@@ -8,6 +8,7 @@
     <SpaRoot>..\expressedrealms.client</SpaRoot>
     <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:5173</SpaProxyServerUrl>
+    <UserSecretsId>5789f340-45c1-4a0a-975f-402f74196d74</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
