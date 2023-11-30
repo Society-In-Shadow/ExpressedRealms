@@ -12,11 +12,7 @@ builder.Services.AddDbContext<ExpressedRealmsDbContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-
 var app = builder.Build();
-
-
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
@@ -49,6 +45,11 @@ app.MapGet("/weatherforecast", () =>
 })
 .WithName("GetWeatherForecast")
 .WithOpenApi();
+
+app.MapGet("/characters", async (ExpressedRealmsDbContext dbContext) =>
+{
+    return await dbContext.Characters.ToListAsync();
+});
 
 app.MapFallbackToFile("/index.html");
 
