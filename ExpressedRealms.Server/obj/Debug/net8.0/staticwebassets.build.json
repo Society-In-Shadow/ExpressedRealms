@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "uiV5SV7OE29va6hHuSWUFYtz8gxpue78D3ot8LB7F9s=",
+  "Hash": "5DwUSnLSwbS/nb7NjRJGmk9TWGN6yKTHWHTicjuSZ08=",
   "Source": "ExpressedRealms.Server",
   "BasePath": "_content/ExpressedRealms.Server",
   "Mode": "Default",
@@ -11,10 +11,10 @@
       "Version": 2,
       "Source": "expressedrealms.client",
       "GetPublishAssetsTargets": "GetCurrentProjectPublishStaticWebAssetItems",
-      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishProperties": "",
       "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
       "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
-      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildProperties": "",
       "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
     }
   ],

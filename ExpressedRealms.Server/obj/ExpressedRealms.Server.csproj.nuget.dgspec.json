@@ -4,14 +4,14 @@
     "C:\\Users\\NoremacSkich\\source\\repos\\ExpressedRealms\\ExpressedRealms.Server\\ExpressedRealms.Server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\NoremacSkich\\source\\repos\\ExpressedRealms\\ExpressedRealms.Server\\ExpressedRealms.Server.csproj": {
+    "C:\\Users\\NoremacSkich\\source\\repos\\ExpressedRealms\\ExpressedRealms.DB\\ExpressedRealms.DB.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\NoremacSkich\\source\\repos\\ExpressedRealms\\ExpressedRealms.Server\\ExpressedRealms.Server.csproj",
-        "projectName": "ExpressedRealms.Server",
-        "projectPath": "C:\\Users\\NoremacSkich\\source\\repos\\ExpressedRealms\\ExpressedRealms.Server\\ExpressedRealms.Server.csproj",
+        "projectUniqueName": "C:\\Users\\NoremacSkich\\source\\repos\\ExpressedRealms\\ExpressedRealms.DB\\ExpressedRealms.DB.csproj",
+        "projectName": "ExpressedRealms.DB",
+        "projectPath": "C:\\Users\\NoremacSkich\\source\\repos\\ExpressedRealms\\ExpressedRealms.DB\\ExpressedRealms.DB.csproj",
         "packagesPath": "C:\\Users\\NoremacSkich\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\NoremacSkich\\source\\repos\\ExpressedRealms\\ExpressedRealms.Server\\obj\\",
+        "outputPath": "C:\\Users\\NoremacSkich\\source\\repos\\ExpressedRealms\\ExpressedRealms.DB\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\NoremacSkich\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,6 +40,71 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\NoremacSkich\\source\\repos\\ExpressedRealms\\ExpressedRealms.Server\\ExpressedRealms.Server.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\NoremacSkich\\source\\repos\\ExpressedRealms\\ExpressedRealms.Server\\ExpressedRealms.Server.csproj",
+        "projectName": "ExpressedRealms.Server",
+        "projectPath": "C:\\Users\\NoremacSkich\\source\\repos\\ExpressedRealms\\ExpressedRealms.Server\\ExpressedRealms.Server.csproj",
+        "packagesPath": "C:\\Users\\NoremacSkich\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\NoremacSkich\\source\\repos\\ExpressedRealms\\ExpressedRealms.Server\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\NoremacSkich\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Users\\NoremacSkich\\source\\repos\\ExpressedRealms\\ExpressedRealms.DB\\ExpressedRealms.DB.csproj": {
+                "projectPath": "C:\\Users\\NoremacSkich\\source\\repos\\ExpressedRealms\\ExpressedRealms.DB\\ExpressedRealms.DB.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -47,6 +112,16 @@
             "Microsoft.AspNetCore.SpaProxy": {
               "target": "Package",
               "version": "[8.*-*, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[8.0.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
