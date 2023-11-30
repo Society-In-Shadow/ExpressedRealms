@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Server", "E
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "expressedrealms.client", "expressedrealms.client\expressedrealms.client.esproj", "{45604F19-8955-4F4C-A6F9-9F75D32B9E9A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.DB", "ExpressedRealms.DB\ExpressedRealms.DB.csproj", "{75A5A286-276F-4C73-9BFF-A30D4AE5DDE8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{45604F19-8955-4F4C-A6F9-9F75D32B9E9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45604F19-8955-4F4C-A6F9-9F75D32B9E9A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{45604F19-8955-4F4C-A6F9-9F75D32B9E9A}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{75A5A286-276F-4C73-9BFF-A30D4AE5DDE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75A5A286-276F-4C73-9BFF-A30D4AE5DDE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75A5A286-276F-4C73-9BFF-A30D4AE5DDE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75A5A286-276F-4C73-9BFF-A30D4AE5DDE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
