@@ -1,4 +1,11 @@
+using ExpressedRealms.DB;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<ExpressedRealmsDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
+        x=>x.MigrationsHistoryTable("_EfMigrations", "efcore")));
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -38,6 +45,11 @@ app.MapGet("/weatherforecast", () =>
 })
 .WithName("GetWeatherForecast")
 .WithOpenApi();
+
+app.MapGet("/characters", async (ExpressedRealmsDbContext dbContext) =>
+{
+    return await dbContext.Characters.ToListAsync();
+});
 
 app.MapFallbackToFile("/index.html");
 
