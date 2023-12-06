@@ -21,7 +21,7 @@ function transitionScreen(screenName){
           <div class="col d-flex justify-content-center align-items-center">
               <img src="/public/favicon.png" alt="Image" height="200"/>
           </div>
-          <div class="col">
+          <div class="col-sm-6 col-xs-12">
             <Login v-if="currentAction == 'Login'" @transition-to-screen="transitionScreen"></Login>
             <CreateAccount v-if="currentAction == 'CreateAccount'" @transition-to-screen="transitionScreen"></CreateAccount>
             <ResetPassword v-if="currentAction == 'ForgotPassword'" @transition-to-screen="transitionScreen"></ResetPassword>
