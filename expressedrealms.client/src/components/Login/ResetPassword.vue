@@ -6,8 +6,6 @@ import Button from 'primevue/button';
 import { ref } from 'vue'
 
 const email = ref("");
-const password = ref("");
-
 const emit = defineEmits(['transitionToScreen']);
 
 </script>
@@ -19,17 +17,12 @@ const emit = defineEmits(['transitionToScreen']);
         <label for="email1" class="block text-900 font-medium mb-2">Email</label>
         <InputText id="email1" type="text" v-model="email" class="w-100 mb-3" />
       </div>
-      <div>
-        <label for="password1" class="block text-900 font-medium mb-2">Password</label>
-        <InputText id="password1" type="password" v-model="password" class="w-100 mb-3" />
-      </div>
     </div>
   </div>
   <div class="row">
     <div class="col">
-      <Button label="Sign In" class="w-100 mb-2"></Button>
-      <Button label="Create Account" class="w-100 mb-2" @click="emit('transitionToScreen', 'CreateAccount')"></Button>
-      <Button label="Forgot Password?" class="w-100" @click="emit('transitionToScreen', 'ForgotPassword')"></Button>
+      <Button label="Reset Password" class="w-100 mb-2"></Button>
+      <Button label="Back" class="w-100 mb-2" @click="emit('transitionToScreen', 'Login')"></Button>
     </div>
   </div>
 </template>
