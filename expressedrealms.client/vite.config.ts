@@ -21,7 +21,7 @@ if (!certificateName) {
 
 const certFilePath = path.join(baseFolder, `${certificateName}.pem`);
 const keyFilePath = path.join(baseFolder, `${certificateName}.key`);
-
+/*
 if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
     if (0 !== child_process.spawnSync('dotnet', [
         'dev-certs',
@@ -35,6 +35,7 @@ if (!fs.existsSync(certFilePath) || !fs.existsSync(keyFilePath)) {
         throw new Error("Could not create certificate.");
     }
 }
+*/
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -46,19 +47,17 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/weatherforecast': {
+            '/api': {
                 target: 'https://localhost:7121/',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/api/, ''),
                 secure: false
             },
-            '^/characters': {
-                target: 'https://localhost:7121/',
-                secure: false
-            }
         },
         port: 5173,
-        https: {
-            key: fs.readFileSync(keyFilePath),
-            cert: fs.readFileSync(certFilePath),
-        }
+        /*       https: {
+                  key: fs.readFileSync(keyFilePath),
+                  cert: fs.readFileSync(certFilePath),
+              }*/
     }
 })
