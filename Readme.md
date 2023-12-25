@@ -51,11 +51,13 @@ You can access here:
 
 ##### Connect to DB
 
-When you visit it, you will need to add a server.  Click add server.
+When you visit it, it will prompt you for a username and password
 
 To login:
 * username: user-name@domain-name.com
 * password: strong-password
+
+Once you get in, you need click add server.
 
 On the popup
 * General Tab
