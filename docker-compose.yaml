@@ -1,8 +1,12 @@
 version: '3.4'
+
+networks:
+  expressed-realms-network:
+    driver: bridge
+    
 services:
   myapp:
     container_name: expressed-realms-vue-app
-    restart: always
     build:
       context: ./expressedrealms.client
       dockerfile: Dockerfile
@@ -16,11 +20,57 @@ services:
   
   webapi:
     container_name: expressed-realms-web-api
-    restart: always
     build:
       context: .
       dockerfile: Dockerfile
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=expressed-realms-db;Port=5432;Database=expressedRealms;Username=user;Password=password
     ports:
-      - '8080:8080'
+      - '8080:5000'
+    networks:
+      - expressed-realms-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+        
+  postgres:
+    container_name: expressed-realms-db
+    image: postgres:14-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - ~/apps/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=user
+      - POSTGRES_DB=expressedRealms
+    networks:
+      - expressed-realms-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d expressedRealms"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    user: "${UID}:${GID}"
+    image: dpage/pgadmin4:8.1
+    container_name: expressed-realms-db-admin
+    #Disable excessive logs from pgadmin
+    logging:
+      driver: "none"
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
+      PGADMIN_DEFAULT_PASSWORD: strong-password
+    volumes:
+      - ./pgadmin-data:/var/lib/pgadmin
+    networks:
+      - expressed-realms-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
 volumes:
   ignore:

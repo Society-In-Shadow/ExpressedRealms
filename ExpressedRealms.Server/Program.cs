@@ -29,6 +29,18 @@ builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwa
 
 var app = builder.Build();
 
+// Migrate latest database changes during startup
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider
+        .GetRequiredService<ExpressedRealmsDbContext>();
+
+    if(dbContext.Database.GetPendingMigrations().Any()){
+        dbContext.Database.Migrate();
+    }
+}
+
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
