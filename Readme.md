@@ -34,7 +34,6 @@ PGADMIN_PASSWORD=
 DB_NAME=expressedRealms
 DB_USER=
 DB_PASSWORD=
-
 ```
 
 ### Run Society in Shadows
@@ -72,7 +71,7 @@ Connection details can be found in the docker-compose.yaml file.
 
 The database will be persistent across the docker images build / rebuild.  
 
-The actual physical location of the db is in "your user folder/expressedRealms/postgres"
+The actual physical location of the db is in DB_STORAGE_LOCATION/pgAdmin folder. (DB_STORAGE_LOCATION from env file)
 If you want to reset it, just delete the folder
 
 ### pgAdmin
@@ -80,7 +79,7 @@ pgAdmin is a postgres database management tool.  For Expressed Realms, it runs i
 
 When the app is started for the first time, it will create a new directory
 
-All the data regarding it is stored in "your user folder/expressedRealms/pgAdmin" folder.
+All the data regarding it is stored in DB_STORAGE_LOCATION/pgAdmin folder. (DB_STORAGE_LOCATION from env file)
 
 You can access here:
 * [DB Management / pgAdmin](http://localhost:8888/login?next=%2Fbrowser%2F)
