@@ -2,23 +2,60 @@
 
 Expressed Realms is awesome!
 
-## Overview
+## Quick Start
 
+### Docker Desktop
 
+Docker is required to run this application locally.
 
-### Quick Start
+Download and install [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+Follow their instructions to get docker up and running : [Install Windows](https://docs.docker.com/desktop/install/windows-install/#install-docker-desktop-on-windows)
 
-Download and install docker desktop, and get their welcome world sample running.
+Once you have their hello world example up and running, you should be good to go.
 
-After that, open up the root of the project (the same directory as this readme) and run
+### Configure DB Stuff
+
+In the root folder (Same folder as this readme), you need to create a ".env" file.  In said file, add this information.
+Side Note: Avoid spaces on the right hand side of the values
+
+```
+# This is the location on your local machine
+# that will store the physical db. Details
+# can be found in the DB section
+DB_STORAGE_LOCATION=
+
+# pgAdmin is the db management tool. 
+# These values are your login credentials
+PGADMIN_EMAIL=
+PGADMIN_PASSWORD=
+
+# This is the db name, plus the user and 
+# password you need to connect to it
+DB_NAME=expressedRealms
+DB_USER=
+DB_PASSWORD=
+
+```
+
+### Run Society in Shadows
+
+Once you get docker up and running, and get the environment file in place, you should be good to go to start the website.
+
+What you want to do is open up the root of the project (the same directory as this readme) in powershell, and run the 
+following command.
 
 ```
 docker compose up
 ```
 
-That will spin up everything needed to run the application.
+It will start to do a lot of things.  If this is the first run, it will take some time to download stuff. 
 
-You will have 3 URLS:
+Once everything has been downloaded, it should start db followed by the vue app.  Once the DB is up and running, it will 
+start the web api, then the pgAdmin.
+
+Once the messages cool down, you can visit links below
+
+### Important Links
 
 * [Front End / Web App](http://localhost:5173/)
 * [Back End / Web API / Swagger](http://localhost:8080/swagger/index.html)
@@ -53,21 +90,19 @@ You can access here:
 
 When you visit it, it will prompt you for a username and password
 
-To login:
-* username: user-name@domain-name.com
-* password: strong-password
+To login, take a look at that ".env" file you created, it's the credentials you put there.
 
 Once you get in, you need click add server.
 
-On the popup
+On the popup, fill in the following values, some of which are from the ".env" file from earlier
 * General Tab
   * Name - Expressed Realms
 * Connection Tab
   * Hostname/Address - expressed-realms-db
   * Port - 5432
-  * Maintenance Database - expressedRealms
-  * UserName - user
-  * Password - password
+  * Maintenance Database - From the env file: DB_Name
+  * UserName - From the env file: DB_User
+  * Password - From the env file: DB_Password
   * Remember Password - Enable it
 
 Hit save, and it should connect.
