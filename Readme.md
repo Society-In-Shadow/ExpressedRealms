@@ -19,11 +19,6 @@ In the root folder (Same folder as this readme), you need to create a ".env" fil
 Side Note: Avoid spaces on the right hand side of the values
 
 ```
-# This is the location on your local machine
-# that will store the physical db. Details
-# can be found in the DB section
-DB_STORAGE_LOCATION=
-
 # pgAdmin is the db management tool. 
 # These values are your login credentials
 PGADMIN_EMAIL=
@@ -71,15 +66,29 @@ Connection details can be found in the docker-compose.yaml file.
 
 The database will be persistent across the docker images build / rebuild.  
 
-The actual physical location of the db is in DB_STORAGE_LOCATION/pgAdmin folder. (DB_STORAGE_LOCATION from env file)
-If you want to reset it, just delete the folder
+#### Reset DB
+
+If you want to nuke the db, run this command first:
+
+```
+docker volume ls
+```
+
+With that list, there should be a db_data volume
+
+Once you find that, copy it and run this command.
+
+NOTE: this is case sensitive
+
+```
+docker volume rm nameOfVolume
+```
+That name should be fairly consistent going forward, so you won't need to run the first step all the time.
 
 ### pgAdmin
 pgAdmin is a postgres database management tool.  For Expressed Realms, it runs in a docker container.
 
 When the app is started for the first time, it will create a new directory
-
-All the data regarding it is stored in DB_STORAGE_LOCATION/pgAdmin folder. (DB_STORAGE_LOCATION from env file)
 
 You can access here:
 * [DB Management / pgAdmin](http://localhost:8888/login?next=%2Fbrowser%2F)
@@ -99,7 +108,7 @@ On the popup, fill in the following values, some of which are from the ".env" fi
 * Connection Tab
   * Hostname/Address - expressed-realms-db
   * Port - 5432
-  * Maintenance Database - From the env file: DB_Name
+  * Maintenance Database - From the env file: DB_Name (Case Sensitive)
   * UserName - From the env file: DB_User
   * Password - From the env file: DB_Password
   * Remember Password - Enable it
