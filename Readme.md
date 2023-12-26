@@ -61,9 +61,9 @@ Once the messages cool down, you can visit links below
 * [Back End / Web API / Swagger](http://localhost:8080/swagger/index.html)
 * [DB Management / pgAdmin](http://localhost:8888/login?next=%2Fbrowser%2F)
 
-### Database Basics
+## Database Basics
 
-#### Postgres
+### Postgres
 We use a postgres database.  On our locals, that db will be handled by the docker image for postgres.
 
 On first start, the web api will populate the db and fill it in with sample data.
@@ -75,7 +75,7 @@ The database will be persistent across the docker images build / rebuild.
 The actual physical location of the db is in "your user folder/expressedRealms/postgres"
 If you want to reset it, just delete the folder
 
-#### pgAdmin
+### pgAdmin
 pgAdmin is a postgres database management tool.  For Expressed Realms, it runs in a docker container.
 
 When the app is started for the first time, it will create a new directory
@@ -86,7 +86,7 @@ You can access here:
 * [DB Management / pgAdmin](http://localhost:8888/login?next=%2Fbrowser%2F)
 
 
-##### Connect to DB
+#### Connect to DB
 
 When you visit it, it will prompt you for a username and password
 
@@ -110,6 +110,8 @@ Hit save, and it should connect.
 NOTE: I don't think you can connect to this from a local install of pgAdmin
 think the hostname would be localhost
 
+#### Testing DB
+
 To test: On the left hand side, 
 * Servers
   * Expressed Realms
@@ -124,19 +126,19 @@ Right click on that table, and hit view / edit data.
 
 There should be 2 characters in there, John and Jane Doe.
 
-### Docker Commands
+## Docker Commands
 
-#### To start the application
+### To start the application
 ```
 docker compose up
 ```
 
-#### To stop the application
+### To stop the application
 ```
 docker compose down
 ```
 
-#### To rebuild everything
+### To rebuild everything
 ```
 docker compose build --no-cache
 ```
