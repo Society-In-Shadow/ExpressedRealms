@@ -9,7 +9,6 @@ WORKDIR /usr/local/apps/myapp/dev
 COPY tsconfig.json ./
 
 COPY src ./src
-COPY .env ./
 
 EXPOSE 80
 
