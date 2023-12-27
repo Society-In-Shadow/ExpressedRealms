@@ -13,6 +13,35 @@ Follow their instructions to get docker up and running : [Install Windows](https
 
 Once you have their hello world example up and running, you should be good to go.
 
+### Setup Certificates
+
+#### Fedora
+
+Follow these steps for the most part, except for part 2
+https://stackoverflow.com/a/59702094
+
+Part 2, you need to do this instead
+sudo trust anchor --store localhost.crt
+
+after which, this should return ok
+openssl verify localhost.crt
+
+Step 3 does work, but won't work with production stuff
+
+next step is to move the pfx file into ~/.aspnet/https and chmod 777 the entire directory and file
+
+#### Windows
+
+(Work in Progress (I set this up on fedora, so haven't been able to test it))
+
+Roughly speaking
+
+[Setup Certificate](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-dev-certs#commands)
+
+Something like this
+```
+dotnet dev-certs https -p <password you need in env file>
+```
 ### Configure DB Stuff
 
 In the root folder (Same folder as this readme), you need to create a ".env" file.  In said file, add this information.
@@ -29,7 +58,11 @@ PGADMIN_PASSWORD=
 DB_NAME=expressedRealms
 DB_USER=
 DB_PASSWORD=
+
+# This is figured out with the above command
+CERTIFICATE_PASSWORD=
 ```
+
 
 ### Run Society in Shadows
 
