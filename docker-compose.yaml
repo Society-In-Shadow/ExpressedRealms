@@ -15,6 +15,7 @@ services:
     volumes:
       - ./expressedrealms.client:/usr/local/apps/myapp/dev
       - ignore:/usr/local/apps/myapp/dev/node_modules/
+      - ~/.aspnet/https:/https
     networks:
       - expressed-realms-network
   
