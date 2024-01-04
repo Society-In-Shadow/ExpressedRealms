@@ -15,7 +15,7 @@ services:
     volumes:
       - ./expressedrealms.client:/usr/local/apps/myapp/dev
       - ignore:/usr/local/apps/myapp/dev/node_modules/
-      - ~/.aspnet/https:/https
+      - ${USERPROFILE}/.aspnet/https:/https
     networks:
       - expressed-realms-network
   
@@ -35,7 +35,7 @@ services:
       - '5000:5000'
       - '5001:5001'
     volumes:
-      - ~/.aspnet/https:/https:ro
+      - ${USERPROFILE}/.aspnet/https:/https:ro
     networks:
       - expressed-realms-network
     depends_on:

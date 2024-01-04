@@ -32,16 +32,35 @@ next step is to move the pfx file into ~/.aspnet/https and chmod 777 the entire 
 
 #### Windows
 
-(Work in Progress (I set this up on fedora, so haven't been able to test it))
-
-Roughly speaking
-
-[Setup Certificate](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-dev-certs#commands)
-
-Something like this
+##### Chocolatey and mkcert
+To Download and install chocolatey, run this in an admin powershell
 ```
-dotnet dev-certs https -p <password you need in env file>
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 ```
+Now run
+```
+mkdir -p $env:USERPROFILE\.aspnet\https\
+cd $env:USERPROFILE\.aspnet\https\
+```
+
+That should get you to that folder in your user profile.
+
+Now run these commands
+
+```
+mkcert -key-file key.pem -cert-file cert.pem localhost
+mkcert -pkcs12 localhost
+```
+
+Then you need to rename the localhost file
+
+```
+mv .\localhost.p12 localhost.pfx
+```
+
+That will at least get the API working to the point where you can run it without it throwing errors.  When you try loading
+the web api, it will say that the certificate is not secure, you can ignore that for now.
+
 ### Configure DB Stuff
 
 In the root folder (Same folder as this readme), you need to create a ".env" file.  In said file, add this information.
@@ -59,8 +78,8 @@ DB_NAME=expressedRealms
 DB_USER=
 DB_PASSWORD=
 
-# This is figured out with the above command
-CERTIFICATE_PASSWORD=
+# This is predefined with the mkcert command.  Keep the same
+CERTIFICATE_PASSWORD=changeit
 ```
 
 
@@ -80,7 +99,9 @@ It will start to do a lot of things.  If this is the first run, it will take som
 Once everything has been downloaded, it should start db followed by the vue app.  Once the DB is up and running, it will 
 start the web api, then the pgAdmin.
 
-Once the messages cool down, you can visit links below
+Once the messages cool down, you can visit links below.
+
+NOTE: The front end might take a bit to load, as first load takes a bit.
 
 ### Important Links
 
