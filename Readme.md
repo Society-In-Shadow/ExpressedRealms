@@ -1,8 +1,23 @@
 # Expressed Realms
 
-Expressed Realms is awesome!
+[Expressed Realms is awesome!](https://www.youtube.com/watch?v=9UJ1syXaNoQ&t=13s)
 
 ## Quick Start
+
+### Getting the Codebase
+
+You want to download [Docker Desktop](https://desktop.github.com/)
+
+This installer will automatically install itself when you run it.
+Once it installs, it will prompt you to login.
+
+Depending on your status of your github account, you might need to enable 2FA
+
+Society-In-Shadow should show up as an organization, Expressed Realms is the name of the repo.
+
+Click on it, click clone, make sure to note where it's be put in the system (2nd text field)
+
+If it doesn't show up, let Cameron know, he'll get you access.
 
 ### Docker Desktop
 
@@ -63,7 +78,9 @@ the web api, it will say that the certificate is not secure, you can ignore that
 
 ### Configure DB Stuff
 
-In the root folder (Same folder as this readme), you need to create a ".env" file.  In said file, add this information.
+With all of that in mind, we need to go to the repo you downloaded earlier.  In the root folder (Same folder as this 
+readme), you need to create a ".env" file.  In said file, add this information.
+
 Side Note: Avoid spaces on the right hand side of the values
 
 ```
