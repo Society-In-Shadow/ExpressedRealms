@@ -1,0 +1,84 @@
+version: '3.4'
+
+networks:
+  expressed-realms-network:
+    driver: bridge
+    
+services:
+  myapp:
+    container_name: expressed-realms-vue-app
+    build:
+      context: ./expressedrealms.client
+      dockerfile: Dockerfile
+    ports:
+      - '5173:5173'
+    volumes:
+      - ./expressedrealms.client:/usr/local/apps/myapp/dev
+      - ignore:/usr/local/apps/myapp/dev/node_modules/
+      - ${USERPROFILE}/.aspnet/https:/https
+    networks:
+      - expressed-realms-network
+  
+  webapi:
+    container_name: expressed-realms-web-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_HTTPS_PORTS=5001
+      - ASPNETCORE_HTTP_PORTS=5000
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${CERTIFICATE_PASSWORD}
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/localhost.pfx
+      - ConnectionStrings__DefaultConnection=Host=expressed-realms-db;Port=5432;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
+    ports:
+      - '5000:5000'
+      - '5001:5001'
+    volumes:
+      - ${USERPROFILE}/.aspnet/https:/https:ro
+    networks:
+      - expressed-realms-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+        
+  postgres:
+    container_name: expressed-realms-db
+    image: postgres:14-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_DB=${DB_NAME}
+    networks:
+      - expressed-realms-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d expressedRealms"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    user: "${UID}:${GID}"
+    image: dpage/pgadmin4:8.1
+    container_name: expressed-realms-db-admin
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    volumes:
+      - pgAdmin_data:/var/lib/pgadmin
+    networks:
+      - expressed-realms-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  ignore:
+  db_data:
+  pgAdmin_data:

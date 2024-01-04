@@ -62,7 +62,7 @@
                 this.post = null;
                 this.loading = true;
 
-                fetch('/characters')
+                fetch('/api/characters')
                     .then(r => r.json())
                     .then(json => {
                         this.post = json as Characters;
