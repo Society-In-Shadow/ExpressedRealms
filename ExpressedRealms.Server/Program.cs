@@ -7,7 +7,6 @@ using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
-var config = builder.Configuration;
 
 builder.Services.AddDbContext<ExpressedRealmsDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
@@ -17,7 +16,7 @@ builder.Services.AddIdentityCore<IdentityUser>()
     .AddEntityFrameworkStores<ExpressedRealmsDbContext>()
     .AddApiEndpoints();
 
-builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
+builder.Services.AddAuthentication().AddCookie(IdentityConstants.BearerScheme);
 builder.Services.AddAuthorizationBuilder();
 
 // Add services to the container.
@@ -80,9 +79,12 @@ app.MapGet("/characters", [Authorize] async (ExpressedRealmsDbContext dbContext)
     return await dbContext.Characters.ToListAsync();
 })
 .WithName("Charcters")
-.WithOpenApi();
+.WithOpenApi()
+.RequireAuthorization();
 
-app.MapIdentityApi<IdentityUser>();
+app.MapGroup("auth").MapIdentityApi<IdentityUser>();
+app.MapGroup("auth").MapPost("/logoff", (HttpContext httpContext) => Results.SignOut());
+
 
 app.MapFallbackToFile("/index.html");
 
