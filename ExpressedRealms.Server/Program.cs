@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using ExpressedRealms.DB;
 using ExpressedRealms.Server.Swagger;
 using Microsoft.AspNetCore.Authorization;
@@ -16,7 +17,10 @@ builder.Services.AddIdentityCore<IdentityUser>()
     .AddEntityFrameworkStores<ExpressedRealmsDbContext>()
     .AddApiEndpoints();
 
-builder.Services.AddAuthentication().AddCookie(IdentityConstants.BearerScheme);
+builder.Services.AddAuthentication().AddCookie(IdentityConstants.BearerScheme, o =>
+{
+    o.SlidingExpiration = true;
+});
 builder.Services.AddAuthorizationBuilder();
 
 // Add services to the container.
@@ -84,7 +88,7 @@ app.MapGet("/characters", [Authorize] async (ExpressedRealmsDbContext dbContext)
 
 app.MapGroup("auth").MapIdentityApi<IdentityUser>();
 app.MapGroup("auth").MapPost("/logoff", (HttpContext httpContext) => Results.SignOut());
-
+app.MapGroup("auth").MapGet("/isLoggedIn", (ClaimsPrincipal user) => user.Identity?.IsAuthenticated ?? false);
 
 app.MapFallbackToFile("/index.html");
 
