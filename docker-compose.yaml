@@ -18,6 +18,9 @@ services:
       - ${USERPROFILE}/.aspnet/https:/https
     networks:
       - expressed-realms-network
+    depends_on:
+      webapi:
+        condition: service_started
   
   webapi:
     container_name: expressed-realms-web-api
@@ -57,9 +60,9 @@ services:
       - expressed-realms-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U user -d expressedRealms"]
-      interval: 5s
+      interval: 2s
       timeout: 5s
-      retries: 5
+      retries: 3
 
   pgadmin:
     user: "${UID}:${GID}"
@@ -76,7 +79,7 @@ services:
       - expressed-realms-network
     depends_on:
       postgres:
-        condition: service_healthy
+        condition: service_started
 
 volumes:
   ignore:
