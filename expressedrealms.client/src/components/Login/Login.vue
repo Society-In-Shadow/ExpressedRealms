@@ -33,12 +33,12 @@ const onSubmit = handleSubmit((values) => {
       <div class="col">
         <form @submit="onSubmit">
           <div class="mb-3">
-            <label for="email" class="block text-900 font-medium">Email</label>
+            <label for="email">Email</label>
             <InputText id="email" v-model="email" class="w-100" :class="{ 'p-invalid': errors.email }"/>
             <small id="email-help" class="text-danger">{{ errors.email }}</small>
           </div>
           <div class="mb-3">
-            <label for="password" class="block text-900 font-medium">Password</label>
+            <label for="password">Password</label>
             <InputText id="password" type="password" v-model="password" class="w-100" :class="{ 'p-invalid': errors.password }"/>
             <small id="password-help" class="text-danger">{{ errors.password }}</small>
           </div>
@@ -48,7 +48,7 @@ const onSubmit = handleSubmit((values) => {
           <Button label="Create Account" class="w-100 mb-2"></Button>
         </router-link>
         <router-link to="ForgotPassword">
-          <Button label="Forgot Password?" class="w-100"></Button>
+          <Button label="Forgot Password?" class="w-100 mb-2"></Button>
         </router-link>
       </div>
     </div>

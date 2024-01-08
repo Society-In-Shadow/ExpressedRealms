@@ -3,12 +3,42 @@
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 
-import { ref } from 'vue'
 import LoginBasePlate from "@/components/Login/LoginBasePlate.vue";
+import axios from "axios";
+import Router from "@/router";
 
-const email = ref("");
-const password = ref("");
-const confirmPassword = ref("");
+import { useForm } from 'vee-validate';
+import { object, string, ref }  from 'yup';
+
+const { defineField, handleSubmit, errors } = useForm({
+  validationSchema: object({
+    email: string().required().email().label('Email address'),
+    password: string()
+        .required()
+        .min(8)
+        .matches(/[0-9]/, 'Password requires a number')
+        .matches(/[a-z]/, 'Password requires a lowercase letter')
+        .matches(/[A-Z]/, 'Password requires an uppercase letter')
+        .matches(/[^\w]/, 'Password requires a symbol')
+        .label('Password'),
+    confirmPassword: string().required().oneOf([ref('password')], 'Passwords must match').label('Confirm password')
+  })
+});
+
+const [email] = defineField('email');
+const [password] = defineField('password');
+const [confirmPassword] = defineField('confirmPassword')
+
+const onSubmit = handleSubmit((values) => {
+  console.log(values);
+  axios.post('/api/auth/createaccount', 
+      {
+        email: values.email,
+        password: values.confirmPassword
+  }).then((response) => {
+    Router.push('characters');
+  });
+});
 
 </script>
 
@@ -16,23 +46,24 @@ const confirmPassword = ref("");
   <LoginBasePlate>
     <div class="row">
       <div class="col">
-        <div>
-          <label for="email1" class="block text-900 font-medium mb-2">Email</label>
-          <InputText id="email1" type="text" v-model="email" class="w-100 mb-3" />
-        </div>
-        <div>
-          <label for="password1" class="block text-900 font-medium mb-2">Password</label>
-          <InputText id="password1" type="password" v-model="password" class="w-100 mb-3" />
-        </div>
-        <div>
-          <label for="confirmPassword" class="block text-900 font-medium mb-2">Confirm Password</label>
-          <InputText id="confirmPassword" type="password" v-model="confirmPassword" class="w-100 mb-3" />
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <Button label="Create Account" class="w-100 mb-2"></Button>
+        <form @submit="onSubmit">
+          <div class="mb-3">
+            <label for="email">Email</label>
+            <InputText id="email" type="text" v-model="email" class="w-100" :class="{ 'p-invalid': errors.email }"/>
+            <small id="email-help" class="text-danger">{{ errors.email }}</small>
+          </div>
+          <div class="mb-3">
+            <label for="password">Password</label>
+            <InputText id="password" type="password" v-model="password" class="w-100" :class="{ 'p-invalid': errors.password }"/>
+            <small id="password-help" class="text-danger">{{ errors.password }}</small>
+          </div>
+          <div class="mb-3">
+            <label for="confirmPassword">Confirm Password</label>
+            <InputText id="confirmPassword" type="password" v-model="confirmPassword" class="w-100" :class="{ 'p-invalid': errors.confirmPassword }"/>
+            <small id="confirmPassword-help" class="text-danger">{{ errors.confirmPassword }}</small>
+          </div>
+          <Button label="Create Account" class="w-100 mb-2" type="submit"></Button>
+        </form>
         <Button label="Back" class="w-100 mb-2" @click="$router.push('/login')"></Button>
       </div>
     </div>
