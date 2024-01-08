@@ -1,20 +1,27 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import LoginBasePlate from "@/components/Login/LoginBasePlate.vue";
 
 const routes = [
     {
-        path: "/login",
-        name: "Login",
-        component: () => import("./../components/Login/Login.vue"),
-    },
-    {
-        path: "/createAccount",
-        name: "createAccount",
-        component: () => import("./../components/Login/CreateAccount.vue"),
-    },
-    {
-        path: "/forgotPassword",
-        name: "resetPassword",
-        component: () => import("./../components/Login/ResetPassword.vue"),
+        path: '/',
+        component: LoginBasePlate,
+        children: [
+            {
+                path: "/login",
+                name: "Login",
+                component: () => import("./../components/Login/Login.vue"),
+            },
+            {
+                path: "/createAccount",
+                name: "createAccount",
+                component: () => import("./../components/Login/CreateAccount.vue"),
+            },
+            {
+                path: "/forgotPassword",
+                name: "resetPassword",
+                component: () => import("./../components/Login/ResetPassword.vue"),
+            },
+        ]
     },
     {
         path: "/helloworld",

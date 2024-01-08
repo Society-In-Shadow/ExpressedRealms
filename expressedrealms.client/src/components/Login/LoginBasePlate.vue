@@ -1,17 +1,7 @@
 <script setup lang="ts">
 
 import Card from 'primevue/card';
-import Login from './Login.vue';
-import CreateAccount from './CreateAccount.vue';
-import ResetPassword from './ResetPassword.vue';
 
-import { ref } from 'vue';
-
-const currentAction = ref("Login");
-
-function transitionScreen(screenName){
-   currentAction.value = screenName;
-}
 </script>
 
 <template>
@@ -22,7 +12,7 @@ function transitionScreen(screenName){
               <img src="/public/favicon.png" alt="Image" height="200"/>
           </div>
           <div class="col-sm-6 col-xs-12">
-            <slot></slot>
+            <router-view />
           </div>
         </div>
     </template>
