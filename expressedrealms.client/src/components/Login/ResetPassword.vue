@@ -6,7 +6,27 @@ import Button from 'primevue/button';
 import { ref } from 'vue'
 import LoginBasePlate from "@/components/Login/LoginBasePlate.vue";
 
-const email = ref("");
+import { useForm } from 'vee-validate';
+import { object, string }  from 'yup';
+import axios from "axios";
+import Router from "@/router";
+
+const { defineField, handleSubmit, errors } = useForm({
+  validationSchema: object({
+    email: string().required()
+        .email()
+        .label('Email address')
+  })
+});
+
+const [email] = defineField('email');
+
+const onSubmit = handleSubmit((values) => {
+  axios.post('/api/auth/forgotPassword', values)
+      .then((response) => {
+        Router.push('characters');
+      });
+});
 
 </script>
 
@@ -14,15 +34,14 @@ const email = ref("");
   <LoginBasePlate>
     <div class="row">
       <div class="col">
-        <div>
-          <label for="email1" class="block text-900 font-medium mb-2">Email</label>
-          <InputText id="email1" type="text" v-model="email" class="w-100 mb-3" />
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <Button label="Reset Password" class="w-100 mb-2"></Button>
+        <form @submit="onSubmit">
+          <div class="mb-3">
+            <label for="email">Email</label>
+            <InputText id="email" type="text" v-model="email" class="w-100 " :class="{ 'p-invalid': errors.email }"/>
+            <small id="email-help" class="text-danger">{{ errors.email }}</small>
+          </div>
+          <Button label="Reset Password" class="w-100 mb-2" type="submit"></Button>
+        </form>
         <Button label="Back" class="w-100 mb-2" @click="$router.push('/login')"></Button>
       </div>
     </div>
