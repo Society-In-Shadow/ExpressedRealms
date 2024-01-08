@@ -30,29 +30,25 @@ const onSubmit = handleSubmit((values) => {
 </script>
 
 <template>
-  <div class="row">
-    <div class="col">
-      <form @submit="onSubmit">
-        <div class="mb-3">
-          <label for="email">Email</label>
-          <InputText id="email" v-model="email" class="w-100" :class="{ 'p-invalid': errors.email }"/>
-          <small id="email-help" class="text-danger">{{ errors.email }}</small>
-        </div>
-        <div class="mb-3">
-          <label for="password">Password</label>
-          <InputText id="password" type="password" v-model="password" class="w-100" :class="{ 'p-invalid': errors.password }"/>
-          <small id="password-help" class="text-danger">{{ errors.password }}</small>
-        </div>
-        <Button label="Sign In" class="w-100 mb-2" type="submit"></Button>
-      </form>
-      <router-link to="CreateAccount">
-        <Button label="Create Account" class="w-100 mb-2"></Button>
-      </router-link>
-      <router-link to="ForgotPassword">
-        <Button label="Forgot Password?" class="w-100 mb-2"></Button>
-      </router-link>
+  <form @submit="onSubmit">
+    <div class="mb-3">
+      <label for="email">Email</label>
+      <InputText id="email" v-model="email" class="w-100" :class="{ 'p-invalid': errors.email }"/>
+      <small id="email-help" class="text-danger">{{ errors.email }}</small>
     </div>
-  </div>
+    <div class="mb-3">
+      <label for="password">Password</label>
+      <InputText id="password" type="password" v-model="password" class="w-100" :class="{ 'p-invalid': errors.password }"/>
+      <small id="password-help" class="text-danger">{{ errors.password }}</small>
+    </div>
+    <Button label="Sign In" class="w-100 mb-2" type="submit"></Button>
+  </form>
+  <router-link to="CreateAccount">
+    <Button label="Create Account" class="w-100 mb-2"></Button>
+  </router-link>
+  <router-link to="ForgotPassword">
+    <Button label="Forgot Password?" class="w-100 mb-2"></Button>
+  </router-link>
 </template>
 
 <style scoped>

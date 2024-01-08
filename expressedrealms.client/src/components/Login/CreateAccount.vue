@@ -44,29 +44,25 @@ const onSubmit = handleSubmit((values) => {
 </script>
 
 <template>
-  <div class="row">
-    <div class="col">
-      <form @submit="onSubmit">
-        <div class="mb-3">
-          <label for="email">Email</label>
-          <InputText id="email" type="text" v-model="email" class="w-100" :class="{ 'p-invalid': errors.email }"/>
-          <small id="email-help" class="text-danger">{{ errors.email }}</small>
-        </div>
-        <div class="mb-3">
-          <label for="password">Password</label>
-          <InputText id="password" type="password" v-model="password" class="w-100" :class="{ 'p-invalid': errors.password }"/>
-          <small id="password-help" class="text-danger">{{ errors.password }}</small>
-        </div>
-        <div class="mb-3">
-          <label for="confirmPassword">Confirm Password</label>
-          <InputText id="confirmPassword" type="password" v-model="confirmPassword" class="w-100" :class="{ 'p-invalid': errors.confirmPassword }"/>
-          <small id="confirmPassword-help" class="text-danger">{{ errors.confirmPassword }}</small>
-        </div>
-        <Button label="Create Account" class="w-100 mb-2" type="submit"></Button>
-      </form>
-      <Button label="Back" class="w-100 mb-2" @click="$router.push('/login')"></Button>
+  <form @submit="onSubmit">
+    <div class="mb-3">
+      <label for="email">Email</label>
+      <InputText id="email" type="text" v-model="email" class="w-100" :class="{ 'p-invalid': errors.email }"/>
+      <small id="email-help" class="text-danger">{{ errors.email }}</small>
     </div>
-  </div>
+    <div class="mb-3">
+      <label for="password">Password</label>
+      <InputText id="password" type="password" v-model="password" class="w-100" :class="{ 'p-invalid': errors.password }"/>
+      <small id="password-help" class="text-danger">{{ errors.password }}</small>
+    </div>
+    <div class="mb-3">
+      <label for="confirmPassword">Confirm Password</label>
+      <InputText id="confirmPassword" type="password" v-model="confirmPassword" class="w-100" :class="{ 'p-invalid': errors.confirmPassword }"/>
+      <small id="confirmPassword-help" class="text-danger">{{ errors.confirmPassword }}</small>
+    </div>
+    <Button label="Create Account" class="w-100 mb-2" type="submit"></Button>
+  </form>
+  <Button label="Back" class="w-100 mb-2" @click="$router.push('/login')"></Button>
 </template>
 
 <style scoped>
