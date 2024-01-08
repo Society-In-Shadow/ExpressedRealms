@@ -12,7 +12,9 @@ import { object, string, ref }  from 'yup';
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
-    email: string().required().email().label('Email address'),
+    email: string().required()
+        .email()
+        .label('Email address'),
     password: string()
         .required()
         .min(8)
@@ -21,7 +23,9 @@ const { defineField, handleSubmit, errors } = useForm({
         .matches(/[A-Z]/, 'Password requires an uppercase letter')
         .matches(/[^\w]/, 'Password requires a symbol')
         .label('Password'),
-    confirmPassword: string().required().oneOf([ref('password')], 'Passwords must match').label('Confirm password')
+    confirmPassword: string().required()
+        .oneOf([ref('password')], 'Passwords must match')
+        .label('Confirm password')
   })
 });
 
