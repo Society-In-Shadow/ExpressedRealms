@@ -2,11 +2,8 @@
 
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-
-import LoginBasePlate from "@/components/Login/LoginBasePlate.vue";
 import axios from "axios";
 import Router from "@/router";
-
 import { useForm } from 'vee-validate';
 import { object, string, ref }  from 'yup';
 
