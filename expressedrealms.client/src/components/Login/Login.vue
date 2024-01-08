@@ -6,15 +6,13 @@ import axios from "axios";
 import Router from "@/router";
 import LoginBasePlate from "@/components/Login/LoginBasePlate.vue";
 import { useForm } from 'vee-validate';
-import * as yup from 'yup';
-
-const schema = yup.object({
-  email: yup.string().required().email().label('Email address'),
-  password: yup.string().required().label('Password'),
-});
+import { object, string }  from 'yup';
 
 const { defineField, handleSubmit, errors } = useForm({
-  validationSchema: schema,
+  validationSchema: object({
+    email: string().required().email().label('Email address'),
+    password: string().required().label('Password'),
+  })
 });
 
 const [email] = defineField('email');
