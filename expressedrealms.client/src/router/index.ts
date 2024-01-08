@@ -21,6 +21,11 @@ const routes = [
         name: "helloworld",
         component: () => import("./../components/HelloWorld.vue"),
     },
+    {
+        path: "/characters",
+        name: "characters",
+        component: () => import("./../components/Characters.vue"),
+    },
 ]
 
 const router = createRouter({
@@ -31,7 +36,7 @@ const router = createRouter({
 router.beforeEach(async (to, from) => {
 
     let isAuthenticated = false;
-    fetch('/api/isLoggedIn')
+    await fetch('/api/auth/isLoggedIn')
         .then(r => r.json())
         .then(json => {
             isAuthenticated = json as boolean;
@@ -40,7 +45,6 @@ router.beforeEach(async (to, from) => {
     
     let anonymouseEndpoints = ['Login', 'createAccount', 'resetPassword']
     let routeName:string = to.name as string;
-    
     if (
         // make sure the user is authenticated
         !isAuthenticated &&
