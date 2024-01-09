@@ -8,9 +8,13 @@ import 'primevue/resources/themes/lara-dark-green/theme.css'
 import 'bootstrap/scss/bootstrap-utilities.scss'
 import 'bootstrap/scss/bootstrap-grid.scss'
 import App from "@/App.vue";
+import Ripple from 'primevue/ripple';
 
-createApp(App)
-    .use(PrimeVue)
-    .use(Router)
-    .mount('#app');
+var app = createApp(App)
+    .use(PrimeVue, {ripple: true})
+    .use(Router);
+
+app.directive('ripple', Ripple);
+
+app.mount('#app');
 
