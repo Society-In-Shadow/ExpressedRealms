@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using ExpressedRealms.DB;
 using ExpressedRealms.Server.Swagger;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +8,6 @@ using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
-var config = builder.Configuration;
 
 builder.Services.AddDbContext<ExpressedRealmsDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
@@ -17,7 +17,20 @@ builder.Services.AddIdentityCore<IdentityUser>()
     .AddEntityFrameworkStores<ExpressedRealmsDbContext>()
     .AddApiEndpoints();
 
-builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    // Default Password settings.
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequiredLength = 8;
+});
+
+builder.Services.AddAuthentication().AddCookie(IdentityConstants.BearerScheme, o =>
+{
+    o.SlidingExpiration = true;
+});
 builder.Services.AddAuthorizationBuilder();
 
 // Add services to the container.
@@ -80,9 +93,12 @@ app.MapGet("/characters", [Authorize] async (ExpressedRealmsDbContext dbContext)
     return await dbContext.Characters.ToListAsync();
 })
 .WithName("Charcters")
-.WithOpenApi();
+.WithOpenApi()
+.RequireAuthorization();
 
-app.MapIdentityApi<IdentityUser>();
+app.MapGroup("auth").MapIdentityApi<IdentityUser>();
+app.MapGroup("auth").MapPost("/logoff", (HttpContext httpContext) => Results.SignOut());
+app.MapGroup("auth").MapGet("/isLoggedIn", (ClaimsPrincipal user) => user.Identity?.IsAuthenticated ?? false);
 
 app.MapFallbackToFile("/index.html");
 
