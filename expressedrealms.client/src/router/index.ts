@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import LoginBasePlate from "@/components/Login/LoginBasePlate.vue";
+import Layout from "@/components/Layout.vue";
 
 const routes = [
     {
@@ -24,15 +25,21 @@ const routes = [
         ]
     },
     {
-        path: "/helloworld",
-        name: "helloworld",
-        component: () => import("./../components/HelloWorld.vue"),
-    },
-    {
-        path: "/characters",
-        name: "characters",
-        component: () => import("./../components/Characters.vue"),
-    },
+        path: '/expressedRealms',
+        component: Layout,
+        children: [
+            {
+                path: "/weatherforecast",
+                name: "weatherforecast",
+                component: () => import("./../components/WeatherForecast.vue"),
+            },
+            {
+                path: "/characters",
+                name: "characters",
+                component: () => import("./../components/Characters.vue"),
+            },
+        ]
+    }
 ]
 
 const router = createRouter({

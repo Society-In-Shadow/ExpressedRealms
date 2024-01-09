@@ -4,6 +4,8 @@ import { createApp } from 'vue'
 import PrimeVue from 'primevue/config';
 import Router from "@/router";
 import 'primevue/resources/themes/lara-dark-green/theme.css'
+import "primeicons/primeicons.css";
+import "primeflex/primeflex.css"
 
 import 'bootstrap/scss/bootstrap-utilities.scss'
 import 'bootstrap/scss/bootstrap-grid.scss'
