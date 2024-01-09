@@ -5,10 +5,10 @@ import Card from 'primevue/card';
 </script>
 
 <template>
-  <Card style="border-radius: 1em; max-width:40em;">
+  <Card id="loginBox" class="centered">
     <template #content>
         <div class="row">
-          <div class="col d-flex justify-content-center align-items-center">
+          <div class="col-sm-6 col-xs-12 d-flex justify-content-center align-items-center">
               <img src="/public/favicon.png" alt="Image" height="200"/>
           </div>
           <div class="col-sm-6 col-xs-12">
@@ -19,12 +19,17 @@ import Card from 'primevue/card';
   </Card>
 </template>
 
-<style>
+<style scoped>
 
-body {
-  display: flex;
-  place-items: center;
-  background-color: dimgray;
+#loginBox {
+  border-radius: 1em; 
+}
+
+.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 </style>
