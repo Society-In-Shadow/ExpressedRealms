@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using ExpressedRealms.DB;
 using ExpressedRealms.Server.Swagger;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +38,12 @@ builder.Services.AddAuthorizationBuilder();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAntiforgery((options) =>
+{
+    options.HeaderName = "T-XSRF-TOKEN";
+    options.Cookie.HttpOnly = false;
+    options.Cookie.Name = "XSRF-TOKEN";
+});
 
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
@@ -67,6 +74,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseAntiforgery();
 
 var summaries = new[]
 {
@@ -99,7 +108,20 @@ app.MapGet("/characters", [Authorize] async (ExpressedRealmsDbContext dbContext)
 app.MapGroup("auth").MapIdentityApi<IdentityUser>();
 app.MapGroup("auth").MapPost("/logoff", (HttpContext httpContext) => Results.SignOut());
 app.MapGroup("auth").MapGet("/isLoggedIn", (ClaimsPrincipal user) => user.Identity?.IsAuthenticated ?? false);
-
+app.MapGroup("auth").MapGet("/getInitialLoginInfo", (IAntiforgery _antiforgery, HttpContext httpContext, ClaimsPrincipal user) =>
+{
+    var tokens = _antiforgery.GetAndStoreTokens(httpContext);
+    httpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken,
+        new CookieOptions() { HttpOnly = false });
+    return user.Identity.Name;
+});
+app.MapGroup("auth").MapGet("/getAntiforgeryToken", (IAntiforgery _antiforgery, HttpContext httpContext, ClaimsPrincipal user) =>
+{
+    var tokens = _antiforgery.GetAndStoreTokens(httpContext);
+    httpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken,
+        new CookieOptions() { HttpOnly = false });
+    return Results.Ok();
+});
 app.MapFallbackToFile("/index.html");
 
 app.Run();
