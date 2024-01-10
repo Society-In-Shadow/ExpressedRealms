@@ -1,10 +1,13 @@
 <script setup lang="ts">
 
-import { ref } from "vue";
+import {computed, ref} from "vue";
 import { useRouter } from 'vue-router'
 import TieredMenu from "primevue/tieredmenu";
 import Avatar from "primevue/avatar"
 import axios from "axios";
+import {userStore} from "@/stores/userStore";
+import md5 from "md5"
+let userInfo = userStore();
 
 const router = useRouter();
 
@@ -26,14 +29,20 @@ const toggle = (event) => {
   menu.value.toggle(event);
 };
 
+
+const gravatar = computed(() => {
+  const hash = md5(userInfo.userEmail.trim().toLowerCase());
+  return `https://www.gravatar.com/avatar/${hash}`;
+});
+
 </script>
 
 <template>
   <a class="flex align-items-center p-3 cursor-pointer mb-2 gap-2" @click="toggle" aria-haspopup="true" aria-controls="overlay_tmenu">
-    <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" shape="circle" />
-    <div>The User</div>
+    <Avatar :image="gravatar" shape="circle" size="large"/>
+    <div>{{ userInfo.userEmail }}</div>
     <i class="pi pi-caret-down text-lg"></i>
-    <TieredMenu ref="menu" id="overlay_tmenu" size="large" :model="items" popup />
+    <TieredMenu ref="menu" id="overlay_tmenu" :model="items" popup />
   </a>
 </template>
 
