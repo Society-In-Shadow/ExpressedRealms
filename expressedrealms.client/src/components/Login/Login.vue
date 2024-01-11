@@ -52,13 +52,13 @@ const onSubmit = handleSubmit((values) => {
       <InputText id="password" type="password" v-model="password" class="w-100" :class="{ 'p-invalid': errors.password }"/>
       <small id="password-help" class="text-danger">{{ errors.password }}</small>
     </div>
-    <Button label="Sign In" class="w-100 mb-2" type="submit"></Button>
+    <Button id="sign-in-button" label="Sign In" class="w-100 mb-2" type="submit"></Button>
   </form>
   <router-link to="CreateAccount">
-    <Button label="Create Account" class="w-100 mb-2"></Button>
+    <Button id="createAccount" label="Create Account" class="w-100 mb-2"></Button>
   </router-link>
   <router-link to="ForgotPassword">
-    <Button label="Forgot Password?" class="w-100 mb-2"></Button>
+    <Button id="forgotPassword" label="Forgot Password?" class="w-100 mb-2"></Button>
   </router-link>
 </template>
 

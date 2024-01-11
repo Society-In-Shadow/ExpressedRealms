@@ -60,9 +60,9 @@ const onSubmit = handleSubmit((values) => {
       <InputText id="confirmPassword" type="password" v-model="confirmPassword" class="w-100" :class="{ 'p-invalid': errors.confirmPassword }"/>
       <small id="confirmPassword-help" class="text-danger">{{ errors.confirmPassword }}</small>
     </div>
-    <Button label="Create Account" class="w-100 mb-2" type="submit"></Button>
+    <Button id="createAccountButton" label="Create Account" class="w-100 mb-2" type="submit"></Button>
   </form>
-  <Button label="Back" class="w-100 mb-2" @click="$router.push('/login')"></Button>
+  <Button id="backButton" label="Back" class="w-100 mb-2" @click="$router.push('/login')"></Button>
 </template>
 
 <style scoped>
