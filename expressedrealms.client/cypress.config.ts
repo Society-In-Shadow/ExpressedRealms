@@ -1,20 +1,16 @@
-const { defineConfig } = require("cypress");
+import { defineConfig } from 'cypress';
 
-module.exports = defineConfig({
+export default defineConfig({
   projectId: "3wpvob",
 
   e2e: {
     baseUrl: "https://localhost:5173",
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
-    },
   },
 
   component: {
     devServer: {
       framework: "vue",
       bundler: "vite",
-      
     },
   },
 });
