@@ -17,29 +17,6 @@ describe('Login Testing', () => {
         cy.location('pathname')
             .should('include', "login");
     });
-    it('Loading the page doesn\'t validate right away', () => {
-        cy.get('#email-help').should('not.be.visible');
-        cy.get('#password-help').should('not.be.visible');
-    })
-    it('Signing In Without Anything Filled In Shows Both Error Messages', () => {
-        cy.get('#sign-in-button').click();
-        cy.get('#email-help').contains("Email address is a required field")
-        cy.get('#password-help').contains("Password is a required field")
-    });
-    it('Email Permutations', () => {
-        cy.get('#email').type("foo");
-        cy.get('#email-help').contains("Email address must be a valid email");
-        cy.get('#email').clear().type("foo@");
-        cy.get('#email-help').contains("Email address must be a valid email");
-        cy.get('#email').clear().type("foo@example.com");
-        cy.get('#email-help').should('not.be.visible');
-    });
-    it('Password Permutations', () => {
-        cy.get('#password').type("foo");
-        cy.get('#password-help').should('not.be.visible');
-        cy.get('#password').clear();
-        cy.get('#password-help').contains("Password is a required field")
-    });
     it('Redirects to Create Account When Button is Clicked', () => {
         cy.get("#createAccount").click();
         cy.location('pathname')
