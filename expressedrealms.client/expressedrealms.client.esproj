@@ -8,4 +8,7 @@
     <!-- Folder where production build objects will be placed -->
     <PublishAssetsDirectory>$(MSBuildProjectDirectory)\dist</PublishAssetsDirectory>
   </PropertyGroup>
+  <ItemGroup>
+    <TypeScriptConfiguration Remove="src\e2e\cypress\tsconfig.json" />
+  </ItemGroup>
 </Project>
