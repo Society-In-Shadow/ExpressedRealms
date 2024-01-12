@@ -80,6 +80,18 @@ services:
     depends_on:
       postgres:
         condition: service_started
+  cypress:
+    image: "cypress/included"
+    depends_on:
+      - myapp
+    environment:
+      - CYPRESS_baseUrl=https://myapp:5173
+    working_dir: /e2e
+    volumes:
+      - ./expressedrealms.client/src/e2e:/e2e
+    networks:
+      - expressed-realms-network
+
 
 volumes:
   ignore:

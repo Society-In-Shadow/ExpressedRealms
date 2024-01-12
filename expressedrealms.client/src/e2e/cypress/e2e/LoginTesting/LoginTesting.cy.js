@@ -4,16 +4,16 @@ describe('Login Testing', () => {
         // so we must tell it to visit our website with the `cy.visit()` command.
         // Since we want to visit the same URL at the start of all our tests,
         // we include it in our beforeEach function so that it runs before each test
-        cy.visit('https://localhost:5173')
+        cy.visit('/')
     })
     
     it('Base URL redirects to login', () => {
-        cy.visit('https://localhost:5173');
+        cy.visit('/');
         cy.location('pathname')
             .should('eq', "/login");
     });
     it('Protected Endpoint redirects to login', () => {
-        cy.visit('https://localhost:5173/characters');
+        cy.visit('/characters');
         cy.location('pathname')
             .should('include', "login");
     });

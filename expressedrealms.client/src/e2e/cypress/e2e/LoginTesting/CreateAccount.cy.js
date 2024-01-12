@@ -4,7 +4,7 @@ describe('Create Account Testing', () => {
         // so we must tell it to visit our website with the `cy.visit()` command.
         // Since we want to visit the same URL at the start of all our tests,
         // we include it in our beforeEach function so that it runs before each test
-        cy.visit('https://localhost:5173/CreateAccount')
+        cy.visit('/CreateAccount')
     })
     
     it('Back Button Redirects back to Login Page', () => {
@@ -41,7 +41,7 @@ describe('Create Account Testing', () => {
             // so we must tell it to visit our website with the `cy.visit()` command.
             // Since we want to visit the same URL at the start of all our tests,
             // we include it in our beforeEach function so that it runs before each test
-            cy.visit('https://localhost:5173/CreateAccount')
+            cy.visit('/CreateAccount')
         })
         it('Password must be at least 8 characters', () => {
             cy.get('#password').clear().type("foo");
@@ -75,7 +75,7 @@ describe('Create Account Testing', () => {
             // so we must tell it to visit our website with the `cy.visit()` command.
             // Since we want to visit the same URL at the start of all our tests,
             // we include it in our beforeEach function so that it runs before each test
-            cy.visit('https://localhost:5173/CreateAccount');
+            cy.visit('/CreateAccount');
             cy.get('#password').type("Asdf1234@");
         })
         it('Password must be at least 8 characters', () => {
