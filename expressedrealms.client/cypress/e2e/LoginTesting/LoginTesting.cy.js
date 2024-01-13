@@ -18,12 +18,12 @@ describe('Login Testing', () => {
             .should('include', "login");
     });
     it('Redirects to Create Account When Button is Clicked', () => {
-        cy.get("#createAccount").click();
+        cy.dataCy("create-account").click();
         cy.location('pathname')
             .should('eq', "/CreateAccount");
     })
     it('Redirects to Forgot Password When Button is Clicked', () => {
-        cy.get("#forgotPassword").click();
+        cy.dataCy("forgot-password").click();
         cy.location('pathname')
             .should('eq', "/ForgotPassword");
     })
