@@ -65,5 +65,9 @@ Cypress.Commands.add('mount', (component, options = {}) => {
     return mount(component, options)
 })
 
+
+Cypress.Commands.add("dataCy", (selector, ...args) => {
+    return cy.get(`[data-cy=${selector}]`, ...args)
+})
 // Example use:
 // cy.mount(MyComponent)
