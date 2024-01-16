@@ -6,6 +6,13 @@ describe('<Login />', () => {
     // so we must tell it to visit our website with the `cy.visit()` command.
     // Since we want to visit the same URL at the start of all our tests,
     // we include it in our beforeEach function so that it runs before each test
+    cy.intercept('GET', '/api/auth/isLoggedIn', {
+      body: ['false'],
+    });
+
+    cy.intercept('POST', '/api/auth/login')
+        .as('login');
+    
     cy.mount(Login);
   });
   it('Loading the page doesn\'t validate right away', () => {
@@ -30,5 +37,15 @@ describe('<Login />', () => {
     cy.dataCy('password-help').should('not.be.visible');
     cy.dataCy('password').clear();
     cy.dataCy('password-help').contains("Password is a required field")
+  });
+  it('Logs In Successfully', () => {
+    cy.dataCy('email').type("example@example.com")
+    cy.dataCy('password').type('Password1!');
+    cy.dataCy('sign-in-button').click();
+
+    cy.get('@login').its('request.body').should('deep.equal', {
+      email: 'example@example.com',
+      password: 'Password1!'
+    })
   });
 })
