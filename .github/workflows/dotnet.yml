@@ -29,5 +29,5 @@ jobs:
     - name: Build docker
       run: |
        echo ---Building and starting up docker---
-       docker-compose -f ./docker-compose.prpipeline.yml up
+       docker-compose -f docker-compose.prpipeline.yml up
        echo ---Containers up---
