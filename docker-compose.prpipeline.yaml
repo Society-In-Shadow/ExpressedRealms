@@ -5,29 +5,11 @@ networks:
     driver: bridge
     
 services:
-  myapp:
-    container_name: expressed-realms-vue-app
-    build:
-      context: ./expressedrealms.client
-      dockerfile: Dockerfile
-    ports:
-      - '5173:5173'
-    volumes:
-      - ./expressedrealms.client:/usr/local/apps/myapp/dev
-      - ignore:/usr/local/apps/myapp/dev/node_modules/
-      - ${USERPROFILE}/.aspnet/https:/https
-    networks:
-      - expressed-realms-network
-    #depends_on:
-    #  webapi:
-    #    condition: service_started
   
   cypress-component-chrome:
     image: "cypress/included"
     depends_on:
       - myapp
-    environment:
-      - CYPRESS_baseUrl=https://myapp:5173
     working_dir: /e2e
     volumes:
       - ./expressedrealms.client/:/e2e
@@ -39,8 +21,6 @@ services:
     image: "cypress/included"
     depends_on:
       - myapp
-    environment:
-      - CYPRESS_baseUrl=https://myapp:5173
     working_dir: /e2e
     volumes:
       - ./expressedrealms.client/:/e2e
