@@ -6,6 +6,14 @@ describe('<CreateAccount />', () => {
         // so we must tell it to visit our website with the `cy.visit()` command.
         // Since we want to visit the same URL at the start of all our tests,
         // we include it in our beforeEach function so that it runs before each test
+        
+        cy.intercept('GET', '/api/auth/isLoggedIn', {
+            body: ['false'],
+        });
+
+        cy.intercept('POST', '/api/auth/createaccount')
+            .as('createUser');
+
         cy.mount(CreateAccount);
     });
     
@@ -19,7 +27,19 @@ describe('<CreateAccount />', () => {
         cy.dataCy('create-account-button').click();
         cy.dataCy('email-help').contains("Email address is a required field")
         cy.dataCy('password-help').contains("Password is a required field")
-        cy.dataCy('confirm-password-help').contains("Confirm password is a required field")
+        cy.dataCy('confirm-password-help').contains("Confirm password is a required field");
+    });
+
+    it('Submits A new User successfully', () => {
+        cy.dataCy('email').type('example@example.com');
+        cy.dataCy('password').type('Password1!');
+        cy.dataCy('confirm-password').type('Password1!');
+        cy.dataCy('create-account-button').click();
+
+        cy.get('@createUser').its('request.body').should('deep.equal', {
+            email: 'example@example.com',
+            password: 'Password1!'
+        })
     });
     
     it('Email Permutations', () => {

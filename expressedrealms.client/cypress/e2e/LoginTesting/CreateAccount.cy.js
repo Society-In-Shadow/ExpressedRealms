@@ -8,7 +8,7 @@ describe('Create Account Testing', () => {
     })
     
     it('Back Button Redirects back to Login Page', () => {
-        cy.dataCy("back-nutton").click();
+        cy.dataCy("back-button").click();
         cy.location('pathname')
             .should('eq', "/login");
     });
