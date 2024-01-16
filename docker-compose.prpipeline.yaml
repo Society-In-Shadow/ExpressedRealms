@@ -8,8 +8,6 @@ services:
   
   cypress-component-chrome:
     image: "cypress/included"
-    depends_on:
-      - myapp
     working_dir: /e2e
     volumes:
       - ./expressedrealms.client/:/e2e
@@ -19,8 +17,6 @@ services:
     
   cypress-component-firefox:
     image: "cypress/included"
-    depends_on:
-      - myapp
     working_dir: /e2e
     volumes:
       - ./expressedrealms.client/:/e2e
