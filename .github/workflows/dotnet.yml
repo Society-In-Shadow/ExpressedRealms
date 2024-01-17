@@ -40,7 +40,7 @@ jobs:
         with:
           component: true
           browser: chrome
-          working-directory: expressedRealms.client
+          working-directory: expressedrealms.client
           
   cypress-run-firefox:
     runs-on: ubuntu-22.04
@@ -52,4 +52,4 @@ jobs:
         with:
           component: true
           browser: firefox
-          working-directory: expressedRealms.client
+          working-directory: expressedrealms.client
