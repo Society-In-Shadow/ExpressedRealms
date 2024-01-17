@@ -20,14 +20,28 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.0.x
+        
     - name: Restore dependencies
       run: dotnet restore
+    
     - name: Build
       run: dotnet build --no-restore
+    
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: Build docker
-      run: |
-       echo ---Building and starting up docker---
-       docker-compose -f docker-compose.prpipeline.yaml up -d
-       echo ---Containers up---
+    
+    - name: Cypress Component Chrome
+      uses: cypress-io/github-action@v6
+      with:
+        component: true
+        build: npm run build
+        start: npm start
+        browser: chrome
+    
+    - name: Cypress Component Firefox
+      uses: cypress-io/github-action@v6
+      with:
+        component: true
+        build: npm run build
+        start: npm start
+        browser: firefox
