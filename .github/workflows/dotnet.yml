@@ -52,16 +52,4 @@ jobs:
           browser: chrome
           working-directory: expressedrealms.client
           record: true
-          
-  cypress-run-firefox:
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
-        with:
-          component: true
-          browser: firefox
-          working-directory: expressedrealms.client
-          record: true
+          tag: pr-component-chrome
