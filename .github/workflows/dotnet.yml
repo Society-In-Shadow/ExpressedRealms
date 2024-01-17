@@ -41,6 +41,9 @@ jobs:
           component: true
           browser: chrome
           working-directory: expressedrealms.client
+        env:
+          # pass the Cypress Cloud record key as an environment variable
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESSRECORDINGKEY }}
           
   cypress-run-firefox:
     runs-on: ubuntu-22.04
@@ -53,3 +56,6 @@ jobs:
           component: true
           browser: firefox
           working-directory: expressedrealms.client
+        env:
+          # pass the Cypress Cloud record key as an environment variable
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESSRECORDINGKEY }}
