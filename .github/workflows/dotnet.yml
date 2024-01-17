@@ -16,6 +16,8 @@ env:
   # If the Actions secret EXAMPLE_RECORDING_KEY is not defined then recording jobs are skipped.
   CYPRESS_RECORD_KEY: ${{ secrets.CYPRESSRECORDINGKEY }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
+  COMMIT_INFO_SHA: ${{ github.event.pull_request.head.sha }}
 
 jobs:
   build:
