@@ -95,8 +95,6 @@ services:
     image: "cypress/included"
     depends_on:
       - myapp
-    environment:
-      - CYPRESS_baseUrl=https://myapp:5173
     working_dir: /e2e
     volumes:
       - ./expressedrealms.client/:/e2e
