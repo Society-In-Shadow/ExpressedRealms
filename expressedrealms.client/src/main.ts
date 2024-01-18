@@ -1,5 +1,3 @@
-import './assets/main.css'
-
 import { createApp } from 'vue'
 import PrimeVue from 'primevue/config';
 import Router from "@/router";
