@@ -10,10 +10,6 @@ on:
     branches: [ "main" ]
 
 env:
-  # Set up the Cypress Cloud project ID and record key as environment variables
-  # If the Actions secret EXAMPLE_PROJECT_ID is not defined then
-  # the projectId is taken from cypress.json (v9) or cypress.config.js (v10 and later).
-  # If the Actions secret EXAMPLE_RECORDING_KEY is not defined then recording jobs are skipped.
   CYPRESS_RECORD_KEY: ${{ secrets.CYPRESSRECORDINGKEY }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
