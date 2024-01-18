@@ -56,7 +56,8 @@ using (var scope = app.Services.CreateScope())
     var dbContext = scope.ServiceProvider
         .GetRequiredService<ExpressedRealmsDbContext>();
 
-    if (dbContext.Database.GetPendingMigrations().Any()) {
+    if (dbContext.Database.GetPendingMigrations().Any())
+    {
         dbContext.Database.Migrate();
     }
 }
