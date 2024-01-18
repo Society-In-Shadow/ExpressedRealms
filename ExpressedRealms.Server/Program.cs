@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ExpressedRealmsDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
-        x=>x.MigrationsHistoryTable("_EfMigrations", "efcore")));
+        x => x.MigrationsHistoryTable("_EfMigrations", "efcore")));
 
 builder.Services.AddIdentityCore<IdentityUser>()
     .AddEntityFrameworkStores<ExpressedRealmsDbContext>()
@@ -56,7 +56,7 @@ using (var scope = app.Services.CreateScope())
     var dbContext = scope.ServiceProvider
         .GetRequiredService<ExpressedRealmsDbContext>();
 
-    if(dbContext.Database.GetPendingMigrations().Any()){
+    if (dbContext.Database.GetPendingMigrations().Any()) {
         dbContext.Database.Migrate();
     }
 }
