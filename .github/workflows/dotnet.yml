@@ -75,5 +75,5 @@ jobs:
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LOG_LEVEL: WARN
-          TYPESCRIPT_STANDARD_TSCONFIG_FILE: '/expressedrealms.client/tsconfig.json'
-          TYPESCRIPT_ES_CONFIG_FILE: '/expressedrealms.client/eslintrc.js'
+          TYPESCRIPT_STANDARD_TSCONFIG_FILE: 'expressedrealms.client/tsconfig.json'
+          TYPESCRIPT_ES_CONFIG_FILE: 'expressedrealms.client/eslintrc.js'
