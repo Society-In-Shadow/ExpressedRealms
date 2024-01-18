@@ -10,8 +10,18 @@ describe('<Login />', () => {
       body: ['false'],
     });
 
-    cy.intercept('POST', '/api/auth/login')
-        .as('login');
+    cy.intercept('GET', '/api/auth/getAntiforgeryToken', {
+      statusCode: 200
+    });
+
+    cy.intercept('POST', '/api/auth/login', {
+      statusCode: 200
+    }).as('login');
+    
+    cy.intercept('GET', '/api/auth/getInitialLoginInfo', {
+      statusCode: 200
+    });
+        
     
     cy.mount(Login);
   });

@@ -7,8 +7,9 @@ describe('<CreateAccount />', () => {
             body: ['false'],
         });
 
-        cy.intercept('POST', '/api/auth/createaccount')
-            .as('createUser');
+        cy.intercept('POST', '/api/auth/createaccount', {
+            statusCode: 200
+        }).as('createUser');
 
         cy.mount(CreateAccount);
     });
