@@ -39,7 +39,7 @@ jobs:
           fetch-depth: 0 # If you use VALIDATE_ALL_CODEBASE = true, you can remove this line to improve performances
 
       - name: RunGitCommandForDevSkim
-        run: git config --global --add safe.directory /github/workspace/.git
+        run: git config --global --add safe.directory '*'
         
       # MegaLinter
       - name: MegaLinter
@@ -54,7 +54,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TYPESCRIPT_ES_CONFIG_FILE: "expressedrealms.client/.eslintrc.js"
           # ADD YOUR CUSTOM ENV VARIABLES HERE OR DEFINE THEM IN A FILE .mega-linter.yml AT THE ROOT OF YOUR REPOSITORY
-          DISABLE: COPYPASTE,SPELL,markdown-link-check # Link check currently has bug with localhost addresses
+          DISABLE: COPYPASTE,SPELL,MARKDOWN-LINK-CHECK # Link check currently has bug with localhost addresses
 
       # Upload MegaLinter artifacts
       - name: Archive production artifacts

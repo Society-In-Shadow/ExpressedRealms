@@ -1,8 +1,13 @@
 FROM node:16-alpine
-WORKDIR /usr/local/apps/myapp
 
 # Security related, prevent docker from running as root user
-USER $APP_UID 
+# Create a system group named "user" with the -r flag
+RUN groupadd -r user
+RUN useradd -r -g user user
+RUN chown -R user:user /usr/local/apps/myapp
+USER user
+
+WORKDIR /usr/local/apps/myapp
 
 COPY package.json ./
 RUN npm install && npm cache clean --force
