@@ -2,10 +2,12 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 
 # Security related, prevent docker from running as root user
 # Create a system group named "user" with the -r flag
-RUN groupadd -r user
-RUN useradd -r -g user user
-RUN chown -R user:user /app
-USER user
+RUN groupadd -g 10001 dotnet && \
+   useradd -u 10000 -g dotnet dotnet \
+   && chown -R dotnet:dotnet /app \
+   && chown -R dotnet:dotnet /src
+
+USER dotnet:dotnet
 
 WORKDIR /app
 

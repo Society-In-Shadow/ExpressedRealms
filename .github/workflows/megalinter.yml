@@ -54,7 +54,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TYPESCRIPT_ES_CONFIG_FILE: "expressedrealms.client/.eslintrc.js"
           # ADD YOUR CUSTOM ENV VARIABLES HERE OR DEFINE THEM IN A FILE .mega-linter.yml AT THE ROOT OF YOUR REPOSITORY
-          DISABLE: COPYPASTE,SPELL,MARKDOWN-LINK-CHECK # Link check currently has bug with localhost addresses
+          DISABLE: COPYPASTE,SPELL,MARKDOWN_MARKDOWN_LINK_CHECK # Link check currently has bug with localhost addresses
 
       # Upload MegaLinter artifacts
       - name: Archive production artifacts
