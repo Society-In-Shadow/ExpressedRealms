@@ -112,7 +112,7 @@ following command.
 docker compose up
 ```
 
-It will start to do a lot of things.  If this is the first run, it will take some time to download stuff. 
+It will start to do a lot of things.  If this is the first run, it will take some time to download stuff.
 
 Once everything has been downloaded, it should start db followed by the vue app.  Once the DB is up and running, it will
 start the web api, then the pgAdmin.

@@ -12,10 +12,8 @@ namespace ExpressedRealms.DB
             builder.ApplyConfiguration(new CharacterConfiguration());
         }
 
-        public ExpressedRealmsDbContext(DbContextOptions<ExpressedRealmsDbContext> options) : base(options)
-        {
-
-        }
+        public ExpressedRealmsDbContext(DbContextOptions<ExpressedRealmsDbContext> options)
+            : base(options) { }
 
         public DbSet<Character> Characters { get; set; }
     }
