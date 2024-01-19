@@ -20,6 +20,8 @@ concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
   cancel-in-progress: true
 
+permissions: read-all
+
 jobs:
   megalinter:
     name: MegaLinter
@@ -54,7 +56,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TYPESCRIPT_ES_CONFIG_FILE: "expressedrealms.client/.eslintrc.js"
           # ADD YOUR CUSTOM ENV VARIABLES HERE OR DEFINE THEM IN A FILE .mega-linter.yml AT THE ROOT OF YOUR REPOSITORY
-          DISABLE: COPYPASTE,SPELL,MARKDOWN_MARKDOWN_LINK_CHECK # Link check currently has bug with localhost addresses
+          DISABLE: COPYPASTE,SPELL # Link check currently has bug with localhost addresses
+          DISABLE_LINTERS: MARKDOWN_LINK_CHECK
 
       # Upload MegaLinter artifacts
       - name: Archive production artifacts
