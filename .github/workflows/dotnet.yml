@@ -1,3 +1,4 @@
+---
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
@@ -5,9 +6,9 @@ name: .NET
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [main]
   pull_request:
-    branches: [ "main" ]
+    branches: [main]
 
 env:
   CYPRESS_RECORD_KEY: ${{ secrets.CYPRESSRECORDINGKEY }}

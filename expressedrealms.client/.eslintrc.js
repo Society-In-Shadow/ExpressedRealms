@@ -8,12 +8,12 @@ module.exports = {
     'cypress',
     'sonarjs'
   ],
-  'extends': [
+  extends: [
     'plugin:vue/vue3-recommended',
     'plugin:cypress/recommended',
     'plugin:sonarjs/recommended',
     'eslint:recommended',
-    '@vue/eslint-config-typescript',
+    '@vue/eslint-config-typescript'
   ],
   parserOptions: {
     ecmaVersion: 'latest'

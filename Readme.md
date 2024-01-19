@@ -33,7 +33,8 @@ Once you have their hello world example up and running, you should be good to go
 #### Fedora
 
 Follow these steps for the most part, except for part 2
-https://stackoverflow.com/a/59702094
+
+[Stack Overflow Steps](https://stackoverflow.com/a/59702094)
 
 Part 2, you need to do this instead
 sudo trust anchor --store localhost.crt
