@@ -401,3 +401,6 @@ FodyWeavers.xsd
 
 # Docker Configuration
 *.env
+
+# MegaLinter
+megalinter-reports/
