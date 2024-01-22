@@ -2,10 +2,6 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 
 WORKDIR /app
 
-# Add a rootless user
-RUN adduser --disabled-password --gecos '' appuser && chown -R appuser /app
-USER appuser
-
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Development
 WORKDIR /src
@@ -27,4 +23,5 @@ COPY --from=publish /app/publish .
 HEALTHCHECK --interval=15s --timeout=60s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider https://0.0.0.0:5001/login || exit 1
 
+USER $APP_UID
 ENTRYPOINT ["dotnet", "ExpressedRealms.Server.dll"]
