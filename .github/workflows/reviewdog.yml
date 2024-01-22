@@ -18,3 +18,4 @@ jobs:
           reporter: github-pr-review # Change reporter.
           fail_on_error: true
           workdir: "expressedrealms.client/"
+          eslint_flags: "."
