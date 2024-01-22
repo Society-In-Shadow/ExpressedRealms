@@ -142,7 +142,7 @@ The database will be persistent across the docker images build / rebuild.
 
 If you want to nuke the db, run this command first:
 
-```
+```shell
 docker volume ls
 ```
 
@@ -152,7 +152,7 @@ Once you find that, copy it and run this command.
 
 NOTE: this is case sensitive
 
-```
+```shell
 docker volume rm nameOfVolume
 ```
 That name should be fairly consistent going forward, so you won't need to run the first step all the time.
