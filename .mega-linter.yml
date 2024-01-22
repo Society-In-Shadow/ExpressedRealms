@@ -19,9 +19,7 @@ DISABLE_LINTERS:
   - SPELL_PROSELINT
   - SPELL_MISSPELL
   - SPELL_VALE
-  - TYPESCRIPT_PRETTIER # Using a different workflow action for front end scanning
-  - TYPESCRIPT_STANDARD
-  - JAVASCRIPT_ES
+  - JAVASCRIPT_ES # Using a different workflow action for front end scanning
   - JAVASCRIPT_PRETTIER
   - JAVASCRIPT_STANDARD
 DISABLE_ERRORS_LINTERS:
@@ -61,5 +59,17 @@ TYPESCRIPT_ES_PRE_COMMANDS:
   - command: cd expressedrealms.client
     cwd: "workspace"
 TYPESCRIPT_ES_POST_COMMANDS:
+  - command: cd ..
+    cwd: "workspace"
+TYPESCRIPT_STANDARD_PRE_COMMANDS:
+  - command: cd expressedrealms.client
+    cwd: "workspace"
+TYPESCRIPT_STANDARD_POST_COMMANDS:
+  - command: cd ..
+    cwd: "workspace"
+TYPESCRIPT_PRETTIER_PRE_COMMANDS:
+  - command: cd expressedrealms.client
+    cwd: "workspace"
+TYPESCRIPT_PRETTIER_POST_COMMANDS:
   - command: cd ..
     cwd: "workspace"
