@@ -11,7 +11,6 @@ DISABLE:
   - EDITORCONFIG
   - SPELL # Uncomment to disable checks of spelling mistakes
   - JAVASCRIPT
-  - TYPESCRIPT
   - TEKTON
 DISABLE_LINTERS:
   - JSON_PRETTIER
