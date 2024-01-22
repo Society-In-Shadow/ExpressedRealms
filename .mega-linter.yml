@@ -19,8 +19,7 @@ DISABLE_LINTERS:
   - SPELL_PROSELINT
   - SPELL_MISSPELL
   - SPELL_VALE
-  - TYPESCRIPT_ES # Using a different workflow action for front end scanning
-  - TYPESCRIPT_PRETTIER
+  - TYPESCRIPT_PRETTIER # Using a different workflow action for front end scanning
   - TYPESCRIPT_STANDARD
   - JAVASCRIPT_ES
   - JAVASCRIPT_PRETTIER
@@ -57,9 +56,9 @@ JSON_REPORTER: true
 GITHUB_STATUS_REPORTER: true
 PLUGINS:
   - https://raw.githubusercontent.com/oxsecurity/megalinter/main/.automation/test/mega-linter-plugin-test/test.megalinter-descriptor.yml
-PRE_COMMANDS:
-  - command: echo "This is MegaLinter PRE_COMMAND on own MegaLinter ! :)"
-    cwd: "root"
-POST_COMMANDS:
-  - command: echo "This is MegaLinter POST_COMMAND on own MegaLinter ! :)"
+TYPESCRIPT_ES_PRE_COMMANDS:
+  - command: cd expressedrealms.client
+    cwd: "workspace"
+TYPESCRIPT_ES_POST_COMMANDS:
+  - command: cd ..
     cwd: "workspace"
