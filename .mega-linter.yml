@@ -6,15 +6,14 @@ APPLY_FIXES: all
 # ENABLE_LINTERS: # If you use ENABLE_LINTERS variable, all other linters will be disabled by default
 DISABLE:
   - CLOUDFORMATION
-  # - COPYPASTE # Uncomment to disable checks of excessive copy-pastes
+  - COPYPASTE # Uncomment to disable checks of excessive copy-pastes
   - CSS
   - EDITORCONFIG
-  # - SPELL # Uncomment to disable checks of spelling mistakes
+  - SPELL # Uncomment to disable checks of spelling mistakes
   - JAVASCRIPT
   - TEKTON
 DISABLE_LINTERS:
   - JSON_PRETTIER
-  - REPOSITORY_GITLEAKS
   - REPOSITORY_KICS
   - SPELL_PROSELINT
   - SPELL_MISSPELL
@@ -25,7 +24,6 @@ DISABLE_ERRORS_LINTERS:
   - REPOSITORY_DEVSKIM
   - REPOSITORY_GRYPE
   - REPOSITORY_SEMGREP
-  - REPOSITORY_TRUFFLEHOG
 PRINT_ALL_FILES: false
 FILTER_REGEX_EXCLUDE: '(\.automation/test|\.automation/generated|\.venv|\.github/workflows|docs/javascripts|docs/overrides|docs/json-schemas|flavors|clj-kondo|TEMPLATES)'
 JSON_JSONLINT_FILTER_REGEX_EXCLUDE: '(\.vscode/)'
@@ -49,7 +47,7 @@ FLAVOR_SUGGESTIONS: false
 EMAIL_REPORTER: false
 FILEIO_REPORTER: false
 JSON_REPORTER: true
-GITHUB_STATUS_REPORTER: false
+GITHUB_STATUS_REPORTER: true
 PLUGINS:
   - https://raw.githubusercontent.com/oxsecurity/megalinter/main/.automation/test/mega-linter-plugin-test/test.megalinter-descriptor.yml
 PRE_COMMANDS:
