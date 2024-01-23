@@ -21,8 +21,8 @@ DISABLE_LINTERS:
   - SPELL_MISSPELL
   - SPELL_VALE
   #- TYPESCRIPT_ES # These I cannot get to work, cannot find the client files at all (Default scanner needs to be looking in a different directory other then root)
-  - TYPESCRIPT_STANDARD
-  - TYPESCRIPT_PRETTIER
+  #- TYPESCRIPT_STANDARD
+  #- TYPESCRIPT_PRETTIER
   - JAVASCRIPT_ES
   - JAVASCRIPT_PRETTIER
   - JAVASCRIPT_STANDARD
@@ -57,9 +57,6 @@ GITHUB_STATUS_REPORTER: true
 PLUGINS:
   - https://raw.githubusercontent.com/oxsecurity/megalinter/main/.automation/test/mega-linter-plugin-test/test.megalinter-descriptor.yml
 TYPESCRIPT_ES_FILE_NAME: .eslintrc.js
-TYPESCRIPT_ES_PRE_COMMANDS:
-  - command: cd expressedrealms.client
-    cwd: "workspace"
-TYPESCRIPT_ES_POST_COMMANDS:
-  - command: cd ..
-    cwd: "workspace"
+TYPESCRIPT_ES_FILTER_REGEX_INCLUDE: expressedrealms.client\
+TYPESCRIPT_STANDARD_FILTER_REGEX_INCLUDE: expressedrealms.client\
+TYPESCRIPT_PRETTIER_FILTER_REGEX_INCLUDE: expressedrealms.client\
