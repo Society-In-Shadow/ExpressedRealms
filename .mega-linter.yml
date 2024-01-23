@@ -57,5 +57,4 @@ GITHUB_STATUS_REPORTER: true
 SARIF_REPORTER: true
 PLUGINS:
   - https://raw.githubusercontent.com/oxsecurity/megalinter/main/.automation/test/mega-linter-plugin-test/test.megalinter-descriptor.yml
-TYPESCRIPT_ES_FILE_NAME: "/expressedrealms.client/.eslintrc.js"
-DEFAULT_WORKSPACE: "/expressedrealms.client/"
+DEFAULT_WORKSPACE: "expressedrealms.client/"
