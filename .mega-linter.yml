@@ -12,7 +12,7 @@ DISABLE:
   - EDITORCONFIG
   - SPELL # Uncomment to disable checks of spelling mistakes
   - JAVASCRIPT
-  #- TYPESCRIPT
+  - TYPESCRIPT
   - TEKTON
 DISABLE_LINTERS:
   - JSON_PRETTIER
@@ -20,7 +20,7 @@ DISABLE_LINTERS:
   - SPELL_PROSELINT
   - SPELL_MISSPELL
   - SPELL_VALE
-  #- TYPESCRIPT_ES # These I cannot get to work, cannot find the client files at all (Default scanner needs to be looking in a different directory other then root)
+  - TYPESCRIPT_ES # These I cannot get to work, cannot find the client files at all (Default scanner needs to be looking in a different directory other then root)
   - TYPESCRIPT_STANDARD
   - TYPESCRIPT_PRETTIER
   - JAVASCRIPT_ES
