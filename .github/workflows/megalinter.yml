@@ -27,12 +27,7 @@ jobs:
       contents: write
       issues: write
       pull-requests: write
-    steps:
-      - name: Cache Docker images.
-        uses: ScribeMD/docker-cache@0.3.7
-        with:
-          key: docker-${{ runner.os }}-${{ hashFiles('.github/workflows/megalinter.yml') }}
-      
+    steps:      
       # Git Checkout
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -89,3 +84,9 @@ jobs:
           commit_message: "[MegaLinter] Apply linters fixes"
           commit_user_name: megalinter-bot
           commit_user_email: nicolas.vuillamy@ox.security
+
+      - name: Upload MegaLinter scan results to GitHub Security tab
+        if: success() || failure()
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'megalinter-reports/megalinter-report.sarif'
