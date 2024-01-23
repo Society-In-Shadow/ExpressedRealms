@@ -12,7 +12,7 @@ DISABLE:
   - EDITORCONFIG
   - SPELL # Uncomment to disable checks of spelling mistakes
   - JAVASCRIPT
-  - TYPESCRIPT
+  #- TYPESCRIPT
   - TEKTON
 DISABLE_LINTERS:
   - JSON_PRETTIER
@@ -20,7 +20,7 @@ DISABLE_LINTERS:
   - SPELL_PROSELINT
   - SPELL_MISSPELL
   - SPELL_VALE
-  - TYPESCRIPT_ES # These I cannot get to work, cannot find the client files at all (Default scanner needs to be looking in a different directory other then root)
+  #- TYPESCRIPT_ES # These I cannot get to work, cannot find the client files at all (Default scanner needs to be looking in a different directory other then root)
   - TYPESCRIPT_STANDARD
   - TYPESCRIPT_PRETTIER
   - JAVASCRIPT_ES
@@ -56,22 +56,10 @@ JSON_REPORTER: true
 GITHUB_STATUS_REPORTER: true
 PLUGINS:
   - https://raw.githubusercontent.com/oxsecurity/megalinter/main/.automation/test/mega-linter-plugin-test/test.megalinter-descriptor.yml
-TYPESCRIPT_ES_CONFIG_FILE: .eslintrc.js
+TYPESCRIPT_ES_FILE_NAME: .eslintrc.js
 TYPESCRIPT_ES_PRE_COMMANDS:
   - command: cd expressedrealms.client
     cwd: "workspace"
 TYPESCRIPT_ES_POST_COMMANDS:
-  - command: cd ..
-    cwd: "workspace"
-TYPESCRIPT_STANDARD_PRE_COMMANDS:
-  - command: cd expressedrealms.client
-    cwd: "root"
-TYPESCRIPT_STANDARD_POST_COMMANDS:
-  - command: cd ..
-    cwd: "root"
-TYPESCRIPT_PRETTIER_PRE_COMMANDS:
-  - command: cd expressedrealms.client
-    cwd: "workspace"
-TYPESCRIPT_PRETTIER_POST_COMMANDS:
   - command: cd ..
     cwd: "workspace"
