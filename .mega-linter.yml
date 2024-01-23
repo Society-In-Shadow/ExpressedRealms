@@ -54,9 +54,10 @@ EMAIL_REPORTER: false
 FILEIO_REPORTER: false
 JSON_REPORTER: true
 GITHUB_STATUS_REPORTER: true
+SARIF_REPORTER: true
 PLUGINS:
   - https://raw.githubusercontent.com/oxsecurity/megalinter/main/.automation/test/mega-linter-plugin-test/test.megalinter-descriptor.yml
 TYPESCRIPT_ES_FILE_NAME: .eslintrc.js
-TYPESCRIPT_ES_FILTER_REGEX_INCLUDE: "expressedrealms.client/.*"
-TYPESCRIPT_STANDARD_FILTER_REGEX_INCLUDE: "expressedrealms.client/.*"
-TYPESCRIPT_PRETTIER_FILTER_REGEX_INCLUDE: "expressedrealms.client/.*"
+TYPESCRIPT_ES_FILTER_REGEX_INCLUDE: "expressedrealms.client/"
+TYPESCRIPT_STANDARD_FILTER_REGEX_INCLUDE: "expressedrealms.client/"
+TYPESCRIPT_PRETTIER_FILTER_REGEX_INCLUDE: "expressedrealms.client/"
