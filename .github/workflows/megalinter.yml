@@ -28,6 +28,11 @@ jobs:
       issues: write
       pull-requests: write
     steps:
+      - name: Cache Docker images.
+        uses: ScribeMD/docker-cache@0.3.7
+        with:
+          key: docker-${{ runner.os }}-${{ hashFiles('.github/workflows/megalinter.yml') }}
+      
       # Git Checkout
       - name: Checkout Code
         uses: actions/checkout@v3
