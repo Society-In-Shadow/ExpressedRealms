@@ -17,5 +17,15 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: 'latest'
+  },
+  rules: {
+    "vue/max-attributes-per-line": ["error", {
+      "singleline": {
+        "max": 5
+      },
+      "multiline": {
+        "max": 5
+      }
+    }]
   }
 }
