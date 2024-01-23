@@ -59,5 +59,3 @@ PLUGINS:
   - https://raw.githubusercontent.com/oxsecurity/megalinter/main/.automation/test/mega-linter-plugin-test/test.megalinter-descriptor.yml
 TYPESCRIPT_ES_FILE_NAME: "/expressedrealms.client/.eslintrc.js"
 DEFAULT_WORKSPACE: "/expressedrealms.client/"
-TYPESCRIPT_ES_PRE_COMMANDS:
-filter
