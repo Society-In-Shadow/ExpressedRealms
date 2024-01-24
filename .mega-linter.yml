@@ -54,3 +54,6 @@ EMAIL_REPORTER: false
 FILEIO_REPORTER: false
 JSON_REPORTER: true
 SARIF_REPORTER: true
+TYPESCRIPT_STANDARD_ARGUMENTS: 
+  - "--project"
+  - "./expressedrealms.client/tsconfig.json"
