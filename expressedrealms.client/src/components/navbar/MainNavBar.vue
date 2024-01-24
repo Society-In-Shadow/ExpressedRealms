@@ -18,25 +18,25 @@ const items = ref([
           items: [
             { label: 'Weather', icon: 'pi pi-cloud', subtext: 'Random Weather Forecast', command: () => router.push("/weatherforecast") },
             { label: 'Characters', icon: 'pi pi-users', subtext: 'Protected Endpoint Test', command: () => router.push("/characters") },
-            { label: 'Case Studies', icon: 'pi pi-file', subtext: 'Subtext of item' }
+            { label: 'Case Studies', icon: 'pi pi-file', subtext: 'Subtext of item 1' }
           ]
         }
       ],
       [
         {
           items: [
-            { label: 'Solutions', icon: 'pi pi-shield', subtext: 'Subtext of item' },
-            { label: 'Faq', icon: 'pi pi-question', subtext: 'Subtext of item' },
-            { label: 'Library', icon: 'pi pi-search', subtext: 'Subtext of item' }
+            { label: 'Solutions', icon: 'pi pi-shield', subtext: 'Subtext of item 2' },
+            { label: 'Faq', icon: 'pi pi-question', subtext: 'Subtext of item 3' },
+            { label: 'Library', icon: 'pi pi-search', subtext: 'Subtext of item 4' }
           ]
         }
       ],
       [
         {
           items: [
-            { label: 'Community', icon: 'pi pi-comments', subtext: 'Subtext of item' },
-            { label: 'Rewards', icon: 'pi pi-star', subtext: 'Subtext of item' },
-            { label: 'Investors', icon: 'pi pi-globe', subtext: 'Subtext of item' }
+            { label: 'Community', icon: 'pi pi-comments', subtext: 'Subtext of item 5' },
+            { label: 'Rewards', icon: 'pi pi-star', subtext: 'Subtext of item 6' },
+            { label: 'Investors', icon: 'pi pi-globe', subtext: 'Subtext of item 7' }
           ]
         }
       ],

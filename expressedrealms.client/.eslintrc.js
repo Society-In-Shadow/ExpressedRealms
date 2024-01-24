@@ -26,7 +26,14 @@ module.exports = {
       "multiline": {
         "max": 5
       }
-    }],
-    "sonarjs/no-duplicate-string": "off"
-  }
+    }]
+  },
+  "overrides": [
+    {
+      "files": ["*.cy.ts"],
+      "rules": {
+        "sonarjs/no-duplicate-string": "off"
+      }
+    }
+  ]
 }
