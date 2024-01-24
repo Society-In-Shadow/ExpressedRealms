@@ -44,21 +44,24 @@ const onSubmit = handleSubmit((values) => {
   <form @submit="onSubmit">
     <div class="mb-3">
       <label for="email">Email</label>
-      <InputText data-cy="email" id="email" v-model="email" class="w-100" :class="{ 'p-invalid': errors.email }"/>
-      <small data-cy="email-help" id="email-help" class="text-danger">{{ errors.email }}</small>
+      <InputText id="email" v-model="email" data-cy="email" class="w-100" :class="{ 'p-invalid': errors.email }" />
+      <small id="email-help" data-cy="email-help" class="text-danger">{{ errors.email }}</small>
     </div>
     <div class="mb-3">
       <label for="password">Password</label>
-      <InputText data-cy="password" id="password" type="password" v-model="password" class="w-100" :class="{ 'p-invalid': errors.password }"/>
-      <small data-cy="password-help" id="password-help" class="text-danger">{{ errors.password }}</small>
+      <InputText
+        id="password" v-model="password" data-cy="password" type="password" class="w-100"
+        :class="{ 'p-invalid': errors.password }"
+      />
+      <small id="password-help" data-cy="password-help" class="text-danger">{{ errors.password }}</small>
     </div>
-    <Button data-cy="sign-in-button" label="Sign In" class="w-100 mb-2" type="submit"></Button>
+    <Button data-cy="sign-in-button" label="Sign In" class="w-100 mb-2" type="submit" />
   </form>
   <router-link to="CreateAccount">
-    <Button data-cy="create-account" label="Create Account" class="w-100 mb-2"></Button>
+    <Button data-cy="create-account" label="Create Account" class="w-100 mb-2" />
   </router-link>
   <router-link to="ForgotPassword">
-    <Button data-cy="forgot-password" label="Forgot Password?" class="w-100 mb-2"></Button>
+    <Button data-cy="forgot-password" label="Forgot Password?" class="w-100 mb-2" />
   </router-link>
 </template>
 

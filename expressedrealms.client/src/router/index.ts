@@ -57,8 +57,8 @@ router.beforeEach(async (to, from) => {
             return;
         });
     
-    let anonymouseEndpoints = ['Login', 'createAccount', 'resetPassword']
-    let routeName:string = to.name as string;
+    const anonymouseEndpoints = ['Login', 'createAccount', 'resetPassword']
+    const routeName:string = to.name as string;
     if (
         // make sure the user is authenticated
         !isAuthenticated &&

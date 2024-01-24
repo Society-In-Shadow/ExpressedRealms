@@ -20,7 +20,7 @@ import { createPinia } from 'pinia'
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedState);
 
-var app = createApp(App)
+const app = createApp(App)
     .use(PrimeVue, {ripple: true})
     .use(Router);
 app.use(pinia);

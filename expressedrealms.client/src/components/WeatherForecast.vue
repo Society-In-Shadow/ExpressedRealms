@@ -1,15 +1,15 @@
 <template>
-    <div class="weather-component">
-        <h1>Weather forecast</h1>
-        <p>This component demonstrates fetching data from the server.</p>
+  <div class="weather-component">
+    <h1>Weather forecast</h1>
+    <p>This component demonstrates fetching data from the server.</p>
 
-        <DataTable :value="forecastDates" tableStyle="min-width: 50rem">
-          <Column field="date" header="Date"></Column>
-          <Column field="temperatureC" header="Temp (C)"></Column>
-          <Column field="temperatureF" header="Temp (F)"></Column>
-          <Column field="summary" header="Summary"></Column>
-        </DataTable>
-    </div>
+    <DataTable :value="forecastDates" table-style="min-width: 50rem">
+      <Column field="date" header="Date" />
+      <Column field="temperatureC" header="Temp (C)" />
+      <Column field="temperatureF" header="Temp (F)" />
+      <Column field="summary" header="Summary" />
+    </DataTable>
+  </div>
 </template>
 
 <script setup lang="ts">

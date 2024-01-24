@@ -30,12 +30,12 @@ const onSubmit = handleSubmit((values) => {
   <form @submit="onSubmit">
     <div class="mb-3">
       <label for="email">Email</label>
-      <InputText id="email" type="text" v-model="email" class="w-100 " :class="{ 'p-invalid': errors.email }"/>
+      <InputText id="email" v-model="email" type="text" class="w-100 " :class="{ 'p-invalid': errors.email }" />
       <small id="email-help" class="text-danger">{{ errors.email }}</small>
     </div>
-    <Button label="Reset Password" class="w-100 mb-2" type="submit"></Button>
+    <Button label="Reset Password" class="w-100 mb-2" type="submit" />
   </form>
-  <Button label="Back" class="w-100 mb-2" @click="$router.push('/login')"></Button>
+  <Button label="Back" class="w-100 mb-2" @click="$router.push('/login')" />
 </template>
 
 <style scoped>

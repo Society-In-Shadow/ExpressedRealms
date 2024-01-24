@@ -38,11 +38,11 @@ const gravatar = computed(() => {
 </script>
 
 <template>
-  <a class="flex align-items-center p-3 cursor-pointer mb-2 gap-2" @click="toggle" aria-haspopup="true" aria-controls="overlay_tmenu">
-    <Avatar :image="gravatar" shape="circle" size="large"/>
+  <a class="flex align-items-center p-3 cursor-pointer mb-2 gap-2" aria-haspopup="true" aria-controls="overlay_tmenu" @click="toggle">
+    <Avatar :image="gravatar" shape="circle" size="large" />
     <div>{{ userInfo.userEmail }}</div>
-    <i class="pi pi-caret-down text-lg"></i>
-    <TieredMenu ref="menu" id="overlay_tmenu" :model="items" popup />
+    <i class="pi pi-caret-down text-lg" />
+    <TieredMenu id="overlay_tmenu" ref="menu" :model="items" popup />
   </a>
 </template>
 

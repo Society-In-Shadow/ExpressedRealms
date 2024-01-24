@@ -1,14 +1,13 @@
 <template>
-    <div>
-        <h1>Character DB Test</h1>
-        <p>This component demonstrates fetching data from the database via a protected endpoint.</p>
+  <div>
+    <h1>Character DB Test</h1>
+    <p>This component demonstrates fetching data from the database via a protected endpoint.</p>
 
-        <DataTable :value="characters" tableStyle="min-width: 50rem">
-          <Column field="id" header="Id"></Column>
-          <Column field="name" header="Name"></Column>
-        </DataTable>
-      
-    </div>
+    <DataTable :value="characters" table-style="min-width: 50rem">
+      <Column field="id" header="Id" />
+      <Column field="name" header="Name" />
+    </DataTable>
+  </div>
 </template>
 
 <script setup lang="ts">

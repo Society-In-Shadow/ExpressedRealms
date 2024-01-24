@@ -26,6 +26,7 @@ module.exports = {
       "multiline": {
         "max": 5
       }
-    }]
+    }],
+    "sonarjs/no-duplicate-string": "off"
   }
 }

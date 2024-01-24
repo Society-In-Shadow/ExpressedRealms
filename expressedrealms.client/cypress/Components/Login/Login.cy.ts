@@ -37,9 +37,11 @@ describe('<Login />', () => {
   it('Email Permutations', () => {
     cy.dataCy('email').type("foo");
     cy.dataCy('email-help').contains("Email address must be a valid email");
-    cy.dataCy('email').clear().type("foo@");
+    cy.dataCy('email').clear();
+    cy.dataCy('email').type("foo@");
     cy.dataCy('email-help').contains("Email address must be a valid email");
-    cy.dataCy('email').clear().type("foo@example.com");
+    cy.dataCy('email').clear();
+    cy.dataCy('email').type("foo@example.com");
     cy.dataCy('email-help').should('not.be.visible');
   });
   it('Password Permutations', () => {
