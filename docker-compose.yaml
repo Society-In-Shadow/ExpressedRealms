@@ -1,9 +1,10 @@
+---
 version: '3.4'
 
 networks:
   expressed-realms-network:
     driver: bridge
-    
+
 services:
   myapp:
     container_name: expressed-realms-vue-app
@@ -21,7 +22,7 @@ services:
     depends_on:
       webapi:
         condition: service_started
-  
+
   webapi:
     container_name: expressed-realms-web-api
     build:
@@ -44,7 +45,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-        
+
   postgres:
     container_name: expressed-realms-db
     image: postgres:14-alpine
