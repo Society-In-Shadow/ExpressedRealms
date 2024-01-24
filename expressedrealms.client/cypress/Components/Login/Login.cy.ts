@@ -1,4 +1,4 @@
-import Login from "../../../src/components/Login/Login.vue";
+import Login from "../../../src/components/Login/UserLogin.vue";
 
 describe('<Login />', () => {
   beforeEach(() => {

@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import LoginBasePlate from "@/components/Login/LoginBasePlate.vue";
-import Layout from "@/components/Layout.vue";
+import Layout from "@/components/LoggedInLayout.vue";
 
 const routes = [
     {
@@ -10,7 +10,7 @@ const routes = [
             {
                 path: "/login",
                 name: "Login",
-                component: () => import("./../components/Login/Login.vue"),
+                component: () => import("./../components/Login/UserLogin.vue"),
             },
             {
                 path: "/createAccount",
@@ -36,7 +36,7 @@ const routes = [
             {
                 path: "/characters",
                 name: "characters",
-                component: () => import("./../components/Characters.vue"),
+                component: () => import("./../components/CharacterList.vue"),
             },
         ]
     }
