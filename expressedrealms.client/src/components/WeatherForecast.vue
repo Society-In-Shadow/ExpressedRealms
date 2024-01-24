@@ -31,7 +31,6 @@
         .then(r => r.json())
         .then(json => {
           forecastDates.value = json as Forecasts[];
-          return;
         });
   }
   

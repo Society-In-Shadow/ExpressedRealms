@@ -47,14 +47,13 @@ const router = createRouter({
     routes
 })
 
-router.beforeEach(async (to, from) => {
+router.beforeEach(async (to) => {
 
     let isAuthenticated = false;
     await fetch('/api/auth/isLoggedIn')
         .then(r => r.json())
         .then(json => {
             isAuthenticated = json as boolean;
-            return;
         });
     
     const anonymouseEndpoints = ['Login', 'createAccount', 'resetPassword']

@@ -36,7 +36,7 @@ const onSubmit = handleSubmit((values) => {
       {
         email: values.email,
         password: values.confirmPassword
-  }).then((response) => {
+  }).then(() => {
     Router.push('characters');
   });
 });

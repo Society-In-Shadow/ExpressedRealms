@@ -29,7 +29,7 @@ const [password] = defineField('password');
 
 const onSubmit = handleSubmit((values) => {
   axios.post('/api/auth/login', values)
-  .then((response) => {
+  .then(() => {
     axios.get('/api/auth/getInitialLoginInfo')
         .then((stuff) => {
           userInfo.userEmail = stuff.data;

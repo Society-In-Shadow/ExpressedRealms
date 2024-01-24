@@ -19,7 +19,7 @@ const [email] = defineField('email');
 
 const onSubmit = handleSubmit((values) => {
   axios.post('/api/auth/forgotPassword', values)
-      .then((response) => {
+      .then(() => {
         Router.push('characters');
       });
 });
