@@ -16,23 +16,23 @@ module.exports = {
     '@vue/eslint-config-typescript'
   ],
   parserOptions: {
-    ecmaVersion: 'latest'
+    ecmaVersion: 'latest',
   },
   rules: {
-    "vue/max-attributes-per-line": ["error", {
-      "singleline": {
-        "max": 5
+    'vue/max-attributes-per-line': ['error', {
+      singleline: {
+        max: 5
       },
-      "multiline": {
-        "max": 5
+      multiline: {
+        max: 5
       }
     }]
   },
-  "overrides": [
+  overrides: [
     {
-      "files": ["*.cy.ts"],
-      "rules": {
-        "sonarjs/no-duplicate-string": "off"
+      files: ['*.cy.ts'],
+      rules: {
+        'sonarjs/no-duplicate-string': 'off'
       }
     }
   ]
