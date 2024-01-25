@@ -35,6 +35,8 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Password=${CERTIFICATE_PASSWORD}
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/localhost.pfx
       - ConnectionStrings__DefaultConnection=Host=expressed-realms-db;Port=5432;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
+      - SENDGRID_HOST=http://expressed-realms-sendgrid-mock:3000
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
     ports:
       - '5000:5000'
       - '5001:5001'
@@ -82,11 +84,14 @@ services:
         condition: service_started
 
   sendgrid:
+    container_name: expressed-realms-sendgrid-mock
     image: ghashange/sendgrid-mock:1.7.2
     ports:
       - '7000:3000'
     environment:
       - API_KEY=${SENDGRID_API_KEY}
+    networks:
+      - expressed-realms-network
 
 volumes:
   ignore:
