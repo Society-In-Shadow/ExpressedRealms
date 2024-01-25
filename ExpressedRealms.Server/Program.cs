@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using ExpressedRealms.DB;
+using ExpressedRealms.Email;
 using ExpressedRealms.Server.Swagger;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
@@ -46,6 +47,7 @@ builder.Services.AddAntiforgery((options) =>
 });
 
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+builder.Services.AddEmailDependencies(builder.Configuration);
 
 var app = builder.Build();
 
@@ -121,6 +123,11 @@ app.MapGroup("auth").MapGet("/getAntiforgeryToken", (IAntiforgery _antiforgery, 
     var tokens = _antiforgery.GetAndStoreTokens(httpContext);
     httpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken,
         new CookieOptions() { HttpOnly = false });
+    return Results.Ok();
+});
+app.MapGet("/sendTestEmail", async (ISendGridEmail email) =>
+{
+    await email.SendTestEmail();
     return Results.Ok();
 });
 app.MapFallbackToFile("/index.html");

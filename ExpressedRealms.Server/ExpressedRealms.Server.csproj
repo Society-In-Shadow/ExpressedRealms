@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ExpressedRealms.DB\ExpressedRealms.DB.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Email\ExpressedRealms.Email.csproj" />
   </ItemGroup>
 
 </Project>
