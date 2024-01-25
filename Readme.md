@@ -115,6 +115,7 @@ NOTE: The front end might take a bit to load, as first load takes a bit.
 * [Front End / Web App](https://localhost:5173/)
 * [Back End / Web API / Swagger](https://localhost:5001/swagger/index.html)
 * [DB Management / pgAdmin](http://localhost:8888/login?next=%2Fbrowser%2F)
+* [SendGrid Testing](http://localhost:7000)
 
 ## Database Basics
 

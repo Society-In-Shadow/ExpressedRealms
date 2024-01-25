@@ -81,6 +81,12 @@ services:
       postgres:
         condition: service_started
 
+  sendgrid:
+    image: ghashange/sendgrid-mock:1.7.2
+    ports:
+      - '7000:3000'
+    environment:
+      - API_KEY=${SENDGRID_API_KEY}
 
 volumes:
   ignore:
