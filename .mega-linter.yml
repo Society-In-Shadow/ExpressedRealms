@@ -54,10 +54,10 @@ EMAIL_REPORTER: false
 FILEIO_REPORTER: false
 JSON_REPORTER: true
 SARIF_REPORTER: true
-# The following actually does work, but it's throwing errors that I don't know how to resolve. 
+# The following actually does work, but it's throwing errors that I don't know how to resolve.
 # Local steps to resolve
 # npm install ts-standard
 # npx ts-standard
-# TYPESCRIPT_STANDARD_ARGUMENTS: 
+# TYPESCRIPT_STANDARD_ARGUMENTS:
 #  - "--project"
 #  - "./expressedrealms.client/tsconfig.json"
