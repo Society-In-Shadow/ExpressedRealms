@@ -15,7 +15,7 @@ builder.Services.AddDbContext<ExpressedRealmsDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
         x => x.MigrationsHistoryTable("_EfMigrations", "efcore")));
 
-    builder.Services.AddIdentityCore<IdentityUser>((options) =>
+builder.Services.AddIdentityCore<IdentityUser>((options) =>
     {
         options.SignIn.RequireConfirmedAccount = true;
         options.SignIn.RequireConfirmedEmail = true;
