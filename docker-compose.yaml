@@ -37,6 +37,7 @@ services:
       - ConnectionStrings__DefaultConnection=Host=expressed-realms-db;Port=5432;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
       - SENDGRID_HOST=http://expressed-realms-sendgrid-mock:3000
       - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+      - FRONT_END_BASE_URL=https://localhost:5173
     ports:
       - '5000:5000'
       - '5001:5001'
@@ -85,7 +86,7 @@ services:
 
   sendgrid:
     container_name: expressed-realms-sendgrid-mock
-    image: ghashange/sendgrid-mock:1.7.2
+    image: ghashange/sendgrid-mock:1.8.4
     ports:
       - '7000:3000'
     environment:

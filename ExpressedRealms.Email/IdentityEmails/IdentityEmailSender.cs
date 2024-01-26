@@ -5,7 +5,7 @@ using SendGrid.Helpers.Mail;
 
 namespace ExpressedRealms.Email.IdentityEmails;
 
-public class IdentityEmailSender(
+internal sealed class IdentityEmailSender(
     ISendGridClient sendGrid,
     IConfiguration configuration,
     IForgetPasswordEmail forgetPasswordEmail)
