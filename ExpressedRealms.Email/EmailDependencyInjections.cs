@@ -23,5 +23,6 @@ public static class EmailDependencyInjections
     {
         services.AddTransient<ISendGridEmail, SendGridEmail>();
         services.AddTransient<IForgetPasswordEmail, ForgetPasswordEmail>();
+        services.AddTransient<IConfirmAccountEmail, ConfirmAccountEmail>();
     }
 }
