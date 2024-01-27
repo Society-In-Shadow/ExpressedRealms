@@ -22,6 +22,11 @@ const routes = [
                 name: "forgotPassword",
                 component: () => import("./../components/Login/ForgotPassword.vue"),
             },
+            {
+                path: "/resetPassword",
+                name: "resetPassword",
+                component: () => import("./../components/Login/ResetPassword.vue"),
+            },
         ]
     },
     {
@@ -56,7 +61,7 @@ router.beforeEach(async (to) => {
             isAuthenticated = json as boolean;
         });
     
-    const anonymouseEndpoints = ['Login', 'createAccount', 'forgotPassword']
+    const anonymouseEndpoints = ['Login', 'createAccount', 'forgotPassword', 'resetPassword']
     const routeName:string = to.name as string;
     if (
         // make sure the user is authenticated
