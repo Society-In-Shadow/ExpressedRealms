@@ -41,8 +41,8 @@ const onSubmit = handleSubmit((values) => {
         resetCode: route.query.resetToken,
         newPassword: values.confirmPassword
       }).then(() => {
-    Router.push('characters');
-  });
+        Router.push('login?resetPassword=1');
+      });
 });
 
 </script>

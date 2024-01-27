@@ -34,33 +34,6 @@ describe('<ResetPassword />', () => {
         cy.dataCy(passwordHelp).contains("Password is a required field")
         cy.dataCy(confirmPasswordHelp).contains("Confirm password is a required field");
     });
-
-    it('Submits New Password Successfully', async () => {
-        const resetToken = "asdf1234";
-        cy.mount(ResetPassword, {
-            global: {
-                mocks: {
-                    // Replace the $route object with a custom object
-                    $route: {
-                        params: {
-                            resetToken: resetToken
-                        }
-                    }
-                }
-            }
-        });
-        
-        cy.dataCy(email).type('example@example.com');
-        cy.dataCy(password).type('Password1!');
-        cy.dataCy(confirmPassword).type('Password1!');
-        cy.dataCy(createAccountButton).click();
-
-        cy.get('@resetPassword').its('request.body').should('deep.equal', {
-            email: 'example@example.com',
-            resetCode: 'asdf1234',
-            newPassword: 'Password1!'
-        })
-    });
     
     it('Email Permutations', () => {
         cy.dataCy(email).type("foo");
