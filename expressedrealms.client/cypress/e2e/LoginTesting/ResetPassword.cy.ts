@@ -24,7 +24,6 @@ describe('Create Account Testing', () => {
         cy.dataCy('password').type('Password1!');
         cy.dataCy('confirm-password').type('Password1!');
         cy.dataCy('reset-password-button').click();
-        cy.dataCy("back-button").click();
         
         cy.get('@resetPassword').its('request.body').should('deep.equal', {
             email: 'example@example.com',
@@ -33,6 +32,7 @@ describe('Create Account Testing', () => {
         });
         
         // This should be working, but not sure why.  Manually testing seems to work though.
-        //cy.location('pathname').should('eq', "/login?resetPassword=1");
+        cy.location('pathname').should('eq', "/login");
+        cy.location('search').should('eq', "?resetPassword=1");
     });
 })
