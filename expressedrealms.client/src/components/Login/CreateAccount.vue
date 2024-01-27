@@ -71,7 +71,7 @@ const onSubmit = handleSubmit((values) => {
     </div>
     <Button data-cy="create-account-button" label="Create Account" class="w-100 mb-2" type="submit" />
   </form>
-  <Button data-cy="back-button" label="Back" class="w-100 mb-2" @click="$router.push('/login')" />
+  <Button data-cy="back-button" label="Back" class="w-100 mb-2" @click="Router.push('/login')" />
 </template>
 
 <style scoped>
