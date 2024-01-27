@@ -8,6 +8,8 @@ import { useForm } from 'vee-validate';
 import { object, string }  from 'yup';
 import {userStore} from "@/stores/userStore";
 import {onBeforeMount} from "vue";
+import Message from 'primevue/message';
+import {useRoute} from "vue-router";
 let userInfo = userStore();
 
 const { defineField, handleSubmit, errors } = useForm({
@@ -27,6 +29,8 @@ onBeforeMount(() => {
 const [email] = defineField('email');
 const [password] = defineField('password');
 
+const route = useRoute();
+
 const onSubmit = handleSubmit((values) => {
   axios.post('/api/auth/login', values)
   .then(() => {
@@ -41,6 +45,7 @@ const onSubmit = handleSubmit((values) => {
 </script>
 
 <template>
+  <Message severity="success" v-if="route.query.resetPassword" data-cy="success-password-reset-message">Password was successfully changed, please log in.</Message>
   <form @submit="onSubmit">
     <div class="mb-3">
       <label for="email">Email</label>
