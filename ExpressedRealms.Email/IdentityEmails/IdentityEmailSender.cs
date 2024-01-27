@@ -7,20 +7,21 @@ namespace ExpressedRealms.Email.IdentityEmails;
 
 internal sealed class IdentityEmailSender(
     ISendGridClient sendGrid,
-    IConfiguration configuration,
-    IForgetPasswordEmail forgetPasswordEmail)
+    IForgetPasswordEmail forgetPasswordEmail,
+    IConfirmAccountEmail confirmAccountEmail)
     : IEmailSender
 {
-    private readonly IConfiguration _configuration = configuration;
 
     public async Task SendEmailAsync(string email, string subject, string htmlMessage)
     {
         var plainTextMessage = "";
-        if (subject == "Reset your password")
+        (subject, plainTextMessage, htmlMessage) = subject switch
         {
-            (subject, plainTextMessage, htmlMessage) = forgetPasswordEmail.GetUpdatedEmailTemplate(htmlMessage);
-        }
-        
+            "Reset your password" => forgetPasswordEmail.GetUpdatedEmailTemplate(htmlMessage),
+            "Confirm your email" => confirmAccountEmail.GetUpdatedEmailTemplate(htmlMessage),
+            _ => (subject, plainTextMessage, htmlMessage)
+        };
+
         var msg = MailHelper.CreateSingleEmail(
             new EmailAddress("test123@example.com"), 
             new EmailAddress(email), 
