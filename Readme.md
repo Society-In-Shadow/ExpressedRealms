@@ -6,7 +6,7 @@
 
 ### Getting the Codebase
 
-You want to download [Docker Desktop](https://desktop.github.com/)
+You want to download [Github Desktop](https://desktop.github.com/)
 
 This installer will automatically install itself when you run it.
 Once it installs, it will prompt you to login.
@@ -28,38 +28,27 @@ Follow their instructions to get docker up and running : [Install Windows](https
 
 Once you have their hello world example up and running, you should be good to go.
 
-### Setup Certificates
+### Setup Certificates (Windows)
 
-#### Fedora
+Use an admin powershell for the following commands.
 
-Follow these steps for the most part, except for part 2
-
-[Stack Overflow Steps](https://stackoverflow.com/a/59702094)
-
-Part 2, you need to do this instead
-sudo trust anchor --store localhost.crt
-
-after which, this should return OK
-openssl verify localhost.crt
-
-Step 3 does work, but won't work with production stuff
-
-next step is to move the pfx file into ~/.aspnet/https and chmod 777 the entire directory and file
-
-#### Windows
-
-##### Chocolatey and mkcert
-To Download and install chocolatey, run this in an admin powershell
+To Download and install chocolatey:
 ```shell
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 ```
-Now run
+
+Now run the following to get mkcert locally
+```shell
+choco install mkcert
+```
+
+With that, you need to make sure that you have the appropriate folders, and start executing commands from them.
 ```shell
 mkdir -p $env:USERPROFILE\.aspnet\https\
 cd $env:USERPROFILE\.aspnet\https\
 ```
 
-That should get you to that folder in your user profile.
+That should get you to that folder in your user profile.  If it says the folder already exists, just use the CD command.
 
 Now run these commands
 
@@ -74,8 +63,8 @@ Then you need to rename the localhost file
 mv .\localhost.p12 localhost.pfx
 ```
 
-That will at least get the API working to the point where you can run it without it throwing errors.  When you try loading
-the Web API, it will say that the certificate is not secure, you can ignore that for now.
+When you visit the sites, both Chrome and firefox will consider the certificates to be invalid, as it doesn't trust
+local certificates.  If you click through it, it should let you in though.
 
 ### Configure DB Stuff
 
@@ -96,7 +85,7 @@ DB_NAME=expressedRealms
 DB_USER=
 DB_PASSWORD=
 
-# This is predefined with the mkcert command.  Keep the same
+# This is predefined with the mkcert command.  DO NOT modify this
 CERTIFICATE_PASSWORD=changeit
 ```
 
@@ -136,7 +125,7 @@ On first start, the web api will populate the db and fill it in with sample data
 
 Connection details can be found in the docker-compose.yaml file.
 
-The database will be persistent across the docker images build / rebuild.  
+The database will be persistent across the docker images build / rebuild.
 
 #### Reset DB
 
@@ -174,16 +163,33 @@ To login, take a look at that ".env" file you created, it's the credentials you 
 
 Once you get in, you need click add server.
 
-On the popup, fill in the following values, some of which are from the ".env" file from earlier
-* General Tab
-  * Name - Expressed Realms
-* Connection Tab
-  * Hostname/Address - expressed-realms-db
-  * Port - 5432
-  * Maintenance Database - From the env file: DB_Name (Case Sensitive)
-  * UserName - From the env file: DB_User
-  * Password - From the env file: DB_Password
-  * Remember Password - Enable it
+On the popup, there are two tabs you need to be concerned about to get this up and running: General and Connections
+
+
+##### General Tab
+For the general tab, only value you really need to be concerned about is the name field, the rest of them you don't need
+to set
+
+| Field    | Value             |
+|----------|-------------------|
+| Name     | Expressed Realms  |
+
+
+##### Connection Tab
+NOTE: Env File variables are case sensitive
+
+| Field                     | Value                              |
+|---------------------------|------------------------------------|
+| Hostname/Address          | expressed-realms-db                |
+| Port                      | 5432                               |
+| Maintenance Database      | From the env file: expressedRealms |
+| UserName                  | From the env file: DB_User         |
+| Kerberos authentication?  | Don't Enable                       |
+| Password                  | From the env file: DB_Password     |
+| Save Password             | Enable it                          |
+| Role                      | Leave Blank                        |
+| Service                   | Leave Blank                        |
+
 
 Hit save, and it should connect.
 
@@ -222,3 +228,20 @@ docker compose down
 ```shell
 docker compose build --no-cache
 ```
+
+## Other Notes
+### Setup Certificates (Fedora)
+
+Follow these steps for the most part, except for part 2
+
+[Stack Overflow Steps](https://stackoverflow.com/a/59702094)
+
+Part 2, you need to do this instead
+sudo trust anchor --store localhost.crt
+
+after which, this should return OK
+openssl verify localhost.crt
+
+Step 3 does work, but won't work with production stuff
+
+next step is to move the pfx file into ~/.aspnet/https and chmod 777 the entire directory and file
