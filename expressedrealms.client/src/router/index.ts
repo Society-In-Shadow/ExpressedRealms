@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import LoginBasePlate from "@/components/Login/LoginBasePlate.vue";
 import Layout from "@/components/LoggedInLayout.vue";
+import axios from "axios";
+import {userStore} from "@/stores/userStore";
 
 const routes = [
     {
@@ -32,6 +34,11 @@ const routes = [
                 name: "confirmAccount",
                 component: () => import("./../components/Login/ConfirmEmail.vue"),
             },
+            {
+                path: "/pleaseConfirmEmail",
+                name: "pleaseConfirmEmail",
+                component: () => import("./../components/Login/PleaseConfirmEmail.vue"),
+            },
         ]
     },
     {
@@ -59,13 +66,9 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
 
-    let isAuthenticated = false;
-    await fetch('/api/auth/isLoggedIn')
-        .then(r => r.json())
-        .then(json => {
-            isAuthenticated = json as boolean;
-        });
-    
+
+    let userInfo = userStore();
+    let isAuthenticated = isHttpOnlyCookieExists(".AspNetCore.Identity.Bearer");
     const anonymouseEndpoints = ['Login', 'createAccount', 'forgotPassword', 'resetPassword', 'confirmAccount']
     const routeName:string = to.name as string;
     if (
@@ -77,6 +80,25 @@ router.beforeEach(async (to) => {
         // redirect the user to the login page
         return { name: 'Login' }
     }
+    
+    if(isAuthenticated && !userInfo.hasConfirmedEmail){
+        await axios.get("/api/auth/manage/info")
+            .then(response => {
+                userInfo.hasConfirmedEmail = response.data.isEmailConfirmed;
+                userInfo.userEmail = response.data.userEmail;
+                if(!userInfo.hasConfirmedEmail){
+                    return { name: 'PleaseConfirmEmail' }
+                }
+            })
+    }
 })
+
+function isHttpOnlyCookieExists(cookieName:string) {
+    // Attempt to access the cookie
+    var cookieValue = document.cookie.replace(`/(?:(?:^|.*;\s*)${cookieName}\s*\=\s*([^;]*).*$)|^.*$/`, "$1");
+
+    // Check if the cookie value is not empty or undefined
+    return (cookieValue !== "" && typeof cookieValue !== "undefined");
+}
 
 export default router

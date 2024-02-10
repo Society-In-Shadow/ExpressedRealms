@@ -6,10 +6,11 @@ import axios from "axios";
 import Router from "@/router";
 import { useForm } from 'vee-validate';
 import { object, string }  from 'yup';
-import {userStore} from "@/stores/userStore";
+
 import {onBeforeMount} from "vue";
 import Message from 'primevue/message';
 import {useRoute} from "vue-router";
+import {userStore} from "@/stores/userStore";
 let userInfo = userStore();
 
 const { defineField, handleSubmit, errors } = useForm({
@@ -34,10 +35,6 @@ const route = useRoute();
 const onSubmit = handleSubmit((values) => {
   axios.post('/api/auth/login', values)
   .then(() => {
-    axios.get('/api/auth/getInitialLoginInfo')
-        .then((stuff) => {
-          userInfo.userEmail = stuff.data;
-        })
     Router.push('characters');
   });
 });
