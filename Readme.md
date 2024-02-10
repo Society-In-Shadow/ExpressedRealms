@@ -85,8 +85,13 @@ DB_NAME=expressedRealms
 DB_USER=
 DB_PASSWORD=
 
-# This is predefined with the mkcert command.  DO NOT modify this
+# This is predefined with the mkcert command.
+# DO NOT modify this
 CERTIFICATE_PASSWORD=changeit
+
+# Local Sendgrid Key - Not an actual key, just 
+# something to get the docker sendgrid working
+SENDGRID_API_KEY=SG.secret
 ```
 
 
