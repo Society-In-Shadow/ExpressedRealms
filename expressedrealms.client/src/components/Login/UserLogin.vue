@@ -65,7 +65,7 @@ const onSubmit = handleSubmit((values) => {
     <Button data-cy="create-account" label="Create Account" class="w-100 mb-2" />
   </router-link>
   <router-link to="ForgotPassword">
-    <Button data-cy="forgot-password" label="Forgot Goo?" class="w-100 mb-2" />
+    <Button data-cy="forgot-password" label="Forgot Password?" class="w-100 mb-2" />
   </router-link>
 </template>
 
