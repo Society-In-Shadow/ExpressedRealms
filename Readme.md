@@ -92,6 +92,9 @@ CERTIFICATE_PASSWORD=changeit
 # Local Sendgrid Key - Not an actual key, just 
 # something to get the docker sendgrid working
 SENDGRID_API_KEY=SG.secret
+
+# Global From Email
+FROM_EMAIL="no-replay@societyinshadows.org"
 ```
 
 

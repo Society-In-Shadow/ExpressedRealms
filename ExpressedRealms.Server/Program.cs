@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using ExpressedRealms.DB;
-using ExpressedRealms.Email;
+using ExpressedRealms.Email.SendGridTestEmail;
 using ExpressedRealms.Server.Swagger;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
