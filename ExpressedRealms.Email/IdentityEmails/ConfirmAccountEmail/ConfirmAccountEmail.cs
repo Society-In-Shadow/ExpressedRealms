@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 
-namespace ExpressedRealms.Email.IdentityEmails;
+namespace ExpressedRealms.Email.IdentityEmails.ConfirmAccountEmail;
 
 internal sealed class ConfirmAccountEmail(IConfiguration configuration) : IConfirmAccountEmail
 {

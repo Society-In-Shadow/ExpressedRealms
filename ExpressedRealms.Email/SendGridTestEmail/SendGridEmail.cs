@@ -2,7 +2,7 @@
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
-namespace ExpressedRealms.Email;
+namespace ExpressedRealms.Email.SendGridTestEmail;
 
 internal class SendGridEmail(
     ISendGridClient sendGridClient, 

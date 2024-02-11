@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Email.IdentityEmails;
+namespace ExpressedRealms.Email.IdentityEmails.ForgotPasswordEmail;
 
 public interface IForgetPasswordEmail
 {

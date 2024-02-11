@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 
-namespace ExpressedRealms.Email.IdentityEmails;
+namespace ExpressedRealms.Email.IdentityEmails.ForgotPasswordEmail;
 
 internal sealed class ForgetPasswordEmail(IConfiguration configuration) : IForgetPasswordEmail
 {

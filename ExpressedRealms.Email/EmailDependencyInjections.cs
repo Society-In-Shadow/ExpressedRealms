@@ -1,5 +1,8 @@
 using ExpressedRealms.Email;
 using ExpressedRealms.Email.IdentityEmails;
+using ExpressedRealms.Email.IdentityEmails.ConfirmAccountEmail;
+using ExpressedRealms.Email.IdentityEmails.ForgotPasswordEmail;
+using ExpressedRealms.Email.SendGridTestEmail;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

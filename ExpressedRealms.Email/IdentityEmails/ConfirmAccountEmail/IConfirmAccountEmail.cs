@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Email.IdentityEmails;
+namespace ExpressedRealms.Email.IdentityEmails.ConfirmAccountEmail;
 
 internal interface IConfirmAccountEmail
 {

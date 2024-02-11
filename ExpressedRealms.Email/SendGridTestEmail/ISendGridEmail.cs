@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Email;
+namespace ExpressedRealms.Email.SendGridTestEmail;
 
 public interface ISendGridEmail
 {

@@ -1,3 +1,5 @@
+using ExpressedRealms.Email.IdentityEmails.ConfirmAccountEmail;
+using ExpressedRealms.Email.IdentityEmails.ForgotPasswordEmail;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using SendGrid;
