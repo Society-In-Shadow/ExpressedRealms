@@ -1,6 +1,5 @@
 using System.Security.Claims;
 using ExpressedRealms.DB;
-using ExpressedRealms.Email;
 using ExpressedRealms.Email.SendGridTestEmail;
 using ExpressedRealms.Server.Swagger;
 using Microsoft.AspNetCore.Antiforgery;
@@ -16,11 +15,7 @@ builder.Services.AddDbContext<ExpressedRealmsDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
         x => x.MigrationsHistoryTable("_EfMigrations", "efcore")));
 
-builder.Services.AddIdentityCore<IdentityUser>((options) =>
-    {
-        options.SignIn.RequireConfirmedAccount = true;
-        options.SignIn.RequireConfirmedEmail = true;
-    })
+builder.Services.AddIdentityCore<IdentityUser>()
     .AddEntityFrameworkStores<ExpressedRealmsDbContext>()
     .AddApiEndpoints();
 
