@@ -20,7 +20,7 @@ const [email] = defineField('email');
 const onSubmit = handleSubmit((values) => {
   axios.post('/api/auth/forgotPassword', values)
       .then(() => {
-        Router.push('characters');
+        Router.push('login?forgotPassword=1');
       });
 });
 
@@ -35,7 +35,7 @@ const onSubmit = handleSubmit((values) => {
     </div>
     <Button label="Reset Password" class="w-100 mb-2" type="submit" />
   </form>
-  <Button label="Back" class="w-100 mb-2" @click="$router.push('/login')" />
+  <Button label="Back" class="w-100 mb-2" @click="Router.push('/login')" />
 </template>
 
 <style scoped>

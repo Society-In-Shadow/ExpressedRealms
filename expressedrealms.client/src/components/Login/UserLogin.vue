@@ -42,9 +42,10 @@ const onSubmit = handleSubmit((values) => {
 </script>
 
 <template>
-  <Message severity="success" v-if="route.query.resetPassword" data-cy="success-password-reset-message">Password was successfully changed, please log in.</Message>
-  <Message severity="success" v-if="route.query.createdUser" data-cy="success-created-user-message">User was successfully created, please log in.</Message>
-  <Message severity="success" v-if="route.query.confirmedEmail" data-cy="success-confirmed-email-message">Your email was successfully confirmed, please log in.</Message>
+  <Message severity="success" :closable="false" v-if="route.query.resetPassword" data-cy="success-password-reset-message">Password was successfully changed, please log in.</Message>
+  <Message severity="success" :closable="false" v-if="route.query.createdUser" data-cy="success-created-user-message">User was successfully created, please log in.</Message>
+  <Message severity="success" :closable="false" v-if="route.query.confirmedEmail" data-cy="success-confirmed-email-message">Your email was successfully confirmed, please log in.</Message>
+  <Message severity="success" :closable="false" v-if="route.query.forgotPassword" data-cy="success-forgot-password-message">An email was sent to your email, please continue with the email, or login below.</Message>
   <form @submit="onSubmit">
     <div class="mb-3">
       <label for="email">Email</label>

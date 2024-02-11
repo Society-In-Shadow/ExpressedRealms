@@ -30,6 +30,14 @@ describe('Login Testing', () => {
         cy.visit('/login')
         cy.dataCy('success-created-user-message').should('not.exist');
     });
+
+    it('After Sending Reset Password Email, Show Success and Have Them Login', () => {
+        cy.visit('/login?forgotPassword=1')
+        cy.dataCy('success-forgot-password-message').should('be.visible')
+
+        cy.visit('/login')
+        cy.dataCy('success-forgot-password-message').should('not.exist');
+    });
     
     it('Base URL redirects to login', () => {
         cy.visit('/');
