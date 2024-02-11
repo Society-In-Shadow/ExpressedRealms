@@ -66,39 +66,51 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
 
-
-    let userInfo = userStore();
-    let isAuthenticated = isHttpOnlyCookieExists(".AspNetCore.Identity.Bearer");
-    const anonymouseEndpoints = ['Login', 'createAccount', 'forgotPassword', 'resetPassword', 'confirmAccount']
+    let loggedIn = isLoggedIn();
+    const anonymousEndpoints = ['Login', 'createAccount', 'forgotPassword', 'resetPassword', 'confirmAccount', 'pleaseConfirmEmail']
     const routeName:string = to.name as string;
-    if (
-        // make sure the user is authenticated
-        !isAuthenticated &&
-        // ❗️ Avoid an infinite redirect
-        !anonymouseEndpoints.includes(routeName)
-    ) {
-        // redirect the user to the login page
-        return { name: 'Login' }
+    const canCauseInfiniteRedirects = anonymousEndpoints.includes(routeName)
+    
+    if (!loggedIn && !canCauseInfiniteRedirects) {
+        return  { name: 'Login' };
     }
     
-    if(isAuthenticated && !userInfo.hasConfirmedEmail){
-        await axios.get("/api/auth/manage/info")
-            .then(response => {
-                userInfo.hasConfirmedEmail = response.data.isEmailConfirmed;
-                userInfo.userEmail = response.data.userEmail;
-                if(!userInfo.hasConfirmedEmail){
-                    return { name: 'PleaseConfirmEmail' }
-                }
-            })
+    if(loggedIn){
+        
+        let userInfo = userStore();
+        
+        // Check to make sure that they have a confirmed email
+        if(!userInfo.hasConfirmedEmail && routeName != 'pleaseConfirmEmail' && routeName != 'confirmAccount'){
+            await axios.get("/api/auth/manage/info")
+                .then(response => {
+                    userInfo.hasConfirmedEmail = response.data.isEmailConfirmed;
+                    userInfo.userEmail = response.data.email;
+                });
+            if(!userInfo.hasConfirmedEmail){
+                return { name: 'pleaseConfirmEmail' }
+            }
+        }
+
+        // If they are on this page, and refresh it after confirming, redirect them to the characters page
+        if(userInfo.hasConfirmedEmail && routeName == 'pleaseConfirmEmail'){
+            return { name: 'characters' };
+        }
+
+        // if they are on the login page, redirect them to the characters page
+        if(routeName == 'Login')
+            return { name: 'characters' };
     }
+    
+
 })
 
-function isHttpOnlyCookieExists(cookieName:string) {
-    // Attempt to access the cookie
-    var cookieValue = document.cookie.replace(`/(?:(?:^|.*;\s*)${cookieName}\s*\=\s*([^;]*).*$)|^.*$/`, "$1");
-
-    // Check if the cookie value is not empty or undefined
-    return (cookieValue !== "" && typeof cookieValue !== "undefined");
+function isLoggedIn() {
+    document.cookie = ".AspNetCore.Identity.Bearer=1";
+    if(document.cookie.indexOf(".AspNetCore.Identity.Bearer") >= 0){
+        document.cookie = ".AspNetCore.Identity.Bearer=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        return false
+    }
+    return true;
 }
 
 export default router

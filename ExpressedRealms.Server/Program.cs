@@ -15,11 +15,7 @@ builder.Services.AddDbContext<ExpressedRealmsDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
         x => x.MigrationsHistoryTable("_EfMigrations", "efcore")));
 
-builder.Services.AddIdentityCore<IdentityUser>((options) =>
-    {
-        options.SignIn.RequireConfirmedAccount = true;
-        options.SignIn.RequireConfirmedEmail = true;
-    })
+builder.Services.AddIdentityCore<IdentityUser>()
     .AddEntityFrameworkStores<ExpressedRealmsDbContext>()
     .AddApiEndpoints();
 
@@ -114,7 +110,6 @@ app.MapGet("/characters", [Authorize] async (ExpressedRealmsDbContext dbContext)
 
 app.MapGroup("auth").MapIdentityApi<IdentityUser>();
 app.MapGroup("auth").MapPost("/logoff", (HttpContext httpContext) => Results.SignOut());
-app.MapGroup("auth").MapGet("/isLoggedIn", (ClaimsPrincipal user) => user.Identity?.IsAuthenticated ?? false);
 app.MapGroup("auth").MapGet("/getInitialLoginInfo", (IAntiforgery _antiforgery, HttpContext httpContext, ClaimsPrincipal user) =>
 {
     var tokens = _antiforgery.GetAndStoreTokens(httpContext);
