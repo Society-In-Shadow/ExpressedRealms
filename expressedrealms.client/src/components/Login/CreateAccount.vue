@@ -37,7 +37,7 @@ const onSubmit = handleSubmit((values) => {
       email: values.email,
       password: values.confirmPassword
     }).then(() => {
-      Router.push("Login?createdUser=1")
+      Router.push("login?createdUser=1")
     });
 });
 

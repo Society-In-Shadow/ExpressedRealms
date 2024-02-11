@@ -11,10 +11,6 @@ const confirmPassword = 'confirm-password';
 describe('<CreateAccount />', () => {
     beforeEach(() => {
         
-        cy.intercept('GET', '/api/auth/isLoggedIn', {
-            body: ['false'],
-        });
-
         cy.intercept('POST', '/api/auth/register', {
             statusCode: 200
         }).as('createUser');
