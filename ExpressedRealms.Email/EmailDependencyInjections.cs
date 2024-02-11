@@ -1,4 +1,3 @@
-using ExpressedRealms.Email;
 using ExpressedRealms.Email.IdentityEmails;
 using ExpressedRealms.Email.IdentityEmails.ConfirmAccountEmail;
 using ExpressedRealms.Email.IdentityEmails.ForgotPasswordEmail;
