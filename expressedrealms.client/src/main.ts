@@ -23,8 +23,8 @@ pinia.use(piniaPluginPersistedState);
 const app = createApp(App)
     .use(PrimeVue, {ripple: true})
     .use(Router);
-app.use(pinia);
 app.directive('ripple', Ripple);
+app.use(pinia);
 
 app.mount('#app');
 
