@@ -1,24 +1,35 @@
 <script setup lang="ts">
 
+  import Button from 'primevue/button';
   import axios from "axios";
+  import Router from "@/router";
   import {userStore} from "@/stores/userStore";
   let userInfo = userStore();
 
   let sentConfirmationEmail = false;
-  await axios.post("/auth/resendConfirmationEmail", { email: userInfo.userEmail })
-      .then(() => { 
-        sentConfirmationEmail = true;
-      })
-  
+  async function resendConfirmationEmail() {
+    await axios.post("/api/auth/resendConfirmationEmail", { email: userInfo.userEmail })
+        .then(() => {
+          sentConfirmationEmail = true;
+        });
+  }
+  async function logoff() {
+    axios.post('api/auth/logoff').then(() => {
+      userInfo.userEmail = "";
+      userInfo.hasConfirmedEmail = false;
+      Router.push('login');
+    });
+  }
 </script>
 
 <template>
-  <p>You have an unconfirmed email.  Please confirm your email at {{userInfo.userEmail}}.</p>
+  <p>You have an unconfirmed email.  Please confirm your email at</p>
+  <p>{{userInfo.userEmail}}</p>
   <p>If you do not have a confirmation email, you can resend it by clicking the button below.</p>
   <p v-show="sentConfirmationEmail">You have successfully send an reset password email to above email.</p>
-  <router-link to="ForgotPassword">
-    <Button data-cy="forgot-password" label="Forgot Password?" class="w-100 mb-2" />
-  </router-link>
+  <Button data-cy="forgot-password" label="Resend Confirmation Link" @click="resendConfirmationEmail()" class="w-100 mb-2" />
+  <p>Alternatively, you can log off and try another user.</p>
+  <Button data-cy="forgot-password" label="Logoff" @click="logoff()" class="w-100 mb-2" />
 </template>
 
 <style scoped>

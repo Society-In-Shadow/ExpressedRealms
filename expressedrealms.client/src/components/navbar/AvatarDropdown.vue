@@ -19,6 +19,8 @@ const items = ref([
     icon: 'pi pi-sign-out',
     command: () => {
       axios.post('api/auth/logoff').then(() => {
+        userInfo.userEmail = "";
+        userInfo.hasConfirmedEmail = false;
         router.push('login');
       });
     }
