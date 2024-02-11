@@ -35,7 +35,11 @@ const route = useRoute();
 const onSubmit = handleSubmit((values) => {
   axios.post('/api/auth/login', values)
   .then(() => {
-    Router.push('characters');
+    // Reset antiforgery token after login
+    axios.get('/api/auth/getAntiforgeryToken')
+      .then(() => {
+        Router.push('characters');
+      });
   });
 });
 

@@ -110,13 +110,6 @@ app.MapGet("/characters", [Authorize] async (ExpressedRealmsDbContext dbContext)
 
 app.MapGroup("auth").MapIdentityApi<IdentityUser>();
 app.MapGroup("auth").MapPost("/logoff", (HttpContext httpContext) => Results.SignOut());
-app.MapGroup("auth").MapGet("/getInitialLoginInfo", (IAntiforgery _antiforgery, HttpContext httpContext, ClaimsPrincipal user) =>
-{
-    var tokens = _antiforgery.GetAndStoreTokens(httpContext);
-    httpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken,
-        new CookieOptions() { HttpOnly = false });
-    return user.Identity.Name;
-});
 app.MapGroup("auth").MapGet("/getAntiforgeryToken", (IAntiforgery _antiforgery, HttpContext httpContext, ClaimsPrincipal user) =>
 {
     var tokens = _antiforgery.GetAndStoreTokens(httpContext);
