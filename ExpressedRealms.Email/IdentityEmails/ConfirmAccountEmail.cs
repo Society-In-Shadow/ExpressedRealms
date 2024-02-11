@@ -27,7 +27,7 @@ Society in Shadows";
             $"""
             <p>Welcome to Society in Shadows!  Please click the link below to confirm your account</p>
 
-            <p><a href="{baseURL}/confirmAccount?{confirmAccountParamters}"> Reset Password </a></p>
+            <p><a href="{baseURL}/confirmAccount?{confirmAccountParamters}">Confirm Account</a></p>
 
             <p>Thanks,</p>
             <p>Society in Shadows</p>

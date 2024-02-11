@@ -8,7 +8,8 @@ namespace ExpressedRealms.Email.IdentityEmails;
 internal sealed class IdentityEmailSender(
     ISendGridClient sendGrid,
     IForgetPasswordEmail forgetPasswordEmail,
-    IConfirmAccountEmail confirmAccountEmail)
+    IConfirmAccountEmail confirmAccountEmail,
+    IConfiguration configuration)
     : IEmailSender
 {
 
@@ -23,7 +24,7 @@ internal sealed class IdentityEmailSender(
         };
 
         var msg = MailHelper.CreateSingleEmail(
-            new EmailAddress("test123@example.com"), 
+            new EmailAddress(configuration["FROM_EMAIL"]), 
             new EmailAddress(email), 
             subject, 
             plainTextMessage, 

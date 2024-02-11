@@ -20,7 +20,7 @@ internal sealed class ForgetPasswordEmail(IConfiguration configuration) : IForge
 {baseURL}/resetpassword?resetToken={resetToken}
 
 If you did not request a password reset, please ignore this email.
-This password reset link is only valid for the next 30 minutes.
+This password reset link is only valid for the next 24 hours.
 
 Thanks,
 Society in Shadows";
