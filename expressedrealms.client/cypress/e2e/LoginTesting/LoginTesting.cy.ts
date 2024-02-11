@@ -14,6 +14,22 @@ describe('Login Testing', () => {
         cy.visit('/login')
         cy.dataCy('success-password-reset-message').should('not.exist');
     });
+
+    it('After Confirmed Email, Show Success and Have Them Login', () => {
+        cy.visit('/login?confirmedEmail=1')
+        cy.dataCy('success-confirmed-email-message').should('be.visible')
+
+        cy.visit('/login')
+        cy.dataCy('success-confirmed-email-message').should('not.exist');
+    });
+
+    it('After Create Account, Show Success and Have Them Login', () => {
+        cy.visit('/login?createdUser=1')
+        cy.dataCy('success-created-user-message').should('be.visible')
+
+        cy.visit('/login')
+        cy.dataCy('success-created-user-message').should('not.exist');
+    });
     
     it('Base URL redirects to login', () => {
         cy.visit('/');

@@ -43,6 +43,8 @@ const onSubmit = handleSubmit((values) => {
 
 <template>
   <Message severity="success" v-if="route.query.resetPassword" data-cy="success-password-reset-message">Password was successfully changed, please log in.</Message>
+  <Message severity="success" v-if="route.query.createdUser" data-cy="success-created-user-message">User was successfully created, please log in.</Message>
+  <Message severity="success" v-if="route.query.confirmedEmail" data-cy="success-confirmed-email-message">Your email was successfully confirmed, please log in.</Message>
   <form @submit="onSubmit">
     <div class="mb-3">
       <label for="email">Email</label>
@@ -63,7 +65,7 @@ const onSubmit = handleSubmit((values) => {
     <Button data-cy="create-account" label="Create Account" class="w-100 mb-2" />
   </router-link>
   <router-link to="ForgotPassword">
-    <Button data-cy="forgot-password" label="Forgot Password?" class="w-100 mb-2" />
+    <Button data-cy="forgot-password" label="Forgot Goo?" class="w-100 mb-2" />
   </router-link>
 </template>
 

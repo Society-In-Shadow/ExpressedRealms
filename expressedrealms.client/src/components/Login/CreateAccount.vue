@@ -32,13 +32,13 @@ const [confirmPassword] = defineField('confirmPassword')
 
 const onSubmit = handleSubmit((values) => {
   console.log(values);
-  axios.post('/api/auth/createaccount', 
-      {
-        email: values.email,
-        password: values.confirmPassword
-  }).then(() => {
-    Router.push('characters');
-  });
+  axios.post('/api/auth/register', 
+    {
+      email: values.email,
+      password: values.confirmPassword
+    }).then(() => {
+      Router.push("Login?createdUser=1")
+    });
 });
 
 </script>
