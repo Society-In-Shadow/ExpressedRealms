@@ -4,13 +4,14 @@
   import axios from "axios";
   import Router from "@/router";
   import {userStore} from "@/stores/userStore";
+  import { ref } from 'vue'
   let userInfo = userStore();
 
-  let sentConfirmationEmail = false;
+  let sentConfirmationEmail = ref(false);
   async function resendConfirmationEmail() {
     await axios.post("/api/auth/resendConfirmationEmail", { email: userInfo.userEmail })
         .then(() => {
-          sentConfirmationEmail = true;
+          sentConfirmationEmail.value = true;
         });
   }
   async function logoff() {
