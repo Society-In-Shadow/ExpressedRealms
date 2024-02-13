@@ -17,10 +17,9 @@
 </script>
 
 <template>
-  <p>You have an unconfirmed email.  Please confirm your email at</p>
-  <p>{{userInfo.userEmail}}</p>
-  <p>If you do not have a confirmation email, you can resend it by clicking the button below.</p>
-  <p v-show="sentConfirmationEmail">You have successfully send an reset password email to above email.</p>
+  <p>We've detected that you have not confirmed your email associated with this account.</p>
+  <p>Please do so by clicking the link in your confirmation email. If you do not have an email, you can resend it by clicking the button below.</p>
+  <p v-show="sentConfirmationEmail">You have successfully send an reset password email.</p>
   <Button data-cy="forgot-password" label="Resend Confirmation Link" @click="resendConfirmationEmail()" class="w-100 mb-2" />
   <p>Alternatively, you can log off and try another user.</p>
   <Button data-cy="logoff-button" label="Logoff" @click="logOff" class="w-100 mb-2" />
