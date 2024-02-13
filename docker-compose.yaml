@@ -14,9 +14,8 @@ services:
       - '5173:5173'
     volumes:
       - ./expressedrealms.client/:/app
-      - /app/node_modules
       - ${USERPROFILE}/.aspnet/https:/https
-    command: sh -c "npm run dev -- --host 0.0.0.0"
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
     networks:
       - expressed-realms-network
     depends_on:
