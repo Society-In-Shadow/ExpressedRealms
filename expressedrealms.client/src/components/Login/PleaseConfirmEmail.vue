@@ -2,7 +2,7 @@
 
   import Button from 'primevue/button';
   import axios from "axios";
-  import Router from "@/router";
+  import { logOff } from "@/services/Authentication";
   import {userStore} from "@/stores/userStore";
   import { ref } from 'vue'
   let userInfo = userStore();
@@ -14,13 +14,6 @@
           sentConfirmationEmail.value = true;
         });
   }
-  async function logoff() {
-    axios.post('api/auth/logoff').then(() => {
-      userInfo.userEmail = "";
-      userInfo.hasConfirmedEmail = false;
-      Router.push('login');
-    });
-  }
 </script>
 
 <template>
@@ -30,7 +23,7 @@
   <p v-show="sentConfirmationEmail">You have successfully send an reset password email to above email.</p>
   <Button data-cy="forgot-password" label="Resend Confirmation Link" @click="resendConfirmationEmail()" class="w-100 mb-2" />
   <p>Alternatively, you can log off and try another user.</p>
-  <Button data-cy="forgot-password" label="Logoff" @click="logoff()" class="w-100 mb-2" />
+  <Button data-cy="logoff-button" label="Logoff" @click="logOff" class="w-100 mb-2" />
 </template>
 
 <style scoped>

@@ -4,9 +4,9 @@ import {computed, ref} from "vue";
 import { useRouter } from 'vue-router'
 import TieredMenu from "primevue/tieredmenu";
 import Avatar from "primevue/avatar"
-import axios from "axios";
 import {userStore} from "@/stores/userStore";
 import md5 from "md5"
+import { logOff } from "@/services/Authentication";
 let userInfo = userStore();
 
 const router = useRouter();
@@ -17,13 +17,7 @@ const items = ref([
     label: 'Logoff',
     id: 'logoff',
     icon: 'pi pi-sign-out',
-    command: () => {
-      axios.post('api/auth/logoff').then(() => {
-        userInfo.userEmail = "";
-        userInfo.hasConfirmedEmail = false;
-        router.push('login');
-      });
-    }
+    command: () => { logOff(); }
   },
 ]);
 
