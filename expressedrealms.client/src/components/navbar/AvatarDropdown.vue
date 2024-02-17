@@ -1,15 +1,12 @@
 <script setup lang="ts">
 
 import {computed, ref} from "vue";
-import { useRouter } from 'vue-router'
 import TieredMenu from "primevue/tieredmenu";
 import Avatar from "primevue/avatar"
 import {userStore} from "@/stores/userStore";
 import md5 from "md5"
 import { logOff } from "@/services/Authentication";
 let userInfo = userStore();
-
-const router = useRouter();
 
 const menu = ref();
 const items = ref([

@@ -67,7 +67,7 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
 
-    let loggedIn = isLoggedIn();
+    const loggedIn = isLoggedIn();
     const anonymousEndpoints = ['Login', 'createAccount', 'forgotPassword', 'resetPassword', 'confirmAccount']
     const routeName:string = to.name as string;
     const canCauseInfiniteRedirects = anonymousEndpoints.includes(routeName)
@@ -78,7 +78,7 @@ router.beforeEach(async (to) => {
     
     if(loggedIn){
         
-        let userInfo = userStore();
+        const userInfo = userStore();
         
         // Check to make sure that they have a confirmed email
         if(!userInfo.hasConfirmedEmail && routeName != 'pleaseConfirmEmail' && routeName != 'confirmAccount'){
