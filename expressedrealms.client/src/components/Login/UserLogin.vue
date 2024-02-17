@@ -7,7 +7,7 @@ import Router from "@/router";
 import { useForm } from 'vee-validate';
 import { object, string }  from 'yup';
 
-import {onBeforeMount} from "vue";
+import {onBeforeMount, ref} from "vue";
 import Message from 'primevue/message';
 import {useRoute} from "vue-router"
 
@@ -27,10 +27,12 @@ onBeforeMount(() => {
 
 const [email] = defineField('email');
 const [password] = defineField('password');
+let incorrectLogin = ref(false);
 
 const route = useRoute();
 
 const onSubmit = handleSubmit((values) => {
+  incorrectLogin.value = false;
   axios.post('/api/auth/login', values)
   .then(() => {
     // Reset antiforgery token after login
@@ -38,22 +40,28 @@ const onSubmit = handleSubmit((values) => {
       .then(() => {
         Router.push('characters');
       });
+  }).
+  catch(() => {
+    incorrectLogin.value = true;
   });
 });
 
 </script>
 
 <template>
-  <Message v-if="route.query.resetPassword" severity="success" :closable="false" data-cy="success-password-reset-message">
+  <Message v-if="incorrectLogin" severity="error" :closable="false" data-cy="error-invalid-login">
+    Your email or password was incorrect, please try again.
+  </Message>
+  <Message v-else-if="route.query.resetPassword" severity="success" :closable="false" data-cy="success-password-reset-message">
     Password was successfully changed, please log in.
   </Message>
-  <Message v-if="route.query.createdUser" severity="success" :closable="false" data-cy="success-created-user-message">
+  <Message v-else-if="route.query.createdUser" severity="success" :closable="false" data-cy="success-created-user-message">
     User was successfully created, please log in.
   </Message>
-  <Message v-if="route.query.confirmedEmail" severity="success" :closable="false" data-cy="success-confirmed-email-message">
+  <Message v-else-if="route.query.confirmedEmail" severity="success" :closable="false" data-cy="success-confirmed-email-message">
     Your email was successfully confirmed, please log in.
   </Message>
-  <Message v-if="route.query.forgotPassword" severity="success" :closable="false" data-cy="success-forgot-password-message">
+  <Message v-else-if="route.query.forgotPassword" severity="success" :closable="false" data-cy="success-forgot-password-message">
     An email was sent to your email, please continue with the email, or login below.
   </Message>
   <form @submit="onSubmit">

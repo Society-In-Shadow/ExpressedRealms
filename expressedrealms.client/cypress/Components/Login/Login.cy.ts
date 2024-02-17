@@ -61,4 +61,20 @@ describe('<Login />', () => {
     cy.wait('@antiforgeryToken');
     
   });
+  it('Shows Email or Password Incorrect Message Upon Login Failure', () => {
+
+    cy.dataCy("error-invalid-login").should('not.exist');
+
+    cy.intercept('POST', '/api/auth/login', {
+      statusCode: 500
+    }).as('login');
+    
+    cy.dataCy('email').type("example@example.com")
+    cy.dataCy('password').type('Password1!');
+    cy.dataCy('sign-in-button').click();    
+    cy.wait('@login');
+    
+    cy.dataCy("error-invalid-login").should('be.visible');
+        
+  });
 })

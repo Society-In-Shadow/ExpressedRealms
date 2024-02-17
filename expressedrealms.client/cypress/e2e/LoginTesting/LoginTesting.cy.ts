@@ -38,6 +38,25 @@ describe('Login Testing', () => {
         cy.visit('/login')
         cy.dataCy('success-forgot-password-message').should('not.exist');
     });
+
+    it('After Password Reset, and failed login, display only the incorrect password message', () => {
+        cy.visit('/login?resetPassword=1')
+        cy.dataCy('success-password-reset-message').should('be.visible')
+
+        cy.dataCy("error-invalid-login").should('not.exist');
+
+        cy.intercept('POST', '/api/auth/login', {
+            statusCode: 500
+        }).as('login');
+
+        cy.dataCy('email').type("example@example.com")
+        cy.dataCy('password').type('Password1!');
+        cy.dataCy('sign-in-button').click();
+        cy.wait('@login');
+
+        cy.dataCy("error-invalid-login").should('be.visible');
+        cy.dataCy('success-password-reset-message').should('not.exist');
+    });
     
     it('Base URL redirects to login', () => {
         cy.visit('/');
