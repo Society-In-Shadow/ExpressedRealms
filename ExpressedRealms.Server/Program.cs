@@ -1,9 +1,6 @@
-using System.Security.Claims;
 using ExpressedRealms.DB;
-using ExpressedRealms.Email.SendGridTestEmail;
+using ExpressedRealms.Server.EndPoints;
 using ExpressedRealms.Server.Swagger;
-using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -80,53 +77,12 @@ app.UseAuthorization();
 
 app.UseAntiforgery();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+app.AddAuthEndPoints();
+app.AddWeatherEndpoints();
+app.AddCharacterEndPoints();
+app.AddTestingEndPoints();
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
-
-app.MapGet("/characters", [Authorize] async (ExpressedRealmsDbContext dbContext) =>
-{
-    return await dbContext.Characters.ToListAsync();
-})
-.WithName("Charcters")
-.WithOpenApi()
-.RequireAuthorization();
-
-app.MapGroup("auth").MapIdentityApi<IdentityUser>();
-app.MapGroup("auth").MapPost("/logoff", (HttpContext httpContext) => Results.SignOut());
-app.MapGroup("auth").MapGet("/getAntiforgeryToken", (IAntiforgery _antiforgery, HttpContext httpContext, ClaimsPrincipal user) =>
-{
-    var tokens = _antiforgery.GetAndStoreTokens(httpContext);
-    httpContext.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken,
-        new CookieOptions() { HttpOnly = false });
-    return Results.Ok();
-});
-app.MapGet("/sendTestEmail", async (ISendGridEmail email) =>
-{
-    await email.SendTestEmail();
-    return Results.Ok();
-});
 app.MapFallbackToFile("/index.html");
 
 app.Run();
 
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
