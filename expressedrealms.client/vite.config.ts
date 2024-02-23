@@ -27,9 +27,6 @@ export default defineConfig({
         https: {
             key: require('path').resolve(__dirname, `/https/key.pem`),
             cert: require('path').resolve(__dirname, `/https/cert.pem`)
-        },
-        watch: {
-            usePolling: true
         }
     }
 })

@@ -97,6 +97,24 @@ SENDGRID_API_KEY=SG.secret
 FROM_EMAIL="no-replay@societyinshadows.org"
 ```
 
+### Note About Vite and Windows
+
+Hot reloading using Vite won't work with docker compose, due to fundamental issue with how WSL works.
+
+See:
+[Broken File Watcher](https://github.com/microsoft/WSL/issues/4739)
+
+Fundamentally, since the docker runs it's containers on WSL, when you update something on windows, that update isn't being
+translated into the linux version of hey a file updated process,  thus not vite to pick up the changes.
+
+There are some workarounds, the only one that I could get working is below.
+
+To enable it, though at a cost of CPU run time, add the following to the server portion of vite config
+``` javascript
+watch: {
+  usePolling: true
+}
+```
 
 ### Run Society in Shadows
 
@@ -249,19 +267,56 @@ docker compose down
 docker compose build --no-cache
 ```
 
-## Other Notes
-### Setup Certificates (Fedora)
+## Fedora
 
-Follow these steps for the most part, except for part 2
+### Setup Cert
 
-[Stack Overflow Steps](https://stackoverflow.com/a/59702094)
+### Install mkcert and supporting tools
 
-Part 2, you need to do this instead
-sudo trust anchor --store localhost.crt
+```shell
+curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64"
+chmod +x mkcert-v*-linux-amd64
+sudo cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
+```
 
-after which, this should return OK
-openssl verify localhost.crt
+Install nss-tools to allow the CA to be used in firefox and chrome
+```shell
+sudo dnf install nss-tools
+```
 
-Step 3 does work, but won't work with production stuff
+### Create the Certs
+```shell
+mkcert -install
 
-next step is to move the pfx file into ~/.aspnet/https and chmod 777 the entire directory and file
+mkdir ~/.aspnet/https -p
+cd ~/.aspnet/https
+
+mkcert -cert-file cert.pem -key-file key.pem localhost
+mkcert -p12-file localhost.pfx -pkcs12 localhost
+
+```
+
+
+In your env file, add this
+If you use Linux
+```ini
+# If you use linux, set this to your home directory
+USERPROFILE="/home/<username>"
+```
+
+### Issues
+
+#### Can't Connect Docker Deamon
+If you get this:
+permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock:
+
+[Do this](https://stackoverflow.com/questions/47854463/docker-got-permission-denied-while-trying-to-connect-to-the-docker-daemon-socke)
+```shell
+sudo usermod -a -G docker <username>
+```
+After that log off and back on
+
+#### Permission Issue With Certificate
+You might need to chmod 777 the entire directory and files if you run into permission issues while running Docker
+
+
