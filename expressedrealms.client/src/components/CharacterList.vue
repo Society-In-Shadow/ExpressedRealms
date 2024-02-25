@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h1>Character DB Test</h1>
+    <h1 dee="daa">Character DB Test</h1>
     <p>This component demonstrates fetching data from the database via a protected endpoint.</p>
 
     <DataTable :value="characters" table-style="min-width: 50rem">
-      <Column field="id" header="Id" />
+      <Column field="id" header="Id" foo="bar"/>
       <Column field="name" header="Name" />
     </DataTable>
   </div>
