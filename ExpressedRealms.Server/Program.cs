@@ -85,4 +85,3 @@ app.AddTestingEndPoints();
 app.MapFallbackToFile("/index.html");
 
 app.Run();
-
