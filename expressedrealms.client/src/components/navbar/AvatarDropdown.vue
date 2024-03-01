@@ -7,9 +7,20 @@ import {userStore} from "@/stores/userStore";
 import md5 from "md5"
 import { logOff } from "@/services/Authentication";
 let userInfo = userStore();
+import {useRouter} from "vue-router";
+
+const router = useRouter();
 
 const menu = ref();
 const items = ref([
+  {
+    label: 'My Profile',
+    id: 'myProfile',
+    icon: 'pi pi-user-edit',
+    command: () => {
+      router.push('/userProfile');
+    }
+  },
   {
     label: 'Logoff',
     id: 'logoff',
