@@ -10,13 +10,13 @@ internal static class AuthEndPoints
     {
         app.MapGroup("auth").MapIdentityApi<IdentityUser>();
         app.MapGroup("auth").MapPost("/logoff", (HttpContext httpContext) => Results.SignOut());
-        app.MapGroup("auth").MapGet("/getAntiforgeryToken", (IAntiforgery antiforgery, HttpContext httpContext, ClaimsPrincipal user, ILogger logger) =>
+        app.MapGroup("auth").MapGet("/getAntiforgeryToken", (IAntiforgery antiforgery, HttpContext httpContext, ClaimsPrincipal user) =>
         {
             var tokens = antiforgery.GetAndStoreTokens(httpContext);
 
             if (tokens.RequestToken is null)
             {
-                logger.LogCritical("The anti-forgery token was not generated.");
+                app.Logger.LogCritical("The anti-forgery token was not generated.");
                 return Results.StatusCode(500);
             }
             
