@@ -11,6 +11,11 @@ export async function logOff() {
     });
 }
 
+export function resetEmailConfirmation() {
+    const userInfo = userStore();
+    userInfo.hasConfirmedEmail = false;
+}
+
 export function isLoggedIn() {
     document.cookie = ".AspNetCore.Identity.Bearer=1";
     if(document.cookie.indexOf(".AspNetCore.Identity.Bearer") >= 0){
