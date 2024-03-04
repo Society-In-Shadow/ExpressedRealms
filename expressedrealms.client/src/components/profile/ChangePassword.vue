@@ -69,7 +69,7 @@ const onPasswordSubmit = handleSubmit((values, { resetForm }) => {
               id="currentPassword" v-model="currentPassword" data-cy="current-password" type="password"
               :class="{ 'p-invalid': errors.password }"
           />
-          <small data-cy="password-help" class="text-danger">{{ errors.currentPassword }}</small>
+          <small data-cy="current-password-help" class="text-danger">{{ errors.currentPassword }}</small>
         </div>
         <div class="flex flex-column gap-2 mb-3">
           <label for="password">New Password</label>
