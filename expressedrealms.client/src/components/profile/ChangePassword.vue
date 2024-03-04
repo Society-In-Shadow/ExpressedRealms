@@ -4,16 +4,15 @@ import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import Card from 'primevue/card';
 import axios from "axios";
-import Router from "@/router";
 import { useForm } from 'vee-validate';
 import { object, string, ref }  from 'yup';
-import { useRoute } from 'vue-router'
+import Message from "primevue/message";
+import { ref as vueRef } from 'vue';
 
-const { defineField, handleSubmit, errors } = useForm({
+const { defineField, handleSubmit, errors, setErrors } = useForm({
   validationSchema: object({
-    email: string().required()
-        .email()
-        .label('Email address'),
+    currentPassword: string().required()
+        .label('Current Password'),
     password: string()
         .required()
         .min(8)
@@ -28,22 +27,30 @@ const { defineField, handleSubmit, errors } = useForm({
   })
 });
 
-const [email] = defineField('email');
-const [confirmEmail] = defineField('confirmEmail');
+const [currentPassword] = defineField('currentPassword');
 const [password] = defineField('password');
-const [confirmPassword] = defineField('confirmPassword')
+const [confirmPassword] = defineField('confirmPassword');
+const successfullyChangedPassword = vueRef(false);
 
-const route = useRoute();
-
-const onPasswordSubmit = handleSubmit((values) => {
-  axios.post('/api/auth/resetPassword',
+const onPasswordSubmit = handleSubmit((values, {resetForm}) => {
+  axios.post('/api/auth/manage/info',
       {
-        email: values.email,
-        resetCode: route.query.resetToken,
-        newPassword: values.confirmPassword
+        oldPassword: values.currentPassword,
+        newPassword: values.newPassword
       }).then(() => {
-    Router.push('login?resetPassword=1');
-  });
+        successfullyChangedPassword.value = true;
+        resetForm();
+      })
+      .catch((error) => {
+        successfullyChangedPassword.value = false;
+        if (error.response?.status === 400){
+          if(error.response.data?.errors?.PasswordMismatch) {
+            setErrors({ currentPassword: error.response.data.errors.PasswordMismatch });
+          }
+          return;
+        }
+        throw error;
+      });
 });
 
 </script>
@@ -52,11 +59,22 @@ const onPasswordSubmit = handleSubmit((values) => {
   <Card class="mb-3">
     <template #title>Reset Password</template>
     <template #content>
+      <Message v-if="successfullyChangedPassword" severity="success" :closable="false" data-cy="successful-change-password">
+        Successfully changed your password!
+      </Message>
       <form @submit="onPasswordSubmit">
         <div class="flex flex-column gap-2 mb-3">
-          <label for="password">Password</label>
+          <label for="currentPassword">Current Password</label>
           <InputText
-              id="password" v-model="password" data-cy="password" type="password" class=""
+              id="currentPassword" v-model="currentPassword" data-cy="current-password" type="password"
+              :class="{ 'p-invalid': errors.password }"
+          />
+          <small data-cy="password-help" class="text-danger">{{ errors.currentPassword }}</small>
+        </div>
+        <div class="flex flex-column gap-2 mb-3">
+          <label for="password">New Password</label>
+          <InputText
+              id="password" v-model="password" data-cy="password" type="password"
               :class="{ 'p-invalid': errors.password }"
           />
           <small data-cy="password-help" class="text-danger">{{ errors.password }}</small>
@@ -64,7 +82,7 @@ const onPasswordSubmit = handleSubmit((values) => {
         <div class="flex flex-column gap-2 mb-3">
           <label for="confirmPassword">Confirm Password</label>
           <InputText
-              id="confirmPassword" v-model="confirmPassword" data-cy="confirm-password" type="password" class=""
+              id="confirmPassword" v-model="confirmPassword" data-cy="confirm-password" type="password"
               :class="{ 'p-invalid': errors.confirmPassword }"
           />
           <small data-cy="confirm-password-help" class="text-danger">{{ errors.confirmPassword }}</small>
