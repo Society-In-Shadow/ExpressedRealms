@@ -2,11 +2,7 @@
 <template>
   <main-nav-bar />
   
-  <Card class="m-3 p-0" id="baseTile">
-    <template #content>
-      <router-view />
-    </template>
-  </Card>
+  <router-view />
 </template>
 
 <script setup>
