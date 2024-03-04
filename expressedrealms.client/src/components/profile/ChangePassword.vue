@@ -32,11 +32,11 @@ const [password] = defineField('password');
 const [confirmPassword] = defineField('confirmPassword');
 const successfullyChangedPassword = vueRef(false);
 
-const onPasswordSubmit = handleSubmit((values, {resetForm}) => {
+const onPasswordSubmit = handleSubmit((values, { resetForm }) => {
   axios.post('/api/auth/manage/info',
       {
         oldPassword: values.currentPassword,
-        newPassword: values.newPassword
+        newPassword: values.confirmPassword
       }).then(() => {
         successfullyChangedPassword.value = true;
         resetForm();
@@ -59,7 +59,7 @@ const onPasswordSubmit = handleSubmit((values, {resetForm}) => {
   <Card class="mb-3">
     <template #title>Reset Password</template>
     <template #content>
-      <Message v-if="successfullyChangedPassword" severity="success" :closable="false" data-cy="successful-change-password">
+      <Message v-if="successfullyChangedPassword" severity="success" data-cy="successful-change-password">
         Successfully changed your password!
       </Message>
       <form @submit="onPasswordSubmit">
