@@ -67,7 +67,7 @@ const onPasswordSubmit = handleSubmit((values, { resetForm }) => {
           <label for="currentPassword">Current Password</label>
           <InputText
               id="currentPassword" v-model="currentPassword" data-cy="current-password" type="password"
-              :class="{ 'p-invalid': errors.password }"
+              :class="{ 'p-invalid': errors.currentPassword }"
           />
           <small data-cy="current-password-help" class="text-danger">{{ errors.currentPassword }}</small>
         </div>

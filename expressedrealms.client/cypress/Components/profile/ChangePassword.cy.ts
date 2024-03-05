@@ -37,6 +37,26 @@ describe('<ChangePassword />', () => {
         cy.dataCy(currentPasswordHelp).should('not.be.visible');
     });
 
+    it('Fields Correctly Highlight Bad Fields', () => {
+
+        cy.dataCy(currentPassword).type("Password1!");
+        cy.dataCy(password).type("Password1!");
+        cy.dataCy(resetPasswordButton).click();
+        cy.dataCy(confirmPassword).should('have.class', 'p-invalid');
+
+        cy.dataCy(confirmPassword).type("Password1!");
+        cy.dataCy(currentPassword).clear();
+        cy.dataCy(resetPasswordButton).click();
+        cy.dataCy(currentPassword).should('have.class', 'p-invalid');
+
+        cy.dataCy(currentPassword).type("Password1!");
+        cy.dataCy(confirmPassword).clear();
+        cy.dataCy(resetPasswordButton).click();
+        cy.dataCy(confirmPassword).should('have.class', 'p-invalid');
+
+        cy.dataCy(currentPasswordHelp).should('not.be.visible');
+    });
+
     describe("All Passwords", () => {
         it('Password must be at least 8 characters', () => {
             cy.dataCy(password).clear();
