@@ -19,7 +19,6 @@ import Card from 'primevue/card';
       </template>
     </Card>
   </div>
-
 </template>
 
 <style scoped>

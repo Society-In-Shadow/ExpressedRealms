@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h1 class="mt-0">Character DB Test</h1>
+    <h1 class="mt-0">
+      Character DB Test
+    </h1>
     <p>This component demonstrates fetching data from the database via a protected endpoint.</p>
 
     <DataTable :value="characters" table-style="min-width: 50rem">

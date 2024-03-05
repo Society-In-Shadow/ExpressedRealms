@@ -40,9 +40,10 @@ const onEmailSubmit = handleSubmit((values, { resetForm }) => {
 </script>
 
 <template>
-
   <Card class="mb-3">
-    <template #title>Change Email</template>
+    <template #title>
+      Change Email
+    </template>
     <template #content>
       <Message v-if="successfullyChangedEmail" severity="success" :closable="false" data-cy="successful-change-email">
         Email confirmation was sent to the provided email.  Once you click the link, it will update your email address. 
@@ -51,16 +52,16 @@ const onEmailSubmit = handleSubmit((values, { resetForm }) => {
         <div class="flex flex-column gap-2 mb-3">
           <label for="email">Email</label>
           <InputText
-              id="email" v-model="email" data-cy="email" type="text"
-              :class="{ 'p-invalid': errors.email }"
+            id="email" v-model="email" data-cy="email" type="text"
+            :class="{ 'p-invalid': errors.email }"
           />
           <small data-cy="email-help" class="text-danger">{{ errors.email }}</small>
         </div>
         <div class="flex flex-column gap-2 mb-3">
           <label for="confirm-email">Confirm Email</label>
           <InputText
-              id="confirm-email" v-model="confirmEmail" data-cy="confirm-email" type="text"
-              :class="{ 'p-invalid': errors.confirmEmail }"
+            id="confirm-email" v-model="confirmEmail" data-cy="confirm-email" type="text"
+            :class="{ 'p-invalid': errors.confirmEmail }"
           />
           <small data-cy="confirm-email-help" class="text-danger">{{ errors.confirmEmail }}</small>
         </div>
@@ -68,7 +69,6 @@ const onEmailSubmit = handleSubmit((values, { resetForm }) => {
       </form>
     </template>
   </Card>
-  
 </template>
 
 <style scoped>

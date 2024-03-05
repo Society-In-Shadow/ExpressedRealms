@@ -61,7 +61,7 @@ const items = ref([
 
 <template>
   <MegaMenu :model="items" class="m-3 pb-1 pt-1">
-    <template #start >
+    <template #start>
       <img src="/public/favicon.png" height="50" width="50" class="m-2">
     </template>
     <template #item="{ item }">

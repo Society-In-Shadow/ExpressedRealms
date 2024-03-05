@@ -8,7 +8,6 @@
 <script setup>
 import { RouterView } from 'vue-router'
 import MainNavBar from "@/components/navbar/MainNavBar.vue";
-import Card from 'primevue/card';
 </script>
 
 <style>

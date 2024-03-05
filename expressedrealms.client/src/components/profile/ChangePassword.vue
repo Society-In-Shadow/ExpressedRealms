@@ -57,7 +57,9 @@ const onPasswordSubmit = handleSubmit((values, { resetForm }) => {
 
 <template>
   <Card class="mb-3">
-    <template #title>Reset Password</template>
+    <template #title>
+      Reset Password
+    </template>
     <template #content>
       <Message v-if="successfullyChangedPassword" severity="success" data-cy="successful-change-password">
         Successfully changed your password!
@@ -66,24 +68,24 @@ const onPasswordSubmit = handleSubmit((values, { resetForm }) => {
         <div class="flex flex-column gap-2 mb-3">
           <label for="currentPassword">Current Password</label>
           <InputText
-              id="currentPassword" v-model="currentPassword" data-cy="current-password" type="password"
-              :class="{ 'p-invalid': errors.currentPassword }"
+            id="currentPassword" v-model="currentPassword" data-cy="current-password" type="password"
+            :class="{ 'p-invalid': errors.currentPassword }"
           />
           <small data-cy="current-password-help" class="text-danger">{{ errors.currentPassword }}</small>
         </div>
         <div class="flex flex-column gap-2 mb-3">
           <label for="password">New Password</label>
           <InputText
-              id="password" v-model="password" data-cy="password" type="password"
-              :class="{ 'p-invalid': errors.password }"
+            id="password" v-model="password" data-cy="password" type="password"
+            :class="{ 'p-invalid': errors.password }"
           />
           <small data-cy="password-help" class="text-danger">{{ errors.password }}</small>
         </div>
         <div class="flex flex-column gap-2 mb-3">
           <label for="confirmPassword">Confirm Password</label>
           <InputText
-              id="confirmPassword" v-model="confirmPassword" data-cy="confirm-password" type="password"
-              :class="{ 'p-invalid': errors.confirmPassword }"
+            id="confirmPassword" v-model="confirmPassword" data-cy="confirm-password" type="password"
+            :class="{ 'p-invalid': errors.confirmPassword }"
           />
           <small data-cy="confirm-password-help" class="text-danger">{{ errors.confirmPassword }}</small>
         </div>
