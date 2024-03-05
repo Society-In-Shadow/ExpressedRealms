@@ -18,7 +18,7 @@ const { defineField, handleSubmit, errors } = useForm({
         .label('Email'),
     confirmEmail: string().required()
         .oneOf([ref('email')], 'Emails must match')
-        .label('Confirm password')
+        .label('Confirm Email')
   })
 });
 
@@ -44,7 +44,7 @@ const onEmailSubmit = handleSubmit((values, { resetForm }) => {
   <Card class="mb-3">
     <template #title>Change Email</template>
     <template #content>
-      <Message v-if="successfullyChangedEmail" severity="success" :closable="false" data-cy="successful-change-password">
+      <Message v-if="successfullyChangedEmail" severity="success" :closable="false" data-cy="successful-change-email">
         Email confirmation was sent to the provided email.  Once you click the link, it will update your email address. 
       </Message>
       <form @submit="onEmailSubmit">
@@ -60,9 +60,9 @@ const onEmailSubmit = handleSubmit((values, { resetForm }) => {
           <label for="confirm-email">Confirm Email</label>
           <InputText
               id="confirm-email" v-model="confirmEmail" data-cy="confirm-email" type="text"
-              :class="{ 'p-invalid': errors.email }"
+              :class="{ 'p-invalid': errors.confirmEmail }"
           />
-          <small data-cy="email-help" class="text-danger">{{ errors.email }}</small>
+          <small data-cy="confirm-email-help" class="text-danger">{{ errors.confirmEmail }}</small>
         </div>
         <Button data-cy="reset-email-button" label="Reset Email" class="" type="submit" />
       </form>
