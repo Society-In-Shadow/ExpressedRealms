@@ -40,6 +40,11 @@ const routes = [
                 name: "pleaseConfirmEmail",
                 component: () => import("./../components/Login/PleaseConfirmEmail.vue"),
             },
+            {
+                path: "/setupProfile",
+                name: "setupProfile",
+                component: () => import("./../components/Login/AddUserProfile.vue"),
+            },
         ]
     },
     {
@@ -96,7 +101,19 @@ router.beforeEach(async (to) => {
                 return { name: 'pleaseConfirmEmail' }
             }
         }
+        
+        // Check to see if they setup their player info yet
+        if(!userInfo.isPlayerSetup && routeName != 'setupProfile'){
+            await axios.get('/api/player/isSetup')
+                .then ((response) => {
+                        userInfo.isPlayerSetup = response.data;
+                });
 
+            if(!userInfo.isPlayerSetup){
+                return { name: 'setupProfile'}
+            }
+        }
+        
         // If they are on this page, and refresh it after confirming, redirect them to the characters page
         if(userInfo.hasConfirmedEmail && routeName == 'pleaseConfirmEmail'){
             return { name: 'characters' };
