@@ -21,6 +21,29 @@ If you have a separate instance up and running, you can use the following comman
 dotnet ef database update --verbose --project ExpressedRealms.DB --startup-project ExpressedRealms.Server
 ```
 
+## To Rollback the Database
+You will need to update the appsettings.Development.json to include the connection string to the db
+Altertantively, you can use the app secret stuff to store it on a more permanent basis, and not have it committed
+
+once you get that, the two commands you want to use is
+
+To list out the transactions
+```shell
+dotnet ef migrations list --project ExpressedRealms.DB --startup-project ExpressedRealms.Server
+```
+
+To to revert to a specified time, use this
+
+Keep note, nameOfMigration is not the one you want to revert, it's the name of the one before the one you want to remove
+```shell
+dotnet ef database update <nameOfMigration> --project ExpressedRealms.DB --startup-project ExpressedRealms.Server
+```
+
+After that, you will need to go through and manually remove the migrations in the migration folder, plus revert the model
+snapshot to a state before you applied the changes.
+
+
+
 ### Creating new DB Objects
 
 So we effectively have configuration classes that we can use to build objects out.  Included in this is the default data

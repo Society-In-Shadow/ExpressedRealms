@@ -24,7 +24,7 @@ internal class PlayerConfiguration : IEntityTypeConfiguration<Player>
             .IsRequired();
 
         builder.Property(x => x.City)
-            .HasMaxLength(15)
+            .HasMaxLength(100)
             .IsRequired();
 
         builder.Property(x => x.State)
