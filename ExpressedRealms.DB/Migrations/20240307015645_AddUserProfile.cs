@@ -17,7 +17,7 @@ namespace ExpressedRealms.DB.Migrations
                 type: "character varying(13)",
                 maxLength: 13,
                 nullable: false,
-                defaultValue: "");
+                defaultValue: "User");
 
             migrationBuilder.CreateTable(
                 name: "Players",
