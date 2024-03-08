@@ -8,6 +8,7 @@ import { object, string }  from 'yup';
 import {logOff} from "@/services/Authentication";
 import InputTextWrapper from "../../FormWrappers/InputTextWrapper.vue"
 import { userStore } from "@/stores/userStore";
+import InputMaskWrapper from "@/FormWrappers/InputMaskWrapper.vue";
 const userInfo = userStore();
 
 const { defineField, handleSubmit, errors } = useForm({
@@ -17,6 +18,7 @@ const { defineField, handleSubmit, errors } = useForm({
         .label("Name"),
     phoneNumber: string().required()
         .max(15)
+        .matches("\\(\\d{3}\\) \\d{3}\\-\\d{4}", "Format must be (555) 555-5555")
         .label('Phone Number'),
     city: string().required()
         .max(100)
@@ -45,12 +47,12 @@ const onSubmit = handleSubmit((values) => {
 <template>
   <form @submit="onSubmit">
     <div class="mb-3">
-      <p>We need a few more pieces of information before we can continue.</p>
+      <h1 class="mt-md-0 pt-md-0">User Profile Setup</h1>
     </div>
     <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name"></InputTextWrapper>
-    <InputTextWrapper v-model="phoneNumber" field-name="Phone Number" :error-text="errors.phoneNumber"></InputTextWrapper>
+    <InputMaskWrapper v-model="phoneNumber" field-name="Phone Number" :error-text="errors.phoneNumber" mask="(999) 999-9999"></InputMaskWrapper>
     <InputTextWrapper v-model="city" field-name="City" :error-text="errors.city"></InputTextWrapper>
-    <InputTextWrapper v-model="state" field-name="State" :error-text="errors.state"></InputTextWrapper>
+    <InputTextWrapper v-model="state" field-name="State" :error-text="errors.state" maxlength="2"></InputTextWrapper>
     <Button data-cy="create-account-button" label="Update Profile" class="w-100 mb-2" type="submit" />
   </form>
   <Button data-cy="logoff-button" label="Logoff" class="w-100 mb-2" @click="logOff" />

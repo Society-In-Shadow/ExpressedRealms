@@ -102,6 +102,11 @@ router.beforeEach(async (to) => {
             }
         }
         
+        // Prevent infinite loop with isPlayerSetup
+        if(!userInfo.hasConfirmedEmail && routeName == 'pleaseConfirmEmail'){
+            return;
+        }
+
         // Check to see if they setup their player info yet
         if(!userInfo.isPlayerSetup && routeName != 'setupProfile'){
             await axios.get('/api/player/isSetup')
