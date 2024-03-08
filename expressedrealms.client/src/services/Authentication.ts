@@ -5,8 +5,7 @@ import {userStore} from "@/stores/userStore";
 export async function logOff() {
     const userInfo = userStore();
     axios.post('api/auth/logoff').then(() => {
-        userInfo.userEmail = "";
-        userInfo.hasConfirmedEmail = false;
+        userInfo.$reset();
         Router.push('login');
     });
 }
