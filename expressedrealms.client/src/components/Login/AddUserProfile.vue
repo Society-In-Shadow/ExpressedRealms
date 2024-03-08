@@ -4,7 +4,7 @@ import Button from 'primevue/button';
 import axios from "axios";
 import Router from "@/router";
 import { useForm } from 'vee-validate';
-import { object, string, ref }  from 'yup';
+import { object, string }  from 'yup';
 import {logOff} from "@/services/Authentication";
 import InputTextWrapper from "../../FormWrappers/InputTextWrapper.vue"
 
@@ -32,13 +32,9 @@ const [city] = defineField('city')
 const [state] = defineField('state');
 
 const onSubmit = handleSubmit((values) => {
-  /*axios.post('/api/player/addPlayer', 
-    {
-      email: values.email,
-      password: values.confirmPassword
-    }).then(() => {
-      Router.push("login?createdUser=1")
-    });*/
+  axios.post('/api/player/addUserProfile', values).then(() => {
+      Router.push("characters")
+    });
 });
 
 </script>
