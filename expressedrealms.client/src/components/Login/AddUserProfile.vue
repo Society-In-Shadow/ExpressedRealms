@@ -7,6 +7,8 @@ import { useForm } from 'vee-validate';
 import { object, string }  from 'yup';
 import {logOff} from "@/services/Authentication";
 import InputTextWrapper from "../../FormWrappers/InputTextWrapper.vue"
+import { userStore } from "@/stores/userStore";
+const userInfo = userStore();
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
@@ -33,7 +35,8 @@ const [state] = defineField('state');
 
 const onSubmit = handleSubmit((values) => {
   axios.post('/api/player/addUserProfile', values).then(() => {
-      Router.push("characters")
+      userInfo.name = values.name;
+      Router.push("characters");
     });
 });
 

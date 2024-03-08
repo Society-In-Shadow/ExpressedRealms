@@ -106,7 +106,10 @@ router.beforeEach(async (to) => {
         if(!userInfo.isPlayerSetup && routeName != 'setupProfile'){
             await axios.get('/api/player/isSetup')
                 .then ((response) => {
-                        userInfo.isPlayerSetup = response.data;
+                    if(response.data){
+                        userInfo.isPlayerSetup = true;
+                        userInfo.name = response.data;
+                    }
                 });
 
             if(!userInfo.isPlayerSetup){

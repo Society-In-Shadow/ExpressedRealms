@@ -42,7 +42,7 @@ const gravatar = computed(() => {
 <template>
   <a class="flex align-items-center p-3 cursor-pointer mb-2 gap-2" aria-haspopup="true" aria-controls="overlay_tmenu" @click="toggle">
     <Avatar :image="gravatar" shape="circle" size="large" />
-    <div class="hideIfSmall">{{ userInfo.userEmail }}</div>
+    <div class="hideIfSmall">{{ userInfo.name }}</div>
     <i class="pi pi-caret-down text-lg" />
     <TieredMenu id="overlay_tmenu" ref="menu" :model="items" popup />
   </a>

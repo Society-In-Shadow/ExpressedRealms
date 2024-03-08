@@ -17,7 +17,7 @@ internal static class PlayerEndpoints
                     HttpContext http) =>
                 {
                     var player = await dbContext.Players.FirstOrDefaultAsync(x => x.UserId == http.User.GetUserId());
-                    return player is not null;
+                    return player?.Name;
                 })
             .WithName("isSetup")
             .WithOpenApi()
