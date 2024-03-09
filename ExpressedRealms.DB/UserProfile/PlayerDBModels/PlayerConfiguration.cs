@@ -8,33 +8,23 @@ internal class PlayerConfiguration : IEntityTypeConfiguration<Player>
     public void Configure(EntityTypeBuilder<Player> builder)
     {
         builder.HasKey(x => x.Id);
-        
-        builder.Property(x => x.Name)
-            .HasMaxLength(100)
-            .IsRequired();
 
-        builder.Property(x => x.UserId)
-            .IsRequired();
+        builder.Property(x => x.Name).HasMaxLength(100).IsRequired();
 
-        builder.Property(x => x.PlayerNumber)
-            .IsRequired();
+        builder.Property(x => x.UserId).IsRequired();
 
-        builder.Property(x => x.Phone)
-            .HasMaxLength(15)
-            .IsRequired();
+        builder.Property(x => x.PlayerNumber).IsRequired();
 
-        builder.Property(x => x.City)
-            .HasMaxLength(100)
-            .IsRequired();
+        builder.Property(x => x.Phone).HasMaxLength(15).IsRequired();
 
-        builder.Property(x => x.State)
-            .IsRequired()
-            .HasMaxLength(2);
+        builder.Property(x => x.City).HasMaxLength(100).IsRequired();
 
-        builder.Property(x => x.Id)
-            .IsRequired();
+        builder.Property(x => x.State).IsRequired().HasMaxLength(2);
 
-        builder.HasOne(x => x.User)
+        builder.Property(x => x.Id).IsRequired();
+
+        builder
+            .HasOne(x => x.User)
             .WithOne(x => x.Player)
             .HasForeignKey<Player>(x => x.UserId)
             .OnDelete(DeleteBehavior.Restrict)

@@ -11,27 +11,34 @@ internal static class PlayerEndpoints
     internal static void AddPlayerEndPoints(this WebApplication app)
     {
         var endpointGroup = app.MapGroup("player").AddFluentValidationAutoValidation();
-        
-        endpointGroup.MapGet("/isSetup",
-                async (ExpressedRealmsDbContext dbContext,
-                    HttpContext http) =>
+
+        endpointGroup
+            .MapGet(
+                "/isSetup",
+                async (ExpressedRealmsDbContext dbContext, HttpContext http) =>
                 {
-                    var player = await dbContext.Players.FirstOrDefaultAsync(x => x.UserId == http.User.GetUserId());
+                    var player = await dbContext.Players.FirstOrDefaultAsync(x =>
+                        x.UserId == http.User.GetUserId()
+                    );
                     return player?.Name;
-                })
+                }
+            )
             .WithName("isSetup")
             .WithOpenApi()
             .RequireAuthorization();
-        
-        endpointGroup.MapPost("/addUserProfile", 
-                async (
-                    CreatePlayerDTO playerDto, 
-                    ExpressedRealmsDbContext dbContext, 
-                    HttpContext http) =>
-                {
 
-                    var isExistingPlayer =
-                        await dbContext.Players.FirstOrDefaultAsync(x => x.UserId == http.User.GetUserId());
+        endpointGroup
+            .MapPost(
+                "/addUserProfile",
+                async (
+                    CreatePlayerDTO playerDto,
+                    ExpressedRealmsDbContext dbContext,
+                    HttpContext http
+                ) =>
+                {
+                    var isExistingPlayer = await dbContext.Players.FirstOrDefaultAsync(x =>
+                        x.UserId == http.User.GetUserId()
+                    );
 
                     if (isExistingPlayer is null)
                     {
@@ -49,10 +56,10 @@ internal static class PlayerEndpoints
                         await dbContext.Players.AddAsync(player);
                         await dbContext.SaveChangesAsync();
                     }
-                    
 
                     return Results.Created();
-                })
+                }
+            )
             .WithName("addUserProfile")
             .WithOpenApi()
             .RequireAuthorization();
