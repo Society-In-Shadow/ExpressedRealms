@@ -47,12 +47,14 @@ const onSubmit = handleSubmit((values) => {
 <template>
   <form @submit="onSubmit">
     <div class="mb-3">
-      <h1 class="mt-md-0 pt-md-0">User Profile Setup</h1>
+      <h1 class="mt-md-0 pt-md-0">
+        User Profile Setup
+      </h1>
     </div>
-    <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name"></InputTextWrapper>
-    <InputMaskWrapper v-model="phoneNumber" field-name="Phone Number" :error-text="errors.phoneNumber" mask="(999) 999-9999"></InputMaskWrapper>
-    <InputTextWrapper v-model="city" field-name="City" :error-text="errors.city"></InputTextWrapper>
-    <InputTextWrapper v-model="state" field-name="State" :error-text="errors.state" maxlength="2"></InputTextWrapper>
+    <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" />
+    <InputMaskWrapper v-model="phoneNumber" field-name="Phone Number" :error-text="errors.phoneNumber" mask="(999) 999-9999" />
+    <InputTextWrapper v-model="city" field-name="City" :error-text="errors.city" />
+    <InputTextWrapper v-model="state" field-name="State" :error-text="errors.state" maxlength="2" />
     <Button data-cy="create-account-button" label="Update Profile" class="w-100 mb-2" type="submit" />
   </form>
   <Button data-cy="logoff-button" label="Logoff" class="w-100 mb-2" @click="logOff" />

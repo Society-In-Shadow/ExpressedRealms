@@ -3,7 +3,7 @@
 import InputText from "primevue/inputtext";
 import {computed} from "vue";
 
-const model = defineModel({ required: true });
+const model = defineModel<string>({ required: true });
 
 defineOptions({
   inheritAttrs: false
@@ -15,10 +15,12 @@ const props = defineProps({
     required: true,
   },
   dataCyTag: {
-    type: String
+    type: String,
+    default: ""
   },
   errorText: {
-    required: true
+    required: true,
+    type: String
   }
 });
 
@@ -30,8 +32,8 @@ const dataCyTagCalc = computed(() => props.dataCyTag ?? props.fieldName.replace(
   <div class="mb-3">
     <label :for="dataCyTagCalc">{{ props.fieldName }}</label>
     <InputText
-        :id="dataCyTagCalc" v-model="model" :data-cy="dataCyTagCalc" class="w-100"
-        :class="{ 'p-invalid': errorText }" v-bind="$attrs"
+      :id="dataCyTagCalc" v-model="model" :data-cy="dataCyTagCalc" class="w-100"
+      :class="{ 'p-invalid': errorText }" v-bind="$attrs"
     />
     <small :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ errorText }}</small>
   </div>
