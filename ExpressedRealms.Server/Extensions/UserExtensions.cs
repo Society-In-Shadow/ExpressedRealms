@@ -1,5 +1,7 @@
 using System.Security.Claims;
 
+namespace ExpressedRealms.Server.Extensions;
+
 public static class ClaimsPrincipalExtensions
 {
     public static string GetUserId(this ClaimsPrincipal principal)
