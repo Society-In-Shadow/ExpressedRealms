@@ -1,6 +1,7 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels;
 using ExpressedRealms.Server.EndPoints;
+using ExpressedRealms.Server.EndPoints.PlayerEndpoints;
 using ExpressedRealms.Server.Swagger;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;

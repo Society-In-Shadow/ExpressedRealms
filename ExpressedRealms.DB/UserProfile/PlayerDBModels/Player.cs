@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Identity;
-
 namespace ExpressedRealms.DB.UserProfile.PlayerDBModels;
 
 public class Player

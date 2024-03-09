@@ -1,7 +1,6 @@
 using System.Security.Claims;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels;
 using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.AspNetCore.Identity;
 
 namespace ExpressedRealms.Server.EndPoints;
 

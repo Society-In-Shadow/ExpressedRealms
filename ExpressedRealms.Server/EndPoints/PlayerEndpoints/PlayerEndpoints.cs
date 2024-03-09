@@ -1,10 +1,10 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels;
-using ExpressedRealms.Server.EndPoints.DTOs;
+using ExpressedRealms.Server.EndPoints.PlayerEndpoints.DTOs;
 using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
-namespace ExpressedRealms.Server.EndPoints;
+namespace ExpressedRealms.Server.EndPoints.PlayerEndpoints;
 
 internal static class PlayerEndpoints
 {

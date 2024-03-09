@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace ExpressedRealms.Server.EndPoints.DTOs;
+namespace ExpressedRealms.Server.EndPoints.PlayerEndpoints.DTOs;
 
 public class CreatePlayerDTOValidator : AbstractValidator<CreatePlayerDTO>
 {

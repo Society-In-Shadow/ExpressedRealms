@@ -8,8 +8,8 @@ dotnet ef migrations add <migration name> --project ExpressedRealms.DB --startup
 ```
 
 
-You might run into permission issues, especially if you use docker.  So what you need to do is delete the obj and bin 
-folders fro both the server project and the db project.
+You might run into permission issues, especially if you use docker.  So what you need to do is delete the obj and bin
+folders for both the server project and the db project.
 
 ## To Update the DB
 
