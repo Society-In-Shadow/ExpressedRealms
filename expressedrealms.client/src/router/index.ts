@@ -3,7 +3,7 @@ import LoginBasePlate from "@/components/Login/LoginBasePlate.vue";
 import Layout from "@/components/LoggedInLayout.vue";
 import axios from "axios";
 import {userStore} from "@/stores/userStore";
-import {isLoggedIn} from "@/services/Authentication";
+import {updateUserStoreWithEmailInfo, isLoggedIn, updateUserStoreWithPlayerInfo} from "@/services/Authentication";
 
 const routes = [
     {
@@ -92,11 +92,7 @@ router.beforeEach(async (to) => {
         
         // Check to make sure that they have a confirmed email
         if(!userInfo.hasConfirmedEmail && routeName != 'pleaseConfirmEmail' && routeName != 'confirmAccount'){
-            await axios.get("/api/auth/manage/info")
-                .then(response => {
-                    userInfo.hasConfirmedEmail = response.data.isEmailConfirmed;
-                    userInfo.userEmail = response.data.email;
-                });
+            await updateUserStoreWithEmailInfo();
             if(!userInfo.hasConfirmedEmail){
                 return { name: 'pleaseConfirmEmail' }
             }
@@ -109,13 +105,7 @@ router.beforeEach(async (to) => {
 
         // Check to see if they setup their player info yet
         if(!userInfo.isPlayerSetup && routeName != 'setupProfile'){
-            await axios.get('/api/player/isSetup')
-                .then ((response) => {
-                    if(response.data){
-                        userInfo.isPlayerSetup = true;
-                        userInfo.name = response.data;
-                    }
-                });
+            await updateUserStoreWithPlayerInfo();
 
             if(!userInfo.isPlayerSetup){
                 return { name: 'setupProfile'}
@@ -132,6 +122,6 @@ router.beforeEach(async (to) => {
             return { name: 'characters' };
     }
     
-})
+});
 
 export default router
