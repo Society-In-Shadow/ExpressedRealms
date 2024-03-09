@@ -33,7 +33,12 @@ const props = defineProps({
   }
 });
 
-const dataCyTagCalc = computed(() => props.dataCyTag ?? props.fieldName.replace(" ", "-").toLowerCase())
+const dataCyTagCalc = computed(() => {
+  if(props.dataCyTag != ""){
+    return props.dataCyTag;
+  }
+  return props.fieldName.replace(" ", "-").toLowerCase();
+});
 
 </script>
 
