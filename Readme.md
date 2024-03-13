@@ -348,7 +348,9 @@ npx cypress run --component
 ```
 
 ### Permission Issue While Running Cypress
-You also might need to use the following command if you try running Cypress Component Testing and Docker at the same time
+You also might need to use the following command if you try running Cypress Component Testing and Docker at the same time.
+
+You need to be in the expressedRealms.client folder for this to work.
 
 ```shell
 sudo chown -hR <username> node_modules/
