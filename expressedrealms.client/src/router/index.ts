@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import LoginBasePlate from "@/components/Login/LoginBasePlate.vue";
 import Layout from "@/components/LoggedInLayout.vue";
-import axios from "axios";
 import {userStore} from "@/stores/userStore";
 import {updateUserStoreWithEmailInfo, isLoggedIn, updateUserStoreWithPlayerInfo} from "@/services/Authentication";
 

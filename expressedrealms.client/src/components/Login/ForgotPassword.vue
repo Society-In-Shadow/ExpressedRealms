@@ -28,7 +28,7 @@ const onSubmit = handleSubmit((values) => {
 
 <template>
   <form @submit="onSubmit">
-    <InputTextWrapper field-name="Email" v-model="email" :error-text="errors.email"/>
+    <InputTextWrapper v-model="email" field-name="Email" :error-text="errors.email" />
     <Button label="Reset Password" class="w-100 mb-2" type="submit" />
   </form>
   <Button label="Back" class="w-100 mb-2" @click="Router.push('/login')" />

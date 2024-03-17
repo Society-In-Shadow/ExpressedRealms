@@ -65,8 +65,8 @@ const onSubmit = handleSubmit((values) => {
     An email was sent to your email, please continue with the email, or login below.
   </Message>
   <form @submit="onSubmit">
-    <InputTextWrapper field-name="Email" v-model="email" :error-text="errors.email" />
-    <InputTextWrapper field-name="Password" v-model="password" :error-text="errors.password" type="password"/>
+    <InputTextWrapper v-model="email" field-name="Email" :error-text="errors.email" />
+    <InputTextWrapper v-model="password" field-name="Password" :error-text="errors.password" type="password" />
     <Button data-cy="sign-in-button" label="Sign In" class="w-100 mb-2" type="submit" />
   </form>
   <router-link to="CreateAccount">

@@ -45,9 +45,9 @@ const onSubmit = handleSubmit((values) => {
 
 <template>
   <form @submit="onSubmit">
-    <InputTextWrapper field-name="Email" v-model="email" :error-text="errors.email" />
-    <InputTextWrapper field-name="Password" v-model="password" :error-text="errors.password" type="password" />
-    <InputTextWrapper field-name="Confirm Password" v-model="confirmPassword" :error-text="errors.confirmPassword" type="password" />
+    <InputTextWrapper v-model="email" field-name="Email" :error-text="errors.email" />
+    <InputTextWrapper v-model="password" field-name="Password" :error-text="errors.password" type="password" />
+    <InputTextWrapper v-model="confirmPassword" field-name="Confirm Password" :error-text="errors.confirmPassword" type="password" />
     <Button data-cy="create-account-button" label="Create Account" class="w-100 mb-2" type="submit" />
   </form>
   <Button data-cy="back-button" label="Back" class="w-100 mb-2" @click="Router.push('/login')" />
