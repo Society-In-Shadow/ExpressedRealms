@@ -68,7 +68,7 @@ const onPasswordSubmit = handleSubmit((values, { resetForm }) => {
         <InputTextWrapper v-model="currentPassword" field-name="Current Password" :error-text="errors.currentPassword" type="password" />
         <InputTextWrapper v-model="password" field-name="New Password" :error-text="errors.password" type="password" />
         <InputTextWrapper v-model="confirmPassword" field-name="Confirm Password" :error-text="errors.confirmPassword" type="password" />
-        <Button data-cy="reset-password-button" label="Reset Password" class="flex flex-column gap-3" type="submit" />
+        <Button data-cy="reset-password-button" label="Reset Password" class="w-100" type="submit" />
       </form>
     </template>
   </Card>

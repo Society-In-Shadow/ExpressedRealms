@@ -51,7 +51,7 @@ const onEmailSubmit = handleSubmit((values, { resetForm }) => {
       <form @submit="onEmailSubmit">
         <InputTextWrapper v-model="email" field-name="Email" :error-text="errors.email" />
         <InputTextWrapper v-model="confirmEmail" field-name="Confirm Email" :error-text="errors.confirmEmail" />
-        <Button data-cy="reset-email-button" label="Reset Email" class="" type="submit" />
+        <Button data-cy="reset-email-button" label="Reset Email" class="w-100" type="submit" />
       </form>
     </template>
   </Card>
