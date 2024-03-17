@@ -1,6 +1,8 @@
 <template>
   <div class="weather-component">
-    <h1>Weather forecast</h1>
+    <h1 class="mt-0">
+      Weather forecast
+    </h1>
     <p>This component demonstrates fetching data from the server.</p>
 
     <DataTable :value="forecastDates" table-style="min-width: 50rem">

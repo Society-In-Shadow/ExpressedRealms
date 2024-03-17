@@ -1,6 +1,5 @@
 <script setup lang="ts">
 
-import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import axios from "axios";
 import Router from "@/router";
@@ -10,6 +9,7 @@ import { object, string }  from 'yup';
 import {onBeforeMount, ref} from "vue";
 import Message from 'primevue/message';
 import {useRoute} from "vue-router"
+import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
@@ -65,19 +65,8 @@ const onSubmit = handleSubmit((values) => {
     An email was sent to your email, please continue with the email, or login below.
   </Message>
   <form @submit="onSubmit">
-    <div class="mb-3">
-      <label for="email">Email</label>
-      <InputText id="email" v-model="email" data-cy="email" class="w-100" :class="{ 'p-invalid': errors.email }" />
-      <small id="email-help" data-cy="email-help" class="text-danger">{{ errors.email }}</small>
-    </div>
-    <div class="mb-3">
-      <label for="password">Password</label>
-      <InputText
-        id="password" v-model="password" data-cy="password" type="password" class="w-100"
-        :class="{ 'p-invalid': errors.password }"
-      />
-      <small id="password-help" data-cy="password-help" class="text-danger">{{ errors.password }}</small>
-    </div>
+    <InputTextWrapper v-model="email" field-name="Email" :error-text="errors.email" />
+    <InputTextWrapper v-model="password" field-name="Password" :error-text="errors.password" type="password" />
     <Button data-cy="sign-in-button" label="Sign In" class="w-100 mb-2" type="submit" />
   </form>
   <router-link to="CreateAccount">

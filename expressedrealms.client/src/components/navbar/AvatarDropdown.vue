@@ -7,9 +7,18 @@ import {userStore} from "@/stores/userStore";
 import md5 from "md5"
 import { logOff } from "@/services/Authentication";
 let userInfo = userStore();
+import Router from "@/router";
 
 const menu = ref();
 const items = ref([
+  {
+    label: 'My Profile',
+    id: 'myProfile',
+    icon: 'pi pi-user-edit',
+    command: () => {
+      Router.push('/userProfile');
+    }
+  },
   {
     label: 'Logoff',
     id: 'logoff',
@@ -33,12 +42,16 @@ const gravatar = computed(() => {
 <template>
   <a class="flex align-items-center p-3 cursor-pointer mb-2 gap-2" aria-haspopup="true" aria-controls="overlay_tmenu" @click="toggle">
     <Avatar :image="gravatar" shape="circle" size="large" />
-    <div>{{ userInfo.userEmail }}</div>
+    <div class="hideIfSmall">{{ userInfo.name }}</div>
     <i class="pi pi-caret-down text-lg" />
     <TieredMenu id="overlay_tmenu" ref="menu" :model="items" popup />
   </a>
 </template>
 
 <style scoped>
-
+  @media(max-width: 576px){
+    .hideIfSmall{
+      display: none;
+    }
+  }
 </style>

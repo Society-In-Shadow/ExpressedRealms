@@ -94,7 +94,7 @@ CERTIFICATE_PASSWORD=changeit
 SENDGRID_API_KEY=SG.secret
 
 # Global From Email
-FROM_EMAIL="no-replay@societyinshadows.org"
+FROM_EMAIL="no-reply@example.com"
 ```
 
 ### Note About Vite and Windows
@@ -116,7 +116,7 @@ watch: {
 }
 ```
 
-### Run Society in Shadows
+### Run Expressed Realms
 
 Once you get docker up and running, and get the environment file in place, you should be good to go to start the website.
 
@@ -296,7 +296,6 @@ mkcert -p12-file localhost.pfx -pkcs12 localhost
 
 ```
 
-
 In your env file, add this
 If you use Linux
 ```ini
@@ -319,4 +318,41 @@ After that log off and back on
 #### Permission Issue With Certificate
 You might need to chmod 777 the entire directory and files if you run into permission issues while running Docker
 
+## Cypress
+Cypress is configured in this repo.  Both the end to end and the component testing is implemented.
+In order to run it on your local you need to go to the expressedRealms.client folder, and run one of the following commands.
+
+For more inforamtion, see [Cypress](https://docs.cypress.io/guides/overview/why-cypress)
+
+### Interactive GUI
+When you run the below command, it will pop up a GUI that will allow you to run both types of tests and watch them run.
+You can only do one or the other.  The main benefit here is that you can watch them run, and debug them in place to a degree.
+The main benefit of using the GUI is that it will update in realtime, as you are modifying the components.
+
+```shell
+npx cypress open
+```
+
+### End to End Testing
+The following runs the end to end testing via the command line.  It does everything the GUI does, it just does it headlessly.
+
+```shell
+npx cypress run
+```
+
+### Component Testing
+Similar to the above command, it does everything the GUI does, but headlessly.
+
+```shell
+npx cypress run --component
+```
+
+### Permission Issue While Running Cypress
+You also might need to use the following command if you try running Cypress Component Testing and Docker at the same time.
+
+You need to be in the expressedRealms.client folder for this to work.
+
+```shell
+sudo chown -hR <username> node_modules/
+```
 

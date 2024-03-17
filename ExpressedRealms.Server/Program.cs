@@ -1,18 +1,23 @@
 using ExpressedRealms.DB;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels;
 using ExpressedRealms.Server.EndPoints;
+using ExpressedRealms.Server.EndPoints.PlayerEndpoints;
 using ExpressedRealms.Server.Swagger;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ExpressedRealmsDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
         x => x.MigrationsHistoryTable("_EfMigrations", "efcore")));
 
-builder.Services.AddIdentityCore<IdentityUser>()
+builder.Services.AddIdentityCore<User>()
     .AddEntityFrameworkStores<ExpressedRealmsDbContext>()
     .AddApiEndpoints();
 
@@ -45,6 +50,9 @@ builder.Services.AddAntiforgery((options) =>
 
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 builder.Services.AddEmailDependencies(builder.Configuration);
+
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+builder.Services.AddFluentValidationAutoValidation();
 
 var app = builder.Build();
 
@@ -81,6 +89,7 @@ app.AddAuthEndPoints();
 app.AddWeatherEndpoints();
 app.AddCharacterEndPoints();
 app.AddTestingEndPoints();
+app.AddPlayerEndPoints();
 
 app.MapFallbackToFile("/index.html");
 

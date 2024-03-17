@@ -17,10 +17,13 @@
   axios.get('/api/auth/confirmEmail',{
     params: {
       userId: route.query.userId,
-      code: route.query.code
+      code: route.query.code,
+      changedEmail: route.query.changedEmail
     }
   }).then(() => {
     userInfo.hasConfirmedEmail = true;
+    if(route.query.changedEmail)
+      userInfo.userEmail = route.query.changedEmail;
     Router.push('login?confirmedEmail=1');
   }).catch(() => {
     hasError.value = true;

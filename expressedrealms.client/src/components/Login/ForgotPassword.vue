@@ -1,11 +1,11 @@
 <script setup lang="ts">
 
-import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import { useForm } from 'vee-validate';
 import { object, string }  from 'yup';
 import axios from "axios";
 import Router from "@/router";
+import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
@@ -28,11 +28,7 @@ const onSubmit = handleSubmit((values) => {
 
 <template>
   <form @submit="onSubmit">
-    <div class="mb-3">
-      <label for="email">Email</label>
-      <InputText id="email" v-model="email" type="text" class="w-100 " :class="{ 'p-invalid': errors.email }" />
-      <small id="email-help" class="text-danger">{{ errors.email }}</small>
-    </div>
+    <InputTextWrapper v-model="email" field-name="Email" :error-text="errors.email" />
     <Button label="Reset Password" class="w-100 mb-2" type="submit" />
   </form>
   <Button label="Back" class="w-100 mb-2" @click="Router.push('/login')" />

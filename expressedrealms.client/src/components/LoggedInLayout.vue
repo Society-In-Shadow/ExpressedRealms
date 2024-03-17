@@ -8,9 +8,11 @@
 <script setup>
 import { RouterView } from 'vue-router'
 import MainNavBar from "@/components/navbar/MainNavBar.vue";
-
 </script>
 
-<style scoped>
-
+<style>
+  #baseTile > div > div{
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
 </style>

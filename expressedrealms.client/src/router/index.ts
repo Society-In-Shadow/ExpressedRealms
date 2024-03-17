@@ -1,9 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import LoginBasePlate from "@/components/Login/LoginBasePlate.vue";
 import Layout from "@/components/LoggedInLayout.vue";
-import axios from "axios";
 import {userStore} from "@/stores/userStore";
-import {isLoggedIn} from "@/services/Authentication";
+import {updateUserStoreWithEmailInfo, isLoggedIn, updateUserStoreWithPlayerInfo} from "@/services/Authentication";
 
 const routes = [
     {
@@ -40,6 +39,11 @@ const routes = [
                 name: "pleaseConfirmEmail",
                 component: () => import("./../components/Login/PleaseConfirmEmail.vue"),
             },
+            {
+                path: "/setupProfile",
+                name: "setupProfile",
+                component: () => import("./../components/Login/AddUserProfile.vue"),
+            },
         ]
     },
     {
@@ -56,6 +60,11 @@ const routes = [
                 name: "characters",
                 component: () => import("./../components/CharacterList.vue"),
             },
+            {
+                path: "/userProfile",
+                name: "userProfile",
+                component: () => import("./../components/profile/UserProfileBase.vue")
+            }
         ]
     }
 ]
@@ -82,16 +91,26 @@ router.beforeEach(async (to) => {
         
         // Check to make sure that they have a confirmed email
         if(!userInfo.hasConfirmedEmail && routeName != 'pleaseConfirmEmail' && routeName != 'confirmAccount'){
-            await axios.get("/api/auth/manage/info")
-                .then(response => {
-                    userInfo.hasConfirmedEmail = response.data.isEmailConfirmed;
-                    userInfo.userEmail = response.data.email;
-                });
+            await updateUserStoreWithEmailInfo();
             if(!userInfo.hasConfirmedEmail){
                 return { name: 'pleaseConfirmEmail' }
             }
         }
+        
+        // Prevent infinite loop with isPlayerSetup
+        if(!userInfo.hasConfirmedEmail && routeName == 'pleaseConfirmEmail'){
+            return;
+        }
 
+        // Check to see if they setup their player info yet
+        if(!userInfo.isPlayerSetup && routeName != 'setupProfile'){
+            await updateUserStoreWithPlayerInfo();
+
+            if(!userInfo.isPlayerSetup){
+                return { name: 'setupProfile'}
+            }
+        }
+        
         // If they are on this page, and refresh it after confirming, redirect them to the characters page
         if(userInfo.hasConfirmedEmail && routeName == 'pleaseConfirmEmail'){
             return { name: 'characters' };
@@ -102,6 +121,6 @@ router.beforeEach(async (to) => {
             return { name: 'characters' };
     }
     
-})
+});
 
 export default router

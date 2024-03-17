@@ -5,10 +5,14 @@ import {userStore} from "@/stores/userStore";
 export async function logOff() {
     const userInfo = userStore();
     axios.post('api/auth/logoff').then(() => {
-        userInfo.userEmail = "";
-        userInfo.hasConfirmedEmail = false;
+        userInfo.$reset();
         Router.push('login');
     });
+}
+
+export function resetEmailConfirmation() {
+    const userInfo = userStore();
+    userInfo.hasConfirmedEmail = false;
 }
 
 export function isLoggedIn() {
@@ -18,4 +22,24 @@ export function isLoggedIn() {
         return false
     }
     return true;
+}
+
+export async function updateUserStoreWithPlayerInfo() {
+    const userInfo = userStore();
+    await axios.get('/api/player/isSetup')
+        .then ((response) => {
+            if(response.data){
+                userInfo.isPlayerSetup = true;
+                userInfo.name = response.data;
+            }
+        });
+}
+
+export async function updateUserStoreWithEmailInfo() {
+    const userInfo = userStore();
+    await axios.get("/api/auth/manage/info")
+        .then(response => {
+            userInfo.hasConfirmedEmail = response.data.isEmailConfirmed;
+            userInfo.userEmail = response.data.email;
+        });
 }

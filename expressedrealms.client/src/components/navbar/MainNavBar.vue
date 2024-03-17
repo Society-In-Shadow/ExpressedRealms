@@ -60,14 +60,13 @@ const items = ref([
 </script>
 
 <template>
-  <MegaMenu :model="items">
+  <MegaMenu :model="items" class="m-3 pb-1 pt-1">
     <template #start>
-      <img src="/public/favicon.png" height="50" width="50">
+      <img src="/public/favicon.png" height="50" width="50" class="m-2">
     </template>
     <template #item="{ item }">
-      <a v-if="item.root" v-ripple class="flex align-items-center cursor-pointer px-3 py-2 overflow-hidden relative font-semibold text-lg uppercase" style="border-radius: 2rem">
-        <span :class="item.icon" />
-        <span class="ml-2">{{ item.label }}</span>
+      <a v-if="item.root" v-ripple class="flex align-items-center cursor-pointer px-3 py-2 overflow-hidden relative font-semibold text-lg uppercase">
+        <span>{{ item.label }}</span>
       </a>
       <a v-else-if="!item.image" class="flex align-items-center p-3 cursor-pointer mb-2 gap-2">
         <span class="inline-flex flex-none align-items-center justify-content-center border-circle bg-primary w-3rem h-3rem">

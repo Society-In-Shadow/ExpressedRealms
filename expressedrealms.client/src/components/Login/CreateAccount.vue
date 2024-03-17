@@ -1,11 +1,11 @@
 <script setup lang="ts">
 
-import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import axios from "axios";
 import Router from "@/router";
 import { useForm } from 'vee-validate';
 import { object, string, ref }  from 'yup';
+import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
@@ -45,30 +45,9 @@ const onSubmit = handleSubmit((values) => {
 
 <template>
   <form @submit="onSubmit">
-    <div class="mb-3">
-      <label for="email">Email</label>
-      <InputText
-        id="email" v-model="email" data-cy="email" type="text" class="w-100"
-        :class="{ 'p-invalid': errors.email }"
-      />
-      <small data-cy="email-help" class="text-danger">{{ errors.email }}</small>
-    </div>
-    <div class="mb-3">
-      <label for="password">Password</label>
-      <InputText
-        id="password" v-model="password" data-cy="password" type="password" class="w-100"
-        :class="{ 'p-invalid': errors.password }"
-      />
-      <small data-cy="password-help" class="text-danger">{{ errors.password }}</small>
-    </div>
-    <div class="mb-3">
-      <label for="confirmPassword">Confirm Password</label>
-      <InputText
-        id="confirmPassword" v-model="confirmPassword" data-cy="confirm-password" type="password" class="w-100"
-        :class="{ 'p-invalid': errors.confirmPassword }"
-      />
-      <small data-cy="confirm-password-help" class="text-danger">{{ errors.confirmPassword }}</small>
-    </div>
+    <InputTextWrapper v-model="email" field-name="Email" :error-text="errors.email" />
+    <InputTextWrapper v-model="password" field-name="Password" :error-text="errors.password" type="password" />
+    <InputTextWrapper v-model="confirmPassword" field-name="Confirm Password" :error-text="errors.confirmPassword" type="password" />
     <Button data-cy="create-account-button" label="Create Account" class="w-100 mb-2" type="submit" />
   </form>
   <Button data-cy="back-button" label="Back" class="w-100 mb-2" @click="Router.push('/login')" />
