@@ -2,8 +2,8 @@ import ResetPassword from "../../../src/components/profile/ChangePassword.vue";
 
 const currentPassword = 'current-password';
 const currentPasswordHelp = 'current-password-help';
-const password = 'password';
-const passwordHelp = 'password-help'
+const password = 'new-password';
+const passwordHelp = 'new-password-help'
 const confirmPassword = 'confirm-password';
 const confirmPasswordHelp = 'confirm-password-help';
 const resetPasswordButton = 'reset-password-button';

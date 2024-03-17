@@ -1,6 +1,5 @@
 <script setup lang="ts">
 
-import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import Card from 'primevue/card';
 import axios from "axios";
@@ -8,6 +7,7 @@ import { useForm } from 'vee-validate';
 import { object, string, ref }  from 'yup';
 import Message from "primevue/message";
 import { ref as vueRef } from 'vue';
+import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
 
 const { defineField, handleSubmit, errors, setErrors } = useForm({
   validationSchema: object({
@@ -65,30 +65,9 @@ const onPasswordSubmit = handleSubmit((values, { resetForm }) => {
         Successfully changed your password!
       </Message>
       <form @submit="onPasswordSubmit">
-        <div class="flex flex-column gap-2 mb-3">
-          <label for="currentPassword">Current Password</label>
-          <InputText
-            id="currentPassword" v-model="currentPassword" data-cy="current-password" type="password"
-            :class="{ 'p-invalid': errors.currentPassword }"
-          />
-          <small data-cy="current-password-help" class="text-danger">{{ errors.currentPassword }}</small>
-        </div>
-        <div class="flex flex-column gap-2 mb-3">
-          <label for="password">New Password</label>
-          <InputText
-            id="password" v-model="password" data-cy="password" type="password"
-            :class="{ 'p-invalid': errors.password }"
-          />
-          <small data-cy="password-help" class="text-danger">{{ errors.password }}</small>
-        </div>
-        <div class="flex flex-column gap-2 mb-3">
-          <label for="confirmPassword">Confirm Password</label>
-          <InputText
-            id="confirmPassword" v-model="confirmPassword" data-cy="confirm-password" type="password"
-            :class="{ 'p-invalid': errors.confirmPassword }"
-          />
-          <small data-cy="confirm-password-help" class="text-danger">{{ errors.confirmPassword }}</small>
-        </div>
+        <InputTextWrapper v-model="currentPassword" field-name="Current Password" :error-text="errors.currentPassword" type="password" />
+        <InputTextWrapper v-model="password" field-name="New Password" :error-text="errors.password" type="password" />
+        <InputTextWrapper v-model="confirmPassword" field-name="Confirm Password" :error-text="errors.confirmPassword" type="password" />
         <Button data-cy="reset-password-button" label="Reset Password" class="flex flex-column gap-3" type="submit" />
       </form>
     </template>

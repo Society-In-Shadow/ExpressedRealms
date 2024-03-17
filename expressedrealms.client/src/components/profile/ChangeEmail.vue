@@ -1,6 +1,5 @@
 <script setup lang="ts">
 
-import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import Card from 'primevue/card';
 import axios from "axios";
@@ -9,6 +8,7 @@ import { object, string, ref }  from 'yup';
 import {ref as vueRef} from "vue";
 import Message from "primevue/message";
 import {resetEmailConfirmation} from "@/services/Authentication";
+import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
@@ -49,22 +49,8 @@ const onEmailSubmit = handleSubmit((values, { resetForm }) => {
         Email confirmation was sent to the provided email.  Once you click the link, it will update your email address. 
       </Message>
       <form @submit="onEmailSubmit">
-        <div class="flex flex-column gap-2 mb-3">
-          <label for="email">Email</label>
-          <InputText
-            id="email" v-model="email" data-cy="email" type="text"
-            :class="{ 'p-invalid': errors.email }"
-          />
-          <small data-cy="email-help" class="text-danger">{{ errors.email }}</small>
-        </div>
-        <div class="flex flex-column gap-2 mb-3">
-          <label for="confirm-email">Confirm Email</label>
-          <InputText
-            id="confirm-email" v-model="confirmEmail" data-cy="confirm-email" type="text"
-            :class="{ 'p-invalid': errors.confirmEmail }"
-          />
-          <small data-cy="confirm-email-help" class="text-danger">{{ errors.confirmEmail }}</small>
-        </div>
+        <InputTextWrapper v-model="email" field-name="Email" :error-text="errors.email" />
+        <InputTextWrapper v-model="confirmEmail" field-name="Confirm Email" :error-text="errors.confirmEmail" />
         <Button data-cy="reset-email-button" label="Reset Email" class="" type="submit" />
       </form>
     </template>
