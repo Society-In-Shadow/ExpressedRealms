@@ -29,8 +29,29 @@ internal static class PlayerEndpoints
             .RequireAuthorization();
 
         endpointGroup
+            .MapGet(
+                "",
+                async (ExpressedRealmsDbContext dbContext, HttpContext http) =>
+                {
+                    var player = await dbContext.Players.FirstAsync(x =>
+                        x.UserId == http.User.GetUserId()
+                    );
+
+                    return Results.Json(new
+                    {
+                        name = player.Name,
+                        city = player.City,
+                        state = player.State,
+                        phone = player.Phone
+                    });
+                }
+            )
+            .WithOpenApi()
+            .RequireAuthorization();
+        
+        endpointGroup
             .MapPost(
-                "/addUserProfile",
+                "",
                 async (
                     CreatePlayerDTO playerDto,
                     ExpressedRealmsDbContext dbContext,
@@ -61,7 +82,30 @@ internal static class PlayerEndpoints
                     return Results.Created();
                 }
             )
-            .WithName("addUserProfile")
+            .WithOpenApi()
+            .RequireAuthorization();
+
+        endpointGroup.MapPut(
+                "",
+                async (
+                    CreatePlayerDTO playerDto,
+                    ExpressedRealmsDbContext dbContext,
+                    HttpContext http
+                ) =>
+                {
+                    var existingPlayer = await dbContext.Players.FirstAsync(x =>
+                        x.UserId == http.User.GetUserId()
+                    );
+
+                    existingPlayer.Name = playerDto.Name;
+                    existingPlayer.Phone = playerDto.PhoneNumber;
+                    existingPlayer.City = playerDto.City;
+                    existingPlayer.State = playerDto.State;
+
+                    await dbContext.SaveChangesAsync();
+
+                    return Results.NoContent();
+                })
             .WithOpenApi()
             .RequireAuthorization();
     }
