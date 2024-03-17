@@ -37,7 +37,8 @@ internal static class PlayerEndpoints
                         x.UserId == http.User.GetUserId()
                     );
 
-                    return Results.Json(new
+                    return Results.Json(
+                        new
                     {
                         name = player.Name,
                         city = player.City,
