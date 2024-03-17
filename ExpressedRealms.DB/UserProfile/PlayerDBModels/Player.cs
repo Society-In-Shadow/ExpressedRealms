@@ -1,3 +1,5 @@
+using ExpressedRealms.DB.Characters;
+
 namespace ExpressedRealms.DB.UserProfile.PlayerDBModels;
 
 public class Player
@@ -11,4 +13,5 @@ public class Player
     public string State { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;
+    public virtual List<Character> Characters { get; set; } = new();
 }
