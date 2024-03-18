@@ -64,6 +64,11 @@ const routes = [
                 path: "/userProfile",
                 name: "userProfile",
                 component: () => import("./../components/profile/UserProfileBase.vue")
+            },
+            {
+                path: "/characters/add",
+                name: "addCharacter",
+                component: () => import("./../components/characters/character/AddCharacter.vue")
             }
         ]
     }
