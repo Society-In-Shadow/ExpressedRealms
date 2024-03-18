@@ -16,7 +16,7 @@ export function resetEmailConfirmation() {
 }
 
 export function isLoggedIn() {
-    document.cookie = ".AspNetCore.Identity.Bearer=1";
+    document.cookie = ".AspNetCore.Identity.Bearer=1;path=/";
     if(document.cookie.indexOf(".AspNetCore.Identity.Bearer") >= 0){
         document.cookie = ".AspNetCore.Identity.Bearer=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         return false
