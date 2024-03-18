@@ -17,5 +17,6 @@ internal static class CharacterEndPoints
             .WithName("Characters")
             .WithOpenApi()
             .RequireAuthorization();
+        
     }
 }
