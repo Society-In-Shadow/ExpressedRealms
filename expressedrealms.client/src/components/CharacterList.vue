@@ -5,7 +5,9 @@
     </h1>
     <p>This component demonstrates fetching data from the database via a protected endpoint.</p>
 
-    <DataTable :value="characters" table-style="min-width: 50rem">
+    <div v-if="characters.length == 0">There are no characters to display</div>
+    
+    <DataTable v-else :value="characters" table-style="min-width: 50rem">
       <Column field="id" header="Id" />
       <Column field="name" header="Name" />
     </DataTable>
