@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-xs-column flex-sm-column flex-lg-row flex-md-row gap-3 m-3 ">
-    <CharacterTile v-for="character in characters" :character-id="character.id" :character-name="character.name" :background-story="character.backgroundStory"></CharacterTile>
+    <CharacterTile v-for="character in characters" :character-id="character.id" :character-name="character.name" :background-story="character.background"></CharacterTile>
     <AddCharacterTile></AddCharacterTile>
   </div>
 </template>
@@ -29,7 +29,7 @@
 
 .characterTile {
   width: 15rem;
-  height: 20rem;
+  height: 15rem;
 }
 
 
