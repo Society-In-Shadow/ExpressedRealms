@@ -1,0 +1,36 @@
+<template>
+  <div class="flex flex-xs-column flex-sm-column flex-lg-row flex-md-row gap-3 m-3 ">
+    <CharacterTile v-for="character in characters" :character-id="character.id" :character-name="character.name" :background-story="character.backgroundStory"></CharacterTile>
+    <AddCharacterTile></AddCharacterTile>
+  </div>
+</template>
+
+<script setup lang="ts">
+    import { onMounted, ref } from 'vue';
+    import axios from "axios";
+    import CharacterTile from "@/components/characters/tiles/CharacterTile.vue";
+    import AddCharacterTile from "@/components/characters/tiles/AddCharacterTile.vue";
+
+    let characters = ref([]);
+    
+    function fetchData() {
+      axios.get('/api/characters')
+          .then((json) => {
+            characters.value = json.data;
+          });
+    }
+     
+    onMounted(() =>{
+      fetchData();
+    })
+</script>
+
+<style scoped>
+
+.characterTile {
+  width: 15rem;
+  height: 20rem;
+}
+
+
+</style>

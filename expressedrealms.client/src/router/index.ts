@@ -58,7 +58,7 @@ const routes = [
             {
                 path: "/characters",
                 name: "characters",
-                component: () => import("./../components/CharacterList.vue"),
+                component: () => import("./../components/characters/CharacterList.vue"),
             },
             {
                 path: "/userProfile",
