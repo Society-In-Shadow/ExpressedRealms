@@ -1,6 +1,5 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Characters;
-using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.Server.EndPoints.DTOs;
 using ExpressedRealms.Server.Extensions;
 using Microsoft.AspNetCore.Authorization;
