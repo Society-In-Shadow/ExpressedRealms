@@ -3,7 +3,7 @@
 import InputMask from 'primevue/inputmask';
 import {computed} from "vue";
 
-const model = defineModel<string>({ required: true });
+const model = defineModel<string>({ required: true, default: "" });
 
 defineOptions({
   inheritAttrs: false
@@ -29,7 +29,8 @@ const props = defineProps({
   },
   errorText: {
     required: true,
-    type: String
+    type: String,
+    default: ""
   }
 });
 

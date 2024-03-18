@@ -4,7 +4,7 @@
 import Textarea from 'primevue/textarea';
 import {computed} from "vue";
 
-const model = defineModel<string>({ required: true });
+const model = defineModel<string>({ required: true, default: "" });
 
 defineOptions({
   inheritAttrs: false
@@ -20,7 +20,9 @@ const props = defineProps({
     default: ""
   },
   errorText: {
-    type: String
+    required: true,
+    type: String,
+    default: ""
   }
 });
 
