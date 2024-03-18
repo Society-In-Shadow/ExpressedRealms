@@ -14,7 +14,7 @@ internal static class CharacterEndPoints
     internal static void AddCharacterEndPoints(this WebApplication app)
     {
         var endpointGroup = app.MapGroup("characters").AddFluentValidationAutoValidation();
-        
+
         endpointGroup
             .MapGet("", [Authorize] async (ExpressedRealmsDbContext dbContext, HttpContext http) =>
             {
