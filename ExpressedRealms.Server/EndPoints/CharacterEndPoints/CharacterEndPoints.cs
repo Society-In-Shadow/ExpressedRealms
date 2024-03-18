@@ -1,5 +1,6 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Characters;
+using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.Server.EndPoints.DTOs;
 using ExpressedRealms.Server.Extensions;
 using Microsoft.AspNetCore.Authorization;
@@ -47,5 +48,22 @@ internal static class CharacterEndPoints
             })
             .WithOpenApi()
             .RequireAuthorization();
+
+        endpointGroup.MapDelete("{id}", async (int id, ExpressedRealmsDbContext dbContext, HttpContext http) =>
+        {
+            var character =
+                await dbContext.Characters.FirstOrDefaultAsync(x =>
+                    x.Id == id && x.Player.UserId == http.User.GetUserId());
+
+            if (character is null || character.IsDeleted)
+            {
+                return Results.NotFound();
+            }
+            
+            character.SoftDelete();
+            await dbContext.SaveChangesAsync();
+
+            return Results.NoContent();
+        });
     }
 }

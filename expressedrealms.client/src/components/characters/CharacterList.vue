@@ -1,6 +1,10 @@
 <template>
   <div class="flex flex-xs-column flex-sm-column flex-lg-row flex-md-row gap-3 m-3 ">
-    <CharacterTile v-for="character in characters" :character-id="character.id" :character-name="character.name" :background-story="character.background"></CharacterTile>
+    <CharacterTile v-for="character in characters" 
+                   :character-id="character.id" 
+                   :character-name="character.name" 
+                   :background-story="character.background"
+                   @delete="deleteCharacter"></CharacterTile>
     <AddCharacterTile></AddCharacterTile>
   </div>
 </template>
@@ -19,7 +23,12 @@
             characters.value = json.data;
           });
     }
-     
+    
+    function deleteCharacter(id){
+      var characterIndex = characters.value.map(i => i.id).indexOf(id)
+      ~characterIndex && characters.value.splice(characterIndex, 1);
+    }
+    
     onMounted(() =>{
       fetchData();
     })
