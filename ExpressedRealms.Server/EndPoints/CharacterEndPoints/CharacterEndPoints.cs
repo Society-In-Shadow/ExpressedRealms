@@ -14,7 +14,8 @@ internal static class CharacterEndPoints
     {
         var endpointGroup = app.MapGroup("characters").AddFluentValidationAutoValidation();
         
-        endpointGroup.MapGet("", [Authorize] async (ExpressedRealmsDbContext dbContext, HttpContext http) =>
+        endpointGroup
+            .MapGet("", [Authorize] async (ExpressedRealmsDbContext dbContext, HttpContext http) =>
             {
                 return await dbContext.Characters
                     .Where(x => x.Player.UserId == http.User.GetUserId()).ToListAsync();
@@ -23,27 +24,28 @@ internal static class CharacterEndPoints
             .WithOpenApi()
             .RequireAuthorization();
 
-        endpointGroup.MapPost("", async (CreateCharacterDTO dto, ExpressedRealmsDbContext dbContext, HttpContext http) =>
-        {
-            var playerId = await dbContext.Players
-                .Where(x => x.UserId == http.User.GetUserId())
-                .Select(x => x.Id)
-                .FirstAsync();
-
-            var newCharacter = new Character()
+        endpointGroup
+            .MapPost("", async (CreateCharacterDTO dto, ExpressedRealmsDbContext dbContext, HttpContext http) =>
             {
-                PlayerId = playerId,
-                Name = dto.Name,
-                Background = dto.Background
-            };
-            
-            dbContext.Characters.Add(newCharacter);
+                var playerId = await dbContext.Players
+                    .Where(x => x.UserId == http.User.GetUserId())
+                    .Select(x => x.Id)
+                    .FirstAsync();
 
-            await dbContext.SaveChangesAsync();
+                var newCharacter = new Character()
+                {
+                    PlayerId = playerId,
+                    Name = dto.Name,
+                    Background = dto.Background
+                };
+                
+                dbContext.Characters.Add(newCharacter);
 
-            return Results.Created("/characters", newCharacter.Id);
-        })
-        .WithOpenApi()
-        .RequireAuthorization();
+                await dbContext.SaveChangesAsync();
+
+                return Results.Created("/characters", newCharacter.Id);
+            })
+            .WithOpenApi()
+            .RequireAuthorization();
     }
 }
