@@ -76,22 +76,25 @@ internal static class CharacterEndPoints
             .WithOpenApi()
             .RequireAuthorization();
 
-        endpointGroup.MapDelete("{id}", async Task<Results<NotFound, NoContent>> (int id, ExpressedRealmsDbContext dbContext, HttpContext http) =>
-        {
-            var character =
-                await dbContext.Characters.FirstOrDefaultAsync(x =>
-                    x.Id == id && x.Player.UserId == http.User.GetUserId());
-
-            if (character is null || character.IsDeleted)
+        endpointGroup
+            .MapDelete("{id}", async Task<Results<NotFound, NoContent>> (int id, ExpressedRealmsDbContext dbContext, HttpContext http) =>
             {
-                return TypedResults.NotFound();
-            }
-            
-            character.SoftDelete();
-            await dbContext.SaveChangesAsync();
+                var character =
+                    await dbContext.Characters.FirstOrDefaultAsync(x =>
+                        x.Id == id && x.Player.UserId == http.User.GetUserId());
 
-            return TypedResults.NoContent();
-        });
+                if (character is null || character.IsDeleted)
+                {
+                    return TypedResults.NotFound();
+                }
+                
+                character.SoftDelete();
+                await dbContext.SaveChangesAsync();
+
+                return TypedResults.NoContent();
+            })
+            .WithOpenApi()
+            .RequireAuthorization();
 
         endpointGroup.MapPut("",
             async Task<Results<NotFound, NoContent>> (EditCharacterDTO dto, ExpressedRealmsDbContext dbContext, HttpContext http) =>
@@ -109,6 +112,8 @@ internal static class CharacterEndPoints
                 await dbContext.SaveChangesAsync();
 
                 return TypedResults.NoContent();
-            });
+            })
+            .WithOpenApi()
+            .RequireAuthorization();
     }
 }
