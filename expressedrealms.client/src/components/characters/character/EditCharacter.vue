@@ -48,9 +48,8 @@ const onSubmit = handleSubmit((values) => {
     <Card class="mb-3">
       <template #content>
         <form @submit="onSubmit">
-          <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" />
-          <TextAreaWrapper v-model="background" field-name="Background" :error-text="errors.background" />
-          <Button data-cy="save-character-button" label="Save Character" class="w-100 mb-2" type="submit" />
+          <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" @change="onSubmit" />
+          <TextAreaWrapper v-model="background" field-name="Background" :error-text="errors.background" @change="onSubmit" />
         </form>
       </template>
     </Card>
