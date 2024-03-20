@@ -15,7 +15,8 @@ const props = defineProps({
     required: true,
   },
   backgroundStory: {
-    type: String
+    type: String,
+    default: ''
   },
   characterId: {
     type: Number,
@@ -39,11 +40,11 @@ function editCharacter() {
 <template>
   <Card class="mb-3 characterTile">
     <template #title>
-      {{characterName}}
+      {{ characterName }}
     </template>
     <template #content>
-      <div>{{backgroundStory}}</div>
-      <Button data-cy="character-edit-button" label="Edit" class="m-1" @click="editCharacter"/>
+      <div>{{ backgroundStory }}</div>
+      <Button data-cy="character-edit-button" label="Edit" class="m-1" @click="editCharacter" />
       <Button data-cy="character-delete-button" label="Delete" class="m-1" @click="deleteCharacter" />
     </template>
   </Card>

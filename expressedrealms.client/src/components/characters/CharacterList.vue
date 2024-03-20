@@ -1,11 +1,14 @@
 <template>
   <div class="flex flex-xs-column flex-sm-column flex-lg-row flex-md-row gap-3 m-3 ">
-    <CharacterTile v-for="character in characters" 
-                   :character-id="character.id" 
-                   :character-name="character.name" 
-                   :background-story="character.background"
-                   @delete="deleteCharacter"></CharacterTile>
-    <AddCharacterTile></AddCharacterTile>
+    <CharacterTile
+      v-for="character in characters" 
+      :key="character.id"
+      :character-id="character.id" 
+      :character-name="character.name" 
+      :background-story="character.background"
+      @delete="deleteCharacter"
+    />
+    <AddCharacterTile />
   </div>
 </template>
 

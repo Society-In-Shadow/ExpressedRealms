@@ -11,7 +11,7 @@ import Router from "@/router";
   <Card class="mb-3 characterTile">
     <template #content>
       <div style="text-align: center;" class="align-self-center">
-        <Button data-cy="character-delete-button" label="Add" @click="Router.push('/characters/add')"/>
+        <Button data-cy="character-delete-button" label="Add" @click="Router.push('/characters/add')" />
       </div>
     </template>
   </Card>

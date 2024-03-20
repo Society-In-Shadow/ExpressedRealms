@@ -40,7 +40,7 @@ const dataCyTagCalc = computed(() => {
     <label :for="dataCyTagCalc">{{ props.fieldName }}</label>
     <Textarea
       :id="dataCyTagCalc" v-model="model" :data-cy="dataCyTagCalc" class="w-100"
-      :class="{ 'p-invalid': errorText }" v-bind="$attrs" autoResize
+      :class="{ 'p-invalid': errorText }" v-bind="$attrs" auto-resize
     />
     <small :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ errorText }}</small>
   </div>

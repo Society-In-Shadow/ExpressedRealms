@@ -1,6 +1,5 @@
 <script setup lang="ts">
 
-import Button from 'primevue/button';
 import axios from "axios";
 import { useForm } from 'vee-validate';
 import { object, string }  from 'yup';
