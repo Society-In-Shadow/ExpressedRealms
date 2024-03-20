@@ -309,6 +309,10 @@ After that log off and back on
 #### Permission Issue With Certificate
 You might need to chmod 777 the entire directory and files if you run into permission issues while running Docker
 
+#### Docker Compose: bind: address already in use
+This can happen if you have cypress open, and you try start / stop the docker compose, specifically the vue docker.  
+All you need to do is close cypress and you should be good to go.
+
 ## Cypress
 Cypress is configured in this repo.  Both the end to end and the component testing is implemented.
 In order to run it on your local you need to go to the expressedRealms.client folder, and run one of the following commands.
