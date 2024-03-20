@@ -3,6 +3,7 @@
 import Button from "primevue/button";
 import Card from "primevue/card";
 import axios from "axios";
+import Router from "@/router";
 
 const emit = defineEmits<{
   delete: [id: number]
@@ -23,11 +24,14 @@ const props = defineProps({
 });
 
 async function deleteCharacter() {
-  
   await axios.delete(`/api/characters/${props.characterId}`)
       .then(() => {
         emit('delete', props.characterId);
       });
+}
+
+function editCharacter() {
+  Router.push(`/characters/${props.characterId}`)
 }
 
 </script>
@@ -39,7 +43,7 @@ async function deleteCharacter() {
     </template>
     <template #content>
       <div>{{backgroundStory}}</div>
-      <Button data-cy="character-edit-button" label="Edit" class="m-1" />
+      <Button data-cy="character-edit-button" label="Edit" class="m-1" @click="editCharacter"/>
       <Button data-cy="character-delete-button" label="Delete" class="m-1" @click="deleteCharacter" />
     </template>
   </Card>

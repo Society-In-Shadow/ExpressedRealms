@@ -69,6 +69,11 @@ const routes = [
                 path: "/characters/add",
                 name: "addCharacter",
                 component: () => import("./../components/characters/character/AddCharacter.vue")
+            },
+            {
+                path: "/characters/:id",
+                name: "editCharacter",
+                component: () => import("./../components/characters/character/EditCharacter.vue")
             }
         ]
     }
