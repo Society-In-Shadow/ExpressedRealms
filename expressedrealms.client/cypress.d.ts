@@ -1,5 +1,8 @@
 import { mount } from "cypress/vue";
+import { Router } from 'vue-router'
 
+type MountParams = Parameters<typeof mount>
+type OptionsParam = MountParams[1] & { router?: Router, pushRoute?: string }
 // Augment the Cypress namespace to include type definitions for
 // your custom command.
 // Alternatively, can be defined in cypress/support/component.d.ts
@@ -7,7 +10,7 @@ import { mount } from "cypress/vue";
 declare global {
     namespace Cypress {
         interface Chainable {
-            mount: typeof mount;
+            mount(component: any, options?: OptionsParam): Chainable<any>
             /**
              * Custom command to select DOM element by data-cy attribute.
              * @example cy.dataCy('greeting')

@@ -33,7 +33,8 @@ import 'bootstrap/scss/bootstrap-utilities.scss'
 import 'bootstrap/scss/bootstrap-grid.scss'
 
 import PrimeVue from 'primevue/config';
-import Router from "@/router";
+import { createMemoryHistory, createRouter } from 'vue-router';
+import {routes} from "../../src/router";
 import Ripple from 'primevue/ripple';
 import piniaPluginPersistedState from "pinia-plugin-persistedstate"
 import { createPinia } from 'pinia'
@@ -49,11 +50,23 @@ Cypress.Commands.add('mount', (component, options = {}) => {
     options.global.components = options.global.components || {}
     options.global.plugins = options.global.plugins || []
 
+    // create router if one is not provided
+    if (!options.router) {
+        options.router = createRouter({
+            routes: routes,
+            history: createMemoryHistory(),
+        })
+    }
+    
+    if(options.pushRoute){
+        cy.wrap(options.router.push(options.pushRoute));
+    }
+    
     /* Add any global plugins */
     options.global.plugins.push({
        install(app) {
          app.use(PrimeVue, {ripple: true})
-             .use(Router);
+             .use(options.router);
            app.use(pinia);
            app.directive('ripple', Ripple);
        },
@@ -69,5 +82,3 @@ Cypress.Commands.add('mount', (component, options = {}) => {
 Cypress.Commands.add("dataCy", (selector, ...args) => {
     return cy.get(`[data-cy=${selector}]`, ...args)
 })
-// Example use:
-// cy.mount(MyComponent)
