@@ -8,6 +8,7 @@ import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
 import TextAreaWrapper from "@/FormWrappers/TextAreaWrapper.vue";
 import {onMounted} from "vue";
 import { useRoute } from 'vue-router'
+import { popSuccess } from "@/services/Toasters";
 
 const route = useRoute()
 
@@ -37,6 +38,8 @@ const onSubmit = handleSubmit((values) => {
     name: values.name,
     background: values.background,
     id: route.params.id
+  }).then((response) => {
+    popSuccess("Successfully Updated Character Info!");
   });
 });
 

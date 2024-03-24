@@ -1,5 +1,6 @@
 
 <template>
+  <Toast position="top-center"/>
   <main-nav-bar />
   
   <router-view />
@@ -8,6 +9,7 @@
 <script setup>
 import { RouterView } from 'vue-router'
 import MainNavBar from "@/components/navbar/MainNavBar.vue";
+import Toast from 'primevue/toast';
 </script>
 
 <style>
