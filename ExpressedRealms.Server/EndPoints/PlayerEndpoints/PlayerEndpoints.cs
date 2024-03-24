@@ -54,7 +54,7 @@ internal static class PlayerEndpoints
             .MapPost(
                 "",
                 async (
-                    CreatePlayerDTO playerDto,
+                    PlayerDTO playerDto,
                     ExpressedRealmsDbContext dbContext,
                     HttpContext http
                 ) =>
@@ -89,7 +89,7 @@ internal static class PlayerEndpoints
         endpointGroup.MapPut(
                 "",
                 async (
-                    CreatePlayerDTO playerDto,
+                    PlayerDTO playerDto,
                     ExpressedRealmsDbContext dbContext,
                     HttpContext http
                 ) =>

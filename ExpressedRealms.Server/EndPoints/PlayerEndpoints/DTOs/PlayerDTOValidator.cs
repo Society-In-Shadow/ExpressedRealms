@@ -2,9 +2,9 @@ using FluentValidation;
 
 namespace ExpressedRealms.Server.EndPoints.PlayerEndpoints.DTOs;
 
-public class CreatePlayerDTOValidator : AbstractValidator<CreatePlayerDTO>
+public class PlayerDTOValidator : AbstractValidator<PlayerDTO>
 {
-    public CreatePlayerDTOValidator()
+    public PlayerDTOValidator()
     {
         RuleFor(x => x.Name).NotEmpty().MaximumLength(100);
         RuleFor(x => x.City).NotEmpty().MaximumLength(100);
