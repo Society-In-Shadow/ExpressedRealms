@@ -17,6 +17,8 @@ import Ripple from 'primevue/ripple';
 import piniaPluginPersistedState from "pinia-plugin-persistedstate"
 import { createPinia } from 'pinia'
 import ToastService from 'primevue/toastservice';
+import axiosConfig from "@/config/axiosConfig";
+axiosConfig.setupErrorHandlingInterceptors();
 
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedState);
