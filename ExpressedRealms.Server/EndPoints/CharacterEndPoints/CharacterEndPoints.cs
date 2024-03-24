@@ -15,7 +15,10 @@ internal static class CharacterEndPoints
 {
     internal static void AddCharacterEndPoints(this WebApplication app)
     {
-        var endpointGroup = app.MapGroup("characters").AddFluentValidationAutoValidation();
+        var endpointGroup = app.MapGroup("characters")
+            .AddFluentValidationAutoValidation()
+            .WithTags("Characters")
+            .WithOpenApi();
 
         endpointGroup
             .MapGet("", [Authorize] async (ExpressedRealmsDbContext dbContext, HttpContext http) =>
@@ -31,7 +34,6 @@ internal static class CharacterEndPoints
                 }).ToList());
             })
             .WithName("Characters")
-            .WithOpenApi()
             .RequireAuthorization();
         
         endpointGroup
@@ -49,7 +51,6 @@ internal static class CharacterEndPoints
                     Background = character.Background
                 });
             })
-            .WithOpenApi()
             .RequireAuthorization();
 
         endpointGroup
@@ -73,7 +74,6 @@ internal static class CharacterEndPoints
 
                 return TypedResults.Created("/characters", newCharacter.Id);
             })
-            .WithOpenApi()
             .RequireAuthorization();
 
         endpointGroup
@@ -93,7 +93,6 @@ internal static class CharacterEndPoints
 
                 return TypedResults.NoContent();
             })
-            .WithOpenApi()
             .RequireAuthorization();
 
         endpointGroup.MapPut("",
@@ -113,7 +112,6 @@ internal static class CharacterEndPoints
 
                 return TypedResults.NoContent();
             })
-            .WithOpenApi()
             .RequireAuthorization();
     }
 }
