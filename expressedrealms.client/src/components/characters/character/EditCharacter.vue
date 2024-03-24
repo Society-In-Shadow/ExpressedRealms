@@ -8,7 +8,7 @@ import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
 import TextAreaWrapper from "@/FormWrappers/TextAreaWrapper.vue";
 import {onMounted} from "vue";
 import { useRoute } from 'vue-router'
-import { popSuccess } from "@/services/Toasters";
+import toaster from "@/services/Toasters";
 
 const route = useRoute()
 
@@ -39,7 +39,7 @@ const onSubmit = handleSubmit((values) => {
     background: values.background,
     id: route.params.id
   }).then((response) => {
-    popSuccess("Successfully Updated Character Info!");
+    toaster.success("Successfully Updated Character Info!");
   });
 });
 
