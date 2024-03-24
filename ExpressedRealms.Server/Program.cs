@@ -1,3 +1,4 @@
+using System.Reflection;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels;
 using ExpressedRealms.Server.EndPoints;
@@ -44,7 +45,13 @@ builder.Services.AddAuthorizationBuilder();
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    // Needed to add additional information on dto's
+    // https://github.com/domaindrivendev/Swashbuckle.AspNetCore?tab=readme-ov-file#include-descriptions-from-xml-comments
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 builder.Services.AddAntiforgery((options) =>
 {
     options.HeaderName = "T-XSRF-TOKEN";
