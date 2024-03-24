@@ -25,7 +25,14 @@ The component and Typings tabs have already been implemented.
 You won't see the popups happen in the component tests, it won't load them in.  Instead you need to spy on the toaster,
 then treat it like an intercept call.
 
-It's actually pretty straight forward.  You want to add one or more of the following lines before the mount command.
+It's actually pretty straight forward.
+
+First import toasters at the top (Note, relative path will change depending on the directory you are in)
+```typescript
+import toasters from "../../../../src/services/Toasters";
+```
+
+Then you want to add one or more of the following lines before the mount command.
 
 ```typescript
 cy.spy(toasters, 'success').as("toasterSuccess");
@@ -37,6 +44,7 @@ cy.spy(toasters, 'contrast').as("toasterContrast");
 ```
 
 Then for the actual testing (Tweak as needed)
+
 ```typescript
 cy.get('@toasterSuccess').should('have.been.calledWith', 'Title', 'Message');
 cy.get('@toasterSuccess').should('have.been.calledWith', 'Message');

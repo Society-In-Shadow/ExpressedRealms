@@ -41,7 +41,7 @@ function warning(title: string, message?: string): void {
 }
 
 function secondary(title: string, message: string): void {
-    ToastEventBus.emit("add", { severity: 'secondary', summary: "Information", detail: title, life: 3000 } )
+    ToastEventBus.emit("add", { severity: 'secondary', summary: title, detail: message, life: 3000 } )
 }
 
 function contrast(title: string, message: string){

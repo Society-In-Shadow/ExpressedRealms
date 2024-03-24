@@ -1,6 +1,6 @@
 
 <template>
-  <Toast position="top-center"/>
+  <Toast position="top-center" />
   <main-nav-bar />
   
   <router-view />

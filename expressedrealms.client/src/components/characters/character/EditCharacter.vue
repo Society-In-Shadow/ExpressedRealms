@@ -38,7 +38,7 @@ const onSubmit = handleSubmit((values) => {
     name: values.name,
     background: values.background,
     id: route.params.id
-  }).then((response) => {
+  }).then(() => {
     toaster.success("Successfully Updated Character Info!");
   });
 });
