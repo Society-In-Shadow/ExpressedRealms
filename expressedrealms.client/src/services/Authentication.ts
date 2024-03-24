@@ -26,11 +26,11 @@ export function isLoggedIn() {
 
 export async function updateUserStoreWithPlayerInfo() {
     const userInfo = userStore();
-    await axios.get('/api/player/isSetup')
+    await axios.get('/api/player/playerName')
         .then ((response) => {
-            if(response.data){
+            if(response.data.name){
                 userInfo.isPlayerSetup = true;
-                userInfo.name = response.data;
+                userInfo.name = response.data.name;
             }
         });
 }
