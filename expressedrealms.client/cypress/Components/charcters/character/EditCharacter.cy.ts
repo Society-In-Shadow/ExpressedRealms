@@ -1,4 +1,5 @@
 import component from "../../../../src/components/characters/character/EditCharacter.vue";
+import toasters from "../../../../src/services/Toasters";
 
 const name = 'name';
 const nameHelp = 'name-help';
@@ -21,7 +22,9 @@ describe('<EditCharacter />', () => {
         cy.intercept('PUT', '/api/characters', {
             statusCode: 200,
         }).as('updateCharacter');
-        
+
+        cy.spy(toasters, 'success').as("toasterSuccess");
+
         cy.mount(component, {
             pushRoute: '/characters/3'
         });
@@ -52,6 +55,8 @@ describe('<EditCharacter />', () => {
             .should('have.property', 'name', 'Jane Doe');
         cy.get('@updateCharacter').its('request.body')
             .should('have.property', 'id', '3');
+
+        cy.get('@toasterSuccess').should('have.been.calledWith', 'Successfully Updated Character Info!');
     });
 
     it('Background Follows all Schema Validations and Updates Automatically', () => {
@@ -64,6 +69,7 @@ describe('<EditCharacter />', () => {
             .should('have.property', 'background', '5555555555');
         cy.get('@updateCharacter').its('request.body')
             .should('have.property', 'id', '3');
+        cy.get('@toasterSuccess').should('have.been.calledWith', 'Successfully Updated Character Info!');
     });
     
 });
