@@ -22,7 +22,7 @@ const { defineField, handleSubmit, errors } = useForm({
 });
 
 onBeforeMount(() => {
-  axios.get('/api/auth/getAntiforgeryToken');
+  axios.get('/api/auth/antiforgeryToken');
 })
 
 const [email] = defineField('email');
@@ -36,7 +36,7 @@ const onSubmit = handleSubmit((values) => {
   axios.post('/api/auth/login', values)
   .then(() => {
     // Reset antiforgery token after login
-    axios.get('/api/auth/getAntiforgeryToken')
+    axios.get('/api/auth/antiforgeryToken')
       .then(() => {
         Router.push('characters');
       });

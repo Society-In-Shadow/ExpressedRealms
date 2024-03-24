@@ -17,7 +17,7 @@ internal static class AuthEndPoints
         
         endpointGroup.MapIdentityApi<User>();
         endpointGroup.MapPost("/logoff", (HttpContext httpContext) => Results.SignOut());
-        endpointGroup.MapGet("/getAntiforgeryToken", Results<NoContent, StatusCodeHttpResult>(IAntiforgery antiforgery, HttpContext httpContext, ClaimsPrincipal user) =>
+        endpointGroup.MapGet("/antiforgeryToken", Results<NoContent, StatusCodeHttpResult>(IAntiforgery antiforgery, HttpContext httpContext, ClaimsPrincipal user) =>
         {
             var tokens = antiforgery.GetAndStoreTokens(httpContext);
 
@@ -31,6 +31,13 @@ internal static class AuthEndPoints
                 new CookieOptions() { HttpOnly = false });
             
             return TypedResults.NoContent();
-        });
+        })
+        .WithSummary("Cookie Based Anti-forgery Token for SPA")
+        .WithDescription("""
+                           Since the web api isn't handling the html, we can't use @Html.AntiForgeryToken() on each form.
+                           Instead, we need to keep track of that inside a cookie.  You will need to call this endpoint
+                           on initial load of the page, as well as get a new one immediately after logging in, to prevent
+                           some attacks.
+                         """);
     }
 }
