@@ -34,9 +34,9 @@ function warning(message: string): void;
 function warning(title: string, message: string): void;
 function warning(title: string, message?: string): void {
     if(message !== undefined){
-        ToastEventBus.emit("add", { severity: 'warning', summary: title, detail: message, life: 3000 } )
+        ToastEventBus.emit("add", { severity: 'warn', summary: title, detail: message, life: 3000 } )
     }else {
-        ToastEventBus.emit("add", { severity: 'warning', summary: "Warning", detail: title, life: 3000 } )
+        ToastEventBus.emit("add", { severity: 'warn', summary: "Warning", detail: title, life: 3000 } )
     }
 }
 
