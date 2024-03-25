@@ -20,25 +20,17 @@ internal static class NavigationEndpoints
         endpointGroup
             .MapGet(
                 "/expressions",
-                async (ExpressedRealmsDbContext dbContext, HttpContext http) =>
+                async (ExpressedRealmsDbContext dbContext) =>
                 {
-                    var expressions = new List<ExpressionMenuItem>()
-                    {
-                        new()
+
+                    var expressions = await dbContext.Expressions
+                        .Select(x => new ExpressionMenuItem()
                         {
-                            Id = 1,
-                            Name = "Vampyres",
-                            ShortDescription = "Spooky Capes",
-                            NavMenuImage = ""
-                        },
-                        new()
-                        {
-                            Id = 2,
-                            Name = "Sorcerers",
-                            ShortDescription = "Spooky Magic",
-                            NavMenuImage = ""
-                        }
-                    };
+                            Name = x.Name,
+                            Id = x.Id,
+                            ShortDescription = x.ShortDescription,
+                            NavMenuImage = x.NavMenuImage
+                        }).ToListAsync();
                         
                     return TypedResults.Ok(expressions);
                 }
