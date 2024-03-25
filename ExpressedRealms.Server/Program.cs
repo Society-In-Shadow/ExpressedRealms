@@ -109,6 +109,7 @@ app.AddWeatherEndpoints();
 app.AddCharacterEndPoints();
 app.AddTestingEndPoints();
 app.AddPlayerEndPoints();
+app.AddNavigationEndpoints();
 
 app.MapFallbackToFile("/index.html");
 

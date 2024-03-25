@@ -1,10 +1,11 @@
 <script setup lang="ts">
 
-import { ref } from "vue";
+import {onMounted, ref} from "vue";
 import MegaMenu from "primevue/megamenu";
 import Button from "primevue/button"
 import AvatarDropdown from "@/components/navbar/AvatarDropdown.vue";
 import {useRouter} from "vue-router";
+import axios from "axios";
 
 const router = useRouter();
 
@@ -25,7 +26,7 @@ const items = ref([
       [
         {
           items: [
-            { label: 'Solutions', icon: 'pi pi-shield', subtext: 'Subtext of item 2' },
+            { label: 'Adepts', icon: 'pi pi-shield', subtext: 'Incredible martial artists. Masters of the mind. Enlightened healers. Stalwart defenders.' },
             { label: 'Faq', icon: 'pi pi-question', subtext: 'Subtext of item 3' },
             { label: 'Library', icon: 'pi pi-search', subtext: 'Subtext of item 4' }
           ]
@@ -48,14 +49,44 @@ const items = ref([
     ]
   },
   {
-    label: 'Resources',
-    root: true
-  },
-  {
-    label: 'Contact',
-    root: true
+    label: 'Expressions',
+    root: true,
+    items: []
   }
 ]);
+
+onMounted(() => {
+  function MapExpressions(expression) {
+    return {
+      items: [
+        {
+          label: expression.name,
+          icon: 'pi pi-cloud', // Example icon, modify as needed
+          subtext: expression.shortDescription,
+          command: () => {
+            // Add your navigation logic here
+            console.log('Navigate to:', expression.name);
+          }
+        }
+      ]
+    };
+  }
+
+  axios.get("/api/navMenu/expressions")
+      .then(response => {
+        const expressions = response.data;
+        const column1 = expressions.slice(0, expressions.length / 2);
+        const column2 = expressions.slice(expressions.length / 2, expressions.length);
+        
+        items.value.find(item => item.label === 'Expressions').items.push(
+            column1.map(MapExpressions)
+        );
+        items.value.find(item => item.label === 'Expressions').items.push(
+            column2.map(MapExpressions)
+        );
+      })
+});
+
 
 </script>
 
@@ -68,7 +99,7 @@ const items = ref([
       <a v-if="item.root" v-ripple class="flex align-items-center cursor-pointer px-3 py-2 overflow-hidden relative font-semibold text-lg uppercase">
         <span>{{ item.label }}</span>
       </a>
-      <a v-else-if="!item.image" class="flex align-items-center p-3 cursor-pointer mb-2 gap-2">
+      <a v-else-if="!item.image" class="flex flex-shrink-1 align-items-center p-3 cursor-pointer mb-2 gap-2">
         <span class="inline-flex flex-none align-items-center justify-content-center border-circle bg-primary w-3rem h-3rem">
           <i :class="[item.icon, 'text-lg']" />
         </span>
