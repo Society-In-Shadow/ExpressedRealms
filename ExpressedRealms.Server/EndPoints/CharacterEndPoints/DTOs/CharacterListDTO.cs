@@ -2,8 +2,8 @@ namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.DTOs;
 
 public class CharacterListDTO
 {
-    public string Id { get; set;  }
-    
+    public string Id { get; set; }
+
     /// <example>John Doe</example>
     public string Name { get; set; } = null!;
 

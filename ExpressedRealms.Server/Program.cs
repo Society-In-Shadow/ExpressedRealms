@@ -19,10 +19,11 @@ builder.Services.AddDbContext<ExpressedRealmsDbContext>(options =>
     options.UseNpgsql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
         x => x.MigrationsHistoryTable("_EfMigrations", "efcore")
-        )
-    );
+    )
+);
 
-builder.Services.AddIdentityCore<User>()
+builder
+    .Services.AddIdentityCore<User>()
     .AddEntityFrameworkStores<ExpressedRealmsDbContext>()
     .AddApiEndpoints();
 
@@ -36,10 +37,15 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequiredLength = 8;
 });
 
-builder.Services.AddAuthentication().AddCookie(IdentityConstants.BearerScheme, o =>
-{
-    o.SlidingExpiration = true;
-});
+builder
+    .Services.AddAuthentication()
+    .AddCookie(
+        IdentityConstants.BearerScheme,
+        o =>
+        {
+            o.SlidingExpiration = true;
+        }
+    );
 builder.Services.AddAuthorizationBuilder();
 
 // Add services to the container.
@@ -52,12 +58,14 @@ builder.Services.AddSwaggerGen(options =>
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
-builder.Services.AddAntiforgery((options) =>
-{
-    options.HeaderName = "T-XSRF-TOKEN";
-    options.Cookie.HttpOnly = false;
-    options.Cookie.Name = "XSRF-TOKEN";
-});
+builder.Services.AddAntiforgery(
+    (options) =>
+    {
+        options.HeaderName = "T-XSRF-TOKEN";
+        options.Cookie.HttpOnly = false;
+        options.Cookie.Name = "XSRF-TOKEN";
+    }
+);
 
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 builder.Services.AddEmailDependencies(builder.Configuration);
@@ -72,8 +80,7 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider
-        .GetRequiredService<ExpressedRealmsDbContext>();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ExpressedRealmsDbContext>();
 
     if (dbContext.Database.GetPendingMigrations().Any())
     {

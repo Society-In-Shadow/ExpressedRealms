@@ -12,7 +12,9 @@ public class PlayerDTOValidator : AbstractValidator<PlayerDTO>
             .NotEmpty()
             .MaximumLength(2)
             .MinimumLength(2)
-            .Matches("AL|AK|AZ|AR|CA|CO|CT|DE|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WA|WV|WI|WY|NE")
+            .Matches(
+                "AL|AK|AZ|AR|CA|CO|CT|DE|FL|GA|HI|ID|IL|IN|IA|KS|KY|LA|ME|MD|MA|MI|MN|MS|MO|MT|NV|NH|NJ|NM|NY|NC|ND|OH|OK|OR|PA|RI|SC|SD|TN|TX|UT|VT|VA|WA|WV|WI|WY|NE"
+            )
             .WithMessage("{PropertyName} is not a valid US state.");
         RuleFor(x => x.PhoneNumber)
             .NotEmpty()

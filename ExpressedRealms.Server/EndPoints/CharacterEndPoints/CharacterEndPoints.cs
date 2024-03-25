@@ -21,97 +21,140 @@ internal static class CharacterEndPoints
             .WithOpenApi();
 
         endpointGroup
-            .MapGet("", [Authorize] async (ExpressedRealmsDbContext dbContext, HttpContext http) =>
-            {
-                var characters =  await dbContext.Characters
-                    .Where(x => x.Player.UserId == http.User.GetUserId()).ToListAsync();
-
-                return TypedResults.Ok(characters.Select(x => new CharacterListDTO()
+            .MapGet(
+                "",
+                [Authorize]
+                async (ExpressedRealmsDbContext dbContext, HttpContext http) =>
                 {
-                    Id = x.Id.ToString(),
-                    Name = x.Name,
-                    Background = x.Background
-                }).ToList());
-            })
+                    var characters = await dbContext
+                        .Characters.Where(x => x.Player.UserId == http.User.GetUserId())
+                        .ToListAsync();
+
+                    return TypedResults.Ok(
+                        characters
+                            .Select(x => new CharacterListDTO()
+                            {
+                                Id = x.Id.ToString(),
+                                Name = x.Name,
+                                Background = x.Background
+                            })
+                            .ToList()
+                    );
+                }
+            )
             .WithName("Characters")
             .RequireAuthorization();
-        
-        endpointGroup
-            .MapGet("{id}", [Authorize] async Task<Results<NotFound, Ok<CharacterDTO>>>(int id, ExpressedRealmsDbContext dbContext, HttpContext http) =>
-            {
-                var character = await dbContext.Characters
-                    .Where(x => x.Id == id && x.Player.UserId == http.User.GetUserId()).FirstOrDefaultAsync();
-
-                if (character is null)
-                    return TypedResults.NotFound();
-
-                return TypedResults.Ok(new CharacterDTO()
-                {
-                    Name = character.Name,
-                    Background = character.Background
-                });
-            })
-            .RequireAuthorization();
 
         endpointGroup
-            .MapPost("", async (CreateCharacterDTO dto, ExpressedRealmsDbContext dbContext, HttpContext http) =>
-            {
-                var playerId = await dbContext.Players
-                    .Where(x => x.UserId == http.User.GetUserId())
-                    .Select(x => x.Id)
-                    .FirstAsync();
-
-                var newCharacter = new Character()
+            .MapGet(
+                "{id}",
+                [Authorize]
+                async Task<Results<NotFound, Ok<CharacterDTO>>> (
+                    int id,
+                    ExpressedRealmsDbContext dbContext,
+                    HttpContext http
+                ) =>
                 {
-                    PlayerId = playerId,
-                    Name = dto.Name,
-                    Background = dto.Background
-                };
-                
-                dbContext.Characters.Add(newCharacter);
+                    var character = await dbContext
+                        .Characters.Where(x =>
+                            x.Id == id && x.Player.UserId == http.User.GetUserId()
+                        )
+                        .FirstOrDefaultAsync();
 
-                await dbContext.SaveChangesAsync();
+                    if (character is null)
+                        return TypedResults.NotFound();
 
-                return TypedResults.Created("/characters", newCharacter.Id);
-            })
-            .RequireAuthorization();
-
-        endpointGroup
-            .MapDelete("{id}", async Task<Results<NotFound, NoContent>> (int id, ExpressedRealmsDbContext dbContext, HttpContext http) =>
-            {
-                var character =
-                    await dbContext.Characters.FirstOrDefaultAsync(x =>
-                        x.Id == id && x.Player.UserId == http.User.GetUserId());
-
-                if (character is null || character.IsDeleted)
-                {
-                    return TypedResults.NotFound();
+                    return TypedResults.Ok(
+                        new CharacterDTO()
+                        {
+                            Name = character.Name,
+                            Background = character.Background
+                        }
+                    );
                 }
-                
-                character.SoftDelete();
-                await dbContext.SaveChangesAsync();
-
-                return TypedResults.NoContent();
-            })
+            )
             .RequireAuthorization();
 
-        endpointGroup.MapPut("",
-            async Task<Results<NotFound, NoContent>> (EditCharacterDTO dto, ExpressedRealmsDbContext dbContext, HttpContext http) =>
-            {
-                var character =
-                    await dbContext.Characters.FirstOrDefaultAsync(x =>
-                        x.Id == dto.Id && x.Player.UserId == http.User.GetUserId());
+        endpointGroup
+            .MapPost(
+                "",
+                async (
+                    CreateCharacterDTO dto,
+                    ExpressedRealmsDbContext dbContext,
+                    HttpContext http
+                ) =>
+                {
+                    var playerId = await dbContext
+                        .Players.Where(x => x.UserId == http.User.GetUserId())
+                        .Select(x => x.Id)
+                        .FirstAsync();
 
-                if (character is null)
-                    return TypedResults.NotFound();
+                    var newCharacter = new Character()
+                    {
+                        PlayerId = playerId,
+                        Name = dto.Name,
+                        Background = dto.Background
+                    };
 
-                character.Name = dto.Name;
-                character.Background = dto.Background;
+                    dbContext.Characters.Add(newCharacter);
 
-                await dbContext.SaveChangesAsync();
+                    await dbContext.SaveChangesAsync();
 
-                return TypedResults.NoContent();
-            })
+                    return TypedResults.Created("/characters", newCharacter.Id);
+                }
+            )
+            .RequireAuthorization();
+
+        endpointGroup
+            .MapDelete(
+                "{id}",
+                async Task<Results<NotFound, NoContent>> (
+                    int id,
+                    ExpressedRealmsDbContext dbContext,
+                    HttpContext http
+                ) =>
+                {
+                    var character = await dbContext.Characters.FirstOrDefaultAsync(x =>
+                        x.Id == id && x.Player.UserId == http.User.GetUserId()
+                    );
+
+                    if (character is null || character.IsDeleted)
+                    {
+                        return TypedResults.NotFound();
+                    }
+
+                    character.SoftDelete();
+                    await dbContext.SaveChangesAsync();
+
+                    return TypedResults.NoContent();
+                }
+            )
+            .RequireAuthorization();
+
+        endpointGroup
+            .MapPut(
+                "",
+                async Task<Results<NotFound, NoContent>> (
+                    EditCharacterDTO dto,
+                    ExpressedRealmsDbContext dbContext,
+                    HttpContext http
+                ) =>
+                {
+                    var character = await dbContext.Characters.FirstOrDefaultAsync(x =>
+                        x.Id == dto.Id && x.Player.UserId == http.User.GetUserId()
+                    );
+
+                    if (character is null)
+                        return TypedResults.NotFound();
+
+                    character.Name = dto.Name;
+                    character.Background = dto.Background;
+
+                    await dbContext.SaveChangesAsync();
+
+                    return TypedResults.NoContent();
+                }
+            )
             .RequireAuthorization();
     }
 }
