@@ -56,7 +56,7 @@ const items = ref([
 ]);
 
 onMounted(() => {
-  function MapExpressions(expression) {
+  function MapData(expression) {
     return {
       items: [
         {
@@ -75,15 +75,17 @@ onMounted(() => {
   axios.get("/api/navMenu/expressions")
       .then(response => {
         const expressions = response.data;
+        
         const column1 = expressions.slice(0, expressions.length / 2);
         const column2 = expressions.slice(expressions.length / 2, expressions.length);
         
-        items.value.find(item => item.label === 'Expressions').items.push(
-            column1.map(MapExpressions)
-        );
-        items.value.find(item => item.label === 'Expressions').items.push(
-            column2.map(MapExpressions)
-        );
+        const expressionMenu = items.value.find(item => item.label === 'Expressions')?.items;
+        
+        if(expressionMenu !== undefined){
+          expressionMenu.push(column1.map(MapData));
+          expressionMenu.push(column2.map(MapData));
+        }
+        
       })
 });
 
