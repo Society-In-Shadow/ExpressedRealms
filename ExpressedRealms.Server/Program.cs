@@ -3,6 +3,7 @@ using ExpressedRealms.DB;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels;
 using ExpressedRealms.Server.EndPoints;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints;
+using ExpressedRealms.Server.EndPoints.ExpressionEndpoints;
 using ExpressedRealms.Server.EndPoints.PlayerEndpoints;
 using ExpressedRealms.Server.Swagger;
 using FluentValidation;
@@ -110,6 +111,7 @@ app.AddCharacterEndPoints();
 app.AddTestingEndPoints();
 app.AddPlayerEndPoints();
 app.AddNavigationEndpoints();
+app.AddExpressionEndpoints();
 
 app.MapFallbackToFile("/index.html");
 
