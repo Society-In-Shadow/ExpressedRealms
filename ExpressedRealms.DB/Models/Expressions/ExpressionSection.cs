@@ -5,7 +5,7 @@ public class ExpressionSection
     public int Id { get; set; }
     public int ExpressionId { get; set; }
     public int SectionTypeId { get; set; }
-    public int ParentId { get; set; }
+    public int? ParentId { get; set; }
     public string Name { get; set; } = null!;
     public string Content { get; set; } = null!;
 
