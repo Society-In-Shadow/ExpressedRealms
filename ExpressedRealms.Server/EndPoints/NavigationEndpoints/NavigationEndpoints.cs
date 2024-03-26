@@ -27,6 +27,7 @@ internal static class NavigationEndpoints
                             ShortDescription = x.ShortDescription,
                             NavMenuImage = x.NavMenuImage
                         })
+                        .OrderBy(x => x.Name)
                         .ToListAsync();
 
                     return TypedResults.Ok(expressions);

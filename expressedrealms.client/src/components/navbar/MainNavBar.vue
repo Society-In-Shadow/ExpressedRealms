@@ -6,6 +6,7 @@ import Button from "primevue/button"
 import AvatarDropdown from "@/components/navbar/AvatarDropdown.vue";
 import {useRouter} from "vue-router";
 import axios from "axios";
+import Router from "@/router";
 
 const router = useRouter();
 
@@ -58,17 +59,12 @@ const items = ref([
 onMounted(() => {
   function MapData(expression) {
     return {
-      items: [
-        {
           label: expression.name,
-          icon: 'pi pi-cloud', // Example icon, modify as needed
+          icon: 'pi pi-cloud',
           subtext: expression.shortDescription,
           command: () => {
-            // Add your navigation logic here
-            console.log('Navigate to:', expression.name);
+            Router.push("/expressions/" + expression.name.toLowerCase());
           }
-        }
-      ]
     };
   }
 
@@ -76,14 +72,19 @@ onMounted(() => {
       .then(response => {
         const expressions = response.data;
         
-        const column1 = expressions.slice(0, expressions.length / 2);
-        const column2 = expressions.slice(expressions.length / 2, expressions.length);
+        const column1 = expressions.slice(0, Math.ceil(expressions.length / 2));
+        const column2 = expressions.slice(Math.ceil(expressions.length / 2), expressions.length);
         
         const expressionMenu = items.value.find(item => item.label === 'Expressions')?.items;
         
         if(expressionMenu !== undefined){
-          expressionMenu.push(column1.map(MapData));
-          expressionMenu.push(column2.map(MapData));
+          expressionMenu.push([{
+            items: column1.map(MapData)
+          }]);
+          expressionMenu.push([{
+            items: column2.map(MapData)
+          }]);
+
         }
         
       })
