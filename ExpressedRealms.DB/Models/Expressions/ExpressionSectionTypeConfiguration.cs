@@ -10,12 +10,9 @@ public class ExpressionSectionTypeConfiguration : IEntityTypeConfiguration<Expre
         builder.ToTable("ExpressionSectionTypes");
 
         builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id)
-            .IsRequired();
+        builder.Property(e => e.Id).IsRequired();
 
-        builder.Property(e => e.Name)
-            .HasMaxLength(50)
-            .IsRequired();
+        builder.Property(e => e.Name).HasMaxLength(50).IsRequired();
 
         builder.Property(e => e.Description);
     }
