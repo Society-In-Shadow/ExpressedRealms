@@ -1,8 +1,5 @@
 using ExpressedRealms.DB;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels;
 using ExpressedRealms.Server.EndPoints.PlayerEndpoints.DTOs;
-using ExpressedRealms.Server.Extensions;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
@@ -22,20 +19,19 @@ internal static class NavigationEndpoints
                 "/expressions",
                 async (ExpressedRealmsDbContext dbContext) =>
                 {
-
-                    var expressions = await dbContext.Expressions
-                        .Select(x => new ExpressionMenuItem()
+                    var expressions = await dbContext
+                        .Expressions.Select(x => new ExpressionMenuItem()
                         {
                             Name = x.Name,
                             Id = x.Id,
                             ShortDescription = x.ShortDescription,
                             NavMenuImage = x.NavMenuImage
-                        }).ToListAsync();
-                        
+                        })
+                        .ToListAsync();
+
                     return TypedResults.Ok(expressions);
                 }
             )
             .RequireAuthorization();
-
     }
 }
