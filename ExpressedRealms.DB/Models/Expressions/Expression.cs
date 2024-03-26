@@ -13,4 +13,6 @@ public class Expression
     public string Advantages { get; set; } = null!;
     public string Disadvantages { get; set; } = null!;
     public string? MaterialWeakness { get; set; }
+
+    public virtual List<ExpressionSection> ExpressionSections { get; set; } = null!;
 }

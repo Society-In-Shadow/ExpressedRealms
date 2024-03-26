@@ -11,15 +11,12 @@ public class ExpressionSectionTypeConfiguration : IEntityTypeConfiguration<Expre
 
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id)
-            .HasColumnName("Id")
             .IsRequired();
 
         builder.Property(e => e.Name)
-            .HasColumnName("Name")
             .HasMaxLength(50)
             .IsRequired();
 
-        builder.Property(e => e.Description)
-            .HasColumnName("Description");
+        builder.Property(e => e.Description);
     }
 }
