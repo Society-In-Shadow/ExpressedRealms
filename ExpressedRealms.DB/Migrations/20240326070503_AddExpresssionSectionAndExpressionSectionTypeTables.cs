@@ -54,7 +54,7 @@ namespace ExpressedRealms.DB.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ExpressionSection",
+                name: "ExpressionSections",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)

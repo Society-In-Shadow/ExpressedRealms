@@ -16,7 +16,7 @@ public class ExpressionSectionsConfiguration : IEntityTypeConfiguration<Expressi
 
         builder.Property(e => e.SectionTypeId).IsRequired();
 
-        builder.Property(e => e.ParentId).IsRequired();
+        builder.Property(e => e.ParentId);
 
         builder.Property(e => e.Name).HasMaxLength(150).IsRequired();
 

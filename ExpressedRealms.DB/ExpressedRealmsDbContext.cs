@@ -15,6 +15,7 @@ namespace ExpressedRealms.DB
             builder.ApplyConfiguration(new CharacterConfiguration());
             builder.ApplyConfiguration(new PlayerConfiguration());
             builder.ApplyConfiguration(new ExpressionConfiguration());
+            builder.ApplyConfiguration(new ExpressionSectionsConfiguration());
             builder.ApplyConfiguration(new ExpressionSectionTypeConfiguration());
         }
 
@@ -24,6 +25,7 @@ namespace ExpressedRealms.DB
         public DbSet<Character> Characters { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<Expression> Expressions { get; set; }
+        public DbSet<ExpressionSection> ExpressionSections { get; set; }
         public DbSet<ExpressionSectionType> ExpressionSectionTypes { get; set; }
     }
 }
