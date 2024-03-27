@@ -15,21 +15,26 @@ internal static class ExpressionEndpoints
             .WithTags("Expressions")
             .WithOpenApi();
 
-        endpointGroup.MapGet(
-            "{name}",
-            async (string name, ExpressedRealmsDbContext dbContext) =>
-            {
-                var sections = await dbContext.ExpressionSections.AsNoTracking()
-                    .Where(x => x.Expression.Name.ToLower() == name.ToLower())
-                    .ToListAsync();
+        endpointGroup
+            .MapGet(
+                "{name}",
+                async (string name, ExpressedRealmsDbContext dbContext) =>
+                {
+                    var sections = await dbContext
+                        .ExpressionSections.AsNoTracking()
+                        .Where(x => x.Expression.Name.ToLower() == name.ToLower())
+                        .ToListAsync();
 
-                return TypedResults.Ok(BuildExpressionPage(sections, null));
-
-            })
+                    return TypedResults.Ok(BuildExpressionPage(sections, null));
+                }
+            )
             .RequireAuthorization();
     }
 
-    private static List<ExpressionSectionDTO> BuildExpressionPage(List<ExpressionSection> dbSections, int? parentId)
+    private static List<ExpressionSectionDTO> BuildExpressionPage(
+        List<ExpressionSection> dbSections,
+        int? parentId
+    )
     {
         List<ExpressionSectionDTO> sections = new();
 
@@ -56,5 +61,4 @@ internal static class ExpressionEndpoints
 
         return sections;
     }
-    
 }
