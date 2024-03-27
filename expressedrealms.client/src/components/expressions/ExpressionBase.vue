@@ -7,6 +7,7 @@ const route = useRoute()
 
 import {onMounted, ref, watch} from "vue";
 import Card from "primevue/card";
+import ExpressionToC from "@/components/expressions/ExpressionToC.vue";
 let sections = ref([]);
 function fetchData(name: string) {
   axios.get(`/api/expression/${name}`)
@@ -28,21 +29,49 @@ onBeforeRouteUpdate(async (to, from) => {
 </script>
 
 <template>
-  <div id="expression" class="d-flex justify-content-center align-items-center boxCenterHelper m-3">
-    <Card class="mb-3 p-0 mt-0 pt-0" style="max-width: 800px">
-      <template #header>
-        <img src="../../../public/ifIHadOne.png" class="w-100"/>
-      </template>
-      <template #content class="mt-0 pt-0">
-        <article id="expression-body">
-          <ExpressionSection :sections="sections" :current-level="1"/>
-        </article>
-      </template>
-    </Card>
+  <div id="expression" class="d-flex justify-content-center align-items-center boxCenterHelper m-lg-3 m-md-3 m-sm-1 m-1">
+    <div class="row">
+      <div class="col-lg-3 col-sm-12 col-xl-3 col-md-3">
+        <div class="sticky-md-top sticky-lg-top sticky-xl-top">
+          <Card class="mb-3 p-0 mt-0 pt-0" style="max-width: 800px">
+            <template #title>
+              Table Of Contents
+            </template>
+            <template #content class="mt-0 pt-0" id="tocTempalte">
+              <article id="expression-body">
+                <ExpressionToC :sections="sections" :current-level="0"></ExpressionToC>
+              </article>
+            </template>
+          </Card>
+        </div>
+      </div>
+      <div class="col">
+        <Card class="mb-3 p-0 mt-0 pt-0" style="max-width: 800px">
+          <template #header>
+            <img src="../../../public/ifIHadOne.png" class="w-100"/>
+          </template>
+          <template #content class="mt-0 pt-0">
+            <article id="expression-body">
+              <ExpressionSection :sections="sections" :current-level="1"/>
+            </article>
+          </template>
+        </Card>
+      </div>
+    </div>
   </div>
 </template>
 
 <style>
+
+.fixed-top2 {
+  max-height: 90vh;
+  overflow: auto;
+}
+
+#expression .p-card-content {
+  padding-top: 0;
+  margin-top: 0;
+}
 
 #expression > div > div.p-card-body > div {
   padding-top: 0;
