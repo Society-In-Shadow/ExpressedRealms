@@ -33,7 +33,10 @@ internal static class ExpressionEndpoints
     {
         List<ExpressionSectionDTO> sections = new();
 
-        var filteredSections = dbSections.Where(x => x.ParentId == parentId).ToList();
+        var filteredSections = dbSections
+            .Where(x => x.ParentId == parentId)
+            .OrderBy(x => x.Id)
+            .ToList();
         foreach (var dbSection in filteredSections)
         {
             var dto = new ExpressionSectionDTO()

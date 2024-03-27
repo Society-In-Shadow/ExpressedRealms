@@ -1,8 +1,5 @@
 <script setup lang="ts">
 
-import {computed, ref} from 'vue';
-
-
 const props = defineProps({
   sections: {
     type: Array,
@@ -24,7 +21,7 @@ const props = defineProps({
     <h4 v-if="currentLevel == 4">{{value.name}}</h4>
     <h5 v-if="currentLevel == 5">{{value.name}}</h5>
     <h6 v-if="currentLevel == 6">{{value.name}}</h6>
-    <div>{{value.content}}</div>
+    <div v-html="value.content"></div>
     <div>
       <ExpressionSection v-if="value.subSections" :sections="value.subSections" :current-level="props.currentLevel + 1"></ExpressionSection>
     </div>
