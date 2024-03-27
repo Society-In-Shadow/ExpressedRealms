@@ -32,7 +32,7 @@ onBeforeRouteUpdate(async (to, from) => {
   <div id="expression" class="d-flex justify-content-center align-items-center boxCenterHelper m-lg-3 m-md-3 m-sm-1 m-1">
     <div class="row">
       <div class="col-lg-3 col-sm-12 col-xl-3 col-md-3">
-        <div class="sticky-md-top sticky-lg-top sticky-xl-top">
+        <div class="sticky-md-top sticky-lg-top sticky-xl-top zIndexFix">
           <Card class="mb-3 p-0 mt-0 pt-0" style="max-width: 800px">
             <template #title>
               Table Of Contents
@@ -63,9 +63,8 @@ onBeforeRouteUpdate(async (to, from) => {
 
 <style>
 
-.fixed-top2 {
-  max-height: 90vh;
-  overflow: auto;
+.zIndexFix {
+  z-index: inherit !important;
 }
 
 #expression .p-card-content {
