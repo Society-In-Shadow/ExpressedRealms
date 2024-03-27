@@ -16,12 +16,11 @@ const props = defineProps({
 </script>
 
 <template>
-  <div v-for="(value, key) in props.sections" :key="value.id">
-    <a class="p-1 tocItem" :style="{ marginLeft: currentLevel * 10 + 'px' }" :href="'#' + makeIdSafe(value.name)">{{value.name}}</a>
+  <div v-for="(value) in props.sections" :key="value.id">
+    <a class="p-1 tocItem" :style="{ marginLeft: currentLevel * 10 + 'px' }" :href="'#' + makeIdSafe(value.name)">{{ value.name }}</a>
     <div>
-      <ExpressionToC v-if="value.subSections" :sections="value.subSections" :current-level="props.currentLevel + 1"></ExpressionToC>
+      <ExpressionToC v-if="value.subSections" :sections="value.subSections" :current-level="props.currentLevel + 1" />
     </div>
-
   </div>
 </template>
 

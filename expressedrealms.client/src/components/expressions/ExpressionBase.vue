@@ -5,7 +5,7 @@ import axios from "axios";
 import {onBeforeRouteUpdate, useRoute} from 'vue-router'
 const route = useRoute()
 
-import {onMounted, ref, watch} from "vue";
+import {onMounted, ref } from "vue";
 import Card from "primevue/card";
 import ExpressionToC from "@/components/expressions/ExpressionToC.vue";
 let sections = ref([]);
@@ -37,9 +37,9 @@ onBeforeRouteUpdate(async (to, from) => {
             <template #title>
               Table Of Contents
             </template>
-            <template #content class="mt-0 pt-0" id="tocTempalte">
+            <template #content>
               <article id="expression-body">
-                <ExpressionToC :sections="sections" :current-level="0"></ExpressionToC>
+                <ExpressionToC :sections="sections" :current-level="0" />
               </article>
             </template>
           </Card>
@@ -48,11 +48,11 @@ onBeforeRouteUpdate(async (to, from) => {
       <div class="col">
         <Card class="mb-3 p-0 mt-0 pt-0" style="max-width: 800px">
           <template #header>
-            <img src="../../../public/ifIHadOne.png" class="w-100"/>
+            <img src="../../../public/ifIHadOne.png" class="w-100">
           </template>
-          <template #content class="mt-0 pt-0">
+          <template #content>
             <article id="expression-body">
-              <ExpressionSection :sections="sections" :current-level="1"/>
+              <ExpressionSection :sections="sections" :current-level="1" />
             </article>
           </template>
         </Card>
