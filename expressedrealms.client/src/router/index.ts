@@ -74,6 +74,11 @@ export const routes = [
                 path: "/characters/:id",
                 name: "editCharacter",
                 component: () => import("./../components/characters/character/EditCharacter.vue")
+            },
+            {
+                path: "/expressions/:name",
+                name: "viewExpression",
+                component: () => import("./../components/expressions/ExpressionBase.vue")
             }
         ]
     }
