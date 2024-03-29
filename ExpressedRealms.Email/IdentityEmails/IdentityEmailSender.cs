@@ -11,10 +11,9 @@ internal sealed class IdentityEmailSender(
     ISendGridClient sendGrid,
     IForgetPasswordEmail forgetPasswordEmail,
     IConfirmAccountEmail confirmAccountEmail,
-    IConfiguration configuration)
-    : IEmailSender
+    IConfiguration configuration
+) : IEmailSender
 {
-
     public async Task SendEmailAsync(string email, string subject, string htmlMessage)
     {
         var plainTextMessage = "";
@@ -26,13 +25,12 @@ internal sealed class IdentityEmailSender(
         };
 
         var msg = MailHelper.CreateSingleEmail(
-            new EmailAddress(configuration["FROM_EMAIL"]), 
-            new EmailAddress(email), 
-            subject, 
-            plainTextMessage, 
-            htmlMessage);
+            new EmailAddress(configuration["FROM_EMAIL"]),
+            new EmailAddress(email),
+            subject,
+            plainTextMessage,
+            htmlMessage
+        );
         var response = await sendGrid.SendEmailAsync(msg).ConfigureAwait(false);
     }
-
-
 }

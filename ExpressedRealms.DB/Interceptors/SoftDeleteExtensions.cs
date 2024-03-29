@@ -7,6 +7,7 @@ public static class SoftDeleteExtensions
         softDelete.IsDeleted = true;
         softDelete.DeletedAt = DateTimeOffset.UtcNow;
     }
+
     public static void RestoreSoftDelete(this ISoftDelete softDelete)
     {
         softDelete.IsDeleted = false;

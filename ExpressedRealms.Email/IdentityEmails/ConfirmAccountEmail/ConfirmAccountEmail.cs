@@ -9,13 +9,15 @@ internal sealed class ConfirmAccountEmail(IConfiguration configuration) : IConfi
         var url = identityEmail.Split("'")[1];
         return url.Split('?').Last();
     }
-    
-    public (string subject, string plaintext, string html) GetUpdatedEmailTemplate(string htmlContent)
+
+    public (string subject, string plaintext, string html) GetUpdatedEmailTemplate(
+        string htmlContent
+    )
     {
         var subject = "Society in Shadows Account Confirmation";
         var confirmAccountParamters = ParseAccountConfirmationLink(htmlContent);
         var baseURL = configuration["FRONT_END_BASE_URL"];
-        var plainTextContext =  
+        var plainTextContext =
             $@"Welcome to Society in Shadows!  Please copy and paste the link below to confirm your account
 
 {baseURL}/confirmAccount?{confirmAccountParamters.Replace("&amp;", "&")}
@@ -23,8 +25,7 @@ internal sealed class ConfirmAccountEmail(IConfiguration configuration) : IConfi
 Thanks,
 Society in Shadows";
 
-        string htmlEmail = 
-            $"""
+        string htmlEmail = $"""
             <p>Welcome to Society in Shadows!  Please click the link below to confirm your account</p>
 
             <p><a href="{baseURL}/confirmAccount?{confirmAccountParamters}">Confirm Account</a></p>
