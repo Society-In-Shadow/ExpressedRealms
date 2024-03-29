@@ -15,18 +15,20 @@ using Serilog;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-
-
 try
 {
-    Log.Information("Setting Up Web App") ;
+    Log.Information("Setting Up Web App");
     var builder = WebApplication.CreateBuilder(args);
 
     Log.Information("Setting Up Loggers");
     Log.Logger = new LoggerConfiguration()
         .MinimumLevel.Information()
         .WriteTo.Console()
-        .WriteTo.PostgreSQL(builder.Configuration.GetConnectionString("DefaultConnection"), "Logs", needAutoCreateTable: true)
+        .WriteTo.PostgreSQL(
+            builder.Configuration.GetConnectionString("DefaultConnection"),
+            "Logs",
+            needAutoCreateTable: true
+        )
         .CreateLogger();
 
     builder.Host.UseSerilog();
@@ -39,7 +41,7 @@ try
             x => x.MigrationsHistoryTable("_EfMigrations", "efcore")
         )
     );
-    
+
     Log.Information("Setting Up Authentication and Identity");
     builder
         .Services.AddIdentityCore<User>()
@@ -60,10 +62,13 @@ try
         .Services.AddAuthentication()
         .AddCookie(
             IdentityConstants.BearerScheme,
-            o => { o.SlidingExpiration = true; }
+            o =>
+            {
+                o.SlidingExpiration = true;
+            }
         );
     builder.Services.AddAuthorizationBuilder();
-        
+
     builder.Services.AddAntiforgery(
         (options) =>
         {
@@ -117,7 +122,7 @@ try
 
     app.UseDefaultFiles();
     app.UseStaticFiles();
-    
+
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {
@@ -125,7 +130,7 @@ try
         app.UseSwagger();
         app.UseSwaggerUI();
     }
-    
+
     Log.Information("Adding in Security Related Things");
     app.UseHttpsRedirection();
     app.UseAuthentication();
