@@ -153,6 +153,12 @@ try
 }
 catch (Exception ex)
 {
+    // https://github.com/dotnet/efcore/issues/29809#issuecomment-1345132260
+    if (ex is HostAbortedException)
+    {
+        Log.Information("EF Core Migration Build was detected.  Catching and closing out.");
+        return;
+    }
     Log.Fatal(ex, "Application terminated unexpectedly");
 }
 finally
