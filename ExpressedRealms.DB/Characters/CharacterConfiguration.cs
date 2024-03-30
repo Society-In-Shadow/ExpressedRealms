@@ -12,6 +12,7 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
         builder.Property(x => x.Name).IsRequired().HasMaxLength(150);
         builder.Property(x => x.Background);
         builder.Property(x => x.PlayerId).IsRequired();
+        builder.Property(x => x.ExpressionId).IsRequired();
 
         builder.HasQueryFilter(x => !x.IsDeleted);
 
@@ -19,6 +20,13 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
             .HasOne(x => x.Player)
             .WithMany(x => x.Characters)
             .HasForeignKey(x => x.PlayerId)
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired();
+
+        builder
+            .HasOne(x => x.Expression)
+            .WithMany(x => x.Characters)
+            .HasForeignKey(x => x.ExpressionId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
     }

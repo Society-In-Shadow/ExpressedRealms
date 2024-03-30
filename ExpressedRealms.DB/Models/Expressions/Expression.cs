@@ -1,3 +1,5 @@
+using ExpressedRealms.DB.Characters;
+
 namespace ExpressedRealms.DB.Models.Expressions;
 
 public class Expression
@@ -8,4 +10,5 @@ public class Expression
     public string NavMenuImage { get; set; } = null!;
 
     public virtual List<ExpressionSection> ExpressionSections { get; set; } = null!;
+    public virtual List<Character> Characters { get; set; } = null!;
 }
