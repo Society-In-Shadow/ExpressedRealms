@@ -32,7 +32,7 @@ internal static class CharacterEndPoints
                         {
                             Id = x.Id.ToString(),
                             Name = x.Name,
-                            ShortDescription = x.Background,
+                            Background = x.Background,
                             Expression = x.Expression.Name
                         })
                         .ToListAsync();
