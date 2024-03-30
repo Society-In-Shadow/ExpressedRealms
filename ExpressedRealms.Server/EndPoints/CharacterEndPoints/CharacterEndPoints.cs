@@ -28,18 +28,6 @@ internal static class CharacterEndPoints
                 {
                     var characters = await dbContext
                         .Characters.Where(x => x.Player.UserId == http.User.GetUserId())
-                        .ToListAsync();
-
-                    return TypedResults.Ok(
-                        characters
-                            .Select(x => new CharacterListDTO()
-                            {
-                                Id = x.Id.ToString(),
-                                Name = x.Name,
-                                Background = x.Background
-                            })
-                            .ToList()
-                    );
                         .Select(x => new CharacterListDTO()
                         {
                             Id = x.Id.ToString(),
@@ -52,7 +40,28 @@ internal static class CharacterEndPoints
                     return TypedResults.Ok(characters);
                 }
             )
-            .WithName("Characters")
+            .RequireAuthorization();
+
+        endpointGroup
+            .MapGet(
+                "options",
+                [Authorize]
+                async (ExpressedRealmsDbContext dbContext, HttpContext http) =>
+                {
+                    var expressions = await dbContext
+                        .Expressions.Select(x => new CharacterOptionExpression()
+                        {
+                            Id = x.Id,
+                            Name = x.Name,
+                            ShortDescription = x.ShortDescription
+                        })
+                        .ToListAsync();
+
+                    return TypedResults.Ok(new CharacterOptions() { Expressions = expressions });
+                }
+            )
+            .WithSummary("Returns info needed for creating a character")
+            .WithDescription("Returns info needed for creating a character.")
             .RequireAuthorization();
 
         endpointGroup
