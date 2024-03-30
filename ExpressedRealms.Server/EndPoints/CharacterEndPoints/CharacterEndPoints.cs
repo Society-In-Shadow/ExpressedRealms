@@ -40,6 +40,16 @@ internal static class CharacterEndPoints
                             })
                             .ToList()
                     );
+                        .Select(x => new CharacterListDTO()
+                        {
+                            Id = x.Id.ToString(),
+                            Name = x.Name,
+                            ShortDescription = x.Background,
+                            Expression = x.Expression.Name
+                        })
+                        .ToListAsync();
+
+                    return TypedResults.Ok(characters);
                 }
             )
             .WithName("Characters")
@@ -59,18 +69,18 @@ internal static class CharacterEndPoints
                         .Characters.Where(x =>
                             x.Id == id && x.Player.UserId == http.User.GetUserId()
                         )
+                        .Select(x => new CharacterDTO()
+                        {
+                            Name = x.Name,
+                            Background = x.Background,
+                            Expression = x.Expression.Name
+                        })
                         .FirstOrDefaultAsync();
 
                     if (character is null)
                         return TypedResults.NotFound();
 
-                    return TypedResults.Ok(
-                        new CharacterDTO()
-                        {
-                            Name = character.Name,
-                            Background = character.Background
-                        }
-                    );
+                    return TypedResults.Ok(character);
                 }
             )
             .RequireAuthorization();
@@ -93,7 +103,8 @@ internal static class CharacterEndPoints
                     {
                         PlayerId = playerId,
                         Name = dto.Name,
-                        Background = dto.Background
+                        Background = dto.Background,
+                        ExpressionId = dto.ExpressionId
                     };
 
                     dbContext.Characters.Add(newCharacter);
