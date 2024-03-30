@@ -6,6 +6,7 @@
       :character-id="character.id" 
       :character-name="character.name" 
       :background-story="character.background"
+      :expression="character.expression"
       @delete="deleteCharacter"
     />
     <AddCharacterTile />

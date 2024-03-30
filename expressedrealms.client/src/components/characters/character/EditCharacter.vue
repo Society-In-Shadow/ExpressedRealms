@@ -6,7 +6,7 @@ import { object, string }  from 'yup';
 import Card from "primevue/card";
 import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
 import TextAreaWrapper from "@/FormWrappers/TextAreaWrapper.vue";
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
 import { useRoute } from 'vue-router'
 import toaster from "@/services/Toasters";
 
@@ -16,7 +16,8 @@ onMounted(() =>{
   axios.get(`/api/characters/${route.params.id}`)
       .then((response) => {
         name.value = response.data.name;
-        background.value = response.data.background
+        background.value = response.data.background;
+        expression.value = response.data.expression;
       })
 });
 
@@ -32,6 +33,7 @@ const { defineField, handleSubmit, errors } = useForm({
 
 const [name] = defineField('name');
 const [background] = defineField('background');
+const expression = ref("");
 
 const onSubmit = handleSubmit((values) => {
   axios.put('/api/characters/', {
@@ -51,6 +53,7 @@ const onSubmit = handleSubmit((values) => {
       <template #content>
         <form @submit="onSubmit">
           <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" @change="onSubmit" />
+          <InputTextWrapper v-model="expression" field-name="Expression" disabled @change="onSubmit" />          
           <TextAreaWrapper v-model="background" field-name="Background" :error-text="errors.background" @change="onSubmit" />
         </form>
       </template>

@@ -21,6 +21,10 @@ const props = defineProps({
   characterId: {
     type: Number,
     required: true
+  },
+  expression: {
+    type: String,
+    required: true
   }
 });
 
@@ -43,7 +47,10 @@ function editCharacter() {
       {{ characterName }}
     </template>
     <template #content>
-      <div>{{ backgroundStory }}</div>
+      <em class="mb-3">{{ expression }}</em>
+      <div class="mt-3 text-sm">
+        {{ backgroundStory }}
+      </div>
       <Button data-cy="character-edit-button" label="Edit" class="m-1" @click="editCharacter" />
       <Button data-cy="character-delete-button" label="Delete" class="m-1" @click="deleteCharacter" />
     </template>
@@ -51,5 +58,7 @@ function editCharacter() {
 </template>
 
 <style scoped>
-
+  .characterTile >>> .p-card-content{
+    padding: 0;
+  }
 </style>

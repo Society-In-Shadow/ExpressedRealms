@@ -19,7 +19,6 @@ const props = defineProps({
     default: ""
   },
   errorText: {
-    required: true,
     type: String,
     default: ""
   }

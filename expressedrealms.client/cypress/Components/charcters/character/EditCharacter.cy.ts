@@ -7,6 +7,9 @@ const nameDefaultValue = "John Doe";
 const background = 'background';
 const backgroundHelp = 'background-help'
 const backgroundDefaultValue = "The anonymous person";
+const expression = "expression";
+const expressionHelp = 'expression-help'
+const expressionDefaultValue = "Adept";
 
 describe('<EditCharacter />', () => {
     beforeEach(() => {
@@ -15,7 +18,8 @@ describe('<EditCharacter />', () => {
             statusCode: 200,
             body: {
                 name: nameDefaultValue,
-                background: backgroundDefaultValue
+                background: backgroundDefaultValue,
+                expression: expressionDefaultValue
             }
         }).as('getCharacter');
 
@@ -33,12 +37,15 @@ describe('<EditCharacter />', () => {
     it('Loading the page doesn\'t validate right away', () => {
         cy.dataCy(nameHelp).should('not.be.visible');
         cy.dataCy(backgroundHelp).should('not.be.visible');
+        cy.dataCy(expressionHelp).should('not.be.visible');
     });
     
     it('Loading Page Will Grab Data From API and Load It In', () => {
         cy.dataCy(name).should("have.value", nameDefaultValue);
         cy.dataCy(background).should("have.value", backgroundDefaultValue);
-    })
+        cy.dataCy(expression).should("have.value", expressionDefaultValue);
+    });
+    
     
     it('Name Field follows all Schema Validations and Updates Automatically', () => {
         cy.dataCy(name).clear();
@@ -58,6 +65,11 @@ describe('<EditCharacter />', () => {
 
         cy.get('@toasterSuccess').should('have.been.calledWith', 'Successfully Updated Character Info!');
     });
+    
+    it('Expression Field is Disabled', () => {
+        cy.dataCy(expression).should('be.disabled');
+    })
+    
 
     it('Background Follows all Schema Validations and Updates Automatically', () => {
         
