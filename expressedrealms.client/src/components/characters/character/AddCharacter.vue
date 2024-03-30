@@ -3,11 +3,13 @@
 import Button from 'primevue/button';
 import axios from "axios";
 import { useForm } from 'vee-validate';
-import { object, string }  from 'yup';
+import {object, string} from 'yup';
 import Card from "primevue/card";
 import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
 import Router from "@/router";
 import TextAreaWrapper from "@/FormWrappers/TextAreaWrapper.vue";
+import {onMounted, ref} from "vue";
+import DropdownWrapper from "@/FormWrappers/DropdownWrapper.vue";
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
@@ -16,14 +18,29 @@ const { defineField, handleSubmit, errors } = useForm({
         .label("Name"),
     background: string()
         .label('Background'),
+    expressionId: object().required()
+        .label("Expression")
   })
 });
 
 const [name] = defineField('name');
 const [background] = defineField('background');
+const [expression] = defineField('expressionId');
+const expressions = ref([]);
+
+onMounted(() =>{
+  axios.get(`/api/characters/options`)
+      .then((response) => {
+        expressions.value = response.data.expressions;
+      })
+});
 
 const onSubmit = handleSubmit((values) => {
-  axios.post('/api/characters', values)
+  axios.post('/api/characters', {
+    name: values.name,
+    expressionId: values.expressionId.id,
+    background: values.background
+  })
       .then(() => {
         Router.push("/characters");
       });
@@ -40,6 +57,9 @@ const onSubmit = handleSubmit((values) => {
       <template #content>
         <form @submit="onSubmit">
           <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" />
+          <DropdownWrapper option-label="name" :options="expressions" field-name="Expression" v-model="expression" :error-text="errors.expressionId">
+            <div class="m-2">{{ expression?.shortDescription ?? "" }}</div>
+          </DropdownWrapper>
           <TextAreaWrapper v-model="background" field-name="Background" :error-text="errors.background" />
           <Button data-cy="add-character-button" label="Add Character" class="w-100 mb-2" type="submit" />
         </form>
