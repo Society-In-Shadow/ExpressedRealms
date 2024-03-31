@@ -1,4 +1,5 @@
 using System.Reflection;
+using AspNetCore.SwaggerUI.Themes;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels;
 using ExpressedRealms.Server.EndPoints;
@@ -128,7 +129,7 @@ try
     {
         Log.Information("Setting Up Swagger");
         app.UseSwagger();
-        app.UseSwaggerUI();
+        app.UseSwaggerUI(ModernStyle.Dark);
     }
 
     Log.Information("Adding in Security Related Things");
