@@ -76,6 +76,8 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+      # https://github.com/docker/compose/issues/8578#issuecomment-945228061
+      GUNICORN_ACCESS_LOGFILE: '/dev/null'
     volumes:
       - pgAdmin_data:/var/lib/pgadmin
     networks:
