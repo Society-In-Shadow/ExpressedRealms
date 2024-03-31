@@ -58,7 +58,7 @@ const onSubmit = handleSubmit((values) => {
         <form @submit="onSubmit">
           <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" />
           <DropdownWrapper option-label="name" :options="expressions" field-name="Expression" v-model="expression" :error-text="errors.expressionId">
-            <div class="m-2">{{ expression?.shortDescription ?? "" }}</div>
+            <div data-cy="expression-short-description" class="m-2">{{ expression?.shortDescription ?? "" }}</div>
           </DropdownWrapper>
           <TextAreaWrapper v-model="background" field-name="Background" :error-text="errors.background" />
           <Button data-cy="add-character-button" label="Add Character" class="w-100 mb-2" type="submit" />
