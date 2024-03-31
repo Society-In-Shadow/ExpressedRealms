@@ -52,7 +52,7 @@ const dataCyTagCalc = computed(() => {
       v-bind="$attrs"
     />
     <small :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ errorText }}</small>
-    <slot></slot>
+    <slot />
   </div>
 </template>
 

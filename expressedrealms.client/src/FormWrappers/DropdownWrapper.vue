@@ -51,11 +51,11 @@ const dataCyTagCalc = computed(() => {
   <div class="mb-3">
     <label :for="dataCyTagCalc">{{ props.fieldName }}</label>
     <Dropdown
-      :id="dataCyTagCalc" v-model="model" :options="options" :optionLabel="optionLabel" :data-cy="dataCyTagCalc" class="w-100"
-      :class="{ 'p-invalid': errorText }" v-bind="$attrs"
+      :id="dataCyTagCalc" v-model="model" :options="options" :option-label="optionLabel" :data-cy="dataCyTagCalc"
+      class="w-100" :class="{ 'p-invalid': errorText }" v-bind="$attrs"
     />
     <small :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ errorText }}</small>
-    <slot></slot>
+    <slot />
   </div>
 </template>
 
