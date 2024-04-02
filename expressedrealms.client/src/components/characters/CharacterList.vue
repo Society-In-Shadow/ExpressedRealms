@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-xs-column flex-sm-column flex-lg-row flex-md-row gap-3 m-3 ">
+  <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
     <CharacterTile
       v-for="character in characters" 
       :key="character.id"
@@ -42,8 +42,12 @@
 
 .characterTile {
   width: 15rem;
-  height: 15rem;
 }
 
+@media(max-width: 576px){
+  .characterTile {
+    width: 100%
+  }
+}
 
 </style>
