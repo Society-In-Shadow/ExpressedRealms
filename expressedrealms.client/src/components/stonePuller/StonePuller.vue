@@ -5,6 +5,7 @@ import Button from "primevue/button";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import SplitButton from 'primevue/splitbutton';
+import Card from "primevue/card";
 
 const stones = ref([]);
 const neutralStone = ref("");
@@ -183,68 +184,76 @@ const pullStoneList = [
 </script>
 
 <template>
-  <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
-    <SplitButton label="Pull Neutral Stone" @click="pullNeutralStone" class="m-2"  :model="neutralStones" />
-    <SplitButton label="Pull Stone" @click="pullStones(1)" class="m-2" :model="pullStoneList" />
-    <Button data-cy="logoff-button" label="Clear Stones" class="m-2" @click="clearStones" />
-  </div>
-  <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
-    <div class="stone leadStone ml-3 mt-3 mb-3 mr-5 text-center align-content-center">{{ neutralStone }}</div>
-    <div v-if="showComputedCell" class="m-3 ml-5 text-center align-content-center">X</div>
-    <div v-if="showComputedCell" class="m-3 ml-5 text-center align-content-center">(</div>
-    <div class="stone leadStone m-3 ml-5 text-center align-content-center">{{stones[0]}}</div>
-    <div v-for="stone in stones.slice(1)" class="stone m-3 text-center align-content-center">
-      {{stone}}
-    </div>
-    <div v-if="showComputedCell" class="m-3 ml-5 text-center align-content-center">)</div>
-    <div v-if="showComputedCell" class="m-3 ml-5 text-center align-content-center">=</div>
-    <div v-if="showComputedCell" class="stone leadStone m-3 ml-5 text-center align-content-center">+{{calculateBonus()}}</div>
-  </div>
-
-  <p>
-    In an RBT, a drawn stone’s color is cross-referenced to the neutral stone’s color via the Random Bonus Table, 
-    illustrated below. Comparing two colors generates a number between 0 and 5 called the 
-    Random Bonus (RB). For example, if a player draws a red stone and the neutral stone is green, a RB of +4 is 
-    generated. If a player is entitled to draw multiple stones for the test,  she chooses the stone giving her the 
-    higher RB unless.
+  <Card class="m-3">
+    <template #content>
+      <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
+        <SplitButton label="Pull Stone" @click="pullStones(1)" class="m-2" :model="pullStoneList" />
+        <SplitButton label="Pull Neutral Stone" @click="pullNeutralStone" class="m-2"  :model="neutralStones" />
+        <Button data-cy="logoff-button" label="Clear Stones" class="m-2" @click="clearStones" />
+      </div>
+      <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
+        <div class="stone ml-3 mt-3 mb-3 mr-5 text-center align-content-center">{{ neutralStone }}</div>
+      </div>
+      <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
+        
+        <div v-if="showComputedCell" class="m-3 ml-5 text-center align-content-center"></div>
+        <div v-if="showComputedCell" class="m-3 ml-5 text-center align-content-center">(</div>
+        <div class="stone leadStone m-3 ml-5 text-center align-content-center">{{stones[0]}}</div>
+        <div v-for="stone in stones.slice(1)" class="stone m-3 text-center align-content-center">
+          {{stone}}
+        </div>
+        <div v-if="showComputedCell" class="m-3 ml-5 text-center align-content-center">)</div>
+        <div v-if="showComputedCell" class="m-3 ml-5 text-center align-content-center">=</div>
+        <div v-if="showComputedCell" class="stone m-3 ml-5 text-center align-content-center">+{{calculateBonus()}}</div>
+      </div>
     
-    The bag has 1 stone of each color.
-  </p>
-  
-  <DataTable :value="table" table-style="min-width: 50rem">
-    <Column field="stone" header="" />
-    <Column field="black" header="Black">
-      <template #body="slotProps">
-        +{{ slotProps.data.black }}
-      </template>
-    </Column>
-    <Column field="blue" header="Blue" >
-      <template #body="slotProps">
-        +{{ slotProps.data.blue }}
-      </template>
-    </Column>
-    <Column field="clear" header="Clear" >
-      <template #body="slotProps">
-        +{{ slotProps.data.clear }}
-      </template>
-    </Column>
-    <Column field="green" header="Green" >
-      <template #body="slotProps">
-        +{{ slotProps.data.green }}
-      </template>
-    </Column>
-    <Column field="red" header="Red" >
-      <template #body="slotProps">
-        +{{ slotProps.data.red }}
-      </template>
-    </Column>
-    <Column field="white" header="White" >
-      <template #body="slotProps">
-        +{{ slotProps.data.white }}
-      </template>
-    </Column>
-  </DataTable>
-  
+      <h1>Stone Pulling</h1>
+      <p>
+        In a RBT, a drawn stone’s color is cross-referenced to the neutral stone’s color via the Random Bonus Table, 
+        illustrated below. Comparing two colors generates a number between 0 and 5 called the 
+        Random Bonus. For example, if a player draws a red stone and the neutral stone is green, a RB of +4 is 
+        generated. If a player is entitled to draw multiple stones for the test, they choose the stone giving them the 
+        highest bonus value.
+        
+        The bag has 1 stone of each color.
+      </p>
+      
+      <DataTable :value="table" table-style="min-width: 50rem">
+        <Column field="stone" header="" />
+        <Column field="black" header="Black">
+          <template #body="slotProps">
+            +{{ slotProps.data.black }}
+          </template>
+        </Column>
+        <Column field="blue" header="Blue" >
+          <template #body="slotProps">
+            +{{ slotProps.data.blue }}
+          </template>
+        </Column>
+        <Column field="clear" header="Clear" >
+          <template #body="slotProps">
+            +{{ slotProps.data.clear }}
+          </template>
+        </Column>
+        <Column field="green" header="Green" >
+          <template #body="slotProps">
+            +{{ slotProps.data.green }}
+          </template>
+        </Column>
+        <Column field="red" header="Red" >
+          <template #body="slotProps">
+            +{{ slotProps.data.red }}
+          </template>
+        </Column>
+        <Column field="white" header="White" >
+          <template #body="slotProps">
+            +{{ slotProps.data.white }}
+          </template>
+        </Column>
+      </DataTable>
+      
+    </template>
+  </Card>
 </template>
 
 <style scoped>
