@@ -190,10 +190,14 @@ const pullStoneList = [
   </div>
   <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
     <div class="stone leadStone ml-3 mt-3 mb-3 mr-5 text-center align-content-center">{{ neutralStone }}</div>
+    <div v-if="showComputedCell" class="m-3 ml-5 text-center align-content-center">X</div>
+    <div v-if="showComputedCell" class="m-3 ml-5 text-center align-content-center">(</div>
     <div class="stone leadStone m-3 ml-5 text-center align-content-center">{{stones[0]}}</div>
     <div v-for="stone in stones.slice(1)" class="stone m-3 text-center align-content-center">
       {{stone}}
     </div>
+    <div v-if="showComputedCell" class="m-3 ml-5 text-center align-content-center">)</div>
+    <div v-if="showComputedCell" class="m-3 ml-5 text-center align-content-center">=</div>
     <div v-if="showComputedCell" class="stone leadStone m-3 ml-5 text-center align-content-center">+{{calculateBonus()}}</div>
   </div>
 
