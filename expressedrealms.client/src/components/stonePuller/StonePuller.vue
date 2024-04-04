@@ -50,6 +50,19 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled); // The maximum is exclusive and the minimum is inclusive
 }
 
+function calculateBonus():string {
+  
+  if(neutralStone.value == "")
+    return "";
+  
+  if(stones.value.length == 0)
+    return "";
+  
+  var neutralStoneIndex = table.map(x => x.stone.toLowerCase()).indexOf(neutralStone.value);
+  
+  return table[neutralStoneIndex][stones.value[0]];
+}
+
 var table = [
   {
     stone: "Black",
@@ -170,6 +183,7 @@ const pullStoneList = [
     <div v-for="stone in stones.slice(1)" class="stone m-3 text-center align-content-center">
       {{stone}}
     </div>
+    <div class="stone leadStone m-3 ml-5 text-center align-content-center">{{calculateBonus()}}</div>
   </div>
 
   <p>
