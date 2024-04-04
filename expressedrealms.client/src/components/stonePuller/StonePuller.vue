@@ -10,15 +10,44 @@ const stones = ref([]);
 const neutralStone = ref("");
 
 const stoneTypes = [ "red", "blue", "black", "clear", "green", "white"]
+let stoneBag = [ "red", "blue", "black", "clear", "green", "white"]
 
-
+function removeStone(stoneName:string): string{
+  var characterIndex = stoneBag.indexOf(stoneName)
+  ~characterIndex && stoneBag.splice(characterIndex, 1);
+  return stoneName;
+}
 function pullStones(numberOfStones:number) {
-  for(var i = 1; i<=numberOfStones; i++)
-    stones.value.push(stoneTypes[getRandomInt(0, 5)])
+  
+  for(var i = 1; i<=numberOfStones; i++){
+
+    if(stoneBag.length === 0)
+      return;
+    
+    if(stoneBag.length === 1){
+      stones.value.push(removeStone(stoneBag[0]));
+      return;
+    }
+    
+    const stone = removeStone(stoneBag[getRandomInt(0, stoneBag.length-1)])
+    stones.value.push(stone);
+  }
+    
 }
 
 function pullNeutralStone() {
   neutralStone.value = stoneTypes[getRandomInt(0, 5)];
+}
+
+function clearStones() {
+  stones.value = [];
+  stoneBag = stoneTypes.slice();
+  neutralStone.value = "";
+}
+function getRandomInt(min, max) {
+  const minCeiled = Math.ceil(min);
+  const maxFloored = Math.floor(max);
+  return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled); // The maximum is exclusive and the minimum is inclusive
 }
 
 var table = [
@@ -78,18 +107,6 @@ var table = [
   }
 ]
 
-
-function clearStones() {
-  stones.value = [];
-  neutralStone.value = "";
-}
-function getRandomInt(min, max) {
-  const minCeiled = Math.ceil(min);
-  const maxFloored = Math.floor(max);
-  return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
-}
-
-
 const neutralStones = [
   {
     label: 'Black',
@@ -134,6 +151,10 @@ const pullStoneList = [
     label: '5 Stones',
     command: () => pullStones(5)
   },
+  {
+    label: '6 Stones',
+    command: () => pullStones(6)
+  }
 ];
 
 </script>
