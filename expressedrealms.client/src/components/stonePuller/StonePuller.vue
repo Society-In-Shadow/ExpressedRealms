@@ -181,6 +181,16 @@ const pullStoneList = [
   }
 ];
 
+const bonusEffects = [
+  { bonus: "+5", success: "Choose and combine two other effects", failure: "Choose and combine two other effects" },
+  { bonus: "+4", success: "+1 Damage and Action delayed 6 phases", failure: "2 Damage or Daze" },
+  { bonus: "+3", success: "+1 Damage or Daze", failure: "Action delayed 6 phases" },
+  { bonus: "+2", success: "Move defender 2 paces in any direction", failure: "1 Damage or Stun" },
+  { bonus: "+1", success: "Action delayed 6 phases or Stun", failure: "Held item lands 2 paces away in direction of target" },
+  { bonus: "+0", success: "Knockdown or Disarm", failure: "Fall Down, Drop held item, moved 2 paces in direction of defender’s choice" }
+];
+
+
 </script>
 
 <template>
@@ -254,6 +264,45 @@ const pullStoneList = [
       
     </template>
   </Card>
+  
+  <h1>Lead Stone</h1>
+  <p>
+    In some instances, players are allowed to draw more than one stone. When drawing multiple stones, it is important
+    for you to specify a lead stone. To do so, you should somehow separate and designate your lead stone prior to
+    revealing. A common method for doing this is to shift one of your drawn stones into the other hand and place this
+    hand above the other to clearly designate it as the lead stone. Some tests rely on the lead stone to determine the
+    quality of the test’s result, however, the other stone(s) are typically still used for determining success.
+  </p>
+  <h1>Success and Failure</h1>
+  <p>
+    All things considered, it is assumed that if you fail, you fail completely and if you succeed, that you succeed
+    completely. On some rare occasions, a successful test may not have the intended effect, and a failure may have some
+    benefits to the failing character.
+  </p>
+  <h1>Critical Success and Critical Failure</h1>
+  <p>
+    There are two rare (1-in-36 chance) circumstances that can occur when an attack is made, changing the result
+    drastically.
+  </p>
+  <p>
+    The first is a critical success and happens when the attacker’s lead stone random bonus result is +5 and the
+    defender’s is +0. The other is a critical failure and happens in the reverse circumstance when the defender’s lead
+    stone random bonus result is +5 and the attacker’s is +0.
+  </p>
+  <p>In either case, the successful party may either allow the GO a free hand to describe the critical success/failure
+    with cinematic and mechanics or draw a new random bonus test and look up the result on the appropriate critical
+    table. This is called making a critical test. Some powers have a unique effect listed in the event of a critical
+    result, in these instances, a critical test is not necessary. When a critical success occurs there is no need to
+    draw for an extra damage test as this test is considered to be successful. The game official always has the final
+    say on which critical effect occurs, including making up critical effects on the fly, allowing the game official
+    to craft the cinematic of the scene.
+  </p>
+
+  <DataTable :value="bonusEffects" table-style="min-width: 50rem">
+    <Column field="bonus" header="Bonus" />
+    <Column field="success" header="Success (Effect on Defender)" />
+    <Column field="failure" header="Failure (Effect on Attacker)" />
+  </DataTable>
 </template>
 
 <style scoped>
