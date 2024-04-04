@@ -66,57 +66,57 @@ function calculateBonus():string {
 var table = [
   {
     stone: "Black",
-    black: "+5",
-    blue: "+4",
-    clear: "+3",
-    green: "+2",
-    red: "+1",
-    white: "+0"
+    black: 5,
+    blue: 4,
+    clear: 3,
+    green: 2,
+    red: 1,
+    white: 0
   },
   {
     stone: "Blue",
-    black: "+4",
-    blue: "+5",
-    clear: "+1",
-    green: "+3",
-    red: "+0",
-    white: "+2"
+    black: 4,
+    blue: 5,
+    clear: 1,
+    green: 3,
+    red: 0,
+    white: 2
   },
   {
     stone: "Clear",
-    black: "+3",
-    blue: "+1",
-    clear: "+5",
-    green: "+0",
-    red: "+2",
-    white: "+4"
+    black: 3,
+    blue: 1,
+    clear: 5,
+    green: 0,
+    red: 2,
+    white: 4
   },
   {
     stone: "Green",
-    black: "+2",
-    blue: "+3",
-    clear: "+0",
-    green: "+5",
-    red: "+4",
-    white: "+1"
+    black: 2,
+    blue: 3,
+    clear: 0,
+    green: 5,
+    red: 4,
+    white: 1
   },
   {
     stone: "Red",
-    black: "+1",
-    blue: "+0",
-    clear: "+2",
-    green: "+4",
-    red: "+5",
-    white: "+3"
+    black: 1,
+    blue: 0,
+    clear: 2,
+    green: 4,
+    red: 5,
+    white: 3
   },
   {
     stone: "White",
-    black: "+0",
-    blue: "+2",
-    clear: "+4",
-    green: "+1",
-    red: "+3",
-    white: "+5"
+    black: 0,
+    blue: 2,
+    clear: 4,
+    green: 1,
+    red: 3,
+    white: 5
   }
 ]
 
@@ -198,12 +198,36 @@ const pullStoneList = [
   
   <DataTable :value="table" table-style="min-width: 50rem">
     <Column field="stone" header="" />
-    <Column field="black" header="Black" />
-    <Column field="blue" header="Blue" />
-    <Column field="clear" header="Clear" />
-    <Column field="green" header="Green" />
-    <Column field="red" header="Red" />
-    <Column field="white" header="White" />
+    <Column field="black" header="Black">
+      <template #body="slotProps">
+        +{{ slotProps.data.black }}
+      </template>
+    </Column>
+    <Column field="blue" header="Blue" >
+      <template #body="slotProps">
+        +{{ slotProps.data.blue }}
+      </template>
+    </Column>
+    <Column field="clear" header="Clear" >
+      <template #body="slotProps">
+        +{{ slotProps.data.clear }}
+      </template>
+    </Column>
+    <Column field="green" header="Green" >
+      <template #body="slotProps">
+        +{{ slotProps.data.green }}
+      </template>
+    </Column>
+    <Column field="red" header="Red" >
+      <template #body="slotProps">
+        +{{ slotProps.data.red }}
+      </template>
+    </Column>
+    <Column field="white" header="White" >
+      <template #body="slotProps">
+        +{{ slotProps.data.white }}
+      </template>
+    </Column>
   </DataTable>
   
 </template>
