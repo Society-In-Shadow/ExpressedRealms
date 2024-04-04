@@ -183,10 +183,11 @@ const pullStoneList = [
 </script>
 
 <template>
-  <SplitButton label="Pull Neutral Stone" @click="pullNeutralStone" class="m-2" :model="neutralStones" />
-  <SplitButton label="Pull Stone" @click="pullStones(1)" class="m-2" :model="pullStoneList" />
-  <Button data-cy="logoff-button" label="Clear Stones" class="m-2" @click="clearStones" />
-    
+  <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
+    <SplitButton label="Pull Neutral Stone" @click="pullNeutralStone" class="m-2"  :model="neutralStones" />
+    <SplitButton label="Pull Stone" @click="pullStones(1)" class="m-2" :model="pullStoneList" />
+    <Button data-cy="logoff-button" label="Clear Stones" class="m-2" @click="clearStones" />
+  </div>
   <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
     <div class="stone leadStone ml-3 mt-3 mb-3 mr-5 text-center align-content-center">{{ neutralStone }}</div>
     <div class="stone leadStone m-3 ml-5 text-center align-content-center">{{stones[0]}}</div>
