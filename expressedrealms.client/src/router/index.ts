@@ -56,6 +56,11 @@ export const routes = [
                 component: () => import("./../components/WeatherForecast.vue"),
             },
             {
+                path: "/stonePuller",
+                name: "stonePuller",
+                component: () => import("./../components/stonePuller/StonePuller.vue"),
+            },
+            {
                 path: "/characters",
                 name: "characters",
                 component: () => import("./../components/characters/CharacterList.vue"),

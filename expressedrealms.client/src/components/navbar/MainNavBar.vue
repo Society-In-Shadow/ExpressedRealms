@@ -20,7 +20,7 @@ const items = ref([
           items: [
             { label: 'Weather', icon: 'pi pi-cloud', subtext: 'Random Weather Forecast', command: () => router.push("/weatherforecast") },
             { label: 'Characters', icon: 'pi pi-users', subtext: 'Protected Endpoint Test', command: () => router.push("/characters") },
-            { label: 'Case Studies', icon: 'pi pi-file', subtext: 'Subtext of item 1' }
+            { label: 'Stone Puller', icon: 'pi pi-file', subtext: 'Stone Puller', command: () => router.push("/stonePuller") }
           ]
         }
       ],
