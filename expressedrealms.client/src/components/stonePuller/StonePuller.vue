@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {computed, ref} from "vue";
+import {ref} from "vue";
 import Button from "primevue/button";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
@@ -9,6 +9,8 @@ import Card from "primevue/card";
 
 const stones = ref([]);
 const neutralStone = ref("");
+const winningMarble = ref("");
+const winningMarbleValue = ref(0);
 
 const stoneTypes = [ "red", "blue", "black", "clear", "green", "white"]
 let stoneBag = [ "red", "blue", "black", "clear", "green", "white"]
@@ -33,11 +35,12 @@ function pullStones(numberOfStones:number) {
     const stone = removeStone(stoneBag[getRandomInt(0, stoneBag.length-1)])
     stones.value.push(stone);
   }
-    
+  calculateBonus();
 }
 
 function pullNeutralStone() {
   neutralStone.value = stoneTypes[getRandomInt(0, 5)];
+  calculateBonus();
 }
 
 function clearStones() {
@@ -66,12 +69,24 @@ function calculateBonus():number {
   stones.value.forEach((stoneName) => {
     stoneBonus.push(table[neutralStoneIndex][stoneName]);
   });
-  return Math.max(...stoneBonus);
+  
+  var maxValue = Math.max(...stoneBonus);
+  
+  const stonePosition = stoneBonus.indexOf(maxValue);
+
+  winningMarble.value = stones.value[stonePosition];
+  winningMarbleValue.value = maxValue;
+  
+  return maxValue;
 }
 
-const showComputedCell = computed(() => {
-  return !(neutralStone.value == "" || stones.value.length == 0);
-});
+function showMarbleValue(marbleName: string): string {
+  
+  if(marbleName === winningMarble.value)
+    return "+" + winningMarbleValue.value;
+  
+  return ""
+}
 
 
 var table = [
@@ -202,19 +217,15 @@ const bonusEffects = [
         <Button data-cy="logoff-button" label="Clear Stones" class="m-2" @click="clearStones" />
       </div>
       <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
-        <div class="stone ml-3 mt-3 mb-3 mr-5 text-center align-content-center">{{ neutralStone }}</div>
+        <div class="stone ml-3 mt-3 mb-3 mr-5 text-center align-content-center">
+          <div>{{ neutralStone }}</div>
+        </div>
       </div>
       <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
-        
-        <div v-if="showComputedCell" class="m-3 ml-5 text-center align-content-center"></div>
-        <div v-if="showComputedCell" class="m-3 ml-5 text-center align-content-center">(</div>
-        <div class="stone leadStone m-3 ml-5 text-center align-content-center">{{stones[0]}}</div>
-        <div v-for="stone in stones.slice(1)" class="stone m-3 text-center align-content-center">
-          {{stone}}
+        <div v-for="stone in stones" class="stone m-3 text-center align-content-center">
+          <div>{{stone}}</div>
+          <div>{{ showMarbleValue(stone) }}</div>
         </div>
-        <div v-if="showComputedCell" class="m-3 ml-5 text-center align-content-center">)</div>
-        <div v-if="showComputedCell" class="m-3 ml-5 text-center align-content-center">=</div>
-        <div v-if="showComputedCell" class="stone m-3 ml-5 text-center align-content-center">+{{calculateBonus()}}</div>
       </div>
     
       <h1>Stone Pulling</h1>
