@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import Button from "primevue/button";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
@@ -50,18 +50,28 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled); // The maximum is exclusive and the minimum is inclusive
 }
 
-function calculateBonus():string {
+function calculateBonus():number {
   
   if(neutralStone.value == "")
-    return "";
+    return -1;
   
   if(stones.value.length == 0)
-    return "";
+    return -1;
   
-  var neutralStoneIndex = table.map(x => x.stone.toLowerCase()).indexOf(neutralStone.value);
+  const neutralStoneIndex = table.map(x => x.stone.toLowerCase()).indexOf(neutralStone.value);
   
-  return table[neutralStoneIndex][stones.value[0]];
+  let stoneBonus = [];
+  
+  stones.value.forEach((stoneName) => {
+    stoneBonus.push(table[neutralStoneIndex][stoneName]);
+  });
+  return Math.max(...stoneBonus);
 }
+
+const showComputedCell = computed(() => {
+  return !(neutralStone.value == "" || stones.value.length == 0);
+});
+
 
 var table = [
   {
@@ -183,7 +193,7 @@ const pullStoneList = [
     <div v-for="stone in stones.slice(1)" class="stone m-3 text-center align-content-center">
       {{stone}}
     </div>
-    <div class="stone leadStone m-3 ml-5 text-center align-content-center">{{calculateBonus()}}</div>
+    <div v-if="showComputedCell" class="stone leadStone m-3 ml-5 text-center align-content-center">+{{calculateBonus()}}</div>
   </div>
 
   <p>
