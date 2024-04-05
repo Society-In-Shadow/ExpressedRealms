@@ -222,25 +222,25 @@ const bonusEffects = [
   <Card class="mb-3 p-0 mt-0 pt-0" style="max-width: 800px; margin-left: auto; margin-right: auto">
     <template #content>
       <div class="text-center">
-        <SplitButton label="Pull Stone" @click="pullStones(1)" class="m-2" :model="pullStoneList" />
-        <SplitButton label="Pull Neutral Stone" @click="pullNeutralStone('')" class="m-2" :model="neutralStones" />
+        <SplitButton label="Pull Stone" class="m-2" :model="pullStoneList" @click="pullStones(1)" />
+        <SplitButton label="Pull Neutral Stone" class="m-2" :model="neutralStones" @click="pullNeutralStone('')" />
         <Button data-cy="logoff-button" label="Clear Stones" class="m-2" @click="clearStones" />
       </div>
   
       <div class="text-center">
         <div class="text-center m-3">
-          <Fieldset legend="Pulled Stones" class="flex-shrink-0" v-if="stones.length > 0" style="display: inline-block">
+          <Fieldset v-if="stones.length > 0" legend="Pulled Stones" class="flex-shrink-0" style="display: inline-block">
             <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
-              <div v-for="stone in stones" class="stone m-3 text-center align-content-center" :style="{ 'background-color': stone, 'color': updateTextColor(stone) }">
+              <div v-for="stone in stones" :key="stone" class="stone m-3 text-center align-content-center" :style="{ 'background-color': stone, 'color': updateTextColor(stone) }">
                 <div>{{ showMarbleValue(stone) }}</div>
               </div>
             </div>
           </Fieldset>
         </div>
         <div class="text-center m-3">
-          <Fieldset legend="Neutral Stone" v-if="neutralStone !== ''" style="display: inline-block">
+          <Fieldset v-if="neutralStone !== ''" legend="Neutral Stone" style="display: inline-block">
             <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
-              <div class="stone m-3 text-center align-content-center" :style="{ 'background-color': neutralStone, 'color': updateTextColor(neutralStone) }"></div>
+              <div class="stone m-3 text-center align-content-center" :style="{ 'background-color': neutralStone, 'color': updateTextColor(neutralStone) }" />
             </div>
           </Fieldset>
         </div>
@@ -269,27 +269,27 @@ const bonusEffects = [
               +{{ slotProps.data.black }}
             </template>
           </Column>
-          <Column field="blue" header="Blue" >
+          <Column field="blue" header="Blue">
             <template #body="slotProps">
               +{{ slotProps.data.blue }}
             </template>
           </Column>
-          <Column field="clear" header="Clear" >
+          <Column field="clear" header="Clear">
             <template #body="slotProps">
               +{{ slotProps.data.clear }}
             </template>
           </Column>
-          <Column field="green" header="Green" >
+          <Column field="green" header="Green">
             <template #body="slotProps">
               +{{ slotProps.data.green }}
             </template>
           </Column>
-          <Column field="red" header="Red" >
+          <Column field="red" header="Red">
             <template #body="slotProps">
               +{{ slotProps.data.red }}
             </template>
           </Column>
-          <Column field="white" header="White" >
+          <Column field="white" header="White">
             <template #body="slotProps">
               +{{ slotProps.data.white }}
             </template>
@@ -323,7 +323,8 @@ const bonusEffects = [
         defender’s is +0. The other is a critical failure and happens in the reverse circumstance when the defender’s lead
         stone random bonus result is +5 and the attacker’s is +0.
       </p>
-      <p>In either case, the successful party may either allow the GO a free hand to describe the critical success/failure
+      <p>
+        In either case, the successful party may either allow the GO a free hand to describe the critical success/failure
         with cinematic and mechanics or draw a new random bonus test and look up the result on the appropriate critical
         table. This is called making a critical test. Some powers have a unique effect listed in the event of a critical
         result, in these instances, a critical test is not necessary. When a critical success occurs there is no need to
@@ -338,10 +339,8 @@ const bonusEffects = [
           <Column field="failure" header="Failure (Effect on Attacker)" />
         </DataTable>
       </div>
-  
     </template>
   </Card>
-
 </template>
 
 <style scoped>
