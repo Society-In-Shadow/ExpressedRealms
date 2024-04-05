@@ -69,12 +69,11 @@ function calculateBonus():number {
   if(stones.value.length == 0)
     return -1;
   
-  const neutralStoneIndex = table.map(x => x.stone.toLowerCase()).indexOf(neutralStone.value);
-  
-  let stoneBonus = [];
+  var stoneRow = table.find(x => x.stone.toLowerCase() === neutralStone.value)
+  let stoneBonus:Array<number> = [];
   
   stones.value.forEach((stoneName) => {
-    stoneBonus.push(table[neutralStoneIndex][stoneName]);
+    stoneBonus.push(stoneRow[stoneName]);
   });
   
   var maxValue = Math.max(...stoneBonus);
