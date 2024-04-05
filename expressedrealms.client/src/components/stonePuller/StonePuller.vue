@@ -229,18 +229,18 @@ const bonusEffects = [
   
       <div class="text-center">
         <div class="text-center m-3">
-          <Fieldset legend="Neutral Stone" v-if="neutralStone !== ''" style="display: inline-block">
-            <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
-              <div class="stone m-3 text-center align-content-center" :style="{ 'background-color': neutralStone, 'color': updateTextColor(neutralStone) }"></div>
-            </div>
-          </Fieldset>
-        </div>
-        <div class="text-center m-3">
           <Fieldset legend="Pulled Stones" class="flex-shrink-0" v-if="stones.length > 0" style="display: inline-block">
             <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
               <div v-for="stone in stones" class="stone m-3 text-center align-content-center" :style="{ 'background-color': stone, 'color': updateTextColor(stone) }">
                 <div>{{ showMarbleValue(stone) }}</div>
               </div>
+            </div>
+          </Fieldset>
+        </div>
+        <div class="text-center m-3">
+          <Fieldset legend="Neutral Stone" v-if="neutralStone !== ''" style="display: inline-block">
+            <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
+              <div class="stone m-3 text-center align-content-center" :style="{ 'background-color': neutralStone, 'color': updateTextColor(neutralStone) }"></div>
             </div>
           </Fieldset>
         </div>
