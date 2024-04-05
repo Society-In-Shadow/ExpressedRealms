@@ -53,7 +53,8 @@ const items = ref([
     label: 'Expressions',
     root: true,
     items: []
-  }
+  },
+  { root: true, label: 'Stone Puller', icon: 'pi pi-file', subtext: 'Stone Puller', command: () => router.push("/stonePuller") }
 ]);
 
 onMounted(() => {
