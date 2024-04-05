@@ -216,77 +216,86 @@ const bonusEffects = [
   { bonus: "+0", success: "Knockdown or Disarm", failure: "Fall Down, Drop held item, moved 2 paces in direction of defender’s choice" }
 ];
 
-
 </script>
 
 <template>
-  <Card class="m-3">
+  <Card class="mb-3 p-0 mt-0 pt-0" style="max-width: 800px; margin-left: auto; margin-right: auto">
     <template #content>
-      <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
+      <div class="text-center">
         <SplitButton label="Pull Stone" @click="pullStones(1)" class="m-2" :model="pullStoneList" />
-        <SplitButton label="Pull Neutral Stone" @click="pullNeutralStone('')" class="m-2"  :model="neutralStones" />
+        <SplitButton label="Pull Neutral Stone" @click="pullNeutralStone('')" class="m-2" :model="neutralStones" />
         <Button data-cy="logoff-button" label="Clear Stones" class="m-2" @click="clearStones" />
       </div>
-      <div class="d-flex justify-content-center align-items-center mb-3"  v-if="neutralStone !== ''">
-        <Fieldset legend="Neutral Stone">
-          <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
-            <div class="stone m-3 text-center align-content-center" :style="{ 'background-color': neutralStone, 'color': updateTextColor(neutralStone) }"></div>
-          </div>
-        </Fieldset>
-      </div>
-      <div class="d-flex justify-content-center align-items-center" v-if="stones.length > 0">
-        <Fieldset legend="Pulled Stones" class="flex-shrink-0">
-          <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
+  
+      <div class="text-center">
+        <div class="text-center m-3">
+          <Fieldset legend="Neutral Stone" v-if="neutralStone !== ''" style="display: inline-block">
+            <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
+              <div class="stone m-3 text-center align-content-center" :style="{ 'background-color': neutralStone, 'color': updateTextColor(neutralStone) }"></div>
+            </div>
+          </Fieldset>
+        </div>
+        <div class="text-center m-3">
+          <Fieldset legend="Pulled Stones" class="flex-shrink-0" v-if="stones.length > 0" style="display: inline-block">
+            <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
               <div v-for="stone in stones" class="stone m-3 text-center align-content-center" :style="{ 'background-color': stone, 'color': updateTextColor(stone) }">
                 <div>{{ showMarbleValue(stone) }}</div>
               </div>
-          </div>
-        </Fieldset>
+            </div>
+          </Fieldset>
+        </div>
       </div>
+  
       <h1>Stone Pulling</h1>
       <p>
-        In a RBT, a drawn stone’s color is cross-referenced to the neutral stone’s color via the Random Bonus Table, 
-        illustrated below. Comparing two colors generates a number between 0 and 5 called the 
-        Random Bonus. For example, if a player draws a red stone and the neutral stone is green, a RB of +4 is 
-        generated. If a player is entitled to draw multiple stones for the test, they choose the stone giving them the 
+        In a RBT, a drawn stone’s color is cross-referenced to the neutral stone’s color via the Random Bonus Table,
+        illustrated below. Comparing two colors generates a number between 0 and 5 called the
+        Random Bonus. For example, if a player draws a red stone and the neutral stone is green, a RB of +4 is
+        generated. If a player is entitled to draw multiple stones for the test, they choose the stone giving them the
         highest bonus value.
-        
+  
         The bag has 1 stone of each color.
       </p>
-      
-      <DataTable :value="table" table-style="min-width: 50rem">
-        <Column field="stone" header="" />
-        <Column field="black" header="Black">
-          <template #body="slotProps">
-            +{{ slotProps.data.black }}
-          </template>
-        </Column>
-        <Column field="blue" header="Blue" >
-          <template #body="slotProps">
-            +{{ slotProps.data.blue }}
-          </template>
-        </Column>
-        <Column field="clear" header="Clear" >
-          <template #body="slotProps">
-            +{{ slotProps.data.clear }}
-          </template>
-        </Column>
-        <Column field="green" header="Green" >
-          <template #body="slotProps">
-            +{{ slotProps.data.green }}
-          </template>
-        </Column>
-        <Column field="red" header="Red" >
-          <template #body="slotProps">
-            +{{ slotProps.data.red }}
-          </template>
-        </Column>
-        <Column field="white" header="White" >
-          <template #body="slotProps">
-            +{{ slotProps.data.white }}
-          </template>
-        </Column>
-      </DataTable>
+  
+      <div>
+        <DataTable :value="table" striped-rows>
+          <Column field="stone" header="">
+            <template #body="slotProps">
+              <strong>{{ slotProps.data.stone }}</strong>
+            </template>
+          </Column>
+          <Column field="black" header="Black">
+            <template #body="slotProps">
+              +{{ slotProps.data.black }}
+            </template>
+          </Column>
+          <Column field="blue" header="Blue" >
+            <template #body="slotProps">
+              +{{ slotProps.data.blue }}
+            </template>
+          </Column>
+          <Column field="clear" header="Clear" >
+            <template #body="slotProps">
+              +{{ slotProps.data.clear }}
+            </template>
+          </Column>
+          <Column field="green" header="Green" >
+            <template #body="slotProps">
+              +{{ slotProps.data.green }}
+            </template>
+          </Column>
+          <Column field="red" header="Red" >
+            <template #body="slotProps">
+              +{{ slotProps.data.red }}
+            </template>
+          </Column>
+          <Column field="white" header="White" >
+            <template #body="slotProps">
+              +{{ slotProps.data.white }}
+            </template>
+          </Column>
+        </DataTable>
+      </div>
       <h1>Lead Stone</h1>
       <p>
         In some instances, players are allowed to draw more than one stone. When drawing multiple stones, it is important
@@ -294,6 +303,9 @@ const bonusEffects = [
         revealing. A common method for doing this is to shift one of your drawn stones into the other hand and place this
         hand above the other to clearly designate it as the lead stone. Some tests rely on the lead stone to determine the
         quality of the test’s result, however, the other stone(s) are typically still used for determining success.
+      </p>
+      <p>
+        For the purpose of this online tool, the top left most stone is the lead stone.
       </p>
       <h1>Success and Failure</h1>
       <p>
@@ -319,19 +331,21 @@ const bonusEffects = [
         say on which critical effect occurs, including making up critical effects on the fly, allowing the game official
         to craft the cinematic of the scene.
       </p>
-
-      <DataTable :value="bonusEffects" table-style="min-width: 50rem">
-        <Column field="bonus" header="Bonus" />
-        <Column field="success" header="Success (Effect on Defender)" />
-        <Column field="failure" header="Failure (Effect on Attacker)" />
-      </DataTable>
+      <div>
+        <DataTable :value="bonusEffects" striped-rows>
+          <Column field="bonus" header="Bonus" />
+          <Column field="success" header="Success (Effect on Defender)" />
+          <Column field="failure" header="Failure (Effect on Attacker)" />
+        </DataTable>
+      </div>
+  
     </template>
   </Card>
-  
 
 </template>
 
 <style scoped>
+
 .stone {
   width: 50px;
   height: 50px;
