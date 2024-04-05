@@ -6,6 +6,7 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import SplitButton from 'primevue/splitbutton';
 import Card from "primevue/card";
+import Fieldset from 'primevue/fieldset';
 
 const stones = ref([]);
 const neutralStone = ref("");
@@ -18,6 +19,8 @@ let stoneBag = [ "red", "blue", "black", "clear", "green", "white"]
 function removeStone(stoneName:string): string{
   var characterIndex = stoneBag.indexOf(stoneName)
   ~characterIndex && stoneBag.splice(characterIndex, 1);
+  winningMarble.value = "";
+  winningMarbleValue.value = 0;
   return stoneName;
 }
 function pullStones(numberOfStones:number) {
@@ -38,8 +41,12 @@ function pullStones(numberOfStones:number) {
   calculateBonus();
 }
 
-function pullNeutralStone() {
-  neutralStone.value = stoneTypes[getRandomInt(0, 5)];
+function pullNeutralStone(stoneName:string) {
+  if(stoneName == null || stoneName == "")
+    neutralStone.value = stoneTypes[getRandomInt(0, 5)];
+  else 
+    neutralStone.value = stoneName;
+  
   calculateBonus();
 }
 
@@ -86,6 +93,11 @@ function showMarbleValue(marbleName: string): string {
     return "+" + winningMarbleValue.value;
   
   return ""
+}
+
+function updateTextColor(backgroundColor:string): string
+{
+  return backgroundColor === 'white' ? 'black' : 'default';
 }
 
 
@@ -149,27 +161,27 @@ var table = [
 const neutralStones = [
   {
     label: 'Black',
-    command: () => neutralStone.value = "black"
+    command: () => pullNeutralStone("black")
   },
   {
     label: 'Blue',
-    command: () => neutralStone.value = "blue"
+    command: () => pullNeutralStone("blue")
   },
   {
     label: 'Clear',
-    command: () => neutralStone.value = "clear"
+    command: () => pullNeutralStone("clear")
   },
   {
     label: 'Green',
-    command: () => neutralStone.value = "green"
+    command: () => pullNeutralStone("green")
   },
   {
     label: 'Red',
-    command: () => neutralStone.value = "red"
+    command: () => pullNeutralStone("red")
   },  
   {
     label: 'White',
-    command: () => neutralStone.value = "white"
+    command: () => pullNeutralStone("white")
   },
 ];
 
@@ -213,21 +225,25 @@ const bonusEffects = [
     <template #content>
       <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
         <SplitButton label="Pull Stone" @click="pullStones(1)" class="m-2" :model="pullStoneList" />
-        <SplitButton label="Pull Neutral Stone" @click="pullNeutralStone" class="m-2"  :model="neutralStones" />
+        <SplitButton label="Pull Neutral Stone" @click="pullNeutralStone('')" class="m-2"  :model="neutralStones" />
         <Button data-cy="logoff-button" label="Clear Stones" class="m-2" @click="clearStones" />
       </div>
-      <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
-        <div class="stone ml-3 mt-3 mb-3 mr-5 text-center align-content-center">
-          <div>{{ neutralStone }}</div>
-        </div>
+      <div class="d-flex justify-content-center align-items-center mb-3"  v-if="neutralStone !== ''">
+        <Fieldset legend="Neutral Stone">
+          <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
+            <div class="stone m-3 text-center align-content-center" :style="{ 'background-color': neutralStone, 'color': updateTextColor(neutralStone) }"></div>
+          </div>
+        </Fieldset>
       </div>
-      <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
-        <div v-for="stone in stones" class="stone m-3 text-center align-content-center">
-          <div>{{stone}}</div>
-          <div>{{ showMarbleValue(stone) }}</div>
-        </div>
+      <div class="d-flex justify-content-center align-items-center" v-if="stones.length > 0">
+        <Fieldset legend="Pulled Stones" class="flex-shrink-0">
+          <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
+              <div v-for="stone in stones" class="stone m-3 text-center align-content-center" :style="{ 'background-color': stone, 'color': updateTextColor(stone) }">
+                <div>{{ showMarbleValue(stone) }}</div>
+              </div>
+          </div>
+        </Fieldset>
       </div>
-    
       <h1>Stone Pulling</h1>
       <p>
         In a RBT, a drawn stone’s color is cross-referenced to the neutral stone’s color via the Random Bonus Table, 
@@ -272,58 +288,56 @@ const bonusEffects = [
           </template>
         </Column>
       </DataTable>
-      
+      <h1>Lead Stone</h1>
+      <p>
+        In some instances, players are allowed to draw more than one stone. When drawing multiple stones, it is important
+        for you to specify a lead stone. To do so, you should somehow separate and designate your lead stone prior to
+        revealing. A common method for doing this is to shift one of your drawn stones into the other hand and place this
+        hand above the other to clearly designate it as the lead stone. Some tests rely on the lead stone to determine the
+        quality of the test’s result, however, the other stone(s) are typically still used for determining success.
+      </p>
+      <h1>Success and Failure</h1>
+      <p>
+        All things considered, it is assumed that if you fail, you fail completely and if you succeed, that you succeed
+        completely. On some rare occasions, a successful test may not have the intended effect, and a failure may have some
+        benefits to the failing character.
+      </p>
+      <h1>Critical Success and Critical Failure</h1>
+      <p>
+        There are two rare (1-in-36 chance) circumstances that can occur when an attack is made, changing the result
+        drastically.
+      </p>
+      <p>
+        The first is a critical success and happens when the attacker’s lead stone random bonus result is +5 and the
+        defender’s is +0. The other is a critical failure and happens in the reverse circumstance when the defender’s lead
+        stone random bonus result is +5 and the attacker’s is +0.
+      </p>
+      <p>In either case, the successful party may either allow the GO a free hand to describe the critical success/failure
+        with cinematic and mechanics or draw a new random bonus test and look up the result on the appropriate critical
+        table. This is called making a critical test. Some powers have a unique effect listed in the event of a critical
+        result, in these instances, a critical test is not necessary. When a critical success occurs there is no need to
+        draw for an extra damage test as this test is considered to be successful. The game official always has the final
+        say on which critical effect occurs, including making up critical effects on the fly, allowing the game official
+        to craft the cinematic of the scene.
+      </p>
+
+      <DataTable :value="bonusEffects" table-style="min-width: 50rem">
+        <Column field="bonus" header="Bonus" />
+        <Column field="success" header="Success (Effect on Defender)" />
+        <Column field="failure" header="Failure (Effect on Attacker)" />
+      </DataTable>
     </template>
   </Card>
   
-  <h1>Lead Stone</h1>
-  <p>
-    In some instances, players are allowed to draw more than one stone. When drawing multiple stones, it is important
-    for you to specify a lead stone. To do so, you should somehow separate and designate your lead stone prior to
-    revealing. A common method for doing this is to shift one of your drawn stones into the other hand and place this
-    hand above the other to clearly designate it as the lead stone. Some tests rely on the lead stone to determine the
-    quality of the test’s result, however, the other stone(s) are typically still used for determining success.
-  </p>
-  <h1>Success and Failure</h1>
-  <p>
-    All things considered, it is assumed that if you fail, you fail completely and if you succeed, that you succeed
-    completely. On some rare occasions, a successful test may not have the intended effect, and a failure may have some
-    benefits to the failing character.
-  </p>
-  <h1>Critical Success and Critical Failure</h1>
-  <p>
-    There are two rare (1-in-36 chance) circumstances that can occur when an attack is made, changing the result
-    drastically.
-  </p>
-  <p>
-    The first is a critical success and happens when the attacker’s lead stone random bonus result is +5 and the
-    defender’s is +0. The other is a critical failure and happens in the reverse circumstance when the defender’s lead
-    stone random bonus result is +5 and the attacker’s is +0.
-  </p>
-  <p>In either case, the successful party may either allow the GO a free hand to describe the critical success/failure
-    with cinematic and mechanics or draw a new random bonus test and look up the result on the appropriate critical
-    table. This is called making a critical test. Some powers have a unique effect listed in the event of a critical
-    result, in these instances, a critical test is not necessary. When a critical success occurs there is no need to
-    draw for an extra damage test as this test is considered to be successful. The game official always has the final
-    say on which critical effect occurs, including making up critical effects on the fly, allowing the game official
-    to craft the cinematic of the scene.
-  </p>
 
-  <DataTable :value="bonusEffects" table-style="min-width: 50rem">
-    <Column field="bonus" header="Bonus" />
-    <Column field="success" header="Success (Effect on Defender)" />
-    <Column field="failure" header="Failure (Effect on Attacker)" />
-  </DataTable>
 </template>
 
 <style scoped>
 .stone {
-  width: 75px;
-  height: 75px;
-  border: white 5px solid;
+  width: 50px;
+  height: 50px;
+  border: black 3px solid;
+  border-radius: 100%
 }
 
-.leadStone{
-  border: greenyellow 5px solid;
-}
 </style>
