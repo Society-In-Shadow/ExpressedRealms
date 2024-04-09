@@ -39,7 +39,7 @@ onMounted(() =>{
   axios.get("/api/player")
       .then((response) => {
         name.value = response.data.name;
-        phoneNumber.value = response.data.phone;
+        phoneNumber.value = response.data.phoneNumber;
         city.value = response.data.city;
         state.value = response.data.state;
       })
