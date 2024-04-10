@@ -17,7 +17,7 @@ describe('<EditUserProfile />', () => {
             statusCode: 200,
             body: {
                 name: "Jane Doe",
-                phone: "(777) 777-7777",
+                phoneNumber: "(777) 777-7777",
                 city: "Chicago",
                 state: "IL"
             }
