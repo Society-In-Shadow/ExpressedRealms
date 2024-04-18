@@ -22,7 +22,7 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
         builder.Property(x => x.WillpowerId).IsRequired().HasDefaultValue(1);
 
         builder.Property(x => x.StatExperiencePoints).IsRequired().HasDefaultValue(72);
-        
+
         builder.HasQueryFilter(x => !x.IsDeleted);
 
         builder
@@ -38,42 +38,42 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
             .HasForeignKey(x => x.ExpressionId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder
             .HasOne(x => x.AgilityStatLevel)
             .WithMany(x => x.CharacterAgility)
             .HasForeignKey(x => x.AgilityId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder
             .HasOne(x => x.ConstitutionStatLevel)
             .WithMany(x => x.CharacterConstitution)
             .HasForeignKey(x => x.ConstitutionId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder
             .HasOne(x => x.DexterityStatLevel)
             .WithMany(x => x.CharacterDexterity)
             .HasForeignKey(x => x.DexterityId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder
             .HasOne(x => x.StrengthStatLevel)
             .WithMany(x => x.CharacterStrength)
             .HasForeignKey(x => x.StrengthId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder
             .HasOne(x => x.IntelligenceStatLevel)
             .WithMany(x => x.CharacterIntelligence)
             .HasForeignKey(x => x.IntelligenceId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder
             .HasOne(x => x.WillpowerStatLevel)
             .WithMany(x => x.CharacterWillpower)

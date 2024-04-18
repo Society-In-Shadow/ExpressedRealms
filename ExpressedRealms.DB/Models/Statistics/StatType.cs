@@ -6,6 +6,6 @@ public class StatType
     public string Name { get; set; }
     public string ShortName { get; set; }
     public string Description { get; set; }
-    
+
     public virtual List<StatDescriptionMapping> StatDescriptionMappings { get; set; } = null!;
 }

@@ -27,7 +27,7 @@ public class Character : ISoftDelete
 
     public virtual Player Player { get; set; } = null!;
     public virtual Expression Expression { get; set; } = null!;
-    
+
     public virtual StatLevel AgilityStatLevel { get; set; } = null!;
     public virtual StatLevel ConstitutionStatLevel { get; set; } = null!;
     public virtual StatLevel DexterityStatLevel { get; set; } = null!;
