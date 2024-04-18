@@ -20,6 +20,8 @@ public class Character : ISoftDelete
     public byte IntelligenceId { get; set; }
     public byte WillpowerId { get; set; }
 
+    public int StatExperiencePoints { get; set; }
+
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 
