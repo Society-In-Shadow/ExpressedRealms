@@ -19,6 +19,7 @@ namespace ExpressedRealms.DB
             builder.ApplyConfiguration(new ExpressionSectionsConfiguration());
             builder.ApplyConfiguration(new ExpressionSectionTypeConfiguration());
             builder.ApplyConfiguration(new StatTypeConfiguration());
+            builder.ApplyConfiguration(new StatLevelConfiguration());
         }
 
         public ExpressedRealmsDbContext(DbContextOptions<ExpressedRealmsDbContext> options)
@@ -29,6 +30,7 @@ namespace ExpressedRealms.DB
         public DbSet<Expression> Expressions { get; set; }
         public DbSet<ExpressionSection> ExpressionSections { get; set; }
         public DbSet<ExpressionSectionType> ExpressionSectionTypes { get; set; }
-        public DbSet<StatType> StateType { get; set; }
+        public DbSet<StatType> StateTypes { get; set; }
+        public DbSet<StatLevel> StatLevels { get; set; }
     }
 }
