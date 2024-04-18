@@ -1,6 +1,6 @@
 ﻿using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Models.Expressions;
-using ExpressedRealms.DB.Statistics;
+using ExpressedRealms.DB.Models.Statistics;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

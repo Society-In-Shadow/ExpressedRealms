@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ExpressedRealms.DB.Statistics;
+namespace ExpressedRealms.DB.Models.Statistics;
 
 public class StatLevelConfiguration : IEntityTypeConfiguration<StatLevel>
 {

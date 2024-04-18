@@ -1,4 +1,4 @@
-namespace ExpressedRealms.DB.Statistics;
+namespace ExpressedRealms.DB.Models.Statistics;
 
 public class StatLevel
 {
