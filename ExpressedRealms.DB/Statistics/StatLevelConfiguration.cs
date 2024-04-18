@@ -7,7 +7,6 @@ public class StatLevelConfiguration : IEntityTypeConfiguration<StatLevel>
 {
     public void Configure(EntityTypeBuilder<StatLevel> builder)
     {
-        builder
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id).IsRequired();

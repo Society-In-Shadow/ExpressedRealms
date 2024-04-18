@@ -20,6 +20,7 @@ namespace ExpressedRealms.DB
             builder.ApplyConfiguration(new ExpressionSectionTypeConfiguration());
             builder.ApplyConfiguration(new StatTypeConfiguration());
             builder.ApplyConfiguration(new StatLevelConfiguration());
+            builder.ApplyConfiguration(new StatDescriptionMappingConfiguration());
         }
 
         public ExpressedRealmsDbContext(DbContextOptions<ExpressedRealmsDbContext> options)
@@ -32,5 +33,6 @@ namespace ExpressedRealms.DB
         public DbSet<ExpressionSectionType> ExpressionSectionTypes { get; set; }
         public DbSet<StatType> StateTypes { get; set; }
         public DbSet<StatLevel> StatLevels { get; set; }
+        public DbSet<StatDescriptionMapping> StatDescriptionMappings { get; set; }
     }
 }
