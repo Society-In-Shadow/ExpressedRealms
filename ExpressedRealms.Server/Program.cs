@@ -147,6 +147,7 @@ try
     app.AddPlayerEndPoints();
     app.AddNavigationEndpoints();
     app.AddExpressionEndpoints();
+    app.AddStatEndPoints();
 
     app.MapFallbackToFile("/index.html");
     Log.Information("Starting Web API");
