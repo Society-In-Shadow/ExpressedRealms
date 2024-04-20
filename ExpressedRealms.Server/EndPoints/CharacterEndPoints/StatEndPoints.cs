@@ -61,5 +61,69 @@ internal static class StatEndPoints
                 }
             )
             .RequireAuthorization();
+        
+        endpointGroup
+            .MapGet(
+                "{id}/smallStats",
+                [Authorize]
+                async Task<Results<NotFound, Ok<List<SmallStatInfo>>>> (int id, ExpressedRealmsDbContext dbContext, HttpContext http) =>
+                {
+                    var character = await dbContext.Characters
+                        .Include(x => x.AgilityStatLevel)
+                        .Include(x => x.ConstitutionStatLevel)
+                        .Include(x => x.DexterityStatLevel)
+                        .Include(x => x.StrengthStatLevel)
+                        .Include(x => x.IntelligenceStatLevel)
+                        .Include(x => x.WillpowerStatLevel)
+                        .FirstOrDefaultAsync(x => x.Id == id);
+
+                    var statTypes = await dbContext.StateTypes.ToListAsync();
+                    if (character is null)
+                        return TypedResults.NotFound();
+
+                    var characterStats = new List<SmallStatInfo>()
+                    {
+                        new ()
+                        {
+                            Bonus = character.AgilityStatLevel.Bonus,
+                            Level = character.AgilityStatLevel.Id,
+                            ShortName = statTypes.First(x => x.Id == 1).ShortName
+                        },
+                        new ()
+                        {
+                            Bonus = character.ConstitutionStatLevel.Bonus,
+                            Level = character.ConstitutionStatLevel.Id,
+                            ShortName = statTypes.First(x => x.Id == 2).ShortName
+                        },
+                        new ()
+                        {
+                            Bonus = character.DexterityStatLevel.Bonus,
+                            Level = character.DexterityStatLevel.Id,
+                            ShortName = statTypes.First(x => x.Id == 3).ShortName
+                        },
+                        new ()
+                        {
+                            Bonus = character.StrengthStatLevel.Bonus,
+                            Level = character.StrengthStatLevel.Id,
+                            ShortName = statTypes.First(x => x.Id == 4).ShortName
+                        },
+                        new ()
+                        {
+                            Bonus = character.IntelligenceStatLevel.Bonus,
+                            Level = character.IntelligenceStatLevel.Id,
+                            ShortName = statTypes.First(x => x.Id == 5).ShortName
+                        },
+                        new ()
+                        {
+                            Bonus = character.WillpowerStatLevel.Bonus,
+                            Level = character.WillpowerStatLevel.Id,
+                            ShortName = statTypes.First(x => x.Id == 6).ShortName
+                        }
+                    };
+                    
+                    return TypedResults.Ok(characterStats);
+                }
+            )
+            .RequireAuthorization();
     }
 }
