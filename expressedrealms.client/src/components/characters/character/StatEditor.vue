@@ -41,7 +41,7 @@
     <h3>{{stat.name}}</h3>
     <div class="mb-3">{{stat.description}}</div>
     
-    <div v-if="!stat.showOptions" class="p-listbox">
+    <div v-if="!stat.showOptions" class="p-listbox" style="cursor: pointer">
       <StatTile :state-info="getSelectedStatInfo(stat.statLevel, stat.statLevels)" @click="stat.showOptions = !stat.showOptions" class="p-3"></StatTile>
     </div>
     <Listbox v-else v-model="stat.statLevel" :options="stat.statLevels" option-value="level" @change="handleStatUpdate(stat)">
