@@ -10,6 +10,7 @@ import {onMounted, ref} from "vue";
 import { useRoute } from 'vue-router'
 import toaster from "@/services/Toasters";
 import StatEditor from "@/components/characters/character/StatEditor.vue";
+import SmallStatDisplay from "@/components/characters/character/SmallStatDisplay.vue";
 const route = useRoute()
 
 onMounted(() =>{
@@ -56,6 +57,11 @@ const onSubmit = handleSubmit((values) => {
           <InputTextWrapper v-model="expression" field-name="Expression" disabled @change="onSubmit" />
           <TextAreaWrapper v-model="background" field-name="Background" :error-text="errors.background" @change="onSubmit" />
         </form>
+      </template>
+    </Card>
+    <Card class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch">
+      <template #content>
+        <SmallStatDisplay></SmallStatDisplay>
       </template>
     </Card>
     <Card class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch">
