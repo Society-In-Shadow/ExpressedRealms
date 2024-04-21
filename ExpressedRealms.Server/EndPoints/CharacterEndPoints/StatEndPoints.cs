@@ -85,36 +85,42 @@ internal static class StatEndPoints
                     {
                         new ()
                         {
+                            StatTypeId = 1,
                             Bonus = character.AgilityStatLevel.Bonus,
                             Level = character.AgilityStatLevel.Id,
                             ShortName = statTypes.First(x => x.Id == 1).ShortName
                         },
                         new ()
                         {
+                            StatTypeId = 2,
                             Bonus = character.ConstitutionStatLevel.Bonus,
                             Level = character.ConstitutionStatLevel.Id,
                             ShortName = statTypes.First(x => x.Id == 2).ShortName
                         },
                         new ()
                         {
+                            StatTypeId = 3,
                             Bonus = character.DexterityStatLevel.Bonus,
                             Level = character.DexterityStatLevel.Id,
                             ShortName = statTypes.First(x => x.Id == 3).ShortName
                         },
                         new ()
                         {
+                            StatTypeId = 4,
                             Bonus = character.StrengthStatLevel.Bonus,
                             Level = character.StrengthStatLevel.Id,
                             ShortName = statTypes.First(x => x.Id == 4).ShortName
                         },
                         new ()
                         {
+                            StatTypeId = 5,
                             Bonus = character.IntelligenceStatLevel.Bonus,
                             Level = character.IntelligenceStatLevel.Id,
                             ShortName = statTypes.First(x => x.Id == 5).ShortName
                         },
                         new ()
                         {
+                            StatTypeId = 6,
                             Bonus = character.WillpowerStatLevel.Bonus,
                             Level = character.WillpowerStatLevel.Id,
                             ShortName = statTypes.First(x => x.Id == 6).ShortName
