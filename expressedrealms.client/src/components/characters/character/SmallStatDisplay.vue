@@ -23,7 +23,6 @@ function showDetailedStat(statTypeId:number){
   
 }
 
-//This is a temporary function, should ideally refresh upon update, not directly from UI.
 function updateStat(level:number, bonus:number){
   var updatedStat = stats.value.find(x => x.statTypeId == selectedStatType.value);
   updatedStat.bonus = bonus;
