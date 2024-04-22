@@ -23,39 +23,21 @@ internal static class StatEndPoints
 
         endpointGroup
             .MapGet(
-                "{id}",
+                "{statTypeId}",
                 [Authorize]
-                async Task<Results<NotFound, Ok<List<StatInfo>>>> (int id, ExpressedRealmsDbContext dbContext, HttpContext http) =>
+                async Task<Results<NotFound, Ok<List<StatDetails>>>> (int statTypeId, ExpressedRealmsDbContext dbContext, HttpContext http) =>
                 {
                     var stats = await dbContext
-                        .StateTypes
-                        .Select(x => new StatInfo()
+                        .StatDescriptionMappings
+                        .Where(x => x.StatTypeId == statTypeId)
+                        .Select(x => new StatDetails()
                         {
-                            Id = x.Id,
-                            Name = x.Name,
-                            Description = x.Description,
-                            StatLevel = 1,
-                            StatLevels = x.StatDescriptionMappings.Select(x => new StatDetails()
-                            {
-                                Level = x.StatLevel.Id,
-                                Bonus = x.StatLevel.Bonus,
-                                XP = x.StatLevel.XPCost,
-                                Description = x.ReasonableExpectation
-                            }).ToList()
+                            Level = x.StatLevel.Id,
+                            Bonus = x.StatLevel.Bonus,
+                            XP = x.StatLevel.XPCost,
+                            Description = x.ReasonableExpectation
                         })
                         .ToListAsync();
-
-                    var character = await dbContext.Characters.FirstOrDefaultAsync(x => x.Id == id);
-
-                    if (character is null)
-                        return TypedResults.NotFound();
-
-                    stats.First(x => x.Id == 1).StatLevel = character.AgilityId;
-                    stats.First(x => x.Id == 2).StatLevel = character.ConstitutionId;
-                    stats.First(x => x.Id == 3).StatLevel = character.DexterityId;
-                    stats.First(x => x.Id == 4).StatLevel = character.StrengthId;
-                    stats.First(x => x.Id == 5).StatLevel = character.IntelligenceId;
-                    stats.First(x => x.Id == 6).StatLevel = character.WillpowerId;
                     
                     return TypedResults.Ok(stats);
                 }
