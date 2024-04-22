@@ -28,7 +28,7 @@ const props = defineProps({
       <div>Bonus</div>
       <div>
         <SkeletonWrapper :show-skeleton="isLoading" height="2rem" width="100%">
-          {{ props.statLevelInfo.bonus }}
+          <span v-if="props.statLevelInfo.bonus > 0">+</span>{{ props.statLevelInfo.bonus }}
         </SkeletonWrapper>
       </div>
     </div>
