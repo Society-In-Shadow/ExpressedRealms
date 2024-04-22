@@ -220,5 +220,52 @@ internal static class CharacterEndPoints
                 }
             )
             .RequireAuthorization();
+        
+        endpointGroup
+            .MapPut(
+                "{characterId}/stats/{statTypeId}",
+                [Authorize] async Task<Results<NotFound, Ok>> (EditStatDTO dto,
+                    ExpressedRealmsDbContext dbContext, HttpContext http) =>
+                {
+
+                    app.Logger.LogInformation("CharacterId" + dto.CharacterId + " statTypeId" + dto.StatTypeId);
+                    var character = await dbContext.Characters
+                        .Where(x => x.Id == dto.CharacterId)
+                        .FirstOrDefaultAsync();
+
+                    if (character is null)
+                        return TypedResults.NotFound();
+
+
+                    switch (dto.StatTypeId)
+                    {
+                        case StatType.Agility:
+                            character.AgilityId = dto.LevelTypeId;
+                            break;
+                        case StatType.Constitution:
+                            character.ConstitutionId = dto.LevelTypeId;
+                            break;
+                        case StatType.Dexterity:
+                            character.DexterityId = dto.LevelTypeId;
+                            break;
+                        case StatType.Strength:
+                            character.StrengthId = dto.LevelTypeId;
+                            break;
+                        case StatType.Intelligence:
+                            character.IntelligenceId = dto.LevelTypeId;
+                            break;
+                        case StatType.Willpower:
+                            character.WillpowerId = dto.LevelTypeId;
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+
+                    await dbContext.SaveChangesAsync();
+
+                    return TypedResults.Ok();
+                }
+            )
+            .RequireAuthorization();
     }
 }

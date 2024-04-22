@@ -50,11 +50,18 @@ function handleStatUpdate(stat){
   if(stat.statLevel == undefined)
     stat.statLevel = oldValue.value;
 
-  stat.statLevelInfo = statLevels.value.find(x => x.level == stat.statLevel);
-  
-  emit("updateStat", stat.statLevelInfo.level, stat.statLevelInfo.bonus);
-  
-  showOptions.value = !showOptions.value;
+  axios.put(`/api/characters/${route.params.id}/stats/${props.statTypeId}`, {
+    levelTypeId: stat.statLevel,
+    statTypeId: props.statTypeId,
+    characterId: route.params.id
+  }).then(function(response){
+    stat.statLevelInfo = statLevels.value.find(x => x.level == stat.statLevel);
+
+    emit("updateStat", stat.statLevelInfo.level, stat.statLevelInfo.bonus);
+
+    showOptions.value = !showOptions.value;
+  })
+
 }
 
 </script>
