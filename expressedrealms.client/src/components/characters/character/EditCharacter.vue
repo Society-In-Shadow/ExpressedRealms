@@ -60,7 +60,7 @@ const onSubmit = handleSubmit((values) => {
     </Card>
     <Card class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch">
       <template #content>
-        <SmallStatDisplay></SmallStatDisplay>
+        <SmallStatDisplay />
       </template>
     </Card>
   </div>

@@ -20,7 +20,7 @@ const props = defineProps({
       <div>Level</div>
       <div>
         <SkeletonWrapper :show-skeleton="isLoading" height="2rem" width="100%">
-          {{props.statLevelInfo.level}}
+          {{ props.statLevelInfo.level }}
         </SkeletonWrapper>
       </div>
     </div>
@@ -28,7 +28,7 @@ const props = defineProps({
       <div>Bonus</div>
       <div>
         <SkeletonWrapper :show-skeleton="isLoading" height="2rem" width="100%">
-          {{props.statLevelInfo.bonus}}
+          {{ props.statLevelInfo.bonus }}
         </SkeletonWrapper>
       </div>
     </div>
@@ -36,7 +36,7 @@ const props = defineProps({
       <div>XP</div>
       <div>
         <SkeletonWrapper :show-skeleton="isLoading" height="2rem" width="100%">
-          {{props.statLevelInfo.xp}}
+          {{ props.statLevelInfo.xp }}
         </SkeletonWrapper>
       </div>
     </div>
@@ -44,7 +44,7 @@ const props = defineProps({
   <div class="row">
     <div class="col">
       <SkeletonWrapper :show-skeleton="isLoading" height="4em" width="100%">
-        {{props.statLevelInfo.description}}
+        {{ props.statLevelInfo.description }}
       </SkeletonWrapper>
     </div>
   </div>

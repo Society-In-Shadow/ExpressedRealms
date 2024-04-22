@@ -36,21 +36,21 @@
 </script>
 
 <template>
-
-  <div v-for="stat in stats" style="max-width: 500px" :id="stat.name">
-    <h3>{{stat.name}}</h3>
-    <div class="mb-3">{{stat.description}}</div>
+  <div v-for="stat in stats" :id="stat.name" style="max-width: 500px">
+    <h3>{{ stat.name }}</h3>
+    <div class="mb-3">
+      {{ stat.description }}
+    </div>
     
     <div v-if="!stat.showOptions" class="p-listbox" style="cursor: pointer">
-      <StatTile :state-info="getSelectedStatInfo(stat.statLevel, stat.statLevels)" @click="stat.showOptions = !stat.showOptions" class="p-3"></StatTile>
+      <StatTile :state-info="getSelectedStatInfo(stat.statLevel, stat.statLevels)" class="p-3" @click="stat.showOptions = !stat.showOptions" />
     </div>
     <Listbox v-else v-model="stat.statLevel" :options="stat.statLevels" option-value="level" @change="handleStatUpdate(stat)">
       <template #option="slotProps">
-        <StatTile :state-info="slotProps.option"></StatTile>
+        <StatTile :state-info="slotProps.option" />
       </template>
     </Listbox>
   </div>
-
 </template>
 
 <style scoped>

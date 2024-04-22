@@ -2,7 +2,7 @@
 
 import Skeleton from 'primevue/skeleton';
 
-const props = defineProps({
+defineProps({
   showSkeleton: {
     type: Boolean,
     required: true,
@@ -13,8 +13,8 @@ const props = defineProps({
 
 <template>
   <div>
-    <skeleton v-if="showSkeleton" v-bind="$attrs"></skeleton>
-    <slot v-else></slot>
+    <skeleton v-if="showSkeleton" v-bind="$attrs" />
+    <slot v-else />
   </div>
 </template>
 

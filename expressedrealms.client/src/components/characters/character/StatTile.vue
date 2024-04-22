@@ -54,7 +54,7 @@ function handleStatUpdate(stat){
     levelTypeId: stat.statLevel,
     statTypeId: props.statTypeId,
     characterId: route.params.id
-  }).then(function(response){
+  }).then(function(){
     stat.statLevelInfo = statLevels.value.find(x => x.level == stat.statLevel);
 
     emit("updateStat", stat.statLevelInfo.level, stat.statLevelInfo.bonus);
@@ -72,24 +72,24 @@ function handleStatUpdate(stat){
       <div class="col">
         <h3 class="mt-0">
           <SkeletonWrapper :show-skeleton="loading" height="2rem">
-            {{stat.name}}
+            {{ stat.name }}
           </SkeletonWrapper>
         </h3>
         <div class="mb-3">
           <SkeletonWrapper :show-skeleton="loading" height="3rem">
-            {{stat.description}}
+            {{ stat.description }}
           </SkeletonWrapper>
         </div>
       </div>
     </div>
     <div class="row">
       <div class="col">
-        <div class="p-listbox p-3" v-if="!showOptions" @click="getEditOptions()" style="cursor: pointer">
-          <StatLevel :stat-level-info="stat.statLevelInfo" :is-loading="loading" ></StatLevel>
+        <div v-if="!showOptions" class="p-listbox p-3" style="cursor: pointer" @click="getEditOptions()">
+          <StatLevel :stat-level-info="stat.statLevelInfo" :is-loading="loading" />
         </div>
         <Listbox v-else v-model="stat.statLevel" :options="statLevels" option-value="level" @change="handleStatUpdate(stat)">
           <template #option="slotProps">
-            <StatLevel :stat-level-info="slotProps.option"></StatLevel>
+            <StatLevel :stat-level-info="slotProps.option" />
           </template>
         </Listbox>
       </div>

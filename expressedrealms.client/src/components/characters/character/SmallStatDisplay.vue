@@ -34,15 +34,16 @@ function updateStat(level:number, bonus:number){
 
 <template>
   <div class="flex flex-wrap justify-content-center column-gap-3 row-gap-3" style="max-width: 350px">
-    <div v-if="!showDetails" v-for="stat in stats" class="align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch m-0 p-0">
-      <Fieldset :legend="stat.shortName" class="statBlock" @click="showDetailedStat(stat.statTypeId)" style="cursor: pointer">
-        <div class=""><strong>{{stat.bonus}}</strong></div> <br/>
-        <div><small>{{stat.level}}</small></div>
+    <div v-for="stat in stats" v-if="!showDetails" :key="stat.statTypeId" class="align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch m-0 p-0">
+      <Fieldset :legend="stat.shortName" class="statBlock" style="cursor: pointer" @click="showDetailedStat(stat.statTypeId)">
+        <div class="">
+          <strong>{{ stat.bonus }}</strong>
+        </div> <br>
+        <div><small>{{ stat.level }}</small></div>
       </Fieldset>
     </div>
-    <StatTile v-else :stat-type-id="selectedStatType" @toggle-stat="showDetails = !showDetails" @update-stat="updateStat"></StatTile>
+    <StatTile v-else :stat-type-id="selectedStatType" @toggle-stat="showDetails = !showDetails" @update-stat="updateStat" />
   </div>
-
 </template>
 
 <style scoped>
