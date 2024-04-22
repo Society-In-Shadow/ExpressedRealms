@@ -64,11 +64,6 @@ const onSubmit = handleSubmit((values) => {
         <SmallStatDisplay></SmallStatDisplay>
       </template>
     </Card>
-    <Card class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch">
-      <template #content>
-        <StatEditor></StatEditor>
-      </template>
-    </Card>
   </div>
 </template>
 
