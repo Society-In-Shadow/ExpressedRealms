@@ -24,7 +24,8 @@ internal static class CharacterEndPoints
         endpointGroup
             .MapGet(
                 "",
-                [Authorize] async (ExpressedRealmsDbContext dbContext, HttpContext http) =>
+                [Authorize]
+                async (ExpressedRealmsDbContext dbContext, HttpContext http) =>
                 {
                     var characters = await dbContext
                         .Characters.Where(x => x.Player.UserId == http.User.GetUserId())
@@ -45,7 +46,8 @@ internal static class CharacterEndPoints
         endpointGroup
             .MapGet(
                 "options",
-                [Authorize] async (ExpressedRealmsDbContext dbContext, HttpContext http) =>
+                [Authorize]
+                async (ExpressedRealmsDbContext dbContext, HttpContext http) =>
                 {
                     var expressions = await dbContext
                         .Expressions.Select(x => new CharacterOptionExpression()
@@ -56,7 +58,7 @@ internal static class CharacterEndPoints
                         })
                         .ToListAsync();
 
-                    return TypedResults.Ok(new CharacterOptions() {Expressions = expressions});
+                    return TypedResults.Ok(new CharacterOptions() { Expressions = expressions });
                 }
             )
             .WithSummary("Returns info needed for creating a character")
@@ -66,7 +68,8 @@ internal static class CharacterEndPoints
         endpointGroup
             .MapGet(
                 "{id}",
-                [Authorize] async Task<Results<NotFound, Ok<CharacterDTO>>> (
+                [Authorize]
+                async Task<Results<NotFound, Ok<CharacterDTO>>> (
                     int id,
                     ExpressedRealmsDbContext dbContext,
                     HttpContext http
@@ -178,11 +181,16 @@ internal static class CharacterEndPoints
         endpointGroup
             .MapGet(
                 "{characterId}/stats/{statTypeId}",
-                [Authorize] async Task<Results<NotFound, Ok<SingleStatInfo>>> (int characterId, int statTypeId,
-                    ExpressedRealmsDbContext dbContext, HttpContext http) =>
+                [Authorize]
+                async Task<Results<NotFound, Ok<SingleStatInfo>>> (
+                    int characterId,
+                    int statTypeId,
+                    ExpressedRealmsDbContext dbContext,
+                    HttpContext http
+                ) =>
                 {
-                    var character = await dbContext.Characters
-                        .Where(x => x.Id == characterId)
+                    var character = await dbContext
+                        .Characters.Where(x => x.Id == characterId)
                         .FirstOrDefaultAsync();
 
                     if (character is null)
@@ -198,44 +206,51 @@ internal static class CharacterEndPoints
                         6 => character.WillpowerId,
                     };
 
-                    var statInfo = await dbContext.StateTypes
-                        .Where(x => x.Id == statTypeId)
+                    var statInfo = await dbContext
+                        .StateTypes.Where(x => x.Id == statTypeId)
                         .Select(x => new SingleStatInfo()
                         {
                             Id = x.Id,
                             Name = x.Name,
                             Description = x.Description,
                             StatLevel = statLevelId,
-                            StatLevelInfo = x.StatDescriptionMappings.Where(y => y.StatLevelId == statLevelId)
+                            StatLevelInfo = x
+                                .StatDescriptionMappings.Where(y => y.StatLevelId == statLevelId)
                                 .Select(y => new StatDetails()
                                 {
                                     Level = y.StatLevelId,
                                     XP = y.StatLevel.XPCost,
                                     Bonus = y.StatLevel.Bonus,
                                     Description = y.ReasonableExpectation
-                                }).First()
-                        }).FirstAsync();
+                                })
+                                .First()
+                        })
+                        .FirstAsync();
 
                     return TypedResults.Ok(statInfo);
                 }
             )
             .RequireAuthorization();
-        
+
         endpointGroup
             .MapPut(
                 "{characterId}/stats/{statTypeId}",
-                [Authorize] async Task<Results<NotFound, Ok>> (EditStatDTO dto,
-                    ExpressedRealmsDbContext dbContext, HttpContext http) =>
+                [Authorize]
+                async Task<Results<NotFound, Ok>> (
+                    EditStatDTO dto,
+                    ExpressedRealmsDbContext dbContext,
+                    HttpContext http
+                ) =>
                 {
-
-                    app.Logger.LogInformation("CharacterId" + dto.CharacterId + " statTypeId" + dto.StatTypeId);
-                    var character = await dbContext.Characters
-                        .Where(x => x.Id == dto.CharacterId)
+                    app.Logger.LogInformation(
+                        "CharacterId" + dto.CharacterId + " statTypeId" + dto.StatTypeId
+                    );
+                    var character = await dbContext
+                        .Characters.Where(x => x.Id == dto.CharacterId)
                         .FirstOrDefaultAsync();
 
                     if (character is null)
                         return TypedResults.NotFound();
-
 
                     switch (dto.StatTypeId)
                     {

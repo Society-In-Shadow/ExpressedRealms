@@ -25,11 +25,14 @@ internal static class StatEndPoints
             .MapGet(
                 "{statTypeId}",
                 [Authorize]
-                async Task<Results<NotFound, Ok<List<StatDetails>>>> (int statTypeId, ExpressedRealmsDbContext dbContext, HttpContext http) =>
+                async Task<Results<NotFound, Ok<List<StatDetails>>>> (
+                    int statTypeId,
+                    ExpressedRealmsDbContext dbContext,
+                    HttpContext http
+                ) =>
                 {
                     var stats = await dbContext
-                        .StatDescriptionMappings
-                        .Where(x => x.StatTypeId == statTypeId)
+                        .StatDescriptionMappings.Where(x => x.StatTypeId == statTypeId)
                         .Select(x => new StatDetails()
                         {
                             Level = x.StatLevel.Id,
@@ -38,20 +41,24 @@ internal static class StatEndPoints
                             Description = x.ReasonableExpectation
                         })
                         .ToListAsync();
-                    
+
                     return TypedResults.Ok(stats);
                 }
             )
             .RequireAuthorization();
-        
+
         endpointGroup
             .MapGet(
                 "{id}/smallStats",
                 [Authorize]
-                async Task<Results<NotFound, Ok<List<SmallStatInfo>>>> (int id, ExpressedRealmsDbContext dbContext, HttpContext http) =>
+                async Task<Results<NotFound, Ok<List<SmallStatInfo>>>> (
+                    int id,
+                    ExpressedRealmsDbContext dbContext,
+                    HttpContext http
+                ) =>
                 {
-                    var character = await dbContext.Characters
-                        .Include(x => x.AgilityStatLevel)
+                    var character = await dbContext
+                        .Characters.Include(x => x.AgilityStatLevel)
                         .Include(x => x.ConstitutionStatLevel)
                         .Include(x => x.DexterityStatLevel)
                         .Include(x => x.StrengthStatLevel)
@@ -65,42 +72,42 @@ internal static class StatEndPoints
 
                     var characterStats = new List<SmallStatInfo>()
                     {
-                        new ()
+                        new()
                         {
                             StatTypeId = 1,
                             Bonus = character.AgilityStatLevel.Bonus,
                             Level = character.AgilityStatLevel.Id,
                             ShortName = statTypes.First(x => x.Id == 1).ShortName
                         },
-                        new ()
+                        new()
                         {
                             StatTypeId = 2,
                             Bonus = character.ConstitutionStatLevel.Bonus,
                             Level = character.ConstitutionStatLevel.Id,
                             ShortName = statTypes.First(x => x.Id == 2).ShortName
                         },
-                        new ()
+                        new()
                         {
                             StatTypeId = 3,
                             Bonus = character.DexterityStatLevel.Bonus,
                             Level = character.DexterityStatLevel.Id,
                             ShortName = statTypes.First(x => x.Id == 3).ShortName
                         },
-                        new ()
+                        new()
                         {
                             StatTypeId = 4,
                             Bonus = character.StrengthStatLevel.Bonus,
                             Level = character.StrengthStatLevel.Id,
                             ShortName = statTypes.First(x => x.Id == 4).ShortName
                         },
-                        new ()
+                        new()
                         {
                             StatTypeId = 5,
                             Bonus = character.IntelligenceStatLevel.Bonus,
                             Level = character.IntelligenceStatLevel.Id,
                             ShortName = statTypes.First(x => x.Id == 5).ShortName
                         },
-                        new ()
+                        new()
                         {
                             StatTypeId = 6,
                             Bonus = character.WillpowerStatLevel.Bonus,
@@ -108,7 +115,7 @@ internal static class StatEndPoints
                             ShortName = statTypes.First(x => x.Id == 6).ShortName
                         }
                     };
-                    
+
                     return TypedResults.Ok(characterStats);
                 }
             )
