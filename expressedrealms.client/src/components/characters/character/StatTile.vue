@@ -6,10 +6,12 @@ import { useRoute } from 'vue-router'
 import Button from 'primevue/button';
 import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
 import StatLevel from "@/components/characters/character/StatLevel.vue";
+import Listbox from 'primevue/listbox';
 const route = useRoute()
 
 const emit = defineEmits<{
-  (e: 'toggleStat')
+  toggleStat: [],
+  updateStat: [level: number, bonus: number]
 }>();
 
 const props = defineProps({
@@ -19,8 +21,13 @@ const props = defineProps({
   },
 });
 
-var stat = ref({});
-var loading = ref(true);
+const stat = ref({
+  statLevelInfo: {}
+});
+const statLevels = ref([]);
+const loading = ref(true);
+const showOptions = ref(false);
+const oldValue = ref(props.statTypeId);
 
 onMounted(() =>{
   axios.get(`/api/characters/${route.params.id}/stats/${props.statTypeId}`)
@@ -29,6 +36,26 @@ onMounted(() =>{
         loading.value = false;
       })
 });
+
+function getEditOptions() {
+  axios.get(`/api/stats/${props.statTypeId}`)
+      .then((response) => {
+        statLevels.value = response.data;
+        showOptions.value = true;
+      })
+}
+
+function handleStatUpdate(stat){
+  // Don't allow them to unselect the option
+  if(stat.statLevel == undefined)
+    stat.statLevel = oldValue.value;
+
+  stat.statLevelInfo = statLevels.value.find(x => x.level == stat.statLevel);
+  
+  emit("updateStat", stat.statLevelInfo.level, stat.statLevelInfo.bonus);
+  
+  showOptions.value = !showOptions.value;
+}
 
 </script>
 
@@ -50,9 +77,14 @@ onMounted(() =>{
     </div>
     <div class="row">
       <div class="col">
-        <div class="p-listbox p-3">
-          <StatLevel :stat-level-info="stat.statLevelInfo" :is-loading="loading"></StatLevel>
+        <div class="p-listbox p-3" v-if="!showOptions" @click="getEditOptions()" style="cursor: pointer">
+          <StatLevel :stat-level-info="stat.statLevelInfo" :is-loading="loading" ></StatLevel>
         </div>
+        <Listbox v-else v-model="stat.statLevel" :options="statLevels" option-value="level" @change="handleStatUpdate(stat)">
+          <template #option="slotProps">
+            <StatLevel :stat-level-info="slotProps.option"></StatLevel>
+          </template>
+        </Listbox>
       </div>
     </div>
     <div class="row">

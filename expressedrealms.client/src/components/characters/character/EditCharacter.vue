@@ -9,7 +9,6 @@ import TextAreaWrapper from "@/FormWrappers/TextAreaWrapper.vue";
 import {onMounted, ref} from "vue";
 import { useRoute } from 'vue-router'
 import toaster from "@/services/Toasters";
-import StatEditor from "@/components/characters/character/StatEditor.vue";
 import SmallStatDisplay from "@/components/characters/character/SmallStatDisplay.vue";
 const route = useRoute()
 

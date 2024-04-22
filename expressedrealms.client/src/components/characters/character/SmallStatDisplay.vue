@@ -18,10 +18,16 @@ onMounted(() =>{
 });
 
 function showDetailedStat(statTypeId:number){
-  console.log("far");
   selectedStatType.value = statTypeId;
   showDetails.value = !showDetails.value;
   
+}
+
+//This is a temporary function, should ideally refresh upon update, not directly from UI.
+function updateStat(level:number, bonus:number){
+  var updatedStat = stats.value.find(x => x.statTypeId == selectedStatType.value);
+  updatedStat.bonus = bonus;
+  updatedStat.level = level;
 }
 
 </script>
@@ -34,7 +40,7 @@ function showDetailedStat(statTypeId:number){
         <div><small>{{stat.level}}</small></div>
       </Fieldset>
     </div>
-    <StatTile v-else :stat-type-id="selectedStatType" @toggle-stat="showDetails = !showDetails"></StatTile>
+    <StatTile v-else :stat-type-id="selectedStatType" @toggle-stat="showDetails = !showDetails" @update-stat="updateStat"></StatTile>
   </div>
 
 </template>
