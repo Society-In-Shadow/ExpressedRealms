@@ -4,7 +4,7 @@ import Fieldset from 'primevue/fieldset';
 import axios from "axios";
 import {onMounted, ref} from "vue";
 import { useRoute } from 'vue-router'
-import StatTileV2 from "@/components/characters/character/StatTileV2.vue";
+import StatTile from "@/components/characters/character/StatTile.vue";
 const route = useRoute()
 const stats = ref([]);
 const showDetails = ref(false);
@@ -34,7 +34,7 @@ function showDetailedStat(statTypeId:number){
         <div><small>{{stat.level}}</small></div>
       </Fieldset>
     </div>
-    <StatTileV2 v-else :stat-type-id="selectedStatType" @toggle-stat="showDetails = !showDetails"></StatTileV2>
+    <StatTile v-else :stat-type-id="selectedStatType" @toggle-stat="showDetails = !showDetails"></StatTile>
   </div>
 
 </template>
