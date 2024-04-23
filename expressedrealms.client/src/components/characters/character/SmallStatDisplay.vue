@@ -5,16 +5,18 @@ import axios from "axios";
 import {onMounted, ref} from "vue";
 import { useRoute } from 'vue-router'
 import StatTile from "@/components/characters/character/StatTile.vue";
-import Divider from 'primevue/divider';
+import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
 const route = useRoute()
-const stats = ref([]);
+const stats = ref([ {}, {}, {}, {}, {}, {}]);
 const showDetails = ref(false);
 const selectedStatType = ref(1);
+const isLoading = ref(true);
 
 onMounted(() =>{
   axios.get(`/api/stats/${route.params.id}/smallStats`)
       .then((response) => {
         stats.value = response.data;
+        isLoading.value = false;
       })
 });
 
@@ -35,11 +37,14 @@ function updateStat(level:number, bonus:number){
 <template>
   <div class="flex flex-wrap justify-content-center column-gap-3 row-gap-3" style="max-width: 350px">
     <div v-for="stat in stats" v-if="!showDetails" :key="stat.statTypeId" class="align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch m-0 p-0">
-      <Fieldset :legend="stat.shortName" class="statBlock mb-3" style="cursor: pointer;" @click="showDetailedStat(stat.statTypeId)">
-        <h2 class="m-1" >
-          <strong><span v-if="stat.bonus > 0">+</span>{{ stat.bonus }}</strong>
+      <Fieldset class="statBlock mb-3" style="cursor: pointer;" @click="showDetailedStat(stat.statTypeId)">
+        <template #legend>
+          <SkeletonWrapper height="1.5rem" width="2rem" :show-skeleton="isLoading">{{stat.shortName}}</SkeletonWrapper>
+        </template>
+        <h2 class="m-1 text-center" >
+          <SkeletonWrapper :show-skeleton="isLoading" height="2rem" width="2.75em"><strong><span v-if="stat.bonus > 0">+</span>{{ stat.bonus }}</strong></SkeletonWrapper>
         </h2>
-        <div class="levelDisplay p-fieldset-legend ">{{ stat.level }}</div>
+        <div class="levelDisplay p-fieldset-legend "><SkeletonWrapper :show-skeleton="isLoading">{{ stat.level }}</SkeletonWrapper></div>
       </Fieldset>
     </div>
     <StatTile v-else :stat-type-id="selectedStatType" @toggle-stat="showDetails = !showDetails" @update-stat="updateStat" />

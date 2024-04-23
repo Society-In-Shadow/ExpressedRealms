@@ -67,7 +67,7 @@ function handleStatUpdate(stat){
 </script>
 
 <template>
-  <div>
+  <div class="w-100" style="min-width: 350px">
     <div class="row">
       <div class="col">
         <h3 class="mt-0">
