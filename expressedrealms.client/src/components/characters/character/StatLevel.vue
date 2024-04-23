@@ -17,7 +17,7 @@ const props = defineProps({
 <template>
   <div class="row">
     <div class="col-4 text-center">
-      <div>Level</div>
+      <div class="mb-2">Level</div>
       <div>
         <SkeletonWrapper :show-skeleton="isLoading" height="2rem" width="100%">
           {{ props.statLevelInfo.level }}
@@ -25,7 +25,7 @@ const props = defineProps({
       </div>
     </div>
     <div class="col-4 text-center">
-      <div>Bonus</div>
+      <div class="mb-2">Bonus</div>
       <div>
         <SkeletonWrapper :show-skeleton="isLoading" height="2rem" width="100%">
           <span v-if="props.statLevelInfo.bonus > 0">+</span>{{ props.statLevelInfo.bonus }}
@@ -33,7 +33,7 @@ const props = defineProps({
       </div>
     </div>
     <div class="col-4 text-center">
-      <div>XP</div>
+      <div class="mb-2">XP</div>
       <div>
         <SkeletonWrapper :show-skeleton="isLoading" height="2rem" width="100%">
           {{ props.statLevelInfo.xp }}
