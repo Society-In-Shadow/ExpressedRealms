@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Interceptors;
@@ -5,6 +6,8 @@ using ExpressedRealms.Server.EndPoints.CharacterEndPoints.DTOs;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs;
 using ExpressedRealms.Server.EndPoints.DTOs;
 using ExpressedRealms.Server.Extensions;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
@@ -182,13 +185,18 @@ internal static class CharacterEndPoints
             .MapGet(
                 "{characterId}/stat/{statTypeId}",
                 [Authorize]
-                async Task<Results<NotFound, Ok<SingleStatInfo>>> (
+                async Task<Results<NotFound, BadRequest<List<ValidationFailure>>, Ok<SingleStatInfo>>> (
                     int characterId,
                     StatType statTypeId,
+                    IValidator<EditStatRequest> validator,
                     ExpressedRealmsDbContext dbContext,
                     HttpContext http
                 ) =>
                 {
+                    var result = await validator.ValidateAsync(new EditStatRequest(characterId, statTypeId));
+                    if (!result.IsValid)
+                        return TypedResults.BadRequest<List<ValidationFailure>>(result.Errors);
+                    
                     // TODO: Need Validation on this endpoint
                     var character = await dbContext
                         .Characters.Where(x => x.Id == characterId)
