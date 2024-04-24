@@ -197,7 +197,6 @@ internal static class CharacterEndPoints
                     if (!result.IsValid)
                         return TypedResults.BadRequest<List<ValidationFailure>>(result.Errors);
                     
-                    // TODO: Need Validation on this endpoint
                     var character = await dbContext
                         .Characters.Where(x => x.Id == characterId)
                         .FirstOrDefaultAsync();
