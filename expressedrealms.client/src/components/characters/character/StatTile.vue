@@ -30,7 +30,7 @@ const showOptions = ref(false);
 const oldValue = ref(props.statTypeId);
 
 onMounted(() =>{
-  axios.get(`/api/characters/${route.params.id}/stats/${props.statTypeId}`)
+  axios.get(`/api/characters/${route.params.id}/stat/${props.statTypeId}`)
       .then((response) => {
         stat.value = response.data;
         loading.value = false;
@@ -50,7 +50,7 @@ function handleStatUpdate(stat){
   if(stat.statLevel == undefined)
     stat.statLevel = oldValue.value;
 
-  axios.put(`/api/characters/${route.params.id}/stats/${props.statTypeId}`, {
+  axios.put(`/api/characters/${route.params.id}/stat/${props.statTypeId}`, {
     levelTypeId: stat.statLevel,
     statTypeId: props.statTypeId,
     characterId: route.params.id
