@@ -11,6 +11,7 @@ import { useRoute } from 'vue-router'
 import toaster from "@/services/Toasters";
 import SmallStatDisplay from "@/components/characters/character/SmallStatDisplay.vue";
 const route = useRoute()
+import Breadcrumb from 'primevue/breadcrumb';
 
 onMounted(() =>{
   axios.get(`/api/characters/${route.params.id}`)
@@ -45,9 +46,29 @@ const onSubmit = handleSubmit((values) => {
   });
 });
 
+const items = ref([
+  { label: name },
+]);
+const home = ref({
+  icon: 'pi pi-home',
+  route: '/characters'
+});
 </script>
 
 <template>
+  <Breadcrumb :home="home" :model="items" class="m-3">
+    <template #item="{ item, props }">
+      <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
+        <a :href="href" v-bind="props.action" @click="navigate">
+          <span :class="[item.icon, 'text-color']"/>
+          <span class="text-primary font-semibold">{{ item.label }}</span>
+        </a>
+      </router-link>
+      <a v-else :href="item.url" :target="item.target" v-bind="props.action">
+        <span class="text-color">{{ item.label }}</span>
+      </a>
+    </template>
+  </Breadcrumb>
   <div class="flex flex-xs-column flex-sm-column flex-lg-row flex-md-row gap-3 m-3 ">
     <Card class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch">
       <template #content>
