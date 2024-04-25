@@ -11,50 +11,9 @@ import Router from "@/router";
 const router = useRouter();
 
 const items = ref([
-  {
-    label: 'Company',
-    root: true,
-    items: [
-      [
-        {
-          items: [
-            { label: 'Weather', icon: 'pi pi-cloud', subtext: 'Random Weather Forecast', command: () => router.push("/weatherforecast") },
-            { label: 'Characters', icon: 'pi pi-users', subtext: 'Protected Endpoint Test', command: () => router.push("/characters") },
-            { label: 'Stone Puller', icon: 'pi pi-file', subtext: 'Stone Puller', command: () => router.push("/stonePuller") }
-          ]
-        }
-      ],
-      [
-        {
-          items: [
-            { label: 'Adepts', icon: 'pi pi-shield', subtext: 'Incredible martial artists. Masters of the mind. Enlightened healers. Stalwart defenders.' },
-            { label: 'Faq', icon: 'pi pi-question', subtext: 'Subtext of item 3' },
-            { label: 'Library', icon: 'pi pi-search', subtext: 'Subtext of item 4' }
-          ]
-        }
-      ],
-      [
-        {
-          items: [
-            { label: 'Community', icon: 'pi pi-comments', subtext: 'Subtext of item 5' },
-            { label: 'Rewards', icon: 'pi pi-star', subtext: 'Subtext of item 6' },
-            { label: 'Investors', icon: 'pi pi-globe', subtext: 'Subtext of item 7' }
-          ]
-        }
-      ],
-      [
-        {
-          items: [{ image: 'https://primefaces.org/cdn/primevue/images/uikit/uikit-system.png', label: 'GET STARTED', subtext: 'Build spectacular apps in no time.' }]
-        }
-      ]
-    ]
-  },
-  {
-    label: 'Expressions',
-    root: true,
-    items: []
-  },
-  { root: true, label: 'Stone Puller', icon: 'pi pi-file', subtext: 'Stone Puller', command: () => router.push("/stonePuller") }
+  { root: true, label: 'Characters', icon: 'pi pi-file', subtext: 'Characters', command: () => router.push("/characters") },
+  { root: true, label: 'Expressions', items: [] },
+  { root: true, label: 'Stone Puller', icon: 'pi pi-file', subtext: 'Stone Puller', command: () => router.push("/stonePuller") },
 ]);
 
 onMounted(() => {
