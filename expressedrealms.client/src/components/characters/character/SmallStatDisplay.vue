@@ -39,12 +39,20 @@ function updateStat(level:number, bonus:number){
     <div v-for="stat in stats" v-if="!showDetails" :key="stat.statTypeId" class="align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch m-0 p-0">
       <Fieldset class="statBlock mb-3" style="cursor: pointer;" @click="showDetailedStat(stat.statTypeId)">
         <template #legend>
-          <SkeletonWrapper height="1.5rem" width="2rem" :show-skeleton="isLoading">{{stat.shortName}}</SkeletonWrapper>
+          <SkeletonWrapper height="1.5rem" width="2rem" :show-skeleton="isLoading">
+            {{ stat.shortName }}
+          </SkeletonWrapper>
         </template>
-        <h2 class="m-1 text-center" >
-          <SkeletonWrapper :show-skeleton="isLoading" height="2rem" width="2.75em"><strong><span v-if="stat.bonus > 0">+</span>{{ stat.bonus }}</strong></SkeletonWrapper>
+        <h2 class="m-1 text-center">
+          <SkeletonWrapper :show-skeleton="isLoading" height="2rem" width="2.75em">
+            <strong><span v-if="stat.bonus > 0">+</span>{{ stat.bonus }}</strong>
+          </SkeletonWrapper>
         </h2>
-        <div class="levelDisplay p-fieldset-legend "><SkeletonWrapper :show-skeleton="isLoading">{{ stat.level }}</SkeletonWrapper></div>
+        <div class="levelDisplay p-fieldset-legend ">
+          <SkeletonWrapper :show-skeleton="isLoading">
+            {{ stat.level }}
+          </SkeletonWrapper>
+        </div>
       </Fieldset>
     </div>
     <StatTile v-else :stat-type-id="selectedStatType" @toggle-stat="showDetails = !showDetails" @update-stat="updateStat" />
@@ -75,6 +83,5 @@ function updateStat(level:number, bonus:number){
   text-align: center;
   height: 45px
 }
-
 
 </style>

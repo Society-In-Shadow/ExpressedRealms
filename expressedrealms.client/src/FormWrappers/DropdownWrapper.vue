@@ -3,13 +3,7 @@
 import Dropdown from 'primevue/dropdown';
 import {computed} from "vue";
 
-interface DropDown {
-  id: number,
-  name: string,
-  shortDescription: string
-}
-
-const model = defineModel({ required: true, default: {} });
+const model = defineModel({ required: true, default: {}, type: Number });
 
 defineOptions({
   inheritAttrs: false
