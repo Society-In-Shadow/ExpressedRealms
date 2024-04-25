@@ -22,6 +22,11 @@ describe('<EditCharacter />', () => {
                 expression: expressionDefaultValue
             }
         }).as('getCharacter');
+        
+        cy.intercept('GET', '/api/characters/3/stats', {
+            statusCode: 200,
+            body: [{}, {}, {}, {}, {}, {}]
+        })
 
         cy.intercept('PUT', '/api/characters', {
             statusCode: 200,
