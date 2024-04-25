@@ -185,7 +185,9 @@ internal static class CharacterEndPoints
             .MapGet(
                 "{characterId}/stat/{statTypeId}",
                 [Authorize]
-                async Task<Results<NotFound, BadRequest<List<ValidationFailure>>, Ok<SingleStatInfo>>> (
+                async Task<
+                    Results<NotFound, BadRequest<List<ValidationFailure>>, Ok<SingleStatInfo>>
+                > (
                     int characterId,
                     StatType statTypeId,
                     IValidator<EditStatRequest> validator,
@@ -193,10 +195,12 @@ internal static class CharacterEndPoints
                     HttpContext http
                 ) =>
                 {
-                    var result = await validator.ValidateAsync(new EditStatRequest(characterId, statTypeId));
+                    var result = await validator.ValidateAsync(
+                        new EditStatRequest(characterId, statTypeId)
+                    );
                     if (!result.IsValid)
                         return TypedResults.BadRequest<List<ValidationFailure>>(result.Errors);
-                    
+
                     var character = await dbContext
                         .Characters.Where(x => x.Id == characterId)
                         .FirstOrDefaultAsync();
@@ -239,7 +243,9 @@ internal static class CharacterEndPoints
                 }
             )
             .WithSummary("This returns the detailed information for the given stat")
-            .WithDescription("This returns the detailed information for the given stat.  This will include the full name, what it does, current level, bonus, xp, and description.")
+            .WithDescription(
+                "This returns the detailed information for the given stat.  This will include the full name, what it does, current level, bonus, xp, and description."
+            )
             .RequireAuthorization();
 
         endpointGroup
@@ -252,7 +258,6 @@ internal static class CharacterEndPoints
                     HttpContext http
                 ) =>
                 {
-
                     var character = await dbContext
                         .Characters.Where(x => x.Id == dto.CharacterId)
                         .FirstOrDefaultAsync();
@@ -292,8 +297,7 @@ internal static class CharacterEndPoints
             .WithSummary("Allows user to update the given state with the provided level")
             .WithDescription("Allows user to update the given state with the provided level")
             .RequireAuthorization();
-        
-        
+
         endpointGroup
             .MapGet(
                 "{characterId}/stats",
@@ -324,42 +328,54 @@ internal static class CharacterEndPoints
                             StatTypeId = StatType.Agility,
                             Bonus = character.AgilityStatLevel.Bonus,
                             Level = character.AgilityStatLevel.Id,
-                            ShortName = statTypes.First(x => x.Id == (byte)StatType.Agility).ShortName
+                            ShortName = statTypes
+                                .First(x => x.Id == (byte)StatType.Agility)
+                                .ShortName
                         },
                         new()
                         {
                             StatTypeId = StatType.Constitution,
                             Bonus = character.ConstitutionStatLevel.Bonus,
                             Level = character.ConstitutionStatLevel.Id,
-                            ShortName = statTypes.First(x => x.Id == (byte)StatType.Constitution).ShortName
+                            ShortName = statTypes
+                                .First(x => x.Id == (byte)StatType.Constitution)
+                                .ShortName
                         },
                         new()
                         {
                             StatTypeId = StatType.Dexterity,
                             Bonus = character.DexterityStatLevel.Bonus,
                             Level = character.DexterityStatLevel.Id,
-                            ShortName = statTypes.First(x => x.Id == (byte)StatType.Dexterity).ShortName
+                            ShortName = statTypes
+                                .First(x => x.Id == (byte)StatType.Dexterity)
+                                .ShortName
                         },
                         new()
                         {
                             StatTypeId = StatType.Strength,
                             Bonus = character.StrengthStatLevel.Bonus,
                             Level = character.StrengthStatLevel.Id,
-                            ShortName = statTypes.First(x => x.Id == (byte)StatType.Strength).ShortName
+                            ShortName = statTypes
+                                .First(x => x.Id == (byte)StatType.Strength)
+                                .ShortName
                         },
                         new()
                         {
                             StatTypeId = StatType.Intelligence,
                             Bonus = character.IntelligenceStatLevel.Bonus,
                             Level = character.IntelligenceStatLevel.Id,
-                            ShortName = statTypes.First(x => x.Id == (byte)StatType.Intelligence).ShortName
+                            ShortName = statTypes
+                                .First(x => x.Id == (byte)StatType.Intelligence)
+                                .ShortName
                         },
                         new()
                         {
                             StatTypeId = StatType.Willpower,
                             Bonus = character.WillpowerStatLevel.Bonus,
                             Level = character.WillpowerStatLevel.Id,
-                            ShortName = statTypes.First(x => x.Id == (byte)StatType.Willpower).ShortName
+                            ShortName = statTypes
+                                .First(x => x.Id == (byte)StatType.Willpower)
+                                .ShortName
                         }
                     };
 
@@ -367,7 +383,9 @@ internal static class CharacterEndPoints
                 }
             )
             .WithSummary("Returns the info needed for displaying the small stat tiles")
-            .WithDescription("Returns the info needed for displaying the small stat tiles, mainly the bonus, stat name and level.")
+            .WithDescription(
+                "Returns the info needed for displaying the small stat tiles, mainly the bonus, stat name and level."
+            )
             .RequireAuthorization();
     }
 }

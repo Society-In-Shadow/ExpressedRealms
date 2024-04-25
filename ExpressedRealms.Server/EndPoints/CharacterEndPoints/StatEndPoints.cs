@@ -41,7 +41,9 @@ internal static class StatEndPoints
                 }
             )
             .WithSummary("Returns all levels for the given stat")
-            .WithDescription("This will return the levels for the given stat id.  It will be in the range of 1-7.")
+            .WithDescription(
+                "This will return the levels for the given stat id.  It will be in the range of 1-7."
+            )
             .RequireAuthorization();
     }
 }

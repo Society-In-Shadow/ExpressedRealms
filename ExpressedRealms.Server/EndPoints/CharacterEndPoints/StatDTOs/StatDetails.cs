@@ -4,6 +4,7 @@ public class StatDetails
 {
     /// <example>7</example>
     public byte Level { get; set; }
+
     /// <example>+3</example>
     public int Bonus { get; set; }
 
