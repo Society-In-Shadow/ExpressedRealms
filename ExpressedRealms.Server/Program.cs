@@ -143,7 +143,6 @@ try
 
     Log.Information("Adding endpoints");
     app.AddAuthEndPoints();
-    app.AddWeatherEndpoints();
     app.AddCharacterEndPoints();
     app.AddTestingEndPoints();
     app.AddPlayerEndPoints();
