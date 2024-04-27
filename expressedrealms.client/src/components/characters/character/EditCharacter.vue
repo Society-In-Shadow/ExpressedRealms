@@ -64,11 +64,10 @@ const home = ref({
       <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
         <SkeletonWrapper :show-skeleton="isLoading" width="1em" height="1em">
           <a :href="href" v-bind="props.action" @click="navigate">
-            <span :class="[item.icon, 'text-color']"/>
+            <span :class="[item.icon, 'text-color']" />
             <span class="text-primary font-semibold">{{ item.label }}</span>
           </a>
         </SkeletonWrapper>
-
       </router-link>
       <a v-else :href="item.url" :target="item.target" v-bind="props.action">
         <SkeletonWrapper :show-skeleton="isLoading" width="3em" height="1em"><span class="text-color">{{ item.label }}</span></SkeletonWrapper>

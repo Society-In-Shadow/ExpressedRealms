@@ -97,9 +97,9 @@ onMounted(() => {
       <img src="/public/favicon.png" height="50" width="50" class="m-2">
     </template>
     <template #item="{ item }">
-      <RootNodeMenuItem v-if="item.root" :item="item"></RootNodeMenuItem>
+      <RootNodeMenuItem v-if="item.root" :item="item" />
       <CharacterMenuItem v-else-if="item.navMenuType == 'character'" :item="item" />
-      <ExpressionMenuItem v-else :item="item"/>
+      <ExpressionMenuItem v-else :item="item" />
     </template>
     <template #end>
       <avatar-dropdown />
