@@ -2,16 +2,18 @@
 
 import {onMounted, ref} from "vue";
 import MegaMenu from "primevue/megamenu";
-import Button from "primevue/button"
 import AvatarDropdown from "@/components/navbar/AvatarDropdown.vue";
 import {useRouter} from "vue-router";
 import axios from "axios";
 import Router from "@/router";
+import ExpressionMenuItem from "@/components/navbar/navMenuItems/ExpressionMenuItem.vue";
+import CharacterMenuItem from "@/components/navbar/navMenuItems/CharacterMenuItem.vue";
+import RootNodeMenuItem from "@/components/navbar/navMenuItems/RootNodeMenuItem.vue";
 
 const router = useRouter();
 
 const items = ref([
-  { root: true, label: 'Characters', icon: 'pi pi-file', subtext: 'Characters', command: () => router.push("/characters") },
+  { root: true, label: 'Characters', icon: 'pi pi-file', subtext: 'Characters', command: () => router.push("/characters"),  items: [] },
   { root: true, label: 'Expressions', items: [] },
   { root: true, label: 'Stone Puller', icon: 'pi pi-file', subtext: 'Stone Puller', command: () => router.push("/stonePuller") },
 ]);
@@ -22,12 +24,27 @@ onMounted(() => {
           label: expression.name,
           icon: 'pi pi-cloud',
           subtext: expression.shortDescription,
+          navMenuType: "expression",
           command: () => {
             Router.push("/expressions/" + expression.name.toLowerCase());
           }
     };
   }
 
+  function MapCharacterData(character) {
+    return {
+      id: character.id,
+      name: character.name,
+      icon: 'pi pi-cloud',
+      background: character.background,
+      expression: character.expression,
+      navMenuType: "character",
+      command: () => {
+        Router.push("/characters/" + character.id);
+      }
+    };
+  }
+  
   axios.get("/api/navMenu/expressions")
       .then(response => {
         const expressions = response.data;
@@ -48,6 +65,27 @@ onMounted(() => {
         }
         
       })
+
+  axios.get("/api/navMenu/characters")
+      .then(response => {
+        const characters = response.data;
+        
+        const column1 = characters.slice(0, Math.ceil(characters.length / 2));
+        const column2 = characters.slice(Math.ceil(characters.length / 2), characters.length);
+
+        const expressionMenu = items.value.find(item => item.label === 'Characters')?.items;
+
+        if(expressionMenu !== undefined){
+          expressionMenu.push([{
+            items: column1.map(MapCharacterData)
+          }]);
+          expressionMenu.push([{
+            items: column2.map(MapCharacterData)
+          }]);
+
+        }
+
+      })
 });
 
 
@@ -59,30 +97,12 @@ onMounted(() => {
       <img src="/public/favicon.png" height="50" width="50" class="m-2">
     </template>
     <template #item="{ item }">
-      <a v-if="item.root" v-ripple class="flex align-items-center cursor-pointer px-3 py-2 overflow-hidden relative font-semibold text-lg uppercase">
-        <span>{{ item.label }}</span>
-      </a>
-      <a v-else-if="!item.image" class="flex flex-shrink-1 align-items-center p-3 cursor-pointer mb-2 gap-2">
-        <span class="inline-flex flex-none align-items-center justify-content-center border-circle bg-primary w-3rem h-3rem">
-          <i :class="[item.icon, 'text-lg']" />
-        </span>
-        <span class="inline-flex flex-column gap-1">
-          <span class="font-medium text-lg text-900">{{ item.label }}</span>
-          <span class="">{{ item.subtext }}</span>
-        </span>
-      </a>
-      <div v-else class="flex flex-column align-items-start gap-3">
-        <img alt="megamenu-demo" :src="item.image" class="w-full">
-        <span>{{ item.subtext }}</span>
-        <Button :label="item.label" outlined />
-      </div>
+      <RootNodeMenuItem v-if="item.root" :item="item"></RootNodeMenuItem>
+      <CharacterMenuItem v-else-if="item.navMenuType == 'character'" :item="item" />
+      <ExpressionMenuItem v-else :item="item"/>
     </template>
     <template #end>
       <avatar-dropdown />
     </template>
   </MegaMenu>
 </template>
-
-<style scoped>
-
-</style>
