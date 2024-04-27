@@ -37,7 +37,7 @@ internal static class NavigationEndpoints
                 }
             )
             .RequireAuthorization();
-        
+
         endpointGroup
             .MapGet(
                 "characters",
@@ -61,12 +61,16 @@ internal static class NavigationEndpoints
                             x.Background = x.Background.Substring(0, 50) + "...";
                         }
                     });
-                    
+
                     return TypedResults.Ok(characters);
                 }
             )
-            .WithSummary("Returns a simplified version of the characters for display in the nav menu.")
-            .WithDescription("Returns the all characters with their name, expression, and a truncated background (50 characters + '...',  or less).")
+            .WithSummary(
+                "Returns a simplified version of the characters for display in the nav menu."
+            )
+            .WithDescription(
+                "Returns the all characters with their name, expression, and a truncated background (50 characters + '...',  or less)."
+            )
             .RequireAuthorization();
     }
 }
