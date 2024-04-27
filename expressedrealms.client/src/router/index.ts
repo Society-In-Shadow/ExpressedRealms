@@ -51,11 +51,6 @@ export const routes = [
         component: Layout,
         children: [
             {
-                path: "/weatherforecast",
-                name: "weatherforecast",
-                component: () => import("./../components/WeatherForecast.vue"),
-            },
-            {
                 path: "/stonePuller",
                 name: "stonePuller",
                 component: () => import("./../components/stonePuller/StonePuller.vue"),
