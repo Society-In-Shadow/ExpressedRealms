@@ -64,11 +64,11 @@ const onSubmit = handleSubmit((values) => {
     </template>
     <template #content>
       <form @submit="onSubmit">
-        <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" :show-skeleton="isLoading"/>
-        <InputMaskWrapper v-model="phoneNumber" field-name="Phone Number" :error-text="errors.phoneNumber" mask="(999) 999-9999" :show-skeleton="isLoading"/>
-        <InputTextWrapper v-model="city" field-name="City" :error-text="errors.city" :show-skeleton="isLoading"/>
-        <InputTextWrapper v-model="state" field-name="State" :error-text="errors.state" maxlength="2" :show-skeleton="isLoading"/>
-        <Button data-cy="update-profile-button" label="Update Profile" class="w-100 mb-2" type="submit" :disabled="isLoading"/>
+        <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" :show-skeleton="isLoading" />
+        <InputMaskWrapper v-model="phoneNumber" field-name="Phone Number" :error-text="errors.phoneNumber" mask="(999) 999-9999" :show-skeleton="isLoading" />
+        <InputTextWrapper v-model="city" field-name="City" :error-text="errors.city" :show-skeleton="isLoading" />
+        <InputTextWrapper v-model="state" field-name="State" :error-text="errors.state" maxlength="2" :show-skeleton="isLoading" />
+        <Button data-cy="update-profile-button" label="Update Profile" class="w-100 mb-2" type="submit" :disabled="isLoading" />
       </form>
     </template>
   </Card>

@@ -44,7 +44,8 @@ const dataCyTagCalc = computed(() => {
   <div class="mb-3">
     <label :for="dataCyTagCalc">{{ props.fieldName }}</label>
     <Skeleton v-if="showSkeleton" :id="dataCyTagCalc + '-skeleton'" class="w-100" height="5em" />
-    <Textarea v-else
+    <Textarea
+      v-else
       :id="dataCyTagCalc" v-model="model" :data-cy="dataCyTagCalc" class="w-100"
       :class="{ 'p-invalid': errorText }" v-bind="$attrs" auto-resize
     />

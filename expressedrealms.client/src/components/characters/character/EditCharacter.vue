@@ -78,9 +78,9 @@ const home = ref({
     <Card class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="width: 390px">
       <template #content>
         <form @submit="onSubmit">
-          <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" @change="onSubmit" :show-skeleton="isLoading"/>
-          <InputTextWrapper v-model="expression" field-name="Expression" disabled @change="onSubmit" :show-skeleton="isLoading" />
-          <TextAreaWrapper v-model="background" field-name="Background" :error-text="errors.background" @change="onSubmit" :show-skeleton="isLoading"/>
+          <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" :show-skeleton="isLoading" @change="onSubmit" />
+          <InputTextWrapper v-model="expression" field-name="Expression" disabled :show-skeleton="isLoading" @change="onSubmit" />
+          <TextAreaWrapper v-model="background" field-name="Background" :error-text="errors.background" :show-skeleton="isLoading" @change="onSubmit" />
         </form>
       </template>
     </Card>

@@ -42,7 +42,8 @@ const dataCyTagCalc = computed(() => {
   <div class="mb-3">
     <label :for="dataCyTagCalc">{{ props.fieldName }}</label>
     <Skeleton v-if="showSkeleton" :id="dataCyTagCalc + '-skeleton'" class="w-100" height="3em" />
-    <InputText v-else
+    <InputText
+      v-else
       :id="dataCyTagCalc" v-model="model" :data-cy="dataCyTagCalc" class="w-100"
       :class="{ 'p-invalid': errorText }" v-bind="$attrs"
     />
