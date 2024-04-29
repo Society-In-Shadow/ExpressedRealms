@@ -75,12 +75,12 @@ const home = ref({
     </template>
   </Breadcrumb>
   <div class="flex flex-xs-column flex-sm-column flex-lg-row flex-md-row gap-3 m-3 ">
-    <Card class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch">
+    <Card class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="width: 390px">
       <template #content>
         <form @submit="onSubmit">
-          <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" @change="onSubmit" />
-          <InputTextWrapper v-model="expression" field-name="Expression" disabled @change="onSubmit" />
-          <TextAreaWrapper v-model="background" field-name="Background" :error-text="errors.background" @change="onSubmit" />
+          <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" @change="onSubmit" :show-skeleton="isLoading"/>
+          <InputTextWrapper v-model="expression" field-name="Expression" disabled @change="onSubmit" :show-skeleton="isLoading" />
+          <TextAreaWrapper v-model="background" field-name="Background" :error-text="errors.background" @change="onSubmit" :show-skeleton="isLoading"/>
         </form>
       </template>
     </Card>

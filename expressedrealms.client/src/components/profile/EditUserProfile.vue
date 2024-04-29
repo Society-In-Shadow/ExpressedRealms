@@ -8,7 +8,7 @@ import InputTextWrapper from "../../FormWrappers/InputTextWrapper.vue"
 import { userStore } from "@/stores/userStore";
 import InputMaskWrapper from "@/FormWrappers/InputMaskWrapper.vue";
 import Card from "primevue/card";
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
 const userInfo = userStore();
 
 const { defineField, handleSubmit, errors } = useForm({
@@ -34,6 +34,7 @@ const [name] = defineField('name');
 const [phoneNumber] = defineField('phoneNumber');
 const [city] = defineField('city')
 const [state] = defineField('state');
+const isLoading = ref(true);
 
 onMounted(() =>{
   axios.get("/api/player")
@@ -42,6 +43,7 @@ onMounted(() =>{
         phoneNumber.value = response.data.phoneNumber;
         city.value = response.data.city;
         state.value = response.data.state;
+        isLoading.value = false;
       })
 });
 
@@ -56,17 +58,17 @@ const onSubmit = handleSubmit((values) => {
 </script>
 
 <template>
-  <Card class="mb-3">
+  <Card class="mb-3" style="width: 390px">
     <template #title>
       User Profile
     </template>
     <template #content>
       <form @submit="onSubmit">
-        <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" />
-        <InputMaskWrapper v-model="phoneNumber" field-name="Phone Number" :error-text="errors.phoneNumber" mask="(999) 999-9999" />
-        <InputTextWrapper v-model="city" field-name="City" :error-text="errors.city" />
-        <InputTextWrapper v-model="state" field-name="State" :error-text="errors.state" maxlength="2" />
-        <Button data-cy="update-profile-button" label="Update Profile" class="w-100 mb-2" type="submit" />
+        <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" :show-skeleton="isLoading"/>
+        <InputMaskWrapper v-model="phoneNumber" field-name="Phone Number" :error-text="errors.phoneNumber" mask="(999) 999-9999" :show-skeleton="isLoading"/>
+        <InputTextWrapper v-model="city" field-name="City" :error-text="errors.city" :show-skeleton="isLoading"/>
+        <InputTextWrapper v-model="state" field-name="State" :error-text="errors.state" maxlength="2" :show-skeleton="isLoading"/>
+        <Button data-cy="update-profile-button" label="Update Profile" class="w-100 mb-2" type="submit" :disabled="isLoading"/>
       </form>
     </template>
   </Card>
