@@ -2,6 +2,7 @@
 
 import Dropdown from 'primevue/dropdown';
 import {computed} from "vue";
+import Skeleton from 'primevue/skeleton';
 
 const model = defineModel({ required: true, default: {}, type: Number });
 
@@ -29,6 +30,10 @@ const props = defineProps({
   errorText: {
     type: String,
     default: ""
+  },
+  showSkeleton: {
+    type: Boolean,
+    default: false
   }
 });
 
@@ -44,6 +49,7 @@ const dataCyTagCalc = computed(() => {
 <template>
   <div class="mb-3">
     <label :for="dataCyTagCalc">{{ props.fieldName }}</label>
+    <Skeleton v-if="showSkeleton" :id="dataCyTagCalc + '-skeleton'" class="w-100" height="3em" />
     <Dropdown
       :id="dataCyTagCalc" v-model="model" :options="options" :option-label="optionLabel" :data-cy="dataCyTagCalc"
       class="w-100" :class="{ 'p-invalid': errorText }" v-bind="$attrs"

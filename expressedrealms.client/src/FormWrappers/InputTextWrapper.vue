@@ -2,6 +2,7 @@
 
 import InputText from "primevue/inputtext";
 import {computed} from "vue";
+import Skeleton from 'primevue/skeleton';
 
 const model = defineModel<string>({ required: true, default: "" });
 
@@ -21,6 +22,10 @@ const props = defineProps({
   errorText: {
     type: String,
     default: ""
+  },
+  showSkeleton: {
+    type: Boolean,
+    default: false
   }
 });
 
@@ -36,7 +41,8 @@ const dataCyTagCalc = computed(() => {
 <template>
   <div class="mb-3">
     <label :for="dataCyTagCalc">{{ props.fieldName }}</label>
-    <InputText
+    <Skeleton v-if="showSkeleton" :id="dataCyTagCalc + '-skeleton'" class="w-100" height="3em" />
+    <InputText v-else
       :id="dataCyTagCalc" v-model="model" :data-cy="dataCyTagCalc" class="w-100"
       :class="{ 'p-invalid': errorText }" v-bind="$attrs"
     />
