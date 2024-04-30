@@ -28,8 +28,8 @@ module.exports = {
         max: 5
       }
     }],
-    "eol-last": ["error", "always"],
-    "no-multiple-empty-lines": [2, {"max": 2, "maxEOF": 1}]
+    "eol-last": ["error", "always"], // Github plays nicer with this on
+    "no-multiple-empty-lines": [2, {"max": 2, "maxEOF": 1}] // Nice to keep extra blank lines in check
   },
   overrides: [
     {

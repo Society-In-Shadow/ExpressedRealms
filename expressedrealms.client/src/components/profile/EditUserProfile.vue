@@ -48,7 +48,6 @@ onMounted(() =>{
 });
 
 
-
 const onSubmit = handleSubmit((values) => {
   axios.put('/api/player', values).then(() => {
       userInfo.name = values.name;
