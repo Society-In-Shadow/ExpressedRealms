@@ -34,7 +34,6 @@ const [confirmPassword] = defineField('confirmPassword')
 const route = useRoute();
 
 const onSubmit = handleSubmit((values) => {
-  console.log(values);
   axios.post('/api/auth/resetPassword',
       {
         email: values.email,

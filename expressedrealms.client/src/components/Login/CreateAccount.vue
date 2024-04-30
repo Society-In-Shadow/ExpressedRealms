@@ -31,7 +31,6 @@ const [password] = defineField('password');
 const [confirmPassword] = defineField('confirmPassword')
 
 const onSubmit = handleSubmit((values) => {
-  console.log(values);
   axios.post('/api/auth/register', 
     {
       email: values.email,
