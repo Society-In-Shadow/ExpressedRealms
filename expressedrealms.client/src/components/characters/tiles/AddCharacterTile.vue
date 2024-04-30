@@ -16,7 +16,3 @@ import Router from "@/router";
     </template>
   </Card>
 </template>
-
-<style scoped>
-
-</style>

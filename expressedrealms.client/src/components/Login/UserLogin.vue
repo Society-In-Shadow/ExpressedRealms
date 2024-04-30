@@ -76,7 +76,3 @@ const onSubmit = handleSubmit((values) => {
     <Button data-cy="forgot-password" label="Forgot Password?" class="w-100 mb-2" />
   </router-link>
 </template>
-
-<style scoped>
-
-</style>

@@ -52,7 +52,3 @@ const onSubmit = handleSubmit((values) => {
   </form>
   <Button data-cy="back-button" label="Back" class="w-100 mb-2" @click="Router.push('/login')" />
 </template>
-
-<style scoped>
-
-</style>

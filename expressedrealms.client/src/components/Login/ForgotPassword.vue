@@ -33,7 +33,3 @@ const onSubmit = handleSubmit((values) => {
   </form>
   <Button label="Back" class="w-100 mb-2" @click="Router.push('/login')" />
 </template>
-
-<style scoped>
-
-</style>

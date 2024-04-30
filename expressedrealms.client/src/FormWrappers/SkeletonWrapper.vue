@@ -17,7 +17,3 @@ defineProps({
     <slot v-else />
   </div>
 </template>
-
-<style scoped>
-
-</style>

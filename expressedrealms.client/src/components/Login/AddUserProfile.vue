@@ -59,7 +59,3 @@ const onSubmit = handleSubmit((values) => {
   </form>
   <Button data-cy="logoff-button" label="Logoff" class="w-100 mb-2" @click="logOff" />
 </template>
-
-<style scoped>
-
-</style>

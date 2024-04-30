@@ -26,7 +26,3 @@
   <p>Alternatively, you can log off and try another user.</p>
   <Button data-cy="logoff-button" label="Logoff" class="w-100 mb-2" @click="logOff" />
 </template>
-
-<style scoped>
-
-</style>

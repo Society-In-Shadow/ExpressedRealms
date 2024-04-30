@@ -72,7 +72,3 @@ const onSubmit = handleSubmit((values) => {
     </template>
   </Card>
 </template>
-
-<style scoped>
-
-</style>

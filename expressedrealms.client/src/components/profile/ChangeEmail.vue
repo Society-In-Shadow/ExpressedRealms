@@ -56,6 +56,3 @@ const onEmailSubmit = handleSubmit((values, { resetForm }) => {
     </template>
   </Card>
 </template>
-
-<style scoped>
-</style>
