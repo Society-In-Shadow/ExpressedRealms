@@ -7,7 +7,6 @@ const createAccountButton = 'reset-password-button';
 const email = 'email';
 const confirmPassword = 'confirm-password';
 
-
 describe('<ResetPassword />', () => {
     beforeEach(() => {
         

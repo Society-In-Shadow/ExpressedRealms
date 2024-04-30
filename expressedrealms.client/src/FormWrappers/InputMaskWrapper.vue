@@ -10,7 +10,6 @@ defineOptions({
   inheritAttrs: false
 })
 
-
 const props = defineProps({
   fieldName: {
     type: String,

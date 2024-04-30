@@ -51,7 +51,6 @@ describe('<EditCharacter />', () => {
         cy.dataCy(expression).should("have.value", expressionDefaultValue);
     });
     
-    
     it('Name Field follows all Schema Validations and Updates Automatically', () => {
         cy.dataCy(name).clear();
         cy.dataCy(nameHelp).contains("Name is a required field");
@@ -74,7 +73,6 @@ describe('<EditCharacter />', () => {
     it('Expression Field is Disabled', () => {
         cy.dataCy(expression).should('be.disabled');
     })
-    
 
     it('Background Follows all Schema Validations and Updates Automatically', () => {
         

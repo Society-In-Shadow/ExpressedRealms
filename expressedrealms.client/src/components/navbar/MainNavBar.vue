@@ -88,7 +88,6 @@ onMounted(() => {
       })
 });
 
-
 </script>
 
 <template>

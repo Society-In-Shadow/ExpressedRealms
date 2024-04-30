@@ -31,7 +31,6 @@ const toggle = (event) => {
   menu.value.toggle(event);
 };
 
-
 const gravatar = computed(() => {
   const hash = md5(userInfo.userEmail.trim().toLowerCase());
   return `https://www.gravatar.com/avatar/${hash}`;

@@ -4,7 +4,6 @@ import Button from "primevue/button";
 import Card from "primevue/card";
 import Router from "@/router";
 
-
 </script>
 
 <template>

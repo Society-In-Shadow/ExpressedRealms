@@ -13,7 +13,6 @@ const expressionValues = [
     { id: 2, name: "Boo", shortDescription: "Goo" }
 ]
 
-
 describe('<AddCharacter />', () => {
     beforeEach(() => {
 

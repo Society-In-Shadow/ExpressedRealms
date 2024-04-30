@@ -18,7 +18,6 @@ describe('<Login />', () => {
     cy.intercept('GET', '/api/auth/getInitialLoginInfo', {
       statusCode: 200
     });
-        
     
     cy.mount(Login);
   });

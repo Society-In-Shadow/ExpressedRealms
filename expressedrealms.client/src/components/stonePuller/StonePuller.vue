@@ -99,7 +99,6 @@ function updateTextColor(backgroundColor:string): string
   return backgroundColor === 'white' ? 'black' : 'default';
 }
 
-
 var table = [
   {
     stone: "Black",
