@@ -6,14 +6,15 @@ module.exports = {
   plugins: [
     'vue',
     'cypress',
-    'sonarjs'
+    'sonarjs',
+    '@stylistic/js'
   ],
   extends: [
     'plugin:vue/vue3-recommended',
     'plugin:cypress/recommended',
     'plugin:sonarjs/recommended',
     'eslint:recommended',
-    '@vue/eslint-config-typescript'
+    '@vue/eslint-config-typescript',
   ],
   parserOptions: {
     ecmaVersion: 'latest',
@@ -26,7 +27,9 @@ module.exports = {
       multiline: {
         max: 5
       }
-    }]
+    }],
+    "eol-last": ["error", "always"],
+    "no-multiple-empty-lines": [2, {"max": 2, "maxEOF": 1}]
   },
   overrides: [
     {
