@@ -8,11 +8,30 @@ const route = useRoute()
 import {onMounted, ref } from "vue";
 import Card from "primevue/card";
 import ExpressionToC from "@/components/expressions/ExpressionToC.vue";
-let sections = ref([]);
+let sections = ref([
+  {
+    subSections: [
+      {subSections: []},
+      {subSections: []},
+      {subSections: []}
+    ]
+  },
+  {
+    subSections: []
+  },
+  {
+    subSections: [{}]
+  },
+  {
+    subSections: [{}]
+  }
+]);
+const isLoading = ref(true);
 function fetchData(name: string) {
   axios.get(`/api/expression/${name}`)
       .then((json) => {
         sections.value = json.data;
+        isLoading.value = false;
       });
 }
 
@@ -39,7 +58,7 @@ onBeforeRouteUpdate(async (to, from) => {
             </template>
             <template #content>
               <article id="expression-body">
-                <ExpressionToC :sections="sections" :current-level="0" />
+                <ExpressionToC :sections="sections" :current-level="0" :show-skeleton="isLoading"/>
               </article>
             </template>
           </Card>
@@ -52,7 +71,7 @@ onBeforeRouteUpdate(async (to, from) => {
           </template>
           <template #content>
             <article id="expression-body">
-              <ExpressionSection :sections="sections" :current-level="1" />
+<!--              <ExpressionSection :sections="sections" :current-level="1" />-->
             </article>
           </template>
         </Card>
