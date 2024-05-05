@@ -89,7 +89,7 @@ function handleStatUpdate(stat){
         </div>
         <Listbox v-else v-model="stat.statLevel" :options="statLevels" option-value="level" @change="handleStatUpdate(stat)">
           <template #option="slotProps">
-            <StatLevel :stat-level-info="slotProps.option" />
+            <StatLevel :stat-level-info="slotProps.option" :current-level-xp="stat.statLevelInfo.totalXP" :current-level-id="stat.statLevelInfo.level"/>
           </template>
         </Listbox>
       </div>

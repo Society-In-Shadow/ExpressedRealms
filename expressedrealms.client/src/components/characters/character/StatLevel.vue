@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
+import {computed} from "vue";
 
 const props = defineProps({
   statLevelInfo: {
@@ -10,8 +11,27 @@ const props = defineProps({
     type: Boolean,
     required: false,
     default: false
+  },
+  currentLevelXp: {
+    type: Number,
+    required: false,
+    default: 0
+  },
+  currentLevelId: {
+    type: Number,
+    required: false,
+    default: 0
   }
 });
+
+const showXPTag = computed(() => {
+  return props.statLevelInfo.level !== props.currentLevelId
+})
+
+const plusOrMinusSign = computed(() => {
+  return props.statLevelInfo.level > props.currentLevelId ? "-" : "+";
+});
+
 </script>
 
 <template>
@@ -42,7 +62,7 @@ const props = defineProps({
       </div>
       <div>
         <SkeletonWrapper :show-skeleton="isLoading" height="2rem" width="100%">
-          {{ props.statLevelInfo.xp }}
+          {{ props.statLevelInfo.xp }}<span v-if="showXPTag"> ( {{plusOrMinusSign}}{{ Math.abs(props.statLevelInfo.totalXP - props.currentLevelXp) }} )</span>
         </SkeletonWrapper>
       </div>
     </div>
