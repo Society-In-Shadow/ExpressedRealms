@@ -203,6 +203,17 @@ internal static class CharacterEndPoints
 
                     var character = await dbContext
                         .Characters.Where(x => x.Id == characterId)
+                        .Select(x => new
+                        {
+                            AgilityId = x.AgilityId,
+                            ConstitutionId = x.ConstitutionId,
+                            DexterityId = x.DexterityId,
+                            StrengthId = x.StrengthId,
+                            IntelligenceId = x.IntelligenceId,
+                            WillpowerId = x.WillpowerId,
+                            AvailableXP = x.StatExperiencePoints - (x.AgilityStatLevel.TotalXPCost + x.ConstitutionStatLevel.TotalXPCost + x.DexterityStatLevel.TotalXPCost
+                                          + x.StrengthStatLevel.TotalXPCost + x.IntelligenceStatLevel.TotalXPCost + x.WillpowerStatLevel.TotalXPCost)
+                        })
                         .FirstOrDefaultAsync();
 
                     if (character is null)
@@ -226,6 +237,7 @@ internal static class CharacterEndPoints
                             Name = x.Name,
                             Description = x.Description,
                             StatLevel = statLevelId,
+                            AvailableXP = character.AvailableXP,
                             StatLevelInfo = x
                                 .StatDescriptionMappings.Where(y => y.StatLevelId == statLevelId)
                                 .Select(y => new StatDetails()
