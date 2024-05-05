@@ -8,22 +8,27 @@ const route = useRoute()
 import {onMounted, ref } from "vue";
 import Card from "primevue/card";
 import ExpressionToC from "@/components/expressions/ExpressionToC.vue";
+import Skeleton from 'primevue/skeleton';
 let sections = ref([
   {
+    id: 1,
     subSections: [
-      {subSections: []},
-      {subSections: []},
-      {subSections: []}
+      { id: 2, subSections: []},
+      { id: 3, subSections: []},
+      { id: 4, subSections: []}
     ]
   },
   {
+    id: 5,
     subSections: []
   },
   {
-    subSections: [{}]
+    id: 6,
+    subSections: [{id: 7}]
   },
   {
-    subSections: [{}]
+    id: 8,
+    subSections: [{id: 9,}]
   }
 ]);
 const isLoading = ref(true);
@@ -48,30 +53,29 @@ onBeforeRouteUpdate(async (to, from) => {
 </script>
 
 <template>
-  <div id="expression" class="d-flex justify-content-center align-items-center boxCenterHelper m-lg-3 m-md-3 m-sm-1 m-1">
-    <div class="row">
-      <div class="col-lg-3 col-sm-12 col-xl-3 col-md-3">
-        <div class="sticky-md-top sticky-lg-top sticky-xl-top zIndexFix">
-          <Card class="mb-3 p-0 mt-0 pt-0" style="max-width: 800px">
-            <template #title>
-              Table Of Contents
-            </template>
-            <template #content>
-              <article id="expression-body">
-                <ExpressionToC :sections="sections" :current-level="0" :show-skeleton="isLoading"/>
-              </article>
-            </template>
-          </Card>
-        </div>
+  <div id="expression" class="container">
+    <div class="row justify-content-md-center" >
+      <div class="col-12 col-lg-3 col-sm-12 col-xl-3 col-md-3">
+        <Card class="sticky-md-top sticky-lg-top sticky-xl-top zIndexFix">
+          <template #title>
+            Table Of Contents
+          </template>
+          <template #content>
+            <article id="expression-body">
+              <ExpressionToC :sections="sections" :current-level="0" :show-skeleton="isLoading"/>
+            </article>
+          </template>
+        </Card>
       </div>
       <div class="col">
         <Card class="mb-3 p-0 mt-0 pt-0" style="max-width: 800px">
           <template #header>
-            <img src="../../../public/ifIHadOne.png" class="w-100">
+            <Skeleton v-show="isLoading" class="w-100" height="20em"></Skeleton>
+            <img v-show="!isLoading" src="../../../public/ifIHadOne.png" class="w-100">
           </template>
           <template #content>
             <article id="expression-body">
-<!--              <ExpressionSection :sections="sections" :current-level="1" />-->
+              <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading"/>
             </article>
           </template>
         </Card>
@@ -81,6 +85,13 @@ onBeforeRouteUpdate(async (to, from) => {
 </template>
 
 <style>
+
+.container {
+  width: 100%; 
+  margin-right: auto; 
+  margin-left: auto; 
+  max-width:1000px
+}
 
 .zIndexFix {
   z-index: inherit !important;
