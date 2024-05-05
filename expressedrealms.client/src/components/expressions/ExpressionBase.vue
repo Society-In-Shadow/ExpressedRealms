@@ -9,6 +9,7 @@ import {onMounted, ref } from "vue";
 import Card from "primevue/card";
 import ExpressionToC from "@/components/expressions/ExpressionToC.vue";
 import Skeleton from 'primevue/skeleton';
+import ScrollTop from 'primevue/scrolltop';
 let sections = ref([
   {
     id: 1,
@@ -81,6 +82,7 @@ onBeforeRouteUpdate(async (to, from) => {
         </Card>
       </div>
     </div>
+    <ScrollTop />
   </div>
 </template>
 
