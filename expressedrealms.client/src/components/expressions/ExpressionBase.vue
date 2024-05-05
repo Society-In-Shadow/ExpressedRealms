@@ -55,7 +55,7 @@ onBeforeRouteUpdate(async (to, from) => {
 
 <template>
   <div id="expression" class="container">
-    <div class="row justify-content-md-center" >
+    <div class="row">
       <div class="col-12 col-lg-3 col-sm-12 col-xl-3 col-md-3">
         <Card class="sticky-md-top sticky-lg-top sticky-xl-top zIndexFix">
           <template #title>
