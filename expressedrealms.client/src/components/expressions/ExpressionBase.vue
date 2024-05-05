@@ -63,7 +63,7 @@ onBeforeRouteUpdate(async (to, from) => {
           </template>
           <template #content>
             <article id="expression-body">
-              <ExpressionToC :sections="sections" :current-level="0" :show-skeleton="isLoading"/>
+              <ExpressionToC :sections="sections" :current-level="0" :show-skeleton="isLoading" />
             </article>
           </template>
         </Card>
@@ -71,12 +71,12 @@ onBeforeRouteUpdate(async (to, from) => {
       <div class="col">
         <Card class="mb-3 p-0 mt-0 pt-0" style="max-width: 800px">
           <template #header>
-            <Skeleton v-show="isLoading" class="w-100" height="20em"></Skeleton>
+            <Skeleton v-show="isLoading" class="w-100" height="20em" />
             <img v-show="!isLoading" src="../../../public/ifIHadOne.png" class="w-100">
           </template>
           <template #content>
             <article id="expression-body">
-              <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading"/>
+              <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" />
             </article>
           </template>
         </Card>

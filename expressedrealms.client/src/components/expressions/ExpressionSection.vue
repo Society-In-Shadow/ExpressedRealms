@@ -22,7 +22,7 @@ const props = defineProps({
 
 <template>
   <div v-for="(value) in props.sections" :key="value.id">
-    <div v-if="showSkeleton" >
+    <div v-if="showSkeleton">
       <Skeleton id="toc-skeleton" class="mb-2" height="1.5em" />
       <Skeleton id="toc-skeleton" class="mb-2" height="5em" />
     </div>
@@ -49,7 +49,7 @@ const props = defineProps({
       <div v-html="value.content" />
     </div>
     <div>
-      <ExpressionSection v-if="value.subSections" :sections="value.subSections" :current-level="props.currentLevel + 1" :show-skeleton="showSkeleton"/>
+      <ExpressionSection v-if="value.subSections" :sections="value.subSections" :current-level="props.currentLevel + 1" :show-skeleton="showSkeleton" />
     </div>
   </div>
 </template>
