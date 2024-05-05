@@ -28,6 +28,7 @@ internal static class StatEndPoints
                 {
                     var stats = await dbContext
                         .StatDescriptionMappings.Where(x => x.StatTypeId == (byte)statTypeId)
+                        .OrderBy(x => x.StatLevel.Id)
                         .Select(x => new StatDetails()
                         {
                             Level = x.StatLevel.Id,
@@ -37,6 +38,13 @@ internal static class StatEndPoints
                         })
                         .ToListAsync();
 
+                    var totalExperience = 0;
+                    stats.ForEach(x =>
+                    {
+                        totalExperience += x.XP;
+                        x.TotalXP = totalExperience;
+                    });
+                    
                     return TypedResults.Ok(stats);
                 }
             )
