@@ -34,16 +34,10 @@ internal static class StatEndPoints
                             Level = x.StatLevel.Id,
                             Bonus = x.StatLevel.Bonus,
                             XP = x.StatLevel.XPCost,
+                            TotalXP = x.StatLevel.TotalXPCost,
                             Description = x.ReasonableExpectation
                         })
                         .ToListAsync();
-
-                    var totalExperience = 0;
-                    stats.ForEach(x =>
-                    {
-                        totalExperience += x.XP;
-                        x.TotalXP = totalExperience;
-                    });
                     
                     return TypedResults.Ok(stats);
                 }
