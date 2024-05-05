@@ -23,8 +23,8 @@ const props = defineProps({
 <template>
   <div v-for="(value) in props.sections" :key="value.id">
     <div v-if="showSkeleton">
-      <Skeleton id="toc-skeleton" class="mb-2" height="1.5em" />
-      <Skeleton id="toc-skeleton" class="mb-2" height="5em" />
+      <Skeleton id="expression-section-title-skeleton" class="mb-2" height="1.5em" />
+      <Skeleton id="expression-section-body-skeleton" class="mb-2" height="5em" />
     </div>
     
     <div v-else>
