@@ -12,5 +12,6 @@ public class StatLevelConfiguration : IEntityTypeConfiguration<StatLevel>
         builder.Property(x => x.Id).IsRequired();
         builder.Property(x => x.Bonus).IsRequired();
         builder.Property(x => x.XPCost).IsRequired();
+        builder.Property(x => x.TotalXPCost).IsRequired();
     }
 }
