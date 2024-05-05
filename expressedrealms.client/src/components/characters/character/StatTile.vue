@@ -1,13 +1,31 @@
 <script setup lang="ts">
 
 import axios from "axios";
-import {onMounted, ref} from "vue";
+import {onMounted, ref, type Ref} from "vue";
 import { useRoute } from 'vue-router'
 import Button from 'primevue/button';
 import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
 import StatLevel from "@/components/characters/character/StatLevel.vue";
 import Listbox from 'primevue/listbox';
 const route = useRoute()
+
+interface LevelInfo {
+  bonus: number;
+  description: string;
+  level: number;
+  totalXP: number;
+  xp: number;
+  disabled: boolean;
+}
+
+interface Stat {
+  availableXP: number;
+  description: string;
+  id: number;
+  name: string;
+  statLevel: number;
+  statLevelInfo: LevelInfo;
+}
 
 const emit = defineEmits<{
   toggleStat: [],
@@ -21,10 +39,10 @@ const props = defineProps({
   },
 });
 
-const stat = ref({
+const stat:Ref<Stat> = ref({
   statLevelInfo: {}
 });
-const statLevels = ref([]);
+const statLevels:Ref<Array<LevelInfo>> = ref([]);
 const loading = ref(true);
 const showOptions = ref(false);
 const oldValue = ref(props.statTypeId);
@@ -40,12 +58,19 @@ onMounted(() =>{
 function getEditOptions() {
   axios.get(`/api/stats/${props.statTypeId}`)
       .then((response) => {
+        
+        const selectedXP = response.data.find(x => x.level == stat.value.statLevel).totalXP;
+        
+        response.data.forEach(function(level:LevelInfo) {
+          level.disabled = level.totalXP > stat.value.availableXP + selectedXP && level.level > stat.value.statLevel;
+        });
+
         statLevels.value = response.data;
         showOptions.value = true;
       })
 }
 
-function handleStatUpdate(stat){
+function handleStatUpdate(stat:Stat){
   // Don't allow them to unselect the option
   if(stat.statLevel == undefined)
     stat.statLevel = oldValue.value;
@@ -95,7 +120,7 @@ function handleStatUpdate(stat){
         <div v-if="!showOptions" class="p-listbox p-3" style="cursor: pointer" @click="getEditOptions()">
           <StatLevel :stat-level-info="stat.statLevelInfo" :is-loading="loading" />
         </div>
-        <Listbox v-else v-model="stat.statLevel" :options="statLevels" option-value="level" @change="handleStatUpdate(stat)">
+        <Listbox v-else v-model="stat.statLevel" :options="statLevels" option-value="level" @change="handleStatUpdate(stat)" option-disabled="disabled" >
           <template #option="slotProps">
             <StatLevel :stat-level-info="slotProps.option" :current-level-xp="stat.statLevelInfo.totalXP" :current-level-id="stat.statLevelInfo.level"/>
           </template>
