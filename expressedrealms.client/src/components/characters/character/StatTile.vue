@@ -59,6 +59,7 @@ function handleStatUpdate(stat){
 
     emit("updateStat", stat.statLevelInfo.level, stat.statLevelInfo.bonus);
 
+    reloadStatInfo();
     showOptions.value = !showOptions.value;
   })
 
@@ -72,7 +73,14 @@ function handleStatUpdate(stat){
       <div class="col">
         <h3 class="mt-0">
           <SkeletonWrapper :show-skeleton="loading" height="2rem">
-            {{ stat.name }}
+            <div class="row">
+              <div class="col">
+                {{ stat.name }}
+              </div>
+              <div class="col text-right">
+                {{ stat.availableXP }} XP
+              </div>
+            </div>
           </SkeletonWrapper>
         </h3>
         <div class="mb-3">
