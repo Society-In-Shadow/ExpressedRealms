@@ -115,7 +115,7 @@ function handleStatUpdate(stat:Stat){
               <div class="col">
                 {{ stat.name }}
               </div>
-              <div class="col text-right">
+              <div v-if="showOptions" class="col text-right">
                 {{ stat.availableXP }} XP
               </div>
             </div>
@@ -131,14 +131,14 @@ function handleStatUpdate(stat:Stat){
     <div class="row">
       <div class="col">
         <div v-if="!showOptions" class="p-listbox p-3" style="cursor: pointer" @click="getEditOptions()">
-          <StatLevel :stat-level-info="stat.statLevelInfo" :is-loading="loading" />
+          <StatLevel :stat-level-info="stat.statLevelInfo" :is-loading="loading" :current-level-xp="stat.statLevelInfo.totalXP" :current-level-id="stat.statLevel" :display-only="true" />
         </div>
         <Listbox
           v-else v-model="stat.statLevel" :options="statLevels" option-value="level" option-disabled="disabled"
           @change="handleStatUpdate(stat)"
         >
           <template #option="slotProps">
-            <StatLevel :stat-level-info="slotProps.option" :current-level-xp="stat.statLevelInfo.totalXP" :current-level-id="stat.statLevelInfo.level" />
+            <StatLevel :stat-level-info="slotProps.option" :current-level-xp="stat.statLevelInfo.totalXP" :current-level-id="stat.statLevel" />
           </template>
         </Listbox>
       </div>

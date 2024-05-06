@@ -21,11 +21,16 @@ const props = defineProps({
     type: Number,
     required: false,
     default: 0
+  },
+  displayOnly: {
+    type: Boolean,
+    required: false,
+    default: false
   }
 });
 
 const showXPTag = computed(() => {
-  return props.statLevelInfo.level !== props.currentLevelId
+  return !props.displayOnly;
 })
 
 const plusOrMinusSign = computed(() => {
@@ -36,7 +41,7 @@ const plusOrMinusSign = computed(() => {
 
 <template>
   <div class="row">
-    <div class="col-4 text-center">
+    <div class="col text-center">
       <div class="mb-2">
         Level
       </div>
@@ -46,7 +51,7 @@ const plusOrMinusSign = computed(() => {
         </SkeletonWrapper>
       </div>
     </div>
-    <div class="col-4 text-center">
+    <div class="col text-center">
       <div class="mb-2">
         Bonus
       </div>
@@ -56,13 +61,13 @@ const plusOrMinusSign = computed(() => {
         </SkeletonWrapper>
       </div>
     </div>
-    <div class="col-4 text-center">
+    <div v-if="showXPTag" class="col text-center">
       <div class="mb-2">
         XP
       </div>
       <div>
         <SkeletonWrapper :show-skeleton="isLoading" height="2rem" width="100%">
-          {{ props.statLevelInfo.xp }}<span v-if="showXPTag"> ( {{ plusOrMinusSign }}{{ Math.abs(props.statLevelInfo.totalXP - props.currentLevelXp) }} )</span>
+          {{ plusOrMinusSign }}{{ Math.abs(props.statLevelInfo.totalXP - props.currentLevelXp) }}
         </SkeletonWrapper>
       </div>
     </div>
