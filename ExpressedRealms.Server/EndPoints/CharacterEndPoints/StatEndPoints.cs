@@ -38,7 +38,7 @@ internal static class StatEndPoints
                             Description = x.ReasonableExpectation
                         })
                         .ToListAsync();
-                    
+
                     return TypedResults.Ok(stats);
                 }
             )

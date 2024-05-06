@@ -10,7 +10,7 @@ public class StatDetails
 
     /// <example>12</example>
     public int XP { get; set; }
-    
+
     /// <example>24</example>
     public int TotalXP { get; set; }
 

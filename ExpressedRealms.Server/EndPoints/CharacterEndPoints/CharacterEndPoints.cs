@@ -211,8 +211,15 @@ internal static class CharacterEndPoints
                             StrengthId = x.StrengthId,
                             IntelligenceId = x.IntelligenceId,
                             WillpowerId = x.WillpowerId,
-                            AvailableXP = x.StatExperiencePoints - (x.AgilityStatLevel.TotalXPCost + x.ConstitutionStatLevel.TotalXPCost + x.DexterityStatLevel.TotalXPCost
-                                          + x.StrengthStatLevel.TotalXPCost + x.IntelligenceStatLevel.TotalXPCost + x.WillpowerStatLevel.TotalXPCost)
+                            AvailableXP = x.StatExperiencePoints
+                                - (
+                                    x.AgilityStatLevel.TotalXPCost
+                                    + x.ConstitutionStatLevel.TotalXPCost
+                                    + x.DexterityStatLevel.TotalXPCost
+                                    + x.StrengthStatLevel.TotalXPCost
+                                    + x.IntelligenceStatLevel.TotalXPCost
+                                    + x.WillpowerStatLevel.TotalXPCost
+                                )
                         })
                         .FirstOrDefaultAsync();
 
@@ -280,17 +287,25 @@ internal static class CharacterEndPoints
                         .Include(x => x.IntelligenceStatLevel)
                         .Include(x => x.WillpowerStatLevel)
                         .FirstOrDefaultAsync();
-                    
+
                     if (character is null)
                         return TypedResults.NotFound();
 
-                    
                     var availableXp = await dbContext
                         .Characters.Where(x => x.Id == dto.CharacterId)
-                        .Select(x => x.StatExperiencePoints - (x.AgilityStatLevel.TotalXPCost + x.ConstitutionStatLevel.TotalXPCost + x.DexterityStatLevel.TotalXPCost
-                                                               + x.StrengthStatLevel.TotalXPCost + x.IntelligenceStatLevel.TotalXPCost + x.WillpowerStatLevel.TotalXPCost))
+                        .Select(x =>
+                            x.StatExperiencePoints
+                            - (
+                                x.AgilityStatLevel.TotalXPCost
+                                + x.ConstitutionStatLevel.TotalXPCost
+                                + x.DexterityStatLevel.TotalXPCost
+                                + x.StrengthStatLevel.TotalXPCost
+                                + x.IntelligenceStatLevel.TotalXPCost
+                                + x.WillpowerStatLevel.TotalXPCost
+                            )
+                        )
                         .FirstOrDefaultAsync();
-                    
+
                     var oldTotalXpCost = dto.StatTypeId switch
                     {
                         StatType.Agility => character.AgilityStatLevel.TotalXPCost,
@@ -302,15 +317,21 @@ internal static class CharacterEndPoints
                         _ => throw new ArgumentOutOfRangeException()
                     };
 
-                    var newTotalXpCost = await dbContext.StatLevels.Where(x => x.Id == dto.LevelTypeId)
+                    var newTotalXpCost = await dbContext
+                        .StatLevels.Where(x => x.Id == dto.LevelTypeId)
                         .Select(x => x.TotalXPCost)
                         .FirstAsync();
 
                     if (availableXp < newTotalXpCost - oldTotalXpCost)
                     {
-                        return TypedResults.BadRequest<string>("You don't have enough XP to select that level.  You have " + availableXp + " points available.  You tried to spend " + (newTotalXpCost - oldTotalXpCost) + " points.");
+                        return TypedResults.BadRequest<string>(
+                            "You don't have enough XP to select that level.  You have "
+                                + availableXp
+                                + " points available.  You tried to spend "
+                                + (newTotalXpCost - oldTotalXpCost)
+                                + " points."
+                        );
                     }
-
 
                     switch (dto.StatTypeId)
                     {

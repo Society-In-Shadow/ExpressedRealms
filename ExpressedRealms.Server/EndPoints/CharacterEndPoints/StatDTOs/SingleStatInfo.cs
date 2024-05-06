@@ -14,8 +14,9 @@ public class SingleStatInfo
 
     /// <example>7</example>
     public int StatLevel { get; set; }
+
     /// <example>128</example>
     public int AvailableXP { get; set; }
-    
+
     public StatDetails StatLevelInfo { get; set; }
 }
