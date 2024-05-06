@@ -106,7 +106,7 @@ function handleStatUpdate(stat:Stat){
 </script>
 
 <template>
-  <div class="w-100">
+  <div class="w-100" style="min-width: 300px">
     <div class="row">
       <div class="col">
         <h3 class="mt-0">
@@ -133,9 +133,12 @@ function handleStatUpdate(stat:Stat){
         <div v-if="!showOptions" class="p-listbox p-3" style="cursor: pointer" @click="getEditOptions()">
           <StatLevel :stat-level-info="stat.statLevelInfo" :is-loading="loading" />
         </div>
-        <Listbox v-else v-model="stat.statLevel" :options="statLevels" option-value="level" @change="handleStatUpdate(stat)" option-disabled="disabled" >
+        <Listbox
+          v-else v-model="stat.statLevel" :options="statLevels" option-value="level" option-disabled="disabled"
+          @change="handleStatUpdate(stat)"
+        >
           <template #option="slotProps">
-            <StatLevel :stat-level-info="slotProps.option" :current-level-xp="stat.statLevelInfo.totalXP" :current-level-id="stat.statLevelInfo.level"/>
+            <StatLevel :stat-level-info="slotProps.option" :current-level-xp="stat.statLevelInfo.totalXP" :current-level-id="stat.statLevelInfo.level" />
           </template>
         </Listbox>
       </div>

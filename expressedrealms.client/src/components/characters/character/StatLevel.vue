@@ -62,7 +62,7 @@ const plusOrMinusSign = computed(() => {
       </div>
       <div>
         <SkeletonWrapper :show-skeleton="isLoading" height="2rem" width="100%">
-          {{ props.statLevelInfo.xp }}<span v-if="showXPTag"> ( {{plusOrMinusSign}}{{ Math.abs(props.statLevelInfo.totalXP - props.currentLevelXp) }} )</span>
+          {{ props.statLevelInfo.xp }}<span v-if="showXPTag"> ( {{ plusOrMinusSign }}{{ Math.abs(props.statLevelInfo.totalXP - props.currentLevelXp) }} )</span>
         </SkeletonWrapper>
       </div>
     </div>
