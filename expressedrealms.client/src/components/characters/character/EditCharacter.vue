@@ -74,7 +74,7 @@ const home = ref({
       </a>
     </template>
   </Breadcrumb>
-  <div class="flex flex-xs-column flex-sm-column flex-lg-row flex-md-row gap-3 m-3 ">
+  <div class="flex flex-xs-column flex-sm-column flex-lg-row flex-md-row gap-3 m-1 m-sm-3 m-md-3 m-lg-3 m-xl-3">
     <Card class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="width: 390px">
       <template #content>
         <form @submit="onSubmit">

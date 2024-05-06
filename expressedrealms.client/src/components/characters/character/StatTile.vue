@@ -106,7 +106,7 @@ function handleStatUpdate(stat:Stat){
 </script>
 
 <template>
-  <div class="w-100" style="min-width: 350px">
+  <div class="w-100">
     <div class="row">
       <div class="col">
         <h3 class="mt-0">
