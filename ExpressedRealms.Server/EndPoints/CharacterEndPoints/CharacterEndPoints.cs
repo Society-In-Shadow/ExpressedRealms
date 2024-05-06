@@ -245,7 +245,8 @@ internal static class CharacterEndPoints
                                     Level = y.StatLevelId,
                                     XP = y.StatLevel.XPCost,
                                     Bonus = y.StatLevel.Bonus,
-                                    Description = y.ReasonableExpectation
+                                    Description = y.ReasonableExpectation,
+                                    TotalXP = y.StatLevel.TotalXPCost
                                 })
                                 .First()
                         })
