@@ -7,6 +7,7 @@ import Button from 'primevue/button';
 import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
 import StatLevel from "@/components/characters/character/StatLevel.vue";
 import Listbox from 'primevue/listbox';
+import toasters from "@/services/Toasters";
 const route = useRoute()
 
 interface LevelInfo {
@@ -48,12 +49,16 @@ const showOptions = ref(false);
 const oldValue = ref(props.statTypeId);
 
 onMounted(() =>{
+  reloadStatInfo();
+});
+
+function reloadStatInfo() {
   axios.get(`/api/characters/${route.params.id}/stat/${props.statTypeId}`)
       .then((response) => {
         stat.value = response.data;
         loading.value = false;
       })
-});
+}
 
 function getEditOptions() {
   axios.get(`/api/stats/${props.statTypeId}`)
@@ -73,8 +78,11 @@ function getEditOptions() {
 function handleStatUpdate(stat:Stat){
   // Don't allow them to unselect the option
   if(stat.statLevel == undefined)
+  {
     stat.statLevel = oldValue.value;
-
+    showOptions.value = !showOptions.value;
+    return;
+  }
   axios.put(`/api/characters/${route.params.id}/stat/${props.statTypeId}`, {
     levelTypeId: stat.statLevel,
     statTypeId: props.statTypeId,
@@ -82,10 +90,15 @@ function handleStatUpdate(stat:Stat){
   }).then(function(){
     stat.statLevelInfo = statLevels.value.find(x => x.level == stat.statLevel);
 
+    oldValue.value = stat.statLevel;
+    
     emit("updateStat", stat.statLevelInfo.level, stat.statLevelInfo.bonus);
-
+    toasters.success("Successfully updated " + stat.name + " to level " + stat.statLevel);
+    
     reloadStatInfo();
     showOptions.value = !showOptions.value;
+  }).catch(function() {
+    stat.statLevel = oldValue.value;
   })
 
 }
