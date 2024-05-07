@@ -1,3 +1,5 @@
+using ExpressedRealms.DB.Characters;
+
 namespace ExpressedRealms.DB.Models.Expressions;
 
 public class ExpressionSection
@@ -13,4 +15,5 @@ public class ExpressionSection
     public virtual ExpressionSection? Parent { get; set; }
     public virtual ExpressionSectionType SectionType { get; set; } = null;
     public virtual List<ExpressionSection>? Children { get; set; }
+    public virtual List<Character> CharactersList { get; set; }
 }
