@@ -1,3 +1,4 @@
+using ExpressedRealms.DB;
 using FluentValidation;
 
 namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.DTOs;
@@ -8,5 +9,6 @@ public class EditCharacterDTOValidator : AbstractValidator<EditCharacterDTO>
     {
         RuleFor(x => x.Id).NotEmpty().GreaterThan(0);
         RuleFor(x => x.Name).NotEmpty().MaximumLength(150);
+        RuleFor(x => x.FactionId).NotEmpty();
     }
 }

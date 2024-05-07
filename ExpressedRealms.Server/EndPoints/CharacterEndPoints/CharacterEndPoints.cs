@@ -192,23 +192,37 @@ internal static class CharacterEndPoints
         endpointGroup
             .MapPut(
                 "",
-                async Task<Results<NotFound, NoContent>> (
+                async Task<Results<NotFound, NoContent, ValidationProblem>> (
                     EditCharacterDTO dto,
                     ExpressedRealmsDbContext dbContext,
-                    HttpContext http
+                    HttpContext http,
+                    CancellationToken cancellationToken
                 ) =>
                 {
                     var character = await dbContext.Characters.FirstOrDefaultAsync(x =>
-                        x.Id == dto.Id && x.Player.UserId == http.User.GetUserId()
+                        x.Id == dto.Id && x.Player.UserId == http.User.GetUserId(),
+                        cancellationToken
                     );
 
                     if (character is null)
                         return TypedResults.NotFound();
+                    
+                    var isFaction = await dbContext.ExpressionSections
+                        .AnyAsync(x => x.ExpressionId == character.ExpressionId 
+                                       && x.SectionTypeId == (int)ExpressionSectionType.FactionType
+                                       && x.Id == dto.FactionId, cancellationToken);
+
+                    if (!isFaction)
+                    {
+                        var errors = new Dictionary<string, string[]> {{"FactionId", ["This is not a valid Faction Id."]}};
+                        return TypedResults.ValidationProblem(errors);
+                    }
 
                     character.Name = dto.Name;
                     character.Background = dto.Background;
+                    character.FactionId = dto.FactionId;
 
-                    await dbContext.SaveChangesAsync();
+                    await dbContext.SaveChangesAsync(cancellationToken);
 
                     return TypedResults.NoContent();
                 }
