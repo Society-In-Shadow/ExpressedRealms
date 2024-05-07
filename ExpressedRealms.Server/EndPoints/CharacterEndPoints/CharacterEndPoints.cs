@@ -66,7 +66,7 @@ internal static class CharacterEndPoints
             .WithSummary("Returns info needed for creating a character")
             .WithDescription("Returns info needed for creating a character.")
             .RequireAuthorization();
-        
+
         endpointGroup
             .MapGet(
                 "FactionOptions/{expressionId}",
@@ -74,11 +74,13 @@ internal static class CharacterEndPoints
                 async (int expressionId, ExpressedRealmsDbContext dbContext, HttpContext http) =>
                 {
                     var factions = await dbContext
-                        .ExpressionSections
-                        .Where(x => x.ExpressionId == expressionId && x.SectionTypeId == (int)ExpressionSectionType.FactionType)
+                        .ExpressionSections.Where(x =>
+                            x.ExpressionId == expressionId
+                            && x.SectionTypeId == (int)ExpressionSectionType.FactionType
+                        )
                         .Select(x => new FactionOptionResponse(x.Id, x.Name, x.Content))
                         .ToListAsync();
-                    
+
                     return TypedResults.Ok(factions);
                 }
             )
@@ -119,7 +121,9 @@ internal static class CharacterEndPoints
         endpointGroup
             .MapPost(
                 "",
-                async Task<Results<Created<int>, BadRequest<ValidationFailure>, ValidationProblem>>(
+                async Task<
+                    Results<Created<int>, BadRequest<ValidationFailure>, ValidationProblem>
+                > (
                     CreateCharacterRequest dto,
                     ExpressedRealmsDbContext dbContext,
                     CreateCharacterRequestValidator validator,
@@ -127,22 +131,19 @@ internal static class CharacterEndPoints
                     CancellationToken cancellationToken
                 ) =>
                 {
-
                     var result = await validator.ValidateAsync(
-                        dto, 
-                        options => options.IncludeRuleSets("Async Checks"), 
+                        dto,
+                        options => options.IncludeRuleSets("Async Checks"),
                         cancellationToken
                     );
-                    
+
                     if (!result.IsValid)
                         return TypedResults.ValidationProblem(result.ToDictionary());
-                        
-                    
+
                     var playerId = await dbContext
                         .Players.Where(x => x.UserId == http.User.GetUserId())
                         .Select(x => x.Id)
                         .FirstAsync(cancellationToken);
-
 
                     var newCharacter = new Character()
                     {
@@ -198,22 +199,28 @@ internal static class CharacterEndPoints
                     CancellationToken cancellationToken
                 ) =>
                 {
-                    var character = await dbContext.Characters.FirstOrDefaultAsync(x =>
-                        x.Id == dto.Id && x.Player.UserId == http.User.GetUserId(),
+                    var character = await dbContext.Characters.FirstOrDefaultAsync(
+                        x => x.Id == dto.Id && x.Player.UserId == http.User.GetUserId(),
                         cancellationToken
                     );
 
                     if (character is null)
                         return TypedResults.NotFound();
-                    
-                    var isFaction = await dbContext.ExpressionSections
-                        .AnyAsync(x => x.ExpressionId == character.ExpressionId 
-                                       && x.SectionTypeId == (int)ExpressionSectionType.FactionType
-                                       && x.Id == dto.FactionId, cancellationToken);
+
+                    var isFaction = await dbContext.ExpressionSections.AnyAsync(
+                        x =>
+                            x.ExpressionId == character.ExpressionId
+                            && x.SectionTypeId == (int)ExpressionSectionType.FactionType
+                            && x.Id == dto.FactionId,
+                        cancellationToken
+                    );
 
                     if (!isFaction)
                     {
-                        var errors = new Dictionary<string, string[]> {{"FactionId", ["This is not a valid Faction Id."]}};
+                        var errors = new Dictionary<string, string[]>
+                        {
+                            { "FactionId", ["This is not a valid Faction Id."] }
+                        };
                         return TypedResults.ValidationProblem(errors);
                     }
 

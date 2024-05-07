@@ -19,7 +19,7 @@ public class Character : ISoftDelete
     public byte StrengthId { get; set; }
     public byte IntelligenceId { get; set; }
     public byte WillpowerId { get; set; }
-    
+
     public int FactionId { get; set; }
 
     public int StatExperiencePoints { get; set; }
