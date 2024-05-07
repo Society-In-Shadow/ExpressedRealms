@@ -67,6 +67,25 @@ internal static class CharacterEndPoints
             .WithSummary("Returns info needed for creating a character")
             .WithDescription("Returns info needed for creating a character.")
             .RequireAuthorization();
+        
+        endpointGroup
+            .MapGet(
+                "FactionOptions/{expressionId}",
+                [Authorize]
+                async (int expressionId, ExpressedRealmsDbContext dbContext, HttpContext http) =>
+                {
+                    var factions = await dbContext
+                        .ExpressionSections
+                        .Where(x => x.ExpressionId == expressionId && x.SectionTypeId == (int)ExpressionSectionType.FactionType)
+                        .Select(x => new FactionOptionResponse(x.Id, x.Name, x.Content))
+                        .ToListAsync();
+                    
+                    return TypedResults.Ok(factions);
+                }
+            )
+            .WithSummary("Returns info needed for selecting a faction")
+            .WithDescription("Returns info needed for selecting a faction.")
+            .RequireAuthorization();
 
         endpointGroup
             .MapGet(
