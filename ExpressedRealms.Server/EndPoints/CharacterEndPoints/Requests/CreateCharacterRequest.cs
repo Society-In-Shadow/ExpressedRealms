@@ -8,7 +8,7 @@ public record CreateCharacterRequest
     /// <example>John Doe is a high elf from the northern woods.</example>
     public string? Background { get; set; }
 
-    /// <example>1 - Adept</example>
+    /// <example>3 - Adept</example>
     public int ExpressionId { get; set; }
 
     /// <example>9 - The Shield Wardens</example>
