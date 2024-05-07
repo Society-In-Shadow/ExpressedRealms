@@ -10,4 +10,7 @@ public class CreateCharacterDTO
 
     /// <example>1 - Adept</example>
     public int ExpressionId { get; set; }
+
+    /// <example>9 - The Shield Wardens</example>
+    public int FactionId { get; set; }
 }

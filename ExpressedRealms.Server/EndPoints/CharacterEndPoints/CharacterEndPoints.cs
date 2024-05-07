@@ -120,28 +120,43 @@ internal static class CharacterEndPoints
         endpointGroup
             .MapPost(
                 "",
-                async (
+                async Task<Results<Created<int>, BadRequest<ValidationFailure>, ValidationProblem>>(
                     CreateCharacterDTO dto,
                     ExpressedRealmsDbContext dbContext,
+                    CreateCharacterDTOValidator validator,
                     HttpContext http
                 ) =>
                 {
+
+                    var result = await validator.ValidateAsync(dto, options => options.IncludeRuleSets("Async Checks"));
+                    if (!result.IsValid)
+                    {
+                        var errors = result.Errors
+                            .GroupBy(x => x.PropertyName, e => e.ErrorMessage)
+                            .ToDictionary(g => g.Key, g => g.ToArray());
+                        
+                        return TypedResults.ValidationProblem(errors);
+                    }
+                        
+                    
                     var playerId = await dbContext
                         .Players.Where(x => x.UserId == http.User.GetUserId())
                         .Select(x => x.Id)
                         .FirstAsync();
+
 
                     var newCharacter = new Character()
                     {
                         PlayerId = playerId,
                         Name = dto.Name,
                         Background = dto.Background,
-                        ExpressionId = dto.ExpressionId
+                        ExpressionId = dto.ExpressionId,
+                        FactionId = dto.FactionId
                     };
 
                     dbContext.Characters.Add(newCharacter);
 
-                    await dbContext.SaveChangesAsync();
+                    //await dbContext.SaveChangesAsync();
 
                     return TypedResults.Created("/characters", newCharacter.Id);
                 }
