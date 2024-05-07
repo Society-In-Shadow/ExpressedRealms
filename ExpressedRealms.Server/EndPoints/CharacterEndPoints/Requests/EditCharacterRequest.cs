@@ -1,6 +1,6 @@
 namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.DTOs;
 
-public class EditCharacterDTO
+public record EditCharacterRequest
 {
     public int Id { get; set; }
 

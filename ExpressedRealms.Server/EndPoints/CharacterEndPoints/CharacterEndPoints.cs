@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Interceptors;
@@ -193,7 +192,7 @@ internal static class CharacterEndPoints
             .MapPut(
                 "",
                 async Task<Results<NotFound, NoContent, ValidationProblem>> (
-                    EditCharacterDTO dto,
+                    EditCharacterRequest dto,
                     ExpressedRealmsDbContext dbContext,
                     HttpContext http,
                     CancellationToken cancellationToken
