@@ -1,6 +1,6 @@
-namespace ExpressedRealms.Server.EndPoints.DTOs;
+namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.Requests;
 
-public class CreateCharacterDTO
+public record CreateCharacterRequest
 {
     /// <example>John Doe</example>
     public string Name { get; set; } = null!;

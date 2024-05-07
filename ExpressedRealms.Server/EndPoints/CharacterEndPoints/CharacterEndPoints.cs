@@ -3,8 +3,8 @@ using ExpressedRealms.DB;
 using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.DTOs;
+using ExpressedRealms.Server.EndPoints.CharacterEndPoints.Requests;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs;
-using ExpressedRealms.Server.EndPoints.DTOs;
 using ExpressedRealms.Server.Extensions;
 using FluentValidation;
 using FluentValidation.Results;
@@ -121,28 +121,28 @@ internal static class CharacterEndPoints
             .MapPost(
                 "",
                 async Task<Results<Created<int>, BadRequest<ValidationFailure>, ValidationProblem>>(
-                    CreateCharacterDTO dto,
+                    CreateCharacterRequest dto,
                     ExpressedRealmsDbContext dbContext,
-                    CreateCharacterDTOValidator validator,
-                    HttpContext http
+                    CreateCharacterRequestValidator validator,
+                    HttpContext http,
+                    CancellationToken cancellationToken
                 ) =>
                 {
 
-                    var result = await validator.ValidateAsync(dto, options => options.IncludeRuleSets("Async Checks"));
+                    var result = await validator.ValidateAsync(
+                        dto, 
+                        options => options.IncludeRuleSets("Async Checks"), 
+                        cancellationToken
+                    );
+                    
                     if (!result.IsValid)
-                    {
-                        var errors = result.Errors
-                            .GroupBy(x => x.PropertyName, e => e.ErrorMessage)
-                            .ToDictionary(g => g.Key, g => g.ToArray());
-                        
-                        return TypedResults.ValidationProblem(errors);
-                    }
+                        return TypedResults.ValidationProblem(result.ToDictionary());
                         
                     
                     var playerId = await dbContext
                         .Players.Where(x => x.UserId == http.User.GetUserId())
                         .Select(x => x.Id)
-                        .FirstAsync();
+                        .FirstAsync(cancellationToken);
 
 
                     var newCharacter = new Character()
@@ -156,7 +156,7 @@ internal static class CharacterEndPoints
 
                     dbContext.Characters.Add(newCharacter);
 
-                    //await dbContext.SaveChangesAsync();
+                    await dbContext.SaveChangesAsync(cancellationToken);
 
                     return TypedResults.Created("/characters", newCharacter.Id);
                 }
