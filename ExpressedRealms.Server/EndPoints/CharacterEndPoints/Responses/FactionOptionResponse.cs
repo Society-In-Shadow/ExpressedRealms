@@ -1,3 +1,3 @@
-namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.DTOs;
+namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.Responses;
 
-public record FactionOptionResponse(int Id, string Name, string ShortDescription);
+public record FactionOptionResponse(int Id, string Name, string Description);

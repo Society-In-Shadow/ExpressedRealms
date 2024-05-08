@@ -3,6 +3,7 @@ using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.DTOs;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.Requests;
+using ExpressedRealms.Server.EndPoints.CharacterEndPoints.Responses;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs;
 using ExpressedRealms.Server.Extensions;
 using FluentValidation;
@@ -71,21 +72,66 @@ internal static class CharacterEndPoints
             .MapGet(
                 "FactionOptions/{expressionId}",
                 [Authorize]
-                async (int expressionId, ExpressedRealmsDbContext dbContext, HttpContext http) =>
+                async Task<Results<NotFound, Ok<List<FactionOptionResponse>>>>
+                    (int expressionId, ExpressedRealmsDbContext dbContext, HttpContext http, CancellationToken cancellationToken) =>
                 {
+
+                    var isValidExpression = await dbContext.Expressions.AnyAsync(
+                        x => x.Id == expressionId,
+                        cancellationToken
+                    );
+
+                    if (!isValidExpression)
+                    {
+                        return TypedResults.NotFound();
+                    }
+                    
                     var factions = await dbContext
                         .ExpressionSections.Where(x =>
                             x.ExpressionId == expressionId
                             && x.SectionTypeId == (int)ExpressionSectionType.FactionType
                         )
                         .Select(x => new FactionOptionResponse(x.Id, x.Name, x.Content))
-                        .ToListAsync();
+                        .ToListAsync(cancellationToken);
 
                     return TypedResults.Ok(factions);
                 }
             )
-            .WithSummary("Returns info needed for selecting a faction")
-            .WithDescription("Returns info needed for selecting a faction.")
+            .WithSummary("Returns info needed for selecting a faction for character create")
+            .WithDescription("Returns info needed for selecting a faction for character create.")
+            .RequireAuthorization();
+
+        
+        endpointGroup
+            .MapGet(
+                "{characterId}/factionOptions",
+                [Authorize]
+                async Task<Results<NotFound, Ok<List<FactionOptionResponse>>>>
+                (int characterId, ExpressedRealmsDbContext dbContext, HttpContext http, CancellationToken cancellationToken) =>
+                {
+                    
+                    var character = await dbContext.Characters.FirstOrDefaultAsync(x =>
+                        x.Id == characterId && x.Player.UserId == http.User.GetUserId()
+                    );
+
+                    if (character is null || character.IsDeleted)
+                    {
+                        return TypedResults.NotFound();
+                    }
+                    
+                    var factions = await dbContext
+                        .ExpressionSections.Where(x =>
+                            x.ExpressionId == character.ExpressionId
+                            && x.SectionTypeId == (int)ExpressionSectionType.FactionType
+                        )
+                        .Select(x => new FactionOptionResponse(x.Id, x.Name, x.Content))
+                        .ToListAsync(cancellationToken);
+
+                    return TypedResults.Ok(factions);
+                }
+            )
+            .WithSummary("Returns info needed for selecting a faction on edit character.")
+            .WithDescription("Returns info needed for selecting a faction on edit character.")
             .RequireAuthorization();
 
         endpointGroup
