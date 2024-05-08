@@ -1,6 +1,6 @@
-namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.DTOs;
+namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.Responses;
 
-public class CharacterDTO
+public class CharacterEditResponse
 {
     /// <example>John Doe</example>
     public string Name { get; set; } = null!;
@@ -10,4 +10,7 @@ public class CharacterDTO
 
     /// <example>Adept</example>
     public string Expression { get; set; }
+
+    /// <example>8</example>
+    public int FactionId { get; set; }
 }

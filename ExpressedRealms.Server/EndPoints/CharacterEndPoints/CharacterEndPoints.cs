@@ -138,7 +138,7 @@ internal static class CharacterEndPoints
             .MapGet(
                 "{id}",
                 [Authorize]
-                async Task<Results<NotFound, Ok<CharacterDTO>>> (
+                async Task<Results<NotFound, Ok<CharacterEditResponse>>> (
                     int id,
                     ExpressedRealmsDbContext dbContext,
                     HttpContext http
@@ -148,11 +148,12 @@ internal static class CharacterEndPoints
                         .Characters.Where(x =>
                             x.Id == id && x.Player.UserId == http.User.GetUserId()
                         )
-                        .Select(x => new CharacterDTO()
+                        .Select(x => new CharacterEditResponse()
                         {
                             Name = x.Name,
                             Background = x.Background,
-                            Expression = x.Expression.Name
+                            Expression = x.Expression.Name,
+                            FactionId = x.FactionId
                         })
                         .FirstOrDefaultAsync();
 
