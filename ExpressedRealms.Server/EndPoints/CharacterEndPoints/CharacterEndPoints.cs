@@ -72,10 +72,13 @@ internal static class CharacterEndPoints
             .MapGet(
                 "FactionOptions/{expressionId}",
                 [Authorize]
-                async Task<Results<NotFound, Ok<List<FactionOptionResponse>>>>
-                    (int expressionId, ExpressedRealmsDbContext dbContext, HttpContext http, CancellationToken cancellationToken) =>
+                async Task<Results<NotFound, Ok<List<FactionOptionResponse>>>> (
+                    int expressionId,
+                    ExpressedRealmsDbContext dbContext,
+                    HttpContext http,
+                    CancellationToken cancellationToken
+                ) =>
                 {
-
                     var isValidExpression = await dbContext.Expressions.AnyAsync(
                         x => x.Id == expressionId,
                         cancellationToken
@@ -85,7 +88,7 @@ internal static class CharacterEndPoints
                     {
                         return TypedResults.NotFound();
                     }
-                    
+
                     var factions = await dbContext
                         .ExpressionSections.Where(x =>
                             x.ExpressionId == expressionId
@@ -101,15 +104,17 @@ internal static class CharacterEndPoints
             .WithDescription("Returns info needed for selecting a faction for character create.")
             .RequireAuthorization();
 
-        
         endpointGroup
             .MapGet(
                 "{characterId}/factionOptions",
                 [Authorize]
-                async Task<Results<NotFound, Ok<List<FactionOptionResponse>>>>
-                (int characterId, ExpressedRealmsDbContext dbContext, HttpContext http, CancellationToken cancellationToken) =>
+                async Task<Results<NotFound, Ok<List<FactionOptionResponse>>>> (
+                    int characterId,
+                    ExpressedRealmsDbContext dbContext,
+                    HttpContext http,
+                    CancellationToken cancellationToken
+                ) =>
                 {
-                    
                     var character = await dbContext.Characters.FirstOrDefaultAsync(x =>
                         x.Id == characterId && x.Player.UserId == http.User.GetUserId()
                     );
@@ -118,7 +123,7 @@ internal static class CharacterEndPoints
                     {
                         return TypedResults.NotFound();
                     }
-                    
+
                     var factions = await dbContext
                         .ExpressionSections.Where(x =>
                             x.ExpressionId == character.ExpressionId
@@ -141,7 +146,8 @@ internal static class CharacterEndPoints
                 async Task<Results<NotFound, Ok<CharacterEditResponse>>> (
                     int id,
                     ExpressedRealmsDbContext dbContext,
-                    HttpContext http
+                    HttpContext http,
+                    CancellationToken cancellationToken
                 ) =>
                 {
                     var character = await dbContext
@@ -155,7 +161,7 @@ internal static class CharacterEndPoints
                             Expression = x.Expression.Name,
                             FactionId = x.FactionId
                         })
-                        .FirstOrDefaultAsync();
+                        .FirstOrDefaultAsync(cancellationToken);
 
                     if (character is null)
                         return TypedResults.NotFound();
