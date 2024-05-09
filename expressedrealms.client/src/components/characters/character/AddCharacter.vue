@@ -54,6 +54,7 @@ const onSubmit = handleSubmit((values) => {
 function loadFactions(){
   axios.get(`/api/characters/factionOptions/${expression.value.id}`)
       .then((response) => {
+        faction.value = null;
         factions.value = response.data;
       })
 }
