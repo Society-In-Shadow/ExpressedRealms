@@ -49,3 +49,11 @@ Then for the actual testing (Tweak as needed)
 cy.get('@toasterSuccess').should('have.been.calledWith', 'Title', 'Message');
 cy.get('@toasterSuccess').should('have.been.calledWith', 'Message');
 ```
+
+## Testing Drop-Downs
+
+You need to use Contains to find the value.  You cannot verify the actual id, just the name of the option. Like so:
+
+```typescript
+cy.dataCy(faction).contains(factionValues.find(x => x.id == factionDefaultValue).name);
+```

@@ -13,6 +13,13 @@ import SmallStatDisplay from "@/components/characters/character/SmallStatDisplay
 const route = useRoute()
 import Breadcrumb from 'primevue/breadcrumb';
 import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
+import DropdownWrapper from "@/FormWrappers/DropdownWrapper.vue";
+
+interface faction{
+  id: number,
+  name: string,
+  description: string
+};
 
 onMounted(() =>{
   axios.get(`/api/characters/${route.params.id}`)
@@ -20,8 +27,18 @@ onMounted(() =>{
         name.value = response.data.name;
         background.value = response.data.background;
         expression.value = response.data.expression;
-        isLoading.value = false;
-      })
+        //faction.value = response.data.factionId
+        
+        axios.get(`/api/characters/${route.params.id}/factionOptions`)
+            .then((factionResponse) => {
+              factions.value = factionResponse.data;
+              
+              faction.value = factionResponse.data.find(x => x.id == response.data.factionId);
+              isLoading.value = false;
+            })
+      });
+  
+  
 });
 
 const { defineField, handleSubmit, errors } = useForm({
@@ -29,6 +46,8 @@ const { defineField, handleSubmit, errors } = useForm({
     name: string().required()
         .max(150)
         .label("Name"),
+    faction: object().required()
+        .label('Faction'),
     background: string()
         .label('Background'),
   })
@@ -36,14 +55,17 @@ const { defineField, handleSubmit, errors } = useForm({
 
 const [name] = defineField('name');
 const [background] = defineField('background');
+const [faction] = defineField('faction');
 const expression = ref("");
 const isLoading = ref(true);
+const factions = ref([]);
 
 const onSubmit = handleSubmit((values) => {
   axios.put('/api/characters/', {
     name: values.name,
     background: values.background,
-    id: route.params.id
+    id: route.params.id,
+    factionId: values.faction.id
   }).then(() => {
     toaster.success("Successfully Updated Character Info!");
   });
@@ -81,6 +103,9 @@ const home = ref({
           <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" :show-skeleton="isLoading" @change="onSubmit" />
           <InputTextWrapper v-model="expression" field-name="Expression" disabled :show-skeleton="isLoading" @change="onSubmit" />
           <TextAreaWrapper v-model="background" field-name="Background" :error-text="errors.background" :show-skeleton="isLoading" @change="onSubmit" />
+          <DropdownWrapper v-model="faction" option-label="name" :options="factions" field-name="Faction" :error-text="errors.factionId" :show-skeleton="isLoading" @change="onSubmit" >
+            <div data-cy="faction-description" class="m-2" v-html="faction?.description ?? ''" ></div>
+          </DropdownWrapper>
         </form>
       </template>
     </Card>

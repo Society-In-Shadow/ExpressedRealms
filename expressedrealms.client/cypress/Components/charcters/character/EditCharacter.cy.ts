@@ -9,8 +9,14 @@ const backgroundHelp = 'background-help'
 const backgroundDefaultValue = "The anonymous person";
 const expression = "expression";
 const expressionHelp = 'expression-help'
+const faction = "faction";
+const factionHelp = "faction-help"
+const factionDefaultValue = 4;
 const expressionDefaultValue = "Adept";
-
+const factionValues = [
+    { id: 4, name: "Too", description: "Far" },
+    { id: 5, name: "Loo", description: "Yoo" }
+]
 describe('<EditCharacter />', () => {
     beforeEach(() => {
 
@@ -19,7 +25,8 @@ describe('<EditCharacter />', () => {
             body: {
                 name: nameDefaultValue,
                 background: backgroundDefaultValue,
-                expression: expressionDefaultValue
+                expression: expressionDefaultValue,
+                factionId: factionDefaultValue
             }
         }).as('getCharacter');
         
@@ -27,6 +34,11 @@ describe('<EditCharacter />', () => {
             statusCode: 200,
             body: [{}, {}, {}, {}, {}, {}]
         })
+        
+        cy.intercept('GET', '/api/characters/3/factionOptions', {
+            statusCode: 200,
+            body: factionValues
+        }).as('getFactionOptions');
 
         cy.intercept('PUT', '/api/characters', {
             statusCode: 200,
@@ -43,12 +55,15 @@ describe('<EditCharacter />', () => {
         cy.dataCy(nameHelp).should('not.be.visible');
         cy.dataCy(backgroundHelp).should('not.be.visible');
         cy.dataCy(expressionHelp).should('not.be.visible');
+        cy.dataCy(factionHelp).should('not.be.visible');
     });
     
     it('Loading Page Will Grab Data From API and Load It In', () => {
+        cy.get('@getFactionOptions');
         cy.dataCy(name).should("have.value", nameDefaultValue);
         cy.dataCy(background).should("have.value", backgroundDefaultValue);
         cy.dataCy(expression).should("have.value", expressionDefaultValue);
+        cy.dataCy(faction).contains(factionValues.find(x => x.id == factionDefaultValue).name);
     });
     
     it('Name Field follows all Schema Validations and Updates Automatically', () => {
@@ -72,6 +87,23 @@ describe('<EditCharacter />', () => {
     
     it('Expression Field is Disabled', () => {
         cy.dataCy(expression).should('be.disabled');
+    })
+
+    it('Faction Field Populates Data', () => {
+        cy.get("@getFactionOptions");
+        cy.dataCy(faction).click();
+        cy.get("#faction_list li").each(($ele, i) => {
+            expect($ele).to.have.text(factionValues[i].name)
+        });
+        cy.get("#faction_0").click();
+        cy.dataCy(factionHelp).should('not.be.visible');
+        cy.dataCy("faction-description").contains(factionValues[0].description);
+
+        cy.get('@updateCharacter').its('request.body')
+            .should('have.property', 'factionId', 4);
+        cy.get('@updateCharacter').its('request.body')
+            .should('have.property', 'id', '3');
+        cy.get('@toasterSuccess').should('have.been.calledWith', 'Successfully Updated Character Info!');
     })
 
     it('Background Follows all Schema Validations and Updates Automatically', () => {
