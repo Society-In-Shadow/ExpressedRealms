@@ -4,6 +4,8 @@ const name = 'name';
 const nameHelp = 'name-help';
 const expression = 'expression';
 const expressionHelp = 'expression-help';
+const faction = 'faction';
+const factionHelp = 'faction-help';
 const background = 'background';
 const backgroundHelp = 'background-help'
 
@@ -11,6 +13,11 @@ const addCharacterButton = 'add-character-button';
 const expressionValues = [
     { id: 1, name: "Foo", shortDescription: "Bar" },
     { id: 2, name: "Boo", shortDescription: "Goo" }
+]
+
+const factionValues = [
+    { id: 4, name: "Too", description: "Far" },
+    { id: 5, name: "Loo", description: "Yoo" }
 ]
 
 describe('<AddCharacter />', () => {
@@ -26,6 +33,11 @@ describe('<AddCharacter />', () => {
                 expressions: expressionValues
             }
         }).as('addOptions');
+
+        cy.intercept('GET', '/api/characters/factionOptions/1', {
+            statusCode: 200,
+            body: factionValues
+        }).as('factionOptions');
         
         cy.mount(addUserProfile);
     });
@@ -33,6 +45,7 @@ describe('<AddCharacter />', () => {
     it('Loading the page doesn\'t validate right away', () => {
         cy.dataCy(nameHelp).should('not.be.visible');
         cy.dataCy(backgroundHelp).should('not.be.visible');
+        cy.dataCy(factionHelp).should('not.be.visible');
     });
     
     it('Name Field follows all Schema Validations', () => {
@@ -57,12 +70,31 @@ describe('<AddCharacter />', () => {
         cy.dataCy("expression-short-description").contains(expressionValues[0].shortDescription);
     })
 
+    it('Faction Field Populates Data', () => {
+        cy.dataCy(faction).should('have.class', 'p-disabled');
+        cy.dataCy(expression).click();
+        cy.get("#expression_0").click();
+        cy.get("@factionOptions");
+        cy.dataCy(faction).should('not.have.class', 'p-disabled');
+        cy.dataCy(addCharacterButton).click();
+        cy.dataCy(factionHelp).contains("Faction is a required field");
+        cy.dataCy(faction).click();
+        cy.get("#faction_list li").each(($ele, i) => {
+            expect($ele).to.have.text(factionValues[i].name)
+        });
+        cy.get("#faction_0").click();
+        cy.dataCy(factionHelp).should('not.be.visible');
+        cy.dataCy("faction-description").contains(factionValues[0].description);
+    })
+
     it('Passes Data Through Data To API', () => {
         
         cy.dataCy(name).clear();
         cy.dataCy(name).type("John Doe");
         cy.dataCy(expression).click();
         cy.get("#expression_0").click();
+        cy.dataCy(faction).click();
+        cy.get("#faction_0").click();
         cy.dataCy(background).clear();
         cy.dataCy(background).type("5555555555");
         cy.dataCy(addCharacterButton).click();
@@ -71,6 +103,7 @@ describe('<AddCharacter />', () => {
             name: 'John Doe',
             expressionId: expressionValues[0].id,
             background: '5555555555',
+            factionId: factionValues[0].id
         });
     });
     

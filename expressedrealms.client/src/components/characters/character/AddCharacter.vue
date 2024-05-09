@@ -19,14 +19,18 @@ const { defineField, handleSubmit, errors } = useForm({
     background: string()
         .label('Background'),
     expressionId: object().required()
-        .label("Expression")
+        .label("Expression"),
+    factionId: object().required()
+        .label("Faction")
   })
 });
 
 const [name] = defineField('name');
 const [background] = defineField('background');
 const [expression] = defineField('expressionId');
+const [faction] = defineField('factionId');
 const expressions = ref([]);
+const factions = ref([]);
 
 onMounted(() =>{
   axios.get(`/api/characters/options`)
@@ -39,12 +43,20 @@ const onSubmit = handleSubmit((values) => {
   axios.post('/api/characters', {
     name: values.name,
     expressionId: values.expressionId.id,
-    background: values.background
+    background: values.background,
+    factionId: values.factionId.id
   })
       .then(() => {
         Router.push("/characters");
       });
 });
+
+function loadFactions(){
+  axios.get(`/api/characters/factionOptions/${expression.value.id}`)
+      .then((response) => {
+        factions.value = response.data;
+      })
+}
 
 </script>
 
@@ -57,10 +69,13 @@ const onSubmit = handleSubmit((values) => {
       <template #content>
         <form @submit="onSubmit">
           <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" />
-          <DropdownWrapper v-model="expression" option-label="name" :options="expressions" field-name="Expression" :error-text="errors.expressionId">
+          <DropdownWrapper v-model="expression" option-label="name" :options="expressions" field-name="Expression" :error-text="errors.expressionId" @change="loadFactions()">
             <div data-cy="expression-short-description" class="m-2">
               {{ expression?.shortDescription ?? "" }}
             </div>
+          </DropdownWrapper>
+          <DropdownWrapper v-model="faction" option-label="name" :options="factions" field-name="Faction" :error-text="errors.factionId" :disabled="!expression">
+            <div data-cy="faction-description" class="m-2" v-html="faction?.description ?? ''" ></div>
           </DropdownWrapper>
           <TextAreaWrapper v-model="background" field-name="Background" :error-text="errors.background" />
           <Button data-cy="add-character-button" label="Add Character" class="w-100 mb-2" type="submit" />
