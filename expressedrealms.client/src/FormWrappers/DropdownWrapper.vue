@@ -51,7 +51,7 @@ const dataCyTagCalc = computed(() => {
     <label :for="dataCyTagCalc">{{ props.fieldName }}</label>
     <Skeleton v-if="showSkeleton" :id="dataCyTagCalc + '-skeleton'" class="w-100" height="3em" />
     <Dropdown
-      :id="dataCyTagCalc" v-model="model" :options="options" :option-label="optionLabel" :data-cy="dataCyTagCalc"
+      v-else :id="dataCyTagCalc" v-model="model" :options="options" :option-label="optionLabel" :data-cy="dataCyTagCalc"
       class="w-100" :class="{ 'p-invalid': errorText }" v-bind="$attrs"
     />
     <small :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ errorText }}</small>
