@@ -8,8 +8,10 @@ import Card from "primevue/card";
 import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
 import Router from "@/router";
 import TextAreaWrapper from "@/FormWrappers/TextAreaWrapper.vue";
-import {onMounted, ref} from "vue";
+import {onMounted, ref, computed} from "vue";
 import DropdownWrapper from "@/FormWrappers/DropdownWrapper.vue";
+import {makeIdSafe} from "@/utilities/stringUtilities";
+import DropdownInfoWrapper from "@/FormWrappers/DropdownInfoWrapper.vue";
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
@@ -31,11 +33,14 @@ const [expression] = defineField('expressionId');
 const [faction] = defineField('factionId');
 const expressions = ref([]);
 const factions = ref([]);
+const isLoadingFactions = ref(true);
+const isLoadingExpressions = ref(true);
 
 onMounted(() =>{
   axios.get(`/api/characters/options`)
       .then((response) => {
         expressions.value = response.data.expressions;
+        isLoadingExpressions.value = false;
       })
 });
 
@@ -52,12 +57,23 @@ const onSubmit = handleSubmit((values) => {
 });
 
 function loadFactions(){
+  isLoadingFactions.value = true;
   axios.get(`/api/characters/factionOptions/${expression.value.id}`)
       .then((response) => {
         faction.value = null;
         factions.value = response.data;
+        isLoadingFactions.value = false;
       })
 }
+
+
+const expressionRedirectURL = computed(() => {
+  if(!isLoadingFactions.value && faction){
+    return `/expressions/${expression.value.name.toLowerCase()}#${makeIdSafe(faction.value.name)}`;
+  }
+  return '';
+})
+
 
 </script>
 
@@ -70,14 +86,12 @@ function loadFactions(){
       <template #content>
         <form @submit="onSubmit">
           <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" />
-          <DropdownWrapper v-model="expression" option-label="name" :options="expressions" field-name="Expression" :error-text="errors.expressionId" @change="loadFactions()">
+          <DropdownWrapper v-model="expression" option-label="name" :options="expressions" field-name="Expression" :error-text="errors.expressionId" @change="loadFactions()" :show-skeleton="isLoadingExpressions">
             <div data-cy="expression-short-description" class="m-2">
               {{ expression?.shortDescription ?? "" }}
             </div>
           </DropdownWrapper>
-          <DropdownWrapper v-model="faction" option-label="name" :options="factions" field-name="Faction" :error-text="errors.factionId" :disabled="!expression">
-            <div data-cy="faction-description" class="m-2" v-html="faction?.description ?? ''" ></div>
-          </DropdownWrapper>
+          <DropdownInfoWrapper v-if="expression" v-model="faction" option-label="name" :options="factions" field-name="Faction" :error-text="errors.factionId" :disabled="!expression" :redirect-url="expressionRedirectURL" :show-skeleton="isLoadingFactions" :redirect-to-different-page="true"/>
           <TextAreaWrapper v-model="background" field-name="Background" :error-text="errors.background" />
           <Button data-cy="add-character-button" label="Add Character" class="w-100 mb-2" type="submit" />
         </form>
