@@ -4,7 +4,7 @@ import Dropdown from 'primevue/dropdown';
 import {computed} from "vue";
 import Skeleton from 'primevue/skeleton';
 
-const model = defineModel({ required: true, default: {}, type: Number });
+const model = defineModel({ required: true, default: {}, type: Object });
 
 defineOptions({
   inheritAttrs: false
