@@ -41,6 +41,10 @@ const props = defineProps({
   redirectUrl:{
     type: String,
     required: true
+  },
+  redirectToDifferentPage:{
+    type: Boolean,
+    default: false
   }
 });
 
@@ -52,7 +56,11 @@ const dataCyTagCalc = computed(() => {
 });
 
 function redirectUser() {
-  Router.push(props.redirectUrl);
+  if(!props.redirectToDifferentPage){
+    Router.push(props.redirectUrl);
+  }else{
+    window.open(props.redirectUrl, "_blank");
+  }
 }
 
 </script>
