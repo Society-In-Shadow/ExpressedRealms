@@ -5,7 +5,7 @@ import axios from "axios";
 import {onBeforeRouteUpdate, useRoute} from 'vue-router'
 const route = useRoute()
 
-import {onMounted, ref } from "vue";
+import {onMounted, ref, nextTick } from "vue";
 import Card from "primevue/card";
 import ExpressionToC from "@/components/expressions/ExpressionToC.vue";
 import Skeleton from 'primevue/skeleton';
@@ -35,9 +35,13 @@ let sections = ref([
 const isLoading = ref(true);
 function fetchData(name: string) {
   axios.get(`/api/expression/${name}`)
-      .then((json) => {
+      .then(async (json) => {
         sections.value = json.data;
         isLoading.value = false;
+        if(location.hash){
+          await nextTick();
+          window.location.replace(location.hash);
+        }        
       });
 }
 
