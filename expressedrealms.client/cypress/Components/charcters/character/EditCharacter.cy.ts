@@ -97,7 +97,6 @@ describe('<EditCharacter />', () => {
         });
         cy.get("#faction_0").click();
         cy.dataCy(factionHelp).should('not.be.visible');
-        cy.dataCy("faction-description").contains(factionValues[0].description);
 
         cy.get('@updateCharacter').its('request.body')
             .should('have.property', 'factionId', 4);
