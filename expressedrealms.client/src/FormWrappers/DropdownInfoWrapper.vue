@@ -55,8 +55,8 @@ const dataCyTagCalc = computed(() => {
   return props.fieldName.replace(" ", "-").toLowerCase();
 });
 
-function redirectUser() {
-  if(!props.redirectToDifferentPage){
+function redirectUser(openInNewTab:boolean) {
+  if(!openInNewTab){
     Router.push(props.redirectUrl);
   }else{
     window.open(props.redirectUrl, "_blank");
@@ -74,7 +74,7 @@ function redirectUser() {
           :id="dataCyTagCalc" v-model="model" :options="options" :option-label="optionLabel" :data-cy="dataCyTagCalc"
           class="w-100" :class="{ 'p-invalid': errorText }" v-bind="$attrs"
       />
-      <Button icon="pi pi-info-circle" severity="info" @click="redirectUser"></Button>
+      <Button icon="pi pi-info-circle" severity="info" @click="redirectUser(props.redirectToDifferentPage)" @click.middle="redirectUser(true)"></Button>
     </InputGroup>
     <small :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ errorText }}</small>
     <slot />
