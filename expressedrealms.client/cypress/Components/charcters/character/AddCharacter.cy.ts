@@ -6,7 +6,6 @@ const expression = 'expression';
 const expressionHelp = 'expression-help';
 const faction = 'faction';
 const factionHelp = 'faction-help';
-const factionDescription = 'faction-description';
 const background = 'background';
 const backgroundHelp = 'background-help'
 
@@ -19,6 +18,11 @@ const expressionValues = [
 const factionValues = [
     { id: 4, name: "Too", description: "Far" },
     { id: 5, name: "Loo", description: "Yoo" }
+]
+
+const factionValues2 = [
+    { id: 6, name: "Hoo", description: "Gar" },
+    { id: 7, name: "Moo", description: "Boo" }
 ]
 
 describe('<AddCharacter />', () => {
@@ -35,10 +39,15 @@ describe('<AddCharacter />', () => {
             }
         }).as('addOptions');
 
-        cy.intercept('GET', '/api/characters/factionOptions/*', {
+        cy.intercept('GET', '/api/characters/factionOptions/1', {
             statusCode: 200,
             body: factionValues
         }).as('factionOptions');
+
+        cy.intercept('GET', '/api/characters/factionOptions/2', {
+            statusCode: 200,
+            body: factionValues2
+        }).as('factionOptions2');
         
         cy.mount(addUserProfile);
     });
@@ -46,8 +55,7 @@ describe('<AddCharacter />', () => {
     it('Loading the page doesn\'t validate right away', () => {
         cy.dataCy(nameHelp).should('not.be.visible');
         cy.dataCy(backgroundHelp).should('not.be.visible');
-        cy.dataCy(factionHelp).should('not.be.visible');
-        cy.dataCy(factionDescription).should('be.empty');
+        cy.dataCy(factionHelp).should('not.exist');
     });
     
     it('Name Field follows all Schema Validations', () => {
@@ -74,12 +82,12 @@ describe('<AddCharacter />', () => {
 
     it('Faction Field Populates Data', () => {
         // Faction needs to be disabled until after an expression has been selected
-        cy.dataCy(faction).should('have.class', 'p-disabled');
+        cy.dataCy(faction).should('not.exist');
         cy.dataCy(expression).click();
         cy.get("#expression_0").click();
         cy.get("@factionOptions");
         // Select after selecting, it should now be visable and testable
-        cy.dataCy(faction).should('not.have.class', 'p-disabled');
+        cy.dataCy(faction).should('exist');
         cy.dataCy(addCharacterButton).click();
         cy.dataCy(factionHelp).contains("Faction is a required field");
         cy.dataCy(faction).click();
@@ -88,11 +96,11 @@ describe('<AddCharacter />', () => {
         });
         cy.get("#faction_0").click();
         cy.dataCy(factionHelp).should('not.be.visible');
-        cy.dataCy("faction-description").contains(factionValues[0].description);
         // If you change expression, it should clear out the old stuff
         cy.dataCy(expression).click();
         cy.get("#expression_1").click();
-        cy.dataCy(factionDescription).should('be.empty');
+        cy.get("@factionOptions2")
+        cy.dataCy(factionHelp).contains("Faction is a required field");
     })
 
     it('Passes Data Through Data To API', () => {

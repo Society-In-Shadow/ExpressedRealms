@@ -68,7 +68,7 @@ function loadFactions(){
 
 
 const expressionRedirectURL = computed(() => {
-  if(!isLoadingFactions.value && faction){
+  if(!isLoadingFactions.value && faction.value){
     return `/expressions/${expression.value.name.toLowerCase()}#${makeIdSafe(faction.value.name)}`;
   }
   return '';
