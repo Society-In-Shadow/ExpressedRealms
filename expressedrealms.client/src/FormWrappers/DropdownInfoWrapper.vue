@@ -7,7 +7,7 @@ import InputGroup from 'primevue/inputgroup';
 import Button from 'primevue/button'
 import Router from "@/router";
 
-const model = defineModel({ required: true, default: {}, type: Object });
+const model = defineModel({ required: false, default: {}, type: Object });
 
 defineOptions({
   inheritAttrs: false
@@ -74,7 +74,7 @@ function redirectUser(openInNewTab:boolean) {
           :id="dataCyTagCalc" v-model="model" :options="options" :option-label="optionLabel" :data-cy="dataCyTagCalc"
           class="w-100" :class="{ 'p-invalid': errorText }" v-bind="$attrs"
       />
-      <Button icon="pi pi-info-circle" severity="info" @click="redirectUser(props.redirectToDifferentPage)" @click.middle="redirectUser(true)"></Button>
+      <Button icon="pi pi-info-circle" severity="info" @click="redirectUser(props.redirectToDifferentPage)" @click.middle="redirectUser(true)" :disabled="!model"></Button>
     </InputGroup>
     <small :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ errorText }}</small>
     <slot />
