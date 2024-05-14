@@ -71,10 +71,10 @@ function redirectUser(openInNewTab:boolean) {
     <Skeleton v-if="showSkeleton" :id="dataCyTagCalc + '-skeleton'" class="w-100" height="3em" />
     <InputGroup v-else>
       <Dropdown
-          :id="dataCyTagCalc" v-model="model" :options="options" :option-label="optionLabel" :data-cy="dataCyTagCalc"
-          class="w-100" :class="{ 'p-invalid': errorText }" v-bind="$attrs"
+        :id="dataCyTagCalc" v-model="model" :options="options" :option-label="optionLabel" :data-cy="dataCyTagCalc"
+        class="w-100" :class="{ 'p-invalid': errorText }" v-bind="$attrs"
       />
-      <Button icon="pi pi-info-circle" severity="info" @click="redirectUser(props.redirectToDifferentPage)" @click.middle="redirectUser(true)" :disabled="!model"></Button>
+      <Button icon="pi pi-info-circle" severity="info" :disabled="!model" @click="redirectUser(props.redirectToDifferentPage)" @click.middle="redirectUser(true)" />
     </InputGroup>
     <small :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ errorText }}</small>
     <slot />

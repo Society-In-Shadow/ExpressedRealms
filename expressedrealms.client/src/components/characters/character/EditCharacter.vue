@@ -16,11 +16,11 @@ import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
 import DropdownInfoWrapper from "@/FormWrappers/DropdownInfoWrapper.vue";
 import {makeIdSafe} from "@/utilities/stringUtilities";
 
-interface faction{
+interface Faction{
   id: number,
   name: string,
   description: string
-};
+}
 
 onMounted(() =>{
   axios.get(`/api/characters/${route.params.id}`)
@@ -38,7 +38,6 @@ onMounted(() =>{
             })
       });
   
-  
 });
 
 const { defineField, handleSubmit, errors } = useForm({
@@ -46,7 +45,7 @@ const { defineField, handleSubmit, errors } = useForm({
     name: string().required()
         .max(150)
         .label("Name"),
-    faction: object<faction>().required()
+    faction: object<Faction>().required()
         .label('Faction'),
     background: string()
         .label('Background'),
@@ -110,7 +109,10 @@ let expressionRedirectURL = computed(() => {
         <form @submit="onSubmit">
           <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" :show-skeleton="isLoading" @change="onSubmit" />
           <InputTextWrapper v-model="expression" field-name="Expression" disabled :show-skeleton="isLoading" @change="onSubmit" />
-          <DropdownInfoWrapper v-model="faction" option-label="name" :options="factions" field-name="Faction" :error-text="errors.factionId" :show-skeleton="isLoading" :redirect-url="expressionRedirectURL" @change="onSubmit" />
+          <DropdownInfoWrapper
+            v-model="faction" option-label="name" :options="factions" field-name="Faction" :error-text="errors.factionId"
+            :show-skeleton="isLoading" :redirect-url="expressionRedirectURL" @change="onSubmit"
+          />
           <TextAreaWrapper v-model="background" field-name="Background" :error-text="errors.background" :show-skeleton="isLoading" @change="onSubmit" />
         </form>
       </template>

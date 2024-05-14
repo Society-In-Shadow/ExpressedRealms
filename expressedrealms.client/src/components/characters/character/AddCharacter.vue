@@ -66,14 +66,12 @@ function loadFactions(){
       })
 }
 
-
 const expressionRedirectURL = computed(() => {
   if(!isLoadingFactions.value && faction.value){
     return `/expressions/${expression.value.name.toLowerCase()}#${makeIdSafe(faction.value.name)}`;
   }
   return '';
 })
-
 
 </script>
 
@@ -86,12 +84,18 @@ const expressionRedirectURL = computed(() => {
       <template #content>
         <form @submit="onSubmit">
           <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" />
-          <DropdownWrapper v-model="expression" option-label="name" :options="expressions" field-name="Expression" :error-text="errors.expressionId" @change="loadFactions()" :show-skeleton="isLoadingExpressions">
+          <DropdownWrapper
+            v-model="expression" option-label="name" :options="expressions" field-name="Expression" :error-text="errors.expressionId"
+            :show-skeleton="isLoadingExpressions" @change="loadFactions()"
+          >
             <div data-cy="expression-short-description" class="m-2">
               {{ expression?.shortDescription ?? "" }}
             </div>
           </DropdownWrapper>
-          <DropdownInfoWrapper v-if="expression" v-model="faction" option-label="name" :options="factions" field-name="Faction" :error-text="errors.factionId" :disabled="!expression" :redirect-url="expressionRedirectURL" :show-skeleton="isLoadingFactions" :redirect-to-different-page="true"/>
+          <DropdownInfoWrapper
+            v-if="expression" v-model="faction" option-label="name" :options="factions" field-name="Faction"
+            :error-text="errors.factionId" :disabled="!expression" :redirect-url="expressionRedirectURL" :show-skeleton="isLoadingFactions" :redirect-to-different-page="true"
+          />
           <TextAreaWrapper v-model="background" field-name="Background" :error-text="errors.background" />
           <Button data-cy="add-character-button" label="Add Character" class="w-100 mb-2" type="submit" />
         </form>
