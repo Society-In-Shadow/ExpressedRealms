@@ -6,6 +6,7 @@ using ExpressedRealms.Server.EndPoints.CharacterEndPoints.Requests;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.Responses;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs;
 using ExpressedRealms.Server.Extensions;
+using FluentResults;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
@@ -147,43 +148,28 @@ internal static class CharacterEndPoints
             .MapPost(
                 "",
                 async Task<
-                    Results<Created<int>, BadRequest<ValidationFailure>, ValidationProblem>
+                    Results<Created<int>, ValidationProblem>
                 > (
-                    CreateCharacterRequest dto,
-                    ExpressedRealmsDbContext dbContext,
-                    CreateCharacterRequestValidator validator,
-                    HttpContext http,
-                    CancellationToken cancellationToken
+                    CreateCharacterRequest request,
+                    ICharacterRepository repository
                 ) =>
                 {
-                    var result = await validator.ValidateAsync(
-                        dto,
-                        options => options.IncludeRuleSets("Async Checks"),
-                        cancellationToken
-                    );
 
-                    if (!result.IsValid)
-                        return TypedResults.ValidationProblem(result.ToDictionary());
-
-                    var playerId = await dbContext
-                        .Players.Where(x => x.UserId == http.User.GetUserId())
-                        .Select(x => x.Id)
-                        .FirstAsync(cancellationToken);
-
-                    var newCharacter = new Character()
+                    var result = await repository.CreateCharacter(new AddCharacterDto()
                     {
-                        PlayerId = playerId,
-                        Name = dto.Name,
-                        Background = dto.Background,
-                        ExpressionId = dto.ExpressionId,
-                        FactionId = dto.FactionId
-                    };
+                        Name = request.Name,
+                        Background = request.Background,
+                        ExpressionId = request.ExpressionId,
+                        FactionId = request.FactionId
+                    });
 
-                    dbContext.Characters.Add(newCharacter);
+                    if (result.HasError<FluentValidationFailure>())
+                    {
+                        return TypedResults.ValidationProblem(GetValidationFailure(result.Errors));
+                    }
 
-                    await dbContext.SaveChangesAsync(cancellationToken);
 
-                    return TypedResults.Created("/characters", newCharacter.Id);
+                    return TypedResults.Created("/characters", result.Value);
                 }
             )
             .RequireAuthorization();
@@ -534,5 +520,11 @@ internal static class CharacterEndPoints
                 "Returns the info needed for displaying the small stat tiles, mainly the bonus, stat name and level."
             )
             .RequireAuthorization();
+    }
+
+    private static IDictionary<string, string[]> GetValidationFailure(List<IError> errors)
+    {
+        return ((FluentValidationFailure) errors[0])
+            .ValidationFailures;
     }
 }
