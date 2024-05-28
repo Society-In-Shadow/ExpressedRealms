@@ -1,7 +1,16 @@
+using ExpressedRealms.Repositories.Characters.DTOs;
+
 namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.Responses;
 
-public class CharacterEditResponse
+public record CharacterEditResponse
 {
+    public CharacterEditResponse(GetEditCharacterDto dto)
+    {
+        Name = dto.Name;
+        Background = dto.Background;
+        Expression = dto.Expression;
+        FactionId = dto.FactionId;
+    }
     /// <example>John Doe</example>
     public string Name { get; set; } = null!;
 

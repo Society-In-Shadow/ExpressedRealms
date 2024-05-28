@@ -130,28 +130,15 @@ internal static class CharacterEndPoints
                 [Authorize]
                 async Task<Results<NotFound, Ok<CharacterEditResponse>>> (
                     int id,
-                    ExpressedRealmsDbContext dbContext,
-                    HttpContext http,
-                    CancellationToken cancellationToken
+                    ICharacterRepository repository
                 ) =>
                 {
-                    var character = await dbContext
-                        .Characters.Where(x =>
-                            x.Id == id && x.Player.UserId == http.User.GetUserId()
-                        )
-                        .Select(x => new CharacterEditResponse()
-                        {
-                            Name = x.Name,
-                            Background = x.Background,
-                            Expression = x.Expression.Name,
-                            FactionId = x.FactionId
-                        })
-                        .FirstOrDefaultAsync(cancellationToken);
+                    var character = await repository.GetCharacterInfoAsync(id);
 
                     if (character is null)
                         return TypedResults.NotFound();
 
-                    return TypedResults.Ok(character);
+                    return TypedResults.Ok(new CharacterEditResponse(character));
                 }
             )
             .RequireAuthorization();

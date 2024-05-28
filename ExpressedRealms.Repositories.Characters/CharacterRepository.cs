@@ -21,4 +21,19 @@ public class CharacterRepository(ExpressedRealmsDbContext context, IUserContext 
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<GetEditCharacterDto?> GetCharacterInfoAsync(int id)
+    {
+        return await context.Characters.AsNoTracking()
+            .Where(x =>
+                x.Id == id && x.Player.UserId == userContext.CurrentUserId()
+            )
+            .Select(x => new GetEditCharacterDto()
+            {
+                Name = x.Name,
+                Background = x.Background,
+                Expression = x.Expression.Name,
+                FactionId = x.FactionId
+            })
+            .FirstOrDefaultAsync(cancellationToken);
+    }
 }
