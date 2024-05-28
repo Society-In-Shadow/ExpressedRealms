@@ -1,5 +1,6 @@
 ﻿using ExpressedRealms.DB;
 using ExpressedRealms.DB.Characters;
+using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.Repositories.Characters.DTOs;
 using ExpressedRealms.Repositories.Characters.ExternalDependencies;
 using ExpressedRealms.Repositories.Characters.ResultFailureTypes;
@@ -67,5 +68,24 @@ public class CharacterRepository(ExpressedRealmsDbContext context, IUserContext 
         await context.SaveChangesAsync(cancellationToken);
 
         return Result.Ok(character.Id);
+    }
+    
+    public async Task<Result> DeleteCharacter(int id)
+    {
+        var character = await context.Characters.FirstOrDefaultAsync(x =>
+            x.Id == id && x.Player.UserId == userContext.CurrentUserId()
+        );
+
+        if (character is null)
+            return Result.Fail(new NotFoundFailure("Character"));
+        
+        if (character.IsDeleted)
+            return Result.Fail(new AlreadyDeletedFailure("Character"));
+        
+
+        character.SoftDelete();
+        await context.SaveChangesAsync();
+
+        return Result.Ok();
     }
 }

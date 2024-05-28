@@ -178,23 +178,22 @@ internal static class CharacterEndPoints
         endpointGroup
             .MapDelete(
                 "{id}",
-                async Task<Results<NotFound, NoContent>> (
+                async Task<Results<NotFound, NoContent, StatusCodeHttpResult>> (
                     int id,
-                    ExpressedRealmsDbContext dbContext,
-                    HttpContext http
+                    ICharacterRepository repository
                 ) =>
                 {
-                    var character = await dbContext.Characters.FirstOrDefaultAsync(x =>
-                        x.Id == id && x.Player.UserId == http.User.GetUserId()
-                    );
+                    var status = await repository.DeleteCharacter(id);
 
-                    if (character is null || character.IsDeleted)
+                    if (status.HasError<NotFoundFailure>())
                     {
                         return TypedResults.NotFound();
                     }
 
-                    character.SoftDelete();
-                    await dbContext.SaveChangesAsync();
+                    if (status.HasError<AlreadyDeletedFailure>())
+                    {
+                        return TypedResults.StatusCode(410);
+                    }
 
                     return TypedResults.NoContent();
                 }
