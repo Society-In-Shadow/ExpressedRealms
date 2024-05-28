@@ -35,6 +35,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ExpressedRealms.DB\ExpressedRealms.DB.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Email\ExpressedRealms.Email.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Repositories.Characters\ExpressedRealms.Repositories.Characters.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
 using ExpressedRealms.DB;
-using ExpressedRealms.DB.Characters;
-using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.Repositories.Characters;
+using ExpressedRealms.Repositories.Characters.DTOs;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.DTOs;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.Requests;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.Responses;
@@ -28,22 +28,7 @@ internal static class CharacterEndPoints
             .MapGet(
                 "",
                 [Authorize]
-                async (ExpressedRealmsDbContext dbContext, HttpContext http) =>
-                {
-                    var characters = await dbContext
-                        .Characters.Where(x => x.Player.UserId == http.User.GetUserId())
-                        .Select(x => new CharacterListDTO()
-                        {
-                            Id = x.Id.ToString(),
-                            Name = x.Name,
-                            Background = x.Background,
-                            Expression = x.Expression.Name
-                        })
-                        .ToListAsync();
-
-                    return TypedResults.Ok(characters);
-                }
-            )
+                async (ICharacterRepository repository) => TypedResults.Ok(await repository.GetCharactersAsync()))
             .RequireAuthorization();
 
         endpointGroup

@@ -2,6 +2,9 @@ using System.Reflection;
 using AspNetCore.SwaggerUI.Themes;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels;
+using ExpressedRealms.Repositories.Characters;
+using ExpressedRealms.Repositories.Characters.ExternalDependencies;
+using ExpressedRealms.Server.DependencyInjections;
 using ExpressedRealms.Server.EndPoints;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints;
 using ExpressedRealms.Server.EndPoints.ExpressionEndpoints;
@@ -101,6 +104,9 @@ try
     builder.Services.AddValidatorsFromAssemblyContaining<Program>();
     builder.Services.AddFluentValidationAutoValidation();
     builder.Services.AddFluentValidationRulesToSwagger();
+
+    builder.Services.AddScoped<IUserContext, UserContext>();
+    builder.Services.AddCharacterRepositoryInjections();
 
     Log.Information("Building the App");
     var app = builder.Build();
