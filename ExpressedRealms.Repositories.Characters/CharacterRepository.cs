@@ -2,6 +2,7 @@
 using ExpressedRealms.DB.Characters;
 using ExpressedRealms.Repositories.Characters.DTOs;
 using ExpressedRealms.Repositories.Characters.ExternalDependencies;
+using ExpressedRealms.Repositories.Characters.ResultFailureTypes;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 

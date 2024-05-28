@@ -1,6 +1,6 @@
 using FluentResults;
 
-namespace ExpressedRealms.Repositories.Characters;
+namespace ExpressedRealms.Repositories.Characters.ResultFailureTypes;
 
 public class FluentValidationFailure : Error
 {

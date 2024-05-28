@@ -1,6 +1,7 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.Repositories.Characters;
 using ExpressedRealms.Repositories.Characters.DTOs;
+using ExpressedRealms.Repositories.Characters.ResultFailureTypes;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.DTOs;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.Requests;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.Responses;
