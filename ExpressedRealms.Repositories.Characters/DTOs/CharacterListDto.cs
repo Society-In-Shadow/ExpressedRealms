@@ -2,7 +2,7 @@ namespace ExpressedRealms.Repositories.Characters.DTOs;
 
 public sealed record CharacterListDto
 {
-    public string Id { get; set; }
+    public string Id { get; set; } = null!;
 
     /// <example>John Doe</example>
     public string Name { get; set; } = null!;
@@ -11,5 +11,5 @@ public sealed record CharacterListDto
     public string? Background { get; set; }
 
     /// <example>Adept</example>
-    public string Expression { get; set; }
+    public string Expression { get; set; } = null!;
 }

@@ -13,9 +13,9 @@ namespace ExpressedRealms.Repositories.Characters;
 internal sealed class CharacterRepository(
     ExpressedRealmsDbContext context,
     IUserContext userContext,
-    CancellationToken cancellationToken,
     AddCharacterDtoValidator addValidator,
-    EditCharacterDtoValidator editValidator
+    EditCharacterDtoValidator editValidator,
+    CancellationToken cancellationToken
 ) : ICharacterRepository
 {
     public async Task<List<CharacterListDto>> GetCharactersAsync()

@@ -2,12 +2,13 @@
 
 ## Repository
 The repository itself should be an internal sealed class, that has a public interface.  There should be a static
-dependency class that connects them that external callers can call.
+dependency class that connects them that external callers can call.  All method calls will be suffixed with "Async" if 
+appropriate.
 
 ## Using Results Return Type
 
 ### Handling Error Types
-All failure types will have an associated class to deal pass back.  It will allow the API layer to specifically deal 
+All failure types will have an associated class to deal pass back.  It will allow the API layer to specifically deal
 any specific errors.  They will:
 
 They Will:
@@ -59,6 +60,6 @@ There are three Result Failure Types
 * Not Found Failure - Indicates that the record was not found****
 
 ### IUserContext
-This is an interface that needs to be full-filled by the caller of the repositories.  It mainly passes through the user 
+This is an interface that needs to be full-filled by the caller of the repositories.  It mainly passes through the user
 id from the front end.  The server project should have this mapped out in Dependency Injections folder
 
