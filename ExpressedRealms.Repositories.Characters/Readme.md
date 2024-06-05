@@ -59,6 +59,6 @@ There are three Result Failure Types
 * Not Found Failure - Indicates that the record was not found****
 
 ### IUserContext
-This is an interface that needs to be full-filled by the caller of the repositories.  The server project should have this 
-mapped out in Dependency Injections folder
+This is an interface that needs to be full-filled by the caller of the repositories.  It mainly passes through the user 
+id from the front end.  The server project should have this mapped out in Dependency Injections folder
 
