@@ -164,11 +164,8 @@ internal static class CharacterEndPoints
                         FactionId = request.FactionId
                     });
 
-                    if (result.HasError<FluentValidationFailure>())
-                    {
-                        return TypedResults.ValidationProblem(GetValidationFailure(result.Errors));
-                    }
-
+                    if (result.HasValidationError(out var validationProblem)) return validationProblem;
+                    result.ThrowIfErrorNotHandled();
 
                     return TypedResults.Created("/characters", result.Value);
                 }
@@ -185,15 +182,9 @@ internal static class CharacterEndPoints
                 {
                     var status = await repository.DeleteCharacter(id);
 
-                    if (status.HasError<NotFoundFailure>())
-                    {
-                        return TypedResults.NotFound();
-                    }
-
-                    if (status.HasError<AlreadyDeletedFailure>())
-                    {
-                        return TypedResults.StatusCode(410);
-                    }
+                    if (status.HasNotFound(out var notFound)) return notFound;
+                    if (status.HasBeenDeletedAlready(out var deletedAlready)) return deletedAlready;
+                    status.ThrowIfErrorNotHandled();
 
                     return TypedResults.NoContent();
                 }
