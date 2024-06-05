@@ -1,6 +1,6 @@
 namespace ExpressedRealms.Repositories.Characters.DTOs;
 
-public record EditCharacterDTO
+public sealed record EditCharacterDTO
 {
     public int Id { get; set; }
 

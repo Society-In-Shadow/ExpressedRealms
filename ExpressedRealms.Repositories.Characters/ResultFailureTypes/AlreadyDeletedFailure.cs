@@ -2,7 +2,7 @@ using FluentResults;
 
 namespace ExpressedRealms.Repositories.Characters.ResultFailureTypes;
 
-public class AlreadyDeletedFailure: Error
+public sealed class AlreadyDeletedFailure: Error
 {
     public AlreadyDeletedFailure(string objectName)
     {

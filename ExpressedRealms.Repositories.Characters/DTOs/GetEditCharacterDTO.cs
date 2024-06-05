@@ -1,6 +1,6 @@
 namespace ExpressedRealms.Repositories.Characters.DTOs;
 
-public record GetEditCharacterDto
+public sealed record GetEditCharacterDto
 {
     public string Name { get; init; } = null!;
     public string? Background { get; init; }

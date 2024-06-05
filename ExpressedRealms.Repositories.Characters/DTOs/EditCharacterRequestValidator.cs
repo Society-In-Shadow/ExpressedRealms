@@ -2,7 +2,7 @@ using FluentValidation;
 
 namespace ExpressedRealms.Repositories.Characters.DTOs;
 
-public class EditCharacterRequestValidator : AbstractValidator<EditCharacterDTO>
+internal sealed class EditCharacterRequestValidator : AbstractValidator<EditCharacterDTO>
 {
     public EditCharacterRequestValidator()
     {

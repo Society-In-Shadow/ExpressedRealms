@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Repositories.Characters.DTOs;
 
-public class AddCharacterDtoValidator : AbstractValidator<AddCharacterDto>
+internal sealed class AddCharacterDtoValidator : AbstractValidator<AddCharacterDto>
 {
     public AddCharacterDtoValidator(ExpressedRealmsDbContext dbContext)
     {

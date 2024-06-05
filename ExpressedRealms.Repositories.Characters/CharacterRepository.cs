@@ -10,7 +10,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Repositories.Characters;
 
-public class CharacterRepository(ExpressedRealmsDbContext context, IUserContext userContext, CancellationToken cancellationToken, AddCharacterDtoValidator addValidator, EditCharacterRequestValidator editValidator) : ICharacterRepository
+internal sealed class CharacterRepository(
+    ExpressedRealmsDbContext context, 
+    IUserContext userContext, 
+    CancellationToken cancellationToken, 
+    AddCharacterDtoValidator addValidator, 
+    EditCharacterRequestValidator editValidator
+) : ICharacterRepository
 {
     public async Task<List<CharacterListDTO>> GetCharactersAsync()
     {
