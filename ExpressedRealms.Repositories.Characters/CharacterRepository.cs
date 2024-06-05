@@ -82,9 +82,9 @@ internal sealed class CharacterRepository(
 
     public async Task<Result> DeleteCharacterAsync(int id)
     {
-        var character = await context.Characters.FirstOrDefaultAsync(x =>
-            x.Id == id && x.Player.UserId == userContext.CurrentUserId()
-        );
+        var character = await context
+            .Characters.IgnoreQueryFilters()
+            .FirstOrDefaultAsync(x => x.Id == id && x.Player.UserId == userContext.CurrentUserId());
 
         if (character is null)
             return Result.Fail(new NotFoundFailure("Character"));
