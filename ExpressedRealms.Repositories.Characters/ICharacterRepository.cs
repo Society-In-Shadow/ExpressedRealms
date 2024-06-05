@@ -7,7 +7,7 @@ public interface ICharacterRepository
 {
     Task<List<CharacterListDTO>> GetCharactersAsync();
     Task<Result<GetEditCharacterDto>> GetCharacterInfoAsync(int id);
-    Task<Result<int>> CreateCharacter(AddCharacterDto characterDto);
-    Task<Result> DeleteCharacter(int id);
-    Task<Result> UpdateCharacter(EditCharacterDTO dto);
+    Task<Result<int>> CreateCharacterAsync(AddCharacterDto characterDto);
+    Task<Result> DeleteCharacterAsync(int id);
+    Task<Result> UpdateCharacterAsync(EditCharacterDTO dto);
 }

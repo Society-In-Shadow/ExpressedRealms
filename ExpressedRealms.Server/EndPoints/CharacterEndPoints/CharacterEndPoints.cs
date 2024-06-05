@@ -154,7 +154,7 @@ internal static class CharacterEndPoints
                 ) =>
                 {
 
-                    var result = await repository.CreateCharacter(new AddCharacterDto()
+                    var result = await repository.CreateCharacterAsync(new AddCharacterDto()
                     {
                         Name = request.Name,
                         Background = request.Background,
@@ -178,7 +178,7 @@ internal static class CharacterEndPoints
                     ICharacterRepository repository
                 ) =>
                 {
-                    var status = await repository.DeleteCharacter(id);
+                    var status = await repository.DeleteCharacterAsync(id);
 
                     if (status.HasNotFound(out var notFound)) return notFound;
                     if (status.HasBeenDeletedAlready(out var deletedAlready)) return deletedAlready;
@@ -197,7 +197,7 @@ internal static class CharacterEndPoints
                     ICharacterRepository repository
                 ) =>
                 {
-                    var status = await repository.UpdateCharacter(new EditCharacterDTO()
+                    var status = await repository.UpdateCharacterAsync(new EditCharacterDTO()
                     {
                         Name = dto.Name,
                         Background = dto.Background,

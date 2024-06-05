@@ -47,7 +47,7 @@ public class CharacterRepository(ExpressedRealmsDbContext context, IUserContext 
         return Result.Ok(character);
     }
 
-    public async Task<Result<int>> CreateCharacter(AddCharacterDto dto)
+    public async Task<Result<int>> CreateCharacterAsync(AddCharacterDto dto)
     {
         var result = await addValidator.ValidateAsync(dto, cancellationToken);
         if (!result.IsValid)
@@ -76,7 +76,7 @@ public class CharacterRepository(ExpressedRealmsDbContext context, IUserContext 
         return Result.Ok(character.Id);
     }
     
-    public async Task<Result> DeleteCharacter(int id)
+    public async Task<Result> DeleteCharacterAsync(int id)
     {
         var character = await context.Characters.FirstOrDefaultAsync(x =>
             x.Id == id && x.Player.UserId == userContext.CurrentUserId()
@@ -95,7 +95,7 @@ public class CharacterRepository(ExpressedRealmsDbContext context, IUserContext 
         return Result.Ok();
     }
 
-    public async Task<Result> UpdateCharacter(EditCharacterDTO dto)
+    public async Task<Result> UpdateCharacterAsync(EditCharacterDTO dto)
     {
         var result = await editValidator.ValidateAsync(dto, cancellationToken);
         if (!result.IsValid)
