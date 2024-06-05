@@ -133,12 +133,12 @@ internal static class CharacterEndPoints
                     ICharacterRepository repository
                 ) =>
                 {
-                    var character = await repository.GetCharacterInfoAsync(id);
+                    var result = await repository.GetCharacterInfoAsync(id);
 
-                    if (character is null)
-                        return TypedResults.NotFound();
+                    if (result.HasNotFound(out var notFound)) return notFound;
+                    result.ThrowIfErrorNotHandled();
 
-                    return TypedResults.Ok(new CharacterEditResponse(character));
+                    return TypedResults.Ok(new CharacterEditResponse(result.Value));
                 }
             )
             .RequireAuthorization();

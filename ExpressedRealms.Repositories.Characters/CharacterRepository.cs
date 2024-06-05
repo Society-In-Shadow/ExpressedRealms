@@ -26,9 +26,9 @@ public class CharacterRepository(ExpressedRealmsDbContext context, IUserContext 
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<GetEditCharacterDto?> GetCharacterInfoAsync(int id)
+    public async Task<Result<GetEditCharacterDto>> GetCharacterInfoAsync(int id)
     {
-        return await context.Characters.AsNoTracking()
+        var character = await context.Characters.AsNoTracking()
             .Where(x =>
                 x.Id == id && x.Player.UserId == userContext.CurrentUserId()
             )
@@ -40,6 +40,11 @@ public class CharacterRepository(ExpressedRealmsDbContext context, IUserContext 
                 FactionId = x.FactionId
             })
             .FirstOrDefaultAsync(cancellationToken);
+
+        if (character is null)
+            return Result.Fail(new NotFoundFailure("Character"));
+
+        return Result.Ok(character);
     }
 
     public async Task<Result<int>> CreateCharacter(AddCharacterDto dto)
