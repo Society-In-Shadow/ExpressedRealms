@@ -1,4 +1,3 @@
-using ExpressedRealms.Repositories.Characters;
 using ExpressedRealms.Repositories.Characters.ExternalDependencies;
 using ExpressedRealms.Server.Extensions;
 

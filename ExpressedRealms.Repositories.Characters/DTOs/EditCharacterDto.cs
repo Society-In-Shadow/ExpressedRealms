@@ -12,5 +12,4 @@ public sealed record EditCharacterDto
 
     /// <example>9</example>
     public int FactionId { get; set; }
-
 }

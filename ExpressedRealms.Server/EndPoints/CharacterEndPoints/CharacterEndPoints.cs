@@ -28,7 +28,9 @@ internal static class CharacterEndPoints
             .MapGet(
                 "",
                 [Authorize]
-                async (ICharacterRepository repository) => TypedResults.Ok(await repository.GetCharactersAsync()))
+                async (ICharacterRepository repository) =>
+                    TypedResults.Ok(await repository.GetCharactersAsync())
+            )
             .RequireAuthorization();
 
         endpointGroup
@@ -135,7 +137,8 @@ internal static class CharacterEndPoints
                 {
                     var result = await repository.GetCharacterInfoAsync(id);
 
-                    if (result.HasNotFound(out var notFound)) return notFound;
+                    if (result.HasNotFound(out var notFound))
+                        return notFound;
                     result.ThrowIfErrorNotHandled();
 
                     return TypedResults.Ok(new CharacterEditResponse(result.Value));
@@ -146,23 +149,23 @@ internal static class CharacterEndPoints
         endpointGroup
             .MapPost(
                 "",
-                async Task<
-                    Results<Created<int>, ValidationProblem>
-                > (
+                async Task<Results<Created<int>, ValidationProblem>> (
                     CreateCharacterRequest request,
                     ICharacterRepository repository
                 ) =>
                 {
+                    var result = await repository.CreateCharacterAsync(
+                        new AddCharacterDto()
+                        {
+                            Name = request.Name,
+                            Background = request.Background,
+                            ExpressionId = request.ExpressionId,
+                            FactionId = request.FactionId
+                        }
+                    );
 
-                    var result = await repository.CreateCharacterAsync(new AddCharacterDto()
-                    {
-                        Name = request.Name,
-                        Background = request.Background,
-                        ExpressionId = request.ExpressionId,
-                        FactionId = request.FactionId
-                    });
-
-                    if (result.HasValidationError(out var validationProblem)) return validationProblem;
+                    if (result.HasValidationError(out var validationProblem))
+                        return validationProblem;
                     result.ThrowIfErrorNotHandled();
 
                     return TypedResults.Created("/characters", result.Value);
@@ -180,8 +183,10 @@ internal static class CharacterEndPoints
                 {
                     var status = await repository.DeleteCharacterAsync(id);
 
-                    if (status.HasNotFound(out var notFound)) return notFound;
-                    if (status.HasBeenDeletedAlready(out var deletedAlready)) return deletedAlready;
+                    if (status.HasNotFound(out var notFound))
+                        return notFound;
+                    if (status.HasBeenDeletedAlready(out var deletedAlready))
+                        return deletedAlready;
                     status.ThrowIfErrorNotHandled();
 
                     return TypedResults.NoContent();
@@ -197,18 +202,22 @@ internal static class CharacterEndPoints
                     ICharacterRepository repository
                 ) =>
                 {
-                    var status = await repository.UpdateCharacterAsync(new EditCharacterDto()
-                    {
-                        Name = dto.Name,
-                        Background = dto.Background,
-                        FactionId = dto.FactionId,
-                        Id = dto.FactionId
-                    });
+                    var status = await repository.UpdateCharacterAsync(
+                        new EditCharacterDto()
+                        {
+                            Name = dto.Name,
+                            Background = dto.Background,
+                            FactionId = dto.FactionId,
+                            Id = dto.FactionId
+                        }
+                    );
 
-                    if (status.HasNotFound(out var notFound)) return notFound;
-                    if (status.HasValidationError(out var validationProblem)) return validationProblem;
+                    if (status.HasNotFound(out var notFound))
+                        return notFound;
+                    if (status.HasValidationError(out var validationProblem))
+                        return validationProblem;
                     status.ThrowIfErrorNotHandled();
-                    
+
                     return TypedResults.NoContent();
                 }
             )

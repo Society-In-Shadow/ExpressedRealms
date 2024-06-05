@@ -11,6 +11,7 @@ public record CharacterEditResponse
         Expression = dto.Expression;
         FactionId = dto.FactionId;
     }
+
     /// <example>John Doe</example>
     public string Name { get; set; } = null!;
 

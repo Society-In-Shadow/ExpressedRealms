@@ -11,10 +11,10 @@ using Microsoft.EntityFrameworkCore;
 namespace ExpressedRealms.Repositories.Characters;
 
 internal sealed class CharacterRepository(
-    ExpressedRealmsDbContext context, 
-    IUserContext userContext, 
-    CancellationToken cancellationToken, 
-    AddCharacterDtoValidator addValidator, 
+    ExpressedRealmsDbContext context,
+    IUserContext userContext,
+    CancellationToken cancellationToken,
+    AddCharacterDtoValidator addValidator,
     EditCharacterDtoValidator editValidator
 ) : ICharacterRepository
 {
@@ -34,10 +34,9 @@ internal sealed class CharacterRepository(
 
     public async Task<Result<GetEditCharacterDto>> GetCharacterInfoAsync(int id)
     {
-        var character = await context.Characters.AsNoTracking()
-            .Where(x =>
-                x.Id == id && x.Player.UserId == userContext.CurrentUserId()
-            )
+        var character = await context
+            .Characters.AsNoTracking()
+            .Where(x => x.Id == id && x.Player.UserId == userContext.CurrentUserId())
             .Select(x => new GetEditCharacterDto()
             {
                 Name = x.Name,
@@ -58,8 +57,7 @@ internal sealed class CharacterRepository(
         var result = await addValidator.ValidateAsync(dto, cancellationToken);
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
-        
-        
+
         var playerId = await context
             .Players.Where(x => x.UserId == userContext.CurrentUserId())
             .Select(x => x.Id)
@@ -74,14 +72,14 @@ internal sealed class CharacterRepository(
         };
 
         character.PlayerId = playerId;
-        
+
         context.Characters.Add(character);
 
         await context.SaveChangesAsync(cancellationToken);
 
         return Result.Ok(character.Id);
     }
-    
+
     public async Task<Result> DeleteCharacterAsync(int id)
     {
         var character = await context.Characters.FirstOrDefaultAsync(x =>
@@ -90,10 +88,9 @@ internal sealed class CharacterRepository(
 
         if (character is null)
             return Result.Fail(new NotFoundFailure("Character"));
-        
+
         if (character.IsDeleted)
             return Result.Fail(new AlreadyDeletedFailure("Character"));
-        
 
         character.SoftDelete();
         await context.SaveChangesAsync();
@@ -106,7 +103,7 @@ internal sealed class CharacterRepository(
         var result = await editValidator.ValidateAsync(dto, cancellationToken);
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
-        
+
         var character = await context.Characters.FirstOrDefaultAsync(
             x => x.Id == dto.Id && x.Player.UserId == userContext.CurrentUserId(),
             cancellationToken
@@ -125,10 +122,14 @@ internal sealed class CharacterRepository(
 
         if (!isFaction)
         {
-            return Result.Fail(new FluentValidationFailure(new Dictionary<string, string[]>
-            {
-                { "FactionId", ["This is not a valid Faction Id."] }
-            }));
+            return Result.Fail(
+                new FluentValidationFailure(
+                    new Dictionary<string, string[]>
+                    {
+                        { "FactionId", ["This is not a valid Faction Id."] }
+                    }
+                )
+            );
         }
 
         character.Name = dto.Name;
