@@ -15,14 +15,14 @@ internal sealed class CharacterRepository(
     IUserContext userContext, 
     CancellationToken cancellationToken, 
     AddCharacterDtoValidator addValidator, 
-    EditCharacterRequestValidator editValidator
+    EditCharacterDtoValidator editValidator
 ) : ICharacterRepository
 {
-    public async Task<List<CharacterListDTO>> GetCharactersAsync()
+    public async Task<List<CharacterListDto>> GetCharactersAsync()
     {
         return await context
             .Characters.Where(x => x.Player.UserId == userContext.CurrentUserId())
-            .Select(x => new CharacterListDTO()
+            .Select(x => new CharacterListDto()
             {
                 Id = x.Id.ToString(),
                 Name = x.Name,
@@ -101,7 +101,7 @@ internal sealed class CharacterRepository(
         return Result.Ok();
     }
 
-    public async Task<Result> UpdateCharacterAsync(EditCharacterDTO dto)
+    public async Task<Result> UpdateCharacterAsync(EditCharacterDto dto)
     {
         var result = await editValidator.ValidateAsync(dto, cancellationToken);
         if (!result.IsValid)

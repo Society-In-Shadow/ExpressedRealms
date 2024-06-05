@@ -1,8 +1,8 @@
 namespace ExpressedRealms.Repositories.Characters.DTOs;
 
-public sealed record EditCharacterDTO
+public sealed class CharacterListDto
 {
-    public int Id { get; set; }
+    public string Id { get; set; }
 
     /// <example>John Doe</example>
     public string Name { get; set; } = null!;
@@ -10,7 +10,6 @@ public sealed record EditCharacterDTO
     /// <example>John Doe is a high elf from the northern woods.</example>
     public string? Background { get; set; }
 
-    /// <example>9</example>
-    public int FactionId { get; set; }
-
+    /// <example>Adept</example>
+    public string Expression { get; set; }
 }

@@ -5,9 +5,9 @@ namespace ExpressedRealms.Repositories.Characters;
 
 public interface ICharacterRepository
 {
-    Task<List<CharacterListDTO>> GetCharactersAsync();
+    Task<List<CharacterListDto>> GetCharactersAsync();
     Task<Result<GetEditCharacterDto>> GetCharacterInfoAsync(int id);
     Task<Result<int>> CreateCharacterAsync(AddCharacterDto characterDto);
     Task<Result> DeleteCharacterAsync(int id);
-    Task<Result> UpdateCharacterAsync(EditCharacterDTO dto);
+    Task<Result> UpdateCharacterAsync(EditCharacterDto dto);
 }

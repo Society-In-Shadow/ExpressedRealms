@@ -197,7 +197,7 @@ internal static class CharacterEndPoints
                     ICharacterRepository repository
                 ) =>
                 {
-                    var status = await repository.UpdateCharacterAsync(new EditCharacterDTO()
+                    var status = await repository.UpdateCharacterAsync(new EditCharacterDto()
                     {
                         Name = dto.Name,
                         Background = dto.Background,
