@@ -1,9 +1,8 @@
-using ExpressedRealms.DB;
 using FluentValidation;
 
-namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.DTOs;
+namespace ExpressedRealms.Repositories.Characters.DTOs;
 
-public class EditCharacterRequestValidator : AbstractValidator<EditCharacterRequest>
+public class EditCharacterRequestValidator : AbstractValidator<EditCharacterDTO>
 {
     public EditCharacterRequestValidator()
     {

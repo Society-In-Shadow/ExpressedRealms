@@ -2,6 +2,7 @@
 using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.Repositories.Characters.DTOs;
+using ExpressedRealms.Repositories.Characters.Enums;
 using ExpressedRealms.Repositories.Characters.ExternalDependencies;
 using ExpressedRealms.Repositories.Characters.ResultFailureTypes;
 using FluentResults;
@@ -9,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Repositories.Characters;
 
-public class CharacterRepository(ExpressedRealmsDbContext context, IUserContext userContext, CancellationToken cancellationToken, AddCharacterDtoValidator addValidator) : ICharacterRepository
+public class CharacterRepository(ExpressedRealmsDbContext context, IUserContext userContext, CancellationToken cancellationToken, AddCharacterDtoValidator addValidator, EditCharacterRequestValidator editValidator) : ICharacterRepository
 {
     public async Task<List<CharacterListDTO>> GetCharactersAsync()
     {
@@ -85,6 +86,45 @@ public class CharacterRepository(ExpressedRealmsDbContext context, IUserContext 
 
         character.SoftDelete();
         await context.SaveChangesAsync();
+
+        return Result.Ok();
+    }
+
+    public async Task<Result> UpdateCharacter(EditCharacterDTO dto)
+    {
+        var result = await editValidator.ValidateAsync(dto, cancellationToken);
+        if (!result.IsValid)
+            return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
+        
+        var character = await context.Characters.FirstOrDefaultAsync(
+            x => x.Id == dto.Id && x.Player.UserId == userContext.CurrentUserId(),
+            cancellationToken
+        );
+
+        if (character is null)
+            return Result.Fail(new NotFoundFailure("Character"));
+
+        var isFaction = await context.ExpressionSections.AnyAsync(
+            x =>
+                x.ExpressionId == character.ExpressionId
+                && x.SectionTypeId == (int)ExpressionSectionType.FactionType
+                && x.Id == dto.FactionId,
+            cancellationToken
+        );
+
+        if (!isFaction)
+        {
+            return Result.Fail(new FluentValidationFailure(new Dictionary<string, string[]>
+            {
+                { "FactionId", ["This is not a valid Faction Id."] }
+            }));
+        }
+
+        character.Name = dto.Name;
+        character.Background = dto.Background;
+        character.FactionId = dto.FactionId;
+
+        await context.SaveChangesAsync(cancellationToken);
 
         return Result.Ok();
     }

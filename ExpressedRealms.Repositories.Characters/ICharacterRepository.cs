@@ -9,4 +9,5 @@ public interface ICharacterRepository
     Task<GetEditCharacterDto?> GetCharacterInfoAsync(int id);
     Task<Result<int>> CreateCharacter(AddCharacterDto characterDto);
     Task<Result> DeleteCharacter(int id);
+    Task<Result> UpdateCharacter(EditCharacterDTO dto);
 }

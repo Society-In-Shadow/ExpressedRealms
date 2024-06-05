@@ -1,13 +1,11 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.Repositories.Characters;
 using ExpressedRealms.Repositories.Characters.DTOs;
-using ExpressedRealms.Repositories.Characters.ResultFailureTypes;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.DTOs;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.Requests;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.Responses;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs;
 using ExpressedRealms.Server.Extensions;
-using FluentResults;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
@@ -196,42 +194,21 @@ internal static class CharacterEndPoints
                 "",
                 async Task<Results<NotFound, NoContent, ValidationProblem>> (
                     EditCharacterRequest dto,
-                    ExpressedRealmsDbContext dbContext,
-                    HttpContext http,
-                    CancellationToken cancellationToken
+                    ICharacterRepository repository
                 ) =>
                 {
-                    var character = await dbContext.Characters.FirstOrDefaultAsync(
-                        x => x.Id == dto.Id && x.Player.UserId == http.User.GetUserId(),
-                        cancellationToken
-                    );
-
-                    if (character is null)
-                        return TypedResults.NotFound();
-
-                    var isFaction = await dbContext.ExpressionSections.AnyAsync(
-                        x =>
-                            x.ExpressionId == character.ExpressionId
-                            && x.SectionTypeId == (int)ExpressionSectionType.FactionType
-                            && x.Id == dto.FactionId,
-                        cancellationToken
-                    );
-
-                    if (!isFaction)
+                    var status = await repository.UpdateCharacter(new EditCharacterDTO()
                     {
-                        var errors = new Dictionary<string, string[]>
-                        {
-                            { "FactionId", ["This is not a valid Faction Id."] }
-                        };
-                        return TypedResults.ValidationProblem(errors);
-                    }
+                        Name = dto.Name,
+                        Background = dto.Background,
+                        FactionId = dto.FactionId,
+                        Id = dto.FactionId
+                    });
 
-                    character.Name = dto.Name;
-                    character.Background = dto.Background;
-                    character.FactionId = dto.FactionId;
-
-                    await dbContext.SaveChangesAsync(cancellationToken);
-
+                    if (status.HasNotFound(out var notFound)) return notFound;
+                    if (status.HasValidationError(out var validationProblem)) return validationProblem;
+                    status.ThrowIfErrorNotHandled();
+                    
                     return TypedResults.NoContent();
                 }
             )
@@ -511,11 +488,5 @@ internal static class CharacterEndPoints
                 "Returns the info needed for displaying the small stat tiles, mainly the bonus, stat name and level."
             )
             .RequireAuthorization();
-    }
-
-    private static IDictionary<string, string[]> GetValidationFailure(List<IError> errors)
-    {
-        return ((FluentValidationFailure) errors[0])
-            .ValidationFailures;
     }
 }
