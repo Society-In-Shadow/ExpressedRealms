@@ -105,6 +105,13 @@ try
     builder.Services.AddFluentValidationAutoValidation();
     builder.Services.AddFluentValidationRulesToSwagger();
 
+    builder.Services.AddHttpContextAccessor();
+    // https://stackoverflow.com/questions/64122616/cancellation-token-injection/77342914#77342914
+    builder.Services.AddScoped(typeof(CancellationToken), serviceProvider =>
+    {
+        IHttpContextAccessor httpContext = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+        return httpContext.HttpContext?.RequestAborted ?? CancellationToken.None;
+    });
     builder.Services.AddScoped<IUserContext, UserContext>();
     builder.Services.AddCharacterRepositoryInjections();
 

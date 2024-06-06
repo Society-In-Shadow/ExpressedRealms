@@ -3,17 +3,10 @@ using ExpressedRealms.Server.Extensions;
 
 namespace ExpressedRealms.Server.DependencyInjections;
 
-public class UserContext : IUserContext
+public class UserContext(IHttpContextAccessor accessor) : IUserContext
 {
-    private readonly HttpContext _httpContext;
-
-    public UserContext(HttpContext httpContext)
-    {
-        _httpContext = httpContext;
-    }
-
     public string CurrentUserId()
     {
-        return _httpContext.User.GetUserId();
+        return accessor.HttpContext.User.GetUserId();
     }
 }
