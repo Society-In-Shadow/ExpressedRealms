@@ -2,7 +2,7 @@
 
 ## Repository
 The repository itself should be an internal sealed class, that has a public interface.  There should be a static
-dependency class that connects them that external callers can call.  All method calls will be suffixed with "Async" if 
+dependency class that connects them that external callers can call.  All method calls will be suffixed with "Async" if
 appropriate.
 
 ## Using Results Return Type
