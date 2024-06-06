@@ -1,3 +1,5 @@
+using ExpressedRealms.Repositories.Characters.Stats.Enums;
+
 namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs;
 
 public class SmallStatInfo

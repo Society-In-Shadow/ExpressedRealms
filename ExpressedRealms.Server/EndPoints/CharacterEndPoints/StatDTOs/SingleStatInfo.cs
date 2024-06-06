@@ -1,7 +1,25 @@
+using ExpressedRealms.Repositories.Characters.Stats.Enums;
+
 namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs;
 
-public class SingleStatInfo
+public record SingleStatInfo
 {
+    public SingleStatInfo(Repositories.Characters.Stats.DTOs.SingleStatInfo dto)
+    {
+        Id = dto.Id;
+        Name = dto.Name;
+        Description = dto.Description;
+        StatLevel = dto.StatLevel;
+        AvailableXP = dto.AvailableXP;
+        StatLevelInfo = new StatDetails()
+        {
+            Level = dto.StatLevelInfo.Level,
+            Description = dto.StatLevelInfo.Description,
+            TotalXP = dto.StatLevelInfo.TotalXP,
+            Bonus = dto.StatLevelInfo.Bonus,
+            XP = dto.StatLevelInfo.XP,
+        };
+    }
     /// <example>6</example>
     public StatType Id { get; set; }
 

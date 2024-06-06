@@ -1,17 +1,19 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.Repositories.Characters;
 using ExpressedRealms.Repositories.Characters.DTOs;
+using ExpressedRealms.Repositories.Characters.Stats;
+using ExpressedRealms.Repositories.Characters.Stats.DTOs;
+using ExpressedRealms.Repositories.Characters.Stats.Enums;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.DTOs;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.Requests;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.Responses;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs;
 using ExpressedRealms.Server.Extensions;
-using FluentValidation;
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
+using SingleStatInfo = ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs.SingleStatInfo;
 
 namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints;
 
@@ -228,80 +230,23 @@ internal static class CharacterEndPoints
                 "{characterId}/stat/{statTypeId}",
                 [Authorize]
                 async Task<
-                    Results<NotFound, BadRequest<List<ValidationFailure>>, Ok<SingleStatInfo>>
+                    Results<NotFound, ValidationProblem, Ok<SingleStatInfo>>
                 > (
                     int characterId,
                     StatType statTypeId,
-                    IValidator<EditStatRequest> validator,
-                    ExpressedRealmsDbContext dbContext,
-                    HttpContext http
+                    ICharacterStatRepository repository
                 ) =>
                 {
-                    var result = await validator.ValidateAsync(
-                        new EditStatRequest(characterId, statTypeId)
-                    );
-                    if (!result.IsValid)
-                        return TypedResults.BadRequest<List<ValidationFailure>>(result.Errors);
-
-                    var character = await dbContext
-                        .Characters.Where(x => x.Id == characterId)
-                        .Select(x => new
-                        {
-                            AgilityId = x.AgilityId,
-                            ConstitutionId = x.ConstitutionId,
-                            DexterityId = x.DexterityId,
-                            StrengthId = x.StrengthId,
-                            IntelligenceId = x.IntelligenceId,
-                            WillpowerId = x.WillpowerId,
-                            AvailableXP = x.StatExperiencePoints
-                                - (
-                                    x.AgilityStatLevel.TotalXPCost
-                                    + x.ConstitutionStatLevel.TotalXPCost
-                                    + x.DexterityStatLevel.TotalXPCost
-                                    + x.StrengthStatLevel.TotalXPCost
-                                    + x.IntelligenceStatLevel.TotalXPCost
-                                    + x.WillpowerStatLevel.TotalXPCost
-                                )
-                        })
-                        .FirstOrDefaultAsync();
-
-                    if (character is null)
-                        return TypedResults.NotFound();
-
-                    var statLevelId = statTypeId switch
-                    {
-                        StatType.Agility => character.AgilityId,
-                        StatType.Constitution => character.ConstitutionId,
-                        StatType.Dexterity => character.DexterityId,
-                        StatType.Strength => character.StrengthId,
-                        StatType.Intelligence => character.IntelligenceId,
-                        StatType.Willpower => character.WillpowerId,
-                    };
-
-                    var statInfo = await dbContext
-                        .StateTypes.Where(x => x.Id == (byte)statTypeId)
-                        .Select(x => new SingleStatInfo()
-                        {
-                            Id = (StatType)x.Id,
-                            Name = x.Name,
-                            Description = x.Description,
-                            StatLevel = statLevelId,
-                            AvailableXP = character.AvailableXP,
-                            StatLevelInfo = x
-                                .StatDescriptionMappings.Where(y => y.StatLevelId == statLevelId)
-                                .Select(y => new StatDetails()
-                                {
-                                    Level = y.StatLevelId,
-                                    XP = y.StatLevel.XPCost,
-                                    Bonus = y.StatLevel.Bonus,
-                                    Description = y.ReasonableExpectation,
-                                    TotalXP = y.StatLevel.TotalXPCost
-                                })
-                                .First()
-                        })
-                        .FirstAsync();
-
-                    return TypedResults.Ok(statInfo);
+                    var results =
+                        await repository.GetDetailedStatInfo(new GetDetailedStatInfoDto(characterId, statTypeId));
+                    
+                    if (results.HasNotFound(out var notFound))
+                        return notFound;
+                    if (results.HasValidationError(out var validationProblem))
+                        return validationProblem;
+                    results.ThrowIfErrorNotHandled();
+                    
+                    return TypedResults.Ok(new SingleStatInfo(results.Value));
                 }
             )
             .WithSummary("This returns the detailed information for the given stat")

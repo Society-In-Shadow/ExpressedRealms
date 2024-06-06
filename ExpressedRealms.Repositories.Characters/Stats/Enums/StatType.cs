@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Server;
+namespace ExpressedRealms.Repositories.Characters.Stats.Enums;
 
 public enum StatType
 {

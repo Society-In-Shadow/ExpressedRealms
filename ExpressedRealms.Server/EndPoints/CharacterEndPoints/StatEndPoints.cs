@@ -1,4 +1,5 @@
 using ExpressedRealms.DB;
+using ExpressedRealms.Repositories.Characters.Stats.Enums;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
