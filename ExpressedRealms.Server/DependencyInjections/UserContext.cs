@@ -1,4 +1,4 @@
-using ExpressedRealms.Repositories.Characters.ExternalDependencies;
+using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Server.Extensions;
 
 namespace ExpressedRealms.Server.DependencyInjections;

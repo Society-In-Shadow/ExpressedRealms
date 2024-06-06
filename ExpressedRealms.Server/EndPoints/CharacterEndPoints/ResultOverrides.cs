@@ -1,4 +1,4 @@
-using ExpressedRealms.Repositories.Characters.ResultFailureTypes;
+using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
 using FluentResults;
 using Microsoft.AspNetCore.Http.HttpResults;
 

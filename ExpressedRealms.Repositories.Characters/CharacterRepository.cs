@@ -3,8 +3,8 @@ using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.Repositories.Characters.DTOs;
 using ExpressedRealms.Repositories.Characters.Enums;
-using ExpressedRealms.Repositories.Characters.ExternalDependencies;
-using ExpressedRealms.Repositories.Characters.ResultFailureTypes;
+using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
+using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 

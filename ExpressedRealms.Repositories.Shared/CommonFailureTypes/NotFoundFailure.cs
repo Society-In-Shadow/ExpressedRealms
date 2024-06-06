@@ -1,6 +1,6 @@
 using FluentResults;
 
-namespace ExpressedRealms.Repositories.Characters.ResultFailureTypes;
+namespace ExpressedRealms.Repositories.Shared.CommonFailureTypes;
 
 public sealed class NotFoundFailure : Error
 {

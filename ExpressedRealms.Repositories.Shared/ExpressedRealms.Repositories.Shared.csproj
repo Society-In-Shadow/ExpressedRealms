@@ -7,13 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ExpressedRealms.DB\ExpressedRealms.DB.csproj" />
-      <ProjectReference Include="..\ExpressedRealms.Repositories.Shared\ExpressedRealms.Repositories.Shared.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="FluentResults" Version="3.15.2" />
-      <PackageReference Include="FluentValidation" Version="11.9.1" />
     </ItemGroup>
 
 </Project>

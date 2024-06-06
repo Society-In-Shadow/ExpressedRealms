@@ -3,7 +3,7 @@ using AspNetCore.SwaggerUI.Themes;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels;
 using ExpressedRealms.Repositories.Characters;
-using ExpressedRealms.Repositories.Characters.ExternalDependencies;
+using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Server.DependencyInjections;
 using ExpressedRealms.Server.EndPoints;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints;
