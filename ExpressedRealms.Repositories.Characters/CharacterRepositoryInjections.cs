@@ -17,7 +17,7 @@ public static class CharacterRepositoryInjections
 
         services.AddScoped<GetDetailedStatInfoDtoValidator>();
         services.AddScoped<ICharacterStatRepository, CharacterStatRepository>();
-        
+
         return services;
     }
 }

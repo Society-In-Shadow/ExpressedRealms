@@ -24,7 +24,9 @@ internal sealed class CharacterStatRepository(
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
 
         var character = await context
-            .Characters.Where(x => x.Id == dto.CharacterId && x.Player.UserId == userContext.CurrentUserId())
+            .Characters.Where(x =>
+                x.Id == dto.CharacterId && x.Player.UserId == userContext.CurrentUserId()
+            )
             .Select(x => new
             {
                 AgilityId = x.AgilityId,
@@ -89,9 +91,11 @@ internal sealed class CharacterStatRepository(
         var result = await editStatValidator.ValidateAsync(dto);
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
-        
+
         var character = await context
-            .Characters.Where(x => x.Id == dto.CharacterId && x.Player.UserId == userContext.CurrentUserId())
+            .Characters.Where(x =>
+                x.Id == dto.CharacterId && x.Player.UserId == userContext.CurrentUserId()
+            )
             .Include(x => x.AgilityStatLevel)
             .Include(x => x.StrengthStatLevel)
             .Include(x => x.ConstitutionStatLevel)
@@ -171,7 +175,9 @@ internal sealed class CharacterStatRepository(
 
         if (availableXp < newTotalXpCost - oldTotalXpCost)
         {
-            return Result.Fail(new NotEnoughXPFailure(availableXp, newTotalXpCost - oldTotalXpCost));
+            return Result.Fail(
+                new NotEnoughXPFailure(availableXp, newTotalXpCost - oldTotalXpCost)
+            );
         }
 
         return Result.Ok();
@@ -186,13 +192,16 @@ internal sealed class CharacterStatRepository(
             .Include(x => x.StrengthStatLevel)
             .Include(x => x.IntelligenceStatLevel)
             .Include(x => x.WillpowerStatLevel)
-            .FirstOrDefaultAsync(x => x.Id == characterId && x.Player.UserId == userContext.CurrentUserId(), cancellationToken);
+            .FirstOrDefaultAsync(
+                x => x.Id == characterId && x.Player.UserId == userContext.CurrentUserId(),
+                cancellationToken
+            );
 
         if (character is null)
             return Result.Fail(new NotFoundFailure("Character"));
 
         var statTypes = await context.StateTypes.ToListAsync(cancellationToken);
-        
+
         var characterStats = new List<SmallStatInfo>()
         {
             new()
@@ -200,54 +209,42 @@ internal sealed class CharacterStatRepository(
                 StatTypeId = StatType.Agility,
                 Bonus = character.AgilityStatLevel.Bonus,
                 Level = character.AgilityStatLevel.Id,
-                ShortName = statTypes
-                    .First(x => x.Id == (byte)StatType.Agility)
-                    .ShortName
+                ShortName = statTypes.First(x => x.Id == (byte)StatType.Agility).ShortName
             },
             new()
             {
                 StatTypeId = StatType.Constitution,
                 Bonus = character.ConstitutionStatLevel.Bonus,
                 Level = character.ConstitutionStatLevel.Id,
-                ShortName = statTypes
-                    .First(x => x.Id == (byte)StatType.Constitution)
-                    .ShortName
+                ShortName = statTypes.First(x => x.Id == (byte)StatType.Constitution).ShortName
             },
             new()
             {
                 StatTypeId = StatType.Dexterity,
                 Bonus = character.DexterityStatLevel.Bonus,
                 Level = character.DexterityStatLevel.Id,
-                ShortName = statTypes
-                    .First(x => x.Id == (byte)StatType.Dexterity)
-                    .ShortName
+                ShortName = statTypes.First(x => x.Id == (byte)StatType.Dexterity).ShortName
             },
             new()
             {
                 StatTypeId = StatType.Strength,
                 Bonus = character.StrengthStatLevel.Bonus,
                 Level = character.StrengthStatLevel.Id,
-                ShortName = statTypes
-                    .First(x => x.Id == (byte)StatType.Strength)
-                    .ShortName
+                ShortName = statTypes.First(x => x.Id == (byte)StatType.Strength).ShortName
             },
             new()
             {
                 StatTypeId = StatType.Intelligence,
                 Bonus = character.IntelligenceStatLevel.Bonus,
                 Level = character.IntelligenceStatLevel.Id,
-                ShortName = statTypes
-                    .First(x => x.Id == (byte)StatType.Intelligence)
-                    .ShortName
+                ShortName = statTypes.First(x => x.Id == (byte)StatType.Intelligence).ShortName
             },
             new()
             {
                 StatTypeId = StatType.Willpower,
                 Bonus = character.WillpowerStatLevel.Bonus,
                 Level = character.WillpowerStatLevel.Id,
-                ShortName = statTypes
-                    .First(x => x.Id == (byte)StatType.Willpower)
-                    .ShortName
+                ShortName = statTypes.First(x => x.Id == (byte)StatType.Willpower).ShortName
             }
         };
 

@@ -230,23 +230,22 @@ internal static class CharacterEndPoints
             .MapGet(
                 "{characterId}/stat/{statTypeId}",
                 [Authorize]
-                async Task<
-                    Results<NotFound, ValidationProblem, Ok<SingleStatInfo>>
-                > (
+                async Task<Results<NotFound, ValidationProblem, Ok<SingleStatInfo>>> (
                     int characterId,
                     StatType statTypeId,
                     ICharacterStatRepository repository
                 ) =>
                 {
-                    var results =
-                        await repository.GetDetailedStatInfo(new GetDetailedStatInfoDto(characterId, statTypeId));
-                    
+                    var results = await repository.GetDetailedStatInfo(
+                        new GetDetailedStatInfoDto(characterId, statTypeId)
+                    );
+
                     if (results.HasNotFound(out var notFound))
                         return notFound;
                     if (results.HasValidationError(out var validationProblem))
                         return validationProblem;
                     results.ThrowIfErrorNotHandled();
-                    
+
                     return TypedResults.Ok(new SingleStatInfo(results.Value));
                 }
             )
@@ -265,13 +264,15 @@ internal static class CharacterEndPoints
                     ICharacterStatRepository repository
                 ) =>
                 {
-                    var results = await repository.UpdateCharacterStat(new Repositories.Characters.Stats.DTOs.EditStatDto()
-                    {
-                        CharacterId = dto.CharacterId,
-                        LevelTypeId = dto.LevelTypeId,
-                        StatTypeId = dto.StatTypeId
-                    });
-                    
+                    var results = await repository.UpdateCharacterStat(
+                        new Repositories.Characters.Stats.DTOs.EditStatDto()
+                        {
+                            CharacterId = dto.CharacterId,
+                            LevelTypeId = dto.LevelTypeId,
+                            StatTypeId = dto.StatTypeId
+                        }
+                    );
+
                     if (results.HasNotFound(out var notFound))
                         return notFound;
                     if (results.HasValidationError(out var validationProblem))
@@ -297,12 +298,14 @@ internal static class CharacterEndPoints
                 ) =>
                 {
                     var results = await repository.GetAllStats(characterId);
-                    
+
                     if (results.HasNotFound(out var notFound))
                         return notFound;
                     results.ThrowIfErrorNotHandled();
-                    
-                    return TypedResults.Ok(results.Value.Select(x => new SmallStatInfo(x)).ToList());
+
+                    return TypedResults.Ok(
+                        results.Value.Select(x => new SmallStatInfo(x)).ToList()
+                    );
                 }
             )
             .WithSummary("Returns the info needed for displaying the small stat tiles")

@@ -20,6 +20,7 @@ public record SingleStatInfo
             XP = dto.StatLevelInfo.XP,
         };
     }
+
     /// <example>6</example>
     public StatType Id { get; set; }
 

@@ -63,42 +63,48 @@ public static class ResultOverrides
         return result.HasError<AlreadyDeletedFailure>();
     }
 
-    public static bool HasInsufficientXP(this Result result, out BadRequest<string> insufficientXPMessage)
+    public static bool HasInsufficientXP(
+        this Result result,
+        out BadRequest<string> insufficientXPMessage
+    )
     {
         insufficientXPMessage = TypedResults.BadRequest("This is not a valid error");
-        
-        if (!result.HasError<NotEnoughXPFailure>()) return false;
-        
-        var xpResults = (NotEnoughXPFailure) result.Errors[0];
+
+        if (!result.HasError<NotEnoughXPFailure>())
+            return false;
+
+        var xpResults = (NotEnoughXPFailure)result.Errors[0];
         insufficientXPMessage = TypedResults.BadRequest(
             "You don't have enough XP to do that.  You have "
-            + xpResults.AvailableXP
-            + " points available.  You tried to spend "
-            + xpResults.AmountTryingToSpend
-            + " points."
+                + xpResults.AvailableXP
+                + " points available.  You tried to spend "
+                + xpResults.AmountTryingToSpend
+                + " points."
         );
         return true;
-
     }
-    
-    public static bool HasInsufficientXP<T>(this Result<T> result, out BadRequest<string> insufficientXPMessage)
+
+    public static bool HasInsufficientXP<T>(
+        this Result<T> result,
+        out BadRequest<string> insufficientXPMessage
+    )
     {
         insufficientXPMessage = TypedResults.BadRequest("This is not a valid error");
-        
-        if (!result.HasError<NotEnoughXPFailure>()) return false;
-        
-        var xpResults = (NotEnoughXPFailure) result.Errors[0];
+
+        if (!result.HasError<NotEnoughXPFailure>())
+            return false;
+
+        var xpResults = (NotEnoughXPFailure)result.Errors[0];
         insufficientXPMessage = TypedResults.BadRequest(
             "You don't have enough XP to do that.  You have "
-            + xpResults.AvailableXP
-            + " points available.  You tried to spend "
-            + xpResults.AmountTryingToSpend
-            + " points."
+                + xpResults.AvailableXP
+                + " points available.  You tried to spend "
+                + xpResults.AmountTryingToSpend
+                + " points."
         );
         return true;
-
     }
-    
+
     private static IDictionary<string, string[]> GetValidationFailure(List<IError> errors)
     {
         return ((FluentValidationFailure)errors[0]).ValidationFailures;
