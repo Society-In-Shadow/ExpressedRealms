@@ -41,8 +41,13 @@ public static class ResultOverrides
         out ValidationProblem typedResults
     )
     {
-        typedResults = TypedResults.ValidationProblem(GetValidationFailure(result.Errors));
-        return result.HasError<FluentValidationFailure>();
+        typedResults = TypedResults.ValidationProblem(new Dictionary<string, string[]>());
+        var hasError = result.HasError<FluentValidationFailure>();
+        
+        if(hasError)
+            typedResults = TypedResults.ValidationProblem(GetValidationFailure(result.Errors));
+        
+        return hasError;
     }
 
     public static bool HasBeenDeletedAlready(
@@ -107,6 +112,8 @@ public static class ResultOverrides
 
     private static IDictionary<string, string[]> GetValidationFailure(List<IError> errors)
     {
-        return ((FluentValidationFailure)errors[0]).ValidationFailures;
+        if(errors.Count != 0)
+            return ((FluentValidationFailure)errors[0]).ValidationFailures;
+        return new Dictionary<string, string[]>();
     }
 }

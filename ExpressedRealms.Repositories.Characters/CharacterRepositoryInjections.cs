@@ -14,7 +14,8 @@ public static class CharacterRepositoryInjections
         services.AddScoped<AddCharacterDtoValidator>();
         services.AddScoped<EditCharacterDtoValidator>();
         services.AddScoped<ICharacterRepository, CharacterRepository>();
-
+        
+        services.AddScoped<EditStatDtoValidator>();
         services.AddScoped<GetDetailedStatInfoDtoValidator>();
         services.AddScoped<ICharacterStatRepository, CharacterStatRepository>();
 

@@ -211,7 +211,7 @@ internal static class CharacterEndPoints
                             Name = dto.Name,
                             Background = dto.Background,
                             FactionId = dto.FactionId,
-                            Id = dto.FactionId
+                            Id = dto.Id
                         }
                     );
 
