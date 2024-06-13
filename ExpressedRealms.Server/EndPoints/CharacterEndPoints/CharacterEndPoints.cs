@@ -7,7 +7,6 @@ using ExpressedRealms.Repositories.Characters.Stats.Enums;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.DTOs;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.Requests;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.Responses;
-using ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs;
 using ExpressedRealms.Server.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -15,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 using EditStatDTO = ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs.EditStatDTO;
 using SingleStatInfo = ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs.SingleStatInfo;
+using SmallStatInfo = ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs.SmallStatInfo;
 
 namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints;
 
@@ -293,82 +293,16 @@ internal static class CharacterEndPoints
                 [Authorize]
                 async Task<Results<NotFound, Ok<List<SmallStatInfo>>>> (
                     int characterId,
-                    ExpressedRealmsDbContext dbContext,
-                    HttpContext http
+                    ICharacterStatRepository repository
                 ) =>
                 {
-                    var character = await dbContext
-                        .Characters.Include(x => x.AgilityStatLevel)
-                        .Include(x => x.ConstitutionStatLevel)
-                        .Include(x => x.DexterityStatLevel)
-                        .Include(x => x.StrengthStatLevel)
-                        .Include(x => x.IntelligenceStatLevel)
-                        .Include(x => x.WillpowerStatLevel)
-                        .FirstOrDefaultAsync(x => x.Id == characterId);
-
-                    var statTypes = await dbContext.StateTypes.ToListAsync();
-                    if (character is null)
-                        return TypedResults.NotFound();
-
-                    var characterStats = new List<SmallStatInfo>()
-                    {
-                        new()
-                        {
-                            StatTypeId = StatType.Agility,
-                            Bonus = character.AgilityStatLevel.Bonus,
-                            Level = character.AgilityStatLevel.Id,
-                            ShortName = statTypes
-                                .First(x => x.Id == (byte)StatType.Agility)
-                                .ShortName
-                        },
-                        new()
-                        {
-                            StatTypeId = StatType.Constitution,
-                            Bonus = character.ConstitutionStatLevel.Bonus,
-                            Level = character.ConstitutionStatLevel.Id,
-                            ShortName = statTypes
-                                .First(x => x.Id == (byte)StatType.Constitution)
-                                .ShortName
-                        },
-                        new()
-                        {
-                            StatTypeId = StatType.Dexterity,
-                            Bonus = character.DexterityStatLevel.Bonus,
-                            Level = character.DexterityStatLevel.Id,
-                            ShortName = statTypes
-                                .First(x => x.Id == (byte)StatType.Dexterity)
-                                .ShortName
-                        },
-                        new()
-                        {
-                            StatTypeId = StatType.Strength,
-                            Bonus = character.StrengthStatLevel.Bonus,
-                            Level = character.StrengthStatLevel.Id,
-                            ShortName = statTypes
-                                .First(x => x.Id == (byte)StatType.Strength)
-                                .ShortName
-                        },
-                        new()
-                        {
-                            StatTypeId = StatType.Intelligence,
-                            Bonus = character.IntelligenceStatLevel.Bonus,
-                            Level = character.IntelligenceStatLevel.Id,
-                            ShortName = statTypes
-                                .First(x => x.Id == (byte)StatType.Intelligence)
-                                .ShortName
-                        },
-                        new()
-                        {
-                            StatTypeId = StatType.Willpower,
-                            Bonus = character.WillpowerStatLevel.Bonus,
-                            Level = character.WillpowerStatLevel.Id,
-                            ShortName = statTypes
-                                .First(x => x.Id == (byte)StatType.Willpower)
-                                .ShortName
-                        }
-                    };
-
-                    return TypedResults.Ok(characterStats);
+                    var results = await repository.GetAllStats(characterId);
+                    
+                    if (results.HasNotFound(out var notFound))
+                        return notFound;
+                    results.ThrowIfErrorNotHandled();
+                    
+                    return TypedResults.Ok(results.Value.Select(x => new SmallStatInfo(x)).ToList());
                 }
             )
             .WithSummary("Returns the info needed for displaying the small stat tiles")
