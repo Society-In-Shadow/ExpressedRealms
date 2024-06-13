@@ -1,4 +1,5 @@
 using ExpressedRealms.DB;
+using ExpressedRealms.DB.Characters;
 using ExpressedRealms.Repositories.Characters.Stats.DTOs;
 using ExpressedRealms.Repositories.Characters.Stats.Enums;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
@@ -12,6 +13,7 @@ internal sealed class CharacterStatRepository(
     ExpressedRealmsDbContext context,
     IUserContext userContext,
     GetDetailedStatInfoDtoValidator detailedStatValidator,
+    EditStatDtoValidator editStatValidator,
     CancellationToken cancellationToken
 ) : ICharacterStatRepository
 {
@@ -80,5 +82,98 @@ internal sealed class CharacterStatRepository(
             .FirstAsync(cancellationToken);
 
         return Result.Ok(statInfo);
+    }
+
+    public async Task<Result> UpdateCharacterStat(EditStatDto dto)
+    {
+        var result = await editStatValidator.ValidateAsync(dto);
+        if (!result.IsValid)
+            return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
+        
+        var character = await context
+            .Characters.Where(x => x.Id == dto.CharacterId)
+            .Include(x => x.AgilityStatLevel)
+            .Include(x => x.StrengthStatLevel)
+            .Include(x => x.ConstitutionStatLevel)
+            .Include(x => x.DexterityStatLevel)
+            .Include(x => x.IntelligenceStatLevel)
+            .Include(x => x.WillpowerStatLevel)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (character is null)
+            return Result.Fail(new NotFoundFailure("Character"));
+
+        var xpCheck = await EditStatXpCheck(dto, character);
+        if (xpCheck.IsFailed)
+            return xpCheck;
+
+        switch (dto.StatTypeId)
+        {
+            case StatType.Agility:
+                character.AgilityId = dto.LevelTypeId;
+                break;
+            case StatType.Constitution:
+                character.ConstitutionId = dto.LevelTypeId;
+                break;
+            case StatType.Dexterity:
+                character.DexterityId = dto.LevelTypeId;
+                break;
+            case StatType.Strength:
+                character.StrengthId = dto.LevelTypeId;
+                break;
+            case StatType.Intelligence:
+                character.IntelligenceId = dto.LevelTypeId;
+                break;
+            case StatType.Willpower:
+                character.WillpowerId = dto.LevelTypeId;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+        await context.SaveChangesAsync(cancellationToken);
+
+        return Result.Ok();
+    }
+
+    private async Task<Result> EditStatXpCheck(EditStatDto dto, Character character)
+    {
+        var availableXp = await context
+            .Characters.Where(x => x.Id == dto.CharacterId)
+            .Select(x =>
+                x.StatExperiencePoints
+                - (
+                    x.AgilityStatLevel.TotalXPCost
+                    + x.ConstitutionStatLevel.TotalXPCost
+                    + x.DexterityStatLevel.TotalXPCost
+                    + x.StrengthStatLevel.TotalXPCost
+                    + x.IntelligenceStatLevel.TotalXPCost
+                    + x.WillpowerStatLevel.TotalXPCost
+                )
+            )
+            .FirstOrDefaultAsync(cancellationToken);
+
+        var oldTotalXpCost = dto.StatTypeId switch
+        {
+            StatType.Agility => character.AgilityStatLevel.TotalXPCost,
+            StatType.Strength => character.StrengthStatLevel.TotalXPCost,
+            StatType.Constitution => character.ConstitutionStatLevel.TotalXPCost,
+            StatType.Dexterity => character.DexterityStatLevel.TotalXPCost,
+            StatType.Intelligence => character.IntelligenceStatLevel.TotalXPCost,
+            StatType.Willpower => character.WillpowerStatLevel.TotalXPCost,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+
+        var newTotalXpCost = await context
+            .StatLevels.Where(x => x.Id == dto.LevelTypeId)
+            .Select(x => x.TotalXPCost)
+            .FirstAsync(cancellationToken);
+
+        if (availableXp < newTotalXpCost - oldTotalXpCost)
+        {
+            return Result.Fail(new NotEnoughXPFailure(availableXp, newTotalXpCost - oldTotalXpCost));
+        }
+
+        return Result.Ok();
     }
 }

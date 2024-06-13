@@ -6,4 +6,5 @@ namespace ExpressedRealms.Repositories.Characters.Stats;
 public interface ICharacterStatRepository
 {
     Task<Result<SingleStatInfo>> GetDetailedStatInfo(GetDetailedStatInfoDto dto);
+    Task<Result> UpdateCharacterStat(EditStatDto dto);
 }

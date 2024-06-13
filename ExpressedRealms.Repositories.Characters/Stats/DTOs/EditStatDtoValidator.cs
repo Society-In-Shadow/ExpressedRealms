@@ -1,10 +1,10 @@
 using FluentValidation;
 
-namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs;
+namespace ExpressedRealms.Repositories.Characters.Stats.DTOs;
 
-public class EditStatDTOValidator : AbstractValidator<EditStatDTO>
+public class EditStatDtoValidator : AbstractValidator<EditStatDto>
 {
-    public EditStatDTOValidator()
+    public EditStatDtoValidator()
     {
         RuleFor(x => x.CharacterId).NotEmpty();
         RuleFor(x => x.LevelTypeId).NotEmpty().InclusiveBetween((byte)1, (byte)7);

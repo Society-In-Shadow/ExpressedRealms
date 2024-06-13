@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
+using EditStatDTO = ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs.EditStatDTO;
 using SingleStatInfo = ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs.SingleStatInfo;
 
 namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints;
@@ -259,92 +260,25 @@ internal static class CharacterEndPoints
             .MapPut(
                 "{characterId}/stat/{statTypeId}",
                 [Authorize]
-                async Task<Results<NotFound, NoContent, BadRequest<string>>> (
+                async Task<Results<NotFound, NoContent, ValidationProblem, BadRequest<string>>> (
                     EditStatDTO dto,
-                    ExpressedRealmsDbContext dbContext,
-                    HttpContext http
+                    ICharacterStatRepository repository
                 ) =>
                 {
-                    var character = await dbContext
-                        .Characters.Where(x => x.Id == dto.CharacterId)
-                        .Include(x => x.AgilityStatLevel)
-                        .Include(x => x.StrengthStatLevel)
-                        .Include(x => x.ConstitutionStatLevel)
-                        .Include(x => x.DexterityStatLevel)
-                        .Include(x => x.IntelligenceStatLevel)
-                        .Include(x => x.WillpowerStatLevel)
-                        .FirstOrDefaultAsync();
-
-                    if (character is null)
-                        return TypedResults.NotFound();
-
-                    var availableXp = await dbContext
-                        .Characters.Where(x => x.Id == dto.CharacterId)
-                        .Select(x =>
-                            x.StatExperiencePoints
-                            - (
-                                x.AgilityStatLevel.TotalXPCost
-                                + x.ConstitutionStatLevel.TotalXPCost
-                                + x.DexterityStatLevel.TotalXPCost
-                                + x.StrengthStatLevel.TotalXPCost
-                                + x.IntelligenceStatLevel.TotalXPCost
-                                + x.WillpowerStatLevel.TotalXPCost
-                            )
-                        )
-                        .FirstOrDefaultAsync();
-
-                    var oldTotalXpCost = dto.StatTypeId switch
+                    var results = await repository.UpdateCharacterStat(new Repositories.Characters.Stats.DTOs.EditStatDto()
                     {
-                        StatType.Agility => character.AgilityStatLevel.TotalXPCost,
-                        StatType.Strength => character.StrengthStatLevel.TotalXPCost,
-                        StatType.Constitution => character.ConstitutionStatLevel.TotalXPCost,
-                        StatType.Dexterity => character.DexterityStatLevel.TotalXPCost,
-                        StatType.Intelligence => character.IntelligenceStatLevel.TotalXPCost,
-                        StatType.Willpower => character.WillpowerStatLevel.TotalXPCost,
-                        _ => throw new ArgumentOutOfRangeException()
-                    };
-
-                    var newTotalXpCost = await dbContext
-                        .StatLevels.Where(x => x.Id == dto.LevelTypeId)
-                        .Select(x => x.TotalXPCost)
-                        .FirstAsync();
-
-                    if (availableXp < newTotalXpCost - oldTotalXpCost)
-                    {
-                        return TypedResults.BadRequest<string>(
-                            "You don't have enough XP to select that level.  You have "
-                                + availableXp
-                                + " points available.  You tried to spend "
-                                + (newTotalXpCost - oldTotalXpCost)
-                                + " points."
-                        );
-                    }
-
-                    switch (dto.StatTypeId)
-                    {
-                        case StatType.Agility:
-                            character.AgilityId = dto.LevelTypeId;
-                            break;
-                        case StatType.Constitution:
-                            character.ConstitutionId = dto.LevelTypeId;
-                            break;
-                        case StatType.Dexterity:
-                            character.DexterityId = dto.LevelTypeId;
-                            break;
-                        case StatType.Strength:
-                            character.StrengthId = dto.LevelTypeId;
-                            break;
-                        case StatType.Intelligence:
-                            character.IntelligenceId = dto.LevelTypeId;
-                            break;
-                        case StatType.Willpower:
-                            character.WillpowerId = dto.LevelTypeId;
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-
-                    await dbContext.SaveChangesAsync();
+                        CharacterId = dto.CharacterId,
+                        LevelTypeId = dto.LevelTypeId,
+                        StatTypeId = dto.StatTypeId
+                    });
+                    
+                    if (results.HasNotFound(out var notFound))
+                        return notFound;
+                    if (results.HasValidationError(out var validationProblem))
+                        return validationProblem;
+                    if (results.HasInsufficientXP(out var insufficientXPMessage))
+                        return insufficientXPMessage;
+                    results.ThrowIfErrorNotHandled();
 
                     return TypedResults.NoContent();
                 }
