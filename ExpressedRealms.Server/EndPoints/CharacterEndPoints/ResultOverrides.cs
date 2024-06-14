@@ -43,10 +43,10 @@ public static class ResultOverrides
     {
         typedResults = TypedResults.ValidationProblem(new Dictionary<string, string[]>());
         var hasError = result.HasError<FluentValidationFailure>();
-        
-        if(hasError)
+
+        if (hasError)
             typedResults = TypedResults.ValidationProblem(GetValidationFailure(result.Errors));
-        
+
         return hasError;
     }
 
@@ -112,7 +112,7 @@ public static class ResultOverrides
 
     private static IDictionary<string, string[]> GetValidationFailure(List<IError> errors)
     {
-        if(errors.Count != 0)
+        if (errors.Count != 0)
             return ((FluentValidationFailure)errors[0]).ValidationFailures;
         return new Dictionary<string, string[]>();
     }
