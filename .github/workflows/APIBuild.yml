@@ -14,17 +14,15 @@ on: # yamllint disable-line rule:truthy
     paths:
       - 'api/**'
 
-env:
-  CYPRESS_RECORD_KEY: ${{ secrets.CYPRESSRECORDINGKEY }}
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  COMMIT_INFO_MESSAGE: ${{ github.event.pull_request.title }}
-  COMMIT_INFO_SHA: ${{ github.event.pull_request.head.sha }}
-
 permissions: read-all
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./api
 
     steps:
       - uses: actions/checkout@v3
@@ -33,9 +31,6 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Move to API
-        run: cd api
-      
       - name: Restore dependencies
         run: dotnet restore
 
