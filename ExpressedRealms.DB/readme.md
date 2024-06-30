@@ -39,6 +39,12 @@ Keep note, nameOfMigration is not the one you want to revert, it's the name of t
 dotnet ef database update <nameOfMigration> --project ExpressedRealms.DB --startup-project ExpressedRealms.Server
 ```
 
+If the IP address isn't working, use this command to find it for the connection string
+
+```shell
+docker inspect   -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' expressed-realms-db
+```
+
 After that, you will need to go through and manually remove the migrations in the migration folder, plus revert the model
 snapshot to a state before you applied the changes.
 
