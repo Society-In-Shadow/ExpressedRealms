@@ -7,8 +7,12 @@ name: .NET
 on: # yamllint disable-line rule:truthy
   push:
     branches: [main]
+    paths:
+      - 'expressedrealms.client'
   pull_request:
     branches: [main]
+    paths:
+      - 'expressedrealms.client'
 
 env:
   CYPRESS_RECORD_KEY: ${{ secrets.CYPRESSRECORDINGKEY }}
@@ -19,25 +23,6 @@ env:
 permissions: read-all
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 8.0.x
-
-      - name: Restore dependencies
-        run: dotnet restore
-
-      - name: Build
-        run: dotnet build --no-restore
-
-      - name: Test
-        run: dotnet test --no-build --verbosity normal
-
   cypress-run-chrome:
     runs-on: ubuntu-22.04
     steps:
