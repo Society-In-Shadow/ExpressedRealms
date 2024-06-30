@@ -42,7 +42,7 @@ namespace ExpressedRealms.DB
         public DbSet<StatType> StateTypes { get; set; }
         public DbSet<StatLevel> StatLevels { get; set; }
         public DbSet<StatDescriptionMapping> StatDescriptionMappings { get; set; }
-        
+
         public DbSet<CharacterSkillsMapping> CharacterSkillsMappings { get; set; }
         public DbSet<ModifierType> ModifierTypes { get; set; }
         public DbSet<SkillLevel> SkillLevels { get; set; }

@@ -5,7 +5,7 @@ namespace ExpressedRealms.DB.Models.Skills;
 
 public class ModifierTypeConfiguration : IEntityTypeConfiguration<ModifierType>
 {
-    public void Configure(EntityTypeBuilder<ModifierType> builder) 
+    public void Configure(EntityTypeBuilder<ModifierType> builder)
     {
         builder.ToTable(nameof(ModifierType));
 

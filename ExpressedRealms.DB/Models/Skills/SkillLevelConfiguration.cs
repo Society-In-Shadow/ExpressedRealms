@@ -5,7 +5,7 @@ namespace ExpressedRealms.DB.Models.Skills;
 
 public class SkillLevelConfiguration : IEntityTypeConfiguration<SkillLevel>
 {
-    public void Configure(EntityTypeBuilder<SkillLevel> builder) 
+    public void Configure(EntityTypeBuilder<SkillLevel> builder)
     {
         builder.ToTable(nameof(SkillLevel));
 

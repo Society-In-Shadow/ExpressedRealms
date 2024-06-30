@@ -16,10 +16,10 @@ public class SkillTypeConfiguration : IEntityTypeConfiguration<SkillType>
         builder.Property(e => e.Description).HasMaxLength(500).IsRequired().IsRequired();
 
         builder.Property(e => e.SkillSubTypeId).IsRequired();
-        builder.HasOne(e => e.SkillSubType)
+        builder
+            .HasOne(e => e.SkillSubType)
             .WithMany(e => e.SkillTypes)
             .HasForeignKey(e => e.SkillSubTypeId)
             .OnDelete(DeleteBehavior.Restrict);
-
     }
 }
