@@ -1,5 +1,6 @@
 ﻿using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions;
+using ExpressedRealms.DB.Models.Skills;
 using ExpressedRealms.DB.Models.Statistics;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels;
 
@@ -37,4 +38,5 @@ public class Character : ISoftDelete
     public virtual StatLevel IntelligenceStatLevel { get; set; } = null!;
     public virtual StatLevel WillpowerStatLevel { get; set; } = null!;
     public virtual ExpressionSection FactionInfo { get; set; } = null!;
+    public virtual List<CharacterSkillsMapping> CharacterSkillsMappings { get; set; } = null!;
 }
