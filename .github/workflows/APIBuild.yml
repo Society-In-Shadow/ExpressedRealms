@@ -8,11 +8,11 @@ on: # yamllint disable-line rule:truthy
   push:
     branches: [main]
     paths:
-      - 'api'
+      - 'api/**'
   pull_request:
     branches: [main]
     paths:
-      - 'api'
+      - 'api/**'
 
 env:
   CYPRESS_RECORD_KEY: ${{ secrets.CYPRESSRECORDINGKEY }}

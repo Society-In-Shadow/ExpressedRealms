@@ -8,11 +8,11 @@ on: # yamllint disable-line rule:truthy
   push:
     branches: [main]
     paths:
-      - 'expressedrealms.client'
+      - 'client/**'
   pull_request:
     branches: [main]
     paths:
-      - 'expressedrealms.client'
+      - 'client/**'
 
 env:
   CYPRESS_RECORD_KEY: ${{ secrets.CYPRESSRECORDINGKEY }}
@@ -33,6 +33,6 @@ jobs:
         with:
           component: true
           browser: chrome
-          working-directory: expressedrealms.client
+          working-directory: client
           record: true
           tag: pr-component-chrome
