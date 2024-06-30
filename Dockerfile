@@ -1,24 +1,25 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-
-WORKDIR /app
-
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Development
+
 WORKDIR /src
-COPY ["ExpressedRealms.Server/ExpressedRealms.Server.csproj", "ExpressedRealms.Server/"]
+COPY ["ExpressedRealms.sln", "."]
+COPY ["expressedrealms.client/expressedrealms.client.esproj", "expressedrealms.client/"]
+COPY ["ExpressedRealms.Repositories.Shared/ExpressedRealms.Repositories.Shared.csproj", "ExpressedRealms.Repositories.Shared/"]
+COPY ["ExpressedRealms.Email/ExpressedRealms.Email.csproj", "ExpressedRealms.Email/"]
+COPY ["ExpressedRealms.Repositories.Characters/ExpressedRealms.Repositories.Characters.csproj", "ExpressedRealms.Repositories.Characters/"]
 COPY ["ExpressedRealms.DB/ExpressedRealms.DB.csproj", "ExpressedRealms.DB/"]
-RUN dotnet restore "ExpressedRealms.Server/ExpressedRealms.Server.csproj"
+COPY ["ExpressedRealms.Server/ExpressedRealms.Server.csproj", "ExpressedRealms.Server/"]
+RUN dotnet restore
+
 COPY . .
 WORKDIR "/src/ExpressedRealms.Server"
-RUN dotnet build "ExpressedRealms.Server.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Development
-RUN dotnet publish "ExpressedRealms.Server.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "ExpressedRealms.Server.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-FROM base AS final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-COPY --from=publish /app/publish .
+EXPOSE 80
+EXPOSE 443
+COPY --from=build /app/publish .
 
 HEALTHCHECK --interval=15s --timeout=60s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider https://0.0.0.0:5001/login || exit 1
