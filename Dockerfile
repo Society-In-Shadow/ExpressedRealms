@@ -2,7 +2,6 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
 WORKDIR /src
 COPY ["ExpressedRealms.sln", "."]
-COPY ["expressedrealms.client/expressedrealms.client.esproj", "expressedrealms.client/"]
 COPY ["ExpressedRealms.Repositories.Shared/ExpressedRealms.Repositories.Shared.csproj", "ExpressedRealms.Repositories.Shared/"]
 COPY ["ExpressedRealms.Email/ExpressedRealms.Email.csproj", "ExpressedRealms.Email/"]
 COPY ["ExpressedRealms.Repositories.Characters/ExpressedRealms.Repositories.Characters.csproj", "ExpressedRealms.Repositories.Characters/"]
