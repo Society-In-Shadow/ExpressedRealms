@@ -7,14 +7,19 @@ networks:
 
 services:
   myapp:
-    image: node:21.6.1
+    image: node:current-alpine3.20
     container_name: expressed-realms-vue-app
     working_dir: /app
     ports:
       - '5173:5173'
+    environment:
+      - VITE_HTTPS_KEY=/https/key.pem
+      - VITE_HTTPS_CERT=/https/cert.pem
+      - VITE_PORT=443
+      - VITE_API_BASE_URL=https://expressed-realms-web-api:5001/
     volumes:
-      - ./client/:/app
-      - ${USERPROFILE}/.aspnet/https:/https
+      - ./client/:/app # This is only here to allow automatic updates on local machines as you are editing the code
+      - ${USERPROFILE}/.aspnet/https:/https # Host Certificate Location (key.pem/cert.pem) : Image Path
     command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
     networks:
       - expressed-realms-network

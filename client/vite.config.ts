@@ -1,32 +1,42 @@
 import { defineConfig } from 'vite';
 import plugin from '@vitejs/plugin-vue';
 import { dirname } from 'node:path';
-
-// @see https://chat.openai.com/share/f09deddb-821e-450d-b78d-444977b4aeab
+import fs from 'fs';
 
 const __dirname = dirname(__filename);
 
-// https://vitejs.dev/config/
-export default defineConfig({
-    plugins: [plugin()],
-    resolve: {
-        alias: {
-            '@': require('path').resolve(__dirname, 'src')
-        }
-    },
-    server: {
+export default defineConfig(({ mode }) => {
+    
+    const port = process.env.VITE_PORT || 443;
+    const httpsKey = process.env.VITE_HTTPS_KEY;
+    const httpsCert = process.env.VITE_HTTPS_CERT;
+
+    const serverConfig = {
+        port: port,
         proxy: {
             '/api': {
-                target: 'https://expressed-realms-web-api:5001/',
+                target: process.env.VITE_API_BASE_URL,
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/api/, ''),
                 secure: false
-            },
-        },
-        port: 5173,
-        https: {
-            key: require('path').resolve(__dirname, `/https/key.pem`),
-            cert: require('path').resolve(__dirname, `/https/cert.pem`)
+            }
         }
+    };
+
+    if (httpsKey && httpsCert) {
+        serverConfig.https = {
+            key: fs.readFileSync(httpsKey),
+            cert: fs.readFileSync(httpsCert)
+        };
     }
-})
+
+    return {
+        plugins: [plugin()],
+        resolve: {
+            alias: {
+                '@': require('path').resolve(__dirname, 'src')
+            }
+        },
+        server: serverConfig
+    };
+});
