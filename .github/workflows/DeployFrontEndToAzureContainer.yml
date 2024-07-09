@@ -11,12 +11,6 @@ on:
     paths:
       - 'client/**'
       - '.github/workflows/DeployFrontEndToAzureContainer.yml'
-  pull_request:
-    branches:
-      [main]
-    paths:
-      - 'client/**'
-      - '.github/workflows/DeployFrontEndToAzureContainer.yml'
 
   # Allow manual trigger
   workflow_dispatch:
