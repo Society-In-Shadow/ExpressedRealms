@@ -7,9 +7,9 @@ networks:
 
 services:
   myapp:
-    image: node:current-alpine3.20
-    container_name: expressed-realms-vue-app
-    working_dir: /app
+    build:
+      context: ./client
+      dockerfile: Dockerfile
     ports:
       - '5173:5173'
     environment:
