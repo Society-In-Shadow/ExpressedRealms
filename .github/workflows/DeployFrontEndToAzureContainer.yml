@@ -1,34 +1,36 @@
-name: Trigger auto deployment for expressed-realms-frontend
+---
+
+name: Deploy Client to Azure App Container
 
 # When this action will be executed
 on:
   # Automatically trigger it when detected changes in repo
   push:
-    branches: 
-      [ main ]
+    branches:
+      [main]
     paths:
-    - 'client/**'
-    - '.github/workflows/DeployFrontEndToAzureContainer.yml'
+      - 'client/**'
+      - '.github/workflows/DeployFrontEndToAzureContainer.yml'
   pull_request:
     branches:
-      [ main ]
+      [main]
     paths:
       - 'client/**'
       - '.github/workflows/DeployFrontEndToAzureContainer.yml'
 
-  # Allow manual trigger 
-  workflow_dispatch:      
+  # Allow manual trigger
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    permissions: 
-      id-token: write #This is required for requesting the OIDC JWT Token
-      contents: read #Required when GH token is used to authenticate with private repo
+    permissions:
+      id-token: write # This is required for requesting the OIDC JWT Token
+      contents: read # Required when GH token is used to authenticate with private repo
 
     steps:
       - name: Checkout to the branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Azure Login
         uses: azure/login@v1
@@ -49,5 +51,3 @@ jobs:
           imageToBuild: noremacskich/expressed-realms-frontend:${{ github.sha }}
           _buildArgumentsKey_: |
             _buildArgumentsValues_
-
-
