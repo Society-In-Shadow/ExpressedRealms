@@ -7,8 +7,8 @@ on:
     branches: 
       [ main ]
     paths:
-    - '**'
-    - '.github/workflows/expressed-realms-frontend-AutoDeployTrigger-6b966aa6-cc52-4995-a5b9-9bef54261aad.yml'
+    - 'client/**'
+    - '.github/workflows/DeployFrontEndToAzureContainer.yml'
 
   # Allow manual trigger 
   workflow_dispatch:      
@@ -34,8 +34,8 @@ jobs:
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
         with:
-          appSourcePath: ${{ github.workspace }} 
-          registryUrl: docker.io
+          appSourcePath: ${{ github.workspace }}/client
+          registryUrl: index.docker.io
           registryUsername: ${{ secrets.EXPRESSEDREALMSFRONTEND_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.EXPRESSEDREALMSFRONTEND_REGISTRY_PASSWORD }}
           containerAppName: expressed-realms-frontend
