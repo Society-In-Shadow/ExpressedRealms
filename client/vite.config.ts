@@ -5,9 +5,11 @@ import fs from 'fs';
 
 const __dirname = dirname(__filename);
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(() => {
     
-    const port = process.env.VITE_PORT || 443;
+    // Needs to be above 1024, as any below that will be protected / require administrative rights
+    // This is particularly important for cypress testing
+    const port = process.env.VITE_PORT || 3000;
     const httpsKey = process.env.VITE_HTTPS_KEY;
     const httpsCert = process.env.VITE_HTTPS_CERT;
 
