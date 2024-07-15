@@ -18,16 +18,19 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write # This is required for requesting the OIDC JWT Token
-      contents: read # Required when GH token is used to authenticate with private repo
 
     steps:
       - name: Checkout to the branch
         uses: actions/checkout@v3
+        permissions:
+          id-token: write # This is required for requesting the OIDC JWT Token
+          contents: read # Required when GH token is used to authenticate with private repo
 
       - name: Azure Login
         uses: azure/login@v1
+        permissions:
+          id-token: write # This is required for requesting the OIDC JWT Token
+          contents: read # Required when GH token is used to authenticate with private repo
         with:
           client-id: ${{ secrets.EXPRESSEDREALMSFRONTEND_AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.EXPRESSEDREALMSFRONTEND_AZURE_TENANT_ID }}
@@ -35,6 +38,9 @@ jobs:
 
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
+        permissions:
+          id-token: write # This is required for requesting the OIDC JWT Token
+          contents: read # Required when GH token is used to authenticate with private repo
         with:
           appSourcePath: ${{ github.workspace }}/client
           registryUrl: index.docker.io
