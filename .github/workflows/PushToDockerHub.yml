@@ -70,6 +70,6 @@ jobs:
           registryUrl: ${{ vars.EXPRESSEDREALMSFRONTEND_REGISTRY_URL }}
           registryUsername: ${{ secrets.EXPRESSEDREALMSFRONTEND_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.EXPRESSEDREALMSFRONTEND_REGISTRY_PASSWORD }}
-          imageToDeploy: noremacskich/expressedrealms-frontend:latest
-          containerAppName: expressed-realms-frontend
-          resourceGroup: ExpressedRealms
+          imageToDeploy: noremacskich/expressedrealms-frontend:${{ steps.meta.outputs.tags }}
+          containerAppName: ca-expressedrealms-frontend
+          resourceGroup: RG_ExpressedRealms
