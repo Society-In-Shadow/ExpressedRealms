@@ -39,7 +39,7 @@ jobs:
         uses: azure/container-apps-deploy-action@v2
         with:
           appSourcePath: ${{ github.workspace }}/client
-          registryUrl: index.docker.io
+          registryUrl: ${{ vars.EXPRESSEDREALMSFRONTEND_REGISTRY_URL }}
           registryUsername: ${{ secrets.EXPRESSEDREALMSFRONTEND_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.EXPRESSEDREALMSFRONTEND_REGISTRY_PASSWORD }}
           containerAppName: expressed-realms-frontend
