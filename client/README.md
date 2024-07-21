@@ -55,3 +55,10 @@ RUN apt-get update && \
 ```shell
 docker build . --no-cache --progress plain
 ```
+
+### Docker Personalized Access Token
+
+When you create an access token, you need to make note of the registry URL.  It's the url after docker login command.
+
+You can look at them here
+[Access Tokens](https://app.docker.com/settings/personal-access-tokens)
