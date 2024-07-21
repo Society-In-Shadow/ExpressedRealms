@@ -44,3 +44,11 @@ npm run build
 ```sh
 npm run lint
 ```
+
+### To Find Latest Curl Version
+
+```dockerfile
+RUN set -eux && \
+apt-get update && \
+apt-cache madison curl
+```

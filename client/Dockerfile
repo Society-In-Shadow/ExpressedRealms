@@ -7,7 +7,7 @@
 # alwyas use slim and the lastest debian distro offered
 FROM node:22.4-bookworm-slim@sha256:ee76feb064dbe3579085bc2517cb54ecf64b083db8f6f80341cfe4a4770d1415
 
-RUN apt-get update && apt-get install -y curl=7.88.1 --no-install-recommends  && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y curl=7.88.1-10+deb12u6 --no-install-recommends  && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 443
 
