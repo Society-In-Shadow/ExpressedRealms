@@ -28,5 +28,7 @@ COPY --chown=node:node . .
 # Health check using curl
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 CMD curl -fs https://localhost --insecure || exit 1
 
+RUN ls -la /app/bin
+
 # change command to run node directly
 CMD ["node", "./bin/www"]
