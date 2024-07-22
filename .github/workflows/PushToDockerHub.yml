@@ -12,6 +12,10 @@
 name: Publish Docker image
 
 on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'client/**'
   pull_request:
     branches: [main]
 
@@ -47,7 +51,7 @@ jobs:
           context: ./client
           file: ./client/Dockerfile
           push: true
-          tags: ${{ github.sha }}
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
 #      - name: Generate artifact attestation
@@ -70,6 +74,6 @@ jobs:
           registryUrl: ${{ vars.EXPRESSEDREALMSFRONTEND_REGISTRY_URL }}
           registryUsername: ${{ secrets.EXPRESSEDREALMSFRONTEND_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.EXPRESSEDREALMSFRONTEND_REGISTRY_PASSWORD }}
-          imageToDeploy: noremacskich/expressedrealms-frontend:${{ github.sha }}
+          imageToDeploy: noremacskich/expressedrealms-frontend:${{ steps.meta.outputs.tags }}
           containerAppName: ca-expressedrealms-frontend
           resourceGroup: RG_ExpressedRealms
