@@ -51,7 +51,7 @@ jobs:
           context: ./client
           file: ./client/Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: noremacskich/expressedrealms-frontend:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
 
 #      - name: Generate artifact attestation
@@ -74,6 +74,6 @@ jobs:
           registryUrl: ${{ vars.EXPRESSEDREALMSFRONTEND_REGISTRY_URL }}
           registryUsername: ${{ secrets.EXPRESSEDREALMSFRONTEND_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.EXPRESSEDREALMSFRONTEND_REGISTRY_PASSWORD }}
-          imageToDeploy: noremacskich/expressedrealms-frontend:${{ steps.meta.outputs.tags }}
+          imageToDeploy: noremacskich/expressedrealms-frontend:${{ github.sha }}
           containerAppName: ca-expressedrealms-frontend
           resourceGroup: RG_ExpressedRealms
