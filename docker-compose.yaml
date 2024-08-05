@@ -7,6 +7,7 @@ networks:
 
 services:
   myapp:
+    container_name: societyinshadows.org
     build:
       context: ./client
       dockerfile: Dockerfile
@@ -18,9 +19,9 @@ services:
       - VITE_HTTPS_CERT=/https/cert.pem
       - VITE_PORT=443
       - VITE_API_BASE_URL=https://api.societyinshadows.org/
-    volumes:
-      - ./client/:/app # This is only here to allow automatic updates on local machines as you are editing the code
-      - ${USERPROFILE}/.aspnet/https:/https # Host Certificate Location (key.pem/cert.pem) : Image Path
+    #volumes:
+      #- ./client/:/app # This is only here to allow automatic updates on local machines as you are editing the code
+      #- ${USERPROFILE}/.aspnet/https:/https # Host Certificate Location (key.pem/cert.pem) : Image Path
     networks:
       - expressed-realms-network
     depends_on:
