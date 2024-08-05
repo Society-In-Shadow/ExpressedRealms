@@ -13,7 +13,7 @@ name: Publish Docker image
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
       - 'client/**'
   pull_request:
@@ -60,7 +60,7 @@ jobs:
 #          subject-name: noremacskich/expressedrealms-frontend
 #          subject-digest: ${{ steps.push.outputs.digest }}
 #          push-to-registry: true
-          
+
       - name: Azure Login
         uses: azure/login@v1
         with:
