@@ -1,32 +1,15 @@
-# syntax=docker/dockerfile:1
-# https://github.com/BretFisher/nodejs-rocks-in-docker/blob/main/dockerfiles/1.Dockerfile
-###
-## Example: The most basic, CORRECT, Dockerfile for Node.js
-###
-
-# alwyas use slim and the lastest debian distro offered
-FROM node:lts-bookworm-slim
-
-RUN apt-get update && apt-get install -y curl=7.88.1-10+deb12u6 --no-install-recommends  && rm -rf /var/lib/apt/lists/*
-
-EXPOSE 443
-
-# add user first, then set WORKDIR to set permissions
-USER node
-
+# build stage
+FROM node:18 as build-stage
 WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build-only
 
-# copy in with correct permissions. Using * prevents errors if file is missing
-COPY --chown=node:node package*.json ./
-
-# use ci to only install packages from lock files
-RUN npm ci --omit=dev && npm cache clean --force
-
-# copy files with correct permissions
-COPY --chown=node:node . .
-
-# Health check using curl
-HEALTHCHECK --interval=30s --timeout=10s --retries=3 CMD curl -fs https://localhost --insecure || exit 1
-
-# change command to run node directly
-CMD ["node", "./bin/www"]
+# production stage
+FROM nginx:stable-alpine as production-stage
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/nginx.conf  
+# Optional: Add custom Nginx configuration
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
