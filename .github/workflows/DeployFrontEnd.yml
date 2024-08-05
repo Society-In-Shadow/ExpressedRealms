@@ -9,15 +9,15 @@
 # To get a newer version, you will need to update the SHA.
 # You can also reference a tag or branch, but the action may change without warning.
 
-name: Publish Docker image
+name: Deploy Front End
 
 on:
   push:
     branches: [main]
     paths:
       - 'client/**'
-  pull_request:
-    branches: [main]
+  # pull_request:
+  #  branches: [main]
 
 jobs:
   push_to_registry:
