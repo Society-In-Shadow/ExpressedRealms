@@ -18,6 +18,8 @@ RUN chown -R nginx:nginx /var/cache/nginx && \
 RUN touch /var/run/nginx.pid && \
         chown -R nginx:nginx /var/run/nginx.pid
 
+HEALTHCHECK --interval=30s --timeout=3s CMD curl --fail http://localhost:3000/ || exit 1
+
 # Optional: Add custom Nginx configuration
 EXPOSE 80
 USER nginx
