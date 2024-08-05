@@ -17,7 +17,7 @@ services:
       - VITE_HTTPS_KEY=/https/key.pem
       - VITE_HTTPS_CERT=/https/cert.pem
       - VITE_PORT=443
-      - VITE_API_BASE_URL=https://expressed-realms-web-api:5001/
+      - VITE_API_BASE_URL=https://api.societyinshadows.org/
     volumes:
       - ./client/:/app # This is only here to allow automatic updates on local machines as you are editing the code
       - ${USERPROFILE}/.aspnet/https:/https # Host Certificate Location (key.pem/cert.pem) : Image Path
@@ -28,20 +28,20 @@ services:
         condition: service_started
 
   webapi:
-    container_name: expressed-realms-web-api
+    container_name: api.societyinshadows.org
     build:
       context: ./api
       dockerfile: Dockerfile
     environment:
-      - ASPNETCORE_HTTPS_PORTS=5001
-      - ASPNETCORE_HTTP_PORTS=5000
+      - ASPNETCORE_HTTPS_PORTS=443
+      - ASPNETCORE_HTTP_PORTS=80
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_Kestrel__Certificates__Default__KeyPath=/https/key.pem
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/cert.pem
       - ConnectionStrings__DefaultConnection=Host=expressed-realms-db;Port=5432;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
       - SENDGRID_HOST=http://expressed-realms-sendgrid-mock:3000
       - SENDGRID_API_KEY=${SENDGRID_API_KEY}
-      - FRONT_END_BASE_URL=https://localhost:5173
+      - FRONT_END_BASE_URL=https://localhost
       - FROM_EMAIL=${FROM_EMAIL}
     ports:
       - '5000:5000'
