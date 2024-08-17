@@ -1,0 +1,72 @@
+name: .NET
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'api/ExpressedRealms.DB/Migrations/**'
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+        
+      - name: Restore Tools
+        run: dotnet tool restore
+        
+      - name: Build Bundle
+        run: dotnet ef migrations bundle --self-contained --project ExpressedRealms.DB --startup-project ExpressedRealms.Server
+        working-directory: ./api
+        
+      - name: Get Public IP
+        id: ip
+        uses: haythem/public-ip@v1.3
+        
+      - name: Print Public IP
+        run: |
+          echo ${{ steps.ip.outputs.ipv4 }}
+          echo ${{ steps.ip.outputs.ipv6 }}
+          
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.EXPRESSEDREALMS_DATABASE_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.EXPRESSEDREALMS_DATABASE_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.EXPRESSEDREALMS_DATABASE_AZURE_SUBSCRIPTION_ID }}
+          
+      - name: Add IP to Firewall
+        run: az postgres server firewall-rule create --resource-group ${RESOURCE_GROUP} --server ${SQL_SERVER} --name GitHubIP --start-ip-address ${IP_ADDRESS} --end-ip-address ${IP_ADDRESS}
+        env:
+          SQL_SERVER: ${{ secrets.Postgres_Server_Name }}
+          IP_ADDRESS: ${{ steps.ip.outputs.ipv4 }}
+          RESOURCE_GROUP: ${{ secrets.Posgres_Resource_Group }}
+          
+      - name: Run Migrations
+        run: ./efbundle --connection "${{ secrets.CONNECTION_STRING }}"
+        working-directory: ./api
+          
+      - name: Remove IP from Firewall
+        if: always()
+        run: az sql postgres firewall-rule delete --resource-group ${RESOURCE_GROUP} --server ${SQL_SERVER} --name GitHubIP
+        env:
+          SQL_SERVER: ${{ secrets.Postgres_Server_Name }}
+          RESOURCE_GROUP: ${{ secrets.Posgres_Resource_Group }}
