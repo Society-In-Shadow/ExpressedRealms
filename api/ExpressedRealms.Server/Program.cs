@@ -122,24 +122,6 @@ try
     Log.Information("Building the App");
     var app = builder.Build();
 
-    // Migrate latest database changes during startup
-    Log.Information("Checking if Migrations Need to Be Run");
-    using (var scope = app.Services.CreateScope())
-    {
-        var dbContext = scope.ServiceProvider.GetRequiredService<ExpressedRealmsDbContext>();
-
-        if (dbContext.Database.GetPendingMigrations().Any())
-        {
-            Log.Information("DB is missing migrations, running them now");
-            dbContext.Database.Migrate();
-            Log.Information("Successfully ran all migrations!");
-        }
-        else
-        {
-            Log.Information("No Migrations are needed");
-        }
-    }
-
     app.UseDefaultFiles();
     app.UseStaticFiles();
 
