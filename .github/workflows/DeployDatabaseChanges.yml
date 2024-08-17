@@ -64,7 +64,7 @@ jobs:
           subscription-id: ${{ secrets.EXPRESSEDREALMS_DATABASE_AZURE_SUBSCRIPTION_ID }}
 
       - name: Add IP to Firewall
-        run: az postgres flexible-server firewall-rule create --resource-group "${RESOURCE_GROUP}" --server-name "${SQL_SERVER}" --name GitHubIP --start-ip-address "${IP_ADDRESS}" --end-ip-address "${IP_ADDRESS}"
+        run: az postgres flexible-server firewall-rule create --resource-group "${RESOURCE_GROUP}" --name "${SQL_SERVER}" --name GitHubIP --start-ip-address "${IP_ADDRESS}" --end-ip-address "${IP_ADDRESS}"
         env:
           SQL_SERVER: ${{ secrets.POSTGRES_SERVER_NAME }}
           IP_ADDRESS: ${{ steps.ip.outputs.ipv4 }}
@@ -76,7 +76,7 @@ jobs:
 
       - name: Remove IP from Firewall
         if: always()
-        run: az postgres flexible-server firewall-rule delete --resource-group "${RESOURCE_GROUP}" --server-name "${SQL_SERVER}" --name GitHubIP --yes
+        run: az postgres flexible-server firewall-rule delete --resource-group "${RESOURCE_GROUP}" --name "${SQL_SERVER}" --name GitHubIP --yes
         env:
           SQL_SERVER: ${{ secrets.POSTGRES_SERVER_NAME }}
           RESOURCE_GROUP: ${{ secrets.POSTGRES_RESOURCE_GROUP }}
