@@ -66,9 +66,9 @@ jobs:
       - name: Add IP to Firewall
         run: az postgres server firewall-rule create --resource-group ${RESOURCE_GROUP} --server ${SQL_SERVER} --name GitHubIP --start-ip-address ${IP_ADDRESS} --end-ip-address ${IP_ADDRESS}
         env:
-          SQL_SERVER: ${{ secrets.POSTGRESS_SERVER_NAME }}
+          SQL_SERVER: ${{ secrets.POSTGRES_SERVER_NAME }}
           IP_ADDRESS: ${{ steps.ip.outputs.ipv4 }}
-          RESOURCE_GROUP: ${{ secrets.POSTGRESS_RESOURCE_GROUP }}
+          RESOURCE_GROUP: ${{ secrets.POSTGRES_RESOURCE_GROUP }}
 
       - name: Run Migrations
         run: ./efbundle --connection "${{ secrets.CONNECTION_STRING }}"
