@@ -66,9 +66,9 @@ jobs:
       - name: Add IP to Firewall
         run: az postgres server firewall-rule create --resource-group ${RESOURCE_GROUP} --server ${SQL_SERVER} --name GitHubIP --start-ip-address ${IP_ADDRESS} --end-ip-address ${IP_ADDRESS}
         env:
-          SQL_SERVER: ${{ secrets.Postgres_Server_Name }}
+          SQL_SERVER: ${{ secrets.POSTGRESS_SERVER_NAME }}
           IP_ADDRESS: ${{ steps.ip.outputs.ipv4 }}
-          RESOURCE_GROUP: ${{ secrets.Posgres_Resource_Group }}
+          RESOURCE_GROUP: ${{ secrets.POSTGRESS_RESOURCE_GROUP }}
 
       - name: Run Migrations
         run: ./efbundle --connection "${{ secrets.CONNECTION_STRING }}"
@@ -76,7 +76,7 @@ jobs:
 
       - name: Remove IP from Firewall
         if: always()
-        run: az sql postgres firewall-rule delete --resource-group ${RESOURCE_GROUP} --server ${SQL_SERVER} --name GitHubIP
+        run: az postgres firewall-rule delete --resource-group ${RESOURCE_GROUP} --server ${SQL_SERVER} --name GitHubIP
         env:
           SQL_SERVER: ${{ secrets.Postgres_Server_Name }}
           RESOURCE_GROUP: ${{ secrets.Posgres_Resource_Group }}
