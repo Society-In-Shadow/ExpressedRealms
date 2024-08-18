@@ -70,9 +70,17 @@ jobs:
           IP_ADDRESS: ${{ steps.ip.outputs.ipv4 }}
           RESOURCE_GROUP: ${{ secrets.POSTGRES_RESOURCE_GROUP }}
 
+      - name: Get Access Token
+        id: get_token
+        run: |
+          token=$(az account get-access-token --resource https://ossrdbms-aad.database.windows.net/ --query accessToken -o tsv)
+          echo "##[set-output name=token;]$token"
+
       - name: Run Migrations
         run: ./efbundle --connection "${{ secrets.CONNECTION_STRING }}"
         working-directory: ./api
+        env:
+          CONNECTION_STRING: "Server=${{secrets.CONNECTION_STRING_SERVER_NAME}};Database=${{secrets.CONNECTION_STRING_DATABASE}};Port=5432;User Id=${{secrets.CONNECTION_STRING_USER_ID}};Password=${{ steps.get_token.outputs.token }};Ssl Mode=Require;"
 
       - name: Remove IP from Firewall
         if: always()
