@@ -62,26 +62,26 @@ namespace ExpressedRealms.DB.Migrations
                     ExpressionId = table.Column<int>(type: "integer", nullable: false),
                     SectionTypeId = table.Column<int>(type: "integer", nullable: false),
                     ParentId = table.Column<int>(type: "integer", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "character varying(150)", nullable: false, maxLength: 150),
                     Content = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ExpressionSection", x => x.Id);
+                    table.PrimaryKey("PK_ExpressionSections", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ExpressionSection_ExpressionSectionTypes_SectionTypeId",
+                        name: "FK_ExpressionSections_ExpressionSectionTypes_SectionTypeId",
                         column: x => x.SectionTypeId,
                         principalTable: "ExpressionSectionTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ExpressionSection_ExpressionSection_ParentId",
+                        name: "FK_ExpressionSections_ExpressionSections_ParentId",
                         column: x => x.ParentId,
-                        principalTable: "ExpressionSection",
+                        principalTable: "ExpressionSections",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ExpressionSection_Expressions_ExpressionId",
+                        name: "FK_ExpressionSections_Expressions_ExpressionId",
                         column: x => x.ExpressionId,
                         principalTable: "Expressions",
                         principalColumn: "Id",
@@ -89,18 +89,18 @@ namespace ExpressedRealms.DB.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExpressionSection_ExpressionId",
-                table: "ExpressionSection",
+                name: "IX_ExpressionSections_ExpressionId",
+                table: "ExpressionSections",
                 column: "ExpressionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExpressionSection_ParentId",
-                table: "ExpressionSection",
+                name: "IX_ExpressionSections_ParentId",
+                table: "ExpressionSections",
                 column: "ParentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExpressionSection_SectionTypeId",
-                table: "ExpressionSection",
+                name: "IX_ExpressionSections_SectionTypeId",
+                table: "ExpressionSections",
                 column: "SectionTypeId");
         }
 
@@ -108,7 +108,7 @@ namespace ExpressedRealms.DB.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ExpressionSection");
+                name: "ExpressionSections");
 
             migrationBuilder.DropTable(
                 name: "ExpressionSectionTypes");
