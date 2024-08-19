@@ -1,5 +1,6 @@
 using System.Reflection;
 using AspNetCore.SwaggerUI.Themes;
+using Azure.Core;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels;
 using ExpressedRealms.Repositories.Characters;
@@ -19,6 +20,7 @@ using Serilog;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
+using Azure.Identity;
 
 try
 {
@@ -39,10 +41,19 @@ try
     builder.Host.UseSerilog();
 
     Log.Information("Adding DB Context");
+    
+    // For system-assigned identity.
+    var sqlServerTokenProvider = new DefaultAzureCredential();
+
+    AccessToken accessToken = await sqlServerTokenProvider.GetTokenAsync(
+        new TokenRequestContext(scopes: new string[]
+        {
+            "https://ossrdbms-aad.database.windows.net/.default"
+        }));
 
     builder.Services.AddDbContext<ExpressedRealmsDbContext>(options =>
         options.UseNpgsql(
-            builder.Configuration.GetConnectionString("DefaultConnection"),
+            $"{builder.Configuration.GetConnectionString("DefaultConnection")};Password={accessToken.Token}\"",
             x => x.MigrationsHistoryTable("_EfMigrations", "efcore")
         )
     );
