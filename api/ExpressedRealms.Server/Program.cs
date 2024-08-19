@@ -50,10 +50,12 @@ try
         {
             "https://ossrdbms-aad.database.windows.net/.default"
         }));
-
+    
+    string connectionString =
+        $"{Environment.GetEnvironmentVariable("AZURE_POSTGRESQL_CONNECTIONSTRING")};Password={accessToken.Token}";
+    
     builder.Services.AddDbContext<ExpressedRealmsDbContext>(options =>
-        options.UseNpgsql(
-            $"{builder.Configuration.GetConnectionString("DefaultConnection")};Password={accessToken.Token}\"",
+        options.UseNpgsql(connectionString,
             x => x.MigrationsHistoryTable("_EfMigrations", "efcore")
         )
     );
