@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using ExpressedRealms.Email.EmailClientAdapter;
+using Microsoft.Extensions.Configuration;
 
 namespace ExpressedRealms.Email.SendGridTestEmail;
 

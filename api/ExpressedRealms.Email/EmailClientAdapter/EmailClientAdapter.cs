@@ -4,9 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 
-namespace ExpressedRealms.Email;
+namespace ExpressedRealms.Email.EmailClientAdapter;
 
-public class EmailClientAdapter(
+internal sealed class EmailClientAdapter(
     IConfiguration configuration, 
     ILogger<EmailClientAdapter> logger
 ) : IEmailClientAdapter
@@ -35,7 +35,7 @@ public class EmailClientAdapter(
         
         MailjetResponse response = await mailClient.PostAsync(request);
         if (!response.IsSuccessStatusCode)
-            logger.LogError("Email {Subject} failed to send to {toField}.  StatusCode {statusCode}, ErrorInfo {errorInfo}, ErrorMessage: {errorMessage}", 
+            logger.LogError("Email \"{Subject}\" failed to send to \"{toField}\".  StatusCode {statusCode}, ErrorInfo {errorInfo}, ErrorMessage: {errorMessage}", 
                 data.Subject, data.ToField, response.StatusCode, response.GetErrorInfo(), response.GetErrorMessage());
         
     }

@@ -1,3 +1,4 @@
+using ExpressedRealms.Email.EmailClientAdapter;
 using ExpressedRealms.Email.IdentityEmails.ConfirmAccountEmail;
 using ExpressedRealms.Email.IdentityEmails.ForgotPasswordEmail;
 using Mailjet.Client;

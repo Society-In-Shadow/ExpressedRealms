@@ -1,6 +1,6 @@
-namespace ExpressedRealms.Email;
+namespace ExpressedRealms.Email.EmailClientAdapter;
 
-public record EmailData(
+internal record EmailData(
     string ToField,
     string Subject,
     string PlainTextBody,
