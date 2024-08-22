@@ -1,17 +1,20 @@
 using ExpressedRealms.Email.IdentityEmails.ConfirmAccountEmail;
 using ExpressedRealms.Email.IdentityEmails.ForgotPasswordEmail;
+using Mailjet.Client;
+using Mailjet.Client.Resources;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
 namespace ExpressedRealms.Email.IdentityEmails;
 
 internal sealed class IdentityEmailSender(
-    ISendGridClient sendGrid,
     IForgetPasswordEmail forgetPasswordEmail,
     IConfirmAccountEmail confirmAccountEmail,
-    IConfiguration configuration
+    IEmailClientAdapter emailClientAdapter
 ) : IEmailSender
 {
     public async Task SendEmailAsync(string email, string subject, string htmlMessage)
@@ -23,14 +26,11 @@ internal sealed class IdentityEmailSender(
             "Confirm your email" => confirmAccountEmail.GetUpdatedEmailTemplate(htmlMessage),
             _ => (subject, plainTextMessage, htmlMessage)
         };
-
-        var msg = MailHelper.CreateSingleEmail(
-            new EmailAddress(configuration["FROM_EMAIL"]),
-            new EmailAddress(email),
+        
+        await emailClientAdapter.SendEmailAsync(new EmailData(
+            email,
             subject,
             plainTextMessage,
-            htmlMessage
-        );
-        var response = await sendGrid.SendEmailAsync(msg).ConfigureAwait(false);
+            htmlMessage));
     }
 }
