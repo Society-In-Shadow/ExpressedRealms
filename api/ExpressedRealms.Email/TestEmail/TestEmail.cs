@@ -1,10 +1,10 @@
 ﻿using ExpressedRealms.Email.EmailClientAdapter;
 using Microsoft.Extensions.Configuration;
 
-namespace ExpressedRealms.Email.SendGridTestEmail;
+namespace ExpressedRealms.Email.TestEmail;
 
-internal class SendGridEmail(IEmailClientAdapter emailClientClient, IConfiguration configuration)
-    : ISendGridEmail
+internal class TestEmail(IEmailClientAdapter emailClientClient, IConfiguration configuration)
+    : ITestEmail
 {
     public async Task SendTestEmail()
     {

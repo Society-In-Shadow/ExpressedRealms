@@ -3,7 +3,7 @@ using ExpressedRealms.Email.EmailClientAdapter;
 using ExpressedRealms.Email.IdentityEmails;
 using ExpressedRealms.Email.IdentityEmails.ConfirmAccountEmail;
 using ExpressedRealms.Email.IdentityEmails.ForgotPasswordEmail;
-using ExpressedRealms.Email.SendGridTestEmail;
+using ExpressedRealms.Email.TestEmail;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +24,7 @@ public static class EmailDependencyInjections
 
     private static void InjectIndividualEmails(this IServiceCollection services)
     {
-        services.AddTransient<ISendGridEmail, SendGridEmail>();
+        services.AddTransient<ITestEmail, TestEmail>();
         services.AddTransient<IForgetPasswordEmail, ForgetPasswordEmail>();
         services.AddTransient<IConfirmAccountEmail, ConfirmAccountEmail>();
     }

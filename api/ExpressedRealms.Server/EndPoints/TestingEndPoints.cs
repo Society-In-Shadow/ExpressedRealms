@@ -1,4 +1,4 @@
-using ExpressedRealms.Email.SendGridTestEmail;
+using ExpressedRealms.Email.TestEmail;
 
 namespace ExpressedRealms.Server.EndPoints;
 
@@ -8,7 +8,7 @@ internal static class TestingEndPoints
     {
         app.MapGet(
             "/sendTestEmail",
-            async (ISendGridEmail email) =>
+            async (ITestEmail email) =>
             {
                 await email.SendTestEmail();
                 return Results.Ok();
