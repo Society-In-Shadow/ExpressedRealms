@@ -1,14 +1,7 @@
 using ExpressedRealms.Email.EmailClientAdapter;
 using ExpressedRealms.Email.IdentityEmails.ConfirmAccountEmail;
 using ExpressedRealms.Email.IdentityEmails.ForgotPasswordEmail;
-using Mailjet.Client;
-using Mailjet.Client.Resources;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
-using SendGrid;
-using SendGrid.Helpers.Mail;
 
 namespace ExpressedRealms.Email.IdentityEmails;
 
