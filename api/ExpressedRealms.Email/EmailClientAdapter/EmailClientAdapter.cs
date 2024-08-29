@@ -1,8 +1,6 @@
-using Mailjet.Client;
-using Mailjet.Client.Resources;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
+using PostmarkDotNet;
 
 namespace ExpressedRealms.Email.EmailClientAdapter;
 
@@ -13,30 +11,27 @@ internal sealed class EmailClientAdapter(
 {
     public async Task SendEmailAsync(EmailData data)
     {
-        MailjetRequest request = new MailjetRequest
-            {
-                Resource = Send.Resource,
-            }
-            .Property(Send.FromEmail, configuration["NO_REPLY_EMAIL"])
-            .Property(Send.FromName, configuration["NO_REPLY_EMAIL_NAME"])
-            .Property(Send.Subject, data.Subject)
-            .Property(Send.TextPart, data.PlainTextBody)
-            .Property(Send.HtmlPart, data.HtmlBody)
-            .Property(Send.Recipients, new JArray {
-                new JObject {
-                    {"Email", data.ToField}
-                }
-            });
+        var message = new PostmarkMessage
+        {
+            From = configuration["NO_REPLY_EMAIL"],
+            To = data.ToField,
+            Subject = data.Subject,
+            TextBody = data.PlainTextBody,
+            HtmlBody = data.HtmlBody
+        };
+
+        var client = new PostmarkClient(configuration["POSTMARK_API_KEY"]);
         
-        var mailClient = new MailjetClient(
-            configuration["MAILJET_API_KEY"], 
-            configuration["MAILJET_API_PRIVATE_KEY"]
-        );
-        
-        MailjetResponse response = await mailClient.PostAsync(request);
-        if (!response.IsSuccessStatusCode)
-            logger.LogError("Email \"{Subject}\" failed to send to \"{toField}\".  StatusCode {statusCode}, ErrorInfo {errorInfo}, ErrorMessage: {errorMessage}", 
-                data.Subject, data.ToField, response.StatusCode, response.GetErrorInfo(), response.GetErrorMessage());
+        var response = await client.SendMessageAsync(message);
+
+        if (response.Status == PostmarkStatus.Success)
+        {
+            logger.LogTrace("Successfully sent message!");
+        }
+        else
+        {
+            logger.LogError("Email did not send.  Error Code {errorCode}.  Message {message}", response.ErrorCode, response.Message);
+        }
         
     }
 }

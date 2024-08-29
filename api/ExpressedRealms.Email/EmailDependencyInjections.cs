@@ -15,7 +15,7 @@ public static class EmailDependencyInjections
         IConfiguration configuration
     )
     {
-        services.AddScoped<IEmailClientAdapter, EmailClientAdapter>();
+        services.AddTransient<IEmailClientAdapter, EmailClientAdapter>();
         
         services.AddTransient<IEmailSender, IdentityEmailSender>();
         services.InjectIndividualEmails();

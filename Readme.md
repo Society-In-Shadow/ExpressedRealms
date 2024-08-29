@@ -82,13 +82,11 @@ DB_PASSWORD=
 # DO NOT modify this
 CERTIFICATE_PASSWORD=changeit
 
-# Ask about these keys
-MAILJET_API_KEY=superKey
-MAILJET_API_PRIVATE_KEY=superSecretKey
+# Ask about this key
+POSTMARK_API_KEY=
 
 # Global From Email
-NO_REPLY_EMAIL=no-reply@societyinshadows.org
-NO_REPLY_EMAIL_NAME="No Reply"
+NO_REPLY_EMAIL=admin@societyinshadows.org
 
 # Email address the admin test email sends to
 TEST_EMAIL_ADDRESS=YourEmailAddressHere
