@@ -16,7 +16,7 @@ public static class EmailDependencyInjections
     )
     {
         services.AddTransient<IEmailClientAdapter, EmailClientAdapter>();
-        
+
         services.AddTransient<IEmailSender, IdentityEmailSender>();
         services.InjectIndividualEmails();
         return services;

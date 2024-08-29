@@ -20,11 +20,9 @@ internal sealed class IdentityEmailSender(
             "Confirm your email" => confirmAccountEmail.GetUpdatedEmailTemplate(htmlMessage),
             _ => (subject, plainTextMessage, htmlMessage)
         };
-        
-        await emailClientAdapter.SendEmailAsync(new EmailData(
-            email,
-            subject,
-            plainTextMessage,
-            htmlMessage));
+
+        await emailClientAdapter.SendEmailAsync(
+            new EmailData(email, subject, plainTextMessage, htmlMessage)
+        );
     }
 }

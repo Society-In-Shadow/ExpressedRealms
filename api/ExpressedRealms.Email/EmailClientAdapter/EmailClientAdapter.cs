@@ -5,7 +5,7 @@ using PostmarkDotNet;
 namespace ExpressedRealms.Email.EmailClientAdapter;
 
 internal sealed class EmailClientAdapter(
-    IConfiguration configuration, 
+    IConfiguration configuration,
     ILogger<EmailClientAdapter> logger
 ) : IEmailClientAdapter
 {
@@ -21,7 +21,7 @@ internal sealed class EmailClientAdapter(
         };
 
         var client = new PostmarkClient(configuration["POSTMARK_API_KEY"]);
-        
+
         var response = await client.SendMessageAsync(message);
 
         if (response.Status == PostmarkStatus.Success)
@@ -30,8 +30,11 @@ internal sealed class EmailClientAdapter(
         }
         else
         {
-            logger.LogError("Email did not send.  Error Code {errorCode}.  Message {message}", response.ErrorCode, response.Message);
+            logger.LogError(
+                "Email did not send.  Error Code {errorCode}.  Message {message}",
+                response.ErrorCode,
+                response.Message
+            );
         }
-        
     }
 }
