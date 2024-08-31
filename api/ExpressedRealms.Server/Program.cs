@@ -26,13 +26,29 @@ try
 {
     Log.Information("Setting Up Web App");
     var builder = WebApplication.CreateBuilder(args);
+    
+    // For system-assigned identity.
+    string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
+    if (!builder.Environment.IsDevelopment())
+    {
+        var sqlServerTokenProvider = new DefaultAzureCredential();
+        AccessToken accessToken = await sqlServerTokenProvider.GetTokenAsync(
+            new TokenRequestContext(scopes: new string[]
+            {
+                "https://ossrdbms-aad.database.windows.net/.default"
+            }));
+    
+        connectionString =
+            $"{Environment.GetEnvironmentVariable("AZURE_POSTGRESQL_CONNECTIONSTRING")};Password={accessToken.Token}";
+    }
+
 
     Log.Information("Setting Up Loggers");
     Log.Logger = new LoggerConfiguration()
         .MinimumLevel.Information()
         .WriteTo.Console()
         .WriteTo.PostgreSQL(
-            builder.Configuration.GetConnectionString("DefaultConnection"),
+            connectionString,
             "Logs",
             needAutoCreateTable: true
         )
@@ -41,18 +57,6 @@ try
     builder.Host.UseSerilog();
 
     Log.Information("Adding DB Context");
-    
-    // For system-assigned identity.
-    var sqlServerTokenProvider = new DefaultAzureCredential();
-
-    AccessToken accessToken = await sqlServerTokenProvider.GetTokenAsync(
-        new TokenRequestContext(scopes: new string[]
-        {
-            "https://ossrdbms-aad.database.windows.net/.default"
-        }));
-    
-    string connectionString =
-        $"{Environment.GetEnvironmentVariable("AZURE_POSTGRESQL_CONNECTIONSTRING")};Password={accessToken.Token}";
     
     builder.Services.AddDbContext<ExpressedRealmsDbContext>(options =>
         options.UseNpgsql(connectionString,
@@ -165,7 +169,10 @@ try
     }
 
     Log.Information("Adding in Security Related Things");
-    app.UseHttpsRedirection();
+    
+    if(app.Environment.IsDevelopment())
+        app.UseHttpsRedirection();
+    
     app.UseAuthentication();
     app.UseAuthorization();
 
