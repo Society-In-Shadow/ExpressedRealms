@@ -21,7 +21,7 @@ EXPOSE 443
 COPY --from=build /app/publish .
 
 HEALTHCHECK --interval=15s --timeout=60s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider https://0.0.0.0:5001/login || exit 1
+  CMD wget --no-verbose --tries=1 --spider http://0.0.0.0/_health || exit 1
 
 USER $APP_UID
 ENTRYPOINT ["dotnet", "ExpressedRealms.Server.dll"]
