@@ -16,8 +16,8 @@ on:
     branches: [main]
     paths:
       - 'client/**'
-  # pull_request:
-  #  branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   push_to_registry:
@@ -77,3 +77,4 @@ jobs:
           imageToDeploy: ${{ vars.EXPRESSEDREALMSFRONTEND_REGISTRY_URL }}/noremacskich/expressedrealms-frontend:${{ github.sha }}
           containerAppName: ca-expressedrealms-frontend
           resourceGroup: RG_ExpressedRealms
+          environmentVariables: VITE_API_BASE_URL=https://api.societyinshadows.org/
