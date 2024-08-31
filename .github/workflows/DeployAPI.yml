@@ -77,3 +77,11 @@ jobs:
           imageToDeploy: ${{ vars.EXPRESSEDREALMSFRONTEND_REGISTRY_URL }}/noremacskich/expressedrealms-api:${{ github.sha }}
           containerAppName: ca-expressedrealms-api
           resourceGroup: RG_ExpressedRealms
+          environment-variables: |
+            ASPNETCORE_ENVIRONMENT=Production
+            ASPNETCORE_URLS=http://+:80
+            POSTMARK_API_KEY=${{ secrets.POSTMARK_API_KEY }}
+            NO_REPLY_EMAIL=${{ vars.NO_REPLY_EMAIL }}
+            TEST_EMAIL_ADDRESS=${{ vars.TEST_EMAIL_ADDRESS }}
+            
+            
