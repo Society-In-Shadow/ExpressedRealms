@@ -10,7 +10,16 @@ RUN npm run build-only
 FROM nginx:stable-alpine as production-stage
 
 COPY --from=build-stage /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/nginx.conf  
+COPY nginx.dev.conf /etc/nginx/nginx.dev.conf
+COPY nginx.prod.conf /etc/nginx/nginx.prod.conf
+
+CMD rm /etc/nginx/nginx.conf
+COPY start.sh /usr/local/bin/start.sh
+RUN chown -R nginx:nginx /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
+
+RUN chown -R nginx:nginx /etc/nginx/nginx.dev.conf
+RUN chown -R nginx:nginx /etc/nginx/nginx.prod.conf
 
 RUN chown -R nginx:nginx /var/cache/nginx && \
         chown -R nginx:nginx /var/log/nginx && \
@@ -23,4 +32,4 @@ HEALTHCHECK --interval=30s --timeout=3s CMD curl --fail http://localhost:3000/ |
 # Optional: Add custom Nginx configuration
 EXPOSE 80
 USER nginx
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/usr/local/bin/start.sh"]
