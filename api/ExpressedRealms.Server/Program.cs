@@ -29,7 +29,7 @@ try
     
     // For system-assigned identity.
     string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
-    if (!builder.Environment.IsDevelopment())
+    if (string.IsNullOrEmpty(connectionString))
     {
         var sqlServerTokenProvider = new DefaultAzureCredential();
         AccessToken accessToken = await sqlServerTokenProvider.GetTokenAsync(
@@ -174,7 +174,7 @@ try
 
     Log.Information("Adding Health Check Endpoint");
     
-    app.MapHealthChecks("_health");
+    app.MapHealthChecks("health");
     
     Log.Information("Adding in Security Related Things");
     
