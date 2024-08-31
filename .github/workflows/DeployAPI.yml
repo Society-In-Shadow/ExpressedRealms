@@ -79,7 +79,6 @@ jobs:
           resourceGroup: RG_ExpressedRealms
           environmentVariables: |
             ASPNETCORE_ENVIRONMENT=Production
-            ASPNETCORE_URLS=http://+:80
             POSTMARK_API_KEY=${{ secrets.POSTMARK_API_KEY }}
             NO_REPLY_EMAIL=${{ vars.NO_REPLY_EMAIL }}
             TEST_EMAIL_ADDRESS=${{ vars.TEST_EMAIL_ADDRESS }}
