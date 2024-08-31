@@ -55,7 +55,11 @@ try
         .CreateLogger();
 
     builder.Host.UseSerilog();
+    
+    Log.Information("Add in Healthchecks");
 
+    builder.Services.AddHealthChecks();
+    
     Log.Information("Adding DB Context");
     
     builder.Services.AddDbContext<ExpressedRealmsDbContext>(options =>
@@ -168,6 +172,10 @@ try
         app.UseSwaggerUI(ModernStyle.Dark);
     }
 
+    Log.Information("Adding Health Check Endpoint");
+    
+    app.MapHealthChecks("_health");
+    
     Log.Information("Adding in Security Related Things");
     
     if(app.Environment.IsDevelopment())
