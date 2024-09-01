@@ -10,16 +10,7 @@ RUN npm run build-only
 FROM nginx:stable-alpine as production-stage
 
 COPY --from=build-stage /app/dist /usr/share/nginx/html
-#COPY nginx.dev.conf /etc/nginx/nginx.dev.conf
-COPY nginx.prod.conf /etc/nginx/nginx.conf
-
-#CMD rm /etc/nginx/nginx.conf
-COPY start.sh /usr/local/bin/start.sh
-RUN chown -R nginx:nginx /usr/local/bin/start.sh
-RUN chmod +x /usr/local/bin/start.sh
-
-RUN chown -R nginx:nginx /etc/nginx/nginx.dev.conf
-RUN chown -R nginx:nginx /etc/nginx/nginx.prod.conf
+COPY nginx.conf /etc/nginx/nginx.conf
 
 RUN chown -R nginx:nginx /var/cache/nginx && \
         chown -R nginx:nginx /var/log/nginx && \
