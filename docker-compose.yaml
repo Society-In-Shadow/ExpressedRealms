@@ -12,13 +12,13 @@ services:
       context: ./client
       dockerfile: Dockerfile
     ports:
-      - '80:3000'
+      - '3000:3000'
       - '443:443'
     environment:
       - VITE_HTTPS_KEY=/https/key.pem
       - VITE_HTTPS_CERT=/https/cert.pem
       - VITE_PORT=443
-      - VITE_API_BASE_URL=https://api.societyinshadows.org/
+      - VITE_API_BASE_URL=http://localhost:5000/
     #volumes:
       #- ./client/:/app # This is only here to allow automatic updates on local machines as you are editing the code
       #- ${USERPROFILE}/.aspnet/https:/https # Host Certificate Location (key.pem/cert.pem) : Image Path
@@ -34,19 +34,15 @@ services:
       context: ./api
       dockerfile: Dockerfile
     environment:
-      - ASPNETCORE_HTTPS_PORTS=443
-      - ASPNETCORE_HTTP_PORTS=80
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_Kestrel__Certificates__Default__KeyPath=/https/key.pem
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/cert.pem
+      - ASPNETCORE_URLS=http://+:8080
+      - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=Host=expressed-realms-db;Port=5432;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
       - FRONT_END_BASE_URL=https://localhost
       - POSTMARK_API_KEY=${POSTMARK_API_KEY}
       - NO_REPLY_EMAIL=${NO_REPLY_EMAIL}
       - TEST_EMAIL_ADDRESS=${TEST_EMAIL_ADDRESS}
     ports:
-      - '5000:80'
-      - '5001:443'
+      - '5000:8080'
     volumes:
       - ${USERPROFILE}/.aspnet/https:/https:ro
     networks:
