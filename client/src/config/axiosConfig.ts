@@ -26,7 +26,7 @@ function setupErrorHandlingInterceptors() {
 }
 
 function setAPIUrl() {
-    axios.defaults.baseURL = "https://societyinshadows.org"
+    axios.defaults.baseURL = "https://api.societyinshadows.org"
 }
 
 export default {
