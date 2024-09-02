@@ -107,7 +107,7 @@ try
             options.Cookie.HttpOnly = false;
             options.Cookie.Name = "XSRF-TOKEN";
             options.Cookie.SameSite = SameSiteMode.None;
-            options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
         }
     );
 
