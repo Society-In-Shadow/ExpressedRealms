@@ -21,6 +21,7 @@ using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 using Azure.Identity;
+using Microsoft.AspNetCore.HttpOverrides;
 
 try
 {
