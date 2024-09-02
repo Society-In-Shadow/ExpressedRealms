@@ -167,6 +167,14 @@ try
         }
     }
 
+    if (app.Environment.IsProduction())
+    {
+        app.UseForwardedHeaders(new ForwardedHeadersOptions()
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+        });
+    }
+    
     app.UseDefaultFiles();
     app.UseStaticFiles();
 
