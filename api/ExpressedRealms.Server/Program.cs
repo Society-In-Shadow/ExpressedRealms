@@ -107,7 +107,7 @@ try
             options.Cookie.HttpOnly = false;
             options.Cookie.Name = "XSRF-TOKEN";
             options.Cookie.SameSite = SameSiteMode.None;
-            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
         }
     );
 
@@ -190,6 +190,7 @@ try
 
     if (app.Environment.IsProduction())
     {
+        Log.Information("Setting Up Forwarded Headers");
         app.UseForwardedHeaders();
     }
     
