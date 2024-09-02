@@ -128,7 +128,7 @@ try
     builder.Services.Configure<ForwardedHeadersOptions>(options =>
     {
         options.ForwardedHeaders =
-            ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
     });
     
     Log.Information("Adding OpenAPI Support and Swagger Generation");
