@@ -93,7 +93,7 @@ try
             {
                 o.Cookie.Domain = ".societyinshadows.org";
                 o.SlidingExpiration = true;
-                o.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 o.Cookie.SameSite = SameSiteMode.None;
             }
         );
@@ -111,6 +111,12 @@ try
         }
     );
 
+    builder.Services.Configure<ForwardedHeadersOptions>(options =>
+    {
+        options.ForwardedHeaders =
+            ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    });
+    
     Log.Information("Adding OpenAPI Support and Swagger Generation");
 
     // Add services to the container.
@@ -170,10 +176,7 @@ try
 
     if (app.Environment.IsProduction())
     {
-        app.UseForwardedHeaders(new ForwardedHeadersOptions()
-        {
-            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-        });
+        app.UseForwardedHeaders();
     }
     
     app.UseDefaultFiles();
