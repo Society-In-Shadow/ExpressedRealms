@@ -111,6 +111,20 @@ try
         }
     );
 
+    if (builder.Environment.IsDevelopment())
+    {
+        builder.Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(policy =>
+            {
+                policy.WithOrigins("https://localhost")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            });
+        });
+    }
+
     builder.Services.Configure<ForwardedHeadersOptions>(options =>
     {
         options.ForwardedHeaders =
@@ -195,9 +209,12 @@ try
     app.MapHealthChecks("health");
     
     Log.Information("Adding in Security Related Things");
-    
+
     if(app.Environment.IsDevelopment())
+    {
         app.UseHttpsRedirection();
+        app.UseCors();
+    }
     
     app.UseAuthentication();
     app.UseAuthorization();
