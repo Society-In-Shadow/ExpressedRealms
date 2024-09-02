@@ -25,6 +25,11 @@ function setupErrorHandlingInterceptors() {
     );
 }
 
+function setAPIUrl() {
+    axios.defaults.baseURL = "https://societyinshadows.org"
+}
+
 export default {
-    setupErrorHandlingInterceptors
+    setupErrorHandlingInterceptors,
+    setAPIUrl
 };

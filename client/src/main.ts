@@ -19,6 +19,7 @@ import { createPinia } from 'pinia'
 import ToastService from 'primevue/toastservice';
 import axiosConfig from "@/config/axiosConfig";
 axiosConfig.setupErrorHandlingInterceptors();
+axiosConfig.setAPIUrl();
 
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedState);
