@@ -29,7 +29,7 @@ const props = defineProps({
 });
 
 async function deleteCharacter() {
-  await axios.delete(`/api/characters/${props.characterId}`)
+  await axios.delete(`/characters/${props.characterId}`)
       .then(() => {
         emit('delete', props.characterId);
       });

@@ -14,7 +14,7 @@
 
   let userIsLoggedIn = isLoggedIn();
   let hasError = ref(false);
-  axios.get('/api/auth/confirmEmail',{
+  axios.get('/auth/confirmEmail',{
     params: {
       userId: route.query.userId,
       code: route.query.code,
@@ -31,7 +31,7 @@
   
   let sentConfirmationEmail = ref(false);
   async function resendConfirmationEmail() {
-    await axios.post("/api/auth/resendConfirmationEmail", { email: userInfo.userEmail })
+    await axios.post("/auth/resendConfirmationEmail", { email: userInfo.userEmail })
         .then(() => {
           sentConfirmationEmail.value = true;
         });

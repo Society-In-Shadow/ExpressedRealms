@@ -34,7 +34,7 @@ let sections = ref([
 ]);
 const isLoading = ref(true);
 function fetchData(name: string) {
-  axios.get(`/api/expression/${name}`)
+  axios.get(`/expression/${name}`)
       .then(async (json) => {
         sections.value = json.data;
         isLoading.value = false;

@@ -33,7 +33,7 @@ const [confirmPassword] = defineField('confirmPassword');
 const successfullyChangedPassword = vueRef(false);
 
 const onPasswordSubmit = handleSubmit((values, { resetForm }) => {
-  axios.post('/api/auth/manage/info',
+  axios.post('/auth/manage/info',
       {
         oldPassword: values.currentPassword,
         newPassword: values.confirmPassword

@@ -13,7 +13,7 @@ const selectedStatType = ref(1);
 const isLoading = ref(true);
 
 onMounted(() =>{
-  axios.get(`/api/characters/${route.params.id}/stats`)
+  axios.get(`/characters/${route.params.id}/stats`)
       .then((response) => {
         stats.value = response.data;
         isLoading.value = false;

@@ -53,7 +53,7 @@ onMounted(() =>{
 });
 
 function reloadStatInfo() {
-  axios.get(`/api/characters/${route.params.id}/stat/${props.statTypeId}`)
+  axios.get(`/characters/${route.params.id}/stat/${props.statTypeId}`)
       .then((response) => {
         stat.value = response.data;
         loading.value = false;
@@ -61,7 +61,7 @@ function reloadStatInfo() {
 }
 
 function getEditOptions() {
-  axios.get(`/api/stats/${props.statTypeId}`)
+  axios.get(`/stats/${props.statTypeId}`)
       .then((response) => {
         
         const selectedXP = response.data.find(x => x.level == stat.value.statLevel).totalXP;
@@ -83,7 +83,7 @@ function handleStatUpdate(stat:Stat){
     showOptions.value = !showOptions.value;
     return;
   }
-  axios.put(`/api/characters/${route.params.id}/stat/${props.statTypeId}`, {
+  axios.put(`/characters/${route.params.id}/stat/${props.statTypeId}`, {
     levelTypeId: stat.statLevel,
     statTypeId: props.statTypeId,
     characterId: route.params.id

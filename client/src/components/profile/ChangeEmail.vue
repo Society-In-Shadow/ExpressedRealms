@@ -27,7 +27,7 @@ const [confirmEmail] = defineField('confirmEmail');
 const successfullyChangedEmail = vueRef(false);
 
 const onEmailSubmit = handleSubmit((values, { resetForm }) => {
-  axios.post('/api/auth/manage/info',
+  axios.post('/auth/manage/info',
       {
         newEmail: values.confirmEmail
       }).then(() => {

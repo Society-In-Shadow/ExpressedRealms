@@ -18,7 +18,7 @@ const { defineField, handleSubmit, errors } = useForm({
 const [email] = defineField('email');
 
 const onSubmit = handleSubmit((values) => {
-  axios.post('/api/auth/forgotPassword', values)
+  axios.post('/auth/forgotPassword', values)
       .then(() => {
         Router.push('login?forgotPassword=1');
       });

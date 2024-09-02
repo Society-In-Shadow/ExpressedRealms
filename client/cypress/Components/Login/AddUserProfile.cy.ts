@@ -13,7 +13,7 @@ const updateProfileButton = 'update-profile-button';
 describe('<AddUserProfile />', () => {
     beforeEach(() => {
         
-        cy.intercept('POST', '/api/player', {
+        cy.intercept('POST', '/player', {
             statusCode: 200
         }).as('updateProfile');
 

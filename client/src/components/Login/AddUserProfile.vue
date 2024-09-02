@@ -36,7 +36,7 @@ const [city] = defineField('city')
 const [state] = defineField('state');
 
 const onSubmit = handleSubmit((values) => {
-  axios.post('/api/player', values).then(() => {
+  axios.post('/player', values).then(() => {
       userInfo.name = values.name;
       Router.push("characters");
     });

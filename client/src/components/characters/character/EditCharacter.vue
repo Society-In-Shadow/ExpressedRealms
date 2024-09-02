@@ -23,13 +23,13 @@ interface Faction{
 }
 
 onMounted(() =>{
-  axios.get(`/api/characters/${route.params.id}`)
+  axios.get(`/characters/${route.params.id}`)
       .then((response) => {
         name.value = response.data.name;
         background.value = response.data.background;
         expression.value = response.data.expression;
         
-        axios.get(`/api/characters/${route.params.id}/factionOptions`)
+        axios.get(`/characters/${route.params.id}/factionOptions`)
             .then((factionResponse) => {
               factions.value = factionResponse.data;
               
@@ -60,7 +60,7 @@ const isLoading = ref(true);
 const factions = ref([]);
 
 const onSubmit = handleSubmit((values) => {
-  axios.put('/api/characters/', {
+  axios.put('/characters/', {
     name: values.name,
     background: values.background,
     id: route.params.id,

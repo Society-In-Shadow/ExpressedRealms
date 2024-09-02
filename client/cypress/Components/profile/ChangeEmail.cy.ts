@@ -9,7 +9,7 @@ const resetEmailButton = 'reset-email-button';
 describe('<ChangeEmail />', () => {
     beforeEach(() => {
         
-        cy.intercept('POST', '/api/auth/manage/info', {
+        cy.intercept('POST', '/auth/manage/info', {
             statusCode: 200
         }).as('changePassword');
 

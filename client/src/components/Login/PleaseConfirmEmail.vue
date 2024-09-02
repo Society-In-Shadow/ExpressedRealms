@@ -9,7 +9,7 @@
 
   let sentConfirmationEmail = ref(false);
   async function resendConfirmationEmail() {
-    await axios.post("/api/auth/resendConfirmationEmail", { email: userInfo.userEmail })
+    await axios.post("/auth/resendConfirmationEmail", { email: userInfo.userEmail })
         .then(() => {
           sentConfirmationEmail.value = true;
         });

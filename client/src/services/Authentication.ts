@@ -26,7 +26,7 @@ export function isLoggedIn() {
 
 export async function updateUserStoreWithPlayerInfo() {
     const userInfo = userStore();
-    await axios.get('/api/player/playerName')
+    await axios.get('/player/playerName')
         .then ((response) => {
             if(response.data.name){
                 userInfo.isPlayerSetup = true;
@@ -37,7 +37,7 @@ export async function updateUserStoreWithPlayerInfo() {
 
 export async function updateUserStoreWithEmailInfo() {
     const userInfo = userStore();
-    await axios.get("/api/auth/manage/info")
+    await axios.get("/auth/manage/info")
         .then(response => {
             userInfo.hasConfirmedEmail = response.data.isEmailConfirmed;
             userInfo.userEmail = response.data.email;

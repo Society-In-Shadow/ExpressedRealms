@@ -6,7 +6,7 @@ describe('Create Account Testing', () => {
         // we include it in our beforeEach function so that it runs before each test
         cy.visit('/CreateAccount')
 
-        cy.intercept('POST', '/api/auth/resetPassword', {
+        cy.intercept('POST', '/auth/resetPassword', {
             statusCode: 200
         }).as('resetPassword');
     })

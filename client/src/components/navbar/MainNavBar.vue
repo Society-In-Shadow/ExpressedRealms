@@ -45,7 +45,7 @@ onMounted(() => {
     };
   }
   
-  axios.get("/api/navMenu/expressions")
+  axios.get("/navMenu/expressions")
       .then(response => {
         const expressions = response.data;
         
@@ -66,7 +66,7 @@ onMounted(() => {
         
       })
 
-  axios.get("/api/navMenu/characters")
+  axios.get("/navMenu/characters")
       .then(response => {
         const characters = response.data;
         
