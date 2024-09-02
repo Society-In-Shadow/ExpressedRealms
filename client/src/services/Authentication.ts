@@ -4,7 +4,7 @@ import {userStore} from "@/stores/userStore";
 
 export async function logOff() {
     const userInfo = userStore();
-    axios.post('api/auth/logoff').then(() => {
+    axios.post('/auth/logoff').then(() => {
         userInfo.$reset();
         Router.push('login');
     });
