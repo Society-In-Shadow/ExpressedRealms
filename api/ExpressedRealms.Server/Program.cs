@@ -90,7 +90,10 @@ try
             IdentityConstants.BearerScheme,
             o =>
             {
+                o.Cookie.Domain = ".societyinshadows.org";
                 o.SlidingExpiration = true;
+                o.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                o.Cookie.SameSite = SameSiteMode.None;
             }
         );
     builder.Services.AddAuthorizationBuilder();
@@ -98,9 +101,12 @@ try
     builder.Services.AddAntiforgery(
         (options) =>
         {
+            options.Cookie.Domain = ".societyinshadows.org";
             options.HeaderName = "T-XSRF-TOKEN";
             options.Cookie.HttpOnly = false;
             options.Cookie.Name = "XSRF-TOKEN";
+            options.Cookie.SameSite = SameSiteMode.None;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
         }
     );
 
