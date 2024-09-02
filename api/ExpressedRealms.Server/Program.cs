@@ -129,6 +129,8 @@ try
     {
         options.ForwardedHeaders =
             ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+        options.KnownNetworks.Clear();
+        options.KnownProxies.Clear();
     });
     
     Log.Information("Adding OpenAPI Support and Swagger Generation");
