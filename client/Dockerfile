@@ -5,7 +5,7 @@ FROM node:18 as build-stage
 ARG MODE
 
 # Set the environment variable for Vite mode
-ENV VITE_ENV=${MODE}
+RUN echo "MODE is set to ${MODE}"
 COPY .env.development /usr/share/nginx/html
 COPY .env.production /usr/share/nginx/html
 
@@ -13,7 +13,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build-only -- --mode $VITE_ENV
+RUN npm run build-only -- --mode ${MODE}
 
 # production stage
 FROM nginx:stable-alpine as production-stage
