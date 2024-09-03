@@ -41,6 +41,7 @@ services:
       - POSTMARK_API_KEY=${POSTMARK_API_KEY}
       - NO_REPLY_EMAIL=${NO_REPLY_EMAIL}
       - TEST_EMAIL_ADDRESS=${TEST_EMAIL_ADDRESS}
+      - CLIENT_COOKIE_DOMAIN=.localhost
     ports:
       - '5000:8080'
     volumes:

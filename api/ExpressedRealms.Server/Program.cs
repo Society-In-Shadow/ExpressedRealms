@@ -91,7 +91,7 @@ try
             IdentityConstants.BearerScheme,
             o =>
             {
-                o.Cookie.Domain = ".societyinshadows.org";
+                o.Cookie.Domain = Environment.GetEnvironmentVariable("CLIENT_COOKIE_DOMAIN");
                 o.SlidingExpiration = true;
                 o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 o.Cookie.SameSite = SameSiteMode.None;
@@ -102,7 +102,7 @@ try
     builder.Services.AddAntiforgery(
         (options) =>
         {
-            options.Cookie.Domain = ".societyinshadows.org";
+            options.Cookie.Domain = Environment.GetEnvironmentVariable("CLIENT_COOKIE_DOMAIN");
             options.HeaderName = "T-XSRF-TOKEN";
             options.Cookie.HttpOnly = false;
             options.Cookie.Name = "XSRF-TOKEN";

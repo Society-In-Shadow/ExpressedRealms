@@ -77,4 +77,4 @@ jobs:
           imageToDeploy: ${{ vars.EXPRESSEDREALMSFRONTEND_REGISTRY_URL }}/noremacskich/expressedrealms-api:${{ github.sha }}
           containerAppName: ca-expressedrealms-api
           resourceGroup: RG_ExpressedRealms
-          environmentVariables: ASPNETCORE_ENVIRONMENT=Production POSTMARK_API_KEY=${{ secrets.POSTMARK_API_KEY }} NO_REPLY_EMAIL=${{ vars.NO_REPLY_EMAIL }} TEST_EMAIL_ADDRESS=${{ vars.TEST_EMAIL_ADDRESS }} AZURE_POSTGRESSQL_CONNECTIONSTRING=secretref:${{ secrets.AZURE_POSTGRESSQL_CONNECTIONSTRING }} FRONT_END_BASE_URL=https://societyinshadows.org
+          environmentVariables: ASPNETCORE_ENVIRONMENT=Production POSTMARK_API_KEY=${{ secrets.POSTMARK_API_KEY }} NO_REPLY_EMAIL=${{ vars.NO_REPLY_EMAIL }} TEST_EMAIL_ADDRESS=${{ vars.TEST_EMAIL_ADDRESS }} AZURE_POSTGRESSQL_CONNECTIONSTRING=secretref:${{ secrets.AZURE_POSTGRESSQL_CONNECTIONSTRING }} FRONT_END_BASE_URL=https://societyinshadows.org CLIENT_COOKIE_DOMAIN=.societyinshadows.org
