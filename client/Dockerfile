@@ -2,7 +2,7 @@
 FROM node:18 as build-stage
 
 # Set the build argument with a default value of "development"
-ARG MODE=development
+ARG MODE
 
 # Set the environment variable for Vite mode
 ENV VITE_ENV=${MODE}
