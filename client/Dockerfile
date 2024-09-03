@@ -1,17 +1,25 @@
 # build stage
 FROM node:18 as build-stage
+
+# Set the build argument with a default value of "development"
+ARG MODE=development
+
+# Set the environment variable for Vite mode
+ENV VITE_ENV=${MODE}
+COPY .env.development /usr/share/nginx/html
+COPY .env.production /usr/share/nginx/html
+
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build-only
+RUN npm run build-only -- --mode $VITE_ENV
 
 # production stage
 FROM nginx:stable-alpine as production-stage
 
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf  
-COPY .env /usr/share/nginx/html
 
 RUN chown -R nginx:nginx /var/cache/nginx && \
         chown -R nginx:nginx /var/log/nginx && \
