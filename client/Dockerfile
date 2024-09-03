@@ -1,11 +1,11 @@
 # build stage
 FROM node:18 as build-stage
 
-# Set the build argument with a default value of "development"
-ARG MODE
+# Ideally this should be set in the github action, but it's not picking up the value
+# so setting it to production here, and overriding it locally.  See #147
+ARG MODE=production
 
 # Set the environment variable for Vite mode
-RUN echo "MODE is set to $MODE"
 COPY .env.development /usr/share/nginx/html
 COPY .env.production /usr/share/nginx/html
 
