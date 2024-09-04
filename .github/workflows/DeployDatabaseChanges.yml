@@ -75,14 +75,14 @@ jobs:
       - name: Get Access Token
         id: get_token
         run: |
-          token=$(az account get-access-token --query accessToken -o tsv)
+          token=$(az account get-access-token --resource https://ossrdbms-aad.database.windows.net/ --query accessToken -o tsv)
           echo "##[set-output name=token;]$token"
 
       - name: Run Migrations
         run: ./efbundle --connection "${{ secrets.CONNECTION_STRING }}"
         working-directory: ./api
         env:
-          CONNECTION_STRING: "${{secrets.AZURE_POSTGRESSQL_CONNECTIONSTRING}};Password=${{ steps.get_token.outputs.token }};"
+          CONNECTION_STRING: "${{secrets.DB_DEPLOYMENT_CONNECTION_STRING}};Password=${{ steps.get_token.outputs.token }};"
 
       - name: Remove IP from Firewall
         if: always()
