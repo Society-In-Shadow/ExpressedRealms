@@ -82,7 +82,7 @@ jobs:
         run: ./efbundle --connection "${{ secrets.CONNECTION_STRING }}"
         working-directory: ./api
         env:
-          CONNECTION_STRING: "${{secrets.DB_DEPLOYMENT_CONNECTION_STRING}};Password=${{ steps.get_token.outputs.token }};"
+          CONNECTION_STRING: "${{secrets.DB_DEPLOYMENT_CONNECTION_STRING}};Password=${{ steps.get_token.outputs.token }};Ssl Mode=Require;"
 
       - name: Remove IP from Firewall
         if: always()
