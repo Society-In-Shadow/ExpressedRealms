@@ -47,7 +47,7 @@ jobs:
       - name: Build Bundle
         run: dotnet ef migrations bundle --self-contained --project ExpressedRealms.DB --startup-project ExpressedRealms.Server
         env:
-          CONNECTION_STRING=Foo
+          CONNECTION_STRING: "Foo"
         
       - name: Get Public IP
         id: ip
