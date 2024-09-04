@@ -75,7 +75,7 @@ jobs:
       - name: Get Access Token
         id: get_token
         run: |
-          token=$(az account get-access-token --resource https://ossrdbms-aad.database.windows.net/ --query accessToken -o tsv)
+          token=$(az account get-access-token --query accessToken -o tsv)
           echo "##[set-output name=token;]$token"
 
       - name: Run Migrations
