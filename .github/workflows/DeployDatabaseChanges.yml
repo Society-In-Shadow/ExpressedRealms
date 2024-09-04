@@ -80,7 +80,7 @@ jobs:
         run: ./efbundle --connection "${{ secrets.CONNECTION_STRING }}"
         working-directory: ./api
         env:
-          CONNECTION_STRING: "Server=${{secrets.CONNECTION_STRING_SERVER_NAME}};Database=${{secrets.CONNECTION_STRING_DATABASE}};Port=5432;User Id=${{secrets.CONNECTION_STRING_USER_ID}};Password=${{ steps.get_token.outputs.token }};Ssl Mode=Require;"
+          CONNECTION_STRING: "${{secrets.AZURE_POSTGRESSQL_CONNECTIONSTRING}};Password=${{ steps.get_token.outputs.token }};"
 
       - name: Remove IP from Firewall
         if: always()
