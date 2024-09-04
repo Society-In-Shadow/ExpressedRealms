@@ -58,3 +58,14 @@ the application has.  See the CharacterConfiguration class for an example.
 * [Seeding](https://code-maze.com/migrations-and-seed-data-efcore/)
 * [Type Configuration](https://stackoverflow.com/questions/46978332/use-ientitytypeconfiguration-with-a-base-entity)
 
+
+## Applying Migrations Locally
+Create the efbundle.exe:
+```shell
+dotnet ef migrations bundle --self-contained --project ExpressedRealms.DB --startup-project ExpressedRealms.Server
+```
+
+Run the bundle
+```shell
+./efbundle --connection="Host=localhost:5432;Port=5432;Database=expressedRealms;Username=user;Password=password"
+```
