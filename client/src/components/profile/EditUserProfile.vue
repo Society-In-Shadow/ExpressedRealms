@@ -37,7 +37,7 @@ const [state] = defineField('state');
 const isLoading = ref(true);
 
 onMounted(() =>{
-  axios.get("/api/player")
+  axios.get("/player")
       .then((response) => {
         name.value = response.data.name;
         phoneNumber.value = response.data.phoneNumber;
@@ -48,7 +48,7 @@ onMounted(() =>{
 });
 
 const onSubmit = handleSubmit((values) => {
-  axios.put('/api/player', values).then(() => {
+  axios.put('/player', values).then(() => {
       userInfo.name = values.name;
     });
 });

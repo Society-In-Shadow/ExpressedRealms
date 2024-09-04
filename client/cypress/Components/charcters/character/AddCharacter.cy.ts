@@ -28,23 +28,23 @@ const factionValues2 = [
 describe('<AddCharacter />', () => {
     beforeEach(() => {
 
-        cy.intercept('POST', '/api/characters', {
+        cy.intercept('POST', '/characters', {
             statusCode: 200,
         }).as('addProfile');
 
-        cy.intercept('GET', '/api/characters/options', {
+        cy.intercept('GET', '/characters/options', {
             statusCode: 200,
             body: {
                 expressions: expressionValues
             }
         }).as('addOptions');
 
-        cy.intercept('GET', '/api/characters/factionOptions/1', {
+        cy.intercept('GET', '/characters/factionOptions/1', {
             statusCode: 200,
             body: factionValues
         }).as('factionOptions');
 
-        cy.intercept('GET', '/api/characters/factionOptions/2', {
+        cy.intercept('GET', '/characters/factionOptions/2', {
             statusCode: 200,
             body: factionValues2
         }).as('factionOptions2');

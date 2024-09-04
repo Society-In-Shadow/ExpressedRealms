@@ -400,13 +400,17 @@ FodyWeavers.xsd
 *.sln.iml
 
 # Docker Configuration
-*.env
+#*.env
 
 # MegaLinter
 **/megalinter-reports/
 
 .git/
 .github/
+
+cypress/
+# Need to keep this file to prevent build errors
+!cypress/tsconfig.json 
 
 expressedrealms.client/
 !expressedrealms.client/expressedrealms.client.esproj

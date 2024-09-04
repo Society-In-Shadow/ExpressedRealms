@@ -11,14 +11,16 @@ services:
     build:
       context: ./client
       dockerfile: Dockerfile
+      args:
+        MODE: development
     ports:
-      - '80:3000'
+      - '3000:3000'
       - '443:443'
     environment:
       - VITE_HTTPS_KEY=/https/key.pem
       - VITE_HTTPS_CERT=/https/cert.pem
       - VITE_PORT=443
-      - VITE_API_BASE_URL=https://api.societyinshadows.org/
+      - VITE_API_BASE_URL=http://localhost:5000/
     #volumes:
       #- ./client/:/app # This is only here to allow automatic updates on local machines as you are editing the code
       #- ${USERPROFILE}/.aspnet/https:/https # Host Certificate Location (key.pem/cert.pem) : Image Path
@@ -40,13 +42,14 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__KeyPath=/https/key.pem
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/cert.pem
       - ConnectionStrings__DefaultConnection=Host=expressed-realms-db;Port=5432;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
-      - SENDGRID_HOST=http://expressed-realms-sendgrid-mock:3000
-      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
       - FRONT_END_BASE_URL=https://localhost
-      - FROM_EMAIL=${FROM_EMAIL}
+      - POSTMARK_API_KEY=${POSTMARK_API_KEY}
+      - NO_REPLY_EMAIL=${NO_REPLY_EMAIL}
+      - TEST_EMAIL_ADDRESS=${TEST_EMAIL_ADDRESS}
+      - CLIENT_COOKIE_DOMAIN=.localhost
     ports:
-      - '5000:5000'
-      - '5001:5001'
+      - '5000:80'
+      - '5001:443'
     volumes:
       - ${USERPROFILE}/.aspnet/https:/https:ro
     networks:
@@ -91,16 +94,6 @@ services:
     depends_on:
       postgres:
         condition: service_started
-
-  sendgrid:
-    container_name: expressed-realms-sendgrid-mock
-    image: ghashange/sendgrid-mock:1.8.4
-    ports:
-      - '7000:3000'
-    environment:
-      - API_KEY=${SENDGRID_API_KEY}
-    networks:
-      - expressed-realms-network
 
 volumes:
   ignore:

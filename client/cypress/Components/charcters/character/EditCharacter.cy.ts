@@ -20,7 +20,7 @@ const factionValues = [
 describe('<EditCharacter />', () => {
     beforeEach(() => {
 
-        cy.intercept('GET', '/api/characters/3', {
+        cy.intercept('GET', '/characters/3', {
             statusCode: 200,
             body: {
                 name: nameDefaultValue,
@@ -30,17 +30,17 @@ describe('<EditCharacter />', () => {
             }
         }).as('getCharacter');
         
-        cy.intercept('GET', '/api/characters/3/stats', {
+        cy.intercept('GET', '/characters/3/stats', {
             statusCode: 200,
             body: [{}, {}, {}, {}, {}, {}]
         })
         
-        cy.intercept('GET', '/api/characters/3/factionOptions', {
+        cy.intercept('GET', '/characters/3/factionOptions', {
             statusCode: 200,
             body: factionValues
         }).as('getFactionOptions');
 
-        cy.intercept('PUT', '/api/characters', {
+        cy.intercept('PUT', '/characters', {
             statusCode: 200,
         }).as('updateCharacter');
 

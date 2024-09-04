@@ -11,7 +11,7 @@ const resetPasswordButton = 'reset-password-button';
 describe('<ChangePassword />', () => {
     beforeEach(() => {
         
-        cy.intercept('POST', '/api/auth/manage/info', {
+        cy.intercept('POST', '/auth/manage/info', {
             statusCode: 200
         }).as('changePassword');
 
@@ -126,7 +126,7 @@ describe('<ChangePassword />', () => {
         it('Passes Data Through and Shows That Current Password Is Incorrect', () => {
 
             const invalidPasswordMessage = "Invalid Password";
-            cy.intercept('POST', '/api/auth/manage/info', {
+            cy.intercept('POST', '/auth/manage/info', {
                 statusCode: 400,
                 body: {
                     errors: {

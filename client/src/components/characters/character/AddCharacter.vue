@@ -37,7 +37,7 @@ const isLoadingFactions = ref(true);
 const isLoadingExpressions = ref(true);
 
 onMounted(() =>{
-  axios.get(`/api/characters/options`)
+  axios.get(`/characters/options`)
       .then((response) => {
         expressions.value = response.data.expressions;
         isLoadingExpressions.value = false;
@@ -45,7 +45,7 @@ onMounted(() =>{
 });
 
 const onSubmit = handleSubmit((values) => {
-  axios.post('/api/characters', {
+  axios.post('/characters', {
     name: values.name,
     expressionId: values.expressionId.id,
     background: values.background,
@@ -58,7 +58,7 @@ const onSubmit = handleSubmit((values) => {
 
 function loadFactions(){
   isLoadingFactions.value = true;
-  axios.get(`/api/characters/factionOptions/${expression.value.id}`)
+  axios.get(`/characters/factionOptions/${expression.value.id}`)
       .then((response) => {
         faction.value = null;
         factions.value = response.data;

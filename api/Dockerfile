@@ -16,12 +16,13 @@ RUN dotnet publish "ExpressedRealms.Server.csproj" -c Release -o /app/publish /p
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+EXPOSE 8080
 COPY --from=build /app/publish .
 
+RUN apt-get update && apt-get install -y --no-install-recommends  wget=1.21.3-1+b2 && rm -rf /var/lib/apt/lists/*
+
 HEALTHCHECK --interval=15s --timeout=60s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider https://0.0.0.0:5001/login || exit 1
+  CMD wget --no-verbose --tries=1 --spider http://0.0.0.0:8080/health || exit 1
 
 USER $APP_UID
 ENTRYPOINT ["dotnet", "ExpressedRealms.Server.dll"]

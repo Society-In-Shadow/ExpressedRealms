@@ -45,7 +45,7 @@ describe('Login Testing', () => {
 
         cy.dataCy("error-invalid-login").should('not.exist');
 
-        cy.intercept('POST', '/api/auth/login', {
+        cy.intercept('POST', '/auth/login', {
             statusCode: 500
         }).as('login');
 

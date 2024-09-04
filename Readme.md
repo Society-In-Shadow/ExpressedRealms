@@ -82,12 +82,14 @@ DB_PASSWORD=
 # DO NOT modify this
 CERTIFICATE_PASSWORD=changeit
 
-# Local Sendgrid Key - Not an actual key, just 
-# something to get the docker sendgrid working
-SENDGRID_API_KEY=SG.secret
+# Ask about this key
+POSTMARK_API_KEY=
 
 # Global From Email
-FROM_EMAIL="no-reply@example.com"
+NO_REPLY_EMAIL=admin@societyinshadows.org
+
+# Email address the admin test email sends to
+TEST_EMAIL_ADDRESS=YourEmailAddressHere
 ```
 
 ### Note About Vite and Windows

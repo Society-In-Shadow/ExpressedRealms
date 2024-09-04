@@ -22,7 +22,7 @@
     let characters = ref([]);
     
     function fetchData() {
-      axios.get('/api/characters')
+      axios.get('/characters')
           .then((json) => {
             characters.value = json.data;
           });

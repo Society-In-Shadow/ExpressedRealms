@@ -34,12 +34,6 @@ internal static class AuthEndPoints
                         return TypedResults.StatusCode(500);
                     }
 
-                    httpContext.Response.Cookies.Append(
-                        "XSRF-TOKEN",
-                        tokens.RequestToken,
-                        new CookieOptions() { HttpOnly = false }
-                    );
-
                     return TypedResults.NoContent();
                 }
             )

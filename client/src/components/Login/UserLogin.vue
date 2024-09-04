@@ -22,7 +22,7 @@ const { defineField, handleSubmit, errors } = useForm({
 });
 
 onBeforeMount(() => {
-  axios.get('/api/auth/antiforgeryToken');
+  axios.get('/auth/antiforgeryToken');
 })
 
 const [email] = defineField('email');
@@ -33,10 +33,10 @@ const route = useRoute();
 
 const onSubmit = handleSubmit((values) => {
   incorrectLogin.value = false;
-  axios.post('/api/auth/login', values)
+  axios.post('/auth/login', values)
   .then(() => {
     // Reset antiforgery token after login
-    axios.get('/api/auth/antiforgeryToken')
+    axios.get('/auth/antiforgeryToken')
       .then(() => {
         Router.push('characters');
       });

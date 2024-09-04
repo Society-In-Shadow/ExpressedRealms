@@ -1,10 +1,19 @@
 # build stage
 FROM node:18 as build-stage
+
+# Ideally this should be set in the github action, but it's not picking up the value
+# so setting it to production here, and overriding it locally.  See #147
+ARG MODE=production
+
+# Set the environment variable for Vite mode
+COPY .env.development /usr/share/nginx/html
+COPY .env.production /usr/share/nginx/html
+
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build-only
+RUN npm run build-only -- --mode $MODE
 
 # production stage
 FROM nginx:stable-alpine as production-stage

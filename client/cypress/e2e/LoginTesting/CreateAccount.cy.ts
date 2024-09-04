@@ -12,7 +12,7 @@ describe('Create Account Testing', () => {
         // we include it in our beforeEach function so that it runs before each test
         cy.visit('/CreateAccount');
 
-        cy.intercept('POST', '/api/auth/register', {
+        cy.intercept('POST', '/auth/register', {
             statusCode: 200
         }).as('createUser');
     })

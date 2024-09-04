@@ -10,7 +10,7 @@ const confirmPassword = 'confirm-password';
 describe('<ResetPassword />', () => {
     beforeEach(() => {
         
-        cy.intercept('POST', '/api/auth/resetPassword', {
+        cy.intercept('POST', '/auth/resetPassword', {
             statusCode: 200
         }).as('resetPassword');
 

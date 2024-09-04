@@ -9,13 +9,13 @@
 # To get a newer version, you will need to update the SHA.
 # You can also reference a tag or branch, but the action may change without warning.
 
-name: Deploy Front End
+name: Deploy API
 
 on:
   push:
     branches: [main]
     paths:
-      - 'client/**'
+      - 'api/**'
   #pull_request:
   #  branches: [main]
 
@@ -42,17 +42,19 @@ jobs:
         id: meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: noremacskich/expressedrealms-frontend
+          images: noremacskich/expressedrealms-api
 
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
         with:
-          context: ./client
-          file: ./client/Dockerfile
+          context: ./api
+          file: ./api/Dockerfile
           push: true
-          tags: noremacskich/expressedrealms-frontend:${{ github.sha }}
+          tags: noremacskich/expressedrealms-api:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
+          #build-args: | # See #147, it's not passing through the parameter to the docker container
+          #  MODE=production
 
 #      - name: Generate artifact attestation
 #        uses: actions/attest-build-provenance@v1
@@ -64,16 +66,17 @@ jobs:
       - name: Azure Login
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.EXPRESSEDREALMSFRONTEND_AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.EXPRESSEDREALMSFRONTEND_AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.EXPRESSEDREALMSFRONTEND_AZURE_SUBSCRIPTION_ID }}
+          client-id: ${{ secrets.EXPRESSEDREALMSAPI_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.EXPRESSEDREALMSAPI_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.EXPRESSEDREALMSAPI_AZURE_SUBSCRIPTION_ID }}
 
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
         with:
           registryUrl: ${{ vars.EXPRESSEDREALMSFRONTEND_REGISTRY_URL }}
           registryUsername: ${{ secrets.EXPRESSEDREALMSFRONTEND_REGISTRY_USERNAME }}
-          registryPassword: ${{ secrets.EXPRESSEDREALMSFRONTEND_REGISTRY_PASSWORD }}
-          imageToDeploy: ${{ vars.EXPRESSEDREALMSFRONTEND_REGISTRY_URL }}/noremacskich/expressedrealms-frontend:${{ github.sha }}
-          containerAppName: ca-expressedrealms-frontend
+          registryPassword: ${{ secrets.EXPRESSEDREALMSAPI_REGISTRY_PASSWORD }}
+          imageToDeploy: ${{ vars.EXPRESSEDREALMSFRONTEND_REGISTRY_URL }}/noremacskich/expressedrealms-api:${{ github.sha }}
+          containerAppName: ca-expressedrealms-api
           resourceGroup: RG_ExpressedRealms
+          environmentVariables: ASPNETCORE_ENVIRONMENT=Production POSTMARK_API_KEY=${{ secrets.POSTMARK_API_KEY }} NO_REPLY_EMAIL=${{ vars.NO_REPLY_EMAIL }} TEST_EMAIL_ADDRESS=${{ vars.TEST_EMAIL_ADDRESS }} AZURE_POSTGRESSQL_CONNECTIONSTRING=secretref:${{ secrets.AZURE_POSTGRESSQL_CONNECTIONSTRING }} FRONT_END_BASE_URL=https://societyinshadows.org CLIENT_COOKIE_DOMAIN=.societyinshadows.org

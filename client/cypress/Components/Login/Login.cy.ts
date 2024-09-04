@@ -7,15 +7,15 @@ describe('<Login />', () => {
     // Since we want to visit the same URL at the start of all our tests,
     // we include it in our beforeEach function so that it runs before each test
 
-    cy.intercept('GET', '/api/auth/antiforgeryToken', {
+    cy.intercept('GET', '/auth/antiforgeryToken', {
       statusCode: 200
     }).as('antiforgeryToken');
 
-    cy.intercept('POST', '/api/auth/login', {
+    cy.intercept('POST', '/auth/login', {
       statusCode: 200
     }).as('login');
     
-    cy.intercept('GET', '/api/auth/getInitialLoginInfo', {
+    cy.intercept('GET', '/auth/getInitialLoginInfo', {
       statusCode: 200
     });
     
@@ -64,7 +64,7 @@ describe('<Login />', () => {
 
     cy.dataCy("error-invalid-login").should('not.exist');
 
-    cy.intercept('POST', '/api/auth/login', {
+    cy.intercept('POST', '/auth/login', {
       statusCode: 500
     }).as('login');
     

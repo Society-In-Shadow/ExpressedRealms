@@ -1,5 +1,6 @@
 using System.Reflection;
 using AspNetCore.SwaggerUI.Themes;
+using Azure.Core;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels;
 using ExpressedRealms.Repositories.Characters;
@@ -19,30 +20,51 @@ using Serilog;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
+using Azure.Identity;
+using Microsoft.AspNetCore.HttpOverrides;
 
 try
 {
     Log.Information("Setting Up Web App");
     var builder = WebApplication.CreateBuilder(args);
+    
+    // For system-assigned identity.
+    string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
+    if (string.IsNullOrEmpty(connectionString))
+    {
+        var sqlServerTokenProvider = new DefaultAzureCredential();
+        AccessToken accessToken = await sqlServerTokenProvider.GetTokenAsync(
+            new TokenRequestContext(scopes: new string[]
+            {
+                "https://ossrdbms-aad.database.windows.net/.default"
+            }));
+    
+        connectionString =
+            $"{Environment.GetEnvironmentVariable("AZURE_POSTGRESSQL_CONNECTIONSTRING")};Password={accessToken.Token}";
+    }
+
 
     Log.Information("Setting Up Loggers");
     Log.Logger = new LoggerConfiguration()
         .MinimumLevel.Information()
         .WriteTo.Console()
         .WriteTo.PostgreSQL(
-            builder.Configuration.GetConnectionString("DefaultConnection"),
+            connectionString,
             "Logs",
             needAutoCreateTable: true
         )
         .CreateLogger();
 
     builder.Host.UseSerilog();
+    
+    Log.Information("Add in Healthchecks");
 
+    builder.Services.AddHealthChecks();
+    
     Log.Information("Adding DB Context");
-
+    
     builder.Services.AddDbContext<ExpressedRealmsDbContext>(options =>
-        options.UseNpgsql(
-            builder.Configuration.GetConnectionString("DefaultConnection"),
+        options.UseNpgsql(connectionString,
             x => x.MigrationsHistoryTable("_EfMigrations", "efcore")
         )
     );
@@ -69,7 +91,10 @@ try
             IdentityConstants.BearerScheme,
             o =>
             {
+                o.Cookie.Domain = Environment.GetEnvironmentVariable("CLIENT_COOKIE_DOMAIN");
                 o.SlidingExpiration = true;
+                o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                o.Cookie.SameSite = SameSiteMode.None;
             }
         );
     builder.Services.AddAuthorizationBuilder();
@@ -77,12 +102,37 @@ try
     builder.Services.AddAntiforgery(
         (options) =>
         {
+            options.Cookie.Domain = Environment.GetEnvironmentVariable("CLIENT_COOKIE_DOMAIN");
             options.HeaderName = "T-XSRF-TOKEN";
             options.Cookie.HttpOnly = false;
             options.Cookie.Name = "XSRF-TOKEN";
+            options.Cookie.SameSite = SameSiteMode.None;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
         }
     );
 
+    if (builder.Environment.IsDevelopment())
+    {
+        builder.Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(policy =>
+            {
+                policy.WithOrigins("https://localhost")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            });
+        });
+    }
+
+    builder.Services.Configure<ForwardedHeadersOptions>(options =>
+    {
+        options.ForwardedHeaders =
+            ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+        options.KnownNetworks.Clear();
+        options.KnownProxies.Clear();
+    });
+    
     Log.Information("Adding OpenAPI Support and Swagger Generation");
 
     // Add services to the container.
@@ -122,6 +172,12 @@ try
     Log.Information("Building the App");
     var app = builder.Build();
 
+    if (app.Environment.IsProduction())
+    {
+        Log.Information("Setting Up Forwarded Headers");
+        app.UseForwardedHeaders();
+    }
+    
     app.UseDefaultFiles();
     app.UseStaticFiles();
 
@@ -133,8 +189,18 @@ try
         app.UseSwaggerUI(ModernStyle.Dark);
     }
 
+    Log.Information("Adding Health Check Endpoint");
+    
+    app.MapHealthChecks("health");
+    
     Log.Information("Adding in Security Related Things");
-    app.UseHttpsRedirection();
+
+    if(app.Environment.IsDevelopment())
+    {
+        app.UseHttpsRedirection();
+        app.UseCors();
+    }
+    
     app.UseAuthentication();
     app.UseAuthorization();
 
