@@ -61,7 +61,7 @@ namespace ExpressedRealms.DB.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ExpressionId = table.Column<int>(type: "integer", nullable: false),
                     SectionTypeId = table.Column<int>(type: "integer", nullable: false),
-                    ParentId = table.Column<int>(type: "integer", nullable: false),
+                    ParentId = table.Column<int?>(type: "integer", nullable: true),
                     Name = table.Column<string>(type: "character varying(150)", nullable: false, maxLength: 150),
                     Content = table.Column<string>(type: "text", nullable: false)
                 },

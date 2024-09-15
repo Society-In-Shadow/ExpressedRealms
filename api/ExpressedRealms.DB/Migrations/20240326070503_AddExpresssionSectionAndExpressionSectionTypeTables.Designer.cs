@@ -103,7 +103,7 @@ namespace ExpressedRealms.DB.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("ParentId")
+                    b.Property<int?>("ParentId")
                         .HasColumnType("integer");
 
                     b.Property<int>("SectionTypeId")
