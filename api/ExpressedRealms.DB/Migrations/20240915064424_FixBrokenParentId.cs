@@ -11,7 +11,7 @@ namespace ExpressedRealms.DB.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql(
-                "ALTER TABLE public.\"ExpressionSections\" ALTER COLUMN \"ParentId\" SET NOT NULL;");
+                "ALTER TABLE public.\"ExpressionSections\" ALTER COLUMN \"ParentId\" DROP NOT NULL;");
         }
 
         /// <inheritdoc />
