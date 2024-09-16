@@ -27,8 +27,8 @@ services:
     depends_on:
       webapi:
         condition: service_started
-        
-  #myProductionApp:
+
+  # myProductionApp:
   #  container_name: societyinshadows.org
   #  build:
   #    context: ./client
