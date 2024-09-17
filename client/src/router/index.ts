@@ -132,7 +132,8 @@ router.beforeEach(async (to) => {
         }
 
         // if they are on the login page, redirect them to the characters page
-        if(routeName == 'Login')
+        // Also, if on url root, redirect to characters page
+        if(routeName == 'Login' || !routeName)
             return { name: 'characters' };
     }
     
