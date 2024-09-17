@@ -26,7 +26,7 @@ onMounted(() =>{
   axios.get(`/characters/${route.params.id}`)
       .then((response) => {
         name.value = response.data.name;
-        background.value = response.data.background;
+        background.value = response.data.background ?? "";
         expression.value = response.data.expression;
         
         axios.get(`/characters/${route.params.id}/factionOptions`)
