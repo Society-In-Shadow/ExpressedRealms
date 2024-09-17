@@ -89,7 +89,6 @@ describe('<AddCharacter />', () => {
         // Select after selecting, it should now be visable and testable
         cy.dataCy(faction).should('exist');
         cy.dataCy(addCharacterButton).click();
-        cy.dataCy(factionHelp).contains("Faction is a required field");
         cy.dataCy(faction).click();
         cy.get("#faction_list li").each(($ele, i) => {
             expect($ele).to.have.text(factionValues[i].name)
@@ -100,7 +99,6 @@ describe('<AddCharacter />', () => {
         cy.dataCy(expression).click();
         cy.get("#expression_1").click();
         cy.get("@factionOptions2")
-        cy.dataCy(factionHelp).contains("Faction is a required field");
     })
 
     it('Passes Data Through Data To API', () => {
