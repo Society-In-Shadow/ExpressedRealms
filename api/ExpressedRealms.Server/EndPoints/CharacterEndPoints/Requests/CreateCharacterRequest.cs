@@ -12,5 +12,5 @@ public record CreateCharacterRequest
     public int ExpressionId { get; set; }
 
     /// <example>9 - The Shield Wardens</example>
-    public int FactionId { get; set; }
+    public int? FactionId { get; set; }
 }

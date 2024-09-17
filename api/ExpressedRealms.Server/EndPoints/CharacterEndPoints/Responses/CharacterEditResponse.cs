@@ -22,5 +22,5 @@ public record CharacterEditResponse
     public string Expression { get; set; }
 
     /// <example>8</example>
-    public int FactionId { get; set; }
+    public int? FactionId { get; set; }
 }

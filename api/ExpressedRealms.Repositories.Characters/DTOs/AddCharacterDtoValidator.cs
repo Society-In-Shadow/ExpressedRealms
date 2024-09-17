@@ -11,7 +11,6 @@ internal sealed class AddCharacterDtoValidator : AbstractValidator<AddCharacterD
     {
         RuleFor(x => x.Name).NotEmpty().MaximumLength(150);
         RuleFor(x => x.ExpressionId).NotEmpty();
-        RuleFor(x => x.FactionId).NotEmpty();
         RuleFor(x => x.ExpressionId)
             .MustAsync(
                 async (expressionId, cancellationToken) =>
@@ -36,6 +35,7 @@ internal sealed class AddCharacterDtoValidator : AbstractValidator<AddCharacterD
                     );
                 }
             )
+            .When(x => x.FactionId is not null)
             .WithName(nameof(AddCharacterDto.FactionId))
             .WithMessage("This is not a valid Faction Id");
     }

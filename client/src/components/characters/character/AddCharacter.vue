@@ -18,11 +18,11 @@ const { defineField, handleSubmit, errors } = useForm({
     name: string().required()
         .max(150)
         .label("Name"),
-    background: string()
+    background: string().nullable()
         .label('Background'),
     expressionId: object().required()
         .label("Expression"),
-    factionId: object().required()
+    factionId: object().nullable()
         .label("Faction")
   })
 });
@@ -49,7 +49,7 @@ const onSubmit = handleSubmit((values) => {
     name: values.name,
     expressionId: values.expressionId.id,
     background: values.background,
-    factionId: values.factionId.id
+    factionId: values.factionId?.id
   })
       .then(() => {
         Router.push("/characters");

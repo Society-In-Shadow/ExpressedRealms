@@ -45,7 +45,7 @@ const { defineField, handleSubmit, errors } = useForm({
     name: string().required()
         .max(150)
         .label("Name"),
-    faction: object<Faction>().required()
+    faction: object<Faction>().nullable()
         .label('Faction'),
     background: string().nullable()
         .label('Background'),
@@ -64,7 +64,7 @@ const onSubmit = handleSubmit((values) => {
     name: values.name,
     background: values.background,
     id: route.params.id,
-    factionId: values.faction.id
+    factionId: values.faction?.id
   }).then(() => {
     toaster.success("Successfully Updated Character Info!");
   });

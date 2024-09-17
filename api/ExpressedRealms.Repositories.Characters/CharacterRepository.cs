@@ -112,25 +112,29 @@ internal sealed class CharacterRepository(
         if (character is null)
             return Result.Fail(new NotFoundFailure("Character"));
 
-        var isFaction = await context.ExpressionSections.AnyAsync(
-            x =>
-                x.ExpressionId == character.ExpressionId
-                && x.SectionTypeId == (int)ExpressionSectionType.FactionType
-                && x.Id == dto.FactionId,
-            cancellationToken
-        );
-
-        if (!isFaction)
+        if (dto.FactionId is not null)
         {
-            return Result.Fail(
-                new FluentValidationFailure(
-                    new Dictionary<string, string[]>
-                    {
-                        { "FactionId", ["This is not a valid Faction Id."] }
-                    }
-                )
+            var isFaction = await context.ExpressionSections.AnyAsync(
+                x =>
+                    x.ExpressionId == character.ExpressionId
+                    && x.SectionTypeId == (int)ExpressionSectionType.FactionType
+                    && x.Id == dto.FactionId,
+                cancellationToken
             );
+
+            if (!isFaction)
+            {
+                return Result.Fail(
+                    new FluentValidationFailure(
+                        new Dictionary<string, string[]>
+                        {
+                            { "FactionId", ["This is not a valid Faction Id."] }
+                        }
+                    )
+                );
+            }
         }
+        
 
         character.Name = dto.Name;
         character.Background = dto.Background;

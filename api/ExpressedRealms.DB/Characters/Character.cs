@@ -21,7 +21,7 @@ public class Character : ISoftDelete
     public byte IntelligenceId { get; set; }
     public byte WillpowerId { get; set; }
 
-    public int FactionId { get; set; }
+    public int? FactionId { get; set; }
 
     public int StatExperiencePoints { get; set; }
 
@@ -37,6 +37,6 @@ public class Character : ISoftDelete
     public virtual StatLevel StrengthStatLevel { get; set; } = null!;
     public virtual StatLevel IntelligenceStatLevel { get; set; } = null!;
     public virtual StatLevel WillpowerStatLevel { get; set; } = null!;
-    public virtual ExpressionSection FactionInfo { get; set; } = null!;
+    public virtual ExpressionSection? FactionInfo { get; set; } = null!;
     public virtual List<CharacterSkillsMapping> CharacterSkillsMappings { get; set; } = null!;
 }

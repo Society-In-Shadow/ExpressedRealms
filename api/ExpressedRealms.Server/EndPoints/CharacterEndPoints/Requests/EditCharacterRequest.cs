@@ -11,5 +11,5 @@ public record EditCharacterRequest
     public string? Background { get; set; }
 
     /// <example>9</example>
-    public int FactionId { get; set; }
+    public int? FactionId { get; set; }
 }
