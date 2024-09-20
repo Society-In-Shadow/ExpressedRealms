@@ -15,12 +15,6 @@ internal class PlayerConfiguration : IEntityTypeConfiguration<Player>
 
         builder.Property(x => x.PlayerNumber).IsRequired();
 
-        builder.Property(x => x.Phone).HasMaxLength(15).IsRequired();
-
-        builder.Property(x => x.City).HasMaxLength(100).IsRequired();
-
-        builder.Property(x => x.State).IsRequired().HasMaxLength(2);
-
         builder.Property(x => x.Id).IsRequired();
 
         builder

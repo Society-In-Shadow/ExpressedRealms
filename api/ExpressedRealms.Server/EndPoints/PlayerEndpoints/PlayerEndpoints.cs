@@ -57,10 +57,7 @@ internal static class PlayerEndpoints
                     return TypedResults.Ok(
                         new PlayerDTO()
                         {
-                            Name = player.Name,
-                            City = player.City,
-                            State = player.State,
-                            PhoneNumber = player.Phone
+                            Name = player.Name
                         }
                     );
                 }
@@ -90,9 +87,6 @@ internal static class PlayerEndpoints
                         {
                             Id = new Guid(),
                             Name = playerDto.Name,
-                            City = playerDto.City,
-                            Phone = playerDto.PhoneNumber,
-                            State = playerDto.State,
                             PlayerNumber = 1,
                             UserId = http.User.GetUserId()
                         };
@@ -123,9 +117,6 @@ internal static class PlayerEndpoints
                     );
 
                     existingPlayer.Name = playerDto.Name;
-                    existingPlayer.Phone = playerDto.PhoneNumber;
-                    existingPlayer.City = playerDto.City;
-                    existingPlayer.State = playerDto.State;
 
                     await dbContext.SaveChangesAsync();
 
