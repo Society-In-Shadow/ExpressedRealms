@@ -41,7 +41,7 @@ try
             }));
     
         connectionString =
-            $"{Environment.GetEnvironmentVariable("azure-postgresql-connectionstring-6f940")};Password={accessToken.Token}";
+            $"{Environment.GetEnvironmentVariable("AZURE_POSTGRESSQL_CONNECTIONSTRING")};Password={accessToken.Token}";
     }
 
     Log.Information("Setting Up Loggers");
