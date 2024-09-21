@@ -58,7 +58,7 @@ try
     builder.Host.UseSerilog();
     
     // Since we are in a container, we need to keep track of the data keys manually
-    string blobStorageEndpoint = Environment.GetEnvironmentVariable("AZURE_STORAGEBLOB_RESOURCEENDPOINT") ?? "";
+    string blobStorageEndpoint = Environment.GetEnvironmentVariable("azure-postgresql-connectionstring-6f940") ?? "";
     if (!string.IsNullOrEmpty(blobStorageEndpoint))
     {
         builder.Services.AddDataProtection()
