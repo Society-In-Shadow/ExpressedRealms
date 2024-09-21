@@ -41,7 +41,7 @@ try
             }));
     
         connectionString =
-            $"{Environment.GetEnvironmentVariable("AZURE_POSTGRESSQL_CONNECTIONSTRING")};Password={accessToken.Token}";
+            $"{Environment.GetEnvironmentVariable("azure-postgresql-connectionstring-6f940")};Password={accessToken.Token}";
     }
 
     // Since we are in a container, we need to keep track of the data keys manually
@@ -49,7 +49,7 @@ try
     if (string.IsNullOrEmpty(blobStorageEndpoint))
     {
         builder.Services.AddDataProtection()
-            .PersistKeysToAzureBlobStorage(new Uri(blobStorageEndpoint));
+            .PersistKeysToAzureBlobStorage(new Uri(blobStorageEndpoint), new DefaultAzureCredential());
     }
 
     Log.Information("Setting Up Loggers");
