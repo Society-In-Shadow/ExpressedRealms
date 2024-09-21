@@ -59,7 +59,7 @@ try
     
     // Since we are in a container, we need to keep track of the data keys manually
     string blobStorageEndpoint = Environment.GetEnvironmentVariable("azure-storageblob-resourceendpoint-08dee") ?? "";
-    if (string.IsNullOrEmpty(blobStorageEndpoint))
+    if (!string.IsNullOrEmpty(blobStorageEndpoint))
     {
         builder.Services.AddDataProtection()
             .PersistKeysToAzureBlobStorage(new Uri(blobStorageEndpoint), new DefaultAzureCredential());
