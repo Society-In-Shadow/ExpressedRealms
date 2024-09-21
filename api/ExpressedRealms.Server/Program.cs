@@ -44,14 +44,6 @@ try
             $"{Environment.GetEnvironmentVariable("azure-postgresql-connectionstring-6f940")};Password={accessToken.Token}";
     }
 
-    // Since we are in a container, we need to keep track of the data keys manually
-    string blobStorageEndpoint = Environment.GetEnvironmentVariable("azure-storageblob-resourceendpoint-08dee") ?? "";
-    if (string.IsNullOrEmpty(blobStorageEndpoint))
-    {
-        builder.Services.AddDataProtection()
-            .PersistKeysToAzureBlobStorage(new Uri(blobStorageEndpoint), new DefaultAzureCredential());
-    }
-
     Log.Information("Setting Up Loggers");
     Log.Logger = new LoggerConfiguration()
         .MinimumLevel.Information()
@@ -64,6 +56,14 @@ try
         .CreateLogger();
 
     builder.Host.UseSerilog();
+    
+    // Since we are in a container, we need to keep track of the data keys manually
+    string blobStorageEndpoint = Environment.GetEnvironmentVariable("azure-storageblob-resourceendpoint-08dee") ?? "";
+    if (string.IsNullOrEmpty(blobStorageEndpoint))
+    {
+        builder.Services.AddDataProtection()
+            .PersistKeysToAzureBlobStorage(new Uri(blobStorageEndpoint), new DefaultAzureCredential());
+    }
     
     Log.Information("Add in Healthchecks");
 
