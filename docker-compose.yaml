@@ -71,6 +71,7 @@ services:
       - '5001:443'
     volumes:
       - ${USERPROFILE}/.aspnet/https:/https:ro
+      - data_protection_keys:/home/app/.aspnet/DataProtection-Keys:rw
     networks:
       - expressed-realms-network
     depends_on:
@@ -118,3 +119,4 @@ volumes:
   ignore:
   db_data:
   pgAdmin_data:
+  data_protection_keys:

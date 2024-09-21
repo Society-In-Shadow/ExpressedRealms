@@ -25,4 +25,5 @@ HEALTHCHECK --interval=15s --timeout=60s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider http://0.0.0.0:8080/health || exit 1
 
 USER $APP_UID
+RUN mkdir -p /home/app/.aspnet/DataProtection-Keys
 ENTRYPOINT ["dotnet", "ExpressedRealms.Server.dll"]
