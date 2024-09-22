@@ -80,10 +80,11 @@ jobs:
           containerAppName: ca-expressedrealms-api
           resourceGroup: RG_ExpressedRealms
           environmentVariables: |
-            ASPNETCORE_ENVIRONMENT=Production
-            POSTMARK_API_KEY=${{ secrets.POSTMARK_API_KEY }}
-            NO_REPLY_EMAIL=${{ vars.NO_REPLY_EMAIL }}
-            TEST_EMAIL_ADDRESS=${{ vars.TEST_EMAIL_ADDRESS }}
-            AZURE_POSTGRESSQL_CONNECTIONSTRING=secretref:${{ secrets.AZURE_POSTGRESSQL_CONNECTIONSTRING }}
-            FRONT_END_BASE_URL=https://societyinshadows.org
-            CLIENT_COOKIE_DOMAIN=.societyinshadows.org
+            ASPNETCORE_ENVIRONMENT=secretref:aspnetcore-environment 
+            POSTMARK_API_KEY=secretref:postmark-api-key 
+            NO_REPLY_EMAIL=secretref:no-reply-email 
+            TEST_EMAIL_ADDRESS=secretref:test-email-address 
+            AZURE_POSTGRESSQL_CONNECTIONSTRING=secretref:azure-postgresql-connectionstring-6f940 
+            FRONT_END_BASE_URL=secretref:front-end-base-url 
+            CLIENT_COOKIE_DOMAIN=secretref:client-cookie-domain 
+            AZURE_STORAGE_BLOB_RESOURCE_ENDPOINT:secretref:azure-storageblob-resourceendpoint-08dee
