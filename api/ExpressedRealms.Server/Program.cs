@@ -60,7 +60,7 @@ try
     builder.Host.UseSerilog();
     
     // Since we are in a container, we need to keep track of the data keys manually
-    string blobStorageEndpoint = Environment.GetEnvironmentVariable("AZURE_STORAGE_BLOB_RESOURCE_ENDPOINT") ?? "";
+    string blobStorageEndpoint = Environment.GetEnvironmentVariable("AZURE_STORAGEBLOB_RESOURCEENDPOINT") ?? "";
     if (!string.IsNullOrEmpty(blobStorageEndpoint))
     {
         var blobServiceClient = new BlobServiceClient(new Uri(blobStorageEndpoint), new DefaultAzureCredential());
