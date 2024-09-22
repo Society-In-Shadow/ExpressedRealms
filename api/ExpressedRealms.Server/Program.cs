@@ -21,6 +21,8 @@ using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 using Azure.Identity;
+using Azure.Storage.Blobs;
+using Azure.Extensions.AspNetCore.DataProtection.Blobs;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 
@@ -61,8 +63,12 @@ try
     string blobStorageEndpoint = Environment.GetEnvironmentVariable("AZURE_STORAGE_BLOB_RESOURCE_ENDPOINT") ?? "";
     if (!string.IsNullOrEmpty(blobStorageEndpoint))
     {
+        var blobServiceClient = new BlobServiceClient(new Uri(blobStorageEndpoint), new DefaultAzureCredential());
+        var containerClient = blobServiceClient.GetBlobContainerClient("dataprotection-keys");
+        var blobClient = containerClient.GetBlobClient("dataprotection-keys.xml");
+
         builder.Services.AddDataProtection()
-            .PersistKeysToAzureBlobStorage(new Uri(blobStorageEndpoint), new DefaultAzureCredential());
+            .PersistKeysToAzureBlobStorage(blobClient);
     }
     
     Log.Information("Add in Healthchecks");
