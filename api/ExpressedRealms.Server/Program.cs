@@ -50,7 +50,7 @@ try
     Log.Logger = logger.CreateLogger();
 
     builder.Host.UseSerilog();
-    
+
     // Since we are in a container, we need to keep track of the data keys manually
     var blobStorageEndpoint = Environment.GetEnvironmentVariable("AZURE_STORAGEBLOB_RESOURCEENDPOINT") ?? "";
     if (!string.IsNullOrEmpty(blobStorageEndpoint))
@@ -62,18 +62,40 @@ try
         builder.Services.AddDataProtection()
             .PersistKeysToAzureBlobStorage(blobClient);
     }
-    
+
     Log.Information("Add in Healthchecks");
 
     builder.Services.AddHealthChecks();
-    
+
     Log.Information("Adding DB Context");
     
-    builder.Services.AddDbContext<ExpressedRealmsDbContext>(options =>
-        options.UseNpgsql(connectionString,
-            x => x.MigrationsHistoryTable("_EfMigrations", "efcore")
-        )
-    );
+    builder.Services.AddDbContext<ExpressedRealmsDbContext>(async (serviceProvider, options) =>
+    {
+        if (string.IsNullOrEmpty(connectionString))
+        {
+            var dataSourceBuilder = new NpgsqlDataSourceBuilder(Environment.GetEnvironmentVariable("AZURE_POSTGRESSQL_CONNECTIONSTRING"));
+            dataSourceBuilder.UsePasswordProvider(
+                passwordProvider: _ => throw new NotSupportedException(),
+                passwordProviderAsync: async (passwordBuilder, token) => 
+                {
+                    var sqlServerTokenProvider = new DefaultAzureCredential();
+                    AccessToken accessToken = await sqlServerTokenProvider.GetTokenAsync(
+                        new TokenRequestContext(new string[] { "https://ossrdbms-aad.database.windows.net/.default" }),
+                        token // Pass the cancellation token along if needed
+                    );
+
+                    return accessToken.Token;
+                });
+            await using var dataSource = dataSourceBuilder.Build();
+        
+            connectionString = dataSourceBuilder.ConnectionString;
+        }
+
+        options.UseNpgsql(connectionString, options =>
+        {
+            options.MigrationsHistoryTable("_EfMigrations", "efcore");
+        });
+    });
 
     Log.Information("Setting Up Authentication and Identity");
     builder
