@@ -46,6 +46,10 @@ try
             needAutoCreateTable: true
         );
     }
+    else
+    {
+        logger.WriteTo.ApplicationInsights(Environment.GetEnvironmentVariable("APPLICATION_INSIGHTS_CONNECTION_STRING"), TelemetryConverter.Traces);
+    }
 
     Log.Logger = logger.CreateLogger();
 
@@ -96,16 +100,16 @@ try
                 });
             await using var dataSource = dataSourceBuilder.Build();
         
-            options.UseNpgsql(dataSource, options =>
+            options.UseNpgsql(dataSource, postgresOptions =>
             {
-                options.MigrationsHistoryTable("_EfMigrations", "efcore");
+                postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
             });
         }
         else
         {
-            options.UseNpgsql(connectionString, options =>
+            options.UseNpgsql(connectionString, postgresOptions =>
             {
-                options.MigrationsHistoryTable("_EfMigrations", "efcore");
+                postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
             });
         }
 
