@@ -22,40 +22,32 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 using Azure.Identity;
 using Azure.Storage.Blobs;
-using Azure.Extensions.AspNetCore.DataProtection.Blobs;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
+using Npgsql;
 
 try
 {
     Log.Information("Setting Up Web App");
     var builder = WebApplication.CreateBuilder(args);
-    
-    // For system-assigned identity.
+
     string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
-    if (string.IsNullOrEmpty(connectionString))
-    {
-        var sqlServerTokenProvider = new DefaultAzureCredential();
-        AccessToken accessToken = await sqlServerTokenProvider.GetTokenAsync(
-            new TokenRequestContext(scopes: new string[]
-            {
-                "https://ossrdbms-aad.database.windows.net/.default"
-            }));
-    
-        connectionString =
-            $"{Environment.GetEnvironmentVariable("AZURE_POSTGRESSQL_CONNECTIONSTRING")};Password={accessToken.Token}";
-    }
 
     Log.Information("Setting Up Loggers");
-    Log.Logger = new LoggerConfiguration()
+    var logger = new LoggerConfiguration()
         .MinimumLevel.Information()
-        .WriteTo.Console()
-        .WriteTo.PostgreSQL(
+        .WriteTo.Console();
+
+    if (!string.IsNullOrEmpty(connectionString))
+    {
+        logger.WriteTo.PostgreSQL(
             connectionString,
             "Logs",
             needAutoCreateTable: true
-        )
-        .CreateLogger();
+        );
+    }
+
+    Log.Logger = logger.CreateLogger();
 
     builder.Host.UseSerilog();
     
