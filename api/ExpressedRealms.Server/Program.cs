@@ -75,7 +75,15 @@ try
         {
             var dataSourceBuilder = new NpgsqlDataSourceBuilder(Environment.GetEnvironmentVariable("AZURE_POSTGRESSQL_CONNECTIONSTRING"));
             dataSourceBuilder.UsePasswordProvider(
-                passwordProvider: _ => throw new NotSupportedException(),
+                passwordProvider: _ => 
+                {
+                    var sqlServerTokenProvider = new DefaultAzureCredential();
+                    AccessToken accessToken = sqlServerTokenProvider.GetToken(
+                        new TokenRequestContext(new string[] { "https://ossrdbms-aad.database.windows.net/.default" })
+                    );
+
+                    return accessToken.Token;
+                },
                 passwordProviderAsync: async (passwordBuilder, token) => 
                 {
                     var sqlServerTokenProvider = new DefaultAzureCredential();
@@ -88,13 +96,19 @@ try
                 });
             await using var dataSource = dataSourceBuilder.Build();
         
-            connectionString = dataSourceBuilder.ConnectionString;
+            options.UseNpgsql(dataSource, options =>
+            {
+                options.MigrationsHistoryTable("_EfMigrations", "efcore");
+            });
+        }
+        else
+        {
+            options.UseNpgsql(connectionString, options =>
+            {
+                options.MigrationsHistoryTable("_EfMigrations", "efcore");
+            });
         }
 
-        options.UseNpgsql(connectionString, options =>
-        {
-            options.MigrationsHistoryTable("_EfMigrations", "efcore");
-        });
     });
 
     Log.Information("Setting Up Authentication and Identity");
