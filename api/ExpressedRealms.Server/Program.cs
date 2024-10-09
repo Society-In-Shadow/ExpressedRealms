@@ -55,6 +55,11 @@ try
 
     builder.Host.UseSerilog();
 
+    builder.Services.AddApplicationInsightsTelemetry((options) =>
+    {
+        options.ConnectionString = Environment.GetEnvironmentVariable("APPLICATION_INSIGHTS_CONNECTION_STRING");
+    });
+    
     // Since we are in a container, we need to keep track of the data keys manually
     var blobStorageEndpoint = Environment.GetEnvironmentVariable("AZURE_STORAGEBLOB_RESOURCEENDPOINT") ?? "";
     if (!string.IsNullOrEmpty(blobStorageEndpoint))
