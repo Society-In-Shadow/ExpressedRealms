@@ -102,7 +102,7 @@ try
 
                 return accessToken.Token;
             });
-        await using var dataSource = dataSourceBuilder.Build();
+        var dataSource = dataSourceBuilder.Build();
     
         options.UseNpgsql(dataSource, postgresOptions =>
         {
