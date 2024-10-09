@@ -22,6 +22,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 using Azure.Identity;
 using Azure.Storage.Blobs;
+using ExpressedRealms.Repositories.Expressions;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Npgsql;
@@ -219,6 +220,7 @@ try
     );
     builder.Services.AddScoped<IUserContext, UserContext>();
     builder.Services.AddCharacterRepositoryInjections();
+    builder.Services.AddExpressionRepositoryInjections();
 
     Log.Information("Building the App");
     var app = builder.Build();
