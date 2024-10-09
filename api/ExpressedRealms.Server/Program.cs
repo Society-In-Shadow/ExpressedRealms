@@ -80,34 +80,43 @@ try
     
     builder.Services.AddDbContext<ExpressedRealmsDbContext>(async (serviceProvider, options) =>
     {
-
-        var dataSourceBuilder = new NpgsqlDataSourceBuilder(Environment.GetEnvironmentVariable("AZURE_POSTGRESSQL_CONNECTIONSTRING"));
-        dataSourceBuilder.UsePasswordProvider(
-            passwordProvider: _ => 
-            {
-                var sqlServerTokenProvider = new DefaultAzureCredential();
-                AccessToken accessToken = sqlServerTokenProvider.GetToken(
-                    new TokenRequestContext(new string[] { "https://ossrdbms-aad.database.windows.net/.default" })
-                );
-
-                return accessToken.Token;
-            },
-            passwordProviderAsync: async (passwordBuilder, token) => 
-            {
-                var sqlServerTokenProvider = new DefaultAzureCredential();
-                AccessToken accessToken = await sqlServerTokenProvider.GetTokenAsync(
-                    new TokenRequestContext(new string[] { "https://ossrdbms-aad.database.windows.net/.default" }),
-                    token // Pass the cancellation token along if needed
-                );
-
-                return accessToken.Token;
-            });
-        var dataSource = dataSourceBuilder.Build();
-    
-        options.UseNpgsql(dataSource, postgresOptions =>
+        if (string.IsNullOrEmpty(connectionString))
         {
-            postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
-        });
+            var dataSourceBuilder = new NpgsqlDataSourceBuilder(Environment.GetEnvironmentVariable("AZURE_POSTGRESSQL_CONNECTIONSTRING"));
+            dataSourceBuilder.UsePasswordProvider(
+                passwordProvider: _ => 
+                {
+                    var sqlServerTokenProvider = new DefaultAzureCredential();
+                    AccessToken accessToken = sqlServerTokenProvider.GetToken(
+                        new TokenRequestContext(new string[] { "https://ossrdbms-aad.database.windows.net/.default" })
+                    );
+
+                    return accessToken.Token;
+                },
+                passwordProviderAsync: async (passwordBuilder, token) => 
+                {
+                    var sqlServerTokenProvider = new DefaultAzureCredential();
+                    AccessToken accessToken = await sqlServerTokenProvider.GetTokenAsync(
+                        new TokenRequestContext(new string[] { "https://ossrdbms-aad.database.windows.net/.default" }),
+                        token // Pass the cancellation token along if needed
+                    );
+
+                    return accessToken.Token;
+                });
+            var dataSource = dataSourceBuilder.Build();
+        
+            options.UseNpgsql(dataSource, postgresOptions =>
+            {
+                postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
+            });
+        }
+        else
+        {
+            options.UseNpgsql(connectionString, postgresOptions =>
+            {
+                postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
+            });
+        }
 
     });
 
