@@ -1,0 +1,9 @@
+using ExpressedRealms.Repositories.Expressions.Expressions.DTOs;
+using FluentResults;
+
+namespace ExpressedRealms.Repositories.Expressions.Expressions;
+
+public interface IExpressionRepository
+{
+    Task<Result<int>> CreateExpressionAsync(CreateExpressionDto dto);
+}
