@@ -1,8 +1,11 @@
+using Audit.EntityFramework;
 using ExpressedRealms.DB.Characters;
+using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Interceptors;
 
 namespace ExpressedRealms.DB.Models.Expressions;
 
+[AuditInclude]
 public class ExpressionSection : ISoftDelete
 {
     public int Id { get; set; }

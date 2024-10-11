@@ -1,5 +1,8 @@
+using Audit.EntityFramework;
+
 namespace ExpressedRealms.DB.Models.Expressions;
 
+[AuditInclude]
 public class ExpressionSectionType
 {
     public int Id { get; set; }
