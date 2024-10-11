@@ -6,4 +6,6 @@ namespace ExpressedRealms.Repositories.Expressions.Expressions;
 public interface IExpressionRepository
 {
     Task<Result<int>> CreateExpressionAsync(CreateExpressionDto dto);
+    Task<Result<int>> EditExpressionAsync(EditExpressionDto dto);
+    Task<Result> DeleteExpressionAsync(int id);
 }

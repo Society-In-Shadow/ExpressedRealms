@@ -1,4 +1,5 @@
 using ExpressedRealms.DB;
+using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions;
 using ExpressedRealms.Repositories.Expressions.Expressions.DTOs;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
@@ -56,5 +57,23 @@ internal sealed class ExpressionRepository(
         await context.SaveChangesAsync(cancellationToken);
         
         return Result.Ok(expression.Id);
+    }
+    
+    public async Task<Result> DeleteExpressionAsync(int id)
+    {
+        var expression = await context
+            .Expressions.IgnoreQueryFilters()
+            .FirstOrDefaultAsync(x => x.Id == id);
+
+        if (expression is null)
+            return Result.Fail(new NotFoundFailure("Expression"));
+
+        if (expression.IsDeleted)
+            return Result.Fail(new AlreadyDeletedFailure("Expression"));
+
+        expression.SoftDelete();
+        await context.SaveChangesAsync();
+
+        return Result.Ok();
     }
 }
