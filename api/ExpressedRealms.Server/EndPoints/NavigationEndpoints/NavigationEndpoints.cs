@@ -1,4 +1,5 @@
 using ExpressedRealms.DB;
+using ExpressedRealms.Repositories.Expressions.Expressions;
 using ExpressedRealms.Server.EndPoints.NavigationEndpoints.Responses;
 using ExpressedRealms.Server.EndPoints.PlayerEndpoints.DTOs;
 using ExpressedRealms.Server.Extensions;
@@ -20,20 +21,11 @@ internal static class NavigationEndpoints
         endpointGroup
             .MapGet(
                 "/expressions",
-                async (ExpressedRealmsDbContext dbContext) =>
+                async (ExpressedRealmsDbContext dbContext, IExpressionRepository repository) =>
                 {
-                    var expressions = await dbContext
-                        .Expressions.Select(x => new ExpressionMenuItem()
-                        {
-                            Name = x.Name,
-                            Id = x.Id,
-                            ShortDescription = x.ShortDescription,
-                            NavMenuImage = x.NavMenuImage
-                        })
-                        .OrderBy(x => x.Name)
-                        .ToListAsync();
+                    var navMenuItems = await repository.GetNavigationMenuItems();
 
-                    return TypedResults.Ok(expressions);
+                    return TypedResults.Ok(navMenuItems.Value.Select(x => new ExpressionMenuItem(x)));
                 }
             )
             .RequireAuthorization();

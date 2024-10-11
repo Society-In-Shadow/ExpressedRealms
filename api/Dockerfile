@@ -5,6 +5,7 @@ COPY ["ExpressedRealms.sln", "."]
 COPY ["ExpressedRealms.Repositories.Shared/ExpressedRealms.Repositories.Shared.csproj", "ExpressedRealms.Repositories.Shared/"]
 COPY ["ExpressedRealms.Email/ExpressedRealms.Email.csproj", "ExpressedRealms.Email/"]
 COPY ["ExpressedRealms.Repositories.Characters/ExpressedRealms.Repositories.Characters.csproj", "ExpressedRealms.Repositories.Characters/"]
+COPY ["ExpressedRealms.Repositories.Expressions/ExpressedRealms.Repositories.Expressions.csproj", "ExpressedRealms.Repositories.Expressions/"]
 COPY ["ExpressedRealms.DB/ExpressedRealms.DB.csproj", "ExpressedRealms.DB/"]
 COPY ["ExpressedRealms.Server/ExpressedRealms.Server.csproj", "ExpressedRealms.Server/"]
 RUN dotnet restore

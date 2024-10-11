@@ -15,6 +15,19 @@ internal sealed class ExpressionRepository(
     CancellationToken cancellationToken
 ) : IExpressionRepository
 {
+    public async Task<Result<List<ExpressionNavigationMenuItem>>> GetNavigationMenuItems()
+    {
+        return await context
+            .Expressions.Select(x => new ExpressionNavigationMenuItem()
+            {
+                Name = x.Name,
+                Id = x.Id,
+                ShortDescription = x.ShortDescription,
+                NavMenuImage = x.NavMenuImage
+            })
+            .OrderBy(x => x.Name)
+            .ToListAsync(cancellationToken);
+    }
     public async Task<Result<int>> CreateExpressionAsync(CreateExpressionDto dto)
     {
         var result = await createExpressionDtoValidator.ValidateAsync(dto, cancellationToken);
@@ -72,7 +85,7 @@ internal sealed class ExpressionRepository(
             return Result.Fail(new AlreadyDeletedFailure("Expression"));
 
         expression.SoftDelete();
-        await context.SaveChangesAsync();
+        await context.SaveChangesAsync(cancellationToken);
 
         return Result.Ok();
     }

@@ -1,9 +1,11 @@
+using ExpressedRealms.Repositories.Expressions.Expressions.DTOs;
+
 namespace ExpressedRealms.Server.EndPoints.PlayerEndpoints.DTOs;
 
-public class ExpressionMenuItem
+public class ExpressionMenuItem(ExpressionNavigationMenuItem expressionNavigationMenuItem)
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string ShortDescription { get; set; }
-    public string NavMenuImage { get; set; }
+    public int Id { get; init; } = expressionNavigationMenuItem.Id;
+    public string Name { get; init; } = expressionNavigationMenuItem.Name;
+    public string ShortDescription { get; init; } = expressionNavigationMenuItem.ShortDescription;
+    public string NavMenuImage { get; init; } = expressionNavigationMenuItem.NavMenuImage;
 }
