@@ -22,9 +22,9 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 using Azure.Identity;
 using Azure.Storage.Blobs;
+using ExpressedRealms.Server.Configuration;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
-using Npgsql;
 
 try
 {
@@ -77,48 +77,8 @@ try
     builder.Services.AddHealthChecks();
 
     Log.Information("Adding DB Context");
-    
-    builder.Services.AddDbContext<ExpressedRealmsDbContext>(async (serviceProvider, options) =>
-    {
-        if (string.IsNullOrEmpty(connectionString))
-        {
-            var dataSourceBuilder = new NpgsqlDataSourceBuilder(Environment.GetEnvironmentVariable("AZURE_POSTGRESSQL_CONNECTIONSTRING"));
-            dataSourceBuilder.UsePasswordProvider(
-                passwordProvider: _ => 
-                {
-                    var sqlServerTokenProvider = new DefaultAzureCredential();
-                    AccessToken accessToken = sqlServerTokenProvider.GetToken(
-                        new TokenRequestContext(new string[] { "https://ossrdbms-aad.database.windows.net/.default" })
-                    );
 
-                    return accessToken.Token;
-                },
-                passwordProviderAsync: async (passwordBuilder, token) => 
-                {
-                    var sqlServerTokenProvider = new DefaultAzureCredential();
-                    AccessToken accessToken = await sqlServerTokenProvider.GetTokenAsync(
-                        new TokenRequestContext(new string[] { "https://ossrdbms-aad.database.windows.net/.default" }),
-                        token // Pass the cancellation token along if needed
-                    );
-
-                    return accessToken.Token;
-                });
-            var dataSource = dataSourceBuilder.Build();
-        
-            options.UseNpgsql(dataSource, postgresOptions =>
-            {
-                postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
-            });
-        }
-        else
-        {
-            options.UseNpgsql(connectionString, postgresOptions =>
-            {
-                postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
-            });
-        }
-
-    });
+    builder.AddDatabaseConnection(connectionString);
 
     Log.Information("Setting Up Authentication and Identity");
     builder
