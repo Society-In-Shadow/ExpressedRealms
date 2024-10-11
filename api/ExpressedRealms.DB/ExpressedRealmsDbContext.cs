@@ -1,4 +1,5 @@
-﻿using Audit.EntityFramework;
+﻿using Audit.Core;
+using Audit.EntityFramework;
 using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Models.Expressions;
 using ExpressedRealms.DB.Models.Skills;
@@ -36,6 +37,9 @@ public class ExpressedRealmsDbContext : AuditIdentityDbContext<IdentityUser>
     public ExpressedRealmsDbContext(DbContextOptions<ExpressedRealmsDbContext> options)
         : base(options)
     {
+        Audit.Core.Configuration.Setup()
+            .UseEntityFramework(x => x
+                .AuditTypeNameMapper(typeName => typeName + "_AuditTrail"));
     }
 
         public DbSet<Character> Characters { get; set; }
