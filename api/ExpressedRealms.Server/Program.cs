@@ -102,6 +102,8 @@ try
         options.Password.RequireUppercase = true;
         options.Password.RequiredLength = 8;
     });
+    
+    builder.AddPolicyConfiguration();
 
     builder
         .Services.AddAuthentication()

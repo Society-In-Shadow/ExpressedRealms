@@ -1,15 +1,10 @@
-using ExpressedRealms.DB;
-using ExpressedRealms.DB.Models.Expressions;
 using ExpressedRealms.Repositories.Expressions.Expressions;
 using ExpressedRealms.Repositories.Expressions.Expressions.DTOs;
 using ExpressedRealms.Server.Configuration.UserRoles;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints;
-using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.DTOs;
 using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Requests;
 using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Responses;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
 namespace ExpressedRealms.Server.EndPoints.ExpressionEndpoints;
@@ -20,6 +15,7 @@ internal static class ExpressionEndpoints
     {
         var endpointGroup = app.MapGroup("expression")
             .AddFluentValidationAutoValidation()
+            .RequireAuthorization(Policies.ExpressionEditorPolicy)
             .WithTags("Expressions")
             .WithOpenApi();
 
@@ -41,7 +37,6 @@ internal static class ExpressionEndpoints
         endpointGroup
             .MapGet(
                 "{expressionId}",
-                [Authorize(Roles = UserRoles.ExpressionEditor)]
                 async Task<Results<NotFound, ValidationProblem, Ok<EditExpressionResponse>>> (
                     int expressionId,
                     IExpressionRepository repository
@@ -61,13 +56,11 @@ internal static class ExpressionEndpoints
             .WithSummary("Returns the high level information for a given expression")
             .WithDescription(
                 "This returns the detailed information for the given expression, including publish details"
-            )
-            .RequireAuthorization();
-        
+            );
+
         endpointGroup
             .MapPut(
                 "{expressionId}",
-                [Authorize(Roles = UserRoles.ExpressionEditor)]
                 async Task<Results<NotFound, ValidationProblem, NoContent>> (
                     int expressionId,
                     EditExpressionRequest editExpressionRequest,
@@ -97,12 +90,10 @@ internal static class ExpressionEndpoints
             .WithSummary("Allows one to edit the high level expression details")
             .WithDescription(
                 "You will also be able to set the publish status of the expression."
-            )
-            .RequireAuthorization();
-        
+            );
+
         endpointGroup
             .MapPost("",
-                [Authorize(Roles = UserRoles.ExpressionEditor)]
                 async Task<Results<ValidationProblem, Created<int>>> (
                     AddExpressionRequest request,
                     IExpressionRepository repository
@@ -124,13 +115,11 @@ internal static class ExpressionEndpoints
                     return TypedResults.Created("/expressions", results.Value);
                 }
             )
-            .WithSummary("Allows one to create new expressions")
-            .RequireAuthorization();
-        
+            .WithSummary("Allows one to create new expressions");
+
         endpointGroup
             .MapDelete(
                 "{id}",
-                [Authorize(Roles = UserRoles.ExpressionEditor)]
                 async Task<Results<NotFound, NoContent, StatusCodeHttpResult>> (
                     int id,
                     IExpressionRepository repository
@@ -146,8 +135,7 @@ internal static class ExpressionEndpoints
 
                     return TypedResults.NoContent();
                 }
-            )
-            .RequireAuthorization();
+            );
     }
 
     private static List<ExpressionSectionDTO> BuildExpressionPage(
