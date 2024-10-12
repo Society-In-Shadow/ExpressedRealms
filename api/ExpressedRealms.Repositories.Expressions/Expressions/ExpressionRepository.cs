@@ -3,6 +3,7 @@ using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions;
 using ExpressedRealms.Repositories.Expressions.Expressions.DTOs;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
+using ExpressedRealms.Repositories.Shared.Helpers;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,6 +33,27 @@ internal sealed class ExpressionRepository(
             .OrderBy(x => x.Name)
             .ToListAsync(cancellationToken);
     }
+    
+    public async Task<Result<GetExpressionDto>> GetExpression(int expressionId)
+    {
+        var expression = await context.Expressions
+            .Where(x => x.Id == expressionId)
+            .FirstOrDefaultAsync();
+        
+        if (expression is null)
+            return Result.Fail(new NotFoundFailure("Expression"));
+        
+        return new GetExpressionDto()
+        {
+            Name = expression.Name,
+            Id = expression.Id,
+            ShortDescription = expression.ShortDescription,
+            NavMenuImage = expression.NavMenuImage,
+            PublishStatus = (PublishTypes) expression.PublishStatusId,
+            PublishTypes = EnumHelpers.GetEnumKeyValuePairs<PublishTypes>(),
+        };
+    }
+    
     public async Task<Result<int>> CreateExpressionAsync(CreateExpressionDto dto)
     {
         var result = await createExpressionDtoValidator.ValidateAsync(dto, cancellationToken);
