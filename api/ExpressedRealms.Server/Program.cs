@@ -258,6 +258,7 @@ try
     app.AddPlayerEndPoints();
     app.AddNavigationEndpoints();
     app.AddExpressionEndpoints();
+    app.AddExpressionSubsectionEndpoints();
     app.AddStatEndPoints();
 
     app.MapFallbackToFile("/index.html");
