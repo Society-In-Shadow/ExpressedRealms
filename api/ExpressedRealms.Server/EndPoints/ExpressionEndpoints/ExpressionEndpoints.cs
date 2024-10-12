@@ -98,6 +98,54 @@ internal static class ExpressionEndpoints
                 "You will also be able to set the publish status of the expression."
             )
             .RequireAuthorization();
+        
+        endpointGroup
+            .MapPost("",
+                [Authorize]
+                async Task<Results<ValidationProblem, Created<int>>> (
+                    AddExpressionRequest request,
+                    IExpressionRepository repository
+                ) =>
+                {
+                    var results = await repository.CreateExpressionAsync(
+                        new CreateExpressionDto()
+                        {
+                            Name = request.Name,
+                            ShortDescription = request.ShortDescription,
+                            NavMenuImage = request.NavMenuImage
+                        }
+                    );
+
+                    if (results.HasValidationError(out var validationProblem))
+                        return validationProblem;
+                    results.ThrowIfErrorNotHandled();
+
+                    return TypedResults.Created("/expressions", results.Value);
+                }
+            )
+            .WithSummary("Allows one to create new expressions")
+            .RequireAuthorization();
+        
+        endpointGroup
+            .MapDelete(
+                "{id}",
+                async Task<Results<NotFound, NoContent, StatusCodeHttpResult>> (
+                    int id,
+                    IExpressionRepository repository
+                ) =>
+                {
+                    var status = await repository.DeleteExpressionAsync(id);
+
+                    if (status.HasNotFound(out var notFound))
+                        return notFound;
+                    if (status.HasBeenDeletedAlready(out var deletedAlready))
+                        return deletedAlready;
+                    status.ThrowIfErrorNotHandled();
+
+                    return TypedResults.NoContent();
+                }
+            )
+            .RequireAuthorization();
     }
 
     private static List<ExpressionSectionDTO> BuildExpressionPage(
