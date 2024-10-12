@@ -89,6 +89,7 @@ try
     Log.Information("Setting Up Authentication and Identity");
     builder
         .Services.AddIdentityCore<User>()
+        .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<ExpressedRealmsDbContext>()
         .AddApiEndpoints();
 
