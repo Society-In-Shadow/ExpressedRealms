@@ -2,6 +2,7 @@ using ExpressedRealms.DB;
 using ExpressedRealms.DB.Models.Expressions;
 using ExpressedRealms.Repositories.Expressions.Expressions;
 using ExpressedRealms.Repositories.Expressions.Expressions.DTOs;
+using ExpressedRealms.Server.Configuration.UserRoles;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints;
 using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.DTOs;
 using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Requests;
@@ -40,7 +41,7 @@ internal static class ExpressionEndpoints
         endpointGroup
             .MapGet(
                 "{expressionId}",
-                [Authorize]
+                [Authorize(Roles = UserRoles.ExpressionEditor)]
                 async Task<Results<NotFound, ValidationProblem, Ok<EditExpressionResponse>>> (
                     int expressionId,
                     IExpressionRepository repository
@@ -66,7 +67,7 @@ internal static class ExpressionEndpoints
         endpointGroup
             .MapPut(
                 "{expressionId}",
-                [Authorize]
+                [Authorize(Roles = UserRoles.ExpressionEditor)]
                 async Task<Results<NotFound, ValidationProblem, NoContent>> (
                     int expressionId,
                     EditExpressionRequest editExpressionRequest,
@@ -101,7 +102,7 @@ internal static class ExpressionEndpoints
         
         endpointGroup
             .MapPost("",
-                [Authorize]
+                [Authorize(Roles = UserRoles.ExpressionEditor)]
                 async Task<Results<ValidationProblem, Created<int>>> (
                     AddExpressionRequest request,
                     IExpressionRepository repository
@@ -129,6 +130,7 @@ internal static class ExpressionEndpoints
         endpointGroup
             .MapDelete(
                 "{id}",
+                [Authorize(Roles = UserRoles.ExpressionEditor)]
                 async Task<Results<NotFound, NoContent, StatusCodeHttpResult>> (
                     int id,
                     IExpressionRepository repository

@@ -9,6 +9,7 @@ using ExpressedRealms.Repositories.Characters;
 using ExpressedRealms.Repositories.Expressions;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Server.Configuration;
+using ExpressedRealms.Server.Configuration.UserRoles;
 using ExpressedRealms.Server.DependencyInjections;
 using ExpressedRealms.Server.EndPoints;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints;
@@ -215,6 +216,9 @@ try
         Log.Information("Setting Up Forwarded Headers");
         app.UseForwardedHeaders();
     }
+    
+    // Seed Roles
+    app.ConfigureUserRoles();
 
     app.UseDefaultFiles();
     app.UseStaticFiles();
