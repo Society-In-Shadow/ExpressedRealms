@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ExpressedRealms.DB.Models.Expressions;
 
-public class ExpressionPublishStatusConfiguration : IEntityTypeConfiguration<ExpressionPublishStatus>
+public class ExpressionPublishStatusConfiguration
+    : IEntityTypeConfiguration<ExpressionPublishStatus>
 {
     public void Configure(EntityTypeBuilder<ExpressionPublishStatus> builder)
     {

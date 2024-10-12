@@ -12,7 +12,7 @@ public static class ExpressionRepositoryInjections
     {
         services.AddScoped<CreateExpressionDtoValidator>();
         services.AddScoped<EditExpressionDtoValidator>();
-        
+
         services.AddScoped<IExpressionRepository, ExpressionRepository>();
         return services;
     }

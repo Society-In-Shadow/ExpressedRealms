@@ -33,27 +33,27 @@ internal sealed class ExpressionRepository(
             .OrderBy(x => x.Name)
             .ToListAsync(cancellationToken);
     }
-    
+
     public async Task<Result<GetExpressionDto>> GetExpression(int expressionId)
     {
-        var expression = await context.Expressions
-            .Where(x => x.Id == expressionId)
+        var expression = await context
+            .Expressions.Where(x => x.Id == expressionId)
             .FirstOrDefaultAsync();
-        
+
         if (expression is null)
             return Result.Fail(new NotFoundFailure("Expression"));
-        
+
         return new GetExpressionDto()
         {
             Name = expression.Name,
             Id = expression.Id,
             ShortDescription = expression.ShortDescription,
             NavMenuImage = expression.NavMenuImage,
-            PublishStatus = (PublishTypes) expression.PublishStatusId,
+            PublishStatus = (PublishTypes)expression.PublishStatusId,
             PublishTypes = EnumHelpers.GetEnumKeyValuePairs<PublishTypes>(),
         };
     }
-    
+
     public async Task<Result<int>> CreateExpressionAsync(CreateExpressionDto dto)
     {
         var result = await createExpressionDtoValidator.ValidateAsync(dto, cancellationToken);
@@ -67,39 +67,37 @@ internal sealed class ExpressionRepository(
             NavMenuImage = dto.NavMenuImage,
             PublishStatusId = (int)PublishTypes.Draft
         };
-        
+
         context.Expressions.Add(expression);
-        
+
         await context.SaveChangesAsync(cancellationToken);
-        
+
         return Result.Ok(expression.Id);
     }
-    
+
     public async Task<Result<int>> EditExpressionAsync(EditExpressionDto dto)
     {
         var result = await editExpressionDtoValidator.ValidateAsync(dto, cancellationToken);
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
 
-        var expression = await context.Expressions
-            .Where(x => x.Id == dto.Id)
-            .FirstOrDefaultAsync();
-        
+        var expression = await context.Expressions.Where(x => x.Id == dto.Id).FirstOrDefaultAsync();
+
         if (expression is null)
             return Result.Fail(new NotFoundFailure("Expression"));
-        
+
         expression.Name = dto.Name;
         expression.ShortDescription = dto.ShortDescription;
         expression.NavMenuImage = dto.NavMenuImage;
-        expression.PublishStatusId = (int) dto.PublishStatus;
-        
+        expression.PublishStatusId = (int)dto.PublishStatus;
+
         context.Expressions.Update(expression);
-        
+
         await context.SaveChangesAsync(cancellationToken);
-        
+
         return Result.Ok(expression.Id);
     }
-    
+
     public async Task<Result> DeleteExpressionAsync(int id)
     {
         var expression = await context

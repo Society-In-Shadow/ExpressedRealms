@@ -1,10 +1,14 @@
 using System.Reflection;
 using AspNetCore.SwaggerUI.Themes;
 using Azure.Core;
+using Azure.Identity;
+using Azure.Storage.Blobs;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels;
 using ExpressedRealms.Repositories.Characters;
+using ExpressedRealms.Repositories.Expressions;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
+using ExpressedRealms.Server.Configuration;
 using ExpressedRealms.Server.DependencyInjections;
 using ExpressedRealms.Server.EndPoints;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints;
@@ -13,6 +17,8 @@ using ExpressedRealms.Server.EndPoints.PlayerEndpoints;
 using ExpressedRealms.Server.Swagger;
 using FluentValidation;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -20,12 +26,6 @@ using Serilog;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
-using Azure.Identity;
-using Azure.Storage.Blobs;
-using ExpressedRealms.Repositories.Expressions;
-using ExpressedRealms.Server.Configuration;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.HttpOverrides;
 
 try
 {
@@ -35,42 +35,46 @@ try
     string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
 
     Log.Information("Setting Up Loggers");
-    var logger = new LoggerConfiguration()
-        .MinimumLevel.Information()
-        .WriteTo.Console();
+    var logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console();
 
     if (!string.IsNullOrEmpty(connectionString))
     {
-        logger.WriteTo.PostgreSQL(
-            connectionString,
-            "Logs",
-            needAutoCreateTable: true
-        );
+        logger.WriteTo.PostgreSQL(connectionString, "Logs", needAutoCreateTable: true);
     }
     else
     {
-        logger.WriteTo.ApplicationInsights(Environment.GetEnvironmentVariable("APPLICATION_INSIGHTS_CONNECTION_STRING"), TelemetryConverter.Traces);
+        logger.WriteTo.ApplicationInsights(
+            Environment.GetEnvironmentVariable("APPLICATION_INSIGHTS_CONNECTION_STRING"),
+            TelemetryConverter.Traces
+        );
     }
 
     Log.Logger = logger.CreateLogger();
 
     builder.Host.UseSerilog();
 
-    builder.Services.AddApplicationInsightsTelemetry((options) =>
-    {
-        options.ConnectionString = Environment.GetEnvironmentVariable("APPLICATION_INSIGHTS_CONNECTION_STRING");
-    });
-    
+    builder.Services.AddApplicationInsightsTelemetry(
+        (options) =>
+        {
+            options.ConnectionString = Environment.GetEnvironmentVariable(
+                "APPLICATION_INSIGHTS_CONNECTION_STRING"
+            );
+        }
+    );
+
     // Since we are in a container, we need to keep track of the data keys manually
-    var blobStorageEndpoint = Environment.GetEnvironmentVariable("AZURE_STORAGEBLOB_RESOURCEENDPOINT") ?? "";
+    var blobStorageEndpoint =
+        Environment.GetEnvironmentVariable("AZURE_STORAGEBLOB_RESOURCEENDPOINT") ?? "";
     if (!string.IsNullOrEmpty(blobStorageEndpoint))
     {
-        var blobServiceClient = new BlobServiceClient(new Uri(blobStorageEndpoint), new DefaultAzureCredential());
+        var blobServiceClient = new BlobServiceClient(
+            new Uri(blobStorageEndpoint),
+            new DefaultAzureCredential()
+        );
         var containerClient = blobServiceClient.GetBlobContainerClient("dataprotection-keys");
         var blobClient = containerClient.GetBlobClient("dataprotection-keys.xml");
 
-        builder.Services.AddDataProtection()
-            .PersistKeysToAzureBlobStorage(blobClient);
+        builder.Services.AddDataProtection().PersistKeysToAzureBlobStorage(blobClient);
     }
 
     Log.Information("Add in Healthchecks");
@@ -129,7 +133,8 @@ try
         {
             options.AddDefaultPolicy(policy =>
             {
-                policy.WithOrigins("https://localhost")
+                policy
+                    .WithOrigins("https://localhost")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials();
@@ -140,11 +145,13 @@ try
     builder.Services.Configure<ForwardedHeadersOptions>(options =>
     {
         options.ForwardedHeaders =
-            ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+            ForwardedHeaders.XForwardedFor
+            | ForwardedHeaders.XForwardedProto
+            | ForwardedHeaders.XForwardedHost;
         options.KnownNetworks.Clear();
         options.KnownProxies.Clear();
     });
-    
+
     Log.Information("Adding OpenAPI Support and Swagger Generation");
 
     // Add services to the container.
@@ -208,7 +215,7 @@ try
         Log.Information("Setting Up Forwarded Headers");
         app.UseForwardedHeaders();
     }
-    
+
     app.UseDefaultFiles();
     app.UseStaticFiles();
 
@@ -221,17 +228,17 @@ try
     }
 
     Log.Information("Adding Health Check Endpoint");
-    
+
     app.MapHealthChecks("health");
-    
+
     Log.Information("Adding in Security Related Things");
 
-    if(app.Environment.IsDevelopment())
+    if (app.Environment.IsDevelopment())
     {
         app.UseHttpsRedirection();
         app.UseCors();
     }
-    
+
     app.UseAuthentication();
     app.UseAuthorization();
 

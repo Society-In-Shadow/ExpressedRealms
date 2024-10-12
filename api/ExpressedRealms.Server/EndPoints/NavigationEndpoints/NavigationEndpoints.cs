@@ -25,7 +25,9 @@ internal static class NavigationEndpoints
                 {
                     var navMenuItems = await repository.GetNavigationMenuItems();
 
-                    return TypedResults.Ok(navMenuItems.Value.Select(x => new ExpressionMenuItem(x)));
+                    return TypedResults.Ok(
+                        navMenuItems.Value.Select(x => new ExpressionMenuItem(x))
+                    );
                 }
             )
             .RequireAuthorization();

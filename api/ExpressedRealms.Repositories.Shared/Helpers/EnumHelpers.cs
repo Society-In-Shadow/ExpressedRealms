@@ -2,7 +2,8 @@ namespace ExpressedRealms.Repositories.Shared.Helpers;
 
 public static class EnumHelpers
 {
-    public static List<KeyValuePair<int, string>> GetEnumKeyValuePairs<T>() where T : Enum
+    public static List<KeyValuePair<int, string>> GetEnumKeyValuePairs<T>()
+        where T : Enum
     {
         var enumValues = Enum.GetValues(typeof(T));
         var enumNames = Enum.GetNames(typeof(T));
@@ -10,7 +11,9 @@ public static class EnumHelpers
 
         for (int i = 0; i < enumValues.Length; i++)
         {
-            keyValuePairs.Add(new KeyValuePair<int, string>((int)enumValues.GetValue(i), enumNames[i]));
+            keyValuePairs.Add(
+                new KeyValuePair<int, string>((int)enumValues.GetValue(i), enumNames[i])
+            );
         }
 
         return keyValuePairs;

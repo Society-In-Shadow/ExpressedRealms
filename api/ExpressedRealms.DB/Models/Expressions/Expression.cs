@@ -16,5 +16,4 @@ public class Expression : ISoftDelete
     public virtual ExpressionPublishStatus PublishStatus { get; set; } = null!;
     public virtual List<ExpressionSection> ExpressionSections { get; set; } = null!;
     public virtual List<Character> Characters { get; set; } = null!;
-
 }

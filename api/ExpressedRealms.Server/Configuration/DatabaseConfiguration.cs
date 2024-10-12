@@ -8,24 +8,34 @@ namespace ExpressedRealms.Server.Configuration;
 
 public static class DatabaseConfiguration
 {
-    public static void AddDatabaseConnection(this WebApplicationBuilder builder, string connectionString)
+    public static void AddDatabaseConnection(
+        this WebApplicationBuilder builder,
+        string connectionString
+    )
     {
         if (!string.IsNullOrEmpty(connectionString))
         {
             // Register DbContext with reuse of the existing services
-            builder.Services.AddDbContext<ExpressedRealmsDbContext>((_, options) =>
-            {
-                options.UseNpgsql(connectionString, postgresOptions =>
+            builder.Services.AddDbContext<ExpressedRealmsDbContext>(
+                (_, options) =>
                 {
-                    postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
-                });
-            });
+                    options.UseNpgsql(
+                        connectionString,
+                        postgresOptions =>
+                        {
+                            postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
+                        }
+                    );
+                }
+            );
 
             return;
         }
-        
+
         // Assuming these services are registered once and reused
-        var dataSourceBuilder = new NpgsqlDataSourceBuilder(Environment.GetEnvironmentVariable("AZURE_POSTGRESSQL_CONNECTIONSTRING"));
+        var dataSourceBuilder = new NpgsqlDataSourceBuilder(
+            Environment.GetEnvironmentVariable("AZURE_POSTGRESSQL_CONNECTIONSTRING")
+        );
 
         // Define the password provider once and reuse
         var sqlServerTokenProvider = new DefaultAzureCredential();
@@ -44,18 +54,24 @@ public static class DatabaseConfiguration
                     token // Pass the cancellation token if needed
                 );
                 return accessToken.Token;
-            });
+            }
+        );
 
         // Build the data source once and reuse it across DbContext instances
         var dataSource = dataSourceBuilder.Build();
-    
+
         // Register DbContext with reuse of the existing services
-        builder.Services.AddDbContext<ExpressedRealmsDbContext>((_, options) =>
-        {
-            options.UseNpgsql(dataSource, postgresOptions =>
+        builder.Services.AddDbContext<ExpressedRealmsDbContext>(
+            (_, options) =>
             {
-                postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
-            });
-        });
+                options.UseNpgsql(
+                    dataSource,
+                    postgresOptions =>
+                    {
+                        postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
+                    }
+                );
+            }
+        );
     }
 }

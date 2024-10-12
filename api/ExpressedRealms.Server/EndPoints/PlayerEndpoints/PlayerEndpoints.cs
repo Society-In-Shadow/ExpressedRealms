@@ -54,12 +54,7 @@ internal static class PlayerEndpoints
                     if (player is null)
                         return TypedResults.NotFound();
 
-                    return TypedResults.Ok(
-                        new PlayerDTO()
-                        {
-                            Name = player.Name
-                        }
-                    );
+                    return TypedResults.Ok(new PlayerDTO() { Name = player.Name });
                 }
             )
             .WithSummary("No Id Required, this is specific to the User")

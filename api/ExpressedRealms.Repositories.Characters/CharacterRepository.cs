@@ -134,7 +134,6 @@ internal sealed class CharacterRepository(
                 );
             }
         }
-        
 
         character.Name = dto.Name;
         character.Background = dto.Background;
