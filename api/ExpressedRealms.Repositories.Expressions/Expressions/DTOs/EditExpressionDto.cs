@@ -6,4 +6,5 @@ public record EditExpressionDto
     public string Name { get; set; }
     public string ShortDescription { get; set; }
     public string NavMenuImage { get; set; }
+    public PublishTypes PublishStatus { get; set; }
 }

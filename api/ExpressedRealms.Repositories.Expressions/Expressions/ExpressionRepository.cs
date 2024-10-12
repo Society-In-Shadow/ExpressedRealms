@@ -17,13 +17,17 @@ internal sealed class ExpressionRepository(
 {
     public async Task<Result<List<ExpressionNavigationMenuItem>>> GetNavigationMenuItems()
     {
+        // TODO: Add role based viewing of the expressions
         return await context
-            .Expressions.Select(x => new ExpressionNavigationMenuItem()
+            .Expressions.AsNoTracking()
+            .Select(x => new ExpressionNavigationMenuItem()
             {
                 Name = x.Name,
                 Id = x.Id,
                 ShortDescription = x.ShortDescription,
-                NavMenuImage = x.NavMenuImage
+                NavMenuImage = x.NavMenuImage,
+                PublishStatusName = x.PublishStatus.Name,
+                PublishStatusId = (PublishTypes)x.PublishStatusId
             })
             .OrderBy(x => x.Name)
             .ToListAsync(cancellationToken);
@@ -38,7 +42,8 @@ internal sealed class ExpressionRepository(
         {
             Name = dto.Name,
             ShortDescription = dto.ShortDescription,
-            NavMenuImage = dto.NavMenuImage
+            NavMenuImage = dto.NavMenuImage,
+            PublishStatusId = (int)PublishTypes.Draft
         };
         
         context.Expressions.Add(expression);
@@ -64,6 +69,7 @@ internal sealed class ExpressionRepository(
         expression.Name = dto.Name;
         expression.ShortDescription = dto.ShortDescription;
         expression.NavMenuImage = dto.NavMenuImage;
+        expression.PublishStatusId = (int) dto.PublishStatus;
         
         context.Expressions.Update(expression);
         

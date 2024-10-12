@@ -10,5 +10,6 @@ public class EditExpressionDtoValidator : AbstractValidator<EditExpressionDto>
         RuleFor(x => x.Name).NotEmpty();
         RuleFor(x => x.ShortDescription).NotEmpty();
         RuleFor(x => x.NavMenuImage).NotEmpty();
+        RuleFor(x => x.PublishStatus).IsInEnum().NotEmpty();
     }
 }

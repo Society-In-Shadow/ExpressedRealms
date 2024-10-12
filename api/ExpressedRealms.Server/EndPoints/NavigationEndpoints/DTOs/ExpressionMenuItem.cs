@@ -8,4 +8,6 @@ public class ExpressionMenuItem(ExpressionNavigationMenuItem expressionNavigatio
     public string Name { get; init; } = expressionNavigationMenuItem.Name;
     public string ShortDescription { get; init; } = expressionNavigationMenuItem.ShortDescription;
     public string NavMenuImage { get; init; } = expressionNavigationMenuItem.NavMenuImage;
+    public string? StatusName { get; init; } = expressionNavigationMenuItem.PublishStatusName;
+    public int StatusId { get; init; } = (int)expressionNavigationMenuItem.PublishStatusId;
 }
