@@ -1,10 +1,10 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Models.Expressions;
-using ExpressedRealms.Repositories.Characters.Stats.DTOs;
 using ExpressedRealms.Repositories.Expressions.Expressions;
 using ExpressedRealms.Repositories.Expressions.Expressions.DTOs;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints;
 using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.DTOs;
+using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Requests;
 using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -59,7 +59,43 @@ internal static class ExpressionEndpoints
             )
             .WithSummary("Returns the high level information for a given expression")
             .WithDescription(
-                "This returns the detailed information for the given expression.  You will also be able to set the publish status of the expression."
+                "This returns the detailed information for the given expression, including publish details"
+            )
+            .RequireAuthorization();
+        
+        endpointGroup
+            .MapPut(
+                "{expressionId}",
+                [Authorize]
+                async Task<Results<NotFound, ValidationProblem, NoContent>> (
+                    int expressionId,
+                    EditExpressionRequest editExpressionRequest,
+                    IExpressionRepository repository
+                ) =>
+                {
+                    var results = await repository.EditExpressionAsync(
+                        new EditExpressionDto()
+                        {
+                            Id = editExpressionRequest.Id,
+                            Name = editExpressionRequest.Name,
+                            PublishStatus = editExpressionRequest.PublishStatus,
+                            ShortDescription = editExpressionRequest.ShortDescription,
+                            NavMenuImage = editExpressionRequest.NavMenuImage
+                        }
+                    );
+
+                    if (results.HasNotFound(out var notFound))
+                        return notFound;
+                    if (results.HasValidationError(out var validationProblem))
+                        return validationProblem;
+                    results.ThrowIfErrorNotHandled();
+
+                    return TypedResults.NoContent();
+                }
+            )
+            .WithSummary("Allows one to edit the high level expression details")
+            .WithDescription(
+                "You will also be able to set the publish status of the expression."
             )
             .RequireAuthorization();
     }
