@@ -7,9 +7,11 @@ import TextAreaWrapper from "@/FormWrappers/TextAreaWrapper.vue";
 import axios from "axios";
 import toaster from "@/services/Toasters";
 import Button from "primevue/button";
+import Router from "@/router";
 
 const emit = defineEmits<{
   refreshList: []
+  closeDialog: []
 }>();
 
 const { defineField, handleSubmit, errors } = useForm({
@@ -37,7 +39,9 @@ const onSubmit = handleSubmit((values) => {
     navMenuImage: values.navMenuImage
   }).then(() => {
     emit('refreshList');
+    emit('closeDialog');
     toaster.success(`Successfully added ${values.Name} Expression as a Draft!`);
+    Router.push("/expressions/" + encodeURIComponent(values.name.toLowerCase()));
   });
 });
 

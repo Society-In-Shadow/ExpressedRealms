@@ -117,7 +117,7 @@ function showCreateExpressionPopup(){
     <EditExpression :expression-id="expressionId" @refreshList="loadList"></EditExpression>
   </Dialog>
   <Dialog v-model:visible="newVisible" modal header="Add Expression">
-    <AddExpression @refreshList="loadList"></AddExpression>
+    <AddExpression @refreshList="loadList" @closeDialog="newVisible = false"></AddExpression>
   </Dialog>
   <MegaMenu :model="items" class="m-lg-3 m-md-3 m-sm-1 m-1 pb-1 pt-1">
     <template #start>
