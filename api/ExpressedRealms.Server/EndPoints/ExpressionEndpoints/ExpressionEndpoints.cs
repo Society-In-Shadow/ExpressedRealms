@@ -6,6 +6,7 @@ using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Requests;
 using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Responses;
 using Microsoft.AspNetCore.Http.HttpResults;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
+using ExpressedRealms.Server.Extensions;
 
 namespace ExpressedRealms.Server.EndPoints.ExpressionEndpoints;
 
@@ -15,7 +16,7 @@ internal static class ExpressionEndpoints
     {
         var endpointGroup = app.MapGroup("expression")
             .AddFluentValidationAutoValidation()
-            .RequireAuthorization(Policies.ExpressionEditorPolicy)
+            .RequirePolicyAuthorization(Policies.ExpressionEditorPolicy)
             .WithTags("Expressions")
             .WithOpenApi();
 

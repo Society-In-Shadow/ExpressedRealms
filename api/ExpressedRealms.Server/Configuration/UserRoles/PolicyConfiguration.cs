@@ -8,7 +8,7 @@ public static class PolicyConfiguration
     {
         builder.Services.AddAuthorization(options =>
         {
-            options.AddPolicy(Policies.ExpressionEditorPolicy, policy =>
+            options.AddPolicy(Policies.ExpressionEditorPolicy.Name, policy =>
                 policy.RequireRole(UserRoles.ExpressionEditor));
         });
     }
