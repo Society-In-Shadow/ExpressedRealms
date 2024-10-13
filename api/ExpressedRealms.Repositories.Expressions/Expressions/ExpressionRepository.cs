@@ -21,17 +21,19 @@ internal sealed class ExpressionRepository(
 {
     public async Task<Result<List<ExpressionNavigationMenuItem>>> GetNavigationMenuItems()
     {
-        var canSeeBetaAndDrafts = await userContext.CurrentUserHasPolicy(Policies.ExpressionEditorPolicy);
+        var canSeeBetaAndDrafts = await userContext.CurrentUserHasPolicy(
+            Policies.ExpressionEditorPolicy
+        );
 
-        var expression = context
-            .Expressions.AsNoTracking();
+        var expression = context.Expressions.AsNoTracking();
 
         if (!canSeeBetaAndDrafts)
         {
             expression = expression.Where(e => e.PublishStatusId == (int)PublishTypes.Published);
         }
-        
-        return await expression.Select(x => new ExpressionNavigationMenuItem()
+
+        return await expression
+            .Select(x => new ExpressionNavigationMenuItem()
             {
                 Name = x.Name,
                 Id = x.Id,

@@ -11,5 +11,6 @@ public class EditExpressionResponse(GetExpressionDto dto)
     public string ShortDescription { get; set; } = dto.ShortDescription;
     public string NavMenuImage { get; set; } = dto.NavMenuImage;
     public PublishTypes PublishStatus { get; set; } = dto.PublishStatus;
-    public List<PublishTypeDto> PublishTypes { get; set; } = dto.PublishTypes.Select(x => new PublishTypeDto(x.Key, x.Value)).ToList();
+    public List<PublishTypeDto> PublishTypes { get; set; } =
+        dto.PublishTypes.Select(x => new PublishTypeDto(x.Key, x.Value)).ToList();
 }

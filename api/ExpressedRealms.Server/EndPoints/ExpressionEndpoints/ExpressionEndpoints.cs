@@ -4,9 +4,9 @@ using ExpressedRealms.Repositories.Expressions.Expressions.DTOs;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints;
 using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Requests;
 using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Responses;
+using ExpressedRealms.Server.Extensions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
-using ExpressedRealms.Server.Extensions;
 
 namespace ExpressedRealms.Server.EndPoints.ExpressionEndpoints;
 
@@ -74,12 +74,11 @@ internal static class ExpressionEndpoints
                 }
             )
             .WithSummary("Allows one to edit the high level expression details")
-            .WithDescription(
-                "You will also be able to set the publish status of the expression."
-            );
+            .WithDescription("You will also be able to set the publish status of the expression.");
 
         endpointGroup
-            .MapPost("",
+            .MapPost(
+                "",
                 async Task<Results<ValidationProblem, Created<int>>> (
                     AddExpressionRequest request,
                     IExpressionRepository repository
@@ -103,24 +102,23 @@ internal static class ExpressionEndpoints
             )
             .WithSummary("Allows one to create new expressions");
 
-        endpointGroup
-            .MapDelete(
-                "{id}",
-                async Task<Results<NotFound, NoContent, StatusCodeHttpResult>> (
-                    int id,
-                    IExpressionRepository repository
-                ) =>
-                {
-                    var status = await repository.DeleteExpressionAsync(id);
+        endpointGroup.MapDelete(
+            "{id}",
+            async Task<Results<NotFound, NoContent, StatusCodeHttpResult>> (
+                int id,
+                IExpressionRepository repository
+            ) =>
+            {
+                var status = await repository.DeleteExpressionAsync(id);
 
-                    if (status.HasNotFound(out var notFound))
-                        return notFound;
-                    if (status.HasBeenDeletedAlready(out var deletedAlready))
-                        return deletedAlready;
-                    status.ThrowIfErrorNotHandled();
+                if (status.HasNotFound(out var notFound))
+                    return notFound;
+                if (status.HasBeenDeletedAlready(out var deletedAlready))
+                    return deletedAlready;
+                status.ThrowIfErrorNotHandled();
 
-                    return TypedResults.NoContent();
-                }
-            );
+                return TypedResults.NoContent();
+            }
+        );
     }
 }

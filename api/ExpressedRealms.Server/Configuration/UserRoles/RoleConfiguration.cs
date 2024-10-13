@@ -4,9 +4,7 @@ namespace ExpressedRealms.Server.Configuration.UserRoles;
 
 public static class RoleConfiguration
 {
-    public static void ConfigureUserRoles(
-        this WebApplication app
-    )
+    public static void ConfigureUserRoles(this WebApplication app)
     {
         app.Lifetime.ApplicationStarted.Register(async () =>
         {

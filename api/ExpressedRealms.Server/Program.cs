@@ -102,7 +102,7 @@ try
         options.Password.RequireUppercase = true;
         options.Password.RequiredLength = 8;
     });
-    
+
     builder.AddPolicyConfiguration();
 
     builder
@@ -219,7 +219,7 @@ try
         Log.Information("Setting Up Forwarded Headers");
         app.UseForwardedHeaders();
     }
-    
+
     // Seed Roles
     app.ConfigureUserRoles();
 

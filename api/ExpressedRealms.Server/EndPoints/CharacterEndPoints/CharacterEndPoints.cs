@@ -43,7 +43,8 @@ internal static class CharacterEndPoints
                 [Authorize]
                 async (ExpressedRealmsDbContext dbContext, HttpContext http) =>
                 {
-                    var expressions = await dbContext.Expressions.AsNoTracking()
+                    var expressions = await dbContext
+                        .Expressions.AsNoTracking()
                         .Where(x => x.PublishStatusId == (int)PublishTypes.Published)
                         .Select(x => new CharacterOptionExpression()
                         {
@@ -72,7 +73,9 @@ internal static class CharacterEndPoints
                 ) =>
                 {
                     var isValidExpression = await dbContext.Expressions.AnyAsync(
-                        x => x.Id == expressionId && x.PublishStatusId == (int)PublishTypes.Published,
+                        x =>
+                            x.Id == expressionId
+                            && x.PublishStatusId == (int)PublishTypes.Published,
                         cancellationToken
                     );
 

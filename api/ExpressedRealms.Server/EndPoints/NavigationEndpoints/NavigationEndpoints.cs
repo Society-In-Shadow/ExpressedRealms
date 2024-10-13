@@ -23,26 +23,34 @@ internal static class NavigationEndpoints
         endpointGroup
             .MapGet(
                 "/expressions",
-                async Task<Ok<ExpressionMenuResponse>>
-                    (HttpContext httpContext, IExpressionRepository repository) =>
+                async Task<Ok<ExpressionMenuResponse>> (
+                    HttpContext httpContext,
+                    IExpressionRepository repository
+                ) =>
                 {
                     var navMenuItems = await repository.GetNavigationMenuItems();
 
-                    var hasEditPolicy = await httpContext.UserHasPolicyAsync(Policies.ExpressionEditorPolicy);
+                    var hasEditPolicy = await httpContext.UserHasPolicyAsync(
+                        Policies.ExpressionEditorPolicy
+                    );
 
-                    var menuItems = navMenuItems.Value.Select(x => new ExpressionMenuItem(x)).ToList();
+                    var menuItems = navMenuItems
+                        .Value.Select(x => new ExpressionMenuItem(x))
+                        .ToList();
 
                     if (hasEditPolicy)
                     {
-                        menuItems.Add(new ExpressionMenuItem()
-                        {
-                            Id = 0,
-                            Name = "Add Expression",
-                            ShortDescription = "Use this to add a new expression",
-                            NavMenuImage = "pi-plus"
-                        });
+                        menuItems.Add(
+                            new ExpressionMenuItem()
+                            {
+                                Id = 0,
+                                Name = "Add Expression",
+                                ShortDescription = "Use this to add a new expression",
+                                NavMenuImage = "pi-plus"
+                            }
+                        );
                     }
-                    
+
                     return TypedResults.Ok(
                         new ExpressionMenuResponse()
                         {
