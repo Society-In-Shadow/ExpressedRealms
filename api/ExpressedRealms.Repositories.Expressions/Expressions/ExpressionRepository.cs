@@ -1,8 +1,10 @@
+using ExpressedRealms.Authentication;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions;
 using ExpressedRealms.Repositories.Expressions.Expressions.DTOs;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
+using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Repositories.Shared.Helpers;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
@@ -13,15 +15,23 @@ internal sealed class ExpressionRepository(
     ExpressedRealmsDbContext context,
     CreateExpressionDtoValidator createExpressionDtoValidator,
     EditExpressionDtoValidator editExpressionDtoValidator,
+    IUserContext userContext,
     CancellationToken cancellationToken
 ) : IExpressionRepository
 {
     public async Task<Result<List<ExpressionNavigationMenuItem>>> GetNavigationMenuItems()
     {
-        // TODO: Add role based viewing of the expressions
-        return await context
-            .Expressions.AsNoTracking()
-            .Select(x => new ExpressionNavigationMenuItem()
+        var canSeeBetaAndDrafts = await userContext.CurrentUserHasPolicy(Policies.ExpressionEditorPolicy);
+
+        var expression = context
+            .Expressions.AsNoTracking();
+
+        if (!canSeeBetaAndDrafts)
+        {
+            expression = expression.Where(e => e.PublishStatusId == (int)PublishTypes.Published);
+        }
+        
+        return await expression.Select(x => new ExpressionNavigationMenuItem()
             {
                 Name = x.Name,
                 Id = x.Id,
