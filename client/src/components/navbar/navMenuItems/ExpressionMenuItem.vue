@@ -6,6 +6,7 @@
   import {useRouter} from "vue-router";
   import axios from "axios";
   import toaster from "@/services/Toasters";
+  import Badge from 'primevue/badge';
   const router = useRouter();
 
   const emit = defineEmits<{
@@ -62,6 +63,19 @@
       reject: () => {}
     });
   };
+
+  function getStatus() {
+    switch (props.item.statusId) {
+      case 1:
+        return 'success';   // Publish
+      case 2:
+        return 'warning';      // Beta
+      case 3:
+        return 'secondary'; // Draft
+      default:
+        return 'unknown';   // Fallback for invalid values
+    }
+  }
   
 </script>
 <template>
@@ -70,7 +84,7 @@
       <i :class="['pi', item.navMenuImage, 'text-lg', 'text-white']" />
     </span>
     <span class="inline-flex flex-grow-1 flex-column gap-1" @click="redirect">
-      <span class="font-medium text-lg text-900">{{ item.name }}</span>
+      <span class="font-medium text-lg text-900">{{ item.name }} <Badge v-if="showEdit && item.id !== 0" :value="item.statusName" :severity="getStatus()" ></Badge></span>
       <span class="">{{ item.shortDescription }}</span>
     </span>
     <span class="inline-flex flex-column gap-1" v-if="showEdit && item.id !==0">
