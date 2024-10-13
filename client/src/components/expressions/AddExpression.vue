@@ -49,9 +49,9 @@ const onSubmit = handleSubmit((values) => {
 
 <template>
   <form @submit="onSubmit">
-    <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name"/>
-    <TextAreaWrapper v-model="shortDescription" field-name="Short Description" :error-text="errors.shortDescription"/>
-    <InputTextWrapper v-model="navMenuImage" field-name="Nav Menu Icon" :error-text="errors.navMenuImage"/>
+    <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" />
+    <TextAreaWrapper v-model="shortDescription" field-name="Short Description" :error-text="errors.shortDescription" />
+    <InputTextWrapper v-model="navMenuImage" field-name="Nav Menu Icon" :error-text="errors.navMenuImage" />
     <Button data-cy="add-expression-button" label="Add Expression" class="w-100 mb-2" type="submit" />
   </form>
 </template>

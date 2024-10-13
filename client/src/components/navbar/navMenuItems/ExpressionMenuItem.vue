@@ -79,18 +79,18 @@
   
 </script>
 <template>
-  <div class="flex flex-shrink-1 align-items-center p-3 cursor-pointer mb-2 gap-2" >
+  <div class="flex flex-shrink-1 align-items-center p-3 cursor-pointer mb-2 gap-2">
     <span class="inline-flex flex-none align-items-center justify-content-center border-circle bg-primary w-3rem h-3rem" @click="redirect">
       <i :class="['pi', item.navMenuImage, 'text-lg', 'text-white']" />
     </span>
     <span class="inline-flex flex-grow-1 flex-column gap-1" @click="redirect">
-      <span class="font-medium text-lg text-900">{{ item.name }} <Badge v-if="showEdit && item.id !== 0" :value="item.statusName" :severity="getStatus()" ></Badge></span>
+      <span class="font-medium text-lg text-900">{{ item.name }} <Badge v-if="showEdit && item.id !== 0" :value="item.statusName" :severity="getStatus()" /></span>
       <span class="">{{ item.shortDescription }}</span>
     </span>
-    <span class="inline-flex flex-column gap-1" v-if="showEdit && item.id !==0">
+    <span v-if="showEdit && item.id !==0" class="inline-flex flex-column gap-1">
       
-      <Button label="Edit" @click="showEditPopup"/>
-      <Button label="Delete" @click="deleteExpression($event)" severity="danger"/>
+      <Button label="Edit" @click="showEditPopup" />
+      <Button label="Delete" severity="danger" @click="deleteExpression($event)" />
     </span>
   </div>
 </template>

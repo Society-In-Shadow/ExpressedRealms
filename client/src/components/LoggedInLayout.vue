@@ -1,7 +1,7 @@
 
 <template>
   <Toast position="top-center" />
-  <ConfirmDialog></ConfirmDialog>
+  <ConfirmDialog />
   <main-nav-bar />
   
   <router-view />

@@ -114,10 +114,10 @@ function showCreateExpressionPopup(){
 
 <template>
   <Dialog v-model:visible="editVisible" modal header="Edit Expression">
-    <EditExpression :expression-id="expressionId" @refreshList="loadList"></EditExpression>
+    <EditExpression :expression-id="expressionId" @refresh-list="loadList" />
   </Dialog>
   <Dialog v-model:visible="newVisible" modal header="Add Expression">
-    <AddExpression @refreshList="loadList" @closeDialog="newVisible = false"></AddExpression>
+    <AddExpression @refresh-list="loadList" @close-dialog="newVisible = false" />
   </Dialog>
   <MegaMenu :model="items" class="m-lg-3 m-md-3 m-sm-1 m-1 pb-1 pt-1">
     <template #start>
@@ -126,7 +126,10 @@ function showCreateExpressionPopup(){
     <template #item="{ item }">
       <RootNodeMenuItem v-if="item.root" :item="item" />
       <CharacterMenuItem v-else-if="item.navMenuType == 'character'" :item="item" />
-      <ExpressionMenuItem v-else :item="item.expression" :showEdit="showExpressionEdit" @showEditPopup="showEditExpressionPopup" @showCreatePopup="showCreateExpressionPopup" @refreshList="loadList"/>
+      <ExpressionMenuItem
+        v-else :item="item.expression" :show-edit="showExpressionEdit" @show-edit-popup="showEditExpressionPopup" @show-create-popup="showCreateExpressionPopup"
+        @refresh-list="loadList"
+      />
     </template>
     <template #end>
       <avatar-dropdown />
