@@ -8,6 +8,10 @@ import axios from "axios";
 import toaster from "@/services/Toasters";
 import Button from "primevue/button";
 
+const emit = defineEmits<{
+  refreshList: []
+}>();
+
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
     name: string().required()
@@ -32,6 +36,7 @@ const onSubmit = handleSubmit((values) => {
     shortDescription: values.shortDescription,
     navMenuImage: values.navMenuImage
   }).then(() => {
+    emit('refreshList');
     toaster.success(`Successfully added ${values.Name} Expression as a Draft!`);
   });
 });

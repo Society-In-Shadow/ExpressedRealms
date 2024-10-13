@@ -23,11 +23,11 @@ const items = ref([
   { root: true, label: 'Stone Puller', icon: 'pi pi-file', subtext: 'Stone Puller', command: () => router.push("/stonePuller") },
 ]);
 
-onMounted(() => {
+function loadList(){
   function MapData(expression) {
     return {
-        navMenuType: "expression",
-        expression: expression,
+      navMenuType: "expression",
+      expression: expression,
     };
   }
 
@@ -44,18 +44,20 @@ onMounted(() => {
       }
     };
   }
-  
+
   axios.get("/navMenu/expressions")
       .then(response => {
         const expressions = response.data;
-        
+
         showExpressionEdit = expressions.canEdit;
         const menuItems = expressions.menuItems;
-        
+
         const column1 = menuItems.slice(0, Math.ceil(menuItems.length / 2));
         const column2 = menuItems.slice(Math.ceil(menuItems.length / 2), menuItems.length);
-        
+
         const expressionMenu = items.value.find(item => item.label === 'Expressions')?.items;
+
+        expressionMenu.length = 0;
         
         if(expressionMenu !== undefined){
           expressionMenu.push([{
@@ -66,18 +68,20 @@ onMounted(() => {
           }]);
 
         }
-        
+
       })
 
   axios.get("/navMenu/characters")
       .then(response => {
         const characters = response.data;
-        
+
         const column1 = characters.slice(0, Math.ceil(characters.length / 2));
         const column2 = characters.slice(Math.ceil(characters.length / 2), characters.length);
 
         const expressionMenu = items.value.find(item => item.label === 'Characters')?.items;
 
+        expressionMenu.length = 0;
+        
         if(expressionMenu !== undefined){
           expressionMenu.push([{
             items: column1.map(MapCharacterData)
@@ -89,6 +93,10 @@ onMounted(() => {
         }
 
       })
+}
+
+onMounted(() => {
+  loadList();
 });
 
 let editVisible = ref(false);
@@ -106,10 +114,10 @@ function showCreateExpressionPopup(){
 
 <template>
   <Dialog v-model:visible="editVisible" modal header="Edit Expression">
-    <EditExpression :expression-id="expressionId"></EditExpression>
+    <EditExpression :expression-id="expressionId" @refreshList="loadList"></EditExpression>
   </Dialog>
   <Dialog v-model:visible="newVisible" modal header="Add Expression">
-    <AddExpression></AddExpression>
+    <AddExpression @refreshList="loadList"></AddExpression>
   </Dialog>
   <MegaMenu :model="items" class="m-lg-3 m-md-3 m-sm-1 m-1 pb-1 pt-1">
     <template #start>
@@ -118,7 +126,7 @@ function showCreateExpressionPopup(){
     <template #item="{ item }">
       <RootNodeMenuItem v-if="item.root" :item="item" />
       <CharacterMenuItem v-else-if="item.navMenuType == 'character'" :item="item" />
-      <ExpressionMenuItem v-else :item="item.expression" :showEdit="showExpressionEdit" @showEditPopup="showEditExpressionPopup" @showCreatePopup="showCreateExpressionPopup"/>
+      <ExpressionMenuItem v-else :item="item.expression" :showEdit="showExpressionEdit" @showEditPopup="showEditExpressionPopup" @showCreatePopup="showCreateExpressionPopup" @refreshList="loadList"/>
     </template>
     <template #end>
       <avatar-dropdown />

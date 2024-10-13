@@ -12,6 +12,10 @@ import toaster from "@/services/Toasters";
 const isLoading = ref(true);
 const publishStatusOptions = ref([]);
 
+const emit = defineEmits<{
+  refreshList: []
+}>();
+
 const props = defineProps({
   expressionId: {
     type: Number,
@@ -60,6 +64,7 @@ const onSubmit = handleSubmit((values) => {
     publishStatus: values.publishStatus.id,
     navMenuImage: values.navMenuImage
   }).then(() => {
+    emit('refreshList');
     toaster.success("Successfully Updated Expression Info!");
   });
 });

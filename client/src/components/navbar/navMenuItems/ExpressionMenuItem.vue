@@ -10,7 +10,8 @@
 
   const emit = defineEmits<{
     showEditPopup: [expressionId: number],
-    showCreatePopup: []
+    showCreatePopup: [],
+    refreshList: []
   }>();
   
   let props = defineProps({
@@ -54,6 +55,7 @@
       },
       accept: () => {
         axios.delete(`/expression/${props.item.id}`).then(() => {
+          emit('refreshList');
           toaster.success(`Successfully Deleted Expression ${props.item.name}!`);
         });
       },
