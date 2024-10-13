@@ -11,6 +11,7 @@ import CharacterMenuItem from "@/components/navbar/navMenuItems/CharacterMenuIte
 import RootNodeMenuItem from "@/components/navbar/navMenuItems/RootNodeMenuItem.vue";
 import EditExpression from "@/components/expressions/EditExpression.vue";
 import Dialog from 'primevue/dialog';
+import AddExpression from "@/components/expressions/AddExpression.vue";
 
 let showExpressionEdit = false;
 
@@ -90,18 +91,25 @@ onMounted(() => {
       })
 });
 
-let visible = ref(false);
+let editVisible = ref(false);
 let expressionId = ref();
-function showPopup(id){
-  visible.value = true;
+function showEditExpressionPopup(id){
+  editVisible.value = true;
   expressionId.value = id;
+}
+let newVisible = ref(false);
+function showCreateExpressionPopup(){
+  newVisible.value = true;
 }
 
 </script>
 
 <template>
-  <Dialog v-model:visible="visible" modal header="Edit Expression">
+  <Dialog v-model:visible="editVisible" modal header="Edit Expression">
     <EditExpression :expression-id="expressionId"></EditExpression>
+  </Dialog>
+  <Dialog v-model:visible="newVisible" modal header="Add Expression">
+    <AddExpression></AddExpression>
   </Dialog>
   <MegaMenu :model="items" class="m-lg-3 m-md-3 m-sm-1 m-1 pb-1 pt-1">
     <template #start>
@@ -110,7 +118,7 @@ function showPopup(id){
     <template #item="{ item }">
       <RootNodeMenuItem v-if="item.root" :item="item" />
       <CharacterMenuItem v-else-if="item.navMenuType == 'character'" :item="item" />
-      <ExpressionMenuItem v-else :item="item.expression" :showEdit="showExpressionEdit" @showPopup="showPopup"/>
+      <ExpressionMenuItem v-else :item="item.expression" :showEdit="showExpressionEdit" @showEditPopup="showEditExpressionPopup" @showCreatePopup="showCreateExpressionPopup"/>
     </template>
     <template #end>
       <avatar-dropdown />

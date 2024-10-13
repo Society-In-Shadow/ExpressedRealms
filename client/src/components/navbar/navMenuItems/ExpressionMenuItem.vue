@@ -6,7 +6,8 @@
   const router = useRouter();
 
   const emit = defineEmits<{
-    showPopup: [expressionId: number]
+    showEditPopup: [expressionId: number],
+    showCreatePopup: []
   }>();
   
   let props = defineProps({
@@ -21,13 +22,18 @@
   });
 
   function redirect(){
-    if(props.item.id === 0) return;
+    if(props.item.id === 0)
+    {
+      emit('showCreatePopup');
+      return;
+    }
     Router.push("/expressions/" + props.item.name.toLowerCase());
   }
-  
+
   function showEditPopup(){
-    emit('showPopup', props.item.id);
+    emit('showEditPopup', props.item.id);
   }
+
   
 </script>
 <template>
