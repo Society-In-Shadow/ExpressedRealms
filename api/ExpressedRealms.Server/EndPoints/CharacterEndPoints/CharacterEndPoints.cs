@@ -4,6 +4,7 @@ using ExpressedRealms.Repositories.Characters.DTOs;
 using ExpressedRealms.Repositories.Characters.Stats;
 using ExpressedRealms.Repositories.Characters.Stats.DTOs;
 using ExpressedRealms.Repositories.Characters.Stats.Enums;
+using ExpressedRealms.Repositories.Expressions.Expressions;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.DTOs;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.Requests;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.Responses;
@@ -42,8 +43,9 @@ internal static class CharacterEndPoints
                 [Authorize]
                 async (ExpressedRealmsDbContext dbContext, HttpContext http) =>
                 {
-                    var expressions = await dbContext
-                        .Expressions.Select(x => new CharacterOptionExpression()
+                    var expressions = await dbContext.Expressions.AsNoTracking()
+                        .Where(x => x.PublishStatusId == (int)PublishTypes.Published)
+                        .Select(x => new CharacterOptionExpression()
                         {
                             Id = x.Id,
                             Name = x.Name,
@@ -70,7 +72,7 @@ internal static class CharacterEndPoints
                 ) =>
                 {
                     var isValidExpression = await dbContext.Expressions.AnyAsync(
-                        x => x.Id == expressionId,
+                        x => x.Id == expressionId && x.PublishStatusId == (int)PublishTypes.Published,
                         cancellationToken
                     );
 
