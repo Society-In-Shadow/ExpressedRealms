@@ -1,6 +1,6 @@
+using ExpressedRealms.Authentication;
 using ExpressedRealms.Repositories.Expressions.Expressions;
 using ExpressedRealms.Repositories.Expressions.Expressions.DTOs;
-using ExpressedRealms.Server.Configuration.UserRoles;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints;
 using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Requests;
 using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Responses;

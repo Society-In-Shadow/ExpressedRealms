@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Repositorie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Repositories.Expressions", "ExpressedRealms.Repositories.Expressions\ExpressedRealms.Repositories.Expressions.csproj", "{22B493A9-8064-4A35-AAAA-A2E9E190CACD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Authentication", "ExpressedRealms.Authentication\ExpressedRealms.Authentication.csproj", "{7B73AD3F-E9A8-403C-A873-1723BBE9A770}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{22B493A9-8064-4A35-AAAA-A2E9E190CACD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22B493A9-8064-4A35-AAAA-A2E9E190CACD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22B493A9-8064-4A35-AAAA-A2E9E190CACD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B73AD3F-E9A8-403C-A873-1723BBE9A770}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B73AD3F-E9A8-403C-A873-1723BBE9A770}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B73AD3F-E9A8-403C-A873-1723BBE9A770}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B73AD3F-E9A8-403C-A873-1723BBE9A770}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

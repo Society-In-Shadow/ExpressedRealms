@@ -1,4 +1,4 @@
-using ExpressedRealms.Server.Configuration.UserRoles;
+using ExpressedRealms.Authentication;
 using Microsoft.AspNetCore.Authorization;
 
 namespace ExpressedRealms.Server.Extensions;

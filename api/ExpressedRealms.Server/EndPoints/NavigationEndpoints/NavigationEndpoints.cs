@@ -1,9 +1,8 @@
+using ExpressedRealms.Authentication;
 using ExpressedRealms.DB;
 using ExpressedRealms.Repositories.Expressions.Expressions;
-using ExpressedRealms.Server.Configuration.UserRoles;
 using ExpressedRealms.Server.EndPoints.NavigationEndpoints.DTOs;
 using ExpressedRealms.Server.EndPoints.NavigationEndpoints.Responses;
-using ExpressedRealms.Server.EndPoints.PlayerEndpoints.DTOs;
 using ExpressedRealms.Server.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;

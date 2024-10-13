@@ -1,3 +1,5 @@
+using ExpressedRealms.Authentication;
+
 namespace ExpressedRealms.Server.Configuration.UserRoles;
 
 public static class PolicyConfiguration

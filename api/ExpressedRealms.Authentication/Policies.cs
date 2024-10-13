@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Server.Configuration.UserRoles;
+namespace ExpressedRealms.Authentication;
 
 public class Policies
 {
