@@ -10,6 +10,8 @@ import ExpressionMenuItem from "@/components/navbar/navMenuItems/ExpressionMenuI
 import CharacterMenuItem from "@/components/navbar/navMenuItems/CharacterMenuItem.vue";
 import RootNodeMenuItem from "@/components/navbar/navMenuItems/RootNodeMenuItem.vue";
 
+let showExpressionEdit = false;
+
 const router = useRouter();
 
 const items = ref([
@@ -21,13 +23,8 @@ const items = ref([
 onMounted(() => {
   function MapData(expression) {
     return {
-          label: expression.name,
-          icon: 'pi pi-cloud',
-          subtext: expression.shortDescription,
-          navMenuType: "expression",
-          command: () => {
-            Router.push("/expressions/" + expression.name.toLowerCase());
-          }
+        navMenuType: "expression",
+        expression: expression,
     };
   }
 
@@ -49,8 +46,11 @@ onMounted(() => {
       .then(response => {
         const expressions = response.data;
         
-        const column1 = expressions.slice(0, Math.ceil(expressions.length / 2));
-        const column2 = expressions.slice(Math.ceil(expressions.length / 2), expressions.length);
+        showExpressionEdit = expressions.canEdit;
+        const menuItems = expressions.menuItems;
+        
+        const column1 = menuItems.slice(0, Math.ceil(menuItems.length / 2));
+        const column2 = menuItems.slice(Math.ceil(menuItems.length / 2), menuItems.length);
         
         const expressionMenu = items.value.find(item => item.label === 'Expressions')?.items;
         
@@ -98,7 +98,7 @@ onMounted(() => {
     <template #item="{ item }">
       <RootNodeMenuItem v-if="item.root" :item="item" />
       <CharacterMenuItem v-else-if="item.navMenuType == 'character'" :item="item" />
-      <ExpressionMenuItem v-else :item="item" />
+      <ExpressionMenuItem v-else :item="item.expression" :showEdit="showExpressionEdit" />
     </template>
     <template #end>
       <avatar-dropdown />

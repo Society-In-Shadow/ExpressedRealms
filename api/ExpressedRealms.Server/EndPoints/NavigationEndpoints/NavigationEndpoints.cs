@@ -1,9 +1,12 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.Repositories.Expressions.Expressions;
+using ExpressedRealms.Server.Configuration.UserRoles;
+using ExpressedRealms.Server.EndPoints.NavigationEndpoints.DTOs;
 using ExpressedRealms.Server.EndPoints.NavigationEndpoints.Responses;
 using ExpressedRealms.Server.EndPoints.PlayerEndpoints.DTOs;
 using ExpressedRealms.Server.Extensions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
@@ -21,12 +24,32 @@ internal static class NavigationEndpoints
         endpointGroup
             .MapGet(
                 "/expressions",
-                async (ExpressedRealmsDbContext dbContext, IExpressionRepository repository) =>
+                async Task<Ok<ExpressionMenuResponse>>
+                    (HttpContext httpContext, IExpressionRepository repository) =>
                 {
                     var navMenuItems = await repository.GetNavigationMenuItems();
 
+                    var hasEditPolicy = await httpContext.UserHasPolicyAsync(Policies.ExpressionEditorPolicy);
+
+                    var menuItems = navMenuItems.Value.Select(x => new ExpressionMenuItem(x)).ToList();
+
+                    if (hasEditPolicy)
+                    {
+                        menuItems.Add(new ExpressionMenuItem()
+                        {
+                            Id = 0,
+                            Name = "Add Expression",
+                            ShortDescription = "Use this to add a new expression",
+                            NavMenuImage = "pi-plus"
+                        });
+                    }
+                    
                     return TypedResults.Ok(
-                        navMenuItems.Value.Select(x => new ExpressionMenuItem(x))
+                        new ExpressionMenuResponse()
+                        {
+                            CanEdit = hasEditPolicy,
+                            MenuItems = menuItems
+                        }
                     );
                 }
             )
