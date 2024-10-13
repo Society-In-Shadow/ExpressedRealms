@@ -4,6 +4,10 @@
   import Router from "@/router";
   import {useRouter} from "vue-router";
   const router = useRouter();
+
+  const emit = defineEmits<{
+    showPopup: [expressionId: number]
+  }>();
   
   let props = defineProps({
     item: {
@@ -22,7 +26,7 @@
   }
   
   function showEditPopup(){
-    console.log("showEditPopup");
+    emit('showPopup', props.item.id);
   }
   
 </script>
