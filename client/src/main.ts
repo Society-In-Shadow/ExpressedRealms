@@ -18,6 +18,7 @@ import piniaPluginPersistedState from "pinia-plugin-persistedstate"
 import { createPinia } from 'pinia'
 import ToastService from 'primevue/toastservice';
 import axiosConfig from "@/config/axiosConfig";
+import ConfirmationService from 'primevue/confirmationservice';
 axiosConfig.setupErrorHandlingInterceptors();
 axiosConfig.setAPIUrl();
 
@@ -30,5 +31,6 @@ const app = createApp(App)
 app.directive('ripple', Ripple);
 app.use(pinia);
 app.use(ToastService);
+app.use(ConfirmationService)
 
 app.mount('#app');

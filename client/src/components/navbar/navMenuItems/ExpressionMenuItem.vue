@@ -1,8 +1,11 @@
 <script setup lang="ts">
 
   import Button from 'primevue/button';
+  import { useConfirm } from "primevue/useconfirm";
   import Router from "@/router";
   import {useRouter} from "vue-router";
+  import axios from "axios";
+  import toaster from "@/services/Toasters";
   const router = useRouter();
 
   const emit = defineEmits<{
@@ -34,6 +37,29 @@
     emit('showEditPopup', props.item.id);
   }
 
+  const confirm = useConfirm();
+  const deleteExpression = (event) => {
+    confirm.require({
+      target: event.currentTarget,
+      header: 'Deleting Expression',
+      message: `Are you sure you want delete ${props.item.name} expression?`,
+      icon: 'pi pi-exclamation-triangle',
+      rejectProps: {
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true
+      },
+      acceptProps: {
+        label: 'Save'
+      },
+      accept: () => {
+        axios.delete(`/expression/${props.item.id}`).then(() => {
+          toaster.success(`Successfully Deleted Expression ${props.item.name}!`);
+        });
+      },
+      reject: () => {}
+    });
+  };
   
 </script>
 <template>
@@ -41,12 +67,14 @@
     <span class="inline-flex flex-none align-items-center justify-content-center border-circle bg-primary w-3rem h-3rem" @click="redirect">
       <i :class="['pi', item.navMenuImage, 'text-lg', 'text-white']" />
     </span>
-    <span class="inline-flex flex-column gap-1" @click="redirect">
+    <span class="inline-flex flex-grow-1 flex-column gap-1" @click="redirect">
       <span class="font-medium text-lg text-900">{{ item.name }}</span>
       <span class="">{{ item.shortDescription }}</span>
     </span>
     <span class="inline-flex flex-column gap-1" v-if="showEdit && item.id !==0">
+      
       <Button label="Edit" @click="showEditPopup"/>
+      <Button label="Delete" @click="deleteExpression($event)" severity="danger"/>
     </span>
   </div>
 </template>
