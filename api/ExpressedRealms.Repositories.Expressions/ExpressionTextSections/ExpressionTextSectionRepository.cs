@@ -1,4 +1,3 @@
-using ExpressedRealms.Authentication;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions;
@@ -9,7 +8,6 @@ using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Repositories.Shared.Helpers;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
-using GetExpressionDto = ExpressedRealms.Repositories.Expressions.Expressions.DTOs.GetExpressionDto;
 
 namespace ExpressedRealms.Repositories.Expressions.ExpressionTextSections;
 
@@ -88,7 +86,7 @@ internal sealed class ExpressionTextSectionRepository(
     public async Task<Result> DeleteExpressionTextSectionAsync(int id)
     {
         var expression = await context
-            .Expressions.IgnoreQueryFilters()
+            .ExpressionSections.IgnoreQueryFilters()
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (expression is null)

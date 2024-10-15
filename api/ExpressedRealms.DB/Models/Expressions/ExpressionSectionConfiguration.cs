@@ -11,6 +11,8 @@ public class ExpressionSectionsConfiguration : IEntityTypeConfiguration<Expressi
 
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired();
+        
+        builder.HasQueryFilter(x => !x.IsDeleted);
 
         builder.Property(e => e.ExpressionId).IsRequired();
 
