@@ -13,9 +13,9 @@ using GetExpressionDto = ExpressedRealms.Repositories.Expressions.Expressions.DT
 
 namespace ExpressedRealms.Repositories.Expressions.ExpressionTextSections;
 
-internal sealed class ExpressionRepository(
+internal sealed class ExpressionTextSectionRepository(
     ExpressedRealmsDbContext context,
-    CreateExpressionDtoValidator createExpressionDtoValidator,
+    CreateExpressionTextSectionDtoValidator createExpressionDtoValidator,
     EditExpressionDtoValidator editExpressionDtoValidator,
     IUserContext userContext,
     CancellationToken cancellationToken
@@ -41,21 +41,21 @@ internal sealed class ExpressionRepository(
         };
     }
 
-    public async Task<Result<int>> CreateExpressionTextSectionAsync(CreateExpressionDto dto)
+    public async Task<Result<int>> CreateExpressionTextSectionAsync(CreateExpressionTextSectionDto dto)
     {
         var result = await createExpressionDtoValidator.ValidateAsync(dto, cancellationToken);
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
 
-        var expression = new Expression()
+        var expression = new ExpressionSection()
         {
             Name = dto.Name,
-            ShortDescription = dto.ShortDescription,
-            NavMenuImage = dto.NavMenuImage,
-            PublishStatusId = (int)PublishTypes.Draft
+            Content = dto.Content,
+            ExpressionId = dto.ExpressionId,
+            SectionTypeId = dto.SectionTypeId
         };
 
-        context.Expressions.Add(expression);
+        context.ExpressionSections.Add(expression);
 
         await context.SaveChangesAsync(cancellationToken);
 

@@ -6,7 +6,7 @@ namespace ExpressedRealms.Repositories.Expressions.ExpressionTextSections;
 
 public interface IExpressionTextSectionRepository
 {
-    Task<Result<int>> CreateExpressionTextSectionAsync(CreateExpressionDto dto);
+    Task<Result<int>> CreateExpressionTextSectionAsync(CreateExpressionTextSectionDto dto);
     Task<Result<int>> EditExpressionTextSectionAsync(EditExpressionDto dto);
     Task<Result> DeleteExpressionTextSectionAsync(int id);
     Task<Result<GetExpressionTextSectionDto>> GetExpressionTextSection(int expressionId);
