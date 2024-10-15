@@ -16,7 +16,7 @@ namespace ExpressedRealms.Repositories.Expressions.ExpressionTextSections;
 internal sealed class ExpressionTextSectionRepository(
     ExpressedRealmsDbContext context,
     CreateExpressionTextSectionDtoValidator createExpressionDtoValidator,
-    EditExpressionDtoValidator editExpressionDtoValidator,
+    EditExpressionTextSectionDtoValidator editExpressionDtoValidator,
     IUserContext userContext,
     CancellationToken cancellationToken
 ) : IExpressionTextSectionRepository
@@ -62,27 +62,27 @@ internal sealed class ExpressionTextSectionRepository(
         return Result.Ok(expression.Id);
     }
 
-    public async Task<Result<int>> EditExpressionTextSectionAsync(EditExpressionDto dto)
+    public async Task<Result<int>> EditExpressionTextSectionAsync(EditExpressionTextSectionDto dto)
     {
         var result = await editExpressionDtoValidator.ValidateAsync(dto, cancellationToken);
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
 
-        var expression = await context.Expressions.Where(x => x.Id == dto.Id).FirstOrDefaultAsync();
+        var section = await context.ExpressionSections.Where(x => x.Id == dto.Id).FirstOrDefaultAsync();
 
-        if (expression is null)
+        if (section is null)
             return Result.Fail(new NotFoundFailure("Expression"));
 
-        expression.Name = dto.Name;
-        expression.ShortDescription = dto.ShortDescription;
-        expression.NavMenuImage = dto.NavMenuImage;
-        expression.PublishStatusId = (int)dto.PublishStatus;
+        section.Name = dto.Name;
+        section.Content = dto.Content;
+        section.ExpressionId = dto.ExpressionId;
+        section.SectionTypeId = dto.SectionTypeId;
 
-        context.Expressions.Update(expression);
+        context.ExpressionSections.Update(section);
 
         await context.SaveChangesAsync(cancellationToken);
 
-        return Result.Ok(expression.Id);
+        return Result.Ok(section.Id);
     }
 
     public async Task<Result> DeleteExpressionTextSectionAsync(int id)

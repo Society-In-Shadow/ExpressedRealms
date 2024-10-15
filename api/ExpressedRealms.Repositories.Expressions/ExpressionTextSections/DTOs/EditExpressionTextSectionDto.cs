@@ -4,7 +4,7 @@ public record EditExpressionTextSectionDto
 {
     public int Id { get; init; }
     public string Name { get; set; } = null!;
-    public string ShortDescription { get; set; } = null!;
-    public string NavMenuImage { get; set; } = null!;
-    public PublishTypes PublishStatus { get; set; }
+    public string Content { get; set; } = null!;
+    public int ExpressionId { get; set; }
+    public int SectionTypeId { get; set; }
 }
