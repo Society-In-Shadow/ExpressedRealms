@@ -21,34 +21,7 @@ internal sealed class ExpressionRepository(
     CancellationToken cancellationToken
 ) : IExpressionTextSectionRepository
 {
-    public async Task<Result<List<ExpressionTextSectionNavigationMenuItem>>> GetNavigationMenuItems()
-    {
-        var canSeeBetaAndDrafts = await userContext.CurrentUserHasPolicy(
-            Policies.ExpressionEditorPolicy
-        );
-
-        var expression = context.Expressions.AsNoTracking();
-
-        if (!canSeeBetaAndDrafts)
-        {
-            expression = expression.Where(e => e.PublishStatusId == (int)PublishTypes.Published);
-        }
-
-        return await expression
-            .Select(x => new ExpressionTextSectionNavigationMenuItem()
-            {
-                Name = x.Name,
-                Id = x.Id,
-                ShortDescription = x.ShortDescription,
-                NavMenuImage = x.NavMenuImage,
-                PublishStatusName = x.PublishStatus.Name,
-                PublishStatusId = (PublishTypes)x.PublishStatusId
-            })
-            .OrderBy(x => x.Name)
-            .ToListAsync(cancellationToken);
-    }
-
-    public async Task<Result<GetExpressionTextSectionDto>> GetExpression(int expressionId)
+    public async Task<Result<GetExpressionTextSectionDto>> GetExpressionTextSection(int expressionId)
     {
         var expression = await context
             .Expressions.Where(x => x.Id == expressionId)
@@ -68,7 +41,7 @@ internal sealed class ExpressionRepository(
         };
     }
 
-    public async Task<Result<int>> CreateExpressionAsync(CreateExpressionDto dto)
+    public async Task<Result<int>> CreateExpressionTextSectionAsync(CreateExpressionDto dto)
     {
         var result = await createExpressionDtoValidator.ValidateAsync(dto, cancellationToken);
         if (!result.IsValid)
@@ -89,7 +62,7 @@ internal sealed class ExpressionRepository(
         return Result.Ok(expression.Id);
     }
 
-    public async Task<Result<int>> EditExpressionAsync(EditExpressionDto dto)
+    public async Task<Result<int>> EditExpressionTextSectionAsync(EditExpressionDto dto)
     {
         var result = await editExpressionDtoValidator.ValidateAsync(dto, cancellationToken);
         if (!result.IsValid)
@@ -112,7 +85,7 @@ internal sealed class ExpressionRepository(
         return Result.Ok(expression.Id);
     }
 
-    public async Task<Result> DeleteExpressionAsync(int id)
+    public async Task<Result> DeleteExpressionTextSectionAsync(int id)
     {
         var expression = await context
             .Expressions.IgnoreQueryFilters()
@@ -128,5 +101,46 @@ internal sealed class ExpressionRepository(
         await context.SaveChangesAsync(cancellationToken);
 
         return Result.Ok();
+    }
+
+    public async Task<List<ExpressionSectionDto>> GetExpressionTextSections(int expressionId)
+    {
+        var sections = await context
+            .ExpressionSections.AsNoTracking()
+            .Where(x => x.ExpressionId == expressionId)
+            .ToListAsync();
+
+        return BuildExpressionPage(sections, null);
+    }
+    
+    private static List<ExpressionSectionDto> BuildExpressionPage(
+        List<ExpressionSection> dbSections,
+        int? parentId
+    )
+    {
+        List<ExpressionSectionDto> sections = new();
+
+        var filteredSections = dbSections
+            .Where(x => x.ParentId == parentId)
+            .OrderBy(x => x.Id)
+            .ToList();
+        foreach (var dbSection in filteredSections)
+        {
+            var dto = new ExpressionSectionDto()
+            {
+                Name = dbSection.Name,
+                Id = dbSection.Id,
+                Content = dbSection.Content,
+            };
+
+            if (dbSections.Any(x => x.ParentId == dbSection.Id))
+            {
+                dto.SubSections = BuildExpressionPage(dbSections, dbSection.Id);
+            }
+
+            sections.Add(dto);
+        }
+
+        return sections;
     }
 }
