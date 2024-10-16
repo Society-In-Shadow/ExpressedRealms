@@ -120,7 +120,7 @@ internal sealed class ExpressionTextSectionRepository(
             .FirstOrDefaultAsync();
 
         if (section is null)
-            return Result.Fail(new NotFoundFailure("Expression"));
+            return Result.Fail(new NotFoundFailure("Expression Section"));
 
         section.Name = dto.Name;
         section.Content = dto.Content;
@@ -137,17 +137,17 @@ internal sealed class ExpressionTextSectionRepository(
 
     public async Task<Result> DeleteExpressionTextSectionAsync(int id)
     {
-        var expression = await context
+        var section = await context
             .ExpressionSections.IgnoreQueryFilters()
             .FirstOrDefaultAsync(x => x.Id == id);
 
-        if (expression is null)
-            return Result.Fail(new NotFoundFailure("Expression"));
+        if (section is null)
+            return Result.Fail(new NotFoundFailure("Expression Section"));
 
-        if (expression.IsDeleted)
-            return Result.Fail(new AlreadyDeletedFailure("Expression"));
+        if (section.IsDeleted)
+            return Result.Fail(new AlreadyDeletedFailure("Expression Section"));
 
-        expression.SoftDelete();
+        section.SoftDelete();
         await context.SaveChangesAsync(cancellationToken);
 
         return Result.Ok();

@@ -20,7 +20,7 @@ public class GetExpressionTestSectionOptionsValidator
                 }
             )
             .When(x => x.SectionId is not null)
-            .WithMessage("This is not a valid Section Type");
+            .WithMessage("This is not a valid Section");
         RuleFor(x => x.ExpressionId)
             .MustAsync(
                 async (expressionId, cancellationToken) =>
