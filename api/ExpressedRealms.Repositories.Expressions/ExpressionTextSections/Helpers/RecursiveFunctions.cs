@@ -36,7 +36,7 @@ public static class RecursiveFunctions
 
         return sections;
     }
-    
+
     public static List<ExpressionSectionDto> GetPotentialParentTargets(
         List<ExpressionSection> dbSections,
         int? parentId,
@@ -49,7 +49,7 @@ public static class RecursiveFunctions
             .Where(x => x.ParentId == parentId)
             .OrderBy(x => x.Id)
             .ToList();
-        
+
         foreach (var dbSection in filteredSections)
         {
             var dto = new ExpressionSectionDto()
@@ -59,9 +59,16 @@ public static class RecursiveFunctions
                 Content = dbSection.Content,
             };
 
-            if (dbSections.Any(x => x.ParentId == dbSection.Id) && dbSection.Id != excludedChildrenId)
+            if (
+                dbSections.Any(x => x.ParentId == dbSection.Id)
+                && dbSection.Id != excludedChildrenId
+            )
             {
-                dto.SubSections = GetPotentialParentTargets(dbSections, dbSection.Id, excludedChildrenId);
+                dto.SubSections = GetPotentialParentTargets(
+                    dbSections,
+                    dbSection.Id,
+                    excludedChildrenId
+                );
             }
 
             sections.Add(dto);
@@ -69,7 +76,7 @@ public static class RecursiveFunctions
 
         return sections;
     }
-    
+
     public static List<int> GetValidParentIds(
         List<ExpressionSection> dbSections,
         int? parentId,
@@ -82,10 +89,13 @@ public static class RecursiveFunctions
             .Where(x => x.ParentId == parentId)
             .OrderBy(x => x.Id)
             .ToList();
-        
+
         foreach (var dbSection in filteredSections)
         {
-            if (dbSections.Any(x => x.ParentId == dbSection.Id) && dbSection.Id != excludedChildrenId)
+            if (
+                dbSections.Any(x => x.ParentId == dbSection.Id)
+                && dbSection.Id != excludedChildrenId
+            )
             {
                 sections.AddRange(GetValidParentIds(dbSections, dbSection.Id, excludedChildrenId));
             }

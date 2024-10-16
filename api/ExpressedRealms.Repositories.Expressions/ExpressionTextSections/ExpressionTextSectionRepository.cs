@@ -20,12 +20,13 @@ internal sealed class ExpressionTextSectionRepository(
 {
     public async Task<Result<GetExpressionTextSectionDto>> GetExpressionTextSection(int sectionId)
     {
-        var expressionSection = await context.ExpressionSections
-            .FirstOrDefaultAsync(x => x.SectionTypeId == sectionId);
+        var expressionSection = await context.ExpressionSections.FirstOrDefaultAsync(x =>
+            x.SectionTypeId == sectionId
+        );
 
         if (expressionSection is null)
             return Result.Fail(new NotFoundFailure("Expression Section"));
-        
+
         return new GetExpressionTextSectionDto()
         {
             Id = expressionSection.Id,
@@ -36,13 +37,21 @@ internal sealed class ExpressionTextSectionRepository(
         };
     }
 
-    public async Task<Result<ExpressionTextSectionOptions>> GetExpressionTextSectionOptions(GetExpressionTestSectionOptionsDto optionsDto)
+    public async Task<Result<ExpressionTextSectionOptions>> GetExpressionTextSectionOptions(
+        GetExpressionTestSectionOptionsDto optionsDto
+    )
     {
-        var result = await getExpressionTestSectionOptionsDtoValidator.ValidateAsync(optionsDto, cancellationToken);
+        var result = await getExpressionTestSectionOptionsDtoValidator.ValidateAsync(
+            optionsDto,
+            cancellationToken
+        );
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
-        
-        var availableParents = await GetParentSectionList(optionsDto.ExpressionId, optionsDto.SectionId);
+
+        var availableParents = await GetParentSectionList(
+            optionsDto.ExpressionId,
+            optionsDto.SectionId
+        );
         var expressSectionTypes = await GetSectionTypes();
 
         return new ExpressionTextSectionOptions()
@@ -51,12 +60,11 @@ internal sealed class ExpressionTextSectionRepository(
             ExpressionSectionTypes = expressSectionTypes,
         };
     }
-    
+
     private async Task<List<SectionTypeDto>> GetSectionTypes()
     {
         return await context
-            .ExpressionSectionTypes
-            .Select(x => new SectionTypeDto()
+            .ExpressionSectionTypes.Select(x => new SectionTypeDto()
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -65,16 +73,21 @@ internal sealed class ExpressionTextSectionRepository(
             .ToListAsync();
     }
 
-    private async Task<List<ExpressionSectionDto>> GetParentSectionList(int expressionId, int? sectionId)
+    private async Task<List<ExpressionSectionDto>> GetParentSectionList(
+        int expressionId,
+        int? sectionId
+    )
     {
-        var expressionSections = await context.ExpressionSections
-            .Where(x => x.ExpressionId == expressionId)
+        var expressionSections = await context
+            .ExpressionSections.Where(x => x.ExpressionId == expressionId)
             .ToListAsync();
 
         return RecursiveFunctions.GetPotentialParentTargets(expressionSections, null, sectionId);
     }
 
-    public async Task<Result<int>> CreateExpressionTextSectionAsync(CreateExpressionTextSectionDto dto)
+    public async Task<Result<int>> CreateExpressionTextSectionAsync(
+        CreateExpressionTextSectionDto dto
+    )
     {
         var result = await createExpressionDtoValidator.ValidateAsync(dto, cancellationToken);
         if (!result.IsValid)
@@ -102,7 +115,9 @@ internal sealed class ExpressionTextSectionRepository(
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
 
-        var section = await context.ExpressionSections.Where(x => x.Id == dto.Id).FirstOrDefaultAsync();
+        var section = await context
+            .ExpressionSections.Where(x => x.Id == dto.Id)
+            .FirstOrDefaultAsync();
 
         if (section is null)
             return Result.Fail(new NotFoundFailure("Expression"));

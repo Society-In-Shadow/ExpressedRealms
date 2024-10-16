@@ -12,13 +12,12 @@ public class EditExpressionTextSectionDtoValidator : AbstractValidator<EditExpre
         RuleFor(x => x.Id).NotEmpty().GreaterThan(0);
         RuleFor(x => x.Name).MaximumLength(50).NotEmpty();
         RuleFor(x => x.Content).NotEmpty();
-        RuleFor(x => x.SectionTypeId)         
+        RuleFor(x => x.SectionTypeId)
             .MustAsync(
                 async (sectionTypeId, cancellationToken) =>
                 {
                     return await dbContext.ExpressionSectionTypes.AnyAsync(
-                        x =>
-                            x.Id == sectionTypeId,
+                        x => x.Id == sectionTypeId,
                         cancellationToken
                     );
                 }
@@ -39,11 +38,17 @@ public class EditExpressionTextSectionDtoValidator : AbstractValidator<EditExpre
             .MustAsync(
                 async (expressionSection, cancellationToken) =>
                 {
-                    var expressionSections = await dbContext.ExpressionSections
-                        .Where(x => x.ExpressionId == expressionSection.ExpressionId)
+                    var expressionSections = await dbContext
+                        .ExpressionSections.Where(x =>
+                            x.ExpressionId == expressionSection.ExpressionId
+                        )
                         .ToListAsync();
-                    
-                    var validParentIds = RecursiveFunctions.GetValidParentIds(expressionSections, null, 0);
+
+                    var validParentIds = RecursiveFunctions.GetValidParentIds(
+                        expressionSections,
+                        null,
+                        0
+                    );
                     return validParentIds.Contains(expressionSection.ParentId.Value);
                 }
             )
