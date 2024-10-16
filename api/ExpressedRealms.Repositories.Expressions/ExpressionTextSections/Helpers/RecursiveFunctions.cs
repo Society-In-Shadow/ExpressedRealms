@@ -40,7 +40,7 @@ public static class RecursiveFunctions
     public static List<ExpressionSectionDto> GetPotentialParentTargets(
         List<ExpressionSection> dbSections,
         int? parentId,
-        int excludedChildrenId
+        int? excludedChildrenId
     )
     {
         List<ExpressionSectionDto> sections = new();
