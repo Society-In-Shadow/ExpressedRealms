@@ -64,7 +64,8 @@ internal sealed class ExpressionTextSectionRepository(
             Name = dto.Name,
             Content = dto.Content,
             ExpressionId = dto.ExpressionId,
-            SectionTypeId = dto.SectionTypeId
+            SectionTypeId = dto.SectionTypeId,
+            ParentId = dto.ParentId
         };
 
         context.ExpressionSections.Add(expression);
@@ -89,6 +90,7 @@ internal sealed class ExpressionTextSectionRepository(
         section.Content = dto.Content;
         section.ExpressionId = dto.ExpressionId;
         section.SectionTypeId = dto.SectionTypeId;
+        section.ParentId = dto.ParentId;
 
         context.ExpressionSections.Update(section);
 

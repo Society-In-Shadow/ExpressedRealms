@@ -1,5 +1,5 @@
 using ExpressedRealms.DB;
-using ExpressedRealms.DB.Models.Expressions;
+using ExpressedRealms.Repositories.Expressions.ExpressionTextSections.Helpers;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,5 +34,19 @@ public class CreateExpressionTextSectionDtoValidator : AbstractValidator<CreateE
                 }
             )
             .WithMessage("This is not a valid Expression Id");
+        RuleFor(x => x)
+            .MustAsync(
+                async (expressionSection, cancellationToken) =>
+                {
+                    var expressionSections = await dbContext.ExpressionSections
+                        .Where(x => x.ExpressionId == expressionSection.ExpressionId)
+                        .ToListAsync();
+                    
+                    var validParentIds = RecursiveFunctions.GetValidParentIds(expressionSections, null, 0);
+                    return validParentIds.Contains(expressionSection.ParentId.Value);
+                }
+            )
+            .When(x => x.ParentId != null)
+            .WithMessage("This is not a valid Parent Id");
     }
 }

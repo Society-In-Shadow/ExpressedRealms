@@ -61,10 +61,36 @@ public static class RecursiveFunctions
 
             if (dbSections.Any(x => x.ParentId == dbSection.Id) && dbSection.Id != excludedChildrenId)
             {
-                dto.SubSections = BuildExpressionPage(dbSections, dbSection.Id);
+                dto.SubSections = GetPotentialParentTargets(dbSections, dbSection.Id, excludedChildrenId);
             }
 
             sections.Add(dto);
+        }
+
+        return sections;
+    }
+    
+    public static List<int> GetValidParentIds(
+        List<ExpressionSection> dbSections,
+        int? parentId,
+        int excludedChildrenId
+    )
+    {
+        List<int> sections = new();
+
+        var filteredSections = dbSections
+            .Where(x => x.ParentId == parentId)
+            .OrderBy(x => x.Id)
+            .ToList();
+        
+        foreach (var dbSection in filteredSections)
+        {
+            if (dbSections.Any(x => x.ParentId == dbSection.Id) && dbSection.Id != excludedChildrenId)
+            {
+                sections.AddRange(GetValidParentIds(dbSections, dbSection.Id, excludedChildrenId));
+            }
+
+            sections.Add(dbSection.Id);
         }
 
         return sections;
