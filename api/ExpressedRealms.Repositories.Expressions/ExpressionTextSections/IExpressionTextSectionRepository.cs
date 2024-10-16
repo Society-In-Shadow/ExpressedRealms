@@ -9,6 +9,6 @@ public interface IExpressionTextSectionRepository
     Task<Result<int>> CreateExpressionTextSectionAsync(CreateExpressionTextSectionDto dto);
     Task<Result<int>> EditExpressionTextSectionAsync(EditExpressionTextSectionDto dto);
     Task<Result> DeleteExpressionTextSectionAsync(int id);
-    Task<Result<GetExpressionTextSectionDto>> GetExpressionTextSection(int expressionId);
+    Task<Result<GetExpressionTextSectionDto>> GetExpressionTextSection(int sectionId);
     Task<List<ExpressionSectionDto>> GetExpressionTextSections(int expressionId);
 }

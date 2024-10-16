@@ -3,9 +3,8 @@ using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions;
 using ExpressedRealms.Repositories.Expressions.Expressions.DTOs;
 using ExpressedRealms.Repositories.Expressions.ExpressionTextSections.DTOs;
+using ExpressedRealms.Repositories.Expressions.ExpressionTextSections.Helpers;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
-using ExpressedRealms.Repositories.Shared.ExternalDependencies;
-using ExpressedRealms.Repositories.Shared.Helpers;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,27 +14,42 @@ internal sealed class ExpressionTextSectionRepository(
     ExpressedRealmsDbContext context,
     CreateExpressionTextSectionDtoValidator createExpressionDtoValidator,
     EditExpressionTextSectionDtoValidator editExpressionDtoValidator,
-    IUserContext userContext,
     CancellationToken cancellationToken
 ) : IExpressionTextSectionRepository
 {
-    public async Task<Result<GetExpressionTextSectionDto>> GetExpressionTextSection(int expressionId)
+    public async Task<Result<GetExpressionTextSectionDto>> GetExpressionTextSection(int sectionId)
     {
-        var expression = await context
-            .Expressions.Where(x => x.Id == expressionId)
-            .FirstOrDefaultAsync();
+        var expressionSection = await context.ExpressionSections
+            .FirstOrDefaultAsync(x => x.SectionTypeId == sectionId);
 
-        if (expression is null)
-            return Result.Fail(new NotFoundFailure("Expression"));
+        if (expressionSection is null)
+            return Result.Fail(new NotFoundFailure("Expression Section"));
+        
+        var expressionSections = await context.ExpressionSections
+            .Where(x => x.ExpressionId == expressionSection.ExpressionId)
+            .ToListAsync();
+        
+        var availableParents = RecursiveFunctions.GetPotentialParentTargets(expressionSections, null, sectionId);
+        
+        var expressSectionTypes = await context
+            .ExpressionSectionTypes
+            .Select(x => new SectionTypeDto()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+            })
+            .ToListAsync();
 
         return new GetExpressionTextSectionDto()
         {
-            Name = expression.Name,
-            Id = expression.Id,
-            ShortDescription = expression.ShortDescription,
-            NavMenuImage = expression.NavMenuImage,
-            PublishStatus = (PublishTypes)expression.PublishStatusId,
-            PublishTypes = EnumHelpers.GetEnumKeyValuePairs<PublishTypes>(),
+            Id = expressionSection.Id,
+            Name = expressionSection.Name,
+            Content = expressionSection.Content,
+            ParentId = expressionSection.ParentId,
+            AvailableParents = availableParents,
+            SectionTypeId = expressionSection.SectionTypeId,
+            SectionTypes = expressSectionTypes,
         };
     }
 
@@ -108,37 +122,6 @@ internal sealed class ExpressionTextSectionRepository(
             .Where(x => x.ExpressionId == expressionId)
             .ToListAsync();
 
-        return BuildExpressionPage(sections, null);
-    }
-    
-    private static List<ExpressionSectionDto> BuildExpressionPage(
-        List<ExpressionSection> dbSections,
-        int? parentId
-    )
-    {
-        List<ExpressionSectionDto> sections = new();
-
-        var filteredSections = dbSections
-            .Where(x => x.ParentId == parentId)
-            .OrderBy(x => x.Id)
-            .ToList();
-        foreach (var dbSection in filteredSections)
-        {
-            var dto = new ExpressionSectionDto()
-            {
-                Name = dbSection.Name,
-                Id = dbSection.Id,
-                Content = dbSection.Content,
-            };
-
-            if (dbSections.Any(x => x.ParentId == dbSection.Id))
-            {
-                dto.SubSections = BuildExpressionPage(dbSections, dbSection.Id);
-            }
-
-            sections.Add(dto);
-        }
-
-        return sections;
+        return RecursiveFunctions.BuildExpressionPage(sections, null);
     }
 }
