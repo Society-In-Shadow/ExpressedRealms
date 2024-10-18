@@ -37,13 +37,13 @@ public static class RecursiveFunctions
         return sections;
     }
 
-    public static List<ExpressionSectionDto> GetPotentialParentTargets(
+    public static List<PotentialParentsDto> GetPotentialParentTargets(
         List<ExpressionSection> dbSections,
         int? parentId,
         int? excludedChildrenId
     )
     {
-        List<ExpressionSectionDto> sections = new();
+        List<PotentialParentsDto> sections = new();
 
         var filteredSections = dbSections
             .Where(x => x.ParentId == parentId)
@@ -52,11 +52,10 @@ public static class RecursiveFunctions
 
         foreach (var dbSection in filteredSections)
         {
-            var dto = new ExpressionSectionDto()
+            var dto = new PotentialParentsDto()
             {
                 Name = dbSection.Name,
-                Id = dbSection.Id,
-                Content = dbSection.Content,
+                Id = dbSection.Id
             };
 
             if (

@@ -73,7 +73,7 @@ internal sealed class ExpressionTextSectionRepository(
             .ToListAsync();
     }
 
-    private async Task<List<ExpressionSectionDto>> GetParentSectionList(
+    private async Task<List<PotentialParentsDto>> GetParentSectionList(
         int expressionId,
         int? sectionId
     )

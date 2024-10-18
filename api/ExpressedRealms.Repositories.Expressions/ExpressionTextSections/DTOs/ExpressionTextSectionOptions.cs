@@ -2,6 +2,6 @@ namespace ExpressedRealms.Repositories.Expressions.ExpressionTextSections.DTOs;
 
 public class ExpressionTextSectionOptions
 {
-    public List<ExpressionSectionDto> AvailableParents { get; set; } = null!;
+    public List<PotentialParentsDto> AvailableParents { get; set; } = null!;
     public List<SectionTypeDto> ExpressionSectionTypes { get; set; } = null!;
 }
