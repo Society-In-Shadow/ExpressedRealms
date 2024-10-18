@@ -27,4 +27,26 @@ public static class ExpressionHelpers
 
         return sections;
     }
+    
+    public static List<AvailableParentsDto> BuildAvailableParentTree(
+        List<PotentialParentsDto> dbSections
+    )
+    {
+        List<AvailableParentsDto> sections = new();
+
+        foreach (var dbSection in dbSections)
+        {
+            var dto = new AvailableParentsDto()
+            {
+                Name = dbSection.Name,
+                Id = dbSection.Id
+            };
+
+            dto.SubSections = BuildAvailableParentTree(dbSection.SubSections);
+
+            sections.Add(dto);
+        }
+
+        return sections;
+    }
 }
