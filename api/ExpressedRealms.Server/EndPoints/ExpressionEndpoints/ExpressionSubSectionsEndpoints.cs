@@ -1,7 +1,8 @@
-using ExpressedRealms.DB;
-using ExpressedRealms.DB.Models.Expressions;
-using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.DTOs;
-using Microsoft.EntityFrameworkCore;
+using ExpressedRealms.Repositories.Expressions.ExpressionTextSections;
+using ExpressedRealms.Server.EndPoints.CharacterEndPoints;
+using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Helpers;
+using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Responses;
+using Microsoft.AspNetCore.Http.HttpResults;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
 namespace ExpressedRealms.Server.EndPoints.ExpressionEndpoints;
@@ -18,47 +19,23 @@ internal static class ExpectedSubSectionsEndpoints
         endpointGroup
             .MapGet(
                 "{name}",
-                async (string name, ExpressedRealmsDbContext dbContext) =>
+                async Task<Results<NotFound, Ok<ExpressionBaseResponse>>>
+                    (string name, IExpressionTextSectionRepository repository) =>
                 {
-                    var sections = await dbContext
-                        .ExpressionSections.AsNoTracking()
-                        .Where(x => x.Expression.Name.ToLower() == name.ToLower())
-                        .ToListAsync();
-
-                    return TypedResults.Ok(BuildExpressionPage(sections, null));
+                    var expressionIdResult = await repository.GetExpressionId(name);
+                    if (expressionIdResult.HasNotFound(out var notFound))
+                        return notFound;
+                    expressionIdResult.ThrowIfErrorNotHandled();
+                    
+                    var sections = await repository.GetExpressionTextSections(expressionIdResult.Value);
+                    
+                    return TypedResults.Ok( new ExpressionBaseResponse()
+                    {
+                        ExpressionId = expressionIdResult.Value,
+                        ExpressionSections = ExpressionHelpers.BuildExpressionPage(sections)
+                    });
                 }
             )
             .RequireAuthorization();
-    }
-
-    private static List<ExpressionSectionDTO> BuildExpressionPage(
-        List<ExpressionSection> dbSections,
-        int? parentId
-    )
-    {
-        List<ExpressionSectionDTO> sections = new();
-
-        var filteredSections = dbSections
-            .Where(x => x.ParentId == parentId)
-            .OrderBy(x => x.Id)
-            .ToList();
-        foreach (var dbSection in filteredSections)
-        {
-            var dto = new ExpressionSectionDTO()
-            {
-                Name = dbSection.Name,
-                Id = dbSection.Id,
-                Content = dbSection.Content,
-            };
-
-            if (dbSections.Any(x => x.ParentId == dbSection.Id))
-            {
-                dto.SubSections = BuildExpressionPage(dbSections, dbSection.Id);
-            }
-
-            sections.Add(dto);
-        }
-
-        return sections;
     }
 }
