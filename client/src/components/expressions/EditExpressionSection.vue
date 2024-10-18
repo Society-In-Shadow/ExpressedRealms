@@ -17,11 +17,14 @@ const props = defineProps({
   showSkeleton:{
     type: Boolean,
     required: true
+  },
+  showEdit:{
+    type: Boolean,
+    required: true
   }
 });
 import { ref } from "vue";
 
-const value = ref('Always bet on Prime');
 const showEditor = ref(false);
 
 </script>
@@ -78,9 +81,6 @@ const showEditor = ref(false);
       </div>
     </div>
 
-
-    
-    
   </div>
 </template>
 

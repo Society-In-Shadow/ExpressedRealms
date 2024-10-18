@@ -36,12 +36,15 @@ let sections = ref([
   }
 ]);
 const isLoading = ref(true);
+const showEdit = ref(false);
+
 function fetchData(name: string) {
   axios.get(`/expressionSubSections/${name}`)
       .then(async (json) => {
         sections.value = json.data.expressionSections;
         isLoading.value = false;
         expressionInfo.currentExpressionId = json.data.expressionId;
+        showEdit.value = json.data.canEditPolicy
         if(location.hash){
           await nextTick();
           window.location.replace(location.hash);
@@ -84,7 +87,7 @@ onBeforeRouteUpdate(async (to, from) => {
           </template>
           <template #content>
             <article id="expression-body">
-              <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" />
+              <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit"/>
             </article>
           </template>
         </Card>
