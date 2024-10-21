@@ -2,8 +2,17 @@
 
 import {makeIdSafe} from "@/utilities/stringUtilities";
 import Skeleton from "primevue/skeleton";
-import Editor from "primevue/editor";
 import Button from "primevue/button";
+import {ref} from "vue";
+import axios from "axios";
+import {useForm} from "vee-validate";
+import {object, string} from "yup";
+import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
+import DropdownWrapper from "@/FormWrappers/DropdownWrapper.vue";
+
+import { expressionStore } from "@/stores/expressionStore";
+import EditorWrapper from "@/FormWrappers/EditorWrapper.vue";
+const expressionInfo = expressionStore();
 
 const props = defineProps({
   sectionInfo: {
@@ -23,9 +32,61 @@ const props = defineProps({
     required: true
   }
 });
-import { ref } from "vue";
 
 const showEditor = ref(false);
+const showOptionLoader = ref(true);
+const sectionTypeOptions = ref([]);
+
+function toggleEditor(){
+  showEditor.value = !showEditor.value;
+  loadSectionInfo();
+}
+
+function cancelEdit(){
+  showEditor.value = !showEditor.value;
+}
+
+function reset(){
+  showOptionLoader.value = true;
+  loadSectionInfo();
+}
+
+function loadSectionInfo(){
+  if(!showOptionLoader.value) return; // Don't load in 2nd time
+  axios.get(`/expressionSubSections/${expressionInfo.currentExpressionId}/${props.sectionInfo.id}/options`)
+      .then(async (response) => {
+
+        sectionTypeOptions.value = response.data.sectionTypes;
+
+        axios.get(`/expressionSubSections/${expressionInfo.currentExpressionId}/${props.sectionInfo.id}`)
+            .then(async (json) => {
+              name.value = json.data.name;
+              content.value = json.data.content;
+              sectionType.value = sectionTypeOptions.value.find(x => x.id == json.data.sectionTypeId);
+              showOptionLoader.value = false;
+            });
+      });
+}
+
+
+const { defineField, handleSubmit, errors } = useForm({
+  validationSchema: object({
+    name: string().required()
+        .label('Name'),
+    content: string()
+        .required()
+        .label('Content'),
+    parentSection: object().nullable()
+        .label('Parent Section'),
+    sectionType: object().nullable()
+        .label('Section Type')
+  })
+});
+
+const [name] = defineField('name');
+const [content] = defineField('content');
+const [parentSection] = defineField('parentSection');
+const [sectionType] = defineField('sectionType');
 
 </script>
 
@@ -33,6 +94,20 @@ const showEditor = ref(false);
   <div v-if="showSkeleton">
     <Skeleton id="expression-section-title-skeleton" class="mb-2" height="1.5em" />
     <Skeleton id="expression-section-body-skeleton" class="mb-2" height="5em" />
+  </div>
+  <div v-else-if="showEditor" class="m-2">
+    <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" :show-skeleton="showOptionLoader" />
+    <EditorWrapper v-model="content" field-name="Content" :error-text="errors.content" :show-skeleton="showOptionLoader"/>
+    <dropdown-wrapper option-label="name" :options="sectionTypeOptions" field-name="Section Types" v-model="sectionType" :show-skeleton="showOptionLoader" :error-text="errors.sectionType"></dropdown-wrapper>
+    <div class="flex">
+      <div class="col-flex flex-grow-1">
+        <div class="float-end">
+          <Button label="Reset" @click="reset()" class="m-2"></Button>
+          <Button label="Cancel" @click="cancelEdit()" class="m-2"></Button>
+          <Button label="Save" @click="showEditor = !showEditor" class="m-2"></Button>
+        </div>
+      </div>
+    </div>
   </div>
   <div v-else>
     <div class="flex">
@@ -57,30 +132,10 @@ const showEditor = ref(false);
         </h6>
       </div>
       <div class="col-flex">
-        <Button v-if="!showEditor" label="Edit" @click="showEditor = !showEditor" class="float-end m-2"></Button>
+        <Button v-if="!showEditor && showEdit" label="Edit" @click="toggleEditor()" class="float-end m-2"></Button>
       </div>
     </div>
-
-
-    <Editor v-if="showEditor" v-model="props.sectionInfo.content">
-      <template v-slot:toolbar>
-        <span class="ql-formats">
-            <button v-tooltip.bottom="'Bold'" class="ql-bold"></button>
-            <button v-tooltip.bottom="'Italic'" class="ql-italic"></button>
-            <button v-tooltip.bottom="'Underline'" class="ql-underline"></button>
-        </span>
-      </template>
-    </Editor>
-    <div v-else v-html="props.sectionInfo.content" class="mb-2"></div>
-    <div class="flex">
-      <div class="col-flex flex-grow-1">
-        <div class="float-end">
-          <Button v-if="showEditor" label="Cancel" @click="showEditor = !showEditor" class="m-2"></Button>
-          <Button v-if="showEditor" label="Save" @click="showEditor = !showEditor" class="m-2"></Button>
-        </div>
-      </div>
-    </div>
-
+    <div v-html="props.sectionInfo.content" class="mb-2"></div>
   </div>
 </template>
 

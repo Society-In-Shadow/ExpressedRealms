@@ -61,7 +61,6 @@ internal static class ExpectedSubSectionsEndpoints
                     
                     return TypedResults.Ok(new EditExpressionSectionResponse()
                     {
-                        Id = sectionResult.Value.Id,
                         Name = sectionResult.Value.Name,
                         Content = sectionResult.Value.Content,
                         ParentId = sectionResult.Value.ParentId,
