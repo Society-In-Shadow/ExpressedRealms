@@ -44,15 +44,17 @@ const dataCyTagCalc = computed(() => {
   <div class="mb-3">
     <label :for="dataCyTagCalc">{{ props.fieldName }}</label>
     <Skeleton v-if="showSkeleton" :id="dataCyTagCalc + '-skeleton'" class="w-100" height="10em" />
-    <Editor v-else
-            :id="dataCyTagCalc" v-model="model" :data-cy="dataCyTagCalc" class="w-100"
-            :class="{ 'p-invalid': errorText }" v-bind="$attrs">
-      <template v-slot:toolbar>
-          <span class="ql-formats">
-              <button class="ql-bold"></button>
-              <button class="ql-italic"></button>
-              <button class="ql-underline"></button>
-          </span>
+    <Editor
+      v-else
+      :id="dataCyTagCalc" v-model="model" :data-cy="dataCyTagCalc" class="w-100"
+      :class="{ 'p-invalid': errorText }" v-bind="$attrs"
+    >
+      <template #toolbar>
+        <span class="ql-formats">
+          <button class="ql-bold" />
+          <button class="ql-italic" />
+          <button class="ql-underline" />
+        </span>
       </template>
     </Editor>
     <small :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ errorText }}</small>

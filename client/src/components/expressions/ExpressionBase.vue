@@ -87,7 +87,7 @@ onBeforeRouteUpdate(async (to, from) => {
           </template>
           <template #content>
             <article id="expression-body">
-              <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit"/>
+              <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit" />
             </article>
           </template>
         </Card>

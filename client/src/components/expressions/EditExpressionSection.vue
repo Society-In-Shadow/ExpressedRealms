@@ -69,7 +69,6 @@ function loadSectionInfo(){
       });
 }
 
-
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
     name: string().required()
@@ -112,14 +111,17 @@ const onSubmit = handleSubmit((values) => {
   <div v-else-if="showEditor" class="m-2">
     <form @submit="onSubmit">
       <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" :show-skeleton="showOptionLoader" />
-      <EditorWrapper v-model="content" field-name="Content" :error-text="errors.content" :show-skeleton="showOptionLoader"/>
-      <dropdown-wrapper option-label="name" :options="sectionTypeOptions" field-name="Section Types" v-model="sectionType" :show-skeleton="showOptionLoader" :error-text="errors.sectionType"></dropdown-wrapper>
+      <EditorWrapper v-model="content" field-name="Content" :error-text="errors.content" :show-skeleton="showOptionLoader" />
+      <DropdownWrapper
+        v-model="sectionType" option-label="name" :options="sectionTypeOptions" field-name="Section Types" :show-skeleton="showOptionLoader"
+        :error-text="errors.sectionType"
+      />
       <div class="flex">
         <div class="col-flex flex-grow-1">
           <div class="float-end">
-            <Button label="Reset" @click="reset()" class="m-2"></Button>
-            <Button label="Cancel" @click="cancelEdit()" class="m-2"></Button>
-            <Button label="Save" @click="onSubmit" class="m-2"></Button>
+            <Button label="Reset" class="m-2" @click="reset()" />
+            <Button label="Cancel" class="m-2" @click="cancelEdit()" />
+            <Button label="Save" class="m-2" @click="onSubmit" />
           </div>
         </div>
       </div>
@@ -148,10 +150,10 @@ const onSubmit = handleSubmit((values) => {
         </h6>
       </div>
       <div class="col-flex">
-        <Button v-if="!showEditor && showEdit" label="Edit" @click="toggleEditor()" class="float-end m-2"></Button>
+        <Button v-if="!showEditor && showEdit" label="Edit" class="float-end m-2" @click="toggleEditor()" />
       </div>
     </div>
-    <div v-html="props.sectionInfo.content" class="mb-2"></div>
+    <div class="mb-2" v-html="props.sectionInfo.content" />
   </div>
 </template>
 
