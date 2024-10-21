@@ -3,6 +3,7 @@ using ExpressedRealms.Repositories.Expressions.ExpressionTextSections;
 using ExpressedRealms.Repositories.Expressions.ExpressionTextSections.DTOs;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints;
 using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Helpers;
+using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Requests;
 using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Responses;
 using ExpressedRealms.Server.Extensions;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -97,6 +98,32 @@ internal static class ExpectedSubSectionsEndpoints
                         AvailableParents = ExpressionHelpers.BuildAvailableParentTree(optionsResult.Value.AvailableParents)
                         
                     });
+                }
+            )
+            .RequirePolicyAuthorization(Policies.ExpressionEditorPolicy);
+        
+        endpointGroup
+            .MapPut(
+                "{expressionId}/{sectionId}",
+                async Task<Results<NotFound, ValidationProblem, NoContent>>
+                    (int expressionId, int sectionId, EditExpressionSubSectionTextRequest request, IExpressionTextSectionRepository repository) =>
+                {
+                    var results = await repository.EditExpressionTextSectionAsync(new EditExpressionTextSectionDto()
+                    {
+                        Id = sectionId,
+                        ExpressionId = expressionId,
+                        Name = request.Name,
+                        Content = request.Content,
+                        SectionTypeId = request.SectionTypeId
+                    });
+                    
+                    if (results.HasNotFound(out var notFound))
+                        return notFound;
+                    if (results.HasValidationError(out var validationProblem))
+                        return validationProblem;
+                    results.ThrowIfErrorNotHandled();
+                    
+                    return TypedResults.NoContent();
                 }
             )
             .RequirePolicyAuthorization(Policies.ExpressionEditorPolicy);

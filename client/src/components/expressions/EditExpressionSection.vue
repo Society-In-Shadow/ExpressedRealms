@@ -12,6 +12,7 @@ import DropdownWrapper from "@/FormWrappers/DropdownWrapper.vue";
 
 import { expressionStore } from "@/stores/expressionStore";
 import EditorWrapper from "@/FormWrappers/EditorWrapper.vue";
+import toaster from "@/services/Toasters";
 const expressionInfo = expressionStore();
 
 const props = defineProps({
@@ -88,6 +89,19 @@ const [content] = defineField('content');
 const [parentSection] = defineField('parentSection');
 const [sectionType] = defineField('sectionType');
 
+const onSubmit = handleSubmit((values) => {
+  axios.put(`/expressionSubSections/${expressionInfo.currentExpressionId}/${props.sectionInfo.id}`, {
+    name: values.name,
+    content: values.content,
+    sectionTypeId: values.sectionType.id,
+  }).then(() => {
+    props.sectionInfo.name = values.name;
+    props.sectionInfo.content = values.content;
+    showEditor.value = false;
+    toaster.success("Successfully Updated Expression Section Info!");
+  });
+});
+
 </script>
 
 <template>
@@ -96,18 +110,20 @@ const [sectionType] = defineField('sectionType');
     <Skeleton id="expression-section-body-skeleton" class="mb-2" height="5em" />
   </div>
   <div v-else-if="showEditor" class="m-2">
-    <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" :show-skeleton="showOptionLoader" />
-    <EditorWrapper v-model="content" field-name="Content" :error-text="errors.content" :show-skeleton="showOptionLoader"/>
-    <dropdown-wrapper option-label="name" :options="sectionTypeOptions" field-name="Section Types" v-model="sectionType" :show-skeleton="showOptionLoader" :error-text="errors.sectionType"></dropdown-wrapper>
-    <div class="flex">
-      <div class="col-flex flex-grow-1">
-        <div class="float-end">
-          <Button label="Reset" @click="reset()" class="m-2"></Button>
-          <Button label="Cancel" @click="cancelEdit()" class="m-2"></Button>
-          <Button label="Save" @click="showEditor = !showEditor" class="m-2"></Button>
+    <form @submit="onSubmit">
+      <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" :show-skeleton="showOptionLoader" />
+      <EditorWrapper v-model="content" field-name="Content" :error-text="errors.content" :show-skeleton="showOptionLoader"/>
+      <dropdown-wrapper option-label="name" :options="sectionTypeOptions" field-name="Section Types" v-model="sectionType" :show-skeleton="showOptionLoader" :error-text="errors.sectionType"></dropdown-wrapper>
+      <div class="flex">
+        <div class="col-flex flex-grow-1">
+          <div class="float-end">
+            <Button label="Reset" @click="reset()" class="m-2"></Button>
+            <Button label="Cancel" @click="cancelEdit()" class="m-2"></Button>
+            <Button label="Save" @click="onSubmit" class="m-2"></Button>
+          </div>
         </div>
       </div>
-    </div>
+    </form>
   </div>
   <div v-else>
     <div class="flex">
