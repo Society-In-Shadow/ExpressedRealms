@@ -155,10 +155,11 @@ internal sealed class ExpressionTextSectionRepository(
 
     public async Task<Result<int>> GetExpressionId(string expressionName)
     {
-        var expression = await context.Expressions
-            .FirstOrDefaultAsync(x => x.Name.ToLower() == expressionName.ToLower());
-        
-        if(expression is null)
+        var expression = await context.Expressions.FirstOrDefaultAsync(x =>
+            x.Name.ToLower() == expressionName.ToLower()
+        );
+
+        if (expression is null)
             return Result.Fail(new NotFoundFailure("Expression"));
 
         return expression.Id;

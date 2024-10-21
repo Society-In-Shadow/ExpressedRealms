@@ -27,7 +27,7 @@ public static class ExpressionHelpers
 
         return sections;
     }
-    
+
     public static List<AvailableParentsDto> BuildAvailableParentTree(
         List<PotentialParentsDto> dbSections
     )
@@ -36,11 +36,7 @@ public static class ExpressionHelpers
 
         foreach (var dbSection in dbSections)
         {
-            var dto = new AvailableParentsDto()
-            {
-                Name = dbSection.Name,
-                Id = dbSection.Id
-            };
+            var dto = new AvailableParentsDto() { Name = dbSection.Name, Id = dbSection.Id };
 
             dto.SubSections = BuildAvailableParentTree(dbSection.SubSections);
 
