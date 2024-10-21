@@ -55,7 +55,8 @@ public static class RecursiveFunctions
             var dto = new PotentialParentsDto()
             {
                 Name = dbSection.Name,
-                Id = dbSection.Id
+                Id = dbSection.Id,
+                SubSections = []
             };
 
             if (

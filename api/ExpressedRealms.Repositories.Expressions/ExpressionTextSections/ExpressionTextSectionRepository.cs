@@ -21,7 +21,7 @@ internal sealed class ExpressionTextSectionRepository(
     public async Task<Result<GetExpressionTextSectionDto>> GetExpressionTextSection(int sectionId)
     {
         var expressionSection = await context.ExpressionSections.FirstOrDefaultAsync(x =>
-            x.SectionTypeId == sectionId
+            x.Id == sectionId
         );
 
         if (expressionSection is null)
