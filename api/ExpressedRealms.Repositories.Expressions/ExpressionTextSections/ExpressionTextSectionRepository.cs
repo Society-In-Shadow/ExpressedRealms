@@ -126,7 +126,7 @@ internal sealed class ExpressionTextSectionRepository(
         section.Content = dto.Content;
         section.ExpressionId = dto.ExpressionId;
         section.SectionTypeId = dto.SectionTypeId;
-        section.ParentId = dto.ParentId;
+        //section.ParentId = dto.ParentId;
 
         context.ExpressionSections.Update(section);
 
