@@ -187,5 +187,27 @@ internal static class ExpectedSubSectionsEndpoints
                 }
             )
             .RequirePolicyAuthorization(Policies.ExpressionEditorPolicy);
+        
+        endpointGroup
+            .MapDelete(
+                "{expressionId}/{sectionId}",
+                async Task<Results<NotFound, StatusCodeHttpResult, NoContent>> (
+                    int expressionId,
+                    int sectionId,
+                    IExpressionTextSectionRepository repository
+                ) =>
+                {
+                    var results = await repository.DeleteExpressionTextSectionAsync(expressionId, sectionId);
+
+                    if (results.HasNotFound(out var notFound))
+                        return notFound;
+                    if (results.HasBeenDeletedAlready(out var deletedAlready))
+                        return deletedAlready;
+                    results.ThrowIfErrorNotHandled();
+
+                    return TypedResults.NoContent();
+                }
+            )
+            .RequirePolicyAuthorization(Policies.ExpressionEditorPolicy);
     }
 }

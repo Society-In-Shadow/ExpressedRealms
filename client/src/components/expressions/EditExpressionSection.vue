@@ -14,10 +14,11 @@ import { expressionStore } from "@/stores/expressionStore";
 import EditorWrapper from "@/FormWrappers/EditorWrapper.vue";
 import toaster from "@/services/Toasters";
 import CreateExpressionSection from "@/components/expressions/CreateExpressionSection.vue";
+import {useConfirm} from "primevue/useconfirm";
 const expressionInfo = expressionStore();
 
 const emit = defineEmits<{
-  addedSection: []
+  refreshList: []
 }>();
 
 const props = defineProps({
@@ -50,7 +51,7 @@ function toggleEditor(){
 }
 
 function passThroughAddedSection(){
-  emit("addedSection");
+  emit("refreshList");
 }
 
 function cancelEdit(){
@@ -115,6 +116,31 @@ const onSubmit = handleSubmit((values) => {
   });
 });
 
+const confirm = useConfirm();
+const deleteExpression = (event) => {
+  confirm.require({
+    target: event.currentTarget,
+    header: 'Deleting Section',
+    message: `Are you sure you want delete ${props.sectionInfo.name} section?  This will delete this section and any sub children`,
+    icon: 'pi pi-exclamation-triangle',
+    rejectProps: {
+      label: 'Cancel',
+      severity: 'secondary',
+      outlined: true
+    },
+    acceptProps: {
+      label: 'Save'
+    },
+    accept: () => {
+      axios.delete(`/expressionSubSections/${expressionInfo.currentExpressionId}/${props.sectionInfo.id}`).then(() => {
+        emit('refreshList');
+        toaster.success(`Successfully Deleted Section ${props.sectionInfo.name}!`);
+      });
+    },
+    reject: () => {}
+  });
+};
+
 </script>
 
 <template>
@@ -132,6 +158,7 @@ const onSubmit = handleSubmit((values) => {
       />
       <div class="flex">
         <div class="col-flex flex-grow-1">
+          <Button severity="danger" label="Delete" class="m-2" @click="deleteExpression($event)" />
           <div class="float-end">
             <Button label="Reset" class="m-2" @click="reset()" />
             <Button label="Cancel" class="m-2" @click="cancelEdit()" />
@@ -164,13 +191,13 @@ const onSubmit = handleSubmit((values) => {
         </h6>
       </div>
       <div class="col-flex">
-        <Button label="Add Child Section" class="m-2" @click="toggleCreate" />
+        <Button v-if="showEdit" label="Add Child Section" class="m-2" @click="toggleCreate" />
         <Button v-if="!showEditor && showEdit" label="Edit" class="float-end m-2" @click="toggleEditor()" />
       </div>
     </div>
     <div class="mb-2" v-html="props.sectionInfo.content" />
   </div>
-  <div v-if="showCreate">
+  <div v-if="showCreate && showEdit">
     <CreateExpressionSection :parent-id="props.sectionInfo.id" @cancel-event="toggleCreate" @added-section="passThroughAddedSection()"></CreateExpressionSection>
   </div>
 </template>

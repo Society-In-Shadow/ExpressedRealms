@@ -135,11 +135,11 @@ internal sealed class ExpressionTextSectionRepository(
         return Result.Ok(section.Id);
     }
 
-    public async Task<Result> DeleteExpressionTextSectionAsync(int id)
+    public async Task<Result> DeleteExpressionTextSectionAsync(int expressionId, int id)
     {
         var section = await context
             .ExpressionSections.IgnoreQueryFilters()
-            .FirstOrDefaultAsync(x => x.Id == id);
+            .FirstOrDefaultAsync(x => x.ExpressionId == expressionId && x.Id == id);
 
         if (section is null)
             return Result.Fail(new NotFoundFailure("Expression Section"));
