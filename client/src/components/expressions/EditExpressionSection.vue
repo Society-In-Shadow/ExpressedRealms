@@ -13,7 +13,12 @@ import DropdownWrapper from "@/FormWrappers/DropdownWrapper.vue";
 import { expressionStore } from "@/stores/expressionStore";
 import EditorWrapper from "@/FormWrappers/EditorWrapper.vue";
 import toaster from "@/services/Toasters";
+import CreateExpressionSection from "@/components/expressions/CreateExpressionSection.vue";
 const expressionInfo = expressionStore();
+
+const emit = defineEmits<{
+  addedSection: []
+}>();
 
 const props = defineProps({
   sectionInfo: {
@@ -37,10 +42,15 @@ const props = defineProps({
 const showEditor = ref(false);
 const showOptionLoader = ref(true);
 const sectionTypeOptions = ref([]);
+const showCreate = ref(false);
 
 function toggleEditor(){
   showEditor.value = !showEditor.value;
   loadSectionInfo();
+}
+
+function passThroughAddedSection(){
+  emit("addedSection");
 }
 
 function cancelEdit(){
@@ -87,6 +97,10 @@ const [name] = defineField('name');
 const [content] = defineField('content');
 const [parentSection] = defineField('parentSection');
 const [sectionType] = defineField('sectionType');
+
+function toggleCreate(){
+  showCreate.value = !showCreate.value;
+}
 
 const onSubmit = handleSubmit((values) => {
   axios.put(`/expressionSubSections/${expressionInfo.currentExpressionId}/${props.sectionInfo.id}`, {
@@ -150,10 +164,14 @@ const onSubmit = handleSubmit((values) => {
         </h6>
       </div>
       <div class="col-flex">
+        <Button label="Add Child Section" class="m-2" @click="toggleCreate" />
         <Button v-if="!showEditor && showEdit" label="Edit" class="float-end m-2" @click="toggleEditor()" />
       </div>
     </div>
     <div class="mb-2" v-html="props.sectionInfo.content" />
+  </div>
+  <div v-if="showCreate">
+    <CreateExpressionSection :parent-id="props.sectionInfo.id" @cancel-event="toggleCreate" @added-section="passThroughAddedSection()"></CreateExpressionSection>
   </div>
 </template>
 

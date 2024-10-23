@@ -94,7 +94,7 @@ onBeforeRouteUpdate(async (to, from) => {
           </template>
           <template #content>
             <article id="expression-body">
-              <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit" />
+              <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit" @added-section="fetchData(route.params.name)"/>
               <Button label="Add Section" class="m-2" @click="toggleCreate" />
               <div v-if="showCreate">
                 <CreateExpressionSection @cancel-event="toggleCreate" @added-section="fetchData(route.params.name)"></CreateExpressionSection>

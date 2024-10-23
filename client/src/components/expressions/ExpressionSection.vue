@@ -2,6 +2,14 @@
 
 import EditExpressionSection from "@/components/expressions/EditExpressionSection.vue";
 
+const emit = defineEmits<{
+  addedSection: []
+}>();
+
+function passThroughAddedSection(){
+  emit("addedSection");
+}
+
 const props = defineProps({
   sections: {
     type: Array,
@@ -25,9 +33,9 @@ const props = defineProps({
 
 <template>
   <div v-for="(value) in props.sections" :key="value.id">
-    <EditExpressionSection :section-info="value" :current-level="currentLevel" :show-skeleton="showSkeleton" :show-edit="showEdit" />
+    <EditExpressionSection :section-info="value" :current-level="currentLevel" :show-skeleton="showSkeleton" :show-edit="showEdit" @added-section="passThroughAddedSection"/>
     <div>
-      <ExpressionSection v-if="value.subSections" :sections="value.subSections" :current-level="props.currentLevel + 1" :show-skeleton="showSkeleton" :show-edit="showEdit" />
+      <ExpressionSection v-if="value.subSections" :sections="value.subSections" :current-level="props.currentLevel + 1" :show-skeleton="showSkeleton" :show-edit="showEdit" @added-section="passThroughAddedSection"/>
     </div>
   </div>
 </template>
