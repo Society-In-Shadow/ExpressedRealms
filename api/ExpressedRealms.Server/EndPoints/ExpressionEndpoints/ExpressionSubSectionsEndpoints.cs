@@ -1,4 +1,5 @@
 using ExpressedRealms.Authentication;
+using ExpressedRealms.Repositories.Expressions.Expressions.DTOs;
 using ExpressedRealms.Repositories.Expressions.ExpressionTextSections;
 using ExpressedRealms.Repositories.Expressions.ExpressionTextSections.DTOs;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints;
@@ -86,7 +87,7 @@ internal static class ExpectedSubSectionsEndpoints
         endpointGroup
             .MapGet(
                 "{expressionId}/{sectionId}/options",
-                async Task<Results<NotFound, Ok<ExpressionSectionOptionsResponse>>> (
+                async Task<Results<ValidationProblem, Ok<ExpressionSectionOptionsResponse>>> (
                     int expressionId,
                     int sectionId,
                     IExpressionTextSectionRepository repository
@@ -100,8 +101,8 @@ internal static class ExpectedSubSectionsEndpoints
                         }
                     );
 
-                    if (optionsResult.HasNotFound(out var notFound))
-                        return notFound;
+                    if (optionsResult.HasValidationError(out var validationProblem))
+                        return validationProblem;
                     optionsResult.ThrowIfErrorNotHandled();
 
                     return TypedResults.Ok(
@@ -152,6 +153,37 @@ internal static class ExpectedSubSectionsEndpoints
                     results.ThrowIfErrorNotHandled();
 
                     return TypedResults.NoContent();
+                }
+            )
+            .RequirePolicyAuthorization(Policies.ExpressionEditorPolicy);
+        
+        endpointGroup
+            .MapPost(
+                "{expressionId}",
+                async Task<Results<NotFound, ValidationProblem, Created<int>>> (
+                    int expressionId,
+                    CreateExpressionSubSectionTextRequest request,
+                    IExpressionTextSectionRepository repository
+                ) =>
+                {
+                    var results = await repository.CreateExpressionTextSectionAsync(
+                        new CreateExpressionTextSectionDto()
+                        {
+                            ExpressionId = expressionId,
+                            Name = request.Name,
+                            Content = request.Content,
+                            SectionTypeId = request.SectionTypeId,
+                            ParentId = request.ParentId
+                        }
+                    );
+
+                    if (results.HasNotFound(out var notFound))
+                        return notFound;
+                    if (results.HasValidationError(out var validationProblem))
+                        return validationProblem;
+                    results.ThrowIfErrorNotHandled();
+
+                    return TypedResults.Created("/", results.Value);
                 }
             )
             .RequirePolicyAuthorization(Policies.ExpressionEditorPolicy);

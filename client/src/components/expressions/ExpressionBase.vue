@@ -12,6 +12,8 @@ import Card from "primevue/card";
 import ExpressionToC from "@/components/expressions/ExpressionToC.vue";
 import Skeleton from 'primevue/skeleton';
 import ScrollTop from 'primevue/scrolltop';
+import CreateExpressionSection from "@/components/expressions/CreateExpressionSection.vue";
+import Button from "primevue/button";
 
 let sections = ref([
   {
@@ -37,6 +39,7 @@ let sections = ref([
 ]);
 const isLoading = ref(true);
 const showEdit = ref(false);
+const showCreate = ref(false);
 
 function fetchData(name: string) {
   axios.get(`/expressionSubSections/${name}`)
@@ -50,6 +53,10 @@ function fetchData(name: string) {
           window.location.replace(location.hash);
         }        
       });
+}
+
+function toggleCreate(){
+  showCreate.value = !showCreate.value;
 }
 
 onMounted(() =>{
@@ -88,6 +95,10 @@ onBeforeRouteUpdate(async (to, from) => {
           <template #content>
             <article id="expression-body">
               <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit" />
+              <Button label="Add Section" class="m-2" @click="toggleCreate" />
+              <div v-if="showCreate">
+                <CreateExpressionSection @cancel-event="toggleCreate" @added-section="fetchData(route.params.name)"></CreateExpressionSection>
+              </div>
             </article>
           </template>
         </Card>
