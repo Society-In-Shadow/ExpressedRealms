@@ -156,7 +156,7 @@ internal static class ExpectedSubSectionsEndpoints
                 }
             )
             .RequirePolicyAuthorization(Policies.ExpressionEditorPolicy);
-        
+
         endpointGroup
             .MapPost(
                 "{expressionId}",
@@ -187,7 +187,7 @@ internal static class ExpectedSubSectionsEndpoints
                 }
             )
             .RequirePolicyAuthorization(Policies.ExpressionEditorPolicy);
-        
+
         endpointGroup
             .MapDelete(
                 "{expressionId}/{sectionId}",
@@ -197,7 +197,10 @@ internal static class ExpectedSubSectionsEndpoints
                     IExpressionTextSectionRepository repository
                 ) =>
                 {
-                    var results = await repository.DeleteExpressionTextSectionAsync(expressionId, sectionId);
+                    var results = await repository.DeleteExpressionTextSectionAsync(
+                        expressionId,
+                        sectionId
+                    );
 
                     if (results.HasNotFound(out var notFound))
                         return notFound;
