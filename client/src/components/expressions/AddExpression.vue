@@ -32,6 +32,8 @@ const [name] = defineField('name');
 const [shortDescription] = defineField('shortDescription');
 const [navMenuImage] = defineField('navMenuImage');
 
+navMenuImage.value = 'pi-prime'
+
 const onSubmit = handleSubmit((values) => {
   axios.post(`/expression/`, {
     name: values.name,
@@ -52,6 +54,7 @@ const onSubmit = handleSubmit((values) => {
     <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" />
     <TextAreaWrapper v-model="shortDescription" field-name="Short Description" :error-text="errors.shortDescription" />
     <InputTextWrapper v-model="navMenuImage" field-name="Nav Menu Icon" :error-text="errors.navMenuImage" />
+    <p>List of icons can be found here : <a href="https://primevue.org/icons/#list">Primevue Icons</a></p>
     <Button data-cy="add-expression-button" label="Add Expression" class="w-100 mb-2" type="submit" />
   </form>
 </template>

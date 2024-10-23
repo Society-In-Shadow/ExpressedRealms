@@ -76,6 +76,7 @@ const onSubmit = handleSubmit((values) => {
     <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" :show-skeleton="isLoading" @change="onSubmit" />
     <TextAreaWrapper v-model="shortDescription" field-name="Short Description" :error-text="errors.shortDescription" :show-skeleton="isLoading" @change="onSubmit" />
     <InputTextWrapper v-model="navMenuImage" field-name="Nav Menu Icon" :error-text="errors.navMenuImage" :show-skeleton="isLoading" @change="onSubmit" />
+    <p>List of icons can be found here : <a href="https://primevue.org/icons/#list">Primevue Icons</a></p>
     <DropdownWrapper
       v-model="publishStatus" option-label="name" :options="publishStatusOptions" field-name="Publish Status" :error-text="errors.publishStatus"
       :show-skeleton="isLoading" @change="onSubmit"
