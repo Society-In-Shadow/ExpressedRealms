@@ -88,10 +88,6 @@ onBeforeRouteUpdate(async (to, from) => {
       </div>
       <div class="col">
         <Card class="mb-3 p-0 mt-0 pt-0" style="max-width: 800px">
-          <template #header>
-            <Skeleton v-show="isLoading" class="w-100" height="20em" />
-            <img v-show="!isLoading" src="../../../public/ifIHadOne.png" class="w-100">
-          </template>
           <template #content>
             <article id="expression-body">
               <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit" @refresh-list="fetchData(route.params.name)" />
