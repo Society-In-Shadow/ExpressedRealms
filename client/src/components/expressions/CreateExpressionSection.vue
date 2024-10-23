@@ -82,14 +82,13 @@ const onSubmit = handleSubmit((values) => {
 </script>
 
 <template>
-
   <div class="m-2">
     <form @submit="onSubmit">
       <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" />
       <EditorWrapper v-model="content" field-name="Content" :error-text="errors.content" />
       <DropdownWrapper
-          v-model="sectionType" option-label="name" :options="sectionTypeOptions" field-name="Section Types" :show-skeleton="showOptionLoader"
-          :error-text="errors.sectionType"
+        v-model="sectionType" option-label="name" :options="sectionTypeOptions" field-name="Section Types" :show-skeleton="showOptionLoader"
+        :error-text="errors.sectionType"
       />
       <div class="flex">
         <div class="col-flex flex-grow-1">

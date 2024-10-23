@@ -198,7 +198,7 @@ const deleteExpression = (event) => {
     <div class="mb-2" v-html="props.sectionInfo.content" />
   </div>
   <div v-if="showCreate && showEdit">
-    <CreateExpressionSection :parent-id="props.sectionInfo.id" @cancel-event="toggleCreate" @added-section="passThroughAddedSection()"></CreateExpressionSection>
+    <CreateExpressionSection :parent-id="props.sectionInfo.id" @cancel-event="toggleCreate" @added-section="passThroughAddedSection()" />
   </div>
 </template>
 
