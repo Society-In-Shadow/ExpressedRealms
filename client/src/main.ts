@@ -1,9 +1,6 @@
 import { createApp } from 'vue'
 import PrimeVue from 'primevue/config';
 import Router from "@/router";
-import 'primevue/resources/themes/lara-dark-green/theme.css'
-import 'primevue/resources/themes/lara-dark-green/fonts/Inter-italic.var.woff2'
-import 'primevue/resources/themes/lara-dark-green/fonts/Inter-roman.var.woff2'
 import "primeicons/primeicons.css";
 import "primeicons/fonts/primeicons.ttf"
 import "primeicons/fonts/primeicons.woff"
@@ -25,8 +22,61 @@ axiosConfig.setAPIUrl();
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedState);
 
+import { definePreset } from '@primevue/themes';
+import Lara from '@primevue/themes/lara';
+import Material from '@primevue/themes/material';
+import Aura from '@primevue/themes/aura';
+import Nora from '@primevue/themes/nora';
+
+const MyPreset = definePreset(Nora, {
+    semantic: {
+        colorScheme: {
+            root: {
+                background: 'rgb(229, 231, 235)',
+            },
+            light: {
+                surface: {
+                    0: '#ffffff',
+                    50: '{slate.50}',
+                    100: '{slate.100}',
+                    200: '{slate.200}',
+                    300: '{slate.300}',
+                    400: '{slate.400}',
+                    500: '{slate.500}',
+                    600: '{slate.600}',
+                    700: '{slate.700}',
+                    800: '{slate.800}',
+                    900: '{slate.900}',
+                    950: '{slate.950}'
+                }
+            },
+            dark: {
+                
+                surface: {
+                    0: '#ffffff',
+                    50: '{slate.50}',
+                    100: '{slate.100}',
+                    200: '{slate.200}',
+                    300: '{slate.300}',
+                    400: '{slate.400}',
+                    500: '{slate.500}',
+                    600: '{slate.600}',
+                    700: '{slate.700}',
+                    800: '{slate.800}',
+                    900: '{slate.900}',
+                    950: '{slate.950}'
+                }
+            }
+        }
+    }
+});
+
 const app = createApp(App)
-    .use(PrimeVue, {ripple: true})
+    .use(PrimeVue, {
+        theme: {
+            preset: MyPreset
+        }
+    })
     .use(Router);
 app.directive('ripple', Ripple);
 app.use(pinia);
