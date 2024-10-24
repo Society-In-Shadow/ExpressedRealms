@@ -1,5 +1,5 @@
 # build stage
-FROM node:18 as build-stage
+FROM node:20 as build-stage
 
 # Ideally this should be set in the github action, but it's not picking up the value
 # so setting it to production here, and overriding it locally.  See #147
