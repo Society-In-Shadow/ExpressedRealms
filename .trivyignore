@@ -1,2 +1,3 @@
 # .trivyignore
+# This is to do with Quill, but upgrading it breaks the prime vue implementation, so ignoring for now
 CVE-2021-3163
