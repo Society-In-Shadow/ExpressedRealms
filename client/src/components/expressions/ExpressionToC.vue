@@ -39,7 +39,7 @@ const props = defineProps({
 }
 
 .tocItem:hover {
-  background: green;
+  background: var(--p-form-field-disabled-background);
   cursor: pointer;
 }
 

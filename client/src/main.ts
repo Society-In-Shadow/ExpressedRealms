@@ -24,17 +24,14 @@ pinia.use(piniaPluginPersistedState);
 
 import { definePreset } from '@primevue/themes';
 import Lara from '@primevue/themes/lara';
-import Material from '@primevue/themes/material';
-import Aura from '@primevue/themes/aura';
-import Nora from '@primevue/themes/nora';
 
-const MyPreset = definePreset(Nora, {
+const MyPreset = definePreset(Lara, {
     semantic: {
         colorScheme: {
-            root: {
-                background: 'rgb(229, 231, 235)',
-            },
             light: {
+                root:{
+                    background: '#edf1fa'
+                },
                 surface: {
                     0: '#ffffff',
                     50: '{slate.50}',
@@ -51,7 +48,9 @@ const MyPreset = definePreset(Nora, {
                 }
             },
             dark: {
-                
+                root:{
+                    background: '#121212'
+                },
                 surface: {
                     0: '#ffffff',
                     50: '{slate.50}',
