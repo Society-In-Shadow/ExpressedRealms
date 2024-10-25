@@ -20,9 +20,6 @@ import './commands'
 // require('./commands')
 
 import { mount } from 'cypress/vue'
-import 'primevue/resources/themes/lara-dark-green/theme.css'
-import 'primevue/resources/themes/lara-dark-green/fonts/Inter-italic.var.woff2'
-import 'primevue/resources/themes/lara-dark-green/fonts/Inter-roman.var.woff2'
 import "primeicons/primeicons.css";
 import "primeicons/fonts/primeicons.ttf"
 import "primeicons/fonts/primeicons.woff"
@@ -31,6 +28,7 @@ import "primeflex/primeflex.css"
 
 import 'bootstrap/scss/bootstrap-utilities.scss'
 import 'bootstrap/scss/bootstrap-grid.scss'
+import Lara from '@primevue/themes/lara';
 
 import PrimeVue from 'primevue/config';
 import { createMemoryHistory, createRouter } from 'vue-router';
@@ -69,7 +67,11 @@ Cypress.Commands.add('mount', (component, options = {}) => {
     /* Add any global plugins */
     options.global.plugins.push({
        install(app) {
-         app.use(PrimeVue, {ripple: true})
+         app.use(PrimeVue, {
+             theme: {
+                 preset: Lara
+             }
+         })
              .use(options.router);
            app.use(pinia);
            app.directive('ripple', Ripple);
