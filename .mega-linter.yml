@@ -28,6 +28,7 @@ DISABLE_LINTERS:
   - JAVASCRIPT_STANDARD
   - CSHARP_DOTNET_FORMAT # This isn't supporting .net 8 yet
   - REPOSITORY_DEVSKIM # There's a git ownership issue with this one : fatal: detected dubious ownership in repository at '/github/workspace/.git'
+  - REPOSITORY_TRIVY # Getting fatal download errors, and too many requests errors, so ignoring for now
 DISABLE_ERRORS_LINTERS:
   - PYTHON_BANDIT
   - PYTHON_PYRIGHT
