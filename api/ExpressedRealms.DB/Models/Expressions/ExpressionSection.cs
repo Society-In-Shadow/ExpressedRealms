@@ -1,7 +1,6 @@
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Interceptors;
-using ExpressedRealms.DB.Interceptors;
 
 namespace ExpressedRealms.DB.Models.Expressions;
 
