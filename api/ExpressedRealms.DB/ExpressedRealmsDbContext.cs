@@ -22,7 +22,7 @@ namespace ExpressedRealms.DB
             builder.ApplyConfiguration(new ExpressionSectionsConfiguration());
             builder.ApplyConfiguration(new ExpressionSectionTypeConfiguration());
             builder.ApplyConfiguration(new ExpressionPublishStatusConfiguration());
-            
+
             builder.ApplyConfiguration(new StatTypeConfiguration());
             builder.ApplyConfiguration(new StatLevelConfiguration());
             builder.ApplyConfiguration(new StatDescriptionMappingConfiguration());
