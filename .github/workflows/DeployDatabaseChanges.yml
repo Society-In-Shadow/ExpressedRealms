@@ -1,0 +1,90 @@
+---
+
+name: Deploy Database Changes
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - 'api/ExpressedRealms.DB/Migrations/**'
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./api
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      - name: Install dotnet-ef tool
+        run: dotnet tool install --global dotnet-ef
+
+      - name: Add dotnet tools to PATH
+        run: echo "$HOME/.dotnet/tools" >> "$GITHUB_PATH"
+
+      - name: Restore Tools
+        run: dotnet tool restore
+
+      - name: Build Bundle
+        run: dotnet ef migrations bundle --self-contained --project ExpressedRealms.DB --startup-project ExpressedRealms.Server
+        env:
+          ConnectionStrings__DefaultConnection: "Foo"
+        
+      - name: Get Public IP
+        id: ip
+        uses: haythem/public-ip@v1.3
+
+      - name: Print Public IP
+        run: |
+          echo ${{ steps.ip.outputs.ipv4 }}
+          echo ${{ steps.ip.outputs.ipv6 }}
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.EXPRESSEDREALMS_DATABASE_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.EXPRESSEDREALMS_DATABASE_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.EXPRESSEDREALMS_DATABASE_AZURE_SUBSCRIPTION_ID }}
+
+      - name: Add IP to Firewall
+        run: az postgres flexible-server firewall-rule create --resource-group "${RESOURCE_GROUP}" --name "${SQL_SERVER}" --rule-name GitHubIP --start-ip-address "${IP_ADDRESS}" --end-ip-address "${IP_ADDRESS}"
+        env:
+          SQL_SERVER: ${{ secrets.POSTGRES_SERVER_NAME }}
+          IP_ADDRESS: ${{ steps.ip.outputs.ipv4 }}
+          RESOURCE_GROUP: ${{ secrets.POSTGRES_RESOURCE_GROUP }}
+
+      - name: Get Access Token
+        id: get_token
+        run: |
+          token=$(az account get-access-token --resource https://ossrdbms-aad.database.windows.net/ --query accessToken -o tsv)
+          echo "TOKEN=$token" >> $GITHUB_ENV
+
+      - name: Run Migrations
+        run: ./efbundle --connection "${{secrets.DB_DEPLOYMENT_CONNECTION_STRING}};Password=${{ env.TOKEN}};Ssl Mode=Require;"
+        working-directory: ./api
+
+      - name: Remove IP from Firewall
+        if: always()
+        run: az postgres flexible-server firewall-rule delete --resource-group "${RESOURCE_GROUP}" --name "${SQL_SERVER}" --rule-name GitHubIP --yes
+        env:
+          SQL_SERVER: ${{ secrets.POSTGRES_SERVER_NAME }}
+          RESOURCE_GROUP: ${{ secrets.POSTGRES_RESOURCE_GROUP }}
