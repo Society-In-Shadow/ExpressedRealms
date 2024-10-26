@@ -42,16 +42,16 @@ public class ExpressedRealmsDbContext : AuditIdentityDbContext<IdentityUser>
                 .AuditTypeNameMapper(typeName => typeName + "_AuditTrail"));
     }
 
-        public DbSet<Character> Characters { get; set; }
-        public DbSet<Player> Players { get; set; }
-        public DbSet<Expression> Expressions { get; set; }
-        public DbSet<ExpressionSection> ExpressionSections { get; set; }
-        public DbSet<ExpressionSectionType> ExpressionSectionTypes { get; set; }
-        public DbSet<ExpressionPublishStatus> ExpressionPublishStatus { get; set; }
+    public DbSet<Character> Characters { get; set; }
+    public DbSet<Player> Players { get; set; }
+    public DbSet<Expression> Expressions { get; set; }
+    public DbSet<ExpressionSection> ExpressionSections { get; set; }
+    public DbSet<ExpressionSectionType> ExpressionSectionTypes { get; set; }
+    public DbSet<ExpressionPublishStatus> ExpressionPublishStatus { get; set; }
 
-        public DbSet<StatType> StateTypes { get; set; }
-        public DbSet<StatLevel> StatLevels { get; set; }
-        public DbSet<StatDescriptionMapping> StatDescriptionMappings { get; set; }
+    public DbSet<StatType> StateTypes { get; set; }
+    public DbSet<StatLevel> StatLevels { get; set; }
+    public DbSet<StatDescriptionMapping> StatDescriptionMappings { get; set; }
 
     public DbSet<CharacterSkillsMapping> CharacterSkillsMappings { get; set; }
     public DbSet<ModifierType> ModifierTypes { get; set; }
