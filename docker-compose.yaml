@@ -19,8 +19,8 @@ services:
       - VITE_PORT=443
       - VITE_API_BASE_URL=https://localhost:5001/
     volumes:
-      - ./client/:/app # This is only here to allow automatic updates on local machines as you are editing the code
-      - ${USERPROFILE}/.aspnet/https:/https # Host Certificate Location (key.pem/cert.pem) : Image Path
+      - ./client/:/app:z # This is only here to allow automatic updates on local machines as you are editing the code
+      - ${USERPROFILE}/.aspnet/https:/https:z # Host Certificate Location (key.pem/cert.pem) : Image Path
     command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
     networks:
       - expressed-realms-network
@@ -70,7 +70,9 @@ services:
       - '5000:80'
       - '5001:443'
     volumes:
-      - ${USERPROFILE}/.aspnet/https:/https:ro
+      - /etc/passwd:/etc/passwd:ro # Comment out if you are using windows
+      - /etc/group:/etc/group:ro # Comment out if you are using windows
+      - ${USERPROFILE}/.aspnet/https:/https:ro,z
       - data_protection_keys:/home/app/.aspnet/DataProtection-Keys:rw
     networks:
       - expressed-realms-network
