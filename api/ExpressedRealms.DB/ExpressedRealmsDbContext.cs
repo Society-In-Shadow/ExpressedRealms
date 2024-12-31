@@ -1,15 +1,17 @@
-﻿using ExpressedRealms.DB.Characters;
+﻿using Audit.Core;
+using Audit.EntityFramework;
+using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Models.Expressions;
 using ExpressedRealms.DB.Models.Skills;
 using ExpressedRealms.DB.Models.Statistics;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.DB
 {
-    public class ExpressedRealmsDbContext : IdentityDbContext<IdentityUser>
+    [AuditDbContext(Mode = AuditOptionMode.OptIn)]
+    public class ExpressedRealmsDbContext : AuditIdentityDbContext<IdentityUser>
     {
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -34,7 +36,12 @@ namespace ExpressedRealms.DB
         }
 
         public ExpressedRealmsDbContext(DbContextOptions<ExpressedRealmsDbContext> options)
-            : base(options) { }
+            : base(options)
+        {
+            Audit.Core.Configuration.Setup()
+                .UseEntityFramework(x => x
+                    .AuditTypeNameMapper(typeName => typeName + "_AuditTrail"));
+        }
 
         public DbSet<Character> Characters { get; set; }
         public DbSet<Player> Players { get; set; }
