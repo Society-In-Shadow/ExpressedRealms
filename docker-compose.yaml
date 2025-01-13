@@ -61,6 +61,7 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__KeyPath=/https/key.pem
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/cert.pem
       - ConnectionStrings__DefaultConnection=Host=expressed-realms-db;Port=5432;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
+      - AZURE_STORAGEBLOB_RESOURCEENDPOINT=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
       - FRONT_END_BASE_URL=https://localhost
       - POSTMARK_API_KEY=${POSTMARK_API_KEY}
       - NO_REPLY_EMAIL=${NO_REPLY_EMAIL}
@@ -70,15 +71,14 @@ services:
       - '5000:80'
       - '5001:443'
     volumes:
-      - /etc/passwd:/etc/passwd:ro # Comment out if you are using windows
-      - /etc/group:/etc/group:ro # Comment out if you are using windows
       - ${USERPROFILE}/.aspnet/https:/https:ro,z
-      - data_protection_keys:/home/app/.aspnet/DataProtection-Keys:rw
     networks:
       - expressed-realms-network
     depends_on:
       postgres:
         condition: service_healthy
+      azurite:
+        condition: service_started
 
   postgres:
     container_name: expressed-realms-db
@@ -116,9 +116,21 @@ services:
     depends_on:
       postgres:
         condition: service_started
+        
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    hostname: azurite
+    restart: always
+    command: "azurite-blob --blobHost 0.0.0.0 --blobPort 10000 --location /data"
+    ports:
+      - "10000:10000"
+    volumes:
+      - azurite-data:/data
+    networks:
+      - expressed-realms-network
 
 volumes:
   ignore:
   db_data:
   pgAdmin_data:
-  data_protection_keys:
+  azurite-data:

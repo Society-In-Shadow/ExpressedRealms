@@ -321,14 +321,6 @@ by default prevents containers from access files.  It's basically wanting to enf
 This can happen if you have cypress open, and you try start / stop the docker compose, specifically the vue docker.  
 All you need to do is close cypress and you should be good to go.
 
-#### Access Denied to Data Protection Keys
-
-If you have this : System.UnauthorizedAccessException: Access to the path '/home/app/.aspnet/DataProtection-Keys/ec1cc766-d010-4f5f-b997-2f7a9a8a8b68.tmp' is denied.
-
-So, this is happening because the id's between users on your local machine isn't matching up with the ones on the docker image.
-
-the volumes of etx/passwd and group should fix this for the most part on your local, but you will also run into issues
-with the certificates due to the same issue.
 
 ## Cypress
 Cypress is configured in this repo.  Both the end to end and the component testing is implemented.

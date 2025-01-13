@@ -1,8 +1,5 @@
 using System.Reflection;
 using AspNetCore.SwaggerUI.Themes;
-using Azure.Core;
-using Azure.Identity;
-using Azure.Storage.Blobs;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels;
 using ExpressedRealms.Repositories.Characters;
@@ -18,7 +15,6 @@ using ExpressedRealms.Server.EndPoints.PlayerEndpoints;
 using ExpressedRealms.Server.Swagger;
 using FluentValidation;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -63,20 +59,9 @@ try
         }
     );
 
-    // Since we are in a container, we need to keep track of the data keys manually
-    var blobStorageEndpoint =
-        Environment.GetEnvironmentVariable("AZURE_STORAGEBLOB_RESOURCEENDPOINT") ?? "";
-    if (!string.IsNullOrEmpty(blobStorageEndpoint))
-    {
-        var blobServiceClient = new BlobServiceClient(
-            new Uri(blobStorageEndpoint),
-            new DefaultAzureCredential()
-        );
-        var containerClient = blobServiceClient.GetBlobContainerClient("dataprotection-keys");
-        var blobClient = containerClient.GetBlobClient("dataprotection-keys.xml");
-
-        builder.Services.AddDataProtection().PersistKeysToAzureBlobStorage(blobClient);
-    }
+    Log.Information("Setup Azure Storage Blob");
+    
+    builder.SetupBlobStorage();
 
     Log.Information("Add in Healthchecks");
 
