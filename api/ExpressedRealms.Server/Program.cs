@@ -60,7 +60,7 @@ try
     );
 
     Log.Information("Setup Azure Storage Blob");
-    
+
     builder.SetupBlobStorage();
 
     Log.Information("Add in Healthchecks");

@@ -116,7 +116,7 @@ services:
     depends_on:
       postgres:
         condition: service_started
-        
+
   azurite:
     image: mcr.microsoft.com/azure-storage/azurite
     hostname: azurite

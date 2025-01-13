@@ -12,6 +12,7 @@ public static class AzureStorageConfiguration
         var blobStorageEndpoint = 
             Environment.GetEnvironmentVariable("AZURE_STORAGEBLOB_RESOURCEENDPOINT") 
             ?? throw new NullReferenceException("Missing AZURE_STORAGEBLOB_RESOURCEENDPOINT environmental variable");
+        
         BlobClient blobClient;
         if (builder.Environment.IsDevelopment())
         {
