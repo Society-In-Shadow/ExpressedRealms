@@ -1,5 +1,6 @@
 using System.Reflection;
 using AspNetCore.SwaggerUI.Themes;
+using Audit.Core;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels;
 using ExpressedRealms.Repositories.Characters;
@@ -12,6 +13,7 @@ using ExpressedRealms.Server.EndPoints;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints;
 using ExpressedRealms.Server.EndPoints.ExpressionEndpoints;
 using ExpressedRealms.Server.EndPoints.PlayerEndpoints;
+using ExpressedRealms.Server.Extensions;
 using ExpressedRealms.Server.Swagger;
 using FluentValidation;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
@@ -180,6 +182,12 @@ try
 
     Log.Information("Building the App");
     var app = builder.Build();
+    
+    Audit.Core.Configuration.AddCustomAction(ActionType.OnScopeCreated, scope =>
+    {
+        var httpContext = app.Services.GetService<IHttpContextAccessor>();
+        scope.Event.Environment.UserName = httpContext.HttpContext.User.GetUserId();
+    });
 
     // Migrate latest database changes during startup
     Log.Information("Checking if Migrations Need to Be Run");

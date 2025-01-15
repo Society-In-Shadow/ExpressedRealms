@@ -1,18 +1,21 @@
+using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels;
+
 namespace ExpressedRealms.DB.Models.Expressions;
 
-public class ExpressionSectionAuditTrail
+public class ExpressionSectionAuditTrail : IAuditTable
 {
-    public int Id { get; set; }
     public int SectionId { get; set; }
     public int ExpressionId { get; set; }
+    
+    public int Id { get; set; }
     public string Action { get; set; }
-    public string PropertyUpdated { get; set; }
-    public string OldValue { get; set; }
-    public string NewValue { get; set; }
     public DateTime Timestamp { get; set; }
-    public string UserName { get; set; }
+    public Guid UserId { get; set; }
+    public string ChangedProperties { get; set; }
     
     public virtual Expression Expression { get; set; }
     public virtual ExpressionSection ExpressionSection { get; set; }
+    public virtual User User { get; set; }
     
 }

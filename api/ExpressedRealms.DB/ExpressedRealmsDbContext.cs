@@ -1,6 +1,7 @@
 using Audit.Core;
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Characters;
+using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions;
 using ExpressedRealms.DB.Models.Skills;
 using ExpressedRealms.DB.Models.Statistics;
@@ -23,7 +24,6 @@ namespace ExpressedRealms.DB
             builder.ApplyConfiguration(new ExpressionSectionTypeConfiguration());
             builder.ApplyConfiguration(new ExpressionPublishStatusConfiguration());
             builder.ApplyConfiguration(new ExpressionSectionAuditTrailConfiguration());
-
 
             builder.ApplyConfiguration(new StatTypeConfiguration());
             builder.ApplyConfiguration(new StatLevelConfiguration());
@@ -49,23 +49,12 @@ namespace ExpressedRealms.DB
                             audit.ExpressionId = section.ExpressionId;
                             return true;
                         })
-                        .AuditEntityAction<ExpressionSectionAuditTrail>((evt, entry, audit) =>
+                        .AuditEntityAction<IAuditTable>((evt, entry, audit) =>
                         {
                             audit.Action = entry.Action;
-                            audit.UserName = entry.ToJson();
                             audit.Timestamp = DateTime.UtcNow;
-
-                            foreach (var prop in entry.Changes)
-                            {
-                                if (prop.OriginalValue?.ToString() == prop.NewValue?.ToString()) continue;
-                                audit.PropertyUpdated = prop.ColumnName;
-                                audit.OldValue = prop.OriginalValue?.ToString();
-                                audit.NewValue = prop.NewValue.ToString();
-
-                                // Insert new audit record with just this information
-                                // Eg User Updated Title from x to y on Oct 28 2024
-                                //multipleAuditEntities.Add(audit);
-                            }
+                            audit.ChangedProperties = entry.ToJson();
+                            audit.UserId = Guid.Parse(evt.Environment.UserName);
 
                             return true;
                         })

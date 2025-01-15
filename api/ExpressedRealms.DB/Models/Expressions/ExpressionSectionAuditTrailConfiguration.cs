@@ -16,14 +16,9 @@ public class ExpressionSectionAuditTrailConfiguration : IEntityTypeConfiguration
         builder.Property(e => e.SectionId).IsRequired();
         
         builder.Property(e => e.Action).IsRequired();
-        
-        builder.Property(e => e.PropertyUpdated).IsRequired();
-        
-        builder.Property(e => e.OldValue);
-        builder.Property(e => e.NewValue).IsRequired();
+        builder.Property(e => e.UserId).IsRequired();
         builder.Property(e => e.Timestamp).IsRequired();
-
-        builder.Property(e => e.UserName).IsRequired();
+        builder.Property(e => e.ChangedProperties).IsRequired();
 
         builder
             .HasOne(x => x.Expression)
