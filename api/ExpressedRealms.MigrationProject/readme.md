@@ -1,0 +1,1 @@
+The purpose of this project is to allow for easy creation of migrations without having to rely on the main web api

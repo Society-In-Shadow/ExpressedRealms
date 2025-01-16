@@ -4,7 +4,7 @@
 
 Go to the root of project, (folder above this one), and type the following:
 ```shell
-dotnet ef migrations add <migration name> --project ExpressedRealms.DB --startup-project ExpressedRealms.Server
+dotnet ef migrations add <migration name> --project ExpressedRealms.DB --startup-project ExpressedRealms.MigrationProject
 ```
 
 
@@ -18,7 +18,7 @@ update.
 
 If you have a separate instance up and running, you can use the following command:
 ```shell
-dotnet ef database update --verbose --project ExpressedRealms.DB --startup-project ExpressedRealms.Server
+dotnet ef database update --verbose --project ExpressedRealms.DB --startup-project ExpressedRealms.MigrationProject
 ```
 
 ## To Rollback the Database
@@ -29,14 +29,14 @@ once you get that, the two commands you want to use is
 
 To list out the transactions
 ```shell
-dotnet ef migrations list --project ExpressedRealms.DB --startup-project ExpressedRealms.Server
+dotnet ef migrations list --project ExpressedRealms.DB --startup-project ExpressedRealms.MigrationProject
 ```
 
 To to revert to a specified time, use this
 
 Keep note, nameOfMigration is not the one you want to revert, it's the name of the one before the one you want to remove
 ```shell
-dotnet ef database update <nameOfMigration> --project ExpressedRealms.DB --startup-project ExpressedRealms.Server
+dotnet ef database update <nameOfMigration> --project ExpressedRealms.DB --startup-project ExpressedRealms.MigrationProject
 ```
 
 If the IP address isn't working, use this command to find it for the connection string

@@ -1,0 +1,6 @@
+@ExpressedRealms.MigrationProject_HostAddress = http://localhost:5206
+
+GET {{ExpressedRealms.MigrationProject_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
