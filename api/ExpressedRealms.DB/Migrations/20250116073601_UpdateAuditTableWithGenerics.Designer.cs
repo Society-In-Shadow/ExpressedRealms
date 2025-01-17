@@ -3,6 +3,7 @@ using System;
 using ExpressedRealms.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpressedRealms.DB.Migrations
 {
     [DbContext(typeof(ExpressedRealmsDbContext))]
-    partial class ExpressedRealmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250116073601_UpdateAuditTableWithGenerics")]
+    partial class UpdateAuditTableWithGenerics
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -242,7 +245,10 @@ namespace ExpressedRealms.DB.Migrations
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("UserId")
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("UserId1")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -252,7 +258,7 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.HasIndex("SectionId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
                     b.ToTable("ExpressionSection_AuditTrail", (string)null);
                 });
@@ -847,9 +853,9 @@ namespace ExpressedRealms.DB.Migrations
                         .IsRequired();
 
                     b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.User", "User")
-                        .WithMany("ExpressionSectionAuditTrails")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .WithMany("ExpressionSectionAudit")
+                        .HasForeignKey("UserId1")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Expression");
@@ -1091,7 +1097,7 @@ namespace ExpressedRealms.DB.Migrations
 
             modelBuilder.Entity("ExpressedRealms.DB.UserProfile.PlayerDBModels.User", b =>
                 {
-                    b.Navigation("ExpressionSectionAuditTrails");
+                    b.Navigation("ExpressionSectionAudit");
 
                     b.Navigation("Player")
                         .IsRequired();

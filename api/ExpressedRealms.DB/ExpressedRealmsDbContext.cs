@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Audit.Core;
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Characters;
@@ -53,9 +54,28 @@ namespace ExpressedRealms.DB
                         {
                             audit.Action = entry.Action;
                             audit.Timestamp = DateTime.UtcNow;
-                            audit.ChangedProperties = entry.ToJson();
-                            audit.UserId = Guid.Parse(evt.Environment.UserName);
+                            audit.UserId = evt.Environment.UserName;
 
+                            var changes = new List<ChangedRecord>();
+                            if (string.Compare(audit.Action, "insert", StringComparison.InvariantCultureIgnoreCase) == 0)
+                            {
+                                changes = entry.ColumnValues.Select(x => new ChangedRecord(x.Key, null, x.Value?.ToString()))
+                                    .ToList();
+                            }
+                            else
+                            {
+                                changes = entry.Changes
+                                    .Where(x =>
+                                        x.NewValue == null
+                                            ? x.OriginalValue != null
+                                            : !x.NewValue.Equals(x.OriginalValue))
+                                    .Select(x => new ChangedRecord(x.ColumnName, x.OriginalValue?.ToString(),
+                                        x.NewValue?.ToString()))
+                                    .ToList();
+                            }
+                            
+                            audit.ChangedProperties = JsonSerializer.Serialize(changes);
+                            
                             return true;
                         })
                     )

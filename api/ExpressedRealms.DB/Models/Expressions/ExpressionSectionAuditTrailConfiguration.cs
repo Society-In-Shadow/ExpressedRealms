@@ -33,5 +33,12 @@ public class ExpressionSectionAuditTrailConfiguration : IEntityTypeConfiguration
             .HasForeignKey(x => x.SectionId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
+        
+        builder
+            .HasOne(x => x.User)
+            .WithMany(x => x.ExpressionSectionAuditTrails)
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired();
     }
 }
