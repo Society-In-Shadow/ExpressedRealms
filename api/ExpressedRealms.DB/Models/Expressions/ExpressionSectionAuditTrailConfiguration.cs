@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ExpressedRealms.DB.Models.Expressions;
 
-public class ExpressionSectionAuditTrailConfiguration : IEntityTypeConfiguration<ExpressionSectionAuditTrail>
+public class ExpressionSectionAuditTrailConfiguration
+    : IEntityTypeConfiguration<ExpressionSectionAuditTrail>
 {
     public void Configure(EntityTypeBuilder<ExpressionSectionAuditTrail> builder)
     {
@@ -11,10 +12,10 @@ public class ExpressionSectionAuditTrailConfiguration : IEntityTypeConfiguration
 
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
-        
+
         builder.Property(e => e.ExpressionId).IsRequired();
         builder.Property(e => e.SectionId).IsRequired();
-        
+
         builder.Property(e => e.Action).IsRequired();
         builder.Property(e => e.UserId).IsRequired();
         builder.Property(e => e.Timestamp).IsRequired();
@@ -26,14 +27,14 @@ public class ExpressionSectionAuditTrailConfiguration : IEntityTypeConfiguration
             .HasForeignKey(x => x.ExpressionId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder
             .HasOne(x => x.ExpressionSection)
             .WithMany(x => x.SectionAudits)
             .HasForeignKey(x => x.SectionId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder
             .HasOne(x => x.User)
             .WithMany(x => x.ExpressionSectionAuditTrails)

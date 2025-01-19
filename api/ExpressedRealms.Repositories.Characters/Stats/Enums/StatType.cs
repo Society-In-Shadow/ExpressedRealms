@@ -7,5 +7,5 @@ public enum StatType
     Dexterity,
     Strength,
     Intelligence,
-    Willpower
+    Willpower,
 }

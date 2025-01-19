@@ -46,7 +46,7 @@ internal static class NavigationEndpoints
                                 Id = 0,
                                 Name = "Add Expression",
                                 ShortDescription = "Use this to add a new expression",
-                                NavMenuImage = "pi-plus"
+                                NavMenuImage = "pi-plus",
                             }
                         );
                     }
@@ -55,7 +55,7 @@ internal static class NavigationEndpoints
                         new ExpressionMenuResponse()
                         {
                             CanEdit = hasEditPolicy,
-                            MenuItems = menuItems
+                            MenuItems = menuItems,
                         }
                     );
                 }

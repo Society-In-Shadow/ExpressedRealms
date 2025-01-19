@@ -60,7 +60,7 @@ internal static class ExpressionEndpoints
                             Name = editExpressionRequest.Name,
                             PublishStatus = editExpressionRequest.PublishStatus,
                             ShortDescription = editExpressionRequest.ShortDescription,
-                            NavMenuImage = editExpressionRequest.NavMenuImage
+                            NavMenuImage = editExpressionRequest.NavMenuImage,
                         }
                     );
 
@@ -89,7 +89,7 @@ internal static class ExpressionEndpoints
                         {
                             Name = request.Name,
                             ShortDescription = request.ShortDescription,
-                            NavMenuImage = request.NavMenuImage
+                            NavMenuImage = request.NavMenuImage,
                         }
                     );
 

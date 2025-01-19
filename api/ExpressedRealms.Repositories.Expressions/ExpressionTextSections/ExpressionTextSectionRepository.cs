@@ -99,7 +99,7 @@ internal sealed class ExpressionTextSectionRepository(
             Content = dto.Content,
             ExpressionId = dto.ExpressionId,
             SectionTypeId = dto.SectionTypeId,
-            ParentId = dto.ParentId
+            ParentId = dto.ParentId,
         };
 
         context.ExpressionSections.Add(expression);

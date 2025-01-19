@@ -43,7 +43,7 @@ internal sealed class CharacterStatRepository(
                         + x.StrengthStatLevel.TotalXPCost
                         + x.IntelligenceStatLevel.TotalXPCost
                         + x.WillpowerStatLevel.TotalXPCost
-                    )
+                    ),
             })
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -77,9 +77,9 @@ internal sealed class CharacterStatRepository(
                         XP = y.StatLevel.XPCost,
                         Bonus = y.StatLevel.Bonus,
                         Description = y.ReasonableExpectation,
-                        TotalXP = y.StatLevel.TotalXPCost
+                        TotalXP = y.StatLevel.TotalXPCost,
                     })
-                    .First()
+                    .First(),
             })
             .FirstAsync(cancellationToken);
 
@@ -165,7 +165,7 @@ internal sealed class CharacterStatRepository(
             StatType.Dexterity => character.DexterityStatLevel.TotalXPCost,
             StatType.Intelligence => character.IntelligenceStatLevel.TotalXPCost,
             StatType.Willpower => character.WillpowerStatLevel.TotalXPCost,
-            _ => throw new ArgumentOutOfRangeException()
+            _ => throw new ArgumentOutOfRangeException(),
         };
 
         var newTotalXpCost = await context
@@ -209,43 +209,43 @@ internal sealed class CharacterStatRepository(
                 StatTypeId = StatType.Agility,
                 Bonus = character.AgilityStatLevel.Bonus,
                 Level = character.AgilityStatLevel.Id,
-                ShortName = statTypes.First(x => x.Id == (byte)StatType.Agility).ShortName
+                ShortName = statTypes.First(x => x.Id == (byte)StatType.Agility).ShortName,
             },
             new()
             {
                 StatTypeId = StatType.Constitution,
                 Bonus = character.ConstitutionStatLevel.Bonus,
                 Level = character.ConstitutionStatLevel.Id,
-                ShortName = statTypes.First(x => x.Id == (byte)StatType.Constitution).ShortName
+                ShortName = statTypes.First(x => x.Id == (byte)StatType.Constitution).ShortName,
             },
             new()
             {
                 StatTypeId = StatType.Dexterity,
                 Bonus = character.DexterityStatLevel.Bonus,
                 Level = character.DexterityStatLevel.Id,
-                ShortName = statTypes.First(x => x.Id == (byte)StatType.Dexterity).ShortName
+                ShortName = statTypes.First(x => x.Id == (byte)StatType.Dexterity).ShortName,
             },
             new()
             {
                 StatTypeId = StatType.Strength,
                 Bonus = character.StrengthStatLevel.Bonus,
                 Level = character.StrengthStatLevel.Id,
-                ShortName = statTypes.First(x => x.Id == (byte)StatType.Strength).ShortName
+                ShortName = statTypes.First(x => x.Id == (byte)StatType.Strength).ShortName,
             },
             new()
             {
                 StatTypeId = StatType.Intelligence,
                 Bonus = character.IntelligenceStatLevel.Bonus,
                 Level = character.IntelligenceStatLevel.Id,
-                ShortName = statTypes.First(x => x.Id == (byte)StatType.Intelligence).ShortName
+                ShortName = statTypes.First(x => x.Id == (byte)StatType.Intelligence).ShortName,
             },
             new()
             {
                 StatTypeId = StatType.Willpower,
                 Bonus = character.WillpowerStatLevel.Bonus,
                 Level = character.WillpowerStatLevel.Id,
-                ShortName = statTypes.First(x => x.Id == (byte)StatType.Willpower).ShortName
-            }
+                ShortName = statTypes.First(x => x.Id == (byte)StatType.Willpower).ShortName,
+            },
         };
 
         return Result.Ok(characterStats);

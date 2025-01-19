@@ -182,12 +182,15 @@ try
 
     Log.Information("Building the App");
     var app = builder.Build();
-    
-    Audit.Core.Configuration.AddCustomAction(ActionType.OnScopeCreated, scope =>
-    {
-        var httpContext = app.Services.GetService<IHttpContextAccessor>();
-        scope.Event.Environment.UserName = httpContext.HttpContext.User.GetUserId();
-    });
+
+    Audit.Core.Configuration.AddCustomAction(
+        ActionType.OnScopeCreated,
+        scope =>
+        {
+            var httpContext = app.Services.GetService<IHttpContextAccessor>();
+            scope.Event.Environment.UserName = httpContext.HttpContext.User.GetUserId();
+        }
+    );
 
     // Migrate latest database changes during startup
     Log.Information("Checking if Migrations Need to Be Run");

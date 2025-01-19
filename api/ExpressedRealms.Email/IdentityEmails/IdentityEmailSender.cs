@@ -18,7 +18,7 @@ internal sealed class IdentityEmailSender(
         {
             "Reset your password" => forgetPasswordEmail.GetUpdatedEmailTemplate(htmlMessage),
             "Confirm your email" => confirmAccountEmail.GetUpdatedEmailTemplate(htmlMessage),
-            _ => (subject, plainTextMessage, htmlMessage)
+            _ => (subject, plainTextMessage, htmlMessage),
         };
 
         await emailClientAdapter.SendEmailAsync(

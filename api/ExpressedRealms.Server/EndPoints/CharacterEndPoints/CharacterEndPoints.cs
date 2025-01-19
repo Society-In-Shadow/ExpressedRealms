@@ -50,7 +50,7 @@ internal static class CharacterEndPoints
                         {
                             Id = x.Id,
                             Name = x.Name,
-                            ShortDescription = x.ShortDescription
+                            ShortDescription = x.ShortDescription,
                         })
                         .ToListAsync();
 
@@ -168,7 +168,7 @@ internal static class CharacterEndPoints
                             Name = request.Name,
                             Background = request.Background,
                             ExpressionId = request.ExpressionId,
-                            FactionId = request.FactionId
+                            FactionId = request.FactionId,
                         }
                     );
 
@@ -216,7 +216,7 @@ internal static class CharacterEndPoints
                             Name = dto.Name,
                             Background = dto.Background,
                             FactionId = dto.FactionId,
-                            Id = dto.Id
+                            Id = dto.Id,
                         }
                     );
 
@@ -274,7 +274,7 @@ internal static class CharacterEndPoints
                         {
                             CharacterId = dto.CharacterId,
                             LevelTypeId = dto.LevelTypeId,
-                            StatTypeId = dto.StatTypeId
+                            StatTypeId = dto.StatTypeId,
                         }
                     );
 

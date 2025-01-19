@@ -17,7 +17,7 @@ internal sealed class EmailClientAdapter(
             To = data.ToField,
             Subject = data.Subject,
             TextBody = data.PlainTextBody,
-            HtmlBody = data.HtmlBody
+            HtmlBody = data.HtmlBody,
         };
 
         var client = new PostmarkClient(configuration["POSTMARK_API_KEY"]);

@@ -13,7 +13,7 @@ public class CharacterSkillsMappingConfiguration : IEntityTypeConfiguration<Char
         {
             e.CharacterId,
             e.SkillLevelId,
-            e.SkillTypeId
+            e.SkillTypeId,
         });
 
         builder.Property(e => e.SkillTypeId).IsRequired();

@@ -36,7 +36,7 @@ internal static class StatEndPoints
                             Bonus = x.StatLevel.Bonus,
                             XP = x.StatLevel.XPCost,
                             TotalXP = x.StatLevel.TotalXPCost,
-                            Description = x.ReasonableExpectation
+                            Description = x.ReasonableExpectation,
                         })
                         .ToListAsync();
 

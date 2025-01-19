@@ -17,7 +17,7 @@ public static class ExpressionHelpers
             {
                 Name = dbSection.Name,
                 Id = dbSection.Id,
-                Content = dbSection.Content
+                Content = dbSection.Content,
             };
 
             dto.SubSections = BuildExpressionPage(dbSection.SubSections);

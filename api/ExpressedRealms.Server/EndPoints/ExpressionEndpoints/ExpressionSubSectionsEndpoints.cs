@@ -49,7 +49,7 @@ internal static class ExpectedSubSectionsEndpoints
                         {
                             ExpressionId = expressionIdResult.Value,
                             ExpressionSections = ExpressionHelpers.BuildExpressionPage(sections),
-                            CanEditPolicy = hasEditPolicy
+                            CanEditPolicy = hasEditPolicy,
                         }
                     );
                 }
@@ -77,7 +77,7 @@ internal static class ExpectedSubSectionsEndpoints
                             Name = sectionResult.Value.Name,
                             Content = sectionResult.Value.Content,
                             ParentId = sectionResult.Value.ParentId,
-                            SectionTypeId = sectionResult.Value.SectionTypeId
+                            SectionTypeId = sectionResult.Value.SectionTypeId,
                         }
                     );
                 }
@@ -97,7 +97,7 @@ internal static class ExpectedSubSectionsEndpoints
                         new GetExpressionTestSectionOptionsDto()
                         {
                             ExpressionId = expressionId,
-                            SectionId = sectionId == 0 ? null : sectionId // Handle Create (0 = null)
+                            SectionId = sectionId == 0 ? null : sectionId, // Handle Create (0 = null)
                         }
                     );
 
@@ -113,12 +113,12 @@ internal static class ExpectedSubSectionsEndpoints
                                 {
                                     Id = x.Id,
                                     Name = x.Name,
-                                    Description = x.Description
+                                    Description = x.Description,
                                 })
                                 .ToList(),
                             AvailableParents = ExpressionHelpers.BuildAvailableParentTree(
                                 optionsResult.Value.AvailableParents
-                            )
+                            ),
                         }
                     );
                 }
@@ -142,7 +142,7 @@ internal static class ExpectedSubSectionsEndpoints
                             ExpressionId = expressionId,
                             Name = request.Name,
                             Content = request.Content,
-                            SectionTypeId = request.SectionTypeId
+                            SectionTypeId = request.SectionTypeId,
                         }
                     );
 
@@ -173,7 +173,7 @@ internal static class ExpectedSubSectionsEndpoints
                             Name = request.Name,
                             Content = request.Content,
                             SectionTypeId = request.SectionTypeId,
-                            ParentId = request.ParentId
+                            ParentId = request.ParentId,
                         }
                     );
 

@@ -17,7 +17,7 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
                 Name = "Authorization",
                 Type = SecuritySchemeType.Http,
                 BearerFormat = "JWT",
-                Scheme = "Bearer"
+                Scheme = "Bearer",
             }
         );
 
@@ -30,11 +30,11 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
                         Reference = new OpenApiReference()
                         {
                             Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
+                            Id = "Bearer",
+                        },
                     },
                     Array.Empty<string>()
-                }
+                },
             }
         );
     }

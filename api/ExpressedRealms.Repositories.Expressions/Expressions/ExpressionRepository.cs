@@ -40,7 +40,7 @@ internal sealed class ExpressionRepository(
                 ShortDescription = x.ShortDescription,
                 NavMenuImage = x.NavMenuImage,
                 PublishStatusName = x.PublishStatus.Name,
-                PublishStatusId = (PublishTypes)x.PublishStatusId
+                PublishStatusId = (PublishTypes)x.PublishStatusId,
             })
             .OrderBy(x => x.Name)
             .ToListAsync(cancellationToken);
@@ -77,7 +77,7 @@ internal sealed class ExpressionRepository(
             Name = dto.Name,
             ShortDescription = dto.ShortDescription,
             NavMenuImage = dto.NavMenuImage,
-            PublishStatusId = (int)PublishTypes.Draft
+            PublishStatusId = (int)PublishTypes.Draft,
         };
 
         context.Expressions.Add(expression);

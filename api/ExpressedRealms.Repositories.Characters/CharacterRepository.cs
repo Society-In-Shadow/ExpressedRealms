@@ -27,7 +27,7 @@ internal sealed class CharacterRepository(
                 Id = x.Id.ToString(),
                 Name = x.Name,
                 Background = x.Background,
-                Expression = x.Expression.Name
+                Expression = x.Expression.Name,
             })
             .ToListAsync(cancellationToken);
     }
@@ -42,7 +42,7 @@ internal sealed class CharacterRepository(
                 Name = x.Name,
                 Background = x.Background,
                 Expression = x.Expression.Name,
-                FactionId = x.FactionId
+                FactionId = x.FactionId,
             })
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -68,7 +68,7 @@ internal sealed class CharacterRepository(
             Name = dto.Name,
             Background = dto.Background,
             ExpressionId = dto.ExpressionId,
-            FactionId = dto.FactionId
+            FactionId = dto.FactionId,
         };
 
         character.PlayerId = playerId;
@@ -128,7 +128,7 @@ internal sealed class CharacterRepository(
                     new FluentValidationFailure(
                         new Dictionary<string, string[]>
                         {
-                            { "FactionId", ["This is not a valid Faction Id."] }
+                            { "FactionId", ["This is not a valid Faction Id."] },
                         }
                     )
                 );

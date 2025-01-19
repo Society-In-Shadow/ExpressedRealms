@@ -13,7 +13,7 @@ public class SkillLevelBenefitConfiguration : IEntityTypeConfiguration<SkillLeve
         {
             e.SkillLevelId,
             e.SkillTypeId,
-            e.ModifierTypeId
+            e.ModifierTypeId,
         });
 
         builder.Property(e => e.SkillTypeId).IsRequired();

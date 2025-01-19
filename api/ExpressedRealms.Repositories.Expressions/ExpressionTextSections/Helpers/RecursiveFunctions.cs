@@ -56,7 +56,7 @@ public static class RecursiveFunctions
             {
                 Name = dbSection.Name,
                 Id = dbSection.Id,
-                SubSections = []
+                SubSections = [],
             };
 
             if (
