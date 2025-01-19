@@ -21,7 +21,8 @@ public static class SetupDatabaseAudit
                                     audit.ExpressionId = section.ExpressionId;
                                     return true;
                                 }
-                            ).Map<Expression, ExpressionAuditTrail>(
+                            )
+                            .Map<Expression, ExpressionAuditTrail>(
                                 (section, audit) =>
                                 {
                                     audit.ExpressionId = section.Id;
@@ -45,8 +46,9 @@ public static class SetupDatabaseAudit
                                     )
                                     {
                                         changes = entry
-                                            .ColumnValues
-                                            .Where(x => !globallyExcludedColumns.Contains(x.Key))
+                                            .ColumnValues.Where(x =>
+                                                !globallyExcludedColumns.Contains(x.Key)
+                                            )
                                             .Select(x => new ChangedRecord(
                                                 x.Key,
                                                 null,

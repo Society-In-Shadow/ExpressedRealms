@@ -3,8 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ExpressedRealms.DB.Models.Expressions;
 
-public class ExpressionAuditTrailConfiguration
-    : IEntityTypeConfiguration<ExpressionAuditTrail>
+public class ExpressionAuditTrailConfiguration : IEntityTypeConfiguration<ExpressionAuditTrail>
 {
     public void Configure(EntityTypeBuilder<ExpressionAuditTrail> builder)
     {
