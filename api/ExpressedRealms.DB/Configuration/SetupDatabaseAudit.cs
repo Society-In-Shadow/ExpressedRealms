@@ -9,6 +9,7 @@ public static class SetupDatabaseAudit
 {
     public static void SetupAudit()
     {
+        var globallyExcludedColumns = new List<string>() { "Id", "DeletedAt", "IsDeleted" };
         Audit
             .Core.Configuration.Setup()
             .UseEntityFramework(x =>
@@ -44,7 +45,9 @@ public static class SetupDatabaseAudit
                                     )
                                     {
                                         changes = entry
-                                            .ColumnValues.Select(x => new ChangedRecord(
+                                            .ColumnValues
+                                            .Where(x => !globallyExcludedColumns.Contains(x.Key))
+                                            .Select(x => new ChangedRecord(
                                                 x.Key,
                                                 null,
                                                 x.Value?.ToString()
