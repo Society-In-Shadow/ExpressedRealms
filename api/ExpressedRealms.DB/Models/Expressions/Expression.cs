@@ -19,4 +19,5 @@ public class Expression : ISoftDelete
     public virtual List<ExpressionSection> ExpressionSections { get; set; } = null!;
     public virtual List<Character> Characters { get; set; } = null!;
     public virtual List<ExpressionSectionAuditTrail> SectionAudits { get; set; } = null!;
+    public virtual List<ExpressionAuditTrail> ExpressionAudits { get; set; } = null!;
 }

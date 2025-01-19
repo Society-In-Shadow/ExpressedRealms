@@ -20,6 +20,12 @@ public static class SetupDatabaseAudit
                                     audit.ExpressionId = section.ExpressionId;
                                     return true;
                                 }
+                            ).Map<Expression, ExpressionAuditTrail>(
+                                (section, audit) =>
+                                {
+                                    audit.ExpressionId = section.Id;
+                                    return true;
+                                }
                             )
                             .AuditEntityAction<IAuditTable>(
                                 (evt, entry, audit) =>
