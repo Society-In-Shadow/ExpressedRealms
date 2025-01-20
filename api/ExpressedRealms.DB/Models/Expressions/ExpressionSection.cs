@@ -11,6 +11,7 @@ public class ExpressionSection : ISoftDelete
     public int ExpressionId { get; set; }
     public int SectionTypeId { get; set; }
     public int? ParentId { get; set; }
+    public int OrderIndex { get; set; }
     public string Name { get; set; } = null!;
     public string Content { get; set; } = null!;
     public bool IsDeleted { get; set; }
