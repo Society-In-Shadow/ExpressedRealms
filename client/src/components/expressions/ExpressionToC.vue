@@ -3,20 +3,21 @@
 import {makeIdSafe} from "@/utilities/stringUtilities";
 import Skeleton from 'primevue/skeleton';
 import {BaseTree, Draggable} from "@he-tree/vue";
-import {onMounted, onUpdated, watch} from 'vue';
-
+import {toRaw, isProxy, ref, watch} from 'vue';
 import '@he-tree/vue/style/default.css'
 import '@he-tree/vue/style/material-design.css'
+import Button from "primevue/button";
 
-const model = defineModel({ required: true, default: {}, type: Object });
+const model = defineModel({ required: true, default: {}, type: Array });
 
-let plainModel;
-watch(model, (newValue, oldValue) => {
-  plainModel = JSON.parse(JSON.stringify(model.value));
-}, { deep: true });
+const emit = defineEmits<{
+  togglePreview: []
+}>();
+
+let originalModel;
 
 const props = defineProps({
-  editMenu:{
+  canEdit:{
     type: Boolean
   },
   showSkeleton:{
@@ -25,18 +26,73 @@ const props = defineProps({
   }
 });
 
+function saveChanges(){
+  console.log(getIdsWithDynamicSortForArray(model.value))
+  emit("togglePreview");
+  showTocEdit.value = !showTocEdit.value;
+}
+
+const showTocEdit = ref(false);
+function toggleEdit(){
+  if(!showTocEdit.value)
+    originalModel = JSON.parse(JSON.stringify(toRaw(model.value)));
+  
+  if(showTocEdit.value)
+    model.value = originalModel;
+  
+  emit("togglePreview");
+  showTocEdit.value = !showTocEdit.value;
+}
+
+/**
+ * Recursively traverses the tree beginning with an array of nodes,
+ * adding dynamically assigned "sort" values based on their position
+ * in the current array. Handles Vue Proxy objects gracefully.
+ *
+ * @param {Array} nodes - The array of nodes to process (possibly a Proxy).
+ * @returns {Array} - A new array with "id", "sort", and "subSections" for each node.
+ */
+function getIdsWithDynamicSortForArray(nodes) {
+  if (!Array.isArray(nodes)) {
+    return []; // If not an array, return an empty array to safeguard the process
+  }
+
+  // Ensure we are working with raw data if it's a Vue Proxy
+  const rawNodes = isProxy(nodes) ? toRaw(nodes) : nodes;
+
+  // Process each node in the array, dynamically assigning "sort"
+  return rawNodes.map((node, index) => {
+    // Safeguard if node is not an object
+    if (!node || typeof node !== "object") {
+      return null;
+    }
+
+    // Convert node (if it's reactive) to raw, so we can handle subSections
+    const rawNode = isProxy(node) ? toRaw(node) : node;
+
+    // Build the processed result with sort and recursively processed subSections
+    return {
+      id: rawNode.id || null, // Use null for missing IDs
+      sort: index + 1, // Add sort based on array position (1-based index)
+      subSections: getIdsWithDynamicSortForArray(rawNode.subSections || []) // Recursively process subSections
+    };
+  }).filter(node => node !== null); // Filter out invalid (null) nodes
+}
+
+
+
 </script>
 
 <template>
   <Draggable
-      v-if="props.editMenu"
+      v-if="props.canEdit && showTocEdit"
       class="mtl-tree"
-      v-model="plainModel"
+      v-model="model"
       childrenKey="subSections"
+      updateBehavior="new"
       textKey="name">
     <template #default="{ node, stat }">
-      <Skeleton v-if="props.showSkeleton" id="toc-skeleton" class="mb-2" height="1.5em" />
-      <a v-else class="p-1 tocItem" :href="'#' + makeIdSafe(node.name)">{{ node.name }}</a>
+      <a class="p-1 tocItem" >{{ node.name }}</a>
     </template>
   </Draggable>
   <BaseTree v-else 
@@ -48,6 +104,11 @@ const props = defineProps({
       <a v-else class="p-1 tocItem" :href="'#' + makeIdSafe(node.name)">{{ node.name }}</a>
     </template>
   </BaseTree>
+  <div v-if="props.canEdit" >
+    <Button v-if="showTocEdit" label="Save" class="mt-2 w-100" @click="saveChanges" />
+
+    <Button :label="showTocEdit ? 'Cancel' : 'Edit Order'" class="mt-2 w-100" @click="toggleEdit" />
+  </div>
 
 </template>
 

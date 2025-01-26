@@ -39,8 +39,8 @@ let sections = ref([
 ]);
 const isLoading = ref(true);
 const showEdit = ref(false);
-const showTocEdit = ref(false);
 const showCreate = ref(false);
+const showPreview = ref(false);
 
 function fetchData(name: string) {
   axios.get(`/expressionSubSections/${name}`)
@@ -60,8 +60,8 @@ function toggleCreate(){
   showCreate.value = !showCreate.value;
 }
 
-function toggleEdit(){
-  showTocEdit.value = !showTocEdit.value;
+function togglePreview(){
+  showPreview.value = !showPreview.value;
 }
 
 onMounted(() =>{
@@ -82,11 +82,11 @@ onBeforeRouteUpdate(async (to, from) => {
       <div class="col-12 col-lg-3 col-sm-12 col-xl-3 col-md-3">
         <Card class="sticky-md-top sticky-lg-top sticky-xl-top zIndexFix">
           <template #title>
-            Table Of Contents <Button v-if="showEdit" label="Edit" class="m-2" @click="toggleEdit" />
+            Table Of Contents
           </template>
           <template #content>
             <article id="expression-body">
-              <ExpressionToC v-model="sections" :edit-menu="showTocEdit" :show-skeleton="isLoading" />
+              <ExpressionToC v-model="sections" :can-edit="showEdit" :show-skeleton="isLoading" @togglePreview="togglePreview" />
             </article>
           </template>
         </Card>
@@ -95,8 +95,8 @@ onBeforeRouteUpdate(async (to, from) => {
         <Card class="mb-3 p-0 mt-0 pt-0" style="max-width: 800px">
           <template #content>
             <article id="expression-body">
-              <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit" @refresh-list="fetchData(route.params.name)" />
-              <Button v-if="showEdit" label="Add Section" class="m-2" @click="toggleCreate" />
+              <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit && !showPreview" @refresh-list="fetchData(route.params.name)" />
+              <Button v-if="showEdit && !showPreview" label="Add Section" class="m-2" @click="toggleCreate" />
               <div v-if="showCreate">
                 <CreateExpressionSection @cancel-event="toggleCreate" @added-section="fetchData(route.params.name)" />
               </div>
