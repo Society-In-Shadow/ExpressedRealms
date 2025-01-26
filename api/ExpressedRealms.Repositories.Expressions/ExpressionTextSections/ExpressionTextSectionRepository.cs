@@ -175,7 +175,7 @@ internal sealed class ExpressionTextSectionRepository(
         return RecursiveFunctions.BuildExpressionPage(sections, null);
     }
 
-    public async Task UpdateSectionHierarchyAndSorting(EditExpressionHierarchyDto dto)
+    public async Task<Result> UpdateSectionHierarchyAndSorting(EditExpressionHierarchyDto dto)
     {
         var sections = await context
             .ExpressionSections
@@ -191,6 +191,6 @@ internal sealed class ExpressionTextSectionRepository(
         }
         
         await context.SaveChangesAsync();
-        
+        return Result.Ok();
     }
 }
