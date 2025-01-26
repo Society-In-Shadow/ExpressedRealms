@@ -78,6 +78,35 @@ internal static class ExpressionEndpoints
             )
             .WithSummary("Allows one to edit the high level expression details")
             .WithDescription("You will also be able to set the publish status of the expression.");
+        
+        endpointGroup
+            .MapPut(
+                "{expressionId}/updateHierarchy",
+                async Task<Results<NotFound, ValidationProblem, NoContent>> (
+                    int expressionId,
+                    EditExpressionHierarchyItemRequest editExpressionRequest,
+                    IExpressionTextSectionRepository repository
+                ) =>
+                {
+                    var results = await repository.UpdateSectionHierarchyAndSorting(
+                        new EditExpressionHierarchyDto()
+                        {
+                            ExpressionId = expressionId,
+                            Items = ExpressionHelpers.FlattenHierarchy(editExpressionRequest.Items),
+                        }
+                    );
+
+                    if (results.HasNotFound(out var notFound))
+                        return notFound;
+                    if (results.HasValidationError(out var validationProblem))
+                        return validationProblem;
+                    results.ThrowIfErrorNotHandled();
+
+                    return TypedResults.NoContent();
+                }
+            )
+            .WithSummary("Allows one to modify the hierarchy of the expression")
+            .WithDescription("This is an all or nothing operation.  It needs to be called with all the items, not a subset of them.");
 
         endpointGroup
             .MapPut(
