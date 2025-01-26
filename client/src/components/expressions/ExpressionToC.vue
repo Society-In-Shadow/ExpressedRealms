@@ -7,6 +7,10 @@ import {toRaw, isProxy, ref, watch} from 'vue';
 import '@he-tree/vue/style/default.css'
 import '@he-tree/vue/style/material-design.css'
 import Button from "primevue/button";
+import axios from "axios";
+import toaster from "@/services/Toasters";
+import {expressionStore} from "@/stores/expressionStore";
+const expressionInfo = expressionStore();
 
 const model = defineModel({ required: true, default: {}, type: Array });
 
@@ -27,9 +31,15 @@ const props = defineProps({
 });
 
 function saveChanges(){
-  console.log(getIdsWithDynamicSortForArray(model.value))
-  emit("togglePreview");
-  showTocEdit.value = !showTocEdit.value;
+
+  axios.put(`/expression/${expressionInfo.currentExpressionId}/updateHierarchy`, {
+    expressionId: expressionInfo.currentExpressionId,
+    items: getIdsWithDynamicSortForArray(model.value, null)
+  }).then(() => {
+    emit("togglePreview");
+    showTocEdit.value = !showTocEdit.value;
+    toaster.success("Successfully Updated Expression Tree!");
+  });
 }
 
 const showTocEdit = ref(false);
@@ -52,7 +62,7 @@ function toggleEdit(){
  * @param {Array} nodes - The array of nodes to process (possibly a Proxy).
  * @returns {Array} - A new array with "id", "sort", and "subSections" for each node.
  */
-function getIdsWithDynamicSortForArray(nodes) {
+function getIdsWithDynamicSortForArray(nodes, parentId) {
   if (!Array.isArray(nodes)) {
     return []; // If not an array, return an empty array to safeguard the process
   }
@@ -73,8 +83,9 @@ function getIdsWithDynamicSortForArray(nodes) {
     // Build the processed result with sort and recursively processed subSections
     return {
       id: rawNode.id || null, // Use null for missing IDs
-      sort: index + 1, // Add sort based on array position (1-based index)
-      subSections: getIdsWithDynamicSortForArray(rawNode.subSections || []) // Recursively process subSections
+      parentId: parentId,
+      sortOrder: index + 1, // Add sort based on array position (1-based index)
+      subSections: getIdsWithDynamicSortForArray(rawNode.subSections || [], rawNode.id) // Recursively process subSections
     };
   }).filter(node => node !== null); // Filter out invalid (null) nodes
 }

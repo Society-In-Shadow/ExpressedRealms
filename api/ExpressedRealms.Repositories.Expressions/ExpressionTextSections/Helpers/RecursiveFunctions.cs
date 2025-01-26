@@ -14,7 +14,7 @@ public static class RecursiveFunctions
 
         var filteredSections = dbSections
             .Where(x => x.ParentId == parentId)
-            .OrderBy(x => x.Id)
+            .OrderBy(x => x.OrderIndex)
             .ToList();
 
         foreach (var dbSection in filteredSections)
