@@ -18,6 +18,7 @@ public static class ExpressionRepositoryInjections
         services.AddScoped<GetExpressionTestSectionOptionsValidator>();
         services.AddScoped<CreateExpressionTextSectionDtoValidator>();
         services.AddScoped<EditExpressionTextSectionDtoValidator>();
+        services.AddScoped<EditExpressionHierarchyDtoValidator>();
 
         services.AddScoped<IExpressionRepository, ExpressionRepository>();
         services.AddScoped<IExpressionTextSectionRepository, ExpressionTextSectionRepository>();

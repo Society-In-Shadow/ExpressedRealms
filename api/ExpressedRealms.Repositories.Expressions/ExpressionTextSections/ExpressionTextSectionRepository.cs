@@ -174,4 +174,23 @@ internal sealed class ExpressionTextSectionRepository(
 
         return RecursiveFunctions.BuildExpressionPage(sections, null);
     }
+
+    public async Task UpdateSectionHierarchyAndSorting(EditExpressionHierarchyDto dto)
+    {
+        var sections = await context
+            .ExpressionSections
+            .Where(x => x.ExpressionId == dto.ExpressionId)
+            .ToListAsync();
+
+        foreach (var item in dto.Items)
+        {
+            var section = sections.First(x => x.Id == item.Id);
+            
+            section.ParentId = item.ParentId;
+            section.OrderIndex = item.SortOrder;
+        }
+        
+        await context.SaveChangesAsync();
+        
+    }
 }

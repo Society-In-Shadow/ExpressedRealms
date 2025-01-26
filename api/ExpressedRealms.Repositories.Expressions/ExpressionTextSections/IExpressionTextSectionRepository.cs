@@ -15,4 +15,5 @@ public interface IExpressionTextSectionRepository
         GetExpressionTestSectionOptionsDto optionsDto
     );
     Task<Result<int>> GetExpressionId(string expressionName);
+    Task UpdateSectionHierarchyAndSorting(EditExpressionHierarchyDto dto);
 }
