@@ -46,21 +46,26 @@ public static class ExpressionHelpers
 
         return sections;
     }
-    
-    public static List<EditExpressionHierarchyItemDto> FlattenHierarchy(List<EditExpressionHierarchyItemReqestDto> request)
+
+    public static List<EditExpressionHierarchyItemDto> FlattenHierarchy(
+        List<EditExpressionHierarchyItemReqestDto> request
+    )
     {
         var flatList = new List<EditExpressionHierarchyItemDto>();
 
         foreach (var item in request)
         {
-            flatList.Add(new EditExpressionHierarchyItemDto()
-            {
-                Id = item.Id,
-                ParentId = item.ParentId,
-                SortOrder = item.SortOrder,
-            });
-            
-            if(item.SubSections.Count == 0) continue;
+            flatList.Add(
+                new EditExpressionHierarchyItemDto()
+                {
+                    Id = item.Id,
+                    ParentId = item.ParentId,
+                    SortOrder = item.SortOrder,
+                }
+            );
+
+            if (item.SubSections.Count == 0)
+                continue;
             flatList.AddRange(FlattenHierarchy(item.SubSections));
         }
         return flatList;

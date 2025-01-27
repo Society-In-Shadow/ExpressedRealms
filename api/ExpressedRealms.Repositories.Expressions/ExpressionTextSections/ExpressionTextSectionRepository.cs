@@ -178,18 +178,17 @@ internal sealed class ExpressionTextSectionRepository(
     public async Task<Result> UpdateSectionHierarchyAndSorting(EditExpressionHierarchyDto dto)
     {
         var sections = await context
-            .ExpressionSections
-            .Where(x => x.ExpressionId == dto.ExpressionId)
+            .ExpressionSections.Where(x => x.ExpressionId == dto.ExpressionId)
             .ToListAsync();
 
         foreach (var item in dto.Items)
         {
             var section = sections.First(x => x.Id == item.Id);
-            
+
             section.ParentId = item.ParentId;
             section.OrderIndex = item.SortOrder;
         }
-        
+
         await context.SaveChangesAsync();
         return Result.Ok();
     }
