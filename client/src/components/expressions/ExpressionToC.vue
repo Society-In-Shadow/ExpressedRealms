@@ -57,30 +57,34 @@ function toggleEdit(){
 
 <template>
   <Draggable
-      v-if="props.canEdit && showTocEdit"
-      class="mtl-tree"
-      v-model="model"
-      childrenKey="subSections"
-      updateBehavior="new"
-      textKey="name">
-    <template #default="{ node, stat }">
-      <div class="p-1"><i class="pi pi-bars mr-2"></i>{{ node.name }}</div>
+    v-if="props.canEdit && showTocEdit"
+    v-model="model"
+    class="mtl-tree"
+    children-key="subSections"
+    update-behavior="new"
+    text-key="name"
+  >
+    <template #default="{ node }">
+      <div class="p-1">
+        <i class="pi pi-bars mr-2" />{{ node.name }}
+      </div>
     </template>
   </Draggable>
-  <BaseTree v-else 
-            v-model="model" 
-            childrenKey="subSections"
-            textKey="name">
-    <template #default="{ node, stat }">
+  <BaseTree
+    v-else 
+    v-model="model" 
+    children-key="subSections"
+    text-key="name"
+  >
+    <template #default="{ node }">
       <Skeleton v-if="props.showSkeleton" id="toc-skeleton" class="mb-2" height="1.5em" />
       <a v-else class="p-1 tocItem" :href="'#' + makeIdSafe(node.name)" @click.prevent="scrollToSection(node.name)">{{ node.name }}</a>
     </template>
   </BaseTree>
-  <div v-if="props.canEdit" >
+  <div v-if="props.canEdit">
     <Button v-if="showTocEdit" label="Save" class="mt-2 w-100" @click="saveChanges" />
     <Button :label="showTocEdit ? 'Cancel' : 'Edit Order'" class="mt-2 w-100" @click="toggleEdit" />
   </div>
-
 </template>
 
 <style>

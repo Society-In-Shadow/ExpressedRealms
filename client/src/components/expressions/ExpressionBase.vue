@@ -86,7 +86,7 @@ onBeforeRouteUpdate(async (to, from) => {
           </template>
           <template #content>
             <article id="expression-body">
-              <ExpressionToC v-model="sections" :can-edit="showEdit" :show-skeleton="isLoading" @togglePreview="togglePreview" />
+              <ExpressionToC v-model="sections" :can-edit="showEdit" :show-skeleton="isLoading" @toggle-preview="togglePreview" />
             </article>
           </template>
         </Card>
