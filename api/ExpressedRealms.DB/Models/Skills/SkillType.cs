@@ -10,4 +10,5 @@ public class SkillType
     public virtual SkillSubType SkillSubType { get; set; } = null!;
     public virtual List<SkillLevelBenefit> SkillLevelBenefits { get; set; } = null!;
     public virtual List<CharacterSkillsMapping> CharacterSkillsMappings { get; set; } = null!;
+    public virtual List<SkillLevelDescriptionMapping> CharacterLevelDescriptions { get; set; } = null!;
 }

@@ -37,6 +37,7 @@ namespace ExpressedRealms.DB
             builder.ApplyConfiguration(new SkillLevelBenefitConfiguration());
             builder.ApplyConfiguration(new SkillSubTypeConfiguration());
             builder.ApplyConfiguration(new SkillTypeConfiguration());
+            builder.ApplyConfiguration(new SkillLevelDescriptionMappingConfiguration());
         }
 
         public ExpressedRealmsDbContext(DbContextOptions<ExpressedRealmsDbContext> options)
@@ -62,5 +63,6 @@ namespace ExpressedRealms.DB
         public DbSet<SkillLevelBenefit> SkillLevelBenefits { get; set; }
         public DbSet<SkillSubType> SkillSubTypes { get; set; }
         public DbSet<SkillType> SkillTypes { get; set; }
+        public DbSet<SkillLevelDescriptionMapping> SkillLevelDescriptionMappings { get; set; }
     }
 }

@@ -9,4 +9,5 @@ public class SkillLevel
 
     public virtual List<SkillLevelBenefit> SkillLevelBenefits { get; set; } = null!;
     public virtual List<CharacterSkillsMapping> CharacterSkillsMappings { get; set; } = null!;
+    public virtual List<SkillLevelDescriptionMapping> CharacterLevelDescriptions { get; set; } = null!;
 }
