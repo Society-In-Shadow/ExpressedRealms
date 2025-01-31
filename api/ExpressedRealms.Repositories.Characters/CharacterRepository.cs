@@ -3,6 +3,8 @@ using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.Repositories.Characters.DTOs;
 using ExpressedRealms.Repositories.Characters.Enums;
+using ExpressedRealms.Repositories.Characters.Skills;
+using ExpressedRealms.Repositories.Characters.Stats;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using FluentResults;
@@ -15,7 +17,8 @@ internal sealed class CharacterRepository(
     IUserContext userContext,
     AddCharacterDtoValidator addValidator,
     EditCharacterDtoValidator editValidator,
-    CancellationToken cancellationToken
+    CancellationToken cancellationToken,
+    ICharacterSkillRepository skillRepository
 ) : ICharacterRepository
 {
     public async Task<List<CharacterListDto>> GetCharactersAsync()
@@ -76,6 +79,8 @@ internal sealed class CharacterRepository(
         context.Characters.Add(character);
 
         await context.SaveChangesAsync(cancellationToken);
+
+        await skillRepository.AddDefaultSkills(character.Id);
 
         return Result.Ok(character.Id);
     }

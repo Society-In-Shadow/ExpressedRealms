@@ -1,4 +1,5 @@
 using ExpressedRealms.Repositories.Characters.DTOs;
+using ExpressedRealms.Repositories.Characters.Skills;
 using ExpressedRealms.Repositories.Characters.Stats;
 using ExpressedRealms.Repositories.Characters.Stats.DTOs;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +19,7 @@ public static class CharacterRepositoryInjections
         services.AddScoped<EditStatDtoValidator>();
         services.AddScoped<GetDetailedStatInfoDtoValidator>();
         services.AddScoped<ICharacterStatRepository, CharacterStatRepository>();
+        services.AddScoped<ICharacterSkillRepository, CharacterSkillRepository>();
 
         return services;
     }
