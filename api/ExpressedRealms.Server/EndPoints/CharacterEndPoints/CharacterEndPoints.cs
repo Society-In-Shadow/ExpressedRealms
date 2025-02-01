@@ -2,6 +2,7 @@ using ExpressedRealms.DB;
 using ExpressedRealms.Repositories.Characters;
 using ExpressedRealms.Repositories.Characters.DTOs;
 using ExpressedRealms.Repositories.Characters.Skills;
+using ExpressedRealms.Repositories.Characters.Skills.DTOs;
 using ExpressedRealms.Repositories.Characters.Stats;
 using ExpressedRealms.Repositories.Characters.Stats.DTOs;
 using ExpressedRealms.Repositories.Characters.Stats.Enums;
@@ -381,6 +382,38 @@ internal static class CharacterEndPoints
 
                 })
             .WithSummary("Returns all available levels for the given skill type")
+            .RequireAuthorization();
+        
+        endpointGroup
+            .MapPut(
+                "{characterId}/skill/{statTypeId}",
+                [Authorize]
+                async Task<Results<NotFound, NoContent, ValidationProblem, BadRequest<string>>> (
+                    EditCharacterSkillRequest dto,
+                    ICharacterSkillRepository repository
+                ) =>
+                {
+                    var results = await repository.UpdateSkillLevel(
+                        new EditCharacterSkillMappingDto()
+                        {
+                            SkillLevelId = dto.SkillLevelId,
+                            CharacterId = dto.CharacterId,
+                            SkillTypeId = dto.SkillTypeId,
+                        }
+                    );
+
+                    if (results.HasValidationError(out var validationProblem))
+                        return validationProblem;
+                    if (results.HasNotFound(out var notFound))
+                        return notFound;
+
+                    results.ThrowIfErrorNotHandled();
+
+                    return TypedResults.NoContent();
+                }
+            )
+            .WithSummary("Allows user to update the given skill with the provided level")
+            .WithDescription("Allows user to update the given skill with the provided level")
             .RequireAuthorization();
     }
 }

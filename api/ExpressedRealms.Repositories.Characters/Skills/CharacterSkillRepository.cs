@@ -9,6 +9,7 @@ namespace ExpressedRealms.Repositories.Characters.Skills;
 
 internal sealed class CharacterSkillRepository(
     ExpressedRealmsDbContext context,
+    EditCharacterSkillMappingDtoValidator editCharacterSkillMappingDtoValidator,
     CancellationToken cancellationToken
     ) : ICharacterSkillRepository
 {
@@ -91,6 +92,10 @@ internal sealed class CharacterSkillRepository(
     
     public async Task<Result> UpdateSkillLevel(EditCharacterSkillMappingDto dto)
     {
+        var result = await editCharacterSkillMappingDtoValidator.ValidateAsync(dto, cancellationToken);
+        if (!result.IsValid)
+            return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
+        
         var characterSkill = await context.CharacterSkillsMappings.FirstOrDefaultAsync(x =>
             x.CharacterId == dto.CharacterId && x.SkillTypeId == dto.SkillTypeId, cancellationToken);
 

@@ -12,7 +12,6 @@ public class CharacterSkillsMappingConfiguration : IEntityTypeConfiguration<Char
         builder.HasKey(e => new
         {
             e.CharacterId,
-            e.SkillLevelId,
             e.SkillTypeId,
         });
 

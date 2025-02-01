@@ -1,6 +1,6 @@
-namespace ExpressedRealms.Repositories.Characters.Skills.DTOs;
+namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.Requests;
 
-public class EditCharacterSkillMappingDto
+public class EditCharacterSkillRequest
 {
     public int CharacterId { get; set; }
     public byte SkillTypeId { get; set; } 
