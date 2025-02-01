@@ -3,7 +3,7 @@ using FluentResults;
 
 namespace ExpressedRealms.Repositories.Characters.Skills;
 
-internal interface ICharacterSkillRepository
+public interface ICharacterSkillRepository
 {
     Task AddDefaultSkills(int characterId);
     Task<List<SkillDto>> GetCharacterSkills(int characterId);

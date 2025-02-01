@@ -1,6 +1,7 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.Repositories.Characters;
 using ExpressedRealms.Repositories.Characters.DTOs;
+using ExpressedRealms.Repositories.Characters.Skills;
 using ExpressedRealms.Repositories.Characters.Stats;
 using ExpressedRealms.Repositories.Characters.Stats.DTOs;
 using ExpressedRealms.Repositories.Characters.Stats.Enums;
@@ -318,5 +319,38 @@ internal static class CharacterEndPoints
                 "Returns the info needed for displaying the small stat tiles, mainly the bonus, stat name and level."
             )
             .RequireAuthorization();
+
+        endpointGroup
+            .MapGet("{characterId}/skills",
+                [Authorize] async Task<Results<NotFound, ValidationProblem, Ok<List<CharacterSkillsResponse>>>> (
+                    int characterId,
+                    ICharacterSkillRepository repository) =>
+                {
+                    var results = await repository.GetCharacterSkills(characterId);
+
+                    return TypedResults.Ok(
+                        results.Select(x => new CharacterSkillsResponse()
+                            {
+                                Description = x.Description,
+                                SkillSubTypeId = x.SkillSubTypeId,
+                                Name = x.Name,
+                                LevelDescription = x.Description,
+                                LevelId = x.LevelId,
+                                LevelName = x.LevelName,
+                                SkillTypeId = x.SkillTypeId,
+                                Benefits = x.Benefits.Select(y => new BenefitItemResponse()
+                                {
+                                    Name = y.Name,
+                                    Description = y.Description,
+                                    Modifier = y.Modifier,
+                                    LevelId = y.LevelId,
+                                }).ToList()
+                            })
+                            .ToList());
+
+                })
+            .WithSummary("Returns both the basic and detailed info needed for displaying the skills")
+            .RequireAuthorization();
+        
     }
 }
