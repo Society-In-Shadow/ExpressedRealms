@@ -39,6 +39,14 @@ namespace ExpressedRealms.DB.Migrations
                 name: "IX_SkillLevelDescriptionMapping_SkillTypeId",
                 table: "SkillLevelDescriptionMapping",
                 column: "SkillTypeId");
+            
+            migrationBuilder.Sql(@"INSERT INTO public.""SkillLevelDescriptionMapping"" (""SkillLevelId"", ""SkillTypeId"", ""Description"") 
+SELECT
+	sl.""Id"" AS skill_level_id,
+	st.""Id"" AS skill_type_id,
+    'This is a description of the level type in regards to the skill' AS skill_type_description
+FROM public.""SkillLevel"" sl
+CROSS JOIN public.""SkillType"" st;");
         }
 
         /// <inheritdoc />

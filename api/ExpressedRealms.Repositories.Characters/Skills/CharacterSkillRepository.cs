@@ -59,7 +59,7 @@ internal sealed class CharacterSkillRepository(
     public async Task<List<SkillLevelOptionsDto>> GetSkillLevelValuesForSkillTypeId(int skillTypeId)
     {
         var descriptions = await context.SkillLevelDescriptionMappings.AsNoTracking()
-            .Where(x => x.SkillLevelId == skillTypeId)
+            .Where(x => x.SkillTypeId == skillTypeId)
             .Select(x => new SkillLevelOptionsDto()
             {
                 SkillTypeId = x.SkillTypeId,
