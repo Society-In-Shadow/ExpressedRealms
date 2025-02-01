@@ -1,6 +1,8 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Models.Skills;
 using ExpressedRealms.Repositories.Characters.Skills.DTOs;
+using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
+using FluentResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Repositories.Characters.Skills;
@@ -84,8 +86,21 @@ internal sealed class CharacterSkillRepository(
             description.Benefits = benefits.Where(x => x.LevelId == description.LevelId).ToList();
         }
 
-        // TODO: Add overall class that will keep track of current XP expenditure, maybe
         return descriptions;
+    }
+    
+    public async Task<Result> UpdateSkillLevel(EditCharacterSkillMappingDto dto)
+    {
+        var characterSkill = await context.CharacterSkillsMappings.FirstOrDefaultAsync(x =>
+            x.CharacterId == dto.CharacterId && x.SkillTypeId == dto.SkillTypeId, cancellationToken);
 
+        if (characterSkill is null)
+            return Result.Fail(new NotFoundFailure("Character Skill Mapping"));
+        
+        characterSkill.SkillLevelId = dto.SkillLevelId;
+        
+        await context.SaveChangesAsync(cancellationToken);
+        
+        return Result.Ok();
     }
 }
