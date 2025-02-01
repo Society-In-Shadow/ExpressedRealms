@@ -334,7 +334,7 @@ internal static class CharacterEndPoints
                                 Description = x.Description,
                                 SkillSubTypeId = x.SkillSubTypeId,
                                 Name = x.Name,
-                                LevelDescription = x.Description,
+                                LevelDescription = x.LevelDescription,
                                 LevelId = x.LevelId,
                                 LevelName = x.LevelName,
                                 SkillTypeId = x.SkillTypeId,
