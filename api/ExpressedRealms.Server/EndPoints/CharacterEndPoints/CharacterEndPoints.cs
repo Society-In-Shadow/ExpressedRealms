@@ -322,15 +322,18 @@ internal static class CharacterEndPoints
             .RequireAuthorization();
 
         endpointGroup
-            .MapGet("{characterId}/skills",
-                [Authorize] async Task<Results<NotFound, ValidationProblem, Ok<List<CharacterSkillsResponse>>>> (
-                    int characterId,
-                    ICharacterSkillRepository repository) =>
+            .MapGet(
+                "{characterId}/skills",
+                [Authorize]
+                async Task<
+                    Results<NotFound, ValidationProblem, Ok<List<CharacterSkillsResponse>>>
+                > (int characterId, ICharacterSkillRepository repository) =>
                 {
                     var results = await repository.GetCharacterSkills(characterId);
 
                     return TypedResults.Ok(
-                        results.Select(x => new CharacterSkillsResponse()
+                        results
+                            .Select(x => new CharacterSkillsResponse()
                             {
                                 Description = x.Description,
                                 SkillSubTypeId = x.SkillSubTypeId,
@@ -339,51 +342,61 @@ internal static class CharacterEndPoints
                                 LevelId = x.LevelId,
                                 LevelName = x.LevelName,
                                 SkillTypeId = x.SkillTypeId,
-                                Benefits = x.Benefits.Select(y => new BenefitItemResponse()
-                                {
-                                    Name = y.Name,
-                                    Description = y.Description,
-                                    Modifier = y.Modifier,
-                                    LevelId = y.LevelId,
-                                }).ToList()
+                                Benefits = x
+                                    .Benefits.Select(y => new BenefitItemResponse()
+                                    {
+                                        Name = y.Name,
+                                        Description = y.Description,
+                                        Modifier = y.Modifier,
+                                        LevelId = y.LevelId,
+                                    })
+                                    .ToList(),
                             })
-                            .ToList());
-
-                })
-            .WithSummary("Returns both the basic and detailed info needed for displaying the skills")
+                            .ToList()
+                    );
+                }
+            )
+            .WithSummary(
+                "Returns both the basic and detailed info needed for displaying the skills"
+            )
             .RequireAuthorization();
-        
+
         endpointGroup
-            .MapGet("{characterId}/skills/{skillTypeId}",
-                [Authorize] async Task<Results<NotFound, ValidationProblem, Ok<List<CharacterSkillOptionsResponse>>>> (
-                    int characterId,
-                    int skillTypeId,
-                    ICharacterSkillRepository repository) =>
+            .MapGet(
+                "{characterId}/skills/{skillTypeId}",
+                [Authorize]
+                async Task<
+                    Results<NotFound, ValidationProblem, Ok<List<CharacterSkillOptionsResponse>>>
+                > (int characterId, int skillTypeId, ICharacterSkillRepository repository) =>
                 {
                     var results = await repository.GetSkillLevelValuesForSkillTypeId(skillTypeId);
 
                     return TypedResults.Ok(
-                        results.Select(x => new CharacterSkillOptionsResponse()
+                        results
+                            .Select(x => new CharacterSkillOptionsResponse()
                             {
                                 Description = x.Description,
                                 Name = x.Name,
                                 LevelId = x.LevelId,
                                 SkillTypeId = x.SkillTypeId,
                                 ExperienceCost = x.ExperienceCost,
-                                Benefits = x.Benefits.Select(y => new BenefitItemResponse()
-                                {
-                                    Name = y.Name,
-                                    Description = y.Description,
-                                    Modifier = y.Modifier,
-                                    LevelId = y.LevelId,
-                                }).ToList()
+                                Benefits = x
+                                    .Benefits.Select(y => new BenefitItemResponse()
+                                    {
+                                        Name = y.Name,
+                                        Description = y.Description,
+                                        Modifier = y.Modifier,
+                                        LevelId = y.LevelId,
+                                    })
+                                    .ToList(),
                             })
-                            .ToList());
-
-                })
+                            .ToList()
+                    );
+                }
+            )
             .WithSummary("Returns all available levels for the given skill type")
             .RequireAuthorization();
-        
+
         endpointGroup
             .MapPut(
                 "{characterId}/skill/{statTypeId}",

@@ -11,12 +11,11 @@ internal sealed class CharacterSkillRepository(
     ExpressedRealmsDbContext context,
     EditCharacterSkillMappingDtoValidator editCharacterSkillMappingDtoValidator,
     CancellationToken cancellationToken
-    ) : ICharacterSkillRepository
+) : ICharacterSkillRepository
 {
     public async Task AddDefaultSkills(int characterId)
     {
-        var availableSkills = await context.SkillTypes.AsNoTracking()
-            .ToListAsync();
+        var availableSkills = await context.SkillTypes.AsNoTracking().ToListAsync();
 
         var characterSkills = availableSkills.Select(x => new CharacterSkillsMapping()
         {
@@ -26,13 +25,14 @@ internal sealed class CharacterSkillRepository(
         });
 
         context.CharacterSkillsMappings.AddRange(characterSkills);
-        
+
         await context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<List<SkillDto>> GetCharacterSkills(int characterId)
     {
-        return await context.CharacterSkillsMappings.AsNoTracking()
+        return await context
+            .CharacterSkillsMappings.AsNoTracking()
             .Where(x => x.CharacterId == characterId)
             .Select(x => new SkillDto()
             {
@@ -42,24 +42,29 @@ internal sealed class CharacterSkillRepository(
                 Name = x.SkillType.Name,
                 LevelId = x.SkillLevelId,
                 LevelName = x.SkillLevel.Name,
-                LevelDescription = x.SkillType.CharacterLevelDescriptions.First(y => y.SkillLevelId == x.SkillLevelId).Description,
-                Benefits = x.SkillType.SkillLevelBenefits
-                    .Where(y => y.SkillLevelId == x.SkillLevelId)
+                LevelDescription = x
+                    .SkillType.CharacterLevelDescriptions.First(y =>
+                        y.SkillLevelId == x.SkillLevelId
+                    )
+                    .Description,
+                Benefits = x
+                    .SkillType.SkillLevelBenefits.Where(y => y.SkillLevelId == x.SkillLevelId)
                     .Select(y => new BenefitDto()
                     {
                         LevelId = y.SkillLevelId,
                         Name = y.ModifierType.Name,
                         Description = y.ModifierType.Description,
-                        Modifier = y.Modifier
+                        Modifier = y.Modifier,
                     })
-                    .ToList()
+                    .ToList(),
             })
             .ToListAsync(cancellationToken);
     }
 
     public async Task<List<SkillLevelOptionsDto>> GetSkillLevelValuesForSkillTypeId(int skillTypeId)
     {
-        var descriptions = await context.SkillLevelDescriptionMappings.AsNoTracking()
+        var descriptions = await context
+            .SkillLevelDescriptionMappings.AsNoTracking()
             .Where(x => x.SkillTypeId == skillTypeId)
             .Select(x => new SkillLevelOptionsDto()
             {
@@ -67,20 +72,21 @@ internal sealed class CharacterSkillRepository(
                 Name = x.SkillLevel.Name,
                 Description = x.Description,
                 LevelId = x.SkillLevelId,
-                ExperienceCost = x.SkillLevel.XP
+                ExperienceCost = x.SkillLevel.XP,
             })
             .ToListAsync(cancellationToken);
 
-        var benefits = await context.SkillLevelBenefits.AsNoTracking()
+        var benefits = await context
+            .SkillLevelBenefits.AsNoTracking()
             .Where(x => x.SkillTypeId == skillTypeId)
             .Select(x => new BenefitDto()
             {
                 LevelId = x.SkillLevelId,
                 Name = x.ModifierType.Name,
                 Description = x.ModifierType.Description,
-                Modifier = x.Modifier
-            }).ToListAsync(cancellationToken);
-
+                Modifier = x.Modifier,
+            })
+            .ToListAsync(cancellationToken);
 
         foreach (var description in descriptions)
         {
@@ -89,23 +95,28 @@ internal sealed class CharacterSkillRepository(
 
         return descriptions;
     }
-    
+
     public async Task<Result> UpdateSkillLevel(EditCharacterSkillMappingDto dto)
     {
-        var result = await editCharacterSkillMappingDtoValidator.ValidateAsync(dto, cancellationToken);
+        var result = await editCharacterSkillMappingDtoValidator.ValidateAsync(
+            dto,
+            cancellationToken
+        );
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
-        
-        var characterSkill = await context.CharacterSkillsMappings.FirstOrDefaultAsync(x =>
-            x.CharacterId == dto.CharacterId && x.SkillTypeId == dto.SkillTypeId, cancellationToken);
+
+        var characterSkill = await context.CharacterSkillsMappings.FirstOrDefaultAsync(
+            x => x.CharacterId == dto.CharacterId && x.SkillTypeId == dto.SkillTypeId,
+            cancellationToken
+        );
 
         if (characterSkill is null)
             return Result.Fail(new NotFoundFailure("Character Skill Mapping"));
-        
+
         characterSkill.SkillLevelId = dto.SkillLevelId;
-        
+
         await context.SaveChangesAsync(cancellationToken);
-        
+
         return Result.Ok();
     }
 }
