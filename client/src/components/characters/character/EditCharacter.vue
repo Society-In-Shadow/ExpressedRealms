@@ -15,6 +15,7 @@ import Breadcrumb from 'primevue/breadcrumb';
 import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
 import DropdownInfoWrapper from "@/FormWrappers/DropdownInfoWrapper.vue";
 import {makeIdSafe} from "@/utilities/stringUtilities";
+import SkillTile from "@/components/characters/character/SkillTile.vue";
 
 interface Faction{
   id: number,
@@ -103,7 +104,7 @@ let expressionRedirectURL = computed(() => {
       </a>
     </template>
   </Breadcrumb>
-  <div class="flex flex-xs-column flex-sm-column flex-lg-row flex-md-row gap-3 m-1 m-sm-3 m-md-3 m-lg-3 m-xl-3">
+  <div class="flex flex-xs-column flex-sm-column flex-lg-row flex-md-row gap-3 m-1 m-sm-3 m-md-3 m-lg-3 m-xl-3 flex-wrap">
     <Card class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="width: 390px">
       <template #content>
         <form @submit="onSubmit">
@@ -122,6 +123,8 @@ let expressionRedirectURL = computed(() => {
         <SmallStatDisplay />
       </template>
     </Card>
+
+    <SkillTile />
   </div>
 </template>
 
