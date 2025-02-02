@@ -1,3 +1,5 @@
+import type {BenefitItemResponse} from "@/components/characters/character/interfaces/BenefitItemResponse";
+
 export interface CharacterSkillsResponse {
     skillTypeId: number;
     name: string;

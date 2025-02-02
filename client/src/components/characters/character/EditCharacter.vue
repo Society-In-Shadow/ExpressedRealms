@@ -15,7 +15,7 @@ import Breadcrumb from 'primevue/breadcrumb';
 import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
 import DropdownInfoWrapper from "@/FormWrappers/DropdownInfoWrapper.vue";
 import {makeIdSafe} from "@/utilities/stringUtilities";
-import SkillTile from "@/components/characters/character/SkillTile.vue";
+import SkillTile from "@/components/characters/character/skills/SkillTile.vue";
 
 interface Faction{
   id: number,
