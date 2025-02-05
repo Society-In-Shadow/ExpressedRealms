@@ -10,4 +10,5 @@ public class CharacterSkillsResponse
     public string LevelDescription { get; set; } = null!;
     public byte SkillSubTypeId { get; set; }
     public List<BenefitItemResponse> Benefits { get; set; } = new();
+    public int XP { get; set; }
 }

@@ -338,19 +338,10 @@ internal static class CharacterEndPoints
                                 Description = x.Description,
                                 SkillSubTypeId = x.SkillSubTypeId,
                                 Name = x.Name,
-                                LevelDescription = x.LevelDescription,
+                                SkillTypeId = x.SkillTypeId,
                                 LevelId = x.LevelId,
                                 LevelName = x.LevelName,
-                                SkillTypeId = x.SkillTypeId,
-                                Benefits = x
-                                    .Benefits.Select(y => new BenefitItemResponse()
-                                    {
-                                        Name = y.Name,
-                                        Description = y.Description,
-                                        Modifier = y.Modifier,
-                                        LevelId = y.LevelId,
-                                    })
-                                    .ToList(),
+                                XP = x.XP
                             })
                             .ToList()
                     );

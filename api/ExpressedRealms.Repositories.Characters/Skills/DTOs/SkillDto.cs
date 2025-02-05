@@ -9,5 +9,5 @@ public class SkillDto
     public string LevelName { get; set; } = null!;
     public string LevelDescription { get; set; } = null!;
     public byte SkillSubTypeId { get; set; }
-    public List<BenefitDto> Benefits { get; set; } = new();
+    public int XP { get; set; }
 }

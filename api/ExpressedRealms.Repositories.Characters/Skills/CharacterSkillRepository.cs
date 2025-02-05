@@ -42,21 +42,12 @@ internal sealed class CharacterSkillRepository(
                 Name = x.SkillType.Name,
                 LevelId = x.SkillLevelId,
                 LevelName = x.SkillLevel.Name,
+                XP = x.SkillLevel.XP,
                 LevelDescription = x
                     .SkillType.CharacterLevelDescriptions.First(y =>
                         y.SkillLevelId == x.SkillLevelId
                     )
-                    .Description,
-                Benefits = x
-                    .SkillType.SkillLevelBenefits.Where(y => y.SkillLevelId == x.SkillLevelId)
-                    .Select(y => new BenefitDto()
-                    {
-                        LevelId = y.SkillLevelId,
-                        Name = y.ModifierType.Name,
-                        Description = y.ModifierType.Description,
-                        Modifier = y.Modifier,
-                    })
-                    .ToList(),
+                    .Description
             })
             .ToListAsync(cancellationToken);
     }

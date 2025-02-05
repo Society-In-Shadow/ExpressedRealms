@@ -8,5 +8,5 @@ export interface CharacterSkillsResponse {
     levelName: string;
     levelDescription: string;
     skillSubTypeId: number;
-    benefits: BenefitItemResponse[];
+    xp: number;
 }
