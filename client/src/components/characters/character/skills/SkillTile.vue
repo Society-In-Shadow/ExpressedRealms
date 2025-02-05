@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import Card from "primevue/card";
-import {onMounted, ref, type Ref} from "vue";
+import {computed, onMounted, ref, type Ref} from "vue";
 import { useRoute } from 'vue-router'
 const route = useRoute()
 
@@ -16,6 +16,11 @@ import EditSkillDetail from "@/components/characters/character/skills/EditSkillD
 
 const offensiveSkills:Ref<Array<CharacterSkillsResponse>> = ref([]);
 const defensiveSkills:Ref<Array<CharacterSkillsResponse>> = ref([]);
+const showEdit = ref(false);
+const maxXP = 28;
+const appliedXp = ref(0);
+
+const remainingXP = computed(() => maxXP - appliedXp.value);
 
 const skillTypes = ref([
   { name: "Offensive Skills",  skills: offensiveSkills },
@@ -31,7 +36,13 @@ function getEditOptions() {
       .then((response) => {
         offensiveSkills.value = response.data.filter((x: CharacterSkillsResponse) => x.skillSubTypeId === 1);
         defensiveSkills.value = response.data.filter((x: CharacterSkillsResponse) => x.skillSubTypeId === 2);
+        appliedXp.value = response.data.reduce((sum: number, item: CharacterSkillsResponse) => sum + item.xp, 0);
       })
+}
+
+function toggleEdit() 
+{
+  showEdit.value = !showEdit.value;
 }
 
 </script>
@@ -39,7 +50,7 @@ function getEditOptions() {
 <template>
   
   <Card v-for="skillType in skillTypes" class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="width: 25em">
-    <template #title>{{skillType.name}}</template>
+    <template #title>{{skillType.name}} <span>- {{remainingXP}} EXP</span></template>
     <template #content>
       <Accordion :value="[]" multiple :lazy="true" expandIcon="pi pi-info-circle" collapseIcon="pi pi-times-circle">
         <AccordionPanel v-for="skill in skillType.skills" :key="skill.name" :value="skill.skillTypeId">
@@ -51,7 +62,7 @@ function getEditOptions() {
           </AccordionHeader>
           <AccordionContent>
             <p class="m-0">{{ skill.description}}</p>
-            <EditSkillDetail :skill-type-id="skill.skillTypeId" :selected-level-id="skill.levelId"/>
+            <EditSkillDetail :skill-type-id="skill.skillTypeId" :selected-level-id="skill.levelId" @update-level="getEditOptions()" @edit-toggle="toggleEdit()"/>
           </AccordionContent>
         </AccordionPanel>
       </Accordion>
