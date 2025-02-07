@@ -49,6 +49,7 @@ internal sealed class CharacterSkillRepository(
                     )
                     .Description
             })
+            .OrderBy(x => x.SkillTypeId)
             .ToListAsync(cancellationToken);
     }
 

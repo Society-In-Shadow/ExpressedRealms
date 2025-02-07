@@ -57,7 +57,7 @@ public class EditCharacterSkillMappingDtoValidator : AbstractValidator<EditChara
                         cancellationToken
                     );
 
-                    return currentSpentXp + newSkillLevelXp.XP < 28;
+                    return currentSpentXp + newSkillLevelXp.XP <= 28;
                 }
             )
             .WithMessage("Not enough XP to level up.");
