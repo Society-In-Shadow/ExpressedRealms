@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {onMounted, ref, type Ref} from "vue";
+import {computed, onMounted, ref, type Ref} from "vue";
 import axios from "axios";
 import type {SkillResponse} from "@/components/characters/character/skills/interfaces/SkillOptionsResponse";
 
@@ -19,13 +19,14 @@ import { useRoute } from 'vue-router'
 import SkillDetail from "@/components/characters/character/skills/SkillDetail.vue";
 import Listbox from "primevue/listbox";
 import toasters from "@/services/Toasters";
+import {skillStore} from "@/components/characters/character/skills/Stores/skillStore";
 const route = useRoute()
 
 const skillLevels:Ref<Array<SkillResponse>> = ref([]);
 const isLoading = ref(true);
 const showOptions = ref(false);
 
-
+const skillInfo = skillStore()
 const oldValue = ref(props.selectedLevelId);
 const selectedItem = ref(props.selectedLevelId);
 
@@ -48,12 +49,17 @@ function getEditOptions() {
         skillLevels.value = response.data;
         isLoading.value = false;
         oldValue.value = props.selectedLevelId;
-        selectedItem.value = props.selectedLevelId;
+        selectedItem.value = props.selectedLevelId;      
       })
 }
 
+const currentXP = computed(() => {
+  return skillLevels.value.find(x => x.levelId === selectedItem.value)?.experienceCost ?? 0;
+});
+
 function toggleEditOptions() {
   showOptions.value = true;
+  skillInfo.showExperience = !skillInfo.showExperience;
   emit("editToggle");
 }
 
@@ -63,6 +69,7 @@ function handleStatUpdate(skill:SkillResponse){
   {
     selectedItem.value  = oldValue.value;
     showOptions.value = !showOptions.value;
+    skillInfo.showExperience = !skillInfo.showExperience;
     return;
   }
 
@@ -75,7 +82,7 @@ function handleStatUpdate(skill:SkillResponse){
     showOptions.value = !showOptions.value;
     
     var levelInfo = getSelectedLevelInformation();
-
+    skillInfo.showExperience = !skillInfo.showExperience;
     emit("updateLevel");
     
     toasters.success("Successfully updated to level " + levelInfo.name);
@@ -97,7 +104,7 @@ function handleStatUpdate(skill:SkillResponse){
                :options="skillLevels" option-value="levelId" option-disabled="disabled"
                 @change="handleStatUpdate(selectedItem)">
         <template #option="slotProps">
-          <SkillDetail :is-loading="isLoading" :selected-item="slotProps.option"/>
+          <SkillDetail :is-loading="isLoading" :selected-item="slotProps.option" :current-xp-level="currentXP"/>
         </template>
       </Listbox>
     </div>
