@@ -53,8 +53,7 @@ jobs:
           push: true
           tags: noremacskich/expressedrealms-frontend:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: |
-            API_SERVER_LOCATION=${{ secrets.API_SERVER_LOCATION }}
+          build-args: API_SERVER_LOCATION=${{ secrets.API_SERVER_LOCATION }}
       
       
       
