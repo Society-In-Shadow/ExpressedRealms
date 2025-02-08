@@ -5,13 +5,6 @@ FROM node:20 as build-stage
 # so setting it to production here, and overriding it locally.  See #147
 ARG MODE=production
 
-# Declare build argument
-ARG API_SERVER_LOCATION
-ENV API_SERVER_LOCATION=$API_SERVER_LOCATION
-
-#ARG COOKIE_DOMAIN_NAME
-#ENV COOKIE_DOMAIN_NAME=$COOKIE_DOMAIN_NAME
-
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
@@ -23,10 +16,6 @@ FROM nginx:stable-alpine as production-stage
 
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 COPY nginx.conf.template /etc/nginx/nginx.conf.template
-
-RUN envsubst '${API_SERVER_LOCATION}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
-
-RUN cat /etc/nginx/nginx.conf
 
 RUN chown -R nginx:nginx /var/cache/nginx && \
         chown -R nginx:nginx /var/log/nginx && \
