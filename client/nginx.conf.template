@@ -1,23 +1,22 @@
-http {
-    # HTTP server block for redirection
-    server {
-        listen 3000;
-        server_name localhost;
-        include /etc/nginx/mime.types;
-        
-        # Serve static files and handle client-side routing
-        location / {
-            root /usr/share/nginx/html;
-            try_files $uri $uri/ /index.html;
-        }
+
+# HTTP server block for redirection
+server {
+    listen 3000;
+    server_name localhost;
+    include /etc/nginx/mime.types;
     
-        # Proxy pass for API endpoints (if you have them)
-        location /api/ {
-            proxy_pass ${API_SERVER_LOCATION}; # Replace with your backend service URL
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-        }
+    # Serve static files and handle client-side routing
+    location / {
+        root /usr/share/nginx/html;
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Proxy pass for API endpoints (if you have them)
+    location /api/ {
+        proxy_pass ${API_SERVER_LOCATION}; # Replace with your backend service URL
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
     }
 }
