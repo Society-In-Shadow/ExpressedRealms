@@ -1,7 +1,3 @@
-# nginx.conf
-events {
-    # Empty events block
-}
 http {
     # HTTP server block for redirection
     server {
