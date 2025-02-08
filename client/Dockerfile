@@ -23,6 +23,8 @@ COPY nginx.conf.template /etc/nginx/nginx.conf.template
 
 RUN envsubst '${API_SERVER_LOCATION}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
 
+RUN cat /etc/nginx/nginx.conf
+
 RUN chown -R nginx:nginx /var/cache/nginx && \
         chown -R nginx:nginx /var/log/nginx && \
         chown -R nginx:nginx /etc/nginx/conf.d
