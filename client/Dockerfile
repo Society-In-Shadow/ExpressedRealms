@@ -9,9 +9,8 @@ ARG MODE=production
 ARG API_SERVER_LOCATION
 ENV API_SERVER_LOCATION=$API_SERVER_LOCATION
 
-# Set the environment variable for Vite mode
-COPY .env.development /usr/share/nginx/html
-COPY .env.production /usr/share/nginx/html
+#ARG COOKIE_DOMAIN_NAME
+#ENV COOKIE_DOMAIN_NAME=$COOKIE_DOMAIN_NAME
 
 WORKDIR /app
 COPY package*.json ./
