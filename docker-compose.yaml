@@ -17,7 +17,8 @@ services:
       - VITE_HTTPS_KEY=/https/key.pem
       - VITE_HTTPS_CERT=/https/cert.pem
       - VITE_PORT=443
-      - VITE_API_BASE_URL=https://localhost:5001/
+      - VITE_API_SERVER_LOCATION=https://localhost/
+      - VITE_COOKIE_DOMAIN_NAME=.localhost
     volumes:
       - ./client/:/app:z # This is only here to allow automatic updates on local machines as you are editing the code
       - ${USERPROFILE}/.aspnet/https:/https:z # Host Certificate Location (key.pem/cert.pem) : Image Path
