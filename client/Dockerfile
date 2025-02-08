@@ -21,6 +21,8 @@ FROM nginx:stable-alpine as production-stage
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf  
 
+RUN envsubst '${API_SERVER_LOCATION}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
+
 RUN chown -R nginx:nginx /var/cache/nginx && \
         chown -R nginx:nginx /var/log/nginx && \
         chown -R nginx:nginx /etc/nginx/conf.d
