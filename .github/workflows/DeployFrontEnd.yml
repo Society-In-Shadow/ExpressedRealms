@@ -80,4 +80,4 @@ jobs:
           imageToDeploy: ${{ vars.EXPRESSEDREALMSFRONTEND_REGISTRY_URL }}/noremacskich/expressedrealms-frontend:${{ github.sha }}
           containerAppName: ca-expressedrealms-frontend
           resourceGroup: RG_ExpressedRealms
-          environmentVariables: API_SERVER_LOCATION=secretref:api-server-location
+          environmentVariables: API_SERVER_LOCATION=secretref:api-server-location COOKIE_DOMAIN_NAME=secretref:cookie-domain-name
