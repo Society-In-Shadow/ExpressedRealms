@@ -53,8 +53,8 @@ jobs:
           push: true
           tags: noremacskich/expressedrealms-frontend:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
-      
-      #      - name: Generate artifact attestation
+
+#      - name: Generate artifact attestation
 #        uses: actions/attest-build-provenance@v1
 #        with:
 #          subject-name: noremacskich/expressedrealms-frontend
@@ -77,4 +77,4 @@ jobs:
           imageToDeploy: ${{ vars.EXPRESSEDREALMSFRONTEND_REGISTRY_URL }}/noremacskich/expressedrealms-frontend:${{ github.sha }}
           containerAppName: ca-expressedrealms-frontend
           resourceGroup: RG_ExpressedRealms
-          environmentVariables: VITE_API_SERVER_LOCATION=secretref:api-server-location VITE_COOKIE_DOMAIN_NAME=secretref:cookie-domain-name
+          

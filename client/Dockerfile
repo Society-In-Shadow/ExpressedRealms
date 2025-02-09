@@ -5,6 +5,8 @@ FROM node:20 as build-stage
 # so setting it to production here, and overriding it locally.  See #147
 ARG MODE=production
 
+COPY .env.production /usr/share/nginx/html
+
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
