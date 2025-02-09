@@ -16,8 +16,8 @@ on:
     branches: [main]
     paths:
       - 'client/**'
-  pull_request:
-    branches: [main]
+  #pull_request:
+  #  branches: [main]
 
 jobs:
   push_to_registry:
