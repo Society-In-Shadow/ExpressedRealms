@@ -96,9 +96,6 @@ router.beforeEach(async (to) => {
     const routeName:string = to.name as string;
     const canCauseInfiniteRedirects = anonymousEndpoints.includes(routeName)
     
-    console.log("Server Location" + import.meta.env.VITE_API_SERVER_LOCATION)
-    console.log("Cookie Name" + import.meta.env.VITE_COOKIE_DOMAIN_NAME)
-    
     if (!loggedIn && !canCauseInfiniteRedirects) {
         return  { name: 'Login' };
     }
