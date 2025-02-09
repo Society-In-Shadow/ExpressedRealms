@@ -7,8 +7,8 @@ import "primeicons/fonts/primeicons.woff"
 import "primeicons/fonts/primeicons.woff2"
 import "primeflex/primeflex.css"
 
-import 'bootstrap/scss/bootstrap-utilities.scss'
-import 'bootstrap/scss/bootstrap-grid.scss'
+import "bootstrap/dist/css/bootstrap-grid.css";
+import "bootstrap/dist/css/bootstrap-utilities.css";
 import App from "@/App.vue";
 import Ripple from 'primevue/ripple';
 import piniaPluginPersistedState from "pinia-plugin-persistedstate"
