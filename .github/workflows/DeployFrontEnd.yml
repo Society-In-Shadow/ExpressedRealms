@@ -53,9 +53,6 @@ jobs:
           push: true
           tags: noremacskich/expressedrealms-frontend:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: API_SERVER_LOCATION=${{ secrets.API_SERVER_LOCATION }}
-      
-      
       
       #      - name: Generate artifact attestation
 #        uses: actions/attest-build-provenance@v1
