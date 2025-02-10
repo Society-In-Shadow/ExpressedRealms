@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {computed, onMounted, ref, type Ref} from "vue";
+import {watch, computed, onMounted, ref, type Ref} from "vue";
 import axios from "axios";
 import type {SkillResponse} from "@/components/characters/character/skills/interfaces/SkillOptionsResponse";
 
@@ -42,6 +42,11 @@ const emit = defineEmits<{
   updateLevel: [],
   editToggle: []
 }>();
+
+watch(() => props.remainingXp, (newValue, oldValue) => {
+  getEditOptions()
+});
+
 
 onMounted(() =>{
   getEditOptions();
