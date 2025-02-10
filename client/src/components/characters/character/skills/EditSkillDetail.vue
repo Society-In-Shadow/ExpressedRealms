@@ -110,19 +110,19 @@ function handleStatUpdate(skill:SkillResponse){
   <div class="row pt-3">
     <div class="col p-0 m-0">
       <div v-if="!showOptions || skillInfo.editSkillTypeId != props.skillTypeId" class="p-listbox p-3" style="cursor: pointer;" @click="toggleEditOptions()">
-        <SkillDetail :is-loading="isLoading" :selected-item="getSelectedLevelInformation()" :showcase-only="true" scroll-height="30em"/>
+        <SkillDetail :is-loading="isLoading" :selected-item="getSelectedLevelInformation()" :showcase-only="true" scroll-height="30em" />
       </div>
-      <Listbox v-else v-model="selectedItem" 
-               :options="skillLevels" option-value="levelId" option-disabled="disabled"
-                @change="handleStatUpdate(selectedItem)">
+      <Listbox
+        v-else v-model="selectedItem" 
+        :options="skillLevels" option-value="levelId" option-disabled="disabled"
+        @change="handleStatUpdate(selectedItem)"
+      >
         <template #option="slotProps">
-          <SkillDetail :is-loading="isLoading" :selected-item="slotProps.option" :current-xp-level="currentXP"/>
+          <SkillDetail :is-loading="isLoading" :selected-item="slotProps.option" :current-xp-level="currentXP" />
         </template>
       </Listbox>
     </div>
   </div>
-
-  
 </template>
 
 <style>

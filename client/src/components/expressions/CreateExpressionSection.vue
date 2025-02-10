@@ -42,7 +42,6 @@ function reset(){
 
 function loadSectionInfo(){
   if(!showOptionLoader.value) return; // Don't load in 2nd time
-  console.log('expressionid' + expressionInfo.currentExpressionId);
   axios.get(`/expressionSubSections/${expressionInfo.currentExpressionId}/0/options`)
       .then(async (response) => {
         sectionTypeOptions.value = response.data.sectionTypes;

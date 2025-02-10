@@ -46,30 +46,36 @@ function getEditOptions() {
 </script>
 
 <template>
-  
   <Card v-for="skillType in skillTypes" class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="width: 25em">
     <template #title>
       <div class="row">
-        <div class="col">{{skillType.name}}</div>
-        <div class="col text-right" v-if="skillInfo.showExperience">{{remainingXP}} EXP</div>
+        <div class="col">
+          {{ skillType.name }}
+        </div>
+        <div v-if="skillInfo.showExperience" class="col text-right">
+          {{ remainingXP }} EXP
+        </div>
       </div>
     </template>
     <template #content>
-      <Accordion :value="openItems" multiple :lazy="true" expandIcon="pi pi-info-circle" collapseIcon="pi pi-times-circle">
+      <Accordion :value="openItems" multiple :lazy="true" expand-icon="pi pi-info-circle" collapse-icon="pi pi-times-circle">
         <AccordionPanel v-for="skill in skillType.skills" :key="skill.name" :value="skill.skillTypeId">
           <AccordionHeader>  
             <div class="d-flex justify-content-between w-100 pr-3">
-              <div>{{skill.name}}</div>
-              <div class="text-right">{{skill.levelName}}</div>
+              <div>{{ skill.name }}</div>
+              <div class="text-right">
+                {{ skill.levelName }}
+              </div>
             </div>
           </AccordionHeader>
           <AccordionContent>
-            <p class="m-0">{{ skill.description}}</p>
-            <EditSkillDetail :skill-type-id="skill.skillTypeId" :selected-level-id="skill.levelId" @update-level="getEditOptions()" :remaining-xp="remainingXP"/>
+            <p class="m-0">
+              {{ skill.description }}
+            </p>
+            <EditSkillDetail :skill-type-id="skill.skillTypeId" :selected-level-id="skill.levelId" :remaining-xp="remainingXP" @update-level="getEditOptions()" />
           </AccordionContent>
         </AccordionPanel>
       </Accordion>
     </template>
   </Card>
-
 </template>
