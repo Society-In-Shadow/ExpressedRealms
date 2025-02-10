@@ -341,7 +341,7 @@ internal static class CharacterEndPoints
                                 SkillTypeId = x.SkillTypeId,
                                 LevelId = x.LevelId,
                                 LevelName = x.LevelName,
-                                XP = x.XP
+                                XP = x.XP,
                             })
                             .ToList()
                     );

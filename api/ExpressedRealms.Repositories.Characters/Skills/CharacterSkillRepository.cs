@@ -47,7 +47,7 @@ internal sealed class CharacterSkillRepository(
                     .SkillType.CharacterLevelDescriptions.First(y =>
                         y.SkillLevelId == x.SkillLevelId
                     )
-                    .Description
+                    .Description,
             })
             .OrderBy(x => x.SkillTypeId)
             .ToListAsync(cancellationToken);
