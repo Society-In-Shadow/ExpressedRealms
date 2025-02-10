@@ -15,8 +15,10 @@ const props = defineProps({
     required: true
   },
   currentXpLevel:{
-    type: Number,
-    required: true
+    type: Number
+  },
+  showcaseOnly:{
+    type: Boolean
   }
 });
 
@@ -39,7 +41,7 @@ const plusOrMinusSign = computed(() => {
           </SkeletonWrapper>
         </div>
       </div>
-      <div v-if="skillInfo.showExperience" class="col text-right">
+      <div v-if="skillInfo.showExperience && !props.showcaseOnly" class="col text-right">
         <div class="mb-2">
           XP
         </div>

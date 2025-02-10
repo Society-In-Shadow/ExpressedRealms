@@ -59,7 +59,8 @@ const currentXP = computed(() => {
 
 function toggleEditOptions() {
   showOptions.value = true;
-  skillInfo.showExperience = !skillInfo.showExperience;
+  skillInfo.editSkillTypeId = props.skillTypeId;
+  skillInfo.showExperience = true;
   emit("editToggle");
 }
 
@@ -68,8 +69,9 @@ function handleStatUpdate(skill:SkillResponse){
   if(selectedItem.value == undefined)
   {
     selectedItem.value  = oldValue.value;
-    showOptions.value = !showOptions.value;
-    skillInfo.showExperience = !skillInfo.showExperience;
+    showOptions.value = false;
+    skillInfo.showExperience = false;
+    skillInfo.editSkillTypeId = 0;
     return;
   }
 
@@ -79,10 +81,11 @@ function handleStatUpdate(skill:SkillResponse){
     skillLevelId: selectedItem.value
   }).then(function(){
     oldValue.value = selectedItem.value;
-    showOptions.value = !showOptions.value;
+    showOptions.value = false;
     
     var levelInfo = getSelectedLevelInformation();
-    skillInfo.showExperience = !skillInfo.showExperience;
+    skillInfo.showExperience = false;
+    skillInfo.editSkillTypeId = 0;
     emit("updateLevel");
     
     toasters.success("Successfully updated to level " + levelInfo.name);
@@ -97,8 +100,8 @@ function handleStatUpdate(skill:SkillResponse){
 <template>
   <div class="row pt-3">
     <div class="col p-0 m-0">
-      <div v-if="!showOptions" class="p-listbox p-3" style="cursor: pointer;" @click="toggleEditOptions()">
-        <SkillDetail :is-loading="isLoading" :selected-item="getSelectedLevelInformation()" scroll-height="30em"/>
+      <div v-if="!showOptions || skillInfo.editSkillTypeId != props.skillTypeId" class="p-listbox p-3" style="cursor: pointer;" @click="toggleEditOptions()">
+        <SkillDetail :is-loading="isLoading" :selected-item="getSelectedLevelInformation()" :showcase-only="true" scroll-height="30em"/>
       </div>
       <Listbox v-else v-model="selectedItem" 
                :options="skillLevels" option-value="levelId" option-disabled="disabled"
