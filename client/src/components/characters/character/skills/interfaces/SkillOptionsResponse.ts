@@ -7,4 +7,5 @@ export interface SkillResponse {
   levelId: number;
   benefits: BenefitItemResponse[];
   experienceCost: number;
+  disabled: boolean;
 }

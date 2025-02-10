@@ -12,6 +12,10 @@ const props = defineProps({
   selectedLevelId:{
     type: Number,
     required: true,
+  },
+  remainingXp:{
+    type: Number,
+    required: true
   }
 });
 
@@ -47,6 +51,11 @@ function getEditOptions() {
   axios.get(`characters/${route.params.id}/skills/${props.skillTypeId}`)
       .then((response) => {
         skillLevels.value = response.data;
+
+        skillLevels.value.forEach(function(level:SkillResponse) {
+          level.disabled = level.experienceCost > props.remainingXp && level.levelId > selectedItem.value;
+        });
+        
         isLoading.value = false;
         oldValue.value = props.selectedLevelId;
         selectedItem.value = props.selectedLevelId;      

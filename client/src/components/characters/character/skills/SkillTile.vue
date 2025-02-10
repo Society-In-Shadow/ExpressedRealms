@@ -65,7 +65,7 @@ function getEditOptions() {
           </AccordionHeader>
           <AccordionContent>
             <p class="m-0">{{ skill.description}}</p>
-            <EditSkillDetail :skill-type-id="skill.skillTypeId" :selected-level-id="skill.levelId" @update-level="getEditOptions()" />
+            <EditSkillDetail :skill-type-id="skill.skillTypeId" :selected-level-id="skill.levelId" @update-level="getEditOptions()" :remaining-xp="remainingXP"/>
           </AccordionContent>
         </AccordionPanel>
       </Accordion>
