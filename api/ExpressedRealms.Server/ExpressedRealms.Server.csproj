@@ -41,6 +41,7 @@
     <ProjectReference Include="..\ExpressedRealms.Authentication\ExpressedRealms.Authentication.csproj" />
     <ProjectReference Include="..\ExpressedRealms.DB\ExpressedRealms.DB.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Email\ExpressedRealms.Email.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Repositories.Admin\ExpressedRealms.Repositories.Admin.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Repositories.Characters\ExpressedRealms.Repositories.Characters.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Repositories.Expressions\ExpressedRealms.Repositories.Expressions.csproj" />
   </ItemGroup>

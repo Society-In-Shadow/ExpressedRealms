@@ -3,6 +3,7 @@ using AspNetCore.SwaggerUI.Themes;
 using Audit.Core;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels;
+using ExpressedRealms.Repositories.Admin;
 using ExpressedRealms.Repositories.Characters;
 using ExpressedRealms.Repositories.Expressions;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
@@ -10,6 +11,7 @@ using ExpressedRealms.Server.Configuration;
 using ExpressedRealms.Server.Configuration.UserRoles;
 using ExpressedRealms.Server.DependencyInjections;
 using ExpressedRealms.Server.EndPoints;
+using ExpressedRealms.Server.EndPoints.AdminEndpoints;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints;
 using ExpressedRealms.Server.EndPoints.ExpressionEndpoints;
 using ExpressedRealms.Server.EndPoints.PlayerEndpoints;
@@ -179,6 +181,7 @@ try
     builder.Services.AddScoped<IUserContext, UserContext>();
     builder.Services.AddCharacterRepositoryInjections();
     builder.Services.AddExpressionRepositoryInjections();
+    builder.Services.AddAdminRepositoryInjections();
 
     Log.Information("Building the App");
     var app = builder.Build();
