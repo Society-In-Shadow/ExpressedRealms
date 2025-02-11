@@ -93,6 +93,15 @@ function loadList(){
         }
 
       })
+
+  axios.get("/navMenu/permissions")
+      .then(response => {
+        console.log(response.data);
+        const hasAdminPermission = response.data.hasAdminPermission;
+
+        if(hasAdminPermission)
+          items.value.push({ root: true, label: 'Admin', icon: 'pi pi-admin', subtext: 'See User List', command: () => router.push("/admin/players") })
+      });
 }
 
 onMounted(() => {

@@ -22,6 +22,25 @@ internal static class NavigationEndpoints
 
         endpointGroup
             .MapGet(
+                "/permissions",
+                async Task<Ok<PermissionResponse>> (
+                    HttpContext httpContext,
+                    IExpressionRepository repository
+                ) =>
+                {
+                    var hasAdminPolicy = await httpContext.UserHasPolicyAsync(
+                        Policies.UserManagementPolicy
+                    );
+
+                    return TypedResults.Ok(new PermissionResponse
+                        {
+                            HasAdminPermission = hasAdminPolicy,
+                        }
+                    );
+                });
+
+        endpointGroup
+            .MapGet(
                 "/expressions",
                 async Task<Ok<ExpressionMenuResponse>> (
                     HttpContext httpContext,
