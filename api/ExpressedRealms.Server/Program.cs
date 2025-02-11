@@ -259,6 +259,7 @@ try
     app.AddExpressionEndpoints();
     app.AddExpressionSubsectionEndpoints();
     app.AddStatEndPoints();
+    app.AddAdminEndPoints();
 
     app.MapFallbackToFile("/index.html");
     Log.Information("Starting Web API");
