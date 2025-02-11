@@ -10,7 +10,7 @@ public static class RoleConfiguration
         {
             using var scope = app.Services.CreateScope();
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var roles = new[] { UserRoles.ExpressionEditor };
+            var roles = new[] { UserRoles.ExpressionEditor, UserRoles.UserManagementRole };
 
             foreach (var role in roles)
             {

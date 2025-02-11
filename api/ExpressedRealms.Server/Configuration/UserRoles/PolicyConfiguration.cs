@@ -12,6 +12,11 @@ public static class PolicyConfiguration
                 Policies.ExpressionEditorPolicy.Name,
                 policy => policy.RequireRole(UserRoles.ExpressionEditor)
             );
+            
+            options.AddPolicy(
+                Policies.UserManagementPolicy.Name,
+                policy => policy.RequireRole(UserRoles.UserManagementRole)
+            );
         });
     }
 }
