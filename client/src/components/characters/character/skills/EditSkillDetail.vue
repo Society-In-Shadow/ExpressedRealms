@@ -47,7 +47,6 @@ watch(() => props.remainingXp, (newValue, oldValue) => {
   getEditOptions()
 });
 
-
 onMounted(() =>{
   getEditOptions();
 });

@@ -13,22 +13,21 @@ const props = defineProps({
 </script>
 
 <template>
-  <Card class="m-3" >
+  <Card class="m-3">
     <template #content>
       <div class="row">
         <div class="col">
-          <h2 class="p-0 m-0">{{props.playerInfo.username}}</h2>
+          <h2 class="p-0 m-0">
+            {{ props.playerInfo.username }}
+          </h2>
         </div>
       </div>
       <div class="row">
         <div class="col">
-          {{props.playerInfo.email}}
+          {{ props.playerInfo.email }}
         </div>
       </div>
     </template>
   </Card>
 </template>
 
-<style scoped>
-
-</style>

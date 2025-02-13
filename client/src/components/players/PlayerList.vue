@@ -21,8 +21,8 @@ onMounted(() =>{
 </script>
 
 <template>
-  <div v-for="player in players" class="container">
-    <PlayerTile :player-info="player"/>
+  <div v-for="player in players" class="container" v-bind:key="player.id">
+    <PlayerTile :player-info="player" />
   </div>
 </template>
 
