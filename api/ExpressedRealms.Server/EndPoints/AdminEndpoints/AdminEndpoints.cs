@@ -22,21 +22,25 @@ public static class AdminEndpoints
         endpointGroup
             .MapGet(
                 "users",
-                [Authorize] async Task<Ok<UserListResponse>>(IUsersRepository repository) =>
+                [Authorize]
+                async Task<Ok<UserListResponse>> (IUsersRepository repository) =>
                 {
                     var users = await repository.GetUsersAsync();
 
-                    return TypedResults.Ok(new UserListResponse()
-                    {
-                        Users = users.Select(x => new UserListItem()
+                    return TypedResults.Ok(
+                        new UserListResponse()
                         {
-                            Id = x.Id,
-                            Email = x.Email,
-                            Username = x.Username,
-                        }).ToList()
-                    });
+                            Users = users
+                                .Select(x => new UserListItem()
+                                {
+                                    Id = x.Id,
+                                    Email = x.Email,
+                                    Username = x.Username,
+                                })
+                                .ToList(),
+                        }
+                    );
                 }
-                    
             )
             .RequireAuthorization();
     }

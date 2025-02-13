@@ -8,12 +8,14 @@ internal sealed class UsersRepository(ExpressedRealmsDbContext context) : IUsers
 {
     public async Task<List<UserListDto>> GetUsersAsync()
     {
-        return await context.Players.AsNoTracking()
+        return await context
+            .Players.AsNoTracking()
             .Select(x => new UserListDto()
             {
                 Id = x.Id,
                 Email = x.User.Email,
-                Username = x.Name
-            }).ToListAsync();
+                Username = x.Name,
+            })
+            .ToListAsync();
     }
 }

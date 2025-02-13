@@ -20,24 +20,22 @@ internal static class NavigationEndpoints
             .WithTags("Nav Menu")
             .WithOpenApi();
 
-        endpointGroup
-            .MapGet(
-                "/permissions",
-                async Task<Ok<PermissionResponse>> (
-                    HttpContext httpContext,
-                    IExpressionRepository repository
-                ) =>
-                {
-                    var hasAdminPolicy = await httpContext.UserHasPolicyAsync(
-                        Policies.UserManagementPolicy
-                    );
+        endpointGroup.MapGet(
+            "/permissions",
+            async Task<Ok<PermissionResponse>> (
+                HttpContext httpContext,
+                IExpressionRepository repository
+            ) =>
+            {
+                var hasAdminPolicy = await httpContext.UserHasPolicyAsync(
+                    Policies.UserManagementPolicy
+                );
 
-                    return TypedResults.Ok(new PermissionResponse
-                        {
-                            HasAdminPermission = hasAdminPolicy,
-                        }
-                    );
-                });
+                return TypedResults.Ok(
+                    new PermissionResponse { HasAdminPermission = hasAdminPolicy }
+                );
+            }
+        );
 
         endpointGroup
             .MapGet(
