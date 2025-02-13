@@ -1,16 +1,20 @@
 <script setup lang="ts">
 
-import { onMounted, ref } from 'vue';
+import {onMounted, ref, watch} from 'vue';
 import axios from "axios";
 import PlayerTile from "@/components/players/Tiles/PlayerTile.vue";
 import type {PlayerListItem} from "@/components/players/Objects/Player";
+import InputText from "primevue/inputtext";
 
 let players = ref<Array<PlayerListItem>>([]);
+const filteredPlayers = ref<Array<PlayerListItem>>([]);
+const searchQuery = ref<string>("");
 
 function fetchData() {
   axios.get('/admin/users')
-      .then((json) => {
-        players.value = json.data.users;
+      .then((response) => {
+        players.value = response.data.users;
+        filteredPlayers.value = response.data.users
       });
 }
 
@@ -18,11 +22,59 @@ onMounted(() =>{
   fetchData();
 })
 
+function filterPlayers(query: string) {
+  const lowercasedQuery = query.toLowerCase().trim();
+
+  if (!lowercasedQuery) {
+    // Reset showing all players if the query is empty
+    filteredPlayers.value = players.value;
+  } else {
+    // Filter players by username or email
+    filteredPlayers.value = players.value.filter((player) =>
+        player.username.toLowerCase().includes(lowercasedQuery) ||
+        player.email.toLowerCase().includes(lowercasedQuery)
+    );
+  }
+}
+
+// Debounce function
+function debounce(fn: Function, delay: number) {
+  let timeout: number | undefined;
+  return (...args: any[]) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      fn(...args);
+    }, delay);
+  };
+}
+
+// Debounced filter function
+const debouncedFilterPlayers = debounce((query: string) => {
+  filterPlayers(query);
+}, 250);
+
+// Watch for changes to the search query and trigger the debounced filter function
+watch(searchQuery, (newQuery) => {
+  debouncedFilterPlayers(newQuery);
+});
+
 </script>
 
 <template>
-  <div v-for="player in players" class="container" v-bind:key="player.id">
-    <PlayerTile :player-info="player" />
+  <div class="container">
+    <InputText
+      v-model="searchQuery"
+      placeholder="Search..."
+      class="m-3"
+    />
+
+    <div v-if="filteredPlayers.length === 0" class="m-3">
+      No users with that name or email address
+    </div>
+    
+    <div v-for="player in filteredPlayers" :key="player.id">
+      <PlayerTile :player-info="player" />
+    </div>
   </div>
 </template>
 
