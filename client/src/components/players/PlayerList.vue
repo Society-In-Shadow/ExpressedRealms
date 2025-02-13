@@ -62,12 +62,16 @@ watch(searchQuery, (newQuery) => {
 
 <template>
   <div class="container">
-    <InputText
-      v-model="searchQuery"
-      placeholder="Search..."
-      class="m-3"
-    />
-
+    <div class="row">
+      <div class="col">
+        <h1 class="m-3">Players</h1></div>
+      <div class="col">
+        <InputText
+          v-model="searchQuery"
+          placeholder="Search..."
+          class="float-end m-3"
+      /></div>
+    </div>
     <div v-if="filteredPlayers.length === 0" class="m-3">
       No users with that name or email address
     </div>
