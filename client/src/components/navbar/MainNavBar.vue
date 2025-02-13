@@ -96,7 +96,6 @@ function loadList(){
 
   axios.get("/navMenu/permissions")
       .then(response => {
-        console.log(response.data);
         const hasAdminPermission = response.data.hasAdminPermission;
 
         if(hasAdminPermission)

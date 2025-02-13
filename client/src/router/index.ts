@@ -81,6 +81,17 @@ export const routes = [
                 component: () => import("./../components/expressions/ExpressionBase.vue")
             }
         ]
+    },
+    {
+        path: '/admin',
+        component: Layout,
+        children: [
+            {
+                path: "players",
+                name: "viewPlayers",
+                component: () => import("./../components/players/PlayerList.vue"),
+            }
+        ]
     }
 ]
 
