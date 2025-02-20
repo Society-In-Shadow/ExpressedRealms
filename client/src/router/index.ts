@@ -1,103 +1,29 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import LoginBasePlate from "@/components/Login/LoginBasePlate.vue";
-import Layout from "@/components/LoggedInLayout.vue";
 import {userStore} from "@/stores/userStore";
 import {updateUserStoreWithEmailInfo, isLoggedIn, updateUserStoreWithPlayerInfo} from "@/services/Authentication";
+import {UserRoutes} from "@/router/Routes/UserRoutes";
+import {AdminRoutes} from "@/router/Routes/AdminRoutes";
+import {OverallRoutes} from "@/router/Routes/OverallNavigationRoutes";
+import axios from "axios";
+
 
 export const routes = [
-    {
-        path: '/',
-        component: LoginBasePlate,
-        children: [
-            {
-                path: "/login",
-                name: "Login",
-                component: () => import("./../components/Login/UserLogin.vue"),
-            },
-            {
-                path: "/createAccount",
-                name: "createAccount",
-                component: () => import("./../components/Login/CreateAccount.vue"),
-            },
-            {
-                path: "/forgotPassword",
-                name: "forgotPassword",
-                component: () => import("./../components/Login/ForgotPassword.vue"),
-            },
-            {
-                path: "/resetPassword",
-                name: "resetPassword",
-                component: () => import("./../components/Login/ResetPassword.vue"),
-            },
-            {
-                path: "/confirmAccount",
-                name: "confirmAccount",
-                component: () => import("./../components/Login/ConfirmEmail.vue"),
-            },
-            {
-                path: "/pleaseConfirmEmail",
-                name: "pleaseConfirmEmail",
-                component: () => import("./../components/Login/PleaseConfirmEmail.vue"),
-            },
-            {
-                path: "/setupProfile",
-                name: "setupProfile",
-                component: () => import("./../components/Login/AddUserProfile.vue"),
-            },
-        ]
-    },
-    {
-        path: '/expressedRealms',
-        component: Layout,
-        children: [
-            {
-                path: "/stonePuller",
-                name: "stonePuller",
-                component: () => import("./../components/stonePuller/StonePuller.vue"),
-            },
-            {
-                path: "/characters",
-                name: "characters",
-                component: () => import("./../components/characters/CharacterList.vue"),
-            },
-            {
-                path: "/userProfile",
-                name: "userProfile",
-                component: () => import("./../components/profile/UserProfileBase.vue")
-            },
-            {
-                path: "/characters/add",
-                name: "addCharacter",
-                component: () => import("./../components/characters/character/AddCharacter.vue")
-            },
-            {
-                path: "/characters/:id",
-                name: "editCharacter",
-                component: () => import("./../components/characters/character/EditCharacter.vue")
-            },
-            {
-                path: "/expressions/:name",
-                name: "viewExpression",
-                component: () => import("./../components/expressions/ExpressionBase.vue")
-            }
-        ]
-    },
-    {
-        path: '/admin',
-        component: Layout,
-        children: [
-            {
-                path: "players",
-                name: "viewPlayers",
-                component: () => import("./../components/players/PlayerList.vue"),
-            }
-        ]
-    }
+    UserRoutes,
+    OverallRoutes,
+    AdminRoutes
 ]
 
 const router = createRouter({
     history: createWebHistory(),
     routes
+})
+
+router.isReady().then(() => {
+    const userInfo = userStore();
+    axios.get("/navMenu/permissions")
+        .then(response => {
+            userInfo.userRoles = response.data.roles;
+        })
 })
 
 router.beforeEach(async (to) => {
@@ -114,6 +40,12 @@ router.beforeEach(async (to) => {
     if(loggedIn){
         
         const userInfo = userStore();
+
+        if(to.meta.requiredRole){
+            if(!userInfo.userRoles.includes(to.meta.requiredRole)){
+                return { name: 'characters' };
+            }
+        }
         
         // Check to make sure that they have a confirmed email
         if(!userInfo.hasConfirmedEmail && routeName != 'pleaseConfirmEmail' && routeName != 'confirmAccount'){

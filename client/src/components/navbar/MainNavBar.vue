@@ -12,6 +12,8 @@ import RootNodeMenuItem from "@/components/navbar/navMenuItems/RootNodeMenuItem.
 import EditExpression from "@/components/expressions/EditExpression.vue";
 import Dialog from 'primevue/dialog';
 import AddExpression from "@/components/expressions/AddExpression.vue";
+import {userStore} from "@/stores/userStore";
+const userInfo = userStore();
 
 let showExpressionEdit = false;
 
@@ -21,6 +23,7 @@ const items = ref([
   { root: true, label: 'Characters', icon: 'pi pi-file', subtext: 'Characters', command: () => router.push("/characters"),  items: [] },
   { root: true, label: 'Expressions', items: [] },
   { root: true, label: 'Stone Puller', icon: 'pi pi-file', subtext: 'Stone Puller', command: () => router.push("/stonePuller") },
+  { root: true, label: 'Admin', icon: 'pi pi-admin', subtext: 'See User List', command: () => router.push("/admin/players"), visible: () => userInfo.userRoles.includes("UserManagementRole") }
 ]);
 
 function loadList(){
@@ -93,14 +96,6 @@ function loadList(){
         }
 
       })
-
-  axios.get("/navMenu/permissions")
-      .then(response => {
-        const hasAdminPermission = response.data.hasAdminPermission;
-
-        if(hasAdminPermission)
-          items.value.push({ root: true, label: 'Admin', icon: 'pi pi-admin', subtext: 'See User List', command: () => router.push("/admin/players") })
-      });
 }
 
 onMounted(() => {
