@@ -6,7 +6,6 @@ import {AdminRoutes} from "@/router/Routes/AdminRoutes";
 import {OverallRoutes} from "@/router/Routes/OverallNavigationRoutes";
 import axios from "axios";
 
-
 export const routes = [
     UserRoutes,
     OverallRoutes,
@@ -41,12 +40,10 @@ router.beforeEach(async (to) => {
         
         const userInfo = userStore();
 
-        if(to.meta.requiredRole){
-            if(!userInfo.userRoles.includes(to.meta.requiredRole)){
-                return { name: 'characters' };
-            }
+        if (to.meta.requiredRole && !userInfo.userRoles.includes(to.meta.requiredRole)) {
+            return {name: 'characters'};
         }
-        
+
         // Check to make sure that they have a confirmed email
         if(!userInfo.hasConfirmedEmail && routeName != 'pleaseConfirmEmail' && routeName != 'confirmAccount'){
             await updateUserStoreWithEmailInfo();

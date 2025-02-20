@@ -1,6 +1,5 @@
 import Layout from "@/components/LoggedInLayout.vue";
 
-
 export const OverallRoutes = {
     path: '/expressedRealms',
     component: Layout,

@@ -1,6 +1,5 @@
 import LoginBasePlate from "@/components/Login/LoginBasePlate.vue";
 
-
 export const UserRoutes = {
     path: '/',
     component: LoginBasePlate,

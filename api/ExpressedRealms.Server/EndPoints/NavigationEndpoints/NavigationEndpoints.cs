@@ -21,34 +21,33 @@ internal static class NavigationEndpoints
             .WithTags("Nav Menu")
             .WithOpenApi();
 
-        endpointGroup.MapGet(
-            "/permissions",
-            async Task<Ok<PermissionResponse>> (
-                HttpContext httpContext,
-                IExpressionRepository repository
-            ) =>
-            {
-                if (!httpContext.User.Identity?.IsAuthenticated ?? false)
+        endpointGroup
+            .MapGet(
+                "/permissions",
+                async Task<Ok<PermissionResponse>> (
+                    HttpContext httpContext,
+                    IExpressionRepository repository
+                ) =>
                 {
+                    if (!httpContext.User.Identity?.IsAuthenticated ?? false)
+                    {
+                        return TypedResults.Ok(
+                            new PermissionResponse { Roles = new List<string>() }
+                        );
+                    }
+
                     return TypedResults.Ok(
                         new PermissionResponse
                         {
-                            Roles = new List<string>()
+                            Roles = httpContext
+                                .User.Claims.Where(x => x.Type == ClaimTypes.Role)
+                                .Select(x => x.Value)
+                                .ToList(),
                         }
                     );
                 }
-                
-                return TypedResults.Ok(
-                    new PermissionResponse
-                    {
-                        Roles = httpContext.User.Claims
-                            .Where(x => x.Type == ClaimTypes.Role)
-                            .Select(x => x.Value)
-                            .ToList()
-                    }
-                );
-            }
-        ).AllowAnonymous();
+            )
+            .AllowAnonymous();
 
         endpointGroup
             .MapGet(
