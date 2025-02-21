@@ -69,14 +69,14 @@ public static class AdminEndpoints
                     }
 
                     // Ensure the role exists before assigning
-                    if (!await roleManager.RoleExistsAsync(dto.RoleId))
+                    if (!await roleManager.RoleExistsAsync(dto.RoleName))
                     {
                         return TypedResults.NotFound();
                     }
 
                     if (dto.IsEnabled)
                     {
-                        var result = await userManager.AddToRoleAsync(user, dto.RoleId);
+                        var result = await userManager.AddToRoleAsync(user, dto.RoleName);
                         if (result.Succeeded)
                         {
                             return TypedResults.NoContent();
@@ -84,7 +84,7 @@ public static class AdminEndpoints
                     }
                     else
                     {
-                        var result = await userManager.RemoveFromRoleAsync(user, dto.RoleId);
+                        var result = await userManager.RemoveFromRoleAsync(user, dto.RoleName);
                         if (result.Succeeded)
                         {
                             return TypedResults.NoContent();
