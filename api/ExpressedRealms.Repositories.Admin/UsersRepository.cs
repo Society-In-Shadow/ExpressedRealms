@@ -12,7 +12,7 @@ internal sealed class UsersRepository(ExpressedRealmsDbContext context) : IUsers
             .Players.AsNoTracking()
             .Select(x => new UserListDto()
             {
-                Id = x.Id,
+                Id = x.User.Id,
                 Email = x.User.Email,
                 Username = x.Name,
             })
