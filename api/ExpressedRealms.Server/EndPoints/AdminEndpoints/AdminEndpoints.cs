@@ -50,7 +50,7 @@ public static class AdminEndpoints
                 }
             )
             .RequireAuthorization();
-        
+
         endpointGroup
             .MapPut(
                 "user/{userid}/role",
@@ -62,7 +62,6 @@ public static class AdminEndpoints
                     SignInManager<User> signInManager
                 ) =>
                 {
-                    
                     var user = await userManager.FindByIdAsync(dto.UserId);
 
                     if (user == null)
@@ -92,13 +91,14 @@ public static class AdminEndpoints
                             return TypedResults.NoContent();
                         }
                     }
-                    
+
                     await signInManager.RefreshSignInAsync(user);
-                    
+
                     return TypedResults.BadRequest<string>("The role was not updated.");
                 }
-            ).RequireAuthorization();
-        
+            )
+            .RequireAuthorization();
+
         endpointGroup
             .MapGet(
                 "user/{userid}/roles",
@@ -116,20 +116,20 @@ public static class AdminEndpoints
                     }
 
                     var allRoles = await roleManager.Roles.ToListAsync();
-                    
-                    var userRoles = await userManager.GetRolesAsync(user);
-                    
-                    var roles = allRoles.Select(x => new UserRoleDto()
-                    {
-                        Name = x.Name,
-                        IsEnabled = userRoles.Any(y => y == x.Name)
-                    }).ToList();
 
-                    return TypedResults.Ok(new UserRoleResponse()
-                    {
-                        Roles = roles
-                    });
+                    var userRoles = await userManager.GetRolesAsync(user);
+
+                    var roles = allRoles
+                        .Select(x => new UserRoleDto()
+                        {
+                            Name = x.Name,
+                            IsEnabled = userRoles.Any(y => y == x.Name),
+                        })
+                        .ToList();
+
+                    return TypedResults.Ok(new UserRoleResponse() { Roles = roles });
                 }
-            ).RequireAuthorization();
+            )
+            .RequireAuthorization();
     }
 }

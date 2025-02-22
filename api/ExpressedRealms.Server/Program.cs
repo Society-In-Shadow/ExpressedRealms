@@ -81,10 +81,6 @@ try
         .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<ExpressedRealmsDbContext>()
         .AddApiEndpoints();
-    
-    /*builder.Services.AddScoped<UserManager<User>>();
-    builder.Services.AddScoped<SignInManager<User>>();*/
-
 
     builder.Services.Configure<IdentityOptions>(options =>
     {
