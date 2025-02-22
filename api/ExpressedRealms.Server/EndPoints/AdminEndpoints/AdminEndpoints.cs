@@ -131,5 +131,29 @@ public static class AdminEndpoints
                 }
             )
             .RequireAuthorization();
+        
+        endpointGroup
+            .MapGet(
+                "user/{userid}/activitylogs",
+                async Task<Ok<LogResponse>> (
+                    Guid userId,
+                    IActivityLogRepository repository
+                ) =>
+                {
+                    var userLogs = await repository.GetUserLogs(userId.ToString());
+                    
+                    return TypedResults.Ok(new LogResponse()
+                    {
+                        Logs = userLogs.Select(x => new LogDto()
+                        {
+                            ChangedProperties = x.ChangedProperties,
+                            Location = x.Location,
+                            TimeStamp = x.TimeStamp,
+                            Action = x.Action,
+                        }).ToList()
+                    });
+                }
+            )
+            .RequireAuthorization();
     }
 }

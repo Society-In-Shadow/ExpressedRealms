@@ -8,13 +8,12 @@ using ExpressedRealms.DB.Models.Expressions;
 using ExpressedRealms.DB.Models.Skills;
 using ExpressedRealms.DB.Models.Statistics;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.DB
 {
     [AuditDbContext(Mode = AuditOptionMode.OptIn)]
-    public class ExpressedRealmsDbContext : AuditIdentityDbContext<IdentityUser>
+    public class ExpressedRealmsDbContext : AuditIdentityDbContext<User>
     {
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -52,6 +51,8 @@ namespace ExpressedRealms.DB
         public DbSet<ExpressionSection> ExpressionSections { get; set; }
         public DbSet<ExpressionSectionType> ExpressionSectionTypes { get; set; }
         public DbSet<ExpressionPublishStatus> ExpressionPublishStatus { get; set; }
+        public DbSet<ExpressionSectionAuditTrail> ExpressionSectionAuditTrails { get; set; }
+        public DbSet<ExpressionAuditTrail> ExpressionAuditTrails { get; set; }
 
         public DbSet<StatType> StateTypes { get; set; }
         public DbSet<StatLevel> StatLevels { get; set; }
