@@ -151,7 +151,9 @@ public static class AdminEndpoints
                             Location = x.Location,
                             TimeStamp = x.TimeStamp,
                             Action = x.Action,
-                        }).ToList()
+                        })
+                        .OrderBy(x => x.TimeStamp)
+                        .ToList()
                     });
                 }
             )

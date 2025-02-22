@@ -12,6 +12,7 @@ import Button from "primevue/button";
 import PlayerRoles from "@/components/players/Tiles/PlayerRoles.vue";
 import Tag from 'primevue/tag';
 import {fetchUserPolicies} from "@/components/players/Services/PlayerRoleService";
+import ActivityLogs from "@/components/players/Tiles/ActivityLogs.vue";
 
 const showInfo = ref(false);
 
@@ -57,15 +58,21 @@ function updatePlayerRoles(){
 
       <div v-if="showInfo" class="row">
         <div class="col">
-          <Tabs value="0">
+          <Tabs value="0" :lazy="true">
             <TabList>
               <Tab value="0">
                 User Policies
+              </Tab>
+              <Tab value="1">
+                Activity Logs
               </Tab>
             </TabList>
             <TabPanels>
               <TabPanel value="0">
                 <PlayerRoles :user-id="props.playerInfo.id" @policies-changed="updatePlayerRoles()" />
+              </TabPanel>
+              <TabPanel value="1">
+                <ActivityLogs :user-id="props.playerInfo.id"/>
               </TabPanel>
             </TabPanels>
           </Tabs>
