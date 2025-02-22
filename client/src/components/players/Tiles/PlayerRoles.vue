@@ -4,8 +4,10 @@ import ToggleSwitch from 'primevue/toggleswitch';
 import axios from "axios";
 import {onMounted, ref} from 'vue'
 import toaster from "@/services/Toasters";
+import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
 
-const roles = ref([]);
+const roles = ref([ {}, {}]);
+const isLoading = ref(true);
 
 const props = defineProps({
   userId: {
@@ -18,6 +20,7 @@ function fetchData() {
   axios.get(`/admin/user/${props.userId}/roles`)
       .then((response) => {
         roles.value = response.data.roles;
+        isLoading.value = false;
       });
 }
 
@@ -40,16 +43,20 @@ onMounted(() =>{
 </script>
 
 <template>
-  <div v-for="role in roles" :key="role.name">
-    <div class="d-flex d-flex-column">
-      <div class="align-self-center p-3">
-        {{ role.name }} 
+  
+  <div class="p-2" v-for="role in roles" :key="role.name">
+
+    <SkeletonWrapper :show-skeleton="isLoading" height="3rem" width="20em">
+      <div class="d-flex d-flex-column">
+        <div class="align-self-center">
+          <ToggleSwitch v-model="role.isEnabled" @change="updateRole(role.name, role.isEnabled)"/>
+        </div>
+        <div class="align-self-center p-3">
+          {{ role.name }}
+        </div>
       </div>
-      <div class="align-self-center">
-        <ToggleSwitch v-model="role.isEnabled" @change="updateRole(role.name, role.isEnabled)"/>
-      </div>
-    </div>
-    
+    </SkeletonWrapper>
+
   </div>
 </template>
 
