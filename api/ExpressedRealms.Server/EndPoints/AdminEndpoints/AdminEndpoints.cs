@@ -144,8 +144,9 @@ public static class AdminEndpoints
                     
                     return TypedResults.Ok(new LogResponse()
                     {
-                        Logs = userLogs.Select(x => new LogDto()
+                        Logs = userLogs.Select((x, index) => new LogDto()
                         {
+                            Id = index,
                             ChangedProperties = x.ChangedProperties,
                             Location = x.Location,
                             TimeStamp = x.TimeStamp,
