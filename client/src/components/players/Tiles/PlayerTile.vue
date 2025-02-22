@@ -11,6 +11,7 @@ import TabPanel from 'primevue/tabpanel';
 import Button from "primevue/button";
 import PlayerRoles from "@/components/players/Tiles/PlayerRoles.vue";
 import Tag from 'primevue/tag';
+import {fetchUserPolicies} from "@/components/players/Services/PlayerRoleService";
 
 const showInfo = ref(false);
 
@@ -20,6 +21,13 @@ const props = defineProps({
     required: true
   }
 });
+
+function updatePlayerRoles(){
+  fetchUserPolicies(props.playerInfo.id)
+      .then(response => {
+        props.playerInfo.roles = response.data.roles.filter(x => x.isEnabled).map(x => x.name);
+      });
+}
 
 </script>
 
@@ -55,7 +63,7 @@ const props = defineProps({
             </TabList>
             <TabPanels>
               <TabPanel value="0">
-                <PlayerRoles :user-id="props.playerInfo.id"></PlayerRoles>
+                <PlayerRoles :user-id="props.playerInfo.id" @policies-changed="updatePlayerRoles()"></PlayerRoles>
               </TabPanel>
             </TabPanels>
           </Tabs>
