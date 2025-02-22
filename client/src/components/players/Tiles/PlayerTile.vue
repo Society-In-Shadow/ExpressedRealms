@@ -10,8 +10,7 @@ import TabPanels from 'primevue/tabpanels';
 import TabPanel from 'primevue/tabpanel';
 import Button from "primevue/button";
 import PlayerRoles from "@/components/players/Tiles/PlayerRoles.vue";
-
-const value = ref(0);
+import Tag from 'primevue/tag';
 
 const showInfo = ref(false);
 
@@ -27,21 +26,27 @@ const props = defineProps({
 <template>
   <Card class="m-3">
     <template #content>
-      <div class="row">
-        <div class="col">
-          <h2 class="p-0 m-0">
-            {{ props.playerInfo.username }}
-          </h2>
+      <div class="d-flex flex-row">
+        <div class="flex-grow-1">
+          <div class="row">
+            <div class="col">
+              <h2 class="d-inline-flex m-0 pr-3">
+                {{ props.playerInfo.username }}
+              </h2>
+              <Tag class="m-1" v-for="role in props.playerInfo.roles" :value="role" :key="role" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              {{ props.playerInfo.email }}
+            </div>
+          </div>
         </div>
-        <div class="col text-end">
-          <Button label="Edit" class="m-2" @click="showInfo = !showInfo" />
+        <div class="">
+          <Button :label="showInfo ? 'Cancel' : 'Edit'" class="m-2" @click="showInfo = !showInfo" />
         </div>
       </div>
-      <div class="row">
-        <div class="col">
-          {{ props.playerInfo.email }}
-        </div>
-      </div>
+
       <div class="row" v-if="showInfo">
         <div class="col">
           <Tabs value="0" >
@@ -51,18 +56,6 @@ const props = defineProps({
             <TabPanels>
               <TabPanel value="0">
                 <PlayerRoles :user-id="props.playerInfo.id"></PlayerRoles>
-              </TabPanel>
-              <TabPanel value="1">
-                <p class="m-0">
-                  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
-                  ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
-                </p>
-              </TabPanel>
-              <TabPanel value="2">
-                <p class="m-0">
-                  At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa
-                  qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
-                </p>
               </TabPanel>
             </TabPanels>
           </Tabs>

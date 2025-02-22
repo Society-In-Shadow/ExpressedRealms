@@ -41,7 +41,9 @@ public static class AdminEndpoints
                                     Id = x.Id,
                                     Email = x.Email,
                                     Username = x.Username,
+                                    Roles = x.Roles,
                                 })
+                                .OrderBy(x => x.Email)
                                 .ToList(),
                         }
                     );
