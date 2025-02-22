@@ -41,7 +41,7 @@ function updatePlayerRoles(){
               <h2 class="d-inline-flex m-0 pr-3">
                 {{ props.playerInfo.username }}
               </h2>
-              <Tag class="m-1" v-for="role in props.playerInfo.roles" :value="role" :key="role" />
+              <Tag v-for="role in props.playerInfo.roles" :key="role" class="m-1" :value="role" />
             </div>
           </div>
           <div class="row">
@@ -50,20 +50,22 @@ function updatePlayerRoles(){
             </div>
           </div>
         </div>
-        <div class="">
+        <div>
           <Button :label="showInfo ? 'Cancel' : 'Edit'" class="m-2" @click="showInfo = !showInfo" />
         </div>
       </div>
 
-      <div class="row" v-if="showInfo">
+      <div v-if="showInfo" class="row">
         <div class="col">
-          <Tabs value="0" >
+          <Tabs value="0">
             <TabList>
-              <Tab value="0">User Policies</Tab>
+              <Tab value="0">
+                User Policies
+              </Tab>
             </TabList>
             <TabPanels>
               <TabPanel value="0">
-                <PlayerRoles :user-id="props.playerInfo.id" @policies-changed="updatePlayerRoles()"></PlayerRoles>
+                <PlayerRoles :user-id="props.playerInfo.id" @policies-changed="updatePlayerRoles()" />
               </TabPanel>
             </TabPanels>
           </Tabs>

@@ -38,11 +38,11 @@ function roleToggled(roleName:string, isEnabled:boolean){
 </script>
 
 <template>
-  <div class="p-2" v-for="role in roles" :key="role.name">
+  <div v-for="role in roles" :key="role.name" class="p-2">
     <SkeletonWrapper :show-skeleton="isLoading" height="3rem" width="20em">
       <div class="d-flex d-flex-column">
         <div class="align-self-center">
-          <ToggleSwitch v-model="role.isEnabled" @change="roleToggled(role.name, role.isEnabled)"/>
+          <ToggleSwitch v-model="role.isEnabled" @change="roleToggled(role.name, role.isEnabled)" />
         </div>
         <div class="align-self-center p-3">
           {{ role.name }}
