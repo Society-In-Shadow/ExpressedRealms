@@ -5,6 +5,9 @@ import axios from "axios";
 import InputText from "primevue/inputtext";
 import type {Log} from "@/components/players/Objects/ActivityLogs";
 import Card from "primevue/card";
+import Column from "primevue/column";
+import DataTable from "primevue/datatable";
+import type {ChangedProperty} from "@/components/players/Objects/ChangedProperty";
 
 let logs = ref<Array<Log>>([]);
 const filteredLogs = ref<Array<Log>>([]);
@@ -20,8 +23,21 @@ const props = defineProps({
 function fetchData() {
   axios.get(`/admin/user/${props.userId}/activitylogs`)
       .then((response) => {
+
+        response.data.logs.forEach(function(log:Log) {
+          var parsedProperties = JSON.parse(log.changedProperties);
+          
+          parsedProperties.forEach(function(property:ChangedProperty, index:number) {
+            property.id = index;
+          });
+          
+          log.changedPropertiesList = parsedProperties;
+        });
+
         logs.value = response.data.logs;
-        filteredLogs.value = response.data.logs;
+        filteredLogs.value = response.data.logs
+            .sort((a, b) => b.timeStamp - a.timeStamp)
+            .slice(0, 25);
       });
 }
 
@@ -34,13 +50,16 @@ function filter(query: string) {
 
   if (!lowercasedQuery) {
     // Reset showing all players if the query is empty
-    filteredLogs.value = logs.value;
+    filteredLogs.value = logs.value
+        .sort((a, b) => b.timeStamp - a.timeStamp)
+        .slice(0, 25);
   } else {
     // Filter players by username or email
     filteredLogs.value = logs.value.filter((logs) =>
         logs.location.toLowerCase().includes(lowercasedQuery) ||
         logs.changedProperties.toLowerCase().includes(lowercasedQuery)
-    );
+    ).sort((a, b) => b.timeStamp - a.timeStamp)
+        .slice(0, 25);
   }
 }
 
@@ -97,7 +116,24 @@ watch(searchQuery, (newQuery) => {
         {{ log.timeStamp }}
       </template>
       <template #content>
-        <p>{{ log.changedProperties }}</p>
+
+        <DataTable :value="log.changedPropertiesList" striped-rows dataKey="ColumnName">
+          <Column field="ColumnName" header="Property">
+            <template #body="slotProps">
+              <strong>{{ slotProps.data.ColumnName }}</strong>
+            </template>
+          </Column>
+          <Column field="OriginalValue" header="Old Value">
+            <template #body="slotProps">
+              {{ slotProps.data.OriginalValue }}
+            </template>
+          </Column>
+          <Column field="NewValue" header="New Value">
+            <template #body="slotProps">
+              {{ slotProps.data.NewValue }}
+            </template>
+          </Column>
+        </DataTable>
       </template>
     </Card>
   </div>

@@ -1,7 +1,6 @@
 using ExpressedRealms.Authentication;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels;
 using ExpressedRealms.Repositories.Admin;
-using ExpressedRealms.Repositories.Admin.DTOs;
 using ExpressedRealms.Server.EndPoints.AdminEndpoints.Dtos;
 using ExpressedRealms.Server.EndPoints.AdminEndpoints.Request;
 using ExpressedRealms.Server.EndPoints.AdminEndpoints.Response;
@@ -152,7 +151,6 @@ public static class AdminEndpoints
                             TimeStamp = x.TimeStamp,
                             Action = x.Action,
                         })
-                        .OrderBy(x => x.TimeStamp)
                         .ToList()
                     });
                 }
