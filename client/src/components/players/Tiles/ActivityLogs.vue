@@ -6,11 +6,15 @@ import InputText from "primevue/inputtext";
 import type {Log} from "@/components/players/Objects/ActivityLogs";
 import DataTable from "primevue/datatable";
 import type {ChangedProperty} from "@/components/players/Objects/ChangedProperty";
+import Paginator from 'primevue/paginator';
 import ActivityLogTile from "@/components/players/Tiles/ActivityLogTile.vue";
 
+const startingPageSize = 25
 let logs = ref<Array<Log>>([]);
 const filteredLogs = ref<Array<Log>>([]);
 const searchQuery = ref<string>("");
+const first = ref(0);
+const pageSize = ref(startingPageSize);
 
 const props = defineProps({
   userId: {
@@ -106,12 +110,20 @@ watch(searchQuery, (newQuery) => {
   <!-- This is needed to keep the stylings on the page, I'll figure out why later and fix it -->
   <DataTable></DataTable>
   
-  <div v-if="filteredLogs.length === 0" class="m-3">
+  <div v-if="logs.length === 0" class="m-3">
+    There are no logs for this user.
+  </div>
+  
+  <div v-else-if="filteredLogs.length === 0" class="m-3">
     No logs with that location or changed properties
   </div>
 
-  <div v-for="log in sortedFilteredLogs" :key="log.id">
+  <div v-for="log in sortedFilteredLogs.slice(first, first + pageSize)" :key="log.id">
     <ActivityLogTile :log="log"/>
+  </div>
+
+  <div v-if="filteredLogs.length > pageSize || pageSize !== startingPageSize && logs.length > startingPageSize">
+    <Paginator v-model:first="first" v-model:rows="pageSize" :totalRecords="filteredLogs.length" :rowsPerPageOptions="[25, 50, 75, 100]"></Paginator>
   </div>
 </template>
 
