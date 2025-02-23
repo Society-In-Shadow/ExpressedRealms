@@ -3,7 +3,7 @@ import type {ChangedProperty} from "@/components/players/Objects/ChangedProperty
 export interface Log {
     id: number;
     location: string;
-    timeStamp: Date; // Date type in TypeScript
+    timeStamp: Date;
     action: string;
     changedProperties: string;
     changedPropertiesList: ChangedProperty[];

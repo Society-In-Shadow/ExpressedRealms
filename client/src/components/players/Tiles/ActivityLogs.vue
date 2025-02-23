@@ -123,7 +123,7 @@ watch(searchQuery, (newQuery) => {
   </div>
 
   <div v-if="filteredLogs.length > pageSize || pageSize !== startingPageSize && logs.length > startingPageSize">
-    <Paginator v-model:first="first" v-model:rows="pageSize" :totalRecords="filteredLogs.length" :rowsPerPageOptions="[25, 50, 75, 100]"></Paginator>
+    <Paginator v-model:first="first" v-model:rows="pageSize" :totalRecords="filteredLogs.length" :rowsPerPageOptions="[25, 50, 75, 100]" />
   </div>
 </template>
 
