@@ -113,7 +113,12 @@ watch(searchQuery, (newQuery) => {
         {{ log.action }} - {{ log.location }}
       </template>
       <template #subtitle>
-        {{ log.timeStamp }}
+        {{ new Date(log.timeStamp).toLocaleString('en-US', {  year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      }) }}
       </template>
       <template #content>
 
