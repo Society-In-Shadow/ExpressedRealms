@@ -72,7 +72,7 @@ function updatePlayerRoles(){
                 <PlayerRoles :user-id="props.playerInfo.id" @policies-changed="updatePlayerRoles()" />
               </TabPanel>
               <TabPanel value="1">
-                <ActivityLogs :user-id="props.playerInfo.id"/>
+                <ActivityLogs :user-id="props.playerInfo.id" />
               </TabPanel>
             </TabPanels>
           </Tabs>

@@ -49,9 +49,11 @@ onMounted(() =>{
 })
 
 const sortedFilteredLogs = computed(() => {
-  return filteredLogs.value.sort((a:Log, b:Log) => b.timeStamp.getTime() - a.timeStamp.getTime()); // Example calculation
+  return filteredLogs.value
+      .slice() // Make sure that sort doens't modify filtered logs as a side effect
+      .sort((a:Log, b:Log) => b.timeStamp.getTime() - a.timeStamp.getTime())
+      .slice(first, first + pageSize);
 });
-
 
 function filter(query: string) {
   const lowercasedQuery = query.toLowerCase().trim();
@@ -92,7 +94,6 @@ watch(searchQuery, (newQuery) => {
 </script>
 
 <template>
-
   <div class="row">
     <div class="col">
       <h1 class="m-3">
@@ -108,7 +109,7 @@ watch(searchQuery, (newQuery) => {
     </div>
   </div>
   <!-- This is needed to keep the stylings on the page, I'll figure out why later and fix it -->
-  <DataTable></DataTable>
+  <DataTable />
   
   <div v-if="logs.length === 0" class="m-3">
     There are no logs for this user.
@@ -118,12 +119,12 @@ watch(searchQuery, (newQuery) => {
     No logs with that location or changed properties
   </div>
 
-  <div v-for="log in sortedFilteredLogs.slice(first, first + pageSize)" :key="log.id">
-    <ActivityLogTile :log="log"/>
+  <div v-for="log in sortedFilteredLogs" :key="log.id">
+    <ActivityLogTile :log="log" />
   </div>
 
   <div v-if="filteredLogs.length > pageSize || pageSize !== startingPageSize && logs.length > startingPageSize">
-    <Paginator v-model:first="first" v-model:rows="pageSize" :totalRecords="filteredLogs.length" :rowsPerPageOptions="[25, 50, 75, 100]" />
+    <Paginator v-model:first="first" v-model:rows="pageSize" :total-records="filteredLogs.length" :rows-per-page-options="[25, 50, 75, 100]" />
   </div>
 </template>
 
