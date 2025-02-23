@@ -4,8 +4,9 @@ import {computed, onMounted, ref, watch} from 'vue';
 import axios from "axios";
 import InputText from "primevue/inputtext";
 import type {Log} from "@/components/players/Objects/ActivityLogs";
-import Card from "primevue/card";
+import DataTable from "primevue/datatable";
 import type {ChangedProperty} from "@/components/players/Objects/ChangedProperty";
+import ActivityLogTile from "@/components/players/Tiles/ActivityLogTile.vue";
 
 let logs = ref<Array<Log>>([]);
 const filteredLogs = ref<Array<Log>>([]);
@@ -102,58 +103,19 @@ watch(searchQuery, (newQuery) => {
       />
     </div>
   </div>
+  <!-- This is needed to keep the stylings on the page, I'll figure out why later and fix it -->
+  <DataTable></DataTable>
   
   <div v-if="filteredLogs.length === 0" class="m-3">
     No logs with that location or changed properties
   </div>
 
   <div v-for="log in sortedFilteredLogs" :key="log.id">
-    <Card class="card-outline mb-3">
-      <template #title>
-        {{ log.action }} - {{ log.location }}
-      </template>
-      <template #subtitle>
-        {{ new Date(log.timeStamp).toLocaleString('en-US', {  year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      }) }}
-      </template>
-      <template #content>
-        <div class="p-datatable p-component p-datatable-striped">
-          <div class="p-datatable-table-container">
-            <table class="w-100 p-datatable-table">
-              <!-- Table header -->
-              <thead class="p-datatable-thead" >
-                <tr>
-                  <th class="p-datatable-header-cell">Property</th>
-                  <th class="p-datatable-header-cell">Old Value</th>
-                  <th class="p-datatable-header-cell">New Value</th>
-                </tr>
-              </thead>
-  
-              <!-- Table body -->
-              <tbody class="p-datatable-tbody">
-                <tr v-for="(row, index) in log.changedPropertiesList" :key="row.id" :class="index % 2 === 0 ? 'p-row-even' : 'p-row-odd'">
-                  <td>{{ row.ColumnName }}</td>
-                  <td>{{ row.OriginalValue }}</td>
-                  <td>{{ row.NewValue }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-      </template>
-    </Card>
+    <ActivityLogTile :log="log"/>
   </div>
 </template>
 
 <style scoped>
-  .card-outline{
-    border: 1px solid var(--p-form-field-disabled-background);
-  }
   .container {
     width: 100%;
     margin-right: auto;
