@@ -52,7 +52,7 @@ const sortedFilteredLogs = computed(() => {
   return filteredLogs.value
       .slice() // Make sure that sort doens't modify filtered logs as a side effect
       .sort((a:Log, b:Log) => b.timeStamp.getTime() - a.timeStamp.getTime())
-      .slice(first, first + pageSize);
+      .slice(first.value, first.value + pageSize.value);
 });
 
 function filter(query: string) {
@@ -102,6 +102,7 @@ watch(searchQuery, (newQuery) => {
     </div>
     <div class="col">
       <InputText
+        v-if="logs.length > 0"
         v-model="searchQuery"
         placeholder="Search..."
         class="float-end m-3"
