@@ -31,7 +31,6 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             .ToListAsync();
         
         return expressionLogs.Concat(expressionSectionsLogs)
-            .Take(50)
             .ToList();
     }
 }

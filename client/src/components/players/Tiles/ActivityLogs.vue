@@ -1,12 +1,10 @@
 <script setup lang="ts">
 
-import {onMounted, ref, watch} from 'vue';
+import {computed, onMounted, ref, watch} from 'vue';
 import axios from "axios";
 import InputText from "primevue/inputtext";
 import type {Log} from "@/components/players/Objects/ActivityLogs";
 import Card from "primevue/card";
-import Column from "primevue/column";
-import DataTable from "primevue/datatable";
 import type {ChangedProperty} from "@/components/players/Objects/ChangedProperty";
 
 let logs = ref<Array<Log>>([]);
@@ -23,21 +21,21 @@ const props = defineProps({
 function fetchData() {
   axios.get(`/admin/user/${props.userId}/activitylogs`)
       .then((response) => {
-
+        
         response.data.logs.forEach(function(log:Log) {
           var parsedProperties = JSON.parse(log.changedProperties);
-          
+          log.timeStamp = new Date(log.timeStamp);
           parsedProperties.forEach(function(property:ChangedProperty, index:number) {
             property.id = index;
           });
           
           log.changedPropertiesList = parsedProperties;
         });
-
+        
         logs.value = response.data.logs;
-        filteredLogs.value = response.data.logs
-            .sort((a, b) => b.timeStamp - a.timeStamp)
-            .slice(0, 25);
+        
+        filteredLogs.value = logs.value
+            
       });
 }
 
@@ -45,21 +43,23 @@ onMounted(() =>{
   fetchData();
 })
 
+const sortedFilteredLogs = computed(() => {
+  return filteredLogs.value.sort((a:Log, b:Log) => b.timeStamp.getTime() - a.timeStamp.getTime()); // Example calculation
+});
+
+
 function filter(query: string) {
   const lowercasedQuery = query.toLowerCase().trim();
 
   if (!lowercasedQuery) {
     // Reset showing all players if the query is empty
-    filteredLogs.value = logs.value
-        .sort((a, b) => b.timeStamp - a.timeStamp)
-        .slice(0, 25);
+    filteredLogs.value = logs.value;
   } else {
     // Filter players by username or email
     filteredLogs.value = logs.value.filter((logs) =>
         logs.location.toLowerCase().includes(lowercasedQuery) ||
         logs.changedProperties.toLowerCase().includes(lowercasedQuery)
-    ).sort((a, b) => b.timeStamp - a.timeStamp)
-        .slice(0, 25);
+    );
   }
 }
 
@@ -107,7 +107,7 @@ watch(searchQuery, (newQuery) => {
     No logs with that location or changed properties
   </div>
 
-  <div v-for="log in filteredLogs" :key="log.id">
+  <div v-for="log in sortedFilteredLogs" :key="log.id">
     <Card class="card-outline mb-3">
       <template #title>
         {{ log.action }} - {{ log.location }}
@@ -121,24 +121,30 @@ watch(searchQuery, (newQuery) => {
       }) }}
       </template>
       <template #content>
+        <div class="p-datatable p-component p-datatable-striped">
+          <div class="p-datatable-table-container">
+            <table class="w-100 p-datatable-table">
+              <!-- Table header -->
+              <thead class="p-datatable-thead" >
+                <tr>
+                  <th class="p-datatable-header-cell">Property</th>
+                  <th class="p-datatable-header-cell">Old Value</th>
+                  <th class="p-datatable-header-cell">New Value</th>
+                </tr>
+              </thead>
+  
+              <!-- Table body -->
+              <tbody class="p-datatable-tbody">
+                <tr v-for="(row, index) in log.changedPropertiesList" :key="row.id" :class="index % 2 === 0 ? 'p-row-even' : 'p-row-odd'">
+                  <td>{{ row.ColumnName }}</td>
+                  <td>{{ row.OriginalValue }}</td>
+                  <td>{{ row.NewValue }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-        <DataTable :value="log.changedPropertiesList" striped-rows dataKey="ColumnName">
-          <Column field="ColumnName" header="Property">
-            <template #body="slotProps">
-              <strong>{{ slotProps.data.ColumnName }}</strong>
-            </template>
-          </Column>
-          <Column field="OriginalValue" header="Old Value">
-            <template #body="slotProps">
-              {{ slotProps.data.OriginalValue }}
-            </template>
-          </Column>
-          <Column field="NewValue" header="New Value">
-            <template #body="slotProps">
-              {{ slotProps.data.NewValue }}
-            </template>
-          </Column>
-        </DataTable>
       </template>
     </Card>
   </div>
