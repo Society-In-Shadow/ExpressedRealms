@@ -1,7 +1,7 @@
 using ExpressedRealms.Authentication;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Interceptors;
-using ExpressedRealms.DB.Models.Expressions;
+using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.Repositories.Expressions.Expressions.DTOs;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;

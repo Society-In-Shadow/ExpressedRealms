@@ -1,6 +1,6 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Interceptors;
-using ExpressedRealms.DB.Models.Expressions;
+using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.Repositories.Expressions.Expressions.DTOs;
 using ExpressedRealms.Repositories.Expressions.ExpressionTextSections.DTOs;
 using ExpressedRealms.Repositories.Expressions.ExpressionTextSections.Helpers;

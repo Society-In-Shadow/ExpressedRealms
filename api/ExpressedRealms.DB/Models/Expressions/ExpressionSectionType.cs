@@ -1,4 +1,5 @@
 using Audit.EntityFramework;
+using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 
 namespace ExpressedRealms.DB.Models.Expressions;
 

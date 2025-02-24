@@ -1,10 +1,12 @@
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels;
 
-namespace ExpressedRealms.DB.Models.Expressions;
+namespace ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 
-public class ExpressionAuditTrail : IAuditTable
+public class ExpressionSectionAuditTrail : IAuditTable
 {
+    public int SectionId { get; set; }
     public int ExpressionId { get; set; }
 
     public int Id { get; set; }
@@ -14,5 +16,6 @@ public class ExpressionAuditTrail : IAuditTable
     public string ChangedProperties { get; set; }
 
     public virtual Expression Expression { get; set; }
+    public virtual ExpressionSection ExpressionSection { get; set; }
     public virtual User User { get; set; }
 }

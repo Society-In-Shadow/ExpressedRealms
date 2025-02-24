@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ExpressedRealms.DB.UserProfile.PlayerDBModels;
+namespace ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 
 internal class PlayerConfiguration : IEntityTypeConfiguration<Player>
 {
@@ -16,6 +16,8 @@ internal class PlayerConfiguration : IEntityTypeConfiguration<Player>
         builder.Property(x => x.PlayerNumber).IsRequired();
 
         builder.Property(x => x.Id).IsRequired();
+        
+        /*builder.Property(x => x.LastLoginDate);*/
 
         builder
             .HasOne(x => x.User)

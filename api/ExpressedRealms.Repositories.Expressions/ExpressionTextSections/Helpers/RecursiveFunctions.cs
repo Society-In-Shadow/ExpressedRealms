@@ -1,4 +1,4 @@
-using ExpressedRealms.DB.Models.Expressions;
+using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.Repositories.Expressions.ExpressionTextSections.DTOs;
 
 namespace ExpressedRealms.Repositories.Expressions.ExpressionTextSections.Helpers;

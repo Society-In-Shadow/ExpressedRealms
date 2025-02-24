@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ExpressedRealms.DB.Models.Expressions;
+namespace ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 
 public class ExpressionConfiguration : IEntityTypeConfiguration<Expression>
 {

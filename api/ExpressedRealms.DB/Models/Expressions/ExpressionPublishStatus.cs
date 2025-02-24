@@ -1,3 +1,5 @@
+using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
+
 namespace ExpressedRealms.DB.Models.Expressions;
 
 public class ExpressionPublishStatus

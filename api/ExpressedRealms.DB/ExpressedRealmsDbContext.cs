@@ -1,13 +1,14 @@
-using System.Text.Json;
-using Audit.Core;
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Configuration;
-using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions;
+using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
+using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.Models.Skills;
 using ExpressedRealms.DB.Models.Statistics;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.DB
@@ -27,6 +28,7 @@ namespace ExpressedRealms.DB
 
             builder.ApplyConfiguration(new ExpressionAuditTrailConfiguration());
             builder.ApplyConfiguration(new ExpressionSectionAuditTrailConfiguration());
+            builder.ApplyConfiguration(new UserAuditTrailConfiguration());
 
             builder.ApplyConfiguration(new StatTypeConfiguration());
             builder.ApplyConfiguration(new StatLevelConfiguration());
@@ -53,8 +55,10 @@ namespace ExpressedRealms.DB
         public DbSet<ExpressionSection> ExpressionSections { get; set; }
         public DbSet<ExpressionSectionType> ExpressionSectionTypes { get; set; }
         public DbSet<ExpressionPublishStatus> ExpressionPublishStatus { get; set; }
+        
         public DbSet<ExpressionSectionAuditTrail> ExpressionSectionAuditTrails { get; set; }
         public DbSet<ExpressionAuditTrail> ExpressionAuditTrails { get; set; }
+        public DbSet<UserAuditTrail> UserAuditTrails { get; set; }
 
         public DbSet<StatType> StateTypes { get; set; }
         public DbSet<StatLevel> StatLevels { get; set; }

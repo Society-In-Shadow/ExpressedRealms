@@ -1,8 +1,10 @@
 ﻿using ExpressedRealms.DB.Interceptors;
-using ExpressedRealms.DB.Models.Expressions;
+using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
+using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.Models.Skills;
 using ExpressedRealms.DB.Models.Statistics;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 
 namespace ExpressedRealms.DB.Characters;
 

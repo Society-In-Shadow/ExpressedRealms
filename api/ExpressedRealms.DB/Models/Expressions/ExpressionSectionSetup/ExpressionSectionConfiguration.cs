@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ExpressedRealms.DB.Models.Expressions;
+namespace ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 
-public class ExpressionSectionsConfiguration : IEntityTypeConfiguration<ExpressionSection>
+internal class ExpressionSectionsConfiguration : IEntityTypeConfiguration<ExpressionSection>
 {
     public void Configure(EntityTypeBuilder<ExpressionSection> builder)
     {

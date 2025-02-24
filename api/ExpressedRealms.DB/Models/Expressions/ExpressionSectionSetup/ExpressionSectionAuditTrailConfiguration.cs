@@ -1,18 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ExpressedRealms.DB.Models.Expressions;
+namespace ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 
-public class ExpressionAuditTrailConfiguration : IEntityTypeConfiguration<ExpressionAuditTrail>
+internal class ExpressionSectionAuditTrailConfiguration
+    : IEntityTypeConfiguration<ExpressionSectionAuditTrail>
 {
-    public void Configure(EntityTypeBuilder<ExpressionAuditTrail> builder)
+    public void Configure(EntityTypeBuilder<ExpressionSectionAuditTrail> builder)
     {
-        builder.ToTable("Expression_AuditTrail");
+        builder.ToTable("ExpressionSection_AuditTrail");
 
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
 
         builder.Property(e => e.ExpressionId).IsRequired();
+        builder.Property(e => e.SectionId).IsRequired();
 
         builder.Property(e => e.Action).IsRequired();
         builder.Property(e => e.UserId).IsRequired();
@@ -21,14 +23,21 @@ public class ExpressionAuditTrailConfiguration : IEntityTypeConfiguration<Expres
 
         builder
             .HasOne(x => x.Expression)
-            .WithMany(x => x.ExpressionAudits)
+            .WithMany(x => x.SectionAudits)
             .HasForeignKey(x => x.ExpressionId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
 
         builder
+            .HasOne(x => x.ExpressionSection)
+            .WithMany(x => x.SectionAudits)
+            .HasForeignKey(x => x.SectionId)
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired();
+
+        builder
             .HasOne(x => x.User)
-            .WithMany(x => x.ExpressionAuditTrails)
+            .WithMany(x => x.ExpressionSectionAuditTrails)
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();

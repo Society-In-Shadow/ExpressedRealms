@@ -1,8 +1,9 @@
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 
-namespace ExpressedRealms.DB.Models.Expressions;
+namespace ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 
 [AuditInclude]
 public class ExpressionSection : ISoftDelete

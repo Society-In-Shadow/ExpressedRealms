@@ -1,5 +1,5 @@
 using ExpressedRealms.DB;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 using ExpressedRealms.Server.EndPoints.PlayerEndpoints.DTOs;
 using ExpressedRealms.Server.Extensions;
 using Microsoft.AspNetCore.Http.HttpResults;
