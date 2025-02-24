@@ -1,5 +1,5 @@
 using ExpressedRealms.Authentication;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using ExpressedRealms.Repositories.Admin;
 using ExpressedRealms.Server.EndPoints.AdminEndpoints.Dtos;
 using ExpressedRealms.Server.EndPoints.AdminEndpoints.Request;
@@ -150,7 +150,7 @@ public static class AdminEndpoints
                                             ChangedProperties = x.ChangedProperties,
                                             Location = x.Location,
                                             TimeStamp = x.TimeStamp,
-                                            Action = x.Action,
+                                            Action = x.Action
                                         }
                                 )
                                 .ToList(),

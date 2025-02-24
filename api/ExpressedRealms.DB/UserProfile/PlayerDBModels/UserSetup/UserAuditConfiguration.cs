@@ -16,9 +16,20 @@ internal static class UserAuditConfiguration
                     changedRecordsToReturn.Add(changedRecord);
                     break;
                 case nameof(User.PasswordHash):
+                    changedRecord.ColumnName = "Password";
                     changedRecord.Message = "Changed their password.";
                     changedRecord.NewValue = null;
                     changedRecord.OriginalValue = null;
+                    changedRecordsToReturn.Add(changedRecord);
+                    break;
+                case nameof(User.EmailConfirmed):
+                    // This doesn't seem to reset itself on email change,
+                    // Instead it does a whole update
+                    changedRecord.FriendlyName = "Confirmed Email";
+                    if(changedRecord.NewValue.ToLowerInvariant() == "true")
+                        changedRecord.Message = "Confirmed their email.";
+                    if(changedRecord.NewValue.ToLowerInvariant() == "false")
+                        changedRecord.Message = "Need to reconfirm their new email address.";
                     changedRecordsToReturn.Add(changedRecord);
                     break;
             }

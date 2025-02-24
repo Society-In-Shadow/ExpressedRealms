@@ -50,9 +50,10 @@
                 v-for="(row, index) in props.log.changedPropertiesList" :key="row.id"
                 :class="index % 2 === 0 ? 'p-row-even' : 'p-row-odd'"
               >
-                <td>{{ row.ColumnName }}</td>
-                <td>{{ row.OriginalValue }}</td>
-                <td>{{ row.NewValue }}</td>
+                <td>{{ row.FriendlyName ?? row.ColumnName }}</td>
+                <td v-if="row.Message" colspan="2">{{row.Message}}</td>
+                <td v-if="!row.Message">{{ row.OriginalValue }}</td>
+                <td v-if="!row.Message">{{ row.NewValue }}</td>
               </tr>
             </tbody>
           </table>

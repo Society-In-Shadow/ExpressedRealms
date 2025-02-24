@@ -2,7 +2,7 @@ using System.Reflection;
 using AspNetCore.SwaggerUI.Themes;
 using Audit.Core;
 using ExpressedRealms.DB;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using ExpressedRealms.Repositories.Admin;
 using ExpressedRealms.Repositories.Characters;
 using ExpressedRealms.Repositories.Expressions;

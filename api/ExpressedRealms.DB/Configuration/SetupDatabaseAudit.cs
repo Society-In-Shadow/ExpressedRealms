@@ -67,7 +67,8 @@ public static class SetupDatabaseAudit
                                 var processedRecords = 
                                     ProcessChangedRecords.ProcessRecords(entry.EntityType.Name, changes);
 
-                                audit.ChangedProperties = JsonSerializer.Serialize(processedRecords);
+                                if(processedRecords.Any())
+                                    audit.ChangedProperties = JsonSerializer.Serialize(processedRecords);
 
                                 return true;
                             }

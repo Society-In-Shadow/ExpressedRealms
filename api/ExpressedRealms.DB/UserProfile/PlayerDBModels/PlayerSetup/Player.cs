@@ -1,5 +1,6 @@
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Characters;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 
 namespace ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 

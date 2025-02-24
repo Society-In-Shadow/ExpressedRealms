@@ -1,5 +1,5 @@
 using ExpressedRealms.DB.Interceptors;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 
 namespace ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 

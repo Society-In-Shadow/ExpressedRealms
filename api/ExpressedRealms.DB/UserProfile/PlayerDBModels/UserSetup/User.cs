@@ -1,11 +1,12 @@
+using Audit.EntityFramework;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using Microsoft.AspNetCore.Identity;
 
-namespace ExpressedRealms.DB.UserProfile.PlayerDBModels;
+namespace ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 
+[AuditInclude]
 public class User : IdentityUser
 {
     public virtual Player Player { get; set; } = null!;

@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Http.HttpResults;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
