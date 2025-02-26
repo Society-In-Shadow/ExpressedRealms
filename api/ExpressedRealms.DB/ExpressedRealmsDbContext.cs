@@ -29,6 +29,7 @@ namespace ExpressedRealms.DB
             builder.ApplyConfiguration(new ExpressionAuditTrailConfiguration());
             builder.ApplyConfiguration(new ExpressionSectionAuditTrailConfiguration());
             builder.ApplyConfiguration(new UserAuditTrailConfiguration());
+            builder.ApplyConfiguration(new PlayerAuditTrailConfiguration());
 
             builder.ApplyConfiguration(new StatTypeConfiguration());
             builder.ApplyConfiguration(new StatLevelConfiguration());
@@ -59,6 +60,7 @@ namespace ExpressedRealms.DB
         public DbSet<ExpressionSectionAuditTrail> ExpressionSectionAuditTrails { get; set; }
         public DbSet<ExpressionAuditTrail> ExpressionAuditTrails { get; set; }
         public DbSet<UserAuditTrail> UserAuditTrails { get; set; }
+        public DbSet<PlayerAuditTrail> PlayerAuditTrails { get; set; }
 
         public DbSet<StatType> StateTypes { get; set; }
         public DbSet<StatLevel> StatLevels { get; set; }

@@ -82,7 +82,6 @@ internal static class PlayerEndpoints
                         {
                             Id = new Guid(),
                             Name = playerDto.Name,
-                            PlayerNumber = 1,
                             UserId = http.User.GetUserId(),
                         };
 

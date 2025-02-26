@@ -1,7 +1,7 @@
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 
 namespace ExpressedRealms.DB.Configuration;
@@ -15,7 +15,8 @@ public static class ProcessChangedRecords
             nameof(User) => UserAuditConfiguration.ProcessChangedRecords(changedRecords),
             nameof(ExpressionSection) => ExpressionSectionAuditConfiguration.ProcessChangedRecords(changedRecords),
             nameof(Expression) => ExpressionAuditConfiguration.ProcessChangedRecords(changedRecords),
-            _ => throw new ArgumentException($"Invalid table name: {tableName}")
+            nameof(Player) => PlayerAuditConfiguration.ProcessChangedRecords(changedRecords),
+            _ => throw new ArgumentException($"Table not setup in the ProcessChangedRecords class: {tableName}")
         };
     }
 }

@@ -13,11 +13,7 @@ internal class PlayerConfiguration : IEntityTypeConfiguration<Player>
 
         builder.Property(x => x.UserId).IsRequired();
 
-        builder.Property(x => x.PlayerNumber).IsRequired();
-
         builder.Property(x => x.Id).IsRequired();
-        
-        /*builder.Property(x => x.LastLoginDate);*/
 
         builder
             .HasOne(x => x.User)

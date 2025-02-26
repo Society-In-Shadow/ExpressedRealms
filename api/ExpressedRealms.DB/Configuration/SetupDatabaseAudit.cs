@@ -3,6 +3,7 @@ using Audit.Core;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 
 namespace ExpressedRealms.DB.Configuration;
@@ -19,6 +20,7 @@ public static class SetupDatabaseAudit
                         m.AddExpressionSectionAuditTrailMapping()
                          .AddExpressionAuditTrailMapping()
                          .AddUserAuditTrailMapping()
+                         .AddPlayerAuditTrailMapping()
                          .AuditEntityAction<IAuditTable>(
                             (evt, entry, audit) =>
                             {
@@ -67,8 +69,10 @@ public static class SetupDatabaseAudit
                                 var processedRecords = 
                                     ProcessChangedRecords.ProcessRecords(entry.EntityType.Name, changes);
 
-                                if(processedRecords.Any())
-                                    audit.ChangedProperties = JsonSerializer.Serialize(processedRecords);
+                                if (!processedRecords.Any())
+                                    return false;
+                                
+                                audit.ChangedProperties = JsonSerializer.Serialize(processedRecords);
 
                                 return true;
                             }

@@ -3,6 +3,7 @@ using System;
 using ExpressedRealms.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpressedRealms.DB.Migrations
 {
     [DbContext(typeof(ExpressedRealmsDbContext))]
-    partial class ExpressedRealmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250224073935_AddPlayerAuditConfiguration")]
+    partial class AddPlayerAuditConfiguration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -597,7 +600,7 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Player_AuditTrail", (string)null);
+                    b.ToTable("PlayerAuditTrail");
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", b =>
@@ -1102,13 +1105,13 @@ namespace ExpressedRealms.DB.Migrations
                     b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup.Player", "Player")
                         .WithMany("PlayerAuditTrails")
                         .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", "User")
                         .WithMany("PlayerAuditTrails")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Player");
