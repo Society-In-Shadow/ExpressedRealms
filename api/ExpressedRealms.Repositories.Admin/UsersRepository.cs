@@ -12,12 +12,12 @@ internal sealed class UsersRepository(ExpressedRealmsDbContext context) : IUsers
         var roles = await context.Roles.AsNoTracking().ToListAsync();
 
         var players = await context
-            .Players.AsNoTracking()
+            .Users.AsNoTracking()
             .Select(x => new UserListDto()
             {
-                Id = x.User.Id,
-                Email = x.User.Email,
-                Username = x.Name,
+                Id = x.Id,
+                Email = x.Email,
+                Username = x.Player != null && x.Player.Name != null ? x.Player.Name : "Name hasn't been set yet.",
             })
             .ToListAsync();
 

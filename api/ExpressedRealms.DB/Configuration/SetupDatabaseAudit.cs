@@ -26,7 +26,26 @@ public static class SetupDatabaseAudit
                             {
                                 audit.Action = entry.Action;
                                 audit.Timestamp = DateTime.UtcNow;
-                                audit.UserId = evt.Environment.UserName;
+                                
+                                // Need to handle edge case of a user being created
+                                if (
+                                    string.Compare(
+                                        audit.Action,
+                                        "insert",
+                                        StringComparison.InvariantCultureIgnoreCase
+                                    ) == 0
+                                    && !string.IsNullOrWhiteSpace(evt.Environment.UserName)
+                                )
+                                {
+                                    if(entry.EntityType.Name == nameof(User))
+                                        audit.UserId = entry.ColumnValues.First(x => x.Key == "Id").Value.ToString();
+                                    if(entry.EntityType.Name == nameof(Player))
+                                        audit.UserId = entry.ColumnValues.First(x => x.Key == "UserId").Value.ToString();
+                                }
+                                else
+                                {
+                                    audit.UserId = evt.Environment.UserName;
+                                }
                                 
                                 // TODO: Need a delete clause in here, if soft delete is enabled, say delete as an action
 
