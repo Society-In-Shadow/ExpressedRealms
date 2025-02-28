@@ -17,7 +17,10 @@ internal sealed class UsersRepository(ExpressedRealmsDbContext context) : IUsers
             {
                 Id = x.Id,
                 Email = x.Email,
-                Username = x.Player != null && x.Player.Name != null ? x.Player.Name : "Name hasn't been set yet.",
+                Username =
+                    x.Player != null && x.Player.Name != null
+                        ? x.Player.Name
+                        : "Name hasn't been set yet.",
             })
             .ToListAsync();
 

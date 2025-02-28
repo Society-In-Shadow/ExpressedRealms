@@ -26,19 +26,18 @@ internal static class UserAuditConfiguration
                     // This doesn't seem to reset itself on email change,
                     // Instead it does a whole update
                     changedRecord.FriendlyName = "Confirmed Email";
-                    if(changedRecord.NewValue.ToLowerInvariant() == "true")
+                    if (changedRecord.NewValue.ToLowerInvariant() == "true")
                         changedRecord.Message = "Confirmed their email.";
-                    if(changedRecord.NewValue.ToLowerInvariant() == "false")
+                    if (changedRecord.NewValue.ToLowerInvariant() == "false")
                         changedRecord.Message = "Need to reconfirm their new email address.";
                     changedRecordsToReturn.Add(changedRecord);
                     break;
             }
-            
         }
-        
+
         return changedRecordsToReturn;
     }
-    
+
     public static IAuditEntityMapping AddUserAuditTrailMapping(this IAuditEntityMapping mapping)
     {
         return mapping.Map<User, UserAuditTrail>();

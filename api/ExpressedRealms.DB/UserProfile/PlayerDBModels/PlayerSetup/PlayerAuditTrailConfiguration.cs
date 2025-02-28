@@ -11,7 +11,7 @@ internal class PlayerAuditTrailConfiguration : IEntityTypeConfiguration<PlayerAu
 
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
-        
+
         builder.Property(e => e.PlayerId).IsRequired();
 
         builder.Property(e => e.Action).IsRequired();
@@ -25,7 +25,7 @@ internal class PlayerAuditTrailConfiguration : IEntityTypeConfiguration<PlayerAu
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder
             .HasOne(x => x.Player)
             .WithMany(x => x.PlayerAuditTrails)

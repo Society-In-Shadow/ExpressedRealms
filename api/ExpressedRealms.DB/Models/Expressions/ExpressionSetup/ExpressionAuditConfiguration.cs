@@ -32,15 +32,18 @@ internal static class ExpressionAuditConfiguration
                     throw new Exception($"Unknown column name {changedRecord.ColumnName}");
             }
 
-            if (skipRecord) continue;
-            
-            changedRecordsToReturn.Add(changedRecord);
+            if (skipRecord)
+                continue;
 
+            changedRecordsToReturn.Add(changedRecord);
         }
-        
+
         return changedRecordsToReturn;
     }
-    public static IAuditEntityMapping AddExpressionAuditTrailMapping(this IAuditEntityMapping mapping)
+
+    public static IAuditEntityMapping AddExpressionAuditTrailMapping(
+        this IAuditEntityMapping mapping
+    )
     {
         return mapping.Map<Expression, ExpressionAuditTrail>(
             (section, audit) =>

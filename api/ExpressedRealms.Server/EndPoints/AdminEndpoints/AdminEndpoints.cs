@@ -150,7 +150,7 @@ public static class AdminEndpoints
                                             ChangedProperties = x.ChangedProperties,
                                             Location = x.Location,
                                             TimeStamp = x.TimeStamp,
-                                            Action = x.Action
+                                            Action = x.Action,
                                         }
                                 )
                                 .ToList(),

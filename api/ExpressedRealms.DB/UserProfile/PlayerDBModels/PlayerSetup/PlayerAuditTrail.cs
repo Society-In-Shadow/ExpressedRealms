@@ -11,7 +11,7 @@ public class PlayerAuditTrail : IAuditTable
     public DateTime Timestamp { get; set; }
     public string UserId { get; set; }
     public string ChangedProperties { get; set; }
-    
+
     public virtual User User { get; set; }
     public virtual Player Player { get; set; }
 }

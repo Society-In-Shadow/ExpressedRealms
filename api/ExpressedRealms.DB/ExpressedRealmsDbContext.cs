@@ -56,7 +56,7 @@ namespace ExpressedRealms.DB
         public DbSet<ExpressionSection> ExpressionSections { get; set; }
         public DbSet<ExpressionSectionType> ExpressionSectionTypes { get; set; }
         public DbSet<ExpressionPublishStatus> ExpressionPublishStatus { get; set; }
-        
+
         public DbSet<ExpressionSectionAuditTrail> ExpressionSectionAuditTrails { get; set; }
         public DbSet<ExpressionAuditTrail> ExpressionAuditTrails { get; set; }
         public DbSet<UserAuditTrail> UserAuditTrails { get; set; }

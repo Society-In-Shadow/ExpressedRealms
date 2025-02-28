@@ -20,26 +20,28 @@ internal static class PlayerAuditConfiguration
                 case nameof(Player.UserId):
                     skipRecord = true;
                     break;
-                
+
                 default:
                     throw new Exception($"Unknown column name {changedRecord.ColumnName}");
             }
 
-            if (skipRecord) continue;
-            
+            if (skipRecord)
+                continue;
+
             changedRecordsToReturn.Add(changedRecord);
-            
         }
-        
+
         return changedRecordsToReturn;
     }
-    
+
     public static IAuditEntityMapping AddPlayerAuditTrailMapping(this IAuditEntityMapping mapping)
     {
-        return mapping.Map<Player, PlayerAuditTrail>((player, audit) =>
-        {
-            audit.PlayerId = player.Id;
-            return true;
-        });
+        return mapping.Map<Player, PlayerAuditTrail>(
+            (player, audit) =>
+            {
+                audit.PlayerId = player.Id;
+                return true;
+            }
+        );
     }
 }

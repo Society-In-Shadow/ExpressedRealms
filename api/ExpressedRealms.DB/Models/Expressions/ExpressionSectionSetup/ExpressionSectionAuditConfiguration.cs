@@ -33,21 +33,23 @@ internal static class ExpressionSectionAuditConfiguration
                 case nameof(ExpressionSection.Name):
                 case nameof(ExpressionSection.Content):
                     break;
-                
+
                 default:
                     throw new Exception($"Unknown column name {changedRecord.ColumnName}");
             }
 
-            if (skipRecord) continue;
-            
-            changedRecordsToReturn.Add(changedRecord);
+            if (skipRecord)
+                continue;
 
+            changedRecordsToReturn.Add(changedRecord);
         }
-        
+
         return changedRecordsToReturn;
     }
 
-    public static IAuditEntityMapping AddExpressionSectionAuditTrailMapping(this IAuditEntityMapping mapping)
+    public static IAuditEntityMapping AddExpressionSectionAuditTrailMapping(
+        this IAuditEntityMapping mapping
+    )
     {
         return mapping.Map<ExpressionSection, ExpressionSectionAuditTrail>(
             (section, audit) =>
