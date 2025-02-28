@@ -194,10 +194,9 @@ try
             // This will only ever be empty when the user isn't logged in (think creating a new user)
             if (httpContext is null || httpContext.HttpContext is null || !httpContext.HttpContext.User.Identity.IsAuthenticated)
             {
-                scope.Event.Environment.UserName = string.Empty;
                 return;
             }
-            scope.Event.Environment.UserName = httpContext.HttpContext?.User.GetUserId();
+            scope.Event.CustomFields.Add("UserId", httpContext.HttpContext?.User.GetUserId());
         }
     );
 

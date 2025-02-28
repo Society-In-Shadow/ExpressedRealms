@@ -28,23 +28,13 @@ public static class SetupDatabaseAudit
                                 audit.Timestamp = DateTime.UtcNow;
                                 
                                 // Need to handle edge case of a user being created
-                                if (
-                                    string.Compare(
-                                        audit.Action,
-                                        "insert",
-                                        StringComparison.InvariantCultureIgnoreCase
-                                    ) == 0
-                                    && !string.IsNullOrWhiteSpace(evt.Environment.UserName)
-                                )
+                                if (!evt.CustomFields.ContainsKey("UserId"))
                                 {
-                                    if(entry.EntityType.Name == nameof(User))
-                                        audit.UserId = entry.ColumnValues.First(x => x.Key == "Id").Value.ToString();
-                                    if(entry.EntityType.Name == nameof(Player))
-                                        audit.UserId = entry.ColumnValues.First(x => x.Key == "UserId").Value.ToString();
+                                    audit.UserId = ExtractUserId(entry.EntityType.Name, entry.ColumnValues);
                                 }
                                 else
                                 {
-                                    audit.UserId = evt.Environment.UserName;
+                                    audit.UserId = evt.CustomFields["UserId"]?.ToString();
                                 }
                                 
                                 // TODO: Need a delete clause in here, if soft delete is enabled, say delete as an action
@@ -100,4 +90,15 @@ public static class SetupDatabaseAudit
                     .IgnoreMatchedProperties(true)
             );
     }
+    
+    private static string ExtractUserId(string entityTypeName, IDictionary<string, object> columnValues)
+    {
+        return entityTypeName switch
+        {
+            nameof(User) => columnValues.First(x => x.Key == "Id").Value.ToString(),
+            nameof(Player) => columnValues.First(x => x.Key == "UserId").Value.ToString(),
+            _ => throw new InvalidOperationException($"Unsupported entity type: {entityTypeName}")
+        };
+    }
+
 }
