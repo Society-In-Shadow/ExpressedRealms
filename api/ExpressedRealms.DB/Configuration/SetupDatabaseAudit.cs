@@ -12,7 +12,7 @@ public static class SetupDatabaseAudit
 {
     public static void SetupAudit()
     {
-        var globallyExcludedColumns = new List<string>() { "Id", "DeletedAt", "IsDeleted" };
+        var globallyExcludedColumns = new List<string>() { "Id", nameof(ISoftDelete.IsDeleted), nameof(ISoftDelete.DeletedAt) };
         Audit
             .Core.Configuration.Setup()
             .UseEntityFramework(x =>
@@ -39,9 +39,7 @@ public static class SetupDatabaseAudit
                                     {
                                         audit.UserId = evt.CustomFields["UserId"]?.ToString();
                                     }
-
-                                    // TODO: Need a delete clause in here, if soft delete is enabled, say delete as an action
-
+                                    
                                     var changes = new List<ChangedRecord>();
                                     if (
                                         string.Compare(
@@ -79,11 +77,32 @@ public static class SetupDatabaseAudit
                                             })
                                             .ToList();
                                     }
+                                    
+                                    List<ChangedRecord> globallyHandledRecords = new();
+                                    
+                                    if (changes.Any(x => x.ColumnName == nameof(ISoftDelete.IsDeleted) && x.NewValue?.ToLower() == "true"))
+                                    {
+                                        audit.Action = "Delete";
+                                        var deletedRecord = changes.First(x => x.ColumnName == nameof(ISoftDelete.IsDeleted));
+                                        changes.Remove(deletedRecord);
+                                        deletedRecord.FriendlyName = "Deleted";
+                                        deletedRecord.Message = "Successfully deleted.";
+                                        globallyHandledRecords.Add(deletedRecord);
+                                    }
+
+                                    if (changes.Any(x => x.ColumnName == nameof(ISoftDelete.DeletedAt) && !string.IsNullOrWhiteSpace(x.NewValue)))
+                                    {
+                                        audit.Action = "Delete";
+                                        var deletedRecord = changes.First(x => x.ColumnName == nameof(ISoftDelete.DeletedAt));
+                                        changes.Remove(deletedRecord);
+                                    }
 
                                     var processedRecords = ProcessChangedRecords.ProcessRecords(
                                         entry.EntityType.Name,
                                         changes
                                     );
+                                    
+                                    processedRecords.AddRange(globallyHandledRecords);
 
                                     if (!processedRecords.Any())
                                         return false;
