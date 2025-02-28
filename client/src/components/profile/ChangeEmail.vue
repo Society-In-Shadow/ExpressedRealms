@@ -9,6 +9,7 @@ import {ref as vueRef} from "vue";
 import Message from "primevue/message";
 import {resetEmailConfirmation} from "@/services/Authentication";
 import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
+import toasters from "@/services/Toasters";
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
@@ -34,6 +35,7 @@ const onEmailSubmit = handleSubmit((values, { resetForm }) => {
         successfullyChangedEmail.value = true;
         resetEmailConfirmation();
         resetForm();
+        toasters.success("Successfully updated email!");
       });
 });
 

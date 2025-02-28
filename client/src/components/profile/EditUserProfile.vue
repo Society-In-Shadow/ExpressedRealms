@@ -9,6 +9,7 @@ import { userStore } from "@/stores/userStore";
 import InputMaskWrapper from "@/FormWrappers/InputMaskWrapper.vue";
 import Card from "primevue/card";
 import {onMounted, ref} from "vue";
+import toasters from "@/services/Toasters";
 const userInfo = userStore();
 
 const { defineField, handleSubmit, errors } = useForm({
@@ -36,7 +37,10 @@ onMounted(() =>{
 const onSubmit = handleSubmit((values) => {
   axios.put('/player', values).then(() => {
       userInfo.name = values.name;
-    });
+    })
+      .then(() => {
+        toasters.success("Successfully Updated User Name!");
+      });
 });
 
 </script>

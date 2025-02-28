@@ -8,6 +8,7 @@ import { object, string, ref }  from 'yup';
 import Message from "primevue/message";
 import { ref as vueRef } from 'vue';
 import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
+import toasters from "@/services/Toasters";
 
 const { defineField, handleSubmit, errors, setErrors } = useForm({
   validationSchema: object({
@@ -39,6 +40,7 @@ const onPasswordSubmit = handleSubmit((values, { resetForm }) => {
         newPassword: values.confirmPassword
       }).then(() => {
         successfullyChangedPassword.value = true;
+        toasters.success("Successfully changed password!");
         resetForm();
       })
       .catch((error) => {
