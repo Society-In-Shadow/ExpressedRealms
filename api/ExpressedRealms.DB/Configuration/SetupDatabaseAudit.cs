@@ -4,6 +4,7 @@ using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserRoles;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 
 namespace ExpressedRealms.DB.Configuration;
@@ -26,6 +27,7 @@ public static class SetupDatabaseAudit
                             .AddExpressionAuditTrailMapping()
                             .AddUserAuditTrailMapping()
                             .AddPlayerAuditTrailMapping()
+                            .AddUserRoleAuditTrailMapping()
                             .AuditEntityAction<IAuditTable>(
                                 (evt, entry, audit) =>
                                 {
@@ -65,6 +67,24 @@ public static class SetupDatabaseAudit
                                                 NewValue = x.Value?.ToString(),
                                             })
                                             .ToList();
+                                    }
+                                    else if (string.Compare(
+                                                 audit.Action,
+                                                 "delete",
+                                                 StringComparison.InvariantCultureIgnoreCase
+                                             ) == 0)
+                                    {
+                                        audit.ChangedProperties = JsonSerializer.Serialize(
+                                            new List<ChangedRecord>()
+                                            {
+                                                new ChangedRecord()
+                                                {
+                                                    Message = "Item was permanently deleted / removed.",
+                                                    FriendlyName = "Deleted"
+                                                }
+                                            }
+                                        );
+                                        return true;
                                     }
                                     else
                                     {

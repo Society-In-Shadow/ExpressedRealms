@@ -1,4 +1,5 @@
 using ExpressedRealms.Authentication;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.Roles;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using ExpressedRealms.Repositories.Admin;
 using ExpressedRealms.Server.EndPoints.AdminEndpoints.Dtos;
@@ -57,7 +58,7 @@ public static class AdminEndpoints
                     string userId,
                     UpdateUserRoleRequest dto,
                     UserManager<User> userManager,
-                    RoleManager<IdentityRole> roleManager,
+                    RoleManager<Role> roleManager,
                     SignInManager<User> signInManager
                 ) =>
                 {
@@ -103,7 +104,7 @@ public static class AdminEndpoints
                 "user/{userid}/roles",
                 async Task<Results<NoContent, NotFound, Ok<UserRoleResponse>>> (
                     Guid userId,
-                    RoleManager<IdentityRole> roleManager,
+                    RoleManager<Role> roleManager,
                     UserManager<User> userManager
                 ) =>
                 {

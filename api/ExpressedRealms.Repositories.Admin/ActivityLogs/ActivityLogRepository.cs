@@ -60,11 +60,25 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
                 ChangedProperties = x.ChangedProperties,
             })
             .ToListAsync();
+        
+        var userRoleLogs = await context
+            .UserRoleAuditTrails.AsNoTracking()
+            .IgnoreQueryFilters()
+            .Where(x => x.UserId == userId)
+            .Select(x => new Log()
+            {
+                Location = $"Role \"{x.Role.Name}\" for Player \"{x.User.Player.Name}\"",
+                TimeStamp = x.Timestamp,
+                Action = x.Action,
+                ChangedProperties = x.ChangedProperties,
+            })
+            .ToListAsync();
 
         return expressionLogs
             .Concat(expressionSectionsLogs)
             .Concat(userLogs)
             .Concat(playerLogs)
+            .Concat(userRoleLogs)
             .ToList();
     }
 }

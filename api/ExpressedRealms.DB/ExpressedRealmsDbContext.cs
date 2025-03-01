@@ -6,15 +6,26 @@ using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.Models.Skills;
 using ExpressedRealms.DB.Models.Statistics;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.Roles;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserRoles;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.DB
 {
     [AuditDbContext(Mode = AuditOptionMode.OptIn)]
-    public class ExpressedRealmsDbContext : AuditIdentityDbContext<User>
+    public class ExpressedRealmsDbContext : AuditIdentityDbContext<
+            User, 
+            Role, 
+            string, 
+            IdentityUserClaim<string>,
+            UserRole,
+            IdentityUserLogin<string>,
+            IdentityRoleClaim<string>,
+            IdentityUserToken<string>
+    >
     {
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -30,6 +41,7 @@ namespace ExpressedRealms.DB
             builder.ApplyConfiguration(new ExpressionSectionAuditTrailConfiguration());
             builder.ApplyConfiguration(new UserAuditTrailConfiguration());
             builder.ApplyConfiguration(new PlayerAuditTrailConfiguration());
+            builder.ApplyConfiguration(new UserRoleAuditTrailConfiguration());
 
             builder.ApplyConfiguration(new StatTypeConfiguration());
             builder.ApplyConfiguration(new StatLevelConfiguration());
@@ -61,6 +73,7 @@ namespace ExpressedRealms.DB
         public DbSet<ExpressionAuditTrail> ExpressionAuditTrails { get; set; }
         public DbSet<UserAuditTrail> UserAuditTrails { get; set; }
         public DbSet<PlayerAuditTrail> PlayerAuditTrails { get; set; }
+        public DbSet<UserRoleAuditTrail> UserRoleAuditTrails { get; set; }
 
         public DbSet<StatType> StateTypes { get; set; }
         public DbSet<StatLevel> StatLevels { get; set; }

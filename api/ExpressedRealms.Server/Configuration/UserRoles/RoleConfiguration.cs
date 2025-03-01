@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.Roles;
 using Microsoft.AspNetCore.Identity;
 
 namespace ExpressedRealms.Server.Configuration.UserRoles;
@@ -9,14 +10,17 @@ public static class RoleConfiguration
         app.Lifetime.ApplicationStarted.Register(async () =>
         {
             using var scope = app.Services.CreateScope();
-            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
             var roles = new[] { UserRoles.ExpressionEditor, UserRoles.UserManagementRole };
 
             foreach (var role in roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
                 {
-                    await roleManager.CreateAsync(new IdentityRole(role));
+                    await roleManager.CreateAsync(new Role()
+                    {
+                        Name = role
+                    });
                 }
             }
         });

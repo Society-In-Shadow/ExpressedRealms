@@ -2,6 +2,7 @@ using System.Reflection;
 using AspNetCore.SwaggerUI.Themes;
 using Audit.Core;
 using ExpressedRealms.DB;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.Roles;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using ExpressedRealms.Repositories.Admin;
 using ExpressedRealms.Repositories.Characters;
@@ -78,7 +79,7 @@ try
     Log.Information("Setting Up Authentication and Identity");
     builder
         .Services.AddIdentityCore<User>()
-        .AddRoles<IdentityRole>()
+        .AddRoles<Role>()
         .AddEntityFrameworkStores<ExpressedRealmsDbContext>()
         .AddApiEndpoints();
 
