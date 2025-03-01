@@ -8,7 +8,7 @@ public class UserRoleAuditTrail : IAuditTable
 {
     public string RoleId { get; set; }
     public string MappingUserId { get; set; }
-    
+
     public int Id { get; set; }
     public string Action { get; set; }
     public DateTime Timestamp { get; set; }

@@ -60,7 +60,7 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
                 ChangedProperties = x.ChangedProperties,
             })
             .ToListAsync();
-        
+
         var userRoleLogs = await context
             .UserRoleAuditTrails.AsNoTracking()
             .IgnoreQueryFilters()

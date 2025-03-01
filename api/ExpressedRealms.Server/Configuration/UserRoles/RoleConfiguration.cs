@@ -17,10 +17,7 @@ public static class RoleConfiguration
             {
                 if (!await roleManager.RoleExistsAsync(role))
                 {
-                    await roleManager.CreateAsync(new Role()
-                    {
-                        Name = role
-                    });
+                    await roleManager.CreateAsync(new Role() { Name = role });
                 }
             }
         });

@@ -34,10 +34,11 @@ internal static class UserRoleAuditConfiguration
     {
         return mapping.Map<UserRole, UserRoleAuditTrail>(
             (role, audit) =>
-        {
-            audit.RoleId = role.RoleId;
-            audit.MappingUserId = role.UserId;
-            return true;
-        });
+            {
+                audit.RoleId = role.RoleId;
+                audit.MappingUserId = role.UserId;
+                return true;
+            }
+        );
     }
 }

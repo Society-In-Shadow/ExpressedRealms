@@ -68,20 +68,23 @@ public static class SetupDatabaseAudit
                                             })
                                             .ToList();
                                     }
-                                    else if (string.Compare(
-                                                 audit.Action,
-                                                 "delete",
-                                                 StringComparison.InvariantCultureIgnoreCase
-                                             ) == 0)
+                                    else if (
+                                        string.Compare(
+                                            audit.Action,
+                                            "delete",
+                                            StringComparison.InvariantCultureIgnoreCase
+                                        ) == 0
+                                    )
                                     {
                                         audit.ChangedProperties = JsonSerializer.Serialize(
                                             new List<ChangedRecord>()
                                             {
                                                 new ChangedRecord()
                                                 {
-                                                    Message = "Item was permanently deleted / removed.",
-                                                    FriendlyName = "Deleted"
-                                                }
+                                                    Message =
+                                                        "Item was permanently deleted / removed.",
+                                                    FriendlyName = "Deleted",
+                                                },
                                             }
                                         );
                                         return true;

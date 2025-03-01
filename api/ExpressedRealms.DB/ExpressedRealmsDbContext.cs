@@ -16,16 +16,17 @@ using Microsoft.EntityFrameworkCore;
 namespace ExpressedRealms.DB
 {
     [AuditDbContext(Mode = AuditOptionMode.OptIn)]
-    public class ExpressedRealmsDbContext : AuditIdentityDbContext<
-            User, 
-            Role, 
-            string, 
+    public class ExpressedRealmsDbContext
+        : AuditIdentityDbContext<
+            User,
+            Role,
+            string,
             IdentityUserClaim<string>,
             UserRole,
             IdentityUserLogin<string>,
             IdentityRoleClaim<string>,
             IdentityUserToken<string>
-    >
+        >
     {
         protected override void OnModelCreating(ModelBuilder builder)
         {

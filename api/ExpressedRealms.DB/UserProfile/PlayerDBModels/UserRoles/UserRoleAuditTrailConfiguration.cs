@@ -14,7 +14,7 @@ internal class UserRoleAuditTrailConfiguration : IEntityTypeConfiguration<UserRo
 
         builder.Property(e => e.RoleId).IsRequired();
         builder.Property(e => e.MappingUserId).IsRequired();
-        
+
         builder.Property(e => e.Action).IsRequired();
         builder.Property(e => e.UserId).IsRequired();
         builder.Property(e => e.Timestamp).IsRequired();
@@ -26,14 +26,14 @@ internal class UserRoleAuditTrailConfiguration : IEntityTypeConfiguration<UserRo
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder
             .HasOne(x => x.MappingUser)
             .WithMany(x => x.MappedUserRoleAuditTrails)
             .HasForeignKey(x => x.MappingUserId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder
             .HasOne(x => x.Role)
             .WithMany(x => x.UserRoleAuditTrails)
