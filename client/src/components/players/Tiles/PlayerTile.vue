@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import {computed, ref} from 'vue'
 import Card from "primevue/card";
 import type {PlayerListItem} from "@/components/players/Objects/Player";
 import type {PropType} from "vue";
@@ -13,6 +13,8 @@ import PlayerRoles from "@/components/players/Tiles/PlayerRoles.vue";
 import Tag from 'primevue/tag';
 import {fetchUserPolicies} from "@/components/players/Services/PlayerRoleService";
 import ActivityLogs from "@/components/players/Tiles/ActivityLogs.vue";
+import {formatDistance}  from 'date-fns/formatDistance';
+import {userConfirmationPopups} from "@/components/players/Services/PlayerConfirmationPopupService";
 
 const showInfo = ref(false);
 
@@ -23,12 +25,21 @@ const props = defineProps({
   }
 });
 
+var userConfirmations = userConfirmationPopups(props.playerInfo.id);
+
 function updatePlayerRoles(){
   fetchUserPolicies(props.playerInfo.id)
       .then(response => {
         props.playerInfo.roles = response.data.roles.filter(x => x.isEnabled).map(x => x.name);
       });
 }
+
+const timeTillLockoutExpires = computed(() => {
+  if(props.playerInfo.lockedOut){
+    return formatDistance(new Date(props.playerInfo.lockedOutExpires), new Date(), { includeSeconds: true});
+  }
+  return "";
+})
 
 </script>
 
@@ -37,23 +48,32 @@ function updatePlayerRoles(){
     <template #content>
       <div class="d-flex flex-row">
         <div class="flex-grow-1">
-          <div class="row">
-            <div class="col">
-              <h2 class="d-inline-flex m-0 pr-3">
+          <div class="d-flex flex-row">
+            <div class="flex-grow-1 align-self-center">
+              <h1 class="d-inline-flex m-0 pr-3">
                 {{ props.playerInfo.username }}
-              </h2>
+              </h1>
               <Tag v-for="role in props.playerInfo.roles" :key="role" class="m-1" :value="role" />
             </div>
+            <div>
+              <Button v-if="props.playerInfo.isDisabled" label="Enable Account" class="m-2" @click="userConfirmations.enableConfirmation($event)" />
+              <Button v-else-if="!props.playerInfo.isDisabled" label="Disable Account" class="m-2" @click="userConfirmations.deleteConfirmation($event)" />
+              <Button v-else-if="props.playerInfo.lockedOut" label="Unlock Account" class="m-2" @click="userConfirmations.unlockConfirmation($event)" />
+              <Button :label="showInfo ? 'Cancel' : 'Edit'" class="m-2" @click="showInfo = !showInfo" />
+            </div>
           </div>
-          <div class="row">
-            <div class="col">
+          <div class="d-flex flex-row align-self-center pt-3 pr-3">
+            <div class="flex-grow-1">
               {{ props.playerInfo.email }}
+            </div>
+            <div>
+              <Tag v-if="props.playerInfo.emailVerified" value="Email Verified" />
+              <Tag v-if="props.playerInfo.isDisabled" severity="danger" value="Disabled" />
+              <Tag v-else-if="props.playerInfo.lockedOut" severity="warn" :value="'Locked Out for ' + timeTillLockoutExpires" />
             </div>
           </div>
         </div>
-        <div>
-          <Button :label="showInfo ? 'Cancel' : 'Edit'" class="m-2" @click="showInfo = !showInfo" />
-        </div>
+
       </div>
 
       <div v-if="showInfo" class="row">

@@ -67,7 +67,7 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             .Where(x => x.UserId == userId)
             .Select(x => new Log()
             {
-                Location = $"Role \"{x.Role.Name}\" for Player \"{x.User.Player.Name}\"",
+                Location = $"Role \"{x.Role.Name}\" for Player \"{x.MappingUser.Player.Name}\"",
                 TimeStamp = x.Timestamp,
                 Action = x.Action,
                 ChangedProperties = x.ChangedProperties,

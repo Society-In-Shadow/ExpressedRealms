@@ -42,6 +42,9 @@ public static class AdminEndpoints
                                     Email = x.Email,
                                     Username = x.Username,
                                     Roles = x.Roles,
+                                    IsDisabled = x.IsDisabled,
+                                    LockedOut = x.LockedOut,
+                                    LockedOutExpires = x.LockOutExpires,
                                 })
                                 .OrderBy(x => x.Email)
                                 .ToList(),
@@ -157,6 +160,33 @@ public static class AdminEndpoints
                                 .ToList(),
                         }
                     );
+                }
+            )
+            .RequireAuthorization();
+        
+        endpointGroup
+            .MapPut(
+                "user/{userid}/lockout",
+                async Task<Results<NoContent, NotFound, BadRequest<string>>> (
+                    string userId,
+                    DisableUserRequest dto,
+                    UserManager<User> userManager
+                ) =>
+                {
+                    var user = await userManager.FindByIdAsync(dto.UserId);
+
+                    if (user == null)
+                    {
+                        return TypedResults.NotFound();
+                    }
+                    
+                    var expireDate = dto.CustomExpiryDate ?? DateTime.MaxValue;
+                    if(!dto.LockoutEnabled)
+                        expireDate = DateTime.UtcNow;
+                    
+                    await userManager.SetLockoutEndDateAsync(user, expireDate);
+                    
+                    return TypedResults.NoContent();
                 }
             )
             .RequireAuthorization();

@@ -21,6 +21,10 @@ internal sealed class UsersRepository(ExpressedRealmsDbContext context) : IUsers
                     x.Player != null && x.Player.Name != null
                         ? x.Player.Name
                         : "Name hasn't been set yet.",
+                IsDisabled = x.LockoutEnd.HasValue && x.LockoutEnd == DateTimeOffset.MaxValue,
+                LockedOut = x.LockoutEnd.HasValue && x.LockoutEnd >= DateTimeOffset.UtcNow,
+                LockOutExpires = x.LockoutEnd,
+                
             })
             .ToListAsync();
 

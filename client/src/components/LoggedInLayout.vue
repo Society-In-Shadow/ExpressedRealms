@@ -1,7 +1,8 @@
 
 <template>
   <Toast position="top-center" />
-  <ConfirmDialog />
+  <ConfirmDialog group="dialog" />
+  <ConfirmPopup group="popup"></ConfirmPopup>
   <main-nav-bar />
   
   <router-view />
@@ -12,6 +13,7 @@ import { RouterView } from 'vue-router'
 import MainNavBar from "@/components/navbar/MainNavBar.vue";
 import Toast from 'primevue/toast';
 import ConfirmDialog from "primevue/confirmdialog";
+import ConfirmPopup from 'primevue/confirmpopup';
 </script>
 
 <style>

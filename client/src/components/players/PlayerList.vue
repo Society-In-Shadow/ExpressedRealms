@@ -5,6 +5,8 @@ import axios from "axios";
 import PlayerTile from "@/components/players/Tiles/PlayerTile.vue";
 import type {PlayerListItem} from "@/components/players/Objects/Player";
 import InputText from "primevue/inputtext";
+import type {Log} from "@/components/players/Objects/ActivityLogs";
+import type {ChangedProperty} from "@/components/players/Objects/ChangedProperty";
 
 let players = ref<Array<PlayerListItem>>([]);
 const filteredPlayers = ref<Array<PlayerListItem>>([]);
@@ -13,6 +15,9 @@ const searchQuery = ref<string>("");
 function fetchData() {
   axios.get('/admin/users')
       .then((response) => {
+        response.data.users.forEach(function(item:PlayerListItem) {
+          item.lockedOutExpires = new Date(item.lockedOutExpires);
+        });
         players.value = response.data.users;
         filteredPlayers.value = response.data.users
       });
