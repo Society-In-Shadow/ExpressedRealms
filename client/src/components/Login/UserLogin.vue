@@ -28,11 +28,13 @@ onBeforeMount(() => {
 const [email] = defineField('email');
 const [password] = defineField('password');
 let incorrectLogin = ref(false);
+let lockedOut = ref(false);
 
 const route = useRoute();
 
 const onSubmit = handleSubmit((values) => {
   incorrectLogin.value = false;
+  lockedOut.value = false;
   axios.post('/auth/login', values)
   .then(() => {
     // Reset antiforgery token after login
@@ -41,8 +43,11 @@ const onSubmit = handleSubmit((values) => {
         Router.push('characters');
       });
   }).
-  catch(() => {
-    incorrectLogin.value = true;
+  catch((response) => {
+    if(response.response.data && response.response.data.detail == "LockedOut")
+      lockedOut.value = true;
+    else
+      incorrectLogin.value = true;
   });
 });
 
@@ -51,6 +56,9 @@ const onSubmit = handleSubmit((values) => {
 <template>
   <Message v-if="incorrectLogin" severity="error" :closable="false" data-cy="error-invalid-login">
     Your email or password was incorrect, please try again.
+  </Message>
+  <Message v-if="lockedOut" severity="error" :closable="false" data-cy="error-invalid-login">
+    You've been locked out of your account.  Please wait 5 minutes before trying again.
   </Message>
   <Message v-else-if="route.query.resetPassword" severity="success" :closable="false" data-cy="success-password-reset-message">
     Password was successfully changed, please log in.
