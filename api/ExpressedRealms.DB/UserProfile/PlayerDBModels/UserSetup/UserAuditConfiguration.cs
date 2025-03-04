@@ -34,6 +34,9 @@ internal static class UserAuditConfiguration
                     break;
                 
                 case nameof(User.AccessFailedCount):
+                    // This catches when the user is initially created
+                    if (changedRecord.NewValue == "0" && string.IsNullOrWhiteSpace(changedRecord.OriginalValue))
+                        break;
                     changedRecord.FriendlyName = "Invalid Password Attempt";
                     changedRecord.Message = "Player entered an incorrect password";
                     changedRecordsToReturn.Add(changedRecord);
@@ -41,8 +44,14 @@ internal static class UserAuditConfiguration
                 
                 case nameof(User.LockoutEnd):
                     changedRecord.FriendlyName = "Player Status Update";
-                    
-                    var date = DateTimeOffset.Parse(changedRecord.NewValue);
+
+                    var successful = DateTimeOffset.TryParse(changedRecord.NewValue, out var date);
+
+                    // User was more than likely just added / doesn't have issues
+                    if (!successful)
+                    {
+                        break;
+                    }
                     
                     // Interesting side note, converting max value to a string and converting back
                     // will make it lose it's microsecond and millisecond value, thus making it not
