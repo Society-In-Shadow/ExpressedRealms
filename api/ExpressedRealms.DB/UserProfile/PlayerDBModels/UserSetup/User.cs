@@ -14,6 +14,7 @@ public class User : IdentityUser
     public virtual List<ExpressionSectionAuditTrail> ExpressionSectionAuditTrails { get; set; } =
         new();
     public virtual List<ExpressionAuditTrail> ExpressionAuditTrails { get; set; } = new();
+    public virtual List<UserAuditTrail> UserActorAuditTrails { get; set; } = new();
     public virtual List<UserAuditTrail> UserAuditTrails { get; set; } = new();
     public virtual List<PlayerAuditTrail> PlayerAuditTrails { get; set; } = new();
     public virtual List<UserRoleAuditTrail> UserRoleAuditTrails { get; set; } = new();

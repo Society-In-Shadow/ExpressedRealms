@@ -47,6 +47,19 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
                 ChangedProperties = x.ChangedProperties,
             })
             .ToListAsync();
+        
+        var userSpecificLogs = await context
+            .UserAuditTrails.AsNoTracking()
+            .IgnoreQueryFilters()
+            .Where(x => x.UserId == userId)
+            .Select(x => new Log()
+            {
+                Location = $"Player \"{x.User.Player.Name}\" was modified by \"{x.ActorUser.Player.Name}\"",
+                TimeStamp = x.Timestamp,
+                Action = x.Action,
+                ChangedProperties = x.ChangedProperties,
+            })
+            .ToListAsync();
 
         var playerLogs = await context
             .PlayerAuditTrails.AsNoTracking()
@@ -61,6 +74,19 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             })
             .ToListAsync();
 
+        var playerSpecificLogs = await context
+            .PlayerAuditTrails.AsNoTracking()
+            .IgnoreQueryFilters()
+            .Where(x => x.Player.UserId == userId)
+            .Select(x => new Log()
+            {
+                Location = $"Player \"{x.Player.Name}\" was modified by \"{x.ActorUser.Player.Name}\"",
+                TimeStamp = x.Timestamp,
+                Action = x.Action,
+                ChangedProperties = x.ChangedProperties,
+            })
+            .ToListAsync();
+        
         var userRoleLogs = await context
             .UserRoleAuditTrails.AsNoTracking()
             .IgnoreQueryFilters()
@@ -73,13 +99,28 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
                 ChangedProperties = x.ChangedProperties,
             })
             .ToListAsync();
+            
+        var userSpecificRoleLogs = await context
+                .UserRoleAuditTrails.AsNoTracking()
+                .IgnoreQueryFilters()
+                .Where(x => x.MappingUserId == userId)
+                .Select(x => new Log()
+                {
+                    Location = $"Role \"{x.Role.Name}\" was modified by \"{x.ActorUser.Player.Name}\"",
+                    TimeStamp = x.Timestamp,
+                    Action = x.Action,
+                    ChangedProperties = x.ChangedProperties,
+                })
             .ToListAsync();
 
         return expressionLogs
             .Concat(expressionSectionsLogs)
             .Concat(userLogs)
+            .Concat(userSpecificLogs)
             .Concat(playerLogs)
+            .Concat(playerSpecificLogs)
             .Concat(userRoleLogs)
+            .Concat(userSpecificRoleLogs)
             .ToList();
     }
 }

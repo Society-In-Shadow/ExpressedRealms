@@ -12,6 +12,7 @@ internal class UserAuditTrailConfiguration : IEntityTypeConfiguration<UserAuditT
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
 
+        builder.Property(e => e.UserId).IsRequired();
         builder.Property(e => e.Action).IsRequired();
         builder.Property(e => e.ActorUserId).IsRequired();
         builder.Property(e => e.Timestamp).IsRequired();
@@ -21,6 +22,13 @@ internal class UserAuditTrailConfiguration : IEntityTypeConfiguration<UserAuditT
             .HasOne(x => x.ActorUser)
             .WithMany(x => x.UserAuditTrails)
             .HasForeignKey(x => x.ActorUserId)
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired();
+        
+        builder
+            .HasOne(x => x.User)
+            .WithMany(x => x.UserActorAuditTrails)
+            .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
     }

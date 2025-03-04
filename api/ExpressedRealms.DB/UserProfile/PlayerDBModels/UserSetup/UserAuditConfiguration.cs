@@ -64,6 +64,12 @@ internal static class UserAuditConfiguration
 
     public static IAuditEntityMapping AddUserAuditTrailMapping(this IAuditEntityMapping mapping)
     {
-        return mapping.Map<User, UserAuditTrail>();
+        return mapping.Map<User, UserAuditTrail>(
+            (user, audit) =>
+            {
+                audit.UserId = user.Id;
+                return true;
+            }
+        );
     }
 }
