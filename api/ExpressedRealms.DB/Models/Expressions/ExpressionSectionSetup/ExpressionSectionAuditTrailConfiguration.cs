@@ -17,7 +17,7 @@ internal class ExpressionSectionAuditTrailConfiguration
         builder.Property(e => e.SectionId).IsRequired();
 
         builder.Property(e => e.Action).IsRequired();
-        builder.Property(e => e.UserId).IsRequired();
+        builder.Property(e => e.ActorUserId).IsRequired();
         builder.Property(e => e.Timestamp).IsRequired();
         builder.Property(e => e.ChangedProperties).IsRequired();
 
@@ -36,9 +36,9 @@ internal class ExpressionSectionAuditTrailConfiguration
             .IsRequired();
 
         builder
-            .HasOne(x => x.User)
+            .HasOne(x => x.ActorUser)
             .WithMany(x => x.ExpressionSectionAuditTrails)
-            .HasForeignKey(x => x.UserId)
+            .HasForeignKey(x => x.ActorUserId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
     }

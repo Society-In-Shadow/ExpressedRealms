@@ -15,7 +15,7 @@ internal class ExpressionAuditTrailConfiguration : IEntityTypeConfiguration<Expr
         builder.Property(e => e.ExpressionId).IsRequired();
 
         builder.Property(e => e.Action).IsRequired();
-        builder.Property(e => e.UserId).IsRequired();
+        builder.Property(e => e.ActorUserId).IsRequired();
         builder.Property(e => e.Timestamp).IsRequired();
         builder.Property(e => e.ChangedProperties).IsRequired();
 
@@ -27,9 +27,9 @@ internal class ExpressionAuditTrailConfiguration : IEntityTypeConfiguration<Expr
             .IsRequired();
 
         builder
-            .HasOne(x => x.User)
+            .HasOne(x => x.ActorUser)
             .WithMany(x => x.ExpressionAuditTrails)
-            .HasForeignKey(x => x.UserId)
+            .HasForeignKey(x => x.ActorUserId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
     }

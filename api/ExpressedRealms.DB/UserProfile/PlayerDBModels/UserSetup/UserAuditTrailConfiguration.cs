@@ -13,14 +13,14 @@ internal class UserAuditTrailConfiguration : IEntityTypeConfiguration<UserAuditT
         builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
 
         builder.Property(e => e.Action).IsRequired();
-        builder.Property(e => e.UserId).IsRequired();
+        builder.Property(e => e.ActorUserId).IsRequired();
         builder.Property(e => e.Timestamp).IsRequired();
         builder.Property(e => e.ChangedProperties).IsRequired();
 
         builder
-            .HasOne(x => x.User)
+            .HasOne(x => x.ActorUser)
             .WithMany(x => x.UserAuditTrails)
-            .HasForeignKey(x => x.UserId)
+            .HasForeignKey(x => x.ActorUserId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
     }

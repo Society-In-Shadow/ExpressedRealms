@@ -12,10 +12,10 @@ public class ExpressionSectionAuditTrail : IAuditTable
     public int Id { get; set; }
     public string Action { get; set; }
     public DateTime Timestamp { get; set; }
-    public string UserId { get; set; }
+    public string ActorUserId { get; set; }
     public string ChangedProperties { get; set; }
 
     public virtual Expression Expression { get; set; }
     public virtual ExpressionSection ExpressionSection { get; set; }
-    public virtual User User { get; set; }
+    public virtual User ActorUser { get; set; }
 }

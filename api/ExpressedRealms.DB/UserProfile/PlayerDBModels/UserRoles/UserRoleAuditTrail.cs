@@ -12,10 +12,10 @@ public class UserRoleAuditTrail : IAuditTable
     public int Id { get; set; }
     public string Action { get; set; }
     public DateTime Timestamp { get; set; }
-    public string UserId { get; set; }
+    public string ActorUserId { get; set; }
     public string ChangedProperties { get; set; }
 
-    public virtual User User { get; set; }
+    public virtual User ActorUser { get; set; }
     public virtual User MappingUser { get; set; }
     public virtual Role Role { get; set; }
 }

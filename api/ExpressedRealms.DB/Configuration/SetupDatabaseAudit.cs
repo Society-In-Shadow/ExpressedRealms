@@ -37,14 +37,14 @@ public static class SetupDatabaseAudit
                                     // Need to handle edge case of a user being created
                                     if (!evt.CustomFields.ContainsKey("UserId"))
                                     {
-                                        audit.UserId = ExtractUserId(
+                                        audit.ActorUserId = ExtractUserId(
                                             entry.EntityType.Name,
                                             entry.ColumnValues
                                         );
                                     }
                                     else
                                     {
-                                        audit.UserId = evt.CustomFields["UserId"]?.ToString();
+                                        audit.ActorUserId = evt.CustomFields["UserId"]?.ToString();
                                     }
 
                                     var changes = new List<ChangedRecord>();

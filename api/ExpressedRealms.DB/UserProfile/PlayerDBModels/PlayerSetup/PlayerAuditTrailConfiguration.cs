@@ -15,14 +15,14 @@ internal class PlayerAuditTrailConfiguration : IEntityTypeConfiguration<PlayerAu
         builder.Property(e => e.PlayerId).IsRequired();
 
         builder.Property(e => e.Action).IsRequired();
-        builder.Property(e => e.UserId).IsRequired();
+        builder.Property(e => e.ActorUserId).IsRequired();
         builder.Property(e => e.Timestamp).IsRequired();
         builder.Property(e => e.ChangedProperties).IsRequired();
 
         builder
-            .HasOne(x => x.User)
+            .HasOne(x => x.ActorUser)
             .WithMany(x => x.PlayerAuditTrails)
-            .HasForeignKey(x => x.UserId)
+            .HasForeignKey(x => x.ActorUserId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
 
