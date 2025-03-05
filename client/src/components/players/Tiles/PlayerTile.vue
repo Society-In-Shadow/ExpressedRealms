@@ -15,6 +15,8 @@ import {fetchUserPolicies} from "@/components/players/Services/PlayerRoleService
 import ActivityLogs from "@/components/players/Tiles/ActivityLogs.vue";
 import {formatDistance}  from 'date-fns/formatDistance';
 import {userConfirmationPopups} from "@/components/players/Services/PlayerConfirmationPopupService";
+import {playerList} from "@/components/players/Stores/PlayerListStore";
+const playerListStore = playerList();
 
 const showInfo = ref(false);
 
@@ -30,7 +32,7 @@ var userConfirmations = userConfirmationPopups(props.playerInfo.id);
 function updatePlayerRoles(){
   fetchUserPolicies(props.playerInfo.id)
       .then(response => {
-        props.playerInfo.roles = response.data.roles.filter(x => x.isEnabled).map(x => x.name);
+        playerListStore.fetchPlayers();
       });
 }
 
@@ -73,7 +75,6 @@ const timeTillLockoutExpires = computed(() => {
             </div>
           </div>
         </div>
-
       </div>
 
       <div v-if="showInfo" class="row">

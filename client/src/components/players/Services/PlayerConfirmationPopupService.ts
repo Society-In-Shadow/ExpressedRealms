@@ -29,7 +29,7 @@ export const userConfirmationPopups = (userId: string) => {
                 userId: userId,
                 lockoutEnabled: true
             })
-            .then(async (response) => {
+            .then(async () => {
                 await playerListStore.fetchPlayers();
                 toaster.success('Successfully Disabled Player!');
             });
@@ -57,7 +57,7 @@ export const userConfirmationPopups = (userId: string) => {
                     userId: userId,
                     lockoutEnabled: false
                 })
-                .then(async (response) => {
+                .then(async () => {
                     await playerListStore.fetchPlayers();
                     toaster.success('Successfully Enabled Player!');
                 });
@@ -86,7 +86,7 @@ export const userConfirmationPopups = (userId: string) => {
                     userId: userId,
                     lockoutEnabled: false
                 })
-                .then(async (response) => {
+                .then(async () => {
                     await playerListStore.fetchPlayers();
                     toaster.success('Successfully Unlocked Player!');
                 });
@@ -97,6 +97,4 @@ export const userConfirmationPopups = (userId: string) => {
     return { deleteConfirmation, enableConfirmation, unlockConfirmation };
 
 };
-
-
 

@@ -2,7 +2,7 @@
 <template>
   <Toast position="top-center" />
   <ConfirmDialog group="dialog" />
-  <ConfirmPopup group="popup"></ConfirmPopup>
+  <ConfirmPopup group="popup" />
   <main-nav-bar />
   
   <router-view />
