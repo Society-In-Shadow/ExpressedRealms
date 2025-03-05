@@ -12,7 +12,7 @@ export const playerList =
         },
         actions: {
             async fetchPlayers() {
-                axios.get('/admin/users')
+                await axios.get('/admin/users')
                     .then((response) => {
                         response.data.users.forEach(function(item:PlayerListItem) {
                             item.lockedOutExpires = new Date(item.lockedOutExpires);

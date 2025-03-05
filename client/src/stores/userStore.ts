@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import axios from "axios";
 
 export const userStore = 
 defineStore('user', {
@@ -11,4 +12,12 @@ defineStore('user', {
             userRoles: [] as string[]
         }
     },
+    actions: {
+        async updateUserRoles(){
+            await axios.get("/navMenu/permissions")
+                .then(response => {
+                    this.userRoles = response.data.roles;
+                })
+        }
+    }
 });

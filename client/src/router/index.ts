@@ -27,6 +27,8 @@ router.isReady().then(() => {
 
 router.beforeEach(async (to) => {
 
+    const userInfo = userStore();
+    await userInfo.updateUserRoles();
     const loggedIn = isLoggedIn();
     const anonymousEndpoints = ['Login', 'createAccount', 'forgotPassword', 'resetPassword', 'confirmAccount']
     const routeName:string = to.name as string;
@@ -37,8 +39,6 @@ router.beforeEach(async (to) => {
     }
     
     if(loggedIn){
-        
-        const userInfo = userStore();
 
         if (to.meta.requiredRole && !userInfo.userRoles.includes(to.meta.requiredRole)) {
             return {name: 'characters'};

@@ -96,6 +96,12 @@ function loadList(){
         }
 
       })
+
+  const userInfo = userStore();
+  axios.get("/navMenu/permissions")
+      .then(response => {
+        userInfo.userRoles = response.data.roles;
+      })
 }
 
 onMounted(() => {
