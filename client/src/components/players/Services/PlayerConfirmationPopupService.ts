@@ -1,11 +1,12 @@
 import { useConfirm } from "primevue/useconfirm";
 import toaster from "@/services/Toasters";
 import axios from "axios";
-
+import {playerList} from "@/components/players/Stores/PlayerListStore";
 
 export const userConfirmationPopups = (userId: string) => {
 
     const confirm = useConfirm();
+    const playerListStore = playerList();
 
     const deleteConfirmation = (event: MouseEvent) =>
         confirm.require({
@@ -28,7 +29,8 @@ export const userConfirmationPopups = (userId: string) => {
                 userId: userId,
                 lockoutEnabled: true
             })
-            .then((response) => {
+            .then(async (response) => {
+                await playerListStore.fetchPlayers();
                 toaster.success('Successfully Disabled Player!');
             });
         }
@@ -55,7 +57,8 @@ export const userConfirmationPopups = (userId: string) => {
                     userId: userId,
                     lockoutEnabled: false
                 })
-                .then((response) => {
+                .then(async (response) => {
+                    await playerListStore.fetchPlayers();
                     toaster.success('Successfully Enabled Player!');
                 });
             }
@@ -83,7 +86,8 @@ export const userConfirmationPopups = (userId: string) => {
                     userId: userId,
                     lockoutEnabled: false
                 })
-                .then((response) => {
+                .then(async (response) => {
+                    await playerListStore.fetchPlayers();
                     toaster.success('Successfully Unlocked Player!');
                 });
             }
