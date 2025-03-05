@@ -24,7 +24,6 @@ internal sealed class UsersRepository(ExpressedRealmsDbContext context) : IUsers
                 IsDisabled = x.LockoutEnd.HasValue && x.LockoutEnd == DateTimeOffset.MaxValue,
                 LockedOut = x.LockoutEnd.HasValue && x.LockoutEnd >= DateTimeOffset.UtcNow,
                 LockOutExpires = x.LockoutEnd,
-                
             })
             .ToListAsync();
 

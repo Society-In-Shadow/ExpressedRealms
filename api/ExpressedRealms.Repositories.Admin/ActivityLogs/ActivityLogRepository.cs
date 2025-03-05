@@ -47,20 +47,21 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
                 ChangedProperties = x.ChangedProperties,
             })
             .ToListAsync();
-        
+
         var userSpecificLogs = await context
             .UserAuditTrails.AsNoTracking()
             .IgnoreQueryFilters()
             .Where(x => x.UserId == userId && x.ActorUserId != userId)
             .Select(x => new Log()
             {
-                Location = $"Player \"{x.User.Player.Name}\" was modified by \"{x.ActorUser.Player.Name}\"",
+                Location =
+                    $"Player \"{x.User.Player.Name}\" was modified by \"{x.ActorUser.Player.Name}\"",
                 TimeStamp = x.Timestamp,
                 Action = x.Action,
                 ChangedProperties = x.ChangedProperties,
             })
             .ToListAsync();
-        
+
         var playerLogs = await context
             .PlayerAuditTrails.AsNoTracking()
             .IgnoreQueryFilters()
@@ -80,13 +81,14 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             .Where(x => x.Player.UserId == userId && x.ActorUserId != userId)
             .Select(x => new Log()
             {
-                Location = $"Player \"{x.Player.Name}\" was modified by \"{x.ActorUser.Player.Name}\"",
+                Location =
+                    $"Player \"{x.Player.Name}\" was modified by \"{x.ActorUser.Player.Name}\"",
                 TimeStamp = x.Timestamp,
                 Action = x.Action,
                 ChangedProperties = x.ChangedProperties,
             })
             .ToListAsync();
-        
+
         var userRoleLogs = await context
             .UserRoleAuditTrails.AsNoTracking()
             .IgnoreQueryFilters()
@@ -99,18 +101,18 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
                 ChangedProperties = x.ChangedProperties,
             })
             .ToListAsync();
-            
+
         var userSpecificRoleLogs = await context
-                .UserRoleAuditTrails.AsNoTracking()
-                .IgnoreQueryFilters()
-                .Where(x => x.MappingUserId == userId && x.ActorUserId != userId)
-                .Select(x => new Log()
-                {
-                    Location = $"Role \"{x.Role.Name}\" was modified by \"{x.ActorUser.Player.Name}\"",
-                    TimeStamp = x.Timestamp,
-                    Action = x.Action,
-                    ChangedProperties = x.ChangedProperties,
-                })
+            .UserRoleAuditTrails.AsNoTracking()
+            .IgnoreQueryFilters()
+            .Where(x => x.MappingUserId == userId && x.ActorUserId != userId)
+            .Select(x => new Log()
+            {
+                Location = $"Role \"{x.Role.Name}\" was modified by \"{x.ActorUser.Player.Name}\"",
+                TimeStamp = x.Timestamp,
+                Action = x.Action,
+                ChangedProperties = x.ChangedProperties,
+            })
             .ToListAsync();
 
         return expressionLogs

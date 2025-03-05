@@ -163,7 +163,7 @@ public static class AdminEndpoints
                 }
             )
             .RequireAuthorization();
-        
+
         endpointGroup
             .MapPut(
                 "user/{userid}/lockout",
@@ -179,13 +179,13 @@ public static class AdminEndpoints
                     {
                         return TypedResults.NotFound();
                     }
-                    
+
                     var expireDate = dto.CustomExpiryDate ?? DateTime.MaxValue;
-                    if(!dto.LockoutEnabled)
+                    if (!dto.LockoutEnabled)
                         expireDate = DateTime.UtcNow;
-                    
+
                     await userManager.SetLockoutEndDateAsync(user, expireDate);
-                    
+
                     return TypedResults.NoContent();
                 }
             )

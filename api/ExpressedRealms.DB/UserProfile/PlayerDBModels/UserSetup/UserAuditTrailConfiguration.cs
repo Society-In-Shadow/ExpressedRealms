@@ -24,7 +24,7 @@ internal class UserAuditTrailConfiguration : IEntityTypeConfiguration<UserAuditT
             .HasForeignKey(x => x.ActorUserId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder
             .HasOne(x => x.User)
             .WithMany(x => x.UserActorAuditTrails)
