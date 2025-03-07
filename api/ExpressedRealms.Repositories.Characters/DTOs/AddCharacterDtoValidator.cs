@@ -1,5 +1,6 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.Repositories.Characters.Enums;
+using ExpressedRealms.Repositories.Expressions.Expressions;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +17,7 @@ internal sealed class AddCharacterDtoValidator : AbstractValidator<AddCharacterD
                 async (expressionId, cancellationToken) =>
                 {
                     return await dbContext.Expressions.AnyAsync(
-                        x => x.Id == expressionId,
+                        x => x.Id == expressionId && x.PublishStatusId == (int)PublishTypes.Published,
                         cancellationToken
                     );
                 }
@@ -29,6 +30,7 @@ internal sealed class AddCharacterDtoValidator : AbstractValidator<AddCharacterD
                     return await dbContext.ExpressionSections.AnyAsync(
                         x =>
                             x.ExpressionId == dto.ExpressionId
+                            && x.Expression.PublishStatusId == (int)PublishTypes.Published
                             && x.SectionTypeId == (int)ExpressionSectionType.FactionType
                             && x.Id == dto.FactionId,
                         cancellationToken

@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ExpressedRealms.DB\ExpressedRealms.DB.csproj" />
+      <ProjectReference Include="..\ExpressedRealms.Repositories.Expressions\ExpressedRealms.Repositories.Expressions.csproj" />
       <ProjectReference Include="..\ExpressedRealms.Repositories.Shared\ExpressedRealms.Repositories.Shared.csproj" />
     </ItemGroup>
 
