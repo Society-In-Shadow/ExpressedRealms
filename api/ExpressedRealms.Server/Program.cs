@@ -49,10 +49,11 @@ try
 
     builder.Services.AddAuthenticationInjections();
     
+    Log.Logger = logger.CreateLogger();
     EarlyKeyVaultManager keyVaultManager = new EarlyKeyVaultManager(builder.Environment.IsProduction());
 
 
-    var appInsightsConnectionString = await keyVaultManager.GetSecret(ConnectionStrings.ApplicationInsights);
+    /*var appInsightsConnectionString = await keyVaultManager.GetSecret(ConnectionStrings.ApplicationInsights);
     if (builder.Environment.IsDevelopment())
     {
         string connectionString = await keyVaultManager.GetSecret(ConnectionStrings.Database);
@@ -64,18 +65,20 @@ try
             appInsightsConnectionString,
             TelemetryConverter.Traces
         );
-    }
+    }*/
 
-    Log.Logger = logger.CreateLogger();
+
 
     builder.Host.UseSerilog();
 
+    /*
     builder.Services.AddApplicationInsightsTelemetry(
         (options) =>
         {
             options.ConnectionString = appInsightsConnectionString;
         }
     );
+    */
     
 
     Log.Information("Setup Azure Storage Blob");
