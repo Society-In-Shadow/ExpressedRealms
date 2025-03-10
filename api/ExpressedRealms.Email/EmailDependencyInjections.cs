@@ -1,4 +1,3 @@
-using ExpressedRealms.Email;
 using ExpressedRealms.Email.EmailClientAdapter;
 using ExpressedRealms.Email.IdentityEmails;
 using ExpressedRealms.Email.IdentityEmails.ConfirmAccountEmail;
@@ -8,6 +7,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+namespace ExpressedRealms.Email;
+
 public static class EmailDependencyInjections
 {
     public static IServiceCollection AddEmailDependencies(
@@ -15,7 +16,7 @@ public static class EmailDependencyInjections
         IConfiguration configuration
     )
     {
-        services.AddTransient<IEmailClientAdapter, EmailClientAdapter>();
+        services.AddTransient<IEmailClientAdapter, EmailClientAdapter.EmailClientAdapter>();
 
         services.AddTransient<IEmailSender, IdentityEmailSender>();
         services.InjectIndividualEmails();
@@ -24,7 +25,7 @@ public static class EmailDependencyInjections
 
     private static void InjectIndividualEmails(this IServiceCollection services)
     {
-        services.AddTransient<ITestEmail, TestEmail>();
+        services.AddTransient<ITestEmail, TestEmail.TestEmail>();
         services.AddTransient<IForgetPasswordEmail, ForgetPasswordEmail>();
         services.AddTransient<IConfirmAccountEmail, ConfirmAccountEmail>();
     }

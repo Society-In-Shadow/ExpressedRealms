@@ -13,4 +13,9 @@
       <PackageReference Include="Postmark" Version="5.2.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\ExpressedRealms.Authentication\ExpressedRealms.Authentication.csproj" />
+      <ProjectReference Include="..\ExpressedRealms.DB\ExpressedRealms.DB.csproj" />
+    </ItemGroup>
+
 </Project>
