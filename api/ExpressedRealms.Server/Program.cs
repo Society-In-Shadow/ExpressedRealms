@@ -35,6 +35,10 @@ try
     var builder = WebApplication.CreateBuilder(args);
 
     string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
+    Log.Information("Setup Azure Key Vault");
+
+    builder.Services.AddAuthenticationInjections();
+    
 
     Log.Information("Setting Up Loggers");
     var logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console();

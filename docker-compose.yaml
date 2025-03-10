@@ -68,6 +68,9 @@ services:
       - NO_REPLY_EMAIL=${NO_REPLY_EMAIL}
       - TEST_EMAIL_ADDRESS=${TEST_EMAIL_ADDRESS}
       - CLIENT_COOKIE_DOMAIN=.localhost
+      - FRONT-END-BASE-URL=https://localhost
+      - POSTMARK-API-KEY=${POSTMARK_API_KEY}
+      - NO-REPLY-EMAIL=${NO_REPLY_EMAIL}
     ports:
       - '5000:80'
       - '5001:443'
