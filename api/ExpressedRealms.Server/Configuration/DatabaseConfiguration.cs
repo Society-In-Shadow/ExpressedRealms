@@ -1,5 +1,7 @@
 using Azure.Core;
 using Azure.Identity;
+using ExpressedRealms.Authentication.AzureKeyVault;
+using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
 using ExpressedRealms.DB;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
@@ -8,13 +10,15 @@ namespace ExpressedRealms.Server.Configuration;
 
 public static class DatabaseConfiguration
 {
-    public static void AddDatabaseConnection(
+    public static async Task AddDatabaseConnection(
         this WebApplicationBuilder builder,
-        string connectionString
+        EarlyKeyVaultManager vaultManager,
+        bool isProduction
     )
     {
-        if (!string.IsNullOrEmpty(connectionString))
+        if (!isProduction)
         {
+            var connectionString = await vaultManager.GetSecret(ConnectionStrings.Database);
             // Register DbContext with reuse of the existing services
             builder.Services.AddDbContext<ExpressedRealmsDbContext>(
                 (_, options) =>
@@ -32,10 +36,9 @@ public static class DatabaseConfiguration
             return;
         }
 
+        var azureConnectionString = await vaultManager.GetSecret(ConnectionStrings.Database);
         // Assuming these services are registered once and reused
-        var dataSourceBuilder = new NpgsqlDataSourceBuilder(
-            Environment.GetEnvironmentVariable("AZURE_POSTGRESSQL_CONNECTIONSTRING")
-        );
+        var dataSourceBuilder = new NpgsqlDataSourceBuilder(azureConnectionString);
 
         // Define the password provider once and reuse
         var sqlServerTokenProvider = new DefaultAzureCredential();

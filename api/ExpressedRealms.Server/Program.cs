@@ -1,6 +1,8 @@
 using System.Reflection;
 using AspNetCore.SwaggerUI.Themes;
 using Audit.Core;
+using ExpressedRealms.Authentication.AzureKeyVault;
+using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
 using ExpressedRealms.Authentication.Configuration;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.Roles;
@@ -36,16 +38,22 @@ try
     Log.Information("Setting Up Web App");
     var builder = WebApplication.CreateBuilder(args);
 
-    string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
+    Log.Information("Setup In Memory Cache");
+
+    builder.Services.AddMemoryCache();
+    
     Log.Information("Setup Azure Key Vault");
 
-    builder.Services.AddMemoryCache(); 
     builder.Services.AddAuthenticationInjections();
     
+    EarlyKeyVaultManager keyVaultManager = new EarlyKeyVaultManager(builder.Environment.IsProduction());
+
+    string connectionString = await keyVaultManager.GetSecret(ConnectionStrings.Database);
 
     Log.Information("Setting Up Loggers");
     var logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console();
 
+    var appInsightsConnectionString = await keyVaultManager.GetSecret(ConnectionStrings.ApplicationInsights);
     if (!string.IsNullOrEmpty(connectionString))
     {
         logger.WriteTo.PostgreSQL(connectionString, "Logs", needAutoCreateTable: true);
@@ -53,7 +61,7 @@ try
     else
     {
         logger.WriteTo.ApplicationInsights(
-            Environment.GetEnvironmentVariable("APPLICATION_INSIGHTS_CONNECTION_STRING"),
+            appInsightsConnectionString,
             TelemetryConverter.Traces
         );
     }
@@ -65,15 +73,13 @@ try
     builder.Services.AddApplicationInsightsTelemetry(
         (options) =>
         {
-            options.ConnectionString = Environment.GetEnvironmentVariable(
-                "APPLICATION_INSIGHTS_CONNECTION_STRING"
-            );
+            options.ConnectionString = appInsightsConnectionString;
         }
     );
 
     Log.Information("Setup Azure Storage Blob");
 
-    builder.SetupBlobStorage();
+    await builder.SetupBlobStorage(keyVaultManager);
 
     Log.Information("Add in Healthchecks");
 
@@ -81,7 +87,7 @@ try
 
     Log.Information("Adding DB Context");
 
-    builder.AddDatabaseConnection(connectionString);
+    await builder.AddDatabaseConnection(keyVaultManager, builder.Environment.IsProduction());
 
     Log.Information("Setting Up Authentication and Identity");
     builder
@@ -105,13 +111,14 @@ try
 
     builder.AddPolicyConfiguration();
 
+    var clientCookieDomain = await keyVaultManager.GetSecret(GeneralConfig.CookieDomain);
     builder
         .Services.AddAuthentication()
         .AddCookie(
             IdentityConstants.BearerScheme,
             o =>
             {
-                o.Cookie.Domain = Environment.GetEnvironmentVariable("CLIENT_COOKIE_DOMAIN");
+                o.Cookie.Domain = clientCookieDomain;
                 o.SlidingExpiration = true;
                 o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 o.Cookie.SameSite = SameSiteMode.None;
@@ -122,7 +129,7 @@ try
     builder.Services.AddAntiforgery(
         (options) =>
         {
-            options.Cookie.Domain = Environment.GetEnvironmentVariable("CLIENT_COOKIE_DOMAIN");
+            options.Cookie.Domain = clientCookieDomain;
             options.HeaderName = "T-XSRF-TOKEN";
             options.Cookie.HttpOnly = false;
             options.Cookie.Name = "XSRF-TOKEN";
