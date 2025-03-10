@@ -1,9 +1,11 @@
 using System.Reflection;
 using AspNetCore.SwaggerUI.Themes;
 using Audit.Core;
+using ExpressedRealms.Authentication.Configuration;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.Roles;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
+using ExpressedRealms.Email;
 using ExpressedRealms.Repositories.Admin;
 using ExpressedRealms.Repositories.Characters;
 using ExpressedRealms.Repositories.Expressions;
@@ -35,6 +37,10 @@ try
     var builder = WebApplication.CreateBuilder(args);
 
     string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
+    Log.Information("Setup Azure Key Vault");
+
+    builder.Services.AddAuthenticationInjections();
+    
 
     Log.Information("Setting Up Loggers");
     var logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console();

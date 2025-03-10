@@ -1,8 +1,9 @@
-using Microsoft.Extensions.Configuration;
+using ExpressedRealms.Authentication.AzureKeyVault;
+using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
 
 namespace ExpressedRealms.Email.IdentityEmails.ConfirmAccountEmail;
 
-internal sealed class ConfirmAccountEmail(IConfiguration configuration) : IConfirmAccountEmail
+internal sealed class ConfirmAccountEmail(IKeyVaultManager keyVault) : IConfirmAccountEmail
 {
     private string ParseAccountConfirmationLink(string identityEmail)
     {
@@ -10,13 +11,13 @@ internal sealed class ConfirmAccountEmail(IConfiguration configuration) : IConfi
         return url.Split('?').Last();
     }
 
-    public (string subject, string plaintext, string html) GetUpdatedEmailTemplate(
+    public async Task<(string subject, string plaintext, string html)> GetUpdatedEmailTemplate(
         string htmlContent
     )
     {
         var subject = "Society in Shadows Account Confirmation";
         var confirmAccountParamters = ParseAccountConfirmationLink(htmlContent);
-        var baseURL = configuration["FRONT_END_BASE_URL"];
+        var baseURL = await keyVault.GetSecret(EmailSettings.FrontEndBaseUrl);
         var plainTextContext =
             $@"Welcome to Society in Shadows!  Please copy and paste the link below to confirm your account
 
