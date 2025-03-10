@@ -51,11 +51,11 @@ try
     
     EarlyKeyVaultManager keyVaultManager = new EarlyKeyVaultManager(builder.Environment.IsProduction());
 
-    string connectionString = await keyVaultManager.GetSecret(ConnectionStrings.Database);
 
     var appInsightsConnectionString = await keyVaultManager.GetSecret(ConnectionStrings.ApplicationInsights);
-    /*if (!string.IsNullOrEmpty(connectionString))
+    if (builder.Environment.IsDevelopment())
     {
+        string connectionString = await keyVaultManager.GetSecret(ConnectionStrings.Database);
         logger.WriteTo.PostgreSQL(connectionString, "Logs", needAutoCreateTable: true);
     }
     else
@@ -64,7 +64,7 @@ try
             appInsightsConnectionString,
             TelemetryConverter.Traces
         );
-    }*/
+    }
 
     Log.Logger = logger.CreateLogger();
 
