@@ -39,6 +39,7 @@ try
     string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "";
     Log.Information("Setup Azure Key Vault");
 
+    builder.Services.AddMemoryCache(); 
     builder.Services.AddAuthenticationInjections();
     
 
