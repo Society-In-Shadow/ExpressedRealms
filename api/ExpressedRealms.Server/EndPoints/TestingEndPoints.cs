@@ -1,4 +1,6 @@
+using ExpressedRealms.Authentication;
 using ExpressedRealms.Email.TestEmail;
+using ExpressedRealms.Server.Extensions;
 
 namespace ExpressedRealms.Server.EndPoints;
 
@@ -8,11 +10,25 @@ internal static class TestingEndPoints
     {
         app.MapGet(
             "/sendTestEmail",
-            async (ITestEmail email) =>
+            async (HttpContext httpContext, 
+                ITestEmail email) =>
             {
-                await email.SendTestEmail();
+                var user = httpContext.User;
+
+                // Retrieve the email from claims
+                var emailClaim = user.Claims.FirstOrDefault(c => c.Type.Contains("email"))?.Value;
+
+                if (string.IsNullOrEmpty(emailClaim))
+                {
+                    // If the email claim is missing or empty, return a bad request
+                    return Results.BadRequest("Email claim is missing.");
+                }
+
+                await email.SendTestEmail(emailClaim);
                 return Results.Ok();
             }
-        );
+        )
+        .RequireAuthorization()
+        .RequirePolicyAuthorization(Policies.UserManagementPolicy);
     }
 }

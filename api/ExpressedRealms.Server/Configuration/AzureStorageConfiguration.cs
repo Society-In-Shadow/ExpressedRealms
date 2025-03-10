@@ -1,19 +1,17 @@
 using Azure.Identity;
 using Azure.Storage.Blobs;
+using ExpressedRealms.Authentication.AzureKeyVault;
+using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
 using Microsoft.AspNetCore.DataProtection;
 
 namespace ExpressedRealms.Server.Configuration;
 
 public static class AzureStorageConfiguration
 {
-    public static void SetupBlobStorage(this WebApplicationBuilder builder)
+    public static async Task SetupBlobStorage(this WebApplicationBuilder builder, EarlyKeyVaultManager manager)
     {
         // Since we are in a container, we need to keep track of the data keys manually
-        var blobStorageEndpoint =
-            Environment.GetEnvironmentVariable("AZURE_STORAGEBLOB_RESOURCEENDPOINT")
-            ?? throw new NullReferenceException(
-                "Missing AZURE_STORAGEBLOB_RESOURCEENDPOINT environmental variable"
-            );
+        var blobStorageEndpoint = await manager.GetSecret(ConnectionStrings.BlobStorage);
 
         BlobClient blobClient;
         if (builder.Environment.IsDevelopment())

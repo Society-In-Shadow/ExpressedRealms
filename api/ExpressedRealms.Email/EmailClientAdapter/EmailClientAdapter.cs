@@ -1,26 +1,27 @@
-using Microsoft.Extensions.Configuration;
+using ExpressedRealms.Authentication.AzureKeyVault;
+using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
 using Microsoft.Extensions.Logging;
 using PostmarkDotNet;
 
 namespace ExpressedRealms.Email.EmailClientAdapter;
 
 internal sealed class EmailClientAdapter(
-    IConfiguration configuration,
-    ILogger<EmailClientAdapter> logger
+    ILogger<EmailClientAdapter> logger,
+    IKeyVaultManager keyVaultManager
 ) : IEmailClientAdapter
 {
     public async Task SendEmailAsync(EmailData data)
     {
         var message = new PostmarkMessage
         {
-            From = configuration["NO_REPLY_EMAIL"],
+            From = await keyVaultManager.GetSecret(EmailSettings.NoReplyEmail),
             To = data.ToField,
             Subject = data.Subject,
             TextBody = data.PlainTextBody,
             HtmlBody = data.HtmlBody,
         };
 
-        var client = new PostmarkClient(configuration["POSTMARK_API_KEY"]);
+        var client = new PostmarkClient(await keyVaultManager.GetSecret(EmailSettings.Postmark));
 
         var response = await client.SendMessageAsync(message);
 

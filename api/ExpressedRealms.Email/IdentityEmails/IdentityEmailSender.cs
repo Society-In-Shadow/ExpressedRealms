@@ -16,8 +16,8 @@ internal sealed class IdentityEmailSender(
         var plainTextMessage = "";
         (subject, plainTextMessage, htmlMessage) = subject switch
         {
-            "Reset your password" => forgetPasswordEmail.GetUpdatedEmailTemplate(htmlMessage),
-            "Confirm your email" => confirmAccountEmail.GetUpdatedEmailTemplate(htmlMessage),
+            "Reset your password" => await forgetPasswordEmail.GetUpdatedEmailTemplate(htmlMessage),
+            "Confirm your email" => await confirmAccountEmail.GetUpdatedEmailTemplate(htmlMessage),
             _ => (subject, plainTextMessage, htmlMessage),
         };
 
