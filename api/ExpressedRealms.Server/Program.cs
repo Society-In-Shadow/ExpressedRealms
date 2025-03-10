@@ -70,12 +70,14 @@ try
 
     builder.Host.UseSerilog();
 
+    /*
     builder.Services.AddApplicationInsightsTelemetry(
         (options) =>
         {
             options.ConnectionString = appInsightsConnectionString;
         }
     );
+    */
 
     Log.Information("Setup Azure Storage Blob");
 
