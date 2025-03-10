@@ -35,6 +35,9 @@ using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 
 try
 {
+    Log.Information("Setting Up Loggers");
+    var logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console();
+    
     Log.Information("Setting Up Web App");
     var builder = WebApplication.CreateBuilder(args);
 
@@ -49,9 +52,6 @@ try
     EarlyKeyVaultManager keyVaultManager = new EarlyKeyVaultManager(builder.Environment.IsProduction());
 
     string connectionString = await keyVaultManager.GetSecret(ConnectionStrings.Database);
-
-    Log.Information("Setting Up Loggers");
-    var logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console();
 
     var appInsightsConnectionString = await keyVaultManager.GetSecret(ConnectionStrings.ApplicationInsights);
     if (!string.IsNullOrEmpty(connectionString))
