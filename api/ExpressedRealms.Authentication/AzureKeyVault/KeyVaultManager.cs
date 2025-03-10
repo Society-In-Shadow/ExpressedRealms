@@ -16,7 +16,14 @@ internal sealed class KeyVaultManager : IKeyVaultManager
     {
         if (!environment.IsDevelopment())
         {
-            _secretClient = new SecretClient(new Uri(Environment.GetEnvironmentVariable("AZURE_KEYVAULT_RESOURCEENDPOINT")), new DefaultAzureCredential());
+            var keyVaultUri = Environment.GetEnvironmentVariable("AZURE_KEYVAULT_RESOURCEENDPOINT");
+
+            if (string.IsNullOrEmpty(keyVaultUri) || !Uri.IsWellFormedUriString(keyVaultUri, UriKind.Absolute))
+            {
+                throw new InvalidOperationException("The Azure Key Vault endpoint URI is not valid. Ensure 'AZURE_KEYVAULT_RESOURCEENDPOINT' is set and correctly formatted.");
+            }
+
+            _secretClient = new SecretClient(new Uri(keyVaultUri), new DefaultAzureCredential());
         }
         _memoryCache = memoryCache;
         _environment = environment;
