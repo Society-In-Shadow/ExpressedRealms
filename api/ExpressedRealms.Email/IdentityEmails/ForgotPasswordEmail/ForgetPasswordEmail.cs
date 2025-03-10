@@ -1,21 +1,22 @@
-using Microsoft.Extensions.Configuration;
+using ExpressedRealms.Authentication.AzureKeyVault;
+using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
 
 namespace ExpressedRealms.Email.IdentityEmails.ForgotPasswordEmail;
 
-internal sealed class ForgetPasswordEmail(IConfiguration configuration) : IForgetPasswordEmail
+internal sealed class ForgetPasswordEmail(IKeyVaultManager keyVault) : IForgetPasswordEmail
 {
     private string ParseResetToken(string identityEmail)
     {
         return identityEmail.Split(" ").Last();
     }
 
-    public (string subject, string plaintext, string html) GetUpdatedEmailTemplate(
+    public async Task<(string subject, string plaintext, string html)> GetUpdatedEmailTemplate(
         string htmlContent
     )
     {
         var subject = "Society in Shadows Password Reset";
         var resetToken = ParseResetToken(htmlContent);
-        var baseURL = configuration["FRONT_END_BASE_URL"];
+        var baseURL = await keyVault.GetSecret(EmailSettings.FrontEndBaseUrl);
         var plainTextContext =
             $@"You recently requested to reset the password for your Society in Shadows account. Copy and paste the link below to proceed.
 
