@@ -16,7 +16,7 @@ internal sealed class KeyVaultManager : IKeyVaultManager
     {
         if (!environment.IsDevelopment())
         {
-            _secretClient = new SecretClient(new Uri(Environment.GetEnvironmentVariable("AZURE_KEY_VAULT_URL")), new DefaultAzureCredential());
+            _secretClient = new SecretClient(new Uri(Environment.GetEnvironmentVariable("AZURE_KEYVAULT_RESOURCEENDPOINT")), new DefaultAzureCredential());
         }
         _memoryCache = memoryCache;
         _environment = environment;
