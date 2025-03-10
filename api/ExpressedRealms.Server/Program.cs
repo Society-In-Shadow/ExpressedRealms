@@ -54,7 +54,7 @@ try
     string connectionString = await keyVaultManager.GetSecret(ConnectionStrings.Database);
 
     var appInsightsConnectionString = await keyVaultManager.GetSecret(ConnectionStrings.ApplicationInsights);
-    if (!string.IsNullOrEmpty(connectionString))
+    /*if (!string.IsNullOrEmpty(connectionString))
     {
         logger.WriteTo.PostgreSQL(connectionString, "Logs", needAutoCreateTable: true);
     }
@@ -64,20 +64,19 @@ try
             appInsightsConnectionString,
             TelemetryConverter.Traces
         );
-    }
+    }*/
 
     Log.Logger = logger.CreateLogger();
 
     builder.Host.UseSerilog();
 
-    /*
     builder.Services.AddApplicationInsightsTelemetry(
         (options) =>
         {
             options.ConnectionString = appInsightsConnectionString;
         }
     );
-    */
+    
 
     Log.Information("Setup Azure Storage Blob");
 
