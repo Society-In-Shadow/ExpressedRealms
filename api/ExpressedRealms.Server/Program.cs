@@ -50,7 +50,6 @@ try
     builder.Services.AddAuthenticationInjections();
     
     Log.Logger = logger.CreateLogger();
-    EarlyKeyVaultManager keyVaultManager = new EarlyKeyVaultManager(builder.Environment.IsProduction());
 
 
     /*var appInsightsConnectionString = await keyVaultManager.GetSecret(ConnectionStrings.ApplicationInsights);
@@ -70,6 +69,7 @@ try
 
 
     builder.Host.UseSerilog();
+    EarlyKeyVaultManager keyVaultManager = new EarlyKeyVaultManager(builder.Environment.IsProduction());
 
     /*
     builder.Services.AddApplicationInsightsTelemetry(
