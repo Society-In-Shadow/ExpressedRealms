@@ -8,9 +8,11 @@ public class EarlyKeyVaultManager
 {
     
     private readonly SecretClient _secretClient;
+    private readonly bool _isProduction;
     
     public EarlyKeyVaultManager(bool isProduction)
     {
+        _isProduction = isProduction;
         if (isProduction)
         {
             var keyVaultUri = Environment.GetEnvironmentVariable("AZURE_KEYVAULT_RESOURCEENDPOINT");
@@ -22,10 +24,10 @@ public class EarlyKeyVaultManager
         }
     }
     
-    public async Task<string> GetSecret(IKeyVaultSecret secretName, bool isProduction = false)
+    public async Task<string> GetSecret(IKeyVaultSecret secretName)
     {
         string secret;
-        if (isProduction)
+        if (_isProduction)
         {
             // Cache miss: Fetch secret from Azure Key Vault
             var keyValueSecret = await _secretClient.GetSecretAsync(secretName.Name);
