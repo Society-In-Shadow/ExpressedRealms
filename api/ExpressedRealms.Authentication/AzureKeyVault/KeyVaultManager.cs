@@ -1,5 +1,6 @@
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
+using Dapr.Client;
 using ExpressedRealms.Authentication.AzureKeyVault.Secrets.Config;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Hosting;
@@ -8,7 +9,7 @@ namespace ExpressedRealms.Authentication.AzureKeyVault;
 
 internal sealed class KeyVaultManager : IKeyVaultManager
 {
-    private readonly SecretClient _secretClient;
+    private readonly DaprClient _secretClient;
     private readonly IHostEnvironment _environment;
     private readonly IMemoryCache _memoryCache;
     
@@ -16,14 +17,18 @@ internal sealed class KeyVaultManager : IKeyVaultManager
     {
         if (!environment.IsDevelopment())
         {
-            var keyVaultUri = Environment.GetEnvironmentVariable("AZURE_KEYVAULT_RESOURCEENDPOINT");
+            
+            _secretClient = new DaprClientBuilder().Build();
+
+            /*var keyVaultUri = Environment.GetEnvironmentVariable("AZURE_KEYVAULT_RESOURCEENDPOINT");
 
             if (string.IsNullOrEmpty(keyVaultUri) || !Uri.IsWellFormedUriString(keyVaultUri, UriKind.Absolute))
             {
                 throw new InvalidOperationException("The Azure Key Vault endpoint URI is not valid. Ensure 'AZURE_KEYVAULT_RESOURCEENDPOINT' is set and correctly formatted.");
-            }
+            }*/
 
-            _secretClient = new SecretClient(new Uri(keyVaultUri), new DefaultAzureCredential());
+
+            //_secretClient = new SecretClient(new Uri(keyVaultUri), new DefaultAzureCredential());
         }
         _memoryCache = memoryCache;
         _environment = environment;
@@ -40,12 +45,15 @@ internal sealed class KeyVaultManager : IKeyVaultManager
             }
             else
             {
+                // Retrieve the database connection string from the Dapr secret store
+                var secretStoreName = "azure-key-vault"; // The name of the configured Dapr secret store
+                
                 // Cache miss: Fetch secret from Azure Key Vault
-                var keyValueSecret = await _secretClient.GetSecretAsync(secretName.Name);
-                if (!keyValueSecret.HasValue)
+                var keyValueSecret = (await _secretClient.GetSecretAsync(secretStoreName, secretName.Name)).Values.FirstOrDefault();
+                if (keyValueSecret is null)
                     throw new Exception($"Secret {secretName.Name} not found in Key Vault");
             
-                cachedSecret = keyValueSecret.Value.Value;
+                cachedSecret = keyValueSecret;
             }
 
 

@@ -80,18 +80,6 @@ try
     );
     */
     
-    try
-    {
-        var blobStorageEndpoint = await keyVaultManager.GetSecret(ConnectionStrings.BlobStorage);
-        Log.Information(blobStorageEndpoint);
-        //return;
-    }
-    catch (Exception ex)
-    {
-        Log.Information(ex.StackTrace.Take(200).ToString());
-    }
-    
-
     Log.Information("Setup Azure Storage Blob");
 
     await builder.SetupBlobStorage(keyVaultManager);
@@ -316,10 +304,7 @@ catch (Exception ex)
         return;
     }
 
-    Log.Information(ex.StackTrace.Take(100).ToString());
-    Log.Information(ex.StackTrace.Take(100).ToString());
-    Log.Information(ex.StackTrace);
-    //Log.Fatal(ex, "Application terminated unexpectedly");
+    Log.Fatal(ex, "Application terminated unexpectedly");
 }
 finally
 {
