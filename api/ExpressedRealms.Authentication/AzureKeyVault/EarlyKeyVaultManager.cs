@@ -1,6 +1,4 @@
-using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
- iusing Dapr.Client;
+using Dapr.Client;
 using ExpressedRealms.Authentication.AzureKeyVault.Secrets.Config;
 
 namespace ExpressedRealms.Authentication.AzureKeyVault;
