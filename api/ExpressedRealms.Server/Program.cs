@@ -83,6 +83,8 @@ try
     try
     {
         var blobStorageEndpoint = await keyVaultManager.GetSecret(ConnectionStrings.BlobStorage);
+        Log.Information(blobStorageEndpoint);
+        return;
     }
     catch (Exception ex)
     {
@@ -92,18 +94,7 @@ try
 
     Log.Information("Setup Azure Storage Blob");
 
-    try
-    {
-        await builder.SetupBlobStorage(keyVaultManager);
-
-    }
-    catch (Exception ex)
-    {
-        Log.Error(ex, "Failed to setup blob storage");
-        throw;
-    }
-    
-
+    await builder.SetupBlobStorage(keyVaultManager);
 
     Log.Information("Add in Healthchecks");
 
