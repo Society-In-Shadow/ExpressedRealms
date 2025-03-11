@@ -80,6 +80,20 @@ try
     );
     */
     
+    try
+    {
+        var blobStorageEndpoint = await keyVaultManager.GetSecret(ConnectionStrings.BlobStorage);
+    }
+    catch (Exception ex)
+    {
+        Log.Error(ex, "Failed to get blob storage endpoint");
+        Log.Error(ex, "Failed to get blob storage endpoint {message}", ex.StackTrace.Take(300) );
+        Console.WriteLine(ex.StackTrace);
+        Console.WriteLine(ex.Message);
+        await Console.Out.FlushAsync();
+        throw;
+    }
+    
 
     Log.Information("Setup Azure Storage Blob");
 
