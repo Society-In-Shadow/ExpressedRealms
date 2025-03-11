@@ -87,13 +87,6 @@ try
     catch (Exception ex)
     {
         Log.Information(ex.StackTrace.Take(500).ToString());
-        Log.Error(ex, "Failed to get blob storage endpoint {message}", ex.StackTrace.Take(300) );
-
-        Log.Error(ex, "Failed to get blob storage endpoint");
-        Console.WriteLine(ex.StackTrace);
-        Console.WriteLine(ex.Message);
-        await Console.Out.FlushAsync();
-        throw;
     }
     
 
