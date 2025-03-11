@@ -86,7 +86,7 @@ try
     }
     catch (Exception ex)
     {
-        Log.Information(ex.StackTrace.Take(500).ToString());
+        Log.Information(ex.StackTrace.Take(100).ToString());
     }
     
 
