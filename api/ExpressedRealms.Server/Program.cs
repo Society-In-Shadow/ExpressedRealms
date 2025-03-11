@@ -324,7 +324,9 @@ catch (Exception ex)
         Log.Information("EF Core Migration Build was detected.  Catching and closing out.");
         return;
     }
-    Log.Fatal(ex, "Application terminated unexpectedly");
+
+    Log.Information(ex.StackTrace.Take(100).ToString());
+    //Log.Fatal(ex, "Application terminated unexpectedly");
 }
 finally
 {
