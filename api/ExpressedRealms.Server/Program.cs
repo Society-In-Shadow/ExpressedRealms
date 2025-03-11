@@ -318,7 +318,7 @@ catch (Exception ex)
 
     Log.Information(ex.StackTrace.Take(100).ToString());
     Log.Information(ex.StackTrace.Take(100).ToString());
-    Log.Information(ex.StackTrace.Take(100).ToString());
+    Log.Information(ex.StackTrace);
     //Log.Fatal(ex, "Application terminated unexpectedly");
 }
 finally
