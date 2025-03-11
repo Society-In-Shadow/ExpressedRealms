@@ -84,11 +84,11 @@ try
     {
         var blobStorageEndpoint = await keyVaultManager.GetSecret(ConnectionStrings.BlobStorage);
         Log.Information(blobStorageEndpoint);
-        return;
+        //return;
     }
     catch (Exception ex)
     {
-        Log.Information(ex.StackTrace.Take(100).ToString());
+        Log.Information(ex.StackTrace.Take(200).ToString());
     }
     
 
@@ -303,7 +303,7 @@ try
     app.AddStatEndPoints();
     app.AddAdminEndPoints();
 
-    app.MapFallbackToFile("/index.html");
+    app.MapFallbackToFile("index.html");
     Log.Information("Starting Web API");
     app.Run();
 }
