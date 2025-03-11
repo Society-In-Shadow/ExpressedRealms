@@ -83,7 +83,18 @@ try
 
     Log.Information("Setup Azure Storage Blob");
 
-    await builder.SetupBlobStorage(keyVaultManager);
+    try
+    {
+        await builder.SetupBlobStorage(keyVaultManager);
+
+    }
+    catch (Exception ex)
+    {
+        Log.Error(ex, "Failed to setup blob storage");
+        throw;
+    }
+    
+
 
     Log.Information("Add in Healthchecks");
 
