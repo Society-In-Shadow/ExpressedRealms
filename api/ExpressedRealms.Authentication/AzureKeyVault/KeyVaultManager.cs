@@ -1,5 +1,3 @@
-using Azure.Identity;
-using Azure.Security.KeyVault.Secrets;
 using Dapr.Client;
 using ExpressedRealms.Authentication.AzureKeyVault.Secrets.Config;
 using Microsoft.Extensions.Caching.Memory;
@@ -17,18 +15,7 @@ internal sealed class KeyVaultManager : IKeyVaultManager
     {
         if (!environment.IsDevelopment())
         {
-            
             _secretClient = new DaprClientBuilder().Build();
-
-            /*var keyVaultUri = Environment.GetEnvironmentVariable("AZURE_KEYVAULT_RESOURCEENDPOINT");
-
-            if (string.IsNullOrEmpty(keyVaultUri) || !Uri.IsWellFormedUriString(keyVaultUri, UriKind.Absolute))
-            {
-                throw new InvalidOperationException("The Azure Key Vault endpoint URI is not valid. Ensure 'AZURE_KEYVAULT_RESOURCEENDPOINT' is set and correctly formatted.");
-            }*/
-
-
-            //_secretClient = new SecretClient(new Uri(keyVaultUri), new DefaultAzureCredential());
         }
         _memoryCache = memoryCache;
         _environment = environment;
