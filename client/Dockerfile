@@ -14,7 +14,7 @@ COPY . .
 RUN npm run build-only -- --mode $MODE
 
 # production stage
-FROM nginx:stable-alpine as production-stage
+FROM nginx:1.27-alpine-slim as production-stage
 
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf

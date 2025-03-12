@@ -1,5 +1,5 @@
 using System.Reflection;
-using AspNetCore.SwaggerUI.Themes;
+using AspNetCore.Swagger.Themes;
 using Audit.Core;
 using ExpressedRealms.Authentication.AzureKeyVault;
 using ExpressedRealms.Authentication.AzureKeyVault.Secrets;

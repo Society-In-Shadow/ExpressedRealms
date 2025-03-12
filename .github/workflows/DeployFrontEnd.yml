@@ -16,11 +16,11 @@ on:
     branches: [main]
     paths:
       - 'client/**'
-  #pull_request:
-  #  branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-  push_to_registry:
+  push_to_docker:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     permissions:
@@ -60,7 +60,16 @@ jobs:
 #          subject-name: noremacskich/expressedrealms-frontend
 #          subject-digest: ${{ steps.push.outputs.digest }}
 #          push-to-registry: true
-
+  deploy:
+    name: Deploy To Production
+    runs-on: ubuntu-latest
+    needs: [push_to_docker]
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
+    steps:
       - name: Azure Login
         uses: azure/login@v1.4.7
         with:

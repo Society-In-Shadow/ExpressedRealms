@@ -102,7 +102,7 @@ services:
       retries: 3
 
   pgadmin:
-    image: dpage/pgadmin4:8.4
+    image: dpage/pgadmin4:9.1.0
     container_name: expressed-realms-db-admin
     ports:
       - "8888:80"
