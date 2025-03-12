@@ -9,26 +9,27 @@ internal static class TestingEndPoints
     internal static void AddTestingEndPoints(this WebApplication app)
     {
         app.MapGet(
-            "/sendTestEmail",
-            async (HttpContext httpContext, 
-                ITestEmail email) =>
-            {
-                var user = httpContext.User;
-
-                // Retrieve the email from claims
-                var emailClaim = user.Claims.FirstOrDefault(c => c.Type.Contains("email"))?.Value;
-
-                if (string.IsNullOrEmpty(emailClaim))
+                "/sendTestEmail",
+                async (HttpContext httpContext, ITestEmail email) =>
                 {
-                    // If the email claim is missing or empty, return a bad request
-                    return Results.BadRequest("Email claim is missing.");
-                }
+                    var user = httpContext.User;
 
-                await email.SendTestEmail(emailClaim);
-                return Results.Ok();
-            }
-        )
-        .RequireAuthorization()
-        .RequirePolicyAuthorization(Policies.UserManagementPolicy);
+                    // Retrieve the email from claims
+                    var emailClaim = user
+                        .Claims.FirstOrDefault(c => c.Type.Contains("email"))
+                        ?.Value;
+
+                    if (string.IsNullOrEmpty(emailClaim))
+                    {
+                        // If the email claim is missing or empty, return a bad request
+                        return Results.BadRequest("Email claim is missing.");
+                    }
+
+                    await email.SendTestEmail(emailClaim);
+                    return Results.Ok();
+                }
+            )
+            .RequireAuthorization()
+            .RequirePolicyAuthorization(Policies.UserManagementPolicy);
     }
 }

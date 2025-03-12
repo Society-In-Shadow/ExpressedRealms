@@ -37,21 +37,25 @@ try
 {
     Log.Information("Setting Up Loggers");
     var logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console();
-    
+
     Log.Information("Setting Up Web App");
     var builder = WebApplication.CreateBuilder(args);
 
     Log.Information("Setup In Memory Cache");
 
     builder.Services.AddMemoryCache();
-    
+
     Log.Information("Setup Azure Key Vault");
 
     builder.Services.AddAuthenticationInjections();
 
-    EarlyKeyVaultManager keyVaultManager = new EarlyKeyVaultManager(builder.Environment.IsProduction());
+    EarlyKeyVaultManager keyVaultManager = new EarlyKeyVaultManager(
+        builder.Environment.IsProduction()
+    );
 
-    var appInsightsConnectionString = await keyVaultManager.GetSecret(ConnectionStrings.ApplicationInsights);
+    var appInsightsConnectionString = await keyVaultManager.GetSecret(
+        ConnectionStrings.ApplicationInsights
+    );
     if (builder.Environment.IsDevelopment())
     {
         string connectionString = await keyVaultManager.GetSecret(ConnectionStrings.Database);
@@ -59,12 +63,9 @@ try
     }
     else
     {
-        logger.WriteTo.ApplicationInsights(
-            appInsightsConnectionString,
-            TelemetryConverter.Traces
-        );
+        logger.WriteTo.ApplicationInsights(appInsightsConnectionString, TelemetryConverter.Traces);
     }
-    
+
     Log.Logger = logger.CreateLogger();
 
     builder.Host.UseSerilog();
@@ -75,7 +76,7 @@ try
             options.ConnectionString = appInsightsConnectionString;
         }
     );
-    
+
     Log.Information("Setup Azure Storage Blob");
 
     await builder.SetupBlobStorage(keyVaultManager);

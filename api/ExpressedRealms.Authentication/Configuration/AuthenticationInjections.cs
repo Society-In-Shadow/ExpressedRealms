@@ -5,9 +5,7 @@ namespace ExpressedRealms.Authentication.Configuration;
 
 public static class AuthenticationInjections
 {
-    public static IServiceCollection AddAuthenticationInjections(
-        this IServiceCollection services
-    )
+    public static IServiceCollection AddAuthenticationInjections(this IServiceCollection services)
     {
         services.AddSingleton<IKeyVaultManager, KeyVaultManager>();
         return services;

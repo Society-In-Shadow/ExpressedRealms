@@ -7,11 +7,11 @@ namespace ExpressedRealms.Authentication.AzureKeyVault;
 
 internal sealed class KeyVaultManager : IKeyVaultManager
 {
-    private readonly DaprClient _secretClient;
+    private readonly DaprClient? _secretClient;
     private readonly IHostEnvironment _environment;
     private readonly IMemoryCache _memoryCache;
-    
-    public KeyVaultManager(IMemoryCache memoryCache, IHostEnvironment environment )
+
+    public KeyVaultManager(IMemoryCache memoryCache, IHostEnvironment environment)
     {
         if (!environment.IsDevelopment())
         {
@@ -20,7 +20,7 @@ internal sealed class KeyVaultManager : IKeyVaultManager
         _memoryCache = memoryCache;
         _environment = environment;
     }
-    
+
     public async Task<string> GetSecret(IKeyVaultSecret secretName)
     {
         // Attempt to get secret from the cache
@@ -34,15 +34,16 @@ internal sealed class KeyVaultManager : IKeyVaultManager
             {
                 // Retrieve the database connection string from the Dapr secret store
                 var secretStoreName = "azure-key-vault"; // The name of the configured Dapr secret store
-                
+
                 // Cache miss: Fetch secret from Azure Key Vault
-                var keyValueSecret = (await _secretClient.GetSecretAsync(secretStoreName, secretName.Name)).Values.FirstOrDefault();
+                var keyValueSecret = (
+                    await _secretClient.GetSecretAsync(secretStoreName, secretName.Name)
+                ).Values.FirstOrDefault();
                 if (keyValueSecret is null)
                     throw new Exception($"Secret {secretName.Name} not found in Key Vault");
-            
+
                 cachedSecret = keyValueSecret;
             }
-
 
             // Store the secret in the cache with expiration
             _memoryCache.Set(secretName, cachedSecret, TimeSpan.FromHours(6));
@@ -50,5 +51,4 @@ internal sealed class KeyVaultManager : IKeyVaultManager
 
         return cachedSecret;
     }
-
 }
