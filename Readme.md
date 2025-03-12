@@ -357,6 +357,6 @@ You also might need to use the following command if you try running Cypress Comp
 You need to be in the expressedRealms.client folder for this to work.
 
 ```shell
-sudo chown -hR <username> node_modules/
+sudo chown -hR $(whoami) node_modules/
 ```
 
