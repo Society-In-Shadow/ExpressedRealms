@@ -15,7 +15,6 @@ public class EarlyKeyVaultManager
         if (isProduction)
         {
             _secretClient = new DaprClientBuilder()
-                .UseHttpEndpoint("http://localhost:3500")
                 .Build();
             /*var keyVaultUri = Environment.GetEnvironmentVariable("AZURE_KEYVAULT_RESOURCEENDPOINT");
             if (string.IsNullOrEmpty(keyVaultUri) || !Uri.IsWellFormedUriString(keyVaultUri, UriKind.Absolute))
