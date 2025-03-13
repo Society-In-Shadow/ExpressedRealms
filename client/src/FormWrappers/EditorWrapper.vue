@@ -48,6 +48,9 @@ const dataCyTagCalc = computed(() => {
       v-else
       :id="dataCyTagCalc" v-model="model" :data-cy="dataCyTagCalc" class="w-100"
       :class="{ 'p-invalid': errorText }" v-bind="$attrs"
+      :modules="{
+        clipboard: { matchVisual: false }
+      }"
     >
       <template #toolbar>
         <span class="ql-formats">

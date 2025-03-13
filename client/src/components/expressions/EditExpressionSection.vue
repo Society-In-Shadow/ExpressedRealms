@@ -123,6 +123,7 @@ const deleteExpression = (event) => {
     header: 'Deleting Section',
     message: `Are you sure you want delete ${props.sectionInfo.name} section?  This will delete this section and any sub children`,
     icon: 'pi pi-exclamation-triangle',
+    group: 'popup',
     rejectProps: {
       label: 'Cancel',
       severity: 'secondary',
@@ -195,7 +196,7 @@ const deleteExpression = (event) => {
         <Button v-if="!showEditor && showEdit" label="Edit" class="float-end m-2" @click="toggleEditor()" />
       </div>
     </div>
-    <div class="mb-2" v-html="props.sectionInfo.content" />
+    <div class="mb-2 fix-wrapping" v-html="props.sectionInfo.content" />
   </div>
   <div v-if="showCreate && showEdit">
     <CreateExpressionSection :parent-id="props.sectionInfo.id" @cancel-event="toggleCreate" @added-section="passThroughAddedSection()" />
@@ -210,5 +211,9 @@ const deleteExpression = (event) => {
     font-weight: normal;
     margin-top: 1em;
     margin-bottom: 1em;
+  }
+  
+  .fix-wrapping {
+    overflow-wrap: break-word;
   }
 </style>

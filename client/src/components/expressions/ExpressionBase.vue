@@ -78,7 +78,7 @@ onBeforeRouteUpdate(async (to, from) => {
 
 <template>
   <div id="expression" class="container">
-    <div class="row">
+    <div class="d-flex flex-row">
       <div class="col-12 col-lg-3 col-sm-12 col-xl-3 col-md-3">
         <Card class="sticky-md-top sticky-lg-top sticky-xl-top zIndexFix">
           <template #title>
@@ -91,7 +91,7 @@ onBeforeRouteUpdate(async (to, from) => {
           </template>
         </Card>
       </div>
-      <div class="col">
+      <div class="flex-fill m-2">
         <Card class="mb-3 p-0 mt-0 pt-0" style="max-width: 800px">
           <template #content>
             <article id="expression-body">

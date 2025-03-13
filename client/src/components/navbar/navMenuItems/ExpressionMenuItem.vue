@@ -46,6 +46,7 @@
       header: 'Deleting Expression',
       message: `Are you sure you want delete ${props.item.name} expression?`,
       icon: 'pi pi-exclamation-triangle',
+      group: 'popup',
       rejectProps: {
         label: 'Cancel',
         severity: 'secondary',
