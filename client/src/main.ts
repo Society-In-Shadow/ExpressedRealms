@@ -24,6 +24,7 @@ pinia.use(piniaPluginPersistedState);
 
 import { definePreset } from '@primevue/themes';
 import Lara from '@primevue/themes/lara';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const MyPreset = definePreset(Lara, {
     semantic: {
