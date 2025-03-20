@@ -2,8 +2,6 @@
 
 import {computed} from "vue";
 import Skeleton from 'primevue/skeleton';
-import Editor from "primevue/editor";
-import Button from "primevue/button";
 
 const model = defineModel<string>({ required: true, default: "" });
 
@@ -31,6 +29,17 @@ const props = defineProps({
   }
 });
 
+import { useEditor, EditorContent } from '@tiptap/vue-3'
+import StarterKit from '@tiptap/starter-kit'
+
+const editor = useEditor({
+  content: model.value,
+  extensions: [StarterKit],
+  onUpdate: ({editor}) => {
+    model.value = editor.getHTML();
+  }
+})
+
 const dataCyTagCalc = computed(() => {
   if(props.dataCyTag != ""){
     return props.dataCyTag;
@@ -44,22 +53,11 @@ const dataCyTagCalc = computed(() => {
   <div class="mb-3">
     <label :for="dataCyTagCalc">{{ props.fieldName }}</label>
     <Skeleton v-if="showSkeleton" :id="dataCyTagCalc + '-skeleton'" class="w-100" height="10em" />
-    <Editor
-      v-else
-      :id="dataCyTagCalc" v-model="model" :data-cy="dataCyTagCalc" class="w-100"
-      :class="{ 'p-invalid': errorText }" v-bind="$attrs"
-      :modules="{
-        clipboard: { matchVisual: false }
-      }"
-    >
-      <template #toolbar>
-        <span class="ql-formats">
-          <button class="ql-bold" />
-          <button class="ql-italic" />
-          <button class="ql-underline" />
-        </span>
-      </template>
-    </Editor>
+    <editor-content :editor="editor"
+                    v-else
+                    :id="dataCyTagCalc" :data-cy="dataCyTagCalc" class="p-inputtext p-component p-filled w-100"
+                    :class="{ 'p-invalid': errorText }" v-bind="$attrs"
+    />
     <small :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ errorText }}</small>
     <slot />
   </div>
