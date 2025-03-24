@@ -1,5 +1,2 @@
 # .trivyignore
-# This is to do with Quill, but upgrading it breaks the prime vue implementation, so ignoring for now
-# This specifically has something to do with image upload, which is disabled, and even if it wasn't would 
-# would be admin only
-CVE-2021-3163
+
