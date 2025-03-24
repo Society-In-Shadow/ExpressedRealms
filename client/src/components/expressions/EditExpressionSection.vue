@@ -146,7 +146,9 @@ const deleteExpression = (event) => {
 </script>
 
 <template>
-  <div class="d-none"><DataTable /></div>
+  <div class="d-none">
+    <DataTable />
+  </div>
   <div v-if="showSkeleton">
     <Skeleton id="expression-section-title-skeleton" class="mb-2" height="1.5em" />
     <Skeleton id="expression-section-body-skeleton" class="mb-2" height="5em" />
@@ -218,7 +220,6 @@ const deleteExpression = (event) => {
   .fix-wrapping {
     overflow-wrap: break-word;
   }
-
 
   .custom-table {
     width: 100%; /* Full width table */

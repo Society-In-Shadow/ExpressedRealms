@@ -41,8 +41,6 @@ const props = defineProps({
 const editorValue = ref(model.value);
 const startupComplete = ref(false);
 
-
-
 const CustomTable = Table.configure().extend({
   renderHTML({ HTMLAttributes }) {
 
@@ -67,8 +65,6 @@ const CustomTable = Table.configure().extend({
 });
 
 onMounted(() => {startupComplete.value = false;})
-
-
 
 const editor = useEditor({
   content: editorValue.value,
@@ -102,7 +98,6 @@ watch(
       }
     }
 );
-
 
 const dataCyTagCalc = computed(() => {
   if(props.dataCyTag != ""){
@@ -205,33 +200,37 @@ const contextOptions = ref([
 
 <template>
   <div class="mb-3">
-    <ContextMenu ref="menu" :model="contextOptions" v-if="focusingOnTable"/>
-    <div class="d-none"><Editor/></div>
+    <ContextMenu v-if="focusingOnTable" ref="menu" :model="contextOptions" />
+    <div class="d-none">
+      <Editor />
+    </div>
     <label :for="dataCyTagCalc">{{ props.fieldName }}</label>
     <Skeleton v-if="showSkeleton" :id="dataCyTagCalc + '-skeleton'" class="w-100" height="10em" />
     <div v-else class="p-editor" :class="{ 'p-invalid': errorText }">
       <div class="p-editor-toolbar ql-toolbar ql-snow">
         <span class="ql-formats" data-pc-section="formats">
-          <button @click="editor.chain().focus().toggleBold().run()" type="button" data-pc-section="">
-            <i class="bi bi-type-bold icon-fix"></i>
+          <button type="button" data-pc-section="" @click="editor.chain().focus().toggleBold().run()">
+            <i class="bi bi-type-bold icon-fix" />
           </button>
-          <button @click="editor.chain().focus().toggleItalic().run()" type="button">
-            <i class="bi bi-type-italic icon-fix"></i>
+          <button type="button" @click="editor.chain().focus().toggleItalic().run()">
+            <i class="bi bi-type-italic icon-fix" />
           </button>
-          <button @click="editor.chain().focus().toggleUnderline().run()"  type="button">
-            <i class="bi-type-underline icon-fix"></i>
+          <button type="button" @click="editor.chain().focus().toggleUnderline().run()">
+            <i class="bi-type-underline icon-fix" />
           </button>
-          <button @click="editor.chain().focus().insertTable({ rows: 4, cols: 3, withHeaderRow: true }).run()"  type="button">
-            <i class="bi bi-table icon-fix"></i>
+          <button type="button" @click="editor.chain().focus().insertTable({ rows: 4, cols: 3, withHeaderRow: true }).run()">
+            <i class="bi bi-table icon-fix" />
           </button>
         </span>
       </div>
       <div class="p-editor-content ql-container ql-snow">
-        <editor-content :editor="editor"
-                        :id="dataCyTagCalc" 
-                        :data-cy="dataCyTagCalc"
-                        v-bind="$attrs"
-                        @contextmenu="onImageRightClick"/>
+        <editor-content
+          :id="dataCyTagCalc"
+          :editor="editor" 
+          :data-cy="dataCyTagCalc"
+          v-bind="$attrs"
+          @contextmenu="onImageRightClick"
+        />
       </div>
     </div>
     
