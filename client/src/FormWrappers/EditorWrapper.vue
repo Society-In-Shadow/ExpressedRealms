@@ -1,9 +1,16 @@
 <script setup lang="ts">
 
-import {computed, ref, watch} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import Skeleton from 'primevue/skeleton';
 import Editor from "primevue/editor";
 import ContextMenu from 'primevue/contextmenu';
+import { useEditor, EditorContent } from '@tiptap/vue-3'
+import StarterKit from '@tiptap/starter-kit'
+import Table from '@tiptap/extension-table';
+import TableRow from '@tiptap/extension-table-row';
+import TableCell from '@tiptap/extension-table-cell';
+import TableHeader from '@tiptap/extension-table-header';
+import Underline from '@tiptap/extension-underline';
 
 const model = defineModel<string>({ required: true });
 
@@ -31,17 +38,12 @@ const props = defineProps({
   }
 });
 
-const editorValue = ref();
+const editorValue = ref(model.value);
+const startupComplete = ref(false);
 
-import { useEditor, EditorContent } from '@tiptap/vue-3'
-import StarterKit from '@tiptap/starter-kit'
-import Table from '@tiptap/extension-table';
-import TableRow from '@tiptap/extension-table-row';
-import TableCell from '@tiptap/extension-table-cell';
-import TableHeader from '@tiptap/extension-table-header';
-import Underline from '@tiptap/extension-underline';
 
-const CustomTable = Table.extend({
+
+const CustomTable = Table.configure().extend({
   renderHTML({ HTMLAttributes }) {
 
     // Add a new class to the table element
@@ -64,6 +66,7 @@ const CustomTable = Table.extend({
   },
 });
 
+onMounted(() => {startupComplete.value = false;})
 
 
 
@@ -71,14 +74,13 @@ const editor = useEditor({
   content: editorValue.value,
   extensions: [
     StarterKit,
-    CustomTable.configure({ resizable: false, HTMLAttributes: { class: ''} }),
+    CustomTable,
     TableRow,
     TableCell,
     TableHeader,
     Underline
   ],
   onUpdate: ({editor}) => {
-    console.log("i've been updated!");
     model.value = editor.getHTML();
   },
   editorProps: {
@@ -93,8 +95,10 @@ watch(
     () => model.value, // Reactive dependency
     (newValue) => {
       // Update the editor content whenever `model.value` changes
-      if (editor.value) {
+      if (editor.value && startupComplete.value == false) {
         editor.value.commands.setContent(newValue);
+        startupComplete.value = true;
+        
       }
     }
 );
@@ -111,6 +115,19 @@ const menu = ref();
 const onImageRightClick = (event) => {
   menu.value.show(event);
 };
+
+const focusingOnTable = computed(() => {
+  if(!editor.value){
+    return false;
+  }
+  return editor.value.can().addColumnBefore() || 
+      editor.value.can().addColumnAfter() ||
+      editor.value.can().deleteColumn() ||
+      editor.value.can().addRowBefore() ||
+      editor.value.can().addRowAfter() ||
+      editor.value.can().deleteRow() ||
+      editor.value.can().deleteTable();
+})
 
 const contextOptions = ref([
   {
@@ -145,12 +162,12 @@ const contextOptions = ref([
     icon: 'bi bi-list-task',
     items: [
       {
-        label: 'Add Row Before',
+        label: 'Add Row Above',
         icon: 'bi bi-arrow-bar-up',
         command: () => editor.value.chain().focus().addRowBefore().run()
       },
       {
-        label: 'Add Row After',
+        label: 'Add Row Below',
         icon: 'bi bi-arrow-bar-down',
         command: () => editor.value.chain().focus().addRowAfter().run()
       },
@@ -188,7 +205,7 @@ const contextOptions = ref([
 
 <template>
   <div class="mb-3">
-    <ContextMenu ref="menu" :model="contextOptions" />
+    <ContextMenu ref="menu" :model="contextOptions" v-if="focusingOnTable"/>
     <div class="d-none"><Editor/></div>
     <label :for="dataCyTagCalc">{{ props.fieldName }}</label>
     <Skeleton v-if="showSkeleton" :id="dataCyTagCalc + '-skeleton'" class="w-100" height="10em" />
@@ -227,64 +244,4 @@ const contextOptions = ref([
   .icon-fix{
     font-size: 1.5em;
   }
-
-  .custom-table {
-    width: 100%; /* Full width table */
-    border-collapse: collapse; /* Clean collapse of borders */
-  }
-
-  .custom-table tr {
-    background-color: var(--surface-ground); /* PrimeVue table row color */
-    border-bottom: 1px solid var(--surface-border); /* Row bottom border */
-  }
-
-  .custom-table tr:nth-child(odd) {
-    background: var(--p-datatable-row-striped-background);
-  }
-
-  .custom-table td {
-    text-align: start;
-    border-color: var(--p-datatable-body-cell-border-color);
-    border-style: solid;
-    border-width: 0 0 1px 0;
-    padding: var(--p-datatable-body-cell-padding);
-  }
-
-  .p-editor-content .custom-table td {
-    border-width: 3px;
-  }
-
-  .custom-table td p{
-    margin: 0px;
-    padding: 0px;
-    min-height: 1em;
-  }
-  
-  .custom-table th p{
-    margin: 0px;
-    padding: 0px;
-    min-height: 1em;
-  }
-  
-  .custom-table th {
-    padding: var(--p-datatable-header-cell-padding);
-    background: var(--p-datatable-header-cell-background);
-    border-color: var(--p-datatable-header-cell-border-color);
-    border-style: solid;
-    border-width: 0 0 1px 0;
-    color: var(--p-datatable-header-cell-color);
-    font-weight: normal;
-    text-align: start;
-    transition: background var(--p-datatable-transition-duration), color var(--p-datatable-transition-duration), border-color var(--p-datatable-transition-duration), outline-color var(--p-datatable-transition-duration), box-shadow var(--p-datatable-transition-duration);
-  }
-
-  .custom-table-container {
-    display: block; /* Container for overflow */
-    margin: 1rem 0; /* Add space around the table */
-    overflow-x: auto; /* Enable horizontal scrolling for small screens */
-    border: 1px solid var(--surface-border); /* Border matching PrimeVue style */
-    border-radius: 4px; /* Rounding of corners */
-    background-color: var(--surface-card); /* Background color for container */
-  }
-
 </style>
