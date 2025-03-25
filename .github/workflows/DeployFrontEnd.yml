@@ -1,7 +1,7 @@
 ---
 
-name: Deploy Front End
-  
+name: Build and Deploy Front End
+
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: false
 
@@ -12,15 +12,17 @@ on:
       - 'client/**'
   pull_request:
     branches: [main]
+    paths:
+      - 'api/**'
 
 jobs:
   megalinter:
     name: MegaLinter
     runs-on: ubuntu-latest
-    permissions: # checkov:skip=CKV_GHA_1:write-all permissions are acceptable for this use case
-      issues: write # checkov:skip=CKV_GHA_1:write-all permissions are acceptable for this use case
-      pull-requests: write # checkov:skip=CKV_GHA_1:write-all permissions are acceptable for this use case
-      statuses: write # checkov:skip=CKV_GHA_1:write-all permissions are acceptable for this use case
+    permissions:
+      issues: write
+      pull-requests: write
+      statuses: write
     steps:
       # Git Checkout
       - name: Checkout Code

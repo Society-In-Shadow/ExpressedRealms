@@ -1,6 +1,6 @@
 ---
 
-name: Deploy API
+name: Build and Deploy API
 
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: false
@@ -20,10 +20,10 @@ jobs:
   megalinter:
     name: MegaLinter
     runs-on: ubuntu-latest
-    permissions: # checkov:skip=CKV_GHA_1:write-all permissions are acceptable for this use case
-      issues: write # checkov:skip=CKV_GHA_1:write-all permissions are acceptable for this use case
-      pull-requests: write # checkov:skip=CKV_GHA_1:write-all permissions are acceptable for this use case
-      statuses: write # checkov:skip=CKV_GHA_1:write-all permissions are acceptable for this use case
+    permissions:
+      issues: write
+      pull-requests: write
+      statuses: write
 
     steps:
       # Git Checkout
