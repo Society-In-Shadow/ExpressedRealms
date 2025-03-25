@@ -17,7 +17,6 @@ jobs:
       # Remove the ones you do not need
       contents: write
       issues: write
-      pull-requests: write
     steps:
       # Git Checkout
       - name: Checkout Code
