@@ -70,7 +70,7 @@ jobs:
       id-token: write
     steps:
       # Step 1: Checkout code
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # Step 2: Setup .NET
       - name: Setup .NET
@@ -95,11 +95,11 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       # Step 1: Checkout code
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # Step 2: Setup .NET
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
 
@@ -157,7 +157,7 @@ jobs:
     steps:
       # Step 1: Azure Login
       - name: Azure Login
-        uses: azure/login@v1
+        uses: azure/login@v1.4.7
         with:
           client-id: ${{ secrets.EXPRESSEDREALMSAPI_AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.EXPRESSEDREALMSAPI_AZURE_TENANT_ID }}
