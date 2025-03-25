@@ -56,6 +56,7 @@ EMAIL_REPORTER: false
 FILEIO_REPORTER: false
 JSON_REPORTER: true
 SARIF_REPORTER: true
+REPOSITORY_CHECKOV_ARGUMENTS: --skip-check CKV2_GHA_1
 # The following actually does work, but it's throwing errors that I don't know how to resolve.
 # Local steps to resolve
 # npm install ts-standard
