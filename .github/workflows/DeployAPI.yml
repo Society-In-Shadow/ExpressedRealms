@@ -17,7 +17,7 @@ jobs:
   megalinter:
     name: MegaLinter
     runs-on: ubuntu-latest
-    permissions:
+    permissions: # checkov:skip=CKV_GHA_1:write-all permissions are acceptable for this use case
       issues: write
       pull-requests: write
       statuses: write
