@@ -70,6 +70,7 @@ jobs:
       packages: write
       contents: read
       id-token: write
+      statuses: write
     steps:
       # Step 1: Checkout code
       - uses: actions/checkout@v4
