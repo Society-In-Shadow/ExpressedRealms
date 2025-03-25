@@ -58,6 +58,30 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: 'megalinter-reports/megalinter-report.sarif'
+          
+  build:
+    name: Build .NET and Push Docker Image
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+      id-token: write
+    steps:
+      # Step 1: Checkout code
+      - uses: actions/checkout@v3
+
+      # Step 2: Setup .NET
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      # Step 3: Restore and build .NET project
+      - name: Restore dependencies
+        run: dotnet restore ./api
+
+      - name: Build
+        run: dotnet build --no-restore ./api
   
   build_and_dockerize:
     name: Build .NET and Push Docker Image
@@ -66,6 +90,7 @@ jobs:
       packages: write
       contents: read
       id-token: write
+    if: github.ref == 'refs/heads/main'
     steps:
       # Step 1: Checkout code
       - uses: actions/checkout@v3
