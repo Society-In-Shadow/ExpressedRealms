@@ -1,3 +1,5 @@
+---
+
 name: Deploy API
 
 on:
@@ -6,7 +8,7 @@ on:
     paths:
       - 'api/**'
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths:
       - 'api/**'
 
@@ -133,7 +135,7 @@ jobs:
           push: true
           tags: noremacskich/expressedrealms-api:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
-          
+
       # Capture the digest of the pushed image
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
@@ -152,7 +154,7 @@ jobs:
       id-token: write
       statuses: write
 
-    if: github.ref == 'refs/heads/main' 
+    if: github.ref == 'refs/heads/main'
 
     steps:
       # Step 1: Azure Login
