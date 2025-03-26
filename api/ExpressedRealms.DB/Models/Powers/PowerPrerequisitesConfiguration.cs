@@ -7,7 +7,7 @@ public class PowerPrerequisitesConfiguration : IEntityTypeConfiguration<PowerPre
 {
     public void Configure(EntityTypeBuilder<PowerPrerequisites> builder)
     {
-        builder.ToTable("power_category_mapping");
+        builder.ToTable("power_prerequisites");
 
         builder.HasKey(e => new { e.ParentPowerId, e.ChildPowerId });
         builder.Property(e => e.ParentPowerId).IsRequired();

@@ -13,13 +13,13 @@ public class Power : ISoftDelete
     public int LevelId { get; set; }
     public virtual PowerLevel PowerLevel { get; set; } = null!;
     
-    public int AreaOfEffectTypeId { get; set; }
+    public byte AreaOfEffectTypeId { get; set; }
     public virtual PowerAreaOfEffectType PowerAreaOfEffectType { get; set; } = null!;
     
-    public int ActivationTimingTypeId { get; set; }
+    public byte ActivationTimingTypeId { get; set; }
     public virtual PowerActivationTimingType PowerActivationTimingType { get; set; } = null!;
     
-    public int DurationId { get; set; }
+    public byte DurationId { get; set; }
     public virtual PowerDuration PowerDuration { get; set; } = null!;
     
     public int ExpressionId { get; set; }
@@ -32,11 +32,6 @@ public class Power : ISoftDelete
     
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
-    
-
-    
-    
-    
     
     public virtual List<PowerCategoryMapping> CategoryMappings { get; set; } = null!;
     
