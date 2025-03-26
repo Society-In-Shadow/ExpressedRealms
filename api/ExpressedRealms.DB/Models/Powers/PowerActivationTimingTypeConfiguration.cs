@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ExpressedRealms.DB.Models.Powers;
 
-public class PowerActivationTimingTypeConfiguration : IEntityTypeConfiguration<PowerActivationTimingType>
+public class PowerActivationTimingTypeConfiguration
+    : IEntityTypeConfiguration<PowerActivationTimingType>
 {
     public void Configure(EntityTypeBuilder<PowerActivationTimingType> builder)
     {

@@ -12,13 +12,13 @@ public class PowerCategoryMappingConfiguration : IEntityTypeConfiguration<PowerC
         builder.HasKey(e => new { e.PowerId, e.CategoryId });
         builder.Property(e => e.PowerId).IsRequired();
         builder.Property(e => e.CategoryId).IsRequired();
-        
+
         builder
             .HasOne(e => e.Power)
             .WithMany(e => e.CategoryMappings)
             .HasForeignKey(e => e.PowerId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         builder
             .HasOne(e => e.Category)
             .WithMany(e => e.PowerMappings)

@@ -56,7 +56,7 @@ namespace ExpressedRealms.DB
             builder.ApplyConfiguration(new SkillSubTypeConfiguration());
             builder.ApplyConfiguration(new SkillTypeConfiguration());
             builder.ApplyConfiguration(new SkillLevelDescriptionMappingConfiguration());
-            
+
             builder.AddPowerConfiguration();
         }
 

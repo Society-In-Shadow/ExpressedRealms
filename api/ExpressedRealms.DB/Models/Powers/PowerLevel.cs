@@ -6,6 +6,6 @@ public class PowerLevel
     public string Name { get; set; } = null!;
     public string Description { get; set; } = null!;
     public int Xp { get; set; }
-    
+
     public virtual List<Power> Powers { get; set; } = null!;
 }

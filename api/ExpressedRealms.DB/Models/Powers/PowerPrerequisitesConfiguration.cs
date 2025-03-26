@@ -12,7 +12,7 @@ public class PowerPrerequisitesConfiguration : IEntityTypeConfiguration<PowerPre
         builder.HasKey(e => new { e.ParentPowerId, e.ChildPowerId });
         builder.Property(e => e.ParentPowerId).IsRequired();
         builder.Property(e => e.ChildPowerId).IsRequired();
-        
+
         // Define relationships
         builder
             .HasOne(e => e.ChildPower) // ChildPower is linked by ChildPowerId
@@ -25,6 +25,5 @@ public class PowerPrerequisitesConfiguration : IEntityTypeConfiguration<PowerPre
             .WithMany(e => e.PrerequisitePowers) // ParentPower has a collection of prerequisites
             .HasForeignKey(e => e.ParentPowerId)
             .OnDelete(DeleteBehavior.Restrict);
-
     }
 }
