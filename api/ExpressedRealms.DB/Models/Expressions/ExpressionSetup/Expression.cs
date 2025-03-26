@@ -2,6 +2,7 @@ using Audit.EntityFramework;
 using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
+using ExpressedRealms.DB.Models.Powers;
 
 namespace ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 
@@ -21,4 +22,5 @@ public class Expression : ISoftDelete
     public virtual List<Character> Characters { get; set; } = null!;
     public virtual List<ExpressionSectionAuditTrail> SectionAudits { get; set; } = null!;
     public virtual List<ExpressionAuditTrail> ExpressionAudits { get; set; } = null!;
+    public virtual List<Power> Powers { get; set; } = null!;
 }

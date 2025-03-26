@@ -1,5 +1,6 @@
 using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 
 namespace ExpressedRealms.DB.Models.Powers;
 
@@ -8,10 +9,21 @@ public class Power : ISoftDelete
     public int Id { get; set; }
     public string Name { get; set; } = null!;
     public string Description { get; set; } = null!;
+    
     public int LevelId { get; set; }
+    public virtual PowerLevel PowerLevel { get; set; } = null!;
+    
     public int AreaOfEffectTypeId { get; set; }
+    public virtual PowerAreaOfEffectType PowerAreaOfEffectType { get; set; } = null!;
+    
     public int ActivationTimingTypeId { get; set; }
+    public virtual PowerActivationTimingType PowerActivationTimingType { get; set; } = null!;
+    
     public int DurationId { get; set; }
+    public virtual PowerDuration PowerDuration { get; set; } = null!;
+    
+    public int ExpressionId { get; set; }
+    public virtual Expression Expression { get; set; } = null!;
     
     public bool IsPowerUse { get; set; }
     public string? GameMechanicEffect { get; set; }
@@ -21,10 +33,10 @@ public class Power : ISoftDelete
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
     
-    public virtual PowerLevel PowerLevel { get; set; } = null!;
-    public virtual PowerAreaOfEffectType PowerAreaOfEffectType { get; set; } = null!;
-    public virtual PowerActivationTimingType PowerActivationTimingType { get; set; } = null!;
-    public virtual PowerDuration PowerDuration { get; set; } = null!;
+
+    
+    
+    
     
     public virtual List<PowerCategoryMapping> CategoryMappings { get; set; } = null!;
     

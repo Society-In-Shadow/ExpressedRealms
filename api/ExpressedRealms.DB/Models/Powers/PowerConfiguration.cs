@@ -40,5 +40,11 @@ public class PowerConfiguration : IEntityTypeConfiguration<Power>
             .WithMany(e => e.Powers)
             .HasForeignKey(e => e.DurationId)
             .OnDelete(DeleteBehavior.Restrict);
+        
+        builder
+            .HasOne(e => e.Expression)
+            .WithMany(e => e.Powers)
+            .HasForeignKey(e => e.ExpressionId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
