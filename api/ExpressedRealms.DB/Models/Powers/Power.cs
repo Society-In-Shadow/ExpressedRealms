@@ -27,4 +27,6 @@ public class Power : ISoftDelete
     public virtual PowerDuration PowerDuration { get; set; } = null!;
     
     public virtual List<PowerCategoryMapping> CategoryMappings { get; set; } = null!;
+    
+    public virtual List<PowerPrerequisites> PrerequisitePowers { get; set; } = null!;
 }
