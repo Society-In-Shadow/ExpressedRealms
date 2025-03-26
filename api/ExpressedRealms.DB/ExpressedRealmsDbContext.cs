@@ -4,6 +4,7 @@ using ExpressedRealms.DB.Configuration;
 using ExpressedRealms.DB.Models.Expressions;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
+using ExpressedRealms.DB.Models.Powers.Configuration;
 using ExpressedRealms.DB.Models.Skills;
 using ExpressedRealms.DB.Models.Statistics;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
@@ -16,7 +17,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ExpressedRealms.DB
 {
     [AuditDbContext(Mode = AuditOptionMode.OptIn)]
-    public class ExpressedRealmsDbContext
+    public partial class ExpressedRealmsDbContext
         : AuditIdentityDbContext<
             User,
             Role,
@@ -55,6 +56,8 @@ namespace ExpressedRealms.DB
             builder.ApplyConfiguration(new SkillSubTypeConfiguration());
             builder.ApplyConfiguration(new SkillTypeConfiguration());
             builder.ApplyConfiguration(new SkillLevelDescriptionMappingConfiguration());
+            
+            builder.AddPowerConfiguration();
         }
 
         public ExpressedRealmsDbContext(DbContextOptions<ExpressedRealmsDbContext> options)
