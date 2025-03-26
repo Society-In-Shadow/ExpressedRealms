@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Interceptors;
 
 namespace ExpressedRealms.DB.Models.Powers;
@@ -24,4 +25,6 @@ public class Power : ISoftDelete
     public virtual PowerAreaOfEffectType PowerAreaOfEffectType { get; set; } = null!;
     public virtual PowerActivationTimingType PowerActivationTimingType { get; set; } = null!;
     public virtual PowerDuration PowerDuration { get; set; } = null!;
+    
+    public virtual List<PowerCategoryMapping> CategoryMappings { get; set; } = null!;
 }
