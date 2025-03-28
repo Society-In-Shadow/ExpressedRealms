@@ -138,14 +138,6 @@ jobs:
           tags: noremacskich/expressedrealms-api:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      # Capture the digest of the pushed image
-      - name: Generate artifact attestation
-        uses: actions/attest-build-provenance@v1
-        with:
-          subject-name: noremacskich/expressedrealms-api
-          subject-digest: ${{ steps.push.outputs.digest }}
-          push-to-registry: true
-
   deploy:
     name: Deploy To Production
     runs-on: ubuntu-latest
