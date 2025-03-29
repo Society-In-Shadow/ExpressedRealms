@@ -24,7 +24,7 @@ public class CreatePowerModelValidator : AbstractValidator<CreatePowerModel>
                 }
             )
             .WithMessage("This is not a valid Duration Type");
-        
+
         RuleFor(x => x.PowerLevel)
             .MustAsync(
                 async (powerLevelId, cancellationToken) =>
@@ -36,7 +36,7 @@ public class CreatePowerModelValidator : AbstractValidator<CreatePowerModel>
                 }
             )
             .WithMessage("This is not a valid Power Level");
-        
+
         RuleFor(x => x.Category)
             .MustAsync(
                 async (categories, cancellationToken) =>
@@ -48,7 +48,7 @@ public class CreatePowerModelValidator : AbstractValidator<CreatePowerModel>
                 }
             )
             .WithMessage("One or more categories are invalid");
-        
+
         RuleFor(x => x.AreaOfEffect)
             .MustAsync(
                 async (areaOfEffectTypeId, cancellationToken) =>
@@ -60,7 +60,7 @@ public class CreatePowerModelValidator : AbstractValidator<CreatePowerModel>
                 }
             )
             .WithMessage("This is not a valid Area of Effect Type");
-        
+
         RuleFor(x => x.PowerActivationType)
             .MustAsync(
                 async (powerActivationTypeId, cancellationToken) =>
@@ -72,7 +72,7 @@ public class CreatePowerModelValidator : AbstractValidator<CreatePowerModel>
                 }
             )
             .WithMessage("This is not a valid Power Activation Type");
-        
+
         RuleFor(x => x.ExpressionId)
             .MustAsync(
                 async (expressionId, cancellationToken) =>

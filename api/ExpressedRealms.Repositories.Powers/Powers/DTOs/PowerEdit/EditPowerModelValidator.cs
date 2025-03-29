@@ -18,15 +18,12 @@ public class EditPowerModelValidator : AbstractValidator<EditPowerModel>
             .MustAsync(
                 async (id, cancellationToken) =>
                 {
-                    return await dbContext.Powers.AnyAsync(
-                        x => x.Id == id,
-                        cancellationToken
-                    );
+                    return await dbContext.Powers.AnyAsync(x => x.Id == id, cancellationToken);
                 }
             )
             .WithErrorCode("NotFound")
             .WithMessage("This is not a valid Power");
-        
+
         RuleFor(x => x.PowerDuration)
             .MustAsync(
                 async (powerDurationId, cancellationToken) =>
@@ -38,7 +35,7 @@ public class EditPowerModelValidator : AbstractValidator<EditPowerModel>
                 }
             )
             .WithMessage("This is not a valid Duration Type");
-        
+
         RuleFor(x => x.PowerLevel)
             .MustAsync(
                 async (powerLevelId, cancellationToken) =>
@@ -50,7 +47,7 @@ public class EditPowerModelValidator : AbstractValidator<EditPowerModel>
                 }
             )
             .WithMessage("This is not a valid Power Level");
-        
+
         RuleFor(x => x.Category)
             .MustAsync(
                 async (categories, cancellationToken) =>
@@ -62,7 +59,7 @@ public class EditPowerModelValidator : AbstractValidator<EditPowerModel>
                 }
             )
             .WithMessage("One or more categories are invalid");
-        
+
         RuleFor(x => x.AreaOfEffect)
             .MustAsync(
                 async (areaOfEffectTypeId, cancellationToken) =>
@@ -74,7 +71,7 @@ public class EditPowerModelValidator : AbstractValidator<EditPowerModel>
                 }
             )
             .WithMessage("This is not a valid Area of Effect Type");
-        
+
         RuleFor(x => x.PowerActivationType)
             .MustAsync(
                 async (powerActivationTypeId, cancellationToken) =>
@@ -86,7 +83,7 @@ public class EditPowerModelValidator : AbstractValidator<EditPowerModel>
                 }
             )
             .WithMessage("This is not a valid Power Activation Type");
-        
+
         RuleFor(x => x.ExpressionId)
             .MustAsync(
                 async (expressionId, cancellationToken) =>
