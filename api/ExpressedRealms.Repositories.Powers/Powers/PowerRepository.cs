@@ -28,4 +28,16 @@ internal sealed class PowerRepository(ExpressedRealmsDbContext context) : IPower
         
         return Result.Ok(items);
     }
+
+    public async Task<Result<PowerOptions>> GetPowerOptionsAsync()
+    {
+        return Result.Ok(new PowerOptions()
+        {
+            AreaOfEffect = await context.PowerAreaOfEffectTypes.AsNoTracking().Select(x => new DetailedEditInformation(x)).ToListAsync(),
+            Category = await context.PowerCategories.AsNoTracking().Select(x => new DetailedEditInformation(x)).ToListAsync(),
+            PowerDuration = await context.PowerDurations.AsNoTracking().Select(x => new DetailedEditInformation(x)).ToListAsync(),
+            PowerLevel = await context.PowerLevels.AsNoTracking().Select(x => new DetailedEditInformation(x)).ToListAsync(),
+            PowerActivationType = await context.PowerActivationTimingTypes.AsNoTracking().Select(x => new DetailedEditInformation(x)).ToListAsync(),
+        });
+    }
 }
