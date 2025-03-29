@@ -11,6 +11,7 @@ using ExpressedRealms.Email;
 using ExpressedRealms.Repositories.Admin;
 using ExpressedRealms.Repositories.Characters;
 using ExpressedRealms.Repositories.Expressions;
+using ExpressedRealms.Repositories.Powers;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Server.Configuration;
 using ExpressedRealms.Server.Configuration.UserRoles;
@@ -200,6 +201,7 @@ try
     builder.Services.AddCharacterRepositoryInjections();
     builder.Services.AddExpressionRepositoryInjections();
     builder.Services.AddAdminRepositoryInjections();
+    builder.Services.AddPowerRepositoryInjections();
 
     Log.Information("Building the App");
     var app = builder.Build();

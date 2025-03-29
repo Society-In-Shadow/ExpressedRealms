@@ -44,6 +44,7 @@
     <ProjectReference Include="..\ExpressedRealms.Repositories.Admin\ExpressedRealms.Repositories.Admin.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Repositories.Characters\ExpressedRealms.Repositories.Characters.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Repositories.Expressions\ExpressedRealms.Repositories.Expressions.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Repositories.Powers\ExpressedRealms.Repositories.Powers.csproj" />
   </ItemGroup>
 
 </Project>
