@@ -82,7 +82,7 @@ jobs:
 
       - name: Build
         run: dotnet build --no-restore ./api
-        
+
       # Step 4: Ensure Docker Image Builds
       - name: Build Docker Image
         run: docker build -t noremacskich/expressedrealms-api:${{ github.sha }} ./api
