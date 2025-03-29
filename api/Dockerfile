@@ -7,6 +7,7 @@ COPY ["ExpressedRealms.Email/ExpressedRealms.Email.csproj", "ExpressedRealms.Ema
 COPY ["ExpressedRealms.Repositories.Characters/ExpressedRealms.Repositories.Characters.csproj", "ExpressedRealms.Repositories.Characters/"]
 COPY ["ExpressedRealms.Repositories.Expressions/ExpressedRealms.Repositories.Expressions.csproj", "ExpressedRealms.Repositories.Expressions/"]
 COPY ["ExpressedRealms.Repositories.Admin/ExpressedRealms.Repositories.Admin.csproj", "ExpressedRealms.Repositories.Admin/"]
+COPY ["ExpressedRealms.Repositories.Powers/ExpressedRealms.Repositories.Powers.csproj", "ExpressedRealms.Repositories.Powers/"]
 COPY ["ExpressedRealms.DB/ExpressedRealms.DB.csproj", "ExpressedRealms.DB/"]
 COPY ["ExpressedRealms.MigrationProject/ExpressedRealms.MigrationProject.csproj", "ExpressedRealms.MigrationProject/"]
 COPY ["ExpressedRealms.Authentication/ExpressedRealms.Authentication.csproj", "ExpressedRealms.Authentication/"]
