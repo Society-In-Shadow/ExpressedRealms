@@ -53,13 +53,10 @@ internal sealed class PowerRepository(
     
     public async Task<Result<int>> CreatePower(CreatePowerModel createPowerModel)
     {
-        var result = await createPowerModelValidator.ValidateAsync(
-            createPowerModel,
-            cancellationToken
-        );
+        var result = await ValidationHelper.ValidateAndHandleErrorsAsync(createPowerModelValidator, createPowerModel, cancellationToken);
         
-        if (!result.IsValid)
-            return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
+        if(result.IsFailed)
+            return Result.Fail(result.Errors);
 
         var newPower = new Power
         {
@@ -93,13 +90,10 @@ internal sealed class PowerRepository(
     
     public async Task<Result<int>> EditPower(EditPowerModel editPowerModel)
     {
-        var result = await editPowerModelValidator.ValidateAsync(
-            editPowerModel,
-            cancellationToken
-        );
+        var result = await ValidationHelper.ValidateAndHandleErrorsAsync(editPowerModelValidator, editPowerModel, cancellationToken);
         
-        if (!result.IsValid)
-            return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
+        if(result.IsFailed)
+            return Result.Fail(result.Errors);
 
         var power = await context.Powers.FirstAsync(x => x.Id == editPowerModel.Id, cancellationToken);
 
@@ -117,7 +111,9 @@ internal sealed class PowerRepository(
 
         await context.SaveChangesAsync(cancellationToken);
         
-        var categoryMappings = await context.PowerCategoryMappings.Where(x => x.PowerId == power.Id).ToListAsync(cancellationToken);
+        var categoryMappings = await context.PowerCategoryMappings
+            .Where(x => x.PowerId == power.Id)
+            .ToListAsync(cancellationToken);
         
         context.Remove(categoryMappings);
         
