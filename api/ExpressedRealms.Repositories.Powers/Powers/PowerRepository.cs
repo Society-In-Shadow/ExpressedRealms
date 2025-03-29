@@ -1,10 +1,11 @@
 using ExpressedRealms.DB;
+using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Powers;
 using ExpressedRealms.Repositories.Powers.Powers.DTOs;
 using ExpressedRealms.Repositories.Powers.Powers.DTOs.PowerCreate;
+using ExpressedRealms.Repositories.Powers.Powers.DTOs.PowerEdit;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
 using FluentResults;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Repositories.Powers.Powers;
@@ -12,6 +13,7 @@ namespace ExpressedRealms.Repositories.Powers.Powers;
 internal sealed class PowerRepository(
     ExpressedRealmsDbContext context,
     CreatePowerModelValidator createPowerModelValidator,
+    EditPowerModelValidator editPowerModelValidator,
     CancellationToken cancellationToken
 ) : IPowerRepository
 {
@@ -77,7 +79,75 @@ internal sealed class PowerRepository(
         context.Powers.Add(newPower);
         await context.SaveChangesAsync(cancellationToken);
 
+        context.PowerCategoryMappings.AddRange(createPowerModel.Category.Select(x => new PowerCategoryMapping()
+        {
+            PowerId = newPower.Id,
+            CategoryId = x,
+        }));
+        
+        await context.SaveChangesAsync(cancellationToken);
+
         return Result.Ok(newPower.Id);
 
+    }
+    
+    public async Task<Result<int>> EditPower(EditPowerModel editPowerModel)
+    {
+        var result = await editPowerModelValidator.ValidateAsync(
+            editPowerModel,
+            cancellationToken
+        );
+        
+        if (!result.IsValid)
+            return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
+
+        var power = await context.Powers.FirstAsync(x => x.Id == editPowerModel.Id, cancellationToken);
+
+        power.Name = editPowerModel.Name;
+        power.Description = editPowerModel.Description;
+        power.LevelId = editPowerModel.PowerLevel;
+        power.AreaOfEffectTypeId = editPowerModel.AreaOfEffect;
+        power.ActivationTimingTypeId = editPowerModel.PowerActivationType;
+        power.DurationId = editPowerModel.PowerDuration;
+        power.ExpressionId = editPowerModel.ExpressionId;
+        power.IsPowerUse = editPowerModel.IsPowerUse;
+        power.GameMechanicEffect = editPowerModel.GameMechanicEffect;
+        power.Limitation = editPowerModel.Limitation;
+        power.OtherFields = editPowerModel.Other;
+
+        await context.SaveChangesAsync(cancellationToken);
+        
+        var categoryMappings = await context.PowerCategoryMappings.Where(x => x.PowerId == power.Id).ToListAsync(cancellationToken);
+        
+        context.Remove(categoryMappings);
+        
+        context.PowerCategoryMappings.AddRange(editPowerModel.Category.Select(x => new PowerCategoryMapping()
+        {
+            PowerId = editPowerModel.Id,
+            CategoryId = x,
+        }));
+        
+        await context.SaveChangesAsync(cancellationToken);
+
+        return Result.Ok();
+
+    }
+    
+    public async Task<Result> DeletePowerAsync(int expressionId, int id)
+    {
+        var section = await context
+            .Powers.IgnoreQueryFilters()
+            .FirstOrDefaultAsync(x => x.ExpressionId == expressionId && x.Id == id);
+
+        if (section is null)
+            return Result.Fail(new NotFoundFailure("Power"));
+
+        if (section.IsDeleted)
+            return Result.Fail(new AlreadyDeletedFailure("Power"));
+
+        section.SoftDelete();
+        await context.SaveChangesAsync(cancellationToken);
+
+        return Result.Ok();
     }
 }
