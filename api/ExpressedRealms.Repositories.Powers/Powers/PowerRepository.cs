@@ -175,11 +175,13 @@ internal sealed class PowerRepository(
         return Result.Ok();
     }
 
-    public async Task<Result> DeletePowerAsync(int expressionId, int id)
+    public async Task<Result> DeletePowerAsync(int id)
     {
         var section = await context
             .Powers.IgnoreQueryFilters()
-            .FirstOrDefaultAsync(x => x.ExpressionId == expressionId && x.Id == id);
+            .FirstOrDefaultAsync(x => x.Id == id);
+        
+        
 
         if (section is null)
             return Result.Fail(new NotFoundFailure("Power"));

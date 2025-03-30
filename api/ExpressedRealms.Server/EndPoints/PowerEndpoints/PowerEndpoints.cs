@@ -154,17 +154,16 @@ internal static class PowerEndpoints
                 }
             )
             .RequirePolicyAuthorization(Policies.ManagePowers)
-            .WithSummary("Allows one to create new powers");
+            .WithSummary("Allows one to edit new powers");
 
         endpointGroup.MapDelete(
-            "{expressionId}/{id}",
+            "{id}",
             async Task<Results<NotFound, NoContent, StatusCodeHttpResult>> (
-                int expressionId,
                 int id,
                 IPowerRepository repository
             ) =>
             {
-                var status = await repository.DeletePowerAsync(expressionId, id);
+                var status = await repository.DeletePowerAsync(id);
 
                 if (status.HasNotFound(out var notFound))
                     return notFound;
