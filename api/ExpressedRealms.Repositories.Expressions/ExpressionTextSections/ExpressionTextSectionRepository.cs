@@ -169,10 +169,29 @@ internal sealed class ExpressionTextSectionRepository(
     {
         var sections = await context
             .ExpressionSections.AsNoTracking()
-            .Where(x => x.ExpressionId == expressionId)
+            .Where(x => x.ExpressionId == expressionId && x.SectionType.Name != "Expression")
             .ToListAsync();
 
         return RecursiveFunctions.BuildExpressionPage(sections, null);
+    }
+    
+    public async Task<ExpressionSectionDto> GetExpressionSection(int expressionId)
+    {
+        var section = await context
+            .ExpressionSections.AsNoTracking()
+            .FirstOrDefaultAsync(x => x.ExpressionId == expressionId && x.SectionType.Name == "Expression");
+
+        if (section is null)
+        {
+            return new ExpressionSectionDto();
+        }
+        
+        return new ExpressionSectionDto()
+        {
+            Name = section.Name,
+            Id = section.Id,
+            Content = section.Content,
+        };
     }
 
     public async Task<Result> UpdateSectionHierarchyAndSorting(EditExpressionHierarchyDto dto)

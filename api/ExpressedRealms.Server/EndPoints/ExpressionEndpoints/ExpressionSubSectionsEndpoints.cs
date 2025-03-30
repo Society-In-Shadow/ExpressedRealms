@@ -3,6 +3,7 @@ using ExpressedRealms.Repositories.Expressions.Expressions.DTOs;
 using ExpressedRealms.Repositories.Expressions.ExpressionTextSections;
 using ExpressedRealms.Repositories.Expressions.ExpressionTextSections.DTOs;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints;
+using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.DTOs;
 using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Helpers;
 using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Requests;
 using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Responses;
@@ -22,6 +23,36 @@ internal static class ExpectedSubSectionsEndpoints
             .WithTags("Expressions")
             .WithOpenApi();
 
+        endpointGroup
+            .MapGet(
+                "{name}/expression",
+                async Task<Results<NotFound, Ok<ExpressionSectionDTO>>> (
+                    string name,
+                    IExpressionTextSectionRepository repository
+                ) =>
+                {
+                    var expressionIdResult = await repository.GetExpressionId(name);
+                    if (expressionIdResult.HasNotFound(out var notFound))
+                        return notFound;
+                    expressionIdResult.ThrowIfErrorNotHandled();
+
+                    var section = await repository.GetExpressionSection(
+                        expressionIdResult.Value
+                    );
+
+                    return TypedResults.Ok(
+                        new ExpressionSectionDTO()
+                        {
+                            Name = section.Name,
+                            Id = section.Id,
+                            Content = section.Content,
+                            SubSections = new List<ExpressionSectionDTO>()
+                        }
+                    );
+                }
+            )
+            .RequireAuthorization();
+        
         endpointGroup
             .MapGet(
                 "{name}",

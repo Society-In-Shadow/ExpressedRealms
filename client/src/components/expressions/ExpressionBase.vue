@@ -1,5 +1,11 @@
 <script setup lang="ts">
 
+import Tabs from 'primevue/tabs';
+import TabList from 'primevue/tablist';
+import Tab from 'primevue/tab';
+import TabPanels from 'primevue/tabpanels';
+import TabPanel from 'primevue/tabpanel';
+
 import ExpressionSection from "@/components/expressions/ExpressionSection.vue";
 import axios from "axios";
 import {onBeforeRouteUpdate, useRoute} from 'vue-router'
@@ -15,6 +21,7 @@ import Button from "primevue/button";
 import '@he-tree/vue/style/default.css'
 import '@he-tree/vue/style/material-design.css'
 import ExpressionToC from "@/components/expressions/ExpressionToC.vue";
+import EditExpressionSection from "@/components/expressions/EditExpressionSection.vue";
 let sections = ref([
   {
     id: 1,
@@ -37,22 +44,32 @@ let sections = ref([
     subSections: [{id: 9,}]
   }
 ]);
+
+const expressionHeader = ref({});
+
 const isLoading = ref(true);
-const showEdit = ref(false);
+const headerIsLoading = ref(true);
+const showEdit = ref(expressionInfo.canEdit);
 const showCreate = ref(false);
 const showPreview = ref(false);
 
 function fetchData(name: string) {
-  axios.get(`/expressionSubSections/${name}`)
-      .then(async (json) => {
-        sections.value = json.data.expressionSections;
+  expressionInfo.getExpressionSections(name)
+      .then(async () => {
+        sections.value = expressionInfo.sections;
+        showEdit.value = expressionInfo.canEdit;
         isLoading.value = false;
-        expressionInfo.currentExpressionId = json.data.expressionId;
-        showEdit.value = json.data.canEditPolicy
         if(location.hash){
           await nextTick();
           window.location.replace(location.hash);
         }        
+      });
+  
+  headerIsLoading.value = true;
+  axios.get(`/expressionSubSections/${name}/expression`)
+      .then(async (json) => {
+        expressionHeader.value = json.data;
+        headerIsLoading.value = false;
       });
 }
 
@@ -94,13 +111,33 @@ onBeforeRouteUpdate(async (to, from) => {
       <div class="flex-fill m-2">
         <Card class="mb-3 p-0 mt-0 pt-0" style="max-width: 800px">
           <template #content>
-            <article id="expression-body">
-              <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit && !showPreview" @refresh-list="fetchData(route.params.name)" />
-              <Button v-if="showEdit && !showPreview" label="Add Section" class="m-2" @click="toggleCreate" />
-              <div v-if="showCreate">
-                <CreateExpressionSection @cancel-event="toggleCreate" @added-section="fetchData(route.params.name)" />
-              </div>
-            </article>
+            <div class="pb-4">
+              <CreateExpressionSection v-if="expressionHeader.id === 0" :add-expression-header="true" @added-section="fetchData(route.params.name)" />
+              <EditExpressionSection v-else :section-info="expressionHeader" :current-level="1" :show-skeleton="headerIsLoading" :show-edit="showEdit" :is-header-section="true"/>
+            </div>
+            <Tabs value="0">
+              <TabList>
+                <Tab value="0">Background</Tab>
+                <Tab value="1">Powers</Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel value="0">
+                  <article id="expression-body">
+                    <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit && !showPreview" @refresh-list="fetchData(route.params.name)" />
+                    <Button v-if="showEdit && !showPreview" label="Add Section" class="m-2" @click="toggleCreate" />
+                    <div v-if="showCreate">
+                      <CreateExpressionSection @cancel-event="toggleCreate" @added-section="fetchData(route.params.name)" />
+                    </div>
+                  </article>
+                </TabPanel>
+                <TabPanel value="1">
+                  <p class="m-0">
+                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
+                    ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
+                  </p>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
           </template>
         </Card>
       </div>

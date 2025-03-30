@@ -38,6 +38,9 @@ const props = defineProps({
   showEdit:{
     type: Boolean,
     required: true
+  },
+  isHeaderSection:{
+    type: Boolean
   }
 });
 
@@ -157,13 +160,13 @@ const deleteExpression = (event) => {
     <form @submit="onSubmit">
       <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" :show-skeleton="showOptionLoader" />
       <EditorWrapper v-model="content" field-name="Content" :error-text="errors.content" :show-skeleton="showOptionLoader" />
-      <DropdownWrapper
+      <DropdownWrapper v-if="!isHeaderSection"
         v-model="sectionType" option-label="name" :options="sectionTypeOptions" field-name="Section Types" :show-skeleton="showOptionLoader"
         :error-text="errors.sectionType"
       />
       <div class="flex">
         <div class="col-flex flex-grow-1">
-          <Button severity="danger" label="Delete" class="m-2" @click="deleteExpression($event)" />
+          <Button v-if="!isHeaderSection" severity="danger" label="Delete" class="m-2" @click="deleteExpression($event)" />
           <div class="float-end">
             <Button label="Reset" class="m-2" @click="reset()" />
             <Button label="Cancel" class="m-2" @click="cancelEdit()" />
@@ -196,14 +199,14 @@ const deleteExpression = (event) => {
         </h6>
       </div>
       <div class="col-flex">
-        <Button v-if="showEdit" label="Add Child Section" class="m-2" @click="toggleCreate" />
+        <Button v-if="showEdit && !isHeaderSection" label="Add Child Section" class="m-2" @click="toggleCreate" />
         <Button v-if="!showEditor && showEdit" label="Edit" class="float-end m-2" @click="toggleEditor()" />
       </div>
     </div>
     <div class="mb-2 fix-wrapping" v-html="props.sectionInfo.content" />
   </div>
   <div v-if="showCreate && showEdit">
-    <CreateExpressionSection :parent-id="props.sectionInfo.id" @cancel-event="toggleCreate" @added-section="passThroughAddedSection()" />
+    <CreateExpressionSection :parent-id="props.sectionInfo.id" :add-expression-header="true" @cancel-event="toggleCreate" @added-section="passThroughAddedSection()" />
   </div>
 </template>
 
