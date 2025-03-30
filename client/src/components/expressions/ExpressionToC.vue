@@ -11,8 +11,6 @@ import {expressionStore} from "@/stores/expressionStore";
 import {getIdsWithDynamicSortForArray, scrollToSection} from "@/components/expressions/expressionUtilities";
 const expressionInfo = expressionStore();
 
-const model = defineModel({ required: true, default: {}, type: Array });
-
 const emit = defineEmits<{
   togglePreview: []
 }>();
@@ -33,7 +31,7 @@ function saveChanges(){
 
   axios.put(`/expression/${expressionInfo.currentExpressionId}/updateHierarchy`, {
     expressionId: expressionInfo.currentExpressionId,
-    items: getIdsWithDynamicSortForArray(model.value, null)
+    items: getIdsWithDynamicSortForArray(expressionInfo.sections, null)
   }).then(() => {
     emit("togglePreview");
     showTocEdit.value = !showTocEdit.value;
@@ -44,10 +42,10 @@ function saveChanges(){
 const showTocEdit = ref(false);
 function toggleEdit(){
   if(!showTocEdit.value)
-    originalModel = JSON.parse(JSON.stringify(toRaw(model.value)));
+    originalModel = JSON.parse(JSON.stringify(toRaw(expressionInfo.sections)));
   
   if(showTocEdit.value)
-    model.value = originalModel;
+    expressionInfo.sections = originalModel;
   
   emit("togglePreview");
   showTocEdit.value = !showTocEdit.value;
@@ -58,7 +56,7 @@ function toggleEdit(){
 <template>
   <Draggable
     v-if="props.canEdit && showTocEdit"
-    v-model="model"
+    v-model="expressionInfo.sections"
     class="mtl-tree"
     children-key="subSections"
     update-behavior="new"
@@ -72,7 +70,7 @@ function toggleEdit(){
   </Draggable>
   <BaseTree
     v-else 
-    v-model="model" 
+    v-model="expressionInfo.sections" 
     children-key="subSections"
     text-key="name"
   >
