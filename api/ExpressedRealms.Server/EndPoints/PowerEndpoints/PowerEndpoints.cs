@@ -111,6 +111,7 @@ internal static class PowerEndpoints
                     return TypedResults.Created("/powers", results.Value);
                 }
             )
+            .RequirePolicyAuthorization(Policies.ManagePowers)
             .WithSummary("Allows one to create new powers");
         
         endpointGroup
@@ -152,6 +153,27 @@ internal static class PowerEndpoints
                     return TypedResults.NoContent();
                 }
             )
+            .RequirePolicyAuthorization(Policies.ManagePowers)
             .WithSummary("Allows one to create new powers");
-        }
+
+        endpointGroup.MapDelete(
+            "{expressionId}/{id}",
+            async Task<Results<NotFound, NoContent, StatusCodeHttpResult>> (
+                int expressionId,
+                int id,
+                IPowerRepository repository
+            ) =>
+            {
+                var status = await repository.DeletePowerAsync(expressionId, id);
+
+                if (status.HasNotFound(out var notFound))
+                    return notFound;
+                if (status.HasBeenDeletedAlready(out var deletedAlready))
+                    return deletedAlready;
+                status.ThrowIfErrorNotHandled();
+
+                return TypedResults.NoContent();
+            }
+        ).RequirePolicyAuthorization(Policies.ManagePowers);
     }
+}
