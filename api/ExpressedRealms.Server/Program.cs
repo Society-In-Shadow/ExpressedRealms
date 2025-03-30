@@ -21,6 +21,7 @@ using ExpressedRealms.Server.EndPoints.AdminEndpoints;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints;
 using ExpressedRealms.Server.EndPoints.ExpressionEndpoints;
 using ExpressedRealms.Server.EndPoints.PlayerEndpoints;
+using ExpressedRealms.Server.EndPoints.PowerEndpoints;
 using ExpressedRealms.Server.Extensions;
 using ExpressedRealms.Server.Swagger;
 using FluentValidation;
@@ -289,6 +290,7 @@ try
     app.AddExpressionSubsectionEndpoints();
     app.AddStatEndPoints();
     app.AddAdminEndPoints();
+    app.AddPowerEndPoints();
 
     app.MapFallbackToFile("index.html");
     Log.Information("Starting Web API");
