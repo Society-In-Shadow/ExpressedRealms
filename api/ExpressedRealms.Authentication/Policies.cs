@@ -13,6 +13,7 @@ public class Policies
     // Predefined static instances for each policy
     public static readonly Policies ExpressionEditorPolicy = new(nameof(ExpressionEditorPolicy));
     public static readonly Policies UserManagementPolicy = new(nameof(UserManagementPolicy));
+    public static readonly Policies ManagePowers = new(nameof(ManagePowers));
 
     // Override ToString for convenience
     public override string ToString()

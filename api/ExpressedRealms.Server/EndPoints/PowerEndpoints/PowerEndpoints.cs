@@ -1,6 +1,8 @@
+using ExpressedRealms.Authentication;
 using ExpressedRealms.Repositories.Powers.Powers;
 using ExpressedRealms.Server.EndPoints.PowerEndpoints.Responses.Options;
 using ExpressedRealms.Server.EndPoints.PowerEndpoints.Responses.PowerList;
+using ExpressedRealms.Server.Extensions;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
 namespace ExpressedRealms.Server.EndPoints.PowerEndpoints;
@@ -62,6 +64,7 @@ internal static class PowerEndpoints
                     });
                 }
             )
+            .RequirePolicyAuthorization(Policies.ManagePowers)
             .WithSummary("Returns available options for powers")
             .WithDescription("This endpoint retrieves the available options for creating or editing powers.");
 

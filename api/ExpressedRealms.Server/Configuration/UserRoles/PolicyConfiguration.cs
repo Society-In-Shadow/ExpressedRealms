@@ -17,6 +17,11 @@ public static class PolicyConfiguration
                 Policies.UserManagementPolicy.Name,
                 policy => policy.RequireRole(UserRoles.UserManagementRole)
             );
+            
+            options.AddPolicy(
+                Policies.ManagePowers.Name,
+                policy => policy.RequireRole(UserRoles.PowerManagementRole)
+            );
         });
     }
 }
