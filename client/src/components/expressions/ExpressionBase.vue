@@ -112,8 +112,14 @@ onBeforeRouteUpdate(async (to, from) => {
         <Card class="mb-3 p-0 mt-0 pt-0" style="max-width: 800px">
           <template #content>
             <div class="pb-4">
-              <CreateExpressionSection v-if="expressionHeader.id === 0" :add-expression-header="true" @added-section="fetchData(route.params.name)" />
-              <EditExpressionSection v-else :section-info="expressionHeader" :current-level="1" :show-skeleton="headerIsLoading" :show-edit="showEdit" :is-header-section="true"/>
+              <div class="row">
+                <div class="col-8"><CreateExpressionSection v-if="expressionHeader.id === 0" :add-expression-header="true" @added-section="fetchData(route.params.name)" />
+                  <EditExpressionSection v-else :section-info="expressionHeader" :current-level="1" :show-skeleton="headerIsLoading" :show-edit="showEdit" :is-header-section="true"/>
+                </div>
+                <div class="col align-self-center">
+                  <img src="../../../public/IfIHadOne2.jpg" class="w-100"/>
+                </div>
+              </div>
             </div>
             <Tabs value="0">
               <TabList>
