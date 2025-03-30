@@ -5,7 +5,15 @@ import TabList from 'primevue/tablist';
 import Tab from 'primevue/tab';
 import TabPanels from 'primevue/tabpanels';
 import TabPanel from 'primevue/tabpanel';
-import {onMounted, ref, nextTick} from "vue";
+
+import ExpressionSection from "@/components/expressions/ExpressionSection.vue";
+import axios from "axios";
+import {onBeforeRouteUpdate, useRoute} from 'vue-router'
+import { expressionStore } from "@/stores/expressionStore";
+const expressionInfo = expressionStore();
+const route = useRoute()
+
+import {onMounted, ref, nextTick } from "vue";
 import Card from "primevue/card";
 import ScrollTop from 'primevue/scrolltop';
 import CreateExpressionSection from "@/components/expressions/CreateExpressionSection.vue";
@@ -14,22 +22,43 @@ import '@he-tree/vue/style/default.css'
 import '@he-tree/vue/style/material-design.css'
 import ExpressionToC from "@/components/expressions/ExpressionToC.vue";
 import EditExpressionSection from "@/components/expressions/EditExpressionSection.vue";
-import ExpressionSection from "@/components/expressions/ExpressionSection.vue";
-import axios from "axios";
-import {onBeforeRouteUpdate, useRoute} from 'vue-router'
-import { expressionStore } from "@/stores/expressionStore";
-const expressionInfo = expressionStore();
-const route = useRoute()
+let sections = ref([
+  {
+    id: 1,
+    subSections: [
+      { id: 2, subSections: []},
+      { id: 3, subSections: []},
+      { id: 4, subSections: []}
+    ]
+  },
+  {
+    id: 5,
+    subSections: []
+  },
+  {
+    id: 6,
+    subSections: [{id: 7}]
+  },
+  {
+    id: 8,
+    subSections: [{id: 9,}]
+  }
+]);
 
 const expressionHeader = ref({});
 
+const isLoading = ref(true);
 const headerIsLoading = ref(true);
+const showEdit = ref(expressionInfo.canEdit);
 const showCreate = ref(false);
 const showPreview = ref(false);
 
 function fetchData(name: string) {
   expressionInfo.getExpressionSections(name)
       .then(async () => {
+        sections.value = expressionInfo.sections;
+        showEdit.value = expressionInfo.canEdit;
+        isLoading.value = false;
         if(location.hash){
           await nextTick();
           window.location.replace(location.hash);
@@ -74,7 +103,7 @@ onBeforeRouteUpdate(async (to, from) => {
           </template>
           <template #content>
             <article id="expression-body">
-              <ExpressionToC :can-edit="expressionInfo.canEdit" :show-skeleton="expressionInfo.isLoading" @toggle-preview="togglePreview" />
+              <ExpressionToC v-model="sections" :can-edit="showEdit" :show-skeleton="isLoading" @toggle-preview="togglePreview" />
             </article>
           </template>
         </Card>
@@ -85,7 +114,7 @@ onBeforeRouteUpdate(async (to, from) => {
             <div class="pb-4">
               <div class="row">
                 <div class="col-8"><CreateExpressionSection v-if="expressionHeader.id === 0" :add-expression-header="true" @added-section="fetchData(route.params.name)" />
-                  <EditExpressionSection v-else :section-info="expressionHeader" :current-level="1" :show-skeleton="headerIsLoading" :show-edit="expressionInfo.canEdit" :is-header-section="true"/>
+                  <EditExpressionSection v-else :section-info="expressionHeader" :current-level="1" :show-skeleton="headerIsLoading" :show-edit="showEdit" :is-header-section="true"/>
                 </div>
                 <div class="col align-self-center">
                   <img src="../../../public/IfIHadOne2.jpg" class="w-100"/>
@@ -100,8 +129,8 @@ onBeforeRouteUpdate(async (to, from) => {
               <TabPanels>
                 <TabPanel value="0">
                   <article id="expression-body">
-                    <ExpressionSection :sections="expressionInfo.sections" :current-level="1" :show-skeleton="expressionInfo.isLoading" :show-edit="expressionInfo.canEdit && !showPreview" @refresh-list="fetchData(route.params.name)" />
-                    <Button v-if="expressionInfo.canEdit && !showPreview" label="Add Section" class="m-2" @click="toggleCreate" />
+                    <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit && !showPreview" @refresh-list="fetchData(route.params.name)" />
+                    <Button v-if="showEdit && !showPreview" label="Add Section" class="m-2" @click="toggleCreate" />
                     <div v-if="showCreate">
                       <CreateExpressionSection @cancel-event="toggleCreate" @added-section="fetchData(route.params.name)" />
                     </div>
