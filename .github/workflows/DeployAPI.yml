@@ -152,6 +152,4 @@ jobs:
           imageToDeploy: ${{ vars.EXPRESSEDREALMSFRONTEND_REGISTRY_URL }}/noremacskich/expressedrealms-api:${{ github.sha }}
           containerAppName: ca-expressedrealms-api
           resourceGroup: RG_ExpressedRealms
-          environmentVariables: |
-            ASPNETCORE_ENVIRONMENT=secretref:aspnetcore-environment
-            AZURE_KEYVAULT_RESOURCEENDPOINT=secretref:azure-keyvault-resourceendpoint-dc543
+          environmentVariables: ASPNETCORE_ENVIRONMENT=secretref:aspnetcore-environment AZURE_KEYVAULT_RESOURCEENDPOINT=secretref:azure-keyvault-resourceendpoint-dc543
