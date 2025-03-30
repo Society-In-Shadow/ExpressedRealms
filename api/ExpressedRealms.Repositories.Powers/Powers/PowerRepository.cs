@@ -180,8 +180,6 @@ internal sealed class PowerRepository(
         var section = await context
             .Powers.IgnoreQueryFilters()
             .FirstOrDefaultAsync(x => x.Id == id);
-        
-        
 
         if (section is null)
             return Result.Fail(new NotFoundFailure("Power"));

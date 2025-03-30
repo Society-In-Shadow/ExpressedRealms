@@ -4,7 +4,9 @@ namespace ExpressedRealms.Server.EndPoints.PowerEndpoints.Responses.Options;
 
 public class DetailedEditInformation
 {
-    public DetailedEditInformation(ExpressedRealms.Repositories.Powers.Powers.DTOs.Options.DetailedEditInformation editInformation)
+    public DetailedEditInformation(
+        ExpressedRealms.Repositories.Powers.Powers.DTOs.Options.DetailedEditInformation editInformation
+    )
     {
         Id = editInformation.Id;
         Name = editInformation.Name;

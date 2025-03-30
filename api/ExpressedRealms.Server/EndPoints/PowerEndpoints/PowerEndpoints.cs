@@ -21,30 +21,30 @@ internal static class PowerEndpoints
             .AddFluentValidationAutoValidation()
             .WithTags("Powers")
             .WithOpenApi();
-        
+
         endpointGroup
             .MapGet(
                 "/{expressionId}",
-                async (
-                    int expressionId,
-                    IPowerRepository powerRepository) =>
+                async (int expressionId, IPowerRepository powerRepository) =>
                 {
                     var powers = await powerRepository.GetPowersAsync(expressionId);
-                    
-                    return TypedResults.Ok(powers.Value.Select(x => new PowerInformationResponse()
-                    {
-                        Id = x.Id,
-                        Name = x.Name,
-                        Category = x.Category.Select(x => new DetailedInformation(x)).ToList(),
-                        Description = x.Description,
-                        GameMechanicEffect = x.GameMechanicEffect,
-                        Limitation = x.Limitation,
-                        PowerDuration = new DetailedInformation(x.PowerDuration),
-                        AreaOfEffect = new DetailedInformation(x.AreaOfEffect),
-                        PowerLevel = new DetailedInformation(x.PowerLevel),
-                        PowerActivationType = new DetailedInformation(x.PowerActivationType),
-                        Other = x.Other
-                    }));
+
+                    return TypedResults.Ok(
+                        powers.Value.Select(x => new PowerInformationResponse()
+                        {
+                            Id = x.Id,
+                            Name = x.Name,
+                            Category = x.Category.Select(x => new DetailedInformation(x)).ToList(),
+                            Description = x.Description,
+                            GameMechanicEffect = x.GameMechanicEffect,
+                            Limitation = x.Limitation,
+                            PowerDuration = new DetailedInformation(x.PowerDuration),
+                            AreaOfEffect = new DetailedInformation(x.AreaOfEffect),
+                            PowerLevel = new DetailedInformation(x.PowerLevel),
+                            PowerActivationType = new DetailedInformation(x.PowerActivationType),
+                            Other = x.Other,
+                        })
+                    );
                 }
             )
             .WithSummary("Returns the list of powers for a given expression")
@@ -58,21 +58,35 @@ internal static class PowerEndpoints
                 {
                     var options = await powerRepository.GetPowerOptionsAsync();
 
-                    return TypedResults.Ok(new PowerOptionsResponse()
-                    {
-                        Category = options.Value.Category.Select(x => new DetailedEditInformation(x)).ToList(),
-                        PowerDuration =
-                            options.Value.PowerDuration.Select(x => new DetailedEditInformation(x)).ToList(),
-                        PowerLevel = options.Value.PowerLevel.Select(x => new DetailedEditInformation(x)).ToList(),
-                        AreaOfEffect = options.Value.AreaOfEffect.Select(x => new DetailedEditInformation(x)).ToList(),
-                        PowerActivationType = options.Value.PowerActivationType
-                            .Select(x => new DetailedEditInformation(x)).ToList(),
-                    });
+                    return TypedResults.Ok(
+                        new PowerOptionsResponse()
+                        {
+                            Category = options
+                                .Value.Category.Select(x => new DetailedEditInformation(x))
+                                .ToList(),
+                            PowerDuration = options
+                                .Value.PowerDuration.Select(x => new DetailedEditInformation(x))
+                                .ToList(),
+                            PowerLevel = options
+                                .Value.PowerLevel.Select(x => new DetailedEditInformation(x))
+                                .ToList(),
+                            AreaOfEffect = options
+                                .Value.AreaOfEffect.Select(x => new DetailedEditInformation(x))
+                                .ToList(),
+                            PowerActivationType = options
+                                .Value.PowerActivationType.Select(x => new DetailedEditInformation(
+                                    x
+                                ))
+                                .ToList(),
+                        }
+                    );
                 }
             )
             .RequirePolicyAuthorization(Policies.ManagePowers)
             .WithSummary("Returns available options for powers")
-            .WithDescription("This endpoint retrieves the available options for creating or editing powers.");
+            .WithDescription(
+                "This endpoint retrieves the available options for creating or editing powers."
+            );
 
         endpointGroup
             .MapPost(
@@ -96,7 +110,7 @@ internal static class PowerEndpoints
                             PowerActivationType = request.PowerActivationType,
                             Other = request.Other,
                             ExpressionId = request.ExpressionId,
-                            IsPowerUse = request.IsPowerUse
+                            IsPowerUse = request.IsPowerUse,
                         }
                     );
 
@@ -113,7 +127,7 @@ internal static class PowerEndpoints
             )
             .RequirePolicyAuthorization(Policies.ManagePowers)
             .WithSummary("Allows one to create new powers");
-        
+
         endpointGroup
             .MapPut(
                 "{id}",
@@ -138,7 +152,7 @@ internal static class PowerEndpoints
                             PowerActivationType = request.PowerActivationType,
                             Other = request.Other,
                             ExpressionId = request.ExpressionId,
-                            IsPowerUse = request.IsPowerUse
+                            IsPowerUse = request.IsPowerUse,
                         }
                     );
 
@@ -156,23 +170,25 @@ internal static class PowerEndpoints
             .RequirePolicyAuthorization(Policies.ManagePowers)
             .WithSummary("Allows one to edit new powers");
 
-        endpointGroup.MapDelete(
-            "{id}",
-            async Task<Results<NotFound, NoContent, StatusCodeHttpResult>> (
-                int id,
-                IPowerRepository repository
-            ) =>
-            {
-                var status = await repository.DeletePowerAsync(id);
+        endpointGroup
+            .MapDelete(
+                "{id}",
+                async Task<Results<NotFound, NoContent, StatusCodeHttpResult>> (
+                    int id,
+                    IPowerRepository repository
+                ) =>
+                {
+                    var status = await repository.DeletePowerAsync(id);
 
-                if (status.HasNotFound(out var notFound))
-                    return notFound;
-                if (status.HasBeenDeletedAlready(out var deletedAlready))
-                    return deletedAlready;
-                status.ThrowIfErrorNotHandled();
+                    if (status.HasNotFound(out var notFound))
+                        return notFound;
+                    if (status.HasBeenDeletedAlready(out var deletedAlready))
+                        return deletedAlready;
+                    status.ThrowIfErrorNotHandled();
 
-                return TypedResults.NoContent();
-            }
-        ).RequirePolicyAuthorization(Policies.ManagePowers);
+                    return TypedResults.NoContent();
+                }
+            )
+            .RequirePolicyAuthorization(Policies.ManagePowers);
     }
 }

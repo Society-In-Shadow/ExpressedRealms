@@ -11,13 +11,20 @@ public static class RoleConfiguration
         {
             using var scope = app.Services.CreateScope();
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
-            var roles = new[] { UserRoles.ExpressionEditor, UserRoles.UserManagementRole, UserRoles.PowerManagementRole };
+            var roles = new[]
+            {
+                UserRoles.ExpressionEditor,
+                UserRoles.UserManagementRole,
+                UserRoles.PowerManagementRole,
+            };
 
             foreach (var role in roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
                 {
-                    await roleManager.CreateAsync(new Role() { Id = Guid.NewGuid().ToString(), Name = role });
+                    await roleManager.CreateAsync(
+                        new Role() { Id = Guid.NewGuid().ToString(), Name = role }
+                    );
                 }
             }
         });
