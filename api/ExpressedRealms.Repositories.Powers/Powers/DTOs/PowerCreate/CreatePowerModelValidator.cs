@@ -83,6 +83,7 @@ public class CreatePowerModelValidator : AbstractValidator<CreatePowerModel>
                     );
                 }
             )
+            .WithErrorCode("NotFound")
             .WithMessage("This is not a valid Expression");
     }
 }

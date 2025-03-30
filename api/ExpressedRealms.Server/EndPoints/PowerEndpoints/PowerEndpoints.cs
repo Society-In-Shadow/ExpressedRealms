@@ -1,8 +1,14 @@
 using ExpressedRealms.Authentication;
 using ExpressedRealms.Repositories.Powers.Powers;
+using ExpressedRealms.Repositories.Powers.Powers.DTOs.PowerCreate;
+using ExpressedRealms.Repositories.Powers.Powers.DTOs.PowerEdit;
+using ExpressedRealms.Server.EndPoints.CharacterEndPoints;
+using ExpressedRealms.Server.EndPoints.PowerEndpoints.Requests.CreatePower;
+using ExpressedRealms.Server.EndPoints.PowerEndpoints.Requests.PowerEdit;
 using ExpressedRealms.Server.EndPoints.PowerEndpoints.Responses.Options;
 using ExpressedRealms.Server.EndPoints.PowerEndpoints.Responses.PowerList;
 using ExpressedRealms.Server.Extensions;
+using Microsoft.AspNetCore.Http.HttpResults;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
 namespace ExpressedRealms.Server.EndPoints.PowerEndpoints;
@@ -68,7 +74,84 @@ internal static class PowerEndpoints
             .WithSummary("Returns available options for powers")
             .WithDescription("This endpoint retrieves the available options for creating or editing powers.");
 
-        
+        endpointGroup
+            .MapPost(
+                "",
+                async Task<Results<ValidationProblem, NotFound, Created<int>>> (
+                    CreatePowerRequest request,
+                    IPowerRepository repository
+                ) =>
+                {
+                    var results = await repository.CreatePower(
+                        new CreatePowerModel()
+                        {
+                            Name = request.Name,
+                            Category = request.Category,
+                            Description = request.Description,
+                            GameMechanicEffect = request.GameMechanicEffect,
+                            Limitation = request.Limitation,
+                            PowerDuration = request.PowerDuration,
+                            AreaOfEffect = request.AreaOfEffect,
+                            PowerLevel = request.PowerLevel,
+                            PowerActivationType = request.PowerActivationType,
+                            Other = request.Other,
+                            ExpressionId = request.ExpressionId,
+                            IsPowerUse = request.IsPowerUse
+                        }
+                    );
 
+                    if (results.HasNotFound(out var notFound))
+                    {
+                        return notFound;
+                    }
+                    if (results.HasValidationError(out var validationProblem))
+                        return validationProblem;
+                    results.ThrowIfErrorNotHandled();
+
+                    return TypedResults.Created("/powers", results.Value);
+                }
+            )
+            .WithSummary("Allows one to create new powers");
+        
+        endpointGroup
+            .MapPut(
+                "{id}",
+                async Task<Results<ValidationProblem, NotFound, NoContent>> (
+                    int id,
+                    EditPowerRequest request,
+                    IPowerRepository repository
+                ) =>
+                {
+                    var results = await repository.EditPower(
+                        new EditPowerModel()
+                        {
+                            Id = request.Id,
+                            Name = request.Name,
+                            Category = request.Category,
+                            Description = request.Description,
+                            GameMechanicEffect = request.GameMechanicEffect,
+                            Limitation = request.Limitation,
+                            PowerDuration = request.PowerDuration,
+                            AreaOfEffect = request.AreaOfEffect,
+                            PowerLevel = request.PowerLevel,
+                            PowerActivationType = request.PowerActivationType,
+                            Other = request.Other,
+                            ExpressionId = request.ExpressionId,
+                            IsPowerUse = request.IsPowerUse
+                        }
+                    );
+
+                    if (results.HasNotFound(out var notFound))
+                    {
+                        return notFound;
+                    }
+                    if (results.HasValidationError(out var validationProblem))
+                        return validationProblem;
+                    results.ThrowIfErrorNotHandled();
+
+                    return TypedResults.NoContent();
+                }
+            )
+            .WithSummary("Allows one to create new powers");
         }
     }
