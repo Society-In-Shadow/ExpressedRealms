@@ -1,6 +1,6 @@
 using ExpressedRealms.DB.Models.Powers;
 
-namespace ExpressedRealms.Repositories.Powers.Powers.DTOs;
+namespace ExpressedRealms.Repositories.Powers.Powers.DTOs.Options;
 
 public class DetailedEditInformation
 {

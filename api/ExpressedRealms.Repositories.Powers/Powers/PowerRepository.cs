@@ -2,6 +2,7 @@ using ExpressedRealms.DB;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Powers;
 using ExpressedRealms.Repositories.Powers.Powers.DTOs;
+using ExpressedRealms.Repositories.Powers.Powers.DTOs.Options;
 using ExpressedRealms.Repositories.Powers.Powers.DTOs.PowerCreate;
 using ExpressedRealms.Repositories.Powers.Powers.DTOs.PowerEdit;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
