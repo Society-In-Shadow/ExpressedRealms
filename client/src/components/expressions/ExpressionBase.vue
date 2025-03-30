@@ -113,18 +113,26 @@ onBeforeRouteUpdate(async (to, from) => {
           <template #content>
             <div class="pb-4">
               <div class="row">
-                <div class="col-8"><CreateExpressionSection v-if="expressionHeader.id === 0" :add-expression-header="true" @added-section="fetchData(route.params.name)" />
-                  <EditExpressionSection v-else :section-info="expressionHeader" :current-level="1" :show-skeleton="headerIsLoading" :show-edit="showEdit" :is-header-section="true"/>
+                <div class="col-8">
+                  <CreateExpressionSection v-if="expressionHeader.id === 0" :add-expression-header="true" @added-section="fetchData(route.params.name)" />
+                  <EditExpressionSection
+                    v-else :section-info="expressionHeader" :current-level="1" :show-skeleton="headerIsLoading" :show-edit="showEdit"
+                    :is-header-section="true"
+                  />
                 </div>
                 <div class="col align-self-center">
-                  <img src="../../../public/IfIHadOne2.jpg" class="w-100"/>
+                  <img src="../../../public/IfIHadOne2.jpg" class="w-100">
                 </div>
               </div>
             </div>
             <Tabs value="0">
               <TabList>
-                <Tab value="0">Background</Tab>
-                <Tab value="1">Powers</Tab>
+                <Tab value="0">
+                  Background
+                </Tab>
+                <Tab value="1">
+                  Powers
+                </Tab>
               </TabList>
               <TabPanels>
                 <TabPanel value="0">

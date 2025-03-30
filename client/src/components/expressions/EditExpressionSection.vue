@@ -160,7 +160,8 @@ const deleteExpression = (event) => {
     <form @submit="onSubmit">
       <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" :show-skeleton="showOptionLoader" />
       <EditorWrapper v-model="content" field-name="Content" :error-text="errors.content" :show-skeleton="showOptionLoader" />
-      <DropdownWrapper v-if="!isHeaderSection"
+      <DropdownWrapper
+        v-if="!isHeaderSection"
         v-model="sectionType" option-label="name" :options="sectionTypeOptions" field-name="Section Types" :show-skeleton="showOptionLoader"
         :error-text="errors.sectionType"
       />

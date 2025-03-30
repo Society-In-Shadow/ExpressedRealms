@@ -37,7 +37,6 @@ const stopWatch = watch(
     () => expressionInfo.isDoneLoading,
     (newValue) => {
       if (newValue) {
-        console.log("isDoneLoading changed to true");
         loadSectionInfo();
       }
     }
@@ -59,7 +58,6 @@ function loadSectionInfo(){
   if(!showOptionLoader.value) return; // Don't load in 2nd time
   axios.get(`/expressionSubSections/${expressionInfo.currentExpressionId}/0/options`)
       .then(async (response) => {
-        console.log("loaded data");
         sectionTypeOptions.value = response.data.sectionTypes;
         showOptionLoader.value = false;
 
@@ -107,7 +105,8 @@ const nameField = props.addExpressionHeader ? 'Expression Name' : 'Name';
     <form @submit="onSubmit">
       <InputTextWrapper v-model="name" :field-name="nameField" :error-text="errors.name" />
       <EditorWrapper v-model="content" field-name="Content" :error-text="errors.content" />
-      <DropdownWrapper v-if="!props.addExpressionHeader"
+      <DropdownWrapper
+        v-if="!props.addExpressionHeader"
         v-model="sectionType" option-label="name" :options="sectionTypeOptions" field-name="Section Types" :show-skeleton="showOptionLoader"
         :error-text="errors.sectionType"
       />
