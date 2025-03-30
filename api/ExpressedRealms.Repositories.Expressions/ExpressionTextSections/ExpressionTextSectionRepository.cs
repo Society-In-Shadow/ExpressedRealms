@@ -174,18 +174,20 @@ internal sealed class ExpressionTextSectionRepository(
 
         return RecursiveFunctions.BuildExpressionPage(sections, null);
     }
-    
+
     public async Task<ExpressionSectionDto> GetExpressionSection(int expressionId)
     {
         var section = await context
             .ExpressionSections.AsNoTracking()
-            .FirstOrDefaultAsync(x => x.ExpressionId == expressionId && x.SectionType.Name == "Expression");
+            .FirstOrDefaultAsync(x =>
+                x.ExpressionId == expressionId && x.SectionType.Name == "Expression"
+            );
 
         if (section is null)
         {
             return new ExpressionSectionDto();
         }
-        
+
         return new ExpressionSectionDto()
         {
             Name = section.Name,

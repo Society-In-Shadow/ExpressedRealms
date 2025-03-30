@@ -39,10 +39,10 @@ try
 {
     var earlyLogger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console();
     Log.Logger = earlyLogger.CreateLogger();
-    
+
     Log.Information("Setting Up Loggers");
     var logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console();
-    
+
     Log.Information("Setting Up Web App");
     var builder = WebApplication.CreateBuilder(args);
 

@@ -36,9 +36,7 @@ internal static class ExpectedSubSectionsEndpoints
                         return notFound;
                     expressionIdResult.ThrowIfErrorNotHandled();
 
-                    var section = await repository.GetExpressionSection(
-                        expressionIdResult.Value
-                    );
+                    var section = await repository.GetExpressionSection(expressionIdResult.Value);
 
                     return TypedResults.Ok(
                         new ExpressionSectionDTO()
@@ -46,13 +44,13 @@ internal static class ExpectedSubSectionsEndpoints
                             Name = section.Name,
                             Id = section.Id,
                             Content = section.Content,
-                            SubSections = new List<ExpressionSectionDTO>()
+                            SubSections = new List<ExpressionSectionDTO>(),
                         }
                     );
                 }
             )
             .RequireAuthorization();
-        
+
         endpointGroup
             .MapGet(
                 "{name}",
