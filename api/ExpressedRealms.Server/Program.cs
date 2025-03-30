@@ -56,9 +56,9 @@ try
         builder.Environment.IsProduction()
     );
 
-    var appInsightsConnectionString = await keyVaultManager.GetSecret(
+    /*var appInsightsConnectionString = await keyVaultManager.GetSecret(
         ConnectionStrings.ApplicationInsights
-    );
+    );*/
     if (builder.Environment.IsDevelopment())
     {
         string connectionString = await keyVaultManager.GetSecret(ConnectionStrings.Database);
@@ -66,19 +66,19 @@ try
     }
     else
     {
-        logger.WriteTo.ApplicationInsights(appInsightsConnectionString, TelemetryConverter.Traces);
+        //logger.WriteTo.ApplicationInsights(appInsightsConnectionString, TelemetryConverter.Traces);
     }
 
     Log.Logger = logger.CreateLogger();
 
     builder.Host.UseSerilog();
 
-    builder.Services.AddApplicationInsightsTelemetry(
+    /*builder.Services.AddApplicationInsightsTelemetry(
         (options) =>
         {
             options.ConnectionString = appInsightsConnectionString;
         }
-    );
+    );*/
 
     Log.Information("Setup Azure Storage Blob");
 
