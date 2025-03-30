@@ -12,8 +12,8 @@ on:
       - 'api/**'
   pull_request:
     branches: [main]
-    paths:
-      - 'api/**'
+#    paths:
+#      - 'api/**'
 
 jobs:
 
@@ -95,7 +95,7 @@ jobs:
       packages: write
       contents: read
       id-token: write
-    if: github.ref == 'refs/heads/main'
+    #if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
 
@@ -131,7 +131,7 @@ jobs:
       id-token: write
       statuses: write
 
-    if: github.ref == 'refs/heads/main'
+    #if: github.ref == 'refs/heads/main'
 
     steps:
       # Step 1: Azure Login

@@ -37,8 +37,9 @@ using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 
 try
 {
-    Log.Information("Setting Up Loggers");
     var logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console();
+    Log.Logger = logger.CreateLogger();
+    Log.Information("Setting Up Loggers");
 
     Log.Information("Setting Up Web App");
     var builder = WebApplication.CreateBuilder(args);
