@@ -92,6 +92,10 @@ internal sealed class ExpressionTextSectionRepository(
         var result = await createExpressionDtoValidator.ValidateAsync(dto, cancellationToken);
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
+        
+        var nextPlaceOnList = await context.ExpressionSections.AsNoTracking()
+            .Where(x => x.ExpressionId == dto.ExpressionId && x.ParentId == dto.ParentId)
+            .CountAsync();
 
         var expression = new ExpressionSection()
         {
@@ -100,6 +104,7 @@ internal sealed class ExpressionTextSectionRepository(
             ExpressionId = dto.ExpressionId,
             SectionTypeId = dto.SectionTypeId,
             ParentId = dto.ParentId,
+            OrderIndex = nextPlaceOnList + 1,
         };
 
         context.ExpressionSections.Add(expression);
