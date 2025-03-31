@@ -72,8 +72,13 @@ function loadSectionInfo(){
   axios.get(`/expressionSubSections/${expressionInfo.currentExpressionId}/${props.sectionInfo.id}/options`)
       .then(async (response) => {
 
-        sectionTypeOptions.value = response.data.sectionTypes;
-
+        if(!props.isHeaderSection) {
+          sectionTypeOptions.value = response.data.sectionTypes.filter(sectionType => sectionType.name.toLowerCase() !== "expression");
+        }
+        else{
+          sectionTypeOptions.value = response.data.sectionTypes;
+        }
+        
         axios.get(`/expressionSubSections/${expressionInfo.currentExpressionId}/${props.sectionInfo.id}`)
             .then(async (json) => {
               name.value = json.data.name;
@@ -207,7 +212,7 @@ const deleteExpression = (event) => {
     <div class="mb-2 fix-wrapping" v-html="props.sectionInfo.content" />
   </div>
   <div v-if="showCreate && showEdit">
-    <CreateExpressionSection :parent-id="props.sectionInfo.id" :add-expression-header="true" @cancel-event="toggleCreate" @added-section="passThroughAddedSection()" />
+    <CreateExpressionSection :parent-id="props.sectionInfo.id" @cancel-event="toggleCreate" @added-section="passThroughAddedSection()" />
   </div>
 </template>
 

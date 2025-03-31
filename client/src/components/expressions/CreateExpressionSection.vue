@@ -23,7 +23,8 @@ const props = defineProps({
     type: Number
   },
   addExpressionHeader:{
-    type: Boolean
+    type: Boolean,
+    value: false
   }
 });
 
@@ -58,7 +59,12 @@ function loadSectionInfo(){
   if(!showOptionLoader.value) return; // Don't load in 2nd time
   axios.get(`/expressionSubSections/${expressionInfo.currentExpressionId}/0/options`)
       .then(async (response) => {
-        sectionTypeOptions.value = response.data.sectionTypes;
+        if(!props.addExpressionHeader) {
+          sectionTypeOptions.value = response.data.sectionTypes.filter(sectionType => sectionType.name.toLowerCase() !== "expression");
+        }
+        else{
+          sectionTypeOptions.value = response.data.sectionTypes;
+        }
         showOptionLoader.value = false;
 
         if(props.addExpressionHeader) {
