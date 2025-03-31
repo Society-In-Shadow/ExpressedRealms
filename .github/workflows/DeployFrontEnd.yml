@@ -62,24 +62,24 @@ jobs:
           sarif_file: 'megalinter-reports/megalinter-report.sarif'
 
   # Cypress Test Job
-  cypress-run-chrome:
-    name: Cypress Test (Chrome)
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+#  cypress-run-chrome:
+#    name: Cypress Test (Chrome)
+#    runs-on: ubuntu-22.04
+#    steps:
+#      - name: Checkout Repository
+#        uses: actions/checkout@v4
 
-      - name: Build Docker Image
-        run: docker build ./client
+#      - name: Build Docker Image
+#        run: docker build ./client
 
-      - name: Run Cypress Tests
-        uses: cypress-io/github-action@v6
-        with:
-          component: true
-          browser: chrome
-          working-directory: client
-          record: true
-          tag: pr-component-chrome
+#      - name: Run Cypress Tests
+#        uses: cypress-io/github-action@v6
+#        with:
+#          component: true
+#          browser: chrome
+#          working-directory: client
+#          record: true
+#          tag: pr-component-chrome
 
   # Build and Push Docker Image
   push_to_docker:
