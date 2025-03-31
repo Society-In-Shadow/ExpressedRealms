@@ -3,7 +3,7 @@
     <CharacterTile
       v-for="character in characters" 
       :key="character.id"
-      :character-id="character.id" 
+      :character-id="Number(character.id)" 
       :character-name="character.name" 
       :background-story="character.background"
       :expression="character.expression"

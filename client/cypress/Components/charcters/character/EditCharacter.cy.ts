@@ -1,4 +1,4 @@
-import component from "../../../../src/components/characters/character/EditCharacter.vue";
+import component from "../../../../src/components/characters/character/EditCharacterDetails.vue";
 import toasters from "../../../../src/services/Toasters";
 
 const name = 'name';
@@ -17,7 +17,7 @@ const factionValues = [
     { id: 4, name: "Too", description: "Far" },
     { id: 5, name: "Loo", description: "Yoo" }
 ]
-describe('<EditCharacter />', () => {
+describe('<EditCharacterDetails />', () => {
     beforeEach(() => {
 
         cy.intercept('GET', '/characters/3', {
@@ -50,7 +50,7 @@ describe('<EditCharacter />', () => {
             pushRoute: '/characters/3'
         });
     });
-    
+
     it('Loading the page doesn\'t validate right away', () => {
         cy.dataCy(nameHelp).should('not.be.visible');
         cy.dataCy(backgroundHelp).should('not.be.visible');
@@ -59,7 +59,6 @@ describe('<EditCharacter />', () => {
     });
     
     it('Loading Page Will Grab Data From API and Load It In', () => {
-        cy.get('@getFactionOptions');
         cy.dataCy(name).should("have.value", nameDefaultValue);
         cy.dataCy(background).should("have.value", backgroundDefaultValue);
         cy.dataCy(expression).should("have.value", expressionDefaultValue);
