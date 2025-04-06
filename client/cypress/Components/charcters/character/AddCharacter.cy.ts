@@ -113,7 +113,7 @@ describe('<AddCharacter />', () => {
         cy.dataCy(background).type("5555555555");
         cy.dataCy(addCharacterButton).click();
 
-        cy.get('@addProfile').its('request.body').should('deep.equal', {
+        cy.wait('@addProfile').its('request.body').should('deep.equal', {
             name: 'John Doe',
             expressionId: expressionValues[0].id,
             background: '5555555555',

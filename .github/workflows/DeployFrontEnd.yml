@@ -65,14 +65,13 @@ jobs:
 
   # Cypress Test Job
   cypress-run-chrome:
-    name: Cypress Test (Chrome)
+    name: Cypress Test
     runs-on: ubuntu-22.04
-    
+
     strategy:
       matrix:
         browser: [ chrome, firefox ] # Run tests for both browsers in parallel
-    
-    
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -87,8 +86,8 @@ jobs:
           browser: ${{ matrix.browser }}
           working-directory: client
           publish-summary: 'true'
-          
-          
+
+
 #      - name: Save Cypress JUnit Report
 #        if: success() || failure()
 #        uses: actions/upload-artifact@v4
