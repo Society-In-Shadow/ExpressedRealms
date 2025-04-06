@@ -10,7 +10,7 @@ import Card from 'primevue/card';
       <template #content>
         <div class="row">
           <div class="col-sm-6 col-xs-12 d-flex justify-content-center align-items-center">
-            <img src="/public/favicon.png" alt="Image" height="200">
+            <img src="/favicon.png" alt="Image" height="200">
           </div>
           <div class="col-sm-6 col-xs-12">
             <router-view />

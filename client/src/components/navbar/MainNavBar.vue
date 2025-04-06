@@ -130,7 +130,7 @@ function showCreateExpressionPopup(){
   </Dialog>
   <MegaMenu :model="items" class="m-lg-3 m-md-3 m-sm-1 m-1 pb-1 pt-1">
     <template #start>
-      <img src="/public/favicon.png" height="50" width="50" class="m-2">
+      <img src="/favicon.png" height="50" width="50" class="m-2">
     </template>
     <template #item="{ item }">
       <RootNodeMenuItem v-if="item.root" :item="item" />
