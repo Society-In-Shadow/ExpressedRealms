@@ -2,6 +2,8 @@ import { defineConfig } from 'vite';
 import plugin from '@vitejs/plugin-vue';
 import { dirname } from 'node:path';
 import fs from 'fs';
+import { vue } from '@vitejs/plugin-vue';
+
 
 const __dirname = dirname(__filename);
 
@@ -33,7 +35,14 @@ export default defineConfig(() => {
     }
 
     return {
-        plugins: [plugin()],
+        plugins: [vue, plugin()],
+        test: {
+            globals: true,
+            environment: 'jsdom',
+            coverage: {
+                reporter: ['text', 'json', 'html'], // Enables code coverage reporting
+            },
+        },
         resolve: {
             alias: {
                 '@': require('path').resolve(__dirname, 'src')
