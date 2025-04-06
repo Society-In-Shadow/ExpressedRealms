@@ -52,7 +52,7 @@ const onSubmit = handleSubmit((values) => {
     factionId: values.factionId?.id
   })
       .then(() => {
-        Router.push("/characters");
+        //Router.push("/characters");
       });
 });
 
