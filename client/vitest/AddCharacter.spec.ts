@@ -1,7 +1,5 @@
-import { mount } from '@vue/test-utils'; // Helper to mount the component
-import PrimeVue from 'primevue/config'; // PrimeVue plugin
-import AddCharacterTile from '../src/components/characters/character/AddCharacter.vue'; // Your component
-import { createRouter, createWebHistory } from 'vue-router'; // Vue Router
+import { mount } from '@vue/test-utils';
+import AddCharacterTile from '../src/components/characters/character/AddCharacter.vue';
 import '@testing-library/jest-dom';
 
 const name = 'name';
@@ -13,45 +11,15 @@ const factionHelp = 'faction-help';
 const background = 'background';
 const backgroundHelp = 'background-help'
 
-// Create a mock router
-const router = createRouter({
-    history: createWebHistory(),
-    routes: [
-        {
-            path: '/', // Add a route for `/`
-            name: 'Home',
-            component: { template: '<div>Home</div>' }, // Temporary placeholder component
-        },
-
-        { path: '/characters/add', name: 'AddCharacter' }, // Example route
-    ],
-});
-
 describe('<AddCharacterTile />', () => {
-    beforeEach(async () => {
-        // Ensure router is ready before each test
-        router.push('/');
-        await router.isReady();
-    });
 
     it('renders without errors', () => {
-        // Mount the component and inject PrimeVue and the router
-        const wrapper = mount(AddCharacterTile, {
-            global: {
-                plugins: [PrimeVue, router],
-            },
-        });
-
-        // Assert that the component exists in the DOM
+        const wrapper = mount(AddCharacterTile);
         expect(wrapper.exists()).toBe(true);
     });
 
     it('Loading the component doesn\'t validate right away', async () => {
-        const wrapper = mount(AddCharacterTile, {
-            global: {
-                plugins: [PrimeVue, router],
-            },
-        });
+        const wrapper = mount(AddCharacterTile);
 
         expect(wrapper.find(`[data-cy="${nameHelp}"]`).element).not.toBeVisible();
         expect(wrapper.find(`[data-cy="${backgroundHelp}"]`).element).not.toBeVisible();
@@ -60,11 +28,7 @@ describe('<AddCharacterTile />', () => {
     });
 
     it('Name Field follows all Schema Validations', async () => {
-        const wrapper = mount(AddCharacterTile, {
-            global: {
-                plugins: [PrimeVue, router],
-            },
-        });
+        const wrapper = mount(AddCharacterTile);
 
         // Variables for `data-cy` selectors
         const name = '[data-cy="name"]';

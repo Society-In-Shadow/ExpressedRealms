@@ -12,3 +12,15 @@ if (!global.ResizeObserver) {
         }
     };
 }
+
+import { config } from '@vue/test-utils';
+import PrimeVue from 'primevue/config';
+import router from './src/router/index';
+import piniaPluginPersistedState from "pinia-plugin-persistedstate"
+import { createPinia } from 'pinia'
+
+const pinia = createPinia();
+pinia.use(piniaPluginPersistedState);
+
+// Add plugins globally
+config.global.plugins = [PrimeVue, router, pinia];
