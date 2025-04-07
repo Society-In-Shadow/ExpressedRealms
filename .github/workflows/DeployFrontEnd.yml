@@ -68,10 +68,6 @@ jobs:
     name: Cypress Test
     runs-on: ubuntu-22.04
 
-    strategy:
-      matrix:
-        browser: [ chrome, firefox ] # Run tests for both browsers in parallel
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -83,18 +79,20 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           component: true
-          browser: ${{ matrix.browser }}
           working-directory: client
           publish-summary: 'true'
 
+      - name: Upload JUnit Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-test-results
+          path: cypress/results/*.xml
 
-#      - name: Save Cypress JUnit Report
-#        if: success() || failure()
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: Cypress Component Test Report (Firefox)
-#          path: ./client/cypress/reports/junit/
-#        continue-on-error: true
+      - name: Publish Test Results
+        uses: actions/upload-test-results@v1
+        with:
+          path: cypress/results/*.xml
+
   
   # Build and Push Docker Image
   push_to_docker:
