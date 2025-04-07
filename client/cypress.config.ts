@@ -7,7 +7,10 @@ const viteConfig = ViteConfig as UserConfig;
 
 export default defineConfig({
   projectId: "3wpvob",
-
+  retries: {
+    runMode: 3, // Retries for `cypress run`
+    openMode: 0  // Retries for `cypress open`
+  },
   e2e: {
     baseUrl: "https://172.19.0.6",
   },
