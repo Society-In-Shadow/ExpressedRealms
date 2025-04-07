@@ -78,6 +78,7 @@ jobs:
         run: docker build ./client
 
       - name: Create Results Directory
+        working-directory: client
         run: mkdir -p cypress/results
 
       - name: Run Cypress Tests
@@ -86,6 +87,8 @@ jobs:
           component: true
           working-directory: client
           publish-summary: 'true'
+          headed: false
+          browser: chrome
 
       - name: Debug Test Results Directory
         run: |
@@ -96,14 +99,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: cypress-test-results
-          path: cypress/results/*.xml
+          path: client/cypress/results/*.xml
 
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
           files: |
-            cypress/results/*.xml
+            client/cypress/results/*.xml
           check_name: Cypress Test Results # Optionally name the result set
           comment_title: Cypress Test Results Summary # Optional title for comments
           github_token: ${{ secrets.GITHUB_TOKEN }} # Used to interact with GitHub
