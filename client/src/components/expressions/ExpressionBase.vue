@@ -121,7 +121,7 @@ onBeforeRouteUpdate(async (to, from) => {
                   />
                 </div>
                 <div class="col align-self-center">
-                  <img src="../../../public/IfIHadOne2.jpg" class="w-100">
+                  <img src="../../../IfIHadOne2.jpg" class="w-100">
                 </div>
               </div>
             </div>
