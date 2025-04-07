@@ -2,14 +2,14 @@
 
   import Button from 'primevue/button';
   import axios from "axios";
-  import Router from "@/router";
-  import {useRoute} from "vue-router";
+  import { useRouter, useRoute } from "vue-router";
   import { ref } from 'vue'
   import {userStore} from "@/stores/userStore";
   import { isLoggedIn, logOff } from "@/services/Authentication";
 
   let userInfo = userStore();
 
+  const Router = useRouter();
   const route = useRoute();
 
   let userIsLoggedIn = isLoggedIn();

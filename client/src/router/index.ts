@@ -12,12 +12,12 @@ export const routes = [
     AdminRoutes
 ]
 
-const router = createRouter({
+const routerSetup = createRouter({
     history: createWebHistory(),
     routes
 })
 
-router.isReady().then(() => {
+routerSetup.isReady().then(() => {
     const userInfo = userStore();
     axios.get("/navMenu/permissions")
         .then(response => {
@@ -25,7 +25,7 @@ router.isReady().then(() => {
         })
 })
 
-router.beforeEach(async (to) => {
+routerSetup.beforeEach(async (to) => {
 
     const userInfo = userStore();
     await userInfo.updateUserRoles();
@@ -79,4 +79,4 @@ router.beforeEach(async (to) => {
     
 });
 
-export default router
+export default routerSetup

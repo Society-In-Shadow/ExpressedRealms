@@ -5,7 +5,7 @@ import MegaMenu from "primevue/megamenu";
 import AvatarDropdown from "@/components/navbar/AvatarDropdown.vue";
 import {useRouter} from "vue-router";
 import axios from "axios";
-import Router from "@/router";
+
 import ExpressionMenuItem from "@/components/navbar/navMenuItems/ExpressionMenuItem.vue";
 import CharacterMenuItem from "@/components/navbar/navMenuItems/CharacterMenuItem.vue";
 import RootNodeMenuItem from "@/components/navbar/navMenuItems/RootNodeMenuItem.vue";
@@ -14,7 +14,7 @@ import Dialog from 'primevue/dialog';
 import AddExpression from "@/components/expressions/AddExpression.vue";
 import {userStore} from "@/stores/userStore";
 const userInfo = userStore();
-
+const Router = useRouter();
 let showExpressionEdit = false;
 
 const router = useRouter();

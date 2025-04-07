@@ -2,12 +2,11 @@
 
   import Button from 'primevue/button';
   import { useConfirm } from "primevue/useconfirm";
-  import Router from "@/router";
   import {useRouter} from "vue-router";
   import axios from "axios";
   import toaster from "@/services/Toasters";
   import Badge from 'primevue/badge';
-  const router = useRouter();
+  const Router = useRouter();
 
   const emit = defineEmits<{
     showEditPopup: [expressionId: number],

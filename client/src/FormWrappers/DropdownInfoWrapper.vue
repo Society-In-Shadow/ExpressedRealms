@@ -5,7 +5,8 @@ import {computed} from "vue";
 import Skeleton from 'primevue/skeleton';
 import InputGroup from 'primevue/inputgroup';
 import Button from 'primevue/button'
-import Router from "@/router";
+import { useRouter } from "vue-router";
+const Router = useRouter();
 
 const model = defineModel({ required: false, default: {}, type: Object });
 

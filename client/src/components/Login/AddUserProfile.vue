@@ -2,7 +2,8 @@
 
 import Button from 'primevue/button';
 import axios from "axios";
-import Router from "@/router";
+import { useRouter } from "vue-router";
+const Router = useRouter();
 import { useForm } from 'vee-validate';
 import { object, string }  from 'yup';
 import {logOff} from "@/services/Authentication";

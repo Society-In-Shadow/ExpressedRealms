@@ -3,7 +3,8 @@
 import Button from "primevue/button";
 import Card from "primevue/card";
 import axios from "axios";
-import Router from "@/router";
+import {useRouter} from "vue-router";
+const Router = useRouter();
 
 const emit = defineEmits<{
   delete: [id: number]

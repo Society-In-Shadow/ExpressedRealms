@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import PrimeVue from 'primevue/config';
-import Router from "@/router";
+import routerSetup from "@/router";
 import "primeicons/primeicons.css";
 import "primeicons/fonts/primeicons.ttf"
 import "primeicons/fonts/primeicons.woff"
@@ -77,7 +77,7 @@ const app = createApp(App)
             preset: MyPreset
         }
     })
-    .use(Router);
+    .use(routerSetup);
 app.directive('ripple', Ripple);
 app.use(pinia);
 app.use(ToastService);

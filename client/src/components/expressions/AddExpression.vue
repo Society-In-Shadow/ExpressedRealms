@@ -7,7 +7,8 @@ import TextAreaWrapper from "@/FormWrappers/TextAreaWrapper.vue";
 import axios from "axios";
 import toaster from "@/services/Toasters";
 import Button from "primevue/button";
-import Router from "@/router";
+import {useRouter} from "vue-router";
+const Router = useRouter();
 
 const emit = defineEmits<{
   refreshList: []

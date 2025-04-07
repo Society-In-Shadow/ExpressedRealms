@@ -2,11 +2,11 @@
 
 import Button from 'primevue/button';
 import axios from "axios";
-import Router from "@/router";
 import { useForm } from 'vee-validate';
 import { object, string, ref }  from 'yup';
 import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
-
+import {useRouter} from "vue-router";
+const Router = useRouter();
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
     email: string().required()

@@ -6,8 +6,9 @@ import Avatar from "primevue/avatar"
 import {userStore} from "@/stores/userStore";
 import md5 from "md5"
 import { logOff } from "@/services/Authentication";
+import {useRouter} from "vue-router";
 let userInfo = userStore();
-import Router from "@/router";
+const Router = useRouter();
 
 const menu = ref();
 const items = ref([

@@ -4,8 +4,9 @@ import Button from 'primevue/button';
 import { useForm } from 'vee-validate';
 import { object, string }  from 'yup';
 import axios from "axios";
-import Router from "@/router";
 import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
+import {useRouter} from "vue-router";
+const Router = useRouter();
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({

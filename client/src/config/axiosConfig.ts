@@ -1,6 +1,7 @@
 import axios from 'axios'
 import toaster from "@/services/Toasters";
-import Router from "@/router";
+import {useRouter} from "vue-router";
+const Router = useRouter();
 
 // Add a response interceptor
 

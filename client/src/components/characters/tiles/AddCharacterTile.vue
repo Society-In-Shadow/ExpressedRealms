@@ -2,7 +2,8 @@
 
 import Button from "primevue/button";
 import Card from "primevue/card";
-import Router from "@/router";
+import {useRouter} from "vue-router";
+const Router = useRouter();
 
 </script>
 

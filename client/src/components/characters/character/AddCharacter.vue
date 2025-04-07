@@ -6,12 +6,14 @@ import { useForm } from 'vee-validate';
 import {object, string} from 'yup';
 import Card from "primevue/card";
 import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
-import Router from "@/router";
 import TextAreaWrapper from "@/FormWrappers/TextAreaWrapper.vue";
-import {onMounted, ref, computed} from "vue";
+import {onMounted, ref, computed } from "vue";
+import { useRouter } from "vue-router";
 import DropdownWrapper from "@/FormWrappers/DropdownWrapper.vue";
 import {makeIdSafe} from "@/utilities/stringUtilities";
 import DropdownInfoWrapper from "@/FormWrappers/DropdownInfoWrapper.vue";
+
+const Router = useRouter();
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
@@ -52,7 +54,7 @@ const onSubmit = handleSubmit((values) => {
     factionId: values.factionId?.id
   })
       .then(() => {
-        //Router.push("/characters");
+        Router.push("/characters");
       });
 });
 
