@@ -77,10 +77,6 @@ jobs:
       - name: Build Docker Image
         run: docker build ./client
 
-      - name: Create Results Directory
-        working-directory: client
-        run: mkdir -p cypress/results
-
       - name: Run Cypress Tests
         uses: cypress-io/github-action@v6
         with:
@@ -89,11 +85,6 @@ jobs:
           publish-summary: 'true'
           headed: false
           browser: chrome
-
-      - name: Debug Test Results Directory
-        run: |
-          echo "Checking cypress/results/ directory for test result files..."
-          ls -al cypress/results/
 
       - name: Upload JUnit Results
         uses: actions/upload-artifact@v4
@@ -110,9 +101,7 @@ jobs:
           check_name: Cypress Test Results # Optionally name the result set
           comment_title: Cypress Test Results Summary # Optional title for comments
           github_token: ${{ secrets.GITHUB_TOKEN }} # Used to interact with GitHub
-  
-  
-  
+
   # Build and Push Docker Image
   push_to_docker:
     name: Build and Push Docker Image
