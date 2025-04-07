@@ -67,7 +67,9 @@ jobs:
   cypress-run-chrome:
     name: Cypress Test
     runs-on: ubuntu-22.04
-
+    permissions:
+      checks: write
+      pull-requests: write
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
