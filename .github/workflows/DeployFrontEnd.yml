@@ -95,7 +95,7 @@ jobs:
         if: always()
         with:
           files: |
-            **/cypress/results/*.xml
+            cypress/results/*.xml
           check_name: Cypress Test Results # Optionally name the result set
           comment_title: Cypress Test Results Summary # Optional title for comments
           github_token: ${{ secrets.GITHUB_TOKEN }} # Used to interact with GitHub
