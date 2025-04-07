@@ -77,12 +77,20 @@ jobs:
       - name: Build Docker Image
         run: docker build ./client
 
+      - name: Create Results Directory
+        run: mkdir -p cypress/results
+
       - name: Run Cypress Tests
         uses: cypress-io/github-action@v6
         with:
           component: true
           working-directory: client
           publish-summary: 'true'
+
+      - name: Debug Test Results Directory
+        run: |
+          echo "Checking cypress/results/ directory for test result files..."
+          ls -al cypress/results/
 
       - name: Upload JUnit Results
         uses: actions/upload-artifact@v4
