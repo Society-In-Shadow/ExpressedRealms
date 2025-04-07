@@ -111,6 +111,7 @@ jobs:
       contents: read
       attestations: write
       id-token: write
+    needs: [cypress-run-chrome]
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout Repository
