@@ -3,7 +3,6 @@ import plugin from '@vitejs/plugin-vue';
 import { dirname } from 'node:path';
 import fs from 'fs';
 
-
 const __dirname = dirname(__filename);
 
 export default defineConfig(() => {
