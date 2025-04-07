@@ -121,7 +121,7 @@ onBeforeRouteUpdate(async (to, from) => {
                   />
                 </div>
                 <div class="col align-self-center">
-                  <img src="../../../IfIHadOne2.jpg" class="w-100">
+                  <img src="/IfIHadOne2.jpg" class="w-100" alt="Timmy Turners Father Regretting not having a trophy">
                 </div>
               </div>
             </div>
