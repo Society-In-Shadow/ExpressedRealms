@@ -334,7 +334,14 @@ You can only do one or the other.  The main benefit here is that you can watch t
 The main benefit of using the GUI is that it will update in realtime, as you are modifying the components.
 
 ```shell
-npx cypress open
+npm run open-cypress
+```
+
+### Component Testing
+It does everything the GUI does, but headlessly.
+
+```shell
+npx run component-tests
 ```
 
 ### End to End Testing
@@ -343,20 +350,3 @@ The following runs the end to end testing via the command line.  It does everyth
 ```shell
 npx cypress run
 ```
-
-### Component Testing
-Similar to the above command, it does everything the GUI does, but headlessly.
-
-```shell
-npx cypress run --component
-```
-
-### Permission Issue While Running Cypress
-You also might need to use the following command if you try running Cypress Component Testing and Docker at the same time.
-
-You need to be in the expressedRealms.client folder for this to work.
-
-```shell
-sudo chown -hR $(whoami) node_modules/
-```
-
