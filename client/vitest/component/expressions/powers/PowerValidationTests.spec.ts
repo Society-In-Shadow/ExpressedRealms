@@ -1,139 +1,206 @@
 import {describe, it, expect} from "vitest";
-import {createPowerModelSchema} from "../../../../src/components/expressions/powers/Validations/AddPowerValidations";
+import {handleSubmit, name, category, description, isPowerUse, powerDuration, powerLevel, powerActivationType, limitation, gameMechanicEffect, areaOfEffect, other} from "../../../../src/components/expressions/powers/Validations/AddPowerValidations";
 
 describe("Power Model Schema - Field Validations", () => {
     describe("Name", () => {
-        it("succeeds when it's set to a value", async () => {
-            const data = {name: "Valid Name"};
-            await expect(createPowerModelSchema.validateAt("name", data)).resolves.toEqual("Valid Name");
+        it("Fails when there are more then 250 characters", async () => {
+            name.field.value = "a".repeat(251);
+            await handleSubmit(() => {})();
+            expect(name.error.value).toEqual("Name must be at most 250 characters");
         });
-
-        it("fails validation when it's empty", async () => {
-            const data = {name: ""};
-            await expect(createPowerModelSchema.validateAt("name", data)).rejects.toThrow("Name is required");
+        it("Says it's required when not filled in", async () => {
+            name.field.value = "";
+            await handleSubmit(() => {})();
+            expect(name.error.value).toEqual("Name is a required field");
         });
+        it("No Errors when it's a valid value", async () => {
+            name.field.value = "asdf";
+            await handleSubmit(() => {})();
+            expect([undefined, '']).toContain(name.error.value);
+        });
+        it("Label is correct", async () => {
+            expect(name.label).toEqual("Name");
+        })
     });
 
     describe("Category", () => {
-        it("succeeds when it's set to a value", async () => {
-            const data = {category: [1, 2]};
-            await expect(createPowerModelSchema.validateAt("category", data)).resolves.toEqual([1, 2]);
+        it("No Errors when it's a valid value", async () => {
+            category.field.value =  [1, 2];
+            await handleSubmit(() => {})();
+            expect([undefined, '']).toContain(category.error.value);
         });
 
         it("fails validation when it's empty", async () => {
-            const data = {category: []};
-            await expect(createPowerModelSchema.validateAt("category", data)).rejects.toThrow("At least one category is required");
+            category.field.value = [];
+            await handleSubmit(() => {})();
+            expect(category.error.value).toEqual("At least one category is required");
         });
 
         it("fails validation when it contains a negative number", async () => {
-            const data = {category: [-1, 2]};
-            await expect(createPowerModelSchema.validateAt("category", data)).rejects.toThrow("Category must have positive numbers");
+            category.field.value = [-1, 2];
+            await handleSubmit(() => {})();
+            expect(category.error.value).toEqual("Category must have positive numbers");
         });
+
+        it("Label is correct", async () => {
+            expect(category.label).toEqual("Category");
+        })
     });
 
     describe("Description", () => {
-        it("succeeds when it's set to a value", async () => {
-            const data = {description: "This is a valid description"};
-            await expect(createPowerModelSchema.validateAt("description", data)).resolves.toEqual("This is a valid description");
+        it("Fails validation when it's missing", async () => {
+            description.field.value = "";
+            await handleSubmit(() => {})();
+            expect(description.error.value).toEqual("Description is a required field");
         });
 
-        it("fails validation when it's missing", async () => {
-            const data = {description: ""};
-            await expect(createPowerModelSchema.validateAt("description", data)).rejects.toThrow("Description is required");
+        it("No errors when it's a valid value", async () => {
+            description.field.value = "This is a valid description";
+            await handleSubmit(() => {})();
+            expect([undefined, ""]).toContain(description.error.value);
+        });
+
+        it("Label is correct", () => {
+            expect(description.label).toEqual("Description");
         });
     });
 
     describe("Game Mechanic Effect", () => {
-        it("succeeds when it's set to a value", async () => {
-            const data = {gameMechanicEffect: "Some valid effect"};
-            await expect(createPowerModelSchema.validateAt("gameMechanicEffect", data)).resolves.toEqual("Some valid effect");
+        it("Fails validation when it's missing", async () => {
+            gameMechanicEffect.field.value = "";
+            await handleSubmit(() => {})();
+            expect(gameMechanicEffect.error.value).toEqual("Game Mechanic Effect is a required field");
         });
 
-        it("fails validation when it's missing", async () => {
-            const data = {gameMechanicEffect: ""};
-            await expect(createPowerModelSchema.validateAt("gameMechanicEffect", data)).rejects.toThrow("Game Mechanic Effect is required");
+        it("No errors when it's a valid value", async () => {
+            gameMechanicEffect.field.value = "Some valid effect";
+            await handleSubmit(() => {})();
+            expect([undefined, ""]).toContain(gameMechanicEffect.error.value);
+        });
+
+        it("Label is correct", () => {
+            expect(gameMechanicEffect.label).toEqual("Game Mechanic Effect");
         });
     });
 
     describe("Limitation", () => {
-        it("succeeds when it's set to a value", async () => {
-            const data = {limitation: "Some valid limitation"};
-            await expect(createPowerModelSchema.validateAt("limitation", data)).resolves.toEqual("Some valid limitation");
+        it("Fails validation when it's missing", async () => {
+            limitation.field.value = "";
+            await handleSubmit(() => {})();
+            expect(limitation.error.value).toEqual("Limitation is a required field");
         });
 
-        it("fails validation when it's missing", async () => {
-            const data = {limitation: ""};
-            await expect(createPowerModelSchema.validateAt("limitation", data)).rejects.toThrow("Limitation is required");
+        it("No errors when it's a valid value", async () => {
+            limitation.field.value = "Some valid limitation";
+            await handleSubmit(() => {})();
+            expect([undefined, ""]).toContain(limitation.error.value);
+        });
+
+        it("Label is correct", () => {
+            expect(limitation.label).toEqual("Limitation");
         });
     });
 
     describe("Power Duration", () => {
-        it("succeeds when it's set to a value", async () => {
-            const data = {powerDuration: 128};
-            await expect(createPowerModelSchema.validateAt("powerDuration", data)).resolves.toEqual(128);
+        it("Fails validation when it's below 0", async () => {
+            powerDuration.field.value = -1;
+            await handleSubmit(() => {})();
+            expect(powerDuration.error.value).toEqual("Power Duration must be between 1 and 255");
         });
 
-        it("fails validation when it's below 0", async () => {
-            const data = {powerDuration: -1};
-            await expect(createPowerModelSchema.validateAt("powerDuration", data)).rejects.toThrow("Power Duration must be between 1 and 255");
+        it("Fails validation when it's above 255", async () => {
+            powerDuration.field.value = 256;
+            await handleSubmit(() => {})();
+            expect(powerDuration.error.value).toEqual("Power Duration must be between 1 and 255");
         });
 
-        it("fails validation when it's above 255", async () => {
-            const data = {powerDuration: 256};
-            await expect(createPowerModelSchema.validateAt("powerDuration", data)).rejects.toThrow("Power Duration must be between 1 and 255");
+        it("No errors when it's a valid value", async () => {
+            powerDuration.field.value = 128;
+            await handleSubmit(() => {})();
+            expect([undefined, ""]).toContain(powerDuration.error.value);
+        });
+
+        it("Label is correct", () => {
+            expect(powerDuration.label).toEqual("Power Duration");
         });
     });
 
     describe("Area of Effect", () => {
-        it("succeeds when it's set to a value", async () => {
-            const data = {areaOfEffect: 50};
-            await expect(createPowerModelSchema.validateAt("areaOfEffect", data)).resolves.toEqual(50);
+        it("Fails validation when it's below 0", async () => {
+            areaOfEffect.field.value = -10;
+            await handleSubmit(() => {})();
+            expect(areaOfEffect.error.value).toEqual("Area of Effect must be greater than 0");
         });
 
-        it("fails validation when it's below 0", async () => {
-            const data = {areaOfEffect: -10};
-            await expect(createPowerModelSchema.validateAt("areaOfEffect", data)).rejects.toThrow("Area of Effect must be greater than 0");
+        it("No errors when it's a valid value", async () => {
+            areaOfEffect.field.value = 50;
+            await handleSubmit(() => {})();
+            expect([undefined, ""]).toContain(areaOfEffect.error.value);
+        });
+
+        it("Label is correct", () => {
+            expect(areaOfEffect.label).toEqual("Area of Effect");
         });
     });
 
     describe("Power Level", () => {
-        it("succeeds when it's set to a value", async () => {
-            const data = {powerLevel: 5};
-            await expect(createPowerModelSchema.validateAt("powerLevel", data)).resolves.toEqual(5);
+        it("Fails validation when it's missing", async () => {
+            powerLevel.field.value = undefined;
+            await handleSubmit(() => {})();
+            expect(powerLevel.error.value).toEqual("Power Level is a required field");
         });
 
-        it("fails validation when it's missing", async () => {
-            const data = {powerLevel: undefined};
-            await expect(createPowerModelSchema.validateAt("powerLevel", data)).rejects.toThrow("Power Level is required");
+        it("No errors when it's a valid value", async () => {
+            powerLevel.field.value = 5;
+            await handleSubmit(() => {})();
+            expect([undefined, ""]).toContain(powerLevel.error.value);
+        });
+
+        it("Label is correct", () => {
+            expect(powerLevel.label).toEqual("Power Level");
         });
     });
 
     describe("Power Activation Type", () => {
-        it("succeeds when it's set to a value", async () => {
-            const data = {powerActivationType: 128};
-            await expect(createPowerModelSchema.validateAt("powerActivationType", data)).resolves.toEqual(128);
+        it("Fails validation when it's below 0", async () => {
+            powerActivationType.field.value = -1;
+            await handleSubmit(() => {})();
+            expect(powerActivationType.error.value).toEqual("Power Activation Type is a required field");
         });
 
-        it("fails validation when it's set below 0", async () => {
-            const data = {powerActivationType: -1};
-            await expect(createPowerModelSchema.validateAt("powerActivationType", data)).rejects.toThrow("Power Activation Type is required");
+        it("No errors when it's a valid value", async () => {
+            powerActivationType.field.value = 128;
+            await handleSubmit(() => {})();
+            expect([undefined, ""]).toContain(powerActivationType.error.value);
+        });
+
+        it("Label is correct", () => {
+            expect(powerActivationType.label).toEqual("Power Activation Type");
         });
     });
 
     describe("Is Power Use", () => {
-        it("succeeds when it's set to true", async () => {
-            const data = {isPowerUse: true};
-            await expect(createPowerModelSchema.validateAt("isPowerUse", data)).resolves.toEqual(true);
+        it("Fails validation when it's missing", async () => {
+            isPowerUse.field.value = undefined;
+            await handleSubmit(() => {})();
+            expect(isPowerUse.error.value).toEqual("Is Power Use is a required field");
         });
 
-        it("succeeds when it's set to false", async () => {
-            const data = {isPowerUse: false};
-            await expect(createPowerModelSchema.validateAt("isPowerUse", data)).resolves.toEqual(false);
+        it("No errors when it's set to true", async () => {
+            isPowerUse.field.value = true;
+            await handleSubmit(() => {})();
+            expect([undefined, ""]).toContain(isPowerUse.error.value);
         });
 
-        it("fails validation when it's missing", async () => {
-            const data = {isPowerUse: undefined};
-            await expect(createPowerModelSchema.validateAt("isPowerUse", data)).rejects.toThrow("Is Power Use is required");
+        it("No errors when it's set to false", async () => {
+            isPowerUse.field.value = false;
+            await handleSubmit(() => {})();
+            expect([undefined, ""]).toContain(isPowerUse.error.value);
+        });
+
+        it("Label is correct", () => {
+            expect(isPowerUse.label).toEqual("Is Power Use");
         });
     });
+
 });
