@@ -8,9 +8,7 @@ const validationSchema = object({
         .required()
         .max(250)
         .label("Name"),
-    category: array()
-        .of(number().positive("Category must have positive numbers"))
-        .min(1, "At least one category is required")
+    category: object().nullable()
         .required("At least one category is required")
         .label("Category"),
     description: string()
@@ -22,23 +20,16 @@ const validationSchema = object({
     limitation: string()
         .required()
         .label("Limitation"),
-    powerDuration: number()
-        .integer()
-        .min(1, "Power Duration must be between 1 and 255")
-        .max(255, "Power Duration must be between 1 and 255")
+    powerDuration: object().nullable()
         .required()
         .label("Power Duration"),
-    areaOfEffect: number()
-        .integer()
-        .min(1, "Area of Effect must be greater than 0")
+    areaOfEffect: object()
+        .nullable()
         .label("Area of Effect"),
-    powerLevel: number()
-        .integer()
+    powerLevel: object().nullable()
         .required()
         .label("Power Level"),
-    powerActivationType: number()
-        .integer()
-        .min(1, "Power Activation Type is a required field")
+    powerActivationType: object().nullable()
         .required()
         .label("Power Activation Type"),
     other: string()

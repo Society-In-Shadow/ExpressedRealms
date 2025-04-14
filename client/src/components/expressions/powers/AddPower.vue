@@ -30,12 +30,11 @@ const powerActivationTypes = ref<Category[]>([]);
 onBeforeMount(async () => {
   await axios.get("/powers/options")
       .then((response) => {
-        
-        categories.value = response.data.categories;
-        powerDurations.value = response.data.powerDurations;
-        powerLevels.value = response.data.powerLevels;
-        areaOfEffects.value = response.data.areaOfEffects;
-        powerActivationTypes.value = response.data.powerActivationTypes;
+        categories.value = response.data.category;
+        powerDurations.value = response.data.powerDuration;
+        powerLevels.value = response.data.powerLevel;
+        areaOfEffects.value = response.data.areaOfEffect;
+        powerActivationTypes.value = response.data.powerActivationType;
       })
 })
 
@@ -107,13 +106,13 @@ const onSubmit = Validations.handleSubmit(async (values) => {
 
       <FormEditorWrapper v-model="Validations.other" />
 
-      <Checkbox
-          v-model="isPowerUse"
+<!--      <Checkbox
+          v-model="Validations.isPowerUse"
           :field-name="'Is Power Use'"
           :options="[{ id: true, label: 'Yes' }, { id: false, label: 'No' }]"
           option-label="label"
-          :error-text="errors.isPowerUse"
-      />
+          :error-text="Validtions.isPowerUse.error"
+      />-->
 
       <div class="float-end">
         <Button label="Submit" class="m-2" type="submit" />
