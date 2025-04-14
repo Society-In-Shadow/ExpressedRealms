@@ -69,7 +69,7 @@ const editor = useEditor({
     Underline
   ],
   onUpdate: ({editor}) => {
-    model.value.field = editor.getHTML();
+    model.value.field.value = editor.getHTML();
   },
   editorProps: {
     attributes: {
