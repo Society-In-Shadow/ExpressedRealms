@@ -44,7 +44,7 @@ const dataCyTagCalc = computed(() => {
     <label :for="dataCyTagCalc">{{ model.label }}</label>
     <Skeleton v-if="showSkeleton" :id="dataCyTagCalc + '-skeleton'" class="w-100" height="3em" />
     <Dropdown
-      v-else :id="dataCyTagCalc" v-model="model" :options="options" :option-label="optionLabel"
+      v-else :id="dataCyTagCalc" v-model="model.field" :options="options" :option-label="optionLabel"
       :data-cy="dataCyTagCalc"
       class="w-100" :class="{ 'p-invalid': model.error && model.error.length > 0 }" v-bind="$attrs"
     />
