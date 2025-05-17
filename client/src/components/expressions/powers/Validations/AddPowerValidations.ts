@@ -3,12 +3,26 @@ import {useForm} from "vee-validate";
 import type {FormField} from "@/FormWrappers/Interfaces/FormField";
 import {computed} from "vue";
 
+export interface ListItem {
+    id: number;
+    name: string;
+    description: string;
+}
+
 const validationSchema = object({
     name: string()
         .required()
         .max(250)
         .label("Name"),
-    category: object().nullable()
+    category: array()
+        .of(
+            object({
+                id: number().required(),
+                name: string().required(),
+                description: string(),
+            })
+        )
+        .min(1, "At least one category is required")
         .required("At least one category is required")
         .label("Category"),
     description: string()
@@ -20,16 +34,17 @@ const validationSchema = object({
     limitation: string()
         .required()
         .label("Limitation"),
-    powerDuration: object().nullable()
+    powerDuration: object<ListItem>().nullable()
         .required()
         .label("Power Duration"),
-    areaOfEffect: object()
+    areaOfEffect: object<ListItem>()
         .nullable()
+        .required()
         .label("Area of Effect"),
-    powerLevel: object().nullable()
+    powerLevel: object<ListItem>().nullable()
         .required()
         .label("Power Level"),
-    powerActivationType: object().nullable()
+    powerActivationType: object<ListItem>().nullable()
         .required()
         .label("Power Activation Type"),
     other: string()
@@ -41,6 +56,9 @@ const validationSchema = object({
 
 // Destructure `useForm` to define handlers and fields
 const { defineField, handleSubmit, errors } = useForm({
+    initialValues:{
+        isPowerUse: false
+    },
     validationSchema: validationSchema
 });
 

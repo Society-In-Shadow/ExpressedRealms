@@ -1,6 +1,14 @@
 import {describe, it, expect} from "vitest";
 import {handleSubmit, name, category, description, isPowerUse, powerDuration, powerLevel, powerActivationType, limitation, gameMechanicEffect, areaOfEffect, other} from "../../../../src/components/expressions/powers/Validations/AddPowerValidations";
 
+const listItem1 = {description: 'Lorem Ipsum',
+    id: 1,
+    name: 'General' };
+
+const listItem2 = {description: 'Lorem Ipsum 2',
+    id: 2,
+    name: 'General 2' }
+
 describe("Power Model Schema - Field Validations", () => {
     describe("Name", () => {
         it("Fails when there are more then 250 characters", async () => {
@@ -16,7 +24,7 @@ describe("Power Model Schema - Field Validations", () => {
         it("No Errors when it's a valid value", async () => {
             name.field.value = "asdf";
             await handleSubmit(() => {})();
-            expect([undefined, '']).toContain(name.error.value);
+            expect(name.error?.value).toBeUndefined();
         });
         it("Label is correct", async () => {
             expect(name.label).toEqual("Name");
@@ -24,22 +32,22 @@ describe("Power Model Schema - Field Validations", () => {
     });
 
     describe("Category", () => {
-        it("No Errors when it's a valid value", async () => {
-            category.field.value =  [1, 2];
+        it("No Errors when one value is selected", async () => {
+            category.field.value =  [ listItem1 ];
             await handleSubmit(() => {})();
-            expect([undefined, '']).toContain(category.error.value);
+            expect(category.error?.value).toBeUndefined();
+        });
+
+        it("No Errors when two values is selected", async () => {
+            category.field.value =  [ listItem1, listItem2 ];
+            await handleSubmit(() => {})();
+            expect(category.error?.value).toBeUndefined();
         });
 
         it("fails validation when it's empty", async () => {
-            category.field.value = [];
+            category.field.value = null;
             await handleSubmit(() => {})();
             expect(category.error.value).toEqual("At least one category is required");
-        });
-
-        it("fails validation when it contains a negative number", async () => {
-            category.field.value = [-1, 2];
-            await handleSubmit(() => {})();
-            expect(category.error.value).toEqual("Category must have positive numbers");
         });
 
         it("Label is correct", async () => {
@@ -57,7 +65,7 @@ describe("Power Model Schema - Field Validations", () => {
         it("No errors when it's a valid value", async () => {
             description.field.value = "This is a valid description";
             await handleSubmit(() => {})();
-            expect([undefined, ""]).toContain(description.error.value);
+            expect(description.error.value).toBeUndefined();
         });
 
         it("Label is correct", () => {
@@ -75,7 +83,7 @@ describe("Power Model Schema - Field Validations", () => {
         it("No errors when it's a valid value", async () => {
             gameMechanicEffect.field.value = "Some valid effect";
             await handleSubmit(() => {})();
-            expect([undefined, ""]).toContain(gameMechanicEffect.error.value);
+            expect(gameMechanicEffect.error.value).toBeUndefined();
         });
 
         it("Label is correct", () => {
@@ -93,7 +101,7 @@ describe("Power Model Schema - Field Validations", () => {
         it("No errors when it's a valid value", async () => {
             limitation.field.value = "Some valid limitation";
             await handleSubmit(() => {})();
-            expect([undefined, ""]).toContain(limitation.error.value);
+            expect(limitation.error.value).toBeUndefined();
         });
 
         it("Label is correct", () => {
@@ -102,76 +110,75 @@ describe("Power Model Schema - Field Validations", () => {
     });
 
     describe("Power Duration", () => {
-        it("Fails validation when it's below 0", async () => {
-            powerDuration.field.value = -1;
-            await handleSubmit(() => {})();
-            expect(powerDuration.error.value).toEqual("Power Duration must be between 1 and 255");
-        });
-
-        it("Fails validation when it's above 255", async () => {
-            powerDuration.field.value = 256;
-            await handleSubmit(() => {})();
-            expect(powerDuration.error.value).toEqual("Power Duration must be between 1 and 255");
-        });
 
         it("No errors when it's a valid value", async () => {
-            powerDuration.field.value = 128;
+            powerDuration.field.value = listItem1;
             await handleSubmit(() => {})();
-            expect([undefined, ""]).toContain(powerDuration.error.value);
+            expect(powerDuration.error.value).toBeUndefined();
+        });
+        
+        it("Is Required", async () => {
+            powerDuration.field.value = undefined;
+            await handleSubmit(() => {})();
+            expect(powerDuration.error.value).toContain("Power Duration is a required field");
         });
 
         it("Label is correct", () => {
             expect(powerDuration.label).toEqual("Power Duration");
         });
+        
     });
 
     describe("Area of Effect", () => {
-        it("Fails validation when it's below 0", async () => {
-            areaOfEffect.field.value = -10;
-            await handleSubmit(() => {})();
-            expect(areaOfEffect.error.value).toEqual("Area of Effect must be greater than 0");
-        });
 
         it("No errors when it's a valid value", async () => {
-            areaOfEffect.field.value = 50;
+            areaOfEffect.field.value = listItem1;
             await handleSubmit(() => {})();
-            expect([undefined, ""]).toContain(areaOfEffect.error.value);
+            expect(areaOfEffect.error.value).toBeUndefined();
+        });
+
+        it("Is Required", async () => {
+            areaOfEffect.field.value = undefined;
+            await handleSubmit(() => {})();
+            expect(areaOfEffect.error.value).toContain("Area of Effect is a required field");
         });
 
         it("Label is correct", () => {
             expect(areaOfEffect.label).toEqual("Area of Effect");
         });
+        
     });
 
     describe("Power Level", () => {
-        it("Fails validation when it's missing", async () => {
-            powerLevel.field.value = undefined;
+        it("No errors when it's a valid value", async () => {
+            powerLevel.field.value = listItem1;
             await handleSubmit(() => {})();
-            expect(powerLevel.error.value).toEqual("Power Level is a required field");
+            expect(powerLevel.error.value).toBeUndefined();
         });
 
-        it("No errors when it's a valid value", async () => {
-            powerLevel.field.value = 5;
+        it("Is Required", async () => {
+            powerLevel.field.value = undefined;
             await handleSubmit(() => {})();
-            expect([undefined, ""]).toContain(powerLevel.error.value);
+            expect(powerLevel.error.value).toContain("Power Level is a required field");
         });
 
         it("Label is correct", () => {
             expect(powerLevel.label).toEqual("Power Level");
         });
+        
     });
 
     describe("Power Activation Type", () => {
-        it("Fails validation when it's below 0", async () => {
-            powerActivationType.field.value = -1;
+        it("No errors when it's a valid value", async () => {
+            powerActivationType.field.value = listItem1;
             await handleSubmit(() => {})();
-            expect(powerActivationType.error.value).toEqual("Power Activation Type is a required field");
+            expect(powerActivationType.error.value).toBeUndefined();
         });
 
-        it("No errors when it's a valid value", async () => {
-            powerActivationType.field.value = 128;
+        it("Is Required", async () => {
+            powerActivationType.field.value = undefined;
             await handleSubmit(() => {})();
-            expect([undefined, ""]).toContain(powerActivationType.error.value);
+            expect(powerActivationType.error.value).toContain("Power Activation Type is a required field");
         });
 
         it("Label is correct", () => {
@@ -186,16 +193,22 @@ describe("Power Model Schema - Field Validations", () => {
             expect(isPowerUse.error.value).toEqual("Is Power Use is a required field");
         });
 
+        // TODO: Figure out way to test default value in vee validate form
+        /*it("Has a default value of false", async () => {
+            expect(isPowerUse.field.value).toBe(false);
+            expect(isPowerUse.error.value).toBeUndefined();
+        });*/
+        
         it("No errors when it's set to true", async () => {
             isPowerUse.field.value = true;
             await handleSubmit(() => {})();
-            expect([undefined, ""]).toContain(isPowerUse.error.value);
+            expect(isPowerUse.error.value).toBeUndefined();
         });
 
         it("No errors when it's set to false", async () => {
             isPowerUse.field.value = false;
             await handleSubmit(() => {})();
-            expect([undefined, ""]).toContain(isPowerUse.error.value);
+            expect(isPowerUse.error.value).toBeUndefined();
         });
 
         it("Label is correct", () => {
