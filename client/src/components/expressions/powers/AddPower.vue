@@ -7,7 +7,7 @@ import Button from "primevue/button";
 import {onBeforeMount, ref} from "vue";
 import axios from "axios";
 import toaster from "@/services/Toasters";
-import * as Validations from "@/components/expressions/powers/Validations/AddPowerValidations";
+import * as form from "@/components/expressions/powers/Validations/AddPowerValidations";
 import FormCheckboxWrapper from "@/FormWrappers/FormCheckboxWrapper.vue";
 import type {Category} from "@/components/expressions/powers/Validations/AddPowerValidations";
 import FormMultiSelectWrapper from "@/FormWrappers/FormMultiSelectWrapper.vue";
@@ -35,7 +35,7 @@ onBeforeMount(async () => {
       })
 })
 
-const onSubmit = Validations.handleSubmit(async (values) => {
+const onSubmit = form.handleSubmit(async (values) => {
   await axios.post(`/powers/${props.expressionId}`, {
     expressionId: props.expressionId,
     name: values.name,
@@ -63,47 +63,47 @@ const onSubmit = Validations.handleSubmit(async (values) => {
   <div class="m-2">
     <form @submit="onSubmit">
       
-      <FormInputTextWrapper v-model="Validations.name"/>
+      <FormInputTextWrapper v-model="form.name"/>
       
       <FormMultiSelectWrapper
-          v-model="Validations.category"
+          v-model="form.category"
           :options="categories"
           option-label="name"
       />
 
-      <FormEditorWrapper v-model="Validations.description" />
+      <FormEditorWrapper v-model="form.description" />
 
-      <FormEditorWrapper v-model="Validations.gameMechanicEffect" />
+      <FormEditorWrapper v-model="form.gameMechanicEffect" />
 
-      <FormEditorWrapper v-model="Validations.limitation" />
+      <FormEditorWrapper v-model="form.limitation" />
 
       <FormDropdownWrapper
-          v-model="Validations.powerDuration"
+          v-model="form.powerDuration"
           :options="powerDurations"
           option-label="name"
       />
 
       <FormDropdownWrapper
-          v-model="Validations.areaOfEffect"
+          v-model="form.areaOfEffect"
           :options="areaOfEffects"
           option-label="name"
       />
 
       <FormDropdownWrapper
-          v-model="Validations.powerLevel"
+          v-model="form.powerLevel"
           :options="powerLevels"
           option-label="name"
       />
 
       <FormDropdownWrapper
-          v-model="Validations.powerActivationType"
+          v-model="form.powerActivationType"
           :options="powerActivationTypes"
           option-label="name"
       />
 
-      <FormEditorWrapper v-model="Validations.other" />
+      <FormEditorWrapper v-model="form.other" />
 
-      <FormCheckboxWrapper v-model="Validations.isPowerUse" />
+      <FormCheckboxWrapper v-model="form.isPowerUse" />
 
       <div class="float-end">
         <Button label="Submit" class="m-2" type="submit" />
