@@ -75,6 +75,9 @@ jobs:
 
       - name: Build Docker Image
         run: docker build ./client
+        
+      - name: Move Into Client Directory
+        run: cd ./client
 
       - name: Run Tests
         run: npm run vitest-pipeline
