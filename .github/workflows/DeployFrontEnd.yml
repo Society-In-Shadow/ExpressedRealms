@@ -63,6 +63,28 @@ jobs:
         with:
           sarif_file: 'megalinter-reports/megalinter-report.sarif'
 
+  run-vitest:
+    name: Cypress Test
+    runs-on: ubuntu-22.04
+    permissions:
+      checks: write
+      pull-requests: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: docker build ./client
+
+      - name: Run Tests
+        run: npm run vitest-pipeline
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage
+
   # Cypress Test Job
   cypress-run-chrome:
     name: Cypress Test

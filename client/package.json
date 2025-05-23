@@ -11,7 +11,8 @@
     "lint": "npx eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "component-tests": "sudo chown -hR $(whoami) node_modules/; npx cypress run --component --browser chromium",
     "open-cypress": "sudo chown -hR $(whoami) node_modules/; npx cypress open",
-    "vitest": "sudo chown -hR $(whoami) node_modules/; npx vitest --run"
+    "vitest": "sudo chown -hR $(whoami) node_modules/; npx vitest --run",
+    "vitest-pipeline": "npx vitest --coverage"
   },
   "dependencies": {
     "@he-tree/vue": "^2.9.4",
