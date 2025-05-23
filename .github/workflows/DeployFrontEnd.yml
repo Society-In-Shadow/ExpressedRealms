@@ -63,30 +63,27 @@ jobs:
         with:
           sarif_file: 'megalinter-reports/megalinter-report.sarif'
 
-  run-vitest:
-    name: Run Vitest
-    runs-on: ubuntu-22.04
+  test:
+    name: Run ViTests
+    runs-on: ubuntu-latest
     permissions:
-      checks: write
+      contents: read
       pull-requests: write
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Build Docker Image
-        run: docker build ./client
-        
-      - name: Move Into Client Directory
-        run: cd ./client
-
-      - name: Run Tests
-        run: npm run vitest-pipeline
-
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v4
+      - uses: actions/checkout@v4
+      - name: 'Install Node'
+        uses: actions/setup-node@v4
         with:
-          name: coverage-report
-          path: coverage
+          node-version: '20.x'
+      - name: 'Install Deps'
+        run: npm install
+      - name: 'Test'
+        run: npx vitest --coverage.enabled true
+      - name: 'Report Coverage'
+        # Set if: always() to also generate the report if tests are failing
+        # Only works if you set `reportOnFailure: true` in your vite config as specified above
+        if: always()
+        uses:  davelosert/vitest-coverage-report-action@v2
 
   # Cypress Test Job
   cypress-run-chrome:
