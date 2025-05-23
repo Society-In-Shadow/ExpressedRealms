@@ -13,5 +13,9 @@ export default defineConfig({
         globals: true, // Enable global utilities like `vi`
         environment: 'jsdom', // Use JSDOM for DOM emulation
         setupFiles: './test-setup.ts', // Optional: Path to your global test setup file
+        coverage: {
+            reporter: ['text', 'json-summary', 'json', "html"],
+            reportOnFailure: true,
+        }
     },
 });
