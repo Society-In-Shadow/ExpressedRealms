@@ -13,4 +13,5 @@ public class PowerInformationResponse
     public DetailedInformation PowerLevel { get; set; }
     public DetailedInformation PowerActivationType { get; set; }
     public string Other { get; set; }
+    public bool IsPowerUse { get; set; }
 }

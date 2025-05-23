@@ -16,4 +16,5 @@ export interface Power {
     powerLevel: DetailedInformation;
     powerActivationType: DetailedInformation;
     other: string;
+    isPowerUse: boolean;
 }

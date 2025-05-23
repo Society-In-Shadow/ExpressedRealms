@@ -44,6 +44,7 @@ internal static class PowerEndpoints
                             PowerLevel = new DetailedInformation(x.PowerLevel),
                             PowerActivationType = new DetailedInformation(x.PowerActivationType),
                             Other = x.Other,
+                            IsPowerUse = x.IsPowerUse,
                         })
                     );
                 }

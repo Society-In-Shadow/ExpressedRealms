@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import Dropdown from 'primevue/dropdown';
+import Select from 'primevue/select';
 import {computed} from "vue";
 import Skeleton from 'primevue/skeleton';
 import type {FormField} from "@/FormWrappers/Interfaces/FormField";
@@ -43,7 +43,7 @@ const dataCyTagCalc = computed(() => {
   <div class="mb-3">
     <label :for="dataCyTagCalc">{{ model.label }}</label>
     <Skeleton v-if="showSkeleton" :id="dataCyTagCalc + '-skeleton'" class="w-100" height="3em" />
-    <Dropdown
+    <Select
       v-else :id="dataCyTagCalc" v-model="model.field" :options="options" :option-label="optionLabel"
       :data-cy="dataCyTagCalc"
       class="w-100" :class="{ 'p-invalid': model.error && model.error.length > 0 }" v-bind="$attrs"

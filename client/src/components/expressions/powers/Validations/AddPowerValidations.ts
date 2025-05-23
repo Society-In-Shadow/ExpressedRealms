@@ -55,11 +55,10 @@ const validationSchema = object({
 });
 
 // Destructure `useForm` to define handlers and fields
-const { defineField, handleSubmit, errors } = useForm({
-    initialValues:{
-        isPowerUse: false
-    },
-    validationSchema: validationSchema
+const { defineField, handleSubmit, errors, handleReset } = useForm({
+    validationSchema: validationSchema,
+    validateOnMount: false,
+    keepValuesOnUnmount: false
 });
 
 // Define all fields using `defineField`
@@ -83,4 +82,13 @@ export const powerActivationType = createFormField("powerActivationType");
 export const other = createFormField("other");
 export const isPowerUse = createFormField("isPowerUse");
 
-export { handleSubmit };
+const customResetForm = () => {
+    powerDuration.field.value = null;
+    areaOfEffect.field.value = null;
+    powerLevel.field.value = null;
+    powerActivationType.field.value = null;
+    category.field.value = []; // TODO: This isn't working for some reason
+    handleReset();
+};
+
+export { handleSubmit, customResetForm as resetForm };

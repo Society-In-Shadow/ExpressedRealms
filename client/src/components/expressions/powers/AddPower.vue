@@ -14,6 +14,10 @@ import {powersStore} from "@/components/expressions/powers/stores/powersStore";
 
 const powers = powersStore();
 
+const emit = defineEmits<{
+  canceled: []
+}>();
+
 const props = defineProps({
   expressionId: {
     type: Number
@@ -39,12 +43,16 @@ const onSubmit = form.handleSubmit(async (values) => {
     other: values.other,
     isPowerUse: values.isPowerUse,
   })
-  .then(() => {
-    //emit("addedSection");
+  .then(async () => {
+    await powers.getPowers(props.expressionId);
     toaster.success("Successfully Added Power!");
-    //cancelEdit();
   });
 });
+
+const reset = () => {
+  form.resetForm();
+  emit("canceled");
+}
 
 </script>
 
@@ -95,6 +103,7 @@ const onSubmit = form.handleSubmit(async (values) => {
       <FormCheckboxWrapper v-model="form.isPowerUse" />
 
       <div class="float-end">
+        <Button label="Cancel" class="m-2" type="reset" @click="reset"/>
         <Button label="Submit" class="m-2" type="submit" />
       </div>
     </form>
