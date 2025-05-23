@@ -76,14 +76,18 @@ jobs:
         with:
           node-version: '20.x'
       - name: 'Install Deps'
+        working-directory: ./client
         run: npm install
       - name: 'Test'
+        working-directory: ./client
         run: npx vitest --coverage.enabled true
       - name: 'Report Coverage'
         # Set if: always() to also generate the report if tests are failing
         # Only works if you set `reportOnFailure: true` in your vite config as specified above
         if: always()
         uses:  davelosert/vitest-coverage-report-action@v2
+        with:
+          working-directory: './client'
 
   # Cypress Test Job
   cypress-run-chrome:
