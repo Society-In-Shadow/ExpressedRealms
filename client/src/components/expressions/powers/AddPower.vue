@@ -9,8 +9,10 @@ import axios from "axios";
 import toaster from "@/services/Toasters";
 import * as form from "@/components/expressions/powers/Validations/AddPowerValidations";
 import FormCheckboxWrapper from "@/FormWrappers/FormCheckboxWrapper.vue";
-import type {Category} from "@/components/expressions/powers/Validations/AddPowerValidations";
 import FormMultiSelectWrapper from "@/FormWrappers/FormMultiSelectWrapper.vue";
+import {powersStore} from "@/components/expressions/powers/stores/powersStore";
+
+const powers = powersStore();
 
 const props = defineProps({
   expressionId: {
@@ -18,21 +20,8 @@ const props = defineProps({
   }
 });
 
-const categories = ref<Category[]>([]);
-const powerDurations = ref<Category[]>([]);
-const powerLevels = ref<Category[]>([]);
-const areaOfEffects = ref<Category[]>([]);
-const powerActivationTypes = ref<Category[]>([]);
-
 onBeforeMount(async () => {
-  await axios.get("/powers/options")
-      .then((response) => {
-        categories.value = response.data.category;
-        powerDurations.value = response.data.powerDuration;
-        powerLevels.value = response.data.powerLevel;
-        areaOfEffects.value = response.data.areaOfEffect;
-        powerActivationTypes.value = response.data.powerActivationType;
-      })
+  await powers.getPowerOptions();
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
@@ -67,7 +56,7 @@ const onSubmit = form.handleSubmit(async (values) => {
       
       <FormMultiSelectWrapper
           v-model="form.category"
-          :options="categories"
+          :options="powers.categories"
           option-label="name"
       />
 
@@ -79,25 +68,25 @@ const onSubmit = form.handleSubmit(async (values) => {
 
       <FormDropdownWrapper
           v-model="form.powerDuration"
-          :options="powerDurations"
+          :options="powers.powerDurations"
           option-label="name"
       />
 
       <FormDropdownWrapper
           v-model="form.areaOfEffect"
-          :options="areaOfEffects"
+          :options="powers.areaOfEffects"
           option-label="name"
       />
 
       <FormDropdownWrapper
           v-model="form.powerLevel"
-          :options="powerLevels"
+          :options="powers.powerLevels"
           option-label="name"
       />
 
       <FormDropdownWrapper
           v-model="form.powerActivationType"
-          :options="powerActivationTypes"
+          :options="powers.powerActivationTypes"
           option-label="name"
       />
 

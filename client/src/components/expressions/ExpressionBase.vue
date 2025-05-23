@@ -147,7 +147,7 @@ onBeforeRouteUpdate(async (to, from) => {
                   </article>
                 </TabPanel>
                 <TabPanel value="1">
-                  <PowerTab :expression-id="expressionInfo.currentExpressionId" />
+                  <PowerTab v-if="expressionInfo.isDoneLoading" :expression-id="expressionInfo.currentExpressionId" />
                 </TabPanel>
               </TabPanels>
             </Tabs>
