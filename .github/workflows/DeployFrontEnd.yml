@@ -64,7 +64,7 @@ jobs:
           sarif_file: 'megalinter-reports/megalinter-report.sarif'
 
   run-vitest:
-    name: Cypress Test
+    name: Run Vitest
     runs-on: ubuntu-22.04
     permissions:
       checks: write
@@ -80,7 +80,7 @@ jobs:
         run: npm run vitest-pipeline
 
       - name: Upload coverage report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage
