@@ -40,14 +40,14 @@ const onSubmit = form.handleSubmit(async (values) => {
     expressionId: props.expressionId,
     name: values.name,
     description: values.description,
-    gameMechanicEffect: values.gameMechanicEffect.id,
+    gameMechanicEffect: values.gameMechanicEffect,
     limitation: values.limitation,
     powerDuration: values.powerDuration.id,
     areaOfEffect: values.areaOfEffect.id,
     powerLevel: values.powerLevel.id,
     powerActivationType: values.powerActivationType.id,
     categoryIds: values.category.map((item: { id: string | number }) => item.id),
-    otherInfo: values.other,
+    other: values.other,
     isPowerUse: values.isPowerUse,
   })
   .then(() => {

@@ -3,7 +3,7 @@ namespace ExpressedRealms.Server.EndPoints.PowerEndpoints.Requests.CreatePower;
 public class CreatePowerRequest
 {
     public required string Name { get; set; }
-    public required List<int> Category { get; set; }
+    public required List<int> CategoryIds { get; set; }
     public required string Description { get; set; }
     public required string GameMechanicEffect { get; set; }
     public required string Limitation { get; set; }

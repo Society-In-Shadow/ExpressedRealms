@@ -9,6 +9,7 @@ using ExpressedRealms.Server.EndPoints.PowerEndpoints.Responses.Options;
 using ExpressedRealms.Server.EndPoints.PowerEndpoints.Responses.PowerList;
 using ExpressedRealms.Server.Extensions;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
 namespace ExpressedRealms.Server.EndPoints.PowerEndpoints;
@@ -90,8 +91,9 @@ internal static class PowerEndpoints
 
         endpointGroup
             .MapPost(
-                "",
+                "{id}",
                 async Task<Results<ValidationProblem, NotFound, Created<int>>> (
+                    string id,
                     CreatePowerRequest request,
                     IPowerRepository repository
                 ) =>
@@ -100,7 +102,7 @@ internal static class PowerEndpoints
                         new CreatePowerModel()
                         {
                             Name = request.Name,
-                            Category = request.Category,
+                            Category = request.CategoryIds,
                             Description = request.Description,
                             GameMechanicEffect = request.GameMechanicEffect,
                             Limitation = request.Limitation,

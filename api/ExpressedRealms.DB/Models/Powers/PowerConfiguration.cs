@@ -36,7 +36,7 @@ public class PowerConfiguration : IEntityTypeConfiguration<Power>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasOne(e => e.PowerActivationTimingType)
+            .HasOne(e => e.PowerDuration)
             .WithMany(e => e.Powers)
             .HasForeignKey(e => e.DurationId)
             .OnDelete(DeleteBehavior.Restrict);
