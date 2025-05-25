@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Ardalis.SmartEnum" Version="8.2.0" />
       <PackageReference Include="Flipt" Version="0.1.0" />
       <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="9.0.5" />
       <PackageReference Include="OpenFeature.Contrib.Providers.Flipt" Version="0.0.5" />

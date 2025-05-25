@@ -2,5 +2,5 @@ namespace ExpressedRealms.FeatureFlags;
 
 public interface IFeatureToggleClient
 {
-    Task<bool> HasFeatureFlag(FeatureFlags featureName);
+    Task<bool> HasFeatureFlag(ReleaseFlags releaseName);
 }

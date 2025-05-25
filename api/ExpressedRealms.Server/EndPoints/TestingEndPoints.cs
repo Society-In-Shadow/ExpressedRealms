@@ -37,7 +37,7 @@ internal static class TestingEndPoints
                 "/getFeatureFlag",
                 async (IFeatureToggleClient client) =>
                 {
-                    return await client.HasFeatureFlag(FeatureFlags.FeatureFlags.TestFeatureFlag);
+                    return await client.HasFeatureFlag(ReleaseFlags.TestReleaseFlag);
                 }
             )
             .RequireAuthorization();

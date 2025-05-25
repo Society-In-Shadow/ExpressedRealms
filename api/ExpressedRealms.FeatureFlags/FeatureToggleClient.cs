@@ -6,16 +6,16 @@ namespace ExpressedRealms.FeatureFlags;
 
 internal sealed class FeatureToggleClient(ILogger<FeatureToggleClient> logger, IFeatureClient client) : IFeatureToggleClient
 {
-    public async Task<bool> HasFeatureFlag(FeatureFlags featureName)
+    public async Task<bool> HasFeatureFlag(ReleaseFlags releaseName)
     {
         var context = EvaluationContext.Builder()
             .SetTargetingKey("cam")
             .Set("extra-data-1", "extra-data-1-value")
             .Build();
         
-        var value = await client.GetBooleanValueAsync(featureName.Name, false, context);
+        var value = await client.GetBooleanValueAsync(releaseName.Name, false, context);
         
-        logger.LogInformation("Flag Flag \"{flagName}\" is \"{status}\"", featureName.Name, value ? "Enabled" : "Disabled");
+        logger.LogInformation("Flag Flag \"{flagName}\" is \"{status}\"", releaseName.Name, value ? "Enabled" : "Disabled");
         return value;
     }
 }
