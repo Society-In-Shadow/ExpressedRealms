@@ -68,6 +68,7 @@ services:
       - POSTMARK-API-KEY=${POSTMARK_API_KEY}
       - NO-REPLY-EMAIL=${NO_REPLY_EMAIL}
       - CLIENT-COOKIE-DOMAIN=.localhost
+      - FEATURE-FLAG-URL=http://flipt:8080/
     ports:
       - '5000:80'
       - '5001:443'
@@ -79,6 +80,8 @@ services:
       postgres:
         condition: service_healthy
       azurite:
+        condition: service_started
+      flipt:
         condition: service_started
 
   postgres:
@@ -132,8 +135,24 @@ services:
     networks:
       - expressed-realms-network
 
+  flipt:
+    container_name: flipt
+    image: flipt/flipt:latest
+    ports:
+      - "8050:8080"    # UI/API
+      - "9000:9000"    # GRPC
+    volumes:
+      - flipt_data:/var/opt/flipt
+    environment:
+      - FLIPT_LOG_LEVEL=ERROR
+      - FLIPT_DB_URL=file:/var/opt/flipt/flipt.db
+    networks:
+      - expressed-realms-network
+    restart: always
+
 volumes:
   ignore:
   db_data:
   pgAdmin_data:
   azurite-data:
+  flipt_data:

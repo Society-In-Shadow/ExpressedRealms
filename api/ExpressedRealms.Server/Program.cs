@@ -8,6 +8,7 @@ using ExpressedRealms.DB;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.Roles;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using ExpressedRealms.Email;
+using ExpressedRealms.FeatureFlags.Configuration;
 using ExpressedRealms.Repositories.Admin;
 using ExpressedRealms.Repositories.Characters;
 using ExpressedRealms.Repositories.Expressions;
@@ -88,7 +89,8 @@ try
 
     Log.Information("Add in Healthchecks");
 
-    builder.Services.AddHealthChecks();
+    builder.Services.AddHealthChecks()
+        .AddFliptHealthCheck();
 
     Log.Information("Adding DB Context");
 
@@ -206,6 +208,7 @@ try
     builder.Services.AddExpressionRepositoryInjections();
     builder.Services.AddAdminRepositoryInjections();
     builder.Services.AddPowerRepositoryInjections();
+    builder.Services.AddFeatureFlagInjections();
 
     Log.Information("Building the App");
     var app = builder.Build();

@@ -1,5 +1,6 @@
 using ExpressedRealms.Authentication;
 using ExpressedRealms.Email.TestEmail;
+using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.Server.Extensions;
 
 namespace ExpressedRealms.Server.EndPoints;
@@ -31,5 +32,14 @@ internal static class TestingEndPoints
             )
             .RequireAuthorization()
             .RequirePolicyAuthorization(Policies.UserManagementPolicy);
+
+        app.MapGet(
+                "/getFeatureFlag",
+                async (IFeatureToggleClient client) =>
+                {
+                    return await client.HasFeatureFlag(FeatureFlags.FeatureFlags.TestFeatureFlag);
+                }
+            )
+            .RequireAuthorization();
     }
 }

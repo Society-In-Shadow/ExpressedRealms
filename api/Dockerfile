@@ -12,6 +12,7 @@ COPY ["ExpressedRealms.DB/ExpressedRealms.DB.csproj", "ExpressedRealms.DB/"]
 COPY ["ExpressedRealms.MigrationProject/ExpressedRealms.MigrationProject.csproj", "ExpressedRealms.MigrationProject/"]
 COPY ["ExpressedRealms.Authentication/ExpressedRealms.Authentication.csproj", "ExpressedRealms.Authentication/"]
 COPY ["ExpressedRealms.Server/ExpressedRealms.Server.csproj", "ExpressedRealms.Server/"]
+COPY ["ExpressedRealms.FeatureFlags/ExpressedRealms.FeatureFlags.csproj", "ExpressedRealms.FeatureFlags/"]
 RUN dotnet restore
 
 COPY . .
