@@ -1,20 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\ExpressedRealms.DB\ExpressedRealms.DB.csproj" />
-      <ProjectReference Include="..\ExpressedRealms.Repositories.Expressions\ExpressedRealms.Repositories.Expressions.csproj" />
-      <ProjectReference Include="..\ExpressedRealms.Repositories.Shared\ExpressedRealms.Repositories.Shared.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="FluentResults" Version="3.16.0" />
-      <PackageReference Include="FluentValidation" Version="11.11.0" />
-    </ItemGroup>
-
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExpressedRealms.DB\ExpressedRealms.DB.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Repositories.Expressions\ExpressedRealms.Repositories.Expressions.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Repositories.Shared\ExpressedRealms.Repositories.Shared.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentResults" Version="3.16.0" />
+    <PackageReference Include="FluentValidation" Version="11.11.0" />
+  </ItemGroup>
 </Project>
