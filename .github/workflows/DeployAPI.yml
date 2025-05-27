@@ -14,6 +14,12 @@ on:
     branches: [main]
     paths:
       - 'api/**'
+  workflow_dispatch:
+    inputs:
+      bypass_ref_check:
+        description: 'Set to true to bypass ref check and force deployment'
+        required: false
+        default: 'false'
 
 jobs:
 
@@ -96,7 +102,7 @@ jobs:
       packages: write
       contents: read
       id-token: write
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.event.inputs.bypass_ref_check == 'true'
     steps:
       - uses: actions/checkout@v4
 
@@ -132,7 +138,7 @@ jobs:
       id-token: write
       statuses: write
 
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || github.event.inputs.bypass_ref_check == 'true'
 
     steps:
       # Step 1: Azure Login
