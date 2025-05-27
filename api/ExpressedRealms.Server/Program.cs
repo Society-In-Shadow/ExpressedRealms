@@ -209,7 +209,7 @@ try
     builder.Services.AddExpressionRepositoryInjections();
     builder.Services.AddAdminRepositoryInjections();
     builder.Services.AddPowerRepositoryInjections();
-    builder.Services.AddFeatureFlagInjections();
+    await builder.Services.AddFeatureFlagInjections(keyVaultManager);
 
     Log.Information("Building the App");
     var app = builder.Build();

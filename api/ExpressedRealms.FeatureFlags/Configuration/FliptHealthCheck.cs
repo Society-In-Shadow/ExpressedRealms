@@ -1,29 +1,36 @@
-using Microsoft.Extensions.Configuration;
+using ExpressedRealms.Authentication.AzureKeyVault;
+using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace ExpressedRealms.FeatureFlags.Configuration;
 
 public class FliptHealthCheck : IHealthCheck
 {
-    private readonly HttpClient _httpClient;
-    private readonly string _fliptUrl;
+    private HttpClient _httpClient;
+    private readonly IKeyVaultManager _keyVaultManager;
 
-    public FliptHealthCheck(IConfiguration configuration)
+    public FliptHealthCheck(IKeyVaultManager keyvaultManager)
     {
-        _httpClient = new HttpClient();
-        _fliptUrl = Environment.GetEnvironmentVariable("FEATURE-FLAG-URL")?.TrimEnd('/') 
-                    ?? throw new ArgumentNullException("FEATURE-FLAG-URL configuration is missing");
+        _keyVaultManager = keyvaultManager;
     }
 
+    private async Task SetupClient()
+    {
+        _httpClient = new()
+        {
+            BaseAddress = new Uri(await _keyVaultManager.GetSecret(FeatureFlagSettings.FeatureFlagUrl))
+        };
+    }
+    
     public async Task<HealthCheckResult> CheckHealthAsync(
         HealthCheckContext context,
         CancellationToken cancellationToken = default)
     {
         try
         {
-            var response = await _httpClient.GetAsync(
-                $"{_fliptUrl}/health",
-                cancellationToken);
+            await SetupClient();
+            
+            var response = await _httpClient.GetAsync("/health", cancellationToken);
 
             if (response.IsSuccessStatusCode)
             {

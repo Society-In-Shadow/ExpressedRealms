@@ -1,16 +1,16 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using OpenFeature;
 using OpenFeature.Model;
 
 namespace ExpressedRealms.FeatureFlags.FeatureClient;
 
-internal sealed class FeatureToggleClient(ILogger<FeatureToggleClient> logger, IFeatureClient client) : IFeatureToggleClient
+internal sealed class FeatureToggleClient(ILogger<FeatureToggleClient> logger, IFeatureClient client, IHttpContextAccessor httpContextAccessor) : IFeatureToggleClient
 {
     public async Task<bool> HasFeatureFlag(ReleaseFlags releaseName)
     {
         var context = EvaluationContext.Builder()
-            .SetTargetingKey("cam")
-            .Set("extra-data-1", "extra-data-1-value")
+            .SetTargetingKey(httpContextAccessor.HttpContext?.User.Identity?.Name ?? "")
             .Build();
         
         var value = await client.GetBooleanValueAsync(releaseName.Value, false, context);

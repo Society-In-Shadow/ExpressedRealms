@@ -1,21 +1,27 @@
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using ExpressedRealms.Authentication.AzureKeyVault;
+using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
 using ExpressedRealms.FeatureFlags.FeatureManager.ApiModels;
 
 namespace ExpressedRealms.FeatureFlags.FeatureManager;
 
 public class FeatureToggleManager : IFeatureToggleManager
 {
-    private readonly HttpClient _httpClient;
+    private HttpClient _httpClient;
+    private readonly IKeyVaultManager _keyVaultManager;
     private const string FlagUrl = "/api/v1/namespaces/default/flags";
 
-    public FeatureToggleManager()
+    public FeatureToggleManager(IKeyVaultManager keyVaultManager)
+    {
+        _keyVaultManager = keyVaultManager;
+    }
+
+    private async Task SetupClient()
     {
         _httpClient = new()
         {
-            BaseAddress = new Uri(Environment.GetEnvironmentVariable("FEATURE-FLAG-URL") ?? throw new NullReferenceException("FEATURE-FLAG-URL environmental Variable is undefined")),
+            BaseAddress = new Uri(await _keyVaultManager.GetSecret(FeatureFlagSettings.FeatureFlagUrl))
         };
-        //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Environment.GetEnvironmentVariable("FEATURE-FLAG-API-KEY") ?? throw new NullReferenceException("FEATURE-FLAG-API-KEY environmental Variable is undefined"));
     }
 
     private async Task<List<Flag>> GetFeatureFlags()
@@ -81,6 +87,8 @@ public class FeatureToggleManager : IFeatureToggleManager
     /// </summary>
     public async Task UpdateFeatureToggles()
     {
+        await SetupClient();
+        
         var codeSideFlags = ReleaseFlags.List.ToList();
         var hostSideFlags = await GetFeatureFlags();
         
