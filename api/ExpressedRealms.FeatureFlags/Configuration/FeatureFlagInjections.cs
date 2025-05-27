@@ -11,10 +11,13 @@ namespace ExpressedRealms.FeatureFlags.Configuration;
 
 public static class FeatureFlagInjections
 {
-    public static async Task AddFeatureFlagInjections(this IServiceCollection services, EarlyKeyVaultManager vaultManager)
+    public static async Task AddFeatureFlagInjections(
+        this IServiceCollection services,
+        EarlyKeyVaultManager vaultManager
+    )
     {
         var url = await vaultManager.GetSecret(FeatureFlagSettings.FeatureFlagUrl);
-        
+
         services.AddOpenFeature(featureBuilder =>
         {
             featureBuilder
@@ -25,16 +28,16 @@ public static class FeatureFlagInjections
                     return provider;
                 });
         });
-        
+
         services.AddScoped<IFeatureToggleClient, FeatureToggleClient>();
         services.AddScoped<IFeatureToggleManager, FeatureToggleManager>();
     }
-    
+
     public static IHealthChecksBuilder AddFliptHealthCheck(
         this IHealthChecksBuilder builder,
-        string name = "flipt")
+        string name = "flipt"
+    )
     {
         return builder.AddCheck<FliptHealthCheck>(name, failureStatus: HealthStatus.Degraded);
     }
-
 }

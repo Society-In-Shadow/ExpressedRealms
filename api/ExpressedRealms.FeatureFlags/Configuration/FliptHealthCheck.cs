@@ -18,18 +18,21 @@ public class FliptHealthCheck : IHealthCheck
     {
         _httpClient = new()
         {
-            BaseAddress = new Uri(await _keyVaultManager.GetSecret(FeatureFlagSettings.FeatureFlagUrl))
+            BaseAddress = new Uri(
+                await _keyVaultManager.GetSecret(FeatureFlagSettings.FeatureFlagUrl)
+            ),
         };
     }
-    
+
     public async Task<HealthCheckResult> CheckHealthAsync(
         HealthCheckContext context,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    )
     {
         try
         {
             await SetupClient();
-            
+
             var response = await _httpClient.GetAsync("/health", cancellationToken);
 
             if (response.IsSuccessStatusCode)
@@ -37,7 +40,9 @@ public class FliptHealthCheck : IHealthCheck
                 return HealthCheckResult.Healthy("Flipt service is healthy");
             }
 
-            return HealthCheckResult.Degraded($"Flipt health check failed with status code: {response.StatusCode}");
+            return HealthCheckResult.Degraded(
+                $"Flipt health check failed with status code: {response.StatusCode}"
+            );
         }
         catch (Exception ex)
         {

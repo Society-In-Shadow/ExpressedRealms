@@ -20,7 +20,9 @@ public class FeatureToggleManager : IFeatureToggleManager
     {
         _httpClient = new()
         {
-            BaseAddress = new Uri(await _keyVaultManager.GetSecret(FeatureFlagSettings.FeatureFlagUrl))
+            BaseAddress = new Uri(
+                await _keyVaultManager.GetSecret(FeatureFlagSettings.FeatureFlagUrl)
+            ),
         };
     }
 
@@ -38,19 +40,25 @@ public class FeatureToggleManager : IFeatureToggleManager
         var addedFlags = codeSideFlags.Where(x => !hostSideFlags.Any(y => y.Key == x.Value));
         foreach (var addedFlag in addedFlags)
         {
-            var response = await _httpClient.PostAsJsonAsync(FlagUrl, new
-            {
-                name = addedFlag.Name,
-                key = addedFlag.Value,
-                description = addedFlag.Description,
-                type = "BOOLEAN_FLAG_TYPE",
-                enabled = false
-            });
+            var response = await _httpClient.PostAsJsonAsync(
+                FlagUrl,
+                new
+                {
+                    name = addedFlag.Name,
+                    key = addedFlag.Value,
+                    description = addedFlag.Description,
+                    type = "BOOLEAN_FLAG_TYPE",
+                    enabled = false,
+                }
+            );
             response.EnsureSuccessStatusCode();
         }
     }
-    
-    private async Task RemoveFeatureFlags(List<ReleaseFlags> codeSideFlags, List<Flag> hostSideFlags)
+
+    private async Task RemoveFeatureFlags(
+        List<ReleaseFlags> codeSideFlags,
+        List<Flag> hostSideFlags
+    )
     {
         var removedFlags = hostSideFlags.Where(x => !codeSideFlags.Any(y => y.Value == x.Key));
         foreach (var removedFlag in removedFlags)
@@ -59,23 +67,31 @@ public class FeatureToggleManager : IFeatureToggleManager
             response.EnsureSuccessStatusCode();
         }
     }
-    
-    private async Task UpdateFeatureFlags(List<ReleaseFlags> codeSideFlags, List<Flag> hostSideFlags)
+
+    private async Task UpdateFeatureFlags(
+        List<ReleaseFlags> codeSideFlags,
+        List<Flag> hostSideFlags
+    )
     {
         var matchingFlags = hostSideFlags.Where(x => codeSideFlags.Any(y => y.Value == x.Key));
-        
+
         foreach (var matchingFlag in matchingFlags)
         {
             var codeSideFlag = codeSideFlags.First(x => x.Value == matchingFlag.Key);
 
-            if (codeSideFlag.Name == matchingFlag.Name &&
-                codeSideFlag.Description == matchingFlag.Description) 
+            if (
+                codeSideFlag.Name == matchingFlag.Name
+                && codeSideFlag.Description == matchingFlag.Description
+            )
                 continue;
-            
+
             matchingFlag.Name = codeSideFlag.Name;
             matchingFlag.Description = codeSideFlag.Description;
-            
-            var response = await _httpClient.PutAsJsonAsync($"{FlagUrl}/{matchingFlag.Key}", matchingFlag);
+
+            var response = await _httpClient.PutAsJsonAsync(
+                $"{FlagUrl}/{matchingFlag.Key}",
+                matchingFlag
+            );
             response.EnsureSuccessStatusCode();
         }
     }
@@ -88,14 +104,14 @@ public class FeatureToggleManager : IFeatureToggleManager
     public async Task UpdateFeatureToggles()
     {
         await SetupClient();
-        
+
         var codeSideFlags = ReleaseFlags.List.ToList();
         var hostSideFlags = await GetFeatureFlags();
-        
+
         await AddFeatureFlags(codeSideFlags, hostSideFlags);
         await RemoveFeatureFlags(codeSideFlags, hostSideFlags);
         await UpdateFeatureFlags(codeSideFlags, hostSideFlags);
-        
+
         _httpClient.Dispose();
     }
 }

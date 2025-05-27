@@ -92,8 +92,9 @@ internal sealed class ExpressionTextSectionRepository(
         var result = await createExpressionDtoValidator.ValidateAsync(dto, cancellationToken);
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
-        
-        var nextPlaceOnList = await context.ExpressionSections.AsNoTracking()
+
+        var nextPlaceOnList = await context
+            .ExpressionSections.AsNoTracking()
             .Where(x => x.ExpressionId == dto.ExpressionId && x.ParentId == dto.ParentId)
             .CountAsync();
 

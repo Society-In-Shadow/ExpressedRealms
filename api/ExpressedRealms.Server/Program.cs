@@ -90,8 +90,7 @@ try
 
     Log.Information("Add in Healthchecks");
 
-    builder.Services.AddHealthChecks()
-        .AddFliptHealthCheck();
+    builder.Services.AddHealthChecks().AddFliptHealthCheck();
 
     Log.Information("Adding DB Context");
 
@@ -231,11 +230,12 @@ try
             scope.Event.CustomFields.Add("UserId", httpContext.HttpContext?.User.GetUserId());
         }
     );
-    
+
     Log.Information("Updating Feature Flags");
     using (var scope = app.Services.CreateScope())
     {
-        var featureToggleManager = scope.ServiceProvider.GetRequiredService<IFeatureToggleManager>();
+        var featureToggleManager =
+            scope.ServiceProvider.GetRequiredService<IFeatureToggleManager>();
         await featureToggleManager.UpdateFeatureToggles();
     }
 
