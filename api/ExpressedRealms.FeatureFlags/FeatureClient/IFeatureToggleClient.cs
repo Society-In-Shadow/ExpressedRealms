@@ -1,4 +1,4 @@
-namespace ExpressedRealms.FeatureFlags;
+namespace ExpressedRealms.FeatureFlags.FeatureClient;
 
 public interface IFeatureToggleClient
 {

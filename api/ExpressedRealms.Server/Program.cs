@@ -9,6 +9,7 @@ using ExpressedRealms.DB.UserProfile.PlayerDBModels.Roles;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using ExpressedRealms.Email;
 using ExpressedRealms.FeatureFlags.Configuration;
+using ExpressedRealms.FeatureFlags.FeatureManager;
 using ExpressedRealms.Repositories.Admin;
 using ExpressedRealms.Repositories.Characters;
 using ExpressedRealms.Repositories.Expressions;
@@ -230,6 +231,13 @@ try
             scope.Event.CustomFields.Add("UserId", httpContext.HttpContext?.User.GetUserId());
         }
     );
+    
+    Log.Information("Updating Feature Flags");
+    using (var scope = app.Services.CreateScope())
+    {
+        var featureToggleManager = scope.ServiceProvider.GetRequiredService<IFeatureToggleManager>();
+        await featureToggleManager.UpdateFeatureToggles();
+    }
 
     // Migrate latest database changes during startup
     Log.Information("Checking if Migrations Need to Be Run");

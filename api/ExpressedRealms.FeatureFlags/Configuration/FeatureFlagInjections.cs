@@ -1,3 +1,5 @@
+using ExpressedRealms.FeatureFlags.FeatureClient;
+using ExpressedRealms.FeatureFlags.FeatureManager;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using OpenFeature;
@@ -12,7 +14,7 @@ public static class FeatureFlagInjections
         services.AddOpenFeature(featureBuilder =>
         {
             featureBuilder
-                .AddHostedFeatureLifecycle() // From Hosting package
+                .AddHostedFeatureLifecycle()
                 .AddProvider(x =>
                 {
                     var provider = new FliptProvider(Environment.GetEnvironmentVariable("FEATURE-FLAG-URL"));
@@ -21,6 +23,7 @@ public static class FeatureFlagInjections
         });
         
         services.AddScoped<IFeatureToggleClient, FeatureToggleClient>();
+        services.AddScoped<IFeatureToggleManager, FeatureToggleManager>();
         
         return services;
     }
