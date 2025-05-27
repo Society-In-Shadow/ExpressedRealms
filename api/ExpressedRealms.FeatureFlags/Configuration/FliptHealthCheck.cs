@@ -6,7 +6,7 @@ namespace ExpressedRealms.FeatureFlags.Configuration;
 
 public class FliptHealthCheck : IHealthCheck
 {
-    private HttpClient _httpClient;
+    private HttpClient _httpClient = null!;
     private readonly IKeyVaultManager _keyVaultManager;
 
     public FliptHealthCheck(IKeyVaultManager keyvaultManager)

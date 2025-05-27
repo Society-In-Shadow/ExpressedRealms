@@ -7,7 +7,7 @@ namespace ExpressedRealms.FeatureFlags.FeatureManager;
 
 public class FeatureToggleManager : IFeatureToggleManager
 {
-    private HttpClient _httpClient;
+    private HttpClient _httpClient = null!;
     private readonly IKeyVaultManager _keyVaultManager;
     private const string FlagUrl = "/api/v1/namespaces/default/flags";
 
