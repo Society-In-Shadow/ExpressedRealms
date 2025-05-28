@@ -16,12 +16,10 @@ public class FliptHealthCheck : IHealthCheck
 
     private async Task SetupClient()
     {
-        _httpClient = new()
-        {
-            BaseAddress = new Uri(
-                await _keyVaultManager.GetSecret(FeatureFlagSettings.FeatureFlagUrl)
-            ),
-        };
+        _httpClient = new HttpClient();
+        _httpClient.BaseAddress = new Uri(await _keyVaultManager.GetSecret(FeatureFlagSettings.FeatureFlagUrl), UriKind.RelativeOrAbsolute);
+        _httpClient.Timeout = TimeSpan.FromSeconds(30);
+        _httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer ");
     }
 
     public async Task<HealthCheckResult> CheckHealthAsync(
