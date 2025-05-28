@@ -49,7 +49,7 @@ internal sealed class PowerRepository(
                     x.PowerActivationTimingType.Description
                 ),
                 Other = x.OtherFields,
-                IsPowerUse = x.IsPowerUse
+                IsPowerUse = x.IsPowerUse,
             })
             .ToListAsync(cancellationToken);
 

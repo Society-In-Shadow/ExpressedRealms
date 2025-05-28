@@ -1,4 +1,5 @@
 using ExpressedRealms.Authentication;
+using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.Repositories.Powers.Powers;
 using ExpressedRealms.Repositories.Powers.Powers.DTOs.PowerCreate;
 using ExpressedRealms.Repositories.Powers.Powers.DTOs.PowerEdit;
@@ -9,7 +10,6 @@ using ExpressedRealms.Server.EndPoints.PowerEndpoints.Responses.Options;
 using ExpressedRealms.Server.EndPoints.PowerEndpoints.Responses.PowerList;
 using ExpressedRealms.Server.Extensions;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
 namespace ExpressedRealms.Server.EndPoints.PowerEndpoints;
@@ -20,6 +20,7 @@ internal static class PowerEndpoints
     {
         var endpointGroup = app.MapGroup("powers")
             .AddFluentValidationAutoValidation()
+            .RequireFeatureToggle(ReleaseFlags.ShowPowersTab)
             .WithTags("Powers")
             .WithOpenApi();
 

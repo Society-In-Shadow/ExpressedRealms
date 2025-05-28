@@ -1,4 +1,6 @@
 using ExpressedRealms.Authentication;
+using ExpressedRealms.FeatureFlags;
+using ExpressedRealms.FeatureFlags.FeatureClient;
 using ExpressedRealms.Repositories.Expressions.Expressions.DTOs;
 using ExpressedRealms.Repositories.Expressions.ExpressionTextSections;
 using ExpressedRealms.Repositories.Expressions.ExpressionTextSections.DTOs;
@@ -57,7 +59,8 @@ internal static class ExpectedSubSectionsEndpoints
                 async Task<Results<NotFound, Ok<ExpressionBaseResponse>>> (
                     string name,
                     HttpContext httpContext,
-                    IExpressionTextSectionRepository repository
+                    IExpressionTextSectionRepository repository,
+                    IFeatureToggleClient featureToggleClient
                 ) =>
                 {
                     var expressionIdResult = await repository.GetExpressionId(name);
@@ -79,6 +82,9 @@ internal static class ExpectedSubSectionsEndpoints
                             ExpressionId = expressionIdResult.Value,
                             ExpressionSections = ExpressionHelpers.BuildExpressionPage(sections),
                             CanEditPolicy = hasEditPolicy,
+                            ShowPowersTab = await featureToggleClient.HasFeatureFlag(
+                                ReleaseFlags.ShowPowersTab
+                            ),
                         }
                     );
                 }

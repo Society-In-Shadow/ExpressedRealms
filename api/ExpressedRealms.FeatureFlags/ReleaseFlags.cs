@@ -17,10 +17,11 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "test-feature-flag",
         "This is a test feature flag."
     );
-    public static readonly ReleaseFlags MyFavorites = new(
-        "My Favorites",
-        "my-favorites",
-        "Shows Favorites."
+
+    public static readonly ReleaseFlags ShowPowersTab = new(
+        "Show Power Tab",
+        "show-power-tab",
+        "On the expressions, shows the power tab."
     );
 
     public override string ToString()

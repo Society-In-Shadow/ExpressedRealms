@@ -10,6 +10,7 @@ defineStore('expression', {
             currentExpressionName: "" as String,
             isDoneLoading: false as Boolean,
             canEdit: false as Boolean,
+            showPowersTab: false as Boolean,
         }
     },
     actions: {
@@ -21,6 +22,7 @@ defineStore('expression', {
                     this.currentExpressionId = json.data.expressionId;
                     this.isDoneLoading = true;
                     this.canEdit = json.data.canEditPolicy
+                    this.showPowersTab = json.data.showPowersTab
                 });
         }
     }
