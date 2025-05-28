@@ -17,16 +17,18 @@ public class FeatureToggleManager : IFeatureToggleManager
     private async Task SetupClient()
     {
         var httpClient = new HttpClient();
-        httpClient.BaseAddress = new Uri(await _keyVaultManager.GetSecret(FeatureFlagSettings.FeatureFlagUrl), UriKind.RelativeOrAbsolute);
+        httpClient.BaseAddress = new Uri(
+            await _keyVaultManager.GetSecret(FeatureFlagSettings.FeatureFlagUrl),
+            UriKind.RelativeOrAbsolute
+        );
         httpClient.Timeout = TimeSpan.FromSeconds(30);
         httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer ");
         _fliptRestClient = new FliptRestClient(httpClient);
     }
 
     private async Task<List<Flag>> GetFeatureFlags()
-    
     {
-        var flags =  await _fliptRestClient.ApiV1NamespacesFlagsGetAsync("default");;
+        var flags = await _fliptRestClient.ApiV1NamespacesFlagsGetAsync("default");
         return flags.Flags.ToList();
     }
 
@@ -35,14 +37,17 @@ public class FeatureToggleManager : IFeatureToggleManager
         var addedFlags = codeSideFlags.Where(x => !hostSideFlags.Any(y => y.Key == x.Value));
         foreach (var addedFlag in addedFlags)
         {
-            await _fliptRestClient.ApiV1NamespacesFlagsPostAsync("default", new CreateFlagRequest()
-            {
-                Name = addedFlag.Name,
-                Key = addedFlag.Value,
-                Description = addedFlag.Description,
-                Type = CreateFlagRequestType.BOOLEAN_FLAG_TYPE,
-                Enabled = false,
-            });
+            await _fliptRestClient.ApiV1NamespacesFlagsPostAsync(
+                "default",
+                new CreateFlagRequest()
+                {
+                    Name = addedFlag.Name,
+                    Key = addedFlag.Value,
+                    Description = addedFlag.Description,
+                    Type = CreateFlagRequestType.BOOLEAN_FLAG_TYPE,
+                    Enabled = false,
+                }
+            );
         }
     }
 
@@ -78,18 +83,21 @@ public class FeatureToggleManager : IFeatureToggleManager
             matchingFlag.Name = codeSideFlag.Name;
             matchingFlag.Description = codeSideFlag.Description;
 
-            await _fliptRestClient.ApiV1NamespacesFlagsPutAsync("default", matchingFlag.Key, new UpdateFlagRequest()
-            {
-                Name = matchingFlag.Name,
-                Description = matchingFlag.Description,
-                Key = matchingFlag.Key,
-                Enabled = matchingFlag.Enabled,
-                AdditionalProperties = matchingFlag.AdditionalProperties,
-                DefaultVariantId = matchingFlag.DefaultVariant?.Id,
-                Metadata = matchingFlag.Metadata,
-                NamespaceKey = matchingFlag.NamespaceKey
-            });
-            
+            await _fliptRestClient.ApiV1NamespacesFlagsPutAsync(
+                "default",
+                matchingFlag.Key,
+                new UpdateFlagRequest()
+                {
+                    Name = matchingFlag.Name,
+                    Description = matchingFlag.Description,
+                    Key = matchingFlag.Key,
+                    Enabled = matchingFlag.Enabled,
+                    AdditionalProperties = matchingFlag.AdditionalProperties,
+                    DefaultVariantId = matchingFlag.DefaultVariant?.Id,
+                    Metadata = matchingFlag.Metadata,
+                    NamespaceKey = matchingFlag.NamespaceKey,
+                }
+            );
         }
     }
 
