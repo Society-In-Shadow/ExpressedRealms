@@ -90,7 +90,7 @@ try
 
     Log.Information("Add in Healthchecks");
 
-    builder.Services.AddHealthChecks().AddFliptHealthCheck();
+    builder.Services.AddHealthChecks();
 
     Log.Information("Adding DB Context");
 

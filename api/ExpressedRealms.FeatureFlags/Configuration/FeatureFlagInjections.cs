@@ -3,7 +3,6 @@ using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
 using ExpressedRealms.FeatureFlags.FeatureClient;
 using ExpressedRealms.FeatureFlags.FeatureManager;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using OpenFeature;
 using OpenFeature.Contrib.Providers.Flipt;
 
@@ -31,13 +30,5 @@ public static class FeatureFlagInjections
 
         services.AddScoped<IFeatureToggleClient, FeatureToggleClient>();
         services.AddScoped<IFeatureToggleManager, FeatureToggleManager>();
-    }
-
-    public static IHealthChecksBuilder AddFliptHealthCheck(
-        this IHealthChecksBuilder builder,
-        string name = "flipt"
-    )
-    {
-        return builder.AddCheck<FliptHealthCheck>(name, failureStatus: HealthStatus.Degraded);
     }
 }
