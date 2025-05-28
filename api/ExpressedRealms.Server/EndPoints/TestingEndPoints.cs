@@ -2,6 +2,7 @@ using ExpressedRealms.Authentication;
 using ExpressedRealms.Email.TestEmail;
 using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.FeatureFlags.FeatureClient;
+using ExpressedRealms.FeatureFlags.FeatureManager;
 using ExpressedRealms.Server.Extensions;
 
 namespace ExpressedRealms.Server.EndPoints;
@@ -35,12 +36,19 @@ internal static class TestingEndPoints
             .RequirePolicyAuthorization(Policies.UserManagementPolicy);
 
         app.MapGet(
-                "/getFeatureFlag",
-                async (IFeatureToggleClient client) =>
-                {
-                    return await client.HasFeatureFlag(ReleaseFlags.TestReleaseFlag);
-                }
-            )
-            .RequireAuthorization();
+            "/getFeatureFlag",
+            async (IFeatureToggleClient client) =>
+            {
+                return await client.HasFeatureFlag(ReleaseFlags.TestReleaseFlag);
+            }
+        );
+
+        app.MapGet(
+            "/updateFeatureFlags",
+            async (IFeatureToggleManager client) =>
+            {
+                await client.UpdateFeatureToggles();
+            }
+        );
     }
 }
