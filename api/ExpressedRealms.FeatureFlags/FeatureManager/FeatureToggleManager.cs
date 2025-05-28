@@ -2,6 +2,7 @@ using System.Net.Http.Json;
 using ExpressedRealms.Authentication.AzureKeyVault;
 using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
 using ExpressedRealms.FeatureFlags.FeatureManager.ApiModels;
+using Microsoft.Extensions.Logging;
 
 namespace ExpressedRealms.FeatureFlags.FeatureManager;
 
@@ -10,14 +11,17 @@ public class FeatureToggleManager : IFeatureToggleManager
     private HttpClient _httpClient = null!;
     private readonly IKeyVaultManager _keyVaultManager;
     private const string FlagUrl = "/api/v1/namespaces/default/flags";
+    private ILogger<FeatureToggleManager> _logger;
 
-    public FeatureToggleManager(IKeyVaultManager keyVaultManager)
+    public FeatureToggleManager(IKeyVaultManager keyVaultManager, ILogger<FeatureToggleManager> logger)
     {
         _keyVaultManager = keyVaultManager;
+        _logger = logger;
     }
 
     private async Task SetupClient()
     {
+        _logger.LogInformation("Setting up client with URL: " + await _keyVaultManager.GetSecret(FeatureFlagSettings.FeatureFlagUrl));
         _httpClient = new()
         {
             BaseAddress = new Uri(
