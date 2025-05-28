@@ -1,42 +1,33 @@
-using System.Net.Http.Json;
 using ExpressedRealms.Authentication.AzureKeyVault;
 using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
-using ExpressedRealms.FeatureFlags.FeatureManager.ApiModels;
-using Microsoft.Extensions.Logging;
+using Flipt.Rest;
 
 namespace ExpressedRealms.FeatureFlags.FeatureManager;
 
 public class FeatureToggleManager : IFeatureToggleManager
 {
-    private HttpClient _httpClient = null!;
     private readonly IKeyVaultManager _keyVaultManager;
-    private const string FlagUrl = "/api/v1/namespaces/default/flags";
-    private ILogger<FeatureToggleManager> _logger;
+    private FliptRestClient _fliptRestClient = null!;
 
-    public FeatureToggleManager(IKeyVaultManager keyVaultManager, ILogger<FeatureToggleManager> logger)
+    public FeatureToggleManager(IKeyVaultManager keyVaultManager)
     {
         _keyVaultManager = keyVaultManager;
-        _logger = logger;
     }
 
     private async Task SetupClient()
     {
-        _logger.LogInformation("Setting up client with URL: " + await _keyVaultManager.GetSecret(FeatureFlagSettings.FeatureFlagUrl));
-        _httpClient = new()
-        {
-            BaseAddress = new Uri(
-                await _keyVaultManager.GetSecret(FeatureFlagSettings.FeatureFlagUrl)
-            ),
-        };
+        var httpClient = new HttpClient();
+        httpClient.BaseAddress = new Uri(await _keyVaultManager.GetSecret(FeatureFlagSettings.FeatureFlagUrl), UriKind.RelativeOrAbsolute);
+        httpClient.Timeout = TimeSpan.FromSeconds(30);
+        httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer ");
+        _fliptRestClient = new FliptRestClient(httpClient);
     }
 
     private async Task<List<Flag>> GetFeatureFlags()
+    
     {
-        var response = await _httpClient.GetAsync(FlagUrl);
-        response.EnsureSuccessStatusCode();
-
-        var root = await response.Content.ReadFromJsonAsync<Root>();
-        return root!.Flags;
+        var flags =  await _fliptRestClient.ApiV1NamespacesFlagsGetAsync("default");;
+        return flags.Flags.ToList();
     }
 
     private async Task AddFeatureFlags(List<ReleaseFlags> codeSideFlags, List<Flag> hostSideFlags)
@@ -44,18 +35,14 @@ public class FeatureToggleManager : IFeatureToggleManager
         var addedFlags = codeSideFlags.Where(x => !hostSideFlags.Any(y => y.Key == x.Value));
         foreach (var addedFlag in addedFlags)
         {
-            var response = await _httpClient.PostAsJsonAsync(
-                FlagUrl,
-                new
-                {
-                    name = addedFlag.Name,
-                    key = addedFlag.Value,
-                    description = addedFlag.Description,
-                    type = "BOOLEAN_FLAG_TYPE",
-                    enabled = false,
-                }
-            );
-            response.EnsureSuccessStatusCode();
+            await _fliptRestClient.ApiV1NamespacesFlagsPostAsync("default", new CreateFlagRequest()
+            {
+                Name = addedFlag.Name,
+                Key = addedFlag.Value,
+                Description = addedFlag.Description,
+                Type = CreateFlagRequestType.BOOLEAN_FLAG_TYPE,
+                Enabled = false,
+            });
         }
     }
 
@@ -67,8 +54,7 @@ public class FeatureToggleManager : IFeatureToggleManager
         var removedFlags = hostSideFlags.Where(x => !codeSideFlags.Any(y => y.Value == x.Key));
         foreach (var removedFlag in removedFlags)
         {
-            var response = await _httpClient.DeleteAsync($"{FlagUrl}/{removedFlag.Key}");
-            response.EnsureSuccessStatusCode();
+            await _fliptRestClient.ApiV1NamespacesFlagsDeleteAsync("default", removedFlag.Key);
         }
     }
 
@@ -92,11 +78,18 @@ public class FeatureToggleManager : IFeatureToggleManager
             matchingFlag.Name = codeSideFlag.Name;
             matchingFlag.Description = codeSideFlag.Description;
 
-            var response = await _httpClient.PutAsJsonAsync(
-                $"{FlagUrl}/{matchingFlag.Key}",
-                matchingFlag
-            );
-            response.EnsureSuccessStatusCode();
+            await _fliptRestClient.ApiV1NamespacesFlagsPutAsync("default", matchingFlag.Key, new UpdateFlagRequest()
+            {
+                Name = matchingFlag.Name,
+                Description = matchingFlag.Description,
+                Key = matchingFlag.Key,
+                Enabled = matchingFlag.Enabled,
+                AdditionalProperties = matchingFlag.AdditionalProperties,
+                DefaultVariantId = matchingFlag.DefaultVariant?.Id,
+                Metadata = matchingFlag.Metadata,
+                NamespaceKey = matchingFlag.NamespaceKey
+            });
+            
         }
     }
 
@@ -115,7 +108,5 @@ public class FeatureToggleManager : IFeatureToggleManager
         await AddFeatureFlags(codeSideFlags, hostSideFlags);
         await RemoveFeatureFlags(codeSideFlags, hostSideFlags);
         await UpdateFeatureFlags(codeSideFlags, hostSideFlags);
-
-        _httpClient.Dispose();
     }
 }
