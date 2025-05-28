@@ -59,13 +59,12 @@ const reset = () => {
 <template>
   <div class="m-2">
     <form @submit="onSubmit">
-      
-      <FormInputTextWrapper v-model="form.name"/>
+      <FormInputTextWrapper v-model="form.name" />
       
       <FormMultiSelectWrapper
-          v-model="form.category"
-          :options="powers.categories"
-          option-label="name"
+        v-model="form.category"
+        :options="powers.categories"
+        option-label="name"
       />
 
       <FormEditorWrapper v-model="form.description" />
@@ -75,27 +74,27 @@ const reset = () => {
       <FormEditorWrapper v-model="form.limitation" />
 
       <FormDropdownWrapper
-          v-model="form.powerDuration"
-          :options="powers.powerDurations"
-          option-label="name"
+        v-model="form.powerDuration"
+        :options="powers.powerDurations"
+        option-label="name"
       />
 
       <FormDropdownWrapper
-          v-model="form.areaOfEffect"
-          :options="powers.areaOfEffects"
-          option-label="name"
+        v-model="form.areaOfEffect"
+        :options="powers.areaOfEffects"
+        option-label="name"
       />
 
       <FormDropdownWrapper
-          v-model="form.powerLevel"
-          :options="powers.powerLevels"
-          option-label="name"
+        v-model="form.powerLevel"
+        :options="powers.powerLevels"
+        option-label="name"
       />
 
       <FormDropdownWrapper
-          v-model="form.powerActivationType"
-          :options="powers.powerActivationTypes"
-          option-label="name"
+        v-model="form.powerActivationType"
+        :options="powers.powerActivationTypes"
+        option-label="name"
       />
 
       <FormEditorWrapper v-model="form.other" />
@@ -103,10 +102,9 @@ const reset = () => {
       <FormCheckboxWrapper v-model="form.isPowerUse" />
 
       <div class="float-end">
-        <Button label="Cancel" class="m-2" type="reset" @click="reset"/>
+        <Button label="Cancel" class="m-2" type="reset" @click="reset" />
         <Button label="Submit" class="m-2" type="submit" />
       </div>
     </form>
-
   </div>
 </template>

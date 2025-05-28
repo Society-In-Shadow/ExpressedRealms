@@ -27,10 +27,10 @@ const toggleAddPower = () => {
 
 <template>
   <div v-for="power in powers.powers">
-    <PowerCard :power="power"></PowerCard>
+    <PowerCard :power="power" />
   </div>
-  <AddPower v-if="showAddPower" :expression-id="props.expressionId" @canceled="toggleAddPower"/>
-  <Button v-else label="Add Power" @click="toggleAddPower"></Button>
+  <AddPower v-if="showAddPower" :expression-id="props.expressionId" @canceled="toggleAddPower" />
+  <Button v-else label="Add Power" @click="toggleAddPower" />
 </template>
 
 <style scoped>

@@ -31,8 +31,8 @@ const onSubmit = handleSubmit((values) => {
 
 <template>
   <form @submit="onSubmit">
-    <FormInputTextWrapper v-model="nameField"/>
-    <FormTextAreaWrapper v-model="shortDescriptionField"/>
+    <FormInputTextWrapper v-model="nameField" />
+    <FormTextAreaWrapper v-model="shortDescriptionField" />
     <FormInputTextWrapper v-model="navMenuImageField" />
     <p>List of icons can be found here : <a href="https://primevue.org/icons/#list">Primevue Icons</a></p>
     <Button data-cy="add-expression-button" label="Add Expression" class="w-100 mb-2" type="submit" />
