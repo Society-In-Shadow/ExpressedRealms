@@ -21,19 +21,40 @@ Please go to the [main website](https://society-in-shadows.com/) to get started.
 Or join our discord group here [Discord](https://discord.gg/6yJDurTdJa)
 
 ## Developers
-Follow the getting started guide here
-
-Or review the overall architecture here
+Overall architecture [here](/documentation/architecture.md)
 
 ## Quick Start
 
-To get this up and running, download the repo, and run 
+To get this up and running, download the repo
+ 
+Next up, add the following snippet as an ".env" file to the root of the repo (same folder this readme is in)
+
+Fill in the blanks below, each email / user / password should be filled in
+
+Side Note: Avoid spaces on the right hand side of the values
+```ini
+# pgAdmin is the db management tool. 
+# These values are your login credentials
+PGADMIN_EMAIL=
+PGADMIN_PASSWORD=
+
+# This is the db name, plus the user and 
+# password you need to connect to it
+DB_NAME=expressedRealms
+DB_USER=
+DB_PASSWORD=
+```
+
+With all that out of the way, run the following command in the root of the repo (Same folder as this readme)
 
 ```shell
 docker compose up
 ```
+That should get the site up and running for the most part, minus the population data.
 
+To get the full experience, feel free to create a user at [https://society-in-shadows.org](https://society-in-shadows.com/)
 
+## Local Links
 Links to various places locally can be found here:
 * [Front End / Web App](https://localhost/)
 * [Back End / Web API / Swagger](https://localhost:5001/swagger/index.html)
@@ -41,5 +62,5 @@ Links to various places locally can be found here:
 * [Feature Flags](http://localhost:8050)
 * [Email Testing](http://localhost:8025)
 
-### Data Population Scripts
+## Data Population Scripts
 These are stored separate if you would like access, ask about it in the discord group
