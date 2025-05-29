@@ -7,7 +7,9 @@ Locally, it can be found at this address
 * [Front End / Web App](https://localhost/)
 
 ## Backend / Web API
-Backend is using .Net 8, primarily using the repository pattern to store business logic.
+Backend is using .Net 8, primarily using the repository pattern to store business logic.  
+
+More information on the repository standard we use can be found [here](/repositoryStandards.md)
 
 The API is built using Minimal APIs, following the restful api pattern.  The swagger documentation is being used to document the API.
 
@@ -27,6 +29,18 @@ Locally, PgAdmin can be found at this address
 * [DB Management / pgAdmin](http://localhost:8888/login?next=%2Fbrowser%2F)
 
 More information on how we use it can be found in the [Database](database.md) documentation
+
+## Auditing
+In here we have user logs, that keep track of admin related actions and anything to do with modifying none user specific 
+data.
+
+We are using a library called Audit.Net, that integrates with EF Core.
+
+At it's core, it keeps track of changes on the column level for all tables.
+
+I have a wrapper around that to make it easier to use, and make sure that it outputs a user activity log.
+
+More information can be found in [the database documentation](/api/ExpressedRealms.DB/readme.md)
 
 ## Testing
 

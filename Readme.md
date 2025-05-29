@@ -16,7 +16,7 @@ section of the project.  You can also take a look at the Issues tab as well to s
 # Non Developers
 Please go to the [https://societyinshadows.org](https://societyinshadows.com/) to get started.
 
-Or join our discord group here [Discord](https://discord.gg/6yJDurTdJa)
+Or join our discord group here [Discord](https://discord.gg/NSv3GxSAj7)
 
 # Developers
 In addition to the quick start below, the high level architecture and technologies can be found [here](/documentation/architecture.md)
