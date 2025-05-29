@@ -65,7 +65,7 @@ services:
       - AZURE-STORAGEBLOB-RESOURCEENDPOINT=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1; #gitleaks:allow
       - APPLICATION-INSIGHTS-CONNECTION-STRING=""
       - FRONT-END-BASE-URL=https://localhost
-      - POSTMARK-API-KEY=${POSTMARK_API_KEY}
+      - SMTP-SERVER=mailpit:1025
       - NO-REPLY-EMAIL=${NO_REPLY_EMAIL}
       - CLIENT-COOKIE-DOMAIN=.localhost
       - FEATURE-FLAG-URL=http://flipt:8080/
@@ -82,6 +82,8 @@ services:
       azurite:
         condition: service_started
       flipt:
+        condition: service_started
+      mailpit:
         condition: service_started
 
   postgres:
@@ -135,6 +137,24 @@ services:
     networks:
       - expressed-realms-network
 
+  mailpit:
+    image: axllent/mailpit
+    container_name: mailpit
+    restart: unless-stopped
+    volumes:
+      - mailpit_data:/data
+    ports:
+      - 8025:8025
+      - 1025:1025
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_DATABASE: /data/mailpit.db
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+      MP_SMTP_DISABLE_RDNS: 1
+    networks:
+      - expressed-realms-network
+
   flipt:
     container_name: flipt
     image: flipt/flipt:latest
@@ -156,3 +176,4 @@ volumes:
   pgAdmin_data:
   azurite-data:
   flipt_data:
+  mailpit_data:

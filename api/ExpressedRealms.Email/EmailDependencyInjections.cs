@@ -16,7 +16,14 @@ public static class EmailDependencyInjections
         IConfiguration configuration
     )
     {
-        services.AddTransient<IEmailClientAdapter, EmailClientAdapter.EmailClientAdapter>();
+        if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("SMTP-SERVER")))
+        {
+            services.AddTransient<IEmailClientAdapter, EmailClientAdapter.EmailClientAdapter>();
+        }
+        else
+        {
+            services.AddTransient<IEmailClientAdapter, LocalAdapter>();
+        }
 
         services.AddTransient<IEmailSender, IdentityEmailSender>();
         services.InjectIndividualEmails();
