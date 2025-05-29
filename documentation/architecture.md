@@ -59,12 +59,10 @@ In addition to hosting this locally at the address down below, we are also hosti
 ## Notifications
 For this application, there isn't much in terms of notifications.  As of right now, it just user registrations
 
-As of right now we are using sendgrid to send user registration emails.
-
 Locally, we are using a product called Mailpit to view the emails that are being sent
 * [Mailpit](http://localhost:8050)
 
-See more information in the [Eamils](emails.md) documentation
+And out on prod we are using a product called Postmark
 
 ## CI/CD
 We are using github actions for CI/CD.  The github actions are located in the .github/workflows folder.

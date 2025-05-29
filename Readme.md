@@ -4,29 +4,28 @@
 
 This github repository is the home of the Society In Shadows project.
 
-There are two main purposes of this project
+There are two main goals for this project
 
 - Provide a platform to store all the lore, expressions, game mechanics, and other information about the Society
 - Provide a platform for creating and maintaining character sheets for the residents of the Society
 
-# Where to go from here
-
-## Current Progress and Goals
-An up-to-date list of all broad objectives can be found in the [Milestones](https://github.com/Society-In-Shadow/ExpressedRealms/milestones) 
+# Current Progress and Goals
+An up-to-date list of all broad goals can be found in the [Milestones](https://github.com/Society-In-Shadow/ExpressedRealms/milestones) 
 section of the project.  You can also take a look at the Issues tab as well to see more fine grained tasks.
 
-## Non Developers
-Please go to the [main website](https://society-in-shadows.com/) to get started.
+# Non Developers
+Please go to the [https://societyinshadows.org](https://societyinshadows.com/) to get started.
 
 Or join our discord group here [Discord](https://discord.gg/6yJDurTdJa)
 
-## Developers
-Overall architecture [here](/documentation/architecture.md)
+# Developers
+In addition to the quick start below, the high level architecture and technologies can be found [here](/documentation/architecture.md)
 
-## Quick Start
+# Quick Start
 
-To get this up and running, download the repo
+To get this up and running, first, you need to download the repo
  
+## Setup the .env File
 Next up, add the following snippet as an ".env" file to the root of the repo (same folder this readme is in)
 
 Fill in the blanks below, each email / user / password should be filled in
@@ -45,14 +44,30 @@ DB_USER=
 DB_PASSWORD=
 ```
 
-With all that out of the way, run the following command in the root of the repo (Same folder as this readme)
+## Create SSL Certs
+Next, you need to setup SSL Certs
+
+* Windows users can follow the instructions [here](/documentation/localSSLCerts.md)
+* Fedora users can follow the instructions [here](/documentation/fedoraSetup.md)
+
+## Start the Website
+Once you get docker up and running, add the .env file, and get the SSL certs setup, you should be good to go to 
+start the website.
+
+What you want to do is open up the root of the project (the same directory as this readme) with command line or terminal,
+and run the following command.
 
 ```shell
 docker compose up
 ```
-That should get the site up and running for the most part, minus the population data.
 
-To get the full experience, feel free to create a user at [https://society-in-shadows.org](https://society-in-shadows.com/)
+At this point, it will start doing a lot of things all together.  If this is the first time running this, it will take
+time to download all the images, then get things started.
+
+Once everything has been downloaded, it should start db followed by the vue app.  Once the DB is up and running, it will
+start the web api, then the pgAdmin.
+
+Once the messages cool down, you can visit links below.
 
 ## Local Links
 Links to various places locally can be found here:
@@ -64,3 +79,5 @@ Links to various places locally can be found here:
 
 ## Data Population Scripts
 These are stored separate if you would like access, ask about it in the discord group
+
+To get the full experience with all the data, feel free to create a user at [https://societyinshadows.org](https://society-in-shadows.com/)
