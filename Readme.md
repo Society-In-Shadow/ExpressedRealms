@@ -27,14 +27,19 @@ Or review the overall architecture here
 
 ## Quick Start
 
-To get this up and running, download the repo, and run docker compose up.
+To get this up and running, download the repo, and run 
+
+```shell
+docker compose up
+```
+
 
 Links to various places locally can be found here:
 * [Front End / Web App](https://localhost/)
 * [Back End / Web API / Swagger](https://localhost:5001/swagger/index.html)
 * [DB Management / pgAdmin](http://localhost:8888/login?next=%2Fbrowser%2F)
 * [Feature Flags](http://localhost:8050)
-* [Email Testing](http://localhost:7000)
+* [Email Testing](http://localhost:8025)
 
 ### Data Population Scripts
 These are stored separate if you would like access, ask about it in the discord group

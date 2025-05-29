@@ -18,27 +18,6 @@ PGADMIN_PASSWORD=
 DB_NAME=expressedRealms
 DB_USER=
 DB_PASSWORD=
-
-# This is predefined with the mkcert command.
-# DO NOT modify this
-CERTIFICATE_PASSWORD=changeit
-
-# Ask about this key
-POSTMARK_API_KEY=
-
-# Global From Email
-NO_REPLY_EMAIL=admin@societyinshadows.org
-
-# Email address the admin test email sends to
-TEST_EMAIL_ADDRESS=admin@societyinshadows.org
-
-# If you use linux, set this to your home directory
-#USERPROFILE="/home/username"
-
-VITE_API_BASE_URL="https://expressed-realms-web-api:5001/"
-
-# Well known key for Azurite development locally
-LOCAL_STORAGE_ACCOUNT_KEY="Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=="
 ```
 
 ### Postgres
@@ -135,5 +114,3 @@ To test: On the left hand side,
                             * characters
 
 Right click on that table, and hit view / edit data.
-
-There should be 2 characters in there, John and Jane Doe.

@@ -24,7 +24,7 @@ public static class AzureStorageConfiguration
                 blobStorageEndpoint,
                 "dataprotection-keys"
             );
-            blobContainerClient.CreateIfNotExists();
+            await blobContainerClient.CreateIfNotExistsAsync();
             blobClient = blobContainerClient.GetBlobClient("dataprotection-keys.xml");
         }
         else
