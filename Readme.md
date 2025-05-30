@@ -1,32 +1,41 @@
-# Expressed Realms
-
-## Welcome to Society In Shadows!
-
-This github repository is the home of the Society In Shadows project.
+# Welcome to Expressed Realms!
+Expressed Realms is the digital companion guide for Six Stones - Society in Shadows, a Capstone LARP Systems.
 
 There are two main goals for this project
 
 - Provide a platform to store all the lore, expressions, game mechanics, and other information about the Society
 - Provide a platform for creating and maintaining character sheets for the residents of the Society
 
+# Plot Hooks
+For a full experience of the application with up-to-date information, please go to 
+[https://societyinshadows.org](https://societyinshadows.com/) to get started.
+
+Or join our discord group [here](https://discord.gg/NSv3GxSAj7)
+
 # Current Progress and Goals
 An up-to-date list of all broad goals can be found in the [Milestones](https://github.com/Society-In-Shadow/ExpressedRealms/milestones) 
-section of the project.  You can also take a look at the Issues tab as well to see more fine grained tasks.
+section of the project.
 
-# Non Developers
-Please go to the [https://societyinshadows.org](https://societyinshadows.com/) to get started.
-
-Or join our discord group here [Discord](https://discord.gg/NSv3GxSAj7)
-
-# Developers
+# Architecture
 In addition to the quick start below, the high level architecture and technologies can be found [here](/documentation/architecture.md)
 
 # Quick Start
+Before we get started, a bit of a quick disclaimer.  
 
-To get this up and running, first, you need to download the repo
- 
+This project was built using the Fedora Operating System, due to some limitations with how the Windows Subsystem for Linux and
+Docker Desktop work together.
+
+Docker Compose should allow the site to work on windows and linux, but there might need to be some additional setup on the
+windows side.
+
+Some documentation is provided in area's where there is a difference between operating systems, but it is by no means 
+comprehensive.
+
+Jetbrains Rider is also the primary editor of choice for this project.
+
 ## Setup the .env File
-Next up, add the following snippet as an ".env" file to the root of the repo (same folder this readme is in)
+After you clone the repo to your local, add the following snippet as an ".env" file to the root of the repo (same folder
+this readme is in)
 
 Fill in the blanks below, each email / user / password should be filled in
 
@@ -64,10 +73,7 @@ docker compose up
 At this point, it will start doing a lot of things all together.  If this is the first time running this, it will take
 time to download all the images, then get things started.
 
-Once everything has been downloaded, it should start db followed by the vue app.  Once the DB is up and running, it will
-start the web api, then the pgAdmin.
-
-Once the messages cool down, you can visit links below.
+Once the deluge messages cool down, you can visit links below.
 
 ## Local Links
 Links to various places locally can be found here:

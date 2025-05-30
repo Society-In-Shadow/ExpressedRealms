@@ -6,6 +6,8 @@ The frontend is built using Vue 3 and Vite.  It primarily uses PrimeVue and Boos
 Locally, it can be found at this address
 * [Front End / Web App](https://localhost/)
 
+
+
 ## Backend / Web API
 Backend is using .Net 8, primarily using the repository pattern to store business logic.  
 
@@ -28,7 +30,10 @@ The database for the most part is a dumb one, all business logic should be handl
 Locally, PgAdmin can be found at this address
 * [DB Management / pgAdmin](http://localhost:8888/login?next=%2Fbrowser%2F)
 
-More information on how we use it can be found in the [Database](database.md) documentation
+### More Information
+* More information on how we use it can be found in the [Database](database.md) documentation
+* More information on how Migrations work can be found in the [Migrations](migrations.md) documentation
+* More information on how we use EF Core can be found in the [EF Core Practices](efCorePractices.md) documentation
 
 ## Auditing
 In here we have user logs, that keep track of admin related actions and anything to do with modifying none user specific 
@@ -40,7 +45,7 @@ At it's core, it keeps track of changes on the column level for all tables.
 
 I have a wrapper around that to make it easier to use, and make sure that it outputs a user activity log.
 
-More information can be found in [the database documentation](/api/ExpressedRealms.DB/readme.md)
+More information on how we use the Audit Framework can be found in the [EF Core Practices](efCorePractices.md) documentation
 
 ## Testing
 
@@ -56,7 +61,7 @@ part of the page.  This means that we are not testing the styling or the layout.
 all fields are filled out, error messages are being displayed, data is being saved, actions are correctly connected up
 and so on.
 
-See [Cypress](cypress.md) for more information about how we use it here
+See [Component Testing](componentTesting.md) for more information about how we use it here
 
 ### End to End Tests
 End to end tests are also using Cypress.  As of writing, they do some basic checks, but not really maintained as much.

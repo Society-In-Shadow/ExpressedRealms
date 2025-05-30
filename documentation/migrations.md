@@ -1,26 +1,29 @@
-The purpose of this project is to allow for easy creation of migrations without having to rely on the main web api
+# Creating EF Core Migrations
+We use a separate project to work with the migrations.  This allows us to eventually make the database updates an 
+independent process, and simplifies the dependencies needed for the migration.
 
-# Expressed Realms DB
 
 ## To create migration
 
-Go to the root of project, (folder above this one), and type the following:
-```shell
-dotnet ef migrations add <migration name> --project ExpressedRealms.DB --startup-project ExpressedRealms.MigrationProject
-```
+Go to the api folder, in there, there should be one of two scripts.
 
+createMigration.bat for Window's Users
+createMigration.sh for Linux users.
+
+When you run either file, it will ask for a migration name, needs to be in camel case, and will create the migration for
+you.
 
 You might run into permission issues, especially if you use docker.  So what you need to do is delete the obj and bin
 folders for both the server project and the db project.
 
 ## To Update the DB
 
-To automatically apply the update, just run docker compose run in the root folder.  That will automatically push the
-update.
+Currently, on API start, it will automatically roll out any updates to the database, so all you need to do is run and
+build the API via
 
-If you have a separate instance up and running, you can use the following command:
 ```shell
-dotnet ef database update --verbose --project ExpressedRealms.DB --startup-project ExpressedRealms.MigrationProject
+docker compose build
+docker compose up
 ```
 
 ## To Rollback the Database
