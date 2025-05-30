@@ -83,4 +83,7 @@ const onSubmit = handleSubmit((values) => {
   <router-link to="ForgotPassword">
     <Button data-cy="forgot-password" label="Forgot Password?" class="w-100 mb-2" />
   </router-link>
+  <a href="https://discord.gg/NSv3GxSAj7" target="_blank">
+    <Button data-cy="join-on-discord" label="Join us on Discord!" class="w-100 mb-2" />
+  </a>
 </template>

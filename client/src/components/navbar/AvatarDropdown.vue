@@ -40,6 +40,10 @@ const gravatar = computed(() => {
 </script>
 
 <template>
+  <a class="flex align-items-center p-3 cursor-pointer mb-2 gap-2 no-underline text-100" href="https://discord.gg/NSv3GxSAj7" target="_blank">
+    <Avatar class="pi pi-discord" shape="circle" size="large" />
+    <div class="hideIfSmall">Discord</div>
+  </a>
   <a class="flex align-items-center p-3 cursor-pointer mb-2 gap-2" aria-haspopup="true" aria-controls="overlay_tmenu" @click="toggle">
     <Avatar :image="gravatar" shape="circle" size="large" />
     <div class="hideIfSmall">{{ userInfo.name }}</div>

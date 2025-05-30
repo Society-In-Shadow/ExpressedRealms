@@ -97,7 +97,7 @@ onBeforeRouteUpdate(async (to, from) => {
 
 <template>
   <div id="expression" class="container">
-    <div class="d-flex flex-row">
+    <div class="d-flex flex-column flex-md-row ">
       <div class="col-12 col-lg-3 col-sm-12 col-xl-3 col-md-3">
         <Card class="sticky-md-top sticky-lg-top sticky-xl-top zIndexFix">
           <template #title>
@@ -114,16 +114,16 @@ onBeforeRouteUpdate(async (to, from) => {
         <Card class="mb-3 p-0 mt-0 pt-0" style="max-width: 800px">
           <template #content>
             <div class="pb-4">
-              <div class="row">
-                <div class="col-8">
+              <div class="d-flex flex-column flex-md-row">
+                <div class="col-12 order-1 order-md-0 col-md-8">
                   <CreateExpressionSection v-if="expressionHeader.id === 0" :add-expression-header="true" @added-section="fetchData(route.params.name)" />
                   <EditExpressionSection
                     v-else :section-info="expressionHeader" :current-level="1" :show-skeleton="headerIsLoading" :show-edit="showEdit"
                     :is-header-section="true"
                   />
                 </div>
-                <div class="col align-self-center">
-                  <img src="/IfIHadOne2.jpg" class="w-100" alt="Timmy Turners Father Regretting not having a trophy">
+                <div class="col-12 align-self-center text-center order-0 order-md-1 col-md-4">
+                  <img src="/IfIHadOne2.jpg" class="w-100" style="max-width: 250px" alt="Timmy Turners Father Regretting not having a trophy">
                 </div>
               </div>
             </div>
