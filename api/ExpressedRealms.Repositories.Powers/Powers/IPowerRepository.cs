@@ -13,4 +13,5 @@ public interface IPowerRepository
     Task<Result<int>> EditPower(EditPowerModel editPowerModel);
     Task<Result> DeletePowerAsync(int id);
     Task<Result<PowerOptions>> GetPowerOptionsAsync();
+    Task<Result<EditPowerInformation>> GetPowerAsync(int expressionId, int powerId);
 }

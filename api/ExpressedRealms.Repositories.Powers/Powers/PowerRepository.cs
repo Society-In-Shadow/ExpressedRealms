@@ -7,6 +7,7 @@ using ExpressedRealms.Repositories.Powers.Powers.DTOs.PowerCreate;
 using ExpressedRealms.Repositories.Powers.Powers.DTOs.PowerEdit;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
 using FluentResults;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Repositories.Powers.Powers;
@@ -54,6 +55,35 @@ internal sealed class PowerRepository(
             .ToListAsync(cancellationToken);
 
         return Result.Ok(items);
+    }
+    
+    public async Task<Result<EditPowerInformation>> GetPowerAsync(int expressionId, int powerId)
+    {
+        var power = await context
+            .Powers.Where(x => x.ExpressionId == expressionId && x.Id == powerId)
+            .Select(x => new EditPowerInformation
+            {
+                Id = x.Id,
+                Name = x.Name,
+                CategoryIds = x
+                    .CategoryMappings.Select(y => y.CategoryId)
+                    .ToList(),
+                Description = x.Description,
+                GameMechanicEffect = x.GameMechanicEffect,
+                Limitation = x.Limitation,
+                PowerDurationId = x.PowerDuration.Id,
+                AreaOfEffectId = x.PowerAreaOfEffectType.Id,
+                PowerLevelId = x.PowerLevel.Id,
+                PowerActivationTypeId = x.PowerActivationTimingType.Id,
+                Other = x.OtherFields,
+                IsPowerUse = x.IsPowerUse,
+            })
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if(power is null)
+            return Result.Fail(new NotFoundFailure(nameof(Power)));
+        
+        return Result.Ok(power);
     }
 
     public async Task<Result<PowerOptions>> GetPowerOptionsAsync()
