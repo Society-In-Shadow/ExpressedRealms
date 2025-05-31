@@ -1,5 +1,5 @@
 import {describe, it, expect} from "vitest";
-import {handleSubmit, name, category, description, isPowerUse, powerDuration, powerLevel, powerActivationType, limitation, gameMechanicEffect, areaOfEffect, other} from "../../../../src/components/expressions/powers/Validations/AddPowerValidations";
+import {handleSubmit, name, category, description, isPowerUse, powerDuration, powerLevel, powerActivationType, limitation, gameMechanicEffect, areaOfEffect, other} from "../../../../src/components/expressions/powers/Validations/PowerValidations";
 
 const listItem1 = {description: 'Lorem Ipsum',
     id: 1,

@@ -2,6 +2,7 @@ import {array, boolean, number, object, string} from "yup";
 import {useForm} from "vee-validate";
 import type {FormField} from "@/FormWrappers/Interfaces/FormField";
 import {computed} from "vue";
+import type {EditPower} from "@/components/expressions/powers/types/power";
 
 export interface ListItem {
     id: number;
@@ -81,6 +82,21 @@ export const powerLevel = createFormField("powerLevel");
 export const powerActivationType = createFormField("powerActivationType");
 export const other = createFormField("other");
 export const isPowerUse = createFormField("isPowerUse");
+
+// TODO: Add tests for this new function
+export const setValues = (power: EditPower) => {
+    name.field.value = power.name;
+    category.field.value = power.categories;
+    description.field.value = power.description;
+    gameMechanicEffect.field.value = power.gameMechanicEffect;
+    limitation.field.value = power.limitation;
+    powerDuration.field.value = power.powerDuration;
+    areaOfEffect.field.value = power.areaOfEffect;
+    powerLevel.field.value = power.powerLevel;
+    powerActivationType.field.value = power.powerActivationType;
+    other.field.value = power.other;
+    isPowerUse.field.value = power.isPowerUse;
+}
 
 const customResetForm = () => {
     powerDuration.field.value = null;

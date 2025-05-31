@@ -1,6 +1,6 @@
 import {describe, it, expect} from "vitest";
 import {nameField, shortDescriptionField, navMenuImageField, handleSubmit} from "../../../../src/components/expressions/expression/AddExpressionValidation";
-import {name} from "../../../../src/components/expressions/powers/Validations/AddPowerValidations";
+import {name} from "../../../../src/components/expressions/powers/Validations/PowerValidations";
 
 describe("Add Expression Schema - Field Validations", () => {
     

@@ -11,26 +11,31 @@ import * as form from "@/components/expressions/powers/Validations/PowerValidati
 import FormCheckboxWrapper from "@/FormWrappers/FormCheckboxWrapper.vue";
 import FormMultiSelectWrapper from "@/FormWrappers/FormMultiSelectWrapper.vue";
 import {powersStore} from "@/components/expressions/powers/stores/powersStore";
-
+import type {EditPower, Power} from "@/components/expressions/powers/types/power";
+import {expressionStore} from "@/stores/expressionStore";
+const expressionInfo = expressionStore();
 const powers = powersStore();
-
+const power = ref<EditPower>({} as EditPower);
 const emit = defineEmits<{
   canceled: []
 }>();
 
 const props = defineProps({
-  expressionId: {
-    type: Number
-  }
+  powerId: {
+    type: Number,
+    required: true,
+  },
 });
 
 onBeforeMount(async () => {
-  await powers.getPowerOptions();
+  power.value = await powers.getPower(expressionInfo.currentExpressionId, props.powerId);
+  form.setValues(power.value);
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await axios.post(`/powers/${props.expressionId}`, {
-    expressionId: props.expressionId,
+  await axios.put(`/powers/${props.powerId}`, {
+    expressionId: expressionInfo.currentExpressionId,
+    id: props.powerId,
     name: values.name,
     description: values.description,
     gameMechanicEffect: values.gameMechanicEffect,
@@ -44,13 +49,12 @@ const onSubmit = form.handleSubmit(async (values) => {
     isPowerUse: values.isPowerUse,
   })
   .then(async () => {
-    await powers.getPowers(props.expressionId);
-    toaster.success("Successfully Added Power!");
+    await powers.getPowers(expressionInfo.currentExpressionId);
+    toaster.success("Successfully Updated Power!");
   });
 });
 
 const reset = () => {
-  form.resetForm();
   emit("canceled");
 }
 

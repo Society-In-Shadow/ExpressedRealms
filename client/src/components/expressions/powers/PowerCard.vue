@@ -1,8 +1,10 @@
 <script setup lang="ts">
 
 import Card from "primevue/card";
-import type {PropType} from "vue";
+import Button from "primevue/button";
+import {type PropType, ref} from "vue";
 import type {Power} from "@/components/expressions/powers/types/power";
+import EditPower from "@/components/expressions/powers/EditPower.vue";
 
 const props = defineProps({
   power: {
@@ -11,10 +13,17 @@ const props = defineProps({
   },
 });
 
+const showEdit = ref(false);
+
+const toggleEdit = () =>{
+  showEdit.value = !showEdit.value;
+}
+
 </script>
 
 <template>
-  <Card>
+  <EditPower v-if="showEdit" :power-id="props.power.id" @cancelled="toggleEdit"></EditPower>
+  <Card v-else>
     <template #title>
       <div class="d-flex align-self-center justify-content-between">
         <div>
@@ -81,6 +90,9 @@ const props = defineProps({
 
       <h2>Additional Information</h2>
       <div v-html="props.power.other" />
+    </template>
+    <template #footer>
+      <Button @click="toggleEdit">Edit</Button>
     </template>
   </Card>
 </template>
