@@ -7,11 +7,12 @@ import Button from "primevue/button";
 import {onBeforeMount, ref} from "vue";
 import axios from "axios";
 import toaster from "@/services/Toasters";
-import * as form from "@/components/expressions/powers/Validations/PowerValidations";
+import {getValidationInstance} from "@/components/expressions/powers/Validations/PowerValidations";
 import FormCheckboxWrapper from "@/FormWrappers/FormCheckboxWrapper.vue";
 import FormMultiSelectWrapper from "@/FormWrappers/FormMultiSelectWrapper.vue";
 import {powersStore} from "@/components/expressions/powers/stores/powersStore";
 
+const form = getValidationInstance();
 const powers = powersStore();
 
 const emit = defineEmits<{

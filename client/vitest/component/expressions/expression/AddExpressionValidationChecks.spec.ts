@@ -1,6 +1,6 @@
 import {describe, it, expect} from "vitest";
 import {nameField, shortDescriptionField, navMenuImageField, handleSubmit} from "../../../../src/components/expressions/expression/AddExpressionValidation";
-import {name} from "../../../../src/components/expressions/powers/Validations/PowerValidations";
+
 
 describe("Add Expression Schema - Field Validations", () => {
     
@@ -18,7 +18,7 @@ describe("Add Expression Schema - Field Validations", () => {
         it("No Errors when it's a valid value", async () => {
             nameField.field.value = "asdf";
             await handleSubmit(() => {})();
-            expect([undefined, '']).toContain(name.error.value);
+            expect([undefined, '']).toContain(nameField.error.value);
         });
         it("Label is correct", async () => {
             expect(nameField.label).toEqual("Name");
