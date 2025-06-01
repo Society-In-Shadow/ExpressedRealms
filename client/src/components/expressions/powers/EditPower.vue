@@ -43,10 +43,10 @@ const onSubmit = form.handleSubmit(async (values) => {
     description: values.description,
     gameMechanicEffect: values.gameMechanicEffect,
     limitation: values.limitation,
-    powerDuration: values.powerDuration.id,
-    areaOfEffect: values.areaOfEffect.id,
-    powerLevel: values.powerLevel.id,
-    powerActivationType: values.powerActivationType.id,
+    powerDurationId: values.powerDuration.id,
+    areaOfEffectId: values.areaOfEffect.id,
+    powerLevelId: values.powerLevel.id,
+    powerActivationTypeId: values.powerActivationType.id,
     categoryIds: values.category.map((item: { id: string | number }) => item.id),
     other: values.other,
     isPowerUse: values.isPowerUse,
@@ -57,7 +57,7 @@ const onSubmit = form.handleSubmit(async (values) => {
   });
 });
 
-const reset = () => {
+const cancel = () => {
   emit("canceled");
 }
 
@@ -109,8 +109,8 @@ const reset = () => {
       <FormCheckboxWrapper v-model="form.isPowerUse" />
 
       <div class="m-3 text-right">
-        <Button label="Cancel" class="m-2" type="reset" @click="reset" />
-        <Button label="Submit" class="m-2" type="submit" />
+        <Button label="Cancel" class="m-2" type="reset" @click="cancel" />
+        <Button label="Update" class="m-2" type="submit" />
       </div>
     </form>
   </div>

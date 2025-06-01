@@ -51,7 +51,7 @@ const onSubmit = form.handleSubmit(async (values) => {
 });
 
 const reset = () => {
-  form.resetForm();
+  form.customResetForm();
   emit("canceled");
 }
 

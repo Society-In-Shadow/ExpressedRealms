@@ -94,6 +94,20 @@ public class EditPowerModelValidator : AbstractValidator<EditPowerModel>
                     );
                 }
             )
+            .WithErrorCode("NotFound")
             .WithMessage("This is not a valid Expression");
+        
+        RuleFor(x => x)
+            .MustAsync(
+                async (model, cancellationToken) =>
+                {
+                    return await dbContext.Powers.AnyAsync(
+                        x => x.Id == model.Id && x.ExpressionId == model.ExpressionId,
+                        cancellationToken
+                    );
+                }
+            )
+            .WithErrorCode("NotFound")
+            .WithMessage("This is not a valid the power isn't part of the expression");
     }
 }

@@ -191,7 +191,7 @@ internal sealed class PowerRepository(
             .PowerCategoryMappings.Where(x => x.PowerId == power.Id)
             .ToListAsync(cancellationToken);
 
-        context.Remove(categoryMappings);
+        context.PowerCategoryMappings.RemoveRange(categoryMappings);
 
         context.PowerCategoryMappings.AddRange(
             editPowerModel.Category.Select(x => new PowerCategoryMapping()
