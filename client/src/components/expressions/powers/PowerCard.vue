@@ -92,7 +92,7 @@ const toggleEdit = () =>{
       <div v-html="props.power.other" />
     </template>
     <template #footer v-if="!showEdit">
-      <Button @click="toggleEdit">Edit</Button>
+      <Button label="Edit" @click="toggleEdit" />
     </template>
   </Card>
 </template>

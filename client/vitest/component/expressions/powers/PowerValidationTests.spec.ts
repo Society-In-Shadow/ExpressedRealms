@@ -217,4 +217,85 @@ describe("Power Model Schema - Field Validations", () => {
         });
     });
 
+    describe("Set Values updates the validator values", () => {
+        it("Sets name", async () => {
+            form.setValues({
+                name: "name 1"
+            })
+            
+           expect(form.name.field.value).toBe("name 1");
+        })
+
+        it("Sets Description", async () => {
+            form.setValues({
+                description: "description 1"
+            })
+
+            expect(form.description.field.value).toBe("description 1");
+        })
+
+        it("Sets Game Mechanic Effect", async () => {
+            form.setValues({
+                gameMechanicEffect: "game mechanic effect 1"
+            })
+
+            expect(form.gameMechanicEffect.field.value).toBe("game mechanic effect 1");
+        })
+
+        it("Sets Limitation", async () => {
+            form.setValues({
+                limitation: "limitation 1"
+            })
+
+            expect(form.limitation.field.value).toBe("limitation 1");
+        })
+
+        it("Sets Other", async () => {
+            form.setValues({
+                other: "other 1"
+            })
+
+            expect(form.other.field.value).toBe("other 1");
+        })
+
+        it("Sets Power Duration", async () => {
+            form.setValues({
+                powerDuration: 1
+            })
+
+            expect(form.powerDuration.field.value).toBe(1);
+        })
+
+        it("Sets Area of Effect", async () => {
+            form.setValues({
+                areaOfEffect: 2
+            })
+
+            expect(form.areaOfEffect.field.value).toBe(2);
+        })
+
+        it("Sets Power Level", async () => {
+            form.setValues({
+                powerLevel: 2
+            })
+
+            expect(form.powerLevel.field.value).toBe(2);
+        })
+
+        it("Sets Power Activation Type", async () => {
+            form.setValues({
+                powerActivationType: 3
+            })
+
+            expect(form.powerActivationType.field.value).toBe(3);
+        })
+
+        it("Sets Categories", async () => {
+            form.setValues({
+                categories: 4
+            })
+
+            expect(form.category.field.value).toBe(4);
+        })
+    })
 });

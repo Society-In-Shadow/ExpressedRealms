@@ -80,7 +80,6 @@ export function getValidationInstance() {
     const other = createFormField("other");
     const isPowerUse = createFormField("isPowerUse");
     
-    // TODO: Add tests for this new function
     const setValues = (power: EditPower) => {
         name.field.value = power.name;
         category.field.value = power.categories;
