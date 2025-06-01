@@ -80,7 +80,7 @@ const editor = useEditor({
 });
 
 watch(
-    () => model.value.field, // Reactive dependency
+    () => model.value.field.value, // Reactive dependency
     (newValue) => {
       // Update the editor content whenever `model.value` changes
       if (editor.value && startupComplete.value == false) {

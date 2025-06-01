@@ -22,7 +22,7 @@ const toggleEdit = () =>{
 </script>
 
 <template>
-  <EditPower v-if="showEdit" :power-id="props.power.id" @cancelled="toggleEdit"></EditPower>
+  <EditPower v-if="showEdit" :power-id="props.power.id" @canceled="toggleEdit"></EditPower>
   <Card v-else>
     <template #title>
       <div class="d-flex align-self-center justify-content-between">
@@ -91,7 +91,7 @@ const toggleEdit = () =>{
       <h2>Additional Information</h2>
       <div v-html="props.power.other" />
     </template>
-    <template #footer>
+    <template #footer v-if="!showEdit">
       <Button @click="toggleEdit">Edit</Button>
     </template>
   </Card>

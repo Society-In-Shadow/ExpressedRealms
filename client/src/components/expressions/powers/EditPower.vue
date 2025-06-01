@@ -108,7 +108,7 @@ const reset = () => {
 
       <FormCheckboxWrapper v-model="form.isPowerUse" />
 
-      <div class="float-end">
+      <div class="m-3 text-right">
         <Button label="Cancel" class="m-2" type="reset" @click="reset" />
         <Button label="Submit" class="m-2" type="submit" />
       </div>
