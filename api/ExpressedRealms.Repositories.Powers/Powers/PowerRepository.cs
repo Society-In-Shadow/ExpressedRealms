@@ -56,7 +56,7 @@ internal sealed class PowerRepository(
 
         return Result.Ok(items);
     }
-    
+
     public async Task<Result<EditPowerInformation>> GetPowerAsync(int expressionId, int powerId)
     {
         var power = await context
@@ -65,9 +65,7 @@ internal sealed class PowerRepository(
             {
                 Id = x.Id,
                 Name = x.Name,
-                CategoryIds = x
-                    .CategoryMappings.Select(y => y.CategoryId)
-                    .ToList(),
+                CategoryIds = x.CategoryMappings.Select(y => y.CategoryId).ToList(),
                 Description = x.Description,
                 GameMechanicEffect = x.GameMechanicEffect,
                 Limitation = x.Limitation,
@@ -80,9 +78,9 @@ internal sealed class PowerRepository(
             })
             .FirstOrDefaultAsync(cancellationToken);
 
-        if(power is null)
+        if (power is null)
             return Result.Fail(new NotFoundFailure(nameof(Power)));
-        
+
         return Result.Ok(power);
     }
 

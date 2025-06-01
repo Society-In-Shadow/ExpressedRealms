@@ -96,7 +96,7 @@ public class EditPowerModelValidator : AbstractValidator<EditPowerModel>
             )
             .WithErrorCode("NotFound")
             .WithMessage("This is not a valid Expression");
-        
+
         RuleFor(x => x)
             .MustAsync(
                 async (model, cancellationToken) =>
