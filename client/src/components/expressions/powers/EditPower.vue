@@ -54,6 +54,7 @@ const onSubmit = form.handleSubmit(async (values) => {
   .then(async () => {
     await powers.getPowers(expressionInfo.currentExpressionId);
     toaster.success("Successfully Updated Power!");
+    cancel();
   });
 });
 
