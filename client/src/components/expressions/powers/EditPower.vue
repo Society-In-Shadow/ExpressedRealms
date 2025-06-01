@@ -18,7 +18,6 @@ const expressionInfo = expressionStore();
 const powers = powersStore();
 const form = getValidationInstance();
 
-const power = ref<EditPower>({} as EditPower);
 const emit = defineEmits<{
   canceled: []
 }>();

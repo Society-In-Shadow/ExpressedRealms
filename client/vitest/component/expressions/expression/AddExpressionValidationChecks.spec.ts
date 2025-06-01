@@ -1,7 +1,6 @@
 import {describe, it, expect} from "vitest";
 import {nameField, shortDescriptionField, navMenuImageField, handleSubmit} from "../../../../src/components/expressions/expression/AddExpressionValidation";
 
-
 describe("Add Expression Schema - Field Validations", () => {
     
     describe("Name", () => {
