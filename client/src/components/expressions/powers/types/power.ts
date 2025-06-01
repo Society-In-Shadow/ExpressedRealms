@@ -1,4 +1,4 @@
-import type {ListItem} from "@/components/expressions/powers/Validations/PowerValidations";
+import type {ListItem} from "@/types/ListItem";
 
 export interface DetailedInformation {
     name: string;

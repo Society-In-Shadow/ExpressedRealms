@@ -14,7 +14,9 @@ import {powersStore} from "@/components/expressions/powers/stores/powersStore";
 import type {EditPower, Power} from "@/components/expressions/powers/types/power";
 import {expressionStore} from "@/stores/expressionStore";
 const expressionInfo = expressionStore();
+
 const powers = powersStore();
+
 const power = ref<EditPower>({} as EditPower);
 const emit = defineEmits<{
   canceled: []

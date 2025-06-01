@@ -3,12 +3,9 @@ import {useForm} from "vee-validate";
 import type {FormField} from "@/FormWrappers/Interfaces/FormField";
 import {computed} from "vue";
 import type {EditPower} from "@/components/expressions/powers/types/power";
+import type {ListItem} from "@/types/ListItem";
 
-export interface ListItem {
-    id: number;
-    name: string;
-    description: string;
-}
+
 
 const validationSchema = object({
     name: string()
