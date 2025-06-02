@@ -24,12 +24,16 @@ internal static class PowerEndpoints
             .WithTags("Powers")
             .WithOpenApi();
 
-        endpointGroup
+        app.MapGroup("/powerpath/")
+            .AddFluentValidationAutoValidation()
+            .RequireFeatureToggle(ReleaseFlags.ShowPowersTab)
+            .WithTags("powerpath")
+            .WithOpenApi()
             .MapGet(
-                "/{expressionId}",
-                async (int expressionId, IPowerRepository powerRepository) =>
+                "/{powerPathId}/powers",
+                async (int powerPathId, IPowerRepository powerRepository) =>
                 {
-                    var powers = await powerRepository.GetPowersAsync(expressionId);
+                    var powers = await powerRepository.GetPowersAsync(powerPathId);
 
                     return TypedResults.Ok(
                         powers.Value.Select(x => new PowerInformationResponse()
@@ -56,14 +60,13 @@ internal static class PowerEndpoints
 
         endpointGroup
             .MapGet(
-                "/{expressionId}/{powerId}",
+                "/{id}",
                 async Task<Results<NotFound, Ok<EditPowerInformationResponse>>> (
-                    int expressionId,
                     int powerId,
                     IPowerRepository powerRepository
                 ) =>
                 {
-                    var powers = await powerRepository.GetPowerAsync(expressionId, powerId);
+                    var powers = await powerRepository.GetPowerAsync(powerId);
 
                     if (powers.HasNotFound(out var notFound))
                         return notFound;
@@ -150,7 +153,7 @@ internal static class PowerEndpoints
                             PowerLevel = request.PowerLevel,
                             PowerActivationType = request.PowerActivationType,
                             Other = request.Other,
-                            ExpressionId = request.ExpressionId,
+                            PowerPathId = request.PowerPathId,
                             IsPowerUse = request.IsPowerUse,
                         }
                     );
@@ -192,7 +195,7 @@ internal static class PowerEndpoints
                             PowerLevel = request.PowerLevelId,
                             PowerActivationType = request.PowerActivationTypeId,
                             Other = request.Other,
-                            ExpressionId = request.ExpressionId,
+                            PowerPathId = request.PowerPathId,
                             IsPowerUse = request.IsPowerUse,
                         }
                     );

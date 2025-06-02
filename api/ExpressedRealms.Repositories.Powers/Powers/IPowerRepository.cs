@@ -8,10 +8,10 @@ namespace ExpressedRealms.Repositories.Powers.Powers;
 
 public interface IPowerRepository
 {
-    Task<Result<List<PowerInformation>>> GetPowersAsync(int expressionId);
+    Task<Result<List<PowerInformation>>> GetPowersAsync(int powerPathId);
     Task<Result<int>> CreatePower(CreatePowerModel createPowerModel);
     Task<Result<int>> EditPower(EditPowerModel editPowerModel);
     Task<Result> DeletePowerAsync(int id);
     Task<Result<PowerOptions>> GetPowerOptionsAsync();
-    Task<Result<EditPowerInformation>> GetPowerAsync(int expressionId, int powerId);
+    Task<Result<EditPowerInformation>> GetPowerAsync(int powerId);
 }

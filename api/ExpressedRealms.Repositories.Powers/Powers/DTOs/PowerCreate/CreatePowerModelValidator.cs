@@ -73,17 +73,17 @@ public class CreatePowerModelValidator : AbstractValidator<CreatePowerModel>
             )
             .WithMessage("This is not a valid Power Activation Type");
 
-        RuleFor(x => x.ExpressionId)
+        RuleFor(x => x.PowerPathId)
             .MustAsync(
-                async (expressionId, cancellationToken) =>
+                async (powerPathId, cancellationToken) =>
                 {
-                    return await dbContext.Expressions.AnyAsync(
-                        x => x.Id == expressionId,
+                    return await dbContext.PowerPaths.AnyAsync(
+                        x => x.Id == powerPathId,
                         cancellationToken
                     );
                 }
             )
             .WithErrorCode("NotFound")
-            .WithMessage("This is not a valid Expression");
+            .WithMessage("This is not a valid Power Path");
     }
 }

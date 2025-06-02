@@ -19,10 +19,10 @@ internal sealed class PowerRepository(
     CancellationToken cancellationToken
 ) : IPowerRepository
 {
-    public async Task<Result<List<PowerInformation>>> GetPowersAsync(int expressionId)
+    public async Task<Result<List<PowerInformation>>> GetPowersAsync(int powerPathId)
     {
         var items = await context
-            .Powers.Where(x => x.ExpressionId == expressionId)
+            .Powers.Where(x => x.PowerPathId == powerPathId)
             .Select(x => new PowerInformation
             {
                 Id = x.Id,
@@ -57,10 +57,10 @@ internal sealed class PowerRepository(
         return Result.Ok(items);
     }
 
-    public async Task<Result<EditPowerInformation>> GetPowerAsync(int expressionId, int powerId)
+    public async Task<Result<EditPowerInformation>> GetPowerAsync(int powerId)
     {
         var power = await context
-            .Powers.Where(x => x.ExpressionId == expressionId && x.Id == powerId)
+            .Powers.Where(x => x.Id == powerId)
             .Select(x => new EditPowerInformation
             {
                 Id = x.Id,
@@ -132,7 +132,7 @@ internal sealed class PowerRepository(
             AreaOfEffectTypeId = createPowerModel.AreaOfEffect,
             ActivationTimingTypeId = createPowerModel.PowerActivationType,
             DurationId = createPowerModel.PowerDuration,
-            ExpressionId = createPowerModel.ExpressionId,
+            PowerPathId = createPowerModel.PowerPathId,
             IsPowerUse = createPowerModel.IsPowerUse,
             GameMechanicEffect = createPowerModel.GameMechanicEffect,
             Limitation = createPowerModel.Limitation,
@@ -177,7 +177,7 @@ internal sealed class PowerRepository(
         power.AreaOfEffectTypeId = editPowerModel.AreaOfEffect;
         power.ActivationTimingTypeId = editPowerModel.PowerActivationType;
         power.DurationId = editPowerModel.PowerDuration;
-        power.ExpressionId = editPowerModel.ExpressionId;
+        power.PowerPathId = editPowerModel.PowerPathId;
         power.IsPowerUse = editPowerModel.IsPowerUse;
         power.GameMechanicEffect = editPowerModel.GameMechanicEffect;
         power.Limitation = editPowerModel.Limitation;
