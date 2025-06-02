@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.MigrationPr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Repositories.Admin", "ExpressedRealms.Repositories.Admin\ExpressedRealms.Repositories.Admin.csproj", "{54B4670E-CD1A-420E-BB2C-880C375D4537}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Repositories.Powers", "ExpressedRealms.Repositories.Powers\ExpressedRealms.Repositories.Powers.csproj", "{B020FD64-87E8-483D-BFC1-008796E63307}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Powers.Repository", "ExpressedRealms.Powers.Repository\ExpressedRealms.Powers.Repository.csproj", "{B020FD64-87E8-483D-BFC1-008796E63307}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.FeatureFlags", "ExpressedRealms.FeatureFlags\ExpressedRealms.FeatureFlags.csproj", "{F52C2D18-4375-4FE8-BF05-9586A720A54F}"
 EndProject

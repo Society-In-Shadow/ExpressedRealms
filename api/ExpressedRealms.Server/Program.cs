@@ -14,7 +14,7 @@ using ExpressedRealms.Powers.API.PowerEndpoints;
 using ExpressedRealms.Repositories.Admin;
 using ExpressedRealms.Repositories.Characters;
 using ExpressedRealms.Repositories.Expressions;
-using ExpressedRealms.Repositories.Powers;
+using ExpressedRealms.Powers.Repository;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Server.Configuration;
 using ExpressedRealms.Server.Configuration.UserRoles;

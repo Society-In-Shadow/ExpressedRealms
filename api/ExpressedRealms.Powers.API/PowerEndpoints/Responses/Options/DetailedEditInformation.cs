@@ -3,7 +3,7 @@ namespace ExpressedRealms.Powers.API.PowerEndpoints.Responses.Options;
 public class DetailedEditInformation
 {
     public DetailedEditInformation(
-        ExpressedRealms.Repositories.Powers.Powers.DTOs.Options.DetailedEditInformation editInformation
+        Repository.Powers.DTOs.Options.DetailedEditInformation editInformation
     )
     {
         Id = editInformation.Id;
