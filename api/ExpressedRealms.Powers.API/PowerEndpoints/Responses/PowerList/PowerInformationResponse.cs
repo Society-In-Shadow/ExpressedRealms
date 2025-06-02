@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Server.EndPoints.PowerEndpoints.Responses.PowerList;
+namespace ExpressedRealms.Powers.API.PowerEndpoints.Responses.PowerList;
 
 public class PowerInformationResponse
 {

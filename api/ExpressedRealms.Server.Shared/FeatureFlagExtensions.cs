@@ -1,7 +1,11 @@
 using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.FeatureFlags.FeatureClient;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace ExpressedRealms.Server.Extensions;
+namespace ExpressedRealms.Server.Shared;
 
 public static class FeatureFlagExtensions
 {

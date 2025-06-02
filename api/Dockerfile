@@ -13,6 +13,8 @@ COPY ["ExpressedRealms.MigrationProject/ExpressedRealms.MigrationProject.csproj"
 COPY ["ExpressedRealms.Authentication/ExpressedRealms.Authentication.csproj", "ExpressedRealms.Authentication/"]
 COPY ["ExpressedRealms.Server/ExpressedRealms.Server.csproj", "ExpressedRealms.Server/"]
 COPY ["ExpressedRealms.FeatureFlags/ExpressedRealms.FeatureFlags.csproj", "ExpressedRealms.FeatureFlags/"]
+COPY ["ExpressedRealms.Powers.API/ExpressedRealms.Powers.API.csproj", "ExpressedRealms.Powers.API/"]
+COPY ["ExpressedRealms.Server.Shared/ExpressedRealms.Server.Shared.csproj", "ExpressedRealms.Server.Shared/"]
 RUN dotnet restore
 
 COPY . .

@@ -1,8 +1,9 @@
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
 using FluentResults;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints;
+namespace ExpressedRealms.Server.Shared;
 
 public static class ResultOverrides
 {

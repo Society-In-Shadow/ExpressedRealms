@@ -2,7 +2,7 @@ using ExpressedRealms.Authentication;
 using ExpressedRealms.Email.TestEmail;
 using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.FeatureFlags.FeatureClient;
-using ExpressedRealms.Server.Extensions;
+using ExpressedRealms.Server.Shared;
 
 namespace ExpressedRealms.Server.EndPoints;
 

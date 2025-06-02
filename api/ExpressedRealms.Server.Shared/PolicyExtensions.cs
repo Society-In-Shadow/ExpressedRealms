@@ -1,7 +1,10 @@
 using ExpressedRealms.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace ExpressedRealms.Server.Extensions;
+namespace ExpressedRealms.Server.Shared;
 
 public static class PolicyExtensions
 {

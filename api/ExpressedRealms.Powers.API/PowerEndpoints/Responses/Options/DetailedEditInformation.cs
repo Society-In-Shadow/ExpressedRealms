@@ -1,6 +1,4 @@
-using ExpressedRealms.DB.Models.Powers;
-
-namespace ExpressedRealms.Server.EndPoints.PowerEndpoints.Responses.Options;
+namespace ExpressedRealms.Powers.API.PowerEndpoints.Responses.Options;
 
 public class DetailedEditInformation
 {

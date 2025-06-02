@@ -5,7 +5,7 @@ using ExpressedRealms.Repositories.Admin;
 using ExpressedRealms.Server.EndPoints.AdminEndpoints.Dtos;
 using ExpressedRealms.Server.EndPoints.AdminEndpoints.Request;
 using ExpressedRealms.Server.EndPoints.AdminEndpoints.Response;
-using ExpressedRealms.Server.Extensions;
+using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;

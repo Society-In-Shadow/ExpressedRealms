@@ -1,22 +1,22 @@
 using ExpressedRealms.Authentication;
 using ExpressedRealms.FeatureFlags;
+using ExpressedRealms.Powers.API.PowerEndpoints.Requests.CreatePower;
+using ExpressedRealms.Powers.API.PowerEndpoints.Requests.PowerEdit;
+using ExpressedRealms.Powers.API.PowerEndpoints.Responses.Options;
+using ExpressedRealms.Powers.API.PowerEndpoints.Responses.PowerList;
 using ExpressedRealms.Repositories.Powers.Powers;
 using ExpressedRealms.Repositories.Powers.Powers.DTOs.PowerCreate;
 using ExpressedRealms.Repositories.Powers.Powers.DTOs.PowerEdit;
-using ExpressedRealms.Server.EndPoints.CharacterEndPoints;
-using ExpressedRealms.Server.EndPoints.PowerEndpoints.Requests.CreatePower;
-using ExpressedRealms.Server.EndPoints.PowerEndpoints.Requests.PowerEdit;
-using ExpressedRealms.Server.EndPoints.PowerEndpoints.Responses.Options;
-using ExpressedRealms.Server.EndPoints.PowerEndpoints.Responses.PowerList;
-using ExpressedRealms.Server.Extensions;
+using ExpressedRealms.Server.Shared;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
+namespace ExpressedRealms.Powers.API.PowerEndpoints;
 
-namespace ExpressedRealms.Server.EndPoints.PowerEndpoints;
-
-internal static class PowerEndpoints
+public static class PowerEndpoints
 {
-    internal static void AddPowerEndPoints(this WebApplication app)
+    public static void AddPowerEndPoints(this WebApplication app)
     {
         var endpointGroup = app.MapGroup("powers")
             .AddFluentValidationAutoValidation()

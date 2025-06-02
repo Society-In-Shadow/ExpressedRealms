@@ -5,6 +5,7 @@ using ExpressedRealms.Repositories.Expressions.Expressions;
 using ExpressedRealms.Server.EndPoints.NavigationEndpoints.DTOs;
 using ExpressedRealms.Server.EndPoints.NavigationEndpoints.Responses;
 using ExpressedRealms.Server.Extensions;
+using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;

@@ -11,6 +11,7 @@ using ExpressedRealms.Server.EndPoints.CharacterEndPoints.DTOs;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.Requests;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.Responses;
 using ExpressedRealms.Server.Extensions;
+using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
