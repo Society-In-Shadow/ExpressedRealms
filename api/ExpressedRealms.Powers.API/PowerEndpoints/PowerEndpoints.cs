@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
+
 namespace ExpressedRealms.Powers.API.PowerEndpoints;
 
 public static class PowerEndpoints
