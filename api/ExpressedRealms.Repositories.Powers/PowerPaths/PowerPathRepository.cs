@@ -25,7 +25,7 @@ internal sealed class PowerPathRepository(
             {
                 Id = x.Id,
                 Name = x.Name,
-                Description = x.Description
+                Description = x.Description,
             })
             .ToListAsync(cancellationToken);
 
@@ -74,7 +74,7 @@ internal sealed class PowerPathRepository(
         return Result.Ok(newPowerPath.Id);
     }
 
-    public async Task<Result<int>> EditPowerPathAsync(EditPowerPathModel editPowerModel)
+    public async Task<Result> EditPowerPathAsync(EditPowerPathModel editPowerModel)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             editPowerModelValidator,

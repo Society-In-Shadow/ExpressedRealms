@@ -155,7 +155,7 @@ internal sealed class PowerRepository(
         return Result.Ok(newPower.Id);
     }
 
-    public async Task<Result<int>> EditPower(EditPowerModel editPowerModel)
+    public async Task<Result> EditPower(EditPowerModel editPowerModel)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             editPowerModelValidator,

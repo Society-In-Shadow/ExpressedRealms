@@ -9,7 +9,7 @@ public interface IPowerPathRepository
 {
     Task<Result<List<PowerPathInformation>>> GetPowerPathsAsync(int expressionId);
     Task<Result<int>> CreatePowerPathAsync(CreatePowerPathModel createPowerPathModel);
-    Task<Result<int>> EditPowerPathAsync(EditPowerPathModel editPowerPathModel);
+    Task<Result> EditPowerPathAsync(EditPowerPathModel editPowerPathModel);
     Task<Result> DeletePowerPathAsync(int powerPathId);
     Task<Result<EditPowerPathInformation>> GetPowerPathAsync(int powerPathId);
 }
