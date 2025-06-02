@@ -22,5 +22,5 @@ public class Expression : ISoftDelete
     public virtual List<Character> Characters { get; set; } = null!;
     public virtual List<ExpressionSectionAuditTrail> SectionAudits { get; set; } = null!;
     public virtual List<ExpressionAuditTrail> ExpressionAudits { get; set; } = null!;
-    public virtual List<Power> Powers { get; set; } = null!;
+    public virtual List<PowerPath> PowerPaths { get; set; } = null!;
 }

@@ -14,6 +14,7 @@ public class PowerConfiguration : IEntityTypeConfiguration<Power>
         builder.Property(e => e.Name).HasMaxLength(250).IsRequired();
         builder.Property(e => e.Description).IsRequired();
         builder.Property(e => e.LevelId).IsRequired();
+        builder.Property(e => e.PowerPathId).HasColumnName("power_path_id").IsRequired();
 
         builder.HasQueryFilter(x => !x.IsDeleted);
 
@@ -42,9 +43,9 @@ public class PowerConfiguration : IEntityTypeConfiguration<Power>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasOne(e => e.Expression)
+            .HasOne(e => e.PowerPath)
             .WithMany(e => e.Powers)
-            .HasForeignKey(e => e.ExpressionId)
+            .HasForeignKey(e => e.PowerPathId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

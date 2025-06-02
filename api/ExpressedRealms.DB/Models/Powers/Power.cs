@@ -1,6 +1,4 @@
-using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Interceptors;
-using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 
 namespace ExpressedRealms.DB.Models.Powers;
 
@@ -22,8 +20,8 @@ public class Power : ISoftDelete
     public byte DurationId { get; set; }
     public virtual PowerDuration PowerDuration { get; set; } = null!;
 
-    public int ExpressionId { get; set; }
-    public virtual Expression Expression { get; set; } = null!;
+    public int PowerPathId { get; set; }
+    public virtual PowerPath PowerPath { get; set; } = null!;
 
     public bool IsPowerUse { get; set; }
     public string? GameMechanicEffect { get; set; }
