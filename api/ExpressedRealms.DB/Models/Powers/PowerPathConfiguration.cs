@@ -14,10 +14,10 @@ public class PowerPathConfiguration : IEntityTypeConfiguration<PowerPath>
         builder.Property(e => e.Name).HasColumnName("name").HasMaxLength(250).IsRequired();
         builder.Property(e => e.Description).HasColumnName("description").IsRequired();
         builder.Property(e => e.ExpressionId).HasColumnName("expression_id").IsRequired();
-        
+
         builder.Property(e => e.IsDeleted).HasColumnName("is_deleted");
         builder.Property(e => e.DeletedAt).HasColumnName("deleted_at");
-        
+
         builder.HasQueryFilter(x => !x.IsDeleted);
 
         builder

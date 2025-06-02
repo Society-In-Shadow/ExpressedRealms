@@ -96,6 +96,5 @@ public class EditPowerModelValidator : AbstractValidator<EditPowerModel>
             )
             .WithErrorCode("NotFound")
             .WithMessage("This is not a valid Power Path");
-
     }
 }
