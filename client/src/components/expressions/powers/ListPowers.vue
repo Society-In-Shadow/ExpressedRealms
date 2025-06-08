@@ -8,7 +8,7 @@ import Button from 'primevue/button';
 const powers = powersStore();
 
 const props = defineProps({
-  expressionId: {
+  powerPathId: {
     type: Number,
     required: true,
   }
@@ -17,7 +17,7 @@ const props = defineProps({
 const showAddPower = ref(false);
 
 onBeforeMount(async () => {
-  await powers.getPowers(props.expressionId);
+  await powers.getPowers(props.powerPathId);
 })
 
 const toggleAddPower = () => {
@@ -30,7 +30,7 @@ const toggleAddPower = () => {
     <PowerCard :power="power" />
   </div>
   
-  <AddPower v-if="showAddPower" :expression-id="props.expressionId" @canceled="toggleAddPower" />
+  <AddPower v-if="showAddPower" :power-path-id="props.powerPathId" @canceled="toggleAddPower" />
   <Button v-else label="Add Power" @click="toggleAddPower" />
 </template>
 

@@ -4,7 +4,7 @@ import axios from "axios";
 import type {PowerPath} from "@/components/expressions/powerPaths/types";
 
 export const powerPathStore =
-    defineStore('powers', {
+    defineStore('powerPaths', {
         state: () => {
             return {
                 havePowerOptions: false,
@@ -17,7 +17,7 @@ export const powerPathStore =
                     console.log("expressionId isn't being loaded in");
                     return;
                 }
-                const response = await axios.get<PowerPath[]>("/expression/{expressionId}/powerPaths");
+                const response = await axios.get<PowerPath[]>(`/expression/${expressionId}/powerPaths`);
                 this.powerPaths = response.data;
             },
 /*            getPower: async function (expressionId: Number, powerPathId: Number): Promise<EditPower> {

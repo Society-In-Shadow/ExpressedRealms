@@ -20,7 +20,7 @@ const emit = defineEmits<{
 }>();
 
 const props = defineProps({
-  expressionId: {
+  powerPathId: {
     type: Number
   }
 });
@@ -30,8 +30,8 @@ onBeforeMount(async () => {
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await axios.post(`/powers/${props.expressionId}`, {
-    expressionId: props.expressionId,
+  await axios.post(`/powers`, {
+    powerPathId: props.powerPathId,
     name: values.name,
     description: values.description,
     gameMechanicEffect: values.gameMechanicEffect,
@@ -45,7 +45,7 @@ const onSubmit = form.handleSubmit(async (values) => {
     isPowerUse: values.isPowerUse,
   })
   .then(async () => {
-    await powers.getPowers(props.expressionId);
+    await powers.getPowers(props.powerPathId);
     toaster.success("Successfully Added Power!");
   });
 });

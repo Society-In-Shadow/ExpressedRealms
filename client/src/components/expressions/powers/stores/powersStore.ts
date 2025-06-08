@@ -32,12 +32,12 @@ export const powersStore =
                         this.havePowerOptions = true;
                     })
             },
-            async getPowers(expressionId: Number){
-                if(expressionId === 0) {
-                    console.log("expressionId isn't being loaded in");
+            async getPowers(powerPathId: Number){
+                if(powerPathId === 0) {
+                    console.log("power path id isn't being loaded in");
                     return;
                 }
-                await axios.get(`/powers/${expressionId}`)
+                await axios.get(`/powerpath/${powerPathId}/powers`)
                     .then((response) => {
                         this.powers = response.data;
                     })
