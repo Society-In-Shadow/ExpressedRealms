@@ -31,7 +31,7 @@ const toggleAddPower = () => {
   </div>
   
   <AddPower v-if="showAddPower" :power-path-id="props.powerPathId" @cancelled="toggleAddPower" />
-  <Button v-else class="w-100" label="Add Power" @click="toggleAddPower" />
+  <Button v-else class="w-100 m-2" label="Add Power" @click="toggleAddPower" />
 </template>
 
 <style scoped>

@@ -13,7 +13,6 @@ import FormMultiSelectWrapper from "@/FormWrappers/FormMultiSelectWrapper.vue";
 import {powersStore} from "@/components/expressions/powers/stores/powersStore";
 
 const form = getValidationInstance();
-const powers = powersStore();
 
 const emit = defineEmits<{
   cancelled: []
@@ -21,9 +20,12 @@ const emit = defineEmits<{
 
 const props = defineProps({
   powerPathId: {
-    type: Number
+    type: Number,
+    required: true,
   }
 });
+
+const powers = powersStore(props.powerPathId);
 
 onBeforeMount(async () => {
   await powers.getPowerOptions();
