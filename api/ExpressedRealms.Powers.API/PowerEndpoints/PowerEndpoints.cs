@@ -55,8 +55,8 @@ internal static class PowerEndpoints
                     );
                 }
             )
-            .WithSummary("Returns the list of powers for a given expression")
-            .WithDescription(" of powers for a given expression")
+            .WithSummary("Returns the list of powers for a given power path")
+            .WithDescription(" of powers for a given power path")
             .RequireAuthorization();
 
         endpointGroup

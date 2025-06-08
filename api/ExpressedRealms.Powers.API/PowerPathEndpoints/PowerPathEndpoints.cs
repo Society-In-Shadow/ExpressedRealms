@@ -69,7 +69,9 @@ internal static class PowerPathEndpoints
                     );
                 }
             )
-            .WithSummary("Returns the specified power path for a given expression for editing purposes")
+            .WithSummary(
+                "Returns the specified power path for a given expression for editing purposes"
+            )
             .RequireAuthorization();
 
         endpointGroup
@@ -85,7 +87,7 @@ internal static class PowerPathEndpoints
                         {
                             Name = request.Name,
                             Description = request.Description,
-                            ExpressionId = request.ExpressionId
+                            ExpressionId = request.ExpressionId,
                         }
                     );
 
