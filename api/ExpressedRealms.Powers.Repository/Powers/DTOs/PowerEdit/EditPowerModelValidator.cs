@@ -83,18 +83,5 @@ public class EditPowerModelValidator : AbstractValidator<EditPowerModel>
                 }
             )
             .WithMessage("This is not a valid Power Activation Type");
-
-        RuleFor(x => x.PowerPathId)
-            .MustAsync(
-                async (powerPathId, cancellationToken) =>
-                {
-                    return await dbContext.PowerPaths.AnyAsync(
-                        x => x.Id == powerPathId,
-                        cancellationToken
-                    );
-                }
-            )
-            .WithErrorCode("NotFound")
-            .WithMessage("This is not a valid Power Path");
     }
 }

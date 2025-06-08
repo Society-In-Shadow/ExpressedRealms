@@ -12,6 +12,10 @@ const props = defineProps({
     type: Object as PropType<Power>,
     required: true,
   },
+  powerPathId:{
+    type: Number,
+    required: true
+  }
 });
 
 const popups = powerConfirmationPopups(props.power.id, props.power.name);
@@ -25,7 +29,7 @@ const toggleEdit = () =>{
 </script>
 
 <template>
-  <EditPower v-if="showEdit" :power-id="props.power.id" @canceled="toggleEdit" />
+  <EditPower v-if="showEdit" :power-id="props.power.id" :power-path-id="props.powerPathId" @canceled="toggleEdit" />
   <Card v-else>
     <template #title>
       <div class="d-flex align-self-center justify-content-between">

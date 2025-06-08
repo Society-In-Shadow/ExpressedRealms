@@ -5,14 +5,14 @@ import {powersStore} from "@/components/expressions/powers/stores/powersStore";
 import PowerCard from "@/components/expressions/powers/PowerCard.vue";
 import Button from 'primevue/button';
 
-const powers = powersStore();
-
 const props = defineProps({
   powerPathId: {
     type: Number,
     required: true,
   }
 });
+
+const powers = powersStore( props.powerPathId);
 
 const showAddPower = ref(false);
 
@@ -27,7 +27,7 @@ const toggleAddPower = () => {
 
 <template>
   <div v-for="power in powers.powers">
-    <PowerCard :power="power" />
+    <PowerCard :power="power" :power-path-id="props.powerPathId" />
   </div>
   
   <AddPower v-if="showAddPower" :power-path-id="props.powerPathId" @canceled="toggleAddPower" />

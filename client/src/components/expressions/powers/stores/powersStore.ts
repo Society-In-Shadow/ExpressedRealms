@@ -4,8 +4,8 @@ import axios from "axios";
 import type {EditPower, EditPowerResponse, Power} from "@/components/expressions/powers/types/power";
 import type {ListItem} from "@/types/ListItem";
 
-export const powersStore =
-    defineStore('powers', {
+export const powersStore = (powerPathId: number) =>
+    defineStore(`powers-${powerPathId}`, {
         state: () => {
             return {
                 categories: [] as ListItem[],
@@ -42,15 +42,12 @@ export const powersStore =
                         this.powers = response.data;
                     })
             },
-            getPower: async function (expressionId: Number, powerId: Number): Promise<EditPower> {
-                if (expressionId === 0) {
-                    console.log("expressionId isn't being loaded in");
-                }
+            getPower: async function (powerId: Number): Promise<EditPower> {
                 if (powerId === 0) {
                     console.log("powerId isn't being loaded in");
                 }
                 await this.getPowerOptions()
-                const response = await axios.get<EditPowerResponse>(`/powers/${expressionId}/${powerId}`);
+                const response = await axios.get<EditPowerResponse>(`/powers/${powerId}`);
                 
                 return {
                     id: response.data.id,
@@ -68,4 +65,4 @@ export const powersStore =
                 };
             }
         }
-    });
+    })();

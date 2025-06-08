@@ -177,7 +177,6 @@ internal sealed class PowerRepository(
         power.AreaOfEffectTypeId = editPowerModel.AreaOfEffect;
         power.ActivationTimingTypeId = editPowerModel.PowerActivationType;
         power.DurationId = editPowerModel.PowerDuration;
-        power.PowerPathId = editPowerModel.PowerPathId;
         power.IsPowerUse = editPowerModel.IsPowerUse;
         power.GameMechanicEffect = editPowerModel.GameMechanicEffect;
         power.Limitation = editPowerModel.Limitation;

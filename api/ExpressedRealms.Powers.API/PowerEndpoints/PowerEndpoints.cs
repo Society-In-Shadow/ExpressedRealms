@@ -61,7 +61,7 @@ internal static class PowerEndpoints
 
         endpointGroup
             .MapGet(
-                "/{id}",
+                "/{powerId}",
                 async Task<Results<NotFound, Ok<EditPowerInformationResponse>>> (
                     int powerId,
                     IPowerRepository powerRepository
@@ -195,7 +195,6 @@ internal static class PowerEndpoints
                             PowerLevel = request.PowerLevelId,
                             PowerActivationType = request.PowerActivationTypeId,
                             Other = request.Other,
-                            PowerPathId = request.PowerPathId,
                             IsPowerUse = request.IsPowerUse,
                         }
                     );

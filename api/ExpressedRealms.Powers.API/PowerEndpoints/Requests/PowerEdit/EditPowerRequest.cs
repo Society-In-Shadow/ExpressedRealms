@@ -13,6 +13,5 @@ public class EditPowerRequest
     public int PowerLevelId { get; set; }
     public byte PowerActivationTypeId { get; set; }
     public required string Other { get; set; }
-    public int PowerPathId { get; set; }
     public bool IsPowerUse { get; set; }
 }

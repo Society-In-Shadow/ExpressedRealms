@@ -11,13 +11,10 @@ import {getValidationInstance} from "@/components/expressions/powers/Validations
 import FormCheckboxWrapper from "@/FormWrappers/FormCheckboxWrapper.vue";
 import FormMultiSelectWrapper from "@/FormWrappers/FormMultiSelectWrapper.vue";
 import {powersStore} from "@/components/expressions/powers/stores/powersStore";
-import type {EditPower, Power} from "@/components/expressions/powers/types/power";
-import {expressionStore} from "@/stores/expressionStore";
-const expressionInfo = expressionStore();
+import type {EditPower} from "@/components/expressions/powers/types/power";
 
-const powers = powersStore();
 const form = getValidationInstance();
-
+const power = ref<EditPower>();
 const emit = defineEmits<{
   canceled: []
 }>();
@@ -27,16 +24,21 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  powerPathId:{
+    type: Number,
+    required: true
+  }
 });
 
+const powers = powersStore(props.powerPathId);
+
 onBeforeMount(async () => {
-  power.value = await powers.getPower(expressionInfo.currentExpressionId, props.powerId);
+  power.value = await powers.getPower(props.powerId);
   form.setValues(power.value);
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
   await axios.put(`/powers/${props.powerId}`, {
-    expressionId: expressionInfo.currentExpressionId,
     id: props.powerId,
     name: values.name,
     description: values.description,
@@ -51,7 +53,7 @@ const onSubmit = form.handleSubmit(async (values) => {
     isPowerUse: values.isPowerUse,
   })
   .then(async () => {
-    await powers.getPowers(expressionInfo.currentExpressionId);
+    await powers.getPowers(props.powerPathId);
     toaster.success("Successfully Updated Power!");
     cancel();
   });
