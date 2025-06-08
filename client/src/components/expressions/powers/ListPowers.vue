@@ -7,22 +7,31 @@ import Button from 'primevue/button';
 
 const powers = powersStore();
 
-import ListPowers from "@/components/expressions/powers/ListPowers.vue";
 const props = defineProps({
   expressionId: {
     type: Number,
     required: true,
   }
 });
+
+const showAddPower = ref(false);
+
+onBeforeMount(async () => {
+  await powers.getPowers(props.expressionId);
+})
+
+const toggleAddPower = () => {
+  showAddPower.value = !showAddPower.value;
+}
 </script>
 
 <template>
   <div v-for="power in powers.powers">
     <PowerCard :power="power" />
   </div>
+  
   <AddPower v-if="showAddPower" :expression-id="props.expressionId" @canceled="toggleAddPower" />
   <Button v-else label="Add Power" @click="toggleAddPower" />
-  <ListPowers :expression-id="props.expressionId"></ListPowers>
 </template>
 
 <style scoped>
