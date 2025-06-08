@@ -11,13 +11,12 @@ import {getValidationInstance} from "@/components/expressions/powers/Validations
 import FormCheckboxWrapper from "@/FormWrappers/FormCheckboxWrapper.vue";
 import FormMultiSelectWrapper from "@/FormWrappers/FormMultiSelectWrapper.vue";
 import {powersStore} from "@/components/expressions/powers/stores/powersStore";
-import Panel from 'primevue/panel';
 
 const form = getValidationInstance();
 const powers = powersStore();
 
 const emit = defineEmits<{
-  canceled: []
+  cancelled: []
 }>();
 
 const props = defineProps({
@@ -48,12 +47,13 @@ const onSubmit = form.handleSubmit(async (values) => {
   .then(async () => {
     await powers.getPowers(props.powerPathId);
     toaster.success("Successfully Added Power!");
+    reset();
   });
 });
 
 const reset = () => {
   form.customResetForm();
-  emit("canceled");
+  emit("cancelled");
 }
 
 </script>
@@ -62,56 +62,53 @@ const reset = () => {
 
   <div class="m-2">
     <form @submit="onSubmit">
-      <Panel>
-
-
         <FormInputTextWrapper v-model="form.name" />
-
+  
+        <FormDropdownWrapper
+            v-model="form.powerLevel"
+            :options="powers.powerLevels"
+            option-label="name"
+        />
+  
+  
         <FormMultiSelectWrapper
             v-model="form.category"
             :options="powers.categories"
             option-label="name"
         />
+  
+        <FormDropdownWrapper
+            v-model="form.powerActivationType"
+            :options="powers.powerActivationTypes"
+            option-label="name"
+        />
 
-      <FormEditorWrapper v-model="form.description" />
+        <FormCheckboxWrapper v-model="form.isPowerUse" />
 
-      <FormEditorWrapper v-model="form.gameMechanicEffect" />
+        <FormEditorWrapper v-model="form.description" />
+  
+        <FormEditorWrapper v-model="form.gameMechanicEffect" />
+  
+        <FormEditorWrapper v-model="form.limitation" />
+  
+        <FormDropdownWrapper
+          v-model="form.powerDuration"
+          :options="powers.powerDurations"
+          option-label="name"
+        />
+  
+        <FormDropdownWrapper
+          v-model="form.areaOfEffect"
+          :options="powers.areaOfEffects"
+          option-label="name"
+        />
 
-      <FormEditorWrapper v-model="form.limitation" />
-
-      <FormDropdownWrapper
-        v-model="form.powerDuration"
-        :options="powers.powerDurations"
-        option-label="name"
-      />
-
-      <FormDropdownWrapper
-        v-model="form.areaOfEffect"
-        :options="powers.areaOfEffects"
-        option-label="name"
-      />
-
-      <FormDropdownWrapper
-        v-model="form.powerLevel"
-        :options="powers.powerLevels"
-        option-label="name"
-      />
-
-      <FormDropdownWrapper
-        v-model="form.powerActivationType"
-        :options="powers.powerActivationTypes"
-        option-label="name"
-      />
-
-      <FormEditorWrapper v-model="form.other" />
-
-      <FormCheckboxWrapper v-model="form.isPowerUse" />
-
-      <div class="float-end">
-        <Button label="Cancel" class="m-2" type="reset" @click="reset" />
-        <Button label="Submit" class="m-2" type="submit" />
-      </div>
-      </Panel>
+        <FormEditorWrapper v-model="form.other" />
+  
+        <div class="float-end">
+          <Button label="Cancel" class="m-2" type="reset" @click="reset" />
+          <Button label="Submit" class="m-2" type="submit" />
+        </div>
     </form>
   </div>
 </template>

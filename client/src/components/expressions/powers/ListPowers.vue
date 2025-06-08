@@ -30,7 +30,7 @@ const toggleAddPower = () => {
     <PowerCard :power="power" :power-path-id="props.powerPathId" />
   </div>
   
-  <AddPower v-if="showAddPower" :power-path-id="props.powerPathId" @canceled="toggleAddPower" />
+  <AddPower v-if="showAddPower" :power-path-id="props.powerPathId" @cancelled="toggleAddPower" />
   <Button v-else class="w-100" label="Add Power" @click="toggleAddPower" />
 </template>
 
