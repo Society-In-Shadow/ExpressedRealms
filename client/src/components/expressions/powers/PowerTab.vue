@@ -1,13 +1,5 @@
 <script setup lang="ts">
-import {onBeforeMount, ref} from "vue";
-import AddPower from "@/components/expressions/powers/AddPower.vue";
-import {powersStore} from "@/components/expressions/powers/stores/powersStore";
-import PowerCard from "@/components/expressions/powers/PowerCard.vue";
-import Button from 'primevue/button';
-
-const powers = powersStore();
-
-import ListPowers from "@/components/expressions/powers/ListPowers.vue";
+import ListPowerPaths from "@/components/expressions/powerPaths/ListPowerPaths.vue";
 const props = defineProps({
   expressionId: {
     type: Number,
@@ -17,14 +9,5 @@ const props = defineProps({
 </script>
 
 <template>
-  <div v-for="power in powers.powers">
-    <PowerCard :power="power" />
-  </div>
-  <AddPower v-if="showAddPower" :expression-id="props.expressionId" @canceled="toggleAddPower" />
-  <Button v-else label="Add Power" @click="toggleAddPower" />
-  <ListPowers :expression-id="props.expressionId"></ListPowers>
+  <ListPowerPaths :expression-id="props.expressionId"></ListPowerPaths>
 </template>
-
-<style scoped>
-
-</style>
