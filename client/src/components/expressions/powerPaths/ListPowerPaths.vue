@@ -33,18 +33,20 @@ const toggleAddPower = () => {
 </script>
 
 <template>
-  <div class="card">
-    <div v-if="powerPaths.powerPaths.length == 0">
-      <Button label="Add Power Path" @click="toggleAddPower"></Button>
-    </div>
-    <AddPowerPath v-if="showAddPower" :expression-id="props.expressionId" @canceled="toggleAddPower" />
-    <Accordion v-else :value="['0']" multiple>
+  <div class="card">    
+    <Accordion :value="['0']" multiple>
       <AccordionPanel v-for="path in powerPaths.powerPaths" :key="path.id" :value="path.id">
         <AccordionHeader>{{path.name}}</AccordionHeader>
         <AccordionContent>
-          <div v-html="path.description"></div>
-          <Divider/>
+          <div class="mb-0 pb-0" v-html="path.description"></div>
+          <Divider></Divider>
           <ListPowers :power-path-id="path.id"></ListPowers>
+        </AccordionContent>
+      </AccordionPanel>
+      <AccordionPanel value="-1">
+        <AccordionHeader>Add Path</AccordionHeader>
+        <AccordionContent>
+          <AddPowerPath :expression-id="props.expressionId" @canceled="toggleAddPower" />
         </AccordionContent>
       </AccordionPanel>
     </Accordion>

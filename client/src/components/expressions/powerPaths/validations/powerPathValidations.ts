@@ -41,6 +41,7 @@ export function getValidationInstance() {
     }
     
     const customResetForm = () => {
+        description.field.value = "";
         handleReset();
     };
     

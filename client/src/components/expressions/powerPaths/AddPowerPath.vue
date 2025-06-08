@@ -30,6 +30,7 @@ const onSubmit = form.handleSubmit(async (values) => {
   })
   .then(async () => {
     await powerPaths.getPowerPaths(props.expressionId);
+    reset();
     toaster.success("Successfully Added Power Path!");
   });
 });
@@ -48,7 +49,7 @@ const reset = () => {
 
       <FormEditorWrapper v-model="form.description" />
 
-      <div class="float-end">
+      <div class="text-right">
         <Button label="Cancel" class="m-2" type="reset" @click="reset" />
         <Button label="Submit" class="m-2" type="submit" />
       </div>
