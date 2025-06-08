@@ -50,11 +50,11 @@ internal static class PowerPathEndpoints
             .MapGet(
                 "/{id}",
                 async Task<Results<NotFound, Ok<EditPowerPathResponse>>> (
-                    int powerPathId,
+                    int id,
                     IPowerPathRepository powerRepository
                 ) =>
                 {
-                    var powers = await powerRepository.GetPowerPathAsync(powerPathId);
+                    var powers = await powerRepository.GetPowerPathAsync(id);
 
                     if (powers.HasNotFound(out var notFound))
                         return notFound;
