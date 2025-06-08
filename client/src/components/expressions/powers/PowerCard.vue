@@ -6,6 +6,7 @@ import {type PropType, ref} from "vue";
 import type {Power} from "@/components/expressions/powers/types/power";
 import EditPower from "@/components/expressions/powers/EditPower.vue";
 import {powerConfirmationPopups} from "@/components/expressions/powers/services/powerConfirmationPopupService";
+import Panel from 'primevue/panel';
 
 const props = defineProps({
   power: {
@@ -30,23 +31,19 @@ const toggleEdit = () =>{
 
 <template>
   <EditPower v-if="showEdit" :power-id="props.power.id" :power-path-id="props.powerPathId" @canceled="toggleEdit" />
-  <Card v-else>
-    <template #title>
-      <div class="d-flex align-self-center justify-content-between">
-        <div>
-          <h1 class="p-0 m-0">
-            {{ props.power.name }}
-          </h1>
-        </div>
-        <div class="p-0 m-0">
+  <Panel v-else class="mb-3" toggleable collapsed>
+    <template #header>
+      <div class="d-flex align-self-center justify-content-between w-100 mr-2">
+        <h2 class="p-0 m-0">
+          {{ props.power.name }}
+        </h2>
+        <div class="p-0 m-0 align-self-center">
           {{ props.power.powerLevel.name }}
         </div>
       </div>
+      
     </template>
-    <template #subtitle>
-      <div v-html="props.power.description" />
-    </template>
-    <template #content>
+    <div v-html="props.power.description" />
       <table class="w-100 p-datatable-table">
         <!-- Table header -->
         <thead class="p-datatable-thead">
@@ -95,12 +92,11 @@ const toggleEdit = () =>{
       <h2>Limitations</h2>
       <div v-html="props.power.limitation" />
 
-      <h2>Additional Information</h2>
+      <h2 v-if="props.power.other.length > 0">Additional Information</h2>
       <div v-html="props.power.other" />
-    </template>
     <template v-if="!showEdit" #footer>
       <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
       <Button class="float-end" label="Edit" @click="toggleEdit" />
     </template>
-  </Card>
+  </Panel>
 </template>

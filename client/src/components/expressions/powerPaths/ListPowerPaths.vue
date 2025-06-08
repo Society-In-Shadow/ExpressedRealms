@@ -10,6 +10,7 @@ import Button from 'primevue/button';
 import ListPowers from "@/components/expressions/powers/ListPowers.vue";
 import AddPowerPath from "@/components/expressions/powerPaths/AddPowerPath.vue";
 import Divider from 'primevue/divider';
+import EditPowerPath from "@/components/expressions/powerPaths/EditPowerPath.vue";
 
 var powerPaths = powerPathStore();
 
@@ -30,26 +31,38 @@ const toggleAddPower = () => {
   showAddPower.value = !showAddPower.value;
 }
 
+const showEdit = ref(false);
+const toggleEdit = () => {
+  showEdit.value = !showEdit.value;
+}
+
 </script>
 
 <template>
-  <div class="card">    
-    <Accordion :value="['0']" multiple>
-      <AccordionPanel v-for="path in powerPaths.powerPaths" :key="path.id" :value="path.id">
-        <AccordionHeader>{{path.name}}</AccordionHeader>
-        <AccordionContent>
-          <div class="mb-0 pb-0" v-html="path.description"></div>
-          <Divider></Divider>
-          <ListPowers :power-path-id="path.id"></ListPowers>
-        </AccordionContent>
-      </AccordionPanel>
-      <AccordionPanel value="-1">
-        <AccordionHeader>Add Path</AccordionHeader>
-        <AccordionContent>
-          <AddPowerPath :expression-id="props.expressionId" @canceled="toggleAddPower" />
-        </AccordionContent>
-      </AccordionPanel>
-    </Accordion>
+  
+  <div v-for="path in powerPaths.powerPaths" :key="path.id">
+    <Divider></Divider>
+    <div v-if="!showEdit">
+      <div class="flex">
+        <div class="col-flex flex-grow-1 align-self-center">
+          <h1 class="m-0">
+            {{path.name}}
+          </h1>
+        </div>
+        <div class="col-flex align-self-center">
+          <Button label="Edit" class="float-end m-2" @click="toggleEdit()" />
+        </div>
+      </div>
+      <div class="mb-0 pb-0" v-html="path.description"></div>
+    </div>
+    <div v-else>
+      <EditPowerPath :power-path-id="path.id" :expression-id="props.expressionId" @cancelled="toggleEdit()"></EditPowerPath>
+    </div>
+   
+    <Divider></Divider>
+    <h2>Powers</h2>
+    <ListPowers :power-path-id="path.id"></ListPowers>
   </div>
+  <AddPowerPath :expression-id="props.expressionId" @canceled="toggleAddPower" />
 
 </template>

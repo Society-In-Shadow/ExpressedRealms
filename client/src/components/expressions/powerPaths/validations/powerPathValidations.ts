@@ -2,7 +2,7 @@ import {object, string} from "yup";
 import {useForm} from "vee-validate";
 import type {FormField} from "@/FormWrappers/Interfaces/FormField";
 import {computed} from "vue";
-import type {EditPower} from "@/components/expressions/powers/types/power";
+import type {EditPowerPath} from "@/components/expressions/powerPaths/types";
 
 export function getValidationInstance() {
     
@@ -35,7 +35,7 @@ export function getValidationInstance() {
     const name = createFormField("name");
     const description = createFormField("description");
     
-    const setValues = (power: EditPower) => {
+    const setValues = (power: EditPowerPath) => {
         name.field.value = power.name;
         description.field.value = power.description;
     }

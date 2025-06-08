@@ -11,6 +11,7 @@ import {getValidationInstance} from "@/components/expressions/powers/Validations
 import FormCheckboxWrapper from "@/FormWrappers/FormCheckboxWrapper.vue";
 import FormMultiSelectWrapper from "@/FormWrappers/FormMultiSelectWrapper.vue";
 import {powersStore} from "@/components/expressions/powers/stores/powersStore";
+import Panel from 'primevue/panel';
 
 const form = getValidationInstance();
 const powers = powersStore();
@@ -58,15 +59,19 @@ const reset = () => {
 </script>
 
 <template>
+
   <div class="m-2">
     <form @submit="onSubmit">
-      <FormInputTextWrapper v-model="form.name" />
-      
-      <FormMultiSelectWrapper
-        v-model="form.category"
-        :options="powers.categories"
-        option-label="name"
-      />
+      <Panel>
+
+
+        <FormInputTextWrapper v-model="form.name" />
+
+        <FormMultiSelectWrapper
+            v-model="form.category"
+            :options="powers.categories"
+            option-label="name"
+        />
 
       <FormEditorWrapper v-model="form.description" />
 
@@ -106,6 +111,7 @@ const reset = () => {
         <Button label="Cancel" class="m-2" type="reset" @click="reset" />
         <Button label="Submit" class="m-2" type="submit" />
       </div>
+      </Panel>
     </form>
   </div>
 </template>
