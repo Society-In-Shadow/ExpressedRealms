@@ -69,6 +69,12 @@ const cancel = () => {
   <div class="m-2">
     <form @submit="onSubmit">
       <FormInputTextWrapper v-model="form.name" />
+
+      <FormDropdownWrapper
+          v-model="form.powerLevel"
+          :options="powers.powerLevels"
+          option-label="name"
+      />
       
       <FormMultiSelectWrapper
         v-model="form.category"
@@ -76,6 +82,14 @@ const cancel = () => {
         option-label="name"
       />
 
+      <FormDropdownWrapper
+          v-model="form.powerActivationType"
+          :options="powers.powerActivationTypes"
+          option-label="name"
+      />
+
+      <FormCheckboxWrapper v-model="form.isPowerUse" />
+      
       <FormEditorWrapper v-model="form.description" />
 
       <FormEditorWrapper v-model="form.gameMechanicEffect" />
@@ -94,21 +108,7 @@ const cancel = () => {
         option-label="name"
       />
 
-      <FormDropdownWrapper
-        v-model="form.powerLevel"
-        :options="powers.powerLevels"
-        option-label="name"
-      />
-
-      <FormDropdownWrapper
-        v-model="form.powerActivationType"
-        :options="powers.powerActivationTypes"
-        option-label="name"
-      />
-
       <FormEditorWrapper v-model="form.other" />
-
-      <FormCheckboxWrapper v-model="form.isPowerUse" />
 
       <div class="m-3 text-right">
         <Button label="Cancel" class="m-2" type="reset" @click="cancel" />
