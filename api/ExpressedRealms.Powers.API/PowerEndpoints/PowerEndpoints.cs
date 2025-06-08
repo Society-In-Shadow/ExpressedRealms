@@ -15,9 +15,9 @@ using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
 namespace ExpressedRealms.Powers.API.PowerEndpoints;
 
-public static class PowerEndpoints
+internal static class PowerEndpoints
 {
-    public static void AddPowerEndPoints(this WebApplication app)
+    internal static void AddPowerApi(this WebApplication app)
     {
         var endpointGroup = app.MapGroup("powers")
             .AddFluentValidationAutoValidation()
@@ -28,13 +28,13 @@ public static class PowerEndpoints
         app.MapGroup("/powerpath/")
             .AddFluentValidationAutoValidation()
             .RequireFeatureToggle(ReleaseFlags.ShowPowersTab)
-            .WithTags("powerpath")
+            .WithTags("Power Paths")
             .WithOpenApi()
             .MapGet(
-                "/{powerPathId}/powers",
-                async (int powerPathId, IPowerRepository powerRepository) =>
+                "/{id}/powers",
+                async (int id, IPowerRepository powerRepository) =>
                 {
-                    var powers = await powerRepository.GetPowersAsync(powerPathId);
+                    var powers = await powerRepository.GetPowersAsync(id);
 
                     return TypedResults.Ok(
                         powers.Value.Select(x => new PowerInformationResponse()
@@ -134,9 +134,8 @@ public static class PowerEndpoints
 
         endpointGroup
             .MapPost(
-                "{id}",
+                "",
                 async Task<Results<ValidationProblem, NotFound, Created<int>>> (
-                    string id,
                     CreatePowerRequest request,
                     IPowerRepository repository
                 ) =>

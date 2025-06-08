@@ -10,7 +10,7 @@ using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using ExpressedRealms.Email;
 using ExpressedRealms.FeatureFlags.Configuration;
 using ExpressedRealms.FeatureFlags.FeatureManager;
-using ExpressedRealms.Powers.API.PowerEndpoints;
+using ExpressedRealms.Powers.API.Configuration;
 using ExpressedRealms.Powers.Repository;
 using ExpressedRealms.Repositories.Admin;
 using ExpressedRealms.Repositories.Characters;
