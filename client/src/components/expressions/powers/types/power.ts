@@ -6,6 +6,11 @@ export interface DetailedInformation {
     id: number;
 }
 
+export interface PowerStore {
+    powerPathId: number;
+    powers: Power[];
+}
+
 export interface Power {
     id: number;
     name: string;

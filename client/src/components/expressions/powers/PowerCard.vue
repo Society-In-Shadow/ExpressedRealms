@@ -6,7 +6,6 @@ import {type PropType, ref} from "vue";
 import type {Power} from "@/components/expressions/powers/types/power";
 import EditPower from "@/components/expressions/powers/EditPower.vue";
 import {powerConfirmationPopups} from "@/components/expressions/powers/services/powerConfirmationPopupService";
-import Panel from 'primevue/panel';
 
 const props = defineProps({
   power: {
@@ -19,7 +18,7 @@ const props = defineProps({
   }
 });
 
-const popups = powerConfirmationPopups(props.power.id, props.power.name);
+const popups = powerConfirmationPopups(props.power.id, props.power.name, props.powerPathId);
 
 const showEdit = ref(false);
 

@@ -1,11 +1,11 @@
 import {defineStore} from "pinia";
 import axios from "axios";
 
-import type {EditPower, EditPowerResponse, Power} from "@/components/expressions/powers/types/power";
+import type {EditPower, EditPowerResponse, Power, PowerStore} from "@/components/expressions/powers/types/power";
 import type {ListItem} from "@/types/ListItem";
 
-export const powersStore = (powerPathId: number) =>
-    defineStore(`powers-${powerPathId}`, {
+export const powersStore = 
+    defineStore(`powers`, {
         state: () => {
             return {
                 categories: [] as ListItem[],
@@ -14,14 +14,14 @@ export const powersStore = (powerPathId: number) =>
                 areaOfEffects: [] as ListItem[],
                 powerActivationTypes: [] as ListItem[],
                 havePowerOptions: false,
-                powers: [] as Power[]
+                powers: [] as PowerStore[]
             }
         },
         actions: {
-            async getPowerOptions(){
-                if(this.havePowerOptions)
+            async getPowerOptions() {
+                if (this.havePowerOptions)
                     return;
-                
+
                 await axios.get("/powers/options")
                     .then((response) => {
                         this.categories = response.data.category;
@@ -32,15 +32,21 @@ export const powersStore = (powerPathId: number) =>
                         this.havePowerOptions = true;
                     })
             },
-            async getPowers(powerPathId: Number){
+            async getPowers(powerPathId: number){
                 if(powerPathId === 0) {
                     console.log("power path id isn't being loaded in");
                     return;
+                }                
+                let response = await axios.get<Power[]>(`/powerpath/${powerPathId}/powers`);
+               
+                let newItem:PowerStore = { powerPathId: powerPathId, powers: response.data};
+                
+                let index = this.powers.findIndex(item => item.powerPathId === powerPathId);
+                if (index === -1) {
+                    this.powers.push(newItem);
+                } else {
+                    this.powers[index].powers = response.data;
                 }
-                await axios.get(`/powerpath/${powerPathId}/powers`)
-                    .then((response) => {
-                        this.powers = response.data;
-                    })
             },
             getPower: async function (powerId: Number): Promise<EditPower> {
                 if (powerId === 0) {
@@ -48,7 +54,7 @@ export const powersStore = (powerPathId: number) =>
                 }
                 await this.getPowerOptions()
                 const response = await axios.get<EditPowerResponse>(`/powers/${powerId}`);
-                
+
                 return {
                     id: response.data.id,
                     name: response.data.name,
@@ -56,13 +62,13 @@ export const powersStore = (powerPathId: number) =>
                     gameMechanicEffect: response.data.gameMechanicEffect,
                     limitation: response.data.limitation,
                     categories: this.categories.filter((x: ListItem) => response.data.categoryIds.includes(x.id)) as ListItem[],
-                    powerDuration: this.powerDurations.find((x: ListItem)  => x.id == response.data.powerDurationId) as ListItem,
-                    areaOfEffect: this.areaOfEffects.find((x: ListItem)  => x.id == response.data.areaOfEffectId) as ListItem,
-                    powerLevel: this.powerLevels.find((x: ListItem)  => x.id == response.data.powerLevelId) as ListItem,
-                    powerActivationType: this.powerActivationTypes.find((x: ListItem)  => x.id == response.data.powerActivationTypeId) as ListItem,
+                    powerDuration: this.powerDurations.find((x: ListItem) => x.id == response.data.powerDurationId) as ListItem,
+                    areaOfEffect: this.areaOfEffects.find((x: ListItem) => x.id == response.data.areaOfEffectId) as ListItem,
+                    powerLevel: this.powerLevels.find((x: ListItem) => x.id == response.data.powerLevelId) as ListItem,
+                    powerActivationType: this.powerActivationTypes.find((x: ListItem) => x.id == response.data.powerActivationTypeId) as ListItem,
                     other: response.data.other,
                     isPowerUse: response.data.isPowerUse,
                 };
             }
         }
-    })();
+    });

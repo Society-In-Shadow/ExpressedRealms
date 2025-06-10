@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onBeforeMount, ref} from "vue";
+import {onBeforeMount, ref, computed} from "vue";
 import AddPower from "@/components/expressions/powers/AddPower.vue";
 import {powersStore} from "@/components/expressions/powers/stores/powersStore";
 import PowerCard from "@/components/expressions/powers/PowerCard.vue";
@@ -12,7 +12,11 @@ const props = defineProps({
   }
 });
 
-const powers = powersStore( props.powerPathId);
+const powers = powersStore();
+
+const powerPath = computed(() => {
+  return powers.powers.find(x => x.powerPathId === props.powerPathId)
+});
 
 const showAddPower = ref(false);
 
@@ -26,7 +30,7 @@ const toggleAddPower = () => {
 </script>
 
 <template>
-  <div v-for="power in powers.powers">
+  <div v-if="powerPath && powerPath.powers.length > 0" v-for="power in powerPath.powers">
     <PowerCard :power="power" :power-path-id="props.powerPathId" />
   </div>
   

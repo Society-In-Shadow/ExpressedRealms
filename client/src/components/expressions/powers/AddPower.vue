@@ -25,7 +25,7 @@ const props = defineProps({
   }
 });
 
-const powers = powersStore(props.powerPathId);
+const powers = powersStore();
 
 onBeforeMount(async () => {
   await powers.getPowerOptions();

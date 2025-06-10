@@ -2,13 +2,11 @@ import { useConfirm } from "primevue/useconfirm";
 import toaster from "@/services/Toasters";
 import axios from "axios";
 import {powersStore} from "@/components/expressions/powers/stores/powersStore";
-import {expressionStore} from "@/stores/expressionStore";
 
-export const powerConfirmationPopups = (id: number, name: string) => {
+export const powerConfirmationPopups = (id: number, name: string, powerPathId: number) => {
 
     const confirm = useConfirm();
-    const powerStore = powersStore(expressionInfo.currentExpressionId);
-    const expressionInfo = expressionStore();
+    const powerStore = powersStore();
 
     const deleteConfirmation = (event: MouseEvent) =>
         confirm.require({
@@ -28,7 +26,7 @@ export const powerConfirmationPopups = (id: number, name: string) => {
         accept: () => {
             axios.delete(`/powers/${id}`)
             .then(async () => {
-                await powerStore.getPowers(expressionInfo.currentExpressionId);
+                await powerStore.getPowers(powerPathId);
                 toaster.success(`Successfully Deleted ${name}!`);
             });
         }
