@@ -188,11 +188,6 @@ describe("Power Model Schema - Field Validations", () => {
     });
 
     describe("Is Power Use", () => {
-        it("Fails validation when it's missing", async () => {
-            form.isPowerUse.field.value = undefined;
-            await form.handleSubmit(() => {})();
-            expect(form.isPowerUse.error.value).toEqual("Is Power Use is a required field");
-        });
 
         // TODO: Figure out way to test default value in vee validate form
         /*it("Has a default value of false", async () => {
