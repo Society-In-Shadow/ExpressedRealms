@@ -48,7 +48,7 @@ export const powersStore =
                     this.powers[index].powers = response.data;
                 }
             },
-            getPower: async function (powerId: Number): Promise<EditPower> {
+            getPower: async function (powerId: number): Promise<EditPower> {
                 if (powerId === 0) {
                     console.log("powerId isn't being loaded in");
                 }

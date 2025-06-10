@@ -8,7 +8,7 @@ import AddPowerPath from "@/components/expressions/powerPaths/AddPowerPath.vue";
 import Divider from 'primevue/divider';
 import ShowPowerPath from "@/components/expressions/powerPaths/ShowPowerPath.vue";
 
-var powerPaths = powerPathStore();
+let powerPaths = powerPathStore();
 
 const props = defineProps({
   expressionId: {

@@ -45,7 +45,3 @@ const popups = powerPathConfirmationPopups(props.path.id, props.path.name);
     <EditPowerPath :power-path-id="props.path.id" :expression-id="props.expressionId" @cancelled="toggleEdit()"></EditPowerPath>
   </div>
 </template>
-
-<style scoped>
-
-</style>

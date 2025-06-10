@@ -12,7 +12,7 @@ export const powerPathStore =
             }
         },
         actions: {
-            async getPowerPaths(expressionId: Number){
+            async getPowerPaths(expressionId: number){
                 if(expressionId === 0) {
                     console.log("expressionId isn't being loaded in");
                     return;
@@ -20,7 +20,7 @@ export const powerPathStore =
                 const response = await axios.get<PowerPath[]>(`/expression/${expressionId}/powerPaths`);
                 this.powerPaths = response.data;
             },
-            getPowerPath: async function (powerPathId: Number): Promise<EditPowerPath> {
+            getPowerPath: async function (powerPathId: number): Promise<EditPowerPath> {
                 if (powerPathId === 0) {
                     console.log("power path Id isn't being loaded in");
                 }
