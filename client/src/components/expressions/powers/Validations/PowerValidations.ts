@@ -46,7 +46,6 @@ export function getValidationInstance() {
         other: string()
             .label("Other"),
         isPowerUse: boolean()
-            .required()
             .label("Is Power Use")
     });
     
