@@ -29,13 +29,12 @@ const popups = powerPathConfirmationPopups(props.path.id, props.path.name);
 
 <template>
   <div v-if="!showEdit">
-    <div class="flex">
-      <div class="col-flex flex-grow-1 align-self-center">
-        <h1 class="m-0">
-          {{props.path.name}}
-        </h1>
-      </div>
-      <div class="col-flex align-self-center">
+    <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
+
+      <h1 class="p-0 m-0">
+        {{props.path.name}}
+      </h1>
+      <div class="d-inline-flex align-items-start">
         <Button class="m-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
         <Button label="Edit" class="float-end m-2" @click="toggleEdit()" />
       </div>

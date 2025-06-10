@@ -6,7 +6,6 @@ import Button from 'primevue/button';
 import ListPowers from "@/components/expressions/powers/ListPowers.vue";
 import AddPowerPath from "@/components/expressions/powerPaths/AddPowerPath.vue";
 import Divider from 'primevue/divider';
-import EditPowerPath from "@/components/expressions/powerPaths/EditPowerPath.vue";
 import ShowPowerPath from "@/components/expressions/powerPaths/ShowPowerPath.vue";
 
 var powerPaths = powerPathStore();
