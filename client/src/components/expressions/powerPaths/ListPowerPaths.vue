@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {powerPathStore} from "@/components/expressions/powerPaths/powerPathStore";
+import {powerPathStore} from "@/components/expressions/powerPaths/stores/powerPathStore";
 import {onBeforeMount, ref} from "vue";
 import Button from 'primevue/button';
 import ListPowers from "@/components/expressions/powers/ListPowers.vue";
