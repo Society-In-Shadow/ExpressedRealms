@@ -9,5 +9,5 @@ const props = defineProps({
 </script>
 
 <template>
-  <ListPowerPaths :expression-id="props.expressionId"></ListPowerPaths>
+  <ListPowerPaths :expression-id="props.expressionId" />
 </template>

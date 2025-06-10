@@ -32,16 +32,12 @@ export const powersStore =
                         this.havePowerOptions = true;
                     })
             },
-            async getPowers(powerPathId: number){
-                if(powerPathId === 0) {
-                    console.log("power path id isn't being loaded in");
-                    return;
-                }                
-                let response = await axios.get<Power[]>(`/powerpath/${powerPathId}/powers`);
+            async getPowers(powerPathId: number){         
+                const response = await axios.get<Power[]>(`/powerpath/${powerPathId}/powers`);
                
-                let newItem:PowerStore = { powerPathId: powerPathId, powers: response.data};
+                const newItem:PowerStore = { powerPathId: powerPathId, powers: response.data};
                 
-                let index = this.powers.findIndex(item => item.powerPathId === powerPathId);
+                const index = this.powers.findIndex(item => item.powerPathId === powerPathId);
                 if (index === -1) {
                     this.powers.push(newItem);
                 } else {
@@ -49,9 +45,6 @@ export const powersStore =
                 }
             },
             getPower: async function (powerId: number): Promise<EditPower> {
-                if (powerId === 0) {
-                    console.log("powerId isn't being loaded in");
-                }
                 await this.getPowerOptions()
                 const response = await axios.get<EditPowerResponse>(`/powers/${powerId}`);
 

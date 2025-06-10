@@ -71,9 +71,9 @@ const cancel = () => {
       <FormInputTextWrapper v-model="form.name" />
 
       <FormDropdownWrapper
-          v-model="form.powerLevel"
-          :options="powers.powerLevels"
-          option-label="name"
+        v-model="form.powerLevel"
+        :options="powers.powerLevels"
+        option-label="name"
       />
       
       <FormMultiSelectWrapper
@@ -83,9 +83,9 @@ const cancel = () => {
       />
 
       <FormDropdownWrapper
-          v-model="form.powerActivationType"
-          :options="powers.powerActivationTypes"
-          option-label="name"
+        v-model="form.powerActivationType"
+        :options="powers.powerActivationTypes"
+        option-label="name"
       />
 
       <FormCheckboxWrapper v-model="form.isPowerUse" />

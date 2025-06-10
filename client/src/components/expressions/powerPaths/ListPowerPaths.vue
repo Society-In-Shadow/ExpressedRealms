@@ -30,17 +30,15 @@ const toggleAddPower = () => {
 </script>
 
 <template>
-  
   <div v-for="path in powerPaths.powerPaths" :key="path.id">
-    <Divider></Divider>
-    <ShowPowerPath :path="path" :expression-id="props.expressionId"></ShowPowerPath>
+    <Divider />
+    <ShowPowerPath :path="path" :expression-id="props.expressionId" />
    
-    <Divider></Divider>
+    <Divider />
     <h2>Powers</h2>
-    <ListPowers :power-path-id="path.id"></ListPowers>
+    <ListPowers :power-path-id="path.id" />
   </div>
   
-  <Button v-if="!showAddPower" class="w-100 m-2" label="Add Power Path" @click="toggleAddPower"></Button>
+  <Button v-if="!showAddPower" class="w-100 m-2" label="Add Power Path" @click="toggleAddPower" />
   <AddPowerPath v-else :expression-id="props.expressionId" @canceled="toggleAddPower" />
-
 </template>

@@ -50,7 +50,7 @@ export function getValidationInstance() {
             .label("Is Power Use")
     });
     
-    let form = useGenericForm(validationSchema);
+    const form = useGenericForm(validationSchema);
     
     const setValues = (power: EditPower) => {
         form.fields.name.field.value = power.name;

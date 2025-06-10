@@ -30,8 +30,10 @@ const toggleAddPower = () => {
 </script>
 
 <template>
-  <div v-if="powerPath && powerPath.powers.length > 0" v-for="power in powerPath.powers">
-    <PowerCard :power="power" :power-path-id="props.powerPathId" />
+  <div v-if="powerPath && powerPath.powers.length > 0">
+    <div v-for="power in powerPath.powers" :key="power.id">
+      <PowerCard :power="power" :power-path-id="props.powerPathId" />
+    </div>
   </div>
   
   <AddPower v-if="showAddPower" :power-path-id="props.powerPathId" @cancelled="toggleAddPower" />

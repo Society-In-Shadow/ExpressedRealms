@@ -61,56 +61,54 @@ const reset = () => {
 </script>
 
 <template>
-
   <div class="m-2">
     <form @submit="onSubmit">
-        <FormInputTextWrapper v-model="form.name" />
+      <FormInputTextWrapper v-model="form.name" />
   
-        <FormDropdownWrapper
-            v-model="form.powerLevel"
-            :options="powers.powerLevels"
-            option-label="name"
-        />
+      <FormDropdownWrapper
+        v-model="form.powerLevel"
+        :options="powers.powerLevels"
+        option-label="name"
+      />
   
+      <FormMultiSelectWrapper
+        v-model="form.category"
+        :options="powers.categories"
+        option-label="name"
+      />
   
-        <FormMultiSelectWrapper
-            v-model="form.category"
-            :options="powers.categories"
-            option-label="name"
-        />
-  
-        <FormDropdownWrapper
-            v-model="form.powerActivationType"
-            :options="powers.powerActivationTypes"
-            option-label="name"
-        />
+      <FormDropdownWrapper
+        v-model="form.powerActivationType"
+        :options="powers.powerActivationTypes"
+        option-label="name"
+      />
 
-        <FormCheckboxWrapper v-model="form.isPowerUse" />
+      <FormCheckboxWrapper v-model="form.isPowerUse" />
 
-        <FormEditorWrapper v-model="form.description" />
+      <FormEditorWrapper v-model="form.description" />
   
-        <FormEditorWrapper v-model="form.gameMechanicEffect" />
+      <FormEditorWrapper v-model="form.gameMechanicEffect" />
   
-        <FormEditorWrapper v-model="form.limitation" />
+      <FormEditorWrapper v-model="form.limitation" />
   
-        <FormDropdownWrapper
-          v-model="form.powerDuration"
-          :options="powers.powerDurations"
-          option-label="name"
-        />
+      <FormDropdownWrapper
+        v-model="form.powerDuration"
+        :options="powers.powerDurations"
+        option-label="name"
+      />
   
-        <FormDropdownWrapper
-          v-model="form.areaOfEffect"
-          :options="powers.areaOfEffects"
-          option-label="name"
-        />
+      <FormDropdownWrapper
+        v-model="form.areaOfEffect"
+        :options="powers.areaOfEffects"
+        option-label="name"
+      />
 
-        <FormEditorWrapper v-model="form.other" />
+      <FormEditorWrapper v-model="form.other" />
   
-        <div class="float-end">
-          <Button label="Cancel" class="m-2" type="reset" @click="reset" />
-          <Button label="Submit" class="m-2" type="submit" />
-        </div>
+      <div class="float-end">
+        <Button label="Cancel" class="m-2" type="reset" @click="reset" />
+        <Button label="Submit" class="m-2" type="submit" />
+      </div>
     </form>
   </div>
 </template>
