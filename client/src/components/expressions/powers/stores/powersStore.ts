@@ -1,7 +1,7 @@
 import {defineStore} from "pinia";
 import axios from "axios";
 
-import type {EditPower, EditPowerResponse, Power, PowerStore} from "@/components/expressions/powers/types/power";
+import type {EditPower, EditPowerResponse, Power, PowerStore} from "@/components/expressions/powers/types";
 import type {ListItem} from "@/types/ListItem";
 
 export const powersStore = 

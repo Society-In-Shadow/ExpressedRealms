@@ -1,9 +1,7 @@
 import {array, boolean, number, object, string} from "yup";
-import {useForm} from "vee-validate";
-import type {FormField} from "@/FormWrappers/Interfaces/FormField";
-import {computed} from "vue";
-import type {EditPower} from "@/components/expressions/powers/types/power";
 import type {ListItem} from "@/types/ListItem";
+import {useGenericForm} from "@/utilities/formUtilities";
+import type {EditPower} from "@/components/expressions/powers/types";
 
 export function getValidationInstance() {
     
@@ -52,71 +50,45 @@ export function getValidationInstance() {
             .label("Is Power Use")
     });
     
-    // Destructure `useForm` to define handlers and fields
-    const { defineField, handleSubmit, errors, handleReset } = useForm({
-        validationSchema: validationSchema,
-        validateOnMount: false,
-        keepValuesOnUnmount: false
-    });
-    
-    // Define all fields using `defineField`
-    function createFormField(fieldName: string): FormField {
-        return {
-            field: defineField(fieldName)[0],
-            error: computed(() => errors.value[fieldName]),
-            label: validationSchema.fields[fieldName].spec.label
-        };
-    }
-    
-    const name = createFormField("name");
-    const category = createFormField("category");
-    const description = createFormField("description");
-    const gameMechanicEffect = createFormField("gameMechanicEffect");
-    const limitation = createFormField("limitation");
-    const powerDuration = createFormField("powerDuration");
-    const areaOfEffect = createFormField("areaOfEffect");
-    const powerLevel = createFormField("powerLevel");
-    const powerActivationType = createFormField("powerActivationType");
-    const other = createFormField("other");
-    const isPowerUse = createFormField("isPowerUse");
+    let form = useGenericForm(validationSchema);
     
     const setValues = (power: EditPower) => {
-        name.field.value = power.name;
-        category.field.value = power.categories;
-        description.field.value = power.description;
-        gameMechanicEffect.field.value = power.gameMechanicEffect;
-        limitation.field.value = power.limitation;
-        powerDuration.field.value = power.powerDuration;
-        areaOfEffect.field.value = power.areaOfEffect;
-        powerLevel.field.value = power.powerLevel;
-        powerActivationType.field.value = power.powerActivationType;
-        other.field.value = power.other;
-        isPowerUse.field.value = power.isPowerUse;
+        form.fields.name.field.value = power.name;
+        form.fields.category.field.value = power.categories;
+        form.fields.description.field.value = power.description;
+        form.fields.gameMechanicEffect.field.value = power.gameMechanicEffect;
+        form.fields.limitation.field.value = power.limitation;
+        form.fields.powerDuration.field.value = power.powerDuration;
+        form.fields.areaOfEffect.field.value = power.areaOfEffect;
+        form.fields.powerLevel.field.value = power.powerLevel;
+        form.fields.powerActivationType.field.value = power.powerActivationType;
+        form.fields.other.field.value = power.other;
+        form.fields.isPowerUse.field.value = power.isPowerUse;
     }
     
     const customResetForm = () => {
-        powerDuration.field.value = null;
-        areaOfEffect.field.value = null;
-        powerLevel.field.value = null;
-        powerActivationType.field.value = null;
-        category.field.value = []; // TODO: This isn't working for some reason
-        handleReset();
+        form.fields.powerDuration.field.value = null;
+        form.fields.areaOfEffect.field.value = null;
+        form.fields.powerLevel.field.value = null;
+        form.fields.powerActivationType.field.value = null;
+        form.fields.category.field.value = []; // TODO: This isn't working for some reason
+        form.handleReset();
     };
     
     return {
-        handleSubmit, 
+        handleSubmit: form.handleSubmit, 
         customResetForm,
         setValues,
-        name,
-        category,
-        description,
-        gameMechanicEffect,
-        limitation,
-        powerDuration,
-        areaOfEffect,
-        powerLevel,
-        powerActivationType,
-        other,
-        isPowerUse,
+        name: form.fields.name,
+        category: form.fields.category,
+        description: form.fields.description,
+        gameMechanicEffect: form.fields.gameMechanicEffect,
+        limitation: form.fields.limitation,
+        powerDuration: form.fields.powerDuration,
+        areaOfEffect: form.fields.areaOfEffect,
+        powerLevel: form.fields.powerLevel,
+        powerActivationType: form.fields.powerActivationType,
+        other: form.fields.other,
+        isPowerUse: form.fields.isPowerUse,
     }
 }

@@ -1,8 +1,6 @@
 import {object, string} from "yup";
-import {useForm} from "vee-validate";
-import type {FormField} from "@/FormWrappers/Interfaces/FormField";
-import {computed} from "vue";
 import type {EditPowerPath} from "@/components/expressions/powerPaths/types";
+import { useGenericForm } from "@/utilities/formUtilities";
 
 export function getValidationInstance() {
     
@@ -16,40 +14,23 @@ export function getValidationInstance() {
             .label("Description")
     });
     
-    // Destructure `useForm` to define handlers and fields
-    const { defineField, handleSubmit, errors, handleReset } = useForm({
-        validationSchema: validationSchema,
-        validateOnMount: false,
-        keepValuesOnUnmount: false
-    });
-    
-    // Define all fields using `defineField`
-    function createFormField(fieldName: string): FormField {
-        return {
-            field: defineField(fieldName)[0],
-            error: computed(() => errors.value[fieldName]),
-            label: validationSchema.fields[fieldName].spec.label
-        };
-    }
-    
-    const name = createFormField("name");
-    const description = createFormField("description");
+    const form = useGenericForm(validationSchema);
     
     const setValues = (power: EditPowerPath) => {
-        name.field.value = power.name;
-        description.field.value = power.description;
+        form.fields.name.field.value = power.name;
+        form.fields.description.field.value = power.description;
     }
     
     const customResetForm = () => {
-        description.field.value = "";
-        handleReset();
+        form.fields.description.field.value = "";
+        form.handleReset();
     };
     
     return {
-        handleSubmit, 
+        handleSubmit: form.handleSubmit, 
         customResetForm,
         setValues,
-        name,
-        description,
+        name: form.fields.name,
+        description: form.fields.description,
     }
 }

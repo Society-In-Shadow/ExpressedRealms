@@ -3,7 +3,7 @@
 import Card from "primevue/card";
 import Button from "primevue/button";
 import {type PropType, ref} from "vue";
-import type {Power} from "@/components/expressions/powers/types/power";
+import type {Power} from "@/components/expressions/powers/types";
 import EditPower from "@/components/expressions/powers/EditPower.vue";
 import {powerConfirmationPopups} from "@/components/expressions/powers/services/powerConfirmationPopupService";
 
@@ -102,9 +102,6 @@ const toggleEdit = () =>{
 
       <h2>Additional Information</h2>
       <div v-html="props.power.other" />
-    </template>
-    <template v-if="!showEdit" #footer>
-
     </template>
   </Card>
 </template>

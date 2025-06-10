@@ -11,7 +11,7 @@ import {getValidationInstance} from "@/components/expressions/powers/Validations
 import FormCheckboxWrapper from "@/FormWrappers/FormCheckboxWrapper.vue";
 import FormMultiSelectWrapper from "@/FormWrappers/FormMultiSelectWrapper.vue";
 import {powersStore} from "@/components/expressions/powers/stores/powersStore";
-import type {EditPower} from "@/components/expressions/powers/types/power";
+import type {EditPower} from "@/components/expressions/powers/types";
 
 const form = getValidationInstance();
 const power = ref<EditPower>();
