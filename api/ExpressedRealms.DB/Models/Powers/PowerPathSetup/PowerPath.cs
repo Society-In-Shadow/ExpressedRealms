@@ -1,8 +1,10 @@
+using Audit.EntityFramework;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 
 namespace ExpressedRealms.DB.Models.Powers.PowerPathSetup;
 
+[AuditInclude]
 public class PowerPath : ISoftDelete
 {
     public int Id { get; set; }

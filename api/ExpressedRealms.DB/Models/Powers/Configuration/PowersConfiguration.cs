@@ -16,5 +16,6 @@ internal static class PowersConfiguration
         builder.ApplyConfiguration(new PowerLevelConfiguration());
         builder.ApplyConfiguration(new PowerPrerequisitesConfiguration());
         builder.ApplyConfiguration(new PowerPathConfiguration());
+        builder.ApplyConfiguration(new PowerPathAuditTrailConfiguration());
     }
 }

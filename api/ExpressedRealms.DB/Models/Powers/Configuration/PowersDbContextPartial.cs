@@ -16,4 +16,5 @@ public partial class ExpressedRealmsDbContext
     public DbSet<PowerLevel> PowerLevels { get; set; }
     public DbSet<PowerPrerequisites> PowerPrerequisites { get; set; }
     public DbSet<PowerPath> PowerPaths { get; set; }
+    public DbSet<PowerPathAuditTrail> PowerPathAuditTrails { get; set; }
 }

@@ -13,10 +13,17 @@ internal static class PowerPathAuditConfiguration
             var skipRecord = false;
             switch (changedRecord.ColumnName)
             {
-                case nameof(PowerPath.Name):
+                case "expression_id":
+                    // You cannot change the Expression Id after creation
+                    skipRecord = true;
+                    break;
+                
+                case "name":
+                    changedRecord.FriendlyName = "Name";
                     break;
 
-                case nameof(PowerPath.Description):
+                case "description":
+                    changedRecord.FriendlyName = "Description";
                     break;
 
                 default:
