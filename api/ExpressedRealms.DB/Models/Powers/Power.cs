@@ -1,4 +1,5 @@
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Powers.PowerPathSetup;
 
 namespace ExpressedRealms.DB.Models.Powers;
 

@@ -1,4 +1,5 @@
 using ExpressedRealms.DB.Models.Powers;
+using ExpressedRealms.DB.Models.Powers.PowerPathSetup;
 using Microsoft.EntityFrameworkCore;
 
 // ReSharper disable once CheckNamespace

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ExpressedRealms.DB.Models.Powers;
+namespace ExpressedRealms.DB.Models.Powers.PowerPathSetup;
 
 public class PowerPathConfiguration : IEntityTypeConfiguration<PowerPath>
 {

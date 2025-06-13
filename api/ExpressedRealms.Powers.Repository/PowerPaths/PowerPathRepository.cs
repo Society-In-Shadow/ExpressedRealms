@@ -1,6 +1,6 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Interceptors;
-using ExpressedRealms.DB.Models.Powers;
+using ExpressedRealms.DB.Models.Powers.PowerPathSetup;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathCreate;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathEdit;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathLIst;

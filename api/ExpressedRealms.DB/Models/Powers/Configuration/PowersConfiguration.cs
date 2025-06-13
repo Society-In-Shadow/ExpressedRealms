@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.Models.Powers.PowerPathSetup;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.DB.Models.Powers.Configuration;
