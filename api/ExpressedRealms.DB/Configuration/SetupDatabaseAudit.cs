@@ -115,14 +115,20 @@ public static class SetupDatabaseAudit
 
                                     if (
                                         changes.Any(x =>
-                                            (x.ColumnName == nameof(ISoftDelete.IsDeleted) || x.ColumnName == "is_deleted")
+                                            (
+                                                x.ColumnName == nameof(ISoftDelete.IsDeleted)
+                                                || x.ColumnName == "is_deleted"
+                                            )
                                             && x.NewValue?.ToLower() == "true"
                                         )
                                     )
                                     {
                                         audit.Action = "Delete";
                                         var deletedRecord = changes.First(x =>
-                                            (x.ColumnName == nameof(ISoftDelete.IsDeleted) || x.ColumnName == "is_deleted")
+                                            (
+                                                x.ColumnName == nameof(ISoftDelete.IsDeleted)
+                                                || x.ColumnName == "is_deleted"
+                                            )
                                         );
                                         changes.Remove(deletedRecord);
                                         deletedRecord.FriendlyName = "Deleted";
@@ -132,14 +138,19 @@ public static class SetupDatabaseAudit
 
                                     if (
                                         changes.Any(x =>
-                                            (x.ColumnName == nameof(ISoftDelete.DeletedAt) || x.ColumnName == "deleted_at") 
-                                            && !string.IsNullOrWhiteSpace(x.NewValue)
+                                            (
+                                                x.ColumnName == nameof(ISoftDelete.DeletedAt)
+                                                || x.ColumnName == "deleted_at"
+                                            ) && !string.IsNullOrWhiteSpace(x.NewValue)
                                         )
                                     )
                                     {
                                         audit.Action = "Delete";
                                         var deletedRecord = changes.First(x =>
-                                            (x.ColumnName == nameof(ISoftDelete.DeletedAt) || x.ColumnName == "deleted_at") 
+                                            (
+                                                x.ColumnName == nameof(ISoftDelete.DeletedAt)
+                                                || x.ColumnName == "deleted_at"
+                                            )
                                         );
                                         changes.Remove(deletedRecord);
                                     }

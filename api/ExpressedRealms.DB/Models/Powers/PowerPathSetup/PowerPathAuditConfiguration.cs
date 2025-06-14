@@ -17,7 +17,7 @@ internal static class PowerPathAuditConfiguration
                     // You cannot change the Expression Id after creation
                     skipRecord = true;
                     break;
-                
+
                 case "name":
                     changedRecord.FriendlyName = "Name";
                     break;
@@ -46,8 +46,10 @@ internal static class PowerPathAuditConfiguration
         return mapping.Map<PowerPath, PowerPathAuditTrail>(
             (powerPath, audit) =>
             {
-                audit.ExpressionId = powerPath.ExpressionId;;
-                audit.PowerPathId = powerPath.Id;;
+                audit.ExpressionId = powerPath.ExpressionId;
+                ;
+                audit.PowerPathId = powerPath.Id;
+                ;
                 return true;
             }
         );

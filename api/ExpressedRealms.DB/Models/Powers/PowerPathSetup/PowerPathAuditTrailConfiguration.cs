@@ -26,7 +26,7 @@ internal class PowerPathAuditTrailConfiguration : IEntityTypeConfiguration<Power
             .HasForeignKey(x => x.ExpressionId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder
             .HasOne(x => x.PowerPath)
             .WithMany(x => x.PowerPathAudits)
