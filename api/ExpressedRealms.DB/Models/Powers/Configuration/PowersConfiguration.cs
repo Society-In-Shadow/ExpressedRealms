@@ -1,4 +1,5 @@
 using ExpressedRealms.DB.Models.Powers.PowerPathSetup;
+using ExpressedRealms.DB.Models.Powers.PowerSetup.Audit;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.DB.Models.Powers.Configuration;
@@ -17,5 +18,6 @@ internal static class PowersConfiguration
         builder.ApplyConfiguration(new PowerPrerequisitesConfiguration());
         builder.ApplyConfiguration(new PowerPathConfiguration());
         builder.ApplyConfiguration(new PowerPathAuditTrailConfiguration());
+        builder.ApplyConfiguration(new PowerAuditTrailConfiguration());
     }
 }

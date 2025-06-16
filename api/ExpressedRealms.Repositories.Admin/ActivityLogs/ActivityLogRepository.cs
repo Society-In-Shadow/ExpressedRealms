@@ -128,6 +128,20 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
                 ChangedProperties = x.ChangedProperties,
             })
             .ToListAsync();
+        
+        var powerLogs = await context
+            .PowerAuditTrails.AsNoTracking()
+            .IgnoreQueryFilters()
+            .Where(x => x.ActorUserId == userId)
+            .Select(x => new Log()
+            {
+                Location =
+                    $"Expression \"{x.Power.PowerPath.Expression.Name}\" > Power Path \"{x.PowerPath.Name}\" > Power \"{x.Power.Name}\"",
+                TimeStamp = x.Timestamp,
+                Action = x.Action,
+                ChangedProperties = x.ChangedProperties,
+            })
+            .ToListAsync();
 
         return expressionLogs
             .Concat(expressionSectionsLogs)
@@ -138,6 +152,7 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             .Concat(userRoleLogs)
             .Concat(userSpecificRoleLogs)
             .Concat(powerPathLogs)
+            .Concat(powerLogs)
             .ToList();
     }
 }
