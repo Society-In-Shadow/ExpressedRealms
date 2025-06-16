@@ -1,4 +1,5 @@
 using Audit.EntityFramework.ConfigurationApi;
+using ExpressedRealms.DB.Exceptions;
 using ExpressedRealms.DB.Interceptors;
 
 namespace ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
@@ -35,7 +36,7 @@ internal static class ExpressionSectionAuditConfiguration
                     break;
 
                 default:
-                    throw new Exception($"Unknown column name {changedRecord.ColumnName}");
+                    throw new MissingAuditColumnException(changedRecord.ColumnName);
             }
 
             if (skipRecord)

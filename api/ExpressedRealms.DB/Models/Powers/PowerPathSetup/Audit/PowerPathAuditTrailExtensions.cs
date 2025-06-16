@@ -1,4 +1,5 @@
 using Audit.EntityFramework.ConfigurationApi;
+using ExpressedRealms.DB.Exceptions;
 using ExpressedRealms.DB.Interceptors;
 
 namespace ExpressedRealms.DB.Models.Powers.PowerPathSetup;
@@ -27,7 +28,7 @@ internal static class PowerPathAuditTrailExtensions
                     break;
 
                 default:
-                    throw new Exception($"Unknown column name {changedRecord.ColumnName}");
+                    throw new MissingAuditColumnException(changedRecord.ColumnName);
             }
 
             if (skipRecord)

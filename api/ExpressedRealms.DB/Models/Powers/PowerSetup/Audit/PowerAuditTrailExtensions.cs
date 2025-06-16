@@ -1,4 +1,5 @@
 using Audit.EntityFramework.ConfigurationApi;
+using ExpressedRealms.DB.Exceptions;
 using ExpressedRealms.DB.Interceptors;
 
 namespace ExpressedRealms.DB.Models.Powers.PowerSetup.Audit;
@@ -59,7 +60,7 @@ internal static class PowerAuditTrailExtensions
                     break;
 
                 default:
-                    throw new Exception($"Unknown column name {changedRecord.ColumnName}");
+                    throw new MissingAuditColumnException(changedRecord.ColumnName);
             }
 
             if (skipRecord)
@@ -78,7 +79,6 @@ internal static class PowerAuditTrailExtensions
             {
                 audit.PowerId = table.Id;
                 audit.PowerPathId = table.PowerPathId;
-                ;
                 return true;
             }
         );

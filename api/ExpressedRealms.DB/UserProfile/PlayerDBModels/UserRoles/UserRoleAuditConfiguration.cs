@@ -1,4 +1,5 @@
 using Audit.EntityFramework.ConfigurationApi;
+using ExpressedRealms.DB.Exceptions;
 using ExpressedRealms.DB.Interceptors;
 using Microsoft.AspNetCore.Identity;
 
@@ -23,7 +24,7 @@ internal static class UserRoleAuditConfiguration
                     changedRecordsToReturn.Add(changedRecord);
                     break;
                 default:
-                    throw new Exception($"Unknown column name {changedRecord.ColumnName}");
+                    throw new MissingAuditColumnException(changedRecord.ColumnName);
             }
         }
 

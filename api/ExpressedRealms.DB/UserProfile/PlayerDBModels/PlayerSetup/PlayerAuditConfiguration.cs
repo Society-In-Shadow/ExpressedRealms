@@ -1,4 +1,5 @@
 using Audit.EntityFramework.ConfigurationApi;
+using ExpressedRealms.DB.Exceptions;
 using ExpressedRealms.DB.Interceptors;
 
 namespace ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
@@ -22,7 +23,7 @@ internal static class PlayerAuditConfiguration
                     break;
 
                 default:
-                    throw new Exception($"Unknown column name {changedRecord.ColumnName}");
+                    throw new MissingAuditColumnException(changedRecord.ColumnName);
             }
 
             if (skipRecord)

@@ -1,4 +1,5 @@
 using Audit.EntityFramework.ConfigurationApi;
+using ExpressedRealms.DB.Exceptions;
 using ExpressedRealms.DB.Interceptors;
 
 namespace ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
@@ -10,7 +11,6 @@ internal static class ExpressionAuditConfiguration
         List<ChangedRecord> changedRecordsToReturn = new();
         foreach (var changedRecord in changedRecords)
         {
-            var skipRecord = false;
             switch (changedRecord.ColumnName)
             {
                 case nameof(Expression.Name):
@@ -29,11 +29,8 @@ internal static class ExpressionAuditConfiguration
                     break;
 
                 default:
-                    throw new Exception($"Unknown column name {changedRecord.ColumnName}");
+                    throw new MissingAuditColumnException(changedRecord.ColumnName);
             }
-
-            if (skipRecord)
-                continue;
 
             changedRecordsToReturn.Add(changedRecord);
         }
