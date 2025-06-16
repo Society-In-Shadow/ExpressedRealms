@@ -3,7 +3,7 @@ using ExpressedRealms.DB.Interceptors;
 
 namespace ExpressedRealms.DB.Models.Powers.PowerPathSetup;
 
-internal static class PowerPathAuditConfiguration
+internal static class PowerPathAuditTrailExtensions
 {
     public static List<ChangedRecord> ProcessChangedRecords(List<ChangedRecord> changedRecords)
     {
@@ -47,9 +47,7 @@ internal static class PowerPathAuditConfiguration
             (powerPath, audit) =>
             {
                 audit.ExpressionId = powerPath.ExpressionId;
-                ;
                 audit.PowerPathId = powerPath.Id;
-                ;
                 return true;
             }
         );
