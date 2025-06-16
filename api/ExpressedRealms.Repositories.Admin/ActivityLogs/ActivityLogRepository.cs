@@ -128,7 +128,7 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
                 ChangedProperties = x.ChangedProperties,
             })
             .ToListAsync();
-        
+
         var powerLogs = await context
             .PowerAuditTrails.AsNoTracking()
             .IgnoreQueryFilters()

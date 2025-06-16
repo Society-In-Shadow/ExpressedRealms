@@ -25,35 +25,35 @@ internal static class PowerAuditTrailExtensions
                 case nameof(Power.Description):
                     changedRecord.FriendlyName = "Description";
                     break;
-                
+
                 case nameof(Power.LevelId):
                     changedRecord.FriendlyName = "Power Level";
                     break;
-                
+
                 case nameof(Power.AreaOfEffectTypeId):
                     changedRecord.FriendlyName = "Area of Effect";
                     break;
-                
+
                 case nameof(Power.ActivationTimingTypeId):
                     changedRecord.FriendlyName = "Activation Timing";
                     break;
-                
+
                 case nameof(Power.DurationId):
                     changedRecord.FriendlyName = "Duration";
                     break;
-                
+
                 case nameof(Power.IsPowerUse):
                     changedRecord.FriendlyName = "Is Power Use";
                     break;
-                
+
                 case nameof(Power.GameMechanicEffect):
                     changedRecord.FriendlyName = "Game Mechanic Effect";
                     break;
-                                
+
                 case nameof(Power.Limitation):
                     changedRecord.FriendlyName = "Limitation";
                     break;
-                
+
                 case nameof(Power.OtherFields):
                     changedRecord.FriendlyName = "Other";
                     break;
@@ -71,15 +71,14 @@ internal static class PowerAuditTrailExtensions
         return changedRecordsToReturn;
     }
 
-    public static IAuditEntityMapping AddPowerAuditTrailMapping(
-        this IAuditEntityMapping mapping
-    )
+    public static IAuditEntityMapping AddPowerAuditTrailMapping(this IAuditEntityMapping mapping)
     {
         return mapping.Map<Power, PowerAuditTrail>(
             (table, audit) =>
             {
                 audit.PowerId = table.Id;
-                audit.PowerPathId = table.PowerPathId;;
+                audit.PowerPathId = table.PowerPathId;
+                ;
                 return true;
             }
         );
