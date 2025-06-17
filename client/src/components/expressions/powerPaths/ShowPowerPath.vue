@@ -36,7 +36,7 @@ const popups = powerPathConfirmationPopups(props.path.id, props.path.name);
       <h1 class="p-0 m-0">
         {{ props.path.name }}
       </h1>
-      <div class="d-inline-flex align-items-start" v-if="userInfo.hasUserRole(UserRoles.PowerManagementRole)">
+      <div v-if="userInfo.hasUserRole(UserRoles.PowerManagementRole)" class="d-inline-flex align-items-start">
         <Button class="m-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
         <Button label="Edit" class="float-end m-2" @click="toggleEdit()" />
       </div>

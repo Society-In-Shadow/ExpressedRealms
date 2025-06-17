@@ -41,8 +41,12 @@ const toggleAddPower = () => {
     <ListPowers :power-path-id="path.id" />
   </div>
 
-  <Button v-if="!showAddPower && userInfo.hasUserRole(UserRoles.PowerManagementRole)" class="w-100 m-2"
-          label="Add Power Path" @click="toggleAddPower"/>
-  <AddPowerPath v-if="showAddPower && userInfo.hasUserRole(UserRoles.PowerManagementRole)"
-                :expression-id="props.expressionId" @canceled="toggleAddPower"/>
+  <Button
+    v-if="!showAddPower && userInfo.hasUserRole(UserRoles.PowerManagementRole)" class="w-100 m-2"
+    label="Add Power Path" @click="toggleAddPower"
+  />
+  <AddPowerPath
+    v-if="showAddPower && userInfo.hasUserRole(UserRoles.PowerManagementRole)"
+    :expression-id="props.expressionId" @canceled="toggleAddPower"
+  />
 </template>

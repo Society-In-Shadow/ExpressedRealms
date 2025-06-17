@@ -4,7 +4,7 @@ import FormDropdownWrapper from "@/FormWrappers/FormDropdownWrapper.vue";
 import FormEditorWrapper from "@/FormWrappers/FormEditorWrapper.vue";
 import FormInputTextWrapper from "@/FormWrappers/FormInputTextWrapper.vue";
 import Button from "primevue/button";
-import {onBeforeMount, ref} from "vue";
+import {onBeforeMount} from "vue";
 import axios from "axios";
 import toaster from "@/services/Toasters";
 import {getValidationInstance} from "@/components/expressions/powers/Validations/PowerValidations";

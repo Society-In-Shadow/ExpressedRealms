@@ -31,8 +31,10 @@ const toggleEdit = () =>{
 </script>
 
 <template>
-  <EditPower v-if="showEdit && userInfo.hasUserRole(UserRoles.PowerManagementRole)" :power-id="props.power.id"
-             :power-path-id="props.powerPathId" @canceled="toggleEdit"/>
+  <EditPower
+    v-if="showEdit && userInfo.hasUserRole(UserRoles.PowerManagementRole)" :power-id="props.power.id"
+    :power-path-id="props.powerPathId" @canceled="toggleEdit"
+  />
   <Card v-else>
     <template #title>
       <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
@@ -44,8 +46,10 @@ const toggleEdit = () =>{
             {{ props.power.powerLevel.name }}
           </div>
         </div>
-        <div v-if="!showEdit && userInfo.hasUserRole(UserRoles.PowerManagementRole)"
-             class="p-0 m-0 d-inline-flex align-items-start">
+        <div
+          v-if="!showEdit && userInfo.hasUserRole(UserRoles.PowerManagementRole)"
+          class="p-0 m-0 d-inline-flex align-items-start"
+        >
           <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
           <Button class="float-end" label="Edit" @click="toggleEdit" />
         </div>
@@ -80,7 +84,7 @@ const toggleEdit = () =>{
           <tbody class="p-datatable-tbody">
             <tr class="p-row-even">
               <td>
-                <p v-for="category in props.power.category" class="pr-3" v-bind:key="category.id">
+                <p v-for="category in props.power.category" :key="category.id" class="pr-3">
                   {{ category.name }}
                 </p>
               </td>
