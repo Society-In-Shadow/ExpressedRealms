@@ -5,6 +5,10 @@ import {powersStore} from "@/components/expressions/powers/stores/powersStore";
 import PowerCard from "@/components/expressions/powers/PowerCard.vue";
 import Button from 'primevue/button';
 
+import {UserRoles, userStore} from "@/stores/userStore";
+
+let userInfo = userStore();
+
 const props = defineProps({
   powerPathId: {
     type: Number,
@@ -35,7 +39,9 @@ const toggleAddPower = () => {
       <PowerCard :power="power" :power-path-id="props.powerPathId" />
     </div>
   </div>
-  
-  <AddPower v-if="showAddPower" :power-path-id="props.powerPathId" @cancelled="toggleAddPower" />
-  <Button v-else class="w-100 m-2" label="Add Power" @click="toggleAddPower" />
+
+  <AddPower v-if="showAddPower && userInfo.hasUserRole(UserRoles.PowerManagementRole)"
+            :power-path-id="props.powerPathId" @cancelled="toggleAddPower"/>
+  <Button v-if="!showAddPower && userInfo.hasUserRole(UserRoles.PowerManagementRole)" class="w-100 m-2"
+          label="Add Power" @click="toggleAddPower"/>
 </template>

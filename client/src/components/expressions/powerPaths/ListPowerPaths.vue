@@ -7,7 +7,9 @@ import ListPowers from "@/components/expressions/powers/ListPowers.vue";
 import AddPowerPath from "@/components/expressions/powerPaths/AddPowerPath.vue";
 import Divider from 'primevue/divider';
 import ShowPowerPath from "@/components/expressions/powerPaths/ShowPowerPath.vue";
+import {UserRoles, userStore} from "@/stores/userStore";
 
+let userInfo = userStore();
 let powerPaths = powerPathStore();
 
 const props = defineProps({
@@ -38,7 +40,9 @@ const toggleAddPower = () => {
     <h2>Powers</h2>
     <ListPowers :power-path-id="path.id" />
   </div>
-  
-  <Button v-if="!showAddPower" class="w-100 m-2" label="Add Power Path" @click="toggleAddPower" />
-  <AddPowerPath v-else :expression-id="props.expressionId" @canceled="toggleAddPower" />
+
+  <Button v-if="!showAddPower && userInfo.hasUserRole(UserRoles.PowerManagementRole)" class="w-100 m-2"
+          label="Add Power Path" @click="toggleAddPower"/>
+  <AddPowerPath v-if="showAddPower && userInfo.hasUserRole(UserRoles.PowerManagementRole)"
+                :expression-id="props.expressionId" @canceled="toggleAddPower"/>
 </template>

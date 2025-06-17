@@ -1,14 +1,22 @@
 import { defineStore } from 'pinia'
 import axios from "axios";
 
+export const UserRoles = {
+    ExpressionEditor: "ExpressionEditorRole",
+    UserManagementRole: "UserManagementRole",
+    PowerManagementRole: "PowerManagementRole",
+} as const;
+
+export type UserRole = (typeof UserRoles)[keyof typeof UserRoles];
+
 export const userStore = 
 defineStore('user', {
     state: () => {
         return {
-            userEmail: "" as String,
-            name: "" as String,
-            hasConfirmedEmail: false as Boolean,
-            isPlayerSetup: false as Boolean,
+            userEmail: "" as string,
+            name: "" as string,
+            hasConfirmedEmail: false as boolean,
+            isPlayerSetup: false as boolean,
             userRoles: [] as string[]
         }
     },
@@ -18,6 +26,9 @@ defineStore('user', {
                 .then(response => {
                     this.userRoles = response.data.roles;
                 })
+        },
+        hasUserRole(role: UserRole): boolean {
+            return this.userRoles.includes(role);
         }
     }
 });

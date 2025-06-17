@@ -6,7 +6,9 @@ import {type PropType, ref} from "vue";
 import type {Power} from "@/components/expressions/powers/types";
 import EditPower from "@/components/expressions/powers/EditPower.vue";
 import {powerConfirmationPopups} from "@/components/expressions/powers/services/powerConfirmationPopupService";
+import {UserRoles, userStore} from "@/stores/userStore";
 
+let userInfo = userStore();
 const props = defineProps({
   power: {
     type: Object as PropType<Power>,
@@ -29,7 +31,8 @@ const toggleEdit = () =>{
 </script>
 
 <template>
-  <EditPower v-if="showEdit" :power-id="props.power.id" :power-path-id="props.powerPathId" @canceled="toggleEdit" />
+  <EditPower v-if="showEdit && userInfo.hasUserRole(UserRoles.PowerManagementRole)" :power-id="props.power.id"
+             :power-path-id="props.powerPathId" @canceled="toggleEdit"/>
   <Card v-else>
     <template #title>
       <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
@@ -41,7 +44,8 @@ const toggleEdit = () =>{
             {{ props.power.powerLevel.name }}
           </div>
         </div>
-        <div v-if="!showEdit" class="p-0 m-0 d-inline-flex align-items-start">
+        <div v-if="!showEdit && userInfo.hasUserRole(UserRoles.PowerManagementRole)"
+             class="p-0 m-0 d-inline-flex align-items-start">
           <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
           <Button class="float-end" label="Edit" @click="toggleEdit" />
         </div>
