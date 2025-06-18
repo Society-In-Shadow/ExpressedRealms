@@ -47,7 +47,7 @@ internal static class ExpressionEndpoints
             .WithDescription(
                 "This returns the detailed information for the given expression, including publish details"
             );
-        
+
         endpointGroup
             .MapGet(
                 "/getByName/{name}",
@@ -78,13 +78,15 @@ internal static class ExpressionEndpoints
                         expressionId = expressionIdResult.Value;
                     }
 
-                    return TypedResults.Ok(new ExpressionNameResponse
-                    {
-                        Id = expressionId,
-                        ShowPowersTab = await featureToggleClient.HasFeatureFlag(
-                            ReleaseFlags.ShowPowersTab
-                        ),
-                    });
+                    return TypedResults.Ok(
+                        new ExpressionNameResponse
+                        {
+                            Id = expressionId,
+                            ShowPowersTab = await featureToggleClient.HasFeatureFlag(
+                                ReleaseFlags.ShowPowersTab
+                            ),
+                        }
+                    );
                 }
             )
             .WithSummary("Returns the id for the given expression name");

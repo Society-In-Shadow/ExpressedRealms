@@ -55,14 +55,12 @@ internal static class ExpectedSubSectionsEndpoints
                     IExpressionTextSectionRepository repository
                 ) =>
                 {
-                    var sections = await repository.GetExpressionTextSections(
-                        id
-                    );
+                    var sections = await repository.GetExpressionTextSections(id);
 
                     return TypedResults.Ok(
                         new ExpressionBaseResponse()
                         {
-                            ExpressionSections = ExpressionHelpers.BuildExpressionPage(sections)
+                            ExpressionSections = ExpressionHelpers.BuildExpressionPage(sections),
                         }
                     );
                 }

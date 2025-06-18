@@ -50,13 +50,11 @@ internal static class NavigationEndpoints
                 }
             )
             .AllowAnonymous();
-        
+
         endpointGroup
             .MapGet(
                 "/featureFlags",
-                async Task<Ok<FeatureFlagResponse>> (
-                    IFeatureToggleClient featureFlags
-                ) =>
+                async Task<Ok<FeatureFlagResponse>> (IFeatureToggleClient featureFlags) =>
                 {
                     List<string> featureFlagList = new List<string>();
                     foreach (var featureFlag in FeatureFlags.ReleaseFlags.List)
@@ -68,10 +66,7 @@ internal static class NavigationEndpoints
                     }
 
                     return TypedResults.Ok(
-                        new FeatureFlagResponse()
-                        {
-                            FeatureFlags = featureFlagList,
-                        }
+                        new FeatureFlagResponse() { FeatureFlags = featureFlagList }
                     );
                 }
             )
