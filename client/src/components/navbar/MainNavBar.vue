@@ -12,7 +12,7 @@ import RootNodeMenuItem from "@/components/navbar/navMenuItems/RootNodeMenuItem.
 import EditExpression from "@/components/expressions/EditExpression.vue";
 import Dialog from 'primevue/dialog';
 import AddExpression from "@/components/expressions/AddExpression.vue";
-import {userStore} from "@/stores/userStore";
+import {FeatureFlags, userStore} from "@/stores/userStore";
 const userInfo = userStore();
 const Router = useRouter();
 let showExpressionEdit = false;
@@ -21,14 +21,28 @@ const router = useRouter();
 
 const items = ref([
   { root: true, label: 'Characters', icon: 'pi pi-file', subtext: 'Characters', command: () => router.push("/characters"),  items: [] },
-  { root: true, label: 'Rule Book', icon: 'pi pi-file', subtext: 'Rule Book', command: () => router.push("/rulebook") },
   { root: true, label: 'Expressions', items: [] },
-  { root: true, label: 'Treasured Tales', icon: 'pi pi-file', subtext: 'Treasured Tales', command: () => router.push("/treasuredtales") },
   { root: true, label: 'Stone Puller', icon: 'pi pi-file', subtext: 'Stone Puller', command: () => router.push("/stonePuller") },
   { root: true, label: 'Admin', icon: 'pi pi-admin', subtext: 'See User List', command: () => router.push("/admin/players"), visible: () => userInfo.userRoles.includes("UserManagementRole") }
 ]);
 
-function loadList(){
+async function loadList(){
+
+  const userInfo = userStore();
+  await userInfo.updateUserRoles();
+  await userInfo.updateUserFeatureFlags()
+      .then(() => {
+        let indexOffset = -1;
+        if(userInfo.hasFeatureFlag(FeatureFlags.ShowRuleBook)){
+          items.value.splice(1, 0, { root: true, label: 'Rule Book', icon: 'pi pi-file', subtext: 'Rule Book', command: () => router.push("/rulebook") });
+          indexOffset = 0;
+        }
+
+        if(userInfo.hasFeatureFlag(FeatureFlags.ShowTreasureTales)){
+          items.value.splice(3 + indexOffset, 0, { root: true, label: 'Treasured Tales', icon: 'pi pi-file', subtext: 'Treasured Tales', command: () => router.push("/treasuredtales") });
+        }
+      });
+  
   function MapData(expression) {
     return {
       navMenuType: "expression",
@@ -99,15 +113,10 @@ function loadList(){
 
       })
 
-  const userInfo = userStore();
-  axios.get("/navMenu/permissions")
-      .then(response => {
-        userInfo.userRoles = response.data.roles;
-      })
 }
 
-onMounted(() => {
-  loadList();
+onMounted(async () => {
+  await loadList();
 });
 
 let editVisible = ref(false);

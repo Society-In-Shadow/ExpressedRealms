@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using ExpressedRealms.Authentication;
 using ExpressedRealms.DB;
+using ExpressedRealms.FeatureFlags.FeatureClient;
 using ExpressedRealms.Repositories.Expressions.Expressions;
 using ExpressedRealms.Server.EndPoints.NavigationEndpoints.DTOs;
 using ExpressedRealms.Server.EndPoints.NavigationEndpoints.Responses;
@@ -44,6 +45,32 @@ internal static class NavigationEndpoints
                                 .User.Claims.Where(x => x.Type == ClaimTypes.Role)
                                 .Select(x => x.Value)
                                 .ToList(),
+                        }
+                    );
+                }
+            )
+            .AllowAnonymous();
+        
+        endpointGroup
+            .MapGet(
+                "/featureFlags",
+                async Task<Ok<FeatureFlagResponse>> (
+                    IFeatureToggleClient featureFlags
+                ) =>
+                {
+                    List<string> featureFlagList = new List<string>();
+                    foreach (var featureFlag in FeatureFlags.ReleaseFlags.List)
+                    {
+                        if (await featureFlags.HasFeatureFlag(featureFlag))
+                        {
+                            featureFlagList.Add(featureFlag.Value);
+                        }
+                    }
+
+                    return TypedResults.Ok(
+                        new FeatureFlagResponse()
+                        {
+                            FeatureFlags = featureFlagList,
                         }
                     );
                 }

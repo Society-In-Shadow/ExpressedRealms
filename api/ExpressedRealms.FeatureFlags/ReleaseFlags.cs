@@ -23,6 +23,18 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "show-power-tab",
         "On the expressions, shows the power tab."
     );
+    
+    public static readonly ReleaseFlags ShowRuleBook = new(
+        "Show Rule Book Nav",
+        "show-rule-book-nav",
+        "Allows one to see the rule book in the nav bar."
+    );
+    
+    public static readonly ReleaseFlags ShowTreasuredTales = new(
+        "Show Treasure Tales Nav",
+        "show-treasured-tales-nav",
+        "Allows one to see the treasured tales in the nav bar."
+    );
 
     public override string ToString()
     {
