@@ -1,7 +1,9 @@
+---
+
 name: SonarQube
 permissions:
   contents: read
-on:
+on: # yamllint disable-line truthy
   push:
     branches:
       - main

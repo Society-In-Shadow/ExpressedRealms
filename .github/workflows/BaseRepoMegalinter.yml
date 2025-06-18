@@ -5,7 +5,7 @@ name: Check Repo Root
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: false
 
-on:
+on: # yamllint disable-line truthy
   push:
     branches: [main]
     paths:

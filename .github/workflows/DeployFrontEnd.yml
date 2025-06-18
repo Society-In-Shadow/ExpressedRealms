@@ -5,7 +5,7 @@ name: Build and Deploy Front End
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: false
 
-on:
+on: # yamllint disable-line truthy
   push:
     branches: [main]
     paths:
