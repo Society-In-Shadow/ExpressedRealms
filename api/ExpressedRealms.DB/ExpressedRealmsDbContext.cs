@@ -38,6 +38,7 @@ namespace ExpressedRealms.DB
             builder.ApplyConfiguration(new ExpressionSectionsConfiguration());
             builder.ApplyConfiguration(new ExpressionSectionTypeConfiguration());
             builder.ApplyConfiguration(new ExpressionPublishStatusConfiguration());
+            builder.ApplyConfiguration(new ExpressionTypeConfiguration());
 
             builder.ApplyConfiguration(new ExpressionAuditTrailConfiguration());
             builder.ApplyConfiguration(new ExpressionSectionAuditTrailConfiguration());
