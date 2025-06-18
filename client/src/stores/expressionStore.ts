@@ -1,28 +1,36 @@
 import { defineStore } from 'pinia'
 import axios from "axios";
+import {UserRoles, userStore} from "@/stores/userStore";
+
+const userInfo = userStore();
 
 export const expressionStore = 
 defineStore('expression', {
     state: () => {
         return {
             sections: [] as any[],
-            currentExpressionId: 0 as Number,
-            currentExpressionName: "" as String,
-            isDoneLoading: false as Boolean,
-            canEdit: false as Boolean,
-            showPowersTab: false as Boolean,
+            currentExpressionId: 0 as number,
+            currentExpressionName: "" as string,
+            isDoneLoading: false as boolean,
+            canEdit: userInfo.hasUserRole(UserRoles.PowerManagementRole),
+            showPowersTab: false as boolean,
+            isSpecialExpression: false as boolean
         }
     },
     actions: {
-        async getExpressionSections(name: String){
+        async getExpressionId(name: string){
+            await axios.get(`/expression/getByName/${name}`)
+                .then(async (json) => {
+                    this.currentExpressionId = json.data.id;
+                    this.showPowersTab = json.data.showPowersTab;
+                })
+        },
+        async getExpressionSections(){
             this.isDoneLoading = false;
-            return await axios.get(`/expressionSubSections/${name}`)
+            return await axios.get(`/expressionSubSections/${this.currentExpressionId}`)
                 .then(async (json) => {
                     this.sections = json.data.expressionSections;
-                    this.currentExpressionId = json.data.expressionId;
                     this.isDoneLoading = true;
-                    this.canEdit = json.data.canEditPolicy
-                    this.showPowersTab = json.data.showPowersTab
                 });
         }
     }

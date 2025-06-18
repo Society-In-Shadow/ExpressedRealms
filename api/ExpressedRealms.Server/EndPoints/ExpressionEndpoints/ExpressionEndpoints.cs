@@ -1,4 +1,6 @@
 using ExpressedRealms.Authentication;
+using ExpressedRealms.FeatureFlags;
+using ExpressedRealms.FeatureFlags.FeatureClient;
 using ExpressedRealms.Repositories.Expressions.Expressions;
 using ExpressedRealms.Repositories.Expressions.Expressions.DTOs;
 using ExpressedRealms.Repositories.Expressions.ExpressionTextSections;
@@ -45,6 +47,47 @@ internal static class ExpressionEndpoints
             .WithDescription(
                 "This returns the detailed information for the given expression, including publish details"
             );
+        
+        endpointGroup
+            .MapGet(
+                "/getByName/{name}",
+                async Task<Results<NotFound, Ok<ExpressionNameResponse>>> (
+                    string name,
+                    IExpressionTextSectionRepository sectionRepository,
+                    IExpressionRepository expressionRepository,
+                    IFeatureToggleClient featureToggleClient
+                ) =>
+                {
+                    int expressionId;
+                    if (name == "gameRules")
+                    {
+                        var result = await expressionRepository.GetGameSystemExpressionId();
+                        expressionId = result.Value;
+                    }
+                    else if (name == "treasuredTales")
+                    {
+                        var result = await expressionRepository.GetTreasuredTalesExpressionId();
+                        expressionId = result.Value;
+                    }
+                    else
+                    {
+                        var expressionIdResult = await sectionRepository.GetExpressionId(name);
+                        if (expressionIdResult.HasNotFound(out var notFound))
+                            return notFound;
+                        expressionIdResult.ThrowIfErrorNotHandled();
+                        expressionId = expressionIdResult.Value;
+                    }
+
+                    return TypedResults.Ok(new ExpressionNameResponse
+                    {
+                        Id = expressionId,
+                        ShowPowersTab = await featureToggleClient.HasFeatureFlag(
+                            ReleaseFlags.ShowPowersTab
+                        ),
+                    });
+                }
+            )
+            .WithSummary("Returns the id for the given expression name");
 
         endpointGroup
             .MapPut(

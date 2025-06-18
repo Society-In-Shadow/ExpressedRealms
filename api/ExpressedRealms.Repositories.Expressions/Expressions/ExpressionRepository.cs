@@ -46,6 +46,16 @@ internal sealed class ExpressionRepository(
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<Result<int>> GetGameSystemExpressionId()
+    {
+        return await context.Expressions.Where(x => x.ExpressionTypeId == 2).Select(x => x.Id).FirstOrDefaultAsync();
+    }
+    
+    public async Task<Result<int>> GetTreasuredTalesExpressionId()
+    {
+        return await context.Expressions.Where(x => x.ExpressionTypeId == 3).Select(x => x.Id).FirstOrDefaultAsync();
+    }
+
     public async Task<Result<GetExpressionDto>> GetExpression(int expressionId)
     {
         var expression = await context

@@ -55,8 +55,8 @@ const showEdit = ref(expressionInfo.canEdit);
 const showCreate = ref(false);
 const showPreview = ref(false);
 
-function fetchData(name: string) {
-  expressionInfo.getExpressionSections(name)
+async function fetchData() {
+  await expressionInfo.getExpressionSections()
       .then(async () => {
         sections.value = expressionInfo.sections;
         showEdit.value = expressionInfo.canEdit;
@@ -68,7 +68,7 @@ function fetchData(name: string) {
       });
   
   headerIsLoading.value = true;
-  axios.get(`/expressionSubSections/${name}/expression`)
+  await axios.get(`/expressionSubSections/${expressionInfo.currentExpressionId}/expression`)
       .then(async (json) => {
         expressionHeader.value = json.data;
         headerIsLoading.value = false;
@@ -83,13 +83,14 @@ function togglePreview(){
   showPreview.value = !showPreview.value;
 }
 
-onMounted(() =>{
-  fetchData(route.params.name);
+onMounted(async () =>{
+  await expressionInfo.getExpressionId(route.params.name);
+  await fetchData();
 })
 
 onBeforeRouteUpdate(async (to, from) => {
   if (to.params.name !== from.params.name) {
-    fetchData(to.params.name)
+    await fetchData()
   }
 })
 

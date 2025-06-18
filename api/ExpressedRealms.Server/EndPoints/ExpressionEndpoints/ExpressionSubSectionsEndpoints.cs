@@ -26,18 +26,13 @@ internal static class ExpectedSubSectionsEndpoints
 
         endpointGroup
             .MapGet(
-                "{name}/expression",
+                "{id}/expression",
                 async Task<Results<NotFound, Ok<ExpressionSectionDTO>>> (
-                    string name,
+                    int id,
                     IExpressionTextSectionRepository repository
                 ) =>
                 {
-                    var expressionIdResult = await repository.GetExpressionId(name);
-                    if (expressionIdResult.HasNotFound(out var notFound))
-                        return notFound;
-                    expressionIdResult.ThrowIfErrorNotHandled();
-
-                    var section = await repository.GetExpressionSection(expressionIdResult.Value);
+                    var section = await repository.GetExpressionSection(id);
 
                     return TypedResults.Ok(
                         new ExpressionSectionDTO()
@@ -54,36 +49,20 @@ internal static class ExpectedSubSectionsEndpoints
 
         endpointGroup
             .MapGet(
-                "{name}",
+                "{id}",
                 async Task<Results<NotFound, Ok<ExpressionBaseResponse>>> (
-                    string name,
-                    HttpContext httpContext,
-                    IExpressionTextSectionRepository repository,
-                    IFeatureToggleClient featureToggleClient
+                    int id,
+                    IExpressionTextSectionRepository repository
                 ) =>
                 {
-                    var expressionIdResult = await repository.GetExpressionId(name);
-                    if (expressionIdResult.HasNotFound(out var notFound))
-                        return notFound;
-                    expressionIdResult.ThrowIfErrorNotHandled();
-
                     var sections = await repository.GetExpressionTextSections(
-                        expressionIdResult.Value
-                    );
-
-                    var hasEditPolicy = await httpContext.UserHasPolicyAsync(
-                        Policies.ExpressionEditorPolicy
+                        id
                     );
 
                     return TypedResults.Ok(
                         new ExpressionBaseResponse()
                         {
-                            ExpressionId = expressionIdResult.Value,
-                            ExpressionSections = ExpressionHelpers.BuildExpressionPage(sections),
-                            CanEditPolicy = hasEditPolicy,
-                            ShowPowersTab = await featureToggleClient.HasFeatureFlag(
-                                ReleaseFlags.ShowPowersTab
-                            ),
+                            ExpressionSections = ExpressionHelpers.BuildExpressionPage(sections)
                         }
                     );
                 }

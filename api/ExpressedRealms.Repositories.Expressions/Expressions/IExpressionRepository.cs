@@ -10,4 +10,6 @@ public interface IExpressionRepository
     Task<Result> DeleteExpressionAsync(int id);
     Task<Result<List<ExpressionNavigationMenuItem>>> GetNavigationMenuItems();
     Task<Result<GetExpressionDto>> GetExpression(int expressionId);
+    Task<Result<int>> GetGameSystemExpressionId();
+    Task<Result<int>> GetTreasuredTalesExpressionId();
 }
