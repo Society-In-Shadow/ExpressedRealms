@@ -1,5 +1,4 @@
 ---
-
 name: Build and Deploy API
 
 env:
@@ -9,14 +8,13 @@ on: # yamllint disable-line truthy
   push:
     branches: [main]
     paths:
-      - 'api/**'
+      - "api/**"
   pull_request:
     branches: [main]
     paths:
-      - 'api/**'
+      - "api/**"
 
 jobs:
-
   megalinter:
     name: MegaLinter
     runs-on: ubuntu-latest
@@ -62,7 +60,7 @@ jobs:
         if: success() || failure()
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: 'megalinter-reports/megalinter-report.sarif'
+          sarif_file: "megalinter-reports/megalinter-report.sarif"
 
   build:
     name: Build API and Docker file

@@ -1,5 +1,4 @@
 ---
-
 name: Check Repo Root
 
 env:
@@ -9,13 +8,13 @@ on: # yamllint disable-line truthy
   push:
     branches: [main]
     paths:
-      - '.github/*'
-      - '*'
+      - ".github/*"
+      - "*"
   pull_request:
     branches: [main]
     paths:
-      - '.github/*'
-      - '*'
+      - ".github/*"
+      - "*"
 
 jobs:
   megalinter:
@@ -61,4 +60,4 @@ jobs:
         if: success() || failure()
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: 'megalinter-reports/megalinter-report.sarif'
+          sarif_file: "megalinter-reports/megalinter-report.sarif"
