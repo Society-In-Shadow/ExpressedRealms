@@ -28,7 +28,9 @@ public static class ProcessChangedRecords
             ),
             nameof(Player) => PlayerAuditConfiguration.ProcessChangedRecords(changedRecords),
             nameof(UserRole) => UserRoleAuditConfiguration.ProcessChangedRecords(changedRecords),
-            nameof(PowerPath) => PowerPathAuditTrailExtensions.ProcessChangedRecords(changedRecords),
+            nameof(PowerPath) => PowerPathAuditTrailExtensions.ProcessChangedRecords(
+                changedRecords
+            ),
             nameof(Power) => PowerAuditTrailExtensions.ProcessChangedRecords(changedRecords),
             _ => throw new ArgumentException(
                 $"Table not setup in the ProcessChangedRecords class: {tableName}"

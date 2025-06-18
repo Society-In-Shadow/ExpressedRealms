@@ -25,8 +25,7 @@ internal sealed class ExpressionRepository(
             Policies.ExpressionEditorPolicy
         );
 
-        var expression = context.Expressions.AsNoTracking()
-            .Where(x => x.ExpressionTypeId == 1); // 1 = expression
+        var expression = context.Expressions.AsNoTracking().Where(x => x.ExpressionTypeId == 1); // 1 = expression
 
         if (!canSeeBetaAndDrafts)
         {
