@@ -59,7 +59,7 @@ internal static class ExpressionEndpoints
                 ) =>
                 {
                     int expressionId;
-                    if (name == "gameRules")
+                    if (name == "ruleBook")
                     {
                         var result = await expressionRepository.GetGameSystemExpressionId();
                         expressionId = result.Value;

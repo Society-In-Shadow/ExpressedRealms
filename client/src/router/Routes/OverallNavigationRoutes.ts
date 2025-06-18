@@ -30,6 +30,16 @@ export const OverallRoutes = {
             component: () => import("./../../components/characters/character/EditCharacter.vue")
         },
         {
+            path: "/rulebook",
+            name: "rulebook",
+            component: () => import("./../../components/expressions/CmsBase.vue")
+        },
+        {
+            path: "/treasuredtales",
+            name: "treasuredtales",
+            component: () => import("./../../components/expressions/CmsBase.vue")
+        },
+        {
             path: "/expressions/:name",
             name: "viewExpression",
             component: () => import("./../../components/expressions/ExpressionBase.vue")

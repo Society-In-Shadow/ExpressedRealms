@@ -21,7 +21,9 @@ const router = useRouter();
 
 const items = ref([
   { root: true, label: 'Characters', icon: 'pi pi-file', subtext: 'Characters', command: () => router.push("/characters"),  items: [] },
+  { root: true, label: 'Rule Book', icon: 'pi pi-file', subtext: 'Rule Book', command: () => router.push("/rulebook") },
   { root: true, label: 'Expressions', items: [] },
+  { root: true, label: 'Treasured Tales', icon: 'pi pi-file', subtext: 'Treasured Tales', command: () => router.push("/treasuredtales") },
   { root: true, label: 'Stone Puller', icon: 'pi pi-file', subtext: 'Stone Puller', command: () => router.push("/stonePuller") },
   { root: true, label: 'Admin', icon: 'pi pi-admin', subtext: 'See User List', command: () => router.push("/admin/players"), visible: () => userInfo.userRoles.includes("UserManagementRole") }
 ]);
@@ -130,7 +132,7 @@ function showCreateExpressionPopup(){
   </Dialog>
   <MegaMenu :model="items" class="m-lg-3 m-md-3 m-sm-1 m-1 pb-1 pt-1">
     <template #start>
-      <img src="/favicon.png" height="50" width="50" class="m-2">
+      <img src="/favicon.png" alt="A white, black, blue, red, green, and transparent marbles organized in a pentagon pattern. The transparent stone is in the center." height="50" width="50" class="m-2">
     </template>
     <template #item="{ item }">
       <RootNodeMenuItem v-if="item.root" :item="item" />
