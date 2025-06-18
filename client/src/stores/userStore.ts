@@ -39,7 +39,6 @@ defineStore('user', {
             return await axios.get("/navMenu/featureFlags")
                 .then(response => {
                     this.userFeatureFlags = response.data.featureFlags;
-                    console.log("feature flags laoded");
                 })
         },
         hasUserRole(role: UserRole): boolean {
