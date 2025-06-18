@@ -16,7 +16,7 @@ import {FeatureFlags, userStore} from "@/stores/userStore";
 const userInfo = userStore();
 const Router = useRouter();
 let showExpressionEdit = false;
-
+let initialLoad = true;
 const router = useRouter();
 
 const items = ref([
@@ -32,6 +32,9 @@ async function loadList(){
   await userInfo.updateUserRoles();
   await userInfo.updateUserFeatureFlags()
       .then(() => {
+        if(!initialLoad){
+          return;
+        }
         let indexOffset = -1;
         if(userInfo.hasFeatureFlag(FeatureFlags.ShowRuleBook)){
           items.value.splice(1, 0, { root: true, label: 'Rule Book', icon: 'pi pi-file', subtext: 'Rule Book', command: () => router.push("/rulebook") });
@@ -41,6 +44,8 @@ async function loadList(){
         if(userInfo.hasFeatureFlag(FeatureFlags.ShowTreasureTales)){
           items.value.splice(3 + indexOffset, 0, { root: true, label: 'Treasured Tales', icon: 'pi pi-file', subtext: 'Treasured Tales', command: () => router.push("/treasuredtales") });
         }
+
+        initialLoad = false;
       });
   
   function MapData(expression) {

@@ -11,20 +11,25 @@ internal static class ExpressionAuditConfiguration
         List<ChangedRecord> changedRecordsToReturn = new();
         foreach (var changedRecord in changedRecords)
         {
+            bool skipRecord = false;
             switch (changedRecord.ColumnName)
             {
-                case nameof(Expression.Name):
+                case "expression_type_id":
+                    skipRecord = true;
+                    break;
+                
+                case "name":
                     break;
 
-                case nameof(Expression.ShortDescription):
+                case "short_description":
                     changedRecord.FriendlyName = "Short Description";
                     break;
 
-                case nameof(Expression.NavMenuImage):
+                case "nav_menu_item":
                     changedRecord.FriendlyName = "Navigation Menu Image";
                     break;
 
-                case nameof(Expression.PublishStatusId):
+                case "publish_status_id":
                     changedRecord.FriendlyName = "Publish Status";
                     break;
 
@@ -32,7 +37,8 @@ internal static class ExpressionAuditConfiguration
                     throw new MissingAuditColumnException(changedRecord.ColumnName);
             }
 
-            changedRecordsToReturn.Add(changedRecord);
+            if(!skipRecord)
+               changedRecordsToReturn.Add(changedRecord);
         }
 
         return changedRecordsToReturn;
