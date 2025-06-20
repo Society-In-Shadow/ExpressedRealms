@@ -1,6 +1,7 @@
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathCreate;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathEdit;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathLIst;
+using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathSorting;
 using FluentResults;
 
 namespace ExpressedRealms.Powers.Repository.PowerPaths;
@@ -12,4 +13,5 @@ public interface IPowerPathRepository
     Task<Result> EditPowerPathAsync(EditPowerPathModel editPowerPathModel);
     Task<Result> DeletePowerPathAsync(int powerPathId);
     Task<Result<EditPowerPathInformation>> GetPowerPathAsync(int powerPathId);
+    Task<Result> UpdatePowerPathSortOrder(EditPowerPathSortModel dto);
 }

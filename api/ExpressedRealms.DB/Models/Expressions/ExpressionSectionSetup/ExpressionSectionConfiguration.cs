@@ -22,8 +22,6 @@ internal class ExpressionSectionsConfiguration : IEntityTypeConfiguration<Expres
 
         builder.Property(e => e.OrderIndex).IsRequired();
 
-        builder.Property(e => e.OrderIndex).IsRequired();
-
         builder.Property(e => e.Name).HasMaxLength(150).IsRequired();
 
         builder.Property(e => e.Content).IsRequired();

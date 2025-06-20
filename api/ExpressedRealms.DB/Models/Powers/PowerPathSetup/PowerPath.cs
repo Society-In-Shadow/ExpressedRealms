@@ -14,6 +14,8 @@ public class PowerPath : ISoftDelete
 
     public int ExpressionId { get; set; }
     public virtual Expression Expression { get; set; } = null!;
+    
+    public int OrderIndex { get; set; }
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 
