@@ -1,13 +1,11 @@
 import axios from "axios";
 import {userStore} from "@/stores/userStore";
-import {useRouter} from "vue-router";
 
-export async function logOff() {
-    const Router = useRouter();
+export async function logOff(router) {
     const userInfo = userStore();
     axios.post('/auth/logoff').then(() => {
         userInfo.$reset();
-        Router.push('login');
+        router.push('/login');
     });
 }
 

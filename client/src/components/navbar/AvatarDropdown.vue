@@ -24,7 +24,7 @@ const items = ref([
     label: 'Logoff',
     id: 'logoff',
     icon: 'pi pi-sign-out',
-    command: () => { logOff(); }
+    command: () => { logOff(Router); }
   },
 ]);
 
