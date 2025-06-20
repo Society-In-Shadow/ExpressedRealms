@@ -19,7 +19,8 @@ internal sealed class AddCharacterDtoValidator : AbstractValidator<AddCharacterD
                     return await dbContext.Expressions.AnyAsync(
                         x =>
                             x.Id == expressionId
-                            && x.PublishStatusId == (int)PublishTypes.Published,
+                            && x.PublishStatusId == (int)PublishTypes.Published
+                            && x.ExpressionTypeId == 1,
                         cancellationToken
                     );
                 }
@@ -33,6 +34,7 @@ internal sealed class AddCharacterDtoValidator : AbstractValidator<AddCharacterD
                         x =>
                             x.ExpressionId == dto.ExpressionId
                             && x.Expression.PublishStatusId == (int)PublishTypes.Published
+                            && x.Expression.ExpressionTypeId == 1
                             && x.SectionTypeId == (int)ExpressionSectionType.FactionType
                             && x.Id == dto.FactionId,
                         cancellationToken
