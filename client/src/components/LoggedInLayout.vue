@@ -3,8 +3,8 @@
   <Toast position="top-center" />
   <ConfirmDialog group="dialog" />
   <ConfirmPopup group="popup" />
+  <Message icon="pi pi-exclamation-triangle" class="sticky-top" severity="warn">This site is currently in BETA, not all features or content is in place.</Message>
   <main-nav-bar />
-  
   <router-view />
 </template>
 
@@ -14,6 +14,7 @@ import MainNavBar from "@/components/navbar/MainNavBar.vue";
 import Toast from 'primevue/toast';
 import ConfirmDialog from "primevue/confirmdialog";
 import ConfirmPopup from 'primevue/confirmpopup';
+import Message from 'primevue/message';
 </script>
 
 <style>

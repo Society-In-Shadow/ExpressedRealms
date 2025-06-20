@@ -97,9 +97,9 @@ onBeforeRouteUpdate(async (to, from) => {
 </script>
 
 <template>
-  <div id="expression" class="container">
-    <div class="d-flex flex-column flex-md-row ">
-      <div class="col-12 col-lg-3 col-sm-12 col-xl-3 col-md-3">
+  <div id="expression" class="ms-md-auto me-md-auto ms-0 me-0 container-md p-0">
+    <div class="d-flex flex-column flex-md-row">
+      <div class="col-12 col-lg-3 col-sm-12 col-xl-3 col-md-3 p-0">
         <Card class="sticky-md-top sticky-lg-top sticky-xl-top zIndexFix">
           <template #title>
             Table Of Contents
@@ -111,8 +111,8 @@ onBeforeRouteUpdate(async (to, from) => {
           </template>
         </Card>
       </div>
-      <div class="flex-fill m-2">
-        <Card class="mb-3 p-0 mt-0 pt-0" style="max-width: 800px">
+      <div class="col p-0">
+        <Card class="" style="max-width: 800px">
           <template #content>
             <div class="pb-4">
               <div class="d-flex flex-column flex-md-row">
@@ -162,29 +162,15 @@ onBeforeRouteUpdate(async (to, from) => {
 
 <style>
 
-.container {
-  width: 100%; 
-  margin-right: auto; 
-  margin-left: auto; 
-  max-width:1000px
+@media(min-width: 768px){
+  .container-md {
+    width: 100%;
+    max-width:1000px
+  }
 }
 
 .zIndexFix {
   z-index: inherit !important;
 }
 
-#expression .p-card-content {
-  padding-top: 0;
-  margin-top: 0;
-}
-
-#expression > div > div.p-card-body > div {
-  padding-top: 0;
-  margin-top: 0;
-}
-
-#expression-body > div:nth-child(1) > h1 {
-  padding-top: 0;
-  margin-top: 0;
-}
 </style>
