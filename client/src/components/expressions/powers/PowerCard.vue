@@ -35,7 +35,7 @@ const toggleEdit = () =>{
     v-if="showEdit && userInfo.hasUserRole(UserRoles.PowerManagementRole)" :power-id="props.power.id"
     :power-path-id="props.powerPathId" @canceled="toggleEdit"
   />
-  <Card v-else>
+  <Card class="card-body-fix" v-else>
     <template #title>
       <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
         <div>
@@ -113,3 +113,11 @@ const toggleEdit = () =>{
     </template>
   </Card>
 </template>
+
+<style>
+@media(max-width: 768px){
+  .card-body-fix .p-card-body{
+    padding: 0 !important;
+  }
+}
+</style>
