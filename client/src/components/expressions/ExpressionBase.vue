@@ -110,7 +110,7 @@ onBeforeRouteUpdate(async (to, from) => {
           <template #content>
             <article id="expression-body">
               <ExpressionToC v-if="currentTab == '0'" v-model="sections" :can-edit="showEdit" :show-skeleton="isLoading" @toggle-preview="togglePreview" />
-              <PowersToC v-else :can-edit="showEdit" :show-skeleton="isLoading" @toggle-preview="togglePreview" />
+              <PowersToC v-else :can-edit="false" :show-skeleton="isLoading" @toggle-preview="togglePreview" />
             </article>
           </template>
         </Card>
