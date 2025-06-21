@@ -18,7 +18,7 @@ export const powerPathStore =
                 this.powerPaths = response.data;
             },
             async updatePowersForPath(powers: Power[], powerPathId:number){
-                let powerPath = this.powerPaths.find(x => x.id == powerPathId)!;
+                const powerPath = this.powerPaths.find(x => x.id == powerPathId)!;
                 powerPath.powers = powers;
             },
             getPowerPath: async function (powerPathId: number): Promise<EditPowerPath> {

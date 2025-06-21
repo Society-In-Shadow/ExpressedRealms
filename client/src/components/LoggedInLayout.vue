@@ -3,7 +3,9 @@
   <Toast position="top-center" />
   <ConfirmDialog group="dialog" />
   <ConfirmPopup group="popup" />
-  <Message icon="pi pi-exclamation-triangle" class="sticky-top ms-0 me-0 mt-2 mb-2 m-md-2" severity="warn">This site is currently in a BETA state, not all features or content is in place.</Message>
+  <Message icon="pi pi-exclamation-triangle" class="sticky-top ms-0 me-0 mt-2 mb-2 m-md-2" severity="warn">
+    This site is currently in a BETA state, not all features or content is in place.
+  </Message>
   <main-nav-bar />
   <router-view />
 </template>

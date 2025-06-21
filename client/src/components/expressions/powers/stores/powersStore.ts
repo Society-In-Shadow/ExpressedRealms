@@ -5,7 +5,7 @@ import type {EditPower, EditPowerResponse, Power, PowerStore} from "@/components
 import type {ListItem} from "@/types/ListItem";
 import {powerPathStore} from "@/components/expressions/powerPaths/stores/powerPathStore";
 
-let powerPaths = powerPathStore();
+const powerPaths = powerPathStore();
 
 export const powersStore = 
     defineStore(`powers`, {

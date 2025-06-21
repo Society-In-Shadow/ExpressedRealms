@@ -14,7 +14,6 @@ import {powerPathStore} from "@/components/expressions/powerPaths/stores/powerPa
 
 const powerPaths = powerPathStore();
 
-
 const emit = defineEmits<{
   togglePreview: []
 }>();

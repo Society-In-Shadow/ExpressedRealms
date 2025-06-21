@@ -5,7 +5,9 @@ import Message from 'primevue/message';
 </script>
 
 <template>
-  <Message icon="pi pi-exclamation-triangle" class="sticky-top ms-0 me-0 mt-2 mb-2 m-md-2" severity="warn">This site is currently in a BETA state, not all features or content is in place.</Message>
+  <Message icon="pi pi-exclamation-triangle" class="sticky-top ms-0 me-0 mt-2 mb-2 m-md-2" severity="warn">
+    This site is currently in a BETA state, not all features or content is in place.
+  </Message>
 
   <div class="d-flex justify-content-center align-items-center boxCenterHelper">
     <Card id="loginBox">
