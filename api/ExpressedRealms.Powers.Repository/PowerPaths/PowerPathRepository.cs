@@ -29,41 +29,46 @@ internal sealed class PowerPathRepository(
                 Id = x.Id,
                 Name = x.Name,
                 Description = x.Description,
-                Powers = x.Powers.Select(x => new PowerInformation
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Category = x
-                        .CategoryMappings.Select(y => new DetailedInformation(
-                            y.Category.Name,
-                            y.Category.Description
-                        ))
-                        .ToList(),
-                    Description = x.Description,
-                    GameMechanicEffect = x.GameMechanicEffect,
-                    Limitation = x.Limitation,
-                    PowerDuration = new DetailedInformation(
-                        x.PowerDuration.Name,
-                        x.PowerDuration.Description
-                    ),
-                    AreaOfEffect = new DetailedInformation(
-                        x.PowerAreaOfEffectType.Name,
-                        x.PowerAreaOfEffectType.Description
-                    ),
-                    PowerLevel = new DetailedInformation(x.PowerLevel.Name, x.PowerLevel.Description),
-                    PowerActivationType = new DetailedInformation(
-                        x.PowerActivationTimingType.Name,
-                        x.PowerActivationTimingType.Description
-                    ),
-                    Other = x.OtherFields,
-                    IsPowerUse = x.IsPowerUse,
-                }).ToList()
+                Powers = x
+                    .Powers.Select(x => new PowerInformation
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Category = x
+                            .CategoryMappings.Select(y => new DetailedInformation(
+                                y.Category.Name,
+                                y.Category.Description
+                            ))
+                            .ToList(),
+                        Description = x.Description,
+                        GameMechanicEffect = x.GameMechanicEffect,
+                        Limitation = x.Limitation,
+                        PowerDuration = new DetailedInformation(
+                            x.PowerDuration.Name,
+                            x.PowerDuration.Description
+                        ),
+                        AreaOfEffect = new DetailedInformation(
+                            x.PowerAreaOfEffectType.Name,
+                            x.PowerAreaOfEffectType.Description
+                        ),
+                        PowerLevel = new DetailedInformation(
+                            x.PowerLevel.Name,
+                            x.PowerLevel.Description
+                        ),
+                        PowerActivationType = new DetailedInformation(
+                            x.PowerActivationTimingType.Name,
+                            x.PowerActivationTimingType.Description
+                        ),
+                        Other = x.OtherFields,
+                        IsPowerUse = x.IsPowerUse,
+                    })
+                    .ToList(),
             })
             .ToListAsync(cancellationToken);
 
         return Result.Ok(items);
     }
-    
+
     public async Task<Result<List<PowerPathInformation>>> GetPowerPathsAsync(int expressionId)
     {
         var items = await context
@@ -112,7 +117,7 @@ internal sealed class PowerPathRepository(
             .PowerPaths.AsNoTracking()
             .Where(x => x.ExpressionId == createPowerPathModel.ExpressionId)
             .CountAsync();
-        
+
         var newPowerPath = new PowerPath()
         {
             Name = createPowerPathModel.Name,
@@ -168,7 +173,7 @@ internal sealed class PowerPathRepository(
 
         return Result.Ok();
     }
-    
+
     public async Task<Result> UpdatePowerPathSortOrder(EditPowerPathSortModel dto)
     {
         var sections = await context

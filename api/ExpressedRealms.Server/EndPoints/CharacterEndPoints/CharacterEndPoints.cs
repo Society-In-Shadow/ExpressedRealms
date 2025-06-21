@@ -48,7 +48,10 @@ internal static class CharacterEndPoints
                 {
                     var expressions = await dbContext
                         .Expressions.AsNoTracking()
-                        .Where(x => x.PublishStatusId == (int)PublishTypes.Published && x.ExpressionTypeId == 1)
+                        .Where(x =>
+                            x.PublishStatusId == (int)PublishTypes.Published
+                            && x.ExpressionTypeId == 1
+                        )
                         .Select(x => new CharacterOptionExpression()
                         {
                             Id = x.Id,

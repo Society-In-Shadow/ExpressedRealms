@@ -17,7 +17,7 @@ internal static class ExpressionAuditConfiguration
                 case "expression_type_id":
                     skipRecord = true;
                     break;
-                
+
                 case "name":
                     break;
 
@@ -37,8 +37,8 @@ internal static class ExpressionAuditConfiguration
                     throw new MissingAuditColumnException(changedRecord.ColumnName);
             }
 
-            if(!skipRecord)
-               changedRecordsToReturn.Add(changedRecord);
+            if (!skipRecord)
+                changedRecordsToReturn.Add(changedRecord);
         }
 
         return changedRecordsToReturn;
