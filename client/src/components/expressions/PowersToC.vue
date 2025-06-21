@@ -3,22 +3,10 @@
 import {makeIdSafe} from "@/utilities/stringUtilities";
 import Skeleton from 'primevue/skeleton';
 import {BaseTree, Draggable} from "@he-tree/vue";
-import {toRaw, ref} from 'vue';
-import Button from "primevue/button";
-import axios from "axios";
-import toaster from "@/services/Toasters";
-import {expressionStore} from "@/stores/expressionStore";
-import {getIdsWithDynamicSortForArray, scrollToSection} from "@/components/expressions/expressionUtilities";
-const expressionInfo = expressionStore();
+import {scrollToSection} from "@/components/expressions/expressionUtilities";
 import {powerPathStore} from "@/components/expressions/powerPaths/stores/powerPathStore";
 
 const powerPaths = powerPathStore();
-
-const emit = defineEmits<{
-  togglePreview: []
-}>();
-
-let originalModel;
 
 const props = defineProps({
   canEdit:{
@@ -30,35 +18,11 @@ const props = defineProps({
   }
 });
 
-function saveChanges(){
-
-  axios.put(`/expression/${expressionInfo.currentExpressionId}/updateHierarchy`, {
-    expressionId: expressionInfo.currentExpressionId,
-    items: getIdsWithDynamicSortForArray(model.value, null)
-  }).then(() => {
-    emit("togglePreview");
-    showTocEdit.value = !showTocEdit.value;
-    toaster.success("Successfully Updated Expression Tree!");
-  });
-}
-
-const showTocEdit = ref(false);
-function toggleEdit(){
-  if(!showTocEdit.value)
-    originalModel = JSON.parse(JSON.stringify(toRaw(model.value)));
-  
-  if(showTocEdit.value)
-    model.value = originalModel;
-  
-  emit("togglePreview");
-  showTocEdit.value = !showTocEdit.value;
-}
-
 </script>
 
 <template>
   <Draggable
-    v-if="props.canEdit && showTocEdit"
+    v-if="props.canEdit"
     v-model="powerPaths.powerPaths"
     class="mtl-tree"
     children-key="powers"
@@ -82,10 +46,6 @@ function toggleEdit(){
       <a v-else class="p-1 tocItem" :href="'#' + makeIdSafe(node.name)" @click.prevent="scrollToSection(node.name)">{{ node.name }}</a>
     </template>
   </BaseTree>
-  <div v-if="props.canEdit && false">
-    <Button v-if="showTocEdit" label="Save" class="mt-2 w-100" @click="saveChanges" />
-    <Button :label="showTocEdit ? 'Cancel' : 'Edit Order'" class="mt-2 w-100" @click="toggleEdit" />
-  </div>
 </template>
 
 <style>
