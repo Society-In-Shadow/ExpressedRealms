@@ -7,6 +7,7 @@ import type {Power} from "@/components/expressions/powers/types";
 import EditPower from "@/components/expressions/powers/EditPower.vue";
 import {powerConfirmationPopups} from "@/components/expressions/powers/services/powerConfirmationPopupService";
 import {UserRoles, userStore} from "@/stores/userStore";
+import {makeIdSafe} from "@/utilities/stringUtilities";
 
 let userInfo = userStore();
 const props = defineProps({
@@ -35,7 +36,7 @@ const toggleEdit = () =>{
     v-if="showEdit && userInfo.hasUserRole(UserRoles.PowerManagementRole)" :power-id="props.power.id"
     :power-path-id="props.powerPathId" @canceled="toggleEdit"
   />
-  <Card class="card-body-fix" v-else>
+  <Card class="card-body-fix" v-else :id="makeIdSafe(props.power.name)">
     <template #title>
       <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
         <div>

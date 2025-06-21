@@ -7,6 +7,7 @@ import {
   powerPathConfirmationPopups
 } from "@/components/expressions/powerPaths/services/powerPathConfirmationPopupService";
 import {UserRoles, userStore} from "@/stores/userStore";
+import {makeIdSafe} from "@/utilities/stringUtilities";
 
 let userInfo = userStore();
 
@@ -31,7 +32,7 @@ const popups = powerPathConfirmationPopups(props.path.id, props.path.name);
 </script>
 
 <template>
-  <div v-if="!showEdit">
+  <div v-if="!showEdit" :id="makeIdSafe(props.path.name)">
     <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
       <h1 class="p-0 m-0">
         {{ props.path.name }}

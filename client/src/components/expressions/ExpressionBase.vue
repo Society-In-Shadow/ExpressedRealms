@@ -23,6 +23,7 @@ import '@he-tree/vue/style/material-design.css'
 import ExpressionToC from "@/components/expressions/ExpressionToC.vue";
 import EditExpressionSection from "@/components/expressions/EditExpressionSection.vue";
 import PowerTab from "@/components/expressions/powers/PowerTab.vue";
+import PowersToC from "@/components/expressions/PowersToC.vue";
 
 let sections = ref([
   {
@@ -54,6 +55,7 @@ const headerIsLoading = ref(true);
 const showEdit = ref(expressionInfo.canEdit);
 const showCreate = ref(false);
 const showPreview = ref(false);
+const currentTab = ref('0');
 
 async function fetchData() {
   await expressionInfo.getExpressionSections()
@@ -107,7 +109,8 @@ onBeforeRouteUpdate(async (to, from) => {
           </template>
           <template #content>
             <article id="expression-body">
-              <ExpressionToC v-model="sections" :can-edit="showEdit" :show-skeleton="isLoading" @toggle-preview="togglePreview" />
+              <ExpressionToC v-if="currentTab == '0'" v-model="sections" :can-edit="showEdit" :show-skeleton="isLoading" @toggle-preview="togglePreview" />
+              <PowersToC v-else :can-edit="showEdit" :show-skeleton="isLoading" @toggle-preview="togglePreview" />
             </article>
           </template>
         </Card>
@@ -129,7 +132,7 @@ onBeforeRouteUpdate(async (to, from) => {
                 </div>
               </div>
             </div>
-            <Tabs value="0">
+            <Tabs v-model:value="currentTab">
               <TabList>
                 <Tab value="0">
                   Background
