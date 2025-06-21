@@ -25,7 +25,7 @@ public class EditPowerPathSortModelValidator : AbstractValidator<EditPowerPathSo
                 {
                     var powerPaths = await dbContext
                         .PowerPaths.Where(x => x.ExpressionId == dto.ExpressionId)
-                        .ToListAsync();
+                        .ToListAsync(cancellationToken);
 
                     return dto
                         .Items.Select(x => x.Id)

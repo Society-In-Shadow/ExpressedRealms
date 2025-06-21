@@ -41,8 +41,8 @@ internal sealed class PowerPathRepository(
                             ))
                             .ToList(),
                         Description = x.Description,
-                        GameMechanicEffect = x.GameMechanicEffect,
-                        Limitation = x.Limitation,
+                        GameMechanicEffect = x.GameMechanicEffect ?? string.Empty,
+                        Limitation = x.Limitation ?? string.Empty,
                         PowerDuration = new DetailedInformation(
                             x.PowerDuration.Name,
                             x.PowerDuration.Description
