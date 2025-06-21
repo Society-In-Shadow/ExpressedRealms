@@ -26,7 +26,7 @@ export const powerConfirmationPopups = (id: number, name: string, powerPathId: n
         accept: () => {
             axios.delete(`/powers/${id}`)
             .then(async () => {
-                await powerStore.getPowers(powerPathId);
+                await powerStore.updatePowersByPathId(powerPathId);
                 toaster.success(`Successfully Deleted ${name}!`);
             });
         }

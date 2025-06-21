@@ -38,7 +38,7 @@ const toggleAddPower = () => {
    
     <Divider />
     <h2>Powers</h2>
-    <ListPowers :power-path-id="path.id" />
+    <ListPowers :power-path-id="path.id" :powers="path.powers" />
   </div>
 
   <Button

@@ -3,6 +3,9 @@ import axios from "axios";
 
 import type {EditPower, EditPowerResponse, Power, PowerStore} from "@/components/expressions/powers/types";
 import type {ListItem} from "@/types/ListItem";
+import {powerPathStore} from "@/components/expressions/powerPaths/stores/powerPathStore";
+
+let powerPaths = powerPathStore();
 
 export const powersStore = 
     defineStore(`powers`, {
@@ -32,17 +35,10 @@ export const powersStore =
                         this.havePowerOptions = true;
                     })
             },
-            async getPowers(powerPathId: number){         
+            async updatePowersByPathId(powerPathId: number){         
                 const response = await axios.get<Power[]>(`/powerpath/${powerPathId}/powers`);
                
-                const newItem:PowerStore = { powerPathId: powerPathId, powers: response.data};
-                
-                const index = this.powers.findIndex(item => item.powerPathId === powerPathId);
-                if (index === -1) {
-                    this.powers.push(newItem);
-                } else {
-                    this.powers[index].powers = response.data;
-                }
+                await powerPaths.updatePowersForPath(response.data, powerPathId);
             },
             getPower: async function (powerId: number): Promise<EditPower> {
                 await this.getPowerOptions()

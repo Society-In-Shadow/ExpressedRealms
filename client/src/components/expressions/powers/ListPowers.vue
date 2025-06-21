@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import {onBeforeMount, ref, computed} from "vue";
+import {ref} from "vue";
 import AddPower from "@/components/expressions/powers/AddPower.vue";
-import {powersStore} from "@/components/expressions/powers/stores/powersStore";
 import PowerCard from "@/components/expressions/powers/PowerCard.vue";
 import Button from 'primevue/button';
 
 import {UserRoles, userStore} from "@/stores/userStore";
+import type {Power} from "@/components/expressions/powers/types";
 
 let userInfo = userStore();
 
@@ -13,20 +13,14 @@ const props = defineProps({
   powerPathId: {
     type: Number,
     required: true,
+  },
+  powers:{
+    type: Array as () => Power[],
+    required: true,
   }
 });
 
-const powers = powersStore();
-
-const powerPath = computed(() => {
-  return powers.powers.find(x => x.powerPathId === props.powerPathId)
-});
-
 const showAddPower = ref(false);
-
-onBeforeMount(async () => {
-  await powers.getPowers(props.powerPathId);
-})
 
 const toggleAddPower = () => {
   showAddPower.value = !showAddPower.value;
@@ -34,8 +28,8 @@ const toggleAddPower = () => {
 </script>
 
 <template>
-  <div v-if="powerPath && powerPath.powers.length > 0">
-    <div v-for="power in powerPath.powers" :key="power.id">
+  <div v-if="props.powers && props.powers.length > 0">
+    <div v-for="power in props.powers" :key="power.id">
       <PowerCard :power="power" :power-path-id="props.powerPathId" />
     </div>
   </div>

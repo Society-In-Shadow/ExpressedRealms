@@ -5,6 +5,8 @@ using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathCreate;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathEdit;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathLIst;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathSorting;
+using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathToC;
+using ExpressedRealms.Powers.Repository.Powers.DTOs;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +20,50 @@ internal sealed class PowerPathRepository(
     CancellationToken cancellationToken
 ) : IPowerPathRepository
 {
+    public async Task<Result<List<PowerPathToc>>> GetPowerPathAndPowers(int expressionId)
+    {
+        var items = await context
+            .PowerPaths.Where(x => x.ExpressionId == expressionId)
+            .Select(x => new PowerPathToc()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                Powers = x.Powers.Select(x => new PowerInformation
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Category = x
+                        .CategoryMappings.Select(y => new DetailedInformation(
+                            y.Category.Name,
+                            y.Category.Description
+                        ))
+                        .ToList(),
+                    Description = x.Description,
+                    GameMechanicEffect = x.GameMechanicEffect,
+                    Limitation = x.Limitation,
+                    PowerDuration = new DetailedInformation(
+                        x.PowerDuration.Name,
+                        x.PowerDuration.Description
+                    ),
+                    AreaOfEffect = new DetailedInformation(
+                        x.PowerAreaOfEffectType.Name,
+                        x.PowerAreaOfEffectType.Description
+                    ),
+                    PowerLevel = new DetailedInformation(x.PowerLevel.Name, x.PowerLevel.Description),
+                    PowerActivationType = new DetailedInformation(
+                        x.PowerActivationTimingType.Name,
+                        x.PowerActivationTimingType.Description
+                    ),
+                    Other = x.OtherFields,
+                    IsPowerUse = x.IsPowerUse,
+                }).ToList()
+            })
+            .ToListAsync(cancellationToken);
+
+        return Result.Ok(items);
+    }
+    
     public async Task<Result<List<PowerPathInformation>>> GetPowerPathsAsync(int expressionId)
     {
         var items = await context

@@ -47,7 +47,7 @@ const onSubmit = form.handleSubmit(async (values) => {
     isPowerUse: values.isPowerUse,
   })
   .then(async () => {
-    await powers.getPowers(props.powerPathId);
+    await powers.updatePowersByPathId(props.powerPathId);
     toaster.success("Successfully Added Power!");
     reset();
   });

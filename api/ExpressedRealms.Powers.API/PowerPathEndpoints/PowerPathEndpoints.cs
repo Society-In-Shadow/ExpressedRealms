@@ -1,5 +1,6 @@
 using ExpressedRealms.Authentication;
 using ExpressedRealms.FeatureFlags;
+using ExpressedRealms.Powers.API.PowerEndpoints.Responses.PowerList;
 using ExpressedRealms.Powers.API.PowerPathEndpoints.Requests;
 using ExpressedRealms.Powers.API.PowerPathEndpoints.Responses.PowerPathList;
 using ExpressedRealms.Powers.Repository.PowerPaths;
@@ -31,7 +32,7 @@ internal static class PowerPathEndpoints
                 "/{expressionId}/powerPaths",
                 async (int expressionId, IPowerPathRepository powerRepository) =>
                 {
-                    var powers = await powerRepository.GetPowerPathsAsync(expressionId);
+                    var powers = await powerRepository.GetPowerPathAndPowers(expressionId);
 
                     return TypedResults.Ok(
                         powers.Value.Select(x => new PowerPathInformationResponse()
@@ -39,6 +40,21 @@ internal static class PowerPathEndpoints
                             Id = x.Id,
                             Name = x.Name,
                             Description = x.Description,
+                            Powers = x.Powers.Select(y => new PowerInformationResponse()
+                            {
+                                Id = y.Id,
+                                Name = y.Name,
+                                Category = y.Category.Select(x => new DetailedInformation(x)).ToList(),
+                                Description = y.Description,
+                                GameMechanicEffect = y.GameMechanicEffect,
+                                Limitation = y.Limitation,
+                                PowerDuration = new DetailedInformation(y.PowerDuration),
+                                AreaOfEffect = new DetailedInformation(y.AreaOfEffect),
+                                PowerLevel = new DetailedInformation(y.PowerLevel),
+                                PowerActivationType = new DetailedInformation(y.PowerActivationType),
+                                Other = y.Other,
+                                IsPowerUse = y.IsPowerUse,
+                            }).ToList()
                         })
                     );
                 }
