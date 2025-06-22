@@ -171,6 +171,10 @@ onBeforeRouteUpdate(async (to, from) => {
     width: 100%;
     max-width:1000px
   }
+  .custom-toc {
+    max-height: calc(100vh - 1rem);
+    overflow-y: auto;
+  }
 }
 
 @media(max-width: 768px){
