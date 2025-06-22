@@ -7,7 +7,7 @@ import type {Power} from "@/components/expressions/powers/types";
 import EditPower from "@/components/expressions/powers/EditPower.vue";
 import {powerConfirmationPopups} from "@/components/expressions/powers/services/powerConfirmationPopupService";
 import {UserRoles, userStore} from "@/stores/userStore";
-import {makeIdSafe} from "@/utilities/stringUtilities";
+import {isNullOrWhiteSpace, makeIdSafe} from "@/utilities/stringUtilities";
 
 let userInfo = userStore();
 const props = defineProps({
@@ -65,7 +65,7 @@ const toggleEdit = () =>{
           <!-- Table header -->
           <thead class="p-datatable-thead">
             <tr>
-              <th class="p-datatable-header-cell">
+              <th class="p-datatable-header-cell" v-if="props.power.category && props.power.category.length > 0">
                 Category
               </th>
               <th class="p-datatable-header-cell">
@@ -83,8 +83,8 @@ const toggleEdit = () =>{
             </tr>
           </thead>
           <tbody class="p-datatable-tbody">
-            <tr class="p-row-even">
-              <td>
+            <tr class="p-row-even" >
+              <td v-if="props.power.category && props.power.category.length > 0">
                 <p v-for="category in props.power.category" :key="category.id" class="pr-3">
                   {{ category.name }}
                 </p>
@@ -106,11 +106,11 @@ const toggleEdit = () =>{
       <h2>Game Mechanic Effect</h2>
       <div v-html="props.power.gameMechanicEffect" />
 
-      <h2>Limitations</h2>
-      <div v-html="props.power.limitation" />
+      <h2 v-if="!isNullOrWhiteSpace(props.power.limitation)">Limitations</h2>
+      <div v-if="!isNullOrWhiteSpace(props.power.limitation)" v-html="props.power.limitation" />
 
-      <h2>Additional Information</h2>
-      <div v-html="props.power.other" />
+      <h2 v-if="!isNullOrWhiteSpace(props.power.other)">Additional Information</h2>
+      <div v-if="!isNullOrWhiteSpace(props.power.other)" v-html="props.power.other" />
     </template>
   </Card>
 </template>
