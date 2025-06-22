@@ -15,6 +15,7 @@ export function useGenericForm<T extends Record<string, any>>(validationSchema: 
             field: defineField(fieldName)[0],
             error: computed(() => errors.value[fieldName]),
             label: (validationSchema.fields[fieldName as string] as any)?.spec?.label ?? fieldName,
+            isRequired: (validationSchema.fields[fieldName as string] as any)?.spec?.optional === false,
         };
     }
 
