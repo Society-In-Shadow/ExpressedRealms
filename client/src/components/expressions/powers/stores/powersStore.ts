@@ -57,6 +57,7 @@ export const powersStore =
                     powerActivationType: this.powerActivationTypes.find((x: ListItem) => x.id == response.data.powerActivationTypeId) as ListItem,
                     other: response.data.other,
                     isPowerUse: response.data.isPowerUse,
+                    cost: response.data.cost
                 };
             }
         }
