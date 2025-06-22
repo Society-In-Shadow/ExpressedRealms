@@ -196,7 +196,7 @@ const contextOptions = ref([
     <div class="d-none">
       <Editor />
     </div>
-    <label :for="dataCyTagCalc" >{{ model.label }}<span v-if="model.isRequired" class="text-danger font-italic"> (Required)</span></label>
+    <label :for="dataCyTagCalc">{{ model.label }}<span v-if="model.isRequired" class="text-danger font-italic"> (Required)</span></label>
     <Skeleton v-if="showSkeleton" :id="dataCyTagCalc + '-skeleton'" class="w-100" height="10em" />
     <div v-else class="p-editor" :class="{ 'p-invalid': model.error && model.error.length > 0 }">
       <div class="p-editor-toolbar ql-toolbar ql-snow">

@@ -65,7 +65,7 @@ const toggleEdit = () =>{
           <!-- Table header -->
           <thead class="p-datatable-thead">
             <tr>
-              <th class="p-datatable-header-cell" >
+              <th class="p-datatable-header-cell">
                 Category
               </th>
               <th class="p-datatable-header-cell">
@@ -77,12 +77,14 @@ const toggleEdit = () =>{
             </tr>
           </thead>
           <tbody class="p-datatable-tbody">
-            <tr class="p-row-even" >
+            <tr class="p-row-even">
               <td>
-                <p v-if="props.power.category && props.power.category.length > 0" v-for="category in props.power.category" :key="category.id" class="pr-3">
+                <p v-for="category in props.power.category" v-if="props.power.category && props.power.category.length > 0" :key="category.id" class="pr-3">
                   {{ category.name }}
                 </p>
-                <p v-else>N/A</p>
+                <p v-else>
+                  N/A
+                </p>
               </td>
               <td :title="props.power.powerDuration.description">
                 {{ props.power.powerDuration.name }}
@@ -91,27 +93,27 @@ const toggleEdit = () =>{
                 {{ props.power.areaOfEffect.name }}
               </td>
             </tr>
-          <tr>
-            <td class="p-datatable-header-cell">
-              Activation Type
-            </td>
-            <td class="p-datatable-header-cell">
-              Power Used?
-            </td>
-            <td class="p-datatable-header-cell">
-              Cost
-            </td>
-          </tr>
-          <tr class="p-row-even" >
-            <td :title="props.power.powerActivationType.description">
-              {{ props.power.powerActivationType.name }}
-            </td>
-            <td>{{ props.power.isPowerUse ? "Yes" : "No" }}</td>
-            <td >
-              <span v-if="!isNullOrWhiteSpace(props.power.cost)">{{ props.power.cost }}</span>
-              <span v-else>N/A</span>
-            </td>
-          </tr>
+            <tr>
+              <td class="p-datatable-header-cell">
+                Activation Type
+              </td>
+              <td class="p-datatable-header-cell">
+                Power Used?
+              </td>
+              <td class="p-datatable-header-cell">
+                Cost
+              </td>
+            </tr>
+            <tr class="p-row-even">
+              <td :title="props.power.powerActivationType.description">
+                {{ props.power.powerActivationType.name }}
+              </td>
+              <td>{{ props.power.isPowerUse ? "Yes" : "No" }}</td>
+              <td>
+                <span v-if="!isNullOrWhiteSpace(props.power.cost)">{{ props.power.cost }}</span>
+                <span v-else>N/A</span>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -119,10 +121,14 @@ const toggleEdit = () =>{
       <h2>Game Mechanic Effect</h2>
       <div v-html="props.power.gameMechanicEffect" />
 
-      <h2 v-if="!isNullOrWhiteSpace(props.power.limitation)">Limitations</h2>
+      <h2 v-if="!isNullOrWhiteSpace(props.power.limitation)">
+        Limitations
+      </h2>
       <div v-if="!isNullOrWhiteSpace(props.power.limitation)" v-html="props.power.limitation" />
 
-      <h2 v-if="!isNullOrWhiteSpace(props.power.other)">Additional Information</h2>
+      <h2 v-if="!isNullOrWhiteSpace(props.power.other)">
+        Additional Information
+      </h2>
       <div v-if="!isNullOrWhiteSpace(props.power.other)" v-html="props.power.other" />
     </template>
   </Card>

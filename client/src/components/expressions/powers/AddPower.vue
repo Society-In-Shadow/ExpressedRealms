@@ -93,9 +93,9 @@ const reset = () => {
       <FormEditorWrapper v-model="form.limitation" />
       
       <FormDropdownWrapper
-          v-model="form.areaOfEffect"
-          :options="powers.areaOfEffects"
-          option-label="name"
+        v-model="form.areaOfEffect"
+        :options="powers.areaOfEffects"
+        option-label="name"
       />
       
       <FormDropdownWrapper
