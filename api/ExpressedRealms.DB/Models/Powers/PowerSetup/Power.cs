@@ -31,6 +31,7 @@ public class Power : ISoftDelete
     public string? GameMechanicEffect { get; set; }
     public string? Limitation { get; set; }
     public string? OtherFields { get; set; }
+    public string? Cost { get; set; }
 
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }

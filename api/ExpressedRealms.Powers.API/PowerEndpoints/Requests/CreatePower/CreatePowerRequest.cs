@@ -14,4 +14,5 @@ public class CreatePowerRequest
     public string? Other { get; set; }
     public int PowerPathId { get; set; }
     public bool IsPowerUse { get; set; }
+    public string? Cost { get; set; }
 }

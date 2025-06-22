@@ -140,6 +140,30 @@ describe("Power Model Schema - Field Validations", () => {
         });
     });
 
+    describe("Cost", () => {
+        it("Is an optional field", async () => {
+            form.cost.field.value = "";
+            await form.handleSubmit(() => {})();
+            expect(form.cost.error.value).toBeUndefined();
+        });
+
+        it("Is nullable", async () => {
+            form.cost.field.value = null;
+            await form.handleSubmit(() => {})();
+            expect(form.cost.error.value).toBeUndefined();
+        });
+
+        it("No errors when it's a valid value", async () => {
+            form.cost.field.value = "Some valid Cost";
+            await form.handleSubmit(() => {})();
+            expect(form.cost.error.value).toBeUndefined();
+        });
+
+        it("Label is correct", () => {
+            expect(form.cost.label).toEqual("Cost");
+        });
+    });
+
     describe("Power Duration", () => {
 
         it("No errors when it's a valid value", async () => {

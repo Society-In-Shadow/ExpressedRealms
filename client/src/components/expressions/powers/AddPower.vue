@@ -45,6 +45,7 @@ const onSubmit = form.handleSubmit(async (values) => {
     categoryIds: values.category?.map((item: { id: string | number }) => item.id),
     other: values.other,
     isPowerUse: values.isPowerUse,
+    cost: values.cost,
   })
   .then(async () => {
     await powers.updatePowersByPathId(props.powerPathId);
@@ -103,6 +104,8 @@ const reset = () => {
         option-label="name"
       />
 
+      <FormInputTextWrapper v-model="form.cost" />
+      
       <FormEditorWrapper v-model="form.other" />
   
       <div class="float-end">

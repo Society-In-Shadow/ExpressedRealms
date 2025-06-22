@@ -14,4 +14,5 @@ public class PowerInformation
     public required DetailedInformation PowerActivationType { get; set; }
     public string? Other { get; set; }
     public bool IsPowerUse { get; set; }
+    public string? Cost { get; set; }
 }

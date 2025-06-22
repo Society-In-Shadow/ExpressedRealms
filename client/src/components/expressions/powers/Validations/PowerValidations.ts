@@ -44,6 +44,9 @@ export function getValidationInstance() {
         other: string()
             .nullable()
             .label("Other"),
+        cost: string()
+            .nullable()
+            .label("Cost"),
         isPowerUse: boolean()
             .label("Is Power Use")
     });
@@ -62,6 +65,7 @@ export function getValidationInstance() {
         form.fields.powerActivationType.field.value = power.powerActivationType;
         form.fields.other.field.value = power.other;
         form.fields.isPowerUse.field.value = power.isPowerUse;
+        form.fields.cost.field.value = power.cost;
     }
     
     const customResetForm = () => {
@@ -88,5 +92,6 @@ export function getValidationInstance() {
         powerActivationType: form.fields.powerActivationType,
         other: form.fields.other,
         isPowerUse: form.fields.isPowerUse,
+        cost: form.fields.cost,
     }
 }

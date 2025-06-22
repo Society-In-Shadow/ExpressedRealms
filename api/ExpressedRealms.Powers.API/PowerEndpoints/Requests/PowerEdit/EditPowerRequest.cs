@@ -14,4 +14,5 @@ public class EditPowerRequest
     public byte PowerActivationTypeId { get; set; }
     public string? Other { get; set; }
     public bool IsPowerUse { get; set; }
+    public string? Cost { get; set; }
 }

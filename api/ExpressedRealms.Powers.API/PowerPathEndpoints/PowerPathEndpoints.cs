@@ -59,6 +59,7 @@ internal static class PowerPathEndpoints
                                     ),
                                     Other = y.Other,
                                     IsPowerUse = y.IsPowerUse,
+                                    Cost = y.Cost,
                                 })
                                 .ToList(),
                         })

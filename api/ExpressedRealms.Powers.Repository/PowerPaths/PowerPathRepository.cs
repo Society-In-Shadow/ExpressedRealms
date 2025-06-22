@@ -62,6 +62,7 @@ internal sealed class PowerPathRepository(
                         ),
                         Other = x.OtherFields,
                         IsPowerUse = x.IsPowerUse,
+                        Cost = x.Cost,
                     })
                     .ToList(),
             })

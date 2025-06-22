@@ -58,6 +58,10 @@ internal static class PowerAuditTrailExtensions
                 case nameof(Power.OtherFields):
                     changedRecord.FriendlyName = "Other";
                     break;
+                
+                case "cost":
+                    changedRecord.FriendlyName = "Cost";
+                    break;
 
                 default:
                     throw new MissingAuditColumnException(changedRecord.ColumnName);

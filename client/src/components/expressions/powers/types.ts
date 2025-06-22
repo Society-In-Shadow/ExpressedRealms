@@ -24,6 +24,7 @@ export interface Power {
     powerActivationType: DetailedInformation;
     other: string;
     isPowerUse: boolean;
+    cost: string;
 }
 
 export interface EditPowerResponse {
@@ -39,6 +40,7 @@ export interface EditPowerResponse {
     powerActivationTypeId: number;
     other: string;
     isPowerUse: boolean;
+    cost: string;
 }
 
 export interface EditPower {
@@ -54,4 +56,5 @@ export interface EditPower {
     powerActivationType: ListItem;
     other: string;
     isPowerUse: boolean;
+    cost: string;
 }
