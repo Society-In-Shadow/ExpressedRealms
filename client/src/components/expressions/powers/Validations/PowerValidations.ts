@@ -36,7 +36,7 @@ export function getValidationInstance() {
             .required()
             .label("Area of Effect"),
         powerLevel: object<ListItem>().nullable()
-            .required()=
+            .required()
             .label("Power Level"),
         powerActivationType: object<ListItem>().nullable()
             .required()
