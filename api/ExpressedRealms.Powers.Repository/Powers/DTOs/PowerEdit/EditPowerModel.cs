@@ -12,6 +12,6 @@ public class EditPowerModel
     public byte AreaOfEffect { get; set; }
     public int PowerLevel { get; set; }
     public byte PowerActivationType { get; set; }
-    public required string Other { get; set; }
+    public string? Other { get; set; }
     public bool IsPowerUse { get; set; }
 }

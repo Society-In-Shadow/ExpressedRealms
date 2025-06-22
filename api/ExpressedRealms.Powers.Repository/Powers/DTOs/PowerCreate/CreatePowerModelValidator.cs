@@ -42,12 +42,12 @@ public class CreatePowerModelValidator : AbstractValidator<CreatePowerModel>
                 async (categories, cancellationToken) =>
                 {
                     return await dbContext.PowerLevels.AnyAsync(
-                        x => categories.Contains(x.Id),
+                        x => categories!.Contains(x.Id),
                         cancellationToken
                     );
                 }
             )
-            .When(x => x.Category != null && x.Category.Any())
+            .When(x => x.Category is { Count: > 0 })
             .WithMessage("One or more categories are invalid");
 
         RuleFor(x => x.AreaOfEffect)
