@@ -3,5 +3,5 @@ export function makeIdSafe(text: string) {
 }
 
 export function isNullOrWhiteSpace(input: string | null | undefined) {
-    return !input || input.trim().length === 0;
+    return !input || input.trim().length === 0 || input.trim().toLowerCase() === "<p></p>";
 }
