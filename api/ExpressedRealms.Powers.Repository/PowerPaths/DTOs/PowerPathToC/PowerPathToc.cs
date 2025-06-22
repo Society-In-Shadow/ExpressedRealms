@@ -1,4 +1,5 @@
 using ExpressedRealms.Powers.Repository.Powers.DTOs;
+using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerList;
 
 namespace ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathToC;
 

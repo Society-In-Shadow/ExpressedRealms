@@ -18,8 +18,6 @@ export function getValidationInstance() {
                     description: string(),
                 })
             )
-            .min(1, "At least one category is required")
-            .required("At least one category is required")
             .label("Category"),
         description: string()
             .required()
@@ -28,7 +26,7 @@ export function getValidationInstance() {
             .required()
             .label("Game Mechanic Effect"),
         limitation: string()
-            .required()
+            .nullable()
             .label("Limitation"),
         powerDuration: object<ListItem>().nullable()
             .required()
@@ -38,12 +36,13 @@ export function getValidationInstance() {
             .required()
             .label("Area of Effect"),
         powerLevel: object<ListItem>().nullable()
-            .required()
+            .required()=
             .label("Power Level"),
         powerActivationType: object<ListItem>().nullable()
             .required()
             .label("Power Activation Type"),
         other: string()
+            .nullable()
             .label("Other"),
         isPowerUse: boolean()
             .label("Is Power Use")

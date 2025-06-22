@@ -41,7 +41,7 @@ internal static class PowerEndpoints
                         {
                             Id = x.Id,
                             Name = x.Name,
-                            Category = x.Category.Select(x => new DetailedInformation(x)).ToList(),
+                            Category = x.Category?.Select(x => new DetailedInformation(x)).ToList() ?? new List<DetailedInformation>(),
                             Description = x.Description,
                             GameMechanicEffect = x.GameMechanicEffect,
                             Limitation = x.Limitation,

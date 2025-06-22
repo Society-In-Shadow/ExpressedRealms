@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Powers.Repository.Powers.DTOs;
+namespace ExpressedRealms.Powers.Repository.Powers.DTOs.PowerList;
 
 public class DetailedInformation
 {

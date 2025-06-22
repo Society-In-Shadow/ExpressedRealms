@@ -5,6 +5,7 @@ using ExpressedRealms.Powers.Repository.Powers.DTOs;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.Options;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerCreate;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerEdit;
+using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerList;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
 using FluentResults;
 using Microsoft.AspNetCore.Http;
@@ -142,6 +143,11 @@ internal sealed class PowerRepository(
         context.Powers.Add(newPower);
         await context.SaveChangesAsync(cancellationToken);
 
+        if (createPowerModel.Category == null || createPowerModel.Category.Count > 0)
+        {
+            return Result.Ok(newPower.Id);
+        }
+        
         context.PowerCategoryMappings.AddRange(
             createPowerModel.Category.Select(x => new PowerCategoryMapping()
             {
@@ -189,6 +195,11 @@ internal sealed class PowerRepository(
             .ToListAsync(cancellationToken);
 
         context.PowerCategoryMappings.RemoveRange(categoryMappings);
+        
+        if (editPowerModel.Category == null || editPowerModel.Category.Count > 0)
+        {
+            return Result.Ok();
+        }
 
         context.PowerCategoryMappings.AddRange(
             editPowerModel.Category.Select(x => new PowerCategoryMapping()

@@ -45,10 +45,10 @@ describe("Power Model Schema - Field Validations", () => {
             expect(form.category.error?.value).toBeUndefined();
         });
 
-        it("fails validation when it's empty", async () => {
-            form.category.field.value = null;
+        it("Is an optional field", async () => {
+            form.category.field.value = [];
             await form.handleSubmit(() => {})();
-            expect(form.category.error.value).toEqual("At least one category is required");
+            expect(form.category.error.value).toBeUndefined();
         });
 
         it("Label is correct", async () => {
@@ -93,10 +93,16 @@ describe("Power Model Schema - Field Validations", () => {
     });
 
     describe("Limitation", () => {
-        it("Fails validation when it's missing", async () => {
+        it("Is an optional field", async () => {
             form.limitation.field.value = "";
             await form.handleSubmit(() => {})();
-            expect(form.limitation.error.value).toEqual("Limitation is a required field");
+            expect(form.limitation.error.value).toBeUndefined();
+        });
+
+        it("Is nullable", async () => {
+            form.limitation.field.value = null;
+            await form.handleSubmit(() => {})();
+            expect(form.limitation.error.value).toBeUndefined();
         });
 
         it("No errors when it's a valid value", async () => {
@@ -107,6 +113,30 @@ describe("Power Model Schema - Field Validations", () => {
 
         it("Label is correct", () => {
             expect(form.limitation.label).toEqual("Limitation");
+        });
+    });
+
+    describe("Other", () => {
+        it("Is an optional field", async () => {
+            form.other.field.value = "";
+            await form.handleSubmit(() => {})();
+            expect(form.other.error.value).toBeUndefined();
+        });
+
+        it("Is nullable", async () => {
+            form.other.field.value = null;
+            await form.handleSubmit(() => {})();
+            expect(form.other.error.value).toBeUndefined();
+        });
+
+        it("No errors when it's a valid value", async () => {
+            form.other.field.value = "Some valid other";
+            await form.handleSubmit(() => {})();
+            expect(form.other.error.value).toBeUndefined();
+        });
+
+        it("Label is correct", () => {
+            expect(form.other.label).toEqual("Other");
         });
     });
 

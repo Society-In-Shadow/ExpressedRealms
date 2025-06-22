@@ -2,6 +2,7 @@ using ExpressedRealms.Powers.Repository.Powers.DTOs;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.Options;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerCreate;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerEdit;
+using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerList;
 using FluentResults;
 
 namespace ExpressedRealms.Powers.Repository.Powers;

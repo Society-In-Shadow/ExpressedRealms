@@ -58,6 +58,7 @@ public class EditPowerModelValidator : AbstractValidator<EditPowerModel>
                     );
                 }
             )
+            .When(x => x.Category != null && x.Category.Any())
             .WithMessage("One or more categories are invalid");
 
         RuleFor(x => x.AreaOfEffect)

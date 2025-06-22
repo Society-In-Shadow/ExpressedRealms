@@ -46,8 +46,8 @@ internal static class PowerPathEndpoints
                                     Id = y.Id,
                                     Name = y.Name,
                                     Category = y
-                                        .Category.Select(x => new DetailedInformation(x))
-                                        .ToList(),
+                                        .Category?.Select(z => new DetailedInformation(z))
+                                        .ToList() ?? new List<DetailedInformation>(),
                                     Description = y.Description,
                                     GameMechanicEffect = y.GameMechanicEffect,
                                     Limitation = y.Limitation,

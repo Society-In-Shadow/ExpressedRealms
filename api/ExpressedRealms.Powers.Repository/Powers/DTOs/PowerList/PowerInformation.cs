@@ -1,10 +1,10 @@
-namespace ExpressedRealms.Powers.API.PowerEndpoints.Responses.PowerList;
+namespace ExpressedRealms.Powers.Repository.Powers.DTOs.PowerList;
 
-public class PowerInformationResponse
+public class PowerInformation
 {
     public int Id { get; set; }
     public required string Name { get; set; }
-    public required List<DetailedInformation> Category { get; set; }
+    public List<DetailedInformation>? Category { get; set; }
     public required string Description { get; set; }
     public required string GameMechanicEffect { get; set; }
     public string? Limitation { get; set; }

@@ -42,7 +42,7 @@ const onSubmit = form.handleSubmit(async (values) => {
     areaOfEffect: values.areaOfEffect.id,
     powerLevel: values.powerLevel.id,
     powerActivationType: values.powerActivationType.id,
-    categoryIds: values.category.map((item: { id: string | number }) => item.id),
+    categoryIds: values.category?.map((item: { id: string | number }) => item.id),
     other: values.other,
     isPowerUse: values.isPowerUse,
   })
@@ -90,16 +90,16 @@ const reset = () => {
       <FormEditorWrapper v-model="form.gameMechanicEffect" />
   
       <FormEditorWrapper v-model="form.limitation" />
-  
+      
+      <FormDropdownWrapper
+          v-model="form.areaOfEffect"
+          :options="powers.areaOfEffects"
+          option-label="name"
+      />
+      
       <FormDropdownWrapper
         v-model="form.powerDuration"
         :options="powers.powerDurations"
-        option-label="name"
-      />
-  
-      <FormDropdownWrapper
-        v-model="form.areaOfEffect"
-        :options="powers.areaOfEffects"
         option-label="name"
       />
 

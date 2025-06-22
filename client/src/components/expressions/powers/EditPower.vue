@@ -48,7 +48,7 @@ const onSubmit = form.handleSubmit(async (values) => {
     areaOfEffectId: values.areaOfEffect.id,
     powerLevelId: values.powerLevel.id,
     powerActivationTypeId: values.powerActivationType.id,
-    categoryIds: values.category.map((item: { id: string | number }) => item.id),
+    categoryIds: values.category?.map((item: { id: string | number }) => item.id),
     other: values.other,
     isPowerUse: values.isPowerUse,
   })
@@ -97,14 +97,14 @@ const cancel = () => {
       <FormEditorWrapper v-model="form.limitation" />
 
       <FormDropdownWrapper
+          v-model="form.areaOfEffect"
+          :options="powers.areaOfEffects"
+          option-label="name"
+      />
+      
+      <FormDropdownWrapper
         v-model="form.powerDuration"
         :options="powers.powerDurations"
-        option-label="name"
-      />
-
-      <FormDropdownWrapper
-        v-model="form.areaOfEffect"
-        :options="powers.areaOfEffects"
         option-label="name"
       />
 
