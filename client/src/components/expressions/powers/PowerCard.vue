@@ -18,6 +18,10 @@ const props = defineProps({
   powerPathId:{
     type: Number,
     required: true
+  },
+  isReadOnly:{
+    type: Boolean,
+    required: false
   }
 });
 
@@ -33,7 +37,7 @@ const toggleEdit = () =>{
 
 <template>
   <EditPower
-    v-if="showEdit && userInfo.hasUserRole(UserRoles.PowerManagementRole)" :power-id="props.power.id"
+    v-if="showEdit && userInfo.hasUserRole(UserRoles.PowerManagementRole) && !props.isReadOnly" :power-id="props.power.id"
     :power-path-id="props.powerPathId" @canceled="toggleEdit"
   />
   <Card v-else :id="makeIdSafe(props.power.name)" class="card-body-fix">
@@ -48,7 +52,7 @@ const toggleEdit = () =>{
           </div>
         </div>
         <div
-          v-if="!showEdit && userInfo.hasUserRole(UserRoles.PowerManagementRole)"
+          v-if="!showEdit && userInfo.hasUserRole(UserRoles.PowerManagementRole) && !props.isReadOnly"
           class="p-0 m-0 d-inline-flex align-items-start"
         >
           <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />

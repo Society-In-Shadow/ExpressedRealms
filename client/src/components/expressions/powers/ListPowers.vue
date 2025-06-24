@@ -17,7 +17,11 @@ const props = defineProps({
   powers:{
     type: Array as () => Power[],
     required: true,
-  }
+  },
+  isReadOnly:{
+    type: Boolean,
+    required: false
+  } 
 });
 
 const showAddPower = ref(false);
@@ -30,16 +34,16 @@ const toggleAddPower = () => {
 <template>
   <div v-if="props.powers && props.powers.length > 0">
     <div v-for="power in props.powers" :key="power.id">
-      <PowerCard :power="power" :power-path-id="props.powerPathId" />
+      <PowerCard :power="power" :power-path-id="props.powerPathId" :is-read-only="props.isReadOnly"/>
     </div>
   </div>
 
   <AddPower
-    v-if="showAddPower && userInfo.hasUserRole(UserRoles.PowerManagementRole)"
+    v-if="showAddPower && userInfo.hasUserRole(UserRoles.PowerManagementRole) && !props.isReadOnly"
     :power-path-id="props.powerPathId" @cancelled="toggleAddPower"
   />
   <Button
-    v-if="!showAddPower && userInfo.hasUserRole(UserRoles.PowerManagementRole)" class="w-100 m-2"
+    v-if="!showAddPower && userInfo.hasUserRole(UserRoles.PowerManagementRole) && !props.isReadOnly" class="w-100 m-2"
     label="Add Power" @click="toggleAddPower"
   />
 </template>
