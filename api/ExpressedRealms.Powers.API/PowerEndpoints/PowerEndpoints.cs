@@ -2,11 +2,13 @@ using ExpressedRealms.Authentication;
 using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.Powers.API.PowerEndpoints.Requests.CreatePower;
 using ExpressedRealms.Powers.API.PowerEndpoints.Requests.PowerEdit;
+using ExpressedRealms.Powers.API.PowerEndpoints.Requests.UpdateOrder;
 using ExpressedRealms.Powers.API.PowerEndpoints.Responses.Options;
 using ExpressedRealms.Powers.API.PowerEndpoints.Responses.PowerList;
 using ExpressedRealms.Powers.Repository.Powers;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerCreate;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerEdit;
+using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerSorting;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -61,6 +63,38 @@ internal static class PowerEndpoints
             .WithSummary("Returns the list of powers for a given power path")
             .WithDescription(" of powers for a given power path")
             .RequireAuthorization();
+        
+        app.MapGroup("powerpath")
+            .AddFluentValidationAutoValidation()
+            .WithTags("Power Paths")
+            .WithOpenApi()
+            .MapPut(
+                "/{powerPathId}/updateSorting",
+                async (
+                    int powerPathId,
+                    PowerOrderUpdateRequest request,
+                    IPowerRepository powerRepository
+                ) =>
+                {
+                    await powerRepository.UpdatePowerPathSortOrder(
+                        new EditPowerSortModel()
+                        {
+                            PowerPathId = powerPathId,
+                            Items = request
+                                .Items.Select(x => new EditPowerSortItemModel()
+                                {
+                                    Id = x.Id,
+                                    SortOrder = x.SortOrder,
+                                })
+                                .ToList(),
+                        }
+                    );
+
+                    return TypedResults.Ok();
+                }
+            )
+            .WithSummary("Updates the sort order of power paths for a given expression")
+            .RequirePolicyAuthorization(Policies.ManagePowers);
 
         endpointGroup
             .MapGet(

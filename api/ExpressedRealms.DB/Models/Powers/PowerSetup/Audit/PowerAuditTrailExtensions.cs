@@ -62,6 +62,10 @@ internal static class PowerAuditTrailExtensions
                 case "cost":
                     changedRecord.FriendlyName = "Cost";
                     break;
+                
+                case "order_index":
+                    changedRecord.FriendlyName = "Sort Order";
+                    break;
 
                 default:
                     throw new MissingAuditColumnException(changedRecord.ColumnName);

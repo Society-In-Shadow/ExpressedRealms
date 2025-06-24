@@ -1,14 +1,13 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Powers;
-using ExpressedRealms.Powers.Repository.Powers.DTOs;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.Options;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerCreate;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerEdit;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerList;
+using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerSorting;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
 using FluentResults;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Powers.Repository.Powers;
@@ -24,6 +23,7 @@ internal sealed class PowerRepository(
     {
         var items = await context
             .Powers.Where(x => x.PowerPathId == powerPathId)
+            .OrderBy(x => x.OrderIndex)
             .Select(x => new PowerInformation
             {
                 Id = x.Id,
@@ -126,6 +126,11 @@ internal sealed class PowerRepository(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
+        
+        var nextPlaceOnList = await context
+            .Powers.AsNoTracking()
+            .Where(x => x.PowerPathId == createPowerModel.PowerPathId)
+            .CountAsync();
 
         var newPower = new Power
         {
@@ -141,6 +146,7 @@ internal sealed class PowerRepository(
             Limitation = createPowerModel.Limitation,
             OtherFields = createPowerModel.Other,
             Cost = createPowerModel.Cost,
+            OrderIndex = nextPlaceOnList + 1
         };
 
         context.Powers.Add(newPower);
@@ -233,6 +239,22 @@ internal sealed class PowerRepository(
         section.SoftDelete();
         await context.SaveChangesAsync(cancellationToken);
 
+        return Result.Ok();
+    }
+    
+    public async Task<Result> UpdatePowerPathSortOrder(EditPowerSortModel dto)
+    {
+        var sections = await context
+            .Powers.Where(x => x.PowerPathId == dto.PowerPathId)
+            .ToListAsync();
+
+        foreach (var item in dto.Items)
+        {
+            var section = sections.First(x => x.Id == item.Id);
+            section.OrderIndex = item.SortOrder;
+        }
+
+        await context.SaveChangesAsync();
         return Result.Ok();
     }
 }

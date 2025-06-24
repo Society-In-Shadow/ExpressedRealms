@@ -32,6 +32,7 @@ public class Power : ISoftDelete
     public string? Limitation { get; set; }
     public string? OtherFields { get; set; }
     public string? Cost { get; set; }
+    public int OrderIndex { get; set; }
 
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
