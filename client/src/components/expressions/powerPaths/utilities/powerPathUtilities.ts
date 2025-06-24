@@ -1,7 +1,8 @@
 import {isProxy, toRaw} from "vue";
 import type {PowerPath} from "@/components/expressions/powerPaths/types";
+import type {Power} from "@/components/expressions/powers/types";
 
-export function getSortAndIdsForPowerPaths(nodes:PowerPath[]) {
+export function getSortAndIdsForPowerPaths(nodes:PowerPath[] | Power[]) {
 
     // Ensure we are working with raw data if it's a Vue Proxy
     const rawNodes = isProxy(nodes) ? toRaw(nodes) : nodes;
