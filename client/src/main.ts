@@ -16,6 +16,7 @@ import { createPinia } from 'pinia'
 import ToastService from 'primevue/toastservice';
 import axiosConfig from "@/config/axiosConfig";
 import ConfirmationService from 'primevue/confirmationservice';
+import 'vue-easy-dnd/dist/dnd.css'
 axiosConfig.setupErrorHandlingInterceptors();
 axiosConfig.setAPIUrl();
 
