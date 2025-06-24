@@ -17,16 +17,15 @@ const props = defineProps({
 </script>
 
 <template>
-  <div v-for="path in powerPaths.powerPaths">
+  <div v-for="path in powerPaths.powerPaths" :key="path.id">
     <Skeleton v-if="props.showSkeleton" id="toc-skeleton" class="mb-2" height="1.5em" />
     <a v-else class="p-1 tocItem" :href="'#' + makeIdSafe(path.name)" @click.prevent="scrollToSection(path.name)">{{ path.name }}</a>
-    <div class="ps-4" v-for="power in path.powers">
+    <div v-for="power in path.powers" :key="power.id" class="ps-4">
       <Skeleton v-if="props.showSkeleton" id="toc-skeleton" class="mb-2" height="1.5em" />
       <a v-else class="p-1 tocItem" :href="'#' + makeIdSafe(power.name)" @click.prevent="scrollToSection(power.name)">{{ power.name }}</a>
     </div>
   </div>
 </template>
-
 
 <style scoped>
 

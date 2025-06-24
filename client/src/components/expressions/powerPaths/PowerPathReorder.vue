@@ -49,20 +49,20 @@ function toggleEdit(){
 <template>
   <div class="row">
     <Button
-        v-if="userInfo.hasUserRole(UserRoles.PowerManagementRole)" class="col m-2"
-        :label="showPowerPathReorder ? 'Cancel' : 'Reorder Power Paths'" @click="toggleEdit"
+      v-if="userInfo.hasUserRole(UserRoles.PowerManagementRole)" class="col m-2"
+      :label="showPowerPathReorder ? 'Cancel' : 'Reorder Power Paths'" @click="toggleEdit"
     />
     <Button v-if="showPowerPathReorder" label="Save" class="col m-2" @click="saveChanges" />
   </div>
 
   <drop-list v-if="showPowerPathReorder" :items="powerPaths.powerPaths" @reorder="$event.apply(powerPaths.powerPaths)">
-    <template v-slot:item="{item}"  >
+    <template #item="{item}">
       <drag :key="item.id" :data="item">
-        <h1><i class="pi pi-bars mr-2" />{{item.name}}</h1>
+        <h1><i class="pi pi-bars mr-2" />{{ item.name }}</h1>
       </drag>
     </template>
-    <template v-slot:feedback="{data}">
-      <h1><i class="pi pi-bars mr-2" />{{data.name}}</h1>
+    <template #feedback="{data}">
+      <h1><i class="pi pi-bars mr-2" />{{ data.name }}</h1>
     </template>
   </drop-list>
 </template>

@@ -32,7 +32,7 @@ const toggleAddPower = () => {
 </script>
 
 <template>
-  <PowerPathReorder></PowerPathReorder>
+  <PowerPathReorder />
   <div v-for="path in powerPaths.powerPaths" :key="path.id">
     <Divider />
     <ShowPowerPath :path="path" :expression-id="props.expressionId" />
