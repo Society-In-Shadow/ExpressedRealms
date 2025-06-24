@@ -52,5 +52,10 @@ public class EditPowerPathSortModelValidator : AbstractValidator<EditPowerPathSo
                 }
             )
             .WithMessage("The sort order has gaps or duplicate values.");
+
+        RuleFor(x => x.Items)
+            .NotEmpty()
+            .Must(x => x.Count > 2)
+            .WithMessage("You must have at least 2 items to sort.");
     }
 }

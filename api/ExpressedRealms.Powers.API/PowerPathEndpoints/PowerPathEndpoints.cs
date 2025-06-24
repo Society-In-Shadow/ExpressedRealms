@@ -6,6 +6,7 @@ using ExpressedRealms.Powers.API.PowerPathEndpoints.Responses.PowerPathList;
 using ExpressedRealms.Powers.Repository.PowerPaths;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathCreate;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathEdit;
+using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathSorting;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -67,6 +68,30 @@ internal static class PowerPathEndpoints
                 }
             )
             .WithSummary("Returns the list of power paths for a given expression")
+            .RequireAuthorization();
+        
+        app.MapGroup("expression")
+            .AddFluentValidationAutoValidation()
+            .WithTags("Expressions")
+            .WithOpenApi()
+            .MapPut(
+                "/{expressionId}/updateSorting",
+                async (int expressionId, PowerPathOrderUpdateRequest request, IPowerPathRepository powerRepository) =>
+                {
+                    await powerRepository.UpdatePowerPathSortOrder(new EditPowerPathSortModel()
+                    {
+                        ExpressionId = expressionId,
+                        Items = request.Items.Select(x => new EditPowerPathSortItemModel()
+                        {
+                            Id = x.Id,
+                            SortOrder = x.SortOrder
+                        }).ToList()
+                    });
+
+                    return TypedResults.Ok();
+                }
+            )
+            .WithSummary("Updates the sort order of power paths for a given expression")
             .RequireAuthorization();
 
         endpointGroup

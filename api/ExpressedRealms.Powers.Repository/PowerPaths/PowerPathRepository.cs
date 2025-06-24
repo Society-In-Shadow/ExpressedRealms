@@ -25,6 +25,7 @@ internal sealed class PowerPathRepository(
     {
         var items = await context
             .PowerPaths.Where(x => x.ExpressionId == expressionId)
+            .OrderBy(x => x.OrderIndex)
             .Select(x => new PowerPathToc()
             {
                 Id = x.Id,
@@ -75,6 +76,7 @@ internal sealed class PowerPathRepository(
     {
         var items = await context
             .PowerPaths.Where(x => x.ExpressionId == expressionId)
+            .OrderBy(x => x.OrderIndex)
             .Select(x => new PowerPathInformation
             {
                 Id = x.Id,
