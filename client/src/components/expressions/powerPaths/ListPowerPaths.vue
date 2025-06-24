@@ -8,9 +8,9 @@ import AddPowerPath from "@/components/expressions/powerPaths/AddPowerPath.vue";
 import Divider from 'primevue/divider';
 import ShowPowerPath from "@/components/expressions/powerPaths/ShowPowerPath.vue";
 import {UserRoles, userStore} from "@/stores/userStore";
-
 let userInfo = userStore();
 let powerPaths = powerPathStore();
+import PowerPathReorder from "@/components/expressions/powerPaths/PowerPathReorder.vue";
 
 const props = defineProps({
   expressionId: {
@@ -32,6 +32,7 @@ const toggleAddPower = () => {
 </script>
 
 <template>
+  <PowerPathReorder></PowerPathReorder>
   <div v-for="path in powerPaths.powerPaths" :key="path.id">
     <Divider />
     <ShowPowerPath :path="path" :expression-id="props.expressionId" />
