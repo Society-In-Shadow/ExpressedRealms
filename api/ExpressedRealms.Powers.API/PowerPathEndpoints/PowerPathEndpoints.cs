@@ -100,7 +100,7 @@ internal static class PowerPathEndpoints
                 }
             )
             .WithSummary("Updates the sort order of power paths for a given expression")
-            .RequireAuthorization();
+            .RequirePolicyAuthorization(Policies.ManagePowers);
 
         endpointGroup
             .MapGet(

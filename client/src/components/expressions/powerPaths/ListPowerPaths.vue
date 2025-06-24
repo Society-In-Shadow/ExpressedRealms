@@ -32,7 +32,7 @@ const toggleAddPower = () => {
 </script>
 
 <template>
-  <PowerPathReorder />
+  <PowerPathReorder v-if="userInfo.hasUserRole(UserRoles.PowerManagementRole)" />
   <div v-for="path in powerPaths.powerPaths" :key="path.id">
     <Divider />
     <ShowPowerPath :path="path" :expression-id="props.expressionId" />
