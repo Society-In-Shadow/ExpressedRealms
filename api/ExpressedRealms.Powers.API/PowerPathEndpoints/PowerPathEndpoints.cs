@@ -69,24 +69,32 @@ internal static class PowerPathEndpoints
             )
             .WithSummary("Returns the list of power paths for a given expression")
             .RequireAuthorization();
-        
+
         app.MapGroup("expression")
             .AddFluentValidationAutoValidation()
             .WithTags("Expressions")
             .WithOpenApi()
             .MapPut(
                 "/{expressionId}/updateSorting",
-                async (int expressionId, PowerPathOrderUpdateRequest request, IPowerPathRepository powerRepository) =>
+                async (
+                    int expressionId,
+                    PowerPathOrderUpdateRequest request,
+                    IPowerPathRepository powerRepository
+                ) =>
                 {
-                    await powerRepository.UpdatePowerPathSortOrder(new EditPowerPathSortModel()
-                    {
-                        ExpressionId = expressionId,
-                        Items = request.Items.Select(x => new EditPowerPathSortItemModel()
+                    await powerRepository.UpdatePowerPathSortOrder(
+                        new EditPowerPathSortModel()
                         {
-                            Id = x.Id,
-                            SortOrder = x.SortOrder
-                        }).ToList()
-                    });
+                            ExpressionId = expressionId,
+                            Items = request
+                                .Items.Select(x => new EditPowerPathSortItemModel()
+                                {
+                                    Id = x.Id,
+                                    SortOrder = x.SortOrder,
+                                })
+                                .ToList(),
+                        }
+                    );
 
                     return TypedResults.Ok();
                 }
