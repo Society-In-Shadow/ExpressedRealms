@@ -1,6 +1,6 @@
 using ExpressedRealms.Characters.Repository.DTOs;
 
-namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.Responses;
+namespace ExpressedRealms.Characters.API.CharacterEndPoints.Responses;
 
 public record CharacterEditResponse
 {

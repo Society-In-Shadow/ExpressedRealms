@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs;
+namespace ExpressedRealms.Characters.API.CharacterEndPoints.StatDTOs;
 
 public class StatDetails
 {

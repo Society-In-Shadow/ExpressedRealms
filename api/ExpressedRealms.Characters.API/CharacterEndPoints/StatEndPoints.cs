@@ -1,12 +1,14 @@
-using ExpressedRealms.DB;
+using ExpressedRealms.Characters.API.CharacterEndPoints.StatDTOs;
 using ExpressedRealms.Characters.Repository.Stats.Enums;
-using ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs;
+using ExpressedRealms.DB;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
-namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints;
+namespace ExpressedRealms.Characters.API.CharacterEndPoints;
 
 internal static class StatEndPoints
 {

@@ -1,7 +1,7 @@
 using ExpressedRealms.Authentication;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
-using ExpressedRealms.Server.Extensions;
 using ExpressedRealms.Server.Shared;
+using ExpressedRealms.Server.Shared.Extensions;
 
 namespace ExpressedRealms.Server.DependencyInjections;
 

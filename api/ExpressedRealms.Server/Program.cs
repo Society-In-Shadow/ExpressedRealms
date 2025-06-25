@@ -4,6 +4,7 @@ using Audit.Core;
 using ExpressedRealms.Authentication.AzureKeyVault;
 using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
 using ExpressedRealms.Authentication.Configuration;
+using ExpressedRealms.Characters.API.Configuration;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.Roles;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
@@ -21,10 +22,9 @@ using ExpressedRealms.Server.Configuration.UserRoles;
 using ExpressedRealms.Server.DependencyInjections;
 using ExpressedRealms.Server.EndPoints;
 using ExpressedRealms.Server.EndPoints.AdminEndpoints;
-using ExpressedRealms.Server.EndPoints.CharacterEndPoints;
 using ExpressedRealms.Server.EndPoints.ExpressionEndpoints;
 using ExpressedRealms.Server.EndPoints.PlayerEndpoints;
-using ExpressedRealms.Server.Extensions;
+using ExpressedRealms.Server.Shared.Extensions;
 using ExpressedRealms.Server.Swagger;
 using FluentValidation;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
@@ -296,15 +296,14 @@ try
 
     Log.Information("Adding endpoints");
     app.AddAuthEndPoints();
-    app.AddCharacterEndPoints();
     app.AddTestingEndPoints();
     app.AddPlayerEndPoints();
     app.AddNavigationEndpoints();
     app.AddExpressionEndpoints();
     app.AddExpressionSubsectionEndpoints();
-    app.AddStatEndPoints();
     app.AddAdminEndPoints();
     app.AddPowerEndPoints();
+    app.AddCharacterAPIEndPoints();
 
     app.MapFallbackToFile("index.html");
     Log.Information("Starting Web API");

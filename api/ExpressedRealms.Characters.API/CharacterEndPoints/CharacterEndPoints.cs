@@ -1,26 +1,29 @@
-using ExpressedRealms.DB;
+using ExpressedRealms.Characters.API.CharacterEndPoints.DTOs;
+using ExpressedRealms.Characters.API.CharacterEndPoints.Requests;
+using ExpressedRealms.Characters.API.CharacterEndPoints.Responses;
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.DTOs;
+using ExpressedRealms.Characters.Repository.Enums;
 using ExpressedRealms.Characters.Repository.Skills;
 using ExpressedRealms.Characters.Repository.Skills.DTOs;
 using ExpressedRealms.Characters.Repository.Stats;
 using ExpressedRealms.Characters.Repository.Stats.DTOs;
 using ExpressedRealms.Characters.Repository.Stats.Enums;
+using ExpressedRealms.DB;
 using ExpressedRealms.Repositories.Expressions.Expressions;
-using ExpressedRealms.Server.EndPoints.CharacterEndPoints.DTOs;
-using ExpressedRealms.Server.EndPoints.CharacterEndPoints.Requests;
-using ExpressedRealms.Server.EndPoints.CharacterEndPoints.Responses;
-using ExpressedRealms.Server.Extensions;
 using ExpressedRealms.Server.Shared;
+using ExpressedRealms.Server.Shared.Extensions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
-using EditStatDTO = ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs.EditStatDTO;
-using SingleStatInfo = ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs.SingleStatInfo;
-using SmallStatInfo = ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs.SmallStatInfo;
+using EditStatDTO = ExpressedRealms.Characters.API.CharacterEndPoints.StatDTOs.EditStatDTO;
+using SingleStatInfo = ExpressedRealms.Characters.API.CharacterEndPoints.StatDTOs.SingleStatInfo;
+using SmallStatInfo = ExpressedRealms.Characters.API.CharacterEndPoints.StatDTOs.SmallStatInfo;
 
-namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints;
+namespace ExpressedRealms.Characters.API.CharacterEndPoints;
 
 internal static class CharacterEndPoints
 {

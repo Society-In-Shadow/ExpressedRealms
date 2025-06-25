@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.Responses;
+namespace ExpressedRealms.Characters.API.CharacterEndPoints.Responses;
 
 public class BenefitItemResponse
 {

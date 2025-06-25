@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace ExpressedRealms.Server.Extensions;
+namespace ExpressedRealms.Server.Shared.Extensions;
 
 public static class ClaimsPrincipalExtensions
 {

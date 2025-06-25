@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.Requests;
+namespace ExpressedRealms.Characters.API.CharacterEndPoints.Requests;
 
 public class EditCharacterSkillRequest
 {

@@ -1,7 +1,7 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 using ExpressedRealms.Server.EndPoints.PlayerEndpoints.DTOs;
-using ExpressedRealms.Server.Extensions;
+using ExpressedRealms.Server.Shared.Extensions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;

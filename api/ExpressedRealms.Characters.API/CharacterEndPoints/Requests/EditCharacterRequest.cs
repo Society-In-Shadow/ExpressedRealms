@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.DTOs;
+namespace ExpressedRealms.Characters.API.CharacterEndPoints.Requests;
 
 public record EditCharacterRequest
 {
