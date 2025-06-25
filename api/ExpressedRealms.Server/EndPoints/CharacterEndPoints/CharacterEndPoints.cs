@@ -1,11 +1,11 @@
 using ExpressedRealms.DB;
-using ExpressedRealms.Repositories.Characters;
-using ExpressedRealms.Repositories.Characters.DTOs;
-using ExpressedRealms.Repositories.Characters.Skills;
-using ExpressedRealms.Repositories.Characters.Skills.DTOs;
-using ExpressedRealms.Repositories.Characters.Stats;
-using ExpressedRealms.Repositories.Characters.Stats.DTOs;
-using ExpressedRealms.Repositories.Characters.Stats.Enums;
+using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.Characters.Repository.DTOs;
+using ExpressedRealms.Characters.Repository.Skills;
+using ExpressedRealms.Characters.Repository.Skills.DTOs;
+using ExpressedRealms.Characters.Repository.Stats;
+using ExpressedRealms.Characters.Repository.Stats.DTOs;
+using ExpressedRealms.Characters.Repository.Stats.Enums;
 using ExpressedRealms.Repositories.Expressions.Expressions;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.DTOs;
 using ExpressedRealms.Server.EndPoints.CharacterEndPoints.Requests;
@@ -276,7 +276,7 @@ internal static class CharacterEndPoints
                 ) =>
                 {
                     var results = await repository.UpdateCharacterStat(
-                        new Repositories.Characters.Stats.DTOs.EditStatDto()
+                        new Characters.Repository.Stats.DTOs.EditStatDto()
                         {
                             CharacterId = dto.CharacterId,
                             LevelTypeId = dto.LevelTypeId,

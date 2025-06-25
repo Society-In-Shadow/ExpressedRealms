@@ -1,4 +1,4 @@
-using ExpressedRealms.Repositories.Characters.Stats.Enums;
+using ExpressedRealms.Characters.Repository.Stats.Enums;
 
 namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs;
 

@@ -1,4 +1,4 @@
-using ExpressedRealms.Repositories.Characters.DTOs;
+using ExpressedRealms.Characters.Repository.DTOs;
 
 namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.Responses;
 

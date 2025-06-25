@@ -1,8 +1,8 @@
 using ExpressedRealms.Characters.Repository.Stats.Enums;
 
-namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs;
+namespace ExpressedRealms.Characters.Repository.Stats.DTOs;
 
-public class EditStatDTO
+public record EditStatDto
 {
     /// <example>6</example>
     public int CharacterId { get; set; }

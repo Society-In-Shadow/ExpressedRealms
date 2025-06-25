@@ -13,7 +13,7 @@ using ExpressedRealms.FeatureFlags.FeatureManager;
 using ExpressedRealms.Powers.API.Configuration;
 using ExpressedRealms.Powers.Repository;
 using ExpressedRealms.Repositories.Admin;
-using ExpressedRealms.Repositories.Characters;
+using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Repositories.Expressions;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Server.Configuration;

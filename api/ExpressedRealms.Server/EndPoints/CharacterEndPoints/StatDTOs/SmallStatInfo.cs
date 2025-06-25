@@ -1,8 +1,8 @@
-using ExpressedRealms.Repositories.Characters.Stats.Enums;
+using ExpressedRealms.Characters.Repository.Stats.Enums;
 
 namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs;
 
-public class SmallStatInfo(Repositories.Characters.Stats.DTOs.SmallStatInfo smallStatInfo)
+public class SmallStatInfo(Characters.Repository.Stats.DTOs.SmallStatInfo smallStatInfo)
 {
     /// <example>WIL</example>
     public string ShortName { get; set; } = smallStatInfo.ShortName;

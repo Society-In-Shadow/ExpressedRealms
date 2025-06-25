@@ -1,10 +1,10 @@
-using ExpressedRealms.Repositories.Characters.Stats.Enums;
+using ExpressedRealms.Characters.Repository.Stats.Enums;
 
 namespace ExpressedRealms.Server.EndPoints.CharacterEndPoints.StatDTOs;
 
 public record SingleStatInfo
 {
-    public SingleStatInfo(Repositories.Characters.Stats.DTOs.SingleStatInfo dto)
+    public SingleStatInfo(Characters.Repository.Stats.DTOs.SingleStatInfo dto)
     {
         Id = dto.Id;
         Name = dto.Name;
