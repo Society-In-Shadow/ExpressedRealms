@@ -38,31 +38,32 @@ internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context,
             .Select(x => new
             {
                 x.SkillTypeId,
-                x.SkillLevel.Level,
+                LevelValue = x.SkillLevel.Level,
                 x.SkillLevel.SkillLevelBenefits,
-                x.SkillType
+                x.SkillType,
+                x.SkillLevel,
             })
             .ToListAsync(cancellationToken);
 
         availableModifiers.AddRange( skills.Select(x => new ModifierDescription()
         {
-            Value = x.Level,
+            Value = x.LevelValue,
             Message = $"Base Skill for {x.SkillType.Name}",
             Type = ModiferConversions.GetModifierType((SkillTypes)x.SkillTypeId),
             Name = ModiferConversions.GetModifierType((SkillTypes)x.SkillTypeId).Name
         }));
 
         availableModifiers.AddRange( skills
-            .SelectMany(x => x.SkillLevelBenefits
+            .SelectMany(x => x.SkillLevelBenefits.Where(y => y.SkillTypeId == x.SkillTypeId)
                 .Select(y => new ModifierDescription()
                     {
                         Value = y.Modifier,
-                        Message = $"Skill Level Benefit for {x.SkillType.Name}",
-                        Type = ModiferConversions.GetModifierType((DbModifierTypes)x.SkillTypeId),
-                        Name = ModiferConversions.GetModifierType((DbModifierTypes)x.SkillTypeId).Name
+                        Message = $"{x.SkillLevel.Name} Skill Level Benefit for {x.SkillType.Name}",
+                        Type = ModiferConversions.GetModifierType((DbModifierTypes)y.ModifierTypeId),
+                        Name = ModiferConversions.GetModifierType((DbModifierTypes)y.ModifierTypeId).Name
                     }
                 )
-            ).Distinct()
+            )
         );
 
         var proficiencies = ProficiencyDtos.GetProficiencies();
