@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import Card from "primevue/card";
-import {computed, onMounted, ref, type Ref} from "vue";
+import {onMounted, ref, type Ref} from "vue";
 import { useRoute } from 'vue-router'
 const route = useRoute()
 
@@ -11,27 +11,20 @@ import AccordionPanel from 'primevue/accordionpanel';
 import AccordionHeader from 'primevue/accordionheader';
 import AccordionContent from 'primevue/accordioncontent';
 
-import type {CharacterSkillsResponse} from "@/components/characters/character/skills/interfaces/CharacterSkillsResponse";
-
-const offensiveSkills:Ref<Array<CharacterSkillsResponse>> = ref([]);
-const defensiveSkills:Ref<Array<CharacterSkillsResponse>> = ref([]);
-const maxXP = 28;
-const appliedXp = ref(0);
+const offensive:Ref<Array<ProficienciesDto>> = ref([]);
+const defensive:Ref<Array<ProficienciesDto>> = ref([]);
 const openItems = ref([]);
 
-const skillTypes = ref([
-  { name: "Offensive Skills",  skills: offensiveSkills },
-  { name: "Defensive Skills", skills: defensiveSkills }
+const types = ref([
+  { name: "Offensive Proficiencies", items: offensive },
+  { name: "Defensive Proficiencies", items: defensive }
 ]);
 
 onMounted(() =>{
-  getEditOptions();
+  getProficiencies();
 });
 
-var offensive = ref([]);
-var defensive = ref([]);
-
-function getEditOptions() {
+function getProficiencies() {
   axios.get(`proficiencies/${route.params.id}`)
       .then((response) => {
         offensive.value = response.data.proficiencies.filter(x => x.type === "Offensive");
@@ -42,15 +35,13 @@ function getEditOptions() {
 </script>
 
 <template>
-  <Card class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="width: 75em">
-    <template #title>
-      Proficiencies
-    </template>
+  <Card class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch w-100 max-width">
     <template #content>
-      <div class="row">
-        <div class="col">
+      <div class="d-flex flex-md-row flex-column">
+        <div class="col" v-for="type in types">
+          <h3>{{type.name}}</h3>
           <Accordion :value="openItems" multiple :lazy="true" expand-icon="pi pi-info-circle" collapse-icon="pi pi-times-circle">
-            <AccordionPanel v-for="proficiency in offensive" :key="proficiency.id" :value="proficiency.id" >
+            <AccordionPanel v-for="proficiency in type.items" :key="proficiency.id" :value="proficiency.id" >
               <AccordionHeader>
                 <div class="d-flex justify-content-between w-100 pr-3">
                   <div>{{proficiency.name}}</div>
@@ -60,45 +51,37 @@ function getEditOptions() {
                 </div>
               </AccordionHeader>
               <AccordionContent>
-                <div class="row">
-                  <div class="col">Source</div>
-                  <div class="col">Details</div>
-                  <div class="col text-right">Bonus</div>
-                </div>
-                <div v-for="modifier in proficiency.appliedModifiers">
-                  <div class="row">
-                    <div class="col">{{modifier.name}}</div>
-                    <div class="col">{{modifier.message}}</div>
-                    <div class="col text-right">{{modifier.value >= 0 ? '+' : '-'}}{{modifier.value}}</div>
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionPanel>
-          </Accordion>
-        </div>
-        <div class="col">
-          <Accordion :value="openItems" multiple :lazy="true" expand-icon="pi pi-info-circle" collapse-icon="pi pi-times-circle">
-            <AccordionPanel v-for="proficiency in defensive" :key="proficiency.id" :value="proficiency.id" >
-              <AccordionHeader>
-                <div class="d-flex justify-content-between w-100 pr-3">
-                  <div>{{proficiency.name}}</div>
-                  <div class="text-right">
-                    {{proficiency.value}}
-                  </div>
-                </div>
-              </AccordionHeader>
-              <AccordionContent>
-                <div class="row">
-                  <div class="col">Source</div>
-                  <div class="col">Details</div>
-                  <div class="col text-right">Bonus</div>
-                </div>
-                <div v-for="modifier in proficiency.appliedModifiers">
-
-                  <div class="row">
-                    <div class="col">{{modifier.name}}</div>
-                    <div class="col">{{modifier.message}}</div>
-                    <div class="col text-right">{{modifier.value >= 0 ? '+' : '-'}}{{modifier.value}}</div>
+                <div class="p-datatable p-component p-datatable-striped">
+                  <div class="p-datatable-table-container">
+                    <table class="w-100 p-datatable-table">
+                      <!-- Table header -->
+                      <thead class="p-datatable-thead">
+                      <tr>
+                        <th class="p-datatable-header-cell">
+                          Source
+                        </th>
+                        <th class="p-datatable-header-cell">
+                          Details
+                        </th>
+                        <th class="p-datatable-header-cell">
+                          Bonus
+                        </th>
+                      </tr>
+                      </thead>
+                      <tbody class="p-datatable-tbody">
+                      <tr v-for="(modifier, index) in proficiency.appliedModifiers" :class="index % 2 === 0 ? 'p-row-even' : 'p-row-odd'">
+                        <td>
+                          {{modifier.name}}
+                        </td>
+                        <td>
+                          {{modifier.message}}
+                        </td>
+                        <td class="text-right">
+                          {{modifier.value >= 0 ? '+' : ''}}{{modifier.value}}
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </AccordionContent>
@@ -106,7 +89,15 @@ function getEditOptions() {
           </Accordion>
         </div>
       </div>
-      
     </template>
   </Card>
 </template>
+
+<style>
+@media(min-width: 768px){
+  .max-width {
+    width: 100%;
+    max-width: 75em
+  }
+}
+</style>
