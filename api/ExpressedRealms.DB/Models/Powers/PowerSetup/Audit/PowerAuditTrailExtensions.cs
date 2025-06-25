@@ -62,7 +62,7 @@ internal static class PowerAuditTrailExtensions
                 case "cost":
                     changedRecord.FriendlyName = "Cost";
                     break;
-                
+
                 case "order_index":
                     changedRecord.FriendlyName = "Sort Order";
                     break;

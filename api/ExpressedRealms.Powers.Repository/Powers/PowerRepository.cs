@@ -126,7 +126,7 @@ internal sealed class PowerRepository(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-        
+
         var nextPlaceOnList = await context
             .Powers.AsNoTracking()
             .Where(x => x.PowerPathId == createPowerModel.PowerPathId)
@@ -146,7 +146,7 @@ internal sealed class PowerRepository(
             Limitation = createPowerModel.Limitation,
             OtherFields = createPowerModel.Other,
             Cost = createPowerModel.Cost,
-            OrderIndex = nextPlaceOnList + 1
+            OrderIndex = nextPlaceOnList + 1,
         };
 
         context.Powers.Add(newPower);
@@ -241,7 +241,7 @@ internal sealed class PowerRepository(
 
         return Result.Ok();
     }
-    
+
     public async Task<Result> UpdatePowerPathSortOrder(EditPowerSortModel dto)
     {
         var sections = await context

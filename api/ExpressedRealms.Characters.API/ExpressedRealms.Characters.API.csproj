@@ -1,14 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\ExpressedRealms.Characters.Repository\ExpressedRealms.Characters.Repository.csproj" />
-      <ProjectReference Include="..\ExpressedRealms.Server.Shared\ExpressedRealms.Server.Shared.csproj" />
-    </ItemGroup>
-
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExpressedRealms.Characters.Repository\ExpressedRealms.Characters.Repository.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Server.Shared\ExpressedRealms.Server.Shared.csproj" />
+  </ItemGroup>
 </Project>

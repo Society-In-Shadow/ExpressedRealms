@@ -32,7 +32,8 @@ internal sealed class PowerPathRepository(
                 Name = x.Name,
                 Description = x.Description,
                 Powers = x
-                    .Powers.OrderBy(x => x.OrderIndex).Select(x => new PowerInformation
+                    .Powers.OrderBy(x => x.OrderIndex)
+                    .Select(x => new PowerInformation
                     {
                         Id = x.Id,
                         Name = x.Name,

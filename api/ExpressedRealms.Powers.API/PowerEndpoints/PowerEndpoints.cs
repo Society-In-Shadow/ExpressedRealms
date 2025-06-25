@@ -63,7 +63,7 @@ internal static class PowerEndpoints
             .WithSummary("Returns the list of powers for a given power path")
             .WithDescription(" of powers for a given power path")
             .RequireAuthorization();
-        
+
         app.MapGroup("powerpath")
             .AddFluentValidationAutoValidation()
             .WithTags("Power Paths")
