@@ -18,5 +18,16 @@ public enum ModifierType
     MeleeDefense,
     Acrobatics,
     Spellwarding,
-    Deflection
+    Deflection,
+    Strike,
+    Thrust,
+    Throw,
+    Shoot,
+    Cast,
+    Project,
+    Dodge,
+    Parry,
+    Evade,
+    Ward,
+    Deflect
 }

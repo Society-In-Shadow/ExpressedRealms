@@ -36,17 +36,31 @@ internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context,
             .Select(x => new
             {
                 x.SkillTypeId,
-                x.SkillLevel.Level
+                x.SkillLevel.Level,
+                x.SkillLevel.SkillLevelBenefits,
+                x.SkillType
             })
             .ToListAsync(cancellationToken);
 
         availableModifiers.AddRange( skills.Select(x => new ModifierDescription()
         {
             Value = x.Level,
-            Message = "Base Skill",
+            Message = $"Base Skill for {x.SkillType.Name}",
             Type = GetModifierType((SkillTypes)x.SkillTypeId)
         }));
 
+        availableModifiers.AddRange( skills
+            .SelectMany(x => x.SkillLevelBenefits
+                .Select(y => new ModifierDescription()
+                    {
+                        Value = y.Modifier,
+                        Message = $"Skill Level Benefit for {x.SkillType.Name}",
+                        Type = GetModifierType((DbModifierTypes)x.SkillTypeId)
+                    }
+                )
+            ).Distinct()
+        );
+        
         var proficiencies = new List<ProficiencyDto>()
         {
             new ProficiencyDto()
@@ -57,7 +71,8 @@ internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context,
                 {
                     ModifierType.Dexterity,
                     ModifierType.Strength,
-                    ModifierType.HandToHandOffense
+                    ModifierType.HandToHandOffense,
+                    ModifierType.Strike
                 },
                 CorrespondingId = 1,
             },
@@ -69,7 +84,8 @@ internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context,
                 {
                     ModifierType.Agility,
                     ModifierType.Strength,
-                    ModifierType.HandToHandDefense
+                    ModifierType.HandToHandDefense,
+                    ModifierType.Dodge
                 },
                 CorrespondingId = 1,
             },
@@ -81,7 +97,8 @@ internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context,
                 {
                     ModifierType.Agility,
                     ModifierType.Dexterity,
-                    ModifierType.MeleeOffense
+                    ModifierType.MeleeOffense,
+                    ModifierType.Thrust
                 },
                 CorrespondingId = 2,
             },
@@ -93,7 +110,8 @@ internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context,
                 {
                     ModifierType.Agility,
                     ModifierType.Strength,
-                    ModifierType.MeleeDefense
+                    ModifierType.MeleeDefense,
+                    ModifierType.Parry
                 },
                 CorrespondingId = 2,
             },
@@ -105,7 +123,7 @@ internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context,
         }
         
         return proficiencies;
-    }
+    } 
 
     private static ModifierType GetModifierType(StatType statType)
     {
@@ -136,6 +154,34 @@ internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context,
             SkillTypes.Acrobatics => ModifierType.Acrobatics,
             SkillTypes.Spellwarding => ModifierType.Spellwarding,
             SkillTypes.Deflection => ModifierType.Deflection,
+            _ => throw new ArgumentOutOfRangeException(nameof(statType), statType, null)
+        };
+    }
+    private static ModifierType GetModifierType(DbModifierTypes statType)
+    {
+        return statType switch
+        {
+            DbModifierTypes.StrengthStonePull => ModifierType.Strength,
+            DbModifierTypes.StrikeProficiencyModifier => ModifierType.Strike,
+            DbModifierTypes.ConstitutionStonePull => ModifierType.Constitution,
+            //DbModifierTypes.WisdomStonePull => ,
+            DbModifierTypes.IntelligenceStonePull => ModifierType.Intelligence,
+            DbModifierTypes.WillpowerStonePull => ModifierType.Willpower,
+            DbModifierTypes.DexterityStonePull => ModifierType.Dexterity,
+            DbModifierTypes.ThrustProficiencyModifier => ModifierType.Thrust,
+            DbModifierTypes.ShootProficiencyModifier => ModifierType.Shoot,
+            DbModifierTypes.ThrowRange => ModifierType.Throw,
+            DbModifierTypes.CastProficiencyModifier => ModifierType.Cast,
+            DbModifierTypes.DodgeGeneralDamageProficiency => ModifierType.Dodge,
+            DbModifierTypes.ParryGeneralDamageProficiency => ModifierType.Parry,
+            DbModifierTypes.EvadeGeneralDamageProficiency => ModifierType.Evade,
+            DbModifierTypes.WardGeneralDamageProficiency => ModifierType.Ward,
+            DbModifierTypes.DeflectGeneralDamageProficiency => ModifierType.Deflection,
+            //DbModifierTypes.ReserveWillPower => expr,
+            DbModifierTypes.ThrowStat => ModifierType.Throw,
+            DbModifierTypes.ProjectStat => ModifierType.Project,
+            DbModifierTypes.AgilityStonePull => ModifierType.Agility,
+            DbModifierTypes.Project => ModifierType.Project,
             _ => throw new ArgumentOutOfRangeException(nameof(statType), statType, null)
         };
     }
