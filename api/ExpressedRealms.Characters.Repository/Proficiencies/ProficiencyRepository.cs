@@ -7,7 +7,6 @@ using FluentResults;
 using Microsoft.EntityFrameworkCore;
 using StatType = ExpressedRealms.Characters.Repository.Stats.Enums.StatType;
 
-
 namespace ExpressedRealms.Characters.Repository.Proficiencies;
 
 internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context, 
@@ -23,6 +22,15 @@ internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context,
             return Result.Fail(stats.Errors);
         }
 
+        var availableModifiers = new List<ModifierDescription>();
+        
+        availableModifiers.AddRange( stats.Value.Select(x => new ModifierDescription()
+        {
+            Value = x.Bonus,
+            Message = "Base Stat",
+            Type = GetModifierType(x.StatTypeId)
+        }));
+        
         var skills = await context.CharacterSkillsMappings.AsNoTracking()
             .Where(x => x.CharacterId == characterId)
             .Select(x => new
@@ -32,6 +40,12 @@ internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context,
             })
             .ToListAsync(cancellationToken);
 
+        availableModifiers.AddRange( skills.Select(x => new ModifierDescription()
+        {
+            Value = x.Level,
+            Message = "Base Skill",
+            Type = GetModifierType((SkillTypes)x.SkillTypeId)
+        }));
 
         var proficiencies = new List<ProficiencyDto>()
         {
@@ -59,59 +73,70 @@ internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context,
                 },
                 CorrespondingId = 1,
             },
+            new ProficiencyDto()
+            {
+                Name = "Thrust",
+                Description = "Lorem Ipsum",
+                Modifiers = new List<ModifierType>()
+                {
+                    ModifierType.Agility,
+                    ModifierType.Dexterity,
+                    ModifierType.MeleeOffense
+                },
+                CorrespondingId = 2,
+            },
+            new ProficiencyDto()
+            {
+                Name = "Parry",
+                Description = "Lorem Ipsum",
+                Modifiers = new List<ModifierType>()
+                {
+                    ModifierType.Agility,
+                    ModifierType.Strength,
+                    ModifierType.MeleeDefense
+                },
+                CorrespondingId = 2,
+            },
         };
 
         foreach (var proficiency in proficiencies)
         {
-            foreach (var modifierType in proficiency.Modifiers)
-            {
-                switch (modifierType)
-                {
-                    case ModifierType.Dexterity:
-                        proficiency.AppliedModifiers.Add(new ModifierDescription()
-                        {
-                            Message = "Base Dexterity Stat",
-                            Type = modifierType,
-                            Value = stats.Value.First(x => x.StatTypeId == StatType.Dexterity).Bonus,
-                        });
-                        break;
-                    case ModifierType.Strength:
-                        proficiency.AppliedModifiers.Add(new ModifierDescription()
-                        {
-                            Message = "Base Strength Stat",
-                            Type = modifierType,
-                            Value = stats.Value.First(x => x.StatTypeId == StatType.Strength).Bonus,
-                        });
-                        break;
-                    case ModifierType.Agility:
-                        proficiency.AppliedModifiers.Add(new ModifierDescription()
-                        {
-                            Message = "Base Agility Stat",
-                            Type = modifierType,
-                            Value = stats.Value.First(x => x.StatTypeId == StatType.Agility).Bonus,
-                        });
-                        break;
-                    case ModifierType.HandToHandOffense:
-                        proficiency.AppliedModifiers.Add(new ModifierDescription()
-                        {
-                            Message = "Base Hand To Hand Offense Stat",
-                            Type = modifierType,
-                            Value = skills.First(x => x.SkillTypeId == (int)SkillTypes.HandToHandOffense).Level,
-                        });
-                        break;
-                    case ModifierType.HandToHandDefense:
-                        proficiency.AppliedModifiers.Add(new ModifierDescription()
-                        {
-                            Message = "Base Hand To Hand Defense Stat",
-                            Type = modifierType,
-                            Value = skills.First(x => x.SkillTypeId == (int)SkillTypes.HandToHandDefense).Level,
-                        });
-                        break;
-
-                }
-            }
+            proficiency.AppliedModifiers = availableModifiers.Where(x => proficiency.Modifiers.Contains(x.Type)).ToList();
         }
         
         return proficiencies;
+    }
+
+    private static ModifierType GetModifierType(StatType statType)
+    {
+        return statType switch
+        {
+            StatType.Dexterity => ModifierType.Dexterity,
+            StatType.Strength => ModifierType.Strength,
+            StatType.Agility => ModifierType.Agility,
+            StatType.Intelligence => ModifierType.Intelligence,
+            StatType.Willpower => ModifierType.Willpower,
+            StatType.Constitution => ModifierType.Constitution,
+            _ => throw new ArgumentOutOfRangeException(nameof(statType), statType, null)
+        };
+    }
+    
+    private static ModifierType GetModifierType(SkillTypes statType)
+    {
+        return statType switch
+        {
+            SkillTypes.HandToHandDefense => ModifierType.HandToHandDefense,
+            SkillTypes.HandToHandOffense => ModifierType.HandToHandOffense,
+            SkillTypes.MeleeOffense => ModifierType.MeleeOffense,
+            SkillTypes.Marksmanship => ModifierType.Marksmanship,
+            SkillTypes.ThrownWeapons => ModifierType.ThrownWeapons,
+            SkillTypes.Spellcasting => ModifierType.Spellcasting,
+            SkillTypes.Projection => ModifierType.Projection,
+            SkillTypes.MeleeDefense => ModifierType.MeleeDefense,
+            SkillTypes.Acrobatics => ModifierType.Acrobatics,
+            SkillTypes.Spellwarding => ModifierType.Spellwarding,
+            SkillTypes.Deflection => ModifierType.Deflection,
+            _ => throw new ArgumentOutOfRangeException(nameof(statType), statType, null)
+        };
     }
 }
