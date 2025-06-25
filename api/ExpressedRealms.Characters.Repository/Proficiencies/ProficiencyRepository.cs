@@ -1,11 +1,12 @@
 using ExpressedRealms.Characters.Repository.Enums;
+using ExpressedRealms.Characters.Repository.Proficiencies.Data;
 using ExpressedRealms.Characters.Repository.Proficiencies.DTOs;
 using ExpressedRealms.Characters.Repository.Proficiencies.Enums;
+using ExpressedRealms.Characters.Repository.Proficiencies.Utilities;
 using ExpressedRealms.Characters.Repository.Stats;
 using ExpressedRealms.DB;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
-using StatType = ExpressedRealms.Characters.Repository.Stats.Enums.StatType;
 
 namespace ExpressedRealms.Characters.Repository.Proficiencies;
 
@@ -28,7 +29,7 @@ internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context,
         {
             Value = x.Bonus,
             Message = "Base Stat",
-            Type = GetModifierType(x.StatTypeId)
+            Type = ModiferConversions.GetModifierType(x.StatTypeId)
         }));
         
         var skills = await context.CharacterSkillsMappings.AsNoTracking()
@@ -46,7 +47,7 @@ internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context,
         {
             Value = x.Level,
             Message = $"Base Skill for {x.SkillType.Name}",
-            Type = GetModifierType((SkillTypes)x.SkillTypeId)
+            Type = ModiferConversions.GetModifierType((SkillTypes)x.SkillTypeId)
         }));
 
         availableModifiers.AddRange( skills
@@ -55,75 +56,13 @@ internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context,
                     {
                         Value = y.Modifier,
                         Message = $"Skill Level Benefit for {x.SkillType.Name}",
-                        Type = GetModifierType((DbModifierTypes)x.SkillTypeId)
+                        Type = ModiferConversions.GetModifierType((DbModifierTypes)x.SkillTypeId)
                     }
                 )
             ).Distinct()
         );
-        
-        var proficiencies = new List<ProficiencyDto>()
-        {
-            new ProficiencyDto()
-            {
-                Id = 1,
-                Name = "Strike",
-                Description = "Lorem Ipsum",
-                Type = "Offensive",
-                Modifiers = new List<ModifierType>()
-                {
-                    ModifierType.Dexterity,
-                    ModifierType.Strength,
-                    ModifierType.HandToHandOffense,
-                    ModifierType.Strike
-                },
-                SortOrder = 1,
-            },
-            new ProficiencyDto()
-            {
-                Id = 2,
-                Name = "Dodge",
-                Description = "Lorem Ipsum",
-                Modifiers = new List<ModifierType>()
-                {
-                    ModifierType.Agility,
-                    ModifierType.Strength,
-                    ModifierType.HandToHandDefense,
-                    ModifierType.Dodge
-                },
-                Type = "Defensive",
-                SortOrder = 1,
-            },
-            new ProficiencyDto()
-            {
-                Id = 3,
-                Name = "Thrust",
-                Description = "Lorem Ipsum",
-                Type = "Offensive",
-                Modifiers = new List<ModifierType>()
-                {
-                    ModifierType.Agility,
-                    ModifierType.Dexterity,
-                    ModifierType.MeleeOffense,
-                    ModifierType.Thrust
-                },
-                SortOrder = 2,
-            },
-            new ProficiencyDto()
-            {
-                Id = 4,
-                Name = "Parry",
-                Description = "Lorem Ipsum",
-                Type = "Defensive",
-                Modifiers = new List<ModifierType>()
-                {
-                    ModifierType.Agility,
-                    ModifierType.Strength,
-                    ModifierType.MeleeDefense,
-                    ModifierType.Parry
-                },
-                SortOrder = 2,
-            },
-        };
+
+        var proficiencies = ProficiencyDtos.GetProficiencies();
 
         foreach (var proficiency in proficiencies)
         {
@@ -132,65 +71,5 @@ internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context,
         
         return proficiencies;
     } 
-
-    private static ModifierType GetModifierType(StatType statType)
-    {
-        return statType switch
-        {
-            StatType.Dexterity => ModifierType.Dexterity,
-            StatType.Strength => ModifierType.Strength,
-            StatType.Agility => ModifierType.Agility,
-            StatType.Intelligence => ModifierType.Intelligence,
-            StatType.Willpower => ModifierType.Willpower,
-            StatType.Constitution => ModifierType.Constitution,
-            _ => throw new ArgumentOutOfRangeException(nameof(statType), statType, null)
-        };
-    }
     
-    private static ModifierType GetModifierType(SkillTypes statType)
-    {
-        return statType switch
-        {
-            SkillTypes.HandToHandDefense => ModifierType.HandToHandDefense,
-            SkillTypes.HandToHandOffense => ModifierType.HandToHandOffense,
-            SkillTypes.MeleeOffense => ModifierType.MeleeOffense,
-            SkillTypes.Marksmanship => ModifierType.Marksmanship,
-            SkillTypes.ThrownWeapons => ModifierType.ThrownWeapons,
-            SkillTypes.Spellcasting => ModifierType.Spellcasting,
-            SkillTypes.Projection => ModifierType.Projection,
-            SkillTypes.MeleeDefense => ModifierType.MeleeDefense,
-            SkillTypes.Acrobatics => ModifierType.Acrobatics,
-            SkillTypes.Spellwarding => ModifierType.Spellwarding,
-            SkillTypes.Deflection => ModifierType.Deflection,
-            _ => throw new ArgumentOutOfRangeException(nameof(statType), statType, null)
-        };
-    }
-    private static ModifierType GetModifierType(DbModifierTypes statType)
-    {
-        return statType switch
-        {
-            DbModifierTypes.StrengthStonePull => ModifierType.Strength,
-            DbModifierTypes.StrikeProficiencyModifier => ModifierType.Strike,
-            DbModifierTypes.ConstitutionStonePull => ModifierType.Constitution,
-            //DbModifierTypes.WisdomStonePull => ,
-            DbModifierTypes.IntelligenceStonePull => ModifierType.Intelligence,
-            DbModifierTypes.WillpowerStonePull => ModifierType.Willpower,
-            DbModifierTypes.DexterityStonePull => ModifierType.Dexterity,
-            DbModifierTypes.ThrustProficiencyModifier => ModifierType.Thrust,
-            DbModifierTypes.ShootProficiencyModifier => ModifierType.Shoot,
-            DbModifierTypes.ThrowRange => ModifierType.Throw,
-            DbModifierTypes.CastProficiencyModifier => ModifierType.Cast,
-            DbModifierTypes.DodgeGeneralDamageProficiency => ModifierType.Dodge,
-            DbModifierTypes.ParryGeneralDamageProficiency => ModifierType.Parry,
-            DbModifierTypes.EvadeGeneralDamageProficiency => ModifierType.Evade,
-            DbModifierTypes.WardGeneralDamageProficiency => ModifierType.Ward,
-            DbModifierTypes.DeflectGeneralDamageProficiency => ModifierType.Deflection,
-            //DbModifierTypes.ReserveWillPower => expr,
-            DbModifierTypes.ThrowStat => ModifierType.Throw,
-            DbModifierTypes.ProjectStat => ModifierType.Project,
-            DbModifierTypes.AgilityStonePull => ModifierType.Agility,
-            DbModifierTypes.Project => ModifierType.Project,
-            _ => throw new ArgumentOutOfRangeException(nameof(statType), statType, null)
-        };
-    }
 }

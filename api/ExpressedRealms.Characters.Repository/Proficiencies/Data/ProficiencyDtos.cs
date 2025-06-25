@@ -1,0 +1,193 @@
+using ExpressedRealms.Characters.Repository.Proficiencies.DTOs;
+using ExpressedRealms.Characters.Repository.Proficiencies.Enums;
+
+namespace ExpressedRealms.Characters.Repository.Proficiencies.Data;
+
+public static class ProficiencyDtos
+{
+    public static List<ProficiencyDto> GetProficiencies()
+    {
+        return new List<ProficiencyDto>()
+        {
+            new ProficiencyDto()
+            {
+                Id = 1,
+                Name = "Strike",
+                Description = "Lorem Ipsum",
+                Type = "Offensive",
+                Modifiers = new List<ModifierType>()
+                {
+                    ModifierType.Dexterity,
+                    ModifierType.Strength,
+                    ModifierType.HandToHandOffense,
+                    ModifierType.Strike
+                },
+                SortOrder = 1,
+            },
+            new ProficiencyDto()
+            {
+                Id = 2,
+                Name = "Dodge",
+                Description = "Lorem Ipsum",
+                Modifiers = new List<ModifierType>()
+                {
+                    ModifierType.Agility,
+                    ModifierType.Strength,
+                    ModifierType.HandToHandDefense,
+                    ModifierType.Dodge
+                },
+                Type = "Defensive",
+                SortOrder = 1,
+            },
+            new ProficiencyDto()
+            {
+                Id = 3,
+                Name = "Thrust",
+                Description = "Lorem Ipsum",
+                Type = "Offensive",
+                Modifiers = new List<ModifierType>()
+                {
+                    ModifierType.Agility,
+                    ModifierType.Dexterity,
+                    ModifierType.MeleeOffense,
+                    ModifierType.Thrust
+                },
+                SortOrder = 2,
+            },
+            new ProficiencyDto()
+            {
+                Id = 4,
+                Name = "Parry",
+                Description = "Lorem Ipsum",
+                Type = "Defensive",
+                Modifiers = new List<ModifierType>()
+                {
+                    ModifierType.Agility,
+                    ModifierType.Strength,
+                    ModifierType.MeleeDefense,
+                    ModifierType.Parry
+                },
+                SortOrder = 2,
+            },
+            new ProficiencyDto()
+            {
+                Id = 5,
+                Name = "Throw",
+                Description = "Lorem Ipsum",
+                Type = "Offensive",
+                Modifiers = new List<ModifierType>()
+                {
+                    ModifierType.Dexterity,
+                    ModifierType.Intelligence,
+                    ModifierType.ThrownWeapons,
+                    ModifierType.Throw
+                },
+                SortOrder = 3,
+            },
+            new ProficiencyDto()
+            {
+                Id = 6,
+                Name = "Evade",
+                Description = "Lorem Ipsum",
+                Type = "Defensive",
+                Modifiers = new List<ModifierType>()
+                {
+                    ModifierType.Agility,
+                    ModifierType.Intelligence,
+                    ModifierType.Acrobatics,
+                    ModifierType.Evade
+                },
+                SortOrder = 3,
+            },
+            new ProficiencyDto()
+            {
+                Id = 7,
+                Name = "Shoot",
+                Description = "Lorem Ipsum",
+                Type = "Offensive",
+                Modifiers = new List<ModifierType>()
+                {
+                    ModifierType.Dexterity,
+                    ModifierType.Intelligence,
+                    ModifierType.Marksmanship,
+                    ModifierType.Shoot
+                },
+                SortOrder = 4,
+            },
+            new ProficiencyDto()
+            {
+                Id = 8,
+                Name = "Evade",
+                Description = "Lorem Ipsum",
+                Type = "Defensive",
+                Modifiers = new List<ModifierType>()
+                {
+                    ModifierType.Agility,
+                    ModifierType.Intelligence,
+                    ModifierType.Acrobatics,
+                    ModifierType.Evade
+                },
+                SortOrder = 4,
+            },
+            new ProficiencyDto()
+            {
+                Id = 9,
+                Name = "Cast",
+                Description = "Lorem Ipsum",
+                Type = "Offensive",
+                Modifiers = new List<ModifierType>()
+                {
+                    ModifierType.Intelligence,
+                    ModifierType.Willpower,
+                    ModifierType.Spellcasting,
+                    ModifierType.Cast
+                },
+                SortOrder = 5,
+            },
+            new ProficiencyDto()
+            {
+                Id = 10,
+                Name = "Ward",
+                Description = "Lorem Ipsum",
+                Type = "Defensive",
+                Modifiers = new List<ModifierType>()
+                {
+                    ModifierType.Constitution,
+                    ModifierType.Willpower,
+                    ModifierType.Spellwarding,
+                    ModifierType.Ward
+                },
+                SortOrder = 5,
+            },            new ProficiencyDto()
+            {
+                Id = 11,
+                Name = "Project",
+                Description = "Lorem Ipsum",
+                Type = "Offensive",
+                Modifiers = new List<ModifierType>()
+                {
+                    ModifierType.Intelligence,
+                    ModifierType.Willpower,
+                    ModifierType.Projection,
+                    ModifierType.Project
+                },
+                SortOrder = 6,
+            },
+            new ProficiencyDto()
+            {
+                Id = 12,
+                Name = "Deflect",
+                Description = "Lorem Ipsum",
+                Type = "Defensive",
+                Modifiers = new List<ModifierType>()
+                {
+                    ModifierType.Constitution,
+                    ModifierType.Willpower,
+                    ModifierType.Deflection,
+                    ModifierType.Deflect
+                },
+                SortOrder = 6,
+            },
+        };
+    }
+}
