@@ -34,11 +34,13 @@ internal static class ProficiencyEndPoints
                     {
                         Proficiencies = results.Value.Select(x => new ProficienciesDto()
                         {
+                            Id = x.Id,
                             Value = x.Value,
                             Name = x.Name,
                             Description = x.Description,
                             Modifiers = x.Modifiers,
-                            CorrespondingId = x.CorrespondingId,
+                            CorrespondingId = x.SortOrder,
+                            Type = x.Type,
                             AppliedModifiers = x.AppliedModifiers.Select(y => new ModifierDescription()
                             {
                                 Value = y.Value,

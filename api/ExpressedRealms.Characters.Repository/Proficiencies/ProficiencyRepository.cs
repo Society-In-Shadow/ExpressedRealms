@@ -65,8 +65,10 @@ internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context,
         {
             new ProficiencyDto()
             {
+                Id = 1,
                 Name = "Strike",
                 Description = "Lorem Ipsum",
+                Type = "Offensive",
                 Modifiers = new List<ModifierType>()
                 {
                     ModifierType.Dexterity,
@@ -74,10 +76,11 @@ internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context,
                     ModifierType.HandToHandOffense,
                     ModifierType.Strike
                 },
-                CorrespondingId = 1,
+                SortOrder = 1,
             },
             new ProficiencyDto()
             {
+                Id = 2,
                 Name = "Dodge",
                 Description = "Lorem Ipsum",
                 Modifiers = new List<ModifierType>()
@@ -87,12 +90,15 @@ internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context,
                     ModifierType.HandToHandDefense,
                     ModifierType.Dodge
                 },
-                CorrespondingId = 1,
+                Type = "Defensive",
+                SortOrder = 1,
             },
             new ProficiencyDto()
             {
+                Id = 3,
                 Name = "Thrust",
                 Description = "Lorem Ipsum",
+                Type = "Offensive",
                 Modifiers = new List<ModifierType>()
                 {
                     ModifierType.Agility,
@@ -100,12 +106,14 @@ internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context,
                     ModifierType.MeleeOffense,
                     ModifierType.Thrust
                 },
-                CorrespondingId = 2,
+                SortOrder = 2,
             },
             new ProficiencyDto()
             {
+                Id = 4,
                 Name = "Parry",
                 Description = "Lorem Ipsum",
+                Type = "Defensive",
                 Modifiers = new List<ModifierType>()
                 {
                     ModifierType.Agility,
@@ -113,7 +121,7 @@ internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context,
                     ModifierType.MeleeDefense,
                     ModifierType.Parry
                 },
-                CorrespondingId = 2,
+                SortOrder = 2,
             },
         };
 

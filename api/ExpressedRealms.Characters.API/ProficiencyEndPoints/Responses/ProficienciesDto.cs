@@ -10,4 +10,6 @@ public class ProficienciesDto
     public List<ModifierDescription> AppliedModifiers { get; set; } = new();
     public byte CorrespondingId { get; set; }
     public int Value { get; set; }
+    public int Id { get; set; }
+    public string Type { get; set; }
 }

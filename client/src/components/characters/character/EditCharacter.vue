@@ -9,6 +9,7 @@ import SkillTile from "@/components/characters/character/skills/SkillTile.vue";
 import EditCharacterDetails from "@/components/characters/character/EditCharacterDetails.vue";
 
 import {characterStore} from "@/components/characters/character/stores/characterStore";
+import ProficiencyTableTile from "@/components/characters/character/proficiency/ProficiencyTableTile.vue";
 const characterInfo = characterStore();
 
 const items = ref([
@@ -46,6 +47,7 @@ const home = ref({
     </Card>
 
     <SkillTile />
+    <ProficiencyTableTile></ProficiencyTableTile>
   </div>
 </template>
 
