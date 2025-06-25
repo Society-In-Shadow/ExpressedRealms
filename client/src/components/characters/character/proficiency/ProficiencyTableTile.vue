@@ -60,11 +60,16 @@ function getEditOptions() {
                 </div>
               </AccordionHeader>
               <AccordionContent>
+                <div class="row">
+                  <div class="col">Source</div>
+                  <div class="col">Details</div>
+                  <div class="col text-right">Bonus</div>
+                </div>
                 <div v-for="modifier in proficiency.appliedModifiers">
                   <div class="row">
                     <div class="col">{{modifier.name}}</div>
                     <div class="col">{{modifier.message}}</div>
-                    <div class="col">{{modifier.value}}</div>
+                    <div class="col text-right">{{modifier.value >= 0 ? '+' : '-'}}{{modifier.value}}</div>
                   </div>
                 </div>
               </AccordionContent>
@@ -83,11 +88,17 @@ function getEditOptions() {
                 </div>
               </AccordionHeader>
               <AccordionContent>
+                <div class="row">
+                  <div class="col">Source</div>
+                  <div class="col">Details</div>
+                  <div class="col text-right">Bonus</div>
+                </div>
                 <div v-for="modifier in proficiency.appliedModifiers">
+
                   <div class="row">
                     <div class="col">{{modifier.name}}</div>
                     <div class="col">{{modifier.message}}</div>
-                    <div class="col">{{modifier.value}}</div>
+                    <div class="col text-right">{{modifier.value >= 0 ? '+' : '-'}}{{modifier.value}}</div>
                   </div>
                 </div>
               </AccordionContent>
