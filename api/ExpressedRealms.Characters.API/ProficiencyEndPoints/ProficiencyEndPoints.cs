@@ -34,10 +34,17 @@ internal static class ProficiencyEndPoints
                     {
                         Proficiencies = results.Value.Select(x => new ProficienciesDto()
                         {
-                            DefensiveName = x.DefensiveName,
-                            DefensiveValue = x.DefensiveValue,
-                            OffensiveName = x.OffensiveName,
-                            OffensiveValue = x.OffensiveValue,
+                            Value = x.Value,
+                            Name = x.Name,
+                            Description = x.Description,
+                            Modifiers = x.Modifiers,
+                            CorrespondingId = x.CorrespondingId,
+                            AppliedModifiers = x.AppliedModifiers.Select(y => new ModifierDescription()
+                            {
+                                Value = y.Value,
+                                Type = y.Type,
+                                Message = y.Message,
+                            }).ToList(),
                         }).ToList()
                     });
                 }

@@ -1,4 +1,5 @@
 using ExpressedRealms.Characters.Repository.DTOs;
+using ExpressedRealms.Characters.Repository.Proficiencies.DTOs;
 using FluentResults;
 
 namespace ExpressedRealms.Characters.Repository.Proficiencies;

@@ -1,11 +1,13 @@
-using ExpressedRealms.Characters.Repository.Enums;
+using ExpressedRealms.Characters.Repository.Proficiencies.Enums;
 
-namespace ExpressedRealms.Characters.Repository.DTOs;
+namespace ExpressedRealms.Characters.Repository.Proficiencies.DTOs;
 
 public class ProficiencyDto
 {
-    public string OffensiveName { get; set; } = null!;
-    public int OffensiveValue { get; set; }
-    public string DefensiveName { get; set; } = null!;
-    public int DefensiveValue { get; set; }
+    public string Name { get; set; } = null!;
+    public string Description { get; set; } = null!;
+    public List<ModifierType> Modifiers { get; set; } = new();
+    public List<ModifierDescription> AppliedModifiers { get; set; } = new();
+    public byte CorrespondingId { get; set; }
+    public int Value => AppliedModifiers.Sum(x => x.Value);
 }

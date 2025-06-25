@@ -1,9 +1,13 @@
+using ExpressedRealms.Characters.Repository.Proficiencies.Enums;
+
 namespace ExpressedRealms.Characters.API.ProficiencyEndPoints.Responses;
 
 public class ProficienciesDto
 {
-    public string OffensiveName { get; set; } = null!;
-    public int OffensiveValue { get; set; }
-    public string DefensiveName { get; set; } = null!;
-    public int DefensiveValue { get; set; }
+    public string Name { get; set; } = null!;
+    public string Description { get; set; } = null!;
+    public List<ModifierType> Modifiers { get; set; } = new();
+    public List<ModifierDescription> AppliedModifiers { get; set; } = new();
+    public byte CorrespondingId { get; set; }
+    public int Value { get; set; }
 }
