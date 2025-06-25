@@ -4,7 +4,8 @@ namespace ExpressedRealms.Characters.API.ProficiencyEndPoints.Responses;
 
 public class ModifierDescription
 {
-    public string Message { get; set; } = null!;
+    public required string Message { get; set; }
     public int Value { get; set; }
     public ModifierType Type { get; set; }
+    public required string Name { get; set; }
 }

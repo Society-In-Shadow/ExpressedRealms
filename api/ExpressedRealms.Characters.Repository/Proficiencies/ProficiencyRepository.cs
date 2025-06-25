@@ -29,7 +29,8 @@ internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context,
         {
             Value = x.Bonus,
             Message = "Base Stat",
-            Type = ModiferConversions.GetModifierType(x.StatTypeId)
+            Type = ModiferConversions.GetModifierType(x.StatTypeId),
+            Name = ModiferConversions.GetModifierType(x.StatTypeId).Name
         }));
         
         var skills = await context.CharacterSkillsMappings.AsNoTracking()
@@ -47,7 +48,8 @@ internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context,
         {
             Value = x.Level,
             Message = $"Base Skill for {x.SkillType.Name}",
-            Type = ModiferConversions.GetModifierType((SkillTypes)x.SkillTypeId)
+            Type = ModiferConversions.GetModifierType((SkillTypes)x.SkillTypeId),
+            Name = ModiferConversions.GetModifierType((SkillTypes)x.SkillTypeId).Name
         }));
 
         availableModifiers.AddRange( skills
@@ -56,7 +58,8 @@ internal sealed class ProficiencyRepository (ExpressedRealmsDbContext context,
                     {
                         Value = y.Modifier,
                         Message = $"Skill Level Benefit for {x.SkillType.Name}",
-                        Type = ModiferConversions.GetModifierType((DbModifierTypes)x.SkillTypeId)
+                        Type = ModiferConversions.GetModifierType((DbModifierTypes)x.SkillTypeId),
+                        Name = ModiferConversions.GetModifierType((DbModifierTypes)x.SkillTypeId).Name
                     }
                 )
             ).Distinct()

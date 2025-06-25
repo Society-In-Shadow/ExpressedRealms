@@ -12,15 +12,12 @@ import AccordionHeader from 'primevue/accordionheader';
 import AccordionContent from 'primevue/accordioncontent';
 
 import type {CharacterSkillsResponse} from "@/components/characters/character/skills/interfaces/CharacterSkillsResponse";
-import {skillStore} from "@/components/characters/character/skills/Stores/skillStore";
 
 const offensiveSkills:Ref<Array<CharacterSkillsResponse>> = ref([]);
 const defensiveSkills:Ref<Array<CharacterSkillsResponse>> = ref([]);
 const maxXP = 28;
 const appliedXp = ref(0);
 const openItems = ref([]);
-
-const remainingXP = computed(() => maxXP - appliedXp.value);
 
 const skillTypes = ref([
   { name: "Offensive Skills",  skills: offensiveSkills },
@@ -45,7 +42,7 @@ function getEditOptions() {
 </script>
 
 <template>
-  <Card class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="width: 50em">
+  <Card class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="width: 75em">
     <template #title>
       Proficiencies
     </template>
@@ -65,7 +62,7 @@ function getEditOptions() {
               <AccordionContent>
                 <div v-for="modifier in proficiency.appliedModifiers">
                   <div class="row">
-                    <div class="col">{{modifier.type}}</div>
+                    <div class="col">{{modifier.name}}</div>
                     <div class="col">{{modifier.message}}</div>
                     <div class="col">{{modifier.value}}</div>
                   </div>
@@ -88,7 +85,7 @@ function getEditOptions() {
               <AccordionContent>
                 <div v-for="modifier in proficiency.appliedModifiers">
                   <div class="row">
-                    <div class="col">{{modifier.type}}</div>
+                    <div class="col">{{modifier.name}}</div>
                     <div class="col">{{modifier.message}}</div>
                     <div class="col">{{modifier.value}}</div>
                   </div>

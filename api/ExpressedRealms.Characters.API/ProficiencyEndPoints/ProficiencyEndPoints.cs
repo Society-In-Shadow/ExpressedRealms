@@ -46,6 +46,7 @@ internal static class ProficiencyEndPoints
                                 Value = y.Value,
                                 Type = y.Type,
                                 Message = y.Message,
+                                Name = y.Name,
                             }).ToList(),
                         }).ToList()
                     });
