@@ -5,6 +5,9 @@ namespace ExpressedRealms.Characters.Repository.Proficiencies.Data;
 
 public static class ProficiencyDtos
 {
+    private const string StaticDescription = "Lorem Ipsum";
+    private const string Offensive = "Offensive";
+    private const string Defensive = "Defensive";
     public static List<ProficiencyDto> GetProficiencies()
     {
         return new List<ProficiencyDto>()
@@ -13,8 +16,8 @@ public static class ProficiencyDtos
             {
                 Id = 1,
                 Name = "Strike",
-                Description = "Lorem Ipsum",
-                Type = "Offensive",
+                Description = StaticDescription,
+                Type = Offensive,
                 Modifiers = new List<ModifierType>()
                 {
                     ModifierType.Dexterity,
@@ -28,7 +31,7 @@ public static class ProficiencyDtos
             {
                 Id = 2,
                 Name = "Dodge",
-                Description = "Lorem Ipsum",
+                Description = StaticDescription,
                 Modifiers = new List<ModifierType>()
                 {
                     ModifierType.Agility,
@@ -36,15 +39,15 @@ public static class ProficiencyDtos
                     ModifierType.HandToHandDefense,
                     ModifierType.Dodge,
                 },
-                Type = "Defensive",
+                Type = Defensive,
                 SortOrder = 1,
             },
             new ProficiencyDto()
             {
                 Id = 3,
                 Name = "Thrust",
-                Description = "Lorem Ipsum",
-                Type = "Offensive",
+                Description = StaticDescription,
+                Type = Offensive,
                 Modifiers = new List<ModifierType>()
                 {
                     ModifierType.Agility,
@@ -58,8 +61,8 @@ public static class ProficiencyDtos
             {
                 Id = 4,
                 Name = "Parry",
-                Description = "Lorem Ipsum",
-                Type = "Defensive",
+                Description = StaticDescription,
+                Type = Defensive,
                 Modifiers = new List<ModifierType>()
                 {
                     ModifierType.Agility,
@@ -73,8 +76,8 @@ public static class ProficiencyDtos
             {
                 Id = 5,
                 Name = "Throw",
-                Description = "Lorem Ipsum",
-                Type = "Offensive",
+                Description = StaticDescription,
+                Type = Offensive,
                 Modifiers = new List<ModifierType>()
                 {
                     ModifierType.Dexterity,
@@ -88,8 +91,8 @@ public static class ProficiencyDtos
             {
                 Id = 6,
                 Name = "Evade",
-                Description = "Lorem Ipsum",
-                Type = "Defensive",
+                Description = StaticDescription,
+                Type = Defensive,
                 Modifiers = new List<ModifierType>()
                 {
                     ModifierType.Agility,
@@ -103,8 +106,8 @@ public static class ProficiencyDtos
             {
                 Id = 7,
                 Name = "Shoot",
-                Description = "Lorem Ipsum",
-                Type = "Offensive",
+                Description = StaticDescription,
+                Type = Offensive,
                 Modifiers = new List<ModifierType>()
                 {
                     ModifierType.Dexterity,
@@ -118,8 +121,8 @@ public static class ProficiencyDtos
             {
                 Id = 8,
                 Name = "Evade",
-                Description = "Lorem Ipsum",
-                Type = "Defensive",
+                Description = StaticDescription,
+                Type = Defensive,
                 Modifiers = new List<ModifierType>()
                 {
                     ModifierType.Agility,
@@ -133,8 +136,8 @@ public static class ProficiencyDtos
             {
                 Id = 9,
                 Name = "Cast",
-                Description = "Lorem Ipsum",
-                Type = "Offensive",
+                Description = StaticDescription,
+                Type = Offensive,
                 Modifiers = new List<ModifierType>()
                 {
                     ModifierType.Intelligence,
@@ -148,8 +151,8 @@ public static class ProficiencyDtos
             {
                 Id = 10,
                 Name = "Ward",
-                Description = "Lorem Ipsum",
-                Type = "Defensive",
+                Description = StaticDescription,
+                Type = Defensive,
                 Modifiers = new List<ModifierType>()
                 {
                     ModifierType.Constitution,
@@ -163,8 +166,8 @@ public static class ProficiencyDtos
             {
                 Id = 11,
                 Name = "Project",
-                Description = "Lorem Ipsum",
-                Type = "Offensive",
+                Description = StaticDescription,
+                Type = Offensive,
                 Modifiers = new List<ModifierType>()
                 {
                     ModifierType.Intelligence,
@@ -178,8 +181,8 @@ public static class ProficiencyDtos
             {
                 Id = 12,
                 Name = "Deflect",
-                Description = "Lorem Ipsum",
-                Type = "Defensive",
+                Description = StaticDescription,
+                Type = Defensive,
                 Modifiers = new List<ModifierType>()
                 {
                     ModifierType.Constitution,
