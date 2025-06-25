@@ -51,7 +51,7 @@ const home = ref({
     </Card>
 
     <SkillTile />
-    <ProficiencyTableTile></ProficiencyTableTile>
+    <ProficiencyTableTile />
   </div>
 </template>
 

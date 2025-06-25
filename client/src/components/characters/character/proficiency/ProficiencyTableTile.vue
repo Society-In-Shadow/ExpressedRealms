@@ -31,15 +31,15 @@ onMounted(() =>{
   <Card class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch w-100 max-width">
     <template #content>
       <div class="d-flex flex-md-row flex-column">
-        <div class="col" v-for="type in types">
-          <h3>{{type.name}}</h3>
+        <div v-for="type in types" :key="type.name" class="col">
+          <h3>{{ type.name }}</h3>
           <Accordion :value="openItems" multiple :lazy="true" expand-icon="pi pi-info-circle" collapse-icon="pi pi-times-circle">
-            <AccordionPanel v-for="proficiency in type.items" :key="proficiency.id" :value="proficiency.id" >
+            <AccordionPanel v-for="proficiency in type.items" :key="proficiency.id" :value="proficiency.id">
               <AccordionHeader>
                 <div class="d-flex justify-content-between w-100 pr-3">
-                  <div>{{proficiency.name}}</div>
+                  <div>{{ proficiency.name }}</div>
                   <div class="text-right">
-                    {{proficiency.value}}
+                    {{ proficiency.value }}
                   </div>
                 </div>
               </AccordionHeader>
@@ -49,30 +49,30 @@ onMounted(() =>{
                     <table class="w-100 p-datatable-table">
                       <!-- Table header -->
                       <thead class="p-datatable-thead">
-                      <tr>
-                        <th class="p-datatable-header-cell">
-                          Source
-                        </th>
-                        <th class="p-datatable-header-cell">
-                          Details
-                        </th>
-                        <th class="p-datatable-header-cell">
-                          Bonus
-                        </th>
-                      </tr>
+                        <tr>
+                          <th class="p-datatable-header-cell">
+                            Source
+                          </th>
+                          <th class="p-datatable-header-cell">
+                            Details
+                          </th>
+                          <th class="p-datatable-header-cell">
+                            Bonus
+                          </th>
+                        </tr>
                       </thead>
                       <tbody class="p-datatable-tbody">
-                      <tr v-for="(modifier, index) in proficiency.appliedModifiers" :class="index % 2 === 0 ? 'p-row-even' : 'p-row-odd'">
-                        <td>
-                          {{modifier.name}}
-                        </td>
-                        <td>
-                          {{modifier.message}}
-                        </td>
-                        <td class="text-right">
-                          {{modifier.value >= 0 ? '+' : ''}}{{modifier.value}}
-                        </td>
-                      </tr>
+                        <tr v-for="(modifier, index) in proficiency.appliedModifiers" :key="index" :class="index % 2 === 0 ? 'p-row-even' : 'p-row-odd'">
+                          <td>
+                            {{ modifier.name }}
+                          </td>
+                          <td>
+                            {{ modifier.message }}
+                          </td>
+                          <td class="text-right">
+                            {{ modifier.value >= 0 ? '+' : '' }}{{ modifier.value }}
+                          </td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>
