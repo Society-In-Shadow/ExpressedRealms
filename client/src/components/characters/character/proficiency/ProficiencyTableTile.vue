@@ -1,9 +1,10 @@
 <script setup lang="ts">
 
-import axios from "axios";
 import Card from "primevue/card";
-import {onMounted, ref, type Ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import { useRoute } from 'vue-router'
+import {proficiencyStore} from "@/components/characters/character/proficiency/stores/proficiencyStore";
+
 const route = useRoute()
 
 import Accordion from 'primevue/accordion';
@@ -11,26 +12,18 @@ import AccordionPanel from 'primevue/accordionpanel';
 import AccordionHeader from 'primevue/accordionheader';
 import AccordionContent from 'primevue/accordioncontent';
 
-const offensive:Ref<Array<ProficienciesDto>> = ref([]);
-const defensive:Ref<Array<ProficienciesDto>> = ref([]);
 const openItems = ref([]);
 
-const types = ref([
-  { name: "Offensive Proficiencies", items: offensive },
-  { name: "Defensive Proficiencies", items: defensive }
+const profStore = proficiencyStore();
+
+const types = computed(() => [
+  { name: "Offensive Proficiencies", items: profStore.offensive },
+  { name: "Defensive Proficiencies", items: profStore.defensive }
 ]);
 
 onMounted(() =>{
-  getProficiencies();
+  profStore.getUpdateProficiencies(route.params.id);
 });
-
-function getProficiencies() {
-  axios.get(`proficiencies/${route.params.id}`)
-      .then((response) => {
-        offensive.value = response.data.proficiencies.filter(x => x.type === "Offensive");
-        defensive.value = response.data.proficiencies.filter(x => x.type === "Defensive");
-      })
-}
 
 </script>
 

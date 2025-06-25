@@ -8,6 +8,7 @@ import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
 import StatLevel from "@/components/characters/character/StatLevel.vue";
 import Listbox from 'primevue/listbox';
 import toasters from "@/services/Toasters";
+import {proficiencyStore} from "@/components/characters/character/proficiency/stores/proficiencyStore";
 const route = useRoute()
 
 interface LevelInfo {
@@ -47,6 +48,7 @@ const statLevels:Ref<Array<LevelInfo>> = ref([]);
 const loading = ref(true);
 const showOptions = ref(false);
 const oldValue = ref(props.statTypeId);
+const profStore = proficiencyStore();
 
 onMounted(() =>{
   reloadStatInfo();
@@ -94,7 +96,7 @@ function handleStatUpdate(stat:Stat){
     
     emit("updateStat", stat.statLevelInfo.level, stat.statLevelInfo.bonus);
     toasters.success("Successfully updated " + stat.name + " to level " + stat.statLevel);
-    
+    profStore.getUpdateProficiencies(route.params.id);
     reloadStatInfo();
     showOptions.value = !showOptions.value;
   }).catch(function() {

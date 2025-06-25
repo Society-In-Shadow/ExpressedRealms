@@ -24,12 +24,14 @@ import SkillDetail from "@/components/characters/character/skills/SkillDetail.vu
 import Listbox from "primevue/listbox";
 import toasters from "@/services/Toasters";
 import {skillStore} from "@/components/characters/character/skills/Stores/skillStore";
+import {proficiencyStore} from "@/components/characters/character/proficiency/stores/proficiencyStore";
 const route = useRoute()
 
 const skillLevels:Ref<Array<SkillResponse>> = ref([]);
 const isLoading = ref(true);
 const showOptions = ref(false);
 
+const profStore = proficiencyStore();
 const skillInfo = skillStore()
 const oldValue = ref(props.selectedLevelId);
 const selectedItem = ref(props.selectedLevelId);
@@ -100,7 +102,7 @@ function handleStatUpdate(skill:SkillResponse){
     skillInfo.showExperience = false;
     skillInfo.editSkillTypeId = 0;
     emit("updateLevel");
-    
+    profStore.getUpdateProficiencies(route.params.id);
     toasters.success("Successfully updated to level " + levelInfo.name);
   }).catch(function() {
     selectedItem.value  = oldValue.value;
