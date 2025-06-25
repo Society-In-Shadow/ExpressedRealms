@@ -4,14 +4,14 @@ WORKDIR /src
 COPY ["ExpressedRealms.sln", "./"]
 # https://stackoverflow.com/a/51373386
 COPY */*.csproj ./
-RUN for file in $(ls *.csproj); do mkdir -p ${file%.*}/ && mv $file ${file%.*}/; done
+RUN for file in $(ls *.csproj); do mkdir -p ${file%.*}/ && mv "$file" ${file%.*}/; done
 
 RUN dotnet restore
 
 COPY . .
 WORKDIR "/src/ExpressedRealms.Server"
 
-RUN dotnet publish "ExpressedRealms.Server.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "ExpressedRealms.Server.csproj" -c Release -o /app/publish /p:UseAppHost=false --no-restore
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
