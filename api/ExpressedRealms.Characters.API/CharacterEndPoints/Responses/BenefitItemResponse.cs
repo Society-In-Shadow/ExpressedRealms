@@ -1,6 +1,6 @@
 namespace ExpressedRealms.Characters.API.CharacterEndPoints.Responses;
 
-public class BenefitItemResponse
+internal class BenefitItemResponse
 {
     public string Name { get; set; } = null!;
     public string Description { get; set; } = null!;

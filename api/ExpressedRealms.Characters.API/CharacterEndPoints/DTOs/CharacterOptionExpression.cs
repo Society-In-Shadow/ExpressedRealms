@@ -1,6 +1,6 @@
 namespace ExpressedRealms.Characters.API.CharacterEndPoints.DTOs;
 
-public class CharacterOptionExpression
+internal class CharacterOptionExpression
 {
     public int Id { get; set; }
 

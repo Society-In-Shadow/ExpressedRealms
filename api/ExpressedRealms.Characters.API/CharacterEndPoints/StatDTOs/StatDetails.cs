@@ -1,6 +1,6 @@
 namespace ExpressedRealms.Characters.API.CharacterEndPoints.StatDTOs;
 
-public class StatDetails
+internal class StatDetails
 {
     /// <example>4</example>
     public byte Level { get; set; }

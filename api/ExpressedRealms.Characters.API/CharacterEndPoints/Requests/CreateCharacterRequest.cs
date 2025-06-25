@@ -1,6 +1,6 @@
 namespace ExpressedRealms.Characters.API.CharacterEndPoints.Requests;
 
-public record CreateCharacterRequest
+internal record CreateCharacterRequest
 {
     /// <example>John Doe</example>
     public string Name { get; set; } = null!;

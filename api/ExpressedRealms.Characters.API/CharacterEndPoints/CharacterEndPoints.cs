@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
-using EditStatDTO = ExpressedRealms.Characters.API.CharacterEndPoints.StatDTOs.EditStatDTO;
+using EditStatDto = ExpressedRealms.Characters.API.CharacterEndPoints.StatDTOs.EditStatDto;
 using SingleStatInfo = ExpressedRealms.Characters.API.CharacterEndPoints.StatDTOs.SingleStatInfo;
 using SmallStatInfo = ExpressedRealms.Characters.API.CharacterEndPoints.StatDTOs.SmallStatInfo;
 
@@ -274,7 +274,7 @@ internal static class CharacterEndPoints
                 "{characterId}/stat/{statTypeId}",
                 [Authorize]
                 async Task<Results<NotFound, NoContent, ValidationProblem, BadRequest<string>>> (
-                    EditStatDTO dto,
+                    EditStatDto dto,
                     ICharacterStatRepository repository
                 ) =>
                 {

@@ -2,7 +2,7 @@ using ExpressedRealms.Characters.Repository.Stats.Enums;
 
 namespace ExpressedRealms.Characters.API.CharacterEndPoints.StatDTOs;
 
-public class EditStatDTO
+internal class EditStatDto
 {
     /// <example>6</example>
     public int CharacterId { get; set; }

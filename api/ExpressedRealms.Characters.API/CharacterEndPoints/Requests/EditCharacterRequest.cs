@@ -1,6 +1,6 @@
 namespace ExpressedRealms.Characters.API.CharacterEndPoints.Requests;
 
-public record EditCharacterRequest
+internal record EditCharacterRequest
 {
     public int Id { get; set; }
 

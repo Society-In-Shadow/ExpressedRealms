@@ -1,6 +1,6 @@
 namespace ExpressedRealms.Characters.API.CharacterEndPoints.Responses;
 
-public class CharacterResponse
+internal class CharacterResponse
 {
     public string Id { get; set; }
 

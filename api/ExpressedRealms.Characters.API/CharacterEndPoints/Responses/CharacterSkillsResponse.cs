@@ -1,6 +1,6 @@
 namespace ExpressedRealms.Characters.API.CharacterEndPoints.Responses;
 
-public class CharacterSkillsResponse
+internal class CharacterSkillsResponse
 {
     public byte SkillTypeId { get; set; }
     public string Name { get; set; } = null!;

@@ -2,7 +2,7 @@ using ExpressedRealms.Characters.Repository.DTOs;
 
 namespace ExpressedRealms.Characters.API.CharacterEndPoints.Responses;
 
-public record CharacterEditResponse
+internal record CharacterEditResponse
 {
     public CharacterEditResponse(GetEditCharacterDto dto)
     {

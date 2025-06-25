@@ -2,7 +2,7 @@ using ExpressedRealms.Characters.Repository.Stats.Enums;
 
 namespace ExpressedRealms.Characters.API.CharacterEndPoints.StatDTOs;
 
-public record SingleStatInfo
+internal record SingleStatInfo
 {
     public SingleStatInfo(Characters.Repository.Stats.DTOs.SingleStatInfo dto)
     {
