@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
-namespace ExpressedRealms.Characters.API.CharacterEndPoints;
+namespace ExpressedRealms.Characters.API.StatEndPoints;
 
 internal static class StatEndPoints
 {

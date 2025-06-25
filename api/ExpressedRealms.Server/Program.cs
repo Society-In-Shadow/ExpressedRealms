@@ -303,7 +303,7 @@ try
     app.AddExpressionSubsectionEndpoints();
     app.AddAdminEndPoints();
     app.AddPowerEndPoints();
-    app.AddCharacterAPIEndPoints();
+    app.AddCharacterApiEndPoints();
 
     app.MapFallbackToFile("index.html");
     Log.Information("Starting Web API");

@@ -1,6 +1,7 @@
 using ExpressedRealms.Characters.API.CharacterEndPoints.DTOs;
 using ExpressedRealms.Characters.API.CharacterEndPoints.Requests;
 using ExpressedRealms.Characters.API.CharacterEndPoints.Responses;
+using ExpressedRealms.Characters.API.StatEndPoints.Requests;
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.DTOs;
 using ExpressedRealms.Characters.Repository.Enums;
@@ -19,7 +20,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
-using EditStatDto = ExpressedRealms.Characters.API.CharacterEndPoints.StatDTOs.EditStatDto;
 using SingleStatInfo = ExpressedRealms.Characters.API.CharacterEndPoints.StatDTOs.SingleStatInfo;
 using SmallStatInfo = ExpressedRealms.Characters.API.CharacterEndPoints.StatDTOs.SmallStatInfo;
 
@@ -274,16 +274,16 @@ internal static class CharacterEndPoints
                 "{characterId}/stat/{statTypeId}",
                 [Authorize]
                 async Task<Results<NotFound, NoContent, ValidationProblem, BadRequest<string>>> (
-                    EditStatDto dto,
+                    EditStatRequest request,
                     ICharacterStatRepository repository
                 ) =>
                 {
                     var results = await repository.UpdateCharacterStat(
-                        new Characters.Repository.Stats.DTOs.EditStatDto()
+                        new EditStatDto()
                         {
-                            CharacterId = dto.CharacterId,
-                            LevelTypeId = dto.LevelTypeId,
-                            StatTypeId = dto.StatTypeId,
+                            CharacterId = request.CharacterId,
+                            LevelTypeId = request.LevelTypeId,
+                            StatTypeId = request.StatTypeId,
                         }
                     );
 
