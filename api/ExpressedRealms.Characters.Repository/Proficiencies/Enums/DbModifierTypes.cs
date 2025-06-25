@@ -22,5 +22,5 @@ public enum DbModifierTypes
     ThrowStat,
     ProjectStat,
     AgilityStonePull,
-    Project
+    Project,
 }

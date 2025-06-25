@@ -12,5 +12,5 @@ public enum SkillTypes
     MeleeDefense,
     Acrobatics,
     Spellwarding,
-    Deflection
+    Deflection,
 }

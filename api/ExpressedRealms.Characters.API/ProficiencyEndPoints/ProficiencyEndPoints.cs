@@ -29,27 +29,33 @@ internal static class ProficiencyEndPoints
 
                     if (results.HasNotFound(out var notFound))
                         return notFound;
-                    
-                    return TypedResults.Ok(new BaseProficiencyResponse()
-                    {
-                        Proficiencies = results.Value.Select(x => new ProficienciesDto()
+
+                    return TypedResults.Ok(
+                        new BaseProficiencyResponse()
                         {
-                            Id = x.Id,
-                            Value = x.Value,
-                            Name = x.Name,
-                            Description = x.Description,
-                            Modifiers = x.Modifiers,
-                            CorrespondingId = x.SortOrder,
-                            Type = x.Type,
-                            AppliedModifiers = x.AppliedModifiers.Select(y => new ModifierDescription()
-                            {
-                                Value = y.Value,
-                                Type = y.Type,
-                                Message = y.Message,
-                                Name = y.Name,
-                            }).ToList(),
-                        }).ToList()
-                    });
+                            Proficiencies = results
+                                .Value.Select(x => new ProficienciesDto()
+                                {
+                                    Id = x.Id,
+                                    Value = x.Value,
+                                    Name = x.Name,
+                                    Description = x.Description,
+                                    Modifiers = x.Modifiers,
+                                    CorrespondingId = x.SortOrder,
+                                    Type = x.Type,
+                                    AppliedModifiers = x
+                                        .AppliedModifiers.Select(y => new ModifierDescription()
+                                        {
+                                            Value = y.Value,
+                                            Type = y.Type,
+                                            Message = y.Message,
+                                            Name = y.Name,
+                                        })
+                                        .ToList(),
+                                })
+                                .ToList(),
+                        }
+                    );
                 }
             )
             .WithSummary("Returns all basic proficiencies for the given character")

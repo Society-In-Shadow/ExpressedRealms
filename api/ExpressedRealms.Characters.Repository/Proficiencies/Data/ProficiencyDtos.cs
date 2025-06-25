@@ -20,7 +20,7 @@ public static class ProficiencyDtos
                     ModifierType.Dexterity,
                     ModifierType.Strength,
                     ModifierType.HandToHandOffense,
-                    ModifierType.Strike
+                    ModifierType.Strike,
                 },
                 SortOrder = 1,
             },
@@ -34,7 +34,7 @@ public static class ProficiencyDtos
                     ModifierType.Agility,
                     ModifierType.Strength,
                     ModifierType.HandToHandDefense,
-                    ModifierType.Dodge
+                    ModifierType.Dodge,
                 },
                 Type = "Defensive",
                 SortOrder = 1,
@@ -50,7 +50,7 @@ public static class ProficiencyDtos
                     ModifierType.Agility,
                     ModifierType.Dexterity,
                     ModifierType.MeleeOffense,
-                    ModifierType.Thrust
+                    ModifierType.Thrust,
                 },
                 SortOrder = 2,
             },
@@ -65,7 +65,7 @@ public static class ProficiencyDtos
                     ModifierType.Agility,
                     ModifierType.Strength,
                     ModifierType.MeleeDefense,
-                    ModifierType.Parry
+                    ModifierType.Parry,
                 },
                 SortOrder = 2,
             },
@@ -80,7 +80,7 @@ public static class ProficiencyDtos
                     ModifierType.Dexterity,
                     ModifierType.Intelligence,
                     ModifierType.ThrownWeapons,
-                    ModifierType.Throw
+                    ModifierType.Throw,
                 },
                 SortOrder = 3,
             },
@@ -95,7 +95,7 @@ public static class ProficiencyDtos
                     ModifierType.Agility,
                     ModifierType.Intelligence,
                     ModifierType.Acrobatics,
-                    ModifierType.Evade
+                    ModifierType.Evade,
                 },
                 SortOrder = 3,
             },
@@ -110,7 +110,7 @@ public static class ProficiencyDtos
                     ModifierType.Dexterity,
                     ModifierType.Intelligence,
                     ModifierType.Marksmanship,
-                    ModifierType.Shoot
+                    ModifierType.Shoot,
                 },
                 SortOrder = 4,
             },
@@ -125,7 +125,7 @@ public static class ProficiencyDtos
                     ModifierType.Agility,
                     ModifierType.Intelligence,
                     ModifierType.Acrobatics,
-                    ModifierType.Evade
+                    ModifierType.Evade,
                 },
                 SortOrder = 4,
             },
@@ -140,7 +140,7 @@ public static class ProficiencyDtos
                     ModifierType.Intelligence,
                     ModifierType.Willpower,
                     ModifierType.Spellcasting,
-                    ModifierType.Cast
+                    ModifierType.Cast,
                 },
                 SortOrder = 5,
             },
@@ -155,10 +155,11 @@ public static class ProficiencyDtos
                     ModifierType.Constitution,
                     ModifierType.Willpower,
                     ModifierType.Spellwarding,
-                    ModifierType.Ward
+                    ModifierType.Ward,
                 },
                 SortOrder = 5,
-            },            new ProficiencyDto()
+            },
+            new ProficiencyDto()
             {
                 Id = 11,
                 Name = "Project",
@@ -169,7 +170,7 @@ public static class ProficiencyDtos
                     ModifierType.Intelligence,
                     ModifierType.Willpower,
                     ModifierType.Projection,
-                    ModifierType.Project
+                    ModifierType.Project,
                 },
                 SortOrder = 6,
             },
@@ -184,7 +185,7 @@ public static class ProficiencyDtos
                     ModifierType.Constitution,
                     ModifierType.Willpower,
                     ModifierType.Deflection,
-                    ModifierType.Deflect
+                    ModifierType.Deflect,
                 },
                 SortOrder = 6,
             },

@@ -4,7 +4,8 @@ namespace ExpressedRealms.Characters.Repository.Proficiencies.Enums;
 
 public sealed class ModifierType : SmartEnum<ModifierType, byte>
 {
-    private ModifierType(string name, byte key) : base(name, key) { }
+    private ModifierType(string name, byte key)
+        : base(name, key) { }
 
     public static readonly ModifierType Strength = new("Strength", 1);
     public static readonly ModifierType Dexterity = new("Dexterity", 2);
@@ -38,7 +39,6 @@ public sealed class ModifierType : SmartEnum<ModifierType, byte>
     public static readonly ModifierType Evade = new("Evade", 26);
     public static readonly ModifierType Ward = new("Ward", 27);
     public static readonly ModifierType Deflect = new("Deflect", 28);
-
 
     public override string ToString() => Name;
 }

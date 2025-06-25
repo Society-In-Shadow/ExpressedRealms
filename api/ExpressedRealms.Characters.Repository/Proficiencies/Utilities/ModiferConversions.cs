@@ -16,10 +16,10 @@ internal static class ModiferConversions
             StatType.Intelligence => ModifierType.Intelligence,
             StatType.Willpower => ModifierType.Willpower,
             StatType.Constitution => ModifierType.Constitution,
-            _ => throw new ArgumentOutOfRangeException(nameof(statType), statType, null)
+            _ => throw new ArgumentOutOfRangeException(nameof(statType), statType, null),
         };
     }
-    
+
     public static ModifierType GetModifierType(SkillTypes statType)
     {
         return statType switch
@@ -35,10 +35,10 @@ internal static class ModiferConversions
             SkillTypes.Acrobatics => ModifierType.Acrobatics,
             SkillTypes.Spellwarding => ModifierType.Spellwarding,
             SkillTypes.Deflection => ModifierType.Deflection,
-            _ => throw new ArgumentOutOfRangeException(nameof(statType), statType, null)
+            _ => throw new ArgumentOutOfRangeException(nameof(statType), statType, null),
         };
     }
-    
+
     public static ModifierType GetModifierType(DbModifierTypes statType)
     {
         return statType switch
@@ -64,7 +64,7 @@ internal static class ModiferConversions
             DbModifierTypes.ProjectStat => ModifierType.Project,
             DbModifierTypes.AgilityStonePull => ModifierType.Agility,
             DbModifierTypes.Project => ModifierType.Project,
-            _ => throw new ArgumentOutOfRangeException(nameof(statType), statType, null)
+            _ => throw new ArgumentOutOfRangeException(nameof(statType), statType, null),
         };
     }
 }
