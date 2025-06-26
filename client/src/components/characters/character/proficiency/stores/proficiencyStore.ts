@@ -8,6 +8,7 @@ export const proficiencyStore =
                 isLoading: true as boolean,
                 offensive: [] as ProficienciesDto[],
                 defensive: [] as ProficienciesDto[],
+                secondary: [] as ProficienciesDto[],
             }
         },
         actions: {
@@ -17,6 +18,7 @@ export const proficiencyStore =
                     .then((response) => {
                         this.offensive = response.data.proficiencies.filter(x => x.type === "Offensive");
                         this.defensive = response.data.proficiencies.filter(x => x.type === "Defensive");
+                        this.secondary = response.data.proficiencies.filter(x => x.type === "Secondary");
                         this.isLoading = false;
                     })
             }
