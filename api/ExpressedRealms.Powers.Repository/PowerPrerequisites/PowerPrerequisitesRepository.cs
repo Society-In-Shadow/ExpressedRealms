@@ -2,7 +2,6 @@ using ExpressedRealms.DB;
 using ExpressedRealms.DB.Models.Powers.PowerPrerequisitePowerSetup;
 using ExpressedRealms.DB.Models.Powers.PowerPrerequisiteSetup;
 using ExpressedRealms.Powers.Repository.PowerPrerequisites.DTOs.DeletePrerequisite;
-using ExpressedRealms.Powers.Repository.PowerPrerequisites.DTOs.EditPrerequisite;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,36 +21,32 @@ public class PowerPrerequisitesRepository(ExpressedRealmsDbContext context, Canc
         context.PowerPrerequisitePowers.AddRange(model);
         await context.SaveChangesAsync(cancellationToken);
     }
-    
-    public async Task<Result> EditPrerequisite(EditPrerequisiteModel model)
+
+    public async Task<PowerPrerequisite> GetPrerequisiteForEditingAsync(int id)
     {
-        var prerequisite = await context.PowerPrerequisites.FirstAsync(x => x.Id == model.Id, cancellationToken);
+        return await context.PowerPrerequisites.FirstAsync(x => x.Id == id, cancellationToken);
+    }
 
-        prerequisite.RequiredAmount = model.RequiredAmount;
-        
+    public async Task UpdatePrerequisite(PowerPrerequisite model)
+    {
+        context.PowerPrerequisites.Update(model);
         await context.SaveChangesAsync(cancellationToken);
-
+    }
+    
+    public async Task RemovePrerequisitePowers(int prerequisiteId)
+    {
         var powerPrerequisites = await context.PowerPrerequisitePowers
-            .Where(x => x.PrerequisiteId == model.Id)
+            .Where(x => x.PrerequisiteId == prerequisiteId)
             .ToListAsync();
         
         context.PowerPrerequisitePowers.RemoveRange(powerPrerequisites);
-
-        if (model.PowerIds.Count == 0)
-        {
-            await context.SaveChangesAsync(cancellationToken);
-            return Result.Ok();
-        }
-        
-        context.PowerPrerequisitePowers.AddRange(model.PowerIds.Select(x => new PowerPrerequisitePower()
-        {
-            PrerequisiteId = prerequisite.Id,
-            PowerId = x,
-        }).ToList());
-        
+        await context.SaveChangesAsync(cancellationToken);   
+    }
+    
+    public async Task UpdatePrerequisitePowers(List<PowerPrerequisitePower> model)
+    {
+        context.PowerPrerequisitePowers.UpdateRange(model);
         await context.SaveChangesAsync(cancellationToken);
-        
-        return Result.Ok();
     }
     
     public async Task<Result> DeletePrerequisite(DeletePrerequisiteModel model)
