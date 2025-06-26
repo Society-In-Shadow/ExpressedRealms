@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="FluentResults" Version="3.16.0" />
     <PackageReference Include="FluentValidation" Version="11.11.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
     <PackageReference
       Include="Microsoft.Extensions.DependencyInjection.Abstractions"
       Version="8.0.2"
@@ -15,5 +16,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ExpressedRealms.DB\ExpressedRealms.DB.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Repositories.Shared\ExpressedRealms.Repositories.Shared.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Shared\ExpressedRealms.Shared.csproj" />
   </ItemGroup>
 </Project>
