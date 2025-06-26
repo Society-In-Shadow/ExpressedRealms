@@ -1,6 +1,8 @@
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Powers.PowerPathSetup;
+using ExpressedRealms.DB.Models.Powers.PowerPrerequisitePowerSetup;
+using ExpressedRealms.DB.Models.Powers.PowerPrerequisiteSetup;
 using ExpressedRealms.DB.Models.Powers.PowerSetup.Audit;
 
 namespace ExpressedRealms.DB.Models.Powers;
@@ -39,6 +41,7 @@ public class Power : ISoftDelete
 
     public virtual List<PowerCategoryMapping> CategoryMappings { get; set; } = null!;
 
-    public virtual List<PowerPrerequisites> PrerequisitePowers { get; set; } = null!;
+    public virtual PowerPrerequisite Prerequisite { get; set; } = null!;
+    public virtual List<PowerPrerequisitePower> PrerequisitePowers { get; set; } = null!;
     public virtual List<PowerAuditTrail> PowerAuditTrails { get; set; } = null!;
 }
