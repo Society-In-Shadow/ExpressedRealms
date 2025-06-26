@@ -1,9 +1,7 @@
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Configuration;
-using ExpressedRealms.DB.Models.Expressions;
-using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
-using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
+using ExpressedRealms.DB.Models.Expressions.Configuration;
 using ExpressedRealms.DB.Models.Powers.Configuration;
 using ExpressedRealms.DB.Models.Skills;
 using ExpressedRealms.DB.Models.Statistics;
@@ -34,14 +32,7 @@ namespace ExpressedRealms.DB
             base.OnModelCreating(builder);
             builder.ApplyConfiguration(new CharacterConfiguration());
             builder.ApplyConfiguration(new PlayerConfiguration());
-            builder.ApplyConfiguration(new ExpressionConfiguration());
-            builder.ApplyConfiguration(new ExpressionSectionsConfiguration());
-            builder.ApplyConfiguration(new ExpressionSectionTypeConfiguration());
-            builder.ApplyConfiguration(new ExpressionPublishStatusConfiguration());
-            builder.ApplyConfiguration(new ExpressionTypeConfiguration());
 
-            builder.ApplyConfiguration(new ExpressionAuditTrailConfiguration());
-            builder.ApplyConfiguration(new ExpressionSectionAuditTrailConfiguration());
             builder.ApplyConfiguration(new UserAuditTrailConfiguration());
             builder.ApplyConfiguration(new PlayerAuditTrailConfiguration());
             builder.ApplyConfiguration(new UserRoleAuditTrailConfiguration());
@@ -59,6 +50,7 @@ namespace ExpressedRealms.DB
             builder.ApplyConfiguration(new SkillLevelDescriptionMappingConfiguration());
 
             builder.AddPowerConfiguration();
+            builder.AddExpressionConfiguration();
         }
 
         public ExpressedRealmsDbContext(DbContextOptions<ExpressedRealmsDbContext> options)
@@ -69,21 +61,12 @@ namespace ExpressedRealms.DB
 
         public DbSet<Character> Characters { get; set; }
         public DbSet<Player> Players { get; set; }
-        public DbSet<Expression> Expressions { get; set; }
-        public DbSet<ExpressionSection> ExpressionSections { get; set; }
-        public DbSet<ExpressionSectionType> ExpressionSectionTypes { get; set; }
-        public DbSet<ExpressionPublishStatus> ExpressionPublishStatus { get; set; }
-
-        public DbSet<ExpressionSectionAuditTrail> ExpressionSectionAuditTrails { get; set; }
-        public DbSet<ExpressionAuditTrail> ExpressionAuditTrails { get; set; }
         public DbSet<UserAuditTrail> UserAuditTrails { get; set; }
         public DbSet<PlayerAuditTrail> PlayerAuditTrails { get; set; }
         public DbSet<UserRoleAuditTrail> UserRoleAuditTrails { get; set; }
-
         public DbSet<StatType> StateTypes { get; set; }
         public DbSet<StatLevel> StatLevels { get; set; }
         public DbSet<StatDescriptionMapping> StatDescriptionMappings { get; set; }
-
         public DbSet<CharacterSkillsMapping> CharacterSkillsMappings { get; set; }
         public DbSet<ModifierType> ModifierTypes { get; set; }
         public DbSet<SkillLevel> SkillLevels { get; set; }
