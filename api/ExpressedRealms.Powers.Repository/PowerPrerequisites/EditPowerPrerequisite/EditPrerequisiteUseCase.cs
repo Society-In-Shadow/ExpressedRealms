@@ -5,10 +5,22 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Powers.Repository.PowerPrerequisites.EditPowerPrerequisite;
 
 [UsedImplicitly]
-public class EditPrerequisiteUseCase(IPowerPrerequisitesRepository repository) : IEditPrerequisiteUseCase
+internal class EditPrerequisiteUseCase(
+    IPowerPrerequisitesRepository repository, 
+    EditPrerequisiteModelValidator validator,
+    CancellationToken cancellationToken) : IEditPrerequisiteUseCase
 {
     public async Task<Result> ExecuteAsync(EditPrerequisiteModel model)
     {
+        var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
+            validator,
+            model,
+            cancellationToken
+        );
+        
+        if (result.IsFailed)
+            return Result.Fail(result.Errors);
+        
         var prerequisite = await repository.GetPrerequisiteForEditingAsync(model.Id);
 
         prerequisite.RequiredAmount = model.RequiredAmount;
