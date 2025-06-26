@@ -206,8 +206,9 @@ internal sealed class PowerRepository(
 
         context.PowerCategoryMappings.RemoveRange(categoryMappings);
 
-        if (editPowerModel.Category == null || editPowerModel.Category.Count > 0)
+        if (editPowerModel.Category == null || editPowerModel.Category.Count == 0)
         {
+            await context.SaveChangesAsync(cancellationToken);
             return Result.Ok();
         }
 
