@@ -3,7 +3,7 @@ using ExpressedRealms.DB.Models.Powers.PowerPrerequisiteSetup;
 using FluentResults;
 using JetBrains.Annotations;
 
-namespace ExpressedRealms.Powers.Repository.PowerPrerequisites.DTOs.CreatePowerPrerequisite;
+namespace ExpressedRealms.Powers.Repository.PowerPrerequisites.CreatePowerPrerequisite;
 
 [UsedImplicitly]
 internal class CreatePrerequisiteUseCase(
