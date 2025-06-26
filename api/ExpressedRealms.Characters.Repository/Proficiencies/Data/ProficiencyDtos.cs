@@ -9,6 +9,7 @@ public static class ProficiencyDtos
     private const string Offensive = "Offensive";
     private const string Defensive = "Defensive";
     private const string Secondary = "Secondary";
+
     public static List<ProficiencyDto> GetProficiencies()
     {
         return new List<ProficiencyDto>()

@@ -81,15 +81,13 @@ internal sealed class ProficiencyRepository(
 
         foreach (var proficiency in proficiencies)
         {
-
             // Go through them one by one, as we have duplicates
             foreach (var modifier in proficiency.Modifiers)
             {
-                proficiency.AppliedModifiers.AddRange(availableModifiers
-                    .Where(x => x.Type == modifier)
-                    .ToList());
+                proficiency.AppliedModifiers.AddRange(
+                    availableModifiers.Where(x => x.Type == modifier).ToList()
+                );
             }
-
         }
 
         return proficiencies;
