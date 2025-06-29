@@ -49,15 +49,9 @@ public class PowerPrerequisitesRepository(ExpressedRealmsDbContext context, Canc
         await context.SaveChangesAsync(cancellationToken);
     }
     
-    public async Task<Result> DeletePrerequisite(DeletePrerequisiteModel model)
+    public async Task<Result> DeletePrerequisite(int prerequisiteId)
     {
-        var powerPrerequisites = await context.PowerPrerequisitePowers
-            .Where(x => x.PrerequisiteId == model.Id)
-            .ToListAsync();
-        
-        context.PowerPrerequisitePowers.RemoveRange(powerPrerequisites);
-
-        var prerequisite = await context.PowerPrerequisites.FirstAsync(x => x.Id == model.Id, cancellationToken);
+        var prerequisite = await context.PowerPrerequisites.FirstAsync(x => x.Id == prerequisiteId, cancellationToken);
 
         context.PowerPrerequisites.Remove(prerequisite);
         await context.SaveChangesAsync(cancellationToken);
