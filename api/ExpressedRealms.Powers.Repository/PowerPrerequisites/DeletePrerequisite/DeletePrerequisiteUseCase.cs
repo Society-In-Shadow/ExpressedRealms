@@ -1,6 +1,6 @@
 using FluentResults;
 
-namespace ExpressedRealms.Powers.Repository.PowerPrerequisites.DTOs.DeletePrerequisite;
+namespace ExpressedRealms.Powers.Repository.PowerPrerequisites.DeletePrerequisite;
 
 public class DeletePrerequisiteUseCase(
     DeletePrerequisiteModelValidator validator, 

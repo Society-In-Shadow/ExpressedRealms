@@ -1,7 +1,5 @@
 using ExpressedRealms.DB.Models.Powers.PowerPrerequisitePowerSetup;
 using ExpressedRealms.DB.Models.Powers.PowerPrerequisiteSetup;
-using ExpressedRealms.Powers.Repository.PowerPrerequisites.DTOs.DeletePrerequisite;
-using ExpressedRealms.Powers.Repository.PowerPrerequisites.EditPowerPrerequisite;
 using FluentResults;
 
 namespace ExpressedRealms.Powers.Repository.PowerPrerequisites;

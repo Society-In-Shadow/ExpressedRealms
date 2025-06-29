@@ -1,7 +1,7 @@
 using ExpressedRealms.Powers.Repository.Powers;
 using FluentValidation;
 
-namespace ExpressedRealms.Powers.Repository.PowerPrerequisites.DTOs.DeletePrerequisite;
+namespace ExpressedRealms.Powers.Repository.PowerPrerequisites.DeletePrerequisite;
 
 public class DeletePrerequisiteModelValidator : AbstractValidator<DeletePrerequisiteModel>
 {
