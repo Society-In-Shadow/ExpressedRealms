@@ -2,7 +2,7 @@ using ExpressedRealms.DB.Models.Powers.PowerPrerequisitePowerSetup;
 using FluentResults;
 using JetBrains.Annotations;
 
-namespace ExpressedRealms.Powers.Repository.PowerPrerequisites.EditPowerPrerequisite;
+namespace ExpressedRealms.Powers.Repository.PowerPrerequisites.EditPrerequisite;
 
 [UsedImplicitly]
 internal class EditPrerequisiteUseCase(

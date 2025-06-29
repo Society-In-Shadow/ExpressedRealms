@@ -1,6 +1,6 @@
-namespace ExpressedRealms.Powers.Repository.PowerPrerequisites.EditPowerPrerequisite;
+namespace ExpressedRealms.Powers.Repository.PowerPrerequisites.CreatePrerequisite;
 
-public class EditPrerequisiteModel
+public class CreatePrerequisiteModel
 {
     public int Id { get; set; }
     public int RequiredAmount { get; set; }
