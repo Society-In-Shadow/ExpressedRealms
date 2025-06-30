@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Characters.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Shared", "ExpressedRealms.Shared\ExpressedRealms.Shared.csproj", "{D5DFD23E-F49D-4016-83D5-6592512E9CAB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Powers.Repository.Tests.Unit", "ExpressedRealms.Powers.Repository.Tests.Unit\ExpressedRealms.Powers.Repository.Tests.Unit.csproj", "{698D343C-2A89-43A9-9395-121FE7E1D3A0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,10 @@ Global
 		{D5DFD23E-F49D-4016-83D5-6592512E9CAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5DFD23E-F49D-4016-83D5-6592512E9CAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5DFD23E-F49D-4016-83D5-6592512E9CAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{698D343C-2A89-43A9-9395-121FE7E1D3A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{698D343C-2A89-43A9-9395-121FE7E1D3A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{698D343C-2A89-43A9-9395-121FE7E1D3A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{698D343C-2A89-43A9-9395-121FE7E1D3A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

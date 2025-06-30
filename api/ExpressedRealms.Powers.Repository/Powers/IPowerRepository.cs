@@ -18,4 +18,5 @@ public interface IPowerRepository
     Task<Result> UpdatePowerPathSortOrder(EditPowerSortModel dto);
     Task<bool> IsValidPower(int id);
     Task<bool> AreValidPowers(List<int> ids);
+    Task<bool> RequirementAlreadyExists(int id);
 }
