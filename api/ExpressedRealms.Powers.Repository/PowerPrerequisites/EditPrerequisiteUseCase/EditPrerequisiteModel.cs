@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Powers.Repository.PowerPrerequisites.EditPrerequisite;
+namespace ExpressedRealms.Powers.Repository.PowerPrerequisites.EditPrerequisiteUseCase;
 
 public class EditPrerequisiteModel
 {

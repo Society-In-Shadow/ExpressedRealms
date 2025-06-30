@@ -1,7 +1,7 @@
 ﻿using ExpressedRealms.DB.Models.Powers.PowerPrerequisitePowerSetup;
 using ExpressedRealms.DB.Models.Powers.PowerPrerequisiteSetup;
 using ExpressedRealms.Powers.Repository.PowerPrerequisites;
-using ExpressedRealms.Powers.Repository.PowerPrerequisites.CreatePrerequisite;
+using ExpressedRealms.Powers.Repository.PowerPrerequisites.CreatePrerequisiteUseCase;
 using ExpressedRealms.Powers.Repository.Powers;
 using FakeItEasy;
 using Xunit;

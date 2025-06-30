@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Powers.Repository.PowerPrerequisites.CreatePrerequisite;
+namespace ExpressedRealms.Powers.Repository.PowerPrerequisites.CreatePrerequisiteUseCase;
 
 public class CreatePrerequisiteModel
 {

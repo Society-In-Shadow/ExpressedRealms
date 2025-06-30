@@ -2,7 +2,7 @@ using ExpressedRealms.Powers.Repository.Powers;
 using FluentValidation;
 using JetBrains.Annotations;
 
-namespace ExpressedRealms.Powers.Repository.PowerPrerequisites.CreatePrerequisite;
+namespace ExpressedRealms.Powers.Repository.PowerPrerequisites.CreatePrerequisiteUseCase;
 
 [UsedImplicitly]
 internal class CreatePrerequisiteModelValidator : AbstractValidator<CreatePrerequisiteModel>
