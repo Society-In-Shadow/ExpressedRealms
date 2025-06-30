@@ -14,6 +14,7 @@ public class CreatePrerequisiteTest
     private readonly IPowerPrerequisitesRepository _repository;
     private readonly IPowerRepository _powerRepository;
     private readonly CreatePrerequisiteModel _model;
+    private const int ReturnedPowerId = 6;
     
     public CreatePrerequisiteTest()
     {
@@ -30,7 +31,7 @@ public class CreatePrerequisiteTest
         A.CallTo(() => _powerRepository.IsValidPower(A<int>.Ignored)).Returns(true);
         A.CallTo(() => _powerRepository.AreValidPowers(A<List<int>>.Ignored)).Returns(true);
         A.CallTo(() => _powerRepository.RequirementAlreadyExists(A<int>.Ignored)).Returns(false);
-        A.CallTo(() => _repository.AddPrerequisite(A<PowerPrerequisite>.Ignored)).Returns(6);
+        A.CallTo(() => _repository.AddPrerequisite(A<PowerPrerequisite>.Ignored)).Returns(ReturnedPowerId);
         
         var validator = new CreatePrerequisiteModelValidator(_powerRepository);
 
@@ -121,7 +122,7 @@ public class CreatePrerequisiteTest
 
         var requisitePowers = _model.PrerequisitePowerIds.Select(x => new PowerPrerequisitePower()
         {
-            PrerequisiteId = 6,
+            PrerequisiteId = ReturnedPowerId,
             PowerId = x,
         }).ToList();
         
