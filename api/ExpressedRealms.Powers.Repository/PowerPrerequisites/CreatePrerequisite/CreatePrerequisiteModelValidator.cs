@@ -20,11 +20,8 @@ internal class CreatePrerequisiteModelValidator : AbstractValidator<CreatePrereq
             .WithMessage("A Power Requirement already exists for this power.");
 
         RuleFor(x => x.RequiredAmount)
-            .Must(x =>
-            {
-                return x > 0 || x == -1 || x == -2;
-            })
-            .WithMessage("Required Amount can only be a value greater then 0, or -1 or -2");
+            .Must(x => x > 0 || x == -1 || x == -2)
+            .WithMessage("Required Amount can only be a value greater then 0, or -1 (All) or -2 (Any)");
         
         RuleFor(x => x.PowerIds)
             .NotEmpty()
