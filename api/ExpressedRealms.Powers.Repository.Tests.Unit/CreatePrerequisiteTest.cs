@@ -19,9 +19,9 @@ public class CreatePrerequisiteTest
     {
         _model = new CreatePrerequisiteModel()
         {
-            Id = 3,
+            PowerId = 3,
             RequiredAmount = 1,
-            PowerIds = new List<int>() { 1, 2, 3 }
+            PrerequisitePowerIds = new List<int>() { 1, 2, 3 }
         };
         
         _repository = A.Fake<IPowerPrerequisitesRepository>();
@@ -43,33 +43,33 @@ public class CreatePrerequisiteTest
         A.CallTo(() => _powerRepository.RequirementAlreadyExists(A<int>.Ignored)).Returns(true);
         
         var results = await _useCase.ExecuteAsync(_model);
-        results.HasValidationError(nameof(CreatePrerequisiteModel.Id), "A Power Requirement already exists for this power.");
+        results.HasValidationError(nameof(CreatePrerequisiteModel.PowerId), "A Power Requirement already exists for this power.");
     }
 
     [Fact]
-    public async Task WillFail_IfPowerDoesntExist()
+    public async Task WillFail_IfPowerIdDoesNotExist()
     {
         A.CallTo(() => _powerRepository.IsValidPower(A<int>.Ignored)).Returns(false);
         
         var results = await _useCase.ExecuteAsync(_model);
-        results.HasValidationError(nameof(CreatePrerequisiteModel.Id), "Invalid Power.");
+        results.HasValidationError(nameof(CreatePrerequisiteModel.PowerId), "Invalid Power.");
     }
     
     [Fact]
-    public async Task WillFail_IfAnyPowerIdDoesntExist()
+    public async Task WillFail_IfAnyPrerequisitePowersDoesNotExist()
     {
         A.CallTo(() => _powerRepository.AreValidPowers(A<List<int>>.Ignored)).Returns(false);
         
         var results = await _useCase.ExecuteAsync(_model);
         
-        results.HasValidationError(nameof(CreatePrerequisiteModel.PowerIds), "One or more powers are invalid.");
+        results.HasValidationError(nameof(CreatePrerequisiteModel.PrerequisitePowerIds), "One or more prerequisite powers are invalid.");
     }
     
     [Theory]
     [InlineData(-3)]
     [InlineData(0)]
     [InlineData(-7)]
-    public async Task WillFail_IfRequiredAmountIsLessThenNegativeTwo(int requiredAmount)
+    public async Task WillFail_IfRequiredAmountIsLessThenNegativeTwoOrZero(int requiredAmount)
     {
         _model.RequiredAmount = requiredAmount;
         
@@ -109,7 +109,7 @@ public class CreatePrerequisiteTest
     {
         await _useCase.ExecuteAsync(_model);
         A.CallTo(() => _repository.AddPrerequisite(A<PowerPrerequisite>.That.Matches(p => 
-            p.PowerId == _model.Id && 
+            p.PowerId == _model.PowerId && 
             p.RequiredAmount == _model.RequiredAmount))
         ).MustHaveHappenedOnceExactly();
     }
@@ -119,7 +119,7 @@ public class CreatePrerequisiteTest
     {
         await _useCase.ExecuteAsync(_model);
 
-        var requisitePowers = _model.PowerIds.Select(x => new PowerPrerequisitePower()
+        var requisitePowers = _model.PrerequisitePowerIds.Select(x => new PowerPrerequisitePower()
         {
             PrerequisiteId = 6,
             PowerId = x,

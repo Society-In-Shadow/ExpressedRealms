@@ -2,7 +2,7 @@ namespace ExpressedRealms.Powers.Repository.PowerPrerequisites.CreatePrerequisit
 
 public class CreatePrerequisiteModel
 {
-    public int Id { get; set; }
+    public int PowerId { get; set; }
     public int RequiredAmount { get; set; }
-    public List<int> PowerIds { get; set; } = new();
+    public List<int> PrerequisitePowerIds { get; set; } = new();
 }

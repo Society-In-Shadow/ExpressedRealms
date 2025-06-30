@@ -25,11 +25,11 @@ internal class CreatePrerequisiteUseCase(
         
         var newId = await repository.AddPrerequisite(new PowerPrerequisite()
         {
-            PowerId = model.Id,
+            PowerId = model.PowerId,
             RequiredAmount = model.RequiredAmount,
         });
 
-        await repository.AddPrerequisitePowers(model.PowerIds.Select(x => new PowerPrerequisitePower()
+        await repository.AddPrerequisitePowers(model.PrerequisitePowerIds.Select(x => new PowerPrerequisitePower()
         {
             PrerequisiteId = newId,
             PowerId = x,
