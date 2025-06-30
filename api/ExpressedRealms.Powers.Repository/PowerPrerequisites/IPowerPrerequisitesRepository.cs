@@ -11,6 +11,5 @@ public interface IPowerPrerequisitesRepository
     Task<PowerPrerequisite> GetPrerequisiteForEditingAsync(int id);
     Task UpdatePrerequisite(PowerPrerequisite model);
     Task RemovePrerequisitePowers(int prerequisiteId);
-    Task UpdatePrerequisitePowers(List<PowerPrerequisitePower> model);
     Task<Result> DeletePrerequisite(int prerequisiteId);
 }

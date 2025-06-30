@@ -273,6 +273,15 @@ internal sealed class PowerRepository(
         );
         return power is not null;
     }
+    
+    public async Task<bool> IsValidRequirement(int id)
+    {
+        var power = await context.PowerPrerequisites.FirstOrDefaultAsync(
+            x => x.Id == id,
+            cancellationToken
+        );
+        return power is not null;
+    }
 
     public async Task<bool> AreValidPowers(List<int> ids)
     {

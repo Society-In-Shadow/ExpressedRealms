@@ -45,12 +45,6 @@ public class PowerPrerequisitesRepository(
         await context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task UpdatePrerequisitePowers(List<PowerPrerequisitePower> model)
-    {
-        context.PowerPrerequisitePowers.UpdateRange(model);
-        await context.SaveChangesAsync(cancellationToken);
-    }
-
     public async Task<Result> DeletePrerequisite(int prerequisiteId)
     {
         var prerequisite = await context.PowerPrerequisites.FirstAsync(

@@ -30,14 +30,14 @@ internal class EditPrerequisiteUseCase(
 
         await repository.RemovePrerequisitePowers(model.Id);
 
-        if (model.PowerIds.Count == 0)
+        if (model.PrerequisitePowerIds.Count == 0)
         {
             return Result.Ok();
         }
 
-        await repository.UpdatePrerequisitePowers(
+        await repository.AddPrerequisitePowers(
             model
-                .PowerIds.Select(x => new PowerPrerequisitePower()
+                .PrerequisitePowerIds.Select(x => new PowerPrerequisitePower()
                 {
                     PrerequisiteId = prerequisite.Id,
                     PowerId = x,
