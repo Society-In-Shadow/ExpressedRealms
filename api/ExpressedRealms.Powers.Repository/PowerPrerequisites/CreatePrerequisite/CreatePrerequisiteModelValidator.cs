@@ -13,7 +13,7 @@ internal class CreatePrerequisiteModelValidator : AbstractValidator<CreatePrereq
             .NotEmpty()
             .MustAsync(async (x, y) => await powerRepository.IsValidPower(x))
             .WithMessage("Invalid Power.");
-        
+
         RuleFor(x => x.PowerId)
             .NotEmpty()
             .MustAsync(async (x, y) => !await powerRepository.RequirementAlreadyExists(x))
@@ -21,8 +21,10 @@ internal class CreatePrerequisiteModelValidator : AbstractValidator<CreatePrereq
 
         RuleFor(x => x.RequiredAmount)
             .Must(x => x > 0 || x == -1 || x == -2)
-            .WithMessage("Required Amount can only be a value greater then 0, or -1 (All) or -2 (Any)");
-        
+            .WithMessage(
+                "Required Amount can only be a value greater then 0, or -1 (All) or -2 (Any)"
+            );
+
         RuleFor(x => x.PrerequisitePowerIds)
             .NotEmpty()
             .MustAsync(async (x, y) => await powerRepository.AreValidPowers(x))

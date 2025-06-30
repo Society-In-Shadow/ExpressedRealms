@@ -22,5 +22,4 @@
     <InternalsVisibleTo Include="ExpressedRealms.Powers.Repository.Tests.Unit" />
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
-
 </Project>

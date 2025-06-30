@@ -7,40 +7,54 @@ namespace ExpressedRealms.Powers.Repository.Tests.Unit;
 
 public static class ResultExtensions
 {
-    public static void HasValidationError(this Result result, string propertyName, string? errorMessage = null)
+    public static void HasValidationError(
+        this Result result,
+        string propertyName,
+        string? errorMessage = null
+    )
     {
         Assert.False(result.IsSuccess);
-        
+
         var validationFailure = result.Errors.OfType<FluentValidationFailure>().FirstOrDefault();
-        
+
         if (validationFailure == null)
         {
             Assert.Fail("No validation failure");
             return;
         }
-        
-        if (!HandlePropertyAndReturnSuccess(propertyName, validationFailure)) 
+
+        if (!HandlePropertyAndReturnSuccess(propertyName, validationFailure))
             return;
 
         HandleMessage(propertyName, errorMessage, validationFailure);
     }
 
-    private static void HandleMessage(string propertyName, string? errorMessage,
-        FluentValidationFailure validationFailure)
+    private static void HandleMessage(
+        string propertyName,
+        string? errorMessage,
+        FluentValidationFailure validationFailure
+    )
     {
-        var hasErrorMessage = validationFailure.ValidationFailures[propertyName].Contains(errorMessage);
-        
-        if (hasErrorMessage || string.IsNullOrWhiteSpace(errorMessage)) return;
-        
+        var hasErrorMessage = validationFailure
+            .ValidationFailures[propertyName]
+            .Contains(errorMessage);
+
+        if (hasErrorMessage || string.IsNullOrWhiteSpace(errorMessage))
+            return;
+
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine($"The following Message was not found for property \"{propertyName}\".");
+        stringBuilder.AppendLine(
+            $"The following Message was not found for property \"{propertyName}\"."
+        );
         stringBuilder.AppendLine();
         stringBuilder.AppendLine($"{errorMessage}");
         stringBuilder.AppendLine();
         stringBuilder.AppendLine("The available ones are:");
-            
+
         // Message for the given property id
-        var relatedMessages = validationFailure.ValidationFailures.Where(x => x.Key == propertyName);
+        var relatedMessages = validationFailure.ValidationFailures.Where(x =>
+            x.Key == propertyName
+        );
 
         foreach (var (key, value) in relatedMessages)
         {
@@ -50,10 +64,10 @@ public static class ResultExtensions
             }
         }
 
-        var additionalMessages = validationFailure.ValidationFailures
-            .Where(x => x.Key != propertyName)
+        var additionalMessages = validationFailure
+            .ValidationFailures.Where(x => x.Key != propertyName)
             .ToList();
-            
+
         if (additionalMessages.Any())
         {
             stringBuilder.AppendLine();
@@ -62,19 +76,23 @@ public static class ResultExtensions
             {
                 foreach (var message in value)
                 {
-                    stringBuilder.AppendLine($"{message} => \"{key}\"");   
+                    stringBuilder.AppendLine($"{message} => \"{key}\"");
                 }
             }
         }
-            
+
         Assert.Fail(stringBuilder.ToString());
     }
 
-    private static bool HandlePropertyAndReturnSuccess(string propertyName, FluentValidationFailure validationFailure)
+    private static bool HandlePropertyAndReturnSuccess(
+        string propertyName,
+        FluentValidationFailure validationFailure
+    )
     {
         var hasProperty = validationFailure.ValidationFailures.ContainsKey(propertyName);
-        if (hasProperty) return true;
-        
+        if (hasProperty)
+            return true;
+
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine($"\"{propertyName}\" Property was not found");
         stringBuilder.AppendLine();
@@ -94,7 +112,7 @@ public static class ResultExtensions
                 }
             }
         }
-            
+
         Assert.Fail(stringBuilder.ToString());
         return false;
     }

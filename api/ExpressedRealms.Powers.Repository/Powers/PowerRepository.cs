@@ -258,22 +258,27 @@ internal sealed class PowerRepository(
         await context.SaveChangesAsync();
         return Result.Ok();
     }
-    
+
     public async Task<bool> IsValidPower(int id)
     {
         var power = await context.Powers.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         return power is not null;
     }
-    
+
     public async Task<bool> RequirementAlreadyExists(int id)
     {
-        var power = await context.PowerPrerequisites.FirstOrDefaultAsync(x => x.PowerId == id, cancellationToken);
+        var power = await context.PowerPrerequisites.FirstOrDefaultAsync(
+            x => x.PowerId == id,
+            cancellationToken
+        );
         return power is not null;
     }
-    
+
     public async Task<bool> AreValidPowers(List<int> ids)
     {
-        var powers = await context.Powers.Where(x => ids.Contains(x.Id)).ToListAsync(cancellationToken);
+        var powers = await context
+            .Powers.Where(x => ids.Contains(x.Id))
+            .ToListAsync(cancellationToken);
         return powers.Count == ids.Count;
     }
 }

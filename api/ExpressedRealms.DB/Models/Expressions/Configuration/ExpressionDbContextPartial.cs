@@ -1,7 +1,7 @@
 using ExpressedRealms.DB.Models.Expressions;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
-using Microsoft.EntityFrameworkCore;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
+using Microsoft.EntityFrameworkCore;
 
 // ReSharper disable once CheckNamespace
 namespace ExpressedRealms.DB;

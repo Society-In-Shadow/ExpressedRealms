@@ -13,7 +13,7 @@ public static class PowersRepositoryInjections
     {
         services.ImportGenericUseCases(Assembly.GetExecutingAssembly());
         services.ImportValidators(Assembly.GetExecutingAssembly());
-        
+
         services.AddScoped<IPowerRepository, PowerRepository>();
         services.AddScoped<IPowerPrerequisitesRepository, PowerPrerequisitesRepository>();
         services.AddScoped<IPowerPathRepository, PowerPathRepository>();

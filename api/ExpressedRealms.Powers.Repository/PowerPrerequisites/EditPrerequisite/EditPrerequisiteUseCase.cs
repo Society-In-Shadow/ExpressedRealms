@@ -6,9 +6,10 @@ namespace ExpressedRealms.Powers.Repository.PowerPrerequisites.EditPrerequisite;
 
 [UsedImplicitly]
 internal class EditPrerequisiteUseCase(
-    IPowerPrerequisitesRepository repository, 
+    IPowerPrerequisitesRepository repository,
     EditPrerequisiteModelValidator validator,
-    CancellationToken cancellationToken) : IEditPrerequisiteUseCase
+    CancellationToken cancellationToken
+) : IEditPrerequisiteUseCase
 {
     public async Task<Result> ExecuteAsync(EditPrerequisiteModel model)
     {
@@ -17,14 +18,14 @@ internal class EditPrerequisiteUseCase(
             model,
             cancellationToken
         );
-        
+
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-        
+
         var prerequisite = await repository.GetPrerequisiteForEditingAsync(model.Id);
 
         prerequisite.RequiredAmount = model.RequiredAmount;
-        
+
         await repository.UpdatePrerequisite(prerequisite);
 
         await repository.RemovePrerequisitePowers(model.Id);
@@ -33,13 +34,17 @@ internal class EditPrerequisiteUseCase(
         {
             return Result.Ok();
         }
-        
-        await repository.UpdatePrerequisitePowers(model.PowerIds.Select(x => new PowerPrerequisitePower()
-        {
-            PrerequisiteId = prerequisite.Id,
-            PowerId = x,
-        }).ToList());
-        
+
+        await repository.UpdatePrerequisitePowers(
+            model
+                .PowerIds.Select(x => new PowerPrerequisitePower()
+                {
+                    PrerequisiteId = prerequisite.Id,
+                    PowerId = x,
+                })
+                .ToList()
+        );
+
         return Result.Ok();
     }
 }

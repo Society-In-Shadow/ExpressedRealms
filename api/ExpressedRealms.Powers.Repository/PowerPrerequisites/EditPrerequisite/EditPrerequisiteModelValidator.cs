@@ -12,9 +12,8 @@ internal class EditPrerequisiteModelValidator : AbstractValidator<EditPrerequisi
         RuleFor(x => x.Id)
             .NotEmpty()
             .MustAsync(async (x, y) => !await powerRepository.IsValidPower(x));
-        
-        RuleFor(x => x.RequiredAmount)
-            .NotEmpty();
+
+        RuleFor(x => x.RequiredAmount).NotEmpty();
 
         RuleFor(x => x.PowerIds)
             .NotEmpty()

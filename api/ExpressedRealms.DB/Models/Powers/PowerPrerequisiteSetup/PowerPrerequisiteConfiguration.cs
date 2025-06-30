@@ -8,7 +8,7 @@ public class PowerPrerequisiteConfiguration : IEntityTypeConfiguration<PowerPrer
     public void Configure(EntityTypeBuilder<PowerPrerequisite> builder)
     {
         builder.ToTable("power_prerequisite");
-        
+
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).HasColumnName("id").IsRequired().ValueGeneratedOnAdd();
 

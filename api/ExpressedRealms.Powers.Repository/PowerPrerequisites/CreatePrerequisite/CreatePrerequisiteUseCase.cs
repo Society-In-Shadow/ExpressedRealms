@@ -7,8 +7,8 @@ namespace ExpressedRealms.Powers.Repository.PowerPrerequisites.CreatePrerequisit
 
 [UsedImplicitly]
 internal class CreatePrerequisiteUseCase(
-    IPowerPrerequisitesRepository repository, 
-    CreatePrerequisiteModelValidator validator, 
+    IPowerPrerequisitesRepository repository,
+    CreatePrerequisiteModelValidator validator,
     CancellationToken cancellationToken
 ) : ICreatePrerequisiteUseCase
 {
@@ -22,19 +22,25 @@ internal class CreatePrerequisiteUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-        
-        var newId = await repository.AddPrerequisite(new PowerPrerequisite()
-        {
-            PowerId = model.PowerId,
-            RequiredAmount = model.RequiredAmount,
-        });
 
-        await repository.AddPrerequisitePowers(model.PrerequisitePowerIds.Select(x => new PowerPrerequisitePower()
-        {
-            PrerequisiteId = newId,
-            PowerId = x,
-        }).ToList());
-        
+        var newId = await repository.AddPrerequisite(
+            new PowerPrerequisite()
+            {
+                PowerId = model.PowerId,
+                RequiredAmount = model.RequiredAmount,
+            }
+        );
+
+        await repository.AddPrerequisitePowers(
+            model
+                .PrerequisitePowerIds.Select(x => new PowerPrerequisitePower()
+                {
+                    PrerequisiteId = newId,
+                    PowerId = x,
+                })
+                .ToList()
+        );
+
         return Result.Ok();
     }
 }
