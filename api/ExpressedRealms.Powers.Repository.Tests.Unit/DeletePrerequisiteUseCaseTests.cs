@@ -44,17 +44,14 @@ public class DeletePrerequisiteUseCaseTests
             "This is not a valid prerequisite id."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_Id_WillFail_IfPrerequisiteIdIsEmpty()
     {
         _model.Id = 0;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.HasValidationError(
-            nameof(DeletePrerequisiteModel.Id),
-            "Id is required."
-        );
+        results.HasValidationError(nameof(DeletePrerequisiteModel.Id), "Id is required.");
     }
 
     [Fact]

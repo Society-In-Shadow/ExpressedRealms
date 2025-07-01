@@ -53,17 +53,14 @@ public class EditPrerequisiteUseCaseTests
             "This is not a valid prerequisite id."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_Id_WillFail_IfPrerequisiteIdIsEmpty()
     {
         _model.Id = 0;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.HasValidationError(
-            nameof(EditPrerequisiteModel.Id),
-            "Id is required."
-        );
+        results.HasValidationError(nameof(EditPrerequisiteModel.Id), "Id is required.");
     }
 
     [Fact]
@@ -78,7 +75,7 @@ public class EditPrerequisiteUseCaseTests
             "One or more prerequisite powers are invalid."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_PrerequisitePowerIds_WillFail_IfPrerequisitePowersAreEmpty()
     {
@@ -96,7 +93,9 @@ public class EditPrerequisiteUseCaseTests
     [InlineData(-3)]
     [InlineData(0)]
     [InlineData(-7)]
-    public async Task ValidationFor_RequiredAmount_WillFail_IfRequiredAmountIsLessThenNegativeTwoOrZero(int requiredAmount)
+    public async Task ValidationFor_RequiredAmount_WillFail_IfRequiredAmountIsLessThenNegativeTwoOrZero(
+        int requiredAmount
+    )
     {
         _model.RequiredAmount = requiredAmount;
 
@@ -107,7 +106,8 @@ public class EditPrerequisiteUseCaseTests
         );
     }
 
-    [Fact] public async Task ValidationFor_RequiredAmount_WillSucceed_IfRequiredAmountIsGreaterThen0()
+    [Fact]
+    public async Task ValidationFor_RequiredAmount_WillSucceed_IfRequiredAmountIsGreaterThen0()
     {
         _model.RequiredAmount = 1;
 

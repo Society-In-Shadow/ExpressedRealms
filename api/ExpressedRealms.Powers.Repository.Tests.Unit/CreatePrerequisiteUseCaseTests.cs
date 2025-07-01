@@ -59,14 +59,17 @@ public class CreatePrerequisiteUseCaseTests
         var results = await _useCase.ExecuteAsync(_model);
         results.HasValidationError(nameof(CreatePrerequisiteModel.PowerId), "Invalid Power.");
     }
-    
+
     [Fact]
     public async Task ValidationFor_PowerId_WillFail_IfPowerIdIsEmpty()
     {
         _model.PowerId = 0;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.HasValidationError(nameof(CreatePrerequisiteModel.PowerId), "Power Id is required.");
+        results.HasValidationError(
+            nameof(CreatePrerequisiteModel.PowerId),
+            "Power Id is required."
+        );
     }
 
     [Fact]
@@ -80,8 +83,8 @@ public class CreatePrerequisiteUseCaseTests
             nameof(CreatePrerequisiteModel.PrerequisitePowerIds),
             "One or more prerequisite powers are invalid."
         );
-    } 
-    
+    }
+
     [Fact]
     public async Task ValidationFor_PrerequisitePowerIds_WillFail_IfAnyPrerequisitePowersAreEmpty()
     {
@@ -99,7 +102,9 @@ public class CreatePrerequisiteUseCaseTests
     [InlineData(-3)]
     [InlineData(0)]
     [InlineData(-7)]
-    public async Task ValidationFor_RequiredAmount_WillFail_IfRequiredAmountIsLessThenNegativeTwoOrZero(int requiredAmount)
+    public async Task ValidationFor_RequiredAmount_WillFail_IfRequiredAmountIsLessThenNegativeTwoOrZero(
+        int requiredAmount
+    )
     {
         _model.RequiredAmount = requiredAmount;
 
