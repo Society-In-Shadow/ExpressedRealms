@@ -74,6 +74,7 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
+          cache: true
 
       # Step 3: Restore and build .NET project
       - name: Restore dependencies
@@ -81,6 +82,9 @@ jobs:
 
       - name: Build
         run: dotnet build --no-restore ./api
+        
+      - name: Run Unit Tests
+        run: dotnet test --no-restore --logger trx
 
       # Step 4: Ensure Docker Image Builds
       - name: Build Docker Image
