@@ -68,7 +68,7 @@ public static class ResultExtensions
             .ValidationFailures.Where(x => x.Key != propertyName)
             .ToList();
 
-        if (additionalMessages.Any())
+        if (additionalMessages.Count > 0)
         {
             stringBuilder.AppendLine();
             stringBuilder.AppendLine("Additional messages for other properties:");
