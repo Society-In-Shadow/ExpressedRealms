@@ -8,7 +8,7 @@ using Xunit;
 
 namespace ExpressedRealms.Powers.Repository.Tests.Unit;
 
-public class CreatePrerequisiteTest
+public class CreatePrerequisiteUseCaseTests
 {
     private readonly CreatePrerequisiteUseCase _useCase;
     private readonly IPowerPrerequisitesRepository _repository;
@@ -16,7 +16,7 @@ public class CreatePrerequisiteTest
     private readonly CreatePrerequisiteModel _model;
     private const int ReturnedPowerId = 6;
 
-    public CreatePrerequisiteTest()
+    public CreatePrerequisiteUseCaseTests()
     {
         _model = new CreatePrerequisiteModel()
         {
