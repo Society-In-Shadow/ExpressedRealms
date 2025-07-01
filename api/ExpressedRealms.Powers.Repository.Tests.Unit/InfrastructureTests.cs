@@ -36,38 +36,56 @@ public class InfrastructureTests
 
         Assert.True(result.IsSuccessful);
     }
+
     private record TestMethodFailure(string MethodName, string ClassName);
 
     [Fact]
     public void TestMethods_MustStartWith_ValidationForOrUseCase()
     {
-        var assemblies = AppDomain.CurrentDomain.GetAssemblies()
+        var assemblies = AppDomain
+            .CurrentDomain.GetAssemblies()
             .Where(a => !a.IsDynamic && a.GetName().Name?.Contains("Tests") == true);
 
         var failures = new List<TestMethodFailure>();
 
         foreach (var assembly in assemblies)
         {
-            var testClasses = assembly.GetTypes()
-                .Where(t => t.Name.EndsWith("Tests") && t.IsClass && !t.IsAbstract && !t.Name.Contains("InfrastructureTests"));
+            var testClasses = assembly
+                .GetTypes()
+                .Where(t =>
+                    t.Name.EndsWith("Tests")
+                    && t.IsClass
+                    && !t.IsAbstract
+                    && !t.Name.Contains("InfrastructureTests")
+                );
 
             foreach (var testClass in testClasses)
             {
-                var methods = testClass.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
-                    .Where(m => m.GetCustomAttributes(typeof(FactAttribute), false).Any() || 
-                                m.GetCustomAttributes(typeof(TheoryAttribute), false).Any());
+                var methods = testClass
+                    .GetMethods(
+                        BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly
+                    )
+                    .Where(m =>
+                        m.GetCustomAttributes(typeof(FactAttribute), false).Length > 0
+                        || m.GetCustomAttributes(typeof(TheoryAttribute), false).Length > 0
+                    );
 
-                failures.AddRange(methods.Where(x =>
-                        !(x.Name.StartsWith("ValidationFor_") || x.Name.StartsWith("UseCase_")))
-                    .Select(x => new TestMethodFailure(x.Name, testClass.FullName))
-                    .ToList());
+                failures.AddRange(
+                    methods
+                        .Where(x =>
+                            !(x.Name.StartsWith("ValidationFor_") || x.Name.StartsWith("UseCase_"))
+                        )
+                        .Select(x => new TestMethodFailure(x.Name, testClass.FullName!))
+                        .ToList()
+                );
             }
         }
 
-        if (!failures.Any()) return;
+        if (failures.Count == 0)
+            return;
 
         var stringBuilder = new StringBuilder();
-        
+
         stringBuilder.AppendLine("Test method naming violations found:");
         stringBuilder.AppendLine();
         stringBuilder.AppendLine("Test Names must start with ValidationFor_ or UseCase_");
@@ -86,18 +104,20 @@ public class InfrastructureTests
 
         Assert.Fail(stringBuilder.ToString());
     }
-    
+
     private record ValidatorInformation(string ValidatorName, string UseCaseName);
+
     [Fact]
     public void UseCases_ShouldHaveCorresponding_ModelAndValidator()
     {
         var assembly = typeof(PowersRepositoryInjections).Assembly;
-    
+
         var useCaseTypes = Types
             .InAssembly(assembly)
             .That()
             .ImplementInterface(typeof(IGenericUseCase<,>))
-            .And().AreClasses()
+            .And()
+            .AreClasses()
             .GetTypes();
 
         var modelTypes = Types
@@ -107,26 +127,27 @@ public class InfrastructureTests
             .GetTypes()
             .Select(t => t.Name)
             .ToHashSet();
-        
+
         var validators = Types
             .InAssembly(assembly)
             .That()
             .Inherit(typeof(AbstractValidator<>))
             .GetTypes()
             .ToHashSet();
-        
+
         var validationErrors = GetValidationMessages(useCaseTypes, modelTypes, validators);
 
         if (validationErrors.Count == 0)
             return;
-        
+
         var stringBuilder = new StringBuilder();
 
         stringBuilder.AppendLine(
-            "One or more Use Cases are missing Models or Validators, or have incorrect validators");
-        
+            "One or more Use Cases are missing Models or Validators, or have incorrect validators"
+        );
+
         stringBuilder.AppendLine();
-        
+
         var failuresGroupedByClass = validationErrors.GroupBy(x => x.UseCaseName);
         foreach (var className in failuresGroupedByClass)
         {
@@ -141,29 +162,43 @@ public class InfrastructureTests
         Assert.Fail(stringBuilder.ToString());
     }
 
-    private static List<ValidatorInformation> GetValidationMessages(IEnumerable<Type> useCaseTypes, HashSet<string> modelTypes, HashSet<Type> validators)
+    private static List<ValidatorInformation> GetValidationMessages(
+        IEnumerable<Type> useCaseTypes,
+        HashSet<string> modelTypes,
+        HashSet<Type> validators
+    )
     {
         var validationErrors = new List<ValidatorInformation>();
         foreach (var useCaseType in useCaseTypes)
         {
             // Extract the base name by removing "UseCase" suffix
-            var baseName = useCaseType.Name.EndsWith("UseCase") 
-                ? useCaseType.Name.Substring(0, useCaseType.Name.Length - 7) 
+            var baseName = useCaseType.Name.EndsWith("UseCase")
+                ? useCaseType.Name.Substring(0, useCaseType.Name.Length - 7)
                 : useCaseType.Name;
-            
+
             var expectedModelName = baseName + "Model";
-        
+
             if (!modelTypes.Contains(expectedModelName))
             {
-                validationErrors.Add(new ValidatorInformation($"Missing Model: {expectedModelName}", useCaseType.Name));
+                validationErrors.Add(
+                    new ValidatorInformation(
+                        $"Missing Model: {expectedModelName}",
+                        useCaseType.Name
+                    )
+                );
             }
-            
+
             var expectedValidatorName = baseName + "ModelValidator";
 
             var validatorNames = validators.Select(x => x.Name).ToHashSet();
             if (!validatorNames.Contains(expectedValidatorName))
             {
-                validationErrors.Add(new ValidatorInformation($"Missing Validator: {expectedValidatorName}", useCaseType.Name));
+                validationErrors.Add(
+                    new ValidatorInformation(
+                        $"Missing Validator: {expectedValidatorName}",
+                        useCaseType.Name
+                    )
+                );
             }
             else
             {
@@ -172,15 +207,16 @@ public class InfrastructureTests
                 var name = genericArguments[0].Name;
                 if (name != expectedModelName)
                 {
-                    validationErrors.Add(new ValidatorInformation($"Validator '{expectedValidatorName}' should have generic argument '{expectedModelName}' instead found '{name}'", useCaseType.Name));
+                    validationErrors.Add(
+                        new ValidatorInformation(
+                            $"Validator '{expectedValidatorName}' should have generic argument '{expectedModelName}' instead found '{name}'",
+                            useCaseType.Name
+                        )
+                    );
                 }
             }
-            
         }
 
         return validationErrors;
     }
-
-
-    
 }
