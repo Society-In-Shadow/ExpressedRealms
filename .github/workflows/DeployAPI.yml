@@ -83,7 +83,7 @@ jobs:
         run: dotnet build --no-restore ./api
         
       - name: Run Unit Tests
-        run: dotnet test --no-restore --logger trx
+        run: dotnet test --no-restore ./api --logger trx
 
       # Step 4: Ensure Docker Image Builds
       - name: Build Docker Image
