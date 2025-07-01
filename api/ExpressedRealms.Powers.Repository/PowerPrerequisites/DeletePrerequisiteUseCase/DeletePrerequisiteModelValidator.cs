@@ -9,6 +9,7 @@ public class DeletePrerequisiteModelValidator : AbstractValidator<DeletePrerequi
     {
         RuleFor(x => x.Id)
             .NotEmpty()
-            .MustAsync(async (x, y) => !await powerRepository.IsValidPower(x));
+            .MustAsync(async (x, y) => await powerRepository.IsValidRequirement(x))
+            .WithMessage("This is not a valid prerequisite id.");
     }
 }

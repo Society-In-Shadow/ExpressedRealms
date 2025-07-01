@@ -3,8 +3,8 @@ using FluentResults;
 namespace ExpressedRealms.Powers.Repository.PowerPrerequisites.DeletePrerequisiteUseCase;
 
 public class DeletePrerequisiteUseCase(
-    DeletePrerequisiteModelValidator validator,
     IPowerPrerequisitesRepository repository,
+    DeletePrerequisiteModelValidator validator,
     CancellationToken cancellationToken
 ) : IDeletePrerequisiteUseCase
 {
