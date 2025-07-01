@@ -10,11 +10,9 @@ internal class EditPrerequisiteModelValidator : AbstractValidator<EditPrerequisi
     public EditPrerequisiteModelValidator(IPowerRepository powerRepository)
     {
         RuleFor(x => x.Id)
-            .NotEmpty()
+            .NotEmpty().WithMessage("Id is required.")
             .MustAsync(async (x, y) => await powerRepository.IsValidRequirement(x))
             .WithMessage("This is not a valid prerequisite id.");
-
-        RuleFor(x => x.RequiredAmount).NotEmpty();
 
         RuleFor(x => x.RequiredAmount)
             .Must(x => x > 0 || x == -1 || x == -2)
@@ -23,7 +21,7 @@ internal class EditPrerequisiteModelValidator : AbstractValidator<EditPrerequisi
             );
 
         RuleFor(x => x.PrerequisitePowerIds)
-            .NotEmpty()
+            .NotEmpty().WithMessage("Prerequisite Power Ids are required.")
             .MustAsync(async (x, y) => await powerRepository.AreValidPowers(x))
             .WithMessage("One or more prerequisite powers are invalid.");
     }

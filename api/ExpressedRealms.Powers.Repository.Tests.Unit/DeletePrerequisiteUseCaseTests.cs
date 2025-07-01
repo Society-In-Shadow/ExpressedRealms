@@ -34,7 +34,7 @@ public class DeletePrerequisiteUseCaseTests
     }
 
     [Fact]
-    public async Task WillFail_IfPrerequisiteIdDoesNotExist()
+    public async Task ValidationFor_Id_WillFail_IfPrerequisiteIdDoesNotExist()
     {
         A.CallTo(() => _powerRepository.IsValidRequirement(_model.Id)).Returns(false);
 
@@ -44,9 +44,21 @@ public class DeletePrerequisiteUseCaseTests
             "This is not a valid prerequisite id."
         );
     }
+    
+    [Fact]
+    public async Task ValidationFor_Id_WillFail_IfPrerequisiteIdIsEmpty()
+    {
+        _model.Id = 0;
+
+        var results = await _useCase.ExecuteAsync(_model);
+        results.HasValidationError(
+            nameof(DeletePrerequisiteModel.Id),
+            "Id is required."
+        );
+    }
 
     [Fact]
-    public async Task WillDelete_PrerequisitePowers()
+    public async Task UseCase_WillDelete_PrerequisitePowers()
     {
         await _useCase.ExecuteAsync(_model);
 
@@ -55,7 +67,7 @@ public class DeletePrerequisiteUseCaseTests
     }
 
     [Fact]
-    public async Task WillDelete_Prerequisite()
+    public async Task UseCase_WillDelete_Prerequisite()
     {
         await _useCase.ExecuteAsync(_model);
 

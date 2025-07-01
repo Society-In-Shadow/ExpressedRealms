@@ -43,7 +43,7 @@ public class EditPrerequisiteUseCaseTests
     }
 
     [Fact]
-    public async Task WillFail_IfPrerequisiteIdDoesNotExist()
+    public async Task ValidationFor_Id_WillFail_IfPrerequisiteIdDoesNotExist()
     {
         A.CallTo(() => _powerRepository.IsValidRequirement(_model.Id)).Returns(false);
 
@@ -53,9 +53,21 @@ public class EditPrerequisiteUseCaseTests
             "This is not a valid prerequisite id."
         );
     }
+    
+    [Fact]
+    public async Task ValidationFor_Id_WillFail_IfPrerequisiteIdIsEmpty()
+    {
+        _model.Id = 0;
+
+        var results = await _useCase.ExecuteAsync(_model);
+        results.HasValidationError(
+            nameof(EditPrerequisiteModel.Id),
+            "Id is required."
+        );
+    }
 
     [Fact]
-    public async Task WillFail_IfAnyPrerequisitePowersDoesNotExist()
+    public async Task ValidationFor_PrerequisitePowerIds_WillFail_IfAnyPrerequisitePowersDoesNotExist()
     {
         A.CallTo(() => _powerRepository.AreValidPowers(A<List<int>>.Ignored)).Returns(false);
 
@@ -66,12 +78,25 @@ public class EditPrerequisiteUseCaseTests
             "One or more prerequisite powers are invalid."
         );
     }
+    
+    [Fact]
+    public async Task ValidationFor_PrerequisitePowerIds_WillFail_IfPrerequisitePowersAreEmpty()
+    {
+        _model.PrerequisitePowerIds = [];
+
+        var results = await _useCase.ExecuteAsync(_model);
+
+        results.HasValidationError(
+            nameof(EditPrerequisiteModel.PrerequisitePowerIds),
+            "Prerequisite Power Ids are required."
+        );
+    }
 
     [Theory]
     [InlineData(-3)]
     [InlineData(0)]
     [InlineData(-7)]
-    public async Task WillFail_IfRequiredAmountIsLessThenNegativeTwoOrZero(int requiredAmount)
+    public async Task ValidationFor_RequiredAmount_WillFail_IfRequiredAmountIsLessThenNegativeTwoOrZero(int requiredAmount)
     {
         _model.RequiredAmount = requiredAmount;
 
@@ -82,8 +107,7 @@ public class EditPrerequisiteUseCaseTests
         );
     }
 
-    [Fact]
-    public async Task WillSucceed_IfRequiredAmountIsGreaterThen0()
+    [Fact] public async Task ValidationFor_RequiredAmount_WillSucceed_IfRequiredAmountIsGreaterThen0()
     {
         _model.RequiredAmount = 1;
 
@@ -92,7 +116,7 @@ public class EditPrerequisiteUseCaseTests
     }
 
     [Fact]
-    public async Task WillSucceed_IfSetToAnyPower()
+    public async Task ValidationFor_RequiredAmount_WillSucceed_IfSetToAnyPower()
     {
         _model.RequiredAmount = -1;
 
@@ -101,7 +125,7 @@ public class EditPrerequisiteUseCaseTests
     }
 
     [Fact]
-    public async Task WillSucceed_IfSetToAllPowers()
+    public async Task ValidationFor_RequiredAmount_WillSucceed_IfSetToAllPowers()
     {
         _model.RequiredAmount = -2;
 
@@ -110,7 +134,7 @@ public class EditPrerequisiteUseCaseTests
     }
 
     [Fact]
-    public async Task WillGrab_TheCorrespondingPrerequisite()
+    public async Task UseCase_WillGrab_TheCorrespondingPrerequisite()
     {
         await _useCase.ExecuteAsync(_model);
 
@@ -119,7 +143,7 @@ public class EditPrerequisiteUseCaseTests
     }
 
     [Fact]
-    public async Task WillUpdate_TheRequiredAmount()
+    public async Task UseCase_WillUpdate_TheRequiredAmount()
     {
         _model.RequiredAmount = 5;
         await _useCase.ExecuteAsync(_model);
@@ -135,7 +159,7 @@ public class EditPrerequisiteUseCaseTests
     }
 
     [Fact]
-    public async Task WillRemove_AllPrerequisitePowers()
+    public async Task UseCase_WillRemove_AllPrerequisitePowers()
     {
         await _useCase.ExecuteAsync(_model);
 
@@ -144,17 +168,7 @@ public class EditPrerequisiteUseCaseTests
     }
 
     [Fact]
-    public async Task WillShortCircuit_IfNoPrerequisitePowersAreEmpty()
-    {
-        _model.PrerequisitePowerIds = [];
-        await _useCase.ExecuteAsync(_model);
-
-        A.CallTo(() => _repository.AddPrerequisitePowers(A<List<PowerPrerequisitePower>>.Ignored))
-            .MustNotHaveHappened();
-    }
-
-    [Fact]
-    public async Task WillAdd_UpdatedPrerequisitePowers()
+    public async Task UseCase_WillAdd_UpdatedPrerequisitePowers()
     {
         await _useCase.ExecuteAsync(_model);
 
