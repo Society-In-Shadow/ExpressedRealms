@@ -21,7 +21,7 @@ internal class EditPrerequisiteModelValidator : AbstractValidator<EditPrerequisi
             .WithMessage(
                 "Required Amount can only be a value greater then 0, or -1 (All) or -2 (Any)"
             );
-        
+
         RuleFor(x => x.PrerequisitePowerIds)
             .NotEmpty()
             .MustAsync(async (x, y) => await powerRepository.AreValidPowers(x))

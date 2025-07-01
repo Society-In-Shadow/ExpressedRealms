@@ -25,11 +25,7 @@ public class EditPrerequisiteUseCaseTests
             PrerequisitePowerIds = [1, 2, 3],
         };
 
-        var dbModel = new PowerPrerequisite()
-        {
-            Id = ReturnedPrerequisiteId,
-            RequiredAmount = 1
-        };
+        var dbModel = new PowerPrerequisite() { Id = ReturnedPrerequisiteId, RequiredAmount = 1 };
 
         _repository = A.Fake<IPowerPrerequisitesRepository>();
         _powerRepository = A.Fake<IPowerRepository>();
@@ -52,8 +48,10 @@ public class EditPrerequisiteUseCaseTests
         A.CallTo(() => _powerRepository.IsValidRequirement(_model.Id)).Returns(false);
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.HasValidationError(nameof(EditPrerequisiteModel.Id), 
-            "This is not a valid prerequisite id.");
+        results.HasValidationError(
+            nameof(EditPrerequisiteModel.Id),
+            "This is not a valid prerequisite id."
+        );
     }
 
     [Fact]
@@ -115,21 +113,23 @@ public class EditPrerequisiteUseCaseTests
     public async Task WillGrab_TheCorrespondingPrerequisite()
     {
         await _useCase.ExecuteAsync(_model);
-        
-        A.CallTo(() =>
-                _repository.GetPrerequisiteForEditingAsync(_model.Id)
-            )
+
+        A.CallTo(() => _repository.GetPrerequisiteForEditingAsync(_model.Id))
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task WillUpdate_TheRequiredAmount()
     {
         _model.RequiredAmount = 5;
         await _useCase.ExecuteAsync(_model);
-        
+
         A.CallTo(() =>
-                _repository.UpdatePrerequisite(A<PowerPrerequisite>.That.Matches(x => x.RequiredAmount == _model.RequiredAmount))
+                _repository.UpdatePrerequisite(
+                    A<PowerPrerequisite>.That.Matches(x =>
+                        x.RequiredAmount == _model.RequiredAmount
+                    )
+                )
             )
             .MustHaveHappenedOnceExactly();
     }
@@ -138,29 +138,26 @@ public class EditPrerequisiteUseCaseTests
     public async Task WillRemove_AllPrerequisitePowers()
     {
         await _useCase.ExecuteAsync(_model);
-        
-        A.CallTo(() =>
-                _repository.RemovePrerequisitePowers(_model.Id)
-            )
+
+        A.CallTo(() => _repository.RemovePrerequisitePowers(_model.Id))
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task WillShortCircuit_IfNoPrerequisitePowersAreEmpty()
     {
         _model.PrerequisitePowerIds = [];
         await _useCase.ExecuteAsync(_model);
-        
-        A.CallTo(() =>
-                _repository.AddPrerequisitePowers(A<List<PowerPrerequisitePower>>.Ignored)
-            ).MustNotHaveHappened();
+
+        A.CallTo(() => _repository.AddPrerequisitePowers(A<List<PowerPrerequisitePower>>.Ignored))
+            .MustNotHaveHappened();
     }
-    
+
     [Fact]
     public async Task WillAdd_UpdatedPrerequisitePowers()
     {
         await _useCase.ExecuteAsync(_model);
-        
+
         var requisitePowers = _model
             .PrerequisitePowerIds.Select(x => new PowerPrerequisitePower()
             {

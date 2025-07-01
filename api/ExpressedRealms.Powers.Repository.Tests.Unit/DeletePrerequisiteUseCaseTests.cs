@@ -19,10 +19,7 @@ public class DeletePrerequisiteUseCaseTests
 
     public DeletePrerequisiteUseCaseTests()
     {
-        _model = new DeletePrerequisiteModel()
-        {
-            Id = 3,
-        };
+        _model = new DeletePrerequisiteModel() { Id = 3 };
 
         _repository = A.Fake<IPowerPrerequisitesRepository>();
         _powerRepository = A.Fake<IPowerRepository>();
@@ -42,29 +39,26 @@ public class DeletePrerequisiteUseCaseTests
         A.CallTo(() => _powerRepository.IsValidRequirement(_model.Id)).Returns(false);
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.HasValidationError(nameof(DeletePrerequisiteModel.Id), 
-            "This is not a valid prerequisite id.");
+        results.HasValidationError(
+            nameof(DeletePrerequisiteModel.Id),
+            "This is not a valid prerequisite id."
+        );
     }
-    
+
     [Fact]
     public async Task WillDelete_PrerequisitePowers()
     {
         await _useCase.ExecuteAsync(_model);
-        
-        A.CallTo(() =>
-                _repository.RemovePrerequisitePowers(_model.Id)
-            )
+
+        A.CallTo(() => _repository.RemovePrerequisitePowers(_model.Id))
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task WillDelete_Prerequisite()
     {
         await _useCase.ExecuteAsync(_model);
-        
-        A.CallTo(() =>
-                _repository.DeletePrerequisite(_model.Id)
-            )
-            .MustHaveHappenedOnceExactly();
+
+        A.CallTo(() => _repository.DeletePrerequisite(_model.Id)).MustHaveHappenedOnceExactly();
     }
 }
