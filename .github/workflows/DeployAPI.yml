@@ -81,7 +81,7 @@ jobs:
 
       - name: Build
         run: dotnet build --no-restore ./api
-        
+
       - name: Run Unit Tests
         run: dotnet test --no-restore ./api --logger trx
 
