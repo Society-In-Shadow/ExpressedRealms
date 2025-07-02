@@ -31,7 +31,7 @@ internal sealed class ProficiencyRepository(
             stats.Value.Select(x => new ModifierDescription()
             {
                 Value = x.Level,
-                Message = $"{ModiferConversions.GetModifierType(x.StatTypeId).Name} Level2",
+                Message = $"{ModiferConversions.GetModifierType(x.StatTypeId).Name} Level",
                 Type = ModiferConversions.GetModifierType(x.StatTypeId),
                 Name = ModiferConversions.GetModifierType(x.StatTypeId).Name,
             })
