@@ -59,7 +59,7 @@ internal static class ModiferConversions
             DbModifierTypes.EvadeGeneralDamageProficiency => ModifierType.Evade,
             DbModifierTypes.WardGeneralDamageProficiency => ModifierType.Ward,
             DbModifierTypes.DeflectGeneralDamageProficiency => ModifierType.Deflection,
-            //DbModifierTypes.ReserveWillPower => expr,
+            DbModifierTypes.ReserveWillPower => ModifierType.RWP,
             DbModifierTypes.ThrowStat => ModifierType.Throw,
             DbModifierTypes.ProjectStat => ModifierType.Project,
             DbModifierTypes.AgilityStonePull => ModifierType.Agility,

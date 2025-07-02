@@ -30,8 +30,8 @@ internal sealed class ProficiencyRepository(
         availableModifiers.AddRange(
             stats.Value.Select(x => new ModifierDescription()
             {
-                Value = x.Bonus,
-                Message = "Base Stat",
+                Value = x.Level,
+                Message = $"{ModiferConversions.GetModifierType(x.StatTypeId).Name} Level2",
                 Type = ModiferConversions.GetModifierType(x.StatTypeId),
                 Name = ModiferConversions.GetModifierType(x.StatTypeId).Name,
             })
@@ -57,25 +57,20 @@ internal sealed class ProficiencyRepository(
             skills.Select(x => new ModifierDescription()
             {
                 Value = x.LevelValue,
-                Message = $"Base Skill for {x.SkillTypeName}",
+                Message = $"{x.SkillTypeName} Level",
                 Type = ModiferConversions.GetModifierType((SkillTypes)x.SkillTypeId),
                 Name = ModiferConversions.GetModifierType((SkillTypes)x.SkillTypeId).Name,
             })
         );
 
-        availableModifiers.AddRange(
-            skills.SelectMany(x =>
-                x.Benefits.Select(y => new ModifierDescription()
-                {
-                    Value = y.Modifier,
-                    Message = $"{x.SkillLevelName} Skill Level Benefit for {x.SkillTypeName}",
-                    Type = ModiferConversions.GetModifierType((DbModifierTypes)y.ModifierTypeId),
-                    Name = ModiferConversions
-                        .GetModifierType((DbModifierTypes)y.ModifierTypeId)
-                        .Name,
-                })
-            )
-        );
+        // All characters have this by default
+        availableModifiers.Add(new ModifierDescription()
+        {
+            Value = 8,
+            Message = "Standard",
+            Type = ModifierType.Mortis,
+            Name = "Mortis"
+        });
 
         var proficiencies = ProficiencyDtos.GetProficiencies();
 

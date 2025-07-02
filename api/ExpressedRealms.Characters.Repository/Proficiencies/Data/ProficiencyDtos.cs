@@ -244,9 +244,9 @@ public static class ProficiencyDtos
                 Type = Secondary,
                 Modifiers = new List<ModifierType>()
                 {
-                    ModifierType.Constitution,
-                    ModifierType.Constitution,
-                    ModifierType.Willpower,
+                    ModifierType.Agility,
+                    ModifierType.Dexterity,
+                    ModifierType.Intelligence,
                 },
                 SortOrder = 4,
             },
@@ -319,6 +319,32 @@ public static class ProficiencyDtos
                     ModifierType.Willpower,
                 },
                 SortOrder = 9,
+            },
+            new ProficiencyDto()
+            {
+                Id = 22,
+                Name = "RWP",
+                Description = "Reserve Will Power",
+                Type = Secondary,
+                Modifiers = new List<ModifierType>()
+                {
+                    ModifierType.Willpower,
+                    ModifierType.RWP
+                },
+                SortOrder = 10,
+            },
+             
+            new ProficiencyDto()
+            {
+                Id = 23,
+                Name = "Mortis",
+                Description = StaticDescription,
+                Type = Secondary,
+                Modifiers = new List<ModifierType>()
+                {
+                    ModifierType.Mortis
+                },
+                SortOrder = 11,
             },
         };
     }

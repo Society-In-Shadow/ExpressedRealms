@@ -39,6 +39,8 @@ public sealed class ModifierType : SmartEnum<ModifierType, byte>
     public static readonly ModifierType Evade = new("Evade", 26);
     public static readonly ModifierType Ward = new("Ward", 27);
     public static readonly ModifierType Deflect = new("Deflect", 28);
+    public static readonly ModifierType RWP = new ("Reserve Willpower", 29);
+    public static readonly ModifierType Mortis = new ("Mortis", 30);
 
     public override string ToString() => Name;
 }
