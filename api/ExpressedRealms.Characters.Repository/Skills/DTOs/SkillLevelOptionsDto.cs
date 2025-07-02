@@ -9,4 +9,5 @@ public class SkillLevelOptionsDto
 
     public List<BenefitDto> Benefits { get; set; } = new();
     public int ExperienceCost { get; set; }
+    public byte LevelNumber { get; set; }
 }

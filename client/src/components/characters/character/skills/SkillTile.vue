@@ -64,7 +64,7 @@ function getEditOptions() {
             <div class="d-flex justify-content-between w-100 pr-3">
               <div>{{ skill.name }}</div>
               <div class="text-right">
-                {{ skill.levelName }}
+                {{ skill.levelName }} ({{skill.levelNumber}})
               </div>
             </div>
           </AccordionHeader>

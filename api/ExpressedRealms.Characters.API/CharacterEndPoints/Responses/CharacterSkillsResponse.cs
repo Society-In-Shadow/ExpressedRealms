@@ -11,4 +11,5 @@ internal class CharacterSkillsResponse
     public byte SkillSubTypeId { get; set; }
     public List<BenefitItemResponse> Benefits { get; set; } = new();
     public int XP { get; set; }
+    public byte LevelNumber { get; set; }
 }

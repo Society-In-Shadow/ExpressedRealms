@@ -33,7 +33,7 @@ const plusOrMinusSign = computed(() => {
     <div class="row">
       <div class="col text-left">
         <div class="mb-2">
-          Level
+          Level {{props.selectedItem.levelNumber}}
         </div>
         <div>
           <SkeletonWrapper :show-skeleton="isLoading" height="2rem" width="100%">

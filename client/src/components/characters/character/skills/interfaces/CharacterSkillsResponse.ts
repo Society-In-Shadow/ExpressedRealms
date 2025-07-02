@@ -9,4 +9,5 @@ export interface CharacterSkillsResponse {
     levelDescription: string;
     skillSubTypeId: number;
     xp: number;
+    levelNumber: number;
 }

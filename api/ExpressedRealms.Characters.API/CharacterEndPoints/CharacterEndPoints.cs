@@ -348,6 +348,7 @@ internal static class CharacterEndPoints
                                 SkillTypeId = x.SkillTypeId,
                                 LevelId = x.LevelId,
                                 LevelName = x.LevelName,
+                                LevelNumber = x.LevelNumber,
                                 XP = x.XP,
                             })
                             .ToList()
@@ -378,13 +379,14 @@ internal static class CharacterEndPoints
                                 LevelId = x.LevelId,
                                 SkillTypeId = x.SkillTypeId,
                                 ExperienceCost = x.ExperienceCost,
+                                LevelNumber = x.LevelNumber,
                                 Benefits = x
                                     .Benefits.Select(y => new BenefitItemResponse()
                                     {
                                         Name = y.Name,
                                         Description = y.Description,
                                         Modifier = y.Modifier,
-                                        LevelId = y.LevelId,
+                                        LevelId = y.LevelId
                                     })
                                     .ToList(),
                             })

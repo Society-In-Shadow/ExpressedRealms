@@ -10,4 +10,5 @@ public class SkillDto
     public string LevelDescription { get; set; } = null!;
     public byte SkillSubTypeId { get; set; }
     public int XP { get; set; }
+    public byte LevelNumber { get; set; }
 }
