@@ -28,6 +28,13 @@ public class PowerPrerequisitesRepository(
     {
         return await context.PowerPrerequisites.FirstAsync(x => x.Id == id, cancellationToken);
     }
+    
+    public async Task<PowerPrerequisite?> GetPrerequisiteAndPowersForEditingAsync(int powerId)
+    {
+        return await context.PowerPrerequisites
+            .Include(x => x.PrerequisitePowers) 
+            .FirstOrDefaultAsync(x => x.PowerId == powerId, cancellationToken);
+    }
 
     public async Task UpdatePrerequisite(PowerPrerequisite model)
     {
