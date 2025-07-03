@@ -1,5 +1,6 @@
 using ExpressedRealms.Powers.API.PowerEndpoints;
 using ExpressedRealms.Powers.API.PowerPathEndpoints;
+using ExpressedRealms.Powers.API.PowerPrerequisites;
 using Microsoft.AspNetCore.Builder;
 
 namespace ExpressedRealms.Powers.API.Configuration;
@@ -10,5 +11,6 @@ public static class PowersApiConfiguration
     {
         app.AddPowerApi();
         app.AddPowerPathApi();
+        app.AddPowerPrerequisiteApi();
     }
 }
