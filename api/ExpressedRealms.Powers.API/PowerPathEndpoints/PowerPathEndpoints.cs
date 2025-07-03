@@ -7,11 +7,13 @@ using ExpressedRealms.Powers.Repository.PowerPaths;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathCreate;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathEdit;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathSorting;
+using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerList;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
+using DetailedInformation = ExpressedRealms.Powers.API.PowerEndpoints.Responses.PowerList.DetailedInformation;
 
 namespace ExpressedRealms.Powers.API.PowerPathEndpoints;
 
@@ -61,6 +63,11 @@ internal static class PowerPathEndpoints
                                     Other = y.Other,
                                     IsPowerUse = y.IsPowerUse,
                                     Cost = y.Cost,
+                                    Prerequisites = y.Prerequisites is not null ? new PrerequisiteDetails()
+                                    {
+                                        RequiredAmount = y.Prerequisites.RequiredAmount,
+                                        Powers = y.Prerequisites.Powers
+                                    } : null,
                                 })
                                 .ToList(),
                         })

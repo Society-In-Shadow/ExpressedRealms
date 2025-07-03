@@ -16,4 +16,5 @@ public class PowerInformation
     public bool IsPowerUse { get; set; }
     public string? Cost { get; set; }
     public int SortOrder { get; set; }
+    public PrerequisiteDetails? Prerequisites { get; set; }
 }

@@ -53,6 +53,11 @@ internal sealed class PowerRepository(
                 Other = x.OtherFields,
                 IsPowerUse = x.IsPowerUse,
                 Cost = x.Cost,
+                Prerequisites = x.Prerequisite != null ?  new PrerequisiteDetails()
+                {
+                    RequiredAmount = x.Prerequisite.RequiredAmount,
+                    Powers = x.Prerequisite.PrerequisitePowers.Select(x => x.Power.Name).ToList(),
+                } : null,
             })
             .ToListAsync(cancellationToken);
 

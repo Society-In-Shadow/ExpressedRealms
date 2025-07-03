@@ -8,12 +8,14 @@ using ExpressedRealms.Powers.API.PowerEndpoints.Responses.PowerList;
 using ExpressedRealms.Powers.Repository.Powers;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerCreate;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerEdit;
+using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerList;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerSorting;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
+using DetailedInformation = ExpressedRealms.Powers.API.PowerEndpoints.Responses.PowerList.DetailedInformation;
 
 namespace ExpressedRealms.Powers.API.PowerEndpoints;
 
@@ -55,6 +57,11 @@ internal static class PowerEndpoints
                             PowerActivationType = new DetailedInformation(x.PowerActivationType),
                             Other = x.Other,
                             IsPowerUse = x.IsPowerUse,
+                            Prerequisites = x.Prerequisites is not null ? new PrerequisiteDetails()
+                            {
+                                RequiredAmount = x.Prerequisites.RequiredAmount,
+                                Powers = x.Prerequisites.Powers
+                            } : null,
                             Cost = x.Cost,
                         })
                     );

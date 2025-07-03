@@ -41,7 +41,7 @@ public class Power : ISoftDelete
 
     public virtual List<PowerCategoryMapping> CategoryMappings { get; set; } = null!;
 
-    public virtual PowerPrerequisite Prerequisite { get; set; } = null!;
+    public virtual PowerPrerequisite? Prerequisite { get; set; } = null!;
     public virtual List<PowerPrerequisitePower> PrerequisitePowers { get; set; } = null!;
     public virtual List<PowerAuditTrail> PowerAuditTrails { get; set; } = null!;
 }
