@@ -20,5 +20,11 @@ public class PowerPrerequisitePowerConfiguration : IEntityTypeConfiguration<Powe
             .WithMany(e => e.PrerequisitePowers)
             .HasForeignKey(x => x.PowerId)
             .OnDelete(DeleteBehavior.Restrict);
+        
+        builder
+            .HasOne(e => e.Prerequisite)
+            .WithMany(e => e.PrerequisitePowers)
+            .HasForeignKey(x => x.PrerequisiteId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
