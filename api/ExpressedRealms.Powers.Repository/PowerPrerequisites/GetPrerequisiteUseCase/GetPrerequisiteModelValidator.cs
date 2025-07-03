@@ -11,8 +11,8 @@ internal sealed class GetPrerequisiteModelValidator : AbstractValidator<GetPrere
     {
         RuleFor(x => x.PowerId)
             .NotEmpty()
-            .WithMessage("Id is required.")
+            .WithMessage("Power Id is required.")
             .MustAsync(async (x, y) => await powerRepository.IsValidPower(x))
-            .WithMessage("This is not a valid prerequisite id.");
+            .WithMessage("This is not a valid power id.");
     }
 }

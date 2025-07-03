@@ -28,6 +28,27 @@ public static class ResultExtensions
 
         HandleMessage(propertyName, errorMessage, validationFailure);
     }
+    public static void HasValidationError<T>(
+        this Result<T> result,
+        string propertyName,
+        string? errorMessage = null
+    )
+    {
+        Assert.False(result.IsSuccess);
+
+        var validationFailure = result.Errors.OfType<FluentValidationFailure>().FirstOrDefault();
+
+        if (validationFailure == null)
+        {
+            Assert.Fail("No validation failure");
+            return;
+        }
+
+        if (!HandlePropertyAndReturnSuccess(propertyName, validationFailure))
+            return;
+
+        HandleMessage(propertyName, errorMessage, validationFailure);
+    }
 
     private static void HandleMessage(
         string propertyName,
