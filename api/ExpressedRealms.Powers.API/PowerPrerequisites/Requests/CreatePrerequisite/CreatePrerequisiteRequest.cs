@@ -2,6 +2,6 @@ namespace ExpressedRealms.Powers.API.PowerPrerequisites.Requests.CreatePrerequis
 
 public class CreatePrerequisiteRequest
 {
-    public List<int> PowerIds { get; set; }
+    public required List<int> PowerIds { get; set; }
     public int RequiredAmount { get; set; }
 }

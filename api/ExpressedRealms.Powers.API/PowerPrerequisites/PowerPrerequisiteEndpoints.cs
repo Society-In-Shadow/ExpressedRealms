@@ -1,9 +1,9 @@
 using ExpressedRealms.Authentication;
 using ExpressedRealms.FeatureFlags;
-using ExpressedRealms.Powers.API.PowerEndpoints.Responses.GetPrerequisites;
 using ExpressedRealms.Powers.API.PowerEndpoints.Responses.Options;
 using ExpressedRealms.Powers.API.PowerPrerequisites.Requests.CreatePrerequisite;
 using ExpressedRealms.Powers.API.PowerPrerequisites.Requests.EditPrerequisite;
+using ExpressedRealms.Powers.API.PowerPrerequisites.Responses.GetPrerequisites;
 using ExpressedRealms.Powers.Repository.PowerPrerequisites.CreatePrerequisiteUseCase;
 using ExpressedRealms.Powers.Repository.PowerPrerequisites.DeletePrerequisiteUseCase;
 using ExpressedRealms.Powers.Repository.PowerPrerequisites.EditPrerequisiteUseCase;
