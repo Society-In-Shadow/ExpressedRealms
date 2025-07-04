@@ -326,24 +326,16 @@ public static class ProficiencyDtos
                 Name = "RWP",
                 Description = "Reserve Will Power",
                 Type = Secondary,
-                Modifiers = new List<ModifierType>()
-                {
-                    ModifierType.Willpower,
-                    ModifierType.RWP
-                },
+                Modifiers = new List<ModifierType>() { ModifierType.Willpower, ModifierType.RWP },
                 SortOrder = 10,
             },
-             
             new ProficiencyDto()
             {
                 Id = 23,
                 Name = "Mortis",
                 Description = StaticDescription,
                 Type = Secondary,
-                Modifiers = new List<ModifierType>()
-                {
-                    ModifierType.Mortis
-                },
+                Modifiers = new List<ModifierType>() { ModifierType.Mortis },
                 SortOrder = 11,
             },
         };

@@ -27,7 +27,6 @@ internal static class PowerPrerequisiteEndpoints
             .WithTags("Powers")
             .WithOpenApi();
 
-                
         endpointGroup
             .MapGet(
                 "/{powerId}/prerequisites",
@@ -36,11 +35,10 @@ internal static class PowerPrerequisiteEndpoints
                     IGetPrerequisiteUseCase getCase
                 ) =>
                 {
-                    var results = await getCase.ExecuteAsync(new GetPrerequisiteModel()
-                    {
-                        PowerId = powerId
-                    });
-                    
+                    var results = await getCase.ExecuteAsync(
+                        new GetPrerequisiteModel() { PowerId = powerId }
+                    );
+
                     if (results.HasValidationError(out var validationProblem))
                         return validationProblem;
                     results.ThrowIfErrorNotHandled();
@@ -49,19 +47,21 @@ internal static class PowerPrerequisiteEndpoints
                     {
                         return TypedResults.Ok<GetPrerequisiteResponse?>(null);
                     }
-                    
-                    return TypedResults.Ok<GetPrerequisiteResponse?>(new GetPrerequisiteResponse()
-                    {
-                        Id = results.Value.Id,
-                        RequiredAmount = results.Value.RequiredAmount,
-                        PowerIds = results.Value.PowerIds,
-                    });
+
+                    return TypedResults.Ok<GetPrerequisiteResponse?>(
+                        new GetPrerequisiteResponse()
+                        {
+                            Id = results.Value.Id,
+                            RequiredAmount = results.Value.RequiredAmount,
+                            PowerIds = results.Value.PowerIds,
+                        }
+                    );
                 }
             )
             .WithSummary("Gets the prerequisite")
             .RequirePolicyAuthorization(Policies.ManagePowers)
             .RequireAuthorization();
-        
+
         endpointGroup
             .MapPost(
                 "/{powerId}/prerequisite",
@@ -71,13 +71,15 @@ internal static class PowerPrerequisiteEndpoints
                     ICreatePrerequisiteUseCase createCase
                 ) =>
                 {
-                    var results = await createCase.ExecuteAsync(new CreatePrerequisiteModel()
-                    {
-                        PowerId = powerId,
-                        RequiredAmount = request.RequiredAmount,
-                        PrerequisitePowerIds = request.PowerIds
-                    });
-                    
+                    var results = await createCase.ExecuteAsync(
+                        new CreatePrerequisiteModel()
+                        {
+                            PowerId = powerId,
+                            RequiredAmount = request.RequiredAmount,
+                            PrerequisitePowerIds = request.PowerIds,
+                        }
+                    );
+
                     if (results.HasValidationError(out var validationProblem))
                         return validationProblem;
                     results.ThrowIfErrorNotHandled();
@@ -86,10 +88,9 @@ internal static class PowerPrerequisiteEndpoints
                 }
             )
             .WithSummary("Adds the prerequisite")
-            
             .RequirePolicyAuthorization(Policies.ManagePowers)
             .RequireAuthorization();
-        
+
         endpointGroup
             .MapDelete(
                 "/{powerId}/prerequisite/{prerequisiteId}",
@@ -99,11 +100,10 @@ internal static class PowerPrerequisiteEndpoints
                     IDeletePrerequisiteUseCase deleteCase
                 ) =>
                 {
-                    var results = await deleteCase.ExecuteAsync(new DeletePrerequisiteModel()
-                    {
-                        Id = prerequisiteId
-                    });
-                    
+                    var results = await deleteCase.ExecuteAsync(
+                        new DeletePrerequisiteModel() { Id = prerequisiteId }
+                    );
+
                     if (results.HasValidationError(out var validationProblem))
                         return validationProblem;
                     results.ThrowIfErrorNotHandled();
@@ -114,7 +114,7 @@ internal static class PowerPrerequisiteEndpoints
             .WithSummary("Deletes the prerequisite")
             .RequirePolicyAuthorization(Policies.ManagePowers)
             .RequireAuthorization();
-        
+
         endpointGroup
             .MapPut(
                 "/{powerId}/prerequisite/{prerequisiteId}",
@@ -125,13 +125,15 @@ internal static class PowerPrerequisiteEndpoints
                     IEditPrerequisiteUseCase editCase
                 ) =>
                 {
-                    var results = await editCase.ExecuteAsync(new EditPrerequisiteModel()
-                    {
-                        Id = prerequisiteId,
-                        RequiredAmount = request.RequiredAmount,
-                        PrerequisitePowerIds = request.PowerIds
-                    });
-                    
+                    var results = await editCase.ExecuteAsync(
+                        new EditPrerequisiteModel()
+                        {
+                            Id = prerequisiteId,
+                            RequiredAmount = request.RequiredAmount,
+                            PrerequisitePowerIds = request.PowerIds,
+                        }
+                    );
+
                     if (results.HasValidationError(out var validationProblem))
                         return validationProblem;
                     results.ThrowIfErrorNotHandled();
@@ -143,7 +145,6 @@ internal static class PowerPrerequisiteEndpoints
             .RequirePolicyAuthorization(Policies.ManagePowers)
             .RequireAuthorization();
 
-                
         app.MapGroup("/powerpath/")
             .AddFluentValidationAutoValidation()
             .RequireFeatureToggle(ReleaseFlags.ShowPowersTab)
@@ -159,12 +160,14 @@ internal static class PowerPrerequisiteEndpoints
 
                     for (int i = 1; i <= powers.Value.Count - 1; i++)
                     {
-                        requiredAmount.Add(new DetailedEditInformation()
-                        {
-                            Id = i,
-                            Name = GetName(i),
-                            Description = GetName(i),
-                        });
+                        requiredAmount.Add(
+                            new DetailedEditInformation()
+                            {
+                                Id = i,
+                                Name = GetName(i),
+                                Description = GetName(i),
+                            }
+                        );
                     }
 
                     string GetName(int index)
@@ -178,15 +181,18 @@ internal static class PowerPrerequisiteEndpoints
                         return $"{index}";
                     }
 
-                    return TypedResults.Ok(new
+                    return TypedResults.Ok(
+                        new
                         {
                             RequiredAmount = requiredAmount,
-                            PrerequisitePowers = powers.Value.Select(x => new DetailedEditInformation()
-                            {
-                                Id = x.Id,
-                                Description = x.Description,
-                                Name = x.Name,
-                            }).ToList(),
+                            PrerequisitePowers = powers
+                                .Value.Select(x => new DetailedEditInformation()
+                                {
+                                    Id = x.Id,
+                                    Description = x.Description,
+                                    Name = x.Name,
+                                })
+                                .ToList(),
                         }
                     );
                 }
@@ -195,6 +201,5 @@ internal static class PowerPrerequisiteEndpoints
             .WithDescription(" of powers for a given power path")
             .RequirePolicyAuthorization(Policies.ManagePowers)
             .RequireAuthorization();
-
     }
 }

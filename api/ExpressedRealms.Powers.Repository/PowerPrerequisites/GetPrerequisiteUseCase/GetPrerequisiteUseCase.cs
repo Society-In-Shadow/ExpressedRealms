@@ -25,12 +25,14 @@ internal sealed class GetPrerequisiteUseCase(
         {
             return Result.Ok<GetPrerequisiteData?>(null);
         }
-        
-        return Result.Ok<GetPrerequisiteData?>(new GetPrerequisiteData()
-        {
-            Id = prerequisite.Id,
-            RequiredAmount = prerequisite.RequiredAmount,
-            PowerIds = prerequisite.PrerequisitePowers.Select(x => x.PowerId).ToList(),
-        });
+
+        return Result.Ok<GetPrerequisiteData?>(
+            new GetPrerequisiteData()
+            {
+                Id = prerequisite.Id,
+                RequiredAmount = prerequisite.RequiredAmount,
+                PowerIds = prerequisite.PrerequisitePowers.Select(x => x.PowerId).ToList(),
+            }
+        );
     }
 }

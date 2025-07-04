@@ -25,22 +25,18 @@ public class GetPrerequisiteUseCaseTests
 
         A.CallTo(() => _powerRepository.IsValidPower(A<int>.Ignored)).Returns(true);
         A.CallTo(() => _repository.GetPrerequisiteAndPowersForEditingAsync(A<int>.Ignored))
-            .Returns(new PowerPrerequisite()
-            {
-                Id = ReturnedPrerequisiteId, 
-                RequiredAmount = 3,
-                PrerequisitePowers = new List<PowerPrerequisitePower>()
+            .Returns(
+                new PowerPrerequisite()
                 {
-                    new PowerPrerequisitePower()
+                    Id = ReturnedPrerequisiteId,
+                    RequiredAmount = 3,
+                    PrerequisitePowers = new List<PowerPrerequisitePower>()
                     {
-                        PowerId = 1
-                    },
-                    new PowerPrerequisitePower()
-                    {
-                        PowerId = 2
+                        new PowerPrerequisitePower() { PowerId = 1 },
+                        new PowerPrerequisitePower() { PowerId = 2 },
                     },
                 }
-            });
+            );
 
         var validator = new GetPrerequisiteModelValidator(_powerRepository);
 
@@ -71,8 +67,9 @@ public class GetPrerequisiteUseCaseTests
     [Fact]
     public async Task UseCase_WillReturnNull_IfThereIsNoPrerequisite()
     {
-        A.CallTo(() => _repository.GetPrerequisiteAndPowersForEditingAsync(_model.PowerId)).Returns(Task.FromResult<PowerPrerequisite?>(null));
-        
+        A.CallTo(() => _repository.GetPrerequisiteAndPowersForEditingAsync(_model.PowerId))
+            .Returns(Task.FromResult<PowerPrerequisite?>(null));
+
         var result = await _useCase.ExecuteAsync(_model);
 
         Assert.Null(result.Value);
@@ -87,7 +84,7 @@ public class GetPrerequisiteUseCaseTests
 
         Assert.Equal(ReturnedPrerequisiteId, result.Value!.Id);
     }
-    
+
     [Fact]
     public async Task UseCase_WillReturn_RequiredAmount_IfNotNull()
     {
@@ -97,7 +94,7 @@ public class GetPrerequisiteUseCaseTests
 
         Assert.Equal(3, result.Value!.RequiredAmount);
     }
-    
+
     [Fact]
     public async Task UseCase_WillReturn_PowerIds_IfNotNull()
     {

@@ -66,7 +66,7 @@ internal sealed class CharacterSkillRepository(
                 Description = x.Description,
                 LevelId = x.SkillLevelId,
                 ExperienceCost = x.SkillLevel.XP,
-                LevelNumber = x.SkillLevel.Level
+                LevelNumber = x.SkillLevel.Level,
             })
             .ToListAsync(cancellationToken);
 
@@ -78,7 +78,7 @@ internal sealed class CharacterSkillRepository(
                 LevelId = x.SkillLevelId,
                 Name = x.ModifierType.Name,
                 Description = x.ModifierType.Description,
-                Modifier = x.Modifier
+                Modifier = x.Modifier,
             })
             .ToListAsync(cancellationToken);
 

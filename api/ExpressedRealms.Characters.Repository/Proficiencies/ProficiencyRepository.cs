@@ -64,13 +64,15 @@ internal sealed class ProficiencyRepository(
         );
 
         // All characters have this by default
-        availableModifiers.Add(new ModifierDescription()
-        {
-            Value = 8,
-            Message = "Standard",
-            Type = ModifierType.Mortis,
-            Name = "Mortis"
-        });
+        availableModifiers.Add(
+            new ModifierDescription()
+            {
+                Value = 8,
+                Message = "Standard",
+                Type = ModifierType.Mortis,
+                Name = "Mortis",
+            }
+        );
 
         var proficiencies = ProficiencyDtos.GetProficiencies();
 

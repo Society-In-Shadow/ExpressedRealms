@@ -11,10 +11,8 @@ public class DetailedEditInformation
         Description = editInformation.Description;
     }
 
-    public DetailedEditInformation()
-    {
-    }
-    
+    public DetailedEditInformation() { }
+
     public int Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }

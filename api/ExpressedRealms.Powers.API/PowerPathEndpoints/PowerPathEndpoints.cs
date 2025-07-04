@@ -63,11 +63,13 @@ internal static class PowerPathEndpoints
                                     Other = y.Other,
                                     IsPowerUse = y.IsPowerUse,
                                     Cost = y.Cost,
-                                    Prerequisites = y.Prerequisites is not null ? new PrerequisiteDetails()
-                                    {
-                                        RequiredAmount = y.Prerequisites.RequiredAmount,
-                                        Powers = y.Prerequisites.Powers
-                                    } : null,
+                                    Prerequisites = y.Prerequisites is not null
+                                        ? new PrerequisiteDetails()
+                                        {
+                                            RequiredAmount = y.Prerequisites.RequiredAmount,
+                                            Powers = y.Prerequisites.Powers,
+                                        }
+                                        : null,
                                 })
                                 .ToList(),
                         })

@@ -28,6 +28,7 @@ public static class ResultExtensions
 
         HandleMessage(propertyName, errorMessage, validationFailure);
     }
+
     public static void HasValidationError<T>(
         this Result<T> result,
         string propertyName,

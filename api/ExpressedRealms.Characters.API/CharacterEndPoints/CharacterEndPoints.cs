@@ -386,7 +386,7 @@ internal static class CharacterEndPoints
                                         Name = y.Name,
                                         Description = y.Description,
                                         Modifier = y.Modifier,
-                                        LevelId = y.LevelId
+                                        LevelId = y.LevelId,
                                     })
                                     .ToList(),
                             })

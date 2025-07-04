@@ -57,11 +57,13 @@ internal static class PowerEndpoints
                             PowerActivationType = new DetailedInformation(x.PowerActivationType),
                             Other = x.Other,
                             IsPowerUse = x.IsPowerUse,
-                            Prerequisites = x.Prerequisites is not null ? new PrerequisiteDetails()
-                            {
-                                RequiredAmount = x.Prerequisites.RequiredAmount,
-                                Powers = x.Prerequisites.Powers
-                            } : null,
+                            Prerequisites = x.Prerequisites is not null
+                                ? new PrerequisiteDetails()
+                                {
+                                    RequiredAmount = x.Prerequisites.RequiredAmount,
+                                    Powers = x.Prerequisites.Powers,
+                                }
+                                : null,
                             Cost = x.Cost,
                         })
                     );
