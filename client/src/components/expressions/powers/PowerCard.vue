@@ -136,25 +136,24 @@ const toggleEdit = () =>{
       </h2>
       <div v-if="props.power.prerequisites">
         <div v-if="props.power.prerequisites.powers.length == 1">
-          <a :href="'#' + makeIdSafe(props.power.prerequisites.powers[0])" @click.prevent="scrollToSection(props.power.prerequisites.powers[0])">{{props.power.prerequisites.powers[0]}}</a>
+          <a :href="'#' + makeIdSafe(props.power.prerequisites.powers[0])" @click.prevent="scrollToSection(props.power.prerequisites.powers[0])">{{ props.power.prerequisites.powers[0] }}</a>
         </div>
         <div v-else-if="props.power.prerequisites.powers.length == props.power.prerequisites.requiredAmount">
           All of the following powers : 
           <span v-for="(power, index) in props.power.prerequisites.powers">
-            <a :href="'#' + makeIdSafe(power)" @click.prevent="scrollToSection(power)">{{power}}</a> 
+            <a :href="'#' + makeIdSafe(power)" @click.prevent="scrollToSection(power)">{{ power }}</a> 
             <span v-if="index != props.power.prerequisites.powers.length -1"> and </span>
           </span>
         </div>
         <div v-else>
           Any of 
-          <span v-if="props.power.prerequisites.requiredAmount != 1">{{props.power.prerequisites.requiredAmount}}</span> 
+          <span v-if="props.power.prerequisites.requiredAmount != 1">{{ props.power.prerequisites.requiredAmount }}</span> 
           the following powers : 
           <span v-for="(power, index) in props.power.prerequisites.powers">
-            <a :href="'#' + makeIdSafe(power)" @click.prevent="scrollToSection(power)">{{power}}</a>
+            <a :href="'#' + makeIdSafe(power)" @click.prevent="scrollToSection(power)">{{ power }}</a>
             <span v-if="index != props.power.prerequisites.powers.length -1"> or </span>
           </span>
         </div>
-        
       </div>
 
       <h2 v-if="!isNullOrWhiteSpace(props.power.other)">

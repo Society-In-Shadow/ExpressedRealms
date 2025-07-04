@@ -20,7 +20,6 @@ import {
 let powers = powersStore();
 let form = getValidationInstance();
 
-
 const props = defineProps({
   powerId: {
     type: Number,
@@ -116,29 +115,27 @@ async function deletePrerequisite(event: MouseEvent){
 </script>
 
 <template>
-
   <div v-if="showPrerequisite || hasPrerequisite" class="row">
     <div class="col">
       <FormDropdownWrapper
-          v-model="form.requiredAmount"
-          :options="availablePowers.requiredAmount"
-          option-label="name"
+        v-model="form.requiredAmount"
+        :options="availablePowers.requiredAmount"
+        option-label="name"
       />
     </div>
     <div class="col">
       <FormMultiSelectWrapper
-          v-model="form.powers"
-          :options="availablePowers.prerequisitePowers"
-          option-label="name"
+        v-model="form.powers"
+        :options="availablePowers.prerequisitePowers"
+        option-label="name"
       />
     </div>
   </div>
   <div v-if="hasPrerequisite">
-    <Button label="Remove Prerequisite" severity="danger" class="mr-2" @click="deletePrerequisite($event)"></Button>
+    <Button label="Remove Prerequisite" severity="danger" class="mr-2" @click="deletePrerequisite($event)" />
   </div>
   <div v-else>
-    <Button v-if="!showPrerequisite" label="Add Prerequisite" @click="togglePrerequisite"></Button>
-    <Button v-if="showPrerequisite" label="Cancel Prerequisite" class="ml-2" @click="togglePrerequisite"></Button>
+    <Button v-if="!showPrerequisite" label="Add Prerequisite" @click="togglePrerequisite" />
+    <Button v-if="showPrerequisite" label="Cancel Prerequisite" class="ml-2" @click="togglePrerequisite" />
   </div>
-  
 </template>
