@@ -4,13 +4,14 @@ import FormDropdownWrapper from "@/FormWrappers/FormDropdownWrapper.vue";
 import FormEditorWrapper from "@/FormWrappers/FormEditorWrapper.vue";
 import FormInputTextWrapper from "@/FormWrappers/FormInputTextWrapper.vue";
 import Button from "primevue/button";
-import {onBeforeMount} from "vue";
+import {onBeforeMount, ref} from "vue";
 import axios from "axios";
 import toaster from "@/services/Toasters";
 import {getValidationInstance} from "@/components/expressions/powers/Validations/PowerValidations";
 import FormCheckboxWrapper from "@/FormWrappers/FormCheckboxWrapper.vue";
 import FormMultiSelectWrapper from "@/FormWrappers/FormMultiSelectWrapper.vue";
 import {powersStore} from "@/components/expressions/powers/stores/powersStore";
+import PowerPrerequisites from "@/components/expressions/powers/PowerPrerequisites.vue";
 
 const form = getValidationInstance();
 
@@ -26,6 +27,7 @@ const props = defineProps({
 });
 
 const powers = powersStore();
+const prerequisiteChild = ref();
 
 onBeforeMount(async () => {
   await powers.getPowerOptions();
@@ -47,7 +49,9 @@ const onSubmit = form.handleSubmit(async (values) => {
     isPowerUse: values.isPowerUse,
     cost: values.cost,
   })
-  .then(async () => {
+  .then(async (response) => {
+    const newPowerId = response.data;
+    await prerequisiteChild.value.addUpdatePrerequisite(newPowerId);
     await powers.updatePowersByPathId(props.powerPathId);
     toaster.success("Successfully Added Power!");
     reset();
@@ -107,6 +111,8 @@ const reset = () => {
       <FormInputTextWrapper v-model="form.cost" />
       
       <FormEditorWrapper v-model="form.other" />
+
+      <PowerPrerequisites ref="prerequisiteChild" :power-path-id="props.powerPathId" />
   
       <div class="float-end">
         <Button label="Cancel" class="m-2" type="reset" @click="reset" />

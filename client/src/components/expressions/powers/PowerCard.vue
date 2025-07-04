@@ -8,6 +8,7 @@ import EditPower from "@/components/expressions/powers/EditPower.vue";
 import {powerConfirmationPopups} from "@/components/expressions/powers/services/powerConfirmationPopupService";
 import {UserRoles, userStore} from "@/stores/userStore";
 import {isNullOrWhiteSpace, makeIdSafe} from "@/utilities/stringUtilities";
+import {scrollToSection} from "@/components/expressions/expressionUtilities";
 
 let userInfo = userStore();
 const props = defineProps({
@@ -129,6 +130,32 @@ const toggleEdit = () =>{
         Limitations
       </h2>
       <div v-if="!isNullOrWhiteSpace(props.power.limitation)" v-html="props.power.limitation" />
+
+      <h2 v-if="props.power.prerequisites">
+        Prerequisites
+      </h2>
+      <div v-if="props.power.prerequisites">
+        <div v-if="props.power.prerequisites.powers.length == 1">
+          <a :href="'#' + makeIdSafe(props.power.prerequisites.powers[0])" @click.prevent="scrollToSection(props.power.prerequisites.powers[0])">{{props.power.prerequisites.powers[0]}}</a>
+        </div>
+        <div v-else-if="props.power.prerequisites.powers.length == props.power.prerequisites.requiredAmount">
+          All of the following powers : 
+          <span v-for="(power, index) in props.power.prerequisites.powers">
+            <a :href="'#' + makeIdSafe(power)" @click.prevent="scrollToSection(power)">{{power}}</a> 
+            <span v-if="index != props.power.prerequisites.powers.length -1"> and </span>
+          </span>
+        </div>
+        <div v-else>
+          Any of 
+          <span v-if="props.power.prerequisites.requiredAmount != 1">{{props.power.prerequisites.requiredAmount}}</span> 
+          the following powers : 
+          <span v-for="(power, index) in props.power.prerequisites.powers">
+            <a :href="'#' + makeIdSafe(power)" @click.prevent="scrollToSection(power)">{{power}}</a>
+            <span v-if="index != props.power.prerequisites.powers.length -1"> or </span>
+          </span>
+        </div>
+        
+      </div>
 
       <h2 v-if="!isNullOrWhiteSpace(props.power.other)">
         Additional Information

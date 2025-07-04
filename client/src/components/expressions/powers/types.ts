@@ -25,6 +25,12 @@ export interface Power {
     other: string;
     isPowerUse: boolean;
     cost: string;
+    prerequisites: PrerequisiteDisplay | null;
+}
+
+export interface PrerequisiteDisplay {
+    requiredAmount: number;
+    powers: string[]
 }
 
 export interface EditPowerResponse {
@@ -57,4 +63,20 @@ export interface EditPower {
     other: string;
     isPowerUse: boolean;
     cost: string;
+}
+
+export interface PowerPrerequisiteOptions {
+    prerequisitePowers: ListItem[];
+    requiredAmount: ListItem[];
+}
+
+export interface RawPowerPrerequisite {
+    id: number;
+    requiredAmount: number;
+    powerIds: number[];
+}
+
+export interface PowerPrerequisite {
+    powerIds: ListItem[];
+    requiredAmount: ListItem;
 }

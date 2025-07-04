@@ -1,55 +1,56 @@
-import {array, boolean, number, object, string} from "yup";
+import {array, boolean, type InferType, number, object, string} from "yup";
 import type {ListItem} from "@/types/ListItem";
 import {useGenericForm} from "@/utilities/formUtilities";
 import type {EditPower} from "@/components/expressions/powers/types";
 
+const validationSchema = object({
+    name: string()
+        .required()
+        .max(250)
+        .label("Name"),
+    category: array()
+        .of(
+            object({
+                id: number().required(),
+                name: string().required(),
+                description: string(),
+            })
+        )
+        .label("Category"),
+    description: string()
+        .required()
+        .label("Description"),
+    gameMechanicEffect: string()
+        .required()
+        .label("Game Mechanic Effect"),
+    limitation: string()
+        .nullable()
+        .label("Limitation"),
+    powerDuration: object<ListItem>().nullable()
+        .required()
+        .label("Power Duration"),
+    areaOfEffect: object<ListItem>()
+        .nullable()
+        .required()
+        .label("Area of Effect"),
+    powerLevel: object<ListItem>().nullable()
+        .required()
+        .label("Power Level"),
+    powerActivationType: object<ListItem>().nullable()
+        .required()
+        .label("Power Activation Type"),
+    other: string()
+        .nullable()
+        .label("Other"),
+    cost: string()
+        .nullable()
+        .label("Cost"),
+    isPowerUse: boolean()
+        .label("Is Power Use")
+});
+
+export type PowerFormData = InferType<typeof validationSchema>;
 export function getValidationInstance() {
-    
-    const validationSchema = object({
-        name: string()
-            .required()
-            .max(250)
-            .label("Name"),
-        category: array()
-            .of(
-                object({
-                    id: number().required(),
-                    name: string().required(),
-                    description: string(),
-                })
-            )
-            .label("Category"),
-        description: string()
-            .required()
-            .label("Description"),
-        gameMechanicEffect: string()
-            .required()
-            .label("Game Mechanic Effect"),
-        limitation: string()
-            .nullable()
-            .label("Limitation"),
-        powerDuration: object<ListItem>().nullable()
-            .required()
-            .label("Power Duration"),
-        areaOfEffect: object<ListItem>()
-            .nullable()
-            .required()
-            .label("Area of Effect"),
-        powerLevel: object<ListItem>().nullable()
-            .required()
-            .label("Power Level"),
-        powerActivationType: object<ListItem>().nullable()
-            .required()
-            .label("Power Activation Type"),
-        other: string()
-            .nullable()
-            .label("Other"),
-        cost: string()
-            .nullable()
-            .label("Cost"),
-        isPowerUse: boolean()
-            .label("Is Power Use")
-    });
     
     const form = useGenericForm(validationSchema);
     
@@ -92,6 +93,6 @@ export function getValidationInstance() {
         powerActivationType: form.fields.powerActivationType,
         other: form.fields.other,
         isPowerUse: form.fields.isPowerUse,
-        cost: form.fields.cost,
+        cost: form.fields.cost
     }
 }
