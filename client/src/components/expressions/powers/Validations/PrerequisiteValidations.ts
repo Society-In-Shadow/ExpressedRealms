@@ -1,6 +1,7 @@
 import {array, type InferType, number, object, string} from "yup";
 import type {ListItem} from "@/types/ListItem";
 import {useGenericForm} from "@/utilities/formUtilities";
+
 const validationSchema = object({
     powers: array()
         .of(
