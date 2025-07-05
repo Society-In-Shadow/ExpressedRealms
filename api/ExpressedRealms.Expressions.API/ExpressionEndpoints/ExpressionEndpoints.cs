@@ -27,178 +27,174 @@ internal static class ExpressionEndpoints
             .WithOpenApi();
 
         endpointGroup
-            .MapGet(
-                "{expressionId}",
-                async Task<Results<NotFound, ValidationProblem, Ok<EditExpressionResponse>>> (
-                    int expressionId,
-                    IExpressionRepository repository
-                ) =>
-                {
-                    var results = await repository.GetExpression(expressionId);
-
-                    if (results.HasNotFound(out var notFound))
-                        return notFound;
-                    if (results.HasValidationError(out var validationProblem))
-                        return validationProblem;
-                    results.ThrowIfErrorNotHandled();
-
-                    return TypedResults.Ok(new EditExpressionResponse(results.Value));
-                }
-            )
+            .MapGet("{expressionId}", GetEditExpression)
             .WithSummary("Returns the high level information for a given expression")
             .WithDescription(
                 "This returns the detailed information for the given expression, including publish details"
             );
 
         endpointGroup
-            .MapGet(
-                "/getByName/{name}",
-                async Task<Results<NotFound, Ok<ExpressionNameResponse>>> (
-                    string name,
-                    IExpressionTextSectionRepository sectionRepository,
-                    IExpressionRepository expressionRepository,
-                    IFeatureToggleClient featureToggleClient
-                ) =>
-                {
-                    int expressionId;
-                    if (name == "ruleBook")
-                    {
-                        var result = await expressionRepository.GetGameSystemExpressionId();
-                        expressionId = result.Value;
-                    }
-                    else if (name == "treasuredTales")
-                    {
-                        var result = await expressionRepository.GetTreasuredTalesExpressionId();
-                        expressionId = result.Value;
-                    }
-                    else
-                    {
-                        var expressionIdResult = await sectionRepository.GetExpressionId(name);
-                        if (expressionIdResult.HasNotFound(out var notFound))
-                            return notFound;
-                        expressionIdResult.ThrowIfErrorNotHandled();
-                        expressionId = expressionIdResult.Value;
-                    }
-
-                    return TypedResults.Ok(
-                        new ExpressionNameResponse
-                        {
-                            Id = expressionId,
-                            ShowPowersTab = await featureToggleClient.HasFeatureFlag(
-                                ReleaseFlags.ShowPowersTab
-                            ),
-                        }
-                    );
-                }
-            )
+            .MapGet("/getByName/{name}", GetExpressionIdByName)
             .WithSummary("Returns the id for the given expression name");
 
         endpointGroup
-            .MapPut(
-                "{expressionId}",
-                async Task<Results<NotFound, ValidationProblem, NoContent>> (
-                    int expressionId,
-                    EditExpressionRequest editExpressionRequest,
-                    IExpressionRepository repository
-                ) =>
-                {
-                    var results = await repository.EditExpressionAsync(
-                        new EditExpressionDto()
-                        {
-                            Id = editExpressionRequest.Id,
-                            Name = editExpressionRequest.Name,
-                            PublishStatus = editExpressionRequest.PublishStatus,
-                            ShortDescription = editExpressionRequest.ShortDescription,
-                            NavMenuImage = editExpressionRequest.NavMenuImage,
-                        }
-                    );
-
-                    if (results.HasNotFound(out var notFound))
-                        return notFound;
-                    if (results.HasValidationError(out var validationProblem))
-                        return validationProblem;
-                    results.ThrowIfErrorNotHandled();
-
-                    return TypedResults.NoContent();
-                }
-            )
+            .MapPut("{expressionId}", EditExpression)
             .WithSummary("Allows one to edit the high level expression details")
             .WithDescription("You will also be able to set the publish status of the expression.");
 
         endpointGroup
-            .MapPut(
-                "{expressionId}/updateHierarchy",
-                async Task<Results<NotFound, ValidationProblem, NoContent>> (
-                    int expressionId,
-                    EditExpressionHierarchyItemRequest editExpressionRequest,
-                    IExpressionTextSectionRepository repository
-                ) =>
-                {
-                    var results = await repository.UpdateSectionHierarchyAndSorting(
-                        new EditExpressionHierarchyDto()
-                        {
-                            ExpressionId = expressionId,
-                            Items = ExpressionHelpers.FlattenHierarchy(editExpressionRequest.Items),
-                        }
-                    );
-
-                    if (results.HasNotFound(out var notFound))
-                        return notFound;
-                    if (results.HasValidationError(out var validationProblem))
-                        return validationProblem;
-                    results.ThrowIfErrorNotHandled();
-
-                    return TypedResults.NoContent();
-                }
-            )
+            .MapPut("{expressionId}/updateHierarchy", UpdateHierarchy)
             .WithSummary("Allows one to modify the hierarchy of the expression")
             .WithDescription(
                 "This is an all or nothing operation.  It needs to be called with all the items, not a subset of them."
             );
 
         endpointGroup
-            .MapPost(
-                "",
-                async Task<Results<ValidationProblem, Created<int>>> (
-                    AddExpressionRequest request,
-                    IExpressionRepository repository
-                ) =>
-                {
-                    var results = await repository.CreateExpressionAsync(
-                        new CreateExpressionDto()
-                        {
-                            Name = request.Name,
-                            ShortDescription = request.ShortDescription,
-                            NavMenuImage = request.NavMenuImage,
-                        }
-                    );
-
-                    if (results.HasValidationError(out var validationProblem))
-                        return validationProblem;
-                    results.ThrowIfErrorNotHandled();
-
-                    return TypedResults.Created("/expressions", results.Value);
-                }
-            )
+            .MapPost("", CreateExpression)
             .WithSummary("Allows one to create new expressions");
 
-        endpointGroup.MapDelete(
-            "{id}",
-            async Task<Results<NotFound, NoContent, StatusCodeHttpResult>> (
-                int id,
-                IExpressionRepository repository
-            ) =>
+        endpointGroup.MapDelete("{id}", DeleteExpression);
+    }
+
+    
+    private static async Task<Results<ValidationProblem, Created<int>>> CreateExpression (
+        AddExpressionRequest request,
+        IExpressionRepository repository
+    )
+    {
+        var results = await repository.CreateExpressionAsync(
+            new CreateExpressionDto()
             {
-                var status = await repository.DeleteExpressionAsync(id);
-
-                if (status.HasNotFound(out var notFound))
-                    return notFound;
-                if (status.HasBeenDeletedAlready(out var deletedAlready))
-                    return deletedAlready;
-                status.ThrowIfErrorNotHandled();
-
-                return TypedResults.NoContent();
+                Name = request.Name,
+                ShortDescription = request.ShortDescription,
+                NavMenuImage = request.NavMenuImage,
             }
         );
+
+        if (results.HasValidationError(out var validationProblem))
+            return validationProblem;
+        results.ThrowIfErrorNotHandled();
+
+        return TypedResults.Created("/expressions", results.Value);
+    }
+
+    private static async Task<Results<NotFound, Ok<ExpressionNameResponse>>> GetExpressionIdByName(
+        string name,
+        IExpressionTextSectionRepository sectionRepository,
+        IExpressionRepository expressionRepository,
+        IFeatureToggleClient featureToggleClient
+    )
+    {
+        int expressionId;
+        if (name == "ruleBook")
+        {
+            var result = await expressionRepository.GetGameSystemExpressionId();
+            expressionId = result.Value;
+        }
+        else if (name == "treasuredTales")
+        {
+            var result = await expressionRepository.GetTreasuredTalesExpressionId();
+            expressionId = result.Value;
+        }
+        else
+        {
+            var expressionIdResult = await sectionRepository.GetExpressionId(name);
+            if (expressionIdResult.HasNotFound(out var notFound))
+                return notFound;
+            expressionIdResult.ThrowIfErrorNotHandled();
+            expressionId = expressionIdResult.Value;
+        }
+
+        return TypedResults.Ok(
+            new ExpressionNameResponse
+            {
+                Id = expressionId,
+                ShowPowersTab = await featureToggleClient.HasFeatureFlag(
+                    ReleaseFlags.ShowPowersTab
+                ),
+            }
+        );
+    }
+    
+    private static async Task<Results<NotFound, ValidationProblem, NoContent>> UpdateHierarchy(
+        int expressionId,
+        EditExpressionHierarchyItemRequest editExpressionRequest,
+        IExpressionTextSectionRepository repository
+        )
+    {
+        var results = await repository.UpdateSectionHierarchyAndSorting(
+            new EditExpressionHierarchyDto()
+            {
+                ExpressionId = expressionId,
+                Items = ExpressionHelpers.FlattenHierarchy(editExpressionRequest.Items),
+            }
+        );
+
+        if (results.HasNotFound(out var notFound))
+            return notFound;
+        if (results.HasValidationError(out var validationProblem))
+            return validationProblem;
+        results.ThrowIfErrorNotHandled();
+
+        return TypedResults.NoContent();
+    }
+    
+    private static async Task<Results<NotFound, ValidationProblem, NoContent>> EditExpression (
+        int expressionId,
+        EditExpressionRequest editExpressionRequest,
+        IExpressionRepository repository
+    )
+    {
+        var results = await repository.EditExpressionAsync(
+            new EditExpressionDto()
+            {
+                Id = editExpressionRequest.Id,
+                Name = editExpressionRequest.Name,
+                PublishStatus = editExpressionRequest.PublishStatus,
+                ShortDescription = editExpressionRequest.ShortDescription,
+                NavMenuImage = editExpressionRequest.NavMenuImage,
+            }
+        );
+
+        if (results.HasNotFound(out var notFound))
+            return notFound;
+        if (results.HasValidationError(out var validationProblem))
+            return validationProblem;
+        results.ThrowIfErrorNotHandled();
+
+        return TypedResults.NoContent();
+    }
+
+    private static async Task<Results<NotFound, ValidationProblem, Ok<EditExpressionResponse>>> GetEditExpression(
+        int expressionId,
+        IExpressionRepository repository
+        )
+    {
+        var results = await repository.GetExpression(expressionId);
+
+        if (results.HasNotFound(out var notFound))
+            return notFound;
+        if (results.HasValidationError(out var validationProblem))
+            return validationProblem;
+        results.ThrowIfErrorNotHandled();
+
+        return TypedResults.Ok(new EditExpressionResponse(results.Value));
+    }
+    
+        
+    private static async Task<Results<NotFound, NoContent, StatusCodeHttpResult>> DeleteExpression(
+        int id,
+        IExpressionRepository repository
+    )
+    {
+        var status = await repository.DeleteExpressionAsync(id);
+
+        if (status.HasNotFound(out var notFound))
+            return notFound;
+        if (status.HasBeenDeletedAlready(out var deletedAlready))
+            return deletedAlready;
+        status.ThrowIfErrorNotHandled();
+
+        return TypedResults.NoContent();
     }
 }
