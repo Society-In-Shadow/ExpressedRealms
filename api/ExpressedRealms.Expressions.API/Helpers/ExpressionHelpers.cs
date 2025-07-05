@@ -1,20 +1,21 @@
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.UpdateHierarchy;
 using ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.DTOs;
 using ExpressedRealms.Expressions.Repository.ExpressionTextSections.DTOs;
+using ExpressionSectionDto = ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.DTOs.ExpressionSectionDto;
 
 namespace ExpressedRealms.Expressions.API.Helpers;
 
 internal static class ExpressionHelpers
 {
-    public static List<ExpressionSectionDTO> BuildExpressionPage(
-        List<ExpressionSectionDto> dbSections
+    public static List<ExpressionSectionDto> BuildExpressionPage(
+        List<Repository.ExpressionTextSections.DTOs.ExpressionSectionDto> dbSections
     )
     {
-        List<ExpressionSectionDTO> sections = new();
+        List<ExpressionSectionDto> sections = new();
 
         foreach (var dbSection in dbSections)
         {
-            var dto = new ExpressionSectionDTO()
+            var dto = new ExpressionSectionDto()
             {
                 Name = dbSection.Name,
                 Id = dbSection.Id,

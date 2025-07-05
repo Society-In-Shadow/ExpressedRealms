@@ -1,5 +1,4 @@
 using ExpressedRealms.Authentication;
-using ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.DTOs;
 using ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.Requests;
 using ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.Responses;
 using ExpressedRealms.Expressions.API.Helpers;
@@ -10,6 +9,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
+using ExpressionSectionDto = ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.DTOs.ExpressionSectionDto;
 using SectionTypeDto = ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.DTOs.SectionTypeDto;
 
 namespace ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints;
@@ -26,20 +26,23 @@ internal static class ExpectedSubSectionsEndpoints
         endpointGroup
             .MapGet(
                 "{id}/expression",
-                async Task<Results<NotFound, Ok<ExpressionSectionDTO>>> (
+                async Task<Results<NotFound, Ok<ExpressionSectionDto>>> (
                     int id,
                     IExpressionTextSectionRepository repository
                 ) =>
                 {
                     var section = await repository.GetExpressionSection(id);
 
+                    if(section is null)
+                        return TypedResults.NotFound();
+                    
                     return TypedResults.Ok(
-                        new ExpressionSectionDTO()
+                        new ExpressionSectionDto()
                         {
                             Name = section.Name,
                             Id = section.Id,
                             Content = section.Content,
-                            SubSections = new List<ExpressionSectionDTO>(),
+                            SubSections = new List<ExpressionSectionDto>(),
                         }
                     );
                 }

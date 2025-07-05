@@ -4,7 +4,7 @@ namespace ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.Response
 
 public class ExpressionBaseResponse
 {
-    public List<ExpressionSectionDTO> ExpressionSections { get; set; }
+    public List<ExpressionSectionDto> ExpressionSections { get; set; } = new();
     public bool CanEditPolicy { get; set; }
     public bool ShowPowersTab { get; set; }
 }

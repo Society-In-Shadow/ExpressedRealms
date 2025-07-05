@@ -25,7 +25,7 @@ public class EditExpressionHierarchyDtoValidator : AbstractValidator<EditExpress
                 {
                     var expressionSections = await dbContext
                         .ExpressionSections.Where(x => x.ExpressionId == dto.ExpressionId)
-                        .ToListAsync();
+                        .ToListAsync(cancellationToken);
 
                     return dto
                         .Items.Select(x => x.Id)
@@ -73,7 +73,7 @@ public class EditExpressionHierarchyDtoValidator : AbstractValidator<EditExpress
             .WithMessage("The sort order has gaps or duplicate values in one of the sections.");
     }
 
-    private bool HasCycles(IEnumerable<EditExpressionHierarchyItemDto> nodes)
+    private static bool HasCycles(IEnumerable<EditExpressionHierarchyItemDto> nodes)
     {
         // Create dictionary mapping of Id to ParentId
         var nodeLookup = nodes.ToDictionary(x => x.Id, x => x.ParentId);
@@ -83,12 +83,11 @@ public class EditExpressionHierarchyDtoValidator : AbstractValidator<EditExpress
         {
             if (path.Contains(id))
                 return true; // Cycle detected
-            if (!nodeLookup.ContainsKey(id) || nodeLookup[id] == null)
+            if (!nodeLookup.TryGetValue(id, out int? parentId) || parentId == null)
                 return false; // Reached root
 
             path.Add(id); // Add current node to the path
-            var parentId = nodeLookup[id]; // Get parent
-            if (parentId.HasValue && DetectCycle(parentId.Value, visited, path))
+            if (DetectCycle(parentId.Value, visited, path))
                 return true;
             path.Remove(id); // Remove node from path after traversal
 

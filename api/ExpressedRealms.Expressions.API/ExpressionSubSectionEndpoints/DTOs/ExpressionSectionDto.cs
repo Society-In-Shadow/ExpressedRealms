@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Expressions.Repository.ExpressionTextSections.DTOs;
+namespace ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.DTOs;
 
 public class ExpressionSectionDto
 {

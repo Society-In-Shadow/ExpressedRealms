@@ -4,6 +4,6 @@ namespace ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.Response
 
 public class ExpressionSectionOptionsResponse
 {
-    public List<AvailableParentsDto> AvailableParents { get; set; }
-    public List<SectionTypeDto> SectionTypes { get; set; }
+    public List<AvailableParentsDto> AvailableParents { get; set; } = new();
+    public List<SectionTypeDto> SectionTypes { get; set; } = new();
 }

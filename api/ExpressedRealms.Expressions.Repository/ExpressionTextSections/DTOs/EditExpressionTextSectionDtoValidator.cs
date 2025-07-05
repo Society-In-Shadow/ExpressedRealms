@@ -42,14 +42,14 @@ public class EditExpressionTextSectionDtoValidator : AbstractValidator<EditExpre
                         .ExpressionSections.Where(x =>
                             x.ExpressionId == expressionSection.ExpressionId
                         )
-                        .ToListAsync();
+                        .ToListAsync(cancellationToken);
 
                     var validParentIds = RecursiveFunctions.GetValidParentIds(
                         expressionSections,
                         null,
                         0
                     );
-                    return validParentIds.Contains(expressionSection.ParentId.Value);
+                    return validParentIds.Contains(expressionSection.ParentId!.Value);
                 }
             )
             .When(x => x.ParentId != null)
