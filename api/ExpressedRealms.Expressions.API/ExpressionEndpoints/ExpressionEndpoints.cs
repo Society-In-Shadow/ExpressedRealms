@@ -1,7 +1,7 @@
 using ExpressedRealms.Authentication;
-using ExpressedRealms.Expressions.API.ExpressionEndpoints.Helpers;
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.Requests;
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.Responses;
+using ExpressedRealms.Expressions.API.Helpers;
 using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.Expressions.Repository.Expressions.DTOs;
 using ExpressedRealms.Expressions.Repository.ExpressionTextSections;

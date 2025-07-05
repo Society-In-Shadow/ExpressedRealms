@@ -1,8 +1,8 @@
 using ExpressedRealms.Authentication;
-using ExpressedRealms.Expressions.API.ExpressionEndpoints.DTOs;
-using ExpressedRealms.Expressions.API.ExpressionEndpoints.Helpers;
-using ExpressedRealms.Expressions.API.ExpressionEndpoints.Requests;
-using ExpressedRealms.Expressions.API.ExpressionEndpoints.Responses;
+using ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.DTOs;
+using ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.Requests;
+using ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.Responses;
+using ExpressedRealms.Expressions.API.Helpers;
 using ExpressedRealms.Expressions.Repository.ExpressionTextSections;
 using ExpressedRealms.Expressions.Repository.ExpressionTextSections.DTOs;
 using ExpressedRealms.Server.Shared;
@@ -10,9 +10,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
-using SectionTypeDto = ExpressedRealms.Expressions.API.ExpressionEndpoints.DTOs.SectionTypeDto;
+using SectionTypeDto = ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.DTOs.SectionTypeDto;
 
-namespace ExpressedRealms.Expressions.API.ExpressionEndpoints;
+namespace ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints;
 
 internal static class ExpectedSubSectionsEndpoints
 {

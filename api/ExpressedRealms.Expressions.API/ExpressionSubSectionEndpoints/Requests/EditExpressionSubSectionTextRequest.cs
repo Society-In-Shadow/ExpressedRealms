@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Expressions.API.ExpressionEndpoints.Requests;
+namespace ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.Requests;
 
 public class EditExpressionSubSectionTextRequest
 {

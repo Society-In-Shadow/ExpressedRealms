@@ -1,4 +1,5 @@
 using ExpressedRealms.Expressions.API.ExpressionEndpoints;
+using ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints;
 using Microsoft.AspNetCore.Builder;
 
 namespace ExpressedRealms.Expressions.API.Configuration;
