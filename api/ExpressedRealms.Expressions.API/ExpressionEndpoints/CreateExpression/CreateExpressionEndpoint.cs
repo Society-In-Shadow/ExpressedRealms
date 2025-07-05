@@ -8,7 +8,7 @@ namespace ExpressedRealms.Expressions.API.ExpressionEndpoints.CreateExpression;
 
 internal static class CreateExpressionEndpoint
 {
-    public static async Task<Results<ValidationProblem, Created<int>>> CreateExpression (
+    public static async Task<Results<ValidationProblem, Created<int>>> CreateExpression(
         AddExpressionRequest request,
         IExpressionRepository repository
     )

@@ -7,10 +7,9 @@ namespace ExpressedRealms.Expressions.API.ExpressionEndpoints.GetEditExpression;
 
 internal static class GetEditExpressionEndpoint
 {
-    internal static async Task<Results<NotFound, ValidationProblem, Ok<EditExpressionResponse>>> GetEditExpression(
-        int expressionId,
-        IExpressionRepository repository
-    )
+    internal static async Task<
+        Results<NotFound, ValidationProblem, Ok<EditExpressionResponse>>
+    > GetEditExpression(int expressionId, IExpressionRepository repository)
     {
         var results = await repository.GetExpression(expressionId);
 

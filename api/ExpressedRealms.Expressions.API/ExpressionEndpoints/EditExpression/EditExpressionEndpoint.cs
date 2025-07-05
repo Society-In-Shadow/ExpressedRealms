@@ -8,7 +8,7 @@ namespace ExpressedRealms.Expressions.API.ExpressionEndpoints.EditExpression;
 
 internal static class EditExpressionEndpoint
 {
-    public static async Task<Results<NotFound, ValidationProblem, NoContent>> EditExpression (
+    public static async Task<Results<NotFound, ValidationProblem, NoContent>> EditExpression(
         int expressionId,
         EditExpressionRequest editExpressionRequest,
         IExpressionRepository repository
