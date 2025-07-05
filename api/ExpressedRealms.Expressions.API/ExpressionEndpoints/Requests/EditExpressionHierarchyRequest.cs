@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Requests;
+namespace ExpressedRealms.Expressions.API.ExpressionEndpoints.Requests;
 
 public class EditExpressionHierarchyItemRequest
 {

@@ -1,10 +1,10 @@
+using ExpressedRealms.Expressions.API.ExpressionEndpoints.DTOs;
+using ExpressedRealms.Expressions.API.ExpressionEndpoints.Requests;
 using ExpressedRealms.Repositories.Expressions.ExpressionTextSections.DTOs;
-using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.DTOs;
-using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Requests;
 
-namespace ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Helpers;
+namespace ExpressedRealms.Expressions.API.ExpressionEndpoints.Helpers;
 
-public static class ExpressionHelpers
+internal static class ExpressionHelpers
 {
     public static List<ExpressionSectionDTO> BuildExpressionPage(
         List<ExpressionSectionDto> dbSections

@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Server;
+namespace ExpressedRealms.Expressions.API.Enums;
 
 public enum ExpressionSectionType
 {

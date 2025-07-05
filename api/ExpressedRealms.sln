@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Shared", "E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Powers.Repository.Tests.Unit", "ExpressedRealms.Powers.Repository.Tests.Unit\ExpressedRealms.Powers.Repository.Tests.Unit.csproj", "{698D343C-2A89-43A9-9395-121FE7E1D3A0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Expressions.API", "ExpressedRealms.Expressions.API\ExpressedRealms.Expressions.API.csproj", "{AF6E754D-F524-4050-9882-BE5BE6343949}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,10 @@ Global
 		{698D343C-2A89-43A9-9395-121FE7E1D3A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{698D343C-2A89-43A9-9395-121FE7E1D3A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{698D343C-2A89-43A9-9395-121FE7E1D3A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF6E754D-F524-4050-9882-BE5BE6343949}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF6E754D-F524-4050-9882-BE5BE6343949}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF6E754D-F524-4050-9882-BE5BE6343949}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF6E754D-F524-4050-9882-BE5BE6343949}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

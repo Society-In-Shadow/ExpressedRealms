@@ -1,18 +1,20 @@
 using ExpressedRealms.Authentication;
+using ExpressedRealms.Expressions.API.ExpressionEndpoints.Helpers;
+using ExpressedRealms.Expressions.API.ExpressionEndpoints.Requests;
+using ExpressedRealms.Expressions.API.ExpressionEndpoints.Responses;
 using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.FeatureFlags.FeatureClient;
 using ExpressedRealms.Repositories.Expressions.Expressions;
 using ExpressedRealms.Repositories.Expressions.Expressions.DTOs;
 using ExpressedRealms.Repositories.Expressions.ExpressionTextSections;
 using ExpressedRealms.Repositories.Expressions.ExpressionTextSections.DTOs;
-using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Helpers;
-using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Requests;
-using ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Responses;
 using ExpressedRealms.Server.Shared;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
-namespace ExpressedRealms.Server.EndPoints.ExpressionEndpoints;
+namespace ExpressedRealms.Expressions.API.ExpressionEndpoints;
 
 internal static class ExpressionEndpoints
 {

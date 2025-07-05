@@ -1,6 +1,6 @@
 using ExpressedRealms.Repositories.Expressions.Expressions;
 
-namespace ExpressedRealms.Server.EndPoints.ExpressionEndpoints.Requests;
+namespace ExpressedRealms.Expressions.API.ExpressionEndpoints.Requests;
 
 public class EditExpressionRequest
 {
