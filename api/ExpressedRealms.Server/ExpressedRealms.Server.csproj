@@ -38,7 +38,7 @@
     <ProjectReference Include="..\ExpressedRealms.Powers.API\ExpressedRealms.Powers.API.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Repositories.Admin\ExpressedRealms.Repositories.Admin.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Characters.Repository\ExpressedRealms.Characters.Repository.csproj" />
-    <ProjectReference Include="..\ExpressedRealms.Repositories.Expressions\ExpressedRealms.Repositories.Expressions.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Expressions.Repository\ExpressedRealms.Expressions.Repository.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Powers.Repository\ExpressedRealms.Powers.Repository.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Server.Shared\ExpressedRealms.Server.Shared.csproj" />
   </ItemGroup>

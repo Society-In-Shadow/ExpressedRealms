@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Characters.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Repositories.Shared", "ExpressedRealms.Repositories.Shared\ExpressedRealms.Repositories.Shared.csproj", "{0554641F-EEE1-4480-925F-F6FAB1993D99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Repositories.Expressions", "ExpressedRealms.Repositories.Expressions\ExpressedRealms.Repositories.Expressions.csproj", "{22B493A9-8064-4A35-AAAA-A2E9E190CACD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Expressions.Repository", "ExpressedRealms.Expressions.Repository\ExpressedRealms.Expressions.Repository.csproj", "{22B493A9-8064-4A35-AAAA-A2E9E190CACD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Authentication", "ExpressedRealms.Authentication\ExpressedRealms.Authentication.csproj", "{7B73AD3F-E9A8-403C-A873-1723BBE9A770}"
 EndProject

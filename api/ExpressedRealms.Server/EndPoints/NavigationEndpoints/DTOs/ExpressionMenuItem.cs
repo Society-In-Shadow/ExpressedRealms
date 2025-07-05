@@ -1,4 +1,4 @@
-using ExpressedRealms.Repositories.Expressions.Expressions.DTOs;
+using ExpressedRealms.Expressions.Repository.Expressions.DTOs;
 
 namespace ExpressedRealms.Server.EndPoints.NavigationEndpoints.DTOs;
 

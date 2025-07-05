@@ -11,7 +11,7 @@ using ExpressedRealms.Characters.Repository.Stats;
 using ExpressedRealms.Characters.Repository.Stats.DTOs;
 using ExpressedRealms.Characters.Repository.Stats.Enums;
 using ExpressedRealms.DB;
-using ExpressedRealms.Repositories.Expressions.Expressions;
+using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.Server.Shared;
 using ExpressedRealms.Server.Shared.Extensions;
 using Microsoft.AspNetCore.Authorization;

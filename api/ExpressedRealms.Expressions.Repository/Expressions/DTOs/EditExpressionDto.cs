@@ -1,8 +1,6 @@
-using ExpressedRealms.Expressions.Repository.Expressions;
+namespace ExpressedRealms.Expressions.Repository.Expressions.DTOs;
 
-namespace ExpressedRealms.Expressions.API.ExpressionEndpoints.Requests;
-
-public class EditExpressionRequest
+public record EditExpressionDto
 {
     public int Id { get; init; }
     public string Name { get; set; } = null!;

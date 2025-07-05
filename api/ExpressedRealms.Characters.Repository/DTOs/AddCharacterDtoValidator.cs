@@ -1,6 +1,6 @@
 using ExpressedRealms.Characters.Repository.Enums;
 using ExpressedRealms.DB;
-using ExpressedRealms.Repositories.Expressions.Expressions;
+using ExpressedRealms.Expressions.Repository.Expressions;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 

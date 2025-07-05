@@ -1,12 +1,11 @@
-using ExpressedRealms.Expressions.Repository.Expressions;
+namespace ExpressedRealms.Expressions.Repository.Expressions.DTOs;
 
-namespace ExpressedRealms.Expressions.API.ExpressionEndpoints.Requests;
-
-public class EditExpressionRequest
+public class GetExpressionDto
 {
     public int Id { get; init; }
     public string Name { get; set; } = null!;
     public string ShortDescription { get; set; } = null!;
     public string NavMenuImage { get; set; } = null!;
     public PublishTypes PublishStatus { get; set; }
+    public List<KeyValuePair<int, string>> PublishTypes { get; set; } = null!;
 }

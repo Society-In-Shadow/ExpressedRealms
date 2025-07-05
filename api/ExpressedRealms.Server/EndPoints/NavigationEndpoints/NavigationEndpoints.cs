@@ -1,8 +1,8 @@
 using System.Security.Claims;
 using ExpressedRealms.Authentication;
 using ExpressedRealms.DB;
+using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.FeatureFlags.FeatureClient;
-using ExpressedRealms.Repositories.Expressions.Expressions;
 using ExpressedRealms.Server.EndPoints.NavigationEndpoints.DTOs;
 using ExpressedRealms.Server.EndPoints.NavigationEndpoints.Responses;
 using ExpressedRealms.Server.Shared;

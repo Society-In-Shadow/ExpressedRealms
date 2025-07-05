@@ -1,6 +1,6 @@
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.DTOs;
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.Requests;
-using ExpressedRealms.Repositories.Expressions.ExpressionTextSections.DTOs;
+using ExpressedRealms.Expressions.Repository.ExpressionTextSections.DTOs;
 
 namespace ExpressedRealms.Expressions.API.ExpressionEndpoints.Helpers;
 

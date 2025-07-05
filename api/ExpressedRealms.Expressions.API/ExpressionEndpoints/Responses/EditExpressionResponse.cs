@@ -1,6 +1,6 @@
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.DTOs;
-using ExpressedRealms.Repositories.Expressions.Expressions;
-using ExpressedRealms.Repositories.Expressions.Expressions.DTOs;
+using ExpressedRealms.Expressions.Repository.Expressions;
+using ExpressedRealms.Expressions.Repository.Expressions.DTOs;
 
 namespace ExpressedRealms.Expressions.API.ExpressionEndpoints.Responses;
 
