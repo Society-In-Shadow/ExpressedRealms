@@ -1,4 +1,4 @@
-using ExpressedRealms.Expressions.API.ExpressionEndpoints.Requests;
+using ExpressedRealms.Expressions.API.ExpressionEndpoints.UpdateHierarchy;
 using ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.DTOs;
 using ExpressedRealms.Expressions.Repository.ExpressionTextSections.DTOs;
 

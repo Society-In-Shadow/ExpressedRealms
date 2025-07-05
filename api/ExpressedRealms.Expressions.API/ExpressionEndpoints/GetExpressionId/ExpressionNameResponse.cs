@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Expressions.API.ExpressionEndpoints.Responses;
+namespace ExpressedRealms.Expressions.API.ExpressionEndpoints.GetExpressionId;
 
 public class ExpressionNameResponse
 {

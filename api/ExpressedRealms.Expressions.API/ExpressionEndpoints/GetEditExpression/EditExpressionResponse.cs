@@ -1,8 +1,7 @@
-using ExpressedRealms.Expressions.API.ExpressionEndpoints.DTOs;
 using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.Expressions.Repository.Expressions.DTOs;
 
-namespace ExpressedRealms.Expressions.API.ExpressionEndpoints.Responses;
+namespace ExpressedRealms.Expressions.API.ExpressionEndpoints.GetEditExpression;
 
 public class EditExpressionResponse(GetExpressionDto dto)
 {

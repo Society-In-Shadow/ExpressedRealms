@@ -1,17 +1,13 @@
 using ExpressedRealms.Authentication;
-using ExpressedRealms.Expressions.API.ExpressionEndpoints.Requests;
-using ExpressedRealms.Expressions.API.ExpressionEndpoints.Responses;
-using ExpressedRealms.Expressions.API.Helpers;
-using ExpressedRealms.Expressions.Repository.Expressions;
-using ExpressedRealms.Expressions.Repository.Expressions.DTOs;
-using ExpressedRealms.Expressions.Repository.ExpressionTextSections;
-using ExpressedRealms.Expressions.Repository.ExpressionTextSections.DTOs;
-using ExpressedRealms.FeatureFlags;
-using ExpressedRealms.FeatureFlags.FeatureClient;
+using ExpressedRealms.Expressions.API.ExpressionEndpoints.CreateExpression;
+using ExpressedRealms.Expressions.API.ExpressionEndpoints.DeleteExpression;
+using ExpressedRealms.Expressions.API.ExpressionEndpoints.EditExpression;
+using ExpressedRealms.Expressions.API.ExpressionEndpoints.GetEditExpression;
+using ExpressedRealms.Expressions.API.ExpressionEndpoints.GetExpressionId;
+using ExpressedRealms.Expressions.API.ExpressionEndpoints.UpdateHierarchy;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
 namespace ExpressedRealms.Expressions.API.ExpressionEndpoints;
@@ -27,174 +23,28 @@ internal static class ExpressionEndpoints
             .WithOpenApi();
 
         endpointGroup
-            .MapGet("{expressionId}", GetEditExpression)
+            .MapGet("{expressionId}", GetEditExpressionEndpoint.GetEditExpression)
             .WithSummary("Returns the high level information for a given expression")
             .WithDescription(
                 "This returns the detailed information for the given expression, including publish details"
             );
 
-        endpointGroup
-            .MapGet("/getByName/{name}", GetExpressionIdByName)
+        endpointGroup.MapGet("/getByName/{name}", GetExpressionIdByNameEndpoint.GetExpressionIdByName)
             .WithSummary("Returns the id for the given expression name");
 
-        endpointGroup
-            .MapPut("{expressionId}", EditExpression)
+        endpointGroup.MapPut("{expressionId}", EditExpressionEndpoint.EditExpression)
             .WithSummary("Allows one to edit the high level expression details")
             .WithDescription("You will also be able to set the publish status of the expression.");
 
-        endpointGroup
-            .MapPut("{expressionId}/updateHierarchy", UpdateHierarchy)
+        endpointGroup.MapPut("{expressionId}/updateHierarchy", UpdateHierarchyEndpoint.UpdateHierarchy)
             .WithSummary("Allows one to modify the hierarchy of the expression")
             .WithDescription(
                 "This is an all or nothing operation.  It needs to be called with all the items, not a subset of them."
             );
 
-        endpointGroup
-            .MapPost("", CreateExpression)
+        endpointGroup.MapPost("", CreateExpressionEndpoint.CreateExpression)
             .WithSummary("Allows one to create new expressions");
 
-        endpointGroup.MapDelete("{id}", DeleteExpression);
-    }
-
-    
-    private static async Task<Results<ValidationProblem, Created<int>>> CreateExpression (
-        AddExpressionRequest request,
-        IExpressionRepository repository
-    )
-    {
-        var results = await repository.CreateExpressionAsync(
-            new CreateExpressionDto()
-            {
-                Name = request.Name,
-                ShortDescription = request.ShortDescription,
-                NavMenuImage = request.NavMenuImage,
-            }
-        );
-
-        if (results.HasValidationError(out var validationProblem))
-            return validationProblem;
-        results.ThrowIfErrorNotHandled();
-
-        return TypedResults.Created("/expressions", results.Value);
-    }
-
-    private static async Task<Results<NotFound, Ok<ExpressionNameResponse>>> GetExpressionIdByName(
-        string name,
-        IExpressionTextSectionRepository sectionRepository,
-        IExpressionRepository expressionRepository,
-        IFeatureToggleClient featureToggleClient
-    )
-    {
-        int expressionId;
-        if (name == "ruleBook")
-        {
-            var result = await expressionRepository.GetGameSystemExpressionId();
-            expressionId = result.Value;
-        }
-        else if (name == "treasuredTales")
-        {
-            var result = await expressionRepository.GetTreasuredTalesExpressionId();
-            expressionId = result.Value;
-        }
-        else
-        {
-            var expressionIdResult = await sectionRepository.GetExpressionId(name);
-            if (expressionIdResult.HasNotFound(out var notFound))
-                return notFound;
-            expressionIdResult.ThrowIfErrorNotHandled();
-            expressionId = expressionIdResult.Value;
-        }
-
-        return TypedResults.Ok(
-            new ExpressionNameResponse
-            {
-                Id = expressionId,
-                ShowPowersTab = await featureToggleClient.HasFeatureFlag(
-                    ReleaseFlags.ShowPowersTab
-                ),
-            }
-        );
-    }
-    
-    private static async Task<Results<NotFound, ValidationProblem, NoContent>> UpdateHierarchy(
-        int expressionId,
-        EditExpressionHierarchyItemRequest editExpressionRequest,
-        IExpressionTextSectionRepository repository
-        )
-    {
-        var results = await repository.UpdateSectionHierarchyAndSorting(
-            new EditExpressionHierarchyDto()
-            {
-                ExpressionId = expressionId,
-                Items = ExpressionHelpers.FlattenHierarchy(editExpressionRequest.Items),
-            }
-        );
-
-        if (results.HasNotFound(out var notFound))
-            return notFound;
-        if (results.HasValidationError(out var validationProblem))
-            return validationProblem;
-        results.ThrowIfErrorNotHandled();
-
-        return TypedResults.NoContent();
-    }
-    
-    private static async Task<Results<NotFound, ValidationProblem, NoContent>> EditExpression (
-        int expressionId,
-        EditExpressionRequest editExpressionRequest,
-        IExpressionRepository repository
-    )
-    {
-        var results = await repository.EditExpressionAsync(
-            new EditExpressionDto()
-            {
-                Id = editExpressionRequest.Id,
-                Name = editExpressionRequest.Name,
-                PublishStatus = editExpressionRequest.PublishStatus,
-                ShortDescription = editExpressionRequest.ShortDescription,
-                NavMenuImage = editExpressionRequest.NavMenuImage,
-            }
-        );
-
-        if (results.HasNotFound(out var notFound))
-            return notFound;
-        if (results.HasValidationError(out var validationProblem))
-            return validationProblem;
-        results.ThrowIfErrorNotHandled();
-
-        return TypedResults.NoContent();
-    }
-
-    private static async Task<Results<NotFound, ValidationProblem, Ok<EditExpressionResponse>>> GetEditExpression(
-        int expressionId,
-        IExpressionRepository repository
-        )
-    {
-        var results = await repository.GetExpression(expressionId);
-
-        if (results.HasNotFound(out var notFound))
-            return notFound;
-        if (results.HasValidationError(out var validationProblem))
-            return validationProblem;
-        results.ThrowIfErrorNotHandled();
-
-        return TypedResults.Ok(new EditExpressionResponse(results.Value));
-    }
-    
-        
-    private static async Task<Results<NotFound, NoContent, StatusCodeHttpResult>> DeleteExpression(
-        int id,
-        IExpressionRepository repository
-    )
-    {
-        var status = await repository.DeleteExpressionAsync(id);
-
-        if (status.HasNotFound(out var notFound))
-            return notFound;
-        if (status.HasBeenDeletedAlready(out var deletedAlready))
-            return deletedAlready;
-        status.ThrowIfErrorNotHandled();
-
-        return TypedResults.NoContent();
+        endpointGroup.MapDelete("{id}", DeleteExpressionEndpoint.DeleteExpression);
     }
 }
