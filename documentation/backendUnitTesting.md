@@ -10,11 +10,11 @@ and setting up the dependencies
 
 ## NetArchTest.Rules
 This is an infrastructure based testing library.  This allows us to enforce common structures and guidelines:
- - Any class that inherits from IGenericUseCase needs to have "UseCase" at the end of the class name.
- - Use Cases cannot directly call the Db Context
- - Method names on unit tests need to follow certain rules and guidelines
+- Any class that inherits from IGenericUseCase needs to have "UseCase" at the end of the class name.
+- Use Cases cannot directly call the Db Context
+- Method names on unit tests need to follow certain rules and guidelines
 
-# Shared Infrastructure Unit Tests for Use Cases
+## Shared Infrastructure Unit Tests for Use Cases
 When creating new unit test projects for use cases, you need to make sure you add the following class to the root of
 that assembly.
 
@@ -27,16 +27,16 @@ public class AssemblyInfrastructureTests : InfrastructureTests
 }
 ```
 
-# Creating Custom Assertions
+## Creating Custom Assertions
 Rider and sonar cloud will not pick up test assertions if they are custom.
 
 You can get around this by adding any of these names to the list:
- - ASSERT
- - CHECK
- - EXPECT
- - MUST
- - SHOULD
- - VERIFY
- - VALIDATE
+- ASSERT
+- CHECK
+- EXPECT
+- MUST
+- SHOULD
+- VERIFY
+- VALIDATE
 
 per [Sonar Cloud Documentation](https://community.sonarsource.com/t/how-to-mark-custom-methods-as-assertion-methods-in-c/31437/2)

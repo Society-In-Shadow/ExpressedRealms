@@ -13,5 +13,5 @@ public interface IExpressionRepository
     Task<Result<GetExpressionDto>> GetExpression(int expressionId);
     Task<Result<int>> GetGameSystemExpressionId();
     Task<Result<int>> GetTreasuredTalesExpressionId();
-    Task<Expression?> GetExpressionForDeletion(int i);
+    Task<Expression?> GetExpressionForDeletion(int id);
 }
