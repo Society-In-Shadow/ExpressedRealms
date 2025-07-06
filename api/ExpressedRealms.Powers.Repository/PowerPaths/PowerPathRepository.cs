@@ -6,9 +6,9 @@ using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathEdit;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathLIst;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathSorting;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathToC;
-using ExpressedRealms.Powers.Repository.Powers.DTOs;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerList;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
+using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 
