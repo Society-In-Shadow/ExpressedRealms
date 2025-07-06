@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Expressions.UseCases.ExpressionTextSections.DeleteTextSection;
 
 [UsedImplicitly]
-internal sealed class DeleteTextSectionUseCase(    
+internal sealed class DeleteTextSectionUseCase(
     IExpressionTextSectionRepository repository,
     DeleteTextSectionModelValidator validator,
     CancellationToken cancellationToken) : IDeleteTextSectionUseCase
