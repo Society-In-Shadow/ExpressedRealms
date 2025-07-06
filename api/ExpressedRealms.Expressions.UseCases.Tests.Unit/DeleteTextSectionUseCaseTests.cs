@@ -4,6 +4,7 @@ using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.Expressions.Repository.ExpressionTextSections;
 using ExpressedRealms.Expressions.UseCases.ExpressionTextSections.DeleteTextSection;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
+using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FakeItEasy;
 using Xunit;
 
@@ -44,18 +45,70 @@ public class DeleteTextSectionUseCaseTests
         A.CallTo(() => _expressionRepository.GetExpressionForDeletion(A<int>.Ignored)).Returns(Task.FromResult<Expression?>(null));
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(
+        results.MustHaveValidationError<NotFoundFailure>(
             nameof(DeleteTextSectionModel.ExpressionId),
             "This is not a valid expression."
         );
     }
+    
+    [Fact]
+    public async Task ValidationFor_ExpressionId_WillFail_IfExpressionHasBeenDeleted()
+    {
+        A.CallTo(() => _expressionRepository.GetExpressionForDeletion(A<int>.Ignored)).Returns(new Expression()
+        {
+            IsDeleted = true,
+        });
+
+        var results = await _useCase.ExecuteAsync(_model);
+        results.MustHaveValidationError<AlreadyDeletedFailure>(
+            nameof(DeleteTextSectionModel.ExpressionId),
+            "This expression has been deleted."
+        );
+    }
+
 
     [Fact]
-    public async Task ValidationFor_ExpressionId_WillFail_IfExpressionIdIsEmpty()
+    public async Task ValidationFor_ExpressionId_WillFail_IfIsEmpty()
     {
         _model.ExpressionId = 0;
 
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(nameof(DeleteTextSectionModel.ExpressionId), "ExpressionId is required.");
+    }
+    
+    [Fact]
+    public async Task ValidationFor_Id_WillFail_IfExpressionSectionDoesNotExist()
+    {
+        A.CallTo(() => _textRepository.GetExpressionSectionForDeletion(A<int>.Ignored)).Returns(Task.FromResult<ExpressionSection?>(null));
+
+        var results = await _useCase.ExecuteAsync(_model);
+        results.MustHaveValidationError<NotFoundFailure>(
+            nameof(DeleteTextSectionModel.Id),
+            "This is not a valid expression section."
+        );
+    }
+    
+    [Fact]
+    public async Task ValidationFor_Id_WillFail_IfExpressionHasBeenDeleted()
+    {
+        A.CallTo(() => _textRepository.GetExpressionSectionForDeletion(A<int>.Ignored)).Returns(new ExpressionSection()
+        {
+            IsDeleted = true,
+        });
+
+        var results = await _useCase.ExecuteAsync(_model);
+        results.MustHaveValidationError<AlreadyDeletedFailure>(
+            nameof(DeleteTextSectionModel.Id),
+            "This expression section has been deleted."
+        );
+    }
+
+    [Fact]
+    public async Task ValidationFor_Id_WillFail_IfIsEmpty()
+    {
+        _model.Id = 0;
+
+        var results = await _useCase.ExecuteAsync(_model);
+        results.MustHaveValidationError(nameof(DeleteTextSectionModel.Id), "Id is required.");
     }
 }
