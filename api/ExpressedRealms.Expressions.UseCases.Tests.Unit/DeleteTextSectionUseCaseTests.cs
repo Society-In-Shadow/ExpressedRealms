@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.Models.Expressions;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.Expressions.Repository.Expressions;
@@ -32,6 +33,10 @@ public class DeleteTextSectionUseCaseTests
         A.CallTo(() => _textRepository.GetExpressionSectionForDeletion(_model.ExpressionId, _model.Id)).Returns(new ExpressionSection()
         {
             Id = _model.Id,
+            SectionType = new ExpressionSectionType()
+            {
+                Name = "Section",
+            }
         });
 
         var validator = new DeleteTextSectionModelValidator(_textRepository, _expressionRepository);
@@ -110,5 +115,38 @@ public class DeleteTextSectionUseCaseTests
 
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(nameof(DeleteTextSectionModel.Id), "Id is required.");
+    }
+
+    [Fact]
+    public async Task UseCase_WillGrab_TheCorrespondingExpressionSection()
+    {
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() => _textRepository.GetExpressionSectionForDeletion(_model.ExpressionId, _model.Id))
+            .MustHaveHappened(1, Times.OrMore);
+    }
+
+    [Fact]
+    public async Task UseCase_WillFail_IfItsTheKnowledgeSection_FromTheRulebook()
+    {
+        A.CallTo(() => _textRepository.GetExpressionSectionForDeletion(_model.ExpressionId, _model.Id)).Returns(new ExpressionSection()
+        {
+            Id = 1,
+            SectionType = new ExpressionSectionType()
+            {
+                Name = "Knowledges Section",
+            }
+        });
+        
+        var result = await _useCase.ExecuteAsync(_model);
+        
+        Assert.False(result.IsSuccess);
+        Assert.Equal("You cannot delete the systems knowledge section.", result.Errors.First().Message);
+    }
+
+    [Fact]
+    public async Task UseCase_WillDelete_TheExpression()
+    {
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() => _textRepository.DeleteExpressionTextSectionAsync(_model.ExpressionId, _model.Id)).MustHaveHappenedOnceExactly();
     }
 }
