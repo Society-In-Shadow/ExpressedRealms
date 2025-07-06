@@ -16,6 +16,7 @@ public static class ResultExtensions
         Assert.False(result.IsSuccess);
 
         var validationFailure = result.Errors.OfType<FluentValidationFailure>().FirstOrDefault();
+        var notFoundFailure = result.Errors.OfType<NotFoundFailure>().FirstOrDefault();
 
         if (validationFailure == null)
         {
@@ -23,10 +24,10 @@ public static class ResultExtensions
             return;
         }
 
-        if (!HandlePropertyAndReturnSuccess(propertyName, validationFailure))
+        if (!HandlePropertyAndReturnSuccess(propertyName, validationFailure, notFoundFailure))
             return;
 
-        HandleMessage(propertyName, errorMessage, validationFailure);
+        HandleMessage(propertyName, errorMessage, validationFailure, notFoundFailure);
 
         Assert.True(true);
     }
@@ -56,15 +57,26 @@ public static class ResultExtensions
     private static void HandleMessage(
         string propertyName,
         string? errorMessage,
-        FluentValidationFailure validationFailure
+        FluentValidationFailure validationFailure,
+        NotFoundFailure? notFoundFailure = null
     )
     {
-        var hasErrorMessage = validationFailure
-            .ValidationFailures[propertyName]
-            .Contains(errorMessage);
 
-        if (hasErrorMessage || string.IsNullOrWhiteSpace(errorMessage))
-            return;
+        if (notFoundFailure is not null)
+        {
+            if (notFoundFailure.ValidationMessage == errorMessage)
+                return;
+        }
+        else
+        {
+            var hasErrorMessage = validationFailure
+                .ValidationFailures[propertyName]
+                .Contains(errorMessage);
+
+            if (hasErrorMessage || string.IsNullOrWhiteSpace(errorMessage))
+                return;
+        }
+        
 
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine(
@@ -78,7 +90,13 @@ public static class ResultExtensions
         // Message for the given property id
         var relatedMessages = validationFailure.ValidationFailures.Where(x =>
             x.Key == propertyName
-        );
+        ).ToList();
+
+        if (notFoundFailure is not null)
+        {
+            relatedMessages.Add(new KeyValuePair<string, string[]>(notFoundFailure.PropertyName, new[] { notFoundFailure.ValidationMessage }));
+        }
+        
 
         foreach (var (key, value) in relatedMessages)
         {
@@ -110,12 +128,24 @@ public static class ResultExtensions
 
     private static bool HandlePropertyAndReturnSuccess(
         string propertyName,
-        FluentValidationFailure validationFailure
+        FluentValidationFailure validationFailure,
+        NotFoundFailure? notFoundFailure = null
     )
     {
-        var hasProperty = validationFailure.ValidationFailures.ContainsKey(propertyName);
-        if (hasProperty)
-            return true;
+        if (notFoundFailure is not null)
+        {
+            var hasProperty = notFoundFailure.PropertyName == propertyName;
+            if (hasProperty)
+                return true;
+            
+            validationFailure.ValidationFailures.Add(new KeyValuePair<string, string[]>(notFoundFailure.PropertyName, new []{notFoundFailure.ValidationMessage}));
+        }
+        else
+        {
+            var hasProperty = validationFailure.ValidationFailures.ContainsKey(propertyName);
+            if (hasProperty)
+                return true;
+        }
 
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine($"\"{propertyName}\" Property was not found");

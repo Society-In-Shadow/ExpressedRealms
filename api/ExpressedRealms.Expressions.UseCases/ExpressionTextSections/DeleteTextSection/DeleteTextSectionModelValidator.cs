@@ -18,10 +18,10 @@ internal sealed class DeleteTextSectionModelValidator : AbstractValidator<Delete
             .WithMessage("ExpressionId is required.")
             .MustAsync(async (x, y) => await expressionRepository.GetExpressionForDeletion(x) != null)
             .WithErrorCode("NotFound")
-            .WithMessage("This is not a valid expression.")
-            .MustAsync(async (x, y) => !(await expressionRepository.GetExpressionForDeletion(x))!.IsDeleted)
+            .WithMessage("This is not a valid expression.");
+            /*.MustAsync(async (x, y) => !(await expressionRepository.GetExpressionForDeletion(x))!.IsDeleted)
             .WithErrorCode("AlreadyDeleted")
-            .WithMessage("This is expression has been deleted.");
+            .WithMessage("This is expression has been deleted.");*/
 
         RuleFor(x => x.Id)
             .NotEmpty()

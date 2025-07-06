@@ -22,7 +22,7 @@ public static class ValidationHelper
         var errors = new List<IError>();
 
         var notFoundErrors = validationResult.Errors.Where(x => x.ErrorCode == "NotFound");
-        errors.AddRange(notFoundErrors.Select(x => new NotFoundFailure(x.PropertyName)));
+        errors.AddRange(notFoundErrors.Select(x => new NotFoundFailure(x.PropertyName, x.ErrorMessage)));
         validationResult.Errors.RemoveAll(x => x.ErrorCode == "NotFound");
         
         var alreadyDeleted = validationResult.Errors.Where(x => x.ErrorCode == "AlreadyDeleted");
