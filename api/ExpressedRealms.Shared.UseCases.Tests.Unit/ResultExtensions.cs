@@ -1,9 +1,9 @@
 using System.Text;
-using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
+using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FluentResults;
 using Xunit;
 
-namespace ExpressedRealms.Powers.Repository.Tests.Unit;
+namespace ExpressedRealms.Shared.UseCases.Tests.Unit;
 
 public static class ResultExtensions
 {
@@ -27,6 +27,8 @@ public static class ResultExtensions
             return;
 
         HandleMessage(propertyName, errorMessage, validationFailure);
+
+        Assert.True(true);
     }
 
     public static void HasValidationError<T>(

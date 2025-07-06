@@ -1,39 +1,89 @@
 using System.Reflection;
 using System.Text;
-using ExpressedRealms.Shared;
 using FluentValidation;
 using NetArchTest.Rules;
 using Xunit;
 
-namespace ExpressedRealms.Powers.Repository.Tests.Unit;
+namespace ExpressedRealms.Shared.UseCases.Tests.Unit;
 
-public class InfrastructureTests
+public abstract class InfrastructureTests
 {
+    private static Assembly _useCaseAssembly = null!;
+    private static Assembly _unitTestAssembly = null!;
+
+    protected InfrastructureTests()
+    {
+        var appAssemblies = AppDomain.CurrentDomain.GetAssemblies()
+            .Where(x => x.GetName().Name!.StartsWith("ExpressedRealms.") &&
+                        !x.GetName().Name!.Equals("ExpressedRealms.Shared.UseCases.Tests.Unit"))
+            .ToList();
+        
+        _unitTestAssembly = appAssemblies.First(x => x.GetName().Name!.EndsWith(".UseCases.Tests.Unit"));
+        
+        // Derive the UseCase assembly name from the test assembly name
+        var testAssemblyName = _unitTestAssembly.GetName().Name!;
+        var useCaseAssemblyName = testAssemblyName.Replace(".Tests.Unit", "");
+
+        _useCaseAssembly = Assembly.Load(useCaseAssemblyName);
+    }
+    
     [Fact]
     public void UseCases_MustEndIn_UseCase()
     {
         var result = Types
-            .InAssembly(typeof(PowersRepositoryInjections).Assembly)
+            .InAssembly(_useCaseAssembly)
             .That()
             .ImplementInterface(typeof(IGenericUseCase<,>))
             .Should()
             .HaveNameEndingWith("UseCase")
             .GetResult();
 
-        Assert.True(result.IsSuccessful);
+        if (result.IsSuccessful) return;
+        
+        var stringBuilder = new StringBuilder();
+
+        stringBuilder.AppendLine(
+            "One or more Use Cases do not end in \"UseCase\""
+        );
+
+        stringBuilder.AppendLine();
+
+        foreach (var className in result.FailingTypes)
+        {
+            stringBuilder.AppendLine($"Use Case: {className.Name}");
+            stringBuilder.AppendLine();
+        }
+        Assert.Fail(stringBuilder.ToString());
     }
 
     [Fact]
     public void UseCases_ShouldNeverCall_DBContextDirectly()
     {
         var result = Types
-            .InAssembly(typeof(PowersRepositoryInjections).Assembly)
+            .InAssembly(_useCaseAssembly)
             .That()
             .ImplementInterface(typeof(IGenericUseCase<,>))
             .ShouldNot()
             .HaveDependencyOn("ExpressedRealms.DB.ExpressedRealmsDbContext")
             .GetResult();
 
+        if (result.IsSuccessful) return;
+        
+        var stringBuilder = new StringBuilder();
+
+        stringBuilder.AppendLine(
+            "One or more Use Cases currently call the DBContext Directly"
+        );
+
+        stringBuilder.AppendLine();
+
+        foreach (var className in result.FailingTypes)
+        {
+            stringBuilder.AppendLine($"Use Case: {className.Name}");
+            stringBuilder.AppendLine();
+        }
+        Assert.Fail(stringBuilder.ToString());
+        
         Assert.True(result.IsSuccessful);
     }
 
@@ -110,10 +160,8 @@ public class InfrastructureTests
     [Fact]
     public void UseCases_ShouldHaveCorresponding_ModelAndValidator()
     {
-        var assembly = typeof(PowersRepositoryInjections).Assembly;
-
         var useCaseTypes = Types
-            .InAssembly(assembly)
+            .InAssembly(_useCaseAssembly)
             .That()
             .ImplementInterface(typeof(IGenericUseCase<,>))
             .And()
@@ -121,7 +169,7 @@ public class InfrastructureTests
             .GetTypes();
 
         var modelTypes = Types
-            .InAssembly(assembly)
+            .InAssembly(_useCaseAssembly)
             .That()
             .HaveNameEndingWith("Model")
             .GetTypes()
@@ -129,7 +177,7 @@ public class InfrastructureTests
             .ToHashSet();
 
         var validators = Types
-            .InAssembly(assembly)
+            .InAssembly(_useCaseAssembly)
             .That()
             .Inherit(typeof(AbstractValidator<>))
             .GetTypes()
@@ -162,6 +210,27 @@ public class InfrastructureTests
         Assert.Fail(stringBuilder.ToString());
     }
 
+    [Fact]
+    public void UseCasesAndTestAssemblies_ShouldHaveTheSameRootName()
+    {
+        var rootNamespaceForUnit = _unitTestAssembly.GetName().Name!.Replace(".UseCases.Tests.Unit", "");
+        var rootNamespaceForUseCase = _useCaseAssembly.GetName().Name!.Replace(".UseCases", "");
+        
+        Assert.Equal(rootNamespaceForUseCase, rootNamespaceForUnit);
+    }
+    
+    [Fact]
+    public void LogicShouldNotBeShared_BetweenUseCaseTests_AsideFromSharedProject()
+    {
+        var appAssemblies = AppDomain.CurrentDomain.GetAssemblies()
+            .Where(x => x.GetName().Name!.StartsWith("ExpressedRealms.") &&
+                        !x.GetName().Name!.Equals("ExpressedRealms.Shared.UseCases.Tests.Unit")
+                        && x.GetName().Name!.EndsWith(".UseCases.Tests.Unit"))
+            .ToList();
+
+        Assert.Single(appAssemblies);
+    }
+    
     private static List<ValidatorInformation> GetValidationMessages(
         IEnumerable<Type> useCaseTypes,
         HashSet<string> modelTypes,
