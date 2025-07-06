@@ -1,25 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
-    <ItemGroup>
-        <PackageReference Include="FluentResults" Version="3.16.0" />
-        <PackageReference Include="FluentValidation" Version="11.11.0" />
-        <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
-        <PackageReference
-                Include="Microsoft.Extensions.DependencyInjection.Abstractions"
-                Version="8.0.2"
-        />
-    </ItemGroup>
-    <ItemGroup>
-      <ProjectReference Include="..\ExpressedRealms.Expressions.Repository\ExpressedRealms.Expressions.Repository.csproj" />
-      <ProjectReference Include="..\ExpressedRealms.Shared.UseCases\ExpressedRealms.Shared.UseCases.csproj" />
-      <ProjectReference Include="..\ExpressedRealms.Shared\ExpressedRealms.Shared.csproj" />
-    </ItemGroup>
-    <ItemGroup>
-        <InternalsVisibleTo Include="ExpressedRealms.Expressions.UseCases.Tests.Unit" />
-        <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
-    </ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentResults" Version="3.16.0" />
+    <PackageReference Include="FluentValidation" Version="11.11.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
+    <PackageReference
+      Include="Microsoft.Extensions.DependencyInjection.Abstractions"
+      Version="8.0.2"
+    />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExpressedRealms.Expressions.Repository\ExpressedRealms.Expressions.Repository.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Shared.UseCases\ExpressedRealms.Shared.UseCases.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Shared\ExpressedRealms.Shared.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="ExpressedRealms.Expressions.UseCases.Tests.Unit" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
 </Project>

@@ -144,7 +144,7 @@ internal sealed class ExpressionRepository(
 
         return Result.Ok();
     }
-    
+
     public async Task<Expression?> GetExpressionForDeletion(int id)
     {
         return await context

@@ -62,7 +62,10 @@ public class GetPrerequisiteUseCaseTests
         _model.PowerId = 0;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(GetPrerequisiteModel.PowerId), "Power Id is required.");
+        results.MustHaveValidationError(
+            nameof(GetPrerequisiteModel.PowerId),
+            "Power Id is required."
+        );
     }
 
     [Fact]

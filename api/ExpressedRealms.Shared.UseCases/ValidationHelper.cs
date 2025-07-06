@@ -22,11 +22,15 @@ public static class ValidationHelper
         var errors = new List<IError>();
 
         var notFoundErrors = validationResult.Errors.Where(x => x.ErrorCode == "NotFound");
-        errors.AddRange(notFoundErrors.Select(x => new NotFoundFailure(x.PropertyName, x.ErrorMessage)));
+        errors.AddRange(
+            notFoundErrors.Select(x => new NotFoundFailure(x.PropertyName, x.ErrorMessage))
+        );
         validationResult.Errors.RemoveAll(x => x.ErrorCode == "NotFound");
-        
+
         var alreadyDeleted = validationResult.Errors.Where(x => x.ErrorCode == "AlreadyDeleted");
-        errors.AddRange(alreadyDeleted.Select(x => new AlreadyDeletedFailure(x.PropertyName, x.ErrorMessage)));
+        errors.AddRange(
+            alreadyDeleted.Select(x => new AlreadyDeletedFailure(x.PropertyName, x.ErrorMessage))
+        );
         validationResult.Errors.RemoveAll(x => x.ErrorCode == "AlreadyDeleted");
 
         errors.Add(new FluentValidationFailure(validationResult.ToDictionary()));

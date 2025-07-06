@@ -13,20 +13,25 @@ public abstract class InfrastructureTests
 
     protected InfrastructureTests()
     {
-        var appAssemblies = AppDomain.CurrentDomain.GetAssemblies()
-            .Where(x => x.GetName().Name!.StartsWith("ExpressedRealms.") &&
-                        !x.GetName().Name!.Equals("ExpressedRealms.Shared.UseCases.Tests.Unit"))
+        var appAssemblies = AppDomain
+            .CurrentDomain.GetAssemblies()
+            .Where(x =>
+                x.GetName().Name!.StartsWith("ExpressedRealms.")
+                && !x.GetName().Name!.Equals("ExpressedRealms.Shared.UseCases.Tests.Unit")
+            )
             .ToList();
-        
-        _unitTestAssembly = appAssemblies.First(x => x.GetName().Name!.EndsWith(".UseCases.Tests.Unit"));
-        
+
+        _unitTestAssembly = appAssemblies.First(x =>
+            x.GetName().Name!.EndsWith(".UseCases.Tests.Unit")
+        );
+
         // Derive the UseCase assembly name from the test assembly name
         var testAssemblyName = _unitTestAssembly.GetName().Name!;
         var useCaseAssemblyName = testAssemblyName.Replace(".Tests.Unit", "");
 
         _useCaseAssembly = Assembly.Load(useCaseAssemblyName);
     }
-    
+
     [Fact]
     public void UseCases_MustEndIn_UseCase()
     {
@@ -38,13 +43,12 @@ public abstract class InfrastructureTests
             .HaveNameEndingWith("UseCase")
             .GetResult();
 
-        if (result.IsSuccessful) return;
-        
+        if (result.IsSuccessful)
+            return;
+
         var stringBuilder = new StringBuilder();
 
-        stringBuilder.AppendLine(
-            "One or more Use Cases do not end in \"UseCase\""
-        );
+        stringBuilder.AppendLine("One or more Use Cases do not end in \"UseCase\"");
 
         stringBuilder.AppendLine();
 
@@ -67,13 +71,12 @@ public abstract class InfrastructureTests
             .HaveDependencyOn("ExpressedRealms.DB.ExpressedRealmsDbContext")
             .GetResult();
 
-        if (result.IsSuccessful) return;
-        
+        if (result.IsSuccessful)
+            return;
+
         var stringBuilder = new StringBuilder();
 
-        stringBuilder.AppendLine(
-            "One or more Use Cases currently call the DBContext Directly"
-        );
+        stringBuilder.AppendLine("One or more Use Cases currently call the DBContext Directly");
 
         stringBuilder.AppendLine();
 
@@ -83,7 +86,7 @@ public abstract class InfrastructureTests
             stringBuilder.AppendLine();
         }
         Assert.Fail(stringBuilder.ToString());
-        
+
         Assert.True(result.IsSuccessful);
     }
 
@@ -213,24 +216,29 @@ public abstract class InfrastructureTests
     [Fact]
     public void UseCasesAndTestAssemblies_ShouldHaveTheSameRootName()
     {
-        var rootNamespaceForUnit = _unitTestAssembly.GetName().Name!.Replace(".UseCases.Tests.Unit", "");
+        var rootNamespaceForUnit = _unitTestAssembly
+            .GetName()
+            .Name!.Replace(".UseCases.Tests.Unit", "");
         var rootNamespaceForUseCase = _useCaseAssembly.GetName().Name!.Replace(".UseCases", "");
-        
+
         Assert.Equal(rootNamespaceForUseCase, rootNamespaceForUnit);
     }
-    
+
     [Fact]
     public void LogicShouldNotBeShared_BetweenUseCaseTests_AsideFromSharedProject()
     {
-        var appAssemblies = AppDomain.CurrentDomain.GetAssemblies()
-            .Where(x => x.GetName().Name!.StartsWith("ExpressedRealms.") &&
-                        !x.GetName().Name!.Equals("ExpressedRealms.Shared.UseCases.Tests.Unit")
-                        && x.GetName().Name!.EndsWith(".UseCases.Tests.Unit"))
+        var appAssemblies = AppDomain
+            .CurrentDomain.GetAssemblies()
+            .Where(x =>
+                x.GetName().Name!.StartsWith("ExpressedRealms.")
+                && !x.GetName().Name!.Equals("ExpressedRealms.Shared.UseCases.Tests.Unit")
+                && x.GetName().Name!.EndsWith(".UseCases.Tests.Unit")
+            )
             .ToList();
 
         Assert.Single(appAssemblies);
     }
-    
+
     private static List<ValidatorInformation> GetValidationMessages(
         IEnumerable<Type> useCaseTypes,
         HashSet<string> modelTypes,

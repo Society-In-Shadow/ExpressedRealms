@@ -6,6 +6,7 @@ public sealed class NotFoundFailure : Error, IValidationSourcedError
 {
     public string PropertyName { get; set; }
     public string ValidationMessage { get; set; }
+
     public NotFoundFailure(string objectName, string messageName)
     {
         PropertyName = objectName;

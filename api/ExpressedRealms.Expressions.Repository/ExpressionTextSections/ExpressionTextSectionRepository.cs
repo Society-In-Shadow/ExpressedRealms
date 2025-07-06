@@ -68,7 +68,8 @@ internal sealed class ExpressionTextSectionRepository(
                 Id = x.Id,
                 Name = x.Name,
                 Description = x.Description,
-            }).Where(x => x.Name != "Expression" && x.Name != "Knowledges Section")
+            })
+            .Where(x => x.Name != "Expression" && x.Name != "Knowledges Section")
             .ToListAsync();
     }
 
@@ -193,15 +194,17 @@ internal sealed class ExpressionTextSectionRepository(
             Content = section.Content,
         };
     }
-    
-    public async Task<ExpressionSection?> GetExpressionSectionForDeletion(int expressionId, int sectionId)
+
+    public async Task<ExpressionSection?> GetExpressionSectionForDeletion(
+        int expressionId,
+        int sectionId
+    )
     {
         return await context
-            .ExpressionSections.AsNoTracking().IgnoreQueryFilters()
+            .ExpressionSections.AsNoTracking()
+            .IgnoreQueryFilters()
             .Include(x => x.SectionType)
-            .FirstOrDefaultAsync(x =>
-                x.ExpressionId == expressionId && x.Id == sectionId
-            );
+            .FirstOrDefaultAsync(x => x.ExpressionId == expressionId && x.Id == sectionId);
     }
 
     public async Task<Result> UpdateSectionHierarchyAndSorting(EditExpressionHierarchyDto dto)

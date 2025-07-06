@@ -12,7 +12,7 @@ public static class ExpressionsUseCaseConfiguration
     {
         services.ImportGenericUseCases(Assembly.GetExecutingAssembly());
         services.ImportValidators(Assembly.GetExecutingAssembly());
-        
+
         return services;
     }
 }

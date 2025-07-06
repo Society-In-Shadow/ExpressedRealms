@@ -33,9 +33,9 @@ internal static class ExpectedSubSectionsEndpoints
                 {
                     var section = await repository.GetExpressionSection(id);
 
-                    if(section is null)
+                    if (section is null)
                         return TypedResults.NotFound();
-                    
+
                     return TypedResults.Ok(
                         new ExpressionSectionDto()
                         {

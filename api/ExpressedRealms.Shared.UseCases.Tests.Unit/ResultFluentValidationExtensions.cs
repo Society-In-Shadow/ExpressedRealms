@@ -23,7 +23,12 @@ public static class ResultFluentValidationExtensions
             return;
         }
 
-        if (!HandlePropertyAndReturnSuccess<IValidationSourcedError>(propertyName, validationFailure))
+        if (
+            !HandlePropertyAndReturnSuccess<IValidationSourcedError>(
+                propertyName,
+                validationFailure
+            )
+        )
             return;
 
         HandleMessage<IValidationSourcedError>(propertyName, errorMessage, validationFailure);
@@ -47,19 +52,25 @@ public static class ResultFluentValidationExtensions
             return;
         }
 
-        if (!HandlePropertyAndReturnSuccess<IValidationSourcedError>(propertyName, validationFailure))
+        if (
+            !HandlePropertyAndReturnSuccess<IValidationSourcedError>(
+                propertyName,
+                validationFailure
+            )
+        )
             return;
 
         HandleMessage<IValidationSourcedError>(propertyName, errorMessage, validationFailure);
 
         Assert.True(true);
     }
-    
+
     public static void MustHaveValidationError<T>(
         this Result result,
         string propertyName,
         string? errorMessage = null
-    ) where T : class, IValidationSourcedError
+    )
+        where T : class, IValidationSourcedError
     {
         Assert.False(result.IsSuccess);
 
@@ -84,7 +95,8 @@ public static class ResultFluentValidationExtensions
         this Result<TResult> result,
         string propertyName,
         string? errorMessage = null
-    ) where T : class, IValidationSourcedError
+    )
+        where T : class, IValidationSourcedError
     {
         Assert.False(result.IsSuccess);
 
@@ -97,7 +109,13 @@ public static class ResultFluentValidationExtensions
             return;
         }
 
-        if (!HandlePropertyAndReturnSuccess(propertyName, validationFailure, validationSpecificError))
+        if (
+            !HandlePropertyAndReturnSuccess(
+                propertyName,
+                validationFailure,
+                validationSpecificError
+            )
+        )
             return;
 
         HandleMessage(propertyName, errorMessage, validationFailure, validationSpecificError);
@@ -108,9 +126,9 @@ public static class ResultFluentValidationExtensions
         string? errorMessage,
         FluentValidationFailure validationFailure,
         T? notFoundFailure = null
-    ) where T : class, IValidationSourcedError
+    )
+        where T : class, IValidationSourcedError
     {
-
         if (notFoundFailure is not null)
         {
             if (notFoundFailure.ValidationMessage == errorMessage)
@@ -125,7 +143,6 @@ public static class ResultFluentValidationExtensions
             if (hasErrorMessage || string.IsNullOrWhiteSpace(errorMessage))
                 return;
         }
-        
 
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine(
@@ -137,15 +154,19 @@ public static class ResultFluentValidationExtensions
         stringBuilder.AppendLine("The available ones are:");
 
         // Message for the given property id
-        var relatedMessages = validationFailure.ValidationFailures.Where(x =>
-            x.Key == propertyName
-        ).ToList();
+        var relatedMessages = validationFailure
+            .ValidationFailures.Where(x => x.Key == propertyName)
+            .ToList();
 
         if (notFoundFailure is not null)
         {
-            relatedMessages.Add(new KeyValuePair<string, string[]>(notFoundFailure.PropertyName, new[] { notFoundFailure.ValidationMessage }));
+            relatedMessages.Add(
+                new KeyValuePair<string, string[]>(
+                    notFoundFailure.PropertyName,
+                    new[] { notFoundFailure.ValidationMessage }
+                )
+            );
         }
-        
 
         foreach (var (key, value) in relatedMessages)
         {
@@ -179,15 +200,21 @@ public static class ResultFluentValidationExtensions
         string propertyName,
         FluentValidationFailure validationFailure,
         T? validationSpecificError = null
-    ) where T : class, IValidationSourcedError
+    )
+        where T : class, IValidationSourcedError
     {
         if (validationSpecificError is not null)
         {
             var hasProperty = validationSpecificError.PropertyName == propertyName;
             if (hasProperty)
                 return true;
-            
-            validationFailure.ValidationFailures.Add(new KeyValuePair<string, string[]>(validationSpecificError.PropertyName, new []{validationSpecificError.ValidationMessage}));
+
+            validationFailure.ValidationFailures.Add(
+                new KeyValuePair<string, string[]>(
+                    validationSpecificError.PropertyName,
+                    new[] { validationSpecificError.ValidationMessage }
+                )
+            );
         }
         else
         {
