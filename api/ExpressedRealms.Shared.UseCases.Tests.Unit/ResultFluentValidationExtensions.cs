@@ -5,7 +5,7 @@ using Xunit;
 
 namespace ExpressedRealms.Shared.UseCases.Tests.Unit;
 
-public static class ResultExtensions
+public static class ResultFluentValidationExtensions
 {
     public static void MustHaveValidationError(
         this Result result,
@@ -16,7 +16,6 @@ public static class ResultExtensions
         Assert.False(result.IsSuccess);
 
         var validationFailure = result.Errors.OfType<FluentValidationFailure>().FirstOrDefault();
-        var notFoundFailure = result.Errors.OfType<NotFoundFailure>().FirstOrDefault();
 
         if (validationFailure == null)
         {
@@ -24,10 +23,10 @@ public static class ResultExtensions
             return;
         }
 
-        if (!HandlePropertyAndReturnSuccess(propertyName, validationFailure, notFoundFailure))
+        if (!HandlePropertyAndReturnSuccess<IValidationSourcedError>(propertyName, validationFailure))
             return;
 
-        HandleMessage(propertyName, errorMessage, validationFailure, notFoundFailure);
+        HandleMessage<IValidationSourcedError>(propertyName, errorMessage, validationFailure);
 
         Assert.True(true);
     }
@@ -48,18 +47,68 @@ public static class ResultExtensions
             return;
         }
 
-        if (!HandlePropertyAndReturnSuccess(propertyName, validationFailure))
+        if (!HandlePropertyAndReturnSuccess<IValidationSourcedError>(propertyName, validationFailure))
             return;
 
-        HandleMessage(propertyName, errorMessage, validationFailure);
+        HandleMessage<IValidationSourcedError>(propertyName, errorMessage, validationFailure);
+
+        Assert.True(true);
+    }
+    
+    public static void MustHaveValidationError<T>(
+        this Result result,
+        string propertyName,
+        string? errorMessage = null
+    ) where T : class, IValidationSourcedError
+    {
+        Assert.False(result.IsSuccess);
+
+        var validationFailure = result.Errors.OfType<FluentValidationFailure>().FirstOrDefault();
+        var notFoundFailure = result.Errors.OfType<T>().FirstOrDefault();
+
+        if (validationFailure == null)
+        {
+            Assert.Fail("No validation failure");
+            return;
+        }
+
+        if (!HandlePropertyAndReturnSuccess(propertyName, validationFailure, notFoundFailure))
+            return;
+
+        HandleMessage(propertyName, errorMessage, validationFailure, notFoundFailure);
+
+        Assert.True(true);
     }
 
-    private static void HandleMessage(
+    public static void MustHaveValidationError<T, TResult>(
+        this Result<TResult> result,
+        string propertyName,
+        string? errorMessage = null
+    ) where T : class, IValidationSourcedError
+    {
+        Assert.False(result.IsSuccess);
+
+        var validationFailure = result.Errors.OfType<FluentValidationFailure>().FirstOrDefault();
+        var validationSpecificError = result.Errors.OfType<T>().FirstOrDefault();
+
+        if (validationFailure == null)
+        {
+            Assert.Fail("No validation failure");
+            return;
+        }
+
+        if (!HandlePropertyAndReturnSuccess(propertyName, validationFailure, validationSpecificError))
+            return;
+
+        HandleMessage(propertyName, errorMessage, validationFailure, validationSpecificError);
+    }
+
+    private static void HandleMessage<T>(
         string propertyName,
         string? errorMessage,
         FluentValidationFailure validationFailure,
-        NotFoundFailure? notFoundFailure = null
-    )
+        T? notFoundFailure = null
+    ) where T : class, IValidationSourcedError
     {
 
         if (notFoundFailure is not null)
@@ -126,19 +175,19 @@ public static class ResultExtensions
         Assert.Fail(stringBuilder.ToString());
     }
 
-    private static bool HandlePropertyAndReturnSuccess(
+    private static bool HandlePropertyAndReturnSuccess<T>(
         string propertyName,
         FluentValidationFailure validationFailure,
-        NotFoundFailure? notFoundFailure = null
-    )
+        T? validationSpecificError = null
+    ) where T : class, IValidationSourcedError
     {
-        if (notFoundFailure is not null)
+        if (validationSpecificError is not null)
         {
-            var hasProperty = notFoundFailure.PropertyName == propertyName;
+            var hasProperty = validationSpecificError.PropertyName == propertyName;
             if (hasProperty)
                 return true;
             
-            validationFailure.ValidationFailures.Add(new KeyValuePair<string, string[]>(notFoundFailure.PropertyName, new []{notFoundFailure.ValidationMessage}));
+            validationFailure.ValidationFailures.Add(new KeyValuePair<string, string[]>(validationSpecificError.PropertyName, new []{validationSpecificError.ValidationMessage}));
         }
         else
         {
