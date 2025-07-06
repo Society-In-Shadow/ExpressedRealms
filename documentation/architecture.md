@@ -50,10 +50,12 @@ More information on how we use the Audit Framework can be found in the [EF Core 
 ## Testing
 
 ### Unit Tests
-As of writing, the only unit tests implemented are vitests.
-This is mainly to test the front end pinia stores and custom logic.
+We have unit tests in both the front end and backend.
 
 The github actions will run them on every push to a PR, and they must all be passing to merge
+
+See [Backend Unit Testing](backendUnitTesting.md) for how we have the backend setup.
+See [Vitests](vitesting.md) for how we do generic frontend tests.
 
 ### Component Tests
 Cypress is being used for component testing.  When writing these, we are looking for complete coverage of the functional
