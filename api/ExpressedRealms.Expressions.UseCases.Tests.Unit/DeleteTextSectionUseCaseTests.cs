@@ -29,7 +29,7 @@ public class DeleteTextSectionUseCaseTests
             Id = _model.ExpressionId,
         });
         
-        A.CallTo(() => _textRepository.GetExpressionSectionForDeletion(_model.Id)).Returns(new ExpressionSection()
+        A.CallTo(() => _textRepository.GetExpressionSectionForDeletion(_model.ExpressionId, _model.Id)).Returns(new ExpressionSection()
         {
             Id = _model.Id,
         });
@@ -79,7 +79,7 @@ public class DeleteTextSectionUseCaseTests
     [Fact]
     public async Task ValidationFor_Id_WillFail_IfExpressionSectionDoesNotExist()
     {
-        A.CallTo(() => _textRepository.GetExpressionSectionForDeletion(A<int>.Ignored)).Returns(Task.FromResult<ExpressionSection?>(null));
+        A.CallTo(() => _textRepository.GetExpressionSectionForDeletion(_model.ExpressionId, _model.Id)).Returns(Task.FromResult<ExpressionSection?>(null));
 
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError<NotFoundFailure>(
@@ -91,7 +91,7 @@ public class DeleteTextSectionUseCaseTests
     [Fact]
     public async Task ValidationFor_Id_WillFail_IfExpressionHasBeenDeleted()
     {
-        A.CallTo(() => _textRepository.GetExpressionSectionForDeletion(A<int>.Ignored)).Returns(new ExpressionSection()
+        A.CallTo(() => _textRepository.GetExpressionSectionForDeletion(_model.ExpressionId, _model.Id)).Returns(new ExpressionSection()
         {
             IsDeleted = true,
         });

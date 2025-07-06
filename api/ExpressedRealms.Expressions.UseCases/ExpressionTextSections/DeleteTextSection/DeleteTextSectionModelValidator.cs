@@ -29,18 +29,21 @@ internal sealed class DeleteTextSectionModelValidator : AbstractValidator<Delete
 
         RuleFor(x => x.Id)
             .NotEmpty()
-            .WithMessage("Id is required.")
-            .MustAsync(async (x, y) => await textRepository.GetExpressionSectionForDeletion(x) != null)
+            .WithMessage("Id is required.");
+        
+        RuleFor(x => x)
+            .MustAsync(async (x, y) => await textRepository.GetExpressionSectionForDeletion(x.ExpressionId, x.Id) != null)
             .WithErrorCode("NotFound")
+            .WithName("Id")
             .WithMessage("This is not a valid expression section.")
             .DependentRules(() =>
             {
-                RuleFor(x => x.Id)
-                    .MustAsync(async (x, y) => !(await textRepository.GetExpressionSectionForDeletion(x))!.IsDeleted)
+                RuleFor(x => x)
+                    .MustAsync(async (x, y) => !(await textRepository.GetExpressionSectionForDeletion(x.ExpressionId, x.Id))!.IsDeleted)
                     .WithErrorCode("AlreadyDeleted")
+                    .WithName("Id")
                     .WithMessage("This expression section has been deleted.");
-            })
-            ;
+            });
 
     }
 }
