@@ -144,4 +144,11 @@ internal sealed class ExpressionRepository(
 
         return Result.Ok();
     }
+    
+    public async Task<Expression?> GetExpressionForDeletion(int id)
+    {
+        return await context
+            .Expressions.IgnoreQueryFilters()
+            .FirstOrDefaultAsync(x => x.Id == id && x.ExpressionTypeId == 1); // 1 = expression
+    }
 }

@@ -143,13 +143,7 @@ internal sealed class ExpressionTextSectionRepository(
     {
         var section = await context
             .ExpressionSections.IgnoreQueryFilters()
-            .FirstOrDefaultAsync(x => x.ExpressionId == expressionId && x.Id == id);
-
-        if (section is null)
-            return Result.Fail(new NotFoundFailure("Expression Section"));
-
-        if (section.IsDeleted)
-            return Result.Fail(new AlreadyDeletedFailure("Expression Section"));
+            .FirstAsync(x => x.ExpressionId == expressionId && x.Id == id);
 
         section.SoftDelete();
         await context.SaveChangesAsync(cancellationToken);
@@ -198,6 +192,15 @@ internal sealed class ExpressionTextSectionRepository(
             Id = section.Id,
             Content = section.Content,
         };
+    }
+    
+    public async Task<ExpressionSection?> GetExpressionSectionForDeletion(int expressionId)
+    {
+        return await context
+            .ExpressionSections.AsNoTracking().IgnoreQueryFilters()
+            .FirstOrDefaultAsync(x =>
+                x.ExpressionId == expressionId && x.SectionType.Name == "Expression"
+            );
     }
 
     public async Task<Result> UpdateSectionHierarchyAndSorting(EditExpressionHierarchyDto dto)
