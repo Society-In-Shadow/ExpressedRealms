@@ -68,7 +68,7 @@ internal sealed class ExpressionTextSectionRepository(
                 Id = x.Id,
                 Name = x.Name,
                 Description = x.Description,
-            })
+            }).Where(x => x.Name != "Expression" && x.Name != "Knowledges Section")
             .ToListAsync();
     }
 
