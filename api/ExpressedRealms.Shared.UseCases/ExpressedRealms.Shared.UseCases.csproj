@@ -8,12 +8,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Reference Include="FluentResults">
-        <HintPath>..\..\..\..\.nuget\packages\fluentresults\3.16.0\lib\netstandard2.1\FluentResults.dll</HintPath>
-      </Reference>
-      <Reference Include="FluentValidation">
-        <HintPath>..\..\..\..\.nuget\packages\fluentvalidation\11.11.0\lib\net8.0\FluentValidation.dll</HintPath>
-      </Reference>
+        <PackageReference Include="FluentResults" Version="3.16.0" />
+        <PackageReference Include="FluentValidation" Version="11.11.0" />
     </ItemGroup>
 
 </Project>
