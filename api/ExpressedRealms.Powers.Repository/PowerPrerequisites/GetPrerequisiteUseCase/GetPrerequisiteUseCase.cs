@@ -1,3 +1,4 @@
+using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
 namespace ExpressedRealms.Powers.Repository.PowerPrerequisites.GetPrerequisiteUseCase;

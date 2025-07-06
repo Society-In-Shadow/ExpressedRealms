@@ -1,5 +1,6 @@
 using ExpressedRealms.DB.Models.Powers.PowerPrerequisitePowerSetup;
 using ExpressedRealms.DB.Models.Powers.PowerPrerequisiteSetup;
+using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 using JetBrains.Annotations;
 

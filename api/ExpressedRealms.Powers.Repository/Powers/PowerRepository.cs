@@ -7,6 +7,7 @@ using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerEdit;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerList;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerSorting;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
+using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 
