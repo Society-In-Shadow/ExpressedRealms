@@ -194,12 +194,13 @@ internal sealed class ExpressionTextSectionRepository(
         };
     }
     
-    public async Task<ExpressionSection?> GetExpressionSectionForDeletion(int expressionId)
+    public async Task<ExpressionSection?> GetExpressionSectionForDeletion(int expressionId, int sectionId)
     {
         return await context
             .ExpressionSections.AsNoTracking().IgnoreQueryFilters()
+            .Include(x => x.SectionType)
             .FirstOrDefaultAsync(x =>
-                x.ExpressionId == expressionId && x.SectionType.Name == "Expression"
+                x.ExpressionId == expressionId && x.Id == sectionId
             );
     }
 
