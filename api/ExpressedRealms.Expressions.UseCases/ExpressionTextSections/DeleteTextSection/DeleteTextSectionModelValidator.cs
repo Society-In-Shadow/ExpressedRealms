@@ -18,10 +18,14 @@ internal sealed class DeleteTextSectionModelValidator : AbstractValidator<Delete
             .WithMessage("ExpressionId is required.")
             .MustAsync(async (x, y) => await expressionRepository.GetExpressionForDeletion(x) != null)
             .WithErrorCode("NotFound")
-            .WithMessage("This is not a valid expression.");
-            /*.MustAsync(async (x, y) => !(await expressionRepository.GetExpressionForDeletion(x))!.IsDeleted)
-            .WithErrorCode("AlreadyDeleted")
-            .WithMessage("This is expression has been deleted.");*/
+            .WithMessage("This is not a valid expression.")
+            .DependentRules(() =>
+            {
+                RuleFor(x => x.ExpressionId)
+                    .MustAsync(async (x, y) => !(await expressionRepository.GetExpressionForDeletion(x))!.IsDeleted)
+                    .WithErrorCode("AlreadyDeleted")
+                    .WithMessage("This expression has been deleted.");
+            });
 
         RuleFor(x => x.Id)
             .NotEmpty()
@@ -29,9 +33,14 @@ internal sealed class DeleteTextSectionModelValidator : AbstractValidator<Delete
             .MustAsync(async (x, y) => await textRepository.GetExpressionSectionForDeletion(x) != null)
             .WithErrorCode("NotFound")
             .WithMessage("This is not a valid expression section.")
-            .MustAsync(async (x, y) => !(await textRepository.GetExpressionSectionForDeletion(x))!.IsDeleted)
-            .WithErrorCode("AlreadyDeleted")
-            .WithMessage("This is expression section has been deleted.");
+            .DependentRules(() =>
+            {
+                RuleFor(x => x.Id)
+                    .MustAsync(async (x, y) => !(await textRepository.GetExpressionSectionForDeletion(x))!.IsDeleted)
+                    .WithErrorCode("AlreadyDeleted")
+                    .WithMessage("This expression section has been deleted.");
+            })
+            ;
 
     }
 }
