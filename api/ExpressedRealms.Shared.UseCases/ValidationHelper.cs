@@ -26,7 +26,7 @@ public static class ValidationHelper
         validationResult.Errors.RemoveAll(x => x.ErrorCode == "NotFound");
         
         var alreadyDeleted = validationResult.Errors.Where(x => x.ErrorCode == "AlreadyDeleted");
-        errors.AddRange(alreadyDeleted.Select(x => new AlreadyDeletedFailure(x.PropertyName)));
+        errors.AddRange(alreadyDeleted.Select(x => new AlreadyDeletedFailure(x.PropertyName, x.ErrorMessage)));
         validationResult.Errors.RemoveAll(x => x.ErrorCode == "AlreadyDeleted");
 
         errors.Add(new FluentValidationFailure(validationResult.ToDictionary()));

@@ -2,7 +2,7 @@ using FluentResults;
 
 namespace ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 
-public sealed class NotFoundFailure : Error
+public sealed class NotFoundFailure : Error, IValidationSourcedError
 {
     public string PropertyName { get; set; }
     public string ValidationMessage { get; set; }
