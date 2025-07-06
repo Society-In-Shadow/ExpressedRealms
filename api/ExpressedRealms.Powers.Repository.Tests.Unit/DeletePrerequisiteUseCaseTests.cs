@@ -38,7 +38,7 @@ public class DeletePrerequisiteUseCaseTests
         A.CallTo(() => _powerRepository.IsValidRequirement(_model.Id)).Returns(false);
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.HasValidationError(
+        results.MustHaveValidationError(
             nameof(DeletePrerequisiteModel.Id),
             "This is not a valid prerequisite id."
         );
@@ -50,7 +50,7 @@ public class DeletePrerequisiteUseCaseTests
         _model.Id = 0;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.HasValidationError(nameof(DeletePrerequisiteModel.Id), "Id is required.");
+        results.MustHaveValidationError(nameof(DeletePrerequisiteModel.Id), "Id is required.");
     }
 
     [Fact]

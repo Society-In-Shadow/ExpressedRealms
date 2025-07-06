@@ -41,12 +41,12 @@ public class CreatePrerequisiteUseCaseTests
     }
 
     [Fact]
-    public async Task ValidationFor_PoweRequirement_WillFail_WhenPrerequisiteAlreadyExists()
+    public async Task ValidationFor_PowerRequirement_WillFail_WhenPrerequisiteAlreadyExists()
     {
         A.CallTo(() => _powerRepository.RequirementAlreadyExists(A<int>.Ignored)).Returns(true);
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.HasValidationError(
+        results.MustHaveValidationError(
             nameof(CreatePrerequisiteModel.PowerId),
             "A Power Requirement already exists for this power."
         );
@@ -58,7 +58,7 @@ public class CreatePrerequisiteUseCaseTests
         A.CallTo(() => _powerRepository.IsValidPower(A<int>.Ignored)).Returns(false);
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.HasValidationError(nameof(CreatePrerequisiteModel.PowerId), "Invalid Power.");
+        results.MustHaveValidationError(nameof(CreatePrerequisiteModel.PowerId), "Invalid Power.");
     }
 
     [Fact]
@@ -67,7 +67,7 @@ public class CreatePrerequisiteUseCaseTests
         _model.PowerId = 0;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.HasValidationError(
+        results.MustHaveValidationError(
             nameof(CreatePrerequisiteModel.PowerId),
             "Power Id is required."
         );
@@ -80,7 +80,7 @@ public class CreatePrerequisiteUseCaseTests
 
         var results = await _useCase.ExecuteAsync(_model);
 
-        results.HasValidationError(
+        results.MustHaveValidationError(
             nameof(CreatePrerequisiteModel.PrerequisitePowerIds),
             "One or more prerequisite powers are invalid."
         );
@@ -93,7 +93,7 @@ public class CreatePrerequisiteUseCaseTests
 
         var results = await _useCase.ExecuteAsync(_model);
 
-        results.HasValidationError(
+        results.MustHaveValidationError(
             nameof(CreatePrerequisiteModel.PrerequisitePowerIds),
             "Prerequisite Powers are required."
         );
@@ -110,7 +110,7 @@ public class CreatePrerequisiteUseCaseTests
         _model.RequiredAmount = requiredAmount;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.HasValidationError(
+        results.MustHaveValidationError(
             nameof(CreatePrerequisiteModel.RequiredAmount),
             "Required Amount can only be a value greater then 0, or -1 (All) or -2 (Any)"
         );

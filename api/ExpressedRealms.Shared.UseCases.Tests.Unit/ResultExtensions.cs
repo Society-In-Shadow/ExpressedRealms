@@ -7,7 +7,7 @@ namespace ExpressedRealms.Shared.UseCases.Tests.Unit;
 
 public static class ResultExtensions
 {
-    public static void HasValidationError(
+    public static void MustHaveValidationError(
         this Result result,
         string propertyName,
         string? errorMessage = null
@@ -32,7 +32,7 @@ public static class ResultExtensions
         Assert.True(true);
     }
 
-    public static void HasValidationError<T>(
+    public static void MustHaveValidationError<T>(
         this Result<T> result,
         string propertyName,
         string? errorMessage = null

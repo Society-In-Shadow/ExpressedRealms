@@ -50,7 +50,7 @@ public class GetPrerequisiteUseCaseTests
         A.CallTo(() => _powerRepository.IsValidPower(_model.PowerId)).Returns(false);
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.HasValidationError(
+        results.MustHaveValidationError(
             nameof(GetPrerequisiteModel.PowerId),
             "This is not a valid power id."
         );
@@ -62,7 +62,7 @@ public class GetPrerequisiteUseCaseTests
         _model.PowerId = 0;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.HasValidationError(nameof(GetPrerequisiteModel.PowerId), "Power Id is required.");
+        results.MustHaveValidationError(nameof(GetPrerequisiteModel.PowerId), "Power Id is required.");
     }
 
     [Fact]

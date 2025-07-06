@@ -44,7 +44,7 @@ public class DeleteTextSectionUseCaseTests
         A.CallTo(() => _expressionRepository.GetExpressionForDeletion(A<int>.Ignored)).Returns(Task.FromResult<Expression?>(null));
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.HasValidationError(
+        results.MustHaveValidationError(
             nameof(DeleteTextSectionModel.ExpressionId),
             "This is not a valid expression."
         );
@@ -56,6 +56,6 @@ public class DeleteTextSectionUseCaseTests
         _model.ExpressionId = 0;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.HasValidationError(nameof(DeleteTextSectionModel.ExpressionId), "ExpressionId is required.");
+        results.MustHaveValidationError(nameof(DeleteTextSectionModel.ExpressionId), "ExpressionId is required.");
     }
 }

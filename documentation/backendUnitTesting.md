@@ -26,3 +26,17 @@ public class AssemblyInfrastructureTests : InfrastructureTests
 {
 }
 ```
+
+# Creating Custom Assertions
+Rider and sonar cloud will not pick up test assertions if they are custom.
+
+You can get around this by adding any of these names to the list:
+ - ASSERT
+ - CHECK
+ - EXPECT
+ - MUST
+ - SHOULD
+ - VERIFY
+ - VALIDATE
+
+per [Sonar Cloud Documentation](https://community.sonarsource.com/t/how-to-mark-custom-methods-as-assertion-methods-in-c/31437/2)

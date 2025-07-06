@@ -49,7 +49,7 @@ public class EditPrerequisiteUseCaseTests
         A.CallTo(() => _powerRepository.IsValidRequirement(_model.Id)).Returns(false);
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.HasValidationError(
+        results.MustHaveValidationError(
             nameof(EditPrerequisiteModel.Id),
             "This is not a valid prerequisite id."
         );
@@ -61,7 +61,7 @@ public class EditPrerequisiteUseCaseTests
         _model.Id = 0;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.HasValidationError(nameof(EditPrerequisiteModel.Id), "Id is required.");
+        results.MustHaveValidationError(nameof(EditPrerequisiteModel.Id), "Id is required.");
     }
 
     [Fact]
@@ -71,7 +71,7 @@ public class EditPrerequisiteUseCaseTests
 
         var results = await _useCase.ExecuteAsync(_model);
 
-        results.HasValidationError(
+        results.MustHaveValidationError(
             nameof(EditPrerequisiteModel.PrerequisitePowerIds),
             "One or more prerequisite powers are invalid."
         );
@@ -84,7 +84,7 @@ public class EditPrerequisiteUseCaseTests
 
         var results = await _useCase.ExecuteAsync(_model);
 
-        results.HasValidationError(
+        results.MustHaveValidationError(
             nameof(EditPrerequisiteModel.PrerequisitePowerIds),
             "Prerequisite Power Ids are required."
         );
@@ -101,7 +101,7 @@ public class EditPrerequisiteUseCaseTests
         _model.RequiredAmount = requiredAmount;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.HasValidationError(
+        results.MustHaveValidationError(
             nameof(EditPrerequisiteModel.RequiredAmount),
             "Required Amount can only be a value greater then 0, or -1 (All) or -2 (Any)"
         );
