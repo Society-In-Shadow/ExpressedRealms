@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.Expressions.Repository.Expressions.DTOs;
 using FluentResults;
 
@@ -12,4 +13,5 @@ public interface IExpressionRepository
     Task<Result<GetExpressionDto>> GetExpression(int expressionId);
     Task<Result<int>> GetGameSystemExpressionId();
     Task<Result<int>> GetTreasuredTalesExpressionId();
+    Task<Expression?> GetExpressionForDeletion(int i);
 }
