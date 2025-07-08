@@ -34,7 +34,9 @@ public static class ProcessChangedRecords
                 changedRecords
             ),
             nameof(Power) => PowerAuditTrailExtensions.ProcessChangedRecords(changedRecords),
-            nameof(Knowledge) => KnowledgesAuditTrailExtensions.ProcessChangedRecords(changedRecords),
+            nameof(Knowledge) => KnowledgesAuditTrailExtensions.ProcessChangedRecords(
+                changedRecords
+            ),
             _ => throw new ArgumentException(
                 $"Table not setup in the ProcessChangedRecords class: {tableName}"
             ),

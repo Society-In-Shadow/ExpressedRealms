@@ -9,11 +9,10 @@ public class Knowledge : ISoftDelete
     public int KnowledgeTypeId { get; set; }
     public string Name { get; set; } = null!;
     public string Description { get; set; } = null!;
-    
+
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
-    
+
     public virtual KnowledgeType KnowledgeType { get; set; } = null!;
     public virtual List<KnowledgeAuditTrail> KnowledgeAuditTrails { get; set; } = null!;
-
 }
