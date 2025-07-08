@@ -13,6 +13,7 @@ using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
 namespace ExpressedRealms.Powers.API.PowerPrerequisites;
@@ -32,7 +33,7 @@ internal static class PowerPrerequisiteEndpoints
                 "/{powerId}/prerequisites",
                 async Task<Results<ValidationProblem, Ok<GetPrerequisiteResponse?>>> (
                     int powerId,
-                    IGetPrerequisiteUseCase getCase
+                    [FromServices]IGetPrerequisiteUseCase getCase
                 ) =>
                 {
                     var results = await getCase.ExecuteAsync(
@@ -68,7 +69,7 @@ internal static class PowerPrerequisiteEndpoints
                 async Task<Results<ValidationProblem, Ok>> (
                     int powerId,
                     CreatePrerequisiteRequest request,
-                    ICreatePrerequisiteUseCase createCase
+                    [FromServices]ICreatePrerequisiteUseCase createCase
                 ) =>
                 {
                     var results = await createCase.ExecuteAsync(
@@ -97,7 +98,7 @@ internal static class PowerPrerequisiteEndpoints
                 async Task<Results<ValidationProblem, Ok>> (
                     int powerId,
                     int prerequisiteId,
-                    IDeletePrerequisiteUseCase deleteCase
+                    [FromServices]IDeletePrerequisiteUseCase deleteCase
                 ) =>
                 {
                     var results = await deleteCase.ExecuteAsync(
@@ -122,7 +123,7 @@ internal static class PowerPrerequisiteEndpoints
                     int powerId,
                     int prerequisiteId,
                     EditPrerequisiteRequest request,
-                    IEditPrerequisiteUseCase editCase
+                    [FromServices]IEditPrerequisiteUseCase editCase
                 ) =>
                 {
                     var results = await editCase.ExecuteAsync(
