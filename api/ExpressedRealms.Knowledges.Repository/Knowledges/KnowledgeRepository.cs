@@ -54,14 +54,15 @@ internal sealed class KnowledgeRepository(
 
     public async Task<List<Knowledge>> GetKnowledges()
     {
-        return await context.Knowledges
-            .Include(x => x.KnowledgeType)
+        return await context
+            .Knowledges.Include(x => x.KnowledgeType)
             .ToListAsync(cancellationToken);
     }
 
     public Task<Knowledge> GetKnowledgeAsync(int modelId)
     {
-        return context.Knowledges.AsNoTracking()
+        return context
+            .Knowledges.AsNoTracking()
             .FirstAsync(x => x.Id == modelId, cancellationToken);
     }
 

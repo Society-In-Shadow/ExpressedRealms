@@ -24,18 +24,22 @@ internal sealed class GetEditKnowledgeUseCase(
         var knowledge = await knowledgeRepository.GetKnowledgeAsync(model.Id);
         var knowledgeTypes = await knowledgeRepository.GetKnowledgeTypesAsync();
 
-        return Result.Ok(new GetEditKnowledgeReturnModel()
-        {
-            Id = knowledge.Id,
-            Description = knowledge.Description,
-            Name = knowledge.Name,
-            KnowledgeTypeId = knowledge.KnowledgeTypeId,
-            KnowledgeTypes = knowledgeTypes.Select(x => new KnowledgeTypeModel()
+        return Result.Ok(
+            new GetEditKnowledgeReturnModel()
             {
-                Id = x.Id,
-                Name = x.Name,
-                Description = x.Description,
-            }).ToList()
-        });
+                Id = knowledge.Id,
+                Description = knowledge.Description,
+                Name = knowledge.Name,
+                KnowledgeTypeId = knowledge.KnowledgeTypeId,
+                KnowledgeTypes = knowledgeTypes
+                    .Select(x => new KnowledgeTypeModel()
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Description = x.Description,
+                    })
+                    .ToList(),
+            }
+        );
     }
 }
