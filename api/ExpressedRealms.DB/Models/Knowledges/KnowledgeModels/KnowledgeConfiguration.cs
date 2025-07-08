@@ -15,6 +15,7 @@ public class KnowledgeConfiguration : IEntityTypeConfiguration<Knowledge>
         builder.Property(e => e.Name).HasColumnName("name").HasMaxLength(250).IsRequired();
         builder.Property(e => e.Description).HasColumnName("description").IsRequired();
 
+        builder.HasQueryFilter(x => !x.IsDeleted);
         builder.Property(e => e.IsDeleted).HasColumnName("is_deleted");
         builder.Property(e => e.DeletedAt).HasColumnName("deleted_at");
     }
