@@ -7,9 +7,7 @@ namespace ExpressedRealms.Knowledges.UseCases.Configuration;
 
 public static class KnowledgesUseCaseConfiguration
 {
-    public static IServiceCollection AddKnowledgesInjections(
-        this IServiceCollection services
-    )
+    public static IServiceCollection AddKnowledgesInjections(this IServiceCollection services)
     {
         services.ImportGenericUseCases(Assembly.GetExecutingAssembly());
         services.ImportValidators(Assembly.GetExecutingAssembly());

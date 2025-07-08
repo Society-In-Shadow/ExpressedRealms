@@ -7,7 +7,7 @@ namespace ExpressedRealms.Knowledges.Repository.Knowledges;
 internal sealed class KnowledgeRepository(
     ExpressedRealmsDbContext context,
     CancellationToken cancellationToken
-    ) : IKnowledgeRepository
+) : IKnowledgeRepository
 {
     public async Task<int> CreateKnowledgeAsync(Knowledge knowledge)
     {
@@ -18,15 +18,18 @@ internal sealed class KnowledgeRepository(
 
     public async Task<bool> HasDuplicateName(string name)
     {
-        return await context.Knowledges.AsNoTracking()
-            .AnyAsync(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase),
-            cancellationToken);
+        return await context
+            .Knowledges.AsNoTracking()
+            .AnyAsync(
+                x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase),
+                cancellationToken
+            );
     }
-    
+
     public async Task<bool> KnowledgeTypeExists(int knowledgeTypeId)
     {
-        return await context.KnowledgeTypes.AsNoTracking()
-            .AnyAsync(x => x.Id == knowledgeTypeId,
-            cancellationToken);
+        return await context
+            .KnowledgeTypes.AsNoTracking()
+            .AnyAsync(x => x.Id == knowledgeTypeId, cancellationToken);
     }
 }

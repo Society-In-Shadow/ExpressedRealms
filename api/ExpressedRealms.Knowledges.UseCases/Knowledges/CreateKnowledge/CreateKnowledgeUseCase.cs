@@ -8,7 +8,8 @@ namespace ExpressedRealms.Knowledges.UseCases.Knowledges.CreateKnowledge;
 internal sealed class CreateKnowledgeUseCase(
     IKnowledgeRepository knowledgeRepository,
     CreateKnowledgeModelValidator validator,
-    CancellationToken cancellationToken) : ICreateKnowledgeUseCase
+    CancellationToken cancellationToken
+) : ICreateKnowledgeUseCase
 {
     public async Task<Result<int>> ExecuteAsync(CreateKnowledgeModel model)
     {
@@ -21,13 +22,15 @@ internal sealed class CreateKnowledgeUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var knowledgeId = await knowledgeRepository.CreateKnowledgeAsync(new Knowledge()
-        {
-            Name = model.Name,
-            Description = model.Description,
-            KnowledgeTypeId = model.KnowledgeTypeId
-        });
-        
+        var knowledgeId = await knowledgeRepository.CreateKnowledgeAsync(
+            new Knowledge()
+            {
+                Name = model.Name,
+                Description = model.Description,
+                KnowledgeTypeId = model.KnowledgeTypeId,
+            }
+        );
+
         return Result.Ok(knowledgeId);
     }
 }
