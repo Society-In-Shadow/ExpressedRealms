@@ -45,4 +45,9 @@ internal sealed class KnowledgeRepository(
         context.Knowledges.Update(knowledge);
         await context.SaveChangesAsync(cancellationToken);
     }
+
+    public Task<Knowledge> GetKnowledgeForEditingAsync(int modelId)
+    {
+        return context.Knowledges.FirstAsync(x => x.Id == modelId, cancellationToken);
+    }
 }

@@ -9,4 +9,5 @@ public interface IKnowledgeRepository
     Task<bool> KnowledgeTypeExists(int knowledgeTypeId);
     Task<bool> IsExistingKnowledge(int knowledgeId);
     Task EditKnowledgeAsync(Knowledge knowledge);
+    Task<Knowledge> GetKnowledgeForEditingAsync(int modelId);
 }
