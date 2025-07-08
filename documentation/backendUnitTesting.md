@@ -27,6 +27,10 @@ public class AssemblyInfrastructureTests : InfrastructureTests
 }
 ```
 
+### Note About Not Finding Assembly
+If the tests says it cannot find the file to load the assembly, make sure that the unit test project has it as a
+referenced project on the nuget / dependency side.
+
 ## Creating Custom Assertions
 Rider and sonar cloud will not pick up test assertions if they are custom.
 
@@ -40,3 +44,32 @@ You can get around this by adding any of these names to the list:
 - VALIDATE
 
 per [Sonar Cloud Documentation](https://community.sonarsource.com/t/how-to-mark-custom-methods-as-assertion-methods-in-c/31437/2)
+
+## Setting Up Projects
+
+### Project to be tested
+In the project that is to be tested, you want to add these two lines to the csproj, where the first line targets the test
+project.  This allows the test project to access the internals of this project.  This allows the tests to test the
+concrete classes that should be internal.
+
+```xml
+  <ItemGroup>
+    <InternalsVisibleTo Include="ExpressedRealms.Expressions.UseCases.Tests.Unit" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
+
+```
+
+As for the test project, you can add these as dependencies
+
+```xml
+  <ItemGroup>
+    <PackageReference Include="FakeItEasy" Version="8.3.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="xunit.v3" Version="2.0.3" />
+  </ItemGroup>
+```
