@@ -6,6 +6,9 @@
         <RootNamespace>ExpressedRealms.Knowledges.UseCases.Tests.Unit</RootNamespace>
     </PropertyGroup>
     <ItemGroup>
+      <ProjectReference Include="..\ExpressedRealms.DB\ExpressedRealms.DB.csproj" />
+      <ProjectReference Include="..\ExpressedRealms.Knowledges.Repository\ExpressedRealms.Knowledges.Repository.csproj" />
+      <ProjectReference Include="..\ExpressedRealms.Knowledges.UseCases\ExpressedRealms.Knowledges.UseCases.csproj" />
       <ProjectReference Include="..\ExpressedRealms.Shared.UseCases.Tests.Unit\ExpressedRealms.Shared.UseCases.Tests.Unit.csproj" />
     </ItemGroup>
     <ItemGroup>
