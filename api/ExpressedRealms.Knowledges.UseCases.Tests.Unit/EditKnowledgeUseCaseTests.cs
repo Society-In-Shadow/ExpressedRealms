@@ -41,15 +41,18 @@ public class EditKnowledgeUseCaseTests
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(nameof(EditKnowledgeModel.Id), "Id is required.");
     }
-    
+
     [Fact]
     public async Task ValidationFor_Id_WillFail_KnowledgeDoesNotExist()
     {
         A.CallTo(() => _repository.IsExistingKnowledge(_model.Id)).Returns(false);
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(EditKnowledgeModel.Id), "This knowledge was not found.");
+        results.MustHaveValidationError(
+            nameof(EditKnowledgeModel.Id),
+            "This knowledge was not found."
+        );
     }
-    
+
     [Fact]
     public async Task ValidationFor_Name_WillFail_WhenName_IsEmpty()
     {
@@ -134,10 +137,10 @@ public class EditKnowledgeUseCaseTests
         A.CallTo(() =>
                 _repository.EditKnowledgeAsync(
                     A<Knowledge>.That.Matches(k =>
-                        k.Id == knowledge.Id &&
-                        k.Name == knowledge.Name && 
-                        k.Description == knowledge.Description &&
-                        k.KnowledgeTypeId == knowledge.KnowledgeTypeId
+                        k.Id == knowledge.Id
+                        && k.Name == knowledge.Name
+                        && k.Description == knowledge.Description
+                        && k.KnowledgeTypeId == knowledge.KnowledgeTypeId
                     )
                 )
             )

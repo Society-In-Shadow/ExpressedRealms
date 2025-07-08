@@ -16,18 +16,13 @@ public class DeleteKnowledgeUseCaseTests
 
     public DeleteKnowledgeUseCaseTests()
     {
-        _model = new DeleteKnowledgeModel()
-        {
-            Id = 4
-        };
+        _model = new DeleteKnowledgeModel() { Id = 4 };
 
         _repository = A.Fake<IKnowledgeRepository>();
 
         A.CallTo(() => _repository.IsExistingKnowledge(_model.Id)).Returns(true);
-        A.CallTo(() => _repository.GetKnowledgeForEditingAsync(_model.Id)).Returns(new Knowledge()
-        {
-            Id = _model.Id
-        });
+        A.CallTo(() => _repository.GetKnowledgeForEditingAsync(_model.Id))
+            .Returns(new Knowledge() { Id = _model.Id });
 
         var validator = new DeleteKnowledgeModelValidator(_repository);
 
@@ -41,13 +36,16 @@ public class DeleteKnowledgeUseCaseTests
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(nameof(EditKnowledgeModel.Id), "Id is required.");
     }
-    
+
     [Fact]
     public async Task ValidationFor_Id_WillFail_KnowledgeDoesNotExist()
     {
         A.CallTo(() => _repository.IsExistingKnowledge(_model.Id)).Returns(false);
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(EditKnowledgeModel.Id), "This knowledge was not found.");
+        results.MustHaveValidationError(
+            nameof(EditKnowledgeModel.Id),
+            "This knowledge was not found."
+        );
     }
 
     [Fact]
@@ -55,25 +53,24 @@ public class DeleteKnowledgeUseCaseTests
     {
         await _useCase.ExecuteAsync(_model);
 
-        A.CallTo(() => _repository.GetKnowledgeForEditingAsync(_model.Id)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _repository.GetKnowledgeForEditingAsync(_model.Id))
+            .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_WillSoftDelete_TheKnowledge()
     {
-        var knowledge = new Knowledge()
-        {
-            Id = _model.Id,
-            IsDeleted = true
-        };
-        
+        var knowledge = new Knowledge() { Id = _model.Id, IsDeleted = true };
+
         await _useCase.ExecuteAsync(_model);
 
-        A.CallTo(() => _repository.EditKnowledgeAsync(
-            A<Knowledge>.That.Matches(k =>
-                k.Id == knowledge.Id &&
-                k.IsDeleted == knowledge.IsDeleted
-            ))
-        ).MustHaveHappenedOnceExactly();
+        A.CallTo(() =>
+                _repository.EditKnowledgeAsync(
+                    A<Knowledge>.That.Matches(k =>
+                        k.Id == knowledge.Id && k.IsDeleted == knowledge.IsDeleted
+                    )
+                )
+            )
+            .MustHaveHappenedOnceExactly();
     }
 }

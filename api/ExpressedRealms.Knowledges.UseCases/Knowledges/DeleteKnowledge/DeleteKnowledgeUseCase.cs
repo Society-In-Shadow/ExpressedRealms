@@ -23,9 +23,9 @@ internal sealed class DeleteKnowledgeUseCase(
             return Result.Fail(result.Errors);
 
         var knowledge = await knowledgeRepository.GetKnowledgeForEditingAsync(model.Id);
-        
+
         knowledge.SoftDelete();
-        
+
         await knowledgeRepository.EditKnowledgeAsync(knowledge);
 
         return Result.Ok();

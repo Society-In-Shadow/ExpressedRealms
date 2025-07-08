@@ -32,7 +32,7 @@ internal sealed class KnowledgeRepository(
             .KnowledgeTypes.AsNoTracking()
             .AnyAsync(x => x.Id == knowledgeTypeId, cancellationToken);
     }
-    
+
     public async Task<bool> IsExistingKnowledge(int knowledgeId)
     {
         return await context

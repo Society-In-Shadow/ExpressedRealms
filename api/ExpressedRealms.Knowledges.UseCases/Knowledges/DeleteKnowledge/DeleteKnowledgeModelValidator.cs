@@ -15,6 +15,5 @@ internal sealed class DeleteKnowledgeModelValidator : AbstractValidator<DeleteKn
             .MustAsync(async (x, y) => await repository.IsExistingKnowledge(x))
             .WithMessage("NotFound")
             .WithMessage("This knowledge was not found.");
-        
     }
 }

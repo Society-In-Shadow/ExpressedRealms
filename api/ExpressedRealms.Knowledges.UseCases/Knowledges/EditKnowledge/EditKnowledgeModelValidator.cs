@@ -15,7 +15,7 @@ internal sealed class EditKnowledgeModelValidator : AbstractValidator<EditKnowle
             .MustAsync(async (x, y) => await repository.IsExistingKnowledge(x))
             .WithMessage("NotFound")
             .WithMessage("This knowledge was not found.");
-        
+
         RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage("Name is required.")
