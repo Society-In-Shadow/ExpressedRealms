@@ -1,6 +1,8 @@
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
+using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels;
+using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Audit;
 using ExpressedRealms.DB.Models.Powers;
 using ExpressedRealms.DB.Models.Powers.PowerPathSetup;
 using ExpressedRealms.DB.Models.Powers.PowerSetup.Audit;
@@ -32,6 +34,7 @@ public static class ProcessChangedRecords
                 changedRecords
             ),
             nameof(Power) => PowerAuditTrailExtensions.ProcessChangedRecords(changedRecords),
+            nameof(Knowledge) => KnowledgesAuditTrailExtensions.ProcessChangedRecords(changedRecords),
             _ => throw new ArgumentException(
                 $"Table not setup in the ProcessChangedRecords class: {tableName}"
             ),

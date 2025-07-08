@@ -3,6 +3,7 @@ using Audit.Core;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
+using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Audit;
 using ExpressedRealms.DB.Models.Powers.PowerPathSetup;
 using ExpressedRealms.DB.Models.Powers.PowerSetup.Audit;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
@@ -35,6 +36,7 @@ public static class SetupDatabaseAudit
                             .AddUserRoleAuditTrailMapping()
                             .AddPowerPathAuditTrailMapping()
                             .AddPowerAuditTrailMapping()
+                            .AddKnowledgeAuditTrailMapping()
                             .AuditEntityAction<IAuditTable>(
                                 (evt, entry, audit) =>
                                 {

@@ -2,6 +2,7 @@ using Audit.EntityFramework;
 using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Configuration;
 using ExpressedRealms.DB.Models.Expressions.Configuration;
+using ExpressedRealms.DB.Models.Knowledges.Configuration;
 using ExpressedRealms.DB.Models.Powers.Configuration;
 using ExpressedRealms.DB.Models.Skills;
 using ExpressedRealms.DB.Models.Statistics;
@@ -51,6 +52,7 @@ namespace ExpressedRealms.DB
 
             builder.AddPowerConfiguration();
             builder.AddExpressionConfiguration();
+            builder.AddKnowledgeConfiguration();
         }
 
         public ExpressedRealmsDbContext(DbContextOptions<ExpressedRealmsDbContext> options)
