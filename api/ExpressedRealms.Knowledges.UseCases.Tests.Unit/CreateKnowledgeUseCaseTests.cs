@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels;
 using ExpressedRealms.Knowledges.Repository.Knowledges;
 using ExpressedRealms.Knowledges.UseCases.Knowledges.CreateKnowledge;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
@@ -96,5 +97,31 @@ public class CreateKnowledgeUseCaseTests
             nameof(CreateKnowledgeModel.KnowledgeTypeId),
             "The Knowledge Type does not exist."
         );
+    }
+
+    [Fact]
+    public async Task UseCase_WillCreateTheKnowledge()
+    {
+        var knowledge = new Knowledge()
+        {
+            Name = _model.Name,
+            Description = _model.Description,
+            KnowledgeTypeId = _model.KnowledgeTypeId,
+        };
+        
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() => _repository.CreateKnowledgeAsync(A<Knowledge>.That.Matches(k =>
+            k.Name == knowledge.Name &&
+            k.Description == knowledge.Description &&
+            k.KnowledgeTypeId == knowledge.KnowledgeTypeId))).MustHaveHappenedOnceExactly();
+    }
+    
+    [Fact]
+    public async Task UseCase_WillReturn_KnowledgeId_IfSuccessful()
+    {
+        A.CallTo(() => _repository.CreateKnowledgeAsync(A<Knowledge>._)).Returns(5);
+        
+        var result = await _useCase.ExecuteAsync(_model);
+        Assert.Equal(5, result.Value);
     }
 }
