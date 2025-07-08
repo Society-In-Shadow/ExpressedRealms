@@ -50,4 +50,11 @@ internal sealed class KnowledgeRepository(
     {
         return context.Knowledges.FirstAsync(x => x.Id == modelId, cancellationToken);
     }
+
+    public async Task<List<Knowledge>> GetKnowledges()
+    {
+        return await context.Knowledges
+            .Include(x => x.KnowledgeType)
+            .ToListAsync(cancellationToken);
+    }
 }
