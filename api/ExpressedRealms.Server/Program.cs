@@ -12,8 +12,10 @@ using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using ExpressedRealms.Email;
 using ExpressedRealms.Expressions.API.Configuration;
 using ExpressedRealms.Expressions.Repository;
+using ExpressedRealms.Expressions.UseCases.Configuration;
 using ExpressedRealms.FeatureFlags.Configuration;
 using ExpressedRealms.FeatureFlags.FeatureManager;
+using ExpressedRealms.Knowledges.UseCases.Configuration;
 using ExpressedRealms.Powers.API.Configuration;
 using ExpressedRealms.Powers.Repository;
 using ExpressedRealms.Repositories.Admin;
@@ -208,6 +210,8 @@ try
     builder.Services.AddExpressionRepositoryInjections();
     builder.Services.AddAdminRepositoryInjections();
     builder.Services.AddPowerRepositoryInjections();
+    builder.Services.AddKnowledgesInjections();
+    builder.Services.AddExpressionTextSectionInjections();
     await builder.Services.AddFeatureFlagInjections(keyVaultManager);
 
     Log.Information("Building the App");

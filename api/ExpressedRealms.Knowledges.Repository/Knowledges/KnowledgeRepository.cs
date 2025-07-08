@@ -1,0 +1,32 @@
+using ExpressedRealms.DB;
+using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels;
+using Microsoft.EntityFrameworkCore;
+
+namespace ExpressedRealms.Knowledges.Repository.Knowledges;
+
+internal sealed class KnowledgeRepository(
+    ExpressedRealmsDbContext context,
+    CancellationToken cancellationToken
+    ) : IKnowledgeRepository
+{
+    public async Task<int> CreateKnowledgeAsync(Knowledge knowledge)
+    {
+        context.Knowledges.Add(knowledge);
+        await context.SaveChangesAsync(cancellationToken);
+        return knowledge.Id;
+    }
+
+    public async Task<bool> HasDuplicateName(string name)
+    {
+        return await context.Knowledges.AsNoTracking()
+            .AnyAsync(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase),
+            cancellationToken);
+    }
+    
+    public async Task<bool> KnowledgeTypeExists(int knowledgeTypeId)
+    {
+        return await context.KnowledgeTypes.AsNoTracking()
+            .AnyAsync(x => x.Id == knowledgeTypeId,
+            cancellationToken);
+    }
+}
