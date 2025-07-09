@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Repositorie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Powers.Repository", "ExpressedRealms.Powers.Repository\ExpressedRealms.Powers.Repository.csproj", "{B020FD64-87E8-483D-BFC1-008796E63307}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.FeatureFlags", "ExpressedRealms.FeatureFlags\ExpressedRealms.FeatureFlags.csproj", "{F52C2D18-4375-4FE8-BF05-9586A720A54F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Shared.FeatureFlags", "ExpressedRealms.Shared.FeatureFlags\ExpressedRealms.Shared.FeatureFlags.csproj", "{F52C2D18-4375-4FE8-BF05-9586A720A54F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Powers.API", "ExpressedRealms.Powers.API\ExpressedRealms.Powers.API.csproj", "{5BBF14F2-63A8-4ADA-A629-8D4870113E92}"
 EndProject

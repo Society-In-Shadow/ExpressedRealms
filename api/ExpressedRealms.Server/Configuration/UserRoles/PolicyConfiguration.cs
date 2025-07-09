@@ -22,6 +22,11 @@ public static class PolicyConfiguration
                 Policies.ManagePowers.Name,
                 policy => policy.RequireRole(UserRoles.PowerManagementRole)
             );
+            
+            options.AddPolicy(
+                Policies.ManageKnowledges.Name,
+                policy => policy.RequireRole(UserRoles.KnowledgeManagementRole)
+            );
         });
     }
 }

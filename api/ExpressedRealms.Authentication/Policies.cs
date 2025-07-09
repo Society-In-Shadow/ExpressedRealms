@@ -14,6 +14,7 @@ public class Policies
     public static readonly Policies ExpressionEditorPolicy = new(nameof(ExpressionEditorPolicy));
     public static readonly Policies UserManagementPolicy = new(nameof(UserManagementPolicy));
     public static readonly Policies ManagePowers = new(nameof(ManagePowers));
+    public static readonly Policies ManageKnowledges = new(nameof(ManageKnowledges));
 
     // Override ToString for convenience
     public override string ToString()

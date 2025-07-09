@@ -35,7 +35,7 @@
     <ProjectReference Include="..\ExpressedRealms.Email\ExpressedRealms.Email.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Expressions.API\ExpressedRealms.Expressions.API.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Expressions.UseCases\ExpressedRealms.Expressions.UseCases.csproj" />
-    <ProjectReference Include="..\ExpressedRealms.FeatureFlags\ExpressedRealms.FeatureFlags.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Shared.FeatureFlags\ExpressedRealms.Shared.FeatureFlags.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Knowledges.UseCases\ExpressedRealms.Knowledges.UseCases.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Powers.API\ExpressedRealms.Powers.API.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Repositories.Admin\ExpressedRealms.Repositories.Admin.csproj" />

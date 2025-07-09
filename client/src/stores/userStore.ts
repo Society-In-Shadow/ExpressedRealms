@@ -5,12 +5,14 @@ export const UserRoles = {
     ExpressionEditor: "ExpressionEditorRole",
     UserManagementRole: "UserManagementRole",
     PowerManagementRole: "PowerManagementRole",
+    KnowledgeManagementRole: "KnowledgeManagementRole"
 } as const;
 
 export const FeatureFlags = {
     ShowsPowerTab: "show-power-tab",
     ShowRuleBook: "show-rule-book-nav",
     ShowTreasureTales: "show-treasured-tales-nav",
+    ShowKnowledges: "show-knowledges"
 } as const;
 
 export type UserRole = (typeof UserRoles)[keyof typeof UserRoles];
