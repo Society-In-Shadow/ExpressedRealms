@@ -33,7 +33,7 @@ internal static class PowerPrerequisiteEndpoints
                 "/{powerId}/prerequisites",
                 async Task<Results<ValidationProblem, Ok<GetPrerequisiteResponse?>>> (
                     int powerId,
-                    [FromServices]IGetPrerequisiteUseCase getCase
+                    [FromServices] IGetPrerequisiteUseCase getCase
                 ) =>
                 {
                     var results = await getCase.ExecuteAsync(
@@ -69,7 +69,7 @@ internal static class PowerPrerequisiteEndpoints
                 async Task<Results<ValidationProblem, Ok>> (
                     int powerId,
                     CreatePrerequisiteRequest request,
-                    [FromServices]ICreatePrerequisiteUseCase createCase
+                    [FromServices] ICreatePrerequisiteUseCase createCase
                 ) =>
                 {
                     var results = await createCase.ExecuteAsync(
@@ -98,7 +98,7 @@ internal static class PowerPrerequisiteEndpoints
                 async Task<Results<ValidationProblem, Ok>> (
                     int powerId,
                     int prerequisiteId,
-                    [FromServices]IDeletePrerequisiteUseCase deleteCase
+                    [FromServices] IDeletePrerequisiteUseCase deleteCase
                 ) =>
                 {
                     var results = await deleteCase.ExecuteAsync(
@@ -123,7 +123,7 @@ internal static class PowerPrerequisiteEndpoints
                     int powerId,
                     int prerequisiteId,
                     EditPrerequisiteRequest request,
-                    [FromServices]IEditPrerequisiteUseCase editCase
+                    [FromServices] IEditPrerequisiteUseCase editCase
                 ) =>
                 {
                     var results = await editCase.ExecuteAsync(
