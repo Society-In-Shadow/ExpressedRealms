@@ -15,6 +15,7 @@ using ExpressedRealms.Expressions.Repository;
 using ExpressedRealms.Expressions.UseCases.Configuration;
 using ExpressedRealms.FeatureFlags.Configuration;
 using ExpressedRealms.FeatureFlags.FeatureManager;
+using ExpressedRealms.Knowledges.API.Configuration;
 using ExpressedRealms.Knowledges.UseCases.Configuration;
 using ExpressedRealms.Powers.API.Configuration;
 using ExpressedRealms.Powers.Repository;
@@ -307,6 +308,7 @@ try
     app.AddAdminEndPoints();
     app.AddPowerEndPoints();
     app.AddCharacterApiEndPoints();
+    app.ConfigureKnowledgeEndPoints();
 
     app.MapFallbackToFile("index.html");
     Log.Information("Starting Web API");
