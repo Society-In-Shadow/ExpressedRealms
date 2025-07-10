@@ -14,16 +14,17 @@ namespace ExpressedRealms.Expressions.API.ExpressionEndpoints;
 
 internal static class ExpressionEndpoints
 {
+    
     internal static void AddExpressionEndpoints(this WebApplication app)
     {
         var endpointGroup = app.MapGroup("expression")
             .AddFluentValidationAutoValidation()
-            .RequirePolicyAuthorization(Policies.ExpressionEditorPolicy)
             .WithTags("Expressions")
             .WithOpenApi();
 
         endpointGroup
             .MapGet("{expressionId}", GetEditExpressionEndpoint.GetEditExpression)
+            .RequirePolicyAuthorization(Policies.ExpressionEditorPolicy)
             .WithSummary("Returns the high level information for a given expression")
             .WithDescription(
                 "This returns the detailed information for the given expression, including publish details"
@@ -35,11 +36,13 @@ internal static class ExpressionEndpoints
 
         endpointGroup
             .MapPut("{expressionId}", EditExpressionEndpoint.EditExpression)
+            .RequirePolicyAuthorization(Policies.ExpressionEditorPolicy)
             .WithSummary("Allows one to edit the high level expression details")
             .WithDescription("You will also be able to set the publish status of the expression.");
 
         endpointGroup
             .MapPut("{expressionId}/updateHierarchy", UpdateHierarchyEndpoint.UpdateHierarchy)
+            .RequirePolicyAuthorization(Policies.ExpressionEditorPolicy)
             .WithSummary("Allows one to modify the hierarchy of the expression")
             .WithDescription(
                 "This is an all or nothing operation.  It needs to be called with all the items, not a subset of them."
@@ -47,6 +50,7 @@ internal static class ExpressionEndpoints
 
         endpointGroup
             .MapPost("", CreateExpressionEndpoint.CreateExpression)
+            .RequirePolicyAuthorization(Policies.ExpressionEditorPolicy)
             .WithSummary("Allows one to create new expressions");
 
         endpointGroup.MapDelete("{id}", DeleteExpressionEndpoint.DeleteExpression);
