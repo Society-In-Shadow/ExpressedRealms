@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Knowledges.UseCases.Knowledges.GetEditKnowledge;
+namespace ExpressedRealms.Knowledges.UseCases.KnowledgeTypes.GetKnowledgeTypes;
 
 public class KnowledgeTypeModel
 {

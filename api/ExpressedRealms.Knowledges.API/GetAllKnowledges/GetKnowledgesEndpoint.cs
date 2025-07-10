@@ -13,7 +13,7 @@ public static class GetKnowledgesEndpoint
 
         return TypedResults.Ok(new KnowledgeResponse()
         {
-            Knowledges = results.Value.Knowledges.Select(x => new KnowledgeViewModel()
+            Knowledges = results.Value.KnowledgeTypes.Select(x => new KnowledgeViewModel()
             {
                 Id = x.Id,
                 Name = x.Name,

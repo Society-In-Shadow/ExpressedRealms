@@ -62,7 +62,7 @@ public class GetKnowledgeUseCaseTests
 
         var expectedReturn = new KnowledgeReturnModel()
         {
-            Knowledges = new List<KnowledgeModel>()
+            KnowledgeTypes = new List<KnowledgeModel>()
             {
                 new()
                 {
@@ -89,6 +89,6 @@ public class GetKnowledgeUseCaseTests
 
         var results = await _useCase.ExecuteAsync();
 
-        Assert.Equivalent(expectedReturn.Knowledges, results.Value.Knowledges);
+        Assert.Equivalent(expectedReturn.KnowledgeTypes, results.Value.KnowledgeTypes);
     }
 }

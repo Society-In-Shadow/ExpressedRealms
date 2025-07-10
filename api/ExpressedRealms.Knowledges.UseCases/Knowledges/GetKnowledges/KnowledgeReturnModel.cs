@@ -2,5 +2,5 @@ namespace ExpressedRealms.Knowledges.UseCases.Knowledges.GetKnowledges;
 
 public class KnowledgeReturnModel
 {
-    public List<KnowledgeModel> Knowledges { get; set; } = new();
+    public List<KnowledgeModel> KnowledgesTypes { get; set; } = new();
 }
