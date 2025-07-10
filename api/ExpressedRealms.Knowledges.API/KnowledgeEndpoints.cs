@@ -1,5 +1,5 @@
 ﻿using ExpressedRealms.FeatureFlags;
-using ExpressedRealms.Knowledges.API.GetAllExpressions;
+using ExpressedRealms.Knowledges.API.EditKnowledge;
 using ExpressedRealms.Knowledges.API.GetAllKnowledges;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
@@ -21,6 +21,14 @@ internal static class KnowledgeEndpoints
         endpointGroup
             .MapGet("", GetKnowledgesEndpoint.GetKnowledges)
             .WithSummary("Returns all knowledges.");
+        
+        /*
+        endpointGroup
+            .MapGet("{id}/edit")*/
+        
+        endpointGroup
+            .MapPut("{id}", EditKnowledgeEndpoint.EditKnowledges)
+            .WithSummary("Edits the knowledge");
             
         
     }
