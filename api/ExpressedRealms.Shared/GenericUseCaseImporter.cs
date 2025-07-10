@@ -14,6 +14,10 @@ public static class GenericUseCaseImporter
                     classes => classes.AssignableTo(typeof(IGenericUseCase<,>)),
                     publicOnly: false
                 )
+                .AddClasses(
+                    classes => classes.AssignableTo(typeof(IGenericUseCase<>)),
+                    publicOnly: false
+                )
                 .AsMatchingInterface()
                 .WithScopedLifetime()
         );

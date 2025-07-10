@@ -2,6 +2,7 @@
 using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.Knowledges.API.CreateKnowledge;
 using ExpressedRealms.Knowledges.API.DeleteKnowledge;
+using ExpressedRealms.Knowledges.API.EditKnowledge;
 using ExpressedRealms.Knowledges.API.GetAllKnowledges;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
@@ -27,9 +28,13 @@ internal static class KnowledgeEndpoints
         endpointGroup
             .MapPost("", CreateKnowledgeEndpoint.CreateKnowledge)
             .RequirePolicyAuthorization(Policies.ManageKnowledges);
+        
+        endpointGroup
+            .MapPut("{id}", EditKnowledgeEndpoint.EditKnowledges)
+            .RequirePolicyAuthorization(Policies.ManageKnowledges);
          
         endpointGroup
-            .MapPut("{id}", DeleteKnowledgeEndpoint.DeleteKnowledge)
+            .MapDelete("{id}", DeleteKnowledgeEndpoint.DeleteKnowledge)
             .RequirePolicyAuthorization(Policies.ManageKnowledges)
             .WithSummary("Deletes the knowledge");
         

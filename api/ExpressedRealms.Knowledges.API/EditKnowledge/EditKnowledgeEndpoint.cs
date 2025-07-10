@@ -2,12 +2,16 @@ using ExpressedRealms.Knowledges.UseCases.Knowledges.EditKnowledge;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ExpressedRealms.Knowledges.API.EditKnowledge;
 
 public static class EditKnowledgeEndpoint
 {
-    public static async Task<Results<Ok, NotFound, ValidationProblem>> EditKnowledges(int id, EditKnowledgeRequest request, IEditKnowledgeUseCase editKnowledgeUseCase)
+    public static async Task<Results<Ok, NotFound, ValidationProblem>> EditKnowledges(
+        int id, 
+        [FromBody]EditKnowledgeRequest request, 
+        [FromServices]IEditKnowledgeUseCase editKnowledgeUseCase)
     {
         var results = await editKnowledgeUseCase.ExecuteAsync(new EditKnowledgeModel()
         {
