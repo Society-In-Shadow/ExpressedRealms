@@ -7,21 +7,27 @@ namespace ExpressedRealms.Knowledges.API.GetAllKnowledges;
 
 public static class GetKnowledgesEndpoint
 {
-    public static async Task<Ok<KnowledgeResponse>> GetKnowledges(IGetKnowledgesUseCase createKnowledgeUseCase)
+    public static async Task<Ok<KnowledgeResponse>> GetKnowledges(
+        IGetKnowledgesUseCase createKnowledgeUseCase
+    )
     {
         var results = await createKnowledgeUseCase.ExecuteAsync();
 
-        return TypedResults.Ok(new KnowledgeResponse()
-        {
-            Knowledges = results.Value.KnowledgeTypes.Select(x => new KnowledgeViewModel()
+        return TypedResults.Ok(
+            new KnowledgeResponse()
             {
-                Id = x.Id,
-                Name = x.Name,
-                Description = x.Description,
-                TypeName = x.TypeName,
-                TypeDescription = x.TypeDescription,
-                TypeId = x.TypeId
-            }).ToList()
-        });
+                Knowledges = results
+                    .Value.KnowledgeTypes.Select(x => new KnowledgeViewModel()
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Description = x.Description,
+                        TypeName = x.TypeName,
+                        TypeDescription = x.TypeDescription,
+                        TypeId = x.TypeId,
+                    })
+                    .ToList(),
+            }
+        );
     }
 }

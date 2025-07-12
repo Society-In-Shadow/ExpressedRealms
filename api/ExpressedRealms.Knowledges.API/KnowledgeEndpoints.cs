@@ -25,7 +25,7 @@ internal static class KnowledgeEndpoints
         endpointGroup
             .MapGet("", GetKnowledgesEndpoint.GetKnowledges)
             .WithSummary("Returns all knowledges.");
-        
+
         endpointGroup
             .MapGet("{id}", GetKnowledgeEndpoint.GetKnowledge)
             .RequirePolicyAuthorization(Policies.ManageKnowledges);
@@ -33,11 +33,11 @@ internal static class KnowledgeEndpoints
         endpointGroup
             .MapPost("", CreateKnowledgeEndpoint.CreateKnowledge)
             .RequirePolicyAuthorization(Policies.ManageKnowledges);
-        
+
         endpointGroup
             .MapPut("{id}", EditKnowledgeEndpoint.EditKnowledges)
             .RequirePolicyAuthorization(Policies.ManageKnowledges);
-         
+
         endpointGroup
             .MapDelete("{id}", DeleteKnowledgeEndpoint.DeleteKnowledge)
             .RequirePolicyAuthorization(Policies.ManageKnowledges)

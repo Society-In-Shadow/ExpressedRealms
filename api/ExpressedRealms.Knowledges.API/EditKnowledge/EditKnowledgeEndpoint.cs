@@ -9,17 +9,20 @@ namespace ExpressedRealms.Knowledges.API.EditKnowledge;
 public static class EditKnowledgeEndpoint
 {
     public static async Task<Results<Ok, NotFound, ValidationProblem>> EditKnowledges(
-        int id, 
-        [FromBody]EditKnowledgeRequest request, 
-        [FromServices]IEditKnowledgeUseCase editKnowledgeUseCase)
+        int id,
+        [FromBody] EditKnowledgeRequest request,
+        [FromServices] IEditKnowledgeUseCase editKnowledgeUseCase
+    )
     {
-        var results = await editKnowledgeUseCase.ExecuteAsync(new EditKnowledgeModel()
-        {
-            Id = id,
-            Name = request.Name,
-            Description = request.Description,
-            KnowledgeTypeId = request.KnowledgeTypeId,
-        });
+        var results = await editKnowledgeUseCase.ExecuteAsync(
+            new EditKnowledgeModel()
+            {
+                Id = id,
+                Name = request.Name,
+                Description = request.Description,
+                KnowledgeTypeId = request.KnowledgeTypeId,
+            }
+        );
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;
@@ -27,7 +30,7 @@ public static class EditKnowledgeEndpoint
             return notFound;
 
         results.ThrowIfErrorNotHandled();
-        
+
         return TypedResults.Ok();
     }
 }

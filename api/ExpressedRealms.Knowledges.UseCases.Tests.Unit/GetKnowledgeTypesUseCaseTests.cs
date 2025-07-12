@@ -15,7 +15,6 @@ public class GetKnowledgeTypesUseCaseTests
 
     public GetKnowledgeTypesUseCaseTests()
     {
-
         KnowledgeTypesDbModel = new List<KnowledgeType>()
         {
             new KnowledgeType()

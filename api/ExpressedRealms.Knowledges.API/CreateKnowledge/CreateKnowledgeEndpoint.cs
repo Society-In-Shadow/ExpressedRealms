@@ -9,16 +9,18 @@ namespace ExpressedRealms.Knowledges.API.CreateKnowledge;
 public static class CreateKnowledgeEndpoint
 {
     public static async Task<Results<Ok<int>, NotFound, ValidationProblem>> CreateKnowledge(
-        [FromBody] CreateKnowledgeRequest request, 
+        [FromBody] CreateKnowledgeRequest request,
         [FromServices] ICreateKnowledgeUseCase createKnowledgeUseCase
     )
     {
-        var results = await createKnowledgeUseCase.ExecuteAsync(new CreateKnowledgeModel()
-        {
-            Name = request.Name,
-            Description = request.Description,
-            KnowledgeTypeId = request.KnowledgeTypeId,
-        });
+        var results = await createKnowledgeUseCase.ExecuteAsync(
+            new CreateKnowledgeModel()
+            {
+                Name = request.Name,
+                Description = request.Description,
+                KnowledgeTypeId = request.KnowledgeTypeId,
+            }
+        );
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;
@@ -26,7 +28,7 @@ public static class CreateKnowledgeEndpoint
             return notFound;
 
         results.ThrowIfErrorNotHandled();
-        
+
         return TypedResults.Ok(results.Value);
     }
 }

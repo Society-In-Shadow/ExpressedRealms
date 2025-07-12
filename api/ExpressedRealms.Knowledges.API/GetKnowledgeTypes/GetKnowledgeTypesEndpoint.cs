@@ -6,18 +6,24 @@ namespace ExpressedRealms.Knowledges.API.GetKnowledgeTypes;
 
 public static class GetKnowledgeTypesEndpoint
 {
-    public static async Task<Ok<KnowledgeTypeResponse>> GetKnowledgeTypes(IGetKnowledgeTypesUseCase getKnowledgeTypesUseCase)
+    public static async Task<Ok<KnowledgeTypeResponse>> GetKnowledgeTypes(
+        IGetKnowledgeTypesUseCase getKnowledgeTypesUseCase
+    )
     {
         var results = await getKnowledgeTypesUseCase.ExecuteAsync();
 
-        return TypedResults.Ok(new KnowledgeTypeResponse()
-        {
-            KnowledgeTypes = results.Value.KnowledgeTypes.Select(x => new KnowledgeTypeViewModel()
+        return TypedResults.Ok(
+            new KnowledgeTypeResponse()
             {
-                Id = x.Id,
-                Name = x.Name,
-                Description = x.Description,
-            }).ToList()
-        });
+                KnowledgeTypes = results
+                    .Value.KnowledgeTypes.Select(x => new KnowledgeTypeViewModel()
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Description = x.Description,
+                    })
+                    .ToList(),
+            }
+        );
     }
 }

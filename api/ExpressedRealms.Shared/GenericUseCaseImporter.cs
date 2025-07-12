@@ -17,7 +17,7 @@ public static class GenericUseCaseImporter
                 .AsMatchingInterface()
                 .WithScopedLifetime()
         );
-            
+
         services.Scan(scan =>
             scan.FromAssemblies(assembly)
                 .AddClasses(
@@ -25,7 +25,7 @@ public static class GenericUseCaseImporter
                     publicOnly: false
                 )
                 .AsMatchingInterface()
-                .WithScopedLifetime() 
+                .WithScopedLifetime()
         );
     }
 

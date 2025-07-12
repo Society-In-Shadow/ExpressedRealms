@@ -8,13 +8,12 @@ namespace ExpressedRealms.Knowledges.API.DeleteKnowledge;
 
 public static class DeleteKnowledgeEndpoint
 {
-    public static async Task<Results<Ok, NotFound, ValidationProblem>> DeleteKnowledge(int id,
-        [FromServices]IDeleteKnowledgeUseCase useCase)
+    public static async Task<Results<Ok, NotFound, ValidationProblem>> DeleteKnowledge(
+        int id,
+        [FromServices] IDeleteKnowledgeUseCase useCase
+    )
     {
-        var results = await useCase.ExecuteAsync(new DeleteKnowledgeModel()
-        {
-            Id = id
-        });
+        var results = await useCase.ExecuteAsync(new DeleteKnowledgeModel() { Id = id });
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;
@@ -22,7 +21,7 @@ public static class DeleteKnowledgeEndpoint
             return notFound;
 
         results.ThrowIfErrorNotHandled();
-        
+
         return TypedResults.Ok();
     }
 }

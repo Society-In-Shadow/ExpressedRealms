@@ -3,7 +3,8 @@ using FluentResults;
 
 namespace ExpressedRealms.Knowledges.UseCases.KnowledgeTypes.GetKnowledgeTypes;
 
-public class GetKnowledgeTypesUseCase(IKnowledgeRepository knowledgeRepository) : IGetKnowledgeTypesUseCase
+public class GetKnowledgeTypesUseCase(IKnowledgeRepository knowledgeRepository)
+    : IGetKnowledgeTypesUseCase
 {
     public async Task<Result<GetKnowledgeTypeReturnModel>> ExecuteAsync()
     {

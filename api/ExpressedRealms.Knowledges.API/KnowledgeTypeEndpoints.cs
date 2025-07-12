@@ -17,7 +17,7 @@ public static class KnowledgeTypeEndpoints
             .RequireFeatureToggle(ReleaseFlags.EnableKnowledgeManagement)
             .WithTags("Knowledges")
             .WithOpenApi();
-        
+
         endpointGroup
             .MapGet("", GetKnowledgeTypesEndpoint.GetKnowledgeTypes)
             .RequirePolicyAuthorization(Policies.ManageKnowledges);
