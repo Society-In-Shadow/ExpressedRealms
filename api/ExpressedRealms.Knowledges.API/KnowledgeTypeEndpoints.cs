@@ -19,7 +19,7 @@ public static class KnowledgeTypeEndpoints
             .WithOpenApi();
         
         endpointGroup
-            .MapGet("{id}", GetKnowledgeTypesEndpoint.GetKnowledgeTypes)
+            .MapGet("", GetKnowledgeTypesEndpoint.GetKnowledgeTypes)
             .RequirePolicyAuthorization(Policies.ManageKnowledges);
     }
 }
