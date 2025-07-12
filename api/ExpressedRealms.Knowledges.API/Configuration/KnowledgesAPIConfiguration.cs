@@ -7,5 +7,6 @@ public static class KnowledgesApiConfiguration
     public static void ConfigureKnowledgeEndPoints(this WebApplication app)
     {
         app.AddKnowledgeEndpoints();
+        app.AddKnowledgeTypesEndpoints();
     }
 }

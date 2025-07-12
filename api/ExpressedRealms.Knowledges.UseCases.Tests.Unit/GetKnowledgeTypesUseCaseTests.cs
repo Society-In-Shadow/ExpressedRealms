@@ -1,20 +1,19 @@
 using ExpressedRealms.DB.Models.Knowledges;
 using ExpressedRealms.Knowledges.Repository.Knowledges;
-using ExpressedRealms.Knowledges.UseCases.Knowledges.GetKnowledges;
 using ExpressedRealms.Knowledges.UseCases.KnowledgeTypes.GetKnowledgeTypes;
 using FakeItEasy;
 using Xunit;
 
 namespace ExpressedRealms.Knowledges.UseCases.Tests.Unit;
 
-public class GetKnowledgesUseCaseTests
+public class GetKnowledgeTypesUseCaseTests
 {
-    private readonly GetKnowledgesUseCase _useCase;
+    private readonly GetKnowledgeTypesUseCase _useCase;
     private readonly IKnowledgeRepository _repository;
 
     private List<KnowledgeType> KnowledgeTypesDbModel { get; set; }
 
-    public GetKnowledgesUseCaseTests()
+    public GetKnowledgeTypesUseCaseTests()
     {
 
         KnowledgeTypesDbModel = new List<KnowledgeType>()
@@ -37,7 +36,7 @@ public class GetKnowledgesUseCaseTests
 
         A.CallTo(() => _repository.GetKnowledgeTypesAsync()).Returns(KnowledgeTypesDbModel);
 
-        _useCase = new GetKnowledgesUseCase(_repository);
+        _useCase = new GetKnowledgeTypesUseCase(_repository);
     }
 
     [Fact]
