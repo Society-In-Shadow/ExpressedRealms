@@ -6,6 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\ExpressedRealms.Knowledges.UseCases\ExpressedRealms.Knowledges.UseCases.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Powers.API\ExpressedRealms.Powers.API.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Server.Shared\ExpressedRealms.Server.Shared.csproj" />
   </ItemGroup>
 </Project>

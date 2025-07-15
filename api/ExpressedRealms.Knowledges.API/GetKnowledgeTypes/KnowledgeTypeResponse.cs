@@ -1,6 +1,8 @@
+using ExpressedRealms.Powers.API.PowerEndpoints.Responses.Options;
+
 namespace ExpressedRealms.Knowledges.API.GetKnowledgeTypes;
 
 public class KnowledgeTypeResponse
 {
-    public List<KnowledgeTypeViewModel> KnowledgeTypes { get; set; } = new();
+    public List<DetailedEditInformation> KnowledgeTypes { get; set; } = new();
 }

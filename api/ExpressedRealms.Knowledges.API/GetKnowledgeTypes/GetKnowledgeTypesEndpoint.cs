@@ -1,4 +1,5 @@
 using ExpressedRealms.Knowledges.UseCases.KnowledgeTypes.GetKnowledgeTypes;
+using ExpressedRealms.Powers.API.PowerEndpoints.Responses.Options;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -16,7 +17,7 @@ public static class GetKnowledgeTypesEndpoint
             new KnowledgeTypeResponse()
             {
                 KnowledgeTypes = results
-                    .Value.KnowledgeTypes.Select(x => new KnowledgeTypeViewModel()
+                    .Value.KnowledgeTypes.Select(x => new DetailedEditInformation()
                     {
                         Id = x.Id,
                         Name = x.Name,
