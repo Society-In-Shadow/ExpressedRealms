@@ -168,6 +168,7 @@ internal sealed class ExpressionTextSectionRepository(
     {
         var sections = await context
             .ExpressionSections.AsNoTracking()
+            .Include(x => x.SectionType)
             .Where(x => x.ExpressionId == expressionId && x.SectionType.Name != "Expression")
             .ToListAsync();
 
@@ -192,6 +193,7 @@ internal sealed class ExpressionTextSectionRepository(
             Name = section.Name,
             Id = section.Id,
             Content = section.Content,
+            SectionTypeName = section.SectionType.Name
         };
     }
 

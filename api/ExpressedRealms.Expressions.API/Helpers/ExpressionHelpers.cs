@@ -20,6 +20,7 @@ internal static class ExpressionHelpers
                 Name = dbSection.Name,
                 Id = dbSection.Id,
                 Content = dbSection.Content,
+                SectionTypeName = dbSection.SectionTypeName,
             };
 
             dto.SubSections = BuildExpressionPage(dbSection.SubSections);

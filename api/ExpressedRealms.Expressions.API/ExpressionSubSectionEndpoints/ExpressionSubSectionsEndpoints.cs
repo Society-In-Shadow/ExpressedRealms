@@ -42,6 +42,7 @@ internal static class ExpectedSubSectionsEndpoints
                             Name = section.Name,
                             Id = section.Id,
                             Content = section.Content,
+                            SectionTypeName = section.SectionTypeName,
                             SubSections = new List<ExpressionSectionDto>(),
                         }
                     );

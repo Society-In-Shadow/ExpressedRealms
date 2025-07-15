@@ -24,6 +24,7 @@ public static class RecursiveFunctions
                 Name = dbSection.Name,
                 Id = dbSection.Id,
                 Content = dbSection.Content,
+                SectionTypeName = dbSection.SectionType.Name,
             };
 
             if (dbSections.Any(x => x.ParentId == dbSection.Id))
