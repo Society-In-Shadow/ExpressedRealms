@@ -4,7 +4,7 @@ import axios from "axios";
 import type {ListItem} from "@/types/ListItem";
 import toaster from "@/services/Toasters";
 import type {EditKnowledge, EditKnowledgeRequest, Knowledge} from "@/components/knowledges/types";
-import type {KnowledgeForm} from "@/components/knowledges/Validations/powerPathValidations";
+import type {KnowledgeForm} from "@/components/knowledges/Validations/knowledgeValidations";
 
 
 export const knowledgeStore =
@@ -29,7 +29,7 @@ export const knowledgeStore =
                     });
 
             },
-            async updateKnowledges(){
+            async getKnowledges(){
                 const response = await axios.get<Knowledge[]>(`/knowledges`);
                 this.knowledges = response.data
             },
@@ -53,8 +53,19 @@ export const knowledgeStore =
                     powerDurationId: values.knowledgeType.id,
                 })
                     .then(async () => {
-                        await this.updateKnowledges();
-                        toaster.success("Successfully Updated Power!");
+                        await this.getKnowledges();
+                        toaster.success("Successfully Updated Knowledge!");
+                    });
+            },
+            addKnowledge: async function (values:KnowledgeForm): Promise<void> {
+                await axios.post(`/knowledges/`, {
+                    name: values.name,
+                    description: values.description,
+                    powerDurationId: values.knowledgeType.id,
+                })
+                    .then(async () => {
+                        await this.getKnowledges();
+                        toaster.success("Successfully Added Knowledge!");
                     });
             },
             deleteKnowledge: async function(id: number){
@@ -67,7 +78,7 @@ export const knowledgeStore =
                 
                 await axios.delete(`/knowledges/${id}`)
                     .then(async () => {
-                        await this.updateKnowledges()
+                        await this.getKnowledges()
                         toaster.success(`Successfully Deleted ${name}!`);
                     });
             }
