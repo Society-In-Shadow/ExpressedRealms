@@ -2,10 +2,11 @@
 
 import {knowledgeStore} from "@/components/knowledges/stores/knowledgeStore";
 import FormDropdownWrapper from "@/FormWrappers/FormDropdownWrapper.vue";
-import FormEditorWrapper from "@/FormWrappers/FormEditorWrapper.vue";
 import FormInputTextWrapper from "@/FormWrappers/FormInputTextWrapper.vue";
 import {getValidationInstance} from "@/components/knowledges/Validations/knowledgeValidations";
 import Button from "primevue/button";
+import {onBeforeMount} from "vue";
+import FormTextAreaWrapper from "@/FormWrappers/FormTextAreaWrapper.vue";
 
 const store = knowledgeStore();
 
@@ -13,6 +14,10 @@ const form = getValidationInstance()
 const emit = defineEmits<{
   canceled: []
 }>();
+
+onBeforeMount(async () => {
+  await store.getOptions();
+})
 
 const onSubmit = form.handleSubmit(async (values) => {
   await store.addKnowledge(values);
@@ -29,7 +34,7 @@ const cancel = () => {
   <form @submit="onSubmit">
     <FormInputTextWrapper v-model="form.name" />
 
-    <FormEditorWrapper v-model="form.description" />
+    <FormTextAreaWrapper v-model="form.description" />
 
     <FormDropdownWrapper
         v-model="form.knowledgeType"

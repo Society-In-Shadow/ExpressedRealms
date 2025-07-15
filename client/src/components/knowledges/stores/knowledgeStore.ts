@@ -31,7 +31,7 @@ export const knowledgeStore =
             },
             async getKnowledges(){
                 const response = await axios.get<Knowledge[]>(`/knowledges`);
-                this.knowledges = response.data
+                this.knowledges = response.data.knowledges
             },
             getKnowledge: async function (id: number): Promise<EditKnowledge> {
                 await this.getOptions()
@@ -42,7 +42,7 @@ export const knowledgeStore =
                     id: response.data.id,
                     name: response.data.name,
                     description: response.data.description,
-                    knowledgeType: this.knowledgeTypes.find((x: ListItem) => x.id == response.data.knowledgeTypeId) as ListItem
+                    knowledgeType: this.knowledgeTypes.find((x: ListItem) => x.id == response.data.typeId) as ListItem
                 };
             },
             updateKnowledge: async function (values:KnowledgeForm, id: number): Promise<void> {
@@ -50,7 +50,7 @@ export const knowledgeStore =
                     id: id,
                     name: values.name,
                     description: values.description,
-                    powerDurationId: values.knowledgeType.id,
+                    knowledgeTypeId: values.knowledgeType.id,
                 })
                     .then(async () => {
                         await this.getKnowledges();
@@ -61,7 +61,7 @@ export const knowledgeStore =
                 await axios.post(`/knowledges/`, {
                     name: values.name,
                     description: values.description,
-                    powerDurationId: values.knowledgeType.id,
+                    knowledgeTypeId: values.knowledgeType.id,
                 })
                     .then(async () => {
                         await this.getKnowledges();

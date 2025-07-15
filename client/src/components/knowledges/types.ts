@@ -13,7 +13,7 @@ export interface EditKnowledgeRequest {
     id: number,
     name: string,
     description: string,
-    knowledgeTypeId: number
+    typeId: number
 }
 
 export interface EditKnowledge {

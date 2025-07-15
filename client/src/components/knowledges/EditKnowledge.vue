@@ -3,11 +3,11 @@
 import {onBeforeMount, ref} from "vue";
 import {knowledgeStore} from "@/components/knowledges/stores/knowledgeStore";
 import FormDropdownWrapper from "@/FormWrappers/FormDropdownWrapper.vue";
-import FormEditorWrapper from "@/FormWrappers/FormEditorWrapper.vue";
 import FormInputTextWrapper from "@/FormWrappers/FormInputTextWrapper.vue";
 import {getValidationInstance} from "@/components/knowledges/Validations/knowledgeValidations";
 import type {EditKnowledge} from "@/components/knowledges/types";
 import Button from "primevue/button";
+import FormTextAreaWrapper from "@/FormWrappers/FormTextAreaWrapper.vue";
 
 const store = knowledgeStore();
 
@@ -45,7 +45,7 @@ const cancel = () => {
   <form @submit="onSubmit">
     <FormInputTextWrapper v-model="form.name" />
     
-    <FormEditorWrapper v-model="form.description" />
+    <FormTextAreaWrapper v-model="form.description" />
     
     <FormDropdownWrapper
         v-model="form.knowledgeType"
