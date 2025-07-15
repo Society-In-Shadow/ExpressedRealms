@@ -11,13 +11,8 @@ public static class RoleConfiguration
         {
             using var scope = app.Services.CreateScope();
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
-            var roles = new[]
-            {
-                UserRoles.ExpressionEditor,
-                UserRoles.UserManagementRole,
-                UserRoles.PowerManagementRole,
-            };
 
+            var roles = UserRoles.RolesForPermissions;
             foreach (var role in roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
