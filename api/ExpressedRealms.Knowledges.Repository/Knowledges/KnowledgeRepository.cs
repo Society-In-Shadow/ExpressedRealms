@@ -17,12 +17,21 @@ internal sealed class KnowledgeRepository(
         return knowledge.Id;
     }
 
-    public async Task<bool> HasDuplicateName(string name)
+    public async Task<bool> HasDuplicateName(string name, int knowledgeId = 0)
     {
+        if (knowledgeId != 0)
+        {
+            return await context
+                .Knowledges.AsNoTracking()
+                .AnyAsync(
+                    x => x.Name.ToLower() == name.ToLower() && x.Id != knowledgeId,
+                    cancellationToken
+                );
+        }
         return await context
             .Knowledges.AsNoTracking()
             .AnyAsync(
-                x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase),
+                x => x.Name.ToLower() == name.ToLower(),
                 cancellationToken
             );
     }

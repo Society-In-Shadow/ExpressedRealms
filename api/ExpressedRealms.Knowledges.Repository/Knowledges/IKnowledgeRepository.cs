@@ -6,7 +6,7 @@ namespace ExpressedRealms.Knowledges.Repository.Knowledges;
 public interface IKnowledgeRepository
 {
     Task<int> CreateKnowledgeAsync(Knowledge knowledge);
-    Task<bool> HasDuplicateName(string name);
+    Task<bool> HasDuplicateName(string name, int knowledgeId = 0);
     Task<bool> KnowledgeTypeExists(int knowledgeTypeId);
     Task<bool> IsExistingKnowledge(int knowledgeId);
     Task EditKnowledgeAsync(Knowledge knowledge);

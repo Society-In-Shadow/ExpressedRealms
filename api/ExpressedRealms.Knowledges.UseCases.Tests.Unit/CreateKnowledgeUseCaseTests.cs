@@ -24,7 +24,7 @@ public class CreateKnowledgeUseCaseTests
 
         _repository = A.Fake<IKnowledgeRepository>();
 
-        A.CallTo(() => _repository.HasDuplicateName(_model.Name)).Returns(false);
+        A.CallTo(() => _repository.HasDuplicateName(_model.Name, 0)).Returns(false);
         A.CallTo(() => _repository.KnowledgeTypeExists(_model.KnowledgeTypeId)).Returns(true);
 
         var validator = new CreateKnowledgeModelValidator(_repository);
@@ -56,7 +56,7 @@ public class CreateKnowledgeUseCaseTests
     [Fact]
     public async Task ValidationFor_Name_WillFail_WhenName_AlreadyExists()
     {
-        A.CallTo(() => _repository.HasDuplicateName(_model.Name)).Returns(true);
+        A.CallTo(() => _repository.HasDuplicateName(_model.Name, 0)).Returns(true);
 
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(
