@@ -21,7 +21,7 @@ internal sealed class EditKnowledgeModelValidator : AbstractValidator<EditKnowle
             .WithMessage("Name is required.")
             .MaximumLength(150)
             .WithMessage("Name must be between 1 and 150 characters.");
-            
+
         RuleFor(x => x)
             .MustAsync(async (x, y) => !await repository.HasDuplicateName(x.Name, x.Id))
             .WithName("Name")

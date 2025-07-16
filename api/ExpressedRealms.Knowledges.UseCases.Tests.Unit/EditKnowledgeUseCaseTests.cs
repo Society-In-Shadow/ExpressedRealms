@@ -23,7 +23,7 @@ public class EditKnowledgeUseCaseTests
             Description = "Test Description",
             KnowledgeTypeId = 1,
         };
-        
+
         _dbModel = new Knowledge()
         {
             Id = 4,
@@ -136,18 +136,15 @@ public class EditKnowledgeUseCaseTests
     public async Task UseCase_WillGrab_TheKnowledge()
     {
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() => _repository.GetKnowledgeForEditingAsync(_model.Id)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _repository.GetKnowledgeForEditingAsync(_model.Id))
+            .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_PassesThrough_TheDbKnowledge()
     {
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() =>
-                _repository.EditKnowledgeAsync(
-                    A<Knowledge>.That.IsSameAs(_dbModel)
-                )
-            )
+        A.CallTo(() => _repository.EditKnowledgeAsync(A<Knowledge>.That.IsSameAs(_dbModel)))
             .MustHaveHappenedOnceExactly();
     }
 

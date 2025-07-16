@@ -14,7 +14,6 @@ namespace ExpressedRealms.Expressions.API.ExpressionEndpoints;
 
 internal static class ExpressionEndpoints
 {
-    
     internal static void AddExpressionEndpoints(this WebApplication app)
     {
         var endpointGroup = app.MapGroup("expression")

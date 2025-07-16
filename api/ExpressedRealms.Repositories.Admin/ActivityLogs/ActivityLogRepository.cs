@@ -142,7 +142,7 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
                 ChangedProperties = x.ChangedProperties,
             })
             .ToListAsync();
-        
+
         var knowledgeLogs = await context
             .KnowledgeAuditTrails.AsNoTracking()
             .IgnoreQueryFilters()

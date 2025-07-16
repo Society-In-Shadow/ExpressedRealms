@@ -30,10 +30,7 @@ internal sealed class KnowledgeRepository(
         }
         return await context
             .Knowledges.AsNoTracking()
-            .AnyAsync(
-                x => x.Name.ToLower() == name.ToLower(),
-                cancellationToken
-            );
+            .AnyAsync(x => x.Name.ToLower() == name.ToLower(), cancellationToken);
     }
 
     public async Task<bool> KnowledgeTypeExists(int knowledgeTypeId)

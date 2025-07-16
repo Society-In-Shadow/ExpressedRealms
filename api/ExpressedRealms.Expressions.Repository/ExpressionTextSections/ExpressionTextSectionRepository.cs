@@ -193,7 +193,7 @@ internal sealed class ExpressionTextSectionRepository(
             Name = section.Name,
             Id = section.Id,
             Content = section.Content,
-            SectionTypeName = section.SectionType.Name
+            SectionTypeName = section.SectionType.Name,
         };
     }
 
