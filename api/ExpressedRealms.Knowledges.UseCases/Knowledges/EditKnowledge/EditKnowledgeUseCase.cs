@@ -21,16 +21,14 @@ internal sealed class EditKnowledgeUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
+        
+        var knowledge = await knowledgeRepository.GetKnowledgeForEditingAsync(model.Id);
+        
+        knowledge.Name = model.Name;
+        knowledge.Description = model.Description;
+        knowledge.KnowledgeTypeId = model.KnowledgeTypeId;
 
-        await knowledgeRepository.EditKnowledgeAsync(
-            new Knowledge()
-            {
-                Id = model.Id,
-                Name = model.Name,
-                Description = model.Description,
-                KnowledgeTypeId = model.KnowledgeTypeId,
-            }
-        );
+        await knowledgeRepository.EditKnowledgeAsync(knowledge);
 
         return Result.Ok();
     }

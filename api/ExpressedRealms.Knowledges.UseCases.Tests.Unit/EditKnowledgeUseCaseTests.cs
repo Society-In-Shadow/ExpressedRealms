@@ -12,6 +12,7 @@ public class EditKnowledgeUseCaseTests
     private readonly EditKnowledgeUseCase _useCase;
     private readonly IKnowledgeRepository _repository;
     private readonly EditKnowledgeModel _model;
+    private readonly Knowledge _dbModel;
 
     public EditKnowledgeUseCaseTests()
     {
@@ -22,12 +23,21 @@ public class EditKnowledgeUseCaseTests
             Description = "Test Description",
             KnowledgeTypeId = 1,
         };
+        
+        _dbModel = new Knowledge()
+        {
+            Id = 4,
+            Name = "Test Knowledge 3",
+            Description = "Test Description 2",
+            KnowledgeTypeId = 5,
+        };
 
         _repository = A.Fake<IKnowledgeRepository>();
 
         A.CallTo(() => _repository.IsExistingKnowledge(_model.Id)).Returns(true);
         A.CallTo(() => _repository.HasDuplicateName(_model.Name, _model.Id)).Returns(false);
         A.CallTo(() => _repository.KnowledgeTypeExists(_model.KnowledgeTypeId)).Returns(true);
+        A.CallTo(() => _repository.GetKnowledgeForEditingAsync(_model.Id)).Returns(_dbModel);
 
         var validator = new EditKnowledgeModelValidator(_repository);
 
@@ -120,6 +130,25 @@ public class EditKnowledgeUseCaseTests
             nameof(EditKnowledgeModel.KnowledgeTypeId),
             "The Knowledge Type does not exist."
         );
+    }
+
+    [Fact]
+    public async Task UseCase_WillGrab_TheKnowledge()
+    {
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() => _repository.GetKnowledgeForEditingAsync(_model.Id)).MustHaveHappenedOnceExactly();
+    }
+    
+    [Fact]
+    public async Task UseCase_PassesThrough_TheDbKnowledge()
+    {
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() =>
+                _repository.EditKnowledgeAsync(
+                    A<Knowledge>.That.IsSameAs(_dbModel)
+                )
+            )
+            .MustHaveHappenedOnceExactly();
     }
 
     [Fact]

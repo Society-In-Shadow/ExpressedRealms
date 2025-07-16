@@ -1,8 +1,10 @@
+using Audit.EntityFramework;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Audit;
 
 namespace ExpressedRealms.DB.Models.Knowledges.KnowledgeModels;
 
+[AuditInclude]
 public class Knowledge : ISoftDelete
 {
     public int Id { get; set; }
