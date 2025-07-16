@@ -39,10 +39,7 @@ let sections = ref([
   }
 ]);
 
-const expressionHeader = ref({});
-
 const isLoading = ref(true);
-const headerIsLoading = ref(true);
 const showEdit = ref(expressionInfo.canEdit);
 const showCreate = ref(false);
 const showPreview = ref(false);
@@ -70,13 +67,6 @@ async function fetchData() {
           await nextTick();
           window.location.replace(location.hash);
         }        
-      });
-  
-  headerIsLoading.value = true;
-  await axios.get(`/expressionSubSections/${expressionInfo.currentExpressionId}/expression`)
-      .then(async (json) => {
-        expressionHeader.value = json.data;
-        headerIsLoading.value = false;
       });
 }
 
