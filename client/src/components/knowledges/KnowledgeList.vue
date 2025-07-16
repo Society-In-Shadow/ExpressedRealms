@@ -30,15 +30,13 @@ const props = defineProps({
 </script>
 
 <template>
-
   <div v-for="knowledge in store.knowledges" :key="knowledge.id">
     <KnowledgeItem :knowledge="knowledge" :is-read-only="props.isReadOnly" />
   </div>
   
-  <AddKnowledge v-if="showAdd && userInfo.hasUserRole(UserRoles.KnowledgeManagementRole) && !props.isReadOnly" @canceled="toggleAdd"/>
+  <AddKnowledge v-if="showAdd && userInfo.hasUserRole(UserRoles.KnowledgeManagementRole) && !props.isReadOnly" @canceled="toggleAdd" />
   <Button
-      v-if="!showAdd && userInfo.hasUserRole(UserRoles.KnowledgeManagementRole) && !props.isReadOnly" class="w-100 m-2"
-      label="Add Knowledge" @click="toggleAdd"
+    v-if="!showAdd && userInfo.hasUserRole(UserRoles.KnowledgeManagementRole) && !props.isReadOnly" class="w-100 m-2"
+    label="Add Knowledge" @click="toggleAdd"
   />
-  
 </template>

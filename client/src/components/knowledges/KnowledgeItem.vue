@@ -20,7 +20,6 @@ const props = defineProps({
   }
 });
 
-
 let popups = knowledgeConfirmationPopup(props.knowledge.id, props.knowledge.name)
 
 const showEdit = ref(false);
@@ -37,19 +36,19 @@ function toggleEdit(){
   <div v-else class="d-flex flex-column flex-md-row align-self-center justify-content-between">
     <div>
       <h1 class="p-0 m-0">
-        {{props.knowledge.name}}
+        {{ props.knowledge.name }}
       </h1>
       <div class="p-0 m-0">
-        {{props.knowledge.typeName}}
+        {{ props.knowledge.typeName }}
       </div>
     </div>
     <div
-        v-if="!showEdit && userInfo.hasUserRole(UserRoles.PowerManagementRole) && !props.isReadOnly"
-        class="p-0 m-0 d-inline-flex align-items-start"
+      v-if="!showEdit && userInfo.hasUserRole(UserRoles.PowerManagementRole) && !props.isReadOnly"
+      class="p-0 m-0 d-inline-flex align-items-start"
     >
       <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
       <Button class="float-end" label="Edit" @click="toggleEdit" />
     </div>
   </div>
-  <p>{{props.knowledge.description}}</p>
+  <p>{{ props.knowledge.description }}</p>
 </template>

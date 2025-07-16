@@ -189,19 +189,19 @@ const deleteExpression = (event) => {
     <div class="flex">
       <div class="col-flex flex-grow-1">
         <component
-            :is="`h${Math.min(Math.max(currentLevel, 1), 6)}`"
-            :id="makeIdSafe(sectionInfo.name)"
+          :is="`h${Math.min(Math.max(currentLevel, 1), 6)}`"
+          :id="makeIdSafe(sectionInfo.name)"
         >
           {{ sectionInfo.name }}
         </component>
       </div>
-      <div class="col-flex" v-if="props.sectionInfo.sectionTypeName != 'Knowledges Section'">
+      <div v-if="props.sectionInfo.sectionTypeName != 'Knowledges Section'" class="col-flex">
         <Button v-if="showEdit && !isHeaderSection" label="Add Child Section" class="m-2" @click="toggleCreate" />
         <Button v-if="!showEditor && showEdit" label="Edit" class="float-end m-2" @click="toggleEditor()" />
       </div>
     </div>
     <div v-if="props.sectionInfo.sectionTypeName === 'Knowledges Section'">
-      <KnowledgeList :is-read-only="!showEdit"></KnowledgeList>
+      <KnowledgeList :is-read-only="!showEdit" />
     </div>
     
     <div v-else class="mb-2 fix-wrapping" v-html="props.sectionInfo.content" />

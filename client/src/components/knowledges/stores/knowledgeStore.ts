@@ -6,7 +6,6 @@ import toaster from "@/services/Toasters";
 import type {EditKnowledge, EditKnowledgeRequest, Knowledge} from "@/components/knowledges/types";
 import type {KnowledgeForm} from "@/components/knowledges/Validations/knowledgeValidations";
 
-
 export const knowledgeStore =
     defineStore(`powers`, {
         state: () => {

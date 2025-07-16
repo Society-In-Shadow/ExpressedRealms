@@ -14,7 +14,6 @@ const oversizedPowerRequirement = {description: 'Lorem Ipsum 2',
     id: 5,
     name: 'General 2' }
 
-
 describe("Power Prerequisite Model Schema - Field Validations", () => {
 
     describe("Powers", () => {

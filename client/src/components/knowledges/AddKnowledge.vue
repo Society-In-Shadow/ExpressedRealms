@@ -37,9 +37,9 @@ const cancel = () => {
     <FormTextAreaWrapper v-model="form.description" />
 
     <FormDropdownWrapper
-        v-model="form.knowledgeType"
-        :options="store.knowledgeTypes"
-        option-label="name"
+      v-model="form.knowledgeType"
+      :options="store.knowledgeTypes"
+      option-label="name"
     />
 
     <div class="m-3 text-right">

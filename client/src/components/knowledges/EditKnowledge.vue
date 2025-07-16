@@ -17,7 +17,6 @@ const emit = defineEmits<{
   canceled: []
 }>();
 
-
 const props = defineProps({
   knowledgeId: {
     type: Number,
@@ -48,9 +47,9 @@ const cancel = () => {
     <FormTextAreaWrapper v-model="form.description" />
     
     <FormDropdownWrapper
-        v-model="form.knowledgeType"
-        :options="store.knowledgeTypes"
-        option-label="name"
+      v-model="form.knowledgeType"
+      :options="store.knowledgeTypes"
+      option-label="name"
     />
     
     <div class="m-3 text-right">

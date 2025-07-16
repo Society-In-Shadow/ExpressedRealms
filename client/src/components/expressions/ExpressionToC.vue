@@ -67,7 +67,7 @@ function toggleEdit(){
     text-key="name"
   >
     <template #default="{ node }">
-      <div class="p-1" v-if="node.sectionTypeName == 'Knowledges Section' ? userInfo.hasFeatureFlag(FeatureFlags.ShowKnowledges) : true">
+      <div v-if="node.sectionTypeName == 'Knowledges Section' ? userInfo.hasFeatureFlag(FeatureFlags.ShowKnowledges) : true" class="p-1">
         <i class="pi pi-bars mr-2" />{{ node.name }}
       </div>
     </template>
