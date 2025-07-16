@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
 import ExpressionSection from "@/components/expressions/ExpressionSection.vue";
-import axios from "axios";
 import {useRoute} from 'vue-router'
 import { expressionStore } from "@/stores/expressionStore";
 const expressionInfo = expressionStore();
