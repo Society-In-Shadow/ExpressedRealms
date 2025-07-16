@@ -9,7 +9,9 @@ import axios from "axios";
 import toaster from "@/services/Toasters";
 import {expressionStore} from "@/stores/expressionStore";
 import {getIdsWithDynamicSortForArray, scrollToSection} from "@/components/expressions/expressionUtilities";
+import {FeatureFlags, userStore} from "@/stores/userStore";
 const expressionInfo = expressionStore();
+const userInfo = userStore();
 
 const model = defineModel({ required: true, default: {}, type: Array });
 
@@ -65,7 +67,7 @@ function toggleEdit(){
     text-key="name"
   >
     <template #default="{ node }">
-      <div class="p-1">
+      <div class="p-1" v-if="node.sectionTypeName == 'Knowledges Section' ? userInfo.hasFeatureFlag(FeatureFlags.ShowKnowledges) : true">
         <i class="pi pi-bars mr-2" />{{ node.name }}
       </div>
     </template>
@@ -74,11 +76,10 @@ function toggleEdit(){
     v-else 
     v-model="model" 
     children-key="subSections"
-    text-key="name"
   >
     <template #default="{ node }">
       <Skeleton v-if="props.showSkeleton" id="toc-skeleton" class="mb-2" height="1.5em" />
-      <a v-else class="p-1 tocItem" :href="'#' + makeIdSafe(node.name)" @click.prevent="scrollToSection(node.name)">{{ node.name }}</a>
+      <a v-else-if="node.sectionTypeName == 'Knowledges Section' ? userInfo.hasFeatureFlag(FeatureFlags.ShowKnowledges) : true" class="p-1 tocItem" :href="'#' + makeIdSafe(node.name)" @click.prevent="scrollToSection(node.name)">{{ node.name }}</a>
     </template>
   </BaseTree>
   <div v-if="props.canEdit">

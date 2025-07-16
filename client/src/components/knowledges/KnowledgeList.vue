@@ -1,12 +1,11 @@
 <script setup lang="ts">
 
 import {knowledgeStore} from "@/components/knowledges/stores/knowledgeStore";
-import {onMounted, type PropType, ref} from "vue";
+import {onMounted, ref} from "vue";
 import KnowledgeItem from "@/components/knowledges/KnowledgeItem.vue";
 import {UserRoles, userStore} from "@/stores/userStore";
 import Button from "primevue/button";
 import AddKnowledge from "@/components/knowledges/AddKnowledge.vue";
-import type {Knowledge} from "@/components/knowledges/types";
 
 const store = knowledgeStore();
 const userInfo = userStore();
@@ -22,10 +21,6 @@ const toggleAdd = () =>{
 }
 
 const props = defineProps({
-  knowledge: {
-    type: Object as PropType<Knowledge>,
-    required: true,
-  },
   isReadOnly: {
     type: Boolean,
     required: true

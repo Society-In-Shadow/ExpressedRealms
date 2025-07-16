@@ -17,7 +17,9 @@ import CreateExpressionSection from "@/components/expressions/CreateExpressionSe
 import {useConfirm} from "primevue/useconfirm";
 import DataTable from "primevue/datatable";
 import KnowledgeList from "@/components/knowledges/KnowledgeList.vue";
+import {FeatureFlags, userStore} from "@/stores/userStore";
 const expressionInfo = expressionStore();
+const userInfo = userStore();
 
 const emit = defineEmits<{
   refreshList: []
@@ -183,7 +185,7 @@ const deleteExpression = (event) => {
       </div>
     </form>
   </div>
-  <div v-else>
+  <div v-else-if="props.sectionInfo.sectionTypeName === 'Knowledges Section' ? userInfo.hasFeatureFlag(FeatureFlags.ShowKnowledges) : true">
     <div class="flex">
       <div class="col-flex flex-grow-1">
         <component
@@ -193,7 +195,7 @@ const deleteExpression = (event) => {
           {{ sectionInfo.name }}
         </component>
       </div>
-      <div class="col-flex">
+      <div class="col-flex" v-if="props.sectionInfo.sectionTypeName != 'Knowledges Section'">
         <Button v-if="showEdit && !isHeaderSection" label="Add Child Section" class="m-2" @click="toggleCreate" />
         <Button v-if="!showEditor && showEdit" label="Edit" class="float-end m-2" @click="toggleEditor()" />
       </div>
