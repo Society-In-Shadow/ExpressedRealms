@@ -59,7 +59,7 @@ const items = [
         <a class="text-decoration-none text-reset" :href="slotProps.data.link">
           <div class="card">
             <div class="d-flex flex-column flex-md-row align-items-center justify-content-between">
-              <div>
+              <div class="mr-3">
                 <h2 class="mt-0 pt-0">{{slotProps.data.name}}</h2>
                 <p>{{slotProps.data.description}}</p>
               </div>
