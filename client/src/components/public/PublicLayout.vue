@@ -11,10 +11,16 @@ import Menu from "@/components/public/Menu.vue";
     This site is currently in a BETA state, not all features or content is in place.
   </Message>
   <Menu />
-  <router-view />
+  <div class="container-fluid constrain-width ">
+    <router-view />
+  </div>
+
 </template>
 
 <style scoped>
 
+ .constrain-width {
+   max-width: 1000px;
+ }
 
 </style>
