@@ -6,8 +6,6 @@ import Card from "primevue/card";
 </script>
 
 <template>
-  
-  <HomePageCarousel />
 
   <h1>The Three Pillars</h1>
   <div class="d-flex flex-column flex-md-row">
@@ -32,8 +30,7 @@ import Card from "primevue/card";
     </Card>
   </div>
   
-  
-  
+  <HomePageCarousel />
   
   <h1>The Foundation of the Society</h1>
   <p>
@@ -55,8 +52,6 @@ import Card from "primevue/card";
     them to survive as a member of the Society  and to defend the One Law. It is the Grand Council’s belief that these
     benchmarks should be upheld to  protect the Society.
   </p>
-
-
 
 </template>
 
