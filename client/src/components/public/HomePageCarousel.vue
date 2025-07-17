@@ -12,37 +12,37 @@ const items = [
     type: 'expression',
     name: 'Adepts',
     description: 'Incredible martial artists. Masters of the mind. Enlightened healers. Stalwart defenders.',
-    link: 'expressions/adepts'
+    link: 'expressions#adepts'
   },
   {
     type: 'expression',
     name: 'Vampyres',
     description: 'Vampyres of legend have been portrayed as everything from vicious monsters to cursed saints.',
-    link: 'expressions/vampyres'
+    link: 'expressions#vampyres'
   },
   {
     type: 'expression',
     name: 'Sidhe',
     description: 'Eldritch Knights. Carefree Illusionists. Archer\'s of Legend.',
-    link: 'expressions/vampyres'
+    link: 'expressions#sidhe'
   },
   {
     type: 'expression',
     name: 'Aeternari',
     description: 'The Immortals. The Ageless.',
-    link: 'expressions/vampyres'
+    link: 'expressions#aeternari'
   },
   {
     type: 'expression',
     name: 'Sorcerers',
     description: 'Elementalists. Witches. Magi.',
-    link: 'expressions/vampyres'
+    link: 'expressions#sorcerers'
   },
   {
     type: 'expression',
     name: 'Shammas',
     description: 'Werecreatures. Medicine men. Hybrid of humanity and the wild.',
-    link: 'expressions/vampyres'
+    link: 'expressions#shammas'
   }
 ]
 
