@@ -1,7 +1,7 @@
 import LoginBasePlate from "@/components/Login/LoginBasePlate.vue";
 
 export const UserRoutes = {
-    path: '/',
+    path: '/auth',
     component: LoginBasePlate,
     children: [
         {

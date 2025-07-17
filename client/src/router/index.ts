@@ -4,12 +4,14 @@ import {updateUserStoreWithEmailInfo, isLoggedIn, updateUserStoreWithPlayerInfo}
 import {UserRoutes} from "@/router/Routes/UserRoutes";
 import {AdminRoutes} from "@/router/Routes/AdminRoutes";
 import {OverallRoutes} from "@/router/Routes/OverallNavigationRoutes";
+import {PublicRoutes} from "@/router/Routes/PublicRoutes";
 import axios from "axios";
 
 export const routes = [
     UserRoutes,
     OverallRoutes,
-    AdminRoutes
+    AdminRoutes,
+    PublicRoutes
 ]
 
 const routerSetup = createRouter({
@@ -30,13 +32,10 @@ routerSetup.beforeEach(async (to) => {
     const userInfo = userStore();
     await userInfo.updateUserRoles();
     const loggedIn = isLoggedIn();
-    const anonymousEndpoints = ['Login', 'createAccount', 'forgotPassword', 'resetPassword', 'confirmAccount']
     const routeName:string = to.name as string;
-    const canCauseInfiniteRedirects = anonymousEndpoints.includes(routeName)
     
-    if (!loggedIn && !canCauseInfiniteRedirects) {
-        return  { name: 'Login' };
-    }
+    if(to.meta.isAnonymous)
+        return
     
     if(loggedIn){
 
