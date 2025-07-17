@@ -9,10 +9,11 @@ import {ref} from "vue";
 const router = useRouter();
 
 const items = ref([
-  { root: true, label: 'Home', icon: 'pi pi-file', subtext: 'Characters', command: () => router.push("/"),  items: [] },
+  { root: true, label: 'Home', command: () => router.push("/") },
   { root: true, label: 'About', command: () => router.push("/about") },
-  { root: true, label: 'Expressions', icon: 'pi pi-file', subtext: 'Stone Puller', command: () => router.push("/expressions") },
-  { root: true, label: 'Contact Us', icon: 'pi pi-file', subtext: 'Stone Puller', command: () => router.push("/contact-us") },
+  { root: true, label: 'Expressions', command: () => router.push("/expressions") },
+  { root: true, label: 'Contact Us', command: () => router.push("/contact-us") },
+  { root: true, label: 'Upcoming Events', command: () => router.push("/upcoming-events") },
 ]);
 </script>
 
