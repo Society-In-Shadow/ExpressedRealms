@@ -9,11 +9,11 @@ import {ref} from "vue";
 const router = useRouter();
 
 const items = ref([
-  { root: true, label: 'Home', command: () => router.push("/") },
-  { root: true, label: 'About', command: () => router.push("/about") },
-  { root: true, label: 'Expressions', command: () => router.push("/expressions") },
-  { root: true, label: 'Contact Us', command: () => router.push("/contact-us") },
-  { root: true, label: 'Upcoming Events', command: () => router.push("/upcoming-events") },
+  { root: true, label: 'Home', route: '', command: () => router.push("/") },
+  { root: true, label: 'About', route: 'about', command: () => router.push("/about") },
+  { root: true, label: 'Expressions', route: 'expressions', command: () => router.push("/expressions") },
+  { root: true, label: 'Contact Us', route: 'contact-us', command: () => router.push("/contact-us") },
+  { root: true, label: 'Upcoming Events', route: 'upcoming-events', command: () => router.push("/upcoming-events") },
 ]);
 </script>
 
@@ -23,7 +23,7 @@ const items = ref([
       <img src="/favicon.png" alt="A white, black, blue, red, green, and transparent marbles organized in a pentagon pattern. The white stone is at the top and the transparent stone is in the center." height="50" width="50" class="m-2">
     </template>
     <template #item="{ item }">
-      <a v-if="item.root" class="flex items-center cursor-pointer px-4 py-2 overflow-hidden relative font-semibold text-lg uppercase" style="border-radius: 2rem">
+      <a v-if="item.root" class="flex items-center cursor-pointer px-4 py-2 overflow-hidden relative font-semibold text-lg uppercase" style="border-radius: 2rem" :class="{ 'selected-item': router.currentRoute.value.path === '/' + item.route }">
         <span>{{ item.label }}</span>
       </a>
       <a v-else-if="!item.image" class="flex items-center p-4 cursor-pointer mb-2 gap-3">
@@ -59,5 +59,9 @@ const items = ref([
   .hideIfSmall{
     display: none;
   }
+}
+
+.selected-item {
+  background: var(--p-form-field-disabled-background);
 }
 </style>
