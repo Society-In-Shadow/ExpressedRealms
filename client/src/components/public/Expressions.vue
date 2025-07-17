@@ -25,6 +25,7 @@ onMounted(async () => {
         available on that ancient race. From the eldritch paths of the ancient knights to the glamour using tricksters,
         from the entropy masters to the beneficial healers; the Sidhe are never predictable and always formidable.
       </p>
+      <p>For more background and information, please <a href="/login">login.</a></p>
     </div>
     <div>
       <img src="/public/favicon.png" alt="If I had one" width="150">
@@ -39,6 +40,7 @@ onMounted(async () => {
         an Adept chooses to follow develops over time shaping their expression and augmenting their abilities. They wield
         mental and physical powers which range from the subtle to the incredible.
       </p>
+      <p>For more background and information, please <a href="/login">login.</a></p>
     </div>
     <div>
       <img src="/public/favicon.png" alt="If I had one" width="150">
@@ -58,6 +60,7 @@ onMounted(async () => {
         relationships with one another and other long-lived supernaturals as the only constants in which they can find
         comfort.
       </p>
+      <p>For more background and information, please <a href="/login">login.</a></p>
     </div>
     <div>
       <img src="/public/favicon.png" alt="If I had one" width="150">
@@ -73,6 +76,7 @@ onMounted(async () => {
         complex protective effects and evoke raw destruction, eventually summoning and controlling the ultimate examples
         of their arcane power: Elementals. Sorcerers direct the awesome power of the elements with finesse and subtlety.
       </p>
+      <p>For more background and information, please <a href="/login">login.</a></p>
     </div>
     <div>
       <img src="/public/favicon.png" alt="If I had one" width="150">
@@ -91,6 +95,7 @@ onMounted(async () => {
         whether taking on the aspects of their totems or channeling nature's spirits, their shamanistic roots are
         readily apparent.
       </p>
+      <p>For more background and information, please <a href="/login">login.</a></p>
     </div>
     <div class="">
       <img src="/public/favicon.png" alt="If I had one" width="150">
@@ -108,6 +113,7 @@ onMounted(async () => {
         viable members of the Society, albeit with a thirst for blood. Many Vampyres enjoy their extended life and
         consider themselves above mundane concerns.
       </p>
+      <p>For more background and information, please <a href="/login">login.</a></p>
     </div>
     <div class="">
       <img src="/public/favicon.png" alt="If I had one" width="150">
