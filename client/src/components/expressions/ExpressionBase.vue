@@ -177,7 +177,7 @@ onBeforeRouteUpdate(async (to, from) => {
   }
 }
 
-@media(max-width: 768px){
+@media(max-width: 768px){ 
   .custom-card > .p-card-body{
     padding: 0.75rem !important;
   }
