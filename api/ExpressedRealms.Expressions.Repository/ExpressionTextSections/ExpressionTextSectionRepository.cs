@@ -179,6 +179,7 @@ internal sealed class ExpressionTextSectionRepository(
     {
         var section = await context
             .ExpressionSections.AsNoTracking()
+            .Include(x => x.SectionType)
             .FirstOrDefaultAsync(x =>
                 x.ExpressionId == expressionId && x.SectionType.Name == "Expression"
             );
