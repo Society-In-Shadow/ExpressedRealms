@@ -8,3 +8,9 @@ export interface EventDetails{
     conWebsiteName: string;
     conWebsiteUrl: string;
 }
+
+export interface ExpressionInfo{
+    name: string;
+    archetypes: string;
+    description: string;
+}
