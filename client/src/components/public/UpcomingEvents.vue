@@ -25,17 +25,8 @@ onBeforeMount(() => {
     <template #title><h1 class="m-0">{{event.name}}</h1></template>
     <template #content>
       <div>{{event.startDate.toDateString()}} - {{event.endDate.toDateString()}}</div>
-      <div>{{event.location}}</div>
+      <div><a :href="`maps:${event.location}`">{{event.location}}</a></div>
       <div><a :href="event.conWebsiteUrl">{{event.conWebsiteName}}</a></div>
-      <h1 class="m-0 pt-5" v-if="event.staff">Meet Our Team</h1>
-      <div v-for="staff in event.staff" class="pt-2">
-        <div class="d-flex flex-column flex-md-row align-items-center">
-          <div>
-            <h2>{{staff.name}}</h2>
-            <p>{{staff.bio}}</p>
-          </div>
-        </div>
-      </div>
     </template>
   </Card>
 </div>

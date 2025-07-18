@@ -7,10 +7,4 @@ export interface EventDetails{
     location: string;
     conWebsiteName: string;
     conWebsiteUrl: string;
-    staff: StaffDetail[];
-}
-
-export interface StaffDetail{
-    name: string;
-    bio: string;
 }
