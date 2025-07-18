@@ -3,52 +3,41 @@ import Carousel from 'primevue/carousel';
 
 const items = [
   {
-    type: 'event',
     name: 'Upcoming Event',
     description: 'Come join us at Sioux City Geek Con!',
     link: 'upcoming-events'
   },
   {
-    type: 'expression',
     name: 'Adepts',
     description: 'Incredible martial artists. Masters of the mind. Enlightened healers. Stalwart defenders.',
     link: 'expressions#adepts'
   },
   {
-    type: 'expression',
     name: 'Vampyres',
     description: 'Vampyres of legend have been portrayed as everything from vicious monsters to cursed saints.',
     link: 'expressions#vampyres'
   },
   {
-    type: 'expression',
     name: 'Sidhe',
     description: 'Eldritch Knights. Carefree Illusionists. Archer\'s of Legend.',
     link: 'expressions#sidhe'
   },
   {
-    type: 'expression',
     name: 'Aeternari',
     description: 'The Immortals. The Ageless.',
     link: 'expressions#aeternari'
   },
   {
-    type: 'expression',
     name: 'Sorcerers',
     description: 'Elementalists. Witches. Magi.',
     link: 'expressions#sorcerers'
   },
   {
-    type: 'expression',
     name: 'Shammas',
     description: 'Werecreatures. Medicine men. Hybrid of humanity and the wild.',
     link: 'expressions#shammas'
   }
 ]
-
-// One tile per expression
-// One tile for next upcoming event (first tile displayed)
-// one tile for news articles
 
 </script>
 
