@@ -41,6 +41,12 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "show-knowledges",
         "Allows one to see and modify the knowledges."
     );
+    
+    public static readonly ReleaseFlags ShowMarketingPages = new(
+        "Show Marketing Pages",
+        "show-marketing",
+        "Allows one to see the typical landing pages you'd expect from a company."
+    );
 
     public override string ToString()
     {

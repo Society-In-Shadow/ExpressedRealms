@@ -12,7 +12,8 @@ export const FeatureFlags = {
     ShowsPowerTab: "show-power-tab",
     ShowRuleBook: "show-rule-book-nav",
     ShowTreasureTales: "show-treasured-tales-nav",
-    ShowKnowledges: "show-knowledges"
+    ShowKnowledges: "show-knowledges",
+    ShowMarketing: "show-marketing",
 } as const;
 
 export type UserRole = (typeof UserRoles)[keyof typeof UserRoles];
