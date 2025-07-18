@@ -32,25 +32,29 @@ import Card from "primevue/card";
   
   <HomePageCarousel />
   
-  <h1>The Foundation of the Society</h1>
+  <h1>Before the Shadows</h1>
+
   <p>
-    Beyond the bickering, scheming and backstabbing, beyond any political manipulations, the Three Pillars  have remained 
-    sacred since their creation. Acceptance of the Pillars unites the Society as a nation of  allies who follow this vital 
-    code. Though every few generations of Expressed customize the precise  wording to fit their specific brand of justice 
-    and debate the number of Pillars, the heart of the First Pillar  has remained constant since the days of Atlantis and 
-    is known as the One Law. This One Law, “Thou  shall not draw undue Mundane attention to the Society,” is the ultimate 
-    fail-safe for all Expressed, as it  gives them the liberty to live freely outside the influence of ignorant Mundanes.
+    The world of the Expressed began well before the Society, before we followed the Pillars, and before the 
+    formation of the original Grand Council. What was this time like? What happened in this time before the 
+    shadows, before the One Law? Perhaps, more importantly, what about this time shaped our lives as they 
+    are now; and how did each Expression come to exist? These things and more will be covered here in our 
+    historical origins known as ancient history.
   </p>
   <p>
-    The Second and Third Pillars also support vital doctrines within the Society. The Second Pillar, “Thou  shall defend
-    the well-being of Mundanes as you do that of the Society, for our fates are intertwined,” is a  core principle dating
-    back to the fore-founders of the Society. It was the belief of the first Council that the  Society would remain as
-    mankind’s undisclosed ally. Some may not care to admit it, but we all come from  humanity, and any mundane death may
-    prevent another one of our kind from expressing. The Third Pillar,  “Thou shall assist in the education of any
-    Supernatural beings so that they understand the need to remain  hidden, or assist in their removal so they do not
-    threaten the Society,” imparts the need to mentor the  newly Expressed. Instruction of basic skills is essential for
-    them to survive as a member of the Society  and to defend the One Law. It is the Grand Council’s belief that these
-    benchmarks should be upheld to  protect the Society.
+    The ancient history for the Expressed overlaps with the history of Man. Though many things stated here 
+    will seem to contradict the mundane histories you have learned, be aware that they do not unless ample 
+    proof exists for us to believe otherwise. Also know, the spin doctors over in Obscura have done their best
+    to keep the most damning of this evidence out of the history books. While most of you will not be familiar 
+    with fact that there were cities populated with Expressed and mundanes as far back as 39,000 BC,
+    remember that until recently you were also unfamiliar with the fact that Vampyres, Sorcerers, and shape shifters are real.
+  </p>
+  <p>
+    That being said, sit back and enjoy the ride as I take you through the wonders that are our most ancient of histories.
+  </p>
+  <p>
+    Orin Svenson<br/>
+    Order of Archivists: Third Circle
   </p>
 
 </template>
