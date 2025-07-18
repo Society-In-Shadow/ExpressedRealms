@@ -1,6 +1,6 @@
 
-
 export interface EventDetails{
+    id: number;
     name: string;
     startDate: Date;
     endDate: Date;

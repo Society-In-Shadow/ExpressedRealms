@@ -1,7 +1,3 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
   <h1>Who We Are</h1>
   <p>
@@ -47,7 +43,9 @@
     tempus suscipit erat. Morbi vitae ex turpis. Aliquam luctus bibendum condimentum.
   </p>
  
-  <h1>General History</h1>
+  <h1>
+    General History
+  </h1>
   <p>
     Fusce imperdiet sit amet neque et auctor. Duis ullamcorper, ipsum vitae sollicitudin iaculis, elit tortor congue 
     dolor, in laoreet quam arcu id diam. Nullam a congue massa. Quisque lacinia sem blandit interdum ultricies. 
@@ -57,12 +55,4 @@
     sed libero aliquam dignissim bibendum non nisl. Fusce non odio id elit feugiat ullamcorper vel ut ante. Integer 
     fringilla congue ligula molestie fermentum.
   </p>
-
-
-
-
 </template>
-
-<style scoped>
-
-</style>

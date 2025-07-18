@@ -6,23 +6,28 @@ import Card from "primevue/card";
 </script>
 
 <template>
-
   <h1>The Three Pillars</h1>
   <div class="d-flex flex-column flex-md-row">
     <Card class="constrain-pillars m-2">
-      <template #title>1st</template>
+      <template #title>
+        1st
+      </template>
       <template #content>
         Thou shall not draw undue Mundane attention to the Society.
       </template>
     </Card>
     <Card class="constrain-pillars m-2">
-      <template #title>2nd</template>
-      <template #content class="">
+      <template #title>
+        2nd
+      </template>
+      <template #content>
         Thou shall defend the well-being of Mundanes as you do that of the Society, for  our fates are intertwined.
       </template>
     </Card>
     <Card class="constrain-pillars m-2">
-      <template #title>3rd</template>
+      <template #title>
+        3rd
+      </template>
       <template #content>
         Thou shall assist in the education of any Supernatural beings so that they  understand the need to remain
         hidden, or assist in their removal so they do not threaten  the Society.
@@ -53,10 +58,9 @@ import Card from "primevue/card";
     That being said, sit back and enjoy the ride as I take you through the wonders that are our most ancient of histories.
   </p>
   <p>
-    Orin Svenson<br/>
+    Orin Svenson<br>
     Order of Archivists: Third Circle
   </p>
-
 </template>
 
 <style scoped>

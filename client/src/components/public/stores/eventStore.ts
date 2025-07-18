@@ -12,6 +12,7 @@ export const eventStore =
             async getEvents(){
                 
                 this.events = [{
+                    id: 1,
                     name: 'Sioux City Geek Con',
                     location: '801 4th St Sioux City, Iowa',
                     startDate: new Date(2025, 7, 23),

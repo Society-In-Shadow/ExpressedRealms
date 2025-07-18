@@ -8,17 +8,26 @@ import Card from 'primevue/card';
 </script>
 
 <template>
-
   <Card>
-    <template #title>Contact Us</template>
+    <template #title>
+      Contact Us
+    </template>
     <template #content>
       <p>Blurb about reaching out to us in general.  See individual tabs below for more information.</p>
       <Tabs value="0" scrollable>
         <TabList>
-          <Tab value="0">Parents / Guardians</Tab>
-          <Tab value="1">Players</Tab>
-          <Tab value="2">Event Organizers / Conventions</Tab>
-          <Tab value="3">Other</Tab>
+          <Tab value="0">
+            Parents / Guardians
+          </Tab>
+          <Tab value="1">
+            Players
+          </Tab>
+          <Tab value="2">
+            Event Organizers / Conventions
+          </Tab>
+          <Tab value="3">
+            Other
+          </Tab>
         </TabList>
         <TabPanels>
           <TabPanel value="0">
@@ -80,9 +89,4 @@ import Card from 'primevue/card';
       </Tabs>
     </template>
   </Card>
-  
 </template>
-
-<style scoped>
-
-</style>

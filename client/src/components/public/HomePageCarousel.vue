@@ -54,17 +54,17 @@ const items = [
 
 <template>
   <div class="constrain-carousal mt-5 mb-5">
-    <Carousel :value="items" :numVisible="1" :autoplay-interval="5000">
+    <Carousel :value="items" :num-visible="1" :autoplay-interval="5000">
       <template #item="slotProps">
         <a class="text-decoration-none text-reset" :href="slotProps.data.link">
           <div class="card">
             <div class="d-flex flex-column flex-md-row align-items-center justify-content-between">
               <div class="mr-3">
-                <h2 class="mt-0 pt-0">{{slotProps.data.name}}</h2>
-                <p>{{slotProps.data.description}}</p>
+                <h2 class="mt-0 pt-0">{{ slotProps.data.name }}</h2>
+                <p>{{ slotProps.data.description }}</p>
               </div>
               <div>
-                <img src="/public/favicon.png" alt="Six Stones Logo" width="175px"/>
+                <img src="/public/favicon.png" alt="Six Stones Logo" width="175px">
               </div>
             </div>
           </div>

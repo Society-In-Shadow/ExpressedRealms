@@ -7,19 +7,19 @@ export const PublicRoutes = {
         {
             path: "about",
             name: "About",
-            component: () => import("./../../components/public/About.vue"),
+            component: () => import("./../../components/public/AboutUs.vue"),
             meta: { isAnonymous: true },
         },
         {
             path: "",
             name: "home",
-            component: () => import("./../../components/public/Home.vue"),
+            component: () => import("./../../components/public/HomePage.vue"),
             meta: { isAnonymous: true },
         },
         {
             path: "expressions",
             name: "expressions",
-            component: () => import("./../../components/public/Expressions.vue"),
+            component: () => import("./../../components/public/PublicExpressions.vue"),
             meta: { isAnonymous: true },
         },
         {

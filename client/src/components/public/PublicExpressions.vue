@@ -13,11 +13,13 @@ onMounted(async () => {
 <template>
   <h1>Choose from a wide range of Expressions!</h1>
   
-  <p> </p>
+  <p />
 
   <div class="d-flex flex-column flex-md-row align-items-center">
     <div>
-      <h2 id="sidhe">Sidhe</h2>
+      <h2 id="sidhe">
+        Sidhe
+      </h2>
       <p>
         Eldritch Knights. Carefree Illusionists. Archer's of Legend. Spiritual descendants of a long missing race, the
         Sidhe have been portrayed many ways, including capricious fey or guiding angels. Many Sidhe find themselves
@@ -34,7 +36,9 @@ onMounted(async () => {
 
   <div class="d-flex flex-column flex-md-row align-items-center">
     <div>
-      <h2 id="adepts">Adepts</h2>
+      <h2 id="adepts">
+        Adepts
+      </h2>
       <p>
         Incredible martial artists. Masters of the mind. Enlightened healers. Stalwart defenders. The specific discipline
         an Adept chooses to follow develops over time shaping their expression and augmenting their abilities. They wield
@@ -49,7 +53,9 @@ onMounted(async () => {
 
   <div class="d-flex flex-column flex-md-row align-items-center">
     <div>
-      <h2 id="aeternari">Aeternari</h2>
+      <h2 id="aeternari">
+        Aeternari
+      </h2>
       <p>
         The Immortals. The Ageless. In the prehistory of man, the Immortals were twisted to become a madman's generals.
         No longer truly Immortals, the Aeternari now subsist upon the life force of others. Long after their insane
@@ -69,7 +75,9 @@ onMounted(async () => {
 
   <div class="d-flex flex-column flex-md-row align-items-center">
     <div>
-      <h2 id="sorcerers">Sorcerers</h2>
+      <h2 id="sorcerers">
+        Sorcerers
+      </h2>
       <p>
         Elementalists. Witches. Magi. Sorcerers have more than a title to define them; they hold power over the raw
         materials of creation. The Sorcerers are masters of the elements, able to activate powerful powers that craft
@@ -85,7 +93,9 @@ onMounted(async () => {
 
   <div class="d-flex flex-column flex-md-row align-items-center">
     <div>
-      <h2 id="sorcerers">Shammas</h2>
+      <h2 id="sorcerers">
+        Shammas
+      </h2>
       <p>
         Werecreatures. Medicine men. Hybrid of humanity and the wild. The Shammas are gifted with a connection to
         nature and the wild that most could never fathom. While some supernaturals command nature and elements, the
@@ -104,7 +114,9 @@ onMounted(async () => {
 
   <div class="d-flex flex-column flex-md-row align-items-center">
     <div>
-      <h2 id="vampyres">Vampyres</h2>
+      <h2 id="vampyres">
+        Vampyres
+      </h2>
       <p>
         Vampyres of legend have been portrayed as everything from vicious monsters to cursed saints. The reality falls
         somewhere in between. Mundanes twisted into gods of war tens of thousands of years ago; Vampyres require blood
@@ -119,9 +131,4 @@ onMounted(async () => {
       <img src="/public/favicon.png" alt="If I had one" width="150">
     </div>
   </div>
-
 </template>
-
-<style scoped>
-
-</style>

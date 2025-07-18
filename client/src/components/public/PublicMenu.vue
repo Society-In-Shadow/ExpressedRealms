@@ -5,7 +5,6 @@ import Avatar from "primevue/avatar";
 import {useRouter} from "vue-router";
 import {ref} from "vue";
 
-
 const router = useRouter();
 
 const items = ref([
@@ -28,7 +27,7 @@ const items = ref([
         <span>{{ item.label }}</span>
       </a>
       <a v-else class="flex flex-shrink-1 align-items-center p-3 cursor-pointer mb-2 gap-2">
-        {{item.label}}
+        {{ item.label }}
       </a>
     </template>
     <template #end>
