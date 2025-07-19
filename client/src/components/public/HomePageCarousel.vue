@@ -55,7 +55,7 @@ const items = ref<Array<CarouselItem>>([]);
               <div class="mr-3">
                 <h2 class="mt-0 pt-0">{{ slotProps.data.name }}</h2>
                 <p>{{ slotProps.data.description }}</p>
-                <p v-if="slotProps.data.dateRange">{{slotProps.data.dateRange}}</p>
+                <p v-if="slotProps.data.dateRange">{{ slotProps.data.dateRange }}</p>
               </div>
               <div>
                 <img src="/public/favicon.png" alt="Six Stones Logo" width="175px">

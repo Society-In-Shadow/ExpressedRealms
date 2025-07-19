@@ -1,5 +1,4 @@
 <template>
-
   <h1>Who We Are</h1>
   <p>
     We are a dedicated group of players who are working to bring our beloved game to the world. We have all played for 
@@ -12,7 +11,6 @@
       disability friendly.
     </strong>
   </p>
-  
 
   <h1>About Game</h1>
   <p>
@@ -55,5 +53,4 @@
     interim we have returned, better than ever. Our Main Staff has been playing the game for many years, and have been 
     hard at work making this the best iteration of the game it can be.
   </p>
-  
 </template>
