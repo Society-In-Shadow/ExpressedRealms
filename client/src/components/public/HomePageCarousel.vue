@@ -24,7 +24,7 @@ onBeforeMount(async () => {
       .map(event => {
         return {
           name: "Upcoming Event",
-          description: `Come join us at ${event.name}`,
+          description: `Come join us at ${event.name}!`,
           dateRange: `${event.startDate.toDateString()} - ${event.endDate.toDateString()}`,
           link: 'upcoming-events'
         }

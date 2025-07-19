@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from "axios";
+import {isLoggedIn} from "@/services/Authentication";
 
 export const UserRoles = {
     ExpressionEditor: "ExpressionEditorRole",
@@ -31,7 +32,10 @@ defineStore('user', {
             userFeatureFlags: [] as string[]
         }
     },
-    actions: {
+    actions: { 
+        isLoggedIn() {
+            return isLoggedIn();
+        },
         async updateUserRoles(){
             await axios.get("/navMenu/permissions")
                 .then(response => {

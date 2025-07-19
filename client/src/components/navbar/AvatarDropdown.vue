@@ -21,6 +21,14 @@ const items = ref([
     }
   },
   {
+    label: 'Characters',
+    id: 'characters',
+    icon: 'pi pi-users',
+    command: () => {
+      Router.push('/characters');
+    }
+  },
+  {
     label: 'Logoff',
     id: 'logoff',
     icon: 'pi pi-sign-out',
@@ -44,11 +52,15 @@ const gravatar = computed(() => {
     <Avatar class="pi pi-discord" shape="circle" size="large" />
     <div class="hideIfSmall">Discord</div>
   </a>
-  <a class="flex align-items-center p-3 cursor-pointer mb-2 gap-2" aria-haspopup="true" aria-controls="overlay_tmenu" @click="toggle">
+  <a v-if="userInfo.isLoggedIn()" class="flex align-items-center p-3 cursor-pointer mb-2 gap-2" aria-haspopup="true" aria-controls="overlay_tmenu" @click="toggle">
     <Avatar :image="gravatar" shape="circle" size="large" />
     <div class="hideIfSmall">{{ userInfo.name }}</div>
     <i class="pi pi-caret-down text-lg" />
     <TieredMenu id="overlay_tmenu" ref="menu" :model="items" popup />
+  </a>
+  <a v-else class="flex align-items-center p-3 cursor-pointer mb-2 gap-2 no-underline text-100" href="/login">
+    <Avatar class="pi pi-sign-in" shape="circle" size="large" />
+    <div class="hideIfSmall">Login</div>
   </a>
 </template>
 

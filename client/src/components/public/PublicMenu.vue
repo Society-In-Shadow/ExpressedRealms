@@ -1,9 +1,9 @@
 <script setup lang="ts">
 
 import MegaMenu from "primevue/megamenu";
-import Avatar from "primevue/avatar";
 import {useRouter} from "vue-router";
 import {ref} from "vue";
+import AvatarDropdown from "@/components/navbar/AvatarDropdown.vue";
 
 const router = useRouter();
 
@@ -20,7 +20,9 @@ const items = ref([
 <template>
   <MegaMenu :model="items" class="ms-0 me-0 mt-2 mb-2 m-md-2">
     <template #start>
-      <img src="/favicon.png" alt="A white, black, blue, red, green, and transparent marbles organized in a pentagon pattern. The white stone is at the top and the transparent stone is in the center." height="50" width="50" class="m-2">
+      <RouterLink to="/">
+        <img src="/favicon.png" alt="A white, black, blue, red, green, and transparent marbles organized in a pentagon pattern. The white stone is at the top and the transparent stone is in the center." height="50" width="50" class="m-2">
+      </RouterLink>
     </template>
     <template #item="{ item }">
       <a v-if="item.root" class="flex items-center cursor-pointer px-4 py-2 overflow-hidden relative font-semibold text-lg uppercase" :class="{ 'selected-item': router.currentRoute.value.path === '/' + item.route }">
@@ -31,14 +33,7 @@ const items = ref([
       </a>
     </template>
     <template #end>
-      <a class="flex align-items-center p-3 cursor-pointer mb-2 gap-2 no-underline text-100" href="https://discord.gg/NSv3GxSAj7" target="_blank">
-        <Avatar class="pi pi-discord" shape="circle" size="large" />
-        <div class="hideIfSmall">Discord</div>
-      </a>
-      <a class="flex align-items-center p-3 cursor-pointer mb-2 gap-2 no-underline text-100" href="/login" target="_blank">
-        <Avatar class="pi pi-sign-in" shape="circle" size="large" />
-        <div class="hideIfSmall">Login</div>
-      </a>
+      <avatar-dropdown />
     </template>
   </MegaMenu>
 </template>
