@@ -10,6 +10,7 @@ export interface EventDetails{
 }
 
 export interface ExpressionInfo{
+    id: number;
     name: string;
     archetypes: string;
     description: string;
