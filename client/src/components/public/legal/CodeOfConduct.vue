@@ -29,7 +29,6 @@
     the situation warrants it, they will be warned against doing it again. If following this, the behaviour continues, 
     they will be removed from our game, and prohibited from attending any further events. The following are not 
     reasonable excuses for doing so, and will not prevent us from taking the above action. This list is not exhaustive.
-
   </p>
 
   <ul>
@@ -45,7 +44,6 @@
     be dealt with immediately, in a calm and direct manner. As far as we are concerned, attending the game is a 
     recognition that you are aware of our policy.
   </p>
-
 
   <h2>Code of Conduct</h2>
   <p>
@@ -137,7 +135,8 @@
 
   <p>The event is 13+. Anyone found to be underage and attending, will be asked to leave.</p>
   
-  <p>We encourage players to come to us directly (through our listed means of contact, as found on the website, or 
+  <p>
+    We encourage players to come to us directly (through our listed means of contact, as found on the website, or 
     in person at events) if they have any concerns regarding the conduct of a person, or group.
   </p>
   <p>

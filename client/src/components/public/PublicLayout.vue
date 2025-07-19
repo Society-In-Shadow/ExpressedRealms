@@ -19,7 +19,7 @@ import PublicMenu from "@/components/public/PublicMenu.vue";
     <Card class="mt-auto m-0 p-0">
       <template #content>
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
-          <div>Society in Shadows © {{ new Date().getFullYear() }}</div>
+          <div>© {{ new Date().getFullYear() }} Expressed Realms: Society in Shadows LARP. All rights reserved.</div>
           <div class="d-flex flex-column flex-md-row text-center">
             <RouterLink to="/terms-of-service" class="p-md-3">
               Terms of Service

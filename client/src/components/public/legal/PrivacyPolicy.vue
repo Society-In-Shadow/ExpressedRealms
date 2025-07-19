@@ -24,7 +24,8 @@
 
   <h2>Log Data</h2>
 
-  <p>Like many site operators, we collect information that your browser sends whenever you visit our Site (&quot;Log Data&quot;).
+  <p>
+    Like many site operators, we collect information that your browser sends whenever you visit our Site (&quot;Log Data&quot;).
   </p>
 
   <p>
