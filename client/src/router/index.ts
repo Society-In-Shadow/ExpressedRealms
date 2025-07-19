@@ -54,7 +54,7 @@ routerSetup.beforeEach(async (to) => {
         return to;
     }
 
-    if(to.meta.isAnonymous)
+    if(to.meta.isAnonymous && !loggedIn)
         return
     
     if(!loggedIn){
@@ -96,7 +96,7 @@ routerSetup.beforeEach(async (to) => {
 
         // if they are on the login page, redirect them to the characters page
         // Also, if on url root, redirect to characters page
-        if(routeName == 'Login' || !routeName)
+        if(routeName == 'Login')
             return { name: 'characters' };
     }
     
