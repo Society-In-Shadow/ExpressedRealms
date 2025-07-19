@@ -30,7 +30,6 @@ const items = ref([
 async function loadList(){
 
   const userInfo = userStore();
-  await userInfo.updateUserRoles();
   await userInfo.updateUserFeatureFlags()
       .then(() => {
         if(!initialLoad){

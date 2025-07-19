@@ -8,7 +8,7 @@ export const UserRoutes = {
             path: "/login",
             name: "Login",
             component: () => import("./../../components/Login/UserLogin.vue"),
-            meta: { isAnonymous: true },
+            meta: { isAnonymous: true, isUserSetup: true },
         },
         {
             path: "/createAccount",
@@ -32,18 +32,19 @@ export const UserRoutes = {
             path: "/confirmAccount",
             name: "confirmAccount",
             component: () => import("./../../components/Login/ConfirmEmail.vue"),
-            meta: { isAnonymous: true },
+            meta: { isAnonymous: true, isUserSetup: true },
         },
         {
             path: "/pleaseConfirmEmail",
             name: "pleaseConfirmEmail",
             component: () => import("./../../components/Login/PleaseConfirmEmail.vue"),
-            meta: { isAnonymous: true },
+            meta: { isUserSetup: true }
         },
         {
             path: "/setupProfile",
             name: "setupProfile",
-            component: () => import("./../../components/Login/AddUserProfile.vue")
+            component: () => import("./../../components/Login/AddUserProfile.vue"),
+            meta: { isUserSetup: true }
         },
     ]
 }
