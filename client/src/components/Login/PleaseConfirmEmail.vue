@@ -5,7 +5,9 @@
   import { logOff } from "@/services/Authentication";
   import {userStore} from "@/stores/userStore";
   import { ref } from 'vue'
+  import {useRouter} from "vue-router";
   let userInfo = userStore();
+  const router = useRouter();
 
   let sentConfirmationEmail = ref(false);
   async function resendConfirmationEmail() {
@@ -24,5 +26,5 @@
   </p>
   <Button data-cy="forgot-password" label="Resend Confirmation Link" class="w-100 mb-2" @click="resendConfirmationEmail()" />
   <p>Alternatively, you can log off and try another user.</p>
-  <Button data-cy="logoff-button" label="Logoff" class="w-100 mb-2" @click="logOff" />
+  <Button data-cy="logoff-button" label="Logoff" class="w-100 mb-2" @click="logOff(router)" />
 </template>

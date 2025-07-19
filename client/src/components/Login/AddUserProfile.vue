@@ -39,5 +39,5 @@ const onSubmit = handleSubmit((values) => {
     <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" />
     <Button data-cy="update-profile-button" label="Update Profile" class="w-100 mb-2" type="submit" />
   </form>
-  <Button data-cy="logoff-button" label="Logoff" class="w-100 mb-2" @click="logOff" />
+  <Button data-cy="logoff-button" label="Logoff" class="w-100 mb-2" @click="logOff(Router)" />
 </template>
