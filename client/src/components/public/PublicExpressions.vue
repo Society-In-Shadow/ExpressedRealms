@@ -26,7 +26,7 @@ onMounted(async () => {
       <p>
         {{expression.description}}
       </p>
-      <p>For full background and information, please follow this link: <a href="/login">{{expression.name}}</a></p>
+      <p>For full background and information, please <a href="/login">login</a> and take a look at the expressions page.</p>
     </div>
     <div>
       <img src="/public/favicon.png" alt="If I had one" width="150">

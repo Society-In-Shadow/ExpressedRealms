@@ -9,7 +9,7 @@ interface CarouselItem {
   name: string;
   description: string;
   link: string;
-  dateRange: string;
+  dateRange: string | null | undefined;
 }
 
 const expressionStore =  publicExpressionsStore();
@@ -35,6 +35,7 @@ onBeforeMount(async () => {
         return {
           name: expression.name,
           description: expression.archetypes,
+          dateRange: null,
           link: `expressions#${makeIdSafe(expression.name)}`
         }
       }));
