@@ -16,7 +16,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <h1>Choose from a wide range of Expressions!</h1>
+  <h1>What Expression will you awaken to?</h1>
   <div v-for="expression in  store.expressions" v-bind:key="expression.id" class="d-flex flex-column flex-md-row align-items-center">
     <div>
       <h2 :id="makeIdSafe(expression.name)">

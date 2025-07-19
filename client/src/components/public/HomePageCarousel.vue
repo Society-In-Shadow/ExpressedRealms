@@ -9,6 +9,7 @@ interface CarouselItem {
   name: string;
   description: string;
   link: string;
+  dateRange: string;
 }
 
 const expressionStore =  publicExpressionsStore();
@@ -18,12 +19,13 @@ onBeforeMount(async () => {
   await eventsStore.getEvents();
   
   items.value.push(...eventsStore.events
-      .sort((a, b) => a.startDate.getTime() - b.startDate.getTime()) // Sort by earliest first
+      .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
       .slice(0, 2)
       .map(event => {
         return {
           name: "Upcoming Event",
           description: `Come join us at ${event.name}`,
+          dateRange: `${event.startDate.toDateString()} - ${event.endDate.toDateString()}`,
           link: 'upcoming-events'
         }
       }));
@@ -52,6 +54,7 @@ const items = ref<Array<CarouselItem>>([]);
               <div class="mr-3">
                 <h2 class="mt-0 pt-0">{{ slotProps.data.name }}</h2>
                 <p>{{ slotProps.data.description }}</p>
+                <p v-if="slotProps.data.dateRange">{{slotProps.data.dateRange}}</p>
               </div>
               <div>
                 <img src="/public/favicon.png" alt="Six Stones Logo" width="175px">
