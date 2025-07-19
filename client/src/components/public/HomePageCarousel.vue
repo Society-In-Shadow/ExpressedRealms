@@ -1,43 +1,44 @@
 <script setup lang="ts">
 import Carousel from 'primevue/carousel';
+import {publicExpressionsStore} from "@/components/public/stores/publicExpressionStore";
+import {ref, onBeforeMount} from "vue";
+import {eventStore} from "@/components/public/stores/eventStore";
+import {makeIdSafe} from "@/utilities/stringUtilities";
 
-const items = [
-  {
-    name: 'Upcoming Event',
-    description: 'Come join us at Sioux City Geek Con!',
-    link: 'upcoming-events'
-  },
-  {
-    name: 'Adepts',
-    description: 'Incredible martial artists. Masters of the mind. Enlightened healers. Stalwart defenders.',
-    link: 'expressions#adepts'
-  },
-  {
-    name: 'Vampyres',
-    description: 'Vampyres of legend have been portrayed as everything from vicious monsters to cursed saints.',
-    link: 'expressions#vampyres'
-  },
-  {
-    name: 'Sidhe',
-    description: 'Eldritch Knights. Carefree Illusionists. Archer\'s of Legend.',
-    link: 'expressions#sidhe'
-  },
-  {
-    name: 'Aeternari',
-    description: 'The Immortals. The Ageless.',
-    link: 'expressions#aeternari'
-  },
-  {
-    name: 'Sorcerers',
-    description: 'Elementalists. Witches. Magi.',
-    link: 'expressions#sorcerers'
-  },
-  {
-    name: 'Shammas',
-    description: 'Werecreatures. Medicine men. Hybrid of humanity and the wild.',
-    link: 'expressions#shammas'
-  }
-]
+interface CarouselItem {
+  name: string;
+  description: string;
+  link: string;
+}
+
+const expressionStore =  publicExpressionsStore();
+const eventsStore = eventStore();
+onBeforeMount(async () => {
+  await expressionStore.getExpressions();
+  await eventsStore.getEvents();
+  
+  items.value.push(...eventsStore.events
+      .sort((a, b) => a.startDate.getTime() - b.startDate.getTime()) // Sort by earliest first
+      .slice(0, 2)
+      .map(event => {
+        return {
+          name: "Upcoming Event",
+          description: `Come join us at ${event.name}`,
+          link: 'upcoming-events'
+        }
+      }));
+  
+  items.value.push(...expressionStore.expressions
+      .map(expression => {
+        return {
+          name: expression.name,
+          description: expression.archetypes,
+          link: `expressions#${makeIdSafe(expression.name)}`
+        }
+      }));
+})
+
+const items = ref<Array<CarouselItem>>([]);
 
 </script>
 
