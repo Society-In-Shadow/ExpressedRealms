@@ -1,4 +1,13 @@
 <template>
+
+  <h1>History</h1>
+  <p>
+    Society in Shadows is a long running Live Action RolePlaying game boasting players from Kansas City all the way to
+    Minneapolis and further. With a former peak of 87 players and averaging around 30-40 players, and after a brief
+    interim we have returned, better than ever. Our Main Staff has been playing the game for many years, and have been
+    hard at work making this the best iteration of the game it can be.
+  </p>
+  
   <h1>Who We Are</h1>
   <p>
     We are a dedicated group of players who are working to bring our beloved game to the world. We have all played for 
@@ -7,8 +16,7 @@
   </p>
   <p>
     <strong>
-      We are not an action based LARP, instead more focused on inter-character roleplay with an intent to be more
-      disability friendly.
+      We have a strong emphasis on accessibility and making sure that everyone can play on a mostly equal playing field.
     </strong>
   </p>
 
@@ -46,11 +54,5 @@
     (i.e. medical, physical)  
   </p>
   
-  <h1>History</h1>
-  <p>
-    Society in Shadows is a long running Live Action RolePlaying game boasting players from Kansas City all the way to 
-    Minneapolis and further. With a former peak of 87 players and averaging around 30-40 players, and after a brief 
-    interim we have returned, better than ever. Our Main Staff has been playing the game for many years, and have been 
-    hard at work making this the best iteration of the game it can be.
-  </p>
+
 </template>

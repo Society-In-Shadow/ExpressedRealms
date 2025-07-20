@@ -22,7 +22,7 @@ export const publicExpressionsStore =
                         id: 2,
                         name: 'Aeternari',
                         archetypes: ' Bodyguards, curse masters, hex masters, knights reborn, mummies, strangers out of time',
-                        description: 'Ancient beings with an immortal soul, Aeternari have refined their abilities to stand the test of time. Ranging from Immortal warriors who have fought in major wars, to the Generals of old able to voice commands from afar, these people can also curse their foes to weaken their very essence. An Aeternari also feeds off the very life essence of others, needing to consume a little every day, though the Society does provide a safe method to do so. Think of these like Highlander or the Bene Gesserit.'
+                        description: 'Ancient beings with an immortal soul, Aeternari have refined their abilities to stand the test of time. Ranging from Immortal warriors who have fought in major wars, to the Generals of old able to voice commands from afar, these people can also curse their foes to weaken their very essence. An Aeternari also feeds off the very life essence of others, needing to consume a little every day, though the Society does provide a safe method to do so. Think of these like the eternal warrior fighting to remain on top, or those with commanding voices that speak to the very soul of others.'
                     },
                     {
                         id: 3,
@@ -46,7 +46,7 @@ export const publicExpressionsStore =
                         id: 6,
                         name: 'Vampyre',
                         archetypes: 'Blood Mages, Brutes, Chameleons, Mentalists, Puppet Masters',
-                        description: 'Alas, unlike Mr. Cullen, these Vampyres are much different. Giving a penchant for blood and a wide range of powers from twisting forms to be more physically fortified, to the ability to dominate others with their minds, these folk can turn to stone or into the typical bats and dogs. A typical vampire can be easily seen in most vampiric media, though they do not (inherently) sparkle.'
+                        description: 'Giving a penchant for blood and a wide range of powers from twisting forms to be more physically fortified, to the ability to dominate others with their minds, these Vampyres can turn to stone or into the typical bats and dogs. Having to deal with a Bloodthirst that creeps up and needing to feed regularly creates an interesting dynamic between them and others. A typical vampire can be easily seen in most vampiric media, though they do not (inherently) sparkle.'
                     }
                 ]
             },
