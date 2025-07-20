@@ -47,6 +47,12 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "show-marketing",
         "Allows one to see the typical landing pages you'd expect from a company."
     );
+    
+    public static readonly ReleaseFlags ShowMarketingContactUsPage = new(
+        "Show Marketing Contact Us Pages",
+        "show-marketing-contact-us",
+        "Allows one to see the contact us page on the marketing materials"
+    );
 
     public override string ToString()
     {

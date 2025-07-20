@@ -15,6 +15,7 @@ export const FeatureFlags = {
     ShowTreasureTales: "show-treasured-tales-nav",
     ShowKnowledges: "show-knowledges",
     ShowMarketing: "show-marketing",
+    ShowMarketingContactUs: "show-marketing-contact-us",
 } as const;
 
 export type UserRole = (typeof UserRoles)[keyof typeof UserRoles];
@@ -52,7 +53,8 @@ defineStore('user', {
         hasUserRole(role: UserRole): boolean {
             return this.userRoles.includes(role);
         },
-        hasFeatureFlag(featureFlag: FeatureFlag): boolean {
+        async hasFeatureFlag(featureFlag: FeatureFlag): Promise<boolean> {
+            await this.updateUserFeatureFlags();
             return this.userFeatureFlags.includes(featureFlag);
         },
         async getUserInfo(){
