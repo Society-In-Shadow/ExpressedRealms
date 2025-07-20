@@ -10,14 +10,12 @@
   
   <h1>Who We Are</h1>
   <p>
-    We are a dedicated group of players who are working to bring our beloved game to the world. We have all played for 
-    many a year, and have stepped up to the reins to help guide this organization into a new format and a more enjoyable 
-    LARP
-  </p>
-  <p>
-    <strong>
-      We have a strong emphasis on accessibility and making sure that everyone can play on a mostly equal playing field.
-    </strong>
+    We are a dedicated group of former players who are working to once more help bring back a game that has been beloved,
+    cherished and has helped inspire us with the world and stories told within it.  The core group working towards 
+    resurecting the game have previously played the 6 stones ran incarnation of the game for many years and we want to 
+    continue the legacy of that while continuing to expand and grow the game that we all fell in love with. Our goal is
+    to have an accessible and inclusive LARP where everyone is able to tell collaborative stories no matter your 
+    experience level with the medium
   </p>
 
   <h1>About Game</h1>
