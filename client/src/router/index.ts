@@ -71,6 +71,10 @@ routerSetup.beforeEach(async (to) => {
         if (to.meta.requiredRole && !userInfo.userRoles.includes(to.meta.requiredRole)) {
             return {name: 'characters'};
         }
+        
+        if (to.meta.requiredFeatureFlag && !await userInfo.hasFeatureFlag(to.meta.requiredFeatureFlag)) {
+            return {name: 'characters'};
+        }
 
     }
     

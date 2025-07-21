@@ -12,7 +12,7 @@
   <p>
     We are a dedicated group of former players who are working to once more help bring back a game that has been beloved,
     cherished and has helped inspire us with the world and stories told within it.  The core group working towards 
-    resurecting the game have previously played the 6 stones ran incarnation of the game for many years and we want to 
+    resurrecting the game have previously played the 6 stones ran incarnation of the game for many years and we want to 
     continue the legacy of that while continuing to expand and grow the game that we all fell in love with. Our goal is
     to have an accessible and inclusive LARP where everyone is able to tell collaborative stories no matter your 
     experience level with the medium
