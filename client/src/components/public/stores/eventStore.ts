@@ -15,10 +15,10 @@ export const eventStore =
                     id: 1,
                     name: 'Sioux City Geek Con',
                     location: '801 4th St Sioux City, Iowa',
-                    startDate: new Date(2025, 7, 23),
-                    endDate: new Date(2025, 7, 25),
+                    startDate: new Date(2025, 7, 22),
+                    endDate: new Date(2025, 7, 24),
                     conWebsiteName: 'Sioux City Table Top RPG',
-                    conWebsiteUrl: 'https://siouxcitytabletopg.wixsite.com/my-site',
+                    conWebsiteUrl: 'https://tabletop.events/conventions/sioux-city-geek-con-fall-2025',
                 }]
             },
         }
