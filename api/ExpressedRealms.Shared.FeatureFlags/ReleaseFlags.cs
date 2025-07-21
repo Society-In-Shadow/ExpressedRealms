@@ -35,12 +35,6 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "show-treasured-tales-nav",
         "Allows one to see the treasured tales in the nav bar."
     );
-
-    public static readonly ReleaseFlags EnableKnowledgeManagement = new(
-        "Show Knowledges / Enable Management",
-        "show-knowledges",
-        "Allows one to see and modify the knowledges."
-    );
     
     public static readonly ReleaseFlags ShowMarketingPages = new(
         "Show Marketing Pages",

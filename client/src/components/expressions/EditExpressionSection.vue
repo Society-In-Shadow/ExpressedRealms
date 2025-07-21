@@ -185,7 +185,7 @@ const deleteExpression = (event) => {
       </div>
     </form>
   </div>
-  <div v-else-if="props.sectionInfo.sectionTypeName === 'Knowledges Section' ? userInfo.hasFeatureFlag(FeatureFlags.ShowKnowledges) : true">
+  <div v-else-if="props.sectionInfo.sectionTypeName === 'Knowledges Section'">
     <div class="flex">
       <div class="col-flex flex-grow-1">
         <component

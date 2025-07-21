@@ -1,5 +1,4 @@
 ﻿using ExpressedRealms.Authentication;
-using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.Knowledges.API.CreateKnowledge;
 using ExpressedRealms.Knowledges.API.DeleteKnowledge;
 using ExpressedRealms.Knowledges.API.EditKnowledge;
@@ -18,7 +17,6 @@ internal static class KnowledgeEndpoints
     {
         var endpointGroup = app.MapGroup("knowledges")
             .AddFluentValidationAutoValidation()
-            .RequireFeatureToggle(ReleaseFlags.EnableKnowledgeManagement)
             .WithTags("Knowledges")
             .WithOpenApi();
 

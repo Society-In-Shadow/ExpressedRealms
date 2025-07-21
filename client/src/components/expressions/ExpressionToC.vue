@@ -67,7 +67,7 @@ function toggleEdit(){
     text-key="name"
   >
     <template #default="{ node }">
-      <div v-if="node.sectionTypeName == 'Knowledges Section' ? userInfo.hasFeatureFlag(FeatureFlags.ShowKnowledges) : true" class="p-1">
+      <div v-if="node.sectionTypeName == 'Knowledges Section'" class="p-1">
         <i class="pi pi-bars mr-2" />{{ node.name }}
       </div>
     </template>
@@ -79,7 +79,7 @@ function toggleEdit(){
   >
     <template #default="{ node }">
       <Skeleton v-if="props.showSkeleton" id="toc-skeleton" class="mb-2" height="1.5em" />
-      <a v-else-if="node.sectionTypeName == 'Knowledges Section' ? userInfo.hasFeatureFlag(FeatureFlags.ShowKnowledges) : true" class="p-1 tocItem" :href="'#' + makeIdSafe(node.name)" @click.prevent="scrollToSection(node.name)">{{ node.name }}</a>
+      <a v-else-if="node.sectionTypeName == 'Knowledges Section'" class="p-1 tocItem" :href="'#' + makeIdSafe(node.name)" @click.prevent="scrollToSection(node.name)">{{ node.name }}</a>
     </template>
   </BaseTree>
   <div v-if="props.canEdit">

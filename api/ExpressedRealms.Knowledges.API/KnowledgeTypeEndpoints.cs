@@ -1,5 +1,4 @@
 using ExpressedRealms.Authentication;
-using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.Knowledges.API.GetKnowledgeTypes;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
@@ -14,7 +13,6 @@ public static class KnowledgeTypeEndpoints
     {
         var endpointGroup = app.MapGroup("knowledgetypes")
             .AddFluentValidationAutoValidation()
-            .RequireFeatureToggle(ReleaseFlags.EnableKnowledgeManagement)
             .WithTags("Knowledges")
             .WithOpenApi();
 
