@@ -32,7 +32,7 @@ routerSetup.beforeEach(async (to) => {
 
         await userInfo.updateUserFeatureFlags();
 
-        if (userInfo.hasFeatureFlag(FeatureFlags.ShowMarketing)) {
+        if (await userInfo.hasFeatureFlag(FeatureFlags.ShowMarketing)) {
             if (Array.isArray(PublicRoutes)) {
                 PublicRoutes.forEach(route => routerSetup.addRoute(route));
             } else {

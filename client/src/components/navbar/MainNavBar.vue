@@ -31,17 +31,17 @@ async function loadList(){
 
   const userInfo = userStore();
   await userInfo.updateUserFeatureFlags()
-      .then(() => {
+      .then(async () => {
         if(!initialLoad){
           return;
         }
         let indexOffset = -1;
-        if(userInfo.hasFeatureFlag(FeatureFlags.ShowRuleBook)){
+        if(await userInfo.hasFeatureFlag(FeatureFlags.ShowRuleBook)){
           items.value.splice(1, 0, { root: true, label: 'Rule Book', icon: 'pi pi-file', subtext: 'Rule Book', command: () => router.push("/rulebook") });
           indexOffset = 0;
         }
 
-        if(userInfo.hasFeatureFlag(FeatureFlags.ShowTreasureTales)){
+        if(await userInfo.hasFeatureFlag(FeatureFlags.ShowTreasureTales)){
           items.value.splice(3 + indexOffset, 0, { root: true, label: 'Treasured Tales', icon: 'pi pi-file', subtext: 'Treasured Tales', command: () => router.push("/treasuredtales") });
         }
 
