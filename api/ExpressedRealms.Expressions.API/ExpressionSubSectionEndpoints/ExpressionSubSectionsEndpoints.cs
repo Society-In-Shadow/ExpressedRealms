@@ -100,20 +100,12 @@ internal static class ExpectedSubSectionsEndpoints
 
         endpointGroup
             .MapGet(
-                "{expressionId}/{sectionId}/options",
+                "options",
                 async Task<Results<ValidationProblem, Ok<ExpressionSectionOptionsResponse>>> (
-                    int expressionId,
-                    int sectionId,
                     IExpressionTextSectionRepository repository
                 ) =>
                 {
-                    var optionsResult = await repository.GetExpressionTextSectionOptions(
-                        new GetExpressionTestSectionOptionsDto()
-                        {
-                            ExpressionId = expressionId,
-                            SectionId = sectionId == 0 ? null : sectionId, // Handle Create (0 = null)
-                        }
-                    );
+                    var optionsResult = await repository.GetExpressionTextSectionOptions();
 
                     if (optionsResult.HasValidationError(out var validationProblem))
                         return validationProblem;
@@ -130,9 +122,6 @@ internal static class ExpectedSubSectionsEndpoints
                                     Description = x.Description,
                                 })
                                 .ToList(),
-                            AvailableParents = ExpressionHelpers.BuildAvailableParentTree(
-                                optionsResult.Value.AvailableParents
-                            ),
                         }
                     );
                 }

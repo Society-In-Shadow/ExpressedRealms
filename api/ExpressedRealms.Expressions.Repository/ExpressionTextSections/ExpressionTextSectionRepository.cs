@@ -13,7 +13,6 @@ internal sealed class ExpressionTextSectionRepository(
     ExpressedRealmsDbContext context,
     CreateExpressionTextSectionDtoValidator createExpressionDtoValidator,
     EditExpressionTextSectionDtoValidator editExpressionDtoValidator,
-    GetExpressionTestSectionOptionsValidator getExpressionTestSectionOptionsDtoValidator,
     CancellationToken cancellationToken
 ) : IExpressionTextSectionRepository
 {
@@ -36,26 +35,12 @@ internal sealed class ExpressionTextSectionRepository(
         };
     }
 
-    public async Task<Result<ExpressionTextSectionOptions>> GetExpressionTextSectionOptions(
-        GetExpressionTestSectionOptionsDto optionsDto
-    )
+    public async Task<Result<ExpressionTextSectionOptions>> GetExpressionTextSectionOptions()
     {
-        var result = await getExpressionTestSectionOptionsDtoValidator.ValidateAsync(
-            optionsDto,
-            cancellationToken
-        );
-        if (!result.IsValid)
-            return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
-
-        var availableParents = await GetParentSectionList(
-            optionsDto.ExpressionId,
-            optionsDto.SectionId
-        );
         var expressSectionTypes = await GetSectionTypes();
 
         return new ExpressionTextSectionOptions()
         {
-            AvailableParents = availableParents,
             ExpressionSectionTypes = expressSectionTypes,
         };
     }
