@@ -1,156 +1,66 @@
 <script setup lang="ts">
 
-import {makeIdSafe} from "@/utilities/stringUtilities";
 import Skeleton from "primevue/skeleton";
 import Button from "primevue/button";
-import {ref} from "vue";
-import axios from "axios";
-import {useForm} from "vee-validate";
-import {object, string} from "yup";
-import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
-import DropdownWrapper from "@/FormWrappers/DropdownWrapper.vue";
+import {onMounted, ref} from "vue";
 
 import { expressionStore } from "@/stores/expressionStore";
-import EditorWrapper from "@/FormWrappers/EditorWrapper.vue";
-import toaster from "@/services/Toasters";
-import CreateExpressionSection from "@/components/expressions/expressionSection/CreateExpressionSection.vue";
-import {useConfirm} from "primevue/useconfirm";
 import DataTable from "primevue/datatable";
-import KnowledgeList from "@/components/knowledges/KnowledgeList.vue";
+import {getValidationInstance} from "@/components/expressions/expressionSection/validators/expressionSectionValidator";
+import FormInputTextWrapper from "@/FormWrappers/FormInputTextWrapper.vue";
+import FormEditorWrapper from "@/FormWrappers/FormEditorWrapper.vue";
+import FormDropdownWrapper from "@/FormWrappers/FormDropdownWrapper.vue";
+import {expressionSectionStore} from "@/components/expressions/expressionSection/store/expressionSectionStore";
+import {
+  expressionSectionConfirmationPopup
+} from "@/components/expressions/expressionSection/services/expressionSectionConfirmationPopup";
+
 const expressionInfo = expressionStore();
+const expressionSectionInfo = expressionSectionStore();
 
 const emit = defineEmits<{
-  refreshList: []
+  canceled: []
 }>();
 
+const cancel = () => {
+  emit("canceled");
+}
+
 const props = defineProps({
-  sectionInfo: {
-    type: Object,
-    required: true,
-  },
-  currentLevel: {
+  sectionId: {
     type: Number,
-    required: true
-  },
-  showSkeleton:{
-    type: Boolean,
-    required: true
-  },
-  showEdit:{
-    type: Boolean,
-    required: true
-  },
-  isHeaderSection:{
-    type: Boolean
+    required: true,
   }
 });
 
-const showEditor = ref(false);
+const popups = expressionSectionConfirmationPopup(props.sectionId);
 const showOptionLoader = ref(true);
 const sectionTypeOptions = ref([]);
-const showCreate = ref(false);
+const showSkeleton = ref(true);
+const isHeaderSection = ref(false);
 
-function toggleEditor(){
-  showEditor.value = !showEditor.value;
-  loadSectionInfo();
-}
+const form = getValidationInstance()
 
-function passThroughAddedSection(){
-  emit("refreshList");
-}
-
-function cancelEdit(){
-  showEditor.value = !showEditor.value;
-}
-
-function reset(){
+async function reset(){
   showOptionLoader.value = true;
-  loadSectionInfo();
+  await loadSectionInfo();
 }
 
-function loadSectionInfo(){
-  if(!showOptionLoader.value) return; // Don't load in 2nd time
-  axios.get(`/expressionSubSections/${expressionInfo.currentExpressionId}/${props.sectionInfo.id}/options`)
-      .then(async (response) => {
+onMounted(async () => {
+  await loadSectionInfo();
+})
 
-        if(!props.isHeaderSection) {
-          sectionTypeOptions.value = response.data.sectionTypes.filter(sectionType => sectionType.name.toLowerCase() !== "expression");
-        }
-        else{
-          sectionTypeOptions.value = response.data.sectionTypes;
-        }
-        
-        axios.get(`/expressionSubSections/${expressionInfo.currentExpressionId}/${props.sectionInfo.id}`)
-            .then(async (json) => {
-              name.value = json.data.name;
-              content.value = json.data.content;
-              sectionType.value = sectionTypeOptions.value.find(x => x.id == json.data.sectionTypeId);
-              showOptionLoader.value = false;
-            });
-      });
+async function loadSectionInfo(){
+  const expressionSection = await expressionSectionInfo.getExpressionSection(expressionInfo.currentExpressionId, props.sectionId);
+  isHeaderSection.value = expressionSection.isHeaderSection;
+  form.setValues(expressionSection);
+  showOptionLoader.value = false;
+  showSkeleton.value = false;
 }
 
-const { defineField, handleSubmit, errors } = useForm({
-  validationSchema: object({
-    name: string().required()
-        .label('Name'),
-    content: string()
-        .required()
-        .label('Content'),
-    parentSection: object().nullable()
-        .label('Parent Section'),
-    sectionType: object().nullable()
-        .label('Section Type')
-  })
-});
-
-const [name] = defineField('name');
-const [content] = defineField('content');
-const [parentSection] = defineField('parentSection');
-const [sectionType] = defineField('sectionType');
-
-function toggleCreate(){
-  showCreate.value = !showCreate.value;
-}
-
-const onSubmit = handleSubmit((values) => {
-  axios.put(`/expressionSubSections/${expressionInfo.currentExpressionId}/${props.sectionInfo.id}`, {
-    name: values.name,
-    content: values.content,
-    sectionTypeId: values.sectionType.id,
-  }).then(() => {
-    props.sectionInfo.name = values.name;
-    props.sectionInfo.content = values.content;
-    showEditor.value = false;
-    toaster.success("Successfully Updated Expression Section Info!");
-  });
-});
-
-const confirm = useConfirm();
-const deleteExpression = (event) => {
-  confirm.require({
-    target: event.currentTarget,
-    header: 'Deleting Section',
-    message: `Are you sure you want delete ${props.sectionInfo.name} section?  This will delete this section and any sub children`,
-    icon: 'pi pi-exclamation-triangle',
-    group: 'popup',
-    rejectProps: {
-      label: 'Cancel',
-      severity: 'secondary',
-      outlined: true
-    },
-    acceptProps: {
-      label: 'Save'
-    },
-    accept: () => {
-      axios.delete(`/expressionSubSections/${expressionInfo.currentExpressionId}/${props.sectionInfo.id}`).then(() => {
-        emit('refreshList');
-        toaster.success(`Successfully Deleted Section ${props.sectionInfo.name}!`);
-      });
-    },
-    reject: () => {}
-  });
-};
+const onSubmit = form.handleSubmit(async (values) => {
+  await expressionSectionInfo.updateSection(values, expressionInfo.currentExpressionId, props.sectionId);
+})
 
 </script>
 
@@ -162,50 +72,25 @@ const deleteExpression = (event) => {
     <Skeleton id="expression-section-title-skeleton" class="mb-2" height="1.5em" />
     <Skeleton id="expression-section-body-skeleton" class="mb-2" height="5em" />
   </div>
-  <div v-else-if="showEditor" class="m-2">
+  <div v-else class="m-2">
     <form @submit="onSubmit">
-      <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" :show-skeleton="showOptionLoader" />
-      <EditorWrapper v-model="content" field-name="Content" :error-text="errors.content" :show-skeleton="showOptionLoader" />
-      <DropdownWrapper
+      <FormInputTextWrapper v-model="form.name" :show-skeleton="showOptionLoader" />
+      <FormEditorWrapper v-model="form.content" :show-skeleton="showOptionLoader" />
+      <FormDropdownWrapper
         v-if="!isHeaderSection"
-        v-model="sectionType" option-label="name" :options="sectionTypeOptions" field-name="Section Types" :show-skeleton="showOptionLoader"
-        :error-text="errors.sectionType"
+        v-model="form.sectionType" option-label="name" :options="sectionTypeOptions" :show-skeleton="showOptionLoader"
       />
       <div class="flex">
         <div class="col-flex flex-grow-1">
-          <Button v-if="!isHeaderSection" severity="danger" label="Delete" class="m-2" @click="deleteExpression($event)" />
+          <Button v-if="!isHeaderSection" severity="danger" label="Delete" class="m-2" @click="popups.deleteConfirmation($event)" />
           <div class="float-end">
             <Button label="Reset" class="m-2" @click="reset()" />
-            <Button label="Cancel" class="m-2" @click="cancelEdit()" />
+            <Button label="Cancel" class="m-2" @click="cancel()" />
             <Button label="Save" class="m-2" @click="onSubmit" />
           </div>
         </div>
       </div>
     </form>
-  </div>
-  <div v-else>
-    <div class="flex">
-      <div class="col-flex flex-grow-1">
-        <component
-          :is="`h${Math.min(Math.max(currentLevel, 1), 6)}`"
-          :id="makeIdSafe(sectionInfo.name)"
-        >
-          {{ sectionInfo.name }}
-        </component>
-      </div>
-      <div v-if="props.sectionInfo.sectionTypeName != 'Knowledges Section'" class="col-flex">
-        <Button v-if="showEdit && !isHeaderSection" label="Add Child Section" class="m-2" @click="toggleCreate" />
-        <Button v-if="!showEditor && showEdit" label="Edit" class="float-end m-2" @click="toggleEditor()" />
-      </div>
-    </div>
-    <div v-if="props.sectionInfo.sectionTypeName === 'Knowledges Section'">
-      <KnowledgeList :is-read-only="!showEdit" />
-    </div>
-    
-    <div v-else class="mb-2 fix-wrapping" v-html="props.sectionInfo.content" />
-  </div>
-  <div v-if="showCreate && showEdit">
-    <CreateExpressionSection :parent-id="props.sectionInfo.id" @cancel-event="toggleCreate" @added-section="passThroughAddedSection()" />
   </div>
 </template>
 

@@ -21,7 +21,7 @@ import Button from "primevue/button";
 import '@he-tree/vue/style/default.css'
 import '@he-tree/vue/style/material-design.css'
 import ExpressionToC from "@/components/expressions/ExpressionToC.vue";
-import EditExpressionSection from "@/components/expressions/expressionSection/EditExpressionSection.vue";
+import ExpressionSectionTile from "@/components/expressions/expressionSection/ExpressionSectionTile.vue";
 import PowerTab from "@/components/expressions/powers/PowerTab.vue";
 import PowersToC from "@/components/expressions/PowersToC.vue";
 
@@ -122,7 +122,7 @@ onBeforeRouteUpdate(async (to, from) => {
               <div class="d-flex flex-column flex-md-row">
                 <div class="col-12 order-1 order-md-0 col-md-8">
                   <CreateExpressionSection v-if="expressionHeader.id === 0" :add-expression-header="true" @added-section="fetchData(route.params.name)" />
-                  <EditExpressionSection
+                  <ExpressionSectionTile
                     v-else :section-info="expressionHeader" :current-level="1" :show-skeleton="headerIsLoading" :show-edit="showEdit"
                     :is-header-section="true"
                   />
