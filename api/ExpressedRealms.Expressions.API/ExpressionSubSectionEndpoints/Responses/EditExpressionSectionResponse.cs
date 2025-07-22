@@ -7,4 +7,5 @@ public class EditExpressionSectionResponse
     public required string Content { get; set; }
     public int? ParentId { get; set; }
     public int SectionTypeId { get; set; }
+    public bool IsHeaderSection { get; set; }
 }

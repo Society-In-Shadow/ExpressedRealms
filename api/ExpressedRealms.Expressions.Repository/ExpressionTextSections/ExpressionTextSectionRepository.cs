@@ -30,8 +30,8 @@ internal sealed class ExpressionTextSectionRepository(
             Id = expressionSection.Id,
             Name = expressionSection.Name,
             Content = expressionSection.Content,
-            ParentId = expressionSection.ParentId,
             SectionTypeId = expressionSection.SectionTypeId,
+            IsHeaderSection = expressionSection.SectionType.Name == "Expression",
         };
     }
 

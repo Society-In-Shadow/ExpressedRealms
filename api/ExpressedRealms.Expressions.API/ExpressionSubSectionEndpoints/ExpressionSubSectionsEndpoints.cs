@@ -90,7 +90,7 @@ internal static class ExpectedSubSectionsEndpoints
                         {
                             Name = sectionResult.Value.Name,
                             Content = sectionResult.Value.Content,
-                            ParentId = sectionResult.Value.ParentId,
+                            IsHeaderSection = sectionResult.Value.IsHeaderSection,
                             SectionTypeId = sectionResult.Value.SectionTypeId,
                         }
                     );
