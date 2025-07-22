@@ -6,7 +6,7 @@ import Tab from 'primevue/tab';
 import TabPanels from 'primevue/tabpanels';
 import TabPanel from 'primevue/tabpanel';
 
-import ExpressionSection from "@/components/expressions/ExpressionSection.vue";
+import ExpressionSection from "@/components/expressions/expressionSection/ExpressionSection.vue";
 import axios from "axios";
 import {onBeforeRouteUpdate, useRoute} from 'vue-router'
 import { expressionStore } from "@/stores/expressionStore";
@@ -16,12 +16,12 @@ const route = useRoute()
 import {onMounted, ref, nextTick } from "vue";
 import Card from "primevue/card";
 import ScrollTop from 'primevue/scrolltop';
-import CreateExpressionSection from "@/components/expressions/CreateExpressionSection.vue";
+import CreateExpressionSection from "@/components/expressions/expressionSection/CreateExpressionSection.vue";
 import Button from "primevue/button";
 import '@he-tree/vue/style/default.css'
 import '@he-tree/vue/style/material-design.css'
 import ExpressionToC from "@/components/expressions/ExpressionToC.vue";
-import EditExpressionSection from "@/components/expressions/EditExpressionSection.vue";
+import EditExpressionSection from "@/components/expressions/expressionSection/EditExpressionSection.vue";
 import PowerTab from "@/components/expressions/powers/PowerTab.vue";
 import PowersToC from "@/components/expressions/PowersToC.vue";
 

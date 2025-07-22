@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import EditExpressionSection from "@/components/expressions/EditExpressionSection.vue";
+import EditExpressionSection from "@/components/expressions/expressionSection/EditExpressionSection.vue";
 
 const emit = defineEmits<{
   refreshList: []

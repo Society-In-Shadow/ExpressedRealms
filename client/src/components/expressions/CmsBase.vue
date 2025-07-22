@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import ExpressionSection from "@/components/expressions/ExpressionSection.vue";
+import ExpressionSection from "@/components/expressions/expressionSection/ExpressionSection.vue";
 import {useRoute} from 'vue-router'
 import { expressionStore } from "@/stores/expressionStore";
 const expressionInfo = expressionStore();
@@ -9,7 +9,7 @@ const route = useRoute()
 import {onMounted, ref, nextTick, watch} from "vue";
 import Card from "primevue/card";
 import ScrollTop from 'primevue/scrolltop';
-import CreateExpressionSection from "@/components/expressions/CreateExpressionSection.vue";
+import CreateExpressionSection from "@/components/expressions/expressionSection/CreateExpressionSection.vue";
 import Button from "primevue/button";
 import '@he-tree/vue/style/default.css'
 import '@he-tree/vue/style/material-design.css'

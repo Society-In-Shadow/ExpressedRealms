@@ -13,7 +13,7 @@ import DropdownWrapper from "@/FormWrappers/DropdownWrapper.vue";
 import { expressionStore } from "@/stores/expressionStore";
 import EditorWrapper from "@/FormWrappers/EditorWrapper.vue";
 import toaster from "@/services/Toasters";
-import CreateExpressionSection from "@/components/expressions/CreateExpressionSection.vue";
+import CreateExpressionSection from "@/components/expressions/expressionSection/CreateExpressionSection.vue";
 import {useConfirm} from "primevue/useconfirm";
 import DataTable from "primevue/datatable";
 import KnowledgeList from "@/components/knowledges/KnowledgeList.vue";
