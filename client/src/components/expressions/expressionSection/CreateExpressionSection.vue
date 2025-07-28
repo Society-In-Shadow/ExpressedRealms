@@ -11,7 +11,14 @@ import DropdownWrapper from "@/FormWrappers/DropdownWrapper.vue";
 import { expressionStore } from "@/stores/expressionStore";
 import EditorWrapper from "@/FormWrappers/EditorWrapper.vue";
 import toaster from "@/services/Toasters";
+import {expressionSectionStore} from "@/components/expressions/expressionSection/store/expressionSectionStore";
+import type {ListItem} from "@/types/ListItem";
+import {getValidationInstance} from "@/components/expressions/expressionSection/validators/expressionSectionValidator";
+import FormInputTextWrapper from "@/FormWrappers/FormInputTextWrapper.vue";
+import FormDropdownWrapper from "@/FormWrappers/FormDropdownWrapper.vue";
+import FormEditorWrapper from "@/FormWrappers/FormEditorWrapper.vue";
 const expressionInfo = expressionStore();
+const expressionSectionInfo = expressionSectionStore();
 
 const emit = defineEmits<{
   cancelEvent: [],
@@ -34,87 +41,41 @@ onMounted(() => {
   }
 })
 
-const stopWatch = watch(
-    () => expressionInfo.isDoneLoading,
-    (newValue) => {
-      if (newValue) {
-        loadSectionInfo();
-      }
-    }
-);
+const isHeaderSection = ref(false);
 
-const showOptionLoader = ref(true);
-const sectionTypeOptions = ref([]);
+const form = getValidationInstance()
+
+const sectionTypeOptions = ref<Array<ListItem>>([]);
 
 function cancelEdit(){
   emit("cancelEvent");
 }
 
 function reset(){
-  showOptionLoader.value = true;
   loadSectionInfo();
 }
 
-function loadSectionInfo(){
-  if(!showOptionLoader.value) return; // Don't load in 2nd time
-  axios.get(`/expressionSubSections/${expressionInfo.currentExpressionId}/0/options`)
-      .then(async (response) => {
-        if(!props.addExpressionHeader) {
-          sectionTypeOptions.value = response.data.sectionTypes.filter(sectionType => sectionType.name.toLowerCase() !== "expression");
-        }
-        else{
-          sectionTypeOptions.value = response.data.sectionTypes;
-        }
-        showOptionLoader.value = false;
-
-        if(props.addExpressionHeader) {
-          sectionType.value = sectionTypeOptions.value.find(obj => obj.name === "Expression");
-        }
-      });
+async function loadSectionInfo(){
+  await expressionSectionInfo.getOptions();
+  sectionTypeOptions.value = expressionSectionInfo.sectionTypes;
 }
 
-const { defineField, handleSubmit, errors } = useForm({
-  validationSchema: object({
-    name: string().required()
-        .label('Name'),
-    content: string()
-        .required()
-        .label('Content'),
-    sectionType: object().nullable()
-        .label('Section Type')
-  })
+const onSubmit = form.handleSubmit(async (values) => {
+  await expressionSectionInfo.addSection(values, expressionInfo.currentExpressionId, props.parentId)
+  cancelEdit();
+  emit("addedSection");
 });
-
-const [name] = defineField('name');
-const [content] = defineField('content');
-const [sectionType] = defineField('sectionType');
-
-const onSubmit = handleSubmit((values) => {
-  axios.post(`/expressionSubSections/${expressionInfo.currentExpressionId}`, {
-    name: values.name,
-    content: values.content,
-    sectionTypeId: values.sectionType.id,
-    parentId: props.parentId
-  }).then(() => {
-    emit("addedSection");
-    toaster.success("Successfully Added Expression Section Info!");
-    cancelEdit();
-  });
-});
-
-const nameField = props.addExpressionHeader ? 'Expression Name' : 'Name';
 
 </script>
 
 <template>
   <div class="m-2">
     <form @submit="onSubmit">
-      <InputTextWrapper v-model="name" :field-name="nameField" :error-text="errors.name" />
-      <EditorWrapper v-model="content" field-name="Content" :error-text="errors.content" />
-      <DropdownWrapper
-        v-if="!props.addExpressionHeader"
-        v-model="sectionType" option-label="name" :options="sectionTypeOptions" field-name="Section Types" :show-skeleton="showOptionLoader"
-        :error-text="errors.sectionType"
+      <FormInputTextWrapper v-model="form.name" :show-skeleton="expressionSectionInfo.haveSectionTypes" />
+      <FormEditorWrapper v-model="form.content" :show-skeleton="expressionSectionInfo.haveSectionTypes" />
+      <FormDropdownWrapper
+          v-if="!isHeaderSection"
+          v-model="form.sectionType" option-label="name" :options="sectionTypeOptions" :show-skeleton="expressionSectionInfo.haveSectionTypes"
       />
       <div class="flex">
         <div class="col-flex flex-grow-1">
