@@ -41,7 +41,7 @@ public class CreatePowerModelValidator : AbstractValidator<CreatePowerModel>
             .MustAsync(
                 async (categories, cancellationToken) =>
                 {
-                    return await dbContext.PowerLevels.AnyAsync(
+                    return await dbContext.PowerCategories.AnyAsync(
                         x => categories!.Contains(x.Id),
                         cancellationToken
                     );
