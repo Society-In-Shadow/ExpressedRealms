@@ -9,7 +9,7 @@ internal class KnowledgeAuditTrailConfiguration : IEntityTypeConfiguration<Knowl
     public void Configure(EntityTypeBuilder<KnowledgeAuditTrail> builder)
     {
         builder.ToTable("knowledges_audit_trail");
-        
+
         builder.Property(e => e.KnowledgeId).HasColumnName("knowledge_id").IsRequired();
 
         builder
@@ -19,9 +19,6 @@ internal class KnowledgeAuditTrailConfiguration : IEntityTypeConfiguration<Knowl
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
 
-
         builder.ConfigureAuditTrailProperties(user => user.KnowledgeAuditTrails);
-        
     }
-
 }

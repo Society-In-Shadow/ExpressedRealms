@@ -9,9 +9,9 @@ internal class BlessingAuditTrailConfiguration : IEntityTypeConfiguration<Blessi
     public void Configure(EntityTypeBuilder<BlessingAuditTrail> builder)
     {
         builder.ToTable("blessing_audit_trail");
-        
+
         builder.ConfigureAuditTrailProperties(user => user.BlessingAuditTrails);
-        
+
         builder.Property(e => e.BlessingId).HasColumnName("blessing_id").IsRequired();
 
         builder

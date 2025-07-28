@@ -15,7 +15,7 @@ internal static class BlessingLevelAuditTrailExtensions
             {
                 case "blessing_id":
                     continue;
-                
+
                 case "description":
                     changedRecord.FriendlyName = "Description";
                     break;
@@ -23,7 +23,7 @@ internal static class BlessingLevelAuditTrailExtensions
                 case "level":
                     changedRecord.FriendlyName = "Level";
                     break;
-                
+
                 case "xp_cost":
                     changedRecord.FriendlyName = "XP Cost";
                     break;
@@ -31,7 +31,7 @@ internal static class BlessingLevelAuditTrailExtensions
                 case "xp_gain":
                     changedRecord.FriendlyName = "XP Gain";
                     break;
-                
+
                 default:
                     throw new MissingAuditColumnException(changedRecord.ColumnName);
             }

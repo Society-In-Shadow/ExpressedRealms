@@ -16,7 +16,7 @@ public class BlessingLevel : ISoftDelete
     public int XpGain { get; set; }
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
-    
+
     public virtual Blessing Blessing { get; set; } = null!;
     public virtual List<BlessingLevelAuditTrail> BlessingLevelAuditTrails { get; set; } = null!;
 }

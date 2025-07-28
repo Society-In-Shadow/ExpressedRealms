@@ -9,7 +9,8 @@ public static class AuditTableExtensions
 {
     public static void ConfigureAuditTrailProperties<TAuditTrail>(
         this EntityTypeBuilder<TAuditTrail> builder,
-        Expression<Func<User, IEnumerable<TAuditTrail>?>>? withManyExpression)
+        Expression<Func<User, IEnumerable<TAuditTrail>?>>? withManyExpression
+    )
         where TAuditTrail : class, IAuditTable
     {
         // Configure the standard audit trail properties
@@ -28,5 +29,4 @@ public static class AuditTableExtensions
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
     }
-
 }

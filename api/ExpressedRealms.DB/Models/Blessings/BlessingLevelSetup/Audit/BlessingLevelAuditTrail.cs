@@ -8,10 +8,10 @@ public class BlessingLevelAuditTrail : IAuditTable
 {
     public int BlessingId { get; set; }
     public virtual Blessing Blessing { get; set; } = null!;
-    
+
     public int BlessingLevelId { get; set; }
     public virtual BlessingLevel BlessingLevel { get; set; } = null!;
-    
+
     public int Id { get; set; }
     public required string Action { get; set; }
     public DateTime Timestamp { get; set; }

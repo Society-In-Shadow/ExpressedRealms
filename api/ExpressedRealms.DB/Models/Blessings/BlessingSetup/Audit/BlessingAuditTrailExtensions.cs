@@ -24,7 +24,7 @@ internal static class BlessingAuditTrailExtensions
                 case "type":
                     changedRecord.FriendlyName = "Type";
                     break;
-                
+
                 case "sub_category":
                     changedRecord.FriendlyName = "Sub Category";
                     break;
@@ -39,9 +39,7 @@ internal static class BlessingAuditTrailExtensions
         return changedRecordsToReturn;
     }
 
-    public static IAuditEntityMapping AddBlessingAuditTrailMapping(
-        this IAuditEntityMapping mapping
-    )
+    public static IAuditEntityMapping AddBlessingAuditTrailMapping(this IAuditEntityMapping mapping)
     {
         return mapping.Map<Blessing, BlessingAuditTrail>(
             (blessing, audit) =>

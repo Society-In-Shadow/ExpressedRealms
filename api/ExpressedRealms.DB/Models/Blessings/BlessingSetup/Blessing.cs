@@ -15,7 +15,7 @@ public class Blessing : ISoftDelete
     public string? SubCategory { get; set; }
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
-    
+
     public virtual List<BlessingAuditTrail> BlessingAuditTrails { get; set; } = null!;
     public virtual List<BlessingLevelAuditTrail> BlessingLevelAuditTrails { get; set; } = null!;
 }
