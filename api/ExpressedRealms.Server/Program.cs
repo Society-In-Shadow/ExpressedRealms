@@ -4,7 +4,7 @@ using Audit.Core;
 using ExpressedRealms.Authentication.AzureKeyVault;
 using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
 using ExpressedRealms.Authentication.Configuration;
-using ExpressedRealms.Blessings.Repository.Configuration;
+using ExpressedRealms.Blessings.UseCases.Configuration;
 using ExpressedRealms.Characters.API.Configuration;
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.DB;
@@ -214,7 +214,7 @@ try
     builder.Services.AddPowerRepositoryInjections();
     builder.Services.AddKnowledgesInjections();
     builder.Services.AddExpressionTextSectionInjections();
-    builder.Services.AddBlessingRepositoryInjections();
+    builder.Services.AddBlessingInjections();
     await builder.Services.AddFeatureFlagInjections(keyVaultManager);
 
     Log.Information("Building the App");
