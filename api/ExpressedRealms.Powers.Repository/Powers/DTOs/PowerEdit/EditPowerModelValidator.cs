@@ -52,7 +52,7 @@ public class EditPowerModelValidator : AbstractValidator<EditPowerModel>
             .MustAsync(
                 async (categories, cancellationToken) =>
                 {
-                    return await dbContext.PowerLevels.AnyAsync(
+                    return await dbContext.PowerCategories.AnyAsync(
                         x => categories!.Contains(x.Id),
                         cancellationToken
                     );
