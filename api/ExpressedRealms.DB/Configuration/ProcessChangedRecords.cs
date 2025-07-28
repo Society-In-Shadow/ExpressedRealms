@@ -1,4 +1,6 @@
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup;
+using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
@@ -40,6 +42,7 @@ public static class ProcessChangedRecords
                 changedRecords
             ),
             nameof(Blessing) => BlessingAuditTrailExtensions.ProcessChangedRecords(changedRecords),
+            nameof(BlessingLevel) => BlessingLevelAuditTrailExtensions.ProcessChangedRecords(changedRecords),
             _ => throw new ArgumentException(
                 $"Table not setup in the ProcessChangedRecords class: {tableName}"
             ),
