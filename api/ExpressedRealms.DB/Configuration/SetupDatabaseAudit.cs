@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Audit.Core;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Audit;
@@ -37,6 +38,7 @@ public static class SetupDatabaseAudit
                             .AddPowerPathAuditTrailMapping()
                             .AddPowerAuditTrailMapping()
                             .AddKnowledgeAuditTrailMapping()
+                            .AddBlessingAuditTrailMapping()
                             .AuditEntityAction<IAuditTable>(
                                 (evt, entry, audit) =>
                                 {

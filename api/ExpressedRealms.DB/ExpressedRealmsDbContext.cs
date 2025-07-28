@@ -1,3 +1,4 @@
+using System.Reflection;
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Configuration;
@@ -31,6 +32,10 @@ namespace ExpressedRealms.DB
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            
+            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            
+            /*
             builder.ApplyConfiguration(new CharacterConfiguration());
             builder.ApplyConfiguration(new PlayerConfiguration());
 
@@ -52,7 +57,7 @@ namespace ExpressedRealms.DB
 
             builder.AddPowerConfiguration();
             builder.AddExpressionConfiguration();
-            builder.AddKnowledgeConfiguration();
+            builder.AddKnowledgeConfiguration();*/
         }
 
         public ExpressedRealmsDbContext(DbContextOptions<ExpressedRealmsDbContext> options)
