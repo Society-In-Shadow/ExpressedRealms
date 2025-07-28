@@ -53,6 +53,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Knowledges.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Knowledges.API", "ExpressedRealms.Knowledges.API\ExpressedRealms.Knowledges.API.csproj", "{A0ABC7FB-11E0-4245-A5A7-CD68558055D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Blessings.Repository", "ExpressedRealms.Blessings.Repository\ExpressedRealms.Blessings.Repository.csproj", "{C01EF593-70AD-4D57-B47D-99B5A742557D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -159,6 +161,10 @@ Global
 		{A0ABC7FB-11E0-4245-A5A7-CD68558055D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0ABC7FB-11E0-4245-A5A7-CD68558055D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0ABC7FB-11E0-4245-A5A7-CD68558055D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C01EF593-70AD-4D57-B47D-99B5A742557D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C01EF593-70AD-4D57-B47D-99B5A742557D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C01EF593-70AD-4D57-B47D-99B5A742557D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C01EF593-70AD-4D57-B47D-99B5A742557D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
