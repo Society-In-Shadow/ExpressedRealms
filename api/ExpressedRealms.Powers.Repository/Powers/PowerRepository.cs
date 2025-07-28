@@ -163,7 +163,7 @@ internal sealed class PowerRepository(
         context.Powers.Add(newPower);
         await context.SaveChangesAsync(cancellationToken);
 
-        if (createPowerModel.Category == null || createPowerModel.Category.Count > 0)
+        if (createPowerModel.Category == null || createPowerModel.Category.Count == 0)
         {
             return Result.Ok(newPower.Id);
         }
