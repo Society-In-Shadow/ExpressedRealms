@@ -159,7 +159,7 @@ internal static class PowerPrerequisiteEndpoints
 
                     var requiredAmount = new List<DetailedEditInformation>();
 
-                    for (int i = 1; i <= powers.Value.Count - 1; i++)
+                    for (int i = 1; i <= powers.Value.Count; i++)
                     {
                         requiredAmount.Add(
                             new DetailedEditInformation()
