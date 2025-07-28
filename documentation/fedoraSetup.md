@@ -56,3 +56,7 @@ by default prevents containers from access files.  It's basically wanting to enf
 #### Docker Compose: bind: address already in use
 This can happen if you have cypress open, and you try start / stop the docker compose, specifically the vue docker.  
 All you need to do is close cypress and you should be good to go.
+
+#### Firefox not Loading Page
+
+You will need to manually open up the api url (Swagger)[https://localhost:5001/swagger] and accept the certificate there.
