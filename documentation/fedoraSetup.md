@@ -59,4 +59,4 @@ All you need to do is close cypress and you should be good to go.
 
 #### Firefox not Loading Page
 
-You will need to manually open up the api url (Swagger)[https://localhost:5001/swagger] and accept the certificate there.
+You will need to manually open up the api url [Swagger](https://localhost:5001/swagger) and accept the certificate there.
