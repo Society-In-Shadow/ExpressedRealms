@@ -53,7 +53,7 @@ function toggleEditor(){
     <Skeleton id="expression-section-body-skeleton" class="mb-2" height="5em" />
   </div>
   <div v-else-if="showEditor" class="m-2">
-    <EditExpressionSection :section-id="props.sectionInfo.id"/>
+    <EditExpressionSection :section-id="props.sectionInfo.id" @canceled="toggleEditor()" />
   </div>
   <div v-else>
     <div class="flex">

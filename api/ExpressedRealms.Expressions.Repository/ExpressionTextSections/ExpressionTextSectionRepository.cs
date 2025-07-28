@@ -18,21 +18,23 @@ internal sealed class ExpressionTextSectionRepository(
 {
     public async Task<Result<GetExpressionTextSectionDto>> GetExpressionTextSection(int sectionId)
     {
-        var expressionSection = await context.ExpressionSections.FirstOrDefaultAsync(x =>
-            x.Id == sectionId
-        );
+        var expressionSection = await context.ExpressionSections
+                .AsNoTracking()
+                .Where(x => x.Id == sectionId)
+                .Select(x => new GetExpressionTextSectionDto()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Content = x.Content,
+                    SectionTypeId = x.SectionTypeId,
+                    IsHeaderSection = x.SectionType.Name == "Expression",
+                })
+            .FirstOrDefaultAsync();
 
         if (expressionSection is null)
             return Result.Fail(new NotFoundFailure("Expression Section"));
 
-        return new GetExpressionTextSectionDto()
-        {
-            Id = expressionSection.Id,
-            Name = expressionSection.Name,
-            Content = expressionSection.Content,
-            SectionTypeId = expressionSection.SectionTypeId,
-            IsHeaderSection = expressionSection.SectionType.Name == "Expression",
-        };
+        return expressionSection;
     }
 
     public async Task<Result<ExpressionTextSectionOptions>> GetExpressionTextSectionOptions()

@@ -14,6 +14,7 @@ import {expressionSectionStore} from "@/components/expressions/expressionSection
 import {
   expressionSectionConfirmationPopup
 } from "@/components/expressions/expressionSection/services/expressionSectionConfirmationPopup";
+import type {ListItem} from "@/types/ListItem";
 
 const expressionInfo = expressionStore();
 const expressionSectionInfo = expressionSectionStore();
@@ -35,7 +36,7 @@ const props = defineProps({
 
 const popups = expressionSectionConfirmationPopup(props.sectionId);
 const showOptionLoader = ref(true);
-const sectionTypeOptions = ref([]);
+const sectionTypeOptions = ref<Array<ListItem>>([]);
 const showSkeleton = ref(true);
 const isHeaderSection = ref(false);
 
@@ -52,6 +53,7 @@ onMounted(async () => {
 
 async function loadSectionInfo(){
   const expressionSection = await expressionSectionInfo.getExpressionSection(expressionInfo.currentExpressionId, props.sectionId);
+  sectionTypeOptions.value = expressionSectionInfo.sectionTypes;
   isHeaderSection.value = expressionSection.isHeaderSection;
   form.setValues(expressionSection);
   showOptionLoader.value = false;
@@ -60,6 +62,7 @@ async function loadSectionInfo(){
 
 const onSubmit = form.handleSubmit(async (values) => {
   await expressionSectionInfo.updateSection(values, expressionInfo.currentExpressionId, props.sectionId);
+  cancel();
 })
 
 </script>
