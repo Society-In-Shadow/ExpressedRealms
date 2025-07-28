@@ -1,4 +1,3 @@
-import { knowledgeStore } from "@/components/knowledges/stores/knowledgeStore";
 import { useConfirm } from "primevue/useconfirm";
 import {expressionStore} from "@/stores/expressionStore";
 import {expressionSectionStore} from "@/components/expressions/expressionSection/store/expressionSectionStore";
@@ -22,7 +21,8 @@ const deleteConfirmation = (event: MouseEvent) =>   confirm.require({
         outlined: true
     },
     acceptProps: {
-        label: 'Save'
+        label: 'Delete',
+        severity: 'danger'
     },
     accept: async () => {
         await expressionSectionInfo.deleteExpressionSection(expressionInfo.currentExpressionId, id);
