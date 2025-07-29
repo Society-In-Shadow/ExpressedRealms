@@ -6,5 +6,5 @@ public class BlessingReturnModel
     public required string Description { get; set; }
     public required string Type { get; set; }
     public string? SubCategory { get; set; }
-    public List<BlessingLevelReturnModel> Levels { get; set; }
+    public List<BlessingLevelReturnModel> Levels { get; set; } = new ();
 }
