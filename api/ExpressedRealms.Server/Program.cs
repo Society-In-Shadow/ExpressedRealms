@@ -4,6 +4,7 @@ using Audit.Core;
 using ExpressedRealms.Authentication.AzureKeyVault;
 using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
 using ExpressedRealms.Authentication.Configuration;
+using ExpressedRealms.Blessings.API.Configuration;
 using ExpressedRealms.Blessings.UseCases.Configuration;
 using ExpressedRealms.Characters.API.Configuration;
 using ExpressedRealms.Characters.Repository;
@@ -310,6 +311,7 @@ try
     app.AddAdminEndPoints();
     app.AddPowerEndPoints();
     app.AddCharacterApiEndPoints();
+    app.ConfigureBlessingEndPoints();
     app.ConfigureKnowledgeEndPoints();
 
     app.MapFallbackToFile("index.html");
