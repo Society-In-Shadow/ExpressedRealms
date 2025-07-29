@@ -17,6 +17,8 @@ internal static class BlessingEndpoints
 
         endpointGroup
             .MapGet("", GetAllBlessingsEndpoint.GetBlessings)
-            .WithSummary("Returns three sets of blessings, advantages, disadvantages, and mixed blessings.");
+            .WithSummary(
+                "Returns three sets of blessings, advantages, disadvantages, and mixed blessings."
+            );
     }
 }

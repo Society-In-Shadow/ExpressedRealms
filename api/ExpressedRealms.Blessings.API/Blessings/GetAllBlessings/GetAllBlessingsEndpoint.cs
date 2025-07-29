@@ -18,30 +18,35 @@ public static class GetAllBlessingsEndpoint
             {
                 Advantages = GetDetailsFor(results, "Advantage"),
                 DisAdvantages = GetDetailsFor(results, "Disadvantage"),
-                MixedBlessings = GetDetailsFor(results, "Mixed Blessing")
+                MixedBlessings = GetDetailsFor(results, "Mixed Blessing"),
             }
         );
     }
 
-    private static List<Blessing> GetDetailsFor(Result<GetBlessingsReturnModel> results, string typeName)
+    private static List<Blessing> GetDetailsFor(
+        Result<GetBlessingsReturnModel> results,
+        string typeName
+    )
     {
-        return results.Value.Blessings
-            .Where(x => x.Type == typeName)
+        return results
+            .Value.Blessings.Where(x => x.Type == typeName)
             .OrderBy(x => x.Name)
             .Select(x => new Blessing()
             {
                 Name = x.Name,
                 Description = x.Description,
                 SubCategory = x.SubCategory,
-                Levels = x.Levels
-                    .OrderBy(y => y.Level)
+                Levels = x
+                    .Levels.OrderBy(y => y.Level)
                     .Select(y => new Level()
                     {
                         Name = y.Level,
                         Description = y.Description,
                         XpCost = y.XpCost,
                         XpGain = y.XpGain,
-                    }).ToList()
-            }).ToList();
+                    })
+                    .ToList(),
+            })
+            .ToList();
     }
 }
