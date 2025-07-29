@@ -13,6 +13,7 @@ public class GetBlessingsUseCaseTests
     private readonly IBlessingRepository _repository;
 
     private readonly List<Blessing> _blessings;
+
     public GetBlessingsUseCaseTests()
     {
         _blessings = new List<Blessing>()
@@ -45,8 +46,8 @@ public class GetBlessingsUseCaseTests
                         Level = "6pt",
                         XpCost = 30,
                         XpGain = 0,
-                    }
-                }
+                    },
+                },
             },
             new Blessing()
             {
@@ -54,47 +55,51 @@ public class GetBlessingsUseCaseTests
                 Description = "Test Description 2",
                 SubCategory = "Sub Category 2",
                 Type = "Type 2",
-                BlessingLevels = new List<BlessingLevel>()
-
-            }
+                BlessingLevels = new List<BlessingLevel>(),
+            },
         };
-        
+
         _repository = A.Fake<IBlessingRepository>();
-        
+
         A.CallTo(() => _repository.GetAllBlessingsAndBlessingLevels()).Returns(_blessings);
-        
+
         _useCase = new GetBlessingsUseCase(_repository);
     }
-    
+
     [Fact]
     public async Task UseCase_Grabs_TheBlessings()
     {
         await _useCase.ExecuteAsync();
-        
-        A.CallTo(() => _repository.GetAllBlessingsAndBlessingLevels()).MustHaveHappenedOnceExactly();
+
+        A.CallTo(() => _repository.GetAllBlessingsAndBlessingLevels())
+            .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_ReturnsExpectedStructure()
     {
         var results = await _useCase.ExecuteAsync();
-        
+
         var blessingList = new GetBlessingsReturnModel()
         {
-            Blessings = _blessings.Select(x => new BlessingReturnModel()
-            {
-                Name = x.Name,
-                Description = x.Description,
-                Type = x.Type,
-                SubCategory = x.SubCategory,
-                Levels = x.BlessingLevels.Select(y => new BlessingLevelReturnModel()
+            Blessings = _blessings
+                .Select(x => new BlessingReturnModel()
                 {
-                    Description = y.Description,
-                    Level = y.Level,
-                    XpCost = y.XpCost,
-                    XpGain = y.XpGain,
-                }).ToList()
-            }).ToList()
+                    Name = x.Name,
+                    Description = x.Description,
+                    Type = x.Type,
+                    SubCategory = x.SubCategory,
+                    Levels = x
+                        .BlessingLevels.Select(y => new BlessingLevelReturnModel()
+                        {
+                            Description = y.Description,
+                            Level = y.Level,
+                            XpCost = y.XpCost,
+                            XpGain = y.XpGain,
+                        })
+                        .ToList(),
+                })
+                .ToList(),
         };
 
         Assert.Equivalent(blessingList, results.Value);

@@ -6,11 +6,13 @@ namespace ExpressedRealms.Blessings.Repository.Blessings;
 
 internal sealed class BlessingRepository(
     ExpressedRealmsDbContext context,
-    CancellationToken cancellationToken) : IBlessingRepository
+    CancellationToken cancellationToken
+) : IBlessingRepository
 {
     public async Task<List<Blessing>> GetAllBlessingsAndBlessingLevels()
     {
-        return await context.Blessings.AsNoTracking()
+        return await context
+            .Blessings.AsNoTracking()
             .Include(x => x.BlessingLevels)
             .ToListAsync(cancellationToken);
     }

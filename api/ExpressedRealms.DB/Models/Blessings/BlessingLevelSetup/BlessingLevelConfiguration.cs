@@ -16,7 +16,7 @@ public class BlessingLevelConfiguration : IEntityTypeConfiguration<BlessingLevel
         builder.Property(e => e.BlessingId).HasColumnName("blessing_id").IsRequired();
         builder.Property(e => e.XpCost).HasColumnName("xp_cost").IsRequired();
         builder.Property(e => e.XpGain).HasColumnName("xp_gain").IsRequired();
-        
+
         builder
             .HasOne(x => x.Blessing)
             .WithMany(x => x.BlessingLevels)
