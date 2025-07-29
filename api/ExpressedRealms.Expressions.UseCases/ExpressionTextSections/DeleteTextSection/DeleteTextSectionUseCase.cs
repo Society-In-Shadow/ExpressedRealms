@@ -32,6 +32,11 @@ internal sealed class DeleteTextSectionUseCase(
         {
             return Result.Fail("You cannot delete the systems knowledge section.");
         }
+        
+        if (expressionSection!.SectionType.Name == "Blessings Section")
+        {
+            return Result.Fail("You cannot delete the systems blessings section.");
+        }
 
         await repository.DeleteExpressionTextSectionAsync(model.ExpressionId, model.Id);
 

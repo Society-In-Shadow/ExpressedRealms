@@ -153,6 +153,29 @@ public class DeleteTextSectionUseCaseTests
             result.Errors.First().Message
         );
     }
+    
+    [Fact]
+    public async Task UseCase_WillFail_IfItsTheBlessingsSection_FromTheRulebook()
+    {
+        A.CallTo(() =>
+                _textRepository.GetExpressionSectionForDeletion(_model.ExpressionId, _model.Id)
+            )
+            .Returns(
+                new ExpressionSection()
+                {
+                    Id = 1,
+                    SectionType = new ExpressionSectionType() { Name = "Blessings Section" },
+                }
+            );
+
+        var result = await _useCase.ExecuteAsync(_model);
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal(
+            "You cannot delete the systems blessings section.",
+            result.Errors.First().Message
+        );
+    }
 
     [Fact]
     public async Task UseCase_WillDelete_TheExpression()
