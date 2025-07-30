@@ -1,0 +1,33 @@
+<script setup lang="ts">
+
+import Card from "primevue/card";
+import {onMounted, ref} from "vue";
+import { useRoute } from 'vue-router'
+const route = useRoute()
+import {characterStore} from "@/components/characters/character/stores/characterStore";
+const characterInfo = characterStore();
+
+onMounted(async () =>{
+  await characterInfo.getCharacterDetails(Number(route.params.id))
+      .then(() => {
+        name.value = characterInfo.name;
+        expression.value = characterInfo.expression;
+        faction.value = characterInfo.faction;
+      });
+});
+
+const name = ref("");
+const faction = ref("");
+const expression = ref("");
+
+</script>
+
+<template>
+  <Card class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="width: 325px">
+    <template #content>
+        <h1 class="mt-0 pt-0">{{name}}</h1>
+        <div>{{expression}}</div>
+        <div>{{faction?.name ?? 'No Faction'}}</div>
+    </template>
+  </Card>
+</template>
