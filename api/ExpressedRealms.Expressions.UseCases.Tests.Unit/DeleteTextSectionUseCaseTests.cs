@@ -153,7 +153,7 @@ public class DeleteTextSectionUseCaseTests
             result.Errors.First().Message
         );
     }
-    
+
     [Fact]
     public async Task UseCase_WillFail_IfItsTheBlessingsSection_FromTheRulebook()
     {

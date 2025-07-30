@@ -69,10 +69,10 @@ internal sealed class ExpressionTextSectionRepository(
                 Name = x.Name,
                 Description = x.Description,
             })
-            .Where(x => 
-                x.Name != "Expression" && 
-                x.Name != "Knowledges Section" &&
-                x.Name != "Blessings Section"
+            .Where(x =>
+                x.Name != "Expression"
+                && x.Name != "Knowledges Section"
+                && x.Name != "Blessings Section"
             )
             .ToListAsync();
     }
