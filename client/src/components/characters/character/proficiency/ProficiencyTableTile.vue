@@ -19,7 +19,6 @@ const profStore = proficiencyStore();
 const types = computed(() => [
   { name: "Offensive Proficiencies", items: profStore.offensive },
   { name: "Defensive Proficiencies", items: profStore.defensive },
-  { name: "Secondary Proficiencies", items: profStore.secondary }
 ]);
 
 onMounted(() =>{
