@@ -82,9 +82,8 @@ function getEditOptions() {
 
 <style>
  .p-panel-header{
-   background: var(--p-panel-background);
-   border-bottom: 0px;
-   padding: 1.5em;
-   padding-bottom: 0em;
+   background: var(--p-panel-background) !important;
+   border-bottom: 0px !important;
+   padding: 1.5em 1.5em 0em !important;
  }
 </style>
