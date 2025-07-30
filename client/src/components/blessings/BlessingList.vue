@@ -57,26 +57,24 @@ const sortedDisadvantages = computed(() => {
 </script>
 
 <template>
-  
   <div>
     <h1>Advantage</h1>
-    <div v-for="blessing in sortedAdvantages" v-bind:key="blessing.id">
+    <div v-for="blessing in sortedAdvantages" :key="blessing.id">
       <BlessingItem :blessing="blessing" :is-read-only="props.isReadOnly" />
     </div>
   </div>
 
   <div>
     <h1>Disadvantage</h1>
-    <div v-for="blessing in sortedDisadvantages" v-bind:key="blessing.id">
+    <div v-for="blessing in sortedDisadvantages" :key="blessing.id">
       <BlessingItem :blessing="blessing" :is-read-only="props.isReadOnly" />
     </div>
   </div>
 
   <div>
     <h1>Mixed Blessings</h1>
-    <div v-for="blessing in store.mixedBlessings" v-bind:key="blessing.id">
+    <div v-for="blessing in store.mixedBlessings" :key="blessing.id">
       <BlessingItem :blessing="blessing" :is-read-only="props.isReadOnly" />
     </div>
   </div>
-  
 </template>

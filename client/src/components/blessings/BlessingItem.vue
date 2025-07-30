@@ -3,7 +3,6 @@
 import {type PropType} from "vue";
 import type {Blessing} from "@/components/blessings/types";
 
-
 const props = defineProps({
   blessing: {
     type: Object as PropType<Blessing>,
@@ -29,9 +28,9 @@ const props = defineProps({
   </div>
   <p>{{ props.blessing.description }}</p>
   <ul>
-    <li v-for="level in props.blessing.levels" v-bind:key="level.id" class="mt-3">
+    <li v-for="level in props.blessing.levels" :key="level.id" class="mt-3">
       <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
-        <div>{{ level.name}} – {{ level.description}}</div>
+        <div>{{ level.name }} – {{ level.description }}</div>
       </div>
     </li>
   </ul>
