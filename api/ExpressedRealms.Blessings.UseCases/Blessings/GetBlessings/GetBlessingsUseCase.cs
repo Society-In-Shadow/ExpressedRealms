@@ -14,6 +14,7 @@ internal sealed class GetBlessingsUseCase(IBlessingRepository repository) : IGet
             Blessings = blessings
                 .Select(x => new BlessingReturnModel()
                 {
+                    Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
                     Type = x.Type,
@@ -21,6 +22,7 @@ internal sealed class GetBlessingsUseCase(IBlessingRepository repository) : IGet
                     Levels = x
                         .BlessingLevels.Select(y => new BlessingLevelReturnModel()
                         {
+                            Id = y.Id,
                             Description = y.Description,
                             Level = y.Level,
                             XpCost = y.XpCost,
