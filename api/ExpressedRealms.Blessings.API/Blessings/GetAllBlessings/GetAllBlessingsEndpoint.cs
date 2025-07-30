@@ -33,6 +33,7 @@ public static class GetAllBlessingsEndpoint
             .OrderBy(x => x.Name)
             .Select(x => new Blessing()
             {
+                Id = x.Id,
                 Name = x.Name,
                 Description = x.Description,
                 SubCategory = x.SubCategory,
@@ -40,6 +41,7 @@ public static class GetAllBlessingsEndpoint
                     .Levels.OrderBy(y => y.Level)
                     .Select(y => new Level()
                     {
+                        Id = y.Id,
                         Name = y.Level,
                         Description = y.Description,
                         XpCost = y.XpCost,

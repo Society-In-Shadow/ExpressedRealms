@@ -20,6 +20,7 @@ public class GetBlessingsUseCaseTests
         {
             new Blessing()
             {
+                Id = 1,
                 Name = "Test Name 1",
                 Description = "Test Description 1",
                 SubCategory = "Sub Category 1",
@@ -28,6 +29,7 @@ public class GetBlessingsUseCaseTests
                 {
                     new BlessingLevel()
                     {
+                        Id = 2,
                         Description = "Test Description 1 Level 1",
                         Level = "2pt",
                         XpCost = 10,
@@ -35,6 +37,7 @@ public class GetBlessingsUseCaseTests
                     },
                     new BlessingLevel()
                     {
+                        Id = 3,
                         Description = "Test Description 1 Level 3",
                         Level = "4pt",
                         XpCost = 20,
@@ -42,6 +45,7 @@ public class GetBlessingsUseCaseTests
                     },
                     new BlessingLevel()
                     {
+                        Id = 4,
                         Description = "Test Description 1 Level 3",
                         Level = "6pt",
                         XpCost = 30,
@@ -51,6 +55,7 @@ public class GetBlessingsUseCaseTests
             },
             new Blessing()
             {
+                Id = 5,
                 Name = "Test Name 2",
                 Description = "Test Description 2",
                 SubCategory = "Sub Category 2",
@@ -85,6 +90,7 @@ public class GetBlessingsUseCaseTests
             Blessings = _blessings
                 .Select(x => new BlessingReturnModel()
                 {
+                    Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
                     Type = x.Type,
@@ -92,6 +98,7 @@ public class GetBlessingsUseCaseTests
                     Levels = x
                         .BlessingLevels.Select(y => new BlessingLevelReturnModel()
                         {
+                            Id = y.Id,
                             Description = y.Description,
                             Level = y.Level,
                             XpCost = y.XpCost,

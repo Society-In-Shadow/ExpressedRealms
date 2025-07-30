@@ -1,5 +1,4 @@
 <template>
-
   <h1>History</h1>
   <p>
     Society in Shadows is a long running Live Action RolePlaying game boasting players from Kansas City all the way to
@@ -51,6 +50,4 @@
     We do ask for an emergency contact in case things go awry and you inform us of any potential concerns as well. 
     (i.e. medical, physical)  
   </p>
-  
-
 </template>

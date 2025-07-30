@@ -17,6 +17,7 @@ import CreateExpressionSection from "@/components/expressions/CreateExpressionSe
 import {useConfirm} from "primevue/useconfirm";
 import DataTable from "primevue/datatable";
 import KnowledgeList from "@/components/knowledges/KnowledgeList.vue";
+import BlessingList from "@/components/blessings/BlessingList.vue";
 const expressionInfo = expressionStore();
 
 const emit = defineEmits<{
@@ -193,13 +194,16 @@ const deleteExpression = (event) => {
           {{ sectionInfo.name }}
         </component>
       </div>
-      <div v-if="props.sectionInfo.sectionTypeName != 'Knowledges Section'" class="col-flex">
+      <div v-if="props.sectionInfo.sectionTypeName != 'Knowledges Section' && props.sectionInfo.sectionTypeName != 'Blessings Section'" class="col-flex">
         <Button v-if="showEdit && !isHeaderSection" label="Add Child Section" class="m-2" @click="toggleCreate" />
         <Button v-if="!showEditor && showEdit" label="Edit" class="float-end m-2" @click="toggleEditor()" />
       </div>
     </div>
     <div v-if="props.sectionInfo.sectionTypeName === 'Knowledges Section'">
       <KnowledgeList :is-read-only="!showEdit" />
+    </div>
+    <div v-if="props.sectionInfo.sectionTypeName === 'Blessings Section'">
+      <BlessingList :is-read-only="!showEdit" />
     </div>
     
     <div v-else class="mb-2 fix-wrapping" v-html="props.sectionInfo.content" />

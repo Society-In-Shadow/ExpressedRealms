@@ -7,7 +7,7 @@ import type {EditKnowledge, EditKnowledgeRequest, Knowledge} from "@/components/
 import type {KnowledgeForm} from "@/components/knowledges/Validations/knowledgeValidations";
 
 export const knowledgeStore =
-    defineStore(`powers`, {
+    defineStore(`knowledges`, {
         state: () => {
             return {
                 knowledgeTypes: [] as ListItem[],

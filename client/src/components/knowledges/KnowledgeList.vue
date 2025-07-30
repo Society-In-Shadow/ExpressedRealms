@@ -38,7 +38,6 @@ const sortedKnowledges = computed(() => {
   });
 });
 
-
 </script>
 
 <template>
