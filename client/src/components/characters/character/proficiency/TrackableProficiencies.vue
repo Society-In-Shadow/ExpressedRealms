@@ -19,7 +19,7 @@ onMounted(() =>{
     <template #content>
       <div class="d-inline-flex flex-wrap gap-1 justify-content-center">
         <div v-for="proficiency in profStore.secondary" :key="proficiency.id" :value="proficiency.id" class="vitality-tile p-2 m-md-2 p-md-3">
-          <div>{{ proficiency.name }}</div>
+          <div class="pb-2">{{ proficiency.name }}</div>
           <InputNumber v-model="proficiency.value" :suffix="' / ' + proficiency.maxValue" 
                        :min="0" :max="proficiency.maxValue" 
                        showButtons buttonLayout="horizontal"

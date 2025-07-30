@@ -1,25 +1,21 @@
 <script setup lang="ts">
 
+import Tabs from 'primevue/tabs';
+import TabList from 'primevue/tablist';
+import Tab from 'primevue/tab';
+import TabPanels from 'primevue/tabpanels';
+import TabPanel from 'primevue/tabpanel';
+
 import Card from "primevue/card";
-import { ref } from "vue";
 import SmallStatDisplay from "@/components/characters/character/SmallStatDisplay.vue";
-import Breadcrumb from 'primevue/breadcrumb';
-import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
 import SkillTile from "@/components/characters/character/skills/SkillTile.vue";
 import EditCharacterDetails from "@/components/characters/character/EditCharacterDetails.vue";
 import DataTable from "primevue/datatable";
 
-import {characterStore} from "@/components/characters/character/stores/characterStore";
 import ProficiencyTableTile from "@/components/characters/character/proficiency/ProficiencyTableTile.vue";
-const characterInfo = characterStore();
+import CharacterDetailTile from "@/components/characters/character/CharacterDetailTile.vue";
+import TrackableProficiencies from "@/components/characters/character/proficiency/TrackableProficiencies.vue";
 
-const items = ref([
-  { label: characterInfo.name },
-]);
-const home = ref({
-  icon: 'pi pi-home',
-  route: '/characters'
-});
 
 </script>
 
@@ -27,31 +23,51 @@ const home = ref({
   <div class="d-none">
     <DataTable />
   </div>
-  <SkeletonWrapper :show-skeleton="characterInfo.isLoading" width="1em" height="1em">
-    <Breadcrumb :home="home" :model="items" class="m-3">
-      <template #item="{ item, props }">
-        <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
-          <a :href="href" v-bind="props.action" @click="navigate">
-            <span class="pi pi-home text-color" />
-            <span class="text-primary font-semibold">{{ item.label }}</span>
-          </a>
-        </router-link>
-        <a v-else :href="item.url" :target="item.target" v-bind="props.action">
-          <span class="text-color">{{ characterInfo.name }}</span>
-        </a>
-      </template>
-    </Breadcrumb>
-  </SkeletonWrapper>
-  <div class="flex flex-xs-column flex-sm-column flex-lg-row flex-md-row gap-3 m-1 m-sm-3 m-md-3 m-lg-3 m-xl-3 flex-wrap">
-    <EditCharacterDetails />
-    <Card class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch">
+  <div class="flex flex-xs-column flex-sm-column flex-lg-row flex-md-row gap-3 m-1 m-sm-3 m-md-3 m-lg-3 m-xl-3 flex-wrap center-content">
+    <CharacterDetailTile />
+    <Card class="align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch">
       <template #content>
         <SmallStatDisplay />
       </template>
     </Card>
-
-    <SkillTile />
-    <ProficiencyTableTile />
+    
+    <TrackableProficiencies></TrackableProficiencies>
+    
+    <Tabs value="0" class="w-100" scrollable>
+      <TabList>
+        <Tab value="0">Proficiencies</Tab>
+        <Tab value="1">Skills</Tab>
+        <Tab value="2">Knowledges</Tab>
+        <Tab value="3">Powers</Tab>
+        <Tab value="4">Advantages / Disadvantages / Mixed Blessings</Tab>
+      </TabList>
+      <TabPanels class="p-2 p-md-3">
+        <TabPanel value="0">
+          <ProficiencyTableTile />
+        </TabPanel>
+        <TabPanel value="1">
+          <SkillTile />
+        </TabPanel>
+        <TabPanel value="2">
+          <p class="m-0">
+            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
+            ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
+          </p>
+        </TabPanel>
+        <TabPanel value="3">
+          <p class="m-0">
+            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa
+            qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
+          </p>
+        </TabPanel>
+        <TabPanel value="4">
+          <p class="m-0">
+            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa
+            qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
+          </p>
+        </TabPanel>
+      </TabPanels>
+    </Tabs>
   </div>
 </template>
 
@@ -61,4 +77,10 @@ const home = ref({
     flex-direction: column !important;
   }
 }
+
+.center-content {
+  max-width: 1000px;
+  margin: 0 auto !important;
+}
+
 </style>
