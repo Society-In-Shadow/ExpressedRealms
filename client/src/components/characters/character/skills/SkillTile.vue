@@ -77,7 +77,6 @@ function getEditOptions() {
       </Accordion>
     </Panel>
   </div>
-  
 </template>
 
 <style>

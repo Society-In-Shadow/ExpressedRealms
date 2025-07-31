@@ -31,7 +31,9 @@ onMounted(() =>{
   <div class="d-inline-flex flex-wrap justify-content-center column-gap-3 row-gap-1 w-100">
     <Panel v-for="type in types" :key="type.name" class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="width: 25em">
       <template #header>
-        <h3 class="pb-0 mb-0 mt-0 pt-0">{{ type.name }}</h3>
+        <h3 class="pb-0 mb-0 mt-0 pt-0">
+          {{ type.name }}
+        </h3>
       </template>
       <Accordion :value="openItems" multiple :lazy="true" expand-icon="pi pi-info-circle" collapse-icon="pi pi-times-circle">
         <AccordionPanel v-for="proficiency in type.items" :key="proficiency.id" :value="proficiency.id">

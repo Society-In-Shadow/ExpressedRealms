@@ -32,10 +32,12 @@ function toggleEdit() {
 <template>
   <Card v-if="!showEdit" class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="max-width: 30em">
     <template #content>
-        <h1 class="mt-0 pt-0">{{name}}</h1>
-        <div>{{expression}}</div>
-        <div>{{faction?.name ?? 'No Faction'}}</div>
-        <Button class="float-end" label="Edit" @click="toggleEdit" />
+      <h1 class="mt-0 pt-0">
+        {{ name }}
+      </h1>
+      <div>{{ expression }}</div>
+      <div>{{ faction?.name ?? 'No Faction' }}</div>
+      <Button class="float-end" label="Edit" @click="toggleEdit" />
     </template>
   </Card>
   <EditCharacterDetails v-else @close-dialog="toggleEdit" />

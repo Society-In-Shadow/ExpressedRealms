@@ -19,11 +19,14 @@ onMounted(() =>{
     <template #content>
       <div class="d-inline-flex flex-wrap gap-1 justify-content-center">
         <div v-for="proficiency in profStore.secondary" :key="proficiency.id" :value="proficiency.id" class="vitality-tile p-2 m-md-2 p-md-3">
-          <div class="pb-2">{{ proficiency.name }}</div>
-          <InputNumber v-model="proficiency.value" :suffix="' / ' + proficiency.maxValue" 
-                       :min="0" :max="proficiency.maxValue" 
-                       showButtons buttonLayout="horizontal"
-                       fluid style="width: 10em" class="text-center"
+          <div class="pb-2">
+            {{ proficiency.name }}
+          </div>
+          <InputNumber
+            v-model="proficiency.value" :suffix="' / ' + proficiency.maxValue" 
+            :min="0" :max="proficiency.maxValue" 
+            show-buttons button-layout="horizontal"
+            fluid style="width: 10em" class="text-center"
           >
             <template #incrementbuttonicon>
               <span class="pi pi-plus" />

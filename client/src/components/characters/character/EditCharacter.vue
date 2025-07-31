@@ -15,7 +15,6 @@ import ProficiencyTableTile from "@/components/characters/character/proficiency/
 import CharacterDetailTile from "@/components/characters/character/CharacterDetailTile.vue";
 import TrackableProficiencies from "@/components/characters/character/proficiency/TrackableProficiencies.vue";
 
-
 </script>
 
 <template>
@@ -30,12 +29,16 @@ import TrackableProficiencies from "@/components/characters/character/proficienc
       </template>
     </Card>
     
-    <TrackableProficiencies></TrackableProficiencies>
+    <TrackableProficiencies />
     
     <Tabs value="0" class="w-100" scrollable>
       <TabList>
-        <Tab value="0">Proficiencies</Tab>
-        <Tab value="1">Skills</Tab>
+        <Tab value="0">
+          Proficiencies
+        </Tab>
+        <Tab value="1">
+          Skills
+        </Tab>
       </TabList>
       <TabPanels class="p-2 p-md-3">
         <TabPanel value="0">
