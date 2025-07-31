@@ -23,7 +23,7 @@ onMounted(() =>{
           <InputNumber v-model="proficiency.value" :suffix="' / ' + proficiency.maxValue" 
                        :min="0" :max="proficiency.maxValue" 
                        showButtons buttonLayout="horizontal"
-                       fluid style="width: 9.5em" class="text-center"
+                       fluid style="width: 10em" class="text-center"
           >
             <template #incrementbuttonicon>
               <span class="pi pi-plus" />
