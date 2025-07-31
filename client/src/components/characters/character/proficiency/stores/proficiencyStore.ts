@@ -19,6 +19,10 @@ export const proficiencyStore =
                         this.offensive = response.data.proficiencies.filter(x => x.type === "Offensive");
                         this.defensive = response.data.proficiencies.filter(x => x.type === "Defensive");
                         this.secondary = response.data.proficiencies.filter(x => x.type === "Secondary");
+                        
+                        this.secondary.map(x => {
+                            x.maxValue = x.value;
+                        });
                         this.isLoading = false;
                     })
             }

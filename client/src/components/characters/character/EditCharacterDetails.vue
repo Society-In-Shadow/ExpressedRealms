@@ -14,7 +14,12 @@ import DropdownInfoWrapper from "@/FormWrappers/DropdownInfoWrapper.vue";
 import {makeIdSafe} from "@/utilities/stringUtilities";
 import type {Faction} from "@/components/characters/character/interfaces/Faction";
 import {characterStore} from "@/components/characters/character/stores/characterStore";
+import Button from "primevue/button";
 const characterInfo = characterStore();
+
+const emit = defineEmits<{
+  closeDialog: []
+}>();
 
 onMounted(async () =>{
   await characterInfo.getCharacterDetails(Number(route.params.id))
@@ -69,7 +74,7 @@ let expressionRedirectURL = computed(() => {
 </script>
 
 <template>
-  <Card class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="width: 390px">
+  <Card class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="max-width: 30em">
     <template #content>
       <form @submit="onSubmit">
         <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
@@ -79,6 +84,7 @@ let expressionRedirectURL = computed(() => {
           :show-skeleton="characterInfo.isLoading" :redirect-url="expressionRedirectURL" @change="onSubmit"
         />
         <TextAreaWrapper v-model="background" field-name="Background" :error-text="errors.background" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
+        <Button class="float-end" label="close" @click="emit('closeDialog')" />
       </form>
     </template>
   </Card>

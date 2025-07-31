@@ -5,6 +5,7 @@ interface ProficienciesDto {
     appliedModifiers: ModifierDescription[];
     correspondingId: number; // byte maps to number in TypeScript
     value: number;
+    maxValue: number;
     id: number;
     type: string;
 }

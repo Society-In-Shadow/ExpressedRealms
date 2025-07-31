@@ -35,7 +35,7 @@ function updateStat(level:number, bonus:number){
 </script>
 
 <template>
-  <div class="flex flex-wrap justify-content-center column-gap-3 row-gap-3" style="max-width: 350px">
+  <div class="flex flex-wrap justify-content-center column-gap-3 row-gap-3 w-100">
     <div v-for="stat in stats" v-if="!showDetails" :key="stat.statTypeId" class="align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch m-0 p-0">
       <Fieldset class="statBlock mb-3" style="cursor: pointer;" @click="showDetailedStat(stat.statTypeId)">
         <template #legend>
