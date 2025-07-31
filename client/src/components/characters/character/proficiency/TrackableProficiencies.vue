@@ -15,7 +15,7 @@ onMounted(() =>{
 </script>
 
 <template>
-  <Card class="p-1 p-md-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch w-100 max-width">
+  <Card class="custom-tile p-1 p-md-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch w-100 max-width">
     <template #content>
       <div class="d-inline-flex flex-wrap gap-1 justify-content-center">
         <div v-for="proficiency in profStore.secondary" :key="proficiency.id" :value="proficiency.id" class="vitality-tile p-2 m-md-2 p-md-3">
@@ -44,6 +44,10 @@ onMounted(() =>{
     width: 100%;
     max-width: 75em
   }
+  .custom-tile .p-card-body {
+    padding-left: inherit !important;
+    padding-right: inherit !important;
+  }
 }
 
 .vitality-tile{
@@ -51,8 +55,9 @@ onMounted(() =>{
   border-radius: var(--p-fieldset-border-radius);
 }
 
-.p-card-body{
-  padding: 0;
+.custom-tile .p-card-body{
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
  .p-inputnumber-input{
