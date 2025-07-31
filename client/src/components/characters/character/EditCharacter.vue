@@ -9,7 +9,6 @@ import TabPanel from 'primevue/tabpanel';
 import Card from "primevue/card";
 import SmallStatDisplay from "@/components/characters/character/SmallStatDisplay.vue";
 import SkillTile from "@/components/characters/character/skills/SkillTile.vue";
-import EditCharacterDetails from "@/components/characters/character/EditCharacterDetails.vue";
 import DataTable from "primevue/datatable";
 
 import ProficiencyTableTile from "@/components/characters/character/proficiency/ProficiencyTableTile.vue";
@@ -79,7 +78,7 @@ import TrackableProficiencies from "@/components/characters/character/proficienc
 }
 
 .center-content {
-  max-width: 1000px;
+  max-width: 72em;
   margin: 0 auto !important;
 }
 

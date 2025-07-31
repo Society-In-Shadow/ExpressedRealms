@@ -74,7 +74,7 @@ let expressionRedirectURL = computed(() => {
 </script>
 
 <template>
-  <Card class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="width: 325px">
+  <Card class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="max-width: 30em">
     <template #content>
       <form @submit="onSubmit">
         <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
