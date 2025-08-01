@@ -14,7 +14,7 @@ public class CharacterKnowledgeMappingConfiguration : IEntityTypeConfiguration<C
         builder.Property(e => e.CharacterId).HasColumnName("character_id").IsRequired();
         builder.Property(e => e.KnowledgeId).HasColumnName("knowledge_id").IsRequired();
         builder.Property(e => e.KnowledgeLevelId).HasColumnName("knowledge_level_id").IsRequired();
-        builder.Property(e => e.Notes).HasColumnName("notes").HasMaxLength(5000).IsRequired();
+        builder.Property(e => e.Notes).HasColumnName("notes").HasMaxLength(5000);
 
         builder
             .HasOne(e => e.Knowledge)

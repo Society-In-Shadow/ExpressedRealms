@@ -9,7 +9,7 @@ public class CharacterKnowledgeSpecialization : ISoftDelete
     public int KnowledgeMappingId { get; set; }
     public string Name { get; set; } = null!;
     public string Description { get; set; } = null!;
-    public string Notes { get; set; } = null!;
+    public string? Notes { get; set; }
 
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }

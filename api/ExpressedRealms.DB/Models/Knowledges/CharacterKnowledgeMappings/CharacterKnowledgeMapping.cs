@@ -14,7 +14,7 @@ public class CharacterKnowledgeMapping : ISoftDelete
     public int CharacterId { get; set; }
     public int KnowledgeId { get; set; }
     public int KnowledgeLevelId { get; set; }
-    public string Notes { get; set; } = null!;
+    public string? Notes { get; set; }
     
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
