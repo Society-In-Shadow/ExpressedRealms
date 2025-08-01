@@ -1,3 +1,5 @@
+using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
+
 namespace ExpressedRealms.DB.Models.Knowledges.KnowledgeEducationLevels;
 
 public class KnowledgeEducationLevel
@@ -9,4 +11,6 @@ public class KnowledgeEducationLevel
     public int StoneModifier { get; set; }
     public int GeneralXpCost { get; set; }
     public int UnknownXpCost { get; set; }
+
+    public virtual List<CharacterKnowledgeMapping> CharacterKnowledgeMappings { get; set; } = null!;
 }
