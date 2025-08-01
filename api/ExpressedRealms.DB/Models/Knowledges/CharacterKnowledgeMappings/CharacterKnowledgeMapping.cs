@@ -15,13 +15,13 @@ public class CharacterKnowledgeMapping : ISoftDelete
     public int KnowledgeId { get; set; }
     public int KnowledgeLevelId { get; set; }
     public string? Notes { get; set; }
-    
+
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 
     public virtual Knowledge Knowledge { get; set; } = null!;
     public virtual Character Character { get; set; } = null!;
     public virtual KnowledgeEducationLevel KnowledgeLevel { get; set; } = null!;
-    public virtual List<CharacterKnowledgeSpecialization> CharacterKnowledgeSpecializations { get; set; } = null!;
-    
+    public virtual List<CharacterKnowledgeSpecialization> CharacterKnowledgeSpecializations { get; set; } =
+        null!;
 }
