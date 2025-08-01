@@ -1,10 +1,9 @@
-using Audit.EntityFramework;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Audit;
 
 namespace ExpressedRealms.DB.Models.Knowledges.KnowledgeModels;
 
-[AuditInclude]
 public class Knowledge : ISoftDelete
 {
     public int Id { get; set; }
@@ -17,4 +16,5 @@ public class Knowledge : ISoftDelete
 
     public virtual KnowledgeType KnowledgeType { get; set; } = null!;
     public virtual List<KnowledgeAuditTrail> KnowledgeAuditTrails { get; set; } = null!;
+    public virtual List<CharacterKnowledgeMapping> CharacterKnowledgeMappings { get; set; } = null!;
 }
