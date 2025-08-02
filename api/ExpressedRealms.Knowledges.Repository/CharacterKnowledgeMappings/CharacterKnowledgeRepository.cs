@@ -21,10 +21,20 @@ public class CharacterKnowledgeRepository(
                 cancellationToken
             );
     }
+    
+    public async Task<int> GetExperienceSpentOnKnowledgesForCharacterSansCurrentKnowledge(int characterId, int knowledgeId)
+    {
+        const int unknownKnowledgeType = 3;
+        return await context
+            .CharacterKnowledgeMappings.Where(x => x.CharacterId == characterId && x.KnowledgeId != knowledgeId)
+            .SumAsync(x =>
+                    x.Knowledge.KnowledgeTypeId == unknownKnowledgeType
+                        ? x.KnowledgeLevel.UnknownXpCost
+                        : x.KnowledgeLevel.GeneralXpCost,
+                cancellationToken
+            );
+    }
 
-    public async Task<int> AddCharacterKnowledgeMapping(
-        DB.Models.Knowledges.CharacterKnowledgeMappings.CharacterKnowledgeMapping mapping
-    )
     public async Task<int> AddCharacterKnowledgeMapping(CharacterKnowledgeMapping mapping)
     {
         context.Add(mapping);
@@ -40,5 +50,23 @@ public class CharacterKnowledgeRepository(
                 x => x.KnowledgeId == knowledgeId && x.CharacterId == characterId,
                 cancellationToken
             );
+    }
+    
+    public Task<bool> MappingAlreadyExists(int mappingId)
+    {
+        return context
+            .CharacterKnowledgeMappings.AsNoTracking()
+            .AnyAsync(x => x.Id == mappingId, cancellationToken);
+    }
+
+    public Task<CharacterKnowledgeMapping> GetCharacterKnowledgeMappingForEditing(int modelMappingId)
+    {
+        return context.CharacterKnowledgeMappings.FirstAsync(x => x.Id == modelMappingId, cancellationToken);
+    }
+    
+    public async Task UpdateCharacterKnowledgeMapping(CharacterKnowledgeMapping mapping)
+    {
+        context.Update(mapping);
+        await context.SaveChangesAsync(cancellationToken);
     }
 }
