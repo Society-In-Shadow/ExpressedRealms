@@ -154,7 +154,7 @@ internal sealed class CharacterRepository(
             x => x.Id == id && x.Player.UserId == userContext.CurrentUserId(),
             cancellationToken
         );
-        
+
         return character is not null;
     }
 }

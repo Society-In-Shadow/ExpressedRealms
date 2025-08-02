@@ -6,7 +6,8 @@ namespace ExpressedRealms.Knowledges.Repository;
 
 public class KnowledgeLevelRepository(
     ExpressedRealmsDbContext context,
-    CancellationToken cancellationToken) : IKnowledgeLevelRepository
+    CancellationToken cancellationToken
+) : IKnowledgeLevelRepository
 {
     public async Task<bool> KnowledgeLevelExists(int id)
     {
