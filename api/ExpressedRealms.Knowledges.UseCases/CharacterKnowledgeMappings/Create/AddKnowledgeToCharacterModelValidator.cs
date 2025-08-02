@@ -1,6 +1,6 @@
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Knowledges.Repository;
-using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMapping;
+using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.Knowledges;
 using FluentValidation;
 using JetBrains.Annotations;
@@ -8,9 +8,9 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.Create;
 
 [UsedImplicitly]
-internal sealed class AddModelValidator : AbstractValidator<AddModel>
+internal sealed class AddKnowledgeToCharacterModelValidator : AbstractValidator<AddKnowledgeToCharacterModel>
 {
-    public AddModelValidator(
+    public AddKnowledgeToCharacterModelValidator(
         IKnowledgeRepository knowledgeRepository,
         ICharacterRepository characterRepository,
         ICharacterKnowledgeRepository mappingRepository,
@@ -41,7 +41,7 @@ internal sealed class AddModelValidator : AbstractValidator<AddModel>
                     !await mappingRepository.MappingAlreadyExists(x.KnowledgeId, x.CharacterId)
             )
             .WithMessage("The knowledge already exists for this character.")
-            .WithName(nameof(AddModel.KnowledgeId));
+            .WithName(nameof(AddKnowledgeToCharacterModel.KnowledgeId));
 
         RuleFor(x => x.Notes)
             .MaximumLength(5000)

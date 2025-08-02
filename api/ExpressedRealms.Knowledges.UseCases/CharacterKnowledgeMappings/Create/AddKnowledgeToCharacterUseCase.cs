@@ -1,6 +1,6 @@
 using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository;
-using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMapping;
+using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.Knowledges;
 using ExpressedRealms.UseCases.Shared;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
@@ -12,11 +12,11 @@ internal sealed class AddKnowledgeToCharacterUseCase(
     ICharacterKnowledgeRepository mappingRepository,
     IKnowledgeLevelRepository knowledgeLevelRepository,
     IKnowledgeRepository knowledgeRepository,
-    AddModelValidator validator,
+    AddKnowledgeToCharacterModelValidator validator,
     CancellationToken cancellationToken
-)
+) : IAddKnowledgeToCharacterUseCase
 {
-    public async Task<Result<int>> Execute(AddModel model)
+    public async Task<Result<int>> ExecuteAsync(AddKnowledgeToCharacterModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,
@@ -60,7 +60,7 @@ internal sealed class AddKnowledgeToCharacterUseCase(
                 KnowledgeLevelId = model.KnowledgeLevelId,
                 CharacterId = model.CharacterId,
                 KnowledgeId = model.KnowledgeId,
-                Notes = model.Notes?.Trim(),
+                Notes = model.Notes?.Trim() == string.Empty ? null : model.Notes?.Trim(),
             }
         );
 

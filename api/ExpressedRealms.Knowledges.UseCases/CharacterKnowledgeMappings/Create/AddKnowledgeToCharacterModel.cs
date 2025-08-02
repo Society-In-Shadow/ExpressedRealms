@@ -1,6 +1,6 @@
 namespace ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.Create;
 
-public class AddModel
+public class AddKnowledgeToCharacterModel
 {
     public int KnowledgeLevelId { get; set; }
     public int CharacterId { get; set; }
