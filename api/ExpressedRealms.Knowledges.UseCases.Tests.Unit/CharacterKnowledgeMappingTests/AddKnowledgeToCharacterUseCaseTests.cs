@@ -3,7 +3,7 @@ using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeEducationLevels;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels;
 using ExpressedRealms.Knowledges.Repository;
-using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMapping;
+using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.Knowledges;
 using ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.Create;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;

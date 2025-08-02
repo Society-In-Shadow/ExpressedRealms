@@ -1,7 +1,8 @@
 using ExpressedRealms.DB;
+using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
 using Microsoft.EntityFrameworkCore;
 
-namespace ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMapping;
+namespace ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 
 public class CharacterKnowledgeRepository(
     ExpressedRealmsDbContext context,
@@ -24,6 +25,7 @@ public class CharacterKnowledgeRepository(
     public async Task<int> AddCharacterKnowledgeMapping(
         DB.Models.Knowledges.CharacterKnowledgeMappings.CharacterKnowledgeMapping mapping
     )
+    public async Task<int> AddCharacterKnowledgeMapping(CharacterKnowledgeMapping mapping)
     {
         context.Add(mapping);
         await context.SaveChangesAsync(cancellationToken);
