@@ -11,11 +11,11 @@ internal sealed class UpdateKnowledgeForCharacterUseCase(
     ICharacterKnowledgeRepository mappingRepository,
     IKnowledgeLevelRepository knowledgeLevelRepository,
     IKnowledgeRepository knowledgeRepository,
-    EditModelValidator validator,
+    UpdateKnowledgeForCharacterModelValidator validator,
     CancellationToken cancellationToken
-)
+) : IUpdateKnowledgeForCharacterUseCase
 {
-    public async Task<Result> Execute(EditModel model)
+    public async Task<Result> ExecuteAsync(UpdateKnowledgeForCharacterModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,
@@ -25,7 +25,6 @@ internal sealed class UpdateKnowledgeForCharacterUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-
 
         var mapping = await mappingRepository.GetCharacterKnowledgeMappingForEditing(model.MappingId);
 
@@ -63,7 +62,7 @@ internal sealed class UpdateKnowledgeForCharacterUseCase(
             mapping.KnowledgeLevelId = model.KnowledgeLevelId;
         }
 
-        mapping.Notes = model.Notes;
+        mapping.Notes = model.Notes?.Trim() == string.Empty ? null : model.Notes?.Trim();
 
         await mappingRepository.UpdateCharacterKnowledgeMapping(mapping);
 

@@ -1,6 +1,6 @@
 namespace ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.Edit;
 
-public class EditModel
+public class UpdateKnowledgeForCharacterModel
 {
     public int MappingId { get; set; }
     public int KnowledgeLevelId { get; set; }

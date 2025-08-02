@@ -12,11 +12,11 @@ internal sealed class AddKnowledgeToCharacterUseCase(
     ICharacterKnowledgeRepository mappingRepository,
     IKnowledgeLevelRepository knowledgeLevelRepository,
     IKnowledgeRepository knowledgeRepository,
-    AddModelValidator validator,
+    AddKnowledgeToCharacterModelValidator validator,
     CancellationToken cancellationToken
-)
+) : IAddKnowledgeToCharacterUseCase
 {
-    public async Task<Result<int>> Execute(AddModel model)
+    public async Task<Result<int>> ExecuteAsync(AddKnowledgeToCharacterModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,

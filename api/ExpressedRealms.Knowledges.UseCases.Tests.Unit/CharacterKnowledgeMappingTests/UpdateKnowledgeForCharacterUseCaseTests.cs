@@ -21,12 +21,12 @@ public class UpdateKnowledgeForCharacterUseCaseTests
     private readonly ICharacterKnowledgeRepository _mappingRepository;
     private readonly IKnowledgeLevelRepository _levelRepository;
     private readonly ICharacterRepository _characterRepository;
-    private readonly EditModel _model;
+    private readonly UpdateKnowledgeForCharacterModel _model;
     private readonly CharacterKnowledgeMapping _dbModel;
     
     public UpdateKnowledgeForCharacterUseCaseTests()
     {
-        _model = new EditModel()
+        _model = new UpdateKnowledgeForCharacterModel()
         {
             MappingId = 1,
             KnowledgeLevelId = 2,
@@ -63,7 +63,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
         A.CallTo(() => _levelRepository.GetKnowledgeLevel(_model.KnowledgeLevelId))
             .Returns(new KnowledgeEducationLevel() { GeneralXpCost = 4, UnknownXpCost = 2 });
 
-        var validator = new EditModelValidator(
+        var validator = new UpdateKnowledgeForCharacterModelValidator(
             _knowledgeRepository,
             _characterRepository,
             _mappingRepository,
@@ -83,19 +83,19 @@ public class UpdateKnowledgeForCharacterUseCaseTests
     public async Task ValidationFor_MappingId_WillFail_WhenItsEmpty()
     {
         _model.MappingId = 0;
-        var result = await _useCase.Execute(_model);
+        var result = await _useCase.ExecuteAsync(_model);
 
-        result.MustHaveValidationError(nameof(EditModel.MappingId), "Mapping Id is required.");
+        result.MustHaveValidationError(nameof(UpdateKnowledgeForCharacterModel.MappingId), "Mapping Id is required.");
     }
 
     [Fact]
     public async Task ValidationFor_MappingId_WillFail_WhenItDoesNotExist()
     {
         A.CallTo(() => _mappingRepository.MappingAlreadyExists(_model.MappingId)).Returns(false);
-        var result = await _useCase.Execute(_model);
+        var result = await _useCase.ExecuteAsync(_model);
 
         result.MustHaveValidationError(
-            nameof(EditModel.MappingId),
+            nameof(UpdateKnowledgeForCharacterModel.MappingId),
             "The Knowledge Mapping does not exist."
         );
     } 
@@ -104,10 +104,10 @@ public class UpdateKnowledgeForCharacterUseCaseTests
     public async Task ValidationFor_KnowledgeLevelId_WillFail_WhenItsEmpty()
     {
         _model.KnowledgeLevelId = 0;
-        var result = await _useCase.Execute(_model);
+        var result = await _useCase.ExecuteAsync(_model);
 
         result.MustHaveValidationError(
-            nameof(AddModel.KnowledgeLevelId),
+            nameof(AddKnowledgeToCharacterModel.KnowledgeLevelId),
             "Knowledge Level Id is required."
         );
     }
@@ -117,10 +117,10 @@ public class UpdateKnowledgeForCharacterUseCaseTests
     {
         A.CallTo(() => _levelRepository.KnowledgeLevelExists(_model.KnowledgeLevelId))
             .Returns(false);
-        var result = await _useCase.Execute(_model);
+        var result = await _useCase.ExecuteAsync(_model);
 
         result.MustHaveValidationError(
-            nameof(AddModel.KnowledgeLevelId),
+            nameof(AddKnowledgeToCharacterModel.KnowledgeLevelId),
             "The Knowledge Level does not exist."
         );
     }
@@ -129,9 +129,9 @@ public class UpdateKnowledgeForCharacterUseCaseTests
     public async Task ValidationFor_Notes_WillFail_WhenMaxLengthIsGreaterThan5000()
     {
         _model.Notes = new string('x', 5001);
-        var result = await _useCase.Execute(_model);
+        var result = await _useCase.ExecuteAsync(_model);
         result.MustHaveValidationError(
-            nameof(AddModel.Notes),
+            nameof(AddKnowledgeToCharacterModel.Notes),
             "Notes must be less than 5000 characters."
         );
     }
@@ -143,14 +143,14 @@ public class UpdateKnowledgeForCharacterUseCaseTests
     public async Task ValidationFor_Notes_AreOptional(string? notes)
     {
         _model.Notes = notes;
-        var result = await _useCase.Execute(_model);
+        var result = await _useCase.ExecuteAsync(_model);
         Assert.True(result.IsSuccess);
     }
 
     [Fact]
     public async Task UseCase_GetsExperienceSpentOnKnowledgesForCharacter()
     {
-        await _useCase.Execute(_model);
+        await _useCase.ExecuteAsync(_model);
 
         A.CallTo(() =>
                 _mappingRepository.GetExperienceSpentOnKnowledgesForCharacterSansCurrentKnowledge(_dbModel.CharacterId, _dbModel.KnowledgeId)
@@ -161,7 +161,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
     [Fact]
     public async Task UseCase_GetsKnowledgeLevel()
     {
-        await _useCase.Execute(_model);
+        await _useCase.ExecuteAsync(_model);
 
         A.CallTo(() => _levelRepository.GetKnowledgeLevel(_model.KnowledgeLevelId))
             .MustHaveHappenedOnceExactly();
@@ -170,7 +170,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
     [Fact]
     public async Task UseCase_GetsTheKnowledgeMapping()
     {
-        await _useCase.Execute(_model);
+        await _useCase.ExecuteAsync(_model);
 
         A.CallTo(() => _mappingRepository.GetCharacterKnowledgeMappingForEditing(_model.MappingId))
             .MustHaveHappenedOnceExactly();
@@ -179,7 +179,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
     [Fact]
     public async Task UseCase_GetsKnowledge()
     {
-        await _useCase.Execute(_model);
+        await _useCase.ExecuteAsync(_model);
 
         A.CallTo(() => _knowledgeRepository.GetKnowledgeAsync(_dbModel.KnowledgeId))
             .MustHaveHappenedOnceExactly();
@@ -192,13 +192,38 @@ public class UpdateKnowledgeForCharacterUseCaseTests
         _model.KnowledgeLevelId = 2;
         _dbModel.KnowledgeLevelId = 2;
 
-        var result = await _useCase.Execute(_model);
+        var result = await _useCase.ExecuteAsync(_model);
         Assert.True(result.IsSuccess);
         
         A.CallTo(() =>
                 _mappingRepository.UpdateCharacterKnowledgeMapping(
                     A<CharacterKnowledgeMapping>.That.Matches(x =>
                         x.Notes == _model.Notes
+                    )
+                )
+            )
+            .MustHaveHappenedOnceExactly();
+    }
+    
+    [Theory]
+    [InlineData(" test", "test")]
+    [InlineData(" test ", "test")]
+    [InlineData("test ", "test")]
+    [InlineData(" ", null)]
+    [InlineData(null, null)]
+    public async Task UseCase_WillTrimNotesField(string? notes, string? savedValue)
+    {
+        _model.Notes = notes;
+        _model.KnowledgeLevelId = 2;
+        _dbModel.KnowledgeLevelId = 2;
+
+        var result = await _useCase.ExecuteAsync(_model);
+        Assert.True(result.IsSuccess);
+        
+        A.CallTo(() =>
+                _mappingRepository.UpdateCharacterKnowledgeMapping(
+                    A<CharacterKnowledgeMapping>.That.Matches(x =>
+                        x.Notes == savedValue
                     )
                 )
             )
@@ -223,7 +248,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
             )
             .Returns(100);
 
-        var result = await _useCase.Execute(_model);
+        var result = await _useCase.ExecuteAsync(_model);
 
         Assert.Equal(xpAmount, ((NotEnoughXPFailure)result.Errors[0]).AmountTryingToSpend);
     }
@@ -242,7 +267,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
             )
             .Returns(xpAmount);
 
-        var result = await _useCase.Execute(_model);
+        var result = await _useCase.ExecuteAsync(_model);
 
         Assert.Equal(7 - xpAmount, ((NotEnoughXPFailure)result.Errors[0]).AvailableXP);
     }
@@ -255,7 +280,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
             )
             .Returns(7);
 
-        var result = await _useCase.Execute(_model);
+        var result = await _useCase.ExecuteAsync(_model);
         Assert.True(result.HasError<NotEnoughXPFailure>());
         Assert.Equal(0, ((NotEnoughXPFailure)result.Errors[0]).AvailableXP);
         Assert.Equal(2, ((NotEnoughXPFailure)result.Errors[0]).AmountTryingToSpend);
@@ -267,7 +292,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
         _model.KnowledgeLevelId = 2;
         _dbModel.KnowledgeLevelId = 3;
 
-        var result = await _useCase.Execute(_model);
+        var result = await _useCase.ExecuteAsync(_model);
         Assert.True(result.IsSuccess);
         
         A.CallTo(() =>
