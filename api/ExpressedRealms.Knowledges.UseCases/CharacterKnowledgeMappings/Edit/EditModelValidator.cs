@@ -21,7 +21,7 @@ internal sealed class EditModelValidator : AbstractValidator<EditModel>
             .NotEmpty()
             .WithMessage("Mapping Id is required.")
             .MustAsync(async (x, y) => await mappingRepository.MappingAlreadyExists(x))
-            .WithMessage("The Knowledge does not exist.");
+            .WithMessage("The Knowledge Mapping does not exist.");
 
         RuleFor(x => x.KnowledgeLevelId)
             .NotEmpty()
