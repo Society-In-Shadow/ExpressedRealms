@@ -60,7 +60,7 @@ internal sealed class AddKnowledgeToCharacterUseCase(
                 KnowledgeLevelId = model.KnowledgeLevelId,
                 CharacterId = model.CharacterId,
                 KnowledgeId = model.KnowledgeId,
-                Notes = model.Notes?.Trim(),
+                Notes = model.Notes?.Trim() == string.Empty ? null : model.Notes?.Trim(),
             }
         );
 
