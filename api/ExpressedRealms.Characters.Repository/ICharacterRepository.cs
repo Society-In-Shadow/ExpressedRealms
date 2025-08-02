@@ -10,4 +10,5 @@ public interface ICharacterRepository
     Task<Result<int>> CreateCharacterAsync(AddCharacterDto characterDto);
     Task<Result> DeleteCharacterAsync(int id);
     Task<Result> UpdateCharacterAsync(EditCharacterDto dto);
+    Task<bool> CharacterExistsAsync(int id);
 }

@@ -147,4 +147,14 @@ internal sealed class CharacterRepository(
 
         return Result.Ok();
     }
+
+    public async Task<bool> CharacterExistsAsync(int id)
+    {
+        var character = await context.Characters.FirstOrDefaultAsync(
+            x => x.Id == id && x.Player.UserId == userContext.CurrentUserId(),
+            cancellationToken
+        );
+        
+        return character is not null;
+    }
 }
