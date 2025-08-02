@@ -12,7 +12,7 @@ public static class KnowledgesRepositoryInjections
     {
         services.AddScoped<IKnowledgeRepository, KnowledgeRepository>();
         services.AddScoped<ICharacterKnowledgeRepository, CharacterKnowledgeRepository>();
-        services.AddScoped<IKnowledgeLevelRepository, IKnowledgeLevelRepository>();
+        services.AddScoped<IKnowledgeLevelRepository, KnowledgeLevelRepository>();
 
         return services;
     }

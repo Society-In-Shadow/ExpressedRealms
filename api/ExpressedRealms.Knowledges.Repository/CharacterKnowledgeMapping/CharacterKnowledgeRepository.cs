@@ -16,7 +16,8 @@ public class CharacterKnowledgeRepository(
             .SumAsync(x =>
                 x.Knowledge.KnowledgeTypeId == unknownKnowledgeType
                     ? x.KnowledgeLevel.UnknownXpCost
-                    : x.KnowledgeLevel.GeneralXpCost
+                    : x.KnowledgeLevel.GeneralXpCost,
+                cancellationToken
             );
     }
 

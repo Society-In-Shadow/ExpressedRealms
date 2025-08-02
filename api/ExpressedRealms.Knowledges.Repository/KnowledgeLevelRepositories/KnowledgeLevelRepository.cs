@@ -4,19 +4,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Knowledges.Repository;
 
-public class KnowledgeLevelRepository(
+internal sealed class KnowledgeLevelRepository(
     ExpressedRealmsDbContext context,
     CancellationToken cancellationToken
 ) : IKnowledgeLevelRepository
 {
     public async Task<bool> KnowledgeLevelExists(int id)
     {
-        var level = await context.KnowledgeEducationLevels.FirstOrDefaultAsync(x => x.Id == id);
+        var level = await context.KnowledgeEducationLevels.AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         return level is not null;
     }
 
     public async Task<KnowledgeEducationLevel> GetKnowledgeLevel(int id)
     {
-        return await context.KnowledgeEducationLevels.FirstOrDefaultAsync(x => x.Id == id);
+        return await context.KnowledgeEducationLevels.AsNoTracking()
+            .FirstAsync(x => x.Id == id, cancellationToken);
     }
 }
