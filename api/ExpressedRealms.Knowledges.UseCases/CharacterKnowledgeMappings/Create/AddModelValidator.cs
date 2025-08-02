@@ -36,10 +36,12 @@ internal sealed class AddModelValidator : AbstractValidator<AddModel>
             .WithMessage("The Knowledge Level does not exist.");
         
         RuleFor(x => x)
-            .MustAsync(async (x , y) =>  await mappingRepository.MappingAlreadyExists(x.KnowledgeId, x.CharacterId))
-            .WithMessage("Knowledge Already Exists for this Character.");
-        
+            .MustAsync(async (x , y) =>  !await mappingRepository.MappingAlreadyExists(x.KnowledgeId, x.CharacterId))
+            .WithMessage("The knowledge already exists for this character.")
+            .WithName(nameof(AddModel.KnowledgeId));
+
         RuleFor(x => x.Notes)
-            .MaximumLength(5000).When(x => !string.IsNullOrWhiteSpace(x.Notes));
+            .MaximumLength(5000).When(x => !string.IsNullOrWhiteSpace(x.Notes))
+            .WithMessage("Notes must be less than 5000 characters.");
     }
 }

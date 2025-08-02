@@ -2,14 +2,14 @@ using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMapping;
 using ExpressedRealms.Knowledges.Repository.Knowledges;
-using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
 using ExpressedRealms.UseCases.Shared;
+using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FluentResults;
 
 namespace ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.Create;
 
 internal sealed class AddKnowledgeToCharacterUseCase(
-    CharacterKnowledgeRepository mappingRepository,
+    ICharacterKnowledgeRepository mappingRepository,
     IKnowledgeLevelRepository knowledgeLevelRepository,
     IKnowledgeRepository knowledgeRepository,
     AddModelValidator validator,
@@ -30,6 +30,9 @@ internal sealed class AddKnowledgeToCharacterUseCase(
         // Check if it's an active character
         // If so, check create status
         
+        // Also need to take into consideration discretionary spending
+        
+        // Assuming character creation rules for now
         const int unknownKnowledgeType = 3;
         const int availableExperience = 7;
         
@@ -40,7 +43,7 @@ internal sealed class AddKnowledgeToCharacterUseCase(
             knowledge.KnowledgeTypeId == unknownKnowledgeType ? knowledgeLevel.UnknownXpCost : knowledgeLevel.GeneralXpCost;
         
         if(spentXp + newExperience > availableExperience)
-            return Result.Fail(new NotEnoughXPFailure(availableExperience, newExperience));
+            return Result.Fail(new NotEnoughXPFailure(availableExperience - spentXp, newExperience));
         
         var mappingId = await mappingRepository.AddCharacterKnowledgeMapping(new CharacterKnowledgeMapping()
         {
