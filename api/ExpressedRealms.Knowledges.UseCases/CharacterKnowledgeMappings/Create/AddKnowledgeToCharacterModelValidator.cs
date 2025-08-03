@@ -8,7 +8,8 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.Create;
 
 [UsedImplicitly]
-internal sealed class AddKnowledgeToCharacterModelValidator : AbstractValidator<AddKnowledgeToCharacterModel>
+internal sealed class AddKnowledgeToCharacterModelValidator
+    : AbstractValidator<AddKnowledgeToCharacterModel>
 {
     public AddKnowledgeToCharacterModelValidator(
         IKnowledgeRepository knowledgeRepository,

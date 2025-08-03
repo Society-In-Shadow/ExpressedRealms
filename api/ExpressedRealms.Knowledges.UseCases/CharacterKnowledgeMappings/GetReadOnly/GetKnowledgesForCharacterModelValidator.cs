@@ -5,11 +5,10 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.GetReadOnly;
 
 [UsedImplicitly]
-internal sealed class GetKnowledgesForCharacterModelValidator : AbstractValidator<GetKnowledgesForCharacterModel>
+internal sealed class GetKnowledgesForCharacterModelValidator
+    : AbstractValidator<GetKnowledgesForCharacterModel>
 {
-    public GetKnowledgesForCharacterModelValidator(
-        ICharacterRepository characterRepository
-    )
+    public GetKnowledgesForCharacterModelValidator(ICharacterRepository characterRepository)
     {
         RuleFor(x => x.CharacterId)
             .NotEmpty()

@@ -4,6 +4,8 @@ using FluentResults;
 
 namespace ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.GetReadOnly;
 
-internal interface IGetKnowledgesForCharacterUseCase : IGenericUseCase<Result<List<CharacterKnowledgeReturnModel>>, GetKnowledgesForCharacterModel>
-{
-}
+internal interface IGetKnowledgesForCharacterUseCase
+    : IGenericUseCase<
+        Result<List<CharacterKnowledgeReturnModel>>,
+        GetKnowledgesForCharacterModel
+    > { }

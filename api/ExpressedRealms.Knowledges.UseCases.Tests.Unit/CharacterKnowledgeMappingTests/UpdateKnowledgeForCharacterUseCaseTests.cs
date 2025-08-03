@@ -21,7 +21,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
     private readonly IKnowledgeLevelRepository _levelRepository;
     private readonly UpdateKnowledgeForCharacterModel _model;
     private readonly CharacterKnowledgeMapping _dbModel;
-    
+
     public UpdateKnowledgeForCharacterUseCaseTests()
     {
         _model = new UpdateKnowledgeForCharacterModel()
@@ -42,15 +42,13 @@ public class UpdateKnowledgeForCharacterUseCaseTests
         _knowledgeRepository = A.Fake<IKnowledgeRepository>();
         _mappingRepository = A.Fake<ICharacterKnowledgeRepository>();
         _levelRepository = A.Fake<IKnowledgeLevelRepository>();
-        
-        A.CallTo(() => _mappingRepository.GetCharacterKnowledgeMappingForEditing(_model.MappingId)).Returns(_dbModel);
+
+        A.CallTo(() => _mappingRepository.GetCharacterKnowledgeMappingForEditing(_model.MappingId))
+            .Returns(_dbModel);
 
         A.CallTo(() => _levelRepository.KnowledgeLevelExists(_model.KnowledgeLevelId))
             .Returns(true);
-        A.CallTo(() =>
-                _mappingRepository.MappingAlreadyExists(_model.MappingId)
-            )
-            .Returns(true);
+        A.CallTo(() => _mappingRepository.MappingAlreadyExists(_model.MappingId)).Returns(true);
         A.CallTo(() =>
                 _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_dbModel.CharacterId)
             )
@@ -81,7 +79,10 @@ public class UpdateKnowledgeForCharacterUseCaseTests
         _model.MappingId = 0;
         var result = await _useCase.ExecuteAsync(_model);
 
-        result.MustHaveValidationError(nameof(UpdateKnowledgeForCharacterModel.MappingId), "Mapping Id is required.");
+        result.MustHaveValidationError(
+            nameof(UpdateKnowledgeForCharacterModel.MappingId),
+            "Mapping Id is required."
+        );
     }
 
     [Fact]
@@ -94,7 +95,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
             nameof(UpdateKnowledgeForCharacterModel.MappingId),
             "The Knowledge Mapping does not exist."
         );
-    } 
+    }
 
     [Fact]
     public async Task ValidationFor_KnowledgeLevelId_WillFail_WhenItsEmpty()
@@ -162,7 +163,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
         A.CallTo(() => _levelRepository.GetKnowledgeLevel(_model.KnowledgeLevelId))
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_GetsTheKnowledgeMapping()
     {
@@ -180,7 +181,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
         A.CallTo(() => _knowledgeRepository.GetKnowledgeAsync(_dbModel.KnowledgeId))
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_WillUpdateNotesField()
     {
@@ -190,17 +191,15 @@ public class UpdateKnowledgeForCharacterUseCaseTests
 
         var result = await _useCase.ExecuteAsync(_model);
         Assert.True(result.IsSuccess);
-        
+
         A.CallTo(() =>
                 _mappingRepository.UpdateCharacterKnowledgeMapping(
-                    A<CharacterKnowledgeMapping>.That.Matches(x =>
-                        x.Notes == _model.Notes
-                    )
+                    A<CharacterKnowledgeMapping>.That.Matches(x => x.Notes == _model.Notes)
                 )
             )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Theory]
     [InlineData(" test", "test")]
     [InlineData(" test ", "test")]
@@ -215,12 +214,10 @@ public class UpdateKnowledgeForCharacterUseCaseTests
 
         var result = await _useCase.ExecuteAsync(_model);
         Assert.True(result.IsSuccess);
-        
+
         A.CallTo(() =>
                 _mappingRepository.UpdateCharacterKnowledgeMapping(
-                    A<CharacterKnowledgeMapping>.That.Matches(x =>
-                        x.Notes == savedValue
-                    )
+                    A<CharacterKnowledgeMapping>.That.Matches(x => x.Notes == savedValue)
                 )
             )
             .MustHaveHappenedOnceExactly();
@@ -290,7 +287,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
 
         var result = await _useCase.ExecuteAsync(_model);
         Assert.True(result.IsSuccess);
-        
+
         A.CallTo(() =>
                 _mappingRepository.UpdateCharacterKnowledgeMapping(
                     A<CharacterKnowledgeMapping>.That.Matches(x =>

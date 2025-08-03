@@ -26,7 +26,9 @@ internal sealed class UpdateKnowledgeForCharacterUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var mapping = await mappingRepository.GetCharacterKnowledgeMappingForEditing(model.MappingId);
+        var mapping = await mappingRepository.GetCharacterKnowledgeMappingForEditing(
+            model.MappingId
+        );
 
         if (mapping.KnowledgeLevelId != model.KnowledgeLevelId)
         {
@@ -35,29 +37,29 @@ internal sealed class UpdateKnowledgeForCharacterUseCase(
             // If so, check create status
 
             // Also need to take into consideration discretionary spending
-            
+
             const int unknownKnowledgeType = 3;
             const int availableExperience = 7;
-            
+
             var spentXp = await mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(
                 mapping.CharacterId
             );
-            
+
             var knowledgeLevel = await knowledgeLevelRepository.GetKnowledgeLevel(
                 model.KnowledgeLevelId
             );
-        
+
             var knowledge = await knowledgeRepository.GetKnowledgeAsync(mapping.KnowledgeId);
             var newExperience =
                 knowledge.KnowledgeTypeId == unknownKnowledgeType
                     ? knowledgeLevel.UnknownXpCost
                     : knowledgeLevel.GeneralXpCost;
-            
+
             if (spentXp + newExperience > availableExperience)
                 return Result.Fail(
                     new NotEnoughXPFailure(availableExperience - spentXp, newExperience)
                 );
-            
+
             mapping.KnowledgeLevelId = model.KnowledgeLevelId;
         }
 

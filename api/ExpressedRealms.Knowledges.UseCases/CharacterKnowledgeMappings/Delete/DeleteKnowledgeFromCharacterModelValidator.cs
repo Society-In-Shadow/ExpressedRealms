@@ -8,7 +8,8 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.Delete;
 
 [UsedImplicitly]
-internal sealed class DeleteKnowledgeFromCharacterModelValidator : AbstractValidator<DeleteKnowledgeFromCharacterModel>
+internal sealed class DeleteKnowledgeFromCharacterModelValidator
+    : AbstractValidator<DeleteKnowledgeFromCharacterModel>
 {
     public DeleteKnowledgeFromCharacterModelValidator(
         ICharacterKnowledgeRepository mappingRepository

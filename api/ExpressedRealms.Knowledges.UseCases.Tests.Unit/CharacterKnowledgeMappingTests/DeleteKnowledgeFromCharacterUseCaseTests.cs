@@ -16,10 +16,7 @@ public class DeleteKnowledgeFromCharacterUseCaseTests
 
     public DeleteKnowledgeFromCharacterUseCaseTests()
     {
-        _model = new DeleteKnowledgeFromCharacterModel()
-        {
-            MappingId = 1
-        };
+        _model = new DeleteKnowledgeFromCharacterModel() { MappingId = 1 };
 
         var dbModel = new CharacterKnowledgeMapping()
         {
@@ -30,17 +27,13 @@ public class DeleteKnowledgeFromCharacterUseCaseTests
         };
 
         _mappingRepository = A.Fake<ICharacterKnowledgeRepository>();
-        
-        A.CallTo(() => _mappingRepository.GetCharacterKnowledgeMappingForEditing(_model.MappingId)).Returns(dbModel);
 
-        A.CallTo(() =>
-                _mappingRepository.MappingAlreadyExists(_model.MappingId)
-            )
-            .Returns(true);
+        A.CallTo(() => _mappingRepository.GetCharacterKnowledgeMappingForEditing(_model.MappingId))
+            .Returns(dbModel);
 
-        var validator = new DeleteKnowledgeFromCharacterModelValidator(
-            _mappingRepository
-        );
+        A.CallTo(() => _mappingRepository.MappingAlreadyExists(_model.MappingId)).Returns(true);
+
+        var validator = new DeleteKnowledgeFromCharacterModelValidator(_mappingRepository);
 
         _useCase = new DeleteKnowledgeFromCharacterUseCase(
             _mappingRepository,
@@ -55,7 +48,10 @@ public class DeleteKnowledgeFromCharacterUseCaseTests
         _model.MappingId = 0;
         var result = await _useCase.ExecuteAsync(_model);
 
-        result.MustHaveValidationError(nameof(UpdateKnowledgeForCharacterModel.MappingId), "Mapping Id is required.");
+        result.MustHaveValidationError(
+            nameof(UpdateKnowledgeForCharacterModel.MappingId),
+            "Mapping Id is required."
+        );
     }
 
     [Fact]
@@ -69,7 +65,7 @@ public class DeleteKnowledgeFromCharacterUseCaseTests
             "The Knowledge Mapping does not exist."
         );
     }
-    
+
     [Fact]
     public async Task UseCase_GetsTheKnowledgeMapping()
     {
@@ -78,17 +74,16 @@ public class DeleteKnowledgeFromCharacterUseCaseTests
         A.CallTo(() => _mappingRepository.GetCharacterKnowledgeMappingForEditing(_model.MappingId))
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_WillUpdateDeleteFields()
     {
         var result = await _useCase.ExecuteAsync(_model);
         Assert.True(result.IsSuccess);
-        
+
         A.CallTo(() =>
                 _mappingRepository.UpdateCharacterKnowledgeMapping(
-                    A<CharacterKnowledgeMapping>.That.Matches(x =>
-                        x.IsDeleted)
+                    A<CharacterKnowledgeMapping>.That.Matches(x => x.IsDeleted)
                 )
             )
             .MustHaveHappenedOnceExactly();

@@ -12,7 +12,9 @@ internal sealed class GetKnowledgesForCharacterUseCase(
     CancellationToken cancellationToken
 ) : IGetKnowledgesForCharacterUseCase
 {
-    public async Task<Result<List<CharacterKnowledgeReturnModel>>> ExecuteAsync(GetKnowledgesForCharacterModel model)
+    public async Task<Result<List<CharacterKnowledgeReturnModel>>> ExecuteAsync(
+        GetKnowledgesForCharacterModel model
+    )
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,
@@ -26,27 +28,30 @@ internal sealed class GetKnowledgesForCharacterUseCase(
         var knowledges = await mappingRepository.GetKnowledgesForCharacter(model.CharacterId);
 
         return Result.Ok(
-            knowledges.Select(x => new CharacterKnowledgeReturnModel()
-            {
-                MappingId = x.MappingId,
-                Knowledge = new KnowledgeReturnModel()
+            knowledges
+                .Select(x => new CharacterKnowledgeReturnModel()
                 {
-                    Name = x.Knowledge.Name,
-                    Description = x.Knowledge.Description,
-                    Type = x.Knowledge.Type
-                },
-                StoneModifier = x.StoneModifier,
-                LevelName = x.LevelName,
-                Level = x.Level,
-                Specializations = x.Specializations.Select(y => new SpecializationReturnModel()
-                {
-                    Name = y.Name,
-                    Description = y.Description,
-                    Id = y.Id,
-                    Notes = y.Notes
-                }).ToList()
-            }).ToList()
+                    MappingId = x.MappingId,
+                    Knowledge = new KnowledgeReturnModel()
+                    {
+                        Name = x.Knowledge.Name,
+                        Description = x.Knowledge.Description,
+                        Type = x.Knowledge.Type,
+                    },
+                    StoneModifier = x.StoneModifier,
+                    LevelName = x.LevelName,
+                    Level = x.Level,
+                    Specializations = x
+                        .Specializations.Select(y => new SpecializationReturnModel()
+                        {
+                            Name = y.Name,
+                            Description = y.Description,
+                            Id = y.Id,
+                            Notes = y.Notes,
+                        })
+                        .ToList(),
+                })
+                .ToList()
         );
-        
     }
 }
