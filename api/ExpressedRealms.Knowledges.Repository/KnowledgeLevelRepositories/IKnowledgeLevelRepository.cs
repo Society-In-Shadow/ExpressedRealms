@@ -6,4 +6,5 @@ public interface IKnowledgeLevelRepository
 {
     Task<bool> KnowledgeLevelExists(int id);
     Task<KnowledgeEducationLevel> GetKnowledgeLevel(int id);
+    Task<List<KnowledgeEducationLevel>> GetKnowledgeLevels();
 }
