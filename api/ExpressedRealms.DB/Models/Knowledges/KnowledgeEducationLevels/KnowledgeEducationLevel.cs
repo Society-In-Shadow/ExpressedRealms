@@ -10,7 +10,9 @@ public class KnowledgeEducationLevel
     public int SpecializationCount { get; set; }
     public int StoneModifier { get; set; }
     public int GeneralXpCost { get; set; }
+    public int TotalGeneralXpCost { get; set; }
     public int UnknownXpCost { get; set; }
+    public int TotalUnknownXpCost { get; set; }
 
     public virtual List<CharacterKnowledgeMapping> CharacterKnowledgeMappings { get; set; } = null!;
 }
