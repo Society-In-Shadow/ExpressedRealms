@@ -8,11 +8,11 @@ namespace ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.Delete;
 
 internal sealed class DeleteKnowledgeFromCharacterUseCase(
     ICharacterKnowledgeRepository mappingRepository,
-    UpdateKnowledgeForCharacterModelValidator validator,
+    DeleteKnowledgeFromCharacterModelValidator validator,
     CancellationToken cancellationToken
-) : IUpdateKnowledgeForCharacterUseCase
+) : IDeleteKnowledgeFromCharacterUseCase
 {
-    public async Task<Result> ExecuteAsync(UpdateKnowledgeForCharacterModel model)
+    public async Task<Result> ExecuteAsync(DeleteKnowledgeFromCharacterModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,

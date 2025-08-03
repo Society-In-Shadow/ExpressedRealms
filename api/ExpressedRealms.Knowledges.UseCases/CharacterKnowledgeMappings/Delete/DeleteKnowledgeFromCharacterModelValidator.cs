@@ -11,10 +11,7 @@ namespace ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.Delete;
 internal sealed class DeleteKnowledgeFromCharacterModelValidator : AbstractValidator<DeleteKnowledgeFromCharacterModel>
 {
     public DeleteKnowledgeFromCharacterModelValidator(
-        IKnowledgeRepository knowledgeRepository,
-        ICharacterRepository characterRepository,
-        ICharacterKnowledgeRepository mappingRepository,
-        IKnowledgeLevelRepository knowledgeLevelRepository
+        ICharacterKnowledgeRepository mappingRepository
     )
     {
         RuleFor(x => x.MappingId)
