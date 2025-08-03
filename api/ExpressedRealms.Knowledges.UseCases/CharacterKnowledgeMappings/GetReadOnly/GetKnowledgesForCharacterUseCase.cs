@@ -23,10 +23,10 @@ internal sealed class GetKnowledgesForCharacterUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var mapping = await mappingRepository.GetKnowledgesForCharacter(model.CharacterId);
+        var knowledges = await mappingRepository.GetKnowledgesForCharacter(model.CharacterId);
 
         return Result.Ok(
-            mapping.Select(x => new CharacterKnowledgeReturnModel()
+            knowledges.Select(x => new CharacterKnowledgeReturnModel()
             {
                 MappingId = x.MappingId,
                 Knowledge = new KnowledgeReturnModel()
