@@ -1,4 +1,6 @@
-namespace ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings.Projections;
+using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings.Projections;
+
+namespace ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.GetReadOnly;
 
 public class CharacterKnowledgeReturnModel
 {
