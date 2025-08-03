@@ -67,7 +67,7 @@ internal sealed class ProficiencyRepository(
         availableModifiers.Add(
             new ModifierDescription()
             {
-                Value = 8,
+                Value = 7,
                 Message = "Standard",
                 Type = ModifierType.Mortis,
                 Name = "Mortis",
