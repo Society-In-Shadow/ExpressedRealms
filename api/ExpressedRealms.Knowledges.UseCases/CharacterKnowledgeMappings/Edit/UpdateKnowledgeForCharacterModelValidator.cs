@@ -12,7 +12,6 @@ internal sealed class UpdateKnowledgeForCharacterModelValidator : AbstractValida
 {
     public UpdateKnowledgeForCharacterModelValidator(
         IKnowledgeRepository knowledgeRepository,
-        ICharacterRepository characterRepository,
         ICharacterKnowledgeRepository mappingRepository,
         IKnowledgeLevelRepository knowledgeLevelRepository
     )

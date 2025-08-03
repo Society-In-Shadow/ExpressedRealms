@@ -39,9 +39,8 @@ internal sealed class UpdateKnowledgeForCharacterUseCase(
             const int unknownKnowledgeType = 3;
             const int availableExperience = 7;
             
-            var spentXp = await mappingRepository.GetExperienceSpentOnKnowledgesForCharacterSansCurrentKnowledge(
-                mapping.CharacterId,
-                mapping.KnowledgeId
+            var spentXp = await mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(
+                mapping.CharacterId
             );
             
             var knowledgeLevel = await knowledgeLevelRepository.GetKnowledgeLevel(
