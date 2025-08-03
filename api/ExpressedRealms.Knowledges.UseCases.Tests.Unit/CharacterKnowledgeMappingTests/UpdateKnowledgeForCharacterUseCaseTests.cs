@@ -1,4 +1,3 @@
-using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeEducationLevels;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels;
@@ -20,7 +19,6 @@ public class UpdateKnowledgeForCharacterUseCaseTests
     private readonly IKnowledgeRepository _knowledgeRepository;
     private readonly ICharacterKnowledgeRepository _mappingRepository;
     private readonly IKnowledgeLevelRepository _levelRepository;
-    private readonly ICharacterRepository _characterRepository;
     private readonly UpdateKnowledgeForCharacterModel _model;
     private readonly CharacterKnowledgeMapping _dbModel;
     
@@ -41,7 +39,6 @@ public class UpdateKnowledgeForCharacterUseCaseTests
             Notes = "123",
         };
 
-        _characterRepository = A.Fake<ICharacterRepository>();
         _knowledgeRepository = A.Fake<IKnowledgeRepository>();
         _mappingRepository = A.Fake<ICharacterKnowledgeRepository>();
         _levelRepository = A.Fake<IKnowledgeLevelRepository>();
@@ -65,7 +62,6 @@ public class UpdateKnowledgeForCharacterUseCaseTests
 
         var validator = new UpdateKnowledgeForCharacterModelValidator(
             _knowledgeRepository,
-            _characterRepository,
             _mappingRepository,
             _levelRepository
         );
@@ -153,7 +149,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
         await _useCase.ExecuteAsync(_model);
 
         A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnKnowledgesForCharacterSansCurrentKnowledge(_dbModel.CharacterId, _dbModel.KnowledgeId)
+                _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_dbModel.CharacterId)
             )
             .MustHaveHappenedOnceExactly();
     }
@@ -244,7 +240,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
             .Returns(new KnowledgeEducationLevel() { GeneralXpCost = 2, UnknownXpCost = 4 });
 
         A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnKnowledgesForCharacterSansCurrentKnowledge(_dbModel.CharacterId, _dbModel.KnowledgeId)
+                _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_dbModel.CharacterId)
             )
             .Returns(100);
 
@@ -263,7 +259,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
         A.CallTo(() => _levelRepository.GetKnowledgeLevel(_model.KnowledgeLevelId))
             .Returns(new KnowledgeEducationLevel() { GeneralXpCost = 7 });
         A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnKnowledgesForCharacterSansCurrentKnowledge(_dbModel.CharacterId, _dbModel.KnowledgeId)
+                _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_dbModel.CharacterId)
             )
             .Returns(xpAmount);
 
@@ -276,7 +272,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
     public async Task UseCase_WillReturnNotEnoughXp_WhenOutOfXp()
     {
         A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnKnowledgesForCharacterSansCurrentKnowledge(_dbModel.CharacterId, _dbModel.KnowledgeId)
+                _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_dbModel.CharacterId)
             )
             .Returns(7);
 

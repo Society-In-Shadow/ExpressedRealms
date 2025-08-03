@@ -16,21 +16,8 @@ public class CharacterKnowledgeRepository(
             .CharacterKnowledgeMappings.Where(x => x.CharacterId == characterId)
             .SumAsync(x =>
                 x.Knowledge.KnowledgeTypeId == unknownKnowledgeType
-                    ? x.KnowledgeLevel.UnknownXpCost
-                    : x.KnowledgeLevel.GeneralXpCost,
-                cancellationToken
-            );
-    }
-    
-    public async Task<int> GetExperienceSpentOnKnowledgesForCharacterSansCurrentKnowledge(int characterId, int knowledgeId)
-    {
-        const int unknownKnowledgeType = 3;
-        return await context
-            .CharacterKnowledgeMappings.Where(x => x.CharacterId == characterId && x.KnowledgeId != knowledgeId)
-            .SumAsync(x =>
-                    x.Knowledge.KnowledgeTypeId == unknownKnowledgeType
-                        ? x.KnowledgeLevel.UnknownXpCost
-                        : x.KnowledgeLevel.GeneralXpCost,
+                    ? x.KnowledgeLevel.TotalUnknownXpCost
+                    : x.KnowledgeLevel.TotalGeneralXpCost,
                 cancellationToken
             );
     }

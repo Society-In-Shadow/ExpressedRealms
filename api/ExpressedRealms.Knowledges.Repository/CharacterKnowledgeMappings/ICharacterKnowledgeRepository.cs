@@ -10,5 +10,4 @@ public interface ICharacterKnowledgeRepository
     Task<bool> MappingAlreadyExists(int knowledgeId, int characterId);
     Task<CharacterKnowledgeMapping> GetCharacterKnowledgeMappingForEditing(int modelMappingId);
     Task UpdateCharacterKnowledgeMapping(CharacterKnowledgeMapping mapping);
-    Task<int> GetExperienceSpentOnKnowledgesForCharacterSansCurrentKnowledge(int characterId, int knowledgeId);
 }
