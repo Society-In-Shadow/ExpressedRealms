@@ -23,4 +23,9 @@ internal sealed class KnowledgeLevelRepository(
             .KnowledgeEducationLevels.AsNoTracking()
             .FirstAsync(x => x.Id == id, cancellationToken);
     }
+    
+    public Task<List<KnowledgeEducationLevel>> GetKnowledgeLevels()
+    {
+        return context.KnowledgeEducationLevels.AsNoTracking().ToListAsync(cancellationToken);
+    }
 }
