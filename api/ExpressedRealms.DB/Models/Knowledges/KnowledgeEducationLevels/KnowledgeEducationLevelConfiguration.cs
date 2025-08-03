@@ -21,8 +21,14 @@ public class KnowledgeEducationLevelConfiguration
             .IsRequired();
         builder.Property(e => e.StoneModifier).HasColumnName("stone_modifier").IsRequired();
         builder.Property(e => e.GeneralXpCost).HasColumnName("general_xp_cost").IsRequired();
-        builder.Property(e => e.TotalGeneralXpCost).HasColumnName("total_general_xp_cost").IsRequired();
+        builder
+            .Property(e => e.TotalGeneralXpCost)
+            .HasColumnName("total_general_xp_cost")
+            .IsRequired();
         builder.Property(e => e.UnknownXpCost).HasColumnName("unknown_xp_cost").IsRequired();
-        builder.Property(e => e.TotalUnknownXpCost).HasColumnName("total_unknown_xp_cost").IsRequired();
+        builder
+            .Property(e => e.TotalUnknownXpCost)
+            .HasColumnName("total_unknown_xp_cost")
+            .IsRequired();
     }
 }

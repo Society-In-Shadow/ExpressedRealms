@@ -23,7 +23,9 @@ internal sealed class DeleteKnowledgeFromCharacterUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var mapping = await mappingRepository.GetCharacterKnowledgeMappingForEditing(model.MappingId);
+        var mapping = await mappingRepository.GetCharacterKnowledgeMappingForEditing(
+            model.MappingId
+        );
 
         mapping.SoftDelete();
 

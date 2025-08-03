@@ -3,6 +3,5 @@ using FluentResults;
 
 namespace ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.Create;
 
-internal interface IAddKnowledgeToCharacterUseCase : IGenericUseCase<Result<int>, AddKnowledgeToCharacterModel>
-{
-}
+internal interface IAddKnowledgeToCharacterUseCase
+    : IGenericUseCase<Result<int>, AddKnowledgeToCharacterModel> { }
