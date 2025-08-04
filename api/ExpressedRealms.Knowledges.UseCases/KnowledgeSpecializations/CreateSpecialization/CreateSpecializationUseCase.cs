@@ -59,7 +59,7 @@ internal sealed class CreateSpecializationUseCase(
             {
                 Name = model.Name,
                 Description = model.Description,
-                Notes = model.Notes,
+                Notes = model.Notes?.Trim() == string.Empty ? null : model.Notes?.Trim(),
                 KnowledgeMappingId = model.KnowledgeMappingId,
             }
         );

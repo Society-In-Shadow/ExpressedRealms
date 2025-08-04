@@ -15,7 +15,7 @@ internal sealed class EditSpecializationUseCase(
     CancellationToken cancellationToken
 ) : IEditSpecializationUseCase
 {
-    public async Task<Result<int>> ExecuteAsync(EditSpecializationModel model)
+    public async Task<Result> ExecuteAsync(EditSpecializationModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,
@@ -59,7 +59,7 @@ internal sealed class EditSpecializationUseCase(
         
         specialization.Name = model.Name;
         specialization.Description = model.Description;
-        specialization.Notes = model.Notes;
+        specialization.Notes = model.Notes?.Trim() == string.Empty ? null : model.Notes?.Trim();
         
         await specializationRepository.UpdateSpecialization(specialization);
         
