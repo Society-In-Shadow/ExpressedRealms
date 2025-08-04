@@ -25,7 +25,7 @@ public class KnowledgeSpecializationRepository(
     {
         return await context.CharacterKnowledgeSpecializations.FirstAsync(x => x.Id == id);
     }
-    
+
     public async Task UpdateSpecialization(CharacterKnowledgeSpecialization specialization)
     {
         context.Update(specialization);

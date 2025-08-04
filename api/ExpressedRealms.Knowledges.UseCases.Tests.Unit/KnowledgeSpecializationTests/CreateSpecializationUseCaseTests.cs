@@ -236,7 +236,7 @@ public class CreateSpecializationUseCaseTests
             )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Theory]
     [InlineData(" test", "test")]
     [InlineData(" test ", "test")]
@@ -250,9 +250,7 @@ public class CreateSpecializationUseCaseTests
         await _useCase.ExecuteAsync(_model);
         A.CallTo(() =>
                 _specializationRepository.CreateSpecialization(
-                    A<CharacterKnowledgeSpecialization>.That.Matches(k =>
-                        k.Notes == savedValue
-                    )
+                    A<CharacterKnowledgeSpecialization>.That.Matches(k => k.Notes == savedValue)
                 )
             )
             .MustHaveHappenedOnceExactly();

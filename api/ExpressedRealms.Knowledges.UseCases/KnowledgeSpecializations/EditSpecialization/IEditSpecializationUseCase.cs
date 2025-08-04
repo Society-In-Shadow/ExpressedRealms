@@ -3,5 +3,4 @@ using FluentResults;
 
 namespace ExpressedRealms.Knowledges.UseCases.KnowledgeSpecializations.EditSpecialization;
 
-public interface IEditSpecializationUseCase
-    : IGenericUseCase<Result, EditSpecializationModel> { }
+public interface IEditSpecializationUseCase : IGenericUseCase<Result, EditSpecializationModel> { }

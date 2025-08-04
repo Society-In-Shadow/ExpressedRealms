@@ -27,7 +27,7 @@ internal sealed class EditSpecializationUseCase(
             return Result.Fail(result.Errors);
 
         var specialization = await specializationRepository.GetSpecialization(model.Id);
-        
+
         var mapping = await mappingRepository.GetCharacterKnowledgeMappingForEditing(
             specialization.KnowledgeMappingId
         );
@@ -56,13 +56,13 @@ internal sealed class EditSpecializationUseCase(
                 "You have reached the maximum number of specializations allowed for this knowledge."
             );
         }
-        
+
         specialization.Name = model.Name;
         specialization.Description = model.Description;
         specialization.Notes = model.Notes?.Trim() == string.Empty ? null : model.Notes?.Trim();
-        
+
         await specializationRepository.UpdateSpecialization(specialization);
-        
+
         return Result.Ok();
     }
 }

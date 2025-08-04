@@ -7,8 +7,7 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Knowledges.UseCases.KnowledgeSpecializations.EditSpecialization;
 
 [UsedImplicitly]
-internal sealed class EditSpecializationModelValidator
-    : AbstractValidator<EditSpecializationModel>
+internal sealed class EditSpecializationModelValidator : AbstractValidator<EditSpecializationModel>
 {
     public EditSpecializationModelValidator(
         IKnowledgeSpecializationRepository specializationRepository,
@@ -24,10 +23,7 @@ internal sealed class EditSpecializationModelValidator
         RuleFor(x => x)
             .MustAsync(
                 async (x, y) =>
-                    !await mappingRepository.HasExistingSpecializationForMappingEdit(
-                        x.Id,
-                        x.Name
-                    )
+                    !await mappingRepository.HasExistingSpecializationForMappingEdit(x.Id, x.Name)
             )
             .WithMessage("A specialization with this name already exists for the given knowledge.")
             .WithName(nameof(CreateSpecializationModel.Name));
