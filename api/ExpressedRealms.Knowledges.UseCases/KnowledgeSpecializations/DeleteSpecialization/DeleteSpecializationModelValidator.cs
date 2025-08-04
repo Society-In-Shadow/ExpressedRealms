@@ -1,6 +1,4 @@
-using ExpressedRealms.Knowledges.Repository.Knowledges;
 using ExpressedRealms.Knowledges.Repository.KnowledgeSpecializations;
-using ExpressedRealms.Knowledges.UseCases.Knowledges.DeleteKnowledge;
 using FluentValidation;
 using JetBrains.Annotations;
 
