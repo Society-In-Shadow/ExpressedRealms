@@ -1,5 +1,6 @@
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.Knowledges;
+using ExpressedRealms.Knowledges.Repository.KnowledgeSpecializations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExpressedRealms.Knowledges.Repository.Configuration;
@@ -13,7 +14,7 @@ public static class KnowledgesRepositoryInjections
         services.AddScoped<IKnowledgeRepository, KnowledgeRepository>();
         services.AddScoped<ICharacterKnowledgeRepository, CharacterKnowledgeRepository>();
         services.AddScoped<IKnowledgeLevelRepository, KnowledgeLevelRepository>();
-
+        services.AddScoped<IKnowledgeSpecializationRepository, KnowledgeSpecializationRepository>();
         return services;
     }
 }
