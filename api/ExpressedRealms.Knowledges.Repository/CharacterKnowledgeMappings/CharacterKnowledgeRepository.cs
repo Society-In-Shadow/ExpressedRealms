@@ -92,4 +92,26 @@ public class CharacterKnowledgeRepository(
             })
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<SpecializationCountProjection> GetSpecializationCountForMapping(int mappingId)
+    {
+        return await context.CharacterKnowledgeMappings.Where(x => x.Id == mappingId)
+            .Select(x => new SpecializationCountProjection()
+            {
+                MaxCount = x.KnowledgeLevel.SpecializationCount,
+                CurrentCount = x.CharacterKnowledgeSpecializations.Count,
+            })
+            .FirstAsync(cancellationToken);
+    }
+    
+    public async Task<bool> HasExistingSpecializationForMapping(int mappingId, string name)
+    {
+        return await context
+            .CharacterKnowledgeMappings.AsNoTracking()
+            .AnyAsync(
+                x => x.Id == mappingId && 
+                     x.CharacterKnowledgeSpecializations.Any(y => y.Name.ToLower() == name.ToLower()),
+                cancellationToken
+            );
+    }
 }

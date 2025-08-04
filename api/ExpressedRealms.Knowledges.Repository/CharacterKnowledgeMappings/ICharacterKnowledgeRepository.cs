@@ -12,4 +12,6 @@ public interface ICharacterKnowledgeRepository
     Task<CharacterKnowledgeMapping> GetCharacterKnowledgeMappingForEditing(int modelMappingId);
     Task UpdateCharacterKnowledgeMapping(CharacterKnowledgeMapping mapping);
     Task<List<CharacterKnowledgeProjection>> GetKnowledgesForCharacter(int characterId);
+    Task<SpecializationCountProjection> GetSpecializationCountForMapping(int mappingId);
+    Task<bool> HasExistingSpecializationForMapping(int mappingId, string name);
 }
