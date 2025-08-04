@@ -16,7 +16,6 @@ public class GetKnowledgeLevelsUseCase(IKnowledgeLevelRepository levelRepository
                 KnowledgeLevels = knowledgeLevels
                     .Select(x => new KnowledgeLevelModel()
                     {
-                        
                         Id = x.Id,
                         Name = x.Name,
                         Level = x.Level,
@@ -25,7 +24,7 @@ public class GetKnowledgeLevelsUseCase(IKnowledgeLevelRepository levelRepository
                         GeneralXpCost = x.GeneralXpCost,
                         TotalGeneralXpCost = x.TotalGeneralXpCost,
                         UnknownXpCost = x.UnknownXpCost,
-                        TotalUnknownXpCost = x.TotalUnknownXpCost
+                        TotalUnknownXpCost = x.TotalUnknownXpCost,
                     })
                     .ToList(),
             }

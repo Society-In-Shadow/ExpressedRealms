@@ -26,31 +26,47 @@ public class CreateSpecializationUseCaseTests
             Name = "Test Knowledge",
             Description = "Test Description",
             Notes = "567",
-            KnowledgeMappingId = 1
+            KnowledgeMappingId = 1,
         };
 
-        _dbModel = new CharacterKnowledgeMapping()
-        {
-            CharacterId = 1,
-            KnowledgeId = 2
-        };
+        _dbModel = new CharacterKnowledgeMapping() { CharacterId = 1, KnowledgeId = 2 };
 
         _specializationRepository = A.Fake<IKnowledgeSpecializationRepository>();
         _mappingRepository = A.Fake<ICharacterKnowledgeRepository>();
 
-        A.CallTo(() => _mappingRepository.HasExistingSpecializationForMapping(_model.KnowledgeMappingId, _model.Name)).Returns(false);
-        A.CallTo(() => _mappingRepository.MappingAlreadyExists(_model.KnowledgeMappingId)).Returns(true);
-        A.CallTo(() => _mappingRepository.GetCharacterKnowledgeMappingForEditing(_model.KnowledgeMappingId)).Returns(_dbModel);
-        A.CallTo(() => _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_dbModel.CharacterId)).Returns(0);
-        A.CallTo(() => _mappingRepository.GetSpecializationCountForMapping(_model.KnowledgeMappingId)).Returns(new SpecializationCountProjection()
-        {
-            CurrentCount = 0,
-            MaxCount = 2
-        });
+        A.CallTo(() =>
+                _mappingRepository.HasExistingSpecializationForMapping(
+                    _model.KnowledgeMappingId,
+                    _model.Name
+                )
+            )
+            .Returns(false);
+        A.CallTo(() => _mappingRepository.MappingAlreadyExists(_model.KnowledgeMappingId))
+            .Returns(true);
+        A.CallTo(() =>
+                _mappingRepository.GetCharacterKnowledgeMappingForEditing(_model.KnowledgeMappingId)
+            )
+            .Returns(_dbModel);
+        A.CallTo(() =>
+                _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_dbModel.CharacterId)
+            )
+            .Returns(0);
+        A.CallTo(() =>
+                _mappingRepository.GetSpecializationCountForMapping(_model.KnowledgeMappingId)
+            )
+            .Returns(new SpecializationCountProjection() { CurrentCount = 0, MaxCount = 2 });
 
-        var validator = new CreateSpecializationModelValidator(_specializationRepository, _mappingRepository);
+        var validator = new CreateSpecializationModelValidator(
+            _specializationRepository,
+            _mappingRepository
+        );
 
-        _useCase = new CreateSpecializationUseCase(_specializationRepository, _mappingRepository, validator, CancellationToken.None);
+        _useCase = new CreateSpecializationUseCase(
+            _specializationRepository,
+            _mappingRepository,
+            validator,
+            CancellationToken.None
+        );
     }
 
     [Fact]
@@ -59,7 +75,10 @@ public class CreateSpecializationUseCaseTests
         _model.Name = string.Empty;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(CreateSpecializationModel.Name), "Name is required.");
+        results.MustHaveValidationError(
+            nameof(CreateSpecializationModel.Name),
+            "Name is required."
+        );
     }
 
     [Fact]
@@ -77,7 +96,13 @@ public class CreateSpecializationUseCaseTests
     [Fact]
     public async Task ValidationFor_Name_WillFail_WhenName_AlreadyExists()
     {
-        A.CallTo(() => _mappingRepository.HasExistingSpecializationForMapping(_model.KnowledgeMappingId, _model.Name)).Returns(true);
+        A.CallTo(() =>
+                _mappingRepository.HasExistingSpecializationForMapping(
+                    _model.KnowledgeMappingId,
+                    _model.Name
+                )
+            )
+            .Returns(true);
 
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(
@@ -97,7 +122,7 @@ public class CreateSpecializationUseCaseTests
             "Description is required."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_Description_WillFail_WhenItIsOver_5000Characters()
     {
@@ -109,7 +134,7 @@ public class CreateSpecializationUseCaseTests
             "Description must be between 1 and 5000 characters."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_Notes_WillFail_WhenMaxLengthIsGreaterThan5000()
     {
@@ -120,7 +145,7 @@ public class CreateSpecializationUseCaseTests
             "Notes must be less than 10,000 characters."
         );
     }
-    
+
     [Theory]
     [InlineData(null)]
     [InlineData("")]
@@ -147,7 +172,8 @@ public class CreateSpecializationUseCaseTests
     [Fact]
     public async Task ValidationFor_KnowledgeMappingId_WillFail_WhenTheKnowledge_DoesNotExist()
     {
-        A.CallTo(() => _mappingRepository.MappingAlreadyExists(_model.KnowledgeMappingId)).Returns(false);
+        A.CallTo(() => _mappingRepository.MappingAlreadyExists(_model.KnowledgeMappingId))
+            .Returns(false);
 
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(
@@ -160,21 +186,30 @@ public class CreateSpecializationUseCaseTests
     public async Task UseCase_CorrectlyGrabs_TheKnowledgeMapping()
     {
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() => _mappingRepository.GetCharacterKnowledgeMappingForEditing(_model.KnowledgeMappingId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() =>
+                _mappingRepository.GetCharacterKnowledgeMappingForEditing(_model.KnowledgeMappingId)
+            )
+            .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
     public async Task UseCase_CorrectlyGrabs_ExperienceSpentOnKnowledges_ForTheCharacter()
     {
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() => _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_dbModel.CharacterId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() =>
+                _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_dbModel.CharacterId)
+            )
+            .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
     public async Task UseCase_CorrectlyGrabs_TheSpecializationCountForTheMapping()
     {
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() => _mappingRepository.GetSpecializationCountForMapping(_model.KnowledgeMappingId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() =>
+                _mappingRepository.GetSpecializationCountForMapping(_model.KnowledgeMappingId)
+            )
+            .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -205,42 +240,55 @@ public class CreateSpecializationUseCaseTests
     [Fact]
     public async Task UseCase_CalculatesAvailableXP_Correctly()
     {
-        A.CallTo(() => _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_dbModel.CharacterId)).Returns(6);
+        A.CallTo(() =>
+                _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_dbModel.CharacterId)
+            )
+            .Returns(6);
 
         var result = await _useCase.ExecuteAsync(_model);
 
         Assert.Equal(1, ((NotEnoughXPFailure)result.Errors[0]).AvailableXP);
     }
-    
+
     [Fact]
     public async Task UseCase_CalculatesCost_Correctly()
     {
-        A.CallTo(() => _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_dbModel.CharacterId)).Returns(6);
+        A.CallTo(() =>
+                _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_dbModel.CharacterId)
+            )
+            .Returns(6);
 
         var result = await _useCase.ExecuteAsync(_model);
 
         Assert.Equal(2, ((NotEnoughXPFailure)result.Errors[0]).AmountTryingToSpend);
     }
-    
+
     [Fact]
     public async Task UseCase_Fails_WhenTheyAlreadyHave_MaxAmountOfSpecializations()
     {
-        A.CallTo(() => _mappingRepository.GetSpecializationCountForMapping(_model.KnowledgeMappingId)).Returns(new SpecializationCountProjection()
-        {
-            CurrentCount = 2,
-            MaxCount = 2
-        });
+        A.CallTo(() =>
+                _mappingRepository.GetSpecializationCountForMapping(_model.KnowledgeMappingId)
+            )
+            .Returns(new SpecializationCountProjection() { CurrentCount = 2, MaxCount = 2 });
 
         var result = await _useCase.ExecuteAsync(_model);
 
         Assert.False(result.IsSuccess);
-        Assert.Equal("You have reached the maximum number of specializations allowed for this knowledge.", result.Errors[0].Message);
+        Assert.Equal(
+            "You have reached the maximum number of specializations allowed for this knowledge.",
+            result.Errors[0].Message
+        );
     }
-    
+
     [Fact]
     public async Task UseCase_WillReturn_KnowledgeId_IfSuccessful()
     {
-        A.CallTo(() => _specializationRepository.CreateSpecialization(A<CharacterKnowledgeSpecialization>._)).Returns(5);
+        A.CallTo(() =>
+                _specializationRepository.CreateSpecialization(
+                    A<CharacterKnowledgeSpecialization>._
+                )
+            )
+            .Returns(5);
 
         var result = await _useCase.ExecuteAsync(_model);
         Assert.Equal(5, result.Value);

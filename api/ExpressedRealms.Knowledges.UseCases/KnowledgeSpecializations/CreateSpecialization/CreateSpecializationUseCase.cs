@@ -24,26 +24,34 @@ internal sealed class CreateSpecializationUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-        
-        var mapping = await mappingRepository.GetCharacterKnowledgeMappingForEditing(model.KnowledgeMappingId);
+
+        var mapping = await mappingRepository.GetCharacterKnowledgeMappingForEditing(
+            model.KnowledgeMappingId
+        );
 
         const int maxKnowledge = 7;
-        
+
         var spentXp = await mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(
             mapping.CharacterId
         );
 
         const int newSpecializationCost = 2;
-        if(maxKnowledge - spentXp - newSpecializationCost < 0)
+        if (maxKnowledge - spentXp - newSpecializationCost < 0)
         {
-            return Result.Fail(new NotEnoughXPFailure(maxKnowledge - spentXp, newSpecializationCost));
+            return Result.Fail(
+                new NotEnoughXPFailure(maxKnowledge - spentXp, newSpecializationCost)
+            );
         }
-            
-        var counts = await mappingRepository.GetSpecializationCountForMapping(model.KnowledgeMappingId);
+
+        var counts = await mappingRepository.GetSpecializationCountForMapping(
+            model.KnowledgeMappingId
+        );
 
         if (counts.MaxCount <= counts.CurrentCount + 1)
         {
-            return Result.Fail("You have reached the maximum number of specializations allowed for this knowledge.");
+            return Result.Fail(
+                "You have reached the maximum number of specializations allowed for this knowledge."
+            );
         }
 
         var knowledgeId = await specializationRepository.CreateSpecialization(
@@ -52,7 +60,7 @@ internal sealed class CreateSpecializationUseCase(
                 Name = model.Name,
                 Description = model.Description,
                 Notes = model.Notes,
-                KnowledgeMappingId = model.KnowledgeMappingId
+                KnowledgeMappingId = model.KnowledgeMappingId,
             }
         );
 

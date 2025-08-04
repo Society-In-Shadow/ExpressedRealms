@@ -27,7 +27,7 @@ public class GetKnowledgeLevelsUseCaseTests
                 GeneralXpCost = 4,
                 Level = 1,
                 StoneModifier = 6,
-                SpecializationCount = 3
+                SpecializationCount = 3,
             },
             new KnowledgeEducationLevel()
             {
@@ -39,7 +39,7 @@ public class GetKnowledgeLevelsUseCaseTests
                 GeneralXpCost = 6,
                 Level = 8,
                 StoneModifier = 9,
-                SpecializationCount = 10
+                SpecializationCount = 10,
             },
         };
 
@@ -66,7 +66,6 @@ public class GetKnowledgeLevelsUseCaseTests
         var knowledgeTypes = KnowledgeTypesDbModel
             .Select(x => new KnowledgeLevelModel()
             {
-                        
                 Id = x.Id,
                 Name = x.Name,
                 Level = x.Level,
@@ -75,7 +74,7 @@ public class GetKnowledgeLevelsUseCaseTests
                 GeneralXpCost = x.GeneralXpCost,
                 TotalGeneralXpCost = x.TotalGeneralXpCost,
                 UnknownXpCost = x.UnknownXpCost,
-                TotalUnknownXpCost = x.TotalUnknownXpCost
+                TotalUnknownXpCost = x.TotalUnknownXpCost,
             })
             .ToList();
 

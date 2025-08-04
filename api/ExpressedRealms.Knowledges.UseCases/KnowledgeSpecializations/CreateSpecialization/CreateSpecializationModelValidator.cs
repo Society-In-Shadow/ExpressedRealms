@@ -6,7 +6,8 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Knowledges.UseCases.KnowledgeSpecializations.CreateSpecialization;
 
 [UsedImplicitly]
-internal sealed class CreateSpecializationModelValidator : AbstractValidator<CreateSpecializationModel>
+internal sealed class CreateSpecializationModelValidator
+    : AbstractValidator<CreateSpecializationModel>
 {
     public CreateSpecializationModelValidator(
         IKnowledgeSpecializationRepository specializationRepository,
@@ -18,9 +19,15 @@ internal sealed class CreateSpecializationModelValidator : AbstractValidator<Cre
             .WithMessage("Name is required.")
             .MaximumLength(250)
             .WithMessage("Name must be between 1 and 250 characters.");
-        
+
         RuleFor(x => x)
-            .MustAsync(async (x, y) => !await mappingRepository.HasExistingSpecializationForMapping(x.KnowledgeMappingId, x.Name))
+            .MustAsync(
+                async (x, y) =>
+                    !await mappingRepository.HasExistingSpecializationForMapping(
+                        x.KnowledgeMappingId,
+                        x.Name
+                    )
+            )
             .WithMessage("A specialization with this name already exists for the given knowledge.")
             .WithName(nameof(CreateSpecializationModel.Name));
 
@@ -29,7 +36,7 @@ internal sealed class CreateSpecializationModelValidator : AbstractValidator<Cre
             .WithMessage("Description is required.")
             .MaximumLength(5000)
             .WithMessage("Description must be between 1 and 5000 characters.");
-        
+
         RuleFor(x => x.Notes)
             .MaximumLength(10000)
             .When(x => !string.IsNullOrWhiteSpace(x.Notes))
