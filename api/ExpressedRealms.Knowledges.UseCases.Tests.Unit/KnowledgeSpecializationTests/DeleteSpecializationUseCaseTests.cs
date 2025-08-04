@@ -53,8 +53,7 @@ public class DeleteSpecializationUseCaseTests
     {
         await _useCase.ExecuteAsync(_model);
 
-        A.CallTo(() => _repository.GetSpecialization(_model.Id))
-            .MustHaveHappenedOnceExactly();
+        A.CallTo(() => _repository.GetSpecialization(_model.Id)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]

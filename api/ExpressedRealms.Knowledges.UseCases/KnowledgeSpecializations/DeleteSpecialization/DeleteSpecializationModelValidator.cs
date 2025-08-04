@@ -5,7 +5,8 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Knowledges.UseCases.KnowledgeSpecializations.DeleteSpecialization;
 
 [UsedImplicitly]
-internal sealed class DeleteSpecializationModelValidator : AbstractValidator<DeleteSpecializationModel>
+internal sealed class DeleteSpecializationModelValidator
+    : AbstractValidator<DeleteSpecializationModel>
 {
     public DeleteSpecializationModelValidator(IKnowledgeSpecializationRepository repository)
     {

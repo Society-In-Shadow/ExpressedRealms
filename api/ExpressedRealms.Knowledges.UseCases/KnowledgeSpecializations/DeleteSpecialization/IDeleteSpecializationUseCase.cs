@@ -3,4 +3,5 @@ using FluentResults;
 
 namespace ExpressedRealms.Knowledges.UseCases.KnowledgeSpecializations.DeleteSpecialization;
 
-public interface IDeleteSpecializationUseCase : IGenericUseCase<Result, DeleteSpecializationModel> { }
+public interface IDeleteSpecializationUseCase
+    : IGenericUseCase<Result, DeleteSpecializationModel> { }
