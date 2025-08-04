@@ -1,3 +1,4 @@
+using ExpressedRealms.Knowledges.API.CharacterKnowledges;
 using Microsoft.AspNetCore.Builder;
 
 namespace ExpressedRealms.Knowledges.API.Configuration;
@@ -8,5 +9,6 @@ public static class KnowledgesApiConfiguration
     {
         app.AddKnowledgeEndpoints();
         app.AddKnowledgeTypesEndpoints();
+        app.AddCharacterKnowledgeEndpoints();
     }
 }

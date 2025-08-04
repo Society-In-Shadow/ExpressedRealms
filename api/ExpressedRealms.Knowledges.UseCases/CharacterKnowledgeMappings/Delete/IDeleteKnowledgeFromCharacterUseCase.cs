@@ -4,5 +4,5 @@ using FluentResults;
 
 namespace ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.Delete;
 
-internal interface IDeleteKnowledgeFromCharacterUseCase
+public interface IDeleteKnowledgeFromCharacterUseCase
     : IGenericUseCase<Result, DeleteKnowledgeFromCharacterModel> { }
