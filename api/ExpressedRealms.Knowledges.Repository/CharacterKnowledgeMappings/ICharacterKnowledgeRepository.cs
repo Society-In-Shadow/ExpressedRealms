@@ -14,4 +14,5 @@ public interface ICharacterKnowledgeRepository
     Task<List<CharacterKnowledgeProjection>> GetKnowledgesForCharacter(int characterId);
     Task<SpecializationCountProjection> GetSpecializationCountForMapping(int mappingId);
     Task<bool> HasExistingSpecializationForMapping(int mappingId, string name);
+    Task<bool> HasExistingSpecializationForMappingEdit(int id, string name);
 }

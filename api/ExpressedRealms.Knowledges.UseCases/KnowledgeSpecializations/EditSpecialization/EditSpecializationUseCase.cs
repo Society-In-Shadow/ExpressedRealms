@@ -1,20 +1,21 @@
 using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeSpecializations;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.KnowledgeSpecializations;
+using ExpressedRealms.Knowledges.UseCases.KnowledgeSpecializations.CreateSpecialization;
 using ExpressedRealms.UseCases.Shared;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FluentResults;
 
-namespace ExpressedRealms.Knowledges.UseCases.KnowledgeSpecializations.CreateSpecialization;
+namespace ExpressedRealms.Knowledges.UseCases.KnowledgeSpecializations.EditSpecialization;
 
-internal sealed class CreateSpecializationUseCase(
+internal sealed class EditSpecializationUseCase(
     IKnowledgeSpecializationRepository specializationRepository,
     ICharacterKnowledgeRepository mappingRepository,
-    CreateSpecializationModelValidator validator,
+    EditSpecializationModelValidator validator,
     CancellationToken cancellationToken
-) : ICreateSpecializationUseCase
+) : IEditSpecializationUseCase
 {
-    public async Task<Result<int>> ExecuteAsync(CreateSpecializationModel model)
+    public async Task<Result> ExecuteAsync(EditSpecializationModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,
@@ -25,8 +26,10 @@ internal sealed class CreateSpecializationUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
+        var specialization = await specializationRepository.GetSpecialization(model.Id);
+
         var mapping = await mappingRepository.GetCharacterKnowledgeMappingForEditing(
-            model.KnowledgeMappingId
+            specialization.KnowledgeMappingId
         );
 
         const int maxKnowledge = 7;
@@ -44,7 +47,7 @@ internal sealed class CreateSpecializationUseCase(
         }
 
         var counts = await mappingRepository.GetSpecializationCountForMapping(
-            model.KnowledgeMappingId
+            specialization.KnowledgeMappingId
         );
 
         if (counts.MaxCount <= counts.CurrentCount + 1)
@@ -54,16 +57,12 @@ internal sealed class CreateSpecializationUseCase(
             );
         }
 
-        var knowledgeId = await specializationRepository.CreateSpecialization(
-            new CharacterKnowledgeSpecialization()
-            {
-                Name = model.Name,
-                Description = model.Description,
-                Notes = model.Notes?.Trim() == string.Empty ? null : model.Notes?.Trim(),
-                KnowledgeMappingId = model.KnowledgeMappingId,
-            }
-        );
+        specialization.Name = model.Name;
+        specialization.Description = model.Description;
+        specialization.Notes = model.Notes?.Trim() == string.Empty ? null : model.Notes?.Trim();
 
-        return Result.Ok(knowledgeId);
+        await specializationRepository.UpdateSpecialization(specialization);
+
+        return Result.Ok();
     }
 }

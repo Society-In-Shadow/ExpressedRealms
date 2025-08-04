@@ -118,4 +118,23 @@ public class CharacterKnowledgeRepository(
                 cancellationToken
             );
     }
+
+    public async Task<bool> HasExistingSpecializationForMappingEdit(int id, string name)
+    {
+        var mappingId = await context
+            .CharacterKnowledgeSpecializations.Where(x => x.Id == id)
+            .Select(x => x.KnowledgeMappingId)
+            .FirstAsync(cancellationToken);
+
+        return await context
+            .CharacterKnowledgeMappings.AsNoTracking()
+            .AnyAsync(
+                x =>
+                    x.Id == mappingId
+                    && x.CharacterKnowledgeSpecializations.Any(y =>
+                        y.Name.ToLower() == name.ToLower() && y.Id != id
+                    ),
+                cancellationToken
+            );
+    }
 }
