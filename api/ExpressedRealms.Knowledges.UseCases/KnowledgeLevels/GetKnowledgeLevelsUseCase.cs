@@ -30,7 +30,7 @@ public class GetKnowledgeLevelsUseCase(
         return Result.Ok(
             new GetKnowledgeLevelsReturnModel()
             {
-                AvailableExperience = currentExperience,
+                AvailableExperience = 7 - currentExperience,
                 KnowledgeLevels = knowledgeLevels
                     .Select(x => new KnowledgeLevelModel()
                     {
