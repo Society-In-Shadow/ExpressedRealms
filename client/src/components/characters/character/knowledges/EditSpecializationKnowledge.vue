@@ -37,19 +37,17 @@ const onSubmit = form.handleSubmit(async (values) => {
   closeDialog()
 });
 
-
 </script>
 
-
 <template>
-
-  <h1 class="pt-0 mt-0">{{ knowledge.knowledge.name }}</h1>
+  <h1 class="pt-0 mt-0">
+    {{ knowledge.knowledge.name }}
+  </h1>
   <h3>{{ knowledge.knowledge.type }}</h3>
   <p>{{ knowledge.knowledge.description }}</p>
   
   <h2>Specialization</h2>
   <form @submit="onSubmit">
-
     <FormInputTextWrapper v-model="form.name" />
     
     <FormTextAreaWrapper v-model="form.description" />
@@ -57,7 +55,7 @@ const onSubmit = form.handleSubmit(async (values) => {
     <FormTextAreaWrapper v-model="form.notes" />
 
     <div class="m-3 text-right">
-      <Button label="Cancel" class="m-2" type="reset" @click="closeDialog()"/>
+      <Button label="Cancel" class="m-2" type="reset" @click="closeDialog()" />
       <Button label="Update" class="m-2" type="submit" />
     </div>
   </form>

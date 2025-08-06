@@ -39,7 +39,6 @@ const onSubmit = form.handleSubmit(async (values) => {
   closeDialog()
 });
 
-
 function getCurrentXpLevel(levelId: number){
   let level = store.knowledgeLevels.filter(function(level:KnowledgeOptions) {
     return level.id === levelId;
@@ -53,20 +52,23 @@ function getCurrentXpLevel(levelId: number){
 
 </script>
 
-
 <template>
-  
-  <h1 class="pt-0 mt-0">{{ knowledge.knowledge.name }}</h1>
+  <h1 class="pt-0 mt-0">
+    {{ knowledge.knowledge.name }}
+  </h1>
   <h3>{{ knowledge.knowledge.type }}</h3>
   <p>{{ knowledge.knowledge.description }}</p>
-  <h3 class="text-right">Available Experience: {{store.currentExperience }}</h3>
+  <h3 class="text-right">
+    Available Experience: {{ store.currentExperience }}
+  </h3>
   <form @submit="onSubmit">
-
     <FormListboxWrapper v-model="form.knowledgeLevel" :options="store.knowledgeLevels" option-value="id" option-disabled="disabled">
       <template #option="slotProps">
-        <KnowledgeLevelDetail :is-loading="store.isLoadingLevels" :selected-item="slotProps.option"
-                              :current-xp-level="getCurrentXpLevel(knowledge.levelId)" :is-unknown-knowledge="isUnknownKnowledge"
-                              :is-read-only="isReadOnly" />
+        <KnowledgeLevelDetail
+          :is-loading="store.isLoadingLevels" :selected-item="slotProps.option"
+          :current-xp-level="getCurrentXpLevel(knowledge.levelId)" :is-unknown-knowledge="isUnknownKnowledge"
+          :is-read-only="isReadOnly"
+        />
       </template>
     </FormListboxWrapper>
 
@@ -86,7 +88,7 @@ function getCurrentXpLevel(levelId: number){
     <FormTextAreaWrapper v-model="form.notes" />
 
     <div class="m-3 text-right">
-      <Button label="Cancel" class="m-2" type="reset" @click="closeDialog()"/>
+      <Button label="Cancel" class="m-2" type="reset" @click="closeDialog()" />
       <Button label="Update" class="m-2" type="submit" />
     </div>
   </form>

@@ -31,7 +31,6 @@ function openMapWithFallback(address:string) {
   }, 1000);
 }
 
-
 </script>
 
 <template>

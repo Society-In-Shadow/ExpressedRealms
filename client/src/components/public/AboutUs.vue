@@ -27,14 +27,16 @@
     game at an event will be provided (This includes a printed character sheet, a bag of six stones, a character badge,
     and resource tracking strips)!
   </p>
-  <p>Society in Shadows conventions are contained in something we call a Chronicle - a collection of stories take place
+  <p>
+    Society in Shadows conventions are contained in something we call a Chronicle - a collection of stories take place
     at these conventions over the course of a few years. Think of it like a TTRPG campaign, except with many more
     players! We are kicking off this chronicle in August 2025! You may play the same character over the course of an
     entire chronicle, however be aware the Society in Shadows can be a dangerous place, lethality is expected! But not
     to fear, even if your character faces their demise you can always create a new character and see the world from
     fresh eyes!
   </p>
-  <p>We strive to create an open, friendly atmosphere and welcome new players to try us out at many conventions across
+  <p>
+    We strive to create an open, friendly atmosphere and welcome new players to try us out at many conventions across
     the Midwestern area. Players are encouraged to dress up in an outfit befitting them, though that is not a requirement
     for play.
   </p>

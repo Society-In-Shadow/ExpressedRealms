@@ -19,7 +19,7 @@ const dialogRef = inject('dialogRef');
 
 const knowledge = ref(dialogRef.value.data.knowledge);
 const isReadOnly = ref(dialogRef.value.data.isReadOnly);
-const isUnknownKnowledge = ref(knowledge.typeName === 'Unknown');
+const isUnknownKnowledge = ref(knowledge.value.typeName === 'Unknown');
 const closeDialog = () => {
   dialogRef.value.close();
 }
@@ -40,18 +40,22 @@ const onSubmit = form.handleSubmit(async (values) => {
 </script>
 
 <template>
-  
-  <h1 class="pt-0 mt-0">{{ knowledge.name }}</h1>
+  <h1 class="pt-0 mt-0">
+    {{ knowledge.name }}
+  </h1>
   <h3>{{ knowledge.typeName }}</h3>
   <p>{{ knowledge.description }}</p>
-  <h3 class="text-right">Available Experience: {{store.currentExperience }}</h3>
+  <h3 class="text-right">
+    Available Experience: {{ store.currentExperience }}
+  </h3>
   <form @submit="onSubmit">
-
     <FormListboxWrapper v-model="form.knowledgeLevel" :options="store.knowledgeLevels" option-value="id" option-disabled="disabled">
       <template #option="slotProps">
-        <KnowledgeLevelDetail :is-loading="store.isLoadingLevels" :selected-item="slotProps.option"
-                              :current-xp-level="0" :is-unknown-knowledge="isUnknownKnowledge"
-                              :is-read-only="isReadOnly" />
+        <KnowledgeLevelDetail
+          :is-loading="store.isLoadingLevels" :selected-item="slotProps.option"
+          :current-xp-level="0" :is-unknown-knowledge="isUnknownKnowledge"
+          :is-read-only="isReadOnly"
+        />
       </template>
     </FormListboxWrapper>
 
@@ -71,7 +75,7 @@ const onSubmit = form.handleSubmit(async (values) => {
     <FormTextAreaWrapper v-model="form.notes" />
 
     <div class="m-3 text-right">
-      <Button label="Cancel" class="m-2" type="reset" @click="closeDialog()"/>
+      <Button label="Cancel" class="m-2" type="reset" @click="closeDialog()" />
       <Button label="Pick" class="m-2" type="submit" />
     </div>
   </form>

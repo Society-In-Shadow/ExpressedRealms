@@ -49,7 +49,7 @@ onBeforeMount(async () => {
         <Tab value="1">
           Skills
         </Tab>
-        <Tab value="2" v-if="showKnowledgeTab">
+        <Tab v-if="showKnowledgeTab" value="2">
           Knowledges
         </Tab>
       </TabList>
@@ -60,7 +60,7 @@ onBeforeMount(async () => {
         <TabPanel value="1">
           <SkillTile />
         </TabPanel>
-        <TabPanel value="2" v-if="showKnowledgeTab">
+        <TabPanel v-if="showKnowledgeTab" value="2">
           <KnowledgeTile />
         </TabPanel>
       </TabPanels>

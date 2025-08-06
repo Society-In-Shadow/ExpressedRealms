@@ -50,83 +50,92 @@ const filteredKnowledges = computed(() => {
 
 <template>
   <div style="max-width: 650px; margin: 0 auto;">
+    <div v-if="!noKnowledges" class="text-right mb-2">
+      <Button v-if="!showEdit" class="btn btn-primary" label="Edit" @click="toggleEdit" />
+      <Button v-else class="btn btn-primary" label="Cancel" @click="toggleEdit" />
+    </div>
 
-  <div class="text-right mb-2" v-if="!noKnowledges">
-    <Button v-if="!showEdit" class="btn btn-primary" label="Edit" @click="toggleEdit" />
-    <Button v-else class="btn btn-primary" label="Cancel" @click="toggleEdit" />
-  </div>
-
-  <Accordion :value="openKnowledgeItems" multiple :lazy="true" expand-icon="pi pi-info-circle" collapse-icon="pi pi-times-circle">
-    <AccordionPanel v-for="knowledge in characterKnowledgeData.knowledges" :key="knowledge.name" :value="knowledge.mappingId">
-      <AccordionHeader>
-        <div class="d-flex flex-column flex-grow-1 pr-3">
-          <div class="d-flex flex-fill align-content-between d-block">
-            <div class="flex-grow-1 font-bold text-900">{{knowledge.knowledge.name}} - <em>{{knowledge.knowledge.type}}</em></div>
-            <div>
-              {{knowledge.levelName}} ({{knowledge.level}})
-            </div>
-          </div>
-          <div class="d-flex d-block mt-1">
-            <div class="flex-grow-1">
-              <Tag v-if="knowledge.specializations.length == 0" value="No Specializations"/>
-              <Tag v-else v-for="special in knowledge.specializations" class="mr-1" :value="special.name"/>
-            </div>
-            <div>Stones: +{{knowledge.stoneModifier}}</div>
-          </div>
-        </div>
-      </AccordionHeader>
-      <AccordionContent>
-        <p class="m-0">
-          {{knowledge.knowledge.description}}
-        </p>
-        
-        <h3 class="mt-3" v-if="knowledge.notes">Notes</h3>
-        <p v-if="knowledge.notes">
-          {{knowledge.notes}}
-        </p>
-
-        <div v-if="showEdit" class="mt-3 d-flex justify-content-between">
-          <Button class="btn btn-primary" label="Delete" severity="danger" @click="popupService.deleteConfirmation($event, knowledge.mappingId)" />
-          <Button label="Edit" @click="dialogService.showEditCharacter(knowledge)" />
-        </div>
-        <hr class="mt-2 mb-2" v-if="knowledge.specializations.length > 0"/>
-        <h1 class="mt-3" v-if="knowledge.specializations.length > 0">Specializations</h1>
-        <div v-if="knowledge.specializations.length > 0">
-          <div v-for="special in knowledge.specializations" :key="special.id">
-            <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
-              <div>
-                <h2 class="m-0 p-0">{{special.name}}</h2>
+    <Accordion :value="openKnowledgeItems" multiple :lazy="true" expand-icon="pi pi-info-circle" collapse-icon="pi pi-times-circle">
+      <AccordionPanel v-for="knowledge in characterKnowledgeData.knowledges" :key="knowledge.name" :value="knowledge.mappingId">
+        <AccordionHeader>
+          <div class="d-flex flex-column flex-grow-1 pr-3">
+            <div class="d-flex flex-fill align-content-between d-block">
+              <div class="flex-grow-1 font-bold text-900">
+                {{ knowledge.knowledge.name }} - <em>{{ knowledge.knowledge.type }}</em>
               </div>
-           </div>
-
-            <p>{{special.description}}</p>
-            <h4 v-if="special.notes">Notes</h4>
-            <p v-if="special.notes">{{special.notes}}</p>
-
-            <div class="p-0 m-0 d-flex justify-content-between">
-              <Button v-if="showEdit" label="Delete" severity="danger" @click="popupService.deleteSpecializationConfirmation($event, knowledge.mappingId, special.id)" />
-              <Button v-if="showEdit" label="Edit" @click="dialogService.showEditSpecialization(knowledge, special)" />
+              <div>
+                {{ knowledge.levelName }} ({{ knowledge.level }})
+              </div>
+            </div>
+            <div class="d-flex d-block mt-1">
+              <div class="flex-grow-1">
+                <Tag v-if="knowledge.specializations.length == 0" value="No Specializations" />
+                <Tag v-for="special in knowledge.specializations" v-else class="mr-1" :value="special.name" />
+              </div>
+              <div>Stones: +{{ knowledge.stoneModifier }}</div>
             </div>
           </div>
-        </div>
-        <div class="text-right mt-2" v-if="showEdit">
-          <Button v-if="knowledge.specializationCount > knowledge.specializations.length" class="btn btn-primary text-right" label="Add Specialization" @click="dialogService.showAddSpecialization(knowledge)" />
-        </div>
+        </AccordionHeader>
+        <AccordionContent>
+          <p class="m-0">
+            {{ knowledge.knowledge.description }}
+          </p>
         
- 
-      </AccordionContent>
-    </AccordionPanel>
-  </Accordion>
+          <h3 v-if="knowledge.notes" class="mt-3">
+            Notes
+          </h3>
+          <p v-if="knowledge.notes">
+            {{ knowledge.notes }}
+          </p>
+
+          <div v-if="showEdit" class="mt-3 d-flex justify-content-between">
+            <Button class="btn btn-primary" label="Delete" severity="danger" @click="popupService.deleteConfirmation($event, knowledge.mappingId)" />
+            <Button label="Edit" @click="dialogService.showEditCharacter(knowledge)" />
+          </div>
+          <hr v-if="knowledge.specializations.length > 0" class="mt-2 mb-2">
+          <h1 v-if="knowledge.specializations.length > 0" class="mt-3">
+            Specializations
+          </h1>
+          <div v-if="knowledge.specializations.length > 0">
+            <div v-for="special in knowledge.specializations" :key="special.id">
+              <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
+                <div>
+                  <h2 class="m-0 p-0">
+                    {{ special.name }}
+                  </h2>
+                </div>
+              </div>
+
+              <p>{{ special.description }}</p>
+              <h4 v-if="special.notes">
+                Notes
+              </h4>
+              <p v-if="special.notes">
+                {{ special.notes }}
+              </p>
+
+              <div class="p-0 m-0 d-flex justify-content-between">
+                <Button v-if="showEdit" label="Delete" severity="danger" @click="popupService.deleteSpecializationConfirmation($event, knowledge.mappingId, special.id)" />
+                <Button v-if="showEdit" label="Edit" @click="dialogService.showEditSpecialization(knowledge, special)" />
+              </div>
+            </div>
+          </div>
+          <div v-if="showEdit" class="text-right mt-2">
+            <Button v-if="knowledge.specializationCount > knowledge.specializations.length" class="btn btn-primary text-right" label="Add Specialization" @click="dialogService.showAddSpecialization(knowledge)" />
+          </div>
+        </AccordionContent>
+      </AccordionPanel>
+    </Accordion>
     
-  <div v-if="showEdit" class="mb-2">
-    <hr v-if="characterKnowledgeData.knowledges.length !== 0"/>
-    <h1>Choose Knowledges</h1>
-    <div v-if="characterKnowledgeData.knowledges.length === 0">
-      <p>No Knowledges detected, please pick one below.</p>
+    <div v-if="showEdit" class="mb-2">
+      <hr v-if="characterKnowledgeData.knowledges.length !== 0">
+      <h1>Choose Knowledges</h1>
+      <div v-if="characterKnowledgeData.knowledges.length === 0">
+        <p>No Knowledges detected, please pick one below.</p>
+      </div>
+      <div v-for="knowledge in filteredKnowledges" :key="knowledge.id">
+        <SelectKnowledgeItem :is-read-only="false" :knowledge="knowledge" />
+      </div>
     </div>
-    <div v-for="knowledge in filteredKnowledges" :key="knowledge.id">
-      <SelectKnowledgeItem :is-read-only="false" :knowledge="knowledge"/>
-    </div>
-  </div>
   </div>
 </template>
