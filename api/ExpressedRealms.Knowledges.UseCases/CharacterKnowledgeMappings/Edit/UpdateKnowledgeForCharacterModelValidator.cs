@@ -17,8 +17,6 @@ internal sealed class UpdateKnowledgeForCharacterModelValidator
         IKnowledgeLevelRepository knowledgeLevelRepository
     )
     {
-        // TODO Need to add a character exists check
-
         RuleFor(x => x.MappingId)
             .NotEmpty()
             .WithMessage("Mapping Id is required.")
