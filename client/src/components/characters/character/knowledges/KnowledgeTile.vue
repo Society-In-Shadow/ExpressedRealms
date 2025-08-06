@@ -50,7 +50,7 @@ const filteredKnowledges = computed(() => {
 
 <template>
   <div style="max-width: 650px; margin: 0 auto;">
-    <div v-if="!noKnowledges" class="text-right mb-2">
+    <div v-if="!noKnowledges || characterKnowledgeData.knowledges.length > 0" class="text-right mb-2">
       <Button v-if="!showEdit" class="btn btn-primary" label="Edit" @click="toggleEdit" />
       <Button v-else class="btn btn-primary" label="Cancel" @click="toggleEdit" />
     </div>
