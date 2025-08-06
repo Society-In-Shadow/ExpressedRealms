@@ -6,7 +6,6 @@ import Card from "primevue/card";
 </script>
 
 <template>
-
   <h1>Society in Shadows</h1>
   <p>
     These pages—once passed around as a heavily guarded manuscript—are no longer confined to dusty shelves or hidden 
@@ -79,8 +78,6 @@ import Card from "primevue/card";
       </template>
     </Card>
   </div>
-  
-
   
   <h1>Before the Shadows</h1>
 

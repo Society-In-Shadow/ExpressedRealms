@@ -28,24 +28,6 @@ internal sealed class EditSpecializationUseCase(
 
         var specialization = await specializationRepository.GetSpecialization(model.Id);
 
-        var mapping = await mappingRepository.GetCharacterKnowledgeMappingForEditing(
-            specialization.KnowledgeMappingId
-        );
-
-        const int maxKnowledge = 7;
-
-        var spentXp = await mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(
-            mapping.CharacterId
-        );
-
-        const int newSpecializationCost = 2;
-        if (maxKnowledge - spentXp - newSpecializationCost < 0)
-        {
-            return Result.Fail(
-                new NotEnoughXPFailure(maxKnowledge - spentXp, newSpecializationCost)
-            );
-        }
-
         var counts = await mappingRepository.GetSpecializationCountForMapping(
             specialization.KnowledgeMappingId
         );

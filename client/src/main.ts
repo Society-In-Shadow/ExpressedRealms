@@ -26,7 +26,7 @@ pinia.use(piniaPluginPersistedState);
 import { definePreset } from '@primevue/themes';
 import Lara from '@primevue/themes/lara';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-
+import DialogService from 'primevue/dialogservice';
 const MyPreset = definePreset(Lara, {
     semantic: {
         colorScheme: {
@@ -82,6 +82,7 @@ const app = createApp(App)
 app.directive('ripple', Ripple);
 app.use(pinia);
 app.use(ToastService);
-app.use(ConfirmationService)
+app.use(ConfirmationService);
+app.use(DialogService);
 
 app.mount('#app');

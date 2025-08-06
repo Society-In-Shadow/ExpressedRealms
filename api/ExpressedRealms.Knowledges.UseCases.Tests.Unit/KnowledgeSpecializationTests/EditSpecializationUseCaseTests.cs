@@ -3,10 +3,8 @@ using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeSpecializations;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings.Projections;
 using ExpressedRealms.Knowledges.Repository.KnowledgeSpecializations;
-using ExpressedRealms.Knowledges.UseCases.KnowledgeSpecializations.CreateSpecialization;
 using ExpressedRealms.Knowledges.UseCases.KnowledgeSpecializations.EditSpecialization;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
-using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FakeItEasy;
 using Xunit;
 
@@ -48,12 +46,6 @@ public class EditSpecializationUseCaseTests
                 _mappingRepository.MappingAlreadyExists(_specializationDbModel.KnowledgeMappingId)
             )
             .Returns(true);
-        A.CallTo(() =>
-                _mappingRepository.GetCharacterKnowledgeMappingForEditing(
-                    _specializationDbModel.KnowledgeMappingId
-                )
-            )
-            .Returns(_mappingDbModel);
         A.CallTo(() =>
                 _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(
                     _mappingDbModel.CharacterId
@@ -190,31 +182,7 @@ public class EditSpecializationUseCaseTests
         A.CallTo(() => _specializationRepository.GetSpecialization(_model.Id))
             .MustHaveHappenedOnceExactly();
     }
-
-    [Fact]
-    public async Task UseCase_CorrectlyGrabs_TheKnowledgeMapping()
-    {
-        await _useCase.ExecuteAsync(_model);
-        A.CallTo(() =>
-                _mappingRepository.GetCharacterKnowledgeMappingForEditing(
-                    _specializationDbModel.KnowledgeMappingId
-                )
-            )
-            .MustHaveHappenedOnceExactly();
-    }
-
-    [Fact]
-    public async Task UseCase_CorrectlyGrabs_ExperienceSpentOnKnowledges_ForTheCharacter()
-    {
-        await _useCase.ExecuteAsync(_model);
-        A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(
-                    _mappingDbModel.CharacterId
-                )
-            )
-            .MustHaveHappenedOnceExactly();
-    }
-
+    
     [Fact]
     public async Task UseCase_CorrectlyGrabs_TheSpecializationCountForTheMapping()
     {
@@ -267,36 +235,6 @@ public class EditSpecializationUseCaseTests
                 )
             )
             .MustHaveHappenedOnceExactly();
-    }
-
-    [Fact]
-    public async Task UseCase_CalculatesAvailableXP_Correctly()
-    {
-        A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(
-                    _mappingDbModel.CharacterId
-                )
-            )
-            .Returns(6);
-
-        var result = await _useCase.ExecuteAsync(_model);
-
-        Assert.Equal(1, ((NotEnoughXPFailure)result.Errors[0]).AvailableXP);
-    }
-
-    [Fact]
-    public async Task UseCase_CalculatesCost_Correctly()
-    {
-        A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(
-                    _mappingDbModel.CharacterId
-                )
-            )
-            .Returns(6);
-
-        var result = await _useCase.ExecuteAsync(_model);
-
-        Assert.Equal(2, ((NotEnoughXPFailure)result.Errors[0]).AmountTryingToSpend);
     }
 
     [Fact]
