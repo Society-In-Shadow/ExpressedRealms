@@ -9,6 +9,9 @@ import toaster from "@/services/Toasters";
 import type {
     CharacterKnowledgeForm
 } from "@/components/characters/character/knowledges/validations/knowledgeValidations";
+import type {
+    SpecializationForm
+} from "@/components/characters/character/knowledges/validations/specializationValidations";
 
 export const characterKnowledgeStore =
     defineStore('characterKnowledge', {
@@ -62,6 +65,35 @@ export const characterKnowledgeStore =
                     .then(async () => {
                         await this.getCharacterKnowledges(characterId);
                         toaster.success("Successfully Deleted Knowledge!");
+                    });
+            },
+            addSpecialization: async function (values:SpecializationForm, characterId: number, mappingId: number): Promise<void> {
+                await axios.post(`/characters/${characterId}/knowledges/${mappingId}/specialization`, {
+                    name: values.name,
+                    description: values.description,
+                    notes: values.notes,
+                })
+                    .then(async () => {
+                        await this.getCharacterKnowledges(characterId);
+                        toaster.success("Successfully Added Specialization!");
+                    });
+            },
+            editSpecialization: async function (values:SpecializationForm, characterId: number, mappingId: number, specializationId: number): Promise<void> {
+                await axios.put(`/characters/${characterId}/knowledges/${mappingId}/specialization/${specializationId}`, {
+                    name: values.name,
+                    description: values.description,
+                    notes: values.notes,
+                })
+                    .then(async () => {
+                        await this.getCharacterKnowledges(characterId);
+                        toaster.success("Successfully Updated Specialization!");
+                    });
+            },
+            deleteSpecialization: async function (characterId: number, mappingId: number, specializationNumber:number): Promise<void> {
+                await axios.delete(`/characters/${characterId}/knowledges/${mappingId}/specialization/${specializationNumber}`)
+                    .then(async () => {
+                        await this.getCharacterKnowledges(characterId);
+                        toaster.success("Successfully Deleted Specialization!");
                     });
             },
         }
