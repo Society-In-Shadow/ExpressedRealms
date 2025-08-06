@@ -15,6 +15,7 @@ export const FeatureFlags = {
     ShowTreasureTales: "show-treasured-tales-nav",
     ShowMarketing: "show-marketing",
     ShowMarketingContactUs: "show-marketing-contact-us",
+    ShowCharacterKnowledgesTab: "show-character-knowledge-tab",
 } as const;
 
 export type UserRole = (typeof UserRoles)[keyof typeof UserRoles];

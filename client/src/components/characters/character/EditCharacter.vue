@@ -14,6 +14,16 @@ import DataTable from "primevue/datatable";
 import ProficiencyTableTile from "@/components/characters/character/proficiency/ProficiencyTableTile.vue";
 import CharacterDetailTile from "@/components/characters/character/CharacterDetailTile.vue";
 import TrackableProficiencies from "@/components/characters/character/proficiency/TrackableProficiencies.vue";
+import KnowledgeTile from "@/components/characters/character/knowledges/KnowledgeTile.vue";
+import {FeatureFlags, userStore} from "@/stores/userStore";
+import {onBeforeMount, ref} from "vue";
+
+const userData = userStore();
+const showKnowledgeTab = ref(false);
+
+onBeforeMount(async () => {
+  showKnowledgeTab.value = await userData.hasFeatureFlag(FeatureFlags.ShowCharacterKnowledgesTab);
+})
 
 </script>
 
@@ -39,6 +49,9 @@ import TrackableProficiencies from "@/components/characters/character/proficienc
         <Tab value="1">
           Skills
         </Tab>
+        <Tab value="2" v-if="showKnowledgeTab">
+          Knowledges
+        </Tab>
       </TabList>
       <TabPanels class="p-2 p-md-3">
         <TabPanel value="0">
@@ -46,6 +59,9 @@ import TrackableProficiencies from "@/components/characters/character/proficienc
         </TabPanel>
         <TabPanel value="1">
           <SkillTile />
+        </TabPanel>
+        <TabPanel value="2" v-if="showKnowledgeTab">
+          <KnowledgeTile />
         </TabPanel>
       </TabPanels>
     </Tabs>
