@@ -47,7 +47,7 @@ internal sealed class CreateSpecializationUseCase(
             model.KnowledgeMappingId
         );
 
-        if (counts.MaxCount <= counts.CurrentCount + 1)
+        if (counts.MaxCount < counts.CurrentCount + 1)
         {
             return Result.Fail(
                 "You have reached the maximum number of specializations allowed for this knowledge."
