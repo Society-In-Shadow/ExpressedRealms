@@ -10,10 +10,11 @@ public class GetKnowledgeLevelsUseCase(
     ICharacterKnowledgeRepository mappingRepository,
     GetKnowledgeLevelsModelValidator validator,
     CancellationToken cancellationToken
-    )
-    : IGetKnowledgeLevelsUseCase
+) : IGetKnowledgeLevelsUseCase
 {
-    public async Task<Result<GetKnowledgeLevelsReturnModel>> ExecuteAsync(GetKnowledgeLevelsModel model)
+    public async Task<Result<GetKnowledgeLevelsReturnModel>> ExecuteAsync(
+        GetKnowledgeLevelsModel model
+    )
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,
@@ -23,9 +24,11 @@ public class GetKnowledgeLevelsUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-        
+
         var knowledgeLevels = await levelRepository.GetKnowledgeLevels();
-        var currentExperience = await mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(model.CharacterId);
+        var currentExperience = await mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(
+            model.CharacterId
+        );
 
         return Result.Ok(
             new GetKnowledgeLevelsReturnModel()

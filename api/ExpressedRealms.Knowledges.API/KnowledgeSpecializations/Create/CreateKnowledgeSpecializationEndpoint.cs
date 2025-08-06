@@ -8,7 +8,9 @@ namespace ExpressedRealms.Knowledges.API.KnowledgeSpecializations.Create;
 
 public static class CreateKnowledgeSpecializationEndpoint
 {
-    public static async Task<Results<Ok<int>, NotFound, ValidationProblem, BadRequest<string>>> Create(
+    public static async Task<
+        Results<Ok<int>, NotFound, ValidationProblem, BadRequest<string>>
+    > Create(
         int characterId,
         int mappingId,
         [FromBody] CreateKnowledgeSpecializationRequest request,
@@ -21,7 +23,7 @@ public static class CreateKnowledgeSpecializationEndpoint
                 KnowledgeMappingId = mappingId,
                 Description = request.Description,
                 Name = request.Name,
-                Notes = request.Notes
+                Notes = request.Notes,
             }
         );
 

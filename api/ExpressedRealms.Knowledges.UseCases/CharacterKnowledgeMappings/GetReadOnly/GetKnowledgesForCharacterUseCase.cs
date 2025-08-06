@@ -59,7 +59,7 @@ internal sealed class GetKnowledgesForCharacterUseCase(
         var foo = 3;
         if (true)
             foo = 4;
-        
+
         return Result.Ok(items.Take(foo).ToList());
     }
 }

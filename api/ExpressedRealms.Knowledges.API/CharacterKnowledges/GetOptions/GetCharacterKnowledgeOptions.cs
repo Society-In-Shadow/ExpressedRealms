@@ -11,26 +11,29 @@ public static class GetCharacterKnowledgeOptions
         IGetKnowledgeLevelsUseCase useCase
     )
     {
-        var results = await useCase.ExecuteAsync(new GetKnowledgeLevelsModel()
-        {
-            CharacterId = characterId,
-        });
+        var results = await useCase.ExecuteAsync(
+            new GetKnowledgeLevelsModel() { CharacterId = characterId }
+        );
 
-        return TypedResults.Ok(new KnowledgeOptionsResponse()
-        {
-            AvailableExperience = results.Value.AvailableExperience,
-            KnowledgeLevels = results.Value.KnowledgeLevels.Select(x => new KnowledgeOptions()
+        return TypedResults.Ok(
+            new KnowledgeOptionsResponse()
             {
-                Id = x.Id,
-                Name = x.Name,
-                Level = x.Level,
-                SpecializationCount = x.SpecializationCount,
-                StoneModifier = x.StoneModifier,
-                GeneralXpCost = x.GeneralXpCost,
-                TotalGeneralXpCost = x.TotalGeneralXpCost,
-                UnknownXpCost = x.UnknownXpCost,
-                TotalUnknownXpCost = x.TotalUnknownXpCost,
-            }).ToList()
-        });
+                AvailableExperience = results.Value.AvailableExperience,
+                KnowledgeLevels = results
+                    .Value.KnowledgeLevels.Select(x => new KnowledgeOptions()
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Level = x.Level,
+                        SpecializationCount = x.SpecializationCount,
+                        StoneModifier = x.StoneModifier,
+                        GeneralXpCost = x.GeneralXpCost,
+                        TotalGeneralXpCost = x.TotalGeneralXpCost,
+                        UnknownXpCost = x.UnknownXpCost,
+                        TotalUnknownXpCost = x.TotalUnknownXpCost,
+                    })
+                    .ToList(),
+            }
+        );
     }
 }

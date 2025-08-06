@@ -20,8 +20,7 @@ public static class EditCharacterKnowledgeEndpoint
             {
                 MappingId = mappingId,
                 KnowledgeLevelId = request.KnowledgeLevelId,
-                Notes = request.Notes
-                
+                Notes = request.Notes,
             }
         );
 

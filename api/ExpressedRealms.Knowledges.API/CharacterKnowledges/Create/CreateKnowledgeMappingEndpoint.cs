@@ -8,7 +8,9 @@ namespace ExpressedRealms.Knowledges.API.CharacterKnowledges.Create;
 
 public static class CreateKnowledgeMappingEndpoint
 {
-    public static async Task<Results<Ok<int>, NotFound, ValidationProblem, BadRequest<string>>> CreateMapping(
+    public static async Task<
+        Results<Ok<int>, NotFound, ValidationProblem, BadRequest<string>>
+    > CreateMapping(
         int characterId,
         [FromBody] CreateKnowledgeMappingRequest request,
         [FromServices] IAddKnowledgeToCharacterUseCase createKnowledgeUseCase
@@ -20,7 +22,7 @@ public static class CreateKnowledgeMappingEndpoint
                 CharacterId = characterId,
                 KnowledgeId = request.KnowledgeId,
                 KnowledgeLevelId = request.KnowledgeLevelId,
-                Notes = request.Notes
+                Notes = request.Notes,
             }
         );
 

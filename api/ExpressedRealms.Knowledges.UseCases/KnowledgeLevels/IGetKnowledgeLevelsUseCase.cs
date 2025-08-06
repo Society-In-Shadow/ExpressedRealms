@@ -3,4 +3,5 @@ using FluentResults;
 
 namespace ExpressedRealms.Knowledges.UseCases.KnowledgeLevels;
 
-public interface IGetKnowledgeLevelsUseCase : IGenericUseCase<Result<GetKnowledgeLevelsReturnModel>, GetKnowledgeLevelsModel> { }
+public interface IGetKnowledgeLevelsUseCase
+    : IGenericUseCase<Result<GetKnowledgeLevelsReturnModel>, GetKnowledgeLevelsModel> { }

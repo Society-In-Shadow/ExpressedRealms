@@ -24,8 +24,7 @@ public static class EditCharacterSpecializationEndpoint
                 Id = specializationId,
                 Description = request.Description,
                 Name = request.Name,
-                Notes = request.Notes
-                
+                Notes = request.Notes,
             }
         );
 

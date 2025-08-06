@@ -14,7 +14,9 @@ public static class DeleteCharacterKnowledgeEndpoint
         [FromServices] IDeleteKnowledgeFromCharacterUseCase useCase
     )
     {
-        var results = await useCase.ExecuteAsync(new DeleteKnowledgeFromCharacterModel() { MappingId = mappingId });
+        var results = await useCase.ExecuteAsync(
+            new DeleteKnowledgeFromCharacterModel() { MappingId = mappingId }
+        );
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;

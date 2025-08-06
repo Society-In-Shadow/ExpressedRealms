@@ -18,7 +18,7 @@ internal sealed class UpdateKnowledgeForCharacterModelValidator
     )
     {
         // TODO Need to add a character exists check
-        
+
         RuleFor(x => x.MappingId)
             .NotEmpty()
             .WithMessage("Mapping Id is required.")

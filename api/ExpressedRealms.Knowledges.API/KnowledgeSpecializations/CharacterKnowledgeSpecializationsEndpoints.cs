@@ -15,14 +15,20 @@ internal static class CharacterKnowledgeSpecializationsEndpoints
             .AddFluentValidationAutoValidation()
             .WithTags("Character Knowledge Specializations")
             .WithOpenApi();
-        
-        endpointGroup
-            .MapPost("{characterid}/knowledges/{mappingId}/specialization", CreateKnowledgeSpecializationEndpoint.Create);
 
-        endpointGroup
-            .MapPut("{characterId}/knowledges/{mappingId}/specialization/{specializationId}", EditCharacterSpecializationEndpoint.Edit);
+        endpointGroup.MapPost(
+            "{characterid}/knowledges/{mappingId}/specialization",
+            CreateKnowledgeSpecializationEndpoint.Create
+        );
 
-        endpointGroup
-            .MapDelete("{characterId}/knowledges/{mappingId}/specialization/{specializationId}", DeleteCharacterSpecializationEndpoint.Delete);
+        endpointGroup.MapPut(
+            "{characterId}/knowledges/{mappingId}/specialization/{specializationId}",
+            EditCharacterSpecializationEndpoint.Edit
+        );
+
+        endpointGroup.MapDelete(
+            "{characterId}/knowledges/{mappingId}/specialization/{specializationId}",
+            DeleteCharacterSpecializationEndpoint.Delete
+        );
     }
 }

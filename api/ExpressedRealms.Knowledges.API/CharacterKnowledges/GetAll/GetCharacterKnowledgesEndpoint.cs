@@ -11,16 +11,15 @@ public static class GetCharacterKnowledgesEndpoint
         IGetKnowledgesForCharacterUseCase useCase
     )
     {
-        var results = await useCase.ExecuteAsync(new GetKnowledgesForCharacterModel()
-        {
-            CharacterId = characterId
-        });
+        var results = await useCase.ExecuteAsync(
+            new GetKnowledgesForCharacterModel() { CharacterId = characterId }
+        );
 
         return TypedResults.Ok(
             new CharacterKnowledgeBaseResponse()
             {
-                Knowledges = results.Value
-                    .Select(x => new CharacterKnowledgeResponse()
+                Knowledges = results
+                    .Value.Select(x => new CharacterKnowledgeResponse()
                     {
                         MappingId = x.MappingId,
                         Knowledge = new KnowledgeModel()
@@ -45,7 +44,8 @@ public static class GetCharacterKnowledgesEndpoint
                                 Notes = y.Notes,
                             })
                             .ToList(),
-                    }).ToList()
+                    })
+                    .ToList(),
             }
         );
     }

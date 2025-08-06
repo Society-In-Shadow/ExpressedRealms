@@ -22,16 +22,24 @@ internal static class CharacterKnowledgeEndpoints
             .MapGet("{characterId}/knowledges", GetCharacterKnowledgesEndpoint.GetKnowledges)
             .WithSummary("Returns all knowledges.");
 
-        endpointGroup
-            .MapPost("{characterid}/knowledges", CreateKnowledgeMappingEndpoint.CreateMapping);
-        
-        endpointGroup
-            .MapGet("{characterid}/knowledges/options", GetCharacterKnowledgeOptions.CharacterKnowledgeOptions);
+        endpointGroup.MapPost(
+            "{characterid}/knowledges",
+            CreateKnowledgeMappingEndpoint.CreateMapping
+        );
 
-        endpointGroup
-            .MapPut("{characterId}/knowledges/{mappingId}", EditCharacterKnowledgeEndpoint.EditKnowledges);
+        endpointGroup.MapGet(
+            "{characterid}/knowledges/options",
+            GetCharacterKnowledgeOptions.CharacterKnowledgeOptions
+        );
 
-        endpointGroup
-            .MapDelete("{characterId}/knowledges/{mappingId}", DeleteCharacterKnowledgeEndpoint.DeleteMapping);
+        endpointGroup.MapPut(
+            "{characterId}/knowledges/{mappingId}",
+            EditCharacterKnowledgeEndpoint.EditKnowledges
+        );
+
+        endpointGroup.MapDelete(
+            "{characterId}/knowledges/{mappingId}",
+            DeleteCharacterKnowledgeEndpoint.DeleteMapping
+        );
     }
 }
