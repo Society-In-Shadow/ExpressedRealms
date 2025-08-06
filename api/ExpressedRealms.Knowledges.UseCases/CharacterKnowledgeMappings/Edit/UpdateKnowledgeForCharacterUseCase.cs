@@ -45,15 +45,28 @@ internal sealed class UpdateKnowledgeForCharacterUseCase(
                 mapping.CharacterId
             );
 
-            var knowledgeLevel = await knowledgeLevelRepository.GetKnowledgeLevel(
+            var newLevel = await knowledgeLevelRepository.GetKnowledgeLevel(
                 model.KnowledgeLevelId
+            );
+            
+            var previousLevel = await knowledgeLevelRepository.GetKnowledgeLevel(
+                mapping.KnowledgeLevelId
             );
 
             var knowledge = await knowledgeRepository.GetKnowledgeAsync(mapping.KnowledgeId);
+            
+            if (newLevel.Level < previousLevel.Level)
+            {
+                var removedXp = knowledge.KnowledgeTypeId == unknownKnowledgeType
+                        ? previousLevel.UnknownXpCost
+                        : previousLevel.GeneralXpCost;
+                spentXp -= removedXp;
+            }
+
             var newExperience =
                 knowledge.KnowledgeTypeId == unknownKnowledgeType
-                    ? knowledgeLevel.UnknownXpCost
-                    : knowledgeLevel.GeneralXpCost;
+                    ? newLevel.UnknownXpCost
+                    : newLevel.GeneralXpCost;
 
             if (spentXp + newExperience > availableExperience)
                 return Result.Fail(
