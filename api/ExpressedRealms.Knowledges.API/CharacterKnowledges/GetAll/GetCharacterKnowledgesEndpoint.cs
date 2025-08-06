@@ -25,6 +25,7 @@ public static class GetCharacterKnowledgesEndpoint
                         MappingId = x.MappingId,
                         Knowledge = new KnowledgeModel()
                         {
+                            Id = x.Knowledge.Id,
                             Name = x.Knowledge.Name,
                             Description = x.Knowledge.Description,
                             Type = x.Knowledge.Type,
@@ -32,6 +33,9 @@ public static class GetCharacterKnowledgesEndpoint
                         StoneModifier = x.StoneModifier,
                         LevelName = x.LevelName,
                         Level = x.Level,
+                        LevelId = x.LevelId,
+                        Notes = x.Notes,
+                        SpecializationCount = x.SpecializationCount,
                         Specializations = x
                             .Specializations.Select(y => new SpecializationModel()
                             {

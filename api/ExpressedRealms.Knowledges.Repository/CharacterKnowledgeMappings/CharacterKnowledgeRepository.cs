@@ -73,13 +73,17 @@ public class CharacterKnowledgeRepository(
                 MappingId = x.Id,
                 Knowledge = new KnowledgeProjection()
                 {
-                    Name = x.Knowledge.Name,
+                    Id = x.KnowledgeId,
                     Description = x.Knowledge.Description,
+                    Name = x.Knowledge.Name,
                     Type = x.Knowledge.KnowledgeType.Name,
                 },
                 StoneModifier = x.KnowledgeLevel.StoneModifier,
                 LevelName = x.KnowledgeLevel.Name,
                 Level = x.KnowledgeLevel.Level,
+                Notes = x.Notes,
+                LevelId = x.KnowledgeLevelId,
+                SpecializationCount = x.KnowledgeLevel.SpecializationCount,
                 Specializations = x
                     .CharacterKnowledgeSpecializations.Select(y => new SpecializationProjection()
                     {

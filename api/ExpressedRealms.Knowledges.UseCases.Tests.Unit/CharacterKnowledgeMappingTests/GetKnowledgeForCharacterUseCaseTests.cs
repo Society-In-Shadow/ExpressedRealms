@@ -27,6 +27,7 @@ public class GetReadOnlyKnowledgesForCharacterUseCaseTests
                 MappingId = 1,
                 Knowledge = new KnowledgeProjection()
                 {
+                    Id = 29,
                     Name = "Knowledge",
                     Description = "Knowledge Description",
                     Type = "Type",
@@ -34,6 +35,9 @@ public class GetReadOnlyKnowledgesForCharacterUseCaseTests
                 LevelName = "LevelName",
                 Level = 2,
                 StoneModifier = 3,
+                Notes = "Notes",
+                LevelId = 3,
+                SpecializationCount = 20,
                 Specializations = new List<SpecializationProjection>()
                 {
                     new SpecializationProjection()
@@ -57,11 +61,14 @@ public class GetReadOnlyKnowledgesForCharacterUseCaseTests
                 MappingId = 4,
                 Knowledge = new KnowledgeProjection()
                 {
+                    Id = 30,
                     Name = "Knowledge 2",
                     Description = "Knowledge Description 2",
                     Type = "Type 2",
                 },
                 LevelName = "LevelName 2",
+                LevelId = 8,
+                SpecializationCount = 3,
                 Level = 5,
                 StoneModifier = 6,
                 Specializations = new List<SpecializationProjection>(),
@@ -131,6 +138,7 @@ public class GetReadOnlyKnowledgesForCharacterUseCaseTests
                 MappingId = x.MappingId,
                 Knowledge = new KnowledgeReturnModel()
                 {
+                    Id = x.Knowledge.Id,
                     Name = x.Knowledge.Name,
                     Description = x.Knowledge.Description,
                     Type = x.Knowledge.Type,
@@ -138,6 +146,9 @@ public class GetReadOnlyKnowledgesForCharacterUseCaseTests
                 StoneModifier = x.StoneModifier,
                 LevelName = x.LevelName,
                 Level = x.Level,
+                Notes = x.Notes,
+                SpecializationCount = x.SpecializationCount,
+                LevelId = x.LevelId,
                 Specializations = x
                     .Specializations.Select(y => new SpecializationReturnModel()
                     {
