@@ -1,8 +1,10 @@
-﻿using ExpressedRealms.Knowledges.API.CharacterKnowledges.Create;
+﻿using ExpressedRealms.FeatureFlags;
+using ExpressedRealms.Knowledges.API.CharacterKnowledges.Create;
 using ExpressedRealms.Knowledges.API.CharacterKnowledges.Delete;
 using ExpressedRealms.Knowledges.API.CharacterKnowledges.Edit;
 using ExpressedRealms.Knowledges.API.CharacterKnowledges.GetAll;
 using ExpressedRealms.Knowledges.API.CharacterKnowledges.GetOptions;
+using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
@@ -15,6 +17,7 @@ internal static class CharacterKnowledgeEndpoints
     {
         var endpointGroup = app.MapGroup("characters")
             .AddFluentValidationAutoValidation()
+            .RequireFeatureToggle(ReleaseFlags.ShowCharacterKnowledgePage)
             .WithTags("Character Knowledges")
             .WithOpenApi();
 
