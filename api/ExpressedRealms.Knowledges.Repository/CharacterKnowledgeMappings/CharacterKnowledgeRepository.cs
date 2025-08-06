@@ -19,9 +19,9 @@ public class CharacterKnowledgeRepository(
             .CharacterKnowledgeMappings.Where(x => x.CharacterId == characterId)
             .SumAsync(
                 x =>
-                    x.Knowledge.KnowledgeTypeId == unknownKnowledgeType
+                    (x.Knowledge.KnowledgeTypeId == unknownKnowledgeType
                         ? x.KnowledgeLevel.TotalUnknownXpCost
-                        : x.KnowledgeLevel.TotalGeneralXpCost,
+                        : x.KnowledgeLevel.TotalGeneralXpCost) + x.CharacterKnowledgeSpecializations.Count * 2,
                 cancellationToken
             );
     }
