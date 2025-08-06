@@ -20,7 +20,7 @@ public class CharacterKnowledgeMappingConfiguration
         builder
             .HasOne(e => e.Knowledge)
             .WithMany(e => e.CharacterKnowledgeMappings)
-            .HasForeignKey(e => e.KnowledgeLevelId)
+            .HasForeignKey(e => e.KnowledgeId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder

@@ -47,6 +47,12 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "show-marketing-contact-us",
         "Allows one to see the contact us page on the marketing materials"
     );
+    
+    public static readonly ReleaseFlags ShowCharacterKnowledgePage = new(
+        "Show Knowledge Tab on Characters",
+        "show-character-knowledge-tab",
+        "Allows one to see the knowledge tab on the character page"
+    );
 
     public override string ToString()
     {

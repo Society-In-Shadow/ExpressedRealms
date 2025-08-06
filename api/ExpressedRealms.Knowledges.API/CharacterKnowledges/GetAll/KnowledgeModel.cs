@@ -1,6 +1,6 @@
-namespace ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.GetReadOnly;
+namespace ExpressedRealms.Knowledges.API.CharacterKnowledges.GetAll;
 
-public class KnowledgeReturnModel
+public class KnowledgeModel
 {
     public required string Name { get; set; }
     public required string Description { get; set; }

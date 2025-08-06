@@ -1,12 +1,14 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings.Projections;
+using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 
 public class CharacterKnowledgeRepository(
     ExpressedRealmsDbContext context,
+    IUserContext userContext,
     CancellationToken cancellationToken
 ) : ICharacterKnowledgeRepository
 {
@@ -36,7 +38,7 @@ public class CharacterKnowledgeRepository(
         return await context
             .CharacterKnowledgeMappings.AsNoTracking()
             .AnyAsync(
-                x => x.KnowledgeId == knowledgeId && x.CharacterId == characterId,
+                x => x.KnowledgeId == knowledgeId && x.CharacterId == characterId && x.Character.Player.UserId == userContext.CurrentUserId(),
                 cancellationToken
             );
     }
@@ -45,7 +47,7 @@ public class CharacterKnowledgeRepository(
     {
         return context
             .CharacterKnowledgeMappings.AsNoTracking()
-            .AnyAsync(x => x.Id == mappingId, cancellationToken);
+            .AnyAsync(x => x.Id == mappingId && x.Character.Player.UserId == userContext.CurrentUserId(), cancellationToken);
     }
 
     public Task<CharacterKnowledgeMapping> GetCharacterKnowledgeMappingForEditing(
@@ -73,13 +75,17 @@ public class CharacterKnowledgeRepository(
                 MappingId = x.Id,
                 Knowledge = new KnowledgeProjection()
                 {
-                    Name = x.Knowledge.Name,
+                    Id = x.KnowledgeId,
                     Description = x.Knowledge.Description,
+                    Name = x.Knowledge.Name,
                     Type = x.Knowledge.KnowledgeType.Name,
                 },
                 StoneModifier = x.KnowledgeLevel.StoneModifier,
                 LevelName = x.KnowledgeLevel.Name,
                 Level = x.KnowledgeLevel.Level,
+                Notes = x.Notes,
+                LevelId = x.KnowledgeLevelId,
+                SpecializationCount = x.KnowledgeLevel.SpecializationCount,
                 Specializations = x
                     .CharacterKnowledgeSpecializations.Select(y => new SpecializationProjection()
                     {
