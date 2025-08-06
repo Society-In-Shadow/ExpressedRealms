@@ -4,9 +4,9 @@
   <h2>Our Equality, Diversity and Inclusion Policy</h2>
   <p>
     Society in Shadows is, at its core, a game through which we encourage our players to explore political themes and 
-    topics. The setting itself is centred on politics in the V5 world, and as such discussion around such topics is 
-    inevitably going to occur in play. As organisers, we want to create a space in which players can feel safe to 
-    explore such themes.
+    topics. The setting itself is centred on politics in the Society in Shadows world, and as such discussion around 
+    such topics is inevitably going to occur in play. As organisers, we want to create a space in which players can 
+    feel safe to explore such themes.
   </p>
 
   <p>
