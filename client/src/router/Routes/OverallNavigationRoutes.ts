@@ -32,12 +32,56 @@ export const OverallRoutes = {
         {
             path: "/rulebook",
             name: "rulebook",
-            component: () => import("./../../components/expressions/CmsBase.vue")
+            component: () => import("./../../components/expressions/CmsBase.vue"),
+            meta: { isCMS: true, id: 2 },
         },
         {
             path: "/treasuredtales",
             name: "treasuredtales",
-            component: () => import("./../../components/expressions/CmsBase.vue")
+            component: () => import("./../../components/expressions/CmsBase.vue"),
+            meta: { isCMS: true, id: 3 },
+        },
+        {
+            path: "/adversaries",
+            name: "adversaries",
+            component: () => import("./../../components/expressions/CmsBase.vue"),
+            meta: { isCMS: true, id: 4 },
+        },
+        {
+            path: "/factions",
+            name: "factions",
+            component: () => import("./../../components/expressions/CmsBase.vue"),
+            meta: { isCMS: true, id: 5 },
+        },
+        {
+            path: "/society",
+            name: "society",
+            component: () => import("./../../components/expressions/CmsBase.vue"),
+            meta: { isCMS: true, id: 6 },
+        },
+        {
+            path: "/characterSetup",
+            name: "characterSetup",
+            component: () => import("./../../components/expressions/CmsBase.vue"),
+            meta: { isCMS: true, id: 7 },
+        },
+        {
+            path: "/knowledges",
+            name: "knowledges",
+            component: () => import("./../../components/expressions/CmsBase.vue"),
+            meta: { isCMS: true, id: 8 },
+        },
+        {
+            path: "/blessings",
+            name: "blessings",
+            component: () => import("./../../components/expressions/CmsBase.vue"),
+            meta: { isCMS: true, id: 9 },
+        },
+        {
+            path: "/combat",
+            name: "combat",
+            component: () => import("./../../components/expressions/CmsBase.vue"),
+            meta: { isCMS: true, id: 10 },
         },
         {
             path: "/expressions/:name",

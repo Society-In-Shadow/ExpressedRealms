@@ -18,12 +18,21 @@ defineStore('expression', {
         }
     },
     actions: {
-        async getExpressionId(name: string){
-            await axios.get(`/expression/getByName/${name}`)
-                .then(async (json) => {
-                    this.currentExpressionId = json.data.id;
-                    this.showPowersTab = json.data.showPowersTab;
-                })
+        async getExpressionId(route: object){
+            if(route.meta.isCMS){
+                console.log("is cms");
+                await axios.get(`/expression/getCmsByName/${route.meta.id}`)
+                    .then(async (json) => {
+                        this.currentExpressionId = json.data.id;
+                    })
+            }
+            else{
+                await axios.get(`/expression/getByName/${route.params.name}`)
+                    .then(async (json) => {
+                        this.currentExpressionId = json.data.id;
+                        this.showPowersTab = json.data.showPowersTab;
+                    })
+            }
         },
         async getExpressionSections(){
             this.isDoneLoading = false;

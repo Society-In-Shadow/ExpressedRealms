@@ -45,17 +45,7 @@ const showPreview = ref(false);
 
 async function fetchData() {
 
-  if(route.path.includes("/rulebook")){
-    await expressionInfo.getExpressionId("ruleBook");
-  }
-  else if(route.path.includes("/treasuredtales"))
-  {
-    await expressionInfo.getExpressionId("treasuredTales");
-  }
-  else
-  {
-    await expressionInfo.getExpressionId(route.params.name);
-  }
+  await expressionInfo.getExpressionId(route);
   
   await expressionInfo.getExpressionSections()
       .then(async () => {
