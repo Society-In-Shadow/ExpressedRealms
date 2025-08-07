@@ -6,10 +6,7 @@ import Editor from "primevue/editor";
 import ContextMenu from 'primevue/contextmenu';
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
-import Table from '@tiptap/extension-table';
-import TableRow from '@tiptap/extension-table-row';
-import TableCell from '@tiptap/extension-table-cell';
-import TableHeader from '@tiptap/extension-table-header';
+import { Table, TableRow, TableCell, TableHeader } from '@tiptap/extension-table'
 import Underline from '@tiptap/extension-underline';
 
 const model = defineModel<string>({ required: true });
