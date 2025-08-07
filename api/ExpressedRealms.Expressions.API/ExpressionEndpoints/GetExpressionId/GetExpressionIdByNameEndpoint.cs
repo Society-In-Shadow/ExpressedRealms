@@ -17,25 +17,11 @@ internal static class GetExpressionIdByNameEndpoint
         IFeatureToggleClient featureToggleClient
     )
     {
-        int expressionId;
-        if (name == "ruleBook")
-        {
-            var result = await expressionRepository.GetGameSystemExpressionId();
-            expressionId = result.Value;
-        }
-        else if (name == "treasuredTales")
-        {
-            var result = await expressionRepository.GetTreasuredTalesExpressionId();
-            expressionId = result.Value;
-        }
-        else
-        {
-            var expressionIdResult = await sectionRepository.GetExpressionId(name);
-            if (expressionIdResult.HasNotFound(out var notFound))
-                return notFound;
-            expressionIdResult.ThrowIfErrorNotHandled();
-            expressionId = expressionIdResult.Value;
-        }
+        var expressionIdResult = await sectionRepository.GetExpressionId(name);
+        if (expressionIdResult.HasNotFound(out var notFound))
+            return notFound;
+        expressionIdResult.ThrowIfErrorNotHandled();
+        var expressionId = expressionIdResult.Value;
 
         return TypedResults.Ok(
             new ExpressionNameResponse
