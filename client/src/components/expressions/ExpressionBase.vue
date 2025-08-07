@@ -102,7 +102,7 @@ onBeforeRouteUpdate(async (to, from) => {
 <template>
   <div id="expression" class="ms-md-auto me-md-auto ms-0 me-0 container-md p-0">
     <div class="d-flex flex-column flex-md-row">
-      <div class="col-12 col-lg-3 col-sm-12 col-xl-3 col-md-3 p-0 ms-0 me-0 mt-2 mb-2 m-md-2">
+      <div class="col-12 col-lg-3 col-sm-12 col-xl-3 col-md-3 p-0 ms-0 me-0 mt-2 mb-2 m-md-2 d-print-none">
         <Card class="custom-toc sticky-md-top sticky-lg-top sticky-xl-top zIndexFix">
           <template #title>
             Table Of Contents

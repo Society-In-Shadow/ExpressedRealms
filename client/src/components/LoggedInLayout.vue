@@ -4,10 +4,10 @@
   <ConfirmDialog group="dialog" />
   <ConfirmPopup group="popup" />
   <DynamicDialog />
-  <Message icon="pi pi-exclamation-triangle" class="sticky-top ms-0 me-0 mt-2 mb-2 m-md-2" severity="warn">
+  <Message icon="pi pi-exclamation-triangle" class="sticky-top ms-0 me-0 mt-2 mb-2 m-md-2 d-print-none" severity="warn">
     This site is currently in a BETA state, not all features or content is in place.
   </Message>
-  <main-nav-bar />
+  <main-nav-bar class="d-print-none"/>
   <router-view />
 </template>
 
