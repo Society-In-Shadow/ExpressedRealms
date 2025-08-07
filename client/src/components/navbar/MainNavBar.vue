@@ -88,11 +88,53 @@ async function loadList(){
         }
 
         if(await userInfo.hasFeatureFlag(FeatureFlags.ShowTreasureTales)){
-          items.value.splice(3 + indexOffset, 0, { root: true, label: 'Treasured Tales', icon: 'pi pi-file', subtext: 'Treasured Tales', command: () => router.push("/treasuredtales") });
+          items.value.splice(3 + indexOffset, 0, {
+            root: true,
+            label: 'World Background',
+            icon: 'pi pi-file',
+            subtext: '',
+            items: [
+              [
+                {
+                  items: [
+                    {
+                      navMenuType: "cms",
+                      label: 'Treasured Tales',
+                      icon: 'auto_stories',
+                      command: () => router.push("/treasuredtales")
+                    },
+                    {
+                      navMenuType: "cms",
+                      label: 'Adversaries',
+                      icon: 'skull_list',
+                      command: () => router.push("/adversaries")
+                    }
+                  ]
+                }
+              ],
+              [
+                { items: [
+                    {
+                      navMenuType: "cms",
+                      label: 'Factions',
+                      icon: 'safety_divider',
+                      command: () => router.push("/factions")
+                    },
+                    {
+                      navMenuType: "cms",
+                      label: 'The Society',
+                      icon: 'hub',
+                      command: () => router.push("/society")
+                    }
+                  ]
+                }
+
+              ]
+            ]
+          } );
         }
         initialLoad = false;
       });
-  
   function MapData(expression) {
     return {
       navMenuType: "expression",
