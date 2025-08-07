@@ -33,7 +33,7 @@ internal static class ExpressionEndpoints
         endpointGroup
             .MapGet("/getByName/{name}", GetExpressionIdByNameEndpoint.GetExpressionIdByName)
             .WithSummary("Returns the id for the given expression name");
-        
+
         endpointGroup
             .MapGet("/getCmsByName/{id}", GetCmsExpressionIdByNameEndpoint.GetCmsExpressionIdByName)
             .WithSummary("Returns the id for the given general cms name");

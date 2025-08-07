@@ -182,7 +182,7 @@ public class EditSpecializationUseCaseTests
         A.CallTo(() => _specializationRepository.GetSpecialization(_model.Id))
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_CorrectlyGrabs_TheSpecializationCountForTheMapping()
     {

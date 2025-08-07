@@ -48,7 +48,8 @@ internal sealed class ExpressionRepository(
 
     public async Task<Result<int>> GetCmsExpressionId(int id)
     {
-        return await context.Expressions.AsNoTracking()
+        return await context
+            .Expressions.AsNoTracking()
             .Where(x => x.ExpressionTypeId == id)
             .Select(x => x.Id)
             .FirstOrDefaultAsync(cancellationToken);
