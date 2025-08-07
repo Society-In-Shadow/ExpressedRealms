@@ -13,6 +13,7 @@ import EditExpression from "@/components/expressions/EditExpression.vue";
 import Dialog from 'primevue/dialog';
 import AddExpression from "@/components/expressions/AddExpression.vue";
 import {FeatureFlags, userStore} from "@/stores/userStore";
+import GeneralContentItem from "@/components/navbar/navMenuItems/GeneralContentItem.vue";
 const userInfo = userStore();
 const Router = useRouter();
 let showExpressionEdit = false;
@@ -37,17 +38,103 @@ async function loadList(){
         }
         let indexOffset = -1;
         if(await userInfo.hasFeatureFlag(FeatureFlags.ShowRuleBook)){
-          items.value.splice(1, 0, { root: true, label: 'Rule Book', icon: 'pi pi-file', subtext: 'Rule Book', command: () => router.push("/rulebook") });
+          items.value.splice(1, 0, 
+      { 
+              root: true, 
+              label: 'Rule Book', 
+              icon: 'pi pi-file', 
+              subtext: 'Rule Book',
+              items: [
+                [
+                  {
+                    items: [
+                        {
+                          navMenuType: "cms",
+                          label: 'Character Setup',
+                          icon: 'user_attributes',
+                          command: () => router.push("/characterSetup")
+                        },
+                        {
+                          navMenuType: "cms",
+                          label: 'Knowledges',
+                          icon: 'cognition_2',
+                          command: () => router.push("/knowledges")
+                        }
+                  ]
+                  }
+                ],
+                [
+                  { items: [
+                    {
+                      navMenuType: "cms",
+                      label: 'Advantages / Disadvantages / Mixed Blessings',
+                      icon: 'chess_bishop_2',
+                      command: () => router.push("/blessings")
+                    },
+                  {
+                    navMenuType: "cms",
+                    label: 'Combat',
+                    icon: 'swords',
+                    command: () => router.push("/combat")
+                  }
+                  ]
+                  }
+
+                ]
+              ]
+            }
+          );
           indexOffset = 0;
         }
 
         if(await userInfo.hasFeatureFlag(FeatureFlags.ShowTreasureTales)){
-          items.value.splice(3 + indexOffset, 0, { root: true, label: 'Treasured Tales', icon: 'pi pi-file', subtext: 'Treasured Tales', command: () => router.push("/treasuredtales") });
-        }
+          items.value.splice(3 + indexOffset, 0, {
+            root: true,
+            label: 'World Background',
+            icon: 'pi pi-file',
+            subtext: '',
+            items: [
+              [
+                {
+                  items: [
+                    {
+                      navMenuType: "cms",
+                      label: 'Treasured Tales',
+                      icon: 'auto_stories',
+                      command: () => router.push("/treasuredtales")
+                    },
+                    {
+                      navMenuType: "cms",
+                      label: 'Adversaries',
+                      icon: 'skull_list',
+                      command: () => router.push("/adversaries")
+                    }
+                  ]
+                }
+              ],
+              [
+                { items: [
+                    {
+                      navMenuType: "cms",
+                      label: 'Factions',
+                      icon: 'safety_divider',
+                      command: () => router.push("/factions")
+                    },
+                    {
+                      navMenuType: "cms",
+                      label: 'The Society',
+                      icon: 'hub',
+                      command: () => router.push("/society")
+                    }
+                  ]
+                }
 
+              ]
+            ]
+          } );
+        }
         initialLoad = false;
       });
-  
   function MapData(expression) {
     return {
       navMenuType: "expression",
@@ -153,6 +240,7 @@ function showCreateExpressionPopup(){
     <template #item="{ item }">
       <RootNodeMenuItem v-if="item.root" :item="item" />
       <CharacterMenuItem v-else-if="item.navMenuType == 'character'" :item="item" />
+      <GeneralContentItem v-else-if="item.navMenuType == 'cms'" :item="item" />
       <ExpressionMenuItem
         v-else :item="item.expression" :show-edit="showExpressionEdit" @show-edit-popup="showEditExpressionPopup" @show-create-popup="showCreateExpressionPopup"
         @refresh-list="loadList"

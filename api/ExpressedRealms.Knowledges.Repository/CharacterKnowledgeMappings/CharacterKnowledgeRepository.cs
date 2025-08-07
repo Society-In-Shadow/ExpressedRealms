@@ -19,9 +19,12 @@ public class CharacterKnowledgeRepository(
             .CharacterKnowledgeMappings.Where(x => x.CharacterId == characterId)
             .SumAsync(
                 x =>
-                    (x.Knowledge.KnowledgeTypeId == unknownKnowledgeType
-                        ? x.KnowledgeLevel.TotalUnknownXpCost
-                        : x.KnowledgeLevel.TotalGeneralXpCost) + x.CharacterKnowledgeSpecializations.Count * 2,
+                    (
+                        x.Knowledge.KnowledgeTypeId == unknownKnowledgeType
+                            ? x.KnowledgeLevel.TotalUnknownXpCost
+                            : x.KnowledgeLevel.TotalGeneralXpCost
+                    )
+                    + x.CharacterKnowledgeSpecializations.Count * 2,
                 cancellationToken
             );
     }
@@ -38,7 +41,10 @@ public class CharacterKnowledgeRepository(
         return await context
             .CharacterKnowledgeMappings.AsNoTracking()
             .AnyAsync(
-                x => x.KnowledgeId == knowledgeId && x.CharacterId == characterId && x.Character.Player.UserId == userContext.CurrentUserId(),
+                x =>
+                    x.KnowledgeId == knowledgeId
+                    && x.CharacterId == characterId
+                    && x.Character.Player.UserId == userContext.CurrentUserId(),
                 cancellationToken
             );
     }
@@ -47,7 +53,10 @@ public class CharacterKnowledgeRepository(
     {
         return context
             .CharacterKnowledgeMappings.AsNoTracking()
-            .AnyAsync(x => x.Id == mappingId && x.Character.Player.UserId == userContext.CurrentUserId(), cancellationToken);
+            .AnyAsync(
+                x => x.Id == mappingId && x.Character.Player.UserId == userContext.CurrentUserId(),
+                cancellationToken
+            );
     }
 
     public Task<CharacterKnowledgeMapping> GetCharacterKnowledgeMappingForEditing(
