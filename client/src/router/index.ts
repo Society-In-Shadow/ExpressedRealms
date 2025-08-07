@@ -7,6 +7,7 @@ import {OverallRoutes} from "@/router/Routes/OverallNavigationRoutes";
 import {PublicRoutes} from "@/router/Routes/PublicRoutes";
 
 export const routes = [
+    PublicRoutes,
     UserRoutes,
     OverallRoutes,
     AdminRoutes
@@ -31,12 +32,6 @@ routerSetup.beforeEach(async (to) => {
     if (!routesInitialized) {
 
         await userInfo.updateUserFeatureFlags();
-
-        if (Array.isArray(PublicRoutes)) {
-            PublicRoutes.forEach(route => routerSetup.addRoute(route));
-        } else {
-            routerSetup.addRoute(PublicRoutes);
-        }  
 
         routesInitialized = true;
 
