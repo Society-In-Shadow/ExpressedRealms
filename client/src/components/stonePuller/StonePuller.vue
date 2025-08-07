@@ -13,8 +13,8 @@ const neutralStone = ref("");
 const winningMarble = ref("");
 const winningMarbleValue = ref(0);
 
-const stoneTypes = [ "red", "blue", "black", "clear", "green", "white"]
-let stoneBag = [ "red", "blue", "black", "clear", "green", "white"]
+const stoneTypes = [ "red", "blue", "black", "yellow", "green", "white"]
+let stoneBag = [ "red", "blue", "black", "yellow", "green", "white"]
 
 function removeStone(stoneName:string): string{
   var characterIndex = stoneBag.indexOf(stoneName)
@@ -230,8 +230,9 @@ const bonusEffects = [
         <div class="text-center m-3">
           <Fieldset v-if="stones.length > 0" legend="Pulled Stones" class="flex-shrink-0" style="display: inline-block">
             <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
-              <div v-for="stone in stones" :key="stone" class="stone m-3 text-center align-content-center" :style="{ 'background-color': stone, 'color': updateTextColor(stone) }">
-                <div>{{ showMarbleValue(stone) }}</div>
+              <div v-for="stone in stones" :key="stone" >
+                <div class="stone m-3 text-center align-content-center" :style="{ 'background-color': stone, 'color': updateTextColor(stone) }">{{ showMarbleValue(stone) }}</div>
+                <div>{{stone}}</div>
               </div>
             </div>
           </Fieldset>
@@ -239,7 +240,10 @@ const bonusEffects = [
         <div class="text-center m-3">
           <Fieldset v-if="neutralStone !== ''" legend="Neutral Stone" style="display: inline-block">
             <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
-              <div class="stone m-3 text-center align-content-center" :style="{ 'background-color': neutralStone, 'color': updateTextColor(neutralStone) }" />
+              <div>
+                <div class="stone m-3 text-center align-content-center" :style="{ 'background-color': neutralStone, 'color': updateTextColor(neutralStone) }" />
+                <div>{{neutralStone}}</div>
+              </div>
             </div>
           </Fieldset>
         </div>
