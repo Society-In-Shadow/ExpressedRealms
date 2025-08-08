@@ -2,11 +2,9 @@
 
 import {type PropType} from "vue";
 import type {Knowledge} from "@/components/knowledges/types";
-import {UserRoles, userStore} from "@/stores/userStore";
 import Button from "primevue/button";
 import {addKnowledgeDialog} from "@/components/characters/character/knowledges/services/dialogs";
 
-let userInfo = userStore();
 const addDialog = addKnowledgeDialog();
 
 const props = defineProps({
@@ -33,7 +31,7 @@ const props = defineProps({
       </div>
     </div>
     <div
-      v-if="userInfo.hasUserRole(UserRoles.PowerManagementRole) && !props.isReadOnly"
+      v-if="!props.isReadOnly"
       class="p-0 m-0 d-inline-flex align-items-start"
     >
       <Button class="float-end" label="Pick" @click="addDialog.showAddCharacter(props.knowledge)" />

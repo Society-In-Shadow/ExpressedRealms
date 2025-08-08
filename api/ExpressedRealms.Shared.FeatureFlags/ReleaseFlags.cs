@@ -36,12 +36,6 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "Allows one to see the treasured tales in the nav bar."
     );
 
-    public static readonly ReleaseFlags ShowMarketingPages = new(
-        "Show Marketing Pages",
-        "show-marketing",
-        "Allows one to see the typical landing pages you'd expect from a company."
-    );
-
     public static readonly ReleaseFlags ShowMarketingContactUsPage = new(
         "Show Marketing Contact Us Pages",
         "show-marketing-contact-us",

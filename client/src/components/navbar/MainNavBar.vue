@@ -231,7 +231,7 @@ function showCreateExpressionPopup(){
   <Dialog v-model:visible="newVisible" modal header="Add Expression">
     <AddExpression @refresh-list="loadList" @close-dialog="newVisible = false" />
   </Dialog>
-  <MegaMenu :model="items" class="ms-0 me-0 mt-2 mb-2 m-md-2">
+  <MegaMenu :model="items" class="ms-0 me-0 mt-2 mb-2 m-md-2 d-print-none">
     <template #start>
       <RouterLink to="/">
         <img src="/favicon.png" alt="A white, black, blue, red, green, and transparent marbles organized in a pentagon pattern. The white stone is at the top and the transparent stone is in the center." height="50" width="50" class="m-2">

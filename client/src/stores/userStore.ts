@@ -13,7 +13,6 @@ export const FeatureFlags = {
     ShowsPowerTab: "show-power-tab",
     ShowRuleBook: "show-rule-book-nav",
     ShowTreasureTales: "show-treasured-tales-nav",
-    ShowMarketing: "show-marketing",
     ShowMarketingContactUs: "show-marketing-contact-us",
     ShowCharacterKnowledgesTab: "show-character-knowledge-tab",
 } as const;

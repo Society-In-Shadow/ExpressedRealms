@@ -48,7 +48,7 @@ const gravatar = computed(() => {
 </script>
 
 <template>
-  <a class="flex align-items-center p-3 cursor-pointer mb-2 gap-2 no-underline text-100" href="https://discord.gg/NSv3GxSAj7" target="_blank">
+  <a class="flex align-items-center p-3 cursor-pointer mb-2 gap-2 no-underline text-900" href="https://discord.gg/NSv3GxSAj7" target="_blank">
     <Avatar class="pi pi-discord" shape="circle" size="large" />
     <div class="hideIfSmall">Discord</div>
   </a>
@@ -58,7 +58,7 @@ const gravatar = computed(() => {
     <i class="pi pi-caret-down text-lg" />
     <TieredMenu id="overlay_tmenu" ref="menu" :model="items" popup />
   </a>
-  <a v-else class="flex align-items-center p-3 cursor-pointer mb-2 gap-2 no-underline text-100" href="/login">
+  <a v-else class="flex align-items-center p-3 cursor-pointer mb-2 gap-2 no-underline text-900" href="/login">
     <Avatar class="pi pi-sign-in" shape="circle" size="large" />
     <div class="hideIfSmall">Login</div>
   </a>

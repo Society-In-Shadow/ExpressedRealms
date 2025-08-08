@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import {FeatureFlags, userStore} from "@/stores/userStore";
+import {userStore} from "@/stores/userStore";
 import {isLoggedIn} from "@/services/Authentication";
 import {UserRoutes} from "@/router/Routes/UserRoutes";
 import {AdminRoutes} from "@/router/Routes/AdminRoutes";
@@ -7,6 +7,7 @@ import {OverallRoutes} from "@/router/Routes/OverallNavigationRoutes";
 import {PublicRoutes} from "@/router/Routes/PublicRoutes";
 
 export const routes = [
+    PublicRoutes,
     UserRoutes,
     OverallRoutes,
     AdminRoutes
@@ -31,14 +32,6 @@ routerSetup.beforeEach(async (to) => {
     if (!routesInitialized) {
 
         await userInfo.updateUserFeatureFlags();
-
-        if (await userInfo.hasFeatureFlag(FeatureFlags.ShowMarketing)) {
-            if (Array.isArray(PublicRoutes)) {
-                PublicRoutes.forEach(route => routerSetup.addRoute(route));
-            } else {
-                routerSetup.addRoute(PublicRoutes);
-            }
-        }        
 
         routesInitialized = true;
 
