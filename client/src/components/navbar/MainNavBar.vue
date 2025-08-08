@@ -50,8 +50,14 @@ async function loadList(){
                     items: [
                         {
                           navMenuType: "cms",
-                          label: 'Character Setup',
+                          label: 'Quick Start Guide',
                           icon: 'user_attributes',
+                          command: () => router.push("/characterQuickStart")
+                        },
+                        {
+                          navMenuType: "cms",
+                          label: 'Character Setup',
+                          icon: 'article_person',
                           command: () => router.push("/characterSetup")
                         },
                         {
