@@ -81,7 +81,7 @@ In addition to hosting this locally at the address down below, we are also hosti
 For this application, there isn't much in terms of notifications.  As of right now, it just user registrations
 
 Locally, we are using a product called Mailpit to view the emails that are being sent
-* [Mailpit](http://localhost:8050)
+* [Mailpit](http://localhost:8025)
 
 And out on prod we are using a product called Postmark
 
