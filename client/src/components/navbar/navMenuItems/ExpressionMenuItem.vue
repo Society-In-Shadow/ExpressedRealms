@@ -79,14 +79,17 @@
   
 </script>
 <template>
-  <div class="flex flex-shrink-1 align-items-center p-3 cursor-pointer mb-2 gap-2">
-    <span class="inline-flex flex-none align-items-center justify-content-center border-circle bg-primary w-3rem h-3rem" @click="redirect">
-      <i :class="['pi', item.navMenuImage, 'text-lg', 'text-white']" />
-    </span>
-    <span class="inline-flex flex-grow-1 flex-column gap-1" @click="redirect">
-      <span class="font-medium text-lg text-900">{{ item.name }} <Badge v-if="showEdit && item.id !== 0" :value="item.statusName" :severity="getStatus()" /></span>
-      <span class="">{{ item.shortDescription }}</span>
-    </span>
+  <div class="flex flex-shrink-1 align-items-center cursor-pointer gap-2" @click="redirect">
+    <div class="flex gap-3 align-items-center flex-grow-1 p-3">
+      <span class="inline-flex flex-none align-items-center justify-content-center border-circle bg-primary w-3rem h-3rem">
+        <i :class="['pi', item.navMenuImage, 'text-lg', 'text-white']" />
+      </span>
+        <span class="inline-flex flex-grow-1 flex-column gap-1">
+        <span class="font-medium text-lg text-900">{{ item.name }} <Badge v-if="showEdit && item.id !== 0" :value="item.statusName" :severity="getStatus()" /></span>
+        <span class="">{{ item.shortDescription }}</span>
+      </span>
+    </div>
+
     <span v-if="showEdit && item.id !==0" class="inline-flex flex-column gap-1">
       
       <Button label="Edit" @click="showEditPopup" />
