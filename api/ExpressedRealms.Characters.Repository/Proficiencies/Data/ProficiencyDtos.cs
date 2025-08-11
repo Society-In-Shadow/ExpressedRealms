@@ -315,8 +315,8 @@ public static class ProficiencyDtos
                 Modifiers = new List<ModifierType>()
                 {
                     ModifierType.Constitution,
-                    ModifierType.Willpower,
-                    ModifierType.Willpower,
+                    ModifierType.Intelligence,
+                    ModifierType.Intelligence,
                 },
                 SortOrder = 9,
             },
