@@ -92,7 +92,7 @@ onMounted(async () =>{
 
 onBeforeRouteUpdate(async (to, from) => {
   if (to.params.name !== from.params.name) {
-    await expressionInfo.getExpressionId(route);
+    await expressionInfo.getExpressionId(to);
     await fetchData()
   }
 })
