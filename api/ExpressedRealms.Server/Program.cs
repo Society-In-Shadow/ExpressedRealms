@@ -150,21 +150,6 @@ try
         }
     );
 
-    if (builder.Environment.IsDevelopment())
-    {
-        builder.Services.AddCors(options =>
-        {
-            options.AddDefaultPolicy(policy =>
-            {
-                policy
-                    .WithOrigins("https://localhost")
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .AllowCredentials();
-            });
-        });
-    }
-
     builder.Services.Configure<ForwardedHeadersOptions>(options =>
     {
         options.ForwardedHeaders =
@@ -294,7 +279,6 @@ try
     if (app.Environment.IsDevelopment())
     {
         app.UseHttpsRedirection();
-        app.UseCors();
     }
 
     app.UseAuthentication();
