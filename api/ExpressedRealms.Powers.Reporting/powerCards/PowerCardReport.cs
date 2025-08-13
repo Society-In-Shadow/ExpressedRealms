@@ -11,6 +11,8 @@ public static class PowerCardReport
     {
         QuestPDF.Settings.License = LicenseType.Community;
 
+        powerCards = powerCards.OrderBy(x => x.PowerLevel).ThenBy(x => x.PathName).ThenBy(x => x.Name).ToList();
+        
         return GetSingleTilePerPage(powerCards, isFiveByThree);;
     }
 
