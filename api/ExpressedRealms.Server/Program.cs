@@ -21,6 +21,7 @@ using ExpressedRealms.Knowledges.API.Configuration;
 using ExpressedRealms.Knowledges.UseCases.Configuration;
 using ExpressedRealms.Powers.API.Configuration;
 using ExpressedRealms.Powers.Repository;
+using ExpressedRealms.Powers.UseCases.Configuration;
 using ExpressedRealms.Repositories.Admin;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Server.Configuration;
@@ -201,6 +202,7 @@ try
     builder.Services.AddKnowledgesInjections();
     builder.Services.AddExpressionTextSectionInjections();
     builder.Services.AddBlessingInjections();
+    builder.Services.AddPowerUseCaseConfiguration();
     await builder.Services.AddFeatureFlagInjections(keyVaultManager);
 
     Log.Information("Building the App");

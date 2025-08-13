@@ -11,6 +11,13 @@ import {UserRoles, userStore} from "@/stores/userStore";
 let userInfo = userStore();
 let powerPaths = powerPathStore();
 import PowerPathReorder from "@/components/expressions/powerPaths/PowerPathReorder.vue";
+import axios from "axios";
+import {expressionStore} from "@/stores/expressionStore.ts";
+import {useRoute} from "vue-router";
+import SplitButton from "primevue/splitbutton";
+
+let expressionInfo = expressionStore();
+let route = useRoute();
 
 const props = defineProps({
   expressionId: {
@@ -34,9 +41,40 @@ const toggleReadOnly = () => {
   readOnly.value = !readOnly.value;
 }
 
+async function downloadPowerCards(isFiveByThree: boolean = false) {
+  const res = await axios.get(`/expression/${expressionInfo.currentExpressionId}/getPowerCards`, {
+    responseType: 'blob',
+    params: {
+      isFiveByThree: isFiveByThree,
+    }
+  });
+  const expression = route.params.name
+  const url = URL.createObjectURL(res.data);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${expression}PowerCards.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+const items = [
+  {
+    label: '5x3 Index Card Size',
+    command: () => {
+      downloadPowerCards(true);
+    }
+  }
+];
+
 </script>
 
 <template>
+  <div class="d-flex flex-row justify-content-end align-items-center">
+    <SplitButton label="Download Power Cards" @click="downloadPowerCards(false)" :model="items" />
+  </div>
+  
   <PowerPathReorder v-if="userInfo.hasUserRole(UserRoles.PowerManagementRole)" @toggle-preview="toggleReadOnly" />
   <div v-for="path in powerPaths.powerPaths" :key="path.id">
     <Divider />
