@@ -94,7 +94,33 @@ export const userConfirmationPopups = (userId: string) => {
         });
     };
 
-    return { deleteConfirmation, enableConfirmation, unlockConfirmation };
+    const bypassConfirmation = (event: MouseEvent) => {
+        confirm.require({
+            target: event.currentTarget as HTMLElement,
+            group: 'popup',
+            message: 'Make sure you manually verify their email address!  Manually verify by asking them to send you an email from the registered email address with some random sentance.  ONLY THEN APPROVE THIS.',
+            icon: 'pi pi-info-circle',
+            rejectProps: {
+                label: 'Cancel',
+                severity: 'secondary',
+                outlined: true
+            },
+            acceptProps: {
+                label: 'I have Confirmed Their Email Address.',
+                severity: 'warn'
+            },
+            accept: () => {
+                axios.post(`/admin/user/${userId}/bypassEmailConfirmation`)
+                    .then(async () => {
+                        await playerListStore.fetchPlayers();
+                        toaster.success('Successfully Bypassed Email for Player!');
+                    });
+            }
+        });
+    };
+
+
+    return { deleteConfirmation, enableConfirmation, unlockConfirmation, bypassConfirmation };
 
 };
 

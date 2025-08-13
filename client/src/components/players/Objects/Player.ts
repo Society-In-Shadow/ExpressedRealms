@@ -3,7 +3,7 @@ export interface PlayerListItem {
     username: string;
     email: string;
     roles: string[];
-    emailVerified: boolean;
+    emailConfirmed: boolean;
     isDisabled: boolean;
     lockedOut: boolean;
     lockedOutExpires: Date;

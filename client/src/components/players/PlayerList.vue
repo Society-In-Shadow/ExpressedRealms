@@ -6,6 +6,12 @@ import InputText from "primevue/inputtext";
 import {playerList} from "@/components/players/Stores/PlayerListStore";
 const playerListStore = playerList();
 
+import Tabs from 'primevue/tabs';
+import TabList from 'primevue/tablist';
+import Tab from 'primevue/tab';
+import TabPanels from 'primevue/tabpanels';
+import TabPanel from 'primevue/tabpanel';
+
 const searchQuery = ref<string>("");
 
 onMounted(async () =>{
@@ -54,10 +60,39 @@ watch(searchQuery, (newQuery) => {
     <div v-if="playerListStore.filteredPlayers.length === 0" class="m-3">
       No users with that name or email address
     </div>
-    
-    <div v-for="player in playerListStore.filteredPlayers" :key="player.id">
-      <PlayerTile :player-info="player" />
-    </div>
+
+
+        <Tabs value="0">
+          <TabList>
+            <Tab value="0">Unverified Users</Tab>
+            <Tab value="4">Privileged Users</Tab>
+            <Tab value="1">Users</Tab>
+            <Tab value="2">Disabled Users</Tab>
+          </TabList>
+          <TabPanels>
+            <TabPanel value="0">
+              <div v-for="player in playerListStore.getUnverifiedPlayers()" :key="player.id">
+                <PlayerTile :player-info="player" />
+              </div>
+            </TabPanel>
+            <TabPanel value="4">
+              <div v-for="player in playerListStore.getPrivilegedPlayers()" :key="player.id">
+                <PlayerTile :player-info="player" />
+              </div>
+            </TabPanel>
+            <TabPanel value="1">
+              <div v-for="player in playerListStore.getPlayers()" :key="player.id">
+                <PlayerTile :player-info="player" />
+              </div>
+            </TabPanel>
+            <TabPanel value="2">
+              <div v-for="player in playerListStore.getDisabledPlayers()" :key="player.id">
+                <PlayerTile :player-info="player" />
+              </div>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+
   </div>
 </template>
 

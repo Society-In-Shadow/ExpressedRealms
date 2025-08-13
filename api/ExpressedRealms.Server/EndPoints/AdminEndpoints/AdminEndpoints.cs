@@ -43,6 +43,7 @@ public static class AdminEndpoints
                                     Username = x.Username,
                                     Roles = x.Roles,
                                     IsDisabled = x.IsDisabled,
+                                    EmailConfirmed = x.EmailConfirmed,
                                     LockedOut = x.LockedOut,
                                     LockedOutExpires = x.LockOutExpires,
                                 })
@@ -98,6 +99,29 @@ public static class AdminEndpoints
                     await signInManager.RefreshSignInAsync(user);
 
                     return TypedResults.BadRequest<string>("The role was not updated.");
+                }
+            )
+            .RequireAuthorization();
+
+        endpointGroup
+            .MapPost(
+                "user/{userId}/bypassEmailConfirmation",
+                async Task<Results<NoContent, NotFound>> (
+                    string userId,
+                    UserManager<User> userManager
+                ) =>
+                {
+                    var user = await userManager.FindByIdAsync(userId);
+
+                    if (user == null)
+                    {
+                        return TypedResults.NotFound();
+                    }
+
+                    var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                    await userManager.ConfirmEmailAsync(user, token);
+
+                    return TypedResults.NoContent();
                 }
             )
             .RequireAuthorization();

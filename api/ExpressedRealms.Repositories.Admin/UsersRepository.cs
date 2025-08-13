@@ -17,6 +17,7 @@ internal sealed class UsersRepository(ExpressedRealmsDbContext context) : IUsers
             {
                 Id = x.Id,
                 Email = x.Email,
+                EmailConfirmed = x.EmailConfirmed,
                 Username =
                     x.Player != null && x.Player.Name != null
                         ? x.Player.Name
