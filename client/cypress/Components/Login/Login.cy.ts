@@ -18,6 +18,11 @@ describe('<Login />', () => {
     cy.intercept('GET', '/auth/getInitialLoginInfo', {
       statusCode: 200
     });
+
+    // needed for the axios interceptor
+    cy.window().then((win) => {
+      win.history.pushState({}, '', '/login');
+    });
     
     cy.mount(Login);
   });
@@ -65,7 +70,10 @@ describe('<Login />', () => {
     cy.dataCy("error-invalid-login").should('not.exist');
 
     cy.intercept('POST', '/auth/login', {
-      statusCode: 500
+      statusCode: 401,
+      body: {
+        detail: "Failed"
+      }
     }).as('login');
     
     cy.dataCy('email').type("example@example.com")
@@ -75,5 +83,27 @@ describe('<Login />', () => {
     
     cy.dataCy("error-invalid-login").should('be.visible');
         
+  });
+  it('Shows timeout if too many attempts at logging in', () => {
+
+    cy.dataCy("error-invalid-login").should('not.exist');
+
+    cy.intercept('POST', '/auth/login', {
+      statusCode: 401,
+      body: {
+        detail: "LockedOut"
+      }
+    }).as('login');
+
+    cy.dataCy('email').type("example@example.com")
+    cy.dataCy('password').type('Password1!');
+    cy.dataCy('sign-in-button').click();
+    cy.wait('@login');
+
+    cy.dataCy("locked-out").should('be.visible');
+    cy.dataCy("locked-out").invoke('text')
+        .then(t => t.trim())
+        .should('contain', "You've been locked out of your account. Please wait 5 minutes before trying again.");
+
   });
 })
