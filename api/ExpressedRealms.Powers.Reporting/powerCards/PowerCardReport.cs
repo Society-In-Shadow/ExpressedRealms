@@ -11,86 +11,77 @@ public static class PowerCardReport
     {
         QuestPDF.Settings.License = LicenseType.Community;
         
-        var chunks = powerCards.Chunk(6);
-        
+        return GetSingleTilePerPage(powerCards);
+    }
+
+    private static Document GetSingleTilePerPage(List<PowerCardData> powerCards)
+    {
         var secondaryColor = Color.FromARGB(125, 0, 0, 0);
-        
         return Document.Create(container =>
+        {
+            container.Page(page =>
             {
-                container.Page(page =>
+                page.Size(PageSizes.Letter.Landscape().Width / 2, PageSizes.Letter.Landscape().Height / 3, Unit.Inch);
+                page.DefaultTextStyle(x => x.FontSize(7.75f));
+
+                page.Content().Column(col =>
                 {
-                    page.Size(PageSizes.Letter.Landscape());
-                    page.DefaultTextStyle(x => x.FontSize(7.75f));
-
-                    float rowHeight = (PageSizes.Letter.Landscape().Height / 3);
-
-                    page.Content().Column(col =>
+                    foreach (var power in powerCards)
                     {
-                        foreach (var chunk in chunks)
-                        {
-                            for (int pageRow = 0; pageRow < 3; pageRow++)
-                            {
-                                col.Item().Height(rowHeight).Row(row =>
-                                {
-                                    for (int f = pageRow * 2; f < pageRow * 2 + 2; f++)
-                                    {
-                                        if (chunk.Length < f + 1)
-                                            break;
-                                    
-                                        var power = chunk[f];
-                                    
-                                        row.RelativeItem()
-                                            .BorderColor(Color.FromARGB(10, 0, 0, 0))
-                                            .Border(1)
-                                            .Column(cell =>
-                                            {
-                                                FillPowerCard(cell, power, secondaryColor);
-                                            });
-                                    }
-                                });
-                            }
-                        }
-                    });
+                        FillPowerCard(col, power, secondaryColor);
+                    }
                 });
+            });
         });
     }
 
     private static void FillPowerCard(ColumnDescriptor card, PowerCardData power, Color secondaryColor)
     {
-        card.Item().Padding(15).Row(row =>
+        card.Item().Padding(15).Decoration(decorator =>
         {
-            row.RelativeItem().PaddingRight(5).Column(leftSide =>
-            {
-                leftSide.Item().Repeat().Section(power.Name).Text(text =>
+            decorator.Before()
+                .Column(leftSide =>
                 {
-                    text.Span(power.Name).Bold().FontSize(11).ExtraBold();
-
-                    if (power.Category?.Count > 0)
-                    {
-                        text.Span($" - {string.Join(", ", power.Category)}").Italic().FontSize(11)
-                            .FontColor(secondaryColor);
-                    }
+                    leftSide.Item().SkipOnce().Text(power.Name + " Continued").Bold().FontSize(11).ExtraBold();
+                    leftSide.Item().SkipOnce().Text($"{power.ExpressionName} > {power.PathName}").Italic().FontSize(6)
+                        .FontColor(secondaryColor);;
                 });
-                leftSide.Item().Text($"{power.ExpressionName} > {power.PathName}").Italic().FontSize(6)
-                    .FontColor(secondaryColor);
-                leftSide.FormatMainSection(null, power.Description);
-                leftSide.FormatMainSection("Game Mechanic Effect", power.GameMechanicEffect);
-                leftSide.FormatMainSection("Limitation", power.Limitation);
-            });
-
-            row.ConstantItem(1.75f, Unit.Inch).Column(rightSide =>
+            
+            decorator.Content().Row(row =>
             {
-                rightSide.FormatAttributeSection("Level", power.PowerLevel);
-                rightSide.FormatAttributeSection("Power Use", power.IsPowerUse ? "Yes" : "No");
-                rightSide.FormatAttributeSection("Cost", power.Cost);
-                rightSide.FormatAttributeSection("Power Duration", power.PowerDuration);
-                rightSide.FormatAttributeSection("Area of Effect", power.AreaOfEffect);
-                rightSide.FormatAttributeSection("Activation Type", power.PowerActivationType);
-                rightSide.FormatOtherSection(power.Other);
-                rightSide.FormatPrerequisites(power.Prerequisites);
+                row.RelativeItem().PaddingRight(5).Column(leftSide =>
+                {
+                    leftSide.Item().Section(power.Name).Text(text =>
+                    {
+                        text.Span(power.Name).Bold().FontSize(11).ExtraBold();
+
+                        if (power.Category?.Count > 0)
+                        {
+                            text.Span($" - {string.Join(", ", power.Category)}").Italic().FontSize(11)
+                                .FontColor(secondaryColor);
+                        }
+                    });
+                    leftSide.Item().Text($"{power.ExpressionName} > {power.PathName}").Italic().FontSize(6)
+                        .FontColor(secondaryColor);
+                    leftSide.FormatMainSection(null, power.Description);
+                    leftSide.FormatMainSection("Game Mechanic Effect", power.GameMechanicEffect);
+                    leftSide.FormatMainSection("Limitation", power.Limitation);
+                });
+
+                row.ConstantItem(1.75f, Unit.Inch).Column(rightSide =>
+                {
+                    rightSide.FormatAttributeSection("Level", power.PowerLevel);
+                    rightSide.FormatAttributeSection("Power Use", power.IsPowerUse ? "Yes" : "No");
+                    rightSide.FormatAttributeSection("Cost", power.Cost);
+                    rightSide.FormatAttributeSection("Power Duration", power.PowerDuration);
+                    rightSide.FormatAttributeSection("Area of Effect", power.AreaOfEffect);
+                    rightSide.FormatAttributeSection("Activation Type", power.PowerActivationType);
+                    rightSide.FormatOtherSection(power.Other);
+                    rightSide.FormatPrerequisites(power.Prerequisites);
+                });
             });
         });
-
+        card.Item().PageBreak();
     }
     
     private static void FormatAttributeSection(this ColumnDescriptor cell, string attributeName, string? attributeValue)
