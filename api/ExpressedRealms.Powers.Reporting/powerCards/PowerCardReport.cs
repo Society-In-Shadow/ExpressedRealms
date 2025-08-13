@@ -1,4 +1,4 @@
-using System.ComponentModel;
+using HTMLQuestPDF.Extensions;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
@@ -62,7 +62,7 @@ public static class PowerCardReport
             {
                 leftSide.Item().Text(text =>
                 {
-                    text.Span(power.Name).Bold().FontSize(9);
+                    text.Span(power.Name).Bold().FontSize(11).ExtraBold();
 
                     if (power.Category?.Count > 0)
                     {
@@ -85,6 +85,7 @@ public static class PowerCardReport
 
             row.ConstantItem(1.75f, Unit.Inch).Column(rightSide =>
             {
+                rightSide.FormatAttributeSection("Categories", string.Join(", ", power.Category ?? new List<string>()));
                 rightSide.FormatAttributeSection("Level", power.PowerLevel);
                 rightSide.FormatAttributeSection("Power Use", power.IsPowerUse ? "Yes" : "No");
                 rightSide.FormatAttributeSection("Cost", power.Cost);
@@ -92,20 +93,71 @@ public static class PowerCardReport
                 rightSide.FormatAttributeSection("Area of Effect", power.AreaOfEffect);
                 rightSide.FormatAttributeSection("Power Duration", power.PowerDuration);
                 rightSide.FormatAttributeSection("Activation Type", power.PowerActivationType);
-                
-                rightSide.Item().Text(power.PrerequisitesNeeded);
-                rightSide.Item().Text(power.Prerequisites?.PrerequisiteNames.Count ?? 0);
+                rightSide.FormatPrerequisites(power.Prerequisites);
+                rightSide.FormatOtherSection(power.Other);
             });
         });
 
     }
     
-    private static void FormatAttributeSection(this ColumnDescriptor cell, string attributeName, string attributeValue)
+    private static void FormatAttributeSection(this ColumnDescriptor cell, string attributeName, string? attributeValue)
     {
+        if (attributeValue is null)
+            return;
+        
         cell.Item().Text(text =>
         {
             text.Span(attributeName).Bold();
             text.Span($": {attributeValue}");
         });
+    }
+    
+    private static void FormatOtherSection(this ColumnDescriptor cell, string? attributeValue)
+    {
+        if (attributeValue is null)
+            return;
+        
+        attributeValue = attributeValue
+            .Replace("<p>", "")
+            .Replace("</p>", "<br/>")
+            .Replace("<strong>", "<b>")
+            .Replace("</strong>", "</b>");
+        
+        cell.Item().HTML(html =>
+        {
+            html.SetHtml(attributeValue);
+        });
+    }
+
+    private static void FormatPrerequisites(this ColumnDescriptor cell, PrerequisiteData? prerequisites)
+    {
+        if (prerequisites is null)
+            return;
+
+
+        if (prerequisites.PrerequisiteNames.Count == 1)
+        {
+            cell.Item().Text(text =>
+            {
+                text.Span("Prerequisites: ").Bold();
+                text.Span(prerequisites.PrerequisiteNames[0]);
+            });
+        }
+        else if (prerequisites.PrerequisiteNames.Count == prerequisites.Count)
+        {
+            cell.Item().Text(text =>
+            {
+                text.Span("Prerequisites: ").Bold();
+                text.Span("All of the following powers:" + string.Join(", ", prerequisites.PrerequisiteNames));
+            });
+        }
+        else if (prerequisites.PrerequisiteNames.Count <= prerequisites.Count)
+        {
+            cell.Item().Text(text =>
+            {
+                text.Span("Prerequisites: ").Bold();
+                text.Span("Any of the following powers: " + string.Join(", ", prerequisites.PrerequisiteNames));
+            });
+        }
     }
 }

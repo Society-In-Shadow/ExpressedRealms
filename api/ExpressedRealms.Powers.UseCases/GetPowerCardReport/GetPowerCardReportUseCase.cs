@@ -29,6 +29,7 @@ public class GetPowerCardReportUseCase(IPowerPathRepository repository, IExpress
                     Id = y.Id,
                     IsPowerUse = y.IsPowerUse,
                     Limitation = y.Limitation,
+                    Other = y.Other,
                     Prerequisites = y.Prerequisites is not null ? 
                         new PrerequisiteData()
                         {
