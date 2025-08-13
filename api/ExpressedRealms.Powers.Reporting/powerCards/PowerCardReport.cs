@@ -13,14 +13,14 @@ public static class PowerCardReport
         
         var chunks = powerCards.Chunk(6);
         
-        var secondaryColor = Color.FromARGB(100, 0, 0, 0);
+        var secondaryColor = Color.FromARGB(125, 0, 0, 0);
         
         return Document.Create(container =>
             {
                 container.Page(page =>
                 {
                     page.Size(PageSizes.Letter.Landscape());
-                    page.DefaultTextStyle(x => x.FontSize(7f));
+                    page.DefaultTextStyle(x => x.FontSize(7.75f));
 
                     float rowHeight = (PageSizes.Letter.Landscape().Height / 3);
 
@@ -40,6 +40,7 @@ public static class PowerCardReport
                                         var power = chunk[f];
                                     
                                         row.RelativeItem()
+                                            .BorderColor(Color.FromARGB(10, 0, 0, 0))
                                             .Border(1)
                                             .Column(cell =>
                                             {
@@ -60,41 +61,33 @@ public static class PowerCardReport
         {
             row.RelativeItem().PaddingRight(5).Column(leftSide =>
             {
-                leftSide.Item().Text(text =>
+                leftSide.Item().Repeat().Section(power.Name).Text(text =>
                 {
                     text.Span(power.Name).Bold().FontSize(11).ExtraBold();
 
                     if (power.Category?.Count > 0)
                     {
-                        text.Span($" - {string.Join(", ", power.Category)}").Italic().FontSize(10)
+                        text.Span($" - {string.Join(", ", power.Category)}").Italic().FontSize(11)
                             .FontColor(secondaryColor);
                     }
                 });
                 leftSide.Item().Text($"{power.ExpressionName} > {power.PathName}").Italic().FontSize(6)
                     .FontColor(secondaryColor);
-                leftSide.Item().Text(power.Description);
-                leftSide.Item().Text("Game Mechanic Effect:").Bold();
-                leftSide.Item().Text(power.GameMechanicEffect);
-
-                if (power.Limitation is not null)
-                {
-                    leftSide.Item().Text("Limitation:").Bold();
-                    leftSide.Item().Text(power.Limitation);
-                }
+                leftSide.FormatMainSection(null, power.Description);
+                leftSide.FormatMainSection("Game Mechanic Effect", power.GameMechanicEffect);
+                leftSide.FormatMainSection("Limitation", power.Limitation);
             });
 
             row.ConstantItem(1.75f, Unit.Inch).Column(rightSide =>
             {
-                rightSide.FormatAttributeSection("Categories", string.Join(", ", power.Category ?? new List<string>()));
                 rightSide.FormatAttributeSection("Level", power.PowerLevel);
                 rightSide.FormatAttributeSection("Power Use", power.IsPowerUse ? "Yes" : "No");
                 rightSide.FormatAttributeSection("Cost", power.Cost);
                 rightSide.FormatAttributeSection("Power Duration", power.PowerDuration);
                 rightSide.FormatAttributeSection("Area of Effect", power.AreaOfEffect);
-                rightSide.FormatAttributeSection("Power Duration", power.PowerDuration);
                 rightSide.FormatAttributeSection("Activation Type", power.PowerActivationType);
-                rightSide.FormatPrerequisites(power.Prerequisites);
                 rightSide.FormatOtherSection(power.Other);
+                rightSide.FormatPrerequisites(power.Prerequisites);
             });
         });
 
@@ -118,13 +111,36 @@ public static class PowerCardReport
             return;
         
         attributeValue = attributeValue
-            .Replace("<p>", "")
-            .Replace("</p>", "<br/>")
             .Replace("<strong>", "<b>")
-            .Replace("</strong>", "</b>");
+            .Replace("</strong>", "</b> ");
         
         cell.Item().HTML(html =>
         {
+            html.SetContainerStyleForHtmlElement("p", x => x.Padding(0));
+            html.SetHtml(attributeValue);
+        });
+    }
+
+    private static void FormatMainSection(this ColumnDescriptor cell, string? name, string? attributeValue)
+    {
+
+        if (attributeValue is null)
+            return;
+
+        var processedValue = attributeValue.Replace("<p>", "").Replace("</p>", "").Replace("&nbsp;", "");
+        if (string.IsNullOrEmpty(processedValue.Trim()))
+            return;
+
+        if (name is not null)
+            cell.Item().Text($"{name}:").Bold();
+        
+        attributeValue = attributeValue
+            .Replace("<strong>", "<b>")
+            .Replace("</strong>", "</b>");
+        
+        cell.Item().PaddingBottom(0).HTML(html =>
+        {
+            html.SetContainerStyleForHtmlElement("p", x => x.Padding(0).PaddingBottom(2));
             html.SetHtml(attributeValue);
         });
     }
@@ -140,24 +156,40 @@ public static class PowerCardReport
             cell.Item().Text(text =>
             {
                 text.Span("Prerequisites: ").Bold();
-                text.Span(prerequisites.PrerequisiteNames[0]);
+                text.SectionLink(prerequisites.PrerequisiteNames[0], prerequisites.PrerequisiteNames[0])
+                    .Underline();
             });
         }
-        else if (prerequisites.PrerequisiteNames.Count == prerequisites.Count)
+        else 
         {
+            var concatanator = "or";
+            var anyAll = "Any";
+            if (prerequisites.PrerequisiteNames.Count == prerequisites.Count)
+            {
+                anyAll = "All";
+                concatanator = "and";
+            }
+            
             cell.Item().Text(text =>
             {
                 text.Span("Prerequisites: ").Bold();
-                text.Span("All of the following powers:" + string.Join(", ", prerequisites.PrerequisiteNames));
+                text.Span($"{anyAll} of the following powers: ");
+
+                var secondToLastIndex = prerequisites.PrerequisiteNames.Count - 2;
+                var last = prerequisites.PrerequisiteNames.Count - 1;
+                int i = 0;
+                foreach (var prerequisite in prerequisites.PrerequisiteNames)
+                {
+                    text.SectionLink(prerequisite, prerequisite).Underline();
+                    
+                    if (last == i)
+                        return;
+                    text.Span(secondToLastIndex == i ? $" {concatanator} " : ", ");
+                    i++;
+                }
             });
         }
-        else if (prerequisites.PrerequisiteNames.Count <= prerequisites.Count)
-        {
-            cell.Item().Text(text =>
-            {
-                text.Span("Prerequisites: ").Bold();
-                text.Span("Any of the following powers: " + string.Join(", ", prerequisites.PrerequisiteNames));
-            });
-        }
+        
+
     }
 }
