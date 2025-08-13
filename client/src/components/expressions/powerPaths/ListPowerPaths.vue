@@ -48,7 +48,7 @@ async function downloadPowerCards(isFiveByThree: boolean = false) {
       isFiveByThree: isFiveByThree,
     }
   });
-  var expression = route.params.name
+  const expression = route.params.name
   const url = URL.createObjectURL(res.data);
   const a = document.createElement('a');
   a.href = url;

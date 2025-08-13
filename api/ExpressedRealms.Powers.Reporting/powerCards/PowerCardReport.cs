@@ -13,7 +13,7 @@ public static class PowerCardReport
 
         powerCards = powerCards.OrderBy(x => x.PowerLevel).ThenBy(x => x.PathName).ThenBy(x => x.Name).ToList();
         
-        return GetSingleTilePerPage(powerCards, isFiveByThree);;
+        return GetSingleTilePerPage(powerCards, isFiveByThree);
     }
 
     private static Document GetSingleTilePerPage(List<PowerCardData> powerCards, bool isFiveByThree)
@@ -77,7 +77,6 @@ public static class PowerCardReport
                             .Italic()
                             .FontSize(6)
                             .FontColor(secondaryColor);
-                        ;
                     });
 
                 decorator
