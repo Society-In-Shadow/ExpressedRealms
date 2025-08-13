@@ -34,6 +34,18 @@ export const playerList =
                         player.email.toLowerCase().includes(lowercasedQuery)
                     );
                 }
+            },
+            getPrivilegedPlayers(){
+                return this.filteredPlayers.filter(x => x.roles.length > 0 && x.isDisabled === false)
+            },
+            getUnverifiedPlayers(){
+                return this.filteredPlayers.filter(x => x.emailConfirmed === false && x.isDisabled === false)
+            },
+            getPlayers(){
+                return this.filteredPlayers.filter(x => x.roles.length === 0 && x.emailConfirmed === true && x.isDisabled === false)
+            },
+            getDisabledPlayers(){
+                return this.filteredPlayers.filter(x => x.isDisabled === true)
             }
         }
     });

@@ -104,6 +104,29 @@ public static class AdminEndpoints
             .RequireAuthorization();
 
         endpointGroup
+            .MapPost(
+                "user/{userId}/bypassEmailConfirmation",
+                async Task<Results<NoContent, NotFound>> (
+                    string userId,
+                    UserManager<User> userManager
+                ) =>
+                {
+                    var user = await userManager.FindByIdAsync(userId);
+
+                    if (user == null)
+                    {
+                        return TypedResults.NotFound();
+                    }
+
+                    var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                    await userManager.ConfirmEmailAsync(user, token);
+
+                    return TypedResults.NoContent();
+                }
+            )
+            .RequireAuthorization();
+
+        endpointGroup
             .MapGet(
                 "user/{userid}/roles",
                 async Task<Results<NoContent, NotFound, Ok<UserRoleResponse>>> (
