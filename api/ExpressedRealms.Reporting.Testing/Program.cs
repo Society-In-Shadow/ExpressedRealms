@@ -6,7 +6,6 @@ using QuestPDF.Fluent;
 
 Console.WriteLine("Hello, World!");
 
-
 var categories = new[] { "Offense", "Defense", "Utility", "Support", "Control", "Movement" };
 var durations = new[] { "Instant", "Sustained", "Encounter", "Daily" };
 var areas = new[] { "Self", "Single Target", "Cone", "Sphere", "Burst" };
@@ -42,10 +41,6 @@ var powerCardFaker = new Faker<PowerCardData>()
 // Generate a list of fake cards
 var cards = powerCardFaker.Generate(25);
 
-
-
 var report = PowerCardReport.GenerateReport(cards);
-
-
 
 report.GeneratePdf("../test.pdf");

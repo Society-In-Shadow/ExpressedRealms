@@ -79,19 +79,21 @@ internal static class PowerPathEndpoints
             )
             .WithSummary("Returns the list of power paths for a given expression")
             .RequireAuthorization();
-        
+
         app.MapGroup("expression")
             .AddFluentValidationAutoValidation()
             .WithTags("Expressions")
             .WithOpenApi()
             .MapGet(
                 "/{expressionId}/getPowerCards",
-                async Task<FileStreamHttpResult> (int expressionId, IGetPowerCardReportUseCase useCase) =>
+                async Task<FileStreamHttpResult> (
+                    int expressionId,
+                    IGetPowerCardReportUseCase useCase
+                ) =>
                 {
-                    var reportStream = await useCase.ExecuteAsync(new GetPowerCardReportUseCaseModel()
-                    {
-                        ExpressionId = expressionId,
-                    });
+                    var reportStream = await useCase.ExecuteAsync(
+                        new GetPowerCardReportUseCaseModel() { ExpressionId = expressionId }
+                    );
 
                     return TypedResults.File(
                         reportStream,
@@ -99,7 +101,6 @@ internal static class PowerPathEndpoints
                         fileDownloadName: "powerCardReport.pdf",
                         enableRangeProcessing: true
                     );
-
                 }
             )
             .WithSummary("Downloads the power cards for the given expression")
