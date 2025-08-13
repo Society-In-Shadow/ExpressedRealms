@@ -11,6 +11,12 @@ import {UserRoles, userStore} from "@/stores/userStore";
 let userInfo = userStore();
 let powerPaths = powerPathStore();
 import PowerPathReorder from "@/components/expressions/powerPaths/PowerPathReorder.vue";
+import axios from "axios";
+import {expressionStore} from "@/stores/expressionStore.ts";
+import {useRoute} from "vue-router";
+
+let expressionInfo = expressionStore();
+let route = useRoute();
 
 const props = defineProps({
   expressionId: {
@@ -34,9 +40,27 @@ const toggleReadOnly = () => {
   readOnly.value = !readOnly.value;
 }
 
+async function downloadPowerCards() {
+  const res = await axios.get(`/expression/${expressionInfo.currentExpressionId}/getPowerCards`, {
+    responseType: 'blob',
+  });
+  var expression = route.params.name
+  const url = URL.createObjectURL(res.data);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${expression}PowerCards.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+
 </script>
 
 <template>
+
+  <Button label="Download Power Cards" @click="downloadPowerCards"/>
   <PowerPathReorder v-if="userInfo.hasUserRole(UserRoles.PowerManagementRole)" @toggle-preview="toggleReadOnly" />
   <div v-for="path in powerPaths.powerPaths" :key="path.id">
     <Divider />

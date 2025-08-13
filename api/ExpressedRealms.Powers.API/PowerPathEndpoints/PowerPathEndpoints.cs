@@ -8,6 +8,7 @@ using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathCreate;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathEdit;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathSorting;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerList;
+using ExpressedRealms.Powers.UseCases.GetPowerCardReport;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -77,6 +78,31 @@ internal static class PowerPathEndpoints
                 }
             )
             .WithSummary("Returns the list of power paths for a given expression")
+            .RequireAuthorization();
+        
+        app.MapGroup("expression")
+            .AddFluentValidationAutoValidation()
+            .WithTags("Expressions")
+            .WithOpenApi()
+            .MapGet(
+                "/{expressionId}/getPowerCards",
+                async Task<FileStreamHttpResult> (int expressionId, IGetPowerCardReportUseCase useCase) =>
+                {
+                    var reportStream = await useCase.ExecuteAsync(new GetPowerCardReportUseCaseModel()
+                    {
+                        ExpressionId = expressionId,
+                    });
+
+                    return TypedResults.File(
+                        reportStream,
+                        contentType: "application/pdf",
+                        fileDownloadName: "powerCardReport.pdf",
+                        enableRangeProcessing: true
+                    );
+
+                }
+            )
+            .WithSummary("Downloads the power cards for the given expression")
             .RequireAuthorization();
 
         app.MapGroup("expression")
