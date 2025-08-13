@@ -9,4 +9,7 @@
     <ProjectReference Include="..\ExpressedRealms.Powers.Reporting\ExpressedRealms.Powers.Reporting.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Powers.Repository.Tests.Unit\ExpressedRealms.Powers.Repository.Tests.Unit.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Bogus" Version="35.6.3" />
+  </ItemGroup>
 </Project>
