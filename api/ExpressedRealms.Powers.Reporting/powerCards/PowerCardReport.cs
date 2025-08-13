@@ -7,25 +7,32 @@ namespace ExpressedRealms.Powers.Reporting.powerCards;
 
 public static class PowerCardReport
 {
-    public static Document GenerateReport(List<PowerCardData> powerCards)
+    public static Document GenerateReport(List<PowerCardData> powerCards, bool isFiveByThree)
     {
         QuestPDF.Settings.License = LicenseType.Community;
 
-        return GetSingleTilePerPage(powerCards);
+        return GetSingleTilePerPage(powerCards, isFiveByThree);;
     }
 
-    private static Document GetSingleTilePerPage(List<PowerCardData> powerCards)
+    private static Document GetSingleTilePerPage(List<PowerCardData> powerCards, bool isFiveByThree)
     {
         var secondaryColor = Color.FromARGB(125, 0, 0, 0);
         return Document.Create(container =>
         {
             container.Page(page =>
             {
-                page.Size(
-                    PageSizes.Letter.Landscape().Width / 2,
-                    PageSizes.Letter.Landscape().Height / 3,
-                    Unit.Inch
-                );
+                if (isFiveByThree)
+                {
+                    page.Size(5, 3, Unit.Inch);
+                }
+                else
+                {
+                    page.Size(
+                        PageSizes.Letter.Landscape().Width / 2,
+                        PageSizes.Letter.Landscape().Height / 3
+                    );
+                }
+                
                 page.DefaultTextStyle(x => x.FontSize(7.75f));
 
                 page.Content()

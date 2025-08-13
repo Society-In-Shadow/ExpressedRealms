@@ -44,7 +44,7 @@ public class GetPowerCardReportUseCase(
                         })
                         .ToList()
                 )
-                .ToList()
+                .ToList(), model.IsFiveByThree
         );
 
         var stream = new MemoryStream();

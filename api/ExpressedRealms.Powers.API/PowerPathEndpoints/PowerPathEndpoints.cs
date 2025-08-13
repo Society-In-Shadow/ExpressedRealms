@@ -88,11 +88,12 @@ internal static class PowerPathEndpoints
                 "/{expressionId}/getPowerCards",
                 async Task<FileStreamHttpResult> (
                     int expressionId,
+                    bool isFiveByThree,
                     IGetPowerCardReportUseCase useCase
                 ) =>
                 {
                     var reportStream = await useCase.ExecuteAsync(
-                        new GetPowerCardReportUseCaseModel() { ExpressionId = expressionId }
+                        new GetPowerCardReportUseCaseModel() { ExpressionId = expressionId, IsFiveByThree = isFiveByThree}
                     );
 
                     return TypedResults.File(
