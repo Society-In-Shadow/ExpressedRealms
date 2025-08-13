@@ -47,15 +47,14 @@ const timeTillLockoutExpires = computed(() => {
 
 <template>
   <Panel class="mb-3">
-    <template #header><h1 class="m-0 p-0">{{ props.playerInfo.username }}</h1></template>
+    <template #header>
+      <h1 class="m-0 p-0">{{ props.playerInfo.username }}</h1>
+    </template>
     <div class="d-flex flex-column flex-md-row">
       <div class="flex-grow-1">
         <div class="flex-grow-1">
           <div class="d-flex flex-md-row flex-column">
             <div class="d-flex flex-column flex-grow-1">
-              <h1 class="d-inline-flex m-0">
-                
-              </h1>
               <div>
                 <Tag v-for="role in props.playerInfo.roles" :key="role" class="m-1" :value="role" />
               </div>
