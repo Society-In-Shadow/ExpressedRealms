@@ -57,7 +57,7 @@ const onSubmit = handleSubmit((values) => {
   <Message v-if="incorrectLogin" severity="error" :closable="false" data-cy="error-invalid-login">
     Your email or password was incorrect, please try again.
   </Message>
-  <Message v-if="lockedOut" severity="error" :closable="false" data-cy="error-invalid-login">
+  <Message v-if="lockedOut" severity="error" :closable="false" data-cy="locked-out">
     You've been locked out of your account.  Please wait 5 minutes before trying again.
   </Message>
   <Message v-else-if="route.query.resetPassword" severity="success" :closable="false" data-cy="success-password-reset-message">

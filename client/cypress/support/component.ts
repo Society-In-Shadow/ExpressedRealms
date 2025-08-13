@@ -41,8 +41,11 @@ const pinia = createPinia();
 pinia.use(piniaPluginPersistedState);
 
 import ToastService from 'primevue/toastservice';
-//import axiosConfig from "../../src/config/axiosConfig";
-//axiosConfig.setupErrorHandlingInterceptors();
+import { setupErrorHandlingInterceptors } from '../../src/config/axiosConfig'  // adjust path
+beforeEach(() => {
+    setupErrorHandlingInterceptors();
+})
+
 
 Cypress.Commands.add('mount', (component, options = {}) => {
     // Setup options object
