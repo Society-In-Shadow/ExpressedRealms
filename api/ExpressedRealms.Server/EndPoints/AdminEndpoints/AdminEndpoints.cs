@@ -43,6 +43,7 @@ public static class AdminEndpoints
                                     Username = x.Username,
                                     Roles = x.Roles,
                                     IsDisabled = x.IsDisabled,
+                                    EmailConfirmed = x.EmailConfirmed,
                                     LockedOut = x.LockedOut,
                                     LockedOutExpires = x.LockOutExpires,
                                 })

@@ -9,4 +9,5 @@ public class UserListDto
     public bool IsDisabled { get; set; }
     public bool LockedOut { get; set; }
     public DateTimeOffset? LockOutExpires { get; set; }
+    public bool EmailConfirmed { get; set; }
 }
