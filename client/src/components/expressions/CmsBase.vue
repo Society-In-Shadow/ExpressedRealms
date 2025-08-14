@@ -2,11 +2,8 @@
 
 import ExpressionSection from "@/components/expressions/ExpressionSection.vue";
 import {useRoute} from 'vue-router'
-import { expressionStore } from "@/stores/expressionStore";
-const expressionInfo = expressionStore();
-const route = useRoute()
-
-import {onMounted, ref, nextTick, watch} from "vue";
+import {expressionStore} from "@/stores/expressionStore";
+import {nextTick, onMounted, ref, watch} from "vue";
 import Card from "primevue/card";
 import ScrollTop from 'primevue/scrolltop';
 import CreateExpressionSection from "@/components/expressions/CreateExpressionSection.vue";
@@ -14,6 +11,9 @@ import Button from "primevue/button";
 import '@he-tree/vue/style/default.css'
 import '@he-tree/vue/style/material-design.css'
 import ExpressionToC from "@/components/expressions/ExpressionToC.vue";
+
+const expressionInfo = expressionStore();
+const route = useRoute()
 
 let sections = ref([
   {
@@ -94,7 +94,7 @@ watch(
           </article>
         </template>
       </Card>
-      <Card class="custom-card">
+      <Card class="custom-card flex-grow-1">
         <template #content>
           <article id="expression-body">
             <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit && !showPreview" @refresh-list="fetchData(route.params.name)" />
