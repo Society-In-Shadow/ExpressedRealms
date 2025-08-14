@@ -84,6 +84,12 @@ export const OverallRoutes = {
             meta: { isCMS: true, id: 10 },
         },
         {
+            path: "/inventory",
+            name: "inventory",
+            component: () => import("./../../components/expressions/CmsBase.vue"),
+            meta: { isCMS: true, id: 12 },
+        },
+        {
             path: "/characterQuickStart",
             name: "characterQuickStart",
             component: () => import("./../../components/expressions/CmsBase.vue"),

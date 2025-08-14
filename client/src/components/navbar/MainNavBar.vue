@@ -14,6 +14,7 @@ import Dialog from 'primevue/dialog';
 import AddExpression from "@/components/expressions/AddExpression.vue";
 import {FeatureFlags, userStore} from "@/stores/userStore";
 import GeneralContentItem from "@/components/navbar/navMenuItems/GeneralContentItem.vue";
+
 const userInfo = userStore();
 const Router = useRouter();
 let showExpressionEdit = false;
@@ -82,6 +83,12 @@ async function loadList(){
                     label: 'Combat',
                     icon: 'swords',
                     command: () => router.push("/combat")
+                  },
+                  {
+                    navMenuType: "cms",
+                    label: 'Inventory',
+                    icon: 'backpack',
+                    command: () => router.push("/inventory")
                   }
                   ]
                   }

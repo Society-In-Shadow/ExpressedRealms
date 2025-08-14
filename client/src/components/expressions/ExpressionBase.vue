@@ -9,11 +9,8 @@ import TabPanel from 'primevue/tabpanel';
 import ExpressionSection from "@/components/expressions/ExpressionSection.vue";
 import axios from "axios";
 import {onBeforeRouteUpdate, useRoute} from 'vue-router'
-import { expressionStore } from "@/stores/expressionStore";
-const expressionInfo = expressionStore();
-const route = useRoute()
-
-import {onMounted, ref, nextTick } from "vue";
+import {expressionStore} from "@/stores/expressionStore";
+import {nextTick, onMounted, ref} from "vue";
 import Card from "primevue/card";
 import ScrollTop from 'primevue/scrolltop';
 import CreateExpressionSection from "@/components/expressions/CreateExpressionSection.vue";
@@ -24,6 +21,9 @@ import ExpressionToC from "@/components/expressions/ExpressionToC.vue";
 import EditExpressionSection from "@/components/expressions/EditExpressionSection.vue";
 import PowerTab from "@/components/expressions/powers/PowerTab.vue";
 import PowersToC from "@/components/expressions/PowersToC.vue";
+
+const expressionInfo = expressionStore();
+const route = useRoute()
 
 let sections = ref([
   {
@@ -112,7 +112,7 @@ onBeforeRouteUpdate(async (to, from) => {
             </article>
           </template>
         </Card>
-        <Card class="custom-card">
+        <Card class="custom-card flex-grow-1">
           <template #content>
             <div class="pb-4">
               <div class="d-flex flex-column flex-md-row">
