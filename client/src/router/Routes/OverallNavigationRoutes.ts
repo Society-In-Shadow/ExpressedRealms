@@ -1,4 +1,5 @@
 import Layout from "@/components/LoggedInLayout.vue";
+import {FeatureFlags} from "@/stores/userStore.ts";
 
 export const OverallRoutes = {
     path: '/expressedRealms',
@@ -87,7 +88,7 @@ export const OverallRoutes = {
             path: "/inventory",
             name: "inventory",
             component: () => import("./../../components/expressions/CmsBase.vue"),
-            meta: { isCMS: true, id: 12 },
+            meta: { isCMS: true, id: 12, requiredFeatureFlag: FeatureFlags.ShowInventoryPage },
         },
         {
             path: "/characterQuickStart",
