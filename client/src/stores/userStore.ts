@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import {defineStore} from 'pinia'
 import axios from "axios";
 import {isLoggedIn, updateUserStoreWithEmailInfo, updateUserStoreWithPlayerInfo} from "@/services/Authentication";
 
@@ -10,11 +10,8 @@ export const UserRoles = {
 } as const;
 
 export const FeatureFlags = {
-    ShowsPowerTab: "show-power-tab",
-    ShowRuleBook: "show-rule-book-nav",
-    ShowTreasureTales: "show-treasured-tales-nav",
     ShowMarketingContactUs: "show-marketing-contact-us",
-    ShowCharacterKnowledgesTab: "show-character-knowledge-tab",
+    ShowInventoryPage: "show-inventory-page",
 } as const;
 
 export type UserRole = (typeof UserRoles)[keyof typeof UserRoles];

@@ -15,16 +15,6 @@ import ProficiencyTableTile from "@/components/characters/character/proficiency/
 import CharacterDetailTile from "@/components/characters/character/CharacterDetailTile.vue";
 import TrackableProficiencies from "@/components/characters/character/proficiency/TrackableProficiencies.vue";
 import KnowledgeTile from "@/components/characters/character/knowledges/KnowledgeTile.vue";
-import {FeatureFlags, userStore} from "@/stores/userStore";
-import {onBeforeMount, ref} from "vue";
-
-const userData = userStore();
-const showKnowledgeTab = ref(false);
-
-onBeforeMount(async () => {
-  showKnowledgeTab.value = await userData.hasFeatureFlag(FeatureFlags.ShowCharacterKnowledgesTab);
-})
-
 </script>
 
 <template>
@@ -49,7 +39,7 @@ onBeforeMount(async () => {
         <Tab value="1">
           Skills
         </Tab>
-        <Tab v-if="showKnowledgeTab" value="2">
+        <Tab value="2">
           Knowledges
         </Tab>
       </TabList>
@@ -60,7 +50,7 @@ onBeforeMount(async () => {
         <TabPanel value="1">
           <SkillTile />
         </TabPanel>
-        <TabPanel v-if="showKnowledgeTab" value="2">
+        <TabPanel value="2">
           <KnowledgeTile />
         </TabPanel>
       </TabPanels>

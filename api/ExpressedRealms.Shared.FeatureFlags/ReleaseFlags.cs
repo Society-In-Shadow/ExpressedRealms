@@ -24,28 +24,16 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "On the expressions, shows the power tab."
     );
 
-    public static readonly ReleaseFlags ShowRuleBook = new(
-        "Show Rule Book Nav",
-        "show-rule-book-nav",
-        "Allows one to see the rule book in the nav bar."
-    );
-
-    public static readonly ReleaseFlags ShowTreasuredTales = new(
-        "Show Treasure Tales Nav",
-        "show-treasured-tales-nav",
-        "Allows one to see the treasured tales in the nav bar."
-    );
-
     public static readonly ReleaseFlags ShowMarketingContactUsPage = new(
         "Show Marketing Contact Us Pages",
         "show-marketing-contact-us",
         "Allows one to see the contact us page on the marketing materials"
     );
 
-    public static readonly ReleaseFlags ShowCharacterKnowledgePage = new(
-        "Show Knowledge Tab on Characters",
-        "show-character-knowledge-tab",
-        "Allows one to see the knowledge tab on the character page"
+    public static readonly ReleaseFlags ShowInventoryPage = new(
+        "Show Inventory Tab on Rule Book",
+        "show-inventory-page",
+        "Allows one to see the inventory tab on the rule book page"
     );
 
     public override string ToString()

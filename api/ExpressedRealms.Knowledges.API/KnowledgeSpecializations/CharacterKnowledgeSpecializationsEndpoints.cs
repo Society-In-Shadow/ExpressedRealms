@@ -1,8 +1,6 @@
-﻿using ExpressedRealms.FeatureFlags;
-using ExpressedRealms.Knowledges.API.KnowledgeSpecializations.Create;
+﻿using ExpressedRealms.Knowledges.API.KnowledgeSpecializations.Create;
 using ExpressedRealms.Knowledges.API.KnowledgeSpecializations.Delete;
 using ExpressedRealms.Knowledges.API.KnowledgeSpecializations.Edit;
-using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
@@ -15,7 +13,6 @@ internal static class CharacterKnowledgeSpecializationsEndpoints
     {
         var endpointGroup = app.MapGroup("characters")
             .AddFluentValidationAutoValidation()
-            .RequireFeatureToggle(ReleaseFlags.ShowCharacterKnowledgePage)
             .WithTags("Character Knowledge Specializations")
             .WithOpenApi();
 
