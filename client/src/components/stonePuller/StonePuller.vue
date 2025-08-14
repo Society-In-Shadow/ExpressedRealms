@@ -218,7 +218,7 @@ const bonusEffects = [
 </script>
 
 <template>
-  <Card class="mb-3 p-0 mt-0 pt-0" style="max-width: 800px; margin-left: auto; margin-right: auto">
+  <Card class="mb-3 p-0 mt-0 pt-0">
     <template #content>
       <div class="text-center">
         <SplitButton label="Pull Stone" class="m-2" :model="pullStoneList" @click="pullStones(1)" />

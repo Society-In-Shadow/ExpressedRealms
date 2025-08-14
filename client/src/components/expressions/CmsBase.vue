@@ -83,48 +83,40 @@ watch(
 </script>
 
 <template>
-  <div id="expression" class="container ms-md-auto me-md-auto ms-0 me-0 container-md p-0">
-    <div class="d-flex flex-column flex-md-row ">
-      <div class="col-12 col-lg-3 col-sm-12 col-xl-3 col-md-3 p-0 ms-0 me-0 mt-2 mb-2 m-md-2">
-        <Card class="custom-toc sticky-md-top sticky-lg-top sticky-xl-top zIndexFix d-print-none">
-          <template #title>
-            Table Of Contents
-          </template>
-          <template #content>
-            <article id="expression-body">
-              <ExpressionToC v-model="sections" :can-edit="showEdit" :show-skeleton="isLoading" @toggle-preview="togglePreview" />
-            </article>
-          </template>
-        </Card>
-      </div>
-      <div class="col p-0 ms-0 me-0 mt-2 mb-2 m-md-2">
-        <Card class="custom-card" style="max-width: 800px">
-          <template #content>
-            <article id="expression-body">
-              <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit && !showPreview" @refresh-list="fetchData(route.params.name)" />
-              <Button v-if="showEdit && !showPreview" label="Add Section" class="m-2" @click="toggleCreate" />
-              <div v-if="showCreate">
-                <CreateExpressionSection @cancel-event="toggleCreate" @added-section="fetchData(route.params.name)" />
-              </div>
-            </article>
-          </template>
-        </Card>
-      </div>
+    <div id="expression" class="d-flex flex-column flex-md-row gap-2 ">
+      <Card class="custom-toc flex-grow-0 sticky-md-top d-print-none zIndexFix">
+        <template #title>
+          Table Of Contents
+        </template>
+        <template #content>
+          <article id="expression-body">
+            <ExpressionToC v-model="sections" :can-edit="showEdit" :show-skeleton="isLoading" @toggle-preview="togglePreview" />
+          </article>
+        </template>
+      </Card>
+      <Card class="custom-card">
+        <template #content>
+          <article id="expression-body">
+            <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit && !showPreview" @refresh-list="fetchData(route.params.name)" />
+            <Button v-if="showEdit && !showPreview" label="Add Section" class="m-2" @click="toggleCreate" />
+            <div v-if="showCreate">
+              <CreateExpressionSection @cancel-event="toggleCreate" @added-section="fetchData(route.params.name)" />
+            </div>
+          </article>
+        </template>
+      </Card>
     </div>
     <ScrollTop />
-  </div>
 </template>
 
 <style>
 
 @media(min-width: 768px){
-  .container-md {
-    width: 100%;
-    max-width:1000px
-  }
   .custom-toc {
     max-height: calc(100vh - 1rem);
     overflow-y: auto;
+    height:100%;
+    min-width: 18em;
   }
 }
 
@@ -143,29 +135,7 @@ watch(
   }
 }
 
-.container {
-  width: 100%; 
-  margin-right: auto; 
-  margin-left: auto; 
-  max-width:1000px
-}
-
 .zIndexFix {
   z-index: inherit !important;
-}
-
-#expression .p-card-content {
-  padding-top: 0;
-  margin-top: 0;
-}
-
-#expression > div > div.p-card-body > div {
-  padding-top: 0;
-  margin-top: 0;
-}
-
-#expression-body > div:nth-child(1) > h1 {
-  padding-top: 0;
-  margin-top: 0;
 }
 </style>
