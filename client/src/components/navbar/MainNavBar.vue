@@ -120,12 +120,12 @@ async function loadList(){
               ],
               [
                 { items: [
-                    {
+/*                    {
                       navMenuType: "cms",
                       label: 'Factions',
                       icon: 'safety_divider',
                       command: () => router.push("/factions")
-                    },
+                    },*/
                     {
                       navMenuType: "cms",
                       label: 'The Society',
