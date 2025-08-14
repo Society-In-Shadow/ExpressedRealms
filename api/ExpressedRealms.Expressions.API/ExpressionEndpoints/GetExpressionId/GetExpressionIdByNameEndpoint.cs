@@ -20,11 +20,6 @@ internal static class GetExpressionIdByNameEndpoint
         expressionIdResult.ThrowIfErrorNotHandled();
         var expressionId = expressionIdResult.Value;
 
-        return TypedResults.Ok(
-            new ExpressionNameResponse
-            {
-                Id = expressionId
-            }
-        );
+        return TypedResults.Ok(new ExpressionNameResponse { Id = expressionId });
     }
 }
