@@ -25,7 +25,7 @@ const items = ref([
   { root: true, label: 'Expressions', items: [] },
   { root: true, label: 'Stone Puller', icon: 'pi pi-file', subtext: 'Stone Puller', command: () => router.push("/stonePuller") },
   { root: true, label: 'Admin', icon: 'pi pi-admin', subtext: 'See User List', command: () => router.push("/admin/players"), visible: () => userInfo.userRoles.includes("UserManagementRole") },
-  { root: true, label: 'Code of Conduct', route: 'code-of-conduct', command: () => router.push("/code-of-conduct") },
+  { root: true, label: 'Code of Conduct', route: 'code-of-conduct', command: () => router.push("/codeofconduct") },
 ]);
 
 async function loadList(){

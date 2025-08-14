@@ -93,6 +93,12 @@ export const OverallRoutes = {
             path: "/expressions/:name",
             name: "viewExpression",
             component: () => import("./../../components/expressions/ExpressionBase.vue")
-        }
+        },
+        {
+            path: "/codeofconduct",
+            name: "codeofconduct",
+            component: () => import("./../../components/public/legal/CodeOfConduct.vue"),
+            meta: { isAnonymous: true },
+        },
     ]
 }

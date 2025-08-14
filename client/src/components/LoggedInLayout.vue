@@ -33,7 +33,6 @@ import DynamicDialog from 'primevue/dynamicdialog';
   .main-container{
     margin: 0 auto;
     max-width: 1300px;
-    background-color: yellow;
   }
   
 </style>
