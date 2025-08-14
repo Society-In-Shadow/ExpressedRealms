@@ -100,7 +100,7 @@ onBeforeRouteUpdate(async (to, from) => {
 </script>
 
 <template>
-    <div class="d-flex flex-column flex-md-row gap-3">
+    <div class="d-flex flex-column flex-md-row gap-2">
         <Card class="custom-toc flex-grow-0 sticky-md-top d-print-none zIndexFix">
           <template #title>
             Table Of Contents
