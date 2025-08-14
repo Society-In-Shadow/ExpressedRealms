@@ -100,10 +100,8 @@ onBeforeRouteUpdate(async (to, from) => {
 </script>
 
 <template>
-  <div id="expression" class="ms-md-auto me-md-auto ms-0 me-0 container-md p-0">
-    <div class="d-flex flex-column flex-md-row">
-      <div class="col-12 col-lg-3 col-sm-12 col-xl-3 col-md-3 p-0 ms-0 me-0 mt-2 mb-2 m-md-2 d-print-none">
-        <Card class="custom-toc sticky-md-top sticky-lg-top sticky-xl-top zIndexFix">
+    <div class="d-flex flex-column flex-md-row gap-3">
+        <Card class="custom-toc flex-grow-0 sticky-md-top d-print-none zIndexFix">
           <template #title>
             Table Of Contents
           </template>
@@ -114,9 +112,7 @@ onBeforeRouteUpdate(async (to, from) => {
             </article>
           </template>
         </Card>
-      </div>
-      <div class="col p-0 ms-0 me-0 mt-2 mb-2 m-md-2">
-        <Card class="custom-card" style="max-width: 800px">
+        <Card class="custom-card">
           <template #content>
             <div class="pb-4">
               <div class="d-flex flex-column flex-md-row">
@@ -141,7 +137,7 @@ onBeforeRouteUpdate(async (to, from) => {
                   Powers
                 </Tab>
               </TabList>
-              <TabPanels class="">
+              <TabPanels>
                 <TabPanel value="0">
                   <article id="expression-body">
                     <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit && !showPreview" @refresh-list="fetchData(route.params.name)" />
@@ -159,21 +155,17 @@ onBeforeRouteUpdate(async (to, from) => {
           </template>
         </Card>
       </div>
-    </div>
     <ScrollTop />
-  </div>
 </template>
 
 <style>
 
 @media(min-width: 768px){
-  .container-md {
-    width: 100%;
-    max-width:1000px
-  }
   .custom-toc {
     max-height: calc(100vh - 1rem);
     overflow-y: auto;
+    height:100%;
+    min-width: 18em;
   }
 }
 

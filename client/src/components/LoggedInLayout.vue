@@ -8,7 +8,10 @@
     This site is currently in a BETA state, not all features or content is in place.
   </Message>
   <main-nav-bar class="d-print-none"/>
-  <router-view />
+  <div class="main-container">
+    <router-view />
+  </div>
+
 </template>
 
 <script setup>
@@ -26,4 +29,11 @@ import DynamicDialog from 'primevue/dynamicdialog';
     padding-top: 0 !important;
     padding-bottom: 0 !important;
   }
+  
+  .main-container{
+    margin: 0 auto;
+    max-width: 1300px;
+    background-color: yellow;
+  }
+  
 </style>
