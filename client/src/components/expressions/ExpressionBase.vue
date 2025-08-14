@@ -133,7 +133,7 @@ onBeforeRouteUpdate(async (to, from) => {
                 <Tab value="0">
                   Background
                 </Tab>
-                <Tab v-if="expressionInfo.showPowersTab" value="1">
+                <Tab value="1">
                   Powers
                 </Tab>
               </TabList>
@@ -147,7 +147,7 @@ onBeforeRouteUpdate(async (to, from) => {
                     </div>
                   </article>
                 </TabPanel>
-                <TabPanel v-if="expressionInfo.showPowersTab" value="1">
+                <TabPanel value="1">
                   <PowerTab v-if="expressionInfo.isDoneLoading" :expression-id="expressionInfo.currentExpressionId" />
                 </TabPanel>
               </TabPanels>

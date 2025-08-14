@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import {defineStore} from 'pinia'
 import axios from "axios";
 import {UserRoles, userStore} from "@/stores/userStore";
 
@@ -13,7 +13,6 @@ defineStore('expression', {
             currentExpressionName: "" as string,
             isDoneLoading: false as boolean,
             canEdit: userInfo.hasUserRole(UserRoles.PowerManagementRole),
-            showPowersTab: false as boolean,
             isSpecialExpression: false as boolean
         }
     },
@@ -30,7 +29,6 @@ defineStore('expression', {
                 await axios.get(`/expression/getByName/${route.params.name}`)
                     .then(async (json) => {
                         this.currentExpressionId = json.data.id;
-                        this.showPowersTab = json.data.showPowersTab;
                     })
             }
         },

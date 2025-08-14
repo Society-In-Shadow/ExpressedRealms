@@ -18,12 +18,6 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "This is a test feature flag."
     );
 
-    public static readonly ReleaseFlags ShowPowersTab = new(
-        "Show Power Tab",
-        "show-power-tab",
-        "On the expressions, shows the power tab."
-    );
-
     public static readonly ReleaseFlags ShowMarketingContactUsPage = new(
         "Show Marketing Contact Us Pages",
         "show-marketing-contact-us",

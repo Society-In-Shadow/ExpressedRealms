@@ -1,7 +1,5 @@
 using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.Expressions.Repository.ExpressionTextSections;
-using ExpressedRealms.FeatureFlags;
-using ExpressedRealms.FeatureFlags.FeatureClient;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -13,8 +11,7 @@ internal static class GetExpressionIdByNameEndpoint
     public static async Task<Results<NotFound, Ok<ExpressionNameResponse>>> GetExpressionIdByName(
         string name,
         IExpressionTextSectionRepository sectionRepository,
-        IExpressionRepository expressionRepository,
-        IFeatureToggleClient featureToggleClient
+        IExpressionRepository expressionRepository
     )
     {
         var expressionIdResult = await sectionRepository.GetExpressionId(name);
@@ -26,10 +23,7 @@ internal static class GetExpressionIdByNameEndpoint
         return TypedResults.Ok(
             new ExpressionNameResponse
             {
-                Id = expressionId,
-                ShowPowersTab = await featureToggleClient.HasFeatureFlag(
-                    ReleaseFlags.ShowPowersTab
-                ),
+                Id = expressionId
             }
         );
     }
