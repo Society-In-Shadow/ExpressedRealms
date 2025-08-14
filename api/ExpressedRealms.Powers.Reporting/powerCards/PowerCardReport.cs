@@ -1,4 +1,5 @@
 using HTMLQuestPDF.Extensions;
+using QuestPDF;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
@@ -9,10 +10,14 @@ public static class PowerCardReport
 {
     public static Document GenerateReport(List<PowerCardData> powerCards, bool isFiveByThree)
     {
-        QuestPDF.Settings.License = LicenseType.Community;
+        Settings.License = LicenseType.Community;
 
-        powerCards = powerCards.OrderBy(x => x.PowerLevel).ThenBy(x => x.PathName).ThenBy(x => x.Name).ToList();
-        
+        powerCards = powerCards
+            .OrderBy(x => x.PowerLevel)
+            .ThenBy(x => x.PathName)
+            .ThenBy(x => x.Name)
+            .ToList();
+
         return GetSingleTilePerPage(powerCards, isFiveByThree);
     }
 
@@ -34,7 +39,7 @@ public static class PowerCardReport
                         PageSizes.Letter.Landscape().Height / 3
                     );
                 }
-                
+
                 page.DefaultTextStyle(x => x.FontSize(7.75f));
 
                 page.Content()

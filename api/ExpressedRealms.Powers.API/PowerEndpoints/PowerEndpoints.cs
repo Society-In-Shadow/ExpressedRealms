@@ -1,5 +1,4 @@
 using ExpressedRealms.Authentication;
-using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.Powers.API.PowerEndpoints.Requests.CreatePower;
 using ExpressedRealms.Powers.API.PowerEndpoints.Requests.PowerEdit;
 using ExpressedRealms.Powers.API.PowerEndpoints.Requests.UpdateOrder;
@@ -25,13 +24,11 @@ internal static class PowerEndpoints
     {
         var endpointGroup = app.MapGroup("powers")
             .AddFluentValidationAutoValidation()
-            .RequireFeatureToggle(ReleaseFlags.ShowPowersTab)
             .WithTags("Powers")
             .WithOpenApi();
 
         app.MapGroup("/powerpath/")
             .AddFluentValidationAutoValidation()
-            .RequireFeatureToggle(ReleaseFlags.ShowPowersTab)
             .WithTags("Power Paths")
             .WithOpenApi()
             .MapGet(

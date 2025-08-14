@@ -6,5 +6,4 @@ public class ExpressionBaseResponse
 {
     public List<ExpressionSectionDto> ExpressionSections { get; set; } = new();
     public bool CanEditPolicy { get; set; }
-    public bool ShowPowersTab { get; set; }
 }

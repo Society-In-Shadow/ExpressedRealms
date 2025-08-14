@@ -1,5 +1,4 @@
 using ExpressedRealms.Authentication;
-using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.Powers.API.PowerEndpoints.Responses.Options;
 using ExpressedRealms.Powers.API.PowerPrerequisites.Requests.CreatePrerequisite;
 using ExpressedRealms.Powers.API.PowerPrerequisites.Requests.EditPrerequisite;
@@ -24,7 +23,6 @@ internal static class PowerPrerequisiteEndpoints
     {
         var endpointGroup = app.MapGroup("powers")
             .AddFluentValidationAutoValidation()
-            .RequireFeatureToggle(ReleaseFlags.ShowPowersTab)
             .WithTags("Powers")
             .WithOpenApi();
 
@@ -148,7 +146,6 @@ internal static class PowerPrerequisiteEndpoints
 
         app.MapGroup("/powerpath/")
             .AddFluentValidationAutoValidation()
-            .RequireFeatureToggle(ReleaseFlags.ShowPowersTab)
             .WithTags("Power Paths")
             .WithOpenApi()
             .MapGet(

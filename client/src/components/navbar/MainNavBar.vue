@@ -18,136 +18,151 @@ import GeneralContentItem from "@/components/navbar/navMenuItems/GeneralContentI
 const userInfo = userStore();
 const Router = useRouter();
 let showExpressionEdit = false;
-let initialLoad = true;
 const router = useRouter();
 
 const items = ref([
-  { root: true, label: 'Characters', icon: 'pi pi-file', subtext: 'Characters', command: () => router.push("/characters"),  items: [] },
-  { root: true, label: 'Expressions', items: [] },
-  { root: true, label: 'Stone Puller', icon: 'pi pi-file', subtext: 'Stone Puller', command: () => router.push("/stonePuller") },
-  { root: true, label: 'Admin', icon: 'pi pi-admin', subtext: 'See User List', command: () => router.push("/admin/players"), visible: () => userInfo.userRoles.includes("UserManagementRole") },
-  { root: true, label: 'Code of Conduct', route: 'code-of-conduct', command: () => router.push("/codeofconduct") },
+  { 
+    root: true, 
+    label: 'Characters', 
+    icon: 'pi pi-file', 
+    subtext: 'Characters', 
+    command: () => router.push("/characters"),  
+    items: [] 
+  },
+  {
+    root: true,
+    label: 'Rule Book',
+    icon: 'pi pi-file',
+    subtext: 'Rule Book',
+    items: [
+      [
+        {
+          items: [
+            {
+              navMenuType: "cms",
+              label: 'Quick Start Guide',
+              icon: 'user_attributes',
+              command: () => router.push("/characterQuickStart")
+            },
+            {
+              navMenuType: "cms",
+              label: 'Character Setup',
+              icon: 'article_person',
+              command: () => router.push("/characterSetup")
+            },
+            {
+              navMenuType: "cms",
+              label: 'Knowledges',
+              icon: 'cognition_2',
+              command: () => router.push("/knowledges")
+            }
+          ]
+        }
+      ],
+      [
+        { 
+          items: [
+            {
+              navMenuType: "cms",
+              label: 'Advantages / Disadvantages / Mixed Blessings',
+              icon: 'chess_bishop_2',
+              command: () => router.push("/blessings")
+            },
+            {
+              navMenuType: "cms",
+              label: 'Combat',
+              icon: 'swords',
+              command: () => router.push("/combat")
+            },
+            {
+              navMenuType: "cms",
+              label: 'Inventory',
+              icon: 'backpack',
+              command: () => router.push("/inventory"),
+              visible: () => userInfo.userRoles.includes(FeatureFlags.ShowInventoryPage)
+            }
+          ]
+        }
+
+      ]
+    ]
+  },
+  { 
+    root: true, 
+    label: 'Expressions', 
+    items: [] 
+  },
+  {
+    root: true,
+    label: 'World Background',
+    icon: 'pi pi-file',
+    subtext: '',
+    items: [
+      [
+        {
+          items: [
+            {
+              navMenuType: "cms",
+              label: 'Treasured Tales',
+              icon: 'auto_stories',
+              command: () => router.push("/treasuredtales")
+            },
+            {
+              navMenuType: "cms",
+              label: 'Adversaries',
+              icon: 'skull_list',
+              command: () => router.push("/adversaries")
+            }
+          ]
+        }
+      ],
+      [
+        { 
+          items: [
+            {
+              navMenuType: "cms",
+              label: 'Factions',
+              icon: 'safety_divider',
+              command: () => router.push("/factions")
+            },
+            {
+              navMenuType: "cms",
+              label: 'The Society',
+              icon: 'hub',
+              command: () => router.push("/society")
+            }
+          ]
+        }
+
+      ]
+    ]
+  },
+  { 
+    root: true, 
+    label: 'Stone Puller', 
+    icon: 'pi pi-file', 
+    subtext: 'Stone Puller', 
+    command: () => router.push("/stonePuller") 
+  },
+  { 
+    root: true, 
+    label: 'Admin', 
+    icon: 'pi pi-admin', 
+    subtext: 'See User List', 
+    command: () => router.push("/admin/players"), 
+    visible: () => userInfo.userRoles.includes("UserManagementRole") },
+  { 
+    root: true, 
+    label: 'Code of Conduct', 
+    route: 'code-of-conduct', 
+    command: () => router.push("/codeofconduct") 
+  },
 ]);
 
 async function loadList(){
 
   const userInfo = userStore();
   await userInfo.updateUserFeatureFlags()
-      .then(async () => {
-        if(!initialLoad){
-          return;
-        }
-        let indexOffset = -1;
-        if(await userInfo.hasFeatureFlag(FeatureFlags.ShowRuleBook)){
-          items.value.splice(1, 0, 
-      { 
-              root: true, 
-              label: 'Rule Book', 
-              icon: 'pi pi-file', 
-              subtext: 'Rule Book',
-              items: [
-                [
-                  {
-                    items: [
-                        {
-                          navMenuType: "cms",
-                          label: 'Quick Start Guide',
-                          icon: 'user_attributes',
-                          command: () => router.push("/characterQuickStart")
-                        },
-                        {
-                          navMenuType: "cms",
-                          label: 'Character Setup',
-                          icon: 'article_person',
-                          command: () => router.push("/characterSetup")
-                        },
-                        {
-                          navMenuType: "cms",
-                          label: 'Knowledges',
-                          icon: 'cognition_2',
-                          command: () => router.push("/knowledges")
-                        }
-                  ]
-                  }
-                ],
-                [
-                  { items: [
-                    {
-                      navMenuType: "cms",
-                      label: 'Advantages / Disadvantages / Mixed Blessings',
-                      icon: 'chess_bishop_2',
-                      command: () => router.push("/blessings")
-                    },
-                  {
-                    navMenuType: "cms",
-                    label: 'Combat',
-                    icon: 'swords',
-                    command: () => router.push("/combat")
-                  },
-                  {
-                    navMenuType: "cms",
-                    label: 'Inventory',
-                    icon: 'backpack',
-                    command: () => router.push("/inventory")
-                  }
-                  ]
-                  }
-
-                ]
-              ]
-            }
-          );
-          indexOffset = 0;
-        }
-
-        if(await userInfo.hasFeatureFlag(FeatureFlags.ShowTreasureTales)){
-          items.value.splice(3 + indexOffset, 0, {
-            root: true,
-            label: 'World Background',
-            icon: 'pi pi-file',
-            subtext: '',
-            items: [
-              [
-                {
-                  items: [
-                    {
-                      navMenuType: "cms",
-                      label: 'Treasured Tales',
-                      icon: 'auto_stories',
-                      command: () => router.push("/treasuredtales")
-                    },
-                    {
-                      navMenuType: "cms",
-                      label: 'Adversaries',
-                      icon: 'skull_list',
-                      command: () => router.push("/adversaries")
-                    }
-                  ]
-                }
-              ],
-              [
-                { items: [
-/*                    {
-                      navMenuType: "cms",
-                      label: 'Factions',
-                      icon: 'safety_divider',
-                      command: () => router.push("/factions")
-                    },*/
-                    {
-                      navMenuType: "cms",
-                      label: 'The Society',
-                      icon: 'hub',
-                      command: () => router.push("/society")
-                    }
-                  ]
-                }
-
-              ]
-            ]
-          } );
-        }
-        initialLoad = false;
-      });
   function MapData(expression) {
     return {
       navMenuType: "expression",

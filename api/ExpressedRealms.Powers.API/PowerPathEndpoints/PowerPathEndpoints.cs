@@ -1,5 +1,4 @@
 using ExpressedRealms.Authentication;
-using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.Powers.API.PowerEndpoints.Responses.PowerList;
 using ExpressedRealms.Powers.API.PowerPathEndpoints.Requests;
 using ExpressedRealms.Powers.API.PowerPathEndpoints.Responses.PowerPathList;
@@ -24,7 +23,6 @@ internal static class PowerPathEndpoints
     {
         var endpointGroup = app.MapGroup("powerpath")
             .AddFluentValidationAutoValidation()
-            .RequireFeatureToggle(ReleaseFlags.ShowPowersTab)
             .WithTags("Power Paths")
             .WithOpenApi();
 
@@ -93,7 +91,11 @@ internal static class PowerPathEndpoints
                 ) =>
                 {
                     var reportStream = await useCase.ExecuteAsync(
-                        new GetPowerCardReportUseCaseModel() { ExpressionId = expressionId, IsFiveByThree = isFiveByThree}
+                        new GetPowerCardReportUseCaseModel()
+                        {
+                            ExpressionId = expressionId,
+                            IsFiveByThree = isFiveByThree,
+                        }
                     );
 
                     return TypedResults.File(
