@@ -79,7 +79,7 @@ const items = ref([
               label: 'Inventory',
               icon: 'backpack',
               command: () => router.push("/inventory"),
-              visible: () => userInfo.userRoles.includes(FeatureFlags.ShowInventoryPage)
+              visible: () => userInfo.userFeatureFlags.includes(FeatureFlags.ShowInventoryPage)
             }
           ]
         }
