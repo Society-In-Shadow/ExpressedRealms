@@ -76,9 +76,9 @@ const items = ref([
             },
             {
               navMenuType: "cms",
-              label: 'Inventory',
+              label: 'Equipment',
               icon: 'backpack',
-              command: () => router.push("/inventory"),
+              command: () => router.push("/equipment"),
               visible: () => userInfo.userFeatureFlags.includes(FeatureFlags.ShowInventoryPage)
             }
           ]

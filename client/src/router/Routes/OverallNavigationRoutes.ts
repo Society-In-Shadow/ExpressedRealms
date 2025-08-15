@@ -85,8 +85,8 @@ export const OverallRoutes = {
             meta: { isCMS: true, id: 10 },
         },
         {
-            path: "/inventory",
-            name: "inventory",
+            path: "/equipment",
+            name: "equipment",
             component: () => import("./../../components/expressions/CmsBase.vue"),
             meta: { isCMS: true, id: 12, requiredFeatureFlag: FeatureFlags.ShowInventoryPage },
         },
