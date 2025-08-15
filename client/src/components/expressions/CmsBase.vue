@@ -12,9 +12,11 @@ import '@he-tree/vue/style/default.css'
 import '@he-tree/vue/style/material-design.css'
 import ExpressionToC from "@/components/expressions/ExpressionToC.vue";
 import axios from "axios";
+import {FeatureFlags, userStore} from "@/stores/userStore.ts";
 
 const expressionInfo = expressionStore();
 const route = useRoute()
+const userInfo = userStore()
 
 let sections = ref([
   {
@@ -43,6 +45,7 @@ const isLoading = ref(true);
 const showEdit = ref(expressionInfo.canEdit);
 const showCreate = ref(false);
 const showPreview = ref(false);
+const showReportButton = ref(false);
 
 async function fetchData() {
 
@@ -70,6 +73,7 @@ function togglePreview(){
 
 onMounted(async () =>{
   await fetchData();
+  showReportButton.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowReportButtons);
 })
 
 watch(
@@ -113,7 +117,7 @@ async function downloadExpressionBooklet() {
       <Card class="custom-card flex-grow-1">
         <template #content>
           <article id="expression-body">
-            <div class="d-flex flex-row justify-content-end align-items-center">
+            <div class="d-flex flex-row justify-content-end align-items-center" v-if="showReportButton">
               <Button label="Download Booklet" @click="downloadExpressionBooklet()"/>
             </div>
             <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit && !showPreview" @refresh-list="fetchData(route.params.name)" />

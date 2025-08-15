@@ -29,6 +29,12 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "show-inventory-page",
         "Allows one to see the inventory tab on the rule book page"
     );
+    
+    public static readonly ReleaseFlags ShowReportButtons = new(
+        "Show Report Download Buttons",
+        "show-report-buttons",
+        "Allows one to download the reports"
+    );
 
     public override string ToString()
     {

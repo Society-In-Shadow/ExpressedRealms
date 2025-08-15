@@ -21,9 +21,11 @@ import ExpressionToC from "@/components/expressions/ExpressionToC.vue";
 import EditExpressionSection from "@/components/expressions/EditExpressionSection.vue";
 import PowerTab from "@/components/expressions/powers/PowerTab.vue";
 import PowersToC from "@/components/expressions/PowersToC.vue";
+import {FeatureFlags, userStore} from "@/stores/userStore.ts";
 
 const expressionInfo = expressionStore();
 const route = useRoute()
+const userInfo = userStore()
 
 let sections = ref([
   {
@@ -56,6 +58,7 @@ const showEdit = ref(expressionInfo.canEdit);
 const showCreate = ref(false);
 const showPreview = ref(false);
 const currentTab = ref('0');
+const showReportButton = ref(false);
 
 async function fetchData() {
   await expressionInfo.getExpressionSections()
@@ -88,6 +91,7 @@ function togglePreview(){
 onMounted(async () =>{
   await expressionInfo.getExpressionId(route);
   await fetchData();
+  showReportButton.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowReportButtons);
 })
 
 onBeforeRouteUpdate(async (to, from) => {
@@ -134,7 +138,7 @@ async function downloadExpressionBooklet() {
             <div class="pb-4">
               <div class="d-flex flex-column flex-md-row">
                 <div class="col-12 order-1 order-md-0 col-md-8">
-                  <div class="d-flex flex-row justify-content-end align-items-center">
+                  <div class="d-flex flex-row justify-content-end align-items-center" v-if="showReportButton">
                     <Button label="Download Booklet" @click="downloadExpressionBooklet()"/>
                   </div>
                   <CreateExpressionSection v-if="expressionHeader.id === 0" :add-expression-header="true" @added-section="fetchData(route.params.name)" />
