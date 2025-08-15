@@ -198,17 +198,20 @@ public static class ExpressionCmsReport
 
     private static readonly Regex TdContentRegex = new Regex(
         "(<td\\b[^>]*>)(.*?)(</td>)",
-        RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled
+        RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled,
+        TimeSpan.FromSeconds(5)
     );
 
     private static readonly Regex POpenRegex = new Regex(
         "<p\\b[^>]*>",
-        RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled
+        RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled,
+        TimeSpan.FromSeconds(5)
     );
 
     private static readonly Regex PCloseRegex = new Regex(
         "</p\\s*>",
-        RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled
+        RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled,
+        TimeSpan.FromSeconds(5)
     );
 
     // Removes <p...> and replaces </p> with a newline ONLY inside <td>...</td> content blocks
