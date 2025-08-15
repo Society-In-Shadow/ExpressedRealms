@@ -28,98 +28,122 @@ public static class PowerBookletReport
                 page.Margin(0.5f, Unit.Inch);
                 page.MarginTop(0.25f, Unit.Inch);
 
-                page.Header().AlignCenter().PaddingBottom(10).Text($"{powerCards.PowerPaths.First().ExpressionName} Power Booklet")
+                page.Header()
+                    .AlignCenter()
+                    .PaddingBottom(10)
+                    .Text($"{powerCards.PowerPaths.First().ExpressionName} Power Booklet")
                     .FontSize(10)
                     .ExtraBold();
-                
+
                 page.Content()
                     .Column(col =>
                     {
-                        col.Item().MultiColumn(multiColumn =>
-                        {
-                            multiColumn.Columns(3);
-                            multiColumn.Spacing(10);
-                            
-                            multiColumn.Content().Column(columnContent =>
+                        col.Item()
+                            .MultiColumn(multiColumn =>
                             {
-                                foreach (var powerPath in powerCards.PowerPaths)
-                                {
-                                    columnContent.Item().PaddingBottom(10).Text(powerPath.Name).FontSize(15).ExtraBold();
+                                multiColumn.Columns(3);
+                                multiColumn.Spacing(10);
 
-                                    columnContent.FormatMainSection(null, powerPath.Description);
-
-                                    columnContent.Item().PaddingBottom(10);
-                                    
-                                    foreach (var power in powerPath.Powers)
+                                multiColumn
+                                    .Content()
+                                    .Column(columnContent =>
                                     {
-                                        FillPowerCard(columnContent, power, secondaryColor);
-                                    }
-                                }
+                                        foreach (var powerPath in powerCards.PowerPaths)
+                                        {
+                                            columnContent
+                                                .Item()
+                                                .PaddingBottom(10)
+                                                .Text(powerPath.Name)
+                                                .FontSize(15)
+                                                .ExtraBold();
+
+                                            columnContent.FormatMainSection(
+                                                null,
+                                                powerPath.Description
+                                            );
+
+                                            columnContent.Item().PaddingBottom(10);
+
+                                            foreach (var power in powerPath.Powers)
+                                            {
+                                                FillPowerCard(columnContent, power, secondaryColor);
+                                            }
+                                        }
+                                    });
+                            });
+                    });
+
+                page.Footer()
+                    .Row(row =>
+                    {
+                        var tzId = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                            ? "Central Standard Time" // Windows ID
+                            : "America/Chicago"; // IANA ID
+
+                        var central = TimeZoneInfo.FindSystemTimeZoneById(tzId);
+                        DateTimeOffset nowCentral = TimeZoneInfo.ConvertTime(
+                            DateTimeOffset.UtcNow,
+                            central
+                        );
+
+                        row.RelativeItem()
+                            .Column(x =>
+                            {
+                                x.Item().Text($"©{nowCentral.Year} Expressed Realms");
+                                x.Item().Text("Society in Shadows LARP. All rights reserved.");
                             });
 
-                        });
+                        row.RelativeItem()
+                            .AlignCenter()
+                            .Column(x =>
+                            {
+                                x.Item().Text("");
+                                x.Item()
+                                    .Text(text =>
+                                    {
+                                        text.Span("Page ");
+                                        text.CurrentPageNumber();
+                                        text.Span(" / ");
+                                        text.TotalPages();
+                                    });
+                            });
+                        row.RelativeItem()
+                            .AlignRight()
+                            .Column(x =>
+                            {
+                                x.Item().Text("");
+                                x.Item().Text($"Download Date: {nowCentral:M/d/yyyy h:mm tt} CST");
+                            });
                     });
-                
-                page.Footer().Row(row =>
-                {
-                    var tzId = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                        ? "Central Standard Time"   // Windows ID
-                        : "America/Chicago";        // IANA ID
-
-                    var central = TimeZoneInfo.FindSystemTimeZoneById(tzId);
-                    DateTimeOffset nowCentral = TimeZoneInfo.ConvertTime(DateTimeOffset.UtcNow, central);
-                    
-                    row.RelativeItem().Column(x =>
-                    {
-                        x.Item().Text($"©{nowCentral.Year} Expressed Realms");
-                        x.Item().Text("Society in Shadows LARP. All rights reserved.");
-                    });
-                    
-                    row.RelativeItem().AlignCenter().Column(x =>
-                    {
-                        x.Item().Text("");
-                        x.Item().Text(text =>
-                        {
-                            text.Span("Page ");
-                            text.CurrentPageNumber();
-                            text.Span(" / ");
-                            text.TotalPages();
-
-                        });
-                    });
-                    row.RelativeItem().AlignRight().Column(x =>
-                    {
-                        x.Item().Text("");
-                        x.Item().Text($"Download Date: {nowCentral:M/d/yyyy h:mm tt} CST");
-                    });
-                });
             });
         });
     }
 
-    private static void FillPowerCard(
-        ColumnDescriptor card,
-        PowerData power,
-        Color secondaryColor
-    )
+    private static void FillPowerCard(ColumnDescriptor card, PowerData power, Color secondaryColor)
     {
-        card.Item().PaddingBottom(10)
+        card.Item()
+            .PaddingBottom(10)
             .Column(col =>
             {
-                col.Item().PaddingBottom(10).Row(row =>
-                {
-                    row.RelativeItem().AlignLeft()
-                        .Section(power.Name)
-                        .Text(power.Name).Bold().FontSize(11).ExtraBold();
-                                
-                    row.AutoItem().AlignRight()
-                        .Text(power.PowerLevel).FontSize(11).Italic();
-                });
-                
+                col.Item()
+                    .PaddingBottom(10)
+                    .Row(row =>
+                    {
+                        row.RelativeItem()
+                            .AlignLeft()
+                            .Section(power.Name)
+                            .Text(power.Name)
+                            .Bold()
+                            .FontSize(11)
+                            .ExtraBold();
+
+                        row.AutoItem().AlignRight().Text(power.PowerLevel).FontSize(11).Italic();
+                    });
+
                 col.FormatMainSection(null, power.Description);
                 col.FormatMainSection("Game Mechanic Effect", power.GameMechanicEffect);
                 col.FormatMainSection("Limitation", power.Limitation);
-                
+
                 col.FormatAttributeSection("Categories", string.Join(", ", power.Category));
                 col.FormatAttributeSection("Level", power.PowerLevel);
                 col.FormatAttributeSection("Power Use", power.IsPowerUse ? "Yes" : "No");

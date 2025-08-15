@@ -109,7 +109,7 @@ internal static class PowerPathEndpoints
             )
             .WithSummary("Downloads the power cards for the given expression")
             .RequireAuthorization();
-        
+
         app.MapGroup("expression")
             .AddFluentValidationAutoValidation()
             .WithTags("Expressions")
@@ -122,10 +122,7 @@ internal static class PowerPathEndpoints
                 ) =>
                 {
                     var reportStream = await useCase.ExecuteAsync(
-                        new GetPowerBookletReportUseCaseModel()
-                        {
-                            ExpressionId = expressionId,
-                        }
+                        new GetPowerBookletReportUseCaseModel() { ExpressionId = expressionId }
                     );
 
                     return TypedResults.File(
