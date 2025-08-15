@@ -26,42 +26,38 @@ public static class PowerBookletReport
                 page.Size(PageSizes.Letter);
                 page.DefaultTextStyle(x => x.FontSize(7.75f));
                 page.Margin(0.5f, Unit.Inch);
+                page.MarginTop(0.25f, Unit.Inch);
+
+                page.Header().AlignCenter().PaddingBottom(10).Text($"{powerCards.PowerPaths.First().ExpressionName} Power Booklet")
+                    .FontSize(10)
+                    .ExtraBold();
                 
                 page.Content()
                     .Column(col =>
                     {
-
-
-                            col.Item().PaddingBottom(10);
+                        col.Item().MultiColumn(multiColumn =>
+                        {
+                            multiColumn.Columns(3);
+                            multiColumn.Spacing(10);
                             
-                            col.Item().MultiColumn(multiColumn =>
+                            multiColumn.Content().Column(columnContent =>
                             {
-                                multiColumn.Columns(3);
-                                multiColumn.Spacing(10);
-                                
-                                multiColumn.Content().Column(columnContent =>
+                                foreach (var powerPath in powerCards.PowerPaths)
                                 {
-                                    foreach (var powerPath in powerCards.PowerPaths)
+                                    columnContent.Item().PaddingBottom(10).Text(powerPath.Name).FontSize(15).ExtraBold();
+
+                                    columnContent.FormatMainSection(null, powerPath.Description);
+
+                                    columnContent.Item().PaddingBottom(10);
+                                    
+                                    foreach (var power in powerPath.Powers)
                                     {
-                                        columnContent.Item().PaddingBottom(10).Row(row =>
-                                        {
-                                            row.RelativeItem()
-                                                .Text(powerPath.Name).FontSize(11).ExtraBold();
-
-                                            row.RelativeItem().AlignRight()
-                                                .Text(powerPath.ExpressionName).FontSize(11).ExtraBold();
-                                        });
-
-                                        columnContent.FormatMainSection(null, powerPath.Description);
-
-                                        foreach (var power in powerPath.Powers)
-                                        {
-                                            FillPowerCard(columnContent, power, secondaryColor);
-                                        }
+                                        FillPowerCard(columnContent, power, secondaryColor);
                                     }
-                                });
-
+                                }
                             });
+
+                        });
                     });
                 
                 page.Footer().Row(row =>
@@ -112,11 +108,11 @@ public static class PowerBookletReport
             {
                 col.Item().PaddingBottom(10).Row(row =>
                 {
-                    row.RelativeItem()
+                    row.RelativeItem().AlignLeft()
                         .Section(power.Name)
                         .Text(power.Name).Bold().FontSize(11).ExtraBold();
                                 
-                    row.RelativeItem().AlignRight()
+                    row.AutoItem().AlignRight()
                         .Text(power.PowerLevel).FontSize(11).Italic();
                 });
                 
