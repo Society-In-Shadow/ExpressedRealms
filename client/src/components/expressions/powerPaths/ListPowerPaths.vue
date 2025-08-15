@@ -8,13 +8,14 @@ import AddPowerPath from "@/components/expressions/powerPaths/AddPowerPath.vue";
 import Divider from 'primevue/divider';
 import ShowPowerPath from "@/components/expressions/powerPaths/ShowPowerPath.vue";
 import {UserRoles, userStore} from "@/stores/userStore";
-let userInfo = userStore();
-let powerPaths = powerPathStore();
 import PowerPathReorder from "@/components/expressions/powerPaths/PowerPathReorder.vue";
 import axios from "axios";
 import {expressionStore} from "@/stores/expressionStore.ts";
 import {useRoute} from "vue-router";
 import SplitButton from "primevue/splitbutton";
+
+let userInfo = userStore();
+let powerPaths = powerPathStore();
 
 let expressionInfo = expressionStore();
 let route = useRoute();
@@ -59,20 +60,41 @@ async function downloadPowerCards(isFiveByThree: boolean = false) {
   URL.revokeObjectURL(url);
 }
 
+async function downloadPowerBooklet() {
+  const res = await axios.get(`/expression/${expressionInfo.currentExpressionId}/powerBooklet`, {
+    responseType: 'blob',
+  });
+  const expression = route.params.name
+  const url = URL.createObjectURL(res.data);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${expression}PowerBooklet.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
 const items = [
   {
     label: '5x3 Index Card Size',
     command: () => {
       downloadPowerCards(true);
     }
-  }
+  },  
+  {
+    label: '2x6 Tile Letter Cutout',
+    command: () => {
+      downloadPowerCards(false);
+    }
+  },
 ];
 
 </script>
 
 <template>
   <div class="d-flex flex-row justify-content-end align-items-center">
-    <SplitButton label="Download Power Cards" @click="downloadPowerCards(false)" :model="items" />
+    <SplitButton label="Download Power Booklet" @click="downloadPowerBooklet()" :model="items" />
   </div>
   
   <PowerPathReorder v-if="userInfo.hasUserRole(UserRoles.PowerManagementRole)" @toggle-preview="toggleReadOnly" />

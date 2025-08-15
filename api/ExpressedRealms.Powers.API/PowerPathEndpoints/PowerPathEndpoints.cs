@@ -7,6 +7,7 @@ using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathCreate;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathEdit;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathSorting;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerList;
+using ExpressedRealms.Powers.UseCases.GetPowerBookletReport;
 using ExpressedRealms.Powers.UseCases.GetPowerCardReport;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
@@ -102,6 +103,32 @@ internal static class PowerPathEndpoints
                         reportStream,
                         contentType: "application/pdf",
                         fileDownloadName: "powerCardReport.pdf",
+                        enableRangeProcessing: true
+                    );
+                }
+            )
+            .WithSummary("Downloads the power cards for the given expression")
+            .RequireAuthorization();
+
+        app.MapGroup("expression")
+            .AddFluentValidationAutoValidation()
+            .WithTags("Expressions")
+            .WithOpenApi()
+            .MapGet(
+                "/{expressionId}/powerBooklet",
+                async Task<FileStreamHttpResult> (
+                    int expressionId,
+                    IGetPowerBookletReportUseCase useCase
+                ) =>
+                {
+                    var reportStream = await useCase.ExecuteAsync(
+                        new GetPowerBookletReportUseCaseModel() { ExpressionId = expressionId }
+                    );
+
+                    return TypedResults.File(
+                        reportStream,
+                        contentType: "application/pdf",
+                        fileDownloadName: "powerBookletReport.pdf",
                         enableRangeProcessing: true
                     );
                 }
