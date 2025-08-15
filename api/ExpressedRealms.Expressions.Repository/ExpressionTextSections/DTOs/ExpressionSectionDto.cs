@@ -7,4 +7,5 @@ public class ExpressionSectionDto
     public required string Content { get; set; }
     public List<ExpressionSectionDto> SubSections { get; set; } = new();
     public required string SectionTypeName { get; set; }
+    public int SectionTypeId { get; set; }
 }

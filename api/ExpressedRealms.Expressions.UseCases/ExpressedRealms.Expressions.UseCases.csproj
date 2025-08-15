@@ -14,7 +14,10 @@
     />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ExpressedRealms.Blessings.Repository\ExpressedRealms.Blessings.Repository.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Expressions.Reports\ExpressedRealms.Expressions.Reports.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Expressions.Repository\ExpressedRealms.Expressions.Repository.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Knowledges.Repository\ExpressedRealms.Knowledges.Repository.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Shared.UseCases\ExpressedRealms.Shared.UseCases.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Shared\ExpressedRealms.Shared.csproj" />
   </ItemGroup>

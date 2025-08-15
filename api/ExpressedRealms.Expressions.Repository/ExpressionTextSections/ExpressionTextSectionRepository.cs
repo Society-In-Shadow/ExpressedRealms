@@ -231,4 +231,29 @@ internal sealed class ExpressionTextSectionRepository(
         await context.SaveChangesAsync();
         return Result.Ok();
     }
+
+    public async Task<int> GetKnowledgesSectionId()
+    {
+        return await context
+            .ExpressionSectionTypes.AsNoTracking()
+            .Where(x => x.Name == "Knowledges Section")
+            .Select(x => x.Id)
+            .FirstAsync();
+    }
+
+    public async Task<bool> IsExpression(int expressionID)
+    {
+        return await context.ExpressionSections.AnyAsync(x =>
+            x.ExpressionId == expressionID && x.SectionTypeId == 1
+        ); // 1 = expression
+    }
+
+    public async Task<int> GetBlessingSectionId()
+    {
+        return await context
+            .ExpressionSectionTypes.AsNoTracking()
+            .Where(x => x.Name == "Blessings Section")
+            .Select(x => x.Id)
+            .FirstAsync();
+    }
 }

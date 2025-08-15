@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ExpressedRealms.Expressions.UseCases\ExpressedRealms.Expressions.UseCases.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Shared.FeatureFlags\ExpressedRealms.Shared.FeatureFlags.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Expressions.Repository\ExpressedRealms.Expressions.Repository.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Server.Shared\ExpressedRealms.Server.Shared.csproj" />

@@ -11,9 +11,12 @@ import Button from "primevue/button";
 import '@he-tree/vue/style/default.css'
 import '@he-tree/vue/style/material-design.css'
 import ExpressionToC from "@/components/expressions/ExpressionToC.vue";
+import axios from "axios";
+import {FeatureFlags, userStore} from "@/stores/userStore.ts";
 
 const expressionInfo = expressionStore();
 const route = useRoute()
+const userInfo = userStore()
 
 let sections = ref([
   {
@@ -42,6 +45,7 @@ const isLoading = ref(true);
 const showEdit = ref(expressionInfo.canEdit);
 const showCreate = ref(false);
 const showPreview = ref(false);
+const showReportButton = ref(false);
 
 async function fetchData() {
 
@@ -69,6 +73,7 @@ function togglePreview(){
 
 onMounted(async () =>{
   await fetchData();
+  showReportButton.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowReportButtons);
 })
 
 watch(
@@ -79,6 +84,21 @@ watch(
       }
     }
 )
+
+async function downloadExpressionBooklet() {
+  const res = await axios.get(`/expression/${expressionInfo.currentExpressionId}/report`, {
+    responseType: 'blob',
+  });
+  const expression = route.params.name
+  const url = URL.createObjectURL(res.data);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${expression}Booklet.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
 
 </script>
 
@@ -97,6 +117,9 @@ watch(
       <Card class="custom-card flex-grow-1">
         <template #content>
           <article id="expression-body">
+            <div class="d-flex flex-row justify-content-end align-items-center" v-if="showReportButton">
+              <Button label="Download Booklet" @click="downloadExpressionBooklet()"/>
+            </div>
             <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit && !showPreview" @refresh-list="fetchData(route.params.name)" />
             <Button v-if="showEdit && !showPreview" label="Add Section" class="m-2" @click="toggleCreate" />
             <div v-if="showCreate">

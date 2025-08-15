@@ -24,6 +24,7 @@ public static class RecursiveFunctions
                 Name = dbSection.Name,
                 Id = dbSection.Id,
                 Content = dbSection.Content,
+                SectionTypeId = dbSection.SectionTypeId,
                 SectionTypeName = dbSection.SectionType.Name,
             };
 
