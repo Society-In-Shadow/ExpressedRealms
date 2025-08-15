@@ -1,3 +1,4 @@
+using ExpressedRealms.Blessings.Repository.Blessings;
 using ExpressedRealms.Expressions.Reports.ExpressionCMSReport;
 using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.Expressions.Repository.ExpressionTextSections;
@@ -15,6 +16,7 @@ internal sealed class GetExpressionCmsReportUseCase(
     IExpressionTextSectionRepository repository,
     IExpressionRepository expressionRepository,
     IKnowledgeRepository knowledgesRepository,
+    IBlessingRepository blessingsRepository,
     GetExpressionCmsReportModelValidator validator,
     CancellationToken cancellationToken
 ) : IGetExpressionCmsReportUseCase
@@ -49,10 +51,34 @@ internal sealed class GetExpressionCmsReportUseCase(
                 Description = x.Description
             }).ToList();
         }
+
+        var blessingId = await repository.GetBlessingSectionId();
+        var blessingSection = flattenedSections.FirstOrDefault(x => x.SectionTypeId == blessingId);
+        if (blessingSection is not null)
+        {
+            var blessings = await blessingsRepository.GetAllBlessingsAndBlessingLevels();
+
+            
+            
+            blessingSection.Blessings = blessings.Select(x => new BlessingData()
+            {
+                Name = x.Name,
+                Description = x.Description,
+                Type = x.Type,
+                SubType = x.SubCategory,
+                Levels = x.BlessingLevels.Select(y => new BlessingLevelData()
+                {
+                    Level = y.Level,
+                    Description = y.Description
+                }).ToList()
+            }).ToList();
+        }
+        
         
         var report = ExpressionCmsReport.GenerateReport(
             new ExpressionCmsReportData()
             {
+                IsExpression = await repository.IsExpression(model.ExpressionId),
                 ExpressionName = expression.Value.Name,
                 Sections = flattenedSections
             }

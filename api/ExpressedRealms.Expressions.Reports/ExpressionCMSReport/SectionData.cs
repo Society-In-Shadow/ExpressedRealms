@@ -8,4 +8,5 @@ public class SectionData
     public int Level { get; set; }
     public int SectionTypeId { get; set; }
     public List<KnowledgeData>? Knowledges { get; set; }
+    public List<BlessingData>? Blessings { get; set; }
 }

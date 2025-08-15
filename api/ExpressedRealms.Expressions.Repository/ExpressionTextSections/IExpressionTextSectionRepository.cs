@@ -19,4 +19,6 @@ public interface IExpressionTextSectionRepository
     Task<ExpressionSectionDto?> GetExpressionSection(int expressionId);
     Task<ExpressionSection?> GetExpressionSectionForDeletion(int expressionId, int sectionId);
     Task<int> GetKnowledgesSectionId();
+    Task<int> GetBlessingSectionId();
+    Task<bool> IsExpression(int expressionID);
 }
