@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using HTMLQuestPDF.Extensions;
 using QuestPDF;
 using QuestPDF.Fluent;
@@ -26,16 +27,76 @@ public static class ExpressionCmsReport
             container.Page(page =>
             {
                 page.Size(PageSizes.Letter);
-                    
                 page.DefaultTextStyle(x => x.FontSize(7.75f));
+                page.Margin(0.5f, Unit.Inch);
+                page.MarginTop(0.25f, Unit.Inch);
 
+                page.Header()
+                    .AlignCenter()
+                    .PaddingBottom(10)
+                    .Text($"{data.ExpressionName} Background Booklet")
+                    .FontSize(10)
+                    .ExtraBold();
+                
                 page.Content()
                     .Column(col =>
                     {
-                        foreach (var power in data.Sections)
+                        col.Item().MultiColumn(mCol =>
                         {
-                            col.FillSection(power);
-                        }
+                            mCol.Spacing(10);
+                            mCol.Content().Column(columnContent =>
+                            {
+                                foreach (var power in data.Sections)
+                                {
+                                    columnContent.FillSection(power);
+                                }
+                            });
+
+                        });
+
+                    });
+                
+                page.Footer()
+                    .Row(row =>
+                    {
+                        var tzId = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                            ? "Central Standard Time" // Windows ID
+                            : "America/Chicago"; // IANA ID
+
+                        var central = TimeZoneInfo.FindSystemTimeZoneById(tzId);
+                        DateTimeOffset nowCentral = TimeZoneInfo.ConvertTime(
+                            DateTimeOffset.UtcNow,
+                            central
+                        );
+
+                        row.RelativeItem()
+                            .Column(x =>
+                            {
+                                x.Item().Text($"©{nowCentral.Year} Expressed Realms");
+                                x.Item().Text("Society in Shadows LARP. All rights reserved.");
+                            });
+
+                        row.RelativeItem()
+                            .AlignCenter()
+                            .Column(x =>
+                            {
+                                x.Item().Text("");
+                                x.Item()
+                                    .Text(text =>
+                                    {
+                                        text.Span("Page ");
+                                        text.CurrentPageNumber();
+                                        text.Span(" / ");
+                                        text.TotalPages();
+                                    });
+                            });
+                        row.RelativeItem()
+                            .AlignRight()
+                            .Column(x =>
+                            {
+                                x.Item().Text("");
+                                x.Item().Text($"Download Date: {nowCentral:M/d/yyyy h:mm tt} CST");
+                            });
                     });
             });
         });
@@ -46,7 +107,8 @@ public static class ExpressionCmsReport
         SectionData section
     )
     {
-        card.Item().Text(section.Name)
+        card.Item().PaddingBottom(10).Text(section.Name)
+            
                             .Bold()
                             .FontSize(11)
                             .ExtraBold();
@@ -73,11 +135,11 @@ public static class ExpressionCmsReport
         if (name is not null)
             cell.Item().Text($"{name}:").Bold();
 
-        attributeValue = attributeValue.Replace("<p>", "").Replace("</p>", "\n");
+        //attributeValue = attributeValue.Replace("<p>", "").Replace("</p>", "\n\n");
         attributeValue = attributeValue.Replace("<strong>", "<b>").Replace("</strong>", "</b>");
 
         cell.Item()
-            .PaddingBottom(0)
+            .PaddingBottom(10)
             .HTML(html =>
             {
                 html.SetHtml(attributeValue);
