@@ -81,20 +81,20 @@ const items = [
     command: () => {
       downloadPowerCards(true);
     }
-  },
+  },  
   {
-    label: 'Booklet Style',
+    label: '2x6 Tile Letter Cutout',
     command: () => {
-      downloadPowerBooklet();
+      downloadPowerCards(false);
     }
-  }
+  },
 ];
 
 </script>
 
 <template>
   <div class="d-flex flex-row justify-content-end align-items-center">
-    <SplitButton label="Download Power Cards" @click="downloadPowerCards(false)" :model="items" />
+    <SplitButton label="Download Power Booklet" @click="downloadPowerBooklet()" :model="items" />
   </div>
   
   <PowerPathReorder v-if="userInfo.hasUserRole(UserRoles.PowerManagementRole)" @toggle-preview="toggleReadOnly" />
