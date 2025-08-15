@@ -64,11 +64,11 @@ public static class PowerBookletReport
 
                                             columnContent.Item().PaddingBottom(10);
 
-                                            powerPath.Powers = powerPath.Powers
-                                                .OrderBy(x => x.PowerLevel)
+                                            powerPath.Powers = powerPath
+                                                .Powers.OrderBy(x => x.PowerLevel)
                                                 .ThenBy(x => x.Name)
                                                 .ToList();
-                                            
+
                                             foreach (var power in powerPath.Powers)
                                             {
                                                 FillPowerCard(columnContent, power, secondaryColor);
