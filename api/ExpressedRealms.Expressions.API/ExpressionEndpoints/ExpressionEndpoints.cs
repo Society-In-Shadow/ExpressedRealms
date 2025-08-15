@@ -32,7 +32,7 @@ internal static class ExpressionEndpoints
             );
         
         endpointGroup
-            .MapGet("{expressionId}", GetExpressionCmsReportEndpoint.GetExpressionCmsReport)
+            .MapGet("{expressionId}/report", GetExpressionCmsReportEndpoint.GetExpressionCmsReport)
             .WithSummary("Returns the report for the given expression");
 
         endpointGroup

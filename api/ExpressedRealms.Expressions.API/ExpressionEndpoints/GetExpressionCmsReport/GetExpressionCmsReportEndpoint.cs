@@ -8,13 +8,13 @@ namespace ExpressedRealms.Expressions.API.ExpressionEndpoints.GetExpressionCmsRe
 internal static class GetExpressionCmsReportEndpoint
 {
     internal static async Task<Results<NotFound, FileStreamHttpResult, StatusCodeHttpResult>> GetExpressionCmsReport(
-        int id,
+        int expressionId,
         IGetExpressionCmsReportUseCase repository
     )
     {
         var status = await repository.ExecuteAsync(new GetExpressionCmsReportModel()
         {
-            ExpressionId = id
+            ExpressionId = expressionId
         });
 
         if (status.HasNotFound(out var notFound))

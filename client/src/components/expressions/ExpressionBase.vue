@@ -97,6 +97,23 @@ onBeforeRouteUpdate(async (to, from) => {
   }
 })
 
+
+async function downloadExpressionBooklet() {
+  const res = await axios.get(`/expression/${expressionInfo.currentExpressionId}/report`, {
+    responseType: 'blob',
+  });
+  const expression = route.params.name
+  const url = URL.createObjectURL(res.data);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${expression}Booklet.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+
 </script>
 
 <template>
@@ -117,6 +134,9 @@ onBeforeRouteUpdate(async (to, from) => {
             <div class="pb-4">
               <div class="d-flex flex-column flex-md-row">
                 <div class="col-12 order-1 order-md-0 col-md-8">
+                  <div class="d-flex flex-row justify-content-end align-items-center">
+                    <Button label="Download Booklet" @click="downloadExpressionBooklet()"/>
+                  </div>
                   <CreateExpressionSection v-if="expressionHeader.id === 0" :add-expression-header="true" @added-section="fetchData(route.params.name)" />
                   <EditExpressionSection
                     v-else :section-info="expressionHeader" :current-level="1" :show-skeleton="headerIsLoading" :show-edit="showEdit"
