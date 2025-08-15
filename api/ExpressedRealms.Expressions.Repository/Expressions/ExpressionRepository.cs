@@ -144,11 +144,9 @@ internal sealed class ExpressionRepository(
             .Expressions.IgnoreQueryFilters()
             .FirstOrDefaultAsync(x => x.Id == id && x.ExpressionTypeId == 1); // 1 = expression
     }
-    
+
     public async Task<Expression?> ExpressionExists(int id)
     {
-        return await context
-            .Expressions.IgnoreQueryFilters()
-            .FirstOrDefaultAsync(x => x.Id == id);
+        return await context.Expressions.IgnoreQueryFilters().FirstOrDefaultAsync(x => x.Id == id);
     }
 }

@@ -7,17 +7,15 @@ namespace ExpressedRealms.Expressions.API.ExpressionEndpoints.GetExpressionCmsRe
 
 internal static class GetExpressionCmsReportEndpoint
 {
-    internal static async Task<Results<NotFound, FileStreamHttpResult, StatusCodeHttpResult, ValidationProblem>> GetExpressionCmsReport(
-        int expressionId,
-        IGetExpressionCmsReportUseCase repository
-    )
+    internal static async Task<
+        Results<NotFound, FileStreamHttpResult, StatusCodeHttpResult, ValidationProblem>
+    > GetExpressionCmsReport(int expressionId, IGetExpressionCmsReportUseCase repository)
     {
-        var status = await repository.ExecuteAsync(new GetExpressionCmsReportModel()
-        {
-            ExpressionId = expressionId
-        });
+        var status = await repository.ExecuteAsync(
+            new GetExpressionCmsReportModel() { ExpressionId = expressionId }
+        );
 
-        if(status.HasValidationError<MemoryStream>(out var validation))
+        if (status.HasValidationError<MemoryStream>(out var validation))
             return validation;
         if (status.HasNotFound(out var notFound))
             return notFound;
@@ -30,6 +28,7 @@ internal static class GetExpressionCmsReportEndpoint
             contentType: "application/pdf",
             fileDownloadName: "powerBookletReport.pdf",
             enableRangeProcessing: true
-        );;
+        );
+        ;
     }
 }

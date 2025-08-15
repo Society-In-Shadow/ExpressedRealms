@@ -30,7 +30,7 @@ internal static class ExpressionEndpoints
             .WithDescription(
                 "This returns the detailed information for the given expression, including publish details"
             );
-        
+
         endpointGroup
             .MapGet("{expressionId}/report", GetExpressionCmsReportEndpoint.GetExpressionCmsReport)
             .WithSummary("Returns the report for the given expression");

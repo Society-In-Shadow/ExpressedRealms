@@ -34,22 +34,26 @@ internal sealed class GetExpressionCmsReportUseCase(
 
         var sections = await repository.GetExpressionTextSections(model.ExpressionId);
         var expression = await expressionRepository.GetExpression(model.ExpressionId);
-        
+
         int sortOrder = await repository.GetKnowledgesSectionId();
         var flattenedSections = FlattenHierarchy(sections, ref sortOrder);
-        
+
         var knowledgeSectionId = await repository.GetKnowledgesSectionId();
-        var knowledgeSection = flattenedSections.FirstOrDefault(x => x.SectionTypeId == knowledgeSectionId);
+        var knowledgeSection = flattenedSections.FirstOrDefault(x =>
+            x.SectionTypeId == knowledgeSectionId
+        );
         if (knowledgeSection is not null)
         {
             var knowledges = await knowledgesRepository.GetKnowledges();
 
-            knowledgeSection.Knowledges = knowledges.Select(x => new KnowledgeData()
-            {
-                Name = x.Name,
-                Type = x.KnowledgeType.Name,
-                Description = x.Description
-            }).ToList();
+            knowledgeSection.Knowledges = knowledges
+                .Select(x => new KnowledgeData()
+                {
+                    Name = x.Name,
+                    Type = x.KnowledgeType.Name,
+                    Description = x.Description,
+                })
+                .ToList();
         }
 
         var blessingId = await repository.GetBlessingSectionId();
@@ -58,29 +62,30 @@ internal sealed class GetExpressionCmsReportUseCase(
         {
             var blessings = await blessingsRepository.GetAllBlessingsAndBlessingLevels();
 
-            
-            
-            blessingSection.Blessings = blessings.Select(x => new BlessingData()
-            {
-                Name = x.Name,
-                Description = x.Description,
-                Type = x.Type,
-                SubType = x.SubCategory,
-                Levels = x.BlessingLevels.Select(y => new BlessingLevelData()
+            blessingSection.Blessings = blessings
+                .Select(x => new BlessingData()
                 {
-                    Level = y.Level,
-                    Description = y.Description
-                }).ToList()
-            }).ToList();
+                    Name = x.Name,
+                    Description = x.Description,
+                    Type = x.Type,
+                    SubType = x.SubCategory,
+                    Levels = x
+                        .BlessingLevels.Select(y => new BlessingLevelData()
+                        {
+                            Level = y.Level,
+                            Description = y.Description,
+                        })
+                        .ToList(),
+                })
+                .ToList();
         }
-        
-        
+
         var report = ExpressionCmsReport.GenerateReport(
             new ExpressionCmsReportData()
             {
                 IsExpression = await repository.IsExpression(model.ExpressionId),
                 ExpressionName = expression.Value.Name,
-                Sections = flattenedSections
+                Sections = flattenedSections,
             }
         );
 
@@ -90,7 +95,7 @@ internal sealed class GetExpressionCmsReportUseCase(
         stream.Position = 0;
         return stream;
     }
-    
+
     private static List<SectionData> FlattenHierarchy(
         List<ExpressionSectionDto> request,
         ref int sortOrder,
@@ -108,7 +113,7 @@ internal sealed class GetExpressionCmsReportUseCase(
                     Name = item.Name,
                     Content = item.Content,
                     SortOrder = sortOrder,
-                    Level = level
+                    Level = level,
                 }
             );
 

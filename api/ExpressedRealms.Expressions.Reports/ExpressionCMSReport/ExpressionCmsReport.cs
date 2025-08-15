@@ -14,9 +14,7 @@ public static class ExpressionCmsReport
     {
         Settings.License = LicenseType.Community;
 
-        data.Sections = data.Sections
-            .OrderBy(x => x.SortOrder)
-            .ToList();
+        data.Sections = data.Sections.OrderBy(x => x.SortOrder).ToList();
 
         return GetSingleTilePerPage(data);
     }
@@ -37,14 +35,9 @@ public static class ExpressionCmsReport
                 {
                     header = $"{data.ExpressionName} Background Booklet";
                 }
-                
-                page.Header()
-                    .AlignCenter()
-                    .PaddingBottom(10)
-                    .Text(header)
-                    .FontSize(10)
-                    .ExtraBold();
-                
+
+                page.Header().AlignCenter().PaddingBottom(10).Text(header).FontSize(10).ExtraBold();
+
                 page.Content()
                     .Column(col =>
                     {
@@ -58,24 +51,22 @@ public static class ExpressionCmsReport
                         }
                         else
                         {
-                            col.Item().MultiColumn(mCol =>
-                            {
-                                
-                                mCol.Spacing(10);
-                                mCol.Content().Column(columnContent =>
+                            col.Item()
+                                .MultiColumn(mCol =>
                                 {
-                                    foreach (var power in data.Sections)
-                                    {
-                                        columnContent.FillSection(power);
-                                    }
+                                    mCol.Spacing(10);
+                                    mCol.Content()
+                                        .Column(columnContent =>
+                                        {
+                                            foreach (var power in data.Sections)
+                                            {
+                                                columnContent.FillSection(power);
+                                            }
+                                        });
                                 });
-
-                            });
                         }
-
-
                     });
-                
+
                 page.Footer()
                     .Row(row =>
                     {
@@ -122,25 +113,26 @@ public static class ExpressionCmsReport
         });
     }
 
-    private static void FillSection(
-        this ColumnDescriptor card,
-        SectionData section
-    )
+    private static void FillSection(this ColumnDescriptor card, SectionData section)
     {
-        card.Item().PaddingBottom(10).PaddingTop(10).Text(section.Name)
-                            .Bold()
-                            .FontSize(11)
-                            .ExtraBold();
+        card.Item()
+            .PaddingBottom(10)
+            .PaddingTop(10)
+            .Text(section.Name)
+            .Bold()
+            .FontSize(11)
+            .ExtraBold();
 
         if (section.Knowledges is not null)
         {
             foreach (var knowledge in section.Knowledges)
             {
-                card.Item().Row(row =>
-                {
-                    row.RelativeItem().Text(knowledge.Name).Bold().FontSize(9);
-                    row.AutoItem().Text(knowledge.Type).Italic();
-                });
+                card.Item()
+                    .Row(row =>
+                    {
+                        row.RelativeItem().Text(knowledge.Name).Bold().FontSize(9);
+                        row.AutoItem().Text(knowledge.Type).Italic();
+                    });
                 card.Item().PaddingBottom(10).Text(knowledge.Description);
             }
         }
@@ -150,14 +142,15 @@ public static class ExpressionCmsReport
             foreach (var group in groups)
             {
                 card.Item().PaddingBottom(10).Text(group.Key).FontSize(10).ExtraBold();
-                
+
                 foreach (var blessing in group)
                 {
-                    card.Item().Row(row =>
-                    {
-                        row.RelativeItem().Text(blessing.Name).Bold().FontSize(9);
-                        row.AutoItem().Text(blessing.SubType).Italic();
-                    });
+                    card.Item()
+                        .Row(row =>
+                        {
+                            row.RelativeItem().Text(blessing.Name).Bold().FontSize(9);
+                            row.AutoItem().Text(blessing.SubType).Italic();
+                        });
                     card.Item().Text(blessing.Description);
                     foreach (var level in blessing.Levels.OrderBy(x => x.Level))
                     {
@@ -166,15 +159,13 @@ public static class ExpressionCmsReport
                     card.Item().PaddingBottom(10);
                 }
             }
-
         }
         else
         {
             card.FormatMainSection(null, section.Content);
         }
-        
     }
-    
+
     private static void FormatMainSection(
         this ColumnDescriptor cell,
         string? name,
@@ -204,30 +195,38 @@ public static class ExpressionCmsReport
                 html.SetHtml(attributeValue);
             });
     }
-    
-    private static readonly Regex TdContentRegex =
-        new Regex("(<td\\b[^>]*>)(.*?)(</td>)", RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled);
 
-    private static readonly Regex POpenRegex =
-        new Regex("<p\\b[^>]*>", RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled);
+    private static readonly Regex TdContentRegex = new Regex(
+        "(<td\\b[^>]*>)(.*?)(</td>)",
+        RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled
+    );
 
-    private static readonly Regex PCloseRegex =
-        new Regex("</p\\s*>", RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled);
+    private static readonly Regex POpenRegex = new Regex(
+        "<p\\b[^>]*>",
+        RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled
+    );
+
+    private static readonly Regex PCloseRegex = new Regex(
+        "</p\\s*>",
+        RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled
+    );
 
     // Removes <p...> and replaces </p> with a newline ONLY inside <td>...</td> content blocks
     private static string NormalizeParagraphsInsideTd(string html)
     {
-        return TdContentRegex.Replace(html, m =>
-        {
-            var openTd = m.Groups[1].Value;
-            var inner = m.Groups[2].Value;
-            var closeTd = m.Groups[3].Value;
+        return TdContentRegex.Replace(
+            html,
+            m =>
+            {
+                var openTd = m.Groups[1].Value;
+                var inner = m.Groups[2].Value;
+                var closeTd = m.Groups[3].Value;
 
-            inner = POpenRegex.Replace(inner, "");
-            inner = PCloseRegex.Replace(inner, "\n");
+                inner = POpenRegex.Replace(inner, "");
+                inner = PCloseRegex.Replace(inner, "\n");
 
-            return openTd + inner + closeTd;
-        });
+                return openTd + inner + closeTd;
+            }
+        );
     }
-
 }
