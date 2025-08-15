@@ -31,7 +31,7 @@ public static class PowerBookletReport
                 page.Header()
                     .AlignCenter()
                     .PaddingBottom(10)
-                    .Text($"{powerCards.PowerPaths.First().ExpressionName} Power Booklet")
+                    .Text($"{powerCards.ExpressionName} Power Booklet")
                     .FontSize(10)
                     .ExtraBold();
 
@@ -64,6 +64,11 @@ public static class PowerBookletReport
 
                                             columnContent.Item().PaddingBottom(10);
 
+                                            powerPath.Powers = powerPath.Powers
+                                                .OrderBy(x => x.PowerLevel)
+                                                .ThenBy(x => x.Name)
+                                                .ToList();
+                                            
                                             foreach (var power in powerPath.Powers)
                                             {
                                                 FillPowerCard(columnContent, power, secondaryColor);
@@ -125,27 +130,22 @@ public static class PowerBookletReport
             .PaddingBottom(10)
             .Column(col =>
             {
+                col.Item().Section(power.Name).Text(power.Name).Bold().FontSize(11).ExtraBold();
+
                 col.Item()
-                    .PaddingBottom(10)
                     .Row(row =>
                     {
-                        row.RelativeItem()
-                            .AlignLeft()
-                            .Section(power.Name)
-                            .Text(power.Name)
-                            .Bold()
-                            .FontSize(11)
-                            .ExtraBold();
-
-                        row.AutoItem().AlignRight().Text(power.PowerLevel).FontSize(11).Italic();
+                        row.RelativeItem().AlignLeft().Text(power.PowerLevel).Italic();
+                        row.AutoItem()
+                            .AlignRight()
+                            .Text(string.Join(", ", power.Category))
+                            .Italic();
                     });
 
                 col.FormatMainSection(null, power.Description);
                 col.FormatMainSection("Game Mechanic Effect", power.GameMechanicEffect);
                 col.FormatMainSection("Limitation", power.Limitation);
 
-                col.FormatAttributeSection("Categories", string.Join(", ", power.Category));
-                col.FormatAttributeSection("Level", power.PowerLevel);
                 col.FormatAttributeSection("Power Use", power.IsPowerUse ? "Yes" : "No");
                 col.FormatAttributeSection("Cost", power.Cost);
                 col.FormatAttributeSection("Power Duration", power.PowerDuration);

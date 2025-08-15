@@ -18,6 +18,7 @@ public class GetPowerBookletReportUseCase(
         var report = PowerBookletReport.GenerateReport(
             new PowerBookletData()
             {
+                ExpressionName = expression.Value.Name,
                 PowerPaths = data
                     .Value.Select(x => new PowerPathData()
                     {
@@ -31,14 +32,11 @@ public class GetPowerBookletReportUseCase(
                                 Name = y.Name,
                                 Category = y.Category?.Select(z => z.Name).ToList(),
                                 Description = y.Description,
-                                PathName = x.Name,
                                 GameMechanicEffect = y.GameMechanicEffect,
-                                ExpressionName = expression.Value.Name,
                                 PowerActivationType = y.PowerActivationType.Name,
                                 PowerDuration = y.PowerDuration.Name,
                                 PowerLevel = y.PowerLevel.Name,
                                 Cost = y.Cost,
-                                Id = y.Id,
                                 IsPowerUse = y.IsPowerUse,
                                 Limitation = y.Limitation,
                                 Other = y.Other,

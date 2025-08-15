@@ -2,9 +2,6 @@ namespace ExpressedRealms.Powers.Reporting.PowerBookletFormat;
 
 public class PowerData
 {
-    public required string ExpressionName { get; set; }
-    public required string PathName { get; set; }
-    public int Id { get; set; }
     public required string Name { get; set; }
     public required List<string>? Category { get; set; }
     public required string Description { get; set; }
@@ -17,6 +14,5 @@ public class PowerData
     public string? Other { get; set; }
     public bool IsPowerUse { get; set; }
     public string? Cost { get; set; }
-    public int PrerequisitesNeeded { get; set; }
     public PrerequisiteData? Prerequisites { get; set; }
 }
