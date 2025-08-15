@@ -19,6 +19,7 @@ public class GetPowerBookletReportUseCase(
         {
             PowerPaths = data.Value.Select(x => new PowerPathData()
             {
+                ExpressionName = expression.Value.Name,
                 Name = x.Name,
                 Description = x.Description,
                 Powers = x.Powers.Select(y => new PowerData()

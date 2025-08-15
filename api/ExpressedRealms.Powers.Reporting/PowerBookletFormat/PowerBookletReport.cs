@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using HTMLQuestPDF.Extensions;
 using QuestPDF;
 using QuestPDF.Fluent;
@@ -12,7 +13,6 @@ public static class PowerBookletReport
     {
         Settings.License = LicenseType.Community;
 
-
         return GetSingleTilePerPage(data);
     }
 
@@ -25,36 +25,78 @@ public static class PowerBookletReport
             {
                 page.Size(PageSizes.Letter);
                 page.DefaultTextStyle(x => x.FontSize(7.75f));
-
+                page.Margin(0.5f, Unit.Inch);
+                
                 page.Content()
                     .Column(col =>
                     {
-                        foreach (var powerPath in powerCards.PowerPaths)
-                        {
-                            col
-                                .Item()
-                                .SkipOnce()
-                                .Text(powerPath.Name)
-                                .Bold()
-                                .FontSize(11)
-                                .ExtraBold();
-                            
-                            col.FormatMainSection(null, powerPath.Description);
+
+
+                            col.Item().PaddingBottom(10);
                             
                             col.Item().MultiColumn(multiColumn =>
                             {
                                 multiColumn.Columns(3);
                                 multiColumn.Spacing(10);
-
-                                foreach (var power in powerPath.Powers)
+                                
+                                multiColumn.Content().Column(columnContent =>
                                 {
-                                    FillPowerCard(col, power, secondaryColor);
-                                }
+                                    foreach (var powerPath in powerCards.PowerPaths)
+                                    {
+                                        columnContent.Item().PaddingBottom(10).Row(row =>
+                                        {
+                                            row.RelativeItem()
+                                                .Text(powerPath.Name).FontSize(11).ExtraBold();
+
+                                            row.RelativeItem().AlignRight()
+                                                .Text(powerPath.ExpressionName).FontSize(11).ExtraBold();
+                                        });
+
+                                        columnContent.FormatMainSection(null, powerPath.Description);
+
+                                        foreach (var power in powerPath.Powers)
+                                        {
+                                            FillPowerCard(columnContent, power, secondaryColor);
+                                        }
+                                    }
+                                });
+
                             });
-                            
-                            col.Item().PageBreak();
-                        }
                     });
+                
+                page.Footer().Row(row =>
+                {
+                    var tzId = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                        ? "Central Standard Time"   // Windows ID
+                        : "America/Chicago";        // IANA ID
+
+                    var central = TimeZoneInfo.FindSystemTimeZoneById(tzId);
+                    DateTimeOffset nowCentral = TimeZoneInfo.ConvertTime(DateTimeOffset.UtcNow, central);
+                    
+                    row.RelativeItem().Column(x =>
+                    {
+                        x.Item().Text($"©{nowCentral.Year} Expressed Realms");
+                        x.Item().Text("Society in Shadows LARP. All rights reserved.");
+                    });
+                    
+                    row.RelativeItem().AlignCenter().Column(x =>
+                    {
+                        x.Item().Text("");
+                        x.Item().Text(text =>
+                        {
+                            text.Span("Page ");
+                            text.CurrentPageNumber();
+                            text.Span(" / ");
+                            text.TotalPages();
+
+                        });
+                    });
+                    row.RelativeItem().AlignRight().Column(x =>
+                    {
+                        x.Item().Text("");
+                        x.Item().Text($"Download Date: {nowCentral:M/d/yyyy h:mm tt} CST");
+                    });
+                });
             });
         });
     }
@@ -65,94 +107,33 @@ public static class PowerBookletReport
         Color secondaryColor
     )
     {
-        card.Item()
-            .Padding(15)
-            .Decoration(decorator =>
+        card.Item().PaddingBottom(10)
+            .Column(col =>
             {
-                decorator
-                    .Before()
-                    .Column(leftSide =>
-                    {
-                        leftSide
-                            .Item()
-                            .SkipOnce()
-                            .Text(power.Name + " Continued")
-                            .Bold()
-                            .FontSize(11)
-                            .ExtraBold();
-                        leftSide
-                            .Item()
-                            .SkipOnce()
-                            .Text($"{power.ExpressionName} > {power.PathName}")
-                            .Italic()
-                            .FontSize(6)
-                            .FontColor(secondaryColor);
-                    });
-
-                decorator
-                    .Content()
-                    .Row(row =>
-                    {
-                        row.RelativeItem()
-                            .PaddingRight(5)
-                            .Column(leftSide =>
-                            {
-                                leftSide
-                                    .Item()
-                                    .Section(power.Name)
-                                    .Text(text =>
-                                    {
-                                        text.Span(power.Name).Bold().FontSize(11).ExtraBold();
-
-                                        if (power.Category?.Count > 0)
-                                        {
-                                            text.Span($" - {string.Join(", ", power.Category)}")
-                                                .Italic()
-                                                .FontSize(11)
-                                                .FontColor(secondaryColor);
-                                        }
-                                    });
-                                leftSide
-                                    .Item()
-                                    .Text($"{power.ExpressionName} > {power.PathName}")
-                                    .Italic()
-                                    .FontSize(6)
-                                    .FontColor(secondaryColor);
-                                leftSide.FormatMainSection(null, power.Description);
-                                leftSide.FormatMainSection(
-                                    "Game Mechanic Effect",
-                                    power.GameMechanicEffect
-                                );
-                                leftSide.FormatMainSection("Limitation", power.Limitation);
-                            });
-
-                        row.ConstantItem(1.75f, Unit.Inch)
-                            .Column(rightSide =>
-                            {
-                                rightSide.FormatAttributeSection("Level", power.PowerLevel);
-                                rightSide.FormatAttributeSection(
-                                    "Power Use",
-                                    power.IsPowerUse ? "Yes" : "No"
-                                );
-                                rightSide.FormatAttributeSection("Cost", power.Cost);
-                                rightSide.FormatAttributeSection(
-                                    "Power Duration",
-                                    power.PowerDuration
-                                );
-                                rightSide.FormatAttributeSection(
-                                    "Area of Effect",
-                                    power.AreaOfEffect
-                                );
-                                rightSide.FormatAttributeSection(
-                                    "Activation Type",
-                                    power.PowerActivationType
-                                );
-                                rightSide.FormatOtherSection(power.Other);
-                                rightSide.FormatPrerequisites(power.Prerequisites);
-                            });
-                    });
+                col.Item().PaddingBottom(10).Row(row =>
+                {
+                    row.RelativeItem()
+                        .Section(power.Name)
+                        .Text(power.Name).Bold().FontSize(11).ExtraBold();
+                                
+                    row.RelativeItem().AlignRight()
+                        .Text(power.PowerLevel).FontSize(11).Italic();
+                });
+                
+                col.FormatMainSection(null, power.Description);
+                col.FormatMainSection("Game Mechanic Effect", power.GameMechanicEffect);
+                col.FormatMainSection("Limitation", power.Limitation);
+                
+                col.FormatAttributeSection("Categories", string.Join(", ", power.Category));
+                col.FormatAttributeSection("Level", power.PowerLevel);
+                col.FormatAttributeSection("Power Use", power.IsPowerUse ? "Yes" : "No");
+                col.FormatAttributeSection("Cost", power.Cost);
+                col.FormatAttributeSection("Power Duration", power.PowerDuration);
+                col.FormatAttributeSection("Area of Effect", power.AreaOfEffect);
+                col.FormatAttributeSection("Activation Type", power.PowerActivationType);
+                col.FormatOtherSection(power.Other);
+                col.FormatPrerequisites(power.Prerequisites);
             });
-        card.Item().PageBreak();
     }
 
     private static void FormatAttributeSection(
@@ -206,13 +187,13 @@ public static class PowerBookletReport
         if (name is not null)
             cell.Item().Text($"{name}:").Bold();
 
+        attributeValue = attributeValue.Replace("<p>", "").Replace("</p>", "\n");
         attributeValue = attributeValue.Replace("<strong>", "<b>").Replace("</strong>", "</b>");
 
         cell.Item()
             .PaddingBottom(0)
             .HTML(html =>
             {
-                html.SetContainerStyleForHtmlElement("p", x => x.Padding(0).PaddingBottom(2));
                 html.SetHtml(attributeValue);
             });
     }
