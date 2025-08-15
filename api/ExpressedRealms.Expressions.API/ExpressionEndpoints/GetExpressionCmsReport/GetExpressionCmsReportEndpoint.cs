@@ -7,7 +7,7 @@ namespace ExpressedRealms.Expressions.API.ExpressionEndpoints.GetExpressionCmsRe
 
 internal static class GetExpressionCmsReportEndpoint
 {
-    internal static async Task<Results<NotFound, FileStreamHttpResult, StatusCodeHttpResult>> GetExpressionCmsReport(
+    internal static async Task<Results<NotFound, FileStreamHttpResult, StatusCodeHttpResult, ValidationProblem>> GetExpressionCmsReport(
         int expressionId,
         IGetExpressionCmsReportUseCase repository
     )
@@ -17,6 +17,8 @@ internal static class GetExpressionCmsReportEndpoint
             ExpressionId = expressionId
         });
 
+        if(status.HasValidationError<MemoryStream>(out var validation))
+            return validation;
         if (status.HasNotFound(out var notFound))
             return notFound;
         if (status.HasBeenDeletedAlready(out var deletedAlready))

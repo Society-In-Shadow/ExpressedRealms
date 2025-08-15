@@ -2,6 +2,7 @@ using ExpressedRealms.Expressions.Reports.ExpressionCMSReport;
 using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.Expressions.Repository.ExpressionTextSections;
 using ExpressedRealms.Expressions.Repository.ExpressionTextSections.DTOs;
+using ExpressedRealms.Knowledges.Repository.Knowledges;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 using JetBrains.Annotations;
@@ -13,6 +14,7 @@ namespace ExpressedRealms.Expressions.UseCases.ExpressionTextSections.GetExpress
 internal sealed class GetExpressionCmsReportUseCase(
     IExpressionTextSectionRepository repository,
     IExpressionRepository expressionRepository,
+    IKnowledgeRepository knowledgesRepository,
     GetExpressionCmsReportModelValidator validator,
     CancellationToken cancellationToken
 ) : IGetExpressionCmsReportUseCase
@@ -30,15 +32,30 @@ internal sealed class GetExpressionCmsReportUseCase(
 
         var sections = await repository.GetExpressionTextSections(model.ExpressionId);
         var expression = await expressionRepository.GetExpression(model.ExpressionId);
-        int sortOrder = 0;
+        
+        int sortOrder = await repository.GetKnowledgesSectionId();
+        var flattenedSections = FlattenHierarchy(sections, ref sortOrder);
+        
+        var knowledgeSectionId = await repository.GetKnowledgesSectionId();
+        var knowledgeSection = flattenedSections.FirstOrDefault(x => x.SectionTypeId == knowledgeSectionId);
+        if (knowledgeSection is not null)
+        {
+            var knowledges = await knowledgesRepository.GetKnowledges();
+
+            knowledgeSection.Knowledges = knowledges.Select(x => new KnowledgeData()
+            {
+                Name = x.Name,
+                Type = x.KnowledgeType.Name,
+                Description = x.Description
+            }).ToList();
+        }
         
         var report = ExpressionCmsReport.GenerateReport(
             new ExpressionCmsReportData()
             {
                 ExpressionName = expression.Value.Name,
-                Sections = FlattenHierarchy(sections, ref sortOrder)
+                Sections = flattenedSections
             }
-            
         );
 
         var stream = new MemoryStream();
@@ -61,6 +78,7 @@ internal sealed class GetExpressionCmsReportUseCase(
             flatList.Add(
                 new SectionData()
                 {
+                    SectionTypeId = item.SectionTypeId,
                     Name = item.Name,
                     Content = item.Content,
                     SortOrder = sortOrder,

@@ -231,4 +231,12 @@ internal sealed class ExpressionTextSectionRepository(
         await context.SaveChangesAsync();
         return Result.Ok();
     }
+    
+    public async Task<int> GetKnowledgesSectionId()
+    {
+        return await context.ExpressionSectionTypes
+            .Where(x => x.Name == "Knowledges Section")
+            .Select(x => x.Id)
+            .FirstAsync();
+    }
 }

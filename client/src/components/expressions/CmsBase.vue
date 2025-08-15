@@ -11,6 +11,7 @@ import Button from "primevue/button";
 import '@he-tree/vue/style/default.css'
 import '@he-tree/vue/style/material-design.css'
 import ExpressionToC from "@/components/expressions/ExpressionToC.vue";
+import axios from "axios";
 
 const expressionInfo = expressionStore();
 const route = useRoute()
@@ -80,6 +81,21 @@ watch(
     }
 )
 
+async function downloadExpressionBooklet() {
+  const res = await axios.get(`/expression/${expressionInfo.currentExpressionId}/report`, {
+    responseType: 'blob',
+  });
+  const expression = route.params.name
+  const url = URL.createObjectURL(res.data);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${expression}Booklet.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
 </script>
 
 <template>
@@ -97,6 +113,9 @@ watch(
       <Card class="custom-card flex-grow-1">
         <template #content>
           <article id="expression-body">
+            <div class="d-flex flex-row justify-content-end align-items-center">
+              <Button label="Download Booklet" @click="downloadExpressionBooklet()"/>
+            </div>
             <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit && !showPreview" @refresh-list="fetchData(route.params.name)" />
             <Button v-if="showEdit && !showPreview" label="Add Section" class="m-2" @click="toggleCreate" />
             <div v-if="showCreate">

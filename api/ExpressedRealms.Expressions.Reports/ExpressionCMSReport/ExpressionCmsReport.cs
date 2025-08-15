@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using HTMLQuestPDF.Extensions;
 using QuestPDF;
 using QuestPDF.Fluent;
@@ -108,12 +109,27 @@ public static class ExpressionCmsReport
     )
     {
         card.Item().PaddingBottom(10).Text(section.Name)
-            
                             .Bold()
                             .FontSize(11)
                             .ExtraBold();
 
-        card.FormatMainSection(null, section.Content);
+        if (section.Knowledges is not null)
+        {
+            foreach (var knowledge in section.Knowledges)
+            {
+                card.Item().Row(row =>
+                {
+                    row.RelativeItem().Text(knowledge.Name).Bold().FontSize(9);
+                    row.AutoItem().Text(knowledge.Type).Italic();
+                });
+                card.Item().PaddingBottom(10).Text(knowledge.Description);
+            }
+        }
+        else
+        {
+            card.FormatMainSection(null, section.Content);
+        }
+        
     }
     
     private static void FormatMainSection(
@@ -135,7 +151,7 @@ public static class ExpressionCmsReport
         if (name is not null)
             cell.Item().Text($"{name}:").Bold();
 
-        //attributeValue = attributeValue.Replace("<p>", "").Replace("</p>", "\n\n");
+        attributeValue = NormalizeParagraphsInsideTd(attributeValue);
         attributeValue = attributeValue.Replace("<strong>", "<b>").Replace("</strong>", "</b>");
 
         cell.Item()
@@ -145,4 +161,30 @@ public static class ExpressionCmsReport
                 html.SetHtml(attributeValue);
             });
     }
+    
+    private static readonly Regex TdContentRegex =
+        new Regex("(<td\\b[^>]*>)(.*?)(</td>)", RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled);
+
+    private static readonly Regex POpenRegex =
+        new Regex("<p\\b[^>]*>", RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled);
+
+    private static readonly Regex PCloseRegex =
+        new Regex("</p\\s*>", RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled);
+
+    // Removes <p...> and replaces </p> with a newline ONLY inside <td>...</td> content blocks
+    private static string NormalizeParagraphsInsideTd(string html)
+    {
+        return TdContentRegex.Replace(html, m =>
+        {
+            var openTd = m.Groups[1].Value;
+            var inner = m.Groups[2].Value;
+            var closeTd = m.Groups[3].Value;
+
+            inner = POpenRegex.Replace(inner, "");
+            inner = PCloseRegex.Replace(inner, "\n");
+
+            return openTd + inner + closeTd;
+        });
+    }
+
 }
