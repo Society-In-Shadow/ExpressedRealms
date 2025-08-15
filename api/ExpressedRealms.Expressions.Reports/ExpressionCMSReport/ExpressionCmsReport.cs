@@ -42,18 +42,31 @@ public static class ExpressionCmsReport
                 page.Content()
                     .Column(col =>
                     {
-                        col.Item().MultiColumn(mCol =>
+                        if (data.ExpressionName == "Inventory")
                         {
-                            mCol.Spacing(10);
-                            mCol.Content().Column(columnContent =>
+                            foreach (var power in data.Sections)
                             {
-                                foreach (var power in data.Sections)
+                                col.FillSection(power);
+                            }
+                        }
+                        else
+                        {
+                            col.Item().MultiColumn(mCol =>
+                            {
+                                // Temporary bypass to make sure equipment tables don't look weird
+                                mCol.Columns(2);
+                                mCol.Spacing(10);
+                                mCol.Content().Column(columnContent =>
                                 {
-                                    columnContent.FillSection(power);
-                                }
-                            });
+                                    foreach (var power in data.Sections)
+                                    {
+                                        columnContent.FillSection(power);
+                                    }
+                                });
 
-                        });
+                            });
+                        }
+
 
                     });
                 
