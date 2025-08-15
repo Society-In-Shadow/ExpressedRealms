@@ -67,6 +67,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Reporting.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Powers.UseCases", "ExpressedRealms.Powers.UseCases\ExpressedRealms.Powers.UseCases.csproj", "{72E578E1-AA3F-4003-A697-C990D359B51C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Expressions.Reports", "ExpressedRealms.Expressions.Reports\ExpressedRealms.Expressions.Reports.csproj", "{D540316B-00E0-4EAE-87E3-A446369FE775}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -201,6 +203,10 @@ Global
 		{72E578E1-AA3F-4003-A697-C990D359B51C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72E578E1-AA3F-4003-A697-C990D359B51C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72E578E1-AA3F-4003-A697-C990D359B51C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D540316B-00E0-4EAE-87E3-A446369FE775}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D540316B-00E0-4EAE-87E3-A446369FE775}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D540316B-00E0-4EAE-87E3-A446369FE775}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D540316B-00E0-4EAE-87E3-A446369FE775}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
