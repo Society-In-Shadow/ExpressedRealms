@@ -6,6 +6,7 @@ public class SkillLevel
     public byte Level { get; set; }
     public string Name { get; set; } = null!;
     public int XP { get; set; }
+    public int TotalXp { get; set; }
 
     public virtual List<SkillLevelBenefit> SkillLevelBenefits { get; set; } = null!;
     public virtual List<CharacterSkillsMapping> CharacterSkillsMappings { get; set; } = null!;

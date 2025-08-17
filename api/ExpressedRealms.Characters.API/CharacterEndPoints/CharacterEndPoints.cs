@@ -350,6 +350,7 @@ internal static class CharacterEndPoints
                                 LevelName = x.LevelName,
                                 LevelNumber = x.LevelNumber,
                                 XP = x.XP,
+                                TotalXp = x.TotalXp,
                             })
                             .ToList()
                     );

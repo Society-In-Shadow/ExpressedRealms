@@ -1,5 +1,3 @@
-import type {BenefitItemResponse} from "@/components/characters/character/interfaces/BenefitItemResponse";
-
 export interface CharacterSkillsResponse {
     skillTypeId: number;
     name: string;
@@ -9,5 +7,6 @@ export interface CharacterSkillsResponse {
     levelDescription: string;
     skillSubTypeId: number;
     xp: number;
+    totalXp: number;
     levelNumber: number;
 }

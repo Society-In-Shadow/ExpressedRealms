@@ -1,8 +1,14 @@
 <script setup lang="ts">
 
-import {watch, computed, onMounted, ref, type Ref} from "vue";
+import {computed, onMounted, ref, type Ref, watch} from "vue";
 import axios from "axios";
 import type {SkillResponse} from "@/components/characters/character/skills/interfaces/SkillOptionsResponse";
+import {useRoute} from 'vue-router'
+import SkillDetail from "@/components/characters/character/skills/SkillDetail.vue";
+import Listbox from "primevue/listbox";
+import toasters from "@/services/Toasters";
+import {skillStore} from "@/components/characters/character/skills/Stores/skillStore";
+import {proficiencyStore} from "@/components/characters/character/proficiency/stores/proficiencyStore";
 
 const props = defineProps({
   skillTypeId: {
@@ -19,12 +25,6 @@ const props = defineProps({
   }
 });
 
-import { useRoute } from 'vue-router'
-import SkillDetail from "@/components/characters/character/skills/SkillDetail.vue";
-import Listbox from "primevue/listbox";
-import toasters from "@/services/Toasters";
-import {skillStore} from "@/components/characters/character/skills/Stores/skillStore";
-import {proficiencyStore} from "@/components/characters/character/proficiency/stores/proficiencyStore";
 const route = useRoute()
 
 const skillLevels:Ref<Array<SkillResponse>> = ref([]);
@@ -58,8 +58,9 @@ function getEditOptions() {
       .then((response) => {
         skillLevels.value = response.data;
 
+        const levelInfo = getSelectedLevelInformation();
         skillLevels.value.forEach(function(level:SkillResponse) {
-          level.disabled = level.experienceCost > props.remainingXp && level.levelId > selectedItem.value;
+          level.disabled = level.experienceCost - (levelInfo?.experienceCost ?? 0) > props.remainingXp && level.levelId > selectedItem.value;
         });
         
         isLoading.value = false;
@@ -103,6 +104,9 @@ function handleStatUpdate(skill:SkillResponse){
     skillInfo.editSkillTypeId = 0;
     emit("updateLevel");
     profStore.getUpdateProficiencies(route.params.id);
+    skillLevels.value.forEach(function(level:SkillResponse) {
+      level.disabled = level.experienceCost - (levelInfo?.experienceCost ?? 0) >= props.remainingXp && level.levelId > selectedItem.value;
+    });
     toasters.success("Successfully updated to level " + levelInfo.name);
   }).catch(function() {
     selectedItem.value  = oldValue.value;
