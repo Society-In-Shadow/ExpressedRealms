@@ -103,7 +103,7 @@ onBeforeRouteUpdate(async (to, from) => {
 
 
 async function downloadExpressionBooklet() {
-  const res = await axios.get(`/expression/${expressionInfo.currentExpressionId}/report`, {
+  const res = await axios.get(`/expression/${expressionInfo.currentExpressionId}/booklet`, {
     responseType: 'blob',
   });
   const expression = route.params.name

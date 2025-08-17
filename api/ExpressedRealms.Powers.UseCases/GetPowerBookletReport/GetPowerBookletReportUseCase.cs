@@ -1,17 +1,32 @@
 using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.Powers.Reporting.PowerBookletFormat;
 using ExpressedRealms.Powers.Repository.PowerPaths;
+using ExpressedRealms.UseCases.Shared;
+using FluentResults;
 using QuestPDF.Fluent;
 
 namespace ExpressedRealms.Powers.UseCases.GetPowerBookletReport;
 
 public class GetPowerBookletReportUseCase(
     IPowerPathRepository repository,
-    IExpressionRepository expressionRepository
+    IExpressionRepository expressionRepository,
+    GetPowerBookletReportUseCaseModelValidator validator,
+    CancellationToken cancellationToken
 ) : IGetPowerBookletReportUseCase
 {
-    public async Task<MemoryStream> ExecuteAsync(GetPowerBookletReportUseCaseModel model)
+    public Document GeneratedReport { get; set; }
+    public bool GenerateMemoryStream { get; set; } = true;
+    public async Task<Result<MemoryStream>> ExecuteAsync(GetPowerBookletReportUseCaseModel model)
     {
+        var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
+            validator,
+            model,
+            cancellationToken
+        );
+        
+        if (result.IsFailed)
+            return Result.Fail(result.Errors);
+        
         var data = await repository.GetPowerPathAndPowers(model.ExpressionId);
         var expression = await expressionRepository.GetExpression(model.ExpressionId);
 
@@ -54,6 +69,12 @@ public class GetPowerBookletReportUseCase(
             }
         );
 
+        if (!GenerateMemoryStream)
+        {
+            GeneratedReport = report;
+            return Result.Fail("Stream Option Was Disabled");
+        }
+        
         var stream = new MemoryStream();
         report.GeneratePdf(stream);
 

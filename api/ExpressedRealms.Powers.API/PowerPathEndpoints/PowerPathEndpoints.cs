@@ -126,7 +126,7 @@ internal static class PowerPathEndpoints
                     );
 
                     return TypedResults.File(
-                        reportStream,
+                        reportStream.Value,
                         contentType: "application/pdf",
                         fileDownloadName: "powerBookletReport.pdf",
                         enableRangeProcessing: true
