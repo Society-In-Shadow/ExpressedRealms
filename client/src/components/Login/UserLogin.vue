@@ -2,15 +2,14 @@
 
 import Button from 'primevue/button';
 import axios from "axios";
-import { useForm } from 'vee-validate';
-import { object, string }  from 'yup';
+import {useForm} from 'vee-validate';
+import {object, string} from 'yup';
 import {onBeforeMount, ref} from "vue";
 import Message from 'primevue/message';
 import {useRoute, useRouter} from "vue-router"
 import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
 
-const Router = useRouter();
-
+const router = useRouter();
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
     email: string().required()
@@ -40,7 +39,10 @@ const onSubmit = handleSubmit((values) => {
     // Reset antiforgery token after login
     axios.get('/auth/antiforgeryToken')
       .then(() => {
-        Router.push('characters');
+        if (!(window as any).Cypress) {
+          window.location.reload();
+        }
+
       });
   }).
   catch((response) => {

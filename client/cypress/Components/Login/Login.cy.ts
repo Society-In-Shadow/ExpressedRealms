@@ -23,7 +23,7 @@ describe('<Login />', () => {
     cy.window().then((win) => {
       win.history.pushState({}, '', '/login');
     });
-    
+
     cy.mount(Login);
   });
   it('Loading the page doesn\'t validate right away', () => {

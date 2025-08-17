@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
+using ExpressedRealms.Shared.Reports;
 using HTMLQuestPDF.Extensions;
 using QuestPDF;
 using QuestPDF.Fluent;
@@ -185,51 +185,16 @@ public static class ExpressionCmsReport
         if (name is not null)
             cell.Item().Text($"{name}:").Bold();
 
-        attributeValue = NormalizeParagraphsInsideTd(attributeValue);
+        attributeValue = HtmlTextFormatter.NormalizeParagraphsInsideTd(attributeValue);
         attributeValue = attributeValue.Replace("<strong>", "<b>").Replace("</strong>", "</b>");
 
         cell.Item()
             .PaddingBottom(10)
             .HTML(html =>
             {
+                html.StandardHtmlFormatting();
                 html.SetHtml(attributeValue);
             });
     }
 
-    private static readonly Regex TdContentRegex = new Regex(
-        "(<td\\b[^>]*>)(.*?)(</td>)",
-        RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled,
-        TimeSpan.FromSeconds(5)
-    );
-
-    private static readonly Regex POpenRegex = new Regex(
-        "<p\\b[^>]*>",
-        RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled,
-        TimeSpan.FromSeconds(5)
-    );
-
-    private static readonly Regex PCloseRegex = new Regex(
-        "</p\\s*>",
-        RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.Compiled,
-        TimeSpan.FromSeconds(5)
-    );
-
-    // Removes <p...> and replaces </p> with a newline ONLY inside <td>...</td> content blocks
-    private static string NormalizeParagraphsInsideTd(string html)
-    {
-        return TdContentRegex.Replace(
-            html,
-            m =>
-            {
-                var openTd = m.Groups[1].Value;
-                var inner = m.Groups[2].Value;
-                var closeTd = m.Groups[3].Value;
-
-                inner = POpenRegex.Replace(inner, "");
-                inner = PCloseRegex.Replace(inner, "\n");
-
-                return openTd + inner + closeTd;
-            }
-        );
-    }
 }
