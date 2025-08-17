@@ -28,10 +28,17 @@ public static class PowerCardReport
     public static MemoryStream GenerateSixUpPdf(List<PowerCardData> powerCards, bool isFiveByThree)
     {
         var singleTileDoc = GenerateReport(powerCards, isFiveByThree);
-        using var srcStream = new MemoryStream();
+        var srcStream = new MemoryStream();
         singleTileDoc.GeneratePdf(srcStream);
-        var pdfBytes = srcStream.ToArray();
 
+        if (isFiveByThree)
+        {
+            return srcStream;
+        }
+        
+        var pdfBytes = srcStream.ToArray();
+        srcStream.Dispose();
+        
         // 2) Load the PDF once as an XPdfForm and use PageNumber to draw specific pages.
         using var outDoc = new PdfDocument();
 
