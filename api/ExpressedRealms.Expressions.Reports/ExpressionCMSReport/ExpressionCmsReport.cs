@@ -27,8 +27,9 @@ public static class ExpressionCmsReport
             {
                 page.Size(PageSizes.Letter);
                 page.DefaultTextStyle(x => x.FontSize(7.75f));
-                page.Margin(0.5f, Unit.Inch);
+                page.Margin(0.75f, Unit.Inch);
                 page.MarginTop(0.25f, Unit.Inch);
+                page.MarginBottom(0.5f, Unit.Inch);
 
                 var header = $"{data.ExpressionName} Booklet";
                 if (data.IsExpression)
