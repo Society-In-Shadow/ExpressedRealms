@@ -7,6 +7,6 @@ namespace ExpressedRealms.Expressions.UseCases.ExpressionTextSections.GetExpress
 public interface IGetExpressionCmsReportUseCase
     : IGenericUseCase<Result<MemoryStream>, GetExpressionCmsReportModel>
 {
-    Document GeneratedReport { get; set; }
+    Document? GeneratedReport { get; set; }
     bool GenerateMemoryStream { get; set; }
 }
