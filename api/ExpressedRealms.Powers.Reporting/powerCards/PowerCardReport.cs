@@ -1,5 +1,8 @@
 using ExpressedRealms.Shared.Reports;
 using HTMLQuestPDF.Extensions;
+using PdfSharpCore;
+using PdfSharpCore.Drawing;
+using PdfSharpCore.Pdf;
 using QuestPDF;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
@@ -20,6 +23,88 @@ public static class PowerCardReport
             .ToList();
 
         return GetSingleTilePerPage(powerCards, isFiveByThree);
+    }
+
+    public static MemoryStream GenerateSixUpPdf(List<PowerCardData> powerCards, bool isFiveByThree)
+    {
+        var singleTileDoc = GenerateReport(powerCards, isFiveByThree);
+        using var srcStream = new MemoryStream();
+        singleTileDoc.GeneratePdf(srcStream);
+        var pdfBytes = srcStream.ToArray();
+
+        // 2) Load the PDF once as an XPdfForm and use PageNumber to draw specific pages.
+        using var outDoc = new PdfDocument();
+
+        // US Letter Landscape in points (72 dpi): 11" x 8.5" => 792 x 612
+        const double sheetWidth = 792.0;
+        const double sheetHeight = 612.0;
+
+        const int cols = 2;
+        const int rows = 3;
+
+        // Margins/gutters (points)
+        const double outerMargin = 10;  // 0.25"
+        const double gutterX = 10;      // between columns
+        const double gutterY = 10;      // between rows
+
+        double contentWidth = sheetWidth - (outerMargin * 2) - gutterX * (cols - 1);
+        double contentHeight = sheetHeight - (outerMargin * 2) - gutterY * (rows - 1);
+        double tileWidth = contentWidth / cols;
+        double tileHeight = contentHeight / rows;
+
+        // Load once and then switch PageNumber as we place pages
+        using var form = XPdfForm.FromStream(new MemoryStream(pdfBytes));
+        int totalPages = form.PageCount;
+
+        int pageIndex = 0;
+        while (pageIndex < totalPages)
+        {
+            var outPage = outDoc.AddPage();
+            outPage.Orientation = PageOrientation.Landscape;
+            outPage.Width = sheetWidth;
+            outPage.Height = sheetHeight;
+
+            using var gfx = XGraphics.FromPdfPage(outPage);
+
+            // Draw light gray cut lines centered in the gutters between tiles
+            var pen = new XPen(XColors.LightGray, 0.5);
+            pen.DashStyle = XDashStyle.Dash;
+            pen.DashPattern = new double[] { 15f, 15f };
+
+            // Vertical lines (between columns)
+            for (int c = 0; c < cols - 1; c++)
+            {
+                double x = outerMargin + (c + 1) * tileWidth + c * gutterX + gutterX / 2.0;
+                double y1 = outerMargin;
+                double y2 = outerMargin + contentHeight + (rows - 1) * gutterY;
+                gfx.DrawLine(pen, x, y1, x, y2);
+            }
+
+            // Horizontal lines (between rows)
+            for (int r = 0; r < rows - 1; r++)
+            {
+                double y = outerMargin + (r + 1) * tileHeight + r * gutterY + gutterY / 2.0;
+                double x1 = outerMargin;
+                double x2 = outerMargin + contentWidth + (cols - 1) * gutterX;
+                gfx.DrawLine(pen, x1, y, x2, y);
+            }
+            
+            for (int r = 0; r < rows && pageIndex < totalPages; r++)
+            {
+                for (int c = 0; c < cols && pageIndex < totalPages; c++)
+                {
+                    form.PageNumber = pageIndex + 1; // 1-based
+                    double x = outerMargin + c * (tileWidth + gutterX);
+                    double y = outerMargin + r * (tileHeight + gutterY);
+                    gfx.DrawImage(form, x, y, tileWidth, tileHeight);
+                    pageIndex++;
+                }
+            }
+        }
+
+        var outStream = new MemoryStream();
+        outDoc.Save(outStream, false);
+        return outStream;
     }
 
     private static Document GetSingleTilePerPage(List<PowerCardData> powerCards, bool isFiveByThree)

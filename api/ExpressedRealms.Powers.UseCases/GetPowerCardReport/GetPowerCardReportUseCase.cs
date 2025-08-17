@@ -1,7 +1,6 @@
 using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.Powers.Reporting.powerCards;
 using ExpressedRealms.Powers.Repository.PowerPaths;
-using QuestPDF.Fluent;
 
 namespace ExpressedRealms.Powers.UseCases.GetPowerCardReport;
 
@@ -15,7 +14,7 @@ public class GetPowerCardReportUseCase(
         var data = await repository.GetPowerPathAndPowers(model.ExpressionId);
         var expression = await expressionRepository.GetExpression(model.ExpressionId);
 
-        var report = PowerCardReport.GenerateReport(
+        var reportStream = PowerCardReport.GenerateSixUpPdf(
             data.Value.SelectMany(x =>
                     x.Powers.Select(y => new PowerCardData()
                         {
@@ -48,10 +47,7 @@ public class GetPowerCardReportUseCase(
             model.IsFiveByThree
         );
 
-        var stream = new MemoryStream();
-        report.GeneratePdf(stream);
-
-        stream.Position = 0;
-        return stream;
+        reportStream.Position = 0;
+        return reportStream;
     }
 }
