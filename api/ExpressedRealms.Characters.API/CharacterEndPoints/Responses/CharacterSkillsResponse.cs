@@ -12,4 +12,5 @@ internal class CharacterSkillsResponse
     public List<BenefitItemResponse> Benefits { get; set; } = new();
     public int XP { get; set; }
     public byte LevelNumber { get; set; }
+    public int TotalXp { get; set; }
 }

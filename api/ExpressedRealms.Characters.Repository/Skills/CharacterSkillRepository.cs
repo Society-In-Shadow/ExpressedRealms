@@ -44,6 +44,7 @@ internal sealed class CharacterSkillRepository(
                 LevelName = x.SkillLevel.Name,
                 LevelNumber = x.SkillLevel.Level,
                 XP = x.SkillLevel.XP,
+                TotalXp = x.SkillLevel.TotalXp,
                 LevelDescription = x
                     .SkillType.CharacterLevelDescriptions.First(y =>
                         y.SkillLevelId == x.SkillLevelId
@@ -65,7 +66,7 @@ internal sealed class CharacterSkillRepository(
                 Name = x.SkillLevel.Name,
                 Description = x.Description,
                 LevelId = x.SkillLevelId,
-                ExperienceCost = x.SkillLevel.XP,
+                ExperienceCost = x.SkillLevel.TotalXp,
                 LevelNumber = x.SkillLevel.Level,
             })
             .ToListAsync(cancellationToken);

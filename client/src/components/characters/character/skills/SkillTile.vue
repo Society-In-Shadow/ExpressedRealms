@@ -3,17 +3,19 @@
 import axios from "axios";
 import Panel from "primevue/panel";
 import {computed, onMounted, ref, type Ref} from "vue";
-import { useRoute } from 'vue-router'
-const route = useRoute()
-
+import {useRoute} from 'vue-router'
 import Accordion from 'primevue/accordion';
 import AccordionPanel from 'primevue/accordionpanel';
 import AccordionHeader from 'primevue/accordionheader';
 import AccordionContent from 'primevue/accordioncontent';
 
-import type {CharacterSkillsResponse} from "@/components/characters/character/skills/interfaces/CharacterSkillsResponse";
+import type {
+  CharacterSkillsResponse
+} from "@/components/characters/character/skills/interfaces/CharacterSkillsResponse";
 import EditSkillDetail from "@/components/characters/character/skills/EditSkillDetail.vue";
 import {skillStore} from "@/components/characters/character/skills/Stores/skillStore";
+
+const route = useRoute()
 
 const offensiveSkills:Ref<Array<CharacterSkillsResponse>> = ref([]);
 const defensiveSkills:Ref<Array<CharacterSkillsResponse>> = ref([]);
@@ -38,7 +40,7 @@ function getEditOptions() {
       .then((response) => {
         offensiveSkills.value = response.data.filter((x: CharacterSkillsResponse) => x.skillSubTypeId === 1);
         defensiveSkills.value = response.data.filter((x: CharacterSkillsResponse) => x.skillSubTypeId === 2);
-        appliedXp.value = response.data.reduce((sum: number, item: CharacterSkillsResponse) => sum + item.xp, 0);
+        appliedXp.value = response.data.reduce((sum: number, item: CharacterSkillsResponse) => sum + item.totalXp, 0);
       })
 }
 

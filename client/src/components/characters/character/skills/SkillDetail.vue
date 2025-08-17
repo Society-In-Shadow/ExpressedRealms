@@ -47,7 +47,7 @@ const plusOrMinusSign = computed(() => {
         </div>
         <div>
           <SkeletonWrapper :show-skeleton="isLoading" height="2rem" width="100%">
-            {{ plusOrMinusSign }} {{ Math.abs(props.selectedItem.experienceCost - props.currentXpLevel) }}
+            {{ plusOrMinusSign }} {{ Math.abs(props.selectedItem?.experienceCost - props.currentXpLevel) }}
           </SkeletonWrapper>
         </div>
       </div>
