@@ -29,6 +29,5 @@ internal static class GetExpressionBookletEndpoint
             fileDownloadName: "powerBookletReport.pdf",
             enableRangeProcessing: true
         );
-        ;
     }
 }

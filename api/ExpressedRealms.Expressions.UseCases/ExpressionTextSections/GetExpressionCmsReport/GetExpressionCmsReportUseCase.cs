@@ -21,7 +21,7 @@ internal sealed class GetExpressionCmsReportUseCase(
     CancellationToken cancellationToken
 ) : IGetExpressionCmsReportUseCase
 {
-    public Document GeneratedReport { get; set; }
+    public Document? GeneratedReport { get; set; }
     public bool GenerateMemoryStream { get; set; } = true;
     public async Task<Result<MemoryStream>> ExecuteAsync(GetExpressionCmsReportModel model)
     {

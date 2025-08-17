@@ -14,7 +14,7 @@ public class GetPowerBookletReportUseCase(
     CancellationToken cancellationToken
 ) : IGetPowerBookletReportUseCase
 {
-    public Document GeneratedReport { get; set; }
+    public Document? GeneratedReport { get; set; }
     public bool GenerateMemoryStream { get; set; } = true;
     public async Task<Result<MemoryStream>> ExecuteAsync(GetPowerBookletReportUseCaseModel model)
     {
