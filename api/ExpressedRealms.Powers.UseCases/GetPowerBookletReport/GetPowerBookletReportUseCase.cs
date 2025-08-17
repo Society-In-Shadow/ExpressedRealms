@@ -16,6 +16,7 @@ public class GetPowerBookletReportUseCase(
 {
     public Document? GeneratedReport { get; set; }
     public bool GenerateMemoryStream { get; set; } = true;
+
     public async Task<Result<MemoryStream>> ExecuteAsync(GetPowerBookletReportUseCaseModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
@@ -23,10 +24,10 @@ public class GetPowerBookletReportUseCase(
             model,
             cancellationToken
         );
-        
+
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-        
+
         var data = await repository.GetPowerPathAndPowers(model.ExpressionId);
         var expression = await expressionRepository.GetExpression(model.ExpressionId);
 
@@ -74,7 +75,7 @@ public class GetPowerBookletReportUseCase(
             GeneratedReport = report;
             return Result.Fail("Stream Option Was Disabled");
         }
-        
+
         var stream = new MemoryStream();
         report.GeneratePdf(stream);
 

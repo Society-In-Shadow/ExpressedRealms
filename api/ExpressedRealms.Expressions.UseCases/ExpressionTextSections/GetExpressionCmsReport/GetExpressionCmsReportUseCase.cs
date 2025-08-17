@@ -23,6 +23,7 @@ internal sealed class GetExpressionCmsReportUseCase(
 {
     public Document? GeneratedReport { get; set; }
     public bool GenerateMemoryStream { get; set; } = true;
+
     public async Task<Result<MemoryStream>> ExecuteAsync(GetExpressionCmsReportModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
@@ -96,13 +97,12 @@ internal sealed class GetExpressionCmsReportUseCase(
             GeneratedReport = report;
             return Result.Fail("Stream Option Was Disabled");
         }
-        
+
         var stream = new MemoryStream();
         report.GeneratePdf(stream);
 
         stream.Position = 0;
         return stream;
-
     }
 
     private static List<SectionData> FlattenHierarchy(

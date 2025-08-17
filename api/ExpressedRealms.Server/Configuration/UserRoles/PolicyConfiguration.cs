@@ -27,12 +27,12 @@ public static class PolicyConfiguration
                 Policies.ManageKnowledges.Name,
                 policy => policy.RequireRole(UserRoles.KnowledgeManagementRole)
             );
-            
+
             options.AddPolicy(
                 Policies.DownloadCMSReports.Name,
                 policy => policy.RequireRole(UserRoles.DownloadCMSReports)
             );
-            
+
             options.AddPolicy(
                 Policies.DownloadExpressionBooklet.Name,
                 policy => policy.RequireRole(UserRoles.DownloadExpressionBooklet)

@@ -20,6 +20,6 @@ public static class UserRoles
             PowerManagementRole,
             KnowledgeManagementRole,
             DownloadCMSReports,
-            DownloadExpressionBooklet
+            DownloadExpressionBooklet,
         };
 }
