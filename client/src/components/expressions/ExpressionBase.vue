@@ -21,7 +21,7 @@ import ExpressionToC from "@/components/expressions/ExpressionToC.vue";
 import EditExpressionSection from "@/components/expressions/EditExpressionSection.vue";
 import PowerTab from "@/components/expressions/powers/PowerTab.vue";
 import PowersToC from "@/components/expressions/PowersToC.vue";
-import {FeatureFlags, userStore} from "@/stores/userStore.ts";
+import {UserRoles, userStore} from "@/stores/userStore.ts";
 
 const expressionInfo = expressionStore();
 const route = useRoute()
@@ -91,7 +91,7 @@ function togglePreview(){
 onMounted(async () =>{
   await expressionInfo.getExpressionId(route);
   await fetchData();
-  showReportButton.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowReportButtons);
+  showReportButton.value = await userInfo.hasUserRole(UserRoles.DownloadExpressionBooklet);
 })
 
 onBeforeRouteUpdate(async (to, from) => {
@@ -103,7 +103,7 @@ onBeforeRouteUpdate(async (to, from) => {
 
 
 async function downloadExpressionBooklet() {
-  const res = await axios.get(`/expression/${expressionInfo.currentExpressionId}/report`, {
+  const res = await axios.get(`/expression/${expressionInfo.currentExpressionId}/booklet`, {
     responseType: 'blob',
   });
   const expression = route.params.name

@@ -4,6 +4,7 @@ using ExpressedRealms.Expressions.API.ExpressionEndpoints.DeleteExpression;
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.EditExpression;
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.GetCmsExpressionId;
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.GetEditExpression;
+using ExpressedRealms.Expressions.API.ExpressionEndpoints.GetExpressionBooklet;
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.GetExpressionCmsReport;
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.GetExpressionId;
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.UpdateHierarchy;
@@ -33,6 +34,12 @@ internal static class ExpressionEndpoints
 
         endpointGroup
             .MapGet("{expressionId}/report", GetExpressionCmsReportEndpoint.GetExpressionCmsReport)
+            .RequirePolicyAuthorization(Policies.DownloadCMSReports)
+            .WithSummary("Returns the report for the given expression");
+
+        endpointGroup
+            .MapGet("{expressionId}/booklet", GetExpressionBookletEndpoint.GetExpressionBooklet)
+            .RequirePolicyAuthorization(Policies.DownloadExpressionBooklet)
             .WithSummary("Returns the report for the given expression");
 
         endpointGroup

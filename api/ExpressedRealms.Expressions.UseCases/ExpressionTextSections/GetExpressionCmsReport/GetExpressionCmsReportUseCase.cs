@@ -21,6 +21,9 @@ internal sealed class GetExpressionCmsReportUseCase(
     CancellationToken cancellationToken
 ) : IGetExpressionCmsReportUseCase
 {
+    public Document? GeneratedReport { get; set; }
+    public bool GenerateMemoryStream { get; set; } = true;
+
     public async Task<Result<MemoryStream>> ExecuteAsync(GetExpressionCmsReportModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
@@ -88,6 +91,12 @@ internal sealed class GetExpressionCmsReportUseCase(
                 Sections = flattenedSections,
             }
         );
+
+        if (!GenerateMemoryStream)
+        {
+            GeneratedReport = report;
+            return Result.Fail("Stream Option Was Disabled");
+        }
 
         var stream = new MemoryStream();
         report.GeneratePdf(stream);
