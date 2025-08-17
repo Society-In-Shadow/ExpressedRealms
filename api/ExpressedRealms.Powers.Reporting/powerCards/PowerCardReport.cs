@@ -43,9 +43,9 @@ public static class PowerCardReport
         const int rows = 3;
 
         // Margins/gutters (points)
-        const double outerMargin = 15;  // 0.25"
-        const double gutterX = 15;      // between columns
-        const double gutterY = 15;      // between rows
+        const double outerMargin = 10;  // 0.25"
+        const double gutterX = 10;      // between columns
+        const double gutterY = 10;      // between rows
 
         double contentWidth = sheetWidth - (outerMargin * 2) - gutterX * (cols - 1);
         double contentHeight = sheetHeight - (outerMargin * 2) - gutterY * (rows - 1);
