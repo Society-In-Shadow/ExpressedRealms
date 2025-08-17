@@ -15,6 +15,8 @@ public class Policies
     public static readonly Policies UserManagementPolicy = new(nameof(UserManagementPolicy));
     public static readonly Policies ManagePowers = new(nameof(ManagePowers));
     public static readonly Policies ManageKnowledges = new(nameof(ManageKnowledges));
+    public static readonly Policies DownloadCMSReports = new(nameof(DownloadCMSReports));
+    public static readonly Policies DownloadExpressionBooklet = new(nameof(DownloadExpressionBooklet));
 
     // Override ToString for convenience
     public override string ToString()

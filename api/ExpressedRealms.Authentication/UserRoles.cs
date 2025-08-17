@@ -6,6 +6,8 @@ public static class UserRoles
     public const string UserManagementRole = "UserManagementRole";
     public const string PowerManagementRole = "PowerManagementRole";
     public const string KnowledgeManagementRole = "KnowledgeManagementRole";
+    public const string DownloadCMSReports = "DownloadCMSReports";
+    public const string DownloadExpressionBooklet = "DownloadExpressionBooklet";
 
     /// <summary>
     /// Add items to this list to automatically add them to the database.
@@ -17,5 +19,7 @@ public static class UserRoles
             UserManagementRole,
             PowerManagementRole,
             KnowledgeManagementRole,
+            DownloadCMSReports,
+            DownloadExpressionBooklet
         };
 }

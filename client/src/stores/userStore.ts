@@ -6,13 +6,14 @@ export const UserRoles = {
     ExpressionEditor: "ExpressionEditorRole",
     UserManagementRole: "UserManagementRole",
     PowerManagementRole: "PowerManagementRole",
-    KnowledgeManagementRole: "KnowledgeManagementRole"
+    KnowledgeManagementRole: "KnowledgeManagementRole",
+    DownloadCMSReports: "DownloadCMSReports",
+    DownloadExpressionBooklet: "DownloadExpressionBooklet",
 } as const;
 
 export const FeatureFlags = {
     ShowMarketingContactUs: "show-marketing-contact-us",
     ShowInventoryPage: "show-inventory-page",
-    ShowReportButtons: "show-report-buttons",
 } as const;
 
 export type UserRole = (typeof UserRoles)[keyof typeof UserRoles];

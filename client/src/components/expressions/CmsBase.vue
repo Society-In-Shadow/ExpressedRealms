@@ -12,7 +12,7 @@ import '@he-tree/vue/style/default.css'
 import '@he-tree/vue/style/material-design.css'
 import ExpressionToC from "@/components/expressions/ExpressionToC.vue";
 import axios from "axios";
-import {FeatureFlags, userStore} from "@/stores/userStore.ts";
+import {UserRoles, userStore} from "@/stores/userStore.ts";
 
 const expressionInfo = expressionStore();
 const route = useRoute()
@@ -73,7 +73,7 @@ function togglePreview(){
 
 onMounted(async () =>{
   await fetchData();
-  showReportButton.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowReportButtons);
+  showReportButton.value = await userInfo.hasUserRole(UserRoles.DownloadCMSReports);
 })
 
 watch(

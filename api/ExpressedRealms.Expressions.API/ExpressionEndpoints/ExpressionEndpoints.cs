@@ -34,10 +34,12 @@ internal static class ExpressionEndpoints
 
         endpointGroup
             .MapGet("{expressionId}/report", GetExpressionCmsReportEndpoint.GetExpressionCmsReport)
+            .RequirePolicyAuthorization(Policies.DownloadCMSReports)
             .WithSummary("Returns the report for the given expression");
         
         endpointGroup
             .MapGet("{expressionId}/booklet", GetExpressionBookletEndpoint.GetExpressionBooklet)
+            .RequirePolicyAuthorization(Policies.DownloadExpressionBooklet)
             .WithSummary("Returns the report for the given expression");
 
         endpointGroup
