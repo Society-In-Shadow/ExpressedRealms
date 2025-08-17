@@ -6,9 +6,10 @@ import {useForm} from 'vee-validate';
 import {object, string} from 'yup';
 import {onBeforeMount, ref} from "vue";
 import Message from 'primevue/message';
-import {useRoute} from "vue-router"
+import {useRoute, useRouter} from "vue-router"
 import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
 
+const router = useRouter();
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
     email: string().required()
@@ -38,7 +39,10 @@ const onSubmit = handleSubmit((values) => {
     // Reset antiforgery token after login
     axios.get('/auth/antiforgeryToken')
       .then(() => {
-        window.location.reload();
+        if (!(window as any).Cypress) {
+          window.location.reload();
+        }
+
       });
   }).
   catch((response) => {
