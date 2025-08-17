@@ -4,10 +4,9 @@ import {computed, onMounted, ref, watch} from "vue";
 import Skeleton from 'primevue/skeleton';
 import Editor from "primevue/editor";
 import ContextMenu from 'primevue/contextmenu';
-import { useEditor, EditorContent } from '@tiptap/vue-3'
+import {EditorContent, useEditor} from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
-import { Table, TableRow, TableCell, TableHeader } from '@tiptap/extension-table'
-import Underline from '@tiptap/extension-underline';
+import {Table, TableCell, TableHeader, TableRow} from '@tiptap/extension-table'
 
 const model = defineModel<string>({ required: true });
 
@@ -70,8 +69,7 @@ const editor = useEditor({
     CustomTable,
     TableRow,
     TableCell,
-    TableHeader,
-    Underline
+    TableHeader
   ],
   onUpdate: ({editor}) => {
     model.value = editor.getHTML();
@@ -215,6 +213,12 @@ const contextOptions = ref([
           <button type="button" @click="editor.chain().focus().toggleUnderline().run()">
             <i class="bi-type-underline icon-fix" />
           </button>
+          <button type="button" @click="editor.chain().focus().toggleBulletList().run()">
+            <i class="bi bi-list-ul icon-fix" />
+          </button>
+          <button type="button" @click="editor.chain().focus().toggleOrderedList().run()">
+            <i class="bi bi-list-ol icon-fix" />
+          </button>
           <button type="button" @click="editor.chain().focus().insertTable({ rows: 4, cols: 3, withHeaderRow: true }).run()">
             <i class="bi bi-table icon-fix" />
           </button>
@@ -239,5 +243,26 @@ const contextOptions = ref([
 <style>
   .icon-fix{
     font-size: 1.5em;
+  }
+  .ql-editor ul > li > p {
+    display: inline;
+    padding-left: 0.75em;
+  }
+
+  .ql-editor ol > li > p {
+    display: inline;
+    padding-left: 0.75em;
+  }
+
+  .ql-editor ul {
+    margin-inline-start: 0em !important;
+    padding-inline-start: 0em !important;
+    font-size: 1rem;
+  }
+
+  .ql-editor ol {
+    margin-inline-start: 0em !important;
+    padding-inline-start: 0em !important;
+    font-size: 1rem;
   }
 </style>
