@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using ExpressedRealms.Shared.Reports;
 using HTMLQuestPDF.Extensions;
 using QuestPDF;
 using QuestPDF.Fluent;
@@ -183,7 +184,7 @@ public static class PowerBookletReport
         cell.Item()
             .HTML(html =>
             {
-                html.SetContainerStyleForHtmlElement("p", x => x.Padding(0));
+                html.StandardHtmlFormatting();
                 html.SetHtml(attributeValue);
             });
     }
@@ -207,13 +208,13 @@ public static class PowerBookletReport
         if (name is not null)
             cell.Item().Text($"{name}:").Bold();
 
-        attributeValue = attributeValue.Replace("<p>", "").Replace("</p>", "\n");
-        attributeValue = attributeValue.Replace("<strong>", "<b>").Replace("</strong>", "</b>");
+        attributeValue = HtmlTextFormatter.NormalizeParagraphsInsideTd(attributeValue);
 
         cell.Item()
             .PaddingBottom(0)
             .HTML(html =>
             {
+                html.StandardHtmlFormatting();
                 html.SetHtml(attributeValue);
             });
     }
