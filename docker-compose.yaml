@@ -12,16 +12,16 @@ services:
     working_dir: /app
     ports:
       - '3000:3000'
-      - '443:443'
+      - '3001:443'
     environment:
       - VITE_HTTPS_KEY=/https/key.pem
       - VITE_HTTPS_CERT=/https/cert.pem
       - VITE_PORT=443
-      - VITE_API_SERVER_LOCATION=https://localhost:5001
+      - VITE_API_SERVER_LOCATION=https://localhost:3001/api
       - VITE_COOKIE_DOMAIN_NAME=.localhost
     volumes:
-      - ./client/:/app:z # This is only here to allow automatic updates on local machines as you are editing the code
-      - ${USERPROFILE}/.aspnet/https:/https:z # Host Certificate Location (key.pem/cert.pem) : Image Path
+      - ./client/:/app # This is only here to allow automatic updates on local machines as you are editing the code
+      - ${USERPROFILE}/.aspnet/https:/https # Host Certificate Location (key.pem/cert.pem) : Image Path
     command: sh -c "npx vite --host 0.0.0.0"
     networks:
       - expressed-realms-network
@@ -56,23 +56,23 @@ services:
       context: ./api
       dockerfile: Dockerfile
     environment:
-      - ASPNETCORE_HTTPS_PORTS=443
-      - ASPNETCORE_HTTP_PORTS=80
+      - ASPNETCORE_HTTPS_PORTS=8443
+      - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_Kestrel__Certificates__Default__KeyPath=/https/key.pem
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/cert.pem
       - POSTGRES-CONNECTION-STRING=Host=expressed-realms-db;Port=5432;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
       - AZURE-STORAGEBLOB-RESOURCEENDPOINT=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1; # gitleaks:allow
-      - FRONT-END-BASE-URL=https://localhost
+      - FRONT-END-BASE-URL=https://localhost:3001
       - SMTP-SERVER=mailpit:1025
       - NO-REPLY-EMAIL=no-reply@societyinshadows.org
       - CLIENT-COOKIE-DOMAIN=.localhost
       - FEATURE-FLAG-URL=http://flipt:8080/
     ports:
-      - '5000:80'
-      - '5001:443'
+      - '5000:8080'
+      - '5001:8443'
     volumes:
-      - ${USERPROFILE}/.aspnet/https:/https:ro,z
+      - ${USERPROFILE}/.aspnet/https:/https:ro
     networks:
       - expressed-realms-network
     depends_on:
