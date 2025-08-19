@@ -2,6 +2,7 @@
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
+using ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup;
 using ExpressedRealms.DB.Models.Skills;
 using ExpressedRealms.DB.Models.Statistics;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
@@ -42,4 +43,5 @@ public class Character : ISoftDelete
     public virtual ExpressionSection? FactionInfo { get; set; } = null!;
     public virtual List<CharacterSkillsMapping> CharacterSkillsMappings { get; set; } = null!;
     public virtual List<CharacterKnowledgeMapping> CharacterKnowledgeMappings { get; set; } = null!;
+    public virtual List<CharacterPowerMapping> CharacterPowerMappings { get; set; } = null!;
 }
