@@ -1,3 +1,4 @@
+using ExpressedRealms.Powers.UseCases.CharacterPower.GetPickablePowers.ReturnModels;
 using ExpressedRealms.Shared;
 using FluentResults;
 

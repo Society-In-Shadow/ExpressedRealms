@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Powers.UseCases.CharacterPower.GetPickablePowers;
+namespace ExpressedRealms.Powers.UseCases.CharacterPower.GetPickablePowers.ReturnModels;
 
 public class PrerequisiteDetailsReturnModel
 {
