@@ -5,20 +5,21 @@ using Microsoft.EntityFrameworkCore;
 namespace ExpressedRealms.Powers.Repository.CharacterPower;
 
 internal sealed class CharacterPowerRepository(
-    ExpressedRealmsDbContext context, 
+    ExpressedRealmsDbContext context,
     CancellationToken token
 ) : ICharacterPowerRepository
 {
     public async Task<bool> MappingExistsAsync(int powerId, int characterId)
     {
-        return await context.CharacterPowerMappings
-            .AnyAsync(x => x.PowerId == powerId && x.CharacterId == characterId,
-            token);
+        return await context.CharacterPowerMappings.AnyAsync(
+            x => x.PowerId == powerId && x.CharacterId == characterId,
+            token
+        );
     }
 
     public async Task<int> GetExperienceSpentOnPowersForCharacter(int modelCharacterId)
     {
-        return await context.CharacterPowerMappings.SumAsync(x => x.PowerLevel.Xp, token); 
+        return await context.CharacterPowerMappings.SumAsync(x => x.PowerLevel.Xp, token);
     }
 
     public async Task<int> AddCharacterPowerMapping(CharacterPowerMapping characterPowerMapping)
@@ -27,40 +28,42 @@ internal sealed class CharacterPowerRepository(
         await context.SaveChangesAsync(token);
         return characterPowerMapping.Id;
     }
-    
+
     public async Task<List<int>> GetSelectablePowersForCharacter(int characterId)
     {
-        var expression = await context.Characters
-                .Where(x => x.Id == characterId)
-                .Select(x => x.ExpressionId)
-                .FirstAsync(token);
-        
+        var expressionId = await context
+            .Characters.Where(x => x.Id == characterId)
+            .Select(x => x.ExpressionId)
+            .FirstAsync(token);
+
         // Get all the assigned powers
-        var powerMappings = await context.CharacterPowerMappings
-            .Where(x => x.CharacterId == characterId)
+        var powerMappings = await context
+            .CharacterPowerMappings.Where(x => x.CharacterId == characterId)
             .Select(x => x.PowerId)
             .ToListAsync(token);
-        
+
         // Grab all powers plus prerequisite data
-        var allPowers = await context.Powers
-            .Where(x => x.PowerPath.ExpressionId == expression)
+        var allPowers = await context
+            .Powers.Where(x => x.PowerPath.ExpressionId == expressionId)
             .Select(x => new
             {
                 PowerId = x.Id,
                 RequiredAmount = x.Prerequisite != null ? x.Prerequisite.RequiredAmount : 0,
-                PrerequisitePowers = x.Prerequisite != null 
+                PrerequisitePowers = x.Prerequisite != null
                     ? x.Prerequisite.PrerequisitePowers.Select(y => y.PowerId)
-                        : null
+                    : null,
             })
             .ToListAsync();
-        
+
         // Get all powers whose requirements have been fulfilled
         var selectablePowers = allPowers
-            .Where(x => 
+            .Where(x =>
                 // If a power does not have a prerequisite, it is always selectable
-                x.PrerequisitePowers == null || 
+                x.PrerequisitePowers == null
+                ||
                 // Otherwise, if the assigned power mappings have everything needed for a power, it is also selectable
-                x.PrerequisitePowers.Intersect(powerMappings).Count() >= x.RequiredAmount)
+                x.PrerequisitePowers.Intersect(powerMappings).Count() >= x.RequiredAmount
+            )
             .Select(x => x.PowerId)
             .ToList();
 

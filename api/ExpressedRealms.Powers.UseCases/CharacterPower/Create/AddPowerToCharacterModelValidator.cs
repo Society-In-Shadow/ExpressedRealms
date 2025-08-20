@@ -41,12 +41,14 @@ internal sealed class AddPowerToCharacterModelValidator
             )
             .WithMessage("The power already exists for this character.")
             .WithName(nameof(AddPowerToCharacterModel.PowerId));
-        
+
         RuleFor(x => x)
             .MustAsync(
                 async (x, y) =>
                 {
-                    var availablePowerIds = await mappingRepository.GetSelectablePowersForCharacter(x.CharacterId);
+                    var availablePowerIds = await mappingRepository.GetSelectablePowersForCharacter(
+                        x.CharacterId
+                    );
                     return availablePowerIds.Contains(x.PowerId);
                 }
             )

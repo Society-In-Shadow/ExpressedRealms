@@ -35,10 +35,10 @@ public static class PowerCardReport
         {
             return srcStream;
         }
-        
+
         var pdfBytes = srcStream.ToArray();
         srcStream.Dispose();
-        
+
         // 2) Load the PDF once as an XPdfForm and use PageNumber to draw specific pages.
         using var outDoc = new PdfDocument();
 
@@ -50,9 +50,9 @@ public static class PowerCardReport
         const int rows = 3;
 
         // Margins/gutters (points)
-        const double outerMargin = 10;  // 0.25"
-        const double gutterX = 10;      // between columns
-        const double gutterY = 10;      // between rows
+        const double outerMargin = 10; // 0.25"
+        const double gutterX = 10; // between columns
+        const double gutterY = 10; // between rows
 
         double contentWidth = sheetWidth - (outerMargin * 2) - gutterX * (cols - 1);
         double contentHeight = sheetHeight - (outerMargin * 2) - gutterY * (rows - 1);
@@ -95,7 +95,7 @@ public static class PowerCardReport
                 double x2 = outerMargin + contentWidth + (cols - 1) * gutterX;
                 gfx.DrawLine(pen, x1, y, x2, y);
             }
-            
+
             for (int r = 0; r < rows && pageIndex < totalPages; r++)
             {
                 for (int c = 0; c < cols && pageIndex < totalPages; c++)

@@ -3,8 +3,7 @@ using FluentValidation;
 
 namespace ExpressedRealms.Powers.UseCases.GetPowerBookletReport;
 
-public class GetPowerBookletReportModelValidator
-    : AbstractValidator<GetPowerBookletReportModel>
+public class GetPowerBookletReportModelValidator : AbstractValidator<GetPowerBookletReportModel>
 {
     public GetPowerBookletReportModelValidator(IExpressionRepository expressionRepository)
     {

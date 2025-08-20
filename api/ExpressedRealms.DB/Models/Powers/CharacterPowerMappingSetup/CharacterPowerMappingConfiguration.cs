@@ -3,8 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup;
 
-public class CharacterPowerMappingConfiguration
-    : IEntityTypeConfiguration<CharacterPowerMapping>
+public class CharacterPowerMappingConfiguration : IEntityTypeConfiguration<CharacterPowerMapping>
 {
     public void Configure(EntityTypeBuilder<CharacterPowerMapping> builder)
     {

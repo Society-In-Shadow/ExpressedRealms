@@ -301,10 +301,7 @@ internal sealed class PowerRepository(
 
     public async Task<int> GetPowerLevelExperience(int id)
     {
-        return await context.PowerLevels
-            .Where(x => x.Id == id)
-            .Select(x => x.Xp)
-            .FirstAsync();
+        return await context.PowerLevels.Where(x => x.Id == id).Select(x => x.Xp).FirstAsync();
     }
 
     public async Task<bool> AreValidPowers(List<int> ids)

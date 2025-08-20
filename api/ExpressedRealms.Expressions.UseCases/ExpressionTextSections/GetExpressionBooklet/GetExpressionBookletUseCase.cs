@@ -36,7 +36,10 @@ internal sealed class GetExpressionBookletUseCase(
             new GetPowerBookletReportModel() { ExpressionId = model.ExpressionId }
         );
 
-        var report = Document.Merge(backgroundReport.GeneratedReport!, powerReport.GeneratedReport!);
+        var report = Document.Merge(
+            backgroundReport.GeneratedReport!,
+            powerReport.GeneratedReport!
+        );
 
         report.UseContinuousPageNumbers();
 

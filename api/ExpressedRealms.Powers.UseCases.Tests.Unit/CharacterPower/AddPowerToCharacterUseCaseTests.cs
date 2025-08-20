@@ -32,17 +32,12 @@ public class AddPowerToCharacterUseCaseTests
         _powerRepository = A.Fake<IPowerRepository>();
         _mappingRepository = A.Fake<ICharacterPowerRepository>();
 
-        A.CallTo(() =>
-                _powerRepository.IsValidPower(_powerToCharacterModel.PowerId)
-            )
-            .Returns(true);
+        A.CallTo(() => _powerRepository.IsValidPower(_powerToCharacterModel.PowerId)).Returns(true);
         A.CallTo(() =>
                 _characterRepository.CharacterExistsAsync(_powerToCharacterModel.CharacterId)
             )
             .Returns(true);
-        A.CallTo(() =>
-                _powerRepository.IsValidPowerLevel(_powerToCharacterModel.PowerLevelId)
-            )
+        A.CallTo(() => _powerRepository.IsValidPowerLevel(_powerToCharacterModel.PowerLevelId))
             .Returns(true);
         A.CallTo(() =>
                 _mappingRepository.MappingExistsAsync(
@@ -58,12 +53,15 @@ public class AddPowerToCharacterUseCaseTests
             )
             .Returns(0);
         A.CallTo(() =>
-            _powerRepository.GetPowerLevelExperience(_powerToCharacterModel.PowerLevelId)
-        ).Returns(4);
-        A.CallTo(() =>
-                _mappingRepository.GetSelectablePowersForCharacter(_powerToCharacterModel.CharacterId)
+                _powerRepository.GetPowerLevelExperience(_powerToCharacterModel.PowerLevelId)
             )
-            .Returns(new List<int>(){ _powerToCharacterModel.PowerId });
+            .Returns(4);
+        A.CallTo(() =>
+                _mappingRepository.GetSelectablePowersForCharacter(
+                    _powerToCharacterModel.CharacterId
+                )
+            )
+            .Returns(new List<int>() { _powerToCharacterModel.PowerId });
 
         var validator = new AddPowerToCharacterModelValidator(
             _powerRepository,
@@ -94,9 +92,7 @@ public class AddPowerToCharacterUseCaseTests
     [Fact]
     public async Task ValidationFor_PowerId_WillFail_WhenItDoesNotExist()
     {
-        A.CallTo(() =>
-                _powerRepository.IsValidPower(_powerToCharacterModel.PowerId)
-            )
+        A.CallTo(() => _powerRepository.IsValidPower(_powerToCharacterModel.PowerId))
             .Returns(false);
         var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
 
@@ -105,12 +101,12 @@ public class AddPowerToCharacterUseCaseTests
             "The Power does not exist."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_PowerId_WillFail_WhenCharacterDoesNotHaveThePrerequisites()
     {
         _powerToCharacterModel.PowerId = 2;
-        
+
         var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
 
         result.MustHaveValidationError(
@@ -161,9 +157,7 @@ public class AddPowerToCharacterUseCaseTests
     [Fact]
     public async Task ValidationFor_PowerLevelId_WillFail_WhenItDoesNotExist()
     {
-        A.CallTo(() =>
-                _powerRepository.IsValidPowerLevel(_powerToCharacterModel.PowerLevelId)
-            )
+        A.CallTo(() => _powerRepository.IsValidPowerLevel(_powerToCharacterModel.PowerLevelId))
             .Returns(false);
         var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
 
@@ -337,9 +331,7 @@ public class AddPowerToCharacterUseCaseTests
     [Fact]
     public async Task UseCase_WillReturn_PowerId_IfSuccessful()
     {
-        A.CallTo(() =>
-                _mappingRepository.AddCharacterPowerMapping(A<CharacterPowerMapping>._)
-            )
+        A.CallTo(() => _mappingRepository.AddCharacterPowerMapping(A<CharacterPowerMapping>._))
             .Returns(5);
         var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
         Assert.Equal(5, result.Value);

@@ -10,6 +10,6 @@ public static class SetStandardHtmlFormatting
         html.SetContainerStyleForHtmlElement("ul", x => x.Padding(0));
         html.SetContainerStyleForHtmlElement("ol", x => x.Padding(0));
         html.SetContainerStyleForHtmlElement("li", x => x.Padding(0));
-        html.SetContainerStyleForHtmlElement("p", x => x.Padding(0).PaddingBottom(3));   
+        html.SetContainerStyleForHtmlElement("p", x => x.Padding(0).PaddingBottom(3));
     }
 }

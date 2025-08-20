@@ -37,10 +37,8 @@ internal sealed class AddPowerToCharacterUseCase(
         var spentXp = await mappingRepository.GetExperienceSpentOnPowersForCharacter(
             model.CharacterId
         );
-        
-        var newPowerExperience = await powerRepository.GetPowerLevelExperience(
-            model.PowerLevelId
-        );
+
+        var newPowerExperience = await powerRepository.GetPowerLevelExperience(model.PowerLevelId);
 
         if (spentXp + newPowerExperience > availableExperience)
             return Result.Fail(
