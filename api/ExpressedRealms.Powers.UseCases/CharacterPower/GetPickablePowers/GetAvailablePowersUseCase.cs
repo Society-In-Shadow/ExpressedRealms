@@ -1,5 +1,6 @@
 using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.Powers.Repository.PowerPaths;
+using ExpressedRealms.Powers.UseCases.CharacterPower.GetPickablePowers.ReturnModels;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
@@ -36,15 +37,15 @@ internal sealed class GetAvailablePowersUseCase(
                     Id = y.Id,
                     Name = y.Name,
                     Category =
-                        y.Category?.Select(z => new DetailedInformation(z)).ToList()
-                        ?? new List<DetailedInformation>(),
+                        y.Category?.Select(z => new DetailedInformationReturnModel(z)).ToList()
+                        ?? new List<DetailedInformationReturnModel>(),
                     Description = y.Description,
                     GameMechanicEffect = y.GameMechanicEffect,
                     Limitation = y.Limitation,
-                    PowerDuration = new DetailedInformation(y.PowerDuration),
-                    AreaOfEffect = new DetailedInformation(y.AreaOfEffect),
-                    PowerLevel = new DetailedInformation(y.PowerLevel),
-                    PowerActivationType = new DetailedInformation(
+                    PowerDuration = new DetailedInformationReturnModel(y.PowerDuration),
+                    AreaOfEffect = new DetailedInformationReturnModel(y.AreaOfEffect),
+                    PowerLevel = new DetailedInformationReturnModel(y.PowerLevel),
+                    PowerActivationType = new DetailedInformationReturnModel(
                         y.PowerActivationType
                     ),
                     Other = y.Other,

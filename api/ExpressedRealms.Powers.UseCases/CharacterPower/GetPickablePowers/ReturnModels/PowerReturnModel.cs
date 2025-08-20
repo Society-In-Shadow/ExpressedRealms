@@ -1,17 +1,17 @@
-namespace ExpressedRealms.Powers.UseCases.CharacterPower.GetPickablePowers;
+namespace ExpressedRealms.Powers.UseCases.CharacterPower.GetPickablePowers.ReturnModels;
 
 public class PowerReturnModel
 {
     public int Id { get; set; }
     public required string Name { get; set; }
-    public List<DetailedInformation>? Category { get; set; }
+    public List<DetailedInformationReturnModel>? Category { get; set; }
     public required string Description { get; set; }
     public required string GameMechanicEffect { get; set; }
     public string? Limitation { get; set; }
-    public required DetailedInformation PowerDuration { get; set; }
-    public required DetailedInformation AreaOfEffect { get; set; }
-    public required DetailedInformation PowerLevel { get; set; }
-    public required DetailedInformation PowerActivationType { get; set; }
+    public required DetailedInformationReturnModel PowerDuration { get; set; }
+    public required DetailedInformationReturnModel AreaOfEffect { get; set; }
+    public required DetailedInformationReturnModel PowerLevel { get; set; }
+    public required DetailedInformationReturnModel PowerActivationType { get; set; }
     public string? Other { get; set; }
     public bool IsPowerUse { get; set; }
     public string? Cost { get; set; }
