@@ -21,5 +21,5 @@ public interface IPowerRepository
     Task<bool> RequirementAlreadyExists(int id);
     Task<bool> IsValidRequirement(int id);
     Task<bool> IsValidPowerLevel(int id);
-    Task<int> GetPowerLevelExperience(int modelPowerLevelId);
+    Task<int> GetPowerLevelExperience(int id);
 }
