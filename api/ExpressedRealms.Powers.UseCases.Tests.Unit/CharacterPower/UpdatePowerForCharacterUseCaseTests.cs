@@ -28,15 +28,18 @@ public class UpdatePowerForCharacterUseCaseTests
             CharacterId = 1,
             PowerId = 2,
             Notes = "123",
-            Id = 4
+            Id = 4,
         };
-        
+
         _mappingRepository = A.Fake<ICharacterPowerRepository>();
 
         A.CallTo(() => _mappingRepository.IsValidMapping(_powerToCharacterModel.MappingId))
             .Returns(true);
-        
-        A.CallTo(() => _mappingRepository.GetCharacterPowerMapping(_powerToCharacterModel.MappingId)).Returns(_mapping);
+
+        A.CallTo(() =>
+                _mappingRepository.GetCharacterPowerMapping(_powerToCharacterModel.MappingId)
+            )
+            .Returns(_mapping);
 
         var validator = new UpdatePowerForCharacterModelValidator(_mappingRepository);
 
@@ -114,21 +117,29 @@ public class UpdatePowerForCharacterUseCaseTests
             )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_SaveMapping()
     {
         var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
         Assert.True(result.IsSuccess);
-        A.CallTo( () => _mappingRepository.UpdateCharacterPowerMapping(_mapping)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _mappingRepository.UpdateCharacterPowerMapping(_mapping))
+            .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_WillUpdate_Notes()
     {
         _powerToCharacterModel.Notes = "test";
         var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
         Assert.True(result.IsSuccess);
-        A.CallTo( () => _mappingRepository.UpdateCharacterPowerMapping(A<CharacterPowerMapping>.That.Matches(x => x.Notes == _powerToCharacterModel.Notes))).MustHaveHappenedOnceExactly();
+        A.CallTo(() =>
+                _mappingRepository.UpdateCharacterPowerMapping(
+                    A<CharacterPowerMapping>.That.Matches(x =>
+                        x.Notes == _powerToCharacterModel.Notes
+                    )
+                )
+            )
+            .MustHaveHappenedOnceExactly();
     }
 }

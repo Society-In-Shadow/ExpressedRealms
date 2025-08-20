@@ -15,28 +15,27 @@ public class DeletePowerFromCharacterUseCaseTests
     private readonly DeletePowerFromCharacterModel _powerToCharacterModel;
     private readonly CharacterPowerMapping _mapping;
 
-
     public DeletePowerFromCharacterUseCaseTests()
     {
-        _powerToCharacterModel = new DeletePowerFromCharacterModel()
-        {
-            MappingId = 1
-        };
+        _powerToCharacterModel = new DeletePowerFromCharacterModel() { MappingId = 1 };
 
         _mapping = new CharacterPowerMapping()
         {
             CharacterId = 1,
             PowerId = 2,
             Notes = "123",
-            Id = 4
+            Id = 4,
         };
-        
+
         _mappingRepository = A.Fake<ICharacterPowerRepository>();
 
         A.CallTo(() => _mappingRepository.IsValidMapping(_powerToCharacterModel.MappingId))
             .Returns(true);
-        
-        A.CallTo(() => _mappingRepository.GetCharacterPowerMapping(_powerToCharacterModel.MappingId)).Returns(_mapping);
+
+        A.CallTo(() =>
+                _mappingRepository.GetCharacterPowerMapping(_powerToCharacterModel.MappingId)
+            )
+            .Returns(_mapping);
 
         var validator = new DeletePowerFromCharacterModelValidator(_mappingRepository);
 
@@ -71,21 +70,26 @@ public class DeletePowerFromCharacterUseCaseTests
             "The Mapping does not exist."
         );
     }
-    
+
     [Fact]
     public async Task UseCase_SaveMapping()
     {
         var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
         Assert.True(result.IsSuccess);
-        A.CallTo( () => _mappingRepository.UpdateCharacterPowerMapping(_mapping)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _mappingRepository.UpdateCharacterPowerMapping(_mapping))
+            .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_UpdatesDeleteStatus()
     {
         var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
         Assert.True(result.IsSuccess);
-        A.CallTo( () => _mappingRepository.UpdateCharacterPowerMapping(A<CharacterPowerMapping>.That.Matches(x => x.IsDeleted == true))).MustHaveHappenedOnceExactly();
+        A.CallTo(() =>
+                _mappingRepository.UpdateCharacterPowerMapping(
+                    A<CharacterPowerMapping>.That.Matches(x => x.IsDeleted == true)
+                )
+            )
+            .MustHaveHappenedOnceExactly();
     }
-    
 }
