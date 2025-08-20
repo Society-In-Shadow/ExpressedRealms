@@ -1,12 +1,12 @@
 using ExpressedRealms.Expressions.Repository.Expressions;
 using FluentValidation;
 
-namespace ExpressedRealms.Powers.UseCases.GetPowerCardReport;
+namespace ExpressedRealms.Powers.UseCases.GetPowerBookletReport;
 
-public class GetPowerCardReportUseCaseModelValidator
-    : AbstractValidator<GetPowerCardReportUseCaseModel>
+public class GetPowerBookletReportModelValidator
+    : AbstractValidator<GetPowerBookletReportModel>
 {
-    public GetPowerCardReportUseCaseModelValidator(IExpressionRepository expressionRepository)
+    public GetPowerBookletReportModelValidator(IExpressionRepository expressionRepository)
     {
         RuleFor(x => x.ExpressionId)
             .NotEmpty()

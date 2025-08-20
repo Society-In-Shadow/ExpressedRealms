@@ -12,4 +12,8 @@
     <ProjectReference Include="..\ExpressedRealms.Shared.UseCases\ExpressedRealms.Shared.UseCases.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Shared\ExpressedRealms.Shared.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="ExpressedRealms.Expressions.UseCases.Tests.Unit" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+  </ItemGroup>
 </Project>

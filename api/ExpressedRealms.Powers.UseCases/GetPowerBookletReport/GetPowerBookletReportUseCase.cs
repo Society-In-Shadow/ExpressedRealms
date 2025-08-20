@@ -10,14 +10,14 @@ namespace ExpressedRealms.Powers.UseCases.GetPowerBookletReport;
 public class GetPowerBookletReportUseCase(
     IPowerPathRepository repository,
     IExpressionRepository expressionRepository,
-    GetPowerBookletReportUseCaseModelValidator validator,
+    GetPowerBookletReportModelValidator validator,
     CancellationToken cancellationToken
 ) : IGetPowerBookletReportUseCase
 {
     public Document? GeneratedReport { get; set; }
     public bool GenerateMemoryStream { get; set; } = true;
 
-    public async Task<Result<MemoryStream>> ExecuteAsync(GetPowerBookletReportUseCaseModel model)
+    public async Task<Result<MemoryStream>> ExecuteAsync(GetPowerBookletReportModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,

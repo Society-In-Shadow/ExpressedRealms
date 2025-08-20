@@ -33,7 +33,7 @@ internal sealed class GetExpressionBookletUseCase(
 
         powerReport.GenerateMemoryStream = false;
         await powerReport.ExecuteAsync(
-            new GetPowerBookletReportUseCaseModel() { ExpressionId = model.ExpressionId }
+            new GetPowerBookletReportModel() { ExpressionId = model.ExpressionId }
         );
 
         var report = Document.Merge(backgroundReport.GeneratedReport!, powerReport.GeneratedReport!);
