@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.Powers.Repository.PowerPaths;
 using ExpressedRealms.Powers.Repository.PowerPrerequisites;
 using ExpressedRealms.Powers.Repository.Powers;
@@ -17,6 +18,7 @@ public static class PowersRepositoryInjections
         services.AddScoped<IPowerRepository, PowerRepository>();
         services.AddScoped<IPowerPrerequisitesRepository, PowerPrerequisitesRepository>();
         services.AddScoped<IPowerPathRepository, PowerPathRepository>();
+        services.AddScoped<ICharacterPowerRepository, CharacterPowerRepository>();
         return services;
     }
 }

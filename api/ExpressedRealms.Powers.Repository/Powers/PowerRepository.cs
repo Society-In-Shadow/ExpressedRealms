@@ -294,6 +294,19 @@ internal sealed class PowerRepository(
         return power is not null;
     }
 
+    public async Task<bool> IsValidPowerLevel(int id)
+    {
+        return await context.PowerLevels.AnyAsync(x => x.Id == id, cancellationToken);
+    }
+
+    public async Task<int> GetPowerLevelExperience(int id)
+    {
+        return await context.PowerLevels
+            .Where(x => x.Id == id)
+            .Select(x => x.Xp)
+            .FirstAsync();
+    }
+
     public async Task<bool> AreValidPowers(List<int> ids)
     {
         var powers = await context
