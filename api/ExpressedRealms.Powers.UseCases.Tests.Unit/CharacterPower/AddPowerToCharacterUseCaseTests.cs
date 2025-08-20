@@ -60,6 +60,10 @@ public class AddPowerToCharacterUseCaseTests
         A.CallTo(() =>
             _powerRepository.GetPowerLevelExperience(_powerToCharacterModel.PowerLevelId)
         ).Returns(4);
+        A.CallTo(() =>
+                _mappingRepository.GetSelectablePowersForCharacter(_powerToCharacterModel.CharacterId)
+            )
+            .Returns(new List<int>(){ _powerToCharacterModel.PowerId });
 
         var validator = new AddPowerToCharacterModelValidator(
             _powerRepository,
@@ -99,6 +103,19 @@ public class AddPowerToCharacterUseCaseTests
         result.MustHaveValidationError(
             nameof(AddPowerToCharacterModel.PowerId),
             "The Power does not exist."
+        );
+    }
+    
+    [Fact]
+    public async Task ValidationFor_PowerId_WillFail_WhenCharacterDoesNotHaveThePrerequisites()
+    {
+        _powerToCharacterModel.PowerId = 2;
+        
+        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
+
+        result.MustHaveValidationError(
+            nameof(AddPowerToCharacterModel.PowerId),
+            "The character does not have the powers required to use this power."
         );
     }
 

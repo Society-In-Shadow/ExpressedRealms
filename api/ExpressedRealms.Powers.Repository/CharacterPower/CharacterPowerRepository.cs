@@ -27,4 +27,44 @@ internal sealed class CharacterPowerRepository(
         await context.SaveChangesAsync(token);
         return characterPowerMapping.Id;
     }
+    
+    public async Task<List<int>> GetSelectablePowersForCharacter(int characterId)
+    {
+        var expression = await context.Characters
+                .Where(x => x.Id == characterId)
+                .Select(x => x.ExpressionId)
+                .FirstAsync(token);
+        
+        // Get all the assigned powers
+        var powerMappings = await context.CharacterPowerMappings
+            .Where(x => x.CharacterId == characterId)
+            .Select(x => x.PowerId)
+            .ToListAsync(token);
+        
+        // Grab all powers plus prerequisite data
+        var allPowers = await context.Powers
+            .Where(x => x.PowerPath.ExpressionId == expression)
+            .Select(x => new
+            {
+                PowerId = x.Id,
+                RequiredAmount = x.Prerequisite != null ? x.Prerequisite.RequiredAmount : 0,
+                PrerequisitePowers = x.Prerequisite != null 
+                    ? x.Prerequisite.PrerequisitePowers.Select(y => y.PowerId)
+                        : null
+            })
+            .ToListAsync();
+        
+        // Get all powers whose requirements have been fulfilled
+        var selectablePowers = allPowers
+            .Where(x => 
+                // If a power does not have a prerequisite, it is always selectable
+                x.PrerequisitePowers == null || 
+                // Otherwise, if the assigned power mappings have everything needed for a power, it is also selectable
+                x.PrerequisitePowers.Intersect(powerMappings).Count() >= x.RequiredAmount)
+            .Select(x => x.PowerId)
+            .ToList();
+
+        // Already selected powers should not be added again
+        return selectablePowers.Except(powerMappings).ToList();
+    }
 }

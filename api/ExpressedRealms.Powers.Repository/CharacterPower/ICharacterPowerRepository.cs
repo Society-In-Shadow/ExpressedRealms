@@ -7,4 +7,5 @@ public interface ICharacterPowerRepository
     Task<bool> MappingExistsAsync(int powerId, int characterId);
     Task<int> GetExperienceSpentOnPowersForCharacter(int modelCharacterId);
     Task<int> AddCharacterPowerMapping(CharacterPowerMapping characterPowerMapping);
+    Task<List<int>> GetSelectablePowersForCharacter(int characterId);
 }
