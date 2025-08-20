@@ -8,4 +8,7 @@ public interface ICharacterPowerRepository
     Task<int> GetExperienceSpentOnPowersForCharacter(int modelCharacterId);
     Task<int> AddCharacterPowerMapping(CharacterPowerMapping characterPowerMapping);
     Task<List<int>> GetSelectablePowersForCharacter(int characterId);
+    Task<CharacterPowerMapping> GetCharacterPowerMapping(int id);
+    Task UpdateCharacterPowerMapping(CharacterPowerMapping characterPowerMapping);
+    Task<bool> IsValidMapping(int id);
 }
