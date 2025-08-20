@@ -8,9 +8,7 @@ namespace ExpressedRealms.Powers.UseCases.CharacterPower.Edit;
 internal sealed class UpdatePowerForCharacterModelValidator
     : AbstractValidator<UpdatePowerForCharacterModel>
 {
-    public UpdatePowerForCharacterModelValidator(
-        ICharacterPowerRepository mappingRepository
-    )
+    public UpdatePowerForCharacterModelValidator(ICharacterPowerRepository mappingRepository)
     {
         RuleFor(x => x.MappingId)
             .NotEmpty()

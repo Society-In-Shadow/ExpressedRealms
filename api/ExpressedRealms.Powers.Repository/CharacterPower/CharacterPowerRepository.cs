@@ -13,7 +13,7 @@ internal sealed class CharacterPowerRepository(
     {
         return await context.CharacterPowerMappings.FirstAsync(x => x.Id == id, token);
     }
-    
+
     public async Task<bool> MappingExistsAsync(int powerId, int characterId)
     {
         return await context.CharacterPowerMappings.AnyAsync(
@@ -21,13 +21,10 @@ internal sealed class CharacterPowerRepository(
             token
         );
     }
-    
+
     public async Task<bool> IsValidMapping(int id)
     {
-        return await context.CharacterPowerMappings.AnyAsync(
-            x => x.Id == id,
-            token
-        );
+        return await context.CharacterPowerMappings.AnyAsync(x => x.Id == id, token);
     }
 
     public async Task<int> GetExperienceSpentOnPowersForCharacter(int modelCharacterId)
@@ -41,7 +38,7 @@ internal sealed class CharacterPowerRepository(
         await context.SaveChangesAsync(token);
         return characterPowerMapping.Id;
     }
-    
+
     public async Task UpdateCharacterPowerMapping(CharacterPowerMapping characterPowerMapping)
     {
         context.CharacterPowerMappings.Update(characterPowerMapping);

@@ -26,10 +26,8 @@ public class UpdatePowerForCharacterUseCaseTests
 
         A.CallTo(() => _mappingRepository.IsValidMapping(_powerToCharacterModel.MappingId))
             .Returns(true);
-        
-        var validator = new UpdatePowerForCharacterModelValidator(
-            _mappingRepository
-        );
+
+        var validator = new UpdatePowerForCharacterModelValidator(_mappingRepository);
 
         _useCase = new UpdatePowerForCharacterUseCase(
             _mappingRepository,
@@ -63,7 +61,6 @@ public class UpdatePowerForCharacterUseCaseTests
         );
     }
 
-
     [Fact]
     public async Task ValidationFor_Notes_WillFail_WhenMaxLengthIsGreaterThan5000()
     {
@@ -85,7 +82,7 @@ public class UpdatePowerForCharacterUseCaseTests
         var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
         Assert.True(result.IsSuccess);
     }
-    
+
     [Theory]
     [InlineData(" test", "test")]
     [InlineData(" test ", "test")]
