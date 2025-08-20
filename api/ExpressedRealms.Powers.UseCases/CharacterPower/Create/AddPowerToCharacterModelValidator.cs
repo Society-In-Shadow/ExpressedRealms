@@ -28,12 +28,6 @@ internal sealed class AddPowerToCharacterModelValidator
             .MustAsync(async (x, y) => await characterRepository.CharacterExistsAsync(x))
             .WithMessage("The Character does not exist.");
 
-        RuleFor(x => x.PowerLevelId)
-            .NotEmpty()
-            .WithMessage("Power Level Id is required.")
-            .MustAsync(async (x, y) => await powerRepository.IsValidPowerLevel(x))
-            .WithMessage("The Power Level does not exist.");
-
         RuleFor(x => x)
             .MustAsync(
                 async (x, y) =>
