@@ -3,10 +3,9 @@ using FluentValidation;
 
 namespace ExpressedRealms.Powers.UseCases.GetPowerBookletReport;
 
-public class GetPowerBookletReportUseCaseModelValidator
-    : AbstractValidator<GetPowerBookletReportUseCaseModel>
+public class GetPowerBookletReportModelValidator : AbstractValidator<GetPowerBookletReportModel>
 {
-    public GetPowerBookletReportUseCaseModelValidator(IExpressionRepository expressionRepository)
+    public GetPowerBookletReportModelValidator(IExpressionRepository expressionRepository)
     {
         RuleFor(x => x.ExpressionId)
             .NotEmpty()

@@ -92,7 +92,7 @@ internal static class PowerPathEndpoints
                 ) =>
                 {
                     var reportStream = await useCase.ExecuteAsync(
-                        new GetPowerCardReportUseCaseModel()
+                        new GetPowerCardReportModel()
                         {
                             ExpressionId = expressionId,
                             IsFiveByThree = isFiveByThree,
@@ -122,7 +122,7 @@ internal static class PowerPathEndpoints
                 ) =>
                 {
                     var reportStream = await useCase.ExecuteAsync(
-                        new GetPowerBookletReportUseCaseModel() { ExpressionId = expressionId }
+                        new GetPowerBookletReportModel() { ExpressionId = expressionId }
                     );
 
                     return TypedResults.File(

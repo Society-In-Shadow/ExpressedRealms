@@ -5,10 +5,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ExpressedRealms.Characters.Repository\ExpressedRealms.Characters.Repository.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Expressions.Repository\ExpressedRealms.Expressions.Repository.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Powers.Reporting\ExpressedRealms.Powers.Reporting.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Powers.Repository\ExpressedRealms.Powers.Repository.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Shared.UseCases\ExpressedRealms.Shared.UseCases.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Shared\ExpressedRealms.Shared.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="$(AssemblyName).Tests.Unit" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
 </Project>

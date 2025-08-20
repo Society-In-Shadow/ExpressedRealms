@@ -20,4 +20,6 @@ public interface IPowerRepository
     Task<bool> AreValidPowers(List<int> ids);
     Task<bool> RequirementAlreadyExists(int id);
     Task<bool> IsValidRequirement(int id);
+    Task<bool> IsValidPowerLevel(int id);
+    Task<int> GetPowerLevelExperience(int id);
 }

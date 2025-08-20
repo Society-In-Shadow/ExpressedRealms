@@ -1,6 +1,6 @@
 namespace ExpressedRealms.Powers.UseCases.GetPowerBookletReport;
 
-public class GetPowerBookletReportUseCaseModel
+public class GetPowerBookletReportModel
 {
     public int ExpressionId { get; set; }
 }

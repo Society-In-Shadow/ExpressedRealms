@@ -9,7 +9,7 @@ public class GetPowerCardReportUseCase(
     IExpressionRepository expressionRepository
 ) : IGetPowerCardReportUseCase
 {
-    public async Task<MemoryStream> ExecuteAsync(GetPowerCardReportUseCaseModel model)
+    public async Task<MemoryStream> ExecuteAsync(GetPowerCardReportModel model)
     {
         var data = await repository.GetPowerPathAndPowers(model.ExpressionId);
         var expression = await expressionRepository.GetExpression(model.ExpressionId);
