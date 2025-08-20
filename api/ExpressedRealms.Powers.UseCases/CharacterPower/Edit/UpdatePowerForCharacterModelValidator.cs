@@ -14,9 +14,9 @@ internal sealed class UpdatePowerForCharacterModelValidator
     {
         RuleFor(x => x.MappingId)
             .NotEmpty()
-            .WithMessage("Power Id is required.")
+            .WithMessage("Mapping Id is required.")
             .MustAsync(async (x, y) => await mappingRepository.IsValidMapping(x))
-            .WithMessage("The Power does not exist.");
+            .WithMessage("The Mapping does not exist.");
 
         RuleFor(x => x.Notes)
             .MaximumLength(5000)
