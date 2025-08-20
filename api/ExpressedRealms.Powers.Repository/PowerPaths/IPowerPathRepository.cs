@@ -16,4 +16,5 @@ public interface IPowerPathRepository
     Task<Result<EditPowerPathInformation>> GetPowerPathAsync(int powerPathId);
     Task<Result> UpdatePowerPathSortOrder(EditPowerPathSortModel dto);
     Task<Result<List<PowerPathToc>>> GetPowerPathAndPowers(int expressionId);
+    Task<Result<List<PowerPathToc>>> GetPowerPathAndPowers(List<int> powerIds);
 }
