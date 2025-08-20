@@ -1,6 +1,6 @@
 using ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup;
 using ExpressedRealms.Powers.Repository.CharacterPower;
-using ExpressedRealms.Powers.UseCases.CharacterPower.Create;
+using ExpressedRealms.Powers.UseCases.CharacterPower.Delete;
 using ExpressedRealms.Powers.UseCases.CharacterPower.Edit;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
@@ -8,20 +8,16 @@ using Xunit;
 
 namespace ExpressedRealms.Powers.UseCases.Tests.Unit.CharacterPower;
 
-public class UpdatePowerForCharacterUseCaseTests
+public class DeletePowerFromCharacterUseCaseTests
 {
-    private readonly UpdatePowerForCharacterUseCase _useCase;
+    private readonly DeletePowerFromCharacterUseCase _useCase;
     private readonly ICharacterPowerRepository _mappingRepository;
-    private readonly UpdatePowerForCharacterModel _powerToCharacterModel;
+    private readonly DeletePowerFromCharacterModel _powerToCharacterModel;
     private readonly CharacterPowerMapping _mapping;
 
-    public UpdatePowerForCharacterUseCaseTests()
+    public DeletePowerFromCharacterUseCaseTests()
     {
-        _powerToCharacterModel = new UpdatePowerForCharacterModel()
-        {
-            MappingId = 1,
-            Notes = "123",
-        };
+        _powerToCharacterModel = new DeletePowerFromCharacterModel() { MappingId = 1 };
 
         _mapping = new CharacterPowerMapping()
         {
@@ -41,9 +37,9 @@ public class UpdatePowerForCharacterUseCaseTests
             )
             .Returns(_mapping);
 
-        var validator = new UpdatePowerForCharacterModelValidator(_mappingRepository);
+        var validator = new DeletePowerFromCharacterModelValidator(_mappingRepository);
 
-        _useCase = new UpdatePowerForCharacterUseCase(
+        _useCase = new DeletePowerFromCharacterUseCase(
             _mappingRepository,
             validator,
             CancellationToken.None
@@ -76,49 +72,6 @@ public class UpdatePowerForCharacterUseCaseTests
     }
 
     [Fact]
-    public async Task ValidationFor_Notes_WillFail_WhenMaxLengthIsGreaterThan5000()
-    {
-        _powerToCharacterModel.Notes = new string('x', 5001);
-        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
-        result.MustHaveValidationError(
-            nameof(AddPowerToCharacterModel.Notes),
-            "Notes must be less than 5000 characters."
-        );
-    }
-
-    [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    [InlineData(" ")]
-    public async Task ValidationFor_Notes_AreOptional(string? notes)
-    {
-        _powerToCharacterModel.Notes = notes;
-        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
-        Assert.True(result.IsSuccess);
-    }
-
-    [Theory]
-    [InlineData(" test", "test")]
-    [InlineData(" test ", "test")]
-    [InlineData("test ", "test")]
-    [InlineData(" ", null)]
-    [InlineData(null, null)]
-    public async Task UseCase_WillTrimNotesField(string? notes, string? savedValue)
-    {
-        _powerToCharacterModel.Notes = notes;
-
-        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
-        Assert.True(result.IsSuccess);
-
-        A.CallTo(() =>
-                _mappingRepository.UpdateCharacterPowerMapping(
-                    A<CharacterPowerMapping>.That.Matches(x => x.Notes == savedValue)
-                )
-            )
-            .MustHaveHappenedOnceExactly();
-    }
-
-    [Fact]
     public async Task UseCase_SaveMapping()
     {
         var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
@@ -128,16 +81,13 @@ public class UpdatePowerForCharacterUseCaseTests
     }
 
     [Fact]
-    public async Task UseCase_WillUpdate_Notes()
+    public async Task UseCase_UpdatesDeleteStatus()
     {
-        _powerToCharacterModel.Notes = "test";
         var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
         Assert.True(result.IsSuccess);
         A.CallTo(() =>
                 _mappingRepository.UpdateCharacterPowerMapping(
-                    A<CharacterPowerMapping>.That.Matches(x =>
-                        x.Notes == _powerToCharacterModel.Notes
-                    )
+                    A<CharacterPowerMapping>.That.Matches(x => x.IsDeleted == true)
                 )
             )
             .MustHaveHappenedOnceExactly();
