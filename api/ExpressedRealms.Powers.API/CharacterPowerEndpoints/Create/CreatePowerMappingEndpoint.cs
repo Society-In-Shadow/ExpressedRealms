@@ -17,7 +17,7 @@ public static class CreatePowerMappingEndpoint
     )
     {
         var results = await createKnowledgeUseCase.ExecuteAsync(
-            new ()
+            new()
             {
                 CharacterId = characterId,
                 PowerId = request.PowerId,

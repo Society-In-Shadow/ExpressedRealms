@@ -296,7 +296,8 @@ internal sealed class PowerRepository(
 
     public async Task<PowerLevel> GetPowerLevelForPower(int id)
     {
-        return await context.Powers.AsNoTracking()
+        return await context
+            .Powers.AsNoTracking()
             .Where(x => x.Id == id)
             .Select(x => x.PowerLevel)
             .FirstAsync();

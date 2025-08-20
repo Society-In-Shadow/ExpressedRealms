@@ -24,15 +24,12 @@ internal static class CharacterPowersEndpoints
         endpointGroup
             .MapGet("{characterId}/powers", GetCharacterPowersEndpoint.GetPowers)
             .WithSummary("Returns character powers.");
-        
+
         endpointGroup
             .MapGet("{characterId}/pickablepowers", GetCharacterPickablePowersEndpoint.GetPowers)
             .WithSummary("Returns powers available to the user.");
 
-        endpointGroup.MapPost(
-            "{characterid}/powers",
-            CreatePowerMappingEndpoint.CreateMapping
-        );
+        endpointGroup.MapPost("{characterid}/powers", CreatePowerMappingEndpoint.CreateMapping);
 
         /*endpointGroup.MapGet(
             "{characterid}/powers/options",

@@ -13,9 +13,7 @@ public static class GetCharacterPowersEndpoint
         IGetCharacterPowersUseCase useCase
     )
     {
-        var results = await useCase.ExecuteAsync(
-            new () { CharacterId = characterId }
-        );
+        var results = await useCase.ExecuteAsync(new() { CharacterId = characterId });
 
         return TypedResults.Ok(
             new CharacterPowerBaseResponse()
@@ -54,7 +52,7 @@ public static class GetCharacterPowersEndpoint
                             })
                             .ToList(),
                     })
-                    .ToList()
+                    .ToList(),
             }
         );
     }

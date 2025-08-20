@@ -29,7 +29,7 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "show-inventory-page",
         "Allows one to see the inventory tab on the rule book page"
     );
-    
+
     public static readonly ReleaseFlags ShowPowersOnCharacter = new(
         "Show Powers on Character Page",
         "show-character-powers",

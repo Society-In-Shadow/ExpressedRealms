@@ -29,11 +29,7 @@ public class AddPowerToCharacterUseCaseTests
             Notes = "123",
         };
 
-        _powerLevel = new PowerLevel()
-        {
-            Id = 1,
-            Xp = 4
-        };
+        _powerLevel = new PowerLevel() { Id = 1, Xp = 4 };
 
         _characterRepository = A.Fake<ICharacterRepository>();
         _powerRepository = A.Fake<IPowerRepository>();
@@ -57,9 +53,7 @@ public class AddPowerToCharacterUseCaseTests
                 )
             )
             .Returns(0);
-        A.CallTo(() =>
-                _powerRepository.GetPowerLevelForPower(_powerToCharacterModel.PowerId)
-            )
+        A.CallTo(() => _powerRepository.GetPowerLevelForPower(_powerToCharacterModel.PowerId))
             .Returns(_powerLevel);
         A.CallTo(() =>
                 _mappingRepository.GetSelectablePowersForCharacter(
@@ -205,9 +199,7 @@ public class AddPowerToCharacterUseCaseTests
     {
         await _useCase.ExecuteAsync(_powerToCharacterModel);
 
-        A.CallTo(() =>
-                _powerRepository.GetPowerLevelForPower(_powerToCharacterModel.PowerId)
-            )
+        A.CallTo(() => _powerRepository.GetPowerLevelForPower(_powerToCharacterModel.PowerId))
             .MustHaveHappenedOnceExactly();
     }
 

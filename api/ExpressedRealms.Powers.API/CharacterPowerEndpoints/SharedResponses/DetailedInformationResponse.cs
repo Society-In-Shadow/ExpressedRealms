@@ -15,8 +15,10 @@ public class DetailedInformationResponse
         Name = dto.Name;
         Description = dto.Description;
     }
-    
-    public DetailedInformationResponse(UseCases.CharacterPower.GetPickablePowers.ReturnModels.DetailedInformationReturnModel dto)
+
+    public DetailedInformationResponse(
+        UseCases.CharacterPower.GetPickablePowers.ReturnModels.DetailedInformationReturnModel dto
+    )
     {
         Name = dto.Name;
         Description = dto.Description;

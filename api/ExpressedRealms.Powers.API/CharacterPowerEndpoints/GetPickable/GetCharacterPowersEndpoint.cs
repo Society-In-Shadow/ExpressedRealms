@@ -13,9 +13,7 @@ public static class GetCharacterPickablePowersEndpoint
         IGetAvailablePowersUseCase useCase
     )
     {
-        var results = await useCase.ExecuteAsync(
-            new () { CharacterId = characterId }
-        );
+        var results = await useCase.ExecuteAsync(new() { CharacterId = characterId });
 
         return TypedResults.Ok(
             new CharacterPickablePowerBaseResponse()
@@ -54,7 +52,7 @@ public static class GetCharacterPickablePowersEndpoint
                             })
                             .ToList(),
                     })
-                    .ToList()
+                    .ToList(),
             }
         );
     }
