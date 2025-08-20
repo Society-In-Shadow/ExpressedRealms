@@ -54,7 +54,7 @@ concrete classes that should be internal.
 
 ```xml
   <ItemGroup>
-    <InternalsVisibleTo Include="ExpressedRealms.Expressions.UseCases.Tests.Unit" />
+    <InternalsVisibleTo Include="$(AssemblyName).Tests.Unit" />
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
 

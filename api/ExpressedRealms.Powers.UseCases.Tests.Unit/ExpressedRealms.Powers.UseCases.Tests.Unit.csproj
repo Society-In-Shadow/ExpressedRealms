@@ -18,9 +18,4 @@
       <ProjectReference Include="..\ExpressedRealms.Powers.UseCases\ExpressedRealms.Powers.UseCases.csproj" />
       <ProjectReference Include="..\ExpressedRealms.Shared.UseCases.Tests.Unit\ExpressedRealms.Shared.UseCases.Tests.Unit.csproj" />
     </ItemGroup>
-    <ItemGroup>
-      <Reference Include="JetBrains.Annotations">
-        <HintPath>..\..\..\..\.nuget\packages\jetbrains.annotations\2024.3.0\lib\netstandard2.0\JetBrains.Annotations.dll</HintPath>
-      </Reference>
-    </ItemGroup>
 </Project>
