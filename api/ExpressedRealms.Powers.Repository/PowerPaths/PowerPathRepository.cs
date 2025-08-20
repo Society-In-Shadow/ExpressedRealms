@@ -32,51 +32,31 @@ internal sealed class PowerPathRepository(
                 Name = x.Name,
                 Description = x.Description,
                 Powers = x
-                    .Powers.OrderBy(x => x.OrderIndex)
-                    .Select(x => new PowerInformation
-                    {
-                        Id = x.Id,
-                        Name = x.Name,
-                        Category = x
-                            .CategoryMappings.Select(y => new DetailedInformation(
-                                y.Category.Name,
-                                y.Category.Description
-                            ))
-                            .ToList(),
-                        Description = x.Description,
-                        GameMechanicEffect = x.GameMechanicEffect ?? string.Empty,
-                        Limitation = x.Limitation ?? string.Empty,
-                        PowerDuration = new DetailedInformation(
-                            x.PowerDuration.Name,
-                            x.PowerDuration.Description
-                        ),
-                        AreaOfEffect = new DetailedInformation(
-                            x.PowerAreaOfEffectType.Name,
-                            x.PowerAreaOfEffectType.Description
-                        ),
-                        PowerLevel = new DetailedInformation(
-                            x.PowerLevel.Name,
-                            x.PowerLevel.Description
-                        ),
-                        PowerActivationType = new DetailedInformation(
-                            x.PowerActivationTimingType.Name,
-                            x.PowerActivationTimingType.Description
-                        ),
-                        Other = x.OtherFields,
-                        IsPowerUse = x.IsPowerUse,
-                        Cost = x.Cost,
-                        SortOrder = x.OrderIndex,
-                        Prerequisites =
-                            x.Prerequisite != null
-                                ? new PrerequisiteDetails()
-                                {
-                                    RequiredAmount = x.Prerequisite.RequiredAmount,
-                                    Powers = x
-                                        .Prerequisite.PrerequisitePowers.Select(x => x.Power.Name)
-                                        .ToList(),
-                                }
-                                : null,
-                    })
+                    .Powers.AsQueryable()
+                    .OrderBy(x => x.OrderIndex)
+                    .Select(PowerInformation.Selector)
+                    .ToList(),
+            })
+            .ToListAsync(cancellationToken);
+
+        return Result.Ok(items);
+    }
+
+    public async Task<Result<List<PowerPathToc>>> GetPowerPathAndPowers(List<int> powerIds)
+    {
+        var items = await context
+            .PowerPaths.Where(x => x.Powers.Any(y => powerIds.Contains(y.Id)))
+            .OrderBy(x => x.OrderIndex)
+            .Select(x => new PowerPathToc()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                Powers = x
+                    .Powers.Where(x => powerIds.Contains(x.Id))
+                    .OrderBy(x => x.OrderIndex)
+                    .AsQueryable()
+                    .Select(PowerInformation.Selector)
                     .ToList(),
             })
             .ToListAsync(cancellationToken);
