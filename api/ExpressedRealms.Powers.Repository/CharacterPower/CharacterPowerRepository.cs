@@ -14,6 +14,14 @@ internal sealed class CharacterPowerRepository(
         return await context.CharacterPowerMappings.FirstAsync(x => x.Id == id, token);
     }
 
+    public async Task<List<int>> GetCharacterPowerIds(int characterId)
+    {
+        return await context
+            .CharacterPowerMappings.Where(x => x.CharacterId == characterId)
+            .Select(x => x.PowerId)
+            .ToListAsync(token);
+    }
+
     public async Task<bool> MappingExistsAsync(int powerId, int characterId)
     {
         return await context.CharacterPowerMappings.AnyAsync(

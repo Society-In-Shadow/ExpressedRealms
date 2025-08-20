@@ -11,4 +11,5 @@ public interface ICharacterPowerRepository
     Task<CharacterPowerMapping> GetCharacterPowerMapping(int id);
     Task UpdateCharacterPowerMapping(CharacterPowerMapping characterPowerMapping);
     Task<bool> IsValidMapping(int id);
+    Task<List<int>> GetCharacterPowerIds(int characterId);
 }
