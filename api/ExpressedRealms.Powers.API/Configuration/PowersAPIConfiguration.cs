@@ -1,3 +1,4 @@
+using ExpressedRealms.Powers.API.CharacterPowerEndpoints;
 using ExpressedRealms.Powers.API.PowerEndpoints;
 using ExpressedRealms.Powers.API.PowerPathEndpoints;
 using ExpressedRealms.Powers.API.PowerPrerequisites;
@@ -12,5 +13,6 @@ public static class PowersApiConfiguration
         app.AddPowerApi();
         app.AddPowerPathApi();
         app.AddPowerPrerequisiteApi();
+        app.AddCharacterPowerApi();
     }
 }
