@@ -38,17 +38,17 @@ internal sealed class AddPowerToCharacterUseCase(
             model.CharacterId
         );
 
-        var newPowerExperience = await powerRepository.GetPowerLevelExperience(model.PowerLevelId);
+        var powerLevel = await powerRepository.GetPowerLevelForPower(model.PowerId);
 
-        if (spentXp + newPowerExperience > availableExperience)
+        if (spentXp + powerLevel.Xp > availableExperience)
             return Result.Fail(
-                new NotEnoughXPFailure(availableExperience - spentXp, newPowerExperience)
+                new NotEnoughXPFailure(availableExperience - spentXp, powerLevel.Xp)
             );
 
         var mappingId = await mappingRepository.AddCharacterPowerMapping(
             new CharacterPowerMapping()
             {
-                PowerLevelId = model.PowerLevelId,
+                PowerLevelId = powerLevel.Id,
                 CharacterId = model.CharacterId,
                 PowerId = model.PowerId,
                 Notes = model.Notes?.Trim() == string.Empty ? null : model.Notes?.Trim(),

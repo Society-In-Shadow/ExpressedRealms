@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.Models.Powers;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.Options;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerCreate;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerEdit;
@@ -20,6 +21,5 @@ public interface IPowerRepository
     Task<bool> AreValidPowers(List<int> ids);
     Task<bool> RequirementAlreadyExists(int id);
     Task<bool> IsValidRequirement(int id);
-    Task<bool> IsValidPowerLevel(int id);
-    Task<int> GetPowerLevelExperience(int id);
+    Task<PowerLevel> GetPowerLevelForPower(int id);
 }

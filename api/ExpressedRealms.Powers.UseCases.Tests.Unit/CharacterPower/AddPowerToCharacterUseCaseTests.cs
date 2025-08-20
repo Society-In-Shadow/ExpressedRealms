@@ -1,4 +1,5 @@
 using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.DB.Models.Powers;
 using ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup;
 using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.Powers.Repository.Powers;
@@ -17,15 +18,21 @@ public class AddPowerToCharacterUseCaseTests
     private readonly ICharacterPowerRepository _mappingRepository;
     private readonly ICharacterRepository _characterRepository;
     private readonly AddPowerToCharacterModel _powerToCharacterModel;
+    private readonly PowerLevel _powerLevel;
 
     public AddPowerToCharacterUseCaseTests()
     {
         _powerToCharacterModel = new AddPowerToCharacterModel()
         {
-            PowerLevelId = 1,
             CharacterId = 2,
             PowerId = 3,
             Notes = "123",
+        };
+
+        _powerLevel = new PowerLevel()
+        {
+            Id = 1,
+            Xp = 4
         };
 
         _characterRepository = A.Fake<ICharacterRepository>();
@@ -36,8 +43,6 @@ public class AddPowerToCharacterUseCaseTests
         A.CallTo(() =>
                 _characterRepository.CharacterExistsAsync(_powerToCharacterModel.CharacterId)
             )
-            .Returns(true);
-        A.CallTo(() => _powerRepository.IsValidPowerLevel(_powerToCharacterModel.PowerLevelId))
             .Returns(true);
         A.CallTo(() =>
                 _mappingRepository.MappingExistsAsync(
@@ -53,9 +58,9 @@ public class AddPowerToCharacterUseCaseTests
             )
             .Returns(0);
         A.CallTo(() =>
-                _powerRepository.GetPowerLevelExperience(_powerToCharacterModel.PowerLevelId)
+                _powerRepository.GetPowerLevelForPower(_powerToCharacterModel.PowerId)
             )
-            .Returns(4);
+            .Returns(_powerLevel);
         A.CallTo(() =>
                 _mappingRepository.GetSelectablePowersForCharacter(
                     _powerToCharacterModel.CharacterId
@@ -143,31 +148,6 @@ public class AddPowerToCharacterUseCaseTests
     }
 
     [Fact]
-    public async Task ValidationFor_PowerLevelId_WillFail_WhenItsEmpty()
-    {
-        _powerToCharacterModel.PowerLevelId = 0;
-        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
-
-        result.MustHaveValidationError(
-            nameof(AddPowerToCharacterModel.PowerLevelId),
-            "Power Level Id is required."
-        );
-    }
-
-    [Fact]
-    public async Task ValidationFor_PowerLevelId_WillFail_WhenItDoesNotExist()
-    {
-        A.CallTo(() => _powerRepository.IsValidPowerLevel(_powerToCharacterModel.PowerLevelId))
-            .Returns(false);
-        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
-
-        result.MustHaveValidationError(
-            nameof(AddPowerToCharacterModel.PowerLevelId),
-            "The Power Level does not exist."
-        );
-    }
-
-    [Fact]
     public async Task ValidationFor_DuplicateMapping_WillFail_WhenItDoesExist()
     {
         A.CallTo(() =>
@@ -226,7 +206,7 @@ public class AddPowerToCharacterUseCaseTests
         await _useCase.ExecuteAsync(_powerToCharacterModel);
 
         A.CallTo(() =>
-                _powerRepository.GetPowerLevelExperience(_powerToCharacterModel.PowerLevelId)
+                _powerRepository.GetPowerLevelForPower(_powerToCharacterModel.PowerId)
             )
             .MustHaveHappenedOnceExactly();
     }
@@ -234,10 +214,7 @@ public class AddPowerToCharacterUseCaseTests
     [Fact]
     public async Task UseCase_GrabsCorrectXp()
     {
-        A.CallTo(() =>
-                _powerRepository.GetPowerLevelExperience(_powerToCharacterModel.PowerLevelId)
-            )
-            .Returns(4);
+        _powerLevel.Xp = 4;
 
         A.CallTo(() =>
                 _mappingRepository.GetExperienceSpentOnPowersForCharacter(
@@ -256,10 +233,7 @@ public class AddPowerToCharacterUseCaseTests
     [InlineData(2)]
     public async Task UseCase_CalculatesAvailableXP_Correctly(int xpAmount)
     {
-        A.CallTo(() =>
-                _powerRepository.GetPowerLevelExperience(_powerToCharacterModel.PowerLevelId)
-            )
-            .Returns(20);
+        _powerLevel.Xp = 20;
         A.CallTo(() =>
                 _mappingRepository.GetExperienceSpentOnPowersForCharacter(
                     _powerToCharacterModel.CharacterId
@@ -300,7 +274,7 @@ public class AddPowerToCharacterUseCaseTests
                         x.Notes == _powerToCharacterModel.Notes
                         && x.PowerId == _powerToCharacterModel.PowerId
                         && x.CharacterId == _powerToCharacterModel.CharacterId
-                        && x.PowerLevelId == _powerToCharacterModel.PowerLevelId
+                        && x.PowerLevelId == _powerLevel.Id
                     )
                 )
             )

@@ -21,7 +21,6 @@ public static class CreatePowerMappingEndpoint
             {
                 CharacterId = characterId,
                 PowerId = request.PowerId,
-                PowerLevelId = request.PowerLevelId,
                 Notes = request.Notes,
             }
         );
