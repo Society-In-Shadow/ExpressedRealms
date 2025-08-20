@@ -32,8 +32,8 @@ internal sealed class PowerPathRepository(
                 Name = x.Name,
                 Description = x.Description,
                 Powers = x
-                    .Powers
-                    .AsQueryable().OrderBy(x => x.OrderIndex)
+                    .Powers.AsQueryable()
+                    .OrderBy(x => x.OrderIndex)
                     .Select(PowerInformation.Selector)
                     .ToList(),
             })
@@ -41,7 +41,7 @@ internal sealed class PowerPathRepository(
 
         return Result.Ok(items);
     }
-    
+
     public async Task<Result<List<PowerPathToc>>> GetPowerPathAndPowers(List<int> powerIds)
     {
         var items = await context
@@ -53,11 +53,11 @@ internal sealed class PowerPathRepository(
                 Name = x.Name,
                 Description = x.Description,
                 Powers = x
-                    .Powers
-                    .Where(x => powerIds.Contains(x.Id))
+                    .Powers.Where(x => powerIds.Contains(x.Id))
                     .OrderBy(x => x.OrderIndex)
                     .AsQueryable()
-                    .Select(PowerInformation.Selector).ToList()
+                    .Select(PowerInformation.Selector)
+                    .ToList(),
             })
             .ToListAsync(cancellationToken);
 

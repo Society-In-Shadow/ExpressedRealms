@@ -5,8 +5,7 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Powers.UseCases.CharacterPower.GetPickablePowers;
 
 [UsedImplicitly]
-internal sealed class GetAvailablePowersModelValidator
-    : AbstractValidator<GetAvailablePowersModel>
+internal sealed class GetAvailablePowersModelValidator : AbstractValidator<GetAvailablePowersModel>
 {
     public GetAvailablePowersModelValidator(ICharacterRepository characterRepository)
     {

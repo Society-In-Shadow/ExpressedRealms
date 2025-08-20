@@ -9,7 +9,7 @@ public class DetailedInformationReturnModel
         Name = name;
         Description = description;
     }
-    
+
     public DetailedInformationReturnModel(DetailedInformation dto)
     {
         Name = dto.Name;

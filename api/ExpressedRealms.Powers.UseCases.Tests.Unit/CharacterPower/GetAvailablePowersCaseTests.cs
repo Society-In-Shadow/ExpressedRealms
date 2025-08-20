@@ -22,10 +22,11 @@ public class GetAvailablePowersUseCaseTests
     private readonly List<PowerPathToc> _dbModels;
 
     private readonly List<int> _powerIds = new List<int>() { 1, 2 };
+
     public GetAvailablePowersUseCaseTests()
     {
         model = new GetAvailablePowersModel() { CharacterId = 1 };
-        
+
         _mappingRepository = A.Fake<ICharacterPowerRepository>();
         _powerPathRepository = A.Fake<IPowerPathRepository>();
         _characterRepository = A.Fake<ICharacterRepository>();
@@ -43,11 +44,23 @@ public class GetAvailablePowersUseCaseTests
                     {
                         Name = "Power 1",
                         Description = "Description 1",
-                        PowerLevel = new DetailedInformation("Power level", "Power level description"),
-                        AreaOfEffect = new DetailedInformation("Area of effect", "Area of effect description"),
+                        PowerLevel = new DetailedInformation(
+                            "Power level",
+                            "Power level description"
+                        ),
+                        AreaOfEffect = new DetailedInformation(
+                            "Area of effect",
+                            "Area of effect description"
+                        ),
                         GameMechanicEffect = "Game Mechanic Effect",
-                        PowerActivationType = new DetailedInformation("Power activation type", "Power activation type description"),
-                        PowerDuration = new DetailedInformation("Power duration", "Power duration description"),
+                        PowerActivationType = new DetailedInformation(
+                            "Power activation type",
+                            "Power activation type description"
+                        ),
+                        PowerDuration = new DetailedInformation(
+                            "Power duration",
+                            "Power duration description"
+                        ),
                         Id = 1,
                         Category = new List<DetailedInformation>()
                         {
@@ -63,11 +76,23 @@ public class GetAvailablePowersUseCaseTests
                     {
                         Name = "Power 12",
                         Description = "Description 12",
-                        PowerLevel = new DetailedInformation("Power level2", "Power level description2"),
-                        AreaOfEffect = new DetailedInformation("Area of effect2", "Area of effect description"),
+                        PowerLevel = new DetailedInformation(
+                            "Power level2",
+                            "Power level description2"
+                        ),
+                        AreaOfEffect = new DetailedInformation(
+                            "Area of effect2",
+                            "Area of effect description"
+                        ),
                         GameMechanicEffect = "Game Mechanic Effect2",
-                        PowerActivationType = new DetailedInformation("Power activation type2", "Power activation type 2description"),
-                        PowerDuration = new DetailedInformation("Power 2duration", "Power duration descr2iption"),
+                        PowerActivationType = new DetailedInformation(
+                            "Power activation type2",
+                            "Power activation type 2description"
+                        ),
+                        PowerDuration = new DetailedInformation(
+                            "Power 2duration",
+                            "Power duration descr2iption"
+                        ),
                         Id = 1,
                         Category = new List<DetailedInformation>()
                         {
@@ -78,21 +103,17 @@ public class GetAvailablePowersUseCaseTests
                         IsPowerUse = true,
                         Cost = "Co2st",
                         SortOrder = 2,
-                    }
-                }
-            }
+                    },
+                },
+            },
         };
 
-        A.CallTo(() => _characterRepository.CharacterExistsAsync(model.CharacterId))
-            .Returns(true);
+        A.CallTo(() => _characterRepository.CharacterExistsAsync(model.CharacterId)).Returns(true);
 
         A.CallTo(() => _mappingRepository.GetSelectablePowersForCharacter(model.CharacterId))
             .Returns(_powerIds);
-        
-        A.CallTo(() =>
-                _powerPathRepository.GetPowerPathAndPowers(_powerIds)
-            )
-            .Returns(_dbModels);
+
+        A.CallTo(() => _powerPathRepository.GetPowerPathAndPowers(_powerIds)).Returns(_dbModels);
 
         var validator = new GetAvailablePowersModelValidator(_characterRepository);
 
@@ -119,8 +140,7 @@ public class GetAvailablePowersUseCaseTests
     [Fact]
     public async Task ValidationFor_CharacterId_WillFail_WhenItDoesNotExist()
     {
-        A.CallTo(() => _characterRepository.CharacterExistsAsync(model.CharacterId))
-            .Returns(false);
+        A.CallTo(() => _characterRepository.CharacterExistsAsync(model.CharacterId)).Returns(false);
         var result = await _useCase.ExecuteAsync(model);
 
         result.MustHaveValidationError(
@@ -136,53 +156,55 @@ public class GetAvailablePowersUseCaseTests
         A.CallTo(() => _powerPathRepository.GetPowerPathAndPowers(_powerIds))
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_WillReturn_Powers()
     {
         var result = await _useCase.ExecuteAsync(model);
         Assert.NotNull(result.Value);
     }
-    
+
     [Fact]
     public async Task UseCase_WillReturn_AllPowers()
     {
         var result = await _useCase.ExecuteAsync(model);
-        
-        var translatedInformation = _dbModels.Select(x => new PowerPathReturnModel()
-        {
-            Name = x.Name,
-            Powers = x
-                .Powers.Select(y => new PowerReturnModel()
-                {
-                    Id = y.Id,
-                    Name = y.Name,
-                    Category =
-                        y.Category?.Select(z => new DetailedInformationReturnModel(z)).ToList()
-                        ?? new List<DetailedInformationReturnModel>(),
-                    Description = y.Description,
-                    GameMechanicEffect = y.GameMechanicEffect,
-                    Limitation = y.Limitation,
-                    PowerDuration = new DetailedInformationReturnModel(y.PowerDuration),
-                    AreaOfEffect = new DetailedInformationReturnModel(y.AreaOfEffect),
-                    PowerLevel = new DetailedInformationReturnModel(y.PowerLevel),
-                    PowerActivationType = new DetailedInformationReturnModel(
-                        y.PowerActivationType
-                    ),
-                    Other = y.Other,
-                    IsPowerUse = y.IsPowerUse,
-                    Cost = y.Cost,
-                    Prerequisites = y.Prerequisites is not null
-                        ? new PrerequisiteDetailsReturnModel()
-                        {
-                            RequiredAmount = y.Prerequisites.RequiredAmount,
-                            Powers = y.Prerequisites.Powers,
-                        }
-                        : null,
-                })
-                .ToList(),
-        }).ToList();
-        
+
+        var translatedInformation = _dbModels
+            .Select(x => new PowerPathReturnModel()
+            {
+                Name = x.Name,
+                Powers = x
+                    .Powers.Select(y => new PowerReturnModel()
+                    {
+                        Id = y.Id,
+                        Name = y.Name,
+                        Category =
+                            y.Category?.Select(z => new DetailedInformationReturnModel(z)).ToList()
+                            ?? new List<DetailedInformationReturnModel>(),
+                        Description = y.Description,
+                        GameMechanicEffect = y.GameMechanicEffect,
+                        Limitation = y.Limitation,
+                        PowerDuration = new DetailedInformationReturnModel(y.PowerDuration),
+                        AreaOfEffect = new DetailedInformationReturnModel(y.AreaOfEffect),
+                        PowerLevel = new DetailedInformationReturnModel(y.PowerLevel),
+                        PowerActivationType = new DetailedInformationReturnModel(
+                            y.PowerActivationType
+                        ),
+                        Other = y.Other,
+                        IsPowerUse = y.IsPowerUse,
+                        Cost = y.Cost,
+                        Prerequisites = y.Prerequisites is not null
+                            ? new PrerequisiteDetailsReturnModel()
+                            {
+                                RequiredAmount = y.Prerequisites.RequiredAmount,
+                                Powers = y.Prerequisites.Powers,
+                            }
+                            : null,
+                    })
+                    .ToList(),
+            })
+            .ToList();
+
         Assert.Equivalent(translatedInformation, result.Value);
     }
 }

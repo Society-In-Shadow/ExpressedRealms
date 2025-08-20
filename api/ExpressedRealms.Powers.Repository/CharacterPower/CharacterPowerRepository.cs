@@ -29,8 +29,8 @@ internal sealed class CharacterPowerRepository(
 
     public async Task<int> GetExperienceSpentOnPowersForCharacter(int characterId)
     {
-        return await context.CharacterPowerMappings
-            .Where(x => x.CharacterId == characterId)
+        return await context
+            .CharacterPowerMappings.Where(x => x.CharacterId == characterId)
             .SumAsync(x => x.PowerLevel.Xp, token);
     }
 
@@ -88,6 +88,4 @@ internal sealed class CharacterPowerRepository(
         // Already selected powers should not be added again
         return selectablePowers.Except(powerMappings).ToList();
     }
-    
-    
 }
