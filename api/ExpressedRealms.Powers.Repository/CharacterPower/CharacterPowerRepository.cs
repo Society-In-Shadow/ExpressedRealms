@@ -9,10 +9,23 @@ internal sealed class CharacterPowerRepository(
     CancellationToken token
 ) : ICharacterPowerRepository
 {
+    public async Task<CharacterPowerMapping> GetCharacterPowerMapping(int id)
+    {
+        return await context.CharacterPowerMappings.FirstAsync(x => x.Id == id, token);
+    }
+    
     public async Task<bool> MappingExistsAsync(int powerId, int characterId)
     {
         return await context.CharacterPowerMappings.AnyAsync(
             x => x.PowerId == powerId && x.CharacterId == characterId,
+            token
+        );
+    }
+    
+    public async Task<bool> IsValidMapping(int id)
+    {
+        return await context.CharacterPowerMappings.AnyAsync(
+            x => x.Id == id,
             token
         );
     }
@@ -27,6 +40,12 @@ internal sealed class CharacterPowerRepository(
         context.CharacterPowerMappings.Add(characterPowerMapping);
         await context.SaveChangesAsync(token);
         return characterPowerMapping.Id;
+    }
+    
+    public async Task UpdateCharacterPowerMapping(CharacterPowerMapping characterPowerMapping)
+    {
+        context.CharacterPowerMappings.Update(characterPowerMapping);
+        await context.SaveChangesAsync(token);
     }
 
     public async Task<List<int>> GetSelectablePowersForCharacter(int characterId)
