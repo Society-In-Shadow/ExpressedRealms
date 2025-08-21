@@ -23,6 +23,7 @@ public class GetCharacterPowersUseCaseTests
     private readonly List<PowerPathToc> _dbModels;
 
     private readonly List<CharacterPowerInfo> _powerInfo;
+    private readonly List<int> _requiredIds = new List<int>() { 2 };
 
     public GetCharacterPowersUseCaseTests()
     {
@@ -100,7 +101,7 @@ public class GetCharacterPowersUseCaseTests
                             "Power 2duration",
                             "Power duration descr2iption"
                         ),
-                        Id = 1,
+                        Id = 2,
                         Category = new List<DetailedInformation>()
                         {
                             new DetailedInformation("Categor2y 1", "Cate2gory 1 description"),
@@ -119,6 +120,9 @@ public class GetCharacterPowersUseCaseTests
 
         A.CallTo(() => _mappingRepository.GetCharacterPowerMappingInfo(model.CharacterId))
             .Returns(_powerInfo);
+
+        A.CallTo(() => _mappingRepository.GetPowersThatArePrerequisites(model.CharacterId))
+            .Returns(_requiredIds);
 
         var powerIds = _powerInfo.Select(x => x.PowerId).ToList();
         A.CallTo(() => _powerPathRepository.GetPowerPathAndPowers(powerIds)).Returns(_dbModels);
@@ -202,6 +206,7 @@ public class GetCharacterPowersUseCaseTests
                         Other = y.Other,
                         IsPowerUse = y.IsPowerUse,
                         Cost = y.Cost,
+                        RequiredPower = _requiredIds.Contains(y.Id),
                         UserNotes = _powerInfo.FirstOrDefault(z => z.PowerId == y.Id)?.UserNotes,
                         Prerequisites = y.Prerequisites is not null
                             ? new PrerequisiteDetailsReturnModel()

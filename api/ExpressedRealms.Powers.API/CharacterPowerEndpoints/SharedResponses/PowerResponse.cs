@@ -20,4 +20,5 @@ public class PowerResponse
     public int SortOrder { get; set; }
     public string? UserNotes { get; set; }
     public PrerequisiteDetailsResponse? Prerequisites { get; set; }
+    public bool RequiredPower { get; set; }
 }

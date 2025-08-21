@@ -18,4 +18,5 @@ public class PowerReturnModel
     public int SortOrder { get; set; }
     public PrerequisiteDetailsReturnModel? Prerequisites { get; set; }
     public string? UserNotes { get; set; }
+    public bool RequiredPower { get; set; }
 }

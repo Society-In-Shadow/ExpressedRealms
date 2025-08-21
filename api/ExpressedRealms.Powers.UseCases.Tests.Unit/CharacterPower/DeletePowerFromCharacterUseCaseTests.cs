@@ -63,6 +63,14 @@ public class DeletePowerFromCharacterUseCaseTests
             )
             .Returns(_mapping);
 
+        A.CallTo(() =>
+                _mappingRepository.IsPowerPartOfPrerequisite(
+                    _powerToCharacterModel.CharacterId,
+                    _powerToCharacterModel.PowerId
+                )
+            )
+            .Returns(false);
+
         var validator = new DeletePowerFromCharacterModelValidator(
             _characterRepository,
             _powerRepository,
@@ -143,6 +151,24 @@ public class DeletePowerFromCharacterUseCaseTests
         result.MustHaveValidationError(
             nameof(DeletePowerFromCharacterModel.PowerId),
             "The Mapping does not exist."
+        );
+    }
+
+    [Fact]
+    public async Task ValidationFor_PowerId_WillFail_WhenMappingIsPartOfAPrerequisite()
+    {
+        A.CallTo(() =>
+                _mappingRepository.IsPowerPartOfPrerequisite(
+                    _powerToCharacterModel.CharacterId,
+                    _powerToCharacterModel.PowerId
+                )
+            )
+            .Returns(true);
+        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
+
+        result.MustHaveValidationError(
+            nameof(DeletePowerFromCharacterModel.PowerId),
+            "The Power is Part of a Prerequisite."
         );
     }
 

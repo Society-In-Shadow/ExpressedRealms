@@ -32,6 +32,9 @@ internal sealed class GetCharacterPowersUseCase(
 
         var powerIds = powerMappingInfo.Select(x => x.PowerId).ToList();
         var powers = await powerPathRepository.GetPowerPathAndPowers(powerIds);
+        var requiredPowers = await mappingRepository.GetPowersThatArePrerequisites(
+            model.CharacterId
+        );
 
         return Result.Ok(
             powers
@@ -68,6 +71,7 @@ internal sealed class GetCharacterPowersUseCase(
                                     Powers = y.Prerequisites.Powers,
                                 }
                                 : null,
+                            RequiredPower = requiredPowers.Contains(y.Id),
                         })
                         .ToList(),
                 })
