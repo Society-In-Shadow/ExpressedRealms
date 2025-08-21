@@ -1,5 +1,5 @@
 import {type InferType, number, object, string} from "yup";
-import { useGenericForm } from "@/utilities/formUtilities";
+import {useGenericForm} from "@/utilities/formUtilities";
 import type {CharacterKnowledge} from "@/components/characters/character/knowledges/types";
 
 const validationSchema = object({
@@ -14,22 +14,22 @@ const validationSchema = object({
 export type CharacterKnowledgeForm = InferType<typeof validationSchema>;
 
 export function getValidationInstance() {
-        
+
     const form = useGenericForm(validationSchema);
-    
+
     const setValues = (model: CharacterKnowledge) => {
         form.fields.notes.field.value = model.notes;
         form.fields.knowledgeLevel.field.value = model.levelId;
     }
-    
+
     const customResetForm = () => {
         form.fields.notes.field.value = "";
         form.fields.knowledgeLevel.field.value = null;
         form.handleReset();
     };
-    
+
     return {
-        handleSubmit: form.handleSubmit, 
+        handleSubmit: form.handleSubmit,
         customResetForm,
         setValues,
         notes: form.fields.notes,

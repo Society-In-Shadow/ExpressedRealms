@@ -62,6 +62,14 @@ public class AddPowerToCharacterUseCaseTests
             )
             .Returns(new List<int>() { _powerToCharacterModel.PowerId });
 
+        A.CallTo(() =>
+                _powerRepository.IsValidPowerForCharacter(
+                    _powerToCharacterModel.CharacterId,
+                    _powerToCharacterModel.PowerId
+                )
+            )
+            .Returns(true);
+
         var validator = new AddPowerToCharacterModelValidator(
             _powerRepository,
             _characterRepository,
@@ -156,6 +164,24 @@ public class AddPowerToCharacterUseCaseTests
         result.MustHaveValidationError(
             nameof(AddPowerToCharacterModel.PowerId),
             "The power already exists for this character."
+        );
+    }
+
+    [Fact]
+    public async Task ValidationFor_PowerId_WillFail_WhenItIsNotPartOfTheCharacterExpression()
+    {
+        A.CallTo(() =>
+                _powerRepository.IsValidPowerForCharacter(
+                    _powerToCharacterModel.CharacterId,
+                    _powerToCharacterModel.PowerId
+                )
+            )
+            .Returns(false);
+        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
+
+        result.MustHaveValidationError(
+            nameof(AddPowerToCharacterModel.PowerId),
+            "The Power is not part of the Expression for the Character."
         );
     }
 

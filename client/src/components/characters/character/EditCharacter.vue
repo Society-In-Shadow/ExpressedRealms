@@ -15,6 +15,19 @@ import ProficiencyTableTile from "@/components/characters/character/proficiency/
 import CharacterDetailTile from "@/components/characters/character/CharacterDetailTile.vue";
 import TrackableProficiencies from "@/components/characters/character/proficiency/TrackableProficiencies.vue";
 import KnowledgeTile from "@/components/characters/character/knowledges/KnowledgeTile.vue";
+import {FeatureFlags, userStore} from "@/stores/userStore.ts";
+import {onMounted, ref} from "vue";
+import PowerTile from "@/components/characters/character/powers/PowerTile.vue";
+
+
+const userData = userStore();
+
+const showPowersTab = ref(false);
+
+onMounted(async() =>{
+  showPowersTab.value = await userData.hasFeatureFlag(FeatureFlags.ShowCharacterPowers)
+})
+
 </script>
 
 <template>
@@ -31,7 +44,7 @@ import KnowledgeTile from "@/components/characters/character/knowledges/Knowledg
     
     <TrackableProficiencies />
     
-    <Tabs value="0" class="w-100" scrollable>
+    <Tabs value="0" class="w-100" scrollable :lazy="true" >
       <TabList>
         <Tab value="0">
           Proficiencies
@@ -41,6 +54,9 @@ import KnowledgeTile from "@/components/characters/character/knowledges/Knowledg
         </Tab>
         <Tab value="2">
           Knowledges
+        </Tab>
+        <Tab value="3" v-if="showPowersTab" >
+          Powers
         </Tab>
       </TabList>
       <TabPanels class="p-2 p-md-3">
@@ -52,6 +68,9 @@ import KnowledgeTile from "@/components/characters/character/knowledges/Knowledg
         </TabPanel>
         <TabPanel value="2">
           <KnowledgeTile />
+        </TabPanel>
+        <TabPanel v-if="showPowersTab" value="3">
+          <PowerTile/>
         </TabPanel>
       </TabPanels>
     </Tabs>

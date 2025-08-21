@@ -37,12 +37,12 @@ internal static class CharacterPowersEndpoints
         );*/
 
         endpointGroup.MapPut(
-            "{characterId}/powers/{mappingId}",
+            "{characterId}/powers/{powerId}",
             EditCharacterPowerEndpoint.EditKnowledges
         );
 
         endpointGroup.MapDelete(
-            "{characterId}/powers/{mappingId}",
+            "{characterId}/powers/{powerId}",
             DeleteCharacterPowerEndpoint.DeleteMapping
         );
     }

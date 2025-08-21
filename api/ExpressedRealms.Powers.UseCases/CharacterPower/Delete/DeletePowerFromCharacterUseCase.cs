@@ -22,7 +22,10 @@ internal sealed class DeletePowerFromCharacterUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var mapping = await mappingRepository.GetCharacterPowerMapping(model.MappingId);
+        var mapping = await mappingRepository.GetCharacterPowerMapping(
+            model.CharacterId,
+            model.PowerId
+        );
 
         mapping.SoftDelete();
 

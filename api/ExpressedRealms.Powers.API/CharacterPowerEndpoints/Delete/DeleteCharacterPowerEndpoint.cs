@@ -10,11 +10,13 @@ public static class DeleteCharacterPowerEndpoint
 {
     public static async Task<Results<Ok, NotFound, ValidationProblem>> DeleteMapping(
         int characterId,
-        int mappingId,
+        int powerId,
         [FromServices] IDeletePowerFromCharacterUseCase useCase
     )
     {
-        var results = await useCase.ExecuteAsync(new() { MappingId = mappingId });
+        var results = await useCase.ExecuteAsync(
+            new() { CharacterId = characterId, PowerId = powerId }
+        );
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;

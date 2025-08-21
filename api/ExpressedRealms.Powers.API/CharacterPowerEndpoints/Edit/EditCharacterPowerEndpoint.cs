@@ -11,13 +11,18 @@ public static class EditCharacterPowerEndpoint
 {
     public static async Task<Results<Ok, NotFound, ValidationProblem>> EditKnowledges(
         int characterId,
-        int mappingId,
+        int powerId,
         [FromBody] EditCharacterPowerRequest request,
         [FromServices] IUpdatePowerForCharacterUseCase editKnowledgeUseCase
     )
     {
         var results = await editKnowledgeUseCase.ExecuteAsync(
-            new() { MappingId = mappingId, Notes = request.Notes }
+            new()
+            {
+                PowerId = powerId,
+                CharacterId = characterId,
+                Notes = request.Notes,
+            }
         );
 
         if (results.HasValidationError(out var validationProblem))

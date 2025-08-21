@@ -1,7 +1,8 @@
+using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup;
 using ExpressedRealms.Powers.Repository.CharacterPower;
+using ExpressedRealms.Powers.Repository.Powers;
 using ExpressedRealms.Powers.UseCases.CharacterPower.Delete;
-using ExpressedRealms.Powers.UseCases.CharacterPower.Edit;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
 using Xunit;
@@ -14,10 +15,16 @@ public class DeletePowerFromCharacterUseCaseTests
     private readonly ICharacterPowerRepository _mappingRepository;
     private readonly DeletePowerFromCharacterModel _powerToCharacterModel;
     private readonly CharacterPowerMapping _mapping;
+    private readonly ICharacterRepository _characterRepository;
+    private readonly IPowerRepository _powerRepository;
 
     public DeletePowerFromCharacterUseCaseTests()
     {
-        _powerToCharacterModel = new DeletePowerFromCharacterModel() { MappingId = 1 };
+        _powerToCharacterModel = new DeletePowerFromCharacterModel()
+        {
+            CharacterId = 1,
+            PowerId = 2,
+        };
 
         _mapping = new CharacterPowerMapping()
         {
@@ -29,15 +36,38 @@ public class DeletePowerFromCharacterUseCaseTests
 
         _mappingRepository = A.Fake<ICharacterPowerRepository>();
 
-        A.CallTo(() => _mappingRepository.IsValidMapping(_powerToCharacterModel.MappingId))
+        _mappingRepository = A.Fake<ICharacterPowerRepository>();
+        _characterRepository = A.Fake<ICharacterRepository>();
+        _powerRepository = A.Fake<IPowerRepository>();
+
+        A.CallTo(() =>
+                _characterRepository.CharacterExistsAsync(_powerToCharacterModel.CharacterId)
+            )
+            .Returns(true);
+
+        A.CallTo(() => _powerRepository.IsValidPower(_powerToCharacterModel.PowerId)).Returns(true);
+
+        A.CallTo(() =>
+                _mappingRepository.MappingExistsAsync(
+                    _powerToCharacterModel.PowerId,
+                    _powerToCharacterModel.CharacterId
+                )
+            )
             .Returns(true);
 
         A.CallTo(() =>
-                _mappingRepository.GetCharacterPowerMapping(_powerToCharacterModel.MappingId)
+                _mappingRepository.GetCharacterPowerMapping(
+                    _powerToCharacterModel.CharacterId,
+                    _powerToCharacterModel.PowerId
+                )
             )
             .Returns(_mapping);
 
-        var validator = new DeletePowerFromCharacterModelValidator(_mappingRepository);
+        var validator = new DeletePowerFromCharacterModelValidator(
+            _characterRepository,
+            _powerRepository,
+            _mappingRepository
+        );
 
         _useCase = new DeletePowerFromCharacterUseCase(
             _mappingRepository,
@@ -47,26 +77,71 @@ public class DeletePowerFromCharacterUseCaseTests
     }
 
     [Fact]
-    public async Task ValidationFor_MappingId_WillFail_WhenItsEmpty()
+    public async Task ValidationFor_CharacterId_WillFail_WhenItsEmpty()
     {
-        _powerToCharacterModel.MappingId = 0;
+        _powerToCharacterModel.CharacterId = 0;
         var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
 
         result.MustHaveValidationError(
-            nameof(UpdatePowerForCharacterModel.MappingId),
-            "Mapping Id is required."
+            nameof(DeletePowerFromCharacterModel.CharacterId),
+            "Character Id is required."
         );
     }
 
     [Fact]
-    public async Task ValidationFor_MappingId_WillFail_WhenItDoesNotExist()
+    public async Task ValidationFor_CharacterId_WillFail_WhenItDoesNotExist()
     {
-        A.CallTo(() => _mappingRepository.IsValidMapping(_powerToCharacterModel.MappingId))
+        A.CallTo(() =>
+                _characterRepository.CharacterExistsAsync(_powerToCharacterModel.CharacterId)
+            )
             .Returns(false);
         var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
 
         result.MustHaveValidationError(
-            nameof(UpdatePowerForCharacterModel.MappingId),
+            nameof(DeletePowerFromCharacterModel.CharacterId),
+            "The Character does not exist."
+        );
+    }
+
+    [Fact]
+    public async Task ValidationFor_PowerId_WillFail_WhenItsEmpty()
+    {
+        _powerToCharacterModel.PowerId = 0;
+        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
+
+        result.MustHaveValidationError(
+            nameof(DeletePowerFromCharacterModel.PowerId),
+            "Power Id is required."
+        );
+    }
+
+    [Fact]
+    public async Task ValidationFor_PowerId_WillFail_WhenItDoesNotExist()
+    {
+        A.CallTo(() => _powerRepository.IsValidPower(_powerToCharacterModel.PowerId))
+            .Returns(false);
+        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
+
+        result.MustHaveValidationError(
+            nameof(DeletePowerFromCharacterModel.PowerId),
+            "The Power does not exist."
+        );
+    }
+
+    [Fact]
+    public async Task ValidationFor_PowerId_WillFail_WhenMappingDoesNotExist()
+    {
+        A.CallTo(() =>
+                _mappingRepository.MappingExistsAsync(
+                    _powerToCharacterModel.PowerId,
+                    _powerToCharacterModel.CharacterId
+                )
+            )
+            .Returns(false);
+        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
+
+        result.MustHaveValidationError(
+            nameof(DeletePowerFromCharacterModel.PowerId),
             "The Mapping does not exist."
         );
     }

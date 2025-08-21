@@ -1,3 +1,4 @@
+using System.Text;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
 using FluentResults;
 using Microsoft.AspNetCore.Http;
@@ -16,7 +17,23 @@ public static class ResultOverrides
     public static void ThrowIfErrorNotHandled<T>(this Result<T> result)
     {
         if (result.IsFailed)
-            throw new NotImplementedException("A Result Error Was Not Handled");
+        {
+            var stringBuilder = new StringBuilder();
+            result.Reasons.ForEach(x => stringBuilder.AppendLine(x.Message));
+            stringBuilder.AppendLine("The following result error(s) was not handled:");
+            foreach (var error in result.Errors)
+            {
+                stringBuilder.AppendLine("Message:");
+                stringBuilder.AppendLine(error.Message);
+                stringBuilder.AppendLine("Reasons:");
+                foreach (var reason in error.Reasons)
+                {
+                    stringBuilder.AppendLine(reason.Message);
+                }
+            }
+
+            throw new NotImplementedException(stringBuilder.ToString());
+        }
     }
 
     public static bool HasNotFound(this Result result, out NotFound typedResults)

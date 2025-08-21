@@ -276,6 +276,22 @@ internal sealed class PowerRepository(
         return power is not null;
     }
 
+    public async Task<bool> IsValidPowerForCharacter(int characterId, int powerId)
+    {
+        var characterExpressionId = await context
+            .Characters.AsNoTracking()
+            .Where(x => x.Id == characterId)
+            .Select(x => x.ExpressionId)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        return await context
+            .Powers.AsNoTracking()
+            .AnyAsync(
+                x => x.Id == powerId && x.PowerPath.ExpressionId == characterExpressionId,
+                cancellationToken
+            );
+    }
+
     public async Task<bool> RequirementAlreadyExists(int id)
     {
         var power = await context.PowerPrerequisites.FirstOrDefaultAsync(

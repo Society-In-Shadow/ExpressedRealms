@@ -39,6 +39,14 @@ internal sealed class AddPowerToCharacterModelValidator
         RuleFor(x => x)
             .MustAsync(
                 async (x, y) =>
+                    await powerRepository.IsValidPowerForCharacter(x.CharacterId, x.PowerId)
+            )
+            .WithMessage("The Power is not part of the Expression for the Character.")
+            .WithName(nameof(AddPowerToCharacterModel.PowerId));
+
+        RuleFor(x => x)
+            .MustAsync(
+                async (x, y) =>
                 {
                     var availablePowerIds = await mappingRepository.GetSelectablePowersForCharacter(
                         x.CharacterId
