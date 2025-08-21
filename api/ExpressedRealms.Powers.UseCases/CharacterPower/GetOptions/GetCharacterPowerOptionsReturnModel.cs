@@ -1,5 +1,3 @@
-
-
 namespace ExpressedRealms.Powers.UseCases.CharacterPower.GetOptions;
 
 public class GetCharacterPowerOptionsReturnModel

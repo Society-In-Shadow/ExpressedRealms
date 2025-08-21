@@ -16,10 +16,9 @@ public class GetKnowledgeLevelsUseCaseTests
     private readonly ICharacterPowerRepository _mappingRepository;
     private readonly GetCharacterPowerOptionsModel _model;
 
-
     public GetKnowledgeLevelsUseCaseTests()
     {
-        _model = new GetCharacterPowerOptionsModel() { CharacterId = 1, PowerId = 2};
+        _model = new GetCharacterPowerOptionsModel() { CharacterId = 1, PowerId = 2 };
 
         _powerRepository = A.Fake<IPowerRepository>();
         _characterRepository = A.Fake<ICharacterRepository>();
@@ -31,16 +30,16 @@ public class GetKnowledgeLevelsUseCaseTests
                 _mappingRepository.GetExperienceSpentOnPowersForCharacter(_model.CharacterId)
             )
             .Returns(0);
-        
+
         A.CallTo(() =>
-                _powerRepository.IsValidPowerForCharacter(
-                    _model.CharacterId,
-                    _model.PowerId
-                )
+                _powerRepository.IsValidPowerForCharacter(_model.CharacterId, _model.PowerId)
             )
             .Returns(true);
 
-        var validator = new GetCharacterPowerOptionsModelValidator(_characterRepository, _powerRepository);
+        var validator = new GetCharacterPowerOptionsModelValidator(
+            _characterRepository,
+            _powerRepository
+        );
 
         _useCase = new GetCharacterPowerOptionsUseCase(
             _powerRepository,
@@ -74,7 +73,7 @@ public class GetKnowledgeLevelsUseCaseTests
             "The Character does not exist."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_PowerId_WillFail_WhenItsEmpty()
     {
@@ -90,8 +89,7 @@ public class GetKnowledgeLevelsUseCaseTests
     [Fact]
     public async Task ValidationFor_PowerId_WillFail_WhenItDoesNotExist()
     {
-        A.CallTo(() => _powerRepository.IsValidPower(_model.PowerId))
-            .Returns(false);
+        A.CallTo(() => _powerRepository.IsValidPower(_model.PowerId)).Returns(false);
         var result = await _useCase.ExecuteAsync(_model);
 
         result.MustHaveValidationError(
@@ -104,10 +102,7 @@ public class GetKnowledgeLevelsUseCaseTests
     public async Task ValidationFor_PowerId_WillFail_WhenItIsNotPartOfTheCharacterExpression()
     {
         A.CallTo(() =>
-                _powerRepository.IsValidPowerForCharacter(
-                    _model.CharacterId,
-                    _model.PowerId
-                )
+                _powerRepository.IsValidPowerForCharacter(_model.CharacterId, _model.PowerId)
             )
             .Returns(false);
         var result = await _useCase.ExecuteAsync(_model);
@@ -121,15 +116,12 @@ public class GetKnowledgeLevelsUseCaseTests
     [Fact]
     public async Task UseCase_Returns_PowerLevelExperience()
     {
-        A.CallTo(() =>
-                _powerRepository.GetPowerExperienceCost(_model.PowerId)
-            )
-            .Returns(7);
+        A.CallTo(() => _powerRepository.GetPowerExperienceCost(_model.PowerId)).Returns(7);
         var results = await _useCase.ExecuteAsync(_model);
 
         Assert.Equivalent(7, results.Value.PowerLevelExperience);
     }
-    
+
     [Fact]
     public async Task UseCase_Returns_AvailableExperience()
     {

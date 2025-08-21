@@ -34,7 +34,7 @@ public class GetCharacterPowerOptionsUseCase(
             new GetCharacterPowerOptionsReturnModel()
             {
                 AvailableExperience = 20 - spentXp,
-                PowerLevelExperience = powerExperienceCost
+                PowerLevelExperience = powerExperienceCost,
             }
         );
     }

@@ -7,19 +7,14 @@ namespace ExpressedRealms.Powers.API.CharacterPowerEndpoints.GetOptions;
 
 public static class GetCharacterPowerOptionsEndpoint
 {
-    public static async Task<Results<Ok<CharacterPickablePowerBaseResponse>, NotFound, ValidationProblem>> GetOptions(
-        int characterId,
-        int powerId,
-        IGetCharacterPowerOptionsUseCase useCase
-    )
+    public static async Task<
+        Results<Ok<CharacterPickablePowerBaseResponse>, NotFound, ValidationProblem>
+    > GetOptions(int characterId, int powerId, IGetCharacterPowerOptionsUseCase useCase)
     {
         var results = await useCase.ExecuteAsync(
-            new()
-            {
-                CharacterId = characterId,
-                PowerId = powerId
-            });
-        
+            new() { CharacterId = characterId, PowerId = powerId }
+        );
+
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;
         if (results.HasNotFound(out var notFound))
@@ -31,7 +26,7 @@ public static class GetCharacterPowerOptionsEndpoint
             new CharacterPickablePowerBaseResponse()
             {
                 AvailableXp = results.Value.AvailableExperience,
-                PowerXp = results.Value.PowerLevelExperience
+                PowerXp = results.Value.PowerLevelExperience,
             }
         );
     }
