@@ -54,7 +54,7 @@ public class UpdatePowerForCharacterUseCaseTests
                 )
             )
             .Returns(_mapping);
-        
+
         A.CallTo(() =>
                 _mappingRepository.MappingExistsAsync(
                     _powerToCharacterModel.PowerId,
@@ -127,7 +127,7 @@ public class UpdatePowerForCharacterUseCaseTests
             "The Power does not exist."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_PowerId_WillFail_WhenMappingDoesNotExist()
     {

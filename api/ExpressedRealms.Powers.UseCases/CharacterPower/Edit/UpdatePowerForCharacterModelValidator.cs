@@ -32,7 +32,7 @@ internal sealed class UpdatePowerForCharacterModelValidator
             .MaximumLength(5000)
             .When(x => !string.IsNullOrWhiteSpace(x.Notes))
             .WithMessage("Notes must be less than 5000 characters.");
-        
+
         RuleFor(x => x)
             .MustAsync(
                 async (x, y) => await mappingRepository.MappingExistsAsync(x.PowerId, x.CharacterId)
