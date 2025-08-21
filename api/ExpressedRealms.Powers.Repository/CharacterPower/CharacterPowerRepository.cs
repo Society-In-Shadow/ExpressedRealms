@@ -125,7 +125,8 @@ internal sealed class CharacterPowerRepository(
             .Select(x => x.PowerId)
             .ToListAsync(token);
 
-        var prereqs = await context.PowerPrerequisites.AsNoTracking()
+        var prereqs = await context
+            .PowerPrerequisites.AsNoTracking()
             .Where(x => powerMappings.Contains(x.PowerId))
             .SelectMany(x => x.PrerequisitePowers.Select(y => y.PowerId).ToList())
             .Distinct()

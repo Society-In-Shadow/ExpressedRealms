@@ -51,6 +51,11 @@ export interface CharacterPowerResponse{
     powers: PowerPath[]
 }
 
+export interface CharacterPowerOptionsResponse{
+    powerXp: number;
+    availableXp: number;
+}
+
 export interface PowerPath {
     id: number;
     name: string;

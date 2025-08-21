@@ -3,6 +3,7 @@ using ExpressedRealms.Powers.API.CharacterPowerEndpoints.Create;
 using ExpressedRealms.Powers.API.CharacterPowerEndpoints.Delete;
 using ExpressedRealms.Powers.API.CharacterPowerEndpoints.Edit;
 using ExpressedRealms.Powers.API.CharacterPowerEndpoints.GetAll;
+using ExpressedRealms.Powers.API.CharacterPowerEndpoints.GetOptions;
 using ExpressedRealms.Powers.API.CharacterPowerEndpoints.GetPickable;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
@@ -31,10 +32,10 @@ internal static class CharacterPowersEndpoints
 
         endpointGroup.MapPost("{characterid}/powers", CreatePowerMappingEndpoint.CreateMapping);
 
-        /*endpointGroup.MapGet(
-            "{characterid}/powers/options",
-            GetCharacterPowerOptions.CharacterPOwerOptions
-        );*/
+        endpointGroup.MapGet(
+            "{characterId}/powers/{powerId}/options",
+            GetCharacterPowerOptionsEndpoint.GetOptions
+        );
 
         endpointGroup.MapPut(
             "{characterId}/powers/{powerId}",
