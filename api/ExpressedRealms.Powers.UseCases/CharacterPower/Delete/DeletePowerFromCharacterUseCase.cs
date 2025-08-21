@@ -26,6 +26,8 @@ internal sealed class DeletePowerFromCharacterUseCase(
             model.CharacterId,
             model.PowerId
         );
+        
+        
 
         mapping.SoftDelete();
 

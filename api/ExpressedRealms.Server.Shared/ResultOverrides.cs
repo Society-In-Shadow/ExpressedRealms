@@ -1,5 +1,5 @@
 using System.Text;
-using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
+using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FluentResults;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;

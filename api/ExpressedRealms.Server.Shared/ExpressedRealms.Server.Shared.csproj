@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ExpressedRealms.Shared.FeatureFlags\ExpressedRealms.Shared.FeatureFlags.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Repositories.Shared\ExpressedRealms.Repositories.Shared.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Shared.UseCases\ExpressedRealms.Shared.UseCases.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FluentResults" Version="3.16.0" />

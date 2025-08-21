@@ -34,5 +34,12 @@ internal sealed class DeletePowerFromCharacterModelValidator
             )
             .WithMessage("The Mapping does not exist.")
             .WithName(nameof(DeletePowerFromCharacterModel.PowerId));
+        
+        RuleFor(x => x)
+            .MustAsync(
+                async (x, y) => !await mappingRepository.IsPowerPartOfPrerequisite(x.CharacterId, x.PowerId)
+            )
+            .WithMessage("The Power is Part of a Prerequisite.")
+            .WithName(nameof(DeletePowerFromCharacterModel.PowerId));
     }
 }
