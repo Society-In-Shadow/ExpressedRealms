@@ -29,7 +29,7 @@ const disabled = computed(() => {
 })
 
 onMounted(async () => {
-  var values = await store.getPowerOptions(route.params.id, power.value.id);
+  const values = await store.getPowerOptions(route.params.id, power.value.id);
   availableXp.value = values.availableXp;
   powerXp.value = values.powerXp;
 })
