@@ -2,7 +2,7 @@
 
 import FormTextAreaWrapper from "@/FormWrappers/FormTextAreaWrapper.vue";
 import Button from "primevue/button";
-import {getValidationInstance} from "@/components/characters/character/knowledges/validations/knowledgeValidations";
+import {getValidationInstance} from "@/components/characters/character/powers/validations/powerValidations.ts";
 import {useRoute} from "vue-router";
 import {inject, onBeforeMount, ref} from "vue";
 import {characterPowersStore} from "@/components/characters/character/powers/stores/characterPowerStore.ts";

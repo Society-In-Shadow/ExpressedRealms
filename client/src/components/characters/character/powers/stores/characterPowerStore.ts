@@ -2,9 +2,7 @@ import {defineStore} from 'pinia'
 import axios from "axios";
 import toaster from "@/services/Toasters";
 import type {CharacterPowerResponse, PowerPath} from "@/components/characters/character/powers/types.ts";
-import type {
-    CharacterPowerForm
-} from "@/components/characters/character/knowledges/validations/knowledgeValidations.ts";
+import type {CharacterPowerForm} from "@/components/characters/character/powers/validations/powerValidations.ts";
 
 export const characterPowersStore =
     defineStore('characterPowers', {

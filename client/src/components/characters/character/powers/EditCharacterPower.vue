@@ -2,12 +2,12 @@
 
 import FormTextAreaWrapper from "@/FormWrappers/FormTextAreaWrapper.vue";
 import Button from "primevue/button";
-import {getValidationInstance} from "@/components/characters/character/knowledges/validations/knowledgeValidations";
 import {useRoute} from "vue-router";
 import {inject, ref} from "vue";
 import {characterPowersStore} from "@/components/characters/character/powers/stores/characterPowerStore.ts";
 import type {Power} from "@/components/characters/character/powers/types.ts";
 import PickPowerCard from "@/components/characters/character/powers/PickPowerCard.vue";
+import {getValidationInstance} from "@/components/characters/character/powers/validations/powerValidations.ts";
 
 const store = characterPowersStore();
 const form = getValidationInstance();
