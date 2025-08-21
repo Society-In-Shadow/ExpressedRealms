@@ -14,4 +14,5 @@ public interface ICharacterPowerRepository
     Task<bool> IsValidMapping(int id);
     Task<List<CharacterPowerInfo>> GetCharacterPowerMappingInfo(int characterId);
     Task<bool> IsPowerPartOfPrerequisite(int characterId, int powerId);
+    Task<List<int>> GetPowersThatArePrerequisites(int characterId);
 }

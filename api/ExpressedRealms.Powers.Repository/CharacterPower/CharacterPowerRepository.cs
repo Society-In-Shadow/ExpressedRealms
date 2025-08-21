@@ -103,11 +103,6 @@ internal sealed class CharacterPowerRepository(
     
     public async Task<bool> IsPowerPartOfPrerequisite(int characterId, int powerId)
     {
-        var expressionId = await context
-            .Characters.Where(x => x.Id == characterId)
-            .Select(x => x.ExpressionId)
-            .FirstAsync(token);
-
         // Get all the assigned powers
         var powerMappings = await context
             .CharacterPowerMappings.Where(x => x.CharacterId == characterId)
@@ -121,5 +116,20 @@ internal sealed class CharacterPowerRepository(
             .ToListAsync();
 
         return prerequisitePowerIds.Intersect(powerMappings).Any();
+    }
+    
+    public async Task<List<int>> GetPowersThatArePrerequisites(int characterId)
+    {
+        var powerMappings = await context
+            .CharacterPowerMappings.Where(x => x.CharacterId == characterId)
+            .Select(x => x.PowerId)
+            .ToListAsync(token);
+        
+        var prerequisitePowerIds = await context.PowerPrerequisitePowers
+            .Where(x => powerMappings.Contains(x.PowerId))
+            .Select(x => x.Prerequisite.PowerId)
+            .ToListAsync();
+
+        return prerequisitePowerIds;
     }
 }

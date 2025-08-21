@@ -43,6 +43,7 @@ public static class GetCharacterPowersEndpoint
                                 IsPowerUse = y.IsPowerUse,
                                 Cost = y.Cost,
                                 UserNotes = y.UserNotes,
+                                RequiredPower = y.RequiredPower,
                                 Prerequisites = y.Prerequisites is not null
                                     ? new PrerequisiteDetailsResponse()
                                     {

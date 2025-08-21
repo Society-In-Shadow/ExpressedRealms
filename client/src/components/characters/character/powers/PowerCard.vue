@@ -68,7 +68,7 @@ const openKnowledgeItems = ref([]);
           <template #title v-if="props.showEdit">
              <div class="d-flex flex-column flex-md-row align-self-center justify-content-end">
                <div class="p-0 m-0 d-inline-flex">
-                 <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event, power.id)" />
+                 <Button v-if="power.requiredPower" class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event, power.id)" />
                  <Button class="float-end" label="Edit" @click="dialogs.showEditPower(power)" />
                </div>
              </div>
