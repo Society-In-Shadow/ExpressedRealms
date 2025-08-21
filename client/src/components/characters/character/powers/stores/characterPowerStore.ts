@@ -68,5 +68,21 @@ export const characterPowersStore =
                         toaster.success("Successfully Deleted Power!");
                     });
             },
+            downloadPowerCards: async function (characterId: number, expressionName: string, isFiveByThree: boolean): Promise<void> {
+                const res = await axios.get(`/characters/${characterId}/powers/downloadCards`, {
+                    responseType: 'blob',
+                    params: {
+                        isFiveByThree: isFiveByThree,
+                    }
+                });
+                const url = URL.createObjectURL(res.data);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${expressionName}PowerBooklet.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(url);
+            }
         }
     });
