@@ -10,11 +10,6 @@ internal sealed class CharacterPowerRepository(
     CancellationToken token
 ) : ICharacterPowerRepository
 {
-    public async Task<CharacterPowerMapping> GetCharacterPowerMapping(int id)
-    {
-        return await context.CharacterPowerMappings.FirstAsync(x => x.Id == id, token);
-    }
-
     public async Task<CharacterPowerMapping> GetCharacterPowerMapping(int characterId, int powerId)
     {
         return await context.CharacterPowerMappings.FirstAsync(

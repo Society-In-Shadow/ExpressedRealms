@@ -2,14 +2,12 @@
 
 import Card from "primevue/card";
 import Button from "primevue/button";
-import {type PropType, ref} from "vue";
+import {type PropType} from "vue";
 import type {Power} from "@/components/expressions/powers/types";
-import {userStore} from "@/stores/userStore";
 import {isNullOrWhiteSpace, makeIdSafe} from "@/utilities/stringUtilities";
 import {scrollToSection} from "@/components/expressions/expressionUtilities";
 import {characterPowerDialogs} from "@/components/characters/character/powers/services/dialogs.ts";
 
-let userInfo = userStore();
 const dialogs = characterPowerDialogs();
 const props = defineProps({
   power: {
@@ -21,14 +19,6 @@ const props = defineProps({
     required: false
   }
 });
-
-//const popups = powerConfirmationPopups(props.power.id, props.power.name, props.powerPathId);
-
-const showEdit = ref(false);
-
-const toggleEdit = () =>{
-  showEdit.value = !showEdit.value;
-}
 
 </script>
 

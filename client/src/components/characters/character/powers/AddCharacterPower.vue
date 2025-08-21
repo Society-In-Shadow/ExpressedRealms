@@ -4,7 +4,7 @@ import FormTextAreaWrapper from "@/FormWrappers/FormTextAreaWrapper.vue";
 import Button from "primevue/button";
 import {getValidationInstance} from "@/components/characters/character/powers/validations/powerValidations.ts";
 import {useRoute} from "vue-router";
-import {inject, onBeforeMount, ref} from "vue";
+import {inject, ref} from "vue";
 import {characterPowersStore} from "@/components/characters/character/powers/stores/characterPowerStore.ts";
 import PickPowerCard from "@/components/characters/character/powers/PickPowerCard.vue";
 
@@ -19,14 +19,6 @@ const power = ref(dialogRef.value.data.power);
 const closeDialog = () => {
   dialogRef.value.close();
 }
-
-onBeforeMount(async () => {
-/*  await store.getKnowledgeLevels(route.params.id);
-  store.knowledgeLevels.forEach(function(level:KnowledgeOptions) {
-    const xpCost = isUnknownKnowledge.value ? level.totalUnknownXpCost : level.totalGeneralXpCost;
-    level.disabled = xpCost > store.currentExperience;
-  });*/
-})
 
 const onSubmit = form.handleSubmit(async (values) => {
   await store.addPower(values, route.params.id, power.value.id);
