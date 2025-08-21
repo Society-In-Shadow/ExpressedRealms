@@ -40,18 +40,25 @@ public class UpdatePowerForCharacterUseCaseTests
         _characterRepository = A.Fake<ICharacterRepository>();
         _powerRepository = A.Fake<IPowerRepository>();
 
-        A.CallTo(() => _characterRepository.CharacterExistsAsync(_powerToCharacterModel.CharacterId))
-            .Returns(true);
-        
-        A.CallTo(() => _powerRepository.IsValidPower(_powerToCharacterModel.PowerId))
-            .Returns(true);
-        
         A.CallTo(() =>
-                _mappingRepository.GetCharacterPowerMapping(_powerToCharacterModel.CharacterId, _powerToCharacterModel.PowerId)
+                _characterRepository.CharacterExistsAsync(_powerToCharacterModel.CharacterId)
+            )
+            .Returns(true);
+
+        A.CallTo(() => _powerRepository.IsValidPower(_powerToCharacterModel.PowerId)).Returns(true);
+
+        A.CallTo(() =>
+                _mappingRepository.GetCharacterPowerMapping(
+                    _powerToCharacterModel.CharacterId,
+                    _powerToCharacterModel.PowerId
+                )
             )
             .Returns(_mapping);
 
-        var validator = new UpdatePowerForCharacterModelValidator(_characterRepository, _powerRepository);
+        var validator = new UpdatePowerForCharacterModelValidator(
+            _characterRepository,
+            _powerRepository
+        );
 
         _useCase = new UpdatePowerForCharacterUseCase(
             _mappingRepository,
@@ -75,7 +82,9 @@ public class UpdatePowerForCharacterUseCaseTests
     [Fact]
     public async Task ValidationFor_CharacterId_WillFail_WhenItDoesNotExist()
     {
-        A.CallTo(() => _characterRepository.CharacterExistsAsync(_powerToCharacterModel.CharacterId))
+        A.CallTo(() =>
+                _characterRepository.CharacterExistsAsync(_powerToCharacterModel.CharacterId)
+            )
             .Returns(false);
         var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
 
@@ -84,7 +93,7 @@ public class UpdatePowerForCharacterUseCaseTests
             "The Character does not exist."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_PowerId_WillFail_WhenItsEmpty()
     {

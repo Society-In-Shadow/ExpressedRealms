@@ -14,7 +14,9 @@ public static class DeleteCharacterPowerEndpoint
         [FromServices] IDeletePowerFromCharacterUseCase useCase
     )
     {
-        var results = await useCase.ExecuteAsync(new() { CharacterId = characterId, PowerId = powerId});
+        var results = await useCase.ExecuteAsync(
+            new() { CharacterId = characterId, PowerId = powerId }
+        );
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;

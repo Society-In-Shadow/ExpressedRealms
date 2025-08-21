@@ -30,16 +30,8 @@ public class GetCharacterPowersUseCaseTests
 
         _powerInfo = new List<CharacterPowerInfo>()
         {
-            new CharacterPowerInfo()
-            {
-                PowerId = 1,
-                UserNotes = "Notes"
-            },
-            new CharacterPowerInfo()
-            {
-                PowerId = 2,
-                UserNotes = "Notes2"
-            },
+            new CharacterPowerInfo() { PowerId = 1, UserNotes = "Notes" },
+            new CharacterPowerInfo() { PowerId = 2, UserNotes = "Notes2" },
         };
 
         _mappingRepository = A.Fake<ICharacterPowerRepository>();
@@ -127,7 +119,7 @@ public class GetCharacterPowersUseCaseTests
 
         A.CallTo(() => _mappingRepository.GetCharacterPowerMappingInfo(model.CharacterId))
             .Returns(_powerInfo);
-        
+
         var powerIds = _powerInfo.Select(x => x.PowerId).ToList();
         A.CallTo(() => _powerPathRepository.GetPowerPathAndPowers(powerIds)).Returns(_dbModels);
 

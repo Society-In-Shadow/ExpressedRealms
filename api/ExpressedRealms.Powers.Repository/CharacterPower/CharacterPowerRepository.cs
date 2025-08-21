@@ -14,23 +14,20 @@ internal sealed class CharacterPowerRepository(
     {
         return await context.CharacterPowerMappings.FirstAsync(x => x.Id == id, token);
     }
-    
+
     public async Task<CharacterPowerMapping> GetCharacterPowerMapping(int characterId, int powerId)
     {
-        return await context.CharacterPowerMappings
-            .FirstAsync(x => x.CharacterId == characterId && x.PowerId == powerId, token);
+        return await context.CharacterPowerMappings.FirstAsync(
+            x => x.CharacterId == characterId && x.PowerId == powerId,
+            token
+        );
     }
 
     public async Task<List<CharacterPowerInfo>> GetCharacterPowerMappingInfo(int characterId)
     {
         return await context
-            .CharacterPowerMappings
-            .Where(x => x.CharacterId == characterId)
-            .Select(x => new CharacterPowerInfo()
-            {
-                PowerId = x.PowerId,
-                UserNotes = x.Notes
-            })
+            .CharacterPowerMappings.Where(x => x.CharacterId == characterId)
+            .Select(x => new CharacterPowerInfo() { PowerId = x.PowerId, UserNotes = x.Notes })
             .ToListAsync(token);
     }
 
@@ -41,7 +38,7 @@ internal sealed class CharacterPowerRepository(
             token
         );
     }
-    
+
     public async Task<bool> IsValidMapping(int id)
     {
         return await context.CharacterPowerMappings.AnyAsync(x => x.Id == id, token);

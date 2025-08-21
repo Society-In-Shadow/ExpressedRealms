@@ -21,7 +21,10 @@ internal sealed class UpdatePowerForCharacterUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var mapping = await mappingRepository.GetCharacterPowerMapping(model.CharacterId, model.PowerId);
+        var mapping = await mappingRepository.GetCharacterPowerMapping(
+            model.CharacterId,
+            model.PowerId
+        );
 
         mapping.Notes = model.Notes?.Trim() == string.Empty ? null : model.Notes?.Trim();
 

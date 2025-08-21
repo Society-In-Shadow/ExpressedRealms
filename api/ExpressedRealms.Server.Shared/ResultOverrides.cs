@@ -30,12 +30,10 @@ public static class ResultOverrides
                 {
                     stringBuilder.AppendLine(reason.Message);
                 }
-                
             }
-            
+
             throw new NotImplementedException(stringBuilder.ToString());
         }
-
     }
 
     public static bool HasNotFound(this Result result, out NotFound typedResults)

@@ -17,7 +17,12 @@ public static class EditCharacterPowerEndpoint
     )
     {
         var results = await editKnowledgeUseCase.ExecuteAsync(
-            new() { PowerId = powerId, CharacterId = characterId, Notes = request.Notes }
+            new()
+            {
+                PowerId = powerId,
+                CharacterId = characterId,
+                Notes = request.Notes,
+            }
         );
 
         if (results.HasValidationError(out var validationProblem))
