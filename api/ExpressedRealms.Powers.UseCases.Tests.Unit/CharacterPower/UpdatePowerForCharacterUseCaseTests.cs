@@ -54,10 +54,19 @@ public class UpdatePowerForCharacterUseCaseTests
                 )
             )
             .Returns(_mapping);
+        
+        A.CallTo(() =>
+                _mappingRepository.MappingExistsAsync(
+                    _powerToCharacterModel.PowerId,
+                    _powerToCharacterModel.CharacterId
+                )
+            )
+            .Returns(true);
 
         var validator = new UpdatePowerForCharacterModelValidator(
             _characterRepository,
-            _powerRepository
+            _powerRepository,
+            _mappingRepository
         );
 
         _useCase = new UpdatePowerForCharacterUseCase(
@@ -116,6 +125,24 @@ public class UpdatePowerForCharacterUseCaseTests
         result.MustHaveValidationError(
             nameof(UpdatePowerForCharacterModel.PowerId),
             "The Power does not exist."
+        );
+    }
+    
+    [Fact]
+    public async Task ValidationFor_PowerId_WillFail_WhenMappingDoesNotExist()
+    {
+        A.CallTo(() =>
+                _mappingRepository.MappingExistsAsync(
+                    _powerToCharacterModel.PowerId,
+                    _powerToCharacterModel.CharacterId
+                )
+            )
+            .Returns(false);
+        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
+
+        result.MustHaveValidationError(
+            nameof(UpdatePowerForCharacterModel.PowerId),
+            "The Mapping does not exist."
         );
     }
 

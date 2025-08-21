@@ -1,4 +1,5 @@
 using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.Powers.Repository.Powers;
 using FluentValidation;
 using JetBrains.Annotations;
@@ -11,7 +12,8 @@ internal sealed class UpdatePowerForCharacterModelValidator
 {
     public UpdatePowerForCharacterModelValidator(
         ICharacterRepository characterRepository,
-        IPowerRepository powerRepository
+        IPowerRepository powerRepository,
+        ICharacterPowerRepository mappingRepository
     )
     {
         RuleFor(x => x.CharacterId)
@@ -30,5 +32,12 @@ internal sealed class UpdatePowerForCharacterModelValidator
             .MaximumLength(5000)
             .When(x => !string.IsNullOrWhiteSpace(x.Notes))
             .WithMessage("Notes must be less than 5000 characters.");
+        
+        RuleFor(x => x)
+            .MustAsync(
+                async (x, y) => await mappingRepository.MappingExistsAsync(x.PowerId, x.CharacterId)
+            )
+            .WithMessage("The Mapping does not exist.")
+            .WithName(nameof(UpdatePowerForCharacterModel.PowerId));
     }
 }

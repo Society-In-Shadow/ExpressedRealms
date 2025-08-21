@@ -35,6 +35,12 @@ internal sealed class AddPowerToCharacterModelValidator
             )
             .WithMessage("The power already exists for this character.")
             .WithName(nameof(AddPowerToCharacterModel.PowerId));
+        
+        RuleFor(x => x)
+            .MustAsync(
+                async (x, y) => await powerRepository.IsValidPowerForCharacter(x.CharacterId, x.PowerId))
+            .WithMessage("The Power is not part of the Expression for the Character.")
+            .WithName(nameof(AddPowerToCharacterModel.PowerId));
 
         RuleFor(x => x)
             .MustAsync(

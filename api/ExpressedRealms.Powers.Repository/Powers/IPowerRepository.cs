@@ -18,6 +18,7 @@ public interface IPowerRepository
     Task<Result<EditPowerInformation>> GetPowerAsync(int powerId);
     Task<Result> UpdatePowerPathSortOrder(EditPowerSortModel dto);
     Task<bool> IsValidPower(int id);
+    Task<bool> IsValidPowerForCharacter(int characterId, int powerId);
     Task<bool> AreValidPowers(List<int> ids);
     Task<bool> RequirementAlreadyExists(int id);
     Task<bool> IsValidRequirement(int id);
