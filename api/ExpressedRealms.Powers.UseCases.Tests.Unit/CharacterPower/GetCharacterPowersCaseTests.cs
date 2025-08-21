@@ -120,7 +120,7 @@ public class GetCharacterPowersUseCaseTests
 
         A.CallTo(() => _mappingRepository.GetCharacterPowerMappingInfo(model.CharacterId))
             .Returns(_powerInfo);
-        
+
         A.CallTo(() => _mappingRepository.GetPowersThatArePrerequisites(model.CharacterId))
             .Returns(_requiredIds);
 

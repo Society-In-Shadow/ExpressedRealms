@@ -62,7 +62,7 @@ public class DeletePowerFromCharacterUseCaseTests
                 )
             )
             .Returns(_mapping);
-        
+
         A.CallTo(() =>
                 _mappingRepository.IsPowerPartOfPrerequisite(
                     _powerToCharacterModel.CharacterId,
@@ -153,7 +153,7 @@ public class DeletePowerFromCharacterUseCaseTests
             "The Mapping does not exist."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_PowerId_WillFail_WhenMappingIsPartOfAPrerequisite()
     {

@@ -100,7 +100,7 @@ internal sealed class CharacterPowerRepository(
         // Already selected powers should not be added again
         return selectablePowers.Except(powerMappings).ToList();
     }
-    
+
     public async Task<bool> IsPowerPartOfPrerequisite(int characterId, int powerId)
     {
         // Get all the assigned powers
@@ -109,24 +109,23 @@ internal sealed class CharacterPowerRepository(
             .Select(x => x.PowerId)
             .ToListAsync(token);
 
-
-        var prerequisitePowerIds = await context.PowerPrerequisitePowers
-            .Where(x => x.PowerId == powerId)
+        var prerequisitePowerIds = await context
+            .PowerPrerequisitePowers.Where(x => x.PowerId == powerId)
             .Select(x => x.Prerequisite.PowerId)
             .ToListAsync();
 
         return prerequisitePowerIds.Intersect(powerMappings).Any();
     }
-    
+
     public async Task<List<int>> GetPowersThatArePrerequisites(int characterId)
     {
         var powerMappings = await context
             .CharacterPowerMappings.Where(x => x.CharacterId == characterId)
             .Select(x => x.PowerId)
             .ToListAsync(token);
-        
-        var prerequisitePowerIds = await context.PowerPrerequisitePowers
-            .Where(x => powerMappings.Contains(x.PowerId))
+
+        var prerequisitePowerIds = await context
+            .PowerPrerequisitePowers.Where(x => powerMappings.Contains(x.PowerId))
             .Select(x => x.Prerequisite.PowerId)
             .ToListAsync();
 
