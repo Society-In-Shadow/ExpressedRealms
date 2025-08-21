@@ -1,5 +1,7 @@
+using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup;
 using ExpressedRealms.Powers.Repository.CharacterPower;
+using ExpressedRealms.Powers.Repository.Powers;
 using ExpressedRealms.Powers.UseCases.CharacterPower.Create;
 using ExpressedRealms.Powers.UseCases.CharacterPower.Edit;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
@@ -14,12 +16,15 @@ public class UpdatePowerForCharacterUseCaseTests
     private readonly ICharacterPowerRepository _mappingRepository;
     private readonly UpdatePowerForCharacterModel _powerToCharacterModel;
     private readonly CharacterPowerMapping _mapping;
+    private readonly ICharacterRepository _characterRepository;
+    private readonly IPowerRepository _powerRepository;
 
     public UpdatePowerForCharacterUseCaseTests()
     {
         _powerToCharacterModel = new UpdatePowerForCharacterModel()
         {
-            MappingId = 1,
+            CharacterId = 1,
+            PowerId = 2,
             Notes = "123",
         };
 
@@ -32,16 +37,21 @@ public class UpdatePowerForCharacterUseCaseTests
         };
 
         _mappingRepository = A.Fake<ICharacterPowerRepository>();
+        _characterRepository = A.Fake<ICharacterRepository>();
+        _powerRepository = A.Fake<IPowerRepository>();
 
-        A.CallTo(() => _mappingRepository.IsValidMapping(_powerToCharacterModel.MappingId))
+        A.CallTo(() => _characterRepository.CharacterExistsAsync(_powerToCharacterModel.CharacterId))
             .Returns(true);
-
+        
+        A.CallTo(() => _powerRepository.IsValidPower(_powerToCharacterModel.PowerId))
+            .Returns(true);
+        
         A.CallTo(() =>
-                _mappingRepository.GetCharacterPowerMapping(_powerToCharacterModel.MappingId)
+                _mappingRepository.GetCharacterPowerMapping(_powerToCharacterModel.CharacterId, _powerToCharacterModel.PowerId)
             )
             .Returns(_mapping);
 
-        var validator = new UpdatePowerForCharacterModelValidator(_mappingRepository);
+        var validator = new UpdatePowerForCharacterModelValidator(_characterRepository, _powerRepository);
 
         _useCase = new UpdatePowerForCharacterUseCase(
             _mappingRepository,
@@ -51,27 +61,52 @@ public class UpdatePowerForCharacterUseCaseTests
     }
 
     [Fact]
-    public async Task ValidationFor_MappingId_WillFail_WhenItsEmpty()
+    public async Task ValidationFor_CharacterId_WillFail_WhenItsEmpty()
     {
-        _powerToCharacterModel.MappingId = 0;
+        _powerToCharacterModel.CharacterId = 0;
         var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
 
         result.MustHaveValidationError(
-            nameof(UpdatePowerForCharacterModel.MappingId),
-            "Mapping Id is required."
+            nameof(UpdatePowerForCharacterModel.CharacterId),
+            "Character Id is required."
         );
     }
 
     [Fact]
-    public async Task ValidationFor_MappingId_WillFail_WhenItDoesNotExist()
+    public async Task ValidationFor_CharacterId_WillFail_WhenItDoesNotExist()
     {
-        A.CallTo(() => _mappingRepository.IsValidMapping(_powerToCharacterModel.MappingId))
+        A.CallTo(() => _characterRepository.CharacterExistsAsync(_powerToCharacterModel.CharacterId))
             .Returns(false);
         var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
 
         result.MustHaveValidationError(
-            nameof(UpdatePowerForCharacterModel.MappingId),
-            "The Mapping does not exist."
+            nameof(UpdatePowerForCharacterModel.CharacterId),
+            "The Character does not exist."
+        );
+    }
+    
+    [Fact]
+    public async Task ValidationFor_PowerId_WillFail_WhenItsEmpty()
+    {
+        _powerToCharacterModel.PowerId = 0;
+        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
+
+        result.MustHaveValidationError(
+            nameof(UpdatePowerForCharacterModel.PowerId),
+            "Power Id is required."
+        );
+    }
+
+    [Fact]
+    public async Task ValidationFor_PowerId_WillFail_WhenItDoesNotExist()
+    {
+        A.CallTo(() => _powerRepository.IsValidPower(_powerToCharacterModel.PowerId))
+            .Returns(false);
+        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
+
+        result.MustHaveValidationError(
+            nameof(UpdatePowerForCharacterModel.PowerId),
+            "The Power does not exist."
         );
     }
 

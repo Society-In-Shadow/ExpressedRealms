@@ -13,6 +13,12 @@ internal sealed class CharacterPowerRepository(
     {
         return await context.CharacterPowerMappings.FirstAsync(x => x.Id == id, token);
     }
+    
+    public async Task<CharacterPowerMapping> GetCharacterPowerMapping(int characterId, int powerId)
+    {
+        return await context.CharacterPowerMappings
+            .FirstAsync(x => x.CharacterId == characterId && x.PowerId == powerId, token);
+    }
 
     public async Task<List<int>> GetCharacterPowerIds(int characterId)
     {

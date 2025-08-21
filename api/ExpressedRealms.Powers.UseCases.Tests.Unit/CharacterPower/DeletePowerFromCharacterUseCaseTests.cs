@@ -1,7 +1,6 @@
 using ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup;
 using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.Powers.UseCases.CharacterPower.Delete;
-using ExpressedRealms.Powers.UseCases.CharacterPower.Edit;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
 using Xunit;
@@ -53,7 +52,7 @@ public class DeletePowerFromCharacterUseCaseTests
         var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
 
         result.MustHaveValidationError(
-            nameof(UpdatePowerForCharacterModel.MappingId),
+            nameof(DeletePowerFromCharacterModel.MappingId),
             "Mapping Id is required."
         );
     }
@@ -66,7 +65,7 @@ public class DeletePowerFromCharacterUseCaseTests
         var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
 
         result.MustHaveValidationError(
-            nameof(UpdatePowerForCharacterModel.MappingId),
+            nameof(DeletePowerFromCharacterModel.MappingId),
             "The Mapping does not exist."
         );
     }
