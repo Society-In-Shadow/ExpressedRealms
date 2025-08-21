@@ -15,7 +15,7 @@ export const characterPowersStore =
                 selectablePowers: [] as Array<PowerPath>,
                 currentExperience: 0 as number
             }
-        },    
+        },
         actions: {
             async getCharacterPowers(characterId: number){
                 this.isLoading = true;
@@ -42,21 +42,22 @@ export const characterPowersStore =
                         toaster.success("Successfully Added Power!");
                     });
             },
-            editKnowledge: async function (values:CharacterPowerForm, characterId: number, mappingId: number): Promise<void> {
-                await axios.put(`/characters/${characterId}/knowledges/${mappingId}`, {
-                    knowledgeLevelId: values.knowledgeLevel,
+            editPower: async function (values:CharacterPowerForm, characterId: number, powerId: number): Promise<void> {
+                await axios.put(`/characters/${characterId}/powers/${powerId}`, {
                     notes: values.notes,
                 })
                     .then(async () => {
                         await this.getCharacterPowers(characterId);
-                        toaster.success("Successfully Updated Knowledge!");
+                        await this.getSelectableCharacterPowers(characterId);
+                        toaster.success("Successfully Updated Power!");
                     });
             },
-            deleteKnowledge: async function (characterId: number, mappingId: number): Promise<void> {
-                await axios.delete(`/characters/${characterId}/knowledges/${mappingId}`)
+            deletePower: async function (characterId: number, powerId: number): Promise<void> {
+                await axios.delete(`/characters/${characterId}/powers/${powerId}`)
                     .then(async () => {
                         await this.getCharacterPowers(characterId);
-                        toaster.success("Successfully Deleted Knowledge!");
+                        await this.getSelectableCharacterPowers(characterId);
+                        toaster.success("Successfully Deleted Power!");
                     });
             },
         }

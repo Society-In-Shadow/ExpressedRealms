@@ -1,8 +1,7 @@
 import {useDialog} from 'primevue/usedialog';
-import type {CharacterKnowledge} from "@/components/characters/character/knowledges/types";
-import EditCharacterKnowledge from "@/components/characters/character/knowledges/EditCharacterKnowledge.vue";
 import AddCharacterPower from "@/components/characters/character/powers/AddCharacterPower.vue";
 import type {Power} from "@/components/characters/character/powers/types.ts";
+import EditCharacterPower from "@/components/characters/character/powers/EditCharacterPower.vue";
 
 export const characterPowerDialogs = () => {
 
@@ -27,10 +26,10 @@ export const characterPowerDialogs = () => {
         });
     }
 
-    const showEditCharacter = (knowledge: CharacterKnowledge) => {
-        dialog.open(EditCharacterKnowledge, {
+    const showEditPower = (power: Power) => {
+        dialog.open(EditCharacterPower, {
             props: {
-                header: 'Edit Knowledge',
+                header: 'Edit Power',
                 style: {
                     width: '500px',
                 },
@@ -41,14 +40,13 @@ export const characterPowerDialogs = () => {
                 modal: true
             },
             data: {
-                knowledge: knowledge,
-                isReadOnly: false,
+                power: power
             }
         });
     }
     
     return {
         showAddPower,
-        showEditCharacter
+        showEditPower
     }
 }

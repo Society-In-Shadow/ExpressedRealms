@@ -1,10 +1,8 @@
 <script setup lang="ts">
 
 import Card from "primevue/card";
+import Button from "primevue/button";
 import {type PropType, ref} from "vue";
-import EditPower from "@/components/expressions/powers/EditPower.vue";
-import {powerConfirmationPopups} from "@/components/expressions/powers/services/powerConfirmationPopupService";
-import {UserRoles, userStore} from "@/stores/userStore";
 import {isNullOrWhiteSpace, makeIdSafe} from "@/utilities/stringUtilities";
 import {scrollToSection} from "@/components/expressions/expressionUtilities";
 import AccordionHeader from "primevue/accordionheader";
@@ -13,39 +11,29 @@ import AccordionPanel from "primevue/accordionpanel";
 import AccordionContent from "primevue/accordioncontent";
 import Tag from "primevue/tag";
 import type {PowerPath} from "@/components/characters/character/powers/types.ts";
+import {characterPowerDialogs} from "@/components/characters/character/powers/services/dialogs.ts";
+import {confirmationPopup} from "@/components/characters/character/powers/services/confirmationService.ts";
+import {useRoute} from "vue-router";
 
-let userInfo = userStore();
+const route = useRoute();
+const dialogs = characterPowerDialogs()
 const props = defineProps({
   powerPath: {
     type: Object as PropType<PowerPath>,
     required: true,
   },
-  powerPathId:{
-    type: Number,
-    required: true
-  },
-  isReadOnly:{
+  showEdit: {
     type: Boolean,
     required: false
   }
 });
 
-const popups = powerConfirmationPopups(props.powerPath.id, props.powerPath.name, props.powerPathId);
+const popups = confirmationPopup(route.params.id);
 const openKnowledgeItems = ref([]);
-const showEdit = ref(false);
-
-const toggleEdit = () =>{
-  showEdit.value = !showEdit.value;
-}
 
 </script>
 
 <template>
-  <EditPower
-    v-if="showEdit && userInfo.hasUserRole(UserRoles.PowerManagementRole) && !props.isReadOnly" :power-id="props.powerPath.id"
-    :power-path-id="props.powerPathId" @canceled="toggleEdit"
-  />
-
   <Accordion :value="openKnowledgeItems" multiple expand-icon="pi pi-info-circle" collapse-icon="pi pi-times-circle">
     <AccordionPanel v-for="power in props.powerPath.powers" :key="power.id" :value="power.id">
       <AccordionHeader>
@@ -77,17 +65,14 @@ const toggleEdit = () =>{
       </AccordionHeader>
       <AccordionContent>
         <Card :id="makeIdSafe(power.name)" class="card-body-fix">
-          <!-- <template #title>
-             <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
-               <div
-                 v-if="!showEdit && userInfo.hasUserRole(UserRoles.PowerManagementRole) && !props.isReadOnly"
-                 class="p-0 m-0 d-inline-flex align-items-start"
-               >
-                 <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
-                 <Button class="float-end" label="Edit" @click="toggleEdit" />
+          <template #title v-if="props.showEdit">
+             <div class="d-flex flex-column flex-md-row align-self-center justify-content-end">
+               <div class="p-0 m-0 d-inline-flex">
+                 <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event, power.id)" />
+                 <Button class="float-end" label="Edit" @click="dialogs.showEditPower(power)" />
                </div>
              </div>
-           </template>-->
+           </template>
           <template #subtitle>
             <div class="pt-0 mt-0" v-html="power.description" />
           </template>
@@ -100,9 +85,6 @@ const toggleEdit = () =>{
               Limitations
             </h2>
             <div v-if="!isNullOrWhiteSpace(power.limitation)" v-html="power.limitation" />
-      
-      
-      
       
             <h2 v-if="power.prerequisites">
               Prerequisites
@@ -138,8 +120,6 @@ const toggleEdit = () =>{
             </h2>
             <div v-if="!isNullOrWhiteSpace(power.other)" v-html="power.other" />
             
-
-      
           </template>
         </Card>
       </AccordionContent>

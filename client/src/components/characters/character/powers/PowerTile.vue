@@ -38,7 +38,7 @@ async function toggleEdit(){
 
     <div v-for="path in characterKnowledgeData.powers">
       <h1>{{path.name}}</h1>
-      <PowerCard :power-path="path"  :power-path-id="path.id"/>
+      <PowerCard :power-path="path" :show-edit="showEdit"/>
     </div>
     
     <div v-if="showEdit" class="mb-2">

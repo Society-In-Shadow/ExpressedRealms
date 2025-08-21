@@ -1,16 +1,16 @@
 import {useConfirm} from "primevue/useconfirm";
-import {characterKnowledgeStore} from "@/components/characters/character/knowledges/stores/characterKnowledgeStore";
+import {characterPowersStore} from "@/components/characters/character/powers/stores/characterPowerStore.ts";
 
 export const confirmationPopup = (characterId: number) => {
 
     const confirm = useConfirm();
-    const store = characterKnowledgeStore();
+    const store = characterPowersStore();
 
-    const deleteConfirmation = (event: MouseEvent, mappingId: number) =>
+    const deleteConfirmation = (event: MouseEvent, powerId: number) =>
         confirm.require({
         target: event.target as HTMLElement,
         group: 'popup',
-        message: `Do you want to delete this knowledge?`,
+        message: `Do you want to delete this power?`,
         icon: 'pi pi-info-circle',
         rejectProps: {
             label: 'Cancel',
@@ -18,35 +18,15 @@ export const confirmationPopup = (characterId: number) => {
             outlined: true
         },
         acceptProps: {
-            label: 'Delete Knowledge',
+            label: 'Delete Power',
             severity: 'danger'
         },
         accept: () => {
-            store.deleteKnowledge(characterId, mappingId);
+            store.deletePower(characterId, powerId);
         }
     });
     
-    const deleteSpecializationConfirmation = (event: MouseEvent, mappingId: number, specializationId: number) =>
-        confirm.require({
-            target: event.target as HTMLElement,
-            group: 'popup',
-            message: `Do you want to delete this specialization?`,
-            icon: 'pi pi-info-circle',
-            rejectProps: {
-                label: 'Cancel',
-                severity: 'secondary',
-                outlined: true
-            },
-            acceptProps: {
-                label: 'Delete Specialization',
-                severity: 'danger'
-            },
-            accept: () => {
-                store.deleteSpecialization(characterId, mappingId, specializationId);
-            }
-        });
-
-    return { deleteConfirmation, deleteSpecializationConfirmation };
+    return { deleteConfirmation };
 
 };
 
