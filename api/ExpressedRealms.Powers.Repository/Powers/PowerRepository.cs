@@ -98,6 +98,14 @@ internal sealed class PowerRepository(
         return Result.Ok(power);
     }
 
+    public async Task<int> GetPowerExperienceCost(int powerId)
+    {
+        return await context
+            .Powers.Where(x => x.Id == powerId)
+            .Select(x => x.PowerLevel.Xp)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
     public async Task<Result<PowerOptions>> GetPowerOptionsAsync()
     {
         return Result.Ok(

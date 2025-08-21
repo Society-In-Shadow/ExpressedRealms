@@ -1,10 +1,11 @@
 <script setup lang="ts">
 
+import Message from "primevue/message";
 import FormTextAreaWrapper from "@/FormWrappers/FormTextAreaWrapper.vue";
 import Button from "primevue/button";
 import {getValidationInstance} from "@/components/characters/character/powers/validations/powerValidations.ts";
 import {useRoute} from "vue-router";
-import {inject, ref} from "vue";
+import {computed, inject, onMounted, ref} from "vue";
 import {characterPowersStore} from "@/components/characters/character/powers/stores/characterPowerStore.ts";
 import PickPowerCard from "@/components/characters/character/powers/PickPowerCard.vue";
 
@@ -20,6 +21,20 @@ const closeDialog = () => {
   dialogRef.value.close();
 }
 
+const availableXp = ref(0);
+const powerXp = ref(0);
+
+const disabled = computed(() => {
+  return availableXp.value < powerXp.value || availableXp.value == 0 && powerXp.value == 0;
+})
+
+onMounted(async () => {
+  var values = await store.getPowerOptions(route.params.id, power.value.id);
+  availableXp.value = values.availableXp;
+  powerXp.value = values.powerXp;
+})
+
+
 const onSubmit = form.handleSubmit(async (values) => {
   await store.addPower(values, route.params.id, power.value.id);
   closeDialog()
@@ -31,16 +46,20 @@ const onSubmit = form.handleSubmit(async (values) => {
   
   <PickPowerCard :power="power" />
   
-  <h3 class="text-right">
-    Available Experience: {{ store.currentExperience }}
+  <h3 class="d-flex justify-content-between">
+    <span>Experience Cost: {{ powerXp }}</span>
+    <span>Available Experience: {{ availableXp }}</span>
   </h3>
+  <Message severity="warn" v-if="disabled">
+    You do not have enough experience to add this power
+  </Message>
   <form @submit="onSubmit">
 
-    <FormTextAreaWrapper v-model="form.notes" />
+    <FormTextAreaWrapper v-model="form.notes" :disabled="disabled"  />
 
     <div class="m-3 text-right">
       <Button label="Cancel" class="m-2" type="reset" @click="closeDialog()" />
-      <Button label="Pick" class="m-2" type="submit" />
+      <Button label="Pick" class="m-2" type="submit" :disabled="disabled" />
     </div>
   </form>
 </template>
