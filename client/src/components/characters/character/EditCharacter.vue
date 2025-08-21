@@ -44,7 +44,7 @@ onMounted(async() =>{
     
     <TrackableProficiencies />
     
-    <Tabs value="0" class="w-100" scrollable>
+    <Tabs value="0" class="w-100" scrollable :lazy="true" >
       <TabList>
         <Tab value="0">
           Proficiencies

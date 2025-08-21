@@ -5,9 +5,8 @@ import Button from "primevue/button";
 import {getValidationInstance} from "@/components/characters/character/knowledges/validations/knowledgeValidations";
 import {useRoute} from "vue-router";
 import {inject, onBeforeMount, ref} from "vue";
-import type {KnowledgeOptions} from "@/components/characters/character/knowledges/types";
-import Message from "primevue/message";
 import {characterPowersStore} from "@/components/characters/character/powers/stores/characterPowerStore.ts";
+import PickPowerCard from "@/components/characters/character/powers/PickPowerCard.vue";
 
 const store = characterPowersStore();
 const form = getValidationInstance();
@@ -15,52 +14,36 @@ const route = useRoute();
 
 const dialogRef = inject('dialogRef');
 
-const knowledge = ref(dialogRef.value.data.knowledge);
-const isReadOnly = ref(dialogRef.value.data.isReadOnly);
-const isUnknownKnowledge = ref(knowledge.value.typeName === 'Unknown');
+const power = ref(dialogRef.value.data.power);
+
 const closeDialog = () => {
   dialogRef.value.close();
 }
 
 onBeforeMount(async () => {
-  await store.getKnowledgeLevels(route.params.id);
+/*  await store.getKnowledgeLevels(route.params.id);
   store.knowledgeLevels.forEach(function(level:KnowledgeOptions) {
     const xpCost = isUnknownKnowledge.value ? level.totalUnknownXpCost : level.totalGeneralXpCost;
     level.disabled = xpCost > store.currentExperience;
-  });
+  });*/
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await store.addKnowledge(values, route.params.id, knowledge.value.id);
+  await store.addPower(values, route.params.id, power.value.id);
   closeDialog()
 });
 
 </script>
 
 <template>
-  <h1 class="pt-0 mt-0">
-    {{ knowledge.name }}
-  </h1>
-  <h3>{{ knowledge.typeName }}</h3>
-  <p>{{ knowledge.description }}</p>
+  
+  <PickPowerCard :power="power" />
+  
   <h3 class="text-right">
     Available Experience: {{ store.currentExperience }}
   </h3>
   <form @submit="onSubmit">
 
-    <Message v-if="form.knowledgeLevel.field == 8" severity="warn">
-      <p>
-        Gaining the doctorate of knowledge also requires the completion of a quest of some kind. The quest can be as
-        straightforward as finding lost or unknown relics that relate to the subject or as complicated as a life-long
-        journey to discover new theories and paradigms of the knowledge. In either case, the quest should have some
-        bearing on the field of the knowledge.
-      </p>
-      <p>
-        Selecting this will require interaction with a GO to get the quest approved.  Use the notes field below to
-        keep track of your ideas, and anything you may have discussed with your GO.
-      </p>
-    </Message>
-    
     <FormTextAreaWrapper v-model="form.notes" />
 
     <div class="m-3 text-right">

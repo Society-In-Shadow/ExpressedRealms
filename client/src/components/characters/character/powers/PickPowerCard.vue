@@ -7,8 +7,10 @@ import type {Power} from "@/components/expressions/powers/types";
 import {userStore} from "@/stores/userStore";
 import {isNullOrWhiteSpace, makeIdSafe} from "@/utilities/stringUtilities";
 import {scrollToSection} from "@/components/expressions/expressionUtilities";
+import {characterPowerDialogs} from "@/components/characters/character/powers/services/dialogs.ts";
 
 let userInfo = userStore();
+const dialogs = characterPowerDialogs();
 const props = defineProps({
   power: {
     type: Object as PropType<Power>,
@@ -43,7 +45,7 @@ const toggleEdit = () =>{
           </div>
         </div>
         <div v-if="props.showPickButton" class="pl-3 flex-grow-1">
-          <Button class="float-end" label="Pick" @click="" />
+          <Button class="float-end" label="Pick" @click="dialogs.showAddPower(props.power)" />
         </div>
       </div>
     </template>

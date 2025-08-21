@@ -1,10 +1,10 @@
 import {defineStore} from 'pinia'
 import axios from "axios";
 import toaster from "@/services/Toasters";
-import type {
-    CharacterKnowledgeForm
-} from "@/components/characters/character/knowledges/validations/knowledgeValidations";
 import type {CharacterPowerResponse, PowerPath} from "@/components/characters/character/powers/types.ts";
+import type {
+    CharacterPowerForm
+} from "@/components/characters/character/knowledges/validations/knowledgeValidations.ts";
 
 export const characterPowersStore =
     defineStore('characterPowers', {
@@ -31,18 +31,18 @@ export const characterPowersStore =
                 this.selectablePowers = response.data.powers;
                 this.isLoading = false;
             },
-            addKnowledge: async function (values:CharacterKnowledgeForm, characterId: number, knowledgeId: number): Promise<void> {
-                await axios.post(`/characters/${characterId}/knowledges/`, {
-                    knowledgeId: knowledgeId,
-                    knowledgeLevelId: values.knowledgeLevel,
+            addPower: async function (values:CharacterPowerForm, characterId: number, powerId: number): Promise<void> {
+                await axios.post(`/characters/${characterId}/powers/`, {
+                    powerId: powerId,
                     notes: values.notes,
                 })
                     .then(async () => {
                         await this.getCharacterPowers(characterId);
-                        toaster.success("Successfully Added Knowledge!");
+                        await this.getSelectableCharacterPowers(characterId);
+                        toaster.success("Successfully Added Power!");
                     });
             },
-            editKnowledge: async function (values:CharacterKnowledgeForm, characterId: number, mappingId: number): Promise<void> {
+            editKnowledge: async function (values:CharacterPowerForm, characterId: number, mappingId: number): Promise<void> {
                 await axios.put(`/characters/${characterId}/knowledges/${mappingId}`, {
                     knowledgeLevelId: values.knowledgeLevel,
                     notes: values.notes,
