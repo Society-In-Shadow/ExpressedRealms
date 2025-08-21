@@ -18,5 +18,6 @@ public class PowerCardData
     public bool IsPowerUse { get; set; }
     public string? Cost { get; set; }
     public int PrerequisitesNeeded { get; set; }
+    public string? UserNotes { get; set; }
     public PrerequisiteData? Prerequisites { get; set; }
 }

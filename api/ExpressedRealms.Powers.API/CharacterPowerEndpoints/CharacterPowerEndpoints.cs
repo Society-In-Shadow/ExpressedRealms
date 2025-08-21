@@ -5,6 +5,7 @@ using ExpressedRealms.Powers.API.CharacterPowerEndpoints.Edit;
 using ExpressedRealms.Powers.API.CharacterPowerEndpoints.GetAll;
 using ExpressedRealms.Powers.API.CharacterPowerEndpoints.GetOptions;
 using ExpressedRealms.Powers.API.CharacterPowerEndpoints.GetPickable;
+using ExpressedRealms.Powers.API.CharacterPowerEndpoints.GetPowerCards;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -35,6 +36,11 @@ internal static class CharacterPowersEndpoints
         endpointGroup.MapGet(
             "{characterId}/powers/{powerId}/options",
             GetCharacterPowerOptionsEndpoint.GetOptions
+        );
+        
+        endpointGroup.MapGet(
+            "{characterId}/powers/downloadCards",
+            GetCharacterPowerCardReportEndpoint.Execute
         );
 
         endpointGroup.MapPut(
