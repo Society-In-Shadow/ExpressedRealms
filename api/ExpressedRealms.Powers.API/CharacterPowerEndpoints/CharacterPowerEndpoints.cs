@@ -37,7 +37,7 @@ internal static class CharacterPowersEndpoints
             "{characterId}/powers/{powerId}/options",
             GetCharacterPowerOptionsEndpoint.GetOptions
         );
-        
+
         endpointGroup.MapGet(
             "{characterId}/powers/downloadCards",
             GetCharacterPowerCardReportEndpoint.Execute

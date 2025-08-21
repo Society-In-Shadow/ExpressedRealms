@@ -7,13 +7,16 @@ namespace ExpressedRealms.Powers.API.CharacterPowerEndpoints.GetPowerCards;
 
 public static class GetCharacterPowerCardReportEndpoint
 {
-    public static async Task<Results<FileStreamHttpResult, ValidationProblem>> 
-        Execute(int characterId, bool isFiveByThree, IGetCharacterPowerCardReportUseCase useCase)
+    public static async Task<Results<FileStreamHttpResult, ValidationProblem>> Execute(
+        int characterId,
+        bool isFiveByThree,
+        IGetCharacterPowerCardReportUseCase useCase
+    )
     {
         var results = await useCase.ExecuteAsync(
             new() { CharacterId = characterId, IsFiveByThree = isFiveByThree }
         );
-        
+
         if (results.HasValidationError(out var validation))
             return validation;
 

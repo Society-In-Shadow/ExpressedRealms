@@ -25,10 +25,14 @@ public class GetCharacterPowerCardReportUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-        
+
         var expression = await characterRepository.GetCharacterInfoAsync(model.CharacterId);
-        var selectedPowerInformation = await mappingRepository.GetCharacterPowerMappingInfo(model.CharacterId);
-        var data = await repository.GetPowerPathAndPowers(selectedPowerInformation.Select(x => x.PowerId).ToList());
+        var selectedPowerInformation = await mappingRepository.GetCharacterPowerMappingInfo(
+            model.CharacterId
+        );
+        var data = await repository.GetPowerPathAndPowers(
+            selectedPowerInformation.Select(x => x.PowerId).ToList()
+        );
 
         var reportStream = PowerCardReport.GenerateSixUpPdf(
             data.Value.SelectMany(x =>
@@ -49,7 +53,10 @@ public class GetCharacterPowerCardReportUseCase(
                             IsPowerUse = y.IsPowerUse,
                             Limitation = y.Limitation,
                             Other = y.Other,
-                            UserNotes = selectedPowerInformation.FirstOrDefault(x => x.PowerId == y.Id)?.UserNotes ?? null,
+                            UserNotes =
+                                selectedPowerInformation
+                                    .FirstOrDefault(x => x.PowerId == y.Id)
+                                    ?.UserNotes ?? null,
                             Prerequisites = y.Prerequisites is not null
                                 ? new PrerequisiteData()
                                 {
