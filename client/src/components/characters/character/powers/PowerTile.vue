@@ -6,6 +6,7 @@ import {useRoute} from "vue-router";
 import {characterPowersStore} from "@/components/characters/character/powers/stores/characterPowerStore.ts";
 import PowerCard from "@/components/characters/character/powers/PowerCard.vue";
 import PickPowerCard from "@/components/characters/character/powers/PickPowerCard.vue";
+import SplitButton from "primevue/splitbutton";
 
 const characterKnowledgeData = characterPowersStore();
 const route = useRoute();
@@ -27,11 +28,21 @@ async function toggleEdit(){
   showEdit.value = !showEdit.value;
 }
 
+const items = [
+  {
+    label: '2x6 Tile Letter Cutout',
+    command: () => {
+      characterKnowledgeData.downloadPowerCards(route.params.id, 'foo', false)
+    }
+  },
+];
+
 </script>
 
 <template>
   <div style="max-width: 650px; margin: 0 auto;">
-    <div v-if="!noPowers || characterKnowledgeData.powers.length > 0" class="text-right mb-2">
+    <div v-if="!noPowers || characterKnowledgeData.powers.length > 0" class="d-flex flex-row justify-content-between mb-2">
+      <SplitButton class="pr-3" label="Download Power Cards" @click="characterKnowledgeData.downloadPowerCards(route.params.id, 'foo', true)" :model="items" />
       <Button v-if="!showEdit" class="btn btn-primary" label="Edit" @click="toggleEdit" />
       <Button v-else class="btn btn-primary" label="Cancel" @click="toggleEdit" />
     </div>

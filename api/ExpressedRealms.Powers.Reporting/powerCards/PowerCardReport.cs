@@ -212,6 +212,7 @@ public static class PowerCardReport
                                     power.GameMechanicEffect
                                 );
                                 leftSide.FormatMainSection("Limitation", power.Limitation);
+                                leftSide.FormatMainSection("User Notes", power.UserNotes);
                             });
 
                         row.ConstantItem(1.75f, Unit.Inch)
