@@ -55,7 +55,7 @@ onMounted(async() =>{
         <Tab value="2">
           Knowledges
         </Tab>
-        <Tab value="3">
+        <Tab value="3" v-if="showPowersTab" >
           Powers
         </Tab>
       </TabList>
