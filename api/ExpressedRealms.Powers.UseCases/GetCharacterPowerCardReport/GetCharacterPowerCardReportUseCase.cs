@@ -1,4 +1,4 @@
-using ExpressedRealms.Expressions.Repository.Expressions;
+using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Powers.Reporting.powerCards;
 using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.Powers.Repository.PowerPaths;
@@ -9,7 +9,7 @@ namespace ExpressedRealms.Powers.UseCases.GetCharacterPowerCardReport;
 
 public class GetCharacterPowerCardReportUseCase(
     IPowerPathRepository repository,
-    IExpressionRepository expressionRepository,
+    ICharacterRepository characterRepository,
     ICharacterPowerRepository mappingRepository,
     GetCharacterPowerCardReportModelValidator validator,
     CancellationToken cancellationToken
@@ -26,7 +26,7 @@ public class GetCharacterPowerCardReportUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
         
-        var expression = await expressionRepository.GetExpression(model.ExpressionId);
+        var expression = await characterRepository.GetCharacterInfoAsync(model.CharacterId);
         var selectedPowerInformation = await mappingRepository.GetCharacterPowerMappingInfo(model.CharacterId);
         var data = await repository.GetPowerPathAndPowers(selectedPowerInformation.Select(x => x.PowerId).ToList());
 
@@ -40,7 +40,7 @@ public class GetCharacterPowerCardReportUseCase(
                             Description = y.Description,
                             PathName = x.Name,
                             GameMechanicEffect = y.GameMechanicEffect,
-                            ExpressionName = expression.Value.Name,
+                            ExpressionName = expression.Value.Expression,
                             PowerActivationType = y.PowerActivationType.Name,
                             PowerDuration = y.PowerDuration.Name,
                             PowerLevel = y.PowerLevel.Name,

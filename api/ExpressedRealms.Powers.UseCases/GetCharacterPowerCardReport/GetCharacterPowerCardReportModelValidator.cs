@@ -1,29 +1,16 @@
-using ExpressedRealms.Expressions.Repository.Expressions;
+using ExpressedRealms.Characters.Repository;
 using FluentValidation;
 
 namespace ExpressedRealms.Powers.UseCases.GetCharacterPowerCardReport;
 
 public class GetCharacterPowerCardReportModelValidator : AbstractValidator<GetCharacterPowerCardReportModel>
 {
-    public GetCharacterPowerCardReportModelValidator(IExpressionRepository expressionRepository)
+    public GetCharacterPowerCardReportModelValidator(ICharacterRepository expressionRepository)
     {
-        RuleFor(x => x.ExpressionId)
+        RuleFor(x => x.CharacterId)
             .NotEmpty()
-            .WithMessage("ExpressionId is required.")
-            .MustAsync(
-                async (x, y) => await expressionRepository.GetExpressionForDeletion(x) != null
-            )
-            .WithErrorCode("NotFound")
-            .WithMessage("This is not a valid expression.")
-            .DependentRules(() =>
-            {
-                RuleFor(x => x.ExpressionId)
-                    .MustAsync(
-                        async (x, y) =>
-                            !(await expressionRepository.GetExpressionForDeletion(x))!.IsDeleted
-                    )
-                    .WithErrorCode("AlreadyDeleted")
-                    .WithMessage("This expression has been deleted.");
-            });
+            .WithMessage("Character Id is required.")
+            .MustAsync(async (x, y) => await expressionRepository.CharacterExistsAsync(x))
+            .WithMessage("The Character does not exist.");
     }
 }
