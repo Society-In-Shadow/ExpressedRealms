@@ -35,7 +35,7 @@ internal sealed class CharacterPowerRepository(
             token
         );
     }
-
+    
     public async Task<bool> IsValidMapping(int id)
     {
         return await context.CharacterPowerMappings.AnyAsync(x => x.Id == id, token);

@@ -1,4 +1,6 @@
+using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Powers.Repository.CharacterPower;
+using ExpressedRealms.Powers.Repository.Powers;
 using FluentValidation;
 using JetBrains.Annotations;
 
@@ -8,12 +10,27 @@ namespace ExpressedRealms.Powers.UseCases.CharacterPower.Delete;
 internal sealed class DeletePowerFromCharacterModelValidator
     : AbstractValidator<DeletePowerFromCharacterModel>
 {
-    public DeletePowerFromCharacterModelValidator(ICharacterPowerRepository mappingRepository)
+    public DeletePowerFromCharacterModelValidator(
+        ICharacterRepository characterRepository, 
+        IPowerRepository powerRepository,
+        ICharacterPowerRepository mappingRepository)
     {
-        RuleFor(x => x.MappingId)
+        RuleFor(x => x.CharacterId)
             .NotEmpty()
-            .WithMessage("Mapping Id is required.")
-            .MustAsync(async (x, y) => await mappingRepository.IsValidMapping(x))
-            .WithMessage("The Mapping does not exist.");
+            .WithMessage("Character Id is required.")
+            .MustAsync(async (x, y) => await characterRepository.CharacterExistsAsync(x))
+            .WithMessage("The Character does not exist.");
+        
+        RuleFor(x => x.PowerId)
+            .NotEmpty()
+            .WithMessage("Power Id is required.")
+            .MustAsync(async (x, y) => await powerRepository.IsValidPower(x))
+            .WithMessage("The Power does not exist.");
+            
+        RuleFor(x => x)
+            .MustAsync(async (x, y) => await mappingRepository.MappingExistsAsync(x.PowerId, x.CharacterId))
+            .WithMessage("The Mapping does not exist.")
+            .WithName(nameof(DeletePowerFromCharacterModel.PowerId));
+
     }
 }
