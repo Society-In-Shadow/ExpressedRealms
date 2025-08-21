@@ -47,6 +47,16 @@ export interface KnowledgeOptions {
     disabled: boolean;
 }
 
+export interface CharacterPowerResponse{
+    powers: PowerPath[]
+}
+
+export interface PowerPath {
+    id: number;
+    name: string;
+    description: string;
+    powers: Power[];
+}
 
 export interface Power {
     id: number;
