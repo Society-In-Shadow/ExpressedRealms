@@ -120,15 +120,17 @@ internal sealed class CharacterPowerRepository(
     public async Task<List<int>> GetPowersThatArePrerequisites(int characterId)
     {
         var powerMappings = await context
-            .CharacterPowerMappings.Where(x => x.CharacterId == characterId)
+            .CharacterPowerMappings.AsNoTracking()
+            .Where(x => x.CharacterId == characterId)
             .Select(x => x.PowerId)
             .ToListAsync(token);
 
-        var prerequisitePowerIds = await context
-            .PowerPrerequisitePowers.Where(x => powerMappings.Contains(x.PowerId))
-            .Select(x => x.Prerequisite.PowerId)
+        var prereqs = await context.PowerPrerequisites.AsNoTracking()
+            .Where(x => powerMappings.Contains(x.PowerId))
+            .SelectMany(x => x.PrerequisitePowers.Select(y => y.PowerId).ToList())
+            .Distinct()
             .ToListAsync();
 
-        return prerequisitePowerIds;
+        return prereqs;
     }
 }
