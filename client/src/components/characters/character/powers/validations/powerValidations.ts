@@ -1,6 +1,6 @@
 import {type InferType, object, string} from "yup";
 import {useGenericForm} from "@/utilities/formUtilities";
-import type {CharacterKnowledge} from "@/components/characters/character/knowledges/types";
+import type {Power} from "@/components/characters/character/powers/types.ts";
 
 const validationSchema = object({
     notes: string().nullable()
@@ -14,8 +14,8 @@ export function getValidationInstance() {
 
     const form = useGenericForm(validationSchema);
 
-    const setValues = (model: CharacterKnowledge) => {
-        form.fields.notes.field.value = model.notes;
+    const setValues = (model: Power) => {
+        form.fields.notes.field.value = model.userNotes;
     }
 
     const customResetForm = () => {

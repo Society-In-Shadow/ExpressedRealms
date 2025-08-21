@@ -1,4 +1,5 @@
 using ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup;
+using ExpressedRealms.Powers.Repository.CharacterPower.DTO;
 
 namespace ExpressedRealms.Powers.Repository.CharacterPower;
 
@@ -11,6 +12,6 @@ public interface ICharacterPowerRepository
     Task<CharacterPowerMapping> GetCharacterPowerMapping(int id);
     Task UpdateCharacterPowerMapping(CharacterPowerMapping characterPowerMapping);
     Task<bool> IsValidMapping(int id);
-    Task<List<int>> GetCharacterPowerIds(int characterId);
+    Task<List<CharacterPowerInfo>> GetCharacterPowerMappingInfo(int characterId);
     Task<CharacterPowerMapping> GetCharacterPowerMapping(int characterId, int powerId);
 }

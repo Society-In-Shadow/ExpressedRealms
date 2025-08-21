@@ -17,4 +17,5 @@ public class PowerReturnModel
     public string? Cost { get; set; }
     public int SortOrder { get; set; }
     public PrerequisiteDetailsReturnModel? Prerequisites { get; set; }
+    public string? UserNotes { get; set; }
 }

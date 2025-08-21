@@ -18,5 +18,6 @@ public class PowerResponse
     public bool IsPowerUse { get; set; }
     public string? Cost { get; set; }
     public int SortOrder { get; set; }
+    public string? UserNotes { get; set; }
     public PrerequisiteDetailsResponse? Prerequisites { get; set; }
 }

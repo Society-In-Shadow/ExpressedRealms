@@ -26,8 +26,9 @@ internal sealed class GetCharacterPowersUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var powerIds = await mappingRepository.GetCharacterPowerIds(model.CharacterId);
+        var powerMappingInfo = await mappingRepository.GetCharacterPowerMappingInfo(model.CharacterId);
 
+        var powerIds = powerMappingInfo.Select(x => x.PowerId).ToList();
         var powers = await powerPathRepository.GetPowerPathAndPowers(powerIds);
 
         return Result.Ok(
@@ -55,6 +56,7 @@ internal sealed class GetCharacterPowersUseCase(
                             Other = y.Other,
                             IsPowerUse = y.IsPowerUse,
                             Cost = y.Cost,
+                            UserNotes = powerMappingInfo.FirstOrDefault(z => z.PowerId == y.Id)?.UserNotes ?? null,
                             Prerequisites = y.Prerequisites is not null
                                 ? new PrerequisiteDetailsReturnModel()
                                 {

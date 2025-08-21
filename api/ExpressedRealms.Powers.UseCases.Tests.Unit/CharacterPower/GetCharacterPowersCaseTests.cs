@@ -1,11 +1,11 @@
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Powers.Repository.CharacterPower;
+using ExpressedRealms.Powers.Repository.CharacterPower.DTO;
 using ExpressedRealms.Powers.Repository.PowerPaths;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathToC;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerList;
-using ExpressedRealms.Powers.UseCases.CharacterPower.GetPickablePowers;
-using ExpressedRealms.Powers.UseCases.CharacterPower.GetPickablePowers.ReturnModels;
 using ExpressedRealms.Powers.UseCases.CharacterPower.GetPowers;
+using ExpressedRealms.Powers.UseCases.CharacterPower.GetPowers.ReturnModels;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
 using Xunit;
@@ -22,11 +22,25 @@ public class GetCharacterPowersUseCaseTests
     private readonly GetCharacterPowersModel model;
     private readonly List<PowerPathToc> _dbModels;
 
-    private readonly List<int> _powerIds = new List<int>() { 1, 2 };
+    private readonly List<CharacterPowerInfo> _powerInfo;
 
     public GetCharacterPowersUseCaseTests()
     {
         model = new GetCharacterPowersModel() { CharacterId = 1 };
+
+        _powerInfo = new List<CharacterPowerInfo>()
+        {
+            new CharacterPowerInfo()
+            {
+                PowerId = 1,
+                UserNotes = "Notes"
+            },
+            new CharacterPowerInfo()
+            {
+                PowerId = 2,
+                UserNotes = "Notes2"
+            },
+        };
 
         _mappingRepository = A.Fake<ICharacterPowerRepository>();
         _powerPathRepository = A.Fake<IPowerPathRepository>();
@@ -111,10 +125,11 @@ public class GetCharacterPowersUseCaseTests
 
         A.CallTo(() => _characterRepository.CharacterExistsAsync(model.CharacterId)).Returns(true);
 
-        A.CallTo(() => _mappingRepository.GetCharacterPowerIds(model.CharacterId))
-            .Returns(_powerIds);
-
-        A.CallTo(() => _powerPathRepository.GetPowerPathAndPowers(_powerIds)).Returns(_dbModels);
+        A.CallTo(() => _mappingRepository.GetCharacterPowerMappingInfo(model.CharacterId))
+            .Returns(_powerInfo);
+        
+        var powerIds = _powerInfo.Select(x => x.PowerId).ToList();
+        A.CallTo(() => _powerPathRepository.GetPowerPathAndPowers(powerIds)).Returns(_dbModels);
 
         var validator = new GetCharacterPowersModelValidator(_characterRepository);
 
@@ -133,7 +148,7 @@ public class GetCharacterPowersUseCaseTests
         var result = await _useCase.ExecuteAsync(model);
 
         result.MustHaveValidationError(
-            nameof(GetAvailablePowersModel.CharacterId),
+            nameof(GetCharacterPowersModel.CharacterId),
             "Character Id is required."
         );
     }
@@ -145,7 +160,7 @@ public class GetCharacterPowersUseCaseTests
         var result = await _useCase.ExecuteAsync(model);
 
         result.MustHaveValidationError(
-            nameof(GetAvailablePowersModel.CharacterId),
+            nameof(GetCharacterPowersModel.CharacterId),
             "The Character does not exist."
         );
     }
@@ -154,7 +169,8 @@ public class GetCharacterPowersUseCaseTests
     public async Task UseCase_WillGrab_ThePowers()
     {
         await _useCase.ExecuteAsync(model);
-        A.CallTo(() => _powerPathRepository.GetPowerPathAndPowers(_powerIds))
+        var powerIds = _powerInfo.Select(x => x.PowerId).ToList();
+        A.CallTo(() => _powerPathRepository.GetPowerPathAndPowers(powerIds))
             .MustHaveHappenedOnceExactly();
     }
 
@@ -194,6 +210,7 @@ public class GetCharacterPowersUseCaseTests
                         Other = y.Other,
                         IsPowerUse = y.IsPowerUse,
                         Cost = y.Cost,
+                        UserNotes = _powerInfo.FirstOrDefault(z => z.PowerId == y.Id)?.UserNotes,
                         Prerequisites = y.Prerequisites is not null
                             ? new PrerequisiteDetailsReturnModel()
                             {

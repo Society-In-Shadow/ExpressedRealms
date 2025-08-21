@@ -120,6 +120,11 @@ const openKnowledgeItems = ref([]);
             </h2>
             <div v-if="!isNullOrWhiteSpace(power.other)" v-html="power.other" />
             
+            <h2 v-if="!isNullOrWhiteSpace(power.userNotes)">
+              User Notes
+            </h2>
+            <div v-if="!isNullOrWhiteSpace(power.userNotes)" v-html="power.userNotes" />
+            
           </template>
         </Card>
       </AccordionContent>

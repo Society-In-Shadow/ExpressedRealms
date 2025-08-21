@@ -3,7 +3,7 @@
 import FormTextAreaWrapper from "@/FormWrappers/FormTextAreaWrapper.vue";
 import Button from "primevue/button";
 import {useRoute} from "vue-router";
-import {inject, ref} from "vue";
+import {inject, onBeforeMount, ref} from "vue";
 import {characterPowersStore} from "@/components/characters/character/powers/stores/characterPowerStore.ts";
 import type {Power} from "@/components/characters/character/powers/types.ts";
 import PickPowerCard from "@/components/characters/character/powers/PickPowerCard.vue";
@@ -20,6 +20,10 @@ const power = ref<Power>(dialogRef.value.data.power);
 const closeDialog = () => {
   dialogRef.value.close();
 }
+
+onBeforeMount(async () => {
+  form.setValues(power.value);
+})
 
 const onSubmit = form.handleSubmit(async (values) => {
   await store.editPower(values, route.params.id, power.value.id);

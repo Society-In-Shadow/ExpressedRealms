@@ -73,4 +73,5 @@ export interface Power {
     isPowerUse: boolean;
     cost: string;
     prerequisites: PrerequisiteDisplay | null;
+    userNotes: string | null;
 }

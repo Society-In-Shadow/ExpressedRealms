@@ -1,5 +1,6 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup;
+using ExpressedRealms.Powers.Repository.CharacterPower.DTO;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Powers.Repository.CharacterPower;
@@ -20,11 +21,16 @@ internal sealed class CharacterPowerRepository(
             .FirstAsync(x => x.CharacterId == characterId && x.PowerId == powerId, token);
     }
 
-    public async Task<List<int>> GetCharacterPowerIds(int characterId)
+    public async Task<List<CharacterPowerInfo>> GetCharacterPowerMappingInfo(int characterId)
     {
         return await context
-            .CharacterPowerMappings.Where(x => x.CharacterId == characterId)
-            .Select(x => x.PowerId)
+            .CharacterPowerMappings
+            .Where(x => x.CharacterId == characterId)
+            .Select(x => new CharacterPowerInfo()
+            {
+                PowerId = x.PowerId,
+                UserNotes = x.Notes
+            })
             .ToListAsync(token);
     }
 
