@@ -97,8 +97,8 @@ const openKnowledgeItems = ref([]);
               </div>
               <div v-else-if="power.prerequisites.powers.length == power.prerequisites.requiredAmount">
                 All of the following powers :
-                <span v-for="(power, index) in power.prerequisites.powers">
-                  <a :href="'#' + makeIdSafe(power)" @click.prevent="scrollToSection(power)">{{ power }}</a> 
+                <span v-for="(prereq, index) in power.prerequisites.powers">
+                  <a :href="'#' + makeIdSafe(prereq)" @click.prevent="scrollToSection(prereq)">{{ prereq }}</a> 
                   <span v-if="index != power.prerequisites.powers.length -1"> and </span>
                 </span>
               </div>
@@ -108,8 +108,8 @@ const openKnowledgeItems = ref([]);
                     power.prerequisites.requiredAmount
                   }}</span>
                 the following powers :
-                <span v-for="(power, index) in power.prerequisites.powers">
-                  <a :href="'#' + makeIdSafe(power)" @click.prevent="scrollToSection(power)">{{ power }}</a>
+                <span v-for="(prereq, index) in power.prerequisites.powers">
+                  <a :href="'#' + makeIdSafe(prereq)" @click.prevent="scrollToSection(prereq)">{{ prereq }}</a>
                   <span v-if="index != power.prerequisites.powers.length -1"> or </span>
                 </span>
               </div>
