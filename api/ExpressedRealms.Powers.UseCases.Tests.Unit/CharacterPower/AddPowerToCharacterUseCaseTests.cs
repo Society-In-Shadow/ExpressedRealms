@@ -4,6 +4,7 @@ using ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup;
 using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.Powers.Repository.Powers;
 using ExpressedRealms.Powers.UseCases.CharacterPower.Create;
+using ExpressedRealms.Shared;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FakeItEasy;
@@ -239,7 +240,7 @@ public class AddPowerToCharacterUseCaseTests
                     _powerToCharacterModel.CharacterId
                 )
             )
-            .Returns(100);
+            .Returns(StartingExperience.StartingPowers + 1);
 
         var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
 
@@ -251,7 +252,7 @@ public class AddPowerToCharacterUseCaseTests
     [InlineData(2)]
     public async Task UseCase_CalculatesAvailableXP_Correctly(int xpAmount)
     {
-        _powerLevel.Xp = 20;
+        _powerLevel.Xp = StartingExperience.StartingPowers;
         A.CallTo(() =>
                 _mappingRepository.GetExperienceSpentOnPowersForCharacter(
                     _powerToCharacterModel.CharacterId
@@ -261,7 +262,7 @@ public class AddPowerToCharacterUseCaseTests
 
         var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
 
-        Assert.Equal(20 - xpAmount, ((NotEnoughXPFailure)result.Errors[0]).AvailableXP);
+        Assert.Equal(StartingExperience.StartingPowers - xpAmount, ((NotEnoughXPFailure)result.Errors[0]).AvailableXP);
     }
 
     [Fact]
@@ -272,7 +273,7 @@ public class AddPowerToCharacterUseCaseTests
                     _powerToCharacterModel.CharacterId
                 )
             )
-            .Returns(20);
+            .Returns(StartingExperience.StartingPowers);
 
         var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
         Assert.True(result.HasError<NotEnoughXPFailure>());

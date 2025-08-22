@@ -1,6 +1,7 @@
 using ExpressedRealms.Knowledges.Repository;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.Knowledges;
+using ExpressedRealms.Shared;
 using ExpressedRealms.UseCases.Shared;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FluentResults;
@@ -39,7 +40,7 @@ internal sealed class UpdateKnowledgeForCharacterUseCase(
             // Also need to take into consideration discretionary spending
 
             const int unknownKnowledgeType = 3;
-            const int availableExperience = 7;
+            const int availableExperience = StartingExperience.StartingKnowledges;
 
             var spentXp = await mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(
                 mapping.CharacterId

@@ -1,6 +1,7 @@
 using ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup;
 using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.Powers.Repository.Powers;
+using ExpressedRealms.Shared;
 using ExpressedRealms.UseCases.Shared;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FluentResults;
@@ -32,7 +33,7 @@ internal sealed class AddPowerToCharacterUseCase(
         // Also need to take into consideration discretionary spending
 
         // Assuming character creation rules for now
-        const int availableExperience = 20;
+        const int availableExperience = StartingExperience.StartingPowers;
 
         var spentXp = await mappingRepository.GetExperienceSpentOnPowersForCharacter(
             model.CharacterId

@@ -1,6 +1,4 @@
-using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
-using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings.Projections;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
@@ -56,10 +54,6 @@ internal sealed class GetKnowledgesForCharacterUseCase(
             })
             .ToList();
 
-        var foo = 3;
-        if (true)
-            foo = 4;
-
-        return Result.Ok(items.Take(foo).ToList());
+        return Result.Ok(items.ToList());
     }
 }

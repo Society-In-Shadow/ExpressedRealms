@@ -1,5 +1,6 @@
 using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.Powers.Repository.Powers;
+using ExpressedRealms.Shared;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
@@ -33,7 +34,7 @@ public class GetCharacterPowerOptionsUseCase(
         return Result.Ok(
             new GetCharacterPowerOptionsReturnModel()
             {
-                AvailableExperience = 20 - spentXp,
+                AvailableExperience = StartingExperience.StartingPowers - spentXp,
                 PowerLevelExperience = powerExperienceCost,
             }
         );

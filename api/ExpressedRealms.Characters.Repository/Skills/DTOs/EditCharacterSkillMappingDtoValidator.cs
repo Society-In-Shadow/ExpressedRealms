@@ -1,4 +1,5 @@
 using ExpressedRealms.DB;
+using ExpressedRealms.Shared;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -57,7 +58,7 @@ public class EditCharacterSkillMappingDtoValidator : AbstractValidator<EditChara
                         cancellationToken
                     );
 
-                    return currentSpentXp + newSkillLevelXp.XP <= 28;
+                    return currentSpentXp + newSkillLevelXp.XP <= StartingExperience.StartingStats;
                 }
             )
             .WithMessage("Not enough XP to level up.");

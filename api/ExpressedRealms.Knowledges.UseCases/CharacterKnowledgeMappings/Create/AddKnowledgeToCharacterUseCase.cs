@@ -2,6 +2,7 @@ using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.Knowledges;
+using ExpressedRealms.Shared;
 using ExpressedRealms.UseCases.Shared;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FluentResults;
@@ -35,7 +36,7 @@ internal sealed class AddKnowledgeToCharacterUseCase(
 
         // Assuming character creation rules for now
         const int unknownKnowledgeType = 3;
-        const int availableExperience = 7;
+        const int availableExperience = StartingExperience.StartingKnowledges;
 
         var spentXp = await mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(
             model.CharacterId

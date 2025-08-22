@@ -4,6 +4,7 @@ using ExpressedRealms.DB;
 using ExpressedRealms.DB.Characters;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
+using ExpressedRealms.Shared;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,15 +36,15 @@ internal sealed class CharacterStatRepository(
                 StrengthId = x.StrengthId,
                 IntelligenceId = x.IntelligenceId,
                 WillpowerId = x.WillpowerId,
-                AvailableXP = x.StatExperiencePoints
-                    - (
-                        x.AgilityStatLevel.TotalXPCost
-                        + x.ConstitutionStatLevel.TotalXPCost
-                        + x.DexterityStatLevel.TotalXPCost
-                        + x.StrengthStatLevel.TotalXPCost
-                        + x.IntelligenceStatLevel.TotalXPCost
-                        + x.WillpowerStatLevel.TotalXPCost
-                    ),
+                AvailableXP = StartingExperience.StartingStats
+                          - (
+                              x.AgilityStatLevel.TotalXPCost
+                              + x.ConstitutionStatLevel.TotalXPCost
+                              + x.DexterityStatLevel.TotalXPCost
+                              + x.StrengthStatLevel.TotalXPCost
+                              + x.IntelligenceStatLevel.TotalXPCost
+                              + x.WillpowerStatLevel.TotalXPCost
+                          ),
             })
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -145,7 +146,7 @@ internal sealed class CharacterStatRepository(
         var availableXp = await context
             .Characters.Where(x => x.Id == dto.CharacterId)
             .Select(x =>
-                x.StatExperiencePoints
+                StartingExperience.StartingStats
                 - (
                     x.AgilityStatLevel.TotalXPCost
                     + x.ConstitutionStatLevel.TotalXPCost

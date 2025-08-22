@@ -6,6 +6,7 @@ using ExpressedRealms.Knowledges.Repository;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.Knowledges;
 using ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.Create;
+using ExpressedRealms.Shared;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FakeItEasy;
@@ -265,7 +266,7 @@ public class AddKnowledgeToCharacterUseCaseTests
                     _knowledgeToCharacterModel.CharacterId
                 )
             )
-            .Returns(100);
+            .Returns(StartingExperience.StartingKnowledges);
 
         var result = await _useCase.ExecuteAsync(_knowledgeToCharacterModel);
 
@@ -284,7 +285,7 @@ public class AddKnowledgeToCharacterUseCaseTests
         A.CallTo(() =>
                 _levelRepository.GetKnowledgeLevel(_knowledgeToCharacterModel.KnowledgeLevelId)
             )
-            .Returns(new KnowledgeEducationLevel() { GeneralXpCost = 7 });
+            .Returns(new KnowledgeEducationLevel() { GeneralXpCost = StartingExperience.StartingKnowledges });
         A.CallTo(() =>
                 _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(
                     _knowledgeToCharacterModel.CharacterId
@@ -294,7 +295,7 @@ public class AddKnowledgeToCharacterUseCaseTests
 
         var result = await _useCase.ExecuteAsync(_knowledgeToCharacterModel);
 
-        Assert.Equal(7 - xpAmount, ((NotEnoughXPFailure)result.Errors[0]).AvailableXP);
+        Assert.Equal(StartingExperience.StartingKnowledges - xpAmount, ((NotEnoughXPFailure)result.Errors[0]).AvailableXP);
     }
 
     [Fact]
@@ -305,7 +306,7 @@ public class AddKnowledgeToCharacterUseCaseTests
                     _knowledgeToCharacterModel.CharacterId
                 )
             )
-            .Returns(7);
+            .Returns(StartingExperience.StartingKnowledges);;
 
         var result = await _useCase.ExecuteAsync(_knowledgeToCharacterModel);
         Assert.True(result.HasError<NotEnoughXPFailure>());

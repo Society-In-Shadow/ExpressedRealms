@@ -1,5 +1,6 @@
 using ExpressedRealms.Knowledges.Repository;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
+using ExpressedRealms.Shared;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
@@ -33,7 +34,7 @@ public class GetKnowledgeLevelsUseCase(
         return Result.Ok(
             new GetKnowledgeLevelsReturnModel()
             {
-                AvailableExperience = 7 - currentExperience,
+                AvailableExperience = StartingExperience.StartingKnowledges - currentExperience,
                 KnowledgeLevels = knowledgeLevels
                     .Select(x => new KnowledgeLevelModel()
                     {
