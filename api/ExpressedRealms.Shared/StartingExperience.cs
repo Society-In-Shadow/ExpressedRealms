@@ -1,6 +1,6 @@
 namespace ExpressedRealms.Shared;
 
-public class StartingExperience
+public static class StartingExperience
 {
     public const int StartingPowers = 1000;
     public const int StartingKnowledges = 1000;
