@@ -37,14 +37,14 @@ internal sealed class CharacterStatRepository(
                 IntelligenceId = x.IntelligenceId,
                 WillpowerId = x.WillpowerId,
                 AvailableXP = StartingExperience.StartingStats
-                          - (
-                              x.AgilityStatLevel.TotalXPCost
-                              + x.ConstitutionStatLevel.TotalXPCost
-                              + x.DexterityStatLevel.TotalXPCost
-                              + x.StrengthStatLevel.TotalXPCost
-                              + x.IntelligenceStatLevel.TotalXPCost
-                              + x.WillpowerStatLevel.TotalXPCost
-                          ),
+                    - (
+                        x.AgilityStatLevel.TotalXPCost
+                        + x.ConstitutionStatLevel.TotalXPCost
+                        + x.DexterityStatLevel.TotalXPCost
+                        + x.StrengthStatLevel.TotalXPCost
+                        + x.IntelligenceStatLevel.TotalXPCost
+                        + x.WillpowerStatLevel.TotalXPCost
+                    ),
             })
             .FirstOrDefaultAsync(cancellationToken);
 

@@ -262,7 +262,10 @@ public class AddPowerToCharacterUseCaseTests
 
         var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
 
-        Assert.Equal(StartingExperience.StartingPowers - xpAmount, ((NotEnoughXPFailure)result.Errors[0]).AvailableXP);
+        Assert.Equal(
+            StartingExperience.StartingPowers - xpAmount,
+            ((NotEnoughXPFailure)result.Errors[0]).AvailableXP
+        );
     }
 
     [Fact]

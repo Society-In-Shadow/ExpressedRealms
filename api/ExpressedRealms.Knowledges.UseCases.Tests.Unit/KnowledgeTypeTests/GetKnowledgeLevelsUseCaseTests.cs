@@ -149,6 +149,9 @@ public class GetKnowledgeLevelsUseCaseTests
             .Returns(5);
         var results = await _useCase.ExecuteAsync(_model);
 
-        Assert.Equivalent(StartingExperience.StartingKnowledges - 5, results.Value.AvailableExperience);
+        Assert.Equivalent(
+            StartingExperience.StartingKnowledges - 5,
+            results.Value.AvailableExperience
+        );
     }
 }

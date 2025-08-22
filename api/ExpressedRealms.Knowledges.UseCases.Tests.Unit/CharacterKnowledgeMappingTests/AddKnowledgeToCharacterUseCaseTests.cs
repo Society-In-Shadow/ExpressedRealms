@@ -285,7 +285,12 @@ public class AddKnowledgeToCharacterUseCaseTests
         A.CallTo(() =>
                 _levelRepository.GetKnowledgeLevel(_knowledgeToCharacterModel.KnowledgeLevelId)
             )
-            .Returns(new KnowledgeEducationLevel() { GeneralXpCost = StartingExperience.StartingKnowledges });
+            .Returns(
+                new KnowledgeEducationLevel()
+                {
+                    GeneralXpCost = StartingExperience.StartingKnowledges,
+                }
+            );
         A.CallTo(() =>
                 _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(
                     _knowledgeToCharacterModel.CharacterId
@@ -295,7 +300,10 @@ public class AddKnowledgeToCharacterUseCaseTests
 
         var result = await _useCase.ExecuteAsync(_knowledgeToCharacterModel);
 
-        Assert.Equal(StartingExperience.StartingKnowledges - xpAmount, ((NotEnoughXPFailure)result.Errors[0]).AvailableXP);
+        Assert.Equal(
+            StartingExperience.StartingKnowledges - xpAmount,
+            ((NotEnoughXPFailure)result.Errors[0]).AvailableXP
+        );
     }
 
     [Fact]
@@ -306,7 +314,8 @@ public class AddKnowledgeToCharacterUseCaseTests
                     _knowledgeToCharacterModel.CharacterId
                 )
             )
-            .Returns(StartingExperience.StartingKnowledges);;
+            .Returns(StartingExperience.StartingKnowledges);
+        ;
 
         var result = await _useCase.ExecuteAsync(_knowledgeToCharacterModel);
         Assert.True(result.HasError<NotEnoughXPFailure>());

@@ -255,7 +255,12 @@ public class UpdateKnowledgeForCharacterUseCaseTests
         A.CallTo(() => _knowledgeRepository.GetKnowledgeAsync(_dbModel.KnowledgeId))
             .Returns(new Knowledge() { KnowledgeTypeId = 2 });
         A.CallTo(() => _levelRepository.GetKnowledgeLevel(_model.KnowledgeLevelId))
-            .Returns(new KnowledgeEducationLevel() { GeneralXpCost = StartingExperience.StartingKnowledges });
+            .Returns(
+                new KnowledgeEducationLevel()
+                {
+                    GeneralXpCost = StartingExperience.StartingKnowledges,
+                }
+            );
         A.CallTo(() =>
                 _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_dbModel.CharacterId)
             )
@@ -263,7 +268,10 @@ public class UpdateKnowledgeForCharacterUseCaseTests
 
         var result = await _useCase.ExecuteAsync(_model);
 
-        Assert.Equal(StartingExperience.StartingKnowledges - xpAmount, ((NotEnoughXPFailure)result.Errors[0]).AvailableXP);
+        Assert.Equal(
+            StartingExperience.StartingKnowledges - xpAmount,
+            ((NotEnoughXPFailure)result.Errors[0]).AvailableXP
+        );
     }
 
     [Fact]
