@@ -67,7 +67,7 @@ public static class PowerBookletReport
                                             columnContent.Item().PaddingBottom(10);
 
                                             powerPath.Powers = powerPath
-                                                .Powers.OrderBy(x => x.PowerLevel)
+                                                .Powers.OrderBy(x => x.PowerLevelId)
                                                 .ThenBy(x => x.Name)
                                                 .ToList();
 

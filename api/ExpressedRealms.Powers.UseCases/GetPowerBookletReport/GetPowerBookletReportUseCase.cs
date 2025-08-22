@@ -52,6 +52,7 @@ public class GetPowerBookletReportUseCase(
                                 PowerActivationType = y.PowerActivationType.Name,
                                 PowerDuration = y.PowerDuration.Name,
                                 PowerLevel = y.PowerLevel.Name,
+                                PowerLevelId = y.PowerLevel.Id,
                                 Cost = y.Cost,
                                 IsPowerUse = y.IsPowerUse,
                                 Limitation = y.Limitation,

@@ -10,6 +10,7 @@ public class PowerData
     public required string PowerDuration { get; set; }
     public required string AreaOfEffect { get; set; }
     public required string PowerLevel { get; set; }
+    public required int PowerLevelId { get; set; }
     public required string PowerActivationType { get; set; }
     public string? Other { get; set; }
     public bool IsPowerUse { get; set; }
