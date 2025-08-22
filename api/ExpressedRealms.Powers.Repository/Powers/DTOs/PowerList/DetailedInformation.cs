@@ -7,7 +7,7 @@ public class DetailedInformation
         Name = name;
         Description = description;
     }
-    
+
     public DetailedInformation(int id, string name, string description)
     {
         Id = id;

@@ -28,8 +28,8 @@ public class PowerInformation
                 x.PowerAreaOfEffectType.Description
             ),
             PowerLevel = new DetailedInformation(
-                x.PowerLevel.Id, 
-                x.PowerLevel.Name, 
+                x.PowerLevel.Id,
+                x.PowerLevel.Name,
                 x.PowerLevel.Description
             ),
             PowerActivationType = new DetailedInformation(
