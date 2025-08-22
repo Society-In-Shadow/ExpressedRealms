@@ -7,6 +7,7 @@ import type {
     PowerPath
 } from "@/components/characters/character/powers/types.ts";
 import type {CharacterPowerForm} from "@/components/characters/character/powers/validations/powerValidations.ts";
+import {characterStore} from "@/components/characters/character/stores/characterStore.ts";
 
 export const characterPowersStore =
     defineStore('characterPowers', {
@@ -75,10 +76,12 @@ export const characterPowersStore =
                         isFiveByThree: isFiveByThree,
                     }
                 });
+                const characterData = characterStore();
+                
                 const url = URL.createObjectURL(res.data);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `${expressionName}PowerBooklet.pdf`;
+                a.download = `${characterData.name}PowerBooklet.pdf`;
                 document.body.appendChild(a);
                 a.click();
                 a.remove();

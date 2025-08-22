@@ -2,8 +2,8 @@ using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeEducationLevels;
 using ExpressedRealms.Knowledges.Repository;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
-using ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.Create;
 using ExpressedRealms.Knowledges.UseCases.KnowledgeLevels;
+using ExpressedRealms.Shared;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
 using Xunit;
@@ -149,6 +149,9 @@ public class GetKnowledgeLevelsUseCaseTests
             .Returns(5);
         var results = await _useCase.ExecuteAsync(_model);
 
-        Assert.Equivalent(7 - 5, results.Value.AvailableExperience);
+        Assert.Equivalent(
+            StartingExperience.StartingKnowledges - 5,
+            results.Value.AvailableExperience
+        );
     }
 }

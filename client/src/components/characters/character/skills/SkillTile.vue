@@ -19,7 +19,7 @@ const route = useRoute()
 
 const offensiveSkills:Ref<Array<CharacterSkillsResponse>> = ref([]);
 const defensiveSkills:Ref<Array<CharacterSkillsResponse>> = ref([]);
-const maxXP = 28;
+const maxXP = 1000;
 const appliedXp = ref(0);
 const skillInfo = skillStore();
 const openItems = ref([]);

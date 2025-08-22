@@ -6,6 +6,7 @@ using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.Knowledges;
 using ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.Create;
 using ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.Edit;
+using ExpressedRealms.Shared;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FakeItEasy;
@@ -239,7 +240,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
         A.CallTo(() =>
                 _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_dbModel.CharacterId)
             )
-            .Returns(100);
+            .Returns(StartingExperience.StartingKnowledges);
 
         var result = await _useCase.ExecuteAsync(_model);
 
@@ -254,7 +255,12 @@ public class UpdateKnowledgeForCharacterUseCaseTests
         A.CallTo(() => _knowledgeRepository.GetKnowledgeAsync(_dbModel.KnowledgeId))
             .Returns(new Knowledge() { KnowledgeTypeId = 2 });
         A.CallTo(() => _levelRepository.GetKnowledgeLevel(_model.KnowledgeLevelId))
-            .Returns(new KnowledgeEducationLevel() { GeneralXpCost = 7 });
+            .Returns(
+                new KnowledgeEducationLevel()
+                {
+                    GeneralXpCost = StartingExperience.StartingKnowledges,
+                }
+            );
         A.CallTo(() =>
                 _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_dbModel.CharacterId)
             )
@@ -262,7 +268,10 @@ public class UpdateKnowledgeForCharacterUseCaseTests
 
         var result = await _useCase.ExecuteAsync(_model);
 
-        Assert.Equal(7 - xpAmount, ((NotEnoughXPFailure)result.Errors[0]).AvailableXP);
+        Assert.Equal(
+            StartingExperience.StartingKnowledges - xpAmount,
+            ((NotEnoughXPFailure)result.Errors[0]).AvailableXP
+        );
     }
 
     [Fact]
@@ -271,7 +280,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
         A.CallTo(() =>
                 _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_dbModel.CharacterId)
             )
-            .Returns(7);
+            .Returns(StartingExperience.StartingKnowledges);
 
         var result = await _useCase.ExecuteAsync(_model);
         Assert.True(result.HasError<NotEnoughXPFailure>());

@@ -2,6 +2,7 @@ using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.Powers.Repository.Powers;
 using ExpressedRealms.Powers.UseCases.CharacterPower.GetOptions;
+using ExpressedRealms.Shared;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
 using Xunit;
@@ -131,6 +132,6 @@ public class GetKnowledgeLevelsUseCaseTests
             .Returns(5);
         var results = await _useCase.ExecuteAsync(_model);
 
-        Assert.Equivalent(20 - 5, results.Value.AvailableExperience);
+        Assert.Equivalent(StartingExperience.StartingPowers - 5, results.Value.AvailableExperience);
     }
 }

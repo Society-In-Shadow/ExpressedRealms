@@ -4,6 +4,7 @@ using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings.Projections;
 using ExpressedRealms.Knowledges.Repository.KnowledgeSpecializations;
 using ExpressedRealms.Knowledges.UseCases.KnowledgeSpecializations.CreateSpecialization;
+using ExpressedRealms.Shared;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FakeItEasy;
@@ -262,7 +263,7 @@ public class CreateSpecializationUseCaseTests
         A.CallTo(() =>
                 _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_dbModel.CharacterId)
             )
-            .Returns(6);
+            .Returns(StartingExperience.StartingKnowledges - 1);
 
         var result = await _useCase.ExecuteAsync(_model);
 
@@ -275,7 +276,7 @@ public class CreateSpecializationUseCaseTests
         A.CallTo(() =>
                 _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_dbModel.CharacterId)
             )
-            .Returns(6);
+            .Returns(StartingExperience.StartingKnowledges - 1);
 
         var result = await _useCase.ExecuteAsync(_model);
 

@@ -1,6 +1,7 @@
 using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeSpecializations;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.KnowledgeSpecializations;
+using ExpressedRealms.Shared;
 using ExpressedRealms.UseCases.Shared;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FluentResults;
@@ -29,7 +30,7 @@ internal sealed class CreateSpecializationUseCase(
             model.KnowledgeMappingId
         );
 
-        const int maxKnowledge = 7;
+        const int maxKnowledge = StartingExperience.StartingKnowledges;
 
         var spentXp = await mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(
             mapping.CharacterId
