@@ -27,7 +27,11 @@ public class PowerInformation
                 x.PowerAreaOfEffectType.Name,
                 x.PowerAreaOfEffectType.Description
             ),
-            PowerLevel = new DetailedInformation(x.PowerLevel.Name, x.PowerLevel.Description),
+            PowerLevel = new DetailedInformation(
+                x.PowerLevel.Id,
+                x.PowerLevel.Name,
+                x.PowerLevel.Description
+            ),
             PowerActivationType = new DetailedInformation(
                 x.PowerActivationTimingType.Name,
                 x.PowerActivationTimingType.Description
