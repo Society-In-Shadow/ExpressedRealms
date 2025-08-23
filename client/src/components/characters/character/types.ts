@@ -9,4 +9,5 @@ interface ExperienceBreakdownResponse {
     setupStatsXp: number;
     setupSkillsXp: number;
     total: number;
+    setupTotal: number;
 }

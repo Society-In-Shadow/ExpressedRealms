@@ -2,13 +2,15 @@
 
 import Card from "primevue/card";
 import {onMounted, ref} from "vue";
-import { useRoute } from 'vue-router'
-const route = useRoute()
+import {useRoute} from 'vue-router'
 import {characterStore} from "@/components/characters/character/stores/characterStore";
 import Button from "primevue/button";
 import EditCharacterDetails from "@/components/characters/character/EditCharacterDetails.vue";
-const characterInfo = characterStore();
+import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 
+const route = useRoute()
+const characterInfo = characterStore();
+const experienceInfo = experienceStore();
 onMounted(async () =>{
   await characterInfo.getCharacterDetails(Number(route.params.id))
       .then(() => {
@@ -16,6 +18,8 @@ onMounted(async () =>{
         expression.value = characterInfo.expression;
         faction.value = characterInfo.faction;
       });
+  
+  await experienceInfo.updateExperience(route.params.id);
 });
 
 const name = ref("");
@@ -32,9 +36,13 @@ function toggleEdit() {
 <template>
   <Card v-if="!showEdit" class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="max-width: 30em">
     <template #content>
-      <h1 class="mt-0 pt-0">
-        {{ name }}
+      <h1 class="mt-0 pt-0 pb-0">
+        {{ name }} 
       </h1>
+      <div class="d-flex flex-row justify-content-between">
+        <div><em>XL: {{ experienceInfo.getCharacterLevel() }}</em></div>
+        <div v-if="experienceInfo.showAllExperience" :title="`(XP - Setup Costs (${experienceInfo.experienceBreakdown.setupTotal})) = ${experienceInfo.experienceBreakdown.total - experienceInfo.experienceBreakdown.setupTotal})`">XP: {{experienceInfo.experienceBreakdown.total - experienceInfo.experienceBreakdown.setupTotal}}</div>
+      </div>
       <div>{{ expression }}</div>
       <div>{{ faction?.name ?? 'No Faction' }}</div>
       <Button class="float-end" label="Edit" @click="toggleEdit" />
