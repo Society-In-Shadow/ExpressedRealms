@@ -2,16 +2,17 @@ using ExpressedRealms.Characters.UseCases.ExperienceBreakdown;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ExpressedRealms.Characters.API.CharacterEndPoints.GetOverallStats;
 
 internal static class GetOverallStatsEndpoint
 {
-    internal static async Task<Results<Ok<ExperienceBreakdownResponse>, NotFound, StatusCodeHttpResult, ValidationProblem>
-    > Execute(int characterId, IGetCharacterExperienceBreakdownUseCase repository)
+    internal static async Task<Results<Ok<ExperienceBreakdownResponse>, NotFound, StatusCodeHttpResult, ValidationProblem>> 
+        Execute(int id, [FromServices]IGetCharacterExperienceBreakdownUseCase repository)
     {
         var status = await repository.ExecuteAsync(
-            new () { CharacterId = characterId }
+            new () { CharacterId = id }
         );
 
         if (status.HasValidationError(out var validation))
@@ -33,6 +34,7 @@ internal static class GetOverallStatsEndpoint
             SetupSkillsXp = status.Value.SetupSkillsXp,
             SetupKnowledgeXp = status.Value.SetupKnowledgeXp,
             Total = status.Value.Total,
+            SetupTotal = status.Value.SetupTotal,
         });
     }
 }

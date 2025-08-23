@@ -11,4 +11,5 @@ public class ExperienceBreakdownResponse
     public int SetupStatsXp { get; set; }
     public int SetupSkillsXp { get; set; }
     public int Total { get; set; }
+    public int SetupTotal { get; set; }
 }

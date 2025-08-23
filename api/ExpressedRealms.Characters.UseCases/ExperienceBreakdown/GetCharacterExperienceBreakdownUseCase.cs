@@ -43,6 +43,7 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
             SkillsXp = skillXp,
             SetupSkillsXp = 28,
             Total = knowledgeXp + powerXp + statsXp + skillXp,
+            SetupTotal = 7 + 20 + 72 + 28 + 16
         });
     }
 }

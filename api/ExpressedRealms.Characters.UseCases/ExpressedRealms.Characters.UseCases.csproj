@@ -11,7 +11,6 @@
       <ProjectReference Include="..\ExpressedRealms.Powers.Repository\ExpressedRealms.Powers.Repository.csproj" />
       <ProjectReference Include="..\ExpressedRealms.Shared.UseCases\ExpressedRealms.Shared.UseCases.csproj" />
       <ProjectReference Include="..\ExpressedRealms.Shared\ExpressedRealms.Shared.csproj" />
-      <PackageReference Include="JetBrains.Annotations" Version="2025.2.0"/>
     </ItemGroup>
     <ItemGroup>
         <InternalsVisibleTo Include="$(AssemblyName).Tests.Unit" />
