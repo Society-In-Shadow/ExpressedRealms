@@ -5,21 +5,21 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
-
     <ItemGroup>
-      <Reference Include="FluentValidation">
-        <HintPath>..\..\..\..\.nuget\packages\fluentvalidation\11.11.0\lib\net8.0\FluentValidation.dll</HintPath>
-      </Reference>
+      <ProjectReference Include="..\ExpressedRealms.Characters.Repository\ExpressedRealms.Characters.Repository.csproj" />
+      <ProjectReference Include="..\ExpressedRealms.Knowledges.Repository\ExpressedRealms.Knowledges.Repository.csproj" />
+      <ProjectReference Include="..\ExpressedRealms.Powers.Repository\ExpressedRealms.Powers.Repository.csproj" />
+      <ProjectReference Include="..\ExpressedRealms.Shared.UseCases\ExpressedRealms.Shared.UseCases.csproj" />
+      <ProjectReference Include="..\ExpressedRealms.Shared\ExpressedRealms.Shared.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <InternalsVisibleTo Include="$(AssemblyName).Tests.Unit" />
+        <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+    </ItemGroup>
+    <ItemGroup>
       <Reference Include="JetBrains.Annotations">
         <HintPath>..\..\..\..\.nuget\packages\jetbrains.annotations\2024.3.0\lib\netstandard2.0\JetBrains.Annotations.dll</HintPath>
       </Reference>
     </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\ExpressedRealms.Characters.Repository\ExpressedRealms.Characters.Repository.csproj" />
-      <ProjectReference Include="..\ExpressedRealms.Knowledges.Repository\ExpressedRealms.Knowledges.Repository.csproj" />
-      <ProjectReference Include="..\ExpressedRealms.Shared.UseCases\ExpressedRealms.Shared.UseCases.csproj" />
-      <ProjectReference Include="..\ExpressedRealms.Shared\ExpressedRealms.Shared.csproj" />
-    </ItemGroup>
-
+    
 </Project>

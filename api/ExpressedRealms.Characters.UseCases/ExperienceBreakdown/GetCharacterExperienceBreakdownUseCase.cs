@@ -1,15 +1,17 @@
 using ExpressedRealms.Characters.Repository.Skills;
 using ExpressedRealms.Characters.Repository.Stats;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
+using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
-namespace ExpressedRealms.Characters.UseCases.GetCharacterExperienceBreakdownUseCase;
+namespace ExpressedRealms.Characters.UseCases.ExperienceBreakdown;
 
 internal sealed class GetCharacterExperienceBreakdownUseCase(
     ICharacterKnowledgeRepository mappingRepository,
     ICharacterStatRepository statRepository,
     ICharacterSkillRepository skillRepository,
+    ICharacterPowerRepository powerRepository,
     GetCharacterExperienceBreakdownModelValidator validator,
     CancellationToken cancellationToken
 ) : IGetCharacterExperienceBreakdownUseCase
@@ -26,7 +28,7 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
             return Result.Fail(result.Errors);
 
         var knowledgeXp = await mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(model.CharacterId);
-        var powerXp = await mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(model.CharacterId);
+        var powerXp = await powerRepository.GetExperienceSpentOnPowersForCharacter(model.CharacterId);
         var statsXp = await statRepository.GetExperienceSpentOnStatsForCharacter(model.CharacterId);
         var skillXp = await skillRepository.GetExperienceSpentOnSkillsForCharacter(model.CharacterId);
         
