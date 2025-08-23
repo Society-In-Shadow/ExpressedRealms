@@ -13,22 +13,8 @@ onBeforeMount(() => {
 function openMapWithFallback(address:string) {
   const encodedAddress = encodeURIComponent(address);
 
-  // Try to open native app first
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const nativeUrl = isIOS
-      ? `maps://maps.apple.com/?q=${encodedAddress}`
-      : `geo:0,0?q=${encodedAddress}`;
+  window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank').focus();// = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
 
-  // Fallback URL
-  const fallbackUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
-
-  // Try native app
-  window.location.href = nativeUrl;
-
-  // If native app doesn't handle it, fallback after a short delay
-  setTimeout(() => {
-    window.location.href = fallbackUrl;
-  }, 1000);
 }
 
 </script>
