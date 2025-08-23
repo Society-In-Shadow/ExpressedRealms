@@ -114,4 +114,12 @@ internal sealed class CharacterSkillRepository(
 
         return Result.Ok();
     }
+
+    public async Task<int> GetExperienceSpentOnSkillsForCharacter(int characterId)
+    {
+        return await context
+            .CharacterSkillsMappings.AsNoTracking()
+            .Where(x => x.CharacterId == characterId)
+            .SumAsync(x => x.SkillLevel.TotalXp, cancellationToken);
+    }
 }

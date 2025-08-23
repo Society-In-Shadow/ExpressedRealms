@@ -9,4 +9,5 @@ public interface ICharacterSkillRepository
     Task<List<SkillDto>> GetCharacterSkills(int characterId);
     Task<List<SkillLevelOptionsDto>> GetSkillLevelValuesForSkillTypeId(int skillTypeId);
     Task<Result> UpdateSkillLevel(EditCharacterSkillMappingDto dto);
+    Task<int> GetExperienceSpentOnSkillsForCharacter(int characterId);
 }
