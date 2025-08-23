@@ -3,7 +3,7 @@ using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using FluentValidation;
 using JetBrains.Annotations;
 
-namespace ExpressedRealms.Characters.UseCases.GetCharacterExperienceBreakdownUseCase;
+namespace ExpressedRealms.Characters.UseCases.ExperienceBreakdown;
 
 [UsedImplicitly]
 internal sealed class GetCharacterExperienceBreakdownModelValidator

@@ -85,6 +85,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Characters", "Characters", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Characters.UseCases", "ExpressedRealms.Characters.UseCases\ExpressedRealms.Characters.UseCases.csproj", "{D26378BA-7B90-49F4-A554-21719FD63E07}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Characters.UseCases.Tests.Unit", "ExpressedRealms.Characters.UseCases.Tests.Unit\ExpressedRealms.Characters.UseCases.Tests.Unit.csproj", "{B902EF82-EB9B-4A61-ABD0-76B5385A09E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -235,6 +237,10 @@ Global
 		{D26378BA-7B90-49F4-A554-21719FD63E07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D26378BA-7B90-49F4-A554-21719FD63E07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D26378BA-7B90-49F4-A554-21719FD63E07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B902EF82-EB9B-4A61-ABD0-76B5385A09E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B902EF82-EB9B-4A61-ABD0-76B5385A09E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B902EF82-EB9B-4A61-ABD0-76B5385A09E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B902EF82-EB9B-4A61-ABD0-76B5385A09E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -265,5 +271,6 @@ Global
 		{22B275D6-19D4-4859-8159-2662DA34E6C0} = {4D59692C-E40B-4BF2-B829-318F19F78CB1}
 		{427CB02E-A9FA-4308-B96D-B8BE2F1EB316} = {4D59692C-E40B-4BF2-B829-318F19F78CB1}
 		{D26378BA-7B90-49F4-A554-21719FD63E07} = {4D59692C-E40B-4BF2-B829-318F19F78CB1}
+		{B902EF82-EB9B-4A61-ABD0-76B5385A09E6} = {4D59692C-E40B-4BF2-B829-318F19F78CB1}
 	EndGlobalSection
 EndGlobal

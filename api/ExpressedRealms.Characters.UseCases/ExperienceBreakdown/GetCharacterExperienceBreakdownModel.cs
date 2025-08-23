@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Characters.UseCases.GetCharacterExperienceBreakdownUseCase;
+namespace ExpressedRealms.Characters.UseCases.ExperienceBreakdown;
 
 public class GetCharacterExperienceBreakdownModel
 {
