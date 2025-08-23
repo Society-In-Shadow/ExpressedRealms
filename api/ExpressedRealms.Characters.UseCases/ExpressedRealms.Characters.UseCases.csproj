@@ -11,15 +11,11 @@
       <ProjectReference Include="..\ExpressedRealms.Powers.Repository\ExpressedRealms.Powers.Repository.csproj" />
       <ProjectReference Include="..\ExpressedRealms.Shared.UseCases\ExpressedRealms.Shared.UseCases.csproj" />
       <ProjectReference Include="..\ExpressedRealms.Shared\ExpressedRealms.Shared.csproj" />
+      <PackageReference Include="JetBrains.Annotations" Version="2025.2.0"/>
     </ItemGroup>
     <ItemGroup>
         <InternalsVisibleTo Include="$(AssemblyName).Tests.Unit" />
         <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
-    </ItemGroup>
-    <ItemGroup>
-      <Reference Include="JetBrains.Annotations">
-        <HintPath>..\..\..\..\.nuget\packages\jetbrains.annotations\2024.3.0\lib\netstandard2.0\JetBrains.Annotations.dll</HintPath>
-      </Reference>
     </ItemGroup>
     
 </Project>
