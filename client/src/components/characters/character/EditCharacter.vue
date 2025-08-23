@@ -18,6 +18,7 @@ import KnowledgeTile from "@/components/characters/character/knowledges/Knowledg
 import {FeatureFlags, userStore} from "@/stores/userStore.ts";
 import {onMounted, ref} from "vue";
 import PowerTile from "@/components/characters/character/powers/PowerTile.vue";
+import OverallExperience from "@/components/characters/character/OverallExperience.vue";
 
 
 const userData = userStore();
@@ -36,6 +37,7 @@ onMounted(async() =>{
   </div>
   <div class="flex flex-xs-column flex-sm-column flex-lg-row flex-md-row gap-3 m-1 m-sm-3 m-md-3 m-lg-3 m-xl-3 flex-wrap center-content">
     <CharacterDetailTile />
+    <OverallExperience />
     <Card class="align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch">
       <template #content>
         <SmallStatDisplay />
