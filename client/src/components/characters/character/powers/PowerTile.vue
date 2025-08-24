@@ -7,9 +7,11 @@ import {characterPowersStore} from "@/components/characters/character/powers/sto
 import PowerCard from "@/components/characters/character/powers/PowerCard.vue";
 import PickPowerCard from "@/components/characters/character/powers/PickPowerCard.vue";
 import SplitButton from "primevue/splitbutton";
+import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 
 const characterKnowledgeData = characterPowersStore();
 const route = useRoute();
+const experienceInfo = experienceStore();
 
 onBeforeMount(async () => {
   await characterKnowledgeData.getCharacterPowers(route.params.id)
@@ -41,12 +43,12 @@ const items = [
 
 <template>
   <div style="max-width: 650px; margin: 0 auto;">
+    <div class="text-right pb-3" v-if="experienceInfo.showAllExperience">{{ experienceInfo.experienceBreakdown.powersXp}} total xp - {{experienceInfo.experienceBreakdown.setupPowersXp}} setup xp = {{experienceInfo.experienceBreakdown.powersXp - experienceInfo.experienceBreakdown.setupPowersXp}} XP</div>
     <div v-if="!noPowers || characterKnowledgeData.powers.length > 0" class="d-flex flex-row justify-content-between mb-2">
       <SplitButton class="pr-3" label="Download Power Cards" @click="characterKnowledgeData.downloadPowerCards(route.params.id, 'foo', true)" :model="items" />
       <Button v-if="!showEdit" class="btn btn-primary" label="Edit" @click="toggleEdit" />
       <Button v-else class="btn btn-primary" label="Cancel" @click="toggleEdit" />
     </div>
-
     <div v-for="path in characterKnowledgeData.powers">
       <h1>{{path.name}}</h1>
       <PowerCard :power-path="path" :show-edit="showEdit"/>

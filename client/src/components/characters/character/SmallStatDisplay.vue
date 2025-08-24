@@ -3,10 +3,13 @@
 import Fieldset from 'primevue/fieldset';
 import axios from "axios";
 import {onMounted, ref} from "vue";
-import { useRoute } from 'vue-router'
+import {useRoute} from 'vue-router'
 import StatTile from "@/components/characters/character/StatTile.vue";
 import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
+import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+
 const route = useRoute()
+const experienceInfo = experienceStore();
 const stats = ref([ {}, {}, {}, {}, {}, {}]);
 const showDetails = ref(false);
 const selectedStatType = ref(1);
@@ -35,6 +38,7 @@ function updateStat(level:number, bonus:number){
 </script>
 
 <template>
+  <div class="text-right pb-3" v-if="experienceInfo.showAllExperience">{{ experienceInfo.experienceBreakdown.statsXp}} total xp - {{experienceInfo.experienceBreakdown.setupStatsXp}} setup xp = {{experienceInfo.experienceBreakdown.statsXp - experienceInfo.experienceBreakdown.setupStatsXp}} XP</div>
   <div class="flex flex-wrap justify-content-center column-gap-3 row-gap-3 w-100">
     <div v-for="stat in stats" v-if="!showDetails" :key="stat.statTypeId" class="align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch m-0 p-0">
       <Fieldset class="statBlock mb-3" style="cursor: pointer;" @click="showDetailedStat(stat.statTypeId)">
