@@ -1,12 +1,14 @@
 <script setup lang="ts">
 
 import Card from "primevue/card";
-import {onMounted, ref} from "vue";
+import Popover from "primevue/popover";
+import {computed, onMounted, ref} from "vue";
 import {useRoute} from 'vue-router'
 import {characterStore} from "@/components/characters/character/stores/characterStore";
 import Button from "primevue/button";
 import EditCharacterDetails from "@/components/characters/character/EditCharacterDetails.vue";
 import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import OverallExperience from "@/components/characters/character/OverallExperience.vue";
 
 const route = useRoute()
 const characterInfo = characterStore();
@@ -31,6 +33,16 @@ function toggleEdit() {
   showEdit.value = !showEdit.value;
 }
 
+
+const op = ref();
+
+const togglePopup = (event) => {
+  op.value.toggle(event);
+}
+const xpTitle = computed(() => {
+  return `(XP - Setup Costs (${experienceInfo.experienceBreakdown.setupTotal})) = ${experienceInfo.experienceBreakdown.total - experienceInfo.experienceBreakdown.setupTotal})`;
+});
+
 </script>
 
 <template>
@@ -41,7 +53,7 @@ function toggleEdit() {
       </h1>
       <div class="d-flex flex-row justify-content-between">
         <div><em>XL: {{ experienceInfo.getCharacterLevel() }}</em></div>
-        <div v-if="experienceInfo.showAllExperience" :title="`(XP - Setup Costs (${experienceInfo.experienceBreakdown.setupTotal})) = ${experienceInfo.experienceBreakdown.total - experienceInfo.experienceBreakdown.setupTotal})`">XP: {{experienceInfo.experienceBreakdown.total - experienceInfo.experienceBreakdown.setupTotal}}</div>
+        <div v-if="experienceInfo.showAllExperience" :title="xpTitle">XP: {{experienceInfo.experienceBreakdown.total - experienceInfo.experienceBreakdown.setupTotal}}<span class="material-symbols-outlined" style="" @click="togglePopup">help</span></div>
       </div>
       <div>{{ expression }}</div>
       <div>{{ faction?.name ?? 'No Faction' }}</div>
@@ -49,4 +61,7 @@ function toggleEdit() {
     </template>
   </Card>
   <EditCharacterDetails v-else @close-dialog="toggleEdit" />
+  <Popover ref="op" >
+    <OverallExperience/>
+  </Popover>
 </template>
