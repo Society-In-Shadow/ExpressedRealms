@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite';
+import {defineConfig} from 'vite';
 import plugin from '@vitejs/plugin-vue';
-import { dirname } from 'node:path';
+import {dirname} from 'node:path';
 import fs from 'fs';
 
 const __dirname = dirname(__filename);
@@ -17,7 +17,7 @@ export default defineConfig(() => {
         port: port,
         proxy: {
             '/api': {
-                target: process.env.VITE_API_SERVER_LOCATION,
+                target: "https://webapi:8443",
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/api/, ''),
                 secure: false
