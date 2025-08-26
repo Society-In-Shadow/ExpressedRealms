@@ -27,12 +27,14 @@ onMounted(async () => {
   <Card class="custom-card" style="max-width: 30em">
     <template #content>
       <table>
-        <tr>
-          <td></td>
-          <td class="text-right pl-3">Total XP</td>
-          <td class="text-right pl-3">Creation XP</td>
-          <td class="text-right pl-3">Spent XP</td>
-        </tr>
+        <thead>
+          <tr>
+            <th></th>
+            <th class="text-right pl-3">Total XP</th>
+            <th class="text-right pl-3">Creation XP</th>
+            <th class="text-right pl-3">Spent XP</th>
+          </tr>
+        </thead>
         <tr>
           <td>Knowledge XP</td>
           <td class="text-right">{{ experienceInfo.experienceBreakdown.knowledgeXp }}</td>
