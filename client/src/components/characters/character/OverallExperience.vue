@@ -29,9 +29,9 @@ onMounted(async () => {
       <table>
         <tr>
           <td></td>
-          <td class="text-right pl-3">Raw XP</td>
-          <td class="text-right pl-3">Creator XP</td>
-          <td class="text-right pl-3">Level XP</td>
+          <td class="text-right pl-3">Total XP</td>
+          <td class="text-right pl-3">Creation XP</td>
+          <td class="text-right pl-3">Spent XP</td>
         </tr>
         <tr>
           <td>Knowledge XP</td>
@@ -75,9 +75,9 @@ onMounted(async () => {
   <Message severity="info" class="mb-3" style="max-width: 30em">
     <div>This is an breakdown of all the XP the current character has. The calculations are assuming you are spending everything you can. This will be changed later.</div>
     <ul>
-      <li>Raw XP - This is the total count for everything in the given category</li>
-      <li>Character XP - This is the this is the XP you are expected to spend in character creation.</li>
-      <li>Level XP - Once you take the difference of the two above, this is what determines your XL level</li>
+      <li>Total XP - Total experience in each category including character creation XP and XP spent past creation.</li>
+      <li>Creation XP - Base experience to be spent in each section during character creation.</li>
+      <li>Spent XP - Experience spent past character creation, this determines your character's XL.</li>
     </ul>
     <div>Experience Levels:</div>
     <ol>

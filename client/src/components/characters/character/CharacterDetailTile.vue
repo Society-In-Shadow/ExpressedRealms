@@ -46,18 +46,19 @@ const xpTitle = computed(() => {
 </script>
 
 <template>
-  <Card v-if="!showEdit" class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="max-width: 30em">
+  <Card v-if="!showEdit" class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch">
     <template #content>
-      <h1 class="mt-0 pt-0 pb-0">
-        {{ name }} 
-      </h1>
-      <div class="d-flex flex-row justify-content-between">
-        <div><em>XL: {{ experienceInfo.getCharacterLevel() }}</em></div>
-        <div v-if="experienceInfo.showAllExperience" :title="xpTitle">XP: {{experienceInfo.experienceBreakdown.total - experienceInfo.experienceBreakdown.setupTotal}}<span class="material-symbols-outlined" style="" @click="togglePopup">help</span></div>
+      <div class="d-flex flex-row justify-content-between" >
+        <div>
+          <h1 class="mt-0 pt-0 pb-0 mb-0">{{ name }}</h1>
+          <div><em><span>XL: {{experienceInfo.getCharacterLevel()}}</span> - {{ expression }}</em></div>
+          <div><em>{{ faction?.name ?? 'No Faction' }}</em></div>
+        </div>
+        <div class="d-flex flex-column gap-3" style="font-size: 2.5em">
+          <Button type="button" @click="togglePopup" size="large" :label="`XP: ${experienceInfo.experienceBreakdown.total - experienceInfo.experienceBreakdown.setupTotal}`" />
+          <Button class="float-end" label="Edit" @click="toggleEdit" />
+        </div>
       </div>
-      <div>{{ expression }}</div>
-      <div>{{ faction?.name ?? 'No Faction' }}</div>
-      <Button class="float-end" label="Edit" @click="toggleEdit" />
     </template>
   </Card>
   <EditCharacterDetails v-else @close-dialog="toggleEdit" />

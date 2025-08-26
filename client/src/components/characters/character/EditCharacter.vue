@@ -13,7 +13,6 @@ import DataTable from "primevue/datatable";
 
 import ProficiencyTableTile from "@/components/characters/character/proficiency/ProficiencyTableTile.vue";
 import CharacterDetailTile from "@/components/characters/character/CharacterDetailTile.vue";
-import TrackableProficiencies from "@/components/characters/character/proficiency/TrackableProficiencies.vue";
 import KnowledgeTile from "@/components/characters/character/knowledges/KnowledgeTile.vue";
 import {FeatureFlags, userStore} from "@/stores/userStore.ts";
 import {onMounted, ref} from "vue";
@@ -34,16 +33,13 @@ onMounted(async() =>{
   <div class="d-none">
     <DataTable />
   </div>
+  <CharacterDetailTile />
   <div class="flex flex-xs-column flex-sm-column flex-lg-row flex-md-row gap-3 m-1 m-sm-3 m-md-3 m-lg-3 m-xl-3 flex-wrap center-content">
-    <CharacterDetailTile />
     <Card class="align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch">
       <template #content>
         <SmallStatDisplay />
       </template>
     </Card>
-    
-    <TrackableProficiencies />
-    
     <Tabs value="0" class="w-100" scrollable :lazy="true" >
       <TabList>
         <Tab value="0">
@@ -85,7 +81,7 @@ onMounted(async() =>{
 }
 
 .center-content {
-  max-width: 72em;
+  max-width: 80em;
   margin: 0 auto !important;
 }
 
