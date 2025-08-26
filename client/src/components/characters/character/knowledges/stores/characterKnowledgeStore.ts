@@ -1,8 +1,9 @@
-import { defineStore } from 'pinia'
+import {defineStore} from 'pinia'
 import axios from "axios";
 import type {
     CharacterKnowledge,
-    CharacterKnowledgeResponse, KnowledgeOptionResponse,
+    CharacterKnowledgeResponse,
+    KnowledgeOptionResponse,
     KnowledgeOptions
 } from "@/components/characters/character/knowledges/types";
 import toaster from "@/services/Toasters";
@@ -12,6 +13,9 @@ import type {
 import type {
     SpecializationForm
 } from "@/components/characters/character/knowledges/validations/specializationValidations";
+import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+
+const experienceInfo = experienceStore();
 
 export const characterKnowledgeStore =
     defineStore('characterKnowledge', {
@@ -46,6 +50,7 @@ export const characterKnowledgeStore =
                     notes: values.notes,
                 })
                     .then(async () => {
+                        await experienceInfo.updateExperience(characterId);
                         await this.getCharacterKnowledges(characterId);
                         toaster.success("Successfully Added Knowledge!");
                     });
@@ -56,6 +61,7 @@ export const characterKnowledgeStore =
                     notes: values.notes,
                 })
                     .then(async () => {
+                        await experienceInfo.updateExperience(characterId);
                         await this.getCharacterKnowledges(characterId);
                         toaster.success("Successfully Updated Knowledge!");
                     });
@@ -63,6 +69,7 @@ export const characterKnowledgeStore =
             deleteKnowledge: async function (characterId: number, mappingId: number): Promise<void> {
                 await axios.delete(`/characters/${characterId}/knowledges/${mappingId}`)
                     .then(async () => {
+                        await experienceInfo.updateExperience(characterId);
                         await this.getCharacterKnowledges(characterId);
                         toaster.success("Successfully Deleted Knowledge!");
                     });
@@ -74,6 +81,7 @@ export const characterKnowledgeStore =
                     notes: values.notes,
                 })
                     .then(async () => {
+                        await experienceInfo.updateExperience(characterId);
                         await this.getCharacterKnowledges(characterId);
                         toaster.success("Successfully Added Specialization!");
                     });
@@ -85,6 +93,7 @@ export const characterKnowledgeStore =
                     notes: values.notes,
                 })
                     .then(async () => {
+                        await experienceInfo.updateExperience(characterId);
                         await this.getCharacterKnowledges(characterId);
                         toaster.success("Successfully Updated Specialization!");
                     });
@@ -92,6 +101,7 @@ export const characterKnowledgeStore =
             deleteSpecialization: async function (characterId: number, mappingId: number, specializationNumber:number): Promise<void> {
                 await axios.delete(`/characters/${characterId}/knowledges/${mappingId}/specialization/${specializationNumber}`)
                     .then(async () => {
+                        await experienceInfo.updateExperience(characterId);
                         await this.getCharacterKnowledges(characterId);
                         toaster.success("Successfully Deleted Specialization!");
                     });

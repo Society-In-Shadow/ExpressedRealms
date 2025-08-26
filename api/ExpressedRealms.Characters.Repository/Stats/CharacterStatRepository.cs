@@ -251,4 +251,26 @@ internal sealed class CharacterStatRepository(
 
         return Result.Ok(characterStats);
     }
+
+    public async Task<int> GetExperienceSpentOnStatsForCharacter(int characterId)
+    {
+        var character = await context
+            .Characters.Include(x => x.AgilityStatLevel)
+            .Include(x => x.ConstitutionStatLevel)
+            .Include(x => x.DexterityStatLevel)
+            .Include(x => x.StrengthStatLevel)
+            .Include(x => x.IntelligenceStatLevel)
+            .Include(x => x.WillpowerStatLevel)
+            .FirstOrDefaultAsync(
+                x => x.Id == characterId && x.Player.UserId == userContext.CurrentUserId(),
+                cancellationToken
+            );
+
+        return character!.AgilityStatLevel.TotalXPCost
+            + character.ConstitutionStatLevel.TotalXPCost
+            + character.DexterityStatLevel.TotalXPCost
+            + character.StrengthStatLevel.TotalXPCost
+            + character.IntelligenceStatLevel.TotalXPCost
+            + character.WillpowerStatLevel.TotalXPCost;
+    }
 }

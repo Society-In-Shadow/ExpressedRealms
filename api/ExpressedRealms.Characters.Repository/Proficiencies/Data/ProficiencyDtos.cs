@@ -10,9 +10,9 @@ public static class ProficiencyDtos
     private const string Defensive = "Defensive";
     private const string Secondary = "Secondary";
 
-    public static List<ProficiencyDto> GetProficiencies()
+    public static List<ProficiencyDto> GetProficiencies(int expressionId)
     {
-        return new List<ProficiencyDto>()
+        var standardProficiencies = new List<ProficiencyDto>()
         {
             new ProficiencyDto()
             {
@@ -266,62 +266,6 @@ public static class ProficiencyDtos
             },
             new ProficiencyDto()
             {
-                Id = 18,
-                Name = "Chi",
-                Description = StaticDescription,
-                Type = Secondary,
-                Modifiers = new List<ModifierType>()
-                {
-                    ModifierType.Constitution,
-                    ModifierType.Constitution,
-                    ModifierType.Intelligence,
-                },
-                SortOrder = 6,
-            },
-            new ProficiencyDto()
-            {
-                Id = 19,
-                Name = "Essence",
-                Description = StaticDescription,
-                Type = Secondary,
-                Modifiers = new List<ModifierType>()
-                {
-                    ModifierType.Constitution,
-                    ModifierType.Willpower,
-                    ModifierType.Willpower,
-                },
-                SortOrder = 7,
-            },
-            new ProficiencyDto()
-            {
-                Id = 20,
-                Name = "Mana",
-                Description = StaticDescription,
-                Type = Secondary,
-                Modifiers = new List<ModifierType>()
-                {
-                    ModifierType.Intelligence,
-                    ModifierType.Willpower,
-                    ModifierType.Willpower,
-                },
-                SortOrder = 8,
-            },
-            new ProficiencyDto()
-            {
-                Id = 21,
-                Name = "Noumenon",
-                Description = StaticDescription,
-                Type = Secondary,
-                Modifiers = new List<ModifierType>()
-                {
-                    ModifierType.Constitution,
-                    ModifierType.Intelligence,
-                    ModifierType.Intelligence,
-                },
-                SortOrder = 9,
-            },
-            new ProficiencyDto()
-            {
                 Id = 22,
                 Name = "RWP",
                 Description = "Reserve Will Power",
@@ -339,5 +283,78 @@ public static class ProficiencyDtos
                 SortOrder = 11,
             },
         };
+
+        const int Adepts = 3;
+        const int Sidhe = 7;
+        const int Sorcerers = 8;
+        const int Shammas = 4;
+
+        var expressionSpecificProficiency = expressionId switch
+        {
+            Adepts => new ProficiencyDto()
+            {
+                Id = 18,
+                Name = "Chi",
+                Description = StaticDescription,
+                Type = Secondary,
+                Modifiers = new List<ModifierType>()
+                {
+                    ModifierType.Constitution,
+                    ModifierType.Constitution,
+                    ModifierType.Intelligence,
+                },
+                SortOrder = 6,
+            },
+            Sidhe => new ProficiencyDto()
+            {
+                Id = 19,
+                Name = "Essence",
+                Description = StaticDescription,
+                Type = Secondary,
+                Modifiers = new List<ModifierType>()
+                {
+                    ModifierType.Constitution,
+                    ModifierType.Willpower,
+                    ModifierType.Willpower,
+                },
+                SortOrder = 7,
+            },
+            Sorcerers => new ProficiencyDto()
+            {
+                Id = 20,
+                Name = "Mana",
+                Description = StaticDescription,
+                Type = Secondary,
+                Modifiers = new List<ModifierType>()
+                {
+                    ModifierType.Intelligence,
+                    ModifierType.Willpower,
+                    ModifierType.Willpower,
+                },
+                SortOrder = 8,
+            },
+            Shammas => new ProficiencyDto()
+            {
+                Id = 21,
+                Name = "Noumenon",
+                Description = StaticDescription,
+                Type = Secondary,
+                Modifiers = new List<ModifierType>()
+                {
+                    ModifierType.Constitution,
+                    ModifierType.Intelligence,
+                    ModifierType.Intelligence,
+                },
+                SortOrder = 9,
+            },
+            _ => null,
+        };
+
+        if (expressionSpecificProficiency != null)
+        {
+            standardProficiencies.Add(expressionSpecificProficiency);
+        }
+
+        return standardProficiencies;
     }
 }

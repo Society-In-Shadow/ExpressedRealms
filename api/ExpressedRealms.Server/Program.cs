@@ -8,6 +8,7 @@ using ExpressedRealms.Blessings.API.Configuration;
 using ExpressedRealms.Blessings.UseCases.Configuration;
 using ExpressedRealms.Characters.API.Configuration;
 using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.Characters.UseCases.Configuration;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.Roles;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
@@ -203,12 +204,13 @@ try
     builder.Services.AddExpressionTextSectionInjections();
     builder.Services.AddBlessingInjections();
     builder.Services.AddPowerUseCaseConfiguration();
+    builder.Services.AddCharacterUseCaseInjections();
     await builder.Services.AddFeatureFlagInjections(keyVaultManager);
 
     Log.Information("Building the App");
     var app = builder.Build();
 
-    Audit.Core.Configuration.AddCustomAction(
+    Configuration.AddCustomAction(
         ActionType.OnScopeCreated,
         scope =>
         {

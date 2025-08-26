@@ -13,12 +13,14 @@ import AccordionContent from "primevue/accordioncontent";
 import AccordionHeader from "primevue/accordionheader";
 import {addKnowledgeDialog} from "@/components/characters/character/knowledges/services/dialogs";
 import {confirmationPopup} from "@/components/characters/character/knowledges/services/confirmationService";
+import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 
 const knowledgeData = knowledgeStore();
 const characterKnowledgeData = characterKnowledgeStore();
 const route = useRoute();
 const dialogService = addKnowledgeDialog();
 const popupService = confirmationPopup(route.params.id)
+const experienceInfo = experienceStore();
 
 onBeforeMount(async () => {
   await characterKnowledgeData.getCharacterKnowledges(route.params.id)
@@ -50,6 +52,7 @@ const filteredKnowledges = computed(() => {
 
 <template>
   <div style="max-width: 650px; margin: 0 auto;">
+    <div class="text-right pb-3" v-if="experienceInfo.showAllExperience">{{ experienceInfo.experienceBreakdown.knowledgeXp}} Total XP - {{experienceInfo.experienceBreakdown.setupKnowledgeXp}} Creation XP = {{experienceInfo.experienceBreakdown.knowledgeXp - experienceInfo.experienceBreakdown.setupKnowledgeXp}} XP</div>
     <div v-if="!noKnowledges || characterKnowledgeData.knowledges.length > 0" class="text-right mb-2">
       <Button v-if="!showEdit" class="btn btn-primary" label="Edit" @click="toggleEdit" />
       <Button v-else class="btn btn-primary" label="Cancel" @click="toggleEdit" />

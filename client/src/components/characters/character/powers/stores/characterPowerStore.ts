@@ -8,6 +8,9 @@ import type {
 } from "@/components/characters/character/powers/types.ts";
 import type {CharacterPowerForm} from "@/components/characters/character/powers/validations/powerValidations.ts";
 import {characterStore} from "@/components/characters/character/stores/characterStore.ts";
+import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+
+const experienceInfo = experienceStore();
 
 export const characterPowersStore =
     defineStore('characterPowers', {
@@ -46,6 +49,7 @@ export const characterPowersStore =
                     notes: values.notes,
                 })
                     .then(async () => {
+                        await experienceInfo.updateExperience(characterId);
                         await this.getCharacterPowers(characterId);
                         await this.getSelectableCharacterPowers(characterId);
                         toaster.success("Successfully Added Power!");
@@ -56,6 +60,7 @@ export const characterPowersStore =
                     notes: values.notes,
                 })
                     .then(async () => {
+                        await experienceInfo.updateExperience(characterId);
                         await this.getCharacterPowers(characterId);
                         await this.getSelectableCharacterPowers(characterId);
                         toaster.success("Successfully Updated Power!");
@@ -64,6 +69,7 @@ export const characterPowersStore =
             deletePower: async function (characterId: number, powerId: number): Promise<void> {
                 await axios.delete(`/characters/${characterId}/powers/${powerId}`)
                     .then(async () => {
+                        await experienceInfo.updateExperience(characterId);
                         await this.getCharacterPowers(characterId);
                         await this.getSelectableCharacterPowers(characterId);
                         toaster.success("Successfully Deleted Power!");

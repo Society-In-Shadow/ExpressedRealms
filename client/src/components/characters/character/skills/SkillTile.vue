@@ -14,6 +14,7 @@ import type {
 } from "@/components/characters/character/skills/interfaces/CharacterSkillsResponse";
 import EditSkillDetail from "@/components/characters/character/skills/EditSkillDetail.vue";
 import {skillStore} from "@/components/characters/character/skills/Stores/skillStore";
+import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 
 const route = useRoute()
 
@@ -23,6 +24,7 @@ const maxXP = 1000;
 const appliedXp = ref(0);
 const skillInfo = skillStore();
 const openItems = ref([]);
+const experienceInfo = experienceStore();
 
 const remainingXP = computed(() => maxXP - appliedXp.value);
 
@@ -47,6 +49,7 @@ function getEditOptions() {
 </script>
 
 <template>
+  <div class="text-right pb-3" v-if="experienceInfo.showAllExperience">{{ experienceInfo.experienceBreakdown.skillsXp}} Total XP - {{experienceInfo.experienceBreakdown.setupSkillsXp}} Creation XP = {{experienceInfo.experienceBreakdown.skillsXp - experienceInfo.experienceBreakdown.setupSkillsXp}} XP</div>
   <div class="d-inline-flex flex-wrap justify-content-center column-gap-3 row-gap-1 w-100">
     <Panel v-for="skillType in skillTypes" class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="width: 25em">
       <template #header>

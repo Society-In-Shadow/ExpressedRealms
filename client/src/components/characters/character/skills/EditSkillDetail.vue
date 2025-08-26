@@ -9,6 +9,7 @@ import Listbox from "primevue/listbox";
 import toasters from "@/services/Toasters";
 import {skillStore} from "@/components/characters/character/skills/Stores/skillStore";
 import {proficiencyStore} from "@/components/characters/character/proficiency/stores/proficiencyStore";
+import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 
 const props = defineProps({
   skillTypeId: {
@@ -26,6 +27,7 @@ const props = defineProps({
 });
 
 const route = useRoute()
+const experienceInfo = experienceStore();
 
 const skillLevels:Ref<Array<SkillResponse>> = ref([]);
 const isLoading = ref(true);
@@ -95,10 +97,10 @@ function handleStatUpdate(skill:SkillResponse){
     characterId: route.params.id,
     skillTypeId: props.skillTypeId,
     skillLevelId: selectedItem.value
-  }).then(function(){
+  }).then(async function(){
     oldValue.value = selectedItem.value;
     showOptions.value = false;
-    
+    await experienceInfo.updateExperience(route.params.id);
     var levelInfo = getSelectedLevelInformation();
     skillInfo.showExperience = false;
     skillInfo.editSkillTypeId = 0;

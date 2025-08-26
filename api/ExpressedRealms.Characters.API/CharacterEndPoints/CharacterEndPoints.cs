@@ -1,4 +1,5 @@
 using ExpressedRealms.Characters.API.CharacterEndPoints.DTOs;
+using ExpressedRealms.Characters.API.CharacterEndPoints.GetOverallStats;
 using ExpressedRealms.Characters.API.CharacterEndPoints.Requests;
 using ExpressedRealms.Characters.API.CharacterEndPoints.Responses;
 using ExpressedRealms.Characters.API.StatEndPoints.Requests;
@@ -161,6 +162,10 @@ internal static class CharacterEndPoints
                     return TypedResults.Ok(new CharacterEditResponse(result.Value));
                 }
             )
+            .RequireAuthorization();
+
+        endpointGroup
+            .MapGet("{id}/overallexperience", GetOverallStatsEndpoint.Execute)
             .RequireAuthorization();
 
         endpointGroup
