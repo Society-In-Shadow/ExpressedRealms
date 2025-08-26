@@ -5,9 +5,7 @@ import {useRoute} from 'vue-router'
 import {proficiencyStore} from "@/components/characters/character/proficiency/stores/proficiencyStore";
 import Panel from "primevue/panel";
 import Accordion from 'primevue/accordion';
-import AccordionPanel from 'primevue/accordionpanel';
-import AccordionHeader from 'primevue/accordionheader';
-import AccordionContent from 'primevue/accordioncontent';
+import ProficiencyAccordionPanel from "@/components/characters/character/proficiency/ProficiencyAccordionPanel.vue";
 
 const route = useRoute()
 
@@ -18,7 +16,6 @@ const profStore = proficiencyStore();
 const types = computed(() => [
   { name: "Offensive Proficiencies", items: profStore.offensive },
   { name: "Defensive Proficiencies", items: profStore.defensive },
-  { name: "Secondary Proficiencies", items: profStore.secondary },
 ]);
 
 onMounted(() =>{
@@ -36,51 +33,7 @@ onMounted(() =>{
         </h3>
       </template>
       <Accordion :value="openItems" multiple :lazy="true" expand-icon="pi pi-info-circle" collapse-icon="pi pi-times-circle">
-        <AccordionPanel v-for="proficiency in type.items" :key="proficiency.id" :value="proficiency.id">
-          <AccordionHeader>
-            <div class="d-flex justify-content-between w-100 pr-3">
-              <div>{{ proficiency.name }}</div>
-              <div class="text-right">
-                {{ proficiency.value }}
-              </div>
-            </div>
-          </AccordionHeader>
-          <AccordionContent>
-            <div class="p-datatable p-component p-datatable-striped">
-              <div class="p-datatable-table-container">
-                <table class="w-100 p-datatable-table">
-                  <!-- Table header -->
-                  <thead class="p-datatable-thead">
-                    <tr>
-                      <th class="p-datatable-header-cell">
-                        Source
-                      </th>
-                      <th class="p-datatable-header-cell">
-                        Details
-                      </th>
-                      <th class="p-datatable-header-cell">
-                        Bonus
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody class="p-datatable-tbody">
-                    <tr v-for="(modifier, index) in proficiency.appliedModifiers" :key="index" :class="index % 2 === 0 ? 'p-row-even' : 'p-row-odd'">
-                      <td>
-                        {{ modifier.name }}
-                      </td>
-                      <td>
-                        {{ modifier.message }}
-                      </td>
-                      <td class="text-right">
-                        {{ modifier.value >= 0 ? '+' : '' }}{{ modifier.value }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </AccordionContent>
-        </AccordionPanel>
+        <ProficiencyAccordionPanel v-for="proficiency in type.items" :key="proficiency.id" :value="proficiency.id" :proficiency="proficiency"/>
       </Accordion>
     </Panel>
   </div>
