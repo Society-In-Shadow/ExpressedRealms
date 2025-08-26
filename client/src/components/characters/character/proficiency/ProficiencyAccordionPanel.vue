@@ -4,8 +4,6 @@ import AccordionContent from "primevue/accordioncontent";
 import AccordionHeader from "primevue/accordionheader";
 import AccordionPanel from "primevue/accordionpanel";
 
-import {proficiencyStore} from "@/components/characters/character/proficiency/stores/proficiencyStore";
-
 const props = defineProps({
   proficiency: {
     type: Object,

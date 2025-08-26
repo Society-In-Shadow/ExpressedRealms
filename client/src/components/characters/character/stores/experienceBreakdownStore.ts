@@ -5,13 +5,13 @@ export const experienceStore =
     defineStore('experienceStore', {
         state: () => {
             return {
-                isLoading: true as Boolean,
+                isLoading: true as boolean,
                 experienceBreakdown: {} as ExperienceBreakdownResponse,
-                showAllExperience: true as Boolean,
+                showAllExperience: true as boolean,
             }
         },
         actions: {
-            async updateExperience(characterId: Number){
+            async updateExperience(characterId: number){
                 this.isLoading = true;
                 await axios.get(`/characters/${characterId}/overallexperience`)
                     .then((response) => {
@@ -20,7 +20,7 @@ export const experienceStore =
                     })
                 },
             getCharacterLevel(): number{
-                var total =this.experienceBreakdown.total;
+                let total = this.experienceBreakdown.total;
 
                 total = total - this.experienceBreakdown.setupTotal;
                 if(total <= 0)

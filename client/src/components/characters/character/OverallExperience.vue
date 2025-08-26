@@ -8,7 +8,7 @@ import {experienceStore} from "@/components/characters/character/stores/experien
 
 const route = useRoute()
 const experienceInfo = experienceStore();
-var totalCreatorXp = computed(() => {
+const totalCreatorXp = computed(() => {
   return experienceInfo.experienceBreakdown.setupStatsXp + 
       experienceInfo.experienceBreakdown.setupKnowledgeXp + 
       experienceInfo.experienceBreakdown.setupPowersXp + 
