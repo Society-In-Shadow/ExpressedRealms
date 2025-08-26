@@ -167,7 +167,7 @@ internal static class CharacterEndPoints
         endpointGroup
             .MapGet("{id}/overallexperience", GetOverallStatsEndpoint.Execute)
             .RequireAuthorization();
-        
+
         endpointGroup
             .MapPost(
                 "",

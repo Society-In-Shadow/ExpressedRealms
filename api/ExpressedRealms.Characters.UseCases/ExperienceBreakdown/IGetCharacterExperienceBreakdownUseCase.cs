@@ -4,4 +4,7 @@ using FluentResults;
 namespace ExpressedRealms.Characters.UseCases.ExperienceBreakdown;
 
 public interface IGetCharacterExperienceBreakdownUseCase
-    : IGenericUseCase<Result<ExperienceBreakdownReturnModel>, GetCharacterExperienceBreakdownModel> { }
+    : IGenericUseCase<
+        Result<ExperienceBreakdownReturnModel>,
+        GetCharacterExperienceBreakdownModel
+    > { }

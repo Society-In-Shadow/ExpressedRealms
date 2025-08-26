@@ -265,12 +265,12 @@ internal sealed class CharacterStatRepository(
                 x => x.Id == characterId && x.Player.UserId == userContext.CurrentUserId(),
                 cancellationToken
             );
-        
-        return character!.AgilityStatLevel.TotalXPCost + 
-               character.ConstitutionStatLevel.TotalXPCost + 
-               character.DexterityStatLevel.TotalXPCost + 
-               character.StrengthStatLevel.TotalXPCost + 
-               character.IntelligenceStatLevel.TotalXPCost + 
-               character.WillpowerStatLevel.TotalXPCost;
+
+        return character!.AgilityStatLevel.TotalXPCost
+            + character.ConstitutionStatLevel.TotalXPCost
+            + character.DexterityStatLevel.TotalXPCost
+            + character.StrengthStatLevel.TotalXPCost
+            + character.IntelligenceStatLevel.TotalXPCost
+            + character.WillpowerStatLevel.TotalXPCost;
     }
 }

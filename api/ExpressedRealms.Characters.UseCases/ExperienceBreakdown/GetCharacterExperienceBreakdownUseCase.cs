@@ -16,7 +16,9 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
     CancellationToken cancellationToken
 ) : IGetCharacterExperienceBreakdownUseCase
 {
-    public async Task<Result<ExperienceBreakdownReturnModel>> ExecuteAsync(GetCharacterExperienceBreakdownModel model)
+    public async Task<Result<ExperienceBreakdownReturnModel>> ExecuteAsync(
+        GetCharacterExperienceBreakdownModel model
+    )
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,
@@ -27,23 +29,31 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var knowledgeXp = await mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(model.CharacterId);
-        var powerXp = await powerRepository.GetExperienceSpentOnPowersForCharacter(model.CharacterId);
+        var knowledgeXp = await mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(
+            model.CharacterId
+        );
+        var powerXp = await powerRepository.GetExperienceSpentOnPowersForCharacter(
+            model.CharacterId
+        );
         var statsXp = await statRepository.GetExperienceSpentOnStatsForCharacter(model.CharacterId);
-        var skillXp = await skillRepository.GetExperienceSpentOnSkillsForCharacter(model.CharacterId);
-        
-        return Result.Ok(new ExperienceBreakdownReturnModel()
-        {
-            KnowledgeXp = knowledgeXp,
-            SetupKnowledgeXp = 7,
-            PowersXp = powerXp,
-            SetupPowersXp = 20,
-            StatsXp = statsXp,
-            SetupStatsXp = 72,
-            SkillsXp = skillXp,
-            SetupSkillsXp = 28,
-            Total = knowledgeXp + powerXp + statsXp + skillXp,
-            SetupTotal = 7 + 20 + 72 + 28 + 16
-        });
+        var skillXp = await skillRepository.GetExperienceSpentOnSkillsForCharacter(
+            model.CharacterId
+        );
+
+        return Result.Ok(
+            new ExperienceBreakdownReturnModel()
+            {
+                KnowledgeXp = knowledgeXp,
+                SetupKnowledgeXp = 7,
+                PowersXp = powerXp,
+                SetupPowersXp = 20,
+                StatsXp = statsXp,
+                SetupStatsXp = 72,
+                SkillsXp = skillXp,
+                SetupSkillsXp = 28,
+                Total = knowledgeXp + powerXp + statsXp + skillXp,
+                SetupTotal = 7 + 20 + 72 + 28 + 16,
+            }
+        );
     }
 }

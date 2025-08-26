@@ -74,11 +74,12 @@ internal sealed class ProficiencyRepository(
             }
         );
 
-        var expressionId = await context.Characters.AsNoTracking()
+        var expressionId = await context
+            .Characters.AsNoTracking()
             .Where(x => x.Id == characterId)
             .Select(x => x.ExpressionId)
             .FirstOrDefaultAsync(cancellationToken);
-        
+
         var proficiencies = ProficiencyDtos.GetProficiencies(expressionId);
 
         foreach (var proficiency in proficiencies)

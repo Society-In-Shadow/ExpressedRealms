@@ -288,7 +288,7 @@ public static class ProficiencyDtos
         const int Sidhe = 7;
         const int Sorcerers = 8;
         const int Shammas = 4;
-        
+
         var expressionSpecificProficiency = expressionId switch
         {
             Adepts => new ProficiencyDto()
@@ -347,7 +347,7 @@ public static class ProficiencyDtos
                 },
                 SortOrder = 9,
             },
-            _ => null
+            _ => null,
         };
 
         if (expressionSpecificProficiency != null)
