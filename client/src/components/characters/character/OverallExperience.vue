@@ -24,7 +24,7 @@ onMounted(async () => {
 
 <template>
 
-  <Card class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="max-width: 30em">
+  <Card class="custom-card" style="max-width: 30em">
     <template #content>
       <table>
         <tr>
@@ -72,7 +72,7 @@ onMounted(async () => {
       </table>
     </template>
   </Card>
-  <Message severity="info" class="mb-3" style="max-width: 30em">
+  <Message severity="info" class="mt-3" style="max-width: 30em">
     <div>This is an breakdown of all the XP the current character has. The calculations are assuming you are spending everything you can. This will be changed later.</div>
     <ul>
       <li>Total XP - Total experience in each category including character creation XP and XP spent past creation.</li>
@@ -93,6 +93,23 @@ onMounted(async () => {
   </Message>
 </template>
 
-<style scoped>
+<style>
+@media(max-width: 768px){
+  .custom-card > .p-card-body{
+    padding: 0rem !important;
+  }
 
+  .custom-toc > .p-card-body{
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .custom-card .p-tabpanels{
+    padding: 0.5rem !important;
+  }
+  
+  .custom-card >>> .p-card-content{
+    padding: 0;
+  }
+}
 </style>

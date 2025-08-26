@@ -2,17 +2,20 @@
 
 import Card from "primevue/card";
 import Popover from "primevue/popover";
-import {computed, onMounted, ref} from "vue";
+import {onMounted, ref} from "vue";
 import {useRoute} from 'vue-router'
 import {characterStore} from "@/components/characters/character/stores/characterStore";
 import Button from "primevue/button";
 import EditCharacterDetails from "@/components/characters/character/EditCharacterDetails.vue";
 import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import OverallExperience from "@/components/characters/character/OverallExperience.vue";
+import {characterPopupDialogs} from "@/components/characters/character/services/dialogs.ts";
 
 const route = useRoute()
 const characterInfo = characterStore();
 const experienceInfo = experienceStore();
+const dialog = characterPopupDialogs()
+
 onMounted(async () =>{
   await characterInfo.getCharacterDetails(Number(route.params.id))
       .then(() => {
@@ -39,9 +42,6 @@ const op = ref();
 const togglePopup = (event) => {
   op.value.toggle(event);
 }
-const xpTitle = computed(() => {
-  return `(XP - Setup Costs (${experienceInfo.experienceBreakdown.setupTotal})) = ${experienceInfo.experienceBreakdown.total - experienceInfo.experienceBreakdown.setupTotal})`;
-});
 
 </script>
 
@@ -55,14 +55,14 @@ const xpTitle = computed(() => {
           <div><em>{{ faction?.name ?? 'No Faction' }}</em></div>
         </div>
         <div class="d-flex flex-column gap-3" style="font-size: 2.5em">
-          <Button type="button" @click="togglePopup" size="large" :label="`XP: ${experienceInfo.experienceBreakdown.total - experienceInfo.experienceBreakdown.setupTotal}`" />
+          <Button type="button" @click="dialog.showExperience()" icon="pi pi-info-circle" icon-pos="right" size="large" :label="`XP: ${experienceInfo.experienceBreakdown.total - experienceInfo.experienceBreakdown.setupTotal}`" />
           <Button class="float-end" label="Edit" @click="toggleEdit" />
         </div>
       </div>
     </template>
   </Card>
   <EditCharacterDetails v-else @close-dialog="toggleEdit" />
-  <Popover ref="op" >
+  <Popover ref="op" :dismissable="true" >
     <OverallExperience/>
   </Popover>
 </template>

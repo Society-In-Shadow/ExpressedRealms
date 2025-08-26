@@ -29,7 +29,7 @@ const openItems = ref([]);
 <template>
   <Card class="p-1 p-md-3">
     <template #header >
-      <h1 class="text-center" v-if="showTitle">Secondary Statistics</h1>
+      <h1 class="text-center p-0 m-0" v-if="showTitle">Secondary Statistics</h1>
     </template>
     <template #content>
       <Accordion :value="openItems" multiple :lazy="true" expand-icon="pi pi-info-circle" collapse-icon="pi pi-times-circle">
