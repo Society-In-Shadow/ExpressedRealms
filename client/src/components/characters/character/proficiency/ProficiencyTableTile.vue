@@ -1,16 +1,15 @@
 <script setup lang="ts">
 
 import {computed, onMounted, ref} from "vue";
-import { useRoute } from 'vue-router'
+import {useRoute} from 'vue-router'
 import {proficiencyStore} from "@/components/characters/character/proficiency/stores/proficiencyStore";
 import Panel from "primevue/panel";
-
-const route = useRoute()
-
 import Accordion from 'primevue/accordion';
 import AccordionPanel from 'primevue/accordionpanel';
 import AccordionHeader from 'primevue/accordionheader';
 import AccordionContent from 'primevue/accordioncontent';
+
+const route = useRoute()
 
 const openItems = ref([]);
 
@@ -19,6 +18,7 @@ const profStore = proficiencyStore();
 const types = computed(() => [
   { name: "Offensive Proficiencies", items: profStore.offensive },
   { name: "Defensive Proficiencies", items: profStore.defensive },
+  { name: "Secondary Proficiencies", items: profStore.secondary },
 ]);
 
 onMounted(() =>{
