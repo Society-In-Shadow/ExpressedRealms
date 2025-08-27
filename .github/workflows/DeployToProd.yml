@@ -152,7 +152,7 @@ jobs:
   push_api_to_docker_hub:
     name: Push API to Docker Hub
     uses: ./.github/workflows/docker-build-push-steps.yml
-    needs: [cypress-run-chrome, vitests]
+    needs: [backend_unit_tests]
     permissions:
       packages: write
       contents: read
@@ -168,7 +168,7 @@ jobs:
   deploy_api_to_prod:
     name: Deploy API To Production
     runs-on: ubuntu-latest
-    needs: push_api_to_docker_hub
+    needs: [push_api_to_docker_hub, push_ui_to_docker_hub]
     permissions:
       packages: write
       contents: read
