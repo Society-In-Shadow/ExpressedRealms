@@ -35,6 +35,51 @@ jobs:
             backend:
               - 'api/**'
 
+  megalinter:
+    name: MegaLinter
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+      statuses: write
+    steps:
+      # Git Checkout
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
+          fetch-depth: 0 # If you use VALIDATE_ALL_CODEBASE = true, you can remove this line to improve performances
+
+      # MegaLinter
+      - name: MegaLinter
+        id: ml
+        # You can override MegaLinter flavor used to have faster performances
+        # More info at https://megalinter.io/flavors/
+        uses: oxsecurity/megalinter/flavors/documentation@v8.8.0@0d456a003f57283738096238b935e40e69888f4b
+        env:
+          # All available variables are described in documentation
+          # https://megalinter.io/configuration/
+          VALIDATE_ALL_CODEBASE: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }} # Validates all source when push on main, else just the git diff with main. Override with true if you always want to lint all sources
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # ADD YOUR CUSTOM ENV VARIABLES HERE OR DEFINE THEM IN A FILE .mega-linter.yml AT THE ROOT OF YOUR REPOSITORY
+          # DISABLE: COPYPASTE,SPELL # Uncomment to disable copy-paste and spell checks
+
+      # Upload MegaLinter artifacts
+      - name: Archive production artifacts
+        if: success() || failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: MegaLinter reports
+          path: |
+            megalinter-reports
+            mega-linter.log
+
+      - name: Upload MegaLinter scan results to GitHub Security tab
+        if: success() || failure()
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: "megalinter-reports/megalinter-report.sarif"
+
   vitests:
     name: Run ViTests
     runs-on: ubuntu-latest
@@ -69,7 +114,7 @@ jobs:
           working-directory: ./client
 
   cypress-run-chrome:
-    name: Run Cypress Component Tests - Chrome
+    name: Run Cypress - Chrome
     runs-on: ubuntu-22.04
     permissions:
       checks: write
@@ -187,8 +232,7 @@ jobs:
       packages: write
       contents: read
       id-token: write
-    #github.ref == 'refs/heads/main' && 
-    if: ${{ always() && needs.changes.outputs.frontend == 'true' }}
+    if: ${{ always() && github.ref == 'refs/heads/main' && needs.changes.outputs.frontend == 'true' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -224,8 +268,7 @@ jobs:
       attestations: write
       id-token: write
     needs: [cypress-run-chrome, vitests, backend_unit_tests, sonarcloud-scan]
-    #if: ${{ github.ref == 'refs/heads/main' && needs.changes.outputs.frontend == 'true' }}
-    if: ${{ always() && needs.changes.outputs.backend == 'true' }}
+    if: ${{ always() && github.ref == 'refs/heads/main' && needs.changes.outputs.backend == 'true' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -262,8 +305,7 @@ jobs:
       id-token: write
       statuses: write
 
-    #if: github.ref == 'refs/heads/main'
-    if: ${{ always() &&  needs.changes.outputs.backend == 'true' }}
+    if: ${{ always() && github.ref == 'refs/heads/main' && needs.changes.outputs.backend == 'true' }}
     steps:
       # Step 1: Azure Login
       - name: Azure Login
@@ -295,7 +337,7 @@ jobs:
       attestations: write
       id-token: write
 
-    if: ${{ always() && needs.changes.outputs.frontend == 'true' }}
+    if: ${{ always() && github.ref == 'refs/heads/main' && needs.changes.outputs.frontend == 'true' }}
 
     steps:
       - name: Azure Login
