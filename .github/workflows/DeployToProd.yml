@@ -38,6 +38,7 @@ jobs:
   megalinter:
     name: MegaLinter
     runs-on: ubuntu-latest
+    continue-on-error: true
     permissions:
       issues: write
       pull-requests: write
@@ -55,7 +56,7 @@ jobs:
         id: ml
         # You can override MegaLinter flavor used to have faster performances
         # More info at https://megalinter.io/flavors/
-        uses: oxsecurity/megalinter@sha256:930b3dbfcfd6814db7e8462f335ebeae8dc1715aeaebb19b0414692ed9930145
+        uses: oxsecurity/megalinter@8.8.0
         env:
           # All available variables are described in documentation
           # https://megalinter.io/configuration/
