@@ -1,0 +1,225 @@
+---
+name: Build and Deploy API
+
+env:
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: false
+
+on: # yamllint disable-line truthy
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-cd-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  
+  changes:
+    name: Detect changed areas
+    runs-on: ubuntu-latest
+    outputs:
+      frontend: ${{ steps.filter.outputs.frontend }}
+      backend: ${{ steps.filter.outputs.backend }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Paths filter
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          filters: |
+            frontend:
+              - 'frontend/**'
+            backend:
+              - 'backend/**'
+
+  vitests:
+    name: Run ViTests
+    runs-on: ubuntu-latest
+    needs: changes
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Install Node"
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+      - name: "Install Deps"
+        working-directory: ./client
+        run: npm install
+      - name: "Test"
+        working-directory: ./client
+        run: npx vitest --coverage.enabled true
+      - name: "Upload Coverage"
+        uses: actions/upload-artifact@v4
+        with:
+          name: vitest-coverage
+          path: ./client/coverage
+      - name: "Report Coverage"
+        # Set if: always() to also generate the report if tests are failing
+        # Only works if you set `reportOnFailure: true` in your vite config as specified above
+        if: always()
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          working-directory: ./client
+
+  cypress-run-chrome:
+    name: Cypress Tests
+    runs-on: ubuntu-22.04
+    permissions:
+      checks: write
+      pull-requests: write
+    needs: changes
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: docker build ./client
+
+      - name: Run Cypress Tests
+        uses: cypress-io/github-action@v6
+        with:
+          component: true
+          working-directory: client
+          publish-summary: "true"
+          headed: false
+          browser: chrome
+
+      - name: Upload JUnit Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-test-results
+          path: client/cypress/results/*.xml
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            client/cypress/results/*.xml
+          check_name: Cypress Test Results # Optionally name the result set
+          comment_title: Cypress Test Results Summary # Optional title for comments
+          github_token: ${{ secrets.GITHUB_TOKEN }} # Used to interact with GitHub
+
+  backend_unit_tests:
+    name: Backend Unit Tests
+    runs-on: ubuntu-latest
+    needs: changes
+    if: ${{ needs.changes.outputs.backend == 'true' }}
+    steps:
+      # Step 1: Checkout code
+      - uses: actions/checkout@v4
+
+      # Step 2: Setup .NET
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      # Step 3: Restore and build .NET project
+      - name: Restore dependencies
+        run: dotnet restore ./api
+
+      - name: Build
+        run: dotnet build --no-restore ./api
+
+      - name: Run Unit Tests
+        run: dotnet test --no-restore ./api --logger trx
+
+  push_ui_to_docker_hub:
+    name: Push UI to Docker Hub
+    uses: ./.github/workflows/docker-build-push-steps.yml
+    needs: [cypress-run-chrome, vitests]
+    #if: github.ref == 'refs/heads/main'
+    with:
+      image: noremacskich/expressedrealms-frontend
+      context: ./client
+      dockerfile: ./client/Dockerfile
+    secrets: inherit
+
+  push_api_to_docker_hub:
+    name: Push API to Docker Hub
+    uses: ./.github/workflows/docker-build-push-steps.yml
+    needs: [cypress-run-chrome, vitests]
+    #if: github.ref == 'refs/heads/main'
+    with:
+      image: noremacskich/expressedrealms-frontend
+      context: ./client
+      dockerfile: ./client/Dockerfile
+    secrets: inherit
+
+  deploy_api_to_prod:
+    name: Deploy API To Production
+    runs-on: ubuntu-latest
+    needs: push_api_to_docker_hub
+    permissions:
+      packages: write
+      contents: read
+      id-token: write
+      statuses: write
+
+    #if: github.ref == 'refs/heads/main'
+
+    steps:
+      # Step 1: Azure Login
+      - name: Azure Login
+        uses: azure/login@v1.4.7
+        with:
+          client-id: ${{ secrets.EXPRESSEDREALMSAPI_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.EXPRESSEDREALMSAPI_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.EXPRESSEDREALMSAPI_AZURE_SUBSCRIPTION_ID }}
+
+      # Step 2: Deploy Container to Azure
+      - name: Build and Push Container to Azure
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          registryUrl: ${{ vars.EXPRESSEDREALMSFRONTEND_REGISTRY_URL }}
+          registryUsername: ${{ secrets.EXPRESSEDREALMSFRONTEND_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.EXPRESSEDREALMSAPI_REGISTRY_PASSWORD }}
+          imageToDeploy: ${{ vars.EXPRESSEDREALMSFRONTEND_REGISTRY_URL }}/noremacskich/expressedrealms-api:${{ github.sha }}
+          containerAppName: ca-expressedrealms-api
+          resourceGroup: RG_ExpressedRealms
+          environmentVariables: ASPNETCORE_ENVIRONMENT=secretref:aspnetcore-environment AZURE_KEYVAULT_RESOURCEENDPOINT=secretref:azure-keyvault-resourceendpoint-dc543
+
+  deploy_ui_to_prod:
+    name: Deploy UI to Production
+    runs-on: ubuntu-22.04
+    needs: [vitests, cypress-run-chrome, deploy_api_to_prod]
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
+
+    if: ${{ always()
+      && github.event_name == 'push'
+      && needs.changes.outputs.frontend == 'true'
+      && (needs.test-frontend.result == 'success' || needs.test-frontend.result == 'skipped')
+      && (needs.deploy-backend.result == 'success' || needs.deploy-backend.result == 'skipped') }}
+
+    steps:
+      - name: Azure Login
+        uses: azure/login@v1.4.7
+        with:
+          client-id: ${{ secrets.EXPRESSEDREALMSFRONTEND_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.EXPRESSEDREALMSFRONTEND_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.EXPRESSEDREALMSFRONTEND_AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy Container to Azure
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          registryUrl: ${{ vars.EXPRESSEDREALMSFRONTEND_REGISTRY_URL }}
+          registryUsername: ${{ secrets.EXPRESSEDREALMSFRONTEND_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.EXPRESSEDREALMSFRONTEND_REGISTRY_PASSWORD }}
+          imageToDeploy: ${{ vars.EXPRESSEDREALMSFRONTEND_REGISTRY_URL }}/noremacskich/expressedrealms-frontend:${{ github.sha }}
+          containerAppName: ca-expressedrealms-frontend
+          resourceGroup: RG_ExpressedRealms
