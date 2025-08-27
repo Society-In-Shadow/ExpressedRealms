@@ -302,7 +302,6 @@ try
     app.MapFallbackToFile("index.html");
     Log.Information("Starting Web API");
     app.Run();
-    // Test Backend Deployment
 }
 catch (Exception ex)
 {
