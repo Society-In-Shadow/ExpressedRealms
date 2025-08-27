@@ -1,5 +1,5 @@
 ---
-name: Build and Deploy API
+name: Overall Github Actions Workflow
 
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: false
@@ -31,9 +31,9 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           filters: |
             frontend:
-              - 'frontend/**'
+              - 'client/**'
             backend:
-              - 'backend/**'
+              - 'api/**'
 
   vitests:
     name: Run ViTests
