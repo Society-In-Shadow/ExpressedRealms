@@ -9,11 +9,7 @@ on: # yamllint disable-line truthy
     branches: [main]
   pull_request:
     branches: [main]
-
-concurrency:
-  group: ci-cd-${{ github.ref }}
-  cancel-in-progress: false
-
+    
 jobs:
   
   changes:
@@ -22,6 +18,8 @@ jobs:
     outputs:
       frontend: ${{ steps.filter.outputs.frontend }}
       backend: ${{ steps.filter.outputs.backend }}
+    permissions: 
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -139,6 +137,11 @@ jobs:
     name: Push UI to Docker Hub
     uses: ./.github/workflows/docker-build-push-steps.yml
     needs: [cypress-run-chrome, vitests]
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
     #if: github.ref == 'refs/heads/main'
     with:
       image: noremacskich/expressedrealms-frontend
@@ -150,6 +153,11 @@ jobs:
     name: Push API to Docker Hub
     uses: ./.github/workflows/docker-build-push-steps.yml
     needs: [cypress-run-chrome, vitests]
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
     #if: github.ref == 'refs/heads/main'
     with:
       image: noremacskich/expressedrealms-frontend
