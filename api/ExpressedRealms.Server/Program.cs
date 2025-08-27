@@ -66,10 +66,7 @@ try
     EarlyKeyVaultManager keyVaultManager = new EarlyKeyVaultManager(
         builder.Environment.IsProduction()
     );
-
-    /*var appInsightsConnectionString = await keyVaultManager.GetSecret(
-        ConnectionStrings.ApplicationInsights
-    );*/
+    
     if (builder.Environment.IsDevelopment())
     {
         string connectionString = await keyVaultManager.GetSecret(ConnectionStrings.Database);
@@ -77,19 +74,19 @@ try
     }
     else
     {
-        //logger.WriteTo.ApplicationInsights(appInsightsConnectionString, TelemetryConverter.Traces);
+        var appInsightsConnectionString = await keyVaultManager.GetSecret(
+            ConnectionStrings.ApplicationInsights
+        );
+        logger.WriteTo.ApplicationInsights(appInsightsConnectionString, TelemetryConverter.Traces);
+        builder.Services.AddApplicationInsightsTelemetry((options) =>
+        {
+            options.ConnectionString = appInsightsConnectionString;
+        });
     }
 
     Log.Logger = logger.CreateLogger();
 
     builder.Host.UseSerilog();
-
-    /*builder.Services.AddApplicationInsightsTelemetry(
-        (options) =>
-        {
-            options.ConnectionString = appInsightsConnectionString;
-        }
-    );*/
 
     Log.Information("Setup Azure Storage Blob");
 
