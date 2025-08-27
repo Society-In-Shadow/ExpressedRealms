@@ -1,4 +1,4 @@
-import {createApp} from 'vue'
+import { createApp } from 'vue'
 import PrimeVue from 'primevue/config';
 import routerSetup from "@/router";
 import "primeicons/primeicons.css";
@@ -12,22 +12,21 @@ import "bootstrap/dist/css/bootstrap-utilities.css";
 import App from "@/App.vue";
 import Ripple from 'primevue/ripple';
 import piniaPluginPersistedState from "pinia-plugin-persistedstate"
-import {createPinia} from 'pinia'
+import { createPinia } from 'pinia'
 import ToastService from 'primevue/toastservice';
 import axiosConfig from "@/config/axiosConfig";
 import ConfirmationService from 'primevue/confirmationservice';
 import 'vue-easy-dnd/dist/dnd.css'
-import {definePreset} from '@primevue/themes';
-import Lara from '@primevue/themes/lara';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import DialogService from 'primevue/dialogservice';
-
 axiosConfig.setupErrorHandlingInterceptors();
 axiosConfig.setAPIUrl();
 
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedState);
 
+import { definePreset } from '@primevue/themes';
+import Lara from '@primevue/themes/lara';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import DialogService from 'primevue/dialogservice';
 const MyPreset = definePreset(Lara, {
     semantic: {
         colorScheme: {
