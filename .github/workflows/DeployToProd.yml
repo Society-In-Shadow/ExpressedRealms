@@ -136,12 +136,12 @@ jobs:
   push_ui_to_docker_hub:
     name: Push UI to Docker Hub
     runs-on: ubuntu-latest
-    needs: [cypress-run-chrome, vitests]
+    needs: [cypress-run-chrome, vitests, backend_unit_tests]
     permissions:
       packages: write
       contents: read
       id-token: write
-    if: github.ref == 'refs/heads/main'
+    #if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
 
@@ -175,7 +175,7 @@ jobs:
       contents: read
       attestations: write
       id-token: write
-    needs: [backend_unit_tests]
+    needs: [cypress-run-chrome, vitests, backend_unit_tests]
     #if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout Repository
