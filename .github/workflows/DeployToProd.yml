@@ -194,6 +194,16 @@ jobs:
         with:
           images: noremacskich/expressedrealms-frontend
 
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        id: push
+        with:
+          context: ./api
+          file: ./api/Dockerfile
+          push: true
+          tags: noremacskich/expressedrealms-api:${{ github.sha }}
+          labels: ${{ steps.meta.outputs.labels }}
+
   deploy_api_to_prod:
     name: Deploy API To Production
     runs-on: ubuntu-latest
