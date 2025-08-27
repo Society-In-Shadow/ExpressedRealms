@@ -142,7 +142,7 @@ jobs:
       contents: read
       id-token: write
     #github.ref == 'refs/heads/main' && 
-    if: ${{ needs.changes.outputs.frontend == 'true' }}
+    if: ${{ always() && needs.changes.outputs.frontend == 'true' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -179,7 +179,7 @@ jobs:
       id-token: write
     needs: [cypress-run-chrome, vitests, backend_unit_tests]
     #if: ${{ github.ref == 'refs/heads/main' && needs.changes.outputs.frontend == 'true' }}
-    if: ${{  needs.changes.outputs.backend == 'true' }}
+    if: ${{ always() && needs.changes.outputs.backend == 'true' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
