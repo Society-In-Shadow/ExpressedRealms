@@ -141,7 +141,8 @@ jobs:
       packages: write
       contents: read
       id-token: write
-    if: ${{ github.ref == 'refs/heads/main' && needs.changes.outputs.frontend == 'true' }}
+    #github.ref == 'refs/heads/main' && 
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
