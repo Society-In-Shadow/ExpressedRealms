@@ -229,7 +229,7 @@ jobs:
   deploy_ui_to_prod:
     name: Deploy UI to Production
     runs-on: ubuntu-22.04
-    needs: [vitests, cypress-run-chrome, deploy_api_to_prod]
+    needs: [push_api_to_docker_hub, push_ui_to_docker_hub, deploy_api_to_prod]
     permissions:
       packages: write
       contents: read
@@ -237,7 +237,6 @@ jobs:
       id-token: write
 
     if: ${{ always()
-      && github.event_name == 'push'
       && needs.changes.outputs.frontend == 'true'
       && (needs.test-frontend.result == 'success' || needs.test-frontend.result == 'skipped')
       && (needs.deploy-backend.result == 'success' || needs.deploy-backend.result == 'skipped') }}
