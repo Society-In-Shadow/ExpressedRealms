@@ -441,6 +441,7 @@ jobs:
       contents: read
       id-token: write
       statuses: write
+      checks: write
     steps:
       - name: Mark Deploy API To Productionas Skipped
         if: ${{ needs.changes.outputs.backend != 'true' || needs.changes.outputs.deploy != 'true' }}
