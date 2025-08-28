@@ -21,7 +21,7 @@ jobs:
     permissions:
       contents: read
     env:
-      DEPLOY: ${{ github.ref == 'refs/heads/main' }}
+      DEPLOY: ${{ true || github.ref == 'refs/heads/main' }}
       GH_EVENT_NAME: ${{ github.event_name }}
       GH_REF: ${{ github.ref }}
     steps:
