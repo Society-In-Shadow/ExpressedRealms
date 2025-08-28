@@ -29,8 +29,8 @@ jobs:
         id: branch
         shell: bash
         run: |
-          echo "deploy=${DEPLOY}" >> "$GITHUB_OUTPUT"
-          echo "is_main=${{ steps.branch.outputs.is_main }}"
+          echo "deploy=$DEPLOY" >> "$GITHUB_OUTPUT"
+          echo "deploy=$DEPLOY"
 
       - name: Paths filter
         id: filter
