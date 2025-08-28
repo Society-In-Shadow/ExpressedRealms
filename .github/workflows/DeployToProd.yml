@@ -30,8 +30,8 @@ jobs:
         shell: bash
         run: |
           echo "deploy=${DEPLOY}" >> "$GITHUB_OUTPUT"
-          echo "deploy=${steps.branch.outputs.deploy}"
-      
+          echo "is_main=${{ steps.branch.outputs.is_main }}"
+
       - name: Paths filter
         id: filter
         uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36
@@ -232,6 +232,7 @@ jobs:
           dotnet build ./api/ExpressedRealms.sln
           dotnet-coverage collect "dotnet test ./api --no-restore" -f xml -o "coverage.xml"
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
+
 
   push_ui_to_docker_hub:
     name: Push UI to Docker Hub
