@@ -17,21 +17,20 @@ jobs:
     outputs:
       frontend: ${{ steps.filter.outputs.frontend }}
       backend: ${{ steps.filter.outputs.backend }}
-      is_main: ${{ steps.branch.outputs.is_main }}
+      deploy: ${{ steps.branch.outputs.deploy }}
     permissions:
       contents: read
     env:
-      DEPLOY: ${{ true || github.ref == 'refs/heads/main' }}
-      GH_EVENT_NAME: ${{ github.event_name }}
-      GH_REF: ${{ github.ref }}
+      DEPLOY: ${{ github.ref == 'refs/heads/main' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Detect main branch on push
+      - name: Pass Through Deploy Flag to Output
         id: branch
         shell: bash
         run: |
-          echo "is_main=${DEPLOY}" >> "$GITHUB_OUTPUT"      
+          echo "deploy=${DEPLOY}" >> "$GITHUB_OUTPUT"
+          echo "deploy=${steps.branch.outputs.deploy}"
       
       - name: Paths filter
         id: filter
@@ -242,7 +241,7 @@ jobs:
       packages: write
       contents: read
       id-token: write
-    if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.is_main == 'true'  && needs.changes.outputs.frontend == 'true' }}
+    if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true'  && needs.changes.outputs.frontend == 'true' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -278,7 +277,7 @@ jobs:
       attestations: write
       id-token: write
     needs: [changes, cypress-run-chrome, vitests, backend_unit_tests, sonarcloud-scan]
-    if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.is_main == 'true' && needs.changes.outputs.backend == 'true' }}
+    if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -315,7 +314,7 @@ jobs:
       id-token: write
       statuses: write
 
-    if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.is_main == 'true' && needs.changes.outputs.backend == 'true' }}
+    if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
     steps:
       # Step 1: Azure Login
       - name: Azure Login
@@ -347,7 +346,7 @@ jobs:
       attestations: write
       id-token: write
 
-    if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.is_main == 'true' && needs.changes.outputs.frontend == 'true' }}
+    if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.frontend == 'true' }}
 
     steps:
       - name: Azure Login
