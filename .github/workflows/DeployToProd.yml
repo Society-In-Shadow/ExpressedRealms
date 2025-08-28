@@ -3,7 +3,7 @@ name: Overall Github Actions Workflow
 
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: false
-  IS_MAIN: ${{ 'true' }} #${{ github.ref == 'refs/heads/main' }}
+
 
 on: # yamllint disable-line truthy
   push:
@@ -12,20 +12,18 @@ on: # yamllint disable-line truthy
     branches: [ '**' ]
     
 jobs:
-  
   changes:
     name: Detect Changes
     runs-on: ubuntu-latest
     outputs:
       frontend: ${{ steps.filter.outputs.frontend }}
       backend: ${{ steps.filter.outputs.backend }}
-      is_main: ${{ env.IS_MAIN }}
-    permissions: 
+      is_main: ${{ github.ref == 'refs/heads/main'}}
+    permissions:
       contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Paths filter
         id: filter
         uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36
@@ -235,7 +233,7 @@ jobs:
       packages: write
       contents: read
       id-token: write
-    if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.is_main == 'true'  && needs.changes.outputs.frontend == 'true' }}
+    if: ${{ !contains(needs.*.result, 'failure') && changes.outputs.is_main == 'true'  && changes.outputs.frontend == 'true' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -271,7 +269,7 @@ jobs:
       attestations: write
       id-token: write
     needs: [cypress-run-chrome, vitests, backend_unit_tests, sonarcloud-scan]
-    if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.is_main == 'true' && needs.changes.outputs.backend == 'true' }}
+    if: ${{ !contains(needs.*.result, 'failure') && changes.outputs.is_main == 'true' && changes.outputs.backend == 'true' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -308,7 +306,7 @@ jobs:
       id-token: write
       statuses: write
 
-    if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.is_main == 'true' && needs.changes.outputs.backend == 'true' }}
+    if: ${{ !contains(needs.*.result, 'failure') && changes.outputs.is_main == 'true' && changes.outputs.backend == 'true' }}
     steps:
       # Step 1: Azure Login
       - name: Azure Login
@@ -333,14 +331,14 @@ jobs:
   deploy_ui_to_prod:
     name: Deploy UI to Production
     runs-on: ubuntu-22.04
-    needs: [push_api_to_docker_hub, push_ui_to_docker_hub, deploy_api_to_prod]
+    needs: [changes, push_api_to_docker_hub, push_ui_to_docker_hub, deploy_api_to_prod]
     permissions:
       packages: write
       contents: read
       attestations: write
       id-token: write
 
-    if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.is_main == 'true' && needs.changes.outputs.frontend == 'true' }}
+    if: ${{ !contains(needs.*.result, 'failure') && changes.outputs.is_main == 'true' && changes.outputs.frontend == 'true' }}
 
     steps:
       - name: Azure Login
@@ -359,4 +357,3 @@ jobs:
           imageToDeploy: ${{ vars.EXPRESSEDREALMSFRONTEND_REGISTRY_URL }}/noremacskich/expressedrealms-frontend:${{ github.sha }}
           containerAppName: ca-expressedrealms-frontend
           resourceGroup: RG_ExpressedRealms
-
