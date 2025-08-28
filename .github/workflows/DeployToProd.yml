@@ -320,7 +320,7 @@ jobs:
     if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.frontend == 'true' }}
     steps:
       - name: Mark API to Docker Hub as Skipped
-        if: ${{ needs.changes.outputs.backend != 'true' || needs.changes.outputs.deploy != 'true' }}
+        if: ${{ needs.changes.outputs.frontend != 'true' || needs.changes.outputs.deploy != 'true' }}
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -376,7 +376,7 @@ jobs:
       contents: read
       attestations: write
       id-token: write
-    needs: [changes, backend_unit_tests, cypress-run-chrome, vitests, sonarcloud-scan]
+    needs: [changes, cypress-run-chrome, vitests, backend_unit_tests, sonarcloud-scan]
     if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
     steps:
       - name: Mark API to Docker Hub as Skipped
