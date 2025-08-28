@@ -3,7 +3,7 @@ name: Overall Github Actions Workflow
 
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: false
-  IS_MAIN: ${{ github.ref == 'refs/heads/main' }}
+  IS_MAIN: ${{ always() }} #${{ github.ref == 'refs/heads/main' }}
 
 on: # yamllint disable-line truthy
   push:
@@ -234,7 +234,7 @@ jobs:
       packages: write
       contents: read
       id-token: write
-    if: ${{ always() && IS_MAIN && needs.changes.outputs.frontend == 'true' }}
+    if: ${{ always() && fromJSON(env.IS_MAIN) && needs.changes.outputs.frontend == 'true' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -270,7 +270,7 @@ jobs:
       attestations: write
       id-token: write
     needs: [cypress-run-chrome, vitests, backend_unit_tests, sonarcloud-scan]
-    if: ${{ always() && IS_MAIN && needs.changes.outputs.backend == 'true' }}
+    if: ${{ always() && fromJSON(env.IS_MAIN) && needs.changes.outputs.backend == 'true' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -307,7 +307,7 @@ jobs:
       id-token: write
       statuses: write
 
-    if: ${{ always() && IS_MAIN && needs.changes.outputs.backend == 'true' }}
+    if: ${{ always() && fromJSON(env.IS_MAIN) && needs.changes.outputs.backend == 'true' }}
     steps:
       # Step 1: Azure Login
       - name: Azure Login
@@ -339,7 +339,7 @@ jobs:
       attestations: write
       id-token: write
 
-    if: ${{ always() && IS_MAIN && needs.changes.outputs.frontend == 'true' }}
+    if: ${{ always() && fromJSON(env.IS_MAIN) && needs.changes.outputs.frontend == 'true' }}
 
     steps:
       - name: Azure Login
