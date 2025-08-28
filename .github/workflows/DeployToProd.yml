@@ -237,7 +237,7 @@ jobs:
   push_ui_to_docker_hub:
     name: Push UI to Docker Hub
     runs-on: ubuntu-latest
-    needs: [changes, cypress-run-chrome, vitests, backend_unit_tests, sonarcloud-scan]
+    needs: [changes, cypress-run-chrome, vitests, sonarcloud-scan]
     permissions:
       packages: write
       contents: read
@@ -277,7 +277,7 @@ jobs:
       contents: read
       attestations: write
       id-token: write
-    needs: [changes, cypress-run-chrome, vitests, backend_unit_tests, sonarcloud-scan]
+    needs: [changes, backend_unit_tests, sonarcloud-scan]
     if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
     steps:
       - name: Checkout Repository
