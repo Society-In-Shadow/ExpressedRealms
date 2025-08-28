@@ -3,7 +3,7 @@ name: Overall Github Actions Workflow
 
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: false
-  IS_MAIN: true #${{ github.ref == 'refs/heads/main' }}
+  IS_MAIN: ${{ 'true' }} #${{ github.ref == 'refs/heads/main' }}
 
 on: # yamllint disable-line truthy
   push:
