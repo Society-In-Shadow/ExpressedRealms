@@ -19,6 +19,7 @@ jobs:
     outputs:
       frontend: ${{ steps.filter.outputs.frontend }}
       backend: ${{ steps.filter.outputs.backend }}
+      is_main: ${{ env.IS_MAIN }}
     permissions: 
       contents: read
     steps:
@@ -234,7 +235,7 @@ jobs:
       packages: write
       contents: read
       id-token: write
-    if: ${{ always() && fromJSON(env.IS_MAIN) && needs.changes.outputs.frontend == 'true' }}
+    if: ${{ always() && needs.changes.outputs.is_main && needs.changes.outputs.frontend == 'true' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -270,7 +271,7 @@ jobs:
       attestations: write
       id-token: write
     needs: [cypress-run-chrome, vitests, backend_unit_tests, sonarcloud-scan]
-    if: ${{ always() && fromJSON(env.IS_MAIN) && needs.changes.outputs.backend == 'true' }}
+    if: ${{ always() && needs.changes.outputs.is_main && needs.changes.outputs.backend == 'true' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -307,7 +308,7 @@ jobs:
       id-token: write
       statuses: write
 
-    if: ${{ always() && fromJSON(env.IS_MAIN) && needs.changes.outputs.backend == 'true' }}
+    if: ${{ always() && needs.changes.outputs.is_main && needs.changes.outputs.backend == 'true' }}
     steps:
       # Step 1: Azure Login
       - name: Azure Login
@@ -339,7 +340,7 @@ jobs:
       attestations: write
       id-token: write
 
-    if: ${{ always() && fromJSON(env.IS_MAIN) && needs.changes.outputs.frontend == 'true' }}
+    if: ${{ always() && needs.changes.outputs.is_main && needs.changes.outputs.frontend == 'true' }}
 
     steps:
       - name: Azure Login
