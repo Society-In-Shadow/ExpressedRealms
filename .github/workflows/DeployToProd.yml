@@ -3,7 +3,6 @@ name: Overall Github Actions Workflow
 
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: false
-  
 
 on: # yamllint disable-line truthy
   push:
