@@ -222,10 +222,10 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"Society-In-Shadow_ExpressedRealms" /o:"society-in-shadows" /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"Society-In-Shadow_ExpressedRealms" /o:"society-in-shadows" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
           dotnet build ./api/ExpressedRealms.sln
           dotnet-coverage collect "dotnet test ./api --no-restore" -f xml -o "coverage.xml"
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="$SONAR_TOKEN"
+          .\.sonar\scanner\dotnet-sonarscanner end
 
   push_ui_to_docker_hub:
     name: Push UI to Docker Hub
