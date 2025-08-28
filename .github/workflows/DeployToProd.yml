@@ -166,25 +166,48 @@ jobs:
     name: Run xUnit Unit Tests
     runs-on: ubuntu-latest
     needs: changes
-    if: ${{ needs.changes.outputs.backend == 'true' }}
     steps:
+      - name: Mark xUnit as skipped
+        if: ${{ needs.changes.outputs.backend != 'true' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            await github.rest.checks.create({
+              owner,
+              repo,
+              name: 'backend_unit_tests',,
+              head_sha: context.sha,
+              status: 'completed',
+              conclusion: 'skipped',
+              output: {
+                title: 'Backend Unit Tests skipped',
+                summary: 'No backend changes detected for this commit.'
+              }
+            });
+
       # Step 1: Checkout code
       - uses: actions/checkout@v4
+        if: ${{ needs.changes.outputs.backend == 'true' }}
 
       # Step 2: Setup .NET
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
+        if: ${{ needs.changes.outputs.backend == 'true' }}
         with:
           dotnet-version: 8.0.x
 
       # Step 3: Restore and build .NET project
       - name: Restore dependencies
+        if: ${{ needs.changes.outputs.backend == 'true' }}
         run: dotnet restore ./api
 
       - name: Build
+        if: ${{ needs.changes.outputs.backend == 'true' }}
         run: dotnet build --no-restore ./api
 
       - name: Run Unit Tests
+        if: ${{ needs.changes.outputs.backend == 'true' }}
         run: dotnet test --no-restore ./api --logger trx
 
   sonarcloud-scan:
@@ -242,7 +265,7 @@ jobs:
       packages: write
       contents: read
       id-token: write
-    if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true'  && needs.changes.outputs.frontend == 'true' }}
+    if: ${{ !contains(needs.*.result, 'failure') && steps.backend_unit_tests.conclusion && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.frontend == 'true' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -340,7 +363,7 @@ jobs:
   deploy_ui_to_prod:
     name: Deploy UI to Production
     runs-on: ubuntu-22.04
-    needs: [changes, push_api_to_docker_hub, push_ui_to_docker_hub, deploy_api_to_prod]
+    needs: [changes, deploy_api_to_prod]
     permissions:
       packages: write
       contents: read
