@@ -1,5 +1,5 @@
 ---
-name: Overall Github Actions Workflow
+name: Primary Workflow
 
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: false
@@ -17,21 +17,21 @@ jobs:
     outputs:
       frontend: ${{ steps.filter.outputs.frontend }}
       backend: ${{ steps.filter.outputs.backend }}
-      is_main: ${{ steps.branch.outputs.is_main }}
+      deploy: ${{ steps.branch.outputs.deploy }}
     permissions:
       contents: read
+    env:
+      DEPLOY: ${{ github.ref == 'refs/heads/main' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Detect main branch on push
+      - name: Pass Through Deploy Flag to Output
         id: branch
         shell: bash
         run: |
-          if [[ "${GITHUB_EVENT_NAME}" == "push" && "${GITHUB_REF}" == "refs/heads/main" ]]; then
-            echo "is_main=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "is_main=false" >> "$GITHUB_OUTPUT"
-          fi
+          echo "deploy=$DEPLOY" >> "$GITHUB_OUTPUT"
+          echo "deploy=$DEPLOY"
+
       - name: Paths filter
         id: filter
         uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36
@@ -97,27 +97,52 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+      checks: write
     steps:
+      - name: Mark Run ViTests as skipped
+        if: ${{ needs.changes.outputs.frontend != 'true' }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            await github.rest.checks.create({
+              owner,
+              repo,
+              name: 'Primary Workflow / Run Vitests Skipped',
+              head_sha: context.sha,
+              status: 'completed',
+              conclusion: 'skipped',
+              output: {
+                title: 'No UI Changes Detected',
+                summary: 'No UI changes detected for this commit.'
+              }
+            });
       - uses: actions/checkout@v4
+        if: ${{ needs.changes.outputs.frontend == 'true' }}
       - name: "Install Node"
         uses: actions/setup-node@v4
+        if: ${{ needs.changes.outputs.frontend == 'true' }}
         with:
           node-version: "20.x"
       - name: "Install Deps"
+        if: ${{ needs.changes.outputs.frontend == 'true' }}
         working-directory: ./client
         run: npm install
       - name: "Test"
+        if: ${{ needs.changes.outputs.frontend == 'true' }}
         working-directory: ./client
         run: npx vitest --coverage.enabled true
       - name: "Upload Coverage"
         uses: actions/upload-artifact@v4
+        if: ${{ needs.changes.outputs.frontend == 'true' }}
         with:
           name: vitest-coverage
           path: ./client/coverage
       - name: "Report Coverage"
         # Set if: always() to also generate the report if tests are failing
         # Only works if you set `reportOnFailure: true` in your vite config as specified above
-        if: always()
+        if: ${{ always() && needs.changes.outputs.frontend == 'true' }}
         uses: davelosert/vitest-coverage-report-action@8ab049ff5a2c6e78f78af446329379b318544a1a
         with:
           working-directory: ./client
@@ -131,14 +156,36 @@ jobs:
     needs: changes
     if: ${{ needs.changes.outputs.frontend == 'true' }}
     steps:
+      - name: Mark Cypress - Chrome as skipped
+        if: ${{ needs.changes.outputs.frontend != 'true' }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            await github.rest.checks.create({
+              owner,
+              repo,
+              name: 'Primary Workflow / Run Cypress - Chrome Tests Skipped',
+              head_sha: context.sha,
+              status: 'completed',
+              conclusion: 'skipped',
+              output: {
+                title: 'No UI Changes Detected',
+                summary: 'No UI changes detected for this commit.'
+              }
+            });
       - name: Checkout Repository
         uses: actions/checkout@v4
+        if: ${{ needs.changes.outputs.frontend == 'true' }}
 
       - name: Build Docker Image
         run: docker build ./client
+        if: ${{ needs.changes.outputs.frontend == 'true' }}
 
       - name: Run Cypress Tests
         uses: cypress-io/github-action@b8ba51a856ba5f4c15cf39007636d4ab04f23e3c
+        if: ${{ needs.changes.outputs.frontend == 'true' }}
         with:
           component: true
           working-directory: client
@@ -148,13 +195,14 @@ jobs:
 
       - name: Upload JUnit Results
         uses: actions/upload-artifact@v4
+        if: ${{ needs.changes.outputs.frontend == 'true' }}
         with:
           name: cypress-test-results
           path: client/cypress/results/*.xml
 
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@3a74b2957438d0b6e2e61d67b05318aa25c9e6c6
-        if: always()
+        if: ${{ always() && needs.changes.outputs.frontend == 'true' }}
         with:
           files: |
             client/cypress/results/*.xml
@@ -166,25 +214,51 @@ jobs:
     name: Run xUnit Unit Tests
     runs-on: ubuntu-latest
     needs: changes
-    if: ${{ needs.changes.outputs.backend == 'true' }}
+    permissions:
+      checks: write
     steps:
+      - name: Mark xUnit as skipped
+        if: ${{ needs.changes.outputs.backend != 'true' }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            await github.rest.checks.create({
+              owner,
+              repo,
+              name: 'Primary Workflow / Run xUnit Unit Tests Skipped',
+              head_sha: context.sha,
+              status: 'completed',
+              conclusion: 'skipped',
+              output: {
+                title: 'No Backend / API Changes Detected',
+                summary: 'No backend changes detected for this commit.'
+              }
+            });
+
       # Step 1: Checkout code
       - uses: actions/checkout@v4
+        if: ${{ needs.changes.outputs.backend == 'true' }}
 
       # Step 2: Setup .NET
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
+        if: ${{ needs.changes.outputs.backend == 'true' }}
         with:
           dotnet-version: 8.0.x
 
       # Step 3: Restore and build .NET project
       - name: Restore dependencies
+        if: ${{ needs.changes.outputs.backend == 'true' }}
         run: dotnet restore ./api
 
       - name: Build
+        if: ${{ needs.changes.outputs.backend == 'true' }}
         run: dotnet build --no-restore ./api
 
       - name: Run Unit Tests
+        if: ${{ needs.changes.outputs.backend == 'true' }}
         run: dotnet test --no-restore ./api --logger trx
 
   sonarcloud-scan:
@@ -241,13 +315,35 @@ jobs:
       packages: write
       contents: read
       id-token: write
-    if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.is_main == 'true'  && needs.changes.outputs.frontend == 'true' }}
+      checks: write
+    if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.frontend == 'true' }}
     steps:
+      - name: Mark API to Docker Hub as Skipped
+        if: ${{ needs.changes.outputs.frontend != 'true' || needs.changes.outputs.deploy != 'true' }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            await github.rest.checks.create({
+              owner,
+              repo,
+              name: 'Primary Workflow / Push UI to Docker Hub Skipped',
+              head_sha: context.sha,
+              status: 'completed',
+              conclusion: 'skipped',
+              output: {
+                title: 'No UI Changes Detected',
+                summary: 'No UI changes detected for this commit.'
+              }
+            });
       - name: Checkout Repository
         uses: actions/checkout@v4
+        if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.frontend == 'true' }}
 
       - name: Log in to Docker Hub
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a # Pinned SHA for security
+        if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.frontend == 'true' }}
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
@@ -255,12 +351,14 @@ jobs:
       - name: Extract Docker Metadata
         id: meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7 # Pinned SHA for security
+        if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.frontend == 'true' }}
         with:
           images: noremacskich/expressedrealms-frontend
 
       - name: Build and Push Docker Image
         id: push
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671 # Pinned SHA for security
+        if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.frontend == 'true' }}
         with:
           context: ./client
           file: ./client/Dockerfile
@@ -270,20 +368,44 @@ jobs:
 
   push_api_to_docker_hub:
     name: Push API to Docker Hub
+    needs: [changes, cypress-run-chrome, vitests, backend_unit_tests, sonarcloud-scan]
+    if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true'}}
     runs-on: ubuntu-22.04
     permissions:
       packages: write
       contents: read
       attestations: write
       id-token: write
-    needs: [changes, cypress-run-chrome, vitests, backend_unit_tests, sonarcloud-scan]
-    if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.is_main == 'true' && needs.changes.outputs.backend == 'true' }}
+      checks: write
+
     steps:
+      - name: Mark API to Docker Hub as Skipped
+        if: ${{ needs.changes.outputs.backend != 'true' || needs.changes.outputs.deploy != 'true' }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            await github.rest.checks.create({
+              owner,
+              repo,
+              name: 'Primary Workflow / Push API to Docker Hub Skipped',
+              head_sha: context.sha,
+              status: 'completed',
+              conclusion: 'skipped',
+              output: {
+                title: 'No Backend / API Changes Detected',
+                summary: 'No backend changes detected for this commit.'
+              }
+            });
+
       - name: Checkout Repository
         uses: actions/checkout@v4
+        if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
 
       - name: Log in to Docker Hub
         uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a # Pinned SHA for security
+        if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
@@ -291,11 +413,13 @@ jobs:
       - name: Extract Docker Metadata
         id: meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7 # Pinned SHA for security
+        if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
         with:
           images: noremacskich/expressedrealms-frontend
 
       - name: Build and Push Docker Image
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
         id: push
         with:
           context: ./api
@@ -308,17 +432,37 @@ jobs:
     name: Deploy API To Production
     runs-on: ubuntu-latest
     needs: [changes, push_api_to_docker_hub, push_ui_to_docker_hub]
+    if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true'}}
     permissions:
       packages: write
       contents: read
       id-token: write
       statuses: write
-
-    if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.is_main == 'true' && needs.changes.outputs.backend == 'true' }}
+      checks: write
     steps:
+      - name: Mark Deploy API To Productionas Skipped
+        if: ${{ needs.changes.outputs.backend != 'true' || needs.changes.outputs.deploy != 'true' }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            await github.rest.checks.create({
+              owner,
+              repo,
+              name: 'Primary Workflow / Deploy API To Production Skipped',
+              head_sha: context.sha,
+              status: 'completed',
+              conclusion: 'skipped',
+              output: {
+                title: 'No Backend / API Changes Detected',
+                summary: 'No Backend / API changes detected for this commit.'
+              }
+            });
       # Step 1: Azure Login
       - name: Azure Login
         uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5
+        if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
         with:
           client-id: ${{ secrets.EXPRESSEDREALMSAPI_AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.EXPRESSEDREALMSAPI_AZURE_TENANT_ID }}
@@ -327,6 +471,7 @@ jobs:
       # Step 2: Deploy Container to Azure
       - name: Build and Push Container to Azure
         uses: azure/container-apps-deploy-action@8dff69dac3367c32ceb2690d8f13adbeab462703
+        if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
         with:
           registryUrl: ${{ vars.EXPRESSEDREALMSFRONTEND_REGISTRY_URL }}
           registryUsername: ${{ secrets.EXPRESSEDREALMSFRONTEND_REGISTRY_USERNAME }}
@@ -339,14 +484,14 @@ jobs:
   deploy_ui_to_prod:
     name: Deploy UI to Production
     runs-on: ubuntu-22.04
-    needs: [changes, push_api_to_docker_hub, push_ui_to_docker_hub, deploy_api_to_prod]
+    needs: [changes, deploy_api_to_prod]
     permissions:
       packages: write
       contents: read
       attestations: write
       id-token: write
 
-    if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.is_main == 'true' && needs.changes.outputs.frontend == 'true' }}
+    if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.frontend == 'true' }}
 
     steps:
       - name: Azure Login
