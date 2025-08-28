@@ -21,7 +21,7 @@ jobs:
     permissions:
       contents: read
     env:
-      DEPLOY: ${{ true || github.ref == 'refs/heads/main' }}
+      DEPLOY: ${{ github.ref == 'refs/heads/main' }}
       GH_EVENT_NAME: ${{ github.event_name }}
       GH_REF: ${{ github.ref }}
     steps:
@@ -31,12 +31,8 @@ jobs:
         id: branch
         shell: bash
         run: |
-          if [[ "${GITHUB_EVENT_NAME}" == "push" && "${GITHUB_REF}" == "refs/heads/main" ]]; then
-            echo "is_main=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "is_main=true" >> "$GITHUB_OUTPUT"
-          fi
-          
+          echo "is_main=${DEPLOY}" >> "$GITHUB_OUTPUT"      
+      
       - name: Paths filter
         id: filter
         uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36
