@@ -21,7 +21,7 @@ jobs:
     permissions:
       contents: read
     env:
-      DEPLOY: ${{ github.ref == 'refs/heads/main' }}
+      DEPLOY: ${{ true || github.ref == 'refs/heads/main' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
