@@ -166,9 +166,12 @@ jobs:
     name: Run xUnit Unit Tests
     runs-on: ubuntu-latest
     needs: changes
+    permissions:
+      checks: write
     steps:
       - name: Mark xUnit as skipped
         if: ${{ needs.changes.outputs.backend != 'true' }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         uses: actions/github-script@v7
         with:
           script: |
