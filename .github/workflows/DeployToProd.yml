@@ -3,6 +3,7 @@ name: Overall Github Actions Workflow
 
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: false
+  IS_MAIN: ${{ github.ref == 'refs/heads/main' }}
 
 on: # yamllint disable-line truthy
   push:
@@ -26,7 +27,7 @@ jobs:
 
       - name: Paths filter
         id: filter
-        uses: dorny/paths-filter@v3
+        uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           filters: |
@@ -56,7 +57,7 @@ jobs:
         id: ml
         # You can override MegaLinter flavor used to have faster performances
         # More info at https://megalinter.io/flavors/
-        uses: oxsecurity/megalinter@v8.8.0
+        uses: docker://oxsecurity/megalinter@sha256:930b3dbfcfd6814db7e8462f335ebeae8dc1715aeaebb19b0414692ed9930145
         env:
           # All available variables are described in documentation
           # https://megalinter.io/configuration/
@@ -110,7 +111,7 @@ jobs:
         # Set if: always() to also generate the report if tests are failing
         # Only works if you set `reportOnFailure: true` in your vite config as specified above
         if: always()
-        uses: davelosert/vitest-coverage-report-action@v2
+        uses: davelosert/vitest-coverage-report-action@8ab049ff5a2c6e78f78af446329379b318544a1a
         with:
           working-directory: ./client
 
@@ -130,7 +131,7 @@ jobs:
         run: docker build ./client
 
       - name: Run Cypress Tests
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@b8ba51a856ba5f4c15cf39007636d4ab04f23e3c
         with:
           component: true
           working-directory: client
@@ -145,7 +146,7 @@ jobs:
           path: client/cypress/results/*.xml
 
       - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
+        uses: EnricoMi/publish-unit-test-result-action@3a74b2957438d0b6e2e61d67b05318aa25c9e6c6
         if: always()
         with:
           files: |
@@ -220,10 +221,10 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"Society-In-Shadow_ExpressedRealms" /o:"society-in-shadows" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"Society-In-Shadow_ExpressedRealms" /o:"society-in-shadows" /d:sonar.token="$SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
           dotnet build ./api/ExpressedRealms.sln
           dotnet-coverage collect "dotnet test ./api --no-restore" -f xml -o "coverage.xml"
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="$SONAR_TOKEN"
 
   push_ui_to_docker_hub:
     name: Push UI to Docker Hub
@@ -233,7 +234,7 @@ jobs:
       packages: write
       contents: read
       id-token: write
-    if: ${{ always() && github.ref == 'refs/heads/main' && needs.changes.outputs.frontend == 'true' }}
+    if: ${{ always() && IS_MAIN && needs.changes.outputs.frontend == 'true' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -269,7 +270,7 @@ jobs:
       attestations: write
       id-token: write
     needs: [cypress-run-chrome, vitests, backend_unit_tests, sonarcloud-scan]
-    if: ${{ always() && github.ref == 'refs/heads/main' && needs.changes.outputs.backend == 'true' }}
+    if: ${{ always() && IS_MAIN && needs.changes.outputs.backend == 'true' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -306,11 +307,11 @@ jobs:
       id-token: write
       statuses: write
 
-    if: ${{ always() && github.ref == 'refs/heads/main' && needs.changes.outputs.backend == 'true' }}
+    if: ${{ always() && IS_MAIN && needs.changes.outputs.backend == 'true' }}
     steps:
       # Step 1: Azure Login
       - name: Azure Login
-        uses: azure/login@v1.4.7
+        uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5
         with:
           client-id: ${{ secrets.EXPRESSEDREALMSAPI_AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.EXPRESSEDREALMSAPI_AZURE_TENANT_ID }}
@@ -318,7 +319,7 @@ jobs:
 
       # Step 2: Deploy Container to Azure
       - name: Build and Push Container to Azure
-        uses: azure/container-apps-deploy-action@v2
+        uses: azure/container-apps-deploy-action@8dff69dac3367c32ceb2690d8f13adbeab462703
         with:
           registryUrl: ${{ vars.EXPRESSEDREALMSFRONTEND_REGISTRY_URL }}
           registryUsername: ${{ secrets.EXPRESSEDREALMSFRONTEND_REGISTRY_USERNAME }}
@@ -338,18 +339,18 @@ jobs:
       attestations: write
       id-token: write
 
-    if: ${{ always() && github.ref == 'refs/heads/main' && needs.changes.outputs.frontend == 'true' }}
+    if: ${{ always() && IS_MAIN && needs.changes.outputs.frontend == 'true' }}
 
     steps:
       - name: Azure Login
-        uses: azure/login@v1.4.7
+        uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5
         with:
           client-id: ${{ secrets.EXPRESSEDREALMSFRONTEND_AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.EXPRESSEDREALMSFRONTEND_AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.EXPRESSEDREALMSFRONTEND_AZURE_SUBSCRIPTION_ID }}
 
       - name: Deploy Container to Azure
-        uses: azure/container-apps-deploy-action@v2
+        uses: azure/container-apps-deploy-action@8dff69dac3367c32ceb2690d8f13adbeab462703
         with:
           registryUrl: ${{ vars.EXPRESSEDREALMSFRONTEND_REGISTRY_URL }}
           registryUsername: ${{ secrets.EXPRESSEDREALMSFRONTEND_REGISTRY_USERNAME }}
