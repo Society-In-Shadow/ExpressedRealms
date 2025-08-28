@@ -3,7 +3,7 @@ name: Overall Github Actions Workflow
 
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: false
-
+  
 
 on: # yamllint disable-line truthy
   push:
@@ -18,12 +18,21 @@ jobs:
     outputs:
       frontend: ${{ steps.filter.outputs.frontend }}
       backend: ${{ steps.filter.outputs.backend }}
-      is_main: ${{ github.ref == 'refs/heads/main' }}
+      is_main: ${{ steps.branch.outputs.is_main }}
     permissions:
       contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Detect main branch on push
+        id: branch
+        shell: bash
+        run: |
+          if [[ "${GITHUB_EVENT_NAME}" == "push" && "${GITHUB_REF}" == "refs/heads/main" ]]; then
+            echo "is_main=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_main=false" >> "$GITHUB_OUTPUT"
+          fi
       - name: Paths filter
         id: filter
         uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36
