@@ -11,7 +11,7 @@ export const eventStore =
         actions: {
             async getEvents(){
                 
-                var events = [{
+                const events = [{
                     id: 1,
                     name: 'Sioux City Geek Con',
                     location: 'Sioux City Convention Center Sioux City, Iowa',
