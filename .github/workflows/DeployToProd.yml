@@ -21,7 +21,7 @@ jobs:
     permissions:
       contents: read
     env:
-      DEPLOY: ${{ true || github.ref == 'refs/heads/main' }}
+      DEPLOY: ${{ github.ref == 'refs/heads/main' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -307,8 +307,6 @@ jobs:
           dotnet-coverage collect "dotnet test ./api --no-restore" -f xml -o "coverage.xml"
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
 
-
-
   push_ui_to_docker_hub:
     name: Push UI to Docker Hub
     runs-on: ubuntu-latest
@@ -339,7 +337,6 @@ jobs:
                 summary: 'No UI changes detected for this commit.'
               }
             });
-        
       - name: Checkout Repository
         uses: actions/checkout@v4
         if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.frontend == 'true' }}
@@ -401,7 +398,7 @@ jobs:
                 summary: 'No backend changes detected for this commit.'
               }
             });
-        
+
       - name: Checkout Repository
         uses: actions/checkout@v4
         if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
