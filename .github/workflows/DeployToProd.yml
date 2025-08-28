@@ -9,8 +9,8 @@ on: # yamllint disable-line truthy
   push:
     branches: [main]
   pull_request:
-    branches: [ '**' ]
-    
+    branches: ['**']
+
 jobs:
   changes:
     name: Detect Changes
@@ -18,7 +18,7 @@ jobs:
     outputs:
       frontend: ${{ steps.filter.outputs.frontend }}
       backend: ${{ steps.filter.outputs.backend }}
-      is_main: ${{ github.ref == 'refs/heads/main'}}
+      is_main: ${{ true }} # github.ref == 'refs/heads/main'
     permissions:
       contents: read
     steps:
