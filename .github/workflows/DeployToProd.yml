@@ -233,7 +233,7 @@ jobs:
       packages: write
       contents: read
       id-token: write
-    if: ${{ !contains(needs.*.result, 'failure') && changes.outputs.is_main == 'true'  && changes.outputs.frontend == 'true' }}
+    if: ${{ !contains(needs.*.result, 'failure') && steps.changes.outputs.is_main == 'true'  && steps.changes.outputs.frontend == 'true' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -269,7 +269,7 @@ jobs:
       attestations: write
       id-token: write
     needs: [cypress-run-chrome, vitests, backend_unit_tests, sonarcloud-scan]
-    if: ${{ !contains(needs.*.result, 'failure') && changes.outputs.is_main == 'true' && changes.outputs.backend == 'true' }}
+    if: ${{ !contains(needs.*.result, 'failure') && steps.changes.outputs.is_main == 'true' && steps.changes.outputs.backend == 'true' }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -306,7 +306,7 @@ jobs:
       id-token: write
       statuses: write
 
-    if: ${{ !contains(needs.*.result, 'failure') && changes.outputs.is_main == 'true' && changes.outputs.backend == 'true' }}
+    if: ${{ !contains(needs.*.result, 'failure') && steps.changes.outputs.is_main == 'true' && steps.changes.outputs.backend == 'true' }}
     steps:
       # Step 1: Azure Login
       - name: Azure Login
@@ -338,7 +338,7 @@ jobs:
       attestations: write
       id-token: write
 
-    if: ${{ !contains(needs.*.result, 'failure') && changes.outputs.is_main == 'true' && changes.outputs.frontend == 'true' }}
+    if: ${{ !contains(needs.*.result, 'failure') && steps.changes.outputs.is_main == 'true' && steps.changes.outputs.frontend == 'true' }}
 
     steps:
       - name: Azure Login
