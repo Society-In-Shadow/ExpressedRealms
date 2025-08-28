@@ -27,7 +27,7 @@ export function setupErrorHandlingInterceptors() {
 }
 
 function setAPIUrl() {
-    axios.defaults.baseURL = import.meta.env.VITE_API_SERVER_LOCATION
+    axios.defaults.baseURL = import.meta.env.DEV ? '/api' : import.meta.env.VITE_API_SERVER_LOCATION
     axios.defaults.withCredentials = true;
 }
 

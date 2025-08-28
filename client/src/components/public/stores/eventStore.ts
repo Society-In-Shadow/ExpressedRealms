@@ -11,7 +11,7 @@ export const eventStore =
         actions: {
             async getEvents(){
                 
-                this.events = [{
+                const events = [{
                     id: 1,
                     name: 'Sioux City Geek Con',
                     location: 'Sioux City Convention Center Sioux City, Iowa',
@@ -28,6 +28,8 @@ export const eventStore =
                     conWebsiteName: 'Nuke-Con',
                     conWebsiteUrl: 'https://www.nuke-con.com/',
                 }]
+                
+                this.events = events.filter(event => event.endDate >= new Date());
             },
         }
     });
