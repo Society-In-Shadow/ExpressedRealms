@@ -86,4 +86,3 @@ app.use(ConfirmationService);
 app.use(DialogService);
 
 app.mount('#app');
-// test

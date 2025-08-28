@@ -298,7 +298,7 @@ try
     app.AddCharacterApiEndPoints();
     app.ConfigureBlessingEndPoints();
     app.ConfigureKnowledgeEndPoints();
-    // Testing API Changes
+
     app.MapFallbackToFile("index.html");
     Log.Information("Starting Web API");
     app.Run();
