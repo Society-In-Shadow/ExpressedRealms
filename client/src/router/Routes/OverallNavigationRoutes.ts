@@ -31,14 +31,14 @@ export const OverallRoutes = {
             component: () => import("./../../components/characters/character/EditCharacter.vue")
         },
         {
-            path: "/rulebook",
+            path: "/rulebook/:slug",
             name: "rulebook",
             component: () => import("./../../components/expressions/CmsBase.vue"),
             meta: { isCMS: true, id: 2 },
         },
         {
-            path: "/treasuredtales",
-            name: "treasuredtales",
+            path: "/worldbackground/:slug",
+            name: "worldbackground",
             component: () => import("./../../components/expressions/CmsBase.vue"),
             meta: { isCMS: true, id: 3 },
         },

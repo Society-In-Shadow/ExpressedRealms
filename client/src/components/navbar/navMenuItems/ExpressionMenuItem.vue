@@ -6,6 +6,8 @@
   import axios from "axios";
   import toaster from "@/services/Toasters";
   import Badge from 'primevue/badge';
+  import type {ExpressionMenuItem} from "@/components/navbar/navMenuItems/types.ts";
+  import type {PropType} from "vue";
   const Router = useRouter();
 
   const emit = defineEmits<{
@@ -15,8 +17,12 @@
   }>();
   
   let props = defineProps({
+    navHeading: {
+      type: String,
+      required: true,
+    },
     item: {
-      type: Object,
+      type: Object as PropType<ExpressionMenuItem>,
       required: true,
     },
     showEdit: {
@@ -31,7 +37,7 @@
       emit('showCreatePopup');
       return;
     }
-    Router.push("/expressions/" + props.item.name.toLowerCase());
+    Router.push(`/${props.navHeading}/` + props.item?.slug);
   }
 
   function showEditPopup(){

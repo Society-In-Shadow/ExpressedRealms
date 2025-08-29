@@ -14,11 +14,13 @@ import Dialog from 'primevue/dialog';
 import AddExpression from "@/components/expressions/AddExpression.vue";
 import {FeatureFlags, userStore} from "@/stores/userStore";
 import GeneralContentItem from "@/components/navbar/navMenuItems/GeneralContentItem.vue";
+import {cmsStore} from "@/stores/cmsStore.ts";
 
 const userInfo = userStore();
 const Router = useRouter();
 let showExpressionEdit = false;
 const router = useRouter();
+const cmsData = cmsStore();
 
 const items = ref([
   { 
@@ -70,9 +72,9 @@ async function loadList(){
 
   const userInfo = userStore();
   await userInfo.updateUserFeatureFlags()
-  function MapData(expression) {
+  function MapData(expression, navMenuHeading: string ) {
     return {
-      navMenuType: "expression",
+      navMenuType: navMenuHeading,
       expression: expression,
     };
   }
@@ -91,80 +93,35 @@ async function loadList(){
     };
   }
 
+  function fillMenu(menuItems: any[], menuLabel: string, navMenuHeading: string){
+    
+    const column1 = menuItems.slice(0, Math.ceil(menuItems.length / 2));
+    const column2 = menuItems.slice(Math.ceil(menuItems.length / 2), menuItems.length);
+
+    const expressionMenu = items.value.find(item => item.label === menuLabel)?.items;
+
+    expressionMenu.length = 0;
+
+    if(expressionMenu !== undefined){
+      expressionMenu.push([{
+        items: column1.map(x => MapData(x, navMenuHeading))
+      }]);
+      expressionMenu.push([{
+        items: column2.map(x => MapData(x, navMenuHeading))
+      }]);
+    }
+  }
+  
   axios.get("/navMenu/content/1")
       .then(response => {
         const expressions = response.data;
-
         showExpressionEdit = expressions.canEdit;
-        const menuItems = expressions.menuItems;
-
-        const column1 = menuItems.slice(0, Math.ceil(menuItems.length / 2));
-        const column2 = menuItems.slice(Math.ceil(menuItems.length / 2), menuItems.length);
-
-        const expressionMenu = items.value.find(item => item.label === 'Expressions')?.items;
-
-        expressionMenu.length = 0;
-        
-        if(expressionMenu !== undefined){
-          expressionMenu.push([{
-            items: column1.map(MapData)
-          }]);
-          expressionMenu.push([{
-            items: column2.map(MapData)
-          }]);
-
-        }
+        fillMenu(expressions.menuItems, "Expressions", "expression");
       })
 
-  axios.get("/navMenu/content/13")
-      .then(response => {
-        const expressions = response.data;
-
-        showExpressionEdit = expressions.canEdit;
-        const menuItems = expressions.menuItems;
-
-        const column1 = menuItems.slice(0, Math.ceil(menuItems.length / 2));
-        const column2 = menuItems.slice(Math.ceil(menuItems.length / 2), menuItems.length);
-
-        const expressionMenu = items.value.find(item => item.label === 'Rule Book')?.items;
-
-        expressionMenu.length = 0;
-
-        if(expressionMenu !== undefined){
-          expressionMenu.push([{
-            items: column1.map(MapData)
-          }]);
-          expressionMenu.push([{
-            items: column2.map(MapData)
-          }]);
-
-        }
-      })
-
-  axios.get("/navMenu/content/14")
-      .then(response => {
-        const expressions = response.data;
-
-        showExpressionEdit = expressions.canEdit;
-        const menuItems = expressions.menuItems;
-
-        const column1 = menuItems.slice(0, Math.ceil(menuItems.length / 2));
-        const column2 = menuItems.slice(Math.ceil(menuItems.length / 2), menuItems.length);
-
-        const expressionMenu = items.value.find(item => item.label === 'World Background')?.items;
-
-        expressionMenu.length = 0;
-
-        if(expressionMenu !== undefined){
-          expressionMenu.push([{
-            items: column1.map(MapData)
-          }]);
-          expressionMenu.push([{
-            items: column2.map(MapData)
-          }]);
-
-        }
-      })
+  await cmsData.getCmsInformation();
+  fillMenu(cmsData.worldBackgroundItems, "World Background", "worldbackground");
+  fillMenu(cmsData.rulebookItems, "Rule Book", "rulebook");
 
   axios.get("/navMenu/characters")
       .then(response => {
@@ -223,10 +180,9 @@ function showCreateExpressionPopup(){
     </template>
     <template #item="{ item }">
       <RootNodeMenuItem v-if="item.root" :item="item" />
-      <CharacterMenuItem v-else-if="item.navMenuType == 'character'" :item="item" />
-      <CharacterMenuItem v-else-if="item.navMenuType == 'cms'" :item="item" />
+      <CharacterMenuItem v-else-if="item.navMenuType == 'character'" :item="item"  />
       <ExpressionMenuItem
-        v-else :item="item.expression" :show-edit="showExpressionEdit" @show-edit-popup="showEditExpressionPopup" @show-create-popup="showCreateExpressionPopup"
+        v-else :item="item.expression" :nav-heading="item.navMenuType" :show-edit="showExpressionEdit" @show-edit-popup="showEditExpressionPopup" @show-create-popup="showCreateExpressionPopup"
         @refresh-list="loadList"
       />
     </template>
