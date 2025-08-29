@@ -43,7 +43,7 @@ export const OverallRoutes = {
             meta: { isWorldBackground: true },
         },
         {
-            path: "/expressions/:name",
+            path: "/expressions/:slug",
             name: "viewExpression",
             component: () => import("./../../components/expressions/ExpressionBase.vue")
         },

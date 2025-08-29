@@ -6,13 +6,19 @@ export const cmsStore =
 defineStore('cmsStore', {
     state: () => {
         return {
-            rulebookItems: [] as any[],
-            worldBackgroundItems: [] as any[],
+            rulebookItems: [] as ExpressionMenuItem[],
+            worldBackgroundItems: [] as ExpressionMenuItem[],
+            expressionItems: [] as ExpressionMenuItem[],
             canEdit: false as boolean,
         }
     },
     actions: {
         async getCmsInformation(){
+            const expressionData = await axios.get<ExpressionMenuResponse>("/navMenu/content/1");
+
+            this.canEdit = expressionData.data.canEdit;
+            this.expressionItems = expressionData.data.menuItems;
+            
             const rulebookData = await axios.get<ExpressionMenuResponse>("/navMenu/content/13");
             
             this.canEdit = rulebookData.data.canEdit;

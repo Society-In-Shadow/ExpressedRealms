@@ -112,16 +112,11 @@ async function loadList(){
     }
   }
   
-  axios.get("/navMenu/content/1")
-      .then(response => {
-        const expressions = response.data;
-        showExpressionEdit = expressions.canEdit;
-        fillMenu(expressions.menuItems, "Expressions", "expression");
-      })
-
   await cmsData.getCmsInformation();
   fillMenu(cmsData.worldBackgroundItems, "World Background", "worldbackground");
   fillMenu(cmsData.rulebookItems, "Rule Book", "rulebook");
+  fillMenu(cmsData.expressionItems, "Expressions", "expressions");
+  showExpressionEdit = cmsData.canEdit;
 
   axios.get("/navMenu/characters")
       .then(response => {
