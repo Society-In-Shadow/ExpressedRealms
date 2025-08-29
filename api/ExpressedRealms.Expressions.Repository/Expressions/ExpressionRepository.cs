@@ -79,7 +79,7 @@ internal sealed class ExpressionRepository(
             ShortDescription = dto.ShortDescription,
             NavMenuImage = dto.NavMenuImage,
             PublishStatusId = (int)PublishTypes.Draft,
-            ExpressionTypeId = dto.ExpressionTypeId
+            ExpressionTypeId = dto.ExpressionTypeId,
         };
 
         context.Expressions.Add(expression);
@@ -132,16 +132,14 @@ internal sealed class ExpressionRepository(
 
     public async Task<Expression?> GetExpressionForDeletion(int id)
     {
-        return await context
-            .Expressions.IgnoreQueryFilters()
-            .FirstOrDefaultAsync(x => x.Id == id);
+        return await context.Expressions.IgnoreQueryFilters().FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<Expression?> ExpressionExists(int id)
     {
         return await context.Expressions.IgnoreQueryFilters().FirstOrDefaultAsync(x => x.Id == id);
     }
-    
+
     public async Task<bool> ExpressionTypeExists(int id)
     {
         return await context.ExpressionTypes.AnyAsync(x => x.Id == id, cancellationToken);

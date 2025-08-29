@@ -19,7 +19,7 @@ internal static class CreateExpressionEndpoint
                 Name = request.Name,
                 ShortDescription = request.ShortDescription,
                 NavMenuImage = request.NavMenuImage,
-                ExpressionTypeId = request.ExpressionTypeId
+                ExpressionTypeId = request.ExpressionTypeId,
             }
         );
 

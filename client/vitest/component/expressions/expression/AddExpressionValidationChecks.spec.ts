@@ -46,8 +46,8 @@ describe("Add Expression Schema - Field Validations", () => {
     });
     
     describe("Nav Menu Icon", () => {
-        it("Default Value is 'pi-prime'", async () => {
-            expect(navMenuImageField.field.value).toEqual("pi-prime");
+        it("Default Value is 'emergency_home'", async () => {
+            expect(navMenuImageField.field.value).toEqual("emergency_home");
         });
         it("Says it's required when not filled in", async () => {
             navMenuImageField.field.value = "";
