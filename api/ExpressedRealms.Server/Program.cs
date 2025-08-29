@@ -66,7 +66,7 @@ try
     EarlyKeyVaultManager keyVaultManager = new EarlyKeyVaultManager(
         builder.Environment.IsProduction()
     );
-    
+
     if (builder.Environment.IsDevelopment())
     {
         string connectionString = await keyVaultManager.GetSecret(ConnectionStrings.Database);
@@ -78,10 +78,12 @@ try
             ConnectionStrings.ApplicationInsights
         );
         logger.WriteTo.ApplicationInsights(appInsightsConnectionString, TelemetryConverter.Traces);
-        builder.Services.AddApplicationInsightsTelemetry((options) =>
-        {
-            options.ConnectionString = appInsightsConnectionString;
-        });
+        builder.Services.AddApplicationInsightsTelemetry(
+            (options) =>
+            {
+                options.ConnectionString = appInsightsConnectionString;
+            }
+        );
     }
 
     Log.Logger = logger.CreateLogger();

@@ -5,26 +5,21 @@ import {object, string, number} from "yup";
 import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
 import TextAreaWrapper from "@/FormWrappers/TextAreaWrapper.vue";
 import DropdownWrapper from "@/FormWrappers/DropdownWrapper.vue";
-import {onMounted, ref} from "vue";
+import {inject, onMounted, ref} from "vue";
 import axios from "axios";
 import toaster from "@/services/Toasters";
+import {cmsStore} from "@/stores/cmsStore.ts";
+import Button from "primevue/button";
 
 const isLoading = ref(true);
 const publishStatusOptions = ref([]);
+const cmsData = cmsStore();
 
-const emit = defineEmits<{
-  refreshList: []
-}>();
-
-const props = defineProps({
-  expressionId: {
-    type: Number,
-    required: true,
-  }
-});
+const dialogRef = inject('dialogRef');
+const expressionId = ref(dialogRef.value.data.expressionId);
 
 onMounted(() =>{
-  axios.get(`/expression/${props.expressionId}`)
+  axios.get(`/expression/${expressionId.value}`)
       .then((response) => {
         name.value = response.data.name;
         shortDescription.value = response.data.shortDescription;
@@ -57,14 +52,14 @@ const [navMenuImage] = defineField('navMenuImage');
 const [publishStatus] = defineField('publishStatus');
 
 const onSubmit = handleSubmit((values) => {
-  axios.put(`/expression/${props.expressionId}`, {
+  axios.put(`/expression/${expressionId.value}`, {
     name: values.name,
     shortDescription: values.shortDescription,
-    id: props.expressionId,
+    id: expressionId.value,
     publishStatus: values.publishStatus.id,
     navMenuImage: values.navMenuImage
   }).then(() => {
-    emit('refreshList');
+    cmsData.refreshCmsInformation();
     toaster.success("Successfully Updated Expression Info!");
   });
 });
@@ -73,15 +68,25 @@ const onSubmit = handleSubmit((values) => {
 
 <template>
   <form @submit="onSubmit">
-    <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" :show-skeleton="isLoading" @change="onSubmit" />
-    <TextAreaWrapper v-model="shortDescription" field-name="Short Description" :error-text="errors.shortDescription" :show-skeleton="isLoading" @change="onSubmit" />
-    <InputTextWrapper v-model="navMenuImage" field-name="Nav Menu Icon" :error-text="errors.navMenuImage" :show-skeleton="isLoading" @change="onSubmit" />
-    <p>List of icons can be found here : <a href="https://primevue.org/icons/#list">Primevue Icons</a></p>
-    <p>Additional Icons can be found here: <a href="https://icons.getbootstrap.com/#:~:text=%E2%80%A2%20GitHub%20repo-,Icons,-Search%20for%20icons">Bootstrap Icons</a></p>
-    <p>For bootstrap, click on icon and look for a string like this "bi bi-0-square"</p>
+    <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" :show-skeleton="isLoading"/>
+    <TextAreaWrapper v-model="shortDescription" field-name="Short Description" :error-text="errors.shortDescription" :show-skeleton="isLoading"/>
+
+    <div class="d-flex align-items-center gap-3 ">
+      <div class="flex-shrink-1">
+        <span class="inline-flex flex-none align-items-center justify-content-center border-circle bg-primary w-3rem h-3rem">
+          <i :class="['material-symbols-outlined', 'text-white']"> {{navMenuImage}}</i>
+        </span>
+      </div>
+      <div class="flex-grow-1">
+        <InputTextWrapper v-model="navMenuImage" field-name="Nav Menu Icon" :error-text="errors.navMenuImage" :show-skeleton="isLoading"/>
+      </div>
+    </div>
+    <p>List of icons can be found here : <a href="https://fonts.google.com/icons?icon.size=24&icon.color=%23e3e3e3">Google Material Design Fonts</a></p>
+    <p>You only need to add the name of the icon, with spaces being replaced with underlines.</p>
     <DropdownWrapper
       v-model="publishStatus" option-label="name" :options="publishStatusOptions" field-name="Publish Status" :error-text="errors.publishStatus"
-      :show-skeleton="isLoading" @change="onSubmit"
+      :show-skeleton="isLoading"
     />
+    <Button label="Save" class="w-100 mb-2" type="submit" />
   </form>
 </template>

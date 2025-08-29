@@ -25,7 +25,7 @@ internal sealed class ExpressionRepository(
             Policies.ExpressionEditorPolicy
         );
 
-        var expression = context.Expressions.AsNoTracking().Where(x => x.ExpressionTypeId == 1); // 1 = expression
+        var expression = context.Expressions.AsNoTracking();
 
         if (!canSeeBetaAndDrafts)
         {
@@ -35,6 +35,7 @@ internal sealed class ExpressionRepository(
         return await expression
             .Select(x => new ExpressionNavigationMenuItem()
             {
+                ExpressionTypeId = x.ExpressionTypeId,
                 Name = x.Name,
                 Id = x.Id,
                 ShortDescription = x.ShortDescription,
@@ -44,15 +45,6 @@ internal sealed class ExpressionRepository(
             })
             .OrderBy(x => x.Name)
             .ToListAsync(cancellationToken);
-    }
-
-    public async Task<Result<int>> GetCmsExpressionId(int id)
-    {
-        return await context
-            .Expressions.AsNoTracking()
-            .Where(x => x.ExpressionTypeId == id)
-            .Select(x => x.Id)
-            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<Result<GetExpressionDto>> GetExpression(int expressionId)
@@ -87,7 +79,7 @@ internal sealed class ExpressionRepository(
             ShortDescription = dto.ShortDescription,
             NavMenuImage = dto.NavMenuImage,
             PublishStatusId = (int)PublishTypes.Draft,
-            ExpressionTypeId = 1, // 1 = expression
+            ExpressionTypeId = dto.ExpressionTypeId,
         };
 
         context.Expressions.Add(expression);
@@ -124,7 +116,7 @@ internal sealed class ExpressionRepository(
     {
         var expression = await context
             .Expressions.IgnoreQueryFilters()
-            .FirstOrDefaultAsync(x => x.Id == id && x.ExpressionTypeId == 1); // 1 = expression
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         if (expression is null)
             return Result.Fail(new NotFoundFailure(nameof(Expression)));
@@ -140,13 +132,16 @@ internal sealed class ExpressionRepository(
 
     public async Task<Expression?> GetExpressionForDeletion(int id)
     {
-        return await context
-            .Expressions.IgnoreQueryFilters()
-            .FirstOrDefaultAsync(x => x.Id == id && x.ExpressionTypeId == 1); // 1 = expression
+        return await context.Expressions.IgnoreQueryFilters().FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<Expression?> ExpressionExists(int id)
     {
         return await context.Expressions.IgnoreQueryFilters().FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task<bool> ExpressionTypeExists(int id)
+    {
+        return await context.ExpressionTypes.AnyAsync(x => x.Id == id, cancellationToken);
     }
 }

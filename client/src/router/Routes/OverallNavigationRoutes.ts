@@ -1,5 +1,4 @@
 import Layout from "@/components/LoggedInLayout.vue";
-import {FeatureFlags} from "@/stores/userStore.ts";
 
 export const OverallRoutes = {
     path: '/expressedRealms',
@@ -31,73 +30,19 @@ export const OverallRoutes = {
             component: () => import("./../../components/characters/character/EditCharacter.vue")
         },
         {
-            path: "/rulebook",
+            path: "/rulebook/:slug",
             name: "rulebook",
             component: () => import("./../../components/expressions/CmsBase.vue"),
-            meta: { isCMS: true, id: 2 },
+            meta: { isRuleBook: true },
         },
         {
-            path: "/treasuredtales",
-            name: "treasuredtales",
+            path: "/worldbackground/:slug",
+            name: "worldbackground",
             component: () => import("./../../components/expressions/CmsBase.vue"),
-            meta: { isCMS: true, id: 3 },
+            meta: { isWorldBackground: true },
         },
         {
-            path: "/adversaries",
-            name: "adversaries",
-            component: () => import("./../../components/expressions/CmsBase.vue"),
-            meta: { isCMS: true, id: 4 },
-        },
-        {
-            path: "/factions",
-            name: "factions",
-            component: () => import("./../../components/expressions/CmsBase.vue"),
-            meta: { isCMS: true, id: 5 },
-        },
-        {
-            path: "/society",
-            name: "society",
-            component: () => import("./../../components/expressions/CmsBase.vue"),
-            meta: { isCMS: true, id: 6 },
-        },
-        {
-            path: "/characterSetup",
-            name: "characterSetup",
-            component: () => import("./../../components/expressions/CmsBase.vue"),
-            meta: { isCMS: true, id: 7 },
-        },
-        {
-            path: "/knowledges",
-            name: "knowledges",
-            component: () => import("./../../components/expressions/CmsBase.vue"),
-            meta: { isCMS: true, id: 8 },
-        },
-        {
-            path: "/blessings",
-            name: "blessings",
-            component: () => import("./../../components/expressions/CmsBase.vue"),
-            meta: { isCMS: true, id: 9 },
-        },
-        {
-            path: "/combat",
-            name: "combat",
-            component: () => import("./../../components/expressions/CmsBase.vue"),
-            meta: { isCMS: true, id: 10 },
-        },
-        {
-            path: "/equipment",
-            name: "equipment",
-            component: () => import("./../../components/expressions/CmsBase.vue"),
-            meta: { isCMS: true, id: 12, requiredFeatureFlag: FeatureFlags.ShowInventoryPage },
-        },
-        {
-            path: "/characterQuickStart",
-            name: "characterQuickStart",
-            component: () => import("./../../components/expressions/CmsBase.vue"),
-            meta: { isCMS: true, id: 11 },
-        },
-        {
-            path: "/expressions/:name",
+            path: "/expressions/:slug",
             name: "viewExpression",
             component: () => import("./../../components/expressions/ExpressionBase.vue")
         },

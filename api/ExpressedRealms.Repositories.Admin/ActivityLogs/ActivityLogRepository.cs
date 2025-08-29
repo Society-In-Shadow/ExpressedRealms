@@ -14,7 +14,7 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             .Where(x => x.ActorUserId == userId)
             .Select(x => new Log()
             {
-                Location = $"Expression \"{x.Expression.Name}\"",
+                Location = $"{x.Expression.ExpressionType.Name} \"{x.Expression.Name}\"",
                 TimeStamp = x.Timestamp,
                 Action = x.Action,
                 ChangedProperties = x.ChangedProperties,
@@ -28,7 +28,7 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             .Select(x => new Log()
             {
                 Location =
-                    $"Expression \"{x.Expression.Name}\" > Expression Section \"{x.ExpressionSection.Name}\"",
+                    $"{x.Expression.ExpressionType.Name} \"{x.Expression.Name}\" > Section \"{x.ExpressionSection.Name}\"",
                 TimeStamp = x.Timestamp,
                 Action = x.Action,
                 ChangedProperties = x.ChangedProperties,
@@ -122,7 +122,7 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             .Select(x => new Log()
             {
                 Location =
-                    $"Expression \"{x.Expression.Name}\" > Power Path \"{x.PowerPath.Name}\"",
+                    $"{x.Expression.ExpressionType.Name} \"{x.Expression.Name}\" > Power Path \"{x.PowerPath.Name}\"",
                 TimeStamp = x.Timestamp,
                 Action = x.Action,
                 ChangedProperties = x.ChangedProperties,
@@ -136,7 +136,7 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             .Select(x => new Log()
             {
                 Location =
-                    $"Expression \"{x.Power.PowerPath.Expression.Name}\" > Power Path \"{x.PowerPath.Name}\" > Power \"{x.Power.Name}\"",
+                    $"{x.PowerPath.Expression.ExpressionType.Name} \"{x.Power.PowerPath.Expression.Name}\" > Power Path \"{x.PowerPath.Name}\" > Power \"{x.Power.Name}\"",
                 TimeStamp = x.Timestamp,
                 Action = x.Action,
                 ChangedProperties = x.ChangedProperties,

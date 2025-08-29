@@ -1,9 +1,11 @@
 import {defineStore} from 'pinia'
 import axios from "axios";
 import {UserRoles, userStore} from "@/stores/userStore";
+import {cmsStore} from "@/stores/cmsStore.ts";
+import router from "@/router";
 
 const userInfo = userStore();
-
+const cmsInfo = cmsStore();
 export const expressionStore = 
 defineStore('expression', {
     state: () => {
@@ -18,19 +20,20 @@ defineStore('expression', {
     },
     actions: {
         async getExpressionId(route: object){
-            if(route.meta.isCMS){
-                console.log("is cms");
-                await axios.get(`/expression/getCmsByName/${route.meta.id}`)
-                    .then(async (json) => {
-                        this.currentExpressionId = json.data.id;
-                    })
+            await cmsInfo.getCmsInformation();
+            let filter = [];
+            if(route.meta.isRuleBook){
+                filter = cmsInfo.rulebookItems.filter(x => x.slug == route.params.slug)
+            } else if(route.meta.isWorldBackground){
+                filter = cmsInfo.worldBackgroundItems.filter(x => x.slug == route.params.slug)
+            } else{
+                filter = cmsInfo.expressionItems.filter(x => x.slug == route.params.slug)
             }
-            else{
-                await axios.get(`/expression/getByName/${route.params.name}`)
-                    .then(async (json) => {
-                        this.currentExpressionId = json.data.id;
-                    })
+            if(filter && filter.length > 0){
+                this.currentExpressionId = filter[0].id;
+                return;
             }
+            router.push("/characters");
         },
         async getExpressionSections(){
             this.isDoneLoading = false;

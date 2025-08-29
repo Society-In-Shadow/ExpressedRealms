@@ -61,6 +61,8 @@ const currentTab = ref('0');
 const showReportButton = ref(false);
 
 async function fetchData() {
+  isLoading.value = true;
+  headerIsLoading.value = true;
   await expressionInfo.getExpressionSections()
       .then(async () => {
         sections.value = expressionInfo.sections;
@@ -95,7 +97,7 @@ onMounted(async () =>{
 })
 
 onBeforeRouteUpdate(async (to, from) => {
-  if (to.params.name !== from.params.name) {
+  if (to.params.slug !== from.params.slug) {
     await expressionInfo.getExpressionId(to);
     await fetchData()
   }

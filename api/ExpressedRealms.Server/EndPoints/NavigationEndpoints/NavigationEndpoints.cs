@@ -74,7 +74,7 @@ internal static class NavigationEndpoints
 
         endpointGroup
             .MapGet(
-                "/expressions",
+                "/content/",
                 async Task<Ok<ExpressionMenuResponse>> (
                     HttpContext httpContext,
                     IExpressionRepository repository
@@ -92,14 +92,34 @@ internal static class NavigationEndpoints
 
                     if (hasEditPolicy)
                     {
-                        menuItems.Add(
-                            new ExpressionMenuItem()
-                            {
-                                Id = 0,
-                                Name = "Add Expression",
-                                ShortDescription = "Use this to add a new expression",
-                                NavMenuImage = "pi-plus",
-                            }
+                        menuItems.AddRange(
+                            [
+                                new ExpressionMenuItem()
+                                {
+                                    Id = 0,
+                                    Name = $"Add Expression",
+                                    ShortDescription = $"Use this to add a new Expression",
+                                    ExpressionTypeId = 1,
+                                    NavMenuImage = "add",
+                                },
+                                new ExpressionMenuItem()
+                                {
+                                    Id = 0,
+                                    Name = $"Add Rule Book Section",
+                                    ShortDescription = $"Use this to add a new Rule Book Section",
+                                    NavMenuImage = "add",
+                                    ExpressionTypeId = 13,
+                                },
+                                new ExpressionMenuItem()
+                                {
+                                    Id = 0,
+                                    Name = $"Add World Background Section",
+                                    ShortDescription =
+                                        $"Use this to add a new World Background Section",
+                                    NavMenuImage = "add",
+                                    ExpressionTypeId = 14,
+                                },
+                            ]
                         );
                     }
 
