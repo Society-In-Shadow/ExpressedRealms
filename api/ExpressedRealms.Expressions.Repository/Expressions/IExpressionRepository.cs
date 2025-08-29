@@ -12,7 +12,6 @@ public interface IExpressionRepository
     Task<Result<List<ExpressionNavigationMenuItem>>> GetNavigationMenuItems();
     Task<Result<GetExpressionDto>> GetExpression(int expressionId);
     Task<Expression?> GetExpressionForDeletion(int id);
-    Task<Result<int>> GetCmsExpressionId(int id);
     Task<Expression?> ExpressionExists(int id);
     Task<bool> ExpressionTypeExists(int id);
 }

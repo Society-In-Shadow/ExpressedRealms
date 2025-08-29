@@ -2,11 +2,9 @@ using ExpressedRealms.Authentication;
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.CreateExpression;
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.DeleteExpression;
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.EditExpression;
-using ExpressedRealms.Expressions.API.ExpressionEndpoints.GetCmsExpressionId;
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.GetEditExpression;
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.GetExpressionBooklet;
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.GetExpressionCmsReport;
-using ExpressedRealms.Expressions.API.ExpressionEndpoints.GetExpressionId;
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.UpdateHierarchy;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
@@ -41,14 +39,6 @@ internal static class ExpressionEndpoints
             .MapGet("{expressionId}/booklet", GetExpressionBookletEndpoint.GetExpressionBooklet)
             .RequirePolicyAuthorization(Policies.DownloadExpressionBooklet)
             .WithSummary("Returns the report for the given expression");
-
-        endpointGroup
-            .MapGet("/getByName/{name}", GetExpressionIdByNameEndpoint.GetExpressionIdByName)
-            .WithSummary("Returns the id for the given expression name");
-
-        endpointGroup
-            .MapGet("/getCmsByName/{id}", GetCmsExpressionIdByNameEndpoint.GetCmsExpressionIdByName)
-            .WithSummary("Returns the id for the given general cms name");
 
         endpointGroup
             .MapPut("{expressionId}", EditExpressionEndpoint.EditExpression)

@@ -14,7 +14,6 @@ public interface IExpressionTextSectionRepository
     Task<Result<ExpressionTextSectionOptions>> GetExpressionTextSectionOptions(
         GetExpressionTestSectionOptionsDto optionsDto
     );
-    Task<Result<int>> GetExpressionId(string expressionName);
     Task<Result> UpdateSectionHierarchyAndSorting(EditExpressionHierarchyDto dto);
     Task<ExpressionSectionDto?> GetExpressionSection(int expressionId);
     Task<ExpressionSection?> GetExpressionSectionForDeletion(int expressionId, int sectionId);
