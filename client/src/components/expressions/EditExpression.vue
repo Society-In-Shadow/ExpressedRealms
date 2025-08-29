@@ -5,26 +5,20 @@ import {object, string, number} from "yup";
 import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
 import TextAreaWrapper from "@/FormWrappers/TextAreaWrapper.vue";
 import DropdownWrapper from "@/FormWrappers/DropdownWrapper.vue";
-import {onMounted, ref} from "vue";
+import {inject, onMounted, ref} from "vue";
 import axios from "axios";
 import toaster from "@/services/Toasters";
+import {cmsStore} from "@/stores/cmsStore.ts";
 
 const isLoading = ref(true);
 const publishStatusOptions = ref([]);
+const cmsData = cmsStore();
 
-const emit = defineEmits<{
-  refreshList: []
-}>();
-
-const props = defineProps({
-  expressionId: {
-    type: Number,
-    required: true,
-  }
-});
+const dialogRef = inject('dialogRef');
+const expressionId = ref(dialogRef.value.data.expressionId);
 
 onMounted(() =>{
-  axios.get(`/expression/${props.expressionId}`)
+  axios.get(`/expression/${expressionId.value}`)
       .then((response) => {
         name.value = response.data.name;
         shortDescription.value = response.data.shortDescription;
@@ -57,14 +51,14 @@ const [navMenuImage] = defineField('navMenuImage');
 const [publishStatus] = defineField('publishStatus');
 
 const onSubmit = handleSubmit((values) => {
-  axios.put(`/expression/${props.expressionId}`, {
+  axios.put(`/expression/${expressionId.value}`, {
     name: values.name,
     shortDescription: values.shortDescription,
-    id: props.expressionId,
+    id: expressionId.value,
     publishStatus: values.publishStatus.id,
     navMenuImage: values.navMenuImage
   }).then(() => {
-    emit('refreshList');
+    cmsData.refreshCmsInformation();
     toaster.success("Successfully Updated Expression Info!");
   });
 });

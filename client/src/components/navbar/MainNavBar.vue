@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import MegaMenu from "primevue/megamenu";
 import AvatarDropdown from "@/components/navbar/AvatarDropdown.vue";
 import {useRouter} from "vue-router";
@@ -9,15 +9,14 @@ import axios from "axios";
 import ExpressionMenuItem from "@/components/navbar/navMenuItems/ExpressionMenuItem.vue";
 import CharacterMenuItem from "@/components/navbar/navMenuItems/CharacterMenuItem.vue";
 import RootNodeMenuItem from "@/components/navbar/navMenuItems/RootNodeMenuItem.vue";
-import EditExpression from "@/components/expressions/EditExpression.vue";
 import Dialog from 'primevue/dialog';
 import AddExpression from "@/components/expressions/AddExpression.vue";
 import {userStore} from "@/stores/userStore";
 import {cmsStore} from "@/stores/cmsStore.ts";
+import {storeToRefs} from "pinia";
 
 const userInfo = userStore();
 const Router = useRouter();
-let showExpressionEdit = false;
 const router = useRouter();
 const cmsData = cmsStore();
 
@@ -67,16 +66,36 @@ const items = ref([
   },
 ]);
 
+function MapData(expression, navMenuHeading: string ) {
+  return {
+    navMenuType: navMenuHeading,
+    expression: expression,
+  };
+}
+
+function fillMenu(menuItems: any[], menuLabel: string, navMenuHeading: string){
+
+  const column1 = menuItems.slice(0, Math.ceil(menuItems.length / 2));
+  const column2 = menuItems.slice(Math.ceil(menuItems.length / 2), menuItems.length);
+
+  const expressionMenu = items.value.find(item => item.label === menuLabel)?.items;
+
+  expressionMenu.length = 0;
+
+  if(expressionMenu !== undefined){
+    expressionMenu.push([{
+      items: column1.map(x => MapData(x, navMenuHeading))
+    }]);
+    expressionMenu.push([{
+      items: column2.map(x => MapData(x, navMenuHeading))
+    }]);
+  }
+}
+
 async function loadList(){
 
   const userInfo = userStore();
   await userInfo.updateUserFeatureFlags()
-  function MapData(expression, navMenuHeading: string ) {
-    return {
-      navMenuType: navMenuHeading,
-      expression: expression,
-    };
-  }
 
   function MapCharacterData(character) {
     return {
@@ -92,30 +111,10 @@ async function loadList(){
     };
   }
 
-  function fillMenu(menuItems: any[], menuLabel: string, navMenuHeading: string){
-    
-    const column1 = menuItems.slice(0, Math.ceil(menuItems.length / 2));
-    const column2 = menuItems.slice(Math.ceil(menuItems.length / 2), menuItems.length);
-
-    const expressionMenu = items.value.find(item => item.label === menuLabel)?.items;
-
-    expressionMenu.length = 0;
-
-    if(expressionMenu !== undefined){
-      expressionMenu.push([{
-        items: column1.map(x => MapData(x, navMenuHeading))
-      }]);
-      expressionMenu.push([{
-        items: column2.map(x => MapData(x, navMenuHeading))
-      }]);
-    }
-  }
-  
   await cmsData.getCmsInformation();
   fillMenu(cmsData.worldBackgroundItems, "World Background", "worldbackground");
   fillMenu(cmsData.rulebookItems, "Rule Book", "rulebook");
   fillMenu(cmsData.expressionItems, "Expressions", "expressions");
-  showExpressionEdit = cmsData.canEdit;
 
   axios.get("/navMenu/characters")
       .then(response => {
@@ -146,23 +145,26 @@ onMounted(async () => {
   await loadList();
 });
 
-let editVisible = ref(false);
-let expressionId = ref();
-function showEditExpressionPopup(id){
-  editVisible.value = true;
-  expressionId.value = id;
-}
 let newVisible = ref(false);
 function showCreateExpressionPopup(){
   newVisible.value = true;
 }
 
+const { worldBackgroundItems, rulebookItems, expressionItems } = storeToRefs(cmsData);
+
+watch(worldBackgroundItems, (newValue) => {
+  fillMenu(newValue, "World Background", "worldbackground");
+})
+watch(rulebookItems, (newValue) => {
+  fillMenu(newValue, "Rule Book", "rulebook");
+})
+watch(expressionItems, (newValue) => {
+  fillMenu(newValue, "Expressions", "expressions");
+})
+
 </script>
 
 <template>
-  <Dialog v-model:visible="editVisible" modal header="Edit Expression">
-    <EditExpression :expression-id="expressionId" @refresh-list="loadList" />
-  </Dialog>
   <Dialog v-model:visible="newVisible" modal header="Add Expression">
     <AddExpression @refresh-list="loadList" @close-dialog="newVisible = false" />
   </Dialog>
@@ -176,7 +178,7 @@ function showCreateExpressionPopup(){
       <RootNodeMenuItem v-if="item.root" :item="item" />
       <CharacterMenuItem v-else-if="item.navMenuType == 'character'" :item="item"  />
       <ExpressionMenuItem
-        v-else :item="item.expression" :nav-heading="item.navMenuType" :show-edit="showExpressionEdit" @show-edit-popup="showEditExpressionPopup" @show-create-popup="showCreateExpressionPopup"
+        v-else :item="item.expression" :nav-heading="item.navMenuType" @show-create-popup="showCreateExpressionPopup"
         @refresh-list="loadList"
       />
     </template>

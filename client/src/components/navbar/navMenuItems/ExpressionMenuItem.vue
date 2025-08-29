@@ -8,10 +8,13 @@
   import Badge from 'primevue/badge';
   import type {ExpressionMenuItem} from "@/components/navbar/navMenuItems/types.ts";
   import type {PropType} from "vue";
+  import {expressionDialogService} from "@/components/expressions/services/dialogs.ts";
+  import {cmsStore} from "@/stores/cmsStore.ts";
   const Router = useRouter();
+  const expressionDialogs = expressionDialogService();
+  const cmsData = cmsStore();
 
   const emit = defineEmits<{
-    showEditPopup: [expressionId: number],
     showCreatePopup: [],
     refreshList: []
   }>();
@@ -24,10 +27,6 @@
     item: {
       type: Object as PropType<ExpressionMenuItem>,
       required: true,
-    },
-    showEdit: {
-      type: Boolean,
-      required: true
     }
   });
 
@@ -38,10 +37,6 @@
       return;
     }
     Router.push(`/${props.navHeading}/` + props.item?.slug);
-  }
-
-  function showEditPopup(){
-    emit('showEditPopup', props.item.id);
   }
 
   const confirm = useConfirm();
@@ -91,14 +86,14 @@
         <i :class="['pi', item.navMenuImage, 'text-lg', 'text-white']" />
       </span>
         <span class="inline-flex flex-grow-1 flex-column gap-1">
-        <span class="font-medium text-lg text-900">{{ item.name }} <Badge v-if="showEdit && item.id !== 0" :value="item.statusName" :severity="getStatus()" /></span>
+        <span class="font-medium text-lg text-900">{{ item.name }} <Badge v-if="cmsData.canEdit && item.id !== 0" :value="item.statusName" :severity="getStatus()" /></span>
         <span class="">{{ item.shortDescription }}</span>
       </span>
     </div>
 
-    <span v-if="showEdit && item.id !==0" class="inline-flex flex-column gap-1">
+    <span v-if="cmsData.canEdit && item.id !==0" class="inline-flex flex-column gap-1">
       
-      <Button label="Edit" @click="showEditPopup" />
+      <Button label="Edit" @click="expressionDialogs.showEditExpression(item.id)" />
       <Button label="Delete" severity="danger" @click="deleteExpression($event)" />
     </span>
   </div>

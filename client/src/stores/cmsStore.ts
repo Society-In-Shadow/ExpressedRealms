@@ -16,15 +16,16 @@ defineStore('cmsStore', {
     actions: {
         async getCmsInformation(){
             if(this.isDoneLoading) return;
-            
+            await this.refreshCmsInformation();
+            this.isDoneLoading = true;
+        },
+        async refreshCmsInformation(){
             const expressionData = await axios.get<ExpressionMenuResponse>("/navMenu/content");
 
             this.canEdit = expressionData.data.canEdit;
             this.expressionItems = expressionData.data.menuItems.filter(x => x.expressionTypeId == 1);
             this.rulebookItems = expressionData.data.menuItems.filter(x => x.expressionTypeId == 13);
             this.worldBackgroundItems = expressionData.data.menuItems.filter(x => x.expressionTypeId == 14);
-            
-            this.isDoneLoading = true;
         }
     }
 });
