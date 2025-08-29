@@ -116,7 +116,7 @@ internal sealed class ExpressionRepository(
     {
         var expression = await context
             .Expressions.IgnoreQueryFilters()
-            .FirstOrDefaultAsync(x => x.Id == id && x.ExpressionTypeId == 1); // 1 = expression
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         if (expression is null)
             return Result.Fail(new NotFoundFailure(nameof(Expression)));
@@ -134,7 +134,7 @@ internal sealed class ExpressionRepository(
     {
         return await context
             .Expressions.IgnoreQueryFilters()
-            .FirstOrDefaultAsync(x => x.Id == id && x.ExpressionTypeId == 1); // 1 = expression
+            .FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<Expression?> ExpressionExists(int id)

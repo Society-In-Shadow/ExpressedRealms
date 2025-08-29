@@ -1,13 +1,12 @@
 <script setup lang="ts">
 
   import Button from 'primevue/button';
-  import { useConfirm } from "primevue/useconfirm";
   import {useRouter} from "vue-router";
   import axios from "axios";
   import toaster from "@/services/Toasters";
   import Badge from 'primevue/badge';
   import type {ExpressionMenuItem} from "@/components/navbar/navMenuItems/types.ts";
-  import type {PropType} from "vue";
+  import {type PropType, ref} from "vue";
   import {expressionDialogService} from "@/components/expressions/services/dialogs.ts";
   import {cmsStore} from "@/stores/cmsStore.ts";
   const Router = useRouter();
@@ -34,32 +33,6 @@
     Router.push(`/${props.navHeading}/` + props.item?.slug);
   }
 
-  const confirm = useConfirm();
-  const deleteExpression = (event) => {
-    confirm.require({
-      target: event.currentTarget,
-      header: 'Deleting Expression',
-      message: `Are you sure you want delete ${props.item.name} expression?`,
-      icon: 'pi pi-exclamation-triangle',
-      group: 'popup',
-      rejectProps: {
-        label: 'Cancel',
-        severity: 'secondary',
-        outlined: true
-      },
-      acceptProps: {
-        label: 'Save'
-      },
-      accept: () => {
-        axios.delete(`/expression/${props.item.id}`).then(() => {
-          cmsData.refreshCmsInformation()
-          toaster.success(`Successfully Deleted Expression ${props.item.name}!`);
-        });
-      },
-      reject: () => {}
-    });
-  };
-
   function getStatus() {
     switch (props.item.statusId) {
       case 1:
@@ -71,6 +44,19 @@
       default:
         return 'unknown';   // Fallback for invalid values
     }
+  }
+  
+  function deleteExpression(){
+    axios.delete(`/expression/${props.item.id}`).then(() => {
+      cmsData.refreshCmsInformation()
+      toaster.success(`Successfully Deleted Expression ${props.item.name}!`);
+      toggleDelete();
+    });
+  }
+  
+  const deleteConfirm = ref(false);
+  function toggleDelete(){
+    deleteConfirm.value = !deleteConfirm.value;
   }
   
 </script>
@@ -87,8 +73,15 @@
     </div>
 
     <span v-if="cmsData.canEdit && item.id !==0" class="inline-flex flex-column gap-1">
-      <Button label="Edit" @click="expressionDialogs.showEditExpression(item.id, item.expressionTypeId)" />
-      <Button label="Delete" severity="danger" @click="deleteExpression($event)" />
+      <template v-if="deleteConfirm">
+        <Button label="Confirm Delete" severity="danger" @click.stop="deleteExpression" />
+        <Button label="Cancel" severity="secondary" @click.stop="toggleDelete" />
+      </template>
+      <template v-else>
+        <Button label="Edit" @click.stop="expressionDialogs.showEditExpression(item.id, item.expressionTypeId)" />
+        <Button label="Delete" severity="danger" @click.stop="toggleDelete" />
+      </template>
+
     </span>
   </div>
 </template>

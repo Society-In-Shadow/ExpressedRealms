@@ -2,6 +2,7 @@ import {defineStore} from 'pinia'
 import axios from "axios";
 import {UserRoles, userStore} from "@/stores/userStore";
 import {cmsStore} from "@/stores/cmsStore.ts";
+import router from "@/router";
 
 const userInfo = userStore();
 const cmsInfo = cmsStore();
@@ -20,14 +21,19 @@ defineStore('expression', {
     actions: {
         async getExpressionId(route: object){
             await cmsInfo.getCmsInformation();
+            let filter = [];
             if(route.meta.isRuleBook){
-                this.currentExpressionId = cmsInfo.rulebookItems.filter(x => x.slug == route.params.slug)[0].id;
+                filter = cmsInfo.rulebookItems.filter(x => x.slug == route.params.slug)
             } else if(route.meta.isWorldBackground){
-                this.currentExpressionId = cmsInfo.worldBackgroundItems.filter(x => x.slug == route.params.slug)[0].id;
+                filter = cmsInfo.worldBackgroundItems.filter(x => x.slug == route.params.slug)
+            } else{
+                filter = cmsInfo.expressionItems.filter(x => x.slug == route.params.slug)
             }
-            else{
-                this.currentExpressionId = cmsInfo.expressionItems.filter(x => x.slug == route.params.slug)[0].id;
+            if(filter && filter.length > 0){
+                this.currentExpressionId = filter[0].id;
+                return;
             }
+            router.push("/characters");
         },
         async getExpressionSections(){
             this.isDoneLoading = false;
