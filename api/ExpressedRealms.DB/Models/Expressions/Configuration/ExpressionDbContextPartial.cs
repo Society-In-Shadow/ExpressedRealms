@@ -9,6 +9,7 @@ namespace ExpressedRealms.DB;
 public partial class ExpressedRealmsDbContext
 {
     public DbSet<Expression> Expressions { get; set; }
+    public DbSet<ExpressionType> ExpressionTypes { get; set; }
     public DbSet<ExpressionSection> ExpressionSections { get; set; }
     public DbSet<ExpressionSectionType> ExpressionSectionTypes { get; set; }
     public DbSet<ExpressionPublishStatus> ExpressionPublishStatus { get; set; }

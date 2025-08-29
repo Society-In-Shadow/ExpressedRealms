@@ -19,13 +19,13 @@ internal sealed class ExpressionRepository(
     CancellationToken cancellationToken
 ) : IExpressionRepository
 {
-    public async Task<Result<List<ExpressionNavigationMenuItem>>> GetNavigationMenuItems()
+    public async Task<Result<List<ExpressionNavigationMenuItem>>> GetNavigationMenuItems(int expressionTypeId)
     {
         var canSeeBetaAndDrafts = await userContext.CurrentUserHasPolicy(
             Policies.ExpressionEditorPolicy
         );
 
-        var expression = context.Expressions.AsNoTracking().Where(x => x.ExpressionTypeId == 1); // 1 = expression
+        var expression = context.Expressions.AsNoTracking().Where(x => x.ExpressionTypeId == expressionTypeId);
 
         if (!canSeeBetaAndDrafts)
         {
@@ -148,5 +148,10 @@ internal sealed class ExpressionRepository(
     public async Task<Expression?> ExpressionExists(int id)
     {
         return await context.Expressions.IgnoreQueryFilters().FirstOrDefaultAsync(x => x.Id == id);
+    }
+    
+    public async Task<bool> ExpressionTypeExists(int id)
+    {
+        return await context.ExpressionTypes.AnyAsync(x => x.Id == id, cancellationToken);
     }
 }

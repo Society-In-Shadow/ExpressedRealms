@@ -9,9 +9,10 @@ public interface IExpressionRepository
     Task<Result<int>> CreateExpressionAsync(CreateExpressionDto dto);
     Task<Result<int>> EditExpressionAsync(EditExpressionDto dto);
     Task<Result> DeleteExpressionAsync(int id);
-    Task<Result<List<ExpressionNavigationMenuItem>>> GetNavigationMenuItems();
+    Task<Result<List<ExpressionNavigationMenuItem>>> GetNavigationMenuItems(int expressionTypeId);
     Task<Result<GetExpressionDto>> GetExpression(int expressionId);
     Task<Expression?> GetExpressionForDeletion(int id);
     Task<Result<int>> GetCmsExpressionId(int id);
     Task<Expression?> ExpressionExists(int id);
+    Task<bool> ExpressionTypeExists(int id);
 }

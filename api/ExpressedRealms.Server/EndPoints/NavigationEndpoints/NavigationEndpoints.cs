@@ -74,13 +74,14 @@ internal static class NavigationEndpoints
 
         endpointGroup
             .MapGet(
-                "/expressions",
+                "/content/{id}",
                 async Task<Ok<ExpressionMenuResponse>> (
+                    int id,
                     HttpContext httpContext,
                     IExpressionRepository repository
                 ) =>
                 {
-                    var navMenuItems = await repository.GetNavigationMenuItems();
+                    var navMenuItems = await repository.GetNavigationMenuItems(id);
 
                     var hasEditPolicy = await httpContext.UserHasPolicyAsync(
                         Policies.ExpressionEditorPolicy
@@ -90,14 +91,22 @@ internal static class NavigationEndpoints
                         .Value.Select(x => new ExpressionMenuItem(x))
                         .ToList();
 
+                    var name = id switch
+                    {
+                        1 => "Expression",
+                        13 => "Rule Book Section",
+                        14 => "World Background Section",
+                        _ => "Unknown"
+                    };
+                    
                     if (hasEditPolicy)
                     {
                         menuItems.Add(
                             new ExpressionMenuItem()
                             {
                                 Id = 0,
-                                Name = "Add Expression",
-                                ShortDescription = "Use this to add a new expression",
+                                Name = $"Add {name}",
+                                ShortDescription = $"Use this to add a new {name}",
                                 NavMenuImage = "pi-plus",
                             }
                         );
@@ -113,6 +122,7 @@ internal static class NavigationEndpoints
                 }
             )
             .RequireAuthorization();
+        
 
         endpointGroup
             .MapGet(
