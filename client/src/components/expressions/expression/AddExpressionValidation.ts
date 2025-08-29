@@ -19,7 +19,7 @@ const validationSchema = object({
 
 const { defineField, handleSubmit, errors } = useForm({
     initialValues:{
-        navMenuImage: 'pi-prime'
+        navMenuImage: 'emergency_home'
     },
     validationSchema: validationSchema
 });

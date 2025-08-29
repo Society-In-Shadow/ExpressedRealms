@@ -99,14 +99,14 @@ internal static class NavigationEndpoints
                                 Name = $"Add Expression",
                                 ShortDescription = $"Use this to add a new Expression",
                                 ExpressionTypeId = 1,
-                                NavMenuImage = "pi-plus",
+                                NavMenuImage = "add",
                             },
                             new ExpressionMenuItem()
                             {
                                 Id = 0,
                                 Name = $"Add Rule Book Section",
                                 ShortDescription = $"Use this to add a new Rule Book Section",
-                                NavMenuImage = "pi-plus",
+                                NavMenuImage = "add",
                                 ExpressionTypeId = 13
                             },
                             new ExpressionMenuItem()
@@ -114,7 +114,7 @@ internal static class NavigationEndpoints
                                 Id = 0,
                                 Name = $"Add World Background Section",
                                 ShortDescription = $"Use this to add a new World Background Section",
-                                NavMenuImage = "pi-plus",
+                                NavMenuImage = "add",
                                 ExpressionTypeId = 14
                             }]
                         );

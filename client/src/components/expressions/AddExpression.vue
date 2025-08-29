@@ -55,8 +55,19 @@ const onSubmit = handleSubmit((values) => {
   <form @submit="onSubmit">
     <FormInputTextWrapper v-model="nameField" />
     <FormTextAreaWrapper v-model="shortDescriptionField" />
-    <FormInputTextWrapper v-model="navMenuImageField" />
-    <p>List of icons can be found here : <a href="https://primevue.org/icons/#list">Primevue Icons</a></p>
+    <div class="d-flex align-items-center gap-3 ">
+      <div class="flex-shrink-1">
+        <span class="inline-flex flex-none align-items-center justify-content-center border-circle bg-primary w-3rem h-3rem">
+          <i :class="['material-symbols-outlined', 'text-white']"> {{navMenuImageField.field.value}}</i>
+        </span>
+      </div>
+      <div class="flex-grow-1">
+        <FormInputTextWrapper v-model="navMenuImageField" />
+      </div>
+    </div>
+    <p>List of icons can be found here : <a href="https://fonts.google.com/icons?icon.size=24&icon.color=%23e3e3e3">Google Material Design Fonts</a></p>
+    <p>You only need to add the name of the icon, with spaces being replaced with underlines.</p>
+
     <Button data-cy="add-expression-button" label="Add" class="w-100 mb-2" type="submit" />
   </form>
 </template>
