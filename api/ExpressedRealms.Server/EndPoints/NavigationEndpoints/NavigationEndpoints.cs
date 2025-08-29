@@ -74,14 +74,13 @@ internal static class NavigationEndpoints
 
         endpointGroup
             .MapGet(
-                "/content/{id}",
+                "/content/",
                 async Task<Ok<ExpressionMenuResponse>> (
-                    int id,
                     HttpContext httpContext,
                     IExpressionRepository repository
                 ) =>
                 {
-                    var navMenuItems = await repository.GetNavigationMenuItems(id);
+                    var navMenuItems = await repository.GetNavigationMenuItems();
 
                     var hasEditPolicy = await httpContext.UserHasPolicyAsync(
                         Policies.ExpressionEditorPolicy
@@ -91,24 +90,33 @@ internal static class NavigationEndpoints
                         .Value.Select(x => new ExpressionMenuItem(x))
                         .ToList();
 
-                    var name = id switch
-                    {
-                        1 => "Expression",
-                        13 => "Rule Book Section",
-                        14 => "World Background Section",
-                        _ => "Unknown"
-                    };
-                    
                     if (hasEditPolicy)
                     {
-                        menuItems.Add(
+                        menuItems.AddRange([
                             new ExpressionMenuItem()
                             {
                                 Id = 0,
-                                Name = $"Add {name}",
-                                ShortDescription = $"Use this to add a new {name}",
+                                Name = $"Add Expression",
+                                ShortDescription = $"Use this to add a new Expression",
+                                ExpressionTypeId = 1,
                                 NavMenuImage = "pi-plus",
-                            }
+                            },
+                            new ExpressionMenuItem()
+                            {
+                                Id = 0,
+                                Name = $"Add Rule Book Section",
+                                ShortDescription = $"Use this to add a new Rule Book Section",
+                                NavMenuImage = "pi-plus",
+                                ExpressionTypeId = 13
+                            },
+                            new ExpressionMenuItem()
+                            {
+                                Id = 0,
+                                Name = $"Add World Background Section",
+                                ShortDescription = $"Use this to add a new World Background Section",
+                                NavMenuImage = "pi-plus",
+                                ExpressionTypeId = 14
+                            }]
                         );
                     }
 

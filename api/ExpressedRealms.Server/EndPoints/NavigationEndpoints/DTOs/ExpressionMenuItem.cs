@@ -17,8 +17,10 @@ public class ExpressionMenuItem
         StatusName = expressionNavigationMenuItem.PublishStatusName;
         var helper = new SlugHelper();
         Slug = helper.GenerateSlug(expressionNavigationMenuItem.Name);
+        ExpressionTypeId = expressionNavigationMenuItem.ExpressionTypeId;
     }
 
+    public int ExpressionTypeId { get; set; }
     public int Id { get; init; }
     public string Name { get; init; }
     public string ShortDescription { get; init; }

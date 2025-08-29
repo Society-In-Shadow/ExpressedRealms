@@ -10,25 +10,21 @@ defineStore('cmsStore', {
             worldBackgroundItems: [] as ExpressionMenuItem[],
             expressionItems: [] as ExpressionMenuItem[],
             canEdit: false as boolean,
+            isDoneLoading: false as boolean,
         }
     },
     actions: {
         async getCmsInformation(){
-            const expressionData = await axios.get<ExpressionMenuResponse>("/navMenu/content/1");
+            if(this.isDoneLoading) return;
+            
+            const expressionData = await axios.get<ExpressionMenuResponse>("/navMenu/content");
 
             this.canEdit = expressionData.data.canEdit;
-            this.expressionItems = expressionData.data.menuItems;
+            this.expressionItems = expressionData.data.menuItems.filter(x => x.expressionTypeId == 1);
+            this.rulebookItems = expressionData.data.menuItems.filter(x => x.expressionTypeId == 13);
+            this.worldBackgroundItems = expressionData.data.menuItems.filter(x => x.expressionTypeId == 14);
             
-            const rulebookData = await axios.get<ExpressionMenuResponse>("/navMenu/content/13");
-            
-            this.canEdit = rulebookData.data.canEdit;
-            this.rulebookItems = rulebookData.data.menuItems;
-            
-            const worldBackgroundData = await axios.get<ExpressionMenuResponse>("/navMenu/content/14");
-            
-            this.canEdit = worldBackgroundData.data.canEdit;
-            this.worldBackgroundItems = worldBackgroundData.data.menuItems;
-            
+            this.isDoneLoading = true;
         }
     }
 });

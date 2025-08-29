@@ -6,6 +6,7 @@ export interface ExpressionMenuItem {
     statusName: string | null;
     statusId: number;
     slug: string;
+    expressionTypeId: number;
 }
 
 export interface ExpressionMenuResponse{

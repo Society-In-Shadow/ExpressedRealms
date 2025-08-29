@@ -12,8 +12,7 @@ import RootNodeMenuItem from "@/components/navbar/navMenuItems/RootNodeMenuItem.
 import EditExpression from "@/components/expressions/EditExpression.vue";
 import Dialog from 'primevue/dialog';
 import AddExpression from "@/components/expressions/AddExpression.vue";
-import {FeatureFlags, userStore} from "@/stores/userStore";
-import GeneralContentItem from "@/components/navbar/navMenuItems/GeneralContentItem.vue";
+import {userStore} from "@/stores/userStore";
 import {cmsStore} from "@/stores/cmsStore.ts";
 
 const userInfo = userStore();

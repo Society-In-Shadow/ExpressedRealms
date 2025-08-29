@@ -8,4 +8,5 @@ public class ExpressionNavigationMenuItem
     public string NavMenuImage { get; set; } = null!;
     public string PublishStatusName { get; set; } = null!;
     public PublishTypes PublishStatusId { get; set; }
+    public int ExpressionTypeId { get; set; }
 }

@@ -48,7 +48,7 @@ const showPreview = ref(false);
 const showReportButton = ref(false);
 
 async function fetchData() {
-
+  isLoading.value = true;
   await expressionInfo.getExpressionId(route);
   
   await expressionInfo.getExpressionSections()
