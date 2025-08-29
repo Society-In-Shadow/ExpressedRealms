@@ -9,8 +9,6 @@ import axios from "axios";
 import ExpressionMenuItem from "@/components/navbar/navMenuItems/ExpressionMenuItem.vue";
 import CharacterMenuItem from "@/components/navbar/navMenuItems/CharacterMenuItem.vue";
 import RootNodeMenuItem from "@/components/navbar/navMenuItems/RootNodeMenuItem.vue";
-import Dialog from 'primevue/dialog';
-import AddExpression from "@/components/expressions/AddExpression.vue";
 import {userStore} from "@/stores/userStore";
 import {cmsStore} from "@/stores/cmsStore.ts";
 import {storeToRefs} from "pinia";
@@ -145,11 +143,6 @@ onMounted(async () => {
   await loadList();
 });
 
-let newVisible = ref(false);
-function showCreateExpressionPopup(){
-  newVisible.value = true;
-}
-
 const { worldBackgroundItems, rulebookItems, expressionItems } = storeToRefs(cmsData);
 
 watch(worldBackgroundItems, (newValue) => {
@@ -165,9 +158,6 @@ watch(expressionItems, (newValue) => {
 </script>
 
 <template>
-  <Dialog v-model:visible="newVisible" modal header="Add Expression">
-    <AddExpression @refresh-list="loadList" @close-dialog="newVisible = false" />
-  </Dialog>
   <MegaMenu :model="items" class="ms-0 me-0 mt-2 mb-2 m-md-2 d-print-none">
     <template #start>
       <RouterLink to="/">
@@ -177,10 +167,7 @@ watch(expressionItems, (newValue) => {
     <template #item="{ item }">
       <RootNodeMenuItem v-if="item.root" :item="item" />
       <CharacterMenuItem v-else-if="item.navMenuType == 'character'" :item="item"  />
-      <ExpressionMenuItem
-        v-else :item="item.expression" :nav-heading="item.navMenuType" @show-create-popup="showCreateExpressionPopup"
-        @refresh-list="loadList"
-      />
+      <ExpressionMenuItem v-else :item="item.expression" :nav-heading="item.navMenuType" />
     </template>
     <template #end>
       <avatar-dropdown />

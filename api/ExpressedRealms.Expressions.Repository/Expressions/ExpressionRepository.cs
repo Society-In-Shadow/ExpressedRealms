@@ -79,7 +79,7 @@ internal sealed class ExpressionRepository(
             ShortDescription = dto.ShortDescription,
             NavMenuImage = dto.NavMenuImage,
             PublishStatusId = (int)PublishTypes.Draft,
-            ExpressionTypeId = 1, // 1 = expression
+            ExpressionTypeId = dto.ExpressionTypeId
         };
 
         context.Expressions.Add(expression);

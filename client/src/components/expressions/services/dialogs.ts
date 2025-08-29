@@ -1,5 +1,4 @@
 import { useDialog } from 'primevue/usedialog';
-import type {Knowledge} from "@/components/knowledges/types";
 import AddExpression from "@/components/expressions/AddExpression.vue";
 import EditExpression from "@/components/expressions/EditExpression.vue";
 
@@ -7,10 +6,17 @@ export const expressionDialogService = () => {
 
     const dialog = useDialog();
 
-    const showAddExpression = (knowledge: Knowledge) => {
+    function getDialogTitle(expressionTypeId: number) {
+        switch(expressionTypeId){
+            case 1: return 'Expression';
+            case 13: return 'Rule Book Section';
+            case 14: return 'World Background Section';
+        }
+    }
+    const showAddExpression = (expressionTypeId: number) => {
         dialog.open(AddExpression, {
             props: {
-                header: 'Add Expression',
+                header: `Add ${getDialogTitle(expressionTypeId)}`,
                 style: {
                     width: '500px',
                 },
@@ -21,16 +27,15 @@ export const expressionDialogService = () => {
                 modal: true
             },
             data: {
-                knowledge: knowledge,
-                isReadOnly: false,
+                expressionTypeId: expressionTypeId
             }
         });
     }
 
-    const showEditExpression = (expressionId: number) => {
+    const showEditExpression = (expressionId: number, expressionTypeId: number) => {
         dialog.open(EditExpression, {
             props: {
-                header: 'Edit Expression',
+                header: `Edit ${getDialogTitle(expressionTypeId)}`,
                 style: {
                     width: '500px',
                 },

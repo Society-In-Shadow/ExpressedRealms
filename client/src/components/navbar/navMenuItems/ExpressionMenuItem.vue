@@ -14,11 +14,6 @@
   const expressionDialogs = expressionDialogService();
   const cmsData = cmsStore();
 
-  const emit = defineEmits<{
-    showCreatePopup: [],
-    refreshList: []
-  }>();
-  
   let props = defineProps({
     navHeading: {
       type: String,
@@ -33,7 +28,7 @@
   function redirect(){
     if(props.item.id === 0)
     {
-      emit('showCreatePopup');
+      expressionDialogs.showAddExpression(props.item?.expressionTypeId)
       return;
     }
     Router.push(`/${props.navHeading}/` + props.item?.slug);
@@ -57,7 +52,7 @@
       },
       accept: () => {
         axios.delete(`/expression/${props.item.id}`).then(() => {
-          emit('refreshList');
+          cmsData.refreshCmsInformation()
           toaster.success(`Successfully Deleted Expression ${props.item.name}!`);
         });
       },
@@ -92,8 +87,7 @@
     </div>
 
     <span v-if="cmsData.canEdit && item.id !==0" class="inline-flex flex-column gap-1">
-      
-      <Button label="Edit" @click="expressionDialogs.showEditExpression(item.id)" />
+      <Button label="Edit" @click="expressionDialogs.showEditExpression(item.id, item.expressionTypeId)" />
       <Button label="Delete" severity="danger" @click="deleteExpression($event)" />
     </span>
   </div>
