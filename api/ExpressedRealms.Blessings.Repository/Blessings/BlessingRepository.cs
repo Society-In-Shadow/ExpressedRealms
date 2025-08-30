@@ -16,4 +16,16 @@ internal sealed class BlessingRepository(
             .Include(x => x.BlessingLevels)
             .ToListAsync(cancellationToken);
     }
+    
+    public async Task<bool> HasDuplicateName(string name)
+    {
+        return await context.Blessings.AnyAsync(x => x.Name == name);
+    }
+
+    public async Task<int> CreateBlessingAsync(Blessing blessing)
+    {
+        context.Blessings.Add(blessing);
+        await context.SaveChangesAsync(cancellationToken);
+        return blessing.Id;
+    }
 }
