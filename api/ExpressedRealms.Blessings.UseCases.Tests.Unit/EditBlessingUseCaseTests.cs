@@ -52,7 +52,7 @@ public class EditBlessingUseCaseTests
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(nameof(EditBlessingModel.Id), "Id is required.");
     }
-    
+
     [Fact]
     public async Task ValidationFor_Id_WillFail_WhenItDoesNotExist()
     {
@@ -60,7 +60,7 @@ public class EditBlessingUseCaseTests
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(nameof(EditBlessingModel.Id), "Blessing does not exist.");
     }
-    
+
     [Fact]
     public async Task ValidationFor_Name_WillFail_WhenName_IsEmpty()
     {
@@ -155,8 +155,7 @@ public class EditBlessingUseCaseTests
     public async Task UseCase_WillGrab_TheBlessing()
     {
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() => _repository.GetBlessing(_model.Id))
-            .MustHaveHappenedOnceExactly();
+        A.CallTo(() => _repository.GetBlessing(_model.Id)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -166,7 +165,7 @@ public class EditBlessingUseCaseTests
         A.CallTo(() => _repository.EditBlessingAsync(A<Blessing>.That.IsSameAs(_dbModel)))
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_WillEditTheBlessing()
     {

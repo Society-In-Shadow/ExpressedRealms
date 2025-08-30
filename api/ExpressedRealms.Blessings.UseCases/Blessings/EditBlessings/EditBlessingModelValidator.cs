@@ -10,10 +10,11 @@ internal sealed class EditBlessingModelValidator : AbstractValidator<EditBlessin
     public EditBlessingModelValidator(IBlessingRepository repository)
     {
         RuleFor(x => x.Id)
-            .NotEmpty().WithMessage("Id is required.")
+            .NotEmpty()
+            .WithMessage("Id is required.")
             .MustAsync(async (x, y) => await repository.IsExistingBlessing(x))
             .WithMessage("Blessing does not exist.");
-        
+
         RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage("Name is required.")

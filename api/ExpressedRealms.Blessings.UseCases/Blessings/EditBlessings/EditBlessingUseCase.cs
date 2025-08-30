@@ -22,7 +22,7 @@ internal sealed class EditBlessingUseCase(
             return Result.Fail(result.Errors);
 
         var blessing = await blessingRepository.GetBlessing(model.Id);
-        
+
         blessing.Name = model.Name;
         blessing.Description = model.Description;
         blessing.SubCategory = model.SubCategory;
