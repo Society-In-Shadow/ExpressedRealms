@@ -19,7 +19,23 @@ internal sealed class BlessingRepository(
 
     public async Task<bool> HasDuplicateName(string name)
     {
-        return await context.Blessings.AnyAsync(x => x.Name == name);
+        return await context.Blessings.AnyAsync(x => x.Name == name, cancellationToken);
+    }
+
+    public async Task<Blessing> GetBlessing(int id)
+    {
+        return await context.Blessings.FirstAsync(x => x.Id == id, cancellationToken);
+    }
+
+    public async Task EditBlessingAsync(Blessing blessing)
+    {
+        context.Blessings.Update(blessing);
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
+    public Task<bool> IsExistingBlessing(int id)
+    {
+        return context.Blessings.AnyAsync(x => x.Id == id, cancellationToken);
     }
 
     public async Task<int> CreateBlessingAsync(Blessing blessing)
