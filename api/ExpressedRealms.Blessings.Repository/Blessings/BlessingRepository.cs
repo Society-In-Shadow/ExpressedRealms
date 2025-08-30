@@ -16,7 +16,7 @@ internal sealed class BlessingRepository(
             .Include(x => x.BlessingLevels)
             .ToListAsync(cancellationToken);
     }
-    
+
     public async Task<bool> HasDuplicateName(string name)
     {
         return await context.Blessings.AnyAsync(x => x.Name == name);

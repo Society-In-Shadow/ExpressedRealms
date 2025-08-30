@@ -20,13 +20,12 @@ public class CreateBlessingUseCaseTests
             Name = "Test Blessing",
             Description = "Test Description",
             SubCategory = "Mental",
-            Type = "Advantage"
+            Type = "Advantage",
         };
 
         _repository = A.Fake<IBlessingRepository>();
 
         A.CallTo(() => _repository.HasDuplicateName(_model.Name)).Returns(false);
-        
 
         var validator = new CreateBlessingModelValidator(_repository);
 
@@ -98,14 +97,17 @@ public class CreateBlessingUseCaseTests
             "Type must be between 1 and 50 characters."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_SubCategory_WillFail_WhenItIs_IsEmpty()
     {
         _model.SubCategory = string.Empty;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(CreateBlessingModel.SubCategory), "Sub Category is required.");
+        results.MustHaveValidationError(
+            nameof(CreateBlessingModel.SubCategory),
+            "Sub Category is required."
+        );
     }
 
     [Fact]
@@ -128,7 +130,7 @@ public class CreateBlessingUseCaseTests
             Name = _model.Name,
             Description = _model.Description,
             SubCategory = _model.SubCategory,
-            Type = _model.Type
+            Type = _model.Type,
         };
 
         await _useCase.ExecuteAsync(_model);
