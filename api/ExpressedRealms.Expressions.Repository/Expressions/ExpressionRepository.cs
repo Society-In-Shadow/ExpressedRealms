@@ -42,7 +42,7 @@ internal sealed class ExpressionRepository(
                 NavMenuImage = x.NavMenuImage,
                 PublishStatusName = x.PublishStatus.Name,
                 PublishStatusId = (PublishTypes)x.PublishStatusId,
-                OrderIndex = x.OrderIndex
+                OrderIndex = x.OrderIndex,
             })
             .OrderBy(x => x.OrderIndex)
             .ToListAsync(cancellationToken);
@@ -75,9 +75,10 @@ internal sealed class ExpressionRepository(
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
 
-        var maxSort = await context.Expressions.Where(x => x.ExpressionTypeId == dto.ExpressionTypeId)
+        var maxSort = await context
+            .Expressions.Where(x => x.ExpressionTypeId == dto.ExpressionTypeId)
             .MaxAsync(x => x.OrderIndex, cancellationToken);
-        
+
         var expression = new Expression()
         {
             Name = dto.Name,
@@ -110,7 +111,7 @@ internal sealed class ExpressionRepository(
         expression.ShortDescription = dto.ShortDescription;
         expression.NavMenuImage = dto.NavMenuImage;
         expression.PublishStatusId = (int)dto.PublishStatus;
-        
+
         var sections = await context
             .Expressions.Where(x => x.ExpressionTypeId == expression.ExpressionTypeId)
             .OrderBy(x => x.OrderIndex)
@@ -121,7 +122,7 @@ internal sealed class ExpressionRepository(
         {
             dto.SortOrder = sections.Count;
         }
-        
+
         var index = 1;
         foreach (var item in sections)
         {

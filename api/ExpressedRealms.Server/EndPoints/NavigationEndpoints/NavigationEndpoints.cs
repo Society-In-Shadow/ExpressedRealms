@@ -125,18 +125,14 @@ internal static class NavigationEndpoints
                             ]
                         );
                     }
-                    
+
                     var sorted = menuItems
                         .OrderBy(x => x.ExpressionTypeId)
                         .ThenBy(x => x.OrderIndex)
                         .ToList();
 
                     return TypedResults.Ok(
-                        new ExpressionMenuResponse()
-                        {
-                            CanEdit = hasEditPolicy,
-                            MenuItems = sorted,
-                        }
+                        new ExpressionMenuResponse() { CanEdit = hasEditPolicy, MenuItems = sorted }
                     );
                 }
             )
