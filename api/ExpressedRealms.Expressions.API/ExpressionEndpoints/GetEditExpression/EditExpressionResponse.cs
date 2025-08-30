@@ -12,4 +12,5 @@ public class EditExpressionResponse(GetExpressionDto dto)
     public PublishTypes PublishStatus { get; set; } = dto.PublishStatus;
     public List<PublishTypeDto> PublishTypes { get; set; } =
         dto.PublishTypes.Select(x => new PublishTypeDto(x.Key, x.Value)).ToList();
+    public int SortOrder { get; set; } = dto.OrderIndex;
 }

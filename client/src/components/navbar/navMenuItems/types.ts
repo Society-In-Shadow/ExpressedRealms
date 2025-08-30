@@ -7,6 +7,7 @@ export interface ExpressionMenuItem {
     statusId: number;
     slug: string;
     expressionTypeId: number;
+    orderIndex: number;
 }
 
 export interface ExpressionMenuResponse{

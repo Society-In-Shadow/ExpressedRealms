@@ -32,6 +32,10 @@ internal static class ExpressionAuditConfiguration
                 case "publish_status_id":
                     changedRecord.FriendlyName = "Publish Status";
                     break;
+                
+                case "order_index":
+                    changedRecord.FriendlyName = "Sort Order";
+                    break;
 
                 default:
                     throw new MissingAuditColumnException(changedRecord.ColumnName);

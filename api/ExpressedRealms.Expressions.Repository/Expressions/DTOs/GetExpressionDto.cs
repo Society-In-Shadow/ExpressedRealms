@@ -8,4 +8,5 @@ public class GetExpressionDto
     public string NavMenuImage { get; set; } = null!;
     public PublishTypes PublishStatus { get; set; }
     public List<KeyValuePair<int, string>> PublishTypes { get; set; } = null!;
+    public int OrderIndex { get; set; }
 }
