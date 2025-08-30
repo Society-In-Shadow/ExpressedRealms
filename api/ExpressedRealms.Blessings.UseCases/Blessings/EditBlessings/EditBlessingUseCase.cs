@@ -21,7 +21,7 @@ internal sealed class EditBlessingUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var blessing = await blessingRepository.GetBlessing(model.Id);
+        var blessing = await blessingRepository.GetBlessingForEditing(model.Id);
 
         blessing.Name = model.Name;
         blessing.Description = model.Description;

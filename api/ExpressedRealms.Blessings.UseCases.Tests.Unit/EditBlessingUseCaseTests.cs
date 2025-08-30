@@ -35,7 +35,7 @@ public class EditBlessingUseCaseTests
 
         _repository = A.Fake<IBlessingRepository>();
 
-        A.CallTo(() => _repository.GetBlessing(_model.Id)).Returns(_dbModel);
+        A.CallTo(() => _repository.GetBlessingForEditing(_model.Id)).Returns(_dbModel);
         A.CallTo(() => _repository.IsExistingBlessing(_model.Id)).Returns(true);
         A.CallTo(() => _repository.HasDuplicateName(_model.Name)).Returns(false);
 
@@ -155,7 +155,7 @@ public class EditBlessingUseCaseTests
     public async Task UseCase_WillGrab_TheBlessing()
     {
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() => _repository.GetBlessing(_model.Id)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _repository.GetBlessingForEditing(_model.Id)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]

@@ -22,7 +22,7 @@ internal sealed class BlessingRepository(
         return await context.Blessings.AnyAsync(x => x.Name == name, cancellationToken);
     }
 
-    public async Task<Blessing> GetBlessing(int id)
+    public async Task<Blessing> GetBlessingForEditing(int id)
     {
         return await context.Blessings.FirstAsync(x => x.Id == id, cancellationToken);
     }
