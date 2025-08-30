@@ -101,6 +101,7 @@ internal static class NavigationEndpoints
                                     ShortDescription = $"Use this to add a new Expression",
                                     ExpressionTypeId = 1,
                                     NavMenuImage = "add",
+                                    OrderIndex = 1000000000,
                                 },
                                 new ExpressionMenuItem()
                                 {
@@ -109,6 +110,7 @@ internal static class NavigationEndpoints
                                     ShortDescription = $"Use this to add a new Rule Book Section",
                                     NavMenuImage = "add",
                                     ExpressionTypeId = 13,
+                                    OrderIndex = 1000000000,
                                 },
                                 new ExpressionMenuItem()
                                 {
@@ -118,17 +120,19 @@ internal static class NavigationEndpoints
                                         $"Use this to add a new World Background Section",
                                     NavMenuImage = "add",
                                     ExpressionTypeId = 14,
+                                    OrderIndex = 1000000000,
                                 },
                             ]
                         );
                     }
 
+                    var sorted = menuItems
+                        .OrderBy(x => x.ExpressionTypeId)
+                        .ThenBy(x => x.OrderIndex)
+                        .ToList();
+
                     return TypedResults.Ok(
-                        new ExpressionMenuResponse()
-                        {
-                            CanEdit = hasEditPolicy,
-                            MenuItems = menuItems,
-                        }
+                        new ExpressionMenuResponse() { CanEdit = hasEditPolicy, MenuItems = sorted }
                     );
                 }
             )

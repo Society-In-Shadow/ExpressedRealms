@@ -31,6 +31,11 @@ public class ExpressionConfiguration : IEntityTypeConfiguration<Expression>
             .HasColumnName("expression_type_id")
             .IsRequired()
             .HasDefaultValue(1);
+        builder
+            .Property(e => e.OrderIndex)
+            .HasColumnName("order_index")
+            .IsRequired()
+            .HasDefaultValue(1);
         builder.Property(e => e.IsDeleted).HasColumnName("is_deleted");
         builder.Property(e => e.DeletedAt).HasColumnName("deleted_at");
 

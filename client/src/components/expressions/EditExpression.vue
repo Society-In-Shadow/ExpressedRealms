@@ -26,6 +26,7 @@ onMounted(() =>{
         navMenuImage.value = response.data.navMenuImage;
         publishStatus.value = response.data.publishTypes.find(x => x.id == response.data.publishStatus);
         publishStatusOptions.value = response.data.publishTypes;
+        sortOrder.value = response.data.sortOrder;
         isLoading.value = false;
       })
 });
@@ -42,7 +43,9 @@ const { defineField, handleSubmit, errors } = useForm({
     navMenuImage: string().required()
         .label('Nav Menu Icon'),
     publishStatus: object().required()
-        .label('Publish Status')
+        .label('Publish Status'),
+    sortOrder: number().required()
+        .label('Sort Order')
   })
 });
 
@@ -50,6 +53,7 @@ const [name] = defineField('name');
 const [shortDescription] = defineField('shortDescription');
 const [navMenuImage] = defineField('navMenuImage');
 const [publishStatus] = defineField('publishStatus');
+const [sortOrder] = defineField('sortOrder');
 
 const onSubmit = handleSubmit((values) => {
   axios.put(`/expression/${expressionId.value}`, {
@@ -57,7 +61,8 @@ const onSubmit = handleSubmit((values) => {
     shortDescription: values.shortDescription,
     id: expressionId.value,
     publishStatus: values.publishStatus.id,
-    navMenuImage: values.navMenuImage
+    navMenuImage: values.navMenuImage,
+    sortOrder: Number(values.sortOrder),
   }).then(() => {
     cmsData.refreshCmsInformation();
     toaster.success("Successfully Updated Expression Info!");
@@ -87,6 +92,8 @@ const onSubmit = handleSubmit((values) => {
       v-model="publishStatus" option-label="name" :options="publishStatusOptions" field-name="Publish Status" :error-text="errors.publishStatus"
       :show-skeleton="isLoading"
     />
+    <InputTextWrapper v-model="sortOrder" field-name="Sort Order" :error-text="errors.sortOrder" :show-skeleton="isLoading"/>
+    <p>Keep in mind, for 6 items, sort order is first column starts at one, and ends at 3, and 2nd column starts at 4 and ends at 6</p>
     <Button label="Save" class="w-100 mb-2" type="submit" />
   </form>
 </template>

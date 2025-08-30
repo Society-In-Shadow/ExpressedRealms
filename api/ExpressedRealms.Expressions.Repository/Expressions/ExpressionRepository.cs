@@ -42,8 +42,9 @@ internal sealed class ExpressionRepository(
                 NavMenuImage = x.NavMenuImage,
                 PublishStatusName = x.PublishStatus.Name,
                 PublishStatusId = (PublishTypes)x.PublishStatusId,
+                OrderIndex = x.OrderIndex,
             })
-            .OrderBy(x => x.Name)
+            .OrderBy(x => x.OrderIndex)
             .ToListAsync(cancellationToken);
     }
 
@@ -64,6 +65,7 @@ internal sealed class ExpressionRepository(
             NavMenuImage = expression.NavMenuImage,
             PublishStatus = (PublishTypes)expression.PublishStatusId,
             PublishTypes = EnumHelpers.GetEnumKeyValuePairs<PublishTypes>(),
+            OrderIndex = expression.OrderIndex,
         };
     }
 
@@ -73,6 +75,10 @@ internal sealed class ExpressionRepository(
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
 
+        var maxSort = await context
+            .Expressions.Where(x => x.ExpressionTypeId == dto.ExpressionTypeId)
+            .MaxAsync(x => x.OrderIndex, cancellationToken);
+
         var expression = new Expression()
         {
             Name = dto.Name,
@@ -80,6 +86,7 @@ internal sealed class ExpressionRepository(
             NavMenuImage = dto.NavMenuImage,
             PublishStatusId = (int)PublishTypes.Draft,
             ExpressionTypeId = dto.ExpressionTypeId,
+            OrderIndex = maxSort + 1,
         };
 
         context.Expressions.Add(expression);
@@ -104,6 +111,31 @@ internal sealed class ExpressionRepository(
         expression.ShortDescription = dto.ShortDescription;
         expression.NavMenuImage = dto.NavMenuImage;
         expression.PublishStatusId = (int)dto.PublishStatus;
+
+        var sections = await context
+            .Expressions.Where(x => x.ExpressionTypeId == expression.ExpressionTypeId)
+            .OrderBy(x => x.OrderIndex)
+            .ToListAsync();
+
+        // Make sure they can't go crazy high
+        if (dto.SortOrder > sections.Count)
+        {
+            dto.SortOrder = sections.Count;
+        }
+
+        var index = 1;
+        foreach (var item in sections)
+        {
+            // Leave hole in order for new position
+            if (item.OrderIndex == dto.SortOrder)
+            {
+                index++;
+            }
+
+            item.OrderIndex = item.Id == dto.Id ? dto.SortOrder : index;
+
+            index++;
+        }
 
         context.Expressions.Update(expression);
 

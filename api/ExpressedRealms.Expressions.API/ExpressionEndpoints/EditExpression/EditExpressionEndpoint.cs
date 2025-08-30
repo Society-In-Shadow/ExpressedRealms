@@ -22,6 +22,7 @@ internal static class EditExpressionEndpoint
                 PublishStatus = editExpressionRequest.PublishStatus,
                 ShortDescription = editExpressionRequest.ShortDescription,
                 NavMenuImage = editExpressionRequest.NavMenuImage,
+                SortOrder = editExpressionRequest.SortOrder,
             }
         );
 

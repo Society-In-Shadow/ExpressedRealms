@@ -9,4 +9,5 @@ public class EditExpressionRequest
     public string ShortDescription { get; set; } = null!;
     public string NavMenuImage { get; set; } = null!;
     public PublishTypes PublishStatus { get; set; }
+    public int SortOrder { get; set; }
 }

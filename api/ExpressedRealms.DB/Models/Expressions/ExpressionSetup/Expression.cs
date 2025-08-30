@@ -15,6 +15,7 @@ public class Expression : ISoftDelete
     public string NavMenuImage { get; set; } = null!;
     public int PublishStatusId { get; set; }
     public int ExpressionTypeId { get; set; }
+    public int OrderIndex { get; set; }
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 
