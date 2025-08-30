@@ -16,10 +16,7 @@ public class DeleteBlessingUseCaseTests
 
     public DeleteBlessingUseCaseTests()
     {
-        _model = new DeleteBlessingModel()
-        {
-            Id = 3,
-        };
+        _model = new DeleteBlessingModel() { Id = 3 };
 
         _dbModel = new Blessing()
         {
@@ -53,10 +50,12 @@ public class DeleteBlessingUseCaseTests
     {
         A.CallTo(() => _repository.IsExistingBlessing(_model.Id)).Returns(false);
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(DeleteBlessingModel.Id), "This blessing was not found.");
+        results.MustHaveValidationError(
+            nameof(DeleteBlessingModel.Id),
+            "This blessing was not found."
+        );
     }
 
-   
     [Fact]
     public async Task UseCase_WillGrab_TheBlessing()
     {
