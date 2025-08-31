@@ -78,7 +78,6 @@ internal sealed class CharacterSkillRepository(
             {
                 LevelId = x.SkillLevelId,
                 Name = x.ModifierType.Name,
-                Description = x.ModifierType.Description,
                 Modifier = x.Modifier,
             })
             .ToListAsync(cancellationToken);
