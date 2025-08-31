@@ -390,7 +390,6 @@ internal static class CharacterEndPoints
                                     .Benefits.Select(y => new BenefitItemResponse()
                                     {
                                         Name = y.Name,
-                                        Description = y.Description,
                                         Modifier = y.Modifier,
                                         LevelId = y.LevelId,
                                     })

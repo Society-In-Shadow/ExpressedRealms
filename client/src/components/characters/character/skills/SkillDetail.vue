@@ -64,9 +64,6 @@ const plusOrMinusSign = computed(() => {
             +{{ benefit.modifier }}
           </div>
         </h4>
-        <p class="m-0">
-          {{ benefit.description }}
-        </p>
       </div>
     </div>
   </SkeletonWrapper>
