@@ -59,7 +59,6 @@ try
     builder.Services.AddMemoryCache();
 
     Log.Information("Setup Azure Key Vault");
-
     builder.Services.AddAuthenticationInjections();
 
     EarlyKeyVaultManager keyVaultManager = new EarlyKeyVaultManager(
