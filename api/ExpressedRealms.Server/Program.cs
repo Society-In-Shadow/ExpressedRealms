@@ -209,6 +209,8 @@ try
     Log.Information("Building the App");
     var app = builder.Build();
 
+    app.UseSerilogRequestLogging();
+    
     Configuration.AddCustomAction(
         ActionType.OnScopeCreated,
         scope =>
@@ -300,6 +302,7 @@ try
     app.AddCharacterApiEndPoints();
     app.ConfigureBlessingEndPoints();
     app.ConfigureKnowledgeEndPoints();
+    
 
     app.MapFallbackToFile("index.html");
     Log.Information("Starting Web API");
