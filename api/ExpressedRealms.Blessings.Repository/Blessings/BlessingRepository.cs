@@ -1,4 +1,5 @@
 using ExpressedRealms.DB;
+using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +21,12 @@ internal sealed class BlessingRepository(
     public async Task<bool> HasDuplicateName(string name)
     {
         return await context.Blessings.AnyAsync(x => x.Name == name, cancellationToken);
+    }
+    
+    public async Task<bool> HasDuplicateLevelName(int blessingId, string name)
+    {
+        return await context.BlessingLevels.AnyAsync(x => 
+            x.BlessingId == blessingId && x.Level == name, cancellationToken);
     }
 
     public async Task<Blessing> GetBlessingForEditing(int id)
@@ -43,5 +50,12 @@ internal sealed class BlessingRepository(
         context.Blessings.Add(blessing);
         await context.SaveChangesAsync(cancellationToken);
         return blessing.Id;
+    }
+    
+    public async Task<int> CreateBlessingLevelAsync(BlessingLevel blessingLevel)
+    {
+        context.BlessingLevels.Add(blessingLevel);
+        await context.SaveChangesAsync(cancellationToken);
+        return blessingLevel.Id;
     }
 }
