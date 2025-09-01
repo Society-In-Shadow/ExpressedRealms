@@ -56,7 +56,6 @@ try
     var builder = WebApplication.CreateBuilder(args);
 
     Log.Information("Setup In Memory Cache");
-
     builder.Services.AddMemoryCache();
 
     Log.Information("Setup Azure Key Vault");
