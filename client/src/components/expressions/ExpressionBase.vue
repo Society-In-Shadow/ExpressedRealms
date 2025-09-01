@@ -108,11 +108,11 @@ async function downloadExpressionBooklet() {
   const res = await axios.get(`/expression/${expressionInfo.currentExpressionId}/booklet`, {
     responseType: 'blob',
   });
-  const expression = route.params.name
+  const expression = route.params.slug
   const url = URL.createObjectURL(res.data);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `${expression}Booklet.pdf`;
+  a.download = `${expression}-booklet.pdf`;
   document.body.appendChild(a);
   a.click();
   a.remove();
