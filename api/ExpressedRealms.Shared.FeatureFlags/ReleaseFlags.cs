@@ -35,7 +35,7 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "show-character-powers",
         "Allows one to see the powers tab on a character"
     );
-    
+
     public static readonly ReleaseFlags ShowFactionDropdown = new(
         "Show Faction Dropdown on Add / Edit Character",
         "show-faction-dropdown",
