@@ -35,7 +35,7 @@ internal sealed class GetExpressionCmsReportUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var sections = await repository.GetExpressionTextSections(model.ExpressionId);
+        var sections = await repository.GetExpressionTextSectionForReport(model.ExpressionId);
         var expression = await expressionRepository.GetExpression(model.ExpressionId);
 
         int sortOrder = await repository.GetKnowledgesSectionId();
@@ -57,6 +57,12 @@ internal sealed class GetExpressionCmsReportUseCase(
                     Description = x.Description,
                 })
                 .ToList();
+        }
+        
+        var expressionHeader = flattenedSections.FirstOrDefault(x => x.SectionTypeId == 2);
+        if (expressionHeader is not null)
+        {
+            expressionHeader.SortOrder = -999;
         }
 
         var blessingId = await repository.GetBlessingSectionId();

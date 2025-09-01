@@ -20,4 +20,5 @@ public interface IExpressionTextSectionRepository
     Task<int> GetKnowledgesSectionId();
     Task<int> GetBlessingSectionId();
     Task<bool> IsExpression(int expressionID);
+    Task<List<ExpressionSectionDto>> GetExpressionTextSectionForReport(int expressionId);
 }
