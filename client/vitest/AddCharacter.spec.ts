@@ -1,7 +1,7 @@
-import { mount } from '@vue/test-utils';
+import {mount} from '@vue/test-utils';
 import AddCharacterTile from '../src/components/characters/character/AddCharacter.vue';
 import '@testing-library/jest-dom';
-import { afterEach, beforeEach, vi, describe, it, expect } from 'vitest';
+import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import axios from 'axios';
 
 const nameHelp = 'name-help';
@@ -35,6 +35,9 @@ describe('<AddCharacterTile />', () => {
             }
             if (url === '/characters/factionOptions/2') {
                 return Promise.resolve({ data: factionValues2 });
+            }
+            if(url === '/navMenu/featureFlags'){
+                return Promise.resolve({ data: {featureFlags: ['show-faction-dropdown']} });
             }
             // Default behavior for other URLs
             return Promise.resolve({ data: [] });

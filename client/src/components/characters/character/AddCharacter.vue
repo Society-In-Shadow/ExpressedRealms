@@ -2,17 +2,19 @@
 
 import Button from 'primevue/button';
 import axios from "axios";
-import { useForm } from 'vee-validate';
+import {useForm} from 'vee-validate';
 import {object, string} from 'yup';
 import Card from "primevue/card";
 import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
 import TextAreaWrapper from "@/FormWrappers/TextAreaWrapper.vue";
-import {onMounted, ref, computed } from "vue";
-import { useRouter } from "vue-router";
+import {computed, onMounted, ref} from "vue";
+import {useRouter} from "vue-router";
 import DropdownWrapper from "@/FormWrappers/DropdownWrapper.vue";
 import {makeIdSafe} from "@/utilities/stringUtilities";
 import DropdownInfoWrapper from "@/FormWrappers/DropdownInfoWrapper.vue";
+import {FeatureFlags, userStore} from "@/stores/userStore.ts";
 
+const userInfo = userStore();
 const Router = useRouter();
 
 const { defineField, handleSubmit, errors } = useForm({
@@ -37,13 +39,15 @@ const expressions = ref([]);
 const factions = ref([]);
 const isLoadingFactions = ref(true);
 const isLoadingExpressions = ref(true);
+const showFactionDropdown = ref(false);
 
-onMounted(() =>{
-  axios.get(`/characters/options`)
+onMounted(async () =>{
+  await axios.get(`/characters/options`)
       .then((response) => {
         expressions.value = response.data.expressions;
         isLoadingExpressions.value = false;
       })
+  showFactionDropdown.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowFactionDropdown)
 });
 
 const onSubmit = handleSubmit((values) => {
@@ -95,7 +99,7 @@ const expressionRedirectURL = computed(() => {
             </div>
           </DropdownWrapper>
           <DropdownInfoWrapper
-            v-if="expression" v-model="faction" option-label="name" :options="factions" field-name="Faction"
+            v-if="expression && showFactionDropdown" v-model="faction" option-label="name" :options="factions" field-name="Faction"
             :error-text="errors.factionId" :disabled="!expression" :redirect-url="expressionRedirectURL" :show-skeleton="isLoadingFactions" :redirect-to-different-page="true"
           />
           <TextAreaWrapper v-model="background" field-name="Background" :error-text="errors.background" />

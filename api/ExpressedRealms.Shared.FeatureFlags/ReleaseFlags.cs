@@ -36,6 +36,12 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "Allows one to see the powers tab on a character"
     );
 
+    public static readonly ReleaseFlags ShowFactionDropdown = new(
+        "Show Faction Dropdown on Add / Edit Character",
+        "show-faction-dropdown",
+        "Allows one to see the faction dropdown on the add / edit character page"
+    );
+
     public override string ToString()
     {
         return Name;

@@ -1,25 +1,31 @@
 <script setup lang="ts">
 
 import axios from "axios";
-import { useForm } from 'vee-validate';
-import { object, string }  from 'yup';
+import {useForm} from 'vee-validate';
+import {object, string} from 'yup';
 import Card from "primevue/card";
 import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
 import TextAreaWrapper from "@/FormWrappers/TextAreaWrapper.vue";
-import {onMounted, ref, computed} from "vue";
-import { useRoute } from 'vue-router'
+import {computed, onMounted, ref} from "vue";
+import {useRoute} from 'vue-router'
 import toaster from "@/services/Toasters";
-const route = useRoute()
 import DropdownInfoWrapper from "@/FormWrappers/DropdownInfoWrapper.vue";
 import {makeIdSafe} from "@/utilities/stringUtilities";
 import type {Faction} from "@/components/characters/character/interfaces/Faction";
 import {characterStore} from "@/components/characters/character/stores/characterStore";
 import Button from "primevue/button";
+import {FeatureFlags, userStore} from "@/stores/userStore.ts";
+
+const route = useRoute()
+
 const characterInfo = characterStore();
+const userInfo = userStore();
 
 const emit = defineEmits<{
   closeDialog: []
 }>();
+
+const showFactionInfo = ref(false);
 
 onMounted(async () =>{
   await characterInfo.getCharacterDetails(Number(route.params.id))
@@ -30,6 +36,8 @@ onMounted(async () =>{
         expression.value = characterInfo.expression;
         faction.value = characterInfo.faction;
       });
+  showFactionInfo.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowFactionDropdown);
+  
 });
 
 const { defineField, handleSubmit, errors } = useForm({
@@ -79,7 +87,7 @@ let expressionRedirectURL = computed(() => {
       <form @submit="onSubmit">
         <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
         <InputTextWrapper v-model="expression" field-name="Expression" disabled :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
-        <DropdownInfoWrapper
+        <DropdownInfoWrapper v-if="showFactionInfo"
           v-model="faction" option-label="name" :options="factions" field-name="Faction" :error-text="errors.factionId"
           :show-skeleton="characterInfo.isLoading" :redirect-url="expressionRedirectURL" @change="onSubmit"
         />
