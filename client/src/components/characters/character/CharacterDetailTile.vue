@@ -10,12 +10,15 @@ import EditCharacterDetails from "@/components/characters/character/EditCharacte
 import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import OverallExperience from "@/components/characters/character/OverallExperience.vue";
 import {characterPopupDialogs} from "@/components/characters/character/services/dialogs.ts";
+import {FeatureFlags, userStore} from "@/stores/userStore.ts";
 
 const route = useRoute()
 const characterInfo = characterStore();
 const experienceInfo = experienceStore();
 const dialog = characterPopupDialogs()
+const userInfo = userStore();
 
+const showFactionInfo = ref(false);
 onMounted(async () =>{
   await characterInfo.getCharacterDetails(Number(route.params.id))
       .then(() => {
@@ -23,7 +26,7 @@ onMounted(async () =>{
         expression.value = characterInfo.expression;
         faction.value = characterInfo.faction;
       });
-  
+  showFactionInfo.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowFactionDropdown);
   await experienceInfo.updateExperience(route.params.id);
 });
 
@@ -52,7 +55,7 @@ const togglePopup = (event) => {
         <div>
           <h1 class="mt-0 pt-0 pb-0 mb-0">{{ name }}</h1>
           <div><em><span>XL: {{experienceInfo.getCharacterLevel()}}</span> - {{ expression }}</em></div>
-          <div><em>{{ faction?.name ?? 'No Faction' }}</em></div>
+          <div v-if="showFactionInfo"><em>{{ faction?.name ?? 'No Faction' }}</em></div>
         </div>
         <div class="d-flex flex-column gap-3" style="font-size: 2.5em">
           <Button type="button" @click="dialog.showExperience()" icon="pi pi-info-circle" icon-pos="right" size="large" :label="`XP: ${experienceInfo.experienceBreakdown.total - experienceInfo.experienceBreakdown.setupTotal}`" />
