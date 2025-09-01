@@ -39,6 +39,11 @@ describe('<AddCharacter />', () => {
             }
         }).as('addOptions');
 
+        cy.intercept('GET', '/navMenu/featureFlags', {
+            statusCode: 200,
+            body: {featureFlags: ['show-faction-dropdown']}
+        }).as('featureFlags');
+
         cy.intercept('GET', '/characters/factionOptions/1', {
             statusCode: 200,
             body: factionValues
@@ -120,5 +125,14 @@ describe('<AddCharacter />', () => {
             factionId: factionValues[0].id
         });
     });
+    
+    it('Hides the Faction Field if Feature Flag is Disabled', () => {
+        cy.intercept('GET', '/navMenu/featureFlags', {
+            statusCode: 200,
+            body: {featureFlags: ['']}
+        }).as('featureFlags');
+
+        cy.dataCy(faction).should('not.exist');
+    })
     
 });

@@ -33,6 +33,11 @@ describe('<EditCharacterDetails />', () => {
             body: [{}, {}, {}, {}, {}, {}]
         })
         
+        cy.intercept('GET', '/navMenu/featureFlags', {
+            statusCode: 200,
+            body: {featureFlags: ['show-faction-dropdown']}
+        }).as('featureFlags');
+        
         cy.intercept('GET', '/characters/3/factionOptions', {
             statusCode: 200,
             body: factionValues
