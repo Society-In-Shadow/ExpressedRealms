@@ -2,13 +2,12 @@
 
 import Button from "primevue/button";
 import Card from "primevue/card";
-import axios from "axios";
 import {useRouter} from "vue-router";
-const Router = useRouter();
+import {overallCharacterConfirmationService} from "@/components/characters/services/confirmationService.ts";
 
-const emit = defineEmits<{
-  delete: [id: number]
-}>()
+const Router = useRouter();
+const popupService = overallCharacterConfirmationService();
+
 
 const props = defineProps({
   characterName: {
@@ -29,12 +28,6 @@ const props = defineProps({
   }
 });
 
-async function deleteCharacter() {
-  await axios.delete(`/characters/${props.characterId}`)
-      .then(() => {
-        emit('delete', props.characterId);
-      });
-}
 
 function editCharacter() {
   Router.push(`/characters/${props.characterId}`)
@@ -53,7 +46,7 @@ function editCharacter() {
         {{ backgroundStory }}
       </div>
       <Button data-cy="character-edit-button" label="Edit" class="m-1" @click="editCharacter" />
-      <Button data-cy="character-delete-button" label="Delete" class="m-1" @click="deleteCharacter" />
+      <Button data-cy="character-delete-button" label="Delete" class="m-1" @click="popupService.deleteConfirmation($event, props.characterId)" />
     </template>
   </Card>
 </template>
