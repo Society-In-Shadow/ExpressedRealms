@@ -29,7 +29,7 @@ Now you need to get the public key for github, so run the following:
 gpg --list-secret-keys --keyid-format=long
 ```
 
-And grab the section mentioned below
+And grab the section mentioned below on the 'sec' line
 
 ```
 /Users/hubot/.gnupg/secring.gpg
@@ -81,15 +81,18 @@ Then tell git to use that when signing the key
 
 ```shell
 git config --global commit.gpgsign true
-git config --global user.signingkey keyhere
+git config --global user.signingkey <keyhere>
 ```
 
 ## Additional Stuff
 Since you are here, make sure to fill in your username and email address for git
 
 ```shell
-git config --global user.name name
-git config --global user.email email@example.com
+git config --global user.name <username>
+```
+
+```shell
+git config --global user.email <githubemail@example.com>
 ```
 
 When using rider, it will prompt you for your passphrase when you try committing.
