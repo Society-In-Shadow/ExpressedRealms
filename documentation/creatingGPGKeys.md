@@ -90,6 +90,7 @@ Since you are here, make sure to fill in your username and email address for git
 ```shell
 git config --global user.name <username>
 ```
+
 ```shell
 git config --global user.email <githubemail@example.com>
 ```
