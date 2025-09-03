@@ -17,16 +17,9 @@ public class DeleteBlessingLevelUseCaseTests
 
     public DeleteBlessingLevelUseCaseTests()
     {
-        _model = new DeleteBlessingLevelModel()
-        {
-            LevelId = 3,
-        };
+        _model = new DeleteBlessingLevelModel() { LevelId = 3 };
 
-        _dbModel = new BlessingLevel()
-        {
-            BlessingId = 2,
-            Id = 1,
-        };
+        _dbModel = new BlessingLevel() { BlessingId = 2, Id = 1 };
 
         _repository = A.Fake<IBlessingRepository>();
 

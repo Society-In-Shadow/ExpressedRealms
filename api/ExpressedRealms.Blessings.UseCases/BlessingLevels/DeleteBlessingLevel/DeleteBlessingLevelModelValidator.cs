@@ -5,7 +5,8 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Blessings.UseCases.BlessingLevels.DeleteBlessingLevel;
 
 [UsedImplicitly]
-internal sealed class DeleteBlessingLevelModelValidator : AbstractValidator<DeleteBlessingLevelModel>
+internal sealed class DeleteBlessingLevelModelValidator
+    : AbstractValidator<DeleteBlessingLevelModel>
 {
     public DeleteBlessingLevelModelValidator(IBlessingRepository repository)
     {
