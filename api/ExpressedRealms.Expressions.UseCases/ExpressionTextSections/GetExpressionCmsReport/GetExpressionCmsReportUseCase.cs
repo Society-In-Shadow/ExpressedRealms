@@ -58,7 +58,7 @@ internal sealed class GetExpressionCmsReportUseCase(
                 })
                 .ToList();
         }
-        
+
         var expressionHeader = flattenedSections.FirstOrDefault(x => x.SectionTypeId == 2);
         if (expressionHeader is not null)
         {
