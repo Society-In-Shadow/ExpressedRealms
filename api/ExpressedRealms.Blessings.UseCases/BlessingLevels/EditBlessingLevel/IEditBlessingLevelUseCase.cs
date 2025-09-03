@@ -3,6 +3,4 @@ using FluentResults;
 
 namespace ExpressedRealms.Blessings.UseCases.BlessingLevels.EditBlessingLevel;
 
-public interface IEditBlessingLevelUseCase : IGenericUseCase<Result, EditBlessingLevelModel>
-{
-}
+public interface IEditBlessingLevelUseCase : IGenericUseCase<Result, EditBlessingLevelModel> { }

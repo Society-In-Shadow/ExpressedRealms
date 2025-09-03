@@ -56,10 +56,7 @@ public class EditBlessingLevelUseCaseTests
         _model.Level = string.Empty;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(
-            nameof(EditBlessingLevelModel.Level),
-            "Level is required."
-        );
+        results.MustHaveValidationError(nameof(EditBlessingLevelModel.Level), "Level is required.");
     }
 
     [Fact]
@@ -163,7 +160,7 @@ public class EditBlessingLevelUseCaseTests
             "Blessing Id does not exist."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_LevelId_WillFail_WhenItIs_IsEmpty()
     {
@@ -195,8 +192,7 @@ public class EditBlessingLevelUseCaseTests
         A.CallTo(() => _repository.EditBlessingLevelAsync(A<BlessingLevel>.That.IsSameAs(_dbModel)))
             .MustHaveHappenedOnceExactly();
     }
-    
-    
+
     [Fact]
     public async Task UseCase_WillEditTheBlessing()
     {
