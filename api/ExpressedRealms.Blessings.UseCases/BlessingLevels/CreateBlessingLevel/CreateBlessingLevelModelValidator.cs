@@ -14,29 +14,23 @@ internal sealed class CreateBlessingLevelModelValidator : AbstractValidator<Crea
             .WithMessage("Level is required.")
             .MaximumLength(25)
             .WithMessage("Name must be between 1 and 25 characters.")
-            .MustAsync(async (x, y) => !await repository.HasDuplicateName(x))
-            .WithMessage("Blessing Level with this level already exists.")
-            .Matches(@"^\d+ pt\.$")
-            .WithMessage("Level must be in the format of '123 pt.'");
+            .Matches(@"^\d+ pts?\.$")
+            .WithMessage("Level must be in the format of '123 pts.' or '1 pt.'");
         
         RuleFor(x => x)
             .MustAsync(async (x, y) => !await repository.HasDuplicateLevelName(x.BlessingId, x.Level))
             .WithName(nameof(CreateBlessingLevelModel.Level))
-            .WithMessage("Blessing Level with this level already exists.");
+            .WithMessage("Blessing already has a level with this name.");
         
         RuleFor(x => x.Description)
             .NotEmpty()
             .WithMessage("Description is required.");
         
         RuleFor(x => x.XpCost)
-            .NotEmpty()
-            .WithMessage("Xp Cost is required.")
             .GreaterThanOrEqualTo(0)
             .WithMessage("Xp Cost must be greater than or equal to 0.");
         
         RuleFor(x => x.XpGain)
-            .NotEmpty()
-            .WithMessage("Xp Gain is required.")
             .GreaterThanOrEqualTo(0)
             .WithMessage("Xp Gain must be greater than or equal to 0.");
         
@@ -44,6 +38,6 @@ internal sealed class CreateBlessingLevelModelValidator : AbstractValidator<Crea
             .NotEmpty()
             .WithMessage("Blessing Id is required.")
             .MustAsync(async (x, y) => await repository.IsExistingBlessing(x))
-            .WithMessage("Blessing does not exist.");
+            .WithMessage("Blessing Id does not exist.");
     }
 }
