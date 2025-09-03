@@ -10,7 +10,7 @@ internal sealed class EditBlessingLevelUseCase(
     CancellationToken cancellationToken
 ) : IEditBlessingLevelUseCase
 {
-    public async Task<Result<int>> ExecuteAsync(EditBlessingLevelModel model)
+    public async Task<Result> ExecuteAsync(EditBlessingLevelModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,

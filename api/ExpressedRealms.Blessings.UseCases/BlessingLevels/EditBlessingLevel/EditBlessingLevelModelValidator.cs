@@ -20,7 +20,8 @@ internal sealed class EditBlessingLevelModelValidator : AbstractValidator<EditBl
         RuleFor(x => x.LevelId)
             .NotEmpty()
             .WithMessage("Level Id is required.")
-            .MustAsync(async (x, y) => await repository.IsExistingBlessingLevel(x));
+            .MustAsync(async (x, y) => await repository.IsExistingBlessingLevel(x))
+            .WithMessage("Level Id does not exist.");
         
         RuleFor(x => x)
             .MustAsync(
