@@ -13,4 +13,7 @@ public interface IBlessingRepository
     Task<bool> IsExistingBlessing(int id);
     Task<int> CreateBlessingLevelAsync(BlessingLevel blessingLevel);
     Task<bool> HasDuplicateLevelName(int blessingId, string name);
+    Task<BlessingLevel> GetBlessingLevelForEditing(int id);
+    Task EditBlessingLevelAsync(BlessingLevel blessing);
+    Task<bool> IsExistingBlessingLevel(int id);
 }
