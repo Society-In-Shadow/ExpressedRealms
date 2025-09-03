@@ -21,12 +21,13 @@ public class CreateBlessingLevelUseCaseTests
             Level = "4 pt.",
             BlessingId = 2,
             XpCost = 4,
-            XpGain = 0
+            XpGain = 0,
         };
 
         _repository = A.Fake<IBlessingRepository>();
 
-        A.CallTo(() => _repository.HasDuplicateLevelName(_model.BlessingId, _model.Level)).Returns(false);
+        A.CallTo(() => _repository.HasDuplicateLevelName(_model.BlessingId, _model.Level))
+            .Returns(false);
         A.CallTo(() => _repository.IsExistingBlessing(_model.BlessingId)).Returns(true);
 
         var validator = new CreateBlessingLevelModelValidator(_repository);
@@ -40,7 +41,10 @@ public class CreateBlessingLevelUseCaseTests
         _model.Level = string.Empty;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(CreateBlessingLevelModel.Level), "Level is required.");
+        results.MustHaveValidationError(
+            nameof(CreateBlessingLevelModel.Level),
+            "Level is required."
+        );
     }
 
     [Fact]
@@ -54,7 +58,7 @@ public class CreateBlessingLevelUseCaseTests
             "Name must be between 1 and 25 characters."
         );
     }
-    
+
     [Theory]
     [InlineData("123 pst.")]
     [InlineData("5 ptss. ")]
@@ -75,8 +79,9 @@ public class CreateBlessingLevelUseCaseTests
     [Fact]
     public async Task ValidationFor_Name_WillFail_WhenName_AlreadyExists()
     {
-        A.CallTo(() => _repository.HasDuplicateLevelName(_model.BlessingId, _model.Level)).Returns(true);
-        
+        A.CallTo(() => _repository.HasDuplicateLevelName(_model.BlessingId, _model.Level))
+            .Returns(true);
+
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(
             nameof(CreateBlessingLevelModel.Level),
@@ -102,7 +107,10 @@ public class CreateBlessingLevelUseCaseTests
         _model.XpCost = -1;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(CreateBlessingLevelModel.XpCost), "Xp Cost must be greater than or equal to 0.");
+        results.MustHaveValidationError(
+            nameof(CreateBlessingLevelModel.XpCost),
+            "Xp Cost must be greater than or equal to 0."
+        );
     }
 
     [Fact]
@@ -111,7 +119,10 @@ public class CreateBlessingLevelUseCaseTests
         _model.XpGain = -1;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(CreateBlessingLevelModel.XpGain), "Xp Gain must be greater than or equal to 0.");
+        results.MustHaveValidationError(
+            nameof(CreateBlessingLevelModel.XpGain),
+            "Xp Gain must be greater than or equal to 0."
+        );
     }
 
     [Fact]
@@ -143,7 +154,6 @@ public class CreateBlessingLevelUseCaseTests
     {
         var blessing = new BlessingLevel()
         {
-            
             Level = _model.Level,
             Description = _model.Description,
             XpCost = _model.XpCost,

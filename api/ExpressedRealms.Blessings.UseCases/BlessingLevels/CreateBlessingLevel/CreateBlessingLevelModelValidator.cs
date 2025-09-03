@@ -5,7 +5,8 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Blessings.UseCases.BlessingLevels.CreateBlessingLevel;
 
 [UsedImplicitly]
-internal sealed class CreateBlessingLevelModelValidator : AbstractValidator<CreateBlessingLevelModel>
+internal sealed class CreateBlessingLevelModelValidator
+    : AbstractValidator<CreateBlessingLevelModel>
 {
     public CreateBlessingLevelModelValidator(IBlessingRepository repository)
     {
@@ -16,24 +17,24 @@ internal sealed class CreateBlessingLevelModelValidator : AbstractValidator<Crea
             .WithMessage("Name must be between 1 and 25 characters.")
             .Matches(@"^\d+ pts?\.$")
             .WithMessage("Level must be in the format of '123 pts.' or '1 pt.'");
-        
+
         RuleFor(x => x)
-            .MustAsync(async (x, y) => !await repository.HasDuplicateLevelName(x.BlessingId, x.Level))
+            .MustAsync(
+                async (x, y) => !await repository.HasDuplicateLevelName(x.BlessingId, x.Level)
+            )
             .WithName(nameof(CreateBlessingLevelModel.Level))
             .WithMessage("Blessing already has a level with this name.");
-        
-        RuleFor(x => x.Description)
-            .NotEmpty()
-            .WithMessage("Description is required.");
-        
+
+        RuleFor(x => x.Description).NotEmpty().WithMessage("Description is required.");
+
         RuleFor(x => x.XpCost)
             .GreaterThanOrEqualTo(0)
             .WithMessage("Xp Cost must be greater than or equal to 0.");
-        
+
         RuleFor(x => x.XpGain)
             .GreaterThanOrEqualTo(0)
             .WithMessage("Xp Gain must be greater than or equal to 0.");
-        
+
         RuleFor(x => x.BlessingId)
             .NotEmpty()
             .WithMessage("Blessing Id is required.")

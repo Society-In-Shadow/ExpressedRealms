@@ -22,11 +22,13 @@ internal sealed class BlessingRepository(
     {
         return await context.Blessings.AnyAsync(x => x.Name == name, cancellationToken);
     }
-    
+
     public async Task<bool> HasDuplicateLevelName(int blessingId, string name)
     {
-        return await context.BlessingLevels.AnyAsync(x => 
-            x.BlessingId == blessingId && x.Level == name, cancellationToken);
+        return await context.BlessingLevels.AnyAsync(
+            x => x.BlessingId == blessingId && x.Level == name,
+            cancellationToken
+        );
     }
 
     public async Task<Blessing> GetBlessingForEditing(int id)
@@ -51,7 +53,7 @@ internal sealed class BlessingRepository(
         await context.SaveChangesAsync(cancellationToken);
         return blessing.Id;
     }
-    
+
     public async Task<int> CreateBlessingLevelAsync(BlessingLevel blessingLevel)
     {
         context.BlessingLevels.Add(blessingLevel);
