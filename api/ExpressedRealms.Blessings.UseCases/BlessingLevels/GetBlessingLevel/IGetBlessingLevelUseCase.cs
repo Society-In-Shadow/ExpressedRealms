@@ -3,6 +3,5 @@ using FluentResults;
 
 namespace ExpressedRealms.Blessings.UseCases.BlessingLevels.GetBlessingLevel;
 
-public interface IGetBlessingLevelUseCase : IGenericUseCase<Result<GetBlessingLevelReturnModel>, GetBlessingLevelModel>
-{
-}
+public interface IGetBlessingLevelUseCase
+    : IGenericUseCase<Result<GetBlessingLevelReturnModel>, GetBlessingLevelModel> { }

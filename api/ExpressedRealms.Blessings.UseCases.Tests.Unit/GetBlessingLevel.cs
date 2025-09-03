@@ -12,16 +12,13 @@ public class GetBlessingLevelUseCaseTests
     private readonly GetBlessingLevelUseCase _useCase;
     private readonly IBlessingRepository _repository;
     private readonly GetBlessingLevelModel _model;
-    
+
     private readonly BlessingLevel _dbModel;
 
     public GetBlessingLevelUseCaseTests()
     {
-        _model = new GetBlessingLevelModel()
-        {
-            LevelId = 3
-        };
-        
+        _model = new GetBlessingLevelModel() { LevelId = 3 };
+
         _dbModel = new BlessingLevel()
         {
             BlessingId = 1,
@@ -36,7 +33,7 @@ public class GetBlessingLevelUseCaseTests
 
         A.CallTo(() => _repository.IsExistingBlessingLevel(_model.LevelId)).Returns(true);
         A.CallTo(() => _repository.GetBlessingLevelForEditing(_model.LevelId)).Returns(_dbModel);
-        
+
         var validator = new GetBlessingLevelModelValidator(_repository);
 
         _useCase = new GetBlessingLevelUseCase(_repository, validator, CancellationToken.None);
@@ -65,7 +62,6 @@ public class GetBlessingLevelUseCaseTests
             "Level Id does not exist."
         );
     }
-
 
     [Fact]
     public async Task UseCase_WillCreateTheBlessing()

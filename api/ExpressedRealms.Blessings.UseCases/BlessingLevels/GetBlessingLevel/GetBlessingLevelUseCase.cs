@@ -22,14 +22,17 @@ internal sealed class GetBlessingLevelUseCase(
             return Result.Fail(result.Errors);
 
         var blessing = await blessingRepository.GetBlessingLevelForEditing(model.LevelId);
-        
-        return Result.Ok(new GetBlessingLevelReturnModel(){
-            Level = blessing.Level,
-            BlessingId = blessing.BlessingId,
-            XpCost = blessing.XpCost,
-            XpGain = blessing.XpGain,
-            Description = blessing.Description,
-            Id = blessing.Id,
-        });
+
+        return Result.Ok(
+            new GetBlessingLevelReturnModel()
+            {
+                Level = blessing.Level,
+                BlessingId = blessing.BlessingId,
+                XpCost = blessing.XpCost,
+                XpGain = blessing.XpGain,
+                Description = blessing.Description,
+                Id = blessing.Id,
+            }
+        );
     }
 }
