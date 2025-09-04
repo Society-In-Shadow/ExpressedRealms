@@ -3,14 +3,14 @@
 import {makeIdSafe} from "@/utilities/stringUtilities";
 import Skeleton from "primevue/skeleton";
 import Button from "primevue/button";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import axios from "axios";
 import {useForm} from "vee-validate";
 import {object, string} from "yup";
 import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
 import DropdownWrapper from "@/FormWrappers/DropdownWrapper.vue";
 
-import { expressionStore } from "@/stores/expressionStore";
+import {expressionStore} from "@/stores/expressionStore";
 import EditorWrapper from "@/FormWrappers/EditorWrapper.vue";
 import toaster from "@/services/Toasters";
 import CreateExpressionSection from "@/components/expressions/CreateExpressionSection.vue";
@@ -18,6 +18,8 @@ import {useConfirm} from "primevue/useconfirm";
 import DataTable from "primevue/datatable";
 import KnowledgeList from "@/components/knowledges/KnowledgeList.vue";
 import BlessingList from "@/components/blessings/BlessingList.vue";
+import {FeatureFlags, userStore} from "@/stores/userStore.ts";
+
 const expressionInfo = expressionStore();
 
 const emit = defineEmits<{
@@ -50,6 +52,12 @@ const showEditor = ref(false);
 const showOptionLoader = ref(true);
 const sectionTypeOptions = ref([]);
 const showCreate = ref(false);
+const showBlessingCms = ref(false);
+const userInfo = userStore();
+
+onMounted(  async() =>  {
+  showBlessingCms.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowBlessingCMS)
+})
 
 function toggleEditor(){
   showEditor.value = !showEditor.value;
@@ -202,7 +210,7 @@ const deleteExpression = (event) => {
     <div v-if="props.sectionInfo.sectionTypeName === 'Knowledges Section'">
       <KnowledgeList :is-read-only="!showEdit" />
     </div>
-    <div v-if="props.sectionInfo.sectionTypeName === 'Blessings Section'">
+    <div v-if="props.sectionInfo.sectionTypeName === 'Blessings Section' && showBlessingCms">
       <BlessingList :is-read-only="!showEdit" />
     </div>
     

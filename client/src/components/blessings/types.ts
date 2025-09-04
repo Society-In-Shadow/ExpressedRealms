@@ -9,6 +9,7 @@ export interface Blessing {
     id: number,
     name: string,
     description: string,
+    type: string,
     subCategory: string | null,
     levels: Array<BlessingLevel>
     typeId: number

@@ -37,7 +37,7 @@ public class EditBlessingUseCaseTests
 
         A.CallTo(() => _repository.GetBlessingForEditing(_model.Id)).Returns(_dbModel);
         A.CallTo(() => _repository.IsExistingBlessing(_model.Id)).Returns(true);
-        A.CallTo(() => _repository.HasDuplicateName(_model.Name)).Returns(false);
+        A.CallTo(() => _repository.HasDuplicateName(_model.Name, _model.Id)).Returns(false);
 
         var validator = new EditBlessingModelValidator(_repository);
 
@@ -85,7 +85,7 @@ public class EditBlessingUseCaseTests
     [Fact]
     public async Task ValidationFor_Name_WillFail_WhenName_AlreadyExists()
     {
-        A.CallTo(() => _repository.HasDuplicateName(_model.Name)).Returns(true);
+        A.CallTo(() => _repository.HasDuplicateName(_model.Name, _model.Id)).Returns(true);
 
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(

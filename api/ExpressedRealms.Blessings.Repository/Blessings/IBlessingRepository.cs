@@ -6,7 +6,7 @@ namespace ExpressedRealms.Blessings.Repository.Blessings;
 public interface IBlessingRepository
 {
     Task<List<Blessing>> GetAllBlessingsAndBlessingLevels();
-    Task<bool> HasDuplicateName(string name);
+    Task<bool> HasDuplicateName(string name, int blessingId = 0);
     Task<int> CreateBlessingAsync(Blessing blessing);
     Task<Blessing> GetBlessingForEditing(int id);
     Task EditBlessingAsync(Blessing blessing);

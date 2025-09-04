@@ -36,6 +36,7 @@ public static class GetAllBlessingsEndpoint
                 Id = x.Id,
                 Name = x.Name,
                 Description = x.Description,
+                Type = x.Type,
                 SubCategory = x.SubCategory,
                 Levels = x
                     .Levels.OrderBy(y => y.Level)

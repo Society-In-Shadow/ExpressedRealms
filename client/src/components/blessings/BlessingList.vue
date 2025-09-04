@@ -1,14 +1,15 @@
 <script setup lang="ts">
 
-import {computed, onMounted} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {blessingsStore} from "@/components/blessings/stores/blessingsStore";
 import BlessingItem from "@/components/blessings/BlessingItem.vue";
+import {UserRoles, userStore} from "@/stores/userStore.ts";
+import AddBlessing from "@/components/blessings/AddBlessing.vue";
+import Button from "primevue/button";
 
 const store = blessingsStore();
+const userInfo = userStore();
 
-onMounted(async () => {
-  await store.getBlessings()
-})
 
 const props = defineProps({
   isReadOnly: {
@@ -16,6 +17,18 @@ const props = defineProps({
     required: true
   }
 });
+
+const showEdit = ref(false);
+const showAdd = ref(false);
+
+const toggleAdd = () =>{
+  showAdd.value = !showAdd.value;
+}
+
+onMounted(async () => {
+  await store.getBlessings()
+  showEdit.value = userInfo.hasUserRole(UserRoles.BlessingsManagementRole);
+})
 
 const sortedAdvantages = computed(() => {
   return [...store.advantages].sort((a, b) => {
@@ -57,6 +70,12 @@ const sortedDisadvantages = computed(() => {
 </script>
 
 <template>
+  <div v-if="showEdit" class="text-right">
+    <Button v-if="!showAdd" label="Add Advantage" @click="toggleAdd" />
+    <Button v-else label="Cancel Add" @click="toggleAdd" />
+    
+  </div>
+  <AddBlessing v-if="showAdd" @canceled="toggleAdd" />
   <div>
     <h1>Advantage</h1>
     <div v-for="blessing in sortedAdvantages" :key="blessing.id">

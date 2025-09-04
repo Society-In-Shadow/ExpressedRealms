@@ -42,6 +42,18 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "Allows one to see the faction dropdown on the add / edit character page"
     );
 
+    public static readonly ReleaseFlags ShowBlessingCMS = new(
+        "Shows the purpose built blessing CMS system",
+        "show-blessing-cms",
+        "Allows one to see blessing CMS system"
+    );
+
+    public static readonly ReleaseFlags HideBlessingSections = new(
+        "Hides the sections that exist in the blessing CMS system",
+        "hide-blessing-sections",
+        "Hides the sections that exist in the blessing CMS system"
+    );
+
     public override string ToString()
     {
         return Name;
