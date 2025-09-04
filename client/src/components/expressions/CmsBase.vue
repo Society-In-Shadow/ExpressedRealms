@@ -42,7 +42,7 @@ let sections = ref([
 ]);
 
 const isLoading = ref(true);
-const showEdit = ref(expressionInfo.canEdit);
+const showEdit = ref(false);
 const showCreate = ref(false);
 const showPreview = ref(false);
 const showReportButton = ref(false);

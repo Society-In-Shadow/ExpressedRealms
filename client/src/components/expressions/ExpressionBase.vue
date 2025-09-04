@@ -54,7 +54,7 @@ const expressionHeader = ref({});
 
 const isLoading = ref(true);
 const headerIsLoading = ref(true);
-const showEdit = ref(expressionInfo.canEdit);
+const showEdit = ref(false);
 const showCreate = ref(false);
 const showPreview = ref(false);
 const currentTab = ref('0');
@@ -66,7 +66,7 @@ async function fetchData() {
   await expressionInfo.getExpressionSections()
       .then(async () => {
         sections.value = expressionInfo.sections;
-        showEdit.value = expressionInfo.canEdit;
+        showEdit.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole);
         isLoading.value = false;
         if(location.hash){
           await nextTick();
