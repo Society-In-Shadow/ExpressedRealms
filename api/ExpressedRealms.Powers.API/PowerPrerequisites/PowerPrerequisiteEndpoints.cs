@@ -2,6 +2,7 @@ using ExpressedRealms.Authentication;
 using ExpressedRealms.Powers.API.PowerEndpoints.Responses.Options;
 using ExpressedRealms.Powers.API.PowerPrerequisites.Requests.CreatePrerequisite;
 using ExpressedRealms.Powers.API.PowerPrerequisites.Requests.EditPrerequisite;
+using ExpressedRealms.Powers.API.PowerPrerequisites.Responses;
 using ExpressedRealms.Powers.API.PowerPrerequisites.Responses.GetPrerequisites;
 using ExpressedRealms.Powers.Repository.PowerPrerequisites.CreatePrerequisiteUseCase;
 using ExpressedRealms.Powers.Repository.PowerPrerequisites.DeletePrerequisiteUseCase;
@@ -180,7 +181,7 @@ internal static class PowerPrerequisiteEndpoints
                     }
 
                     return TypedResults.Ok(
-                        new
+                        new PrerequisiteOptions()
                         {
                             RequiredAmount = requiredAmount,
                             PrerequisitePowers = powers

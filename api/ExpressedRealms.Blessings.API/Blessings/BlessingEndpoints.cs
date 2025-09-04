@@ -1,4 +1,9 @@
+using ExpressedRealms.Authentication;
+using ExpressedRealms.Blessings.API.Blessings.CreateBlessing;
+using ExpressedRealms.Blessings.API.Blessings.DeleteBlessing;
+using ExpressedRealms.Blessings.API.Blessings.EditBlessing;
 using ExpressedRealms.Blessings.API.Blessings.GetAllBlessings;
+using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
@@ -20,5 +25,17 @@ internal static class BlessingEndpoints
             .WithSummary(
                 "Returns three sets of blessings, advantages, disadvantages, and mixed blessings."
             );
+
+        endpointGroup
+            .MapPost("", CreateBlessingEndpoint.Execute)
+            .RequirePolicyAuthorization(Policies.ManageBlessings);
+
+        endpointGroup
+            .MapPut("{id}", EditBlessingEndpoint.Execute)
+            .RequirePolicyAuthorization(Policies.ManageBlessings);
+
+        endpointGroup
+            .MapDelete("{id}", DeleteBlessingEndpoint.Execute)
+            .RequirePolicyAuthorization(Policies.ManageBlessings);
     }
 }

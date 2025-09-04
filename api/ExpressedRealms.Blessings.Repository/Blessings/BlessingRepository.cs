@@ -36,9 +36,12 @@ internal sealed class BlessingRepository(
         return await context.Blessings.FirstAsync(x => x.Id == id, cancellationToken);
     }
 
-    public async Task<BlessingLevel> GetBlessingLevelForEditing(int id)
+    public async Task<BlessingLevel> GetBlessingLevelForEditing(int blessingId, int id)
     {
-        return await context.BlessingLevels.FirstAsync(x => x.Id == id, cancellationToken);
+        return await context.BlessingLevels.FirstAsync(
+            x => x.BlessingId == blessingId && x.Id == id,
+            cancellationToken
+        );
     }
 
     public async Task EditBlessingAsync(Blessing blessing)
@@ -53,9 +56,12 @@ internal sealed class BlessingRepository(
         await context.SaveChangesAsync(cancellationToken);
     }
 
-    public Task<bool> IsExistingBlessingLevel(int id)
+    public Task<bool> IsExistingBlessingLevel(int blessingId, int id)
     {
-        return context.BlessingLevels.AnyAsync(x => x.Id == id, cancellationToken);
+        return context.BlessingLevels.AnyAsync(
+            x => x.BlessingId == blessingId && x.Id == id,
+            cancellationToken
+        );
     }
 
     public Task<bool> IsExistingBlessing(int id)
