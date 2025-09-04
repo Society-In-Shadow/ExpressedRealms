@@ -54,9 +54,9 @@ internal sealed class BlessingRepository(
         await context.SaveChangesAsync(cancellationToken);
     }
 
-    public Task<bool> IsExistingBlessingLevel(int id)
+    public Task<bool> IsExistingBlessingLevel(int blessingId, int id)
     {
-        return context.BlessingLevels.AnyAsync(x => x.Id == id, cancellationToken);
+        return context.BlessingLevels.AnyAsync(x => x.BlessingId == blessingId && x.Id == id, cancellationToken);
     }
 
     public Task<bool> IsExistingBlessing(int id)

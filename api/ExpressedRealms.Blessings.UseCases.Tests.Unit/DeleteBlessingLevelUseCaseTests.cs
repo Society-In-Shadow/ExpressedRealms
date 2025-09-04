@@ -17,14 +17,15 @@ public class DeleteBlessingLevelUseCaseTests
 
     public DeleteBlessingLevelUseCaseTests()
     {
-        _model = new DeleteBlessingLevelModel() { LevelId = 3 };
+        _model = new DeleteBlessingLevelModel() { LevelId = 3, BlessingId = 5};
 
-        _dbModel = new BlessingLevel() { BlessingId = 2, Id = 1 };
+        _dbModel = new BlessingLevel() { BlessingId = 5, Id = 3 };
 
         _repository = A.Fake<IBlessingRepository>();
 
-        A.CallTo(() => _repository.GetBlessingLevelForEditing(_model.LevelId)).Returns(_dbModel);
-        A.CallTo(() => _repository.IsExistingBlessingLevel(_model.LevelId)).Returns(true);
+        A.CallTo(() => _repository.GetBlessingLevelForEditing(_model.BlessingId, _model.LevelId)).Returns(_dbModel);
+        A.CallTo(() => _repository.IsExistingBlessingLevel(_model.BlessingId, _model.LevelId)).Returns(true);
+        A.CallTo(() => _repository.IsExistingBlessing(_model.BlessingId)).Returns(true);
 
         var validator = new DeleteBlessingLevelModelValidator(_repository);
 
@@ -46,12 +47,36 @@ public class DeleteBlessingLevelUseCaseTests
     [Fact]
     public async Task ValidationFor_LevelId_WillFail_WhenItDoesNotExist()
     {
-        A.CallTo(() => _repository.IsExistingBlessingLevel(_model.LevelId)).Returns(false);
+        A.CallTo(() => _repository.IsExistingBlessingLevel(_model.BlessingId, _model.LevelId)).Returns(false);
 
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(
             nameof(DeleteBlessingLevelModel.LevelId),
             "Level Id does not exist."
+        );
+    }
+    
+    [Fact]
+    public async Task ValidationFor_BlessingId_WillFail_WhenItIs_IsEmpty()
+    {
+        _model.BlessingId = 0;
+
+        var results = await _useCase.ExecuteAsync(_model);
+        results.MustHaveValidationError(
+            nameof(DeleteBlessingLevelModel.BlessingId),
+            "Blessing Id is required."
+        );
+    }
+
+    [Fact]
+    public async Task ValidationFor_BlessingId_WillFail_WhenItDoesNotExist()
+    {
+        A.CallTo(() => _repository.IsExistingBlessing(_model.BlessingId)).Returns(false);
+
+        var results = await _useCase.ExecuteAsync(_model);
+        results.MustHaveValidationError(
+            nameof(DeleteBlessingLevelModel.BlessingId),
+            "Blessing Id does not exist."
         );
     }
 

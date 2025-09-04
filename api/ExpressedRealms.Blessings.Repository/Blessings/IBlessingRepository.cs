@@ -15,5 +15,5 @@ public interface IBlessingRepository
     Task<bool> HasDuplicateLevelName(int blessingId, string name);
     Task<BlessingLevel> GetBlessingLevelForEditing(int blessingId, int id);
     Task EditBlessingLevelAsync(BlessingLevel blessing);
-    Task<bool> IsExistingBlessingLevel(int id);
+    Task<bool> IsExistingBlessingLevel(int blessingId, int id);
 }
