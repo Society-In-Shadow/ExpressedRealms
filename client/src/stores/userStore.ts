@@ -35,6 +35,8 @@ defineStore('user', {
             userRoles: [] as string[],
             userFeatureFlags: [] as string[],
             loadedUserInfo: false as boolean,
+            lastFeatureFlagLoad: null as Date | null,
+            lastPermissionLoad: null as Date | null
         }
     },
     actions: { 
@@ -42,12 +44,21 @@ defineStore('user', {
             return isLoggedIn();
         },
         async updateUserRoles(){
+            if(this.lastPermissionLoad && this.lastPermissionLoad.getTime() > new Date().getTime() - 300_000){
+                return;
+            }
+            this.lastPermissionLoad = new Date();
             await axios.get("/navMenu/permissions")
                 .then(response => {
                     this.userRoles = response.data.roles;
                 })
         },
         async updateUserFeatureFlags(){
+            if(this.lastFeatureFlagLoad && this.lastFeatureFlagLoad.getTime() > new Date().getTime() - 300_000){
+                return;
+            }
+            this.lastFeatureFlagLoad = new Date();
+            await this.updateUserRoles()
             return await axios.get("/navMenu/featureFlags")
                 .then(response => {
                     this.userFeatureFlags = response.data.featureFlags;
