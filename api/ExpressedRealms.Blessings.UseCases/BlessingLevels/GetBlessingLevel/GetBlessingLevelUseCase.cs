@@ -21,7 +21,7 @@ internal sealed class GetBlessingLevelUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var blessing = await blessingRepository.GetBlessingLevelForEditing(model.LevelId);
+        var blessing = await blessingRepository.GetBlessingLevelForEditing(model.BlessingId, model.LevelId);
 
         return Result.Ok(
             new GetBlessingLevelReturnModel()

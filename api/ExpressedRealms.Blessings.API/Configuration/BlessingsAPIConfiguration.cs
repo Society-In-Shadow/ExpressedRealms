@@ -1,3 +1,4 @@
+using ExpressedRealms.Blessings.API.BlessingLevels;
 using ExpressedRealms.Blessings.API.Blessings;
 using Microsoft.AspNetCore.Builder;
 
@@ -8,5 +9,6 @@ public static class BlessingsApiConfiguration
     public static void ConfigureBlessingEndPoints(this WebApplication app)
     {
         app.AddBlessingEndpoints();
+        app.AddBlessingLevelEndpoints();
     }
 }

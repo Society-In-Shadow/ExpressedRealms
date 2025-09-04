@@ -21,9 +21,8 @@ internal sealed class EditBlessingLevelUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var level = await blessingRepository.GetBlessingLevelForEditing(model.LevelId);
+        var level = await blessingRepository.GetBlessingLevelForEditing(model.BlessingId, model.LevelId);
 
-        level.BlessingId = model.BlessingId;
         level.XpCost = model.XpCost;
         level.XpGain = model.XpGain;
         level.Level = model.Level;
