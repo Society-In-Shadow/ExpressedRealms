@@ -21,7 +21,7 @@ public static class CreateBlessingLevelEndpoint
                 Description = request.Description,
                 BlessingId = blessingId,
                 XpCost = request.XpCost,
-                XpGain = request.XpGain
+                XpGain = request.XpGain,
             }
         );
 

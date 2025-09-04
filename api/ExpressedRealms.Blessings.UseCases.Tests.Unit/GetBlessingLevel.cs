@@ -31,9 +31,11 @@ public class GetBlessingLevelUseCaseTests
 
         _repository = A.Fake<IBlessingRepository>();
 
-        A.CallTo(() => _repository.IsExistingBlessingLevel(_model.BlessingId, _model.LevelId)).Returns(true);
+        A.CallTo(() => _repository.IsExistingBlessingLevel(_model.BlessingId, _model.LevelId))
+            .Returns(true);
         A.CallTo(() => _repository.IsExistingBlessing(_model.BlessingId)).Returns(true);
-        A.CallTo(() => _repository.GetBlessingLevelForEditing(_model.BlessingId, _model.LevelId)).Returns(_dbModel);
+        A.CallTo(() => _repository.GetBlessingLevelForEditing(_model.BlessingId, _model.LevelId))
+            .Returns(_dbModel);
 
         var validator = new GetBlessingLevelModelValidator(_repository);
 
@@ -55,7 +57,8 @@ public class GetBlessingLevelUseCaseTests
     [Fact]
     public async Task ValidationFor_LevelId_WillFail_WhenItDoesNotExist()
     {
-        A.CallTo(() => _repository.IsExistingBlessingLevel(_model.BlessingId, _model.LevelId)).Returns(false);
+        A.CallTo(() => _repository.IsExistingBlessingLevel(_model.BlessingId, _model.LevelId))
+            .Returns(false);
 
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(
@@ -63,7 +66,7 @@ public class GetBlessingLevelUseCaseTests
             "Level Id does not exist."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_BlessingId_WillFail_WhenItIs_IsEmpty()
     {

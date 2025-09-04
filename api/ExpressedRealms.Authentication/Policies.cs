@@ -19,9 +19,7 @@ public class Policies
     public static readonly Policies DownloadExpressionBooklet = new(
         nameof(DownloadExpressionBooklet)
     );
-    public static readonly Policies ManageBlessings = new(
-        nameof(ManageBlessings)
-    );
+    public static readonly Policies ManageBlessings = new(nameof(ManageBlessings));
 
     // Override ToString for convenience
     public override string ToString()

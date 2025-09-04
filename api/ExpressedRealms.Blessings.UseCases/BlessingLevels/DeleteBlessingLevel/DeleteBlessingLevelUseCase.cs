@@ -22,7 +22,10 @@ internal sealed class DeleteBlessingLevelUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var level = await blessingRepository.GetBlessingLevelForEditing(model.BlessingId, model.LevelId);
+        var level = await blessingRepository.GetBlessingLevelForEditing(
+            model.BlessingId,
+            model.LevelId
+        );
 
         level.SoftDelete();
 

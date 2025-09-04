@@ -22,6 +22,6 @@ public static class UserRoles
             KnowledgeManagementRole,
             DownloadCMSReports,
             DownloadExpressionBooklet,
-            ManageBlessingsRole
+            ManageBlessingsRole,
         };
 }

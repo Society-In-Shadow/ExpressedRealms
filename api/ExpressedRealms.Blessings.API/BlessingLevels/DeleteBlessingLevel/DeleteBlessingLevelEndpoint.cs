@@ -14,11 +14,9 @@ public static class DeleteBlessingLevelEndpoint
         [FromServices] IDeleteBlessingLevelUseCase useCase
     )
     {
-        var results = await useCase.ExecuteAsync(new DeleteBlessingLevelModel()
-        {
-            BlessingId = blessingId,
-            LevelId = id
-        });
+        var results = await useCase.ExecuteAsync(
+            new DeleteBlessingLevelModel() { BlessingId = blessingId, LevelId = id }
+        );
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;

@@ -170,7 +170,7 @@ try
         // https://github.com/domaindrivendev/Swashbuckle.AspNetCore?tab=readme-ov-file#include-descriptions-from-xml-comments
         var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
         options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-        
+
         // Comment out if the JSON cannot be loaded for some reason
         options.CustomSchemaIds(type => type.FullName);
 

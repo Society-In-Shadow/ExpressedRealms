@@ -7,18 +7,14 @@ namespace ExpressedRealms.Blessings.API.BlessingLevels.GetAllBlessings;
 
 public static class GetBlessingLevelEndpoint
 {
-    public static async Task<Results<Ok<BlessingLevelResponse>, ValidationProblem, NotFound>> Execute(
-        int blessingId,
-        int levelId,
-        IGetBlessingLevelUseCase useCase
-    )
+    public static async Task<
+        Results<Ok<BlessingLevelResponse>, ValidationProblem, NotFound>
+    > Execute(int blessingId, int levelId, IGetBlessingLevelUseCase useCase)
     {
-        var results = await useCase.ExecuteAsync(new GetBlessingLevelModel()
-        {
-            BlessingId = blessingId,
-            LevelId = levelId
-        });
-        
+        var results = await useCase.ExecuteAsync(
+            new GetBlessingLevelModel() { BlessingId = blessingId, LevelId = levelId }
+        );
+
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;
         if (results.HasNotFound(out var notFound))
@@ -32,7 +28,7 @@ public static class GetBlessingLevelEndpoint
                 Level = results.Value.Level,
                 XpCost = results.Value.XpCost,
                 XpGain = results.Value.XpGain,
-                Id = results.Value.Id
+                Id = results.Value.Id,
             }
         );
     }

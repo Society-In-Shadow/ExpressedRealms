@@ -18,24 +18,18 @@ internal static class BlessingLevelEndpoints
             .AddFluentValidationAutoValidation()
             .RequireAuthorization()
             .WithTags("Blessings")
+            .RequirePolicyAuthorization(Policies.ManageBlessings)
             .WithOpenApi();
 
-        endpointGroup
-            .MapGet("{blessingId}/level/{levelId}", GetBlessingLevelEndpoint.Execute)
-            .WithSummary(
-                "Returns three sets of blessings, advantages, disadvantages, and mixed blessings."
-            );
-        
-        endpointGroup
-            .MapPost("{blessingId}/level", CreateBlessingLevelEndpoint.Execute)
-            .RequirePolicyAuthorization(Policies.ManageBlessings);
+        endpointGroup.MapGet("{blessingId}/level/{levelId}", GetBlessingLevelEndpoint.Execute);
 
-        endpointGroup
-            .MapPut("{blessingId}/level/{levelId}", EditBlessingLevelEndpoint.Execute)
-            .RequirePolicyAuthorization(Policies.ManageBlessings);
+        endpointGroup.MapPost("{blessingId}/level", CreateBlessingLevelEndpoint.Execute);
 
-        endpointGroup
-            .MapDelete("{blessingId}/level/{levelId}", DeleteBlessingLevelEndpoint.Execute)
-            .RequirePolicyAuthorization(Policies.ManageBlessings);
+        endpointGroup.MapPut("{blessingId}/level/{levelId}", EditBlessingLevelEndpoint.Execute);
+
+        endpointGroup.MapDelete(
+            "{blessingId}/level/{levelId}",
+            DeleteBlessingLevelEndpoint.Execute
+        );
     }
 }

@@ -25,7 +25,7 @@ internal static class BlessingEndpoints
             .WithSummary(
                 "Returns three sets of blessings, advantages, disadvantages, and mixed blessings."
             );
-        
+
         endpointGroup
             .MapPost("", CreateBlessingEndpoint.Execute)
             .RequirePolicyAuthorization(Policies.ManageBlessings);

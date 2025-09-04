@@ -42,8 +42,10 @@ public class EditBlessingLevelUseCaseTests
         A.CallTo(() => _repository.HasDuplicateLevelName(_model.BlessingId, _model.Level))
             .Returns(false);
         A.CallTo(() => _repository.IsExistingBlessing(_model.BlessingId)).Returns(true);
-        A.CallTo(() => _repository.GetBlessingLevelForEditing(_model.BlessingId, _model.LevelId)).Returns(_dbModel);
-        A.CallTo(() => _repository.IsExistingBlessingLevel(_model.BlessingId, _model.LevelId)).Returns(true);
+        A.CallTo(() => _repository.GetBlessingLevelForEditing(_model.BlessingId, _model.LevelId))
+            .Returns(_dbModel);
+        A.CallTo(() => _repository.IsExistingBlessingLevel(_model.BlessingId, _model.LevelId))
+            .Returns(true);
 
         var validator = new EditBlessingLevelModelValidator(_repository);
 
@@ -176,7 +178,8 @@ public class EditBlessingLevelUseCaseTests
     [Fact]
     public async Task ValidationFor_LevelId_WillFail_WhenItDoesNotExist()
     {
-        A.CallTo(() => _repository.IsExistingBlessingLevel(_model.BlessingId, _model.LevelId)).Returns(false);
+        A.CallTo(() => _repository.IsExistingBlessingLevel(_model.BlessingId, _model.LevelId))
+            .Returns(false);
 
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(

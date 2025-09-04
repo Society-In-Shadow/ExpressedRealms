@@ -17,12 +17,12 @@ internal sealed class EditBlessingLevelModelValidator : AbstractValidator<EditBl
             .Matches(@"^\d+ pts?\.$")
             .WithMessage("Level must be in the format of '123 pts.' or '1 pt.'");
 
-        RuleFor(x => x.LevelId)
-            .NotEmpty()
-            .WithMessage("Level Id is required.");
-            
+        RuleFor(x => x.LevelId).NotEmpty().WithMessage("Level Id is required.");
+
         RuleFor(x => x)
-            .MustAsync(async (x, y) => await repository.IsExistingBlessingLevel(x.BlessingId, x.LevelId))
+            .MustAsync(
+                async (x, y) => await repository.IsExistingBlessingLevel(x.BlessingId, x.LevelId)
+            )
             .WithName(nameof(EditBlessingLevelModel.LevelId))
             .WithMessage("Level Id does not exist.");
 

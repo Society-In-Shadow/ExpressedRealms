@@ -10,15 +10,15 @@ internal sealed class DeleteBlessingLevelModelValidator
 {
     public DeleteBlessingLevelModelValidator(IBlessingRepository repository)
     {
-        RuleFor(x => x.LevelId)
-            .NotEmpty()
-            .WithMessage("Level Id is required.");
+        RuleFor(x => x.LevelId).NotEmpty().WithMessage("Level Id is required.");
 
         RuleFor(x => x)
-            .MustAsync(async (x, y) => await repository.IsExistingBlessingLevel(x.BlessingId, x.LevelId))
+            .MustAsync(
+                async (x, y) => await repository.IsExistingBlessingLevel(x.BlessingId, x.LevelId)
+            )
             .WithName(nameof(DeleteBlessingLevelModel.LevelId))
             .WithMessage("Level Id does not exist.");
-        
+
         RuleFor(x => x.BlessingId)
             .NotEmpty()
             .WithMessage("Blessing Id is required.")
