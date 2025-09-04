@@ -21,7 +21,7 @@ public static class EditBlessingEndpoint
                 Description = request.Description,
                 SubCategory = request.Category,
                 Type = request.Type,
-                Id = Id,
+                Id = id,
             }
         );
 
