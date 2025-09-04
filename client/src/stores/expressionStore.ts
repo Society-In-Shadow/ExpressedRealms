@@ -1,10 +1,8 @@
 import {defineStore} from 'pinia'
 import axios from "axios";
-import {UserRoles, userStore} from "@/stores/userStore";
 import {cmsStore} from "@/stores/cmsStore.ts";
 import router from "@/router";
 
-const userInfo = userStore();
 const cmsInfo = cmsStore();
 export const expressionStore = 
 defineStore('expression', {
@@ -14,7 +12,6 @@ defineStore('expression', {
             currentExpressionId: 0 as number,
             currentExpressionName: "" as string,
             isDoneLoading: false as boolean,
-            canEdit: userInfo.hasUserRole(UserRoles.PowerManagementRole),
             isSpecialExpression: false as boolean
         }
     },

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import Button from 'primevue/button';
 import EditPowerPath from "@/components/expressions/powerPaths/EditPowerPath.vue";
 import {
@@ -15,6 +15,12 @@ const showEdit = ref(false);
 const toggleEdit = () => {
   showEdit.value = !showEdit.value;
 }
+
+const hasPowerManagementRole = ref(false);
+
+onMounted(async () => {
+  hasPowerManagementRole.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole);
+})
 
 const props = defineProps({
   expressionId: {
@@ -41,7 +47,7 @@ const popups = powerPathConfirmationPopups(props.path.id, props.path.name);
       <h1 class="p-0 m-0">
         {{ props.path.name }}
       </h1>
-      <div v-if="userInfo.hasUserRole(UserRoles.PowerManagementRole) && !props.isReadOnly" class="d-inline-flex align-items-start">
+      <div v-if="hasPowerManagementRole && !props.isReadOnly" class="d-inline-flex align-items-start">
         <Button class="m-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
         <Button label="Edit" class="float-end m-2" @click="toggleEdit()" />
       </div>

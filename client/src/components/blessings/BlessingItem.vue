@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {type PropType, ref} from "vue";
+import {onMounted, type PropType, ref} from "vue";
 import type {Blessing} from "@/components/blessings/types";
 import EditBlessing from "@/components/blessings/EditBlessing.vue";
 import {UserRoles, userStore} from "@/stores/userStore.ts";
@@ -21,6 +21,11 @@ const props = defineProps({
 });
 
 const showEdit = ref(false);
+const hasBlessingRole = ref(false);
+
+onMounted(async () => {
+  hasBlessingRole.value = await userInfo.hasUserRole(UserRoles.BlessingsManagementRole);
+})
 
 function toggleEdit(){
   showEdit.value = !showEdit.value;
@@ -41,7 +46,7 @@ function toggleEdit(){
       </div>
     </div>
     <div
-        v-if="!showEdit && userInfo.hasUserRole(UserRoles.BlessingsManagementRole) && !props.isReadOnly"
+        v-if="!showEdit && hasBlessingRole && !props.isReadOnly"
         class="p-0 m-0 d-inline-flex align-items-start"
     >
       <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event, props.blessing.id)" />

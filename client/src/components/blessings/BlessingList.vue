@@ -27,7 +27,7 @@ const toggleAdd = () =>{
 
 onMounted(async () => {
   await store.getBlessings()
-  showEdit.value = userInfo.hasUserRole(UserRoles.BlessingsManagementRole);
+  showEdit.value = await userInfo.hasUserRole(UserRoles.BlessingsManagementRole);
 })
 
 const sortedAdvantages = computed(() => {

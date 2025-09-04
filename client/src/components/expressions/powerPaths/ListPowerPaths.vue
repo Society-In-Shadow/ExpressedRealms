@@ -27,8 +27,11 @@ const props = defineProps({
   }
 });
 
+const hasPowerManagementRole = ref(false);
+
 onBeforeMount(async () => {
   await powerPaths.getPowerPaths(props.expressionId);
+  hasPowerManagementRole.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole);
 })
 
 const showAddPower = ref(false);
@@ -97,7 +100,7 @@ const items = [
     <SplitButton label="Download Power Booklet" @click="downloadPowerBooklet()" :model="items" />
   </div>
   
-  <PowerPathReorder v-if="userInfo.hasUserRole(UserRoles.PowerManagementRole)" @toggle-preview="toggleReadOnly" />
+  <PowerPathReorder v-if="hasPowerManagementRole" @toggle-preview="toggleReadOnly" />
   <div v-for="path in powerPaths.powerPaths" :key="path.id">
     <Divider />
     <ShowPowerPath :path="path" :expression-id="props.expressionId" :is-read-only="readOnly" />
@@ -108,11 +111,11 @@ const items = [
   </div>
 
   <Button
-    v-if="!showAddPower && userInfo.hasUserRole(UserRoles.PowerManagementRole) && !readOnly" class="w-100 m-2"
+    v-if="!showAddPower && hasPowerManagementRole && !readOnly" class="w-100 m-2"
     label="Add Power Path" @click="toggleAddPower"
   />
   <AddPowerPath
-    v-if="showAddPower && userInfo.hasUserRole(UserRoles.PowerManagementRole) && !readOnly"
+    v-if="showAddPower && hasPowerManagementRole && !readOnly"
     :expression-id="props.expressionId" @canceled="toggleAddPower"
   />
 </template>

@@ -2,7 +2,7 @@
 
 import Card from "primevue/card";
 import Button from "primevue/button";
-import {type PropType, ref} from "vue";
+import {onMounted, type PropType, ref} from "vue";
 import type {Power} from "@/components/expressions/powers/types";
 import EditPower from "@/components/expressions/powers/EditPower.vue";
 import {powerConfirmationPopups} from "@/components/expressions/powers/services/powerConfirmationPopupService";
@@ -26,6 +26,12 @@ const props = defineProps({
   }
 });
 
+const hasPowerManagementRole = ref(false);
+
+onMounted(async () => {
+  hasPowerManagementRole.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole);
+})
+
 const popups = powerConfirmationPopups(props.power.id, props.power.name, props.powerPathId);
 
 const showEdit = ref(false);
@@ -38,7 +44,7 @@ const toggleEdit = () =>{
 
 <template>
   <EditPower
-    v-if="showEdit && userInfo.hasUserRole(UserRoles.PowerManagementRole) && !props.isReadOnly" :power-id="props.power.id"
+    v-if="showEdit && hasPowerManagementRole && !props.isReadOnly" :power-id="props.power.id"
     :power-path-id="props.powerPathId" @canceled="toggleEdit"
   />
   <Card v-else :id="makeIdSafe(props.power.name)" class="card-body-fix">
@@ -53,7 +59,7 @@ const toggleEdit = () =>{
           </div>
         </div>
         <div
-          v-if="!showEdit && userInfo.hasUserRole(UserRoles.PowerManagementRole) && !props.isReadOnly"
+          v-if="!showEdit && hasPowerManagementRole && !props.isReadOnly"
           class="p-0 m-0 d-inline-flex align-items-start"
         >
           <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />

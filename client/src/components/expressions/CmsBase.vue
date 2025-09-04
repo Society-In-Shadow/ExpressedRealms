@@ -42,7 +42,7 @@ let sections = ref([
 ]);
 
 const isLoading = ref(true);
-const showEdit = ref(expressionInfo.canEdit);
+const showEdit = ref(false);
 const showCreate = ref(false);
 const showPreview = ref(false);
 const showReportButton = ref(false);
@@ -54,7 +54,7 @@ async function fetchData() {
   await expressionInfo.getExpressionSections()
       .then(async () => {
         sections.value = expressionInfo.sections;
-        showEdit.value = userInfo.hasUserRole(UserRoles.ExpressionEditor)
+        showEdit.value = await userInfo.hasUserRole(UserRoles.ExpressionEditor)
         isLoading.value = false;
         if(location.hash){
           await nextTick();

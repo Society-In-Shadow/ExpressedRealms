@@ -9,9 +9,11 @@ import AddKnowledge from "@/components/knowledges/AddKnowledge.vue";
 
 const store = knowledgeStore();
 const userInfo = userStore();
+const hasKnowledgeManagementRole = ref(false);
 
 onMounted(async () => {
   await store.getKnowledges()
+  hasKnowledgeManagementRole.value = await userInfo.hasUserRole(UserRoles.KnowledgeManagementRole);
 })
 
 const showAdd = ref(false);
@@ -45,9 +47,9 @@ const sortedKnowledges = computed(() => {
     <KnowledgeItem :knowledge="knowledge" :is-read-only="props.isReadOnly" />
   </div>
   
-  <AddKnowledge v-if="showAdd && userInfo.hasUserRole(UserRoles.KnowledgeManagementRole) && !props.isReadOnly" @canceled="toggleAdd" />
+  <AddKnowledge v-if="showAdd && hasKnowledgeManagementRole && !props.isReadOnly" @canceled="toggleAdd" />
   <Button
-    v-if="!showAdd && userInfo.hasUserRole(UserRoles.KnowledgeManagementRole) && !props.isReadOnly" class="w-100 m-2"
+    v-if="!showAdd && hasKnowledgeManagementRole && !props.isReadOnly" class="w-100 m-2"
     label="Add Knowledge" @click="toggleAdd"
   />
 </template>

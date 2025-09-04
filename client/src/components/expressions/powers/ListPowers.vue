@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import AddPower from "@/components/expressions/powers/AddPower.vue";
 import PowerCard from "@/components/expressions/powers/PowerCard.vue";
 import Button from 'primevue/button';
@@ -26,6 +26,11 @@ const props = defineProps({
 });
 
 const showAddPower = ref(false);
+const hasPowerManagementRole = ref(false);
+
+onMounted(async () => {
+  hasPowerManagementRole.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole);
+})
 
 const toggleAddPower = () => {
   showAddPower.value = !showAddPower.value;
@@ -47,11 +52,11 @@ const toggleReadOnly = () => {
   </div>
 
   <AddPower
-    v-if="showAddPower && userInfo.hasUserRole(UserRoles.PowerManagementRole) && (!props.isReadOnly || !readOnly)"
+    v-if="showAddPower && hasPowerManagementRole && (!props.isReadOnly || !readOnly)"
     :power-path-id="props.powerPathId" @cancelled="toggleAddPower"
   />
   <Button
-    v-if="!showAddPower && userInfo.hasUserRole(UserRoles.PowerManagementRole) && (!props.isReadOnly || !readOnly)" class="w-100 m-2"
+    v-if="!showAddPower && hasPowerManagementRole && (!props.isReadOnly || !readOnly)" class="w-100 m-2"
     label="Add Power" @click="toggleAddPower"
   />
 </template>
