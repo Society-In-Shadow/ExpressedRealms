@@ -9,6 +9,7 @@ namespace ExpressedRealms.Blessings.API.Blessings.EditBlessing;
 public static class EditBlessingEndpoint
 {
     public static async Task<Results<Ok, NotFound, ValidationProblem>> Execute(
+        int id,
         [FromBody] EditBlessingRequest request,
         [FromServices] IEditBlessingUseCase useCase
     )
@@ -20,7 +21,7 @@ public static class EditBlessingEndpoint
                 Description = request.Description,
                 SubCategory = request.Category,
                 Type = request.Type,
-                Id = request.Id,
+                Id = Id,
             }
         );
 

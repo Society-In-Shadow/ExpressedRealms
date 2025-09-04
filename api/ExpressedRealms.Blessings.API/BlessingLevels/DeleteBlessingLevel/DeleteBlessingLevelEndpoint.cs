@@ -10,12 +10,12 @@ public static class DeleteBlessingLevelEndpoint
 {
     public static async Task<Results<Ok, NotFound, ValidationProblem>> Execute(
         int blessingId,
-        int id,
+        int levelId,
         [FromServices] IDeleteBlessingLevelUseCase useCase
     )
     {
         var results = await useCase.ExecuteAsync(
-            new DeleteBlessingLevelModel() { BlessingId = blessingId, LevelId = id }
+            new DeleteBlessingLevelModel() { BlessingId = blessingId, LevelId = levelId }
         );
 
         if (results.HasValidationError(out var validationProblem))
