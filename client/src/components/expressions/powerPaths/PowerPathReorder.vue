@@ -2,16 +2,17 @@
 
 import {powerPathStore} from "@/components/expressions/powerPaths/stores/powerPathStore";
 import {UserRoles, userStore} from "@/stores/userStore";
-let userInfo = userStore();
-let powerPaths = powerPathStore();
-import { DropList, Drag } from "vue-easy-dnd";
+import {Drag, DropList} from "vue-easy-dnd";
 import Button from 'primevue/button';
-import {ref, toRaw} from "vue";
+import {onMounted, ref, toRaw} from "vue";
 import axios from "axios";
 import type {PowerPath} from "@/components/expressions/powerPaths/types";
 import {getSortAndIdsForPowerPaths} from "@/components/expressions/powerPaths/utilities/powerPathUtilities";
 import {expressionStore} from "@/stores/expressionStore";
 import toaster from "@/services/Toasters";
+
+let userInfo = userStore();
+let powerPaths = powerPathStore();
 
 const expressionInfo = expressionStore();
 const emit = defineEmits<{
@@ -19,6 +20,12 @@ const emit = defineEmits<{
 }>();
 
 let originalModel:PowerPath[];
+
+const hasPowerManagementRole = ref(false);
+
+onMounted(() => {
+  hasPowerManagementRole.value = userInfo.hasUserRole(UserRoles.PowerManagementRole);
+})
 
 function saveChanges(){
 
@@ -49,7 +56,7 @@ function toggleEdit(){
 <template>
   <div class="row">
     <Button
-      v-if="userInfo.hasUserRole(UserRoles.PowerManagementRole)" class="col m-2"
+      v-if="hasPowerManagementRole" class="col m-2"
       :label="showPowerPathReorder ? 'Cancel' : 'Reorder Power Paths'" @click="toggleEdit"
     />
     <Button v-if="showPowerPathReorder" label="Save" class="col m-2" @click="saveChanges" />

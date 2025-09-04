@@ -44,7 +44,7 @@ defineStore('user', {
             return isLoggedIn();
         },
         async updateUserRoles(){
-            if(this.lastPermissionLoad && this.lastPermissionLoad.getTime() > new Date().getTime() - 300_000){
+            if(this.lastPermissionLoad != null && this.lastPermissionLoad.getTime() > new Date().getTime() - 300_000){
                 return;
             }
             this.lastPermissionLoad = new Date();
@@ -54,17 +54,17 @@ defineStore('user', {
                 })
         },
         async updateUserFeatureFlags(){
-            if(this.lastFeatureFlagLoad && this.lastFeatureFlagLoad.getTime() > new Date().getTime() - 300_000){
+            if(this.lastFeatureFlagLoad != null && this.lastFeatureFlagLoad.getTime() > new Date().getTime() - 300_000){
                 return;
             }
             this.lastFeatureFlagLoad = new Date();
-            await this.updateUserRoles()
             return await axios.get("/navMenu/featureFlags")
                 .then(response => {
                     this.userFeatureFlags = response.data.featureFlags;
                 })
         },
-        hasUserRole(role: UserRole): boolean {
+        async hasUserRole(role: UserRole): Promise<boolean> {
+            await this.updateUserRoles()
             return this.userRoles.includes(role);
         },
         async hasFeatureFlag(featureFlag: FeatureFlag): Promise<boolean> {

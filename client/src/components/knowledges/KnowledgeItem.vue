@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {type PropType, ref} from "vue";
+import {onMounted, type PropType, ref} from "vue";
 import type {Knowledge} from "@/components/knowledges/types";
 import {UserRoles, userStore} from "@/stores/userStore";
 import Button from "primevue/button";
@@ -24,6 +24,12 @@ let popups = knowledgeConfirmationPopup(props.knowledge.id, props.knowledge.name
 
 const showEdit = ref(false);
 
+const hasKnowledgeManagementRole = ref(false);
+
+onMounted(async () => {
+  hasKnowledgeManagementRole.value = await userInfo.hasUserRole(UserRoles.KnowledgeManagementRole);
+})
+
 function toggleEdit(){
   showEdit.value = !showEdit.value;
 }
@@ -43,7 +49,7 @@ function toggleEdit(){
       </div>
     </div>
     <div
-      v-if="!showEdit && userInfo.hasUserRole(UserRoles.PowerManagementRole) && !props.isReadOnly"
+      v-if="!showEdit && hasKnowledgeManagementRole && !props.isReadOnly"
       class="p-0 m-0 d-inline-flex align-items-start"
     >
       <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />

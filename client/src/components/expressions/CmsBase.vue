@@ -54,7 +54,7 @@ async function fetchData() {
   await expressionInfo.getExpressionSections()
       .then(async () => {
         sections.value = expressionInfo.sections;
-        showEdit.value = userInfo.hasUserRole(UserRoles.ExpressionEditor)
+        showEdit.value = await userInfo.hasUserRole(UserRoles.ExpressionEditor)
         isLoading.value = false;
         if(location.hash){
           await nextTick();
