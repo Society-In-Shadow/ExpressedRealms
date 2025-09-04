@@ -71,9 +71,11 @@ const sortedDisadvantages = computed(() => {
 
 <template>
   <div v-if="showEdit" class="text-right">
-    <Button label="Add Advantage" @click="toggleAdd" />
-    <AddBlessing v-if="showAdd" @canceled="toggleAdd" />
+    <Button v-if="!showAdd" label="Add Advantage" @click="toggleAdd" />
+    <Button v-else label="Cancel Add" @click="toggleAdd" />
+    
   </div>
+  <AddBlessing v-if="showAdd" @canceled="toggleAdd" />
   <div>
     <h1>Advantage</h1>
     <div v-for="blessing in sortedAdvantages" :key="blessing.id">

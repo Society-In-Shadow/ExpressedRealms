@@ -4,6 +4,8 @@ import FormInputTextWrapper from "@/FormWrappers/FormInputTextWrapper.vue";
 import Button from "primevue/button";
 import {getValidationInstance} from "@/components/blessings/validations/blessingForm.ts";
 import {blessingsStore} from "@/components/blessings/stores/blessingsStore.ts";
+import {onBeforeMount, type PropType} from "vue";
+import type {Blessing} from "@/components/blessings/types.ts";
 import FormEditorWrapper from "@/FormWrappers/FormEditorWrapper.vue";
 
 const store = blessingsStore();
@@ -13,9 +15,20 @@ const emit = defineEmits<{
   canceled: []
 }>();
 
+const props = defineProps({
+  blessing: {
+    type: Object as PropType<Blessing>,
+    required: true,
+  }
+});
+
+onBeforeMount(async () => {
+  form.setValues(props.blessing);
+})
+
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await store.addBlessing(values);
+  await store.editBlessing(props.blessing.id, values);
   cancel();
 });
 
@@ -38,7 +51,7 @@ const cancel = () => {
 
     <div class="m-3 text-right">
       <Button label="Cancel" class="m-2" type="reset" @click="cancel" />
-      <Button label="Add" class="m-2" type="submit" />
+      <Button label="Update" class="m-2" type="submit" />
     </div>
   </form>
 </template>
