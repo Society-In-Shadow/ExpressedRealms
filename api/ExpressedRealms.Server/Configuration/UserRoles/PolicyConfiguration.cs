@@ -37,6 +37,11 @@ public static class PolicyConfiguration
                 Policies.DownloadExpressionBooklet.Name,
                 policy => policy.RequireRole(UserRoles.DownloadExpressionBooklet)
             );
+            
+            options.AddPolicy(
+                Policies.ManageBlessings.Name,
+                policy => policy.RequireRole(UserRoles.ManageBlessingsRole)
+            );
         });
     }
 }
