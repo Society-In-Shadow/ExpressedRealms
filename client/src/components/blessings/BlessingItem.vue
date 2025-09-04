@@ -5,7 +5,9 @@ import type {Blessing} from "@/components/blessings/types";
 import EditBlessing from "@/components/blessings/EditBlessing.vue";
 import {UserRoles, userStore} from "@/stores/userStore.ts";
 import Button from "primevue/button";
+import {blessingConfirmationPopup} from "@/components/blessings/services/blessingConfirmationPopupService.ts";
 
+const popups = blessingConfirmationPopup();
 const userInfo = userStore();
 const props = defineProps({
   blessing: {
@@ -42,7 +44,7 @@ function toggleEdit(){
         v-if="!showEdit && userInfo.hasUserRole(UserRoles.BlessingsManagementRole) && !props.isReadOnly"
         class="p-0 m-0 d-inline-flex align-items-start"
     >
-<!--      <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />-->
+      <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event, props.blessing.id)" />
       <Button class="float-end" label="Edit" @click="toggleEdit" />
     </div>
   </div>
