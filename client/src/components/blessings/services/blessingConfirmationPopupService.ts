@@ -1,5 +1,4 @@
 import {useConfirm} from "primevue/useconfirm";
-import {knowledgeStore} from "@/components/knowledges/stores/knowledgeStore";
 import {blessingsStore} from "@/components/blessings/stores/blessingsStore.ts";
 
 export const blessingConfirmationPopup = () => {

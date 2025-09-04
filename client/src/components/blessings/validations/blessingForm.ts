@@ -1,6 +1,5 @@
 import {type InferType, object, string} from "yup";
 import {useGenericForm} from "@/utilities/formUtilities";
-import type {ListItem} from "@/types/ListItem";
 import type {Blessing} from "@/components/blessings/types.ts";
 
 const validationSchema = object({

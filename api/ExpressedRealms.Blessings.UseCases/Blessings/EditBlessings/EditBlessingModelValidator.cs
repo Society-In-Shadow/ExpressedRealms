@@ -20,7 +20,7 @@ internal sealed class EditBlessingModelValidator : AbstractValidator<EditBlessin
             .WithMessage("Name is required.")
             .MaximumLength(250)
             .WithMessage("Name must be between 1 and 250 characters.");
-        
+
         RuleFor(x => x)
             .MustAsync(async (x, y) => !await repository.HasDuplicateName(x.Name, x.Id))
             .WithName(nameof(EditBlessingModel.Name))
