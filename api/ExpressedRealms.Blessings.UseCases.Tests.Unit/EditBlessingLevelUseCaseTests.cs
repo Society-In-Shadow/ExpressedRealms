@@ -39,7 +39,7 @@ public class EditBlessingLevelUseCaseTests
 
         _repository = A.Fake<IBlessingRepository>();
 
-        A.CallTo(() => _repository.HasDuplicateLevelName(_model.BlessingId, _model.Level))
+        A.CallTo(() => _repository.HasDuplicateLevelName(_model.BlessingId, _model.Level, _model.LevelId))
             .Returns(false);
         A.CallTo(() => _repository.IsExistingBlessing(_model.BlessingId)).Returns(true);
         A.CallTo(() => _repository.GetBlessingLevelForEditing(_model.BlessingId, _model.LevelId))
@@ -74,8 +74,8 @@ public class EditBlessingLevelUseCaseTests
     }
 
     [Theory]
-    [InlineData("123 pst.")]
-    [InlineData("5 ptss. ")]
+    [InlineData("123 pst")]
+    [InlineData("5 ptss ")]
     [InlineData("asdf.")]
     [InlineData("pts.")]
     [InlineData("pt.")]
@@ -86,14 +86,14 @@ public class EditBlessingLevelUseCaseTests
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(
             nameof(EditBlessingLevelModel.Level),
-            "Level must be in the format of '123 pts.' or '1 pt.'"
+            "Level must be in the format of '123pts' or '1pt'"
         );
     }
 
     [Fact]
     public async Task ValidationFor_Name_WillFail_WhenName_AlreadyExists()
     {
-        A.CallTo(() => _repository.HasDuplicateLevelName(_model.BlessingId, _model.Level))
+        A.CallTo(() => _repository.HasDuplicateLevelName(_model.BlessingId, _model.Level, _model.LevelId))
             .Returns(true);
 
         var results = await _useCase.ExecuteAsync(_model);
