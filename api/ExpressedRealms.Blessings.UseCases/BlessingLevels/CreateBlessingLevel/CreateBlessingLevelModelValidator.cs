@@ -15,8 +15,8 @@ internal sealed class CreateBlessingLevelModelValidator
             .WithMessage("Level is required.")
             .MaximumLength(25)
             .WithMessage("Name must be between 1 and 25 characters.")
-            .Matches(@"^\d+ pts?\.$")
-            .WithMessage("Level must be in the format of '123 pts.' or '1 pt.'");
+            .Matches(@"^\d+ pts?$")
+            .WithMessage("Level must be in the format of '123 pts' or '1 pt'");
 
         RuleFor(x => x)
             .MustAsync(

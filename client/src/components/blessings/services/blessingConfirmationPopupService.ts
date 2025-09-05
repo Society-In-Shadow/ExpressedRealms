@@ -26,7 +26,27 @@ export const blessingConfirmationPopup = () => {
         }
     });
 
-    return { deleteConfirmation };
+    const deleteBlessingLevelConfirmation = (event: MouseEvent, blessingId: number, levelId: number) =>
+        confirm.require({
+            target: event.target as HTMLElement,
+            group: 'popup',
+            message: `Do you want to delete this blessing level?`,
+            icon: 'pi pi-info-circle',
+            rejectProps: {
+                label: 'Cancel',
+                severity: 'secondary',
+                outlined: true
+            },
+            acceptProps: {
+                label: 'Delete Blessing Level',
+                severity: 'danger'
+            },
+            accept: () => {
+                store.deleteBlessingLevel(blessingId, levelId);
+            }
+        });
+
+    return { deleteConfirmation, deleteBlessingLevelConfirmation };
 
 };
 
