@@ -34,7 +34,7 @@ public static class GetAllBlessingsEndpoint
             .OrderBy(x => x.Key)
             .Select(x => new SubSection()
             {
-                Name = x.Key,
+                Name = x.Key!,
                 Blessings = x.OrderBy(x => x.Name)
                     .Select(x => new Blessing()
                     {
@@ -55,8 +55,8 @@ public static class GetAllBlessingsEndpoint
                             })
                             .ToList(),
                     })
-                    .ToList()
-            }).ToList();
-
+                    .ToList(),
+            })
+            .ToList();
     }
 }

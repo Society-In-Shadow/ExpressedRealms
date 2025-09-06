@@ -79,7 +79,7 @@ onMounted(async () =>{
   hasBlessingFeatureFlag.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowBlessingCMS);
 })
 
-var hasBlessingSection = computed(() => {
+const hasBlessingSection = computed(() => {
   const hasBlessingSection = sections.value.find(section => section.sectionTypeName === 'Blessings Section')
   return hasBlessingSection !== undefined;
 })
