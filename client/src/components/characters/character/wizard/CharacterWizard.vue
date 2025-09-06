@@ -21,7 +21,7 @@ const sections = ref([
 
 <template>
   <div class="row pt-3">
-    <div class="col-2">
+    <div class="col col-md-2">
       <Card>
         <template #content>
           <div v-for="section in sections" class="text-right p-2">

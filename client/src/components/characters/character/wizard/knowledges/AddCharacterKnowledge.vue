@@ -4,13 +4,13 @@ import FormTextAreaWrapper from "@/FormWrappers/FormTextAreaWrapper.vue";
 import Button from "primevue/button";
 import {getValidationInstance} from "@/components/characters/character/knowledges/validations/knowledgeValidations";
 import {characterKnowledgeStore} from "@/components/characters/character/knowledges/stores/characterKnowledgeStore";
-import KnowledgeLevelDetail from "@/components/characters/character/knowledges/KnowledgeLevelDetail.vue";
 import {useRoute} from "vue-router";
 import {onBeforeMount, type PropType, ref} from "vue";
 import FormListboxWrapper from "@/FormWrappers/FormListboxWrapper.vue";
 import type {KnowledgeOptions} from "@/components/characters/character/knowledges/types";
 import Message from "primevue/message";
 import type {Knowledge} from "@/components/knowledges/types.ts";
+import KnowledgeLevelDetail from "@/components/characters/character/wizard/knowledges/KnowledgeLevelDetail.vue";
 
 const store = characterKnowledgeStore();
 const form = getValidationInstance();
@@ -55,7 +55,7 @@ const onSubmit = form.handleSubmit(async (values) => {
     Available Experience: {{ store.currentExperience }}
   </h3>
   <form @submit="onSubmit">
-    <FormListboxWrapper v-model="form.knowledgeLevel" :options="store.knowledgeLevels" option-value="id" option-disabled="disabled">
+    <FormListboxWrapper v-model="form.knowledgeLevel" :options="store.knowledgeLevels" option-value="id" option-disabled="disabled" scroll-height="10000px">
       <template #option="slotProps">
         <KnowledgeLevelDetail
             :is-loading="store.isLoadingLevels" :selected-item="slotProps.option"
