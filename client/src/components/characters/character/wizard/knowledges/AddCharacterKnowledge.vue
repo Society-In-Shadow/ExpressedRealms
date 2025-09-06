@@ -83,8 +83,7 @@ const onSubmit = form.handleSubmit(async (values) => {
     <FormTextAreaWrapper v-model="form.notes" />
 
     <div class="m-3 text-right">
-      <Button label="Cancel" class="m-2" type="reset" />
-      <Button label="Pick" class="m-2" type="submit" />
+      <Button label="Add" class="m-2" type="submit" />
     </div>
   </form>
 </template>

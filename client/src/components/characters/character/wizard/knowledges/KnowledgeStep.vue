@@ -66,7 +66,7 @@ const toggleEdit = (knowledgeId: number) => {
           </div>
         </div>
         <div>
-          <Button label="Edit" @click="toggleEdit(knowledge.knowledge.id)" />
+          <Button label="View" @click="toggleEdit(knowledge.knowledge.id)" />
           <Teleport v-if="characterKnowledgeData.activeKnowledgeId == knowledge.knowledge.id" to="#item-modification-section">
             <EditCharacterKnowledge :knowledge="knowledge" />
           </Teleport>

@@ -10,11 +10,13 @@ import Message from "primevue/message";
 import {addKnowledgeDialog} from "@/components/characters/character/knowledges/services/dialogs.ts";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
+import {confirmationPopup} from "@/components/characters/character/knowledges/services/confirmationService.ts";
 
 const dialogService = addKnowledgeDialog();
 const store = characterKnowledgeStore();
 const form = getValidationInstance();
 const route = useRoute();
+const popupService = confirmationPopup(route.params.id)
 
 const props = defineProps({
   knowledge: {
@@ -62,9 +64,17 @@ function getCurrentXpLevel(levelId: number){
 </script>
 
 <template>
-  <h1 class="pt-0 mt-0">
-    {{ props.knowledge.knowledge.name }}
-  </h1>
+  <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
+    <div>
+      <h1 class="p-0 m-0">
+        {{ props.knowledge.knowledge.name }}
+      </h1>
+    </div>
+    <div v-if="!props.isReadOnly" class="p-0 m-2 d-inline-flex align-items-start align-items-center">
+      <Button class="float-end" label="Delete" severity="danger" @click="popupService.deleteConfirmation($event, props.knowledge.mappingId )" />
+    </div>
+  </div>
+
   <h3>{{ props.knowledge.knowledge.type }}</h3>
   <p>{{ props.knowledge.knowledge.description }}</p>
   <h3 class="text-right">

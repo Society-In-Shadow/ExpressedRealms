@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import Button from 'primevue/button';
 import Card from 'primevue/card';
-
-
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import KnowledgeStep from "@/components/characters/character/wizard/knowledges/KnowledgeStep.vue";
+import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import {useRoute} from "vue-router";
 
+const xpData = experienceStore();
+const route = useRoute()
 const sections = ref([
   { name: 'Getting Started'},
   { name: 'Expression' },
@@ -16,6 +18,9 @@ const sections = ref([
   { name: 'Proficiencies' },
 ]);
 
+onMounted(() => {
+  xpData.updateExperience(route.params.id);
+})
 
 </script>
 
