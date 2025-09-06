@@ -6,6 +6,7 @@ import BlessingItem from "@/components/blessings/BlessingItem.vue";
 import {UserRoles, userStore} from "@/stores/userStore.ts";
 import AddBlessing from "@/components/blessings/AddBlessing.vue";
 import Button from "primevue/button";
+import {makeIdSafe} from "@/utilities/stringUtilities.ts";
 
 const store = blessingsStore();
 const userInfo = userStore();
@@ -39,30 +40,10 @@ onMounted(async () => {
     
   </div>
   <AddBlessing v-if="showAdd" @canceled="toggleAdd" />
-  <div>
-    <h1>Advantage</h1>
-    <div v-for="subCategory in store.advantages">
-      <h2>{{ subCategory.name }}</h2>
-      <div v-for="blessing in subCategory.blessings" :key="blessing.id">
-        <BlessingItem :blessing="blessing" :is-read-only="props.isReadOnly" />
-      </div>
-    </div>
-  </div>
-
-  <div>
-    <h1>Disadvantage</h1>
-    <div v-for="subCategory in store.disadvantages">
-      <h2>{{ subCategory.name }}</h2>
-      <div v-for="blessing in subCategory.blessings" :key="blessing.id">
-        <BlessingItem :blessing="blessing" :is-read-only="props.isReadOnly" />
-      </div>
-    </div>
-  </div>
-
-  <div>
-    <h1>Mixed Blessings</h1>
-    <div v-for="subCategory in store.mixedBlessings">
-      <h2>{{ subCategory.name }}</h2>
+  <div v-for="type in store.types" :key="type.name">
+    <h1 :id="makeIdSafe(type.name)">{{ type.name }}</h1>
+    <div v-for="subCategory in type.subCategories" :key="subCategory.name">
+      <h2 :id="makeIdSafe(subCategory.name)">{{ subCategory.name }}</h2>
       <div v-for="blessing in subCategory.blessings" :key="blessing.id">
         <BlessingItem :blessing="blessing" :is-read-only="props.isReadOnly" />
       </div>

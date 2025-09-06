@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import axios from "axios";
-import type {BlessingLevel, BlessingRequest, SubCategory} from "@/components/blessings/types";
+import type {BlessingLevel, BlessingRequest, BlessingType, SubCategory} from "@/components/blessings/types";
 import type {BlessingForm} from "@/components/blessings/validations/blessingForm.ts";
 import toaster from "@/services/Toasters";
 
@@ -10,7 +10,8 @@ export const blessingsStore =
             return {
                 advantages: [] as SubCategory[],
                 disadvantages: [] as SubCategory[],
-                mixedBlessings: [] as SubCategory[]
+                mixedBlessings: [] as SubCategory[],
+                types: [] as BlessingType[]
             }
         },
         actions: {
@@ -19,6 +20,11 @@ export const blessingsStore =
                 this.advantages = response.data.advantages
                 this.disadvantages = response.data.disadvantages
                 this.mixedBlessings = response.data.mixedBlessings
+                this.types = [  
+                    { name: 'Advantage', subCategories: response.data.advantages},
+                    { name: 'Disadvantage', subCategories: response.data.disadvantages},
+                    { name: 'Mixed Blessings', subCategories: response.data.mixedBlessings}
+                ]
             },
             async addBlessing(blessing: BlessingForm){
                 await axios.post(`/blessings/`, {

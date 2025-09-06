@@ -7,6 +7,7 @@ import {UserRoles, userStore} from "@/stores/userStore.ts";
 import Button from "primevue/button";
 import {blessingConfirmationPopup} from "@/components/blessings/services/blessingConfirmationPopupService.ts";
 import {addBlessingDialog} from "@/components/blessings/services/dialogs.ts";
+import {makeIdSafe} from "@/utilities/stringUtilities.ts";
 
 const popups = blessingConfirmationPopup();
 const dialogs = addBlessingDialog();
@@ -40,7 +41,7 @@ function toggleEdit(){
   </div>
   <div class="d-flex flex-column flex-md-row align-self-center justify-content-between mt-4">
     <div>
-      <h3 class="p-0 m-0">
+      <h3 :id="makeIdSafe(props.blessing.name)" class="p-0 m-0">
         {{ props.blessing.name }}
       </h3>
     </div>

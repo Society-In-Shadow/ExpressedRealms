@@ -5,6 +5,11 @@ export interface BlessingRequest {
     mixedBlessings: Array<SubCategory>
 }
 
+export interface BlessingType{
+    name: string,
+    subCategories: Array<SubCategory>
+}
+
 export interface SubCategory {
     name: string,
     blessings: Array<Blessing>
