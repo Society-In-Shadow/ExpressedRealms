@@ -54,6 +54,12 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "Hides the sections that exist in the blessing CMS system"
     );
 
+    public static readonly ReleaseFlags ShowCharacterWizard = new(
+        "Shows the new character wizard system",
+        "show-character-wizard",
+        "Shows edit button on the character sheet that will bring up the wizard"
+    );
+
     public override string ToString()
     {
         return Name;
