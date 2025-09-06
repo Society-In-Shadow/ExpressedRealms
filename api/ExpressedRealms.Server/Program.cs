@@ -122,13 +122,12 @@ try
     });
 
     builder.AddPolicyConfiguration();
-    
+
     builder.Services.ConfigureHttpJsonOptions(options =>
     {
         options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         options.SerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
     });
-
 
     var clientCookieDomain = await keyVaultManager.GetSecret(GeneralConfig.CookieDomain);
     builder

@@ -28,7 +28,8 @@ internal sealed class EditBlessingLevelModelValidator : AbstractValidator<EditBl
 
         RuleFor(x => x)
             .MustAsync(
-                async (x, y) => !await repository.HasDuplicateLevelName(x.BlessingId, x.Level, x.LevelId)
+                async (x, y) =>
+                    !await repository.HasDuplicateLevelName(x.BlessingId, x.Level, x.LevelId)
             )
             .WithName(nameof(EditBlessingLevelModel.Level))
             .WithMessage("Blessing already has a level with this name.");

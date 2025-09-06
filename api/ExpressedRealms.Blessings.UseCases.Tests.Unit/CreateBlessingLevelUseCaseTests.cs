@@ -18,7 +18,7 @@ public class CreateBlessingLevelUseCaseTests
         _model = new CreateBlessingLevelModel()
         {
             Description = "Description",
-            Level = "4 pt.",
+            Level = "4pts",
             BlessingId = 2,
             XpCost = 4,
             XpGain = 0,
