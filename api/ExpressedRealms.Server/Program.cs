@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json;
 using AspNetCore.Swagger.Themes;
 using Audit.Core;
 using ExpressedRealms.Authentication.AzureKeyVault;
@@ -121,6 +122,13 @@ try
     });
 
     builder.AddPolicyConfiguration();
+    
+    builder.Services.ConfigureHttpJsonOptions(options =>
+    {
+        options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        options.SerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+    });
+
 
     var clientCookieDomain = await keyVaultManager.GetSecret(GeneralConfig.CookieDomain);
     builder

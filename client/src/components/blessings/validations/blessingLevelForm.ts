@@ -43,6 +43,7 @@ export function getValidationInstance() {
         handleSubmit: form.handleSubmit, 
         customResetForm,
         setValues,
+        setErrors: form.setErrors,
         level: form.fields.level,
         description: form.fields.description,
         xpCost: form.fields.xpCost,

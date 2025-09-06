@@ -15,7 +15,8 @@ const emit = defineEmits<{
 
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await store.addBlessingLevel(values);
+  form.setFieldError("level", "this is a test v2");
+  //await store.addBlessingLevel(form, values);
   cancel();
 });
 

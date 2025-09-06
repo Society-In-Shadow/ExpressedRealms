@@ -17,7 +17,7 @@ const dialogRef = inject('dialogRef');
 const blessingId = ref(dialogRef.value.data.blessingId);
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await store.addBlessingLevel(blessingId.value, values);
+  await store.addBlessingLevel(form, blessingId.value, values);
   cancel();
 });
 

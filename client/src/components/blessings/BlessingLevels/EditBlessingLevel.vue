@@ -1,19 +1,16 @@
 <script setup lang="ts">
 
+import FormInputNumberWrapper from "@/FormWrappers/FormInputNumberWrapper.vue";
 import FormTextAreaWrapper from "@/FormWrappers/FormTextAreaWrapper.vue";
 import FormInputTextWrapper from "@/FormWrappers/FormInputTextWrapper.vue";
 import Button from "primevue/button";
 import {getValidationInstance} from "@/components/blessings/validations/blessingLevelForm.ts";
 import {blessingsStore} from "@/components/blessings/stores/blessingsStore.ts";
 import {inject, onBeforeMount, ref} from "vue";
-import FormInputNumberWrapper from "@/FormWrappers/FormInputNumberWrapper.vue";
 
 const store = blessingsStore();
 
 const form = getValidationInstance()
-const emit = defineEmits<{
-  canceled: []
-}>();
 
 const dialogRef = inject('dialogRef');
 
@@ -25,10 +22,10 @@ onBeforeMount(async () => {
   form.setValues(values);
 })
 
-
 const onSubmit = form.handleSubmit(async (values) => {
-  await store.editBlessingLevel(blessingId.value, levelId.value, values);
-  cancel();
+  if(await store.editBlessingLevel(form, blessingId.value, levelId.value, values)){
+    cancel();
+  }
 });
 
 const cancel = () => {

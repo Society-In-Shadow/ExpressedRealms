@@ -50,25 +50,44 @@ export const blessingsStore =
                 const response = await axios.get<BlessingLevel>(`/blessings/${blessingId}/level/${levelId}`);
                 return response.data;
             },
-            async addBlessingLevel(blessingId: number, form: BlessingLevelForm){
-                await axios.post(`/blessings/${blessingId}/level/`, {
-                    level: form.level,
-                    description: form.description,
-                    xpCost: form.xpCost,
-                    xpGain: form.xpGain
-                });
-                toaster.success("Successfully added Blessing Level!");
-                await this.getBlessings();
+            async addBlessingLevel(blessingId: number, formModel: BlessingLevelForm) {
+                try{
+                    await axios.post(`/blessings/${blessingId}/level/`, {
+                        level: formModel.level,
+                        description: formModel.description,
+                        xpCost: formModel.xpCost,
+                        xpGain: formModel.xpGain
+                    })
+                    toaster.success("Successfully added Blessing Level!");
+                    await this.getBlessings();
+                }catch(error){
+                    const errors = error?.response.data?.errors as Record<string, string[] | string> | undefined;
+                    if(errors){
+                        form.setErrors(errors);
+                    }
+                    return false;
+                }
+
             },
-            async editBlessingLevel(blessingId: number, levelId: number, form: BlessingLevelForm){
-                await axios.put(`/blessings/${blessingId}/level/${levelId}`, {
-                    level: form.level,
-                    description: form.description,
-                    xpCost: form.xpCost,
-                    xpGain: form.xpGain
-                });
-                toaster.success("Successfully edited Blessing Level!");
-                await this.getBlessings();
+            async editBlessingLevel(form, blessingId: number, levelId: number, formData: BlessingLevelForm) : Promise<boolean>{
+                
+                try{
+                    await axios.put(`/blessings/${blessingId}/level/${levelId}`, {
+                        level: formData.level,
+                        description: formData.description,
+                        xpCost: formData.xpCost,
+                        xpGain: formData.xpGain
+                    })
+                    toaster.success("Successfully edited Blessing Level!");
+                    await this.getBlessings();
+                    return true;
+                }catch(error){
+                    const errors = error?.response.data?.errors as Record<string, string[] | string> | undefined;
+                    if(errors){
+                        form.setErrors(errors);
+                    }
+                    return false;
+                }
             },
             async deleteBlessingLevel(blessingId: number, levelId: number){
                 await axios.delete(`/blessings/${blessingId}/level/${levelId}`);
