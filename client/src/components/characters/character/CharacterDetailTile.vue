@@ -3,7 +3,7 @@
 import Card from "primevue/card";
 import Popover from "primevue/popover";
 import {onMounted, ref} from "vue";
-import {useRoute} from 'vue-router'
+import {useRoute, useRouter} from 'vue-router'
 import {characterStore} from "@/components/characters/character/stores/characterStore";
 import Button from "primevue/button";
 import EditCharacterDetails from "@/components/characters/character/EditCharacterDetails.vue";
@@ -13,6 +13,7 @@ import {characterPopupDialogs} from "@/components/characters/character/services/
 import {FeatureFlags, userStore} from "@/stores/userStore.ts";
 
 const route = useRoute()
+const router = useRouter();
 const characterInfo = characterStore();
 const experienceInfo = experienceStore();
 const dialog = characterPopupDialogs()
@@ -27,8 +28,12 @@ onMounted(async () =>{
         faction.value = characterInfo.faction;
       });
   showFactionInfo.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowFactionDropdown);
+  showWizardButton.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowCharacterWizard);
   await experienceInfo.updateExperience(route.params.id);
 });
+
+
+const showWizardButton = ref(false);
 
 const name = ref("");
 const faction = ref("");
@@ -46,6 +51,10 @@ const togglePopup = (event) => {
   op.value.toggle(event);
 }
 
+const redirectToEdit = () => {
+  router.push({name: 'characterWizard', params: {id: route.params.id}})
+}
+
 </script>
 
 <template>
@@ -60,6 +69,7 @@ const togglePopup = (event) => {
         <div class="d-flex flex-column gap-3" style="font-size: 2.5em">
           <Button type="button" @click="dialog.showExperience()" icon="pi pi-info-circle" icon-pos="right" size="large" :label="`XP: ${experienceInfo.experienceBreakdown.total - experienceInfo.experienceBreakdown.setupTotal}`" />
           <Button class="float-end" label="Edit" @click="toggleEdit" />
+          <Button v-if="showWizardButton" class="float-end" label="Wizard" @click="redirectToEdit" />
         </div>
       </div>
     </template>
