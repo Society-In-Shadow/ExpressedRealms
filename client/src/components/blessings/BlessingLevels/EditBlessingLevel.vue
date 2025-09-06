@@ -6,14 +6,12 @@ import FormInputTextWrapper from "@/FormWrappers/FormInputTextWrapper.vue";
 import Button from "primevue/button";
 import {getValidationInstance} from "@/components/blessings/validations/blessingLevelForm.ts";
 import {blessingsStore} from "@/components/blessings/stores/blessingsStore.ts";
-import {inject, onBeforeMount, ref} from "vue";
+import {inject, onBeforeMount, type Ref, ref} from "vue";
 
 const store = blessingsStore();
-
 const form = getValidationInstance()
 
-const dialogRef = inject('dialogRef');
-
+const dialogRef = inject('dialogRef') as Ref;
 const blessingId = ref(dialogRef.value.data.blessingId);
 const levelId = ref(dialogRef.value.data.levelId);
 
@@ -22,8 +20,8 @@ onBeforeMount(async () => {
   form.setValues(values);
 })
 
-const onSubmit = form.handleSubmit(async (values) => {
-  if(await store.editBlessingLevel(form, blessingId.value, levelId.value, values)){
+const onSubmit = form.handleSubmit(async (_) => {
+  if(await store.editBlessingLevel(blessingId.value, levelId.value, form)){
     cancel();
   }
 });
@@ -37,13 +35,13 @@ const cancel = () => {
 <template>
   <form @submit="onSubmit">
 
-    <FormInputTextWrapper v-model="form.level" />
+    <FormInputTextWrapper v-model="form.fields.level" />
 
-    <FormTextAreaWrapper v-model="form.description" />
+    <FormTextAreaWrapper v-model="form.fields.description" />
 
-    <FormInputNumberWrapper v-model="form.xpGain" />
+    <FormInputNumberWrapper v-model="form.fields.xpGain" />
 
-    <FormInputNumberWrapper v-model="form.xpCost" />
+    <FormInputNumberWrapper v-model="form.fields.xpCost" />
 
     <div class="m-3 text-right">
       <Button label="Cancel" class="m-2" type="reset" @click="cancel" />

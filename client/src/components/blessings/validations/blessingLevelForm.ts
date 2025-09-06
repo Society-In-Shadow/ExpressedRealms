@@ -1,4 +1,4 @@
-import {type InferType, number, object, string} from "yup";
+import {number, object, string} from "yup";
 import {useGenericForm} from "@/utilities/formUtilities";
 import type {BlessingLevel} from "@/components/blessings/types.ts";
 
@@ -18,8 +18,6 @@ const validationSchema = object({
         .label("XP Gain"),
 });
 
-export type BlessingLevelForm = InferType<typeof validationSchema>;
-
 export function getValidationInstance() {
         
     const form = useGenericForm(validationSchema);
@@ -32,10 +30,6 @@ export function getValidationInstance() {
     }
     
     const customResetForm = () => {
-        form.fields.description.field.value = "";
-        form.fields.level.field.value = "";
-        form.fields.xpCost.field.value = 0;
-        form.fields.xpGain.field.value = 0;
         form.handleReset();
     };
     
@@ -44,9 +38,6 @@ export function getValidationInstance() {
         customResetForm,
         setValues,
         setErrors: form.setErrors,
-        level: form.fields.level,
-        description: form.fields.description,
-        xpCost: form.fields.xpCost,
-        xpGain: form.fields.xpGain,
+        fields: form.fields,
     }
 }

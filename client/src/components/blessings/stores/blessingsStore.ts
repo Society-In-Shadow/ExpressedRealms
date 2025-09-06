@@ -3,7 +3,6 @@ import axios from "axios";
 import type {Blessing, BlessingLevel, BlessingRequest} from "@/components/blessings/types";
 import type {BlessingForm} from "@/components/blessings/validations/blessingForm.ts";
 import toaster from "@/services/Toasters";
-import type {BlessingLevelForm} from "@/components/blessings/validations/blessingLevelForm.ts";
 
 export const blessingsStore =
     defineStore(`blessings`, {
@@ -50,13 +49,13 @@ export const blessingsStore =
                 const response = await axios.get<BlessingLevel>(`/blessings/${blessingId}/level/${levelId}`);
                 return response.data;
             },
-            async addBlessingLevel(blessingId: number, formModel: BlessingLevelForm) {
+            async addBlessingLevel(blessingId: number, form) {
                 try{
                     await axios.post(`/blessings/${blessingId}/level/`, {
-                        level: formModel.level,
-                        description: formModel.description,
-                        xpCost: formModel.xpCost,
-                        xpGain: formModel.xpGain
+                        level: form.fields.level.field.value,
+                        description: form.fields.description.field.value,
+                        xpCost: form.fields.xpCost.field.value,
+                        xpGain: form.fields.xpGain.field.value
                     })
                     toaster.success("Successfully added Blessing Level!");
                     await this.getBlessings();
@@ -69,14 +68,13 @@ export const blessingsStore =
                 }
 
             },
-            async editBlessingLevel(form, blessingId: number, levelId: number, formData: BlessingLevelForm) : Promise<boolean>{
-                
+            async editBlessingLevel(blessingId: number, levelId: number, form) : Promise<boolean>{
                 try{
                     await axios.put(`/blessings/${blessingId}/level/${levelId}`, {
-                        level: formData.level,
-                        description: formData.description,
-                        xpCost: formData.xpCost,
-                        xpGain: formData.xpGain
+                        level: form.fields.level.field.value,
+                        description: form.fields.description.field.value,
+                        xpCost: form.fields.xpCost.field.value,
+                        xpGain: form.fields.xpGain.field.value
                     })
                     toaster.success("Successfully edited Blessing Level!");
                     await this.getBlessings();
