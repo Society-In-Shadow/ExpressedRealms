@@ -2,7 +2,7 @@
 
 import FormInputTextWrapper from "@/FormWrappers/FormInputTextWrapper.vue";
 import Button from "primevue/button";
-import {getValidationInstance} from "@/components/blessings/validations/blessingLevelForm.ts";
+import {getValidationInstance} from "@/components/blessings/validations/blessingForm.ts";
 import {blessingsStore} from "@/components/blessings/stores/blessingsStore.ts";
 import FormEditorWrapper from "@/FormWrappers/FormEditorWrapper.vue";
 
@@ -15,8 +15,7 @@ const emit = defineEmits<{
 
 
 const onSubmit = form.handleSubmit(async (values) => {
-  form.setFieldError("level", "this is a test v2");
-  //await store.addBlessingLevel(form, values);
+  await store.addBlessing(values);
   cancel();
 });
 

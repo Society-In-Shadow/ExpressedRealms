@@ -55,7 +55,7 @@ function toggleEdit(){
       <Button class="float-end" label="Edit" @click="toggleEdit" />
     </div>
   </div>
-  <p>{{ props.blessing.description }}</p>
+  <div v-html="props.blessing?.description"></div>
   <ul>
     <li v-for="level in props.blessing.levels" :key="level.id" class="mt-3">
       <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">

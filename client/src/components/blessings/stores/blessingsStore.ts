@@ -59,6 +59,7 @@ export const blessingsStore =
                     })
                     toaster.success("Successfully added Blessing Level!");
                     await this.getBlessings();
+                    return true;
                 }catch(error){
                     const errors = error?.response.data?.errors as Record<string, string[] | string> | undefined;
                     if(errors){

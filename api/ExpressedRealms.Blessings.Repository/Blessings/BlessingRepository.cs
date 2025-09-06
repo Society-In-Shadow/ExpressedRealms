@@ -47,7 +47,7 @@ internal sealed class BlessingRepository(
         }
         return await context
             .BlessingLevels.AsNoTracking()
-            .AnyAsync(x => x.Level.ToLower() == name.ToLower(), cancellationToken);
+            .AnyAsync(x => x.BlessingId == blessingId && x.Level.ToLower() == name.ToLower(), cancellationToken);
     }
 
     public async Task<Blessing> GetBlessingForEditing(int id)
