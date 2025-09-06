@@ -1,8 +1,13 @@
 
 export interface BlessingRequest {
-    advantages: Array<Blessing>
-    disadvantages: Array<Blessing>
-    mixedBlessings: Array<Blessing>
+    advantages: Array<SubCategory>
+    disadvantages: Array<SubCategory>
+    mixedBlessings: Array<SubCategory>
+}
+
+export interface SubCategory {
+    name: string,
+    blessings: Array<Blessing>
 }
 
 export interface Blessing {

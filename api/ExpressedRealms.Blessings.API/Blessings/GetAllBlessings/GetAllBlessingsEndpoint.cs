@@ -23,33 +23,40 @@ public static class GetAllBlessingsEndpoint
         );
     }
 
-    private static List<Blessing> GetDetailsFor(
+    private static List<SubSection> GetDetailsFor(
         Result<GetBlessingsReturnModel> results,
         string typeName
     )
     {
         return results
             .Value.Blessings.Where(x => x.Type == typeName)
-            .OrderBy(x => x.Name)
-            .Select(x => new Blessing()
+            .GroupBy(x => x.SubCategory)
+            .OrderBy(x => x.Key)
+            .Select(x => new SubSection()
             {
-                Id = x.Id,
-                Name = x.Name,
-                Description = x.Description,
-                Type = x.Type,
-                SubCategory = x.SubCategory,
-                Levels = x
-                    .Levels.OrderBy(y => y.Level)
-                    .Select(y => new Level()
+                Name = x.Key,
+                Blessings = x.OrderBy(x => x.Name)
+                    .Select(x => new Blessing()
                     {
-                        Id = y.Id,
-                        Name = y.Level,
-                        Description = y.Description,
-                        XpCost = y.XpCost,
-                        XpGain = y.XpGain,
+                        Id = x.Id,
+                        Name = x.Name,
+                        Description = x.Description,
+                        Type = x.Type,
+                        SubCategory = x.SubCategory,
+                        Levels = x
+                            .Levels.OrderBy(y => y.Level)
+                            .Select(y => new Level()
+                            {
+                                Id = y.Id,
+                                Name = y.Level,
+                                Description = y.Description,
+                                XpCost = y.XpCost,
+                                XpGain = y.XpGain,
+                            })
+                            .ToList(),
                     })
-                    .ToList(),
-            })
-            .ToList();
+                    .ToList()
+            }).ToList();
+
     }
 }

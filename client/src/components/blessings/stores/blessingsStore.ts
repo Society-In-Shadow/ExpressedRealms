@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import axios from "axios";
-import type {Blessing, BlessingLevel, BlessingRequest} from "@/components/blessings/types";
+import type {BlessingLevel, BlessingRequest, SubCategory} from "@/components/blessings/types";
 import type {BlessingForm} from "@/components/blessings/validations/blessingForm.ts";
 import toaster from "@/services/Toasters";
 
@@ -8,9 +8,9 @@ export const blessingsStore =
     defineStore(`blessings`, {
         state: () => {
             return {
-                advantages: [] as Blessing[],
-                disadvantages: [] as Blessing[],
-                mixedBlessings: [] as Blessing[]
+                advantages: [] as SubCategory[],
+                disadvantages: [] as SubCategory[],
+                mixedBlessings: [] as SubCategory[]
             }
         },
         actions: {

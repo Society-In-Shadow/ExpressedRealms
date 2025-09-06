@@ -40,12 +40,9 @@ function toggleEdit(){
   </div>
   <div class="d-flex flex-column flex-md-row align-self-center justify-content-between mt-4">
     <div>
-      <h1 class="p-0 m-0">
+      <h3 class="p-0 m-0">
         {{ props.blessing.name }}
-      </h1>
-      <div class="p-0 m-0">
-        {{ props.blessing?.subCategory }}
-      </div>
+      </h3>
     </div>
     <div
         v-if="!showEdit && hasBlessingRole && !props.isReadOnly"
@@ -69,8 +66,8 @@ function toggleEdit(){
         </div>
       </div>
     </li>
-    <li>
-      <Button v-if="hasBlessingRole" label="Add Level" @click="dialogs.showAddBlessingLevel(props.blessing.id)"/>
+    <li v-if="hasBlessingRole">
+      <Button label="Add Level" @click="dialogs.showAddBlessingLevel(props.blessing.id)"/>
     </li>
   </ul>
 </template>
