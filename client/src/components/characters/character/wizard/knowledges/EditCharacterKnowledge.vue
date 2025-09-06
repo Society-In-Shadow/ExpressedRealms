@@ -5,11 +5,11 @@ import {getValidationInstance} from "@/components/characters/character/knowledge
 import {characterKnowledgeStore} from "@/components/characters/character/knowledges/stores/characterKnowledgeStore";
 import {useRoute} from "vue-router";
 import {onBeforeMount, type PropType, ref} from "vue";
-import FormListboxWrapper from "@/FormWrappers/FormListboxWrapper.vue";
 import type {CharacterKnowledge, KnowledgeOptions} from "@/components/characters/character/knowledges/types";
 import Message from "primevue/message";
 import {addKnowledgeDialog} from "@/components/characters/character/knowledges/services/dialogs.ts";
-import KnowledgeLevelDetail from "@/components/characters/character/wizard/knowledges/KnowledgeLevelDetail.vue";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
 
 const dialogService = addKnowledgeDialog();
 const store = characterKnowledgeStore();
@@ -36,7 +36,12 @@ onBeforeMount(async () => {
     const isLowerLevel = level.id > props.knowledge.levelId
     level.disabled = xpCost > store.currentExperience && isLowerLevel;
   });
-  form.setValues(props.knowledge);
+
+  let level = store.knowledgeLevels.filter(function(level:KnowledgeOptions) {
+    return level.id === props.knowledge.levelId;
+  })[0]
+  
+  form.setValues(props.knowledge, level);
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
@@ -67,27 +72,17 @@ function getCurrentXpLevel(levelId: number){
   </h3>
   <form @submit="onSubmit">
 
-<!--    <DataTable v-model:selection="form.knowledgeLevel.field" :value="store.knowledgeLevels" selectionMode="single" dataKey="id">
+    <DataTable v-model:selection="form.knowledgeLevel2.field.value" selection-mode="single" :value="store.knowledgeLevels" dataKey="id">
+      <Column selection-mode="single"  headerStyle="width: 3rem"></Column>
       <Column field="name" header="Name"></Column>
-      <Column field="level" header="Level"></Column>
-      <Column field="totalGeneralXpCost" header="XP">
+      <Column field="totalGeneralXpCost" header="XP" class="text-center" >
         <template #body="slotProps">
-          {{slotProps.totalGeneralXpCost > getCurrentXpLevel(knowledge.levelId) ? "-" : "+"}} {{ Math.abs(slotProps.totalGeneralXpCost - getCurrentXpLevel(knowledge.levelId)) }}
+          {{slotProps.data.totalGeneralXpCost > getCurrentXpLevel(knowledge.levelId) ? "-" : "+"}}{{ Math.abs(slotProps.data.totalGeneralXpCost - getCurrentXpLevel(knowledge.levelId)) }}
         </template>
       </Column>
-      <Column field="stoneModifier" header="Stones"></Column>
-      <Column field="specializations" header="Specials"></Column>
-    </DataTable>-->
-    
-    <FormListboxWrapper v-model="form.knowledgeLevel" :options="store.knowledgeLevels" option-value="id" option-disabled="disabled" scroll-height="10000px">
-      <template #option="slotProps">
-        <KnowledgeLevelDetail
-          :is-loading="store.isLoadingLevels" :selected-item="slotProps.option"
-          :current-xp-level="getCurrentXpLevel(knowledge.levelId)" :is-unknown-knowledge="isUnknownKnowledge"
-          :is-read-only="isReadOnly"
-        />
-      </template>
-    </FormListboxWrapper>
+      <Column field="stoneModifier" header="Stones" class="text-center" ></Column>
+      <Column field="specializationCount" header="Specials" class="text-center" ></Column>
+    </DataTable>
 
     <Message v-if="form.knowledgeLevel.field == 8" severity="warn">
       <p>

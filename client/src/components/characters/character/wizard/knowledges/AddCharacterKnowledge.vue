@@ -6,11 +6,11 @@ import {getValidationInstance} from "@/components/characters/character/knowledge
 import {characterKnowledgeStore} from "@/components/characters/character/knowledges/stores/characterKnowledgeStore";
 import {useRoute} from "vue-router";
 import {onBeforeMount, type PropType, ref} from "vue";
-import FormListboxWrapper from "@/FormWrappers/FormListboxWrapper.vue";
 import type {KnowledgeOptions} from "@/components/characters/character/knowledges/types";
 import Message from "primevue/message";
 import type {Knowledge} from "@/components/knowledges/types.ts";
-import KnowledgeLevelDetail from "@/components/characters/character/wizard/knowledges/KnowledgeLevelDetail.vue";
+import Column from "primevue/column";
+import DataTable from "primevue/datatable";
 
 const store = characterKnowledgeStore();
 const form = getValidationInstance();
@@ -55,15 +55,17 @@ const onSubmit = form.handleSubmit(async (values) => {
     Available Experience: {{ store.currentExperience }}
   </h3>
   <form @submit="onSubmit">
-    <FormListboxWrapper v-model="form.knowledgeLevel" :options="store.knowledgeLevels" option-value="id" option-disabled="disabled" scroll-height="10000px">
-      <template #option="slotProps">
-        <KnowledgeLevelDetail
-            :is-loading="store.isLoadingLevels" :selected-item="slotProps.option"
-            :current-xp-level="0" :is-unknown-knowledge="isUnknownKnowledge"
-            :is-read-only="isReadOnly"
-        />
-      </template>
-    </FormListboxWrapper>
+    <DataTable v-model:selection="form.knowledgeLevel2.field.value" selection-mode="single" :value="store.knowledgeLevels" dataKey="id">
+      <Column selection-mode="single"  headerStyle="width: 3rem"></Column>
+      <Column field="name" header="Name"></Column>
+      <Column field="totalGeneralXpCost" header="XP" class="text-center" >
+        <template #body="slotProps">
+          -{{ slotProps.data.totalGeneralXpCost }}
+        </template>
+      </Column>
+      <Column field="stoneModifier" header="Stones" class="text-center" ></Column>
+      <Column field="specializationCount" header="Specials" class="text-center" ></Column>
+    </DataTable>
 
     <Message v-if="form.knowledgeLevel.field == 8" severity="warn">
       <p>

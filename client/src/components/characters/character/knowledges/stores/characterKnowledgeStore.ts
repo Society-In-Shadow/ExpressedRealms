@@ -45,9 +45,15 @@ export const characterKnowledgeStore =
                 this.isLoadingLevels = false;
             },
             addKnowledge: async function (values:CharacterKnowledgeForm, characterId: number, knowledgeId: number): Promise<void> {
+                
+                let knowledgeLevelId = values.knowledgeLevel
+                if(values.knowledgeLevel2){
+                    knowledgeLevelId = values.knowledgeLevel2.id;
+                }
+                
                 await axios.post(`/characters/${characterId}/knowledges/`, {
                     knowledgeId: knowledgeId,
-                    knowledgeLevelId: values.knowledgeLevel,
+                    knowledgeLevelId: knowledgeLevelId,
                     notes: values.notes,
                 })
                     .then(async () => {
@@ -57,8 +63,13 @@ export const characterKnowledgeStore =
                     });
             },
             editKnowledge: async function (values:CharacterKnowledgeForm, characterId: number, mappingId: number): Promise<void> {
+                let knowledgeLevelId = values.knowledgeLevel
+                if(values.knowledgeLevel2){
+                    knowledgeLevelId = values.knowledgeLevel2.id;
+                }
+                
                 await axios.put(`/characters/${characterId}/knowledges/${mappingId}`, {
-                    knowledgeLevelId: values.knowledgeLevel,
+                    knowledgeLevelId: knowledgeLevelId,
                     notes: values.notes,
                 })
                     .then(async () => {

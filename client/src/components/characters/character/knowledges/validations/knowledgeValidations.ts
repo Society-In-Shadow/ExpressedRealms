@@ -1,13 +1,14 @@
 import {type InferType, number, object, string} from "yup";
 import {useGenericForm} from "@/utilities/formUtilities";
-import type {CharacterKnowledge} from "@/components/characters/character/knowledges/types";
+import type {CharacterKnowledge, KnowledgeOptions} from "@/components/characters/character/knowledges/types";
 
 const validationSchema = object({
     notes: string().nullable()
         .max(10000)
         .label("Notes"),
+    knowledgeLevel2: object<KnowledgeOptions>()
+        .label("Knowledge Level"),
     knowledgeLevel: number()
-        .required()
         .label("Knowledge Level"),
 });
 
@@ -17,9 +18,14 @@ export function getValidationInstance() {
 
     const form = useGenericForm(validationSchema);
 
-    const setValues = (model: CharacterKnowledge) => {
+    const setValues = (model: CharacterKnowledge, knowledgeLevel: KnowledgeOptions | null) => {
         form.fields.notes.field.value = model.notes;
-        form.fields.knowledgeLevel.field.value = model.levelId;
+        if(knowledgeLevel != null){
+            form.fields.knowledgeLevel2.field.value = knowledgeLevel;
+        }else{
+            form.fields.knowledgeLevel.field.value = model.levelId;
+        }
+        
     }
 
     const customResetForm = () => {
@@ -34,5 +40,6 @@ export function getValidationInstance() {
         setValues,
         notes: form.fields.notes,
         knowledgeLevel: form.fields.knowledgeLevel,
+        knowledgeLevel2: form.fields.knowledgeLevel2,
     }
 }
