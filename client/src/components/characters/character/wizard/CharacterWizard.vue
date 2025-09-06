@@ -65,17 +65,9 @@ onMounted(() => {
 }
 
 @media(max-width: 768px){
-  .custom-card > .p-card-body{
-    padding: 0.75rem !important;
-  }
-
   .custom-toc > .p-card-body{
     padding-left: 1rem !important;
     padding-right: 1rem !important;
-  }
-
-  .custom-card .p-tabpanels{
-    padding: 0.5rem !important;
   }
 }
 </style>
