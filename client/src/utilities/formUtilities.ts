@@ -1,10 +1,10 @@
-import { useForm } from "vee-validate";
-import type { ObjectSchema } from "yup";
-import { computed } from "vue";
-import type { FormField } from "@/FormWrappers/Interfaces/FormField";
+import {useForm} from "vee-validate";
+import type {ObjectSchema} from "yup";
+import {computed} from "vue";
+import type {FormField} from "@/FormWrappers/Interfaces/FormField";
 
 export function useGenericForm<T extends Record<string, any>>(validationSchema: ObjectSchema<T>) {
-    const { defineField, handleSubmit, errors, handleReset } = useForm<T>({
+    const { defineField, handleSubmit, errors, handleReset, setErrors } = useForm<T>({
         validationSchema,
         validateOnMount: false,
         keepValuesOnUnmount: false,
@@ -15,7 +15,7 @@ export function useGenericForm<T extends Record<string, any>>(validationSchema: 
             field: defineField(fieldName)[0],
             error: computed(() => errors.value[fieldName]),
             label: (validationSchema.fields[fieldName as string] as any)?.spec?.label ?? fieldName,
-            isRequired: (validationSchema.fields[fieldName as string] as any)?.spec?.optional === false,
+            isRequired: (validationSchema.fields[fieldName as string] as any)?.spec?.optional === false
         };
     }
 
@@ -30,5 +30,6 @@ export function useGenericForm<T extends Record<string, any>>(validationSchema: 
         handleSubmit,
         handleReset,
         errors,
+        setErrors
     };
 }

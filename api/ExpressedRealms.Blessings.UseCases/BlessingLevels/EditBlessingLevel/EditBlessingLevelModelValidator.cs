@@ -14,8 +14,8 @@ internal sealed class EditBlessingLevelModelValidator : AbstractValidator<EditBl
             .WithMessage("Level is required.")
             .MaximumLength(25)
             .WithMessage("Name must be between 1 and 25 characters.")
-            .Matches(@"^\d+ pts?\.$")
-            .WithMessage("Level must be in the format of '123 pts.' or '1 pt.'");
+            .Matches(@"^\d+pts?$")
+            .WithMessage("Level must be in the format of '123pts' or '1pt'");
 
         RuleFor(x => x.LevelId).NotEmpty().WithMessage("Level Id is required.");
 
@@ -28,7 +28,8 @@ internal sealed class EditBlessingLevelModelValidator : AbstractValidator<EditBl
 
         RuleFor(x => x)
             .MustAsync(
-                async (x, y) => !await repository.HasDuplicateLevelName(x.BlessingId, x.Level)
+                async (x, y) =>
+                    !await repository.HasDuplicateLevelName(x.BlessingId, x.Level, x.LevelId)
             )
             .WithName(nameof(EditBlessingLevelModel.Level))
             .WithMessage("Blessing already has a level with this name.");

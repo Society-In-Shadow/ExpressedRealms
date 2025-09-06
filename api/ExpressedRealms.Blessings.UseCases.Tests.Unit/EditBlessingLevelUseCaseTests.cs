@@ -20,7 +20,7 @@ public class EditBlessingLevelUseCaseTests
         _model = new EditBlessingLevelModel()
         {
             Description = "Description",
-            Level = "4 pt.",
+            Level = "4pts",
             BlessingId = 2,
             LevelId = 3,
             XpCost = 4,
@@ -31,7 +31,7 @@ public class EditBlessingLevelUseCaseTests
         {
             BlessingId = 1,
             Id = 1,
-            Level = "1 pt.",
+            Level = "1pt",
             Description = "Description",
             XpCost = 3,
             XpGain = 2,
@@ -39,7 +39,9 @@ public class EditBlessingLevelUseCaseTests
 
         _repository = A.Fake<IBlessingRepository>();
 
-        A.CallTo(() => _repository.HasDuplicateLevelName(_model.BlessingId, _model.Level))
+        A.CallTo(() =>
+                _repository.HasDuplicateLevelName(_model.BlessingId, _model.Level, _model.LevelId)
+            )
             .Returns(false);
         A.CallTo(() => _repository.IsExistingBlessing(_model.BlessingId)).Returns(true);
         A.CallTo(() => _repository.GetBlessingLevelForEditing(_model.BlessingId, _model.LevelId))
@@ -74,8 +76,8 @@ public class EditBlessingLevelUseCaseTests
     }
 
     [Theory]
-    [InlineData("123 pst.")]
-    [InlineData("5 ptss. ")]
+    [InlineData("123 pst")]
+    [InlineData("5 ptss ")]
     [InlineData("asdf.")]
     [InlineData("pts.")]
     [InlineData("pt.")]
@@ -86,14 +88,16 @@ public class EditBlessingLevelUseCaseTests
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(
             nameof(EditBlessingLevelModel.Level),
-            "Level must be in the format of '123 pts.' or '1 pt.'"
+            "Level must be in the format of '123pts' or '1pt'"
         );
     }
 
     [Fact]
     public async Task ValidationFor_Name_WillFail_WhenName_AlreadyExists()
     {
-        A.CallTo(() => _repository.HasDuplicateLevelName(_model.BlessingId, _model.Level))
+        A.CallTo(() =>
+                _repository.HasDuplicateLevelName(_model.BlessingId, _model.Level, _model.LevelId)
+            )
             .Returns(true);
 
         var results = await _useCase.ExecuteAsync(_model);
@@ -207,7 +211,7 @@ public class EditBlessingLevelUseCaseTests
             XpGain = _model.XpGain,
         };
 
-        await _useCase.ExecuteAsync(_model);
+        var result = await _useCase.ExecuteAsync(_model);
         A.CallTo(() =>
                 _repository.EditBlessingLevelAsync(
                     A<BlessingLevel>.That.Matches(k =>

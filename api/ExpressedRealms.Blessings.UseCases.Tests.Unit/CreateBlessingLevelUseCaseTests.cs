@@ -18,7 +18,7 @@ public class CreateBlessingLevelUseCaseTests
         _model = new CreateBlessingLevelModel()
         {
             Description = "Description",
-            Level = "4 pt.",
+            Level = "4pts",
             BlessingId = 2,
             XpCost = 4,
             XpGain = 0,
@@ -26,7 +26,7 @@ public class CreateBlessingLevelUseCaseTests
 
         _repository = A.Fake<IBlessingRepository>();
 
-        A.CallTo(() => _repository.HasDuplicateLevelName(_model.BlessingId, _model.Level))
+        A.CallTo(() => _repository.HasDuplicateLevelName(_model.BlessingId, _model.Level, 0))
             .Returns(false);
         A.CallTo(() => _repository.IsExistingBlessing(_model.BlessingId)).Returns(true);
 
@@ -60,11 +60,11 @@ public class CreateBlessingLevelUseCaseTests
     }
 
     [Theory]
-    [InlineData("123 pst.")]
-    [InlineData("5 ptss. ")]
-    [InlineData("asdf.")]
-    [InlineData("pts.")]
-    [InlineData("pt.")]
+    [InlineData("123pst")]
+    [InlineData("5ptss ")]
+    [InlineData("asdf")]
+    [InlineData("pts")]
+    [InlineData("pt")]
     public async Task ValidationFor_Name_WillFail_WhenName_IsInIncorrectFormat(string levelName)
     {
         _model.Level = levelName;
@@ -72,14 +72,14 @@ public class CreateBlessingLevelUseCaseTests
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(
             nameof(CreateBlessingLevelModel.Level),
-            "Level must be in the format of '123 pts.' or '1 pt.'"
+            "Level must be in the format of '123pts' or '1pt'"
         );
     }
 
     [Fact]
     public async Task ValidationFor_Name_WillFail_WhenName_AlreadyExists()
     {
-        A.CallTo(() => _repository.HasDuplicateLevelName(_model.BlessingId, _model.Level))
+        A.CallTo(() => _repository.HasDuplicateLevelName(_model.BlessingId, _model.Level, 0))
             .Returns(true);
 
         var results = await _useCase.ExecuteAsync(_model);
