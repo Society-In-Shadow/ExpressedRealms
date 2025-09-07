@@ -6,7 +6,7 @@ internal class SmallStatInfo(Repository.Stats.DTOs.SmallStatInfo smallStatInfo)
 {
     /// <example>WIL</example>
     public string ShortName { get; set; } = smallStatInfo.ShortName;
-    
+
     /// <example>Willpower</example>
     public string Name { get; set; } = smallStatInfo.Name;
 
