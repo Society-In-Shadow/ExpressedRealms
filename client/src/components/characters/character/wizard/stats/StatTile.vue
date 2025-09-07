@@ -48,10 +48,7 @@ onMounted(async () =>{
 async function reloadData(){
   await reloadStatInfo();
   await getEditOptions();
-  expandedRows.value = statLevels.value.reduce(
-      (statLevel, p) => (statLevel[p.level] = true) && statLevel,
-      {}
-  );
+  expandedRows.value = statLevels.value.map(p => [p.level, true]);
 }
 
 watch(() => props.statTypeId, (newValue, oldValue) => {
