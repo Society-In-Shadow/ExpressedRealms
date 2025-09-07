@@ -5,7 +5,9 @@ import {computed, defineAsyncComponent, h, onMounted, ref} from "vue";
 import KnowledgeStep from "@/components/characters/character/wizard/knowledges/KnowledgeStep.vue";
 import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import PowerStep from "@/components/characters/character/wizard/powers/PowerStep.vue";
+import StatStep from "@/components/characters/character/wizard/stats/StatStep.vue";
 import {useRoute, useRouter} from "vue-router";
+import DataTable from "primevue/datatable";
 
 const xpData = experienceStore();
 const route = useRoute()
@@ -14,7 +16,7 @@ const router = useRouter();
 const sections = ref([
   { name: 'Getting Started', component: createPlaceholderView('Getting Started', 'Getting Started content coming soon...') },
   { name: 'Expression', component: createPlaceholderView('Expression', 'Expression content coming soon...') },
-  { name: 'Stats', component: createPlaceholderView('Stats', 'Stats content coming soon...') },
+  { name: 'Stats', component: defineAsyncComponent(async () => StatStep) },
   { name: 'Knowledges', component: defineAsyncComponent(async () => KnowledgeStep)},
   { name: 'Powers', component: defineAsyncComponent(async () => PowerStep) },
   { name: 'Skills', component: createPlaceholderView('Skills', 'Skills content coming soon...') },
@@ -46,6 +48,12 @@ const redirectToEdit = () => {
 </script>
 
 <template>
+  <div class="d-none">
+    <DataTable />
+  </div>
+  <div class="row">
+    
+  </div>
   <div class="row pt-3">
     <div class="col col-md-2 custom-toc">
       <Card>
