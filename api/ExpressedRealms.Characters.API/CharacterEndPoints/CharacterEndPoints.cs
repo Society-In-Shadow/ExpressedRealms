@@ -22,7 +22,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 using SingleStatInfo = ExpressedRealms.Characters.API.CharacterEndPoints.StatDTOs.SingleStatInfo;
-using SmallStatInfo = ExpressedRealms.Characters.API.CharacterEndPoints.StatDTOs.SmallStatInfo;
+using SmallStatInfo = ExpressedRealms.Characters.API.StatEndPoints.Responses.SmallStatInfo;
 
 namespace ExpressedRealms.Characters.API.CharacterEndPoints;
 
