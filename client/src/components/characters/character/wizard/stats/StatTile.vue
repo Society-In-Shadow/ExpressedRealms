@@ -52,27 +52,35 @@ const showOptions = ref(false);
 const oldValue = ref(props.statTypeId);
 const profStore = proficiencyStore();
 const experienceInfo = experienceStore();
+const expandedRows = ref({});
 
-onMounted(() =>{
-  reloadStatInfo();
-  getEditOptions();
+onMounted(async () =>{
+  await reloadData();
 });
 
+async function reloadData(){
+  await reloadStatInfo();
+  await getEditOptions();
+  expandedRows.value = statLevels.value.reduce(
+      (statLevel, p) => (statLevel[p.level] = true) && statLevel,
+      {}
+  );
+}
+
 watch(() => props.statTypeId, (newValue, oldValue) => {
-  reloadStatInfo();
-  getEditOptions();
+  reloadData();
 })
 
-function reloadStatInfo() {
-  axios.get(`/characters/${route.params.id}/stat/${props.statTypeId}`)
+async function reloadStatInfo() {
+  await axios.get(`/characters/${route.params.id}/stat/${props.statTypeId}`)
       .then((response) => {
         stat.value = response.data;
         loading.value = false;
       })
 }
 
-function getEditOptions() {
-  axios.get(`/stats/${props.statTypeId}`)
+async function getEditOptions() {
+  await axios.get(`/stats/${props.statTypeId}`)
       .then((response) => {
         
         const selectedXP = response.data.find(x => x.level == stat.value.statLevel).totalXP;
@@ -98,7 +106,7 @@ function handleStatUpdate(stat:Stat){
     levelTypeId: stat.statLevel,
     statTypeId: props.statTypeId,
     characterId: route.params.id
-  }).then(function(){
+  }).then(async function(){
     stat.statLevelInfo = statLevels.value.find(x => x.level == stat.statLevel);
 
     oldValue.value = stat.statLevel;
@@ -107,7 +115,7 @@ function handleStatUpdate(stat:Stat){
     toasters.success("Successfully updated " + stat.name + " to level " + stat.statLevel);
     experienceInfo.updateExperience(route.params.id);
     profStore.getUpdateProficiencies(route.params.id);
-    reloadStatInfo();
+    await reloadData();
     showOptions.value = !showOptions.value;
   }).catch(function() {
     stat.statLevel = oldValue.value;
@@ -140,7 +148,7 @@ function handleStatUpdate(stat:Stat){
         </div>
       </div>
     </div>
-    <DataTable v-model:selection="stat.statLevelInfo" :value="statLevels" selection-mode="single">
+    <DataTable v-model:selection="stat.statLevelInfo" v-model:expandedRows="expandedRows" :value="statLevels" selection-mode="single" data-key="level">
       <Column selection-mode="single" headerStyle="width: 3rem"></Column>
       <Column field="level" header="Level">
         <template #body="slotProps">
@@ -163,6 +171,13 @@ function handleStatUpdate(stat:Stat){
           </SkeletonWrapper>
         </template>
       </Column>
+      <template #expansion="slotProps">
+        <SkeletonWrapper :show-skeleton="loading" height="2rem" width="100%" style="padding-left: 3rem; cursor: pointer;" @click="stat.statLevelInfo = slotProps.data">
+          <div >
+            {{ slotProps.data.description }}
+          </div>
+        </SkeletonWrapper>
+      </template>
     </DataTable>
 <!--    <div class="row">
       <div class="col">
