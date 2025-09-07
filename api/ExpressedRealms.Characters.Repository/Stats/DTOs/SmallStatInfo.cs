@@ -15,4 +15,6 @@ public class SmallStatInfo
 
     /// <example>6</example>
     public StatType StatTypeId { get; set; }
+
+    public string Name { get; set; }
 }

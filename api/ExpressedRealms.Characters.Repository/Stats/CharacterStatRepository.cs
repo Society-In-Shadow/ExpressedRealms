@@ -211,6 +211,7 @@ internal sealed class CharacterStatRepository(
                 Bonus = character.AgilityStatLevel.Bonus,
                 Level = character.AgilityStatLevel.Id,
                 ShortName = statTypes.First(x => x.Id == (byte)StatType.Agility).ShortName,
+                Name = statTypes.First(x => x.Id == (byte)StatType.Agility).Name,
             },
             new()
             {
@@ -218,6 +219,7 @@ internal sealed class CharacterStatRepository(
                 Bonus = character.ConstitutionStatLevel.Bonus,
                 Level = character.ConstitutionStatLevel.Id,
                 ShortName = statTypes.First(x => x.Id == (byte)StatType.Constitution).ShortName,
+                Name = statTypes.First(x => x.Id == (byte)StatType.Constitution).Name,
             },
             new()
             {
@@ -225,6 +227,7 @@ internal sealed class CharacterStatRepository(
                 Bonus = character.DexterityStatLevel.Bonus,
                 Level = character.DexterityStatLevel.Id,
                 ShortName = statTypes.First(x => x.Id == (byte)StatType.Dexterity).ShortName,
+                Name = statTypes.First(x => x.Id == (byte)StatType.Dexterity).Name,
             },
             new()
             {
@@ -232,6 +235,7 @@ internal sealed class CharacterStatRepository(
                 Bonus = character.StrengthStatLevel.Bonus,
                 Level = character.StrengthStatLevel.Id,
                 ShortName = statTypes.First(x => x.Id == (byte)StatType.Strength).ShortName,
+                Name = statTypes.First(x => x.Id == (byte)StatType.Strength).Name,
             },
             new()
             {
@@ -239,6 +243,7 @@ internal sealed class CharacterStatRepository(
                 Bonus = character.IntelligenceStatLevel.Bonus,
                 Level = character.IntelligenceStatLevel.Id,
                 ShortName = statTypes.First(x => x.Id == (byte)StatType.Intelligence).ShortName,
+                Name = statTypes.First(x => x.Id == (byte)StatType.Intelligence).Name,
             },
             new()
             {
@@ -246,6 +251,7 @@ internal sealed class CharacterStatRepository(
                 Bonus = character.WillpowerStatLevel.Bonus,
                 Level = character.WillpowerStatLevel.Id,
                 ShortName = statTypes.First(x => x.Id == (byte)StatType.Willpower).ShortName,
+                Name = statTypes.First(x => x.Id == (byte)StatType.Willpower).Name,
             },
         };
 
