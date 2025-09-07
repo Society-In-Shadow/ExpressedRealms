@@ -52,7 +52,7 @@ const toggleAdd = (id: number) => {
       <Column field="shortName" header="Name">
         <template #body="slotProps">
           <SkeletonWrapper height="1.5rem" width="2rem" :show-skeleton="isLoading">
-            {{ slotProps.data.shortName }}
+            {{ slotProps.data.name }}
           </SkeletonWrapper>
         </template>
       </Column>
