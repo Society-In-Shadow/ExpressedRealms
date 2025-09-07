@@ -59,14 +59,14 @@ const toggleEdit = (knowledgeId: number) => {
           </div>
           <div class="d-flex d-block mt-1">
             <div class="flex-grow-1">
-              <Tag v-if="knowledge.specializations.length == 0" value="No Specializations" />
-              <Tag v-for="special in knowledge.specializations" v-else class="mr-1" :value="special.name" />
+              <Tag severity="info" v-if="knowledge.specializations.length == 0" value="No Specializations" />
+              <Tag severity="info" v-for="special in knowledge.specializations" v-else class="mr-1" :value="special.name" />
             </div>
             <div>Stones: +{{ knowledge.stoneModifier }}</div>
           </div>
         </div>
         <div>
-          <Button label="View" @click="toggleEdit(knowledge.knowledge.id)" />
+          <Button label="View" size="small" @click="toggleEdit(knowledge.knowledge.id)" />
           <Teleport v-if="characterKnowledgeData.activeKnowledgeId == knowledge.knowledge.id" to="#item-modification-section">
             <EditCharacterKnowledge :knowledge="knowledge" />
           </Teleport>

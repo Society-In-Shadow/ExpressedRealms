@@ -66,16 +66,18 @@ function getCurrentXpLevel(levelId: number){
 <template>
   <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
     <div>
-      <h1 class="p-0 m-0">
+      <h2 class="p-0 m-0">
         {{ props.knowledge.knowledge.name }}
-      </h1>
+      </h2>
+      <div>{{ props.knowledge.knowledge.type }}</div>
     </div>
-    <div v-if="!props.isReadOnly" class="p-0 m-2 d-inline-flex align-items-start align-items-center">
-      <Button class="float-end" label="Delete" severity="danger" @click="popupService.deleteConfirmation($event, props.knowledge.mappingId )" />
+    <div v-if="!props.isReadOnly" class="p-0 m-2 d-inline-flex align-items-start align-items-center gap-2">
+      <Button label="Delete" size="small" severity="danger" @click="popupService.deleteConfirmation($event, props.knowledge.mappingId )" />
+      <Button label="Update" size="small" type="submit" />
     </div>
   </div>
 
-  <h3>{{ props.knowledge.knowledge.type }}</h3>
+
   <p>{{ props.knowledge.knowledge.description }}</p>
   <h3 class="text-right">
     Available Experience: {{ store.currentExperience }}
@@ -107,11 +109,10 @@ function getCurrentXpLevel(levelId: number){
       </p>
     </Message>
     
-    <FormTextAreaWrapper v-model="form.notes" />
-
-    <div class="m-3 text-right">
-      <Button label="Update" class="m-2" type="submit" />
+    <div class="pt-4">
+      <FormTextAreaWrapper v-model="form.notes" />
     </div>
+    
   </form>
 
   <hr v-if="knowledge.specializations.length > 0" class="mt-2 mb-2">

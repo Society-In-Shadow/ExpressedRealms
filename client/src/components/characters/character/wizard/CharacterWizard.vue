@@ -57,7 +57,7 @@ const redirectToEdit = () => {
             />
           </div>
           <div class="p-2">
-            <Button class="w-100" label="Character Sheet"
+            <Button class="w-100" label="Character Sheet" :outlined="true" icon="pi pi-arrow-left"
                     @click="redirectToEdit"
             />
           </div>
