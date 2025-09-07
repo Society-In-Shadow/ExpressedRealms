@@ -141,19 +141,19 @@ function handleStatUpdate(stat:Stat){
       <Column selection-mode="single" headerStyle="width: 3rem"></Column>
       <Column field="level" header="Level">
         <template #body="slotProps">
-          <SkeletonWrapper :show-skeleton="loading" height="2rem" width="100%">
+          <SkeletonWrapper :show-skeleton="loading" height="2rem" width="100%" header-class="text-center" body-class="text-center">
             {{ slotProps.data.level }}
           </SkeletonWrapper>
         </template>
       </Column>
       <Column header="Bonus">
         <template #body="slotProps">
-          <SkeletonWrapper :show-skeleton="loading" height="2rem" width="100%">
+          <SkeletonWrapper :show-skeleton="loading" height="2rem" width="100%" header-class="text-center" body-class="text-center">
             <span v-if="slotProps.data.bonus > 0">+</span>{{ slotProps.data.bonus }}
           </SkeletonWrapper>
         </template>
       </Column>
-      <Column field="xp" header="XP">
+      <Column field="xp" header="XP" header-class="text-center" body-class="text-center">
         <template #body="slotProps">
           <SkeletonWrapper :show-skeleton="loading" height="2rem" width="100%">
             {{slotProps.data.totalXP > stat.statLevelInfo.totalXP ? "-" : "+"}}{{ Math.abs(slotProps.data.totalXP - stat.statLevelInfo.totalXP) }}
@@ -168,25 +168,11 @@ function handleStatUpdate(stat:Stat){
         </SkeletonWrapper>
       </template>
     </DataTable>
-<!--    <div class="row">
-      <div class="col">
-        <div v-if="!showOptions" class="p-listbox p-3" style="cursor: pointer" @click="getEditOptions()">
-          <StatLevel :stat-level-info="stat.statLevelInfo" :is-loading="loading" :current-level-xp="stat.statLevelInfo.totalXP" :current-level-id="stat.statLevel" :display-only="true" />
-        </div>
-        <Listbox
-          v-else v-model="stat.statLevel" :options="statLevels" option-value="level" option-disabled="disabled"
-          @change="handleStatUpdate(stat)"
-        >
-          <template #option="slotProps">
-            <StatLevel :stat-level-info="slotProps.option" :current-level-xp="stat.statLevelInfo.totalXP" :current-level-id="stat.statLevel" />
-          </template>
-        </Listbox>
-      </div>
-    </div>-->
-    <div class="row">
-      <div class="col">
-        <Button data-cy="logoff-button" label="Back" class="w-100 mb-2" @click="emit('toggleStat')" />
-      </div>
-    </div>
   </div>
 </template>
+
+<style>
+  :deep(th.text-center .p-datatable-column-header-content) {
+    justify-content: center;
+  }
+</style>

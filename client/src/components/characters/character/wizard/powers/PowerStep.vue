@@ -53,7 +53,7 @@ const items = [
       </div>
       <div v-for="path in characterKnowledgeData.selectablePowers">
         <h2>{{path.name}}</h2>
-        <div v-for="power in path.powers" :key="power.id">
+        <div v-for="power in path.powers" :key="power.id" class="pb-2">
           <PickPowerCard :power="power" :show-pick-button="true"/>
         </div>
       </div>

@@ -58,13 +58,13 @@ const onSubmit = form.handleSubmit(async (values) => {
     <DataTable v-model:selection="form.knowledgeLevel2.field.value" selection-mode="single" :value="store.knowledgeLevels" dataKey="id">
       <Column selection-mode="single"  headerStyle="width: 3rem"></Column>
       <Column field="name" header="Name"></Column>
-      <Column field="totalGeneralXpCost" header="XP" class="text-center" >
+      <Column field="totalGeneralXpCost" header="XP" header-class="text-center" body-class="text-center" >
         <template #body="slotProps">
           -{{ slotProps.data.totalGeneralXpCost }}
         </template>
       </Column>
-      <Column field="stoneModifier" header="Stones" class="text-center" ></Column>
-      <Column field="specializationCount" header="Specials" class="text-center" ></Column>
+      <Column field="stoneModifier" header="Stones" header-class="text-center" body-class="text-center" ></Column>
+      <Column field="specializationCount" header="Specials" header-class="text-center" body-class="text-center" ></Column>
     </DataTable>
 
     <Message v-if="form.knowledgeLevel.field == 8" severity="warn">
@@ -87,3 +87,10 @@ const onSubmit = form.handleSubmit(async (values) => {
     </div>
   </form>
 </template>
+
+<style>
+:deep(th.text-center .p-datatable-column-header-content) {
+  justify-content: center;
+}
+
+</style>

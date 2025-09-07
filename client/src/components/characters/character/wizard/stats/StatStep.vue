@@ -17,13 +17,13 @@ const showDetails = ref(false);
 const selectedStatType = ref(1);
 const isLoading = ref(true);
 
-onMounted(() =>{
-  loadData();
+onMounted(async() =>{
+  await loadData();
 });
 
-function loadData(){
+async function loadData(){
   isLoading.value = true;
-  axios.get(`/characters/${route.params.id}/stats`)
+  await axios.get(`/characters/${route.params.id}/stats`)
       .then((response) => {
         stats.value = response.data;
         isLoading.value = false;
@@ -48,22 +48,22 @@ const toggleAdd = (id: number) => {
 <template>
   <div class="text-right pb-3" v-if="experienceInfo.showAllExperience">{{ experienceInfo.experienceBreakdown.statsXp}} Total XP - {{experienceInfo.experienceBreakdown.setupStatsXp}} Creation XP = {{experienceInfo.experienceBreakdown.statsXp - experienceInfo.experienceBreakdown.setupStatsXp}} XP</div>
   <div class="">
-    <DataTable :value="stats" datakey="id">
-      <Column field="shortName" header="Name">
+    <DataTable :value="stats" data-key="statTypeId">
+      <Column field="name" header="Name">
         <template #body="slotProps">
           <SkeletonWrapper height="1.5rem" width="2rem" :show-skeleton="isLoading">
             {{ slotProps.data.name }}
           </SkeletonWrapper>
         </template>
       </Column>
-      <Column field="level" header="Level">
+      <Column field="level" header="Level" header-class="text-center" body-class="text-center">
         <template #body="slotProps">
-          <SkeletonWrapper height="1.5rem" width="2rem" :show-skeleton="isLoading">
+          <SkeletonWrapper height="1.5rem" width="2rem" :show-skeleton="isLoading"> 
             {{ slotProps.data.level }}
           </SkeletonWrapper>
         </template>
       </Column>
-      <Column field="bonus" header="Bonus" header-style="text-align: center" body-style="text-align: center;">
+      <Column field="bonus" header="Bonus" header-class="text-center" body-class="text-center">
         <template #body="slotProps">
           <SkeletonWrapper height="1.5rem" width="2rem" :show-skeleton="isLoading">
             {{ slotProps.data.bonus }}
@@ -72,7 +72,7 @@ const toggleAdd = (id: number) => {
       </Column>
       <Column>
         <template #body="slotProps">
-          <Button class="float-end" size="small" label="View" @click="showDetailedStat(slotProps.data.statTypeId)"/>
+          <Button class="float-end " size="small" label="View" @click="showDetailedStat(slotProps.data.statTypeId)"/>
         </template>
       </Column>
     </DataTable>
@@ -83,6 +83,11 @@ const toggleAdd = (id: number) => {
 </template>
 
 <style scoped>
+
+:deep(th.text-center .p-datatable-column-header-content) {
+  justify-content: center;
+}
+
 
 .statBlock{
   width: 80px;

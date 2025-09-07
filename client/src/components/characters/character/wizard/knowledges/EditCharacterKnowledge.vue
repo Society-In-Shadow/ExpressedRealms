@@ -87,13 +87,13 @@ function getCurrentXpLevel(levelId: number){
     <DataTable v-model:selection="form.knowledgeLevel2.field.value" selection-mode="single" :value="store.knowledgeLevels" dataKey="id">
       <Column selection-mode="single"  headerStyle="width: 3rem"></Column>
       <Column field="name" header="Name"></Column>
-      <Column field="totalGeneralXpCost" header="XP" class="text-center" >
+      <Column field="totalGeneralXpCost" header="XP" header-class="text-center" body-class="text-center" >
         <template #body="slotProps">
           {{slotProps.data.totalGeneralXpCost > getCurrentXpLevel(knowledge.levelId) ? "-" : "+"}}{{ Math.abs(slotProps.data.totalGeneralXpCost - getCurrentXpLevel(knowledge.levelId)) }}
         </template>
       </Column>
-      <Column field="stoneModifier" header="Stones" class="text-center" ></Column>
-      <Column field="specializationCount" header="Specials" class="text-center" ></Column>
+      <Column field="stoneModifier" header="Stones" header-class="text-center" body-class="text-center" ></Column>
+      <Column field="specializationCount" header="Specials" header-class="text-center" body-class="text-center" ></Column>
     </DataTable>
 
     <Message v-if="form.knowledgeLevel.field == 8" severity="warn">
@@ -147,3 +147,9 @@ function getCurrentXpLevel(levelId: number){
     <Button v-if="knowledge.specializationCount > knowledge.specializations.length" class="btn btn-primary text-right" label="Add Specialization" @click="dialogService.showAddSpecialization(knowledge)" />
   </div>
 </template>
+
+<style>
+:deep(th.text-center .p-datatable-column-header-content) {
+  justify-content: center;
+}
+</style>
