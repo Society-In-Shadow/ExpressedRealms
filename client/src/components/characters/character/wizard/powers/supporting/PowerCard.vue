@@ -35,7 +35,7 @@ const toggleEdit = (powerId: number) => {
 <template>
 
   <div>
-    <div v-for="power in props.powerPath.powers" :key="power.id">
+    <div v-for="power in props.powerPath.powers" :key="power.id" class="pb-3">
       <div class="d-flex flex-grow-1 pr-2">
         <div class="d-flex flex-column flex-grow-1 pr-3">
           <div class="d-flex flex-fill align-content-between d-block">
