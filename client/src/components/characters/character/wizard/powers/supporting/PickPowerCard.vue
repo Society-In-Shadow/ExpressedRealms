@@ -4,12 +4,10 @@ import Button from "primevue/button";
 import {type PropType} from "vue";
 import type {Power} from "@/components/expressions/powers/types";
 import {makeIdSafe} from "@/utilities/stringUtilities";
-import {characterPowerDialogs} from "@/components/characters/character/powers/services/dialogs.ts";
 import {characterPowersStore} from "@/components/characters/character/powers/stores/characterPowerStore.ts";
 import AddCharacterPower from "@/components/characters/character/wizard/powers/supporting/AddCharacterPower.vue";
 
 const powerData = characterPowersStore();
-const dialogs = characterPowerDialogs();
 const props = defineProps({
   power: {
     type: Object as PropType<Power>,
@@ -38,7 +36,7 @@ const toggleAdd = () => {
       </div>
     </div>
     <div class="p-0 m-2 d-inline-flex align-items-start align-items-center">
-      <Button class="float-end" label="View" @click="toggleAdd"/>
+      <Button class="float-end" size="small" label="View" @click="toggleAdd"/>
     </div>
   </div>
   <Teleport v-if="powerData.activePowerId == props.power?.id" to="#item-modification-section">

@@ -1,14 +1,10 @@
 <script setup lang="ts">
 
-import Card from "primevue/card";
-import Button from "primevue/button";
 import {type PropType} from "vue";
 import type {Power} from "@/components/expressions/powers/types";
 import {isNullOrWhiteSpace, makeIdSafe} from "@/utilities/stringUtilities";
 import {scrollToSection} from "@/components/expressions/expressionUtilities";
-import {characterPowerDialogs} from "@/components/characters/character/powers/services/dialogs.ts";
 
-const dialogs = characterPowerDialogs();
 const props = defineProps({
   power: {
     type: Object as PropType<Power>,
@@ -23,10 +19,10 @@ const props = defineProps({
 </script>
 
 <template>
-  <Card :id="makeIdSafe(props.power.name)" class="card-body-fix">
-    <template #title>
+  <div :id="makeIdSafe(props.power.name)" class="card-body-fix">
+
       <div class="d-flex flex-row align-self-center justify-content-between">
-        <div class="flex-shrink-1">
+        <div class="flex-grow-1">
           <H2 class="p-0 m-0">
             {{ props.power.name }}
           </H2>
@@ -34,15 +30,11 @@ const props = defineProps({
             {{ props.power.powerLevel.name }}
           </div>
         </div>
-        <div v-if="props.showPickButton" class="pl-3 flex-grow-1">
-          <Button class="float-end" label="Pick" @click="dialogs.showAddPower(props.power)" />
+        <div class="p-0 m-2 d-inline-flex align-items-start align-items-center gap-2">
+          <slot name="buttons"></slot>
         </div>
       </div>
-    </template>
-    <template #subtitle>
       <div v-html="props.power.description" />
-    </template>
-    <template #content>
       <div style="overflow: auto">
         <table class="p-datatable-table">
           <!-- Table header -->
@@ -138,8 +130,7 @@ const props = defineProps({
         Additional Information
       </h2>
       <div v-if="!isNullOrWhiteSpace(props.power.other)" v-html="props.power.other" />
-    </template>
-  </Card>
+  </div>
 </template>
 
 <style>
