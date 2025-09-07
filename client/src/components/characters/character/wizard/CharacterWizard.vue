@@ -83,7 +83,7 @@ const redirectToEdit = () => {
 
 </template>
 
-<style scoped>
+<style>
 @media(min-width: 768px){
   .custom-toc {
     max-height: calc(100vh - 1rem);
@@ -98,5 +98,9 @@ const redirectToEdit = () => {
     padding-left: 1rem !important;
     padding-right: 1rem !important;
   }
+}
+
+.main-container{
+  max-width: 1500px !important;
 }
 </style>

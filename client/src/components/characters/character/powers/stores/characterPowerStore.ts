@@ -19,7 +19,8 @@ export const characterPowersStore =
                 isLoading: true as boolean,
                 powers: [] as Array<PowerPath>,
                 selectablePowers: [] as Array<PowerPath>,
-                currentExperience: 0 as number
+                currentExperience: 0 as number,
+                activePowerId: 0 as number,
             }
         },
         actions: {
