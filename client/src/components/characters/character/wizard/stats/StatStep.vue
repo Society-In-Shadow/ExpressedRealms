@@ -18,23 +18,25 @@ const selectedStatType = ref(1);
 const isLoading = ref(true);
 
 onMounted(() =>{
+  loadData();
+});
+
+function loadData(){
+  isLoading.value = true;
   axios.get(`/characters/${route.params.id}/stats`)
       .then((response) => {
         stats.value = response.data;
         isLoading.value = false;
       })
-});
+}
 
 function showDetailedStat(statTypeId:number){
   selectedStatType.value = statTypeId;
   showDetails.value = !showDetails.value;
-  console.log("hi");
 }
 
-function updateStat(level:number, bonus:number){
-  var updatedStat = stats.value.find(x => x.statTypeId == selectedStatType.value);
-  updatedStat.bonus = bonus;
-  updatedStat.level = level;
+function updateStat(){
+  loadData();
 }
 
 const toggleAdd = (id: number) => {

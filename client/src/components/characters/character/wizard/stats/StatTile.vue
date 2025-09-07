@@ -10,26 +10,9 @@ import {proficiencyStore} from "@/components/characters/character/proficiency/st
 import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import type {LevelInfo, Stat} from "@/components/characters/character/wizard/stats/types.ts";
 
 const route = useRoute()
-
-interface LevelInfo {
-  bonus: number;
-  description: string;
-  level: number;
-  totalXP: number;
-  xp: number;
-  disabled: boolean;
-}
-
-interface Stat {
-  availableXP: number;
-  description: string;
-  id: number;
-  name: string;
-  statLevel: number;
-  statLevelInfo: LevelInfo;
-}
 
 const emit = defineEmits<{
   toggleStat: [],
@@ -46,9 +29,13 @@ const props = defineProps({
 const stat:Ref<Stat> = ref({
   statLevelInfo: {}
 });
+
+const newStat:Ref<Stat> = ref({
+  statLevelInfo: {}
+});
+
 const statLevels:Ref<Array<LevelInfo>> = ref([]);
 const loading = ref(true);
-const showOptions = ref(false);
 const oldValue = ref(props.statTypeId);
 const profStore = proficiencyStore();
 const experienceInfo = experienceStore();
@@ -75,6 +62,7 @@ async function reloadStatInfo() {
   await axios.get(`/characters/${route.params.id}/stat/${props.statTypeId}`)
       .then((response) => {
         stat.value = response.data;
+        newStat.value = structuredClone(response.data);
         loading.value = false;
       })
 }
@@ -90,7 +78,6 @@ async function getEditOptions() {
         });
 
         statLevels.value = response.data;
-        showOptions.value = true;
       })
 }
 
@@ -99,11 +86,10 @@ function handleStatUpdate(stat:Stat){
   if(stat.statLevel == undefined)
   {
     stat.statLevel = oldValue.value;
-    showOptions.value = !showOptions.value;
     return;
   }
   axios.put(`/characters/${route.params.id}/stat/${props.statTypeId}`, {
-    levelTypeId: stat.statLevel,
+    levelTypeId: newStat.value.statLevelInfo.level,
     statTypeId: props.statTypeId,
     characterId: route.params.id
   }).then(async function(){
@@ -116,7 +102,6 @@ function handleStatUpdate(stat:Stat){
     experienceInfo.updateExperience(route.params.id);
     profStore.getUpdateProficiencies(route.params.id);
     await reloadData();
-    showOptions.value = !showOptions.value;
   }).catch(function() {
     stat.statLevel = oldValue.value;
   })
@@ -135,8 +120,8 @@ function handleStatUpdate(stat:Stat){
               <div class="col">
                 {{ stat.name }}
               </div>
-              <div v-if="showOptions" class="col text-right">
-                {{ stat.availableXP }} XP
+              <div class="col text-right">
+                <Button label="Update" size="small" @click="handleStatUpdate(newStat)" />
               </div>
             </div>
           </SkeletonWrapper>
@@ -148,7 +133,11 @@ function handleStatUpdate(stat:Stat){
         </div>
       </div>
     </div>
-    <DataTable v-model:selection="stat.statLevelInfo" v-model:expandedRows="expandedRows" :value="statLevels" selection-mode="single" data-key="level">
+    <h3 class="d-flex justify-content-between">
+      <span>Experience Cost: {{newStat.statLevelInfo.totalXP > stat.statLevelInfo.totalXP ? "-" : "+"}}{{ Math.abs(newStat.statLevelInfo.totalXP - stat.statLevelInfo.totalXP) }}</span>
+      <span>Available Experience: TBD</span>
+    </h3>
+    <DataTable v-model:selection="newStat.statLevelInfo" v-model:expandedRows="expandedRows" :value="statLevels" selection-mode="single" data-key="level">
       <Column selection-mode="single" headerStyle="width: 3rem"></Column>
       <Column field="level" header="Level">
         <template #body="slotProps">
@@ -172,7 +161,7 @@ function handleStatUpdate(stat:Stat){
         </template>
       </Column>
       <template #expansion="slotProps">
-        <SkeletonWrapper :show-skeleton="loading" height="2rem" width="100%" style="padding-left: 3rem; cursor: pointer;" @click="stat.statLevelInfo = slotProps.data">
+        <SkeletonWrapper :show-skeleton="loading" height="2rem" width="100%" style="padding-left: 3rem; cursor: pointer;" @click="newStat.statLevelInfo = slotProps.data">
           <div >
             {{ slotProps.data.description }}
           </div>
