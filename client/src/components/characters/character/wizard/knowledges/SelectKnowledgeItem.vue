@@ -36,7 +36,7 @@ const toggleAdd = () => {
       </div>
     </div>
     <div v-if="!props.isReadOnly" class="p-0 m-2 d-inline-flex align-items-start align-items-center">
-      <Button class="float-end" label="View" @click="toggleAdd" />
+      <Button class="float-end" size="small" label="View" @click="toggleAdd" />
     </div>
   </div>
   <Teleport v-if="characterKnowledgeData.activeKnowledgeId == props.knowledge?.id" to="#item-modification-section">

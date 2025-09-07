@@ -44,8 +44,7 @@ const toggleEdit = (knowledgeId: number) => {
 
 <template>
   <div style="max-width: 650px; margin: 0 auto;">
-    <div class="text-right pb-3" v-if="experienceInfo.showAllExperience">{{ experienceInfo.experienceBreakdown.knowledgeXp}} Total XP - {{experienceInfo.experienceBreakdown.setupKnowledgeXp}} Creation XP = {{experienceInfo.experienceBreakdown.knowledgeXp - experienceInfo.experienceBreakdown.setupKnowledgeXp}} XP</div>
-    <h1 v-if="characterKnowledgeData.knowledges.length > 0">Selected Knowledges</h1>
+        <h1 v-if="characterKnowledgeData.knowledges.length > 0">Selected Knowledges</h1>
     <div v-for="knowledge in characterKnowledgeData.knowledges" :key="knowledge.id">
       <div class="d-flex flex-column flex-md-row align-self-center justify-content-between pt-2 pb-2">
         <div class="d-flex flex-column flex-grow-1 pr-3">
@@ -59,14 +58,14 @@ const toggleEdit = (knowledgeId: number) => {
           </div>
           <div class="d-flex d-block mt-1">
             <div class="flex-grow-1">
-              <Tag v-if="knowledge.specializations.length == 0" value="No Specializations" />
-              <Tag v-for="special in knowledge.specializations" v-else class="mr-1" :value="special.name" />
+              <Tag severity="info" v-if="knowledge.specializations.length == 0" value="No Specializations" />
+              <Tag severity="info" v-for="special in knowledge.specializations" v-else class="mr-1" :value="special.name" />
             </div>
             <div>Stones: +{{ knowledge.stoneModifier }}</div>
           </div>
         </div>
         <div>
-          <Button label="View" @click="toggleEdit(knowledge.knowledge.id)" />
+          <Button label="View" size="small" @click="toggleEdit(knowledge.knowledge.id)" />
           <Teleport v-if="characterKnowledgeData.activeKnowledgeId == knowledge.knowledge.id" to="#item-modification-section">
             <EditCharacterKnowledge :knowledge="knowledge" />
           </Teleport>
@@ -76,7 +75,9 @@ const toggleEdit = (knowledgeId: number) => {
     
     <div class="mb-2">
       <hr v-if="characterKnowledgeData.knowledges.length !== 0">
-      <h1>Choose Knowledges</h1>
+      <h1 class="pb-0 mb-0">Choose Knowledges</h1>
+      <div class="pb-3" v-if="experienceInfo.showAllExperience">{{ experienceInfo.experienceBreakdown.knowledgeXp}} Total XP - {{experienceInfo.experienceBreakdown.setupKnowledgeXp}} Creation XP = {{experienceInfo.experienceBreakdown.knowledgeXp - experienceInfo.experienceBreakdown.setupKnowledgeXp}} XP</div>
+
       <div v-if="characterKnowledgeData.knowledges.length === 0">
         <p>No Knowledges detected, please pick one below.</p>
       </div>
