@@ -53,7 +53,7 @@ onBeforeMount(async () =>{
 
 async function getEditOptions() {
   await skillInfo.getSkillOptions(route.params.id, props.skill?.skillTypeId)
-  expandedRows.value = skillInfo.skillLevels.reduce((acc, p) => (acc[p.levelId] = true) && acc, {});
+  expandedRows.value = Object.fromEntries(skillInfo.skillLevels.map(x => [x.levelId, true]));
   skillLevel.value = skillInfo.skillLevels.find(x => x.levelId === props.skill.levelId);
   selectedSkillItem.value = skillInfo.skillLevels.find(x => x.levelId === props.skill.levelId);
 }
