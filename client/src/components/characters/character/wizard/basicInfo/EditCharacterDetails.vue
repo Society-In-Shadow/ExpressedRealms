@@ -14,16 +14,13 @@ import {makeIdSafe} from "@/utilities/stringUtilities";
 import type {Faction} from "@/components/characters/character/interfaces/Faction";
 import {characterStore} from "@/components/characters/character/stores/characterStore";
 import {FeatureFlags, userStore} from "@/stores/userStore.ts";
+import HighLevelExpressionInfo
+  from "@/components/characters/character/wizard/basicInfo/supporting/HighLevelExpressionInfo.vue";
 
 const route = useRoute()
 
 const characterInfo = characterStore();
 const userInfo = userStore();
-
-const emit = defineEmits<{
-  closeDialog: []
-}>();
-
 const showFactionInfo = ref(false);
 
 onMounted(async () =>{
@@ -94,4 +91,5 @@ let expressionRedirectURL = computed(() => {
       </form>
     </template>
   </Card>
+  <HighLevelExpressionInfo :expression-id="characterInfo.expressionId" v-if="!characterInfo.isLoading"/>
 </template>

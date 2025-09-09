@@ -45,6 +45,7 @@ internal sealed class CharacterRepository(
                 Background = x.Background,
                 Expression = x.Expression.Name,
                 FactionId = x.FactionId,
+                ExpressionId = x.ExpressionId,
             })
             .FirstOrDefaultAsync(cancellationToken);
 

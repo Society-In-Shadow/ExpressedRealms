@@ -13,6 +13,8 @@ import DropdownWrapper from "@/FormWrappers/DropdownWrapper.vue";
 import {makeIdSafe} from "@/utilities/stringUtilities";
 import DropdownInfoWrapper from "@/FormWrappers/DropdownInfoWrapper.vue";
 import {FeatureFlags, userStore} from "@/stores/userStore.ts";
+import HighLevelExpressionInfo
+  from "@/components/characters/character/wizard/basicInfo/supporting/HighLevelExpressionInfo.vue";
 
 const userInfo = userStore();
 const router = useRouter();
@@ -100,23 +102,7 @@ const expressionRedirectURL = computed(() => {
           <TextAreaWrapper v-model="background" field-name="Background" :error-text="errors.background" />
           <Button data-cy="add-character-button" label="Add Character" class="w-100 mb-2" type="submit" />
         </form>
-        <teleport to="#item-modification-section" v-if="expression">
-          <div class="d-flex justify-content-between">
-            <h1>{{expression.name}}</h1>
-            <Button label="More information" @click="redirectToExpression" />
-          </div>
-          
-          
-          <h2>Archetypes</h2>
-          <div v-html="expression.archetypes"></div>
-          
-          <h2>Background</h2>
-          <div v-html="expression.background"></div>
-                    
-          <h2>Description</h2>
-          <div v-html="expression.description"></div>
-          
-        </teleport>
+        <HighLevelExpressionInfo :expression-id="expression.id" v-if="expression" />
       </template>
     </Card>
   </div>

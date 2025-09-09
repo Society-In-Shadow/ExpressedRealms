@@ -10,7 +10,10 @@ internal record CharacterEditResponse
         Background = dto.Background;
         Expression = dto.Expression;
         FactionId = dto.FactionId;
+        ExpressionId = dto.ExpressionId;
     }
+
+    public int ExpressionId { get; set; }
 
     /// <example>John Doe</example>
     public string Name { get; set; } = null!;
