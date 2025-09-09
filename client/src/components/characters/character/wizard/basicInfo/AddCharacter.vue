@@ -83,8 +83,8 @@ const expressionRedirectURL = computed(() => {
 </script>
 
 <template>
-  <div class="flex flex-xs-column flex-sm-column flex-lg-row flex-md-row gap-3 m-3 ">
-    <Card class="mb-3">
+  <div class="flex flex-xs-column flex-sm-column flex-lg-row flex-md-row gap-3">
+    <Card class="mb-3 w-100">
       <template #title>
         Add Character
       </template>
