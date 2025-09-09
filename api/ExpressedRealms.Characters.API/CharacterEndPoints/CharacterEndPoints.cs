@@ -61,6 +61,9 @@ internal static class CharacterEndPoints
                             Id = x.Id,
                             Name = x.Name,
                             ShortDescription = x.ShortDescription,
+                            Archetypes = x.ExpressionSections.FirstOrDefault(x => x.SectionTypeId == 16).Content,
+                            Description = x.ExpressionSections.FirstOrDefault(x => x.SectionTypeId == 1).Content,
+                            Background = x.ExpressionSections.FirstOrDefault(x => x.SectionTypeId == 2).Content,
                         })
                         .ToListAsync();
 

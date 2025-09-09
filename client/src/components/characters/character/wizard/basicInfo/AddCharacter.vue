@@ -92,11 +92,7 @@ const expressionRedirectURL = computed(() => {
           <DropdownWrapper
             v-model="expression" option-label="name" :options="expressions" field-name="Expression" :error-text="errors.expressionId"
             :show-skeleton="isLoadingExpressions" @change="loadFactions()"
-          >
-            <div data-cy="expression-short-description" class="m-2">
-              {{ expression?.shortDescription ?? "" }}
-            </div>
-          </DropdownWrapper>
+          />
           <DropdownInfoWrapper
             v-if="expression && showFactionDropdown" v-model="faction" option-label="name" :options="factions" field-name="Faction"
             :error-text="errors.factionId" :disabled="!expression" :redirect-url="expressionRedirectURL" :show-skeleton="isLoadingFactions" :redirect-to-different-page="true"
@@ -104,6 +100,23 @@ const expressionRedirectURL = computed(() => {
           <TextAreaWrapper v-model="background" field-name="Background" :error-text="errors.background" />
           <Button data-cy="add-character-button" label="Add Character" class="w-100 mb-2" type="submit" />
         </form>
+        <teleport to="#item-modification-section" v-if="expression">
+          <div class="d-flex justify-content-between">
+            <h1>{{expression.name}}</h1>
+            <Button label="More information" @click="redirectToExpression" />
+          </div>
+          
+          
+          <h2>Archetypes</h2>
+          <div v-html="expression.archetypes"></div>
+          
+          <h2>Background</h2>
+          <div v-html="expression.background"></div>
+                    
+          <h2>Description</h2>
+          <div v-html="expression.description"></div>
+          
+        </teleport>
       </template>
     </Card>
   </div>
