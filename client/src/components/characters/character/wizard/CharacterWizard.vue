@@ -6,6 +6,7 @@ import KnowledgeStep from "@/components/characters/character/wizard/knowledges/K
 import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import PowerStep from "@/components/characters/character/wizard/powers/PowerStep.vue";
 import StatStep from "@/components/characters/character/wizard/stats/StatStep.vue";
+import SkillStep from "@/components/characters/character/wizard/skills/SkillStep.vue";
 import {useRoute, useRouter} from "vue-router";
 import DataTable from "primevue/datatable";
 
@@ -19,7 +20,7 @@ const sections = ref([
   { name: 'Stats', component: defineAsyncComponent(async () => StatStep) },
   { name: 'Knowledges', component: defineAsyncComponent(async () => KnowledgeStep)},
   { name: 'Powers', component: defineAsyncComponent(async () => PowerStep) },
-  { name: 'Skills', component: createPlaceholderView('Skills', 'Skills content coming soon...') },
+  { name: 'Skills', component: defineAsyncComponent(async () => SkillStep) },
   { name: 'Proficiencies', component: createPlaceholderView('Proficiencies', 'Proficiencies content coming soon...') },
 ]);
 
