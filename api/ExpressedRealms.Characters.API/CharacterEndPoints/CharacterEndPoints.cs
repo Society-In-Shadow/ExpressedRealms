@@ -56,11 +56,7 @@ internal static class CharacterEndPoints
                             x.PublishStatusId == (int)PublishTypes.Published
                             && x.ExpressionTypeId == 1
                         )
-                        .Select(x => new CharacterOptionExpression()
-                        {
-                            Id = x.Id,
-                            Name = x.Name
-                        })
+                        .Select(x => new CharacterOptionExpression() { Id = x.Id, Name = x.Name })
                         .ToListAsync();
 
                     return TypedResults.Ok(new CharacterOptions() { Expressions = expressions });
@@ -69,13 +65,12 @@ internal static class CharacterEndPoints
             .WithSummary("Returns info needed for creating a character")
             .WithDescription("Returns info needed for creating a character.")
             .RequireAuthorization();
-        
+
         endpointGroup
             .MapGet(
                 "options/{expressionId}",
                 [Authorize]
-                async (
-                    int expressionId, ExpressedRealmsDbContext dbContext, HttpContext http) =>
+                async (int expressionId, ExpressedRealmsDbContext dbContext, HttpContext http) =>
                 {
                     var expressionInfo = await dbContext
                         .Expressions.AsNoTracking()
@@ -87,9 +82,18 @@ internal static class CharacterEndPoints
                         .Select(x => new HighLevelExpressionInfoResponse()
                         {
                             Name = x.Name,
-                            Archetypes = x.ExpressionSections.FirstOrDefault(x => x.SectionTypeId == 16).Content,
-                            Description = x.ExpressionSections.FirstOrDefault(x => x.SectionTypeId == 1).Content,
-                            Background = x.ExpressionSections.FirstOrDefault(x => x.SectionTypeId == 2).Content,
+                            Archetypes =
+                                x.ExpressionSections.Where(y => y.SectionTypeId == 16)
+                                    .Select(z => z.Content)
+                                    .FirstOrDefault() ?? string.Empty,
+                            Description =
+                                x.ExpressionSections.Where(y => y.SectionTypeId == 1)
+                                    .Select(z => z.Content)
+                                    .FirstOrDefault() ?? string.Empty,
+                            Background =
+                                x.ExpressionSections.Where(y => y.SectionTypeId == 2)
+                                    .Select(z => z.Content)
+                                    .FirstOrDefault() ?? string.Empty,
                         })
                         .FirstAsync();
 
