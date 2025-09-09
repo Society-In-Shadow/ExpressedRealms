@@ -21,7 +21,7 @@ export const skillStore =
         actions: {
             async getSkills(characterId: number) {
                 this.isLoadingSkills = true;
-                axios.get(`characters/${characterId}/skills`)
+                return axios.get(`characters/${characterId}/skills`)
                     .then((response) => {
                         this.offensiveSkills = response.data.filter((x: CharacterSkillsResponse) => x.skillSubTypeId === 1);
                         this.defensiveSkills = response.data.filter((x: CharacterSkillsResponse) => x.skillSubTypeId === 2);

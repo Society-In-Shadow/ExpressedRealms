@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {onBeforeMount, type PropType, ref, type Ref, watch} from "vue";
+import {onBeforeMount, type PropType, ref, type Ref} from "vue";
 import axios from "axios";
 import type {SkillResponse} from "@/components/characters/character/skills/interfaces/SkillOptionsResponse";
 import {useRoute} from 'vue-router'
@@ -47,9 +47,9 @@ const skillLevel: Ref<SkillResponse> = ref(emptySkill);
 const expandedRows = ref({});
 const selectedSkillItem:Ref<SkillResponse> = ref(emptySkill);
 
-watch(() => props.skill?.levelId, async(newValue, oldValue) => {
+/*watch(() => props.skill?.levelId, async(newValue, oldValue) => {
   await getEditOptions();
-});
+});*/
 
 onBeforeMount(async () =>{
   await getEditOptions();
@@ -61,8 +61,6 @@ async function getEditOptions() {
 
   skillLevel.value = skillInfo.skillLevels.filter(x => x.levelId === props.skill.levelId)[0];
   selectedSkillItem.value = skillInfo.skillLevels.filter(x => x.levelId === props.skill.levelId)[0];
-
-
 }
 
 function handleStatUpdate(skill:SkillResponse){
@@ -82,13 +80,15 @@ function handleStatUpdate(skill:SkillResponse){
     await skillInfo.getSkills(route.params.id);
     await experienceInfo.updateExperience(route.params.id);
     await profStore.getUpdateProficiencies(route.params.id);
-
-    skillLevel.value = skillInfo.skillLevels.find(x => x.levelId === props.skill.levelId);
-    selectedSkillItem.value = skillInfo.skillLevels.find(x => x.levelId === props.skill.levelId);
     
     toasters.success("Successfully updated level!");
   })
 
+}
+
+// Prevent deselecting the only option
+const onRowUnselect = (event) => {
+  selectedSkillItem.value = skillInfo.skillLevels.find(x => x.levelId === event.data.levelId)
 }
 
 </script>
@@ -115,7 +115,7 @@ function handleStatUpdate(skill:SkillResponse){
       </div>
     </div>
   </div>
-  <DataTable v-model:selection="selectedSkillItem" v-model:expandedRows="expandedRows" :value="skillInfo.skillLevels" selection-mode="single" data-key="levelId">
+  <DataTable v-model:selection="selectedSkillItem" v-model:expandedRows="expandedRows" :value="skillInfo.skillLevels" selection-mode="single" data-key="levelId" @rowUnselect="onRowUnselect">
     <Column selection-mode="single" headerStyle="width: 3rem"></Column>
     <Column field="level" header="Name">
       <template #body="slotProps">
@@ -134,9 +134,7 @@ function handleStatUpdate(skill:SkillResponse){
     <Column field="xp" header="XP" header-class="text-center" body-class="text-center">
       <template #body="slotProps">
         <SkeletonWrapper :show-skeleton="skillInfo.isLoadingSkillLevels" height="2rem" width="100%">
-
             {{slotProps.data.experienceCost > skillLevel.experienceCost ? "-" : "+"}}{{ Math.abs(slotProps.data.experienceCost - skillLevel.experienceCost) }}
-
         </SkeletonWrapper>
       </template>
     </Column>
