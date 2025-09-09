@@ -3,7 +3,20 @@
 import Button from "primevue/button";
 import Card from "primevue/card";
 import {useRouter} from "vue-router";
-const Router = useRouter();
+import {FeatureFlags, userStore} from "@/stores/userStore.ts";
+
+const router = useRouter();
+const userInfo = userStore();
+
+async function redirectToAdd(){
+  
+  if(await userInfo.hasFeatureFlag(FeatureFlags.ShowCharacterWizard)){
+    router.push('/characters/wizard')
+  }else{
+    router.push('/characters/add')
+  }
+  
+}
 
 </script>
 
@@ -11,7 +24,7 @@ const Router = useRouter();
   <Card class="mb-3 characterTile">
     <template #content>
       <div style="text-align: center;" class="align-self-center">
-        <Button data-cy="character-delete-button" label="Add" @click="Router.push('/characters/add')" />
+        <Button data-cy="character-delete-button" label="Add" @click="redirectToAdd" />
       </div>
     </template>
   </Card>

@@ -26,12 +26,17 @@ export const OverallRoutes = {
             component: () => import("./../../components/characters/character/AddCharacter.vue")
         },
         {
+            path: "/characters/wizard",
+            name: "addWizard",
+            component: () => import("./../../components/characters/character/wizard/CharacterWizard.vue")
+        },
+        {
             path: "/characters/:id",
             name: "editCharacter",
             component: () => import("./../../components/characters/character/EditCharacter.vue")
         },
         {
-            path: "/characters/:id/edit",
+            path: "/characters/:id/wizard",
             name: "characterWizard",
             component: () => import("./../../components/characters/character/wizard/CharacterWizard.vue"),
             meta: { requiredFeatureFlag: FeatureFlags.ShowCharacterWizard }

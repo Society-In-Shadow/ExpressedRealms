@@ -56,12 +56,7 @@ internal static class CharacterEndPoints
                             x.PublishStatusId == (int)PublishTypes.Published
                             && x.ExpressionTypeId == 1
                         )
-                        .Select(x => new CharacterOptionExpression()
-                        {
-                            Id = x.Id,
-                            Name = x.Name,
-                            ShortDescription = x.ShortDescription,
-                        })
+                        .Select(x => new CharacterOptionExpression() { Id = x.Id, Name = x.Name })
                         .ToListAsync();
 
                     return TypedResults.Ok(new CharacterOptions() { Expressions = expressions });
@@ -69,6 +64,43 @@ internal static class CharacterEndPoints
             )
             .WithSummary("Returns info needed for creating a character")
             .WithDescription("Returns info needed for creating a character.")
+            .RequireAuthorization();
+
+        endpointGroup
+            .MapGet(
+                "options/{expressionId}",
+                [Authorize]
+                async (int expressionId, ExpressedRealmsDbContext dbContext, HttpContext http) =>
+                {
+                    var expressionInfo = await dbContext
+                        .Expressions.AsNoTracking()
+                        .Where(x =>
+                            x.PublishStatusId == (int)PublishTypes.Published
+                            && x.ExpressionTypeId == 1
+                            && x.Id == expressionId
+                        )
+                        .Select(x => new HighLevelExpressionInfoResponse()
+                        {
+                            Name = x.Name,
+                            Archetypes =
+                                x.ExpressionSections.Where(y => y.SectionTypeId == 16)
+                                    .Select(z => z.Content)
+                                    .FirstOrDefault() ?? string.Empty,
+                            Description =
+                                x.ExpressionSections.Where(y => y.SectionTypeId == 1)
+                                    .Select(z => z.Content)
+                                    .FirstOrDefault() ?? string.Empty,
+                            Background =
+                                x.ExpressionSections.Where(y => y.SectionTypeId == 2)
+                                    .Select(z => z.Content)
+                                    .FirstOrDefault() ?? string.Empty,
+                        })
+                        .FirstAsync();
+
+                    return TypedResults.Ok(expressionInfo);
+                }
+            )
+            .WithSummary("Returns high level expression info to be displayed in the wizard")
             .RequireAuthorization();
 
         endpointGroup

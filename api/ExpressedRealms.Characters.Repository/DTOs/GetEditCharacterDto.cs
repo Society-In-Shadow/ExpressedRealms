@@ -6,4 +6,5 @@ public sealed record GetEditCharacterDto
     public string? Background { get; init; }
     public string Expression { get; init; } = null!;
     public int? FactionId { get; init; }
+    public int ExpressionId { get; set; }
 }

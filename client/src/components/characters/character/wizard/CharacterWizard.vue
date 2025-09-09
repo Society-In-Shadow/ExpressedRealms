@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Button from 'primevue/button';
 import Card from 'primevue/card';
-import {computed, defineAsyncComponent, h, onMounted, ref} from "vue";
+import {computed, defineAsyncComponent, h, onBeforeMount, ref, watch} from "vue";
 import KnowledgeStep from "@/components/characters/character/wizard/knowledges/KnowledgeStep.vue";
 import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import PowerStep from "@/components/characters/character/wizard/powers/PowerStep.vue";
@@ -11,24 +11,45 @@ import ProficiencyTableTile from "@/components/characters/character/proficiency/
 import {useRoute, useRouter} from "vue-router";
 import DataTable from "primevue/datatable";
 import SecondaryProficiencies from "@/components/characters/character/wizard/proficiencies/SecondaryProficiencies.vue";
+import EditCharacterDetails from "@/components/characters/character/wizard/basicInfo/EditCharacterDetails.vue";
+import AddCharacter from "@/components/characters/character/wizard/basicInfo/AddCharacter.vue";
 
 const xpData = experienceStore();
 const route = useRoute()
 const router = useRouter();
+const isAdd = computed(() =>route.name == 'addWizard');
 
 const sections = ref([
-  { name: 'Getting Started', component: createPlaceholderView('Getting Started', 'Getting Started content coming soon...') },
-  { name: 'Expression', component: createPlaceholderView('Expression', 'Expression content coming soon...') },
-  { name: 'Stats', component: defineAsyncComponent(async () => StatStep) },
-  { name: 'Knowledges', component: defineAsyncComponent(async () => KnowledgeStep)},
-  { name: 'Powers', component: defineAsyncComponent(async () => PowerStep) },
-  { name: 'Skills', component: defineAsyncComponent(async () => SkillStep) },
-  { name: 'Proficiencies', component: defineAsyncComponent(async () => ProficiencyTableTile) },
+  { name: 'Getting Started', isDisabled: false, component: createPlaceholderView('Getting Started', 'Getting Started content coming soon...') },
+  { name: 'Stats', isDisabled: isAdd, component: defineAsyncComponent(async () => StatStep) },
+  { name: 'Knowledges', isDisabled: isAdd, component: defineAsyncComponent(async () => KnowledgeStep)},
+  { name: 'Powers', isDisabled: isAdd, component: defineAsyncComponent(async () => PowerStep) },
+  { name: 'Skills', isDisabled: isAdd, component: defineAsyncComponent(async () => SkillStep) },
+  { name: 'Proficiencies', isDisabled: isAdd, component: defineAsyncComponent(async () => ProficiencyTableTile) },
 ]);
 
-onMounted(() => {
-  xpData.updateExperience(route.params.id);
+onBeforeMount(async () => {
+  await fetchData()
 })
+
+async function fetchData() {
+  if(sections.value[1].name == 'Basic Info') sections.value.splice(1, 1);
+  if(isAdd.value){
+    sections.value.splice(1, 0,   { name: 'Basic Info', isDisabled: false, component: defineAsyncComponent(async () => AddCharacter) },);
+  }else{
+    sections.value.splice(1, 0,   { name: 'Basic Info', isDisabled: false, component: defineAsyncComponent(async () => EditCharacterDetails) },);
+    await xpData.updateExperience(route.params.id);
+  }
+}
+
+watch(
+    () => route.path,
+    async (newPath, oldPath) => {
+      if (newPath !== oldPath) {
+        await fetchData()
+      }
+    }
+)
 
 function createPlaceholderView(name: string, text: string) : Promise<any> {
   return defineAsyncComponent(async () => ({
@@ -39,7 +60,7 @@ function createPlaceholderView(name: string, text: string) : Promise<any> {
   }));
 }
 
-const selectedSection = ref<string>('Knowledges');
+const selectedSection = ref<string>('Basic Info');
 const currentView = computed(() => sections.value.filter(x => x.name == selectedSection.value)[0].component);
 const selectSection = (name: string) => {
   selectedSection.value = name;
@@ -54,7 +75,7 @@ const redirectToEdit = () => {
   <div class="d-none">
     <DataTable />
   </div>
-  <div class="d-flex justify-content-end">
+  <div class="d-flex justify-content-end" v-if="!isAdd">
     <SecondaryProficiencies></SecondaryProficiencies>
   </div>
   <div class="row pt-3">
@@ -65,9 +86,10 @@ const redirectToEdit = () => {
             <Button class="w-100" :label="section.name"
                     :outlined="selectedSection !== section.name"
                     @click="selectSection(section.name)"
+                    :disabled="section.isDisabled"
             />
           </div>
-          <div class="p-2">
+          <div class="p-2" v-if="!isAdd">
             <Button class="w-100" label="Character Sheet" :outlined="true" icon="pi pi-arrow-left"
                     @click="redirectToEdit"
             />
