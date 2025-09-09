@@ -14,7 +14,7 @@ const route = useRoute()
 const experienceInfo = experienceStore();
 const stats = ref([ {}, {}, {}, {}, {}, {}]);
 const showDetails = ref(false);
-const selectedStatType = ref(1);
+const selectedStatType = ref(0);
 const isLoading = ref(true);
 
 onMounted(async() =>{
@@ -39,9 +39,6 @@ function updateStat(){
   loadData();
 }
 
-const toggleAdd = (id: number) => {
-  selectedStatType.value = id;
-}
 
 </script>
 
@@ -77,7 +74,7 @@ const toggleAdd = (id: number) => {
       </Column>
     </DataTable>
     </div>
-    <teleport to="#item-modification-section">
+    <teleport v-if="selectedStatType != 0" to="#item-modification-section">
       <StatTile :stat-type-id="selectedStatType" @toggle-stat="showDetails = !showDetails" @update-stat="updateStat" />
     </teleport>
 </template>
@@ -86,30 +83,6 @@ const toggleAdd = (id: number) => {
 
 :deep(th.text-center .p-datatable-column-header-content) {
   justify-content: center;
-}
-
-
-.statBlock{
-  width: 80px;
-}
-
-.statBlock .levelDisplay{
-  position: relative;
-  top: .4em;
-  width: 30px;
-  left: .9em; 
-  padding: 5px !important;
-  font-size: small
-}
-
-.statBlock:deep(.p-fieldset-legend) {
-  padding: .5rem !important;
-}
-
-.statBlock:deep(.p-fieldset-content) {
-  padding: 0px !important;
-  text-align: center;
-  height: 45px
 }
 
 </style>

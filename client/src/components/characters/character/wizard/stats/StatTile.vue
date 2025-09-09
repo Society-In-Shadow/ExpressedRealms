@@ -132,7 +132,7 @@ function handleStatUpdate(stat:Stat){
     </div>
     <h3 class="d-flex justify-content-between">
       <span>Experience Cost: {{newStat.statLevelInfo.totalXP > stat.statLevelInfo.totalXP ? "-" : "+"}}{{ Math.abs(newStat.statLevelInfo.totalXP - stat.statLevelInfo.totalXP) }}</span>
-      <span>Available Experience: TBD</span>
+      <span>Available Experience: Infinite</span>
     </h3>
     <DataTable v-model:selection="newStat.statLevelInfo" v-model:expandedRows="expandedRows" :value="statLevels" selection-mode="single" data-key="level">
       <Column selection-mode="single" headerStyle="width: 3rem"></Column>
