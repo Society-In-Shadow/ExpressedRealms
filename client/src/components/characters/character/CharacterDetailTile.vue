@@ -67,9 +67,9 @@ const redirectToEdit = () => {
           <div v-if="showFactionInfo"><em>{{ faction?.name ?? 'No Faction' }}</em></div>
         </div>
         <div class="d-flex flex-column gap-3" style="font-size: 2.5em">
-          <Button type="button" @click="dialog.showExperience()" icon="pi pi-info-circle" icon-pos="right" size="large" :label="`XP: ${experienceInfo.experienceBreakdown.total - experienceInfo.experienceBreakdown.setupTotal}`" />
-          <Button class="float-end" label="Edit" @click="toggleEdit" />
-          <Button v-if="showWizardButton" class="float-end" label="Wizard" @click="redirectToEdit" />
+          <Button v-if="!showWizardButton" type="button" @click="dialog.showExperience()" icon="pi pi-info-circle" icon-pos="right" size="large" :label="`XP: ${experienceInfo.experienceBreakdown.total - experienceInfo.experienceBreakdown.setupTotal}`" />
+          <Button v-if="!showWizardButton" class="float-end" label="Edit" @click="toggleEdit" />
+          <Button v-if="showWizardButton" class="float-end" label="Edit" @click="redirectToEdit" />
         </div>
       </div>
     </template>

@@ -14,6 +14,7 @@ import AccordionHeader from "primevue/accordionheader";
 import {addKnowledgeDialog} from "@/components/characters/character/knowledges/services/dialogs";
 import {confirmationPopup} from "@/components/characters/character/knowledges/services/confirmationService";
 import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import {FeatureFlags, userStore} from "@/stores/userStore.ts";
 
 const knowledgeData = knowledgeStore();
 const characterKnowledgeData = characterKnowledgeStore();
@@ -21,6 +22,9 @@ const route = useRoute();
 const dialogService = addKnowledgeDialog();
 const popupService = confirmationPopup(route.params.id)
 const experienceInfo = experienceStore();
+const userInfo = userStore();
+
+const showCharacterWizard = ref(false);
 
 onBeforeMount(async () => {
   await characterKnowledgeData.getCharacterKnowledges(route.params.id)
@@ -29,11 +33,13 @@ onBeforeMount(async () => {
     noKnowledges.value = true;
     await toggleEdit();
   }
+  showCharacterWizard.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowCharacterWizard);
 })
 
 const showEdit = ref(false);
 const noKnowledges = ref(false);
 const openKnowledgeItems = ref([]);
+
 
 async function toggleEdit(){
   await knowledgeData.getKnowledges();
@@ -52,8 +58,8 @@ const filteredKnowledges = computed(() => {
 
 <template>
   <div style="max-width: 650px; margin: 0 auto;">
-    <div class="text-right pb-3" v-if="experienceInfo.showAllExperience">{{ experienceInfo.experienceBreakdown.knowledgeXp}} Total XP - {{experienceInfo.experienceBreakdown.setupKnowledgeXp}} Creation XP = {{experienceInfo.experienceBreakdown.knowledgeXp - experienceInfo.experienceBreakdown.setupKnowledgeXp}} XP</div>
-    <div v-if="!noKnowledges || characterKnowledgeData.knowledges.length > 0" class="text-right mb-2">
+    <div class="text-right pb-3" v-if="experienceInfo.showAllExperience && !showCharacterWizard">{{ experienceInfo.experienceBreakdown.knowledgeXp}} Total XP - {{experienceInfo.experienceBreakdown.setupKnowledgeXp}} Creation XP = {{experienceInfo.experienceBreakdown.knowledgeXp - experienceInfo.experienceBreakdown.setupKnowledgeXp}} XP</div>
+    <div v-if="!showCharacterWizard && (!noKnowledges || characterKnowledgeData.knowledges.length > 0)" class="text-right mb-2">
       <Button v-if="!showEdit" class="btn btn-primary" label="Edit" @click="toggleEdit" />
       <Button v-else class="btn btn-primary" label="Cancel" @click="toggleEdit" />
     </div>
@@ -91,7 +97,7 @@ const filteredKnowledges = computed(() => {
             {{ knowledge.notes }}
           </p>
 
-          <div v-if="showEdit" class="mt-3 d-flex justify-content-between">
+          <div v-if="showEdit && !showCharacterWizard" class="mt-3 d-flex justify-content-between">
             <Button class="btn btn-primary" label="Delete" severity="danger" @click="popupService.deleteConfirmation($event, knowledge.mappingId)" />
             <Button label="Edit" @click="dialogService.showEditCharacter(knowledge)" />
           </div>
@@ -117,20 +123,20 @@ const filteredKnowledges = computed(() => {
                 {{ special.notes }}
               </p>
 
-              <div class="p-0 m-0 d-flex justify-content-between">
+              <div class="p-0 m-0 d-flex justify-content-between" v-if="!showCharacterWizard">
                 <Button v-if="showEdit" label="Delete" severity="danger" @click="popupService.deleteSpecializationConfirmation($event, knowledge.mappingId, special.id)" />
                 <Button v-if="showEdit" label="Edit" @click="dialogService.showEditSpecialization(knowledge, special)" />
               </div>
             </div>
           </div>
-          <div v-if="showEdit" class="text-right mt-2">
+          <div v-if="showEdit && !showCharacterWizard" class="text-right mt-2">
             <Button v-if="knowledge.specializationCount > knowledge.specializations.length" class="btn btn-primary text-right" label="Add Specialization" @click="dialogService.showAddSpecialization(knowledge)" />
           </div>
         </AccordionContent>
       </AccordionPanel>
     </Accordion>
     
-    <div v-if="showEdit" class="mb-2">
+    <div v-if="showEdit && !showCharacterWizard" class="mb-2">
       <hr v-if="characterKnowledgeData.knowledges.length !== 0">
       <h1>Choose Knowledges</h1>
       <div v-if="characterKnowledgeData.knowledges.length === 0">

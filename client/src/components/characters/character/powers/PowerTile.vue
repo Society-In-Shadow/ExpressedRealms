@@ -8,10 +8,12 @@ import PowerCard from "@/components/characters/character/powers/PowerCard.vue";
 import PickPowerCard from "@/components/characters/character/powers/PickPowerCard.vue";
 import SplitButton from "primevue/splitbutton";
 import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import {FeatureFlags, userStore} from "@/stores/userStore.ts";
 
 const characterKnowledgeData = characterPowersStore();
 const route = useRoute();
 const experienceInfo = experienceStore();
+const userInfo = userStore();
 
 onBeforeMount(async () => {
   await characterKnowledgeData.getCharacterPowers(route.params.id)
@@ -20,10 +22,12 @@ onBeforeMount(async () => {
     noPowers.value = true;
     await toggleEdit();
   }
+  showCharacterWizard.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowCharacterWizard);
 })
 
 const showEdit = ref(false);
 const noPowers = ref(false);
+const showCharacterWizard = ref(false);
 
 async function toggleEdit(){
   await characterKnowledgeData.getSelectableCharacterPowers(route.params.id);
@@ -43,8 +47,8 @@ const items = [
 
 <template>
   <div style="max-width: 650px; margin: 0 auto;">
-    <div class="text-right pb-3" v-if="experienceInfo.showAllExperience">{{ experienceInfo.experienceBreakdown.powersXp}} Total XP - {{experienceInfo.experienceBreakdown.setupPowersXp}} Creation XP = {{experienceInfo.experienceBreakdown.powersXp - experienceInfo.experienceBreakdown.setupPowersXp}} XP</div>
-    <div v-if="!noPowers || characterKnowledgeData.powers.length > 0" class="d-flex flex-row justify-content-between mb-2">
+    <div class="text-right pb-3" v-if="experienceInfo.showAllExperience && !showCharacterWizard">{{ experienceInfo.experienceBreakdown.powersXp}} Total XP - {{experienceInfo.experienceBreakdown.setupPowersXp}} Creation XP = {{experienceInfo.experienceBreakdown.powersXp - experienceInfo.experienceBreakdown.setupPowersXp}} XP</div>
+    <div v-if="!showCharacterWizard && (!noPowers || characterKnowledgeData.powers.length > 0)" class="d-flex flex-row justify-content-between mb-2">
       <SplitButton class="pr-3" label="Download Power Cards" @click="characterKnowledgeData.downloadPowerCards(route.params.id, 'foo', true)" :model="items" />
       <Button v-if="!showEdit" class="btn btn-primary" label="Edit" @click="toggleEdit" />
       <Button v-else class="btn btn-primary" label="Cancel" @click="toggleEdit" />
@@ -54,7 +58,7 @@ const items = [
       <PowerCard :power-path="path" :show-edit="showEdit"/>
     </div>
     
-    <div v-if="showEdit" class="mb-2">
+    <div v-if="showEdit && !showCharacterWizard" class="mb-2">
       <hr v-if="characterKnowledgeData.powers.length !== 0">
       <h1>Choose Powers</h1>
       <div v-if="characterKnowledgeData.powers.length === 0">

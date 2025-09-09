@@ -10,6 +10,7 @@ import Listbox from 'primevue/listbox';
 import toasters from "@/services/Toasters";
 import {proficiencyStore} from "@/components/characters/character/proficiency/stores/proficiencyStore";
 import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import {FeatureFlags, userStore} from "@/stores/userStore.ts";
 
 const route = useRoute()
 
@@ -52,9 +53,12 @@ const showOptions = ref(false);
 const oldValue = ref(props.statTypeId);
 const profStore = proficiencyStore();
 const experienceInfo = experienceStore();
+const showCharacterWizard = ref(false);
+const userInfo = userStore();
 
-onMounted(() =>{
+onMounted(async () =>{
   reloadStatInfo();
+  showCharacterWizard.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowCharacterWizard);
 });
 
 function reloadStatInfo() {
@@ -66,6 +70,9 @@ function reloadStatInfo() {
 }
 
 function getEditOptions() {
+  if(showCharacterWizard){
+    return;
+  }
   axios.get(`/stats/${props.statTypeId}`)
       .then((response) => {
         
