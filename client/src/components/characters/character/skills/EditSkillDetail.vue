@@ -10,6 +10,7 @@ import toasters from "@/services/Toasters";
 import {skillStore} from "@/components/characters/character/skills/Stores/skillStore";
 import {proficiencyStore} from "@/components/characters/character/proficiency/stores/proficiencyStore";
 import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import {FeatureFlags, userStore} from "@/stores/userStore.ts";
 
 const props = defineProps({
   skillTypeId: {
@@ -37,6 +38,8 @@ const profStore = proficiencyStore();
 const skillInfo = skillStore()
 const oldValue = ref(props.selectedLevelId);
 const selectedItem = ref(props.selectedLevelId);
+const showCharacterWizard = ref(false);
+const userInfo = userStore();
 
 function getSelectedLevelInformation(){
   return skillLevels.value.find(x => x.levelId === selectedItem.value)
@@ -51,8 +54,9 @@ watch(() => props.remainingXp, (newValue, oldValue) => {
   getEditOptions()
 });
 
-onMounted(() =>{
+onMounted(async () =>{
   getEditOptions();
+  showCharacterWizard.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowCharacterWizard);
 });
 
 function getEditOptions() {
@@ -76,6 +80,9 @@ const currentXP = computed(() => {
 });
 
 function toggleEditOptions() {
+  if(showCharacterWizard){
+    return;
+  }
   showOptions.value = true;
   skillInfo.editSkillTypeId = props.skillTypeId;
   skillInfo.showExperience = true;

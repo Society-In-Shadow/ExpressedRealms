@@ -15,6 +15,7 @@ import type {
 import EditSkillDetail from "@/components/characters/character/skills/EditSkillDetail.vue";
 import {skillStore} from "@/components/characters/character/skills/Stores/skillStore";
 import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import {FeatureFlags, userStore} from "@/stores/userStore.ts";
 
 const route = useRoute()
 
@@ -27,14 +28,17 @@ const openItems = ref([]);
 const experienceInfo = experienceStore();
 
 const remainingXP = computed(() => maxXP - appliedXp.value);
+const showCharacterWizard = ref(false);
+const userInfo = userStore();
 
 const skillTypes = ref([
   { name: "Offensive Skills",  skills: offensiveSkills },
   { name: "Defensive Skills", skills: defensiveSkills }
 ]);
 
-onMounted(() =>{
+onMounted(async () =>{
   getEditOptions();
+  showCharacterWizard.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowCharacterWizard);
 });
 
 function getEditOptions() {
@@ -49,7 +53,7 @@ function getEditOptions() {
 </script>
 
 <template>
-  <div class="text-right pb-3" v-if="experienceInfo.showAllExperience">{{ experienceInfo.experienceBreakdown.skillsXp}} Total XP - {{experienceInfo.experienceBreakdown.setupSkillsXp}} Creation XP = {{experienceInfo.experienceBreakdown.skillsXp - experienceInfo.experienceBreakdown.setupSkillsXp}} XP</div>
+  <div class="text-right pb-3" v-if="!showCharacterWizard && experienceInfo.showAllExperience">{{ experienceInfo.experienceBreakdown.skillsXp}} Total XP - {{experienceInfo.experienceBreakdown.setupSkillsXp}} Creation XP = {{experienceInfo.experienceBreakdown.skillsXp - experienceInfo.experienceBreakdown.setupSkillsXp}} XP</div>
   <div class="d-inline-flex flex-wrap justify-content-center column-gap-3 row-gap-1 w-100">
     <Panel v-for="skillType in skillTypes" class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="width: 25em">
       <template #header>
