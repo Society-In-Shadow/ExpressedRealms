@@ -91,5 +91,5 @@ let expressionRedirectURL = computed(() => {
       </form>
     </template>
   </Card>
-  <HighLevelExpressionInfo :expression-id="characterInfo.expressionId" v-if="!characterInfo.isLoading"/>
+  <HighLevelExpressionInfo :expression-id="characterInfo.expressionId" v-if="!characterInfo.isLoading && characterInfo.expressionId !== 0"/>
 </template>

@@ -13,6 +13,7 @@ import DataTable from "primevue/datatable";
 import SecondaryProficiencies from "@/components/characters/character/wizard/proficiencies/SecondaryProficiencies.vue";
 import EditCharacterDetails from "@/components/characters/character/wizard/basicInfo/EditCharacterDetails.vue";
 import AddCharacter from "@/components/characters/character/wizard/basicInfo/AddCharacter.vue";
+import OverallExperience from "@/components/characters/character/OverallExperience.vue";
 
 const xpData = experienceStore();
 const route = useRoute()
@@ -26,6 +27,7 @@ const sections = ref([
   { name: 'Powers', isDisabled: isAdd, component: defineAsyncComponent(async () => PowerStep) },
   { name: 'Skills', isDisabled: isAdd, component: defineAsyncComponent(async () => SkillStep) },
   { name: 'Proficiencies', isDisabled: isAdd, component: defineAsyncComponent(async () => ProficiencyTableTile) },
+  { name: 'Experience Breakdown', isDisabled: isAdd, component: defineAsyncComponent(async () => OverallExperience) },
 ]);
 
 onBeforeMount(async () => {
