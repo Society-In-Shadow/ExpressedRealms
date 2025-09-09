@@ -1,8 +1,7 @@
 <script setup lang="ts">
 
-import axios from "axios";
 import Panel from "primevue/panel";
-import {computed, onMounted, ref, type Ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {useRoute} from 'vue-router'
 import type {
   CharacterSkillsResponse
@@ -16,35 +15,29 @@ import DataTable from "primevue/datatable";
 import EditSkillDetail from "@/components/characters/character/wizard/skills/supporting/EditSkillDetail.vue";
 
 const route = useRoute()
+const skillData = skillStore();
 
-const offensiveSkills:Ref<Array<CharacterSkillsResponse>> = ref([{}, {}, {}, {}, {}, {}]);
-const defensiveSkills:Ref<Array<CharacterSkillsResponse>> = ref([{}, {}, {}, {}, {}, {}]);
 const maxXP = 1000;
 const appliedXp = ref(0);
 const skillInfo = skillStore();
 const experienceInfo = experienceStore();
-const isLoading = ref(true);
 const remainingXP = computed(() => maxXP - appliedXp.value);
-const selectedSkill = ref<CharacterSkillsResponse>({});
+const selectedSkill = ref<CharacterSkillsResponse | undefined>();
 
-const skillTypes = ref([
-  { name: "Offensive Skills",  skills: offensiveSkills },
-  { name: "Defensive Skills", skills: defensiveSkills }
-]);
-
-onMounted(() =>{
-  getEditOptions();
+const skillTypes = computed( () => {
+  return [
+    { name: "Offensive Skills",  skills: skillData.offensiveSkills },
+    { name: "Defensive Skills", skills: skillData.defensiveSkills }
+  ];
 });
 
-function getEditOptions() {
-  axios.get(`characters/${route.params.id}/skills`)
-      .then((response) => {
-        offensiveSkills.value = response.data.filter((x: CharacterSkillsResponse) => x.skillSubTypeId === 1);
-        defensiveSkills.value = response.data.filter((x: CharacterSkillsResponse) => x.skillSubTypeId === 2);
-        appliedXp.value = response.data.reduce((sum: number, item: CharacterSkillsResponse) => sum + item.totalXp, 0);
-        selectedSkill.value = offensiveSkills.value[0];
-        isLoading.value = false;
-      })
+
+onMounted(async() =>{
+  await getEditOptions();
+});
+
+async function getEditOptions() {
+  await skillData.getSkills(route.params.id);
 }
 
 function showDetailedStat(skill: CharacterSkillsResponse){
@@ -70,21 +63,21 @@ function showDetailedStat(skill: CharacterSkillsResponse){
       <DataTable :value="skillType.skills" data-key="statTypeId">
         <Column field="name" header="Name">
           <template #body="slotProps">
-            <SkeletonWrapper height="1.5rem" width="2rem" :show-skeleton="isLoading">
+            <SkeletonWrapper height="1.5rem" width="2rem" :show-skeleton="skillData.isLoadingSkills">
               {{ slotProps.data.name }}
             </SkeletonWrapper>
           </template>
         </Column>
         <Column field="level" header="Name" header-class="text-center" body-class="text-center">
           <template #body="slotProps">
-            <SkeletonWrapper height="1.5rem" width="2rem" :show-skeleton="isLoading">
+            <SkeletonWrapper height="1.5rem" width="2rem" :show-skeleton="skillData.isLoadingSkills">
               {{ slotProps.data.levelName }}
             </SkeletonWrapper>
           </template>
         </Column>
         <Column field="bonus" header="Level" header-class="text-center" body-class="text-center">
           <template #body="slotProps">
-            <SkeletonWrapper height="1.5rem" width="2rem" :show-skeleton="isLoading">
+            <SkeletonWrapper height="1.5rem" width="2rem" :show-skeleton="skillData.isLoadingSkills">
               {{ slotProps.data.levelNumber }}
             </SkeletonWrapper>
           </template>
@@ -96,8 +89,8 @@ function showDetailedStat(skill: CharacterSkillsResponse){
         </Column>
       </DataTable>
     </Panel>
-    <teleport to="#item-modification-section" v-if="!isLoading">
-      <EditSkillDetail :skill="selectedSkill" :remaining-xp="remainingXP" @update-level="getEditOptions()" />
+    <teleport to="#item-modification-section" v-if="selectedSkill">
+      <EditSkillDetail :skill="selectedSkill" :remaining-xp="remainingXP"/>
     </teleport>
   </div>
 </template>
