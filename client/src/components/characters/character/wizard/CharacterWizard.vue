@@ -7,8 +7,10 @@ import {experienceStore} from "@/components/characters/character/stores/experien
 import PowerStep from "@/components/characters/character/wizard/powers/PowerStep.vue";
 import StatStep from "@/components/characters/character/wizard/stats/StatStep.vue";
 import SkillStep from "@/components/characters/character/wizard/skills/SkillStep.vue";
+import ProficiencyTableTile from "@/components/characters/character/proficiency/ProficiencyTableTile.vue";
 import {useRoute, useRouter} from "vue-router";
 import DataTable from "primevue/datatable";
+import SecondaryProficiencies from "@/components/characters/character/wizard/proficiencies/SecondaryProficiencies.vue";
 
 const xpData = experienceStore();
 const route = useRoute()
@@ -21,7 +23,7 @@ const sections = ref([
   { name: 'Knowledges', component: defineAsyncComponent(async () => KnowledgeStep)},
   { name: 'Powers', component: defineAsyncComponent(async () => PowerStep) },
   { name: 'Skills', component: defineAsyncComponent(async () => SkillStep) },
-  { name: 'Proficiencies', component: createPlaceholderView('Proficiencies', 'Proficiencies content coming soon...') },
+  { name: 'Proficiencies', component: defineAsyncComponent(async () => ProficiencyTableTile) },
 ]);
 
 onMounted(() => {
@@ -52,8 +54,8 @@ const redirectToEdit = () => {
   <div class="d-none">
     <DataTable />
   </div>
-  <div class="row">
-    
+  <div class="d-flex justify-content-end">
+    <SecondaryProficiencies></SecondaryProficiencies>
   </div>
   <div class="row pt-3">
     <div class="col col-md-2 custom-toc">
@@ -81,7 +83,7 @@ const redirectToEdit = () => {
         </template>
       </Card>
     </div>
-    <div class="col custom-toc">
+    <div class="col custom-toc col-12 col-md">
       <Card>
         <template #content>
           <div id="item-modification-section"></div>
