@@ -46,7 +46,7 @@ function showDetailedStat(skill: CharacterSkillsResponse){
 <template>
   <div class="text-right pb-3" v-if="experienceInfo.showAllExperience">{{ experienceInfo.experienceBreakdown.skillsXp}} Total XP - {{experienceInfo.experienceBreakdown.setupSkillsXp}} Creation XP = {{experienceInfo.experienceBreakdown.skillsXp - experienceInfo.experienceBreakdown.setupSkillsXp}} XP</div>
   <div class="d-inline-flex flex-wrap justify-content-center column-gap-3 row-gap-1 w-100">
-    <Panel v-for="skillType in skillTypes" class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="">
+    <Panel v-for="skillType in skillTypes" class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch">
       <template #header>
         <div class="row">
           <h3 class="col pb-0 mb-0 mt-0 pt-0">
