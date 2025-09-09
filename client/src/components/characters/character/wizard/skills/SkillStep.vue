@@ -16,12 +16,9 @@ import EditSkillDetail from "@/components/characters/character/wizard/skills/sup
 
 const route = useRoute()
 const skillData = skillStore();
-
-const maxXP = 1000;
-const appliedXp = ref(0);
+const xpData = experienceStore();
 const skillInfo = skillStore();
 const experienceInfo = experienceStore();
-const remainingXP = computed(() => maxXP - appliedXp.value);
 const selectedSkill = ref<CharacterSkillsResponse | undefined>();
 
 const skillTypes = computed( () => {
@@ -56,7 +53,7 @@ function showDetailedStat(skill: CharacterSkillsResponse){
             {{ skillType.name }}
           </h3>
           <div v-if="skillInfo.showExperience" class="col text-right">
-            {{ remainingXP }} EXP
+            {{ xpData.experienceBreakdown.skillsXp }} EXP
           </div>
         </div>
       </template>
@@ -90,7 +87,7 @@ function showDetailedStat(skill: CharacterSkillsResponse){
       </DataTable>
     </Panel>
     <teleport to="#item-modification-section" v-if="selectedSkill">
-      <EditSkillDetail :skill="selectedSkill" :remaining-xp="remainingXP"/>
+      <EditSkillDetail :skill="selectedSkill" />
     </teleport>
   </div>
 </template>

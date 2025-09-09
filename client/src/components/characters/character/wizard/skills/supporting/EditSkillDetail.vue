@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {onBeforeMount, type PropType, ref, type Ref} from "vue";
+import {onBeforeMount, type PropType, ref, type Ref, watch} from "vue";
 import axios from "axios";
 import type {SkillResponse} from "@/components/characters/character/skills/interfaces/SkillOptionsResponse";
 import {useRoute} from 'vue-router'
@@ -20,10 +20,6 @@ const props = defineProps({
   skill: {
     type: Object as PropType<CharacterSkillsResponse>,
     required: true,
-  },
-  remainingXp:{
-    type: Number,
-    required: true
   }
 });
 
@@ -47,9 +43,9 @@ const skillLevel: Ref<SkillResponse> = ref(emptySkill);
 const expandedRows = ref({});
 const selectedSkillItem:Ref<SkillResponse> = ref(emptySkill);
 
-/*watch(() => props.skill?.levelId, async(newValue, oldValue) => {
+watch(() => props.skill, async(newValue, oldValue) => {
   await getEditOptions();
-});*/
+});
 
 onBeforeMount(async () =>{
   await getEditOptions();
@@ -58,9 +54,8 @@ onBeforeMount(async () =>{
 async function getEditOptions() {
   await skillInfo.getSkillOptions(route.params.id, props.skill?.skillTypeId)
   expandedRows.value = skillInfo.skillLevels.reduce((acc, p) => (acc[p.levelId] = true) && acc, {});
-
-  skillLevel.value = skillInfo.skillLevels.filter(x => x.levelId === props.skill.levelId)[0];
-  selectedSkillItem.value = skillInfo.skillLevels.filter(x => x.levelId === props.skill.levelId)[0];
+  skillLevel.value = skillInfo.skillLevels.find(x => x.levelId === props.skill.levelId);
+  selectedSkillItem.value = skillInfo.skillLevels.find(x => x.levelId === props.skill.levelId);
 }
 
 function handleStatUpdate(skill:SkillResponse){
@@ -77,10 +72,11 @@ function handleStatUpdate(skill:SkillResponse){
     skillLevelId: selectedSkillItem.value.levelId
   }).then(async function(){
     
+    props.skill.levelId = selectedSkillItem.value.levelId;
     await skillInfo.getSkills(route.params.id);
     await experienceInfo.updateExperience(route.params.id);
     await profStore.getUpdateProficiencies(route.params.id);
-    
+    await getEditOptions();
     toasters.success("Successfully updated level!");
   })
 
@@ -115,6 +111,10 @@ const onRowUnselect = (event) => {
       </div>
     </div>
   </div>
+  <h3 class="d-flex justify-content-between">
+    <span>Experience Cost: {{selectedSkillItem.experienceCost > skillLevel.experienceCost ? "-" : "+"}}{{ Math.abs(selectedSkillItem.experienceCost - skillLevel.experienceCost) }}</span>
+    <span>Available Experience: Infinite</span>
+  </h3>
   <DataTable v-model:selection="selectedSkillItem" v-model:expandedRows="expandedRows" :value="skillInfo.skillLevels" selection-mode="single" data-key="levelId" @rowUnselect="onRowUnselect">
     <Column selection-mode="single" headerStyle="width: 3rem"></Column>
     <Column field="level" header="Name">
@@ -140,8 +140,14 @@ const onRowUnselect = (event) => {
     </Column>
     <template #expansion="slotProps">
       <SkeletonWrapper :show-skeleton="skillInfo.isLoadingSkillLevels" height="2rem" width="100%" style="padding-left: 3rem; cursor: pointer;" @click="selectedSkillItem = slotProps.data">
-        <div >
+        <div>
           {{ slotProps.data.description }}
+        </div>
+        <div v-if="slotProps.data.benefits && slotProps.data.benefits.length > 0">
+          <h3 class="pb-1 mb-0">Benefits</h3>
+          <div v-for="benefit in slotProps.data.benefits">
+            <div> +{{ benefit.modifier }} {{ benefit.name }}</div>
+          </div>
         </div>
       </SkeletonWrapper>
     </template>
