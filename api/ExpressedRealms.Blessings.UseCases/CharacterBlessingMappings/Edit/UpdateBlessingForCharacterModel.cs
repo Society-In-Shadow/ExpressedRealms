@@ -1,6 +1,6 @@
 namespace ExpressedRealms.Blessings.UseCases.CharacterBlessingMappings.Edit;
 
-public class EditBlessingToCharacterModel
+public class UpdateBlessingForCharacterModel
 {
     public int BlessingLevelId { get; set; }
     public int CharacterId { get; set; }

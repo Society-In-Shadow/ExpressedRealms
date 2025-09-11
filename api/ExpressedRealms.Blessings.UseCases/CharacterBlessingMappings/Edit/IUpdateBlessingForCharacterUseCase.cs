@@ -3,5 +3,5 @@ using FluentResults;
 
 namespace ExpressedRealms.Blessings.UseCases.CharacterBlessingMappings.Edit;
 
-public interface IEditBlessingToCharacterUseCase
-    : IGenericUseCase<Result<int>, EditBlessingToCharacterModel> { }
+public interface IUpdateBlessingForCharacterUseCase
+    : IGenericUseCase<Result<int>, UpdateBlessingForCharacterModel> { }

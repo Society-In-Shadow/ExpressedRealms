@@ -7,14 +7,14 @@ using FluentResults;
 
 namespace ExpressedRealms.Blessings.UseCases.CharacterBlessingMappings.Edit;
 
-internal sealed class EditBlessingToCharacterUseCase(
+internal sealed class UpdateBlessingForCharacterUseCase(
     ICharacterBlessingRepository mappingRepository,
     IBlessingRepository blessingRepository,
-    EditBlessingToCharacterModelValidator validator,
+    UpdateBlessingForCharacterModelValidator validator,
     CancellationToken cancellationToken
-) : IEditBlessingToCharacterUseCase
+) : IUpdateBlessingForCharacterUseCase
 {
-    public async Task<Result<int>> ExecuteAsync(EditBlessingToCharacterModel model)
+    public async Task<Result<int>> ExecuteAsync(UpdateBlessingForCharacterModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,

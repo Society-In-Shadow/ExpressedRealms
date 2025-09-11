@@ -7,10 +7,10 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Blessings.UseCases.CharacterBlessingMappings.Edit;
 
 [UsedImplicitly]
-internal sealed class EditBlessingToCharacterModelValidator
-    : AbstractValidator<EditBlessingToCharacterModel>
+internal sealed class UpdateBlessingForCharacterModelValidator
+    : AbstractValidator<UpdateBlessingForCharacterModel>
 {
-    public EditBlessingToCharacterModelValidator(
+    public UpdateBlessingForCharacterModelValidator(
         IBlessingRepository blessingRepository,
         ICharacterRepository characterRepository,
         ICharacterBlessingRepository mappingRepository
@@ -40,7 +40,7 @@ internal sealed class EditBlessingToCharacterModelValidator
             
         RuleFor(x => x)
             .MustAsync(async (x, y) => await mappingRepository.MappingAlreadyExists(x.BlessingId, x.CharacterId))
-            .WithName(nameof(EditBlessingToCharacterModel.MappingId))
+            .WithName(nameof(UpdateBlessingForCharacterModel.MappingId))
             .WithMessage("The Blessing Mapping does not exist.");
 
         RuleFor(x => x.Notes)
