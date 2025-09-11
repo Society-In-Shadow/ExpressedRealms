@@ -34,9 +34,7 @@ public class AddBlessingToCharacterUseCaseTests
         _blessingRepository = A.Fake<IBlessingRepository>();
         _mappingRepository = A.Fake<ICharacterBlessingRepository>();
 
-        A.CallTo(() =>
-                _blessingRepository.IsExistingBlessing(_blessingToCharacterModel.BlessingId)
-            )
+        A.CallTo(() => _blessingRepository.IsExistingBlessing(_blessingToCharacterModel.BlessingId))
             .Returns(true);
         A.CallTo(() =>
                 _characterRepository.CharacterExistsAsync(_blessingToCharacterModel.CharacterId)
@@ -93,9 +91,7 @@ public class AddBlessingToCharacterUseCaseTests
     [Fact]
     public async Task ValidationFor_BlessingId_WillFail_WhenItDoesNotExist()
     {
-        A.CallTo(() =>
-                _blessingRepository.IsExistingBlessing(_blessingToCharacterModel.BlessingId)
-            )
+        A.CallTo(() => _blessingRepository.IsExistingBlessing(_blessingToCharacterModel.BlessingId))
             .Returns(false);
         var result = await _useCase.ExecuteAsync(_blessingToCharacterModel);
 
@@ -231,12 +227,7 @@ public class AddBlessingToCharacterUseCaseTests
         A.CallTo(() =>
                 _blessingRepository.GetBlessingLevel(_blessingToCharacterModel.BlessingLevelId)
             )
-            .Returns(
-                new BlessingLevel()
-                {
-                    XpCost = StartingExperience.StartingBlessings,
-                }
-            );
+            .Returns(new BlessingLevel() { XpCost = StartingExperience.StartingBlessings });
         A.CallTo(() =>
                 _mappingRepository.GetExperienceSpentOnBlessingsForCharacter(
                     _blessingToCharacterModel.CharacterId

@@ -11,22 +11,29 @@ internal sealed class CharacterBlessingRepository(
 {
     public Task<bool> MappingAlreadyExists(int blessingId, int characterId)
     {
-        return context.CharacterBlessingMappings.AnyAsync(x => x.BlessingId == blessingId && x.CharacterId == characterId, cancellationToken);
+        return context.CharacterBlessingMappings.AnyAsync(
+            x => x.BlessingId == blessingId && x.CharacterId == characterId,
+            cancellationToken
+        );
     }
 
     public Task<int> GetExperienceSpentOnBlessingsForCharacter(int characterId)
     {
-        return context.CharacterBlessingMappings.Where(x => x.CharacterId == characterId)
+        return context
+            .CharacterBlessingMappings.Where(x => x.CharacterId == characterId)
             .SumAsync(x => x.BlessingLevel.XpCost, cancellationToken);
     }
-    
+
     public Task<int> GetExperienceAvailableToSpendOnCharacter(int characterId)
     {
-        return context.CharacterBlessingMappings.Where(x => x.CharacterId == characterId)
+        return context
+            .CharacterBlessingMappings.Where(x => x.CharacterId == characterId)
             .SumAsync(x => x.BlessingLevel.XpGain, cancellationToken);
     }
 
-    public async Task<int> AddCharacterBlessingMapping(CharacterBlessingMapping characterBlessingMapping)
+    public async Task<int> AddCharacterBlessingMapping(
+        CharacterBlessingMapping characterBlessingMapping
+    )
     {
         context.CharacterBlessingMappings.Add(characterBlessingMapping);
         await context.SaveChangesAsync(cancellationToken);

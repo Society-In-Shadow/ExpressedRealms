@@ -38,10 +38,8 @@ internal sealed class AddBlessingToCharacterUseCase(
         var spentXp = await mappingRepository.GetExperienceSpentOnBlessingsForCharacter(
             model.CharacterId
         );
-        
-        var blessingLevel = await blessingRepository.GetBlessingLevel(
-            model.BlessingLevelId
-        );
+
+        var blessingLevel = await blessingRepository.GetBlessingLevel(model.BlessingLevelId);
 
         if (spentXp + blessingLevel.XpCost > availableExperience)
             return Result.Fail(
