@@ -11,7 +11,6 @@ namespace ExpressedRealms.Blessings.UseCases.Tests.Unit.CharacterBlessingMapping
 public class GetAssignedBlessingsUseCaseTests
 {
     private readonly GetAssignedBlessingsUseCase _useCase;
-    private readonly ICharacterBlessingRepository _repository;
     private readonly ICharacterRepository _characterRepository;
     private readonly GetAssignedBlessingsModel _model;
     private readonly List<CharacterBlessingDto> _dbModel;
@@ -42,15 +41,15 @@ public class GetAssignedBlessingsUseCaseTests
             },
         };
 
-        _repository = A.Fake<ICharacterBlessingRepository>();
+        var repository = A.Fake<ICharacterBlessingRepository>();
         _characterRepository = A.Fake<ICharacterRepository>();
 
         A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId)).Returns(true);
-        A.CallTo(() => _repository.GetBlessingsForCharacter(_model.CharacterId)).Returns(_dbModel);
+        A.CallTo(() => repository.GetBlessingsForCharacter(_model.CharacterId)).Returns(_dbModel);
 
         var validator = new GetAssignedBlessingsModelValidator(_characterRepository);
 
-        _useCase = new GetAssignedBlessingsUseCase(_repository, validator, CancellationToken.None);
+        _useCase = new GetAssignedBlessingsUseCase(repository, validator, CancellationToken.None);
     }
 
     [Fact]
