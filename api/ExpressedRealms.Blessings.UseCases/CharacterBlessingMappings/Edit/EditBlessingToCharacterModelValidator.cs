@@ -1,6 +1,5 @@
 using ExpressedRealms.Blessings.Repository.Blessings;
 using ExpressedRealms.Blessings.Repository.CharacterBlessings;
-using ExpressedRealms.Blessings.UseCases.CharacterBlessingMappings.Create;
 using ExpressedRealms.Characters.Repository;
 using FluentValidation;
 using JetBrains.Annotations;
@@ -41,15 +40,8 @@ internal sealed class EditBlessingToCharacterModelValidator
             
         RuleFor(x => x)
             .MustAsync(async (x, y) => await mappingRepository.MappingAlreadyExists(x.BlessingId, x.CharacterId))
+            .WithName(nameof(EditBlessingToCharacterModel.MappingId))
             .WithMessage("The Blessing Mapping does not exist.");
-
-        RuleFor(x => x)
-            .MustAsync(
-                async (x, y) =>
-                    !await mappingRepository.MappingAlreadyExists(x.BlessingId, x.CharacterId)
-            )
-            .WithMessage("The Blessing already exists for this character.")
-            .WithName(nameof(AddBlessingToCharacterModel.BlessingId));
 
         RuleFor(x => x.Notes)
             .MaximumLength(5000)
