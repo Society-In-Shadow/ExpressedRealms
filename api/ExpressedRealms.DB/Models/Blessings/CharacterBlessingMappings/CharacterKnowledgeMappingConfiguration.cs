@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings;
 
-public class CharacterBlessingMappingConfiguration : IEntityTypeConfiguration<CharacterBlessingMapping>
+public class CharacterBlessingMappingConfiguration
+    : IEntityTypeConfiguration<CharacterBlessingMapping>
 {
     public void Configure(EntityTypeBuilder<CharacterBlessingMapping> builder)
     {

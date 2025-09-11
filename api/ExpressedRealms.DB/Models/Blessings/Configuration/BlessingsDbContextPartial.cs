@@ -4,6 +4,7 @@ using ExpressedRealms.DB.Models.Blessings.BlessingSetup;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings;
 using Microsoft.EntityFrameworkCore;
+
 // ReSharper disable once CheckNamespace
 
 // ReSharper disable once CheckNamespace
