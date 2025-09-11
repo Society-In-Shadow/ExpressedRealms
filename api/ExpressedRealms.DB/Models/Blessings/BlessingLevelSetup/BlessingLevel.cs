@@ -2,6 +2,7 @@ using Audit.EntityFramework;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup;
+using ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings;
 
 namespace ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup;
 
@@ -19,4 +20,5 @@ public class BlessingLevel : ISoftDelete
 
     public virtual Blessing Blessing { get; set; } = null!;
     public virtual List<BlessingLevelAuditTrail> BlessingLevelAuditTrails { get; set; } = null!;
+    public virtual List<CharacterBlessingMapping> CharacterBlessingMappings { get; set; } = null!;
 }
