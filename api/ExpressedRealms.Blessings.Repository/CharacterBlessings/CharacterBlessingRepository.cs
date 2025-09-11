@@ -16,6 +16,14 @@ internal sealed class CharacterBlessingRepository(
             cancellationToken
         );
     }
+    
+    public Task<bool> MappingAlreadyExists(int mappingId)
+    {
+        return context.CharacterBlessingMappings.AnyAsync(
+            x => x.Id == mappingId,
+            cancellationToken
+        );
+    }
 
     public Task<int> GetExperienceSpentOnBlessingsForCharacter(int characterId)
     {

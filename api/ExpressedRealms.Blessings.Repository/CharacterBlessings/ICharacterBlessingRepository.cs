@@ -10,4 +10,5 @@ public interface ICharacterBlessingRepository
     Task<int> GetExperienceAvailableToSpendOnCharacter(int characterId);
     Task<CharacterBlessingMapping> GetCharacterBlessingMappingForEditing(int mappingId);
     Task UpdateMapping(CharacterBlessingMapping mapping);
+    Task<bool> MappingAlreadyExists(int mappingId);
 }
