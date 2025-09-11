@@ -18,11 +18,8 @@ public class GetAssignedBlessingsUseCaseTests
 
     public GetAssignedBlessingsUseCaseTests()
     {
-        _model = new GetAssignedBlessingsModel()
-        {
-            CharacterId = 2
-        };
-        
+        _model = new GetAssignedBlessingsModel() { CharacterId = 2 };
+
         _dbModel = new List<CharacterBlessingDto>()
         {
             new CharacterBlessingDto()
@@ -42,7 +39,7 @@ public class GetAssignedBlessingsUseCaseTests
                 LevelName = "sdfg",
                 BlessingId = 3,
                 BlessingLevelId = 4,
-            }
+            },
         };
 
         _repository = A.Fake<ICharacterBlessingRepository>();
@@ -71,9 +68,7 @@ public class GetAssignedBlessingsUseCaseTests
     [Fact]
     public async Task ValidationFor_CharacterId_WillFail_WhenItDoesNotExist()
     {
-        A.CallTo(() =>
-                _characterRepository.CharacterExistsAsync(_model.CharacterId)
-            )
+        A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId))
             .Returns(false);
         var result = await _useCase.ExecuteAsync(_model);
 
@@ -86,19 +81,20 @@ public class GetAssignedBlessingsUseCaseTests
     [Fact]
     public async Task UseCase_WillCreateTheBlessing()
     {
-        
-        var blessingList = _dbModel.Select(x => new CharacterBlessingReturnModel()
-        {
-            Description = x.Description,
-            LevelDescription = x.LevelDescription,
-            LevelName = x.LevelName,
-            Name = x.Name,
-            BlessingLevelId = x.BlessingLevelId,
-            BlessingId = x.BlessingId
-        }).ToList();
+        var blessingList = _dbModel
+            .Select(x => new CharacterBlessingReturnModel()
+            {
+                Description = x.Description,
+                LevelDescription = x.LevelDescription,
+                LevelName = x.LevelName,
+                Name = x.Name,
+                BlessingLevelId = x.BlessingLevelId,
+                BlessingId = x.BlessingId,
+            })
+            .ToList();
 
         var results = await _useCase.ExecuteAsync(_model);
-        
+
         Assert.Equivalent(blessingList, results.Value);
     }
 }

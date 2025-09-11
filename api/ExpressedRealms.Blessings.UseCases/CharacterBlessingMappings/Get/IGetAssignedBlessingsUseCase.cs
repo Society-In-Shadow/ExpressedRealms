@@ -3,6 +3,5 @@ using FluentResults;
 
 namespace ExpressedRealms.Blessings.UseCases.CharacterBlessingMappings.Get;
 
-public interface IGetAssignedBlessingsUseCase : IGenericUseCase<Result<List<CharacterBlessingReturnModel>>, GetAssignedBlessingsModel>
-{
-}
+public interface IGetAssignedBlessingsUseCase
+    : IGenericUseCase<Result<List<CharacterBlessingReturnModel>>, GetAssignedBlessingsModel> { }

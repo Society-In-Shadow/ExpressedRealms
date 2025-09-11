@@ -5,7 +5,8 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Blessings.UseCases.CharacterBlessingMappings.Get;
 
 [UsedImplicitly]
-internal sealed class GetAssignedBlessingsModelValidator : AbstractValidator<GetAssignedBlessingsModel>
+internal sealed class GetAssignedBlessingsModelValidator
+    : AbstractValidator<GetAssignedBlessingsModel>
 {
     public GetAssignedBlessingsModelValidator(ICharacterRepository repository)
     {

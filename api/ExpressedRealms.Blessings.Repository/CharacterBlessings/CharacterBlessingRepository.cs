@@ -28,7 +28,8 @@ internal sealed class CharacterBlessingRepository(
 
     public Task<List<CharacterBlessingDto>> GetBlessingsForCharacter(int modelCharacterId)
     {
-        return context.CharacterBlessingMappings.Where(x => x.CharacterId == modelCharacterId)
+        return context
+            .CharacterBlessingMappings.Where(x => x.CharacterId == modelCharacterId)
             .Select(x => new CharacterBlessingDto()
             {
                 BlessingId = x.BlessingId,
@@ -37,7 +38,8 @@ internal sealed class CharacterBlessingRepository(
                 Description = x.Blessing.Description,
                 LevelName = x.BlessingLevel.Level,
                 LevelDescription = x.BlessingLevel.Description,
-            }).ToListAsync(cancellationToken);
+            })
+            .ToListAsync(cancellationToken);
     }
 
     public Task<int> GetExperienceSpentOnBlessingsForCharacter(int characterId)

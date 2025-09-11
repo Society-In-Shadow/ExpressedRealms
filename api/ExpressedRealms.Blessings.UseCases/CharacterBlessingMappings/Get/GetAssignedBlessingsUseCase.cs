@@ -10,7 +10,9 @@ internal sealed class GetAssignedBlessingsUseCase(
     CancellationToken cancellationToken
 ) : IGetAssignedBlessingsUseCase
 {
-    public async Task<Result<List<CharacterBlessingReturnModel>>> ExecuteAsync(GetAssignedBlessingsModel model)
+    public async Task<Result<List<CharacterBlessingReturnModel>>> ExecuteAsync(
+        GetAssignedBlessingsModel model
+    )
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,
@@ -23,14 +25,18 @@ internal sealed class GetAssignedBlessingsUseCase(
 
         var blessings = await repository.GetBlessingsForCharacter(model.CharacterId);
 
-        return Result.Ok(blessings.Select(x => new CharacterBlessingReturnModel()
-        {
-            Description = x.Description,
-            LevelDescription = x.LevelDescription,
-            LevelName = x.LevelName,
-            Name = x.Name,
-            BlessingLevelId = x.BlessingLevelId,
-            BlessingId = x.BlessingId
-        }).ToList());
+        return Result.Ok(
+            blessings
+                .Select(x => new CharacterBlessingReturnModel()
+                {
+                    Description = x.Description,
+                    LevelDescription = x.LevelDescription,
+                    LevelName = x.LevelName,
+                    Name = x.Name,
+                    BlessingLevelId = x.BlessingLevelId,
+                    BlessingId = x.BlessingId,
+                })
+                .ToList()
+        );
     }
 }
