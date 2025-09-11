@@ -1,5 +1,4 @@
 using ExpressedRealms.Blessings.Repository.CharacterBlessings;
-using ExpressedRealms.Blessings.UseCases.CharacterBlessingMappings.Edit;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
@@ -8,11 +7,11 @@ namespace ExpressedRealms.Blessings.UseCases.CharacterBlessingMappings.Delete;
 
 internal sealed class DeleteBlessingFromCharacterUseCase(
     ICharacterBlessingRepository mappingRepository,
-    UpdateBlessingForCharacterModelValidator validator,
+    DeleteBlessingFromCharacterModelValidator validator,
     CancellationToken cancellationToken
 ) : IDeleteBlessingFromCharacterUseCase
 {
-    public async Task<Result> ExecuteAsync(UpdateBlessingForCharacterModel model)
+    public async Task<Result> ExecuteAsync(DeleteBlessingFromCharacterModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,

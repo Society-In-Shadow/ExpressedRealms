@@ -1,4 +1,3 @@
-using ExpressedRealms.Blessings.Repository.Blessings;
 using ExpressedRealms.Blessings.Repository.CharacterBlessings;
 using ExpressedRealms.Characters.Repository;
 using FluentValidation;
@@ -11,7 +10,6 @@ internal sealed class DeleteBlessingFromCharacterModelValidator
     : AbstractValidator<DeleteBlessingFromCharacterModel>
 {
     public DeleteBlessingFromCharacterModelValidator(
-        IBlessingRepository blessingRepository,
         ICharacterRepository characterRepository,
         ICharacterBlessingRepository mappingRepository
     )
