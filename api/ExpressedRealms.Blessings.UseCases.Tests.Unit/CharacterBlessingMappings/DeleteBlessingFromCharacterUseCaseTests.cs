@@ -18,11 +18,7 @@ public class DeleteBlessingFromCharacterUseCaseTests
 
     public DeleteBlessingFromCharacterUseCaseTests()
     {
-        _model = new DeleteBlessingFromCharacterModel()
-        {
-            MappingId = 4,
-            CharacterId = 2,
-        };
+        _model = new DeleteBlessingFromCharacterModel() { MappingId = 4, CharacterId = 2 };
 
         _dbModel = new CharacterBlessingMapping()
         {
@@ -35,25 +31,12 @@ public class DeleteBlessingFromCharacterUseCaseTests
         _characterRepository = A.Fake<ICharacterRepository>();
         _mappingRepository = A.Fake<ICharacterBlessingRepository>();
 
-        A.CallTo(() =>
-                _characterRepository.CharacterExistsAsync(_model.CharacterId)
-            )
-            .Returns(true);
+        A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId)).Returns(true);
 
-        A.CallTo(() =>
-                _mappingRepository.MappingAlreadyExists(
-                    _model.MappingId
-                )
-            )
-            .Returns(true);
+        A.CallTo(() => _mappingRepository.MappingAlreadyExists(_model.MappingId)).Returns(true);
 
-        A.CallTo(() =>
-                _mappingRepository.GetCharacterBlessingMappingForEditing(
-                    _model.MappingId
-                )
-            )
+        A.CallTo(() => _mappingRepository.GetCharacterBlessingMappingForEditing(_model.MappingId))
             .Returns(_dbModel);
-
 
         var validator = new DeleteBlessingFromCharacterModelValidator(
             _characterRepository,
@@ -67,7 +50,6 @@ public class DeleteBlessingFromCharacterUseCaseTests
         );
     }
 
-    
     [Fact]
     public async Task ValidationFor_CharacterId_WillFail_WhenItsEmpty()
     {
@@ -83,9 +65,7 @@ public class DeleteBlessingFromCharacterUseCaseTests
     [Fact]
     public async Task ValidationFor_CharacterId_WillFail_WhenItDoesNotExist()
     {
-        A.CallTo(() =>
-                _characterRepository.CharacterExistsAsync(_model.CharacterId)
-            )
+        A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId))
             .Returns(false);
         var result = await _useCase.ExecuteAsync(_model);
 
@@ -94,7 +74,7 @@ public class DeleteBlessingFromCharacterUseCaseTests
             "The Character does not exist."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_MappingId_WillFail_WhenItsEmpty()
     {
@@ -105,16 +85,11 @@ public class DeleteBlessingFromCharacterUseCaseTests
             "Mapping Id is required."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_MappingId_ChecksIfItExists()
     {
-        A.CallTo(() =>
-                _mappingRepository.MappingAlreadyExists(
-                    _model.MappingId
-                )
-            )
-            .Returns(false);
+        A.CallTo(() => _mappingRepository.MappingAlreadyExists(_model.MappingId)).Returns(false);
         var result = await _useCase.ExecuteAsync(_model);
         result.MustHaveValidationError(
             nameof(DeleteBlessingFromCharacterModel.MappingId),

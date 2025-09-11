@@ -14,21 +14,16 @@ internal sealed class DeleteBlessingFromCharacterModelValidator
         ICharacterBlessingRepository mappingRepository
     )
     {
-
         RuleFor(x => x.CharacterId)
             .NotEmpty()
             .WithMessage("Character Id is required.")
             .MustAsync(async (x, y) => await characterRepository.CharacterExistsAsync(x))
             .WithMessage("The Character does not exist.");
-        
+
         RuleFor(x => x.MappingId)
             .NotEmpty()
             .WithMessage("Mapping Id is required.")
-            .MustAsync(
-                async (x, y) =>
-                    await mappingRepository.MappingAlreadyExists(x)
-            )
+            .MustAsync(async (x, y) => await mappingRepository.MappingAlreadyExists(x))
             .WithMessage("The Blessing Mapping does not exist.");
-
     }
 }
