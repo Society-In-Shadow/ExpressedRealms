@@ -16,4 +16,6 @@ public interface IBlessingRepository
     Task<BlessingLevel> GetBlessingLevelForEditing(int blessingId, int id);
     Task EditBlessingLevelAsync(BlessingLevel blessing);
     Task<bool> IsExistingBlessingLevel(int blessingId, int id);
+    Task<bool> BlessingLevelExists(int id);
+    Task<BlessingLevel> GetBlessingLevel(int blessingLevelId);
 }

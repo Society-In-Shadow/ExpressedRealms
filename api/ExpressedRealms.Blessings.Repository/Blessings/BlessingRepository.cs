@@ -89,6 +89,16 @@ internal sealed class BlessingRepository(
         );
     }
 
+    public Task<bool> BlessingLevelExists(int id)
+    {
+        return context.BlessingLevels.AnyAsync(x => x.Id == id, cancellationToken);
+    }
+
+    public Task<BlessingLevel> GetBlessingLevel(int blessingLevelId)
+    {
+        return context.BlessingLevels.FirstAsync(x => x.Id == blessingLevelId, cancellationToken);
+    }
+
     public Task<bool> IsExistingBlessing(int id)
     {
         return context.Blessings.AnyAsync(x => x.Id == id, cancellationToken);
