@@ -14,7 +14,7 @@ internal sealed class UpdateBlessingForCharacterUseCase(
     CancellationToken cancellationToken
 ) : IUpdateBlessingForCharacterUseCase
 {
-    public async Task<Result<int>> ExecuteAsync(UpdateBlessingForCharacterModel model)
+    public async Task<Result> ExecuteAsync(UpdateBlessingForCharacterModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,

@@ -28,7 +28,6 @@ public class UpdateBlessingForCharacterUseCaseTests
             MappingId = 4,
             BlessingLevelId = 1,
             CharacterId = 2,
-            BlessingId = 3,
             Notes = "123",
         };
 
@@ -45,10 +44,6 @@ public class UpdateBlessingForCharacterUseCaseTests
         _mappingRepository = A.Fake<ICharacterBlessingRepository>();
 
         A.CallTo(() =>
-                _blessingRepository.IsExistingBlessing(_blessingForCharacterModel.BlessingId)
-            )
-            .Returns(true);
-        A.CallTo(() =>
                 _characterRepository.CharacterExistsAsync(_blessingForCharacterModel.CharacterId)
             )
             .Returns(true);
@@ -58,8 +53,7 @@ public class UpdateBlessingForCharacterUseCaseTests
             .Returns(true);
         A.CallTo(() =>
                 _mappingRepository.MappingAlreadyExists(
-                    _blessingForCharacterModel.BlessingId,
-                    _blessingForCharacterModel.CharacterId
+                    _blessingForCharacterModel.MappingId
                 )
             )
             .Returns(true);
@@ -95,33 +89,6 @@ public class UpdateBlessingForCharacterUseCaseTests
             _blessingRepository,
             validator,
             CancellationToken.None
-        );
-    }
-
-    [Fact]
-    public async Task ValidationFor_BlessinglId_WillFail_WhenItsEmpty()
-    {
-        _blessingForCharacterModel.BlessingId = 0;
-        var result = await _useCase.ExecuteAsync(_blessingForCharacterModel);
-
-        result.MustHaveValidationError(
-            nameof(UpdateBlessingForCharacterModel.BlessingId),
-            "Blessing Id is required."
-        );
-    }
-
-    [Fact]
-    public async Task ValidationFor_BlessingId_WillFail_WhenItDoesNotExist()
-    {
-        A.CallTo(() =>
-                _blessingRepository.IsExistingBlessing(_blessingForCharacterModel.BlessingId)
-            )
-            .Returns(false);
-        var result = await _useCase.ExecuteAsync(_blessingForCharacterModel);
-
-        result.MustHaveValidationError(
-            nameof(UpdateBlessingForCharacterModel.BlessingId),
-            "The Blessing does not exist."
         );
     }
 
@@ -206,8 +173,7 @@ public class UpdateBlessingForCharacterUseCaseTests
     {
         A.CallTo(() =>
                 _mappingRepository.MappingAlreadyExists(
-                    _blessingForCharacterModel.BlessingId,
-                    _blessingForCharacterModel.CharacterId
+                    _blessingForCharacterModel.MappingId
                 )
             )
             .Returns(false);
