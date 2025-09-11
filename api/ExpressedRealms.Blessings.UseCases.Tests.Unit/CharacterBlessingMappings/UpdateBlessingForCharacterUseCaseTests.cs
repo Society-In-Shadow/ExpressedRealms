@@ -37,14 +37,16 @@ public class UpdateBlessingForCharacterUseCaseTests
             BlessingLevelId = 6,
             CharacterId = 2,
             BlessingId = 3,
-            Notes = "123"
+            Notes = "123",
         };
 
         _characterRepository = A.Fake<ICharacterRepository>();
         _blessingRepository = A.Fake<IBlessingRepository>();
         _mappingRepository = A.Fake<ICharacterBlessingRepository>();
 
-        A.CallTo(() => _blessingRepository.IsExistingBlessing(_blessingForCharacterModel.BlessingId))
+        A.CallTo(() =>
+                _blessingRepository.IsExistingBlessing(_blessingForCharacterModel.BlessingId)
+            )
             .Returns(true);
         A.CallTo(() =>
                 _characterRepository.CharacterExistsAsync(_blessingForCharacterModel.CharacterId)
@@ -71,13 +73,15 @@ public class UpdateBlessingForCharacterUseCaseTests
                 _blessingRepository.GetBlessingLevel(_blessingForCharacterModel.BlessingLevelId)
             )
             .Returns(new BlessingLevel() { XpCost = 4 });
-        
-        A.CallTo(() => _mappingRepository.GetCharacterBlessingMappingForEditing(_blessingForCharacterModel.MappingId))
-            .Returns(_dbModel);
-        
+
         A.CallTo(() =>
-                _blessingRepository.GetBlessingLevel(_dbModel.BlessingLevelId)
+                _mappingRepository.GetCharacterBlessingMappingForEditing(
+                    _blessingForCharacterModel.MappingId
+                )
             )
+            .Returns(_dbModel);
+
+        A.CallTo(() => _blessingRepository.GetBlessingLevel(_dbModel.BlessingLevelId))
             .Returns(new BlessingLevel() { XpCost = 4 });
 
         var validator = new UpdateBlessingForCharacterModelValidator(
@@ -109,7 +113,9 @@ public class UpdateBlessingForCharacterUseCaseTests
     [Fact]
     public async Task ValidationFor_BlessingId_WillFail_WhenItDoesNotExist()
     {
-        A.CallTo(() => _blessingRepository.IsExistingBlessing(_blessingForCharacterModel.BlessingId))
+        A.CallTo(() =>
+                _blessingRepository.IsExistingBlessing(_blessingForCharacterModel.BlessingId)
+            )
             .Returns(false);
         var result = await _useCase.ExecuteAsync(_blessingForCharacterModel);
 
@@ -199,8 +205,11 @@ public class UpdateBlessingForCharacterUseCaseTests
     public async Task ValidationFor_MappingId_ChecksIfItExists()
     {
         A.CallTo(() =>
-                _mappingRepository.MappingAlreadyExists(_blessingForCharacterModel.BlessingId,
-                    _blessingForCharacterModel.CharacterId))
+                _mappingRepository.MappingAlreadyExists(
+                    _blessingForCharacterModel.BlessingId,
+                    _blessingForCharacterModel.CharacterId
+                )
+            )
             .Returns(false);
         var result = await _useCase.ExecuteAsync(_blessingForCharacterModel);
         result.MustHaveValidationError(
@@ -208,7 +217,7 @@ public class UpdateBlessingForCharacterUseCaseTests
             "The Blessing Mapping does not exist."
         );
     }
-    
+
     [Fact]
     public async Task UseCase_GetsExperienceSpentOnBlessingsForCharacter()
     {
@@ -277,7 +286,11 @@ public class UpdateBlessingForCharacterUseCaseTests
     public async Task UseCase_PassesThrough_TheDbBlessing()
     {
         await _useCase.ExecuteAsync(_blessingForCharacterModel);
-        A.CallTo(() => _mappingRepository.UpdateMapping(A<CharacterBlessingMapping>.That.IsSameAs(_dbModel)))
+        A.CallTo(() =>
+                _mappingRepository.UpdateMapping(
+                    A<CharacterBlessingMapping>.That.IsSameAs(_dbModel)
+                )
+            )
             .MustHaveHappenedOnceExactly();
     }
 

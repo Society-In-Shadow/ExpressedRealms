@@ -30,13 +30,15 @@ internal sealed class UpdateBlessingForCharacterUseCase(
         // If so, check create status
 
         // Also need to take into consideration discretionary spending
-        var mapping = await mappingRepository.GetCharacterBlessingMappingForEditing(model.MappingId);
+        var mapping = await mappingRepository.GetCharacterBlessingMappingForEditing(
+            model.MappingId
+        );
 
         if (mapping.BlessingLevelId != model.BlessingLevelId)
         {
             // Assuming character creation rules for now
             const int availableExperience = StartingExperience.StartingBlessings;
-            
+
             var spentXp = await mappingRepository.GetExperienceSpentOnBlessingsForCharacter(
                 model.CharacterId
             );
@@ -56,7 +58,6 @@ internal sealed class UpdateBlessingForCharacterUseCase(
                     new NotEnoughXPFailure(availableExperience - spentXp, newLevel.XpCost)
                 );
             }
-
         }
 
         mapping.Notes = model.Notes?.Trim() == string.Empty ? null : model.Notes?.Trim();

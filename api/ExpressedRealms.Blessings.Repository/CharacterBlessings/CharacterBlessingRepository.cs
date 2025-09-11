@@ -33,7 +33,10 @@ internal sealed class CharacterBlessingRepository(
 
     public Task<CharacterBlessingMapping> GetCharacterBlessingMappingForEditing(int mappingId)
     {
-        return context.CharacterBlessingMappings.FirstAsync(x => x.Id == mappingId, cancellationToken);
+        return context.CharacterBlessingMappings.FirstAsync(
+            x => x.Id == mappingId,
+            cancellationToken
+        );
     }
 
     public async Task UpdateMapping(CharacterBlessingMapping mapping)
