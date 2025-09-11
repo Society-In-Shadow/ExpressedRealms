@@ -31,6 +31,17 @@ internal sealed class CharacterBlessingRepository(
             .SumAsync(x => x.BlessingLevel.XpGain, cancellationToken);
     }
 
+    public Task<CharacterBlessingMapping> GetCharacterBlessingMappingForEditing(int mappingId)
+    {
+        return context.CharacterBlessingMappings.FirstAsync(x => x.Id == mappingId, cancellationToken);
+    }
+
+    public async Task UpdateMapping(CharacterBlessingMapping mapping)
+    {
+        context.CharacterBlessingMappings.Update(mapping);
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
     public async Task<int> AddCharacterBlessingMapping(
         CharacterBlessingMapping characterBlessingMapping
     )

@@ -8,4 +8,6 @@ public interface ICharacterBlessingRepository
     Task<int> GetExperienceSpentOnBlessingsForCharacter(int characterId);
     Task<int> AddCharacterBlessingMapping(CharacterBlessingMapping characterBlessingMapping);
     Task<int> GetExperienceAvailableToSpendOnCharacter(int characterId);
+    Task<CharacterBlessingMapping> GetCharacterBlessingMappingForEditing(int mappingId);
+    Task UpdateMapping(CharacterBlessingMapping mapping);
 }
