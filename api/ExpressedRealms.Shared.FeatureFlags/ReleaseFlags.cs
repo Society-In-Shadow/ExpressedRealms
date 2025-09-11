@@ -59,7 +59,7 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "show-character-wizard",
         "Shows edit button on the character sheet that will bring up the wizard"
     );
-    
+
     public static readonly ReleaseFlags ManageCharacterBlessings = new(
         "Allows one to manage blessings on their character",
         "manage-character-blessings",
