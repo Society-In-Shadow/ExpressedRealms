@@ -1,4 +1,5 @@
 ﻿using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
@@ -44,4 +45,5 @@ public class Character : ISoftDelete
     public virtual List<CharacterSkillsMapping> CharacterSkillsMappings { get; set; } = null!;
     public virtual List<CharacterKnowledgeMapping> CharacterKnowledgeMappings { get; set; } = null!;
     public virtual List<CharacterPowerMapping> CharacterPowerMappings { get; set; } = null!;
+    public virtual List<CharacterBlessingMapping> CharacterBlessingMappings { get; set; } = null!;
 }
