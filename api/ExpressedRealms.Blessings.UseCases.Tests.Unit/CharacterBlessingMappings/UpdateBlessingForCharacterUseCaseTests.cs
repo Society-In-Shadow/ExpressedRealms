@@ -52,9 +52,7 @@ public class UpdateBlessingForCharacterUseCaseTests
             )
             .Returns(true);
         A.CallTo(() =>
-                _mappingRepository.MappingAlreadyExists(
-                    _blessingForCharacterModel.MappingId
-                )
+                _mappingRepository.MappingAlreadyExists(_blessingForCharacterModel.MappingId)
             )
             .Returns(true);
         A.CallTo(() =>
@@ -172,9 +170,7 @@ public class UpdateBlessingForCharacterUseCaseTests
     public async Task ValidationFor_MappingId_ChecksIfItExists()
     {
         A.CallTo(() =>
-                _mappingRepository.MappingAlreadyExists(
-                    _blessingForCharacterModel.MappingId
-                )
+                _mappingRepository.MappingAlreadyExists(_blessingForCharacterModel.MappingId)
             )
             .Returns(false);
         var result = await _useCase.ExecuteAsync(_blessingForCharacterModel);

@@ -27,7 +27,8 @@ public static class GetCharacterBlessingsEndpoint
                         Name = x.Name,
                         BlessingLevelId = x.BlessingLevelId,
                         BlessingId = x.BlessingId,
-                    }).ToList()
+                    })
+                    .ToList(),
             }
         );
     }

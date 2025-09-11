@@ -15,7 +15,11 @@ public static class DeleteBlessingKnowledgeEndpoint
     )
     {
         var results = await useCase.ExecuteAsync(
-            new DeleteBlessingFromCharacterModel() { CharacterId = characterId, MappingId = mappingId }
+            new DeleteBlessingFromCharacterModel()
+            {
+                CharacterId = characterId,
+                MappingId = mappingId,
+            }
         );
 
         if (results.HasValidationError(out var validationProblem))

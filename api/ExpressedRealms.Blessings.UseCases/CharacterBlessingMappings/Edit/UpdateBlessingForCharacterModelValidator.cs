@@ -31,10 +31,7 @@ internal sealed class UpdateBlessingForCharacterModelValidator
         RuleFor(x => x.MappingId)
             .NotEmpty()
             .WithMessage("Mapping Id is required.")
-            .MustAsync(
-                async (x, y) =>
-                    await mappingRepository.MappingAlreadyExists(x)
-            )
+            .MustAsync(async (x, y) => await mappingRepository.MappingAlreadyExists(x))
             .WithName(nameof(UpdateBlessingForCharacterModel.MappingId))
             .WithMessage("The Blessing Mapping does not exist.");
 

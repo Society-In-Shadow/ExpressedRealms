@@ -17,10 +17,7 @@ internal static class CharacterBlessingsEndpoints
             .WithTags("Character Blessings")
             .WithOpenApi();
 
-        endpointGroup.MapGet(
-        "{characterId}/blessings",
-            GetCharacterBlessingsEndpoint.ExecuteAsync
-        );
+        endpointGroup.MapGet("{characterId}/blessings", GetCharacterBlessingsEndpoint.ExecuteAsync);
 
         endpointGroup.MapPost(
             "{characterid}/blessings",
