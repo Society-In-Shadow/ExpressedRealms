@@ -6,6 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\ExpressedRealms.Blessings.Repository\ExpressedRealms.Blessings.Repository.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Characters.Repository\ExpressedRealms.Characters.Repository.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Shared.UseCases\ExpressedRealms.Shared.UseCases.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Shared\ExpressedRealms.Shared.csproj" />
   </ItemGroup>
