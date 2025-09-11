@@ -1,3 +1,4 @@
+using ExpressedRealms.Blessings.Repository.CharacterBlessings.dto;
 using ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings;
 
 namespace ExpressedRealms.Blessings.Repository.CharacterBlessings;
@@ -11,4 +12,5 @@ public interface ICharacterBlessingRepository
     Task<int> GetExperienceAvailableToSpendOnCharacter(int characterId);
     Task<CharacterBlessingMapping> GetCharacterBlessingMappingForEditing(int mappingId);
     Task UpdateMapping(CharacterBlessingMapping mapping);
+    Task<List<CharacterBlessingDto>> GetBlessingsForCharacter(int modelCharacterId);
 }

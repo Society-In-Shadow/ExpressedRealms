@@ -1,3 +1,4 @@
+using ExpressedRealms.Blessings.Repository.CharacterBlessings.dto;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,20 @@ internal sealed class CharacterBlessingRepository(
             x => x.Id == mappingId,
             cancellationToken
         );
+    }
+
+    public Task<List<CharacterBlessingDto>> GetBlessingsForCharacter(int modelCharacterId)
+    {
+        return context.CharacterBlessingMappings.Where(x => x.CharacterId == modelCharacterId)
+            .Select(x => new CharacterBlessingDto()
+            {
+                BlessingId = x.BlessingId,
+                BlessingLevelId = x.BlessingLevelId,
+                Name = x.Blessing.Name,
+                Description = x.Blessing.Description,
+                LevelName = x.BlessingLevel.Level,
+                LevelDescription = x.BlessingLevel.Description,
+            }).ToListAsync(cancellationToken);
     }
 
     public Task<int> GetExperienceSpentOnBlessingsForCharacter(int characterId)
