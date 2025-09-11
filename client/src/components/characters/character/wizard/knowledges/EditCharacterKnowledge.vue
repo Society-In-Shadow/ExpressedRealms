@@ -64,25 +64,24 @@ function getCurrentXpLevel(levelId: number){
 </script>
 
 <template>
-  <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
-    <div>
-      <h2 class="p-0 m-0">
-        {{ props.knowledge.knowledge.name }}
-      </h2>
-      <div>{{ props.knowledge.knowledge.type }}</div>
-    </div>
-    <div v-if="!props.isReadOnly" class="p-0 m-2 d-inline-flex align-items-start align-items-center gap-2">
-      <Button label="Delete" size="small" severity="danger" @click="popupService.deleteConfirmation($event, props.knowledge.mappingId )" />
-      <Button label="Update" size="small" type="submit" />
-    </div>
-  </div>
-
-
-  <p>{{ props.knowledge.knowledge.description }}</p>
-  <h3 class="text-right">
-    Available Experience: {{ store.currentExperience }}
-  </h3>
   <form @submit="onSubmit">
+    <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
+      <div>
+        <h2 class="p-0 m-0">
+          {{ props.knowledge.knowledge.name }}
+        </h2>
+        <div>{{ props.knowledge.knowledge.type }}</div>
+      </div>
+      <div v-if="!props.isReadOnly" class="p-0 m-2 d-inline-flex align-items-start align-items-center gap-2">
+        <Button label="Delete" size="small" severity="danger" @click="popupService.deleteConfirmation($event, props.knowledge.mappingId )" />
+        <Button label="Update" size="small" type="submit" />
+      </div>
+    </div>
+    
+    <p>{{ props.knowledge.knowledge.description }}</p>
+    <h3 class="text-right">
+      Available Experience: {{ store.currentExperience }}
+    </h3>
 
     <DataTable v-model:selection="form.knowledgeLevel2.field.value" selection-mode="single" :value="store.knowledgeLevels" dataKey="id">
       <Column selection-mode="single"  headerStyle="width: 3rem"></Column>
@@ -96,7 +95,7 @@ function getCurrentXpLevel(levelId: number){
       <Column field="specializationCount" header="Specials" header-class="text-center" body-class="text-center" ></Column>
     </DataTable>
 
-    <Message v-if="form.knowledgeLevel.field == 8" severity="warn">
+    <Message v-if="form.knowledgeLevel2.field.value.id == 8" severity="warn" class="mt-4">
       <p>
         Gaining the seventh level of knowledge also requires the completion of a quest of some kind. The quest can be as
         straightforward as finding lost or unknown relics that relate to the subject or as complicated as a life-long
