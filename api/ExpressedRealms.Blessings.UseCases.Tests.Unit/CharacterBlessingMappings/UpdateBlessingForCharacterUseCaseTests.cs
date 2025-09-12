@@ -276,4 +276,26 @@ public class UpdateBlessingForCharacterUseCaseTests
             )
             .MustHaveHappenedOnceExactly();
     }
+
+    [Fact]
+    public async Task UseCase_WillSave_BlessingLevelId()
+    {
+        _blessingForCharacterModel.BlessingLevelId = 20;
+        A.CallTo(() =>
+                _blessingRepository.BlessingLevelExists(_blessingForCharacterModel.BlessingLevelId)
+            )
+            .Returns(true);
+
+        var result = await _useCase.ExecuteAsync(_blessingForCharacterModel);
+        Assert.True(result.IsSuccess);
+
+        A.CallTo(() =>
+                _mappingRepository.UpdateMapping(
+                    A<CharacterBlessingMapping>.That.Matches(x =>
+                        x.BlessingLevelId == _blessingForCharacterModel.BlessingLevelId
+                    )
+                )
+            )
+            .MustHaveHappenedOnceExactly();
+    }
 }

@@ -8,4 +8,6 @@ public class CharacterBlessing
     public required string Description { get; set; }
     public required string LevelName { get; set; }
     public required string LevelDescription { get; set; }
+    public string? Notes { get; set; }
+    public int Id { get; set; }
 }

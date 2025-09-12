@@ -29,12 +29,14 @@ internal sealed class GetAssignedBlessingsUseCase(
             blessings
                 .Select(x => new CharacterBlessingReturnModel()
                 {
+                    Id = x.Id,
                     Description = x.Description,
                     LevelDescription = x.LevelDescription,
                     LevelName = x.LevelName,
                     Name = x.Name,
                     BlessingLevelId = x.BlessingLevelId,
                     BlessingId = x.BlessingId,
+                    Notes = x.Notes,
                 })
                 .ToList()
         );

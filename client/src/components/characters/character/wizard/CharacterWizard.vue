@@ -14,10 +14,13 @@ import SecondaryProficiencies from "@/components/characters/character/wizard/pro
 import EditCharacterDetails from "@/components/characters/character/wizard/basicInfo/EditCharacterDetails.vue";
 import AddCharacter from "@/components/characters/character/wizard/basicInfo/AddCharacter.vue";
 import OverallExperience from "@/components/characters/character/OverallExperience.vue";
+import BlessingStep from "@/components/characters/character/wizard/blessings/BlessingStep.vue";
+import {FeatureFlags, userStore} from "@/stores/userStore.ts";
 
 const xpData = experienceStore();
 const route = useRoute()
 const router = useRouter();
+const userInfo = userStore();
 const isAdd = computed(() =>route.name == 'addWizard');
 
 const sections = ref([
@@ -41,6 +44,10 @@ async function fetchData() {
   }else{
     sections.value.splice(1, 0,   { name: 'Basic Info', isDisabled: false, component: defineAsyncComponent(async () => EditCharacterDetails) },);
     await xpData.updateExperience(route.params.id);
+  }
+  
+  if(await userInfo.hasFeatureFlag(FeatureFlags.ManageCharacterBlessings)){
+    sections.value.splice(sections.value.length - 1, 0, { name: 'Advantages / Disadvantages', isDisabled: isAdd, component: defineAsyncComponent(async () => BlessingStep) })
   }
 }
 
