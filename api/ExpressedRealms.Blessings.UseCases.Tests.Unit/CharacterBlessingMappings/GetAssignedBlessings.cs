@@ -30,7 +30,7 @@ public class GetAssignedBlessingsUseCaseTests
                 BlessingId = 1,
                 BlessingLevelId = 2,
                 Id = 14,
-                Notes = "asdfoiupouisofd"
+                Notes = "asdfoiupouisofd",
             },
             new CharacterBlessingDto()
             {

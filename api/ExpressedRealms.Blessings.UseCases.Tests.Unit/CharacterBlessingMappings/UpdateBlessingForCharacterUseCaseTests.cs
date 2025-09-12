@@ -276,7 +276,7 @@ public class UpdateBlessingForCharacterUseCaseTests
             )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_WillSave_BlessingLevelId()
     {
@@ -291,7 +291,9 @@ public class UpdateBlessingForCharacterUseCaseTests
 
         A.CallTo(() =>
                 _mappingRepository.UpdateMapping(
-                    A<CharacterBlessingMapping>.That.Matches(x => x.BlessingLevelId == _blessingForCharacterModel.BlessingLevelId)
+                    A<CharacterBlessingMapping>.That.Matches(x =>
+                        x.BlessingLevelId == _blessingForCharacterModel.BlessingLevelId
+                    )
                 )
             )
             .MustHaveHappenedOnceExactly();

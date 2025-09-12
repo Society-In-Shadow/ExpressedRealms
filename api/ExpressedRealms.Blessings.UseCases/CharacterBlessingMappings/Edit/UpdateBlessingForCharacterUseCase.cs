@@ -58,7 +58,7 @@ internal sealed class UpdateBlessingForCharacterUseCase(
                     new NotEnoughXPFailure(availableExperience - spentXp, newLevel.XpCost)
                 );
             }
-            
+
             mapping.BlessingLevelId = model.BlessingLevelId;
         }
 
