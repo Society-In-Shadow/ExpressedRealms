@@ -9,7 +9,7 @@ import {addBlessingDialog} from "@/components/blessings/services/dialogs.ts";
 import AddCharacterBlessing from "@/components/characters/character/wizard/blessings/supports/AddCharacterBlessing.vue";
 import {
   characterBlessingsStore
-} from "@/components/characters/character/wizard/blessings/stores/characterKnowledgeStore.ts";
+} from "@/components/characters/character/wizard/blessings/stores/characterBlessingStore.ts";
 
 const popups = blessingConfirmationPopup();
 const dialogs = addBlessingDialog();
