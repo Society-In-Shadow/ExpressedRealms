@@ -58,7 +58,7 @@ export const characterBlessingsStore =
                     const validCategories = subCategories.filter(x => x.blessings?.length ?? 0 > 0);
                     if(validCategories.length > 0)
                         return {
-                            ...type,
+                            name: type.name + 's',
                             subCategories: validCategories
                         };
                     return {
@@ -79,7 +79,7 @@ export const characterBlessingsStore =
                     .then(async () => {
                         await experienceInfo.updateExperience(characterId);
                         await this.getCharacterBlessings(characterId);
-                        toaster.success("Successfully Added Trait!");
+                        toaster.success("Successfully Added Advantage / Disadvantage!");
                     });
             },
             updateBlessing: async function (values:CharacterBlessingForm, characterId: number, mappingId: number): Promise<void> {
@@ -91,7 +91,7 @@ export const characterBlessingsStore =
                     .then(async () => {
                         await experienceInfo.updateExperience(characterId);
                         await this.getCharacterBlessings(characterId);
-                        toaster.success("Successfully Updated Trait!");
+                        toaster.success("Successfully Updated Advantage / Disadvantage!");
                     });
             },
             deleteBlessing: async function (characterId: number, mappingId: number): Promise<void> {
@@ -99,7 +99,7 @@ export const characterBlessingsStore =
                     .then(async () => {
                         await experienceInfo.updateExperience(characterId);
                         await this.getCharacterBlessings(characterId);
-                        toaster.success("Successfully Deleted Knowledge!");
+                        toaster.success("Successfully Deleted Advantage / Disadvantage!");
                     });
             },
         }

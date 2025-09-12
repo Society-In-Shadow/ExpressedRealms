@@ -47,8 +47,6 @@ const toggleAdd = () => {
       <h3 class="p-0 m-0">
         {{ props.blessing.name }}
       </h3>
-      <div class="p-0 m-0">
-      </div>
     </div>
     <div v-if="!props.isReadOnly" class="p-0 m-2 d-inline-flex align-items-start align-items-center">
       <Button class="float-end" size="small" label="View" @click="toggleAdd" />

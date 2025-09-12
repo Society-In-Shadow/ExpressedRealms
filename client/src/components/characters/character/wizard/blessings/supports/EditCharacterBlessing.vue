@@ -3,7 +3,7 @@
 import FormTextAreaWrapper from "@/FormWrappers/FormTextAreaWrapper.vue";
 import Button from "primevue/button";
 import {useRoute} from "vue-router";
-import {onBeforeMount, type PropType} from "vue";
+import {onBeforeMount, type PropType, ref} from "vue";
 import type {Blessing} from "@/components/blessings/types.ts";
 import RadioButton from "primevue/radiobutton";
 import {
@@ -12,11 +12,12 @@ import {
 import {
   characterBlessingsStore
 } from "@/components/characters/character/wizard/blessings/stores/characterBlessingStore.ts";
+import {confirmationPopup} from "@/components/characters/character/wizard/blessings/services/confirmationService.ts";
 
 const store = characterBlessingsStore();
 const form = getValidationInstance();
 const route = useRoute();
-
+const popupService = confirmationPopup(route.params.id);
 
 const props = defineProps({
   blessing: {
@@ -29,9 +30,12 @@ const props = defineProps({
   }
 });
 
+const mappingId = ref(0);
+
 onBeforeMount(async () => {
   const currentBlessing = store.blessings.filter(x => x.blessingId == props.blessing?.id)[0];
   const currentLevel = props.blessing.levels.filter(x => x.id == currentBlessing.blessingLevelId)[0];
+  mappingId.value = currentBlessing.id;
   form.setValues(currentBlessing, currentLevel);  
 })
 
@@ -44,11 +48,9 @@ const onSubmit = form.handleSubmit(async (values) => {
 
 <template>
   <h3 class="d-flex justify-content-between">
-    <span>Experience Cost: {{ form.blessingLevel.field.xpCost }}</span>
+    <span>Experience Cost: {{ form.blessingLevel.field?.value?.xpCost ?? 0 }}</span>
     <span>Available Experience: Infinite</span>
   </h3>
-
-
 
   <form @submit="onSubmit">
 
@@ -59,9 +61,7 @@ const onSubmit = form.handleSubmit(async (values) => {
         </h2>
       </div>
       <div v-if="!props.isReadOnly" class="p-0 m-2 d-inline-flex align-items-start align-items-center gap-2">
-<!--
-        <Button label="Delete" size="small" severity="danger" @click="popupService.deleteConfirmation($event, props.knowledge.mappingId )" />
--->
+        <Button label="Delete" size="small" severity="danger" @click="popupService.deleteConfirmation($event, mappingId )" />
         <Button label="Update" size="small" type="submit" />
       </div>
     </div>

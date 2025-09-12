@@ -3,7 +3,7 @@
 import FormTextAreaWrapper from "@/FormWrappers/FormTextAreaWrapper.vue";
 import Button from "primevue/button";
 import {useRoute} from "vue-router";
-import {type PropType, ref} from "vue";
+import {type PropType} from "vue";
 import type {Blessing} from "@/components/blessings/types.ts";
 import RadioButton from "primevue/radiobutton";
 import {
@@ -29,8 +29,6 @@ const props = defineProps({
   }
 });
 
-const selectedLevel = ref(0);
-
 const onSubmit = form.handleSubmit(async (values) => {
   await store.addBlessing(values, route.params.id, props.blessing.id);
 });
@@ -39,7 +37,7 @@ const onSubmit = form.handleSubmit(async (values) => {
 
 <template>
   <h3 class="d-flex justify-content-between">
-    <span>Experience Cost: {{ selectedLevel.name }}</span>
+    <span>Experience Cost: {{ form.blessingLevel.field?.xpCost ?? 0 }}</span>
     <span>Available Experience: Infinite</span>
   </h3>
   <h1 class="pt-0 mt-0">
