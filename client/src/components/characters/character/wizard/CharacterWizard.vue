@@ -28,7 +28,7 @@ const sections = ref([
   { name: 'Powers', isDisabled: isAdd, component: defineAsyncComponent(async () => PowerStep) },
   { name: 'Skills', isDisabled: isAdd, component: defineAsyncComponent(async () => SkillStep) },
   { name: 'Proficiencies', isDisabled: isAdd, component: defineAsyncComponent(async () => ProficiencyTableTile) },
-  { name: 'Advanage / Disadvantage', isDisabled: isAdd, component: defineAsyncComponent(async () => BlessingStep) },
+  { name: 'Advantages / Disadvantages', isDisabled: isAdd, component: defineAsyncComponent(async () => BlessingStep) },
   { name: 'Experience Breakdown', isDisabled: isAdd, component: defineAsyncComponent(async () => OverallExperience) },
 ]);
 

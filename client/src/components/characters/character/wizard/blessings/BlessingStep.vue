@@ -10,6 +10,9 @@ import {
 } from "@/components/characters/character/wizard/blessings/stores/characterBlessingStore.ts";
 import {useRoute} from "vue-router";
 import type {SubCategory} from "@/components/blessings/types.ts";
+import Button from "primevue/button";
+import EditCharacterBlessing
+  from "@/components/characters/character/wizard/blessings/supports/EditCharacterBlessing.vue";
 
 const route = useRoute();
 const store = blessingsStore();
@@ -53,6 +56,10 @@ const filteredTypes = computed(() => {
   
 })
 
+const toggleEdit = (blessingId: number) => {
+  characterBlessingData.activeBlessingId = blessingId;
+}
+
 </script>
 
 <template>
@@ -62,7 +69,16 @@ const filteredTypes = computed(() => {
     <div v-for="trait in type.subCategories">
       <h3 class="ml-3">{{trait.name}}</h3>
       <div v-for="blessing in trait.blessings">
-        <h4 class="ml-5">{{blessing.name}}</h4>
+        <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
+          <div><h4 class="ml-5">{{blessing.name}}</h4></div>
+          <div>
+            <Button label="View" size="small" @click="toggleEdit(blessing.id)" />
+            <Teleport v-if="characterBlessingData.activeBlessingId == blessing.id" to="#item-modification-section">
+              <EditCharacterBlessing :blessing="blessing" />
+            </Teleport>
+          </div>
+        </div>
+        
       </div>
     </div>
   </div>

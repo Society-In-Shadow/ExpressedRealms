@@ -6,6 +6,7 @@ export interface CharacterBlessingsBaseResponse{
 
 
 export interface CharacterBlessing{
+    id: number;
     blessingId: number;
     blessingLevelId: number;
     name: string;

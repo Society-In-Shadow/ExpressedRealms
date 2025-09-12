@@ -82,7 +82,7 @@ export const characterBlessingsStore =
                         toaster.success("Successfully Added Trait!");
                     });
             },
-            editKnowledge: async function (values:CharacterBlessingForm, characterId: number, mappingId: number): Promise<void> {
+            updateBlessing: async function (values:CharacterBlessingForm, characterId: number, mappingId: number): Promise<void> {
                 
                 await axios.put(`/characters/${characterId}/blessings/${mappingId}`, {
                     blessingLevelId: values.blessingLevel.id,
@@ -94,7 +94,7 @@ export const characterBlessingsStore =
                         toaster.success("Successfully Updated Trait!");
                     });
             },
-            deleteKnowledge: async function (characterId: number, mappingId: number): Promise<void> {
+            deleteBlessing: async function (characterId: number, mappingId: number): Promise<void> {
                 await axios.delete(`/characters/${characterId}/blessings/${mappingId}`)
                     .then(async () => {
                         await experienceInfo.updateExperience(characterId);

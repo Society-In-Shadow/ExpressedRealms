@@ -1,7 +1,7 @@
 import {type InferType, object, string} from "yup";
 import {useGenericForm} from "@/utilities/formUtilities";
-import type {CharacterKnowledge, KnowledgeOptions} from "@/components/characters/character/knowledges/types";
 import type {BlessingLevel} from "@/components/blessings/types.ts";
+import type {CharacterBlessing} from "@/components/characters/character/wizard/blessings/types.ts";
 
 const validationSchema = object({
     notes: string().nullable()
@@ -17,9 +17,9 @@ export function getValidationInstance() {
 
     const form = useGenericForm(validationSchema);
 
-    const setValues = (model: CharacterKnowledge, knowledgeLevel: KnowledgeOptions | null) => {
+    const setValues = (model: CharacterBlessing, level: BlessingLevel ) => {
         form.fields.notes.field.value = model.notes;
-        form.fields.blessingLevel.field.value = model.levelId;
+        form.fields.blessingLevel.field.value = level;
     }
 
     const customResetForm = () => {
