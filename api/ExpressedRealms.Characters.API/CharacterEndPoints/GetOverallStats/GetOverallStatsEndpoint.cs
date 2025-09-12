@@ -25,12 +25,14 @@ internal static class GetOverallStatsEndpoint
         return TypedResults.Ok(
             new ExperienceBreakdownResponse()
             {
-                Experience = status.Value.ExperienceSections.Select(x => new ExperienceSection()
-                {
-                    Name = x.Name,
-                    Total = x.Total,
-                    CharacterCreateMax = x.Max
-                }).ToList()
+                Experience = status
+                    .Value.ExperienceSections.Select(x => new ExperienceSection()
+                    {
+                        Name = x.Name,
+                        Total = x.Total,
+                        CharacterCreateMax = x.Max,
+                    })
+                    .ToList(),
             }
         );
     }
