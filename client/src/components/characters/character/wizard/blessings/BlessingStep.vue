@@ -1,14 +1,19 @@
 <script setup lang="ts">
 
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {blessingsStore} from "@/components/blessings/stores/blessingsStore";
 import {UserRoles, userStore} from "@/stores/userStore.ts";
-import AddBlessing from "@/components/blessings/AddBlessing.vue";
-import Button from "primevue/button";
 import {makeIdSafe} from "@/utilities/stringUtilities.ts";
 import SelectBlessingItem from "@/components/characters/character/wizard/blessings/supports/SelectBlessingItem.vue";
+import {
+  characterBlessingsStore
+} from "@/components/characters/character/wizard/blessings/stores/characterBlessingStore.ts";
+import {useRoute} from "vue-router";
+import type {SubCategory} from "@/components/blessings/types.ts";
 
+const route = useRoute();
 const store = blessingsStore();
+const characterBlessingData = characterBlessingsStore();
 const userInfo = userStore();
 
 
@@ -22,25 +27,47 @@ const props = defineProps({
 const showEdit = ref(false);
 const showAdd = ref(false);
 
-const toggleAdd = () =>{
-  showAdd.value = !showAdd.value;
-}
-
 onMounted(async () => {
   await store.getBlessings()
   showEdit.value = await userInfo.hasUserRole(UserRoles.BlessingsManagementRole);
+  await characterBlessingData.getCharacterBlessings(route.params.id)
+})
+
+const filteredTypes = computed(() => {
+  const selectedIds = characterBlessingData.selectedBlessingIds;
+  
+  return store.types.map(type => {
+    
+    const subCategories = type.subCategories.map(subCategory => {
+      return {
+        name: subCategory.name,
+        blessings: subCategory.blessings.filter(x => !selectedIds.includes(x.id))
+      } as SubCategory
+    })
+    
+    return {
+      ...type,
+      subCategories: subCategories
+    };
+  })
+  
 })
 
 </script>
 
 <template>
-  <div v-if="showEdit" class="text-right">
-    <Button v-if="!showAdd" label="Add Advantage" @click="toggleAdd" />
-    <Button v-else label="Cancel Add" @click="toggleAdd" />
-    
+
+  <div v-for="type in characterBlessingData.types">
+    <h1>Selected {{type.name}}</h1>
+    <div v-for="trait in type.subCategories">
+      <h3 class="ml-3">{{trait.name}}</h3>
+      <div v-for="blessing in trait.blessings">
+        <h4 class="ml-5">{{blessing.name}}</h4>
+      </div>
+    </div>
   </div>
-  <AddBlessing v-if="showAdd" @canceled="toggleAdd" />
-  <div v-for="type in store.types" :key="type.name">
+
+  <div v-for="type in filteredTypes" :key="type.name">
     <h1 :id="makeIdSafe(type.name)">{{ type.name }}</h1>
     <div v-for="subCategory in type.subCategories" :key="subCategory.name">
       <h2 class="pl-3 pb-3" :id="makeIdSafe(subCategory.name)">{{ subCategory.name }}</h2>

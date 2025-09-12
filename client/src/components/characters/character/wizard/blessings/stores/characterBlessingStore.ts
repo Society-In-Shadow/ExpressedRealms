@@ -9,15 +9,23 @@ import type {
     CharacterBlessing,
     CharacterBlessingsBaseResponse
 } from "@/components/characters/character/wizard/blessings/types.ts";
+import {blessingsStore} from "@/components/blessings/stores/blessingsStore.ts";
+import type {BlessingType, SubCategory} from "@/components/blessings/types.ts";
 
 const experienceInfo = experienceStore();
+const blessingInfo = blessingsStore();
 
 export const characterBlessingsStore =
     defineStore('characterBlessings', {
         state: () => {
             return {
                 isLoading: true as boolean,
+                types: [] as Array<BlessingType>,
+                advantages: [] as Array<SubCategory>,
+                disadvantages: [] as Array<SubCategory>,
+                mixedBlessings: [] as Array<CharacterBlessing>,
                 blessings: [] as Array<CharacterBlessing>,
+                selectedBlessingIds: [] as Array<number>,
                 activeBlessingId: 0 as number,
             }
         },    
@@ -25,7 +33,40 @@ export const characterBlessingsStore =
             async getCharacterBlessings(characterId: number){
                 this.isLoading = true;
                 const response = await axios.get<CharacterBlessingsBaseResponse>(`/characters/${characterId}/blessings`)
+                
+                const selectedIds = response.data.blessings.map(x => x.blessingId);
+                this.selectedBlessingIds = selectedIds;
+
+                this.types = blessingInfo.types.map(type => {
                     
+                    const subCategories = type.subCategories.map(subCategory => {
+                        
+                        const blessings = subCategory.blessings.filter(x => selectedIds.includes(x.id))
+                        
+                        if(blessings.length > 0){
+                            return {
+                                name: subCategory.name,
+                                blessings: blessings
+                            } as SubCategory
+                        }
+                        return {
+                            name: "empty",
+                            blessings: []
+                        }
+                    })
+                    
+                    const validCategories = subCategories.filter(x => x.blessings?.length ?? 0 > 0);
+                    if(validCategories.length > 0)
+                        return {
+                            ...type,
+                            subCategories: validCategories
+                        };
+                    return {
+                        name: "empty",
+                        subCategories: []
+                    };
+                }).filter(x => x.subCategories.length > 0);
+                
                 this.blessings = response.data.blessings;
                 this.isLoading = false;
             },
