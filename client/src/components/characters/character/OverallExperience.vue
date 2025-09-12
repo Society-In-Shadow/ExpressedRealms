@@ -1,24 +1,23 @@
 <script setup lang="ts">
 
-import {computed, onMounted} from "vue";
+import {onMounted} from "vue";
 import Card from "primevue/card";
 import Message from "primevue/message";
 import {useRoute} from "vue-router";
 import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import type {ExperienceBreakdown} from "@/components/characters/character/types.ts";
 
 const route = useRoute()
 const experienceInfo = experienceStore();
-const totalCreatorXp = computed(() => {
-  return experienceInfo.experienceBreakdown.setupStatsXp + 
-      experienceInfo.experienceBreakdown.setupKnowledgeXp + 
-      experienceInfo.experienceBreakdown.setupPowersXp + 
-      experienceInfo.experienceBreakdown.setupSkillsXp + 
-      16
-})
 
 onMounted(async () => {
   experienceInfo.updateExperience(route.params.id);
 })
+
+function showSpent(xp: ExperienceBreakdown) {
+  if(xp.characterCreateMax < 0 || xp.total < 0) return "--";
+  return xp.levelXp;
+}
 
 </script>
 
@@ -35,41 +34,11 @@ onMounted(async () => {
             <th class="text-right pl-3">Spent XP</th>
           </tr>
         </thead>
-        <tr>
-          <td>Knowledge XP</td>
-          <td class="text-right">{{ experienceInfo.experienceBreakdown.knowledgeXp }}</td>
-          <td class="text-right">{{ experienceInfo.experienceBreakdown.setupKnowledgeXp }}</td>
-          <td class="text-right">{{ experienceInfo.experienceBreakdown.knowledgeXp - experienceInfo.experienceBreakdown.setupKnowledgeXp }}</td>
-        </tr>
-        <tr>
-          <td>Stats XP</td>
-          <td class="text-right">{{ experienceInfo.experienceBreakdown.statsXp }}</td>
-          <td class="text-right">{{ experienceInfo.experienceBreakdown.setupStatsXp }}</td>
-          <td class="text-right">{{ experienceInfo.experienceBreakdown.statsXp - experienceInfo.experienceBreakdown.setupStatsXp }}</td>
-        </tr>
-        <tr>
-          <td>Skills XP</td>
-          <td class="text-right">{{ experienceInfo.experienceBreakdown.skillsXp }}</td>
-          <td class="text-right">{{ experienceInfo.experienceBreakdown.setupSkillsXp }}</td>
-          <td class="text-right">{{ experienceInfo.experienceBreakdown.skillsXp -experienceInfo.experienceBreakdown.setupSkillsXp }}</td>
-        </tr>
-        <tr>
-          <td>Powers XP</td>
-          <td class="text-right">{{ experienceInfo.experienceBreakdown.powersXp }}</td>
-          <td class="text-right">{{ experienceInfo.experienceBreakdown.setupPowersXp }}</td>
-          <td class="text-right">{{ experienceInfo.experienceBreakdown.powersXp - experienceInfo.experienceBreakdown.setupPowersXp }}</td>
-        </tr>
-        <tr>
-          <td>Descretionary</td>
-          <td class="text-right">--</td>
-          <td class="text-right">16</td>
-          <td class="text-right">-16</td>
-        </tr>
-        <tr>
-          <td>Total</td>
-          <td class="text-right">{{ experienceInfo.experienceBreakdown.total }}</td>
-          <td class="text-right">{{ totalCreatorXp }}</td>
-          <td class="text-right">{{ experienceInfo.experienceBreakdown.total - totalCreatorXp }}</td>
+        <tr v-for="section in experienceInfo.experienceBreakdown.experience">
+          <td>{{section.name}}</td>
+          <td class="text-right">{{ section.total < 0 ? '--' : section.total }}</td>
+          <td class="text-right">{{ section.characterCreateMax < 0 ? '--' : section.characterCreateMax }}</td>
+          <td class="text-right">{{ showSpent(section) }}</td>
         </tr>
       </table>
     </template>

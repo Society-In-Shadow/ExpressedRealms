@@ -3,13 +3,12 @@
 import {onBeforeMount, ref} from "vue";
 import {useRoute} from "vue-router";
 import {characterPowersStore} from "@/components/characters/character/powers/stores/characterPowerStore.ts";
-import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import PowerCard from "@/components/characters/character/wizard/powers/supporting/PowerCard.vue";
 import PickPowerCard from "@/components/characters/character/wizard/powers/supporting/PickPowerCard.vue";
+import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vue";
 
 const characterKnowledgeData = characterPowersStore();
 const route = useRoute();
-const experienceInfo = experienceStore();
 
 onBeforeMount(async () => {
   await characterKnowledgeData.getSelectableCharacterPowers(route.params.id);
@@ -17,12 +16,10 @@ onBeforeMount(async () => {
   if(characterKnowledgeData.powers.length === 0)
   {
     noPowers.value = true;
-    await toggleEdit();
   }
 })
 
 const noPowers = ref(false);
-
 
 const items = [
   {
@@ -46,8 +43,7 @@ const items = [
     <div class="mb-2">
       <hr v-if="characterKnowledgeData.powers.length !== 0">
       <h1 class="pb-0 mb-0">Choose Powers</h1>
-      <div v-if="experienceInfo.showAllExperience">{{ experienceInfo.experienceBreakdown.powersXp}} Total XP - {{experienceInfo.experienceBreakdown.setupPowersXp}} Creation XP = {{experienceInfo.experienceBreakdown.powersXp - experienceInfo.experienceBreakdown.setupPowersXp}} XP</div>
-
+      <ShowXPCosts xp-name-tag="Power XP" />
       <div v-if="characterKnowledgeData.powers.length === 0">
         <p>No Powers detected, please pick one below.</p>
       </div>

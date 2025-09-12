@@ -4,14 +4,13 @@ import axios from "axios";
 import {onMounted, ref} from "vue";
 import {useRoute} from 'vue-router'
 import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
-import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import Button from "primevue/button";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import StatTile from "@/components/characters/character/wizard/stats/StatTile.vue";
+import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vue";
 
 const route = useRoute()
-const experienceInfo = experienceStore();
 const stats = ref([ {}, {}, {}, {}, {}, {}]);
 const showDetails = ref(false);
 const selectedStatType = ref(0);
@@ -43,8 +42,8 @@ function updateStat(){
 </script>
 
 <template>
-  <div class="text-right pb-3" v-if="experienceInfo.showAllExperience">{{ experienceInfo.experienceBreakdown.statsXp}} Total XP - {{experienceInfo.experienceBreakdown.setupStatsXp}} Creation XP = {{experienceInfo.experienceBreakdown.statsXp - experienceInfo.experienceBreakdown.setupStatsXp}} XP</div>
-  <div class="">
+  <ShowXPCosts xp-name-tag="Stat XP" />
+  <div>
     <DataTable :value="stats" data-key="statTypeId">
       <Column field="name" header="Name">
         <template #body="slotProps">
