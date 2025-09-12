@@ -19,7 +19,8 @@ export const FeatureFlags = {
     ShowFactionDropdown: "show-faction-dropdown",
     ShowBlessingCMS: "show-blessing-cms",
     HideBlessingSections: "hide-blessing-sections",
-    ShowCharacterWizard: "show-character-wizard"
+    ShowCharacterWizard: "show-character-wizard",
+    ManageCharacterBlessings: "manage-character-blessings",
 } as const;
 
 export type UserRole = (typeof UserRoles)[keyof typeof UserRoles];
