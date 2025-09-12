@@ -25,16 +25,12 @@ internal static class GetOverallStatsEndpoint
         return TypedResults.Ok(
             new ExperienceBreakdownResponse()
             {
-                PowersXp = status.Value.PowersXp,
-                StatsXp = status.Value.StatsXp,
-                SkillsXp = status.Value.SkillsXp,
-                KnowledgeXp = status.Value.KnowledgeXp,
-                SetupPowersXp = status.Value.SetupPowersXp,
-                SetupStatsXp = status.Value.SetupStatsXp,
-                SetupSkillsXp = status.Value.SetupSkillsXp,
-                SetupKnowledgeXp = status.Value.SetupKnowledgeXp,
-                Total = status.Value.Total,
-                SetupTotal = status.Value.SetupTotal,
+                Experience = status.Value.ExperienceSections.Select(x => new ExperienceSection()
+                {
+                    Name = x.Name,
+                    Total = x.Total,
+                    CharacterCreateMax = x.Max
+                }).ToList()
             }
         );
     }
