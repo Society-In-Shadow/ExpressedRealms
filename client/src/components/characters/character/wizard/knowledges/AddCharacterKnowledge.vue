@@ -67,7 +67,7 @@ const onSubmit = form.handleSubmit(async (values) => {
       <Column field="specializationCount" header="Specials" header-class="text-center" body-class="text-center" ></Column>
     </DataTable>
 
-    <Message v-if="form.knowledgeLevel2.field.value  && form.knowledgeLevel2.field.value.id == 8" severity="warn" class="mt-4">
+    <Message v-if="form.knowledgeLevel2.field.value && form.knowledgeLevel2.field.value.id == 8" severity="warn" class="mt-4">
       <p>
         Gaining the doctorate of knowledge also requires the completion of a quest of some kind. The quest can be as
         straightforward as finding lost or unknown relics that relate to the subject or as complicated as a life-long
