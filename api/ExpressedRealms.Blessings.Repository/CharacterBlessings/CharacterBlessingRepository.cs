@@ -34,10 +34,12 @@ internal sealed class CharacterBlessingRepository(
             {
                 BlessingId = x.BlessingId,
                 BlessingLevelId = x.BlessingLevelId,
+                Id = x.Id,
                 Name = x.Blessing.Name,
                 Description = x.Blessing.Description,
                 LevelName = x.BlessingLevel.Level,
                 LevelDescription = x.BlessingLevel.Description,
+                Notes = x.Notes,
             })
             .ToListAsync(cancellationToken);
     }

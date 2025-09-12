@@ -21,12 +21,14 @@ public static class GetCharacterBlessingsEndpoint
                 Blessings = results
                     .Value.Select(x => new CharacterBlessing()
                     {
+                        Id = x.Id,
                         Description = x.Description,
                         LevelDescription = x.LevelDescription,
                         LevelName = x.LevelName,
                         Name = x.Name,
                         BlessingLevelId = x.BlessingLevelId,
                         BlessingId = x.BlessingId,
+                        Notes = x.Notes,
                     })
                     .ToList(),
             }

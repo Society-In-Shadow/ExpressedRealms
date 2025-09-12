@@ -29,6 +29,8 @@ public class GetAssignedBlessingsUseCaseTests
                 LevelName = "asdfgh",
                 BlessingId = 1,
                 BlessingLevelId = 2,
+                Id = 14,
+                Notes = "asdfoiupouisofd"
             },
             new CharacterBlessingDto()
             {
@@ -38,6 +40,7 @@ public class GetAssignedBlessingsUseCaseTests
                 LevelName = "sdfg",
                 BlessingId = 3,
                 BlessingLevelId = 4,
+                Id = 15,
             },
         };
 
@@ -89,6 +92,8 @@ public class GetAssignedBlessingsUseCaseTests
                 Name = x.Name,
                 BlessingLevelId = x.BlessingLevelId,
                 BlessingId = x.BlessingId,
+                Id = x.Id,
+                Notes = x.Notes,
             })
             .ToList();
 
