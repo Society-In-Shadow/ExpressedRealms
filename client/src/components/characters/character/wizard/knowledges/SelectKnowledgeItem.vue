@@ -29,8 +29,11 @@ const toggleAdd = () => {
   <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
     <div>
       <h2 class="p-0 m-0">
-        {{ props.knowledge.name }} - <em>{{ props.knowledge.typeName }}</em>
+        {{ props.knowledge.name }}
       </h2>
+      <div class="p-0 m-0">
+        {{ props.knowledge.typeName }}
+      </div>
     </div>
     <div v-if="!props.isReadOnly" class="p-0 m-2 d-inline-flex align-items-start align-items-center">
       <Button class="float-end" size="small" label="View" @click="toggleAdd" />
