@@ -1,5 +1,6 @@
 import {defineStore} from "pinia";
 import axios from "axios";
+import type {ExperienceBreakdownResponse} from "@/components/characters/character/types.ts"
 
 export const experienceStore =
     defineStore('experienceStore', {
@@ -13,16 +14,17 @@ export const experienceStore =
         actions: {
             async updateExperience(characterId: number){
                 this.isLoading = true;
-                await axios.get(`/characters/${characterId}/overallexperience`)
+                await axios.get<ExperienceBreakdownResponse>(`/characters/${characterId}/overallexperience`)
                     .then((response) => {
                         this.isLoading = false;
                         this.experienceBreakdown = response.data;
                     })
                 },
             getCharacterLevel(): number{
-                let total = this.experienceBreakdown.total;
-
-                total = total - this.experienceBreakdown.setupTotal;
+                
+                let totals = this.experienceBreakdown.experience.filter(x => x.name === "Total")[0];
+                
+                let total = totals.levelXp;
                 if(total <= 0)
                     return 0;
                 else if(total <= 25)

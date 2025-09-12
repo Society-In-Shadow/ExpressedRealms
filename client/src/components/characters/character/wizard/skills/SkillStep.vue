@@ -7,18 +7,16 @@ import type {
   CharacterSkillsResponse
 } from "@/components/characters/character/skills/interfaces/CharacterSkillsResponse";
 import {skillStore} from "@/components/characters/character/skills/Stores/skillStore";
-import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
 import Column from "primevue/column";
 import Button from "primevue/button";
 import DataTable from "primevue/datatable";
 import EditSkillDetail from "@/components/characters/character/wizard/skills/supporting/EditSkillDetail.vue";
+import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vue";
 
 const route = useRoute()
 const skillData = skillStore();
-const xpData = experienceStore();
 const skillInfo = skillStore();
-const experienceInfo = experienceStore();
 const selectedSkill = ref<CharacterSkillsResponse | undefined>();
 
 const skillTypes = computed( () => {
@@ -44,7 +42,7 @@ function showDetailedStat(skill: CharacterSkillsResponse){
 </script>
 
 <template>
-  <div class="text-right pb-3" v-if="experienceInfo.showAllExperience">{{ experienceInfo.experienceBreakdown.skillsXp}} Total XP - {{experienceInfo.experienceBreakdown.setupSkillsXp}} Creation XP = {{experienceInfo.experienceBreakdown.skillsXp - experienceInfo.experienceBreakdown.setupSkillsXp}} XP</div>
+  <ShowXPCosts xp-name-tag="Skills XP" />
   <div class="d-inline-flex flex-wrap justify-content-center column-gap-3 row-gap-1 w-100">
     <Panel v-for="skillType in skillTypes" class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch">
       <template #header>
@@ -53,7 +51,7 @@ function showDetailedStat(skill: CharacterSkillsResponse){
             {{ skillType.name }}
           </h3>
           <div v-if="skillInfo.showExperience" class="col text-right">
-            {{ xpData.experienceBreakdown.skillsXp }} EXP
+            Infinite EXP
           </div>
         </div>
       </template>

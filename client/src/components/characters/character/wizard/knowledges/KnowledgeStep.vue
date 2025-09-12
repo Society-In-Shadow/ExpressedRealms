@@ -6,14 +6,13 @@ import {knowledgeStore} from "@/components/knowledges/stores/knowledgeStore";
 import {characterKnowledgeStore} from "@/components/characters/character/knowledges/stores/characterKnowledgeStore";
 import {useRoute} from "vue-router";
 import Tag from "primevue/tag";
-import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import SelectKnowledgeItem from "@/components/characters/character/wizard/knowledges/SelectKnowledgeItem.vue";
 import EditCharacterKnowledge from "@/components/characters/character/wizard/knowledges/EditCharacterKnowledge.vue";
+import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vue";
 
 const knowledgeData = knowledgeStore();
 const characterKnowledgeData = characterKnowledgeStore();
 const route = useRoute();
-const experienceInfo = experienceStore();
 
 onBeforeMount(async () => {
   await knowledgeData.getKnowledges();
@@ -25,15 +24,12 @@ onBeforeMount(async () => {
 })
 
 const noKnowledges = ref(false);
-const openKnowledgeItems = ref([]);
-
 
 const filteredKnowledges = computed(() => {
   const existingKnowledgeIds = characterKnowledgeData.knowledges.map(ck => ck.knowledge.id);
   return knowledgeData.knowledges.filter(knowledge =>
       !existingKnowledgeIds.includes(knowledge.id)
   );
-
 })
 
 const toggleEdit = (knowledgeId: number) => {
@@ -44,7 +40,7 @@ const toggleEdit = (knowledgeId: number) => {
 
 <template>
   <div style="max-width: 650px; margin: 0 auto;">
-        <h1 v-if="characterKnowledgeData.knowledges.length > 0">Selected Knowledges</h1>
+    <h1 v-if="characterKnowledgeData.knowledges.length > 0">Selected Knowledges</h1>
     <div v-for="knowledge in characterKnowledgeData.knowledges" :key="knowledge.id">
       <div class="d-flex flex-column flex-md-row align-self-center justify-content-between pt-2 pb-2">
         <div class="d-flex flex-column flex-grow-1 pr-3">
@@ -76,8 +72,7 @@ const toggleEdit = (knowledgeId: number) => {
     <div class="mb-2">
       <hr v-if="characterKnowledgeData.knowledges.length !== 0">
       <h1 class="pb-0 mb-0">Choose Knowledges</h1>
-      <div class="pb-3" v-if="experienceInfo.showAllExperience">{{ experienceInfo.experienceBreakdown.knowledgeXp}} Total XP - {{experienceInfo.experienceBreakdown.setupKnowledgeXp}} Creation XP = {{experienceInfo.experienceBreakdown.knowledgeXp - experienceInfo.experienceBreakdown.setupKnowledgeXp}} XP</div>
-
+      <ShowXPCosts xp-name-tag="Knowledge XP" />
       <div v-if="characterKnowledgeData.knowledges.length === 0">
         <p>No Knowledges detected, please pick one below.</p>
       </div>

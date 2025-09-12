@@ -1,13 +1,11 @@
 
-interface ExperienceBreakdownResponse {
-    knowledgeXp: number;
-    skillsXp: number;
-    powersXp: number;
-    statsXp: number;
-    setupKnowledgeXp: number;
-    setupPowersXp: number;
-    setupStatsXp: number;
-    setupSkillsXp: number;
+export interface ExperienceBreakdownResponse {
+    experience: ExperienceBreakdown[];
+}
+
+export interface ExperienceBreakdown {
+    name: string;
     total: number;
-    setupTotal: number;
+    characterCreateMax: number;
+    levelXp: number;
 }
