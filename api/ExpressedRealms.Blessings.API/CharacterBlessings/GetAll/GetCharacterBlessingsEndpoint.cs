@@ -21,6 +21,8 @@ public static class GetCharacterBlessingsEndpoint
                 Blessings = results
                     .Value.Select(x => new CharacterBlessing()
                     {
+                        SubCategory = x.SubCategory,
+                        Type = x.Type,
                         Id = x.Id,
                         Description = x.Description,
                         LevelDescription = x.LevelDescription,

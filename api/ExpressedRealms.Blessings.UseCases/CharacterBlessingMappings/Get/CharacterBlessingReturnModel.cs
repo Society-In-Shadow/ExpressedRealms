@@ -10,4 +10,6 @@ public class CharacterBlessingReturnModel
     public required string LevelDescription { get; set; }
     public string? Notes { get; set; }
     public int Id { get; set; }
+    public required string Type { get; set; }
+    public required string SubCategory { get; set; }
 }

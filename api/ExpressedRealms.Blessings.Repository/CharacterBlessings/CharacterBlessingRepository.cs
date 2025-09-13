@@ -32,6 +32,7 @@ internal sealed class CharacterBlessingRepository(
             .CharacterBlessingMappings.Where(x => x.CharacterId == modelCharacterId)
             .Select(x => new CharacterBlessingDto()
             {
+                Type = x.Blessing.Type,
                 BlessingId = x.BlessingId,
                 BlessingLevelId = x.BlessingLevelId,
                 Id = x.Id,
@@ -40,6 +41,7 @@ internal sealed class CharacterBlessingRepository(
                 LevelName = x.BlessingLevel.Level,
                 LevelDescription = x.BlessingLevel.Description,
                 Notes = x.Notes,
+                SubCategory = x.Blessing.SubCategory,
             })
             .ToListAsync(cancellationToken);
     }
