@@ -186,8 +186,8 @@ public class UpdateBlessingForCharacterUseCaseTests
         await _useCase.ExecuteAsync(_blessingForCharacterModel);
 
         A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnBlessingsForCharacter(
-                    _blessingForCharacterModel.CharacterId
+                _mappingRepository.GetSpentXpForBlessingType(
+                    _blessingForCharacterModel.CharacterId, _dbModel.BlessingId
                 )
             )
             .MustHaveHappenedOnceExactly();
@@ -214,8 +214,8 @@ public class UpdateBlessingForCharacterUseCaseTests
             )
             .Returns(new BlessingLevel() { XpCost = StartingExperience.StartingBlessings });
         A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnBlessingsForCharacter(
-                    _blessingForCharacterModel.CharacterId
+                _mappingRepository.GetSpentXpForBlessingType(
+                    _blessingForCharacterModel.CharacterId, _dbModel.BlessingId
                 )
             )
             .Returns(xpAmount);
@@ -232,8 +232,8 @@ public class UpdateBlessingForCharacterUseCaseTests
     public async Task UseCase_WillReturnNotEnoughXp_WhenOutOfXp()
     {
         A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnBlessingsForCharacter(
-                    _blessingForCharacterModel.CharacterId
+                _mappingRepository.GetSpentXpForBlessingType(
+                    _blessingForCharacterModel.CharacterId, _dbModel.BlessingId
                 )
             )
             .Returns(StartingExperience.StartingBlessings);

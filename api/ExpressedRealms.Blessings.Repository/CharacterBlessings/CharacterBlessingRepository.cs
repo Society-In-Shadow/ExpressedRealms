@@ -80,4 +80,21 @@ internal sealed class CharacterBlessingRepository(
         await context.SaveChangesAsync(cancellationToken);
         return characterBlessingMapping.Id;
     }
+    
+    public async Task<int> GetSpentXpForBlessingType(int characterId, int blessingId)
+    {
+        var type = await context.Blessings.Where(x => x.Id == blessingId)
+            .Select(x => x.Type)
+            .FirstAsync();
+        
+        var xpQuery = context.CharacterBlessingMappings.AsNoTracking()
+            .Where(x => x.Blessing.Type == type);
+
+        if (type.Equals("disadvantage", StringComparison.InvariantCultureIgnoreCase))
+        {
+            return await xpQuery.SumAsync(x => x.BlessingLevel.XpGain);
+        }
+
+        return await xpQuery.SumAsync(x => x.BlessingLevel.XpCost);
+    }
 }

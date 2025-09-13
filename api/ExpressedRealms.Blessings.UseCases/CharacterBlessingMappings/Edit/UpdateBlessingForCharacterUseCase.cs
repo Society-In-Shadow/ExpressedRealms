@@ -25,10 +25,6 @@ internal sealed class UpdateBlessingForCharacterUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        // Get Character
-        // Check if it's an active character
-        // If so, check create status
-
         // Also need to take into consideration discretionary spending
         var mapping = await mappingRepository.GetCharacterBlessingMappingForEditing(
             model.MappingId
@@ -36,12 +32,10 @@ internal sealed class UpdateBlessingForCharacterUseCase(
 
         if (mapping.BlessingLevelId != model.BlessingLevelId)
         {
-            // Assuming character creation rules for now
+            // Covers both advantage cap (8pts) and disadvantage cap (8pts)
             const int availableExperience = StartingExperience.StartingBlessings;
 
-            var spentXp = await mappingRepository.GetExperienceSpentOnBlessingsForCharacter(
-                model.CharacterId
-            );
+            var spentXp = await mappingRepository.GetSpentXpForBlessingType(model.CharacterId, mapping.BlessingId);
 
             var newLevel = await blessingRepository.GetBlessingLevel(model.BlessingLevelId);
             var oldLevel = await blessingRepository.GetBlessingLevel(mapping.BlessingLevelId);

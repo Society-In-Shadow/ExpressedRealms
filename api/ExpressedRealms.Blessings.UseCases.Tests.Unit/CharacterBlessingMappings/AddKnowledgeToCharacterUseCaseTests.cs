@@ -52,8 +52,8 @@ public class AddBlessingToCharacterUseCaseTests
             )
             .Returns(false);
         A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnBlessingsForCharacter(
-                    _blessingToCharacterModel.CharacterId
+                _mappingRepository.GetSpentXpForBlessingType(
+                    _blessingToCharacterModel.CharacterId, _blessingToCharacterModel.BlessingId
                 )
             )
             .Returns(0);
@@ -201,8 +201,8 @@ public class AddBlessingToCharacterUseCaseTests
         await _useCase.ExecuteAsync(_blessingToCharacterModel);
 
         A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnBlessingsForCharacter(
-                    _blessingToCharacterModel.CharacterId
+                _mappingRepository.GetSpentXpForBlessingType(
+                    _blessingToCharacterModel.CharacterId, _blessingToCharacterModel.BlessingId
                 )
             )
             .MustHaveHappenedOnceExactly();
@@ -229,8 +229,8 @@ public class AddBlessingToCharacterUseCaseTests
             )
             .Returns(new BlessingLevel() { XpCost = StartingExperience.StartingBlessings });
         A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnBlessingsForCharacter(
-                    _blessingToCharacterModel.CharacterId
+                _mappingRepository.GetSpentXpForBlessingType(
+                    _blessingToCharacterModel.CharacterId, _blessingToCharacterModel.BlessingId
                 )
             )
             .Returns(xpAmount);
@@ -247,8 +247,8 @@ public class AddBlessingToCharacterUseCaseTests
     public async Task UseCase_WillReturnNotEnoughXp_WhenOutOfXp()
     {
         A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnBlessingsForCharacter(
-                    _blessingToCharacterModel.CharacterId
+                _mappingRepository.GetSpentXpForBlessingType(
+                    _blessingToCharacterModel.CharacterId, _blessingToCharacterModel.BlessingId
                 )
             )
             .Returns(StartingExperience.StartingBlessings);
