@@ -11,10 +11,10 @@ namespace ExpressedRealms.DB.Models.Blessings.BlessingSetup;
 public class Blessing : ISoftDelete
 {
     public int Id { get; set; }
-    public string Name { get; set; } = null!;
-    public string Description { get; set; } = null!;
+    public required string Name { get; set; }
+    public required string Description { get; set; }
     public string Type { get; set; } = null!;
-    public string SubCategory { get; set; }
+    public required string SubCategory { get; set; }
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 
