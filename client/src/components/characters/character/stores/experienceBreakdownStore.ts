@@ -20,6 +20,9 @@ export const experienceStore =
                         this.experienceBreakdown = response.data;
                     })
                 },
+            getExperienceInfo(name: string){
+                return this.experienceBreakdown.experience.filter(x => x.name === name)[0];
+            },
             getCharacterLevel(): number{
                 
                 let totals = this.experienceBreakdown.experience.filter(x => x.name === "Total")[0];

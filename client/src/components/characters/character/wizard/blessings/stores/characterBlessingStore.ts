@@ -58,7 +58,7 @@ export const characterBlessingsStore =
                     const validCategories = subCategories.filter(x => x.blessings.length > 0);
                     if(validCategories.length > 0)
                         return {
-                            name: type.name + 's',
+                            name: type.name,
                             subCategories: validCategories
                         };
                     return {
