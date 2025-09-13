@@ -18,14 +18,14 @@ import {FeatureFlags, userStore} from "@/stores/userStore.ts";
 import {onMounted, ref} from "vue";
 import PowerTile from "@/components/characters/character/powers/PowerTile.vue";
 import TrackableProficiencies from "@/components/characters/character/proficiency/TrackableProficiencies.vue";
-
+import BlessingTab from "@/components/characters/character/blessings/BlessingTab.vue";
 
 const userData = userStore();
 
-const showPowersTab = ref(false);
+const manageCharacterBlessings = ref(false);
 
 onMounted(async() =>{
-  showPowersTab.value = await userData.hasFeatureFlag(FeatureFlags.ShowCharacterPowers)
+  manageCharacterBlessings.value = await userData.hasFeatureFlag(FeatureFlags.ManageCharacterBlessings)
 })
 
 </script>
@@ -56,8 +56,11 @@ onMounted(async() =>{
             <Tab value="2">
               Knowledges
             </Tab>
-            <Tab value="3" v-if="showPowersTab" >
+            <Tab value="3">
               Powers
+            </Tab>
+            <Tab value="4" v-if="manageCharacterBlessings" >
+              Advantages / Disadvantages
             </Tab>
           </TabList>
           <TabPanels class="p-2 p-md-3">
@@ -73,8 +76,11 @@ onMounted(async() =>{
             <TabPanel value="2">
               <KnowledgeTile />
             </TabPanel>
-            <TabPanel v-if="showPowersTab" value="3">
+            <TabPanel value="3">
               <PowerTile/>
+            </TabPanel>
+            <TabPanel v-if="manageCharacterBlessings" value="4">
+              <BlessingTab />
             </TabPanel>
           </TabPanels>
         </Tabs>

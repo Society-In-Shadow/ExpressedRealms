@@ -4,8 +4,14 @@ export interface CharacterBlessingsBaseResponse{
     blessings: Array<CharacterBlessing>;
 }
 
+export interface CharacterBlessingTypes{
+    name: string;
+    blessings: Array<CharacterBlessing>
+}
 
 export interface CharacterBlessing{
+    type: string;
+    subCategory: string;
     id: number;
     blessingId: number;
     blessingLevelId: number;
