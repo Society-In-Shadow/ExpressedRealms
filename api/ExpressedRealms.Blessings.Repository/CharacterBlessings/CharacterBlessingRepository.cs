@@ -46,15 +46,21 @@ internal sealed class CharacterBlessingRepository(
 
     public Task<int> GetExperienceSpentOnBlessingsForCharacter(int characterId)
     {
+        // Is Deleted = false is needed because the UI is filtering out deleted blessings
         return context
-            .CharacterBlessingMappings.Where(x => x.CharacterId == characterId)
+            .CharacterBlessingMappings.Where(x =>
+                x.CharacterId == characterId && !x.Blessing.IsDeleted
+            )
             .SumAsync(x => x.BlessingLevel.XpCost, cancellationToken);
     }
 
     public Task<int> GetExperienceAvailableToSpendOnCharacter(int characterId)
     {
+        // Is Deleted = false is needed because the UI is filtering out deleted blessings
         return context
-            .CharacterBlessingMappings.Where(x => x.CharacterId == characterId)
+            .CharacterBlessingMappings.Where(x =>
+                x.CharacterId == characterId && !x.Blessing.IsDeleted
+            )
             .SumAsync(x => x.BlessingLevel.XpGain, cancellationToken);
     }
 
@@ -79,5 +85,25 @@ internal sealed class CharacterBlessingRepository(
         context.CharacterBlessingMappings.Add(characterBlessingMapping);
         await context.SaveChangesAsync(cancellationToken);
         return characterBlessingMapping.Id;
+    }
+
+    public async Task<int> GetSpentXpForBlessingType(int characterId, int blessingId)
+    {
+        var type = await context
+            .Blessings.Where(x => x.Id == blessingId)
+            .Select(x => x.Type)
+            .FirstAsync();
+
+        // Is Deleted = false is needed because the UI is filtering out deleted blessings
+        var xpQuery = context
+            .CharacterBlessingMappings.AsNoTracking()
+            .Where(x => x.Blessing.Type == type && !x.Blessing.IsDeleted);
+
+        if (type.Equals("disadvantage", StringComparison.InvariantCultureIgnoreCase))
+        {
+            return await xpQuery.SumAsync(x => x.BlessingLevel.XpGain);
+        }
+
+        return await xpQuery.SumAsync(x => x.BlessingLevel.XpCost);
     }
 }

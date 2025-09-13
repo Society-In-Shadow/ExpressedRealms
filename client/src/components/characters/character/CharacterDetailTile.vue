@@ -2,7 +2,7 @@
 
 import Card from "primevue/card";
 import Popover from "primevue/popover";
-import {onMounted, ref} from "vue";
+import {onBeforeMount, ref} from "vue";
 import {useRoute, useRouter} from 'vue-router'
 import {characterStore} from "@/components/characters/character/stores/characterStore";
 import Button from "primevue/button";
@@ -20,7 +20,7 @@ const dialog = characterPopupDialogs()
 const userInfo = userStore();
 
 const showFactionInfo = ref(false);
-onMounted(async () =>{
+onBeforeMount(async () =>{
   await characterInfo.getCharacterDetails(Number(route.params.id))
       .then(() => {
         name.value = characterInfo.name;
@@ -63,7 +63,7 @@ const redirectToEdit = () => {
       <div class="d-flex flex-row justify-content-between" >
         <div>
           <h1 class="mt-0 pt-0 pb-0 mb-0">{{ name }}</h1>
-          <div><em><span>XL: {{experienceInfo.getCharacterLevel()}}</span> - {{ expression }}</em></div>
+          <div v-if="!experienceInfo.isLoading"><em><span>XL: {{experienceInfo.getCharacterLevel()}}</span> - {{ expression }}</em></div>
           <div v-if="showFactionInfo"><em>{{ faction?.name ?? 'No Faction' }}</em></div>
         </div>
         <div class="d-flex flex-column gap-3" style="font-size: 2.5em">

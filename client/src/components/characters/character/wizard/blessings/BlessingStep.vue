@@ -28,7 +28,6 @@ const props = defineProps({
 });
 
 const showEdit = ref(false);
-const showAdd = ref(false);
 
 onMounted(async () => {
   await store.getBlessings()
@@ -65,7 +64,7 @@ const toggleEdit = (blessingId: number) => {
 <template>
 
   <div v-for="type in characterBlessingData.types">
-    <h1>Selected {{type.name}}</h1>
+    <h1>Selected {{type.name}}s</h1>
     <div v-for="trait in type.subCategories">
       <h3 class="ml-3 pb-2">{{trait.name}}</h3>
       <div v-for="blessing in trait.blessings">

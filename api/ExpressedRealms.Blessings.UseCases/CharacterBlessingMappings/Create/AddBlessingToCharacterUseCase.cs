@@ -26,17 +26,12 @@ internal sealed class AddBlessingToCharacterUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        // Get Character
-        // Check if it's an active character
-        // If so, check create status
-
-        // Also need to take into consideration discretionary spending
-
-        // Assuming character creation rules for now
+        // Covers both advantage cap (8pts) and disadvantage cap (8pts)
         const int availableExperience = StartingExperience.StartingBlessings;
 
-        var spentXp = await mappingRepository.GetExperienceSpentOnBlessingsForCharacter(
-            model.CharacterId
+        var spentXp = await mappingRepository.GetSpentXpForBlessingType(
+            model.CharacterId,
+            model.BlessingId
         );
 
         var blessingLevel = await blessingRepository.GetBlessingLevel(model.BlessingLevelId);

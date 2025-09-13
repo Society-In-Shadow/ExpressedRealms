@@ -4,7 +4,7 @@ import FormTextAreaWrapper from "@/FormWrappers/FormTextAreaWrapper.vue";
 import Button from "primevue/button";
 import {useRoute} from "vue-router";
 import {onBeforeMount, type PropType, ref} from "vue";
-import type {Blessing} from "@/components/blessings/types.ts";
+import type {Blessing, BlessingLevel} from "@/components/blessings/types.ts";
 import RadioButton from "primevue/radiobutton";
 import {
   getValidationInstance
@@ -13,30 +13,35 @@ import {
   characterBlessingsStore
 } from "@/components/characters/character/wizard/blessings/stores/characterBlessingStore.ts";
 import {confirmationPopup} from "@/components/characters/character/wizard/blessings/services/confirmationService.ts";
+import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 
 const store = characterBlessingsStore();
 const form = getValidationInstance();
 const route = useRoute();
 const popupService = confirmationPopup(route.params.id);
+const experienceInfo = experienceStore();
 
 const props = defineProps({
   blessing: {
     type: Object as PropType<Blessing>,
     required: true,
-  },
-  isReadOnly:{
-    type: Boolean,
-    required: false
   }
 });
 
 const mappingId = ref(0);
+const currentLevel = ref<BlessingLevel>({});
+const availableXp = ref(0);
 
 onBeforeMount(async () => {
   const currentBlessing = store.blessings.filter(x => x.blessingId == props.blessing?.id)[0];
-  const currentLevel = props.blessing.levels.filter(x => x.id == currentBlessing.blessingLevelId)[0];
+  currentLevel.value = props.blessing.levels.filter(x => x.id == currentBlessing.blessingLevelId)[0];
   mappingId.value = currentBlessing.id;
-  form.setValues(currentBlessing, currentLevel);  
+  form.setValues(currentBlessing, currentLevel.value);
+  availableXp.value = 8 - experienceInfo.getExperienceInfo(`${props.blessing.type} XP`).total + currentLevel.value.xpCost;
+  if(props.blessing.type.toLowerCase() == 'disadvantage'){
+    availableXp.value = 8 - experienceInfo.getExperienceInfo(`${props.blessing.type} XP`).characterCreateMax + currentLevel.value.xpGain;
+  }
+  
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
@@ -44,13 +49,16 @@ const onSubmit = form.handleSubmit(async (values) => {
   await store.updateBlessing(values, route.params.id, currentBlessing.id);
 });
 
+function disableOption(level:BlessingLevel){
+  if(props.blessing.type.toLowerCase() == 'disadvantage'){
+    return level.xpGain > availableXp.value;
+  }
+  return level.xpCost > availableXp.value;
+}
+
 </script>
 
 <template>
-  <h3 class="d-flex justify-content-between">
-    <span>Experience Cost: {{ form.blessingLevel.field?.value?.xpCost ?? 0 }}</span>
-    <span>Available Experience: Infinite</span>
-  </h3>
 
   <form @submit="onSubmit">
 
@@ -67,10 +75,12 @@ const onSubmit = form.handleSubmit(async (values) => {
     </div>
 
     <div v-html="props.blessing?.description"></div>
-    
+    <h3 class="d-flex justify-content-end">
+      <span>Available Experience: {{availableXp}}</span>
+    </h3>
     <div v-for="level in props.blessing.levels" :key="level.id" class="mt-3">
       <div class="d-flex flex-column flex-md-row align-self-center">
-        <RadioButton v-model="form.blessingLevel.field" :inputId="level.id.toString()" :value="level" class="mr-4" variant="filled"/>
+        <RadioButton v-model="form.blessingLevel.field" :inputId="level.id.toString()" :value="level" class="mr-4" :disabled="disableOption(level)"/>
         <label :for="level.id.toString()">{{ level.name }} – {{ level.description }}</label>
       </div>
     </div>

@@ -13,4 +13,5 @@ public interface ICharacterBlessingRepository
     Task<CharacterBlessingMapping> GetCharacterBlessingMappingForEditing(int mappingId);
     Task UpdateMapping(CharacterBlessingMapping mapping);
     Task<List<CharacterBlessingDto>> GetBlessingsForCharacter(int modelCharacterId);
+    Task<int> GetSpentXpForBlessingType(int characterId, int blessingId);
 }
