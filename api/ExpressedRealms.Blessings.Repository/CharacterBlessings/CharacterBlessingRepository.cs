@@ -48,7 +48,9 @@ internal sealed class CharacterBlessingRepository(
     {
         // Is Deleted = false is needed because the UI is filtering out deleted blessings
         return context
-            .CharacterBlessingMappings.Where(x => x.CharacterId == characterId && x.Blessing.IsDeleted == false)
+            .CharacterBlessingMappings.Where(x =>
+                x.CharacterId == characterId && !x.Blessing.IsDeleted
+            )
             .SumAsync(x => x.BlessingLevel.XpCost, cancellationToken);
     }
 
@@ -56,8 +58,9 @@ internal sealed class CharacterBlessingRepository(
     {
         // Is Deleted = false is needed because the UI is filtering out deleted blessings
         return context
-            .CharacterBlessingMappings
-            .Where(x => x.CharacterId == characterId && x.Blessing.IsDeleted == false)
+            .CharacterBlessingMappings.Where(x =>
+                x.CharacterId == characterId && !x.Blessing.IsDeleted
+            )
             .SumAsync(x => x.BlessingLevel.XpGain, cancellationToken);
     }
 
@@ -83,16 +86,18 @@ internal sealed class CharacterBlessingRepository(
         await context.SaveChangesAsync(cancellationToken);
         return characterBlessingMapping.Id;
     }
-    
+
     public async Task<int> GetSpentXpForBlessingType(int characterId, int blessingId)
     {
-        var type = await context.Blessings.Where(x => x.Id == blessingId)
+        var type = await context
+            .Blessings.Where(x => x.Id == blessingId)
             .Select(x => x.Type)
             .FirstAsync();
-        
+
         // Is Deleted = false is needed because the UI is filtering out deleted blessings
-        var xpQuery = context.CharacterBlessingMappings.AsNoTracking()
-            .Where(x => x.Blessing.Type == type && x.Blessing.IsDeleted == false);
+        var xpQuery = context
+            .CharacterBlessingMappings.AsNoTracking()
+            .Where(x => x.Blessing.Type == type && !x.Blessing.IsDeleted);
 
         if (type.Equals("disadvantage", StringComparison.InvariantCultureIgnoreCase))
         {

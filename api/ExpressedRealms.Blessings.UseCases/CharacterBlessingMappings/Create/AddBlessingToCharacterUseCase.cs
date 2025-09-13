@@ -29,7 +29,10 @@ internal sealed class AddBlessingToCharacterUseCase(
         // Covers both advantage cap (8pts) and disadvantage cap (8pts)
         const int availableExperience = StartingExperience.StartingBlessings;
 
-        var spentXp = await mappingRepository.GetSpentXpForBlessingType(model.CharacterId, model.BlessingId);
+        var spentXp = await mappingRepository.GetSpentXpForBlessingType(
+            model.CharacterId,
+            model.BlessingId
+        );
 
         var blessingLevel = await blessingRepository.GetBlessingLevel(model.BlessingLevelId);
 

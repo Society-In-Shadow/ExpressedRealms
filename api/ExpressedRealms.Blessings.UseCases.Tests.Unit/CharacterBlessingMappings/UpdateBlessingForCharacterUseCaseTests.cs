@@ -187,7 +187,8 @@ public class UpdateBlessingForCharacterUseCaseTests
 
         A.CallTo(() =>
                 _mappingRepository.GetSpentXpForBlessingType(
-                    _blessingForCharacterModel.CharacterId, _dbModel.BlessingId
+                    _blessingForCharacterModel.CharacterId,
+                    _dbModel.BlessingId
                 )
             )
             .MustHaveHappenedOnceExactly();
@@ -215,7 +216,8 @@ public class UpdateBlessingForCharacterUseCaseTests
             .Returns(new BlessingLevel() { XpCost = StartingExperience.StartingBlessings });
         A.CallTo(() =>
                 _mappingRepository.GetSpentXpForBlessingType(
-                    _blessingForCharacterModel.CharacterId, _dbModel.BlessingId
+                    _blessingForCharacterModel.CharacterId,
+                    _dbModel.BlessingId
                 )
             )
             .Returns(xpAmount);
@@ -233,7 +235,8 @@ public class UpdateBlessingForCharacterUseCaseTests
     {
         A.CallTo(() =>
                 _mappingRepository.GetSpentXpForBlessingType(
-                    _blessingForCharacterModel.CharacterId, _dbModel.BlessingId
+                    _blessingForCharacterModel.CharacterId,
+                    _dbModel.BlessingId
                 )
             )
             .Returns(StartingExperience.StartingBlessings);
