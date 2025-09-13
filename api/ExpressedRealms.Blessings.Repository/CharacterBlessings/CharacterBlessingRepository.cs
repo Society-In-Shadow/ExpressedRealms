@@ -46,15 +46,18 @@ internal sealed class CharacterBlessingRepository(
 
     public Task<int> GetExperienceSpentOnBlessingsForCharacter(int characterId)
     {
+        // Is Deleted = false is needed because the UI is filtering out deleted blessings
         return context
-            .CharacterBlessingMappings.Where(x => x.CharacterId == characterId)
+            .CharacterBlessingMappings.Where(x => x.CharacterId == characterId && x.Blessing.IsDeleted == false)
             .SumAsync(x => x.BlessingLevel.XpCost, cancellationToken);
     }
 
     public Task<int> GetExperienceAvailableToSpendOnCharacter(int characterId)
     {
+        // Is Deleted = false is needed because the UI is filtering out deleted blessings
         return context
-            .CharacterBlessingMappings.Where(x => x.CharacterId == characterId)
+            .CharacterBlessingMappings
+            .Where(x => x.CharacterId == characterId && x.Blessing.IsDeleted == false)
             .SumAsync(x => x.BlessingLevel.XpGain, cancellationToken);
     }
 
@@ -87,8 +90,9 @@ internal sealed class CharacterBlessingRepository(
             .Select(x => x.Type)
             .FirstAsync();
         
+        // Is Deleted = false is needed because the UI is filtering out deleted blessings
         var xpQuery = context.CharacterBlessingMappings.AsNoTracking()
-            .Where(x => x.Blessing.Type == type);
+            .Where(x => x.Blessing.Type == type && x.Blessing.IsDeleted == false);
 
         if (type.Equals("disadvantage", StringComparison.InvariantCultureIgnoreCase))
         {
