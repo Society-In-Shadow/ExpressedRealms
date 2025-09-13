@@ -99,7 +99,9 @@ internal sealed class CharacterBlessingRepository(
         // Is Deleted = false is needed because the UI is filtering out deleted blessings
         var xpQuery = context
             .CharacterBlessingMappings.AsNoTracking()
-            .Where(x => x.Blessing.Type == type && !x.Blessing.IsDeleted);
+            .Where(x =>
+                x.CharacterId == characterId && x.Blessing.Type == type && !x.Blessing.IsDeleted
+            );
 
         if (type.Equals("disadvantage", StringComparison.InvariantCultureIgnoreCase))
         {
