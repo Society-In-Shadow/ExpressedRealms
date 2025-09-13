@@ -29,6 +29,9 @@ const props = defineProps({
 
 onBeforeMount(async () => {
   availableXp.value = 8 - experienceInfo.getExperienceInfo(`${props.blessing.type} XP`).total;
+  if(props.blessing.type.toLowerCase() == 'disadvantage'){
+    availableXp.value = 8 - experienceInfo.getExperienceInfo(`${props.blessing.type} XP`).characterCreateMax;
+  }
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
