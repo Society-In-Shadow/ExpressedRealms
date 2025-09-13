@@ -29,6 +29,9 @@ onBeforeMount(async () => {
 
 <template>
   <div style="max-width: 650px; margin: 0 auto;">
+    <div v-if="types.length === 0">
+      No Advantages / Disadvantages for this character.
+    </div>
     <div v-for="type in types">
       <h1>{{type.name}}s</h1>
       <BlessingAccordion :blessings="type.blessings" />
