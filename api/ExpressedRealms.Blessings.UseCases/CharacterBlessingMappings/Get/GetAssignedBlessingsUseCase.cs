@@ -29,6 +29,8 @@ internal sealed class GetAssignedBlessingsUseCase(
             blessings
                 .Select(x => new CharacterBlessingReturnModel()
                 {
+                    SubCategory = x.SubCategory,
+                    Type = x.Type,
                     Id = x.Id,
                     Description = x.Description,
                     LevelDescription = x.LevelDescription,

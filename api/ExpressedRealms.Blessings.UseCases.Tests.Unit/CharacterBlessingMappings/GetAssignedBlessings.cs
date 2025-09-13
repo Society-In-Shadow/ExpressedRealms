@@ -31,6 +31,8 @@ public class GetAssignedBlessingsUseCaseTests
                 BlessingLevelId = 2,
                 Id = 14,
                 Notes = "asdfoiupouisofd",
+                Type = "asq123424df",
+                SubCategory = "aasdfsasdf",
             },
             new CharacterBlessingDto()
             {
@@ -41,6 +43,8 @@ public class GetAssignedBlessingsUseCaseTests
                 BlessingId = 3,
                 BlessingLevelId = 4,
                 Id = 15,
+                Type = "asd3q4rt78f",
+                SubCategory = "as456426rghdf",
             },
         };
 
@@ -94,6 +98,8 @@ public class GetAssignedBlessingsUseCaseTests
                 BlessingId = x.BlessingId,
                 Id = x.Id,
                 Notes = x.Notes,
+                Type = x.Type,
+                SubCategory = x.SubCategory,
             })
             .ToList();
 
