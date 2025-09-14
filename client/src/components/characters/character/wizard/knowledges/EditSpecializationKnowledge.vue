@@ -6,10 +6,7 @@ import {characterKnowledgeStore} from "@/components/characters/character/knowled
 import {useRoute} from "vue-router";
 import {inject, onBeforeMount, ref} from "vue";
 
-import type {
-  CharacterKnowledge,
-  Specialization
-} from "@/components/characters/character/knowledges/types";
+import type {CharacterKnowledge, Specialization} from "@/components/characters/character/knowledges/types";
 import FormInputTextWrapper from "@/FormWrappers/FormInputTextWrapper.vue";
 import {
   getValidationInstance
