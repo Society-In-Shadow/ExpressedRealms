@@ -13,7 +13,7 @@ const isMobile = activeBreakpoint.smaller('md');
 </script>
 
 <template>
-  <Drawer v-model:visible="wizardContentInfo.showContent" header="Drawer" v-if="isMobile" position="full" >
+  <Drawer v-model:visible="wizardContentInfo.showContent" :header="wizardContentInfo.contentComponent.headerName" v-if="isMobile" position="full" >
     <component :is="wizardContentInfo.contentComponent.component" v-bind="wizardContentInfo.contentComponent.props"/>
   </Drawer>
   <Card v-else>

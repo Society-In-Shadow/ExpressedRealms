@@ -66,6 +66,7 @@ function populateSelectedKnowledges(){
 const toggleEdit = (knowledge) => {
   wizardContentInfo.updateContent(
       {
+        headerName: 'Knowledge',
         component: EditCharacterKnowledge,
         props: { knowledge: knowledge}
       } as WizardContent
@@ -107,13 +108,11 @@ const toggleEdit = (knowledge) => {
         </div>
       </div>
     </div>
-
     
     <div class="mb-2">
       <hr v-if="characterKnowledgeData.knowledges.length !== 0">
       <h1 class="pb-0 mb-0">Choose Knowledges</h1>
       <ShowXPCosts xp-name-tag="Knowledge XP" />
-
       <div v-for="knowledgeGroup in availableKnowledgeGroups" :key="knowledgeGroup.name" class="mb-2">
         <h2 class="pb-0 mb-3">{{ knowledgeGroup.name }}</h2>
         <div v-for="knowledge in knowledgeGroup.knowledges" :key="knowledge.id" class="pl-3 pt-1 pb-1">

@@ -23,6 +23,7 @@ const props = defineProps({
 const toggleAdd = () => {
   wizardContentInfo.updateContent(
       { 
+        headerName: 'Knowledge',
         component: AddCharacterKnowledge, 
         props: { knowledge: props.knowledge}
       } as WizardContent)
