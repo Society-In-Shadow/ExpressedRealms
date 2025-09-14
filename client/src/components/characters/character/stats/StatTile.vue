@@ -5,7 +5,7 @@ import {onMounted, ref, type Ref} from "vue";
 import {useRoute} from 'vue-router'
 import Button from 'primevue/button';
 import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
-import StatLevel from "@/components/characters/character/StatLevel.vue";
+import StatLevel from "@/components/characters/character/stats/StatLevel.vue";
 import Listbox from 'primevue/listbox';
 import toasters from "@/services/Toasters";
 import {proficiencyStore} from "@/components/characters/character/proficiency/stores/proficiencyStore";

@@ -7,7 +7,7 @@ import TabPanels from 'primevue/tabpanels';
 import TabPanel from 'primevue/tabpanel';
 
 import Card from "primevue/card";
-import SmallStatDisplay from "@/components/characters/character/SmallStatDisplay.vue";
+import SmallStatDisplay from "@/components/characters/character/stats/SmallStatDisplay.vue";
 import SkillTile from "@/components/characters/character/skills/SkillTile.vue";
 import DataTable from "primevue/datatable";
 

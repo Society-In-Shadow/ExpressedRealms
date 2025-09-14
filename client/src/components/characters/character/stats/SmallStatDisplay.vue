@@ -4,7 +4,7 @@ import Fieldset from 'primevue/fieldset';
 import axios from "axios";
 import {onMounted, ref} from "vue";
 import {useRoute} from 'vue-router'
-import StatTile from "@/components/characters/character/StatTile.vue";
+import StatTile from "@/components/characters/character/stats/StatTile.vue";
 import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
 import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import {FeatureFlags, userStore} from "@/stores/userStore.ts";
