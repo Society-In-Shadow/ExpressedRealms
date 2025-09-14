@@ -4,10 +4,10 @@ import Fieldset from 'primevue/fieldset';
 import axios from "axios";
 import {onMounted, ref} from "vue";
 import {useRoute} from 'vue-router'
-import StatTile from "@/components/characters/character/StatTile.vue";
 import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
 import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import {FeatureFlags, userStore} from "@/stores/userStore.ts";
+import StatInfo from "@/components/characters/character/stats/StatInfo.vue";
 
 const route = useRoute()
 const experienceInfo = experienceStore();
@@ -30,15 +30,7 @@ onMounted(async () =>{
 function showDetailedStat(statTypeId:number){
   selectedStatType.value = statTypeId;
   showDetails.value = !showDetails.value;
-  
 }
-
-function updateStat(level:number, bonus:number){
-  var updatedStat = stats.value.find(x => x.statTypeId == selectedStatType.value);
-  updatedStat.bonus = bonus;
-  updatedStat.level = level;
-}
-
 </script>
 
 <template>
@@ -63,7 +55,7 @@ function updateStat(level:number, bonus:number){
         </div>
       </Fieldset>
     </div>
-    <StatTile v-else :stat-type-id="selectedStatType" @toggle-stat="showDetails = !showDetails" @update-stat="updateStat" />
+    <StatInfo v-else :stat-type-id="selectedStatType" @toggle-stat="showDetails = !showDetails" />
   </div>
 </template>
 

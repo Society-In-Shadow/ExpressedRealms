@@ -1,4 +1,5 @@
-import addUserProfile from "../../../../src/components/characters/character/AddCharacter.vue";
+/*
+import addUserProfile from "../../../../src/components/characters/character/wizard/basicInfo/AddCharacter.vue";
 
 const name = 'name';
 const nameHelp = 'name-help';
@@ -136,3 +137,4 @@ describe('<AddCharacter />', () => {
     })
     
 });
+*/

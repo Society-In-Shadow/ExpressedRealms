@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
 import Card from "primevue/card";
-import Button from "primevue/button";
 import {type PropType, ref} from "vue";
 import {isNullOrWhiteSpace, makeIdSafe} from "@/utilities/stringUtilities";
 import {scrollToSection} from "@/components/expressions/expressionUtilities";
@@ -11,24 +10,14 @@ import AccordionPanel from "primevue/accordionpanel";
 import AccordionContent from "primevue/accordioncontent";
 import Tag from "primevue/tag";
 import type {PowerPath} from "@/components/characters/character/powers/types.ts";
-import {characterPowerDialogs} from "@/components/characters/character/powers/services/dialogs.ts";
-import {confirmationPopup} from "@/components/characters/character/powers/services/confirmationService.ts";
-import {useRoute} from "vue-router";
 
-const route = useRoute();
-const dialogs = characterPowerDialogs()
 const props = defineProps({
   powerPath: {
     type: Object as PropType<PowerPath>,
     required: true,
-  },
-  showEdit: {
-    type: Boolean,
-    required: false
   }
 });
 
-const popups = confirmationPopup(route.params.id);
 const openKnowledgeItems = ref([]);
 
 </script>
@@ -65,19 +54,10 @@ const openKnowledgeItems = ref([]);
       </AccordionHeader>
       <AccordionContent>
         <Card :id="makeIdSafe(power.name)" class="card-body-fix">
-          <template #title v-if="props.showEdit">
-             <div class="d-flex flex-column flex-md-row align-self-center justify-content-end">
-               <div class="p-0 m-0 d-inline-flex">
-                 <Button v-if="!power.requiredPower" class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event, power.id)" />
-                 <Button class="float-end" label="Edit" @click="dialogs.showEditPower(power)" />
-               </div>
-             </div>
-           </template>
           <template #subtitle>
             <div class="pt-0 mt-0" v-html="power.description" />
           </template>
           <template #content>
-      
             <h2>Game Mechanic Effect</h2>
             <div v-html="power.gameMechanicEffect" />
       

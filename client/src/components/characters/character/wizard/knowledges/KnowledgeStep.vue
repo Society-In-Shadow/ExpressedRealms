@@ -24,11 +24,6 @@ onBeforeMount(async () => {
 })
 
 watch(() => characterKnowledgeData.knowledges, () => {
-  if(characterKnowledgeData.knowledges.length === 0)
-  {
-    noKnowledges.value = true;
-    return;
-  }
   populateAvailableKnowledges();
   populateSelectedKnowledges()
 });
@@ -64,7 +59,6 @@ function populateSelectedKnowledges(){
   })
 }
 
-const noKnowledges = ref(false);
 
 const toggleEdit = (knowledgeId: number) => {
   characterKnowledgeData.activeKnowledgeId = knowledgeId;
@@ -74,6 +68,9 @@ const toggleEdit = (knowledgeId: number) => {
 
 <template>
   <div style="max-width: 650px; margin: 0 auto;">
+    <div v-if="characterKnowledgeData.knowledges.length === 0">
+      <p>No Knowledges detected, please pick one below.</p>
+    </div>
     <h1 v-if="characterKnowledgeData.knowledges.length > 0">Selected Knowledges</h1>
     <div v-for="knowledgeGroup in selectedKnowledgeGroups" :key="knowledgeGroup.name" class="mb-2">
       <h2 class="pb-0 mb-0">{{ knowledgeGroup.name }}</h2>
@@ -111,9 +108,7 @@ const toggleEdit = (knowledgeId: number) => {
       <hr v-if="characterKnowledgeData.knowledges.length !== 0">
       <h1 class="pb-0 mb-0">Choose Knowledges</h1>
       <ShowXPCosts xp-name-tag="Knowledge XP" />
-      <div v-if="characterKnowledgeData.knowledges.length === 0">
-        <p>No Knowledges detected, please pick one below.</p>
-      </div>
+
       <div v-for="knowledgeGroup in availableKnowledgeGroups" :key="knowledgeGroup.name" class="mb-2">
         <h2 class="pb-0 mb-3">{{ knowledgeGroup.name }}</h2>
         <div v-for="knowledge in knowledgeGroup.knowledges" :key="knowledge.id" class="pl-3 pt-1 pb-1">

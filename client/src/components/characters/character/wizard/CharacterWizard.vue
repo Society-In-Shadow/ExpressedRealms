@@ -76,7 +76,7 @@ const selectSection = (name: string) => {
 };
 
 const redirectToEdit = () => {
-  router.push({name: 'editCharacter', params: {id: route.params.id}})
+  router.push({name: 'characterSheet', params: {id: route.params.id}})
 }
 </script>
 

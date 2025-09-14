@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import Panel from "primevue/panel";
-import {computed, onMounted, ref, type Ref} from "vue";
+import {onMounted, ref, type Ref} from "vue";
 import {useRoute} from 'vue-router'
 import Accordion from 'primevue/accordion';
 import AccordionPanel from 'primevue/accordionpanel';
@@ -12,24 +12,13 @@ import AccordionContent from 'primevue/accordioncontent';
 import type {
   CharacterSkillsResponse
 } from "@/components/characters/character/skills/interfaces/CharacterSkillsResponse";
-import EditSkillDetail from "@/components/characters/character/skills/EditSkillDetail.vue";
-import {skillStore} from "@/components/characters/character/skills/Stores/skillStore";
-import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
-import {FeatureFlags, userStore} from "@/stores/userStore.ts";
+import SkillDetail from "@/components/characters/character/skills/SkillDetail.vue";
 
 const route = useRoute()
 
 const offensiveSkills:Ref<Array<CharacterSkillsResponse>> = ref([]);
 const defensiveSkills:Ref<Array<CharacterSkillsResponse>> = ref([]);
-const maxXP = 1000;
-const appliedXp = ref(0);
-const skillInfo = skillStore();
 const openItems = ref([]);
-const experienceInfo = experienceStore();
-
-const remainingXP = computed(() => maxXP - appliedXp.value);
-const showCharacterWizard = ref(false);
-const userInfo = userStore();
 
 const skillTypes = ref([
   { name: "Offensive Skills",  skills: offensiveSkills },
@@ -38,7 +27,6 @@ const skillTypes = ref([
 
 onMounted(async () =>{
   getEditOptions();
-  showCharacterWizard.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowCharacterWizard);
 });
 
 function getEditOptions() {
@@ -46,24 +34,19 @@ function getEditOptions() {
       .then((response) => {
         offensiveSkills.value = response.data.filter((x: CharacterSkillsResponse) => x.skillSubTypeId === 1);
         defensiveSkills.value = response.data.filter((x: CharacterSkillsResponse) => x.skillSubTypeId === 2);
-        appliedXp.value = response.data.reduce((sum: number, item: CharacterSkillsResponse) => sum + item.totalXp, 0);
       })
 }
 
 </script>
 
 <template>
-  <div class="text-right pb-3" v-if="!showCharacterWizard && experienceInfo.showAllExperience">{{ experienceInfo.experienceBreakdown.skillsXp}} Total XP - {{experienceInfo.experienceBreakdown.setupSkillsXp}} Creation XP = {{experienceInfo.experienceBreakdown.skillsXp - experienceInfo.experienceBreakdown.setupSkillsXp}} XP</div>
-  <div class="d-inline-flex flex-wrap justify-content-center column-gap-3 row-gap-1 w-100">
+    <div class="d-inline-flex flex-wrap justify-content-center column-gap-3 row-gap-1 w-100">
     <Panel v-for="skillType in skillTypes" class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="width: 25em">
       <template #header>
         <div class="row">
           <h3 class="col pb-0 mb-0 mt-0 pt-0">
             {{ skillType.name }}
           </h3>
-          <div v-if="skillInfo.showExperience" class="col text-right">
-            {{ remainingXP }} EXP
-          </div>
         </div>
       </template>
       <Accordion :value="openItems" multiple :lazy="true" expand-icon="pi pi-info-circle" collapse-icon="pi pi-times-circle">
@@ -80,7 +63,7 @@ function getEditOptions() {
             <p class="m-0">
               {{ skill.description }}
             </p>
-            <EditSkillDetail :skill-type-id="skill.skillTypeId" :selected-level-id="skill.levelId" :remaining-xp="remainingXP" @update-level="getEditOptions()" />
+            <SkillDetail :skill-type-id="skill.skillTypeId" :selected-level-id="skill.levelId" />
           </AccordionContent>
         </AccordionPanel>
       </Accordion>
