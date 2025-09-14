@@ -13,6 +13,10 @@ export const wizardContentStore =
             updateContent(content: WizardContent){
                 this.contentComponent = content;
                 this.showContent = true;
+            },
+            hideContent(){
+                this.showContent = false;
+                this.contentComponent = {} as WizardContent;
             }
         }
     });
