@@ -141,7 +141,6 @@ const redirectToEdit = () => {
     </div>
     <div class="col custom-toc col-12 col-md">
       <WizardContent></WizardContent>
-      <div id="item-modification-section"></div>
     </div>
   </div>
 

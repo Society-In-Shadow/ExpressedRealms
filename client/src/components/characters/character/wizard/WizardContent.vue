@@ -7,7 +7,6 @@ import {wizardContentStore} from "@/components/characters/character/wizard/store
 
 const wizardContentInfo = wizardContentStore();
 const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5);
-
 const isMobile = activeBreakpoint.smaller('md');
 
 </script>
@@ -25,7 +24,3 @@ const isMobile = activeBreakpoint.smaller('md');
     </template>
   </Card>
 </template>
-
-<style scoped>
-
-</style>
