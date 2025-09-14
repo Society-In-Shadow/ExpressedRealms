@@ -1,5 +1,6 @@
 import {defineStore} from 'pinia'
 import type {WizardContent} from "@/components/characters/character/wizard/types.ts";
+import {markRaw} from "vue";
 
 export const wizardContentStore =
     defineStore('wizardContentStore', {
@@ -11,7 +12,11 @@ export const wizardContentStore =
         },
         actions: {
             updateContent(content: WizardContent){
-                this.contentComponent = content;
+                this.contentComponent = {
+                    ...content,
+                    component: markRaw(content.component)
+                };
+
                 this.showContent = true;
             },
             hideContent(){

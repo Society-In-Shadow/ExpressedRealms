@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Button from 'primevue/button';
 import Card from 'primevue/card';
-import {computed, defineAsyncComponent, h, onBeforeMount, ref, watch} from "vue";
+import {computed, defineAsyncComponent, h, markRaw, onBeforeMount, ref, watch} from "vue";
 import KnowledgeStep from "@/components/characters/character/wizard/knowledges/KnowledgeStep.vue";
 import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import PowerStep from "@/components/characters/character/wizard/powers/PowerStep.vue";
@@ -31,13 +31,13 @@ const isMobile = activeBreakpoint.smaller('md');
 const wizardContentData = wizardContentStore();
 
 const sections = ref([
-  { name: 'Getting Started', isDisabled: false, component: createPlaceholderView('Getting Started', 'Getting Started content coming soon...') },
-  { name: 'Stats', isDisabled: isAdd, component: defineAsyncComponent(async () => StatStep) },
-  { name: 'Knowledges', isDisabled: isAdd, component: defineAsyncComponent(async () => KnowledgeStep)},
-  { name: 'Powers', isDisabled: isAdd, component: defineAsyncComponent(async () => PowerStep) },
-  { name: 'Skills', isDisabled: isAdd, component: defineAsyncComponent(async () => SkillStep) },
-  { name: 'Proficiencies', isDisabled: isAdd, component: defineAsyncComponent(async () => ProficiencyTableTile) },
-  { name: 'Experience Breakdown', isDisabled: isAdd, component: defineAsyncComponent(async () => OverallExperience) },
+  { name: 'Getting Started', isDisabled: false, component: markRaw(createPlaceholderView('Getting Started', 'Getting Started content coming soon...')) },
+  { name: 'Stats', isDisabled: isAdd, component: markRaw(StatStep) },
+  { name: 'Knowledges', isDisabled: isAdd, component: markRaw(KnowledgeStep) },
+  { name: 'Powers', isDisabled: isAdd, component: markRaw(PowerStep) },
+  { name: 'Skills', isDisabled: isAdd, component: markRaw(SkillStep) },
+  { name: 'Proficiencies', isDisabled: isAdd, component: markRaw(ProficiencyTableTile) },
+  { name: 'Experience Breakdown', isDisabled: isAdd, component: markRaw(OverallExperience) },
 ]);
 
 onBeforeMount(async () => {
