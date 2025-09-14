@@ -101,6 +101,7 @@ export const characterBlessingsStore =
                     .then(async () => {
                         await experienceInfo.updateExperience(characterId);
                         await this.getCharacterBlessings(characterId);
+                        wizardContentInfo.hideContent();
                         toaster.success("Successfully Deleted Advantage / Disadvantage!");
                     });
             },

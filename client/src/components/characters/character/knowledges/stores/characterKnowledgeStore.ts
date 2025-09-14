@@ -85,6 +85,7 @@ export const characterKnowledgeStore =
                     .then(async () => {
                         await experienceInfo.updateExperience(characterId);
                         await this.getCharacterKnowledges(characterId);
+                        wizardContentInfo.hideContent();
                         toaster.success("Successfully Deleted Knowledge!");
                     });
             },
