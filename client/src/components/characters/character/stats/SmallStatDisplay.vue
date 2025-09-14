@@ -30,15 +30,7 @@ onMounted(async () =>{
 function showDetailedStat(statTypeId:number){
   selectedStatType.value = statTypeId;
   showDetails.value = !showDetails.value;
-  
 }
-
-function updateStat(level:number, bonus:number){
-  var updatedStat = stats.value.find(x => x.statTypeId == selectedStatType.value);
-  updatedStat.bonus = bonus;
-  updatedStat.level = level;
-}
-
 </script>
 
 <template>
@@ -63,7 +55,7 @@ function updateStat(level:number, bonus:number){
         </div>
       </Fieldset>
     </div>
-    <StatTile v-else :stat-type-id="selectedStatType" @toggle-stat="showDetails = !showDetails" @update-stat="updateStat" />
+    <StatTile v-else :stat-type-id="selectedStatType" @toggle-stat="showDetails = !showDetails" />
   </div>
 </template>
 
