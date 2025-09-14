@@ -11,7 +11,10 @@ import EditCharacterKnowledge from "@/components/characters/character/wizard/kno
 import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vue";
 import type {CharacterKnowledgeGroup, Knowledge, KnowledgeGroup} from "@/components/knowledges/types.ts";
 import type {CharacterKnowledge} from "@/components/characters/character/knowledges/types.ts";
+import type {WizardContent} from "@/components/characters/character/wizard/types.ts";
+import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
 
+const wizardContentInfo = wizardContentStore();
 const knowledgeData = knowledgeStore();
 const characterKnowledgeData = characterKnowledgeStore();
 const route = useRoute();
@@ -60,8 +63,13 @@ function populateSelectedKnowledges(){
 }
 
 
-const toggleEdit = (knowledgeId: number) => {
-  characterKnowledgeData.activeKnowledgeId = knowledgeId;
+const toggleEdit = (knowledge) => {
+  wizardContentInfo.updateContent(
+      {
+        component: EditCharacterKnowledge,
+        props: { knowledge: knowledge}
+      } as WizardContent
+  )
 }
 
 </script>
@@ -94,10 +102,7 @@ const toggleEdit = (knowledgeId: number) => {
             </div>
           </div>
           <div>
-            <Button label="View" size="small" @click="toggleEdit(knowledge.knowledge.id)" />
-            <Teleport v-if="characterKnowledgeData.activeKnowledgeId == knowledge.knowledge.id" to="#item-modification-section">
-              <EditCharacterKnowledge :knowledge="knowledge" />
-            </Teleport>
+            <Button label="View" size="small" @click="toggleEdit(knowledge)" />
           </div>
         </div>
       </div>

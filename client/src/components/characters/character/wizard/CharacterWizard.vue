@@ -16,6 +16,7 @@ import AddCharacter from "@/components/characters/character/wizard/basicInfo/Add
 import OverallExperience from "@/components/characters/character/OverallExperience.vue";
 import BlessingStep from "@/components/characters/character/wizard/blessings/BlessingStep.vue";
 import {FeatureFlags, userStore} from "@/stores/userStore.ts";
+import WizardContent from "@/components/characters/character/wizard/WizardContent.vue";
 
 const xpData = experienceStore();
 const route = useRoute()
@@ -115,11 +116,8 @@ const redirectToEdit = () => {
       </Card>
     </div>
     <div class="col custom-toc col-12 col-md">
-      <Card>
-        <template #content>
-          <div id="item-modification-section"></div>
-        </template>
-      </Card>
+      <WizardContent></WizardContent>
+      <div id="item-modification-section"></div>
     </div>
   </div>
 

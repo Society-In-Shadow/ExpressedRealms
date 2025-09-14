@@ -5,7 +5,7 @@ import Button from "primevue/button";
 import {getValidationInstance} from "@/components/characters/character/knowledges/validations/knowledgeValidations";
 import {characterKnowledgeStore} from "@/components/characters/character/knowledges/stores/characterKnowledgeStore";
 import {useRoute} from "vue-router";
-import {onBeforeMount, type PropType, ref} from "vue";
+import {onBeforeMount, type PropType, ref, watch} from "vue";
 import type {KnowledgeOptions} from "@/components/characters/character/knowledges/types";
 import Message from "primevue/message";
 import type {Knowledge} from "@/components/knowledges/types.ts";
@@ -30,14 +30,21 @@ const props = defineProps({
 
 const isUnknownKnowledge = ref(props.knowledge.typeName === 'Unknown');
 
+watch(props.knowledge, async () => {
+  await loadInfo()
+})
 
 onBeforeMount(async () => {
+  await loadInfo()
+});
+
+async function loadInfo(){
   await store.getKnowledgeLevels(route.params.id);
   store.knowledgeLevels.forEach(function(level:KnowledgeOptions) {
     const xpCost = isUnknownKnowledge.value ? level.totalUnknownXpCost : level.totalGeneralXpCost;
     level.disabled = xpCost > store.currentExperience;
   });
-})
+}
 
 const onSubmit = form.handleSubmit(async (values) => {
   await store.addKnowledge(values, route.params.id, props.knowledge.id);

@@ -26,7 +26,6 @@ export const characterKnowledgeStore =
                 knowledges: [] as Array<CharacterKnowledge>,
                 knowledgeLevels: [] as Array<KnowledgeOptions>,
                 currentExperience: 0 as number,
-                activeKnowledgeId: 0 as number,
             }
         },    
         actions: {
