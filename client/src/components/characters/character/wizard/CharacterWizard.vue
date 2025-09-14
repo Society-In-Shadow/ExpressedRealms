@@ -17,12 +17,18 @@ import OverallExperience from "@/components/characters/character/OverallExperien
 import BlessingStep from "@/components/characters/character/wizard/blessings/BlessingStep.vue";
 import {FeatureFlags, userStore} from "@/stores/userStore.ts";
 import WizardContent from "@/components/characters/character/wizard/WizardContent.vue";
+import {breakpointsBootstrapV5, useBreakpoints} from "@vueuse/core";
+import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
 
 const xpData = experienceStore();
 const route = useRoute()
 const router = useRouter();
 const userInfo = userStore();
 const isAdd = computed(() =>route.name == 'addWizard');
+
+const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5);
+const isMobile = activeBreakpoint.smaller('md');
+const wizardContentData = wizardContentStore();
 
 const sections = ref([
   { name: 'Getting Started', isDisabled: false, component: createPlaceholderView('Getting Started', 'Getting Started content coming soon...') },
@@ -70,11 +76,19 @@ function createPlaceholderView(name: string, text: string) : Promise<any> {
   }));
 }
 
-const selectedSection = ref<string>('Basic Info');
+const selectedSection = ref<string>('');
 const currentView = computed(() => sections.value.filter(x => x.name == selectedSection.value)[0].component);
+const hasSelectedSection = computed(() => selectedSection.value !== '');
+
 const selectSection = (name: string) => {
+  wizardContentData.hideContent();
   selectedSection.value = name;
 };
+
+const resetSection = () => {
+  wizardContentData.hideContent();
+  selectedSection.value = '';
+}
 
 const redirectToEdit = () => {
   router.push({name: 'characterSheet', params: {id: route.params.id}})
@@ -85,11 +99,14 @@ const redirectToEdit = () => {
   <div class="d-none">
     <DataTable />
   </div>
-  <div class="d-flex justify-content-end" v-if="!isAdd">
+  <div class="d-flex justify-content-between" v-if="!isAdd">
+    <div>
+      <Button v-if="isMobile && hasSelectedSection" label="Back to Sections" @click="resetSection"/>
+    </div>
     <SecondaryProficiencies></SecondaryProficiencies>
   </div>
   <div class="row pt-3">
-    <div class="col col-md-2 custom-toc">
+    <div class="col col-md-2 custom-toc" v-if="!(isMobile && hasSelectedSection) || !isMobile">
       <Card>
         <template #content>
           <div v-for="section in sections" class="text-right p-2">
@@ -107,7 +124,14 @@ const redirectToEdit = () => {
         </template>
       </Card>
     </div>
-    <div class="col custom-toc">
+    <div class="col custom-toc" v-if="!isMobile &&!hasSelectedSection">
+      <Card>
+        <template #content>
+          <div>Please select a section on the left to get started!</div>
+        </template>
+      </Card>
+    </div>
+    <div class="col custom-toc" v-if="hasSelectedSection">
       <Card>
         <template #content>
           <!-- Dynamically load the chosen section in the middle column -->
