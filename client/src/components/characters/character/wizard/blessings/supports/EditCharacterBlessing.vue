@@ -3,7 +3,7 @@
 import FormTextAreaWrapper from "@/FormWrappers/FormTextAreaWrapper.vue";
 import Button from "primevue/button";
 import {useRoute} from "vue-router";
-import {onBeforeMount, type PropType, ref} from "vue";
+import {onBeforeMount, type PropType, ref, watch} from "vue";
 import type {Blessing, BlessingLevel} from "@/components/blessings/types.ts";
 import RadioButton from "primevue/radiobutton";
 import {
@@ -33,6 +33,14 @@ const currentLevel = ref<BlessingLevel>({});
 const availableXp = ref(0);
 
 onBeforeMount(async () => {
+  await loadData();
+});
+
+watch(() => props.blessing, async () => {
+  await loadData();
+})
+
+const loadData = async () => {
   const currentBlessing = store.blessings.filter(x => x.blessingId == props.blessing?.id)[0];
   currentLevel.value = props.blessing.levels.filter(x => x.id == currentBlessing.blessingLevelId)[0];
   mappingId.value = currentBlessing.id;
@@ -41,8 +49,7 @@ onBeforeMount(async () => {
   if(props.blessing.type.toLowerCase() == 'disadvantage'){
     availableXp.value = 8 - experienceInfo.getExperienceInfo(`${props.blessing.type} XP`).characterCreateMax + currentLevel.value.xpGain;
   }
-  
-})
+}
 
 const onSubmit = form.handleSubmit(async (values) => {
   const currentBlessing = store.blessings.filter(x => x.blessingId == props.blessing?.id)[0];
@@ -68,7 +75,7 @@ function disableOption(level:BlessingLevel){
           {{ props.blessing.name }}
         </h2>
       </div>
-      <div v-if="!props.isReadOnly" class="p-0 m-2 d-inline-flex align-items-start align-items-center gap-2">
+      <div class="p-0 m-2 d-inline-flex align-items-start align-items-center gap-2">
         <Button label="Delete" size="small" severity="danger" @click="popupService.deleteConfirmation($event, mappingId )" />
         <Button label="Update" size="small" type="submit" />
       </div>

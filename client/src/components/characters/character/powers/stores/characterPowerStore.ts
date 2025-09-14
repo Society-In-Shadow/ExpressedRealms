@@ -9,8 +9,10 @@ import type {
 import type {CharacterPowerForm} from "@/components/characters/character/powers/validations/powerValidations.ts";
 import {characterStore} from "@/components/characters/character/stores/characterStore.ts";
 import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
 
 const experienceInfo = experienceStore();
+const wizardContentInfo = wizardContentStore();
 
 export const characterPowersStore =
     defineStore('characterPowers', {
@@ -19,8 +21,7 @@ export const characterPowersStore =
                 isLoading: true as boolean,
                 powers: [] as Array<PowerPath>,
                 selectablePowers: [] as Array<PowerPath>,
-                currentExperience: 0 as number,
-                activePowerId: 0 as number,
+                currentExperience: 0 as number
             }
         },
         actions: {
@@ -54,6 +55,7 @@ export const characterPowersStore =
                         await this.getCharacterPowers(characterId);
                         await this.getSelectableCharacterPowers(characterId);
                         toaster.success("Successfully Added Power!");
+                        wizardContentInfo.hideContent();
                     });
             },
             editPower: async function (values:CharacterPowerForm, characterId: number, powerId: number): Promise<void> {

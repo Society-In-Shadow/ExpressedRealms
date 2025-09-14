@@ -4,9 +4,10 @@ import {type PropType} from "vue";
 import type {Knowledge} from "@/components/knowledges/types";
 import Button from "primevue/button";
 import AddCharacterKnowledge from "@/components/characters/character/wizard/knowledges/AddCharacterKnowledge.vue";
-import {characterKnowledgeStore} from "@/components/characters/character/knowledges/stores/characterKnowledgeStore.ts";
+import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
+import type {WizardContent} from "@/components/characters/character/wizard/types.ts";
 
-const characterKnowledgeData = characterKnowledgeStore();
+const wizardContentInfo = wizardContentStore();
 
 const props = defineProps({
   knowledge: {
@@ -20,7 +21,12 @@ const props = defineProps({
 });
 
 const toggleAdd = () => {
-  characterKnowledgeData.activeKnowledgeId = props.knowledge.id;
+  wizardContentInfo.updateContent(
+      { 
+        headerName: 'Knowledge',
+        component: AddCharacterKnowledge, 
+        props: { knowledge: props.knowledge}
+      } as WizardContent)
 }
 
 </script>
@@ -36,7 +42,4 @@ const toggleAdd = () => {
       <Button class="float-end" size="small" label="View" @click="toggleAdd" />
     </div>
   </div>
-  <Teleport v-if="characterKnowledgeData.activeKnowledgeId == props.knowledge?.id" to="#item-modification-section">
-    <AddCharacterKnowledge :knowledge="props.knowledge" />
-  </Teleport>
 </template>

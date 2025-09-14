@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import Panel from "primevue/panel";
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted} from "vue";
 import {useRoute} from 'vue-router'
 import type {
   CharacterSkillsResponse
@@ -13,11 +13,15 @@ import Button from "primevue/button";
 import DataTable from "primevue/datatable";
 import EditSkillDetail from "@/components/characters/character/wizard/skills/supporting/EditSkillDetail.vue";
 import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vue";
+import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
+import type {WizardContent} from "@/components/characters/character/wizard/types.ts";
+import {breakpointsBootstrapV5, useBreakpoints} from "@vueuse/core";
 
 const route = useRoute()
 const skillData = skillStore();
 const skillInfo = skillStore();
-const selectedSkill = ref<CharacterSkillsResponse | undefined>();
+const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5);
+const isMobile = activeBreakpoint.smaller('md');
 
 const skillTypes = computed( () => {
   return [
@@ -25,7 +29,6 @@ const skillTypes = computed( () => {
     { name: "Defensive Skills", skills: skillData.defensiveSkills }
   ];
 });
-
 
 onMounted(async() =>{
   await getEditOptions();
@@ -35,16 +38,24 @@ async function getEditOptions() {
   await skillData.getSkills(route.params.id);
 }
 
-function showDetailedStat(skill: CharacterSkillsResponse){
-  selectedSkill.value = skill;
+
+const wizardContentInfo = wizardContentStore();
+const updateWizardContent = (skill: CharacterSkillsResponse) => {
+  wizardContentInfo.updateContent(
+      {
+        headerName: 'Edit Skill',
+        component: EditSkillDetail,
+        props: { skill: skill }
+      } as WizardContent
+  )
 }
 
 </script>
 
 <template>
   <ShowXPCosts xp-name-tag="Skills XP" />
-  <div class="d-inline-flex flex-wrap justify-content-center column-gap-3 row-gap-1 w-100">
-    <Panel v-for="skillType in skillTypes" class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch">
+  <div>
+    <Panel v-for="skillType in skillTypes" class="mb-3 flex-shrink-1">
       <template #header>
         <div class="row">
           <h3 class="col pb-0 mb-0 mt-0 pt-0">
@@ -56,6 +67,11 @@ function showDetailedStat(skill: CharacterSkillsResponse){
         </div>
       </template>
       <DataTable :value="skillType.skills" data-key="statTypeId">
+        <Column v-if="isMobile">
+          <template #body="slotProps">
+            <Button class="float-end " size="small" label="View" @click="updateWizardContent(slotProps.data)"/>
+          </template>
+        </Column>
         <Column field="name" header="Name">
           <template #body="slotProps">
             <SkeletonWrapper height="1.5rem" width="2rem" :show-skeleton="skillData.isLoadingSkills">
@@ -77,16 +93,13 @@ function showDetailedStat(skill: CharacterSkillsResponse){
             </SkeletonWrapper>
           </template>
         </Column>
-        <Column>
+        <Column v-if="!isMobile">
           <template #body="slotProps">
-            <Button class="float-end " size="small" label="View" @click="showDetailedStat(slotProps.data)"/>
+            <Button class="float-end " size="small" label="View" @click="updateWizardContent(slotProps.data)"/>
           </template>
         </Column>
       </DataTable>
     </Panel>
-    <teleport to="#item-modification-section" v-if="selectedSkill">
-      <EditSkillDetail :skill="selectedSkill" />
-    </teleport>
   </div>
 </template>
 

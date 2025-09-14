@@ -21,15 +21,6 @@ onBeforeMount(async () => {
 
 const noPowers = ref(false);
 
-const items = [
-  {
-    label: '2x6 Tile Letter Cutout',
-    command: () => {
-      characterKnowledgeData.downloadPowerCards(route.params.id, 'foo', false)
-    }
-  },
-];
-
 </script>
 
 <template>

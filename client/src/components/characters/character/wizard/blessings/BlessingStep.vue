@@ -9,10 +9,12 @@ import {
   characterBlessingsStore
 } from "@/components/characters/character/wizard/blessings/stores/characterBlessingStore.ts";
 import {useRoute} from "vue-router";
-import type {SubCategory} from "@/components/blessings/types.ts";
+import type {Blessing, SubCategory} from "@/components/blessings/types.ts";
 import Button from "primevue/button";
 import EditCharacterBlessing
   from "@/components/characters/character/wizard/blessings/supports/EditCharacterBlessing.vue";
+import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
+import type {WizardContent} from "@/components/characters/character/wizard/types.ts";
 
 const route = useRoute();
 const store = blessingsStore();
@@ -55,8 +57,15 @@ const filteredTypes = computed(() => {
   
 })
 
-const toggleEdit = (blessingId: number) => {
-  characterBlessingData.activeBlessingId = blessingId;
+const wizardContentInfo = wizardContentStore();
+const updateWizardContent = (blessing: Blessing) => {
+  wizardContentInfo.updateContent(
+      {
+        headerName: 'Edit Blessing',
+        component: EditCharacterBlessing,
+        props: { blessing: blessing }
+      } as WizardContent
+  )
 }
 
 </script>
@@ -73,10 +82,7 @@ const toggleEdit = (blessingId: number) => {
             <h3 class="p-0 m-0">{{blessing.name}}</h3>
           </div>
           <div class="p-0 m-2">
-            <Button label="View" size="small" @click="toggleEdit(blessing.id)" />
-            <Teleport v-if="characterBlessingData.activeBlessingId == blessing.id" to="#item-modification-section">
-              <EditCharacterBlessing :blessing="blessing" />
-            </Teleport>
+            <Button label="View" size="small" @click="updateWizardContent(blessing)" />
           </div>
         </div>
       </div>

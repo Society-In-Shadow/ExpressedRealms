@@ -5,19 +5,13 @@ import {onMounted, ref, type Ref, watch} from "vue";
 import {useRoute} from 'vue-router'
 import Button from 'primevue/button';
 import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
-import toasters from "@/services/Toasters";
-import {proficiencyStore} from "@/components/characters/character/proficiency/stores/proficiencyStore";
-import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import type {LevelInfo, Stat} from "@/components/characters/character/wizard/stats/types.ts";
+import type {Stat} from "@/components/characters/character/wizard/stats/types.ts";
+import {statStore} from "@/components/characters/character/wizard/stats/stores/statStore.ts";
 
 const route = useRoute()
-
-const emit = defineEmits<{
-  toggleStat: [],
-  updateStat: [level: number, bonus: number]
-}>();
+const statInfo = statStore();
 
 const props = defineProps({
   statTypeId: {
@@ -34,11 +28,8 @@ const newStat:Ref<Stat> = ref({
   statLevelInfo: {}
 });
 
-const statLevels:Ref<Array<LevelInfo>> = ref([]);
 const loading = ref(true);
 const oldValue = ref(props.statTypeId);
-const profStore = proficiencyStore();
-const experienceInfo = experienceStore();
 const expandedRows = ref({});
 
 onMounted(async () =>{
@@ -47,8 +38,8 @@ onMounted(async () =>{
 
 async function reloadData(){
   await reloadStatInfo();
-  await getEditOptions();
-  expandedRows.value = Object.fromEntries(statLevels.value.map(p => [p.level, true]));
+  await statInfo.getEditOptions(stat.value.id);
+  expandedRows.value = Object.fromEntries(statInfo.statLevels.map(p => [p.level, true]));
 }
 
 watch(() => props.statTypeId, (newValue, oldValue) => {
@@ -64,44 +55,16 @@ async function reloadStatInfo() {
       })
 }
 
-async function getEditOptions() {
-  await axios.get(`/stats/${props.statTypeId}`)
-      .then((response) => {
-        
-        const selectedXP = response.data.find(x => x.level == stat.value.statLevel).totalXP;
-        
-        response.data.forEach(function(level:LevelInfo) {
-          level.disabled = level.totalXP > stat.value.availableXP + selectedXP && level.level > stat.value.statLevel;
-        });
-
-        statLevels.value = response.data;
-      })
-}
-
-function handleStatUpdate(stat:Stat){
+async function handleStatUpdate(stat:Stat){
   // Don't allow them to unselect the option
   if(stat.statLevel == undefined)
   {
     stat.statLevel = oldValue.value;
     return;
   }
-  axios.put(`/characters/${route.params.id}/stat/${props.statTypeId}`, {
-    levelTypeId: newStat.value.statLevelInfo.level,
-    statTypeId: props.statTypeId,
-    characterId: route.params.id
-  }).then(async function(){
-    stat.statLevelInfo = statLevels.value.find(x => x.level == stat.statLevel);
-
-    oldValue.value = stat.statLevel;
-    
-    emit("updateStat", stat.statLevelInfo.level, stat.statLevelInfo.bonus);
-    toasters.success("Successfully updated " + stat.name + " to level " + stat.statLevel);
-    experienceInfo.updateExperience(route.params.id);
-    profStore.getUpdateProficiencies(route.params.id);
-    await reloadData();
-  }).catch(function() {
-    stat.statLevel = oldValue.value;
-  })
+  
+  await statInfo.updateStat(stat, route.params.id, props.statTypeId);
+  oldValue.value = stat.statLevel;
 
 }
 
@@ -134,7 +97,7 @@ function handleStatUpdate(stat:Stat){
       <span>Experience Cost: {{newStat.statLevelInfo.totalXP > stat.statLevelInfo.totalXP ? "-" : "+"}}{{ Math.abs(newStat.statLevelInfo.totalXP - stat.statLevelInfo.totalXP) }}</span>
       <span>Available Experience: Infinite</span>
     </h3>
-    <DataTable v-model:selection="newStat.statLevelInfo" v-model:expandedRows="expandedRows" :value="statLevels" selection-mode="single" data-key="level">
+    <DataTable v-model:selection="newStat.statLevelInfo" v-model:expandedRows="expandedRows" :value="statInfo.statLevels" selection-mode="single" data-key="level">
       <Column selection-mode="single" headerStyle="width: 3rem"></Column>
       <Column field="level" header="Level">
         <template #body="slotProps">

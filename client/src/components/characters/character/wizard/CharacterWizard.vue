@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Button from 'primevue/button';
 import Card from 'primevue/card';
-import {computed, defineAsyncComponent, h, onBeforeMount, ref, watch} from "vue";
+import {computed, defineAsyncComponent, h, markRaw, onBeforeMount, ref, watch} from "vue";
 import KnowledgeStep from "@/components/characters/character/wizard/knowledges/KnowledgeStep.vue";
 import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import PowerStep from "@/components/characters/character/wizard/powers/PowerStep.vue";
@@ -16,6 +16,9 @@ import AddCharacter from "@/components/characters/character/wizard/basicInfo/Add
 import OverallExperience from "@/components/characters/character/OverallExperience.vue";
 import BlessingStep from "@/components/characters/character/wizard/blessings/BlessingStep.vue";
 import {FeatureFlags, userStore} from "@/stores/userStore.ts";
+import WizardContent from "@/components/characters/character/wizard/WizardContent.vue";
+import {breakpointsBootstrapV5, useBreakpoints} from "@vueuse/core";
+import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
 
 const xpData = experienceStore();
 const route = useRoute()
@@ -23,14 +26,18 @@ const router = useRouter();
 const userInfo = userStore();
 const isAdd = computed(() =>route.name == 'addWizard');
 
+const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5);
+const isMobile = activeBreakpoint.smaller('md');
+const wizardContentData = wizardContentStore();
+
 const sections = ref([
-  { name: 'Getting Started', isDisabled: false, component: createPlaceholderView('Getting Started', 'Getting Started content coming soon...') },
-  { name: 'Stats', isDisabled: isAdd, component: defineAsyncComponent(async () => StatStep) },
-  { name: 'Knowledges', isDisabled: isAdd, component: defineAsyncComponent(async () => KnowledgeStep)},
-  { name: 'Powers', isDisabled: isAdd, component: defineAsyncComponent(async () => PowerStep) },
-  { name: 'Skills', isDisabled: isAdd, component: defineAsyncComponent(async () => SkillStep) },
-  { name: 'Proficiencies', isDisabled: isAdd, component: defineAsyncComponent(async () => ProficiencyTableTile) },
-  { name: 'Experience Breakdown', isDisabled: isAdd, component: defineAsyncComponent(async () => OverallExperience) },
+  { name: 'Getting Started', isDisabled: false, component: markRaw(createPlaceholderView('Getting Started', 'Getting Started content coming soon...')) },
+  { name: 'Stats', isDisabled: isAdd, component: markRaw(StatStep) },
+  { name: 'Knowledges', isDisabled: isAdd, component: markRaw(KnowledgeStep) },
+  { name: 'Powers', isDisabled: isAdd, component: markRaw(PowerStep) },
+  { name: 'Skills', isDisabled: isAdd, component: markRaw(SkillStep) },
+  { name: 'Proficiencies', isDisabled: isAdd, component: markRaw(ProficiencyTableTile) },
+  { name: 'Experience Breakdown', isDisabled: isAdd, component: markRaw(OverallExperience) },
 ]);
 
 onBeforeMount(async () => {
@@ -69,11 +76,19 @@ function createPlaceholderView(name: string, text: string) : Promise<any> {
   }));
 }
 
-const selectedSection = ref<string>('Basic Info');
+const selectedSection = ref<string>('');
 const currentView = computed(() => sections.value.filter(x => x.name == selectedSection.value)[0].component);
+const hasSelectedSection = computed(() => selectedSection.value !== '');
+
 const selectSection = (name: string) => {
+  wizardContentData.hideContent();
   selectedSection.value = name;
 };
+
+const resetSection = () => {
+  wizardContentData.hideContent();
+  selectedSection.value = '';
+}
 
 const redirectToEdit = () => {
   router.push({name: 'characterSheet', params: {id: route.params.id}})
@@ -84,11 +99,14 @@ const redirectToEdit = () => {
   <div class="d-none">
     <DataTable />
   </div>
-  <div class="d-flex justify-content-end" v-if="!isAdd">
+  <div class="d-flex justify-content-between" v-if="!isAdd">
+    <div>
+      <Button v-if="isMobile && hasSelectedSection" label="Back to Sections" @click="resetSection"/>
+    </div>
     <SecondaryProficiencies></SecondaryProficiencies>
   </div>
   <div class="row pt-3">
-    <div class="col col-md-2 custom-toc">
+    <div class="col col-md-2 custom-toc" v-if="!(isMobile && hasSelectedSection) || !isMobile">
       <Card>
         <template #content>
           <div v-for="section in sections" class="text-right p-2">
@@ -106,7 +124,14 @@ const redirectToEdit = () => {
         </template>
       </Card>
     </div>
-    <div class="col custom-toc">
+    <div class="col custom-toc" v-if="!isMobile &&!hasSelectedSection">
+      <Card>
+        <template #content>
+          <div>Please select a section on the left to get started!</div>
+        </template>
+      </Card>
+    </div>
+    <div class="col custom-toc" v-if="hasSelectedSection">
       <Card>
         <template #content>
           <!-- Dynamically load the chosen section in the middle column -->
@@ -115,11 +140,7 @@ const redirectToEdit = () => {
       </Card>
     </div>
     <div class="col custom-toc col-12 col-md">
-      <Card>
-        <template #content>
-          <div id="item-modification-section"></div>
-        </template>
-      </Card>
+      <WizardContent></WizardContent>
     </div>
   </div>
 

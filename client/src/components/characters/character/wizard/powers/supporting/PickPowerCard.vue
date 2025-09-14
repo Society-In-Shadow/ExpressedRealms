@@ -4,10 +4,11 @@ import Button from "primevue/button";
 import {type PropType} from "vue";
 import type {Power} from "@/components/expressions/powers/types";
 import {makeIdSafe} from "@/utilities/stringUtilities";
-import {characterPowersStore} from "@/components/characters/character/powers/stores/characterPowerStore.ts";
 import AddCharacterPower from "@/components/characters/character/wizard/powers/supporting/AddCharacterPower.vue";
+import type {WizardContent} from "@/components/characters/character/wizard/types.ts";
+import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
 
-const powerData = characterPowersStore();
+
 const props = defineProps({
   power: {
     type: Object as PropType<Power>,
@@ -19,8 +20,15 @@ const props = defineProps({
   }
 });
 
-const toggleAdd = () => {
-  powerData.activePowerId = props.power.id;
+const wizardContentInfo = wizardContentStore();
+const updateWizardContent = () => {
+  wizardContentInfo.updateContent(
+      {
+        headerName: 'Power',
+        component: AddCharacterPower,
+        props: { power: props.power}
+      } as WizardContent
+  )
 }
 
 </script>
@@ -36,12 +44,9 @@ const toggleAdd = () => {
       </div>
     </div>
     <div class="p-0 m-2 d-inline-flex align-items-start align-items-center">
-      <Button class="float-end" size="small" label="View" @click="toggleAdd"/>
+      <Button class="float-end" size="small" label="View" @click="updateWizardContent"/>
     </div>
   </div>
-  <Teleport v-if="powerData.activePowerId == props.power?.id" to="#item-modification-section">
-    <AddCharacterPower :power="props.power" />
-  </Teleport>
 </template>
 
 <style>

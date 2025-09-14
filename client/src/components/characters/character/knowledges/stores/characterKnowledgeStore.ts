@@ -14,8 +14,10 @@ import type {
     SpecializationForm
 } from "@/components/characters/character/knowledges/validations/specializationValidations";
 import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
 
 const experienceInfo = experienceStore();
+const wizardContentInfo = wizardContentStore();
 
 export const characterKnowledgeStore =
     defineStore('characterKnowledge', {
@@ -26,7 +28,6 @@ export const characterKnowledgeStore =
                 knowledges: [] as Array<CharacterKnowledge>,
                 knowledgeLevels: [] as Array<KnowledgeOptions>,
                 currentExperience: 0 as number,
-                activeKnowledgeId: 0 as number,
             }
         },    
         actions: {
@@ -60,6 +61,7 @@ export const characterKnowledgeStore =
                         await experienceInfo.updateExperience(characterId);
                         await this.getCharacterKnowledges(characterId);
                         toaster.success("Successfully Added Knowledge!");
+                        wizardContentInfo.hideContent()
                     });
             },
             editKnowledge: async function (values:CharacterKnowledgeForm, characterId: number, mappingId: number): Promise<void> {
