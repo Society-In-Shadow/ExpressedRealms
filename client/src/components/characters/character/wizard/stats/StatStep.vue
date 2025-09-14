@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {onMounted, ref} from "vue";
+import {onMounted} from "vue";
 import {useRoute} from 'vue-router'
 import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
 import Button from "primevue/button";
@@ -9,24 +9,32 @@ import Column from "primevue/column";
 import StatTile from "@/components/characters/character/wizard/stats/StatTile.vue";
 import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vue";
 import {statStore} from "@/components/characters/character/wizard/stats/stores/statStore.ts";
+import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
+import type {WizardContent} from "@/components/characters/character/wizard/types.ts";
 
 const route = useRoute()
 const statData = statStore();
-const showDetails = ref(false);
-const selectedStatType = ref(0);
 
 onMounted(async() =>{
   await statData.loadData(route.params.id);
 });
 
-function showDetailedStat(statTypeId:number){
-  selectedStatType.value = statTypeId;
-  showDetails.value = !showDetails.value;
+
+const wizardContentInfo = wizardContentStore();
+const updateWizardContent = (statTypeId: number) => {
+  wizardContentInfo.updateContent(
+      {
+        headerName: 'Edit Stat Type',
+        component: StatTile,
+        props: { statTypeId: statTypeId }
+      } as WizardContent
+  )
 }
 
 </script>
 
 <template>
+  <h2>Stats</h2>
   <ShowXPCosts xp-name-tag="Stat XP" />
   <div>
     <DataTable :value="statData.stats" data-key="statTypeId">
@@ -53,14 +61,11 @@ function showDetailedStat(statTypeId:number){
       </Column>
       <Column>
         <template #body="slotProps">
-          <Button class="float-end " size="small" label="View" @click="showDetailedStat(slotProps.data.statTypeId)"/>
+          <Button class="float-end " size="small" label="View" @click="updateWizardContent(slotProps.data.statTypeId)"/>
         </template>
       </Column>
     </DataTable>
     </div>
-    <teleport v-if="selectedStatType != 0" to="#item-modification-section">
-      <StatTile :stat-type-id="selectedStatType" @toggle-stat="showDetails = !showDetails" />
-    </teleport>
 </template>
 
 <style scoped>
