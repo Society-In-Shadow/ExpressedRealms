@@ -4,13 +4,10 @@ import Button from "primevue/button";
 import {type PropType} from "vue";
 import type {Power} from "@/components/expressions/powers/types";
 import {makeIdSafe} from "@/utilities/stringUtilities";
-import {characterPowersStore} from "@/components/characters/character/powers/stores/characterPowerStore.ts";
 import AddCharacterPower from "@/components/characters/character/wizard/powers/supporting/AddCharacterPower.vue";
 import type {WizardContent} from "@/components/characters/character/wizard/types.ts";
 import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
 
-const powerData = characterPowersStore();
-const wizardContentInfo = wizardContentStore();
 
 const props = defineProps({
   power: {
@@ -23,6 +20,7 @@ const props = defineProps({
   }
 });
 
+const wizardContentInfo = wizardContentStore();
 const updateWizardContent = () => {
   wizardContentInfo.updateContent(
       {
