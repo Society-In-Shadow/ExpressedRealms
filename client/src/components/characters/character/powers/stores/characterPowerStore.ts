@@ -75,6 +75,7 @@ export const characterPowersStore =
                         await experienceInfo.updateExperience(characterId);
                         await this.getCharacterPowers(characterId);
                         await this.getSelectableCharacterPowers(characterId);
+                        wizardContentInfo.hideContent();
                         toaster.success("Successfully Deleted Power!");
                     });
             },
