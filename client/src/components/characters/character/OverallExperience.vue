@@ -22,7 +22,7 @@ function showSpent(xp: ExperienceBreakdown) {
 </script>
 
 <template>
-
+  <h2>Experience Breakdown</h2>
   <Card class="custom-card">
     <template #content>
       <table class="w-100">
