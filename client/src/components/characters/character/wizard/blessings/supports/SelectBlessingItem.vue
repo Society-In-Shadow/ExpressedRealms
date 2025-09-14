@@ -4,18 +4,11 @@ import {onMounted, type PropType, ref} from "vue";
 import type {Blessing} from "@/components/blessings/types";
 import {UserRoles, userStore} from "@/stores/userStore.ts";
 import Button from "primevue/button";
-import {blessingConfirmationPopup} from "@/components/blessings/services/blessingConfirmationPopupService.ts";
-import {addBlessingDialog} from "@/components/blessings/services/dialogs.ts";
 import AddCharacterBlessing from "@/components/characters/character/wizard/blessings/supports/AddCharacterBlessing.vue";
-import {
-  characterBlessingsStore
-} from "@/components/characters/character/wizard/blessings/stores/characterBlessingStore.ts";
+import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
+import type {WizardContent} from "@/components/characters/character/wizard/types.ts";
 
-const popups = blessingConfirmationPopup();
-const dialogs = addBlessingDialog();
 const userInfo = userStore();
-
-const characterBlessingData = characterBlessingsStore();
 
 const props = defineProps({
   blessing: {
@@ -28,17 +21,22 @@ const props = defineProps({
   }
 });
 
-const showEdit = ref(false);
 const hasBlessingRole = ref(false);
 
 onMounted(async () => {
   hasBlessingRole.value = await userInfo.hasUserRole(UserRoles.BlessingsManagementRole);
 })
 
-const toggleAdd = () => {
-  characterBlessingData.activeBlessingId = props.blessing.id;
+const wizardContentInfo = wizardContentStore();
+const updateWizardContent = () => {
+  wizardContentInfo.updateContent(
+      {
+        headerName: 'Add Blessing',
+        component: AddCharacterBlessing,
+        props: { blessing: props.blessing }
+      } as WizardContent
+  )
 }
-
 </script>
 
 <template>
@@ -49,10 +47,7 @@ const toggleAdd = () => {
       </h3>
     </div>
     <div v-if="!props.isReadOnly" class="p-0 m-2 d-inline-flex align-items-start align-items-center">
-      <Button class="float-end" size="small" label="View" @click="toggleAdd" />
+      <Button class="float-end" size="small" label="View" @click="updateWizardContent" />
     </div>
   </div>
-  <Teleport to="#item-modification-section" v-if="characterBlessingData.activeBlessingId == props.blessing.id">
-    <AddCharacterBlessing :blessing="props.blessing" />
-  </Teleport>
 </template>

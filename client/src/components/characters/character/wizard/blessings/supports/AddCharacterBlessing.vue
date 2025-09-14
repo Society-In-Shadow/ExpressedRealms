@@ -65,10 +65,10 @@ function disableOption(level:BlessingLevel){
     </div>
     
     <div class="mt-4">
-      <FormTextAreaWrapper v-model="form.notes"/>
+      <FormTextAreaWrapper v-model="form.notes" :disabled="availableXp == 0" />
     </div>
 
-    <div class="m-3 text-right">
+    <div class="m-3 text-right" v-if="availableXp != 0">
       <Button label="Add" class="m-2" type="submit" />
     </div>
   </form>

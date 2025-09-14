@@ -11,9 +11,11 @@ import type {
 } from "@/components/characters/character/wizard/blessings/types.ts";
 import {blessingsStore} from "@/components/blessings/stores/blessingsStore.ts";
 import type {BlessingType, SubCategory} from "@/components/blessings/types.ts";
+import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
 
 const experienceInfo = experienceStore();
 const blessingInfo = blessingsStore();
+const wizardContentInfo = wizardContentStore();
 
 export const characterBlessingsStore =
     defineStore('characterBlessings', {
@@ -26,7 +28,6 @@ export const characterBlessingsStore =
                 mixedBlessings: [] as Array<CharacterBlessing>,
                 blessings: [] as Array<CharacterBlessing>,
                 selectedBlessingIds: [] as Array<number>,
-                activeBlessingId: 0 as number,
             }
         },    
         actions: {
@@ -80,6 +81,7 @@ export const characterBlessingsStore =
                         await experienceInfo.updateExperience(characterId);
                         await this.getCharacterBlessings(characterId);
                         toaster.success("Successfully Added Advantage / Disadvantage!");
+                        wizardContentInfo.hideContent();
                     });
             },
             updateBlessing: async function (values:CharacterBlessingForm, characterId: number, mappingId: number): Promise<void> {
