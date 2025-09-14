@@ -1,5 +1,5 @@
 import {mount} from '@vue/test-utils';
-import AddCharacterTile from '../src/components/characters/character/AddCharacter.vue';
+import AddCharacterTile from '../src/components/characters/character/wizard/basicInfo/AddCharacter.vue';
 import '@testing-library/jest-dom';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import axios from 'axios';
