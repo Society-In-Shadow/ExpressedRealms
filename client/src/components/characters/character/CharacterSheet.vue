@@ -7,7 +7,6 @@ import TabPanels from 'primevue/tabpanels';
 import TabPanel from 'primevue/tabpanel';
 
 import Card from "primevue/card";
-import SmallStatDisplay from "@/components/characters/character/stats/SmallStatDisplay.vue";
 import SkillTile from "@/components/characters/character/skills/SkillTile.vue";
 import DataTable from "primevue/datatable";
 
@@ -19,6 +18,7 @@ import {onMounted, ref} from "vue";
 import PowerTile from "@/components/characters/character/powers/PowerTile.vue";
 import TrackableProficiencies from "@/components/characters/character/proficiency/TrackableProficiencies.vue";
 import BlessingTab from "@/components/characters/character/blessings/BlessingTab.vue";
+import StatTile from "@/components/characters/character/stats/StatTile.vue";
 
 const userData = userStore();
 
@@ -39,7 +39,7 @@ onMounted(async() =>{
     <div class="static-width">  
         <Card class="mb-3">
           <template #content>
-            <SmallStatDisplay />
+            <StatTile />
           </template>
         </Card>
         <Tabs value="0" class="w-100" scrollable :lazy="true" >

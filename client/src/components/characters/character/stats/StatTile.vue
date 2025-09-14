@@ -1,111 +1,87 @@
 <script setup lang="ts">
 
+import Fieldset from 'primevue/fieldset';
 import axios from "axios";
-import {onMounted, ref, type Ref} from "vue";
+import {onMounted, ref} from "vue";
 import {useRoute} from 'vue-router'
-import Button from 'primevue/button';
 import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
+import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import {FeatureFlags, userStore} from "@/stores/userStore.ts";
-import type {Stat} from "@/components/characters/character/stats/type.ts";
+import StatInfo from "@/components/characters/character/stats/StatInfo.vue";
 
 const route = useRoute()
-
-const emit = defineEmits<{
-  toggleStat: [],
-}>();
-
-const props = defineProps({
-  statTypeId: {
-    type: Number,
-    required: true,
-  },
-});
-
-const stat:Ref<Stat> = ref({
-  statLevelInfo: {}
-});
+const experienceInfo = experienceStore();
+const stats = ref([ {}, {}, {}, {}, {}, {}]);
+const showDetails = ref(false);
+const selectedStatType = ref(1);
 const isLoading = ref(true);
-const showOptions = ref(false);
 const showCharacterWizard = ref(false);
 const userInfo = userStore();
 
 onMounted(async () =>{
-  reloadStatInfo();
+  axios.get(`/characters/${route.params.id}/stats`)
+      .then((response) => {
+        stats.value = response.data;
+        isLoading.value = false;
+      });
   showCharacterWizard.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowCharacterWizard);
 });
 
-function reloadStatInfo() {
-  axios.get(`/characters/${route.params.id}/stat/${props.statTypeId}`)
-      .then((response) => {
-        stat.value = response.data;
-        isLoading.value = false;
-      })
+function showDetailedStat(statTypeId:number){
+  selectedStatType.value = statTypeId;
+  showDetails.value = !showDetails.value;
 }
-
 </script>
 
 <template>
-  <div class="w-100" style="min-width: 300px">
-    <div class="row">
-      <div class="col">
-        <h3 class="mt-0">
-          <SkeletonWrapper :show-skeleton="isLoading" height="2rem">
-            <div class="row">
-              <div class="col">
-                {{ stat.name }}
-              </div>
-              <div v-if="showOptions" class="col text-right">
-                {{ stat.availableXP }} XP
-              </div>
-            </div>
+  <div class="text-right pb-3" v-if="!showCharacterWizard && experienceInfo.showAllExperience">{{ experienceInfo.experienceBreakdown.statsXp}} Total XP - {{experienceInfo.experienceBreakdown.setupStatsXp}} Creation XP = {{experienceInfo.experienceBreakdown.statsXp - experienceInfo.experienceBreakdown.setupStatsXp}} XP</div>
+  <div class="flex flex-wrap justify-content-center column-gap-3 row-gap-3 w-100">
+    <div v-for="stat in stats" v-if="!showDetails" :key="stat.statTypeId" class="align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch m-0 p-0">
+      <Fieldset class="statBlock mb-3" style="cursor: pointer;" @click="showDetailedStat(stat.statTypeId)">
+        <template #legend>
+          <SkeletonWrapper height="1.5rem" width="2rem" :show-skeleton="isLoading">
+            {{ stat.shortName }}
           </SkeletonWrapper>
-        </h3>
-        <div class="mb-3">
-          <SkeletonWrapper :show-skeleton="isLoading" height="3rem">
-            {{ stat.description }}
+        </template>
+        <h2 class="m-1 text-center">
+          <SkeletonWrapper :show-skeleton="isLoading" height="2rem" width="2.75em">
+            <strong><span v-if="stat.bonus > 0">+</span>{{ stat.bonus }}</strong>
+          </SkeletonWrapper>
+        </h2>
+        <div class="levelDisplay p-fieldset-legend ">
+          <SkeletonWrapper :show-skeleton="isLoading">
+            {{ stat.level }}
           </SkeletonWrapper>
         </div>
-      </div>
+      </Fieldset>
     </div>
-    <div class="row">
-      <div class="col">
-        <div v-if="!showOptions" class="p-listbox p-3">
-          <div class="row">
-            <div class="col text-center">
-              <div class="mb-2">
-                Level
-              </div>
-              <div>
-                <SkeletonWrapper :show-skeleton="isLoading" height="2rem" width="100%">
-                  {{ stat.statLevelInfo.level }}
-                </SkeletonWrapper>
-              </div>
-            </div>
-            <div class="col text-center">
-              <div class="mb-2">
-                Bonus
-              </div>
-              <div>
-                <SkeletonWrapper :show-skeleton="isLoading" height="2rem" width="100%">
-                  <span v-if="stat.statLevelInfo.bonus > 0">+</span>{{ stat.statLevelInfo.bonus }}
-                </SkeletonWrapper>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <SkeletonWrapper :show-skeleton="isLoading" height="4em" width="100%">
-                {{ stat.statLevelInfo.description }}
-              </SkeletonWrapper>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <Button data-cy="logoff-button" label="Back" class="w-100 mb-2" @click="emit('toggleStat')" />
-      </div>
-    </div>
+    <StatInfo v-else :stat-type-id="selectedStatType" @toggle-stat="showDetails = !showDetails" />
   </div>
 </template>
+
+<style scoped>
+
+.statBlock{
+  width: 80px;
+}
+
+.statBlock .levelDisplay{
+  position: relative;
+  top: .4em;
+  width: 30px;
+  left: .9em; 
+  padding: 5px !important;
+  font-size: small
+}
+
+.statBlock:deep(.p-fieldset-legend) {
+  padding: .5rem !important;
+}
+
+.statBlock:deep(.p-fieldset-content) {
+  padding: 0px !important;
+  text-align: center;
+  height: 45px
+}
+
+</style>
