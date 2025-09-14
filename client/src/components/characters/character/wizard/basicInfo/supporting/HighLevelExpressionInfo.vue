@@ -39,25 +39,23 @@ function redirectToExpression(){
 </script>
 
 <template>
-  <teleport to="#item-modification-section">
-    <div class="m-3">
-
-      <div class="d-flex justify-content-between mt-3">
-        <h1 class="m-0 p-0">{{expressionInfo.name}}</h1>
-        <div>
-          <Button label="More information" icon="pi pi-external-link" icon-pos="right" @click="redirectToExpression" />
-        </div>
+  <div class="m-3">
+    <div class="d-flex justify-content-between mt-3">
+      <h1 class="m-0 p-0">{{expressionInfo.name}}</h1>
+      <div class="d-none d-md-block">
+        <Button label="More information" icon="pi pi-external-link" icon-pos="right" @click="redirectToExpression" />
       </div>
-
-      <h2>Archetypes</h2>
-      <div v-html="expressionInfo.archetypes"></div>
-
-      <h2>Background</h2>
-      <div v-html="expressionInfo.background"></div>
-
-      <h2>Description</h2>
-      <div v-html="expressionInfo.description"></div>
     </div>
+    <div class="d-block d-md-none text-right">
+      <Button label="More information" icon="pi pi-external-link" icon-pos="right" @click="redirectToExpression" />
+    </div>
+    <h2>Archetypes</h2>
+    <div v-html="expressionInfo.archetypes"></div>
 
-  </teleport>
+    <h2>Background</h2>
+    <div v-html="expressionInfo.background"></div>
+
+    <h2>Description</h2>
+    <div v-html="expressionInfo.description"></div>
+  </div>
 </template>

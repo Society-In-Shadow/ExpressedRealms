@@ -6,7 +6,7 @@ import {object, string} from 'yup';
 import Card from "primevue/card";
 import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
 import TextAreaWrapper from "@/FormWrappers/TextAreaWrapper.vue";
-import {computed, onMounted, ref} from "vue";
+import {computed, onBeforeMount, ref} from "vue";
 import {useRoute} from 'vue-router'
 import toaster from "@/services/Toasters";
 import DropdownInfoWrapper from "@/FormWrappers/DropdownInfoWrapper.vue";
@@ -16,6 +16,10 @@ import {characterStore} from "@/components/characters/character/stores/character
 import {FeatureFlags, userStore} from "@/stores/userStore.ts";
 import HighLevelExpressionInfo
   from "@/components/characters/character/wizard/basicInfo/supporting/HighLevelExpressionInfo.vue";
+import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
+import type {WizardContent} from "@/components/characters/character/wizard/types.ts";
+import Button from "primevue/button";
+import {breakpointsBootstrapV5, useBreakpoints} from "@vueuse/core";
 
 const route = useRoute()
 
@@ -23,7 +27,10 @@ const characterInfo = characterStore();
 const userInfo = userStore();
 const showFactionInfo = ref(false);
 
-onMounted(async () =>{
+const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5);
+const isMobile = activeBreakpoint.smaller('md');
+
+onBeforeMount(async () =>{
   await characterInfo.getCharacterDetails(Number(route.params.id))
       .then(() => {
         factions.value = characterInfo.factions;
@@ -31,9 +38,12 @@ onMounted(async () =>{
         background.value = characterInfo.background;
         expression.value = characterInfo.expression;
         faction.value = characterInfo.faction;
+
       });
   showFactionInfo.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowFactionDropdown);
-  
+  if(!isMobile.value){
+    updateWizardContent();
+  }
 });
 
 const { defineField, handleSubmit, errors } = useForm({
@@ -75,6 +85,19 @@ let expressionRedirectURL = computed(() => {
   }
   return '';
 })
+
+const wizardContentInfo = wizardContentStore();
+const updateWizardContent = () => {
+  console.log('updating wizard content');
+  wizardContentInfo.updateContent(
+      {
+        headerName: 'Expression Info',
+        component: HighLevelExpressionInfo,
+        props: { expressionId: characterInfo.expressionId }
+      } as WizardContent
+  )
+}
+
 </script>
 
 <template>
@@ -89,7 +112,7 @@ let expressionRedirectURL = computed(() => {
         />
         <TextAreaWrapper v-model="background" field-name="Background" :error-text="errors.background" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
       </form>
+      <Button label="Show High Level Expression Info" class="w-100 mb-2 d-block d-md-none " :disabled="characterInfo.isLoading && characterInfo.expressionId !== 0" @click="updateWizardContent" />
     </template>
   </Card>
-  <HighLevelExpressionInfo :expression-id="characterInfo.expressionId" v-if="!characterInfo.isLoading && characterInfo.expressionId !== 0"/>
 </template>

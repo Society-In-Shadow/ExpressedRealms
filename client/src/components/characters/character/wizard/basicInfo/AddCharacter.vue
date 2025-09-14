@@ -15,9 +15,14 @@ import DropdownInfoWrapper from "@/FormWrappers/DropdownInfoWrapper.vue";
 import {FeatureFlags, userStore} from "@/stores/userStore.ts";
 import HighLevelExpressionInfo
   from "@/components/characters/character/wizard/basicInfo/supporting/HighLevelExpressionInfo.vue";
+import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
+import type {WizardContent} from "@/components/characters/character/wizard/types.ts";
+import {breakpointsBootstrapV5, useBreakpoints} from "@vueuse/core";
 
 const userInfo = userStore();
 const router = useRouter();
+const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5);
+const isMobile = activeBreakpoint.smaller('md');
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
@@ -63,14 +68,17 @@ const onSubmit = handleSubmit((values) => {
       });
 });
 
-function loadFactions(){
+async function loadFactions(){
   isLoadingFactions.value = true;
-  axios.get(`/characters/factionOptions/${expression.value.id}`)
+  await axios.get(`/characters/factionOptions/${expression.value.id}`)
       .then((response) => {
         faction.value = null;
         factions.value = response.data;
         isLoadingFactions.value = false;
-      })
+      });
+  if(!isMobile.value){
+    updateWizardContent(); 
+  }
 }
 
 const expressionRedirectURL = computed(() => {
@@ -79,6 +87,17 @@ const expressionRedirectURL = computed(() => {
   }
   return '';
 })
+
+const wizardContentInfo = wizardContentStore();
+const updateWizardContent = () => {
+  wizardContentInfo.updateContent(
+      {
+        headerName: 'Expression Info',
+        component: HighLevelExpressionInfo,
+        props: { expressionId: expression.value.id }
+      } as WizardContent
+  )
+}
 
 </script>
 
@@ -95,6 +114,7 @@ const expressionRedirectURL = computed(() => {
             v-model="expression" option-label="name" :options="expressions" field-name="Expression" :error-text="errors.expressionId"
             :show-skeleton="isLoadingExpressions" @change="loadFactions()"
           />
+          <Button label="Show High Level Expression Info" class="w-100 mb-2 d-block d-md-none " v-if="isMobile && expression" @click="updateWizardContent" />
           <DropdownInfoWrapper
             v-if="expression && showFactionDropdown" v-model="faction" option-label="name" :options="factions" field-name="Faction"
             :error-text="errors.factionId" :disabled="!expression" :redirect-url="expressionRedirectURL" :show-skeleton="isLoadingFactions" :redirect-to-different-page="true"
@@ -102,8 +122,7 @@ const expressionRedirectURL = computed(() => {
           <TextAreaWrapper v-model="background" field-name="Background" :error-text="errors.background" />
           <Button data-cy="add-character-button" label="Add Character" class="w-100 mb-2" type="submit" />
         </form>
-        <HighLevelExpressionInfo :expression-id="expression.id" v-if="expression" />
-      </template>
+              </template>
     </Card>
   </div>
 </template>
