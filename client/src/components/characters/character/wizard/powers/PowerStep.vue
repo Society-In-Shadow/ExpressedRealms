@@ -6,9 +6,11 @@ import {characterPowersStore} from "@/components/characters/character/powers/sto
 import PowerCard from "@/components/characters/character/wizard/powers/supporting/PowerCard.vue";
 import PickPowerCard from "@/components/characters/character/wizard/powers/supporting/PickPowerCard.vue";
 import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vue";
+import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
 
 const characterKnowledgeData = characterPowersStore();
 const route = useRoute();
+const wizardContentInfo = wizardContentStore();
 
 onBeforeMount(async () => {
   await characterKnowledgeData.getSelectableCharacterPowers(route.params.id);
@@ -21,14 +23,7 @@ onBeforeMount(async () => {
 
 const noPowers = ref(false);
 
-const items = [
-  {
-    label: '2x6 Tile Letter Cutout',
-    command: () => {
-      characterKnowledgeData.downloadPowerCards(route.params.id, 'foo', false)
-    }
-  },
-];
+
 
 </script>
 

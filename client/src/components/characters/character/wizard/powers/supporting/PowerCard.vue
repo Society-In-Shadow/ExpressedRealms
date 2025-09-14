@@ -1,16 +1,16 @@
 <script setup lang="ts">
 
 import Button from "primevue/button";
-import {type PropType, ref} from "vue";
+import {type PropType} from "vue";
 import {isNullOrWhiteSpace} from "@/utilities/stringUtilities";
 import Tag from "primevue/tag";
 import type {PowerPath} from "@/components/characters/character/powers/types.ts";
-import {confirmationPopup} from "@/components/characters/character/powers/services/confirmationService.ts";
-import {useRoute} from "vue-router";
 import EditCharacterPower from "@/components/characters/character/wizard/powers/supporting/EditCharacterPower.vue";
-import {characterPowersStore} from "@/components/characters/character/powers/stores/characterPowerStore.ts";
+import type {WizardContent} from "@/components/characters/character/wizard/types.ts";
+import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
 
-const route = useRoute();
+const wizardContentInfo = wizardContentStore();
+
 const props = defineProps({
   powerPath: {
     type: Object as PropType<PowerPath>,
@@ -22,12 +22,14 @@ const props = defineProps({
   }
 });
 
-const popups = confirmationPopup(route.params.id);
-const openKnowledgeItems = ref([]);
-const powerData = characterPowersStore();
-
-const toggleEdit = (powerId: number) => {
-  powerData.activePowerId = powerId;
+const updateWizardContent = (power) => {
+  wizardContentInfo.updateContent(
+      {
+        headerName: 'Power',
+        component: EditCharacterPower,
+        props: { power: power}
+      } as WizardContent
+  )
 }
 
 </script>
@@ -63,10 +65,7 @@ const toggleEdit = (powerId: number) => {
           </div>
         </div>
         <div class="align-content-center">
-          <Button label="View" size="small" @click="toggleEdit(power.id)" />
-          <Teleport v-if="powerData.activePowerId == power.id" to="#item-modification-section">
-            <EditCharacterPower :power="power" />
-          </Teleport>
+          <Button label="View" size="small" @click="updateWizardContent(power)" />
         </div>
       </div>
     </div>
