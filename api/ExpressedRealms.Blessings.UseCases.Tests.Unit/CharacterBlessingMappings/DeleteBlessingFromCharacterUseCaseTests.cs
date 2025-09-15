@@ -1,6 +1,7 @@
 using ExpressedRealms.Blessings.Repository.CharacterBlessings;
 using ExpressedRealms.Blessings.UseCases.CharacterBlessingMappings.Delete;
 using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.Characters.Repository.DTOs;
 using ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
@@ -37,6 +38,9 @@ public class DeleteBlessingFromCharacterUseCaseTests
 
         A.CallTo(() => _mappingRepository.GetCharacterBlessingMappingForEditing(_model.MappingId))
             .Returns(_dbModel);
+        
+        A.CallTo(() => _characterRepository.GetCharacterState(_model.CharacterId))
+            .Returns(new CharacterStatusDto() { IsInCharacterCreation = true });
 
         var validator = new DeleteBlessingFromCharacterModelValidator(
             _characterRepository,
@@ -85,6 +89,18 @@ public class DeleteBlessingFromCharacterUseCaseTests
             nameof(DeleteBlessingFromCharacterModel.MappingId),
             "Mapping Id is required."
         );
+    }
+    
+    [Fact]
+    public async Task UseCase_ReturnsError_WhenModifyingOutsideOfCharacterCreation()
+    {
+        A.CallTo(() => _characterRepository.GetCharacterState(_model.CharacterId))
+            .Returns(new CharacterStatusDto() { IsInCharacterCreation = false });
+        
+        var result = await _useCase.ExecuteAsync(_model);
+
+        Assert.False(result.IsSuccess);
+        Assert.Equal("You cannot delete Advantages or Disadvantages outside of character creation.", result.Errors.First().Message);
     }
 
     [Fact]
