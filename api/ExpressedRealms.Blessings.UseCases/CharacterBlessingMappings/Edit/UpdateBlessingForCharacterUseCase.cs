@@ -38,7 +38,7 @@ internal sealed class UpdateBlessingForCharacterUseCase(
 
             if (!characterState.IsInCharacterCreation)
             {
-                return Result.Fail("Character must be in character creation to modify Advantages / Disadvantages.");
+                return Result.Fail("You cannot edit Advantages or Disadvantages outside of character creation.");
             }
             
             var xpInfo = await xpRepository.GetCharacterXpMapping(model.CharacterId, 1);
@@ -55,7 +55,7 @@ internal sealed class UpdateBlessingForCharacterUseCase(
 
             if (spentXp + newLevel.XpCost > xpInfo.SectionCap)
             {
-                return Result.Fail("Cannot add more than 8 points of Advantages / Disadvantages.");
+                return Result.Fail("You cannot add more than 8 points of Advantages or Disadvantages.");
             }
             
             var blessing = await blessingRepository.GetBlessingForEditing(mapping.BlessingId);
@@ -66,7 +66,7 @@ internal sealed class UpdateBlessingForCharacterUseCase(
                 if (spentXp + newLevel.XpCost > availableDiscretionary)
                 {
                     return Result.Fail(
-                        new NotEnoughXPFailure(availableDiscretionary - spentXp, newLevel.XpCost)
+                        new NotEnoughXPFailure(availableDiscretionary, newLevel.XpCost)
                     );
                 }
 
