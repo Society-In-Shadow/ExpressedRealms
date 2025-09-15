@@ -2,6 +2,7 @@ using ExpressedRealms.Blessings.Repository.Blessings;
 using ExpressedRealms.Blessings.Repository.CharacterBlessings;
 using ExpressedRealms.Blessings.UseCases.CharacterBlessingMappings.Edit;
 using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup;
 using ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings;
 using ExpressedRealms.Shared;
@@ -18,6 +19,7 @@ public class UpdateBlessingForCharacterUseCaseTests
     private readonly IBlessingRepository _blessingRepository;
     private readonly ICharacterBlessingRepository _mappingRepository;
     private readonly ICharacterRepository _characterRepository;
+    private readonly IXpRepository _xpRepository;
     private readonly UpdateBlessingForCharacterModel _blessingForCharacterModel;
     private readonly CharacterBlessingMapping _dbModel;
 
@@ -42,6 +44,7 @@ public class UpdateBlessingForCharacterUseCaseTests
         _characterRepository = A.Fake<ICharacterRepository>();
         _blessingRepository = A.Fake<IBlessingRepository>();
         _mappingRepository = A.Fake<ICharacterBlessingRepository>();
+        _xpRepository = A.Fake<IXpRepository>();
 
         A.CallTo(() =>
                 _characterRepository.CharacterExistsAsync(_blessingForCharacterModel.CharacterId)
@@ -85,6 +88,8 @@ public class UpdateBlessingForCharacterUseCaseTests
         _useCase = new UpdateBlessingForCharacterUseCase(
             _mappingRepository,
             _blessingRepository,
+            _characterRepository,
+            _xpRepository,
             validator,
             CancellationToken.None
         );

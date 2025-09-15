@@ -46,6 +46,7 @@ public class DeleteBlessingFromCharacterUseCaseTests
         _useCase = new DeleteBlessingFromCharacterUseCase(
             _mappingRepository,
             validator,
+            _characterRepository,
             CancellationToken.None
         );
     }

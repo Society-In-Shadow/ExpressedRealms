@@ -3,7 +3,6 @@ using ExpressedRealms.Blessings.Repository.CharacterBlessings;
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings;
-using ExpressedRealms.Shared;
 using ExpressedRealms.UseCases.Shared;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FluentResults;
@@ -34,7 +33,7 @@ internal sealed class AddBlessingToCharacterUseCase(
 
         if (!characterState.IsInCharacterCreation)
         {
-            Result.Fail("Character must be in character creation to add Advantages / Disadvantages.");
+            return Result.Fail("You cannot add Advantages or Disadvantages outside of character creation.");
         }
 
         var xpInfo = await xpRepository.GetCharacterXpMapping(model.CharacterId, 1);
@@ -42,9 +41,9 @@ internal sealed class AddBlessingToCharacterUseCase(
 
         var blessingLevel = await blessingRepository.GetBlessingLevel(model.BlessingLevelId);
         
-        if (spentXp + blessingLevel.XpCost > StartingExperience.StartingBlessings)
+        if (spentXp + blessingLevel.XpCost > xpInfo.SectionCap)
         {
-            return Result.Fail("Cannot add more than 8 points of Advantages / Disadvantages.");
+            return Result.Fail("You cannot add more than 8 points of Advantages or Disadvantages.");
         }
         
         var blessing = await blessingRepository.GetBlessingForEditing(model.BlessingId);
@@ -54,7 +53,7 @@ internal sealed class AddBlessingToCharacterUseCase(
             
             if (spentXp + blessingLevel.XpCost > availableDiscretionary)
                 return Result.Fail(
-                    new NotEnoughXPFailure(availableDiscretionary - spentXp, blessingLevel.XpCost)
+                    new NotEnoughXPFailure(availableDiscretionary, blessingLevel.XpCost)
                 );
 
             xpInfo.SpentXp = spentXp + blessingLevel.XpCost;

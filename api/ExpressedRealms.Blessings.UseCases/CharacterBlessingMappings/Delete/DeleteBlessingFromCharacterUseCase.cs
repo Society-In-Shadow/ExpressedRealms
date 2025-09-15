@@ -28,7 +28,7 @@ internal sealed class DeleteBlessingFromCharacterUseCase(
 
         if (!characterState.IsInCharacterCreation)
         {
-            Result.Fail("Character must be in character creation to add Advantages / Disadvantages.");
+            return Result.Fail("Character must be in character creation to add Advantages / Disadvantages.");
         }
         
         var mapping = await mappingRepository.GetCharacterBlessingMappingForEditing(

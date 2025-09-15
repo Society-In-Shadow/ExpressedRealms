@@ -38,7 +38,7 @@ internal sealed class UpdateBlessingForCharacterUseCase(
 
             if (!characterState.IsInCharacterCreation)
             {
-                Result.Fail("Character must be in character creation to modify Advantages / Disadvantages.");
+                return Result.Fail("Character must be in character creation to modify Advantages / Disadvantages.");
             }
             
             var xpInfo = await xpRepository.GetCharacterXpMapping(model.CharacterId, 1);
