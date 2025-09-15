@@ -54,6 +54,19 @@ internal sealed class CharacterRepository(
 
         return Result.Ok(character);
     }
+    
+    public async Task<CharacterStatusDto> GetCharacterState(int id)
+    {
+        return await context
+            .Characters.AsNoTracking()
+            .Where(x => x.Id == id && x.Player.UserId == userContext.CurrentUserId())
+            .Select(x => new CharacterStatusDto()
+            {
+                IsPrimaryCharacter = x.IsPrimaryCharacter,
+                IsInCharacterCreation = x.IsInCharacterCreation
+            })
+            .FirstAsync(cancellationToken);
+    }
 
     public async Task<Result<int>> CreateCharacterAsync(AddCharacterDto dto)
     {

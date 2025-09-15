@@ -24,6 +24,11 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
         builder.Property(x => x.FactionId);
 
         builder.Property(x => x.StatExperiencePoints).IsRequired().HasDefaultValue(72);
+        
+        builder.Property(x => x.IsInCharacterCreation).HasColumnName("is_in_character_creation").IsRequired()
+            .HasDefaultValue(true);
+        builder.Property(x => x.IsPrimaryCharacter).HasColumnName("is_primary_character").IsRequired()
+            .HasDefaultValue(false);
 
         builder.HasQueryFilter(x => !x.IsDeleted);
 
