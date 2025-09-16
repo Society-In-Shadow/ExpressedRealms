@@ -2,6 +2,7 @@ using ExpressedRealms.Blessings.Repository.Blessings;
 using ExpressedRealms.Blessings.Repository.CharacterBlessings;
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Xp;
+using ExpressedRealms.DB.Characters.xpTables;
 using ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings;
 using ExpressedRealms.UseCases.Shared;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
@@ -36,7 +37,7 @@ internal sealed class AddBlessingToCharacterUseCase(
             return Result.Fail("You cannot add Advantages or Disadvantages outside of character creation.");
         }
 
-        var xpInfo = await xpRepository.GetCharacterXpMapping(model.CharacterId, 1);
+        var xpInfo = await xpRepository.GetCharacterXpMapping(model.CharacterId, (int)XpSectionTypeEnum.Blessings);
         var spentXp = xpInfo.SpentXp;
 
         var blessingLevel = await blessingRepository.GetBlessingLevel(model.BlessingLevelId);

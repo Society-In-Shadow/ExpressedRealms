@@ -76,7 +76,7 @@ public class UpdateBlessingForCharacterUseCaseTests
                 _mappingRepository.MappingAlreadyExists(_model.MappingId)
             )
             .Returns(true);
-        A.CallTo(() => _xpRepository.GetCharacterXpMapping(_model.CharacterId, 1))
+        A.CallTo(() => _xpRepository.GetCharacterXpMapping(_model.CharacterId, (int)XpSectionTypeEnum.Blessings))
             .Returns(_characterMappingDbModel);
         A.CallTo(() =>
                 _blessingRepository.GetBlessingLevel(_model.BlessingLevelId)

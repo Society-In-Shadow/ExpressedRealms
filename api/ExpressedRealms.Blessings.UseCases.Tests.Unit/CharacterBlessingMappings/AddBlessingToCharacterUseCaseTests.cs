@@ -72,7 +72,7 @@ public class AddBlessingToCharacterUseCaseTests
             )
             .Returns(false);
         
-        A.CallTo(() => _xpRepository.GetCharacterXpMapping(_model.CharacterId, 1))
+        A.CallTo(() => _xpRepository.GetCharacterXpMapping(_model.CharacterId, (int)XpSectionTypeEnum.Blessings))
             .Returns(_characterMappingDbModel);
         
         A.CallTo(() =>
