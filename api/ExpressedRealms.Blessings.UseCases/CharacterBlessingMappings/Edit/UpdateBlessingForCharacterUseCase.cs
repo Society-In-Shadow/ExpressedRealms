@@ -42,41 +42,54 @@ internal sealed class UpdateBlessingForCharacterUseCase(
                 return Result.Fail("You cannot edit Advantages or Disadvantages outside of character creation.");
             }
             
-            var xpInfo = await xpRepository.GetCharacterXpMapping(model.CharacterId, (int)XpSectionTypeEnum.Blessings);
-            var spentXp = xpInfo.SpentXp;
-
+            var blessing = await blessingRepository.GetBlessingForEditing(mapping.BlessingId);
             var newLevel = await blessingRepository.GetBlessingLevel(model.BlessingLevelId);
             var oldLevel = await blessingRepository.GetBlessingLevel(mapping.BlessingLevelId);
+        
+            var xpTypeId = (int)XpSectionTypeEnum.Advantages;
+            var oldCost = oldLevel.XpCost;
+            var newCost = newLevel.XpCost;
+            var name = "Advantages";
+        
+            if (blessing.Type.Equals("disadvantage", StringComparison.InvariantCultureIgnoreCase))
+            {
+                xpTypeId = (int)XpSectionTypeEnum.Disadvantages;
+                oldCost = oldLevel.XpGain;
+                newCost = newLevel.XpGain;
+                name = "Disadvantages";
+            }
+        
+            var xpInfo = await xpRepository.GetCharacterXpMapping(model.CharacterId, xpTypeId);
+            var spentXp = xpInfo.SpentXp;
 
-            var gainingXp = newLevel.XpCost < oldLevel.XpCost;
+            var gainingXp = newCost < oldCost;
             if (gainingXp)
             {
-                spentXp -= oldLevel.XpCost;
+                spentXp -= oldCost;
             }
 
-            if (spentXp + newLevel.XpCost > xpInfo.SectionCap)
+            if (spentXp + newCost > xpInfo.SectionCap)
             {
-                return Result.Fail("You cannot add more than 8 points of Advantages or Disadvantages.");
+                return Result.Fail($"You cannot add more than {xpInfo.SectionCap} points of {name}.");
             }
             
-            var blessing = await blessingRepository.GetBlessingForEditing(mapping.BlessingId);
             if (blessing.Type.Equals("advantage", StringComparison.InvariantCultureIgnoreCase))
             {
                 var availableDiscretionary = await xpRepository.GetAvailableDiscretionary(model.CharacterId);
 
-                if (spentXp + newLevel.XpCost > availableDiscretionary)
+                if (spentXp + newCost > availableDiscretionary)
                 {
                     return Result.Fail(
                         new NotEnoughXPFailure(availableDiscretionary, newLevel.XpCost)
                     );
                 }
-
-                xpInfo.SpentXp = spentXp + newLevel.XpCost;
-                xpInfo.DiscretionXp = xpInfo.SpentXp;
-                xpInfo.TotalCharacterCreationXp = xpInfo.SpentXp;
-                xpInfo.LevelXp = 0;
-                await xpRepository.UpdateXpInfo(xpInfo);
             }
+
+            xpInfo.SpentXp = spentXp + newCost;
+            xpInfo.DiscretionXp = xpInfo.SpentXp;
+            xpInfo.TotalCharacterCreationXp = xpInfo.SpentXp;
+            xpInfo.LevelXp = 0;
+            await xpRepository.UpdateXpInfo(xpInfo);
 
             mapping.BlessingLevelId = model.BlessingLevelId;
         }

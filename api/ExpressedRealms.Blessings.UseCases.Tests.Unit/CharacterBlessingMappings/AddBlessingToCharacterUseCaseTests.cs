@@ -317,13 +317,11 @@ public class AddBlessingToCharacterUseCaseTests
     public async Task UseCase_CalculatesLevelXp_As0_ForAdvantages()
     {
         _blessingDbModel.Type = "advantage";
-        _characterMappingDbModel.SpentXp = 4;
-        _blessingLevelDbModel.XpCost = 2;
 
         await _useCase.ExecuteAsync(_model);
 
         A.CallTo(() => _xpRepository.UpdateXpInfo(
-            A<CharacterXpMapping>.That.Matches(x => x.TotalCharacterCreationXp == 6)) 
+            A<CharacterXpMapping>.That.Matches(x => x.LevelXp == 0)) 
         ).MustHaveHappenedOnceExactly();
     }
     
@@ -380,13 +378,11 @@ public class AddBlessingToCharacterUseCaseTests
     public async Task UseCase_CalculatesLevelXp_As0_ForDisadvantages()
     {
         _blessingDbModel.Type = "disadvantage";
-        _characterMappingDbModel.SpentXp = 4;
-        _blessingLevelDbModel.XpGain = 2;
 
         await _useCase.ExecuteAsync(_model);
 
         A.CallTo(() => _xpRepository.UpdateXpInfo(
-            A<CharacterXpMapping>.That.Matches(x => x.TotalCharacterCreationXp == 6)) 
+            A<CharacterXpMapping>.That.Matches(x => x.LevelXp == 0)) 
         ).MustHaveHappenedOnceExactly();
     }
 
