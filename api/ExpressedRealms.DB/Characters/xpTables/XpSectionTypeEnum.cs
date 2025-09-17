@@ -2,7 +2,8 @@ namespace ExpressedRealms.DB.Characters.xpTables;
 
 public enum XpSectionTypeEnum
 {
-    Blessings = 1,
+    Advantages = 1,
+    Disadvantages,
     Knowledge,
     Powers,
     Skills,

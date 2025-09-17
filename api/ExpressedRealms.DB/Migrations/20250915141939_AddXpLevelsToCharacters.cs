@@ -62,26 +62,35 @@ namespace ExpressedRealms.DB.Migrations
 
             migrationBuilder.Sql(@"
                 insert into public.xp_section_type (id, name, creation_cap)
-                values (1, 'Advantage / Disadvantage XP', 8),
-                (2, 'Knowledge XP', 7),
-                (3, 'Power XP', 20),
-                (4, 'Skills XP', 28),
-                (5, 'Stats XP', 72),
-                (6, 'Discretionary', 16);");
+				values (1, 'Advantage XP', 8),
+				(2, 'Disadvantage XP', 8),
+				(3, 'Knowledge XP', 7),
+				(4, 'Power XP', 20),
+				(5, 'Skills XP', 28),
+				(6, 'Stats XP', 72),
+				(7, 'Discretionary', 16);");
 
             migrationBuilder.Sql(@"
 with calc as (
 
-	-- Blessing XP
+	-- Advantage XP
 	select ""Id"" character_id, sum(blessing_level.xp_cost) xp_total, 1 section_Type_id from public.""Characters""
 	join public.character_blessing_mapping on ""Characters"".""Id"" = character_blessing_mapping.character_Id
 	join public.blessing on blessing.id = character_blessing_mapping.blessing_id
 	join public.blessing_level on blessing_level.id = character_blessing_mapping.blessing_level_id
-	where blessing.is_deleted = false and character_blessing_Mapping.is_deleted = false
+	where blessing.is_deleted = false and character_blessing_Mapping.is_deleted = false and blessing.type = 'Advantage'
+	group by ""Characters"".""Id""
+
+	union -- Disadvantage XP
+	select ""Id"" character_id, sum(blessing_level.xp_cost) xp_total, 2 section_Type_id from public.""Characters""
+	join public.character_blessing_mapping on ""Characters"".""Id"" = character_blessing_mapping.character_Id
+	join public.blessing on blessing.id = character_blessing_mapping.blessing_id
+	join public.blessing_level on blessing_level.id = character_blessing_mapping.blessing_level_id
+	where blessing.is_deleted = false and character_blessing_Mapping.is_deleted = false and blessing.type = 'Disadvantage'
 	group by ""Characters"".""Id""
 
 	union -- Knowledges XP
-	select ""Id"" character_id, sum(knowledge_education_level.total_general_xp_cost) + count(character_knowledge_specialization.id) * 2 xp_total, 2 section_type_id from public.""Characters""
+	select ""Id"" character_id, sum(knowledge_education_level.total_general_xp_cost) + count(character_knowledge_specialization.id) * 2 xp_total, 3 section_type_id from public.""Characters""
 	join public.character_knowledge_mapping on ""Characters"".""Id"" = character_knowledge_mapping.character_Id
 	left join public.character_knowledge_specialization on character_knowledge_mapping.id = character_knowledge_specialization.knowledge_mapping_id
 	join public.knowledge_education_level on character_knowledge_mapping.knowledge_level_id = knowledge_education_level.id
@@ -89,26 +98,27 @@ with calc as (
 	group by ""Characters"".""Id""
 	
 	union -- Raw Power XP
-	select ""Id"" character_id, sum(power_level.xp) xp_total, 3 section_type_id from public.""Characters""
+	select ""Id"" character_id, sum(power_level.xp) xp_total, 4 section_type_id from public.""Characters""
 	join public.character_power_mapping on ""Characters"".""Id"" = character_power_mapping.character_Id
 	join public.power_level on power_level.id = character_power_mapping.power_level_id
 	where character_power_mapping.is_deleted = false
 	group by ""Characters"".""Id""
 
 	union -- Raw Skills XP
-	select ""Characters"".""Id"" character_id, sum(skill_level.total_xp) total_xp, 4 section_type_id from public.""Characters""
+	select ""Characters"".""Id"" character_id, sum(skill_level.total_xp) total_xp, 5 section_type_id from public.""Characters""
 	join public.""CharacterSkillsMapping"" on ""Characters"".""Id"" = ""CharacterSkillsMapping"".""CharacterId""
 	join public.skill_level on ""CharacterSkillsMapping"".""SkillLevelId"" = skill_level.id
 	group by ""Characters"".""Id""
 	
 	union -- Raw Stat XP
-	select ""Characters"".""Id"" character_id, agility.""TotalXPCost"" + con.""TotalXPCost"" + dex.""TotalXPCost"" + stre.""TotalXPCost"" + inti.""TotalXPCost"" + wil.""TotalXPCost"" xp_total, 5 section_type_id from public.""Characters""
+	select ""Characters"".""Id"" character_id, agility.""TotalXPCost"" + con.""TotalXPCost"" + dex.""TotalXPCost"" + stre.""TotalXPCost"" + inti.""TotalXPCost"" + wil.""TotalXPCost"" xp_total, 6 section_type_id from public.""Characters""
 	join public.""StatLevels"" agility on ""Characters"".""AgilityId"" = agility.""Id""
 	join public.""StatLevels"" con on ""Characters"".""ConstitutionId"" = con.""Id""
 	join public.""StatLevels"" dex on ""Characters"".""DexterityId"" = dex.""Id""
 	join public.""StatLevels"" stre on ""Characters"".""StrengthId"" = stre.""Id""
 	join public.""StatLevels"" inti on ""Characters"".""IntelligenceId"" = inti.""Id""
 	join public.""StatLevels"" wil on ""Characters"".""WillpowerId"" = wil.""Id""
+
 )
 insert into public.character_xp_mapping (character_id, xp_section_type_id, section_cap, spent_xp, discretion_xp, total_character_creation_xp, level_xp)
 select 
