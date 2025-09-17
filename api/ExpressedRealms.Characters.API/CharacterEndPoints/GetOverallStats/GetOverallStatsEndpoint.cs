@@ -28,6 +28,7 @@ internal static class GetOverallStatsEndpoint
                 Experience = status
                     .Value.ExperienceSections.Select(x => new ExperienceSection()
                     {
+                        SectionTypeId = x.TypeId,
                         Name = x.Name,
                         Total = x.Total,
                         CharacterCreateMax = x.Max,
