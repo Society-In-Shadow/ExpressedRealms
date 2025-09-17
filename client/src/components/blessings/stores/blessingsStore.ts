@@ -10,7 +10,6 @@ export const blessingsStore =
             return {
                 advantages: [] as SubCategory[],
                 disadvantages: [] as SubCategory[],
-                mixedBlessings: [] as SubCategory[],
                 types: [] as BlessingType[]
             }
         },
@@ -19,11 +18,9 @@ export const blessingsStore =
                 const response = await axios.get<BlessingRequest>(`/blessings`);
                 this.advantages = response.data.advantages
                 this.disadvantages = response.data.disadvantages
-                this.mixedBlessings = response.data.mixedBlessings
                 this.types = [  
                     { name: 'Advantage', subCategories: response.data.advantages},
-                    { name: 'Disadvantage', subCategories: response.data.disadvantages},
-                    { name: 'Mixed Blessings', subCategories: response.data.mixedBlessings}
+                    { name: 'Disadvantage', subCategories: response.data.disadvantages}
                 ]
             },
             async addBlessing(blessing: BlessingForm){

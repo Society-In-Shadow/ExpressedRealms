@@ -4,5 +4,4 @@ public class GetAllBlessingsResponse
 {
     public List<SubSection> Advantages { get; set; } = new();
     public List<SubSection> Disadvantages { get; set; } = new();
-    public List<SubSection> MixedBlessings { get; set; } = new();
 }

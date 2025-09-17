@@ -2,7 +2,6 @@
 export interface BlessingRequest {
     advantages: Array<SubCategory>
     disadvantages: Array<SubCategory>
-    mixedBlessings: Array<SubCategory>
 }
 
 export interface BlessingType{

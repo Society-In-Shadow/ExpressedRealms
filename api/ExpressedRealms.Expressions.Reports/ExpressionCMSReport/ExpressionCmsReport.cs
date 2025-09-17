@@ -152,7 +152,7 @@ public static class ExpressionCmsReport
                             row.RelativeItem().Text(blessing.Name).Bold().FontSize(9);
                             row.AutoItem().Text(blessing.SubType).Italic();
                         });
-                    card.Item().Text(blessing.Description);
+                    card.FormatMainSection(null, blessing.Description);
                     foreach (var level in blessing.Levels.OrderBy(x => x.Level))
                     {
                         card.Item().Text($" - {level.Level} - {level.Description}");
