@@ -45,9 +45,18 @@ internal sealed class DeleteBlessingFromCharacterUseCase(
         await mappingRepository.UpdateMapping(mapping);
 
         var blessingLevel = await blessingRepository.GetBlessingLevel(mapping.BlessingLevelId);
-        var xpInfo = await xpRepository.GetCharacterXpMapping(model.CharacterId, (int)XpSectionTypeEnum.Blessings);
+        var xpTypeId = (int)XpSectionTypeEnum.Advantages;
+        var blessing = await blessingRepository.GetBlessingForEditing(mapping.BlessingId);
+        
+        var cost = blessingLevel.XpCost;
+        if (blessing.Type.Equals("disadvantage", StringComparison.InvariantCultureIgnoreCase))
+        {
+            xpTypeId = (int)XpSectionTypeEnum.Disadvantages;
+            cost = blessingLevel.XpGain;
+        }
+        var xpInfo = await xpRepository.GetCharacterXpMapping(model.CharacterId, xpTypeId);
 
-        xpInfo.SpentXp -= blessingLevel.XpCost;
+        xpInfo.SpentXp -= cost;
         xpInfo.DiscretionXp = xpInfo.SpentXp;
         xpInfo.TotalCharacterCreationXp = xpInfo.SpentXp;
         xpInfo.LevelXp = 0;
