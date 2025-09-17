@@ -2,6 +2,17 @@ import {defineStore} from "pinia";
 import axios from "axios";
 import type {ExperienceBreakdownResponse} from "@/components/characters/character/types.ts"
 
+export const XpSectionTypes = {
+    advantage: 1,
+    disadvantage: 2,
+    knowledges: 3,
+    powers: 4,
+    skills: 5,
+    stats: 6,
+    discretionary: 7,
+} as const;
+export type XpSectionType = (typeof XpSectionTypes)[keyof typeof XpSectionTypes];
+
 export const experienceStore =
     defineStore('experienceStore', {
         state: () => {
@@ -22,6 +33,9 @@ export const experienceStore =
                 },
             getExperienceInfo(name: string){
                 return this.experienceBreakdown.experience.filter(x => x.name === name)[0];
+            },
+            getExperienceInfoForSection(sectionTypeId: XpSectionType){
+                return this.experienceBreakdown.experience.filter(x => x.sectionTypeId === sectionTypeId)[0];
             },
             getCharacterLevel(): number{
                 

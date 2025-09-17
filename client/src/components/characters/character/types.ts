@@ -4,6 +4,7 @@ export interface ExperienceBreakdownResponse {
 }
 
 export interface ExperienceBreakdown {
+    sectionTypeId: number;
     name: string;
     total: number;
     characterCreateMax: number;

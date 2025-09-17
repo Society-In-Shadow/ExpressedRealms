@@ -12,7 +12,11 @@ import {
 import {
   characterBlessingsStore
 } from "@/components/characters/character/wizard/blessings/stores/characterBlessingStore.ts";
-import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import {
+  experienceStore,
+  type XpSectionType,
+  XpSectionTypes,
+} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import Message from "primevue/message";
 
 const store = characterBlessingsStore();
@@ -28,12 +32,11 @@ const props = defineProps({
   }
 });
 
-onBeforeMount(async () => {
-  availableXp.value = 8 - experienceInfo.getExperienceInfo(`${props.blessing.type} XP`).total;
-  if(props.blessing.type.toLowerCase() == 'disadvantage'){
-    availableXp.value = 8 - experienceInfo.getExperienceInfo(`${props.blessing.type} XP`).characterCreateMax;
-  }
-})
+watch(() => props.blessing, async () => {
+  let sectionType: XpSectionType = props.blessing.type.toLowerCase() == 'disadvantage' ? XpSectionTypes.disadvantage : XpSectionTypes.advantage;
+  let xpInfo = experienceInfo.getExperienceInfoForSection(sectionType);
+  availableXp.value = xpInfo.characterCreateMax - xpInfo.total;
+}, {immediate: true})
 
 const onSubmit = form.handleSubmit(async (values) => {
   await store.addBlessing(values, route.params.id, props.blessing.id);

@@ -3,7 +3,7 @@
 import FormTextAreaWrapper from "@/FormWrappers/FormTextAreaWrapper.vue";
 import Button from "primevue/button";
 import {useRoute} from "vue-router";
-import {type PropType, ref, watch} from "vue";
+import {onBeforeMount, type PropType, ref, watch} from "vue";
 import type {Blessing, BlessingLevel} from "@/components/blessings/types.ts";
 import RadioButton from "primevue/radiobutton";
 import {
@@ -13,7 +13,11 @@ import {
   characterBlessingsStore
 } from "@/components/characters/character/wizard/blessings/stores/characterBlessingStore.ts";
 import {confirmationPopup} from "@/components/characters/character/wizard/blessings/services/confirmationService.ts";
-import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import {
+  experienceStore,
+  type XpSectionType,
+  XpSectionTypes
+} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import Message from "primevue/message";
 
 const store = characterBlessingsStore();
@@ -46,10 +50,10 @@ const loadData = async () => {
   currentLevel.value = props.blessing.levels.filter(x => x.id == currentBlessing.blessingLevelId)[0];
   mappingId.value = currentBlessing.id;
   form.setValues(currentBlessing, currentLevel.value);
-  availableXp.value = 8 - experienceInfo.getExperienceInfo(`${props.blessing.type} XP`).total + currentLevel.value.xpCost;
-  if(props.blessing.type.toLowerCase() == 'disadvantage'){
-    availableXp.value = 8 - experienceInfo.getExperienceInfo(`${props.blessing.type} XP`).characterCreateMax + currentLevel.value.xpGain;
-  }
+  let sectionType: XpSectionType = props.blessing.type.toLowerCase() == 'disadvantage' ? XpSectionTypes.disadvantage : XpSectionTypes.advantage;
+  let xpInfo = experienceInfo.getExperienceInfoForSection(sectionType);
+  let currentLevelXp = props.blessing.type.toLowerCase() == 'disadvantage' ? currentLevel.value.xpGain : currentLevel.value.xpCost ;
+  availableXp.value = xpInfo.characterCreateMax - xpInfo.total + currentLevelXp;
 }
 
 const onSubmit = form.handleSubmit(async (values) => {

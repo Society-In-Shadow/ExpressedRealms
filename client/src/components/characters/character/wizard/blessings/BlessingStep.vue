@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {computed, onMounted, ref} from "vue";
+import {computed, onBeforeMount, ref} from "vue";
 import {blessingsStore} from "@/components/blessings/stores/blessingsStore";
 import {UserRoles, userStore} from "@/stores/userStore.ts";
 import {makeIdSafe} from "@/utilities/stringUtilities.ts";
@@ -15,11 +15,13 @@ import EditCharacterBlessing
   from "@/components/characters/character/wizard/blessings/supports/EditCharacterBlessing.vue";
 import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
 import type {WizardContent} from "@/components/characters/character/wizard/types.ts";
+import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 
 const route = useRoute();
 const store = blessingsStore();
 const characterBlessingData = characterBlessingsStore();
 const userInfo = userStore();
+const xpInfo = experienceStore();
 
 
 const props = defineProps({
@@ -31,10 +33,11 @@ const props = defineProps({
 
 const showEdit = ref(false);
 
-onMounted(async () => {
+onBeforeMount(async () => {
   await store.getBlessings()
   showEdit.value = await userInfo.hasUserRole(UserRoles.BlessingsManagementRole);
   await characterBlessingData.getCharacterBlessings(route.params.id)
+  await xpInfo.updateExperience(route.params.id);
 })
 
 const filteredTypes = computed(() => {
