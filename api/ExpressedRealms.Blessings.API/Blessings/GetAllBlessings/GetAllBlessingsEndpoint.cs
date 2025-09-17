@@ -18,7 +18,6 @@ public static class GetAllBlessingsEndpoint
             {
                 Advantages = GetDetailsFor(results, "Advantage"),
                 Disadvantages = GetDetailsFor(results, "Disadvantage"),
-                MixedBlessings = GetDetailsFor(results, "Mixed Blessing"),
             }
         );
     }

@@ -25,7 +25,6 @@ export const characterBlessingsStore =
                 types: [] as Array<BlessingType>,
                 advantages: [] as Array<SubCategory>,
                 disadvantages: [] as Array<SubCategory>,
-                mixedBlessings: [] as Array<CharacterBlessing>,
                 blessings: [] as Array<CharacterBlessing>,
                 selectedBlessingIds: [] as Array<number>,
             }
