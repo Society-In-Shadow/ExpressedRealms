@@ -3,7 +3,7 @@
 import FormTextAreaWrapper from "@/FormWrappers/FormTextAreaWrapper.vue";
 import Button from "primevue/button";
 import {useRoute} from "vue-router";
-import {onBeforeMount, type PropType, ref} from "vue";
+import {type PropType, ref, watch} from "vue";
 import type {Blessing, BlessingLevel} from "@/components/blessings/types.ts";
 import RadioButton from "primevue/radiobutton";
 import {
@@ -13,6 +13,7 @@ import {
   characterBlessingsStore
 } from "@/components/characters/character/wizard/blessings/stores/characterBlessingStore.ts";
 import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import Message from "primevue/message";
 
 const store = characterBlessingsStore();
 const form = getValidationInstance();
@@ -56,6 +57,9 @@ function disableOption(level:BlessingLevel){
   <h3 class="d-flex justify-content-end">
     <span>Available Experience: {{ availableXp }}</span>
   </h3>
+  <div v-if="availableXp == 0">
+    <Message severity="warn" class="mt-4">You do not have enough experience to add this to your character.</Message>
+  </div>
   <form @submit="onSubmit">
     <div v-for="level in props.blessing.levels" :key="level.id" class="mt-3">
       <div class="d-flex flex-column flex-md-row align-self-center">
