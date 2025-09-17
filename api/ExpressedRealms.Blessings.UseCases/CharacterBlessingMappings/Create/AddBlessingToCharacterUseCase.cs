@@ -37,17 +37,28 @@ internal sealed class AddBlessingToCharacterUseCase(
             return Result.Fail("You cannot add Advantages or Disadvantages outside of character creation.");
         }
 
-        var xpInfo = await xpRepository.GetCharacterXpMapping(model.CharacterId, (int)XpSectionTypeEnum.Blessings);
-        var spentXp = xpInfo.SpentXp;
-
+        var blessing = await blessingRepository.GetBlessingForEditing(model.BlessingId);
         var blessingLevel = await blessingRepository.GetBlessingLevel(model.BlessingLevelId);
         
-        if (spentXp + blessingLevel.XpCost > xpInfo.SectionCap)
+        var xpTypeId = (int)XpSectionTypeEnum.Advantages;
+        var cost = blessingLevel.XpCost;
+        var name = "Advantages";
+        
+        if (blessing.Type.Equals("disadvantage", StringComparison.InvariantCultureIgnoreCase))
         {
-            return Result.Fail("You cannot add more than 8 points of Advantages or Disadvantages.");
+            xpTypeId = (int)XpSectionTypeEnum.Disadvantages;
+            cost = blessingLevel.XpGain;
+            name = "Disadvantages";
         }
         
-        var blessing = await blessingRepository.GetBlessingForEditing(model.BlessingId);
+        var xpInfo = await xpRepository.GetCharacterXpMapping(model.CharacterId, xpTypeId);
+        var spentXp = xpInfo.SpentXp;
+        
+        if (spentXp + cost > xpInfo.SectionCap)
+        {
+            return Result.Fail($"You cannot add more than {xpInfo.SectionCap} points of {name}.");
+        }
+        
         if (blessing.Type.Equals("advantage", StringComparison.InvariantCultureIgnoreCase))
         {
             var availableDiscretionary = await xpRepository.GetAvailableDiscretionary(model.CharacterId);
@@ -56,13 +67,13 @@ internal sealed class AddBlessingToCharacterUseCase(
                 return Result.Fail(
                     new NotEnoughXPFailure(availableDiscretionary, blessingLevel.XpCost)
                 );
-
-            xpInfo.SpentXp = spentXp + blessingLevel.XpCost;
-            xpInfo.DiscretionXp = xpInfo.SpentXp;
-            xpInfo.TotalCharacterCreationXp = xpInfo.SpentXp;
-            xpInfo.LevelXp = 0;
-            await xpRepository.UpdateXpInfo(xpInfo);
         }
+
+        xpInfo.SpentXp = spentXp + cost;
+        xpInfo.DiscretionXp = xpInfo.SpentXp;
+        xpInfo.TotalCharacterCreationXp = xpInfo.SpentXp;
+        xpInfo.LevelXp = 0;
+        await xpRepository.UpdateXpInfo(xpInfo);
         
         var mappingId = await mappingRepository.AddCharacterBlessingMapping(
             new CharacterBlessingMapping()

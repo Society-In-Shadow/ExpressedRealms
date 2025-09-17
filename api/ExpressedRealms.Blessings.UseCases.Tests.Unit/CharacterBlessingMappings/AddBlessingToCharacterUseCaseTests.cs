@@ -72,7 +72,10 @@ public class AddBlessingToCharacterUseCaseTests
             )
             .Returns(false);
         
-        A.CallTo(() => _xpRepository.GetCharacterXpMapping(_model.CharacterId, (int)XpSectionTypeEnum.Blessings))
+        A.CallTo(() => _xpRepository.GetCharacterXpMapping(_model.CharacterId, (int)XpSectionTypeEnum.Advantages))
+            .Returns(_characterMappingDbModel);
+        
+        A.CallTo(() => _xpRepository.GetCharacterXpMapping(_model.CharacterId, (int)XpSectionTypeEnum.Disadvantages))
             .Returns(_characterMappingDbModel);
         
         A.CallTo(() =>
@@ -247,19 +250,22 @@ public class AddBlessingToCharacterUseCaseTests
         Assert.Equal("You cannot add Advantages or Disadvantages outside of character creation.", result.Errors.First().Message);
     }
     
-    [Fact]
-    public async Task UseCase_ReturnsError_WhenAddingMoreThan8PointsOfAdvantagesOrDisadvantages()
+    [Theory]
+    [InlineData("Advantage", "Advantages")]
+    [InlineData("Disadvantage", "Disadvantages")]
+    public async Task UseCase_ReturnsError_WhenAddingMoreThan8PointsOfAdvantagesOrDisadvantages(string blessingType, string messageString)
     {
-        _characterMappingDbModel.SpentXp = 6;
+        _blessingDbModel.Type = blessingType;
+        _characterMappingDbModel.SpentXp = 20;
         
         var result = await _useCase.ExecuteAsync(_model);
 
         Assert.False(result.IsSuccess);
-        Assert.Equal("You cannot add more than 8 points of Advantages or Disadvantages.", result.Errors.First().Message);
+        Assert.Equal($"You cannot add more than 8 points of {messageString}.", result.Errors.First().Message);
     }
 
     [Fact]
-    public async Task UseCase_CalculatesSpentXp_AsSumOfOldSpentXpAndNewLevelCost()
+    public async Task UseCase_CalculatesSpentXp_AsSumOfOldSpentXpAndNewLevelCost_ForAdvantages()
     {
         _blessingDbModel.Type = "advantage";
         _characterMappingDbModel.SpentXp = 4;
@@ -273,7 +279,7 @@ public class AddBlessingToCharacterUseCaseTests
     }
     
     [Fact]
-    public async Task UseCase_CalculatesDiscretionXp_AsSumOfOldSpentXpAndNewLevelCost()
+    public async Task UseCase_CalculatesDiscretionXp_AsSumOfOldSpentXpAndNewLevelCost_ForAdvantages()
     {
         _blessingDbModel.Type = "advantage";
         _characterMappingDbModel.SpentXp = 4;
@@ -291,7 +297,7 @@ public class AddBlessingToCharacterUseCaseTests
     /// of the old + new level cost.
     /// </summary>
     [Fact]
-    public async Task UseCase_CalculatesTotalCharacterCreationXp_AsSumOfOldSpentXpAndNewLevelCost()
+    public async Task UseCase_CalculatesTotalCharacterCreationXp_AsSumOfOldSpentXpAndNewLevelCost_ForAdvantages()
     {
         _blessingDbModel.Type = "advantage";
         _characterMappingDbModel.SpentXp = 4;
@@ -308,11 +314,74 @@ public class AddBlessingToCharacterUseCaseTests
     /// Advantages and Disadvantages are not relevant to the Level XP calculation, so this is just 0.
     /// </summary>
     [Fact]
-    public async Task UseCase_CalculatesLevelXp_As0()
+    public async Task UseCase_CalculatesLevelXp_As0_ForAdvantages()
     {
         _blessingDbModel.Type = "advantage";
         _characterMappingDbModel.SpentXp = 4;
         _blessingLevelDbModel.XpCost = 2;
+
+        await _useCase.ExecuteAsync(_model);
+
+        A.CallTo(() => _xpRepository.UpdateXpInfo(
+            A<CharacterXpMapping>.That.Matches(x => x.TotalCharacterCreationXp == 6)) 
+        ).MustHaveHappenedOnceExactly();
+    }
+    
+    [Fact]
+    public async Task UseCase_CalculatesSpentXp_AsSumOfOldSpentXpAndNewLevelCost_ForDisadvantages()
+    {
+        _blessingDbModel.Type = "disadvantage";
+        _characterMappingDbModel.SpentXp = 4;
+        _blessingLevelDbModel.XpGain = 2;
+
+        await _useCase.ExecuteAsync(_model);
+
+        A.CallTo(() => _xpRepository.UpdateXpInfo(
+            A<CharacterXpMapping>.That.Matches(x => x.SpentXp == 6)) 
+        ).MustHaveHappenedOnceExactly();
+    }
+    
+    [Fact]
+    public async Task UseCase_CalculatesDiscretionXp_AsSumOfOldSpentXpAndNewLevelCost_ForDisadvantages()
+    {
+        _blessingDbModel.Type = "disadvantage";
+        _characterMappingDbModel.SpentXp = 4;
+        _blessingLevelDbModel.XpGain = 2;
+
+        await _useCase.ExecuteAsync(_model);
+
+        A.CallTo(() => _xpRepository.UpdateXpInfo(
+            A<CharacterXpMapping>.That.Matches(x => x.DiscretionXp == 6)) 
+        ).MustHaveHappenedOnceExactly();
+    }
+    
+    /// <summary>
+    /// For blessings, we don't need to take into consideration the section cap, so this is just the straight value
+    /// of the old + new level cost.
+    /// </summary>
+    [Fact]
+    public async Task UseCase_CalculatesTotalCharacterCreationXp_AsSumOfOldSpentXpAndNewLevelCost_ForDisadvantages()
+    {
+        _blessingDbModel.Type = "disadvantage";
+        _characterMappingDbModel.SpentXp = 4;
+        _blessingLevelDbModel.XpGain = 2;
+
+        await _useCase.ExecuteAsync(_model);
+
+        A.CallTo(() => _xpRepository.UpdateXpInfo(
+            A<CharacterXpMapping>.That.Matches(x => x.TotalCharacterCreationXp == 6)) 
+        ).MustHaveHappenedOnceExactly();
+    }
+    
+    /// <summary>
+    /// Advantages and Disadvantages are not relevant to the Level XP calculation, so this is just 0.
+    /// </summary>
+    [Fact]
+    public async Task UseCase_CalculatesLevelXp_As0_ForDisadvantages()
+    {
+        _blessingDbModel.Type = "disadvantage";
+        _characterMappingDbModel.SpentXp = 4;
+        _blessingLevelDbModel.XpGain = 2;
 
         await _useCase.ExecuteAsync(_model);
 
