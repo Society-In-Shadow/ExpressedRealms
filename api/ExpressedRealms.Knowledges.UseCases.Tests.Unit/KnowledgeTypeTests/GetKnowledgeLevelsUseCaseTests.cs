@@ -1,9 +1,7 @@
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeEducationLevels;
 using ExpressedRealms.Knowledges.Repository;
-using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.UseCases.KnowledgeLevels;
-using ExpressedRealms.Shared;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
 using Xunit;
@@ -15,7 +13,6 @@ public class GetKnowledgeLevelsUseCaseTests
     private readonly GetKnowledgeLevelsUseCase _useCase;
     private readonly IKnowledgeLevelRepository _repository;
     private readonly ICharacterRepository _characterRepository;
-    private readonly ICharacterKnowledgeRepository _mappingRepository;
     private readonly GetKnowledgeLevelsModel _model;
 
     private List<KnowledgeEducationLevel> KnowledgeTypesDbModel { get; set; }
@@ -54,20 +51,14 @@ public class GetKnowledgeLevelsUseCaseTests
 
         _repository = A.Fake<IKnowledgeLevelRepository>();
         _characterRepository = A.Fake<ICharacterRepository>();
-        _mappingRepository = A.Fake<ICharacterKnowledgeRepository>();
 
         A.CallTo(() => _repository.GetKnowledgeLevels()).Returns(KnowledgeTypesDbModel);
         A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId)).Returns(true);
-        A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_model.CharacterId)
-            )
-            .Returns(0);
 
         var validator = new GetKnowledgeLevelsModelValidator(_characterRepository);
 
         _useCase = new GetKnowledgeLevelsUseCase(
             _repository,
-            _mappingRepository,
             validator,
             CancellationToken.None
         );
@@ -107,17 +98,6 @@ public class GetKnowledgeLevelsUseCaseTests
     }
 
     [Fact]
-    public async Task UseCase_Grabs_TheExperienceSpentOnKnowledgesForCharacter()
-    {
-        await _useCase.ExecuteAsync(_model);
-
-        A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_model.CharacterId)
-            )
-            .MustHaveHappenedOnceExactly();
-    }
-
-    [Fact]
     public async Task UseCase_Returns_AvailableKnowledgeTypes()
     {
         var results = await _useCase.ExecuteAsync(_model);
@@ -138,20 +118,5 @@ public class GetKnowledgeLevelsUseCaseTests
             .ToList();
 
         Assert.Equivalent(knowledgeTypes, results.Value.KnowledgeLevels);
-    }
-
-    [Fact]
-    public async Task UseCase_Returns_AvailableExperience()
-    {
-        A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_model.CharacterId)
-            )
-            .Returns(5);
-        var results = await _useCase.ExecuteAsync(_model);
-
-        Assert.Equivalent(
-            StartingExperience.StartingKnowledges - 5,
-            results.Value.AvailableExperience
-        );
     }
 }

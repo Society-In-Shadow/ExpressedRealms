@@ -27,7 +27,6 @@ export const characterKnowledgeStore =
                 isLoadingLevels: true as boolean,
                 knowledges: [] as Array<CharacterKnowledge>,
                 knowledgeLevels: [] as Array<KnowledgeOptions>,
-                currentExperience: 0 as number,
             }
         },    
         actions: {
@@ -42,7 +41,6 @@ export const characterKnowledgeStore =
                 this.isLoadingLevels = true;
                 const response = await axios.get<KnowledgeOptionResponse>(`/characters/${characterId}/knowledges/options`)
                 this.knowledgeLevels = response.data.knowledgeLevels
-                this.currentExperience = response.data.availableExperience;
                 this.isLoadingLevels = false;
             },
             addKnowledge: async function (values:CharacterKnowledgeForm, characterId: number, knowledgeId: number): Promise<void> {

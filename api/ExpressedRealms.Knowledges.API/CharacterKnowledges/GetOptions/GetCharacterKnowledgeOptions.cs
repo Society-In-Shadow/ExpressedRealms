@@ -18,7 +18,6 @@ public static class GetCharacterKnowledgeOptions
         return TypedResults.Ok(
             new KnowledgeOptionsResponse()
             {
-                AvailableExperience = results.Value.AvailableExperience,
                 KnowledgeLevels = results
                     .Value.KnowledgeLevels.Select(x => new KnowledgeOptions()
                     {

@@ -1,6 +1,4 @@
 using ExpressedRealms.Knowledges.Repository;
-using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
-using ExpressedRealms.Shared;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
@@ -8,7 +6,6 @@ namespace ExpressedRealms.Knowledges.UseCases.KnowledgeLevels;
 
 public class GetKnowledgeLevelsUseCase(
     IKnowledgeLevelRepository levelRepository,
-    ICharacterKnowledgeRepository mappingRepository,
     GetKnowledgeLevelsModelValidator validator,
     CancellationToken cancellationToken
 ) : IGetKnowledgeLevelsUseCase
@@ -27,14 +24,10 @@ public class GetKnowledgeLevelsUseCase(
             return Result.Fail(result.Errors);
 
         var knowledgeLevels = await levelRepository.GetKnowledgeLevels();
-        var currentExperience = await mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(
-            model.CharacterId
-        );
 
         return Result.Ok(
             new GetKnowledgeLevelsReturnModel()
             {
-                AvailableExperience = StartingExperience.StartingKnowledges - currentExperience,
                 KnowledgeLevels = knowledgeLevels
                     .Select(x => new KnowledgeLevelModel()
                     {
