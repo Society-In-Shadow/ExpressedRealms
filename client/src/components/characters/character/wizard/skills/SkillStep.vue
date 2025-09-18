@@ -16,6 +16,7 @@ import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vu
 import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
 import type {WizardContent} from "@/components/characters/character/wizard/types.ts";
 import {breakpointsBootstrapV5, useBreakpoints} from "@vueuse/core";
+import {XpSectionTypes} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 
 const route = useRoute()
 const skillData = skillStore();
@@ -53,7 +54,7 @@ const updateWizardContent = (skill: CharacterSkillsResponse) => {
 </script>
 
 <template>
-  <ShowXPCosts xp-name-tag="Skills XP" />
+  <ShowXPCosts :section-type="XpSectionTypes.skills" />
   <div>
     <Panel v-for="skillType in skillTypes" class="mb-3 flex-shrink-1">
       <template #header>

@@ -11,6 +11,8 @@ import Message from "primevue/message";
 import type {Knowledge} from "@/components/knowledges/types.ts";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
+import {XpSectionTypes} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vue";
 
 const store = characterKnowledgeStore();
 const form = getValidationInstance();
@@ -58,9 +60,9 @@ const onSubmit = form.handleSubmit(async (values) => {
   </h1>
   <h3>{{ props.knowledge.typeName }}</h3>
   <p>{{ props.knowledge.description }}</p>
-  <h3 class="text-right">
-    Available Experience: {{ store.currentExperience }}
-  </h3>
+  <div>
+    <ShowXPCosts :section-type="XpSectionTypes.knowledges" />
+  </div>
   <form @submit="onSubmit">
     <DataTable v-model:selection="form.knowledgeLevel2.field.value" selection-mode="single" :value="store.knowledgeLevels" dataKey="id">
       <Column selection-mode="single"  headerStyle="width: 3rem"></Column>

@@ -11,6 +11,8 @@ import {addKnowledgeDialog} from "@/components/characters/character/knowledges/s
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import {confirmationPopup} from "@/components/characters/character/knowledges/services/confirmationService.ts";
+import {XpSectionTypes} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vue";
 
 const dialogService = addKnowledgeDialog();
 const store = characterKnowledgeStore();
@@ -79,9 +81,9 @@ function getCurrentXpLevel(levelId: number){
     </div>
     
     <p>{{ props.knowledge.knowledge.description }}</p>
-    <h3 class="text-right">
-      Available Experience: {{ store.currentExperience }}
-    </h3>
+    <div>
+      <ShowXPCosts :section-type="XpSectionTypes.knowledges" />
+    </div>
 
     <DataTable v-model:selection="form.knowledgeLevel2.field.value" selection-mode="single" :value="store.knowledgeLevels" dataKey="id">
       <Column selection-mode="single"  headerStyle="width: 3rem"></Column>

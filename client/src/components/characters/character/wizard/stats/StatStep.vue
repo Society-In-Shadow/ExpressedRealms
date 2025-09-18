@@ -11,6 +11,7 @@ import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vu
 import {statStore} from "@/components/characters/character/wizard/stats/stores/statStore.ts";
 import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
 import type {WizardContent} from "@/components/characters/character/wizard/types.ts";
+import {XpSectionTypes} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 
 const route = useRoute()
 const statData = statStore();
@@ -35,7 +36,7 @@ const updateWizardContent = (statTypeId: number) => {
 
 <template>
   <h2>Stats</h2>
-  <ShowXPCosts xp-name-tag="Stat XP" />
+  <ShowXPCosts :section-type="XpSectionTypes.stats" />
   <div>
     <DataTable :value="statData.stats" data-key="statTypeId">
       <Column field="name" header="Name">
