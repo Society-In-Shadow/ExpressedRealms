@@ -63,6 +63,8 @@ public class GetCharacterExperienceBreakdownUseCaseTests
         A.CallTo(() => xpRepository.GetCharacterXpMappings(_model.CharacterId))
             .Returns(xpItems);
 
+        A.CallTo(() => xpRepository.GetAvailableDiscretionary(_model.CharacterId)).Returns(18);
+
         var validator = new GetCharacterExperienceBreakdownModelValidator(
             knowledgeRepository,
             characterRepository
@@ -103,6 +105,14 @@ public class GetCharacterExperienceBreakdownUseCaseTests
         var item = result.Value.ExperienceSections.Single(x => x.Name == "Disadvantage XP");
         Assert.Equal(2, item.Total);
         Assert.Equal(8, item.Max);
+    }
+    
+    [Fact]
+    public async Task UseCase_WillReturn_TotalAvailableDiscretionaryXp()
+    {
+        var result = await _useCase.ExecuteAsync(_model);
+
+        Assert.Equal(18, result.Value.AvailableDiscretionary);
     }
 
     [Fact]

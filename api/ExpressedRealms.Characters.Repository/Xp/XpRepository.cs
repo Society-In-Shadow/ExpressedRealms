@@ -56,7 +56,7 @@ public class XpRepository(
         
         // If the discretionary is negative, that means the cap isn't reached yet
         var spentXp = await context.CharacterXpMappings.AsNoTracking()
-            .Where(x => x.CharacterId == characterId && x.DiscretionXp >= 0 && x.XpSectionTypeId != (int)XpSectionTypeEnum.Disadvantages)
+            .Where(x => x.CharacterId == characterId && x.DiscretionXp >= 0 && x.XpSectionTypeId != (int)XpSectionTypeEnum.Discretion)
             .SumAsync(x => x.DiscretionXp);
         
         return availableDiscretionary - spentXp;

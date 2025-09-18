@@ -53,6 +53,10 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
 
         costs.Add(new ExperienceTotalMax("Total", totalXp, maxXp));
 
-        return Result.Ok(new ExperienceBreakdownReturnModel() { ExperienceSections = costs });
+        return Result.Ok(new ExperienceBreakdownReturnModel()
+        {
+            ExperienceSections = costs,
+            AvailableDiscretionary = await xpRepository.GetAvailableDiscretionary(model.CharacterId)
+        });
     }
 }

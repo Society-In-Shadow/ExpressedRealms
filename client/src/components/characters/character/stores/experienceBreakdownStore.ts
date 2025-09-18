@@ -19,6 +19,7 @@ export const experienceStore =
             return {
                 isLoading: true as boolean,
                 experienceBreakdown: {} as ExperienceBreakdownResponse,
+                availableDiscretionary: 0 as number,
                 showAllExperience: true as boolean,
             }
         },
@@ -29,6 +30,7 @@ export const experienceStore =
                     .then((response) => {
                         this.isLoading = false;
                         this.experienceBreakdown = response.data;
+                        this.availableDiscretionary = response.data.availableDiscretionary
                     })
                 },
             getExperienceInfo(name: string){

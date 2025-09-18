@@ -1,6 +1,7 @@
 
 export interface ExperienceBreakdownResponse {
     experience: ExperienceBreakdown[];
+    availableDiscretionary: number;
 }
 
 export interface ExperienceBreakdown {
