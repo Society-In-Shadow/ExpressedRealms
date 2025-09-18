@@ -56,5 +56,6 @@ namespace ExpressedRealms.DB
         public DbSet<SkillLevelDescriptionMapping> SkillLevelDescriptionMappings { get; set; }
         public DbSet<CharacterXpMapping> CharacterXpMappings { get; set; }
         public DbSet<XpSectionType> XpSectionTypes { get; set; }
+        public DbSet<CharacterXpView> CharacterXpViews { get; set; }
     }
 }
