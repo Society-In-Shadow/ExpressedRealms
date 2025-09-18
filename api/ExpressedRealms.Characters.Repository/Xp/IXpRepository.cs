@@ -7,6 +7,6 @@ public interface IXpRepository
     Task<CharacterXpMapping> GetCharacterXpMapping(int characterId, int sectionTypeId);
     Task<int> GetAvailableDiscretionary(int characterId);
     Task UpdateXpInfo(CharacterXpMapping xpInfo);
-    Task<List<CharacterXpMapping>> GetCharacterXpMappings(int characterId);
+    Task<List<CharacterXpView>> GetCharacterXpMappings(int characterId);
     Task AddDefaultCharacterXpMappings(int characterId);
 }

@@ -34,10 +34,9 @@ public class XpRepository(
         await context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<List<CharacterXpMapping>> GetCharacterXpMappings(int characterId)
+    public async Task<List<CharacterXpView>> GetCharacterXpMappings(int characterId)
     {
-        return await context.CharacterXpMappings.AsNoTracking()
-            .Include(x => x.XpSectionType)
+        return await context.CharacterXpViews.AsNoTracking()
             .Where(x => x.CharacterId == characterId)
             .ToListAsync();
     }
@@ -55,8 +54,8 @@ public class XpRepository(
         var availableDiscretionary = maxDiscretionary + disadvantageXp;
         
         // If the discretionary is negative, that means the cap isn't reached yet
-        var spentXp = await context.CharacterXpMappings.AsNoTracking()
-            .Where(x => x.CharacterId == characterId && x.DiscretionXp >= 0 && x.XpSectionTypeId != (int)XpSectionTypeEnum.Discretion)
+        var spentXp = await context.CharacterXpViews.AsNoTracking()
+            .Where(x => x.CharacterId == characterId && x.DiscretionXp >= 0 && x.SectionTypeId != (int)XpSectionTypeEnum.Discretion)
             .SumAsync(x => x.DiscretionXp);
         
         return availableDiscretionary - spentXp;

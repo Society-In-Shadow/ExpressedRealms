@@ -30,12 +30,12 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
         
         costs.AddRange(xpInfo
             .Select(x => 
-                new ExperienceTotalMax(x.XpSectionType.Name, 
+                new ExperienceTotalMax(x.SectionName, 
                     x.SpentXp, 
                     x.SectionCap, 
                     true, 
                     true,
-                    x.XpSectionTypeId)
+                    x.SectionTypeId)
             ).ToList());
 
         var advantage = costs.First(x => x.TypeId == (int)XpSectionTypeEnum.Advantages);

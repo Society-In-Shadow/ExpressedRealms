@@ -21,35 +21,35 @@ public class GetCharacterExperienceBreakdownUseCaseTests
         var characterRepository = A.Fake<ICharacterRepository>();
         var xpRepository = A.Fake<IXpRepository>();
 
-        var xpItems = new List<CharacterXpMapping>()
+        var xpItems = new List<CharacterXpView>()
         {
-            new CharacterXpMapping()
+            new CharacterXpView()
             {
-                XpSectionTypeId = 1,
+                SectionTypeId = 1,
                 SpentXp = 1,
                 SectionCap = 8,
-                XpSectionType = new XpSectionType() { Name = "Knowledge XP" }
+                SectionName = "Knowledge XP" 
             },
-            new CharacterXpMapping()
+            new CharacterXpView()
             {
-                XpSectionTypeId = (int)XpSectionTypeEnum.Advantages,
+                SectionTypeId = (int)XpSectionTypeEnum.Advantages,
                 SpentXp = 4,
                 SectionCap = 8,
-                XpSectionType = new XpSectionType() { Name = "Advantage XP" }
+                SectionName =  "Advantage XP"
             },
-            new CharacterXpMapping()
+            new CharacterXpView()
             {
-                XpSectionTypeId = (int)XpSectionTypeEnum.Disadvantages,
+                SectionTypeId = (int)XpSectionTypeEnum.Disadvantages,
                 SpentXp = 2,
                 SectionCap = 8,
-                XpSectionType = new XpSectionType() { Name = "Disadvantage XP" }
+                SectionName = "Disadvantage XP"
             },
-            new CharacterXpMapping()
+            new CharacterXpView()
             {
-                XpSectionTypeId = (int)XpSectionTypeEnum.Discretion,
+                SectionTypeId = (int)XpSectionTypeEnum.Discretion,
                 SpentXp = 5,
                 SectionCap = 16,
-                XpSectionType = new XpSectionType() { Name = "Discretionary XP" }
+                SectionName = "Discretionary XP"
             }
         };
 
