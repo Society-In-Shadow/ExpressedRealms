@@ -32,7 +32,7 @@ internal sealed class AddKnowledgeToCharacterUseCase(
 
         var xpInfo = await xpRepository.GetAvailableXpForSection(
             model.CharacterId,
-            XpSectionTypeEnum.Knowledge
+            XpSectionTypes.Knowledge
         );
 
         // Assuming character creation rules for now

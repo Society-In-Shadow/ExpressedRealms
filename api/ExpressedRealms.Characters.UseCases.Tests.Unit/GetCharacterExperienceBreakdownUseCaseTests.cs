@@ -32,21 +32,21 @@ public class GetCharacterExperienceBreakdownUseCaseTests
             },
             new CharacterXpView()
             {
-                SectionTypeId = (int)XpSectionTypeEnum.Advantages,
+                SectionTypeId = (int)XpSectionTypes.Advantages,
                 SpentXp = 4,
                 SectionCap = 8,
                 SectionName = "Advantage XP",
             },
             new CharacterXpView()
             {
-                SectionTypeId = (int)XpSectionTypeEnum.Disadvantages,
+                SectionTypeId = (int)XpSectionTypes.Disadvantages,
                 SpentXp = 2,
                 SectionCap = 8,
                 SectionName = "Disadvantage XP",
             },
             new CharacterXpView()
             {
-                SectionTypeId = (int)XpSectionTypeEnum.Discretion,
+                SectionTypeId = (int)XpSectionTypes.Discretion,
                 SpentXp = 5,
                 SectionCap = 16,
                 SectionName = "Discretionary XP",
@@ -112,15 +112,5 @@ public class GetCharacterExperienceBreakdownUseCaseTests
         var result = await _useCase.ExecuteAsync(_model);
 
         Assert.Equal(18, result.Value.AvailableDiscretionary);
-    }
-
-    [Fact]
-    public async Task UseCase_WillReturn_TheCorrectTotalXp()
-    {
-        var result = await _useCase.ExecuteAsync(_model);
-
-        var item = result.Value.ExperienceSections.Single(x => x.Name == "Total");
-        Assert.Equal(5, item.Total);
-        Assert.Equal(32, item.Max);
     }
 }

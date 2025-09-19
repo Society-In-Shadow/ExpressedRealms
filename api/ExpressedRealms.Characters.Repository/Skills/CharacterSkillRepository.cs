@@ -106,7 +106,7 @@ internal sealed class CharacterSkillRepository(
 
         var xpInfo = await xpRepository.GetAvailableXpForSection(
             dto.CharacterId,
-            XpSectionTypeEnum.Skills
+            XpSectionTypes.Skills
         );
 
         var characterSkill = await context.CharacterSkillsMappings.FirstOrDefaultAsync(

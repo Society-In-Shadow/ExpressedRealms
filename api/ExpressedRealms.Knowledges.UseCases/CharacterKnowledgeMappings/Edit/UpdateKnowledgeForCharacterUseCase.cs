@@ -37,7 +37,7 @@ internal sealed class UpdateKnowledgeForCharacterUseCase(
         {
             var xpInfo = await xpRepository.GetAvailableXpForSection(
                 mapping.CharacterId,
-                XpSectionTypeEnum.Knowledge
+                XpSectionTypes.Knowledge
             );
 
             const int unknownKnowledgeType = 3;

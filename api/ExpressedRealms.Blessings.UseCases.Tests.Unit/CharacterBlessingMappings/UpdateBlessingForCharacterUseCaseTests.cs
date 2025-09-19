@@ -71,14 +71,14 @@ public class UpdateBlessingForCharacterUseCaseTests
         A.CallTo(() =>
                 _xpRepository.GetCharacterXpMapping(
                     _model.CharacterId,
-                    (int)XpSectionTypeEnum.Advantages
+                    (int)XpSectionTypes.Advantages
                 )
             )
             .Returns(_characterMappingDbModel);
         A.CallTo(() =>
                 _xpRepository.GetCharacterXpMapping(
                     _model.CharacterId,
-                    (int)XpSectionTypeEnum.Disadvantages
+                    (int)XpSectionTypes.Disadvantages
                 )
             )
             .Returns(_characterMappingDbModel);

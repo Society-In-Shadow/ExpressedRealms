@@ -51,7 +51,7 @@ public class AddPowerToCharacterUseCaseTests
         A.CallTo(() =>
                 _xpRepository.GetAvailableXpForSection(
                     _dbModel.CharacterId,
-                    XpSectionTypeEnum.Powers
+                    XpSectionTypes.Powers
                 )
             )
             .Returns(
@@ -213,7 +213,7 @@ public class AddPowerToCharacterUseCaseTests
         A.CallTo(() =>
                 _xpRepository.GetAvailableXpForSection(
                     _dbModel.CharacterId,
-                    XpSectionTypeEnum.Powers
+                    XpSectionTypes.Powers
                 )
             )
             .Returns(
@@ -238,7 +238,7 @@ public class AddPowerToCharacterUseCaseTests
         A.CallTo(() =>
                 _xpRepository.GetAvailableXpForSection(
                     _dbModel.CharacterId,
-                    XpSectionTypeEnum.Powers
+                    XpSectionTypes.Powers
                 )
             )
             .Returns(
@@ -263,7 +263,7 @@ public class AddPowerToCharacterUseCaseTests
         A.CallTo(() =>
                 _xpRepository.GetAvailableXpForSection(
                     _dbModel.CharacterId,
-                    XpSectionTypeEnum.Powers
+                    XpSectionTypes.Powers
                 )
             )
             .Returns(

@@ -57,14 +57,14 @@ public class XpRepository(
         var disadvantageXp = await context
             .CharacterBlessingMappings.AsNoTracking()
             .Where(x => x.CharacterId == characterId && x.Blessing.Type.ToLower() == "disadvantage")
-            .SumAsync(x => x.BlessingLevel.XpGain);
+            .SumAsync(x => x.BlessingLevel.XpGain, cancellationToken);
 
         var availableDiscretionary = maxDiscretionary + disadvantageXp;
 
-        var excludedSections = new List<XpSectionTypeEnum>
+        var excludedSections = new List<XpSectionTypes>
         {
-            XpSectionTypeEnum.Disadvantages,
-            XpSectionTypeEnum.Discretion,
+            XpSectionTypes.Disadvantages,
+            XpSectionTypes.Discretion,
         };
         // If the discretionary is negative, that means the cap isn't reached yet
         var spentXp = await context
@@ -72,16 +72,16 @@ public class XpRepository(
             .Where(x =>
                 x.CharacterId == characterId
                 && x.DiscretionXp >= 0
-                && !excludedSections.Contains((XpSectionTypeEnum)x.SectionTypeId)
+                && !excludedSections.Contains((XpSectionTypes)x.SectionTypeId)
             )
-            .SumAsync(x => x.DiscretionXp);
+            .SumAsync(x => x.DiscretionXp, cancellationToken);
 
         return availableDiscretionary - spentXp;
     }
 
     public async Task<SectionXpDto> GetAvailableXpForSection(
         int characterId,
-        XpSectionTypeEnum sectionType
+        XpSectionTypes sectionType
     )
     {
         var characterState = await context

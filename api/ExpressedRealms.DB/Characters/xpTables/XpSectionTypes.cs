@@ -1,6 +1,6 @@
 namespace ExpressedRealms.DB.Characters.xpTables;
 
-public enum XpSectionTypeEnum
+public enum XpSectionTypes
 {
     Advantages = 1,
     Disadvantages,

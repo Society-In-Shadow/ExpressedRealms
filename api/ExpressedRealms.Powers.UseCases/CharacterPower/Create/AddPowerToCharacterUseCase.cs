@@ -30,7 +30,7 @@ internal sealed class AddPowerToCharacterUseCase(
 
         var xpInfo = await xpRepository.GetAvailableXpForSection(
             model.CharacterId,
-            XpSectionTypeEnum.Powers
+            XpSectionTypes.Powers
         );
 
         var spentXp = xpInfo.SpentXp;

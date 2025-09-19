@@ -17,9 +17,7 @@ export function getValidationInstance() {
     const form = useGenericForm(validationSchema);
 
     const setValues = (model: CharacterKnowledge) => {
-        form.fields.notes.field.value = model.notes;
-        //form.fields.knowledgeLevel2.field.value = knowledgeLevel;
-        
+        form.fields.notes.field.value = model.notes;        
     }
 
     const customResetForm = () => {

@@ -34,7 +34,7 @@ internal sealed class CreateSpecializationUseCase(
 
         var xpInfo = await xpRepository.GetAvailableXpForSection(
             mapping.CharacterId,
-            XpSectionTypeEnum.Knowledge
+            XpSectionTypes.Knowledge
         );
 
         const int newSpecializationCost = 2;

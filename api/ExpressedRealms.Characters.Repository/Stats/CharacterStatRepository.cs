@@ -150,7 +150,7 @@ internal sealed class CharacterStatRepository(
     {
         var xpInfo = await xpRepository.GetAvailableXpForSection(
             character.Id,
-            XpSectionTypeEnum.Stats
+            XpSectionTypes.Stats
         );
 
         var oldTotalXpCost = dto.StatTypeId switch

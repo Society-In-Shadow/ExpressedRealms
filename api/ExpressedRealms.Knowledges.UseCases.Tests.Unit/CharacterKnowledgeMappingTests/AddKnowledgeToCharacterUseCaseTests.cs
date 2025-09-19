@@ -54,7 +54,7 @@ public class AddKnowledgeToCharacterUseCaseTests
         A.CallTo(() =>
                 _xpRepository.GetAvailableXpForSection(
                     _model.CharacterId,
-                    XpSectionTypeEnum.Knowledge
+                    XpSectionTypes.Knowledge
                 )
             )
             .Returns(
@@ -235,7 +235,7 @@ public class AddKnowledgeToCharacterUseCaseTests
         A.CallTo(() =>
                 _xpRepository.GetAvailableXpForSection(
                     _model.CharacterId,
-                    XpSectionTypeEnum.Knowledge
+                    XpSectionTypes.Knowledge
                 )
             )
             .Returns(
@@ -268,7 +268,7 @@ public class AddKnowledgeToCharacterUseCaseTests
         A.CallTo(() =>
                 _xpRepository.GetAvailableXpForSection(
                     _model.CharacterId,
-                    XpSectionTypeEnum.Knowledge
+                    XpSectionTypes.Knowledge
                 )
             )
             .Returns(
@@ -293,7 +293,7 @@ public class AddKnowledgeToCharacterUseCaseTests
         A.CallTo(() =>
                 _xpRepository.GetAvailableXpForSection(
                     _model.CharacterId,
-                    XpSectionTypeEnum.Knowledge
+                    XpSectionTypes.Knowledge
                 )
             )
             .Returns(

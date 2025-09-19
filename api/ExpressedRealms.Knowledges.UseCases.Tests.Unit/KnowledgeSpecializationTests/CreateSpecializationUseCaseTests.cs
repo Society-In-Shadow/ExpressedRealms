@@ -56,7 +56,7 @@ public class CreateSpecializationUseCaseTests
         A.CallTo(() =>
                 _xpRepository.GetAvailableXpForSection(
                     _dbModel.CharacterId,
-                    XpSectionTypeEnum.Knowledge
+                    XpSectionTypes.Knowledge
                 )
             )
             .Returns(
@@ -268,7 +268,7 @@ public class CreateSpecializationUseCaseTests
         A.CallTo(() =>
                 _xpRepository.GetAvailableXpForSection(
                     _dbModel.CharacterId,
-                    XpSectionTypeEnum.Knowledge
+                    XpSectionTypes.Knowledge
                 )
             )
             .Returns(
@@ -290,7 +290,7 @@ public class CreateSpecializationUseCaseTests
         A.CallTo(() =>
                 _xpRepository.GetAvailableXpForSection(
                     _dbModel.CharacterId,
-                    XpSectionTypeEnum.Knowledge
+                    XpSectionTypes.Knowledge
                 )
             )
             .Returns(

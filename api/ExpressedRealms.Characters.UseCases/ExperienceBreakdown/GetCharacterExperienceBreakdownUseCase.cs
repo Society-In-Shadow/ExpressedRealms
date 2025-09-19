@@ -1,5 +1,4 @@
 using ExpressedRealms.Characters.Repository.Xp;
-using ExpressedRealms.DB.Characters.xpTables;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
@@ -34,27 +33,10 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
                     x.SectionName,
                     x.SpentXp,
                     x.SectionCap,
-                    true,
-                    true,
                     x.SectionTypeId
                 ))
                 .ToList()
         );
-
-        var advantage = costs.First(x => x.TypeId == (int)XpSectionTypeEnum.Advantages);
-        advantage.IncludeInMax = false;
-
-        var disadvantage = costs.First(x => x.TypeId == (int)XpSectionTypeEnum.Disadvantages);
-        disadvantage.IncludeInTotal = false;
-
-        var discretion = costs.First(x => x.TypeId == (int)XpSectionTypeEnum.Discretion);
-        discretion.IncludeInTotal = false;
-        discretion.Total = -1;
-
-        /*var totalXp = costs.Where(x => x.IncludeInTotal).Sum(x => x.Total);
-        var maxXp = costs.Where(x => x.IncludeInMax).Sum(x => x.Max);
-
-        costs.Add(new ExperienceTotalMax("Total", totalXp, maxXp));*/
 
         return Result.Ok(
             new ExperienceBreakdownReturnModel()

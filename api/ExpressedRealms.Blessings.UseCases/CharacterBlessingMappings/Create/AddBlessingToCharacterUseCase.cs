@@ -42,13 +42,13 @@ internal sealed class AddBlessingToCharacterUseCase(
         var blessing = await blessingRepository.GetBlessingForEditing(model.BlessingId);
         var blessingLevel = await blessingRepository.GetBlessingLevel(model.BlessingLevelId);
 
-        var xpTypeId = (int)XpSectionTypeEnum.Advantages;
+        var xpTypeId = (int)XpSectionTypes.Advantages;
         var cost = blessingLevel.XpCost;
         var name = "Advantages";
 
         if (blessing.Type.Equals("disadvantage", StringComparison.InvariantCultureIgnoreCase))
         {
-            xpTypeId = (int)XpSectionTypeEnum.Disadvantages;
+            xpTypeId = (int)XpSectionTypes.Disadvantages;
             cost = blessingLevel.XpGain;
             name = "Disadvantages";
         }

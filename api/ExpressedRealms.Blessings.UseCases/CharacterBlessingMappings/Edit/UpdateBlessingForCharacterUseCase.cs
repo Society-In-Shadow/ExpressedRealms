@@ -48,14 +48,14 @@ internal sealed class UpdateBlessingForCharacterUseCase(
             var newLevel = await blessingRepository.GetBlessingLevel(model.BlessingLevelId);
             var oldLevel = await blessingRepository.GetBlessingLevel(mapping.BlessingLevelId);
 
-            var xpTypeId = (int)XpSectionTypeEnum.Advantages;
+            var xpTypeId = (int)XpSectionTypes.Advantages;
             var oldCost = oldLevel.XpCost;
             var newCost = newLevel.XpCost;
             var name = "Advantages";
 
             if (blessing.Type.Equals("disadvantage", StringComparison.InvariantCultureIgnoreCase))
             {
-                xpTypeId = (int)XpSectionTypeEnum.Disadvantages;
+                xpTypeId = (int)XpSectionTypes.Disadvantages;
                 oldCost = oldLevel.XpGain;
                 newCost = newLevel.XpGain;
                 name = "Disadvantages";

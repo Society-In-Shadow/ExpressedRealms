@@ -10,5 +10,5 @@ public interface IXpRepository
     Task UpdateXpInfo(CharacterXpMapping xpInfo);
     Task<List<CharacterXpView>> GetCharacterXpMappings(int characterId);
     Task AddDefaultCharacterXpMappings(int characterId);
-    Task<SectionXpDto> GetAvailableXpForSection(int characterId, XpSectionTypeEnum sectionType);
+    Task<SectionXpDto> GetAvailableXpForSection(int characterId, XpSectionTypes sectionType);
 }
