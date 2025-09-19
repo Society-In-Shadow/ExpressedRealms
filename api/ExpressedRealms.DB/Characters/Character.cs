@@ -32,6 +32,7 @@ public class Character : ISoftDelete
     
     public bool IsInCharacterCreation { get; set; }
     public bool IsPrimaryCharacter { get; set; }
+    public int AssignedXp { get; set; }
 
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }

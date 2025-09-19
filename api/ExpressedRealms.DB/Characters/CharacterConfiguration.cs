@@ -29,6 +29,8 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
             .HasDefaultValue(true);
         builder.Property(x => x.IsPrimaryCharacter).HasColumnName("is_primary_character").IsRequired()
             .HasDefaultValue(false);
+        builder.Property(x => x.AssignedXp).HasColumnName("assigned_xp").IsRequired()
+            .HasDefaultValue(0);
 
         builder.HasQueryFilter(x => !x.IsDeleted);
 

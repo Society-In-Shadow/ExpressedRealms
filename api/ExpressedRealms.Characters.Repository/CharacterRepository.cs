@@ -65,7 +65,8 @@ internal sealed class CharacterRepository(
             .Select(x => new CharacterStatusDto()
             {
                 IsPrimaryCharacter = x.IsPrimaryCharacter,
-                IsInCharacterCreation = x.IsInCharacterCreation
+                IsInCharacterCreation = x.IsInCharacterCreation,
+                AssignedXp = x.AssignedXp
             })
             .FirstAsync(cancellationToken);
     }
