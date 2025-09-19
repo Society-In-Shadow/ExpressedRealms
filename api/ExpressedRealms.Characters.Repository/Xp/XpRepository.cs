@@ -1,3 +1,4 @@
+using ExpressedRealms.Characters.Repository.Xp.Dtos;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Characters.xpTables;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
@@ -10,10 +11,10 @@ public class XpRepository(
     CancellationToken cancellationToken,
     IUserContext userContext) : IXpRepository
 {
-    public async Task<CharacterXpMapping> GetCharacterXpMapping(int characterId, int sectionTypeId)
+    public async Task<CharacterXpView> GetCharacterXpMapping(int characterId, int sectionTypeId)
     {
-        return await context.CharacterXpMappings
-            .FirstAsync(x => x.CharacterId == characterId && x.XpSectionTypeId == sectionTypeId);
+        return await context.CharacterXpViews
+            .FirstAsync(x => x.CharacterId == characterId && x.SectionTypeId == sectionTypeId);
     }
 
     public async Task AddDefaultCharacterXpMappings(int characterId)
@@ -52,15 +53,48 @@ public class XpRepository(
             .SumAsync(x => x.BlessingLevel.XpGain);
         
         var availableDiscretionary = maxDiscretionary + disadvantageXp;
-        
+
+        var excludedSections = new List<XpSectionTypeEnum>
+            { XpSectionTypeEnum.Disadvantages, XpSectionTypeEnum.Discretion };
         // If the discretionary is negative, that means the cap isn't reached yet
         var spentXp = await context.CharacterXpViews.AsNoTracking()
-            .Where(x => x.CharacterId == characterId && x.DiscretionXp >= 0 && x.SectionTypeId != (int)XpSectionTypeEnum.Discretion)
+            .Where(x => x.CharacterId == characterId && x.DiscretionXp >= 0 && !excludedSections.Contains((XpSectionTypeEnum)x.SectionTypeId))
             .SumAsync(x => x.DiscretionXp);
         
         return availableDiscretionary - spentXp;
     }
 
+    public async Task<SectionXpDto> GetAvailableXpForSection(int characterId, XpSectionTypeEnum sectionType)
+    {
+        var characterState = await context
+            .Characters.AsNoTracking()
+            .Where(x => x.Id == characterId && x.Player.UserId == userContext.CurrentUserId())
+            .Select(x => new 
+            {
+                IsPrimaryCharacter = x.IsPrimaryCharacter,
+                IsInCharacterCreation = x.IsInCharacterCreation,
+                AssignedXp = x.AssignedXp
+            })
+            .FirstAsync(cancellationToken);
+        
+        var xpInfo = await GetCharacterXpMapping(characterId, (int)sectionType);
+        
+        var availableXp =  characterState.IsInCharacterCreation switch
+        {
+            // Discretion is a dyanamic value, as such, it does remove the XP associated with this
+            // particular section.  So you need to add it back in to get to the true available XP
+            true => await GetAvailableDiscretionary(characterId) + xpInfo.SectionCap +  xpInfo.DiscretionXp,
+            false when characterState.IsPrimaryCharacter => xpInfo.TotalCharacterCreationXp + characterState.AssignedXp,
+            _ => 1000
+        };
+
+        return new SectionXpDto()
+        {
+            AvailableXp = availableXp,
+            SpentXp = xpInfo.SpentXp,
+        };
+    }
+    
     public Task UpdateXpInfo(CharacterXpMapping xpInfo)
     {
         context.CharacterXpMappings.Update(xpInfo);
