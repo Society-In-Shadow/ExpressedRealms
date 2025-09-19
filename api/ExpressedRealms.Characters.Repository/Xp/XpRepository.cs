@@ -81,7 +81,6 @@ public class XpRepository(
         
         var availableXp =  characterState.IsInCharacterCreation switch
         {
-
             true => await GetAvailableDiscretionary(characterId) + xpInfo.SectionCap,
             false when characterState.IsPrimaryCharacter => xpInfo.TotalCharacterCreationXp + characterState.AssignedXp,
             _ => 1000

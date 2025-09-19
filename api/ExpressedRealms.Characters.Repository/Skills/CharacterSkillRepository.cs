@@ -1,15 +1,20 @@
 using ExpressedRealms.Characters.Repository.Skills.DTOs;
+using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.DB;
+using ExpressedRealms.DB.Characters.xpTables;
 using ExpressedRealms.DB.Models.Skills;
-using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
+using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
+using FluentValidationFailure = ExpressedRealms.Repositories.Shared.CommonFailureTypes.FluentValidationFailure;
+using NotFoundFailure = ExpressedRealms.Repositories.Shared.CommonFailureTypes.NotFoundFailure;
 
 namespace ExpressedRealms.Characters.Repository.Skills;
 
 internal sealed class CharacterSkillRepository(
     ExpressedRealmsDbContext context,
     EditCharacterSkillMappingDtoValidator editCharacterSkillMappingDtoValidator,
+    IXpRepository xpRepository,
     CancellationToken cancellationToken
 ) : ICharacterSkillRepository
 {
@@ -98,6 +103,8 @@ internal sealed class CharacterSkillRepository(
         );
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
+        
+        var xpInfo = await xpRepository.GetAvailableXpForSection(dto.CharacterId, XpSectionTypeEnum.Skills);
 
         var characterSkill = await context.CharacterSkillsMappings.FirstOrDefaultAsync(
             x => x.CharacterId == dto.CharacterId && x.SkillTypeId == dto.SkillTypeId,
@@ -106,6 +113,25 @@ internal sealed class CharacterSkillRepository(
 
         if (characterSkill is null)
             return Result.Fail(new NotFoundFailure("Character Skill Mapping"));
+
+        if (dto.SkillLevelId == characterSkill.SkillLevelId)
+        {
+            return Result.Ok();
+        }
+        
+        var oldTotalXpCost = (await context.SkillLevels.FirstAsync(x => x.Id == characterSkill.SkillLevelId)).TotalXp;
+        var newTotalXpCost = (await context.SkillLevels.FirstAsync(x => x.Id == dto.SkillLevelId)).TotalXp;
+        
+        var spentXp = xpInfo.SpentXp;
+        
+        spentXp -= oldTotalXpCost;
+        
+        if (spentXp + newTotalXpCost > xpInfo.AvailableXp)
+        {
+            return Result.Fail(
+                new NotEnoughXPFailure(xpInfo.AvailableXp - xpInfo.SpentXp, newTotalXpCost - oldTotalXpCost)
+            );
+        }
 
         characterSkill.SkillLevelId = dto.SkillLevelId;
 
