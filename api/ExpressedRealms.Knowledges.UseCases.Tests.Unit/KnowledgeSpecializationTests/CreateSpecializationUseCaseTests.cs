@@ -1,3 +1,6 @@
+using ExpressedRealms.Characters.Repository.Xp;
+using ExpressedRealms.Characters.Repository.Xp.Dtos;
+using ExpressedRealms.DB.Characters.xpTables;
 using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
 using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeSpecializations;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
@@ -17,6 +20,7 @@ public class CreateSpecializationUseCaseTests
     private readonly CreateSpecializationUseCase _useCase;
     private readonly IKnowledgeSpecializationRepository _specializationRepository;
     private readonly ICharacterKnowledgeRepository _mappingRepository;
+    private readonly IXpRepository _xpRepository;
     private readonly CreateSpecializationModel _model;
     private readonly CharacterKnowledgeMapping _dbModel;
 
@@ -34,7 +38,8 @@ public class CreateSpecializationUseCaseTests
 
         _specializationRepository = A.Fake<IKnowledgeSpecializationRepository>();
         _mappingRepository = A.Fake<ICharacterKnowledgeRepository>();
-
+        _xpRepository =  A.Fake<IXpRepository>();
+        
         A.CallTo(() =>
                 _mappingRepository.HasExistingSpecializationForMapping(
                     _model.KnowledgeMappingId,
@@ -49,9 +54,13 @@ public class CreateSpecializationUseCaseTests
             )
             .Returns(_dbModel);
         A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_dbModel.CharacterId)
+                _xpRepository.GetAvailableXpForSection(_dbModel.CharacterId, XpSectionTypeEnum.Knowledge)
             )
-            .Returns(0);
+            .Returns(new SectionXpDto()
+            {
+                AvailableXp = StartingExperience.StartingKnowledges,
+                SpentXp = 0
+            });
         A.CallTo(() =>
                 _mappingRepository.GetSpecializationCountForMapping(_model.KnowledgeMappingId)
             )
@@ -65,6 +74,7 @@ public class CreateSpecializationUseCaseTests
         _useCase = new CreateSpecializationUseCase(
             _specializationRepository,
             _mappingRepository,
+            _xpRepository,
             validator,
             CancellationToken.None
         );
@@ -194,16 +204,6 @@ public class CreateSpecializationUseCaseTests
     }
 
     [Fact]
-    public async Task UseCase_CorrectlyGrabs_ExperienceSpentOnKnowledges_ForTheCharacter()
-    {
-        await _useCase.ExecuteAsync(_model);
-        A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_dbModel.CharacterId)
-            )
-            .MustHaveHappenedOnceExactly();
-    }
-
-    [Fact]
     public async Task UseCase_CorrectlyGrabs_TheSpecializationCountForTheMapping()
     {
         await _useCase.ExecuteAsync(_model);
@@ -261,9 +261,13 @@ public class CreateSpecializationUseCaseTests
     public async Task UseCase_CalculatesAvailableXP_Correctly()
     {
         A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_dbModel.CharacterId)
+                _xpRepository.GetAvailableXpForSection(_dbModel.CharacterId, XpSectionTypeEnum.Knowledge)
             )
-            .Returns(StartingExperience.StartingKnowledges - 1);
+            .Returns(new SectionXpDto()
+            {
+                AvailableXp = StartingExperience.StartingKnowledges,
+                SpentXp = StartingExperience.StartingKnowledges -1
+            });
 
         var result = await _useCase.ExecuteAsync(_model);
 
@@ -274,9 +278,13 @@ public class CreateSpecializationUseCaseTests
     public async Task UseCase_CalculatesCost_Correctly()
     {
         A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(_dbModel.CharacterId)
+                _xpRepository.GetAvailableXpForSection(_dbModel.CharacterId, XpSectionTypeEnum.Knowledge)
             )
-            .Returns(StartingExperience.StartingKnowledges - 1);
+            .Returns(new SectionXpDto()
+            {
+                AvailableXp = StartingExperience.StartingKnowledges,
+                SpentXp = StartingExperience.StartingKnowledges -1
+            });
 
         var result = await _useCase.ExecuteAsync(_model);
 
