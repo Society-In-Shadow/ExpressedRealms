@@ -64,7 +64,7 @@ export const experienceStore =
                 return this.experienceBreakdown.experience.filter(x => x.name === name)[0];
             },
             getExperienceInfoForSection(sectionTypeId: XpSectionType){
-                return this.experienceBreakdown.experience.filter(x => x.sectionTypeId === sectionTypeId)[0];
+                return this.calculatedValues.filter(x => x.sectionTypeId === sectionTypeId)[0];
             },
             getCharacterLevel(): number{
                 
