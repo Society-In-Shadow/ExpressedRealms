@@ -67,7 +67,7 @@ function disableOption(level:BlessingLevel){
     <div v-for="level in props.blessing.levels" :key="level.id" class="mt-3">
       <div class="d-flex flex-column flex-md-row align-self-center">
         <RadioButton v-model="form.blessingLevel.field" :inputId="level.id.toString()" :value="level" class="mr-4" :disabled="disableOption(level)" />
-        <label :for="level.id.toString()">{{ level.name }} – {{ level.description }}</label>
+        <label :for="level.id.toString()" :class="disableOption(level) ? 'non-selectable' : ''">{{ level.name }} – {{ level.description }}</label>
       </div>
     </div>
     
@@ -85,5 +85,5 @@ function disableOption(level:BlessingLevel){
 :deep(th.text-center .p-datatable-column-header-content) {
   justify-content: center;
 }
-
+.non-selectable { opacity:.6; pointer-events:none; }
 </style>
