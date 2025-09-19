@@ -1,7 +1,8 @@
+using ExpressedRealms.Characters.Repository.Xp;
+using ExpressedRealms.DB.Characters.xpTables;
 using ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup;
 using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.Powers.Repository.Powers;
-using ExpressedRealms.Shared;
 using ExpressedRealms.UseCases.Shared;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FluentResults;
@@ -12,6 +13,7 @@ internal sealed class AddPowerToCharacterUseCase(
     ICharacterPowerRepository mappingRepository,
     IPowerRepository powerRepository,
     AddPowerToCharacterModelValidator validator,
+    IXpRepository xpRepository,
     CancellationToken cancellationToken
 ) : IAddPowerToCharacterUseCase
 {
@@ -26,25 +28,16 @@ internal sealed class AddPowerToCharacterUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        // Get Character
-        // Check if it's an active character
-        // If so, check create status
-
-        // Also need to take into consideration discretionary spending
-
-        // Assuming character creation rules for now
-        const int availableExperience = StartingExperience.StartingPowers;
-
-        var spentXp = await mappingRepository.GetExperienceSpentOnPowersForCharacter(
-            model.CharacterId
+        var xpInfo = await xpRepository.GetAvailableXpForSection(
+            model.CharacterId,
+            XpSectionTypes.Powers
         );
 
+        var spentXp = xpInfo.SpentXp;
         var powerLevel = await powerRepository.GetPowerLevelForPower(model.PowerId);
 
-        if (spentXp + powerLevel.Xp > availableExperience)
-            return Result.Fail(
-                new NotEnoughXPFailure(availableExperience - spentXp, powerLevel.Xp)
-            );
+        if (spentXp + powerLevel.Xp > xpInfo.AvailableXp)
+            return Result.Fail(new NotEnoughXPFailure(xpInfo.AvailableXp - spentXp, powerLevel.Xp));
 
         var mappingId = await mappingRepository.AddCharacterPowerMapping(
             new CharacterPowerMapping()

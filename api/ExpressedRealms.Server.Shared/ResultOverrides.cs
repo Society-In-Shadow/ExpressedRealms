@@ -50,8 +50,13 @@ public static class ResultOverrides
 
     public static bool HasValidationError(this Result result, out ValidationProblem typedResults)
     {
-        typedResults = TypedResults.ValidationProblem(GetValidationFailure(result.Errors));
-        return result.HasError<FluentValidationFailure>();
+        typedResults = TypedResults.ValidationProblem(new Dictionary<string, string[]>());
+        var hasError = result.HasError<FluentValidationFailure>();
+
+        if (hasError)
+            typedResults = TypedResults.ValidationProblem(GetValidationFailure(result.Errors));
+
+        return hasError;
     }
 
     public static bool HasValidationError<T>(

@@ -1,4 +1,5 @@
-﻿using ExpressedRealms.DB.Interceptors;
+﻿using ExpressedRealms.DB.Characters.xpTables;
+using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
@@ -29,6 +30,10 @@ public class Character : ISoftDelete
 
     public int StatExperiencePoints { get; set; }
 
+    public bool IsInCharacterCreation { get; set; }
+    public bool IsPrimaryCharacter { get; set; }
+    public int AssignedXp { get; set; }
+
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 
@@ -46,4 +51,5 @@ public class Character : ISoftDelete
     public virtual List<CharacterKnowledgeMapping> CharacterKnowledgeMappings { get; set; } = null!;
     public virtual List<CharacterPowerMapping> CharacterPowerMappings { get; set; } = null!;
     public virtual List<CharacterBlessingMapping> CharacterBlessingMappings { get; set; } = null!;
+    public virtual List<CharacterXpMapping> CharacterXpMappings { get; set; } = null!;
 }

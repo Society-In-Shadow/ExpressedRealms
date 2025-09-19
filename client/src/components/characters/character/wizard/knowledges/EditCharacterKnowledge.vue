@@ -4,50 +4,69 @@ import Button from "primevue/button";
 import {getValidationInstance} from "@/components/characters/character/knowledges/validations/knowledgeValidations";
 import {characterKnowledgeStore} from "@/components/characters/character/knowledges/stores/characterKnowledgeStore";
 import {useRoute} from "vue-router";
-import {onBeforeMount, type PropType, ref} from "vue";
+import {ref, watch} from "vue";
 import type {CharacterKnowledge, KnowledgeOptions} from "@/components/characters/character/knowledges/types";
 import Message from "primevue/message";
 import {addKnowledgeDialog} from "@/components/characters/character/knowledges/services/dialogs.ts";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import {confirmationPopup} from "@/components/characters/character/knowledges/services/confirmationService.ts";
+import {experienceStore, XpSectionTypes} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vue";
+import type {CalculatedExperience} from "@/components/characters/character/types.ts";
 
 const dialogService = addKnowledgeDialog();
 const store = characterKnowledgeStore();
+const xpInfo = experienceStore();
 const form = getValidationInstance();
 const route = useRoute();
 const popupService = confirmationPopup(route.params.id)
+const sectionInfo = ref<CalculatedExperience>({});
+
+const selectedKnowledgeLevel = ref<KnowledgeOptions>();
 
 const props = defineProps({
-  knowledge: {
-    type: Object as PropType<CharacterKnowledge>,
+  knowledgeMappingId:{
+    type: Number,
     required: true,
-  },
-  isReadOnly:{
-    type: Boolean,
-    required: false
   }
 });
+const knowledge = ref<CharacterKnowledge>({})
+const isUnknownKnowledge = ref(false);
 
-const isUnknownKnowledge = ref(props.knowledge.type === 'Unknown');
+watch(props, async () => {
+  await loadInfo();
+}, {immediate: true})
 
-onBeforeMount(async () => {
+async function loadInfo(){
+
+  knowledge.value = store.knowledges.find(function (characterKnowledge: CharacterKnowledge) {
+    return characterKnowledge.mappingId == props.knowledgeMappingId
+  });
+  
+  isUnknownKnowledge.value = knowledge.value.knowledge.type === 'Unknown';
+  
   await store.getKnowledgeLevels(route.params.id);
-  store.knowledgeLevels.forEach(function(level:KnowledgeOptions) {
+  
+  sectionInfo.value = xpInfo.getExperienceInfoForSection(XpSectionTypes.knowledges);
+  
+  store.knowledgeLevels.map(function(level:KnowledgeOptions) {
     const xpCost = isUnknownKnowledge.value ? level.totalUnknownXpCost : level.totalGeneralXpCost;
-    const isLowerLevel = level.id > props.knowledge.levelId
-    level.disabled = xpCost > store.currentExperience && isLowerLevel;
+    const isLowerLevel = level.id > knowledge.value.levelId
+    level.disabled = xpCost > sectionInfo.value.availableXp && isLowerLevel;
+    return level;
   });
 
-  let level = store.knowledgeLevels.filter(function(level:KnowledgeOptions) {
-    return level.id === props.knowledge.levelId;
-  })[0]
+  selectedKnowledgeLevel.value = store.knowledgeLevels.find(function (level: KnowledgeOptions) {
+    return level.id === knowledge.value.levelId;
+  });
   
-  form.setValues(props.knowledge, level);
-})
+  form.setValues(knowledge.value);
+}
+
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await store.editKnowledge(values, route.params.id, props.knowledge.mappingId);
+  await store.editKnowledge(values, selectedKnowledgeLevel.value.id, route.params.id, knowledge.value.mappingId);
 });
 
 function getCurrentXpLevel(levelId: number){
@@ -61,6 +80,13 @@ function getCurrentXpLevel(levelId: number){
   return level.totalGeneralXpCost;
 }
 
+const onRowUnselect = (event) => {
+  let level = store.knowledgeLevels.find(function(level:KnowledgeOptions) {
+    return level.id === knowledge.value.levelId;
+  })
+  selectedKnowledgeLevel.value = level
+}
+
 </script>
 
 <template>
@@ -68,22 +94,24 @@ function getCurrentXpLevel(levelId: number){
     <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
       <div>
         <h2 class="p-0 m-0">
-          {{ props.knowledge.knowledge.name }}
+          {{ knowledge.knowledge.name }}
         </h2>
-        <div>{{ props.knowledge.knowledge.type }}</div>
+        <div>{{ knowledge.knowledge.type }}</div>
       </div>
-      <div v-if="!props.isReadOnly" class="p-0 m-2 d-inline-flex align-items-start align-items-center gap-2">
-        <Button label="Delete" size="small" severity="danger" @click="popupService.deleteConfirmation($event, props.knowledge.mappingId )" />
+      <div class="p-0 m-2 d-inline-flex align-items-start align-items-center gap-2">
+        <Button label="Delete" size="small" severity="danger" @click="popupService.deleteConfirmation($event, knowledge.mappingId )" />
         <Button label="Update" size="small" type="submit" />
       </div>
     </div>
     
-    <p>{{ props.knowledge.knowledge.description }}</p>
-    <h3 class="text-right">
-      Available Experience: {{ store.currentExperience }}
-    </h3>
-
-    <DataTable v-model:selection="form.knowledgeLevel2.field.value" selection-mode="single" :value="store.knowledgeLevels" dataKey="id">
+    <p>{{ knowledge.knowledge.description }}</p>
+    <div>
+      <ShowXPCosts :section-type="XpSectionTypes.knowledges" />
+    </div>
+    <div v-if="sectionInfo.availableXp == 0">
+      <Message severity="warn" class="my-4">You are out of experience to spend on Knowledges.</Message>
+    </div>
+    <DataTable v-model:selection="selectedKnowledgeLevel" selection-mode="single" :value="store.knowledgeLevels" dataKey="id" :rowClass="row => (row.disabled ? 'non-selectable' : '')" @rowUnselect="onRowUnselect">
       <Column selection-mode="single"  headerStyle="width: 3rem"></Column>
       <Column field="name" header="Name"></Column>
       <Column field="totalGeneralXpCost" header="XP" header-class="text-center" body-class="text-center" >
@@ -151,4 +179,6 @@ function getCurrentXpLevel(levelId: number){
 :deep(th.text-center .p-datatable-column-header-content) {
   justify-content: center;
 }
+.non-selectable { opacity:.6; pointer-events:none; }
+
 </style>

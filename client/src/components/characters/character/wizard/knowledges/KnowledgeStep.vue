@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import Button from "primevue/button";
-import {computed, onBeforeMount, ref} from "vue";
+import {computed, onBeforeMount} from "vue";
 import {knowledgeStore} from "@/components/knowledges/stores/knowledgeStore";
 import {characterKnowledgeStore} from "@/components/characters/character/knowledges/stores/characterKnowledgeStore";
 import {useRoute} from "vue-router";
@@ -13,6 +13,7 @@ import type {CharacterKnowledgeGroup, Knowledge, KnowledgeGroup} from "@/compone
 import type {CharacterKnowledge} from "@/components/characters/character/knowledges/types.ts";
 import type {WizardContent} from "@/components/characters/character/wizard/types.ts";
 import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
+import {XpSectionTypes} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 
 const wizardContentInfo = wizardContentStore();
 const knowledgeData = knowledgeStore();
@@ -51,21 +52,12 @@ const selectedKnowledgeGroups = computed<CharacterKnowledgeGroup[]>(() => {
   } as CharacterKnowledgeGroup));
 });
 
-const currentKnowledgeMappingId = ref<number | null>(null);
-const knowledge = computed(() => {
-  return characterKnowledgeData.knowledges.filter(x => x.mappingId == currentKnowledgeMappingId.value)[0];
-})
 const toggleEdit = (knowledge:CharacterKnowledge) => {
-  currentKnowledgeMappingId.value = knowledge.mappingId;
-  updateWizardContent();
-}
-
-const updateWizardContent = () => {
   wizardContentInfo.updateContent(
       {
         headerName: 'Knowledge',
         component: EditCharacterKnowledge,
-        props: { knowledge: knowledge}
+        props: { knowledgeMappingId: knowledge.mappingId }
       } as WizardContent
   )
 }
@@ -109,7 +101,7 @@ const updateWizardContent = () => {
     <div class="mb-2">
       <hr v-if="characterKnowledgeData.knowledges.length !== 0">
       <h1 class="pb-0 mb-0">Choose Knowledges</h1>
-      <ShowXPCosts xp-name-tag="Knowledge XP" />
+      <ShowXPCosts :section-type="XpSectionTypes.knowledges" />
       <div v-for="knowledgeGroup in availableKnowledgeGroups" :key="knowledgeGroup.name" class="mb-2">
         <h2 class="pb-0 mb-3">{{ knowledgeGroup.name }}</h2>
         <div v-for="knowledge in knowledgeGroup.knowledges" :key="knowledge.id" class="pl-md-3 pt-1 pb-1">

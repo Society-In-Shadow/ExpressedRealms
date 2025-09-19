@@ -13,7 +13,12 @@ import {
   characterBlessingsStore
 } from "@/components/characters/character/wizard/blessings/stores/characterBlessingStore.ts";
 import {confirmationPopup} from "@/components/characters/character/wizard/blessings/services/confirmationService.ts";
-import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import {
+  experienceStore,
+  type XpSectionType,
+  XpSectionTypes
+} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import Message from "primevue/message";
 
 const store = characterBlessingsStore();
 const form = getValidationInstance();
@@ -45,10 +50,10 @@ const loadData = async () => {
   currentLevel.value = props.blessing.levels.filter(x => x.id == currentBlessing.blessingLevelId)[0];
   mappingId.value = currentBlessing.id;
   form.setValues(currentBlessing, currentLevel.value);
-  availableXp.value = 8 - experienceInfo.getExperienceInfo(`${props.blessing.type} XP`).total + currentLevel.value.xpCost;
-  if(props.blessing.type.toLowerCase() == 'disadvantage'){
-    availableXp.value = 8 - experienceInfo.getExperienceInfo(`${props.blessing.type} XP`).characterCreateMax + currentLevel.value.xpGain;
-  }
+  let sectionType: XpSectionType = props.blessing.type.toLowerCase() == 'disadvantage' ? XpSectionTypes.disadvantage : XpSectionTypes.advantage;
+  let xpInfo = experienceInfo.getExperienceInfoForSection(sectionType);
+  let currentLevelXp = props.blessing.type.toLowerCase() == 'disadvantage' ? currentLevel.value.xpGain : currentLevel.value.xpCost ;
+  availableXp.value = xpInfo.characterCreateMax - xpInfo.total + currentLevelXp;
 }
 
 const onSubmit = form.handleSubmit(async (values) => {
@@ -85,10 +90,13 @@ function disableOption(level:BlessingLevel){
     <h3 class="d-flex justify-content-end">
       <span>Available Experience: {{availableXp}}</span>
     </h3>
+    <div v-if="availableXp == 0">
+      <Message severity="warn" class="mt-4">You do not have enough experience to modify this.</Message>
+    </div>
     <div v-for="level in props.blessing.levels" :key="level.id" class="mt-3">
       <div class="d-flex flex-column flex-md-row align-self-center">
         <RadioButton v-model="form.blessingLevel.field" :inputId="level.id.toString()" :value="level" class="mr-4" :disabled="disableOption(level)"/>
-        <label :for="level.id.toString()">{{ level.name }} – {{ level.description }}</label>
+        <label :for="level.id.toString()" :class="disableOption(level) ? 'non-selectable' : ''">{{ level.name }} – {{ level.description }}</label>
       </div>
     </div>
     
@@ -102,5 +110,5 @@ function disableOption(level:BlessingLevel){
 :deep(th.text-center .p-datatable-column-header-content) {
   justify-content: center;
 }
-
+.non-selectable { opacity:.6; pointer-events:none; }
 </style>

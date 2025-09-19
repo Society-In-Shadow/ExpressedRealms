@@ -6,6 +6,7 @@ import {characterPowersStore} from "@/components/characters/character/powers/sto
 import PowerCard from "@/components/characters/character/wizard/powers/supporting/PowerCard.vue";
 import PickPowerCard from "@/components/characters/character/wizard/powers/supporting/PickPowerCard.vue";
 import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vue";
+import {XpSectionTypes} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 
 const characterKnowledgeData = characterPowersStore();
 const route = useRoute();
@@ -34,7 +35,7 @@ const noPowers = ref(false);
     <div class="mb-2">
       <hr v-if="characterKnowledgeData.powers.length !== 0">
       <h1 class="pb-0 mb-0">Choose Powers</h1>
-      <ShowXPCosts xp-name-tag="Power XP" />
+      <ShowXPCosts :section-type="XpSectionTypes.powers" />
       <div v-if="characterKnowledgeData.powers.length === 0">
         <p>No Powers detected, please pick one below.</p>
       </div>

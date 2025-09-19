@@ -1,6 +1,8 @@
 using ExpressedRealms.Blessings.Repository.Blessings;
 using ExpressedRealms.Blessings.Repository.CharacterBlessings;
-using ExpressedRealms.Shared;
+using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.Characters.Repository.Xp;
+using ExpressedRealms.DB.Characters.xpTables;
 using ExpressedRealms.UseCases.Shared;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FluentResults;
@@ -10,6 +12,8 @@ namespace ExpressedRealms.Blessings.UseCases.CharacterBlessingMappings.Edit;
 internal sealed class UpdateBlessingForCharacterUseCase(
     ICharacterBlessingRepository mappingRepository,
     IBlessingRepository blessingRepository,
+    ICharacterRepository characterRepository,
+    IXpRepository xpRepository,
     UpdateBlessingForCharacterModelValidator validator,
     CancellationToken cancellationToken
 ) : IUpdateBlessingForCharacterUseCase
@@ -25,35 +29,66 @@ internal sealed class UpdateBlessingForCharacterUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        // Also need to take into consideration discretionary spending
         var mapping = await mappingRepository.GetCharacterBlessingMappingForEditing(
             model.MappingId
         );
 
         if (mapping.BlessingLevelId != model.BlessingLevelId)
         {
-            // Covers both advantage cap (8pts) and disadvantage cap (8pts)
-            const int availableExperience = StartingExperience.StartingBlessings;
+            var characterState = await characterRepository.GetCharacterState(model.CharacterId);
 
-            var spentXp = await mappingRepository.GetSpentXpForBlessingType(
-                model.CharacterId,
-                mapping.BlessingId
-            );
+            if (!characterState.IsInCharacterCreation)
+            {
+                return Result.Fail(
+                    "You cannot edit Advantages or Disadvantages outside of character creation."
+                );
+            }
 
+            var blessing = await blessingRepository.GetBlessingForEditing(mapping.BlessingId);
             var newLevel = await blessingRepository.GetBlessingLevel(model.BlessingLevelId);
             var oldLevel = await blessingRepository.GetBlessingLevel(mapping.BlessingLevelId);
 
-            var gainingXp = newLevel.XpCost < oldLevel.XpCost;
-            if (gainingXp)
+            var xpTypeId = (int)XpSectionTypes.Advantages;
+            var oldCost = oldLevel.XpCost;
+            var newCost = newLevel.XpCost;
+            var name = "Advantages";
+
+            if (blessing.Type.Equals("disadvantage", StringComparison.InvariantCultureIgnoreCase))
             {
-                spentXp -= oldLevel.XpCost;
+                xpTypeId = (int)XpSectionTypes.Disadvantages;
+                oldCost = oldLevel.XpGain;
+                newCost = newLevel.XpGain;
+                name = "Disadvantages";
             }
 
-            if (spentXp + newLevel.XpCost > availableExperience)
+            var xpInfo = await xpRepository.GetCharacterXpMapping(model.CharacterId, xpTypeId);
+            var spentXp = xpInfo.SpentXp;
+
+            var gainingXp = newCost < oldCost;
+            if (gainingXp)
+            {
+                spentXp -= oldCost;
+            }
+
+            if (spentXp + newCost > xpInfo.SectionCap)
             {
                 return Result.Fail(
-                    new NotEnoughXPFailure(availableExperience - spentXp, newLevel.XpCost)
+                    $"You cannot add more than {xpInfo.SectionCap} points of {name}."
                 );
+            }
+
+            if (blessing.Type.Equals("advantage", StringComparison.InvariantCultureIgnoreCase))
+            {
+                var availableDiscretionary = await xpRepository.GetAvailableDiscretionary(
+                    model.CharacterId
+                );
+
+                if (spentXp + newCost > availableDiscretionary)
+                {
+                    return Result.Fail(
+                        new NotEnoughXPFailure(availableDiscretionary, newLevel.XpCost)
+                    );
+                }
             }
 
             mapping.BlessingLevelId = model.BlessingLevelId;

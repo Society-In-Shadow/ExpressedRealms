@@ -1,6 +1,7 @@
 ﻿using ExpressedRealms.Characters.Repository.DTOs;
 using ExpressedRealms.Characters.Repository.Enums;
 using ExpressedRealms.Characters.Repository.Skills;
+using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Interceptors;
@@ -17,7 +18,8 @@ internal sealed class CharacterRepository(
     AddCharacterDtoValidator addValidator,
     EditCharacterDtoValidator editValidator,
     CancellationToken cancellationToken,
-    ICharacterSkillRepository skillRepository
+    ICharacterSkillRepository skillRepository,
+    IXpRepository xpRepository
 ) : ICharacterRepository
 {
     public async Task<List<CharacterListDto>> GetCharactersAsync()
@@ -55,6 +57,20 @@ internal sealed class CharacterRepository(
         return Result.Ok(character);
     }
 
+    public async Task<CharacterStatusDto> GetCharacterState(int id)
+    {
+        return await context
+            .Characters.AsNoTracking()
+            .Where(x => x.Id == id && x.Player.UserId == userContext.CurrentUserId())
+            .Select(x => new CharacterStatusDto()
+            {
+                IsPrimaryCharacter = x.IsPrimaryCharacter,
+                IsInCharacterCreation = x.IsInCharacterCreation,
+                AssignedXp = x.AssignedXp,
+            })
+            .FirstAsync(cancellationToken);
+    }
+
     public async Task<Result<int>> CreateCharacterAsync(AddCharacterDto dto)
     {
         var result = await addValidator.ValidateAsync(dto, cancellationToken);
@@ -72,6 +88,7 @@ internal sealed class CharacterRepository(
             Background = dto.Background,
             ExpressionId = dto.ExpressionId,
             FactionId = dto.FactionId,
+            IsInCharacterCreation = true,
         };
 
         character.PlayerId = playerId;
@@ -81,6 +98,7 @@ internal sealed class CharacterRepository(
         await context.SaveChangesAsync(cancellationToken);
 
         await skillRepository.AddDefaultSkills(character.Id);
+        await xpRepository.AddDefaultCharacterXpMappings(character.Id);
 
         return Result.Ok(character.Id);
     }

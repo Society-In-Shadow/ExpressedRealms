@@ -35,6 +35,12 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("smallint")
                         .HasDefaultValue((byte)1);
 
+                    b.Property<int>("AssignedXp")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0)
+                        .HasColumnName("assigned_xp");
+
                     b.Property<string>("Background")
                         .HasColumnType("text");
 
@@ -64,6 +70,18 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
+
+                    b.Property<bool>("IsInCharacterCreation")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true)
+                        .HasColumnName("is_in_character_creation");
+
+                    b.Property<bool>("IsPrimaryCharacter")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_primary_character");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -109,6 +127,107 @@ namespace ExpressedRealms.DB.Migrations
                     b.HasIndex("WillpowerId");
 
                     b.ToTable("Characters");
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Characters.xpTables.CharacterXpMapping", b =>
+                {
+                    b.Property<int>("CharacterId")
+                        .HasColumnType("integer")
+                        .HasColumnName("character_id");
+
+                    b.Property<int>("XpSectionTypeId")
+                        .HasColumnType("integer")
+                        .HasColumnName("xp_section_type_id");
+
+                    b.Property<int>("DiscretionXp")
+                        .HasColumnType("integer")
+                        .HasColumnName("discretion_xp");
+
+                    b.Property<int>("LevelXp")
+                        .HasColumnType("integer")
+                        .HasColumnName("level_xp");
+
+                    b.Property<int>("SectionCap")
+                        .HasColumnType("integer")
+                        .HasColumnName("section_cap");
+
+                    b.Property<int>("SpentXp")
+                        .HasColumnType("integer")
+                        .HasColumnName("spent_xp");
+
+                    b.Property<int>("TotalCharacterCreationXp")
+                        .HasColumnType("integer")
+                        .HasColumnName("total_character_creation_xp");
+
+                    b.HasKey("CharacterId", "XpSectionTypeId");
+
+                    b.HasIndex("XpSectionTypeId");
+
+                    b.ToTable("character_xp_mapping", (string)null);
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Characters.xpTables.CharacterXpView", b =>
+                {
+                    b.Property<int>("CharacterId")
+                        .HasColumnType("integer")
+                        .HasColumnName("character_id");
+
+                    b.Property<int>("DiscretionXp")
+                        .HasColumnType("integer")
+                        .HasColumnName("discretion_xp");
+
+                    b.Property<int>("LevelXp")
+                        .HasColumnType("integer")
+                        .HasColumnName("level_xp");
+
+                    b.Property<int>("SectionCap")
+                        .HasColumnType("integer")
+                        .HasColumnName("section_cap");
+
+                    b.Property<string>("SectionName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("section_name");
+
+                    b.Property<int>("SectionTypeId")
+                        .HasColumnType("integer")
+                        .HasColumnName("section_type_id");
+
+                    b.Property<int>("SpentXp")
+                        .HasColumnType("integer")
+                        .HasColumnName("spent_xp");
+
+                    b.Property<int>("TotalCharacterCreationXp")
+                        .HasColumnType("integer")
+                        .HasColumnName("total_character_creation_xp");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("character_xp_view", (string)null);
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Characters.xpTables.XpSectionType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)")
+                        .HasColumnName("name");
+
+                    b.Property<int>("SectionCap")
+                        .HasColumnType("integer")
+                        .HasColumnName("creation_cap");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("xp_section_type", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit.BlessingLevelAuditTrail", b =>
@@ -1917,6 +2036,25 @@ namespace ExpressedRealms.DB.Migrations
                     b.Navigation("WillpowerStatLevel");
                 });
 
+            modelBuilder.Entity("ExpressedRealms.DB.Characters.xpTables.CharacterXpMapping", b =>
+                {
+                    b.HasOne("ExpressedRealms.DB.Characters.Character", "Character")
+                        .WithMany("CharacterXpMappings")
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ExpressedRealms.DB.Characters.xpTables.XpSectionType", "XpSectionType")
+                        .WithMany("CharacterXpMappings")
+                        .HasForeignKey("XpSectionTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Character");
+
+                    b.Navigation("XpSectionType");
+                });
+
             modelBuilder.Entity("ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit.BlessingLevelAuditTrail", b =>
                 {
                     b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", "ActorUser")
@@ -2583,6 +2721,13 @@ namespace ExpressedRealms.DB.Migrations
                     b.Navigation("CharacterPowerMappings");
 
                     b.Navigation("CharacterSkillsMappings");
+
+                    b.Navigation("CharacterXpMappings");
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Characters.xpTables.XpSectionType", b =>
+                {
+                    b.Navigation("CharacterXpMappings");
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.BlessingLevel", b =>

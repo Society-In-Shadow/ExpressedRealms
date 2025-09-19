@@ -23,9 +23,9 @@ const props = defineProps({
 
       <div class="d-flex flex-row align-self-center justify-content-between">
         <div class="flex-grow-1">
-          <H2 class="p-0 m-0">
+          <h2 class="p-0 m-0">
             {{ props.power.name }}
-          </H2>
+          </h2>
           <div class="p-0 m-0">
             {{ props.power.powerLevel.name }}
           </div>

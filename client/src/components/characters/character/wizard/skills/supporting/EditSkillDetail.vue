@@ -7,7 +7,7 @@ import {useRoute} from 'vue-router'
 import toasters from "@/services/Toasters";
 import {skillStore} from "@/components/characters/character/skills/Stores/skillStore";
 import {proficiencyStore} from "@/components/characters/character/proficiency/stores/proficiencyStore";
-import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import {experienceStore, XpSectionTypes} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import type {
   CharacterSkillsResponse
 } from "@/components/characters/character/skills/interfaces/CharacterSkillsResponse.ts";
@@ -15,6 +15,7 @@ import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import Button from "primevue/button";
+import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vue";
 
 const props = defineProps({
   skill: {
@@ -53,9 +54,16 @@ onBeforeMount(async () =>{
 
 async function getEditOptions() {
   await skillInfo.getSkillOptions(route.params.id, props.skill?.skillTypeId)
-  expandedRows.value = Object.fromEntries(skillInfo.skillLevels.map(x => [x.levelId, true]));
-  skillLevel.value = skillInfo.skillLevels.find(x => x.levelId === props.skill.levelId);
+  const info = experienceInfo.getExperienceInfoForSection(XpSectionTypes.skills);
   selectedSkillItem.value = skillInfo.skillLevels.find(x => x.levelId === props.skill.levelId);
+  skillLevel.value = skillInfo.skillLevels.find(x => x.levelId === props.skill.levelId);
+  
+  skillInfo.skillLevels.forEach(function(level:SkillResponse) {
+    const levelInfo = skillInfo.skillLevels.find(x => x.levelId === level.levelId);
+    level.disabled = levelInfo.experienceCost - skillLevel.value.experienceCost > info.availableXp;
+    return level;
+  });
+  expandedRows.value = Object.fromEntries(skillInfo.skillLevels.map(x => [x.levelId, true]));
 }
 
 function handleStatUpdate(skill:SkillResponse){
@@ -111,11 +119,8 @@ const onRowUnselect = (event) => {
       </div>
     </div>
   </div>
-  <h3 class="d-flex justify-content-between">
-    <span>Experience Cost: {{selectedSkillItem.experienceCost > skillLevel.experienceCost ? "-" : "+"}}{{ Math.abs(selectedSkillItem.experienceCost - skillLevel.experienceCost) }}</span>
-    <span>Available Experience: Infinite</span>
-  </h3>
-  <DataTable v-model:selection="selectedSkillItem" v-model:expandedRows="expandedRows" :value="skillInfo.skillLevels" selection-mode="single" data-key="levelId" @rowUnselect="onRowUnselect">
+  <ShowXPCosts :section-type="XpSectionTypes.skills" />
+  <DataTable v-model:selection="selectedSkillItem" v-model:expandedRows="expandedRows" :value="skillInfo.skillLevels" selection-mode="single" data-key="levelId" @rowUnselect="onRowUnselect" :rowClass="row => (row.disabled ? 'non-selectable' : '')">
     <Column selection-mode="single" headerStyle="width: 3rem"></Column>
     <Column field="level" header="Name">
       <template #body="slotProps">
@@ -139,17 +144,23 @@ const onRowUnselect = (event) => {
       </template>
     </Column>
     <template #expansion="slotProps">
-      <SkeletonWrapper :show-skeleton="skillInfo.isLoadingSkillLevels" height="2rem" width="100%" style="padding-left: 3rem; cursor: pointer;" @click="selectedSkillItem = slotProps.data">
-        <div>
-          {{ slotProps.data.description }}
-        </div>
-        <div v-if="slotProps.data.benefits && slotProps.data.benefits.length > 0">
-          <h3 class="pb-1 mb-0">Benefits</h3>
-          <div v-for="benefit in slotProps.data.benefits">
-            <div> +{{ benefit.modifier }} {{ benefit.name }}</div>
+      <div :class="slotProps.data.disabled ? 'non-selectable' : ''">
+        <SkeletonWrapper :show-skeleton="skillInfo.isLoadingSkillLevels" height="2rem" width="100%" style="padding-left: 3rem; cursor: pointer;" @click="selectedSkillItem = slotProps.data">
+          <div>
+            {{ slotProps.data.description }}
           </div>
-        </div>
-      </SkeletonWrapper>
+          <div v-if="slotProps.data.benefits && slotProps.data.benefits.length > 0">
+            <h3 class="pb-1 mb-0">Benefits</h3>
+            <div v-for="benefit in slotProps.data.benefits">
+              <div> +{{ benefit.modifier }} {{ benefit.name }}</div>
+            </div>
+          </div>
+        </SkeletonWrapper>
+      </div>
     </template>
   </DataTable>
 </template>
+
+<style>
+.non-selectable { opacity:.6; pointer-events:none; }
+</style>

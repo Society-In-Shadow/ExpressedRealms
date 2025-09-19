@@ -454,6 +454,8 @@ internal static class CharacterEndPoints
 
                     if (results.HasValidationError(out var validationProblem))
                         return validationProblem;
+                    if (results.HasInsufficientXP(out var insufficientXPMessage))
+                        return insufficientXPMessage;
                     if (results.HasNotFound(out var notFound))
                         return notFound;
 

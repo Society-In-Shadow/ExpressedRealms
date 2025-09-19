@@ -12,10 +12,15 @@ import {
   getValidationInstance
 } from "@/components/characters/character/knowledges/validations/specializationValidations";
 import type {CharacterKnowledge} from "@/components/characters/character/knowledges/types";
+import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vue";
+import {experienceStore, XpSectionTypes} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import type {CalculatedExperience} from "@/components/characters/character/types.ts";
 
 const store = characterKnowledgeStore();
 const form = getValidationInstance();
+const xpInfo = experienceStore();
 const route = useRoute();
+const sectionInfo = ref<CalculatedExperience>({});
 
 const dialogRef = inject('dialogRef');
 
@@ -23,6 +28,7 @@ const knowledge = ref<CharacterKnowledge>(dialogRef.value.data.knowledge);
 
 onBeforeMount(async () => {
   await store.getKnowledgeLevels(route.params.id);
+  sectionInfo.value = xpInfo.getExperienceInfoForSection(XpSectionTypes.knowledges);
 })
 
 const closeDialog = () => {
@@ -42,24 +48,23 @@ const onSubmit = form.handleSubmit(async (values) => {
   </h1>
   <h3>{{ knowledge.knowledge.type }}</h3>
   <p>{{ knowledge.knowledge.description }}</p>
-  <h3 class="text-right">
-    Available Experience: {{ store.currentExperience }}
-  </h3>
   
-  <Message v-if="store.currentExperience < 2" severity="warn" class="mb-2">
+  <ShowXPCosts :section-type="XpSectionTypes.knowledges"/>
+  
+  <Message v-if="sectionInfo.availableXp < 2" severity="warn" class="my-3">
     You do not have enough experience to add a specialization (2xp)
   </Message>
   
   <form @submit="onSubmit">
-    <FormInputTextWrapper v-model="form.name" :disabled="store.currentExperience < 2" />
+    <FormInputTextWrapper v-model="form.name" :disabled="sectionInfo.availableXp < 2" />
     
-    <FormTextAreaWrapper v-model="form.description" :disabled="store.currentExperience < 2" />
+    <FormTextAreaWrapper v-model="form.description" :disabled="sectionInfo.availableXp < 2" />
     
-    <FormTextAreaWrapper v-model="form.notes" :disabled="store.currentExperience < 2" />
+    <FormTextAreaWrapper v-model="form.notes" :disabled="sectionInfo.availableXp < 2" />
 
     <div class="m-3 text-right">
       <Button label="Cancel" class="m-2" type="reset" @click="closeDialog()" />
-      <Button label="Add" class="m-2" type="submit" :disabled="store.currentExperience < 2" />
+      <Button label="Add" class="m-2" type="submit" :disabled="sectionInfo.availableXp < 2" />
     </div>
   </form>
 </template>

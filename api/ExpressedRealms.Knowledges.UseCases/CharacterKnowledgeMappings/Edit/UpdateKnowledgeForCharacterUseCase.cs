@@ -1,7 +1,8 @@
+using ExpressedRealms.Characters.Repository.Xp;
+using ExpressedRealms.DB.Characters.xpTables;
 using ExpressedRealms.Knowledges.Repository;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.Knowledges;
-using ExpressedRealms.Shared;
 using ExpressedRealms.UseCases.Shared;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FluentResults;
@@ -12,6 +13,7 @@ internal sealed class UpdateKnowledgeForCharacterUseCase(
     ICharacterKnowledgeRepository mappingRepository,
     IKnowledgeLevelRepository knowledgeLevelRepository,
     IKnowledgeRepository knowledgeRepository,
+    IXpRepository xpRepository,
     UpdateKnowledgeForCharacterModelValidator validator,
     CancellationToken cancellationToken
 ) : IUpdateKnowledgeForCharacterUseCase
@@ -33,44 +35,35 @@ internal sealed class UpdateKnowledgeForCharacterUseCase(
 
         if (mapping.KnowledgeLevelId != model.KnowledgeLevelId)
         {
-            // Get Character
-            // Check if it's an active character
-            // If so, check create status
-
-            // Also need to take into consideration discretionary spending
-
-            const int unknownKnowledgeType = 3;
-            const int availableExperience = StartingExperience.StartingKnowledges;
-
-            var spentXp = await mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(
-                mapping.CharacterId
+            var xpInfo = await xpRepository.GetAvailableXpForSection(
+                mapping.CharacterId,
+                XpSectionTypes.Knowledge
             );
 
-            var newLevel = await knowledgeLevelRepository.GetKnowledgeLevel(model.KnowledgeLevelId);
+            const int unknownKnowledgeType = 3;
 
+            var newLevel = await knowledgeLevelRepository.GetKnowledgeLevel(model.KnowledgeLevelId);
             var previousLevel = await knowledgeLevelRepository.GetKnowledgeLevel(
                 mapping.KnowledgeLevelId
             );
 
             var knowledge = await knowledgeRepository.GetKnowledgeAsync(mapping.KnowledgeId);
+            var spentXp = xpInfo.SpentXp;
 
-            if (newLevel.Level < previousLevel.Level)
-            {
-                var removedXp =
-                    knowledge.KnowledgeTypeId == unknownKnowledgeType
-                        ? previousLevel.UnknownXpCost
-                        : previousLevel.GeneralXpCost;
-                spentXp -= removedXp;
-            }
+            var removedXp =
+                knowledge.KnowledgeTypeId == unknownKnowledgeType
+                    ? previousLevel.TotalUnknownXpCost
+                    : previousLevel.TotalGeneralXpCost;
+            spentXp -= removedXp;
 
             var newExperience =
                 knowledge.KnowledgeTypeId == unknownKnowledgeType
-                    ? newLevel.UnknownXpCost
-                    : newLevel.GeneralXpCost;
+                    ? newLevel.TotalUnknownXpCost
+                    : newLevel.TotalGeneralXpCost;
 
-            if (spentXp + newExperience > availableExperience)
+            if (spentXp + newExperience > xpInfo.AvailableXp)
                 return Result.Fail(
-                    new NotEnoughXPFailure(availableExperience - spentXp, newExperience)
+                    new NotEnoughXPFailure(xpInfo.AvailableXp - spentXp, newExperience)
                 );
 
             mapping.KnowledgeLevelId = model.KnowledgeLevelId;

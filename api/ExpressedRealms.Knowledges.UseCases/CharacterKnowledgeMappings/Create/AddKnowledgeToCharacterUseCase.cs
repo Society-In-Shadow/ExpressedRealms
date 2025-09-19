@@ -1,8 +1,9 @@
+using ExpressedRealms.Characters.Repository.Xp;
+using ExpressedRealms.DB.Characters.xpTables;
 using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.Knowledges;
-using ExpressedRealms.Shared;
 using ExpressedRealms.UseCases.Shared;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FluentResults;
@@ -13,6 +14,7 @@ internal sealed class AddKnowledgeToCharacterUseCase(
     ICharacterKnowledgeRepository mappingRepository,
     IKnowledgeLevelRepository knowledgeLevelRepository,
     IKnowledgeRepository knowledgeRepository,
+    IXpRepository xpRepository,
     AddKnowledgeToCharacterModelValidator validator,
     CancellationToken cancellationToken
 ) : IAddKnowledgeToCharacterUseCase
@@ -28,31 +30,26 @@ internal sealed class AddKnowledgeToCharacterUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        // Get Character
-        // Check if it's an active character
-        // If so, check create status
-
-        // Also need to take into consideration discretionary spending
+        var xpInfo = await xpRepository.GetAvailableXpForSection(
+            model.CharacterId,
+            XpSectionTypes.Knowledge
+        );
 
         // Assuming character creation rules for now
         const int unknownKnowledgeType = 3;
-        const int availableExperience = StartingExperience.StartingKnowledges;
 
-        var spentXp = await mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(
-            model.CharacterId
-        );
         var knowledge = await knowledgeRepository.GetKnowledgeAsync(model.KnowledgeId);
         var knowledgeLevel = await knowledgeLevelRepository.GetKnowledgeLevel(
             model.KnowledgeLevelId
         );
         var newExperience =
             knowledge.KnowledgeTypeId == unknownKnowledgeType
-                ? knowledgeLevel.UnknownXpCost
-                : knowledgeLevel.GeneralXpCost;
+                ? knowledgeLevel.TotalUnknownXpCost
+                : knowledgeLevel.TotalGeneralXpCost;
 
-        if (spentXp + newExperience > availableExperience)
+        if (xpInfo.SpentXp + newExperience > xpInfo.AvailableXp)
             return Result.Fail(
-                new NotEnoughXPFailure(availableExperience - spentXp, newExperience)
+                new NotEnoughXPFailure(xpInfo.AvailableXp - xpInfo.SpentXp, newExperience)
             );
 
         var mappingId = await mappingRepository.AddCharacterKnowledgeMapping(

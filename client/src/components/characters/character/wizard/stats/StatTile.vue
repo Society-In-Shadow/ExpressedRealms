@@ -7,11 +7,14 @@ import Button from 'primevue/button';
 import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import type {Stat} from "@/components/characters/character/wizard/stats/types.ts";
+import type {LevelInfo, Stat} from "@/components/characters/character/wizard/stats/types.ts";
 import {statStore} from "@/components/characters/character/wizard/stats/stores/statStore.ts";
+import {experienceStore, XpSectionTypes} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vue";
 
 const route = useRoute()
 const statInfo = statStore();
+const xpInfo = experienceStore();
 
 const props = defineProps({
   statTypeId: {
@@ -39,6 +42,10 @@ onMounted(async () =>{
 async function reloadData(){
   await reloadStatInfo();
   await statInfo.getEditOptions(stat.value.id);
+  const info = xpInfo.getExperienceInfoForSection(XpSectionTypes.stats);
+  statInfo.statLevels.forEach(function(level:LevelInfo) {
+    level.disabled = level.totalXP - stat.value.statLevelInfo.totalXP > info.availableXp;
+  });
   expandedRows.value = Object.fromEntries(statInfo.statLevels.map(p => [p.level, true]));
 }
 
@@ -93,11 +100,8 @@ async function handleStatUpdate(stat:Stat){
         </div>
       </div>
     </div>
-    <h3 class="d-flex justify-content-between">
-      <span>Experience Cost: {{newStat.statLevelInfo.totalXP > stat.statLevelInfo.totalXP ? "-" : "+"}}{{ Math.abs(newStat.statLevelInfo.totalXP - stat.statLevelInfo.totalXP) }}</span>
-      <span>Available Experience: Infinite</span>
-    </h3>
-    <DataTable v-model:selection="newStat.statLevelInfo" v-model:expandedRows="expandedRows" :value="statInfo.statLevels" selection-mode="single" data-key="level">
+    <ShowXPCosts :section-type="XpSectionTypes.stats" />
+    <DataTable v-model:selection="newStat.statLevelInfo" v-model:expandedRows="expandedRows" :value="statInfo.statLevels" selection-mode="single" data-key="level" :rowClass="row => (row.disabled ? 'non-selectable' : '')">
       <Column selection-mode="single" headerStyle="width: 3rem"></Column>
       <Column field="level" header="Level">
         <template #body="slotProps">
@@ -121,11 +125,14 @@ async function handleStatUpdate(stat:Stat){
         </template>
       </Column>
       <template #expansion="slotProps">
-        <SkeletonWrapper :show-skeleton="loading" height="2rem" width="100%" style="padding-left: 3rem; cursor: pointer;" @click="newStat.statLevelInfo = slotProps.data">
-          <div >
-            {{ slotProps.data.description }}
-          </div>
-        </SkeletonWrapper>
+        <div :class="slotProps.data.disabled ? 'non-selectable' : ''">
+          <SkeletonWrapper :show-skeleton="loading" height="2rem" width="100%" style="padding-left: 3rem; cursor: pointer;" @click="newStat.statLevelInfo = slotProps.data">
+            <div >
+              {{ slotProps.data.description }}
+            </div>
+          </SkeletonWrapper>
+        </div>
+
       </template>
     </DataTable>
   </div>
@@ -135,4 +142,5 @@ async function handleStatUpdate(stat:Stat){
   :deep(th.text-center .p-datatable-column-header-content) {
     justify-content: center;
   }
+  .non-selectable { opacity:.6; pointer-events:none; }
 </style>

@@ -1,29 +1,48 @@
 <script setup lang="ts">
 
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {useRoute} from "vue-router";
-import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
-import type {ExperienceBreakdown} from "@/components/characters/character/types.ts";
+import {
+  experienceStore,
+  type XpSectionType
+} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import type {CalculatedExperience} from "@/components/characters/character/types.ts";
 
 const route = useRoute()
 const experienceInfo = experienceStore();
 
 const props = defineProps({
-  xpNameTag: {
-    type: String,
+  sectionType: {
+    type: Number as unknown as () => XpSectionType,
     required: true,
   }
 });
 
-const xp = ref<ExperienceBreakdown>({});
+const xp = ref<CalculatedExperience>({});
 
 onMounted(async () => {
   await experienceInfo.updateExperience(route.params.id);
-  xp.value = experienceInfo.experienceBreakdown.experience.filter(x => x.name == props.xpNameTag)[0];
 })
+
+watch(experienceInfo, () => {
+  xp.value = experienceInfo.getExperienceInfoForSection(props.sectionType);
+}, {immediate: true, deep: true})
 
 </script>
 
 <template>
-  <div class="pb-3" v-if="experienceInfo.showAllExperience">{{ xp.total}} Total XP - {{xp.characterCreateMax}} Creation XP = {{xp.levelXp}} XP</div>
+  <div class="d-flex flex-row justify-content-between gap-3">
+    <div>
+      <div class="d-flex flex-row justify-content-center gap-2">
+        <div><strong>Required XP:</strong> {{ xp.requiredXp }} / {{ xp.characterCreateMax }}</div>
+        <div><span class="material-symbols-outlined" title="You are required to spend all points">{{ xp.total >= xp.characterCreateMax ? "check_circle" : "warning" }}</span></div>
+      </div>
+    </div>
+    <div>
+      <strong>Discretionary XP:</strong> {{ xp.currentOptionalXp }} / {{ xp.optionalMaxXP }}
+    </div>
+    <div>
+      <strong>Available XP:</strong> {{ xp.availableXp }}
+    </div>
+  </div>
 </template>

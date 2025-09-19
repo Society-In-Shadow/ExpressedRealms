@@ -1,4 +1,5 @@
 using ExpressedRealms.Blessings.Repository.CharacterBlessings;
+using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
@@ -8,6 +9,7 @@ namespace ExpressedRealms.Blessings.UseCases.CharacterBlessingMappings.Delete;
 internal sealed class DeleteBlessingFromCharacterUseCase(
     ICharacterBlessingRepository mappingRepository,
     DeleteBlessingFromCharacterModelValidator validator,
+    ICharacterRepository characterRepository,
     CancellationToken cancellationToken
 ) : IDeleteBlessingFromCharacterUseCase
 {
@@ -21,6 +23,15 @@ internal sealed class DeleteBlessingFromCharacterUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
+
+        var characterState = await characterRepository.GetCharacterState(model.CharacterId);
+
+        if (!characterState.IsInCharacterCreation)
+        {
+            return Result.Fail(
+                "You cannot delete Advantages or Disadvantages outside of character creation."
+            );
+        }
 
         var mapping = await mappingRepository.GetCharacterBlessingMappingForEditing(
             model.MappingId

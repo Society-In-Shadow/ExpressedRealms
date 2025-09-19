@@ -1,7 +1,8 @@
+using ExpressedRealms.Characters.Repository.Xp;
+using ExpressedRealms.DB.Characters.xpTables;
 using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeSpecializations;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.KnowledgeSpecializations;
-using ExpressedRealms.Shared;
 using ExpressedRealms.UseCases.Shared;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FluentResults;
@@ -11,6 +12,7 @@ namespace ExpressedRealms.Knowledges.UseCases.KnowledgeSpecializations.CreateSpe
 internal sealed class CreateSpecializationUseCase(
     IKnowledgeSpecializationRepository specializationRepository,
     ICharacterKnowledgeRepository mappingRepository,
+    IXpRepository xpRepository,
     CreateSpecializationModelValidator validator,
     CancellationToken cancellationToken
 ) : ICreateSpecializationUseCase
@@ -30,17 +32,16 @@ internal sealed class CreateSpecializationUseCase(
             model.KnowledgeMappingId
         );
 
-        const int maxKnowledge = StartingExperience.StartingKnowledges;
-
-        var spentXp = await mappingRepository.GetExperienceSpentOnKnowledgesForCharacter(
-            mapping.CharacterId
+        var xpInfo = await xpRepository.GetAvailableXpForSection(
+            mapping.CharacterId,
+            XpSectionTypes.Knowledge
         );
 
         const int newSpecializationCost = 2;
-        if (maxKnowledge - spentXp - newSpecializationCost < 0)
+        if (xpInfo.SpentXp + newSpecializationCost > xpInfo.AvailableXp)
         {
             return Result.Fail(
-                new NotEnoughXPFailure(maxKnowledge - spentXp, newSpecializationCost)
+                new NotEnoughXPFailure(xpInfo.AvailableXp - xpInfo.SpentXp, newSpecializationCost)
             );
         }
 

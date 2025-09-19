@@ -4,6 +4,7 @@ using ExpressedRealms.Characters.Repository.Skills;
 using ExpressedRealms.Characters.Repository.Skills.DTOs;
 using ExpressedRealms.Characters.Repository.Stats;
 using ExpressedRealms.Characters.Repository.Stats.DTOs;
+using ExpressedRealms.Characters.Repository.Xp;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExpressedRealms.Characters.Repository;
@@ -24,6 +25,7 @@ public static class CharacterRepositoryInjections
         services.AddScoped<ICharacterStatRepository, CharacterStatRepository>();
         services.AddScoped<ICharacterSkillRepository, CharacterSkillRepository>();
         services.AddScoped<IProficiencyRepository, ProficiencyRepository>();
+        services.AddScoped<IXpRepository, XpRepository>();
 
         return services;
     }
