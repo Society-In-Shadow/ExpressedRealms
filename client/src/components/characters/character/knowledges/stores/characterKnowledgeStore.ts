@@ -62,11 +62,7 @@ export const characterKnowledgeStore =
                         wizardContentInfo.hideContent()
                     });
             },
-            editKnowledge: async function (values:CharacterKnowledgeForm, characterId: number, mappingId: number): Promise<void> {
-                let knowledgeLevelId = values.knowledgeLevel
-                if(values.knowledgeLevel2){
-                    knowledgeLevelId = values.knowledgeLevel2.id;
-                }
+            editKnowledge: async function (values:CharacterKnowledgeForm, knowledgeLevelId:number, characterId: number, mappingId: number): Promise<void> {
                 
                 await axios.put(`/characters/${characterId}/knowledges/${mappingId}`, {
                     knowledgeLevelId: knowledgeLevelId,

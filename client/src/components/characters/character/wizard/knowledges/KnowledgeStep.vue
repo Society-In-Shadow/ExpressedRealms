@@ -57,7 +57,7 @@ const toggleEdit = (knowledge:CharacterKnowledge) => {
       {
         headerName: 'Knowledge',
         component: EditCharacterKnowledge,
-        props: { knowledge: knowledge }
+        props: { knowledgeMappingId: knowledge.mappingId }
       } as WizardContent
   )
 }
