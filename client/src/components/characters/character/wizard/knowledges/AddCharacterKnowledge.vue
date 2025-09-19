@@ -11,12 +11,15 @@ import Message from "primevue/message";
 import type {Knowledge} from "@/components/knowledges/types.ts";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
-import {XpSectionTypes} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import {experienceStore, XpSectionTypes} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vue";
+import type {CalculatedExperience} from "@/components/characters/character/types.ts";
 
 const store = characterKnowledgeStore();
 const form = getValidationInstance();
+const xpInfo = experienceStore();
 const route = useRoute();
+const sectionInfo = ref<CalculatedExperience>({});
 
 
 const props = defineProps({
@@ -42,9 +45,10 @@ onBeforeMount(async () => {
 
 async function loadInfo(){
   await store.getKnowledgeLevels(route.params.id);
+  sectionInfo.value = xpInfo.getExperienceInfoForSection(XpSectionTypes.knowledges);
   store.knowledgeLevels.forEach(function(level:KnowledgeOptions) {
     const xpCost = isUnknownKnowledge.value ? level.totalUnknownXpCost : level.totalGeneralXpCost;
-    level.disabled = xpCost > store.currentExperience;
+    level.disabled = xpCost > sectionInfo.value.availableXp;
   });
 }
 
@@ -63,8 +67,11 @@ const onSubmit = form.handleSubmit(async (values) => {
   <div>
     <ShowXPCosts :section-type="XpSectionTypes.knowledges" />
   </div>
+  <div v-if="sectionInfo.availableXp == 0">
+    <Message severity="warn" class="my-4">You are out of experience to spend on Knowledges.</Message>
+  </div>
   <form @submit="onSubmit">
-    <DataTable v-model:selection="form.knowledgeLevel2.field.value" selection-mode="single" :value="store.knowledgeLevels" dataKey="id">
+    <DataTable v-model:selection="form.knowledgeLevel2.field.value" selection-mode="single" :value="store.knowledgeLevels" dataKey="id" :rowClass="row => (row.disabled ? 'non-selectable' : '')">
       <Column selection-mode="single"  headerStyle="width: 3rem"></Column>
       <Column field="name" header="Name"></Column>
       <Column field="totalGeneralXpCost" header="XP" header-class="text-center" body-class="text-center" >
@@ -90,11 +97,11 @@ const onSubmit = form.handleSubmit(async (values) => {
     </Message>
 
     <div class="mt-4">
-      <FormTextAreaWrapper v-model="form.notes"/>
+      <FormTextAreaWrapper v-model="form.notes" :disabled="sectionInfo.availableXp == 0"/>
     </div>
 
     <div class="m-3 text-right">
-      <Button label="Add" class="m-2" type="submit" />
+      <Button label="Add" class="m-2" type="submit" :disabled="sectionInfo.availableXp == 0" />
     </div>
   </form>
 </template>
@@ -103,5 +110,5 @@ const onSubmit = form.handleSubmit(async (values) => {
 :deep(th.text-center .p-datatable-column-header-content) {
   justify-content: center;
 }
-
+.non-selectable { opacity:.6; pointer-events:none; }
 </style>

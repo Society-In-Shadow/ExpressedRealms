@@ -4,49 +4,70 @@ import Button from "primevue/button";
 import {getValidationInstance} from "@/components/characters/character/knowledges/validations/knowledgeValidations";
 import {characterKnowledgeStore} from "@/components/characters/character/knowledges/stores/characterKnowledgeStore";
 import {useRoute} from "vue-router";
-import {onBeforeMount, type PropType, ref} from "vue";
+import {onBeforeMount, type PropType, ref, watch} from "vue";
 import type {CharacterKnowledge, KnowledgeOptions} from "@/components/characters/character/knowledges/types";
 import Message from "primevue/message";
 import {addKnowledgeDialog} from "@/components/characters/character/knowledges/services/dialogs.ts";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import {confirmationPopup} from "@/components/characters/character/knowledges/services/confirmationService.ts";
-import {XpSectionTypes} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import {experienceStore, XpSectionTypes} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vue";
+import type {CalculatedExperience} from "@/components/characters/character/types.ts";
 
 const dialogService = addKnowledgeDialog();
 const store = characterKnowledgeStore();
+const xpInfo = experienceStore();
 const form = getValidationInstance();
 const route = useRoute();
 const popupService = confirmationPopup(route.params.id)
+const sectionInfo = ref<CalculatedExperience>({});
+
+const selectedKnowledge = ref<KnowledgeOptions>();
 
 const props = defineProps({
   knowledge: {
     type: Object as PropType<CharacterKnowledge>,
     required: true,
   },
-  isReadOnly:{
-    type: Boolean,
-    required: false
-  }
 });
 
 const isUnknownKnowledge = ref(props.knowledge.type === 'Unknown');
 
 onBeforeMount(async () => {
+  await loadInfo();
+})
+
+watch(props.knowledge, async () => {
+  await loadInfo();
+}, {immediate: true})
+
+watch(props.knowledge.levelId, async () => {
+  console.log("triggererd");
+  console.log()
+  selectedKnowledge.value = store.knowledgeLevels.find(function (level: KnowledgeOptions) {
+    return level.id === props.knowledge.levelId;
+  });
+}, {immediate: true, deep: true});
+
+async function loadInfo(){
   await store.getKnowledgeLevels(route.params.id);
-  store.knowledgeLevels.forEach(function(level:KnowledgeOptions) {
+  
+  sectionInfo.value = xpInfo.getExperienceInfoForSection(XpSectionTypes.knowledges);
+  
+  store.knowledgeLevels.map(function(level:KnowledgeOptions) {
     const xpCost = isUnknownKnowledge.value ? level.totalUnknownXpCost : level.totalGeneralXpCost;
     const isLowerLevel = level.id > props.knowledge.levelId
-    level.disabled = xpCost > store.currentExperience && isLowerLevel;
+    level.disabled = xpCost > sectionInfo.value.availableXp && isLowerLevel;
+    return level;
   });
 
-  let level = store.knowledgeLevels.filter(function(level:KnowledgeOptions) {
+  selectedKnowledge.value = store.knowledgeLevels.find(function (level: KnowledgeOptions) {
     return level.id === props.knowledge.levelId;
-  })[0]
-  
-  form.setValues(props.knowledge, level);
-})
+  });
+  form.setValues(props.knowledge);
+}
+
 
 const onSubmit = form.handleSubmit(async (values) => {
   await store.editKnowledge(values, route.params.id, props.knowledge.mappingId);
@@ -63,6 +84,13 @@ function getCurrentXpLevel(levelId: number){
   return level.totalGeneralXpCost;
 }
 
+const onRowUnselect = (event) => {
+  let level = store.knowledgeLevels.find(function(level:KnowledgeOptions) {
+    return level.id === props.knowledge.levelId;
+  })
+  selectedKnowledge.value = level
+}
+
 </script>
 
 <template>
@@ -74,7 +102,7 @@ function getCurrentXpLevel(levelId: number){
         </h2>
         <div>{{ props.knowledge.knowledge.type }}</div>
       </div>
-      <div v-if="!props.isReadOnly" class="p-0 m-2 d-inline-flex align-items-start align-items-center gap-2">
+      <div class="p-0 m-2 d-inline-flex align-items-start align-items-center gap-2">
         <Button label="Delete" size="small" severity="danger" @click="popupService.deleteConfirmation($event, props.knowledge.mappingId )" />
         <Button label="Update" size="small" type="submit" />
       </div>
@@ -84,8 +112,10 @@ function getCurrentXpLevel(levelId: number){
     <div>
       <ShowXPCosts :section-type="XpSectionTypes.knowledges" />
     </div>
-
-    <DataTable v-model:selection="form.knowledgeLevel2.field.value" selection-mode="single" :value="store.knowledgeLevels" dataKey="id">
+    <div v-if="sectionInfo.availableXp == 0">
+      <Message severity="warn" class="my-4">You are out of experience to spend on Knowledges.</Message>
+    </div>
+    <DataTable v-model:selection="selectedKnowledge" selection-mode="single" :value="store.knowledgeLevels" dataKey="id" :rowClass="row => (row.disabled ? 'non-selectable' : '')" @rowUnselect="onRowUnselect">
       <Column selection-mode="single"  headerStyle="width: 3rem"></Column>
       <Column field="name" header="Name"></Column>
       <Column field="totalGeneralXpCost" header="XP" header-class="text-center" body-class="text-center" >
@@ -153,4 +183,6 @@ function getCurrentXpLevel(levelId: number){
 :deep(th.text-center .p-datatable-column-header-content) {
   justify-content: center;
 }
+.non-selectable { opacity:.6; pointer-events:none; }
+
 </style>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import Button from "primevue/button";
-import {computed, onBeforeMount, ref} from "vue";
+import {computed, onBeforeMount} from "vue";
 import {knowledgeStore} from "@/components/knowledges/stores/knowledgeStore";
 import {characterKnowledgeStore} from "@/components/characters/character/knowledges/stores/characterKnowledgeStore";
 import {useRoute} from "vue-router";
@@ -52,21 +52,12 @@ const selectedKnowledgeGroups = computed<CharacterKnowledgeGroup[]>(() => {
   } as CharacterKnowledgeGroup));
 });
 
-const currentKnowledgeMappingId = ref<number | null>(null);
-const knowledge = computed(() => {
-  return characterKnowledgeData.knowledges.filter(x => x.mappingId == currentKnowledgeMappingId.value)[0];
-})
 const toggleEdit = (knowledge:CharacterKnowledge) => {
-  currentKnowledgeMappingId.value = knowledge.mappingId;
-  updateWizardContent();
-}
-
-const updateWizardContent = () => {
   wizardContentInfo.updateContent(
       {
         headerName: 'Knowledge',
         component: EditCharacterKnowledge,
-        props: { knowledge: knowledge.value }
+        props: { knowledge: knowledge }
       } as WizardContent
   )
 }
