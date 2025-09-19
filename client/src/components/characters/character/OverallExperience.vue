@@ -39,8 +39,8 @@ watch(xpInfo.calculatedValues, () => {
     </tr>
     <tr v-for="section in xpInfo.calculatedValues">
       <td class="text-center pr-2">
-        <span v-if="section.sectionTypeId == XpSectionTypes.advantage" class="material-symbols-outlined" title="No Status">
-          do_not_disturb_off
+        <span v-if="section.sectionTypeId == XpSectionTypes.advantage || section.sectionTypeId == XpSectionTypes.disadvantage" class="material-symbols-outlined" title="No Status">
+          do_not_disturb_on
         </span>
         <span v-else-if="section.sectionTypeId == XpSectionTypes.disadvantage" class="material-symbols-outlined" title="You are required to spend all points">
           {{ disadvantageBucket == section.total ? "check_circle" : "warning" }}
@@ -53,41 +53,55 @@ watch(xpInfo.calculatedValues, () => {
         </span>
       </td>
       <td class="text-left">{{section.name}}</td>
-
+      
+      <!-- Required XP -->
       <td class="text-center">
         <div v-if="section.sectionTypeId == XpSectionTypes.discretionary">
-          {{ discretionaryBucket }} / 16
+          {{ discretionaryBucket + disadvantageBucket }} / 22
         </div>
         <div v-else-if="section.sectionTypeId == XpSectionTypes.advantage">
-          0
+          --
         </div>
         <div v-else-if="section.sectionTypeId == XpSectionTypes.disadvantage">
-          {{ disadvantageBucket }} / {{ section.total }}
+          --
         </div>
         <div v-else>
-          {{ section.requiredXp }} / {{ section.characterCreateMax }}
+          {{ section.characterCreateMax }}
         </div>
       </td>
+      
+      <!-- Discretionary XP -->
       <td class="text-center">
-        <div v-if="section.sectionTypeId == XpSectionTypes.discretionary || section.sectionTypeId == XpSectionTypes.disadvantage">
+        <div v-if="section.sectionTypeId == XpSectionTypes.discretionary">
           --
+        </div>
+        <div v-else-if="section.sectionTypeId == XpSectionTypes.disadvantage">
+          + {{ section.total }}
         </div>
         <div v-else-if="section.sectionTypeId == XpSectionTypes.advantage">
           {{ section.total }}
         </div>
         <div v-else>
-          {{ section.currentOptionalXp }}
+          <div v-if="section.currentOptionalXp == 0">--</div>
+          <div v-else>{{ section.currentOptionalXp }}</div>
         </div>
-        
       </td>
+      
+      <!-- Available XP -->
       <td class="text-center">
-        <div v-if="section.sectionTypeId == XpSectionTypes.advantage">
-          {{ section.total == 8 ? '--' : 8-section.total }}
+        <div v-if="section.sectionTypeId == XpSectionTypes.disadvantage ">
+          <div v-if="xpInfo.availableDiscretionary == 0">--</div>
+          <div v-else>{{ xpInfo.availableDiscretionary }}</div>
         </div>
-        <div v-else-if="section.sectionTypeId == XpSectionTypes.disadvantage || section.sectionTypeId == XpSectionTypes.discretionary">
+        <div v-else-if="section.sectionTypeId == XpSectionTypes.discretionary ">
+          {{ 22 - discretionaryBucket - disadvantageBucket }}
+        </div>
+        <div v-else-if="section.total < section.characterCreateMax && section.sectionTypeId != XpSectionTypes.discretionary && section.sectionTypeId != XpSectionTypes.advantage">
+          {{ section.characterCreateMax - section.total }}
+        </div>
+        <div v-else>
           --
         </div>
-        <div v-else>{{xpInfo.availableDiscretionary}}</div>
       </td>
     </tr>
   </table>
@@ -95,9 +109,9 @@ watch(xpInfo.calculatedValues, () => {
   <Message severity="info" class="mt-3">
     <div>This is an breakdown of all the XP the current character has. The calculations are assuming you are spending everything you can. This will be changed later.</div>
     <ul>
-      <li>Total XP - Total experience in each category including character creation XP and XP spent past creation.</li>
-      <li>Creation XP - Base experience to be spent in each section during character creation.</li>
-      <li>Spent XP - Experience spent past character creation, this determines your character's XL.</li>
+      <li>Required - This column shows you the total xp for a section, and how much you have spent on it.</li>
+      <li>Discretionary - This is showing how much discretionary points you have spent in each section</li>
+      <li>Available - This is the remaining XP you need to spend for the given category</li>
     </ul>
     <div>Experience Levels:</div>
     <ol>
