@@ -1,4 +1,7 @@
 using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.Characters.Repository.Xp;
+using ExpressedRealms.Characters.Repository.Xp.Dtos;
+using ExpressedRealms.DB.Characters.xpTables;
 using ExpressedRealms.DB.Models.Powers;
 using ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup;
 using ExpressedRealms.Powers.Repository.CharacterPower;
@@ -18,12 +21,13 @@ public class AddPowerToCharacterUseCaseTests
     private readonly IPowerRepository _powerRepository;
     private readonly ICharacterPowerRepository _mappingRepository;
     private readonly ICharacterRepository _characterRepository;
-    private readonly AddPowerToCharacterModel _powerToCharacterModel;
+    private readonly IXpRepository _xpRepository = A.Fake<IXpRepository>();
+    private readonly AddPowerToCharacterModel _dbModel;
     private readonly PowerLevel _powerLevel;
 
     public AddPowerToCharacterUseCaseTests()
     {
-        _powerToCharacterModel = new AddPowerToCharacterModel()
+        _dbModel = new AddPowerToCharacterModel()
         {
             CharacterId = 2,
             PowerId = 3,
@@ -35,38 +39,41 @@ public class AddPowerToCharacterUseCaseTests
         _characterRepository = A.Fake<ICharacterRepository>();
         _powerRepository = A.Fake<IPowerRepository>();
         _mappingRepository = A.Fake<ICharacterPowerRepository>();
+        _xpRepository = A.Fake<IXpRepository>();
 
-        A.CallTo(() => _powerRepository.IsValidPower(_powerToCharacterModel.PowerId)).Returns(true);
+        A.CallTo(() => _powerRepository.IsValidPower(_dbModel.PowerId)).Returns(true);
         A.CallTo(() =>
-                _characterRepository.CharacterExistsAsync(_powerToCharacterModel.CharacterId)
+                _characterRepository.CharacterExistsAsync(_dbModel.CharacterId)
             )
             .Returns(true);
         A.CallTo(() =>
                 _mappingRepository.MappingExistsAsync(
-                    _powerToCharacterModel.PowerId,
-                    _powerToCharacterModel.CharacterId
+                    _dbModel.PowerId,
+                    _dbModel.CharacterId
                 )
             )
             .Returns(false);
         A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnPowersForCharacter(
-                    _powerToCharacterModel.CharacterId
-                )
+                _xpRepository.GetAvailableXpForSection(_dbModel.CharacterId, XpSectionTypeEnum.Powers)
             )
-            .Returns(0);
-        A.CallTo(() => _powerRepository.GetPowerLevelForPower(_powerToCharacterModel.PowerId))
+            .Returns(new SectionXpDto()
+            {
+                AvailableXp = StartingExperience.StartingPowers,
+                SpentXp = 0
+            });
+        A.CallTo(() => _powerRepository.GetPowerLevelForPower(_dbModel.PowerId))
             .Returns(_powerLevel);
         A.CallTo(() =>
                 _mappingRepository.GetSelectablePowersForCharacter(
-                    _powerToCharacterModel.CharacterId
+                    _dbModel.CharacterId
                 )
             )
-            .Returns(new List<int>() { _powerToCharacterModel.PowerId });
+            .Returns(new List<int>() { _dbModel.PowerId });
 
         A.CallTo(() =>
                 _powerRepository.IsValidPowerForCharacter(
-                    _powerToCharacterModel.CharacterId,
-                    _powerToCharacterModel.PowerId
+                    _dbModel.CharacterId,
+                    _dbModel.PowerId
                 )
             )
             .Returns(true);
@@ -81,6 +88,7 @@ public class AddPowerToCharacterUseCaseTests
             _mappingRepository,
             _powerRepository,
             validator,
+            _xpRepository,
             CancellationToken.None
         );
     }
@@ -88,8 +96,8 @@ public class AddPowerToCharacterUseCaseTests
     [Fact]
     public async Task ValidationFor_PowerId_WillFail_WhenItsEmpty()
     {
-        _powerToCharacterModel.PowerId = 0;
-        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
+        _dbModel.PowerId = 0;
+        var result = await _useCase.ExecuteAsync(_dbModel);
 
         result.MustHaveValidationError(
             nameof(AddPowerToCharacterModel.PowerId),
@@ -100,9 +108,9 @@ public class AddPowerToCharacterUseCaseTests
     [Fact]
     public async Task ValidationFor_PowerId_WillFail_WhenItDoesNotExist()
     {
-        A.CallTo(() => _powerRepository.IsValidPower(_powerToCharacterModel.PowerId))
+        A.CallTo(() => _powerRepository.IsValidPower(_dbModel.PowerId))
             .Returns(false);
-        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
+        var result = await _useCase.ExecuteAsync(_dbModel);
 
         result.MustHaveValidationError(
             nameof(AddPowerToCharacterModel.PowerId),
@@ -113,9 +121,9 @@ public class AddPowerToCharacterUseCaseTests
     [Fact]
     public async Task ValidationFor_PowerId_WillFail_WhenCharacterDoesNotHaveThePrerequisites()
     {
-        _powerToCharacterModel.PowerId = 2;
+        _dbModel.PowerId = 2;
 
-        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
+        var result = await _useCase.ExecuteAsync(_dbModel);
 
         result.MustHaveValidationError(
             nameof(AddPowerToCharacterModel.PowerId),
@@ -126,8 +134,8 @@ public class AddPowerToCharacterUseCaseTests
     [Fact]
     public async Task ValidationFor_CharacterId_WillFail_WhenItsEmpty()
     {
-        _powerToCharacterModel.CharacterId = 0;
-        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
+        _dbModel.CharacterId = 0;
+        var result = await _useCase.ExecuteAsync(_dbModel);
 
         result.MustHaveValidationError(
             nameof(AddPowerToCharacterModel.CharacterId),
@@ -139,10 +147,10 @@ public class AddPowerToCharacterUseCaseTests
     public async Task ValidationFor_CharacterId_WillFail_WhenItDoesNotExist()
     {
         A.CallTo(() =>
-                _characterRepository.CharacterExistsAsync(_powerToCharacterModel.CharacterId)
+                _characterRepository.CharacterExistsAsync(_dbModel.CharacterId)
             )
             .Returns(false);
-        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
+        var result = await _useCase.ExecuteAsync(_dbModel);
 
         result.MustHaveValidationError(
             nameof(AddPowerToCharacterModel.CharacterId),
@@ -155,12 +163,12 @@ public class AddPowerToCharacterUseCaseTests
     {
         A.CallTo(() =>
                 _mappingRepository.MappingExistsAsync(
-                    _powerToCharacterModel.PowerId,
-                    _powerToCharacterModel.CharacterId
+                    _dbModel.PowerId,
+                    _dbModel.CharacterId
                 )
             )
             .Returns(true);
-        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
+        var result = await _useCase.ExecuteAsync(_dbModel);
 
         result.MustHaveValidationError(
             nameof(AddPowerToCharacterModel.PowerId),
@@ -173,12 +181,12 @@ public class AddPowerToCharacterUseCaseTests
     {
         A.CallTo(() =>
                 _powerRepository.IsValidPowerForCharacter(
-                    _powerToCharacterModel.CharacterId,
-                    _powerToCharacterModel.PowerId
+                    _dbModel.CharacterId,
+                    _dbModel.PowerId
                 )
             )
             .Returns(false);
-        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
+        var result = await _useCase.ExecuteAsync(_dbModel);
 
         result.MustHaveValidationError(
             nameof(AddPowerToCharacterModel.PowerId),
@@ -189,8 +197,8 @@ public class AddPowerToCharacterUseCaseTests
     [Fact]
     public async Task ValidationFor_Notes_WillFail_WhenMaxLengthIsGreaterThan5000()
     {
-        _powerToCharacterModel.Notes = new string('x', 5001);
-        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
+        _dbModel.Notes = new string('x', 5001);
+        var result = await _useCase.ExecuteAsync(_dbModel);
         result.MustHaveValidationError(
             nameof(AddPowerToCharacterModel.Notes),
             "Notes must be less than 5000 characters."
@@ -203,30 +211,17 @@ public class AddPowerToCharacterUseCaseTests
     [InlineData(" ")]
     public async Task ValidationFor_Notes_AreOptional(string? notes)
     {
-        _powerToCharacterModel.Notes = notes;
-        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
+        _dbModel.Notes = notes;
+        var result = await _useCase.ExecuteAsync(_dbModel);
         Assert.True(result.IsSuccess);
-    }
-
-    [Fact]
-    public async Task UseCase_GetsExperienceSpentOnPowersForCharacter()
-    {
-        await _useCase.ExecuteAsync(_powerToCharacterModel);
-
-        A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnPowersForCharacter(
-                    _powerToCharacterModel.CharacterId
-                )
-            )
-            .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
     public async Task UseCase_GetsPowerLevelExperience()
     {
-        await _useCase.ExecuteAsync(_powerToCharacterModel);
+        await _useCase.ExecuteAsync(_dbModel);
 
-        A.CallTo(() => _powerRepository.GetPowerLevelForPower(_powerToCharacterModel.PowerId))
+        A.CallTo(() => _powerRepository.GetPowerLevelForPower(_dbModel.PowerId))
             .MustHaveHappenedOnceExactly();
     }
 
@@ -236,13 +231,15 @@ public class AddPowerToCharacterUseCaseTests
         _powerLevel.Xp = 4;
 
         A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnPowersForCharacter(
-                    _powerToCharacterModel.CharacterId
-                )
+                _xpRepository.GetAvailableXpForSection(_dbModel.CharacterId, XpSectionTypeEnum.Powers)
             )
-            .Returns(StartingExperience.StartingPowers + 1);
+            .Returns(new SectionXpDto()
+            {
+                AvailableXp = StartingExperience.StartingPowers,
+                SpentXp = StartingExperience.StartingPowers + 1
+            });
 
-        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
+        var result = await _useCase.ExecuteAsync(_dbModel);
 
         Assert.Equal(4, ((NotEnoughXPFailure)result.Errors[0]).AmountTryingToSpend);
     }
@@ -254,13 +251,15 @@ public class AddPowerToCharacterUseCaseTests
     {
         _powerLevel.Xp = StartingExperience.StartingPowers;
         A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnPowersForCharacter(
-                    _powerToCharacterModel.CharacterId
-                )
+                _xpRepository.GetAvailableXpForSection(_dbModel.CharacterId, XpSectionTypeEnum.Powers)
             )
-            .Returns(xpAmount);
+            .Returns(new SectionXpDto()
+            {
+                AvailableXp = StartingExperience.StartingPowers,
+                SpentXp = xpAmount
+            });
 
-        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
+        var result = await _useCase.ExecuteAsync(_dbModel);
 
         Assert.Equal(
             StartingExperience.StartingPowers - xpAmount,
@@ -272,13 +271,15 @@ public class AddPowerToCharacterUseCaseTests
     public async Task UseCase_WillReturnNotEnoughXp_WhenOutOfXp()
     {
         A.CallTo(() =>
-                _mappingRepository.GetExperienceSpentOnPowersForCharacter(
-                    _powerToCharacterModel.CharacterId
-                )
+                _xpRepository.GetAvailableXpForSection(_dbModel.CharacterId, XpSectionTypeEnum.Powers)
             )
-            .Returns(StartingExperience.StartingPowers);
+            .Returns(new SectionXpDto()
+            {
+                AvailableXp = StartingExperience.StartingPowers,
+                SpentXp = StartingExperience.StartingPowers
+            });
 
-        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
+        var result = await _useCase.ExecuteAsync(_dbModel);
         Assert.True(result.HasError<NotEnoughXPFailure>());
         Assert.Equal(0, ((NotEnoughXPFailure)result.Errors[0]).AvailableXP);
         // Should be the amount of xp needed to level up to the next level.
@@ -288,14 +289,14 @@ public class AddPowerToCharacterUseCaseTests
     [Fact]
     public async Task UseCase_AddCharacterPowerMapping_WhenItHasEnoughXp()
     {
-        await _useCase.ExecuteAsync(_powerToCharacterModel);
+        await _useCase.ExecuteAsync(_dbModel);
 
         A.CallTo(() =>
                 _mappingRepository.AddCharacterPowerMapping(
                     A<CharacterPowerMapping>.That.Matches(x =>
-                        x.Notes == _powerToCharacterModel.Notes
-                        && x.PowerId == _powerToCharacterModel.PowerId
-                        && x.CharacterId == _powerToCharacterModel.CharacterId
+                        x.Notes == _dbModel.Notes
+                        && x.PowerId == _dbModel.PowerId
+                        && x.CharacterId == _dbModel.CharacterId
                         && x.PowerLevelId == _powerLevel.Id
                     )
                 )
@@ -311,9 +312,9 @@ public class AddPowerToCharacterUseCaseTests
     [InlineData(null, null)]
     public async Task UseCase_WillTrimNotesField(string? notes, string? savedValue)
     {
-        _powerToCharacterModel.Notes = notes;
+        _dbModel.Notes = notes;
 
-        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
+        var result = await _useCase.ExecuteAsync(_dbModel);
         Assert.True(result.IsSuccess);
 
         A.CallTo(() =>
@@ -329,7 +330,7 @@ public class AddPowerToCharacterUseCaseTests
     {
         A.CallTo(() => _mappingRepository.AddCharacterPowerMapping(A<CharacterPowerMapping>._))
             .Returns(5);
-        var result = await _useCase.ExecuteAsync(_powerToCharacterModel);
+        var result = await _useCase.ExecuteAsync(_dbModel);
         Assert.Equal(5, result.Value);
     }
 }
