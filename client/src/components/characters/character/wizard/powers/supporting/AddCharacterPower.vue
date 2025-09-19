@@ -9,10 +9,14 @@ import {computed, onMounted, type PropType, ref} from "vue";
 import {characterPowersStore} from "@/components/characters/character/powers/stores/characterPowerStore.ts";
 import type {Power} from "@/components/characters/character/powers/types.ts";
 import PowerDetails from "@/components/characters/character/wizard/powers/supporting/PowerDetails.vue";
+import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vue";
+import {experienceStore, XpSectionTypes} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import type {CalculatedExperience} from "@/components/characters/character/types.ts";
 
 const store = characterPowersStore();
 const form = getValidationInstance();
 const route = useRoute();
+const xpInfo = experienceStore();
 
 const props = defineProps({
   power: {
@@ -23,15 +27,17 @@ const props = defineProps({
 
 const availableXp = ref(0);
 const powerXp = ref(0);
+const sectionInfo = ref<CalculatedExperience>({});
 
 const disabled = computed(() => {
-  return availableXp.value < powerXp.value || availableXp.value == 0 && powerXp.value == 0;
+  return sectionInfo.value.availableXp < powerXp.value
 })
 
 onMounted(async () => {
   const values = await store.getPowerOptions(route.params.id, props.power.id);
   availableXp.value = values.availableXp;
   powerXp.value = values.powerXp;
+  sectionInfo.value = xpInfo.getExperienceInfoForSection(XpSectionTypes.powers);
 })
 
 
@@ -45,14 +51,12 @@ const onSubmit = form.handleSubmit(async (values) => {
   
   <PowerDetails :power="props.power" />
   
-  <h3 class="d-flex justify-content-between">
-    <span>Experience Cost: {{ powerXp }}</span>
-    <span>Available Experience: {{ availableXp }}</span>
-  </h3>
-  <Message severity="warn" v-if="disabled">
+  <ShowXPCosts :section-type="XpSectionTypes.powers"/>
+  <div><strong>Cost:</strong> {{ powerXp }}</div>
+  <Message severity="warn" v-if="disabled" class="my-3">
     You do not have enough experience to add this power
   </Message>
-  <form @submit="onSubmit">
+  <form @submit="onSubmit" class="mt-3">
 
     <FormTextAreaWrapper v-model="form.notes" :disabled="disabled"  />
 
