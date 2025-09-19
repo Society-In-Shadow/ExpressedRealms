@@ -48,10 +48,10 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
         discretion.IncludeInTotal = false;
         discretion.Total = -1;
 
-        var totalXp = costs.Where(x => x.IncludeInTotal).Sum(x => x.Total);
+        /*var totalXp = costs.Where(x => x.IncludeInTotal).Sum(x => x.Total);
         var maxXp = costs.Where(x => x.IncludeInMax).Sum(x => x.Max);
 
-        costs.Add(new ExperienceTotalMax("Total", totalXp, maxXp));
+        costs.Add(new ExperienceTotalMax("Total", totalXp, maxXp));*/
 
         return Result.Ok(new ExperienceBreakdownReturnModel()
         {

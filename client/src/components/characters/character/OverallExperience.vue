@@ -1,22 +1,28 @@
 <script setup lang="ts">
 
-import {onMounted} from "vue";
+import {onMounted, ref, watch} from "vue";
 import Message from "primevue/message";
 import {useRoute} from "vue-router";
 import {experienceStore, XpSectionTypes} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
-import type {ExperienceBreakdown} from "@/components/characters/character/types.ts";
 
 const route = useRoute()
 const xpInfo = experienceStore();
+const disadvantageBucket = ref(0);
+const discretionaryBucket = ref(0);
 
 onMounted(async () => {
-  xpInfo.updateExperience(route.params.id);
+  await xpInfo.updateExperience(route.params.id);  
 })
 
-function showSpent(xp: ExperienceBreakdown) {
-  if(xp.characterCreateMax < 0 || xp.total < 0) return "--";
-  return xp.levelXp;
-}
+watch(xpInfo.calculatedValues, () => {
+  const disadvantage = xpInfo.getExperienceInfoForSection(XpSectionTypes.disadvantage);
+
+  const overallTotal = 16 + disadvantage.total;
+  const availableDiscretionary = xpInfo.availableDiscretionary;
+
+  disadvantageBucket.value = Math.max(0, disadvantage.total - availableDiscretionary);
+  discretionaryBucket.value = overallTotal - availableDiscretionary >= 16 ? 16 : 16 + disadvantage.total - availableDiscretionary  ;
+}, { immediate: true })
 
 </script>
 
@@ -25,28 +31,63 @@ function showSpent(xp: ExperienceBreakdown) {
   
   <table class="w-100">
     <tr>
+      <th class="pr-2"></th>
       <th class="text-left">Name</th>
-      <th></th>
       <th class="text-center">Required</th>
       <th class="text-center">Discretionary</th>
       <th class="text-center">Available</th>
     </tr>
     <tr v-for="section in xpInfo.calculatedValues">
-      <td class="text-left">{{section.name}}</td>
-      <td class="text-center">
-        <div v-if="section.sectionTypeId == XpSectionTypes.advantage || section.sectionTypeId == XpSectionTypes.disadvantage || section.sectionTypeId == XpSectionTypes.discretionary">--</div>
+      <td class="text-center pr-2">
+        <span v-if="section.sectionTypeId == XpSectionTypes.advantage" class="material-symbols-outlined" title="No Status">
+          do_not_disturb_off
+        </span>
+        <span v-else-if="section.sectionTypeId == XpSectionTypes.disadvantage" class="material-symbols-outlined" title="You are required to spend all points">
+          {{ disadvantageBucket == section.total ? "check_circle" : "warning" }}
+        </span>
+        <span v-else-if="section.sectionTypeId == XpSectionTypes.discretionary" class="material-symbols-outlined" title="You are required to spend all points">
+          {{ discretionaryBucket == 16 ? "check_circle" : "warning" }}
+        </span>
         <span v-else class="material-symbols-outlined" title="You are required to spend all points">
           {{ section.total >= section.characterCreateMax ? "check_circle" : "warning" }}
         </span>
       </td>
+      <td class="text-left">{{section.name}}</td>
+
       <td class="text-center">
+        <div v-if="section.sectionTypeId == XpSectionTypes.discretionary">
+          {{ discretionaryBucket }} / 16
+        </div>
+        <div v-else-if="section.sectionTypeId == XpSectionTypes.advantage">
+          0
+        </div>
+        <div v-else-if="section.sectionTypeId == XpSectionTypes.disadvantage">
+          {{ disadvantageBucket }} / {{ section.total }}
+        </div>
+        <div v-else>
           {{ section.requiredXp }} / {{ section.characterCreateMax }}
+        </div>
       </td>
       <td class="text-center">
-        {{ section.currentOptionalXp }} / {{ section.optionalMaxXP }}
+        <div v-if="section.sectionTypeId == XpSectionTypes.discretionary || section.sectionTypeId == XpSectionTypes.disadvantage">
+          --
+        </div>
+        <div v-else-if="section.sectionTypeId == XpSectionTypes.advantage">
+          {{ section.total }}
+        </div>
+        <div v-else>
+          {{ section.currentOptionalXp }}
+        </div>
+        
       </td>
       <td class="text-center">
-        {{ section.availableXp }}
+        <div v-if="section.sectionTypeId == XpSectionTypes.advantage">
+          {{ section.total == 8 ? '--' : 8-section.total }}
+        </div>
+        <div v-else-if="section.sectionTypeId == XpSectionTypes.disadvantage || section.sectionTypeId == XpSectionTypes.discretionary">
+          --
+        </div>
+        <div v-else>{{xpInfo.availableDiscretionary}}</div>
       </td>
     </tr>
   </table>
@@ -71,24 +112,3 @@ function showSpent(xp: ExperienceBreakdown) {
     </ol>
   </Message>
 </template>
-
-<style>
-@media(max-width: 768px){
-  .custom-card > .p-card-body{
-    padding: 0rem !important;
-  }
-
-  .custom-toc > .p-card-body{
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-  }
-
-  .custom-card .p-tabpanels{
-    padding: 0.5rem !important;
-  }
-  
-  .custom-card >>> .p-card-content{
-    padding: 0;
-  }
-}
-</style>
