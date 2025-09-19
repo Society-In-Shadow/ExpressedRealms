@@ -39,18 +39,20 @@ internal sealed class UpdateBlessingForCharacterUseCase(
 
             if (!characterState.IsInCharacterCreation)
             {
-                return Result.Fail("You cannot edit Advantages or Disadvantages outside of character creation.");
+                return Result.Fail(
+                    "You cannot edit Advantages or Disadvantages outside of character creation."
+                );
             }
-            
+
             var blessing = await blessingRepository.GetBlessingForEditing(mapping.BlessingId);
             var newLevel = await blessingRepository.GetBlessingLevel(model.BlessingLevelId);
             var oldLevel = await blessingRepository.GetBlessingLevel(mapping.BlessingLevelId);
-        
+
             var xpTypeId = (int)XpSectionTypeEnum.Advantages;
             var oldCost = oldLevel.XpCost;
             var newCost = newLevel.XpCost;
             var name = "Advantages";
-        
+
             if (blessing.Type.Equals("disadvantage", StringComparison.InvariantCultureIgnoreCase))
             {
                 xpTypeId = (int)XpSectionTypeEnum.Disadvantages;
@@ -58,7 +60,7 @@ internal sealed class UpdateBlessingForCharacterUseCase(
                 newCost = newLevel.XpGain;
                 name = "Disadvantages";
             }
-        
+
             var xpInfo = await xpRepository.GetCharacterXpMapping(model.CharacterId, xpTypeId);
             var spentXp = xpInfo.SpentXp;
 
@@ -70,12 +72,16 @@ internal sealed class UpdateBlessingForCharacterUseCase(
 
             if (spentXp + newCost > xpInfo.SectionCap)
             {
-                return Result.Fail($"You cannot add more than {xpInfo.SectionCap} points of {name}.");
+                return Result.Fail(
+                    $"You cannot add more than {xpInfo.SectionCap} points of {name}."
+                );
             }
-            
+
             if (blessing.Type.Equals("advantage", StringComparison.InvariantCultureIgnoreCase))
             {
-                var availableDiscretionary = await xpRepository.GetAvailableDiscretionary(model.CharacterId);
+                var availableDiscretionary = await xpRepository.GetAvailableDiscretionary(
+                    model.CharacterId
+                );
 
                 if (spentXp + newCost > availableDiscretionary)
                 {

@@ -34,41 +34,45 @@ internal sealed class AddBlessingToCharacterUseCase(
 
         if (!characterState.IsInCharacterCreation)
         {
-            return Result.Fail("You cannot add Advantages or Disadvantages outside of character creation.");
+            return Result.Fail(
+                "You cannot add Advantages or Disadvantages outside of character creation."
+            );
         }
 
         var blessing = await blessingRepository.GetBlessingForEditing(model.BlessingId);
         var blessingLevel = await blessingRepository.GetBlessingLevel(model.BlessingLevelId);
-        
+
         var xpTypeId = (int)XpSectionTypeEnum.Advantages;
         var cost = blessingLevel.XpCost;
         var name = "Advantages";
-        
+
         if (blessing.Type.Equals("disadvantage", StringComparison.InvariantCultureIgnoreCase))
         {
             xpTypeId = (int)XpSectionTypeEnum.Disadvantages;
             cost = blessingLevel.XpGain;
             name = "Disadvantages";
         }
-        
+
         var xpInfo = await xpRepository.GetCharacterXpMapping(model.CharacterId, xpTypeId);
         var spentXp = xpInfo.SpentXp;
-        
+
         if (spentXp + cost > xpInfo.SectionCap)
         {
             return Result.Fail($"You cannot add more than {xpInfo.SectionCap} points of {name}.");
         }
-        
+
         if (blessing.Type.Equals("advantage", StringComparison.InvariantCultureIgnoreCase))
         {
-            var availableDiscretionary = await xpRepository.GetAvailableDiscretionary(model.CharacterId);
-            
+            var availableDiscretionary = await xpRepository.GetAvailableDiscretionary(
+                model.CharacterId
+            );
+
             if (spentXp + blessingLevel.XpCost > availableDiscretionary)
                 return Result.Fail(
                     new NotEnoughXPFailure(availableDiscretionary, blessingLevel.XpCost)
                 );
         }
-        
+
         var mappingId = await mappingRepository.AddCharacterBlessingMapping(
             new CharacterBlessingMapping()
             {

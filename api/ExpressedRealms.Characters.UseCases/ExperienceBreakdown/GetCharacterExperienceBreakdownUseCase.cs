@@ -27,23 +27,26 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
         var costs = new List<ExperienceTotalMax>();
 
         var xpInfo = await xpRepository.GetCharacterXpMappings(model.CharacterId);
-        
-        costs.AddRange(xpInfo
-            .Select(x => 
-                new ExperienceTotalMax(x.SectionName, 
-                    x.SpentXp, 
-                    x.SectionCap, 
-                    true, 
+
+        costs.AddRange(
+            xpInfo
+                .Select(x => new ExperienceTotalMax(
+                    x.SectionName,
+                    x.SpentXp,
+                    x.SectionCap,
                     true,
-                    x.SectionTypeId)
-            ).ToList());
+                    true,
+                    x.SectionTypeId
+                ))
+                .ToList()
+        );
 
         var advantage = costs.First(x => x.TypeId == (int)XpSectionTypeEnum.Advantages);
         advantage.IncludeInMax = false;
 
         var disadvantage = costs.First(x => x.TypeId == (int)XpSectionTypeEnum.Disadvantages);
         disadvantage.IncludeInTotal = false;
-        
+
         var discretion = costs.First(x => x.TypeId == (int)XpSectionTypeEnum.Discretion);
         discretion.IncludeInTotal = false;
         discretion.Total = -1;
@@ -53,10 +56,14 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
 
         costs.Add(new ExperienceTotalMax("Total", totalXp, maxXp));*/
 
-        return Result.Ok(new ExperienceBreakdownReturnModel()
-        {
-            ExperienceSections = costs,
-            AvailableDiscretionary = await xpRepository.GetAvailableDiscretionary(model.CharacterId)
-        });
+        return Result.Ok(
+            new ExperienceBreakdownReturnModel()
+            {
+                ExperienceSections = costs,
+                AvailableDiscretionary = await xpRepository.GetAvailableDiscretionary(
+                    model.CharacterId
+                ),
+            }
+        );
     }
 }

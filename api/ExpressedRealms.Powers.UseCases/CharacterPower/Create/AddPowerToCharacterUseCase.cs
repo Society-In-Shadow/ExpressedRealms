@@ -28,15 +28,16 @@ internal sealed class AddPowerToCharacterUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var xpInfo = await xpRepository.GetAvailableXpForSection(model.CharacterId, XpSectionTypeEnum.Powers);
+        var xpInfo = await xpRepository.GetAvailableXpForSection(
+            model.CharacterId,
+            XpSectionTypeEnum.Powers
+        );
 
         var spentXp = xpInfo.SpentXp;
         var powerLevel = await powerRepository.GetPowerLevelForPower(model.PowerId);
 
         if (spentXp + powerLevel.Xp > xpInfo.AvailableXp)
-            return Result.Fail(
-                new NotEnoughXPFailure(xpInfo.AvailableXp - spentXp, powerLevel.Xp)
-            );
+            return Result.Fail(new NotEnoughXPFailure(xpInfo.AvailableXp - spentXp, powerLevel.Xp));
 
         var mappingId = await mappingRepository.AddCharacterPowerMapping(
             new CharacterPowerMapping()

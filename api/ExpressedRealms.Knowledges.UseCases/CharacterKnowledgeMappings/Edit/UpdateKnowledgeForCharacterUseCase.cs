@@ -35,7 +35,10 @@ internal sealed class UpdateKnowledgeForCharacterUseCase(
 
         if (mapping.KnowledgeLevelId != model.KnowledgeLevelId)
         {
-            var xpInfo = await xpRepository.GetAvailableXpForSection(mapping.CharacterId, XpSectionTypeEnum.Knowledge);
+            var xpInfo = await xpRepository.GetAvailableXpForSection(
+                mapping.CharacterId,
+                XpSectionTypeEnum.Knowledge
+            );
 
             const int unknownKnowledgeType = 3;
 

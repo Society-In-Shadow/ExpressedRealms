@@ -148,7 +148,10 @@ internal sealed class CharacterStatRepository(
 
     private async Task<Result> EditStatXpCheck(EditStatDto dto, Character character)
     {
-        var xpInfo = await xpRepository.GetAvailableXpForSection(character.Id, XpSectionTypeEnum.Stats);
+        var xpInfo = await xpRepository.GetAvailableXpForSection(
+            character.Id,
+            XpSectionTypeEnum.Stats
+        );
 
         var oldTotalXpCost = dto.StatTypeId switch
         {
@@ -167,13 +170,16 @@ internal sealed class CharacterStatRepository(
             .FirstAsync(cancellationToken);
 
         var spentXp = xpInfo.SpentXp;
-        
+
         spentXp -= oldTotalXpCost;
-        
+
         if (spentXp + newTotalXpCost > xpInfo.AvailableXp)
         {
             return Result.Fail(
-                new NotEnoughXPFailure(xpInfo.AvailableXp - xpInfo.SpentXp, newTotalXpCost - oldTotalXpCost)
+                new NotEnoughXPFailure(
+                    xpInfo.AvailableXp - xpInfo.SpentXp,
+                    newTotalXpCost - oldTotalXpCost
+                )
             );
         }
 

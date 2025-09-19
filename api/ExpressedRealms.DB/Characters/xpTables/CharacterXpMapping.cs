@@ -9,7 +9,7 @@ public class CharacterXpMapping
     public int DiscretionXp { get; set; }
     public int TotalCharacterCreationXp { get; set; }
     public int LevelXp { get; set; }
-    
+
     public Character Character { get; set; } = null!;
     public XpSectionType XpSectionType { get; set; } = null!;
 }

@@ -43,41 +43,33 @@ public class AddKnowledgeToCharacterUseCaseTests
         _levelRepository = A.Fake<IKnowledgeLevelRepository>();
         _xpRepository = A.Fake<IXpRepository>();
 
-        A.CallTo(() =>
-                _knowledgeRepository.IsExistingKnowledge(_model.KnowledgeId)
-            )
+        A.CallTo(() => _knowledgeRepository.IsExistingKnowledge(_model.KnowledgeId)).Returns(true);
+        A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId)).Returns(true);
+        A.CallTo(() => _levelRepository.KnowledgeLevelExists(_model.KnowledgeLevelId))
             .Returns(true);
         A.CallTo(() =>
-                _characterRepository.CharacterExistsAsync(_model.CharacterId)
-            )
-            .Returns(true);
-        A.CallTo(() =>
-                _levelRepository.KnowledgeLevelExists(_model.KnowledgeLevelId)
-            )
-            .Returns(true);
-        A.CallTo(() =>
-                _mappingRepository.MappingAlreadyExists(
-                    _model.KnowledgeId,
-                    _model.CharacterId
-                )
+                _mappingRepository.MappingAlreadyExists(_model.KnowledgeId, _model.CharacterId)
             )
             .Returns(false);
         A.CallTo(() =>
-                _xpRepository.GetAvailableXpForSection(_model.CharacterId, XpSectionTypeEnum.Knowledge)
+                _xpRepository.GetAvailableXpForSection(
+                    _model.CharacterId,
+                    XpSectionTypeEnum.Knowledge
+                )
             )
-            .Returns(new SectionXpDto()
-            {
-                AvailableXp = StartingExperience.StartingKnowledges,
-                SpentXp = 0
-            });
-        A.CallTo(() =>
-                _knowledgeRepository.GetKnowledgeAsync(_model.KnowledgeId)
-            )
+            .Returns(
+                new SectionXpDto()
+                {
+                    AvailableXp = StartingExperience.StartingKnowledges,
+                    SpentXp = 0,
+                }
+            );
+        A.CallTo(() => _knowledgeRepository.GetKnowledgeAsync(_model.KnowledgeId))
             .Returns(new Knowledge() { KnowledgeTypeId = 3 });
-        A.CallTo(() =>
-                _levelRepository.GetKnowledgeLevel(_model.KnowledgeLevelId)
-            )
-            .Returns(new KnowledgeEducationLevel() { TotalGeneralXpCost = 4, TotalUnknownXpCost = 2 });
+        A.CallTo(() => _levelRepository.GetKnowledgeLevel(_model.KnowledgeLevelId))
+            .Returns(
+                new KnowledgeEducationLevel() { TotalGeneralXpCost = 4, TotalUnknownXpCost = 2 }
+            );
 
         var validator = new AddKnowledgeToCharacterModelValidator(
             _knowledgeRepository,
@@ -111,10 +103,7 @@ public class AddKnowledgeToCharacterUseCaseTests
     [Fact]
     public async Task ValidationFor_KnowledgeId_WillFail_WhenItDoesNotExist()
     {
-        A.CallTo(() =>
-                _knowledgeRepository.IsExistingKnowledge(_model.KnowledgeId)
-            )
-            .Returns(false);
+        A.CallTo(() => _knowledgeRepository.IsExistingKnowledge(_model.KnowledgeId)).Returns(false);
         var result = await _useCase.ExecuteAsync(_model);
 
         result.MustHaveValidationError(
@@ -138,9 +127,7 @@ public class AddKnowledgeToCharacterUseCaseTests
     [Fact]
     public async Task ValidationFor_CharacterId_WillFail_WhenItDoesNotExist()
     {
-        A.CallTo(() =>
-                _characterRepository.CharacterExistsAsync(_model.CharacterId)
-            )
+        A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId))
             .Returns(false);
         var result = await _useCase.ExecuteAsync(_model);
 
@@ -165,9 +152,7 @@ public class AddKnowledgeToCharacterUseCaseTests
     [Fact]
     public async Task ValidationFor_KnowledgeLevelId_WillFail_WhenItDoesNotExist()
     {
-        A.CallTo(() =>
-                _levelRepository.KnowledgeLevelExists(_model.KnowledgeLevelId)
-            )
+        A.CallTo(() => _levelRepository.KnowledgeLevelExists(_model.KnowledgeLevelId))
             .Returns(false);
         var result = await _useCase.ExecuteAsync(_model);
 
@@ -181,10 +166,7 @@ public class AddKnowledgeToCharacterUseCaseTests
     public async Task ValidationFor_DuplicateMapping_WillFail_WhenItDoesExist()
     {
         A.CallTo(() =>
-                _mappingRepository.MappingAlreadyExists(
-                    _model.KnowledgeId,
-                    _model.CharacterId
-                )
+                _mappingRepository.MappingAlreadyExists(_model.KnowledgeId, _model.CharacterId)
             )
             .Returns(true);
         var result = await _useCase.ExecuteAsync(_model);
@@ -222,9 +204,7 @@ public class AddKnowledgeToCharacterUseCaseTests
     {
         await _useCase.ExecuteAsync(_model);
 
-        A.CallTo(() =>
-                _levelRepository.GetKnowledgeLevel(_model.KnowledgeLevelId)
-            )
+        A.CallTo(() => _levelRepository.GetKnowledgeLevel(_model.KnowledgeLevelId))
             .MustHaveHappenedOnceExactly();
     }
 
@@ -233,9 +213,7 @@ public class AddKnowledgeToCharacterUseCaseTests
     {
         await _useCase.ExecuteAsync(_model);
 
-        A.CallTo(() =>
-                _knowledgeRepository.GetKnowledgeAsync(_model.KnowledgeId)
-            )
+        A.CallTo(() => _knowledgeRepository.GetKnowledgeAsync(_model.KnowledgeId))
             .MustHaveHappenedOnceExactly();
     }
 
@@ -247,23 +225,26 @@ public class AddKnowledgeToCharacterUseCaseTests
         int xpAmount
     )
     {
-        A.CallTo(() =>
-                _knowledgeRepository.GetKnowledgeAsync(_model.KnowledgeId)
-            )
+        A.CallTo(() => _knowledgeRepository.GetKnowledgeAsync(_model.KnowledgeId))
             .Returns(new Knowledge() { KnowledgeTypeId = knowledgeTypeId });
-        A.CallTo(() =>
-                _levelRepository.GetKnowledgeLevel(_model.KnowledgeLevelId)
-            )
-            .Returns(new KnowledgeEducationLevel() { TotalGeneralXpCost = 2, TotalUnknownXpCost = 4 });
+        A.CallTo(() => _levelRepository.GetKnowledgeLevel(_model.KnowledgeLevelId))
+            .Returns(
+                new KnowledgeEducationLevel() { TotalGeneralXpCost = 2, TotalUnknownXpCost = 4 }
+            );
 
         A.CallTo(() =>
-                _xpRepository.GetAvailableXpForSection(_model.CharacterId, XpSectionTypeEnum.Knowledge)
+                _xpRepository.GetAvailableXpForSection(
+                    _model.CharacterId,
+                    XpSectionTypeEnum.Knowledge
+                )
             )
-            .Returns(new SectionXpDto()
-            {
-                AvailableXp = StartingExperience.StartingKnowledges,
-                SpentXp = StartingExperience.StartingKnowledges
-            });
+            .Returns(
+                new SectionXpDto()
+                {
+                    AvailableXp = StartingExperience.StartingKnowledges,
+                    SpentXp = StartingExperience.StartingKnowledges,
+                }
+            );
 
         var result = await _useCase.ExecuteAsync(_model);
 
@@ -275,13 +256,9 @@ public class AddKnowledgeToCharacterUseCaseTests
     [InlineData(2)]
     public async Task UseCase_CalculatesAvailableXP_Correctly(int xpAmount)
     {
-        A.CallTo(() =>
-                _knowledgeRepository.GetKnowledgeAsync(_model.KnowledgeId)
-            )
+        A.CallTo(() => _knowledgeRepository.GetKnowledgeAsync(_model.KnowledgeId))
             .Returns(new Knowledge() { KnowledgeTypeId = 2 });
-        A.CallTo(() =>
-                _levelRepository.GetKnowledgeLevel(_model.KnowledgeLevelId)
-            )
+        A.CallTo(() => _levelRepository.GetKnowledgeLevel(_model.KnowledgeLevelId))
             .Returns(
                 new KnowledgeEducationLevel()
                 {
@@ -289,13 +266,18 @@ public class AddKnowledgeToCharacterUseCaseTests
                 }
             );
         A.CallTo(() =>
-                _xpRepository.GetAvailableXpForSection(_model.CharacterId, XpSectionTypeEnum.Knowledge)
+                _xpRepository.GetAvailableXpForSection(
+                    _model.CharacterId,
+                    XpSectionTypeEnum.Knowledge
+                )
             )
-            .Returns(new SectionXpDto()
-            {
-                AvailableXp = StartingExperience.StartingKnowledges,
-                SpentXp = xpAmount
-            });
+            .Returns(
+                new SectionXpDto()
+                {
+                    AvailableXp = StartingExperience.StartingKnowledges,
+                    SpentXp = xpAmount,
+                }
+            );
 
         var result = await _useCase.ExecuteAsync(_model);
 
@@ -309,13 +291,18 @@ public class AddKnowledgeToCharacterUseCaseTests
     public async Task UseCase_WillReturnNotEnoughXp_WhenOutOfXp()
     {
         A.CallTo(() =>
-                _xpRepository.GetAvailableXpForSection(_model.CharacterId, XpSectionTypeEnum.Knowledge)
+                _xpRepository.GetAvailableXpForSection(
+                    _model.CharacterId,
+                    XpSectionTypeEnum.Knowledge
+                )
             )
-            .Returns(new SectionXpDto()
-            {
-                AvailableXp = StartingExperience.StartingKnowledges,
-                SpentXp = StartingExperience.StartingKnowledges
-            });
+            .Returns(
+                new SectionXpDto()
+                {
+                    AvailableXp = StartingExperience.StartingKnowledges,
+                    SpentXp = StartingExperience.StartingKnowledges,
+                }
+            );
         ;
 
         var result = await _useCase.ExecuteAsync(_model);

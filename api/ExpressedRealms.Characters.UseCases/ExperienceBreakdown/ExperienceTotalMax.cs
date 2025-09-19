@@ -15,13 +15,14 @@ public class ExperienceTotalMax
         int max,
         bool includeInTotal = true,
         bool includeInMax = true,
-        int typeId = 0)
+        int typeId = 0
+    )
     {
         Name = name;
         Total = total;
         Max = max;
         IncludeInTotal = includeInTotal;
-        IncludeInMax = includeInMax; 
+        IncludeInMax = includeInMax;
         TypeId = typeId;
     }
 }

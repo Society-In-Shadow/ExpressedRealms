@@ -34,7 +34,7 @@ internal static class GetOverallStatsEndpoint
                         CharacterCreateMax = x.Max,
                     })
                     .ToList(),
-                AvailableDiscretionary = status.Value.AvailableDiscretionary
+                AvailableDiscretionary = status.Value.AvailableDiscretionary,
             }
         );
     }

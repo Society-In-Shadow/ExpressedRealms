@@ -32,7 +32,10 @@ internal sealed class CreateSpecializationUseCase(
             model.KnowledgeMappingId
         );
 
-        var xpInfo = await xpRepository.GetAvailableXpForSection(mapping.CharacterId, XpSectionTypeEnum.Knowledge);
+        var xpInfo = await xpRepository.GetAvailableXpForSection(
+            mapping.CharacterId,
+            XpSectionTypeEnum.Knowledge
+        );
 
         const int newSpecializationCost = 2;
         if (xpInfo.SpentXp + newSpecializationCost > xpInfo.AvailableXp)

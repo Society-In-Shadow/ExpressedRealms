@@ -28,29 +28,29 @@ public class GetCharacterExperienceBreakdownUseCaseTests
                 SectionTypeId = 1,
                 SpentXp = 1,
                 SectionCap = 8,
-                SectionName = "Knowledge XP" 
+                SectionName = "Knowledge XP",
             },
             new CharacterXpView()
             {
                 SectionTypeId = (int)XpSectionTypeEnum.Advantages,
                 SpentXp = 4,
                 SectionCap = 8,
-                SectionName =  "Advantage XP"
+                SectionName = "Advantage XP",
             },
             new CharacterXpView()
             {
                 SectionTypeId = (int)XpSectionTypeEnum.Disadvantages,
                 SpentXp = 2,
                 SectionCap = 8,
-                SectionName = "Disadvantage XP"
+                SectionName = "Disadvantage XP",
             },
             new CharacterXpView()
             {
                 SectionTypeId = (int)XpSectionTypeEnum.Discretion,
                 SpentXp = 5,
                 SectionCap = 16,
-                SectionName = "Discretionary XP"
-            }
+                SectionName = "Discretionary XP",
+            },
         };
 
         A.CallTo(() =>
@@ -60,8 +60,7 @@ public class GetCharacterExperienceBreakdownUseCaseTests
 
         A.CallTo(() => characterRepository.CharacterExistsAsync(_model.CharacterId)).Returns(true);
 
-        A.CallTo(() => xpRepository.GetCharacterXpMappings(_model.CharacterId))
-            .Returns(xpItems);
+        A.CallTo(() => xpRepository.GetCharacterXpMappings(_model.CharacterId)).Returns(xpItems);
 
         A.CallTo(() => xpRepository.GetAvailableDiscretionary(_model.CharacterId)).Returns(18);
 
@@ -106,7 +105,7 @@ public class GetCharacterExperienceBreakdownUseCaseTests
         Assert.Equal(2, item.Total);
         Assert.Equal(8, item.Max);
     }
-    
+
     [Fact]
     public async Task UseCase_WillReturn_TotalAvailableDiscretionaryXp()
     {

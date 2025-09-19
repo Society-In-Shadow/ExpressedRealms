@@ -56,7 +56,7 @@ internal sealed class CharacterRepository(
 
         return Result.Ok(character);
     }
-    
+
     public async Task<CharacterStatusDto> GetCharacterState(int id)
     {
         return await context
@@ -66,7 +66,7 @@ internal sealed class CharacterRepository(
             {
                 IsPrimaryCharacter = x.IsPrimaryCharacter,
                 IsInCharacterCreation = x.IsInCharacterCreation,
-                AssignedXp = x.AssignedXp
+                AssignedXp = x.AssignedXp,
             })
             .FirstAsync(cancellationToken);
     }

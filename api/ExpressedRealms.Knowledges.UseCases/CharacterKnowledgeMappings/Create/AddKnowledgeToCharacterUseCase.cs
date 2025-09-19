@@ -30,7 +30,10 @@ internal sealed class AddKnowledgeToCharacterUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var xpInfo = await xpRepository.GetAvailableXpForSection(model.CharacterId, XpSectionTypeEnum.Knowledge);
+        var xpInfo = await xpRepository.GetAvailableXpForSection(
+            model.CharacterId,
+            XpSectionTypeEnum.Knowledge
+        );
 
         // Assuming character creation rules for now
         const int unknownKnowledgeType = 3;

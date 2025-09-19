@@ -103,8 +103,11 @@ internal sealed class CharacterSkillRepository(
         );
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
-        
-        var xpInfo = await xpRepository.GetAvailableXpForSection(dto.CharacterId, XpSectionTypeEnum.Skills);
+
+        var xpInfo = await xpRepository.GetAvailableXpForSection(
+            dto.CharacterId,
+            XpSectionTypeEnum.Skills
+        );
 
         var characterSkill = await context.CharacterSkillsMappings.FirstOrDefaultAsync(
             x => x.CharacterId == dto.CharacterId && x.SkillTypeId == dto.SkillTypeId,
@@ -118,18 +121,25 @@ internal sealed class CharacterSkillRepository(
         {
             return Result.Ok();
         }
-        
-        var oldTotalXpCost = (await context.SkillLevels.FirstAsync(x => x.Id == characterSkill.SkillLevelId)).TotalXp;
-        var newTotalXpCost = (await context.SkillLevels.FirstAsync(x => x.Id == dto.SkillLevelId)).TotalXp;
-        
+
+        var oldTotalXpCost = (
+            await context.SkillLevels.FirstAsync(x => x.Id == characterSkill.SkillLevelId)
+        ).TotalXp;
+        var newTotalXpCost = (
+            await context.SkillLevels.FirstAsync(x => x.Id == dto.SkillLevelId)
+        ).TotalXp;
+
         var spentXp = xpInfo.SpentXp;
-        
+
         spentXp -= oldTotalXpCost;
-        
+
         if (spentXp + newTotalXpCost > xpInfo.AvailableXp)
         {
             return Result.Fail(
-                new NotEnoughXPFailure(xpInfo.AvailableXp - xpInfo.SpentXp, newTotalXpCost - oldTotalXpCost)
+                new NotEnoughXPFailure(
+                    xpInfo.AvailableXp - xpInfo.SpentXp,
+                    newTotalXpCost - oldTotalXpCost
+                )
             );
         }
 

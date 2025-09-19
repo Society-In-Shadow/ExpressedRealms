@@ -57,11 +57,7 @@ public class GetKnowledgeLevelsUseCaseTests
 
         var validator = new GetKnowledgeLevelsModelValidator(_characterRepository);
 
-        _useCase = new GetKnowledgeLevelsUseCase(
-            _repository,
-            validator,
-            CancellationToken.None
-        );
+        _useCase = new GetKnowledgeLevelsUseCase(_repository, validator, CancellationToken.None);
     }
 
     [Fact]

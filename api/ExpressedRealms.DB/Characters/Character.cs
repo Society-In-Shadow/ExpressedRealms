@@ -29,7 +29,7 @@ public class Character : ISoftDelete
     public int? FactionId { get; set; }
 
     public int StatExperiencePoints { get; set; }
-    
+
     public bool IsInCharacterCreation { get; set; }
     public bool IsPrimaryCharacter { get; set; }
     public int AssignedXp { get; set; }

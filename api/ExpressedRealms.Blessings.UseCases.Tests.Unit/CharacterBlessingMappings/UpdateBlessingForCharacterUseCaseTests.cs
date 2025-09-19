@@ -28,7 +28,7 @@ public class UpdateBlessingForCharacterUseCaseTests
     private readonly Blessing _blessingDbModel;
     private readonly CharacterXpView _characterMappingDbModel;
     private readonly BlessingLevel _blessingLevelDbModel;
-    
+
     public UpdateBlessingForCharacterUseCaseTests()
     {
         _model = new UpdateBlessingForCharacterModel()
@@ -52,57 +52,52 @@ public class UpdateBlessingForCharacterUseCaseTests
             Name = "test",
             Description = "test",
             SubCategory = "Test",
-            Type = "Disadvantage"
+            Type = "Disadvantage",
         };
 
         _blessingLevelDbModel = new BlessingLevel() { XpCost = 4 };
 
         _characterMappingDbModel = new CharacterXpView() { SectionCap = 8, SpentXp = 0 };
-        
+
         _characterRepository = A.Fake<ICharacterRepository>();
         _blessingRepository = A.Fake<IBlessingRepository>();
         _mappingRepository = A.Fake<ICharacterBlessingRepository>();
         _xpRepository = A.Fake<IXpRepository>();
 
-        A.CallTo(() =>
-                _characterRepository.CharacterExistsAsync(_model.CharacterId)
-            )
+        A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId)).Returns(true);
+        A.CallTo(() => _blessingRepository.BlessingLevelExists(_model.BlessingLevelId))
             .Returns(true);
+        A.CallTo(() => _mappingRepository.MappingAlreadyExists(_model.MappingId)).Returns(true);
         A.CallTo(() =>
-                _blessingRepository.BlessingLevelExists(_model.BlessingLevelId)
-            )
-            .Returns(true);
-        A.CallTo(() =>
-                _mappingRepository.MappingAlreadyExists(_model.MappingId)
-            )
-            .Returns(true);
-        A.CallTo(() => _xpRepository.GetCharacterXpMapping(_model.CharacterId, (int)XpSectionTypeEnum.Advantages))
-            .Returns(_characterMappingDbModel);
-        A.CallTo(() => _xpRepository.GetCharacterXpMapping(_model.CharacterId, (int)XpSectionTypeEnum.Disadvantages))
-            .Returns(_characterMappingDbModel);
-        A.CallTo(() =>
-                _blessingRepository.GetBlessingLevel(_model.BlessingLevelId)
-            )
-            .Returns(_blessingLevelDbModel);
-
-        A.CallTo(() =>
-                _mappingRepository.GetCharacterBlessingMappingForEditing(
-                    _model.MappingId
+                _xpRepository.GetCharacterXpMapping(
+                    _model.CharacterId,
+                    (int)XpSectionTypeEnum.Advantages
                 )
             )
+            .Returns(_characterMappingDbModel);
+        A.CallTo(() =>
+                _xpRepository.GetCharacterXpMapping(
+                    _model.CharacterId,
+                    (int)XpSectionTypeEnum.Disadvantages
+                )
+            )
+            .Returns(_characterMappingDbModel);
+        A.CallTo(() => _blessingRepository.GetBlessingLevel(_model.BlessingLevelId))
+            .Returns(_blessingLevelDbModel);
+
+        A.CallTo(() => _mappingRepository.GetCharacterBlessingMappingForEditing(_model.MappingId))
             .Returns(_dbModel);
 
         A.CallTo(() => _blessingRepository.GetBlessingLevel(_dbModel.BlessingLevelId))
             .Returns(_blessingLevelDbModel);
-        
+
         A.CallTo(() => _characterRepository.GetCharacterState(_model.CharacterId))
             .Returns(new CharacterStatusDto() { IsInCharacterCreation = true });
 
         A.CallTo(() => _blessingRepository.GetBlessingForEditing(_dbModel.BlessingId))
             .Returns(_blessingDbModel);
-        
-        A.CallTo(() => _xpRepository.GetAvailableDiscretionary(_model.CharacterId))
-            .Returns(16);
+
+        A.CallTo(() => _xpRepository.GetAvailableDiscretionary(_model.CharacterId)).Returns(16);
 
         var validator = new UpdateBlessingForCharacterModelValidator(
             _blessingRepository,
@@ -135,9 +130,7 @@ public class UpdateBlessingForCharacterUseCaseTests
     [Fact]
     public async Task ValidationFor_CharacterId_WillFail_WhenItDoesNotExist()
     {
-        A.CallTo(() =>
-                _characterRepository.CharacterExistsAsync(_model.CharacterId)
-            )
+        A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId))
             .Returns(false);
         var result = await _useCase.ExecuteAsync(_model);
 
@@ -162,9 +155,7 @@ public class UpdateBlessingForCharacterUseCaseTests
     [Fact]
     public async Task ValidationFor_BlessingLevelId_WillFail_WhenItDoesNotExist()
     {
-        A.CallTo(() =>
-                _blessingRepository.BlessingLevelExists(_model.BlessingLevelId)
-            )
+        A.CallTo(() => _blessingRepository.BlessingLevelExists(_model.BlessingLevelId))
             .Returns(false);
         var result = await _useCase.ExecuteAsync(_model);
 
@@ -199,10 +190,7 @@ public class UpdateBlessingForCharacterUseCaseTests
     [Fact]
     public async Task ValidationFor_MappingId_ChecksIfItExists()
     {
-        A.CallTo(() =>
-                _mappingRepository.MappingAlreadyExists(_model.MappingId)
-            )
-            .Returns(false);
+        A.CallTo(() => _mappingRepository.MappingAlreadyExists(_model.MappingId)).Returns(false);
         var result = await _useCase.ExecuteAsync(_model);
         result.MustHaveValidationError(
             nameof(UpdateBlessingForCharacterModel.MappingId),
@@ -215,36 +203,44 @@ public class UpdateBlessingForCharacterUseCaseTests
     {
         A.CallTo(() => _characterRepository.GetCharacterState(_model.CharacterId))
             .Returns(new CharacterStatusDto() { IsInCharacterCreation = false });
-        
+
         var result = await _useCase.ExecuteAsync(_model);
 
         Assert.False(result.IsSuccess);
-        Assert.Equal("You cannot edit Advantages or Disadvantages outside of character creation.", result.Errors.First().Message);
+        Assert.Equal(
+            "You cannot edit Advantages or Disadvantages outside of character creation.",
+            result.Errors.First().Message
+        );
     }
-    
+
     [Theory]
     [InlineData("Advantage", "Advantages")]
     [InlineData("Disadvantage", "Disadvantages")]
-    public async Task UseCase_ReturnsError_WhenAddingMoreThan8PointsOfAdvantagesOrDisadvantages(string blessingType, string messageString)
+    public async Task UseCase_ReturnsError_WhenAddingMoreThan8PointsOfAdvantagesOrDisadvantages(
+        string blessingType,
+        string messageString
+    )
     {
         _blessingDbModel.Type = blessingType;
         _characterMappingDbModel.SpentXp = 20;
-        
+
         var result = await _useCase.ExecuteAsync(_model);
 
         Assert.False(result.IsSuccess);
-        Assert.Equal($"You cannot add more than 8 points of {messageString}.", result.Errors.First().Message);
+        Assert.Equal(
+            $"You cannot add more than 8 points of {messageString}.",
+            result.Errors.First().Message
+        );
     }
-    
+
     [Fact]
     public async Task UseCase_CanHandle_GainingXp()
     {
         _blessingDbModel.Type = "advantage";
         _characterMappingDbModel.SpentXp = 4;
         _blessingLevelDbModel.XpCost = 2;
-        A.CallTo(() => _xpRepository.GetAvailableDiscretionary(_model.CharacterId))
-            .Returns(6);
-        
+        A.CallTo(() => _xpRepository.GetAvailableDiscretionary(_model.CharacterId)).Returns(6);
+
         A.CallTo(() => _blessingRepository.GetBlessingLevel(_dbModel.BlessingLevelId))
             .Returns(new BlessingLevel() { XpCost = 4 });
 
@@ -259,8 +255,7 @@ public class UpdateBlessingForCharacterUseCaseTests
         _blessingDbModel.Type = "advantage";
         _characterMappingDbModel.SpentXp = 4;
         _blessingLevelDbModel.XpCost = 2;
-        A.CallTo(() => _xpRepository.GetAvailableDiscretionary(_model.CharacterId))
-            .Returns(4);
+        A.CallTo(() => _xpRepository.GetAvailableDiscretionary(_model.CharacterId)).Returns(4);
 
         var result = await _useCase.ExecuteAsync(_model);
         Assert.True(result.HasError<NotEnoughXPFailure>());
@@ -305,9 +300,7 @@ public class UpdateBlessingForCharacterUseCaseTests
     public async Task UseCase_WillSave_BlessingLevelId()
     {
         _model.BlessingLevelId = 20;
-        A.CallTo(() =>
-                _blessingRepository.BlessingLevelExists(_model.BlessingLevelId)
-            )
+        A.CallTo(() => _blessingRepository.BlessingLevelExists(_model.BlessingLevelId))
             .Returns(true);
 
         var result = await _useCase.ExecuteAsync(_model);

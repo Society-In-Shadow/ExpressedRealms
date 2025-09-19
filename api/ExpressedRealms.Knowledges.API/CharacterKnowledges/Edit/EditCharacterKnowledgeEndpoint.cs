@@ -8,7 +8,9 @@ namespace ExpressedRealms.Knowledges.API.CharacterKnowledges.Edit;
 
 public static class EditCharacterKnowledgeEndpoint
 {
-    public static async Task<Results<Ok, NotFound, ValidationProblem, BadRequest<string>>> EditKnowledges(
+    public static async Task<
+        Results<Ok, NotFound, ValidationProblem, BadRequest<string>>
+    > EditKnowledges(
         int characterId,
         int mappingId,
         [FromBody] EditCharacterKnowledgeRequest request,

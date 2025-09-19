@@ -38,8 +38,8 @@ public class CreateSpecializationUseCaseTests
 
         _specializationRepository = A.Fake<IKnowledgeSpecializationRepository>();
         _mappingRepository = A.Fake<ICharacterKnowledgeRepository>();
-        _xpRepository =  A.Fake<IXpRepository>();
-        
+        _xpRepository = A.Fake<IXpRepository>();
+
         A.CallTo(() =>
                 _mappingRepository.HasExistingSpecializationForMapping(
                     _model.KnowledgeMappingId,
@@ -54,13 +54,18 @@ public class CreateSpecializationUseCaseTests
             )
             .Returns(_dbModel);
         A.CallTo(() =>
-                _xpRepository.GetAvailableXpForSection(_dbModel.CharacterId, XpSectionTypeEnum.Knowledge)
+                _xpRepository.GetAvailableXpForSection(
+                    _dbModel.CharacterId,
+                    XpSectionTypeEnum.Knowledge
+                )
             )
-            .Returns(new SectionXpDto()
-            {
-                AvailableXp = StartingExperience.StartingKnowledges,
-                SpentXp = 0
-            });
+            .Returns(
+                new SectionXpDto()
+                {
+                    AvailableXp = StartingExperience.StartingKnowledges,
+                    SpentXp = 0,
+                }
+            );
         A.CallTo(() =>
                 _mappingRepository.GetSpecializationCountForMapping(_model.KnowledgeMappingId)
             )
@@ -261,13 +266,18 @@ public class CreateSpecializationUseCaseTests
     public async Task UseCase_CalculatesAvailableXP_Correctly()
     {
         A.CallTo(() =>
-                _xpRepository.GetAvailableXpForSection(_dbModel.CharacterId, XpSectionTypeEnum.Knowledge)
+                _xpRepository.GetAvailableXpForSection(
+                    _dbModel.CharacterId,
+                    XpSectionTypeEnum.Knowledge
+                )
             )
-            .Returns(new SectionXpDto()
-            {
-                AvailableXp = StartingExperience.StartingKnowledges,
-                SpentXp = StartingExperience.StartingKnowledges -1
-            });
+            .Returns(
+                new SectionXpDto()
+                {
+                    AvailableXp = StartingExperience.StartingKnowledges,
+                    SpentXp = StartingExperience.StartingKnowledges - 1,
+                }
+            );
 
         var result = await _useCase.ExecuteAsync(_model);
 
@@ -278,13 +288,18 @@ public class CreateSpecializationUseCaseTests
     public async Task UseCase_CalculatesCost_Correctly()
     {
         A.CallTo(() =>
-                _xpRepository.GetAvailableXpForSection(_dbModel.CharacterId, XpSectionTypeEnum.Knowledge)
+                _xpRepository.GetAvailableXpForSection(
+                    _dbModel.CharacterId,
+                    XpSectionTypeEnum.Knowledge
+                )
             )
-            .Returns(new SectionXpDto()
-            {
-                AvailableXp = StartingExperience.StartingKnowledges,
-                SpentXp = StartingExperience.StartingKnowledges -1
-            });
+            .Returns(
+                new SectionXpDto()
+                {
+                    AvailableXp = StartingExperience.StartingKnowledges,
+                    SpentXp = StartingExperience.StartingKnowledges - 1,
+                }
+            );
 
         var result = await _useCase.ExecuteAsync(_model);
 

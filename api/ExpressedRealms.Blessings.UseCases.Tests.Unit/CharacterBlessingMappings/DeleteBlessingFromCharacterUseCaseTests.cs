@@ -23,7 +23,7 @@ public class DeleteBlessingFromCharacterUseCaseTests
     private readonly IXpRepository _xpRepository;
     private readonly DeleteBlessingFromCharacterModel _model;
     private readonly CharacterBlessingMapping _dbModel;
-    
+
     private readonly Blessing _blessingDbModel;
     private readonly CharacterXpView _characterMappingDbModel;
     private readonly BlessingLevel _blessingLevelDbModel;
@@ -39,13 +39,13 @@ public class DeleteBlessingFromCharacterUseCaseTests
             BlessingId = 3,
             Notes = "123",
         };
-        
+
         _blessingDbModel = new Blessing()
         {
             Name = "test",
             Description = "test",
             SubCategory = "Test",
-            Type = "Disadvantage"
+            Type = "Disadvantage",
         };
 
         _blessingLevelDbModel = new BlessingLevel() { XpCost = 4 };
@@ -63,21 +63,29 @@ public class DeleteBlessingFromCharacterUseCaseTests
 
         A.CallTo(() => _mappingRepository.GetCharacterBlessingMappingForEditing(_model.MappingId))
             .Returns(_dbModel);
-        
+
         A.CallTo(() => _characterRepository.GetCharacterState(_model.CharacterId))
             .Returns(new CharacterStatusDto() { IsInCharacterCreation = true });
-        
-        A.CallTo(() => _xpRepository.GetCharacterXpMapping(_model.CharacterId, (int)XpSectionTypeEnum.Advantages))
-            .Returns(_characterMappingDbModel);
-        
-        A.CallTo(() => _xpRepository.GetCharacterXpMapping(_model.CharacterId, (int)XpSectionTypeEnum.Disadvantages))
-            .Returns(_characterMappingDbModel);
-        
+
         A.CallTo(() =>
-                _blessingRepository.GetBlessingLevel(_dbModel.BlessingLevelId)
+                _xpRepository.GetCharacterXpMapping(
+                    _model.CharacterId,
+                    (int)XpSectionTypeEnum.Advantages
+                )
             )
+            .Returns(_characterMappingDbModel);
+
+        A.CallTo(() =>
+                _xpRepository.GetCharacterXpMapping(
+                    _model.CharacterId,
+                    (int)XpSectionTypeEnum.Disadvantages
+                )
+            )
+            .Returns(_characterMappingDbModel);
+
+        A.CallTo(() => _blessingRepository.GetBlessingLevel(_dbModel.BlessingLevelId))
             .Returns(_blessingLevelDbModel);
-        
+
         A.CallTo(() => _blessingRepository.GetBlessingForEditing(_dbModel.BlessingId))
             .Returns(_blessingDbModel);
 
@@ -129,17 +137,20 @@ public class DeleteBlessingFromCharacterUseCaseTests
             "Mapping Id is required."
         );
     }
-    
+
     [Fact]
     public async Task UseCase_ReturnsError_WhenModifyingOutsideOfCharacterCreation()
     {
         A.CallTo(() => _characterRepository.GetCharacterState(_model.CharacterId))
             .Returns(new CharacterStatusDto() { IsInCharacterCreation = false });
-        
+
         var result = await _useCase.ExecuteAsync(_model);
 
         Assert.False(result.IsSuccess);
-        Assert.Equal("You cannot delete Advantages or Disadvantages outside of character creation.", result.Errors.First().Message);
+        Assert.Equal(
+            "You cannot delete Advantages or Disadvantages outside of character creation.",
+            result.Errors.First().Message
+        );
     }
 
     [Fact]
@@ -152,7 +163,7 @@ public class DeleteBlessingFromCharacterUseCaseTests
             "The Blessing Mapping does not exist."
         );
     }
-    
+
     [Fact]
     public async Task UseCase_PassesThrough_TheDbBlessing()
     {
