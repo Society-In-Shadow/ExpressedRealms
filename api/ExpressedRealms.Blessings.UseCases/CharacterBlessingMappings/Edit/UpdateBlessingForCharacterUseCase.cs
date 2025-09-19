@@ -85,12 +85,6 @@ internal sealed class UpdateBlessingForCharacterUseCase(
                 }
             }
 
-            xpInfo.SpentXp = spentXp + newCost;
-            xpInfo.DiscretionXp = xpInfo.SpentXp;
-            xpInfo.TotalCharacterCreationXp = xpInfo.SpentXp;
-            xpInfo.LevelXp = 0;
-            await xpRepository.UpdateXpInfo(xpInfo);
-
             mapping.BlessingLevelId = model.BlessingLevelId;
         }
 

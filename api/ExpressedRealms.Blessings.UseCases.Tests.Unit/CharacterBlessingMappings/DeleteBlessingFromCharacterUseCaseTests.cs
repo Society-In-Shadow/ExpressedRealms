@@ -25,7 +25,7 @@ public class DeleteBlessingFromCharacterUseCaseTests
     private readonly CharacterBlessingMapping _dbModel;
     
     private readonly Blessing _blessingDbModel;
-    private readonly CharacterXpMapping _characterMappingDbModel;
+    private readonly CharacterXpView _characterMappingDbModel;
     private readonly BlessingLevel _blessingLevelDbModel;
 
     public DeleteBlessingFromCharacterUseCaseTests()
@@ -50,7 +50,7 @@ public class DeleteBlessingFromCharacterUseCaseTests
 
         _blessingLevelDbModel = new BlessingLevel() { XpCost = 4 };
 
-        _characterMappingDbModel = new CharacterXpMapping() { SectionCap = 8, SpentXp = 0 };
+        _characterMappingDbModel = new CharacterXpView() { SectionCap = 8, SpentXp = 0 };
 
         _characterRepository = A.Fake<ICharacterRepository>();
         _mappingRepository = A.Fake<ICharacterBlessingRepository>();
@@ -90,8 +90,6 @@ public class DeleteBlessingFromCharacterUseCaseTests
             _mappingRepository,
             validator,
             _characterRepository,
-            _blessingRepository,
-            _xpRepository,
             CancellationToken.None
         );
     }
@@ -153,112 +151,6 @@ public class DeleteBlessingFromCharacterUseCaseTests
             nameof(DeleteBlessingFromCharacterModel.MappingId),
             "The Blessing Mapping does not exist."
         );
-    }
-
-    [Fact]
-    public async Task UseCase_CalculatesSpentXp_AsDifferenceOfOldSpentXpAAndXpCost_ForAdvantages()
-    {
-        _blessingDbModel.Type = "advantage";
-        _characterMappingDbModel.SpentXp = 4;
-        _blessingLevelDbModel.XpCost = 3;
-
-        await _useCase.ExecuteAsync(_model);
-
-        A.CallTo(() => _xpRepository.UpdateXpInfo(
-            A<CharacterXpMapping>.That.Matches(x => x.SpentXp == 1)) 
-        ).MustHaveHappenedOnceExactly();
-    }
-    
-    [Fact]
-    public async Task UseCase_CalculatesDiscretionXp_AsDifferenceOfOldSpentXAndXpCost_ForAdvantages()
-    {
-        _blessingDbModel.Type = "advantage";
-        _characterMappingDbModel.SpentXp = 4;
-        _blessingLevelDbModel.XpCost = 2;
-
-        await _useCase.ExecuteAsync(_model);
-
-        A.CallTo(() => _xpRepository.UpdateXpInfo(
-            A<CharacterXpMapping>.That.Matches(x => x.DiscretionXp == 2)) 
-        ).MustHaveHappenedOnceExactly();
-    }
-    
-    [Fact]
-    public async Task UseCase_CalculatesTotalCharacterCreationXp_AsDifferenceOfOldSpentXpAndXpCost_ForAdvantages()
-    {
-        _blessingDbModel.Type = "advantage";
-        _characterMappingDbModel.SpentXp = 6;
-        _blessingLevelDbModel.XpCost = 4;
-
-        await _useCase.ExecuteAsync(_model);
-
-        A.CallTo(() => _xpRepository.UpdateXpInfo(
-            A<CharacterXpMapping>.That.Matches(x => x.TotalCharacterCreationXp == 2)) 
-        ).MustHaveHappenedOnceExactly();
-    }
-
-    [Fact]
-    public async Task UseCase_GrabsDisadvantageXpMapping_WhenBlessingIsADisadvantage()
-    {
-        _blessingDbModel.Type = "disadvantage";
-
-        await _useCase.ExecuteAsync(_model);
-        
-        A.CallTo(() => _xpRepository.GetCharacterXpMapping(_model.CharacterId, (int)XpSectionTypeEnum.Disadvantages))
-            .MustHaveHappenedOnceExactly();
-    }
-    
-    [Fact]
-    public async Task UseCase_GrabsAdvantageXpMapping_WhenBlessingIsAAdvantage()
-    {
-        _blessingDbModel.Type = "advantage";
-
-        await _useCase.ExecuteAsync(_model);
-        
-        A.CallTo(() => _xpRepository.GetCharacterXpMapping(_model.CharacterId, (int)XpSectionTypeEnum.Advantages))
-            .MustHaveHappenedOnceExactly();
-    }
-    
-    [Fact]
-    public async Task UseCase_CalculatesSpentXp_AsDifferenceOfOldSpentXpAndXpGain_ForDisadvantages()
-    {
-        _blessingDbModel.Type = "disadvantage";
-        _characterMappingDbModel.SpentXp = 4;
-        _blessingLevelDbModel.XpGain = 3;
-
-        await _useCase.ExecuteAsync(_model);
-
-        A.CallTo(() => _xpRepository.UpdateXpInfo(
-            A<CharacterXpMapping>.That.Matches(x => x.SpentXp == 1)) 
-        ).MustHaveHappenedOnceExactly();
-    }
-    
-    [Fact]
-    public async Task UseCase_CalculatesDiscretionXp_AsDifferenceOfOldSpentXpAndXpGain_ForDisadvantages()
-    {
-        _blessingDbModel.Type = "disadvantage";
-        _characterMappingDbModel.SpentXp = 4;
-        _blessingLevelDbModel.XpGain = 2;
-
-        await _useCase.ExecuteAsync(_model);
-
-        A.CallTo(() => _xpRepository.UpdateXpInfo(
-            A<CharacterXpMapping>.That.Matches(x => x.DiscretionXp == 2)) 
-        ).MustHaveHappenedOnceExactly();
-    }
-    
-    [Fact]
-    public async Task UseCase_CalculatesTotalCharacterCreationXp_AsDifferenceOfOldSpentXpAndXpGain_ForDisadvantages()
-    {
-        _blessingDbModel.Type = "disadvantage";
-        _characterMappingDbModel.SpentXp = 6;
-        _blessingLevelDbModel.XpGain = 4;
-
-        await _useCase.ExecuteAsync(_model);
-
-        A.CallTo(() => _xpRepository.UpdateXpInfo(
-            A<CharacterXpMapping>.That.Matches(x => x.TotalCharacterCreationXp == 2)) 
-        ).MustHaveHappenedOnceExactly();
     }
     
     [Fact]

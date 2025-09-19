@@ -68,12 +68,6 @@ internal sealed class AddBlessingToCharacterUseCase(
                     new NotEnoughXPFailure(availableDiscretionary, blessingLevel.XpCost)
                 );
         }
-
-        xpInfo.SpentXp = spentXp + cost;
-        xpInfo.DiscretionXp = xpInfo.SpentXp;
-        xpInfo.TotalCharacterCreationXp = xpInfo.SpentXp;
-        xpInfo.LevelXp = 0;
-        await xpRepository.UpdateXpInfo(xpInfo);
         
         var mappingId = await mappingRepository.AddCharacterBlessingMapping(
             new CharacterBlessingMapping()

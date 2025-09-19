@@ -26,7 +26,7 @@ public class UpdateBlessingForCharacterUseCaseTests
     private readonly CharacterBlessingMapping _dbModel;
 
     private readonly Blessing _blessingDbModel;
-    private readonly CharacterXpMapping _characterMappingDbModel;
+    private readonly CharacterXpView _characterMappingDbModel;
     private readonly BlessingLevel _blessingLevelDbModel;
     
     public UpdateBlessingForCharacterUseCaseTests()
@@ -57,7 +57,7 @@ public class UpdateBlessingForCharacterUseCaseTests
 
         _blessingLevelDbModel = new BlessingLevel() { XpCost = 4 };
 
-        _characterMappingDbModel = new CharacterXpMapping() { SectionCap = 8, SpentXp = 0 };
+        _characterMappingDbModel = new CharacterXpView() { SectionCap = 8, SpentXp = 0 };
         
         _characterRepository = A.Fake<ICharacterRepository>();
         _blessingRepository = A.Fake<IBlessingRepository>();
@@ -235,128 +235,6 @@ public class UpdateBlessingForCharacterUseCaseTests
         Assert.False(result.IsSuccess);
         Assert.Equal($"You cannot add more than 8 points of {messageString}.", result.Errors.First().Message);
     }
-
-    [Fact]
-    public async Task UseCase_CalculatesSpentXp_AsSumOfOldSpentXpAndNewLevelCost_ForAdvantages()
-    {
-        _blessingDbModel.Type = "advantage";
-        _characterMappingDbModel.SpentXp = 4;
-        _blessingLevelDbModel.XpCost = 2;
-
-        await _useCase.ExecuteAsync(_model);
-
-        A.CallTo(() => _xpRepository.UpdateXpInfo(
-            A<CharacterXpMapping>.That.Matches(x => x.SpentXp == 6)) 
-        ).MustHaveHappenedOnceExactly();
-    }
-    
-    [Fact]
-    public async Task UseCase_CalculatesDiscretionXp_AsSumOfOldSpentXpAndNewLevelCost_ForAdvantages()
-    {
-        _blessingDbModel.Type = "advantage";
-        _characterMappingDbModel.SpentXp = 4;
-        _blessingLevelDbModel.XpCost = 2;
-
-        await _useCase.ExecuteAsync(_model);
-
-        A.CallTo(() => _xpRepository.UpdateXpInfo(
-            A<CharacterXpMapping>.That.Matches(x => x.DiscretionXp == 6)) 
-        ).MustHaveHappenedOnceExactly();
-    }
-    
-    /// <summary>
-    /// For blessings, we don't need to take into consideration the section cap, so this is just the straight value
-    /// of the old + new level cost.
-    /// </summary>
-    [Fact]
-    public async Task UseCase_CalculatesTotalCharacterCreationXp_AsSumOfOldSpentXpAndNewLevelCost_ForAdvantages()
-    {
-        _blessingDbModel.Type = "advantage";
-        _characterMappingDbModel.SpentXp = 4;
-        _blessingLevelDbModel.XpCost = 2;
-
-        await _useCase.ExecuteAsync(_model);
-
-        A.CallTo(() => _xpRepository.UpdateXpInfo(
-            A<CharacterXpMapping>.That.Matches(x => x.TotalCharacterCreationXp == 6)) 
-        ).MustHaveHappenedOnceExactly();
-    }
-    
-    /// <summary>
-    /// Advantages and Disadvantages are not relevant to the Level XP calculation, so this is just 0.
-    /// </summary>
-    [Fact]
-    public async Task UseCase_CalculatesLevelXp_As0_ForAdvantages()
-    {
-        _blessingDbModel.Type = "advantage";
-        
-        await _useCase.ExecuteAsync(_model);
-
-        A.CallTo(() => _xpRepository.UpdateXpInfo(
-            A<CharacterXpMapping>.That.Matches(x => x.LevelXp == 0)) 
-        ).MustHaveHappenedOnceExactly();
-    }
-    
-        [Fact]
-    public async Task UseCase_CalculatesSpentXp_AsSumOfOldSpentXpAndNewLevelCost_ForDisadvantages()
-    {
-        _blessingDbModel.Type = "disadvantage";
-        _characterMappingDbModel.SpentXp = 4;
-        _blessingLevelDbModel.XpGain = 2;
-
-        await _useCase.ExecuteAsync(_model);
-
-        A.CallTo(() => _xpRepository.UpdateXpInfo(
-            A<CharacterXpMapping>.That.Matches(x => x.SpentXp == 6)) 
-        ).MustHaveHappenedOnceExactly();
-    }
-    
-    [Fact]
-    public async Task UseCase_CalculatesDiscretionXp_AsSumOfOldSpentXpAndNewLevelCost_ForDisadvantages()
-    {
-        _blessingDbModel.Type = "disadvantage";
-        _characterMappingDbModel.SpentXp = 4;
-        _blessingLevelDbModel.XpGain = 2;
-
-        await _useCase.ExecuteAsync(_model);
-
-        A.CallTo(() => _xpRepository.UpdateXpInfo(
-            A<CharacterXpMapping>.That.Matches(x => x.DiscretionXp == 6)) 
-        ).MustHaveHappenedOnceExactly();
-    }
-    
-    /// <summary>
-    /// For blessings, we don't need to take into consideration the section cap, so this is just the straight value
-    /// of the old + new level cost.
-    /// </summary>
-    [Fact]
-    public async Task UseCase_CalculatesTotalCharacterCreationXp_AsSumOfOldSpentXpAndNewLevelCost_ForDisadvantages()
-    {
-        _blessingDbModel.Type = "disadvantage";
-        _characterMappingDbModel.SpentXp = 4;
-        _blessingLevelDbModel.XpGain = 2;
-
-        await _useCase.ExecuteAsync(_model);
-
-        A.CallTo(() => _xpRepository.UpdateXpInfo(
-            A<CharacterXpMapping>.That.Matches(x => x.TotalCharacterCreationXp == 6)) 
-        ).MustHaveHappenedOnceExactly();
-    }
-    
-    /// <summary>
-    /// Advantages and Disadvantages are not relevant to the Level XP calculation, so this is just 0.
-    /// </summary>
-    [Fact]
-    public async Task UseCase_CalculatesLevelXp_As0_ForDisadvantages()
-    {
-        _blessingDbModel.Type = "disadvantage";
-
-        await _useCase.ExecuteAsync(_model);
-
-        A.CallTo(() => _xpRepository.UpdateXpInfo(
-            A<CharacterXpMapping>.That.Matches(x => x.LevelXp == 0)) 
-        ).MustHaveHappenedOnceExactly();
-    }
     
     [Fact]
     public async Task UseCase_CanHandle_GainingXp()
@@ -370,10 +248,9 @@ public class UpdateBlessingForCharacterUseCaseTests
         A.CallTo(() => _blessingRepository.GetBlessingLevel(_dbModel.BlessingLevelId))
             .Returns(new BlessingLevel() { XpCost = 4 });
 
-        await _useCase.ExecuteAsync(_model);
-        A.CallTo(() => _xpRepository.UpdateXpInfo(
-            A<CharacterXpMapping>.That.Matches(x => x.DiscretionXp == 2)) 
-        ).MustHaveHappenedOnceExactly();
+        var result = await _useCase.ExecuteAsync(_model);
+
+        Assert.True(result.IsSuccess);
     }
 
     [Fact]
