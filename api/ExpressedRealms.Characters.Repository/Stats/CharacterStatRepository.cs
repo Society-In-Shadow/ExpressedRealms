@@ -1,18 +1,23 @@
 using ExpressedRealms.Characters.Repository.Stats.DTOs;
 using ExpressedRealms.Characters.Repository.Stats.Enums;
+using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Characters;
-using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
+using ExpressedRealms.DB.Characters.xpTables;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Shared;
+using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
+using FluentValidationFailure = ExpressedRealms.Repositories.Shared.CommonFailureTypes.FluentValidationFailure;
+using NotFoundFailure = ExpressedRealms.Repositories.Shared.CommonFailureTypes.NotFoundFailure;
 
 namespace ExpressedRealms.Characters.Repository.Stats;
 
 internal sealed class CharacterStatRepository(
     ExpressedRealmsDbContext context,
     IUserContext userContext,
+    IXpRepository xpRepository,
     GetDetailedStatInfoDtoValidator detailedStatValidator,
     EditStatDtoValidator editStatValidator,
     CancellationToken cancellationToken
@@ -143,20 +148,7 @@ internal sealed class CharacterStatRepository(
 
     private async Task<Result> EditStatXpCheck(EditStatDto dto, Character character)
     {
-        var availableXp = await context
-            .Characters.Where(x => x.Id == dto.CharacterId)
-            .Select(x =>
-                StartingExperience.StartingStats
-                - (
-                    x.AgilityStatLevel.TotalXPCost
-                    + x.ConstitutionStatLevel.TotalXPCost
-                    + x.DexterityStatLevel.TotalXPCost
-                    + x.StrengthStatLevel.TotalXPCost
-                    + x.IntelligenceStatLevel.TotalXPCost
-                    + x.WillpowerStatLevel.TotalXPCost
-                )
-            )
-            .FirstOrDefaultAsync(cancellationToken);
+        var xpInfo = await xpRepository.GetAvailableXpForSection(character.Id, XpSectionTypeEnum.Stats);
 
         var oldTotalXpCost = dto.StatTypeId switch
         {
@@ -174,10 +166,14 @@ internal sealed class CharacterStatRepository(
             .Select(x => x.TotalXPCost)
             .FirstAsync(cancellationToken);
 
-        if (availableXp < newTotalXpCost - oldTotalXpCost)
+        var spentXp = xpInfo.SpentXp;
+        
+        spentXp -= oldTotalXpCost;
+        
+        if (spentXp + newTotalXpCost > xpInfo.AvailableXp)
         {
             return Result.Fail(
-                new NotEnoughXPFailure(availableXp, newTotalXpCost - oldTotalXpCost)
+                new NotEnoughXPFailure(xpInfo.AvailableXp - xpInfo.SpentXp, newTotalXpCost - oldTotalXpCost)
             );
         }
 

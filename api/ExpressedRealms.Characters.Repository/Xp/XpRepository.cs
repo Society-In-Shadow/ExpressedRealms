@@ -81,13 +81,20 @@ public class XpRepository(
         
         var availableXp =  characterState.IsInCharacterCreation switch
         {
-            // Discretion is a dyanamic value, as such, it does remove the XP associated with this
-            // particular section.  So you need to add it back in to get to the true available XP
-            true => await GetAvailableDiscretionary(characterId) + xpInfo.SectionCap +  xpInfo.DiscretionXp,
+
+            true => await GetAvailableDiscretionary(characterId) + xpInfo.SectionCap,
             false when characterState.IsPrimaryCharacter => xpInfo.TotalCharacterCreationXp + characterState.AssignedXp,
             _ => 1000
         };
 
+        // Discretion is a dyanamic value, as such, it does remove the XP associated with this
+        // particular section.  So you need to add it back in to get to the true available XP
+        // if the required xp was not fully spent
+        if (xpInfo.DiscretionXp > 0)
+        {
+            availableXp += xpInfo.DiscretionXp;
+        }
+        
         return new SectionXpDto()
         {
             AvailableXp = availableXp,

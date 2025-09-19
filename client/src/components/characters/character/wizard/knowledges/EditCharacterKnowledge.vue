@@ -43,8 +43,6 @@ watch(props.knowledge, async () => {
 }, {immediate: true})
 
 watch(props.knowledge.levelId, async () => {
-  console.log("triggererd");
-  console.log()
   selectedKnowledge.value = store.knowledgeLevels.find(function (level: KnowledgeOptions) {
     return level.id === props.knowledge.levelId;
   });
