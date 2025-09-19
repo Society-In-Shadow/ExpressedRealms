@@ -1,17 +1,16 @@
 <script setup lang="ts">
 
 import {onMounted} from "vue";
-import Card from "primevue/card";
 import Message from "primevue/message";
 import {useRoute} from "vue-router";
-import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import {experienceStore, XpSectionTypes} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import type {ExperienceBreakdown} from "@/components/characters/character/types.ts";
 
 const route = useRoute()
-const experienceInfo = experienceStore();
+const xpInfo = experienceStore();
 
 onMounted(async () => {
-  experienceInfo.updateExperience(route.params.id);
+  xpInfo.updateExperience(route.params.id);
 })
 
 function showSpent(xp: ExperienceBreakdown) {
@@ -23,26 +22,35 @@ function showSpent(xp: ExperienceBreakdown) {
 
 <template>
   <h2>Experience Breakdown</h2>
-  <Card class="custom-card">
-    <template #content>
-      <table class="w-100">
-        <thead>
-          <tr>
-            <th></th>
-            <th class="text-right pl-3">Total XP</th>
-            <th class="text-right pl-3">Creation XP</th>
-            <th class="text-right pl-3">Spent XP</th>
-          </tr>
-        </thead>
-        <tr v-for="section in experienceInfo.experienceBreakdown.experience">
-          <td>{{section.name}}</td>
-          <td class="text-right">{{ section.total < 0 ? '--' : section.total }}</td>
-          <td class="text-right">{{ section.characterCreateMax < 0 ? '--' : section.characterCreateMax }}</td>
-          <td class="text-right">{{ showSpent(section) }}</td>
-        </tr>
-      </table>
-    </template>
-  </Card>
+  
+  <table class="w-100">
+    <tr>
+      <th class="text-left">Name</th>
+      <th></th>
+      <th class="text-center">Required</th>
+      <th class="text-center">Discretionary</th>
+      <th class="text-center">Available</th>
+    </tr>
+    <tr v-for="section in xpInfo.calculatedValues">
+      <td class="text-left">{{section.name}}</td>
+      <td class="text-center">
+        <div v-if="section.sectionTypeId == XpSectionTypes.advantage || section.sectionTypeId == XpSectionTypes.disadvantage || section.sectionTypeId == XpSectionTypes.discretionary">--</div>
+        <span v-else class="material-symbols-outlined" title="You are required to spend all points">
+          {{ section.total >= section.characterCreateMax ? "check_circle" : "warning" }}
+        </span>
+      </td>
+      <td class="text-center">
+          {{ section.requiredXp }} / {{ section.characterCreateMax }}
+      </td>
+      <td class="text-center">
+        {{ section.currentOptionalXp }} / {{ section.optionalMaxXP }}
+      </td>
+      <td class="text-center">
+        {{ section.availableXp }}
+      </td>
+    </tr>
+  </table>
+  
   <Message severity="info" class="mt-3">
     <div>This is an breakdown of all the XP the current character has. The calculations are assuming you are spending everything you can. This will be changed later.</div>
     <ul>

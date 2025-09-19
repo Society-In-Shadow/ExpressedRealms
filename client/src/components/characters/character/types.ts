@@ -11,3 +11,14 @@ export interface ExperienceBreakdown {
     characterCreateMax: number;
     levelXp: number;
 }
+
+export interface CalculatedExperience{
+    name: string;
+    sectionTypeId: number;
+    requiredXp: number;
+    currentOptionalXp: number;
+    optionalMaxXP: number;
+    availableXp: number;
+    total: number,
+    characterCreateMax: number;
+}

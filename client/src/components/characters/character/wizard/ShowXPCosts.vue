@@ -49,7 +49,7 @@ const availableXp = computed(() => {
     </div>
     <div>
       <!-- TODO: Need text that shows Discretionary vs Disadvantage breakdown -->
-      <strong>Optional XP:</strong> {{ currentOptionalXp }} / {{ optionalMaxXP }}
+      <strong>Discretionary XP:</strong> {{ currentOptionalXp }} / {{ optionalMaxXP }}
     </div>
     <div>
       <strong>Available XP:</strong> {{ availableXp }}

@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import axios from "axios";
-import type {ExperienceBreakdownResponse} from "@/components/characters/character/types.ts"
+import type {CalculatedExperience, ExperienceBreakdownResponse} from "@/components/characters/character/types.ts"
 
 export const XpSectionTypes = {
     advantage: 1,
@@ -21,6 +21,7 @@ export const experienceStore =
                 experienceBreakdown: {} as ExperienceBreakdownResponse,
                 availableDiscretionary: 0 as number,
                 showAllExperience: true as boolean,
+                calculatedValues: [] as CalculatedExperience[]
             }
         },
         actions: {
@@ -30,6 +31,32 @@ export const experienceStore =
                     .then((response) => {
                         this.isLoading = false;
                         this.experienceBreakdown = response.data;
+                        
+                        
+                        this.calculatedValues = response.data.experience.map(xp => {
+
+                            const requiredXp =  xp.total >= xp.characterCreateMax ? xp.characterCreateMax : xp.total;
+                            const currentOptionalXp =  xp.total >= xp.characterCreateMax ? xp.total - xp.characterCreateMax : 0;
+                            const optionalMaxXP = currentOptionalXp + response.data.availableDiscretionary
+                            let availableXp = optionalMaxXP - currentOptionalXp
+                            
+                            if (requiredXp < xp.characterCreateMax) {
+                                availableXp = xp.characterCreateMax - requiredXp + optionalMaxXP;
+                            }
+                            
+                            return {
+                                name: xp.name,
+                                requiredXp,
+                                currentOptionalXp,
+                                optionalMaxXP,
+                                availableXp,
+                                characterCreateMax: xp.characterCreateMax,
+                                total: xp.total,
+                                sectionTypeId: xp.sectionTypeId
+                            }
+                        })
+                        
+                        
                         this.availableDiscretionary = response.data.availableDiscretionary
                     })
                 },
