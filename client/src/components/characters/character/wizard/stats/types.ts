@@ -14,4 +14,5 @@ export interface Stat {
     name: string;
     statLevel: number;
     statLevelInfo: LevelInfo;
+    disabled: boolean;
 }

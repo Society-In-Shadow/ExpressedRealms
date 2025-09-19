@@ -44,7 +44,7 @@ async function reloadData(){
   await statInfo.getEditOptions(stat.value.id);
   const info = xpInfo.getExperienceInfoForSection(XpSectionTypes.stats);
   statInfo.statLevels.forEach(function(level:LevelInfo) {
-    level.disabled = level.totalXP > info.availableXp;
+    level.disabled = level.totalXP - stat.value.statLevelInfo.totalXP > info.availableXp;
   });
   expandedRows.value = Object.fromEntries(statInfo.statLevels.map(p => [p.level, true]));
 }
