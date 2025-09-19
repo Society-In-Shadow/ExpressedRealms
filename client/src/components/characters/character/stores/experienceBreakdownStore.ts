@@ -68,7 +68,9 @@ export const experienceStore =
             },
             getCharacterLevel(): number{
                 
-                let totals = this.experienceBreakdown.experience.filter(x => x.name === "Total")[0];
+                return 0;
+                
+                /*let totals = this.experienceBreakdown.experience.filter(x => x.name === "Total")[0];
                 
                 let total = totals.levelXp;
                 if(total <= 0)
@@ -88,7 +90,7 @@ export const experienceStore =
                 else if(total <= 700)
                     return 7;
 
-                return 8;
+                return 8;*/
 
             }
         }

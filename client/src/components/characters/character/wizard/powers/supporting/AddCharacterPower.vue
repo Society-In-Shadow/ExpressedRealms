@@ -5,7 +5,7 @@ import FormTextAreaWrapper from "@/FormWrappers/FormTextAreaWrapper.vue";
 import Button from "primevue/button";
 import {getValidationInstance} from "@/components/characters/character/powers/validations/powerValidations.ts";
 import {useRoute} from "vue-router";
-import {computed, onMounted, type PropType, ref} from "vue";
+import {computed, type PropType, ref, watch} from "vue";
 import {characterPowersStore} from "@/components/characters/character/powers/stores/characterPowerStore.ts";
 import type {Power} from "@/components/characters/character/powers/types.ts";
 import PowerDetails from "@/components/characters/character/wizard/powers/supporting/PowerDetails.vue";
@@ -33,12 +33,20 @@ const disabled = computed(() => {
   return sectionInfo.value.availableXp < powerXp.value
 })
 
-onMounted(async () => {
+watch(() => props.power, async (newValue, oldValue) => {
   const values = await store.getPowerOptions(route.params.id, props.power.id);
   availableXp.value = values.availableXp;
   powerXp.value = values.powerXp;
   sectionInfo.value = xpInfo.getExperienceInfoForSection(XpSectionTypes.powers);
-})
+  console.log("triggered");
+}, {immediate: true, deep: true})
+
+/*onMounted(async () => {
+  const values = await store.getPowerOptions(route.params.id, props.power.id);
+  availableXp.value = values.availableXp;
+  powerXp.value = values.powerXp;
+  sectionInfo.value = xpInfo.getExperienceInfoForSection(XpSectionTypes.powers);
+})*/
 
 
 const onSubmit = form.handleSubmit(async (values) => {

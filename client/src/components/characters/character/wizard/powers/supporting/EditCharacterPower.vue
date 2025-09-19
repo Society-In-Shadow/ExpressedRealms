@@ -3,7 +3,7 @@
 import FormTextAreaWrapper from "@/FormWrappers/FormTextAreaWrapper.vue";
 import Button from "primevue/button";
 import {useRoute} from "vue-router";
-import {onBeforeMount, type PropType} from "vue";
+import {type PropType, watch} from "vue";
 import {characterPowersStore} from "@/components/characters/character/powers/stores/characterPowerStore.ts";
 import type {Power} from "@/components/characters/character/powers/types.ts";
 import {getValidationInstance} from "@/components/characters/character/powers/validations/powerValidations.ts";
@@ -22,9 +22,9 @@ const props = defineProps({
   }
 });
 
-onBeforeMount(async () => {
+watch(() => props.power, async (newValue, oldValue) => {
   form.setValues(props.power);
-})
+}, {immediate: true, deep: true})
 
 const onSubmit = form.handleSubmit(async (values) => {
   await store.editPower(values, route.params.id, props.power.id);
