@@ -15,7 +15,7 @@ import EditCharacterDetails from "@/components/characters/character/wizard/basic
 import AddCharacter from "@/components/characters/character/wizard/basicInfo/AddCharacter.vue";
 import OverallExperience from "@/components/characters/character/OverallExperience.vue";
 import BlessingStep from "@/components/characters/character/wizard/blessings/BlessingStep.vue";
-import {FeatureFlags, userStore} from "@/stores/userStore.ts";
+import {userStore} from "@/stores/userStore.ts";
 import WizardContent from "@/components/characters/character/wizard/WizardContent.vue";
 import {breakpointsBootstrapV5, useBreakpoints} from "@vueuse/core";
 import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
@@ -37,6 +37,7 @@ const sections = ref([
   { name: 'Powers', isDisabled: isAdd, component: markRaw(PowerStep) },
   { name: 'Skills', isDisabled: isAdd, component: markRaw(SkillStep) },
   { name: 'Proficiencies', isDisabled: isAdd, component: markRaw(ProficiencyTableTile) },
+  { name: 'Advantages / Disadvantages', isDisabled: isAdd, component: defineAsyncComponent(async () => BlessingStep) },
   { name: 'Experience Breakdown', isDisabled: isAdd, component: markRaw(OverallExperience) },
 ]);
 
@@ -51,10 +52,6 @@ async function fetchData() {
   }else{
     sections.value.splice(1, 0,   { name: 'Basic Info', isDisabled: false, component: defineAsyncComponent(async () => EditCharacterDetails) },);
     await xpData.updateExperience(route.params.id);
-  }
-  
-  if(await userInfo.hasFeatureFlag(FeatureFlags.ManageCharacterBlessings)){
-    sections.value.splice(sections.value.length - 1, 0, { name: 'Advantages / Disadvantages', isDisabled: isAdd, component: defineAsyncComponent(async () => BlessingStep) })
   }
 }
 
