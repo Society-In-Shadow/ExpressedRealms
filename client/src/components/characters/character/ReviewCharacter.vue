@@ -1,9 +1,11 @@
 <script setup lang="ts">
 
-import {onMounted, ref, watch} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import Message from "primevue/message";
 import {useRoute} from "vue-router";
 import {experienceStore, XpSectionTypes} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import Button from "primevue/button";
+import axios from "axios";
 
 const route = useRoute()
 const xpInfo = experienceStore();
@@ -25,10 +27,31 @@ watch(xpInfo.calculatedValues, () => {
   discretionaryBucket.value = overallDiscretionaryTotal.value - availableDiscretionary >= 16 ? 16 : 16 + disadvantage.total - availableDiscretionary  ;
 }, { immediate: true })
 
+async function finalizeCreation(){
+  await axios.put(`characters/${route.params.id}/finalizeCharacterCreate`)
+}
+
+const spentAllPoints = computed(() => {
+  
+  const discretionarySpent = overallDiscretionaryTotal.value - discretionaryBucket.value - disadvantageBucket.value == 0;
+  const allSectionsMeetMinimum = xpInfo.calculatedValues.every(section => {
+    if (section.sectionTypeId == XpSectionTypes.advantage)
+      return true;
+    if (section.sectionTypeId == XpSectionTypes.disadvantage)
+      return true;
+    if (section.sectionTypeId == XpSectionTypes.discretionary)
+      return true;
+
+    return section.total >= section.characterCreateMax;
+  });
+
+  return discretionarySpent && allSectionsMeetMinimum;
+})
+
 </script>
 
 <template>
-  <h2>Experience Breakdown</h2>
+  <h2>Review Character</h2>
   
   <table class="w-100">
     <tr>
@@ -42,9 +65,6 @@ watch(xpInfo.calculatedValues, () => {
       <td class="text-center pr-2">
         <span v-if="section.sectionTypeId == XpSectionTypes.advantage || section.sectionTypeId == XpSectionTypes.disadvantage" class="material-symbols-outlined" title="No Status">
           do_not_disturb_on
-        </span>
-        <span v-else-if="section.sectionTypeId == XpSectionTypes.disadvantage" class="material-symbols-outlined" title="You are required to spend all points">
-          {{ disadvantageBucket == section.total ? "check_circle" : "warning" }}
         </span>
         <span v-else-if="section.sectionTypeId == XpSectionTypes.discretionary" class="material-symbols-outlined" title="You are required to spend all points">
           {{ overallDiscretionaryTotal - discretionaryBucket - disadvantageBucket == 0 ? "check_circle" : "warning" }}
@@ -110,6 +130,10 @@ watch(xpInfo.calculatedValues, () => {
       </td>
     </tr>
   </table>
+  <div class="text-right">
+    <Button label="Finalize Creation" class="mt-3" @click="finalizeCreation" :disabled="!spentAllPoints"/>
+  </div>
+
   
   <Message severity="info" class="mt-3">
     <div>This is an breakdown of all the XP the current character has. The calculations are assuming you are spending everything you can. This will be changed later.</div>

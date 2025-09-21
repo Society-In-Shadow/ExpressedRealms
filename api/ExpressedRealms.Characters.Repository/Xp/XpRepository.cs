@@ -116,6 +116,25 @@ public class XpRepository(
         return new SectionXpDto() { AvailableXp = availableXp, SpentXp = xpInfo.SpentXp };
     }
 
+    public async Task FinalizeCreateXp(int charactterId)
+    {
+        var mappings = await context.CharacterXpMappings
+            .Where(x => x.CharacterId == charactterId)
+            .ToListAsync();
+
+        var calculatedMappings = await context.CharacterXpViews
+            .Where(x => x.CharacterId == charactterId)
+            .ToListAsync();
+        
+        foreach (var mapping in mappings)
+        {
+            var calculatedMapping = calculatedMappings.First(x => x.SectionTypeId == mapping.XpSectionTypeId);
+            mapping.TotalCharacterCreationXp = calculatedMapping.SpentXp;
+        }
+        
+        await context.SaveChangesAsync();
+    }
+
     public Task UpdateXpInfo(CharacterXpMapping xpInfo)
     {
         context.CharacterXpMappings.Update(xpInfo);

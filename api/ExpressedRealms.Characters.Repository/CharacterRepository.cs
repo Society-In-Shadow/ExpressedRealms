@@ -73,6 +73,17 @@ internal sealed class CharacterRepository(
             .FirstAsync(cancellationToken);
     }
 
+    public Task<Character> GetCharacterForEdit(int characterId)
+    {
+        return context.Characters.FirstAsync(x => x.Id == characterId);
+    }
+
+    public async Task UpdateCharacter(Character user)
+    {
+        context.Characters.Update(user);
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
     public async Task<Result<int>> CreateCharacterAsync(AddCharacterDto dto)
     {
         var result = await addValidator.ValidateAsync(dto, cancellationToken);
