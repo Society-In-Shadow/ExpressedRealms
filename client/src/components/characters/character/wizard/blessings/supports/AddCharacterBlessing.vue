@@ -36,6 +36,7 @@ watch(() => props.blessing, async () => {
   let sectionType: XpSectionType = props.blessing.type.toLowerCase() == 'disadvantage' ? XpSectionTypes.disadvantage : XpSectionTypes.advantage;
   let xpInfo = experienceInfo.getExperienceInfoForSection(sectionType);
   availableXp.value = xpInfo.characterCreateMax - xpInfo.total;
+  form.customResetForm();
 }, {immediate: true})
 
 const onSubmit = form.handleSubmit(async (values) => {
@@ -47,6 +48,10 @@ function disableOption(level:BlessingLevel){
     return level.xpGain > availableXp.value;
   }
   return level.xpCost > availableXp.value;
+}
+
+function updateLevel(level:BlessingLevel){
+  form.blessingLevel.field.value = level
 }
 
 </script>
@@ -66,7 +71,7 @@ function disableOption(level:BlessingLevel){
   <form @submit="onSubmit">
     <div v-for="level in props.blessing.levels" :key="level.id" class="mt-3">
       <div class="d-flex flex-column flex-md-row align-self-center">
-        <RadioButton v-model="form.blessingLevel.field" :inputId="level.id.toString()" :value="level" class="mr-4" :disabled="disableOption(level)" />
+        <RadioButton :inputId="level.id.toString()" :value="level" class="mr-4" :disabled="disableOption(level)" @click="updateLevel(level)"/>
         <label :for="level.id.toString()" :class="disableOption(level) ? 'non-selectable' : ''">{{ level.name }} – {{ level.description }}</label>
       </div>
     </div>
