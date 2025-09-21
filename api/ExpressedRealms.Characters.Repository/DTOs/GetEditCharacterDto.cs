@@ -7,4 +7,5 @@ public sealed record GetEditCharacterDto
     public string Expression { get; init; } = null!;
     public int? FactionId { get; init; }
     public int ExpressionId { get; set; }
+    public bool IsPrimaryCharacter { get; set; }
 }

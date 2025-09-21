@@ -32,6 +32,7 @@ internal sealed class CharacterRepository(
                 Name = x.Name,
                 Background = x.Background,
                 Expression = x.Expression.Name,
+                IsPrimaryCharacter = x.IsPrimaryCharacter,
             })
             .ToListAsync(cancellationToken);
     }
@@ -48,6 +49,7 @@ internal sealed class CharacterRepository(
                 Expression = x.Expression.Name,
                 FactionId = x.FactionId,
                 ExpressionId = x.ExpressionId,
+                IsPrimaryCharacter = x.IsPrimaryCharacter
             })
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -161,6 +163,7 @@ internal sealed class CharacterRepository(
         character.Name = dto.Name;
         character.Background = dto.Background;
         character.FactionId = dto.FactionId;
+        character.IsPrimaryCharacter = dto.IsPrimaryCharacter;
 
         await context.SaveChangesAsync(cancellationToken);
 

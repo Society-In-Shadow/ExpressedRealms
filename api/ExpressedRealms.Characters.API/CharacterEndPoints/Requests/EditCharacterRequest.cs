@@ -12,4 +12,6 @@ internal record EditCharacterRequest
 
     /// <example>9</example>
     public int? FactionId { get; set; }
+
+    public bool IsPrimaryCharacter { get; set; }
 }

@@ -11,7 +11,10 @@ internal record CharacterEditResponse
         Expression = dto.Expression;
         FactionId = dto.FactionId;
         ExpressionId = dto.ExpressionId;
+        IsPrimaryCharacter = dto.IsPrimaryCharacter;
     }
+
+    public bool IsPrimaryCharacter { get; set; }
 
     public int ExpressionId { get; set; }
 

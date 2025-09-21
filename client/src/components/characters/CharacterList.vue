@@ -21,6 +21,7 @@ onMounted(async () => {
       :character-name="character.name" 
       :background-story="character.background"
       :expression="character.expression"
+      :is-primary-character="character.isPrimaryCharacter"
     />
     <AddCharacterTile />
   </div>

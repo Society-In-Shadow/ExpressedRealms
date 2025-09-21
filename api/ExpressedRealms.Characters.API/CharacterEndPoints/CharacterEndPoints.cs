@@ -263,6 +263,7 @@ internal static class CharacterEndPoints
                             Background = dto.Background,
                             FactionId = dto.FactionId,
                             Id = dto.Id,
+                            IsPrimaryCharacter = dto.IsPrimaryCharacter
                         }
                     );
 
