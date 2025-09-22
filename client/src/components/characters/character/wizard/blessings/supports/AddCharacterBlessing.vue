@@ -3,7 +3,7 @@
 import FormTextAreaWrapper from "@/FormWrappers/FormTextAreaWrapper.vue";
 import Button from "primevue/button";
 import {useRoute} from "vue-router";
-import {type PropType, ref, watch} from "vue";
+import {computed, type PropType, ref, watch} from "vue";
 import type {Blessing, BlessingLevel} from "@/components/blessings/types.ts";
 import RadioButton from "primevue/radiobutton";
 import {
@@ -18,11 +18,15 @@ import {
   XpSectionTypes,
 } from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import Message from "primevue/message";
+import {characterStore} from "@/components/characters/character/stores/characterStore.ts";
+import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vue";
 
 const store = characterBlessingsStore();
 const form = getValidationInstance();
 const route = useRoute();
 const experienceInfo = experienceStore();
+const characterInfo = characterStore();
+
 const availableXp = ref(0);
 
 const props = defineProps({
@@ -54,6 +58,10 @@ function updateLevel(level:BlessingLevel){
   form.blessingLevel.field.value = level
 }
 
+const xpSectionType = computed(() => {
+  return props.blessing.type.toLowerCase() == 'disadvantage' ? XpSectionTypes.disadvantage : XpSectionTypes.advantage;
+})
+
 </script>
 
 <template>
@@ -62,25 +70,23 @@ function updateLevel(level:BlessingLevel){
   </h1>
   
   <div v-html="props.blessing?.description"></div>
-  <h3 class="d-flex justify-content-end">
-    <span>Available Experience: {{ availableXp }}</span>
-  </h3>
+  <ShowXPCosts v-if="characterInfo.isInCharacterCreation" :section-type="xpSectionType" class="pt-3" />
   <div v-if="availableXp == 0">
     <Message severity="warn" class="mt-4">You do not have enough experience to add this to your character.</Message>
   </div>
   <form @submit="onSubmit">
     <div v-for="level in props.blessing.levels" :key="level.id" class="mt-3">
       <div class="d-flex flex-column flex-md-row align-self-center">
-        <RadioButton :inputId="level.id.toString()" :value="level" class="mr-4" :disabled="disableOption(level)" @click="updateLevel(level)"/>
+        <RadioButton :inputId="level.id.toString()" :value="level" class="mr-4" :disabled="disableOption(level) || !characterInfo.isInCharacterCreation" @click="updateLevel(level)"/>
         <label :for="level.id.toString()" :class="disableOption(level) ? 'non-selectable' : ''">{{ level.name }} – {{ level.description }}</label>
       </div>
     </div>
     
-    <div class="mt-4">
+    <div class="mt-4" v-if="characterInfo.isInCharacterCreation">
       <FormTextAreaWrapper v-model="form.notes" :disabled="availableXp == 0" />
     </div>
 
-    <div class="m-3 text-right" v-if="availableXp != 0">
+    <div class="m-3 text-right" v-if="availableXp != 0 && characterInfo.isInCharacterCreation">
       <Button label="Add" class="m-2" type="submit" />
     </div>
   </form>
