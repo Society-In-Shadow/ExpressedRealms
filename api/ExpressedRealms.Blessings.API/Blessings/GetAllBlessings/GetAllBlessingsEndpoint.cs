@@ -34,7 +34,8 @@ public static class GetAllBlessingsEndpoint
             .Select(x => new SubSection()
             {
                 Name = x.Key!,
-                Blessings = x.OrderBy(x => x.Name).ThenBy(x => x.SubCategory)
+                Blessings = x.OrderBy(x => x.Name)
+                    .ThenBy(x => x.SubCategory)
                     .Select(x => new Blessing()
                     {
                         Id = x.Id,

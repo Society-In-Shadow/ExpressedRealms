@@ -5,7 +5,8 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Characters.UseCases.FinalizeCharacterCreate;
 
 [UsedImplicitly]
-public sealed class FinalizeCharacterCreateModelValidator : AbstractValidator<FinalizeCharacterCreateModel>
+public sealed class FinalizeCharacterCreateModelValidator
+    : AbstractValidator<FinalizeCharacterCreateModel>
 {
     public FinalizeCharacterCreateModelValidator(ICharacterRepository repository)
     {
@@ -14,6 +15,5 @@ public sealed class FinalizeCharacterCreateModelValidator : AbstractValidator<Fi
             .WithMessage("Character Id is required.")
             .MustAsync(async (x, y) => await repository.CharacterExistsAsync(x))
             .WithMessage("The Character does not exist.");
-
     }
 }

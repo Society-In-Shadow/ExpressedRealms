@@ -65,7 +65,7 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "manage-character-blessings",
         "Allows one to manage blessings on their character"
     );
-    
+
     public static readonly ReleaseFlags AddCharacterLimitCap = new(
         "Add Character Limit Cap",
         "add-character-limit-cap",

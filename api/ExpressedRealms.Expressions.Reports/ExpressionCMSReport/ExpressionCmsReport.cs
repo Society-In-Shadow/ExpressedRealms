@@ -139,9 +139,7 @@ public static class ExpressionCmsReport
         }
         else if (section.Blessings is not null)
         {
-            var groups = section.Blessings
-                .GroupBy(x => x.Type)
-                .OrderBy(x => x.Key);
+            var groups = section.Blessings.GroupBy(x => x.Type).OrderBy(x => x.Key);
             foreach (var group in groups)
             {
                 card.Item().PaddingBottom(10).Text(group.Key).FontSize(10).ExtraBold();

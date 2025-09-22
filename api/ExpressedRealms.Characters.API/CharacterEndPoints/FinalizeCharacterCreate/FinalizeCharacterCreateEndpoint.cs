@@ -20,7 +20,7 @@ internal static class FinalizeCharacterCreateEndpoint
             return notFound;
         if (status.HasBeenDeletedAlready(out var deletedAlready))
             return deletedAlready;
-        
+
         status.ThrowIfErrorNotHandled();
 
         return TypedResults.Ok();

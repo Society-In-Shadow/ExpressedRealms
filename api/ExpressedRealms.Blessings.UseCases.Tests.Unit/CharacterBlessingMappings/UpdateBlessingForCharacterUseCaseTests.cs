@@ -205,7 +205,7 @@ public class UpdateBlessingForCharacterUseCaseTests
             .Returns(new CharacterStatusDto() { IsInCharacterCreation = false });
 
         _mappingModel.BlessingLevelId = 3;
-        
+
         var result = await _useCase.ExecuteAsync(_model);
 
         A.CallTo(() =>
@@ -216,7 +216,6 @@ public class UpdateBlessingForCharacterUseCaseTests
                 )
             )
             .MustHaveHappenedOnceExactly();
-        
     }
 
     [Theory]
@@ -259,14 +258,14 @@ public class UpdateBlessingForCharacterUseCaseTests
     public async Task UseCase_WillReturnNotEnoughXp_WhenOutOfXp()
     {
         _blessingDbModel.Type = "advantage";
-        
+
         // Old Level
         A.CallTo(() => _blessingRepository.GetBlessingLevel(_mappingModel.BlessingLevelId))
             .Returns(new BlessingLevel() { XpCost = 4 });
         // New Level
         A.CallTo(() => _blessingRepository.GetBlessingLevel(_model.BlessingLevelId))
             .Returns(new BlessingLevel() { XpCost = 8 });
-        
+
         A.CallTo(() => _xpRepository.GetAvailableDiscretionary(_model.CharacterId)).Returns(2);
 
         var result = await _useCase.ExecuteAsync(_model);

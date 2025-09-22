@@ -29,7 +29,7 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
 
         var xpInfo = await xpRepository.GetCharacterXpMappings(model.CharacterId);
         var characterState = await characterRepository.GetCharacterState(model.CharacterId);
-        
+
         costs.AddRange(
             xpInfo
                 .Select(x => new ExperienceTotalMax(

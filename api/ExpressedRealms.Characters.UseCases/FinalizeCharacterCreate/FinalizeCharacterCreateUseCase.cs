@@ -15,7 +15,7 @@ internal sealed class FinalizeCharacterCreateUseCase(
     public async Task<Result> ExecuteAsync(FinalizeCharacterCreateModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
-            validator, 
+            validator,
             model,
             cancellationToken
         );
@@ -24,27 +24,27 @@ internal sealed class FinalizeCharacterCreateUseCase(
             return Result.Fail(result.Errors);
 
         var characterXpViews = await xpRepository.GetCharacterXpMappings(model.CharacterId);
-        
-        var xpSpent = characterXpViews
-            .Sum(x => x.TrueTotalSpent);
 
-        var total = characterXpViews
-            .Sum(x => x.TrueSectionCap);
-        
+        var xpSpent = characterXpViews.Sum(x => x.TrueTotalSpent);
+
+        var total = characterXpViews.Sum(x => x.TrueSectionCap);
+
         var overallTotal = total;
         var overallSpent = xpSpent;
-        
+
         if (overallTotal != overallSpent)
         {
-            return Result.Fail($"You still need to spend {overallTotal - overallSpent} xp before finalizing create");
+            return Result.Fail(
+                $"You still need to spend {overallTotal - overallSpent} xp before finalizing create"
+            );
         }
 
         var user = await repository.GetCharacterForEdit(model.CharacterId);
-        
+
         user.IsInCharacterCreation = false;
-        
+
         await xpRepository.FinalizeCreateXp(user.Id);
-        
+
         await repository.UpdateCharacter(user);
 
         return Result.Ok();

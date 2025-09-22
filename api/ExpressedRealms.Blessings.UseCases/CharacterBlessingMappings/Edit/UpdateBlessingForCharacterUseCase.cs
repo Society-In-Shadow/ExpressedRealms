@@ -35,7 +35,10 @@ internal sealed class UpdateBlessingForCharacterUseCase(
 
         var characterState = await characterRepository.GetCharacterState(model.CharacterId);
 
-        if (mapping.BlessingLevelId != model.BlessingLevelId && characterState.IsInCharacterCreation)
+        if (
+            mapping.BlessingLevelId != model.BlessingLevelId
+            && characterState.IsInCharacterCreation
+        )
         {
             var blessing = await blessingRepository.GetBlessingForEditing(mapping.BlessingId);
             var newLevel = await blessingRepository.GetBlessingLevel(model.BlessingLevelId);

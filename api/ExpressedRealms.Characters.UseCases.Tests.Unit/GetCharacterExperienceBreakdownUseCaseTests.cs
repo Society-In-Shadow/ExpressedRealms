@@ -67,10 +67,7 @@ public class GetCharacterExperienceBreakdownUseCaseTests
         A.CallTo(() => xpRepository.GetAvailableDiscretionary(_model.CharacterId)).Returns(18);
 
         A.CallTo(() => _characterRepository.GetCharacterState(_model.CharacterId))
-            .Returns(new CharacterStatusDto()
-            {
-                IsInCharacterCreation = true,
-            });
+            .Returns(new CharacterStatusDto() { IsInCharacterCreation = true });
 
         var validator = new GetCharacterExperienceBreakdownModelValidator(
             knowledgeRepository,
@@ -114,15 +111,12 @@ public class GetCharacterExperienceBreakdownUseCaseTests
         Assert.Equal(2, item.Total);
         Assert.Equal(8, item.Max);
     }
-    
+
     [Fact]
     public async Task UseCase_WillReturn1MillionXp_IfCharacteIsNotInCharacterCreation()
     {
         A.CallTo(() => _characterRepository.GetCharacterState(_model.CharacterId))
-            .Returns(new CharacterStatusDto()
-            {
-                IsInCharacterCreation = false,
-            });
+            .Returns(new CharacterStatusDto() { IsInCharacterCreation = false });
         var result = await _useCase.ExecuteAsync(_model);
 
         var item = result.Value.ExperienceSections.Single(x => x.Name == "Disadvantage XP");

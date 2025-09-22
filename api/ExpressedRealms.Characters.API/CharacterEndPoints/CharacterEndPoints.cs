@@ -249,9 +249,10 @@ internal static class CharacterEndPoints
             )
             .RequireAuthorization();
 
-        endpointGroup.MapPut("{id}/finalizeCharacterCreate", FinalizeCharacterCreateEndpoint.Execute)
+        endpointGroup
+            .MapPut("{id}/finalizeCharacterCreate", FinalizeCharacterCreateEndpoint.Execute)
             .RequireAuthorization();
-        
+
         endpointGroup
             .MapPut(
                 "",
@@ -267,7 +268,7 @@ internal static class CharacterEndPoints
                             Background = dto.Background,
                             FactionId = dto.FactionId,
                             Id = dto.Id,
-                            IsPrimaryCharacter = dto.IsPrimaryCharacter
+                            IsPrimaryCharacter = dto.IsPrimaryCharacter,
                         }
                     );
 
