@@ -21,6 +21,7 @@ export const FeatureFlags = {
     HideBlessingSections: "hide-blessing-sections",
     ShowCharacterWizard: "show-character-wizard",
     ManageCharacterBlessings: "manage-character-blessings",
+    AddCharacterXPLimits: "add-character-limit-cap",
 } as const;
 
 export type UserRole = (typeof UserRoles)[keyof typeof UserRoles];

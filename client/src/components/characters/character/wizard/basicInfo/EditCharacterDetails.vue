@@ -25,11 +25,13 @@ const route = useRoute()
 
 const characterInfo = characterStore();
 const userInfo = userStore();
-const showFactionInfo = ref(false);
 const form = getValidationInstance();
 
 const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5);
 const isMobile = activeBreakpoint.smaller('md');
+
+const showFactionInfo = ref(false);
+const showCharacterXpLimits = ref(false);
 
 onBeforeMount(async () =>{
   await characterInfo.getCharacterDetails(Number(route.params.id))
@@ -41,12 +43,11 @@ onBeforeMount(async () =>{
         form.fields.isPrimaryCharacter.field.value = characterInfo.isPrimaryCharacter;
       });
   showFactionInfo.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowFactionDropdown);
+  showCharacterXpLimits.value = await userInfo.hasFeatureFlag(FeatureFlags.AddCharacterXPLimits);
   if(!isMobile.value){
     updateWizardContent();
   }
 });
-
-
 
 const expression = ref("");
 const isLoading = ref(true);
@@ -76,7 +77,6 @@ let expressionRedirectURL = computed(() => {
 
 const wizardContentInfo = wizardContentStore();
 const updateWizardContent = () => {
-  console.log('updating wizard content');
   wizardContentInfo.updateContent(
       {
         headerName: 'Expression Info',
@@ -99,7 +99,7 @@ const updateWizardContent = () => {
           :show-skeleton="characterInfo.isLoading" :redirect-url="expressionRedirectURL" @change="onSubmit"
         />-->
         <FormTextAreaWrapper v-model="form.fields.background" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
-        <FormCheckboxWrapper v-model="form.fields.isPrimaryCharacter" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
+        <FormCheckboxWrapper v-if="showCharacterXpLimits" v-model="form.fields.isPrimaryCharacter" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
       </form>
       <Button label="Show High Level Expression Info" class="w-100 mb-2 d-block d-md-none " :disabled="characterInfo.isLoading && characterInfo.expressionId !== 0" @click="updateWizardContent" />
     </template>
