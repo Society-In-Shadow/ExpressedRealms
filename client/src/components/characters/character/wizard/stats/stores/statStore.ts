@@ -48,7 +48,7 @@ export const statStore =
                 await experienceInfo.updateExperience(characterId);
                 await profStore.getUpdateProficiencies(characterId);
                 await this.loadData(characterId);
-                toasters.success("Successfully updated " + stat.name + " to level " + stat.statLevel);
+                toasters.success("Successfully updated Level!");
             }
         }
     });
