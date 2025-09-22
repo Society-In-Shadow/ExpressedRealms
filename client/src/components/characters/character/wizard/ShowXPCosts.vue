@@ -30,6 +30,10 @@ watch(experienceInfo, () => {
   xp.value = experienceInfo.getExperienceInfoForSection(props.sectionType);
 }, {immediate: true, deep: true})
 
+watch(() => props.sectionType, () => {
+  xp.value = experienceInfo.getExperienceInfoForSection(props.sectionType);
+}, {immediate: true, deep: true})
+
 </script>
 
 <template>

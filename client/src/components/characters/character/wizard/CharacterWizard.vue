@@ -48,11 +48,12 @@ onBeforeMount(async () => {
 })
 
 async function fetchData() {
-  await characterInfo.getCharacterDetails(Number(route.params.id));
+
   if(sections.value[1].name == 'Basic Info') sections.value.splice(1, 1);
   if(isAdd.value){
     sections.value.splice(1, 0,   { name: 'Basic Info', isDisabled: false, component: defineAsyncComponent(async () => AddCharacter) },);
   }else{
+    await characterInfo.getCharacterDetails(Number(route.params.id));
     sections.value.splice(1, 0,   { name: 'Basic Info', isDisabled: false, component: defineAsyncComponent(async () => EditCharacterDetails) },);
     await xpData.updateExperience(route.params.id);
   }

@@ -7,6 +7,7 @@ import {experienceStore, XpSectionTypes} from "@/components/characters/character
 import Button from "primevue/button";
 import axios from "axios";
 import {characterStore} from "@/components/characters/character/stores/characterStore.ts";
+import toaster from "@/services/Toasters";
 
 const route = useRoute()
 const xpInfo = experienceStore();
@@ -31,6 +32,10 @@ watch(xpInfo.calculatedValues, () => {
 
 async function finalizeCreation(){
   await axios.put(`characters/${route.params.id}/finalizeCharacterCreate`)
+      .then(async (respone) => {
+        toaster.success("Successfully Finalized Charcter!");
+        await characterInfo.getCharacterDetails(route.params.id);
+      })
 }
 
 const spentAllPoints = computed(() => {
@@ -148,19 +153,25 @@ const displayedSections = computed(() => {
       <td>{{ xpInfo.getTotalXp() }}</td>
     </tr>
   </table>
+
+  <div v-if="!characterInfo.isInCharacterCreation">Character Level: {{xpInfo.getCharacterLevel()}}</div>
+  <Message severity="warn" v-if="characterInfo.isInCharacterCreation" class="mt-3">
+    <p v-if="!spentAllPoints">To finalize a character will require you to spend all XP.</p>
+    <p>Finalizing a character will block the ability to add / remove / change levels for Advantages / Disadvantages</p>
+  </Message>
   <div class="text-right" v-if="characterInfo.isInCharacterCreation">
     <Button label="Finalize Creation" class="mt-3" @click="finalizeCreation" :disabled="!spentAllPoints"/>
   </div>
-  <div>Character Level: {{xpInfo.getCharacterLevel()}}</div>
-  
-  <Message severity="info" class="mt-3">
-    <div v-if="characterInfo.isInCharacterCreation">This is an breakdown of all the XP the current character has. The calculations are assuming you are spending everything you can. This will be changed later.</div>
+  <Message v-if="characterInfo.isInCharacterCreation" severity="info" class="mt-3">
+    <p>Here's a breakdown of what each column means:</p>
     <ul v-if="characterInfo.isInCharacterCreation">
-      <li>Status - These are the icons you see.  Checkmark means it's done.  Warning means it still needs work.  Dash means its optional</li>
+      <li>Status - (Unlabeled, first column) These are the icons you see.  Checkmark means it's done.  Warning means it still needs work.  Dash means its optional</li>
       <li>Required - This column shows you the total xp for a section, and how much you have spent on it.</li>
       <li>Available - This is the remaining XP you need to spend for the given category</li>
       <li>Disc. - Discretionary - This is showing how much discretionary points you have spent in each section</li>
     </ul>
+  </Message>
+  <Message v-if="!characterInfo.isInCharacterCreation" severity="info" class="mt-3">
     <div>Experience Levels:</div>
     <ol>
       <li>1 - 25</li>
