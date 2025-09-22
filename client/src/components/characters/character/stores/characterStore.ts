@@ -5,13 +5,13 @@ export const characterStore =
     defineStore('character', {
         state: () => {
             return {
-                isLoading: true as Boolean,
-                name: '' as String,
-                background: '' as String,
-                expression: '' as String,
+                isLoading: true as boolean,
+                name: '' as string,
+                background: '' as string,
+                expression: '' as string,
                 expressionId: 0 as number,
-                isPrimaryCharacter: false as Boolean,
-                isInCharacterCreation: false as Boolean,
+                isPrimaryCharacter: false as boolean,
+                isInCharacterCreation: false as boolean,
                 factions: [] as any[],
                 faction: {} as any,
             }

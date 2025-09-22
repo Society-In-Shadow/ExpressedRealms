@@ -25,8 +25,6 @@ export function getValidationInstance() {
     const form = useGenericForm(validationSchema);
 
     const setValues = (model: CharacterBlessing, level: BlessingLevel ) => {
-        //form.fields.notes.field.value = model.notes;
-        //form.fields.blessingLevel.field.value = level;
     }
 
     const customResetForm = () => {
