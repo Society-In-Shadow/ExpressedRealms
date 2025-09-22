@@ -54,9 +54,8 @@ internal sealed class AddBlessingToCharacterUseCase(
         }
 
         var xpInfo = await xpRepository.GetCharacterXpMapping(model.CharacterId, xpTypeId);
-        var spentXp = xpInfo.SpentXp;
 
-        if (spentXp + cost > xpInfo.SectionCap)
+        if (cost > xpInfo.SectionCap)
         {
             return Result.Fail($"You cannot add more than {xpInfo.SectionCap} points of {name}.");
         }
@@ -67,7 +66,7 @@ internal sealed class AddBlessingToCharacterUseCase(
                 model.CharacterId
             );
 
-            if (spentXp + blessingLevel.XpCost > availableDiscretionary)
+            if (blessingLevel.XpCost > availableDiscretionary)
                 return Result.Fail(
                     new NotEnoughXPFailure(availableDiscretionary, blessingLevel.XpCost)
                 );

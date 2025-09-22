@@ -251,7 +251,8 @@ public class AddBlessingToCharacterUseCaseTests
     )
     {
         _blessingDbModel.Type = blessingType;
-        _characterMappingDbModel.SpentXp = 20;
+        _blessingLevelDbModel.XpCost = 20;
+        _blessingLevelDbModel.XpGain = 20;
 
         var result = await _useCase.ExecuteAsync(_model);
 
@@ -266,14 +267,13 @@ public class AddBlessingToCharacterUseCaseTests
     public async Task UseCase_WillReturnNotEnoughXp_WhenOutOfXp()
     {
         _blessingDbModel.Type = "advantage";
-        _characterMappingDbModel.SpentXp = 4;
-        _blessingLevelDbModel.XpCost = 2;
+        _blessingLevelDbModel.XpCost = 6;
         A.CallTo(() => _xpRepository.GetAvailableDiscretionary(_model.CharacterId)).Returns(4);
 
         var result = await _useCase.ExecuteAsync(_model);
         Assert.True(result.HasError<NotEnoughXPFailure>());
         Assert.Equal(4, ((NotEnoughXPFailure)result.Errors[0]).AvailableXP);
-        Assert.Equal(2, ((NotEnoughXPFailure)result.Errors[0]).AmountTryingToSpend);
+        Assert.Equal(6, ((NotEnoughXPFailure)result.Errors[0]).AmountTryingToSpend);
     }
 
     [Fact]
