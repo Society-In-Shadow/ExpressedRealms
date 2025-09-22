@@ -19,11 +19,13 @@ import WizardContent from "@/components/characters/character/wizard/WizardConten
 import {breakpointsBootstrapV5, useBreakpoints} from "@vueuse/core";
 import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
 import ReviewCharacter from "@/components/characters/character/ReviewCharacter.vue";
+import {characterStore} from "@/components/characters/character/stores/characterStore.ts";
 
 const xpData = experienceStore();
 const route = useRoute()
 const router = useRouter();
 const userInfo = userStore();
+const characterInfo = characterStore();
 const isAdd = computed(() =>route.name == 'addWizard');
 
 const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5);
@@ -46,6 +48,7 @@ onBeforeMount(async () => {
 })
 
 async function fetchData() {
+  await characterInfo.getCharacterDetails(Number(route.params.id));
   if(sections.value[1].name == 'Basic Info') sections.value.splice(1, 1);
   if(isAdd.value){
     sections.value.splice(1, 0,   { name: 'Basic Info', isDisabled: false, component: defineAsyncComponent(async () => AddCharacter) },);

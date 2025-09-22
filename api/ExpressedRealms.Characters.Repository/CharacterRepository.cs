@@ -50,7 +50,8 @@ internal sealed class CharacterRepository(
                 Expression = x.Expression.Name,
                 FactionId = x.FactionId,
                 ExpressionId = x.ExpressionId,
-                IsPrimaryCharacter = x.IsPrimaryCharacter
+                IsPrimaryCharacter = x.IsPrimaryCharacter,
+                IsInCharacterCreation = x.IsInCharacterCreation,
             })
             .FirstOrDefaultAsync(cancellationToken);
 

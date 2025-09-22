@@ -8,4 +8,5 @@ public sealed record GetEditCharacterDto
     public int? FactionId { get; init; }
     public int ExpressionId { get; set; }
     public bool IsPrimaryCharacter { get; set; }
+    public bool IsInCharacterCreation { get; set; }
 }
