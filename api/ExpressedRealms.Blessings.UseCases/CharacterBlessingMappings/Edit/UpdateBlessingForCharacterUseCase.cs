@@ -33,17 +33,10 @@ internal sealed class UpdateBlessingForCharacterUseCase(
             model.MappingId
         );
 
-        if (mapping.BlessingLevelId != model.BlessingLevelId)
+        var characterState = await characterRepository.GetCharacterState(model.CharacterId);
+
+        if (mapping.BlessingLevelId != model.BlessingLevelId && characterState.IsInCharacterCreation)
         {
-            var characterState = await characterRepository.GetCharacterState(model.CharacterId);
-
-            if (!characterState.IsInCharacterCreation)
-            {
-                return Result.Fail(
-                    "You cannot edit Advantages or Disadvantages outside of character creation."
-                );
-            }
-
             var blessing = await blessingRepository.GetBlessingForEditing(mapping.BlessingId);
             var newLevel = await blessingRepository.GetBlessingLevel(model.BlessingLevelId);
             var oldLevel = await blessingRepository.GetBlessingLevel(mapping.BlessingLevelId);
@@ -64,11 +57,7 @@ internal sealed class UpdateBlessingForCharacterUseCase(
             var xpInfo = await xpRepository.GetCharacterXpMapping(model.CharacterId, xpTypeId);
             var spentXp = xpInfo.SpentXp;
 
-            var gainingXp = newCost < oldCost;
-            if (gainingXp)
-            {
-                spentXp -= oldCost;
-            }
+            spentXp -= oldCost;
 
             if (spentXp + newCost > xpInfo.SectionCap)
             {
@@ -83,10 +72,10 @@ internal sealed class UpdateBlessingForCharacterUseCase(
                     model.CharacterId
                 );
 
-                if (spentXp + newCost > availableDiscretionary)
+                if (newCost > availableDiscretionary + oldCost)
                 {
                     return Result.Fail(
-                        new NotEnoughXPFailure(availableDiscretionary, newLevel.XpCost)
+                        new NotEnoughXPFailure(availableDiscretionary, newLevel.XpCost - oldCost)
                     );
                 }
             }
