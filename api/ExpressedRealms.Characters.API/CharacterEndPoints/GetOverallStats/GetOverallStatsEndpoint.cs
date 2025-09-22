@@ -32,6 +32,7 @@ internal static class GetOverallStatsEndpoint
                         Name = x.Name,
                         Total = x.Total,
                         CharacterCreateMax = x.Max,
+                        LevelXp = x.LevelXp,
                     })
                     .ToList(),
                 AvailableDiscretionary = status.Value.AvailableDiscretionary,
