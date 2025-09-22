@@ -14,4 +14,5 @@ public sealed record CharacterListDto
     public string Expression { get; set; } = null!;
 
     public bool IsPrimaryCharacter { get; set; }
+    public bool IsInCharacterCreate { get; set; }
 }

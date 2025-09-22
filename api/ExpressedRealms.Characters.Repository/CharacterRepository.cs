@@ -33,6 +33,7 @@ internal sealed class CharacterRepository(
                 Background = x.Background,
                 Expression = x.Expression.Name,
                 IsPrimaryCharacter = x.IsPrimaryCharacter,
+                IsInCharacterCreate = x.IsInCharacterCreation,
             })
             .ToListAsync(cancellationToken);
     }
