@@ -6,5 +6,5 @@ public class ExperienceSection
     public int Total { get; set; }
     public int CharacterCreateMax { get; set; }
     public int SectionTypeId { get; set; }
-    public int LevelXp => Total - CharacterCreateMax;
+    public int LevelXp { get; set; }
 }

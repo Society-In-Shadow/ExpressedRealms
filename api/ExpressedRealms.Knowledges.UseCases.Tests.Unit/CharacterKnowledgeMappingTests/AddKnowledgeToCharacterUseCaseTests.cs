@@ -52,10 +52,7 @@ public class AddKnowledgeToCharacterUseCaseTests
             )
             .Returns(false);
         A.CallTo(() =>
-                _xpRepository.GetAvailableXpForSection(
-                    _model.CharacterId,
-                    XpSectionTypes.Knowledge
-                )
+                _xpRepository.GetAvailableXpForSection(_model.CharacterId, XpSectionTypes.Knowledge)
             )
             .Returns(
                 new SectionXpDto()
@@ -233,10 +230,7 @@ public class AddKnowledgeToCharacterUseCaseTests
             );
 
         A.CallTo(() =>
-                _xpRepository.GetAvailableXpForSection(
-                    _model.CharacterId,
-                    XpSectionTypes.Knowledge
-                )
+                _xpRepository.GetAvailableXpForSection(_model.CharacterId, XpSectionTypes.Knowledge)
             )
             .Returns(
                 new SectionXpDto()
@@ -266,10 +260,7 @@ public class AddKnowledgeToCharacterUseCaseTests
                 }
             );
         A.CallTo(() =>
-                _xpRepository.GetAvailableXpForSection(
-                    _model.CharacterId,
-                    XpSectionTypes.Knowledge
-                )
+                _xpRepository.GetAvailableXpForSection(_model.CharacterId, XpSectionTypes.Knowledge)
             )
             .Returns(
                 new SectionXpDto()
@@ -291,10 +282,7 @@ public class AddKnowledgeToCharacterUseCaseTests
     public async Task UseCase_WillReturnNotEnoughXp_WhenOutOfXp()
     {
         A.CallTo(() =>
-                _xpRepository.GetAvailableXpForSection(
-                    _model.CharacterId,
-                    XpSectionTypes.Knowledge
-                )
+                _xpRepository.GetAvailableXpForSection(_model.CharacterId, XpSectionTypes.Knowledge)
             )
             .Returns(
                 new SectionXpDto()

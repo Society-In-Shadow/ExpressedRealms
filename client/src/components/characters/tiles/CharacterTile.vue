@@ -4,6 +4,7 @@ import Button from "primevue/button";
 import Card from "primevue/card";
 import {useRouter} from "vue-router";
 import {overallCharacterConfirmationService} from "@/components/characters/services/confirmationService.ts";
+import Tag from "primevue/tag";
 
 const Router = useRouter();
 const popupService = overallCharacterConfirmationService();
@@ -25,6 +26,10 @@ const props = defineProps({
   expression: {
     type: String,
     required: true
+  },
+  isPrimaryCharacter: {
+    type: Boolean,
+    required: true,
   }
 });
 
@@ -38,7 +43,7 @@ function editCharacter() {
 <template>
   <Card class="mb-3 characterTile">
     <template #title>
-      {{ characterName }}
+      {{ characterName }} <Tag v-if="isPrimaryCharacter" value="Primary" severity="info" />
     </template>
     <template #content>
       <em class="mb-3">{{ expression }}</em>

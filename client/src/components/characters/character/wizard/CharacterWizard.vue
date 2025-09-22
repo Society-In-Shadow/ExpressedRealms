@@ -13,17 +13,19 @@ import DataTable from "primevue/datatable";
 import SecondaryProficiencies from "@/components/characters/character/wizard/proficiencies/SecondaryProficiencies.vue";
 import EditCharacterDetails from "@/components/characters/character/wizard/basicInfo/EditCharacterDetails.vue";
 import AddCharacter from "@/components/characters/character/wizard/basicInfo/AddCharacter.vue";
-import OverallExperience from "@/components/characters/character/OverallExperience.vue";
 import BlessingStep from "@/components/characters/character/wizard/blessings/BlessingStep.vue";
-import {FeatureFlags, userStore} from "@/stores/userStore.ts";
+import {userStore} from "@/stores/userStore.ts";
 import WizardContent from "@/components/characters/character/wizard/WizardContent.vue";
 import {breakpointsBootstrapV5, useBreakpoints} from "@vueuse/core";
 import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
+import ReviewCharacter from "@/components/characters/character/ReviewCharacter.vue";
+import {characterStore} from "@/components/characters/character/stores/characterStore.ts";
 
 const xpData = experienceStore();
 const route = useRoute()
 const router = useRouter();
 const userInfo = userStore();
+const characterInfo = characterStore();
 const isAdd = computed(() =>route.name == 'addWizard');
 
 const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5);
@@ -37,7 +39,8 @@ const sections = ref([
   { name: 'Powers', isDisabled: isAdd, component: markRaw(PowerStep) },
   { name: 'Skills', isDisabled: isAdd, component: markRaw(SkillStep) },
   { name: 'Proficiencies', isDisabled: isAdd, component: markRaw(ProficiencyTableTile) },
-  { name: 'Experience Breakdown', isDisabled: isAdd, component: markRaw(OverallExperience) },
+  { name: 'Advantages / Disadvantages', isDisabled: isAdd, component: defineAsyncComponent(async () => BlessingStep) },
+  { name: 'Review Character', isDisabled: isAdd, component: markRaw(ReviewCharacter) },
 ]);
 
 onBeforeMount(async () => {
@@ -45,16 +48,14 @@ onBeforeMount(async () => {
 })
 
 async function fetchData() {
+
   if(sections.value[1].name == 'Basic Info') sections.value.splice(1, 1);
   if(isAdd.value){
     sections.value.splice(1, 0,   { name: 'Basic Info', isDisabled: false, component: defineAsyncComponent(async () => AddCharacter) },);
   }else{
+    await characterInfo.getCharacterDetails(Number(route.params.id));
     sections.value.splice(1, 0,   { name: 'Basic Info', isDisabled: false, component: defineAsyncComponent(async () => EditCharacterDetails) },);
     await xpData.updateExperience(route.params.id);
-  }
-  
-  if(await userInfo.hasFeatureFlag(FeatureFlags.ManageCharacterBlessings)){
-    sections.value.splice(sections.value.length - 1, 0, { name: 'Advantages / Disadvantages', isDisabled: isAdd, component: defineAsyncComponent(async () => BlessingStep) })
   }
 }
 

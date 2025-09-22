@@ -3,7 +3,7 @@
 import FormTextAreaWrapper from "@/FormWrappers/FormTextAreaWrapper.vue";
 import Button from "primevue/button";
 import {useRoute} from "vue-router";
-import {onBeforeMount, type PropType, ref, watch} from "vue";
+import {computed, onBeforeMount, type PropType, ref, watch} from "vue";
 import type {Blessing, BlessingLevel} from "@/components/blessings/types.ts";
 import RadioButton from "primevue/radiobutton";
 import {
@@ -19,12 +19,15 @@ import {
   XpSectionTypes
 } from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import Message from "primevue/message";
+import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vue";
+import {characterStore} from "@/components/characters/character/stores/characterStore.ts";
 
 const store = characterBlessingsStore();
 const form = getValidationInstance();
 const route = useRoute();
 const popupService = confirmationPopup(route.params.id);
 const experienceInfo = experienceStore();
+const characterInfo = characterStore();
 
 const props = defineProps({
   blessing: {
@@ -68,6 +71,10 @@ function disableOption(level:BlessingLevel){
   return level.xpCost > availableXp.value;
 }
 
+const xpSectionType = computed(() => {
+  return props.blessing.type.toLowerCase() == 'disadvantage' ? XpSectionTypes.disadvantage : XpSectionTypes.advantage;
+})
+
 </script>
 
 <template>
@@ -81,21 +88,19 @@ function disableOption(level:BlessingLevel){
         </h2>
       </div>
       <div class="p-0 m-2 d-inline-flex align-items-start align-items-center gap-2">
-        <Button label="Delete" size="small" severity="danger" @click="popupService.deleteConfirmation($event, mappingId )" />
+        <Button v-if="characterInfo.isInCharacterCreation" label="Delete" size="small" severity="danger" @click="popupService.deleteConfirmation($event, mappingId )" />
         <Button label="Update" size="small" type="submit" />
       </div>
     </div>
 
     <div v-html="props.blessing?.description"></div>
-    <h3 class="d-flex justify-content-end">
-      <span>Available Experience: {{availableXp}}</span>
-    </h3>
+    <ShowXPCosts v-if="characterInfo.isInCharacterCreation" :section-type="xpSectionType" class="pt-3"/>
     <div v-if="availableXp == 0">
       <Message severity="warn" class="mt-4">You do not have enough experience to modify this.</Message>
     </div>
     <div v-for="level in props.blessing.levels" :key="level.id" class="mt-3">
       <div class="d-flex flex-column flex-md-row align-self-center">
-        <RadioButton v-model="form.blessingLevel.field" :inputId="level.id.toString()" :value="level" class="mr-4" :disabled="disableOption(level)"/>
+        <RadioButton v-model="form.blessingLevel.field" :inputId="level.id.toString()" :value="level" class="mr-4" :disabled="disableOption(level) || !characterInfo.isInCharacterCreation"/>
         <label :for="level.id.toString()" :class="disableOption(level) ? 'non-selectable' : ''">{{ level.name }} – {{ level.description }}</label>
       </div>
     </div>

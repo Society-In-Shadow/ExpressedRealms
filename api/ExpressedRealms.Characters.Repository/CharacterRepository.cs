@@ -32,6 +32,8 @@ internal sealed class CharacterRepository(
                 Name = x.Name,
                 Background = x.Background,
                 Expression = x.Expression.Name,
+                IsPrimaryCharacter = x.IsPrimaryCharacter,
+                IsInCharacterCreate = x.IsInCharacterCreation,
             })
             .ToListAsync(cancellationToken);
     }
@@ -48,6 +50,8 @@ internal sealed class CharacterRepository(
                 Expression = x.Expression.Name,
                 FactionId = x.FactionId,
                 ExpressionId = x.ExpressionId,
+                IsPrimaryCharacter = x.IsPrimaryCharacter,
+                IsInCharacterCreation = x.IsInCharacterCreation,
             })
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -69,6 +73,17 @@ internal sealed class CharacterRepository(
                 AssignedXp = x.AssignedXp,
             })
             .FirstAsync(cancellationToken);
+    }
+
+    public Task<Character> GetCharacterForEdit(int characterId)
+    {
+        return context.Characters.FirstAsync(x => x.Id == characterId);
+    }
+
+    public async Task UpdateCharacter(Character user)
+    {
+        context.Characters.Update(user);
+        await context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<Result<int>> CreateCharacterAsync(AddCharacterDto dto)
@@ -161,6 +176,7 @@ internal sealed class CharacterRepository(
         character.Name = dto.Name;
         character.Background = dto.Background;
         character.FactionId = dto.FactionId;
+        character.IsPrimaryCharacter = dto.IsPrimaryCharacter;
 
         await context.SaveChangesAsync(cancellationToken);
 

@@ -7,9 +7,11 @@ import {
   type XpSectionType
 } from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import type {CalculatedExperience} from "@/components/characters/character/types.ts";
+import {characterStore} from "@/components/characters/character/stores/characterStore.ts";
 
 const route = useRoute()
 const experienceInfo = experienceStore();
+const characterInfo = characterStore();
 
 const props = defineProps({
   sectionType: {
@@ -28,10 +30,14 @@ watch(experienceInfo, () => {
   xp.value = experienceInfo.getExperienceInfoForSection(props.sectionType);
 }, {immediate: true, deep: true})
 
+watch(() => props.sectionType, () => {
+  xp.value = experienceInfo.getExperienceInfoForSection(props.sectionType);
+}, {immediate: true, deep: true})
+
 </script>
 
 <template>
-  <div class="d-flex flex-row justify-content-between gap-3">
+  <div v-if="characterInfo.isInCharacterCreation" class="d-flex flex-row justify-content-between gap-3">
     <div>
       <div class="d-flex flex-row justify-content-center gap-2">
         <div><strong>Required XP:</strong> {{ xp.requiredXp }} / {{ xp.characterCreateMax }}</div>
@@ -43,6 +49,20 @@ watch(experienceInfo, () => {
     </div>
     <div>
       <strong>Available XP:</strong> {{ xp.availableXp }}
+    </div>
+  </div>
+  <div v-else class="d-flex flex-row justify-content-between gap-3">
+    <div>
+      <div class="d-flex flex-row justify-content-center gap-2">
+        <div><strong>Spent Level XP:</strong> {{ xp.levelXp }}</div>
+      </div>
+    </div>
+    <div>
+      <div class="d-flex flex-row justify-content-center gap-2">
+        <div><strong>Available XP:</strong></div>
+        <div><span class="material-symbols-outlined">all_inclusive</span></div>
+      </div>
+      <strong></strong> 
     </div>
   </div>
 </template>

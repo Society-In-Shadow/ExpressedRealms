@@ -1,4 +1,5 @@
 using ExpressedRealms.Characters.API.CharacterEndPoints.DTOs;
+using ExpressedRealms.Characters.API.CharacterEndPoints.FinalizeCharacterCreate;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetOverallStats;
 using ExpressedRealms.Characters.API.CharacterEndPoints.Requests;
 using ExpressedRealms.Characters.API.CharacterEndPoints.Responses;
@@ -249,6 +250,10 @@ internal static class CharacterEndPoints
             .RequireAuthorization();
 
         endpointGroup
+            .MapPut("{id}/finalizeCharacterCreate", FinalizeCharacterCreateEndpoint.Execute)
+            .RequireAuthorization();
+
+        endpointGroup
             .MapPut(
                 "",
                 async Task<Results<NotFound, NoContent, ValidationProblem>> (
@@ -263,6 +268,7 @@ internal static class CharacterEndPoints
                             Background = dto.Background,
                             FactionId = dto.FactionId,
                             Id = dto.Id,
+                            IsPrimaryCharacter = dto.IsPrimaryCharacter,
                         }
                     );
 

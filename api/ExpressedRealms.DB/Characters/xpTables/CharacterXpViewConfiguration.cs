@@ -14,7 +14,9 @@ public class CharacterXpViewConfiguration : IEntityTypeConfiguration<CharacterXp
         builder.Property(p => p.SectionTypeId).HasColumnName("section_type_id");
         builder.Property(p => p.SectionName).HasColumnName("section_name");
         builder.Property(p => p.SectionCap).HasColumnName("section_cap");
+        builder.Property(p => p.TrueSectionCap).HasColumnName("true_section_cap");
         builder.Property(p => p.SpentXp).HasColumnName("spent_xp");
+        builder.Property(p => p.TrueTotalSpent).HasColumnName("true_total_spent");
         builder.Property(p => p.DiscretionXp).HasColumnName("discretion_xp");
         builder
             .Property(p => p.TotalCharacterCreationXp)

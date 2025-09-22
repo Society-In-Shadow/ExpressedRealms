@@ -49,10 +49,7 @@ public class AddPowerToCharacterUseCaseTests
             )
             .Returns(false);
         A.CallTo(() =>
-                _xpRepository.GetAvailableXpForSection(
-                    _dbModel.CharacterId,
-                    XpSectionTypes.Powers
-                )
+                _xpRepository.GetAvailableXpForSection(_dbModel.CharacterId, XpSectionTypes.Powers)
             )
             .Returns(
                 new SectionXpDto() { AvailableXp = StartingExperience.StartingPowers, SpentXp = 0 }
@@ -211,10 +208,7 @@ public class AddPowerToCharacterUseCaseTests
         _powerLevel.Xp = 4;
 
         A.CallTo(() =>
-                _xpRepository.GetAvailableXpForSection(
-                    _dbModel.CharacterId,
-                    XpSectionTypes.Powers
-                )
+                _xpRepository.GetAvailableXpForSection(_dbModel.CharacterId, XpSectionTypes.Powers)
             )
             .Returns(
                 new SectionXpDto()
@@ -236,10 +230,7 @@ public class AddPowerToCharacterUseCaseTests
     {
         _powerLevel.Xp = StartingExperience.StartingPowers;
         A.CallTo(() =>
-                _xpRepository.GetAvailableXpForSection(
-                    _dbModel.CharacterId,
-                    XpSectionTypes.Powers
-                )
+                _xpRepository.GetAvailableXpForSection(_dbModel.CharacterId, XpSectionTypes.Powers)
             )
             .Returns(
                 new SectionXpDto()
@@ -261,10 +252,7 @@ public class AddPowerToCharacterUseCaseTests
     public async Task UseCase_WillReturnNotEnoughXp_WhenOutOfXp()
     {
         A.CallTo(() =>
-                _xpRepository.GetAvailableXpForSection(
-                    _dbModel.CharacterId,
-                    XpSectionTypes.Powers
-                )
+                _xpRepository.GetAvailableXpForSection(_dbModel.CharacterId, XpSectionTypes.Powers)
             )
             .Returns(
                 new SectionXpDto()

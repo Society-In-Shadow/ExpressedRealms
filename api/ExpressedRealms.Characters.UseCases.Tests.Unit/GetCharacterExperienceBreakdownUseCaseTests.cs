@@ -1,4 +1,5 @@
 ﻿using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.Characters.Repository.DTOs;
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.Characters.UseCases.ExperienceBreakdown;
 using ExpressedRealms.DB.Characters.xpTables;
@@ -12,13 +13,14 @@ public class GetCharacterExperienceBreakdownUseCaseTests
 {
     private readonly GetCharacterExperienceBreakdownUseCase _useCase;
     private readonly GetCharacterExperienceBreakdownModel _model;
+    private readonly ICharacterRepository _characterRepository;
 
     public GetCharacterExperienceBreakdownUseCaseTests()
     {
         _model = new GetCharacterExperienceBreakdownModel() { CharacterId = 1 };
 
         var knowledgeRepository = A.Fake<ICharacterKnowledgeRepository>();
-        var characterRepository = A.Fake<ICharacterRepository>();
+        _characterRepository = A.Fake<ICharacterRepository>();
         var xpRepository = A.Fake<IXpRepository>();
 
         var xpItems = new List<CharacterXpView>()
@@ -58,19 +60,23 @@ public class GetCharacterExperienceBreakdownUseCaseTests
             )
             .Returns(1);
 
-        A.CallTo(() => characterRepository.CharacterExistsAsync(_model.CharacterId)).Returns(true);
+        A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId)).Returns(true);
 
         A.CallTo(() => xpRepository.GetCharacterXpMappings(_model.CharacterId)).Returns(xpItems);
 
         A.CallTo(() => xpRepository.GetAvailableDiscretionary(_model.CharacterId)).Returns(18);
 
+        A.CallTo(() => _characterRepository.GetCharacterState(_model.CharacterId))
+            .Returns(new CharacterStatusDto() { IsInCharacterCreation = true });
+
         var validator = new GetCharacterExperienceBreakdownModelValidator(
             knowledgeRepository,
-            characterRepository
+            _characterRepository
         );
 
         _useCase = new GetCharacterExperienceBreakdownUseCase(
             xpRepository,
+            _characterRepository,
             validator,
             CancellationToken.None
         );
@@ -104,6 +110,18 @@ public class GetCharacterExperienceBreakdownUseCaseTests
         var item = result.Value.ExperienceSections.Single(x => x.Name == "Disadvantage XP");
         Assert.Equal(2, item.Total);
         Assert.Equal(8, item.Max);
+    }
+
+    [Fact]
+    public async Task UseCase_WillReturn1MillionXp_IfCharacteIsNotInCharacterCreation()
+    {
+        A.CallTo(() => _characterRepository.GetCharacterState(_model.CharacterId))
+            .Returns(new CharacterStatusDto() { IsInCharacterCreation = false });
+        var result = await _useCase.ExecuteAsync(_model);
+
+        var item = result.Value.ExperienceSections.Single(x => x.Name == "Disadvantage XP");
+        Assert.Equal(2, item.Total);
+        Assert.Equal(1_000_000, item.Max);
     }
 
     [Fact]

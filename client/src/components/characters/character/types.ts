@@ -21,4 +21,5 @@ export interface CalculatedExperience{
     availableXp: number;
     total: number,
     characterCreateMax: number;
+    levelXp: number;
 }

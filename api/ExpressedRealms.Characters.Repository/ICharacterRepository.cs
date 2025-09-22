@@ -1,4 +1,5 @@
 using ExpressedRealms.Characters.Repository.DTOs;
+using ExpressedRealms.DB.Characters;
 using FluentResults;
 
 namespace ExpressedRealms.Characters.Repository;
@@ -12,4 +13,6 @@ public interface ICharacterRepository
     Task<Result> UpdateCharacterAsync(EditCharacterDto dto);
     Task<bool> CharacterExistsAsync(int id);
     Task<CharacterStatusDto> GetCharacterState(int id);
+    Task<Character> GetCharacterForEdit(int characterId);
+    Task UpdateCharacter(Character user);
 }

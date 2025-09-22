@@ -5,15 +5,17 @@ export const characterStore =
     defineStore('character', {
         state: () => {
             return {
-                isLoading: true as Boolean,
-                name: '' as String,
-                background: '' as String,
-                expression: '' as String,
+                isLoading: true as boolean,
+                name: '' as string,
+                background: '' as string,
+                expression: '' as string,
                 expressionId: 0 as number,
+                isPrimaryCharacter: false as boolean,
+                isInCharacterCreation: false as boolean,
                 factions: [] as any[],
                 faction: {} as any,
             }
-        },    
+        },
         actions: {
             async getCharacterDetails(characterId: Number){
                 this.isLoading = false;
@@ -23,6 +25,8 @@ export const characterStore =
                         this.background = response.data.background;
                         this.expression = response.data.expression;
                         this.expressionId = response.data.expressionId;
+                        this.isPrimaryCharacter = response.data.isPrimaryCharacter;
+                        this.isInCharacterCreation = response.data.isInCharacterCreation;
                         await axios.get(`/characters/${characterId}/factionOptions`)
                             .then((factionResponse) => {
                                 this.factions = factionResponse.data;
