@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="FakeItEasy" Version="8.3.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="3.1.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="xunit.v3" Version="2.0.3" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\ExpressedRealms.Admin.UseCases\ExpressedRealms.Admin.UseCases.csproj" />
+      <ProjectReference Include="..\ExpressedRealms.Powers.UseCases.Tests.Unit\ExpressedRealms.Powers.UseCases.Tests.Unit.csproj" />
+    </ItemGroup>
+</Project>
