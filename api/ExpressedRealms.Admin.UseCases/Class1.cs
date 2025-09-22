@@ -1,5 +1,3 @@
 ﻿namespace ExpressedRealms.Admin.UseCases;
 
-public class Class1
-{
-}
+public class Class1 { }
