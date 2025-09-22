@@ -6,9 +6,11 @@ import {useRoute} from "vue-router";
 import {experienceStore, XpSectionTypes} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import Button from "primevue/button";
 import axios from "axios";
+import {characterStore} from "@/components/characters/character/stores/characterStore.ts";
 
 const route = useRoute()
 const xpInfo = experienceStore();
+const characterInfo = characterStore();
 const disadvantageBucket = ref(0);
 const discretionaryBucket = ref(0);
 const overallDiscretionaryTotal = ref(0);
@@ -48,6 +50,18 @@ const spentAllPoints = computed(() => {
   return discretionarySpent && allSectionsMeetMinimum;
 })
 
+const displayedSections = computed(() => {
+  
+  if(characterInfo.isInCharacterCreation){
+    return xpInfo.calculatedValues;
+  }
+  const filteredSections = [XpSectionTypes.advantage, XpSectionTypes.discretionary, XpSectionTypes.disadvantage]
+  
+  return xpInfo.calculatedValues.filter(section => {
+    return !filteredSections.includes(section.sectionTypeId);
+  })
+})
+
 </script>
 
 <template>
@@ -55,14 +69,15 @@ const spentAllPoints = computed(() => {
   
   <table class="w-100">
     <tr>
-      <th class="pr-2"></th>
+      <th class="pr-2" v-if="characterInfo.isInCharacterCreation"></th>
       <th class="text-left">Name</th>
-      <th class="text-center">Required</th>
-      <th class="text-center">Available</th>
-      <th class="text-right">Disc.</th>
+      <th class="text-left" v-if="!characterInfo.isInCharacterCreation">Spent XP</th>
+      <th class="text-center" v-if="characterInfo.isInCharacterCreation">Required</th>
+      <th class="text-center" v-if="characterInfo.isInCharacterCreation">Available</th>
+      <th class="text-right" v-if="characterInfo.isInCharacterCreation">Disc.</th>
     </tr>
-    <tr v-for="section in xpInfo.calculatedValues">
-      <td class="text-center pr-2">
+    <tr v-for="section in displayedSections">
+      <td v-if="characterInfo.isInCharacterCreation" class="text-center pr-2">
         <span v-if="section.sectionTypeId == XpSectionTypes.advantage || section.sectionTypeId == XpSectionTypes.disadvantage" class="material-symbols-outlined" title="No Status">
           do_not_disturb_on
         </span>
@@ -74,9 +89,8 @@ const spentAllPoints = computed(() => {
         </span>
       </td>
       <td class="text-left">{{section.name}}</td>
-      
       <!-- Required XP -->
-      <td class="text-center">
+      <td v-if="characterInfo.isInCharacterCreation" class="text-center">
         <div v-if="section.sectionTypeId == XpSectionTypes.discretionary">
           {{ discretionaryBucket + disadvantageBucket }} / {{overallDiscretionaryTotal}}
         </div>
@@ -90,11 +104,8 @@ const spentAllPoints = computed(() => {
           {{ section.requiredXp }} / {{ section.characterCreateMax }}
         </div>
       </td>
-      
-
-      
       <!-- Available XP -->
-      <td class="text-center">
+      <td v-if="characterInfo.isInCharacterCreation" class="text-center">
         <div v-if="section.sectionTypeId == XpSectionTypes.disadvantage ">
           --
         </div>
@@ -111,7 +122,7 @@ const spentAllPoints = computed(() => {
         </div>
       </td>
       <!-- Discretionary XP -->
-      <td class="text-center">
+      <td v-if="characterInfo.isInCharacterCreation" class="text-center">
         <div v-if="section.sectionTypeId == XpSectionTypes.discretionary">
           --
         </div>
@@ -128,16 +139,23 @@ const spentAllPoints = computed(() => {
           <div v-else>{{ section.currentOptionalXp }}</div>
         </div>
       </td>
+      <td v-if="!characterInfo.isInCharacterCreation" class="">
+        {{ section.levelXp}}
+      </td>
+    </tr>
+    <tr v-if="!characterInfo.isInCharacterCreation">
+      <td>Total</td>
+      <td>{{ xpInfo.getTotalXp() }}</td>
     </tr>
   </table>
-  <div class="text-right">
+  <div class="text-right" v-if="characterInfo.isInCharacterCreation">
     <Button label="Finalize Creation" class="mt-3" @click="finalizeCreation" :disabled="!spentAllPoints"/>
   </div>
-
+  <div>Character Level: {{xpInfo.getCharacterLevel()}}</div>
   
   <Message severity="info" class="mt-3">
-    <div>This is an breakdown of all the XP the current character has. The calculations are assuming you are spending everything you can. This will be changed later.</div>
-    <ul>
+    <div v-if="characterInfo.isInCharacterCreation">This is an breakdown of all the XP the current character has. The calculations are assuming you are spending everything you can. This will be changed later.</div>
+    <ul v-if="characterInfo.isInCharacterCreation">
       <li>Status - These are the icons you see.  Checkmark means it's done.  Warning means it still needs work.  Dash means its optional</li>
       <li>Required - This column shows you the total xp for a section, and how much you have spent on it.</li>
       <li>Available - This is the remaining XP you need to spend for the given category</li>

@@ -52,7 +52,8 @@ export const experienceStore =
                                 availableXp,
                                 characterCreateMax: xp.characterCreateMax,
                                 total: xp.total,
-                                sectionTypeId: xp.sectionTypeId
+                                sectionTypeId: xp.sectionTypeId,
+                                levelXp: xp.levelXp,
                             }
                         })
                         
@@ -66,13 +67,17 @@ export const experienceStore =
             getExperienceInfoForSection(sectionTypeId: XpSectionType){
                 return this.calculatedValues.filter(x => x.sectionTypeId === sectionTypeId)[0];
             },
+            getTotalXp(): number{
+                const filteredSections = [XpSectionTypes.advantage, XpSectionTypes.discretionary, XpSectionTypes.disadvantage]
+
+                const filteredCalculatedValues = this.calculatedValues.filter(section => {
+                    return !filteredSections.includes(section.sectionTypeId as XpSectionTypes);
+                })
+                return filteredCalculatedValues.reduce((sum, item) => sum + item.levelXp, 0)
+            },
             getCharacterLevel(): number{
-                
-                return 0;
-                
-                /*let totals = this.experienceBreakdown.experience.filter(x => x.name === "Total")[0];
-                
-                let total = totals.levelXp;
+                const total = this.getTotalXp();
+
                 if(total <= 0)
                     return 0;
                 else if(total <= 25)
@@ -90,7 +95,7 @@ export const experienceStore =
                 else if(total <= 700)
                     return 7;
 
-                return 8;*/
+                return 8;
 
             }
         }

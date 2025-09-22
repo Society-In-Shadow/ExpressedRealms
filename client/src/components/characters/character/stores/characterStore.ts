@@ -11,6 +11,7 @@ export const characterStore =
                 expression: '' as String,
                 expressionId: 0 as number,
                 isPrimaryCharacter: false as Boolean,
+                isInCharacterCreation: false as Boolean,
                 factions: [] as any[],
                 faction: {} as any,
             }
@@ -25,6 +26,7 @@ export const characterStore =
                         this.expression = response.data.expression;
                         this.expressionId = response.data.expressionId;
                         this.isPrimaryCharacter = response.data.isPrimaryCharacter;
+                        this.isInCharacterCreation = response.data.isInCharacterCreation;
                         await axios.get(`/characters/${characterId}/factionOptions`)
                             .then((factionResponse) => {
                                 this.factions = factionResponse.data;
