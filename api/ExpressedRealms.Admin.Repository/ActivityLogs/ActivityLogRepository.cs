@@ -1,8 +1,8 @@
+using ExpressedRealms.Admin.Repository.ActivityLogs.DTOs;
 using ExpressedRealms.DB;
-using ExpressedRealms.Repositories.Admin.DTOs;
 using Microsoft.EntityFrameworkCore;
 
-namespace ExpressedRealms.Repositories.Admin.ActivityLogs;
+namespace ExpressedRealms.Admin.Repository.ActivityLogs;
 
 public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivityLogRepository
 {

@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Repositories.Admin.DTOs;
+namespace ExpressedRealms.Admin.Repository.ActivityLogs.DTOs;
 
 public class Log
 {

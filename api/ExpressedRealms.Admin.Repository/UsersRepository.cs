@@ -1,8 +1,8 @@
+using ExpressedRealms.Admin.Repository.DTOs;
 using ExpressedRealms.DB;
-using ExpressedRealms.Repositories.Admin.DTOs;
 using Microsoft.EntityFrameworkCore;
 
-namespace ExpressedRealms.Repositories.Admin;
+namespace ExpressedRealms.Admin.Repository;
 
 internal sealed class UsersRepository(ExpressedRealmsDbContext context) : IUsersRepository
 {

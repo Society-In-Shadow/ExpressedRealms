@@ -13,7 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ExpressedRealms.Repositories.Admin\ExpressedRealms.Repositories.Admin.csproj" />
+      <ProjectReference Include="..\ExpressedRealms.Admin.Repository\ExpressedRealms.Admin.Repository.csproj" />
       <ProjectReference Include="..\ExpressedRealms.Server.Shared\ExpressedRealms.Server.Shared.csproj" />
       <ProjectReference Include="..\ExpressedRealms.Shared\ExpressedRealms.Shared.csproj" />
     </ItemGroup>

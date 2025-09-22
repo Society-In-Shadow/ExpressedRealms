@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Repositories.Admin.DTOs;
+namespace ExpressedRealms.Admin.Repository.DTOs;
 
 public class UserListDto
 {

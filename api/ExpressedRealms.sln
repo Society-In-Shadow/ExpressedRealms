@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Authenticat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.MigrationProject", "ExpressedRealms.MigrationProject\ExpressedRealms.MigrationProject.csproj", "{1BA0880D-CD3F-490D-9408-EE3D00EA5EAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Repositories.Admin", "ExpressedRealms.Repositories.Admin\ExpressedRealms.Repositories.Admin.csproj", "{54B4670E-CD1A-420E-BB2C-880C375D4537}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Admin.Repository", "ExpressedRealms.Admin.Repository\ExpressedRealms.Admin.Repository.csproj", "{54B4670E-CD1A-420E-BB2C-880C375D4537}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Powers.Repository", "ExpressedRealms.Powers.Repository\ExpressedRealms.Powers.Repository.csproj", "{B020FD64-87E8-483D-BFC1-008796E63307}"
 EndProject

@@ -1,7 +1,7 @@
-﻿using ExpressedRealms.Repositories.Admin.ActivityLogs;
+﻿using ExpressedRealms.Admin.Repository.ActivityLogs;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ExpressedRealms.Repositories.Admin;
+namespace ExpressedRealms.Admin.Repository;
 
 public static class AdminRepositoryInjections
 {
