@@ -29,6 +29,8 @@
     <PackageReference Include="Serilog.Sinks.PostgreSQL" Version="2.3.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ExpressedRealms.Admin.API\ExpressedRealms.Admin.API.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Admin.UseCases\ExpressedRealms.Admin.UseCases.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Authentication\ExpressedRealms.Authentication.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Blessings.API\ExpressedRealms.Blessings.API.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Blessings.UseCases\ExpressedRealms.Blessings.UseCases.csproj" />

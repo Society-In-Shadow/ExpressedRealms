@@ -7,12 +7,14 @@ using ExpressedRealms.Server.EndPoints.AdminEndpoints.Request;
 using ExpressedRealms.Server.EndPoints.AdminEndpoints.Response;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
-namespace ExpressedRealms.Server.EndPoints.AdminEndpoints;
+namespace ExpressedRealms.Admin.API.AdminEndpoints;
 
 public static class AdminEndpoints
 {
