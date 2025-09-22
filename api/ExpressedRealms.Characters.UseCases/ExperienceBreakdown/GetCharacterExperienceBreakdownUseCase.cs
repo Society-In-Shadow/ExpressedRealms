@@ -35,7 +35,7 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
                 .Select(x => new ExperienceTotalMax(
                     x.SectionName,
                     x.SpentXp,
-                    x.SectionCap,
+                    characterState.IsInCharacterCreation ? x.SectionCap : 1_000_000,
                     x.SectionTypeId,
                     x.LevelXp
                 ))

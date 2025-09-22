@@ -102,7 +102,7 @@ public class XpRepository(
             true => await GetAvailableDiscretionary(characterId) + xpInfo.SectionCap,
             false when characterState.IsPrimaryCharacter => xpInfo.TotalCharacterCreationXp
                 + characterState.AssignedXp,
-            _ => 1000,
+            _ => 1_000_000,
         };
 
         // Discretion is a dyanamic value, as such, it does remove the XP associated with this
