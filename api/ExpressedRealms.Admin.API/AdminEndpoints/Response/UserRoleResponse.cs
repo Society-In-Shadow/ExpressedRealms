@@ -1,6 +1,6 @@
-using ExpressedRealms.Server.EndPoints.AdminEndpoints.Dtos;
+using ExpressedRealms.Admin.API.AdminEndpoints.Dtos;
 
-namespace ExpressedRealms.Server.EndPoints.AdminEndpoints.Response;
+namespace ExpressedRealms.Admin.API.AdminEndpoints.Response;
 
 public class UserRoleResponse
 {

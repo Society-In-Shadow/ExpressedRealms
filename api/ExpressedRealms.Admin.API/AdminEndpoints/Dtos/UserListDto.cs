@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Server.EndPoints.AdminEndpoints.Dtos;
+namespace ExpressedRealms.Admin.API.AdminEndpoints.Dtos;
 
 public class UserListItem
 {

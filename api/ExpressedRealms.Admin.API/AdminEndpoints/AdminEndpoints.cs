@@ -1,11 +1,11 @@
+using ExpressedRealms.Admin.API.AdminEndpoints.Dtos;
+using ExpressedRealms.Admin.API.AdminEndpoints.Request;
+using ExpressedRealms.Admin.API.AdminEndpoints.Response;
 using ExpressedRealms.Admin.Repository;
 using ExpressedRealms.Admin.Repository.ActivityLogs;
 using ExpressedRealms.Authentication;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.Roles;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
-using ExpressedRealms.Server.EndPoints.AdminEndpoints.Dtos;
-using ExpressedRealms.Server.EndPoints.AdminEndpoints.Request;
-using ExpressedRealms.Server.EndPoints.AdminEndpoints.Response;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
