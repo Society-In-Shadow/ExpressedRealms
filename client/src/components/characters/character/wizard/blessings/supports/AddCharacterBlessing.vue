@@ -39,7 +39,12 @@ const props = defineProps({
 watch(() => props.blessing, async () => {
   let sectionType: XpSectionType = props.blessing.type.toLowerCase() == 'disadvantage' ? XpSectionTypes.disadvantage : XpSectionTypes.advantage;
   let xpInfo = experienceInfo.getExperienceInfoForSection(sectionType);
-  availableXp.value = xpInfo.characterCreateMax - xpInfo.total;
+  if(sectionType == XpSectionTypes.advantage){
+    availableXp.value = xpInfo.availableXp;
+  }else{
+    availableXp.value = xpInfo.characterCreateMax - xpInfo.total;
+  }
+
   form.customResetForm();
 }, {immediate: true})
 

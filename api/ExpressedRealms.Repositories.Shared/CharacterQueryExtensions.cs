@@ -14,7 +14,10 @@ public static class CharacterQueryExtensions
     {
         if (await userContext.CurrentUserHasPolicy(Policies.ManagePlayerCharacterList))
         {
-            return query.Where(x => x.Id == characterId && (x.IsPrimaryCharacter || x.Player.UserId == userContext.CurrentUserId()));
+            return query.Where(x =>
+                x.Id == characterId
+                && (x.IsPrimaryCharacter || x.Player.UserId == userContext.CurrentUserId())
+            );
         }
         return query.Where(x =>
             x.Id == characterId && x.Player.UserId == userContext.CurrentUserId()
