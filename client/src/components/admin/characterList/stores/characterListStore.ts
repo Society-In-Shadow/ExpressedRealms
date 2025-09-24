@@ -27,7 +27,7 @@ export const adminCharacterListStore =
             filterCharacters(query: string) {
                 const lowercasedQuery = query.toLowerCase().trim();
 
-                if (!lowercasedQuery) {
+                if (lowercasedQuery === '' || lowercasedQuery === null || lowercasedQuery === undefined) {
                     this.filteredCharacters = this.primaryCharacters;
                 } else {
                     this.filteredCharacters = this.primaryCharacters.filter((character) =>
