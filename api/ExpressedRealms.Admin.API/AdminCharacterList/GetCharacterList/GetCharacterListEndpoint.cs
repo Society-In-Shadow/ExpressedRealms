@@ -24,6 +24,7 @@ public static class GetCharacterListEndpoint
                         Expression = x.Expression,
                         Id = x.Id,
                         Name = x.Name,
+                        PlayerNumber = x.PlayerNumber
                     })
                     .ToList()
             }
