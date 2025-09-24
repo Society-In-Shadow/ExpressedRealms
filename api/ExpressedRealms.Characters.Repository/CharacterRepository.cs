@@ -5,6 +5,7 @@ using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.Repositories.Shared;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using FluentResults;

@@ -4,6 +4,7 @@ using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Characters.xpTables;
+using ExpressedRealms.Repositories.Shared;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Shared;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
