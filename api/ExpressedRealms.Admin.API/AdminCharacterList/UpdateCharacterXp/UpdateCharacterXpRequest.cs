@@ -1,6 +1,6 @@
 namespace ExpressedRealms.Admin.API.AdminCharacterList.UpdateCharacterXp;
 
-public interface UpdateCharacterXpRequest
+public class UpdateCharacterXpRequest
 {
     public int Xp { get; set; }
 }
