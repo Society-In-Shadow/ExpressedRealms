@@ -19,8 +19,11 @@ import PowerTile from "@/components/characters/character/powers/PowerTile.vue";
 import TrackableProficiencies from "@/components/characters/character/proficiency/TrackableProficiencies.vue";
 import BlessingTab from "@/components/characters/character/blessings/BlessingTab.vue";
 import StatTile from "@/components/characters/character/stats/StatTile.vue";
+import {characterStore} from "@/components/characters/character/stores/characterStore.ts";
+import Message from "primevue/message";
 
 const userData = userStore();
+const characterData = characterStore();
 
 const manageCharacterBlessings = ref(false);
 
@@ -34,6 +37,9 @@ onMounted(async() =>{
   <div class="d-none">
     <DataTable />
   </div>
+  <Message v-if="!characterData.isOwner  && !characterData.isLoading" severity="warn" class="mb-3 mt-3">
+    You have read only access to this character sheet.
+  </Message>
   <CharacterDetailTile />
   <div class="flex flex-column flex-md-row gap-3 m-1 m-sm-3 m-md-3 m-lg-3 m-xl-3 center-content">
     <div class="static-width">  

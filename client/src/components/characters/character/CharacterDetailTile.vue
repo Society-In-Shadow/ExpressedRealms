@@ -16,6 +16,8 @@ const experienceInfo = experienceStore();
 const userInfo = userStore();
 
 const showFactionInfo = ref(false);
+const isOwner = ref(false);
+
 onBeforeMount(async () =>{
   await characterInfo.getCharacterDetails(Number(route.params.id))
       .then(() => {
@@ -23,6 +25,7 @@ onBeforeMount(async () =>{
         expression.value = characterInfo.expression;
         faction.value = characterInfo.faction;
         isPrimaryCharacter.value = characterInfo.isPrimaryCharacter;
+        isOwner.value = characterInfo.isOwner;
       });
   showFactionInfo.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowFactionDropdown);
   await experienceInfo.updateExperience(route.params.id);
@@ -52,7 +55,7 @@ const redirectToEdit = () => {
           <div v-if="showFactionInfo"><em>{{ faction?.name ?? 'No Faction' }}</em></div>
         </div>
         <div class="d-flex flex-column gap-3" style="font-size: 2.5em">
-          <Button class="float-end" label="Edit" @click="redirectToEdit" />
+          <Button v-if="isOwner" class="float-end" label="Edit" @click="redirectToEdit" />
         </div>
       </div>
     </template>
