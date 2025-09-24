@@ -38,6 +38,10 @@ watch(props, async () => {
   await loadInfo();
 }, {immediate: true})
 
+watch(() => store.knowledges, async () => {
+  await loadInfo();
+}, {immediate: true, deep: true})
+
 async function loadInfo(){
 
   knowledge.value = store.knowledges.find(function (characterKnowledge: CharacterKnowledge) {
