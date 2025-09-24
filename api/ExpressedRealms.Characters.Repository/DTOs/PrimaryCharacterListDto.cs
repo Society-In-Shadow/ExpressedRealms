@@ -8,4 +8,5 @@ public sealed record PrimaryCharacterListDto
     public string Expression { get; set; } = null!;
     public required string PlayerName { get; set; }
     public int AssignedXp { get; set; }
+    public int PlayerNumber { get; set; }
 }

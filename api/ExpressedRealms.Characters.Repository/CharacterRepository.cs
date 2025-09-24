@@ -50,6 +50,7 @@ internal sealed class CharacterRepository(
                 Background = x.Background,
                 PlayerName = x.Player.Name,
                 AssignedXp = x.AssignedXp,
+                PlayerNumber = x.PlayerNumber,
             })
             .ToListAsync(cancellationToken);
     }

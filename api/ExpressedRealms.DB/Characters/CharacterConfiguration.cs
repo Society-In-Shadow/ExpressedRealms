@@ -41,6 +41,12 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
             .IsRequired()
             .HasDefaultValue(0);
 
+        builder
+            .Property(x => x.PlayerNumber)
+            .HasColumnName("player_number")
+            .IsRequired()
+            .HasDefaultValue(0);
+
         builder.HasQueryFilter(x => !x.IsDeleted);
 
         builder

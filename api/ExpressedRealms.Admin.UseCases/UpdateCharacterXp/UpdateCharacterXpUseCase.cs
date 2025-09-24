@@ -24,6 +24,7 @@ internal sealed class UpdateCharacterXpUseCase(
         var character = await characterRepository.GetCharacterForEdit(model.Id);
 
         character.AssignedXp = model.Xp;
+        character.PlayerNumber = model.PlayerNumber;
 
         await characterRepository.UpdateCharacter(character);
 

@@ -20,7 +20,9 @@ public static class AdminCharacterListEndpoints
             .RequireFeatureToggle(ReleaseFlags.AddCharacterLimitCap)
             .WithOpenApi();
 
-        endpointGroup.MapGet("characters/", GetCharacterListEndpoint.Execute).RequireAuthorization();
+        endpointGroup
+            .MapGet("characters/", GetCharacterListEndpoint.Execute)
+            .RequireAuthorization();
 
         endpointGroup
             .MapPut("characters/{characterId}/updateXp", UpdateCharacterXpEndpoint.Execute)

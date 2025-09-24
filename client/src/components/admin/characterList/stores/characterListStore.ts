@@ -18,8 +18,8 @@ export const adminCharacterListStore =
                         this.filteredCharacters = response.data.characters;
                     });
             },
-            async updateCharacterXp(characterId: number, xp: number) {
-                await axios.put(`/admin/characters/${characterId}/updateXp`, {xp: xp})
+            async updateCharacterXp(playerNumber: number, characterId: number, xp: number) {
+                await axios.put(`/admin/characters/${characterId}/updateXp`, {playerNumber: playerNumber, xp: xp})
                     .then(() => {
                         this.fetchCharacters();
                     });
@@ -32,7 +32,8 @@ export const adminCharacterListStore =
                 } else {
                     this.filteredCharacters = this.primaryCharacters.filter((character) =>
                         character.name.toLowerCase().includes(lowercasedQuery) ||
-                        character.playerName.toLowerCase().includes(lowercasedQuery)
+                        character.playerName.toLowerCase().includes(lowercasedQuery) ||
+                        character.playerNumber.toString().padStart(3, '0').includes(lowercasedQuery)
                     );
                 }
             },

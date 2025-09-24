@@ -17,7 +17,13 @@ internal sealed class UpdateCharacterXpModelValidator : AbstractValidator<Update
 
         RuleFor(x => x.Xp)
             .NotEmpty()
-            .WithMessage("Name is required.")
+            .WithMessage("Xp is required.")
+            .GreaterThanOrEqualTo(0)
+            .WithMessage("Xp must be greater than or equal to 0.");
+
+        RuleFor(x => x.PlayerNumber)
+            .NotEmpty()
+            .WithMessage("Player Number is required.")
             .GreaterThanOrEqualTo(0)
             .WithMessage("Xp must be greater than or equal to 0.");
     }
