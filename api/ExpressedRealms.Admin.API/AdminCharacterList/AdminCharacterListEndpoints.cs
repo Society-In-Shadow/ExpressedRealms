@@ -1,6 +1,7 @@
 using ExpressedRealms.Admin.API.AdminCharacterList.GetCharacterList;
 using ExpressedRealms.Admin.API.AdminCharacterList.UpdateCharacterXp;
 using ExpressedRealms.Authentication;
+using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -15,7 +16,8 @@ public static class AdminCharacterListEndpoints
         var endpointGroup = app.MapGroup("admin")
             .AddFluentValidationAutoValidation()
             .WithTags("Admin Character List")
-            .RequirePolicyAuthorization(Policies.UserManagementPolicy)
+            .RequirePolicyAuthorization(Policies.ManagePlayerCharacterList)
+            .RequireFeatureToggle(ReleaseFlags.AddCharacterLimitCap)
             .WithOpenApi();
 
         endpointGroup

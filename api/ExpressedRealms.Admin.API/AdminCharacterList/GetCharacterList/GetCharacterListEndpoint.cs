@@ -7,7 +7,6 @@ namespace ExpressedRealms.Admin.API.AdminCharacterList.GetCharacterList;
 public static class GetCharacterListEndpoint
 {
     public static async Task<Ok<List<PrimaryCharacter>>> Execute (
-        string userId,
         IGetPrimaryCharactersUseCase useCase
     )
     {
