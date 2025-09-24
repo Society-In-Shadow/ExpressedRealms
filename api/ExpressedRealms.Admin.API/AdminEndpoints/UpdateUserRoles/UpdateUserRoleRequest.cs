@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Admin.API.AdminEndpoints.Request;
+namespace ExpressedRealms.Admin.API.AdminEndpoints.UpdateUserRoles;
 
 public class UpdateUserRoleRequest
 {
