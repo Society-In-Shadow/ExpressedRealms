@@ -8,7 +8,7 @@ namespace ExpressedRealms.Admin.API.AdminEndpoints.UpdateUserRoles;
 
 public static class UpdateUserRoleEndpoint
 {
-    public static async Task<Results<NoContent, NotFound, BadRequest<string>>> Execute (
+    public static async Task<Results<NoContent, NotFound, BadRequest<string>>> Execute(
         string userId,
         UpdateUserRoleRequest dto,
         UserManager<User> userManager,

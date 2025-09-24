@@ -27,9 +27,7 @@ public static class AdminEndpoints
             .RequirePolicyAuthorization(Policies.UserManagementPolicy)
             .WithOpenApi();
 
-        endpointGroup
-            .MapGet("users", GetUsersEndpoint.Execute)
-            .RequireAuthorization();
+        endpointGroup.MapGet("users", GetUsersEndpoint.Execute).RequireAuthorization();
 
         endpointGroup
             .MapPut("user/{userid}/role", UpdateUserRoleEndpoint.Execute)

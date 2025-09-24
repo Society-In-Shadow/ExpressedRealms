@@ -3,6 +3,5 @@ using FluentResults;
 
 namespace ExpressedRealms.Admin.UseCases.GetPrimaryCharacters;
 
-public interface IGetPrimaryCharactersUseCase : IGenericUseCase<Result<List<PrimaryCharacterReturnInfo>>>
-{
-}
+public interface IGetPrimaryCharactersUseCase
+    : IGenericUseCase<Result<List<PrimaryCharacterReturnInfo>>> { }

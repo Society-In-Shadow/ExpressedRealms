@@ -37,7 +37,7 @@ internal sealed class CharacterRepository(
             })
             .ToListAsync(cancellationToken);
     }
-    
+
     public async Task<List<PrimaryCharacterListDto>> GetPrimaryCharactersAsync()
     {
         return await context
