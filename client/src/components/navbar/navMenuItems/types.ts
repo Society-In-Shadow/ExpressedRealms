@@ -14,3 +14,10 @@ export interface ExpressionMenuResponse{
     menuItems: Array<ExpressionMenuItem>;
     canEdit: boolean;
 }
+
+export interface SimpleMenuItem { 
+    label: string,
+    description: string,
+    navMenuIcon: string,
+    pushComponentRouteName: string
+}
