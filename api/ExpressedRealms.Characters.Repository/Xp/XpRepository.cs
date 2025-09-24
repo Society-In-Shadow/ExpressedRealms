@@ -97,7 +97,6 @@ public class XpRepository(
 
         var xpInfo = await GetCharacterXpMapping(characterId, (int)sectionType);
 
-        
         var availableXp = characterState.IsInCharacterCreation switch
         {
             true => await GetAvailableDiscretionary(characterId) + xpInfo.SectionCap,
@@ -113,7 +112,7 @@ public class XpRepository(
         {
             availableXp += xpInfo.DiscretionXp;
         }
-        
+
         var spentXp = xpInfo.SpentXp;
         if (characterState.IsPrimaryCharacter && !characterState.IsInCharacterCreation)
         {

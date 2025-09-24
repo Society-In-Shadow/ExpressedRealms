@@ -36,13 +36,15 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
         {
             sectionCap = characterInfo.AssignedXp;
         }
-        
+
         costs.AddRange(
             xpInfo
                 .Select(x => new ExperienceTotalMax(
                     x.SectionName,
                     x.SpentXp,
-                    characterState.IsInCharacterCreation ? x.SectionCap : sectionCap + x.TotalCharacterCreationXp,
+                    characterState.IsInCharacterCreation
+                        ? x.SectionCap
+                        : sectionCap + x.TotalCharacterCreationXp,
                     x.SectionTypeId,
                     x.LevelXp
                 ))
@@ -56,7 +58,7 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
                 AvailableDiscretionary = await xpRepository.GetAvailableDiscretionary(
                     model.CharacterId
                 ),
-                TotalSpentLevelXp = xpInfo.Sum(x => x.LevelXp)
+                TotalSpentLevelXp = xpInfo.Sum(x => x.LevelXp),
             }
         );
     }
