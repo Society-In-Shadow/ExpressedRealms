@@ -13,7 +13,13 @@ internal record CharacterEditResponse
         ExpressionId = dto.ExpressionId;
         IsPrimaryCharacter = dto.IsPrimaryCharacter;
         IsInCharacterCreation = dto.IsInCharacterCreation;
+        IsOwner = dto.IsOwner;
     }
+
+    /// <summary>
+    /// Indicates if the user is the owner of the character.
+    /// </summary>
+    public bool IsOwner { get; set; }
 
     public bool IsInCharacterCreation { get; set; }
 

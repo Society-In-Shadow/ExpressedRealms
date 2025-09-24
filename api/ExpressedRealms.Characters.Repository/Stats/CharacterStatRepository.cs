@@ -29,10 +29,11 @@ internal sealed class CharacterStatRepository(
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
 
-        var character = await context
-            .Characters.Where(x =>
-                x.Id == dto.CharacterId && x.Player.UserId == userContext.CurrentUserId()
-            )
+        var query = await context
+            .Characters.AsNoTracking()
+            .WithUserAccessAsync(userContext, dto.CharacterId);
+        
+        var character = await query
             .Select(x => new
             {
                 AgilityId = x.AgilityId,
@@ -188,17 +189,17 @@ internal sealed class CharacterStatRepository(
 
     public async Task<Result<List<SmallStatInfo>>> GetAllStats(int characterId)
     {
-        var character = await context
-            .Characters.Include(x => x.AgilityStatLevel)
+        var query = await context
+            .Characters.AsNoTracking()
+            .WithUserAccessAsync(userContext, characterId);
+        
+        var character = await query.Include(x => x.AgilityStatLevel)
             .Include(x => x.ConstitutionStatLevel)
             .Include(x => x.DexterityStatLevel)
             .Include(x => x.StrengthStatLevel)
             .Include(x => x.IntelligenceStatLevel)
             .Include(x => x.WillpowerStatLevel)
-            .FirstOrDefaultAsync(
-                x => x.Id == characterId && x.Player.UserId == userContext.CurrentUserId(),
-                cancellationToken
-            );
+            .FirstOrDefaultAsync();
 
         if (character is null)
             return Result.Fail(new NotFoundFailure("Character"));

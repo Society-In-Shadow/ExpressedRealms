@@ -377,10 +377,15 @@ internal static class CharacterEndPoints
                 [Authorize]
                 async Task<
                     Results<NotFound, ValidationProblem, Ok<List<CharacterSkillsResponse>>>
-                > (int characterId, ICharacterSkillRepository repository) =>
+                > (int characterId, ICharacterSkillRepository repository, ICharacterRepository characterRepository) =>
                 {
                     var results = await repository.GetCharacterSkills(characterId);
 
+                    if (!await characterRepository.CharacterExistsAsync(characterId))
+                    {
+                        return TypedResults.NotFound();
+                    }
+                    
                     return TypedResults.Ok(
                         results
                             .Select(x => new CharacterSkillsResponse()

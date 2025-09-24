@@ -57,20 +57,22 @@ internal sealed class CharacterRepository(
 
     public async Task<Result<GetEditCharacterDto>> GetCharacterInfoAsync(int id)
     {
-        var character = await context
+        var query = await context
             .Characters.AsNoTracking()
-            .Where(x => x.Id == id && x.Player.UserId == userContext.CurrentUserId())
-            .Select(x => new GetEditCharacterDto()
-            {
-                Name = x.Name,
-                Background = x.Background,
-                Expression = x.Expression.Name,
-                FactionId = x.FactionId,
-                ExpressionId = x.ExpressionId,
-                IsPrimaryCharacter = x.IsPrimaryCharacter,
-                IsInCharacterCreation = x.IsInCharacterCreation,
-            })
-            .FirstOrDefaultAsync(cancellationToken);
+            .WithUserAccessAsync(userContext, id);
+        
+        var character = await query.Select(x => new GetEditCharacterDto()
+        {
+            Name = x.Name,
+            Background = x.Background,
+            Expression = x.Expression.Name,
+            FactionId = x.FactionId,
+            ExpressionId = x.ExpressionId,
+            IsPrimaryCharacter = x.IsPrimaryCharacter,
+            IsInCharacterCreation = x.IsInCharacterCreation,
+            IsOwner = x.Player.UserId == userContext.CurrentUserId()
+        })
+        .FirstOrDefaultAsync(cancellationToken);
 
         if (character is null)
             return Result.Fail(new NotFoundFailure("Character"));
@@ -80,9 +82,11 @@ internal sealed class CharacterRepository(
 
     public async Task<CharacterStatusDto> GetCharacterState(int id)
     {
-        return await context
+        var query = await context
             .Characters.AsNoTracking()
-            .Where(x => x.Id == id && x.Player.UserId == userContext.CurrentUserId())
+            .WithUserAccessAsync(userContext, id);
+        
+        return await query
             .Select(x => new CharacterStatusDto()
             {
                 IsPrimaryCharacter = x.IsPrimaryCharacter,
@@ -202,10 +206,11 @@ internal sealed class CharacterRepository(
 
     public async Task<bool> CharacterExistsAsync(int id)
     {
-        var character = await context.Characters.FirstOrDefaultAsync(
-            x => x.Id == id && x.Player.UserId == userContext.CurrentUserId(),
-            cancellationToken
-        );
+        var query = await context
+            .Characters.AsNoTracking()
+            .WithUserAccessAsync(userContext, id);
+        
+        var character = await query.FirstOrDefaultAsync();
 
         return character is not null;
     }

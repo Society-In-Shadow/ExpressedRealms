@@ -9,4 +9,5 @@ public sealed record GetEditCharacterDto
     public int ExpressionId { get; set; }
     public bool IsPrimaryCharacter { get; set; }
     public bool IsInCharacterCreation { get; set; }
+    public bool IsOwner { get; set; }
 }
