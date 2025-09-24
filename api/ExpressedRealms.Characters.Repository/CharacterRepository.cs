@@ -38,6 +38,22 @@ internal sealed class CharacterRepository(
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<List<PrimaryCharacterListDto>> GetPrimaryCharactersAsync()
+    {
+        return await context
+            .Characters.Where(x => x.IsPrimaryCharacter)
+            .Select(x => new PrimaryCharacterListDto()
+            {
+                Id = x.Id.ToString(),
+                Name = x.Name,
+                Expression = x.Expression.Name,
+                Background = x.Background,
+                PlayerName = x.Player.Name,
+                AssignedXp = x.AssignedXp,
+            })
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<Result<GetEditCharacterDto>> GetCharacterInfoAsync(int id)
     {
         var character = await context

@@ -3,7 +3,7 @@ using System.Text.Json;
 using AspNetCore.Swagger.Themes;
 using Audit.Core;
 using ExpressedRealms.Admin.API.Configuration;
-using ExpressedRealms.Admin.Repository;
+using ExpressedRealms.Admin.UseCases.Configuration;
 using ExpressedRealms.Authentication.AzureKeyVault;
 using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
 using ExpressedRealms.Authentication.Configuration;
@@ -206,7 +206,7 @@ try
     builder.Services.AddScoped<IUserContext, UserContext>();
     builder.Services.AddCharacterRepositoryInjections();
     builder.Services.AddExpressionRepositoryInjections();
-    builder.Services.AddAdminRepositoryInjections();
+    builder.Services.AddAdminInjections();
     builder.Services.AddPowerRepositoryInjections();
     builder.Services.AddKnowledgesInjections();
     builder.Services.AddExpressionTextSectionInjections();

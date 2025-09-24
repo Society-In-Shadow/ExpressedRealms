@@ -15,4 +15,5 @@ public interface ICharacterRepository
     Task<CharacterStatusDto> GetCharacterState(int id);
     Task<Character> GetCharacterForEdit(int characterId);
     Task UpdateCharacter(Character user);
+    Task<List<PrimaryCharacterListDto>> GetPrimaryCharactersAsync();
 }

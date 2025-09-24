@@ -8,7 +8,8 @@ namespace ExpressedRealms.Admin.API.AdminEndpoints.GetUsers;
 public static class GetUsersEndpoint
 {
     public static async Task<Ok<UserListResponse>> Execute(
-        [FromServices]IUsersRepository repository)
+        [FromServices] IUsersRepository repository
+    )
     {
         var users = await repository.GetUsersAsync();
 

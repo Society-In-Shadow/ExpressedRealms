@@ -8,4 +8,10 @@
     <InternalsVisibleTo Include="$(AssemblyName).Tests.Unit" />
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExpressedRealms.Admin.Repository\ExpressedRealms.Admin.Repository.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Characters.Repository\ExpressedRealms.Characters.Repository.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Shared.UseCases\ExpressedRealms.Shared.UseCases.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Shared\ExpressedRealms.Shared.csproj" />
+  </ItemGroup>
 </Project>
