@@ -40,7 +40,7 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
             .HasColumnName("assigned_xp")
             .IsRequired()
             .HasDefaultValue(0);
-        
+
         builder
             .Property(x => x.PlayerNumber)
             .HasColumnName("player_number")
