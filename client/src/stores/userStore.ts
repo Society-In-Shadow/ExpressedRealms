@@ -10,6 +10,7 @@ export const UserRoles = {
     DownloadCMSReports: "DownloadCMSReports",
     DownloadExpressionBooklet: "DownloadExpressionBooklet",
     BlessingsManagementRole: "ManageBlessingsRole",
+    ManagePlayerCharacterList: "ManagePlayerCharacterList"
 } as const;
 
 export const FeatureFlags = {

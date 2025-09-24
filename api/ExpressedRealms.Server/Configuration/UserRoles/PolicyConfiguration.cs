@@ -42,6 +42,11 @@ public static class PolicyConfiguration
                 Policies.ManageBlessings.Name,
                 policy => policy.RequireRole(UserRoles.ManageBlessingsRole)
             );
+
+            options.AddPolicy(
+                Policies.ManagePlayerCharacterList.Name,
+                policy => policy.RequireRole(UserRoles.ManagePlayerCharacterList)
+            );
         });
     }
 }
