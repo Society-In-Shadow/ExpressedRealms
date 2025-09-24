@@ -4,4 +4,4 @@ using FluentResults;
 namespace ExpressedRealms.Admin.UseCases.UpdateCharacterXp;
 
 public interface IUpdateCharacterXpUseCase
-    : IGenericUseCase<Result<int>, UpdateCharacterXpModel> { }
+    : IGenericUseCase<Result, UpdateCharacterXpModel> { }

@@ -10,7 +10,7 @@ internal sealed class UpdateCharacterXpUseCase(
     CancellationToken cancellationToken
 ) : IUpdateCharacterXpUseCase
 {
-    public async Task<Result<int>> ExecuteAsync(UpdateCharacterXpModel model)
+    public async Task<Result> ExecuteAsync(UpdateCharacterXpModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,
