@@ -41,7 +41,7 @@ internal sealed class CharacterRepository(
     public async Task<List<PrimaryCharacterListDto>> GetPrimaryCharactersAsync()
     {
         return await context
-            .Characters.Where(x => x.IsPrimaryCharacter == true)
+            .Characters.Where(x => x.IsPrimaryCharacter)
             .Select(x => new PrimaryCharacterListDto()
             {
                 Id = x.Id.ToString(),
