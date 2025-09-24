@@ -1,6 +1,8 @@
 import {defineStore} from 'pinia'
 import axios from "axios";
+import {FeatureFlags, userStore} from "@/stores/userStore.ts";
 
+const userInfo = userStore();
 export const characterStore =
     defineStore('character', {
         state: () => {
@@ -27,13 +29,17 @@ export const characterStore =
                         this.expressionId = response.data.expressionId;
                         this.isPrimaryCharacter = response.data.isPrimaryCharacter;
                         this.isInCharacterCreation = response.data.isInCharacterCreation;
-                        await axios.get(`/characters/${characterId}/factionOptions`)
-                            .then((factionResponse) => {
-                                this.factions = factionResponse.data;
+                        
+                        if(await userInfo.hasFeatureFlag(FeatureFlags.ShowFactionDropdown)){
+                            await axios.get(`/characters/${characterId}/factionOptions`)
+                                .then((factionResponse) => {
+                                    this.factions = factionResponse.data;
 
-                                this.faction = factionResponse.data.find(x => x.id == response.data.factionId);
-                                this.isLoading = false;
-                            })
+                                    this.faction = factionResponse.data.find(x => x.id == response.data.factionId);
+                                    this.isLoading = false;
+                                })
+                        }
+
                     })
             }
         }
