@@ -5,6 +5,7 @@ using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.Repositories.Shared;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using FluentResults;
@@ -57,9 +58,9 @@ internal sealed class CharacterRepository(
 
     public async Task<Result<GetEditCharacterDto>> GetCharacterInfoAsync(int id)
     {
-        var character = await context
-            .Characters.AsNoTracking()
-            .Where(x => x.Id == id && x.Player.UserId == userContext.CurrentUserId())
+        var query = await context.Characters.AsNoTracking().WithUserAccessAsync(userContext, id);
+
+        var character = await query
             .Select(x => new GetEditCharacterDto()
             {
                 Name = x.Name,
@@ -69,6 +70,7 @@ internal sealed class CharacterRepository(
                 ExpressionId = x.ExpressionId,
                 IsPrimaryCharacter = x.IsPrimaryCharacter,
                 IsInCharacterCreation = x.IsInCharacterCreation,
+                IsOwner = x.Player.UserId == userContext.CurrentUserId(),
             })
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -80,9 +82,9 @@ internal sealed class CharacterRepository(
 
     public async Task<CharacterStatusDto> GetCharacterState(int id)
     {
-        return await context
-            .Characters.AsNoTracking()
-            .Where(x => x.Id == id && x.Player.UserId == userContext.CurrentUserId())
+        var query = await context.Characters.AsNoTracking().WithUserAccessAsync(userContext, id);
+
+        return await query
             .Select(x => new CharacterStatusDto()
             {
                 IsPrimaryCharacter = x.IsPrimaryCharacter,
@@ -202,10 +204,9 @@ internal sealed class CharacterRepository(
 
     public async Task<bool> CharacterExistsAsync(int id)
     {
-        var character = await context.Characters.FirstOrDefaultAsync(
-            x => x.Id == id && x.Player.UserId == userContext.CurrentUserId(),
-            cancellationToken
-        );
+        var query = await context.Characters.AsNoTracking().WithUserAccessAsync(userContext, id);
+
+        var character = await query.FirstOrDefaultAsync();
 
         return character is not null;
     }
