@@ -57,8 +57,9 @@ concrete classes that should be internal.
     <InternalsVisibleTo Include="$(AssemblyName).Tests.Unit" />
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
-
 ```
+
+In Addition, make sure to add the project from above to the test project as a dependency.
 
 As for the test project, you can add these as dependencies
 
@@ -71,5 +72,8 @@ As for the test project, you can add these as dependencies
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="xunit.v3" Version="2.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExpressedRealms.Powers.UseCases.Tests.Unit\ExpressedRealms.Powers.UseCases.Tests.Unit.csproj" />
   </ItemGroup>
 ```

@@ -1,3 +1,6 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Society-In-Shadow_ExpressedRealms&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Society-In-Shadow_ExpressedRealms)
+[![Primary Workflow](https://github.com/Society-In-Shadow/ExpressedRealms/actions/workflows/DeployToProd.yml/badge.svg)](https://github.com/Society-In-Shadow/ExpressedRealms/actions/workflows/DeployToProd.yml)
+
 # Welcome to Expressed Realms!
 Expressed Realms is the digital companion guide for Six Stones - Society in Shadows, a Capstone LARP Systems.
 
@@ -56,7 +59,7 @@ DB_PASSWORD=
 ## Create SSL Certs
 Next, you need to setup SSL Certs
 
-* Windows users can follow the instructions [here](/documentation/localSSLCerts.md)
+* Windows users can follow the instructions [here](/documentation/wi.md)
 * Fedora users can follow the instructions [here](/documentation/fedoraSetup.md)
 
 ## Start the Website

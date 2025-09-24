@@ -1,8 +1,8 @@
+using ExpressedRealms.Admin.Repository.DTOs;
 using ExpressedRealms.DB;
-using ExpressedRealms.Repositories.Admin.DTOs;
 using Microsoft.EntityFrameworkCore;
 
-namespace ExpressedRealms.Repositories.Admin;
+namespace ExpressedRealms.Admin.Repository;
 
 internal sealed class UsersRepository(ExpressedRealmsDbContext context) : IUsersRepository
 {
@@ -16,10 +16,10 @@ internal sealed class UsersRepository(ExpressedRealmsDbContext context) : IUsers
             .Select(x => new UserListDto()
             {
                 Id = x.Id,
-                Email = x.Email,
+                Email = x.Email!,
                 EmailConfirmed = x.EmailConfirmed,
                 Username =
-                    x.Player != null && x.Player.Name != null
+                    x.Player != null && x.Player!.Name != ""
                         ? x.Player.Name
                         : "Name hasn't been set yet.",
                 IsDisabled = x.LockoutEnd.HasValue && x.LockoutEnd == DateTimeOffset.MaxValue,
