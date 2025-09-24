@@ -18,6 +18,12 @@ export const adminCharacterListStore =
                         this.filteredCharacters = response.data.characters;
                     });
             },
+            async updateCharacterXp(characterId: number, xp: number) {
+                await axios.put(`/admin/characters/${characterId}/updateXp`, {xp: xp})
+                    .then(() => {
+                        this.fetchCharacters();
+                    });
+            },
             filterCharacters(query: string) {
                 const lowercasedQuery = query.toLowerCase().trim();
 

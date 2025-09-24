@@ -4,7 +4,7 @@ export interface CharacterListResponse {
 }
 
 export interface PrimaryCharacter {
-    id: string;
+    id: number;
     name: string;
     background?: string;
     expression: string;
