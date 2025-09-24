@@ -10,4 +10,5 @@ export interface PrimaryCharacter {
     expression: string;
     playerName: string;
     assignedXp: number;
+    playerNumber: number;
 }

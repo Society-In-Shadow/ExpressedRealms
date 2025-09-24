@@ -5,7 +5,7 @@ export const adminCharacterDialogs = () => {
 
     const dialog = useDialog();
 
-    const showUpdateXp = (characterId: number, xp: number) => {
+    const showUpdateXp = (characterId: number, playerNumber: number, xp: number) => {
         dialog.open(UpdateCharacterXp, {
             props: {
                 header: 'Update Character XP',
@@ -20,7 +20,8 @@ export const adminCharacterDialogs = () => {
             },
             data: {
                 xp: xp,
-                characterId: characterId
+                characterId: characterId,
+                playerNumber: playerNumber
             }
         });
     }

@@ -11,13 +11,14 @@ const store = adminCharacterListStore();
 const dialogRef = inject('dialogRef') as Ref;
 const xp = ref(dialogRef.value.data.xp);
 const characterId = ref(dialogRef.value.data.characterId);
+const playerNumber = ref(dialogRef.value.data.playerNumber);
 
 onBeforeMount(async () => {
-  form.setValues(xp.value);
+  form.setValues(playerNumber.value, xp.value);
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await store.updateCharacterXp(characterId.value, values.xp);
+  await store.updateCharacterXp(values.playerNumber, characterId.value, values.xp);
   cancel();
 });
 
@@ -30,6 +31,7 @@ const cancel = () => {
 <template>
 
   <form @submit="onSubmit">
+    <FormInputNumberWrapper v-model="form.fields.playerNumber" />
     <FormInputNumberWrapper v-model="form.fields.xp" />
     <Button label="Update" class="m-2" type="submit" />
   </form>
