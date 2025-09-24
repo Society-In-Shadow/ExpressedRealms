@@ -35,6 +35,7 @@ async function finalizeCreation(){
       .then(async (respone) => {
         toaster.success("Successfully Finalized Charcter!");
         await characterInfo.getCharacterDetails(route.params.id);
+        await xpInfo.updateExperience(route.params.id);
       })
 }
 
