@@ -6,24 +6,27 @@ namespace ExpressedRealms.Admin.API.AdminCharacterList.GetCharacterList;
 
 public static class GetCharacterListEndpoint
 {
-    public static async Task<Ok<List<PrimaryCharacter>>> Execute(
+    public static async Task<Ok<PrimaryCharacterResponse>> Execute(
         IGetPrimaryCharactersUseCase useCase
     )
     {
         var primaryCharacters = await useCase.ExecuteAsync();
 
         return TypedResults.Ok(
-            primaryCharacters
-                .Value.Select(x => new PrimaryCharacter()
-                {
-                    PlayerName = x.PlayerName,
-                    AssignedXp = x.AssignedXp,
-                    Background = x.Background,
-                    Expression = x.Expression,
-                    Id = x.Id,
-                    Name = x.Name,
-                })
-                .ToList()
+            new PrimaryCharacterResponse()
+            {
+                Characters = primaryCharacters
+                    .Value.Select(x => new PrimaryCharacter()
+                    {
+                        PlayerName = x.PlayerName,
+                        AssignedXp = x.AssignedXp,
+                        Background = x.Background,
+                        Expression = x.Expression,
+                        Id = x.Id,
+                        Name = x.Name,
+                    })
+                    .ToList()
+            }
         );
     }
 }

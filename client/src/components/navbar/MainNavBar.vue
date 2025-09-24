@@ -76,7 +76,7 @@ const items = ref([
             label: 'Character Management',
             description: "Manage any primary characters across all players.",
             navMenuIcon: 'patient_list',
-            pushComponentRouteName: "viewPlayers",
+            pushComponentRouteName: "adminCharacterList",
             visible: () => userInfo.userRoles.includes("ManagePlayerCharacterList"),
           }
         ]

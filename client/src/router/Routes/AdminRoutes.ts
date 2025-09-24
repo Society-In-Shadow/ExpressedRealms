@@ -9,6 +9,12 @@ export const AdminRoutes = {
             name: "viewPlayers",
             component: () => import("./../../components/players/PlayerList.vue"),
             meta: { requiredRole: "UserManagementRole" },
+        },
+        {
+            path: "characters",
+            name: "adminCharacterList",
+            component: () => import("./../../components/admin/characterList/AdminCharacterList.vue"),
+            meta: { requiredRole: "ManagePlayerCharacterList" },
         }
     ]
 }
