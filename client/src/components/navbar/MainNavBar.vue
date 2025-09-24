@@ -9,6 +9,7 @@ import axios from "axios";
 import ExpressionMenuItem from "@/components/navbar/navMenuItems/ExpressionMenuItem.vue";
 import CharacterMenuItem from "@/components/navbar/navMenuItems/CharacterMenuItem.vue";
 import RootNodeMenuItem from "@/components/navbar/navMenuItems/RootNodeMenuItem.vue";
+import SimpleMenuItem from "@/components/navbar/navMenuItems/SimpleMenuItem.vue";
 import {userStore} from "@/stores/userStore";
 import {cmsStore} from "@/stores/cmsStore.ts";
 import {storeToRefs} from "pinia";
@@ -52,10 +53,36 @@ const items = ref([
   { 
     root: true, 
     label: 'Admin', 
-    icon: 'pi pi-admin', 
-    subtext: 'See User List', 
-    command: () => router.push("/admin/players"), 
-    visible: () => userInfo.userRoles.includes("UserManagementRole") },
+    icon: 'pi pi-admin',
+    visible: () => userInfo.userRoles.includes("UserManagementRole") || userInfo.userRoles.includes("ManagePlayerCharacterList"),
+    items: [[{ 
+          items: [
+              {
+                navMenuType: 'simple',
+                label: 'Users',
+                navMenuIcon: 'groups',
+                pushComponentRouteName: "viewPlayers",
+                description: "Manage all users in the system.",
+                visible: () => userInfo.userRoles.includes("UserManagementRole"),
+              }
+          ]
+        } 
+    ],
+    [
+      {
+        items: [
+          {
+            navMenuType: 'simple',
+            label: 'Character Management',
+            description: "Manage any primary characters across all players.",
+            navMenuIcon: 'patient_list',
+            pushComponentRouteName: "viewPlayers",
+            visible: () => userInfo.userRoles.includes("ManagePlayerCharacterList"),
+          }
+        ]
+      }
+    ]]
+  },
   { 
     root: true, 
     label: 'Code of Conduct', 
@@ -166,6 +193,7 @@ watch(expressionItems, (newValue) => {
     </template>
     <template #item="{ item }">
       <RootNodeMenuItem v-if="item.root" :item="item" />
+      <SimpleMenuItem v-else-if="item.navMenuType == 'simple'" :item="item" />
       <CharacterMenuItem v-else-if="item.navMenuType == 'character'" :item="item"  />
       <ExpressionMenuItem v-else :item="item.expression" :nav-heading="item.navMenuType" />
     </template>
