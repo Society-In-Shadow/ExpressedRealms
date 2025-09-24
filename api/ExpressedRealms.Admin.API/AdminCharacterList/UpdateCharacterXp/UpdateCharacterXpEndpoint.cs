@@ -7,17 +7,15 @@ namespace ExpressedRealms.Admin.API.AdminCharacterList.UpdateCharacterXp;
 
 public static class UpdateCharacterXpEndpoint
 {
-    public static async Task<Ok> Execute (
+    public static async Task<Ok> Execute(
         int characterId,
-        [FromBody]UpdateCharacterXpRequest request,
+        [FromBody] UpdateCharacterXpRequest request,
         [FromServices] IUpdateCharacterXpUseCase useCase
     )
     {
-        await useCase.ExecuteAsync(new UpdateCharacterXpModel()
-        {
-            Id = characterId,
-            Xp = request.Xp,
-        });
+        await useCase.ExecuteAsync(
+            new UpdateCharacterXpModel() { Id = characterId, Xp = request.Xp }
+        );
 
         return TypedResults.Ok();
     }

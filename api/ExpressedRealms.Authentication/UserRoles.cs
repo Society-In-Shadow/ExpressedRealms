@@ -24,6 +24,6 @@ public static class UserRoles
             DownloadCMSReports,
             DownloadExpressionBooklet,
             ManageBlessingsRole,
-            ManagePlayerCharacterList
+            ManagePlayerCharacterList,
         };
 }
