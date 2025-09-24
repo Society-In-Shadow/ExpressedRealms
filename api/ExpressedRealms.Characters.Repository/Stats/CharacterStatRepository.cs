@@ -32,7 +32,7 @@ internal sealed class CharacterStatRepository(
         var query = await context
             .Characters.AsNoTracking()
             .WithUserAccessAsync(userContext, dto.CharacterId);
-        
+
         var character = await query
             .Select(x => new
             {
@@ -192,8 +192,9 @@ internal sealed class CharacterStatRepository(
         var query = await context
             .Characters.AsNoTracking()
             .WithUserAccessAsync(userContext, characterId);
-        
-        var character = await query.Include(x => x.AgilityStatLevel)
+
+        var character = await query
+            .Include(x => x.AgilityStatLevel)
             .Include(x => x.ConstitutionStatLevel)
             .Include(x => x.DexterityStatLevel)
             .Include(x => x.StrengthStatLevel)
