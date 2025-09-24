@@ -1,6 +1,7 @@
 import {defineStore} from "pinia";
 import axios from "axios";
 import type {CalculatedExperience, ExperienceBreakdownResponse} from "@/components/characters/character/types.ts"
+import {characterStore} from "@/components/characters/character/stores/characterStore.ts";
 
 export const XpSectionTypes = {
     advantage: 1,
@@ -13,6 +14,7 @@ export const XpSectionTypes = {
 } as const;
 export type XpSectionType = (typeof XpSectionTypes)[keyof typeof XpSectionTypes];
 
+const characterInfo = characterStore();
 export const experienceStore =
     defineStore('experienceStore', {
         state: () => {
@@ -21,6 +23,7 @@ export const experienceStore =
                 experienceBreakdown: {} as ExperienceBreakdownResponse,
                 availableDiscretionary: 0 as number,
                 showAllExperience: true as boolean,
+                totalSpentLevelXp: 0 as number,
                 calculatedValues: [] as CalculatedExperience[]
             }
         },
@@ -31,7 +34,7 @@ export const experienceStore =
                     .then((response) => {
                         this.isLoading = false;
                         this.experienceBreakdown = response.data;
-                        
+                        this.totalSpentLevelXp = response.data.totalSpentLevelXp
                         
                         this.calculatedValues = response.data.experience.map(xp => {
 
@@ -40,8 +43,17 @@ export const experienceStore =
                             const optionalMaxXP = currentOptionalXp + response.data.availableDiscretionary
                             let availableXp = optionalMaxXP - currentOptionalXp
                             
-                            if (requiredXp < xp.characterCreateMax) {
+                            if (requiredXp < xp.characterCreateMax && xp.sectionTypeId != XpSectionTypes.advantage) {
                                 availableXp = xp.characterCreateMax - requiredXp + optionalMaxXP;
+                            }
+                            
+                            if(xp.sectionTypeId == XpSectionTypes.advantage){
+                                availableXp = response.data.availableDiscretionary;
+                            }
+                            
+                            if(characterInfo.isPrimaryCharacter && !characterInfo.isInCharacterCreation){
+                                const xpSpentPostCreation = xp.characterCreateMax - xp.total; // total = spentxp, characterCreateMax = availableXp
+                                availableXp = xpSpentPostCreation - this.totalSpentLevelXp + xp.levelXp;
                             }
                             
                             return {

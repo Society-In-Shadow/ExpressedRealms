@@ -97,6 +97,7 @@ public class XpRepository(
 
         var xpInfo = await GetCharacterXpMapping(characterId, (int)sectionType);
 
+        
         var availableXp = characterState.IsInCharacterCreation switch
         {
             true => await GetAvailableDiscretionary(characterId) + xpInfo.SectionCap,
@@ -108,12 +109,23 @@ public class XpRepository(
         // Discretion is a dyanamic value, as such, it does remove the XP associated with this
         // particular section.  So you need to add it back in to get to the true available XP
         // if the required xp was not fully spent
-        if (xpInfo.DiscretionXp > 0)
+        if (xpInfo.DiscretionXp > 0 && characterState.IsInCharacterCreation)
         {
             availableXp += xpInfo.DiscretionXp;
         }
+        
+        var spentXp = xpInfo.SpentXp;
+        if (characterState.IsPrimaryCharacter && !characterState.IsInCharacterCreation)
+        {
+            var xpTotal = await context
+                .CharacterXpViews.AsNoTracking()
+                .Where(x => x.CharacterId == characterId)
+                .SumAsync(x => x.LevelXp);
+            var xpSpentPostCreation = availableXp - xpTotal;
+            availableXp = xpSpentPostCreation + xpInfo.LevelXp;
+        }
 
-        return new SectionXpDto() { AvailableXp = availableXp, SpentXp = xpInfo.SpentXp };
+        return new SectionXpDto() { AvailableXp = availableXp, SpentXp = spentXp };
     }
 
     public async Task FinalizeCreateXp(int charactterId)
