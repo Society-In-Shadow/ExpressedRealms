@@ -56,7 +56,14 @@ const loadData = async () => {
   let sectionType: XpSectionType = props.blessing.type.toLowerCase() == 'disadvantage' ? XpSectionTypes.disadvantage : XpSectionTypes.advantage;
   let xpInfo = experienceInfo.getExperienceInfoForSection(sectionType);
   let currentLevelXp = props.blessing.type.toLowerCase() == 'disadvantage' ? currentLevel.value.xpGain : currentLevel.value.xpCost ;
-  availableXp.value = xpInfo.characterCreateMax - xpInfo.total + currentLevelXp;
+
+  if(sectionType == XpSectionTypes.advantage){
+    availableXp.value = xpInfo.availableXp;
+  }else{
+    availableXp.value = xpInfo.characterCreateMax - xpInfo.total + currentLevelXp;
+  }
+  
+
 }
 
 const onSubmit = form.handleSubmit(async (values) => {
@@ -66,9 +73,9 @@ const onSubmit = form.handleSubmit(async (values) => {
 
 function disableOption(level:BlessingLevel){
   if(props.blessing.type.toLowerCase() == 'disadvantage'){
-    return level.xpGain > availableXp.value;
+    return level.xpGain > availableXp.value && level.xpGain > currentLevel.value.xpGain;
   }
-  return level.xpCost > availableXp.value;
+  return level.xpCost > availableXp.value && level.xpCost > currentLevel.value.xpCost;
 }
 
 const xpSectionType = computed(() => {
