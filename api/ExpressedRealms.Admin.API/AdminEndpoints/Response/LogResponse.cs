@@ -4,5 +4,5 @@ namespace ExpressedRealms.Admin.API.AdminEndpoints.Response;
 
 public class LogResponse
 {
-    public List<LogDto> Logs { get; set; }
+    public List<LogDto> Logs { get; set; } = new();
 }

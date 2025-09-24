@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 
 namespace ExpressedRealms.Admin.API.Configuration;
 
-public static class AdminAPIConfiguration
+public static class AdminApiConfiguration
 {
     public static void ConfigureAdminEndPoints(this WebApplication app)
     {

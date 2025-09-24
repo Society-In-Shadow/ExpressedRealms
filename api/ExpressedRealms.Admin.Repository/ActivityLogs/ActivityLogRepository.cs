@@ -41,7 +41,7 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             .Where(x => x.ActorUserId == userId)
             .Select(x => new Log()
             {
-                Location = $"Player \"{x.User.Player.Name}\"",
+                Location = $"Player \"{x.User.Player!.Name}\"",
                 TimeStamp = x.Timestamp,
                 Action = x.Action,
                 ChangedProperties = x.ChangedProperties,
@@ -55,7 +55,7 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             .Select(x => new Log()
             {
                 Location =
-                    $"Player \"{x.User.Player.Name}\" was modified by \"{x.ActorUser.Player.Name}\"",
+                    $"Player \"{x.User.Player!.Name}\" was modified by \"{x.ActorUser.Player!.Name}\"",
                 TimeStamp = x.Timestamp,
                 Action = x.Action,
                 ChangedProperties = x.ChangedProperties,
@@ -82,7 +82,7 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             .Select(x => new Log()
             {
                 Location =
-                    $"Player \"{x.Player.Name}\" was modified by \"{x.ActorUser.Player.Name}\"",
+                    $"Player \"{x.Player.Name}\" was modified by \"{x.ActorUser.Player!.Name}\"",
                 TimeStamp = x.Timestamp,
                 Action = x.Action,
                 ChangedProperties = x.ChangedProperties,
@@ -95,7 +95,7 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             .Where(x => x.ActorUserId == userId)
             .Select(x => new Log()
             {
-                Location = $"Role \"{x.Role.Name}\" for Player \"{x.MappingUser.Player.Name}\"",
+                Location = $"Role \"{x.Role.Name}\" for Player \"{x.MappingUser.Player!.Name}\"",
                 TimeStamp = x.Timestamp,
                 Action = x.Action,
                 ChangedProperties = x.ChangedProperties,
@@ -108,7 +108,7 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             .Where(x => x.MappingUserId == userId && x.ActorUserId != userId)
             .Select(x => new Log()
             {
-                Location = $"Role \"{x.Role.Name}\" was modified by \"{x.ActorUser.Player.Name}\"",
+                Location = $"Role \"{x.Role.Name}\" was modified by \"{x.ActorUser.Player!.Name}\"",
                 TimeStamp = x.Timestamp,
                 Action = x.Action,
                 ChangedProperties = x.ChangedProperties,

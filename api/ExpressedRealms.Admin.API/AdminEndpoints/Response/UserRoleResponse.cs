@@ -4,5 +4,5 @@ namespace ExpressedRealms.Admin.API.AdminEndpoints.Response;
 
 public class UserRoleResponse
 {
-    public List<UserRoleDto> Roles { get; set; }
+    public List<UserRoleDto> Roles { get; set; } = new List<UserRoleDto>();
 }
