@@ -24,6 +24,7 @@ export const experienceStore =
                 availableDiscretionary: 0 as number,
                 showAllExperience: true as boolean,
                 totalSpentLevelXp: 0 as number,
+                totalAvailableXp: 0 as number,
                 calculatedValues: [] as CalculatedExperience[]
             }
         },
@@ -34,7 +35,8 @@ export const experienceStore =
                     .then((response) => {
                         this.isLoading = false;
                         this.experienceBreakdown = response.data;
-                        this.totalSpentLevelXp = response.data.totalSpentLevelXp
+                        this.totalSpentLevelXp = response.data.totalSpentLevelXp;
+                        this.totalAvailableXp = response.data.totalAvailableXp;
                         
                         this.calculatedValues = response.data.experience.map(xp => {
 

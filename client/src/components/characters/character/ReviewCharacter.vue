@@ -151,11 +151,15 @@ const displayedSections = computed(() => {
     </tr>
     <tr v-if="!characterInfo.isInCharacterCreation">
       <td>Total</td>
-      <td>{{ xpInfo.getTotalXp() }}</td>
+      <td>{{ xpInfo.getTotalXp() }} / {{ xpInfo.totalAvailableXp }}</td>
     </tr>
   </table>
 
-  <div v-if="!characterInfo.isInCharacterCreation">Character Level: {{xpInfo.getCharacterLevel()}}</div>
+  <div v-if="!characterInfo.isInCharacterCreation" class="d-flex flex-row justify-content-between gap-3">
+    <div>Character Level: {{xpInfo.getCharacterLevel()}}</div>
+    <div></div>
+  </div>
+  
   <Message severity="warn" v-if="characterInfo.isInCharacterCreation" class="mt-3">
     <p v-if="!spentAllPoints">To finalize a character will require you to spend all XP.</p>
     <p>Finalizing a character will block the ability to add / remove / change levels for Advantages / Disadvantages</p>
