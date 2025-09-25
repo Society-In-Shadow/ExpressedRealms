@@ -37,6 +37,7 @@ internal static class GetOverallStatsEndpoint
                     .ToList(),
                 AvailableDiscretionary = status.Value.AvailableDiscretionary,
                 TotalSpentLevelXp = status.Value.TotalSpentLevelXp,
+                TotalAvailableXp = status.Value.TotalAvailableXp
             }
         );
     }
