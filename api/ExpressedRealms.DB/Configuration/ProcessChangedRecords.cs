@@ -5,6 +5,8 @@ using ExpressedRealms.DB.Models.Blessings.BlessingSetup;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
+using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths;
+using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths.Audit;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Audit;
 using ExpressedRealms.DB.Models.Powers;
@@ -45,6 +47,7 @@ public static class ProcessChangedRecords
             nameof(BlessingLevel) => BlessingLevelAuditTrailExtensions.ProcessChangedRecords(
                 changedRecords
             ),
+            nameof(ProgressionPath) => ProgressionPathAuditTrailExtensions.ProcessChangedRecords(changedRecords),
             _ => throw new ArgumentException(
                 $"Table not setup in the ProcessChangedRecords class: {tableName}"
             ),
