@@ -9,7 +9,7 @@ public class ProgressionLevel : ISoftDelete
 {
     public int Id { get; set; }
     public int ProgressionPathId { get; set; }
-    public string Name { get; set; } = null!;
+    public int XlLevel { get; set; }
     public string Description { get; set; } = null!;
 
     public bool IsDeleted { get; set; }

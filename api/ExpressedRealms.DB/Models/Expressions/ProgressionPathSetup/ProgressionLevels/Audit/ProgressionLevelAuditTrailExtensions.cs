@@ -13,16 +13,15 @@ internal static class ProgressionLevelAuditTrailExtensions
         {
             switch (changedRecord.ColumnName)
             {
-                case "name":
-                    changedRecord.FriendlyName = "Name";
+                case "xl_level":
+                    changedRecord.FriendlyName = "XL Level";
                     break;
 
                 case "description":
                     changedRecord.FriendlyName = "Description";
                     break;
 
-                case "expression_id":
-                case "progression_Id":
+                case "progression_path_id":
                     break;
 
                 default:
