@@ -5,6 +5,7 @@ using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
+using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionLevels.Audit;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths.Audit;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Audit;
 using ExpressedRealms.DB.Models.Powers.PowerPathSetup;
@@ -42,6 +43,7 @@ public static class SetupDatabaseAudit
                             .AddBlessingAuditTrailMapping()
                             .AddBlessingLevelAuditTrailMapping()
                             .AddProgressionPathAuditTrailMapping()
+                            .AddProgressionLevelAuditTrailMapping()
                             .AuditEntityAction<IAuditTable>(
                                 (evt, entry, audit) =>
                                 {
