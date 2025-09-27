@@ -6,16 +6,20 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Expressions.UseCases.ProgressionPaths.Edit;
 
 [UsedImplicitly]
-internal sealed class EditProgressionPathModelValidator : AbstractValidator<EditProgressionPathModel>
+internal sealed class EditProgressionPathModelValidator
+    : AbstractValidator<EditProgressionPathModel>
 {
-    public EditProgressionPathModelValidator(IExpressionRepository repository, IProgressionPathRepository progressionRepository)
+    public EditProgressionPathModelValidator(
+        IExpressionRepository repository,
+        IProgressionPathRepository progressionRepository
+    )
     {
         RuleFor(x => x.Id)
             .NotEmpty()
             .WithMessage("Progression Path Id is required.")
             .MustAsync(async (x, y) => await progressionRepository.ProgressionPathExists(x))
             .WithMessage("Progression Path does not exist.");
-        
+
         RuleFor(x => x.ExpressionId)
             .NotEmpty()
             .WithMessage("Expression Id is required.")

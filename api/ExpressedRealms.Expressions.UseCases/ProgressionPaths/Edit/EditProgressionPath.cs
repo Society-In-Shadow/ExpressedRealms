@@ -3,5 +3,4 @@ using FluentResults;
 
 namespace ExpressedRealms.Expressions.UseCases.ProgressionPaths.Edit;
 
-public interface IEditProgressionPathUseCase
-    : IGenericUseCase<Result, EditProgressionPathModel> { }
+public interface IEditProgressionPathUseCase : IGenericUseCase<Result, EditProgressionPathModel> { }
