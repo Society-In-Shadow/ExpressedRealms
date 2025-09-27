@@ -49,8 +49,12 @@ public static class ProcessChangedRecords
             nameof(BlessingLevel) => BlessingLevelAuditTrailExtensions.ProcessChangedRecords(
                 changedRecords
             ),
-            nameof(ProgressionPath) => ProgressionPathAuditTrailExtensions.ProcessChangedRecords(changedRecords),
-            nameof(ProgressionLevel) => ProgressionLevelAuditTrailExtensions.ProcessChangedRecords(changedRecords),
+            nameof(ProgressionPath) => ProgressionPathAuditTrailExtensions.ProcessChangedRecords(
+                changedRecords
+            ),
+            nameof(ProgressionLevel) => ProgressionLevelAuditTrailExtensions.ProcessChangedRecords(
+                changedRecords
+            ),
             _ => throw new ArgumentException(
                 $"Table not setup in the ProcessChangedRecords class: {tableName}"
             ),

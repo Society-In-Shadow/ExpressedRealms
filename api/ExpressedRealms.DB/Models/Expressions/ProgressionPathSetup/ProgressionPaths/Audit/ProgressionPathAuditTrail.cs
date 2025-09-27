@@ -8,10 +8,10 @@ public class ProgressionPathAuditTrail : IAuditTable
 {
     public int ExpressionId { get; set; }
     public int ProgressionPathId { get; set; }
-    
+
     public virtual ProgressionPath ProgressionPath { get; set; } = null!;
     public virtual Expression Expression { get; set; } = null!;
-    
+
     public int Id { get; set; }
     public required string Action { get; set; }
     public DateTime Timestamp { get; set; }
