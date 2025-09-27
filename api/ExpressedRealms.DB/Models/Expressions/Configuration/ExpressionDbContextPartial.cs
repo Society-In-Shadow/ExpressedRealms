@@ -1,6 +1,8 @@
 using ExpressedRealms.DB.Models.Expressions;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
+using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionLevels;
+using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths;
 using Microsoft.EntityFrameworkCore;
 
 // ReSharper disable once CheckNamespace
@@ -16,4 +18,6 @@ public partial class ExpressedRealmsDbContext
 
     public DbSet<ExpressionSectionAuditTrail> ExpressionSectionAuditTrails { get; set; }
     public DbSet<ExpressionAuditTrail> ExpressionAuditTrails { get; set; }
+    public DbSet<ProgressionPath> ProgressionPath { get; set; }
+    public DbSet<ProgressionLevel> ProgressionLevel { get; set; }
 }
