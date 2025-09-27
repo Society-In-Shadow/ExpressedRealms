@@ -3,4 +3,5 @@ using FluentResults;
 
 namespace ExpressedRealms.Expressions.UseCases.ProgressionPaths.Delete;
 
-public interface IDeleteProgressionPathUseCase : IGenericUseCase<Result, DeleteProgressionPathModel> { }
+public interface IDeleteProgressionPathUseCase
+    : IGenericUseCase<Result, DeleteProgressionPathModel> { }
