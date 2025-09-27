@@ -123,7 +123,7 @@ internal sealed class CharacterRepository(
             ExpressionId = dto.ExpressionId,
             FactionId = dto.FactionId,
             IsInCharacterCreation = true,
-            AssignedXp = 37
+            AssignedXp = 37,
         };
 
         character.PlayerId = playerId;

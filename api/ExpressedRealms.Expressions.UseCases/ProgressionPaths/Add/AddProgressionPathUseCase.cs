@@ -27,7 +27,7 @@ internal sealed class AddProgressionPathUseCase(
             {
                 Name = model.Name,
                 Description = model.Description,
-                ExpressionId = model.ExpressionId
+                ExpressionId = model.ExpressionId,
             }
         );
 

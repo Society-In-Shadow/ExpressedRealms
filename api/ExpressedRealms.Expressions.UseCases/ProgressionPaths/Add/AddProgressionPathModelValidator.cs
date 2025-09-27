@@ -20,7 +20,7 @@ internal sealed class AddProgressionPathModelValidator : AbstractValidator<AddPr
             .WithMessage("Name is required.")
             .MaximumLength(250)
             .WithMessage("Name must be between 1 and 250 characters.");
-        
+
         RuleFor(x => x.Description)
             .NotEmpty()
             .WithMessage("Description is required.")

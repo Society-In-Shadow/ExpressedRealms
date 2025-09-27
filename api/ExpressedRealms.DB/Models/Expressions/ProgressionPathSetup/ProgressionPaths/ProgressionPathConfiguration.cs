@@ -13,7 +13,11 @@ public class ProgressionPathConfiguration : IEntityTypeConfiguration<Progression
         builder.Property(e => e.Id).HasColumnName("id").IsRequired();
         builder.Property(e => e.ExpressionId).HasColumnName("expression_id").IsRequired();
         builder.Property(e => e.Name).HasColumnName("name").HasMaxLength(250).IsRequired();
-        builder.Property(e => e.Description).HasColumnName("description").HasMaxLength(5000).IsRequired();
+        builder
+            .Property(e => e.Description)
+            .HasColumnName("description")
+            .HasMaxLength(5000)
+            .IsRequired();
 
         builder.HasQueryFilter(x => !x.IsDeleted);
         builder.Property(e => e.IsDeleted).HasColumnName("is_deleted");

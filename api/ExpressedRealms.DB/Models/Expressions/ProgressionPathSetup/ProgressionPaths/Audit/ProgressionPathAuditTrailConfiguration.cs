@@ -4,13 +4,17 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths.Audit;
 
-internal class ProgressionPathAuditTrailConfiguration : IEntityTypeConfiguration<ProgressionPathAuditTrail>
+internal class ProgressionPathAuditTrailConfiguration
+    : IEntityTypeConfiguration<ProgressionPathAuditTrail>
 {
     public void Configure(EntityTypeBuilder<ProgressionPathAuditTrail> builder)
     {
         builder.ToTable("progression_path_audit_trail");
 
-        builder.Property(e => e.ProgressionPathId).HasColumnName("progression_path_id").IsRequired();
+        builder
+            .Property(e => e.ProgressionPathId)
+            .HasColumnName("progression_path_id")
+            .IsRequired();
         builder.Property(e => e.ExpressionId).HasColumnName("expression_id").IsRequired();
 
         builder
@@ -26,7 +30,7 @@ internal class ProgressionPathAuditTrailConfiguration : IEntityTypeConfiguration
             .HasForeignKey(x => x.ExpressionId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder.ConfigureAuditTrailProperties(user => user.ProgressionPathAuditTrails);
     }
 }

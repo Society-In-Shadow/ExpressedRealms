@@ -3,6 +3,5 @@ using FluentResults;
 
 namespace ExpressedRealms.Expressions.UseCases.ProgressionPaths.Add;
 
-public interface IAddProgressionPathUseCase : IGenericUseCase<Result<int>, AddProgressionPathModel>
-{
-}
+public interface IAddProgressionPathUseCase
+    : IGenericUseCase<Result<int>, AddProgressionPathModel> { }

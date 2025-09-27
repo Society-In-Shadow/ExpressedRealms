@@ -3,9 +3,10 @@ using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPath
 
 namespace ExpressedRealms.Expressions.Repository.ProgressionPaths;
 
-public class ProgressionPathRepository (
+public class ProgressionPathRepository(
     ExpressedRealmsDbContext context,
-    CancellationToken cancellationToken) : IProgressionPathRepository
+    CancellationToken cancellationToken
+) : IProgressionPathRepository
 {
     public async Task<int> CreateProgressionPath(ProgressionPath progressionPath)
     {
