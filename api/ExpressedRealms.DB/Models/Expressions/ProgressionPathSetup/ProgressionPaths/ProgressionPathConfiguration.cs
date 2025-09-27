@@ -18,6 +18,13 @@ public class ProgressionPathConfiguration : IEntityTypeConfiguration<Progression
             .HasColumnName("description")
             .HasMaxLength(5000)
             .IsRequired();
+        
+        builder
+            .HasOne(x => x.Expression)
+            .WithMany(x => x.ProgressionPaths)
+            .HasForeignKey(x => x.ExpressionId)
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired();
 
         builder.HasQueryFilter(x => !x.IsDeleted);
         builder.Property(e => e.IsDeleted).HasColumnName("is_deleted");
