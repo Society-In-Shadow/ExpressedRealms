@@ -1,5 +1,6 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Expressions.Repository.ProgressionPaths;
 
@@ -13,5 +14,15 @@ public class ProgressionPathRepository(
         context.ProgressionPath.Add(progressionPath);
         await context.SaveChangesAsync(cancellationToken);
         return progressionPath.Id;
+    }
+
+    public async Task<ProgressionPath> GetProgressionPathForEditing(int id)
+    {
+        return await context.ProgressionPath.FirstAsync(x => x.Id == id);
+    }
+
+    public async Task<bool> ProgressionPathExists(int id)
+    {
+        return await context.ProgressionPath.AnyAsync(x => x.Id == id);
     }
 }
