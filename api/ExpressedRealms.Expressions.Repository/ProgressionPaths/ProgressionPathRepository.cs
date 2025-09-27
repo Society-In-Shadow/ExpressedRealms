@@ -28,7 +28,8 @@ public class ProgressionPathRepository(
 
     public async Task<List<ProgressionPath>> GetProgressionPathsAndLevelsForExpression(int id)
     {
-        return await context.ProgressionPath.AsNoTracking()
+        return await context
+            .ProgressionPath.AsNoTracking()
             .Include(x => x.ProgressionLevels)
             .Where(x => x.ExpressionId == id)
             .ToListAsync();

@@ -18,7 +18,7 @@ public class ProgressionPathConfiguration : IEntityTypeConfiguration<Progression
             .HasColumnName("description")
             .HasMaxLength(5000)
             .IsRequired();
-        
+
         builder
             .HasOne(x => x.Expression)
             .WithMany(x => x.ProgressionPaths)

@@ -16,7 +16,7 @@ public class ProgressionPath : ISoftDelete
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 
-    public Expression Expression { get; set; }
+    public Expression Expression { get; set; } = null!;
     public List<ProgressionLevel> ProgressionLevels { get; set; } = null!;
     public List<ProgressionPathAuditTrail> ProgressionPathAuditTrails { get; set; } = null!;
     public List<ProgressionLevelAuditTrail> ProgressionLevelAuditTrails { get; set; } = null!;
