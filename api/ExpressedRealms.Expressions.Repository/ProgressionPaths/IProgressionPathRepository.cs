@@ -5,6 +5,6 @@ namespace ExpressedRealms.Expressions.Repository.ProgressionPaths;
 public interface IProgressionPathRepository
 {
     Task<int> CreateProgressionPath(ProgressionPath progressionPath);
-    Task<ProgressionPath> GetProgressionPathForEditing(int modelId);
+    Task<ProgressionPath> GetProgressionPathForEditing(int id);
     Task<bool> ProgressionPathExists(int id);
 }
