@@ -7,4 +7,5 @@ public interface IProgressionPathRepository
     Task<int> CreateProgressionPath(ProgressionPath progressionPath);
     Task<ProgressionPath> GetProgressionPathForEditing(int id);
     Task<bool> ProgressionPathExists(int id);
+    Task<List<ProgressionPath>> GetProgressionPathsAndLevelsForExpression(int id);
 }
