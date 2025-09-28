@@ -1,4 +1,5 @@
 using ExpressedRealms.DB;
+using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionLevels;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,5 +34,12 @@ public class ProgressionPathRepository(
             .Include(x => x.ProgressionLevels)
             .Where(x => x.ExpressionId == id)
             .ToListAsync();
+    }
+
+    public async Task<int> CreateProgressionLevel(ProgressionLevel progressionLevel)
+    {
+        context.ProgressionLevel.Add(progressionLevel);
+        await context.SaveChangesAsync(cancellationToken);
+        return progressionLevel.Id;
     }
 }
