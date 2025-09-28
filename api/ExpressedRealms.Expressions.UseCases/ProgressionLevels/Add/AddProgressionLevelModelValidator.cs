@@ -5,7 +5,8 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Expressions.UseCases.ProgressionLevels.Add;
 
 [UsedImplicitly]
-internal sealed class AddProgressionLevelModelValidator : AbstractValidator<AddProgressionLevelModel>
+internal sealed class AddProgressionLevelModelValidator
+    : AbstractValidator<AddProgressionLevelModel>
 {
     public AddProgressionLevelModelValidator(IProgressionPathRepository repository)
     {

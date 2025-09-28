@@ -27,7 +27,7 @@ internal sealed class AddProgressionLevelUseCase(
             {
                 Description = model.Description,
                 ProgressionPathId = model.ProgressionId,
-                XlLevel = model.XlLevel
+                XlLevel = model.XlLevel,
             }
         );
 

@@ -35,7 +35,7 @@ public class ProgressionPathRepository(
             .Where(x => x.ExpressionId == id)
             .ToListAsync();
     }
-    
+
     public async Task<int> CreateProgressionLevel(ProgressionLevel progressionLevel)
     {
         context.ProgressionLevel.Add(progressionLevel);
