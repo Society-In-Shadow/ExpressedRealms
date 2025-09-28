@@ -26,6 +26,8 @@ internal sealed class EditProgressionPathUseCase(
         progressionPath.Name = model.Name;
         progressionPath.Description = model.Description;
 
+        await repository.SaveProgressionPathChanges(progressionPath);
+
         return Result.Ok();
     }
 }

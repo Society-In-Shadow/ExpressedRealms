@@ -27,6 +27,28 @@ public class ProgressionPathRepository(
         return await context.ProgressionPath.AnyAsync(x => x.Id == id);
     }
 
+    public async Task SaveProgressionPathChanges(ProgressionPath progressionPath)
+    {
+        context.ProgressionPath.Update(progressionPath);
+        await context.SaveChangesAsync(cancellationToken);
+    }
+    
+    public async Task SaveProgressionLevelChanges(ProgressionLevel progressionLevel)
+    {
+        context.ProgressionLevel.Update(progressionLevel);
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<bool> ProgressionLevelExists(int progressionId, int levelId)
+    {
+        return await context.ProgressionLevel.AnyAsync(x => x.ProgressionPathId == progressionId && x.Id == levelId);
+    }
+
+    public async Task<ProgressionLevel> GetProgressionLevelForEditing(int progressionLevelId)
+    {
+        return await context.ProgressionLevel.FirstAsync(x => x.ProgressionPathId == progressionLevelId);
+    }
+
     public async Task<List<ProgressionPath>> GetProgressionPathsAndLevelsForExpression(int id)
     {
         return await context
