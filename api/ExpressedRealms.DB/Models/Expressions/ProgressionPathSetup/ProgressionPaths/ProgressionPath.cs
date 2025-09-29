@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionLevels;
@@ -17,6 +18,8 @@ public class ProgressionPath : ISoftDelete
     public DateTimeOffset? DeletedAt { get; set; }
 
     public Expression Expression { get; set; } = null!;
+    public virtual List<Character> PrimaryProgressions { get; set; } = null!;
+    public virtual List<Character> SecondaryProgressions { get; set; } = null!;
     public List<ProgressionLevel> ProgressionLevels { get; set; } = null!;
     public List<ProgressionPathAuditTrail> ProgressionPathAuditTrails { get; set; } = null!;
     public List<ProgressionLevelAuditTrail> ProgressionLevelAuditTrails { get; set; } = null!;

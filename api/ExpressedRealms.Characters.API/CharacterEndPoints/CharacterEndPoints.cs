@@ -144,6 +144,45 @@ internal static class CharacterEndPoints
 
         endpointGroup
             .MapGet(
+                "ProgressionOptions/{expressionId}",
+                [Authorize]
+                async Task<Results<NotFound, Ok<List<PowerPathOptionResponse>>>> (
+                    int expressionId,
+                    ExpressedRealmsDbContext dbContext,
+                    HttpContext http,
+                    CancellationToken cancellationToken
+                ) =>
+                {
+                    var isValidExpression = await dbContext.Expressions.AnyAsync(
+                        x =>
+                            x.Id == expressionId
+                            && x.PublishStatusId == (int)PublishTypes.Published,
+                        cancellationToken
+                    );
+
+                    if (!isValidExpression)
+                    {
+                        return TypedResults.NotFound();
+                    }
+
+                    var factions = await dbContext
+                        .ProgressionPath.Where(x => x.ExpressionId == expressionId)
+                        .Select(x => new PowerPathOptionResponse(x.Id, x.Name, x.Description))
+                        .ToListAsync(cancellationToken);
+
+                    return TypedResults.Ok(factions);
+                }
+            )
+            .WithSummary(
+                "Returns info needed for selecting a progression path for character create"
+            )
+            .WithDescription(
+                "Returns info needed for selecting a progression path for character create."
+            )
+            .RequireAuthorization();
+
+        endpointGroup
+            .MapGet(
                 "{characterId}/factionOptions",
                 [Authorize]
                 async Task<Results<NotFound, Ok<List<FactionOptionResponse>>>> (
@@ -269,6 +308,8 @@ internal static class CharacterEndPoints
                             FactionId = dto.FactionId,
                             Id = dto.Id,
                             IsPrimaryCharacter = dto.IsPrimaryCharacter,
+                            PrimaryProgressionId = dto.PrimaryProgressionId,
+                            SecondaryProgressionId = dto.SecondaryProgressionId,
                         }
                     );
 

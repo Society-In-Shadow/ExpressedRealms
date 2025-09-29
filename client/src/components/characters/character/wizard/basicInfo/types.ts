@@ -5,3 +5,9 @@ export interface HighLevelExpressionInfoResponse{
     archetypes: string;
     background: string;
 }
+
+export interface ProgressionPath{
+    id: number,
+    name: string,
+    description: string,
+}

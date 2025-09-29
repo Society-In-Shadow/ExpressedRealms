@@ -182,7 +182,7 @@ async function downloadExpressionBooklet() {
                 <TabPanel value="1">
                   <PowerTab v-if="expressionInfo.isDoneLoading" :expression-id="expressionInfo.currentExpressionId" />
                 </TabPanel>
-                <TabPanel value="2">
+                <TabPanel v-if="hasProgressionPathPermission" value="2">
                   <ProgressionTab v-if="expressionInfo.isDoneLoading" :expression-id="expressionInfo.currentExpressionId" />
                 </TabPanel>
               </TabPanels>

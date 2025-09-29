@@ -27,7 +27,7 @@ internal sealed class DeleteProgressionPathUseCase(
         progressionPath.SoftDelete();
 
         await repository.SaveProgressionPathChanges(progressionPath);
-        
+
         return Result.Ok();
     }
 }

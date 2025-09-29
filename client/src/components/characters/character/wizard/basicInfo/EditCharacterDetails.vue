@@ -20,6 +20,7 @@ import {
 import FormTextAreaWrapper from "@/FormWrappers/FormTextAreaWrapper.vue";
 import FormTextWrapper from "@/FormWrappers/FormInputTextWrapper.vue";
 import FormCheckboxWrapper from "@/FormWrappers/FormCheckboxWrapper.vue";
+import SelectProgressionPaths from "@/components/characters/character/wizard/basicInfo/SelectProgressionPaths.vue";
 
 const route = useRoute()
 
@@ -60,6 +61,8 @@ const onSubmit = form.handleSubmit((values) => {
     id: route.params.id,
     factionId: values.faction?.id,
     isPrimaryCharacter: values.isPrimaryCharacter,
+    primaryProgressionId: values.primaryProgression.id,
+    secondaryProgressionId: values.secondaryProgression?.id,
   }).then(() => {
     characterInfo.name = values.name;
     characterInfo.background = values.background;
@@ -100,6 +103,7 @@ const updateWizardContent = () => {
         />-->
         <FormTextAreaWrapper v-model="form.fields.background" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
         <FormCheckboxWrapper v-if="showCharacterXpLimits" v-model="form.fields.isPrimaryCharacter" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
+        <SelectProgressionPaths :primary-progression="form.fields.primaryProgression" :secondary-progression="form.fields.secondaryProgression" :expression-type-id="characterInfo.expressionId" @change="onSubmit"/>
       </form>
       <Button label="Show High Level Expression Info" class="w-100 mb-2 d-block d-md-none " :disabled="characterInfo.isLoading && characterInfo.expressionId !== 0" @click="updateWizardContent" />
     </template>

@@ -25,6 +25,23 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
 
         builder.Property(x => x.StatExperiencePoints).IsRequired().HasDefaultValue(72);
 
+        builder.Property(x => x.PrimaryProgressionId).HasColumnName("primary_progression_id");
+        builder.Property(x => x.SecondaryProgressionId).HasColumnName("secondary_progression_id");
+
+        builder
+            .HasOne(x => x.PrimaryProgressionPath)
+            .WithMany(x => x.PrimaryProgressions)
+            .HasForeignKey(x => x.PrimaryProgressionId)
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired(false);
+
+        builder
+            .HasOne(x => x.SecondaryProgressionPath)
+            .WithMany(x => x.SecondaryProgressions)
+            .HasForeignKey(x => x.SecondaryProgressionId)
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired(false);
+
         builder
             .Property(x => x.IsInCharacterCreation)
             .HasColumnName("is_in_character_creation")
