@@ -1,5 +1,8 @@
+using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.Expressions.Repository.ProgressionPaths;
 using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.Powers.Repository.PowerPaths;
+using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathToC;
 using ExpressedRealms.Powers.UseCases.CharacterPower.GetPickablePowers.ReturnModels;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
@@ -7,6 +10,8 @@ using FluentResults;
 namespace ExpressedRealms.Powers.UseCases.CharacterPower.GetPickablePowers;
 
 internal sealed class GetAvailablePowersUseCase(
+    ICharacterRepository characterRepository,
+    IProgressionPathRepository progressionPathRepository,
     ICharacterPowerRepository mappingRepository,
     IPowerPathRepository powerPathRepository,
     GetAvailablePowersModelValidator validator,
@@ -30,9 +35,33 @@ internal sealed class GetAvailablePowersUseCase(
 
         var powers = await powerPathRepository.GetPowerPathAndPowers(powerIds);
 
+        var character = await characterRepository.GetCharacterForEdit(model.CharacterId);
+
+        var filteredPowers = powers.Value;
+        if (character.ExpressionId == 8) // Sorcerer
+        {
+            if (!(character.PrimaryProgressionId.HasValue && character.SecondaryProgressionId.HasValue))
+            {
+                filteredPowers = new List<PowerPathToc>();
+            }
+            else
+            {
+                var primaryElement = await progressionPathRepository.GetProgressionPathName(character.PrimaryProgressionId.Value);
+                var secondaryElement = await progressionPathRepository.GetProgressionPathName(character.SecondaryProgressionId.Value);
+
+                // Primary element gets all powers
+                // Secondary element gets all powers that are intermediate or below (<= 2)
+                filteredPowers = filteredPowers
+                    .Where(x => x.Powers
+                        .Any(y => y.Category!.Any(z => z.Name == primaryElement)
+                        || y.Category!.Any(z => z.Name == secondaryElement) && y.PowerLevel.Id <= 2))
+                    .ToList();
+            }
+
+        }
+
         return Result.Ok(
-            powers
-                .Value.Select(x => new PowerPathReturnModel()
+            filteredPowers.Select(x => new PowerPathReturnModel()
                 {
                     Name = x.Name,
                     Powers = x

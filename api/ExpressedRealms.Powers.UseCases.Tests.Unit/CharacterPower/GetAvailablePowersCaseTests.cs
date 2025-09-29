@@ -1,4 +1,5 @@
 using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.Expressions.Repository.ProgressionPaths;
 using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.Powers.Repository.PowerPaths;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathToC;
@@ -18,6 +19,7 @@ public class GetAvailablePowersUseCaseTests
     private readonly ICharacterPowerRepository _mappingRepository;
     private readonly ICharacterRepository _characterRepository;
     private readonly IPowerPathRepository _powerPathRepository;
+    private readonly IProgressionPathRepository _progressionPathRepository;
     private readonly GetAvailablePowersModel model;
     private readonly List<PowerPathToc> _dbModels;
 
@@ -30,6 +32,7 @@ public class GetAvailablePowersUseCaseTests
         _mappingRepository = A.Fake<ICharacterPowerRepository>();
         _powerPathRepository = A.Fake<IPowerPathRepository>();
         _characterRepository = A.Fake<ICharacterRepository>();
+        _progressionPathRepository = A.Fake<IProgressionPathRepository>();
 
         _dbModels = new List<PowerPathToc>()
         {
@@ -118,6 +121,8 @@ public class GetAvailablePowersUseCaseTests
         var validator = new GetAvailablePowersModelValidator(_characterRepository);
 
         _useCase = new GetAvailablePowersUseCase(
+            _characterRepository,
+            _progressionPathRepository,
             _mappingRepository,
             _powerPathRepository,
             validator,

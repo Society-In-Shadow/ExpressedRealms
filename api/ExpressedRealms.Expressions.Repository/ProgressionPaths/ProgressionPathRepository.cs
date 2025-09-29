@@ -26,6 +26,16 @@ public class ProgressionPathRepository(
     {
         return await context.ProgressionPath.AnyAsync(x => x.Id == id);
     }
+    
+    public async Task<bool> ProgressionPathExists(int expressionId, int id)
+    {
+        return await context.ProgressionPath.AnyAsync(x => x.ExpressionId == expressionId && x.Id == id);
+    }
+
+    public async Task<string> GetProgressionPathName(int id)
+    {
+        return (await context.ProgressionPath.FirstAsync(x => x.Id == id)).Name;
+    }
 
     public async Task SaveProgressionPathChanges(ProgressionPath progressionPath)
     {

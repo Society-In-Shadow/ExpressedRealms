@@ -14,4 +14,6 @@ public interface IProgressionPathRepository
     Task<bool> ProgressionLevelExists(int progressionId, int levelId);
     Task<ProgressionLevel> GetProgressionLevelForEditing(int progressionLevelId);
     Task SaveProgressionLevelChanges(ProgressionLevel progressionLevel);
+    Task<bool> ProgressionPathExists(int expressionId, int id);
+    Task<string> GetProgressionPathName(int id);
 }
