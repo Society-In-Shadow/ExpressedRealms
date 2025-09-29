@@ -37,7 +37,7 @@ const vampyreId = 9;
 
 const progressionOptions = ref<ProgressionPath[]>([]);
 const isLoading = ref(true);
-const primaryExpressions = [adeptId, shammasId, sorcererId, vampyreId]
+const primaryExpressions = new Set([adeptId, shammasId, sorcererId, vampyreId])
 
 watch(() => props.expressionTypeId, async () => {
   isLoading.value = true;
@@ -48,7 +48,7 @@ watch(() => props.expressionTypeId, async () => {
   props.secondaryProgression.field.value = progressionOptions.value.find(x => x.id == characterInfo.secondaryProgressionId) as ProgressionPath;
 }, {immediate: true, deep: true})
 
-const showPrimary = computed(() => primaryExpressions.includes(props.expressionTypeId))
+const showPrimary = computed(() => primaryExpressions.has(props.expressionTypeId))
 const showSecondary = computed(() => {
   return props.expressionTypeId == sorcererId && props.primaryProgression?.field.value != null}
 );
@@ -58,14 +58,14 @@ const secondaryProgressionOptions = computed<ProgressionPath[]>(() => {
     return [];
   }
   
-  const fireOpposites = ["Water", "Fire"];
-  if(fireOpposites.includes(props.primaryProgression?.field?.value.name)){
-     return progressionOptions.value.filter(x => !fireOpposites.includes(x.name));
+  const fireOpposites = new Set(["Water", "Fire"]);
+  if(fireOpposites.has(props.primaryProgression?.field?.value.name)){
+     return progressionOptions.value.filter(x => !fireOpposites.has(x.name));
   }
   
-  const earthOpposites = ["Earth", "Air"];
-  if(earthOpposites.includes(props.primaryProgression?.field?.value.name)){
-    return progressionOptions.value.filter(x => !earthOpposites.includes(x.name));
+  const earthOpposites = new Set(["Earth", "Air"]);
+  if(earthOpposites.has(props.primaryProgression?.field?.value.name)){
+    return progressionOptions.value.filter(x => !earthOpposites.has(x.name));
   }
 });
 
