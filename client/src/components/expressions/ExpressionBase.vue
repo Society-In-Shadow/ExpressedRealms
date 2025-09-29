@@ -22,6 +22,7 @@ import EditExpressionSection from "@/components/expressions/EditExpressionSectio
 import PowerTab from "@/components/expressions/powers/PowerTab.vue";
 import PowersToC from "@/components/expressions/PowersToC.vue";
 import {UserRoles, userStore} from "@/stores/userStore.ts";
+import ProgressionTab from "@/components/expressions/progressionPaths/ProgressionTab.vue";
 
 const expressionInfo = expressionStore();
 const route = useRoute()
@@ -59,6 +60,7 @@ const showCreate = ref(false);
 const showPreview = ref(false);
 const currentTab = ref('0');
 const showReportButton = ref(false);
+const hasProgressionPathPermission = ref(false);
 
 async function fetchData() {
   isLoading.value = true;
@@ -67,6 +69,7 @@ async function fetchData() {
       .then(async () => {
         sections.value = expressionInfo.sections;
         showEdit.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole);
+        hasProgressionPathPermission.value = await userInfo.hasUserRole(UserRoles.ManageProgressionPaths);
         isLoading.value = false;
         if(location.hash){
           await nextTick();
@@ -162,6 +165,9 @@ async function downloadExpressionBooklet() {
                 <Tab value="1">
                   Powers
                 </Tab>
+                <Tab v-if="hasProgressionPathPermission" value="2">
+                  Progressions
+                </Tab>
               </TabList>
               <TabPanels>
                 <TabPanel value="0">
@@ -175,6 +181,9 @@ async function downloadExpressionBooklet() {
                 </TabPanel>
                 <TabPanel value="1">
                   <PowerTab v-if="expressionInfo.isDoneLoading" :expression-id="expressionInfo.currentExpressionId" />
+                </TabPanel>
+                <TabPanel value="2">
+                  <ProgressionTab v-if="expressionInfo.isDoneLoading" :expression-id="expressionInfo.currentExpressionId" />
                 </TabPanel>
               </TabPanels>
             </Tabs>

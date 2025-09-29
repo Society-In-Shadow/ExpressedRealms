@@ -11,6 +11,7 @@ export function getValidationInstance() {
             .label("Name"),
         description: string()
             .required()
+            .max(5000)
             .label("Description")
     });
     
