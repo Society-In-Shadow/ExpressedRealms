@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace ExpressedRealms.Expressions.API.ProgressionPaths.ProgressionPaths.Create;
 
-internal static class EditProgressionPathEndpoint
+internal static class CreateProgressionPathEndpoint
 {
     public static async Task<Results<ValidationProblem, Created<int>>> ExecuteAsync(
         int expressionId,
