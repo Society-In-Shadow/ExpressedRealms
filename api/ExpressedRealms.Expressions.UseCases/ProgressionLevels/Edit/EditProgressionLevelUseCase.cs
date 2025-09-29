@@ -22,7 +22,7 @@ internal sealed class EditProgressionLevelUseCase(
             return Result.Fail(result.Errors);
 
         var level = await repository.GetProgressionLevelForEditing(model.ProgressionLevelId);
-        
+
         level.Description = model.Description;
         level.XlLevel = model.XlLevel;
 

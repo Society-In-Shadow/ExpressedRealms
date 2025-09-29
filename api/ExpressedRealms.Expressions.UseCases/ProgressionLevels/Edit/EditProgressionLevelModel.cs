@@ -6,5 +6,4 @@ public class EditProgressionLevelModel
     public int ProgressionLevelId { get; set; }
     public int XlLevel { get; set; }
     public required string Description { get; set; }
-
 }

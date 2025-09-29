@@ -10,12 +10,16 @@ internal sealed class EditProgressionLevelModelValidator
 {
     public EditProgressionLevelModelValidator(IProgressionPathRepository repository)
     {
-        RuleFor(x => x.ProgressionLevelId)
-            .NotEmpty()
-            .WithMessage("Progression Id is required.");
-            
+        RuleFor(x => x.ProgressionLevelId).NotEmpty().WithMessage("Progression Id is required.");
+
         RuleFor(x => x)
-            .MustAsync(async (x, y) => await repository.ProgressionLevelExists(x.ProgressionPathId, x.ProgressionLevelId))
+            .MustAsync(
+                async (x, y) =>
+                    await repository.ProgressionLevelExists(
+                        x.ProgressionPathId,
+                        x.ProgressionLevelId
+                    )
+            )
             .WithMessage("Progression Level does not exist.");
 
         RuleFor(x => x.XlLevel)
