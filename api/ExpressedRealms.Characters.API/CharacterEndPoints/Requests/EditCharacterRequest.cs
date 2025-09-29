@@ -14,6 +14,6 @@ internal record EditCharacterRequest
     public int? FactionId { get; set; }
 
     public bool IsPrimaryCharacter { get; set; }
-    public int PrimaryProgressionId { get; set; }
-    public int SecondaryProgressionId { get; set; }
+    public int? PrimaryProgressionId { get; set; }
+    public int? SecondaryProgressionId { get; set; }
 }
