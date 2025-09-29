@@ -14,7 +14,13 @@ internal record CharacterEditResponse
         IsPrimaryCharacter = dto.IsPrimaryCharacter;
         IsInCharacterCreation = dto.IsInCharacterCreation;
         IsOwner = dto.IsOwner;
+        PrimaryProgressionId = dto.PrimaryProgressionId;
+        SecondaryProgressionId = dto.SecondaryProgressionId;
     }
+
+    public int? SecondaryProgressionId { get; set; }
+
+    public int? PrimaryProgressionId { get; set; }
 
     /// <summary>
     /// Indicates if the user is the owner of the character.

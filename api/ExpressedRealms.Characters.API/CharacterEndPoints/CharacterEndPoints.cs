@@ -269,6 +269,8 @@ internal static class CharacterEndPoints
                             FactionId = dto.FactionId,
                             Id = dto.Id,
                             IsPrimaryCharacter = dto.IsPrimaryCharacter,
+                            PrimaryProgressionId = dto.PrimaryProgressionId,
+                            SecondaryProgressionId = dto.SecondaryProgressionId
                         }
                     );
 

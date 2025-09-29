@@ -10,4 +10,6 @@ public sealed record GetEditCharacterDto
     public bool IsPrimaryCharacter { get; set; }
     public bool IsInCharacterCreation { get; set; }
     public bool IsOwner { get; set; }
+    public int? PrimaryProgressionId { get; set; }
+    public int? SecondaryProgressionId { get; set; }
 }
