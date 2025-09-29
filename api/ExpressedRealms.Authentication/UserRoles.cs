@@ -10,6 +10,7 @@ public static class UserRoles
     public const string DownloadExpressionBooklet = "DownloadExpressionBooklet";
     public const string ManageBlessingsRole = "ManageBlessingsRole";
     public const string ManagePlayerCharacterList = "ManagePlayerCharacterList";
+    public const string ManageProgressionPaths = "ManageProgressionPaths";
 
     /// <summary>
     /// Add items to this list to automatically add them to the database.
@@ -25,5 +26,6 @@ public static class UserRoles
             DownloadExpressionBooklet,
             ManageBlessingsRole,
             ManagePlayerCharacterList,
+            ManageProgressionPaths
         };
 }

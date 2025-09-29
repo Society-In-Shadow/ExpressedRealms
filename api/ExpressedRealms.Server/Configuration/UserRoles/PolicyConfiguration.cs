@@ -47,6 +47,11 @@ public static class PolicyConfiguration
                 Policies.ManagePlayerCharacterList.Name,
                 policy => policy.RequireRole(UserRoles.ManagePlayerCharacterList)
             );
+            
+            options.AddPolicy(
+                Policies.ManageProgressionPaths.Name,
+                policy => policy.RequireRole(UserRoles.ManageProgressionPaths)
+            );
         });
     }
 }
