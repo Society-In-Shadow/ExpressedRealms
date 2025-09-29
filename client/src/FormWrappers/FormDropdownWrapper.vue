@@ -27,6 +27,10 @@ const props = defineProps({
   showSkeleton: {
     type: Boolean,
     default: false
+  },
+  labelOverride:{
+    type: String,
+    default: ""
   }
 });
 
@@ -41,7 +45,7 @@ const dataCyTagCalc = computed(() => {
 
 <template>
   <div class="mb-3">
-    <label :for="dataCyTagCalc">{{ model.label }}<span v-if="model.isRequired" class="text-danger font-italic"> (Required)</span></label>
+    <label :for="dataCyTagCalc">{{ props.labelOverride == "" ? model.label : props.labelOverride }}<span v-if="model.isRequired" class="text-danger font-italic"> (Required)</span></label>
     <Skeleton v-if="showSkeleton" :id="dataCyTagCalc + '-skeleton'" class="w-100" height="3em" />
     <Select
       v-else :id="dataCyTagCalc" v-model="model.field.value" :options="options" :option-label="optionLabel"
