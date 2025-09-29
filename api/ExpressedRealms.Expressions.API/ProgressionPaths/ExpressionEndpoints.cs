@@ -1,4 +1,7 @@
 using ExpressedRealms.Authentication;
+using ExpressedRealms.Expressions.API.ProgressionPaths.ProgressionLevels.Create;
+using ExpressedRealms.Expressions.API.ProgressionPaths.ProgressionLevels.Delete;
+using ExpressedRealms.Expressions.API.ProgressionPaths.ProgressionLevels.Edit;
 using ExpressedRealms.Expressions.API.ProgressionPaths.ProgressionPaths.Create;
 using ExpressedRealms.Expressions.API.ProgressionPaths.ProgressionPaths.Delete;
 using ExpressedRealms.Expressions.API.ProgressionPaths.ProgressionPaths.Get;
@@ -21,23 +24,29 @@ internal static class ProgressionEndpoints
 
         endpointGroup
             .MapGet("{expressionId}/progressions", GetProgressionPathsEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ExpressionEditorPolicy)
-            .WithSummary("Returns the high level information for a given expression")
-            .WithDescription(
-                "This returns the detailed information for the given expression, including publish details"
-            );
+            .RequirePolicyAuthorization(Policies.ManageProgressionPaths);
 
         endpointGroup
             .MapPut("{expressionId}/progressions/{progressionId}", EditProgressionPathEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ExpressionEditorPolicy)
-            .WithSummary("Allows one to edit the high level expression details")
-            .WithDescription("You will also be able to set the publish status of the expression.");
+            .RequirePolicyAuthorization(Policies.ManageProgressionPaths);
 
         endpointGroup
-            .MapPost("{expressionId}/progressions/{progressionId}", CreateProgressionPathEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ExpressionEditorPolicy)
-            .WithSummary("Allows one to create new expressions");
+            .MapPost("{expressionId}/progressions/", CreateProgressionPathEndpoint.ExecuteAsync)
+            .RequirePolicyAuthorization(Policies.ManageProgressionPaths);
 
-        endpointGroup.MapDelete("{expressionId}/progressions/{progressionId}", DeleteProgressionPathEndpoint.ExecuteAsync);
+        endpointGroup.MapDelete("{expressionId}/progressions/{progressionId}", DeleteProgressionPathEndpoint.ExecuteAsync)
+            .RequirePolicyAuthorization(Policies.ManageProgressionPaths);
+
+
+        endpointGroup
+            .MapPut("{expressionId}/progressions/{progressionId}/levels/{levelId}", EditProgressionLevelEndpoint.ExecuteAsync)
+            .RequirePolicyAuthorization(Policies.ManageProgressionPaths);
+
+        endpointGroup
+            .MapPost("{expressionId}/progressions/{progressionId}/levels", CreateProgressionLevelEndpoint.ExecuteAsync)
+            .RequirePolicyAuthorization(Policies.ManageProgressionPaths);
+
+        endpointGroup.MapDelete("{expressionId}/progressions/{progressionId}/levels/{levelId}", DeleteProgressionLevelEndpoint.ExecuteAsync)
+            .RequirePolicyAuthorization(Policies.ManageProgressionPaths);
     }
 }
