@@ -7,6 +7,7 @@ import {UserRoles, userStore} from "@/stores/userStore";
 import {progressionPathStore} from "@/components/expressions/progressionPaths/stores/progressionPathsStore.ts";
 import AddProgressionPath from "@/components/expressions/progressionPaths/AddProgressionPath.vue";
 import ShowProgressionPath from "@/components/expressions/progressionPaths/ShowProgressionPath.vue";
+import ListProgressionLevels from "@/components/expressions/progressionLevels/ListProgressionLevels.vue";
 
 let userInfo = userStore();
 let progressionPaths = progressionPathStore();
@@ -40,7 +41,7 @@ const toggleAddPower = () => {
    
     <Divider />
     <h2>Levels</h2>
-<!--    <ListPowers :power-path-id="path.id" :powers="path.levels" :is-read-only="readOnly" />-->
+    <ListProgressionLevels :expression-id="props.expressionId" :progression-id="path.id" :progression-levels="path.levels"/>
   </div>
 
   <Button
