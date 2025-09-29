@@ -9,7 +9,7 @@ internal static class EditProgressionLevelEndpoint
 {
     public static async Task<Results<ValidationProblem, Ok>> ExecuteAsync(
         int expressionId,
-        int pathId,
+        int progressionId,
         int levelId,
         EditProgressionLevel request,
         IEditProgressionLevelUseCase useCase
@@ -18,7 +18,7 @@ internal static class EditProgressionLevelEndpoint
         var results = await useCase.ExecuteAsync(
             new EditProgressionLevelModel()
             {
-                ProgressionPathId = pathId,
+                ProgressionPathId = progressionId,
                 ProgressionLevelId = levelId,
                 Description = request.Description,
                 XlLevel = request.XlLevel,

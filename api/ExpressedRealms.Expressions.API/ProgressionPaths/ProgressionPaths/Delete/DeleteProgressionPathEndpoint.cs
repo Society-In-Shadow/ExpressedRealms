@@ -9,11 +9,11 @@ internal static class DeleteProgressionPathEndpoint
 {
     public static async Task<Results<ValidationProblem, Ok>> ExecuteAsync(
         int expressionId,
-        int pathId,
+        int progressionId,
         IDeleteProgressionPathUseCase useCase
     )
     {
-        var results = await useCase.ExecuteAsync(new DeleteProgressionPathModel() { Id = pathId });
+        var results = await useCase.ExecuteAsync(new DeleteProgressionPathModel() { Id = progressionId });
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;

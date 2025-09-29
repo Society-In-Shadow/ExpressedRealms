@@ -9,7 +9,7 @@ internal static class EditProgressionPathEndpoint
 {
     public static async Task<Results<ValidationProblem, Ok>> ExecuteAsync(
         int expressionId,
-        int pathId,
+        int progressionId,
         EditProgressionPath request,
         IEditProgressionPathUseCase useCase
     )
@@ -20,7 +20,7 @@ internal static class EditProgressionPathEndpoint
                 Description = request.Description,
                 Name = request.Name,
                 ExpressionId = expressionId,
-                Id = pathId,
+                Id = progressionId,
             }
         );
 

@@ -9,7 +9,7 @@ internal static class DeleteProgressionLevelEndpoint
 {
     public static async Task<Results<ValidationProblem, Ok>> ExecuteAsync(
         int expressionId,
-        int pathId,
+        int progressionId,
         int levelId,
         IDeleteProgressionLevelUseCase useCase
     )
@@ -17,7 +17,7 @@ internal static class DeleteProgressionLevelEndpoint
         var results = await useCase.ExecuteAsync(
             new DeleteProgressionLevelModel()
             {
-                ProgressionPathId = pathId,
+                ProgressionPathId = progressionId,
                 ProgressionLevelId = levelId,
             }
         );
