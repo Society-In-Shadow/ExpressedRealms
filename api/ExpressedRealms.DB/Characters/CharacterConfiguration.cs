@@ -33,14 +33,14 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
             .WithMany(x => x.PrimaryProgressions)
             .HasForeignKey(x => x.PrimaryProgressionId)
             .OnDelete(DeleteBehavior.Restrict)
-            .IsRequired();
+            .IsRequired(false);
 
         builder
             .HasOne(x => x.SecondaryProgressionPath)
             .WithMany(x => x.SecondaryProgressions)
             .HasForeignKey(x => x.SecondaryProgressionId)
             .OnDelete(DeleteBehavior.Restrict)
-            .IsRequired();
+            .IsRequired(false);
 
         builder
             .Property(x => x.IsInCharacterCreation)

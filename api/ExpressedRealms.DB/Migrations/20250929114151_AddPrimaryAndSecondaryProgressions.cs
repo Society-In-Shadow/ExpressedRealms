@@ -14,15 +14,13 @@ namespace ExpressedRealms.DB.Migrations
                 name: "primary_progression_id",
                 table: "Characters",
                 type: "integer",
-                nullable: false,
-                defaultValue: 0);
+                nullable: true);
 
             migrationBuilder.AddColumn<int>(
                 name: "secondary_progression_id",
                 table: "Characters",
                 type: "integer",
-                nullable: false,
-                defaultValue: 0);
+                nullable: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Characters_primary_progression_id",

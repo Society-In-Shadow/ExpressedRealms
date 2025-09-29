@@ -97,11 +97,11 @@ namespace ExpressedRealms.DB.Migrations
                         .HasDefaultValue(0)
                         .HasColumnName("player_number");
 
-                    b.Property<int>("PrimaryProgressionId")
+                    b.Property<int?>("PrimaryProgressionId")
                         .HasColumnType("integer")
                         .HasColumnName("primary_progression_id");
 
-                    b.Property<int>("SecondaryProgressionId")
+                    b.Property<int?>("SecondaryProgressionId")
                         .HasColumnType("integer")
                         .HasColumnName("secondary_progression_id");
 
@@ -2206,14 +2206,12 @@ namespace ExpressedRealms.DB.Migrations
                     b.HasOne("ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths.ProgressionPath", "PrimaryProgressionPath")
                         .WithMany("PrimaryProgressions")
                         .HasForeignKey("PrimaryProgressionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths.ProgressionPath", "SecondaryProgressionPath")
                         .WithMany("SecondaryProgressions")
                         .HasForeignKey("SecondaryProgressionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("ExpressedRealms.DB.Models.Statistics.StatLevel", "StrengthStatLevel")
                         .WithMany("CharacterStrength")
