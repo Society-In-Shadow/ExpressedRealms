@@ -3,6 +3,7 @@ using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
+using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths;
 using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
 using ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup;
 using ExpressedRealms.DB.Models.Skills;
@@ -34,6 +35,11 @@ public class Character : ISoftDelete
     public bool IsPrimaryCharacter { get; set; }
     public int AssignedXp { get; set; }
     public int PlayerNumber { get; set; }
+
+    public int? PrimaryProgressionId { get; set; }
+    public int? SecondaryProgressionId { get; set; }
+    public virtual ProgressionPath? PrimaryProgressionPath { get; set; }
+    public virtual ProgressionPath? SecondaryProgressionPath { get; set; }
 
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
