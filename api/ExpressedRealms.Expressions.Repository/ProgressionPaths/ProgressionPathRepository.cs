@@ -49,7 +49,7 @@ public class ProgressionPathRepository(
     public async Task<ProgressionLevel> GetProgressionLevelForEditing(int progressionLevelId)
     {
         return await context.ProgressionLevel.FirstAsync(x =>
-            x.ProgressionPathId == progressionLevelId
+            x.Id == progressionLevelId
         );
     }
 
