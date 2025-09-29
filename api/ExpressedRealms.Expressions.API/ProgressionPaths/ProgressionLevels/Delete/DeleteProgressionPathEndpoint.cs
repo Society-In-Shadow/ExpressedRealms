@@ -18,7 +18,7 @@ internal static class DeleteProgressionLevelEndpoint
             new DeleteProgressionLevelModel()
             {
                 ProgressionPathId = pathId,
-                ProgressionLevelId = levelId
+                ProgressionLevelId = levelId,
             }
         );
 

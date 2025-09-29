@@ -13,12 +13,7 @@ internal static class DeleteProgressionPathEndpoint
         IDeleteProgressionPathUseCase useCase
     )
     {
-        var results = await useCase.ExecuteAsync(
-            new DeleteProgressionPathModel()
-            {
-                Id = pathId,
-            }
-        );
+        var results = await useCase.ExecuteAsync(new DeleteProgressionPathModel() { Id = pathId });
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;

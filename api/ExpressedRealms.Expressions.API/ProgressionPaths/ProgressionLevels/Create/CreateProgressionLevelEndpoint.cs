@@ -27,6 +27,9 @@ internal static class CreateProgressionLevelEndpoint
             return validationProblem;
         results.ThrowIfErrorNotHandled();
 
-        return TypedResults.Created($"/expressions/{expressionId}/progression/{progressionId}/level/", results.Value);
+        return TypedResults.Created(
+            $"/expressions/{expressionId}/progression/{progressionId}/level/",
+            results.Value
+        );
     }
 }

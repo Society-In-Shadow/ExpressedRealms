@@ -27,26 +27,42 @@ internal static class ProgressionEndpoints
             .RequirePolicyAuthorization(Policies.ManageProgressionPaths);
 
         endpointGroup
-            .MapPut("{expressionId}/progressions/{progressionId}", EditProgressionPathEndpoint.ExecuteAsync)
+            .MapPut(
+                "{expressionId}/progressions/{progressionId}",
+                EditProgressionPathEndpoint.ExecuteAsync
+            )
             .RequirePolicyAuthorization(Policies.ManageProgressionPaths);
 
         endpointGroup
             .MapPost("{expressionId}/progressions/", CreateProgressionPathEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManageProgressionPaths);
 
-        endpointGroup.MapDelete("{expressionId}/progressions/{progressionId}", DeleteProgressionPathEndpoint.ExecuteAsync)
+        endpointGroup
+            .MapDelete(
+                "{expressionId}/progressions/{progressionId}",
+                DeleteProgressionPathEndpoint.ExecuteAsync
+            )
             .RequirePolicyAuthorization(Policies.ManageProgressionPaths);
-
 
         endpointGroup
-            .MapPut("{expressionId}/progressions/{progressionId}/levels/{levelId}", EditProgressionLevelEndpoint.ExecuteAsync)
+            .MapPut(
+                "{expressionId}/progressions/{progressionId}/levels/{levelId}",
+                EditProgressionLevelEndpoint.ExecuteAsync
+            )
             .RequirePolicyAuthorization(Policies.ManageProgressionPaths);
 
         endpointGroup
-            .MapPost("{expressionId}/progressions/{progressionId}/levels", CreateProgressionLevelEndpoint.ExecuteAsync)
+            .MapPost(
+                "{expressionId}/progressions/{progressionId}/levels",
+                CreateProgressionLevelEndpoint.ExecuteAsync
+            )
             .RequirePolicyAuthorization(Policies.ManageProgressionPaths);
 
-        endpointGroup.MapDelete("{expressionId}/progressions/{progressionId}/levels/{levelId}", DeleteProgressionLevelEndpoint.ExecuteAsync)
+        endpointGroup
+            .MapDelete(
+                "{expressionId}/progressions/{progressionId}/levels/{levelId}",
+                DeleteProgressionLevelEndpoint.ExecuteAsync
+            )
             .RequirePolicyAuthorization(Policies.ManageProgressionPaths);
     }
 }

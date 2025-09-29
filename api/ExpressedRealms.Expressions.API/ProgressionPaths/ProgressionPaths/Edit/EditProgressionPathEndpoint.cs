@@ -20,7 +20,7 @@ internal static class EditProgressionPathEndpoint
                 Description = request.Description,
                 Name = request.Name,
                 ExpressionId = expressionId,
-                Id = pathId
+                Id = pathId,
             }
         );
 

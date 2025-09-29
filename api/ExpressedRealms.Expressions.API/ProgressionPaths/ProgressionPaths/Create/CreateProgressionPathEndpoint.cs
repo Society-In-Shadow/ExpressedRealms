@@ -18,7 +18,7 @@ internal static class CreateProgressionPathEndpoint
             {
                 Description = request.Description,
                 Name = request.Name,
-                ExpressionId = expressionId
+                ExpressionId = expressionId,
             }
         );
 

@@ -26,6 +26,6 @@ public static class UserRoles
             DownloadExpressionBooklet,
             ManageBlessingsRole,
             ManagePlayerCharacterList,
-            ManageProgressionPaths
+            ManageProgressionPaths,
         };
 }

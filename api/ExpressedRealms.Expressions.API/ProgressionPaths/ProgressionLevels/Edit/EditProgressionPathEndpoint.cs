@@ -21,7 +21,7 @@ internal static class EditProgressionLevelEndpoint
                 ProgressionPathId = pathId,
                 ProgressionLevelId = levelId,
                 Description = request.Description,
-                XlLevel = request.XlLevel
+                XlLevel = request.XlLevel,
             }
         );
 

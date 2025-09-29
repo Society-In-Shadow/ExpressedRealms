@@ -13,30 +13,33 @@ internal static class GetProgressionPathsEndpoint
     )
     {
         var results = await useCase.ExecuteAsync(
-            new GetPathsAndLevelsModel()
-            {
-                ExpressionId = expressionId
-            }
+            new GetPathsAndLevelsModel() { ExpressionId = expressionId }
         );
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;
         results.ThrowIfErrorNotHandled();
 
-        return TypedResults.Ok(new ProgressionPathsResponse()
-        {
-            Paths = results.Value.Select(x => new ProgressionPathReturnModel()
+        return TypedResults.Ok(
+            new ProgressionPathsResponse()
             {
-                Description = x.Description,
-                Name = x.Name,
-                Id = x.Id,
-                Levels = x.Levels.Select(y => new ProgressionLevelReturnModel()
-                {
-                    Description = y.Description,
-                    XlLevel = y.XlLevel,
-                    Id = y.Id
-                }).ToList()
-            }).ToList()
-        });
+                Paths = results
+                    .Value.Select(x => new ProgressionPathReturnModel()
+                    {
+                        Description = x.Description,
+                        Name = x.Name,
+                        Id = x.Id,
+                        Levels = x
+                            .Levels.Select(y => new ProgressionLevelReturnModel()
+                            {
+                                Description = y.Description,
+                                XlLevel = y.XlLevel,
+                                Id = y.Id,
+                            })
+                            .ToList(),
+                    })
+                    .ToList(),
+            }
+        );
     }
 }
