@@ -27,7 +27,7 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
 
         builder.Property(x => x.PrimaryProgressionId).HasColumnName("primary_progression_id");
         builder.Property(x => x.SecondaryProgressionId).HasColumnName("secondary_progression_id");
-        
+
         builder
             .HasOne(x => x.PrimaryProgressionPath)
             .WithMany(x => x.PrimaryProgressions)

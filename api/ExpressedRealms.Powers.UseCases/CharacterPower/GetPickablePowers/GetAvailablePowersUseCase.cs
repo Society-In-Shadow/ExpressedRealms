@@ -40,28 +40,41 @@ internal sealed class GetAvailablePowersUseCase(
         var filteredPowers = powers.Value;
         if (character.ExpressionId == 8) // Sorcerer
         {
-            if (!(character.PrimaryProgressionId.HasValue && character.SecondaryProgressionId.HasValue))
+            if (
+                !(
+                    character.PrimaryProgressionId.HasValue
+                    && character.SecondaryProgressionId.HasValue
+                )
+            )
             {
                 filteredPowers = new List<PowerPathToc>();
             }
             else
             {
-                var primaryElement = await progressionPathRepository.GetProgressionPathName(character.PrimaryProgressionId.Value);
-                var secondaryElement = await progressionPathRepository.GetProgressionPathName(character.SecondaryProgressionId.Value);
+                var primaryElement = await progressionPathRepository.GetProgressionPathName(
+                    character.PrimaryProgressionId.Value
+                );
+                var secondaryElement = await progressionPathRepository.GetProgressionPathName(
+                    character.SecondaryProgressionId.Value
+                );
 
                 // Primary element gets all powers
                 // Secondary element gets all powers that are intermediate or below (<= 2)
                 filteredPowers = filteredPowers
-                    .Where(x => x.Powers
-                        .Any(y => y.Category!.Any(z => z.Name == primaryElement)
-                        || y.Category!.Any(z => z.Name == secondaryElement) && y.PowerLevel.Id <= 2))
+                    .Where(x =>
+                        x.Powers.Any(y =>
+                            y.Category!.Any(z => z.Name == primaryElement)
+                            || y.Category!.Any(z => z.Name == secondaryElement)
+                                && y.PowerLevel.Id <= 2
+                        )
+                    )
                     .ToList();
             }
-
         }
 
         return Result.Ok(
-            filteredPowers.Select(x => new PowerPathReturnModel()
+            filteredPowers
+                .Select(x => new PowerPathReturnModel()
                 {
                     Name = x.Name,
                     Powers = x

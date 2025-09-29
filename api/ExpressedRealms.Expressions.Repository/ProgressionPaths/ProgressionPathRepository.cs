@@ -26,10 +26,12 @@ public class ProgressionPathRepository(
     {
         return await context.ProgressionPath.AnyAsync(x => x.Id == id);
     }
-    
+
     public async Task<bool> ProgressionPathExists(int expressionId, int id)
     {
-        return await context.ProgressionPath.AnyAsync(x => x.ExpressionId == expressionId && x.Id == id);
+        return await context.ProgressionPath.AnyAsync(x =>
+            x.ExpressionId == expressionId && x.Id == id
+        );
     }
 
     public async Task<string> GetProgressionPathName(int id)
@@ -58,9 +60,7 @@ public class ProgressionPathRepository(
 
     public async Task<ProgressionLevel> GetProgressionLevelForEditing(int progressionLevelId)
     {
-        return await context.ProgressionLevel.FirstAsync(x =>
-            x.Id == progressionLevelId
-        );
+        return await context.ProgressionLevel.FirstAsync(x => x.Id == progressionLevelId);
     }
 
     public async Task<List<ProgressionPath>> GetProgressionPathsAndLevelsForExpression(int id)

@@ -141,7 +141,7 @@ internal static class CharacterEndPoints
             .WithSummary("Returns info needed for selecting a faction for character create")
             .WithDescription("Returns info needed for selecting a faction for character create.")
             .RequireAuthorization();
-        
+
         endpointGroup
             .MapGet(
                 "ProgressionOptions/{expressionId}",
@@ -166,17 +166,19 @@ internal static class CharacterEndPoints
                     }
 
                     var factions = await dbContext
-                        .ProgressionPath.Where(x =>
-                            x.ExpressionId == expressionId
-                        )
-                        .Select(x => new PowerPathOptionResponse(x.Id, x.Name, x. Description))
+                        .ProgressionPath.Where(x => x.ExpressionId == expressionId)
+                        .Select(x => new PowerPathOptionResponse(x.Id, x.Name, x.Description))
                         .ToListAsync(cancellationToken);
 
                     return TypedResults.Ok(factions);
                 }
             )
-            .WithSummary("Returns info needed for selecting a progression path for character create")
-            .WithDescription("Returns info needed for selecting a progression path for character create.")
+            .WithSummary(
+                "Returns info needed for selecting a progression path for character create"
+            )
+            .WithDescription(
+                "Returns info needed for selecting a progression path for character create."
+            )
             .RequireAuthorization();
 
         endpointGroup
@@ -307,7 +309,7 @@ internal static class CharacterEndPoints
                             Id = dto.Id,
                             IsPrimaryCharacter = dto.IsPrimaryCharacter,
                             PrimaryProgressionId = dto.PrimaryProgressionId,
-                            SecondaryProgressionId = dto.SecondaryProgressionId
+                            SecondaryProgressionId = dto.SecondaryProgressionId,
                         }
                     );
 

@@ -72,7 +72,7 @@ internal sealed class CharacterRepository(
                 IsInCharacterCreation = x.IsInCharacterCreation,
                 IsOwner = x.Player.UserId == userContext.CurrentUserId(),
                 PrimaryProgressionId = x.PrimaryProgressionId,
-                SecondaryProgressionId = x.SecondaryProgressionId
+                SecondaryProgressionId = x.SecondaryProgressionId,
             })
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -196,17 +196,20 @@ internal sealed class CharacterRepository(
         }
 
         var validExpressionsForProgressions = new List<int> { 3, 4, 8, 9 }; // Adepts, Shammas, Sorcerer, Vampyres
-        if (dto.PrimaryProgressionId is not null && validExpressionsForProgressions.Contains(character.ExpressionId))
+        if (
+            dto.PrimaryProgressionId is not null
+            && validExpressionsForProgressions.Contains(character.ExpressionId)
+        )
         {
             character.PrimaryProgressionId = dto.PrimaryProgressionId;
         }
-        
+
         const int SorcererId = 8;
         if (dto.SecondaryProgressionId is not null && character.ExpressionId == SorcererId)
         {
             character.SecondaryProgressionId = dto.SecondaryProgressionId;
         }
-        
+
         character.Name = dto.Name;
         character.Background = dto.Background;
         character.FactionId = dto.FactionId;
