@@ -3,5 +3,4 @@ using FluentResults;
 
 namespace ExpressedRealms.Expressions.UseCases.StatModifiers.Delete;
 
-public interface IDeleteStatModifierUseCase
-    : IGenericUseCase<Result, DeleteStatModifierModel> { }
+public interface IDeleteStatModifierUseCase : IGenericUseCase<Result, DeleteStatModifierModel> { }

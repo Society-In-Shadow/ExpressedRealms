@@ -22,6 +22,8 @@ public class StatModifierRepository(
 
     public async Task<bool> GroupMappingExists(int groupId, int id)
     {
-        return await context.StatGroupMappings.AnyAsync(x => x.StatGroupId == groupId && x.Id == id);
+        return await context.StatGroupMappings.AnyAsync(x =>
+            x.StatGroupId == groupId && x.Id == id
+        );
     }
 }
