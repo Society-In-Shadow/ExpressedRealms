@@ -9,6 +9,8 @@ public class StatGroupMapping
     public int StatGroupId { get; set; }
     public int StatModifierId { get; set; }
     public int Modifier { get; set; }
+    public bool ScaleWithLevel { get; set; }
+    public bool CreationSpecificBonus { get; set; }
 
     public StatModifierGroup StatModifierGroup { get; set; } = null!;
     public StatModifier StatModifier { get; set; } = null!;
