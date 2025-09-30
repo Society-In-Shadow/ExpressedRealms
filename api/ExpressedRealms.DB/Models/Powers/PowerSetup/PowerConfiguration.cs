@@ -17,7 +17,7 @@ public class PowerConfiguration : IEntityTypeConfiguration<Power>
         builder.Property(e => e.PowerPathId).HasColumnName("power_path_id").IsRequired();
         builder.Property(e => e.Cost).HasColumnName("cost");
         builder.Property(e => e.OrderIndex).HasColumnName("order_index").IsRequired();
-        builder.Property(e => e.StatModifierGroupId).HasColumnName("stat_modifier_group").IsRequired();
+        builder.Property(e => e.StatModifierGroupId).HasColumnName("stat_modifier_group");
         builder
             .HasOne(e => e.StatModifierGroup)
             .WithMany(e => e.Powers)

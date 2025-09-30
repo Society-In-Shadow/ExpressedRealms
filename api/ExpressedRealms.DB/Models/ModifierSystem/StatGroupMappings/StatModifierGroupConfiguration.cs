@@ -7,7 +7,7 @@ public class StatGroupMappingConfiguration : IEntityTypeConfiguration<StatGroupM
 {
     public void Configure(EntityTypeBuilder<StatGroupMapping> builder)
     {
-        builder.ToTable("stat_modifier_group");
+        builder.ToTable("stat_group_mapping");
 
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).HasColumnName("id").IsRequired();

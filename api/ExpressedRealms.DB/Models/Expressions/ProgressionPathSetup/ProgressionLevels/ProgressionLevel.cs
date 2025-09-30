@@ -17,8 +17,8 @@ public class ProgressionLevel : ISoftDelete
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
     
-    public int StatModifierGroupId { get; set; }
-    public StatModifierGroup StatModifierGroup { get; set; }
+    public int? StatModifierGroupId { get; set; }
+    public StatModifierGroup? StatModifierGroup { get; set; }
 
     public ProgressionPath ProgressionPath { get; set; } = null!;
     public List<ProgressionLevelAuditTrail> ProgressionLevelAuditTrails { get; set; } = null!;
