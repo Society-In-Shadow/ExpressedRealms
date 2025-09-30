@@ -23,7 +23,6 @@ public class PowerConfiguration : IEntityTypeConfiguration<Power>
             .WithMany(e => e.Powers)
             .HasForeignKey(e => e.StatModifierGroupId)
             .OnDelete(DeleteBehavior.Restrict);
-        
 
         builder.HasQueryFilter(x => !x.IsDeleted);
 

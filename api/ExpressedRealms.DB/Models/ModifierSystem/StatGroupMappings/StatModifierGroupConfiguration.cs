@@ -14,13 +14,13 @@ public class StatGroupMappingConfiguration : IEntityTypeConfiguration<StatGroupM
         builder.Property(e => e.StatGroupId).HasColumnName("stat_group_id").IsRequired();
         builder.Property(e => e.StatModifierId).HasColumnName("stat_modifier_id").IsRequired();
         builder.Property(e => e.Modifier).HasColumnName("modifier").IsRequired();
-        
+
         builder
             .HasOne(e => e.StatModifierGroup)
             .WithMany(e => e.StatGroupMappings)
             .HasForeignKey(e => e.StatGroupId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         builder
             .HasOne(e => e.StatModifier)
             .WithMany(e => e.StatGroupMappings)

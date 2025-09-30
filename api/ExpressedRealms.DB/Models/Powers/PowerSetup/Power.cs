@@ -30,7 +30,7 @@ public class Power : ISoftDelete
 
     public int PowerPathId { get; set; }
     public virtual PowerPath PowerPath { get; set; } = null!;
-    
+
     public int? StatModifierGroupId { get; set; }
     public StatModifierGroup? StatModifierGroup { get; set; }
 

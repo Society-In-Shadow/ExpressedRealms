@@ -28,7 +28,7 @@ public class ProgressionLevelConfiguration : IEntityTypeConfiguration<Progressio
             .WithMany(e => e.ProgressionLevels)
             .HasForeignKey(e => e.StatModifierGroupId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         builder
             .HasOne(x => x.ProgressionPath)
             .WithMany(x => x.ProgressionLevels)
