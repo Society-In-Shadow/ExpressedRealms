@@ -3,6 +3,7 @@ using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup;
 using ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings;
+using ExpressedRealms.DB.Models.ModifierSystem.StatModifierGroups;
 
 namespace ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup;
 
@@ -17,6 +18,8 @@ public class BlessingLevel : ISoftDelete
     public int XpGain { get; set; }
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
+    public int? StatModifierGroupId { get; set; }
+    public StatModifierGroup? StatModifierGroup { get; set; } = null!;
 
     public virtual Blessing Blessing { get; set; } = null!;
     public virtual List<BlessingLevelAuditTrail> BlessingLevelAuditTrails { get; set; } = null!;

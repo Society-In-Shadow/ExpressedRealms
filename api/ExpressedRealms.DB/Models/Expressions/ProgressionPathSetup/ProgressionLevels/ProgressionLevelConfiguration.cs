@@ -22,6 +22,13 @@ public class ProgressionLevelConfiguration : IEntityTypeConfiguration<Progressio
             .HasMaxLength(5000)
             .IsRequired();
 
+        builder.Property(e => e.StatModifierGroupId).HasColumnName("stat_modifier_group");
+        builder
+            .HasOne(e => e.StatModifierGroup)
+            .WithMany(e => e.ProgressionLevels)
+            .HasForeignKey(e => e.StatModifierGroupId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder
             .HasOne(x => x.ProgressionPath)
             .WithMany(x => x.ProgressionLevels)

@@ -1,5 +1,6 @@
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.ModifierSystem.StatModifierGroups;
 using ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup;
 using ExpressedRealms.DB.Models.Powers.PowerPathSetup;
 using ExpressedRealms.DB.Models.Powers.PowerPrerequisitePowerSetup;
@@ -29,6 +30,9 @@ public class Power : ISoftDelete
 
     public int PowerPathId { get; set; }
     public virtual PowerPath PowerPath { get; set; } = null!;
+
+    public int? StatModifierGroupId { get; set; }
+    public StatModifierGroup? StatModifierGroup { get; set; }
 
     public bool IsPowerUse { get; set; }
     public string? GameMechanicEffect { get; set; }
