@@ -3,6 +3,7 @@ using ExpressedRealms.Expressions.Repository.Expressions.DTOs;
 using ExpressedRealms.Expressions.Repository.ExpressionTextSections;
 using ExpressedRealms.Expressions.Repository.ExpressionTextSections.DTOs;
 using ExpressedRealms.Expressions.Repository.ProgressionPaths;
+using ExpressedRealms.Expressions.Repository.StatModifier;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExpressedRealms.Expressions.Repository;
@@ -24,6 +25,7 @@ public static class ExpressionRepositoryInjections
         services.AddScoped<IExpressionRepository, ExpressionRepository>();
         services.AddScoped<IExpressionTextSectionRepository, ExpressionTextSectionRepository>();
         services.AddScoped<IProgressionPathRepository, ProgressionPathRepository>();
+        services.AddScoped<IStatModifierRepository, StatModifierRepository>();
         return services;
     }
 }
