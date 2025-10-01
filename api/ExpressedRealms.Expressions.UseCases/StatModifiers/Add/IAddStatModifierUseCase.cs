@@ -3,4 +3,4 @@ using FluentResults;
 
 namespace ExpressedRealms.Expressions.UseCases.StatModifiers.Add;
 
-public interface IAddStatModifierUseCase : IGenericUseCase<Result, AddStatModifierModel> { }
+public interface IAddStatModifierUseCase : IGenericUseCase<Result<ReturnIds>, AddStatModifierModel> { }

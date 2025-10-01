@@ -24,6 +24,7 @@ public class Policies
         nameof(ManagePlayerCharacterList)
     );
     public static readonly Policies ManageProgressionPaths = new(nameof(ManageProgressionPaths));
+    public static readonly Policies ManageModifiers = new(nameof(ManageModifiers));
 
     // Override ToString for convenience
     public override string ToString()

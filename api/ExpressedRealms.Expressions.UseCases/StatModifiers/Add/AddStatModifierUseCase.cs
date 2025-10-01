@@ -11,7 +11,7 @@ internal sealed class AddStatModifierUseCase(
     CancellationToken cancellationToken
 ) : IAddStatModifierUseCase
 {
-    public async Task<Result> ExecuteAsync(AddStatModifierModel model)
+    public async Task<Result<ReturnIds>> ExecuteAsync(AddStatModifierModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,
@@ -44,7 +44,7 @@ internal sealed class AddStatModifierUseCase(
             }
         }
 
-        await repository.AddStatGroupMapping(
+        var mappingId = await repository.AddStatGroupMapping(
             new StatGroupMapping()
             {
                 StatGroupId = groupId,
@@ -55,6 +55,10 @@ internal sealed class AddStatModifierUseCase(
             }
         );
 
-        return Result.Ok();
+        return Result.Ok(new ReturnIds()
+        {
+            GroupId = groupId,
+            ModifierMappingId = mappingId
+        });
     }
 }
