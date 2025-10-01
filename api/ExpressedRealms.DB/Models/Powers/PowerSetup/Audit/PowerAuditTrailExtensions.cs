@@ -67,6 +67,10 @@ internal static class PowerAuditTrailExtensions
                     changedRecord.FriendlyName = "Sort Order";
                     break;
 
+                case "stat_modifier_group":
+                    changedRecord.Message = "Added a stat modifier group";
+                    break;
+                
                 default:
                     throw new MissingAuditColumnException(changedRecord.ColumnName);
             }
