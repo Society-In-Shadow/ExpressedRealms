@@ -60,19 +60,37 @@ internal sealed class GetAvailablePowersUseCase(
 
                 // Primary element gets all powers
                 // Secondary element gets all powers that are intermediate or below (<= 2)
-                filteredPowers = filteredPowers.Select(x => new PowerPathToc()
-                {
-                    Id = x.Id,
-                    Description = x.Description,
-                    Name = x.Name,
-                    Powers = x.Powers.Where(y => 
-                            (y.Category!.Any(z => z.Name == primaryElement)) ||
-                            (y.Category!.Any(z => z.Name.Equals("general", StringComparison.InvariantCultureIgnoreCase))) 
-                             || (y.Category!.Any(z => z.Name.Equals(secondaryElement,
-                                     StringComparison.InvariantCultureIgnoreCase))
-                                 && y.PowerLevel.Id < 3)).ToList()
-                }).Where(x => x.Powers.Any()).ToList();
-
+                filteredPowers = filteredPowers
+                    .Select(x => new PowerPathToc()
+                    {
+                        Id = x.Id,
+                        Description = x.Description,
+                        Name = x.Name,
+                        Powers = x
+                            .Powers.Where(y =>
+                                (y.Category!.Any(z => z.Name == primaryElement))
+                                || (
+                                    y.Category!.Any(z =>
+                                        z.Name.Equals(
+                                            "general",
+                                            StringComparison.InvariantCultureIgnoreCase
+                                        )
+                                    )
+                                )
+                                || (
+                                    y.Category!.Any(z =>
+                                        z.Name.Equals(
+                                            secondaryElement,
+                                            StringComparison.InvariantCultureIgnoreCase
+                                        )
+                                    )
+                                    && y.PowerLevel.Id < 3
+                                )
+                            )
+                            .ToList(),
+                    })
+                    .Where(x => x.Powers.Any())
+                    .ToList();
             }
         }
 
