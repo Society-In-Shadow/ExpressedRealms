@@ -19,4 +19,5 @@ public interface IStatModifierRepository
 
     Task<int> AddGroup();
     Task<int> AddStatGroupMapping(StatGroupMapping mapping);
+    Task<List<StatGroupMapping>> GetGroupMappings(int groupId);
 }
