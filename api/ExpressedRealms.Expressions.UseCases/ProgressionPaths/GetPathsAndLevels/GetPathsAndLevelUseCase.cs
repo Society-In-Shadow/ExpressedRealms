@@ -40,6 +40,7 @@ internal sealed class GetPathsAndLevelsUseCase(
                             Id = x.Id,
                             Description = x.Description,
                             XlLevel = x.XlLevel,
+                            ModifierGroupId = x.StatModifierGroupId,
                         })
                         .ToList(),
                 })

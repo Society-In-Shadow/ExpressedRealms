@@ -1,6 +1,7 @@
 using ExpressedRealms.Expressions.API.ExpressionEndpoints;
 using ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints;
 using ExpressedRealms.Expressions.API.ProgressionPaths;
+using ExpressedRealms.Expressions.API.StatModifiers;
 using Microsoft.AspNetCore.Builder;
 
 namespace ExpressedRealms.Expressions.API.Configuration;
@@ -12,5 +13,6 @@ public static class ExpressionsAPIConfiguration
         app.AddExpressionEndpoints();
         app.AddExpressionSubsectionEndpoints();
         app.AddProgressionEndpoints();
+        app.AddStatModifiersEndpoints();
     }
 }

@@ -18,4 +18,5 @@ public class PowerInformationResponse
     public bool IsPowerUse { get; set; }
     public string? Cost { get; set; }
     public PrerequisiteDetails? Prerequisites { get; set; }
+    public int? ModifierGroupId { get; set; }
 }

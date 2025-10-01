@@ -50,7 +50,10 @@ public class PowerInformation
                             .ToList(),
                     }
                     : null,
+            ModifierGroupId = x.StatModifierGroupId,
         };
+
+    public int? ModifierGroupId { get; set; }
 
     public int Id { get; set; }
     public required string Name { get; set; }
