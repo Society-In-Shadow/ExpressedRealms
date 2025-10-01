@@ -70,7 +70,7 @@ internal static class PowerAuditTrailExtensions
                 case "stat_modifier_group":
                     changedRecord.Message = "Added a stat modifier group";
                     break;
-                
+
                 default:
                     throw new MissingAuditColumnException(changedRecord.ColumnName);
             }

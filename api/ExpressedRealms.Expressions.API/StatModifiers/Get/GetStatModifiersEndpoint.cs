@@ -12,9 +12,7 @@ internal static class GetStatModifiersEndpoint
         IGetModifiersUseCase useCase
     )
     {
-        var results = await useCase.ExecuteAsync(
-            new GetModifiersModel() { GroupId = groupId }
-        );
+        var results = await useCase.ExecuteAsync(new GetModifiersModel() { GroupId = groupId });
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;

@@ -14,11 +14,7 @@ internal static class DeleteStatModifierEndpoint
     )
     {
         var results = await useCase.ExecuteAsync(
-            new DeleteStatModifierModel()
-            {
-                Id = mappingId,
-                StatModifierGroupId = groupId,
-            }
+            new DeleteStatModifierModel() { Id = mappingId, StatModifierGroupId = groupId }
         );
 
         if (results.HasValidationError(out var validationProblem))

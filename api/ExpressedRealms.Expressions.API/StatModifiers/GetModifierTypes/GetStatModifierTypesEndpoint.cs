@@ -12,20 +12,17 @@ internal static class GetStatModifierTypesEndpoint
     )
     {
         var modifierTypeResults = await getModifierTypesUseCase.ExecuteAsync();
-        
+
         if (modifierTypeResults.HasValidationError(out var modifierTypeValidationProblem))
             return modifierTypeValidationProblem;
         modifierTypeResults.ThrowIfErrorNotHandled();
-        
 
         return TypedResults.Ok(
             new StatModifiersResponse()
             {
-                ModifierTypes = modifierTypeResults.Value.Select(x => new ModifierType()
-                {
-                    Id = x.Id,
-                    Name = x.Name
-                }).ToList(),
+                ModifierTypes = modifierTypeResults
+                    .Value.Select(x => new ModifierType() { Id = x.Id, Name = x.Name })
+                    .ToList(),
             }
         );
     }

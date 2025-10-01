@@ -23,7 +23,7 @@ internal static class CreateStatModifierEndpoint
                 SourceId = request.SourceId,
                 SourceTable = request.SourceTable,
                 StatModifierGroupId = groupId,
-                StatModifierId = request.StatModifierId
+                StatModifierId = request.StatModifierId,
             }
         );
 
@@ -31,6 +31,9 @@ internal static class CreateStatModifierEndpoint
             return validationProblem;
         results.ThrowIfErrorNotHandled();
 
-        return TypedResults.Created($"/modifiergroups/{results.Value.GroupId}/modifiers/", results.Value.ModifierMappingId);
+        return TypedResults.Created(
+            $"/modifiergroups/{results.Value.GroupId}/modifiers/",
+            results.Value.ModifierMappingId
+        );
     }
 }

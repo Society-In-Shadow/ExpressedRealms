@@ -55,10 +55,6 @@ internal sealed class AddStatModifierUseCase(
             }
         );
 
-        return Result.Ok(new ReturnIds()
-        {
-            GroupId = groupId,
-            ModifierMappingId = mappingId
-        });
+        return Result.Ok(new ReturnIds() { GroupId = groupId, ModifierMappingId = mappingId });
     }
 }

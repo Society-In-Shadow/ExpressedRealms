@@ -20,18 +20,14 @@ internal static class StatModifiersEndpoint
             .WithTags("Stat Modifier Groups")
             .WithOpenApi();
 
-        endpointGroup
-            .MapGet("{groupId}/modifiers", GetStatModifiersEndpoint.ExecuteAsync);
-        
+        endpointGroup.MapGet("{groupId}/modifiers", GetStatModifiersEndpoint.ExecuteAsync);
+
         endpointGroup
             .MapGet("/modifiers/options", GetStatModifierTypesEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManageModifiers);
 
         endpointGroup
-            .MapPut(
-                "{groupId}/modifiers/{mappingId}",
-                EditStatModifierEndpoint.ExecuteAsync
-            )
+            .MapPut("{groupId}/modifiers/{mappingId}", EditStatModifierEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManageModifiers);
 
         endpointGroup
@@ -39,11 +35,7 @@ internal static class StatModifiersEndpoint
             .RequirePolicyAuthorization(Policies.ManageModifiers);
 
         endpointGroup
-            .MapDelete(
-                "{groupId}/modifiers/{mappingId}",
-                DeleteStatModifierEndpoint.ExecuteAsync
-            )
+            .MapDelete("{groupId}/modifiers/{mappingId}", DeleteStatModifierEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManageModifiers);
-
     }
 }
