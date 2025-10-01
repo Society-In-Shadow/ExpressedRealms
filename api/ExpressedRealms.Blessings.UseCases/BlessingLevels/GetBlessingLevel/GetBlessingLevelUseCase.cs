@@ -35,6 +35,7 @@ internal sealed class GetBlessingLevelUseCase(
                 XpGain = blessing.XpGain,
                 Description = blessing.Description,
                 Id = blessing.Id,
+                ModifierGroupId = blessing.StatModifierGroupId
             }
         );
     }

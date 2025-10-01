@@ -29,6 +29,7 @@ public static class GetBlessingLevelEndpoint
                 XpCost = results.Value.XpCost,
                 XpGain = results.Value.XpGain,
                 Id = results.Value.Id,
+                ModifierGroupId = results.Value.ModifierGroupId,
             }
         );
     }

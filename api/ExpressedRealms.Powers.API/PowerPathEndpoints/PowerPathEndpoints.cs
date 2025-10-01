@@ -70,6 +70,7 @@ internal static class PowerPathEndpoints
                                             Powers = y.Prerequisites.Powers,
                                         }
                                         : null,
+                                    ModifierGroupId = y.ModifierGroupId,
                                 })
                                 .ToList(),
                         })

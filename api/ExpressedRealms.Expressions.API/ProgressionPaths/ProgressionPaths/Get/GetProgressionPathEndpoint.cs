@@ -35,6 +35,7 @@ internal static class GetProgressionPathsEndpoint
                                 Description = y.Description,
                                 XlLevel = y.XlLevel,
                                 Id = y.Id,
+                                ModifierGroupId = y.ModifierGroupId,
                             })
                             .ToList(),
                     })
