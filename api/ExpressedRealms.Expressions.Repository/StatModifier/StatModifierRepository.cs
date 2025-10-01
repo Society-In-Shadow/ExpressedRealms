@@ -1,5 +1,6 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Models.ModifierSystem.StatGroupMappings;
+using ExpressedRealms.DB.Models.ModifierSystem.StatModifierGroups;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Expressions.Repository.StatModifier;
@@ -12,6 +13,73 @@ public class StatModifierRepository(
     public async Task<StatGroupMapping> GetGroupMappingForEditing(int id)
     {
         return await context.StatGroupMappings.FirstAsync(x => x.Id == id);
+    }
+
+    public async Task<bool> ModifierTypeExists(int id)
+    {
+        return await context.ModifierTypes.AnyAsync(x => x.Id == id);
+    }
+
+    public async Task<bool> GroupIdExists(int id)
+    {
+        return await context.StatModifierGroups.AnyAsync(x => x.Id == id);
+    }
+
+    public async Task<bool> ProgressionPathExists(int id)
+    {
+        return await context.ProgressionPath.AnyAsync(x => x.Id == id);
+    }
+
+    public async Task<bool> PowerExists(int id)
+    {
+        return await context.Powers.AnyAsync(x => x.Id == id);
+    }
+
+    public async Task<bool> BlessingLevelExists(int id)
+    {
+        return await context.BlessingLevels.AnyAsync(x => x.Id == id);
+    }
+
+    public async Task UpdateBlessingGroupId(int blessingId, int groupId)
+    {
+        var blessing = await context.BlessingLevels.FirstAsync(x => x.Id == blessingId);
+        blessing.StatModifierGroupId = groupId;
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task UpdateProgressionPathGroupId(int progressionPathId, int groupId)
+    {
+        var progressionPath = await context.ProgressionLevel.FirstAsync(x => x.Id == progressionPathId);
+        progressionPath.StatModifierGroupId = groupId;
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task UpdatePowerGroupId(int powerId, int groupId)
+    {
+        var power = await context.ProgressionLevel.FirstAsync(x => x.Id == powerId);
+        power.StatModifierGroupId = groupId;
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
+    public Task UpdateGroupMapping(StatGroupMapping mapping)
+    {
+        context.StatGroupMappings.Update(mapping);
+        return context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<int> AddGroup()
+    {
+        var group = new StatModifierGroup();
+        context.StatModifierGroups.Add(group);
+        await context.SaveChangesAsync(cancellationToken);
+        return group.Id;
+    }
+
+    public async Task<int> AddStatGroupMapping(StatGroupMapping mapping)
+    {
+        context.StatGroupMappings.Add(mapping);
+        await context.SaveChangesAsync(cancellationToken);
+        return mapping.Id;
     }
 
     public Task HardDeleteGroupMapping(StatGroupMapping mapping)
