@@ -16,6 +16,14 @@ const disadvantageBucket = ref(0);
 const discretionaryBucket = ref(0);
 const overallDiscretionaryTotal = ref(0);
 
+const props = defineProps({
+  isReadOnly: {
+    type: Boolean,
+    required: false,
+    default: false,
+  }
+});
+
 onMounted(async () => {
   await xpInfo.updateExperience(route.params.id);  
 })
@@ -160,11 +168,11 @@ const displayedSections = computed(() => {
     <div></div>
   </div>
   
-  <Message severity="warn" v-if="characterInfo.isInCharacterCreation" class="mt-3">
+  <Message severity="warn" v-if="characterInfo.isInCharacterCreation && !props.isReadOnly" class="mt-3">
     <p v-if="!spentAllPoints">To finalize a character will require you to spend all XP.</p>
     <p>Finalizing a character will block the ability to add / remove / change levels for Advantages / Disadvantages</p>
   </Message>
-  <div class="text-right" v-if="characterInfo.isInCharacterCreation">
+  <div class="text-right" v-if="characterInfo.isInCharacterCreation && !props.isReadOnly">
     <Button label="Finalize Creation" class="mt-3" @click="finalizeCreation" :disabled="!spentAllPoints"/>
   </div>
   <Message v-if="characterInfo.isInCharacterCreation" severity="info" class="mt-3">

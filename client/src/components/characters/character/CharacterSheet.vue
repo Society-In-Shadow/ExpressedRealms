@@ -13,23 +13,15 @@ import DataTable from "primevue/datatable";
 import ProficiencyTableTile from "@/components/characters/character/proficiency/ProficiencyTableTile.vue";
 import CharacterDetailTile from "@/components/characters/character/CharacterDetailTile.vue";
 import KnowledgeTile from "@/components/characters/character/knowledges/KnowledgeTile.vue";
-import {FeatureFlags, userStore} from "@/stores/userStore.ts";
-import {onMounted, ref} from "vue";
 import PowerTile from "@/components/characters/character/powers/PowerTile.vue";
 import TrackableProficiencies from "@/components/characters/character/proficiency/TrackableProficiencies.vue";
 import BlessingTab from "@/components/characters/character/blessings/BlessingTab.vue";
 import StatTile from "@/components/characters/character/stats/StatTile.vue";
 import {characterStore} from "@/components/characters/character/stores/characterStore.ts";
 import Message from "primevue/message";
+import ReviewCharacter from "@/components/characters/character/ReviewCharacter.vue";
 
-const userData = userStore();
 const characterData = characterStore();
-
-const manageCharacterBlessings = ref(false);
-
-onMounted(async() =>{
-  manageCharacterBlessings.value = await userData.hasFeatureFlag(FeatureFlags.ManageCharacterBlessings)
-})
 
 </script>
 
@@ -65,8 +57,11 @@ onMounted(async() =>{
             <Tab value="3">
               Powers
             </Tab>
-            <Tab value="4" v-if="manageCharacterBlessings" >
+            <Tab value="4">
               Advantages / Disadvantages
+            </Tab>
+            <Tab value="5">
+              XP Breakdown
             </Tab>
           </TabList>
           <TabPanels class="p-2 p-md-3">
@@ -85,8 +80,11 @@ onMounted(async() =>{
             <TabPanel value="3">
               <PowerTile/>
             </TabPanel>
-            <TabPanel v-if="manageCharacterBlessings" value="4">
+            <TabPanel value="4">
               <BlessingTab />
+            </TabPanel>
+            <TabPanel value="5">
+              <ReviewCharacter :is-read-only="true" />
             </TabPanel>
           </TabPanels>
         </Tabs>
