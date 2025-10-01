@@ -15,6 +15,11 @@ public class StatModifierRepository(
         return await context.StatGroupMappings.FirstAsync(x => x.Id == id);
     }
 
+    public async Task<List<StatGroupMapping>> GetGroupMappings(int groupId)
+    {
+        return await context.StatGroupMappings.Where(x => x.Id == groupId).ToListAsync();
+    }
+
     public async Task<bool> ModifierTypeExists(int id)
     {
         return await context.ModifierTypes.AnyAsync(x => x.Id == id);
