@@ -49,7 +49,9 @@ public class StatModifierRepository(
 
     public async Task UpdateProgressionPathGroupId(int progressionPathId, int groupId)
     {
-        var progressionPath = await context.ProgressionLevel.FirstAsync(x => x.Id == progressionPathId);
+        var progressionPath = await context.ProgressionLevel.FirstAsync(x =>
+            x.Id == progressionPathId
+        );
         progressionPath.StatModifierGroupId = groupId;
         await context.SaveChangesAsync(cancellationToken);
     }

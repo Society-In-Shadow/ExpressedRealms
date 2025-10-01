@@ -43,15 +43,17 @@ internal sealed class AddStatModifierUseCase(
                     throw new ArgumentOutOfRangeException();
             }
         }
-        
-        await repository.AddStatGroupMapping(new StatGroupMapping()
-        {
-            StatGroupId = groupId,
-            Modifier = model.Modifier,
-            ScaleWithLevel = model.ScaleWithLevel,
-            CreationSpecificBonus = model.CreationSpecificBonus,
-            StatModifierId = model.StatModifierId,
-        });
+
+        await repository.AddStatGroupMapping(
+            new StatGroupMapping()
+            {
+                StatGroupId = groupId,
+                Modifier = model.Modifier,
+                ScaleWithLevel = model.ScaleWithLevel,
+                CreationSpecificBonus = model.CreationSpecificBonus,
+                StatModifierId = model.StatModifierId,
+            }
+        );
 
         return Result.Ok();
     }

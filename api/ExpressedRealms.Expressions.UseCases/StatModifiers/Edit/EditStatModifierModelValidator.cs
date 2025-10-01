@@ -16,7 +16,7 @@ internal sealed class EditStatModifierModelValidator : AbstractValidator<EditSta
         RuleFor(x => x.StatModifierId)
             .NotEmpty()
             .WithMessage("Stat Group Id is required.")
-            .MustAsync(async (x, y)=> await statModifierRepository.ModifierTypeExists(x));
+            .MustAsync(async (x, y) => await statModifierRepository.ModifierTypeExists(x));
 
         RuleFor(x => x)
             .MustAsync(
@@ -24,7 +24,5 @@ internal sealed class EditStatModifierModelValidator : AbstractValidator<EditSta
                     await statModifierRepository.GroupMappingExists(x.StatModifierGroupId, x.Id)
             )
             .WithMessage("Stat Modifier does not exist.");
-        
-        
     }
 }
