@@ -84,7 +84,7 @@ const characterData = characterStore();
               <BlessingTab />
             </TabPanel>
             <TabPanel value="5">
-              <ReviewCharacter :read-only="true" />
+              <ReviewCharacter :is-read-only="true" />
             </TabPanel>
           </TabPanels>
         </Tabs>
