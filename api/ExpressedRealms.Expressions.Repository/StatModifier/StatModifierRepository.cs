@@ -17,7 +17,15 @@ public class StatModifierRepository(
 
     public async Task<List<StatGroupMapping>> GetGroupMappings(int groupId)
     {
-        return await context.StatGroupMappings.Where(x => x.Id == groupId).ToListAsync();
+        return await context
+            .StatGroupMappings.AsNoTracking()
+            .Where(x => x.Id == groupId)
+            .ToListAsync();
+    }
+
+    public async Task<List<DB.Models.ModifierSystem.StatModifiers.StatModifier>> GetModifierTypes()
+    {
+        return await context.StatModifiers.AsNoTracking().ToListAsync();
     }
 
     public async Task<bool> ModifierTypeExists(int id)
