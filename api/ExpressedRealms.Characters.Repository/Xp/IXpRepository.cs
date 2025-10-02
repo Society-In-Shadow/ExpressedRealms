@@ -12,4 +12,5 @@ public interface IXpRepository
     Task AddDefaultCharacterXpMappings(int characterId);
     Task<SectionXpDto> GetAvailableXpForSection(int characterId, XpSectionTypes sectionType);
     Task FinalizeCreateXp(int charactterId);
+    Task<int> GetCharacterXpLevel(int characterId);
 }

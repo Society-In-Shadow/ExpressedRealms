@@ -4,7 +4,9 @@ using ExpressedRealms.Characters.Repository.Proficiencies.DTOs;
 using ExpressedRealms.Characters.Repository.Proficiencies.Enums;
 using ExpressedRealms.Characters.Repository.Proficiencies.Utilities;
 using ExpressedRealms.Characters.Repository.Stats;
+using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.DB;
+using ExpressedRealms.Expressions.Repository.StatModifier;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +15,8 @@ namespace ExpressedRealms.Characters.Repository.Proficiencies;
 internal sealed class ProficiencyRepository(
     ExpressedRealmsDbContext context,
     ICharacterStatRepository characterStatRepository,
+    IStatModifierRepository statModifierRepository,
+    IXpRepository xpRepository,
     CancellationToken cancellationToken
 ) : IProficiencyRepository
 {
@@ -74,6 +78,19 @@ internal sealed class ProficiencyRepository(
             }
         );
 
+        var currentLevel = await xpRepository.GetCharacterXpLevel(characterId);
+        
+        var extraModifiers = new List<ModifierDescription>();
+        var progressionLevels = await statModifierRepository.GetModifiersForBlessings(characterId);
+    
+        extraModifiers.AddRange(progressionLevels.Select(x => new ModifierDescription()
+        {
+            Message = x.Source,
+            Type = ModiferConversions.GetModifierType(x),
+            Name = x.Source,
+            Value = x.ScaleWithLevel ? x.Modifier * currentLevel : x.Modifier,
+        }));
+
         var expressionId = await context
             .Characters.AsNoTracking()
             .Where(x => x.Id == characterId)
@@ -91,6 +108,9 @@ internal sealed class ProficiencyRepository(
                     availableModifiers.Where(x => x.Type == modifier).ToList()
                 );
             }
+            
+            proficiency.AppliedModifiers.AddRange(extraModifiers.Where(x => x.Type.Name.Equals(proficiency.Name, StringComparison.InvariantCultureIgnoreCase)));
+            
         }
 
         return proficiencies;

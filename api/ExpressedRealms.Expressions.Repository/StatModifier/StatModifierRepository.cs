@@ -1,3 +1,4 @@
+using ExpressedRealms.Characters.Repository.Proficiencies.DTOs;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Models.ModifierSystem.StatGroupMappings;
 using ExpressedRealms.DB.Models.ModifierSystem.StatModifierGroups;
@@ -31,6 +32,18 @@ public class StatModifierRepository(
     public async Task<bool> ProgressionLevelExists(int id)
     {
         return await context.ProgressionLevel.AnyAsync(x => x.Id == id);
+    }
+
+    public async Task<List<ProficiencyModifierInfoDto>> GetModifiersForBlessings(int characterId)
+    {
+        return await context.CharacterBlessingMappings.Where(x => x.CharacterId == characterId && x.BlessingLevel.StatModifierGroup != null)
+            .SelectMany(x => x.BlessingLevel.StatModifierGroup!.StatGroupMappings.Select(y => new ProficiencyModifierInfoDto
+            {
+                Source = $"{x.Blessing.Name} {x.Blessing.Type}",
+                Modifier = y.Modifier,
+                ModifierTypeId = y.StatModifierId,
+                ScaleWithLevel = y.ScaleWithLevel
+            })).ToListAsync();
     }
 
     public async Task<bool> ModifierTypeExists(int id)
