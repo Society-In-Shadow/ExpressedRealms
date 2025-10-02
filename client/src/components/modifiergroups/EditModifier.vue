@@ -44,14 +44,14 @@ const cancel = () => {
 
 <template>
   <form @submit="onSubmit">
+
+    <FormInputNumberWrapper v-model="form.fields.modifier" />
     
     <FormDropdownWrapper
         v-model="form.fields.modifierType"
         :options="store.modifierTypes"
         option-label="name"
     />
-
-    <FormInputNumberWrapper v-model="form.fields.modifier" />
 
     <FormCheckboxWrapper v-model="form.fields.scaleWithLevel" />
 
