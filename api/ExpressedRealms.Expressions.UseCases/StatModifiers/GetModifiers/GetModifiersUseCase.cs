@@ -32,7 +32,7 @@ internal sealed class GetModifiersUseCase(
                     CreationSpecificBonus = x.CreationSpecificBonus,
                     Id = x.Id,
                     StatModifierId = x.StatModifierId,
-                    TargetExpressionId = x.TargetExpressionId
+                    TargetExpressionId = x.TargetExpressionId,
                 })
                 .ToList()
         );

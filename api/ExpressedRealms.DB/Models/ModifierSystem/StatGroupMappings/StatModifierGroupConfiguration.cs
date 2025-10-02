@@ -15,13 +15,13 @@ public class StatGroupMappingConfiguration : IEntityTypeConfiguration<StatGroupM
         builder.Property(e => e.StatModifierId).HasColumnName("stat_modifier_id").IsRequired();
         builder.Property(e => e.Modifier).HasColumnName("modifier").IsRequired();
         builder.Property(e => e.TargetExpressionId).HasColumnName("target_expression_id");
-        
+
         builder
             .Property(e => e.CreationSpecificBonus)
             .HasColumnName("creation_specific_bonus")
             .IsRequired()
             .HasDefaultValue(false);
-         
+
         builder
             .Property(e => e.ScaleWithLevel)
             .HasColumnName("scales_with_level")
@@ -39,7 +39,7 @@ public class StatGroupMappingConfiguration : IEntityTypeConfiguration<StatGroupM
             .WithMany(e => e.StatGroupMappings)
             .HasForeignKey(e => e.StatModifierId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         builder
             .HasOne(e => e.Expression)
             .WithMany(e => e.StatGroupMappings)

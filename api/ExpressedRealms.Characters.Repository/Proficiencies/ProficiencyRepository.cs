@@ -97,10 +97,11 @@ internal sealed class ProficiencyRepository(
             dbModifiers.AddRange(
                 await statModifierRepository.GetModifiersFromXlLevel(characterId, currentLevel)
             );
-            dbModifiers = dbModifiers.Where(x => 
-                x.TargetExpressionId == null || 
-                x.TargetExpressionId == character.ExpressionId
-            ).ToList();
+            dbModifiers = dbModifiers
+                .Where(x =>
+                    x.TargetExpressionId == null || x.TargetExpressionId == character.ExpressionId
+                )
+                .ToList();
         }
 
         extraModifiers.AddRange(

@@ -16,5 +16,4 @@ public class StatGroupMapping
     public StatModifierGroup StatModifierGroup { get; set; } = null!;
     public StatModifier StatModifier { get; set; } = null!;
     public Expression? Expression { get; set; }
-
 }

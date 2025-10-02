@@ -3,5 +3,4 @@ using FluentResults;
 
 namespace ExpressedRealms.Expressions.UseCases.StatModifiers.GetModifierTypes;
 
-public interface IGetModifierTypesUseCase
-    : IGenericUseCase<Result<OptionsReturnModel>> { }
+public interface IGetModifierTypesUseCase : IGenericUseCase<Result<OptionsReturnModel>> { }

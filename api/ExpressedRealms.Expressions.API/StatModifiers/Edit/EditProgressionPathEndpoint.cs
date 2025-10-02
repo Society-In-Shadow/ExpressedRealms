@@ -23,7 +23,7 @@ internal static class EditStatModifierEndpoint
                 StatModifierId = request.StatModifierId,
                 StatModifierGroupId = groupId,
                 CreationSpecificBonus = request.CreationSpecificBonus,
-                TargetExpressionId = request.TargetExpressionId
+                TargetExpressionId = request.TargetExpressionId,
             }
         );
 

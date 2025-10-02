@@ -171,7 +171,7 @@ internal sealed class ExpressionRepository(
     {
         return await context.Expressions.IgnoreQueryFilters().FirstOrDefaultAsync(x => x.Id == id);
     }
-    
+
     public async Task<bool> ExpressionExistsForModifiers(int id)
     {
         return await context.Expressions.AnyAsync(x => x.Id == id && x.ExpressionTypeId == 1);
@@ -181,7 +181,7 @@ internal sealed class ExpressionRepository(
     {
         return await context.ExpressionTypes.AnyAsync(x => x.Id == id, cancellationToken);
     }
-    
+
     public async Task<List<Expression>> GetAllEnabledExpressions()
     {
         return await context.Expressions.Where(x => x.ExpressionTypeId == 1).ToListAsync(); // 1 = expression

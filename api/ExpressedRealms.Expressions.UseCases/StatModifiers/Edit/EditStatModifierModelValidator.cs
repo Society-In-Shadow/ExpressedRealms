@@ -8,7 +8,10 @@ namespace ExpressedRealms.Expressions.UseCases.StatModifiers.Edit;
 [UsedImplicitly]
 internal sealed class EditStatModifierModelValidator : AbstractValidator<EditStatModifierModel>
 {
-    public EditStatModifierModelValidator(IStatModifierRepository statModifierRepository, IExpressionRepository expressionRepository)
+    public EditStatModifierModelValidator(
+        IStatModifierRepository statModifierRepository,
+        IExpressionRepository expressionRepository
+    )
     {
         RuleFor(x => x.Id).NotEmpty().WithMessage("Stat Modifier Id is required.");
 
@@ -25,9 +28,11 @@ internal sealed class EditStatModifierModelValidator : AbstractValidator<EditSta
                     await statModifierRepository.GroupMappingExists(x.StatModifierGroupId, x.Id)
             )
             .WithMessage("Stat Modifier does not exist.");
-        
+
         RuleFor(x => x.TargetExpressionId)
-            .MustAsync(async (x, y) => await expressionRepository.ExpressionExistsForModifiers(x.Value))
+            .MustAsync(
+                async (x, y) => await expressionRepository.ExpressionExistsForModifiers(x.Value)
+            )
             .When(x => x.TargetExpressionId.HasValue)
             .WithMessage("The Expression does not exist.");
     }
