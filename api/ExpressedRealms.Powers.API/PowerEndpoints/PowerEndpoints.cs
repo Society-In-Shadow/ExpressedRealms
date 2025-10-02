@@ -131,6 +131,7 @@ internal static class PowerEndpoints
                             Other = powers.Value.Other,
                             IsPowerUse = powers.Value.IsPowerUse,
                             Cost = powers.Value.Cost,
+                            StatModifierGroup = powers.Value.StatModifierGroup,
                         }
                     );
                 }

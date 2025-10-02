@@ -7,6 +7,8 @@ import Button from "primevue/button";
 import {getValidationInstance} from "@/components/blessings/validations/blessingLevelForm.ts";
 import {blessingsStore} from "@/components/blessings/stores/blessingsStore.ts";
 import {inject, onBeforeMount, type Ref, ref} from "vue";
+import ModifierGroup from "@/components/modifiergroups/ModifierGroup.vue";
+import {SourceTableEnum} from "@/components/modifiergroups/types.ts";
 
 const store = blessingsStore();
 const form = getValidationInstance()
@@ -14,9 +16,11 @@ const form = getValidationInstance()
 const dialogRef = inject('dialogRef') as Ref;
 const blessingId = ref(dialogRef.value.data.blessingId);
 const levelId = ref(dialogRef.value.data.levelId);
+const groupId = ref(dialogRef.value.data.groupId);
 
 onBeforeMount(async () => {
   const values = await store.getBlessingLevel(blessingId.value, levelId.value);
+  groupId.value = values.modifierGroupId;
   form.setValues(values);
 })
 
@@ -48,4 +52,6 @@ const cancel = () => {
       <Button label="Update" class="m-2" type="submit" />
     </div>
   </form>
+  
+  <ModifierGroup :group-id="groupId" :source="SourceTableEnum.Blessings" :source-id="levelId"/>
 </template>

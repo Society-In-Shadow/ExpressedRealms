@@ -11,6 +11,8 @@ import FormMultiSelectWrapper from "@/FormWrappers/FormMultiSelectWrapper.vue";
 import {powersStore} from "@/components/expressions/powers/stores/powersStore";
 import type {EditPower} from "@/components/expressions/powers/types";
 import PowerPrerequisites from "@/components/expressions/powers/PowerPrerequisites.vue";
+import {SourceTableEnum} from "@/components/modifiergroups/types.ts";
+import ModifierGroup from "@/components/modifiergroups/ModifierGroup.vue";
 
 const form = getValidationInstance();
 const power = ref<EditPower>();
@@ -31,9 +33,11 @@ const props = defineProps({
 
 const powers = powersStore();
 const prerequisiteChild = ref();
+const groupId = ref(0);
 
 onBeforeMount(async () => {
   power.value = await powers.getPower(props.powerId);
+  groupId.value = power.value.modifierGroupId;
   form.setValues(power.value);
 })
 
@@ -103,5 +107,6 @@ const cancel = () => {
         <Button label="Update" class="m-2" type="submit" />
       </div>
     </form>
+    <ModifierGroup :group-id="groupId" :source="SourceTableEnum.Powers" :source-id="props.powerId"/>
   </div>
 </template>

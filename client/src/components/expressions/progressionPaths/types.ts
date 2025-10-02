@@ -14,4 +14,5 @@ export interface ProgressionLevel{
     description: string;
     xlLevel: number;
     id: number;
+    modiferGroupId: number;
 }

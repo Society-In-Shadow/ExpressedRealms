@@ -18,7 +18,7 @@ internal sealed class AddStatModifierModelValidator : AbstractValidator<AddStatM
                     switch (x.SourceTable)
                     {
                         case SourceTableEnum.ProgressionLevels:
-                            return await statModifierRepository.ProgressionPathExists(x.SourceId);
+                            return await statModifierRepository.ProgressionLevelExists(x.SourceId);
                         case SourceTableEnum.Blessings:
                             return await statModifierRepository.BlessingLevelExists(x.SourceId);
                         case SourceTableEnum.Powers:

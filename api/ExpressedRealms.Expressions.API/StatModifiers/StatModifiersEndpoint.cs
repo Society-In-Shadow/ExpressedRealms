@@ -33,6 +33,10 @@ internal static class StatModifiersEndpoint
         endpointGroup
             .MapPost("{groupId:int?}/modifiers", CreateStatModifierEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManageModifiers);
+        
+        endpointGroup
+            .MapPost("/modifiers", CreateStatModifierNoGroupEndpoint.ExecuteAsync)
+            .RequirePolicyAuthorization(Policies.ManageModifiers);
 
         endpointGroup
             .MapDelete("{groupId}/modifiers/{mappingId}", DeleteStatModifierEndpoint.ExecuteAsync)

@@ -25,7 +25,7 @@ export const addBlessingDialog = () => {
         });
     }
 
-    const showEditBlessingLevel = (blessingId: number, levelId: number) => {
+    const showEditBlessingLevel = (blessingId: number, levelId: number, groupId: number) => {
         dialog.open(EditBlessingLevel, {
             props: {
                 header: 'Edit Blessing Level',
@@ -41,6 +41,7 @@ export const addBlessingDialog = () => {
             data: {
                 blessingId: blessingId,
                 levelId: levelId,
+                groupId: groupId,
             }
         });
     }

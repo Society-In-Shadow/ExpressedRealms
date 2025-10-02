@@ -15,4 +15,5 @@ public class EditPowerInformation
     public string? Other { get; set; }
     public bool IsPowerUse { get; set; }
     public string? Cost { get; set; }
+    public int? StatModifierGroup { get; set; }
 }

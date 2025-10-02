@@ -19,13 +19,18 @@ public class StatModifierRepository(
     {
         return await context
             .StatGroupMappings.AsNoTracking()
-            .Where(x => x.Id == groupId)
+            .Where(x => x.StatGroupId == groupId)
             .ToListAsync();
     }
 
     public async Task<List<DB.Models.ModifierSystem.StatModifiers.StatModifier>> GetModifierTypes()
     {
         return await context.StatModifiers.AsNoTracking().ToListAsync();
+    }
+
+    public async Task<bool> ProgressionLevelExists(int id)
+    {
+        return await context.ProgressionLevel.AnyAsync(x => x.Id == id);
     }
 
     public async Task<bool> ModifierTypeExists(int id)
@@ -71,7 +76,7 @@ public class StatModifierRepository(
 
     public async Task UpdatePowerGroupId(int powerId, int groupId)
     {
-        var power = await context.ProgressionLevel.FirstAsync(x => x.Id == powerId);
+        var power = await context.Powers.FirstAsync(x => x.Id == powerId);
         power.StatModifierGroupId = groupId;
         await context.SaveChangesAsync(cancellationToken);
     }
