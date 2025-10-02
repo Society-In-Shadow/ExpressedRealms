@@ -16,6 +16,7 @@ namespace ExpressedRealms.Characters.Repository.Proficiencies;
 
 internal sealed class ProficiencyRepository(
     ExpressedRealmsDbContext context,
+    ICharacterRepository characterRepository,
     ICharacterStatRepository characterStatRepository,
     IFeatureToggleClient featureToggleClient,
     IStatModifierRepository statModifierRepository,
@@ -82,6 +83,7 @@ internal sealed class ProficiencyRepository(
         );
 
         var currentLevel = await xpRepository.GetCharacterXpLevel(characterId);
+        var character = await characterRepository.GetCharacterForEdit(characterId);
 
         var extraModifiers = new List<ModifierDescription>();
         var dbModifiers = new List<ProficiencyModifierInfoDto>();
@@ -95,6 +97,10 @@ internal sealed class ProficiencyRepository(
             dbModifiers.AddRange(
                 await statModifierRepository.GetModifiersFromXlLevel(characterId, currentLevel)
             );
+            dbModifiers = dbModifiers.Where(x => 
+                x.TargetExpressionId == null || 
+                x.TargetExpressionId == character.ExpressionId
+            ).ToList();
         }
 
         extraModifiers.AddRange(

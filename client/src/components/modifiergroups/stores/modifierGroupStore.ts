@@ -15,6 +15,7 @@ const modifierGroupStore  =
         state: () => {
             return {
                 modifierTypes: [] as StatModifier[],
+                expressions: [] as StatModifier[],
                 haveModifierTypes: false,
                 statModifiers: new Map<number, StatModifierReturnModel[]>()
             }
@@ -27,6 +28,7 @@ const modifierGroupStore  =
                 await axios.get(`/modifiergroups/modifiers/options`)
                     .then((response) => {
                         this.modifierTypes = response.data.modifierTypes;
+                        this.expressions = response.data.expressions;
                         this.haveModifierTypes = true;
                     });
 
@@ -36,8 +38,8 @@ const modifierGroupStore  =
                 const response = await axios.get<StatModifiersResponse>(`/modifiergroups/${groupId}/modifiers`);
                 
                 response.data.modifiers.forEach(modifier => {
-                    const modifierType = this.modifierTypes.find(x => x.id == modifier.statModifierId);
-                    modifier.statModifier = modifierType;
+                    modifier.statModifier = this.modifierTypes.find(x => x.id == modifier.statModifierId);
+                    modifier.targetExpression = this.expressions.find(x => x.id == modifier.targetExpressionId);
                 })
                 
                 this.statModifiers.set(groupId, response.data.modifiers);
@@ -59,6 +61,7 @@ const modifierGroupStore  =
                     modifier: values.modifier,
                     creationSpecificBonus: values.creationSpecificBonus,
                     statModifierId: values.modifierType.id,
+                    targetExpressionId: values.targetExpression.id
                 })
                 .then(async () => {
                     await this.getModifiers(groupId);
@@ -81,6 +84,7 @@ const modifierGroupStore  =
                     modifier: values.modifier,
                     creationSpecificBonus: values.creationSpecificBonus,
                     statModifierId: values.modifierType.id,
+                    targetExpressionId: values.targetExpression.id
                 } as CreateStatModifier)
                 .then(async (response) => {
                     newGroupId = response.data.groupId;

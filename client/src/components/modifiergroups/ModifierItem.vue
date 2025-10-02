@@ -52,6 +52,7 @@ function formatWithSign(number: number) {
     <div class="align-self-center">{{ formatWithSign(props.modifier.modifier) }} {{ props.modifier?.statModifier.name }} 
       <Tag v-if="props.modifier?.scaleWithLevel" severity="info" class="mx-2"><span title="Scales with Level">SwL</span></Tag>
       <Tag v-if="props.modifier?.creationSpecificBonus" severity="info"><span title="Use this to bypass modifier being multiplied by level 0">IL0</span></Tag>
+      <Tag v-if="props.modifier?.targetExpression" severity="info" class="ml-2"><span>{{props.modifier.targetExpression.name}}</span></Tag>
     </div>
     <div
       v-if="!showEdit && hasKnowledgeManagementRole && !props.isReadOnly"

@@ -22,6 +22,7 @@ internal static class CreateStatModifierNoGroupEndpoint
                 SourceTable = request.SourceTable,
                 StatModifierGroupId = null,
                 StatModifierId = request.StatModifierId,
+                TargetExpressionId = request.TargetExpressionId,
             }
         );
 

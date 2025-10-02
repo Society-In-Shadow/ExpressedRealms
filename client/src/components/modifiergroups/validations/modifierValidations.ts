@@ -7,6 +7,8 @@ const validationSchema = object({
     modifierType: object<ListItem>().nullable()
         .required()
         .label("Modifier Type"),
+    targetExpression: object<ListItem>().nullable()
+        .label("Target Expression"),
     modifier: number().required()
         .label("Modifier"),
     creationSpecificBonus: boolean()
@@ -26,6 +28,7 @@ export function getValidationInstance() {
         form.fields.creationSpecificBonus.field.value = model.creationSpecificBonus;
         form.fields.scaleWithLevel.field.value = model.scaleWithLevel;
         form.fields.modifierType.field.value = model.statModifier;
+        form.fields.targetExpression.field.value = model.targetExpression;
     }
     
     const customResetForm = () => {

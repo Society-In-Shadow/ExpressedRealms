@@ -15,4 +15,5 @@ public interface IExpressionRepository
     Task<Expression?> ExpressionExists(int id);
     Task<bool> ExpressionTypeExists(int id);
     Task<List<Expression>> GetAllEnabledExpressions();
+    Task<bool> ExpressionExistsForModifiers(int id);
 }

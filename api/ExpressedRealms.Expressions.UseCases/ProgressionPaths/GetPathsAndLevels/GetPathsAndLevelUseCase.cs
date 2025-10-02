@@ -42,6 +42,7 @@ internal sealed class GetPathsAndLevelsUseCase(
                             XlLevel = x.XlLevel,
                             ModifierGroupId = x.StatModifierGroupId,
                         })
+                        .OrderBy(x => x.XlLevel)
                         .ToList(),
                 })
                 .ToList()

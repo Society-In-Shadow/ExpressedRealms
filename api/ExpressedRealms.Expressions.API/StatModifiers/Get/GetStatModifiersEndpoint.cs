@@ -29,6 +29,7 @@ internal static class GetStatModifiersEndpoint
                         CreationSpecificBonus = x.CreationSpecificBonus,
                         StatModifierId = x.StatModifierId,
                         Id = x.Id,
+                        TargetExpressionId = x.TargetExpressionId,
                     })
                     .ToList(),
             }
