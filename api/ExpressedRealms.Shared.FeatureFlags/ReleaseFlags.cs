@@ -71,6 +71,13 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "add-character-limit-cap",
         "Allows Admins to add XP caps, and for players to designate their primary characters"
     );
+    
+    public static readonly ReleaseFlags ShowProficiencySources = new(
+        "Show Proficiency Sources on Character Sheet",
+        "show-proficiency-sources",
+        "Will pull in blessing levels, powers, and progression levels into proficiencies"
+    );
+
 
     public override string ToString()
     {
