@@ -20,7 +20,7 @@ internal sealed class GetModifierTypesUseCase(
                 ModifierTypes = groupMapping
                     .Select(x => new ModifierTypesReturnModel() { Id = x.Id, Name = x.Name })
                     .ToList(),
-                Expressions = expressions.Select(x => new KeyValuePair<int, string>(x.Id, x.Name)),
+                Expressions = expressions.Select(x => new KeyValuePair<int, string>(x.Id, x.Name)).ToList(),
             }
         );
     }
