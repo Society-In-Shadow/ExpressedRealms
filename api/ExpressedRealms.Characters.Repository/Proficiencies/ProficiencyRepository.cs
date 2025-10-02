@@ -15,6 +15,7 @@ namespace ExpressedRealms.Characters.Repository.Proficiencies;
 internal sealed class ProficiencyRepository(
     ExpressedRealmsDbContext context,
     ICharacterStatRepository characterStatRepository,
+    ICharacterRepository characterRepository,
     IStatModifierRepository statModifierRepository,
     IXpRepository xpRepository,
     CancellationToken cancellationToken
@@ -81,16 +82,26 @@ internal sealed class ProficiencyRepository(
         var currentLevel = await xpRepository.GetCharacterXpLevel(characterId);
         
         var extraModifiers = new List<ModifierDescription>();
-        var progressionLevels = await statModifierRepository.GetModifiersForBlessings(characterId);
+        var dbModifiers = new List<ProficiencyModifierInfoDto>();
+        dbModifiers.AddRange(await statModifierRepository.GetModifiersFromBlessings(characterId));
+        dbModifiers.AddRange(await statModifierRepository.GetModifiersFromPowers(characterId));
+        dbModifiers.AddRange(await statModifierRepository.GetModifiersFromXlLevel(characterId, currentLevel));
     
-        extraModifiers.AddRange(progressionLevels.Select(x => new ModifierDescription()
+        extraModifiers.AddRange(dbModifiers.Select(x => new ModifierDescription()
         {
             Message = x.Source,
             Type = ModiferConversions.GetModifierType(x),
             Name = x.Source,
-            Value = x.ScaleWithLevel ? x.Modifier * currentLevel : x.Modifier,
+            Value = CalculatedValue(x),
         }));
 
+        int CalculatedValue(ProficiencyModifierInfoDto modifier)
+        {
+            if (!modifier.ScaleWithLevel || modifier.CreationSpecificBonus && currentLevel == 0) 
+                return modifier.Modifier;
+            return modifier.Modifier * currentLevel;
+        }
+        
         var expressionId = await context
             .Characters.AsNoTracking()
             .Where(x => x.Id == characterId)

@@ -10,7 +10,7 @@ const validationSchema = object({
     modifier: number().required()
         .label("Modifier"),
     creationSpecificBonus: boolean()
-        .label("Creation Specific Bonus"),
+        .label("Show In Character Creation"),
     scaleWithLevel: boolean()
         .label("Scale With Level")
 });

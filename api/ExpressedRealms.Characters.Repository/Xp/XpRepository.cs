@@ -51,6 +51,10 @@ public class XpRepository(
     
     public async Task<int> GetCharacterXpLevel(int characterId)
     {
+        var character = await context.Characters.Select(x => new {x.Id, x.IsInCharacterCreation}).FirstAsync(x => x.Id == characterId);
+        if (character.IsInCharacterCreation)
+            return 0;
+        
         var totalXpSpent = await context
             .CharacterXpViews.AsNoTracking()
             .Where(x => x.CharacterId == characterId)

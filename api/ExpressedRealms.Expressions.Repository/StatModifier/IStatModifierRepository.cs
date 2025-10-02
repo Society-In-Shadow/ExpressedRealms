@@ -23,5 +23,7 @@ public interface IStatModifierRepository
     Task<List<StatGroupMapping>> GetGroupMappings(int groupId);
     Task<List<DB.Models.ModifierSystem.StatModifiers.StatModifier>> GetModifierTypes();
     Task<bool> ProgressionLevelExists(int id);
-    Task<List<ProficiencyModifierInfoDto>> GetModifiersForBlessings(int characterId);
+    Task<List<ProficiencyModifierInfoDto>> GetModifiersFromBlessings(int characterId);
+    Task<List<ProficiencyModifierInfoDto>> GetModifiersFromPowers(int characterId);
+    Task<List<ProficiencyModifierInfoDto>> GetModifiersFromXlLevel(int characterId, int currentLevel);
 }
