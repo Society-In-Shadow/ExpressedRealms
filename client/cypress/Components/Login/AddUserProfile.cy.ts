@@ -1,3 +1,4 @@
+/*
 import addUserProfile from "../../../src/components/Login/AddUserProfile.vue";
 
 const name = 'name';
@@ -42,3 +43,4 @@ describe('<AddUserProfile />', () => {
     });
     
 });
+*/

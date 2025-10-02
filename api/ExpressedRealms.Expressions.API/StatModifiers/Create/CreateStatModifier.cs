@@ -1,6 +1,6 @@
 using ExpressedRealms.Expressions.UseCases.StatModifiers.Add;
 
-namespace ExpressedRealms.Expressions.API.StatModifiers.StatModifiers.Create;
+namespace ExpressedRealms.Expressions.API.StatModifiers.Create;
 
 public class CreateStatModifier
 {
@@ -10,4 +10,5 @@ public class CreateStatModifier
     public int Modifier { get; set; }
     public bool CreationSpecificBonus { get; set; }
     public int StatModifierId { get; set; }
+    public int? TargetExpressionId { get; set; }
 }

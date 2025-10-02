@@ -33,6 +33,8 @@ export interface StatModifierReturnModel {
     id: number;
     statModifierId: number;
     statModifier: StatModifier;
+    targetExpression: StatModifier;
+    targetExpressionId: number | null;
     modifier: number;
     scaleWithLevel: boolean;
     creationSpecificBonus: boolean;

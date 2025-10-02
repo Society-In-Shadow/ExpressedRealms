@@ -57,6 +57,12 @@ const cancel = () => {
 
     <FormCheckboxWrapper v-model="form.fields.creationSpecificBonus" />
     
+    <FormDropdownWrapper
+        v-model="form.fields.targetExpression"
+        :options="store.expressions"
+        option-label="name"
+    />
+    
     <div class="m-3 text-right">
       <Button label="Cancel" class="m-2" type="reset" @click="cancel" />
       <Button label="Update" class="m-2" type="submit" />

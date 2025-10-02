@@ -52,6 +52,7 @@ internal sealed class AddStatModifierUseCase(
                 ScaleWithLevel = model.ScaleWithLevel,
                 CreationSpecificBonus = model.CreationSpecificBonus,
                 StatModifierId = model.StatModifierId,
+                TargetExpressionId = model.TargetExpressionId,
             }
         );
 

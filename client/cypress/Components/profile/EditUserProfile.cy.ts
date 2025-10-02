@@ -17,6 +17,10 @@ describe('<EditUserProfile />', () => {
         cy.intercept('PUT', '/player', {
             statusCode: 200
         }).as('updateProfile');
+
+        cy.intercept('PUT', '/player', {
+            statusCode: 200
+        }).as('updateProfile');
         
         cy.mount(addUserProfile);
     });

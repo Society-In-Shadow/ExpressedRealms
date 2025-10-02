@@ -27,6 +27,7 @@ internal sealed class EditStatModifierUseCase(
         groupMapping.Modifier = model.Modifier;
         groupMapping.CreationSpecificBonus = model.CreationSpecificBonus;
         groupMapping.StatModifierId = model.StatModifierId;
+        groupMapping.TargetExpressionId = model.TargetExpressionId;
 
         await repository.UpdateGroupMapping(groupMapping);
 

@@ -7,4 +7,5 @@ public class StatModifierReturnModel
     public int Modifier { get; set; }
     public bool ScaleWithLevel { get; set; }
     public bool CreationSpecificBonus { get; set; }
+    public int? TargetExpressionId { get; set; }
 }

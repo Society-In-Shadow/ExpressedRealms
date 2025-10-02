@@ -1,4 +1,3 @@
-using ExpressedRealms.Expressions.API.StatModifiers.StatModifiers.Create;
 using ExpressedRealms.Expressions.UseCases.StatModifiers.Add;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
@@ -23,6 +22,7 @@ internal static class CreateStatModifierNoGroupEndpoint
                 SourceTable = request.SourceTable,
                 StatModifierGroupId = null,
                 StatModifierId = request.StatModifierId,
+                TargetExpressionId = request.TargetExpressionId,
             }
         );
 
