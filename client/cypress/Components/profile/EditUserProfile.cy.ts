@@ -1,8 +1,10 @@
+import addUserProfile from "../../../src/components/profile/EditUserProfile.vue";
+
 const name = 'name';
 const nameHelp = 'name-help';
 const updateProfileButton = 'update-profile-button';
 
-/*describe('<EditUserProfile />', () => {
+describe('<EditUserProfile />', () => {
     beforeEach(() => {
 
         cy.intercept('GET', '/player', {
@@ -52,4 +54,4 @@ const updateProfileButton = 'update-profile-button';
         });
     });
     
-});*/
+});
