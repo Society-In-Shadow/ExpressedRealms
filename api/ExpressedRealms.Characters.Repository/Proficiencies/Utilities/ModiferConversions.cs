@@ -1,4 +1,5 @@
 using ExpressedRealms.Characters.Repository.Enums;
+using ExpressedRealms.Characters.Repository.Proficiencies.DTOs;
 using ExpressedRealms.Characters.Repository.Proficiencies.Enums;
 using ExpressedRealms.Characters.Repository.Stats.Enums;
 
@@ -65,6 +66,41 @@ internal static class ModiferConversions
             DbModifierTypes.AgilityStonePull => ModifierType.Agility,
             DbModifierTypes.Project => ModifierType.Project,
             _ => throw new ArgumentOutOfRangeException(nameof(statType), statType, null),
+        };
+    }
+
+    public static ModifierType GetModifierType(ProficiencyModifierInfoDto mapping)
+    {
+        return mapping.ModifierTypeId switch
+        {
+            1 => ModifierType.Vitality,
+            2 => ModifierType.Health,
+            3 => ModifierType.Blood,
+            4 => ModifierType.Reaction,
+            5 => ModifierType.Psyche,
+            6 => ModifierType.RWP,
+            7 => ModifierType.Mortis,
+            8 => ModifierType.Chi,
+            9 => ModifierType.Essence,
+            10 => ModifierType.Mana,
+            11 => ModifierType.Noumenon,
+            12 => ModifierType.Strike,
+            13 => ModifierType.Thrust,
+            14 => ModifierType.Throw,
+            15 => ModifierType.Shoot,
+            16 => ModifierType.Cast,
+            17 => ModifierType.Project,
+            18 => ModifierType.Dodge,
+            19 => ModifierType.Parry,
+            20 => ModifierType.EvadeThrow,
+            21 => ModifierType.EvadeShoot,
+            22 => ModifierType.Ward,
+            23 => ModifierType.Deflect,
+            _ => throw new ArgumentOutOfRangeException(
+                nameof(mapping),
+                mapping.ModifierTypeId,
+                null
+            ),
         };
     }
 }

@@ -4,7 +4,11 @@ using ExpressedRealms.Characters.Repository.Proficiencies.DTOs;
 using ExpressedRealms.Characters.Repository.Proficiencies.Enums;
 using ExpressedRealms.Characters.Repository.Proficiencies.Utilities;
 using ExpressedRealms.Characters.Repository.Stats;
+using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.DB;
+using ExpressedRealms.Expressions.Repository.StatModifier;
+using ExpressedRealms.FeatureFlags;
+using ExpressedRealms.FeatureFlags.FeatureClient;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +17,9 @@ namespace ExpressedRealms.Characters.Repository.Proficiencies;
 internal sealed class ProficiencyRepository(
     ExpressedRealmsDbContext context,
     ICharacterStatRepository characterStatRepository,
+    IFeatureToggleClient featureToggleClient,
+    IStatModifierRepository statModifierRepository,
+    IXpRepository xpRepository,
     CancellationToken cancellationToken
 ) : IProficiencyRepository
 {
@@ -74,6 +81,39 @@ internal sealed class ProficiencyRepository(
             }
         );
 
+        var currentLevel = await xpRepository.GetCharacterXpLevel(characterId);
+
+        var extraModifiers = new List<ModifierDescription>();
+        var dbModifiers = new List<ProficiencyModifierInfoDto>();
+
+        if (await featureToggleClient.HasFeatureFlag(ReleaseFlags.ShowProficiencySources))
+        {
+            dbModifiers.AddRange(
+                await statModifierRepository.GetModifiersFromBlessings(characterId)
+            );
+            dbModifiers.AddRange(await statModifierRepository.GetModifiersFromPowers(characterId));
+            dbModifiers.AddRange(
+                await statModifierRepository.GetModifiersFromXlLevel(characterId, currentLevel)
+            );
+        }
+
+        extraModifiers.AddRange(
+            dbModifiers.Select(x => new ModifierDescription()
+            {
+                Message = x.Source,
+                Type = ModiferConversions.GetModifierType(x),
+                Name = x.Source,
+                Value = CalculatedValue(x),
+            })
+        );
+
+        int CalculatedValue(ProficiencyModifierInfoDto modifier)
+        {
+            if (!modifier.ScaleWithLevel || modifier.CreationSpecificBonus && currentLevel == 0)
+                return modifier.Modifier;
+            return modifier.Modifier * currentLevel;
+        }
+
         var expressionId = await context
             .Characters.AsNoTracking()
             .Where(x => x.Id == characterId)
@@ -91,6 +131,15 @@ internal sealed class ProficiencyRepository(
                     availableModifiers.Where(x => x.Type == modifier).ToList()
                 );
             }
+
+            proficiency.AppliedModifiers.AddRange(
+                extraModifiers.Where(x =>
+                    x.Type.Name.Equals(
+                        proficiency.Name,
+                        StringComparison.InvariantCultureIgnoreCase
+                    )
+                )
+            );
         }
 
         return proficiencies;

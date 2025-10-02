@@ -49,7 +49,10 @@ function formatWithSign(number: number) {
     <EditModifier :group-id="props.groupId" :modifier="props.modifier" @canceled="toggleEdit" />
   </div>
   <div v-else class="d-flex flex-column flex-md-row align-self-center justify-content-between m-2">
-    <div class="align-self-center">{{ formatWithSign(props.modifier.modifier) }} {{ props.modifier?.statModifier.name }} <Tag v-if="props.modifier?.scaleWithLevel" severity="info"><span title="Scales with Level">Scales with Level</span></Tag></div>
+    <div class="align-self-center">{{ formatWithSign(props.modifier.modifier) }} {{ props.modifier?.statModifier.name }} 
+      <Tag v-if="props.modifier?.scaleWithLevel" severity="info" class="mx-2"><span title="Scales with Level">SwL</span></Tag>
+      <Tag v-if="props.modifier?.creationSpecificBonus" severity="info"><span title="Use this to bypass modifier being multiplied by level 0">IL0</span></Tag>
+    </div>
     <div
       v-if="!showEdit && hasKnowledgeManagementRole && !props.isReadOnly"
       class="p-0 m-0 d-inline-flex align-items-start"

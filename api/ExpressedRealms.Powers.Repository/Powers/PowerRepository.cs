@@ -89,7 +89,7 @@ internal sealed class PowerRepository(
                 Other = x.OtherFields,
                 IsPowerUse = x.IsPowerUse,
                 Cost = x.Cost,
-                StatModifierGroup = x.StatModifierGroupId
+                StatModifierGroup = x.StatModifierGroupId,
             })
             .FirstOrDefaultAsync(cancellationToken);
 

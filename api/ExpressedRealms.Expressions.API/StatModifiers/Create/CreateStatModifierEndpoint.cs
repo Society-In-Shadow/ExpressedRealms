@@ -36,7 +36,7 @@ internal static class CreateStatModifierEndpoint
             new NewIds
             {
                 GroupId = results.Value.GroupId,
-                MappingId = results.Value.ModifierMappingId
+                MappingId = results.Value.ModifierMappingId,
             }
         );
     }

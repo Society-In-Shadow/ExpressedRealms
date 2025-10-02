@@ -49,6 +49,33 @@ public class XpRepository(
             .ToListAsync();
     }
 
+    public async Task<int> GetCharacterXpLevel(int characterId)
+    {
+        var character = await context
+            .Characters.Select(x => new { x.Id, x.IsInCharacterCreation })
+            .FirstAsync(x => x.Id == characterId);
+        if (character.IsInCharacterCreation)
+            return 0;
+
+        var totalXpSpent = await context
+            .CharacterXpViews.AsNoTracking()
+            .Where(x => x.CharacterId == characterId)
+            .SumAsync(x => x.LevelXp, cancellationToken);
+
+        return totalXpSpent switch
+        {
+            <= 0 => 0,
+            <= 25 => 1,
+            <= 75 => 2,
+            <= 150 => 3,
+            <= 250 => 4,
+            <= 375 => 5,
+            <= 525 => 6,
+            <= 700 => 7,
+            _ => 8,
+        };
+    }
+
     public async Task<int> GetAvailableDiscretionary(int characterId)
     {
         const int maxDiscretionary = 16;

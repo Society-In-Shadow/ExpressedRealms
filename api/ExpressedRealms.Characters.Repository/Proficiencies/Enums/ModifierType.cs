@@ -42,5 +42,17 @@ public sealed class ModifierType : SmartEnum<ModifierType, byte>
     public static readonly ModifierType RWP = new("Reserve Willpower", 29);
     public static readonly ModifierType Mortis = new("Mortis", 30);
 
+    public static readonly ModifierType Vitality = new("Vitality", 31);
+    public static readonly ModifierType Health = new("Health", 32);
+    public static readonly ModifierType Blood = new("Blood", 33);
+    public static readonly ModifierType Reaction = new("Reaction", 34);
+    public static readonly ModifierType Psyche = new("Psyche", 35);
+    public static readonly ModifierType Chi = new("Chi", 36);
+    public static readonly ModifierType Essence = new("Essence", 37);
+    public static readonly ModifierType Mana = new("Mana", 38);
+    public static readonly ModifierType Noumenon = new("Noumenon", 39);
+    public static readonly ModifierType EvadeThrow = new("Evade Throw", 40);
+    public static readonly ModifierType EvadeShoot = new("Evade Shoot", 41);
+
     public override string ToString() => Name;
 }
