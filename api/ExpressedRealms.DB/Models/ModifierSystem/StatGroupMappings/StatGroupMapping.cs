@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.Models.ModifierSystem.StatModifierGroups;
 using ExpressedRealms.DB.Models.ModifierSystem.StatModifiers;
 
@@ -11,7 +12,9 @@ public class StatGroupMapping
     public int Modifier { get; set; }
     public bool ScaleWithLevel { get; set; }
     public bool CreationSpecificBonus { get; set; }
-
+    public int? TargetExpressionId { get; set; }
     public StatModifierGroup StatModifierGroup { get; set; } = null!;
     public StatModifier StatModifier { get; set; } = null!;
+    public Expression? Expression { get; set; }
+
 }

@@ -4,6 +4,7 @@ using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths.Audit;
+using ExpressedRealms.DB.Models.ModifierSystem.StatGroupMappings;
 using ExpressedRealms.DB.Models.Powers.PowerPathSetup;
 
 namespace ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
@@ -31,4 +32,5 @@ public class Expression : ISoftDelete
     public virtual List<PowerPathAuditTrail> PowerPathAudits { get; set; } = null!;
     public virtual List<ProgressionPathAuditTrail> ProgressionPathAudits { get; set; } = null!;
     public virtual List<ProgressionPath> ProgressionPaths { get; set; } = null!;
+    public virtual List<StatGroupMapping> StatGroupMappings { get; set; } = null!;
 }
