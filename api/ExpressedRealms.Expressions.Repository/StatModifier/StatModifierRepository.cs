@@ -19,7 +19,7 @@ public class StatModifierRepository(
     {
         return await context
             .StatGroupMappings.AsNoTracking()
-            .Where(x => x.Id == groupId)
+            .Where(x => x.StatGroupId == groupId)
             .ToListAsync();
     }
 

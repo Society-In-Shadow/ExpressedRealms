@@ -28,6 +28,7 @@ export interface BlessingLevel {
     id: number,
     level: string,
     description: string,
-    xpCost: number
-    xpGain: number
+    xpCost: number,
+    xpGain: number,
+    modifierGroupId: number
 }

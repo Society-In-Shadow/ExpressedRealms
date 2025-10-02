@@ -12,6 +12,7 @@ export const UserRoles = {
     BlessingsManagementRole: "ManageBlessingsRole",
     ManagePlayerCharacterList: "ManagePlayerCharacterList",
     ManageProgressionPaths: "ManageProgressionPaths",
+    ManageModifiers: "ManageModifiers",
 } as const;
 
 export const FeatureFlags = {

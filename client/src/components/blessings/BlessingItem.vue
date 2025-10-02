@@ -63,7 +63,7 @@ function toggleEdit(){
             class="p-0 m-0 d-inline-flex align-items-start"
         >
           <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteBlessingLevelConfirmation($event, props.blessing.id, level.id)" />
-          <Button class="float-end" label="Edit" @click="dialogs.showEditBlessingLevel(props.blessing.id, level.id)" />
+          <Button class="float-end" label="Edit" @click="dialogs.showEditBlessingLevel(props.blessing.id, level.id, level.modifierGroupId)" />
         </div>
       </div>
     </li>

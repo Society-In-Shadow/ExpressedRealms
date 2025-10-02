@@ -6,10 +6,9 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace ExpressedRealms.Expressions.API.StatModifiers.Create;
 
-internal static class CreateStatModifierEndpoint
+internal static class CreateStatModifierNoGroupEndpoint
 {
     public static async Task<Results<ValidationProblem, Created<NewIds>>> ExecuteAsync(
-        int? groupId,
         CreateStatModifier request,
         IAddStatModifierUseCase useCase
     )
@@ -22,7 +21,7 @@ internal static class CreateStatModifierEndpoint
                 CreationSpecificBonus = request.CreationSpecificBonus,
                 SourceId = request.SourceId,
                 SourceTable = request.SourceTable,
-                StatModifierGroupId = groupId,
+                StatModifierGroupId = null,
                 StatModifierId = request.StatModifierId,
             }
         );
