@@ -28,6 +28,11 @@ public class StatModifierRepository(
         return await context.StatModifiers.AsNoTracking().ToListAsync();
     }
 
+    public async Task<bool> ProgressionLevelExists(int id)
+    {
+        return await context.ProgressionLevel.AnyAsync(x => x.Id == id);
+    }
+
     public async Task<bool> ModifierTypeExists(int id)
     {
         return await context.ModifierTypes.AnyAsync(x => x.Id == id);

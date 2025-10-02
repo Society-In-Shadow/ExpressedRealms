@@ -12,6 +12,8 @@ import {
   getValidationInstance
 } from "@/components/expressions/progressionLevels/validations/progressionLevelValidations.ts";
 import type {ProgressionLevel} from "@/components/expressions/progressionPaths/types.ts";
+import {SourceTableEnum} from "@/components/modifiergroups/types.ts";
+import ModifierGroup from "@/components/modifiergroups/ModifierGroup.vue";
 
 const form = getValidationInstance();
 const progressionPathInfo = progressionPathStore();
@@ -70,5 +72,8 @@ const reset = () => {
         <Button label="Submit" class="m-2" type="submit" />
       </div>
     </form>
+
+    <ModifierGroup :group-id="props.level?.modiferGroupId" :source="SourceTableEnum.ProgressionLevels" :source-id="props.level.id"/>
+    
   </div>
 </template>
