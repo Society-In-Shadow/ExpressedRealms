@@ -48,10 +48,10 @@ const props = defineProps({
 
 const groupId = computed(() => props.groupId ?? newGroupId.value);
 
-watch(groupId, async (oldValue, newValue) => {
-  if(newValue !== null && newValue !== 0)
-    await store.getModifiers(groupId);
-})
+watch([() => props.groupId, () => newGroupId], async (oldValue, newValue) => {
+  if(groupId.value !== null && groupId.value !== 0)
+    await store.getModifiers(groupId.value);
+}, {immediate: true})
 
 </script>
 

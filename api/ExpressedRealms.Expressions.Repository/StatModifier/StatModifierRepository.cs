@@ -71,7 +71,7 @@ public class StatModifierRepository(
 
     public async Task UpdatePowerGroupId(int powerId, int groupId)
     {
-        var power = await context.ProgressionLevel.FirstAsync(x => x.Id == powerId);
+        var power = await context.Powers.FirstAsync(x => x.Id == powerId);
         power.StatModifierGroupId = groupId;
         await context.SaveChangesAsync(cancellationToken);
     }

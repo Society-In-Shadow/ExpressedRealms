@@ -4,9 +4,10 @@ import axios from "axios";
 import type {
     EditPower,
     EditPowerResponse,
-    Power, RawPowerPrerequisite,
+    Power,
     PowerPrerequisiteOptions,
-    PowerStore
+    PowerStore,
+    RawPowerPrerequisite
 } from "@/components/expressions/powers/types";
 import type {ListItem} from "@/types/ListItem";
 import {powerPathStore} from "@/components/expressions/powerPaths/stores/powerPathStore";
@@ -70,7 +71,8 @@ export const powersStore =
                     powerActivationType: this.powerActivationTypes.find((x: ListItem) => x.id == response.data.powerActivationTypeId) as ListItem,
                     other: response.data.other,
                     isPowerUse: response.data.isPowerUse,
-                    cost: response.data.cost
+                    cost: response.data.cost,
+                    modifierGroupId: response.data.statModifierGroup
                 };
             },
             getPrerequisitePowerOptions: async function (powerPathId: number): Promise<PowerPrerequisiteOptions> {

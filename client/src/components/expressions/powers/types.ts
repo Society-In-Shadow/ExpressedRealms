@@ -47,6 +47,7 @@ export interface EditPowerResponse {
     other: string;
     isPowerUse: boolean;
     cost: string;
+    modifierGroupId: number;
 }
 
 export interface EditPower {
@@ -63,6 +64,7 @@ export interface EditPower {
     other: string;
     isPowerUse: boolean;
     cost: string;
+    modifierGroupId: number;
 }
 
 export interface PowerPrerequisiteOptions {
