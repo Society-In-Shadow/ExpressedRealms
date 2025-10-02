@@ -9,4 +9,5 @@ public class AddStatModifierModel
     public int Modifier { get; set; }
     public bool CreationSpecificBonus { get; set; }
     public int StatModifierId { get; set; }
+    public int? TargetExpressionId { get; set; }
 }

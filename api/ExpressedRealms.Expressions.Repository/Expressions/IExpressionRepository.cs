@@ -14,4 +14,5 @@ public interface IExpressionRepository
     Task<Expression?> GetExpressionForDeletion(int id);
     Task<Expression?> ExpressionExists(int id);
     Task<bool> ExpressionTypeExists(int id);
+    Task<List<Expression>> GetAllEnabledExpressions();
 }

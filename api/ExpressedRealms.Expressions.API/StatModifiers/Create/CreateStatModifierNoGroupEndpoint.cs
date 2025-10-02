@@ -1,4 +1,3 @@
-using ExpressedRealms.Expressions.API.StatModifiers.StatModifiers.Create;
 using ExpressedRealms.Expressions.UseCases.StatModifiers.Add;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;

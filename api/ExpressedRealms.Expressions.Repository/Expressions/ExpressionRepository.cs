@@ -176,4 +176,9 @@ internal sealed class ExpressionRepository(
     {
         return await context.ExpressionTypes.AnyAsync(x => x.Id == id, cancellationToken);
     }
+    
+    public async Task<List<Expression>> GetAllEnabledExpressions()
+    {
+        return await context.Expressions.ToListAsync();
+    }
 }

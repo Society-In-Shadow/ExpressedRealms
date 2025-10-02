@@ -21,8 +21,13 @@ internal static class GetStatModifierTypesEndpoint
             new StatModifiersResponse()
             {
                 ModifierTypes = modifierTypeResults
-                    .Value.Select(x => new ModifierType() { Id = x.Id, Name = x.Name })
+                    .Value.ModifierTypes.Select(x => new ListItem() { Id = x.Id, Name = x.Name })
                     .ToList(),
+                Expressions = modifierTypeResults.Value.Expressions.Select(x => new ListItem()
+                {
+                    Id = x.Key,
+                    Name = x.Value,
+                }).ToList()
             }
         );
     }
