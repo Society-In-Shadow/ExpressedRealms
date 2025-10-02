@@ -21,6 +21,7 @@ public class StatModifierRepository(
         return await context
             .StatGroupMappings.AsNoTracking()
             .Where(x => x.StatGroupId == groupId)
+            .OrderBy(x => x.Id)
             .ToListAsync();
     }
 
@@ -122,7 +123,7 @@ public class StatModifierRepository(
 
     public async Task<bool> ModifierTypeExists(int id)
     {
-        return await context.ModifierTypes.AnyAsync(x => x.Id == id);
+        return await context.StatModifiers.AnyAsync(x => x.Id == id);
     }
 
     public async Task<bool> GroupIdExists(int id)
