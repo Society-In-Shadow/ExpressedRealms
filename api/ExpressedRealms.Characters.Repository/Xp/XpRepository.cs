@@ -48,13 +48,15 @@ public class XpRepository(
             .Where(x => x.CharacterId == characterId)
             .ToListAsync();
     }
-    
+
     public async Task<int> GetCharacterXpLevel(int characterId)
     {
-        var character = await context.Characters.Select(x => new {x.Id, x.IsInCharacterCreation}).FirstAsync(x => x.Id == characterId);
+        var character = await context
+            .Characters.Select(x => new { x.Id, x.IsInCharacterCreation })
+            .FirstAsync(x => x.Id == characterId);
         if (character.IsInCharacterCreation)
             return 0;
-        
+
         var totalXpSpent = await context
             .CharacterXpViews.AsNoTracking()
             .Where(x => x.CharacterId == characterId)
@@ -70,10 +72,9 @@ public class XpRepository(
             <= 375 => 5,
             <= 525 => 6,
             <= 700 => 7,
-            _ => 8
+            _ => 8,
         };
     }
-
 
     public async Task<int> GetAvailableDiscretionary(int characterId)
     {

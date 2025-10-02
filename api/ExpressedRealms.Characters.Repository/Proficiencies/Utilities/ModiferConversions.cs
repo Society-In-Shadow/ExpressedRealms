@@ -96,7 +96,11 @@ internal static class ModiferConversions
             21 => ModifierType.EvadeShoot,
             22 => ModifierType.Ward,
             23 => ModifierType.Deflect,
-            _ => throw new ArgumentOutOfRangeException(nameof(mapping), mapping.ModifierTypeId, null),
+            _ => throw new ArgumentOutOfRangeException(
+                nameof(mapping),
+                mapping.ModifierTypeId,
+                null
+            ),
         };
     }
 }

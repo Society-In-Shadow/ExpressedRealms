@@ -25,5 +25,8 @@ public interface IStatModifierRepository
     Task<bool> ProgressionLevelExists(int id);
     Task<List<ProficiencyModifierInfoDto>> GetModifiersFromBlessings(int characterId);
     Task<List<ProficiencyModifierInfoDto>> GetModifiersFromPowers(int characterId);
-    Task<List<ProficiencyModifierInfoDto>> GetModifiersFromXlLevel(int characterId, int currentLevel);
+    Task<List<ProficiencyModifierInfoDto>> GetModifiersFromXlLevel(
+        int characterId,
+        int currentLevel
+    );
 }

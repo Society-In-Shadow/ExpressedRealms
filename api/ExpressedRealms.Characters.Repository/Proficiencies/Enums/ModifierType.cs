@@ -41,7 +41,7 @@ public sealed class ModifierType : SmartEnum<ModifierType, byte>
     public static readonly ModifierType Deflect = new("Deflect", 28);
     public static readonly ModifierType RWP = new("Reserve Willpower", 29);
     public static readonly ModifierType Mortis = new("Mortis", 30);
-    
+
     public static readonly ModifierType Vitality = new("Vitality", 31);
     public static readonly ModifierType Health = new("Health", 32);
     public static readonly ModifierType Blood = new("Blood", 33);

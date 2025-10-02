@@ -82,32 +82,38 @@ internal sealed class ProficiencyRepository(
         );
 
         var currentLevel = await xpRepository.GetCharacterXpLevel(characterId);
-        
+
         var extraModifiers = new List<ModifierDescription>();
         var dbModifiers = new List<ProficiencyModifierInfoDto>();
-        
-        if(await featureToggleClient.HasFeatureFlag(ReleaseFlags.ShowProficiencySources))
+
+        if (await featureToggleClient.HasFeatureFlag(ReleaseFlags.ShowProficiencySources))
         {
-            dbModifiers.AddRange(await statModifierRepository.GetModifiersFromBlessings(characterId));
+            dbModifiers.AddRange(
+                await statModifierRepository.GetModifiersFromBlessings(characterId)
+            );
             dbModifiers.AddRange(await statModifierRepository.GetModifiersFromPowers(characterId));
-            dbModifiers.AddRange(await statModifierRepository.GetModifiersFromXlLevel(characterId, currentLevel));
+            dbModifiers.AddRange(
+                await statModifierRepository.GetModifiersFromXlLevel(characterId, currentLevel)
+            );
         }
-    
-        extraModifiers.AddRange(dbModifiers.Select(x => new ModifierDescription()
-        {
-            Message = x.Source,
-            Type = ModiferConversions.GetModifierType(x),
-            Name = x.Source,
-            Value = CalculatedValue(x),
-        }));
+
+        extraModifiers.AddRange(
+            dbModifiers.Select(x => new ModifierDescription()
+            {
+                Message = x.Source,
+                Type = ModiferConversions.GetModifierType(x),
+                Name = x.Source,
+                Value = CalculatedValue(x),
+            })
+        );
 
         int CalculatedValue(ProficiencyModifierInfoDto modifier)
         {
-            if (!modifier.ScaleWithLevel || modifier.CreationSpecificBonus && currentLevel == 0) 
+            if (!modifier.ScaleWithLevel || modifier.CreationSpecificBonus && currentLevel == 0)
                 return modifier.Modifier;
             return modifier.Modifier * currentLevel;
         }
-        
+
         var expressionId = await context
             .Characters.AsNoTracking()
             .Where(x => x.Id == characterId)
@@ -125,9 +131,15 @@ internal sealed class ProficiencyRepository(
                     availableModifiers.Where(x => x.Type == modifier).ToList()
                 );
             }
-            
-            proficiency.AppliedModifiers.AddRange(extraModifiers.Where(x => x.Type.Name.Equals(proficiency.Name, StringComparison.InvariantCultureIgnoreCase)));
-            
+
+            proficiency.AppliedModifiers.AddRange(
+                extraModifiers.Where(x =>
+                    x.Type.Name.Equals(
+                        proficiency.Name,
+                        StringComparison.InvariantCultureIgnoreCase
+                    )
+                )
+            );
         }
 
         return proficiencies;
