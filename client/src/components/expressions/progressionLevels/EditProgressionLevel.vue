@@ -73,7 +73,7 @@ const reset = () => {
       </div>
     </form>
 
-    <ModifierGroup :group-id="props.level?.modiferGroupId" :source="SourceTableEnum.ProgressionLevels" :source-id="props.level.id"/>
+    <ModifierGroup :group-id="props.level?.modifierGroupId" :source="SourceTableEnum.ProgressionLevels" :source-id="props.level.id"/>
     
   </div>
 </template>
