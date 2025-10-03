@@ -40,7 +40,9 @@ public static class CharacterReferenceBookletReport
         MergeField(fields,"CharacterName", basicInfo.CharacterName);
         MergeField(fields,"PlayerName", basicInfo.PlayerName);
         MergeField(fields,"Expression", basicInfo.Expression);
+        MergeField(fields,"CharacterClass", basicInfo.Expression);
         MergeField(fields,"Subtype", basicInfo.ProgressionPath);
+        MergeField(fields,"XL", basicInfo.CharacterLevel);
     }
     
     private static void FillInTraits(PdfAcroField.PdfAcroFieldCollection fields, Traits traits)
@@ -92,8 +94,8 @@ public static class CharacterReferenceBookletReport
             var fields = document.AcroForm.Fields;
 
             FillInBasicInfo(fields, data.BasicInfo);
-            //FillInTraits(fields, data.Traits);
-            //FillInSkills(fields, data.Skills);
+            FillInTraits(fields, data.Traits);
+            FillInSkills(fields, data.Skills);
         }
 
         var finalStream = new MemoryStream();
