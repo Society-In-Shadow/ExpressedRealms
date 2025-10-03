@@ -1,7 +1,6 @@
 using System.Text;
 using ExpressedRealms.Characters.Reports.CRB.Data;
 using ExpressedRealms.Characters.Reports.CRB.Data.SupportingData;
-using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.AcroForms;
 using PdfSharpCore.Pdf.IO;
 using QuestPDF;
@@ -36,6 +35,8 @@ public static class CharacterReferenceBookletReport
             FillInProficiencies(fields, data.ProficiencyInfo);
             FillInStatInfo(fields, data.StatInfo);
         }
+        
+        //FlattenAllFields(document);
 
         var finalStream = new MemoryStream();
         document.Save(finalStream, false);
@@ -102,27 +103,21 @@ public static class CharacterReferenceBookletReport
     
     private static void FillInTraits(PdfAcroField.PdfAcroFieldCollection fields, Traits traits)
     {
-        StringBuilder advantageString = new();
-        StringBuilder xpSpent = new();
+        int advantageCount = 0;
         foreach (var advantage in traits.Advantages)
         {
-            advantageString.AppendLine(advantage.Name);
-            xpSpent.AppendLine(advantage.Cost);
+            MergeField(fields, $"Advantages{advantageCount.ToString()}", advantage.Name);
+            MergeField(fields, $"AdvantagesCost{advantageCount.ToString()}", advantage.Cost);
+            advantageCount++;
         }
         
-        MergeField(fields,"Advantages", advantageString.ToString());
-        MergeField(fields,"AdvantagesExp", xpSpent.ToString());
-        
-        StringBuilder disadvantageString = new();
-        StringBuilder disXpSpent = new();
+        int disadvantageCount = 0;
         foreach (var advantage in traits.Disadvantages)
         {
-            disadvantageString.AppendLine(advantage.Name);
-            disXpSpent.AppendLine(advantage.Cost);
+            MergeField(fields, $"Disadvantages{disadvantageCount.ToString()}", advantage.Name);
+            MergeField(fields, $"DisadvantagesCost{disadvantageCount.ToString()}", advantage.Cost);
+            disadvantageCount++;
         }
-        
-        MergeField(fields,"Disadvantages", disadvantageString.ToString());
-        MergeField(fields,"DisadvantagesExp", disXpSpent.ToString());
     }
 
     private static void FillInSkills(PdfAcroField.PdfAcroFieldCollection fields, SkillInfo skillInfo)
@@ -189,8 +184,13 @@ public static class CharacterReferenceBookletReport
 
         foreach (var index in indexes)
         {
-            fields[index].Value = new PdfString(data);
-            fields[index].ReadOnly = true;
+            var pdfCompatibleData = data.Replace("\n", "\r\n").Replace("\r\r", "\r\n");
+            
+            if (fields[index] is PdfTextField textField)
+            {
+                textField.Text = pdfCompatibleData;
+                textField.MultiLine = true;
+            }
         }
     }
 
