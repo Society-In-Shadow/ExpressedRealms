@@ -1,4 +1,3 @@
-using System.Text;
 using ExpressedRealms.Characters.Reports.CRB.Data;
 using ExpressedRealms.Characters.Reports.CRB.Data.SupportingData;
 using PdfSharpCore.Pdf.AcroForms;
@@ -150,22 +149,15 @@ public static class CharacterReferenceBookletReport
     
     private static void FillInKnowledges(PdfAcroField.PdfAcroFieldCollection fields, List<KnowledgeInfo> dataPowers)
     {
-        StringBuilder nameString = new();
-        StringBuilder levelString = new();
-        StringBuilder specializationString = new();
-        StringBuilder xpString = new();
+        int count = 0;
         foreach (var model in dataPowers)
         {
-            nameString.AppendLine(model.Name);
-            specializationString.AppendLine(model.Specialization);
-            levelString.AppendLine(model.Level.Substring(0, 1));
-            xpString.AppendLine(model.XPCost);
+            MergeField(fields, $"KnowledgeName{count.ToString()}", model.Name);
+            MergeField(fields, $"KnowledgeLevel{count.ToString()}", model.Level.Substring(0, 1));
+            MergeField(fields, $"Specialization{count.ToString()}", model.Specialization ?? "");
+            MergeField(fields, $"KnowledgeExp{count.ToString()}", model.XPCost);
+            count++;
         }
-        
-        MergeField(fields,"KnowledgeName", nameString.ToString());
-        MergeField(fields,"KnowledgeLevel", levelString.ToString());
-        MergeField(fields,"Specialization", specializationString.ToString());
-        MergeField(fields,"KnowledgeExp", xpString.ToString());
     }
     
         
