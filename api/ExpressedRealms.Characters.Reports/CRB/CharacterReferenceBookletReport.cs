@@ -138,19 +138,14 @@ public static class CharacterReferenceBookletReport
 
     private static void FillInPowers(PdfAcroField.PdfAcroFieldCollection fields, List<PowerInfo> dataPowers)
     {
-        StringBuilder nameString = new();
-        StringBuilder levelString = new();
-        StringBuilder xpString = new();
-        foreach (var model in dataPowers)
+        int count = 0;
+        foreach (var powers in dataPowers)
         {
-            nameString.AppendLine(model.Name);
-            levelString.AppendLine(model.Level.Substring(0, 1));
-            xpString.AppendLine(model.XPCost);
+            MergeField(fields, $"PowerName{count.ToString()}", powers.Name);
+            MergeField(fields, $"PowerLevel{count.ToString()}", powers.Level.Substring(0, 1));
+            MergeField(fields, $"PowerExp{count.ToString()}", powers.XPCost);
+            count++;
         }
-        
-        MergeField(fields,"PowerName", nameString.ToString());
-        MergeField(fields,"PowerLevel", levelString.ToString());
-        MergeField(fields,"PowerExp", xpString.ToString());
     }
     
     private static void FillInKnowledges(PdfAcroField.PdfAcroFieldCollection fields, List<KnowledgeInfo> dataPowers)
