@@ -33,12 +33,40 @@ public static class CharacterReferenceBookletReport
             FillInSkills(fields, data.SkillInfo);
             FillInPowers(fields, data.Powers);
             FillInKnowledges(fields, data.Knowledges);
+            FillInProficiencies(fields, data.ProficiencyInfo);
         }
 
         var finalStream = new MemoryStream();
         document.Save(finalStream, false);
         finalStream.Position = 0;
         return finalStream;
+    }
+
+    private static void FillInProficiencies(PdfAcroField.PdfAcroFieldCollection fields, ProficiencyData dataProficiencyInfo)
+    {
+        MergeField(fields, "Vitality",   dataProficiencyInfo.Vitality.ToString());
+        MergeField(fields, "Health",     dataProficiencyInfo.Health.ToString());
+        MergeField(fields, "Blood",      dataProficiencyInfo.Blood.ToString());
+        MergeField(fields, "Reaction",   dataProficiencyInfo.Reaction.ToString());
+        MergeField(fields, "Psyche",     dataProficiencyInfo.Psyche.ToString());
+        MergeField(fields, "RWP",        dataProficiencyInfo.RWP.ToString());
+        MergeField(fields, "Mortis",     dataProficiencyInfo.Mortis.ToString());
+        MergeField(fields, "Chi",        dataProficiencyInfo.Chi.ToString());
+        MergeField(fields, "Essence",    dataProficiencyInfo.Essence.ToString());
+        MergeField(fields, "Mana",       dataProficiencyInfo.Mana.ToString());
+        MergeField(fields, "Noumenon",   dataProficiencyInfo.Noumenon.ToString());
+        MergeField(fields, "Strike",     dataProficiencyInfo.Strike.ToString());
+        MergeField(fields, "Thrust",     dataProficiencyInfo.Thrust.ToString());
+        MergeField(fields, "Throw",      dataProficiencyInfo.Throw.ToString());
+        MergeField(fields, "Shoot",      dataProficiencyInfo.Shoot.ToString());
+        MergeField(fields, "Cast",       dataProficiencyInfo.Cast.ToString());
+        MergeField(fields, "Project",    dataProficiencyInfo.Project.ToString());
+        MergeField(fields, "Dodge",      dataProficiencyInfo.Dodge.ToString());
+        MergeField(fields, "Parry",      dataProficiencyInfo.Parry.ToString());
+        MergeField(fields, "ThrowEvade", dataProficiencyInfo.EvadeThrow.ToString());
+        MergeField(fields, "ShootEvade", dataProficiencyInfo.EvadeShoot.ToString());
+        MergeField(fields, "Ward",       dataProficiencyInfo.Ward.ToString());
+        MergeField(fields, "Deflect",    dataProficiencyInfo.Deflect.ToString());
     }
 
     private static void FillInBasicInfo(PdfAcroField.PdfAcroFieldCollection fields, BasicInfo basicInfo)

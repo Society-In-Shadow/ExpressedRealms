@@ -4,6 +4,7 @@ using ExpressedRealms.Characters.Reports.CRB.Data;
 using ExpressedRealms.Characters.Reports.CRB.Data.SupportingData;
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Enums;
+using ExpressedRealms.Characters.Repository.Proficiencies;
 using ExpressedRealms.Characters.Repository.Skills;
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
@@ -20,6 +21,7 @@ public class GetCharacterSheetReportUseCase(
     ICharacterPowerRepository mappingRepository,
     ICharacterBlessingRepository blessingRepository,
     ICharacterSkillRepository skillRepository,
+    IProficiencyRepository proficiencyRepository,
     GetCharacterSheetReportModelValidator validator,
     CancellationToken cancellationToken
 ) : IGetCharacterSheetReportUseCase
@@ -42,10 +44,50 @@ public class GetCharacterSheetReportUseCase(
                 SkillInfo = await GetSkillInfo(model),
                 Powers = await GetPowerInfo(model),
                 Knowledges = await GetKnowledgeInfo(model),
+                ProficiencyInfo = await GetProficiencyInfo(model)
             });
 
         reportStream.Position = 0;
         return reportStream;
+    }
+
+    private async Task<ProficiencyData> GetProficiencyInfo(GetCharacterSheetReportModel model)
+    {
+        var proficiencies = await proficiencyRepository.GetBasicProficiencies(model.CharacterId);
+
+        var proficiencyInfo = new ProficiencyData();
+
+        proficiencyInfo.Vitality   = proficiencies.Value.First(x => x.Id == 13).Value;
+        proficiencyInfo.Health     = proficiencies.Value.First(x => x.Id == 14).Value;
+        proficiencyInfo.Blood      = proficiencies.Value.First(x => x.Id == 15).Value;
+        proficiencyInfo.Reaction   = proficiencies.Value.First(x => x.Id == 16).Value;
+        proficiencyInfo.Psyche     = proficiencies.Value.First(x => x.Id == 17).Value;
+        proficiencyInfo.RWP        = proficiencies.Value.First(x => x.Id == 22).Value;
+        proficiencyInfo.Mortis     = proficiencies.Value.First(x => x.Id == 23).Value;
+
+        proficiencyInfo.Chi        = proficiencies.Value.FirstOrDefault(x => x.Id == 18)?.Value ?? 0;
+        proficiencyInfo.Essence    = proficiencies.Value.FirstOrDefault(x => x.Id == 19)?.Value ?? 0;
+        proficiencyInfo.Mana       = proficiencies.Value.FirstOrDefault(x => x.Id == 20)?.Value ?? 0;
+        proficiencyInfo.Noumenon   = proficiencies.Value.FirstOrDefault(x => x.Id == 21)?.Value ?? 0;
+
+        proficiencyInfo.Strike     = proficiencies.Value.First(x => x.Id == 1).Value;
+        proficiencyInfo.Dodge      = proficiencies.Value.First(x => x.Id == 2).Value;
+        proficiencyInfo.Thrust     = proficiencies.Value.First(x => x.Id == 3).Value;
+        proficiencyInfo.Parry      = proficiencies.Value.First(x => x.Id == 4).Value;
+        proficiencyInfo.Throw      = proficiencies.Value.First(x => x.Id == 5).Value;
+        proficiencyInfo.EvadeThrow = proficiencies.Value.First(x => x.Id == 6).Value;
+        proficiencyInfo.Shoot      = proficiencies.Value.First(x => x.Id == 7).Value;
+        proficiencyInfo.EvadeShoot = proficiencies.Value.First(x => x.Id == 8).Value;
+        proficiencyInfo.Cast       = proficiencies.Value.First(x => x.Id == 9).Value;
+        proficiencyInfo.Ward       = proficiencies.Value.First(x => x.Id == 10).Value;
+        proficiencyInfo.Project    = proficiencies.Value.First(x => x.Id == 11).Value;
+        proficiencyInfo.Deflect    = proficiencies.Value.First(x => x.Id == 12).Value;
+
+
+
+
+
+        return proficiencyInfo;
     }
 
     private async Task<List<KnowledgeInfo>> GetKnowledgeInfo(GetCharacterSheetReportModel model)
