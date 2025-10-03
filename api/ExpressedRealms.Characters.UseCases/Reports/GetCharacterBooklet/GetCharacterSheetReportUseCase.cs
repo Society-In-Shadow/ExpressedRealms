@@ -44,7 +44,7 @@ public class GetCharacterSheetReportUseCase(
 
         var reportStream = CharacterReferenceBookletReport.GenerateReport(new ReportData()
             {
-                BasicInfo = await GetBasicInfo(model),
+                //BasicInfo = await GetBasicInfo(model),
                 Traits = await GetTraits(model),
                 SkillInfo = await GetSkillInfo(model),
                 Powers = await GetPowerInfo(model),
