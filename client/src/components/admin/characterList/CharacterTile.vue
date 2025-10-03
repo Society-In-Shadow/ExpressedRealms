@@ -6,6 +6,7 @@ import Card from "primevue/card";
 import type {PrimaryCharacter} from "@/components/admin/characterList/types.ts";
 import {useRouter} from "vue-router";
 import {adminCharacterDialogs} from "@/components/admin/characterList/services/dialogs.ts";
+import axios from "axios";
 
 const router = useRouter();
 const showInfo = ref(false);
@@ -20,6 +21,20 @@ const props = defineProps({
 
 async function redirectToCharacterSheet(){
   await router.push({name: "characterSheet", params: {id: props.character.id}});
+}
+
+async function downloadCharacterBooklet(characterId: number, characterName:string, playerName: string) {
+  const res = await axios.get(`/characters/${characterId}/getcrb`, {
+    responseType: 'blob',
+  });
+  const url = URL.createObjectURL(res.data);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${characterName} - ${playerName} - CRB.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
 }
 
 </script>
@@ -39,6 +54,7 @@ async function redirectToCharacterSheet(){
           <Button :label="showInfo ? 'Cancel' : 'Quick Notes'" class="m-2" @click="showInfo = !showInfo" />
           <Button label="Character Sheet" class="m-2" @click="redirectToCharacterSheet()" />
           <Button label="Update Character" class="m-2" @click="dialogs.showUpdateXp(props.character.id, props.character.playerNumber, props.character.assignedXp)" />
+          <Button label="CRB" class="m-2" @click="downloadCharacterBooklet(props.character.id, props.character.name, props.character?.playerName)" />
         </div>
       </div>
     </template>

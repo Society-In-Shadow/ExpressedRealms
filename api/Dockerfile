@@ -20,6 +20,14 @@ COPY --from=build /app/publish .
 
 RUN apt-get update && apt-get install -y --no-install-recommends  wget=1.21.3-1+deb12u1 && rm -rf /var/lib/apt/lists/*
 
+# Install fonts and fontconfig in one step
+RUN apt-get update && apt-get install -y \
+    fonts-dejavu-core \
+    fonts-liberation \
+    fontconfig \
+    && fc-cache -f -v \
+    && rm -rf /var/lib/apt/lists/*
+
 HEALTHCHECK --interval=15s --timeout=60s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider http://0.0.0.0:8080/health || exit 1
 

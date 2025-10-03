@@ -56,6 +56,21 @@ internal sealed class CharacterRepository(
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<CharacterInfo> GetCharacterInfoForCRB(int characterId)
+    {
+        return await context
+            .Characters.Where(x => x.Player.UserId == userContext.CurrentUserId())
+            .Select(x => new CharacterInfo()
+            {
+                CharacterName = x.Name,
+                PlayerNumber = x.PlayerNumber,
+                PlayerName = x.Player.Name,
+                Expression = x.Expression.Name,
+                PrimaryProgressionName = x.PrimaryProgressionPath == null ? "" : x.PrimaryProgressionPath.Name,
+                SecondaryProgressionName = x.SecondaryProgressionPath == null ? "" : x.SecondaryProgressionPath.Name,
+            }).FirstAsync(cancellationToken);
+    }
+
     public async Task<Result<GetEditCharacterDto>> GetCharacterInfoAsync(int id)
     {
         var query = await context.Characters.AsNoTracking().WithUserAccessAsync(userContext, id);

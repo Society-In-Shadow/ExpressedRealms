@@ -6,9 +6,11 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\ExpressedRealms.Blessings.Repository\ExpressedRealms.Blessings.Repository.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Characters.Reports\ExpressedRealms.Characters.Reports.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Characters.Repository\ExpressedRealms.Characters.Repository.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Knowledges.Repository\ExpressedRealms.Knowledges.Repository.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Powers.Repository\ExpressedRealms.Powers.Repository.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Powers.UseCases\ExpressedRealms.Powers.UseCases.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Shared.FeatureFlags\ExpressedRealms.Shared.FeatureFlags.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Shared.UseCases\ExpressedRealms.Shared.UseCases.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Shared\ExpressedRealms.Shared.csproj" />
