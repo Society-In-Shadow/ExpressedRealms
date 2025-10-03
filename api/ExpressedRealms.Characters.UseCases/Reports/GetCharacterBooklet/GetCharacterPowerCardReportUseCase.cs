@@ -3,6 +3,8 @@ using ExpressedRealms.Characters.Reports.CRB;
 using ExpressedRealms.Characters.Reports.CRB.Data;
 using ExpressedRealms.Characters.Reports.CRB.Data.SupportingData;
 using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.Characters.Repository.Enums;
+using ExpressedRealms.Characters.Repository.Skills;
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.Powers.Repository.PowerPaths;
@@ -17,6 +19,7 @@ public class GetCharacterSheetReportUseCase(
     IXpRepository xpRepository,
     ICharacterPowerRepository mappingRepository,
     ICharacterBlessingRepository blessingRepository,
+    ICharacterSkillRepository skillRepository,
     GetCharacterSheetReportModelValidator validator,
     CancellationToken cancellationToken
 ) : IGetCharacterSheetReportUseCase
@@ -31,15 +34,37 @@ public class GetCharacterSheetReportUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-
+        
         var reportStream = CharacterReferenceBookletReport.GenerateReport(new ReportData()
             {
                 BasicInfo = await GetBasicInfo(model),
-                Traits = await GetTraits(model)
+                Traits = await GetTraits(model),
+                SkillInfo = await GetSkillInfo(model)
             });
 
         reportStream.Position = 0;
         return reportStream;
+    }
+
+    private async Task<SkillInfo> GetSkillInfo(GetCharacterSheetReportModel model)
+    {
+        var skills = await skillRepository.GetCharacterSkills(model.CharacterId);
+
+        var skillInfo = new SkillInfo()
+        {
+            HandToHandOffense = skills.First(x => x.SkillTypeId == (byte)SkillTypes.HandToHandOffense).LevelNumber,
+            MeleeOffense = skills.First(x => x.SkillTypeId == (byte)SkillTypes.MeleeOffense).LevelNumber,
+            Marksmanship = skills.First(x => x.SkillTypeId == (byte)SkillTypes.Marksmanship).LevelNumber,
+            ThrownWeapons = skills.First(x => x.SkillTypeId == (byte)SkillTypes.ThrownWeapons).LevelNumber,
+            Spellcasting = skills.First(x => x.SkillTypeId == (byte)SkillTypes.Spellcasting).LevelNumber,
+            Projection = skills.First(x => x.SkillTypeId == (byte)SkillTypes.Projection).LevelNumber,
+            HandToHandDefense = skills.First(x => x.SkillTypeId == (byte)SkillTypes.HandToHandDefense).LevelNumber,
+            MeleeDefense = skills.First(x => x.SkillTypeId == (byte)SkillTypes.MeleeDefense).LevelNumber,
+            Acrobatics = skills.First(x => x.SkillTypeId == (byte)SkillTypes.Acrobatics).LevelNumber,
+            Spellwarding = skills.First(x => x.SkillTypeId == (byte)SkillTypes.Spellwarding).LevelNumber,
+            Deflection = skills.First(x => x.SkillTypeId == (byte)SkillTypes.Deflection).LevelNumber
+        };
+        return skillInfo;
     }
 
     private async Task<Traits> GetTraits(GetCharacterSheetReportModel model)

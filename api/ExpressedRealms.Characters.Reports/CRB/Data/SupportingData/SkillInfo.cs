@@ -1,6 +1,6 @@
 namespace ExpressedRealms.Characters.Reports.CRB.Data.SupportingData;
 
-public class Skills
+public class SkillInfo
 {
     public int HandToHandOffense { get; set; }
     public int MeleeOffense { get; set; }

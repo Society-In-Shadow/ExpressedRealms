@@ -70,19 +70,19 @@ public static class CharacterReferenceBookletReport
         MergeField(fields,"DisadvantagesExp", disXpSpent.ToString());
     }
 
-    private static void FillInSkills(PdfAcroField.PdfAcroFieldCollection fields, Skills skills)
+    private static void FillInSkills(PdfAcroField.PdfAcroFieldCollection fields, SkillInfo skillInfo)
     {
-        MergeField(fields,"H2hOffenseLevel", skills.HandToHandOffense.ToString());
-        MergeField(fields,"MeleeOffenseLevel", skills.MeleeOffense.ToString());
-        MergeField(fields,"ThrownWeaponsLevel", skills.ThrownWeapons.ToString());
-        MergeField(fields,"MarksmanshipLevel", skills.Marksmanship.ToString());
-        MergeField(fields,"SpellcastingLevel", skills.Spellcasting.ToString());
-        MergeField(fields,"ProjectionLevel", skills.Projection.ToString());
-        MergeField(fields,"H2hDefenseLevel", skills.HandToHandDefense.ToString());
-        MergeField(fields,"MeleeDefenseLevel", skills.MeleeDefense.ToString());
-        MergeField(fields,"AcrobaticsLevel", skills.Acrobatics.ToString());
-        MergeField(fields,"SpellwardingLevel", skills.Spellwarding.ToString());
-        MergeField(fields,"DeflectionLevel", skills.Deflection.ToString());
+        MergeField(fields,"H2hOffenseLevel", skillInfo.HandToHandOffense.ToString());
+        MergeField(fields,"MeleeOffenseLevel", skillInfo.MeleeOffense.ToString());
+        MergeField(fields,"ThrownWeaponsLevel", skillInfo.ThrownWeapons.ToString());
+        MergeField(fields,"MarksmanshipLevel", skillInfo.Marksmanship.ToString());
+        MergeField(fields,"SpellcastingLevel", skillInfo.Spellcasting.ToString());
+        MergeField(fields,"ProjectionLevel", skillInfo.Projection.ToString());
+        MergeField(fields,"H2hDefenseLevel", skillInfo.HandToHandDefense.ToString());
+        MergeField(fields,"MeleeDefenseLevel", skillInfo.MeleeDefense.ToString());
+        MergeField(fields,"AcrobaticsLevel", skillInfo.Acrobatics.ToString());
+        MergeField(fields,"SpellwardingLevel", skillInfo.Spellwarding.ToString());
+        MergeField(fields,"DeflectionLevel", skillInfo.Deflection.ToString());
     }
 
     private static MemoryStream MergeAllFields(ReportData data)
@@ -95,7 +95,7 @@ public static class CharacterReferenceBookletReport
 
             FillInBasicInfo(fields, data.BasicInfo);
             FillInTraits(fields, data.Traits);
-            FillInSkills(fields, data.Skills);
+            FillInSkills(fields, data.SkillInfo);
         }
 
         var finalStream = new MemoryStream();
