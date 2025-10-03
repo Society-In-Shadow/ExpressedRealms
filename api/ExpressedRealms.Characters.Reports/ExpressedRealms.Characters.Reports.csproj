@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="QuestPDF.HTML" Version="1.4.2" />
+    </ItemGroup>
+    <ItemGroup>
+      <Reference Include="PdfSharpCore">
+        <HintPath>..\..\..\..\.nuget\packages\pdfsharpcore\1.3.67\lib\net8.0\PdfSharpCore.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+</Project>

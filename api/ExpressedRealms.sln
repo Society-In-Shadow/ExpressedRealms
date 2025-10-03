@@ -97,6 +97,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Admin.UseCa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{E719A0D3-525A-421D-8A88-5BD53D810D61}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Characters.Reports", "ExpressedRealms.Characters.Reports\ExpressedRealms.Characters.Reports.csproj", "{33E6A621-3C46-460D-9875-3A39D4C19B8B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -263,6 +265,10 @@ Global
 		{19118116-2224-4C30-92C1-7AA4474E95EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19118116-2224-4C30-92C1-7AA4474E95EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19118116-2224-4C30-92C1-7AA4474E95EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33E6A621-3C46-460D-9875-3A39D4C19B8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33E6A621-3C46-460D-9875-3A39D4C19B8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33E6A621-3C46-460D-9875-3A39D4C19B8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33E6A621-3C46-460D-9875-3A39D4C19B8B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -305,5 +311,6 @@ Global
 		{D5DFD23E-F49D-4016-83D5-6592512E9CAB} = {E719A0D3-525A-421D-8A88-5BD53D810D61}
 		{4B8B5B3C-CDA3-405D-B168-502BC610E9DF} = {E719A0D3-525A-421D-8A88-5BD53D810D61}
 		{0554641F-EEE1-4480-925F-F6FAB1993D99} = {E719A0D3-525A-421D-8A88-5BD53D810D61}
+		{33E6A621-3C46-460D-9875-3A39D4C19B8B} = {4D59692C-E40B-4BF2-B829-318F19F78CB1}
 	EndGlobalSection
 EndGlobal
