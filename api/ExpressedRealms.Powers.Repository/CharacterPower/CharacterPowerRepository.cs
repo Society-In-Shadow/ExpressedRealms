@@ -25,6 +25,19 @@ internal sealed class CharacterPowerRepository(
             .Select(x => new CharacterPowerInfo() { PowerId = x.PowerId, UserNotes = x.Notes })
             .ToListAsync(token);
     }
+    
+    public async Task<List<CharacterCrbInfo>> GetCharacterPowerInfoForCRB(int characterId)
+    {
+        return await context
+            .CharacterPowerMappings.Where(x => x.CharacterId == characterId)
+            .Select(x => new CharacterCrbInfo()
+            {
+                Name = x.Power.Name,
+                Level = x.PowerLevel.Name,
+                Exp = x.PowerLevel.Xp
+            })
+            .ToListAsync(token);
+    }
 
     public async Task<bool> MappingExistsAsync(int powerId, int characterId)
     {

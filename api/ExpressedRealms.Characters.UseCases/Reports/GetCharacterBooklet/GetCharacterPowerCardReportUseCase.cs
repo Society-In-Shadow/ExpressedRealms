@@ -34,16 +34,30 @@ public class GetCharacterSheetReportUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-        
+
         var reportStream = CharacterReferenceBookletReport.GenerateReport(new ReportData()
             {
                 BasicInfo = await GetBasicInfo(model),
                 Traits = await GetTraits(model),
-                SkillInfo = await GetSkillInfo(model)
+                SkillInfo = await GetSkillInfo(model),
+                Powers = await GetPowerInfo(model),
             });
 
         reportStream.Position = 0;
         return reportStream;
+    }
+
+    private async Task<List<PowerInfo>> GetPowerInfo(GetCharacterSheetReportModel model)
+    {
+        var powerMappings = await mappingRepository.GetCharacterPowerInfoForCRB(model.CharacterId);
+
+        return powerMappings.Select(x => new PowerInfo()
+        {
+            Name = x.Name,
+            Level = x.Level,
+            XPCost = x.Exp.ToString()
+        }).ToList();
+        
     }
 
     private async Task<SkillInfo> GetSkillInfo(GetCharacterSheetReportModel model)

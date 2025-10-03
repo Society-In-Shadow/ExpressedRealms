@@ -96,6 +96,7 @@ public static class CharacterReferenceBookletReport
             FillInBasicInfo(fields, data.BasicInfo);
             FillInTraits(fields, data.Traits);
             FillInSkills(fields, data.SkillInfo);
+            FillInPowers(fields, data.Powers);
         }
 
         var finalStream = new MemoryStream();
@@ -103,6 +104,21 @@ public static class CharacterReferenceBookletReport
         finalStream.Position = 0;
         return finalStream;
     }
-    
-    
+
+    private static void FillInPowers(PdfAcroField.PdfAcroFieldCollection fields, List<PowerInfo> dataPowers)
+    {
+        StringBuilder nameString = new();
+        StringBuilder levelString = new();
+        StringBuilder xpString = new();
+        foreach (var model in dataPowers)
+        {
+            nameString.AppendLine(model.Name);
+            levelString.AppendLine(model.Level.Substring(0, 1));
+            xpString.AppendLine(model.XPCost);
+        }
+        
+        MergeField(fields,"PowerName", nameString.ToString());
+        MergeField(fields,"PowerLevel", levelString.ToString());
+        MergeField(fields,"PowerExp", xpString.ToString());
+    }
 }
