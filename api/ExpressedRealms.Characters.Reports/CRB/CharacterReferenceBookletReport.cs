@@ -34,12 +34,30 @@ public static class CharacterReferenceBookletReport
             FillInPowers(fields, data.Powers);
             FillInKnowledges(fields, data.Knowledges);
             FillInProficiencies(fields, data.ProficiencyInfo);
+            FillInStatInfo(fields, data.StatInfo);
         }
 
         var finalStream = new MemoryStream();
         document.Save(finalStream, false);
         finalStream.Position = 0;
         return finalStream;
+    }
+
+    private static void FillInStatInfo(PdfAcroField.PdfAcroFieldCollection fields, StatModifierInfo dataStatInfo)
+    {
+        MergeField(fields, "AglStat",   dataStatInfo.Agility.Stat.ToString());
+        MergeField(fields, "StrStat",   dataStatInfo.Strength.Stat.ToString());
+        MergeField(fields, "ConStat",   dataStatInfo.Constitution.Stat.ToString());
+        MergeField(fields, "DexStat",   dataStatInfo.Dexterity.Stat.ToString());
+        MergeField(fields, "IntStat",   dataStatInfo.Intelligence.Stat.ToString());
+        MergeField(fields, "WilStat",   dataStatInfo.Willpower.Stat.ToString());
+        
+        MergeField(fields, "AglBonus",   dataStatInfo.Agility.Bonus.ToString());
+        MergeField(fields, "StrBonus",   dataStatInfo.Strength.Bonus.ToString());
+        MergeField(fields, "ConBonus",   dataStatInfo.Constitution.Bonus.ToString());
+        MergeField(fields, "DexBonus",   dataStatInfo.Dexterity.Bonus.ToString());
+        MergeField(fields, "IntBonus",   dataStatInfo.Intelligence.Bonus.ToString());
+        MergeField(fields, "WilBonus",   dataStatInfo.Willpower.Bonus.ToString());
     }
 
     private static void FillInProficiencies(PdfAcroField.PdfAcroFieldCollection fields, ProficiencyData dataProficiencyInfo)
@@ -51,10 +69,11 @@ public static class CharacterReferenceBookletReport
         MergeField(fields, "Psyche",     dataProficiencyInfo.Psyche.ToString());
         MergeField(fields, "RWP",        dataProficiencyInfo.RWP.ToString());
         MergeField(fields, "Mortis",     dataProficiencyInfo.Mortis.ToString());
-        MergeField(fields, "Chi",        dataProficiencyInfo.Chi.ToString());
-        MergeField(fields, "Essence",    dataProficiencyInfo.Essence.ToString());
-        MergeField(fields, "Mana",       dataProficiencyInfo.Mana.ToString());
-        MergeField(fields, "Noumenon",   dataProficiencyInfo.Noumenon.ToString());
+        
+        var powerPoints = new List<int>() { dataProficiencyInfo.Chi, dataProficiencyInfo.Essence, dataProficiencyInfo.Mana, dataProficiencyInfo.Noumenon };
+        
+        MergeField(fields, "PowerPoints" ,powerPoints.Max().ToString());
+        
         MergeField(fields, "Strike",     dataProficiencyInfo.Strike.ToString());
         MergeField(fields, "Thrust",     dataProficiencyInfo.Thrust.ToString());
         MergeField(fields, "Throw",      dataProficiencyInfo.Throw.ToString());
@@ -171,6 +190,7 @@ public static class CharacterReferenceBookletReport
         foreach (var index in indexes)
         {
             fields[index].Value = new PdfString(data);
+            fields[index].ReadOnly = true;
         }
     }
 

@@ -6,6 +6,8 @@ using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Enums;
 using ExpressedRealms.Characters.Repository.Proficiencies;
 using ExpressedRealms.Characters.Repository.Skills;
+using ExpressedRealms.Characters.Repository.Stats;
+using ExpressedRealms.Characters.Repository.Stats.Enums;
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Powers.Repository.CharacterPower;
@@ -22,6 +24,7 @@ public class GetCharacterSheetReportUseCase(
     ICharacterBlessingRepository blessingRepository,
     ICharacterSkillRepository skillRepository,
     IProficiencyRepository proficiencyRepository,
+    ICharacterStatRepository statRepository,
     GetCharacterSheetReportModelValidator validator,
     CancellationToken cancellationToken
 ) : IGetCharacterSheetReportUseCase
@@ -36,6 +39,8 @@ public class GetCharacterSheetReportUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
+        
+        var statInfo = await GetStatModifierInfo(model);
 
         var reportStream = CharacterReferenceBookletReport.GenerateReport(new ReportData()
             {
@@ -44,11 +49,52 @@ public class GetCharacterSheetReportUseCase(
                 SkillInfo = await GetSkillInfo(model),
                 Powers = await GetPowerInfo(model),
                 Knowledges = await GetKnowledgeInfo(model),
-                ProficiencyInfo = await GetProficiencyInfo(model)
+                ProficiencyInfo = await GetProficiencyInfo(model),
+                StatInfo = statInfo
             });
 
         reportStream.Position = 0;
         return reportStream;
+    }
+
+    private async Task<StatModifierInfo> GetStatModifierInfo(GetCharacterSheetReportModel model)
+    {
+        var stats = await statRepository.GetAllStats(model.CharacterId);
+
+        var statInfo = new StatModifierInfo()
+        {
+            Constitution = new StatModifier()
+            {
+                Stat = stats.Value.First(x => x.StatTypeId == StatType.Constitution).Level,
+                Bonus = stats.Value.First(x => x.StatTypeId == StatType.Constitution).Bonus
+            },
+            Strength = new StatModifier()
+            {
+                Stat = stats.Value.First(x => x.StatTypeId == StatType.Strength).Level,
+                Bonus = stats.Value.First(x => x.StatTypeId == StatType.Strength).Bonus
+            },
+            Dexterity = new StatModifier()
+            {
+                Stat = stats.Value.First(x => x.StatTypeId == StatType.Dexterity).Level,
+                Bonus = stats.Value.First(x => x.StatTypeId == StatType.Dexterity).Bonus
+            },
+            Intelligence = new StatModifier()
+            {
+                Stat = stats.Value.First(x => x.StatTypeId == StatType.Intelligence).Level,
+                Bonus = stats.Value.First(x => x.StatTypeId == StatType.Intelligence).Bonus
+            },
+            Willpower = new StatModifier()
+            {
+                Stat = stats.Value.First(x => x.StatTypeId == StatType.Willpower).Level,
+                Bonus = stats.Value.First(x => x.StatTypeId == StatType.Willpower).Bonus
+            },
+            Agility = new StatModifier()
+            {
+                Stat = stats.Value.First(x => x.StatTypeId == StatType.Agility).Level,
+                Bonus = stats.Value.First(x => x.StatTypeId == StatType.Agility).Bonus
+            }
+        };
+        return statInfo;
     }
 
     private async Task<ProficiencyData> GetProficiencyInfo(GetCharacterSheetReportModel model)

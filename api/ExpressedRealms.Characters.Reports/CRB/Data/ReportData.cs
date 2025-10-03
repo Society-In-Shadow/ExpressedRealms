@@ -10,4 +10,5 @@ public class ReportData
     public List<PowerInfo> Powers { get; set; } = new();
     public List<KnowledgeInfo> Knowledges { get; set; } = new();
     public ProficiencyData ProficiencyInfo { get; set; }
+    public StatModifierInfo StatInfo { get; set; }
 }
