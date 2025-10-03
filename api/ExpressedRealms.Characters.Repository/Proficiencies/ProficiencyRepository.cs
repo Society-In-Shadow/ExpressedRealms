@@ -109,8 +109,12 @@ internal sealed class ProficiencyRepository(
 
         int CalculatedValue(ProficiencyModifierInfoDto modifier)
         {
-            if (!modifier.ScaleWithLevel || modifier.CreationSpecificBonus && currentLevel == 0)
+            if (!modifier.ScaleWithLevel)
                 return modifier.Modifier;
+            
+            if (modifier.CreationSpecificBonus && modifier.ScaleWithLevel)
+                return modifier.Modifier + (modifier.Modifier * currentLevel);
+
             return modifier.Modifier * currentLevel;
         }
 
