@@ -11,6 +11,7 @@ namespace ExpressedRealms.Characters.Reports.CRB;
 
 public static class CharacterReferenceBookletReport
 {
+
     public static MemoryStream GenerateReport(ReportData data)
     {
         Settings.License = LicenseType.Community;
@@ -91,8 +92,8 @@ public static class CharacterReferenceBookletReport
             var fields = document.AcroForm.Fields;
 
             FillInBasicInfo(fields, data.BasicInfo);
-            FillInTraits(fields, data.Traits);
-            FillInSkills(fields, data.Skills);
+            //FillInTraits(fields, data.Traits);
+            //FillInSkills(fields, data.Skills);
         }
 
         var finalStream = new MemoryStream();

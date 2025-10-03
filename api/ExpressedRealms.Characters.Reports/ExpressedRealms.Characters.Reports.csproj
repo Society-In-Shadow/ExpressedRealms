@@ -9,8 +9,11 @@
         <PackageReference Include="QuestPDF.HTML" Version="1.4.2" />
     </ItemGroup>
     <ItemGroup>
-      <Reference Include="PdfSharpCore">
-        <HintPath>..\..\..\..\.nuget\packages\pdfsharpcore\1.3.67\lib\net8.0\PdfSharpCore.dll</HintPath>
-      </Reference>
+        <ProjectReference Include="..\ExpressedRealms.Shared.Reports\ExpressedRealms.Shared.Reports.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="overallCRB.pdf">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 </Project>
