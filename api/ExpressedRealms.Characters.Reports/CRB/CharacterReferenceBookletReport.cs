@@ -26,7 +26,7 @@ public static class CharacterReferenceBookletReport
         {
             var fields = document.AcroForm.Fields;
 
-            FillInBasicInfo(fields, data.BasicInfo);
+            //FillInBasicInfo(fields, data.BasicInfo);
             FillInTraits(fields, data.Traits);
             FillInSkills(fields, data.SkillInfo);
             FillInPowers(fields, data.Powers);
