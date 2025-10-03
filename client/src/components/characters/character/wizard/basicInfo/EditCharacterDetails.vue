@@ -61,7 +61,7 @@ const onSubmit = form.handleSubmit((values) => {
     id: route.params.id,
     factionId: values.faction?.id,
     isPrimaryCharacter: values.isPrimaryCharacter,
-    primaryProgressionId: values.primaryProgression.id,
+    primaryProgressionId: values.primaryProgression?.id,
     secondaryProgressionId: values.secondaryProgression?.id,
   }).then(() => {
     characterInfo.name = values.name;
