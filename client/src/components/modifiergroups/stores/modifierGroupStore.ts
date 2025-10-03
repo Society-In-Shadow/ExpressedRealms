@@ -61,7 +61,7 @@ const modifierGroupStore  =
                     modifier: values.modifier,
                     creationSpecificBonus: values.creationSpecificBonus,
                     statModifierId: values.modifierType.id,
-                    targetExpressionId: values.targetExpression.id
+                    targetExpressionId: values.targetExpression?.id
                 })
                 .then(async () => {
                     await this.getModifiers(groupId);
@@ -84,7 +84,7 @@ const modifierGroupStore  =
                     modifier: values.modifier,
                     creationSpecificBonus: values.creationSpecificBonus,
                     statModifierId: values.modifierType.id,
-                    targetExpressionId: values.targetExpression.id
+                    targetExpressionId: values.targetExpression?.id ?? null
                 } as CreateStatModifier)
                 .then(async (response) => {
                     newGroupId = response.data.groupId;
