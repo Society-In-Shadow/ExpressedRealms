@@ -26,6 +26,7 @@ onBeforeMount(async () =>{
         faction.value = characterInfo.faction;
         isPrimaryCharacter.value = characterInfo.isPrimaryCharacter;
         isOwner.value = characterInfo.isOwner;
+        isInCharacterGeneration.value = characterInfo.isInCharacterCreation;
       });
   showFactionInfo.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowFactionDropdown);
   await experienceInfo.updateExperience(route.params.id);
@@ -35,6 +36,7 @@ const name = ref("");
 const faction = ref("");
 const expression = ref("");
 const isPrimaryCharacter = ref(false);
+const isInCharacterGeneration = ref(false);
 
 const redirectToEdit = () => {
   router.push({name: 'characterWizard', params: {id: route.params.id}})
@@ -51,7 +53,8 @@ const redirectToEdit = () => {
             <div><h1 class="mt-0 pt-0 pb-0 mb-0">{{ name }}</h1></div>
             <div><Tag v-if="isPrimaryCharacter" value="Primary" severity="info" /></div>
           </div>
-          <div v-if="!experienceInfo.isLoading"><em><span>XL: {{experienceInfo.getCharacterLevel()}}</span> - {{ expression }}</em></div>
+          <div v-if="!experienceInfo.isLoading && !isInCharacterGeneration"><em><span>XL: {{experienceInfo.getCharacterLevel()}}</span> - {{ expression }}</em></div>
+          <div v-if="!experienceInfo.isLoading && isInCharacterGeneration"><em>In Character Creation - {{ expression }}</em></div>
           <div v-if="showFactionInfo"><em>{{ faction?.name ?? 'No Faction' }}</em></div>
         </div>
         <div class="d-flex flex-column gap-3" style="font-size: 2.5em">
