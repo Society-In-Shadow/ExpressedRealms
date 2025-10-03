@@ -58,8 +58,8 @@ internal sealed class CharacterRepository(
 
     public async Task<CharacterInfo> GetCharacterInfoForCRB(int characterId)
     {
-        return await context
-            .Characters.Where(x => x.Player.UserId == userContext.CurrentUserId() && x.Id == characterId)
+        var query = await context.Characters.AsNoTracking().WithUserAccessAsync(userContext, characterId);
+        return await query.Where(x => x.Player.UserId == userContext.CurrentUserId() && x.Id == characterId)
             .Select(x => new CharacterInfo()
             {
                 CharacterName = x.Name,
