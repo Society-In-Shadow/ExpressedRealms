@@ -2,6 +2,7 @@ import {defineStore} from "pinia";
 import axios from "axios";
 import type {CalculatedExperience, ExperienceBreakdownResponse} from "@/components/characters/character/types.ts"
 import {characterStore} from "@/components/characters/character/stores/characterStore.ts";
+import {proficiencyStore} from "@/components/characters/character/proficiency/stores/proficiencyStore.ts";
 
 export const XpSectionTypes = {
     advantage: 1,
@@ -15,6 +16,7 @@ export const XpSectionTypes = {
 export type XpSectionType = (typeof XpSectionTypes)[keyof typeof XpSectionTypes];
 
 const characterInfo = characterStore();
+const proficiencyInfo = proficiencyStore();
 export const experienceStore =
     defineStore('experienceStore', {
         state: () => {
@@ -31,6 +33,7 @@ export const experienceStore =
         actions: {
             async updateExperience(characterId: number){
                 this.isLoading = true;
+                await proficiencyInfo.getUpdateProficiencies(characterId);
                 await axios.get<ExperienceBreakdownResponse>(`/characters/${characterId}/overallexperience`)
                     .then((response) => {
                         this.isLoading = false;
