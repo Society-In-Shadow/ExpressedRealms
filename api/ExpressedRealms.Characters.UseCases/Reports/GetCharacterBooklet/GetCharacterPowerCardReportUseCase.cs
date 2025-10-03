@@ -6,15 +6,15 @@ using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Enums;
 using ExpressedRealms.Characters.Repository.Skills;
 using ExpressedRealms.Characters.Repository.Xp;
+using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Powers.Repository.CharacterPower;
-using ExpressedRealms.Powers.Repository.PowerPaths;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
 namespace ExpressedRealms.Characters.UseCases.Reports.GetCharacterBooklet;
 
 public class GetCharacterSheetReportUseCase(
-    IPowerPathRepository repository,
+    ICharacterKnowledgeRepository knowledgeRepository,
     ICharacterRepository characterRepository,
     IXpRepository xpRepository,
     ICharacterPowerRepository mappingRepository,
@@ -41,10 +41,42 @@ public class GetCharacterSheetReportUseCase(
                 Traits = await GetTraits(model),
                 SkillInfo = await GetSkillInfo(model),
                 Powers = await GetPowerInfo(model),
+                Knowledges = await GetKnowledgeInfo(model),
             });
 
         reportStream.Position = 0;
         return reportStream;
+    }
+
+    private async Task<List<KnowledgeInfo>> GetKnowledgeInfo(GetCharacterSheetReportModel model)
+    {
+        var knowledges = await knowledgeRepository.GetKnowledgesForCharacter(model.CharacterId);
+
+        var knowledgeInfo = knowledges.SelectMany(x =>
+        {
+            if (x.Specializations?.Any() == true)
+            {
+                return x.Specializations.Select(spec => new KnowledgeInfo()
+                {
+                    Name = x.Knowledge.Name,
+                    XPCost = "5",
+                    Level = x.Level.ToString(),
+                    Specialization = spec.Name
+                });
+            }
+
+            return new[]
+            {
+                new KnowledgeInfo()
+                {
+                    Name = x.Knowledge.Name,
+                    XPCost = "5",
+                    Level = x.Level.ToString(),
+                    Specialization = null
+                }
+            };
+        }).ToList();
+        return knowledgeInfo;
     }
 
     private async Task<List<PowerInfo>> GetPowerInfo(GetCharacterSheetReportModel model)

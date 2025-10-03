@@ -19,20 +19,28 @@ public static class CharacterReferenceBookletReport
         return MergeAllFields(data);
     }
 
-    private static void MergeField(PdfAcroField.PdfAcroFieldCollection fields, string targetField, string data)
-    {
-        var indexes = fields.Names
-            .Select((value, index) => new { value, index })
-            .Where(x => x.value == targetField)
-            .Select(x => x.index)
-            .ToList();
-
-        foreach (var index in indexes)
-        {
-            fields[index].Value = new PdfString(data);
-        }
-    }
     
+    private static MemoryStream MergeAllFields(ReportData data)
+    {
+        using var document = PdfReader.Open("overallCRB.pdf", PdfDocumentOpenMode.Modify);
+
+        if (document.AcroForm != null)
+        {
+            var fields = document.AcroForm.Fields;
+
+            FillInBasicInfo(fields, data.BasicInfo);
+            FillInTraits(fields, data.Traits);
+            FillInSkills(fields, data.SkillInfo);
+            FillInPowers(fields, data.Powers);
+            FillInKnowledges(fields, data.Knowledges);
+        }
+
+        var finalStream = new MemoryStream();
+        document.Save(finalStream, false);
+        finalStream.Position = 0;
+        return finalStream;
+    }
+
     private static void FillInBasicInfo(PdfAcroField.PdfAcroFieldCollection fields, BasicInfo basicInfo)
     {
         MergeField(fields,"PlayerNumber", basicInfo.PlayerNumber);
@@ -85,25 +93,6 @@ public static class CharacterReferenceBookletReport
         MergeField(fields,"DeflectionLevel", skillInfo.Deflection.ToString());
     }
 
-    private static MemoryStream MergeAllFields(ReportData data)
-    {
-        using var document = PdfReader.Open("overallCRB.pdf", PdfDocumentOpenMode.Modify);
-
-        if (document.AcroForm != null)
-        {
-            var fields = document.AcroForm.Fields;
-
-            FillInBasicInfo(fields, data.BasicInfo);
-            FillInTraits(fields, data.Traits);
-            FillInSkills(fields, data.SkillInfo);
-            FillInPowers(fields, data.Powers);
-        }
-
-        var finalStream = new MemoryStream();
-        document.Save(finalStream, false);
-        finalStream.Position = 0;
-        return finalStream;
-    }
 
     private static void FillInPowers(PdfAcroField.PdfAcroFieldCollection fields, List<PowerInfo> dataPowers)
     {
@@ -121,4 +110,40 @@ public static class CharacterReferenceBookletReport
         MergeField(fields,"PowerLevel", levelString.ToString());
         MergeField(fields,"PowerExp", xpString.ToString());
     }
+    
+    private static void FillInKnowledges(PdfAcroField.PdfAcroFieldCollection fields, List<KnowledgeInfo> dataPowers)
+    {
+        StringBuilder nameString = new();
+        StringBuilder levelString = new();
+        StringBuilder specializationString = new();
+        StringBuilder xpString = new();
+        foreach (var model in dataPowers)
+        {
+            nameString.AppendLine(model.Name);
+            specializationString.AppendLine(model.Specialization);
+            levelString.AppendLine(model.Level.Substring(0, 1));
+            xpString.AppendLine(model.XPCost);
+        }
+        
+        MergeField(fields,"KnowledgeName", nameString.ToString());
+        MergeField(fields,"KnowledgeLevel", levelString.ToString());
+        MergeField(fields,"Specialization", specializationString.ToString());
+        MergeField(fields,"KnowledgeExp", xpString.ToString());
+    }
+    
+        
+    private static void MergeField(PdfAcroField.PdfAcroFieldCollection fields, string targetField, string data)
+    {
+        var indexes = fields.Names
+            .Select((value, index) => new { value, index })
+            .Where(x => x.value == targetField)
+            .Select(x => x.index)
+            .ToList();
+
+        foreach (var index in indexes)
+        {
+            fields[index].Value = new PdfString(data);
+        }
+    }
+
 }
