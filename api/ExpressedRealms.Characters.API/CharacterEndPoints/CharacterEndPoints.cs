@@ -1,5 +1,7 @@
+using ExpressedRealms.Authentication;
 using ExpressedRealms.Characters.API.CharacterEndPoints.DTOs;
 using ExpressedRealms.Characters.API.CharacterEndPoints.FinalizeCharacterCreate;
+using ExpressedRealms.Characters.API.CharacterEndPoints.GetCRB;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetOverallStats;
 using ExpressedRealms.Characters.API.CharacterEndPoints.Requests;
 using ExpressedRealms.Characters.API.CharacterEndPoints.Responses;
@@ -238,6 +240,11 @@ internal static class CharacterEndPoints
 
         endpointGroup
             .MapGet("{id}/overallexperience", GetOverallStatsEndpoint.Execute)
+            .RequireAuthorization();
+        
+        endpointGroup
+            .MapGet("{characterId}/getcrb", GetExpressionBookletEndpoint.Execute)
+            .RequirePolicyAuthorization(Policies.ManagePlayerCharacterList)
             .RequireAuthorization();
 
         endpointGroup
