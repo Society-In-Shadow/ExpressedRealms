@@ -65,8 +65,8 @@ internal sealed class CharacterRepository(
                 PlayerNumber = x.PlayerNumber,
                 PlayerName = x.Player.Name,
                 Expression = x.Expression.Name,
-                PrimaryProgressionName = x.PrimaryProgressionId == null ? "" : x.PrimaryProgressionPath.Name,
-                SecondaryProgressionName = x.SecondaryProgressionId == null ? "" : x.SecondaryProgressionPath.Name,
+                PrimaryProgressionName = x.PrimaryProgressionId == null ? "" : x.PrimaryProgressionPath!.Name,
+                SecondaryProgressionName = x.SecondaryProgressionId == null ? "" : x.SecondaryProgressionPath!.Name,
             }).FirstAsync(cancellationToken);
     }
 
