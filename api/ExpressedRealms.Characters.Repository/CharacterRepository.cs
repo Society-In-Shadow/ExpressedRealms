@@ -59,15 +59,14 @@ internal sealed class CharacterRepository(
     public async Task<CharacterInfo> GetCharacterInfoForCRB(int characterId)
     {
         var query = await context.Characters.AsNoTracking().WithUserAccessAsync(userContext, characterId);
-        return await query.Where(x => x.Player.UserId == userContext.CurrentUserId() && x.Id == characterId)
-            .Select(x => new CharacterInfo()
+        return await query.Select(x => new CharacterInfo()
             {
                 CharacterName = x.Name,
                 PlayerNumber = x.PlayerNumber,
                 PlayerName = x.Player.Name,
                 Expression = x.Expression.Name,
-                PrimaryProgressionName = x.PrimaryProgressionPath == null ? "" : x.PrimaryProgressionPath.Name,
-                SecondaryProgressionName = x.SecondaryProgressionPath == null ? "" : x.SecondaryProgressionPath.Name,
+                PrimaryProgressionName = x.PrimaryProgressionId == null ? "" : x.PrimaryProgressionPath!.Name,
+                SecondaryProgressionName = x.SecondaryProgressionId == null ? "" : x.SecondaryProgressionPath!.Name,
             }).FirstAsync(cancellationToken);
     }
 
