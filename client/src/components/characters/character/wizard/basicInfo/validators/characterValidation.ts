@@ -16,7 +16,7 @@ const validationSchema = object({
     background: string().nullable()
         .label('Background'),
     isPrimaryCharacter: boolean()
-        .label('Is Primary Character'),
+        .label('Enable GO Visibility'),
     primaryProgression: object<ProgressionPath>().nullable()
         .label('Primary Progression'),
     secondaryProgression: object<ProgressionPath>().nullable()
