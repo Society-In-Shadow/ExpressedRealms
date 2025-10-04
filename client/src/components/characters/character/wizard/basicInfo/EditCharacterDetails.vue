@@ -21,6 +21,7 @@ import FormTextAreaWrapper from "@/FormWrappers/FormTextAreaWrapper.vue";
 import FormTextWrapper from "@/FormWrappers/FormInputTextWrapper.vue";
 import FormCheckboxWrapper from "@/FormWrappers/FormCheckboxWrapper.vue";
 import SelectProgressionPaths from "@/components/characters/character/wizard/basicInfo/SelectProgressionPaths.vue";
+import Message from "primevue/message";
 
 const route = useRoute()
 
@@ -103,6 +104,7 @@ const updateWizardContent = () => {
         />-->
         <FormTextAreaWrapper v-model="form.fields.background" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
         <FormCheckboxWrapper v-if="showCharacterXpLimits" v-model="form.fields.isPrimaryCharacter" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
+        <Message severity="info" class="mb-3">Toggle above to make this visible to GOs for printing the character off.</Message>
         <SelectProgressionPaths :primary-progression="form.fields.primaryProgression" :secondary-progression="form.fields.secondaryProgression" :expression-type-id="characterInfo.expressionId" @change="onSubmit"/>
       </form>
       <Button label="Show High Level Expression Info" class="w-100 mb-2 d-block d-md-none " :disabled="characterInfo.isLoading && characterInfo.expressionId !== 0" @click="updateWizardContent" />
