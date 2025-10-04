@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Button from 'primevue/button';
 import Card from 'primevue/card';
-import {computed, defineAsyncComponent, h, markRaw, onBeforeMount, ref, watch} from "vue";
+import {computed, defineAsyncComponent, markRaw, onBeforeMount, ref, watch} from "vue";
 import KnowledgeStep from "@/components/characters/character/wizard/knowledges/KnowledgeStep.vue";
 import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
 import PowerStep from "@/components/characters/character/wizard/powers/PowerStep.vue";
@@ -14,7 +14,6 @@ import SecondaryProficiencies from "@/components/characters/character/wizard/pro
 import EditCharacterDetails from "@/components/characters/character/wizard/basicInfo/EditCharacterDetails.vue";
 import AddCharacter from "@/components/characters/character/wizard/basicInfo/AddCharacter.vue";
 import BlessingStep from "@/components/characters/character/wizard/blessings/BlessingStep.vue";
-import {userStore} from "@/stores/userStore.ts";
 import WizardContent from "@/components/characters/character/wizard/WizardContent.vue";
 import {breakpointsBootstrapV5, useBreakpoints} from "@vueuse/core";
 import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
@@ -24,16 +23,15 @@ import {characterStore} from "@/components/characters/character/stores/character
 const xpData = experienceStore();
 const route = useRoute()
 const router = useRouter();
-const userInfo = userStore();
 const characterInfo = characterStore();
 const isAdd = computed(() =>route.name == 'addWizard');
+const wasAdd = ref(false);
 
 const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5);
 const isMobile = activeBreakpoint.smaller('md');
 const wizardContentData = wizardContentStore();
 
 const sections = ref([
-  { name: 'Getting Started', isDisabled: false, component: markRaw(createPlaceholderView('Getting Started', 'Getting Started content coming soon...')) },
   { name: 'Stats', isDisabled: isAdd, component: markRaw(StatStep) },
   { name: 'Knowledges', isDisabled: isAdd, component: markRaw(KnowledgeStep) },
   { name: 'Powers', isDisabled: isAdd, component: markRaw(PowerStep) },
@@ -48,14 +46,21 @@ onBeforeMount(async () => {
 })
 
 async function fetchData() {
-
-  if(sections.value[1].name == 'Basic Info') sections.value.splice(1, 1);
+  const basicInfo = sections.value.find(x => x.name == 'Basic Info');
+  if(basicInfo){
+    sections.value.splice(sections.value.indexOf(basicInfo), 1);
+  }
   if(isAdd.value){
-    sections.value.splice(1, 0,   { name: 'Basic Info', isDisabled: false, component: defineAsyncComponent(async () => AddCharacter) },);
+    sections.value.splice(0, 0,   { name: 'Basic Info', isDisabled: false, component: defineAsyncComponent(async () => AddCharacter) },);
+    selectSection('Basic Info');
+    wasAdd.value = true;
   }else{
     await characterInfo.getCharacterDetails(Number(route.params.id));
-    sections.value.splice(1, 0,   { name: 'Basic Info', isDisabled: false, component: defineAsyncComponent(async () => EditCharacterDetails) },);
+    sections.value.splice(0, 0,   { name: 'Basic Info', isDisabled: false, component: defineAsyncComponent(async () => EditCharacterDetails) },);
     await xpData.updateExperience(route.params.id);
+    if(wasAdd){
+      selectSection('Basic Info');
+    }
   }
 }
 
@@ -67,15 +72,6 @@ watch(
       }
     }
 )
-
-function createPlaceholderView(name: string, text: string) : Promise<any> {
-  return defineAsyncComponent(async () => ({
-    name: 'PlaceholderView',
-    setup() {
-      return () => h('div', { class: 'p-3' }, text);
-    },
-  }));
-}
 
 const selectedSection = ref<string>('');
 const currentView = computed(() => sections.value.filter(x => x.name == selectedSection.value)[0].component);
@@ -94,6 +90,22 @@ const resetSection = () => {
 const redirectToEdit = () => {
   router.push({name: 'characterSheet', params: {id: route.params.id}})
 }
+
+const previousSection = computed(() => {
+  const index = sections.value.findIndex(x => x.name == selectedSection.value);
+  if (index > 0) {
+    return sections.value[index - 1].name;
+  }
+  return null;
+})
+
+const nextSection = computed(() => {
+  const index = sections.value.findIndex(x => x.name == selectedSection.value);
+  if (index < sections.value.length - 1) {
+    return sections.value[index + 1].name;
+  }
+})
+
 </script>
 
 <template>
@@ -137,6 +149,14 @@ const redirectToEdit = () => {
         <template #content>
           <!-- Dynamically load the chosen section in the middle column -->
           <component :is="currentView"/>
+          <div v-if="!isAdd" class="d-flex flex-row justify-content-between mt-3">
+            <div>
+              <Button v-if="previousSection" size="small" :label="'<< ' + previousSection" @click="selectSection(previousSection)"/>
+            </div>
+            <div>
+              <Button v-if="nextSection" size="small" :label="nextSection + ' >>'" @click="selectSection(nextSection)"/>
+            </div>
+          </div>
         </template>
       </Card>
     </div>
