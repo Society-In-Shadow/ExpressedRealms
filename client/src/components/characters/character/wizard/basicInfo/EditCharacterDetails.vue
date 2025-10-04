@@ -104,7 +104,7 @@ const updateWizardContent = () => {
         />-->
         <FormTextAreaWrapper v-model="form.fields.background" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
         <FormCheckboxWrapper v-if="showCharacterXpLimits" v-model="form.fields.isPrimaryCharacter" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
-        <Message severity="info" class="mb-3">Toggle above to make this visible to GOs for printing the character off.  It does not give them the ability to modify the character.</Message>
+        <Message severity="info" class="mb-3">Toggle above to make this character visible to GOs for printing the booklet and handing out XP.  It does not give them the ability to modify the character.</Message>
         <SelectProgressionPaths :primary-progression="form.fields.primaryProgression" :secondary-progression="form.fields.secondaryProgression" :expression-type-id="characterInfo.expressionId" @change="onSubmit"/>
       </form>
       <Button label="Show High Level Expression Info" class="w-100 mb-2 d-block d-md-none " :disabled="characterInfo.isLoading && characterInfo.expressionId !== 0" @click="updateWizardContent" />
