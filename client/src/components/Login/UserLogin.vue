@@ -31,19 +31,13 @@ let lockedOut = ref(false);
 
 const route = useRoute();
 
-const onSubmit = handleSubmit((values) => {
+const onSubmit = handleSubmit( async(values) => {
   incorrectLogin.value = false;
   lockedOut.value = false;
-  axios.post('/auth/login', values)
-  .then(() => {
+  await axios.post('/auth/login', values)
+  .then(async () => {
     // Reset antiforgery token after login
-    axios.get('/auth/antiforgeryToken')
-      .then(() => {
-        if (!(window as any).Cypress) {
-          window.location.reload();
-        }
-
-      });
+    await axios.get('/auth/antiforgeryToken')
   }).
   catch((response) => {
     if(response.response.data && response.response.data.detail == "LockedOut")
