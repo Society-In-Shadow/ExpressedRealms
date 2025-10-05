@@ -28,6 +28,7 @@ defineStore('expression', {
             }
             if(filter && filter.length > 0){
                 this.currentExpressionId = filter[0].id;
+                this.currentExpressionName = filter[0].name;
                 return;
             }
             router.push("/characters");
