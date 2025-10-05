@@ -41,7 +41,7 @@ watch(searchQuery, (newQuery) => {
     <div class="row">
       <div class="col">
         <h1 class="m-3">
-          Characters
+          Characters ({{characterListInfo.filteredCharacters.length}})
         </h1>
       </div>
       <div class="col">
