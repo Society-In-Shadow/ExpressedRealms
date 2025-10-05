@@ -38,7 +38,7 @@ const onSubmit = handleSubmit( async(values) => {
   .then(async () => {
     // Reset antiforgery token after login
     await axios.get('/auth/antiforgeryToken')
-    router.push({name: "characters"});
+    await router.push({name: "characters"});
   }).
   catch((response) => {
     if(response.response.data && response.response.data.detail == "LockedOut")
