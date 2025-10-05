@@ -1,6 +1,5 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import {createRouter, createWebHistory} from 'vue-router';
 import {userStore} from "@/stores/userStore";
-import {isLoggedIn} from "@/services/Authentication";
 import {UserRoutes} from "@/router/Routes/UserRoutes";
 import {AdminRoutes} from "@/router/Routes/AdminRoutes";
 import {OverallRoutes} from "@/router/Routes/OverallNavigationRoutes";
@@ -25,7 +24,7 @@ routerSetup.beforeEach(async (to) => {
 
     const userInfo = userStore();
     
-    const loggedIn = isLoggedIn();
+    const loggedIn = userInfo.isLoggedIn();
     const routeName:string = to.name as string;
 
     // Initialize routes on first navigation
