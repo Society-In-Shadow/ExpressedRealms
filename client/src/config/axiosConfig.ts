@@ -1,11 +1,13 @@
 import axios from 'axios'
 import toaster from "@/services/Toasters";
 import {useRouter} from "vue-router";
+
 const Router = useRouter();
 
 // Add a response interceptor
 
 export function setupErrorHandlingInterceptors() {
+    axios.defaults.withCredentials = true;
     axios.interceptors.response.use(
         (response) => response,
         (error) => {

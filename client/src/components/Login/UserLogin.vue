@@ -20,8 +20,8 @@ const { defineField, handleSubmit, errors } = useForm({
   })
 });
 
-onBeforeMount(() => {
-  axios.get('/auth/antiforgeryToken');
+onBeforeMount(async () => {
+  await axios.get('/auth/antiforgeryToken');
 })
 
 const [email] = defineField('email');
