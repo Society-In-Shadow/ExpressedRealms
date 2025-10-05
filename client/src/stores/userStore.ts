@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 import axios from "axios";
-import {isLoggedIn, updateUserStoreWithEmailInfo, updateUserStoreWithPlayerInfo} from "@/services/Authentication";
+import {updateUserStoreWithEmailInfo, updateUserStoreWithPlayerInfo} from "@/services/Authentication";
 
 export const UserRoles = {
     ExpressionEditor: "ExpressionEditorRole",
@@ -42,12 +42,38 @@ defineStore('user', {
             userFeatureFlags: [] as string[],
             loadedUserInfo: false as boolean,
             lastFeatureFlagLoad: null as Date | null,
-            lastPermissionLoad: null as Date | null
+            lastPermissionLoad: null as Date | null,
+            lastAuthCheck: null as Date | null,
+            isLoggedInCache: false as boolean,
         }
     },
     actions: { 
         isLoggedIn() {
-            return isLoggedIn();
+            let self = this;
+            if(this.lastAuthCheck != null && this.lastAuthCheck.getTime() > new Date().getTime() - 600_000){
+                return this.isLoggedInCache;
+            }
+            this.lastAuthCheck = new Date();
+            axios.get("/auth/check")
+                .then(response => {
+                    self.isLoggedInCache = true;
+                })
+                .catch(error => {
+                    self.isLoggedInCache = false;
+                });
+            return this.isLoggedInCache;
+        },
+        async updateLoggedInStatus() {
+            let self = this;
+            this.lastAuthCheck = new Date();
+            await axios.get("/auth/check")
+                .then(response => {
+                    self.isLoggedInCache = true;
+                })
+                .catch(error => {
+                    self.isLoggedInCache = false;
+                });
+            return this.isLoggedInCache;
         },
         async updateUserRoles(){
             if(this.lastPermissionLoad != null && this.lastPermissionLoad.getTime() > new Date().getTime() - 300_000){
