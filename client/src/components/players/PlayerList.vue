@@ -62,10 +62,10 @@ watch(searchQuery, (newQuery) => {
     </div>
     <Tabs value="0">
       <TabList>
-        <Tab value="0">Unverified Users</Tab>
-        <Tab value="4">Privileged Users</Tab>
-        <Tab value="1">Users</Tab>
-        <Tab value="2">Disabled Users</Tab>
+        <Tab value="0">Unverified Users ({{playerListStore.getUnverifiedPlayers().length}})</Tab>
+        <Tab value="4">Privileged Users ({{playerListStore.getPrivilegedPlayers().length}})</Tab>
+        <Tab value="1">Users ({{playerListStore.getPlayers().length}})</Tab>
+        <Tab value="2">Disabled Users ({{playerListStore.getDisabledPlayers().length}})</Tab>
       </TabList>
       <TabPanels>
         <TabPanel value="0">
