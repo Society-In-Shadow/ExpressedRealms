@@ -5,7 +5,7 @@ import TabList from 'primevue/tablist';
 import Tab from 'primevue/tab';
 import TabPanels from 'primevue/tabpanels';
 import TabPanel from 'primevue/tabpanel';
-
+import Skeleton from 'primevue/skeleton';
 import ExpressionSection from "@/components/expressions/ExpressionSection.vue";
 import axios from "axios";
 import {onBeforeRouteUpdate, useRoute} from 'vue-router'
@@ -153,7 +153,9 @@ async function downloadExpressionBooklet() {
                   />
                 </div>
                 <div class="col-12 align-self-center text-center order-0 order-md-1 col-md-4">
-                  <img src="/IfIHadOne2.jpg" class="w-100" style="max-width: 250px" alt="Timmy Turners Father Regretting not having a trophy">
+                  <Skeleton v-if="headerIsLoading" width="100%" height="200px"/>
+                  <img v-else :src="'/expressions/' + expressionInfo.currentExpressionName.toLowerCase() + '_square.png'" class="w-100" style="max-width: 250px" alt="round circle"/>
+                  
                 </div>
               </div>
             </div>
