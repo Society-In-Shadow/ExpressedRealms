@@ -5,6 +5,7 @@ import Card from "primevue/card";
 import {useRouter} from "vue-router";
 import {overallCharacterConfirmationService} from "@/components/characters/services/confirmationService.ts";
 import Tag from "primevue/tag";
+import ExpressionLogo from "@/components/common/ExpressionLogo.vue";
 
 const Router = useRouter();
 const popupService = overallCharacterConfirmationService();
@@ -41,17 +42,24 @@ function editCharacter() {
 </script>
 
 <template>
-  <Card class="mb-3 characterTile">
-    <template #title>
-      {{ characterName }} <Tag v-if="isPrimaryCharacter" value="Primary" severity="info" />
-    </template>
+  <Card class="mb-3 card-width">
     <template #content>
-      <em class="mb-3">{{ expression }}</em>
-      <div class="mt-3 text-sm">
-        {{ backgroundStory }}
+      <div class="d-flex gap-3">
+        <div class="align-self-center" style="max-width: 4em;">
+          <ExpressionLogo :expression-name="expression" />
+        </div>
+        <div class="flex-fill align-self-center">
+          <div>
+            {{ characterName }} 
+          </div>
+          <em class="mb-3">{{ expression }}</em>
+          <div class="mt-1"><Tag v-if="isPrimaryCharacter" value="Primary" severity="info" /></div>
+        </div>
+        <div class="d-inline-flex flex-column">
+          <Button data-cy="character-edit-button" size="small" label="Edit" class="m-1" @click="editCharacter" />
+          <Button data-cy="character-delete-button" size="small" label="Delete" class="m-1" @click="popupService.deleteConfirmation($event, props.characterId)" />
+        </div>
       </div>
-      <Button data-cy="character-edit-button" label="Edit" class="m-1" @click="editCharacter" />
-      <Button data-cy="character-delete-button" label="Delete" class="m-1" @click="popupService.deleteConfirmation($event, props.characterId)" />
     </template>
   </Card>
 </template>
@@ -60,4 +68,14 @@ function editCharacter() {
   .characterTile >>> .p-card-content{
     padding: 0;
   }
+  .card-width {
+    width: 20em;
+  }
+  
+  @media(max-width: 576px){
+    .card-width {
+      width: 100%;
+    }
+  }
+  
 </style>

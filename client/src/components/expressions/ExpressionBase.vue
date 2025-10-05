@@ -5,7 +5,6 @@ import TabList from 'primevue/tablist';
 import Tab from 'primevue/tab';
 import TabPanels from 'primevue/tabpanels';
 import TabPanel from 'primevue/tabpanel';
-import Skeleton from 'primevue/skeleton';
 import ExpressionSection from "@/components/expressions/ExpressionSection.vue";
 import axios from "axios";
 import {onBeforeRouteUpdate, useRoute} from 'vue-router'
@@ -23,6 +22,7 @@ import PowerTab from "@/components/expressions/powers/PowerTab.vue";
 import PowersToC from "@/components/expressions/PowersToC.vue";
 import {UserRoles, userStore} from "@/stores/userStore.ts";
 import ProgressionTab from "@/components/expressions/progressionPaths/ProgressionTab.vue";
+import ExpressionLogo from "@/components/common/ExpressionLogo.vue";
 
 const expressionInfo = expressionStore();
 const route = useRoute()
@@ -153,9 +153,7 @@ async function downloadExpressionBooklet() {
                   />
                 </div>
                 <div class="col-12 align-self-center text-center order-0 order-md-1 col-md-4">
-                  <Skeleton v-if="headerIsLoading" width="100%" height="200px"/>
-                  <img v-else :src="'/expressions/' + expressionInfo.currentExpressionName.toLowerCase() + '_square.png'" class="w-100" style="max-width: 250px" alt="round circle"/>
-                  
+                  <ExpressionLogo :expression-name="expressionInfo.currentExpressionName" :is-loading="headerIsLoading"/>
                 </div>
               </div>
             </div>
