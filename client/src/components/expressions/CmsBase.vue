@@ -12,7 +12,7 @@ import '@he-tree/vue/style/default.css'
 import '@he-tree/vue/style/material-design.css'
 import ExpressionToC from "@/components/expressions/ExpressionToC.vue";
 import axios from "axios";
-import {FeatureFlags, UserRoles, userStore} from "@/stores/userStore.ts";
+import {UserRoles, userStore} from "@/stores/userStore.ts";
 import BlessingToC from "@/components/expressions/BlessingToC.vue";
 
 const expressionInfo = expressionStore();
@@ -47,7 +47,6 @@ const showEdit = ref(false);
 const showCreate = ref(false);
 const showPreview = ref(false);
 const showReportButton = ref(false);
-const hasBlessingFeatureFlag = ref(false);
 
 async function fetchData() {
   isLoading.value = true;
@@ -76,7 +75,6 @@ function togglePreview(){
 onMounted(async () =>{
   await fetchData();
   showReportButton.value = await userInfo.hasUserRole(UserRoles.DownloadCMSReports);
-  hasBlessingFeatureFlag.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowBlessingCMS);
 })
 
 const hasBlessingSection = computed(() => {
@@ -119,7 +117,7 @@ async function downloadExpressionBooklet() {
         <template #content>
           <article id="expression-body">
             <ExpressionToC v-model="sections" :can-edit="showEdit" :show-skeleton="isLoading" @toggle-preview="togglePreview" />
-            <BlessingToC v-if="hasBlessingSection && hasBlessingFeatureFlag" :show-skeleton="isLoading" />
+            <BlessingToC v-if="hasBlessingSection" :show-skeleton="isLoading" />
           </article>
         </template>
       </Card>

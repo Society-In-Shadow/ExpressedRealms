@@ -7,7 +7,6 @@ using ExpressedRealms.Characters.Repository.Stats;
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.DB;
 using ExpressedRealms.Expressions.Repository.StatModifier;
-using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.FeatureFlags.FeatureClient;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
@@ -88,21 +87,18 @@ internal sealed class ProficiencyRepository(
         var extraModifiers = new List<ModifierDescription>();
         var dbModifiers = new List<ProficiencyModifierInfoDto>();
 
-        if (await featureToggleClient.HasFeatureFlag(ReleaseFlags.ShowProficiencySources))
-        {
-            dbModifiers.AddRange(
-                await statModifierRepository.GetModifiersFromBlessings(characterId)
-            );
-            dbModifiers.AddRange(await statModifierRepository.GetModifiersFromPowers(characterId));
-            dbModifiers.AddRange(
-                await statModifierRepository.GetModifiersFromXlLevel(characterId, currentLevel)
-            );
-            dbModifiers = dbModifiers
-                .Where(x =>
-                    x.TargetExpressionId == null || x.TargetExpressionId == character.ExpressionId
-                )
-                .ToList();
-        }
+        dbModifiers.AddRange(
+            await statModifierRepository.GetModifiersFromBlessings(characterId)
+        );
+        dbModifiers.AddRange(await statModifierRepository.GetModifiersFromPowers(characterId));
+        dbModifiers.AddRange(
+            await statModifierRepository.GetModifiersFromXlLevel(characterId, currentLevel)
+        );
+        dbModifiers = dbModifiers
+            .Where(x =>
+                x.TargetExpressionId == null || x.TargetExpressionId == character.ExpressionId
+            )
+            .ToList();
 
         extraModifiers.AddRange(
             dbModifiers.Select(x => new ModifierDescription()

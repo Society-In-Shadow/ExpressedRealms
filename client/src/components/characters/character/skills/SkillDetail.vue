@@ -3,7 +3,6 @@
 import {computed, onMounted, ref, type Ref} from "vue";
 import type {SkillResponse} from "@/components/characters/character/skills/interfaces/SkillOptionsResponse";
 import {useRoute} from 'vue-router'
-import {FeatureFlags, userStore} from "@/stores/userStore.ts";
 import axios from "axios";
 import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
 
@@ -23,8 +22,6 @@ const props = defineProps({
 const skillLevels:Ref<Array<SkillResponse>> = ref([]);
 const isLoading = ref(true);
 const selectedItem = ref(props.selectedLevelId);
-const showCharacterWizard = ref(false);
-const userInfo = userStore();
 
 
 const selectedLevel = computed(() => {
@@ -33,7 +30,6 @@ const selectedLevel = computed(() => {
 
 onMounted(async () =>{
   getEditOptions();
-  showCharacterWizard.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowCharacterWizard);
 });
 
 function getEditOptions() {

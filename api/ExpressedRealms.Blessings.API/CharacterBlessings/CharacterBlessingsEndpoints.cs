@@ -2,8 +2,6 @@
 using ExpressedRealms.Blessings.API.CharacterBlessings.Delete;
 using ExpressedRealms.Blessings.API.CharacterBlessings.Edit;
 using ExpressedRealms.Blessings.API.CharacterBlessings.GetAll;
-using ExpressedRealms.FeatureFlags;
-using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
@@ -17,7 +15,6 @@ internal static class CharacterBlessingsEndpoints
         var endpointGroup = app.MapGroup("characters")
             .AddFluentValidationAutoValidation()
             .WithTags("Character Blessings")
-            .RequireFeatureToggle(ReleaseFlags.ManageCharacterBlessings)
             .WithOpenApi();
 
         endpointGroup.MapGet("{characterId}/blessings", GetCharacterBlessingsEndpoint.ExecuteAsync);

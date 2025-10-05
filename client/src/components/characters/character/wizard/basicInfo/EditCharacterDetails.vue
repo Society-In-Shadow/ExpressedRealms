@@ -33,7 +33,6 @@ const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5);
 const isMobile = activeBreakpoint.smaller('md');
 
 const showFactionInfo = ref(false);
-const showCharacterXpLimits = ref(false);
 
 onBeforeMount(async () =>{
   await characterInfo.getCharacterDetails(Number(route.params.id))
@@ -45,7 +44,6 @@ onBeforeMount(async () =>{
         form.fields.isPrimaryCharacter.field.value = characterInfo.isPrimaryCharacter;
       });
   showFactionInfo.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowFactionDropdown);
-  showCharacterXpLimits.value = await userInfo.hasFeatureFlag(FeatureFlags.AddCharacterXPLimits);
   if(!isMobile.value){
     updateWizardContent();
   }
@@ -103,7 +101,7 @@ const updateWizardContent = () => {
           :show-skeleton="characterInfo.isLoading" :redirect-url="expressionRedirectURL" @change="onSubmit"
         />-->
         <FormTextAreaWrapper v-model="form.fields.background" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
-        <FormCheckboxWrapper v-if="showCharacterXpLimits" v-model="form.fields.isPrimaryCharacter" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
+        <FormCheckboxWrapper v-model="form.fields.isPrimaryCharacter" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
         <Message severity="info" class="mb-3">Toggle above to make this character visible to GOs for printing the booklet and handing out XP.  It does not give them the ability to modify the character.</Message>
         <SelectProgressionPaths :primary-progression="form.fields.primaryProgression" :secondary-progression="form.fields.secondaryProgression" :expression-type-id="characterInfo.expressionId" @change="onSubmit"/>
       </form>

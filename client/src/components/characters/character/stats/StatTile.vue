@@ -5,18 +5,13 @@ import axios from "axios";
 import {onMounted, ref} from "vue";
 import {useRoute} from 'vue-router'
 import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
-import {experienceStore} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
-import {FeatureFlags, userStore} from "@/stores/userStore.ts";
 import StatInfo from "@/components/characters/character/stats/StatInfo.vue";
 
 const route = useRoute()
-const experienceInfo = experienceStore();
 const stats = ref([ {}, {}, {}, {}, {}, {}]);
 const showDetails = ref(false);
 const selectedStatType = ref(1);
 const isLoading = ref(true);
-const showCharacterWizard = ref(false);
-const userInfo = userStore();
 
 onMounted(async () =>{
   axios.get(`/characters/${route.params.id}/stats`)
@@ -24,7 +19,6 @@ onMounted(async () =>{
         stats.value = response.data;
         isLoading.value = false;
       });
-  showCharacterWizard.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowCharacterWizard);
 });
 
 function showDetailedStat(statTypeId:number){
@@ -34,7 +28,6 @@ function showDetailedStat(statTypeId:number){
 </script>
 
 <template>
-  <div class="text-right pb-3" v-if="!showCharacterWizard && experienceInfo.showAllExperience">{{ experienceInfo.experienceBreakdown.statsXp}} Total XP - {{experienceInfo.experienceBreakdown.setupStatsXp}} Creation XP = {{experienceInfo.experienceBreakdown.statsXp - experienceInfo.experienceBreakdown.setupStatsXp}} XP</div>
   <div class="flex flex-wrap justify-content-center column-gap-3 row-gap-3 w-100">
     <div v-for="stat in stats" v-if="!showDetails" :key="stat.statTypeId" class="align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch m-0 p-0">
       <Fieldset class="statBlock mb-3" style="cursor: pointer;" @click="showDetailedStat(stat.statTypeId)">

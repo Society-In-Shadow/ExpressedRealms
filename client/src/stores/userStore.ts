@@ -17,14 +17,7 @@ export const UserRoles = {
 
 export const FeatureFlags = {
     ShowMarketingContactUs: "show-marketing-contact-us",
-    ShowInventoryPage: "show-inventory-page",
-    ShowCharacterPowers: "show-character-powers",
     ShowFactionDropdown: "show-faction-dropdown",
-    ShowBlessingCMS: "show-blessing-cms",
-    HideBlessingSections: "hide-blessing-sections",
-    ShowCharacterWizard: "show-character-wizard",
-    ManageCharacterBlessings: "manage-character-blessings",
-    AddCharacterXPLimits: "add-character-limit-cap",
 } as const;
 
 export type UserRole = (typeof UserRoles)[keyof typeof UserRoles];

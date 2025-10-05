@@ -1,5 +1,4 @@
 import Layout from "@/components/LoggedInLayout.vue";
-import {FeatureFlags} from "@/stores/userStore.ts";
 
 export const OverallRoutes = {
     path: '/expressedRealms',
@@ -28,14 +27,12 @@ export const OverallRoutes = {
         {
             path: "/characters/wizard",
             name: "addWizard",
-            component: () => import("./../../components/characters/character/wizard/CharacterWizard.vue"),
-            meta: { requiredFeatureFlag: FeatureFlags.ShowCharacterWizard }
+            component: () => import("./../../components/characters/character/wizard/CharacterWizard.vue")
         },
         {
             path: "/characters/:id/wizard",
             name: "characterWizard",
-            component: () => import("./../../components/characters/character/wizard/CharacterWizard.vue"),
-            meta: { requiredFeatureFlag: FeatureFlags.ShowCharacterWizard }
+            component: () => import("./../../components/characters/character/wizard/CharacterWizard.vue")
         },
         {
             path: "/rulebook/:slug",
