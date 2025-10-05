@@ -121,8 +121,9 @@ const updateWizardContent = () => {
           />
           <TextAreaWrapper v-model="background" field-name="Background" :error-text="errors.background" />
           <Button data-cy="add-character-button" label="Add Character" class="w-100 mb-2" type="submit" />
+          <Button label="Back" class="w-100 mb-2" severity="secondary" @click="router.push({name: 'characters'})" />
         </form>
-              </template>
+      </template>
     </Card>
   </div>
 </template>

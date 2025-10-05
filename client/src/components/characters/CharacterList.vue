@@ -13,6 +13,9 @@ onMounted(async () => {
 </script>
 
 <template>
+  <div class="mt-3">
+    <AddCharacterTile />
+  </div>
   <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
     <CharacterTile
       v-for="character in charactersData.characters" 
@@ -23,7 +26,6 @@ onMounted(async () => {
       :expression="character.expression"
       :is-primary-character="character.isPrimaryCharacter"
     />
-    <AddCharacterTile />
   </div>
 </template>
 
