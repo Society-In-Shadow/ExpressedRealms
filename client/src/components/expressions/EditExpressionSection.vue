@@ -3,7 +3,7 @@
 import {makeIdSafe} from "@/utilities/stringUtilities";
 import Skeleton from "primevue/skeleton";
 import Button from "primevue/button";
-import {onMounted, ref} from "vue";
+import {ref} from "vue";
 import axios from "axios";
 import {useForm} from "vee-validate";
 import {object, string} from "yup";
@@ -18,7 +18,7 @@ import {useConfirm} from "primevue/useconfirm";
 import DataTable from "primevue/datatable";
 import KnowledgeList from "@/components/knowledges/KnowledgeList.vue";
 import BlessingList from "@/components/blessings/BlessingList.vue";
-import {FeatureFlags, userStore} from "@/stores/userStore.ts";
+import {userStore} from "@/stores/userStore.ts";
 
 const expressionInfo = expressionStore();
 
@@ -52,12 +52,7 @@ const showEditor = ref(false);
 const showOptionLoader = ref(true);
 const sectionTypeOptions = ref([]);
 const showCreate = ref(false);
-const showBlessingCms = ref(false);
 const userInfo = userStore();
-
-onMounted(  async() =>  {
-  showBlessingCms.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowBlessingCMS)
-})
 
 function toggleEditor(){
   showEditor.value = !showEditor.value;
@@ -210,7 +205,7 @@ const deleteExpression = (event) => {
     <div v-if="props.sectionInfo.sectionTypeName === 'Knowledges Section'">
       <KnowledgeList :is-read-only="!showEdit" />
     </div>
-    <div v-if="props.sectionInfo.sectionTypeName === 'Blessings Section' && showBlessingCms">
+    <div v-if="props.sectionInfo.sectionTypeName === 'Blessings Section'">
       <BlessingList :is-read-only="!showEdit" />
     </div>
     

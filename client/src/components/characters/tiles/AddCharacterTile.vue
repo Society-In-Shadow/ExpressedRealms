@@ -3,19 +3,11 @@
 import Button from "primevue/button";
 import Card from "primevue/card";
 import {useRouter} from "vue-router";
-import {FeatureFlags, userStore} from "@/stores/userStore.ts";
 
 const router = useRouter();
-const userInfo = userStore();
 
 async function redirectToAdd(){
-  
-  if(await userInfo.hasFeatureFlag(FeatureFlags.ShowCharacterWizard)){
-    router.push('/characters/wizard')
-  }else{
-    router.push('/characters/add')
-  }
-  
+  router.push('/characters/wizard')
 }
 
 </script>

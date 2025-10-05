@@ -1,4 +1,3 @@
-using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.Powers.API.CharacterPowerEndpoints.Create;
 using ExpressedRealms.Powers.API.CharacterPowerEndpoints.Delete;
 using ExpressedRealms.Powers.API.CharacterPowerEndpoints.Edit;
@@ -6,7 +5,6 @@ using ExpressedRealms.Powers.API.CharacterPowerEndpoints.GetAll;
 using ExpressedRealms.Powers.API.CharacterPowerEndpoints.GetOptions;
 using ExpressedRealms.Powers.API.CharacterPowerEndpoints.GetPickable;
 using ExpressedRealms.Powers.API.CharacterPowerEndpoints.GetPowerCards;
-using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
@@ -19,7 +17,6 @@ internal static class CharacterPowersEndpoints
     {
         var endpointGroup = app.MapGroup("characters")
             .AddFluentValidationAutoValidation()
-            .RequireFeatureToggle(ReleaseFlags.ShowPowersOnCharacter)
             .WithTags("Character Powers")
             .WithOpenApi();
 

@@ -5,7 +5,6 @@ import {onMounted, ref, type Ref} from "vue";
 import {useRoute} from 'vue-router'
 import Button from 'primevue/button';
 import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
-import {FeatureFlags, userStore} from "@/stores/userStore.ts";
 import type {Stat} from "@/components/characters/character/stats/type.ts";
 
 const route = useRoute()
@@ -26,12 +25,9 @@ const stat:Ref<Stat> = ref({
 });
 const isLoading = ref(true);
 const showOptions = ref(false);
-const showCharacterWizard = ref(false);
-const userInfo = userStore();
 
 onMounted(async () =>{
   reloadStatInfo();
-  showCharacterWizard.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowCharacterWizard);
 });
 
 function reloadStatInfo() {
