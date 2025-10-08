@@ -1,7 +1,7 @@
 # Creating EF Core Migrations
-We use a separate project to work with the migrations.  This allows us to eventually make the database updates an 
-independent process, and simplifies the dependencies needed for the migration.
 
+We use a separate project to work with the migrations.  This allows us to eventually make the database updates an
+independent process, and simplifies the dependencies needed for the migration.
 
 ## To create migration
 
@@ -27,12 +27,14 @@ docker compose up
 ```
 
 ## To Rollback the Database
+
 You will need to update the appsettings.Development.json to include the connection string to the db
 Altertantively, you can use the app secret stuff to store it on a more permanent basis, and not have it committed
 
 once you get that, the two commands you want to use is
 
 To list out the transactions
+
 ```shell
 dotnet ef migrations list --project ExpressedRealms.DB --startup-project ExpressedRealms.MigrationProject
 ```
@@ -40,6 +42,7 @@ dotnet ef migrations list --project ExpressedRealms.DB --startup-project Express
 To to revert to a specified time, use this
 
 Keep note, nameOfMigration is not the one you want to revert, it's the name of the one before the one you want to remove
+
 ```shell
 dotnet ef database update <nameOfMigration> --project ExpressedRealms.DB --startup-project ExpressedRealms.MigrationProject
 ```
