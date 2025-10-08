@@ -44,7 +44,7 @@ public sealed class FluentValidationFailure : Error
 * Each enum will be in a separate class
 * Enums will all be located in the same folder
 
-## Data Transfer Objects (Dto)
+## Data Transfer Objects (Dto) (Depreciated in favor of Use Cases)
 * Classes will have "Dto" at the end of the class name
 * Validation Classes will have "DtoValidator" at the end of the class name
 * The DTO's should always be public sealed records

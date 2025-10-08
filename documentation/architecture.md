@@ -6,14 +6,16 @@ The frontend is built using Vue 3 and Vite.  It primarily uses PrimeVue and Boos
 Locally, it can be found at this address
 * [Front End / Web App](https://localhost/)
 
-
-
 ## Backend / Web API
-Backend is using .Net 8, primarily using the repository pattern to store business logic.  
+Backend is using .Net 8, using a combination of Use Cases for business logic, and repositories to consolidate common
+ef core operations.
 
-More information on the repository standard we use can be found [here](/repositoryStandards.md)
+ - Use Case Details can be found [here](/useCases.md)
+ - Repository standards can be found [here](/repositoryStandards.md)
 
-The API is built using Minimal APIs, following the restful api pattern.  The swagger documentation is being used to document the API.
+The API is built using Minimal APIs, following the restful api pattern.
+
+The swagger documentation is being used to document the API.
 
 Fluent Validations and Fluent Results are used extensively to validate and pass around the data in the backend.
 
@@ -71,7 +73,14 @@ End to end tests are also using Cypress.  As of writing, they do some basic chec
 See [Cypress](cypress.md) for more information about how we use it here
 
 ## Feature Flags
-This one is the newer kid on the block.  We are using a product called FlipT.
+We use a product called Flipt. It's free to host locally and out on production. The free hosting locally is the main drive
+for using it, as each dev can have their own instance.
+
+There is a custom wrapper around that system, that does a couple of different things:
+
+ - Allows us to define feature flags code side, and upon deployment, it will update the feature flag instance
+ - Centralized the feature flag logic into a central project
+ - Frontend has also been configured to look at the feature flag instance
 
 In addition to hosting this locally at the address down below, we are also hosting it out in production.
 
@@ -96,4 +105,5 @@ Locally, everything is running via docker containers.  All services should be co
 See more information in the [Docker](docker.md) documentation
 
 ## Azure
-For our production environment, we rely on Azure.
+For our production environment, we rely on Azure.  Main components are the azure container apps for both front end and 
+back end projects.  We do have an application insights instance and use azure key vault and azure blob storage.
