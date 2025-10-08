@@ -1,6 +1,7 @@
 # Adding New CMS Sections
 
 ## Database
+
 You need to add the following in a migration, this will get you the new section information.
 Basically each CMS will have it's dedicated expression type, and expression. Below adds them all in
 
@@ -36,9 +37,11 @@ Basically each CMS will have it's dedicated expression type, and expression. Bel
 ```
 
 ## Backend
+
 There's nothing that needs to be done here, it's been generalized so you don't need to modify this after adding a new one
 
 ## Frontend
+
 The dynamic nature is driven by the vue router meta data, you will need to add something like below to get it to properly
 connect to the backend.
 
@@ -54,19 +57,20 @@ The import bit is the isCMS and id, where id is the expression type id as set ab
 
 ```
 
-
 # Creating Dynamic Sections
+
 A dynamic section is one that shows up in the list, but has additional functionality beyond the standard title / description
 mix.  The two existing ones as of writing are the Knowledge list and Blessings list.
 
 ## Codeside
+
 There's a few pieces to this, most of which I don't remember off the top of my head as of writing.  Will add when I need
 to do this again.
 
 ## Database
+
 So, in addition to adding the new component, you will also need to run something like this in the database to make sure
 that the section shows up appropriately.
-
 
 ```postgresql
 DO $$

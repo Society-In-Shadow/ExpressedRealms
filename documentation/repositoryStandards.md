@@ -1,6 +1,7 @@
 # Repository Standards
 
 ## Repository
+
 The repository itself should be an internal sealed class, that has a public interface.  There should be a static
 dependency class that connects them that external callers can call.  All method calls will be suffixed with "Async" if
 appropriate.
@@ -8,10 +9,12 @@ appropriate.
 ## Using Results Return Type
 
 ### Handling Error Types
+
 All failure types will have an associated class to deal pass back.  It will allow the API layer to specifically deal
 any specific errors.  They will:
 
 They Will:
+
 * Always end in "Failure"
 * Return a message or something useful to the caller
 
@@ -41,10 +44,12 @@ public sealed class FluentValidationFailure : Error
 ```
 
 ## Enum Use
+
 * Each enum will be in a separate class
 * Enums will all be located in the same folder
 
-## Data Transfer Objects (Dto)
+## Data Transfer Objects (Dto) (Depreciated in favor of Use Cases)
+
 * Classes will have "Dto" at the end of the class name
 * Validation Classes will have "DtoValidator" at the end of the class name
 * The DTO's should always be public sealed records

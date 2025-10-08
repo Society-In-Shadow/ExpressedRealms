@@ -21,10 +21,10 @@ COPY --from=build /app/publish .
 RUN apt-get update && apt-get install -y --no-install-recommends  wget=1.21.3-1+deb12u1 && rm -rf /var/lib/apt/lists/*
 
 # Install fonts and fontconfig in one step
-RUN apt-get update && apt-get install -y \
-    fonts-dejavu-core \
-    fonts-liberation \
-    fontconfig \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    fonts-dejavu-core=2.37-6 \
+    fonts-liberation=1:1.07.4-11 \
+    fontconfig=2.14.1-4 \
     && fc-cache -f -v \
     && rm -rf /var/lib/apt/lists/*
 

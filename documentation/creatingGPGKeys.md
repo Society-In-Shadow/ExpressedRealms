@@ -1,4 +1,5 @@
 # Github and Verified Commits
+
 Github has a feature called Verified Commits.  They work by linking a GPG key from your local machine to a public key you
 upload to your account on there.  It's basically a very strong way of taking ownership of that commit in a secure manner.
 
@@ -6,11 +7,13 @@ It's mainly there to verify that you are in fact the one that made a commit, not
 as you.
 
 ## Generating the Public and Private Key locally
+
 I will caveat that these steps should be compatible across both fedora and ubuntu, but was only tested in Ubuntu.
 
 For an up to date steps, look here : [Generating GPG Key](https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key)
 
 ## Quick Guide
+
 First thing you want to do is generate the key, with the command below, use the information associated with your git
 account.  It will ask you for some information, accept defaults where possible.
 
@@ -23,6 +26,7 @@ gpg --full-generate-key
 ```
 
 ### Updating Github Account
+
 Now you need to get the public key for github, so run the following:
 
 ```shell
@@ -54,9 +58,11 @@ Then you want to open up this link here : [Add GPG Key to Github](https://github
 There should be a GPG keys section, hit the New GPG key, and paste the output from above into that, and give it an appropriate name
 
 ## Configure Git Locally
+
 Now that Github has the public key, you need to tell your local git instance to sign with the private key.
 
 To do so, run the following commands
+
 ```shell
 git config --global --unset gpg.format
 ```
@@ -64,6 +70,7 @@ git config --global --unset gpg.format
 Just like above, we need to grab that identifier to tell git to use the private key
 
 So, same command as before, and grab that chunk as shown below.
+
 ```shell
 gpg --list-secret-keys --keyid-format=long
 ```
@@ -85,6 +92,7 @@ git config --global user.signingkey <keyhere>
 ```
 
 ## Additional Stuff
+
 Since you are here, make sure to fill in your username and email address for git
 
 ```shell

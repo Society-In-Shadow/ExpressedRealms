@@ -21,6 +21,7 @@ DB_PASSWORD=
 ```
 
 ### Postgres
+
 We use a postgres database.  On our locals, that db will be handled by the docker image for postgres.
 
 On first start, the web api will populate the db and fill it in with sample data.
@@ -30,6 +31,7 @@ Connection details can be found in the docker-compose.yaml file.
 The database will be persistent across the docker images build / rebuild.
 
 #### Population Scripts
+
 These are stored outside of the repo, and you will need to ask about getting access to them.
 
 #### Reset DB
@@ -49,16 +51,18 @@ NOTE: this is case sensitive
 ```shell
 docker volume rm nameOfVolume
 ```
+
 That name should be fairly consistent going forward, so you won't need to run the first step all the time.
 
 ### pgAdmin
+
 pgAdmin is a postgres database management tool.  For Expressed Realms, it runs in a docker container.
 
 When the app is started for the first time, it will create a new directory
 
 You can access here:
-* [DB Management / pgAdmin](http://localhost:8888/login?next=%2Fbrowser%2F)
 
+* [DB Management / pgAdmin](http://localhost:8888/login?next=%2Fbrowser%2F)
 
 #### Connect to DB
 
@@ -70,8 +74,8 @@ Once you get in, you need click add server.
 
 On the popup, there are two tabs you need to be concerned about to get this up and running: General and Connections
 
-
 ##### General Tab
+
 For the general tab, only value you really need to be concerned about is the name field, the rest of them you don't need
 to set
 
@@ -79,8 +83,8 @@ to set
 |----------|-------------------|
 | Name     | Expressed Realms  |
 
-
 ##### Connection Tab
+
 NOTE: Env File variables are case sensitive
 
 | Field                     | Value                              |
@@ -95,7 +99,6 @@ NOTE: Env File variables are case sensitive
 | Role                      | Leave Blank                        |
 | Service                   | Leave Blank                        |
 
-
 Hit save, and it should connect.
 
 NOTE: I don't think you can connect to this from a local install of pgAdmin
@@ -104,13 +107,14 @@ think the hostname would be localhost
 #### Testing DB
 
 To test: On the left hand side,
+
 * Servers
-    * Expressed Realms
-        * Databases
-            * ExpressedRealms
-                * Schemas (2)
-                    * public
-                        * tables
-                            * characters
+  * Expressed Realms
+    * Databases
+      * ExpressedRealms
+        * Schemas (2)
+          * public
+            * tables
+              * characters
 
 Right click on that table, and hit view / edit data.

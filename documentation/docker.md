@@ -10,16 +10,19 @@ Once you have their hello world example up and running, you should be good to go
 ## Docker Commands
 
 ### To start the application
+
 ```shell
 docker compose up
 ```
 
 ### To stop the application
+
 ```shell
 docker compose down
 ```
 
 ### To rebuild everything
+
 ```shell
 docker compose build --no-cache
 ```
