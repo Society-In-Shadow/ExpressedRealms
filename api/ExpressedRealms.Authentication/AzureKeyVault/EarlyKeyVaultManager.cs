@@ -29,13 +29,13 @@ public class EarlyKeyVaultManager
 
             secret =
                 keyValueSecret
-                ?? throw new Exception($"Secret {secretName.Name} not found in Key Vault");
+                ?? throw new KeyNotFoundException($"Secret {secretName.Name} not found in Key Vault");
         }
         else
         {
             var value = Environment.GetEnvironmentVariable(secretName.Name);
             if (string.IsNullOrEmpty(value))
-                throw new Exception($"Secret {secretName.Name} not found in Environment Variables");
+                throw new KeyNotFoundException($"Secret {secretName.Name} not found in Environment Variables");
 
             secret = value;
         }
