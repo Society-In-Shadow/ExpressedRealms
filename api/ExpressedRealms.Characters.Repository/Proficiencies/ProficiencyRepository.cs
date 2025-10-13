@@ -87,9 +87,7 @@ internal sealed class ProficiencyRepository(
         var extraModifiers = new List<ModifierDescription>();
         var dbModifiers = new List<ProficiencyModifierInfoDto>();
 
-        dbModifiers.AddRange(
-            await statModifierRepository.GetModifiersFromBlessings(characterId)
-        );
+        dbModifiers.AddRange(await statModifierRepository.GetModifiersFromBlessings(characterId));
         dbModifiers.AddRange(await statModifierRepository.GetModifiersFromPowers(characterId));
         dbModifiers.AddRange(
             await statModifierRepository.GetModifiersFromXlLevel(characterId, currentLevel)
@@ -114,7 +112,7 @@ internal sealed class ProficiencyRepository(
         {
             if (!modifier.ScaleWithLevel)
                 return modifier.Modifier;
-            
+
             if (modifier.CreationSpecificBonus && modifier.ScaleWithLevel)
                 return modifier.Modifier + (modifier.Modifier * currentLevel);
 

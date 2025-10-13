@@ -241,7 +241,7 @@ internal static class CharacterEndPoints
         endpointGroup
             .MapGet("{id}/overallexperience", GetOverallStatsEndpoint.Execute)
             .RequireAuthorization();
-        
+
         endpointGroup
             .MapGet("{characterId}/getcrb", GetExpressionBookletEndpoint.Execute)
             .RequirePolicyAuthorization(Policies.ManagePlayerCharacterList)

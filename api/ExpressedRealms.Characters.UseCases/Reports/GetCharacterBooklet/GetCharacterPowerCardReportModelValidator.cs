@@ -3,8 +3,7 @@ using FluentValidation;
 
 namespace ExpressedRealms.Characters.UseCases.Reports.GetCharacterBooklet;
 
-public class GetCharacterSheetReportModelValidator
-    : AbstractValidator<GetCharacterSheetReportModel>
+public class GetCharacterSheetReportModelValidator : AbstractValidator<GetCharacterSheetReportModel>
 {
     public GetCharacterSheetReportModelValidator(ICharacterRepository expressionRepository)
     {

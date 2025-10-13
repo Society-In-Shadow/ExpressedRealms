@@ -27,6 +27,14 @@ export const eventStore =
                     endDate: new Date(2025, 9, 5),
                     conWebsiteName: 'Nuke-Con',
                     conWebsiteUrl: 'https://www.nuke-con.com/',
+                }, {
+                    id: 3,
+                    name: 'Genghis Con',
+                    location: 'Hyatt Regency Aurora-Denver Conference Center, Aurora, CO 80011',
+                    startDate: new Date(2025, 2, 20),
+                    endDate: new Date(2025, 2, 22),
+                    conWebsiteName: 'Gamer Girls Games',
+                    conWebsiteUrl: 'https://gamergirlgames.com/',
                 }]
                 
                 this.events = events.filter(event => event.endDate >= new Date());

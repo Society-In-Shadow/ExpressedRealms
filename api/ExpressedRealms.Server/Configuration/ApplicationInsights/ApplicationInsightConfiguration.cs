@@ -13,7 +13,7 @@ public static class ApplicationInsightConfiguration
     )
     {
         var logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console();
-        
+
         if (builder.Environment.IsDevelopment())
         {
             var testAppInsightsLocally = await keyVaultManager.GetSecret(
@@ -30,16 +30,18 @@ public static class ApplicationInsightConfiguration
             var appInsightsConnectionString = await keyVaultManager.GetSecret(
                 ConnectionStrings.ApplicationInsights
             );
-            logger.WriteTo.ApplicationInsights(appInsightsConnectionString, TelemetryConverter.Traces);
+            logger.WriteTo.ApplicationInsights(
+                appInsightsConnectionString,
+                TelemetryConverter.Traces
+            );
             builder.Services.AddApplicationInsightsTelemetry(
                 (options) =>
                 {
                     options.ConnectionString = appInsightsConnectionString;
                 }
             );
-
         }
-                    
+
         Log.Logger = logger.CreateLogger();
         builder.Host.UseSerilog();
     }

@@ -12,11 +12,11 @@ public class DebugTelemetryChannel : ITelemetryChannel
         {
             case RequestTelemetry req:
                 Console.WriteLine(
-                    $"[RequestTelemetry] Name: {req.Name}, " +
-                    $"Success: {req.Success}, " +
-                    $"ResponseCode: {req.ResponseCode}, " +
-                    $"Duration: {req.Duration}, " +
-                    $"Url: {req.Url}"
+                    $"[RequestTelemetry] Name: {req.Name}, "
+                        + $"Success: {req.Success}, "
+                        + $"ResponseCode: {req.ResponseCode}, "
+                        + $"Duration: {req.Duration}, "
+                        + $"Url: {req.Url}"
                 );
                 if (req.Properties?.Count > 0)
                 {
@@ -28,18 +28,18 @@ public class DebugTelemetryChannel : ITelemetryChannel
 
             case DependencyTelemetry dep:
                 Console.WriteLine(
-                    $"[DependencyTelemetry] Name: {dep.Name}, " +
-                    $"Target: {dep.Target}, " +
-                    $"Type: {dep.Type}, " +
-                    $"Duration: {dep.Duration}, " +
-                    $"Success: {dep.Success}"
+                    $"[DependencyTelemetry] Name: {dep.Name}, "
+                        + $"Target: {dep.Target}, "
+                        + $"Type: {dep.Type}, "
+                        + $"Duration: {dep.Duration}, "
+                        + $"Success: {dep.Success}"
                 );
                 break;
 
             case TraceTelemetry trace:
                 Console.WriteLine(
-                    $"[TraceTelemetry] Message: {trace.Message}, " +
-                    $"Severity: {trace.SeverityLevel}"
+                    $"[TraceTelemetry] Message: {trace.Message}, "
+                        + $"Severity: {trace.SeverityLevel}"
                 );
                 break;
 
@@ -50,7 +50,9 @@ public class DebugTelemetryChannel : ITelemetryChannel
     }
 
     public void Flush() { }
+
     public bool? DeveloperMode { get; set; } = true;
     public string EndpointAddress { get; set; }
+
     public void Dispose() { }
 }

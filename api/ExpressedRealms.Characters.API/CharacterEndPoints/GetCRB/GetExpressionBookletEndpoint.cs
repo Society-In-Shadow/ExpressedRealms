@@ -7,8 +7,9 @@ namespace ExpressedRealms.Characters.API.CharacterEndPoints.GetCRB;
 
 internal static class GetExpressionBookletEndpoint
 {
-    internal static async Task<Results<NotFound, FileStreamHttpResult, StatusCodeHttpResult, ValidationProblem>> 
-        Execute(int characterId, IGetCharacterBookletUseCase repository)
+    internal static async Task<
+        Results<NotFound, FileStreamHttpResult, StatusCodeHttpResult, ValidationProblem>
+    > Execute(int characterId, IGetCharacterBookletUseCase repository)
     {
         var status = await repository.ExecuteAsync(
             new GetCharacterBookletModel() { CharacterId = characterId }

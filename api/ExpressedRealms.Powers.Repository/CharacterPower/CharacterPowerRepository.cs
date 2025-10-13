@@ -25,7 +25,7 @@ internal sealed class CharacterPowerRepository(
             .Select(x => new CharacterPowerInfo() { PowerId = x.PowerId, UserNotes = x.Notes })
             .ToListAsync(token);
     }
-    
+
     public async Task<List<CharacterCrbInfo>> GetCharacterPowerInfoForCRB(int characterId)
     {
         return await context
@@ -34,7 +34,7 @@ internal sealed class CharacterPowerRepository(
             {
                 Name = x.Power.Name,
                 Level = x.PowerLevel.Name,
-                Exp = x.PowerLevel.Xp
+                Exp = x.PowerLevel.Xp,
             })
             .ToListAsync(token);
     }
