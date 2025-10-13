@@ -1,6 +1,5 @@
 using ExpressedRealms.Authentication.AzureKeyVault;
 using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
-using Microsoft.ApplicationInsights.Channel;
 using Serilog;
 
 namespace ExpressedRealms.Server.Configuration.ApplicationInsights;
@@ -12,21 +11,9 @@ public static class ApplicationInsightConfiguration
         EarlyKeyVaultManager keyVaultManager
     )
     {
-        var logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console();
-
-        if (builder.Environment.IsDevelopment())
+        if (await keyVaultManager.IsSecretSet(ConnectionStrings.ApplicationInsights))
         {
-            var testAppInsightsLocally = await keyVaultManager.GetSecret(
-                GeneralConfig.TestAppInsightsLocally
-            );
-            if (testAppInsightsLocally.Equals("true", StringComparison.InvariantCultureIgnoreCase))
-            {
-                builder.Services.AddSingleton<ITelemetryChannel, DebugTelemetryChannel>();
-                builder.Services.AddApplicationInsightsTelemetry();
-            }
-        }
-        else
-        {
+            var logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console();
             var appInsightsConnectionString = await keyVaultManager.GetSecret(
                 ConnectionStrings.ApplicationInsights
             );
@@ -40,9 +27,10 @@ public static class ApplicationInsightConfiguration
                     options.ConnectionString = appInsightsConnectionString;
                 }
             );
+
+            Log.Logger = logger.CreateLogger();
         }
 
-        Log.Logger = logger.CreateLogger();
         builder.Host.UseSerilog();
     }
 }
