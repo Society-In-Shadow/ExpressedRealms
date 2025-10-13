@@ -29,7 +29,8 @@ public static class SetupDatabaseAudit
             nameof(ISoftDelete.DeletedAt),
             "deleted_at",
         };
-        Audit.Core.Configuration.Setup()
+        Audit
+            .Core.Configuration.Setup()
             .UseEntityFramework(x =>
                 x.AuditTypeExplicitMapper(m =>
                         m.AddExpressionSectionAuditTrailMapping()

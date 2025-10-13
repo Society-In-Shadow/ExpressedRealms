@@ -28,6 +28,7 @@ using ExpressedRealms.Powers.Repository;
 using ExpressedRealms.Powers.UseCases.Configuration;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Server.Configuration;
+using ExpressedRealms.Server.Configuration.ApplicationInsights;
 using ExpressedRealms.Server.Configuration.UserRoles;
 using ExpressedRealms.Server.DependencyInjections;
 using ExpressedRealms.Server.EndPoints;
@@ -36,6 +37,7 @@ using ExpressedRealms.Server.Shared.Extensions;
 using ExpressedRealms.Server.Swagger;
 using FluentValidation;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -47,11 +49,9 @@ using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 
 try
 {
+    Log.Information("Setting Up Loggers");
     var earlyLogger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console();
     Log.Logger = earlyLogger.CreateLogger();
-
-    Log.Information("Setting Up Loggers");
-    var logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console();
 
     Log.Information("Setting Up Web App");
     var builder = WebApplication.CreateBuilder(args);
@@ -66,39 +66,16 @@ try
         builder.Environment.IsProduction()
     );
 
-    if (builder.Environment.IsDevelopment())
-    {
-        string connectionString = await keyVaultManager.GetSecret(ConnectionStrings.Database);
-        logger.WriteTo.PostgreSQL(connectionString, "Logs", needAutoCreateTable: true);
-    }
-    else
-    {
-        var appInsightsConnectionString = await keyVaultManager.GetSecret(
-            ConnectionStrings.ApplicationInsights
-        );
-        logger.WriteTo.ApplicationInsights(appInsightsConnectionString, TelemetryConverter.Traces);
-        builder.Services.AddApplicationInsightsTelemetry(
-            (options) =>
-            {
-                options.ConnectionString = appInsightsConnectionString;
-            }
-        );
-    }
-
-    Log.Logger = logger.CreateLogger();
-
-    builder.Host.UseSerilog();
+    Log.Information("Setup Application Insights");
+    await builder.SetupApplicationInsights(keyVaultManager);
 
     Log.Information("Setup Azure Storage Blob");
-
     await builder.SetupBlobStorage(keyVaultManager);
 
-    Log.Information("Add in Healthchecks");
-
+    Log.Information("Add in Health Checks");
     builder.Services.AddHealthChecks();
 
     Log.Information("Adding DB Context");
-
     await builder.AddDatabaseConnection(keyVaultManager, builder.Environment.IsProduction());
 
     Log.Information("Setting Up Authentication and Identity");
@@ -191,6 +168,7 @@ try
     builder.Services.AddValidatorsFromAssemblyContaining<Program>();
     builder.Services.AddFluentValidationAutoValidation();
     builder.Services.AddFluentValidationRulesToSwagger();
+    builder.Services.AddSingleton<ITelemetryInitializer, RouteTemplateTelemetryInitializer>();
 
     builder.Services.AddHttpContextAccessor();
     // https://stackoverflow.com/questions/64122616/cancellation-token-injection/77342914#77342914
