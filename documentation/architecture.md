@@ -127,11 +127,11 @@ back end projects.  We do have an application insights instance and use azure ke
 
 ## Application Insights
 Application Insights can be tested locally, by setting the "TEST-APP-INSIGHTS-LOCALLY" in the docker compose file to
-true.  At that point, you will see the data being sent to app insights in the app log (eg console output in the docker 
+true.  At that point, you will see the data being sent to app insights in the app log (eg console output in the docker
 container).
 
-This is custom functionality that can be found in the "DebugTelementryChannel" class.  This was thrown together while 
-trying to debug route template information for app insights. 
+This is custom functionality that can be found in the "DebugTelementryChannel" class.  This was thrown together while
+trying to debug route template information for app insights.
 
 It's being kept in place just in case we need it again to debug something else.
 
