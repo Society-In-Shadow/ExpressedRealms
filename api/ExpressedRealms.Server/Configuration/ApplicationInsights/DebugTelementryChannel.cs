@@ -4,7 +4,7 @@ using Microsoft.ApplicationInsights.DataContracts;
 namespace ExpressedRealms.Server.Configuration.ApplicationInsights;
 
 // Intended for debugging App Insights locally
-public class DebugTelemetryChannel : ITelemetryChannel
+public sealed class DebugTelemetryChannel : ITelemetryChannel
 {
     public void Send(ITelemetry item)
     {
@@ -53,8 +53,5 @@ public class DebugTelemetryChannel : ITelemetryChannel
     public bool? DeveloperMode { get; set; } = true;
     public string EndpointAddress { get; set; } = String.Empty;
 
-    public void Dispose()
-    {
-        GC.SuppressFinalize(this);
-    }
+    public void Dispose() {}
 }
