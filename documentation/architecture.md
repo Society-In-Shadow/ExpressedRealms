@@ -126,12 +126,12 @@ For our production environment, we rely on Azure.  Main components are the azure
 back end projects.  We do have an application insights instance and use azure key vault and azure blob storage.
 
 ## Application Insights
-Application Insights can be tested locally, by setting the "TEST-APP-INSIGHTS-LOCALLY" in the docker compose file to
-true.  At that point, you will see the data being sent to app insights in the app log (eg console output in the docker
-container).
+Application Insights cannot be tested locally. Instead, you can connect to an actual instance instead and test that way.
+Not ideal, but it's the best way to test this.
 
-This is custom functionality that can be found in the "DebugTelementryChannel" class.  This was thrown together while
-trying to debug route template information for app insights.
+As far as I can tell, you do not need any sort of special permission to send telemetry to an instance, you just need the
+connection string that can be found in the overview tab, second column towards the top.
 
-It's being kept in place just in case we need it again to debug something else.
+To do so, in your .env file, you can set the "APPLICATION-INSIGHTS-CONNECTION-STRING" to an actual instance.
 
+Any logs sent to that instance will have a property of AspNetCoreEnvironment set to "Development"

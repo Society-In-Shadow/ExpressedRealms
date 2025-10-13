@@ -17,9 +17,8 @@ public class RouteTemplateTelemetryInitializer(IHttpContextAccessor httpContextA
         if (endpoint == null)
             return;
 
-        // Replace the name with the route pattern, e.g. "POST /characters/{id}/blessings"
-        requestTelemetry.Name = $"{context!.Request.Method} {endpoint.RoutePattern.RawText}";
-        // Optional: add the raw route as a property for queries
+        requestTelemetry.Context.Operation.Name =
+            $"{context!.Request.Method} {endpoint.RoutePattern.RawText}";
         requestTelemetry.Properties["RouteTemplate"] = endpoint.RoutePattern.RawText;
     }
 }

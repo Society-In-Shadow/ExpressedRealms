@@ -7,6 +7,7 @@ public class EarlyKeyVaultManager
 {
     private readonly DaprClient? _secretClient;
     private readonly bool _isProduction;
+    private const string DaprSecretStoreName = "azure-key-vault";
 
     public EarlyKeyVaultManager(bool isProduction)
     {
@@ -22,29 +23,38 @@ public class EarlyKeyVaultManager
         string secret;
         if (_isProduction)
         {
-            // Cache miss: Fetch secret from Azure Key Vault
-            // Retrieve the database connection string from the Dapr secret store
-            var secretStoreName = "azure-key-vault"; // The name of the configured Dapr secret store
-
-            // Cache miss: Fetch secret from Azure Key Vault
             var keyValueSecret = (
-                await _secretClient.GetSecretAsync(secretStoreName, secretName.Name)
+                await _secretClient!.GetSecretAsync(DaprSecretStoreName, secretName.Name)
             ).Values.FirstOrDefault();
-            if (keyValueSecret is null)
-                throw new Exception($"Secret {secretName.Name} not found in Key Vault");
 
-            secret = keyValueSecret;
+            secret =
+                keyValueSecret
+                ?? throw new KeyNotFoundException($"Secret {secretName.Name} not found in Key Vault");
         }
         else
         {
             var value = Environment.GetEnvironmentVariable(secretName.Name);
             if (string.IsNullOrEmpty(value))
-                throw new Exception($"Secret {secretName.Name} not found in Environment Variables");
+                throw new KeyNotFoundException($"Secret {secretName.Name} not found in Environment Variables");
 
             secret = value;
         }
 
-        // Store the secret in the cache with expiration
         return secret;
+    }
+
+    public async Task<bool> IsSecretSet(IKeyVaultSecret secretName)
+    {
+        if (_isProduction)
+        {
+            var keyValueSecret = (
+                await _secretClient!.GetSecretAsync(DaprSecretStoreName, secretName.Name)
+            ).Values.FirstOrDefault();
+
+            return keyValueSecret is not null;
+        }
+
+        var value = Environment.GetEnvironmentVariable(secretName.Name);
+        return !string.IsNullOrEmpty(value);
     }
 }
