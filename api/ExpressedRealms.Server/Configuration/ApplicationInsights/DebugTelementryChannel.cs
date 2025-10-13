@@ -50,9 +50,11 @@ public class DebugTelemetryChannel : ITelemetryChannel
     }
 
     public void Flush() { }
-
     public bool? DeveloperMode { get; set; } = true;
-    public string EndpointAddress { get; set; }
+    public string EndpointAddress { get; set; } = String.Empty;
 
-    public void Dispose() { }
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+    }
 }
