@@ -6,7 +6,7 @@ const form = addRunCommonRequiredTests(getValidationInstance());
 describe("Character XP Form - Field Validations", () => {
     
     describe("Available Character XP", () => {
-        form.runCommonRequiredTests("xp", "Available Character XP");
+        form.runCommonRequiredTests("xp", "Available Character XP", 123);
     });
     
     describe("Player Number", () => {
@@ -15,6 +15,6 @@ describe("Character XP Form - Field Validations", () => {
             await form.handleSubmit(() => {})();
             expect(form.fields.playerNumber.error.value).toEqual("Player Number must be less than or equal to 999");
         });
-        form.runCommonRequiredTests("playerNumber", "Player Number");
+        form.runCommonRequiredTests("playerNumber", "Player Number", 123);
     });
 });

@@ -1,7 +1,7 @@
 export function addRunCommonRequiredTests(form: any) {
     return {
         ...form,
-        runCommonRequiredTests(key: string, label: string) {
+        runCommonRequiredTests(key: string, label: string, validValue: any = "123") {
 
             it("Label is correct", async () => {
                 expect(form.fields[key].label).toEqual(label);
@@ -14,7 +14,7 @@ export function addRunCommonRequiredTests(form: any) {
             });
 
             it("No Errors when it's a valid value", async () => {
-                form.fields[key].field.value = "123";
+                form.fields[key].field.value = validValue;
                 await form.handleSubmit(() => {})();
                 expect(form.fields[key].error?.value).toBeUndefined();
             });
