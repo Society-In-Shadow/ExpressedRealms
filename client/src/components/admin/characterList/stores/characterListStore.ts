@@ -1,6 +1,7 @@
 import {defineStore} from 'pinia'
 import axios from "axios";
 import type {CharacterListResponse, PrimaryCharacter} from "@/components/admin/characterList/types.ts";
+import type {CharacterXpForm} from "@/components/admin/characterList/validators/characterXpForm.ts";
 
 export const adminCharacterListStore =
     defineStore('adminCharacterList', {
@@ -18,8 +19,8 @@ export const adminCharacterListStore =
                         this.filteredCharacters = response.data.characters;
                     });
             },
-            async updateCharacterXp(playerNumber: number, characterId: number, xp: number) {
-                await axios.put(`/admin/characters/${characterId}/updateXp`, {playerNumber: playerNumber, xp: xp})
+            async updateCharacterXp(formValues: CharacterXpForm, characterId: number) {
+                await axios.put(`/admin/characters/${characterId}/updateXp`, {playerNumber: formValues.playerNumber, xp: formValues.xp})
                     .then(() => {
                         this.fetchCharacters();
                     });

@@ -1,4 +1,4 @@
-import {number, object} from "yup";
+import {type InferType, number, object} from "yup";
 import {useGenericForm} from "@/utilities/formUtilities";
 
 const validationSchema = object({
@@ -10,6 +10,8 @@ const validationSchema = object({
         .required()
         .label("Player Number"),
 });
+
+export type CharacterXpForm = InferType<typeof validationSchema>;
 
 export function getValidationInstance() {
     

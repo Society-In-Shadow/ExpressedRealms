@@ -19,7 +19,7 @@ onBeforeMount(async () => {
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await store.updateCharacterXp(values.playerNumber, characterId.value, values.xp);
+  await store.updateCharacterXp(values, characterId.value);
   cancel();
 });
 
