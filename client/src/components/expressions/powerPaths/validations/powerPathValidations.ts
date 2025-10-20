@@ -27,7 +27,7 @@ export function getValidationInstance() {
     };
     
     return {
-        handleSubmit: form.handleSubmit, 
+        ...form,
         customResetForm,
         setValues,
         name: form.fields.name,
