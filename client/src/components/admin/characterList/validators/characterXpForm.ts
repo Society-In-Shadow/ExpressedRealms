@@ -6,28 +6,22 @@ const validationSchema = object({
         .required()
         .label("Available Character XP"),
     playerNumber: number()
+        .max(999)
         .required()
         .label("Player Number"),
 });
 
 export function getValidationInstance() {
-        
-    const form = useGenericForm(validationSchema);
     
+    const form = useGenericForm(validationSchema);
+
     const setValues = (playerNumber: number, xpValue: number) => {
         form.fields.xp.field.value = xpValue;
         form.fields.playerNumber.field.value = playerNumber;
     }
-    
-    const customResetForm = () => {
-        form.handleReset();
-    };
-    
+
     return {
-        handleSubmit: form.handleSubmit, 
-        customResetForm,
+        ...form,
         setValues,
-        setErrors: form.setErrors,
-        fields: form.fields,
     }
 }
