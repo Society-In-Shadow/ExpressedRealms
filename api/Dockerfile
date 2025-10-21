@@ -11,7 +11,7 @@ RUN dotnet restore ExpressedRealms.sln
 FROM restore AS build
 COPY . .
 WORKDIR /src/ExpressedRealms.Server
-RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false --no-restore -m:$(nproc)
+RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false --no-restore -m:"$(nproc)"
 
 # Stage 3: Runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
