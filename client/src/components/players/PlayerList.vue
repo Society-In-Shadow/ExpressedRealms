@@ -1,43 +1,43 @@
 <script setup lang="ts">
 
-import {onMounted, ref, watch} from 'vue';
-import PlayerTile from "@/components/players/Tiles/PlayerTile.vue";
-import InputText from "primevue/inputtext";
-import {playerList} from "@/components/players/Stores/PlayerListStore";
-import Tabs from 'primevue/tabs';
-import TabList from 'primevue/tablist';
-import Tab from 'primevue/tab';
-import TabPanels from 'primevue/tabpanels';
-import TabPanel from 'primevue/tabpanel';
+import { onMounted, ref, watch } from 'vue'
+import PlayerTile from '@/components/players/Tiles/PlayerTile.vue'
+import InputText from 'primevue/inputtext'
+import { playerList } from '@/components/players/Stores/PlayerListStore'
+import Tabs from 'primevue/tabs'
+import TabList from 'primevue/tablist'
+import Tab from 'primevue/tab'
+import TabPanels from 'primevue/tabpanels'
+import TabPanel from 'primevue/tabpanel'
 
-const playerListStore = playerList();
+const playerListStore = playerList()
 
-const searchQuery = ref<string>("");
+const searchQuery = ref<string>('')
 
-onMounted(async () =>{
-  await playerListStore.fetchPlayers();
+onMounted(async () => {
+  await playerListStore.fetchPlayers()
 })
 
 // Debounce function
 function debounce(fn: Function, delay: number) {
-  let timeout: number | undefined;
+  let timeout: number | undefined
   return (...args: any[]) => {
-    clearTimeout(timeout);
+    clearTimeout(timeout)
     timeout = setTimeout(() => {
-      fn(...args);
-    }, delay);
-  };
+      fn(...args)
+    }, delay)
+  }
 }
 
 // Debounced filter function
 const debouncedFilterPlayers = debounce((query: string) => {
-  playerListStore.filterPlayers(query);
-}, 250);
+  playerListStore.filterPlayers(query)
+}, 250)
 
 // Watch for changes to the search query and trigger the debounced filter function
 watch(searchQuery, (newQuery) => {
-  debouncedFilterPlayers(newQuery);
-});
+  debouncedFilterPlayers(newQuery)
+})
 
 </script>
 
@@ -62,10 +62,18 @@ watch(searchQuery, (newQuery) => {
     </div>
     <Tabs value="0">
       <TabList>
-        <Tab value="0">Unverified Users ({{playerListStore.getUnverifiedPlayers().length}})</Tab>
-        <Tab value="4">Privileged Users ({{playerListStore.getPrivilegedPlayers().length}})</Tab>
-        <Tab value="1">Users ({{playerListStore.getPlayers().length}})</Tab>
-        <Tab value="2">Disabled Users ({{playerListStore.getDisabledPlayers().length}})</Tab>
+        <Tab value="0">
+          Unverified Users ({{ playerListStore.getUnverifiedPlayers().length }})
+        </Tab>
+        <Tab value="4">
+          Privileged Users ({{ playerListStore.getPrivilegedPlayers().length }})
+        </Tab>
+        <Tab value="1">
+          Users ({{ playerListStore.getPlayers().length }})
+        </Tab>
+        <Tab value="2">
+          Disabled Users ({{ playerListStore.getDisabledPlayers().length }})
+        </Tab>
       </TabList>
       <TabPanels>
         <TabPanel value="0">
@@ -90,7 +98,6 @@ watch(searchQuery, (newQuery) => {
         </TabPanel>
       </TabPanels>
     </Tabs>
-
   </div>
 </template>
 

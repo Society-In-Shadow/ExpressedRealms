@@ -1,56 +1,56 @@
 <script setup lang="ts">
 
-import {makeIdSafe} from "@/utilities/stringUtilities";
-import Skeleton from 'primevue/skeleton';
-import {BaseTree, Draggable} from "@he-tree/vue";
-import {toRaw, ref} from 'vue';
-import Button from "primevue/button";
-import axios from "axios";
-import toaster from "@/services/Toasters";
-import {expressionStore} from "@/stores/expressionStore";
-import {getIdsWithDynamicSortForArray, scrollToSection} from "@/components/expressions/expressionUtilities";
-const expressionInfo = expressionStore();
+import {makeIdSafe} from '@/utilities/stringUtilities'
+import Skeleton from 'primevue/skeleton'
+import {BaseTree, Draggable} from '@he-tree/vue'
+import {ref, toRaw} from 'vue'
+import Button from 'primevue/button'
+import axios from 'axios'
+import toaster from '@/services/Toasters'
+import {expressionStore} from '@/stores/expressionStore'
+import {getIdsWithDynamicSortForArray, scrollToSection} from '@/components/expressions/expressionUtilities'
 
-const model = defineModel({ required: true, default: {}, type: Array });
+const expressionInfo = expressionStore()
+
+const model = defineModel({ required: true, default: {}, type: Array })
 
 const emit = defineEmits<{
   togglePreview: []
-}>();
+}>()
 
-let originalModel;
+let originalModel
 
 const props = defineProps({
-  canEdit:{
-    type: Boolean
-  },
-  showSkeleton:{
+  canEdit: {
     type: Boolean,
-    required: true
-  }
-});
+  },
+  showSkeleton: {
+    type: Boolean,
+    required: true,
+  },
+})
 
-function saveChanges(){
-
+function saveChanges() {
   axios.put(`/expression/${expressionInfo.currentExpressionId}/updateHierarchy`, {
     expressionId: expressionInfo.currentExpressionId,
-    items: getIdsWithDynamicSortForArray(model.value, null)
+    items: getIdsWithDynamicSortForArray(model.value, null),
   }).then(() => {
-    emit("togglePreview");
-    showTocEdit.value = !showTocEdit.value;
-    toaster.success("Successfully Updated Expression Tree!");
-  });
+    emit('togglePreview')
+    showTocEdit.value = !showTocEdit.value
+    toaster.success('Successfully Updated Expression Tree!')
+  })
 }
 
-const showTocEdit = ref(false);
-function toggleEdit(){
-  if(!showTocEdit.value)
-    originalModel = JSON.parse(JSON.stringify(toRaw(model.value)));
-  
-  if(showTocEdit.value)
-    model.value = originalModel;
-  
-  emit("togglePreview");
-  showTocEdit.value = !showTocEdit.value;
+const showTocEdit = ref(false)
+function toggleEdit() {
+  if (!showTocEdit.value)
+    originalModel = JSON.parse(JSON.stringify(toRaw(model.value)))
+
+  if (showTocEdit.value)
+    model.value = originalModel
+
+  emit('togglePreview')
+  showTocEdit.value = !showTocEdit.value
 }
 
 </script>
@@ -68,11 +68,11 @@ function toggleEdit(){
       <div class="p-1">
         <i class="pi pi-bars mr-2" />{{ node.name }}
       </div>
-    </template> 
+    </template>
   </Draggable>
   <BaseTree
-    v-else 
-    v-model="model" 
+    v-else
+    v-model="model"
     children-key="subSections"
   >
     <template #default="{ node }">

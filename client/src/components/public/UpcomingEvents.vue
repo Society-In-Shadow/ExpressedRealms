@@ -1,27 +1,26 @@
 <script setup lang="ts">
-import Card from 'primevue/card';
+import Card from 'primevue/card'
 
-import {onBeforeMount} from "vue";
-import {eventStore} from "@/components/public/stores/eventStore";
+import { onBeforeMount } from 'vue'
+import { eventStore } from '@/components/public/stores/eventStore'
 
-const store = eventStore();
+const store = eventStore()
 
 onBeforeMount(() => {
-  store.getEvents();
+  store.getEvents()
 })
 
-function openMapWithFallback(address:string) {
-  const encodedAddress = encodeURIComponent(address);
+function openMapWithFallback(address: string) {
+  const encodedAddress = encodeURIComponent(address)
 
-  window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank').focus();// = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
-
+  window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank').focus()// = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
 }
 
 </script>
 
 <template>
   <h1>Our Upcoming Events!</h1>
-  
+
   <div v-if="store.events.length === 0">
     <Card>
       <template #title>

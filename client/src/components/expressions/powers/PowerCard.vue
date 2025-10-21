@@ -1,43 +1,43 @@
 <script setup lang="ts">
 
-import Card from "primevue/card";
-import Button from "primevue/button";
-import {onMounted, type PropType, ref} from "vue";
-import type {Power} from "@/components/expressions/powers/types";
-import EditPower from "@/components/expressions/powers/EditPower.vue";
-import {powerConfirmationPopups} from "@/components/expressions/powers/services/powerConfirmationPopupService";
-import {UserRoles, userStore} from "@/stores/userStore";
-import {isNullOrWhiteSpace, makeIdSafe} from "@/utilities/stringUtilities";
-import {scrollToSection} from "@/components/expressions/expressionUtilities";
+import Card from 'primevue/card'
+import Button from 'primevue/button'
+import {onMounted, type PropType, ref} from 'vue'
+import type {Power} from '@/components/expressions/powers/types'
+import EditPower from '@/components/expressions/powers/EditPower.vue'
+import {powerConfirmationPopups} from '@/components/expressions/powers/services/powerConfirmationPopupService'
+import {UserRoles, userStore} from '@/stores/userStore'
+import {isNullOrWhiteSpace, makeIdSafe} from '@/utilities/stringUtilities'
+import {scrollToSection} from '@/components/expressions/expressionUtilities'
 
-let userInfo = userStore();
+let userInfo = userStore()
 const props = defineProps({
   power: {
     type: Object as PropType<Power>,
     required: true,
   },
-  powerPathId:{
+  powerPathId: {
     type: Number,
-    required: true
+    required: true,
   },
-  isReadOnly:{
+  isReadOnly: {
     type: Boolean,
-    required: false
-  }
-});
-
-const hasPowerManagementRole = ref(false);
-
-onMounted(async () => {
-  hasPowerManagementRole.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole);
+    required: false,
+  },
 })
 
-const popups = powerConfirmationPopups(props.power.id, props.power.name, props.powerPathId);
+const hasPowerManagementRole = ref(false)
 
-const showEdit = ref(false);
+onMounted(async () => {
+  hasPowerManagementRole.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole)
+})
 
-const toggleEdit = () =>{
-  showEdit.value = !showEdit.value;
+const popups = powerConfirmationPopups(props.power.id, props.power.name, props.powerPathId)
+
+const showEdit = ref(false)
+
+const toggleEdit = () => {
+  showEdit.value = !showEdit.value
 }
 
 </script>
@@ -128,7 +128,7 @@ const toggleEdit = () =>{
           </tbody>
         </table>
       </div>
-      
+
       <h2>Game Mechanic Effect</h2>
       <div v-html="props.power.gameMechanicEffect" />
 
@@ -145,16 +145,16 @@ const toggleEdit = () =>{
           <a :href="'#' + makeIdSafe(props.power.prerequisites.powers[0])" @click.prevent="scrollToSection(props.power.prerequisites.powers[0])">{{ props.power.prerequisites.powers[0] }}</a>
         </div>
         <div v-else-if="props.power.prerequisites.powers.length == props.power.prerequisites.requiredAmount">
-          All of the following powers : 
+          All of the following powers :
           <span v-for="(power, index) in props.power.prerequisites.powers">
-            <a :href="'#' + makeIdSafe(power)" @click.prevent="scrollToSection(power)">{{ power }}</a> 
+            <a :href="'#' + makeIdSafe(power)" @click.prevent="scrollToSection(power)">{{ power }}</a>
             <span v-if="index != props.power.prerequisites.powers.length -1"> and </span>
           </span>
         </div>
         <div v-else>
-          Any of 
-          <span v-if="props.power.prerequisites.requiredAmount != 1">{{ props.power.prerequisites.requiredAmount }}</span> 
-          the following powers : 
+          Any of
+          <span v-if="props.power.prerequisites.requiredAmount != 1">{{ props.power.prerequisites.requiredAmount }}</span>
+          the following powers :
           <span v-for="(power, index) in props.power.prerequisites.powers">
             <a :href="'#' + makeIdSafe(power)" @click.prevent="scrollToSection(power)">{{ power }}</a>
             <span v-if="index != props.power.prerequisites.powers.length -1"> or </span>

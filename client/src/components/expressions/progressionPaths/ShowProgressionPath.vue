@@ -1,25 +1,25 @@
 <script setup lang="ts">
 
-import {onMounted, ref} from "vue";
-import Button from 'primevue/button';
-import {UserRoles, userStore} from "@/stores/userStore";
-import {makeIdSafe} from "@/utilities/stringUtilities";
-import EditProgressionPath from "@/components/expressions/progressionPaths/EditProgressionPath.vue";
+import {onMounted, ref} from 'vue'
+import Button from 'primevue/button'
+import {UserRoles, userStore} from '@/stores/userStore'
+import {makeIdSafe} from '@/utilities/stringUtilities'
+import EditProgressionPath from '@/components/expressions/progressionPaths/EditProgressionPath.vue'
 import {
-  progressionPathConfirmationPopupService
-} from "@/components/expressions/progressionPaths/services/powerPathConfirmationPopupService.ts";
+  progressionPathConfirmationPopupService,
+} from '@/components/expressions/progressionPaths/services/powerPathConfirmationPopupService.ts'
 
-let userInfo = userStore();
+let userInfo = userStore()
 
-const showEdit = ref(false);
+const showEdit = ref(false)
 const toggleEdit = () => {
-  showEdit.value = !showEdit.value;
+  showEdit.value = !showEdit.value
 }
 
-const hasPowerManagementRole = ref(false);
+const hasPowerManagementRole = ref(false)
 
 onMounted(async () => {
-  hasPowerManagementRole.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole);
+  hasPowerManagementRole.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole)
 })
 
 const props = defineProps({
@@ -27,17 +27,17 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  path:{
+  path: {
     type: Object,
-    required: true
+    required: true,
   },
-  isReadOnly:{
+  isReadOnly: {
     type: Boolean,
-    required: false
-  }
-});
+    required: false,
+  },
+})
 
-const popups = progressionPathConfirmationPopupService(props.path.id, props.path.name);
+const popups = progressionPathConfirmationPopupService(props.path.id, props.path.name)
 
 </script>
 
@@ -55,6 +55,6 @@ const popups = progressionPathConfirmationPopupService(props.path.id, props.path
     <div class="mb-0 pb-0" v-html="props.path.description" />
   </div>
   <div v-else>
-    <EditProgressionPath :progression-id="props.path.id" :expression-id="props.expressionId" @cancelled="toggleEdit()"/>
+    <EditProgressionPath :progression-id="props.path.id" :expression-id="props.expressionId" @cancelled="toggleEdit()" />
   </div>
 </template>

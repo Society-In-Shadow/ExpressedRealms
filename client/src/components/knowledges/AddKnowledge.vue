@@ -1,31 +1,31 @@
 <script setup lang="ts">
 
-import {knowledgeStore} from "@/components/knowledges/stores/knowledgeStore";
-import FormDropdownWrapper from "@/FormWrappers/FormDropdownWrapper.vue";
-import FormInputTextWrapper from "@/FormWrappers/FormInputTextWrapper.vue";
-import {getValidationInstance} from "@/components/knowledges/Validations/knowledgeValidations";
-import Button from "primevue/button";
-import {onBeforeMount} from "vue";
-import FormTextAreaWrapper from "@/FormWrappers/FormTextAreaWrapper.vue";
+import {knowledgeStore} from '@/components/knowledges/stores/knowledgeStore'
+import FormDropdownWrapper from '@/FormWrappers/FormDropdownWrapper.vue'
+import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
+import {getValidationInstance} from '@/components/knowledges/Validations/knowledgeValidations'
+import Button from 'primevue/button'
+import {onBeforeMount} from 'vue'
+import FormTextAreaWrapper from '@/FormWrappers/FormTextAreaWrapper.vue'
 
-const store = knowledgeStore();
+const store = knowledgeStore()
 
 const form = getValidationInstance()
 const emit = defineEmits<{
   canceled: []
-}>();
+}>()
 
 onBeforeMount(async () => {
-  await store.getOptions();
+  await store.getOptions()
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await store.addKnowledge(values);
-  cancel();
-});
+  await store.addKnowledge(values)
+  cancel()
+})
 
 const cancel = () => {
-  emit("canceled");
+  emit('canceled')
 }
 
 </script>

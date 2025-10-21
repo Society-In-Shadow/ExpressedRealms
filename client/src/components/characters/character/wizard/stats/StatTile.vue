@@ -1,78 +1,76 @@
 <script setup lang="ts">
 
-import axios from "axios";
-import {onMounted, ref, type Ref, watch} from "vue";
+import axios from 'axios'
+import {onMounted, ref, type Ref, watch} from 'vue'
 import {useRoute} from 'vue-router'
-import Button from 'primevue/button';
-import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import type {LevelInfo, Stat} from "@/components/characters/character/wizard/stats/types.ts";
-import {statStore} from "@/components/characters/character/wizard/stats/stores/statStore.ts";
-import {experienceStore, XpSectionTypes} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
-import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vue";
+import Button from 'primevue/button'
+import SkeletonWrapper from '@/FormWrappers/SkeletonWrapper.vue'
+import DataTable from 'primevue/datatable'
+import Column from 'primevue/column'
+import type {LevelInfo, Stat} from '@/components/characters/character/wizard/stats/types.ts'
+import {statStore} from '@/components/characters/character/wizard/stats/stores/statStore.ts'
+import {experienceStore, XpSectionTypes} from '@/components/characters/character/stores/experienceBreakdownStore.ts'
+import ShowXPCosts from '@/components/characters/character/wizard/ShowXPCosts.vue'
 
 const route = useRoute()
-const statInfo = statStore();
-const xpInfo = experienceStore();
+const statInfo = statStore()
+const xpInfo = experienceStore()
 
 const props = defineProps({
   statTypeId: {
     type: Number,
     required: true,
   },
-});
+})
 
-const stat:Ref<Stat> = ref({
-  statLevelInfo: {}
-});
+const stat: Ref<Stat> = ref({
+  statLevelInfo: {},
+})
 
-const newStat:Ref<Stat> = ref({
-  statLevelInfo: {}
-});
+const newStat: Ref<Stat> = ref({
+  statLevelInfo: {},
+})
 
-const loading = ref(true);
-const oldValue = ref(props.statTypeId);
-const expandedRows = ref({});
+const loading = ref(true)
+const oldValue = ref(props.statTypeId)
+const expandedRows = ref({})
 
-onMounted(async () =>{
-  await reloadData();
-});
+onMounted(async () => {
+  await reloadData()
+})
 
-async function reloadData(){
-  await reloadStatInfo();
-  await statInfo.getEditOptions(stat.value.id);
-  const info = xpInfo.getExperienceInfoForSection(XpSectionTypes.stats);
-  statInfo.statLevels.forEach(function(level:LevelInfo) {
-    level.disabled = level.totalXP - stat.value.statLevelInfo.totalXP > info.availableXp;
-  });
-  expandedRows.value = Object.fromEntries(statInfo.statLevels.map(p => [p.level, true]));
+async function reloadData() {
+  await reloadStatInfo()
+  await statInfo.getEditOptions(stat.value.id)
+  const info = xpInfo.getExperienceInfoForSection(XpSectionTypes.stats)
+  statInfo.statLevels.forEach(function (level: LevelInfo) {
+    level.disabled = level.totalXP - stat.value.statLevelInfo.totalXP > info.availableXp
+  })
+  expandedRows.value = Object.fromEntries(statInfo.statLevels.map(p => [p.level, true]))
 }
 
 watch(() => props.statTypeId, (newValue, oldValue) => {
-  reloadData();
+  reloadData()
 })
 
 async function reloadStatInfo() {
   await axios.get(`/characters/${route.params.id}/stat/${props.statTypeId}`)
-      .then((response) => {
-        stat.value = response.data;
-        newStat.value = structuredClone(response.data);
-        loading.value = false;
-      })
+    .then((response) => {
+      stat.value = response.data
+      newStat.value = structuredClone(response.data)
+      loading.value = false
+    })
 }
 
-async function handleStatUpdate(stat:Stat){
+async function handleStatUpdate(stat: Stat) {
   // Don't allow them to unselect the option
-  if(stat.statLevel == undefined)
-  {
-    stat.statLevel = oldValue.value;
-    return;
+  if (stat.statLevel == undefined) {
+    stat.statLevel = oldValue.value
+    return
   }
-  
-  await statInfo.updateStat(stat, route.params.id, props.statTypeId);
-  oldValue.value = stat.statLevel;
 
+  await statInfo.updateStat(stat, route.params.id, props.statTypeId)
+  oldValue.value = stat.statLevel
 }
 
 </script>
@@ -101,8 +99,11 @@ async function handleStatUpdate(stat:Stat){
       </div>
     </div>
     <ShowXPCosts :section-type="XpSectionTypes.stats" />
-    <DataTable v-model:selection="newStat.statLevelInfo" v-model:expandedRows="expandedRows" :value="statInfo.statLevels" selection-mode="single" data-key="level" :rowClass="row => (row.disabled ? 'non-selectable' : '')">
-      <Column selection-mode="single" headerStyle="width: 3rem"></Column>
+    <DataTable
+      v-model:selection="newStat.statLevelInfo" v-model:expanded-rows="expandedRows" :value="statInfo.statLevels" selection-mode="single" data-key="level"
+      :row-class="row => (row.disabled ? 'non-selectable' : '')"
+    >
+      <Column selection-mode="single" header-style="width: 3rem" />
       <Column field="level" header="Level">
         <template #body="slotProps">
           <SkeletonWrapper :show-skeleton="loading" height="2rem" width="100%" header-class="text-center" body-class="text-center">
@@ -120,19 +121,18 @@ async function handleStatUpdate(stat:Stat){
       <Column field="xp" header="XP" header-class="text-center" body-class="text-center">
         <template #body="slotProps">
           <SkeletonWrapper :show-skeleton="loading" height="2rem" width="100%">
-            {{slotProps.data.totalXP > stat.statLevelInfo.totalXP ? "-" : "+"}}{{ Math.abs(slotProps.data.totalXP - stat.statLevelInfo.totalXP) }}
+            {{ slotProps.data.totalXP > stat.statLevelInfo.totalXP ? "-" : "+" }}{{ Math.abs(slotProps.data.totalXP - stat.statLevelInfo.totalXP) }}
           </SkeletonWrapper>
         </template>
       </Column>
       <template #expansion="slotProps">
         <div :class="slotProps.data.disabled ? 'non-selectable' : ''">
           <SkeletonWrapper :show-skeleton="loading" height="2rem" width="100%" style="padding-left: 3rem; cursor: pointer;" @click="newStat.statLevelInfo = slotProps.data">
-            <div >
+            <div>
               {{ slotProps.data.description }}
             </div>
           </SkeletonWrapper>
         </div>
-
       </template>
     </DataTable>
   </div>

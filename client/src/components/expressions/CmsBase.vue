@@ -1,21 +1,21 @@
 <script setup lang="ts">
 
-import ExpressionSection from "@/components/expressions/ExpressionSection.vue";
+import ExpressionSection from '@/components/expressions/ExpressionSection.vue'
 import {useRoute} from 'vue-router'
-import {expressionStore} from "@/stores/expressionStore";
-import {computed, nextTick, onMounted, ref, watch} from "vue";
-import Card from "primevue/card";
-import ScrollTop from 'primevue/scrolltop';
-import CreateExpressionSection from "@/components/expressions/CreateExpressionSection.vue";
-import Button from "primevue/button";
+import {expressionStore} from '@/stores/expressionStore'
+import {computed, nextTick, onMounted, ref, watch} from 'vue'
+import Card from 'primevue/card'
+import ScrollTop from 'primevue/scrolltop'
+import CreateExpressionSection from '@/components/expressions/CreateExpressionSection.vue'
+import Button from 'primevue/button'
 import '@he-tree/vue/style/default.css'
 import '@he-tree/vue/style/material-design.css'
-import ExpressionToC from "@/components/expressions/ExpressionToC.vue";
-import axios from "axios";
-import {UserRoles, userStore} from "@/stores/userStore.ts";
-import BlessingToC from "@/components/expressions/BlessingToC.vue";
+import ExpressionToC from '@/components/expressions/ExpressionToC.vue'
+import axios from 'axios'
+import {UserRoles, userStore} from '@/stores/userStore.ts'
+import BlessingToC from '@/components/expressions/BlessingToC.vue'
 
-const expressionInfo = expressionStore();
+const expressionInfo = expressionStore()
 const route = useRoute()
 const userInfo = userStore()
 
@@ -23,120 +23,120 @@ let sections = ref([
   {
     id: 1,
     subSections: [
-      { id: 2, subSections: []},
-      { id: 3, subSections: []},
-      { id: 4, subSections: []}
-    ]
+      { id: 2, subSections: [] },
+      { id: 3, subSections: [] },
+      { id: 4, subSections: [] },
+    ],
   },
   {
     id: 5,
-    subSections: []
+    subSections: [],
   },
   {
     id: 6,
-    subSections: [{id: 7}]
+    subSections: [{ id: 7 }],
   },
   {
     id: 8,
-    subSections: [{id: 9,}]
-  }
-]);
+    subSections: [{ id: 9 }],
+  },
+])
 
-const isLoading = ref(true);
-const showEdit = ref(false);
-const showCreate = ref(false);
-const showPreview = ref(false);
-const showReportButton = ref(false);
+const isLoading = ref(true)
+const showEdit = ref(false)
+const showCreate = ref(false)
+const showPreview = ref(false)
+const showReportButton = ref(false)
 
 async function fetchData() {
-  isLoading.value = true;
-  await expressionInfo.getExpressionId(route);
-  
+  isLoading.value = true
+  await expressionInfo.getExpressionId(route)
+
   await expressionInfo.getExpressionSections()
-      .then(async () => {
-        sections.value = expressionInfo.sections;
-        showEdit.value = await userInfo.hasUserRole(UserRoles.ExpressionEditor)
-        isLoading.value = false;
-        if(location.hash){
-          await nextTick();
-          window.location.replace(location.hash);
-        }        
-      });
+    .then(async () => {
+      sections.value = expressionInfo.sections
+      showEdit.value = await userInfo.hasUserRole(UserRoles.ExpressionEditor)
+      isLoading.value = false
+      if (location.hash) {
+        await nextTick()
+        window.location.replace(location.hash)
+      }
+    })
 }
 
-function toggleCreate(){
-  showCreate.value = !showCreate.value;
+function toggleCreate() {
+  showCreate.value = !showCreate.value
 }
 
-function togglePreview(){
-  showPreview.value = !showPreview.value;
+function togglePreview() {
+  showPreview.value = !showPreview.value
 }
 
-onMounted(async () =>{
-  await fetchData();
-  showReportButton.value = await userInfo.hasUserRole(UserRoles.DownloadCMSReports);
+onMounted(async () => {
+  await fetchData()
+  showReportButton.value = await userInfo.hasUserRole(UserRoles.DownloadCMSReports)
 })
 
 const hasBlessingSection = computed(() => {
   const hasBlessingSection = sections.value.find(section => section.sectionTypeName === 'Blessings Section')
-  return hasBlessingSection !== undefined;
+  return hasBlessingSection !== undefined
 })
 
 watch(
-    () => route.path,
-    async (newPath, oldPath) => {
-      if (newPath !== oldPath) {
-        await fetchData()
-      }
+  () => route.path,
+  async (newPath, oldPath) => {
+    if (newPath !== oldPath) {
+      await fetchData()
     }
+  },
 )
 
 async function downloadExpressionBooklet() {
   const res = await axios.get(`/expression/${expressionInfo.currentExpressionId}/report`, {
     responseType: 'blob',
-  });
+  })
   const expression = route.params.slug
-  const url = URL.createObjectURL(res.data);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${expression}-booklet.pdf`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+  const url = URL.createObjectURL(res.data)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `${expression}-booklet.pdf`
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  URL.revokeObjectURL(url)
 }
 
 </script>
 
 <template>
-    <div id="expression" class="d-flex flex-column flex-md-row gap-2 ">
-      <Card class="custom-toc flex-grow-0 sticky-md-top d-print-none zIndexFix">
-        <template #title>
-          Table Of Contents
-        </template>
-        <template #content>
-          <article id="expression-body">
-            <ExpressionToC v-model="sections" :can-edit="showEdit" :show-skeleton="isLoading" @toggle-preview="togglePreview" />
-            <BlessingToC v-if="hasBlessingSection" :show-skeleton="isLoading" />
-          </article>
-        </template>
-      </Card>
-      <Card class="custom-card flex-grow-1">
-        <template #content>
-          <article id="expression-body">
-            <div class="d-flex flex-row justify-content-end align-items-center" v-if="showReportButton">
-              <Button label="Download Booklet" @click="downloadExpressionBooklet()"/>
-            </div>
-            <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit && !showPreview" @refresh-list="fetchData(route.params.name)" />
-            <Button v-if="showEdit && !showPreview" label="Add Section" class="m-2" @click="toggleCreate" />
-            <div v-if="showCreate">
-              <CreateExpressionSection @cancel-event="toggleCreate" @added-section="fetchData(route.params.name)" />
-            </div>
-          </article>
-        </template>
-      </Card>
-    </div>
-    <ScrollTop />
+  <div id="expression" class="d-flex flex-column flex-md-row gap-2 ">
+    <Card class="custom-toc flex-grow-0 sticky-md-top d-print-none zIndexFix">
+      <template #title>
+        Table Of Contents
+      </template>
+      <template #content>
+        <article id="expression-body">
+          <ExpressionToC v-model="sections" :can-edit="showEdit" :show-skeleton="isLoading" @toggle-preview="togglePreview" />
+          <BlessingToC v-if="hasBlessingSection" :show-skeleton="isLoading" />
+        </article>
+      </template>
+    </Card>
+    <Card class="custom-card flex-grow-1">
+      <template #content>
+        <article id="expression-body">
+          <div v-if="showReportButton" class="d-flex flex-row justify-content-end align-items-center">
+            <Button label="Download Booklet" @click="downloadExpressionBooklet()" />
+          </div>
+          <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit && !showPreview" @refresh-list="fetchData(route.params.name)" />
+          <Button v-if="showEdit && !showPreview" label="Add Section" class="m-2" @click="toggleCreate" />
+          <div v-if="showCreate">
+            <CreateExpressionSection @cancel-event="toggleCreate" @added-section="fetchData(route.params.name)" />
+          </div>
+        </article>
+      </template>
+    </Card>
+  </div>
+  <ScrollTop />
 </template>
 
 <style>

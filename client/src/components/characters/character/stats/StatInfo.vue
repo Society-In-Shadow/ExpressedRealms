@@ -1,41 +1,41 @@
 <script setup lang="ts">
 
-import axios from "axios";
-import {onMounted, ref, type Ref} from "vue";
+import axios from 'axios'
+import {onMounted, ref, type Ref} from 'vue'
 import {useRoute} from 'vue-router'
-import Button from 'primevue/button';
-import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
-import type {Stat} from "@/components/characters/character/stats/type.ts";
+import Button from 'primevue/button'
+import SkeletonWrapper from '@/FormWrappers/SkeletonWrapper.vue'
+import type {Stat} from '@/components/characters/character/stats/type.ts'
 
 const route = useRoute()
 
 const emit = defineEmits<{
-  toggleStat: [],
-}>();
+  toggleStat: []
+}>()
 
 const props = defineProps({
   statTypeId: {
     type: Number,
     required: true,
   },
-});
+})
 
-const stat:Ref<Stat> = ref({
-  statLevelInfo: {}
-});
-const isLoading = ref(true);
-const showOptions = ref(false);
+const stat: Ref<Stat> = ref({
+  statLevelInfo: {},
+})
+const isLoading = ref(true)
+const showOptions = ref(false)
 
-onMounted(async () =>{
-  reloadStatInfo();
-});
+onMounted(async () => {
+  reloadStatInfo()
+})
 
 function reloadStatInfo() {
   axios.get(`/characters/${route.params.id}/stat/${props.statTypeId}`)
-      .then((response) => {
-        stat.value = response.data;
-        isLoading.value = false;
-      })
+    .then((response) => {
+      stat.value = response.data
+      isLoading.value = false
+    })
 }
 
 </script>

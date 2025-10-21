@@ -1,47 +1,47 @@
 <script setup lang="ts">
-import Carousel from 'primevue/carousel';
-import {publicExpressionsStore} from "@/components/public/stores/publicExpressionStore";
-import {ref, onBeforeMount} from "vue";
-import {eventStore} from "@/components/public/stores/eventStore";
-import {makeIdSafe} from "@/utilities/stringUtilities";
+import Carousel from 'primevue/carousel'
+import { publicExpressionsStore } from '@/components/public/stores/publicExpressionStore'
+import { onBeforeMount, ref } from 'vue'
+import { eventStore } from '@/components/public/stores/eventStore'
+import { makeIdSafe } from '@/utilities/stringUtilities'
 
 interface CarouselItem {
-  name: string;
-  description: string;
-  link: string;
-  dateRange: string | null | undefined;
+  name: string
+  description: string
+  link: string
+  dateRange: string | null | undefined
 }
 
-const expressionStore =  publicExpressionsStore();
-const eventsStore = eventStore();
+const expressionStore = publicExpressionsStore()
+const eventsStore = eventStore()
 onBeforeMount(async () => {
-  await expressionStore.getExpressions();
-  await eventsStore.getEvents();
-  
+  await expressionStore.getExpressions()
+  await eventsStore.getEvents()
+
   items.value.push(...eventsStore.events
-      .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
-      .slice(0, 2)
-      .map(event => {
-        return {
-          name: "Upcoming Event",
-          description: `Come join us at ${event.name}!`,
-          dateRange: `${event.startDate.toDateString()} - ${event.endDate.toDateString()}`,
-          link: 'upcoming-events'
-        }
-      }));
-  
+    .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+    .slice(0, 2)
+    .map((event) => {
+      return {
+        name: 'Upcoming Event',
+        description: `Come join us at ${event.name}!`,
+        dateRange: `${event.startDate.toDateString()} - ${event.endDate.toDateString()}`,
+        link: 'upcoming-events',
+      }
+    }))
+
   items.value.push(...expressionStore.expressions
-      .map(expression => {
-        return {
-          name: expression.name,
-          description: expression.archetypes,
-          dateRange: null,
-          link: `expressions#${makeIdSafe(expression.name)}`
-        }
-      }));
+    .map((expression) => {
+      return {
+        name: expression.name,
+        description: expression.archetypes,
+        dateRange: null,
+        link: `expressions#${makeIdSafe(expression.name)}`,
+      }
+    }))
 })
 
-const items = ref<Array<CarouselItem>>([]);
+const items = ref<Array<CarouselItem>>([])
 
 </script>
 

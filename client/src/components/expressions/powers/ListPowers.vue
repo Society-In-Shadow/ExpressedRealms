@@ -1,44 +1,44 @@
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
-import AddPower from "@/components/expressions/powers/AddPower.vue";
-import PowerCard from "@/components/expressions/powers/PowerCard.vue";
-import Button from 'primevue/button';
+import {onMounted, ref} from 'vue'
+import AddPower from '@/components/expressions/powers/AddPower.vue'
+import PowerCard from '@/components/expressions/powers/PowerCard.vue'
+import Button from 'primevue/button'
 
-import {UserRoles, userStore} from "@/stores/userStore";
-import type {Power} from "@/components/expressions/powers/types";
-import PowerReorder from "@/components/expressions/powers/PowerReorder.vue";
+import {UserRoles, userStore} from '@/stores/userStore'
+import type {Power} from '@/components/expressions/powers/types'
+import PowerReorder from '@/components/expressions/powers/PowerReorder.vue'
 
-let userInfo = userStore();
+let userInfo = userStore()
 
 const props = defineProps({
   powerPathId: {
     type: Number,
     required: true,
   },
-  powers:{
+  powers: {
     type: Array as () => Power[],
     required: true,
   },
-  isReadOnly:{
+  isReadOnly: {
     type: Boolean,
-    required: false
-  } 
-});
+    required: false,
+  },
+})
 
-const showAddPower = ref(false);
-const hasPowerManagementRole = ref(false);
+const showAddPower = ref(false)
+const hasPowerManagementRole = ref(false)
 
 onMounted(async () => {
-  hasPowerManagementRole.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole);
+  hasPowerManagementRole.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole)
 })
 
 const toggleAddPower = () => {
-  showAddPower.value = !showAddPower.value;
+  showAddPower.value = !showAddPower.value
 }
 
-const readOnly = ref(false);
+const readOnly = ref(false)
 const toggleReadOnly = () => {
-  readOnly.value = !readOnly.value;
+  readOnly.value = !readOnly.value
 }
 
 </script>

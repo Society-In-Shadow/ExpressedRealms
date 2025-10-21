@@ -1,40 +1,40 @@
 <script setup lang="ts">
-import type {PropType} from "vue";
+import type {PropType} from 'vue'
 import {ref} from 'vue'
-import Button from "primevue/button";
-import Card from "primevue/card";
-import type {PrimaryCharacter} from "@/components/admin/characterList/types.ts";
-import {useRouter} from "vue-router";
-import {adminCharacterDialogs} from "@/components/admin/characterList/services/dialogs.ts";
-import axios from "axios";
+import Button from 'primevue/button'
+import Card from 'primevue/card'
+import type {PrimaryCharacter} from '@/components/admin/characterList/types.ts'
+import {useRouter} from 'vue-router'
+import {adminCharacterDialogs} from '@/components/admin/characterList/services/dialogs.ts'
+import axios from 'axios'
 
-const router = useRouter();
-const showInfo = ref(false);
-const dialogs = adminCharacterDialogs();
+const router = useRouter()
+const showInfo = ref(false)
+const dialogs = adminCharacterDialogs()
 
 const props = defineProps({
   character: {
     type: Object as PropType<PrimaryCharacter>,
-    required: true
-  }
-});
+    required: true,
+  },
+})
 
-async function redirectToCharacterSheet(){
-  await router.push({name: "characterSheet", params: {id: props.character.id}});
+async function redirectToCharacterSheet() {
+  await router.push({ name: 'characterSheet', params: { id: props.character.id } })
 }
 
-async function downloadCharacterBooklet(characterId: number, characterName:string, playerName: string) {
+async function downloadCharacterBooklet(characterId: number, characterName: string, playerName: string) {
   const res = await axios.get(`/characters/${characterId}/getcrb`, {
     responseType: 'blob',
-  });
-  const url = URL.createObjectURL(res.data);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${characterName} - ${playerName} - CRB.pdf`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+  })
+  const url = URL.createObjectURL(res.data)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `${characterName} - ${playerName} - CRB.pdf`
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  URL.revokeObjectURL(url)
 }
 
 </script>
@@ -44,8 +44,10 @@ async function downloadCharacterBooklet(characterId: number, characterName:strin
     <template #title>
       <div class="d-flex flex-column flex-md-row justify-content-between">
         <div>
-          <h2 class="m-0 p-0">{{ props.character?.name }}</h2>
-          <em class="small">{{ props.character?.playerName }} ({{props.character.playerNumber.toString().padStart(3, '0')}})</em>
+          <h2 class="m-0 p-0">
+            {{ props.character?.name }}
+          </h2>
+          <em class="small">{{ props.character?.playerName }} ({{ props.character.playerNumber.toString().padStart(3, '0') }})</em>
           <div>
             {{ props.character.expression }}
           </div>
@@ -64,6 +66,5 @@ async function downloadCharacterBooklet(characterId: number, characterName:strin
         {{ props.character.background ?? "No Background has been posted for this character." }}
       </div>
     </template>
-
   </Card>
 </template>

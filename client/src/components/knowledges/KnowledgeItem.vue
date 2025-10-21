@@ -1,13 +1,13 @@
 <script setup lang="ts">
 
-import {onMounted, type PropType, ref} from "vue";
-import type {Knowledge} from "@/components/knowledges/types";
-import {UserRoles, userStore} from "@/stores/userStore";
-import Button from "primevue/button";
-import {knowledgeConfirmationPopup} from "@/components/knowledges/services/knowledgeConfirmationPopupService";
-import EditKnowledge from "@/components/knowledges/EditKnowledge.vue";
+import {onMounted, type PropType, ref} from 'vue'
+import type {Knowledge} from '@/components/knowledges/types'
+import {UserRoles, userStore} from '@/stores/userStore'
+import Button from 'primevue/button'
+import {knowledgeConfirmationPopup} from '@/components/knowledges/services/knowledgeConfirmationPopupService'
+import EditKnowledge from '@/components/knowledges/EditKnowledge.vue'
 
-let userInfo = userStore();
+let userInfo = userStore()
 
 const props = defineProps({
   knowledge: {
@@ -16,22 +16,22 @@ const props = defineProps({
   },
   isReadOnly: {
     type: Boolean,
-    required: true
-  }
-});
+    required: true,
+  },
+})
 
 let popups = knowledgeConfirmationPopup(props.knowledge.id, props.knowledge.name)
 
-const showEdit = ref(false);
+const showEdit = ref(false)
 
-const hasKnowledgeManagementRole = ref(false);
+const hasKnowledgeManagementRole = ref(false)
 
 onMounted(async () => {
-  hasKnowledgeManagementRole.value = await userInfo.hasUserRole(UserRoles.KnowledgeManagementRole);
+  hasKnowledgeManagementRole.value = await userInfo.hasUserRole(UserRoles.KnowledgeManagementRole)
 })
 
-function toggleEdit(){
-  showEdit.value = !showEdit.value;
+function toggleEdit() {
+  showEdit.value = !showEdit.value
 }
 </script>
 

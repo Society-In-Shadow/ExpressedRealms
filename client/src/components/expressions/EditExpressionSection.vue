@@ -1,30 +1,30 @@
 <script setup lang="ts">
 
-import {makeIdSafe} from "@/utilities/stringUtilities";
-import Skeleton from "primevue/skeleton";
-import Button from "primevue/button";
-import {ref} from "vue";
-import axios from "axios";
-import {useForm} from "vee-validate";
-import {object, string} from "yup";
-import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
-import DropdownWrapper from "@/FormWrappers/DropdownWrapper.vue";
+import {makeIdSafe} from '@/utilities/stringUtilities'
+import Skeleton from 'primevue/skeleton'
+import Button from 'primevue/button'
+import {ref} from 'vue'
+import axios from 'axios'
+import {useForm} from 'vee-validate'
+import {object, string} from 'yup'
+import InputTextWrapper from '@/FormWrappers/InputTextWrapper.vue'
+import DropdownWrapper from '@/FormWrappers/DropdownWrapper.vue'
 
-import {expressionStore} from "@/stores/expressionStore";
-import EditorWrapper from "@/FormWrappers/EditorWrapper.vue";
-import toaster from "@/services/Toasters";
-import CreateExpressionSection from "@/components/expressions/CreateExpressionSection.vue";
-import {useConfirm} from "primevue/useconfirm";
-import DataTable from "primevue/datatable";
-import KnowledgeList from "@/components/knowledges/KnowledgeList.vue";
-import BlessingList from "@/components/blessings/BlessingList.vue";
-import {userStore} from "@/stores/userStore.ts";
+import {expressionStore} from '@/stores/expressionStore'
+import EditorWrapper from '@/FormWrappers/EditorWrapper.vue'
+import toaster from '@/services/Toasters'
+import CreateExpressionSection from '@/components/expressions/CreateExpressionSection.vue'
+import {useConfirm} from 'primevue/useconfirm'
+import DataTable from 'primevue/datatable'
+import KnowledgeList from '@/components/knowledges/KnowledgeList.vue'
+import BlessingList from '@/components/blessings/BlessingList.vue'
+import {userStore} from '@/stores/userStore.ts'
 
-const expressionInfo = expressionStore();
+const expressionInfo = expressionStore()
 
 const emit = defineEmits<{
   refreshList: []
-}>();
+}>()
 
 const props = defineProps({
   sectionInfo: {
@@ -33,88 +33,87 @@ const props = defineProps({
   },
   currentLevel: {
     type: Number,
-    required: true
+    required: true,
   },
-  showSkeleton:{
+  showSkeleton: {
     type: Boolean,
-    required: true
+    required: true,
   },
-  showEdit:{
+  showEdit: {
     type: Boolean,
-    required: true
+    required: true,
   },
-  isHeaderSection:{
-    type: Boolean
-  }
-});
+  isHeaderSection: {
+    type: Boolean,
+  },
+})
 
-const showEditor = ref(false);
-const showOptionLoader = ref(true);
-const sectionTypeOptions = ref([]);
-const showCreate = ref(false);
-const userInfo = userStore();
+const showEditor = ref(false)
+const showOptionLoader = ref(true)
+const sectionTypeOptions = ref([])
+const showCreate = ref(false)
+const userInfo = userStore()
 
-function toggleEditor(){
-  showEditor.value = !showEditor.value;
-  loadSectionInfo();
+function toggleEditor() {
+  showEditor.value = !showEditor.value
+  loadSectionInfo()
 }
 
-function passThroughAddedSection(){
-  emit("refreshList");
+function passThroughAddedSection() {
+  emit('refreshList')
 }
 
-function cancelEdit(){
-  showEditor.value = !showEditor.value;
+function cancelEdit() {
+  showEditor.value = !showEditor.value
 }
 
-function reset(){
-  showOptionLoader.value = true;
-  loadSectionInfo();
+function reset() {
+  showOptionLoader.value = true
+  loadSectionInfo()
 }
 
-function loadSectionInfo(){
-  if(!showOptionLoader.value) return; // Don't load in 2nd time
+function loadSectionInfo() {
+  if (!showOptionLoader.value) return // Don't load in 2nd time
   axios.get(`/expressionSubSections/${expressionInfo.currentExpressionId}/${props.sectionInfo.id}/options`)
-      .then(async (response) => {
+    .then(async (response) => {
+      if (!props.isHeaderSection) {
+        sectionTypeOptions.value = response.data.sectionTypes.filter(sectionType => sectionType.name.toLowerCase() !== 'expression')
+      }
+      else {
+        sectionTypeOptions.value = response.data.sectionTypes
+      }
 
-        if(!props.isHeaderSection) {
-          sectionTypeOptions.value = response.data.sectionTypes.filter(sectionType => sectionType.name.toLowerCase() !== "expression");
-        }
-        else{
-          sectionTypeOptions.value = response.data.sectionTypes;
-        }
-        
-        axios.get(`/expressionSubSections/${expressionInfo.currentExpressionId}/${props.sectionInfo.id}`)
-            .then(async (json) => {
-              name.value = json.data.name;
-              content.value = json.data.content;
-              sectionType.value = sectionTypeOptions.value.find(x => x.id == json.data.sectionTypeId);
-              showOptionLoader.value = false;
-            });
-      });
+      axios.get(`/expressionSubSections/${expressionInfo.currentExpressionId}/${props.sectionInfo.id}`)
+        .then(async (json) => {
+          name.value = json.data.name
+          content.value = json.data.content
+          sectionType.value = sectionTypeOptions.value.find(x => x.id == json.data.sectionTypeId)
+          showOptionLoader.value = false
+        })
+    })
 }
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
     name: string().required()
-        .label('Name'),
+      .label('Name'),
     content: string()
-        .required()
-        .label('Content'),
+      .required()
+      .label('Content'),
     parentSection: object().nullable()
-        .label('Parent Section'),
+      .label('Parent Section'),
     sectionType: object().nullable()
-        .label('Section Type')
-  })
-});
+      .label('Section Type'),
+  }),
+})
 
-const [name] = defineField('name');
-const [content] = defineField('content');
-const [parentSection] = defineField('parentSection');
-const [sectionType] = defineField('sectionType');
+const [name] = defineField('name')
+const [content] = defineField('content')
+const [parentSection] = defineField('parentSection')
+const [sectionType] = defineField('sectionType')
 
-function toggleCreate(){
-  showCreate.value = !showCreate.value;
+function toggleCreate() {
+  showCreate.value = !showCreate.value
 }
 
 const onSubmit = handleSubmit((values) => {
@@ -123,14 +122,14 @@ const onSubmit = handleSubmit((values) => {
     content: values.content,
     sectionTypeId: values.sectionType.id,
   }).then(() => {
-    props.sectionInfo.name = values.name;
-    props.sectionInfo.content = values.content;
-    showEditor.value = false;
-    toaster.success("Successfully Updated Expression Section Info!");
-  });
-});
+    props.sectionInfo.name = values.name
+    props.sectionInfo.content = values.content
+    showEditor.value = false
+    toaster.success('Successfully Updated Expression Section Info!')
+  })
+})
 
-const confirm = useConfirm();
+const confirm = useConfirm()
 const deleteExpression = (event) => {
   confirm.require({
     target: event.currentTarget,
@@ -141,20 +140,20 @@ const deleteExpression = (event) => {
     rejectProps: {
       label: 'Cancel',
       severity: 'secondary',
-      outlined: true
+      outlined: true,
     },
     acceptProps: {
-      label: 'Save'
+      label: 'Save',
     },
     accept: () => {
       axios.delete(`/expressionSubSections/${expressionInfo.currentExpressionId}/${props.sectionInfo.id}`).then(() => {
-        emit('refreshList');
-        toaster.success(`Successfully Deleted Section ${props.sectionInfo.name}!`);
-      });
+        emit('refreshList')
+        toaster.success(`Successfully Deleted Section ${props.sectionInfo.name}!`)
+      })
     },
-    reject: () => {}
-  });
-};
+    reject: () => {},
+  })
+}
 
 </script>
 
@@ -208,7 +207,7 @@ const deleteExpression = (event) => {
     <div v-if="props.sectionInfo.sectionTypeName === 'Blessings Section'">
       <BlessingList :is-read-only="!showEdit" />
     </div>
-    
+
     <div v-else class="mb-2 fix-wrapping" v-html="props.sectionInfo.content" />
   </div>
   <div v-if="showCreate && showEdit">
@@ -225,7 +224,7 @@ const deleteExpression = (event) => {
     margin-top: 1em;
     margin-bottom: 1em;
   }
-  
+
   .fix-wrapping {
     overflow-wrap: break-word;
   }

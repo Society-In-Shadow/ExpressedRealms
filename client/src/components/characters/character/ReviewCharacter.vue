@@ -1,78 +1,76 @@
 <script setup lang="ts">
 
-import {computed, onMounted, ref, watch} from "vue";
-import Message from "primevue/message";
-import {useRoute} from "vue-router";
-import {experienceStore, XpSectionTypes} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
-import Button from "primevue/button";
-import axios from "axios";
-import {characterStore} from "@/components/characters/character/stores/characterStore.ts";
-import toaster from "@/services/Toasters";
+import {computed, onMounted, ref, watch} from 'vue'
+import Message from 'primevue/message'
+import {useRoute} from 'vue-router'
+import {experienceStore, XpSectionTypes} from '@/components/characters/character/stores/experienceBreakdownStore.ts'
+import Button from 'primevue/button'
+import axios from 'axios'
+import {characterStore} from '@/components/characters/character/stores/characterStore.ts'
+import toaster from '@/services/Toasters'
 
 const route = useRoute()
-const xpInfo = experienceStore();
-const characterInfo = characterStore();
-const disadvantageBucket = ref(0);
-const discretionaryBucket = ref(0);
-const overallDiscretionaryTotal = ref(0);
+const xpInfo = experienceStore()
+const characterInfo = characterStore()
+const disadvantageBucket = ref(0)
+const discretionaryBucket = ref(0)
+const overallDiscretionaryTotal = ref(0)
 
 const props = defineProps({
   isReadOnly: {
     type: Boolean,
     required: false,
     default: false,
-  }
-});
+  },
+})
 
 onMounted(async () => {
-  await xpInfo.updateExperience(route.params.id);  
+  await xpInfo.updateExperience(route.params.id)
 })
 
 watch(xpInfo.calculatedValues, () => {
-  const disadvantage = xpInfo.getExperienceInfoForSection(XpSectionTypes.disadvantage);
+  const disadvantage = xpInfo.getExperienceInfoForSection(XpSectionTypes.disadvantage)
 
-  overallDiscretionaryTotal.value = 16 + disadvantage.total;
-  const availableDiscretionary = xpInfo.availableDiscretionary;
+  overallDiscretionaryTotal.value = 16 + disadvantage.total
+  const availableDiscretionary = xpInfo.availableDiscretionary
 
-  disadvantageBucket.value = Math.max(0, disadvantage.total - availableDiscretionary);
-  discretionaryBucket.value = overallDiscretionaryTotal.value - availableDiscretionary >= 16 ? 16 : 16 + disadvantage.total - availableDiscretionary  ;
+  disadvantageBucket.value = Math.max(0, disadvantage.total - availableDiscretionary)
+  discretionaryBucket.value = overallDiscretionaryTotal.value - availableDiscretionary >= 16 ? 16 : 16 + disadvantage.total - availableDiscretionary
 }, { immediate: true })
 
-async function finalizeCreation(){
+async function finalizeCreation() {
   await axios.put(`characters/${route.params.id}/finalizeCharacterCreate`)
-      .then(async (respone) => {
-        toaster.success("Successfully Finalized Charcter!");
-        await characterInfo.getCharacterDetails(route.params.id);
-        await xpInfo.updateExperience(route.params.id);
-      })
+    .then(async (respone) => {
+      toaster.success('Successfully Finalized Charcter!')
+      await characterInfo.getCharacterDetails(route.params.id)
+      await xpInfo.updateExperience(route.params.id)
+    })
 }
 
 const spentAllPoints = computed(() => {
-  
-  const discretionarySpent = overallDiscretionaryTotal.value - discretionaryBucket.value - disadvantageBucket.value == 0;
-  const allSectionsMeetMinimum = xpInfo.calculatedValues.every(section => {
+  const discretionarySpent = overallDiscretionaryTotal.value - discretionaryBucket.value - disadvantageBucket.value == 0
+  const allSectionsMeetMinimum = xpInfo.calculatedValues.every((section) => {
     if (section.sectionTypeId == XpSectionTypes.advantage)
-      return true;
+      return true
     if (section.sectionTypeId == XpSectionTypes.disadvantage)
-      return true;
+      return true
     if (section.sectionTypeId == XpSectionTypes.discretionary)
-      return true;
+      return true
 
-    return section.total >= section.characterCreateMax;
-  });
+    return section.total >= section.characterCreateMax
+  })
 
-  return discretionarySpent && allSectionsMeetMinimum;
+  return discretionarySpent && allSectionsMeetMinimum
 })
 
 const displayedSections = computed(() => {
-  
-  if(characterInfo.isInCharacterCreation){
-    return xpInfo.calculatedValues;
+  if (characterInfo.isInCharacterCreation) {
+    return xpInfo.calculatedValues
   }
   const filteredSections = [XpSectionTypes.advantage, XpSectionTypes.discretionary, XpSectionTypes.disadvantage]
-  
-  return xpInfo.calculatedValues.filter(section => {
-    return !filteredSections.includes(section.sectionTypeId);
+
+  return xpInfo.calculatedValues.filter((section) => {
+    return !filteredSections.includes(section.sectionTypeId)
   })
 })
 
@@ -80,15 +78,25 @@ const displayedSections = computed(() => {
 
 <template>
   <h2>Review Character</h2>
-  
+
   <table class="w-100">
     <tr>
-      <th class="pr-2" v-if="characterInfo.isInCharacterCreation"></th>
-      <th class="text-left">Name</th>
-      <th class="text-left" v-if="!characterInfo.isInCharacterCreation">Spent XP</th>
-      <th class="text-center" v-if="characterInfo.isInCharacterCreation">Required</th>
-      <th class="text-center" v-if="characterInfo.isInCharacterCreation">Available</th>
-      <th class="text-right" v-if="characterInfo.isInCharacterCreation">Disc.</th>
+      <th v-if="characterInfo.isInCharacterCreation" class="pr-2" />
+      <th class="text-left">
+        Name
+      </th>
+      <th v-if="!characterInfo.isInCharacterCreation" class="text-left">
+        Spent XP
+      </th>
+      <th v-if="characterInfo.isInCharacterCreation" class="text-center">
+        Required
+      </th>
+      <th v-if="characterInfo.isInCharacterCreation" class="text-center">
+        Available
+      </th>
+      <th v-if="characterInfo.isInCharacterCreation" class="text-right">
+        Disc.
+      </th>
     </tr>
     <tr v-for="section in displayedSections">
       <td v-if="characterInfo.isInCharacterCreation" class="text-center pr-2">
@@ -102,11 +110,13 @@ const displayedSections = computed(() => {
           {{ section.total >= section.characterCreateMax ? "check_circle" : "warning" }}
         </span>
       </td>
-      <td class="text-left">{{section.name}}</td>
+      <td class="text-left">
+        {{ section.name }}
+      </td>
       <!-- Required XP -->
       <td v-if="characterInfo.isInCharacterCreation" class="text-center">
         <div v-if="section.sectionTypeId == XpSectionTypes.discretionary">
-          {{ discretionaryBucket + disadvantageBucket }} / {{overallDiscretionaryTotal}}
+          {{ discretionaryBucket + disadvantageBucket }} / {{ overallDiscretionaryTotal }}
         </div>
         <div v-else-if="section.sectionTypeId == XpSectionTypes.advantage">
           --
@@ -124,9 +134,12 @@ const displayedSections = computed(() => {
           --
         </div>
         <div v-else-if="section.sectionTypeId == XpSectionTypes.discretionary ">
-          <div v-if="overallDiscretionaryTotal - discretionaryBucket - disadvantageBucket == 0">--</div>
-          <div v-else>{{ overallDiscretionaryTotal - discretionaryBucket - disadvantageBucket }}</div>
-          
+          <div v-if="overallDiscretionaryTotal - discretionaryBucket - disadvantageBucket == 0">
+            --
+          </div>
+          <div v-else>
+            {{ overallDiscretionaryTotal - discretionaryBucket - disadvantageBucket }}
+          </div>
         </div>
         <div v-else-if="section.total < section.characterCreateMax && section.sectionTypeId != XpSectionTypes.discretionary && section.sectionTypeId != XpSectionTypes.advantage">
           {{ section.characterCreateMax - section.total }}
@@ -141,20 +154,32 @@ const displayedSections = computed(() => {
           --
         </div>
         <div v-else-if="section.sectionTypeId == XpSectionTypes.disadvantage">
-          <div v-if="section.total == 0">--</div>
-          <div v-else>({{ section.total }})</div>
+          <div v-if="section.total == 0">
+            --
+          </div>
+          <div v-else>
+            ({{ section.total }})
+          </div>
         </div>
         <div v-else-if="section.sectionTypeId == XpSectionTypes.advantage">
-          <div v-if="section.total == 0">--</div>
-          <div v-else>{{ section.total }}</div>
+          <div v-if="section.total == 0">
+            --
+          </div>
+          <div v-else>
+            {{ section.total }}
+          </div>
         </div>
         <div v-else>
-          <div v-if="section.currentOptionalXp == 0">--</div>
-          <div v-else>{{ section.currentOptionalXp }}</div>
+          <div v-if="section.currentOptionalXp == 0">
+            --
+          </div>
+          <div v-else>
+            {{ section.currentOptionalXp }}
+          </div>
         </div>
       </td>
       <td v-if="!characterInfo.isInCharacterCreation" class="">
-        {{ section.levelXp}}
+        {{ section.levelXp }}
       </td>
     </tr>
     <tr v-if="!characterInfo.isInCharacterCreation">
@@ -164,16 +189,18 @@ const displayedSections = computed(() => {
   </table>
 
   <div v-if="!characterInfo.isInCharacterCreation" class="d-flex flex-row justify-content-between gap-3">
-    <div>Character Level: {{xpInfo.getCharacterLevel()}}</div>
-    <div></div>
+    <div>Character Level: {{ xpInfo.getCharacterLevel() }}</div>
+    <div />
   </div>
-  
-  <Message severity="warn" v-if="characterInfo.isInCharacterCreation && !props.isReadOnly" class="mt-3">
-    <p v-if="!spentAllPoints">To finalize a character will require you to spend all XP.</p>
+
+  <Message v-if="characterInfo.isInCharacterCreation && !props.isReadOnly" severity="warn" class="mt-3">
+    <p v-if="!spentAllPoints">
+      To finalize a character will require you to spend all XP.
+    </p>
     <p>Finalizing a character will block the ability to add / remove / change levels for Advantages / Disadvantages</p>
   </Message>
-  <div class="text-right" v-if="characterInfo.isInCharacterCreation && !props.isReadOnly">
-    <Button label="Finalize Creation" class="mt-3" @click="finalizeCreation" :disabled="!spentAllPoints"/>
+  <div v-if="characterInfo.isInCharacterCreation && !props.isReadOnly" class="text-right">
+    <Button label="Finalize Creation" class="mt-3" :disabled="!spentAllPoints" @click="finalizeCreation" />
   </div>
   <Message v-if="characterInfo.isInCharacterCreation" severity="info" class="mt-3">
     <p>Here's a breakdown of what each column means:</p>

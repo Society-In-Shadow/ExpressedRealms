@@ -1,48 +1,48 @@
 <script setup lang="ts">
 
-import {powerPathStore} from "@/components/expressions/powerPaths/stores/powerPathStore";
-import {onBeforeMount, ref} from "vue";
-import Button from 'primevue/button';
-import ListPowers from "@/components/expressions/powers/ListPowers.vue";
-import AddPowerPath from "@/components/expressions/powerPaths/AddPowerPath.vue";
-import Divider from 'primevue/divider';
-import ShowPowerPath from "@/components/expressions/powerPaths/ShowPowerPath.vue";
-import {UserRoles, userStore} from "@/stores/userStore";
-import PowerPathReorder from "@/components/expressions/powerPaths/PowerPathReorder.vue";
-import axios from "axios";
-import {expressionStore} from "@/stores/expressionStore.ts";
-import {useRoute} from "vue-router";
-import SplitButton from "primevue/splitbutton";
+import {powerPathStore} from '@/components/expressions/powerPaths/stores/powerPathStore'
+import {onBeforeMount, ref} from 'vue'
+import Button from 'primevue/button'
+import ListPowers from '@/components/expressions/powers/ListPowers.vue'
+import AddPowerPath from '@/components/expressions/powerPaths/AddPowerPath.vue'
+import Divider from 'primevue/divider'
+import ShowPowerPath from '@/components/expressions/powerPaths/ShowPowerPath.vue'
+import {UserRoles, userStore} from '@/stores/userStore'
+import PowerPathReorder from '@/components/expressions/powerPaths/PowerPathReorder.vue'
+import axios from 'axios'
+import {expressionStore} from '@/stores/expressionStore.ts'
+import {useRoute} from 'vue-router'
+import SplitButton from 'primevue/splitbutton'
 
-let userInfo = userStore();
-let powerPaths = powerPathStore();
+let userInfo = userStore()
+let powerPaths = powerPathStore()
 
-let expressionInfo = expressionStore();
-let route = useRoute();
+let expressionInfo = expressionStore()
+let route = useRoute()
 
 const props = defineProps({
   expressionId: {
     type: Number,
     required: true,
-  }
-});
-
-const hasPowerManagementRole = ref(false);
-
-onBeforeMount(async () => {
-  await powerPaths.getPowerPaths(props.expressionId);
-  hasPowerManagementRole.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole);
+  },
 })
 
-const showAddPower = ref(false);
+const hasPowerManagementRole = ref(false)
+
+onBeforeMount(async () => {
+  await powerPaths.getPowerPaths(props.expressionId)
+  hasPowerManagementRole.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole)
+})
+
+const showAddPower = ref(false)
 
 const toggleAddPower = () => {
-  showAddPower.value = !showAddPower.value;
+  showAddPower.value = !showAddPower.value
 }
 
-const readOnly = ref(false);
+const readOnly = ref(false)
 const toggleReadOnly = () => {
-  readOnly.value = !readOnly.value;
+  readOnly.value = !readOnly.value
 }
 
 async function downloadPowerCards(isFiveByThree: boolean = false) {
@@ -50,61 +50,61 @@ async function downloadPowerCards(isFiveByThree: boolean = false) {
     responseType: 'blob',
     params: {
       isFiveByThree: isFiveByThree,
-    }
-  });
+    },
+  })
   const expression = route.params.name
-  const url = URL.createObjectURL(res.data);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${expression}PowerCards.pdf`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+  const url = URL.createObjectURL(res.data)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `${expression}PowerCards.pdf`
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  URL.revokeObjectURL(url)
 }
 
 async function downloadPowerBooklet() {
   const res = await axios.get(`/expression/${expressionInfo.currentExpressionId}/powerBooklet`, {
     responseType: 'blob',
-  });
+  })
   const expression = route.params.name
-  const url = URL.createObjectURL(res.data);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${expression}PowerBooklet.pdf`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+  const url = URL.createObjectURL(res.data)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `${expression}PowerBooklet.pdf`
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  URL.revokeObjectURL(url)
 }
 
 const items = [
   {
     label: '5x3 Index Card Size',
     command: () => {
-      downloadPowerCards(true);
-    }
-  },  
+      downloadPowerCards(true)
+    },
+  },
   {
     label: '2x6 Tile Letter Cutout',
     command: () => {
-      downloadPowerCards(false);
-    }
+      downloadPowerCards(false)
+    },
   },
-];
+]
 
 </script>
 
 <template>
   <div class="d-flex flex-row justify-content-end align-items-center">
-    <SplitButton label="Download Power Booklet" @click="downloadPowerBooklet()" :model="items" />
+    <SplitButton label="Download Power Booklet" :model="items" @click="downloadPowerBooklet()" />
   </div>
-  
+
   <PowerPathReorder v-if="hasPowerManagementRole" @toggle-preview="toggleReadOnly" />
   <div v-for="path in powerPaths.powerPaths" :key="path.id">
     <Divider />
     <ShowPowerPath :path="path" :expression-id="props.expressionId" :is-read-only="readOnly" />
-   
+
     <Divider />
     <h2>Powers</h2>
     <ListPowers :power-path-id="path.id" :powers="path.powers" :is-read-only="readOnly" />

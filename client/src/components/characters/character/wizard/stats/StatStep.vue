@@ -1,34 +1,33 @@
 <script setup lang="ts">
 
-import {onMounted} from "vue";
+import {onMounted} from 'vue'
 import {useRoute} from 'vue-router'
-import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
-import Button from "primevue/button";
-import DataTable from "primevue/datatable";
-import Column from "primevue/column";
-import StatTile from "@/components/characters/character/wizard/stats/StatTile.vue";
-import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vue";
-import {statStore} from "@/components/characters/character/wizard/stats/stores/statStore.ts";
-import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
-import type {WizardContent} from "@/components/characters/character/wizard/types.ts";
-import {XpSectionTypes} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
+import SkeletonWrapper from '@/FormWrappers/SkeletonWrapper.vue'
+import Button from 'primevue/button'
+import DataTable from 'primevue/datatable'
+import Column from 'primevue/column'
+import StatTile from '@/components/characters/character/wizard/stats/StatTile.vue'
+import ShowXPCosts from '@/components/characters/character/wizard/ShowXPCosts.vue'
+import {statStore} from '@/components/characters/character/wizard/stats/stores/statStore.ts'
+import {wizardContentStore} from '@/components/characters/character/wizard/stores/wizardContentStore.ts'
+import type {WizardContent} from '@/components/characters/character/wizard/types.ts'
+import {XpSectionTypes} from '@/components/characters/character/stores/experienceBreakdownStore.ts'
 
 const route = useRoute()
-const statData = statStore();
+const statData = statStore()
 
-onMounted(async() =>{
-  await statData.loadData(route.params.id);
-});
+onMounted(async () => {
+  await statData.loadData(route.params.id)
+})
 
-
-const wizardContentInfo = wizardContentStore();
+const wizardContentInfo = wizardContentStore()
 const updateWizardContent = (statTypeId: number) => {
   wizardContentInfo.updateContent(
-      {
-        headerName: 'Edit Stat Type',
-        component: StatTile,
-        props: { statTypeId: statTypeId }
-      } as WizardContent
+    {
+      headerName: 'Edit Stat Type',
+      component: StatTile,
+      props: { statTypeId: statTypeId },
+    } as WizardContent,
   )
 }
 
@@ -48,7 +47,7 @@ const updateWizardContent = (statTypeId: number) => {
       </Column>
       <Column field="level" header="Level" header-class="text-center" body-class="text-center">
         <template #body="slotProps">
-          <SkeletonWrapper height="1.5rem" width="2rem" :show-skeleton="statData.isLoading"> 
+          <SkeletonWrapper height="1.5rem" width="2rem" :show-skeleton="statData.isLoading">
             {{ slotProps.data.level }}
           </SkeletonWrapper>
         </template>
@@ -62,11 +61,11 @@ const updateWizardContent = (statTypeId: number) => {
       </Column>
       <Column>
         <template #body="slotProps">
-          <Button class="float-end " size="small" label="View" @click="updateWizardContent(slotProps.data.statTypeId)"/>
+          <Button class="float-end " size="small" label="View" @click="updateWizardContent(slotProps.data.statTypeId)" />
         </template>
       </Column>
     </DataTable>
-    </div>
+  </div>
 </template>
 
 <style scoped>

@@ -1,18 +1,18 @@
-const name = 'name';
-const nameHelp = 'name-help';
-const nameDefaultValue = "John Doe";
-const background = 'background';
+const name = 'name'
+const nameHelp = 'name-help'
+const nameDefaultValue = 'John Doe'
+const background = 'background'
 const backgroundHelp = 'background-help'
-const backgroundDefaultValue = "The anonymous person";
-const expression = "expression";
+const backgroundDefaultValue = 'The anonymous person'
+const expression = 'expression'
 const expressionHelp = 'expression-help'
-const faction = "faction";
-const factionHelp = "faction-help"
-const factionDefaultValue = 4;
-const expressionDefaultValue = "Adept";
+const faction = 'faction'
+const factionHelp = 'faction-help'
+const factionDefaultValue = 4
+const expressionDefaultValue = 'Adept'
 const factionValues = [
-    { id: 4, name: "Too", description: "Far" },
-    { id: 5, name: "Loo", description: "Yoo" }
+  { id: 4, name: 'Too', description: 'Far' },
+  { id: 5, name: 'Loo', description: 'Yoo' },
 ]
 /*
 describe('<EditCharacterDetails />', () => {
@@ -27,17 +27,17 @@ describe('<EditCharacterDetails />', () => {
                 factionId: factionDefaultValue
             }
         }).as('getCharacter');
-        
+
         cy.intercept('GET', '/characters/3/stats', {
             statusCode: 200,
             body: [{}, {}, {}, {}, {}, {}]
         })
-        
+
         cy.intercept('GET', '/navMenu/featureFlags', {
             statusCode: 200,
             body: {featureFlags: ['show-faction-dropdown']}
         }).as('featureFlags');
-        
+
         cy.intercept('GET', '/characters/3/factionOptions', {
             statusCode: 200,
             body: factionValues
@@ -60,14 +60,14 @@ describe('<EditCharacterDetails />', () => {
         cy.dataCy(expressionHelp).should('not.be.visible');
         cy.dataCy(factionHelp).should('not.be.visible');
     });
-    
+
     it('Loading Page Will Grab Data From API and Load It In', () => {
         cy.dataCy(name).should("have.value", nameDefaultValue);
         cy.dataCy(background).should("have.value", backgroundDefaultValue);
         cy.dataCy(expression).should("have.value", expressionDefaultValue);
         cy.dataCy(faction).contains(factionValues.find(x => x.id == factionDefaultValue).name);
     });
-    
+
     it('Name Field follows all Schema Validations and Updates Automatically', () => {
         cy.dataCy(name).clear();
         cy.dataCy(nameHelp).contains("Name is a required field");
@@ -86,7 +86,7 @@ describe('<EditCharacterDetails />', () => {
 
         cy.get('@toasterSuccess').should('have.been.calledWith', 'Successfully Updated Character Info!');
     });
-    
+
     it('Expression Field is Disabled', () => {
         cy.dataCy(expression).should('be.disabled');
     })
@@ -108,7 +108,7 @@ describe('<EditCharacterDetails />', () => {
     })
 
     it('Background Follows all Schema Validations and Updates Automatically', () => {
-        
+
         cy.dataCy(background).clear();
         cy.dataCy(background).type("5555555555");
         cy.dataCy(background).focus();
@@ -119,6 +119,6 @@ describe('<EditCharacterDetails />', () => {
             .should('have.property', 'id', '3');
         cy.get('@toasterSuccess').should('have.been.calledWith', 'Successfully Updated Character Info!');
     });
-    
+
 });
 */

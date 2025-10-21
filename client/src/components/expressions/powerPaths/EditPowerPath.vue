@@ -1,20 +1,20 @@
 <script setup lang="ts">
 
-import FormEditorWrapper from "@/FormWrappers/FormEditorWrapper.vue";
-import FormInputTextWrapper from "@/FormWrappers/FormInputTextWrapper.vue";
-import Button from "primevue/button";
-import axios from "axios";
-import toaster from "@/services/Toasters";
-import {getValidationInstance} from "@/components/expressions/powerPaths/validations/powerPathValidations";
-import {powerPathStore} from "@/components/expressions/powerPaths/stores/powerPathStore";
-import {onBeforeMount} from "vue";
+import FormEditorWrapper from '@/FormWrappers/FormEditorWrapper.vue'
+import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
+import Button from 'primevue/button'
+import axios from 'axios'
+import toaster from '@/services/Toasters'
+import {getValidationInstance} from '@/components/expressions/powerPaths/validations/powerPathValidations'
+import {powerPathStore} from '@/components/expressions/powerPaths/stores/powerPathStore'
+import {onBeforeMount} from 'vue'
 
-const form = getValidationInstance();
-const powerPaths = powerPathStore();
+const form = getValidationInstance()
+const powerPaths = powerPathStore()
 
 const emit = defineEmits<{
   cancelled: []
-}>();
+}>()
 
 const props = defineProps({
   expressionId: {
@@ -24,8 +24,8 @@ const props = defineProps({
   powerPathId: {
     type: Number,
     required: true,
-  }
-});
+  },
+})
 
 const onSubmit = form.handleSubmit(async (values) => {
   await axios.put(`/powerpath/${props.powerPathId}`, {
@@ -33,21 +33,21 @@ const onSubmit = form.handleSubmit(async (values) => {
     name: values.name,
     description: values.description,
   })
-  .then(async () => {
-    await powerPaths.getPowerPaths(props.expressionId);
-    reset();
-    toaster.success("Successfully Updated Power Path!");
-  });
-});
+    .then(async () => {
+      await powerPaths.getPowerPaths(props.expressionId)
+      reset()
+      toaster.success('Successfully Updated Power Path!')
+    })
+})
 
 onBeforeMount(async () => {
-  const powerPath = await powerPaths.getPowerPath(props.powerPathId);
-  form.setValues(powerPath);
+  const powerPath = await powerPaths.getPowerPath(props.powerPathId)
+  form.setValues(powerPath)
 })
 
 const reset = () => {
-  form.customResetForm();
-  emit("cancelled");
+  form.customResetForm()
+  emit('cancelled')
 }
 
 </script>

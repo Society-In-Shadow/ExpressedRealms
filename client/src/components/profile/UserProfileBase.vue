@@ -1,9 +1,8 @@
 <script setup lang="ts">
 
-import ChangeEmail from "@/components/profile/ChangeEmail.vue";
-import ChangePassword from "@/components/profile/ChangePassword.vue";
-import EditUserProfile from "@/components/profile/EditUserProfile.vue";
-
+import ChangeEmail from '@/components/profile/ChangeEmail.vue'
+import ChangePassword from '@/components/profile/ChangePassword.vue'
+import EditUserProfile from '@/components/profile/EditUserProfile.vue'
 </script>
 
 <template>

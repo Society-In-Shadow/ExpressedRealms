@@ -1,14 +1,14 @@
 <script setup lang="ts">
 
-import AccordionContent from "primevue/accordioncontent";
-import AccordionHeader from "primevue/accordionheader";
-import AccordionPanel from "primevue/accordionpanel";
+import AccordionContent from 'primevue/accordioncontent'
+import AccordionHeader from 'primevue/accordionheader'
+import AccordionPanel from 'primevue/accordionpanel'
 
 const props = defineProps({
   proficiency: {
     type: Object,
-    required: true
-  }
+    required: true,
+  },
 })
 
 </script>
@@ -39,8 +39,10 @@ const props = defineProps({
               </tr>
             </thead>
             <tbody class="p-datatable-tbody">
-              <tr v-for="(modifier, index) in props.proficiency.appliedModifiers" :key="index"
-                  :class="index % 2 === 0 ? 'p-row-even' : 'p-row-odd'">
+              <tr
+                v-for="(modifier, index) in props.proficiency.appliedModifiers" :key="index"
+                :class="index % 2 === 0 ? 'p-row-even' : 'p-row-odd'"
+              >
                 <td>
                   {{ modifier.name }}
                 </td>

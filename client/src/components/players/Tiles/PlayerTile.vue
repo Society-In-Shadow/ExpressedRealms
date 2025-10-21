@@ -1,46 +1,47 @@
 <script setup lang="ts">
-import {computed, ref} from 'vue'
-import type {PlayerListItem} from "@/components/players/Objects/Player";
-import type {PropType} from "vue";
-import Tabs from 'primevue/tabs';
-import TabList from 'primevue/tablist';
-import Tab from 'primevue/tab';
-import TabPanels from 'primevue/tabpanels';
-import TabPanel from 'primevue/tabpanel';
-import Button from "primevue/button";
-import PlayerRoles from "@/components/players/Tiles/PlayerRoles.vue";
-import Tag from 'primevue/tag';
-import {fetchUserPolicies} from "@/components/players/Services/PlayerRoleService";
-import ActivityLogs from "@/components/players/Tiles/ActivityLogs.vue";
-import {formatDistance}  from 'date-fns/formatDistance';
-import {userConfirmationPopups} from "@/components/players/Services/PlayerConfirmationPopupService";
-import {playerList} from "@/components/players/Stores/PlayerListStore";
-const playerListStore = playerList();
-import Panel from "primevue/panel";
+import type { PropType } from 'vue'
+import { computed, ref } from 'vue'
+import type { PlayerListItem } from '@/components/players/Objects/Player'
+import Tabs from 'primevue/tabs'
+import TabList from 'primevue/tablist'
+import Tab from 'primevue/tab'
+import TabPanels from 'primevue/tabpanels'
+import TabPanel from 'primevue/tabpanel'
+import Button from 'primevue/button'
+import PlayerRoles from '@/components/players/Tiles/PlayerRoles.vue'
+import Tag from 'primevue/tag'
+import { fetchUserPolicies } from '@/components/players/Services/PlayerRoleService'
+import ActivityLogs from '@/components/players/Tiles/ActivityLogs.vue'
+import { formatDistance } from 'date-fns/formatDistance'
+import { userConfirmationPopups } from '@/components/players/Services/PlayerConfirmationPopupService'
+import { playerList } from '@/components/players/Stores/PlayerListStore'
+import Panel from 'primevue/panel'
 
-const showInfo = ref(false);
+const playerListStore = playerList()
+
+const showInfo = ref(false)
 
 const props = defineProps({
   playerInfo: {
     type: Object as PropType<PlayerListItem>,
-    required: true
-  }
-});
+    required: true,
+  },
+})
 
-var userConfirmations = userConfirmationPopups(props.playerInfo.id);
+var userConfirmations = userConfirmationPopups(props.playerInfo.id)
 
-function updatePlayerRoles(){
+function updatePlayerRoles() {
   fetchUserPolicies(props.playerInfo.id)
-      .then(response => {
-        playerListStore.fetchPlayers();
-      });
+    .then((response) => {
+      playerListStore.fetchPlayers()
+    })
 }
 
 const timeTillLockoutExpires = computed(() => {
-  if(props.playerInfo.lockedOut){
-    return formatDistance(new Date(props.playerInfo.lockedOutExpires), new Date(), { includeSeconds: true});
+  if (props.playerInfo.lockedOut) {
+    return formatDistance(new Date(props.playerInfo.lockedOutExpires), new Date(), { includeSeconds: true })
   }
-  return "";
+  return ''
 })
 
 </script>
@@ -48,7 +49,9 @@ const timeTillLockoutExpires = computed(() => {
 <template>
   <Panel class="mb-3">
     <template #header>
-      <h1 class="m-0 p-0">{{ props.playerInfo.username }}</h1>
+      <h1 class="m-0 p-0">
+        {{ props.playerInfo.username }}
+      </h1>
     </template>
     <div class="d-flex flex-column flex-md-row">
       <div class="flex-grow-1">
@@ -104,7 +107,6 @@ const timeTillLockoutExpires = computed(() => {
         </Tabs>
       </div>
     </div>
-
   </Panel>
 </template>
 
@@ -115,4 +117,3 @@ const timeTillLockoutExpires = computed(() => {
   padding: 1.5em 1.5em 0em !important;
 }
 </style>
-

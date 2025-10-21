@@ -1,38 +1,38 @@
 <script setup lang="ts">
 
-import ToggleSwitch from 'primevue/toggleswitch';
-import {onMounted, ref} from 'vue'
-import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
-import type {RoleInfo} from "@/components/players/Objects/RoleInfo";
-import { fetchUserPolicies, updateRole } from "@/components/players/Services/PlayerRoleService";
+import ToggleSwitch from 'primevue/toggleswitch'
+import { onMounted, ref } from 'vue'
+import SkeletonWrapper from '@/FormWrappers/SkeletonWrapper.vue'
+import type { RoleInfo } from '@/components/players/Objects/RoleInfo'
+import { fetchUserPolicies, updateRole } from '@/components/players/Services/PlayerRoleService'
 
-const roles = ref<Array<RoleInfo>>([ {}, {}]);
-const isLoading = ref(true);
+const roles = ref<Array<RoleInfo>>([{}, {}])
+const isLoading = ref(true)
 
 const emit = defineEmits<{
   policiesChanged: []
-}>();
+}>()
 
 const props = defineProps({
   userId: {
     type: String,
     required: true,
-  }
-});
-
-onMounted(() =>{
-  fetchUserPolicies(props.userId)
-      .then((response) => {
-        roles.value = response.data.roles;
-        isLoading.value = false;
-      });
+  },
 })
 
-function roleToggled(roleName:string, isEnabled:boolean){
+onMounted(() => {
+  fetchUserPolicies(props.userId)
+    .then((response) => {
+      roles.value = response.data.roles
+      isLoading.value = false
+    })
+})
+
+function roleToggled(roleName: string, isEnabled: boolean) {
   updateRole(props.userId, roleName, isEnabled)
-      .then(() => {
-        emit('policiesChanged');
-      });
+    .then(() => {
+      emit('policiesChanged')
+    })
 }
 
 </script>

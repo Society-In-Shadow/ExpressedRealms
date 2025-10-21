@@ -1,24 +1,24 @@
 <template>
   <h1>Expressed Realms Privacy Policy</h1>
-  
+
   <p>Last updated: 7/19/2025</p>
 
   <p>
-    Expressed Realms&nbsp;(&quot;us&quot;, &quot;we&quot;, or &quot;our&quot;) operates 
-    <a href="https://societyinshadows.org/">https://societyinshadows.org/</a> &nbsp;(the &quot;Site&quot;). This page 
+    Expressed Realms&nbsp;(&quot;us&quot;, &quot;we&quot;, or &quot;our&quot;) operates
+    <a href="https://societyinshadows.org/">https://societyinshadows.org/</a> &nbsp;(the &quot;Site&quot;). This page
     informs you of our policies regarding the collection, use and disclosure of Personal Information we receive from users of the Site.
   </p>
 
   <p>
-    We use your Personal Information only for providing and improving the Site. By using the Site, you agree to the 
+    We use your Personal Information only for providing and improving the Site. By using the Site, you agree to the
     collection and use of information in accordance with this policy.
   </p>
 
   <h2>Information Collection And Use</h2>
 
   <p>
-    While using our Site, we may ask you to provide us with certain personally identifiable information that can be 
-    used to contact or identify you. Personally identifiable information may include, but is not limited to your name 
+    While using our Site, we may ask you to provide us with certain personally identifiable information that can be
+    used to contact or identify you. Personally identifiable information may include, but is not limited to your name
     (&quot;Personal Information&quot;).
   </p>
 
@@ -37,7 +37,7 @@
   <p>
     In addition, we may use third party services such as Google Analytics that collect, monitor and analyze this.
   </p>
-  
+
   <h2>Communications</h2>
 
   <p>

@@ -36,6 +36,6 @@
 //   }
 // }
 
-Cypress.Commands.add("dataCy", (selector, ...args) => {
-    return cy.get(`[data-cy=${selector}]`, ...args)
+Cypress.Commands.add('dataCy', (selector, ...args) => {
+  return cy.get(`[data-cy=${selector}]`, ...args)
 })

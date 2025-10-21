@@ -1,33 +1,33 @@
 <script setup lang="ts">
 
-import InputNumber from "primevue/inputnumber";
-import {computed} from "vue";
-import Skeleton from 'primevue/skeleton';
-import type {FormField} from "@/FormWrappers/Interfaces/FormField";
+import InputNumber from 'primevue/inputnumber'
+import { computed } from 'vue'
+import Skeleton from 'primevue/skeleton'
+import type { FormField } from '@/FormWrappers/Interfaces/FormField'
 
-const model = defineModel<FormField>({ required: true });
+const model = defineModel<FormField>({ required: true })
 
 defineOptions({
-  inheritAttrs: false
+  inheritAttrs: false,
 })
 
 const props = defineProps({
   dataCyTag: {
     type: String,
-    default: ""
+    default: '',
   },
   showSkeleton: {
     type: Boolean,
-    default: false
-  }
-});
+    default: false,
+  },
+})
 
 const dataCyTagCalc = computed(() => {
-  if(props.dataCyTag != ""){
-    return props.dataCyTag;
+  if (props.dataCyTag != '') {
+    return props.dataCyTag
   }
-  return model.value.label.replace(" ", "-").toLowerCase();
-});
+  return model.value.label.replace(' ', '-').toLowerCase()
+})
 
 </script>
 

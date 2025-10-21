@@ -1,54 +1,54 @@
 <script setup lang="ts">
 
-import FormDropdownWrapper from "@/FormWrappers/FormDropdownWrapper.vue";
-import FormEditorWrapper from "@/FormWrappers/FormEditorWrapper.vue";
-import FormInputTextWrapper from "@/FormWrappers/FormInputTextWrapper.vue";
-import Button from "primevue/button";
-import {onBeforeMount, ref} from "vue";
-import {getValidationInstance} from "@/components/expressions/powers/Validations/PowerValidations";
-import FormCheckboxWrapper from "@/FormWrappers/FormCheckboxWrapper.vue";
-import FormMultiSelectWrapper from "@/FormWrappers/FormMultiSelectWrapper.vue";
-import {powersStore} from "@/components/expressions/powers/stores/powersStore";
-import type {EditPower} from "@/components/expressions/powers/types";
-import PowerPrerequisites from "@/components/expressions/powers/PowerPrerequisites.vue";
-import {SourceTableEnum} from "@/components/modifiergroups/types.ts";
-import ModifierGroup from "@/components/modifiergroups/ModifierGroup.vue";
+import FormDropdownWrapper from '@/FormWrappers/FormDropdownWrapper.vue'
+import FormEditorWrapper from '@/FormWrappers/FormEditorWrapper.vue'
+import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
+import Button from 'primevue/button'
+import {onBeforeMount, ref} from 'vue'
+import {getValidationInstance} from '@/components/expressions/powers/Validations/PowerValidations'
+import FormCheckboxWrapper from '@/FormWrappers/FormCheckboxWrapper.vue'
+import FormMultiSelectWrapper from '@/FormWrappers/FormMultiSelectWrapper.vue'
+import {powersStore} from '@/components/expressions/powers/stores/powersStore'
+import type {EditPower} from '@/components/expressions/powers/types'
+import PowerPrerequisites from '@/components/expressions/powers/PowerPrerequisites.vue'
+import {SourceTableEnum} from '@/components/modifiergroups/types.ts'
+import ModifierGroup from '@/components/modifiergroups/ModifierGroup.vue'
 
-const form = getValidationInstance();
-const power = ref<EditPower>();
+const form = getValidationInstance()
+const power = ref<EditPower>()
 const emit = defineEmits<{
   canceled: []
-}>();
+}>()
 
 const props = defineProps({
   powerId: {
     type: Number,
     required: true,
   },
-  powerPathId:{
+  powerPathId: {
     type: Number,
-    required: true
-  }
-});
+    required: true,
+  },
+})
 
-const powers = powersStore();
-const prerequisiteChild = ref();
-const groupId = ref(0);
+const powers = powersStore()
+const prerequisiteChild = ref()
+const groupId = ref(0)
 
 onBeforeMount(async () => {
-  power.value = await powers.getPower(props.powerId);
-  groupId.value = power.value.modifierGroupId;
-  form.setValues(power.value);
+  power.value = await powers.getPower(props.powerId)
+  groupId.value = power.value.modifierGroupId
+  form.setValues(power.value)
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await powers.updatePower(values, props.powerId, props.powerPathId);
-  await prerequisiteChild.value.addUpdatePrerequisite(props.powerId);
-  cancel();
-});
+  await powers.updatePower(values, props.powerId, props.powerPathId)
+  await prerequisiteChild.value.addUpdatePrerequisite(props.powerId)
+  cancel()
+})
 
 const cancel = () => {
-  emit("canceled");
+  emit('canceled')
 }
 
 </script>
@@ -63,7 +63,7 @@ const cancel = () => {
         :options="powers.powerLevels"
         option-label="name"
       />
-      
+
       <FormMultiSelectWrapper
         v-model="form.category"
         :options="powers.categories"
@@ -77,7 +77,7 @@ const cancel = () => {
       />
 
       <FormCheckboxWrapper v-model="form.isPowerUse" />
-      
+
       <FormEditorWrapper v-model="form.description" />
 
       <FormEditorWrapper v-model="form.gameMechanicEffect" />
@@ -89,7 +89,7 @@ const cancel = () => {
         :options="powers.areaOfEffects"
         option-label="name"
       />
-      
+
       <FormDropdownWrapper
         v-model="form.powerDuration"
         :options="powers.powerDurations"
@@ -97,9 +97,9 @@ const cancel = () => {
       />
 
       <FormInputTextWrapper v-model="form.cost" />
-      
+
       <FormEditorWrapper v-model="form.other" />
-      
+
       <PowerPrerequisites ref="prerequisiteChild" :power-id="props.powerId" :power-path-id="props.powerPathId" />
 
       <div class="m-3 text-right">
@@ -107,6 +107,6 @@ const cancel = () => {
         <Button label="Update" class="m-2" type="submit" />
       </div>
     </form>
-    <ModifierGroup :group-id="groupId" :source="SourceTableEnum.Powers" :source-id="props.powerId"/>
+    <ModifierGroup :group-id="groupId" :source="SourceTableEnum.Powers" :source-id="props.powerId" />
   </div>
 </template>

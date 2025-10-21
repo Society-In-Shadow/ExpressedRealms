@@ -1,47 +1,47 @@
 <script setup lang="ts">
 
-import Button from 'primevue/button';
-import axios from "axios";
-import { useForm } from 'vee-validate';
-import { object, string }  from 'yup';
-import InputTextWrapper from "../../FormWrappers/InputTextWrapper.vue"
-import { userStore } from "@/stores/userStore";
-import InputMaskWrapper from "@/FormWrappers/InputMaskWrapper.vue";
-import Card from "primevue/card";
-import {onMounted, ref} from "vue";
-import toasters from "@/services/Toasters";
-const userInfo = userStore();
+import Button from 'primevue/button'
+import axios from 'axios'
+import { useForm } from 'vee-validate'
+import { object, string } from 'yup'
+import InputTextWrapper from '../../FormWrappers/InputTextWrapper.vue'
+import { userStore } from '@/stores/userStore'
+import Card from 'primevue/card'
+import { onMounted, ref } from 'vue'
+import toasters from '@/services/Toasters'
+
+const userInfo = userStore()
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
     name: string().required()
-        .max(100)
-        .label("Name"),
-  })
-});
+      .max(100)
+      .label('Name'),
+  }),
+})
 
-const [name] = defineField('name');
-const [phoneNumber] = defineField('phoneNumber');
+const [name] = defineField('name')
+const [phoneNumber] = defineField('phoneNumber')
 const [city] = defineField('city')
-const [state] = defineField('state');
-const isLoading = ref(true);
+const [state] = defineField('state')
+const isLoading = ref(true)
 
-onMounted(() =>{
-  axios.get("/player")
-      .then((response) => {
-        name.value = response.data.name;
-        isLoading.value = false;
-      })
-});
+onMounted(() => {
+  axios.get('/player')
+    .then((response) => {
+      name.value = response.data.name
+      isLoading.value = false
+    })
+})
 
 const onSubmit = handleSubmit((values) => {
   axios.put('/player', values).then(() => {
-      userInfo.name = values.name;
+    userInfo.name = values.name
+  })
+    .then(() => {
+      toasters.success('Successfully Updated User Name!')
     })
-      .then(() => {
-        toasters.success("Successfully Updated User Name!");
-      });
-});
+})
 
 </script>
 

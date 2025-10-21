@@ -1,49 +1,50 @@
 <script setup lang="ts">
 
-import {computed, ref} from "vue";
-import TieredMenu from "primevue/tieredmenu";
-import Avatar from "primevue/avatar"
-import {userStore} from "@/stores/userStore";
-import md5 from "md5"
-import { logOff } from "@/services/Authentication";
-import {useRouter} from "vue-router";
-let userInfo = userStore();
-const Router = useRouter();
+import { computed, ref } from 'vue'
+import TieredMenu from 'primevue/tieredmenu'
+import Avatar from 'primevue/avatar'
+import { userStore } from '@/stores/userStore'
+import md5 from 'md5'
+import { logOff } from '@/services/Authentication'
+import { useRouter } from 'vue-router'
 
-const menu = ref();
+let userInfo = userStore()
+const Router = useRouter()
+
+const menu = ref()
 const items = ref([
   {
     label: 'My Profile',
     id: 'myProfile',
     icon: 'pi pi-user-edit',
     command: () => {
-      Router.push('/userProfile');
-    }
+      Router.push('/userProfile')
+    },
   },
   {
     label: 'Characters',
     id: 'characters',
     icon: 'pi pi-users',
     command: () => {
-      Router.push('/characters');
-    }
+      Router.push('/characters')
+    },
   },
   {
     label: 'Logoff',
     id: 'logoff',
     icon: 'pi pi-sign-out',
-    command: () => { logOff(Router); }
+    command: () => { logOff(Router) },
   },
-]);
+])
 
 const toggle = (event) => {
-  menu.value.toggle(event);
-};
+  menu.value.toggle(event)
+}
 
 const gravatar = computed(() => {
-  const hash = md5(userInfo.userEmail.trim().toLowerCase());
-  return `https://www.gravatar.com/avatar/${hash}`;
-});
+  const hash = md5(userInfo.userEmail.trim().toLowerCase())
+  return `https://www.gravatar.com/avatar/${hash}`
+})
 
 </script>
 

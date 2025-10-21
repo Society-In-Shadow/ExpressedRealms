@@ -1,26 +1,26 @@
 <script setup lang="ts">
 
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, ref} from 'vue'
 import {useRoute} from 'vue-router'
-import {proficiencyStore} from "@/components/characters/character/proficiency/stores/proficiencyStore";
-import Panel from "primevue/panel";
-import Accordion from 'primevue/accordion';
-import ProficiencyAccordionPanel from "@/components/characters/character/proficiency/ProficiencyAccordionPanel.vue";
+import {proficiencyStore} from '@/components/characters/character/proficiency/stores/proficiencyStore'
+import Panel from 'primevue/panel'
+import Accordion from 'primevue/accordion'
+import ProficiencyAccordionPanel from '@/components/characters/character/proficiency/ProficiencyAccordionPanel.vue'
 
 const route = useRoute()
 
-const openItems = ref([]);
+const openItems = ref([])
 
-const profStore = proficiencyStore();
+const profStore = proficiencyStore()
 
 const types = computed(() => [
-  { name: "Offensive Proficiencies", items: profStore.offensive },
-  { name: "Defensive Proficiencies", items: profStore.defensive },
-]);
+  { name: 'Offensive Proficiencies', items: profStore.offensive },
+  { name: 'Defensive Proficiencies', items: profStore.defensive },
+])
 
-onMounted(() =>{
-  profStore.getUpdateProficiencies(route.params.id);
-});
+onMounted(() => {
+  profStore.getUpdateProficiencies(route.params.id)
+})
 
 </script>
 
@@ -33,7 +33,7 @@ onMounted(() =>{
         </h3>
       </template>
       <Accordion :value="openItems" multiple :lazy="true" expand-icon="pi pi-info-circle" collapse-icon="pi pi-times-circle">
-        <ProficiencyAccordionPanel v-for="proficiency in type.items" :key="proficiency.id" :value="proficiency.id" :proficiency="proficiency"/>
+        <ProficiencyAccordionPanel v-for="proficiency in type.items" :key="proficiency.id" :value="proficiency.id" :proficiency="proficiency" />
       </Accordion>
     </Panel>
   </div>

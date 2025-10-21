@@ -1,26 +1,26 @@
 <script setup lang="ts">
 
-import FormEditorWrapper from "@/FormWrappers/FormEditorWrapper.vue";
-import FormInputTextWrapper from "@/FormWrappers/FormInputTextWrapper.vue";
-import Button from "primevue/button";
-import axios from "axios";
-import toaster from "@/services/Toasters";
-import {getValidationInstance} from "@/components/expressions/powerPaths/validations/powerPathValidations";
-import {powerPathStore} from "@/components/expressions/powerPaths/stores/powerPathStore";
+import FormEditorWrapper from '@/FormWrappers/FormEditorWrapper.vue'
+import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
+import Button from 'primevue/button'
+import axios from 'axios'
+import toaster from '@/services/Toasters'
+import {getValidationInstance} from '@/components/expressions/powerPaths/validations/powerPathValidations'
+import {powerPathStore} from '@/components/expressions/powerPaths/stores/powerPathStore'
 
-const form = getValidationInstance();
-const powerPaths = powerPathStore();
+const form = getValidationInstance()
+const powerPaths = powerPathStore()
 
 const emit = defineEmits<{
   canceled: []
-}>();
+}>()
 
 const props = defineProps({
   expressionId: {
     type: Number,
     required: true,
-  }
-});
+  },
+})
 
 const onSubmit = form.handleSubmit(async (values) => {
   await axios.post(`/powerpath`, {
@@ -28,16 +28,16 @@ const onSubmit = form.handleSubmit(async (values) => {
     name: values.name,
     description: values.description,
   })
-  .then(async () => {
-    await powerPaths.getPowerPaths(props.expressionId);
-    reset();
-    toaster.success("Successfully Added Power Path!");
-  });
-});
+    .then(async () => {
+      await powerPaths.getPowerPaths(props.expressionId)
+      reset()
+      toaster.success('Successfully Added Power Path!')
+    })
+})
 
 const reset = () => {
-  form.customResetForm();
-  emit("canceled");
+  form.customResetForm()
+  emit('canceled')
 }
 
 </script>

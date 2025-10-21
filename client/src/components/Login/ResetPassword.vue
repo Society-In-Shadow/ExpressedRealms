@@ -1,48 +1,49 @@
 <script setup lang="ts">
 
-import Button from 'primevue/button';
-import axios from "axios";
-import { useForm } from 'vee-validate';
-import { object, string, ref }  from 'yup';
-import {useRoute, useRouter} from 'vue-router'
-import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
-const Router = useRouter();
+import Button from 'primevue/button'
+import axios from 'axios'
+import { useForm } from 'vee-validate'
+import { object, ref, string } from 'yup'
+import { useRoute, useRouter } from 'vue-router'
+import InputTextWrapper from '@/FormWrappers/InputTextWrapper.vue'
+
+const Router = useRouter()
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
     email: string().required()
-        .email()
-        .label('Email address'),
+      .email()
+      .label('Email address'),
     password: string()
-        .required()
-        .min(8)
-        .matches(/[0-9]/, 'Password requires a number')
-        .matches(/[a-z]/, 'Password requires a lowercase letter')
-        .matches(/[A-Z]/, 'Password requires an uppercase letter')
-        .matches(/[^\w]/, 'Password requires a symbol')
-        .label('Password'),
+      .required()
+      .min(8)
+      .matches(/[0-9]/, 'Password requires a number')
+      .matches(/[a-z]/, 'Password requires a lowercase letter')
+      .matches(/[A-Z]/, 'Password requires an uppercase letter')
+      .matches(/[^\w]/, 'Password requires a symbol')
+      .label('Password'),
     confirmPassword: string().required()
-        .oneOf([ref('password')], 'Passwords must match')
-        .label('Confirm password')
-  })
-});
+      .oneOf([ref('password')], 'Passwords must match')
+      .label('Confirm password'),
+  }),
+})
 
-const [email] = defineField('email');
-const [password] = defineField('password');
+const [email] = defineField('email')
+const [password] = defineField('password')
 const [confirmPassword] = defineField('confirmPassword')
 
-const route = useRoute();
+const route = useRoute()
 
 const onSubmit = handleSubmit((values) => {
   axios.post('/auth/resetPassword',
-      {
-        email: values.email,
-        resetCode: route.query.resetToken,
-        newPassword: values.confirmPassword
-      }).then(() => {
-        Router.push('login?resetPassword=1');
-      });
-});
+    {
+      email: values.email,
+      resetCode: route.query.resetToken,
+      newPassword: values.confirmPassword,
+    }).then(() => {
+    Router.push('login?resetPassword=1')
+  })
+})
 
 </script>
 

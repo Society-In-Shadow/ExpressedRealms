@@ -1,46 +1,46 @@
 <script setup lang="ts">
 
-import axios from "axios";
-import Panel from "primevue/panel";
-import {onMounted, ref, type Ref} from "vue";
+import axios from 'axios'
+import Panel from 'primevue/panel'
+import {onMounted, ref, type Ref} from 'vue'
 import {useRoute} from 'vue-router'
-import Accordion from 'primevue/accordion';
-import AccordionPanel from 'primevue/accordionpanel';
-import AccordionHeader from 'primevue/accordionheader';
-import AccordionContent from 'primevue/accordioncontent';
+import Accordion from 'primevue/accordion'
+import AccordionPanel from 'primevue/accordionpanel'
+import AccordionHeader from 'primevue/accordionheader'
+import AccordionContent from 'primevue/accordioncontent'
 
 import type {
-  CharacterSkillsResponse
-} from "@/components/characters/character/skills/interfaces/CharacterSkillsResponse";
-import SkillDetail from "@/components/characters/character/skills/SkillDetail.vue";
+  CharacterSkillsResponse,
+} from '@/components/characters/character/skills/interfaces/CharacterSkillsResponse'
+import SkillDetail from '@/components/characters/character/skills/SkillDetail.vue'
 
 const route = useRoute()
 
-const offensiveSkills:Ref<Array<CharacterSkillsResponse>> = ref([]);
-const defensiveSkills:Ref<Array<CharacterSkillsResponse>> = ref([]);
-const openItems = ref([]);
+const offensiveSkills: Ref<Array<CharacterSkillsResponse>> = ref([])
+const defensiveSkills: Ref<Array<CharacterSkillsResponse>> = ref([])
+const openItems = ref([])
 
 const skillTypes = ref([
-  { name: "Offensive Skills",  skills: offensiveSkills },
-  { name: "Defensive Skills", skills: defensiveSkills }
-]);
+  { name: 'Offensive Skills', skills: offensiveSkills },
+  { name: 'Defensive Skills', skills: defensiveSkills },
+])
 
-onMounted(async () =>{
-  getEditOptions();
-});
+onMounted(async () => {
+  getEditOptions()
+})
 
 function getEditOptions() {
   axios.get(`characters/${route.params.id}/skills`)
-      .then((response) => {
-        offensiveSkills.value = response.data.filter((x: CharacterSkillsResponse) => x.skillSubTypeId === 1);
-        defensiveSkills.value = response.data.filter((x: CharacterSkillsResponse) => x.skillSubTypeId === 2);
-      })
+    .then((response) => {
+      offensiveSkills.value = response.data.filter((x: CharacterSkillsResponse) => x.skillSubTypeId === 1)
+      defensiveSkills.value = response.data.filter((x: CharacterSkillsResponse) => x.skillSubTypeId === 2)
+    })
 }
 
 </script>
 
 <template>
-    <div class="d-inline-flex flex-wrap justify-content-center column-gap-3 row-gap-1 w-100">
+  <div class="d-inline-flex flex-wrap justify-content-center column-gap-3 row-gap-1 w-100">
     <Panel v-for="skillType in skillTypes" class="mb-3 align-self-lg-start align-self-md-start align-self-xl-start align-self-sm-stretch" style="width: 25em">
       <template #header>
         <div class="row">

@@ -1,50 +1,50 @@
 <script setup lang="ts">
 
-import {onMounted, ref, watch} from "vue";
-import {useRoute} from "vue-router";
+import {onMounted, ref, watch} from 'vue'
+import {useRoute} from 'vue-router'
 import {
   experienceStore,
   type XpSectionType,
-  XpSectionTypes
-} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
-import type {CalculatedExperience} from "@/components/characters/character/types.ts";
-import {characterStore} from "@/components/characters/character/stores/characterStore.ts";
+  XpSectionTypes,
+} from '@/components/characters/character/stores/experienceBreakdownStore.ts'
+import type {CalculatedExperience} from '@/components/characters/character/types.ts'
+import {characterStore} from '@/components/characters/character/stores/characterStore.ts'
 
 const route = useRoute()
-const experienceInfo = experienceStore();
-const characterInfo = characterStore();
+const experienceInfo = experienceStore()
+const characterInfo = characterStore()
 
 const props = defineProps({
   sectionType: {
     type: Number as unknown as () => XpSectionType,
     required: true,
-  }
-});
+  },
+})
 
-const xp = ref<CalculatedExperience>({});
+const xp = ref<CalculatedExperience>({})
 
 onMounted(async () => {
-  await experienceInfo.updateExperience(route.params.id);
+  await experienceInfo.updateExperience(route.params.id)
 })
 
 watch(experienceInfo, () => {
-  xp.value = experienceInfo.getExperienceInfoForSection(props.sectionType);
-}, {immediate: true, deep: true})
+  xp.value = experienceInfo.getExperienceInfoForSection(props.sectionType)
+}, { immediate: true, deep: true })
 
 watch(() => props.sectionType, () => {
-  xp.value = experienceInfo.getExperienceInfoForSection(props.sectionType);
-}, {immediate: true, deep: true})
+  xp.value = experienceInfo.getExperienceInfoForSection(props.sectionType)
+}, { immediate: true, deep: true })
 
 watch(() => experienceInfo.calculatedValues, () => {
-  xp.value = experienceInfo.getExperienceInfoForSection(props.sectionType);
-}, {immediate: true, deep: true})
+  xp.value = experienceInfo.getExperienceInfoForSection(props.sectionType)
+}, { immediate: true, deep: true })
 
 </script>
 
 <template>
   <div v-if="characterInfo.isInCharacterCreation" class="d-flex flex-row justify-content-between gap-3">
     <div>
-      <div class="d-flex flex-row justify-content-center gap-2" >
+      <div class="d-flex flex-row justify-content-center gap-2">
         <div><strong v-if="xp.sectionTypeId != XpSectionTypes.advantage && xp.sectionTypeId != XpSectionTypes.disadvantage">Required XP:</strong>  <strong v-else>Optional XP:</strong> {{ xp.requiredXp }} / {{ xp.characterCreateMax }}</div>
         <div>
           <span v-if="xp.sectionTypeId != XpSectionTypes.advantage && xp.sectionTypeId != XpSectionTypes.disadvantage"class="material-symbols-outlined" title="You are required to spend all points">{{ xp.total >= xp.characterCreateMax ? "check_circle" : "warning" }}</span>
@@ -68,10 +68,14 @@ watch(() => experienceInfo.calculatedValues, () => {
     <div>
       <div class="d-flex flex-row justify-content-center gap-2">
         <div><strong>Available XP:</strong></div>
-        <div v-if="characterInfo.isPrimaryCharacter">{{ xp.availableXp}}</div>
-        <div v-else><span class="material-symbols-outlined">all_inclusive</span></div>
+        <div v-if="characterInfo.isPrimaryCharacter">
+          {{ xp.availableXp }}
+        </div>
+        <div v-else>
+          <span class="material-symbols-outlined">all_inclusive</span>
+        </div>
       </div>
-      <strong></strong> 
+      <strong />
     </div>
   </div>
 </template>

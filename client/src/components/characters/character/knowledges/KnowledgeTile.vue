@@ -1,28 +1,27 @@
 <script setup lang="ts">
 
-import {onBeforeMount, ref} from "vue";
-import {characterKnowledgeStore} from "@/components/characters/character/knowledges/stores/characterKnowledgeStore";
-import {useRoute} from "vue-router";
-import Tag from "primevue/tag";
-import AccordionPanel from "primevue/accordionpanel";
-import Accordion from "primevue/accordion";
-import AccordionContent from "primevue/accordioncontent";
-import AccordionHeader from "primevue/accordionheader";
+import {onBeforeMount, ref} from 'vue'
+import {characterKnowledgeStore} from '@/components/characters/character/knowledges/stores/characterKnowledgeStore'
+import {useRoute} from 'vue-router'
+import Tag from 'primevue/tag'
+import AccordionPanel from 'primevue/accordionpanel'
+import Accordion from 'primevue/accordion'
+import AccordionContent from 'primevue/accordioncontent'
+import AccordionHeader from 'primevue/accordionheader'
 
-const characterKnowledgeData = characterKnowledgeStore();
-const route = useRoute();
+const characterKnowledgeData = characterKnowledgeStore()
+const route = useRoute()
 
 onBeforeMount(async () => {
   await characterKnowledgeData.getCharacterKnowledges(route.params.id)
 })
 
-const openKnowledgeItems = ref([]);
+const openKnowledgeItems = ref([])
 
 </script>
 
 <template>
   <div style="max-width: 650px; margin: 0 auto;">
-
     <Accordion :value="openKnowledgeItems" multiple :lazy="true" expand-icon="pi pi-info-circle" collapse-icon="pi pi-times-circle">
       <AccordionPanel v-for="knowledge in characterKnowledgeData.knowledges" :key="knowledge.name" :value="knowledge.mappingId">
         <AccordionHeader>
@@ -48,7 +47,7 @@ const openKnowledgeItems = ref([]);
           <p class="m-0">
             {{ knowledge.knowledge.description }}
           </p>
-        
+
           <h3 v-if="knowledge.notes" class="mt-3">
             Notes
           </h3>

@@ -1,17 +1,17 @@
 <script setup lang="ts">
 
-import AccordionHeader from "primevue/accordionheader";
-import Accordion from "primevue/accordion";
-import AccordionPanel from "primevue/accordionpanel";
-import AccordionContent from "primevue/accordioncontent";
-import type {CharacterBlessing} from "@/components/characters/character/wizard/blessings/types.ts";
+import AccordionHeader from 'primevue/accordionheader'
+import Accordion from 'primevue/accordion'
+import AccordionPanel from 'primevue/accordionpanel'
+import AccordionContent from 'primevue/accordioncontent'
+import type {CharacterBlessing} from '@/components/characters/character/wizard/blessings/types.ts'
 
 const props = defineProps({
   blessings: {
     type: Object as PropType<Array<CharacterBlessing>>,
     required: true,
-  }
-});
+  },
+})
 
 </script>
 
@@ -25,7 +25,7 @@ const props = defineProps({
               {{ item.name }}
             </div>
             <div>
-              {{ item.subCategory}}
+              {{ item.subCategory }}
             </div>
           </div>
         </div>
@@ -33,9 +33,11 @@ const props = defineProps({
       <AccordionContent>
         <div class="pt-0 mt-0" v-html="item.description" />
         <h3>Effect</h3>
-        <div v-html="item.levelDescription"></div>
-        <h3 v-if="item.notes">Notes</h3>
-        <div>{{item.notes}}</div>
+        <div v-html="item.levelDescription" />
+        <h3 v-if="item.notes">
+          Notes
+        </h3>
+        <div>{{ item.notes }}</div>
       </AccordionContent>
     </AccordionPanel>
   </Accordion>

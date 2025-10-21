@@ -1,26 +1,26 @@
 <script setup lang="ts">
 
-import FormEditorWrapper from "@/FormWrappers/FormEditorWrapper.vue";
-import Button from "primevue/button";
-import axios from "axios";
-import toaster from "@/services/Toasters";
-import {onBeforeMount, type PropType} from "vue";
-import {progressionPathStore} from "@/components/expressions/progressionPaths/stores/progressionPathsStore.ts";
+import FormEditorWrapper from '@/FormWrappers/FormEditorWrapper.vue'
+import Button from 'primevue/button'
+import axios from 'axios'
+import toaster from '@/services/Toasters'
+import {onBeforeMount, type PropType} from 'vue'
+import {progressionPathStore} from '@/components/expressions/progressionPaths/stores/progressionPathsStore.ts'
 
-import FormInputNumberWrapper from "@/FormWrappers/FormInputNumberWrapper.vue";
+import FormInputNumberWrapper from '@/FormWrappers/FormInputNumberWrapper.vue'
 import {
-  getValidationInstance
-} from "@/components/expressions/progressionLevels/validations/progressionLevelValidations.ts";
-import type {ProgressionLevel} from "@/components/expressions/progressionPaths/types.ts";
-import {SourceTableEnum} from "@/components/modifiergroups/types.ts";
-import ModifierGroup from "@/components/modifiergroups/ModifierGroup.vue";
+  getValidationInstance,
+} from '@/components/expressions/progressionLevels/validations/progressionLevelValidations.ts'
+import type {ProgressionLevel} from '@/components/expressions/progressionPaths/types.ts'
+import {SourceTableEnum} from '@/components/modifiergroups/types.ts'
+import ModifierGroup from '@/components/modifiergroups/ModifierGroup.vue'
 
-const form = getValidationInstance();
-const progressionPathInfo = progressionPathStore();
+const form = getValidationInstance()
+const progressionPathInfo = progressionPathStore()
 
 const emit = defineEmits<{
   cancelled: []
-}>();
+}>()
 
 const props = defineProps({
   expressionId: {
@@ -33,29 +33,29 @@ const props = defineProps({
   },
   level: {
     type: Object as PropType<ProgressionLevel>,
-    required: true
-  }
-});
+    required: true,
+  },
+})
 
 const onSubmit = form.handleSubmit(async (values) => {
   await axios.put(`/expression/${props.expressionId}/progressions/${props.progressionId}/levels/${props.level.id}`, {
     xlLevel: values.xlLevel,
     description: values.description,
   })
-  .then(async () => {
-    await progressionPathInfo.getProgressionPaths(props.expressionId);
-    reset();
-    toaster.success("Successfully Updated Progression Level!");
-  });
-});
+    .then(async () => {
+      await progressionPathInfo.getProgressionPaths(props.expressionId)
+      reset()
+      toaster.success('Successfully Updated Progression Level!')
+    })
+})
 
 onBeforeMount(async () => {
-  form.setValues(props.level);
+  form.setValues(props.level)
 })
 
 const reset = () => {
-  form.customResetForm();
-  emit("cancelled");
+  form.customResetForm()
+  emit('cancelled')
 }
 
 </script>
@@ -73,7 +73,6 @@ const reset = () => {
       </div>
     </form>
 
-    <ModifierGroup :group-id="props.level?.modifierGroupId" :source="SourceTableEnum.ProgressionLevels" :source-id="props.level.id"/>
-    
+    <ModifierGroup :group-id="props.level?.modifierGroupId" :source="SourceTableEnum.ProgressionLevels" :source-id="props.level.id" />
   </div>
 </template>

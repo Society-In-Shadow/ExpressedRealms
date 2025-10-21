@@ -1,13 +1,13 @@
 <script setup lang="ts">
 
-import Dropdown from 'primevue/dropdown';
-import {computed} from "vue";
-import Skeleton from 'primevue/skeleton';
+import Dropdown from 'primevue/dropdown'
+import { computed } from 'vue'
+import Skeleton from 'primevue/skeleton'
 
-const model = defineModel({ required: true, default: {}, type: Object });
+const model = defineModel({ required: true, default: {}, type: Object })
 
 defineOptions({
-  inheritAttrs: false
+  inheritAttrs: false,
 })
 
 const props = defineProps({
@@ -17,32 +17,32 @@ const props = defineProps({
   },
   options: {
     type: Array,
-    required: true
+    required: true,
   },
   optionLabel: {
     type: String,
-    required: true
+    required: true,
   },
   dataCyTag: {
     type: String,
-    default: ""
+    default: '',
   },
   errorText: {
     type: String,
-    default: ""
+    default: '',
   },
   showSkeleton: {
     type: Boolean,
-    default: false
-  }
-});
+    default: false,
+  },
+})
 
 const dataCyTagCalc = computed(() => {
-  if(props.dataCyTag != ""){
-    return props.dataCyTag;
+  if (props.dataCyTag != '') {
+    return props.dataCyTag
   }
-  return props.fieldName.replace(" ", "-").toLowerCase();
-});
+  return props.fieldName.replace(' ', '-').toLowerCase()
+})
 
 </script>
 

@@ -1,45 +1,45 @@
 <script setup lang="ts">
 
-import {computed} from "vue";
-import Skeleton from 'primevue/skeleton';
-import type {FormField} from "@/FormWrappers/Interfaces/FormField";
-import Listbox from "primevue/listbox";
+import { computed } from 'vue'
+import Skeleton from 'primevue/skeleton'
+import type { FormField } from '@/FormWrappers/Interfaces/FormField'
+import Listbox from 'primevue/listbox'
 
-const model = defineModel<FormField>({ required: true, type: Object });
+const model = defineModel<FormField>({ required: true, type: Object })
 
 defineOptions({
-  inheritAttrs: false
+  inheritAttrs: false,
 })
 
 const props = defineProps({
   options: {
     type: Array,
-    required: true
+    required: true,
   },
   optionValue: {
     type: String,
-    required: true
+    required: true,
   },
   optionDisabled: {
     type: String,
-    default: 'disabled'
+    default: 'disabled',
   },
   dataCyTag: {
     type: String,
-    default: ""
+    default: '',
   },
   showSkeleton: {
     type: Boolean,
-    default: false
-  }
-});
+    default: false,
+  },
+})
 
 const dataCyTagCalc = computed(() => {
-  if(props.dataCyTag != ""){
-    return props.dataCyTag;
+  if (props.dataCyTag != '') {
+    return props.dataCyTag
   }
-  return model.value.label.replace(" ", "-").toLowerCase();
-});
+  return model.value.label.replace(' ', '-').toLowerCase()
+})
 
 </script>
 
@@ -50,7 +50,7 @@ const dataCyTagCalc = computed(() => {
     <Listbox
       id="dataCyTagCalc" v-model="model.field"
       :data-cy="dataCyTagCalc"
-      :options="options" :option-value="optionValue" :option-disabled="props.optionDisabled" 
+      :options="options" :option-value="optionValue" :option-disabled="props.optionDisabled"
       class="w-100" :class="{ 'p-invalid': model.error && model.error.length > 0 }" v-bind="$attrs"
     >
       <template #option="slotProps">
