@@ -5,5 +5,4 @@ export interface FormField {
     error: ComputedRef<string | undefined>; // ComputedRef for potential error
     label: string; // Label for the field
     isRequired: boolean; // dynamically generated from the validations applied to the field
-    setError: (error: string);
 }
