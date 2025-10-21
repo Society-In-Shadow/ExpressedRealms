@@ -1,4 +1,4 @@
 export interface RoleInfo {
-    name: string;
-    isEnabled: boolean;
+  name: string
+  isEnabled: boolean
 }

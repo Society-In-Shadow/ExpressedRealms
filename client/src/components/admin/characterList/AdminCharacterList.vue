@@ -1,38 +1,38 @@
 <script setup lang="ts">
 
-import {onMounted, ref, watch} from 'vue';
-import InputText from "primevue/inputtext";
-import {adminCharacterListStore} from "@/components/admin/characterList/stores/characterListStore.ts";
-import CharacterTile from "@/components/admin/characterList/CharacterTile.vue";
+import {onMounted, ref, watch} from 'vue'
+import InputText from 'primevue/inputtext'
+import {adminCharacterListStore} from '@/components/admin/characterList/stores/characterListStore.ts'
+import CharacterTile from '@/components/admin/characterList/CharacterTile.vue'
 
-const characterListInfo = adminCharacterListStore();
+const characterListInfo = adminCharacterListStore()
 
-const searchQuery = ref<string>("");
+const searchQuery = ref<string>('')
 
-onMounted(async () =>{
-  await characterListInfo.fetchCharacters();
+onMounted(async () => {
+  await characterListInfo.fetchCharacters()
 })
 
 // Debounce function
 function debounce(fn: Function, delay: number) {
-  let timeout: number | undefined;
+  let timeout: number | undefined
   return (...args: any[]) => {
-    clearTimeout(timeout);
+    clearTimeout(timeout)
     timeout = setTimeout(() => {
-      fn(...args);
-    }, delay);
-  };
+      fn(...args)
+    }, delay)
+  }
 }
 
 // Debounced filter function
 const debouncedFilterPlayers = debounce((query: string) => {
-  characterListInfo.filterCharacters(query);
-}, 250);
+  characterListInfo.filterCharacters(query)
+}, 250)
 
 // Watch for changes to the search query and trigger the debounced filter function
 watch(searchQuery, (newQuery) => {
-  debouncedFilterPlayers(newQuery);
-});
+  debouncedFilterPlayers(newQuery)
+})
 
 </script>
 
@@ -41,7 +41,7 @@ watch(searchQuery, (newQuery) => {
     <div class="row">
       <div class="col">
         <h1 class="m-3">
-          Characters ({{characterListInfo.filteredCharacters.length}})
+          Characters ({{ characterListInfo.filteredCharacters.length }})
         </h1>
       </div>
       <div class="col">

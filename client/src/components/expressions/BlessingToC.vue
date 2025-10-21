@@ -1,26 +1,26 @@
 <script setup lang="ts">
 
-import {makeIdSafe} from "@/utilities/stringUtilities";
-import Skeleton from 'primevue/skeleton';
-import {scrollToSection} from "@/components/expressions/expressionUtilities";
-import {blessingsStore} from "@/components/blessings/stores/blessingsStore.ts";
+import {makeIdSafe} from '@/utilities/stringUtilities'
+import Skeleton from 'primevue/skeleton'
+import {scrollToSection} from '@/components/expressions/expressionUtilities'
+import {blessingsStore} from '@/components/blessings/stores/blessingsStore.ts'
 
-const store = blessingsStore();
+const store = blessingsStore()
 
 const props = defineProps({
-  showSkeleton:{
+  showSkeleton: {
     type: Boolean,
-    required: true
-  }
-});
+    required: true,
+  },
+})
 
 </script>
 
 <template>
   <div v-for="type in store.types" :key="type.name">
     <Skeleton v-if="props.showSkeleton" id="toc-skeleton" class="mb-2" height="1.5em" />
-    <a v-else class="p-1 tocItem" :href="'#' + makeIdSafe(type.name)" @click.prevent="scrollToSection(type.name)">{{type.name}}</a>
-    <div class="ps-4" v-for="path in type.subCategories" :key="path.name">
+    <a v-else class="p-1 tocItem" :href="'#' + makeIdSafe(type.name)" @click.prevent="scrollToSection(type.name)">{{ type.name }}</a>
+    <div v-for="path in type.subCategories" :key="path.name" class="ps-4">
       <Skeleton v-if="props.showSkeleton" id="toc-skeleton" class="mb-2" height="1.5em" />
       <a v-else class="p-1 tocItem" :href="'#' + makeIdSafe(path.name)" @click.prevent="scrollToSection(path.name)">{{ path.name }}</a>
       <div v-for="power in path.blessings" :key="power.id" class="ps-4">

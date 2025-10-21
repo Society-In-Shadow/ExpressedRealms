@@ -1,13 +1,13 @@
 <script setup lang="ts">
 
-import {type PropType} from "vue";
-import type {Knowledge} from "@/components/knowledges/types";
-import Button from "primevue/button";
-import AddCharacterKnowledge from "@/components/characters/character/wizard/knowledges/AddCharacterKnowledge.vue";
-import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
-import type {WizardContent} from "@/components/characters/character/wizard/types.ts";
+import {type PropType} from 'vue'
+import type {Knowledge} from '@/components/knowledges/types'
+import Button from 'primevue/button'
+import AddCharacterKnowledge from '@/components/characters/character/wizard/knowledges/AddCharacterKnowledge.vue'
+import {wizardContentStore} from '@/components/characters/character/wizard/stores/wizardContentStore.ts'
+import type {WizardContent} from '@/components/characters/character/wizard/types.ts'
 
-const wizardContentInfo = wizardContentStore();
+const wizardContentInfo = wizardContentStore()
 
 const props = defineProps({
   knowledge: {
@@ -16,17 +16,17 @@ const props = defineProps({
   },
   isReadOnly: {
     type: Boolean,
-    required: true
-  }
-});
+    required: true,
+  },
+})
 
 const toggleAdd = () => {
   wizardContentInfo.updateContent(
-      { 
-        headerName: 'Knowledge',
-        component: AddCharacterKnowledge, 
-        props: { knowledge: props.knowledge}
-      } as WizardContent)
+    {
+      headerName: 'Knowledge',
+      component: AddCharacterKnowledge,
+      props: { knowledge: props.knowledge },
+    } as WizardContent)
 }
 
 </script>

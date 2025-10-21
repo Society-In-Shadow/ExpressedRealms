@@ -1,108 +1,109 @@
 <script setup lang="ts">
 
-import Button from "primevue/button";
-import {onMounted, ref, watch} from "vue";
-import axios from "axios";
-import {useForm} from "vee-validate";
-import {object, string} from "yup";
-import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
-import DropdownWrapper from "@/FormWrappers/DropdownWrapper.vue";
+import Button from 'primevue/button'
+import {onMounted, ref, watch} from 'vue'
+import axios from 'axios'
+import {useForm} from 'vee-validate'
+import {object, string} from 'yup'
+import InputTextWrapper from '@/FormWrappers/InputTextWrapper.vue'
+import DropdownWrapper from '@/FormWrappers/DropdownWrapper.vue'
 
-import { expressionStore } from "@/stores/expressionStore";
-import EditorWrapper from "@/FormWrappers/EditorWrapper.vue";
-import toaster from "@/services/Toasters";
-const expressionInfo = expressionStore();
+import {expressionStore} from '@/stores/expressionStore'
+import EditorWrapper from '@/FormWrappers/EditorWrapper.vue'
+import toaster from '@/services/Toasters'
+
+const expressionInfo = expressionStore()
 
 const emit = defineEmits<{
-  cancelEvent: [],
+  cancelEvent: []
   addedSection: []
-}>();
+}>()
 
 const props = defineProps({
   parentId: {
-    type: Number
+    type: Number,
   },
-  addExpressionHeader:{
+  addExpressionHeader: {
     type: Boolean,
-    value: false
-  }
-});
+    value: false,
+  },
+})
 
 onMounted(() => {
-  if(expressionInfo.isDoneLoading) {
-    loadSectionInfo();
+  if (expressionInfo.isDoneLoading) {
+    loadSectionInfo()
   }
 })
 
 const stopWatch = watch(
-    () => expressionInfo.isDoneLoading,
-    (newValue) => {
-      if (newValue) {
-        loadSectionInfo();
-      }
+  () => expressionInfo.isDoneLoading,
+  (newValue) => {
+    if (newValue) {
+      loadSectionInfo()
     }
-);
+  },
+)
 
-const showOptionLoader = ref(true);
-const sectionTypeOptions = ref([]);
+const showOptionLoader = ref(true)
+const sectionTypeOptions = ref([])
 
-function cancelEdit(){
-  emit("cancelEvent");
+function cancelEdit() {
+  emit('cancelEvent')
 }
 
-function reset(){
-  showOptionLoader.value = true;
-  loadSectionInfo();
+function reset() {
+  showOptionLoader.value = true
+  loadSectionInfo()
 }
 
-function loadSectionInfo(){
-  if(!showOptionLoader.value) return; // Don't load in 2nd time
+function loadSectionInfo() {
+  if (!showOptionLoader.value) return // Don't load in 2nd time
   axios.get(`/expressionSubSections/${expressionInfo.currentExpressionId}/0/options`)
-      .then(async (response) => {
-        if(!props.addExpressionHeader) {
-          sectionTypeOptions.value = response.data.sectionTypes.filter(sectionType => sectionType.name.toLowerCase() !== "expression");
-        }
-        else{
-          sectionTypeOptions.value = response.data.sectionTypes;
-        }
-        showOptionLoader.value = false;
+    .then(async (response) => {
+      if (!props.addExpressionHeader) {
+        sectionTypeOptions.value = response.data.sectionTypes.filter(sectionType => sectionType.name.toLowerCase() !== 'expression')
+      }
+      else {
+        sectionTypeOptions.value = response.data.sectionTypes
+      }
+      showOptionLoader.value = false
 
-        if(props.addExpressionHeader) {
-          sectionType.value = sectionTypeOptions.value.find(obj => obj.name === "Expression");
-        }
-      });
+      if (props.addExpressionHeader) {
+        sectionType.value = sectionTypeOptions.value.find(obj => obj.name === 'Expression')
+      }
+    })
 }
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
     name: string().required()
-        .label('Name'),
+      .label('Name'),
     content: string()
-        .required()
-        .label('Content'),
+      .required()
+      .label('Content'),
     sectionType: object().nullable()
-        .label('Section Type')
-  })
-});
+      .label('Section Type'),
+  }),
+})
 
-const [name] = defineField('name');
-const [content] = defineField('content');
-const [sectionType] = defineField('sectionType');
+const [name] = defineField('name')
+const [content] = defineField('content')
+const [sectionType] = defineField('sectionType')
 
 const onSubmit = handleSubmit((values) => {
   axios.post(`/expressionSubSections/${expressionInfo.currentExpressionId}`, {
     name: values.name,
     content: values.content,
     sectionTypeId: values.sectionType.id,
-    parentId: props.parentId
+    parentId: props.parentId,
   }).then(() => {
-    emit("addedSection");
-    toaster.success("Successfully Added Expression Section Info!");
-    cancelEdit();
-  });
-});
+    emit('addedSection')
+    toaster.success('Successfully Added Expression Section Info!')
+    cancelEdit()
+  })
+})
 
-const nameField = props.addExpressionHeader ? 'Expression Name' : 'Name';
+const nameField = props.addExpressionHeader ? 'Expression Name' : 'Name'
 
 </script>
 

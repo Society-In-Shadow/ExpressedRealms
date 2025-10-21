@@ -1,19 +1,19 @@
 <script setup lang="ts">
 
-import {onMounted, type PropType, ref} from "vue";
-import {UserRoles, userStore} from "@/stores/userStore";
-import Button from "primevue/button";
-import {type StatModifierReturnModel,} from "@/components/modifiergroups/types.ts";
-import {modifierConfirmationPopup} from "@/components/modifiergroups/services/confirmationPopupService.ts";
-import EditModifier from "@/components/modifiergroups/EditModifier.vue";
-import Tag from "primevue/tag";
+import { onMounted, type PropType, ref } from 'vue'
+import { UserRoles, userStore } from '@/stores/userStore'
+import Button from 'primevue/button'
+import { type StatModifierReturnModel } from '@/components/modifiergroups/types.ts'
+import { modifierConfirmationPopup } from '@/components/modifiergroups/services/confirmationPopupService.ts'
+import EditModifier from '@/components/modifiergroups/EditModifier.vue'
+import Tag from 'primevue/tag'
 
-let userInfo = userStore();
+let userInfo = userStore()
 
 const props = defineProps({
   groupId: {
     type: Number,
-    required: true
+    required: true,
   },
   modifier: {
     type: Object as PropType<StatModifierReturnModel>,
@@ -21,26 +21,26 @@ const props = defineProps({
   },
   isReadOnly: {
     type: Boolean,
-    required: true
-  }
-});
+    required: true,
+  },
+})
 
 let popups = modifierConfirmationPopup()
 
-const showEdit = ref(false);
+const showEdit = ref(false)
 
-const hasKnowledgeManagementRole = ref(false);
+const hasKnowledgeManagementRole = ref(false)
 
 onMounted(async () => {
-  hasKnowledgeManagementRole.value = await userInfo.hasUserRole(UserRoles.KnowledgeManagementRole);
+  hasKnowledgeManagementRole.value = await userInfo.hasUserRole(UserRoles.KnowledgeManagementRole)
 })
 
-function toggleEdit(){
-  showEdit.value = !showEdit.value;
+function toggleEdit() {
+  showEdit.value = !showEdit.value
 }
 
 function formatWithSign(number: number) {
-  return (number > 0 ? '+' : '') + number;
+  return (number > 0 ? '+' : '') + number
 }
 </script>
 
@@ -49,10 +49,17 @@ function formatWithSign(number: number) {
     <EditModifier :group-id="props.groupId" :modifier="props.modifier" @canceled="toggleEdit" />
   </div>
   <div v-else class="d-flex flex-column flex-md-row align-self-center justify-content-between m-2">
-    <div class="align-self-center">{{ formatWithSign(props.modifier.modifier) }} {{ props.modifier?.statModifier.name }} 
-      <Tag v-if="props.modifier?.scaleWithLevel" severity="info" class="mx-2"><span title="Scales with Level">SwL</span></Tag>
-      <Tag v-if="props.modifier?.creationSpecificBonus" severity="info"><span title="Use this to bypass modifier being multiplied by level 0">IL0</span></Tag>
-      <Tag v-if="props.modifier?.targetExpression" severity="info" class="ml-2"><span>{{props.modifier.targetExpression.name}}</span></Tag>
+    <div class="align-self-center">
+      {{ formatWithSign(props.modifier.modifier) }} {{ props.modifier?.statModifier.name }}
+      <Tag v-if="props.modifier?.scaleWithLevel" severity="info" class="mx-2">
+        <span title="Scales with Level">SwL</span>
+      </Tag>
+      <Tag v-if="props.modifier?.creationSpecificBonus" severity="info">
+        <span title="Use this to bypass modifier being multiplied by level 0">IL0</span>
+      </Tag>
+      <Tag v-if="props.modifier?.targetExpression" severity="info" class="ml-2">
+        <span>{{ props.modifier.targetExpression.name }}</span>
+      </Tag>
     </div>
     <div
       v-if="!showEdit && hasKnowledgeManagementRole && !props.isReadOnly"

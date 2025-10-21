@@ -1,59 +1,59 @@
 <script setup lang="ts">
 
-import Button from 'primevue/button';
-import Card from 'primevue/card';
-import axios from "axios";
-import { useForm } from 'vee-validate';
-import { object, string, ref }  from 'yup';
-import Message from "primevue/message";
-import { ref as vueRef } from 'vue';
-import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
-import toasters from "@/services/Toasters";
+import Button from 'primevue/button'
+import Card from 'primevue/card'
+import axios from 'axios'
+import { useForm } from 'vee-validate'
+import { object, ref, string } from 'yup'
+import Message from 'primevue/message'
+import { ref as vueRef } from 'vue'
+import InputTextWrapper from '@/FormWrappers/InputTextWrapper.vue'
+import toasters from '@/services/Toasters'
 
 const { defineField, handleSubmit, errors, setErrors } = useForm({
   validationSchema: object({
     currentPassword: string().required()
-        .label('Current Password'),
+      .label('Current Password'),
     password: string()
-        .required()
-        .min(8)
-        .matches(/[0-9]/, 'Password requires a number')
-        .matches(/[a-z]/, 'Password requires a lowercase letter')
-        .matches(/[A-Z]/, 'Password requires an uppercase letter')
-        .matches(/[^\w]/, 'Password requires a symbol')
-        .label('Password'),
+      .required()
+      .min(8)
+      .matches(/[0-9]/, 'Password requires a number')
+      .matches(/[a-z]/, 'Password requires a lowercase letter')
+      .matches(/[A-Z]/, 'Password requires an uppercase letter')
+      .matches(/[^\w]/, 'Password requires a symbol')
+      .label('Password'),
     confirmPassword: string().required()
-        .oneOf([ref('password')], 'Passwords must match')
-        .label('Confirm password')
-  })
-});
+      .oneOf([ref('password')], 'Passwords must match')
+      .label('Confirm password'),
+  }),
+})
 
-const [currentPassword] = defineField('currentPassword');
-const [password] = defineField('password');
-const [confirmPassword] = defineField('confirmPassword');
-const successfullyChangedPassword = vueRef(false);
+const [currentPassword] = defineField('currentPassword')
+const [password] = defineField('password')
+const [confirmPassword] = defineField('confirmPassword')
+const successfullyChangedPassword = vueRef(false)
 
 const onPasswordSubmit = handleSubmit((values, { resetForm }) => {
   axios.post('/auth/manage/info',
-      {
-        oldPassword: values.currentPassword,
-        newPassword: values.confirmPassword
-      }).then(() => {
-        successfullyChangedPassword.value = true;
-        toasters.success("Successfully changed password!");
-        resetForm();
-      })
-      .catch((error) => {
-        successfullyChangedPassword.value = false;
-        if (error.response?.status === 400){
-          if(error.response.data?.errors?.PasswordMismatch) {
-            setErrors({ currentPassword: error.response.data.errors.PasswordMismatch });
-          }
-          return;
+    {
+      oldPassword: values.currentPassword,
+      newPassword: values.confirmPassword,
+    }).then(() => {
+    successfullyChangedPassword.value = true
+    toasters.success('Successfully changed password!')
+    resetForm()
+  })
+    .catch((error) => {
+      successfullyChangedPassword.value = false
+      if (error.response?.status === 400) {
+        if (error.response.data?.errors?.PasswordMismatch) {
+          setErrors({ currentPassword: error.response.data.errors.PasswordMismatch })
         }
-        throw error;
-      });
-});
+        return
+      }
+      throw error
+    })
+})
 
 </script>
 

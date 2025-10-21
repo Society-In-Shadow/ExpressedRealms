@@ -1,70 +1,71 @@
 <script setup lang="ts">
 
-import FormTextAreaWrapper from "@/FormWrappers/FormTextAreaWrapper.vue";
-import Button from "primevue/button";
-import {useRoute} from "vue-router";
-import {computed, type PropType, ref, watch} from "vue";
-import type {Blessing, BlessingLevel} from "@/components/blessings/types.ts";
-import RadioButton from "primevue/radiobutton";
+import FormTextAreaWrapper from '@/FormWrappers/FormTextAreaWrapper.vue'
+import Button from 'primevue/button'
+import {useRoute} from 'vue-router'
+import {computed, type PropType, ref, watch} from 'vue'
+import type {Blessing, BlessingLevel} from '@/components/blessings/types.ts'
+import RadioButton from 'primevue/radiobutton'
 import {
-  getValidationInstance
-} from "@/components/characters/character/wizard/blessings/validators/blessingValidations.ts";
+  getValidationInstance,
+} from '@/components/characters/character/wizard/blessings/validators/blessingValidations.ts'
 import {
-  characterBlessingsStore
-} from "@/components/characters/character/wizard/blessings/stores/characterBlessingStore.ts";
+  characterBlessingsStore,
+} from '@/components/characters/character/wizard/blessings/stores/characterBlessingStore.ts'
 import {
   experienceStore,
   type XpSectionType,
   XpSectionTypes,
-} from "@/components/characters/character/stores/experienceBreakdownStore.ts";
-import Message from "primevue/message";
-import {characterStore} from "@/components/characters/character/stores/characterStore.ts";
-import ShowXPCosts from "@/components/characters/character/wizard/ShowXPCosts.vue";
+} from '@/components/characters/character/stores/experienceBreakdownStore.ts'
+import Message from 'primevue/message'
+import {characterStore} from '@/components/characters/character/stores/characterStore.ts'
+import ShowXPCosts from '@/components/characters/character/wizard/ShowXPCosts.vue'
 
-const store = characterBlessingsStore();
-const form = getValidationInstance();
-const route = useRoute();
-const experienceInfo = experienceStore();
-const characterInfo = characterStore();
+const store = characterBlessingsStore()
+const form = getValidationInstance()
+const route = useRoute()
+const experienceInfo = experienceStore()
+const characterInfo = characterStore()
 
-const availableXp = ref(0);
+const availableXp = ref(0)
 
 const props = defineProps({
   blessing: {
     type: Object as PropType<Blessing>,
     required: true,
-  }
-});
+  },
+})
 
 watch(() => props.blessing, async () => {
-  let sectionType: XpSectionType = props.blessing.type.toLowerCase() == 'disadvantage' ? XpSectionTypes.disadvantage : XpSectionTypes.advantage;
-  let xpInfo = experienceInfo.getExperienceInfoForSection(sectionType);
-  if(sectionType == XpSectionTypes.advantage){
-    availableXp.value = xpInfo.availableXp;
-  }else{
-    availableXp.value = xpInfo.characterCreateMax - xpInfo.total;
+  let sectionType: XpSectionType = props.blessing.type.toLowerCase() == 'disadvantage' ? XpSectionTypes.disadvantage : XpSectionTypes.advantage
+  let xpInfo = experienceInfo.getExperienceInfoForSection(sectionType)
+  if (sectionType == XpSectionTypes.advantage) {
+    availableXp.value = xpInfo.availableXp
+  }
+  else {
+    availableXp.value = xpInfo.characterCreateMax - xpInfo.total
   }
 
-  form.customResetForm();
-}, {immediate: true})
+  form.customResetForm()
+}, { immediate: true })
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await store.addBlessing(values, route.params.id, props.blessing.id);
-});
+  await store.addBlessing(values, route.params.id, props.blessing.id)
+})
 
-function disableOption(level:BlessingLevel){
-  if(props.blessing.type.toLowerCase() == 'disadvantage'){
-    return level.xpGain > availableXp.value;
+function disableOption(level: BlessingLevel) {
+  if (props.blessing.type.toLowerCase() == 'disadvantage') {
+    return level.xpGain > availableXp.value
   }
-  return level.xpCost > availableXp.value;
+  return level.xpCost > availableXp.value
 }
 
-function updateLevel(level:BlessingLevel){
+function updateLevel(level: BlessingLevel) {
   form.blessingLevel.field.value = level
 }
 
 const xpSectionType = computed(() => {
-  return props.blessing.type.toLowerCase() == 'disadvantage' ? XpSectionTypes.disadvantage : XpSectionTypes.advantage;
+  return props.blessing.type.toLowerCase() == 'disadvantage' ? XpSectionTypes.disadvantage : XpSectionTypes.advantage
 })
 
 </script>
@@ -73,25 +74,27 @@ const xpSectionType = computed(() => {
   <h1 class="pt-0 mt-0">
     {{ props.blessing.name }}
   </h1>
-  
-  <div v-html="props.blessing?.description"></div>
+
+  <div v-html="props.blessing?.description" />
   <ShowXPCosts v-if="characterInfo.isInCharacterCreation" :section-type="xpSectionType" class="pt-3" />
   <div v-if="availableXp == 0">
-    <Message severity="warn" class="mt-4">You do not have enough experience to add this to your character.</Message>
+    <Message severity="warn" class="mt-4">
+      You do not have enough experience to add this to your character.
+    </Message>
   </div>
   <form @submit="onSubmit">
     <div v-for="level in props.blessing.levels" :key="level.id" class="mt-3">
       <div class="d-flex flex-column flex-md-row align-self-center">
-        <RadioButton :inputId="level.id.toString()" :value="level" class="mr-4" :disabled="disableOption(level) || !characterInfo.isInCharacterCreation" @click="updateLevel(level)"/>
+        <RadioButton :input-id="level.id.toString()" :value="level" class="mr-4" :disabled="disableOption(level) || !characterInfo.isInCharacterCreation" @click="updateLevel(level)" />
         <label :for="level.id.toString()" :class="disableOption(level) ? 'non-selectable' : ''">{{ level.name }} – {{ level.description }}</label>
       </div>
     </div>
-    
-    <div class="mt-4" v-if="characterInfo.isInCharacterCreation">
+
+    <div v-if="characterInfo.isInCharacterCreation" class="mt-4">
       <FormTextAreaWrapper v-model="form.notes" :disabled="availableXp == 0" />
     </div>
 
-    <div class="m-3 text-right" v-if="availableXp != 0 && characterInfo.isInCharacterCreation">
+    <div v-if="availableXp != 0 && characterInfo.isInCharacterCreation" class="m-3 text-right">
       <Button label="Add" class="m-2" type="submit" />
     </div>
   </form>

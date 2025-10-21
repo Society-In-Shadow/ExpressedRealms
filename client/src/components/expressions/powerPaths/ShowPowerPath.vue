@@ -1,25 +1,25 @@
 <script setup lang="ts">
 
-import {onMounted, ref} from "vue";
-import Button from 'primevue/button';
-import EditPowerPath from "@/components/expressions/powerPaths/EditPowerPath.vue";
+import {onMounted, ref} from 'vue'
+import Button from 'primevue/button'
+import EditPowerPath from '@/components/expressions/powerPaths/EditPowerPath.vue'
 import {
-  powerPathConfirmationPopups
-} from "@/components/expressions/powerPaths/services/powerPathConfirmationPopupService";
-import {UserRoles, userStore} from "@/stores/userStore";
-import {makeIdSafe} from "@/utilities/stringUtilities";
+  powerPathConfirmationPopups,
+} from '@/components/expressions/powerPaths/services/powerPathConfirmationPopupService'
+import {UserRoles, userStore} from '@/stores/userStore'
+import {makeIdSafe} from '@/utilities/stringUtilities'
 
-let userInfo = userStore();
+let userInfo = userStore()
 
-const showEdit = ref(false);
+const showEdit = ref(false)
 const toggleEdit = () => {
-  showEdit.value = !showEdit.value;
+  showEdit.value = !showEdit.value
 }
 
-const hasPowerManagementRole = ref(false);
+const hasPowerManagementRole = ref(false)
 
 onMounted(async () => {
-  hasPowerManagementRole.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole);
+  hasPowerManagementRole.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole)
 })
 
 const props = defineProps({
@@ -27,17 +27,17 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  path:{
+  path: {
     type: Object,
-    required: true
+    required: true,
   },
-  isReadOnly:{
+  isReadOnly: {
     type: Boolean,
-    required: false
-  }
-});
+    required: false,
+  },
+})
 
-const popups = powerPathConfirmationPopups(props.path.id, props.path.name);
+const popups = powerPathConfirmationPopups(props.path.id, props.path.name)
 
 </script>
 

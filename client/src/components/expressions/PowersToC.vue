@@ -1,18 +1,18 @@
 <script setup lang="ts">
 
-import {makeIdSafe} from "@/utilities/stringUtilities";
-import Skeleton from 'primevue/skeleton';
-import {scrollToSection} from "@/components/expressions/expressionUtilities";
-import {powerPathStore} from "@/components/expressions/powerPaths/stores/powerPathStore";
+import {makeIdSafe} from '@/utilities/stringUtilities'
+import Skeleton from 'primevue/skeleton'
+import {scrollToSection} from '@/components/expressions/expressionUtilities'
+import {powerPathStore} from '@/components/expressions/powerPaths/stores/powerPathStore'
 
-const powerPaths = powerPathStore();
+const powerPaths = powerPathStore()
 
 const props = defineProps({
-  showSkeleton:{
+  showSkeleton: {
     type: Boolean,
-    required: true
-  }
-});
+    required: true,
+  },
+})
 
 </script>
 

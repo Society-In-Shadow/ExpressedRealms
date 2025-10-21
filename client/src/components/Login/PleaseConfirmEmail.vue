@@ -1,21 +1,22 @@
 <script setup lang="ts">
 
-  import Button from 'primevue/button';
-  import axios from "axios";
-  import { logOff } from "@/services/Authentication";
-  import {userStore} from "@/stores/userStore";
-  import { ref } from 'vue'
-  import {useRouter} from "vue-router";
-  let userInfo = userStore();
-  const router = useRouter();
+import Button from 'primevue/button'
+import axios from 'axios'
+import { logOff } from '@/services/Authentication'
+import { userStore } from '@/stores/userStore'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
-  let sentConfirmationEmail = ref(false);
-  async function resendConfirmationEmail() {
-    await axios.post("/auth/resendConfirmationEmail", { email: userInfo.userEmail })
-        .then(() => {
-          sentConfirmationEmail.value = true;
-        });
-  }
+let userInfo = userStore()
+const router = useRouter()
+
+let sentConfirmationEmail = ref(false)
+async function resendConfirmationEmail() {
+  await axios.post('/auth/resendConfirmationEmail', { email: userInfo.userEmail })
+    .then(() => {
+      sentConfirmationEmail.value = true
+    })
+}
 </script>
 
 <template>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
-import Card from 'primevue/card';
-import Message from 'primevue/message';
+import Card from 'primevue/card'
+import Message from 'primevue/message'
 </script>
 
 <template>
@@ -28,7 +28,7 @@ import Message from 'primevue/message';
 <style scoped>
 
 #loginBox {
-  border-radius: 1em; 
+  border-radius: 1em;
 }
 
 @media (min-width: 540px) and (min-height: 450px) {

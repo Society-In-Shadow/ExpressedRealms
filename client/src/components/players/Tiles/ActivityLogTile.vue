@@ -1,14 +1,14 @@
 <script setup lang="ts">
-  import Card from "primevue/card";
-  import type {PropType} from "vue";
-  import type {Log} from "@/components/players/Objects/ActivityLogs";
-  
-  const props = defineProps({
-    log: {
-      type: Object as PropType<Log>,
-      required: true,
-    }
-  });
+import Card from 'primevue/card'
+import type { PropType } from 'vue'
+import type { Log } from '@/components/players/Objects/ActivityLogs'
+
+const props = defineProps({
+  log: {
+    type: Object as PropType<Log>,
+    required: true,
+  },
+})
 
 </script>
 

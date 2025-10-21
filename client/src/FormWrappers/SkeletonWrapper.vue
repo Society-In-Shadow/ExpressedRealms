@@ -1,13 +1,13 @@
 <script setup lang="ts">
 
-import Skeleton from 'primevue/skeleton';
+import Skeleton from 'primevue/skeleton'
 
 defineProps({
   showSkeleton: {
     type: Boolean,
     required: true,
   },
-});
+})
 
 </script>
 

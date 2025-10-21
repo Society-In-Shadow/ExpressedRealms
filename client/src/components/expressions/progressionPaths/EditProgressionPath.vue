@@ -1,22 +1,22 @@
 <script setup lang="ts">
 
-import FormEditorWrapper from "@/FormWrappers/FormEditorWrapper.vue";
-import FormInputTextWrapper from "@/FormWrappers/FormInputTextWrapper.vue";
-import Button from "primevue/button";
-import axios from "axios";
-import toaster from "@/services/Toasters";
-import {onBeforeMount} from "vue";
-import {progressionPathStore} from "@/components/expressions/progressionPaths/stores/progressionPathsStore.ts";
+import FormEditorWrapper from '@/FormWrappers/FormEditorWrapper.vue'
+import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
+import Button from 'primevue/button'
+import axios from 'axios'
+import toaster from '@/services/Toasters'
+import {onBeforeMount} from 'vue'
+import {progressionPathStore} from '@/components/expressions/progressionPaths/stores/progressionPathsStore.ts'
 import {
-  getValidationInstance
-} from "@/components/expressions/progressionPaths/validations/progressionPathValidations.ts";
+  getValidationInstance,
+} from '@/components/expressions/progressionPaths/validations/progressionPathValidations.ts'
 
-const form = getValidationInstance();
-const progressionPathInfo = progressionPathStore();
+const form = getValidationInstance()
+const progressionPathInfo = progressionPathStore()
 
 const emit = defineEmits<{
   cancelled: []
-}>();
+}>()
 
 const props = defineProps({
   expressionId: {
@@ -26,8 +26,8 @@ const props = defineProps({
   progressionId: {
     type: Number,
     required: true,
-  }
-});
+  },
+})
 
 const onSubmit = form.handleSubmit(async (values) => {
   await axios.put(`/expression/${props.expressionId}/progressions/${props.progressionId}`, {
@@ -35,21 +35,21 @@ const onSubmit = form.handleSubmit(async (values) => {
     name: values.name,
     description: values.description,
   })
-  .then(async () => {
-    await progressionPathInfo.getProgressionPaths(props.expressionId);
-    reset();
-    toaster.success("Successfully Updated Progression Path!");
-  });
-});
+    .then(async () => {
+      await progressionPathInfo.getProgressionPaths(props.expressionId)
+      reset()
+      toaster.success('Successfully Updated Progression Path!')
+    })
+})
 
 onBeforeMount(async () => {
-  const progressionPath = await progressionPathInfo.getProgressionPath(props.progressionId);
-  form.setValues(progressionPath);
+  const progressionPath = await progressionPathInfo.getProgressionPath(props.progressionId)
+  form.setValues(progressionPath)
 })
 
 const reset = () => {
-  form.customResetForm();
-  emit("cancelled");
+  form.customResetForm()
+  emit('cancelled')
 }
 
 </script>

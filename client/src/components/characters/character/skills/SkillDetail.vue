@@ -1,43 +1,42 @@
 <script setup lang="ts">
 
-import {computed, onMounted, ref, type Ref} from "vue";
-import type {SkillResponse} from "@/components/characters/character/skills/interfaces/SkillOptionsResponse";
+import {computed, onMounted, ref, type Ref} from 'vue'
+import type {SkillResponse} from '@/components/characters/character/skills/interfaces/SkillOptionsResponse'
 import {useRoute} from 'vue-router'
-import axios from "axios";
-import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
+import axios from 'axios'
+import SkeletonWrapper from '@/FormWrappers/SkeletonWrapper.vue'
 
-const route = useRoute();
+const route = useRoute()
 
 const props = defineProps({
   skillTypeId: {
     type: Number,
     required: true,
   },
-  selectedLevelId:{
+  selectedLevelId: {
     type: Number,
     required: true,
-  }
-});
+  },
+})
 
-const skillLevels:Ref<Array<SkillResponse>> = ref([]);
-const isLoading = ref(true);
-const selectedItem = ref(props.selectedLevelId);
-
+const skillLevels: Ref<Array<SkillResponse>> = ref([])
+const isLoading = ref(true)
+const selectedItem = ref(props.selectedLevelId)
 
 const selectedLevel = computed(() => {
   return skillLevels.value.find(x => x.levelId === selectedItem.value)
 })
 
-onMounted(async () =>{
-  getEditOptions();
-});
+onMounted(async () => {
+  getEditOptions()
+})
 
 function getEditOptions() {
   axios.get(`characters/${route.params.id}/skills/${props.skillTypeId}`)
-      .then((response) => {
-        skillLevels.value = response.data;
-        isLoading.value = false;
-      })
+    .then((response) => {
+      skillLevels.value = response.data
+      isLoading.value = false
+    })
 }
 
 </script>
@@ -45,7 +44,7 @@ function getEditOptions() {
 <template>
   <div class="row pt-3">
     <div class="col p-0 m-0">
-      <div class="p-3" >
+      <div class="p-3">
         <SkeletonWrapper :show-skeleton="isLoading" height="5rem" width="100%">
           <div class="row">
             <div class="col text-left">

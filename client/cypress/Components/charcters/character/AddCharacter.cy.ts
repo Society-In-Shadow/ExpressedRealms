@@ -54,16 +54,16 @@ describe('<AddCharacter />', () => {
             statusCode: 200,
             body: factionValues2
         }).as('factionOptions2');
-        
+
         cy.mount(addUserProfile);
     });
-    
+
     it('Loading the page doesn\'t validate right away', () => {
         cy.dataCy(nameHelp).should('not.be.visible');
         cy.dataCy(backgroundHelp).should('not.be.visible');
         cy.dataCy(factionHelp).should('not.exist');
     });
-    
+
     it('Name Field follows all Schema Validations', () => {
         cy.dataCy(name).clear();
         cy.dataCy(addCharacterButton).click();
@@ -73,7 +73,7 @@ describe('<AddCharacter />', () => {
         cy.dataCy(name).type("{backspace}");
         cy.dataCy(nameHelp).should('not.be.visible');
     });
-    
+
     it('Expression Field Populates Data', () => {
         cy.dataCy(addCharacterButton).click();
         cy.dataCy(expressionHelp).contains("Expression is a required field");
@@ -108,7 +108,7 @@ describe('<AddCharacter />', () => {
     })
 
     it('Passes Data Through Data To API', () => {
-        
+
         cy.dataCy(name).clear();
         cy.dataCy(name).type("John Doe");
         cy.dataCy(expression).click();
@@ -126,7 +126,7 @@ describe('<AddCharacter />', () => {
             factionId: factionValues[0].id
         });
     });
-    
+
     it('Hides the Faction Field if Feature Flag is Disabled', () => {
         cy.intercept('GET', '/navMenu/featureFlags', {
             statusCode: 200,
@@ -135,6 +135,6 @@ describe('<AddCharacter />', () => {
 
         cy.dataCy(faction).should('not.exist');
     })
-    
+
 });
 */

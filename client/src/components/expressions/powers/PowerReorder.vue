@@ -1,62 +1,61 @@
 <script setup lang="ts">
 
-import {UserRoles, userStore} from "@/stores/userStore";
-import {powersStore} from "@/components/expressions/powers/stores/powersStore";
-import {Drag, DropList} from "vue-easy-dnd";
-import Button from 'primevue/button';
-import {onMounted, ref} from "vue";
-import axios from "axios";
-import {getSortAndIdsForPowerPaths} from "@/components/expressions/powerPaths/utilities/powerPathUtilities";
-import toaster from "@/services/Toasters";
-import type {Power} from "@/components/expressions/powers/types";
+import {UserRoles, userStore} from '@/stores/userStore'
+import {powersStore} from '@/components/expressions/powers/stores/powersStore'
+import {Drag, DropList} from 'vue-easy-dnd'
+import Button from 'primevue/button'
+import {onMounted, ref} from 'vue'
+import axios from 'axios'
+import {getSortAndIdsForPowerPaths} from '@/components/expressions/powerPaths/utilities/powerPathUtilities'
+import toaster from '@/services/Toasters'
+import type {Power} from '@/components/expressions/powers/types'
 
-let userInfo = userStore();
-let powers = powersStore();
+let userInfo = userStore()
+let powers = powersStore()
 
 const props = defineProps({
   powerPathId: {
     type: Number,
     required: true,
   },
-  powers:{
+  powers: {
     type: Array as () => Power[],
     required: true,
   },
-  isReadOnly:{
+  isReadOnly: {
     type: Boolean,
-    required: false
-  }
-});
+    required: false,
+  },
+})
 
 const emit = defineEmits<{
   togglePreview: []
-}>();
+}>()
 
-const hasPowerManagementRole = ref(false);
+const hasPowerManagementRole = ref(false)
 
 onMounted(async () => {
-  hasPowerManagementRole.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole);
+  hasPowerManagementRole.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole)
 })
 
-function saveChanges(){
-
+function saveChanges() {
   axios.put(`/powerpath/${props.powerPathId}/updateSorting`, {
     expressionId: props.powerPathId,
-    items: getSortAndIdsForPowerPaths(props.powers)
+    items: getSortAndIdsForPowerPaths(props.powers),
   }).then(() => {
-    emit("togglePreview");
-    showPowerPathReorder.value = !showPowerPathReorder.value;
-    toaster.success("Successfully Updated Power Sorting!");
-  });
+    emit('togglePreview')
+    showPowerPathReorder.value = !showPowerPathReorder.value
+    toaster.success('Successfully Updated Power Sorting!')
+  })
 }
 
-const showPowerPathReorder = ref(false);
-function toggleEdit(){
-  if(showPowerPathReorder.value)
+const showPowerPathReorder = ref(false)
+function toggleEdit() {
+  if (showPowerPathReorder.value)
     powers.updatePowersByPathId(props.powerPathId)
 
-  emit("togglePreview");
-  showPowerPathReorder.value = !showPowerPathReorder.value;
+  emit('togglePreview')
+  showPowerPathReorder.value = !showPowerPathReorder.value
 }
 
 </script>

@@ -7,14 +7,14 @@ const updateProfileButton = 'update-profile-button';
 
 describe('<AddUserProfile />', () => {
     beforeEach(() => {
-        
+
         cy.intercept('POST', '/player', {
             statusCode: 200
         }).as('updateProfile');
 
         cy.mount(addUserProfile);
     });
-    
+
     it('Loading the page doesn\'t validate right away', () => {
         cy.dataCy(nameHelp).should('not.be.visible');
     });
@@ -23,7 +23,7 @@ describe('<AddUserProfile />', () => {
         cy.dataCy(updateProfileButton).click();
         cy.dataCy(nameHelp).contains("Name is a required field");
     });
-    
+
     it('Name Field follows all Schema Validations', () => {
         cy.dataCy(updateProfileButton).click();
         cy.dataCy(nameHelp).contains("Name is a required field");
@@ -41,6 +41,6 @@ describe('<AddUserProfile />', () => {
             name: 'John Doe'
         });
     });
-    
+
 });
 */

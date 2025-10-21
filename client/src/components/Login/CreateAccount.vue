@@ -1,44 +1,45 @@
 <script setup lang="ts">
 
-import Button from 'primevue/button';
-import axios from "axios";
-import { useForm } from 'vee-validate';
-import { object, string, ref }  from 'yup';
-import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
-import {useRouter} from "vue-router";
-const Router = useRouter();
+import Button from 'primevue/button'
+import axios from 'axios'
+import { useForm } from 'vee-validate'
+import { object, ref, string } from 'yup'
+import InputTextWrapper from '@/FormWrappers/InputTextWrapper.vue'
+import { useRouter } from 'vue-router'
+
+const Router = useRouter()
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
     email: string().required()
-        .email()
-        .label('Email address'),
+      .email()
+      .label('Email address'),
     password: string()
-        .required()
-        .min(8)
-        .matches(/[0-9]/, 'Password requires a number')
-        .matches(/[a-z]/, 'Password requires a lowercase letter')
-        .matches(/[A-Z]/, 'Password requires an uppercase letter')
-        .matches(/[^\w]/, 'Password requires a symbol')
-        .label('Password'),
+      .required()
+      .min(8)
+      .matches(/[0-9]/, 'Password requires a number')
+      .matches(/[a-z]/, 'Password requires a lowercase letter')
+      .matches(/[A-Z]/, 'Password requires an uppercase letter')
+      .matches(/[^\w]/, 'Password requires a symbol')
+      .label('Password'),
     confirmPassword: string().required()
-        .oneOf([ref('password')], 'Passwords must match')
-        .label('Confirm password')
-  })
-});
+      .oneOf([ref('password')], 'Passwords must match')
+      .label('Confirm password'),
+  }),
+})
 
-const [email] = defineField('email');
-const [password] = defineField('password');
+const [email] = defineField('email')
+const [password] = defineField('password')
 const [confirmPassword] = defineField('confirmPassword')
 
 const onSubmit = handleSubmit((values) => {
-  axios.post('/auth/register', 
+  axios.post('/auth/register',
     {
       email: values.email,
-      password: values.confirmPassword
+      password: values.confirmPassword,
     }).then(() => {
-      Router.push("login?createdUser=1")
-    });
-});
+    Router.push('login?createdUser=1')
+  })
+})
 
 </script>
 

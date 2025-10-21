@@ -3,8 +3,8 @@ defineProps({
   item: {
     type: Object,
     required: true,
-  }
-});
+  },
+})
 </script>
 <template>
   <a class="flex flex-shrink-1 align-items-center p-3 cursor-pointer mb-2 gap-2">

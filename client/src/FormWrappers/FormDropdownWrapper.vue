@@ -1,45 +1,45 @@
 <script setup lang="ts">
 
-import Select from 'primevue/select';
-import {computed} from "vue";
-import Skeleton from 'primevue/skeleton';
-import type {FormField} from "@/FormWrappers/Interfaces/FormField";
+import Select from 'primevue/select'
+import { computed } from 'vue'
+import Skeleton from 'primevue/skeleton'
+import type { FormField } from '@/FormWrappers/Interfaces/FormField'
 
-const model = defineModel<FormField>({ required: true, type: Object });
+const model = defineModel<FormField>({ required: true, type: Object })
 
 defineOptions({
-  inheritAttrs: false
+  inheritAttrs: false,
 })
 
 const props = defineProps({
   options: {
     type: Array,
-    required: true
+    required: true,
   },
   optionLabel: {
     type: String,
-    required: true
+    required: true,
   },
   dataCyTag: {
     type: String,
-    default: ""
+    default: '',
   },
   showSkeleton: {
     type: Boolean,
-    default: false
+    default: false,
   },
-  labelOverride:{
+  labelOverride: {
     type: String,
-    default: ""
-  }
-});
+    default: '',
+  },
+})
 
 const dataCyTagCalc = computed(() => {
-  if(props.dataCyTag != ""){
-    return props.dataCyTag;
+  if (props.dataCyTag != '') {
+    return props.dataCyTag
   }
-  return model.value.label.replace(" ", "-").toLowerCase();
-});
+  return model.value.label.replace(' ', '-').toLowerCase()
+})
 
 </script>
 

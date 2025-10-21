@@ -1,22 +1,21 @@
 <script setup lang="ts">
 
-import FormEditorWrapper from "@/FormWrappers/FormEditorWrapper.vue";
-import FormInputTextWrapper from "@/FormWrappers/FormInputTextWrapper.vue";
-import Button from "primevue/button";
-import axios from "axios";
-import toaster from "@/services/Toasters";
-import {progressionPathStore} from "@/components/expressions/progressionPaths/stores/progressionPathsStore.ts";
+import FormEditorWrapper from '@/FormWrappers/FormEditorWrapper.vue'
+import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
+import Button from 'primevue/button'
+import axios from 'axios'
+import toaster from '@/services/Toasters'
+import {progressionPathStore} from '@/components/expressions/progressionPaths/stores/progressionPathsStore.ts'
 import {
-  getValidationInstance
-} from "@/components/expressions/progressionLevels/validations/progressionLevelValidations.ts";
+  getValidationInstance,
+} from '@/components/expressions/progressionLevels/validations/progressionLevelValidations.ts'
 
-
-const form = getValidationInstance();
-const progressionPathInfo = progressionPathStore();
+const form = getValidationInstance()
+const progressionPathInfo = progressionPathStore()
 
 const emit = defineEmits<{
   canceled: []
-}>();
+}>()
 
 const props = defineProps({
   expressionId: {
@@ -26,24 +25,24 @@ const props = defineProps({
   progressionId: {
     type: Number,
     required: true,
-  }
-});
+  },
+})
 
 const onSubmit = form.handleSubmit(async (values) => {
   await axios.post(`/expression/${props.expressionId}/progressions/${props.progressionId}/levels`, {
     xlLevel: values.xlLevel,
     description: values.description,
   })
-  .then(async () => {
-    await progressionPathInfo.getProgressionPaths(props.expressionId);
-    reset();
-    toaster.success("Successfully Added Progression Path!");
-  });
-});
+    .then(async () => {
+      await progressionPathInfo.getProgressionPaths(props.expressionId)
+      reset()
+      toaster.success('Successfully Added Progression Path!')
+    })
+})
 
 const reset = () => {
-  form.customResetForm();
-  emit("canceled");
+  form.customResetForm()
+  emit('canceled')
 }
 
 </script>

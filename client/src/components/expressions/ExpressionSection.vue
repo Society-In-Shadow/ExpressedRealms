@@ -1,13 +1,13 @@
 <script setup lang="ts">
 
-import EditExpressionSection from "@/components/expressions/EditExpressionSection.vue";
+import EditExpressionSection from '@/components/expressions/EditExpressionSection.vue'
 
 const emit = defineEmits<{
   refreshList: []
-}>();
+}>()
 
-function passThroughAddedSection(){
-  emit("refreshList");
+function passThroughAddedSection() {
+  emit('refreshList')
 }
 
 const props = defineProps({
@@ -17,17 +17,17 @@ const props = defineProps({
   },
   currentLevel: {
     type: Number,
-    required: true
+    required: true,
   },
-  showSkeleton:{
+  showSkeleton: {
     type: Boolean,
-    required: true
+    required: true,
   },
-  showEdit:{
+  showEdit: {
     type: Boolean,
-    required: true
-  }
-});
+    required: true,
+  },
+})
 
 </script>
 

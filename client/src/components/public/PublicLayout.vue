@@ -1,10 +1,9 @@
 <script setup lang="ts">
 
-import Message from 'primevue/message';
-import {RouterView} from "vue-router";
-import Card from 'primevue/card';
-import PublicMenu from "@/components/public/PublicMenu.vue";
-
+import Message from 'primevue/message'
+import { RouterView } from 'vue-router'
+import Card from 'primevue/card'
+import PublicMenu from '@/components/public/PublicMenu.vue'
 </script>
 
 <template>
@@ -42,7 +41,7 @@ import PublicMenu from "@/components/public/PublicMenu.vue";
  .constrain-width {
    max-width: 1000px;
  }
- 
+
  .min-vh-98 {
    min-height: 98vh;
  }

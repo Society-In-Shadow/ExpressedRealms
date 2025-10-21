@@ -1,17 +1,18 @@
 <script setup lang="ts">
 
-import Dropdown from 'primevue/dropdown';
-import {computed} from "vue";
-import Skeleton from 'primevue/skeleton';
-import InputGroup from 'primevue/inputgroup';
+import Dropdown from 'primevue/dropdown'
+import { computed } from 'vue'
+import Skeleton from 'primevue/skeleton'
+import InputGroup from 'primevue/inputgroup'
 import Button from 'primevue/button'
-import { useRouter } from "vue-router";
-const Router = useRouter();
+import { useRouter } from 'vue-router'
 
-const model = defineModel({ required: false, default: {}, type: Object });
+const Router = useRouter()
+
+const model = defineModel({ required: false, default: {}, type: Object })
 
 defineOptions({
-  inheritAttrs: false
+  inheritAttrs: false,
 })
 
 const props = defineProps({
@@ -21,46 +22,47 @@ const props = defineProps({
   },
   options: {
     type: Array,
-    required: true
+    required: true,
   },
   optionLabel: {
     type: String,
-    required: true
+    required: true,
   },
   dataCyTag: {
     type: String,
-    default: ""
+    default: '',
   },
   errorText: {
     type: String,
-    default: ""
+    default: '',
   },
   showSkeleton: {
     type: Boolean,
-    default: false
+    default: false,
   },
-  redirectUrl:{
+  redirectUrl: {
     type: String,
-    required: true
+    required: true,
   },
-  redirectToDifferentPage:{
+  redirectToDifferentPage: {
     type: Boolean,
-    default: false
-  }
-});
+    default: false,
+  },
+})
 
 const dataCyTagCalc = computed(() => {
-  if(props.dataCyTag != ""){
-    return props.dataCyTag;
+  if (props.dataCyTag != '') {
+    return props.dataCyTag
   }
-  return props.fieldName.replace(" ", "-").toLowerCase();
-});
+  return props.fieldName.replace(' ', '-').toLowerCase()
+})
 
-function redirectUser(openInNewTab:boolean) {
-  if(!openInNewTab){
-    Router.push(props.redirectUrl);
-  }else{
-    window.open(props.redirectUrl, "_blank");
+function redirectUser(openInNewTab: boolean) {
+  if (!openInNewTab) {
+    Router.push(props.redirectUrl)
+  }
+  else {
+    window.open(props.redirectUrl, '_blank')
   }
 }
 

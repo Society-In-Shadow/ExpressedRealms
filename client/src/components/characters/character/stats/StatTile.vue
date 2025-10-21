@@ -1,29 +1,29 @@
 <script setup lang="ts">
 
-import Fieldset from 'primevue/fieldset';
-import axios from "axios";
-import {onMounted, ref} from "vue";
+import Fieldset from 'primevue/fieldset'
+import axios from 'axios'
+import {onMounted, ref} from 'vue'
 import {useRoute} from 'vue-router'
-import SkeletonWrapper from "@/FormWrappers/SkeletonWrapper.vue";
-import StatInfo from "@/components/characters/character/stats/StatInfo.vue";
+import SkeletonWrapper from '@/FormWrappers/SkeletonWrapper.vue'
+import StatInfo from '@/components/characters/character/stats/StatInfo.vue'
 
 const route = useRoute()
-const stats = ref([ {}, {}, {}, {}, {}, {}]);
-const showDetails = ref(false);
-const selectedStatType = ref(1);
-const isLoading = ref(true);
+const stats = ref([{}, {}, {}, {}, {}, {}])
+const showDetails = ref(false)
+const selectedStatType = ref(1)
+const isLoading = ref(true)
 
-onMounted(async () =>{
+onMounted(async () => {
   axios.get(`/characters/${route.params.id}/stats`)
-      .then((response) => {
-        stats.value = response.data;
-        isLoading.value = false;
-      });
-});
+    .then((response) => {
+      stats.value = response.data
+      isLoading.value = false
+    })
+})
 
-function showDetailedStat(statTypeId:number){
-  selectedStatType.value = statTypeId;
-  showDetails.value = !showDetails.value;
+function showDetailedStat(statTypeId: number) {
+  selectedStatType.value = statTypeId
+  showDetails.value = !showDetails.value
 }
 </script>
 
@@ -62,7 +62,7 @@ function showDetailedStat(statTypeId:number){
   position: relative;
   top: .4em;
   width: 30px;
-  left: .9em; 
+  left: .9em;
   padding: 5px !important;
   font-size: small
 }

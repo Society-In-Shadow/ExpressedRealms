@@ -3,8 +3,8 @@ defineProps({
   item: {
     type: Object,
     required: true,
-  }
-});
+  },
+})
 
 </script>
 <template>

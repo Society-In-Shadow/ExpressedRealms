@@ -47,33 +47,31 @@
   <p>
     Take a look at our upcoming events for more information on where we are next!
   </p>
-  
+
   <h1>History</h1>
   <p>
-    Society in Shadows has been around since the mid 1990's.  We've had players from Kansas City all the way to 
-    Minneapolis and further. With a former peak of 87 players and averaging around 30-40 players, and after a brief 
+    Society in Shadows has been around since the mid 1990's.  We've had players from Kansas City all the way to
+    Minneapolis and further. With a former peak of 87 players and averaging around 30-40 players, and after a brief
     interim, we have returned, better than ever. Our Main Staff has been playing the game for many years, and have been
     hard at work making this the best iteration of the game it can be.
   </p>
-  
+
   <h1>Who We Are</h1>
   <p>
     We are a dedicated group of former players who are working to once more help bring back a game that has been beloved,
-    cherished and has helped inspire us with the world and stories told within it.  The core group working towards 
-    resurrecting the game have previously played the 6 stones ran incarnation of the game for many years and we want to 
+    cherished and has helped inspire us with the world and stories told within it.  The core group working towards
+    resurrecting the game have previously played the 6 stones ran incarnation of the game for many years and we want to
     continue the legacy of that while continuing to expand and grow the game that we all fell in love with. Our goal is
-    to have an accessible and inclusive LARP where everyone is able to tell collaborative stories no matter your 
+    to have an accessible and inclusive LARP where everyone is able to tell collaborative stories no matter your
     experience level with the medium
   </p>
 
   <h1>Concerns</h1>
   <p>
-    For those under the age of 18, we do require Parental Consent from a legal Guardian. We do inform our staff, and 
+    For those under the age of 18, we do require Parental Consent from a legal Guardian. We do inform our staff, and
     ask that all players treat the younger ones with respect, and keep their language clean and appropriate around them.
-    We do ask for an emergency contact in case things go awry and you inform us of any potential concerns as well. 
-    (i.e. medical, physical)  
+    We do ask for an emergency contact in case things go awry and you inform us of any potential concerns as well.
+    (i.e. medical, physical)
   </p>
   <p><a href="https://docs.google.com/document/d/1ogaB9BuM5qFATvslI7SRd7Rc4jjlV8kL0-j-oQKmGdI/edit?usp=sharing">Parental Consent Form</a></p>
 </template>
-<script setup lang="ts">
-</script>

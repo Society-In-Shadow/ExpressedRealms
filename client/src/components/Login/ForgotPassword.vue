@@ -1,29 +1,30 @@
 <script setup lang="ts">
 
-import Button from 'primevue/button';
-import { useForm } from 'vee-validate';
-import { object, string }  from 'yup';
-import axios from "axios";
-import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
-import {useRouter} from "vue-router";
-const Router = useRouter();
+import Button from 'primevue/button'
+import { useForm } from 'vee-validate'
+import { object, string } from 'yup'
+import axios from 'axios'
+import InputTextWrapper from '@/FormWrappers/InputTextWrapper.vue'
+import { useRouter } from 'vue-router'
+
+const Router = useRouter()
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
     email: string().required()
-        .email()
-        .label('Email address')
-  })
-});
+      .email()
+      .label('Email address'),
+  }),
+})
 
-const [email] = defineField('email');
+const [email] = defineField('email')
 
 const onSubmit = handleSubmit((values) => {
   axios.post('/auth/forgotPassword', values)
-      .then(() => {
-        Router.push('login?forgotPassword=1');
-      });
-});
+    .then(() => {
+      Router.push('login?forgotPassword=1')
+    })
+})
 
 </script>
 

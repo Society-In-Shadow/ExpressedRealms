@@ -1,14 +1,13 @@
-
 <script setup lang="ts">
-import {onMounted} from 'vue';
-import CharacterTile from "@/components/characters/tiles/CharacterTile.vue";
-import AddCharacterTile from "@/components/characters/tiles/AddCharacterTile.vue";
-import {charactersStore} from "@/components/characters/stores/charactersStore.ts";
+import {onMounted} from 'vue'
+import CharacterTile from '@/components/characters/tiles/CharacterTile.vue'
+import AddCharacterTile from '@/components/characters/tiles/AddCharacterTile.vue'
+import {charactersStore} from '@/components/characters/stores/charactersStore.ts'
 
-const charactersData = charactersStore();
+const charactersData = charactersStore()
 
 onMounted(async () => {
-  await charactersData.getCharacters();
+  await charactersData.getCharacters()
 })
 </script>
 
@@ -18,10 +17,10 @@ onMounted(async () => {
   </div>
   <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
     <CharacterTile
-      v-for="character in charactersData.characters" 
+      v-for="character in charactersData.characters"
       :key="character.id"
-      :character-id="Number(character.id)" 
-      :character-name="character.name" 
+      :character-id="Number(character.id)"
+      :character-name="character.name"
       :background-story="character.background"
       :expression="character.expression"
       :is-primary-character="character.isPrimaryCharacter"

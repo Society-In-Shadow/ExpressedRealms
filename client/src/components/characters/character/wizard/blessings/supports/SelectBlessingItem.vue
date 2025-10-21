@@ -1,14 +1,14 @@
 <script setup lang="ts">
 
-import {onMounted, type PropType, ref} from "vue";
-import type {Blessing} from "@/components/blessings/types";
-import {UserRoles, userStore} from "@/stores/userStore.ts";
-import Button from "primevue/button";
-import AddCharacterBlessing from "@/components/characters/character/wizard/blessings/supports/AddCharacterBlessing.vue";
-import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
-import type {WizardContent} from "@/components/characters/character/wizard/types.ts";
+import {onMounted, type PropType, ref} from 'vue'
+import type {Blessing} from '@/components/blessings/types'
+import {UserRoles, userStore} from '@/stores/userStore.ts'
+import Button from 'primevue/button'
+import AddCharacterBlessing from '@/components/characters/character/wizard/blessings/supports/AddCharacterBlessing.vue'
+import {wizardContentStore} from '@/components/characters/character/wizard/stores/wizardContentStore.ts'
+import type {WizardContent} from '@/components/characters/character/wizard/types.ts'
 
-const userInfo = userStore();
+const userInfo = userStore()
 
 const props = defineProps({
   blessing: {
@@ -17,24 +17,24 @@ const props = defineProps({
   },
   isReadOnly: {
     type: Boolean,
-    required: true
-  }
-});
-
-const hasBlessingRole = ref(false);
-
-onMounted(async () => {
-  hasBlessingRole.value = await userInfo.hasUserRole(UserRoles.BlessingsManagementRole);
+    required: true,
+  },
 })
 
-const wizardContentInfo = wizardContentStore();
+const hasBlessingRole = ref(false)
+
+onMounted(async () => {
+  hasBlessingRole.value = await userInfo.hasUserRole(UserRoles.BlessingsManagementRole)
+})
+
+const wizardContentInfo = wizardContentStore()
 const updateWizardContent = () => {
   wizardContentInfo.updateContent(
-      {
-        headerName: 'Add Blessing',
-        component: AddCharacterBlessing,
-        props: { blessing: props.blessing }
-      } as WizardContent
+    {
+      headerName: 'Add Blessing',
+      component: AddCharacterBlessing,
+      props: { blessing: props.blessing },
+    } as WizardContent,
   )
 }
 </script>

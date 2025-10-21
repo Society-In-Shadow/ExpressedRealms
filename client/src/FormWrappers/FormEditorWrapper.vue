@@ -1,58 +1,57 @@
 <script setup lang="ts">
 
-import {computed, onMounted, ref, watch} from "vue";
-import Skeleton from 'primevue/skeleton';
-import Editor from "primevue/editor";
-import ContextMenu from 'primevue/contextmenu';
-import {EditorContent, useEditor} from '@tiptap/vue-3'
+import { computed, onMounted, ref, watch } from 'vue'
+import Skeleton from 'primevue/skeleton'
+import Editor from 'primevue/editor'
+import ContextMenu from 'primevue/contextmenu'
+import { EditorContent, useEditor } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
-import {Table, TableCell, TableHeader, TableRow} from '@tiptap/extension-table'
-import type {FormField} from "@/FormWrappers/Interfaces/FormField";
+import { Table, TableCell, TableHeader, TableRow } from '@tiptap/extension-table'
+import type { FormField } from '@/FormWrappers/Interfaces/FormField'
 
-const model = defineModel<FormField>({ required: true });
+const model = defineModel<FormField>({ required: true })
 
 defineOptions({
-  inheritAttrs: false
+  inheritAttrs: false,
 })
 
 const props = defineProps({
   dataCyTag: {
     type: String,
-    default: ""
+    default: '',
   },
   showSkeleton: {
     type: Boolean,
-    default: false
-  }
-});
+    default: false,
+  },
+})
 
-const editorValue = ref(model.value.field);
-const startupComplete = ref(false);
+const editorValue = ref(model.value.field)
+const startupComplete = ref(false)
 
 const CustomTable = Table.configure().extend({
   renderHTML({ HTMLAttributes }) {
-
     // Add a new class to the table element
     const tableAttributes = {
       ...HTMLAttributes, // Spread existing table attributes
       class: `${HTMLAttributes.class || 'w-100 custom-table'}`.trim(), // Append new class
-    };
+    }
 
     return [
       'div', // Outer div
       { class: 'custom-table-container' }, // Add custom attributes to the wrapper div
       [
 
-          'table',
-          tableAttributes, // Pass the original HTML attributes to the table
-          0, // This represents a placeholder for the table's children (rows, cells, etc.)
-      ]
-      
-    ];
-  },
-});
+        'table',
+        tableAttributes, // Pass the original HTML attributes to the table
+        0, // This represents a placeholder for the table's children (rows, cells, etc.)
+      ],
 
-onMounted(() => {startupComplete.value = false;})
+    ]
+  },
+})
+
+onMounted(() => { startupComplete.value = false })
 
 const editor = useEditor({
   content: editorValue.value,
@@ -61,54 +60,53 @@ const editor = useEditor({
     CustomTable,
     TableRow,
     TableCell,
-    TableHeader
+    TableHeader,
   ],
-  onUpdate: ({editor}) => {
-    model.value.field.value = editor.getHTML();
+  onUpdate: ({ editor }) => {
+    model.value.field.value = editor.getHTML()
   },
   editorProps: {
     attributes: {
-      class: "ql-editor", // Add your custom classes here
+      class: 'ql-editor', // Add your custom classes here
     },
   },
 
-});
+})
 
 watch(
-    () => model.value.field.value, // Reactive dependency
-    (newValue) => {
-      // Update the editor content whenever `model.value` changes
-      if (editor.value && startupComplete.value == false) {
-        editor.value.commands.setContent(newValue);
-        startupComplete.value = true;
-        
-      }
+  () => model.value.field.value, // Reactive dependency
+  (newValue) => {
+    // Update the editor content whenever `model.value` changes
+    if (editor.value && startupComplete.value == false) {
+      editor.value.commands.setContent(newValue)
+      startupComplete.value = true
     }
-);
+  },
+)
 
 const dataCyTagCalc = computed(() => {
-  if(props.dataCyTag != ""){
-    return props.dataCyTag;
+  if (props.dataCyTag != '') {
+    return props.dataCyTag
   }
-  return model.value.label.replace(" ", "-").toLowerCase();
-});
+  return model.value.label.replace(' ', '-').toLowerCase()
+})
 
-const menu = ref();
+const menu = ref()
 const onImageRightClick = (event) => {
-  menu.value.show(event);
-};
+  menu.value.show(event)
+}
 
 const focusingOnTable = computed(() => {
-  if(!editor.value){
-    return false;
+  if (!editor.value) {
+    return false
   }
-  return editor.value.can().addColumnBefore() || 
-      editor.value.can().addColumnAfter() ||
-      editor.value.can().deleteColumn() ||
-      editor.value.can().addRowBefore() ||
-      editor.value.can().addRowAfter() ||
-      editor.value.can().deleteRow() ||
-      editor.value.can().deleteTable();
+  return editor.value.can().addColumnBefore()
+    || editor.value.can().addColumnAfter()
+    || editor.value.can().deleteColumn()
+    || editor.value.can().addRowBefore()
+    || editor.value.can().addRowAfter()
+    || editor.value.can().deleteRow()
+    || editor.value.can().deleteTable()
 })
 
 const contextOptions = ref([
@@ -119,12 +117,12 @@ const contextOptions = ref([
       {
         label: 'Add Column Before',
         icon: 'bi bi-arrow-bar-left',
-        command: () => editor.value.chain().focus().addColumnBefore().run()
+        command: () => editor.value.chain().focus().addColumnBefore().run(),
       },
       {
         label: 'Add Column After',
         icon: 'bi bi-arrow-bar-right',
-        command: () => editor.value.chain().focus().addColumnAfter().run()
+        command: () => editor.value.chain().focus().addColumnAfter().run(),
       },
       {
         label: 'Delete Column',
@@ -133,25 +131,25 @@ const contextOptions = ref([
           {
             label: 'Confirm Delete Column',
             icon: 'bi bi-trash',
-            command: () => editor.value.chain().focus().deleteColumn().run()
-          }
-        ]
+            command: () => editor.value.chain().focus().deleteColumn().run(),
+          },
+        ],
       },
-    ]
+    ],
   },
-  { 
-    label: "Row",
+  {
+    label: 'Row',
     icon: 'bi bi-list-task',
     items: [
       {
         label: 'Add Row Above',
         icon: 'bi bi-arrow-bar-up',
-        command: () => editor.value.chain().focus().addRowBefore().run()
+        command: () => editor.value.chain().focus().addRowBefore().run(),
       },
       {
         label: 'Add Row Below',
         icon: 'bi bi-arrow-bar-down',
-        command: () => editor.value.chain().focus().addRowAfter().run()
+        command: () => editor.value.chain().focus().addRowAfter().run(),
       },
       {
         label: 'Delete Row',
@@ -160,15 +158,15 @@ const contextOptions = ref([
           {
             label: 'Confirm Delete Row',
             icon: 'bi bi-trash',
-            command: () => editor.value.chain().focus().deleteRow().run()
-          }
-        ]
-        
+            command: () => editor.value.chain().focus().deleteRow().run(),
+          },
+        ],
+
       },
-    ]
+    ],
   },
   {
-    separator: true
+    separator: true,
   },
   {
     label: 'Delete Table',
@@ -177,11 +175,11 @@ const contextOptions = ref([
       {
         label: 'Confirm Delete Table',
         icon: 'bi bi-trash',
-        command: () => editor.value.chain().focus().deleteTable().run()
-      }
-    ]
+        command: () => editor.value.chain().focus().deleteTable().run(),
+      },
+    ],
   },
-]);
+])
 
 </script>
 
@@ -219,14 +217,14 @@ const contextOptions = ref([
       <div class="p-editor-content ql-container ql-snow">
         <editor-content
           :id="dataCyTagCalc"
-          :editor="editor" 
+          :editor="editor"
           :data-cy="dataCyTagCalc"
           v-bind="$attrs"
           @contextmenu="onImageRightClick"
         />
       </div>
     </div>
-    
+
     <small :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ model.error }}</small>
     <slot />
   </div>
@@ -236,17 +234,17 @@ const contextOptions = ref([
   .icon-fix{
     font-size: 1.5em;
   }
-  
+
   .ql-editor ul > li > p {
     display: inline;
     padding-left: 0.75em;
   }
-  
+
   .ql-editor ol > li > p {
     display: inline;
     padding-left: 0.75em;
   }
-  
+
   .ql-editor ul {
     margin-inline-start: 0em !important;
     padding-inline-start: 0em !important;
@@ -258,5 +256,5 @@ const contextOptions = ref([
     padding-inline-start: 0em !important;
     font-size: 1rem;
   }
-  
+
 </style>

@@ -1,45 +1,45 @@
 <script setup lang="ts">
 
-  import Button from 'primevue/button';
-  import axios from "axios";
-  import { useRouter, useRoute } from "vue-router";
-  import { ref } from 'vue'
-  import {userStore} from "@/stores/userStore";
-  import { isLoggedIn, logOff } from "@/services/Authentication";
+import Button from 'primevue/button'
+import axios from 'axios'
+import {useRoute, useRouter} from 'vue-router'
+import {ref} from 'vue'
+import {userStore} from '@/stores/userStore'
+import {logOff} from '@/services/Authentication'
 
-  let userInfo = userStore();
+let userInfo = userStore()
 
-  const Router = useRouter();
-  const route = useRoute();
+const Router = useRouter()
+const route = useRoute()
 
-  let hasError = ref(false);
-  let isSuccessful = ref(false);
-  let isLoading = ref(true );
-  axios.get('/auth/confirmEmail',{
-    params: {
-      userId: route.query.userId,
-      code: route.query.code,
-      changedEmail: route.query.changedEmail
-    }
-  }).then(() => {
-    userInfo.hasConfirmedEmail = true;
-    if(route.query.changedEmail)
-      userInfo.userEmail = route.query.changedEmail;
-    isSuccessful.value = true;
-    isLoading.value = false;
-  }).catch(() => {
-    hasError.value = true;
-    isLoading.value = false;
-  });
-  
-  let sentConfirmationEmail = ref(false);
-  async function resendConfirmationEmail() {
-    await axios.post("/auth/resendConfirmationEmail", { email: userInfo.userEmail })
-        .then(() => {
-          sentConfirmationEmail.value = true;
-        });
-  }
-  
+let hasError = ref(false)
+let isSuccessful = ref(false)
+let isLoading = ref(true)
+axios.get('/auth/confirmEmail', {
+  params: {
+    userId: route.query.userId,
+    code: route.query.code,
+    changedEmail: route.query.changedEmail,
+  },
+}).then(() => {
+  userInfo.hasConfirmedEmail = true
+  if (route.query.changedEmail)
+    userInfo.userEmail = route.query.changedEmail
+  isSuccessful.value = true
+  isLoading.value = false
+}).catch(() => {
+  hasError.value = true
+  isLoading.value = false
+})
+
+let sentConfirmationEmail = ref(false)
+async function resendConfirmationEmail() {
+  await axios.post('/auth/resendConfirmationEmail', { email: userInfo.userEmail })
+    .then(() => {
+      sentConfirmationEmail.value = true
+    })
+}
+
 </script>
 
 <template>

@@ -1,32 +1,32 @@
 <script setup lang="ts">
 
-import Button from 'primevue/button';
-import axios from "axios";
-import {useRouter} from "vue-router";
-import {useForm} from 'vee-validate';
-import {object, string} from 'yup';
-import {logOff} from "@/services/Authentication";
-import InputTextWrapper from "../../FormWrappers/InputTextWrapper.vue"
-import {userStore} from "@/stores/userStore";
+import Button from 'primevue/button'
+import axios from 'axios'
+import {useRouter} from 'vue-router'
+import {useForm} from 'vee-validate'
+import {object, string} from 'yup'
+import {logOff} from '@/services/Authentication'
+import InputTextWrapper from '../../FormWrappers/InputTextWrapper.vue'
+import {userStore} from '@/stores/userStore'
 
-const Router = useRouter();
-const userInfo = userStore();
+const Router = useRouter()
+const userInfo = userStore()
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
     name: string().required()
-        .max(100)
-        .label("Name")
-  })
-});
+      .max(100)
+      .label('Name'),
+  }),
+})
 
-const [name] = defineField('name');
+const [name] = defineField('name')
 const onSubmit = handleSubmit((values) => {
   axios.post('/player', values).then(async () => {
-      await userInfo.getUserInfo();
-      Router.push({name: "characters"});
-    });
-});
+    await userInfo.getUserInfo()
+    Router.push({ name: 'characters' })
+  })
+})
 
 </script>
 

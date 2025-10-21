@@ -1,13 +1,12 @@
 <script setup lang="ts">
 
-import Button from "primevue/button";
-import {type PropType} from "vue";
-import type {Power} from "@/components/expressions/powers/types";
-import {makeIdSafe} from "@/utilities/stringUtilities";
-import AddCharacterPower from "@/components/characters/character/wizard/powers/supporting/AddCharacterPower.vue";
-import type {WizardContent} from "@/components/characters/character/wizard/types.ts";
-import {wizardContentStore} from "@/components/characters/character/wizard/stores/wizardContentStore.ts";
-
+import Button from 'primevue/button'
+import {type PropType} from 'vue'
+import type {Power} from '@/components/expressions/powers/types'
+import {makeIdSafe} from '@/utilities/stringUtilities'
+import AddCharacterPower from '@/components/characters/character/wizard/powers/supporting/AddCharacterPower.vue'
+import type {WizardContent} from '@/components/characters/character/wizard/types.ts'
+import {wizardContentStore} from '@/components/characters/character/wizard/stores/wizardContentStore.ts'
 
 const props = defineProps({
   power: {
@@ -16,18 +15,18 @@ const props = defineProps({
   },
   showPickButton: {
     type: Boolean,
-    required: false
-  }
-});
+    required: false,
+  },
+})
 
-const wizardContentInfo = wizardContentStore();
+const wizardContentInfo = wizardContentStore()
 const updateWizardContent = () => {
   wizardContentInfo.updateContent(
-      {
-        headerName: 'Power',
-        component: AddCharacterPower,
-        props: { power: props.power}
-      } as WizardContent
+    {
+      headerName: 'Power',
+      component: AddCharacterPower,
+      props: { power: props.power },
+    } as WizardContent,
   )
 }
 
@@ -44,7 +43,7 @@ const updateWizardContent = () => {
       </div>
     </div>
     <div class="p-0 m-2 d-inline-flex align-items-start align-items-center">
-      <Button class="float-end" size="small" label="View" @click="updateWizardContent"/>
+      <Button class="float-end" size="small" label="View" @click="updateWizardContent" />
     </div>
   </div>
 </template>

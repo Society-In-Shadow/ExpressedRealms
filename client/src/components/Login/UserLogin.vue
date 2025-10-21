@@ -1,56 +1,55 @@
 <script setup lang="ts">
 
-import Button from 'primevue/button';
-import axios from "axios";
-import {useForm} from 'vee-validate';
-import {object, string} from 'yup';
-import {onBeforeMount, ref} from "vue";
-import Message from 'primevue/message';
-import {useRoute, useRouter} from "vue-router"
-import InputTextWrapper from "@/FormWrappers/InputTextWrapper.vue";
-import {userStore} from "@/stores/userStore.ts";
+import Button from 'primevue/button'
+import axios from 'axios'
+import { useForm } from 'vee-validate'
+import { object, string } from 'yup'
+import { onBeforeMount, ref } from 'vue'
+import Message from 'primevue/message'
+import { useRoute, useRouter } from 'vue-router'
+import InputTextWrapper from '@/FormWrappers/InputTextWrapper.vue'
+import { userStore } from '@/stores/userStore.ts'
 
-const router = useRouter();
-const userInfo = userStore();
+const router = useRouter()
+const userInfo = userStore()
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
     email: string().required()
-        .email()
-        .label('Email address'),
+      .email()
+      .label('Email address'),
     password: string().required()
-        .label('Password'),
-  })
-});
-
-onBeforeMount(async () => {
-  await axios.get('/auth/antiforgeryToken');
+      .label('Password'),
+  }),
 })
 
-const [email] = defineField('email');
-const [password] = defineField('password');
-let incorrectLogin = ref(false);
-let lockedOut = ref(false);
+onBeforeMount(async () => {
+  await axios.get('/auth/antiforgeryToken')
+})
 
-const route = useRoute();
+const [email] = defineField('email')
+const [password] = defineField('password')
+let incorrectLogin = ref(false)
+let lockedOut = ref(false)
 
-const onSubmit = handleSubmit( async(values) => {
-  incorrectLogin.value = false;
-  lockedOut.value = false;
+const route = useRoute()
+
+const onSubmit = handleSubmit(async (values) => {
+  incorrectLogin.value = false
+  lockedOut.value = false
   await axios.post('/auth/login', values)
-  .then(async () => {
+    .then(async () => {
     // Reset antiforgery token after login
-    await axios.get('/auth/antiforgeryToken')
-    await userInfo.updateLoggedInStatus();
-    await router.push({name: "characters"});
-    
-  }).
-  catch((response) => {
-    if(response.response.data && response.response.data.detail == "LockedOut")
-      lockedOut.value = true;
-    else
-      incorrectLogin.value = true;
-  });
-});
+      await axios.get('/auth/antiforgeryToken')
+      await userInfo.updateLoggedInStatus()
+      await router.push({ name: 'characters' })
+    })
+    .catch((response) => {
+      if (response.response.data && response.response.data.detail == 'LockedOut')
+        lockedOut.value = true
+      else
+        incorrectLogin.value = true
+    })
+})
 
 </script>
 
