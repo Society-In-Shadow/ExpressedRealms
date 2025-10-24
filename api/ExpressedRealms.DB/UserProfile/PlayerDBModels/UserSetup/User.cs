@@ -1,6 +1,7 @@
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit;
+using ExpressedRealms.DB.Models.Events.EventSetup.Audit;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionLevels.Audit;
@@ -32,6 +33,7 @@ public class User : IdentityUser
     public virtual List<BlessingAuditTrail> BlessingAuditTrails { get; set; } = new();
     public virtual List<BlessingLevelAuditTrail> BlessingLevelAuditTrails { get; set; } = new();
     public virtual List<ProgressionPathAuditTrail> ProgressionPathAuditTrails { get; set; } = new();
+    public virtual List<EventAuditTrail> EventAuditTrails { get; set; } = new();
     public virtual List<ProgressionLevelAuditTrail> ProgressionLevelAuditTrails { get; set; } =
         new();
 }
