@@ -36,9 +36,9 @@ internal sealed class CreateEventUseCase(
             }
         );
         
-        var fridayDate = DateOnly.FromDateTime(GetNextDayOfWeek(model.StartDate, DayOfWeek.Friday).Date);
-        var saturdayDate = DateOnly.FromDateTime(GetNextDayOfWeek(model.StartDate, DayOfWeek.Saturday).Date);
-        var sundayDate = DateOnly.FromDateTime(GetNextDayOfWeek(model.StartDate, DayOfWeek.Sunday).Date);
+        var fridayDate = GetNextDayOfWeek(model.StartDate, DayOfWeek.Friday);
+        var saturdayDate = GetNextDayOfWeek(model.StartDate, DayOfWeek.Saturday);
+        var sundayDate = GetNextDayOfWeek(model.StartDate, DayOfWeek.Sunday);
 
         var defaultSchedule = await eventRepoository.GetDefaultScheduleItems();
         
@@ -59,7 +59,7 @@ internal sealed class CreateEventUseCase(
         return Result.Ok(eventId);
     }
 
-    private static DateTimeOffset GetNextDayOfWeek(DateTimeOffset currentDate, DayOfWeek dayOfWeek)
+    private static DateOnly GetNextDayOfWeek(DateOnly currentDate, DayOfWeek dayOfWeek)
     {
         var daysTillDayOfWeek = ((int)dayOfWeek - (int)currentDate.DayOfWeek + 7) % 7;
         return currentDate.AddDays(daysTillDayOfWeek);
