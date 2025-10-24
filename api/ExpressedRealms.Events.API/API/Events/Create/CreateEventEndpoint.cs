@@ -8,9 +8,7 @@ namespace ExpressedRealms.Events.API.API.Events.Create;
 
 public static class CreateEventEndpoint
 {
-    public static async Task<
-        Results<Ok<int>, NotFound, ValidationProblem, BadRequest<string>>
-    > ExecuteAsync(
+    public static async Task<Results<Ok<int>, ValidationProblem>> ExecuteAsync(
         [FromBody] CreateEventRequest request,
         [FromServices] ICreateEventUseCase useCase
     )
@@ -31,10 +29,6 @@ public static class CreateEventEndpoint
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;
-        if (results.HasInsufficientXP(out var insufficientXp))
-            return insufficientXp;
-        if (results.HasNotFound(out var notFound))
-            return notFound;
 
         results.ThrowIfErrorNotHandled();
 

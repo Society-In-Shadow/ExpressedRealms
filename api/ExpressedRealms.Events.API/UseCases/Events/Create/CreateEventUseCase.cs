@@ -6,7 +6,7 @@ using FluentResults;
 namespace ExpressedRealms.Events.API.UseCases.Events.Create;
 
 internal sealed class CreateEventUseCase(
-    IEventRepository eventRepoository,
+    IEventRepository eventRepository,
     CreateEventModelValidator validator,
     CancellationToken cancellationToken
 ) : ICreateEventUseCase
@@ -22,7 +22,7 @@ internal sealed class CreateEventUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var eventId = await eventRepoository.CreateEventAsync(
+        var eventId = await eventRepository.CreateEventAsync(
             new Event()
             {
                 Name = model.Name,
@@ -40,7 +40,7 @@ internal sealed class CreateEventUseCase(
         var saturdayDate = GetNextDayOfWeek(model.StartDate, DayOfWeek.Saturday);
         var sundayDate = GetNextDayOfWeek(model.StartDate, DayOfWeek.Sunday);
 
-        var defaultSchedule = await eventRepoository.GetDefaultScheduleItems();
+        var defaultSchedule = await eventRepository.GetDefaultScheduleItems();
         
         foreach (var item in defaultSchedule)
         {
@@ -54,7 +54,7 @@ internal sealed class CreateEventUseCase(
             };
         }
         
-        await eventRepoository.BulkAddEventScheduleItems(defaultSchedule);
+        await eventRepository.BulkAddEventScheduleItems(defaultSchedule);
         
         return Result.Ok(eventId);
     }
