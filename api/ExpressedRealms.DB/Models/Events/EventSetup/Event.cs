@@ -1,5 +1,6 @@
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup.Audit;
 using ExpressedRealms.DB.Models.Events.EventSetup.Audit;
 
 namespace ExpressedRealms.DB.Models.Events.EventSetup;
@@ -20,4 +21,5 @@ public class Event : ISoftDelete
     public DateTimeOffset? DeletedAt { get; set; }
 
     public virtual List<EventAuditTrail> EventAuditTrails { get; set; } = null!;
+    public virtual List<EventScheduleItemAuditTrail> EventScheduleAuditTrails { get; set; } = null!;
 }

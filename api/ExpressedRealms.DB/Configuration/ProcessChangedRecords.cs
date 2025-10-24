@@ -3,6 +3,8 @@ using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit;
+using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup;
+using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup.Audit;
 using ExpressedRealms.DB.Models.Events.EventSetup;
 using ExpressedRealms.DB.Models.Events.EventSetup.Audit;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
@@ -58,6 +60,7 @@ public static class ProcessChangedRecords
                 changedRecords
             ),
             nameof(Event) => EventAuditTrailExtensions.ProcessChangedRecords(changedRecords),
+            nameof(EventScheduleItem) => EventScheduleItemAuditTrailExtensions.ProcessChangedRecords(changedRecords),
             _ => throw new ArgumentException(
                 $"Table not setup in the ProcessChangedRecords class: {tableName}"
             ),

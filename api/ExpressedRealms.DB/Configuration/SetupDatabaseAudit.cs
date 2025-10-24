@@ -3,6 +3,7 @@ using Audit.Core;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit;
+using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup.Audit;
 using ExpressedRealms.DB.Models.Events.EventSetup.Audit;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
@@ -46,6 +47,7 @@ public static class SetupDatabaseAudit
                             .AddProgressionPathAuditTrailMapping()
                             .AddProgressionLevelAuditTrailMapping()
                             .AddEventAuditTrailMapping()
+                            .AddEventScheduleItemAuditTrailMapping()
                             .AuditEntityAction<IAuditTable>(
                                 (evt, entry, audit) =>
                                 {
