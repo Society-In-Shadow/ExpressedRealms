@@ -20,5 +20,9 @@ public class EventScheduleItemConfiguration : IEntityTypeConfiguration<EventSche
         builder.Property(e => e.Date).HasColumnName("date").IsRequired();
         builder.Property(e => e.StartTime).HasColumnName("start_time").IsRequired();
         builder.Property(e => e.EndTime).HasColumnName("end_time").IsRequired();
+        
+        builder.HasQueryFilter(x => !x.IsDeleted);
+        builder.Property(e => e.IsDeleted).HasColumnName("is_deleted");
+        builder.Property(e => e.DeletedAt).HasColumnName("deleted_at");
     }
 }
