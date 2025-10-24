@@ -35,7 +35,8 @@ public class User : IdentityUser
     public virtual List<BlessingLevelAuditTrail> BlessingLevelAuditTrails { get; set; } = new();
     public virtual List<ProgressionPathAuditTrail> ProgressionPathAuditTrails { get; set; } = new();
     public virtual List<EventAuditTrail> EventAuditTrails { get; set; } = new();
-    public virtual List<EventScheduleItemAuditTrail> EventScheduleItemAuditTrails { get; set; } = new();
+    public virtual List<EventScheduleItemAuditTrail> EventScheduleItemAuditTrails { get; set; } =
+        new();
     public virtual List<ProgressionLevelAuditTrail> ProgressionLevelAuditTrails { get; set; } =
         new();
 }

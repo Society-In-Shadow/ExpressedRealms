@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup.Audit;
 
-internal class EventScheduleItemAuditTrailConfiguration : IEntityTypeConfiguration<EventScheduleItemAuditTrail>
+internal class EventScheduleItemAuditTrailConfiguration
+    : IEntityTypeConfiguration<EventScheduleItemAuditTrail>
 {
     public void Configure(EntityTypeBuilder<EventScheduleItemAuditTrail> builder)
     {
@@ -12,7 +13,10 @@ internal class EventScheduleItemAuditTrailConfiguration : IEntityTypeConfigurati
 
         builder.ConfigureAuditTrailProperties(user => user.EventScheduleItemAuditTrails);
 
-        builder.Property(e => e.EventScheduleItemId).HasColumnName("event_schedule_item_id").IsRequired();
+        builder
+            .Property(e => e.EventScheduleItemId)
+            .HasColumnName("event_schedule_item_id")
+            .IsRequired();
 
         builder
             .HasOne(x => x.EventScheduleItem)
@@ -20,7 +24,7 @@ internal class EventScheduleItemAuditTrailConfiguration : IEntityTypeConfigurati
             .HasForeignKey(x => x.EventScheduleItemId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder
             .HasOne(x => x.Event)
             .WithMany(x => x.EventScheduleAuditTrails)

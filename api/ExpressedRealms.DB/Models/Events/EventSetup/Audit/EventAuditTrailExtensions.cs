@@ -32,19 +32,19 @@ internal static class EventAuditTrailExtensions
                 case "website_name":
                     changedRecord.FriendlyName = "Website Name";
                     break;
-                
+
                 case "website_url":
                     changedRecord.FriendlyName = "Website URL";
                     break;
-                
+
                 case "additional_notes":
                     changedRecord.FriendlyName = "Website Name";
                     break;
-                
+
                 case "con_experience":
                     changedRecord.FriendlyName = "Con Experience";
                     break;
-                
+
                 default:
                     throw new MissingAuditColumnException(changedRecord.ColumnName);
             }

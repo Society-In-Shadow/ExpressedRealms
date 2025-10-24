@@ -60,7 +60,8 @@ public static class ProcessChangedRecords
                 changedRecords
             ),
             nameof(Event) => EventAuditTrailExtensions.ProcessChangedRecords(changedRecords),
-            nameof(EventScheduleItem) => EventScheduleItemAuditTrailExtensions.ProcessChangedRecords(changedRecords),
+            nameof(EventScheduleItem) =>
+                EventScheduleItemAuditTrailExtensions.ProcessChangedRecords(changedRecords),
             _ => throw new ArgumentException(
                 $"Table not setup in the ProcessChangedRecords class: {tableName}"
             ),

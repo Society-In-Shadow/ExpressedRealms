@@ -13,5 +13,6 @@ public class EventScheduleItem
     public required TimeOnly StartTime { get; set; }
     public required TimeOnly EndTime { get; set; }
 
-    public virtual List<EventScheduleItemAuditTrail> EventScheduleItemAuditTrails { get; set; } = null!;
+    public virtual List<EventScheduleItemAuditTrail> EventScheduleItemAuditTrails { get; set; } =
+        null!;
 }

@@ -12,7 +12,11 @@ public class EventScheduleItemConfiguration : IEntityTypeConfiguration<EventSche
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).HasColumnName("id").IsRequired();
         builder.Property(e => e.EventId).HasColumnName("event_id").IsRequired();
-        builder.Property(e => e.Description).HasColumnName("description").HasMaxLength(250).IsRequired();
+        builder
+            .Property(e => e.Description)
+            .HasColumnName("description")
+            .HasMaxLength(250)
+            .IsRequired();
         builder.Property(e => e.Date).HasColumnName("date").IsRequired();
         builder.Property(e => e.StartTime).HasColumnName("start_time").IsRequired();
         builder.Property(e => e.EndTime).HasColumnName("end_time").IsRequired();

@@ -15,9 +15,21 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
         builder.Property(e => e.StartDate).HasColumnName("start_date").IsRequired();
         builder.Property(e => e.EndDate).HasColumnName("end_date").IsRequired();
         builder.Property(e => e.Location).HasColumnName("location").HasMaxLength(1000).IsRequired();
-        builder.Property(e => e.WebsiteName).HasColumnName("website_name").HasMaxLength(250).IsRequired();
-        builder.Property(e => e.WebsiteUrl).HasColumnName("website_url").HasMaxLength(500).IsRequired();
-        builder.Property(e => e.AdditionalNotes).HasColumnName("additional_notes").HasMaxLength(5000).IsRequired();
+        builder
+            .Property(e => e.WebsiteName)
+            .HasColumnName("website_name")
+            .HasMaxLength(250)
+            .IsRequired();
+        builder
+            .Property(e => e.WebsiteUrl)
+            .HasColumnName("website_url")
+            .HasMaxLength(500)
+            .IsRequired();
+        builder
+            .Property(e => e.AdditionalNotes)
+            .HasColumnName("additional_notes")
+            .HasMaxLength(5000)
+            .IsRequired();
         builder.Property(e => e.ConExperience).HasColumnName("con_experience").IsRequired();
 
         builder.HasQueryFilter(x => !x.IsDeleted);

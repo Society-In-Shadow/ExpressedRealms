@@ -28,7 +28,7 @@ internal static class EventScheduleItemAuditTrailExtensions
                 case "end_time":
                     changedRecord.FriendlyName = "End Time";
                     break;
-                
+
                 default:
                     throw new MissingAuditColumnException(changedRecord.ColumnName);
             }
@@ -39,7 +39,9 @@ internal static class EventScheduleItemAuditTrailExtensions
         return changedRecordsToReturn;
     }
 
-    public static IAuditEntityMapping AddEventScheduleItemAuditTrailMapping(this IAuditEntityMapping mapping)
+    public static IAuditEntityMapping AddEventScheduleItemAuditTrailMapping(
+        this IAuditEntityMapping mapping
+    )
     {
         return mapping.Map<EventScheduleItem, EventScheduleItemAuditTrail>(
             (eventScheduleItem, audit) =>
