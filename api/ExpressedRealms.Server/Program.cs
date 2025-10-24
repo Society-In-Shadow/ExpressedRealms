@@ -16,6 +16,8 @@ using ExpressedRealms.DB;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.Roles;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using ExpressedRealms.Email;
+using ExpressedRealms.Events.API.API.Configuration;
+using ExpressedRealms.Events.API.UseCases.Configuration;
 using ExpressedRealms.Expressions.API.Configuration;
 using ExpressedRealms.Expressions.Repository;
 using ExpressedRealms.Expressions.UseCases.Configuration;
@@ -191,6 +193,7 @@ try
     builder.Services.AddBlessingInjections();
     builder.Services.AddPowerUseCaseConfiguration();
     builder.Services.AddCharacterUseCaseInjections();
+    builder.Services.AddEventUseCaseInjections();
     await builder.Services.AddFeatureFlagInjections(keyVaultManager);
 
     Log.Information("Building the App");
@@ -289,6 +292,7 @@ try
     app.AddCharacterApiEndPoints();
     app.ConfigureBlessingEndPoints();
     app.ConfigureKnowledgeEndPoints();
+    app.ConfigureEventsEndPoints();
 
     app.MapFallbackToFile("index.html");
     Log.Information("Starting Web API");
