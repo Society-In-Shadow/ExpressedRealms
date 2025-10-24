@@ -15,9 +15,7 @@ public class EventScheduleItem : ISoftDelete
     public required TimeOnly EndTime { get; set; }
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
-    
+
     public virtual List<EventScheduleItemAuditTrail> EventScheduleItemAuditTrails { get; set; } =
         null!;
-
-
 }
