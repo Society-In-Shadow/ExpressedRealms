@@ -1,4 +1,6 @@
-﻿using ExpressedRealms.Events.API.API.Events.Create;
+﻿using ExpressedRealms.Authentication;
+using ExpressedRealms.Events.API.API.Events.Create;
+using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
@@ -14,6 +16,7 @@ internal static class EventEndpoints
             .WithTags("Events")
             .WithOpenApi();
 
-        endpointGroup.MapPost("", CreateEventEndpoint.ExecuteAsync);
+        endpointGroup.MapPost("", CreateEventEndpoint.ExecuteAsync)
+            .RequirePolicyAuthorization(Policies.ManageEvents);
     }
 }
