@@ -3,6 +3,7 @@ using System;
 using ExpressedRealms.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpressedRealms.DB.Migrations
 {
     [DbContext(typeof(ExpressedRealmsDbContext))]
-    partial class ExpressedRealmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251024111038_AddDefaultEventData")]
+    partial class AddDefaultEventData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -641,8 +644,8 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("deleted_at");
 
-                    b.Property<DateOnly>("EndDate")
-                        .HasColumnType("date")
+                    b.Property<DateTimeOffset>("EndDate")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("end_date");
 
                     b.Property<bool>("IsDeleted")
@@ -661,17 +664,9 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("character varying(250)")
                         .HasColumnName("name");
 
-                    b.Property<DateOnly>("StartDate")
-                        .HasColumnType("date")
+                    b.Property<DateTimeOffset>("StartDate")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("start_date");
-
-                    b.Property<string>("TimeZoneId")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)")
-                        .HasDefaultValue("America/Chicago")
-                        .HasColumnName("time_zone_id");
 
                     b.Property<string>("WebsiteName")
                         .IsRequired()

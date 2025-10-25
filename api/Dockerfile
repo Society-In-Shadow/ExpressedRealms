@@ -18,8 +18,6 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 EXPOSE 8080
 
-COPY --from=build /app/publish .
-
 RUN apt-get update && apt-get install -y --no-install-recommends \
     wget=1.21.3-1+deb12u1 \
     fonts-dejavu-core=2.37-6 \
@@ -27,6 +25,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     fontconfig=2.14.1-4 \
     && fc-cache -f -v \
     && rm -rf /var/lib/apt/lists/*
+
+COPY --from=build /app/publish .
 
 HEALTHCHECK --interval=15s --timeout=60s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider http://0.0.0.0:8080/health || exit 1
