@@ -23,7 +23,8 @@ public static class CreateEventEndpoint
                 WebsiteName = request.WebsiteName,
                 WebsiteUrl = request.WebsiteUrl,
                 AdditionalNotes = request.AdditionalNotes,
-                ConExperience = request.ConExperience
+                ConExperience = request.ConExperience,
+                TimeZoneId = request.TimeZoneId
             }
         );
 

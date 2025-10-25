@@ -26,6 +26,7 @@ public class CreateEventUseCaseTests
             WebsiteName = "Website Name",
             AdditionalNotes = "Additional Notes",
             WebsiteUrl = "https://societyinshadows.org",
+            TimeZoneId = "UTC",
             ConExperience = 20
         };
 
@@ -213,6 +214,33 @@ public class CreateEventUseCaseTests
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(nameof(CreateEventModel.AdditionalNotes), "Additional Notes must be between 1 and 5000 characters.");
     }
+    
+    [Fact]
+    public async Task ValidationFor_TimeZoneId_WillFail_WhenEmpty()
+    {
+        _model.TimeZoneId = string.Empty;
+
+        var results = await _useCase.ExecuteAsync(_model);
+        results.MustHaveValidationError(nameof(CreateEventModel.TimeZoneId), "Time Zone Id is required.");
+    }
+
+    [Fact]
+    public async Task ValidationFor_TimeZoneId_WillFail_WhenOver250Characters()
+    {
+        _model.TimeZoneId = new string('x', 251);
+
+        var results = await _useCase.ExecuteAsync(_model);
+        results.MustHaveValidationError(nameof(CreateEventModel.TimeZoneId), "Time Zone Id must be between 1 and 250 characters.");
+    }
+    
+    [Fact]
+    public async Task ValidationFor_TimeZoneId_WillFail_WhenItIsNotAValidTimeZoneId()
+    {
+        _model.TimeZoneId = "Not Time Zone";
+
+        var results = await _useCase.ExecuteAsync(_model);
+        results.MustHaveValidationError(nameof(CreateEventModel.TimeZoneId), "Time Zone Id is not a valid time zone.");
+    }
 
     [Fact]
     public async Task ValidationFor_ConExperience_WillFail_WhenEmpty()
@@ -238,6 +266,7 @@ public class CreateEventUseCaseTests
                         && k.WebsiteUrl == _model.WebsiteUrl
                         && k.AdditionalNotes == _model.AdditionalNotes
                         && k.ConExperience == _model.ConExperience
+                        && k.TimeZoneId == _model.TimeZoneId
                     )
                 )
             )

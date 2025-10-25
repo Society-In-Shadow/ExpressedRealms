@@ -30,6 +30,12 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
             .HasColumnName("additional_notes")
             .HasMaxLength(5000)
             .IsRequired();
+        builder
+            .Property(e => e.TimeZoneId)
+            .HasColumnName("time_zone_id")
+            .HasMaxLength(250)
+            .IsRequired()
+            .HasDefaultValue("America/Chicago");
         builder.Property(e => e.ConExperience).HasColumnName("con_experience").IsRequired();
 
         builder.HasQueryFilter(x => !x.IsDeleted);

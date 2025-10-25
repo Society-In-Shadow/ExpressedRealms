@@ -30,6 +30,10 @@ internal sealed class CreateEventModelValidator : AbstractValidator<CreateEventM
         RuleFor(x => x.AdditionalNotes)
             .NotEmpty().WithMessage("Additional Notes is required.")
             .MaximumLength(5000).WithMessage("Additional Notes must be between 1 and 5000 characters.");
+        RuleFor(x => x.TimeZoneId)
+            .NotEmpty().WithMessage("Time Zone Id is required.")
+            .MaximumLength(250).WithMessage("Time Zone Id must be between 1 and 250 characters.")
+            .MustBeAValidTimeZone();
         RuleFor(x => x.ConExperience)
             .NotEmpty().WithMessage("Con Experience is required.");
     }

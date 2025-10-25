@@ -32,7 +32,8 @@ internal sealed class CreateEventUseCase(
                 WebsiteName = model.WebsiteName,
                 WebsiteUrl = model.WebsiteUrl,
                 AdditionalNotes = model.AdditionalNotes,
-                ConExperience = model.ConExperience
+                ConExperience = model.ConExperience,
+                TimeZoneId = model.TimeZoneId
             }
         );
         

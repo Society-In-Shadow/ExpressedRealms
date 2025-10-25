@@ -17,4 +17,17 @@ public static class FluentValidationExtensions
             })
             .WithMessage("{PropertyName} must be a valid URL.");
     }
+    
+    public static IRuleBuilderOptions<T, string> MustBeAValidTimeZone<T>(
+        this IRuleBuilder<T, string> ruleBuilder)
+    {
+        return ruleBuilder.Must(timeZoneId =>
+            {
+                if (string.IsNullOrWhiteSpace(timeZoneId))
+                    return false;
+
+                return TimeZoneInfo.TryFindSystemTimeZoneById(timeZoneId, out _);
+            })
+            .WithMessage("{PropertyName} is not a valid time zone.");
+    }
 }
