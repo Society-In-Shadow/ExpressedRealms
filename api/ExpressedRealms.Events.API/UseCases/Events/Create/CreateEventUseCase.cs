@@ -44,6 +44,7 @@ internal sealed class CreateEventUseCase(
         
         foreach (var item in defaultSchedule)
         {
+            item.Id = 0;
             item.EventId = eventId;
             item.Date = item.Date.DayOfWeek switch
             {
