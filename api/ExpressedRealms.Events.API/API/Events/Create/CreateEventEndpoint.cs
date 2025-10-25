@@ -24,7 +24,7 @@ public static class CreateEventEndpoint
                 WebsiteUrl = request.WebsiteUrl,
                 AdditionalNotes = request.AdditionalNotes,
                 ConExperience = request.ConExperience,
-                TimeZoneId = request.TimeZoneId
+                TimeZoneId = request.TimeZoneId,
             }
         );
 

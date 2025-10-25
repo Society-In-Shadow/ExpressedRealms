@@ -14,7 +14,6 @@ internal static class EventEndpoints
             .WithTags("Events")
             .WithOpenApi();
 
-        endpointGroup
-            .MapPost("", CreateEventEndpoint.ExecuteAsync);
+        endpointGroup.MapPost("", CreateEventEndpoint.ExecuteAsync);
     }
 }

@@ -1,6 +1,7 @@
 using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup;
 using ExpressedRealms.DB.Models.Events.EventSetup;
 using Microsoft.EntityFrameworkCore;
+
 // ReSharper disable once CheckNamespace
 
 namespace ExpressedRealms.DB;

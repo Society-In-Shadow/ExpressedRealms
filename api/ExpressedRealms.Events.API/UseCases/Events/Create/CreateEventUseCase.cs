@@ -33,16 +33,16 @@ internal sealed class CreateEventUseCase(
                 WebsiteUrl = model.WebsiteUrl,
                 AdditionalNotes = model.AdditionalNotes,
                 ConExperience = model.ConExperience,
-                TimeZoneId = model.TimeZoneId
+                TimeZoneId = model.TimeZoneId,
             }
         );
-        
+
         var fridayDate = GetNextDayOfWeek(model.StartDate, DayOfWeek.Friday);
         var saturdayDate = GetNextDayOfWeek(model.StartDate, DayOfWeek.Saturday);
         var sundayDate = GetNextDayOfWeek(model.StartDate, DayOfWeek.Sunday);
 
         var defaultSchedule = await eventRepository.GetDefaultScheduleItems();
-        
+
         foreach (var item in defaultSchedule)
         {
             item.Id = 0;
@@ -52,12 +52,12 @@ internal sealed class CreateEventUseCase(
                 DayOfWeek.Friday => fridayDate,
                 DayOfWeek.Saturday => saturdayDate,
                 DayOfWeek.Sunday => sundayDate,
-                _ => throw new ArgumentOutOfRangeException(item.Date.DayOfWeek.ToString())
+                _ => throw new ArgumentOutOfRangeException(item.Date.DayOfWeek.ToString()),
             };
         }
-        
+
         await eventRepository.BulkAddEventScheduleItems(defaultSchedule);
-        
+
         return Result.Ok(eventId);
     }
 
