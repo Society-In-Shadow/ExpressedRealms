@@ -1,5 +1,6 @@
 ﻿using ExpressedRealms.Authentication;
 using ExpressedRealms.Events.API.API.Events.Create;
+using ExpressedRealms.Events.API.API.Events.Delete;
 using ExpressedRealms.Events.API.API.Events.Edit;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
@@ -23,6 +24,10 @@ internal static class EventEndpoints
 
         endpointGroup
             .MapPut("{id}", EditEventEndpoint.ExecuteAsync)
+            .RequirePolicyAuthorization(Policies.ManageEvents);
+
+        endpointGroup
+            .MapDelete("{id}", DeleteEventEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManageEvents);
     }
 }
