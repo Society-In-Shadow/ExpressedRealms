@@ -1,5 +1,6 @@
 ﻿using ExpressedRealms.Authentication;
 using ExpressedRealms.Events.API.API.Events.Create;
+using ExpressedRealms.Events.API.API.Events.Edit;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -17,6 +18,9 @@ internal static class EventEndpoints
             .WithOpenApi();
 
         endpointGroup.MapPost("", CreateEventEndpoint.ExecuteAsync)
+            .RequirePolicyAuthorization(Policies.ManageEvents);
+        
+        endpointGroup.MapPost("{id}", EditEventEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManageEvents);
     }
 }

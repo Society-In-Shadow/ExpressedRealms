@@ -30,4 +30,20 @@ internal sealed class EventRepository(
         context.EventScheduleItems.AddRange(defaultSchedule);
         await context.SaveChangesAsync(cancellationToken);
     }
+    
+    public async Task<bool> IsExistingEvent(int id)
+    {
+        return await context.Events.AnyAsync(x => x.Id == id, cancellationToken);
+    }
+
+    public Task<Event> GetEventAsync(int id)
+    {
+        return context.Events.FirstAsync(x => x.Id == id, cancellationToken);
+    }
+    
+    public Task UpdateEventAsync(Event @event)
+    {
+        context.Events.Update(@event);
+        return context.SaveChangesAsync(cancellationToken);
+    }
 }
