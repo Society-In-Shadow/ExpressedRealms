@@ -6,7 +6,7 @@ using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using FakeItEasy;
 using Xunit;
 
-namespace ExpressedRealms.Events.API.Tests.Unit;
+namespace ExpressedRealms.Events.API.Tests.Unit.Events;
 
 public class GetEventsUseCaseTests
 {

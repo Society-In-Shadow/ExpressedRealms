@@ -6,7 +6,7 @@ using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FakeItEasy;
 using Xunit;
 
-namespace ExpressedRealms.Events.API.Tests.Unit;
+namespace ExpressedRealms.Events.API.Tests.Unit.Events;
 
 public class DeleteEventUseCaseTests
 {
