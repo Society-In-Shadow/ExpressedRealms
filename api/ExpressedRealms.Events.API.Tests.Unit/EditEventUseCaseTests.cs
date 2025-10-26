@@ -14,7 +14,7 @@ public class EditEventUseCaseTests
     private readonly IEventRepository _repository;
     private readonly EditEventModel _model;
     private readonly Event _dbModel;
-    
+
     public EditEventUseCaseTests()
     {
         _model = new EditEventModel()
@@ -46,7 +46,7 @@ public class EditEventUseCaseTests
         };
 
         _repository = A.Fake<IEventRepository>();
-        
+
         A.CallTo(() => _repository.GetEventAsync(_model.Id)).Returns(_dbModel);
         A.CallTo(() => _repository.IsExistingEvent(_model.Id)).Returns(true);
 
@@ -63,7 +63,7 @@ public class EditEventUseCaseTests
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(nameof(EditEventModel.Id), "Id is required.");
     }
-    
+
     [Fact]
     public async Task ValidationFor_Id_WillReturnNotFound_WhenItDoesNotExist()
     {
@@ -75,7 +75,7 @@ public class EditEventUseCaseTests
             "Event does not exist."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_Name_WillFail_WhenEmpty()
     {
@@ -327,12 +327,7 @@ public class EditEventUseCaseTests
     public async Task UseCase_WillPassThroughTheDbModel()
     {
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() =>
-                _repository.EditEventAsync(
-                    A<Event>.That.IsSameAs(_dbModel)
-                )
-            )
+        A.CallTo(() => _repository.EditEventAsync(A<Event>.That.IsSameAs(_dbModel)))
             .MustHaveHappenedOnceExactly();
     }
-
 }

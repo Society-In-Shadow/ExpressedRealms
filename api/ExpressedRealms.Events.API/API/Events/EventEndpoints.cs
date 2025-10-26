@@ -17,10 +17,12 @@ internal static class EventEndpoints
             .WithTags("Events")
             .WithOpenApi();
 
-        endpointGroup.MapPost("", CreateEventEndpoint.ExecuteAsync)
+        endpointGroup
+            .MapPost("", CreateEventEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManageEvents);
-        
-        endpointGroup.MapPost("{id}", EditEventEndpoint.ExecuteAsync)
+
+        endpointGroup
+            .MapPost("{id}", EditEventEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManageEvents);
     }
 }
