@@ -13,12 +13,7 @@ public static class DeleteEventEndpoint
         [FromServices] IDeleteEventUseCase useCase
     )
     {
-        var results = await useCase.ExecuteAsync(
-            new DeleteEventModel()
-            {
-                Id = id,
-            }
-        );
+        var results = await useCase.ExecuteAsync(new DeleteEventModel() { Id = id });
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;

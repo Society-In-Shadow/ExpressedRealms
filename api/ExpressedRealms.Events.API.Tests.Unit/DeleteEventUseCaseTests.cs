@@ -17,10 +17,7 @@ public class DeleteEventUseCaseTests
 
     public DeleteEventUseCaseTests()
     {
-        _model = new DeleteEventModel()
-        {
-            Id = 2,
-        };
+        _model = new DeleteEventModel() { Id = 2 };
 
         _dbModel = new Event()
         {
@@ -71,13 +68,7 @@ public class DeleteEventUseCaseTests
     public async Task UseCase_WillDeleteTheEvent()
     {
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() =>
-                _repository.EditEventAsync(
-                    A<Event>.That.Matches(k =>
-                        k.IsDeleted == true
-                    )
-                )
-            )
+        A.CallTo(() => _repository.EditEventAsync(A<Event>.That.Matches(k => k.IsDeleted == true)))
             .MustHaveHappenedOnceExactly();
     }
 
