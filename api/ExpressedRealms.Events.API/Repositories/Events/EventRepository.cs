@@ -1,4 +1,5 @@
 using ExpressedRealms.DB;
+using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup;
 using ExpressedRealms.DB.Models.Events.EventSetup;
 using Microsoft.EntityFrameworkCore;
@@ -52,6 +53,12 @@ internal sealed class EventRepository(
         await context.SaveChangesAsync(cancellationToken);
         return eventScheduleItem.Id;
     }
+
+    public async Task<EventScheduleItem?> GetEventScheduleItem(int id)
+    {
+        return await context.EventScheduleItems.FindAsync(id);
+    }
+
     public async Task EditAsync<TEntity>(TEntity entity) where TEntity : class
     {
         await context.CommonSaveChanges(entity, cancellationToken);
