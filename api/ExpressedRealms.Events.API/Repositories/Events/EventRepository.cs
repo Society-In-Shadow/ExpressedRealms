@@ -41,7 +41,7 @@ internal sealed class EventRepository(
         return context.Events.FirstAsync(x => x.Id == id, cancellationToken);
     }
     
-    public Task UpdateEventAsync(Event @event)
+    public Task EditEventAsync(Event @event)
     {
         context.Events.Update(@event);
         return context.SaveChangesAsync(cancellationToken);

@@ -33,7 +33,7 @@ internal sealed class EditEventUseCase(
         currentEvent.ConExperience = model.ConExperience;
         currentEvent.TimeZoneId = model.TimeZoneId;
         
-        await eventRepository.UpdateEventAsync(currentEvent);
+        await eventRepository.EditEventAsync(currentEvent);
 
         return Result.Ok();
     }
