@@ -50,6 +50,7 @@ public static class GenericUseCaseImporter
                     classes => classes.AssignableTo(typeof(IGenericRepository)),
                     publicOnly: false
                 )
+                .AsMatchingInterface()
                 .AsSelf()
                 .WithScopedLifetime()
         );

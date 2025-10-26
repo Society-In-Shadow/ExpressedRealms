@@ -3,6 +3,7 @@ using ExpressedRealms.Events.API.API.Events.Create;
 using ExpressedRealms.Events.API.API.Events.Delete;
 using ExpressedRealms.Events.API.API.Events.Get;
 using ExpressedRealms.Events.API.API.EventScheduleItem.Create;
+using ExpressedRealms.Events.API.API.EventScheduleItem.Delete;
 using ExpressedRealms.Events.API.API.EventScheduleItem.Edit;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
@@ -41,6 +42,10 @@ internal static class EventEndpoints
 
         endpointGroup
             .MapPut("{eventId}/scheduleItem/{id}", EditEventScheduleItemEndpoint.ExecuteAsync)
+            .RequirePolicyAuthorization(Policies.ManageEvents);
+
+        endpointGroup
+            .MapDelete("{eventId}/scheduleItem/{id}", DeleteEventScheduleItemEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManageEvents);
     }
 }
