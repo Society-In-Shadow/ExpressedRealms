@@ -14,4 +14,6 @@ internal interface IEventRepository : IGenericRepository
     Task<List<Event>> GetEventsAsync();
     Task<int> CreateEventScheduleItemAsync(EventScheduleItem eventScheduleItem);
     Task<EventScheduleItem?> GetEventScheduleItem(int id);
+    Task<List<EventScheduleItem>> GetEventScheduleItems(int eventId);
+    Task<Event?> FindEventAsync(int id);
 }

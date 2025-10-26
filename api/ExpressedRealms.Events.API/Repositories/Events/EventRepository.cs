@@ -41,6 +41,11 @@ internal sealed class EventRepository(
     {
         return context.Events.FirstAsync(x => x.Id == id, cancellationToken);
     }
+    
+    public async Task<Event?> FindEventAsync(int id)
+    {
+        return await context.Events.FindAsync(id, cancellationToken);
+    }
 
     public Task<List<Event>> GetEventsAsync()
     {
@@ -57,6 +62,12 @@ internal sealed class EventRepository(
     public async Task<EventScheduleItem?> GetEventScheduleItem(int id)
     {
         return await context.EventScheduleItems.FindAsync(id);
+    }
+
+    public Task<List<EventScheduleItem>> GetEventScheduleItems(int eventId)
+    {
+        return context.EventScheduleItems.AsNoTracking()
+            .Where(x => x.EventId == eventId).ToListAsync(cancellationToken);
     }
 
     public async Task EditAsync<TEntity>(TEntity entity)
