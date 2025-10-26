@@ -8,4 +8,7 @@ internal interface IEventRepository
     Task<int> CreateEventAsync(Event @event);
     Task BulkAddEventScheduleItems(List<EventScheduleItem> defaultSchedule);
     Task<List<EventScheduleItem>> GetDefaultScheduleItems();
+    Task<bool> IsExistingEvent(int id);
+    Task<Event> GetEventAsync(int id);
+    Task EditEventAsync(Event @event);
 }
