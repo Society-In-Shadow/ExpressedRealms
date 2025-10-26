@@ -57,7 +57,7 @@ public static class PolicyConfiguration
                 Policies.ManageModifiers.Name,
                 policy => policy.RequireRole(UserRoles.ManageModifiers)
             );
-            
+
             options.AddPolicy(
                 Policies.ManageEvents.Name,
                 policy => policy.RequireRole(UserRoles.ManageEvents)
