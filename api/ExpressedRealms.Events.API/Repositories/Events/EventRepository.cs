@@ -46,4 +46,9 @@ internal sealed class EventRepository(
         context.Events.Update(@event);
         return context.SaveChangesAsync(cancellationToken);
     }
+
+    public Task<List<Event>> GetEventsAsync()
+    {
+        return context.Events.ToListAsync(cancellationToken);
+    }
 }
