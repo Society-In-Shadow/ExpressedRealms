@@ -24,12 +24,12 @@ internal sealed class CreateEventScheduleItemModelValidator : AbstractValidator<
                 var parentEvent = await repository.GetEventAsync(x.EventId);
                 return parentEvent.StartDate <= x.Date && x.Date <= parentEvent.EndDate;
             })
+            .WithName(nameof(CreateEventScheduleItemModel.Date))
             .WithMessage("Date must be within the event dates.");
         RuleFor(x => x.EventId)
             .NotEmpty()
             .WithMessage("Event Id is required.")
             .MustAsync(async (x, y) => await repository.IsExistingEvent(x))
-            .WithErrorCode("NotFound")
             .WithMessage("Event does not exist.");
     }
 }
