@@ -41,4 +41,17 @@ public static class GenericUseCaseImporter
                 .WithScopedLifetime()
         );
     }
+
+    public static void ImportRepositories(this IServiceCollection services, Assembly assembly)
+    {
+        services.Scan(scan =>
+            scan.FromAssemblies(assembly)
+                .AddClasses(
+                    classes => classes.AssignableTo(typeof(IGenericRepository)),
+                    publicOnly: false
+                )
+                .AsSelf()
+                .WithScopedLifetime()
+        );
+    }
 }
