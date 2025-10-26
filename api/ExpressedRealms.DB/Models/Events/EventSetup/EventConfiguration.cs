@@ -37,6 +37,7 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
             .IsRequired()
             .HasDefaultValue("America/Chicago");
         builder.Property(e => e.ConExperience).HasColumnName("con_experience").IsRequired();
+        builder.Property(e => e.IsPublished).HasColumnName("is_published").IsRequired().HasDefaultValue(false);
 
         builder.HasQueryFilter(x => !x.IsDeleted);
         builder.Property(e => e.IsDeleted).HasColumnName("is_deleted");

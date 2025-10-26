@@ -29,6 +29,7 @@ public static class GetAllEventsEndpoint
                         AdditionalNotes = x.AdditionalNotes,
                         ConExperience = x.ConExperience,
                         TimeZoneId = x.TimeZoneId,
+                        IsPublished = x.IsPublished,
                     })
                     .ToList(),
             }
