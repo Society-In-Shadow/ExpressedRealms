@@ -5,12 +5,15 @@ using FluentResults;
 
 namespace ExpressedRealms.Events.API.UseCases.Events.Get;
 
-internal sealed class GetEventsUseCase(IEventRepository eventRepository, IUserContext userContext) : IGetEventUseCase
+internal sealed class GetEventsUseCase(IEventRepository eventRepository, IUserContext userContext)
+    : IGetEventUseCase
 {
     public async Task<Result<EventBaseReturnModel>> ExecuteAsync()
     {
-        var hasEventManagementPermission = await userContext.CurrentUserHasPolicy(Policies.ManageEvents);
-        
+        var hasEventManagementPermission = await userContext.CurrentUserHasPolicy(
+            Policies.ManageEvents
+        );
+
         var events = await eventRepository.GetEventsAsync();
         if (!hasEventManagementPermission)
             events = events.Where(x => x.IsPublished).ToList();

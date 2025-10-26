@@ -31,7 +31,7 @@ public class GetEventsUseCaseTests
                 WebsiteUrl = "https://societyinshadows.org",
                 TimeZoneId = "UTC",
                 ConExperience = 20,
-                IsPublished = true
+                IsPublished = true,
             },
             new()
             {
@@ -45,7 +45,7 @@ public class GetEventsUseCaseTests
                 WebsiteUrl = "https://societyinshadows.org",
                 TimeZoneId = "UTC",
                 ConExperience = 25,
-                IsPublished = false
+                IsPublished = false,
             },
         };
 
@@ -75,7 +75,7 @@ public class GetEventsUseCaseTests
                 WebsiteUrl = "https://societyinshadows.org",
                 TimeZoneId = "UTC",
                 ConExperience = 20,
-                IsPublished = true
+                IsPublished = true,
             },
             new()
             {
@@ -89,14 +89,14 @@ public class GetEventsUseCaseTests
                 WebsiteUrl = "https://societyinshadows.org",
                 TimeZoneId = "UTC",
                 ConExperience = 25,
-                IsPublished = false
+                IsPublished = false,
             },
         };
         var results = await _useCase.ExecuteAsync();
 
         Assert.Equivalent(returnList, results.Value.Events);
     }
-    
+
     [Fact]
     public async Task UseCase_WillReturnPublishedItems_WhenTheyHaveManageEventsPolicy()
     {
@@ -115,7 +115,7 @@ public class GetEventsUseCaseTests
                 WebsiteUrl = "https://societyinshadows.org",
                 TimeZoneId = "UTC",
                 ConExperience = 20,
-                IsPublished = true
+                IsPublished = true,
             },
         };
         var results = await _useCase.ExecuteAsync();
