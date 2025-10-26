@@ -41,7 +41,7 @@ public static class GenericUseCaseImporter
                 .WithScopedLifetime()
         );
     }
-    
+
     public static void ImportRepositories(this IServiceCollection services, Assembly assembly)
     {
         services.Scan(scan =>

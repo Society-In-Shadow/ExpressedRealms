@@ -39,7 +39,7 @@ public class EditEventScheduleItemUseCaseTests
             Date = DateOnly.Parse("10/31/2025"),
             EventId = 1,
         };
-        
+
         _model = new EditEventScheduleItemModel()
         {
             Id = 2,
@@ -57,11 +57,7 @@ public class EditEventScheduleItemUseCaseTests
 
         var validator = new EditEventScheduleItemModelValidator(_repository);
 
-        _useCase = new EditEventScheduleItemUseCase(
-            _repository,
-            validator,
-            CancellationToken.None
-        );
+        _useCase = new EditEventScheduleItemUseCase(_repository, validator, CancellationToken.None);
     }
 
     [Fact]
@@ -76,7 +72,8 @@ public class EditEventScheduleItemUseCaseTests
     [Fact]
     public async Task ValidationFor_Id_WillReturnNotFound_WhenItDoesNotExist()
     {
-        A.CallTo(() => _repository.GetEventScheduleItem(_model.Id)).Returns(Task.FromResult<EventScheduleItem?>(null));
+        A.CallTo(() => _repository.GetEventScheduleItem(_model.Id))
+            .Returns(Task.FromResult<EventScheduleItem?>(null));
 
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError<NotFoundFailure>(
@@ -84,7 +81,7 @@ public class EditEventScheduleItemUseCaseTests
             "Event Schedule Item does not exist."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_Description_WillFail_WhenEmpty()
     {
@@ -199,7 +196,7 @@ public class EditEventScheduleItemUseCaseTests
             )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_WillPassThroughTheDbModel()
     {

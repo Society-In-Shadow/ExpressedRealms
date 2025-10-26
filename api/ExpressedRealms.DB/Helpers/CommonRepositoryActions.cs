@@ -4,7 +4,12 @@ namespace ExpressedRealms.DB.Helpers;
 
 public static class CommonRepositoryActions
 {
-    public static async Task CommonSaveChanges<TEntity>(this ExpressedRealmsDbContext context, TEntity entity, CancellationToken cancellationToken) where TEntity : class
+    public static async Task CommonSaveChanges<TEntity>(
+        this ExpressedRealmsDbContext context,
+        TEntity entity,
+        CancellationToken cancellationToken
+    )
+        where TEntity : class
     {
         var entry = context.Entry(entity);
 

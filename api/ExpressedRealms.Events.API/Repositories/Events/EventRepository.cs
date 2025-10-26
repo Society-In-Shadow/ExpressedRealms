@@ -59,7 +59,8 @@ internal sealed class EventRepository(
         return await context.EventScheduleItems.FindAsync(id);
     }
 
-    public async Task EditAsync<TEntity>(TEntity entity) where TEntity : class
+    public async Task EditAsync<TEntity>(TEntity entity)
+        where TEntity : class
     {
         await context.CommonSaveChanges(entity, cancellationToken);
     }

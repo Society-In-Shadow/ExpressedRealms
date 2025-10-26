@@ -27,7 +27,7 @@ internal sealed class EditEventScheduleItemUseCase(
         scheduleItem.Date = model.Date;
         scheduleItem.StartTime = model.StartTime;
         scheduleItem.EndTime = model.EndTime;
-        
+
         await eventRepository.EditAsync(scheduleItem);
 
         return Result.Ok();
