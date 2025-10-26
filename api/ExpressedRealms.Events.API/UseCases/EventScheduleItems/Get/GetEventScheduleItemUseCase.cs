@@ -10,7 +10,9 @@ internal sealed class GetEventScheduleItemUseCase(
     CancellationToken cancellationToken
 ) : IGetEventScheduleItemUseCase
 {
-    public async Task<Result<EventScheduleItemBaseReturnModel>> ExecuteAsync(GetEventScheduleItemModel model)
+    public async Task<Result<EventScheduleItemBaseReturnModel>> ExecuteAsync(
+        GetEventScheduleItemModel model
+    )
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,
@@ -23,17 +25,21 @@ internal sealed class GetEventScheduleItemUseCase(
 
         var scheduleItems = await eventRepository.GetEventScheduleItems(model.EventId);
 
-        return Result.Ok(new EventScheduleItemBaseReturnModel()
-        {
-            EventScheduleItems = scheduleItems.Select(x => new EventScheduleItemModel()
+        return Result.Ok(
+            new EventScheduleItemBaseReturnModel()
             {
-                Id = x.Id,
-                Date = x.Date,
-                Description = x.Description,
-                EndTime = x.EndTime,
-                StartTime = x.StartTime,
-                EventId = x.EventId
-            }).ToList()
-        });
+                EventScheduleItems = scheduleItems
+                    .Select(x => new EventScheduleItemModel()
+                    {
+                        Id = x.Id,
+                        Date = x.Date,
+                        Description = x.Description,
+                        EndTime = x.EndTime,
+                        StartTime = x.StartTime,
+                        EventId = x.EventId,
+                    })
+                    .ToList(),
+            }
+        );
     }
 }

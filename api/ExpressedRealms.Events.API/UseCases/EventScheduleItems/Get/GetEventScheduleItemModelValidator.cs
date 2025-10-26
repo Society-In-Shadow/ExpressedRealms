@@ -10,25 +10,22 @@ namespace ExpressedRealms.Events.API.UseCases.EventScheduleItems.Get;
 internal sealed class GetEventScheduleItemModelValidator
     : AbstractValidator<GetEventScheduleItemModel>
 {
-    public GetEventScheduleItemModelValidator(
-        IEventRepository repository,
-        IUserContext userContext
-    )
+    public GetEventScheduleItemModelValidator(IEventRepository repository, IUserContext userContext)
     {
         RuleFor(x => x.EventId)
             .NotEmpty()
             .WithMessage("Event Id is required.")
             .MustAsync(async (x, y) => await repository.FindEventAsync(x) is not null)
-            .WithErrorCode("NotFound")
             .WithMessage("Event does not exist.")
-            .MustAsync(async (x, y) =>
-            {
-                var thisEvent = await repository.FindEventAsync(x);
-                var hasPolicy = await userContext.CurrentUserHasPolicy(Policies.ManageEvents);
+            .MustAsync(
+                async (x, y) =>
+                {
+                    var thisEvent = await repository.FindEventAsync(x);
+                    var hasPolicy = await userContext.CurrentUserHasPolicy(Policies.ManageEvents);
 
-                return hasPolicy || thisEvent!.IsPublished;
-            })
-            .WithErrorCode("NotFound")
+                    return hasPolicy || thisEvent!.IsPublished;
+                }
+            )
             .WithMessage("Event does not exist.");
     }
 }

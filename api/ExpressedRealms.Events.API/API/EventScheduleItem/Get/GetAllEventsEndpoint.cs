@@ -8,17 +8,14 @@ namespace ExpressedRealms.Events.API.API.EventScheduleItem.Get;
 
 public static class GetAllEventScheduleItemsEndpoint
 {
-    public static async Task<Results<Ok<GetAllBaseResponse>, NotFound, ValidationProblem>> ExecuteAsync(
-        int eventId,
-        [FromServices] IGetEventScheduleItemUseCase useCase
-    )
+    public static async Task<
+        Results<Ok<GetAllBaseResponse>, NotFound, ValidationProblem>
+    > ExecuteAsync(int eventId, [FromServices] IGetEventScheduleItemUseCase useCase)
     {
         var results = await useCase.ExecuteAsync(
-            new GetEventScheduleItemModel()
-            {
-                EventId = eventId
-            });
-        
+            new GetEventScheduleItemModel() { EventId = eventId }
+        );
+
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;
         if (results.HasNotFound(out var notFound))
