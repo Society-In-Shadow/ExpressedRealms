@@ -26,9 +26,9 @@ public class CreateEventScheduleItemUseCaseTests
             WebsiteName = "website",
             WebsiteUrl = "url",
             AdditionalNotes = "additional notes",
-            TimeZoneId = "TimeZoneId"
+            TimeZoneId = "TimeZoneId",
         };
-        
+
         _model = new CreateEventScheduleItemModel()
         {
             Description = "My Scheduled Event",
@@ -44,7 +44,11 @@ public class CreateEventScheduleItemUseCaseTests
 
         var validator = new CreateEventScheduleItemModelValidator(_repository);
 
-        _useCase = new CreateEventScheduleItemUseCase(_repository, validator, CancellationToken.None);
+        _useCase = new CreateEventScheduleItemUseCase(
+            _repository,
+            validator,
+            CancellationToken.None
+        );
     }
 
     [Fact]
@@ -53,7 +57,10 @@ public class CreateEventScheduleItemUseCaseTests
         _model.Description = string.Empty;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(CreateEventScheduleItemModel.Description), "Description is required.");
+        results.MustHaveValidationError(
+            nameof(CreateEventScheduleItemModel.Description),
+            "Description is required."
+        );
     }
 
     [Fact]
@@ -74,7 +81,10 @@ public class CreateEventScheduleItemUseCaseTests
         _model.StartTime = default;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(CreateEventScheduleItemModel.StartTime), "Start Date is required.");
+        results.MustHaveValidationError(
+            nameof(CreateEventScheduleItemModel.StartTime),
+            "Start Date is required."
+        );
     }
 
     [Fact]
@@ -83,7 +93,10 @@ public class CreateEventScheduleItemUseCaseTests
         _model.EndTime = default;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(CreateEventScheduleItemModel.EndTime), "End Date is required.");
+        results.MustHaveValidationError(
+            nameof(CreateEventScheduleItemModel.EndTime),
+            "End Date is required."
+        );
     }
 
     [Fact]
@@ -92,7 +105,10 @@ public class CreateEventScheduleItemUseCaseTests
         _model.Date = default;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(CreateEventScheduleItemModel.Date), "Date is required.");
+        results.MustHaveValidationError(
+            nameof(CreateEventScheduleItemModel.Date),
+            "Date is required."
+        );
     }
 
     [Fact]
@@ -102,7 +118,10 @@ public class CreateEventScheduleItemUseCaseTests
         _model.Date = _dbEventModel.EndDate.AddDays(1); // outside range
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(CreateEventScheduleItemModel.Date), "Date must be within the event dates.");
+        results.MustHaveValidationError(
+            nameof(CreateEventScheduleItemModel.Date),
+            "Date must be within the event dates."
+        );
     }
 
     [Fact]
@@ -111,7 +130,10 @@ public class CreateEventScheduleItemUseCaseTests
         _model.EventId = 0;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(CreateEventScheduleItemModel.EventId), "Event Id is required.");
+        results.MustHaveValidationError(
+            nameof(CreateEventScheduleItemModel.EventId),
+            "Event Id is required."
+        );
     }
 
     [Fact]

@@ -33,7 +33,7 @@ internal static class EventEndpoints
         endpointGroup
             .MapDelete("{id}", DeleteEventEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManageEvents);
-        
+
         endpointGroup
             .MapPost("{id}/scheduleItem", CreateEventScheduleItemEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManageEvents);
