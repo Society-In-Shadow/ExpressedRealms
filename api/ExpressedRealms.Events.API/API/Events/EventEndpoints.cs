@@ -19,9 +19,8 @@ internal static class EventEndpoints
             .WithTags("Events")
             .WithOpenApi();
 
-        endpointGroup
-            .MapGet("", GetAllEventsEndpoint.ExecuteAsync);
-        
+        endpointGroup.MapGet("", GetAllEventsEndpoint.ExecuteAsync);
+
         endpointGroup
             .MapPost("", CreateEventEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManageEvents);

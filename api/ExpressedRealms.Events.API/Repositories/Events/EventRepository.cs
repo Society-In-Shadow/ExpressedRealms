@@ -49,7 +49,6 @@ internal sealed class EventRepository(
 
     public Task<List<Event>> GetEventsAsync()
     {
-        return context.Events
-            .ToListAsync(cancellationToken);
+        return context.Events.ToListAsync(cancellationToken);
     }
 }

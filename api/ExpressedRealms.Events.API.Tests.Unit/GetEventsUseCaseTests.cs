@@ -41,7 +41,7 @@ public class GetEventsUseCaseTests
                 WebsiteUrl = "https://societyinshadows.org",
                 TimeZoneId = "UTC",
                 ConExperience = 25,
-            }
+            },
         };
 
         _repository = A.Fake<IEventRepository>();
@@ -54,7 +54,6 @@ public class GetEventsUseCaseTests
     [Fact]
     public async Task UseCase_WillReturnAllItems()
     {
-        
         var returnList = new List<EventModel>()
         {
             new()
@@ -82,7 +81,7 @@ public class GetEventsUseCaseTests
                 WebsiteUrl = "https://societyinshadows.org",
                 TimeZoneId = "UTC",
                 ConExperience = 25,
-            }
+            },
         };
         var results = await _useCase.ExecuteAsync();
 

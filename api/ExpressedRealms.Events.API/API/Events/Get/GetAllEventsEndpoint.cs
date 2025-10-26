@@ -13,21 +13,25 @@ public static class GetAllEventsEndpoint
     {
         var results = await useCase.ExecuteAsync();
 
-        return TypedResults.Ok(new GetAllBaseResponse()
-        {
-            Events = results.Value.Events.Select(x => new EventModel()
+        return TypedResults.Ok(
+            new GetAllBaseResponse()
             {
-                Id = x.Id,
-                Name = x.Name,
-                StartDate = x.StartDate,
-                EndDate = x.EndDate,
-                Location = x.Location,
-                WebsiteName = x.WebsiteName,
-                WebsiteUrl = x.WebsiteUrl,
-                AdditionalNotes = x.AdditionalNotes,
-                ConExperience = x.ConExperience,
-                TimeZoneId = x.TimeZoneId,
-            }).ToList()
-        });
+                Events = results
+                    .Value.Events.Select(x => new EventModel()
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        StartDate = x.StartDate,
+                        EndDate = x.EndDate,
+                        Location = x.Location,
+                        WebsiteName = x.WebsiteName,
+                        WebsiteUrl = x.WebsiteUrl,
+                        AdditionalNotes = x.AdditionalNotes,
+                        ConExperience = x.ConExperience,
+                        TimeZoneId = x.TimeZoneId,
+                    })
+                    .ToList(),
+            }
+        );
     }
 }
