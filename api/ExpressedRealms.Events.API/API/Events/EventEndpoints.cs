@@ -22,7 +22,7 @@ internal static class EventEndpoints
             .RequirePolicyAuthorization(Policies.ManageEvents);
 
         endpointGroup
-            .MapPost("{id}", EditEventEndpoint.ExecuteAsync)
+            .MapPut("{id}", EditEventEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManageEvents);
     }
 }
