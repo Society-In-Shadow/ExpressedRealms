@@ -2,13 +2,14 @@
 using ExpressedRealms.Events.API.API.Events.Create;
 using ExpressedRealms.Events.API.API.Events.Delete;
 using ExpressedRealms.Events.API.API.Events.Get;
+using ExpressedRealms.Events.API.API.EventScheduleItem.Create;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 using EditEventEndpoint = ExpressedRealms.Events.API.API.Events.Edit.EditEventEndpoint;
 
-namespace ExpressedRealms.Events.API.API.Events;
+namespace ExpressedRealms.Events.API.API;
 
 internal static class EventEndpoints
 {
@@ -31,6 +32,10 @@ internal static class EventEndpoints
 
         endpointGroup
             .MapDelete("{id}", DeleteEventEndpoint.ExecuteAsync)
+            .RequirePolicyAuthorization(Policies.ManageEvents);
+        
+        endpointGroup
+            .MapPost("{id}/scheduleItem", CreateEventScheduleItemEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManageEvents);
     }
 }

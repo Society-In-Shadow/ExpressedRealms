@@ -51,4 +51,11 @@ internal sealed class EventRepository(
     {
         return context.Events.ToListAsync(cancellationToken);
     }
+
+    public async Task<int> CreateEventScheduleItemAsync(EventScheduleItem eventScheduleItem)
+    {
+        context.EventScheduleItems.Add(eventScheduleItem);
+        await context.SaveChangesAsync(cancellationToken);
+        return eventScheduleItem.Id;
+    }
 }

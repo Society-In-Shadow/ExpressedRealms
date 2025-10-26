@@ -12,4 +12,5 @@ internal interface IEventRepository
     Task<Event> GetEventAsync(int id);
     Task EditEventAsync(Event @event);
     Task<List<Event>> GetEventsAsync();
+    Task<int> CreateEventScheduleItemAsync(EventScheduleItem eventScheduleItem);
 }
