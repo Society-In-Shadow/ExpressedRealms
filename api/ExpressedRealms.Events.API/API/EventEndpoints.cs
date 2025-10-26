@@ -35,7 +35,7 @@ internal static class EventEndpoints
             .RequirePolicyAuthorization(Policies.ManageEvents);
 
         endpointGroup
-            .MapPost("{id}/scheduleItem", CreateEventScheduleItemEndpoint.ExecuteAsync)
+            .MapPost("{eventId}/scheduleItem", CreateEventScheduleItemEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManageEvents);
     }
 }
