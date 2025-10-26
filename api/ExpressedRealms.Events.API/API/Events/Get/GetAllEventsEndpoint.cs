@@ -8,7 +8,7 @@ namespace ExpressedRealms.Events.API.API.Events.Get;
 public static class GetAllEventsEndpoint
 {
     public static async Task<Ok<GetAllBaseResponse>> ExecuteAsync(
-        [FromServices] IGetEventUseCase useCase
+        [FromServices] IGetEventsUseCase useCase
     )
     {
         var results = await useCase.ExecuteAsync();

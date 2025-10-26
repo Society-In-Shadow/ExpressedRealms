@@ -6,7 +6,7 @@ using FluentResults;
 namespace ExpressedRealms.Events.API.UseCases.Events.Get;
 
 internal sealed class GetEventsUseCase(IEventRepository eventRepository, IUserContext userContext)
-    : IGetEventUseCase
+    : IGetEventsUseCase
 {
     public async Task<Result<EventBaseReturnModel>> ExecuteAsync()
     {
