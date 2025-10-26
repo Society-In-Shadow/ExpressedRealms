@@ -17,6 +17,7 @@ public static class EditEventEndpoint
         var results = await useCase.ExecuteAsync(
             new EditEventModel()
             {
+                Id = id,
                 Name = request.Name,
                 StartDate = request.StartDate,
                 EndDate = request.EndDate,
