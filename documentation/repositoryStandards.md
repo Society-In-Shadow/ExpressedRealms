@@ -56,3 +56,22 @@ public sealed class FluentValidationFailure : Error
 * The Validation Classes will have internal sealed class if the incoming data needs to be validated
 * Repository Methods will immediately call for the Fluent Validation
 * Fluent Validation can have async operators to check for Ids dynamically
+
+## Common Repository Methods
+There is now a IGenericRepository interface that will allow us to automatically inject repositories, similar to how use
+cases work.
+
+On there, there is a generic method "Task EditAsync<TEntity>(TEntity entity) where TEntity : class;"
+
+This generic method paired with CommonSaveChanges will allow us to update any sort of entity, in a consistent, way
+across the code base.  This call has been optimized to ensure that changes tracked by EF Core are being respected.
+
+Practically, what you need to do is: inherit from the IGenericRepository interface, and then implement the EditAsync
+method as shown below.
+
+```csharp
+public async Task EditAsync<TEntity>(TEntity entity) where TEntity : class
+{
+    await context.CommonSaveChanges(entity, cancellationToken);
+}
+```

@@ -306,7 +306,7 @@ public class EditEventUseCaseTests
     {
         await _useCase.ExecuteAsync(_model);
         A.CallTo(() =>
-                _repository.EditEventAsync(
+                _repository.EditAsync(
                     A<Event>.That.Matches(k =>
                         k.Name == _model.Name
                         && k.Location == _model.Location
@@ -327,7 +327,7 @@ public class EditEventUseCaseTests
     public async Task UseCase_WillPassThroughTheDbModel()
     {
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() => _repository.EditEventAsync(A<Event>.That.IsSameAs(_dbModel)))
+        A.CallTo(() => _repository.EditAsync(A<Event>.That.IsSameAs(_dbModel)))
             .MustHaveHappenedOnceExactly();
     }
 }

@@ -1,5 +1,4 @@
 using System.Reflection;
-using ExpressedRealms.Events.API.Repositories.Configuration;
 using ExpressedRealms.Shared;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,7 +10,7 @@ public static class EventUseCaseConfiguration
     {
         services.ImportGenericUseCases(Assembly.GetExecutingAssembly());
         services.ImportValidators(Assembly.GetExecutingAssembly());
-        services.AddEventRepositoryInjections();
+        services.ImportRepositories(Assembly.GetExecutingAssembly());
 
         return services;
     }

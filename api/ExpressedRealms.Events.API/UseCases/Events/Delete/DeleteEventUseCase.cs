@@ -26,7 +26,7 @@ internal sealed class DeleteEventUseCase(
 
         currentEvent.SoftDelete();
 
-        await eventRepository.EditEventAsync(currentEvent);
+        await eventRepository.EditAsync(currentEvent);
 
         return Result.Ok();
     }

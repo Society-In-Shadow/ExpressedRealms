@@ -68,7 +68,7 @@ public class DeleteEventUseCaseTests
     public async Task UseCase_WillDeleteTheEvent()
     {
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() => _repository.EditEventAsync(A<Event>.That.Matches(k => k.IsDeleted == true)))
+        A.CallTo(() => _repository.EditAsync(A<Event>.That.Matches(k => k.IsDeleted == true)))
             .MustHaveHappenedOnceExactly();
     }
 
@@ -76,7 +76,7 @@ public class DeleteEventUseCaseTests
     public async Task UseCase_WillPassThroughTheDbModel()
     {
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() => _repository.EditEventAsync(A<Event>.That.IsSameAs(_dbModel)))
+        A.CallTo(() => _repository.EditAsync(A<Event>.That.IsSameAs(_dbModel)))
             .MustHaveHappenedOnceExactly();
     }
 }
