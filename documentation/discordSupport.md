@@ -9,6 +9,6 @@ scheduled events.
 ## Local Setup
 Discord support is disabled by default locally. To enable it, you will need to add a Discord Bot Token to your .env file.
 
-``` 
+```ini
 DISCORD_BOT_TOKEN=<TOKEN>
 ```
