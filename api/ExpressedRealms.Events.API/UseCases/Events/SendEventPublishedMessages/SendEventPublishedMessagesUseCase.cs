@@ -84,6 +84,9 @@ internal sealed class SendEventPublishedMessagesUseCase(
         message.AppendLine(
             "* **Character Help!** - If you have questions about anything regarding your character, we will be happy to help you out."
         );
+        message.AppendLine(
+            "* **Boring Stuff!** - A lot of cons want us to keep track of who is playing the game, so we will need to collect badge information."
+        );
 
         message.AppendLine("# Schedule");
         message.AppendLine(
