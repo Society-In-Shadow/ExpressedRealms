@@ -61,7 +61,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
                 0 => string.Empty,
                 1 => days[0],
                 2 => string.Join(" and ", days),
-                _ => string.Join(", ", days.Take(dayGroups.Count - 1)) + " and " + days.Last(),
+                _ => string.Join(", ", days.Take(dayGroups.Count - 1)) + " and " + days[dayGroups.Count - 1],
             };
             message.AppendLine($"# Society in Shadows will be there on {attendingDays}!");
         }
