@@ -5,8 +5,9 @@ using ExpressedRealms.Events.API.Discord;
 using ExpressedRealms.Events.API.Repositories.Events;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
+using TimeZoneConverter;
 
-namespace ExpressedRealms.Events.API.UseCases.Events.SendEventPublishedMessage;
+namespace ExpressedRealms.Events.API.UseCases.Events.SendEventPublishedMessages;
 
 internal sealed class SendEventPublishedMessagesUseCase(
     IEventRepository eventRepository,
@@ -44,14 +45,21 @@ internal sealed class SendEventPublishedMessagesUseCase(
         var daysBetween = Math.Abs(currentEvent.EndDate.DayNumber - currentEvent.StartDate.DayNumber) + 1;
         if (dayGroups.Count == daysBetween)
         {
-            message.AppendLine($"# Society in Shadows will be attending all {daysBetween} days!");
+            message.AppendLine("# Society in Shadows will be there every day!");
         }
         else
         {
-            var attendingDays = string.Join(", ", dayGroups.Select(x => x.Key.ToString("dddd")));
-            message.AppendLine($"# Society in Shadows will be attending the following days: {attendingDays}");
+            var days = dayGroups.Select(x => x.Key.ToString("dddd")).ToList();
+            var attendingDays = days.Count switch
+            {
+                0 => string.Empty,
+                1 => days[0],
+                2 => string.Join(" and ", days),
+                _ => string.Join(", ", days.Take(dayGroups.Count - 1)) + " and " + days.Last()
+            };
+            message.AppendLine($"# Society in Shadows will be there on {attendingDays}!");
         }
-        message.AppendLine($"Once the event starts, everyone will have access to an additional {currentEvent.ConExperience} XP for the con.");
+        message.AppendLine($"Once the event starts, everyone will have access to an additional {currentEvent.ConExperience} XP for this event.");
         message.AppendLine();
         message.AppendLine("** We do need you to check in at our booth (SHQ) for the following reasons:**");
         message.AppendLine("* **Bonus XP!** - We will be giving out a bonus XP for attending the event up to 5 XP.  If you bring a new player, you will get the full bonus");
@@ -60,7 +68,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
         message.AppendLine("* **Character Help!** - If you have questions about anything regarding your character, we will be happy to help you out.");
         
         message.AppendLine("# Schedule");
-        message.AppendLine($"{currentEvent.Name} is in the {TimeZoneInfo.FindSystemTimeZoneById(currentEvent.TimeZoneId).StandardName} time zone and our schedule below reflects that.");
+        message.AppendLine($"{currentEvent.Name} is in the {TZConvert.IanaToWindows(currentEvent.TimeZoneId)} and our schedule below reflects that.");
         
         foreach (var dayGroup in dayGroups)
         {

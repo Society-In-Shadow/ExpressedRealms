@@ -1,7 +1,7 @@
 using ExpressedRealms.DB.Models.Events.EventSetup;
 using ExpressedRealms.Events.API.Repositories.Events;
 using ExpressedRealms.Events.API.UseCases.Events.PublishEvent;
-using ExpressedRealms.Events.API.UseCases.Events.SendEventPublishedMessage;
+using ExpressedRealms.Events.API.UseCases.Events.SendEventPublishedMessages;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FakeItEasy;

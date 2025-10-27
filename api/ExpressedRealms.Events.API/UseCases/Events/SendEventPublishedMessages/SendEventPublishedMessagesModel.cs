@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Events.API.UseCases.Events.SendEventPublishedMessage;
+namespace ExpressedRealms.Events.API.UseCases.Events.SendEventPublishedMessages;
 
 public class SendEventPublishedMessagesModel
 {

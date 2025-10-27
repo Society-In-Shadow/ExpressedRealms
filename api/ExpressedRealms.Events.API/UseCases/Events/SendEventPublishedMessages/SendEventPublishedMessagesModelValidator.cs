@@ -2,7 +2,7 @@ using ExpressedRealms.Events.API.Repositories.Events;
 using FluentValidation;
 using JetBrains.Annotations;
 
-namespace ExpressedRealms.Events.API.UseCases.Events.SendEventPublishedMessage;
+namespace ExpressedRealms.Events.API.UseCases.Events.SendEventPublishedMessages;
 
 [UsedImplicitly]
 internal sealed class SendEventPublishedMessagesModelValidator : AbstractValidator<SendEventPublishedMessagesModel>

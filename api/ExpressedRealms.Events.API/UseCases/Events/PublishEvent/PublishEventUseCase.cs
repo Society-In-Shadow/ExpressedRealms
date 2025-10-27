@@ -1,5 +1,5 @@
 using ExpressedRealms.Events.API.Repositories.Events;
-using ExpressedRealms.Events.API.UseCases.Events.SendEventPublishedMessage;
+using ExpressedRealms.Events.API.UseCases.Events.SendEventPublishedMessages;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
