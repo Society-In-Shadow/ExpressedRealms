@@ -29,10 +29,9 @@ internal sealed class PublishEventUseCase(
 
         await eventRepository.EditAsync(currentEvent);
 
-        await publishMessageUseCase.ExecuteAsync(new SendEventPublishedMessagesModel()
-        {
-            Id = model.Id
-        });
+        await publishMessageUseCase.ExecuteAsync(
+            new SendEventPublishedMessagesModel() { Id = model.Id }
+        );
 
         return Result.Ok();
     }

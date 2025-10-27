@@ -3,4 +3,5 @@ using FluentResults;
 
 namespace ExpressedRealms.Events.API.UseCases.Events.SendEventPublishedMessages;
 
-public interface ISendEventPublishedMessagesUseCase : IGenericUseCase<Result, SendEventPublishedMessagesModel> { }
+public interface ISendEventPublishedMessagesUseCase
+    : IGenericUseCase<Result, SendEventPublishedMessagesModel> { }

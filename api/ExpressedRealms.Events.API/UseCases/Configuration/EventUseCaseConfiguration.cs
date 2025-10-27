@@ -13,7 +13,7 @@ public static class EventUseCaseConfiguration
         services.ImportValidators(Assembly.GetExecutingAssembly());
         services.ImportRepositories(Assembly.GetExecutingAssembly());
         services.AddSingleton<IDiscordService, DiscordService>();
-        
+
         return services;
     }
 }

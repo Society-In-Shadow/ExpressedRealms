@@ -13,12 +13,7 @@ public static class PublishEventEndpoint
         [FromServices] IPublishEventUseCase useCase
     )
     {
-        var results = await useCase.ExecuteAsync(
-            new PublishEventModel()
-            {
-                Id = id,
-            }
-        );
+        var results = await useCase.ExecuteAsync(new PublishEventModel() { Id = id });
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;

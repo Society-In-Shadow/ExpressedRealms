@@ -19,10 +19,7 @@ public class PublishEventUseCaseTests
 
     public PublishEventUseCaseTests()
     {
-        _model = new PublishEventModel()
-        {
-            Id = 2,
-        };
+        _model = new PublishEventModel() { Id = 2 };
 
         _dbModel = new Event()
         {
@@ -45,7 +42,12 @@ public class PublishEventUseCaseTests
 
         var validator = new PublishEventModelValidator(_repository);
 
-        _useCase = new PublishEventUseCase(_repository, validator, _publishMessageUseCase, CancellationToken.None);
+        _useCase = new PublishEventUseCase(
+            _repository,
+            validator,
+            _publishMessageUseCase,
+            CancellationToken.None
+        );
     }
 
     [Fact]
@@ -60,7 +62,8 @@ public class PublishEventUseCaseTests
     [Fact]
     public async Task ValidationFor_Id_WillReturnNotFound_WhenItDoesNotExist()
     {
-        A.CallTo(() => _repository.FindEventAsync(_model.Id)).Returns(Task.FromResult<Event?>(null));
+        A.CallTo(() => _repository.FindEventAsync(_model.Id))
+            .Returns(Task.FromResult<Event?>(null));
 
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError<NotFoundFailure>(
@@ -73,13 +76,7 @@ public class PublishEventUseCaseTests
     public async Task UseCase_WillEditTheEvent()
     {
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() =>
-                _repository.EditAsync(
-                    A<Event>.That.Matches(k =>
-                        k.IsPublished == true
-                    )
-                )
-            )
+        A.CallTo(() => _repository.EditAsync(A<Event>.That.Matches(k => k.IsPublished == true)))
             .MustHaveHappenedOnceExactly();
     }
 
@@ -95,8 +92,11 @@ public class PublishEventUseCaseTests
     public async Task UseCase_WillTriggerMessagePublish()
     {
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() => _publishMessageUseCase.ExecuteAsync(A<SendEventPublishedMessagesModel>.That.Matches(k =>
-            k.Id == _model.Id
-        ))).MustHaveHappenedOnceExactly();
+        A.CallTo(() =>
+                _publishMessageUseCase.ExecuteAsync(
+                    A<SendEventPublishedMessagesModel>.That.Matches(k => k.Id == _model.Id)
+                )
+            )
+            .MustHaveHappenedOnceExactly();
     }
 }

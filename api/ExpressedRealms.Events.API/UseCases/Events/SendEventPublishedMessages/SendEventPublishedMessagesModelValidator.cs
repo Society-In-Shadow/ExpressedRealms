@@ -5,7 +5,8 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Events.API.UseCases.Events.SendEventPublishedMessages;
 
 [UsedImplicitly]
-internal sealed class SendEventPublishedMessagesModelValidator : AbstractValidator<SendEventPublishedMessagesModel>
+internal sealed class SendEventPublishedMessagesModelValidator
+    : AbstractValidator<SendEventPublishedMessagesModel>
 {
     public SendEventPublishedMessagesModelValidator(IEventRepository repository)
     {
