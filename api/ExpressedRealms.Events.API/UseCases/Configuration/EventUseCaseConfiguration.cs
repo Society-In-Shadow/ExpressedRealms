@@ -1,4 +1,5 @@
 using System.Reflection;
+using ExpressedRealms.Events.API.Discord;
 using ExpressedRealms.Shared;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,7 +12,8 @@ public static class EventUseCaseConfiguration
         services.ImportGenericUseCases(Assembly.GetExecutingAssembly());
         services.ImportValidators(Assembly.GetExecutingAssembly());
         services.ImportRepositories(Assembly.GetExecutingAssembly());
-
+        services.AddSingleton<IDiscordService, DiscordService>();
+        
         return services;
     }
 }

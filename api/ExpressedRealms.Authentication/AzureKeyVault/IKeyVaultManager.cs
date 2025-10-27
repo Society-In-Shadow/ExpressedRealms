@@ -4,5 +4,5 @@ namespace ExpressedRealms.Authentication.AzureKeyVault;
 
 public interface IKeyVaultManager
 {
-    Task<string> GetSecret(IKeyVaultSecret secretName);
+    Task<string?> GetSecret(IKeyVaultSecret secretName);
 }

@@ -14,4 +14,7 @@
     <ProjectReference Include="..\ExpressedRealms.Shared\ExpressedRealms.Shared.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Server.Shared\ExpressedRealms.Server.Shared.csproj" />
   </ItemGroup>
+  <ItemGroup>
+      <PackageReference Include="Discord.Net.Rest" Version="3.18.0" />
+  </ItemGroup>
 </Project>
