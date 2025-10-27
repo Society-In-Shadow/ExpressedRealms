@@ -196,7 +196,7 @@ public class SendEventPublishedMessagesUseCaseTests
                 _discordService.SendMessageToChannelAsync(
                     DiscordChannel.PublicAnnouncements,
                     A<string>.That.Contains(
-                        "Once the event starts, everyone will have access to an additional 32 XP for this event."
+                        "Once the event starts, everyone will have access to an additional **32 XP** for this event."
                     ),
                     A<Embed[]>._
                 )
@@ -212,7 +212,7 @@ public class SendEventPublishedMessagesUseCaseTests
                 _discordService.SendMessageToChannelAsync(
                     DiscordChannel.PublicAnnouncements,
                     A<string>.That.Contains(
-                        "Sioux City Geek Con is in the Central Standard Time and our schedule below reflects that."
+                        "Sioux City Geek Con is in the **Central Standard Time** and our schedule below reflects that."
                     ),
                     A<Embed[]>._
                 )

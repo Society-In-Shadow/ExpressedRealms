@@ -68,7 +68,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
             message.AppendLine($"# Society in Shadows will be there on {attendingDays}!");
         }
         message.AppendLine(
-            $"Once the event starts, everyone will have access to an additional {currentEvent.ConExperience} XP for this event."
+            $"Once the event starts, everyone will have access to an additional **{currentEvent.ConExperience} XP** for this event."
         );
         message.AppendLine();
         message.AppendLine(
@@ -90,7 +90,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
 
         message.AppendLine("# Schedule");
         message.AppendLine(
-            $"{currentEvent.Name} is in the {TZConvert.IanaToWindows(currentEvent.TimeZoneId)} and our schedule below reflects that."
+            $"{currentEvent.Name} is in the **{TZConvert.IanaToWindows(currentEvent.TimeZoneId)}** and our schedule below reflects that."
         );
 
         foreach (var dayGroup in dayGroups)
