@@ -43,12 +43,15 @@ internal static class TestingEndPoints
                 }
             )
             .RequireAuthorization();
-        
+
         app.MapGet(
                 "/sendDiscordTestMessage",
                 async (IDiscordService discordService) =>
                 {
-                    await discordService.SendMessageToChannelAsync(DiscordChannel.DevTestingChannel, "Test");
+                    await discordService.SendMessageToChannelAsync(
+                        DiscordChannel.DevTestingChannel,
+                        "Test"
+                    );
                 }
             )
             .RequireAuthorization();
