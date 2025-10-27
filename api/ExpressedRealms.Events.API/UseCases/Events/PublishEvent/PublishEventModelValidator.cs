@@ -2,12 +2,12 @@ using ExpressedRealms.Events.API.Repositories.Events;
 using FluentValidation;
 using JetBrains.Annotations;
 
-namespace ExpressedRealms.Events.API.UseCases.Events.SendEventPublishedMessage;
+namespace ExpressedRealms.Events.API.UseCases.Events.PublishEvent;
 
 [UsedImplicitly]
-internal sealed class SendEventPublishedMessagesModelValidator : AbstractValidator<SendEventPublishedMessagesModel>
+internal sealed class PublishEventModelValidator : AbstractValidator<PublishEventModel>
 {
-    public SendEventPublishedMessagesModelValidator(IEventRepository repository)
+    public PublishEventModelValidator(IEventRepository repository)
     {
         RuleFor(x => x.Id)
             .NotEmpty()
