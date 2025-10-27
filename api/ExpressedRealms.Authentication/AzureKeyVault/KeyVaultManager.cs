@@ -21,7 +21,7 @@ internal sealed class KeyVaultManager : IKeyVaultManager
         _environment = environment;
     }
 
-    public async Task<string> GetSecret(IKeyVaultSecret secretName)
+    public async Task<string?> GetSecret(IKeyVaultSecret secretName)
     {
         // Attempt to get secret from the cache
         if (!_memoryCache.TryGetValue(secretName, out string cachedSecret))

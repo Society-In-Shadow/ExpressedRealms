@@ -1,5 +1,6 @@
 using ExpressedRealms.Authentication;
 using ExpressedRealms.Email.TestEmail;
+using ExpressedRealms.Events.API.Discord;
 using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.FeatureFlags.FeatureClient;
 using ExpressedRealms.Server.Shared;
@@ -39,6 +40,18 @@ internal static class TestingEndPoints
                 async (IFeatureToggleClient client) =>
                 {
                     return await client.HasFeatureFlag(ReleaseFlags.TestReleaseFlag);
+                }
+            )
+            .RequireAuthorization();
+
+        app.MapGet(
+                "/sendDiscordTestMessage",
+                async (IDiscordService discordService) =>
+                {
+                    await discordService.SendMessageToChannelAsync(
+                        DiscordChannel.DevTestingChannel,
+                        "Test"
+                    );
                 }
             )
             .RequireAuthorization();

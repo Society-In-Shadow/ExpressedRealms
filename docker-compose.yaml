@@ -69,6 +69,7 @@ services:
       - NO-REPLY-EMAIL=no-reply@societyinshadows.org
       - CLIENT-COOKIE-DOMAIN=.localhost
       - FEATURE-FLAG-URL=http://flipt:8080/
+      - DISCORD-BOT-TOKEN=${DISCORD_BOT_TOKEN}
       - APPLICATION-INSIGHTS-CONNECTION-STRING=${APPLICATION_INSIGHTS_CONNECTION_STRING}
     ports:
       - '5000:8080'
