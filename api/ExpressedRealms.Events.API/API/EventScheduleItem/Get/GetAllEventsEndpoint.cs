@@ -32,8 +32,8 @@ public static class GetAllEventScheduleItemsEndpoint
                         Id = x.Id,
                         Date = x.Date,
                         Description = x.Description,
-                        EndTime = x.EndTime,
-                        StartTime = x.StartTime,
+                        EndTime = x.Date.ToDateTime(x.EndTime),
+                        StartTime = x.Date.ToDateTime(x.StartTime),
                         EventId = x.EventId,
                     })
                     .ToList(),
