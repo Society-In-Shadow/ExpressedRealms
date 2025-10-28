@@ -34,8 +34,6 @@ internal sealed class CreateEventModelValidator : AbstractValidator<CreateEventM
             .WithMessage("Website Url must be between 1 and 500 characters.")
             .MustBeAValidUrl();
         RuleFor(x => x.AdditionalNotes)
-            .NotEmpty()
-            .WithMessage("Additional Notes is required.")
             .MaximumLength(5000)
             .WithMessage("Additional Notes must be between 1 and 5000 characters.");
         RuleFor(x => x.TimeZoneId)
