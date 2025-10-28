@@ -8,8 +8,10 @@ import Card from 'primevue/card'
 import Tag from 'primevue/tag'
 import { EventConfirmationPopup } from '@/components/admin/events/services/eventConfirmationPopupService'
 import EditEvent from '@/components/admin/events/EditEvent.vue'
+import { adminEventScheduleDialogs } from '@/components/admin/eventScheduleItems/services/dialogs.ts'
 
 let userInfo = userStore()
+const dialogs = adminEventScheduleDialogs()
 
 const props = defineProps({
   event: {
@@ -73,11 +75,15 @@ function formatDate(date: string) {
           </div>
         </div>
         <div
-          v-if="!showEdit && hasManageEventRole && !props.isReadOnly"
           class="p-0 m-0 d-inline-flex align-items-start"
         >
-          <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
-          <Button class="float-end" label="Edit" @click="toggleEdit" />
+          <div class="mr-2">
+            <Button class="" label="Schedule" @click="dialogs.showScheduleDialog(props.event.id)" />
+          </div>
+          <div v-if="!showEdit && hasManageEventRole && !props.isReadOnly">
+            <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
+            <Button class="float-end" label="Edit" @click="toggleEdit" />
+          </div>
         </div>
       </div>
     </template>
