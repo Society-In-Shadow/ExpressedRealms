@@ -16,5 +16,11 @@ export const AdminRoutes = {
       component: () => import('./../../components/admin/characterList/AdminCharacterList.vue'),
       meta: { requiredRole: 'ManagePlayerCharacterList' },
     },
+    {
+      path: 'events',
+      name: 'adminEventList',
+      component: () => import('./../../components/admin/events/EventList.vue'),
+      meta: { requiredRole: 'ManageEvents' },
+    },
   ],
 }
