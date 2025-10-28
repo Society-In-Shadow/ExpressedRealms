@@ -43,6 +43,8 @@ function toggleEdit() {
 function formatDate(date: string) {
   return new Date(date).toLocaleTimeString('en-US', {
     hour12: true,
+    hour: 'numeric',
+    minute: 'numeric',
   })
 }
 

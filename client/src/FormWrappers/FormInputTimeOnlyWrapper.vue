@@ -38,7 +38,7 @@ const dataCyTagCalc = computed(() => {
     <DatePicker
       v-else
       :id="dataCyTagCalc" v-model="model.field.value" :data-cy="dataCyTagCalc" class="w-100"
-      time-only
+      time-only hour-format="12"
       :class="{ 'p-invalid': model.error && model.error.length > 0 }" v-bind="$attrs"
     />
     <small :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ model.error }}</small>
