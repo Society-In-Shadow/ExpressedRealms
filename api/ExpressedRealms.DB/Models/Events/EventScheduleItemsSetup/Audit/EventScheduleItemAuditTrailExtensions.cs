@@ -15,7 +15,7 @@ internal static class EventScheduleItemAuditTrailExtensions
             {
                 case "event_id":
                     continue;
-                
+
                 case "description":
                     changedRecord.FriendlyName = "Description";
                     break;
