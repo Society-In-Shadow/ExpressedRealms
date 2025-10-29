@@ -7,13 +7,17 @@ import { UserRoles, userStore } from '@/stores/userStore'
 import Button from 'primevue/button'
 import AddEventScheduledItem from '@/components/admin/eventScheduleItems/AddEventScheduledItem.vue'
 import { DateTime } from 'luxon'
+import { Message } from 'primevue'
+import { EventStore } from '@/components/admin/events/stores/eventStore.ts'
 
 const store = EventScheduleItemStore()
+const eventInfo = EventStore()
 const userInfo = userStore()
 const hasEventScheduleItemManagementRole = ref(false)
 
 const dialogRef = inject('dialogRef') as Ref
 const eventId = ref(dialogRef.value.data.eventId)
+const event = ref(dialogRef.value.data.event)
 
 onBeforeMount(async () => {
   await store.getEventScheduleItems(eventId.value)
@@ -71,9 +75,16 @@ function groupAndSortScheduleItems(
     )
 }
 
+const timezone = computed(() => {
+  return eventInfo.timeZones.find(x => x.id == event.value.timeZoneId)?.name
+})
+
 </script>
 
 <template>
+  <Message severity="info">
+    {{ event.name }} is in the <strong>{{ timezone }}</strong> and our schedule below reflects that.
+  </Message>
   <div v-for="day in groupAndSortScheduleItems(sortedEventScheduleItems)" :key="day.date" class="w-100">
     <h2>{{ day.date }}</h2>
     <div v-for="EventScheduleItem in day.events" :key="EventScheduleItem.id" class="py-3 w-100">

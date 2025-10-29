@@ -74,7 +74,7 @@ function formatDate(date: DateTime) {
           class="p-0 m-0 d-inline-flex align-items-start"
         >
           <div class="mr-2">
-            <Button class="" label="Schedule" @click="dialogs.showScheduleDialog(props.event.id)" />
+            <Button class="" label="Schedule" @click="dialogs.showScheduleDialog(props.event.id, props.event)" />
           </div>
           <div v-if="!showEdit && hasManageEventRole && !props.isReadOnly">
             <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />

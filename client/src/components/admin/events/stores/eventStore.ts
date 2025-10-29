@@ -28,7 +28,38 @@ export const EventStore
         }
         this.events = response.data.events
 
-        this.timeZones = [{ id: 'America/Chicago', name: 'Central Time Zone', description: 'test' } as ListItem]
+        this.timeZones = [
+          {
+            id: 'America/New_York',
+            name: 'Eastern Time Zone',
+            description: 'Eastern Standard Time (EST) / Eastern Daylight Time (EDT)',
+          },
+          {
+            id: 'America/Chicago',
+            name: 'Central Time Zone',
+            description: 'Central Standard Time (CST) / Central Daylight Time (CDT)',
+          },
+          {
+            id: 'America/Denver',
+            name: 'Mountain Time Zone',
+            description: 'Mountain Standard Time (MST) / Mountain Daylight Time (MDT)',
+          },
+          {
+            id: 'America/Los_Angeles',
+            name: 'Pacific Time Zone',
+            description: 'Pacific Standard Time (PST) / Pacific Daylight Time (PDT)',
+          },
+          {
+            id: 'America/Anchorage',
+            name: 'Alaska Time Zone',
+            description: 'Alaska Standard Time (AKST) / Alaska Daylight Time (AKDT)',
+          },
+          {
+            id: 'Pacific/Honolulu',
+            name: 'Hawaii-Aleutian Time Zone',
+            description: 'Hawaii-Aleutian Standard Time (HST) / Hawaii-Aleutian Daylight Time (HDT, rarely used)',
+          },
+        ]
       },
       getEvent: async function (id: number): Promise<EditEvent> {
         const event = this.events.find((x: Event) => x.id == id)

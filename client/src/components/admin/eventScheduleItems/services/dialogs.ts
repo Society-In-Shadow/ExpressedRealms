@@ -4,7 +4,7 @@ import EventScheduledItemList from '@/components/admin/eventScheduleItems/EventS
 export const adminEventScheduleDialogs = () => {
   const dialog = useDialog()
 
-  const showScheduleDialog = (eventId: number) => {
+  const showScheduleDialog = (eventId: number, event: Event) => {
     dialog.open(EventScheduledItemList, {
       props: {
         header: 'Scheduled Events',
@@ -19,6 +19,7 @@ export const adminEventScheduleDialogs = () => {
       },
       data: {
         eventId: eventId,
+        event: event,
       },
     })
   }
