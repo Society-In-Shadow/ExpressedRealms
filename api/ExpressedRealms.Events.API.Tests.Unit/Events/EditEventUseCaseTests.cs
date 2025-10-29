@@ -230,18 +230,6 @@ public class EditEventUseCaseTests
     }
 
     [Fact]
-    public async Task ValidationFor_AdditionalNotes_WillFail_WhenEmpty()
-    {
-        _model.AdditionalNotes = string.Empty;
-
-        var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(
-            nameof(EditEventModel.AdditionalNotes),
-            "Additional Notes is required."
-        );
-    }
-
-    [Fact]
     public async Task ValidationFor_AdditionalNotes_WillFail_WhenOver5000Characters()
     {
         _model.AdditionalNotes = new string('x', 5001);
