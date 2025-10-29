@@ -67,7 +67,7 @@ function formatDate(date: DateTime) {
           <div class="p-0 m-0">
             <div>{{ formatDate(props.event.startDate) }} - {{ formatDate(props.event.endDate) }}</div>
             <div><a href="" @click.prevent="openMapWithFallback(props.event.location)">{{ props.event.location }}</a></div>
-            <div><a :href="props.event.conWebsiteUrl">{{ props.event.conWebsiteName }}</a></div>
+            <div><a :href="props.event?.websiteUrl">{{ props.event.websiteName }}</a></div>
           </div>
         </div>
         <div
