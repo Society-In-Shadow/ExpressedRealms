@@ -7,6 +7,7 @@ import type {
   EventScheduleItemForm,
 } from '@/components/admin/eventScheduleItems/validations/eventScheduleItemValidations'
 import type { EventScheduleItemResponse } from '@/components/admin/eventScheduleItems/types.ts'
+import { DateTime } from 'luxon'
 
 export const EventScheduleItemStore
   = defineStore(`EventScheduleItems`, {
@@ -19,28 +20,21 @@ export const EventScheduleItemStore
       async getEventScheduleItems(eventId: number) {
         const response = await axios.get<EventScheduleItemResponse>(`/events/${eventId}/scheduleItems/`)
         for (const item of response.data.eventScheduleItems) {
-          item.startTime = new Date(item.startTime)
-          item.endTime = new Date(item.endTime)
+          item.startTime = DateTime.fromISO(item.startTime)
+          item.endTime = DateTime.fromISO(item.endTime)
+          item.date = DateTime.fromISO(item.date)
         }
         this.eventScheduleItems[eventId] = response.data.eventScheduleItems
-      },
-      eventScheduleIsLoaded: function (eventId: number) {
-        return this.eventScheduleItems[eventId] != undefined
       },
       getEventScheduleItem: async function (eventId: number, id: number): Promise<EditEventScheduleItem> {
         return this.eventScheduleItems[eventId].find((x: EventScheduleItem) => x.id == id) as EventScheduleItem
       },
       updateEventScheduleItem: async function (eventId: number, values: EventScheduleItemForm, id: number): Promise<void> {
         await axios.put(`/events/${eventId}/scheduleItems/${id}`, {
-          name: values.name,
-          startDate: values.startDate,
-          endDate: values.endDate,
-          location: values.location,
-          websiteName: values.websiteName,
-          websiteUrl: values.websiteUrl,
-          additionalNotes: values.additionalNotes,
-          timeZoneId: values.timeZone.id,
-          conExperience: values.conExperience,
+          description: values.description,
+          startTime: values.startTime.toFormat('yyyy-MM-dd\'T\'HH:mm:ss'),
+          endTime: values.endTime.toFormat('yyyy-MM-dd\'T\'HH:mm:ss'),
+          date: values.date.toFormat('yyyy-LL-dd'),
         })
           .then(async () => {
             await this.getEventScheduleItems(eventId)
@@ -49,15 +43,10 @@ export const EventScheduleItemStore
       },
       addEventScheduleItem: async function (eventId: number, values: EventScheduleItemForm): Promise<void> {
         await axios.post(`/events/${eventId}/scheduleItems/`, {
-          name: values.name,
-          startDate: values.startDate.toISOString().split('T')[0],
-          endDate: values.endDate.toISOString().split('T')[0],
-          location: values.location,
-          websiteName: values.websiteName,
-          websiteUrl: values.websiteUrl,
-          additionalNotes: values.additionalNotes,
-          timeZoneId: values.timeZone.id,
-          conExperience: values.conExperience,
+          description: values.description,
+          startTime: values.startTime.toFormat('yyyy-MM-dd\'T\'HH:mm:ss'),
+          endTime: values.endTime.toFormat('yyyy-MM-dd\'T\'HH:mm:ss'),
+          date: values.date.toFormat('yyyy-LL-dd'),
         })
           .then(async () => {
             await this.getEventScheduleItems(eventId)

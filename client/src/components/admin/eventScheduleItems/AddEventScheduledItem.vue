@@ -37,13 +37,12 @@ const cancel = () => {
   <Card>
     <template #content>
       <form @submit="onSubmit">
+        <FormInputTextWrapper v-model="form.fields.description" />
         <FormInputDateOnlyWrapper v-model="form.fields.date" />
         <div class="d-flex flex-row gap-2 w-100">
           <FormInputTimeOnlyWrapper v-model="form.fields.startTime" />
           <FormInputTimeOnlyWrapper v-model="form.fields.endTime" />
         </div>
-        <FormInputTextWrapper v-model="form.fields.description" />
-
         <div class="m-3 text-right">
           <Button label="Cancel" class="m-2" type="reset" @click="cancel" />
           <Button label="Add" class="m-2" type="submit" />

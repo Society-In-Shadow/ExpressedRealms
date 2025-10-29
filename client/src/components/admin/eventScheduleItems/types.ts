@@ -1,3 +1,5 @@
+import type { DateTime } from 'luxon'
+
 export interface EventScheduleItemResponse {
   eventScheduleItems: Array<EventScheduleItem>
 }
@@ -6,23 +8,16 @@ export interface EventScheduleItem {
   id: number
   eventId: number
   description: string
-  date: string
-  startTime: Date
-  endTime: Date
-}
-
-export interface EditEventScheduleItemRequest {
-  id: number
-  name: string
-  description: string
-  typeId: number
+  date: DateTime
+  startTime: DateTime
+  endTime: DateTime
 }
 
 export interface EditEventScheduleItem {
   id: number
   eventId: number
   description: string
-  date: string
-  startTime: string
-  endTime: string
+  date: DateTime
+  startTime: DateTime
+  endTime: DateTime
 }

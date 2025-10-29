@@ -8,6 +8,7 @@ import {
   EventScheduleItemConfirmationPopup,
 } from '@/components/admin/eventScheduleItems/services/eventScheduledItemConfirmationPopupService'
 import EditEventScheduleItem from '@/components/admin/eventScheduleItems/EditEventScheduledItem.vue'
+import type { DateTime } from 'luxon'
 
 let userInfo = userStore()
 
@@ -40,12 +41,8 @@ function toggleEdit() {
   showEdit.value = !showEdit.value
 }
 
-function formatDate(date: string) {
-  return new Date(date).toLocaleTimeString('en-US', {
-    hour12: true,
-    hour: 'numeric',
-    minute: 'numeric',
-  })
+function formatDate(date: DateTime) {
+  return date.toFormat('t')
 }
 
 </script>

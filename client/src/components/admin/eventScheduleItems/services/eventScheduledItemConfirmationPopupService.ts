@@ -5,7 +5,7 @@ export const EventScheduleItemConfirmationPopup = (id: number, name: string) => 
   const confirm = useConfirm()
   const store = EventScheduleItemStore()
 
-  const deleteConfirmation = (EventScheduleItem: MouseEvent) =>
+  const deleteConfirmation = (eventId: number, EventScheduleItem: MouseEvent) =>
     confirm.require({
       target: EventScheduleItem.target as HTMLElement,
       group: 'popup',
@@ -21,7 +21,7 @@ export const EventScheduleItemConfirmationPopup = (id: number, name: string) => 
         severity: 'danger',
       },
       accept: () => {
-        store.deleteEventScheduleItem(id)
+        store.deleteEventScheduleItem(eventId, id)
       },
     })
 

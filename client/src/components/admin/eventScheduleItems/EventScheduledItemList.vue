@@ -6,6 +6,7 @@ import EventScheduleItemItem from '@/components/admin/eventScheduleItems/EventSc
 import { UserRoles, userStore } from '@/stores/userStore'
 import Button from 'primevue/button'
 import AddEventScheduledItem from '@/components/admin/eventScheduleItems/AddEventScheduledItem.vue'
+import { DateTime } from 'luxon'
 
 const store = EventScheduleItemStore()
 const userInfo = userStore()
@@ -43,7 +44,7 @@ function groupAndSortScheduleItems(
 ): { date: string, events: EventScheduleItem[] }[] {
   // First, group by date (YYYY-MM-DD so we can sort easily)
   const grouped = items.reduce<Record<string, EventScheduleItem[]>>((acc, item) => {
-    const dateKey = new Date(item.startTime).toISOString().split('T')[0]
+    const dateKey = item.startTime.toFormat('yyyy-MM-dd')
     if (!acc[dateKey]) acc[dateKey] = []
     acc[dateKey].push(item)
     return acc
@@ -55,23 +56,18 @@ function groupAndSortScheduleItems(
       // Sort each day's events by start time
       const sortedEvents = dayItems.sort(
         (a, b) =>
-          new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
+          a.startTime - b.startTime,
       )
 
       // Create a readable label
-      const formattedDate = new Date(dateKey).toLocaleDateString('en-US', {
-        weekday: 'long',
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-      })
+      const formattedDate = DateTime.fromISO(dateKey).toFormat('cccc, MMM dd')
 
       return { date: formattedDate, events: sortedEvents }
     })
   // Sort by chronological date
     .sort(
       (a, b) =>
-        new Date(a.events[0].startTime).getTime() - new Date(b.events[0].startTime).getTime(),
+        a.events[0].startTime - b.events[0].startTime,
     )
 }
 
