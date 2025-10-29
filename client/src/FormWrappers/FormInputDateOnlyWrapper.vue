@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import DatePicker from 'primevue/datepicker'
-import { computed } from 'vue'
+import { computed, type PropType } from 'vue'
 import Skeleton from 'primevue/skeleton'
 import type { FormField } from '@/FormWrappers/Interfaces/FormField'
 import { DateTime } from 'luxon'
@@ -16,6 +16,16 @@ const props = defineProps({
   dataCyTag: {
     type: String,
     default: '',
+  },
+  maxDate: {
+    type: Object as PropType<DateTime | null>,
+    required: false,
+    default: null,
+  },
+  minDate: {
+    type: Object as PropType<DateTime | null>,
+    required: false,
+    default: null,
   },
   showSkeleton: {
     type: Boolean,
@@ -56,7 +66,7 @@ function luxonToDate(dt: DateTime | null): Date | null {
       v-else
       :id="dataCyTagCalc" :data-cy="dataCyTagCalc" class="w-100"
       date-format="DD MM, d, yy"
-      :model-value="luxonToDate(model.field.value)" v-bind="$attrs"
+      :model-value="luxonToDate(model.field.value)" v-bind="$attrs" :max-date="luxonToDate(props.maxDate)" :min-date="luxonToDate(props.minDate)"
       :class="{ 'p-invalid': model.error && model.error.length > 0 }" @update:model-value="onDateChange"
     />
     <small :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ model.error }}</small>

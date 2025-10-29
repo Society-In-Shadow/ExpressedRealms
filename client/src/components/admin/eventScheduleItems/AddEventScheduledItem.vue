@@ -7,6 +7,8 @@ import Button from 'primevue/button'
 import Card from 'primevue/card'
 import FormInputDateOnlyWrapper from '@/FormWrappers/FormInputDateOnlyWrapper.vue'
 import FormInputTimeOnlyWrapper from '@/FormWrappers/FormInputTimeOnlyWrapper.vue'
+import type { PropType } from 'vue'
+import type { Event } from '@/components/admin/events/types.ts'
 
 const store = EventScheduleItemStore()
 
@@ -18,6 +20,10 @@ const emit = defineEmits<{
 const props = defineProps({
   eventId: {
     type: Number,
+    required: true,
+  },
+  event: {
+    type: Object as PropType<Event>,
     required: true,
   },
 })
@@ -38,7 +44,7 @@ const cancel = () => {
     <template #content>
       <form @submit="onSubmit">
         <FormInputTextWrapper v-model="form.fields.description" />
-        <FormInputDateOnlyWrapper v-model="form.fields.date" />
+        <FormInputDateOnlyWrapper v-model="form.fields.date" :max-date="props.event.endDate" :min-date="props.event.startDate" />
         <div class="d-flex flex-row gap-2 w-100">
           <FormInputTimeOnlyWrapper v-model="form.fields.startTime" />
           <FormInputTimeOnlyWrapper v-model="form.fields.endTime" />

@@ -88,11 +88,11 @@ const timezone = computed(() => {
   <div v-for="day in groupAndSortScheduleItems(sortedEventScheduleItems)" :key="day.date" class="w-100">
     <h2>{{ day.date }}</h2>
     <div v-for="EventScheduleItem in day.events" :key="EventScheduleItem.id" class="py-3 w-100">
-      <EventScheduleItemItem :event-id="eventId" :event-schedule-item="EventScheduleItem" :is-read-only="false" />
+      <EventScheduleItemItem :event="event" :event-id="eventId" :event-schedule-item="EventScheduleItem" :is-read-only="false" />
     </div>
   </div>
 
-  <AddEventScheduledItem v-if="showAdd && hasEventScheduleItemManagementRole" :event-id="eventId" @canceled="toggleAdd" />
+  <AddEventScheduledItem v-if="showAdd && hasEventScheduleItemManagementRole" :event="event" :event-id="eventId" @canceled="toggleAdd" />
   <Button
     v-if="!showAdd && hasEventScheduleItemManagementRole" class="w-100 m-2"
     label="Add Schedule Item" @click="toggleAdd"

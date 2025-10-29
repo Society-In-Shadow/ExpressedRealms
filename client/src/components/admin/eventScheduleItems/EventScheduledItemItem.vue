@@ -9,12 +9,17 @@ import {
 } from '@/components/admin/eventScheduleItems/services/eventScheduledItemConfirmationPopupService'
 import EditEventScheduleItem from '@/components/admin/eventScheduleItems/EditEventScheduledItem.vue'
 import type { DateTime } from 'luxon'
+import type { Event } from '@/components/admin/events/types.ts'
 
 let userInfo = userStore()
 
 const props = defineProps({
   eventId: {
     type: Number,
+    required: true,
+  },
+  event: {
+    type: Object as PropType<Event>,
     required: true,
   },
   eventScheduleItem: {
@@ -49,7 +54,7 @@ function formatDate(date: DateTime) {
 
 <template>
   <div v-if="showEdit" class="mb-2">
-    <EditEventScheduleItem :event-id="props.eventId" :event-schedule-item-id="props.eventScheduleItem.id" @canceled="toggleEdit" />
+    <EditEventScheduleItem :event="props.event" :event-id="props.eventId" :event-schedule-item-id="props.eventScheduleItem.id" @canceled="toggleEdit" />
   </div>
   <div v-else class="d-flex flex-column flex-md-row align-self-center justify-content-between">
     <div class="flex-fill">
