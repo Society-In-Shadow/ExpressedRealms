@@ -21,9 +21,9 @@ public static class EditEventScheduleItemEndpoint
                 Id = id,
                 EventId = eventId,
                 Description = request.Description,
-                StartTime = request.StartTime,
-                Date = request.Date,
-                EndTime = request.EndTime,
+                 Date = request.Date,
+                StartTime = TimeOnly.FromDateTime(request.StartTime),
+                EndTime = TimeOnly.FromDateTime(request.EndTime),
             }
         );
 
