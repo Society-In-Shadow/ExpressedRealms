@@ -9,6 +9,7 @@ import Tag from 'primevue/tag'
 import { EventConfirmationPopup } from '@/components/admin/events/services/eventConfirmationPopupService'
 import EditEvent from '@/components/admin/events/EditEvent.vue'
 import { adminEventScheduleDialogs } from '@/components/admin/eventScheduleItems/services/dialogs.ts'
+import type { DateTime } from 'luxon'
 
 let userInfo = userStore()
 const dialogs = adminEventScheduleDialogs()
@@ -44,13 +45,8 @@ function openMapWithFallback(address: string) {
   window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank').focus()// = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
 }
 
-function formatDate(date: string) {
-  return new Date(date).toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
+function formatDate(date: DateTime) {
+  return date.toFormat('cccc, LLLL dd, yyyy')
 }
 
 </script>

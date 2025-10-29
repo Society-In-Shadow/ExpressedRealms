@@ -1,17 +1,20 @@
-import { date, type InferType, number, object, string } from 'yup'
+import { type InferType, mixed, number, object, string } from 'yup'
 import { useGenericForm } from '@/utilities/formUtilities'
 import type { ListItem } from '@/types/ListItem'
 import type { EditEvent } from '@/components/admin/events/types.ts'
+import type { DateTime } from 'luxon'
 
 const validationSchema = object({
   name: string()
     .required()
     .max(250)
     .label('Name'),
-  startDate: date()
+  startDate: mixed<DateTime>()
+    .test('is-valid', 'Invalid date', val => val?.isValid ?? false)
     .required()
     .label('Start Date'),
-  endDate: date()
+  endDate: mixed<DateTime>()
+    .test('is-valid', 'Invalid date', val => val?.isValid ?? false)
     .required()
     .label('End Date'),
   location: string()
@@ -24,6 +27,7 @@ const validationSchema = object({
     .required()
     .label('Website Url'),
   additionalNotes: string()
+    .nullable()
     .optional()
     .label('Additional Notes'),
   conExperience: number()

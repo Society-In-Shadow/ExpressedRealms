@@ -1,4 +1,5 @@
 import type { ListItem } from '@/types/ListItem'
+import { DateTime } from 'luxon'
 
 export interface EventResponse {
   events: Array<Event>
@@ -7,8 +8,8 @@ export interface EventResponse {
 export interface Event {
   id: number
   name: string
-  startDate: string // ISO date string (e.g. "2025-10-28")
-  endDate: string // same as above
+  startDate: DateTime
+  endDate: DateTime
   location: string
   websiteName: string
   websiteUrl: string
@@ -28,8 +29,8 @@ export interface EditEventRequest {
 export interface EditEvent {
   id: number
   name: string
-  startDate: string // ISO date string (e.g. "2025-10-28")
-  endDate: string // same as above
+  startDate: DateTime
+  endDate: DateTime
   location: string
   websiteName: string
   websiteUrl: string

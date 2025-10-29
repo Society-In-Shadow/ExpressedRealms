@@ -6,6 +6,7 @@ import toaster from '@/services/Toasters'
 import type { EditEvent, Event } from '@/components/admin/events/types'
 import type { EventForm } from '@/components/admin/events/validations/eventValidations'
 import type { EventResponse } from '@/components/admin/events/types.ts'
+import { DateTime } from 'luxon'
 
 export const EventStore
   = defineStore(`Events`, {
@@ -20,6 +21,11 @@ export const EventStore
     actions: {
       async getEvents() {
         const response = await axios.get<EventResponse>(`/events`)
+
+        for (const item of response.data.events) {
+          item.startDate = DateTime.fromISO(`${item.startDate}`)
+          item.endDate = DateTime.fromISO(`${item.endDate}`)
+        }
         this.events = response.data.events
 
         this.timeZones = [{ id: 'America/Chicago', name: 'Central Time Zone', description: 'test' } as ListItem]
@@ -35,8 +41,8 @@ export const EventStore
       updateEvent: async function (values: EventForm, id: number): Promise<void> {
         await axios.put(`/events/${id}`, {
           name: values.name,
-          startDate: values.startDate,
-          endDate: values.endDate,
+          startDate: values.startDate.toFormat('yyyy-LL-dd'),
+          endDate: values.endDate.toFormat('yyyy-LL-dd'),
           location: values.location,
           websiteName: values.websiteName,
           websiteUrl: values.websiteUrl,
@@ -52,8 +58,8 @@ export const EventStore
       addEvent: async function (values: EventForm): Promise<void> {
         await axios.post(`/events/`, {
           name: values.name,
-          startDate: values.startDate.toISOString().split('T')[0],
-          endDate: values.endDate.toISOString().split('T')[0],
+          startDate: values.startDate.toFormat('yyyy-LL-dd'),
+          endDate: values.endDate.toFormat('yyyy-LL-dd'),
           location: values.location,
           websiteName: values.websiteName,
           websiteUrl: values.websiteUrl,
