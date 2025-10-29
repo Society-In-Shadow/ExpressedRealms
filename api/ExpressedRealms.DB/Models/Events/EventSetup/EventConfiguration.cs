@@ -28,8 +28,7 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
         builder
             .Property(e => e.AdditionalNotes)
             .HasColumnName("additional_notes")
-            .HasMaxLength(5000)
-            .IsRequired();
+            .HasMaxLength(5000);
         builder
             .Property(e => e.TimeZoneId)
             .HasColumnName("time_zone_id")

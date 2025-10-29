@@ -19,9 +19,9 @@ public static class CreateEventScheduleItemEndpoint
             {
                 EventId = eventId,
                 Description = request.Description,
-                StartTime = request.StartTime,
+                StartTime = TimeOnly.FromDateTime(request.StartTime),
+                EndTime = TimeOnly.FromDateTime(request.EndTime),
                 Date = request.Date,
-                EndTime = request.EndTime,
             }
         );
 

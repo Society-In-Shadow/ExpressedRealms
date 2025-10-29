@@ -43,20 +43,20 @@ internal static class EventEndpoints
             .RequirePolicyAuthorization(Policies.ManageEvents);
 
         endpointGroup.MapGet(
-            "{eventId}/scheduleItem",
+            "{eventId}/scheduleItems",
             GetAllEventScheduleItemsEndpoint.ExecuteAsync
         );
 
         endpointGroup
-            .MapPost("{eventId}/scheduleItem", CreateEventScheduleItemEndpoint.ExecuteAsync)
+            .MapPost("{eventId}/scheduleItems", CreateEventScheduleItemEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManageEvents);
 
         endpointGroup
-            .MapPut("{eventId}/scheduleItem/{id}", EditEventScheduleItemEndpoint.ExecuteAsync)
+            .MapPut("{eventId}/scheduleItems/{id}", EditEventScheduleItemEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManageEvents);
 
         endpointGroup
-            .MapDelete("{eventId}/scheduleItem/{id}", DeleteEventScheduleItemEndpoint.ExecuteAsync)
+            .MapDelete("{eventId}/scheduleItems/{id}", DeleteEventScheduleItemEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManageEvents);
     }
 }

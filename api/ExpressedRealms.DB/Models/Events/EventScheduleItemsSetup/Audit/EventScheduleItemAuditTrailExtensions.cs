@@ -13,6 +13,9 @@ internal static class EventScheduleItemAuditTrailExtensions
         {
             switch (changedRecord.ColumnName)
             {
+                case "event_id":
+                    continue;
+
                 case "description":
                     changedRecord.FriendlyName = "Description";
                     break;

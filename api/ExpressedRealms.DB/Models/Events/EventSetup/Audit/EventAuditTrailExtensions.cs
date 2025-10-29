@@ -13,6 +13,9 @@ internal static class EventAuditTrailExtensions
         {
             switch (changedRecord.ColumnName)
             {
+                case "event_id":
+                    continue;
+
                 case "name":
                     changedRecord.FriendlyName = "Name";
                     break;
@@ -43,6 +46,15 @@ internal static class EventAuditTrailExtensions
 
                 case "con_experience":
                     changedRecord.FriendlyName = "Con Experience";
+                    break;
+
+                case "is_published":
+                    changedRecord.FriendlyName = "Published";
+                    changedRecord.Message = "Event was Published";
+                    break;
+
+                case "time_zone_id":
+                    changedRecord.FriendlyName = "Time Zone";
                     break;
 
                 default:

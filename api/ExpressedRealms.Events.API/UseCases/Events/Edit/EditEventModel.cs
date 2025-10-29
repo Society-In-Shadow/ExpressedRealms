@@ -9,7 +9,7 @@ public class EditEventModel
     public required string Location { get; set; } = null!;
     public required string WebsiteName { get; set; } = null!;
     public required string WebsiteUrl { get; set; } = null!;
-    public required string AdditionalNotes { get; set; } = null!;
+    public string? AdditionalNotes { get; set; } = null!;
     public required string TimeZoneId { get; set; }
     public int ConExperience { get; set; }
 }
