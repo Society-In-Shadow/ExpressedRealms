@@ -25,5 +25,25 @@ export const EventConfirmationPopup = (id: number, name: string) => {
       },
     })
 
-  return { deleteConfirmation }
+  const publishConfirmation = (event: MouseEvent) =>
+    confirm.require({
+      target: event.target as HTMLElement,
+      group: 'popup',
+      message: `Do you want to publish ${name}?  This cannot be undone and will send automated messages in Discord.`,
+      icon: 'pi pi-info-circle',
+      rejectProps: {
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptProps: {
+        label: 'Publish Event',
+        severity: 'warning',
+      },
+      accept: () => {
+        store.publishEvent(id)
+      },
+    })
+
+  return { deleteConfirmation, publishConfirmation }
 }

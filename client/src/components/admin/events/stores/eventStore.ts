@@ -116,5 +116,19 @@ export const EventStore
             toaster.success(`Successfully Deleted ${name}!`)
           })
       },
+
+      publishEvent: async function (id: number) {
+        let name = 'Event'
+
+        const Event = this.events.find((x: Event) => x.id == id)
+        if (Event)
+          name = Event.name
+
+        await axios.post(`/events/${id}/publish`)
+          .then(async () => {
+            await this.getEvents()
+            toaster.success(`Successfully Published ${name}!`)
+          })
+      },
     },
   })
