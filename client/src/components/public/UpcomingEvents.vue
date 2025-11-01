@@ -2,24 +2,19 @@
 import Card from 'primevue/card'
 
 import { onBeforeMount } from 'vue'
-import { eventStore } from '@/components/public/stores/eventStore'
+import { EventStore } from '@/components/admin/events/stores/eventStore.ts'
+import EventList from '@/components/admin/events/EventList.vue'
 
-const store = eventStore()
+const store = EventStore()
 
 onBeforeMount(() => {
   store.getEvents()
 })
 
-function openMapWithFallback(address: string) {
-  const encodedAddress = encodeURIComponent(address)
-
-  window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank').focus()// = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
-}
-
 </script>
 
 <template>
-  <h1>Our Upcoming Events!</h1>
+  <h1>Events</h1>
 
   <div v-if="store.events.length === 0">
     <Card>
@@ -31,18 +26,5 @@ function openMapWithFallback(address: string) {
       </template>
     </Card>
   </div>
-  <div v-for="event in store.events" :key="event.id">
-    <Card>
-      <template #title>
-        <h1 class="m-0">
-          {{ event.name }}
-        </h1>
-      </template>
-      <template #content>
-        <div>{{ event.startDate.toDateString() }} - {{ event.endDate.toDateString() }}</div>
-        <div><a href="" @click="openMapWithFallback(event.location)">{{ event.location }}</a></div>
-        <div><a :href="event.conWebsiteUrl">{{ event.conWebsiteName }}</a></div>
-      </template>
-    </Card>
-  </div>
+  <EventList :is-read-only="true" />
 </template>
