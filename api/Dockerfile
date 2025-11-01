@@ -18,13 +18,19 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 EXPOSE 8080
 
+
+# libicu67 is needed because discord.net assumes an english culture,
+# not an invariant culture.  
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    libicu72 \
     wget=1.21.3-1+deb12u1 \
     fonts-dejavu-core=2.37-6 \
     fonts-liberation=1:1.07.4-11 \
     fontconfig=2.14.1-4 \
     && fc-cache -f -v \
     && rm -rf /var/lib/apt/lists/*
+
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 
 COPY --from=build /app/publish .
 
