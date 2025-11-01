@@ -2,8 +2,9 @@
 import Carousel from 'primevue/carousel'
 import { publicExpressionsStore } from '@/components/public/stores/publicExpressionStore'
 import { onBeforeMount, ref } from 'vue'
-import { eventStore } from '@/components/public/stores/eventStore'
 import { makeIdSafe } from '@/utilities/stringUtilities'
+import { EventStore } from '@/components/admin/events/stores/eventStore.ts'
+import { DateTime } from 'luxon'
 
 interface CarouselItem {
   name: string
@@ -13,19 +14,24 @@ interface CarouselItem {
 }
 
 const expressionStore = publicExpressionsStore()
-const eventsStore = eventStore()
+const eventsStore = EventStore()
+function formatDate(date: DateTime) {
+  return date.toFormat('cccc, LLLL dd, yyyy')
+}
+
 onBeforeMount(async () => {
   await expressionStore.getExpressions()
   await eventsStore.getEvents()
-
+  const currentTime = DateTime.now()
   items.value.push(...eventsStore.events
-    .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+    .filter(x => x.endDate > currentTime && x.isPublished)
+    .sort((a, b) => a.startDate - b.startDate)
     .slice(0, 2)
     .map((event) => {
       return {
         name: 'Upcoming Event',
         description: `Come join us at ${event.name}!`,
-        dateRange: `${event.startDate.toDateString()} - ${event.endDate.toDateString()}`,
+        dateRange: `${formatDate(event.startDate)} - ${formatDate(event.endDate)}`,
         link: 'upcoming-events',
       }
     }))

@@ -60,7 +60,7 @@ function formatDate(date: DateTime) {
       <div v-else class="d-flex flex-column flex-md-row align-self-center justify-content-between">
         <div>
           <h1 class="p-0 m-0">
-            {{ props.event?.name }} <Tag severity="secondary">
+            {{ props.event?.name }} <Tag v-if="hasManageEventRole" severity="secondary">
               {{ props.event?.isPublished ? "Published" : "Draft" }}
             </Tag>
           </h1>
@@ -74,7 +74,7 @@ function formatDate(date: DateTime) {
           class="p-0 m-0 d-inline-flex align-items-start"
         >
           <div class="mr-2">
-            <Button class="" label="Schedule" @click="dialogs.showScheduleDialog(props.event.id, props.event)" />
+            <Button class="" label="Schedule" @click="dialogs.showScheduleDialog(props.event.id, props.event, props.isReadOnly)" />
           </div>
           <div v-if="!showEdit && hasManageEventRole && !props.isReadOnly">
             <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />

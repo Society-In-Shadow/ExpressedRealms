@@ -18,6 +18,7 @@ const hasEventScheduleItemManagementRole = ref(false)
 const dialogRef = inject('dialogRef') as Ref
 const eventId = ref(dialogRef.value.data.eventId)
 const event = ref(dialogRef.value.data.event)
+const isReadOnly = ref(dialogRef.value.data.isReadOnly)
 
 onBeforeMount(async () => {
   await store.getEventScheduleItems(eventId.value)
@@ -88,13 +89,13 @@ const timezone = computed(() => {
   <div v-for="day in groupAndSortScheduleItems(sortedEventScheduleItems)" :key="day.date" class="w-100">
     <h2>{{ day.date }}</h2>
     <div v-for="EventScheduleItem in day.events" :key="EventScheduleItem.id" class="py-3 w-100">
-      <EventScheduleItemItem :event="event" :event-id="eventId" :event-schedule-item="EventScheduleItem" :is-read-only="false" />
+      <EventScheduleItemItem :event="event" :event-id="eventId" :event-schedule-item="EventScheduleItem" :is-read-only="isReadOnly" />
     </div>
   </div>
 
-  <AddEventScheduledItem v-if="showAdd && hasEventScheduleItemManagementRole" :event="event" :event-id="eventId" @canceled="toggleAdd" />
+  <AddEventScheduledItem v-if="showAdd && hasEventScheduleItemManagementRole && !isReadOnly" :event="event" :event-id="eventId" @canceled="toggleAdd" />
   <Button
-    v-if="!showAdd && hasEventScheduleItemManagementRole" class="w-100 m-2"
+    v-if="!showAdd && hasEventScheduleItemManagementRole && !isReadOnly" class="w-100 m-2"
     label="Add Schedule Item" @click="toggleAdd"
   />
 </template>
