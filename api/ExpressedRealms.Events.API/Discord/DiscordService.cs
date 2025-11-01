@@ -15,6 +15,7 @@ internal sealed class DiscordService(
 ) : IDiscordService
 {
     private readonly DiscordRestClient _discordRestClient = new();
+    const ulong SocietyInShadowsGuildId = 1176957503104352347;
 
     private async Task<bool> SetupDiscordClient()
     {
@@ -68,6 +69,34 @@ internal sealed class DiscordService(
         }
 
         await channel.SendMessageAsync(message, embeds: embeds);
+        return Result.Ok();
+    }
+
+    public async Task<Result> CreateEventAsync(DiscordEvent discordEvent)
+    {
+        var enabled = await SetupDiscordClient();
+
+        if (!enabled)
+        {
+            return Result.Ok();
+        }
+
+        if (environment.IsDevelopment())
+        {
+            // Disable Event Creation locally all together
+            return Result.Ok();
+        }
+
+        var guild = await _discordRestClient.GetGuildAsync(SocietyInShadowsGuildId);
+
+        await guild.CreateEventAsync(
+            discordEvent.Name,
+            discordEvent.StartDate,
+            GuildScheduledEventType.External,
+            location: discordEvent.Location,
+            endTime: discordEvent.EndDate
+        );
+
         return Result.Ok();
     }
 }

@@ -3,7 +3,6 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <InvariantGlobalization>true</InvariantGlobalization>
     <UserSecretsId>5789f340-45c1-4a0a-975f-402f74196d74</UserSecretsId>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <!-- By turning on the generate document stuff, it will automatically start throwing warnings on anything

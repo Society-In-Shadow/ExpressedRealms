@@ -10,4 +10,6 @@ public interface IDiscordService
         string message,
         Embed[]? embeds = null
     );
+
+    Task<Result> CreateEventAsync(DiscordEvent discordEvent);
 }

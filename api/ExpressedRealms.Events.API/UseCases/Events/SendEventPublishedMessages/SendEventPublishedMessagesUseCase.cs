@@ -3,6 +3,7 @@ using System.Text;
 using Discord;
 using ExpressedRealms.Events.API.Discord;
 using ExpressedRealms.Events.API.Repositories.Events;
+using ExpressedRealms.Shared;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 using TimeZoneConverter;
@@ -125,6 +126,16 @@ internal sealed class SendEventPublishedMessagesUseCase(
             DiscordChannel.PublicAnnouncements,
             message.ToString(),
             embeds: [siteEmbed, locationEmbed]
+        );
+
+        await discordService.CreateEventAsync(
+            new DiscordEvent()
+            {
+                Name = currentEvent.Name,
+                Location = currentEvent.Location,
+                StartDate = currentEvent.StartDate.ToUtc(currentEvent.TimeZoneId),
+                EndDate = currentEvent.EndDate.ToUtc(currentEvent.TimeZoneId),
+            }
         );
 
         return Result.Ok();

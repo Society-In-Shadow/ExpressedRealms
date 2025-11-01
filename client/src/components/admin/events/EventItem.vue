@@ -78,6 +78,7 @@ function formatDate(date: DateTime) {
           </div>
           <div v-if="!showEdit && hasManageEventRole && !props.isReadOnly">
             <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
+            <Button v-if="props.event.isPublished == false" class="mr-2" severity="info" label="Publish" @click="popups.publishConfirmation($event)" />
             <Button class="float-end" label="Edit" @click="toggleEdit" />
           </div>
         </div>

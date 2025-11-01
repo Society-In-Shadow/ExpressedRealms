@@ -14,6 +14,7 @@ import Tab from 'primevue/tab'
 import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
 import type { Event } from '@/components/admin/events/types.ts'
+import Card from 'primevue/card'
 
 const store = EventStore()
 const userInfo = userStore()
@@ -70,6 +71,16 @@ const currentAndUnpublishedEvents = computed(() => {
     </TabList>
     <TabPanels>
       <TabPanel value="0">
+        <div v-if="currentAndUnpublishedEvents.length == 0" class="text-center">
+          <Card>
+            <template #title>
+              No Upcoming Events at this Time
+            </template>
+            <template #content>
+              Stay tuned for upcoming events!
+            </template>
+          </Card>
+        </div>
         <div v-for="event in currentAndUnpublishedEvents" :key="event.id" class="py-3">
           <EventItem :event="event" :is-read-only="props.isReadOnly" />
         </div>
