@@ -9,6 +9,6 @@
     <PackageReference Include="Scrutor" Version="6.1.0" />
   </ItemGroup>
   <ItemGroup>
-      <PackageReference Include="TimeZoneConverter" Version="7.2.0" />
+    <PackageReference Include="TimeZoneConverter" Version="7.2.0" />
   </ItemGroup>
 </Project>

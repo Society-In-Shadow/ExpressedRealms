@@ -127,7 +127,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
             message.ToString(),
             embeds: [siteEmbed, locationEmbed]
         );
-        
+
         await discordService.CreateEventAsync(
             new DiscordEvent()
             {
@@ -135,7 +135,8 @@ internal sealed class SendEventPublishedMessagesUseCase(
                 Location = currentEvent.Location,
                 StartDate = currentEvent.StartDate.ToUtc(currentEvent.TimeZoneId),
                 EndDate = currentEvent.EndDate.ToUtc(currentEvent.TimeZoneId),
-            });
+            }
+        );
 
         return Result.Ok();
     }

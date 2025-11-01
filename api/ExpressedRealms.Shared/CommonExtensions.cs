@@ -10,5 +10,4 @@ public static class CommonExtensions
         var local = date.ToDateTime(TimeOnly.MinValue);
         return new DateTimeOffset(TimeZoneInfo.ConvertTimeToUtc(local, tz), TimeSpan.Zero);
     }
-
 }
