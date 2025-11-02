@@ -1,5 +1,7 @@
-import {defineStore} from 'pinia'
+import { defineStore } from 'pinia'
 import axios from 'axios'
+
+import toaster from '@/services/Toasters'
 
 export const charactersStore
   = defineStore('charactersStore', {
@@ -19,6 +21,7 @@ export const charactersStore
         await axios.delete(`/characters/${id}`)
           .then(async () => {
             await this.getCharacters()
+            toaster.success('Successfully Deleted Character!')
           })
       },
     },

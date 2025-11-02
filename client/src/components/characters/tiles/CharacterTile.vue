@@ -57,7 +57,7 @@ function editCharacter() {
         </div>
         <div class="d-inline-flex flex-column">
           <Button data-cy="character-edit-button" size="small" label="Edit" class="m-1" @click="editCharacter" />
-          <Button data-cy="character-delete-button" size="small" label="Delete" class="m-1" @click="popupService.deleteConfirmation($EventScheduleItem, props.characterId)" />
+          <Button data-cy="character-delete-button" size="small" label="Delete" class="m-1" @click="popupService.deleteConfirmation($event, props.characterId)" />
         </div>
       </div>
     </template>
