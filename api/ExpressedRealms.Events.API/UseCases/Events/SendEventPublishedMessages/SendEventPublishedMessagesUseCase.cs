@@ -116,7 +116,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
                 }
             }
         }
-        
+
         message.AppendLine();
 
         var siteEmbed = new EmbedBuilder()

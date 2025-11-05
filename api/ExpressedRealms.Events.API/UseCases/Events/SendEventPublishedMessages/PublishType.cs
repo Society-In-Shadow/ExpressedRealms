@@ -5,5 +5,5 @@ public enum PublishType
     InitialAnnouncement,
     OneMonthReminder,
     OneWeekReminder,
-    DayOfReminder
+    DayOfReminder,
 }

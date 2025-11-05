@@ -192,7 +192,9 @@ public class SendEventPublishedMessagesUseCaseTests
     [InlineData(PublishType.OneMonthReminder)]
     [InlineData(PublishType.OneWeekReminder)]
     [InlineData(PublishType.DayOfReminder)]
-    public async Task UseCase_ContainsMessage_OfHowMuchXPTheyWillEarn_WithFormatting_WhenItsNotInitialAnnouncement(PublishType type)
+    public async Task UseCase_ContainsMessage_OfHowMuchXPTheyWillEarn_WithFormatting_WhenItsNotInitialAnnouncement(
+        PublishType type
+    )
     {
         _model.PublishType = type;
         await _useCase.ExecuteAsync(_model);
@@ -212,7 +214,9 @@ public class SendEventPublishedMessagesUseCaseTests
     [InlineData(PublishType.OneMonthReminder)]
     [InlineData(PublishType.OneWeekReminder)]
     [InlineData(PublishType.DayOfReminder)]
-    public async Task UseCase_ContainsMessage_StatingTheTimezone_WithFormatting_WhenItIsNotAnInitialAnnouncement(PublishType type)
+    public async Task UseCase_ContainsMessage_StatingTheTimezone_WithFormatting_WhenItIsNotAnInitialAnnouncement(
+        PublishType type
+    )
     {
         _model.PublishType = type;
         await _useCase.ExecuteAsync(_model);
@@ -227,7 +231,7 @@ public class SendEventPublishedMessagesUseCaseTests
             )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_DoesNotContainMessage_StatingTheTimezone_WithFormatting_WhenItIsAnInitialAnnouncement()
     {
@@ -249,7 +253,9 @@ public class SendEventPublishedMessagesUseCaseTests
     [InlineData(PublishType.OneMonthReminder)]
     [InlineData(PublishType.OneWeekReminder)]
     [InlineData(PublishType.DayOfReminder)]
-    public async Task UseCase_ContainsMessage_FridaysScheduledEvent_WithFormatting_WhenItIsNotAnInitialAnnouncement(PublishType type)
+    public async Task UseCase_ContainsMessage_FridaysScheduledEvent_WithFormatting_WhenItIsNotAnInitialAnnouncement(
+        PublishType type
+    )
     {
         _model.PublishType = type;
         await _useCase.ExecuteAsync(_model);
@@ -267,7 +273,9 @@ public class SendEventPublishedMessagesUseCaseTests
     [InlineData(PublishType.OneMonthReminder)]
     [InlineData(PublishType.OneWeekReminder)]
     [InlineData(PublishType.DayOfReminder)]
-    public async Task UseCase_ContainsMessage_SaturdaysScheduledEvent_WithFormatting_WhenItIsNotAnInitialAnnouncement(PublishType type)
+    public async Task UseCase_ContainsMessage_SaturdaysScheduledEvent_WithFormatting_WhenItIsNotAnInitialAnnouncement(
+        PublishType type
+    )
     {
         _model.PublishType = type;
         await _useCase.ExecuteAsync(_model);
@@ -287,7 +295,9 @@ public class SendEventPublishedMessagesUseCaseTests
     [InlineData(PublishType.OneMonthReminder)]
     [InlineData(PublishType.OneWeekReminder)]
     [InlineData(PublishType.DayOfReminder)]
-    public async Task UseCase_ContainsMessage_SundaysScheduledEvent_WithFormatting_WhenItIsNotAnInitialAnnouncement(PublishType type)
+    public async Task UseCase_ContainsMessage_SundaysScheduledEvent_WithFormatting_WhenItIsNotAnInitialAnnouncement(
+        PublishType type
+    )
     {
         _model.PublishType = type;
         await _useCase.ExecuteAsync(_model);
@@ -300,7 +310,7 @@ public class SendEventPublishedMessagesUseCaseTests
             )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_ContainsMessage_CheckInWithBooth_OnDayOfReminder()
     {
@@ -309,7 +319,9 @@ public class SendEventPublishedMessagesUseCaseTests
         A.CallTo(() =>
                 _discordService.SendMessageToChannelAsync(
                     DiscordChannel.PublicAnnouncements,
-                    A<string>.That.Contains("** We do need you to check in at our booth (SHQ) for the following reasons:**"),
+                    A<string>.That.Contains(
+                        "** We do need you to check in at our booth (SHQ) for the following reasons:**"
+                    ),
                     A<Embed[]>._
                 )
             )
@@ -327,13 +339,15 @@ public class SendEventPublishedMessagesUseCaseTests
         A.CallTo(() =>
                 _discordService.SendMessageToChannelAsync(
                     DiscordChannel.PublicAnnouncements,
-                    A<string>.That.Not.Contains("** We do need you to check in at our booth (SHQ) for the following reasons:**"),
+                    A<string>.That.Not.Contains(
+                        "** We do need you to check in at our booth (SHQ) for the following reasons:**"
+                    ),
                     A<Embed[]>._
                 )
             )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_PassesThrough_WebsiteLinkAsEmbed()
     {
@@ -344,7 +358,9 @@ public class SendEventPublishedMessagesUseCaseTests
                     A<string>._,
                     A<Embed[]>.That.Matches(embeds =>
                         embeds.Any(k =>
-                            k.Url == _dbModel.WebsiteUrl && k.Title == _dbModel.WebsiteName && k.Description == $"{_dbModel.Name} Website!"
+                            k.Url == _dbModel.WebsiteUrl
+                            && k.Title == _dbModel.WebsiteName
+                            && k.Description == $"{_dbModel.Name} Website!"
                         )
                     )
                 )
@@ -363,7 +379,11 @@ public class SendEventPublishedMessagesUseCaseTests
                     DiscordChannel.PublicAnnouncements,
                     A<string>._,
                     A<Embed[]>.That.Matches(embeds =>
-                        embeds.Any(k => k.Url == mapUrl && k.Title == _dbModel.Location && k.Description == $"{_dbModel.Name} Location!")
+                        embeds.Any(k =>
+                            k.Url == mapUrl
+                            && k.Title == _dbModel.Location
+                            && k.Description == $"{_dbModel.Name} Location!"
+                        )
                     )
                 )
             )
