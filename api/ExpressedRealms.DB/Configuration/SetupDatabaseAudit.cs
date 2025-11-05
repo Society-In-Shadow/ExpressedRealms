@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Audit.Core;
+using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels.Audit;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit;
@@ -48,6 +49,7 @@ public static class SetupDatabaseAudit
                             .AddProgressionLevelAuditTrailMapping()
                             .AddEventAuditTrailMapping()
                             .AddEventScheduleItemAuditTrailMapping()
+                            .AddAssignedXpMappingAuditTrailMapping()
                             .AuditEntityAction<IAuditTable>(
                                 (evt, entry, audit) =>
                                 {
