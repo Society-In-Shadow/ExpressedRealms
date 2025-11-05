@@ -89,12 +89,14 @@ public class PublishEventUseCaseTests
     }
 
     [Fact]
-    public async Task UseCase_WillTriggerMessagePublish()
+    public async Task UseCase_WillTriggerInitialAnnouncementMessagePublish()
     {
         await _useCase.ExecuteAsync(_model);
         A.CallTo(() =>
                 _publishMessageUseCase.ExecuteAsync(
-                    A<SendEventPublishedMessagesModel>.That.Matches(k => k.Id == _model.Id)
+                    A<SendEventPublishedMessagesModel>.That.Matches(k =>
+                        k.Id == _model.Id && k.PublishType == PublishType.InitialAnnouncement
+                    )
                 )
             )
             .MustHaveHappenedOnceExactly();

@@ -68,41 +68,52 @@ internal sealed class SendEventPublishedMessagesUseCase(
             };
             message.AppendLine($"# Society in Shadows will be there on {attendingDays}!");
         }
-        message.AppendLine(
-            $"Once the event starts, everyone will have access to an additional **{currentEvent.ConExperience} XP** for this event."
-        );
-        message.AppendLine();
-        message.AppendLine(
-            "** We do need you to check in at our booth (SHQ) for the following reasons:**"
-        );
-        message.AppendLine(
-            "* **Bonus XP!** - We will be giving out a bonus XP for attending the event up to 5 XP.  If you bring a new player, you will get the full bonus"
-        );
-        message.AppendLine(
-            "* **Booklets!** - Every player needs a booklet in order to participate in the game.  These are provided to you at no cost."
-        );
-        message.AppendLine("* **Catching Up!** - We love to see both old and new players!");
-        message.AppendLine(
-            "* **Character Help!** - If you have questions about anything regarding your character, we will be happy to help you out."
-        );
-        message.AppendLine(
-            "* **Boring Stuff!** - A lot of cons want us to keep track of who is playing the game, so we will need to collect badge information."
-        );
 
-        message.AppendLine("# Schedule");
-        message.AppendLine(
-            $"{currentEvent.Name} is in the **{TZConvert.IanaToWindows(currentEvent.TimeZoneId)}** and our schedule below reflects that."
-        );
-
-        foreach (var dayGroup in dayGroups)
+        if (model.PublishType != PublishType.InitialAnnouncement)
         {
-            message.AppendLine($"## {dayGroup.Key.ToString("dddd")}");
+            message.AppendLine(
+                $"Once the event starts, everyone will have access to an additional **{currentEvent.ConExperience} XP** for this event."
+            );
+        }
+
+        if (model.PublishType == PublishType.DayOfReminder)
+        {
             message.AppendLine();
-            foreach (var scheduleItem in dayGroup)
+            message.AppendLine(
+                "** We do need you to check in at our booth (SHQ) for the following reasons:**"
+            );
+            message.AppendLine(
+                "* **Bonus XP!** - We will be giving out a bonus XP for attending the event up to 5 XP.  If you bring a new player, you will get the full bonus"
+            );
+            message.AppendLine(
+                "* **Booklets!** - Every player needs a booklet in order to participate in the game.  These are provided to you at no cost."
+            );
+            message.AppendLine("* **Catching Up!** - We love to see both old and new players!");
+            message.AppendLine(
+                "* **Character Help!** - If you have questions about anything regarding your character, we will be happy to help you out."
+            );
+            message.AppendLine(
+                "* **Boring Stuff!** - A lot of cons want us to keep track of who is playing the game, so we will need to collect badge information."
+            );
+        }
+
+        if (model.PublishType != PublishType.InitialAnnouncement)
+        {
+            message.AppendLine("# Schedule");
+            message.AppendLine(
+                $"{currentEvent.Name} is in the **{TZConvert.IanaToWindows(currentEvent.TimeZoneId)}** and our schedule below reflects that."
+            );
+
+            foreach (var dayGroup in dayGroups)
             {
-                message.AppendLine(
-                    $"**{scheduleItem.StartTime.ToString("hh:mm tt")}** - {scheduleItem.EndTime.ToString("hh:mm tt")} - **{scheduleItem.Description}**"
-                );
+                message.AppendLine($"## {dayGroup.Key.ToString("dddd")}");
+                message.AppendLine();
+                foreach (var scheduleItem in dayGroup)
+                {
+                    message.AppendLine(
+                        $"**{scheduleItem.StartTime.ToString("hh:mm tt")}** - {scheduleItem.EndTime.ToString("hh:mm tt")} - **{scheduleItem.Description}**"
+                    );
+                }
             }
         }
 
@@ -111,6 +122,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
         var siteEmbed = new EmbedBuilder()
             .WithTitle(currentEvent.WebsiteName)
             .WithUrl(currentEvent.WebsiteUrl)
+            .WithDescription($"{currentEvent.Name} Website!")
             .WithColor(Color.Blue)
             .Build();
 
@@ -119,6 +131,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
             .WithUrl(
                 $"https://www.google.com/maps/search/?api=1&query={WebUtility.UrlEncode(currentEvent.Location)}"
             )
+            .WithDescription($"{currentEvent.Name} Location!")
             .WithColor(Color.Blue)
             .Build();
 
