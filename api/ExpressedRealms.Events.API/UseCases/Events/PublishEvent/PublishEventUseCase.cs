@@ -30,7 +30,7 @@ internal sealed class PublishEventUseCase(
         await eventRepository.EditAsync(currentEvent);
 
         await publishMessageUseCase.ExecuteAsync(
-            new SendEventPublishedMessagesModel() { Id = model.Id }
+            new SendEventPublishedMessagesModel() { Id = model.Id, PublishType = PublishType.InitialAnnouncement }
         );
 
         return Result.Ok();
