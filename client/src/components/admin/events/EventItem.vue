@@ -9,7 +9,7 @@ import Tag from 'primevue/tag'
 import { EventConfirmationPopup } from '@/components/admin/events/services/eventConfirmationPopupService'
 import EditEvent from '@/components/admin/events/EditEvent.vue'
 import { adminEventScheduleDialogs } from '@/components/admin/eventScheduleItems/services/dialogs.ts'
-import type { DateTime } from 'luxon'
+import { DateTime } from 'luxon'
 
 let userInfo = userStore()
 const dialogs = adminEventScheduleDialogs()
@@ -70,11 +70,9 @@ function formatDate(date: DateTime) {
             <div><a :href="props.event?.websiteUrl">{{ props.event.websiteName }}</a></div>
           </div>
         </div>
-        <div
-          class="p-0 m-0 d-inline-flex align-items-start"
-        >
-          <div class="mr-2">
-            <Button class="" label="Schedule" @click="dialogs.showScheduleDialog(props.event.id, props.event, props.isReadOnly)" />
+        <div class="p-0 m-0 d-inline-flex align-items-start">
+          <div v-if="hasManageEventRole || props.event?.startDate <= DateTime.now().plus({ months: 1 })" class="mr-2">
+            <Button label="Schedule" @click="dialogs.showScheduleDialog(props.event.id, props.event, props.isReadOnly)" />
           </div>
           <div v-if="!showEdit && hasManageEventRole && !props.isReadOnly">
             <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
