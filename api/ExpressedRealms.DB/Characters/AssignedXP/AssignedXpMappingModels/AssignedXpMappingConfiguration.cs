@@ -29,5 +29,17 @@ public class AssignedXpMappingConfiguration : IEntityTypeConfiguration<AssignedX
             .WithMany(x => x.AssignedXpMappings)
             .HasForeignKey(x => x.PlayerId)
             .OnDelete(DeleteBehavior.Restrict);
+        
+        builder
+            .HasOne(x => x.AssignedXpType)
+            .WithMany(x => x.AssignedXpMappings)
+            .HasForeignKey(x => x.AssignedXpTypeId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
+        builder
+            .HasOne(x => x.AssignedByUser)
+            .WithMany(x => x.AssignedXpMappings)
+            .HasForeignKey(x => x.AssignedByUserId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

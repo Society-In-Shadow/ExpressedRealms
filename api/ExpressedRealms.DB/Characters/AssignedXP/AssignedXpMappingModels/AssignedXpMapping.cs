@@ -2,9 +2,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels.Audit;
+using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpTypeModels;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Events.EventSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 
 namespace ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
 
@@ -35,9 +37,21 @@ public class AssignedXpMapping : ISoftDelete
 
     public virtual Event Event { get; set; } = null!;
     
+    [Required]
+    [Column("assigned_xp_type_id")]
+    public int AssignedXpTypeId { get; set; }
+
+    public virtual AssignedXpType AssignedXpType { get; set; } = null!;
+    
+    [Required]
+    [Column("assigned_by_user_id")]
+    public int AssignedByUserId { get; set; }
+
+    public virtual User AssignedByUser { get; set; } = null!;
+    
     [MaxLength(1500)]
     [Column("reason")]
-    public string? Reason { get; set; } = null!;
+    public string? Reason { get; set; }
     
     [Required]
     [AuditIgnore]
