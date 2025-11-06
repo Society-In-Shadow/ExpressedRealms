@@ -45,7 +45,7 @@ public class AssignedXpMapping : ISoftDelete
     
     [Required]
     [Column("assigned_by_user_id")]
-    public int AssignedByUserId { get; set; }
+    public required string AssignedByUserId { get; set; }
 
     public virtual User AssignedByUser { get; set; } = null!;
     
