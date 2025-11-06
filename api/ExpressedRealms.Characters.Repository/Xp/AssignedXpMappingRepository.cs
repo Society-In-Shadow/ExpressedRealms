@@ -4,7 +4,7 @@ using ExpressedRealms.DB.Helpers;
 
 namespace ExpressedRealms.Characters.Repository.Xp;
 
-public class AssignedXpMappingMappingRepository(
+public class AssignedXpMappingRepository(
     ExpressedRealmsDbContext context,
     CancellationToken cancellationToken
 ) : IAssignedXpMappingRepository

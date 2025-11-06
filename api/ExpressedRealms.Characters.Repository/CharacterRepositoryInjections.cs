@@ -1,3 +1,4 @@
+using System.Reflection;
 using ExpressedRealms.Characters.Repository.DTOs;
 using ExpressedRealms.Characters.Repository.Proficiencies;
 using ExpressedRealms.Characters.Repository.Skills;
@@ -5,6 +6,7 @@ using ExpressedRealms.Characters.Repository.Skills.DTOs;
 using ExpressedRealms.Characters.Repository.Stats;
 using ExpressedRealms.Characters.Repository.Stats.DTOs;
 using ExpressedRealms.Characters.Repository.Xp;
+using ExpressedRealms.Shared;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExpressedRealms.Characters.Repository;
@@ -15,6 +17,7 @@ public static class CharacterRepositoryInjections
         this IServiceCollection services
     )
     {
+        services.ImportRepositories(Assembly.GetExecutingAssembly());
         services.AddScoped<AddCharacterDtoValidator>();
         services.AddScoped<EditCharacterDtoValidator>();
         services.AddScoped<EditCharacterSkillMappingDtoValidator>();
