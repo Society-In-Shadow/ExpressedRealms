@@ -4,7 +4,7 @@ using ExpressedRealms.Shared;
 
 namespace ExpressedRealms.Events.API.Repositories.Events;
 
-internal interface IEventRepository : IGenericRepository
+public interface IEventRepository : IGenericRepository
 {
     Task<int> CreateEventAsync(Event @event);
     Task BulkAddEventScheduleItems(List<EventScheduleItem> defaultSchedule);

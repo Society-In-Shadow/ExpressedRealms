@@ -1,6 +1,8 @@
 using System.Reflection;
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Characters;
+using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
+using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpTypeModels;
 using ExpressedRealms.DB.Characters.xpTables;
 using ExpressedRealms.DB.Configuration;
 using ExpressedRealms.DB.Models.Skills;
@@ -57,5 +59,7 @@ namespace ExpressedRealms.DB
         public DbSet<CharacterXpMapping> CharacterXpMappings { get; set; }
         public DbSet<XpSectionType> XpSectionTypes { get; set; }
         public DbSet<CharacterXpView> CharacterXpViews { get; set; }
+        public DbSet<AssignedXpMapping> AssignedXpMappings { get; set; }
+        public DbSet<AssignedXpType> AssignedXpTypes { get; set; }
     }
 }
