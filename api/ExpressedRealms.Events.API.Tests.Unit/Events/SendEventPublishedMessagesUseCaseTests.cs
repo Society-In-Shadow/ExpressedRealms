@@ -349,6 +349,45 @@ public class SendEventPublishedMessagesUseCaseTests
     }
 
     [Fact]
+    public async Task UseCase_ContainsMessage_DailyScheduleWillBeReleasedLater_ForInitialAnnouncement()
+    {
+        _model.PublishType = PublishType.InitialAnnouncement;
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() =>
+                _discordService.SendMessageToChannelAsync(
+                    DiscordChannel.PublicAnnouncements,
+                    A<string>.That.Contains(
+                        "The daily schedule will be provided roughly a month out from the event"
+                    ),
+                    A<Embed[]>._
+                )
+            )
+            .MustHaveHappenedOnceExactly();
+    }
+
+    [Theory]
+    [InlineData(PublishType.OneMonthReminder)]
+    [InlineData(PublishType.OneWeekReminder)]
+    [InlineData(PublishType.DayOfReminder)]
+    public async Task UseCase_OnlyContainsMessage_DailyScheduleWillBeReleasedLater_OnDayOfReminder(
+        PublishType type
+    )
+    {
+        _model.PublishType = type;
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() =>
+                _discordService.SendMessageToChannelAsync(
+                    DiscordChannel.PublicAnnouncements,
+                    A<string>.That.Not.Contains(
+                        "The daily schedule will be provided roughly a month out from the event"
+                    ),
+                    A<Embed[]>._
+                )
+            )
+            .MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
     public async Task UseCase_PassesThrough_WebsiteLinkAsEmbed()
     {
         await _useCase.ExecuteAsync(_model);
