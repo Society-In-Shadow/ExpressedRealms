@@ -24,7 +24,7 @@ internal static class AssignedXpMappingsAuditTrailExtensions
                 case "event_id":
                     changedRecord.FriendlyName = "Event";
                     break;
-                
+
                 case "reason":
                     changedRecord.FriendlyName = "Reason";
                     break;

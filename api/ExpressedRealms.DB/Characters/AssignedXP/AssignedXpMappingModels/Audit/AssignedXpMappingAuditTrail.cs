@@ -8,7 +8,7 @@ public class AssignedXpMappingAuditTrail : IAuditTable
     public int AssignedXpMappingId { get; set; }
 
     public virtual AssignedXpMapping AssignedXpMapping { get; set; } = null!;
-    
+
     public int Id { get; set; }
     public required string Action { get; set; }
     public DateTime Timestamp { get; set; }

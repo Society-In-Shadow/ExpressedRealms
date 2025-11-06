@@ -42,7 +42,8 @@ public class User : IdentityUser
         new();
     public virtual List<ProgressionLevelAuditTrail> ProgressionLevelAuditTrails { get; set; } =
         new();
-    public virtual List<AssignedXpMappingAuditTrail> AssignedXpMappingAuditTrails { get; set; } = null!;
+    public virtual List<AssignedXpMappingAuditTrail> AssignedXpMappingAuditTrails { get; set; } =
+        null!;
     public virtual List<AssignedXpTypeAuditTrail> AssignedXpTypeAuditTrails { get; set; } = null!;
     public virtual List<AssignedXpMapping> AssignedXpMappings { get; set; } = null!;
 }

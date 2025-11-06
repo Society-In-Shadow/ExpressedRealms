@@ -16,13 +16,13 @@ public class AssignedXpType : ISoftDelete
     [Column("id")]
     public int Id { get; set; }
 
-    [Required] 
+    [Required]
     [MaxLength(300)]
     public required string Name { get; set; }
 
     [MaxLength(1500)]
     public string? Description { get; set; }
-    
+
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 

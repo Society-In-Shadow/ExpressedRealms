@@ -9,7 +9,7 @@ public class AssignedXpTypeAuditTrail : IAuditTable
     public int AssignedXpTypeId { get; set; }
 
     public virtual AssignedXpType AssignedXpType { get; set; } = null!;
-    
+
     public int Id { get; set; }
     public required string Action { get; set; }
     public DateTime Timestamp { get; set; }

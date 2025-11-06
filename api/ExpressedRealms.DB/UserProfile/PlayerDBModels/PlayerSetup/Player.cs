@@ -15,6 +15,6 @@ public class Player
     public virtual User User { get; set; } = null!;
     public virtual List<Character> Characters { get; set; } = new();
     public virtual List<PlayerAuditTrail> PlayerAuditTrails { get; set; } = new();
-    
+
     public virtual List<AssignedXpMapping> AssignedXpMappings { get; set; } = null!;
 }

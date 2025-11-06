@@ -18,13 +18,13 @@ public class AssignedXpMapping : ISoftDelete
     [Required]
     [Column("id")]
     public int Id { get; set; }
-    
+
     [Required]
     [Column("character_id")]
     public int CharacterId { get; set; }
 
     public virtual Character Character { get; set; } = null!;
-    
+
     [Required]
     [Column("player_id")]
     public Guid PlayerId { get; set; }
@@ -36,30 +36,31 @@ public class AssignedXpMapping : ISoftDelete
     public int EventId { get; set; }
 
     public virtual Event Event { get; set; } = null!;
-    
+
     [Required]
     [Column("assigned_xp_type_id")]
     public int AssignedXpTypeId { get; set; }
 
     public virtual AssignedXpType AssignedXpType { get; set; } = null!;
-    
+
     [Required]
     [Column("assigned_by_user_id")]
     public required string AssignedByUserId { get; set; }
 
     public virtual User AssignedByUser { get; set; } = null!;
-    
+
     [MaxLength(1500)]
     [Column("reason")]
     public string? Reason { get; set; }
-    
+
     [Required]
     [AuditIgnore]
     [Column("timestamp")]
     public DateTimeOffset Timestamp { get; set; }
-    
+
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 
-    public virtual List<AssignedXpMappingAuditTrail> AssignedXpMappingAuditTrails { get; set; } = null!;
+    public virtual List<AssignedXpMappingAuditTrail> AssignedXpMappingAuditTrails { get; set; } =
+        null!;
 }

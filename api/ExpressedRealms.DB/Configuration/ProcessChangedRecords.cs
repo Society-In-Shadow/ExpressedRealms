@@ -66,8 +66,11 @@ public static class ProcessChangedRecords
             nameof(Event) => EventAuditTrailExtensions.ProcessChangedRecords(changedRecords),
             nameof(EventScheduleItem) =>
                 EventScheduleItemAuditTrailExtensions.ProcessChangedRecords(changedRecords),
-            nameof(AssignedXpMapping) => AssignedXpMappingsAuditTrailExtensions.ProcessChangedRecords(changedRecords),
-            nameof(AssignedXpType) => AssignedXpTypesAuditTrailExtensions.ProcessChangedRecords(changedRecords),
+            nameof(AssignedXpMapping) =>
+                AssignedXpMappingsAuditTrailExtensions.ProcessChangedRecords(changedRecords),
+            nameof(AssignedXpType) => AssignedXpTypesAuditTrailExtensions.ProcessChangedRecords(
+                changedRecords
+            ),
             _ => throw new ArgumentException(
                 $"Table not setup in the ProcessChangedRecords class: {tableName}"
             ),
