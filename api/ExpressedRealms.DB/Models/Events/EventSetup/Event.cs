@@ -1,4 +1,5 @@
 using Audit.EntityFramework;
+using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup.Audit;
 using ExpressedRealms.DB.Models.Events.EventSetup.Audit;
@@ -24,4 +25,5 @@ public class Event : ISoftDelete
 
     public virtual List<EventAuditTrail> EventAuditTrails { get; set; } = null!;
     public virtual List<EventScheduleItemAuditTrail> EventScheduleAuditTrails { get; set; } = null!;
+    public virtual List<AssignedXpMapping> AssignedXpMappings { get; set; } = null!;
 }

@@ -1,4 +1,5 @@
-﻿using ExpressedRealms.DB.Characters.xpTables;
+﻿using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
+using ExpressedRealms.DB.Characters.xpTables;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
@@ -59,4 +60,5 @@ public class Character : ISoftDelete
     public virtual List<CharacterPowerMapping> CharacterPowerMappings { get; set; } = null!;
     public virtual List<CharacterBlessingMapping> CharacterBlessingMappings { get; set; } = null!;
     public virtual List<CharacterXpMapping> CharacterXpMappings { get; set; } = null!;
+    public virtual List<AssignedXpMapping> AssignedXpMappings { get; set; } = null!;
 }

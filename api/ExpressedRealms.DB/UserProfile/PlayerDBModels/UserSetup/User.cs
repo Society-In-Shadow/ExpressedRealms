@@ -1,4 +1,7 @@
 using Audit.EntityFramework;
+using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
+using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels.Audit;
+using ExpressedRealms.DB.Characters.AssignedXP.AssignedXpTypeModels.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit;
 using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup.Audit;
@@ -39,4 +42,8 @@ public class User : IdentityUser
         new();
     public virtual List<ProgressionLevelAuditTrail> ProgressionLevelAuditTrails { get; set; } =
         new();
+    public virtual List<AssignedXpMappingAuditTrail> AssignedXpMappingAuditTrails { get; set; } =
+        null!;
+    public virtual List<AssignedXpTypeAuditTrail> AssignedXpTypeAuditTrails { get; set; } = null!;
+    public virtual List<AssignedXpMapping> AssignedXpMappings { get; set; } = null!;
 }

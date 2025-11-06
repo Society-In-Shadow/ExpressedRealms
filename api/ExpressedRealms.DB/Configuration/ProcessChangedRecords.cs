@@ -1,3 +1,7 @@
+using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
+using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels.Audit;
+using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpTypeModels;
+using ExpressedRealms.DB.Characters.AssignedXP.AssignedXpTypeModels.Audit;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit;
@@ -62,6 +66,11 @@ public static class ProcessChangedRecords
             nameof(Event) => EventAuditTrailExtensions.ProcessChangedRecords(changedRecords),
             nameof(EventScheduleItem) =>
                 EventScheduleItemAuditTrailExtensions.ProcessChangedRecords(changedRecords),
+            nameof(AssignedXpMapping) =>
+                AssignedXpMappingsAuditTrailExtensions.ProcessChangedRecords(changedRecords),
+            nameof(AssignedXpType) => AssignedXpTypesAuditTrailExtensions.ProcessChangedRecords(
+                changedRecords
+            ),
             _ => throw new ArgumentException(
                 $"Table not setup in the ProcessChangedRecords class: {tableName}"
             ),
