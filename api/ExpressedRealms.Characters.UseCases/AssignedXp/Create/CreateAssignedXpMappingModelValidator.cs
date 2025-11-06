@@ -19,16 +19,10 @@ internal sealed class CreateAssignedXpMappingModelValidator
         IAssignedXpMappingRepository assignedXpMappingRepository
     )
     {
-        RuleFor(x => x.PlayerId)
-            .NotEmpty()
-            .WithMessage("Player Id is required.")
-            .MustAsync(async (x, y) => await playerRepository.FindPlayerAsync(x) is not null)
-            .WithMessage("The Player does not exist.");
-
         RuleFor(x => x.CharacterId)
             .NotEmpty()
             .WithMessage("Character Id is required.")
-            .MustAsync(async (x, y) => await characterRepository.CharacterExistsAsync(x))
+            .MustAsync(async (x, y) => await characterRepository.FindCharacterAsync(x) is not null)
             .WithMessage("The Character does not exist.");
 
         RuleFor(x => x.EventId)

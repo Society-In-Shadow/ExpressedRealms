@@ -1,3 +1,4 @@
+using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
@@ -9,6 +10,7 @@ namespace ExpressedRealms.Characters.UseCases.AssignedXp.Create;
 internal sealed class CreateAssignedXpMappingUseCase(
     IAssignedXpMappingRepository mappingRepository,
     CreateAssignedXpMappingModelValidator validator,
+    ICharacterRepository characterRepository,
     IUserContext userContext,
     TimeProvider timeProvider,
     CancellationToken cancellationToken
@@ -24,6 +26,8 @@ internal sealed class CreateAssignedXpMappingUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
+        
+        var character = await characterRepository.FindCharacterAsync(model.CharacterId);
 
         var id = await mappingRepository.AddAsync(
             new AssignedXpMapping()
@@ -32,7 +36,7 @@ internal sealed class CreateAssignedXpMappingUseCase(
                 EventId = model.EventId,
                 AssignedXpTypeId = model.AssignedXpTypeId,
                 CharacterId = model.CharacterId,
-                PlayerId = model.PlayerId,
+                PlayerId = character!.PlayerId,
                 Reason = model.Reason,
                 Timestamp = timeProvider.GetUtcNow(),
             }

@@ -102,6 +102,11 @@ internal sealed class CharacterRepository(
         return Result.Ok(character);
     }
 
+    public async Task<Character?> FindCharacterAsync(int id)
+    {
+        return await context.Characters.FindAsync([id], cancellationToken);
+    }
+
     public async Task<CharacterStatusDto> GetCharacterState(int id)
     {
         var query = await context.Characters.AsNoTracking().WithUserAccessAsync(userContext, id);

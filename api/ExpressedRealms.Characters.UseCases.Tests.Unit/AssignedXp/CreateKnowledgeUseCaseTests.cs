@@ -2,10 +2,10 @@ using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Players;
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.Characters.UseCases.AssignedXp.Create;
+using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
 using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpTypeModels;
 using ExpressedRealms.DB.Models.Events.EventSetup;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 using ExpressedRealms.Events.API.Repositories.Events;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
@@ -25,16 +25,20 @@ public class CreateAssignedXpMappingUseCaseTests
     private readonly IPlayerRepository _playerRepository;
 
     private readonly CreateAssignedXpMappingModel _model;
-
+    private readonly Character _characterModel;
     public CreateAssignedXpMappingUseCaseTests()
     {
         _model = new CreateAssignedXpMappingModel()
         {
-            PlayerId = Guid.NewGuid(),
             AssignedXpTypeId = 1,
             CharacterId = 2,
             EventId = 3,
             Reason = "They are awesome!",
+        };
+        
+        _characterModel = new Character()
+        {
+            PlayerId = Guid.NewGuid()
         };
 
         _repository = A.Fake<IAssignedXpMappingRepository>();
@@ -61,11 +65,8 @@ public class CreateAssignedXpMappingUseCaseTests
 
         A.CallTo(() => _repository.FindAsync<AssignedXpType>(_model.AssignedXpTypeId))
             .Returns(new AssignedXpType() { Name = "Foo" });
-        
-        A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId))
-            .Returns(true);
-        
-        
+
+        A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId)).Returns(_characterModel);
 
         var validator = new CreateAssignedXpMappingModelValidator(
             _characterRepository,
@@ -77,6 +78,7 @@ public class CreateAssignedXpMappingUseCaseTests
         _useCase = new CreateAssignedXpMappingUseCase(
             _repository,
             validator,
+            _characterRepository,
             _userContext,
             _timeProvider,
             CancellationToken.None
@@ -119,7 +121,7 @@ public class CreateAssignedXpMappingUseCaseTests
             "The Assigned Xp Type Id does not exist."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_EventId_WillFail_WhenItsEmpty()
     {
@@ -144,7 +146,7 @@ public class CreateAssignedXpMappingUseCaseTests
             "The Event Id does not exist."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_CharacterId_WillFail_WhenItsEmpty()
     {
@@ -160,38 +162,13 @@ public class CreateAssignedXpMappingUseCaseTests
     [Fact]
     public async Task ValidationFor_CharacterId_WillFail_WhenIt_DoesNotExist()
     {
-        A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId))
-            .Returns(false);
+        A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId))
+            .Returns(Task.FromResult<Character?>(null));
 
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(
             nameof(CreateAssignedXpMappingModel.CharacterId),
             "The Character does not exist."
-        );
-    }
-    
-    [Fact]
-    public async Task ValidationFor_PlayerId_WillFail_WhenItsEmpty()
-    {
-        _model.PlayerId = Guid.Empty;
-
-        var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(
-            nameof(CreateAssignedXpMappingModel.PlayerId),
-            "Player Id is required."
-        );
-    }
-
-    [Fact]
-    public async Task ValidationFor_PlayerId_WillFail_WhenIt_DoesNotExist()
-    {
-        A.CallTo(() => _playerRepository.FindPlayerAsync(_model.PlayerId))
-            .Returns(Task.FromResult<Player?>(null));
-
-        var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(
-            nameof(CreateAssignedXpMappingModel.PlayerId),
-            "The Player does not exist."
         );
     }
 
@@ -203,12 +180,11 @@ public class CreateAssignedXpMappingUseCaseTests
         A.CallTo(() => _timeProvider.GetUtcNow()).Returns(currentDate);
         A.CallTo(() => _userContext.CurrentUserId()).Returns(currentUserId);
 
-
         await _useCase.ExecuteAsync(_model);
         A.CallTo(() =>
                 _repository.AddAsync(
                     A<AssignedXpMapping>.That.Matches(k =>
-                        k.PlayerId == _model.PlayerId
+                        k.PlayerId == _characterModel.PlayerId
                         && k.AssignedXpTypeId == _model.AssignedXpTypeId
                         && k.Timestamp == currentDate
                         && k.EventId == _model.EventId
