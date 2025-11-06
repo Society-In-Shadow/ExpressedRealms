@@ -13,6 +13,7 @@ public static class UserRoles
     public const string ManageProgressionPaths = "ManageProgressionPaths";
     public const string ManageModifiers = "ManageModifiers";
     public const string ManageEvents = "ManageEvents";
+    public const string ManagePlayerExperience = "ManageUserExperience";
 
     /// <summary>
     /// Add items to this list to automatically add them to the database.
@@ -31,5 +32,6 @@ public static class UserRoles
             ManageProgressionPaths,
             ManageModifiers,
             ManageEvents,
+            ManagePlayerExperience,
         };
 }
