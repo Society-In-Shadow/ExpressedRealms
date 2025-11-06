@@ -14,7 +14,8 @@ internal sealed class PlayerRepository(
         return await context.Players.FindAsync([id], cancellationToken);
     }
 
-    public async Task EditAsync<TEntity>(TEntity entity) where TEntity : class
+    public async Task EditAsync<TEntity>(TEntity entity)
+        where TEntity : class
     {
         await context.CommonSaveChanges(entity, cancellationToken);
     }

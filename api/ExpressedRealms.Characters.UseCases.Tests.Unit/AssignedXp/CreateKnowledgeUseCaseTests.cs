@@ -26,6 +26,7 @@ public class CreateAssignedXpMappingUseCaseTests
 
     private readonly CreateAssignedXpMappingModel _model;
     private readonly Character _characterModel;
+
     public CreateAssignedXpMappingUseCaseTests()
     {
         _model = new CreateAssignedXpMappingModel()
@@ -35,11 +36,8 @@ public class CreateAssignedXpMappingUseCaseTests
             EventId = 3,
             Reason = "They are awesome!",
         };
-        
-        _characterModel = new Character()
-        {
-            PlayerId = Guid.NewGuid()
-        };
+
+        _characterModel = new Character() { PlayerId = Guid.NewGuid() };
 
         _repository = A.Fake<IAssignedXpMappingRepository>();
         _eventRepository = A.Fake<IEventRepository>();
@@ -66,7 +64,8 @@ public class CreateAssignedXpMappingUseCaseTests
         A.CallTo(() => _repository.FindAsync<AssignedXpType>(_model.AssignedXpTypeId))
             .Returns(new AssignedXpType() { Name = "Foo" });
 
-        A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId)).Returns(_characterModel);
+        A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId))
+            .Returns(_characterModel);
 
         var validator = new CreateAssignedXpMappingModelValidator(
             _characterRepository,

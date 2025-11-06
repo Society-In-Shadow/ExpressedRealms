@@ -26,7 +26,7 @@ internal sealed class CreateAssignedXpMappingUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-        
+
         var character = await characterRepository.FindCharacterAsync(model.CharacterId);
 
         var id = await mappingRepository.AddAsync(
