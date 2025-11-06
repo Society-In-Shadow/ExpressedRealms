@@ -347,7 +347,7 @@ public class SendEventPublishedMessagesUseCaseTests
             )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_ContainsMessage_DailyScheduleWillBeReleasedLater_ForInitialAnnouncement()
     {
@@ -369,7 +369,9 @@ public class SendEventPublishedMessagesUseCaseTests
     [InlineData(PublishType.OneMonthReminder)]
     [InlineData(PublishType.OneWeekReminder)]
     [InlineData(PublishType.DayOfReminder)]
-    public async Task UseCase_OnlyContainsMessage_DailyScheduleWillBeReleasedLater_OnDayOfReminder(PublishType type)
+    public async Task UseCase_OnlyContainsMessage_DailyScheduleWillBeReleasedLater_OnDayOfReminder(
+        PublishType type
+    )
     {
         _model.PublishType = type;
         await _useCase.ExecuteAsync(_model);

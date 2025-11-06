@@ -71,7 +71,9 @@ internal sealed class SendEventPublishedMessagesUseCase(
 
         if (model.PublishType == PublishType.InitialAnnouncement)
         {
-            message.AppendLine("The daily schedule will be provided roughly a month out from the event.");
+            message.AppendLine(
+                "The daily schedule will be provided roughly a month out from the event."
+            );
         }
 
         if (model.PublishType != PublishType.InitialAnnouncement)
