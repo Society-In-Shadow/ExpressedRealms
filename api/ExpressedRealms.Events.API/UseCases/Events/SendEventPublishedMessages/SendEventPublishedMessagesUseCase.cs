@@ -69,6 +69,11 @@ internal sealed class SendEventPublishedMessagesUseCase(
             message.AppendLine($"# Society in Shadows will be there on {attendingDays}!");
         }
 
+        if (model.PublishType == PublishType.InitialAnnouncement)
+        {
+            message.AppendLine("The daily schedule will be provided roughly a month out from the event.");
+        }
+
         if (model.PublishType != PublishType.InitialAnnouncement)
         {
             message.AppendLine(
