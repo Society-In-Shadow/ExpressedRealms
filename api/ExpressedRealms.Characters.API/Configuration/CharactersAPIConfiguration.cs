@@ -1,3 +1,4 @@
+using ExpressedRealms.Characters.API.AssignedXp;
 using ExpressedRealms.Characters.API.CharacterEndPoints;
 using ExpressedRealms.Characters.API.ProficiencyEndPoints;
 using ExpressedRealms.Characters.API.StatEndPoints;
@@ -12,5 +13,6 @@ public static class CharactersApiConfiguration
         app.AddCharacterEndPoints();
         app.AddStatEndPoints();
         app.AddProficiencyEndPoints();
+        app.AddAssignedXpEndpoints();
     }
 }
