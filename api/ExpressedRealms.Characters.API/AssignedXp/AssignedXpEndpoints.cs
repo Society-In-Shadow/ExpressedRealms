@@ -1,0 +1,23 @@
+﻿using ExpressedRealms.Authentication;
+using ExpressedRealms.Characters.API.AssignedXp.Create;
+using ExpressedRealms.Server.Shared;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
+
+namespace ExpressedRealms.Characters.API.AssignedXp;
+
+internal static class AssignedXpEndpoints
+{
+    internal static void AddAssignedXpEndpoints(this WebApplication app)
+    {
+        var endpointGroup = app.MapGroup("characters")
+            .AddFluentValidationAutoValidation()
+            .WithTags("Character Assigned Xp")
+            .WithOpenApi();
+
+        endpointGroup
+            .MapPost("{characterId}/assignedXp", CreateEndpoint.ExecuteAsync)
+            .RequirePolicyAuthorization(Policies.ManagePlayerExperience);
+    }
+}

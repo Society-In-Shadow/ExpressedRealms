@@ -12,6 +12,7 @@ public interface ICharacterRepository
     Task<Result> DeleteCharacterAsync(int id);
     Task<Result> UpdateCharacterAsync(EditCharacterDto dto);
     Task<bool> CharacterExistsAsync(int id);
+    Task<Character?> FindCharacterAsync(int id);
     Task<CharacterStatusDto> GetCharacterState(int id);
     Task<Character> GetCharacterForEdit(int characterId);
     Task UpdateCharacter(Character user);

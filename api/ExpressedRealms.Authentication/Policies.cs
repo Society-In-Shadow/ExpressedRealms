@@ -26,6 +26,7 @@ public class Policies
     public static readonly Policies ManageProgressionPaths = new(nameof(ManageProgressionPaths));
     public static readonly Policies ManageModifiers = new(nameof(ManageModifiers));
     public static readonly Policies ManageEvents = new(nameof(ManageEvents));
+    public static readonly Policies ManagePlayerExperience = new(nameof(ManagePlayerExperience));
 
     // Override ToString for convenience
     public override string ToString()

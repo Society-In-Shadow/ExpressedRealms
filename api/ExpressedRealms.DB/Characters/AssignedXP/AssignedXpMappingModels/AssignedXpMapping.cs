@@ -58,6 +58,10 @@ public class AssignedXpMapping : ISoftDelete
     [Column("timestamp")]
     public DateTimeOffset Timestamp { get; set; }
 
+    [Required]
+    [Column("amount")]
+    public int Amount { get; set; }
+
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 
