@@ -1,4 +1,5 @@
 using ExpressedRealms.Characters.Repository.Xp;
+using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
 using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpTypeModels;
 using ExpressedRealms.Events.API.Repositories.Events;
 using FluentValidation;
@@ -15,6 +16,15 @@ internal sealed class EditAssignedXpMappingModelValidator
         IAssignedXpMappingRepository assignedXpMappingRepository
     )
     {
+        RuleFor(x => x.Id)
+            .NotEmpty()
+            .WithMessage("Id is required.")
+            .MustAsync(
+                async (x, y) =>
+                    await assignedXpMappingRepository.FindAsync<AssignedXpMapping>(x) is not null
+            )
+            .WithMessage("The Id does not exist.");
+
         RuleFor(x => x.EventId)
             .NotEmpty()
             .WithMessage("Event Id is required.")

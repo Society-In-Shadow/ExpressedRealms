@@ -132,6 +132,28 @@ public class EditAssignedXpMappingUseCaseTests
     }
 
     [Fact]
+    public async Task ValidationFor_Id_WillFail_WhenItsEmpty()
+    {
+        _model.Id = 0;
+
+        var results = await _useCase.ExecuteAsync(_model);
+        results.MustHaveValidationError(nameof(EditAssignedXpMappingModel.Id), "Id is required.");
+    }
+
+    [Fact]
+    public async Task ValidationFor_Id_WillFail_WhenIt_DoesNotExist()
+    {
+        A.CallTo(() => _repository.FindAsync<AssignedXpMapping>(_model.Id))
+            .Returns(Task.FromResult<AssignedXpMapping?>(null));
+
+        var results = await _useCase.ExecuteAsync(_model);
+        results.MustHaveValidationError(
+            nameof(EditAssignedXpMappingModel.Id),
+            "The Id does not exist."
+        );
+    }
+
+    [Fact]
     public async Task ValidationFor_Amount_WillFail_WhenItsEmpty()
     {
         _model.Amount = 0;
