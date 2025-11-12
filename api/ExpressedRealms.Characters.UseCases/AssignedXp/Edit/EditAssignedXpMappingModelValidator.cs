@@ -1,0 +1,63 @@
+using ExpressedRealms.Characters.Repository.Xp;
+using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
+using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpTypeModels;
+using ExpressedRealms.Events.API.Repositories.Events;
+using FluentValidation;
+using JetBrains.Annotations;
+
+namespace ExpressedRealms.Characters.UseCases.AssignedXp.Edit;
+
+[UsedImplicitly]
+internal sealed class EditAssignedXpMappingModelValidator
+    : AbstractValidator<EditAssignedXpMappingModel>
+{
+    public EditAssignedXpMappingModelValidator(
+        IEventRepository eventRepository,
+        IAssignedXpMappingRepository assignedXpMappingRepository
+    )
+    {
+        RuleFor(x => x.Id)
+            .NotEmpty()
+            .WithMessage("Id is required.")
+            .MustAsync(
+                async (x, y) =>
+                    await assignedXpMappingRepository.FindAsync<AssignedXpMapping>(x) is not null
+            )
+            .WithMessage("The Id does not exist.");
+
+        RuleFor(x => x.EventId)
+            .NotEmpty()
+            .WithMessage("Event Id is required.")
+            .MustAsync(async (x, y) => await eventRepository.FindEventAsync(x) is not null)
+            .WithMessage("The Event Id does not exist.");
+
+        RuleFor(x => x.AssignedXpTypeId)
+            .NotEmpty()
+            .WithMessage("Assigned Xp Type Id is required.")
+            .MustAsync(
+                async (x, y) =>
+                    await assignedXpMappingRepository.FindAsync<AssignedXpType>(x) is not null
+            )
+            .WithMessage("The Assigned Xp Type Id does not exist.");
+
+        RuleFor(x => x.AssignedXpTypeId)
+            .NotEmpty()
+            .WithMessage("Assigned Xp Type Id is required.")
+            .MustAsync(
+                async (x, y) =>
+                    await assignedXpMappingRepository.FindAsync<AssignedXpType>(x) is not null
+            )
+            .WithMessage("The Assigned Xp Type Id does not exist.");
+
+        RuleFor(x => x.Amount)
+            .NotEmpty()
+            .WithMessage("Amount is required.")
+            .GreaterThan(0)
+            .WithMessage("Amount must be greater than 0.");
+
+        RuleFor(x => x.Reason)
+            .MaximumLength(1500)
+            .When(x => !string.IsNullOrWhiteSpace(x.Reason))
+            .WithMessage("Reason must be between 1 and 1500 characters.");
+    }
+}
