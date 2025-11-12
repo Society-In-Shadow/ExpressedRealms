@@ -1,5 +1,6 @@
 ﻿using ExpressedRealms.Authentication;
 using ExpressedRealms.Characters.API.AssignedXp.Create;
+using ExpressedRealms.Characters.API.AssignedXp.Edit;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -18,6 +19,10 @@ internal static class AssignedXpEndpoints
 
         endpointGroup
             .MapPost("{characterId}/assignedXp", CreateEndpoint.ExecuteAsync)
+            .RequirePolicyAuthorization(Policies.ManagePlayerExperience);
+
+        endpointGroup
+            .MapPut("{characterId}/assignedXp/{mappingId}", EditEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManagePlayerExperience);
     }
 }
