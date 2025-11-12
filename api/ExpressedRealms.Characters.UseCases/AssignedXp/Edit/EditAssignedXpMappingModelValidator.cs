@@ -1,3 +1,4 @@
+using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
 using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpTypeModels;
@@ -13,6 +14,7 @@ internal sealed class EditAssignedXpMappingModelValidator
 {
     public EditAssignedXpMappingModelValidator(
         IEventRepository eventRepository,
+        ICharacterRepository characterRepository,
         IAssignedXpMappingRepository assignedXpMappingRepository
     )
     {
@@ -24,6 +26,12 @@ internal sealed class EditAssignedXpMappingModelValidator
                     await assignedXpMappingRepository.FindAsync<AssignedXpMapping>(x) is not null
             )
             .WithMessage("The Id does not exist.");
+
+        RuleFor(x => x.CharacterId)
+            .NotEmpty()
+            .WithMessage("Character Id is required.")
+            .MustAsync(async (x, y) => await characterRepository.FindCharacterAsync(x) is not null)
+            .WithMessage("The Character Id does not exist.");
 
         RuleFor(x => x.EventId)
             .NotEmpty()

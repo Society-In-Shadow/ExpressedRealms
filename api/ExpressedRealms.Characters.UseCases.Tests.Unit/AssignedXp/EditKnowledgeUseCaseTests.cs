@@ -1,5 +1,7 @@
+using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.Characters.UseCases.AssignedXp.Edit;
+using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
 using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpTypeModels;
 using ExpressedRealms.DB.Models.Events.EventSetup;
@@ -15,6 +17,7 @@ public class EditAssignedXpMappingUseCaseTests
     private readonly EditAssignedXpMappingUseCase _useCase;
     private readonly IAssignedXpMappingRepository _repository;
     private readonly IEventRepository _eventRepository;
+    private readonly ICharacterRepository _characterRepository;
 
     private readonly EditAssignedXpMappingModel _model;
     private readonly AssignedXpMapping _dbModel;
@@ -28,6 +31,7 @@ public class EditAssignedXpMappingUseCaseTests
             Reason = "They are awesome asdf!",
             Amount = 110,
             Id = 1,
+            CharacterId = 4,
         };
 
         _dbModel = new AssignedXpMapping()
@@ -43,6 +47,7 @@ public class EditAssignedXpMappingUseCaseTests
 
         _repository = A.Fake<IAssignedXpMappingRepository>();
         _eventRepository = A.Fake<IEventRepository>();
+        _characterRepository = A.Fake<ICharacterRepository>();
 
         A.CallTo(() => _eventRepository.FindEventAsync(_model.EventId))
             .Returns(
@@ -64,7 +69,14 @@ public class EditAssignedXpMappingUseCaseTests
         A.CallTo(() => _repository.FindAsync<AssignedXpType>(_model.AssignedXpTypeId))
             .Returns(new AssignedXpType() { Name = "Foo" });
 
-        var validator = new EditAssignedXpMappingModelValidator(_eventRepository, _repository);
+        A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId))
+            .Returns(new Character());
+
+        var validator = new EditAssignedXpMappingModelValidator(
+            _eventRepository,
+            _characterRepository,
+            _repository
+        );
 
         _useCase = new EditAssignedXpMappingUseCase(_repository, validator, CancellationToken.None);
     }
@@ -150,6 +162,31 @@ public class EditAssignedXpMappingUseCaseTests
         results.MustHaveValidationError(
             nameof(EditAssignedXpMappingModel.Id),
             "The Id does not exist."
+        );
+    }
+
+    [Fact]
+    public async Task ValidationFor_CharacterId_WillFail_WhenItsEmpty()
+    {
+        _model.CharacterId = 0;
+
+        var results = await _useCase.ExecuteAsync(_model);
+        results.MustHaveValidationError(
+            nameof(EditAssignedXpMappingModel.CharacterId),
+            "Character Id is required."
+        );
+    }
+
+    [Fact]
+    public async Task ValidationFor_CharacterId_WillFail_WhenIt_DoesNotExist()
+    {
+        A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId))
+            .Returns(Task.FromResult<Character?>(null));
+
+        var results = await _useCase.ExecuteAsync(_model);
+        results.MustHaveValidationError(
+            nameof(EditAssignedXpMappingModel.CharacterId),
+            "The Character Id does not exist."
         );
     }
 

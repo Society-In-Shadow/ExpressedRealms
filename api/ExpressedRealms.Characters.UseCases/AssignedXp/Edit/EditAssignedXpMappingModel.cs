@@ -7,4 +7,5 @@ public class EditAssignedXpMappingModel
     public int AssignedXpTypeId { get; set; }
     public int Amount { get; set; }
     public string? Reason { get; set; }
+    public int CharacterId { get; set; }
 }

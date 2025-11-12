@@ -1,30 +1,21 @@
-using ExpressedRealms.Characters.UseCases.AssignedXp.Edit;
+using ExpressedRealms.Characters.UseCases.AssignedXp.Delete;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ExpressedRealms.Characters.API.AssignedXp.Edit;
+namespace ExpressedRealms.Characters.API.AssignedXp.Delete;
 
-public static class EditEndpoint
+public static class DeleteEndpoint
 {
     public static async Task<Results<Ok, NotFound, ValidationProblem>> ExecuteAsync(
         int characterId,
         int mappingId,
-        [FromBody] EditRequest request,
-        [FromServices] IEditAssignedXpMappingUseCase createKnowledgeUseCase
+        [FromServices] IDeleteAssignedXpMappingUseCase createKnowledgeUseCase
     )
     {
         var results = await createKnowledgeUseCase.ExecuteAsync(
-            new EditAssignedXpMappingModel()
-            {
-                EventId = request.EventId,
-                AssignedXpTypeId = request.AssignedXpTypeId,
-                Reason = request.Reason,
-                Amount = request.Amount,
-                Id = mappingId,
-                CharacterId = characterId,
-            }
+            new DeleteAssignedXpMappingModel() { Id = mappingId, CharacterId = characterId }
         );
 
         if (results.HasValidationError(out var validationProblem))
