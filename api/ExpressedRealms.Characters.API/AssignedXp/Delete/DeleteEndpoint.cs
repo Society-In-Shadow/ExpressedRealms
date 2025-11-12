@@ -15,11 +15,7 @@ public static class DeleteEndpoint
     )
     {
         var results = await createKnowledgeUseCase.ExecuteAsync(
-            new DeleteAssignedXpMappingModel()
-            {
-                Id = mappingId,
-                CharacterId = characterId
-            }
+            new DeleteAssignedXpMappingModel() { Id = mappingId, CharacterId = characterId }
         );
 
         if (results.HasValidationError(out var validationProblem))

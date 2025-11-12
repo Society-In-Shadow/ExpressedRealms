@@ -40,7 +40,10 @@ public class DeleteAssignedXpMappingUseCaseTests
         A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId))
             .Returns(new Character());
 
-        var validator = new DeleteAssignedXpMappingModelValidator(_characterRepository, _repository);
+        var validator = new DeleteAssignedXpMappingModelValidator(
+            _characterRepository,
+            _repository
+        );
 
         _useCase = new DeleteAssignedXpMappingUseCase(
             _repository,
@@ -70,14 +73,17 @@ public class DeleteAssignedXpMappingUseCaseTests
             "The Id does not exist."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_CharacterId_WillFail_WhenItsEmpty()
     {
         _model.CharacterId = 0;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(DeleteAssignedXpMappingModel.CharacterId), "Character Id is required.");
+        results.MustHaveValidationError(
+            nameof(DeleteAssignedXpMappingModel.CharacterId),
+            "Character Id is required."
+        );
     }
 
     [Fact]

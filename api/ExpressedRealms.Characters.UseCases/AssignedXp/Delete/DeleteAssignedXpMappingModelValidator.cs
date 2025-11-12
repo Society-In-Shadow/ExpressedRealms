@@ -23,7 +23,7 @@ internal sealed class DeleteAssignedXpMappingModelValidator
                     await assignedXpMappingRepository.FindAsync<AssignedXpMapping>(x) is not null
             )
             .WithMessage("The Id does not exist.");
-        
+
         RuleFor(x => x.CharacterId)
             .NotEmpty()
             .WithMessage("Character Id is required.")

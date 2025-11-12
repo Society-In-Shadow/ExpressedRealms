@@ -31,7 +31,7 @@ public class EditAssignedXpMappingUseCaseTests
             Reason = "They are awesome asdf!",
             Amount = 110,
             Id = 1,
-            CharacterId = 4
+            CharacterId = 4,
         };
 
         _dbModel = new AssignedXpMapping()
@@ -68,11 +68,15 @@ public class EditAssignedXpMappingUseCaseTests
 
         A.CallTo(() => _repository.FindAsync<AssignedXpType>(_model.AssignedXpTypeId))
             .Returns(new AssignedXpType() { Name = "Foo" });
-        
+
         A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId))
             .Returns(new Character());
 
-        var validator = new EditAssignedXpMappingModelValidator(_eventRepository, _characterRepository, _repository);
+        var validator = new EditAssignedXpMappingModelValidator(
+            _eventRepository,
+            _characterRepository,
+            _repository
+        );
 
         _useCase = new EditAssignedXpMappingUseCase(_repository, validator, CancellationToken.None);
     }
@@ -160,14 +164,17 @@ public class EditAssignedXpMappingUseCaseTests
             "The Id does not exist."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_CharacterId_WillFail_WhenItsEmpty()
     {
         _model.CharacterId = 0;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(EditAssignedXpMappingModel.CharacterId), "Character Id is required.");
+        results.MustHaveValidationError(
+            nameof(EditAssignedXpMappingModel.CharacterId),
+            "Character Id is required."
+        );
     }
 
     [Fact]

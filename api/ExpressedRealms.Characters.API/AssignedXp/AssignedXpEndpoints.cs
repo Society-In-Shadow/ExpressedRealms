@@ -25,7 +25,7 @@ internal static class AssignedXpEndpoints
         endpointGroup
             .MapPut("{characterId}/assignedXp/{mappingId}", EditEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManagePlayerExperience);
-        
+
         endpointGroup
             .MapDelete("{characterId}/assignedXp/{mappingId}", DeleteEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManagePlayerExperience);
