@@ -35,7 +35,7 @@ public class CreateAssignedXpMappingUseCaseTests
             CharacterId = 2,
             EventId = 3,
             Reason = "They are awesome!",
-            Amount = 10
+            Amount = 10,
         };
 
         _characterModel = new Character() { PlayerId = Guid.NewGuid() };
@@ -146,7 +146,7 @@ public class CreateAssignedXpMappingUseCaseTests
             "The Event Id does not exist."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_Amount_WillFail_WhenItsEmpty()
     {
@@ -170,7 +170,7 @@ public class CreateAssignedXpMappingUseCaseTests
             "Amount must be greater than 0."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_CharacterId_WillFail_WhenItsEmpty()
     {

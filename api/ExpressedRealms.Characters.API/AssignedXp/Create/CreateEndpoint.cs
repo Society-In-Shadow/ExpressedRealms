@@ -21,7 +21,7 @@ public static class CreateEndpoint
                 AssignedXpTypeId = request.AssignedXpTypeId,
                 Reason = request.Reason,
                 CharacterId = characterId,
-                Amount = request.Amount
+                Amount = request.Amount,
             }
         );
 
