@@ -23,6 +23,7 @@ public static class EditEndpoint
                 Reason = request.Reason,
                 Amount = request.Amount,
                 Id = mappingId,
+                CharacterId = characterId
             }
         );
 
