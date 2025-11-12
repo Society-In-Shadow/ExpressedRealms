@@ -29,6 +29,10 @@ internal static class AssignedXpMappingsAuditTrailExtensions
                     changedRecord.FriendlyName = "Reason";
                     break;
 
+                case "amount":
+                    changedRecord.FriendlyName = "Amount";
+                    break;
+
                 default:
                     throw new MissingAuditColumnException(changedRecord.ColumnName);
             }
