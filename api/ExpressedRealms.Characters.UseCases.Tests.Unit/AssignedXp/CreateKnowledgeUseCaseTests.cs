@@ -35,6 +35,7 @@ public class CreateAssignedXpMappingUseCaseTests
             CharacterId = 2,
             EventId = 3,
             Reason = "They are awesome!",
+            Amount = 10
         };
 
         _characterModel = new Character() { PlayerId = Guid.NewGuid() };
@@ -145,7 +146,31 @@ public class CreateAssignedXpMappingUseCaseTests
             "The Event Id does not exist."
         );
     }
+    
+    [Fact]
+    public async Task ValidationFor_Amount_WillFail_WhenItsEmpty()
+    {
+        _model.Amount = 0;
 
+        var results = await _useCase.ExecuteAsync(_model);
+        results.MustHaveValidationError(
+            nameof(CreateAssignedXpMappingModel.Amount),
+            "Amount is required."
+        );
+    }
+
+    [Fact]
+    public async Task ValidationFor_Amount_WillFail_WhenItsNegative()
+    {
+        _model.Amount = -1;
+
+        var results = await _useCase.ExecuteAsync(_model);
+        results.MustHaveValidationError(
+            nameof(CreateAssignedXpMappingModel.Amount),
+            "Amount must be greater than 0."
+        );
+    }
+    
     [Fact]
     public async Task ValidationFor_CharacterId_WillFail_WhenItsEmpty()
     {
@@ -190,6 +215,7 @@ public class CreateAssignedXpMappingUseCaseTests
                         && k.Reason == _model.Reason
                         && k.CharacterId == _model.CharacterId
                         && k.AssignedByUserId == currentUserId
+                        && k.Amount == _model.Amount
                     )
                 )
             )

@@ -38,6 +38,7 @@ internal sealed class CreateAssignedXpMappingUseCase(
                 CharacterId = model.CharacterId,
                 PlayerId = character!.PlayerId,
                 Reason = model.Reason,
+                Amount = model.Amount,
                 Timestamp = timeProvider.GetUtcNow(),
             }
         );

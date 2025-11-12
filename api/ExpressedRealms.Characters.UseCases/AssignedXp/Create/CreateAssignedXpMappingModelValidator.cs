@@ -40,6 +40,12 @@ internal sealed class CreateAssignedXpMappingModelValidator
             )
             .WithMessage("The Assigned Xp Type Id does not exist.");
 
+        RuleFor(x => x.Amount)
+            .NotEmpty()
+            .WithMessage("Amount is required.")
+            .GreaterThan(0)
+            .WithMessage("Amount must be greater than 0.");
+        
         RuleFor(x => x.Reason)
             .MaximumLength(1500)
             .When(x => !string.IsNullOrWhiteSpace(x.Reason))
