@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS restore
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS restore
 WORKDIR /src
 
 # https://stackoverflow.com/a/51373386
@@ -14,17 +14,9 @@ WORKDIR /src/ExpressedRealms.Server
 RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false --no-restore -m:"$(nproc)"
 
 # Stage 3: Runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
 EXPOSE 8080
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    wget=1.21.3-1+deb12u1 \
-    fonts-dejavu-core=2.37-6 \
-    fonts-liberation=1:1.07.4-11 \
-    fontconfig=2.14.1-4 \
-    && fc-cache -f -v \
-    && rm -rf /var/lib/apt/lists/*
 
 COPY --from=build /app/publish .
 
