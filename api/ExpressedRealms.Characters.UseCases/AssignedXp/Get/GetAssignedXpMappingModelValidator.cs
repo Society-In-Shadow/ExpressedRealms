@@ -25,7 +25,7 @@ internal sealed class GetAssignedXpMappingModelValidator
             .MustAsync(async (x, y) => await characterRepository.FindCharacterAsync(x) is not null)
             .WithMessage("The Character Id does not exist.")
             .When(x => x.CharacterId != 0);
-        
+
         RuleFor(x => x.EventId)
             .MustAsync(async (x, y) => await eventRepository.FindEventAsync(x) is not null)
             .WithMessage("The Event Id does not exist.")

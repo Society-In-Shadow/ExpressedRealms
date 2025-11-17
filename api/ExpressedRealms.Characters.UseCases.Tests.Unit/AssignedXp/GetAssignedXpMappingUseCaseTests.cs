@@ -28,18 +28,21 @@ public class GetAssignedXpMappingUseCaseTests
     public GetAssignedXpMappingUseCaseTests()
     {
         Randomizer.Seed = new Random(12345);
-        _model = new GetAssignedXpMappingModel() { CharacterId = 4, EventId = 0};
+        _model = new GetAssignedXpMappingModel() { CharacterId = 4, EventId = 0 };
         var basicFaker = new Faker<BasicInfo>()
             .RuleFor(b => b.Id, f => f.IndexFaker + 1)
             .RuleFor(b => b.Name, f => f.Random.Word());
-        
+
         var startDate = new DateOnly(2025, 1, 1);
         var dateTimeOffset = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         var faker = new Faker<XpMappingInfoDto>()
             .RuleForType(typeof(int), f => f.IndexFaker + 1)
             .RuleForType(typeof(string), f => f.Random.AlphaNumeric(8))
             .RuleForType(typeof(Guid), f => f.Random.Guid())
-            .RuleFor(x => x.DateAssigned, f => dateTimeOffset.AddDays(f.IndexFaker).AddTicks(f.Random.Long(0, 1000000)))
+            .RuleFor(
+                x => x.DateAssigned,
+                f => dateTimeOffset.AddDays(f.IndexFaker).AddTicks(f.Random.Long(0, 1000000))
+            )
             .RuleFor(x => x.Player, basicFaker)
             .RuleFor(x => x.Assigner, basicFaker)
             .RuleFor(x => x.Event, basicFaker)
@@ -54,7 +57,7 @@ public class GetAssignedXpMappingUseCaseTests
 
         _xpMappingInfoDtos = faker.Generate(3);
         _eventXpDtos = eventFaker.Generate(3);
-        
+
         _repository = A.Fake<IAssignedXpMappingRepository>();
         _characterRepository = A.Fake<ICharacterRepository>();
         _eventRepository = A.Fake<IEventRepository>();
@@ -63,20 +66,17 @@ public class GetAssignedXpMappingUseCaseTests
             .Returns(new Character());
         A.CallTo(() => _eventRepository.FindEventAsync(_model.EventId))
             .Returns(new Faker<Event>().Generate());
-        
+
         A.CallTo(() => _repository.GetAllEventMappingsAsync(_model.EventId))
             .Returns(_xpMappingInfoDtos);
-        
+
         var playerId = Guid.NewGuid();
         A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId))
-            .Returns(new Character() { PlayerId = playerId});
-        
-        A.CallTo(() => _repository.GetAllPlayerMappingsAsync(playerId))
-            .Returns(_xpMappingInfoDtos);
-        
-        A.CallTo(() => _eventRepository.GetEventsWithAvailableXp())
-            .Returns(_eventXpDtos);
-        
+            .Returns(new Character() { PlayerId = playerId });
+
+        A.CallTo(() => _repository.GetAllPlayerMappingsAsync(playerId)).Returns(_xpMappingInfoDtos);
+
+        A.CallTo(() => _eventRepository.GetEventsWithAvailableXp()).Returns(_eventXpDtos);
 
         var validator = new GetAssignedXpMappingModelValidator(
             _characterRepository,
@@ -96,8 +96,10 @@ public class GetAssignedXpMappingUseCaseTests
     [Theory]
     [InlineData(0, 0)]
     [InlineData(4, 4)]
-    
-    public async Task ValidationFor_CharacterIdAndEventId_WillFail_WhenBothEventAndCharacterIdAreEmpty(int characterId, int eventId)
+    public async Task ValidationFor_CharacterIdAndEventId_WillFail_WhenBothEventAndCharacterIdAreEmpty(
+        int characterId,
+        int eventId
+    )
     {
         _model.CharacterId = characterId;
         _model.EventId = eventId;
@@ -121,7 +123,7 @@ public class GetAssignedXpMappingUseCaseTests
             "The Character Id does not exist."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_EventId_WillFail_WhenIt_DoesNotExist()
     {
@@ -135,89 +137,83 @@ public class GetAssignedXpMappingUseCaseTests
             "The Event Id does not exist."
         );
     }
-    
+
     [Fact]
     public async Task UseCase_WithCharacterId_PassesThrough_AllAssignedXpAndAllEventXp_ForSaidCharacter()
     {
         var results = await _useCase.ExecuteAsync(_model);
 
-        var events = _eventXpDtos.Select(x => new XpMappingInfoReturnModel
-        {
-            Id = -1,
-            Amount = x.ConExperience,
-            Character = new UseCases.AssignedXp.Get.BasicInfo
+        var events = _eventXpDtos
+            .Select(x => new XpMappingInfoReturnModel
             {
-                Name = "System"
-            },
-            Assigner = new UseCases.AssignedXp.Get.BasicInfo
-            {
-                Name = "System"
-            },
-            Player = new UseCases.AssignedXp.Get.BasicInfo
-            {
-                Name = "System"
-            },
-            DateAssigned = x.StartDate.ToDateTime(TimeOnly.MinValue),
-            Event = new UseCases.AssignedXp.Get.BasicInfo
-            {
-                Name = $"{x.Name} ({x.StartDate.Year})"
-            },
-            Notes = "",
-            XpType = new UseCases.AssignedXp.Get.BasicInfo
-            {
-                Name = "Event XP"
-            }
-        }).ToList();
-        
-        events.AddRange(_xpMappingInfoDtos.Select(x => new XpMappingInfoReturnModel
-            {
-                Id = x.Id,
-                DateAssigned = x.DateAssigned,
-                Notes = x.Notes,
-                Amount = x.Amount,
-                Player = new UseCases.AssignedXp.Get.BasicInfo
-                {
-                    Id = x.Player.Id,
-                    Name = x.Player.Name
-                },
-                Character = new UseCases.AssignedXp.Get.BasicInfo
-                {
-                    Id = x.Character.Id,
-                    Name = x.Character.Name
-                },
+                Id = -1,
+                Amount = x.ConExperience,
+                Character = new UseCases.AssignedXp.Get.BasicInfo { Name = "System" },
+                Assigner = new UseCases.AssignedXp.Get.BasicInfo { Name = "System" },
+                Player = new UseCases.AssignedXp.Get.BasicInfo { Name = "System" },
+                DateAssigned = x.StartDate.ToDateTime(TimeOnly.MinValue),
                 Event = new UseCases.AssignedXp.Get.BasicInfo
                 {
-                    Id = x.Event.Id,
-                    Name = x.Event.Name
+                    Name = $"{x.Name} ({x.StartDate.Year})",
                 },
-                XpType = new UseCases.AssignedXp.Get.BasicInfo
+                Notes = "",
+                XpType = new UseCases.AssignedXp.Get.BasicInfo { Name = "Event XP" },
+            })
+            .ToList();
+
+        events.AddRange(
+            _xpMappingInfoDtos
+                .Select(x => new XpMappingInfoReturnModel
                 {
-                    Id = x.XpType.Id,
-                    Name = x.XpType.Name,
-                },
-                Assigner = new UseCases.AssignedXp.Get.BasicInfo
-                {
-                    Id = x.Assigner.Id,
-                    Name = x.Assigner.Name
-                }
-            }).ToList());
-        
+                    Id = x.Id,
+                    DateAssigned = x.DateAssigned,
+                    Notes = x.Notes,
+                    Amount = x.Amount,
+                    Player = new UseCases.AssignedXp.Get.BasicInfo
+                    {
+                        Id = x.Player.Id,
+                        Name = x.Player.Name,
+                    },
+                    Character = new UseCases.AssignedXp.Get.BasicInfo
+                    {
+                        Id = x.Character.Id,
+                        Name = x.Character.Name,
+                    },
+                    Event = new UseCases.AssignedXp.Get.BasicInfo
+                    {
+                        Id = x.Event.Id,
+                        Name = x.Event.Name,
+                    },
+                    XpType = new UseCases.AssignedXp.Get.BasicInfo
+                    {
+                        Id = x.XpType.Id,
+                        Name = x.XpType.Name,
+                    },
+                    Assigner = new UseCases.AssignedXp.Get.BasicInfo
+                    {
+                        Id = x.Assigner.Id,
+                        Name = x.Assigner.Name,
+                    },
+                })
+                .ToList()
+        );
+
         Assert.Equivalent(events.OrderByDescending(x => x.DateAssigned), results.Value);
     }
-
 
     [Fact]
     public async Task UseCase_WithEventId_PassesThrough_AllAssignedXp_ForSaidEvent()
     {
         _model.CharacterId = 0;
         _model.EventId = 4;
-        
+
         A.CallTo(() => _repository.GetAllEventMappingsAsync(_model.EventId))
             .Returns(_xpMappingInfoDtos);
-        
+
         var results = await _useCase.ExecuteAsync(_model);
-        
-        var expectedResults = _xpMappingInfoDtos.Select(x => new XpMappingInfoReturnModel()
+
+        var expectedResults = _xpMappingInfoDtos
+            .Select(x => new XpMappingInfoReturnModel()
             {
                 Id = x.Id,
                 DateAssigned = x.DateAssigned,
@@ -226,17 +222,17 @@ public class GetAssignedXpMappingUseCaseTests
                 Player = new UseCases.AssignedXp.Get.BasicInfo()
                 {
                     Id = x.Player.Id,
-                    Name = x.Player.Name
+                    Name = x.Player.Name,
                 },
                 Character = new UseCases.AssignedXp.Get.BasicInfo()
                 {
                     Id = x.Character.Id,
-                    Name = x.Character.Name
+                    Name = x.Character.Name,
                 },
                 Event = new UseCases.AssignedXp.Get.BasicInfo()
                 {
                     Id = x.Event.Id,
-                    Name = x.Event.Name
+                    Name = x.Event.Name,
                 },
                 XpType = new UseCases.AssignedXp.Get.BasicInfo()
                 {
@@ -246,11 +242,12 @@ public class GetAssignedXpMappingUseCaseTests
                 Assigner = new UseCases.AssignedXp.Get.BasicInfo()
                 {
                     Id = x.Assigner.Id,
-                    Name = x.Assigner.Name
-                }
+                    Name = x.Assigner.Name,
+                },
             })
-            .OrderByDescending(x => x.DateAssigned).ToList();
-        
+            .OrderByDescending(x => x.DateAssigned)
+            .ToList();
+
         Assert.Equivalent(expectedResults, results.Value);
     }
 }

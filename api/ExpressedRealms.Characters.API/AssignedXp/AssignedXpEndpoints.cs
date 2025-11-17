@@ -20,9 +20,8 @@ internal static class AssignedXpEndpoints
             .WithOpenApi()
             .RequireAuthorization();
 
-        endpointGroup
-            .MapGet("{characterId}/assignedXp", GetEndpoint.ExecuteAsync);
-        
+        endpointGroup.MapGet("{characterId}/assignedXp", GetEndpoint.ExecuteAsync);
+
         endpointGroup
             .MapPost("{characterId}/assignedXp", CreateEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManagePlayerExperience);
@@ -34,13 +33,14 @@ internal static class AssignedXpEndpoints
         endpointGroup
             .MapDelete("{characterId}/assignedXp/{mappingId}", DeleteEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManagePlayerExperience);
-        
+
         var eventEndpointGroup = app.MapGroup("events")
             .AddFluentValidationAutoValidation()
             .WithTags("Events")
             .WithOpenApi();
-        
-        eventEndpointGroup.MapGet("{eventId}/assignedXp", GetEventEndpoint.ExecuteAsync)
+
+        eventEndpointGroup
+            .MapGet("{eventId}/assignedXp", GetEventEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManageEvents);
     }
 }

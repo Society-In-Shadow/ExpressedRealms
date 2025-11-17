@@ -51,13 +51,14 @@ internal sealed class EventRepository(
     public async Task<List<EventXpDto>> GetEventsWithAvailableXp()
     {
         var availableDate = DateOnly.FromDateTime(DateTime.UtcNow.AddMonths(1));
-        return await context.Events.AsNoTracking()
+        return await context
+            .Events.AsNoTracking()
             .Where(x => x.StartDate <= availableDate && x.IsPublished)
             .Select(x => new EventXpDto()
             {
                 Name = x.Name,
                 StartDate = x.StartDate,
-                ConExperience = x.ConExperience
+                ConExperience = x.ConExperience,
             })
             .ToListAsync(cancellationToken);
     }
