@@ -26,15 +26,15 @@ internal sealed class GetAssignedXpMappingUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        List<XpMappingInfoDto> mappings;
+        List<XpMappingInfoDto> mappings = new();
         if (model.EventId != 0)
         {
-            mappings = await mappingRepository.GetAllEventMappingsAsync(model.EventId!);
+            mappings.AddRange(await mappingRepository.GetAllEventMappingsAsync(model.EventId!));
         }
         else
         {
             var character = await characterRepository.FindCharacterAsync(model.CharacterId);
-            mappings = await mappingRepository.GetAllPlayerMappingsAsync(character!.PlayerId);
+            mappings.AddRange(await mappingRepository.GetAllPlayerMappingsAsync(character!.PlayerId));
             var events = await eventRepository.GetEventsWithAvailableXp();
             mappings.AddRange(events.Select(x => new XpMappingInfoDto()
             {
