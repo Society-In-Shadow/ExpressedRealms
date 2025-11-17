@@ -2,6 +2,7 @@ using ExpressedRealms.DB;
 using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup;
 using ExpressedRealms.DB.Models.Events.EventSetup;
+using ExpressedRealms.Events.API.Repositories.Events.Dtos;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Events.API.Repositories.Events;
@@ -45,6 +46,21 @@ internal sealed class EventRepository(
     public async Task<Event?> FindEventAsync(int id)
     {
         return await context.Events.FindAsync(id, cancellationToken);
+    }
+
+    public async Task<List<EventXpDto>> GetEventsWithAvailableXp()
+    {
+        var availableDate = DateOnly.FromDateTime(DateTime.UtcNow.AddMonths(1));
+        return await context
+            .Events.AsNoTracking()
+            .Where(x => x.StartDate <= availableDate && x.IsPublished)
+            .Select(x => new EventXpDto()
+            {
+                Name = x.Name,
+                StartDate = x.StartDate,
+                ConExperience = x.ConExperience,
+            })
+            .ToListAsync(cancellationToken);
     }
 
     public Task<List<Event>> GetEventsAsync()

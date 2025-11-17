@@ -1,5 +1,6 @@
 using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup;
 using ExpressedRealms.DB.Models.Events.EventSetup;
+using ExpressedRealms.Events.API.Repositories.Events.Dtos;
 using ExpressedRealms.Shared;
 
 namespace ExpressedRealms.Events.API.Repositories.Events;
@@ -16,4 +17,5 @@ public interface IEventRepository : IGenericRepository
     Task<EventScheduleItem?> GetEventScheduleItem(int id);
     Task<List<EventScheduleItem>> GetEventScheduleItems(int eventId);
     Task<Event?> FindEventAsync(int id);
+    Task<List<EventXpDto>> GetEventsWithAvailableXp();
 }
