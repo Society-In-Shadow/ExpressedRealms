@@ -196,6 +196,17 @@ try
     builder.Services.AddEventUseCaseInjections();
     await builder.Services.AddFeatureFlagInjections(keyVaultManager);
 
+    // Allow any origin for development only
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("LocalDevPolicy", policy =>
+        {
+            policy.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+    });
+    
     Log.Information("Building the App");
     var app = builder.Build();
 
@@ -261,6 +272,10 @@ try
     if (app.Environment.IsDevelopment())
     {
         Log.Information("Setting Up Swagger");
+
+
+        app.UseCors("LocalDevPolicy");
+        
         app.UseSwagger();
         app.UseSwaggerUI(ModernStyle.Dark);
     }

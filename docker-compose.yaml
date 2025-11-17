@@ -171,6 +171,17 @@ services:
     networks:
       - expressed-realms-network
     restart: always
+  
+  hoppscotch:
+    image: hoppscotch/hoppscotch:latest
+    container_name: hoppscotch
+    ports:
+      - "3003:3000"
+      - "3100:3100"
+      - "3170:3170"
+    env_file:
+      - hoppscotch.env
+    restart: unless-stopped
 
 volumes:
   ignore:
@@ -179,3 +190,4 @@ volumes:
   azurite-data:
   flipt_data:
   mailpit_data:
+  hoppscotch-db-data:
