@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import type {PropType} from 'vue'
-import {ref} from 'vue'
+import type { PropType } from 'vue'
+import { ref } from 'vue'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
-import type {PrimaryCharacter} from '@/components/admin/characterList/types.ts'
-import {useRouter} from 'vue-router'
-import {adminCharacterDialogs} from '@/components/admin/characterList/services/dialogs.ts'
+import type { PrimaryCharacter } from '@/components/admin/characterList/types.ts'
+import { useRouter } from 'vue-router'
+import { adminCharacterDialogs } from '@/components/admin/characterList/services/dialogs.ts'
 import axios from 'axios'
+import AssignedXpList from '@/components/admin/assignedXp/AssignedXpList.vue'
 
 const router = useRouter()
 const showInfo = ref(false)
@@ -62,6 +63,8 @@ async function downloadCharacterBooklet(characterId: number, characterName: stri
     </template>
     <template #content>
       <div v-if="showInfo">
+        <h1>Assigned XP</h1>
+        <AssignedXpList :character-id="props.character.id" :is-read-only="false" />
         <h3>Backstory</h3>
         {{ props.character.background ?? "No Background has been posted for this character." }}
       </div>

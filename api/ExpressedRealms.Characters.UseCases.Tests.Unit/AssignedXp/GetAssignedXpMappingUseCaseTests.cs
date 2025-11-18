@@ -157,7 +157,7 @@ public class GetAssignedXpMappingUseCaseTests
                     Name = $"{x.Name} ({x.StartDate.Year})",
                 },
                 Notes = "",
-                XpType = new UseCases.AssignedXp.Get.BasicInfo { Name = "Event XP" },
+                XpType = new UseCases.AssignedXp.Get.BasicInfo { Id = 1, Name = "Event XP" },
             })
             .ToList();
 

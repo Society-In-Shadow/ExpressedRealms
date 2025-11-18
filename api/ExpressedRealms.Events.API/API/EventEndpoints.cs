@@ -2,6 +2,7 @@
 using ExpressedRealms.Events.API.API.Events.Create;
 using ExpressedRealms.Events.API.API.Events.Delete;
 using ExpressedRealms.Events.API.API.Events.Get;
+using ExpressedRealms.Events.API.API.Events.GetSummary;
 using ExpressedRealms.Events.API.API.Events.Publish;
 using ExpressedRealms.Events.API.API.EventScheduleItem.Create;
 using ExpressedRealms.Events.API.API.EventScheduleItem.Delete;
@@ -25,6 +26,7 @@ internal static class EventEndpoints
             .WithOpenApi();
 
         endpointGroup.MapGet("", GetAllEventsEndpoint.ExecuteAsync);
+        endpointGroup.MapGet("summary", GetSummaryEventsEndpoint.ExecuteAsync);
 
         endpointGroup
             .MapPost("", CreateEventEndpoint.ExecuteAsync)
