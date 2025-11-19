@@ -4,9 +4,11 @@ import { onMounted, type PropType, ref } from 'vue'
 import { UserRoles, userStore } from '@/stores/userStore'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
-import { EventConfirmationPopup } from '@/components/admin/events/services/eventConfirmationPopupService'
 import type { AssignedXpInfo } from '@/components/admin/assignedXp/types.ts'
 import EditAssignedXp from '@/components/admin/assignedXp/EditAssignedXp.vue'
+import {
+  xpAssignmentConfirmationPopup,
+} from '@/components/admin/assignedXp/services/xpAssignmentConfirmationPopupService.ts'
 
 let userInfo = userStore()
 
@@ -25,7 +27,7 @@ const props = defineProps({
   },
 })
 
-let popups = EventConfirmationPopup(props.item.id, props.item.name)
+let popups = xpAssignmentConfirmationPopup()
 
 const showEdit = ref(false)
 
@@ -47,7 +49,7 @@ function toggleEdit() {
   <Card>
     <template #content>
       <div v-if="showEdit && !isEvent" class="mb-2">
-        <EditAssignedXp :event-id="props.item.id" :character-id="props.characterId" @canceled="toggleEdit" />
+        <EditAssignedXp :id="props.item.id" :character-id="props.characterId" @canceled="toggleEdit" />
       </div>
       <div v-else class="d-flex flex-column flex-md-row align-self-center justify-content-between">
         <div class="flex-fill mr-3">
@@ -66,7 +68,7 @@ function toggleEdit() {
 
         <div class="p-0 m-0 d-inline-flex align-items-start">
           <div v-if="!showEdit && hasManageEventRole && !props.isReadOnly && !isEvent">
-            <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
+            <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event, props.item.id, props.characterId)" />
             <Button class="float-end" label="Edit" @click="toggleEdit" />
           </div>
         </div>

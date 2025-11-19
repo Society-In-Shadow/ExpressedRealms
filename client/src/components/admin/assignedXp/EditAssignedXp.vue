@@ -18,23 +18,23 @@ const emit = defineEmits<{
 }>()
 
 const props = defineProps({
-  characterId: {
+  id: {
     type: Number,
     required: true,
   },
-  eventId: {
+  characterId: {
     type: Number,
     required: true,
   },
 })
 
 onBeforeMount(async () => {
-  event.value = await store.getEvent(props.eventId)
+  event.value = await store.getEvent(props.id)
   form.setValues(event.value)
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await store.updateEvent(values, props.eventId)
+  await store.update(values, props.id, props.characterId)
   cancel()
 })
 
@@ -46,20 +46,22 @@ const cancel = () => {
 
 <template>
   <form @submit="onSubmit">
-    <FormInputTextWrapper v-model="form.fields.notes" />
-    <FormInputNumberWrapper v-model="form.fields.amount" />
+    <div class="d-flex flex-row gap-2 w-100">
+      <FormDropdownWrapper
+        v-model="form.fields.xpType"
+        :options="store.xpTypes"
+        option-label="name"
+      />
+
+      <FormInputNumberWrapper v-model="form.fields.amount" />
+    </div>
 
     <FormDropdownWrapper
       v-model="form.fields.event"
       :options="store.events"
       option-label="name"
     />
-
-    <!--        <FormDropdownWrapper
-      v-model="form.fields.xpType"
-      :options="store.timeZones"
-      option-label="name"
-    />-->
+    <FormInputTextWrapper v-model="form.fields.notes" />
 
     <div class="m-3 text-right">
       <Button label="Cancel" class="m-2" type="reset" @click="cancel" />

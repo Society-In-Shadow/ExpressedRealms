@@ -23,7 +23,7 @@ const props = defineProps({
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await store.addEvent(values, props.characterId)
+  await store.add(values, props.characterId)
   cancel()
 })
 
@@ -37,20 +37,21 @@ const cancel = () => {
   <Card>
     <template #content>
       <form @submit="onSubmit">
+        <div class="d-flex flex-row gap-2 w-100">
+          <FormDropdownWrapper
+            v-model="form.fields.xpType"
+            :options="store.xpTypes"
+            option-label="name"
+          />
+
+          <FormInputNumberWrapper v-model="form.fields.amount" />
+        </div>
+
         <FormDropdownWrapper
           v-model="form.fields.event"
           :options="store.events"
           option-label="name"
         />
-
-        <!--        <FormDropdownWrapper
-          v-model="form.fields.xpType"
-          :options="store.timeZones"
-          option-label="name"
-        />-->
-
-        <FormInputNumberWrapper v-model="form.fields.amount" />
-
         <FormInputTextWrapper v-model="form.fields.notes" />
 
         <div class="m-3 text-right">
