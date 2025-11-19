@@ -19,6 +19,7 @@ export const AssignedXpStore
     },
     actions: {
       async getAssignedXp(characterId: number) {
+        this.hasItems = false
         const response = await axios.get<AssignedXpResponse>(`/characters/${characterId}/assignedXp`)
         const eventResponse = await axios.get<ListItem[]>(`/events/summary`)
 
@@ -55,6 +56,7 @@ export const AssignedXpStore
             description: 'XP is being assigned out for uncommon reason',
           },
         ]
+        this.hasItems = true
       },
       getEvent: async function (id: number): Promise<EditAssignedXpItem> {
         const item = this.assignedXpItems.find((x: AssignedXpInfo) => x.id == id)

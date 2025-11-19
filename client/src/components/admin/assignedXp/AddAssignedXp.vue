@@ -2,11 +2,11 @@
 
 import { AssignedXpStore } from './stores/assignedXpStore.ts'
 import FormDropdownWrapper from '@/FormWrappers/FormDropdownWrapper.vue'
-import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
 import { getValidationInstance } from './validations/assignedXpValidations.ts'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
 import FormInputNumberWrapper from '@/FormWrappers/FormInputNumberWrapper.vue'
+import FormTextAreaWrapper from '@/FormWrappers/FormTextAreaWrapper.vue'
 
 const store = AssignedXpStore()
 
@@ -37,7 +37,7 @@ const cancel = () => {
   <Card>
     <template #content>
       <form @submit="onSubmit">
-        <div class="d-flex flex-row gap-2 w-100">
+        <div class="d-flex flex-column flex-md-row gap-2 w-100">
           <FormDropdownWrapper
             v-model="form.fields.xpType"
             :options="store.xpTypes"
@@ -52,7 +52,7 @@ const cancel = () => {
           :options="store.events"
           option-label="name"
         />
-        <FormInputTextWrapper v-model="form.fields.notes" />
+        <FormTextAreaWrapper v-model="form.fields.notes" />
 
         <div class="m-3 text-right">
           <Button label="Cancel" class="m-2" type="reset" @click="cancel" />

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 
+import Skeleton from 'primevue/skeleton'
 import { AssignedXpStore } from '@/components/admin/assignedXp/stores/assignedXpStore'
-import { computed, defineProps, onBeforeMount, ref } from 'vue'
+import { computed, inject, onBeforeMount, type Ref, ref } from 'vue'
 import { UserRoles, userStore } from '@/stores/userStore'
 import Button from 'primevue/button'
 
@@ -13,19 +14,12 @@ const store = AssignedXpStore()
 const userInfo = userStore()
 const hasEventManagementRole = ref(false)
 
-const props = defineProps({
-  characterId: {
-    type: Number,
-    required: true,
-  },
-  isReadOnly: {
-    type: Boolean,
-    required: true,
-  },
-})
+const dialogRef = inject('dialogRef') as Ref
+const characterId = ref(dialogRef.value.data.characterId)
+const isReadOnly = ref(dialogRef.value.data.isReadOnly)
 
 onBeforeMount(async () => {
-  await store.getAssignedXp(props.characterId)
+  await store.getAssignedXp(characterId.value)
   hasEventManagementRole.value = await userInfo.hasUserRole(UserRoles.ManageEventRole)
 })
 
@@ -43,13 +37,18 @@ const sortedItems = computed<AssignedXpInfo[]>(() => {
 </script>
 
 <template>
-  <div v-for="item in sortedItems" :key="item.id" class="py-3">
-    <AssignedXpItem :character-id="props.characterId" :item="item" :is-read-only="props.isReadOnly" />
+  <div v-if="!store.hasItems">
+    <Skeleton class="w-100 mb-3" height="5em" />
+    <Skeleton class="w-100 mb-3" height="5em" />
+    <Skeleton class="w-100 mb-3" height="5em" />
+  </div>
+  <div v-for="item in sortedItems" v-else :key="item.id" class="py-3">
+    <AssignedXpItem :character-id="characterId" :item="item" :is-read-only="isReadOnly" />
   </div>
 
-  <AddAssignedXp v-if="showAdd && hasEventManagementRole && !props.isReadOnly" :character-id="props.characterId" @canceled="toggleAdd" />
+  <AddAssignedXp v-if="showAdd && hasEventManagementRole && !isReadOnly" :character-id="characterId" @canceled="toggleAdd" />
   <Button
-    v-if="!showAdd && hasEventManagementRole && !props.isReadOnly" class="w-100 m-2"
+    v-if="!showAdd && hasEventManagementRole && !isReadOnly" class="w-100 m-2"
     label="Add XP" @click="toggleAdd"
   />
 </template>

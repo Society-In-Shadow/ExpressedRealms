@@ -51,27 +51,22 @@ function toggleEdit() {
       <div v-if="showEdit && !isEvent" class="mb-2">
         <EditAssignedXp :id="props.item.id" :character-id="props.characterId" @canceled="toggleEdit" />
       </div>
-      <div v-else class="d-flex flex-column flex-md-row align-self-center justify-content-between">
+      <div v-else class="d-flex flex-column align-self-center justify-content-end">
         <div class="flex-fill mr-3">
-          <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
-            <div>
-              {{ props.item.event.name }} - {{ props.item.assigner?.name }}
-            </div>
-            <div>
-              {{ props.item.xpType.name }} - {{ props.item.amount }}
-            </div>
+          <div>
+            {{ props.item.event.name }} - {{ props.item.assigner?.name }}
+          </div>
+          <div>
+            {{ props.item.xpType.name }} - {{ props.item.amount }}
           </div>
           <div>
             {{ props.item.notes }}
           </div>
         </div>
-
-        <div class="p-0 m-0 d-inline-flex align-items-start">
-          <div v-if="!showEdit && hasManageEventRole && !props.isReadOnly && !isEvent">
-            <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event, props.item.id, props.characterId)" />
-            <Button class="float-end" label="Edit" @click="toggleEdit" />
-          </div>
-        </div>
+      </div>
+      <div v-if="!showEdit && hasManageEventRole && !props.isReadOnly && !isEvent" class="p-0 m-0 float-end">
+        <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event, props.item.id, props.characterId)" />
+        <Button label="Edit" @click="toggleEdit" />
       </div>
     </template>
   </Card>
