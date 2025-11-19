@@ -45,7 +45,7 @@ internal sealed class CharacterRepository(
             .Characters.Where(x => x.IsPrimaryCharacter)
             .Select(x => new PrimaryCharacterListDto()
             {
-                Id = x.Id.ToString(),
+                Id = x.Id,
                 Name = x.Name,
                 Expression = x.Expression.Name,
                 Background = x.Background,
