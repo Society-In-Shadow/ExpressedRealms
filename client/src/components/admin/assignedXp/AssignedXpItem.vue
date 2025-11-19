@@ -31,11 +31,11 @@ let popups = xpAssignmentConfirmationPopup()
 
 const showEdit = ref(false)
 
-const hasManageEventRole = ref(false)
+const hasManagePlayerExperienceRole = ref(false)
 const isEvent = ref(false)
 
 onMounted(async () => {
-  hasManageEventRole.value = await userInfo.hasUserRole(UserRoles.ManageEventRole)
+  hasManagePlayerExperienceRole.value = await userInfo.hasUserRole(UserRoles.ManagePlayerExperience)
   isEvent.value = props.item.xpType.id == 1
 })
 
@@ -64,7 +64,7 @@ function toggleEdit() {
           </div>
         </div>
       </div>
-      <div v-if="!showEdit && hasManageEventRole && !props.isReadOnly && !isEvent" class="p-0 m-0 float-end">
+      <div v-if="!showEdit && hasManagePlayerExperienceRole && !props.isReadOnly && !isEvent" class="p-0 m-0 float-end">
         <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event, props.item.id, props.characterId)" />
         <Button label="Edit" @click="toggleEdit" />
       </div>

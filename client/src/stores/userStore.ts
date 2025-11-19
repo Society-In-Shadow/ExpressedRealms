@@ -14,6 +14,7 @@ export const UserRoles = {
   ManageProgressionPaths: 'ManageProgressionPaths',
   ManageModifiers: 'ManageModifiers',
   ManageEventRole: 'ManageEvents',
+  ManagePlayerExperience: 'ManageUserExperience',
 } as const
 
 export const FeatureFlags = {
