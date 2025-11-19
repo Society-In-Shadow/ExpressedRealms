@@ -65,6 +65,7 @@ internal sealed class GetAssignedXpMappingUseCase(
                     Notes = "",
                     XpType = new Repository.Xp.Dtos.AssignedXpInfoDtos.BasicInfo()
                     {
+                        Id = 1,
                         Name = "Event XP",
                     },
                 })

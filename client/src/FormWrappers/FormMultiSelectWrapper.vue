@@ -40,7 +40,7 @@ const dataCyTagCalc = computed(() => {
 </script>
 
 <template>
-  <div class="mb-3">
+  <div class="mb-3 w-100">
     <label :for="dataCyTagCalc">{{ model.label }}<span v-if="model.isRequired" class="text-danger font-italic"> (Required)</span></label>
     <Skeleton v-if="showSkeleton" :id="dataCyTagCalc + '-skeleton'" class="w-100" height="3em" />
     <MultiSelect

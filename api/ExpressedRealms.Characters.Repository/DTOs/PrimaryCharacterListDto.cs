@@ -2,7 +2,7 @@ namespace ExpressedRealms.Characters.Repository.DTOs;
 
 public sealed record PrimaryCharacterListDto
 {
-    public string Id { get; set; } = null!;
+    public int Id { get; set; }
     public string Name { get; set; } = null!;
     public string? Background { get; set; }
     public string Expression { get; set; } = null!;
