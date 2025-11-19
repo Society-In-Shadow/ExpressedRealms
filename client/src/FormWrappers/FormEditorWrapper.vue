@@ -184,7 +184,7 @@ const contextOptions = ref([
 </script>
 
 <template>
-  <div class="mb-3">
+  <div class="mb-3 w-100">
     <ContextMenu v-if="focusingOnTable" ref="menu" :model="contextOptions" />
     <div class="d-none">
       <Editor />
