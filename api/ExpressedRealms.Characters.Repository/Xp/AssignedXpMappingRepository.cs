@@ -40,7 +40,7 @@ public class AssignedXpMappingRepository(
             Assigner = new BasicInfo() { Id = 0, Name = x.AssignedByUser.Player!.Name },
             Player = new BasicInfo() { Name = x.Player.Name, Id = 0 },
             Character = new BasicInfo() { Name = x.Character.Name, Id = x.CharacterId },
-            Event = new BasicInfo() { Name = x.Event.Name, Id = x.EventId },
+            Event = new BasicInfo() { Name = $"{x.Event.Name} ({x.Event.StartDate.Year})", Id = x.EventId },
             Notes = x.Reason,
             XpType = new BasicInfo() { Name = x.AssignedXpType.Name, Id = x.AssignedXpTypeId },
         };
