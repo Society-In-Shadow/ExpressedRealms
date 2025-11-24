@@ -3,7 +3,11 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import Message from 'primevue/message'
 import { useRoute } from 'vue-router'
-import { experienceStore, XpSectionTypes } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
+import {
+  experienceStore,
+  type XpSectionType,
+  XpSectionTypes,
+} from '@/components/characters/character/stores/experienceBreakdownStore.ts'
 import Button from 'primevue/button'
 import axios from 'axios'
 import { characterStore } from '@/components/characters/character/stores/characterStore.ts'
@@ -28,7 +32,7 @@ const showAssignedXpPanel = computed(() => {
   return !characterInfo.isInCharacterCreation && hasAssignedXpPanelFeatureToggle.value
 })
 
-const characterId = parseInt(route.params.id)
+const characterId = Number.parseInt(route.params.id)
 
 const props = defineProps({
   isReadOnly: {
@@ -55,7 +59,7 @@ watch(xpInfo.calculatedValues, () => {
 
 async function finalizeCreation() {
   await axios.put(`characters/${characterId}/finalizeCharacterCreate`)
-    .then(async (response) => {
+    .then(async () => {
       toaster.success('Successfully Finalized Character!')
       await characterInfo.getCharacterDetails(characterId)
       await xpInfo.updateExperience(characterId)
@@ -82,10 +86,10 @@ const displayedSections = computed(() => {
   if (characterInfo.isInCharacterCreation) {
     return xpInfo.calculatedValues
   }
-  const filteredSections = [XpSectionTypes.advantage, XpSectionTypes.discretionary, XpSectionTypes.disadvantage]
+  const filteredSections = new Set<XpSectionType>([XpSectionTypes.advantage, XpSectionTypes.discretionary, XpSectionTypes.disadvantage])
 
   return xpInfo.calculatedValues.filter((section) => {
-    return !filteredSections.includes(section.sectionTypeId)
+    return !filteredSections.has(section.sectionTypeId)
   })
 })
 
@@ -123,7 +127,7 @@ const displayedSections = computed(() => {
               Disc.
             </th>
           </tr>
-          <tr v-for="section in displayedSections">
+          <tr v-for="section in displayedSections" :key="section.name">
             <td v-if="characterInfo.isInCharacterCreation" class="text-center pr-2">
               <span v-if="section.sectionTypeId == XpSectionTypes.advantage || section.sectionTypeId == XpSectionTypes.disadvantage" class="material-symbols-outlined" title="No Status">
                 do_not_disturb_on
@@ -166,7 +170,7 @@ const displayedSections = computed(() => {
                   {{ overallDiscretionaryTotal - discretionaryBucket - disadvantageBucket }}
                 </div>
               </div>
-              <div v-else-if="section.total < section.characterCreateMax && section.sectionTypeId != XpSectionTypes.discretionary && section.sectionTypeId != XpSectionTypes.advantage">
+              <div v-else-if="section.total < section.characterCreateMax && section.sectionTypeId !== XpSectionTypes.advantage">
                 {{ section.characterCreateMax - section.total }}
               </div>
               <div v-else>

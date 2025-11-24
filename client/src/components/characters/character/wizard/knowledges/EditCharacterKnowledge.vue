@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import FormTextAreaWrapper from '@/FormWrappers/FormTextAreaWrapper.vue'
 import Button from 'primevue/button'
-import {getValidationInstance} from '@/components/characters/character/knowledges/validations/knowledgeValidations'
-import {characterKnowledgeStore} from '@/components/characters/character/knowledges/stores/characterKnowledgeStore'
-import {useRoute} from 'vue-router'
-import {ref, watch} from 'vue'
-import type {CharacterKnowledge, KnowledgeOptions} from '@/components/characters/character/knowledges/types'
+import { getValidationInstance } from '@/components/characters/character/knowledges/validations/knowledgeValidations'
+import { characterKnowledgeStore } from '@/components/characters/character/knowledges/stores/characterKnowledgeStore'
+import { useRoute } from 'vue-router'
+import { ref, watch } from 'vue'
+import type { CharacterKnowledge, KnowledgeOptions } from '@/components/characters/character/knowledges/types'
 import Message from 'primevue/message'
-import {addKnowledgeDialog} from '@/components/characters/character/knowledges/services/dialogs.ts'
+import { addKnowledgeDialog } from '@/components/characters/character/knowledges/services/dialogs.ts'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
-import {confirmationPopup} from '@/components/characters/character/knowledges/services/confirmationService.ts'
-import {experienceStore, XpSectionTypes} from '@/components/characters/character/stores/experienceBreakdownStore.ts'
+import { confirmationPopup } from '@/components/characters/character/knowledges/services/confirmationService.ts'
+import { experienceStore, XpSectionTypes } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
 import ShowXPCosts from '@/components/characters/character/wizard/ShowXPCosts.vue'
-import type {CalculatedExperience} from '@/components/characters/character/types.ts'
+import type { CalculatedExperience } from '@/components/characters/character/types.ts'
 
 const dialogService = addKnowledgeDialog()
 const store = characterKnowledgeStore()

@@ -2,18 +2,18 @@
 
 import FormTextAreaWrapper from '@/FormWrappers/FormTextAreaWrapper.vue'
 import Button from 'primevue/button'
-import {getValidationInstance} from '@/components/characters/character/knowledges/validations/knowledgeValidations'
-import {characterKnowledgeStore} from '@/components/characters/character/knowledges/stores/characterKnowledgeStore'
-import {useRoute} from 'vue-router'
-import {onBeforeMount, type PropType, ref, watch} from 'vue'
-import type {KnowledgeOptions} from '@/components/characters/character/knowledges/types'
+import { getValidationInstance } from '@/components/characters/character/knowledges/validations/knowledgeValidations'
+import { characterKnowledgeStore } from '@/components/characters/character/knowledges/stores/characterKnowledgeStore'
+import { useRoute } from 'vue-router'
+import { onBeforeMount, type PropType, ref, watch } from 'vue'
+import type { KnowledgeOptions } from '@/components/characters/character/knowledges/types'
 import Message from 'primevue/message'
-import type {Knowledge} from '@/components/knowledges/types.ts'
+import type { Knowledge } from '@/components/knowledges/types.ts'
 import Column from 'primevue/column'
 import DataTable from 'primevue/datatable'
-import {experienceStore, XpSectionTypes} from '@/components/characters/character/stores/experienceBreakdownStore.ts'
+import { experienceStore, XpSectionTypes } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
 import ShowXPCosts from '@/components/characters/character/wizard/ShowXPCosts.vue'
-import type {CalculatedExperience} from '@/components/characters/character/types.ts'
+import type { CalculatedExperience } from '@/components/characters/character/types.ts'
 
 const store = characterKnowledgeStore()
 const form = getValidationInstance()

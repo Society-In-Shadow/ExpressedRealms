@@ -31,7 +31,7 @@ const events = computed(() => {
 })
 
 const eventSorted = computed<AssignedXpInfo[][]>(() => {
-  return [...Object.values(events.value)].sort((a: AssignedXpInfo[], b: AssignedXpInfo[]) => {
+  return Object.values(events.value).sort((a: AssignedXpInfo[], b: AssignedXpInfo[]) => {
     return b.find((x: AssignedXpInfo) => x.xpType.id == 1)!.dateAssigned - a.find((x: AssignedXpInfo) => x.xpType.id == 1)!.dateAssigned
   })
 })
