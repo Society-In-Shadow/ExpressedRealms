@@ -24,13 +24,11 @@ internal static class PowerPathEndpoints
     {
         var endpointGroup = app.MapGroup("powerpath")
             .AddFluentValidationAutoValidation()
-            .WithTags("Power Paths")
-            .WithOpenApi();
+            .WithTags("Power Paths");
 
         app.MapGroup("expression")
             .AddFluentValidationAutoValidation()
             .WithTags("Expressions")
-            .WithOpenApi()
             .MapGet(
                 "/{expressionId}/powerPaths",
                 async (int expressionId, IPowerPathRepository powerRepository) =>
@@ -83,7 +81,6 @@ internal static class PowerPathEndpoints
         app.MapGroup("expression")
             .AddFluentValidationAutoValidation()
             .WithTags("Expressions")
-            .WithOpenApi()
             .MapGet(
                 "/{expressionId}/getPowerCards",
                 async Task<FileStreamHttpResult> (
@@ -114,7 +111,6 @@ internal static class PowerPathEndpoints
         app.MapGroup("expression")
             .AddFluentValidationAutoValidation()
             .WithTags("Expressions")
-            .WithOpenApi()
             .MapGet(
                 "/{expressionId}/powerBooklet",
                 async Task<FileStreamHttpResult> (
@@ -140,7 +136,6 @@ internal static class PowerPathEndpoints
         app.MapGroup("expression")
             .AddFluentValidationAutoValidation()
             .WithTags("Expressions")
-            .WithOpenApi()
             .MapPut(
                 "/{expressionId}/updateSorting",
                 async (

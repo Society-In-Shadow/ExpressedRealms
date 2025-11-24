@@ -14,8 +14,7 @@ internal static class PlayerEndpoints
     {
         var endpointGroup = app.MapGroup("player")
             .AddFluentValidationAutoValidation()
-            .WithTags("Player")
-            .WithOpenApi();
+            .WithTags("Player");
 
         endpointGroup
             .MapGet(

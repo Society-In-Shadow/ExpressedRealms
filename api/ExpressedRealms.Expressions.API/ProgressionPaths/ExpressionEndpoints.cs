@@ -19,8 +19,7 @@ internal static class ProgressionEndpoints
     {
         var endpointGroup = app.MapGroup("expression")
             .AddFluentValidationAutoValidation()
-            .WithTags("Expression Progressions")
-            .WithOpenApi();
+            .WithTags("Expression Progressions");
 
         endpointGroup
             .MapGet("{expressionId}/progressions", GetProgressionPathsEndpoint.ExecuteAsync)

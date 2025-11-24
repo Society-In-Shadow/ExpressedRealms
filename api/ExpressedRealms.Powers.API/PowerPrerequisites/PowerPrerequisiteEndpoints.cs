@@ -24,8 +24,7 @@ internal static class PowerPrerequisiteEndpoints
     {
         var endpointGroup = app.MapGroup("powers")
             .AddFluentValidationAutoValidation()
-            .WithTags("Powers")
-            .WithOpenApi();
+            .WithTags("Powers");
 
         endpointGroup
             .MapGet(
@@ -148,7 +147,6 @@ internal static class PowerPrerequisiteEndpoints
         app.MapGroup("/powerpath/")
             .AddFluentValidationAutoValidation()
             .WithTags("Power Paths")
-            .WithOpenApi()
             .MapGet(
                 "/{id}/powerprerequisites/options",
                 async (int id, IPowerRepository powerRepository) =>

@@ -13,8 +13,7 @@ internal static class CharacterKnowledgeSpecializationsEndpoints
     {
         var endpointGroup = app.MapGroup("characters")
             .AddFluentValidationAutoValidation()
-            .WithTags("Character Knowledge Specializations")
-            .WithOpenApi();
+            .WithTags("Character Knowledge Specializations");
 
         endpointGroup.MapPost(
             "{characterid}/knowledges/{mappingId}/specialization",

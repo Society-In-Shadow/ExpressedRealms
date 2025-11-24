@@ -17,8 +17,7 @@ internal static class KnowledgeEndpoints
     {
         var endpointGroup = app.MapGroup("knowledges")
             .AddFluentValidationAutoValidation()
-            .WithTags("Knowledges")
-            .WithOpenApi();
+            .WithTags("Knowledges");
 
         endpointGroup
             .MapGet("", GetKnowledgesEndpoint.GetKnowledges)

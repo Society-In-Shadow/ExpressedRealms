@@ -16,8 +16,7 @@ internal static class StatEndPoints
     {
         var endpointGroup = app.MapGroup("stats")
             .AddFluentValidationAutoValidation()
-            .WithTags("Stats")
-            .WithOpenApi();
+            .WithTags("Stats");
 
         endpointGroup
             .MapGet(

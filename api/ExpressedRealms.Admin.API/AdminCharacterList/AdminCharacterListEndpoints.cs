@@ -15,8 +15,7 @@ public static class AdminCharacterListEndpoints
         var endpointGroup = app.MapGroup("admin")
             .AddFluentValidationAutoValidation()
             .WithTags("Admin Character List")
-            .RequirePolicyAuthorization(Policies.ManagePlayerCharacterList)
-            .WithOpenApi();
+            .RequirePolicyAuthorization(Policies.ManagePlayerCharacterList);
 
         endpointGroup
             .MapGet("characters/", GetCharacterListEndpoint.Execute)

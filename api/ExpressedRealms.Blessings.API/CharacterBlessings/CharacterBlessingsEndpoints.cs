@@ -14,8 +14,7 @@ internal static class CharacterBlessingsEndpoints
     {
         var endpointGroup = app.MapGroup("characters")
             .AddFluentValidationAutoValidation()
-            .WithTags("Character Blessings")
-            .WithOpenApi();
+            .WithTags("Character Blessings");
 
         endpointGroup.MapGet("{characterId}/blessings", GetCharacterBlessingsEndpoint.ExecuteAsync);
 
