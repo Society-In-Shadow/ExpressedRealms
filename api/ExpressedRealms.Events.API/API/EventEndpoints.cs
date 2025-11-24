@@ -22,8 +22,7 @@ internal static class EventEndpoints
     {
         var endpointGroup = app.MapGroup("events")
             .AddFluentValidationAutoValidation()
-            .WithTags("Events")
-            .WithOpenApi();
+            .WithTags("Events");
 
         endpointGroup.MapGet("", GetAllEventsEndpoint.ExecuteAsync);
         endpointGroup.MapGet("summary", GetSummaryEventsEndpoint.ExecuteAsync);

@@ -24,13 +24,11 @@ internal static class PowerEndpoints
     {
         var endpointGroup = app.MapGroup("powers")
             .AddFluentValidationAutoValidation()
-            .WithTags("Powers")
-            .WithOpenApi();
+            .WithTags("Powers");
 
         app.MapGroup("/powerpath/")
             .AddFluentValidationAutoValidation()
             .WithTags("Power Paths")
-            .WithOpenApi()
             .MapGet(
                 "/{id}/powers",
                 async (int id, IPowerRepository powerRepository) =>
@@ -73,7 +71,6 @@ internal static class PowerEndpoints
         app.MapGroup("powerpath")
             .AddFluentValidationAutoValidation()
             .WithTags("Power Paths")
-            .WithOpenApi()
             .MapPut(
                 "/{powerPathId}/updateSorting",
                 async (

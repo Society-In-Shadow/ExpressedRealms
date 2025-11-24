@@ -17,8 +17,7 @@ internal static class BlessingEndpoints
         var endpointGroup = app.MapGroup("blessings")
             .AddFluentValidationAutoValidation()
             .RequireAuthorization()
-            .WithTags("Blessings")
-            .WithOpenApi();
+            .WithTags("Blessings");
 
         endpointGroup
             .MapGet("", GetAllBlessingsEndpoint.GetBlessings)

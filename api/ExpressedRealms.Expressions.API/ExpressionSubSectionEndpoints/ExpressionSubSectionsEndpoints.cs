@@ -20,8 +20,7 @@ internal static class ExpectedSubSectionsEndpoints
     {
         var endpointGroup = app.MapGroup("expressionSubSections")
             .AddFluentValidationAutoValidation()
-            .WithTags("Expressions")
-            .WithOpenApi();
+            .WithTags("Expressions");
 
         endpointGroup
             .MapGet(

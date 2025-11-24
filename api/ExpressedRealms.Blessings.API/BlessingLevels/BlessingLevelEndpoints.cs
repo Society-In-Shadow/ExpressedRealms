@@ -18,8 +18,7 @@ internal static class BlessingLevelEndpoints
             .AddFluentValidationAutoValidation()
             .RequireAuthorization()
             .WithTags("Blessings")
-            .RequirePolicyAuthorization(Policies.ManageBlessings)
-            .WithOpenApi();
+            .RequirePolicyAuthorization(Policies.ManageBlessings);
 
         endpointGroup.MapGet("{blessingId}/level/{levelId}", GetBlessingLevelEndpoint.Execute);
 

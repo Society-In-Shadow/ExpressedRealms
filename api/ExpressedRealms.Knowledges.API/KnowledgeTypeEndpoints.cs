@@ -13,8 +13,7 @@ public static class KnowledgeTypeEndpoints
     {
         var endpointGroup = app.MapGroup("knowledgetypes")
             .AddFluentValidationAutoValidation()
-            .WithTags("Knowledges")
-            .WithOpenApi();
+            .WithTags("Knowledges");
 
         endpointGroup
             .MapGet("", GetKnowledgeTypesEndpoint.GetKnowledgeTypes)

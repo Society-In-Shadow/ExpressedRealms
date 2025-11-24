@@ -19,8 +19,7 @@ internal static class ExpressionEndpoints
     {
         var endpointGroup = app.MapGroup("expression")
             .AddFluentValidationAutoValidation()
-            .WithTags("Expressions")
-            .WithOpenApi();
+            .WithTags("Expressions");
 
         endpointGroup
             .MapGet("{expressionId}", GetEditExpressionEndpoint.GetEditExpression)

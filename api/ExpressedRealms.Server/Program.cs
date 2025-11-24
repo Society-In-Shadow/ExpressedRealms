@@ -1,6 +1,4 @@
-using System.Reflection;
 using System.Text.Json;
-using AspNetCore.Swagger.Themes;
 using Audit.Core;
 using ExpressedRealms.Admin.API.Configuration;
 using ExpressedRealms.Admin.UseCases.Configuration;
@@ -36,18 +34,14 @@ using ExpressedRealms.Server.DependencyInjections;
 using ExpressedRealms.Server.EndPoints;
 using ExpressedRealms.Server.EndPoints.PlayerEndpoints;
 using ExpressedRealms.Server.Shared.Extensions;
-using ExpressedRealms.Server.Swagger;
 using FluentValidation;
-using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using Scalar.AspNetCore;
 using Serilog;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 
 try
 {
@@ -141,35 +135,19 @@ try
             ForwardedHeaders.XForwardedFor
             | ForwardedHeaders.XForwardedProto
             | ForwardedHeaders.XForwardedHost;
-        options.KnownNetworks.Clear();
+        options.KnownIPNetworks.Clear();
         options.KnownProxies.Clear();
     });
 
     Log.Information("Adding OpenAPI Support and Swagger Generation");
 
-    // Add services to the container.
-    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen(options =>
-    {
-        // Needed to add additional information on dto's
-        // https://github.com/domaindrivendev/Swashbuckle.AspNetCore?tab=readme-ov-file#include-descriptions-from-xml-comments
-        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-
-        // Comment out if the JSON cannot be loaded for some reason
-        options.CustomSchemaIds(type => type.FullName);
-
-        options.AddEnumsWithValuesFixFilters();
-    });
+    builder.Services.AddOpenApi();
 
     Log.Information("Configuring various things");
-    builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
     builder.Services.AddEmailDependencies(builder.Configuration);
 
     builder.Services.AddValidatorsFromAssemblyContaining<Program>();
     builder.Services.AddFluentValidationAutoValidation();
-    builder.Services.AddFluentValidationRulesToSwagger();
     builder.Services.AddSingleton<ITelemetryInitializer, RouteTemplateTelemetryInitializer>();
 
     builder.Services.AddHttpContextAccessor();
@@ -261,8 +239,8 @@ try
     if (app.Environment.IsDevelopment())
     {
         Log.Information("Setting Up Swagger");
-        app.UseSwagger();
-        app.UseSwaggerUI(ModernStyle.Dark);
+        app.MapOpenApi();
+        app.MapScalarApiReference();
     }
 
     Log.Information("Adding Health Check Endpoint");

@@ -17,7 +17,6 @@ internal static class AssignedXpEndpoints
         var endpointGroup = app.MapGroup("characters")
             .AddFluentValidationAutoValidation()
             .WithTags("Character Assigned Xp")
-            .WithOpenApi()
             .RequireAuthorization();
 
         endpointGroup.MapGet("{characterId}/assignedXp", GetEndpoint.ExecuteAsync);
@@ -36,8 +35,7 @@ internal static class AssignedXpEndpoints
 
         var eventEndpointGroup = app.MapGroup("events")
             .AddFluentValidationAutoValidation()
-            .WithTags("Events")
-            .WithOpenApi();
+            .WithTags("Events");
 
         eventEndpointGroup
             .MapGet("{eventId}/assignedXp", GetEventEndpoint.ExecuteAsync)

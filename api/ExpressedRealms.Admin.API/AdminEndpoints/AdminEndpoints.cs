@@ -24,8 +24,7 @@ public static class AdminEndpoints
         var endpointGroup = app.MapGroup("admin")
             .AddFluentValidationAutoValidation()
             .WithTags("admin")
-            .RequirePolicyAuthorization(Policies.UserManagementPolicy)
-            .WithOpenApi();
+            .RequirePolicyAuthorization(Policies.UserManagementPolicy);
 
         endpointGroup.MapGet("users", GetUsersEndpoint.Execute).RequireAuthorization();
 

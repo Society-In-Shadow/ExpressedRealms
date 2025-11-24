@@ -35,8 +35,7 @@ internal static class CharacterEndPoints
     {
         var endpointGroup = app.MapGroup("characters")
             .AddFluentValidationAutoValidation()
-            .WithTags("Characters")
-            .WithOpenApi();
+            .WithTags("Characters");
 
         endpointGroup
             .MapGet(

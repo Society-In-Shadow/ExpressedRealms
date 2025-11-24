@@ -15,8 +15,7 @@ internal static class CharacterKnowledgeEndpoints
     {
         var endpointGroup = app.MapGroup("characters")
             .AddFluentValidationAutoValidation()
-            .WithTags("Character Knowledges")
-            .WithOpenApi();
+            .WithTags("Character Knowledges");
 
         endpointGroup
             .MapGet("{characterId}/knowledges", GetCharacterKnowledgesEndpoint.GetKnowledges)

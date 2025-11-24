@@ -17,8 +17,7 @@ internal static class CharacterPowersEndpoints
     {
         var endpointGroup = app.MapGroup("characters")
             .AddFluentValidationAutoValidation()
-            .WithTags("Character Powers")
-            .WithOpenApi();
+            .WithTags("Character Powers");
 
         endpointGroup
             .MapGet("{characterId}/powers", GetCharacterPowersEndpoint.GetPowers)

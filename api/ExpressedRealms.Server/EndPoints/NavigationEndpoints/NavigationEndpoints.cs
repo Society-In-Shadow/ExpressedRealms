@@ -2,6 +2,7 @@ using System.Security.Claims;
 using ExpressedRealms.Authentication;
 using ExpressedRealms.DB;
 using ExpressedRealms.Expressions.Repository.Expressions;
+using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.FeatureFlags.FeatureClient;
 using ExpressedRealms.Server.EndPoints.NavigationEndpoints.DTOs;
 using ExpressedRealms.Server.EndPoints.NavigationEndpoints.Responses;
@@ -20,8 +21,7 @@ internal static class NavigationEndpoints
     {
         var endpointGroup = app.MapGroup("navMenu")
             .AddFluentValidationAutoValidation()
-            .WithTags("Nav Menu")
-            .WithOpenApi();
+            .WithTags("Nav Menu");
 
         endpointGroup
             .MapGet(
@@ -57,7 +57,7 @@ internal static class NavigationEndpoints
                 async Task<Ok<FeatureFlagResponse>> (IFeatureToggleClient featureFlags) =>
                 {
                     List<string> featureFlagList = new List<string>();
-                    foreach (var featureFlag in FeatureFlags.ReleaseFlags.List)
+                    foreach (var featureFlag in ReleaseFlags.List)
                     {
                         if (await featureFlags.HasFeatureFlag(featureFlag))
                         {

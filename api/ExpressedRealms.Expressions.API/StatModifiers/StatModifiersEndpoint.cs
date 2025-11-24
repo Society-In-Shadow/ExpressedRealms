@@ -17,8 +17,7 @@ internal static class StatModifiersEndpoint
     {
         var endpointGroup = app.MapGroup("modifiergroups")
             .AddFluentValidationAutoValidation()
-            .WithTags("Stat Modifier Groups")
-            .WithOpenApi();
+            .WithTags("Stat Modifier Groups");
 
         endpointGroup.MapGet("{groupId}/modifiers", GetStatModifiersEndpoint.ExecuteAsync);
 

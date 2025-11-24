@@ -14,8 +14,7 @@ internal static class ProficiencyEndPoints
     {
         var endpointGroup = app.MapGroup("proficiencies")
             .AddFluentValidationAutoValidation()
-            .WithTags("Proficiencies")
-            .WithOpenApi();
+            .WithTags("Proficiencies");
 
         endpointGroup
             .MapGet(

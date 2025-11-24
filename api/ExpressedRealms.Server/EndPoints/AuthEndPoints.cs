@@ -13,8 +13,7 @@ internal static class AuthEndPoints
     {
         var endpointGroup = app.MapGroup("auth")
             .AddFluentValidationAutoValidation()
-            .WithTags("Authentication")
-            .WithOpenApi();
+            .WithTags("Authentication");
 
         endpointGroup.MapIdentityApi<User>();
         endpointGroup.MapGet("/check", [Authorize] () => Results.Ok());
