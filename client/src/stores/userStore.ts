@@ -20,6 +20,7 @@ export const UserRoles = {
 export const FeatureFlags = {
   ShowMarketingContactUs: 'show-marketing-contact-us',
   ShowFactionDropdown: 'show-faction-dropdown',
+  ShowAssignedXpPanel: 'show-assigned-xp-panel',
 } as const
 
 export type UserRole = (typeof UserRoles)[keyof typeof UserRoles]
