@@ -1,14 +1,14 @@
 <script setup lang="ts">
 
-import {onMounted, ref, watch} from 'vue'
-import {useRoute} from 'vue-router'
+import { onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import {
   experienceStore,
   type XpSectionType,
   XpSectionTypes,
 } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
-import type {CalculatedExperience} from '@/components/characters/character/types.ts'
-import {characterStore} from '@/components/characters/character/stores/characterStore.ts'
+import type { CalculatedExperience } from '@/components/characters/character/types.ts'
+import { characterStore } from '@/components/characters/character/stores/characterStore.ts'
 
 const route = useRoute()
 const experienceInfo = experienceStore()

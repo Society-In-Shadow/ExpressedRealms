@@ -154,6 +154,7 @@ public class GetAssignedXpMappingUseCaseTests
                 DateAssigned = x.StartDate.ToDateTime(TimeOnly.MinValue),
                 Event = new UseCases.AssignedXp.Get.BasicInfo
                 {
+                    Id = x.Id,
                     Name = $"{x.Name} ({x.StartDate.Year})",
                 },
                 Notes = "",

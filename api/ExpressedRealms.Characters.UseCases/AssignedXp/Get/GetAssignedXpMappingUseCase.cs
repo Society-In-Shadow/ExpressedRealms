@@ -60,6 +60,7 @@ internal sealed class GetAssignedXpMappingUseCase(
                     DateAssigned = x.StartDate.ToDateTime(TimeOnly.MinValue),
                     Event = new Repository.Xp.Dtos.AssignedXpInfoDtos.BasicInfo()
                     {
+                        Id = x.Id,
                         Name = $"{x.Name} ({x.StartDate.Year})",
                     },
                     Notes = "",

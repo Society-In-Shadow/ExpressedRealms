@@ -1,3 +1,5 @@
+import { type XpSectionType } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
+
 export interface ExperienceBreakdownResponse {
   experience: ExperienceBreakdown[]
   availableDiscretionary: number
@@ -6,7 +8,7 @@ export interface ExperienceBreakdownResponse {
 }
 
 export interface ExperienceBreakdown {
-  sectionTypeId: number
+  sectionTypeId: XpSectionType
   name: string
   total: number
   characterCreateMax: number
@@ -15,7 +17,7 @@ export interface ExperienceBreakdown {
 
 export interface CalculatedExperience {
   name: string
-  sectionTypeId: number
+  sectionTypeId: XpSectionType
   requiredXp: number
   currentOptionalXp: number
   optionalMaxXP: number

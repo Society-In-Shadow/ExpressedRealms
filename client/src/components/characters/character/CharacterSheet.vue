@@ -17,9 +17,9 @@ import PowerTile from '@/components/characters/character/powers/PowerTile.vue'
 import TrackableProficiencies from '@/components/characters/character/proficiency/TrackableProficiencies.vue'
 import BlessingTab from '@/components/characters/character/blessings/BlessingTab.vue'
 import StatTile from '@/components/characters/character/stats/StatTile.vue'
-import {characterStore} from '@/components/characters/character/stores/characterStore.ts'
+import { characterStore } from '@/components/characters/character/stores/characterStore.ts'
 import Message from 'primevue/message'
-import ReviewCharacter from '@/components/characters/character/ReviewCharacter.vue'
+import ReviewCharacter from '@/components/characters/character/xp/ReviewCharacter.vue'
 
 const characterData = characterStore()
 

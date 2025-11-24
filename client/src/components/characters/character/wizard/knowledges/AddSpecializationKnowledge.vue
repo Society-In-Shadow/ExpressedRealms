@@ -2,19 +2,19 @@
 
 import FormTextAreaWrapper from '@/FormWrappers/FormTextAreaWrapper.vue'
 import Button from 'primevue/button'
-import {characterKnowledgeStore} from '@/components/characters/character/knowledges/stores/characterKnowledgeStore'
-import {useRoute} from 'vue-router'
-import {inject, onBeforeMount, ref} from 'vue'
+import { characterKnowledgeStore } from '@/components/characters/character/knowledges/stores/characterKnowledgeStore'
+import { useRoute } from 'vue-router'
+import { inject, onBeforeMount, ref } from 'vue'
 import Message from 'primevue/message'
 
 import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
 import {
   getValidationInstance,
 } from '@/components/characters/character/knowledges/validations/specializationValidations'
-import type {CharacterKnowledge} from '@/components/characters/character/knowledges/types'
+import type { CharacterKnowledge } from '@/components/characters/character/knowledges/types'
 import ShowXPCosts from '@/components/characters/character/wizard/ShowXPCosts.vue'
-import {experienceStore, XpSectionTypes} from '@/components/characters/character/stores/experienceBreakdownStore.ts'
-import type {CalculatedExperience} from '@/components/characters/character/types.ts'
+import { experienceStore, XpSectionTypes } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
+import type { CalculatedExperience } from '@/components/characters/character/types.ts'
 
 const store = characterKnowledgeStore()
 const form = getValidationInstance()

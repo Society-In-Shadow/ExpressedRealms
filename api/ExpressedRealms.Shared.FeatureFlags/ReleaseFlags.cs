@@ -30,6 +30,12 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "Allows one to see the faction dropdown on the add / edit character page"
     );
 
+    public static readonly ReleaseFlags ShowAssignedXpPanel = new(
+        "Show Assigned XP Panel",
+        "show-assigned-xp-panel",
+        "Shows how the XP has been assigned to the character"
+    );
+
     public override string ToString()
     {
         return Name;

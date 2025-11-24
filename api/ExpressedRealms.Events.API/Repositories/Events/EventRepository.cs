@@ -56,6 +56,7 @@ internal sealed class EventRepository(
             .Where(x => x.StartDate <= availableDate && x.IsPublished)
             .Select(x => new EventXpDto()
             {
+                Id = x.Id,
                 Name = x.Name,
                 StartDate = x.StartDate,
                 ConExperience = x.ConExperience,

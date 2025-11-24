@@ -3,15 +3,15 @@
 import Message from 'primevue/message'
 import FormTextAreaWrapper from '@/FormWrappers/FormTextAreaWrapper.vue'
 import Button from 'primevue/button'
-import {getValidationInstance} from '@/components/characters/character/powers/validations/powerValidations.ts'
-import {useRoute} from 'vue-router'
-import {computed, type PropType, ref, watch} from 'vue'
-import {characterPowersStore} from '@/components/characters/character/powers/stores/characterPowerStore.ts'
-import type {Power} from '@/components/characters/character/powers/types.ts'
+import { getValidationInstance } from '@/components/characters/character/powers/validations/powerValidations.ts'
+import { useRoute } from 'vue-router'
+import { computed, type PropType, ref, watch } from 'vue'
+import { characterPowersStore } from '@/components/characters/character/powers/stores/characterPowerStore.ts'
+import type { Power } from '@/components/characters/character/powers/types.ts'
 import PowerDetails from '@/components/characters/character/wizard/powers/supporting/PowerDetails.vue'
 import ShowXPCosts from '@/components/characters/character/wizard/ShowXPCosts.vue'
-import {experienceStore, XpSectionTypes} from '@/components/characters/character/stores/experienceBreakdownStore.ts'
-import type {CalculatedExperience} from '@/components/characters/character/types.ts'
+import { experienceStore, XpSectionTypes } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
+import type { CalculatedExperience } from '@/components/characters/character/types.ts'
 
 const store = characterPowersStore()
 const form = getValidationInstance()

@@ -1,8 +1,8 @@
-import {defineStore} from 'pinia'
+import { defineStore } from 'pinia'
 import axios from 'axios'
-import type {CalculatedExperience, ExperienceBreakdownResponse} from '@/components/characters/character/types.ts'
-import {characterStore} from '@/components/characters/character/stores/characterStore.ts'
-import {proficiencyStore} from '@/components/characters/character/proficiency/stores/proficiencyStore.ts'
+import type { CalculatedExperience, ExperienceBreakdownResponse } from '@/components/characters/character/types.ts'
+import { characterStore } from '@/components/characters/character/stores/characterStore.ts'
+import { proficiencyStore } from '@/components/characters/character/proficiency/stores/proficiencyStore.ts'
 
 export const XpSectionTypes = {
   advantage: 1,
@@ -83,10 +83,10 @@ export const experienceStore
         return this.calculatedValues.filter(x => x.sectionTypeId === sectionTypeId)[0]
       },
       getTotalXp(): number {
-        const filteredSections = [XpSectionTypes.advantage, XpSectionTypes.discretionary, XpSectionTypes.disadvantage]
+        const filteredSections = new Set<XpSectionType>([XpSectionTypes.advantage, XpSectionTypes.discretionary, XpSectionTypes.disadvantage])
 
         const filteredCalculatedValues = this.calculatedValues.filter((section) => {
-          return !filteredSections.includes(section.sectionTypeId as XpSectionTypes)
+          return !filteredSections.has(section.sectionTypeId)
         })
         return filteredCalculatedValues.reduce((sum, item) => sum + item.levelXp, 0)
       },
