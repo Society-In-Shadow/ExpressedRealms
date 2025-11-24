@@ -135,40 +135,19 @@ try
             ForwardedHeaders.XForwardedFor
             | ForwardedHeaders.XForwardedProto
             | ForwardedHeaders.XForwardedHost;
-        options.KnownNetworks.Clear();
+        options.KnownIPNetworks.Clear();
         options.KnownProxies.Clear();
     });
 
     Log.Information("Adding OpenAPI Support and Swagger Generation");
 
-    
     builder.Services.AddOpenApi();
-    
-    
-    
-    // Add services to the container.
-    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-    /*builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen(options =>
-    {
-        // Needed to add additional information on dto's
-        // https://github.com/domaindrivendev/Swashbuckle.AspNetCore?tab=readme-ov-file#include-descriptions-from-xml-comments
-        var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-
-        // Comment out if the JSON cannot be loaded for some reason
-        options.CustomSchemaIds(type => type.FullName);
-
-        options.AddEnumsWithValuesFixFilters();
-    });*/
 
     Log.Information("Configuring various things");
-    //builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
     builder.Services.AddEmailDependencies(builder.Configuration);
 
     builder.Services.AddValidatorsFromAssemblyContaining<Program>();
     builder.Services.AddFluentValidationAutoValidation();
-    //builder.Services.AddFluentValidationRulesToSwagger();
     builder.Services.AddSingleton<ITelemetryInitializer, RouteTemplateTelemetryInitializer>();
 
     builder.Services.AddHttpContextAccessor();
@@ -260,8 +239,8 @@ try
     if (app.Environment.IsDevelopment())
     {
         Log.Information("Setting Up Swagger");
-        /*app.UseSwagger();
-        app.UseSwaggerUI(ModernStyle.Dark);*/
+        app.MapOpenApi();
+        app.MapScalarApiReference();
     }
 
     Log.Information("Adding Health Check Endpoint");
@@ -273,13 +252,6 @@ try
     if (app.Environment.IsDevelopment())
     {
         app.UseHttpsRedirection();
-    }
-    
-    app.MapOpenApi();
-
-    if (app.Environment.IsDevelopment())
-    {
-        app.MapScalarApiReference();
     }
 
     app.UseAuthentication();
