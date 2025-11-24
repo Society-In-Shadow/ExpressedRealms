@@ -246,7 +246,7 @@ jobs:
         uses: actions/setup-dotnet@v4
         if: ${{ needs.changes.outputs.backend == 'true' }}
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 10.0.x
 
       # Step 3: Restore and build .NET project
       - name: Restore dependencies
