@@ -39,11 +39,13 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
         var xpAvailable = characterInfo!.AssignedXp;
         if (await featureToggleClient.HasFeatureFlag(ReleaseFlags.ShowAssignedXpPanel))
         {
-            var assignedXp = await assignedXpRepository.GetAllPlayerMappingsAsync(characterInfo.PlayerId);
+            var assignedXp = await assignedXpRepository.GetAllPlayerMappingsAsync(
+                characterInfo.PlayerId
+            );
             var events = await eventRepository.GetEventsWithAvailableXp();
             xpAvailable = assignedXp.Sum(x => x.Amount) + events.Sum(x => x.ConExperience);
         }
-        
+
         costs.AddRange(
             xpInfo
                 .Select(x =>
@@ -59,7 +61,7 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
                     {
                         max = xpAvailable + x.TotalCharacterCreationXp;
                     }
-                    
+
                     return new ExperienceTotalMax(
                         x.SectionName,
                         x.SpentXp,

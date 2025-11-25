@@ -84,38 +84,27 @@ public class GetCharacterExperienceBreakdownUseCaseTests
         A.CallTo(() => _xpRepository.GetCharacterXpMappings(_model.CharacterId)).Returns(_xpItems);
 
         A.CallTo(() => _xpRepository.GetAvailableDiscretionary(_model.CharacterId)).Returns(18);
-        
-        A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId)).Returns(new Character()
-        {
-            PlayerId = PlayerId,
-            IsInCharacterCreation = true
-        });
-        
+
+        A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId))
+            .Returns(new Character() { PlayerId = PlayerId, IsInCharacterCreation = true });
+
         A.CallTo(() => _assignedXpRepository.GetAllPlayerMappingsAsync(PlayerId))
-            .Returns(new List<XpMappingInfoDto>()
-            {
-                new ()
+            .Returns(
+                new List<XpMappingInfoDto>()
                 {
-                    Amount = 1
-                },
-                new ()
-                {
-                    Amount = 3
+                    new() { Amount = 1 },
+                    new() { Amount = 3 },
                 }
-            });
+            );
 
         A.CallTo(() => _eventRepository.GetEventsWithAvailableXp())
-            .Returns(new List<EventXpDto>()
-            {
-                new()
+            .Returns(
+                new List<EventXpDto>()
                 {
-                    ConExperience = 5
-                },
-                new()
-                {
-                    ConExperience = 10
+                    new() { ConExperience = 5 },
+                    new() { ConExperience = 10 },
                 }
-            });
+            );
 
         var validator = new GetCharacterExperienceBreakdownModelValidator(
             knowledgeRepository,
@@ -132,7 +121,7 @@ public class GetCharacterExperienceBreakdownUseCaseTests
             CancellationToken.None
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_CharacterId_WillFail_WhenItsEmpty()
     {
@@ -207,25 +196,26 @@ public class GetCharacterExperienceBreakdownUseCaseTests
 
         Assert.Equal(18, result.Value.AvailableDiscretionary);
     }
-    
+
     [Fact]
     public async Task UseCase_WithShowAssignedPanelFeatureToggle_WillSumUpAssignedXpAndEvents()
     {
-        A.CallTo(() => _featureToggleClient.HasFeatureFlag(ReleaseFlags.ShowAssignedXpPanel)).Returns(true);
+        A.CallTo(() => _featureToggleClient.HasFeatureFlag(ReleaseFlags.ShowAssignedXpPanel))
+            .Returns(true);
 
-        
         var result = await _useCase.ExecuteAsync(_model);
 
         Assert.Equal(19, result.Value.TotalAvailableXp);
     }
-    
+
     [Fact]
     public async Task UseCase_WithoutShowAssignedPanelFeatureToggle_WillNotCallAssignedXPMappings()
     {
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() => _assignedXpRepository.GetAllPlayerMappingsAsync(A<Guid>._)).MustNotHaveHappened();
+        A.CallTo(() => _assignedXpRepository.GetAllPlayerMappingsAsync(A<Guid>._))
+            .MustNotHaveHappened();
     }
-    
+
     [Fact]
     public async Task UseCase_WithoutShowAssignedPanelFeatureToggle_WillNotGetEventsWithAvailableXp()
     {
@@ -237,27 +227,27 @@ public class GetCharacterExperienceBreakdownUseCaseTests
     public async Task UseCase_WillSetMaxCapTo1Million_IfCharacterIsNotPrimaryCharacterAndNotInCreationMode()
     {
         A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId))
-            .Returns(new Character() { IsInCharacterCreation = false, IsPrimaryCharacter = false});
-        
+            .Returns(new Character() { IsInCharacterCreation = false, IsPrimaryCharacter = false });
+
         var results = await _useCase.ExecuteAsync(_model);
-        
+
         var itemCount = results.Value.ExperienceSections.Count(x => x.Max == 1_000_000);
         Assert.Equal(_xpItems.Count, itemCount);
     }
-    
+
     [Fact]
     public async Task UseCase_WillSetMaxCapToSectionCap_IfCharacterIsInCreationMode()
     {
         A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId))
             .Returns(new Character() { IsInCharacterCreation = true });
-        
+
         var results = await _useCase.ExecuteAsync(_model);
-        
+
         var maxAmounts = results.Value.ExperienceSections.Select(x => x.Max);
         var providedMaxAmounts = _xpItems.Select(x => x.SectionCap);
         Assert.Equivalent(maxAmounts, providedMaxAmounts);
     }
-    
+
     /// <summary>
     ///  The XP view is grabbing all items assigned to the user, including items selected during character creation, so
     ///  when doing primary calculations, it needs to include the initial creation xp
@@ -266,17 +256,27 @@ public class GetCharacterExperienceBreakdownUseCaseTests
     public async Task UseCase_WillSetMaxCapToXPAvailablePlusCreationCap_IfCharacterIsPrimaryCharacterAndNotInCreationMode()
     {
         A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId))
-            .Returns(new Character() { PlayerId = PlayerId, IsInCharacterCreation = false, IsPrimaryCharacter = true});
-        A.CallTo(() => _featureToggleClient.HasFeatureFlag(ReleaseFlags.ShowAssignedXpPanel)).Returns(true);
-        
+            .Returns(
+                new Character()
+                {
+                    PlayerId = PlayerId,
+                    IsInCharacterCreation = false,
+                    IsPrimaryCharacter = true,
+                }
+            );
+        A.CallTo(() => _featureToggleClient.HasFeatureFlag(ReleaseFlags.ShowAssignedXpPanel))
+            .Returns(true);
+
         var results = await _useCase.ExecuteAsync(_model);
-        
+
         const int totalXpAvailableToUser = 19;
-        var maxAmounts = results.Value.ExperienceSections.Select(x => x.Max  );
-        var providedMaxAmounts = _xpItems.Select(x => totalXpAvailableToUser + x.TotalCharacterCreationXp);
+        var maxAmounts = results.Value.ExperienceSections.Select(x => x.Max);
+        var providedMaxAmounts = _xpItems.Select(x =>
+            totalXpAvailableToUser + x.TotalCharacterCreationXp
+        );
         Assert.Equivalent(maxAmounts, providedMaxAmounts);
     }
-    
+
     /// <summary>
     ///  The XP view is grabbing all items assigned to the user, including items selected during character creation, so
     ///  when doing primary calculations, it needs to include the initial creation xp
@@ -285,13 +285,23 @@ public class GetCharacterExperienceBreakdownUseCaseTests
     public async Task UseCase_WithoutShowAssignedPanelFeatureToggle_WillSetMaxCapToDepreciatedAssignedXpPlusCreationCap_IfCharacterIsPrimaryCharacterAndNotInCreationMode_()
     {
         A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId))
-            .Returns(new Character() { PlayerId = PlayerId, IsInCharacterCreation = false, IsPrimaryCharacter = true, AssignedXp = 20} );
-        
+            .Returns(
+                new Character()
+                {
+                    PlayerId = PlayerId,
+                    IsInCharacterCreation = false,
+                    IsPrimaryCharacter = true,
+                    AssignedXp = 20,
+                }
+            );
+
         var results = await _useCase.ExecuteAsync(_model);
-        
+
         const int totalXpAvailableToUser = 20;
-        var maxAmounts = results.Value.ExperienceSections.Select(x => x.Max  );
-        var providedMaxAmounts = _xpItems.Select(x => totalXpAvailableToUser + x.TotalCharacterCreationXp);
+        var maxAmounts = results.Value.ExperienceSections.Select(x => x.Max);
+        var providedMaxAmounts = _xpItems.Select(x =>
+            totalXpAvailableToUser + x.TotalCharacterCreationXp
+        );
         Assert.Equivalent(maxAmounts, providedMaxAmounts);
     }
 }
