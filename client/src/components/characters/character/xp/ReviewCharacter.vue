@@ -29,7 +29,7 @@ const discretionaryBucket = ref(0)
 const overallDiscretionaryTotal = ref(0)
 const hasAssignedXpPanelFeatureToggle = ref(false)
 const showAssignedXpPanel = computed(() => {
-  return !characterInfo.isInCharacterCreation && hasAssignedXpPanelFeatureToggle.value
+  return !characterInfo.isInCharacterCreation && hasAssignedXpPanelFeatureToggle.value && characterInfo.isPrimaryCharacter
 })
 
 const characterId = Number.parseInt(route.params.id)
@@ -211,9 +211,15 @@ const displayedSections = computed(() => {
               {{ section.levelXp }}
             </td>
           </tr>
+          <!-- Total XP -->
           <tr v-if="!characterInfo.isInCharacterCreation">
             <td>Total</td>
-            <td>{{ xpInfo.getTotalXp() }} / {{ xpInfo.totalAvailableXp }}</td>
+            <td v-if="characterInfo.isPrimaryCharacter">
+              {{ xpInfo.getTotalXp() }} / {{ xpInfo.totalAvailableXp }}
+            </td>
+            <td v-else>
+              {{ xpInfo.getTotalXp() }} / <span class="material-symbols-outlined inline-icon">all_inclusive</span>
+            </td>
           </tr>
         </table>
 
@@ -260,3 +266,9 @@ const displayedSections = computed(() => {
     </TabPanels>
   </Tabs>
 </template>
+
+<style>
+.inline-icon {
+  vertical-align: bottom;
+}
+</style>
