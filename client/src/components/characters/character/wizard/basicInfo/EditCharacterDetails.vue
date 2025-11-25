@@ -2,18 +2,18 @@
 
 import axios from 'axios'
 import Card from 'primevue/card'
-import {computed, onBeforeMount, ref} from 'vue'
-import {useRoute} from 'vue-router'
+import { computed, onBeforeMount, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import toaster from '@/services/Toasters'
-import {makeIdSafe} from '@/utilities/stringUtilities'
-import {characterStore} from '@/components/characters/character/stores/characterStore'
-import {FeatureFlags, userStore} from '@/stores/userStore.ts'
+import { makeIdSafe } from '@/utilities/stringUtilities'
+import { characterStore } from '@/components/characters/character/stores/characterStore'
+import { FeatureFlags, userStore } from '@/stores/userStore.ts'
 import HighLevelExpressionInfo
   from '@/components/characters/character/wizard/basicInfo/supporting/HighLevelExpressionInfo.vue'
-import {wizardContentStore} from '@/components/characters/character/wizard/stores/wizardContentStore.ts'
-import type {WizardContent} from '@/components/characters/character/wizard/types.ts'
+import { wizardContentStore } from '@/components/characters/character/wizard/stores/wizardContentStore.ts'
+import type { WizardContent } from '@/components/characters/character/wizard/types.ts'
 import Button from 'primevue/button'
-import {breakpointsBootstrapV5, useBreakpoints} from '@vueuse/core'
+import { breakpointsBootstrapV5, useBreakpoints } from '@vueuse/core'
 import {
   getValidationInstance,
 } from '@/components/characters/character/wizard/basicInfo/validators/characterValidation.ts'
@@ -22,11 +22,13 @@ import FormTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
 import FormCheckboxWrapper from '@/FormWrappers/FormCheckboxWrapper.vue'
 import SelectProgressionPaths from '@/components/characters/character/wizard/basicInfo/SelectProgressionPaths.vue'
 import Message from 'primevue/message'
+import { experienceStore } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
 
 const route = useRoute()
 
 const characterInfo = characterStore()
 const userInfo = userStore()
+const xpInfo = experienceStore()
 const form = getValidationInstance()
 
 const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5)
@@ -62,10 +64,13 @@ const onSubmit = form.handleSubmit((values) => {
     isPrimaryCharacter: values.isPrimaryCharacter,
     primaryProgressionId: values.primaryProgression?.id,
     secondaryProgressionId: values.secondaryProgression?.id,
-  }).then(() => {
+  }).then(async () => {
     characterInfo.name = values.name
     characterInfo.background = values.background
     characterInfo.faction = values.faction
+    characterInfo.isPrimaryCharacter = values.isPrimaryCharacter
+    await xpInfo.updateExperience(route.params.id)
+
     toaster.success('Successfully Updated Character Info!')
   })
 })
