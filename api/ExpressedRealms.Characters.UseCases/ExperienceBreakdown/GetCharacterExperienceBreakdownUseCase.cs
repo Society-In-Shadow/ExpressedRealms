@@ -1,5 +1,8 @@
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Xp;
+using ExpressedRealms.Events.API.Repositories.Events;
+using ExpressedRealms.FeatureFlags;
+using ExpressedRealms.FeatureFlags.FeatureClient;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
@@ -8,6 +11,9 @@ namespace ExpressedRealms.Characters.UseCases.ExperienceBreakdown;
 internal sealed class GetCharacterExperienceBreakdownUseCase(
     IXpRepository xpRepository,
     ICharacterRepository characterRepository,
+    IAssignedXpMappingRepository assignedXpRepository,
+    IEventRepository eventRepository,
+    IFeatureToggleClient featureToggleClient,
     GetCharacterExperienceBreakdownModelValidator validator,
     CancellationToken cancellationToken
 ) : IGetCharacterExperienceBreakdownUseCase
@@ -28,26 +34,42 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
         var costs = new List<ExperienceTotalMax>();
 
         var xpInfo = await xpRepository.GetCharacterXpMappings(model.CharacterId);
-        var characterState = await characterRepository.GetCharacterState(model.CharacterId);
-        var characterInfo = await characterRepository.GetCharacterForEdit(model.CharacterId);
+        var characterInfo = await characterRepository.FindCharacterAsync(model.CharacterId);
 
-        var sectionCap = 1_000_000;
-        if (characterInfo.IsPrimaryCharacter)
+        var xpAvailable = characterInfo!.AssignedXp;
+        if (await featureToggleClient.HasFeatureFlag(ReleaseFlags.ShowAssignedXpPanel))
         {
-            sectionCap = characterInfo.AssignedXp;
+            var assignedXp = await assignedXpRepository.GetAllPlayerMappingsAsync(
+                characterInfo.PlayerId
+            );
+            var events = await eventRepository.GetEventsWithAvailableXp();
+            xpAvailable = assignedXp.Sum(x => x.Amount) + events.Sum(x => x.ConExperience);
         }
 
         costs.AddRange(
             xpInfo
-                .Select(x => new ExperienceTotalMax(
-                    x.SectionName,
-                    x.SpentXp,
-                    characterState.IsInCharacterCreation
-                        ? x.SectionCap
-                        : sectionCap + x.TotalCharacterCreationXp,
-                    x.SectionTypeId,
-                    x.LevelXp
-                ))
+                .Select(x =>
+                {
+                    // Unlimited XP
+                    var max = 1_000_000;
+
+                    if (characterInfo.IsInCharacterCreation)
+                    {
+                        max = x.SectionCap;
+                    }
+                    else if (characterInfo.IsPrimaryCharacter)
+                    {
+                        max = xpAvailable + x.TotalCharacterCreationXp;
+                    }
+
+                    return new ExperienceTotalMax(
+                        x.SectionName,
+                        x.SpentXp,
+                        max,
+                        x.SectionTypeId,
+                        x.LevelXp
+                    );
+                })
                 .ToList()
         );
 
@@ -59,7 +81,7 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
                     model.CharacterId
                 ),
                 TotalSpentLevelXp = xpInfo.Sum(x => x.LevelXp),
-                TotalAvailableXp = characterInfo.AssignedXp,
+                TotalAvailableXp = xpAvailable,
             }
         );
     }

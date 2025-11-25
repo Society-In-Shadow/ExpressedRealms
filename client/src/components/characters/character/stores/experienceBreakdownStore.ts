@@ -76,9 +76,6 @@ export const experienceStore
             this.availableDiscretionary = response.data.availableDiscretionary
           })
       },
-      getExperienceInfo(name: string) {
-        return this.experienceBreakdown.experience.filter(x => x.name === name)[0]
-      },
       getExperienceInfoForSection(sectionTypeId: XpSectionType) {
         return this.calculatedValues.filter(x => x.sectionTypeId === sectionTypeId)[0]
       },
