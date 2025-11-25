@@ -48,7 +48,6 @@ watch(() => experienceInfo.calculatedValues, () => {
         <div><strong v-if="xp.sectionTypeId != XpSectionTypes.advantage && xp.sectionTypeId != XpSectionTypes.disadvantage">Required XP:</strong>  <strong v-else>Optional XP:</strong> {{ xp.requiredXp }} / {{ xp.characterCreateMax }}</div>
         <div>
           <span v-if="xp.sectionTypeId != XpSectionTypes.advantage && xp.sectionTypeId != XpSectionTypes.disadvantage"class="material-symbols-outlined" title="You are required to spend all points">{{ xp.total >= xp.characterCreateMax ? "check_circle" : "warning" }}</span>
-          <span class="material-symbols-outlined" title="This is optional xp">do_not_disturb_on</span>
         </div>
       </div>
     </div>
