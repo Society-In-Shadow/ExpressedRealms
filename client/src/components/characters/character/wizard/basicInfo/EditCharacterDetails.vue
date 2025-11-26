@@ -56,10 +56,9 @@ const isLoading = ref(true)
 const factions = ref([])
 
 const onSubmit = form.handleSubmit((values) => {
-  axios.put('/characters/', {
+  axios.put(`/characters/${route.params.id}`, {
     name: values.name,
     background: values.background,
-    id: route.params.id,
     factionId: values.faction?.id,
     isPrimaryCharacter: values.isPrimaryCharacter,
     primaryProgressionId: values.primaryProgression?.id,
