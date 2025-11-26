@@ -40,5 +40,10 @@ internal sealed class EditCharacterModelValidator : AbstractValidator<EditCharac
                 async (x, y) => await progressionPathRepository.ProgressionPathExists(x!.Value)
             )
             .When(x => x.SecondaryProgressionId is not null);
+
+        RuleFor(x => x)
+            .MustAsync(async (x, y) => await characterRepository.CanUpdatePrimaryCharacterStatus(x.Id))
+            .WithName(nameof(EditCharacterModel.IsPrimaryCharacter))
+            .WithMessage("A primary character already exists.");
     }
 }

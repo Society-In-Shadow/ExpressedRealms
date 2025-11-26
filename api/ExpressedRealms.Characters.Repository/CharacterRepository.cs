@@ -196,4 +196,17 @@ internal sealed class CharacterRepository(
 
         return character is not null;
     }
+
+    public async Task<bool> CanUpdatePrimaryCharacterStatus(int id)
+    {
+        var hasAnyPrimary =
+            await context.Characters.AnyAsync(x =>
+                x.IsPrimaryCharacter && x.Player.UserId == userContext.CurrentUserId());
+
+        if (!hasAnyPrimary)
+            return true;
+        
+        return await context.Characters.AnyAsync(x => x.Id == id &&
+            x.IsPrimaryCharacter && x.Player.UserId == userContext.CurrentUserId());
+    }
 }

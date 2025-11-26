@@ -19,4 +19,5 @@ public interface ICharacterRepository
     Task<CharacterInfo> GetCharacterInfoForCRB(int characterId);
     Task EditAsync<TEntity>(TEntity entity)
         where TEntity : class;
+    Task<bool> CanUpdatePrimaryCharacterStatus(int id);
 }
