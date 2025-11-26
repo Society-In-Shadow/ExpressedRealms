@@ -16,19 +16,15 @@ public class GetEditOptionsUseCaseTests
 
     public GetEditOptionsUseCaseTests()
     {
-        _model = new GetEditOptionsModel() { Id = 4};
+        _model = new GetEditOptionsModel() { Id = 4 };
 
         _characterRepository = A.Fake<ICharacterRepository>();
 
-        A.CallTo(() => _characterRepository.FindCharacterAsync(_model.Id))
-            .Returns(new Character());
+        A.CallTo(() => _characterRepository.FindCharacterAsync(_model.Id)).Returns(new Character());
 
-        A.CallTo(() => _characterRepository.FindCharacterAsync(_model.Id))
-            .Returns(new Character());
-        
-        var validator = new GetEditOptionsModelValidator(
-            _characterRepository
-        );
+        A.CallTo(() => _characterRepository.FindCharacterAsync(_model.Id)).Returns(new Character());
+
+        var validator = new GetEditOptionsModelValidator(_characterRepository);
 
         _useCaseTests = new GetEditOptionsUseCase(
             _characterRepository,

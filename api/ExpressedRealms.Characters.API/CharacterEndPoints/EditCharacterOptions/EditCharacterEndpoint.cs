@@ -6,14 +6,17 @@ namespace ExpressedRealms.Characters.API.CharacterEndPoints.EditCharacterOptions
 
 internal static class EditCharacterOptionsEndpoint
 {
-    internal static async Task<Results<Ok<EditCharacterOptionResponse>, NotFound, NoContent, ValidationProblem>> 
-        Execute(int id, IGetEditOptionsUseCase useCase)
+    internal static async Task<
+        Results<Ok<EditCharacterOptionResponse>, NotFound, NoContent, ValidationProblem>
+    > Execute(int id, IGetEditOptionsUseCase useCase)
     {
         var result = await useCase.ExecuteAsync(new GetEditOptionsModel() { Id = id });
-        
-        return TypedResults.Ok(new EditCharacterOptionResponse()
-        {
-            CanModifyPrimaryCharacter = result.Value.CanModifyPrimaryCharacter
-        });
+
+        return TypedResults.Ok(
+            new EditCharacterOptionResponse()
+            {
+                CanModifyPrimaryCharacter = result.Value.CanModifyPrimaryCharacter,
+            }
+        );
     }
 }

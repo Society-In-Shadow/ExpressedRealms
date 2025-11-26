@@ -8,8 +8,11 @@ namespace ExpressedRealms.Characters.API.CharacterEndPoints.EditCharacter;
 
 internal static class EditCharacterEndpoint
 {
-    internal static async Task<Results<NotFound, NoContent, ValidationProblem>> 
-        Execute(int id, [FromBody]EditCharacterRequest dto, [FromServices]IEditCharacterUseCase repository)
+    internal static async Task<Results<NotFound, NoContent, ValidationProblem>> Execute(
+        int id,
+        [FromBody] EditCharacterRequest dto,
+        [FromServices] IEditCharacterUseCase repository
+    )
     {
         var status = await repository.ExecuteAsync(
             new EditCharacterModel()

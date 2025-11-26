@@ -21,9 +21,13 @@ internal sealed class GetEditOptionsUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        return Result.Ok(new EditCharacterOptionDto()
-        {
-            CanModifyPrimaryCharacter = await repository.CanUpdatePrimaryCharacterStatus(model.Id)
-        });
+        return Result.Ok(
+            new EditCharacterOptionDto()
+            {
+                CanModifyPrimaryCharacter = await repository.CanUpdatePrimaryCharacterStatus(
+                    model.Id
+                ),
+            }
+        );
     }
 }

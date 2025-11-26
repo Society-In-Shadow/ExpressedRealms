@@ -3,6 +3,5 @@ using FluentResults;
 
 namespace ExpressedRealms.Characters.UseCases.Characters.GetEditOptions;
 
-public interface IGetEditOptionsUseCase : IGenericUseCase<Result<EditCharacterOptionDto>, GetEditOptionsModel>
-{
-}
+public interface IGetEditOptionsUseCase
+    : IGenericUseCase<Result<EditCharacterOptionDto>, GetEditOptionsModel> { }

@@ -63,16 +63,13 @@ internal static class CharacterEndPoints
                         .Select(x => new CharacterOptionExpression() { Id = x.Id, Name = x.Name })
                         .ToListAsync();
 
-                    return TypedResults.Ok(new CharacterOptions()
-                    {
-                        Expressions = expressions
-                    });
+                    return TypedResults.Ok(new CharacterOptions() { Expressions = expressions });
                 }
             )
             .WithSummary("Returns info needed for creating a character")
             .WithDescription("Returns info needed for creating a character.")
             .RequireAuthorization();
-        
+
         endpointGroup
             .MapGet("{id}/options", EditCharacterOptionsEndpoint.Execute)
             .WithDescription("Returns info needed for creating a character.")
@@ -308,9 +305,7 @@ internal static class CharacterEndPoints
             .MapPut("{id}/finalizeCharacterCreate", FinalizeCharacterCreateEndpoint.Execute)
             .RequireAuthorization();
 
-        endpointGroup
-            .MapPut("{id}", EditCharacterEndpoint.Execute)
-            .RequireAuthorization();
+        endpointGroup.MapPut("{id}", EditCharacterEndpoint.Execute).RequireAuthorization();
 
         endpointGroup
             .MapGet(
