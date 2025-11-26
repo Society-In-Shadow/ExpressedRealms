@@ -10,7 +10,6 @@ public interface ICharacterRepository
     Task<Result<GetEditCharacterDto>> GetCharacterInfoAsync(int id);
     Task<Result<int>> CreateCharacterAsync(AddCharacterDto characterDto);
     Task<Result> DeleteCharacterAsync(int id);
-    Task<Result> UpdateCharacterAsync(EditCharacterDto dto);
     Task<bool> CharacterExistsAsync(int id);
     Task<Character?> FindCharacterAsync(int id);
     Task<CharacterStatusDto> GetCharacterState(int id);
@@ -18,4 +17,6 @@ public interface ICharacterRepository
     Task UpdateCharacter(Character user);
     Task<List<PrimaryCharacterListDto>> GetPrimaryCharactersAsync();
     Task<CharacterInfo> GetCharacterInfoForCRB(int characterId);
+    Task EditAsync<TEntity>(TEntity entity)
+        where TEntity : class;
 }

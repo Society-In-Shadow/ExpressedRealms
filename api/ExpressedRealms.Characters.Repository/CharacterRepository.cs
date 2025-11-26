@@ -1,9 +1,9 @@
 ﻿using ExpressedRealms.Characters.Repository.DTOs;
-using ExpressedRealms.Characters.Repository.Enums;
 using ExpressedRealms.Characters.Repository.Skills;
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Characters;
+using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.Repositories.Shared;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
@@ -17,7 +17,6 @@ internal sealed class CharacterRepository(
     ExpressedRealmsDbContext context,
     IUserContext userContext,
     AddCharacterDtoValidator addValidator,
-    EditCharacterDtoValidator editValidator,
     CancellationToken cancellationToken,
     ICharacterSkillRepository skillRepository,
     IXpRepository xpRepository
@@ -183,66 +182,10 @@ internal sealed class CharacterRepository(
         return Result.Ok();
     }
 
-    public async Task<Result> UpdateCharacterAsync(EditCharacterDto dto)
+    public async Task EditAsync<TEntity>(TEntity entity)
+        where TEntity : class
     {
-        var result = await editValidator.ValidateAsync(dto, cancellationToken);
-        if (!result.IsValid)
-            return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
-
-        var character = await context.Characters.FirstOrDefaultAsync(
-            x => x.Id == dto.Id && x.Player.UserId == userContext.CurrentUserId(),
-            cancellationToken
-        );
-
-        if (character is null)
-            return Result.Fail(new NotFoundFailure("Character"));
-
-        if (dto.FactionId is not null)
-        {
-            var isFaction = await context.ExpressionSections.AnyAsync(
-                x =>
-                    x.ExpressionId == character.ExpressionId
-                    && x.SectionTypeId == (int)ExpressionSectionType.FactionType
-                    && x.Id == dto.FactionId,
-                cancellationToken
-            );
-
-            if (!isFaction)
-            {
-                return Result.Fail(
-                    new FluentValidationFailure(
-                        new Dictionary<string, string[]>
-                        {
-                            { "FactionId", ["This is not a valid Faction Id."] },
-                        }
-                    )
-                );
-            }
-        }
-
-        var validExpressionsForProgressions = new List<int> { 3, 4, 8, 9 }; // Adepts, Shammas, Sorcerer, Vampyres
-        if (
-            dto.PrimaryProgressionId is not null
-            && validExpressionsForProgressions.Contains(character.ExpressionId)
-        )
-        {
-            character.PrimaryProgressionId = dto.PrimaryProgressionId;
-        }
-
-        const int SorcererId = 8;
-        if (dto.SecondaryProgressionId is not null && character.ExpressionId == SorcererId)
-        {
-            character.SecondaryProgressionId = dto.SecondaryProgressionId;
-        }
-
-        character.Name = dto.Name;
-        character.Background = dto.Background;
-        character.FactionId = dto.FactionId;
-        character.IsPrimaryCharacter = dto.IsPrimaryCharacter;
-
-        await context.SaveChangesAsync(cancellationToken);
-
-        return Result.Ok();
+        await context.CommonSaveChanges(entity, cancellationToken);
     }
 
     public async Task<bool> CharacterExistsAsync(int id)

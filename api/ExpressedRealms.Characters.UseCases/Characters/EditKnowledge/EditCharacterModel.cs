@@ -1,6 +1,6 @@
-namespace ExpressedRealms.Characters.API.CharacterEndPoints.Requests;
+namespace ExpressedRealms.Characters.UseCases.Characters.EditKnowledge;
 
-internal record EditCharacterRequest
+public sealed record EditCharacterModel
 {
     public int Id { get; set; }
 

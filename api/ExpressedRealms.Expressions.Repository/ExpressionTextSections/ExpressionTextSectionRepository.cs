@@ -257,4 +257,15 @@ internal sealed class ExpressionTextSectionRepository(
             .Select(x => x.Id)
             .FirstAsync();
     }
+
+    public async Task<ExpressionSection?> FindFactionForExpression(int expressionId, int factionId)
+    {
+        return await context.ExpressionSections.FirstOrDefaultAsync(
+            x =>
+                x.ExpressionId == expressionId
+                && x.SectionTypeId == 4 // Faction Type
+                && x.Id == factionId,
+            cancellationToken
+        );
+    }
 }

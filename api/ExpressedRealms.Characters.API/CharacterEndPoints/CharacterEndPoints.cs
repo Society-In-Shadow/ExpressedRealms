@@ -1,5 +1,6 @@
 using ExpressedRealms.Authentication;
 using ExpressedRealms.Characters.API.CharacterEndPoints.DTOs;
+using ExpressedRealms.Characters.API.CharacterEndPoints.EditCharacter;
 using ExpressedRealms.Characters.API.CharacterEndPoints.FinalizeCharacterCreate;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetCRB;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetOverallStats;
@@ -299,35 +300,7 @@ internal static class CharacterEndPoints
             .RequireAuthorization();
 
         endpointGroup
-            .MapPut(
-                "",
-                async Task<Results<NotFound, NoContent, ValidationProblem>> (
-                    EditCharacterRequest dto,
-                    ICharacterRepository repository
-                ) =>
-                {
-                    var status = await repository.UpdateCharacterAsync(
-                        new EditCharacterDto()
-                        {
-                            Name = dto.Name,
-                            Background = dto.Background,
-                            FactionId = dto.FactionId,
-                            Id = dto.Id,
-                            IsPrimaryCharacter = dto.IsPrimaryCharacter,
-                            PrimaryProgressionId = dto.PrimaryProgressionId,
-                            SecondaryProgressionId = dto.SecondaryProgressionId,
-                        }
-                    );
-
-                    if (status.HasNotFound(out var notFound))
-                        return notFound;
-                    if (status.HasValidationError(out var validationProblem))
-                        return validationProblem;
-                    status.ThrowIfErrorNotHandled();
-
-                    return TypedResults.NoContent();
-                }
-            )
+            .MapPut("{id}", EditCharacterEndpoint.Execute)
             .RequireAuthorization();
 
         endpointGroup
