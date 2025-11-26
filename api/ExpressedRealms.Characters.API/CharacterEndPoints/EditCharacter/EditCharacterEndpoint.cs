@@ -1,4 +1,4 @@
-using ExpressedRealms.Characters.UseCases.Characters.EditKnowledge;
+using ExpressedRealms.Characters.UseCases.Characters.Edit;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;

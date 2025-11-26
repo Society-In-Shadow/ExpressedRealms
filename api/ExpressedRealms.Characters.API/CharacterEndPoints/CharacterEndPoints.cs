@@ -1,6 +1,7 @@
 using ExpressedRealms.Authentication;
 using ExpressedRealms.Characters.API.CharacterEndPoints.DTOs;
 using ExpressedRealms.Characters.API.CharacterEndPoints.EditCharacter;
+using ExpressedRealms.Characters.API.CharacterEndPoints.EditCharacterOptions;
 using ExpressedRealms.Characters.API.CharacterEndPoints.FinalizeCharacterCreate;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetCRB;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetOverallStats;
@@ -51,7 +52,7 @@ internal static class CharacterEndPoints
             .MapGet(
                 "options",
                 [Authorize]
-                async (ExpressedRealmsDbContext dbContext, HttpContext http) =>
+                async (ExpressedRealmsDbContext dbContext, ICharacterRepository repository) =>
                 {
                     var expressions = await dbContext
                         .Expressions.AsNoTracking()
@@ -62,10 +63,18 @@ internal static class CharacterEndPoints
                         .Select(x => new CharacterOptionExpression() { Id = x.Id, Name = x.Name })
                         .ToListAsync();
 
-                    return TypedResults.Ok(new CharacterOptions() { Expressions = expressions });
+                    return TypedResults.Ok(new CharacterOptions()
+                    {
+                        Expressions = expressions
+                    });
                 }
             )
             .WithSummary("Returns info needed for creating a character")
+            .WithDescription("Returns info needed for creating a character.")
+            .RequireAuthorization();
+        
+        endpointGroup
+            .MapGet("{id}/options", EditCharacterOptionsEndpoint.Execute)
             .WithDescription("Returns info needed for creating a character.")
             .RequireAuthorization();
 
