@@ -1,5 +1,7 @@
 using ExpressedRealms.Authentication;
 using ExpressedRealms.Characters.API.CharacterEndPoints.DTOs;
+using ExpressedRealms.Characters.API.CharacterEndPoints.EditCharacter;
+using ExpressedRealms.Characters.API.CharacterEndPoints.EditCharacterOptions;
 using ExpressedRealms.Characters.API.CharacterEndPoints.FinalizeCharacterCreate;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetCRB;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetOverallStats;
@@ -50,7 +52,7 @@ internal static class CharacterEndPoints
             .MapGet(
                 "options",
                 [Authorize]
-                async (ExpressedRealmsDbContext dbContext, HttpContext http) =>
+                async (ExpressedRealmsDbContext dbContext, ICharacterRepository repository) =>
                 {
                     var expressions = await dbContext
                         .Expressions.AsNoTracking()
@@ -65,6 +67,11 @@ internal static class CharacterEndPoints
                 }
             )
             .WithSummary("Returns info needed for creating a character")
+            .WithDescription("Returns info needed for creating a character.")
+            .RequireAuthorization();
+
+        endpointGroup
+            .MapGet("{id}/options", EditCharacterOptionsEndpoint.Execute)
             .WithDescription("Returns info needed for creating a character.")
             .RequireAuthorization();
 
@@ -298,37 +305,7 @@ internal static class CharacterEndPoints
             .MapPut("{id}/finalizeCharacterCreate", FinalizeCharacterCreateEndpoint.Execute)
             .RequireAuthorization();
 
-        endpointGroup
-            .MapPut(
-                "",
-                async Task<Results<NotFound, NoContent, ValidationProblem>> (
-                    EditCharacterRequest dto,
-                    ICharacterRepository repository
-                ) =>
-                {
-                    var status = await repository.UpdateCharacterAsync(
-                        new EditCharacterDto()
-                        {
-                            Name = dto.Name,
-                            Background = dto.Background,
-                            FactionId = dto.FactionId,
-                            Id = dto.Id,
-                            IsPrimaryCharacter = dto.IsPrimaryCharacter,
-                            PrimaryProgressionId = dto.PrimaryProgressionId,
-                            SecondaryProgressionId = dto.SecondaryProgressionId,
-                        }
-                    );
-
-                    if (status.HasNotFound(out var notFound))
-                        return notFound;
-                    if (status.HasValidationError(out var validationProblem))
-                        return validationProblem;
-                    status.ThrowIfErrorNotHandled();
-
-                    return TypedResults.NoContent();
-                }
-            )
-            .RequireAuthorization();
+        endpointGroup.MapPut("{id}", EditCharacterEndpoint.Execute).RequireAuthorization();
 
         endpointGroup
             .MapGet(

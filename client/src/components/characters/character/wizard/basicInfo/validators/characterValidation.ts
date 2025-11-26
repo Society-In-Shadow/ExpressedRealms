@@ -1,9 +1,9 @@
-import {boolean, type InferType, object, string} from 'yup'
-import {useGenericForm} from '@/utilities/formUtilities'
-import type {BlessingLevel} from '@/components/blessings/types.ts'
-import type {CharacterBlessing} from '@/components/characters/character/wizard/blessings/types.ts'
-import type {Faction} from '@/components/characters/character/interfaces/Faction.ts'
-import type {ProgressionPath} from '@/components/characters/character/wizard/basicInfo/types.ts'
+import { boolean, type InferType, object, string } from 'yup'
+import { useGenericForm } from '@/utilities/formUtilities'
+import type { BlessingLevel } from '@/components/blessings/types.ts'
+import type { CharacterBlessing } from '@/components/characters/character/wizard/blessings/types.ts'
+import type { Faction } from '@/components/characters/character/interfaces/Faction.ts'
+import type { ProgressionPath } from '@/components/characters/character/wizard/basicInfo/types.ts'
 
 const validationSchema = object({
   name: string().required()
@@ -16,7 +16,7 @@ const validationSchema = object({
   background: string().nullable()
     .label('Background'),
   isPrimaryCharacter: boolean()
-    .label('Enable GO Visibility'),
+    .label('Is Primary Character'),
   primaryProgression: object<ProgressionPath>().nullable()
     .label('Primary Progression'),
   secondaryProgression: object<ProgressionPath>().nullable()

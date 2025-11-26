@@ -59,9 +59,8 @@ async function fetchData() {
     await characterInfo.getCharacterDetails(Number(route.params.id))
     sections.value.splice(0, 0, { name: 'Basic Info', isDisabled: false, component: defineAsyncComponent(async () => EditCharacterDetails) })
     await xpData.updateExperience(route.params.id)
-    if (wasAdd.value) {
-      selectSection('Basic Info')
-    }
+
+    selectSection('Basic Info')
   }
 }
 

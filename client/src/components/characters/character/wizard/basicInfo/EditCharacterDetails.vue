@@ -46,6 +46,7 @@ onBeforeMount(async () => {
       form.fields.isPrimaryCharacter.field.value = characterInfo.isPrimaryCharacter
     })
   showFactionInfo.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowFactionDropdown)
+  await characterInfo.getEditOptions(Number(route.params.id))
   if (!isMobile.value) {
     updateWizardContent()
   }
@@ -56,10 +57,9 @@ const isLoading = ref(true)
 const factions = ref([])
 
 const onSubmit = form.handleSubmit((values) => {
-  axios.put('/characters/', {
+  axios.put(`/characters/${route.params.id}`, {
     name: values.name,
     background: values.background,
-    id: route.params.id,
     factionId: values.faction?.id,
     isPrimaryCharacter: values.isPrimaryCharacter,
     primaryProgressionId: values.primaryProgression?.id,
@@ -70,7 +70,7 @@ const onSubmit = form.handleSubmit((values) => {
     characterInfo.faction = values.faction
     characterInfo.isPrimaryCharacter = values.isPrimaryCharacter
     await xpInfo.updateExperience(route.params.id)
-
+    await characterInfo.getEditOptions(Number(route.params.id))
     toaster.success('Successfully Updated Character Info!')
   })
 })
@@ -106,9 +106,10 @@ const updateWizardContent = () => {
           :show-skeleton="characterInfo.isLoading" :redirect-url="expressionRedirectURL" @change="onSubmit"
         />-->
         <FormTextAreaWrapper v-model="form.fields.background" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
-        <FormCheckboxWrapper v-model="form.fields.isPrimaryCharacter" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
-        <Message severity="info" class="mb-3">
-          Toggle above to make this character visible to GOs for printing the booklet and handing out XP.  It does not give them the ability to modify the character.
+        <FormCheckboxWrapper v-if="characterInfo.canModifyPrimaryCharacter" v-model="form.fields.isPrimaryCharacter" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
+        <Message v-if="characterInfo.canModifyPrimaryCharacter" severity="info" class="mb-3">
+          Toggle above to denote the character you intend on having in play. Only one of these are allowed per account.
+          This will make this character visible to GOs for printing the booklet and handing out XP.  It does not give them the ability to modify the character.
         </Message>
         <SelectProgressionPaths :primary-progression="form.fields.primaryProgression" :secondary-progression="form.fields.secondaryProgression" :expression-type-id="characterInfo.expressionId" @change="onSubmit" />
       </form>

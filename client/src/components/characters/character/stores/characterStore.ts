@@ -1,6 +1,6 @@
-import {defineStore} from 'pinia'
+import { defineStore } from 'pinia'
 import axios from 'axios'
-import {FeatureFlags, userStore} from '@/stores/userStore.ts'
+import { FeatureFlags, userStore } from '@/stores/userStore.ts'
 
 const userInfo = userStore()
 export const characterStore
@@ -19,6 +19,7 @@ export const characterStore
         isOwner: false as boolean,
         factions: [] as any[],
         faction: {} as any,
+        canModifyPrimaryCharacter: false as boolean,
       }
     },
     actions: {
@@ -45,6 +46,12 @@ export const characterStore
                   this.isLoading = false
                 })
             }
+          })
+      },
+      async getEditOptions(id: number) {
+        await axios.get(`/characters/${id}/options`)
+          .then((response) => {
+            this.canModifyPrimaryCharacter = response.data.canModifyPrimaryCharacter
           })
       },
     },

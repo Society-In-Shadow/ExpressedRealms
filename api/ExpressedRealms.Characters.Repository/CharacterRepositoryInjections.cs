@@ -19,7 +19,6 @@ public static class CharacterRepositoryInjections
     {
         services.ImportRepositories(Assembly.GetExecutingAssembly());
         services.AddScoped<AddCharacterDtoValidator>();
-        services.AddScoped<EditCharacterDtoValidator>();
         services.AddScoped<EditCharacterSkillMappingDtoValidator>();
         services.AddScoped<ICharacterRepository, CharacterRepository>();
 

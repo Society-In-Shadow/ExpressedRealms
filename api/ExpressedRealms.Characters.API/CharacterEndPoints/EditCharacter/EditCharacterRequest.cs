@@ -1,9 +1,7 @@
-namespace ExpressedRealms.Characters.Repository.DTOs;
+namespace ExpressedRealms.Characters.API.CharacterEndPoints.EditCharacter;
 
-public sealed record EditCharacterDto
+internal record EditCharacterRequest
 {
-    public int Id { get; set; }
-
     /// <example>John Doe</example>
     public string Name { get; set; } = null!;
 

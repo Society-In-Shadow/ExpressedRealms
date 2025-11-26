@@ -21,4 +21,5 @@ public interface IExpressionTextSectionRepository
     Task<int> GetBlessingSectionId();
     Task<bool> IsExpression(int expressionID);
     Task<List<ExpressionSectionDto>> GetExpressionTextSectionForReport(int expressionId);
+    Task<ExpressionSection?> FindFactionForExpression(int expressionId, int factionId);
 }
