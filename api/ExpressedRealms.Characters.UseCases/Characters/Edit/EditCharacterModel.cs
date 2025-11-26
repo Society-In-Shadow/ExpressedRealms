@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Characters.UseCases.Characters.EditKnowledge;
+namespace ExpressedRealms.Characters.UseCases.Characters.Edit;
 
 public sealed record EditCharacterModel
 {

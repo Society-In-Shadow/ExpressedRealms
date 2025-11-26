@@ -2,7 +2,7 @@ using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
-namespace ExpressedRealms.Characters.UseCases.Characters.EditKnowledge;
+namespace ExpressedRealms.Characters.UseCases.Characters.Edit;
 
 internal sealed class EditCharacterUseCase(
     ICharacterRepository repository,

@@ -3,7 +3,7 @@ using ExpressedRealms.Expressions.Repository.ExpressionTextSections;
 using ExpressedRealms.Expressions.Repository.ProgressionPaths;
 using FluentValidation;
 
-namespace ExpressedRealms.Characters.UseCases.Characters.EditKnowledge;
+namespace ExpressedRealms.Characters.UseCases.Characters.Edit;
 
 internal sealed class EditCharacterModelValidator : AbstractValidator<EditCharacterModel>
 {
