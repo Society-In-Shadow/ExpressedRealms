@@ -4,13 +4,15 @@
 
 The frontend is built using Vue 3 and Vite.  It primarily uses PrimeVue and Boostrap for styling and layout.
 
+See [Forms](./forms.md) for an overview of how we use forms in the application.
+
 Locally, it can be found at this address
 
 * [Front End / Web App](https://localhost/)
 
 ## Backend / Web API
 
-Backend is using .Net 8, using a combination of Use Cases for business logic, and repositories to consolidate common
+Backend is using .Net 10, using a combination of Use Cases for business logic, and repositories to consolidate common
 ef core operations.
 
 * Use Case Details can be found [here](/useCases.md)
