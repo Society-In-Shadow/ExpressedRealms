@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import DatePicker from 'primevue/datepicker'
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 import Skeleton from 'primevue/skeleton'
 import type { FormField } from '@/FormWrappers/Interfaces/FormField'
 import { DateTime } from 'luxon'
@@ -19,7 +19,7 @@ const props = defineProps({
   },
   showSkeleton: {
     type: Boolean,
-    default: false,
+    default: undefined,
   },
 })
 
@@ -46,6 +46,9 @@ function luxonToDate(dt: DateTime | null): Date | null {
   return new Date(dt.year, dt.month - 1, dt.day, dt.hour, dt.minute)
 }
 
+const showSkeleton = props.showSkeleton ?? inject('showSkeleton', false)
+const isInvalid = computed(() => (model.value.error.value ?? '').length > 0)
+
 </script>
 
 <template>
@@ -56,10 +59,10 @@ function luxonToDate(dt: DateTime | null): Date | null {
       v-else
       :id="dataCyTagCalc" :data-cy="dataCyTagCalc" class="w-100"
       time-only hour-format="12"
-      :model-value="luxonToDate(model.field.value)" :class="{ 'p-invalid': model.error && model.error.length > 0 }"
+      :model-value="luxonToDate(model.field.value)" :invalid="isInvalid"
       v-bind="$attrs" @update:model-value="onDateChange"
     />
-    <small :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ model.error }}</small>
+    <small v-if="isInvalid" :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ model.error }}</small>
     <slot />
   </div>
 </template>

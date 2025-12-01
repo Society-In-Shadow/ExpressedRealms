@@ -296,7 +296,6 @@ jobs:
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
-        if: ${{ needs.changes.outputs.backend == 'true' }}
         with:
           dotnet-version: 10.0.x
 

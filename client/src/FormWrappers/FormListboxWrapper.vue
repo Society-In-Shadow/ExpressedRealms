@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 import Skeleton from 'primevue/skeleton'
 import type { FormField } from '@/FormWrappers/Interfaces/FormField'
 import Listbox from 'primevue/listbox'
@@ -30,7 +30,7 @@ const props = defineProps({
   },
   showSkeleton: {
     type: Boolean,
-    default: false,
+    default: undefined,
   },
 })
 
@@ -40,6 +40,9 @@ const dataCyTagCalc = computed(() => {
   }
   return model.value.label.replace(' ', '-').toLowerCase()
 })
+
+const showSkeleton = props.showSkeleton ?? inject('showSkeleton', false)
+const isInvalid = computed(() => (model.value.error.value ?? '').length > 0)
 
 </script>
 
@@ -51,13 +54,13 @@ const dataCyTagCalc = computed(() => {
       id="dataCyTagCalc" v-model="model.field"
       :data-cy="dataCyTagCalc"
       :options="options" :option-value="optionValue" :option-disabled="props.optionDisabled"
-      class="w-100" :class="{ 'p-invalid': model.error && model.error.length > 0 }" v-bind="$attrs"
+      class="w-100" :invalid="isInvalid" v-bind="$attrs"
     >
       <template #option="slotProps">
         <slot name="option" :option="slotProps.option" />
       </template>
     </Listbox>
-    <small :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ model.error }}</small>
+    <small v-if="isInvalid" :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ model.error }}</small>
     <slot />
   </div>
 </template>

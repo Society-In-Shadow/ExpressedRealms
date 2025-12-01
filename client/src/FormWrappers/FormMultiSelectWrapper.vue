@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import MultiSelect from 'primevue/multiselect'
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 import Skeleton from 'primevue/skeleton'
 import type { FormField } from '@/FormWrappers/Interfaces/FormField'
 
@@ -37,6 +37,9 @@ const dataCyTagCalc = computed(() => {
   return model.value.label.replace(' ', '-').toLowerCase()
 })
 
+const showSkeleton = props.showSkeleton ?? inject('showSkeleton', false)
+const isInvalid = computed(() => (model.value.error.value ?? '').length > 0)
+
 </script>
 
 <template>
@@ -46,9 +49,9 @@ const dataCyTagCalc = computed(() => {
     <MultiSelect
       v-else :id="dataCyTagCalc" v-model="model.field" :options="options" :option-label="optionLabel"
       :data-cy="dataCyTagCalc"
-      class="w-100" :class="{ 'p-invalid': model.error && model.error.length > 0 }" v-bind="$attrs"
+      class="w-100" :invalid="isInvalid" v-bind="$attrs"
     />
-    <small :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ model.error }}</small>
+    <small v-if="isInvalid" :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ model.error }}</small>
     <slot />
   </div>
 </template>

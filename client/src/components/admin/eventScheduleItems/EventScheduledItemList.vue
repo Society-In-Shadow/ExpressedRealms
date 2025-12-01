@@ -15,13 +15,31 @@ const eventInfo = EventStore()
 const userInfo = userStore()
 const hasEventScheduleItemManagementRole = ref(false)
 
-const dialogRef = inject('dialogRef') as Ref
-const eventId = ref(dialogRef.value.data.eventId)
-const event = ref(dialogRef.value.data.event)
-const isReadOnly = ref(dialogRef.value.data.isReadOnly)
+const dialogRef = inject<Ref<any> | null>('dialogRef', null) as Ref
+const props = defineProps({
+  eventId: {
+    type: Number,
+    default: undefined,
+  },
+  isReadOnly: {
+    type: Boolean,
+    default: undefined,
+  },
+})
+
+const eventId = computed(() =>
+  props.eventId ?? dialogRef?.value?.data?.eventId,
+)
+
+const event = ref({})
+
+const isReadOnly = computed(() =>
+  props.isReadOnly ?? dialogRef?.value?.data?.isReadOnly ?? false,
+)
 
 onBeforeMount(async () => {
   await store.getEventScheduleItems(eventId.value)
+  event.value = await eventInfo.getEvent(eventId.value)
   hasEventScheduleItemManagementRole.value = userInfo.hasUserRole(UserRoles.ManageEventRole)
 })
 
