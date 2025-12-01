@@ -5,33 +5,17 @@
 
 Expressed Realms is the digital companion guide for Six Stones - Society in Shadows, a Capstone LARP System.
 
-There are two main goals for this project
+There are three main goals for this project
 
 - Provide a cms system to store all the lore, expressions, game mechanics, and other information about the Society
 - Provide a platform for creating and maintaining character sheets for the residents of the Society
-
-# Website / Deployment
-
-The website is deployed on a regular basis via Github Actions, and can be located here:
-[https://societyinshadows.org](https://societyinshadows.com/).
-
-A lot of the CMS and User Management functionality is fully in place, but for obvious reasons restricted to Admins.  
-
-First real test of the system occurred on Oct. 3rd, 2025.  Average response times were sub 50 milliseconds. We had
-roughly 20 people in the tool creating characters, and admins printing out characters sheets and assigning out XP.
-All that in addition to people looking up game information located on the site.
-
-We do have a discord group for those interested [here](https://discord.gg/NSv3GxSAj7)
-
-# Current Progress and Goals
-
-An up-to-date list of all broad goals can be found in the [Milestones](https://github.com/Society-In-Shadow/ExpressedRealms/milestones)
-section of the project.
+- Provide potential employers a view into how I work on a production grade app (more targeted info can be found in [Prospective Employers](./documentation/prospectiveEmployers.md))
 
 # Architecture
 
 ## Quick Specs
 
+- **Numbers** ~70 tables, ~150 API endpoints, 500+ unit tests, and 44,000+ lines of code
 - **Frontend:** Vue 3 + Vite, TypeScript, Axios, Vue Router
 - **Backend:** .NET 10 Minimal API, EF Core, PostgreSQL
 - **Infrastructure:** Azure Container Apps, Blob Storage, Azure Key Vault
