@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import Select from 'primevue/select'
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 import Skeleton from 'primevue/skeleton'
 import type { FormField } from '@/FormWrappers/Interfaces/FormField'
 
@@ -26,7 +26,7 @@ const props = defineProps({
   },
   showSkeleton: {
     type: Boolean,
-    default: false,
+    default: undefined,
   },
   labelOverride: {
     type: String,
@@ -41,6 +41,9 @@ const dataCyTagCalc = computed(() => {
   return model.value.label.replace(' ', '-').toLowerCase()
 })
 
+const showSkeleton = props.showSkeleton ?? inject('showSkeleton', false)
+const isInvalid = computed(() => (model.value.error.value ?? '').length > 0)
+
 </script>
 
 <template>
@@ -49,10 +52,10 @@ const dataCyTagCalc = computed(() => {
     <Skeleton v-if="showSkeleton" :id="dataCyTagCalc + '-skeleton'" class="w-100" height="3em" />
     <Select
       v-else :id="dataCyTagCalc" v-model="model.field.value" :options="options" :option-label="optionLabel"
-      :data-cy="dataCyTagCalc"
-      class="w-100" :class="{ 'p-invalid': model.error && model.error.length > 0 }" v-bind="$attrs"
+      :data-cy="dataCyTagCalc" :invalid="isInvalid"
+      class="w-100" v-bind="$attrs"
     />
-    <small :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ model.error }}</small>
+    <small v-if="isInvalid" :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ model.error }}</small>
     <slot />
   </div>
 </template>

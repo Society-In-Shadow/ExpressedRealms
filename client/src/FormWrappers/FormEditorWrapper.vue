@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, inject, onMounted, ref, watch } from 'vue'
 import Skeleton from 'primevue/skeleton'
 import Editor from 'primevue/editor'
 import ContextMenu from 'primevue/contextmenu'
@@ -22,7 +22,7 @@ const props = defineProps({
   },
   showSkeleton: {
     type: Boolean,
-    default: false,
+    default: undefined,
   },
 })
 
@@ -181,6 +181,9 @@ const contextOptions = ref([
   },
 ])
 
+const showSkeleton = props.showSkeleton ?? inject('showSkeleton', false)
+const isInvalid = computed(() => (model.value.error.value ?? '').length > 0)
+
 </script>
 
 <template>
@@ -191,7 +194,7 @@ const contextOptions = ref([
     </div>
     <label :for="dataCyTagCalc">{{ model.label }}<span v-if="model.isRequired" class="text-danger font-italic"> (Required)</span></label>
     <Skeleton v-if="showSkeleton" :id="dataCyTagCalc + '-skeleton'" class="w-100" height="10em" />
-    <div v-else class="p-editor" :class="{ 'p-invalid': model.error && model.error.length > 0 }">
+    <div v-else class="p-editor" :class="{ 'p-invalid': isInvalid }">
       <div class="p-editor-toolbar ql-toolbar ql-snow">
         <span class="ql-formats" data-pc-section="formats">
           <button type="button" data-pc-section="" @click="editor.chain().focus().toggleBold().run()">
@@ -225,7 +228,7 @@ const contextOptions = ref([
       </div>
     </div>
 
-    <small :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ model.error }}</small>
+    <small v-if="isInvalid" :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ model.error }}</small>
     <slot />
   </div>
 </template>

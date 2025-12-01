@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import Checkbox from 'primevue/checkbox'
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 import Skeleton from 'primevue/skeleton'
 import type { FormField } from '@/FormWrappers/Interfaces/FormField'
 
@@ -18,7 +18,7 @@ const props = defineProps({
   },
   showSkeleton: {
     type: Boolean,
-    default: false,
+    default: undefined,
   },
 })
 
@@ -29,6 +29,9 @@ const dataCyTagCalc = computed(() => {
   return model.value.label.replace(' ', '-').toLowerCase()
 })
 
+const showSkeleton = props.showSkeleton ?? inject('showSkeleton', false)
+const isInvalid = computed(() => (model.value.error.value ?? '').length > 0)
+
 </script>
 
 <template>
@@ -37,10 +40,10 @@ const dataCyTagCalc = computed(() => {
     <Checkbox
       v-if="!showSkeleton"
       v-model="model.field.value" :input-id="dataCyTagCalc" :data-cy="dataCyTagCalc"
-      v-bind="$attrs" :invalid="model.error && model.error.length > 0" binary
+      v-bind="$attrs" :invalid="isInvalid" binary
     />
     <label v-if="!showSkeleton" :for="dataCyTagCalc" class="ml-2">{{ model.label }}</label>
-    <small v-if="model.error && model.error.length > 0" :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ model.error }}</small>
+    <small v-if="isInvalid" :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ model.error }}</small>
     <slot />
   </div>
 </template>
