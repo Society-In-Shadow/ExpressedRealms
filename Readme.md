@@ -15,7 +15,7 @@ There are three main goals for this project
 
 ## Quick Specs
 
-- **Numbers** ~70 tables, ~150 API endpoints, and 44,000+ lines of code
+- **Numbers** ~70 tables, ~150 API endpoints, 500+ unit tests, and 44,000+ lines of code
 - **Frontend:** Vue 3 + Vite, TypeScript, Axios, Vue Router
 - **Backend:** .NET 10 Minimal API, EF Core, PostgreSQL
 - **Infrastructure:** Azure Container Apps, Blob Storage, Azure Key Vault

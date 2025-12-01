@@ -10,7 +10,7 @@ There are two different areas I wanted to cover: Communication / Writing and Cod
 To start out with, some basic info:
 
 ## Numbers
- - App consists of ~70 tables, ~150 API endpoints, and 44,000+ lines of code
+ - App consists of ~70 tables, ~150 API endpoints, 500+ unit tests, and 44,000+ lines of code
  - Launched to ~40 active players during a live event, maintaining <100ms average API response times under gameplay load.
 
 ## Communication
