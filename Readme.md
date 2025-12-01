@@ -33,7 +33,7 @@ section of the project.
 ## Quick Specs
 
 - **Frontend:** Vue 3 + Vite, TypeScript, Axios, Vue Router
-- **Backend:** .NET 8 Minimal API, EF Core, PostgreSQL
+- **Backend:** .NET 10 Minimal API, EF Core, PostgreSQL
 - **Infrastructure:** Azure Container Apps, Blob Storage, Azure Key Vault
 - **CI/CD:** GitHub Actions for build and deploy
 - **Security:** Sonar Qube, MegaLinter

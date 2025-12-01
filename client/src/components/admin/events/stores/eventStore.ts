@@ -60,9 +60,16 @@ export const EventStore
             description: 'Hawaii-Aleutian Standard Time (HST) / Hawaii-Aleutian Daylight Time (HDT, rarely used)',
           },
         ]
+
+        this.haveEvents = true
       },
       getEvent: async function (id: number): Promise<EditEvent> {
-        const event = this.events.find((x: Event) => x.id == id)
+        let event = this.events.find((x: Event) => x.id == id)
+
+        if (!event) {
+          await this.getEvents()
+          event = this.events.find((x: Event) => x.id == id)
+        }
 
         return {
           ...event,

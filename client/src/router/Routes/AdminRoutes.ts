@@ -22,5 +22,11 @@ export const AdminRoutes = {
       component: () => import('./../../components/admin/events/EventList.vue'),
       meta: { requiredRole: 'ManageEvents' },
     },
+    {
+      path: 'events/:id',
+      name: 'editEvent',
+      component: () => import('./../../components/admin/events/EventPage.vue'),
+      meta: { requiredRole: 'ManageEvents' },
+    },
   ],
 }
