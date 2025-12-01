@@ -9,7 +9,7 @@ There are three main goals for this project
 
 - Provide a cms system to store all the lore, expressions, game mechanics, and other information about the Society
 - Provide a platform for creating and maintaining character sheets for the residents of the Society
-- Provide potential employers a view into how I work on a production grade app (more targeted info can be found in [Prospective Employers](./documentation/prospectiveEmployers.md)) 
+- Provide potential employers a view into how I work on a production grade app (more targeted info can be found in [Prospective Employers](./documentation/prospectiveEmployers.md))
 
 # Architecture
 
