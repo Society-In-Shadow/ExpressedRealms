@@ -15,8 +15,9 @@ import TabPanels from 'primevue/tabpanels'
 import Tag from 'primevue/tag'
 import Button from 'primevue/button'
 import { EventConfirmationPopup } from '@/components/admin/events/services/eventConfirmationPopupService.ts'
-import type { DateTime } from 'luxon'
 import SkeletonWrapper from '@/FormWrappers/SkeletonWrapper.vue'
+import CharacterActivity from '@/components/admin/events/CharacterActivity.vue'
+import { formatDate } from '@/utilities/dateUtilities.ts'
 
 let userInfo = userStore()
 const route = useRoute()
@@ -36,12 +37,6 @@ onBeforeMount(async () => {
 })
 
 let popups = EventConfirmationPopup(event.value.id, event.value.name)
-
-function formatDate(date: DateTime) {
-  if (date)
-    return date.toFormat('cccc, LLLL dd, yyyy')
-  return ''
-}
 
 </script>
 
@@ -76,6 +71,9 @@ function formatDate(date: DateTime) {
           <Tab value="1">
             Schedule
           </Tab>
+          <Tab value="2">
+            Character Activity
+          </Tab>
         </TabList>
         <TabPanels>
           <TabPanel value="0">
@@ -83,6 +81,9 @@ function formatDate(date: DateTime) {
           </TabPanel>
           <TabPanel value="1">
             <EventScheduledItemList :event-id="eventId" :is-read-only="false" />
+          </TabPanel>
+          <TabPanel value="2">
+            <CharacterActivity :event-id="eventId" />
           </TabPanel>
         </TabPanels>
       </Tabs>
