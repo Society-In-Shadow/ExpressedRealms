@@ -109,7 +109,7 @@ const xpSectionType = computed(() => {
 </script>
 
 <template>
-  <Button label="Help" class="mb-2 d-block d-md-none float-end" @click="showAboutInfo" />
+  <Button label="Help" class="mb-2 float-end" @click="showAboutInfo" />
 
   <h1>Selected {{ selectedType.name }}s</h1>
   <div v-for="trait in selectedType.subCategories" :key="trait.name">
