@@ -13,12 +13,13 @@ import DataTable from 'primevue/datatable'
 import SecondaryProficiencies from '@/components/characters/character/wizard/proficiencies/SecondaryProficiencies.vue'
 import EditCharacterDetails from '@/components/characters/character/wizard/basicInfo/EditCharacterDetails.vue'
 import AddCharacter from '@/components/characters/character/wizard/basicInfo/AddCharacter.vue'
-import BlessingStep from '@/components/characters/character/wizard/blessings/BlessingStep.vue'
 import WizardContent from '@/components/characters/character/wizard/WizardContent.vue'
 import { breakpointsBootstrapV5, useBreakpoints } from '@vueuse/core'
 import { wizardContentStore } from '@/components/characters/character/wizard/stores/wizardContentStore.ts'
 import ReviewCharacter from '@/components/characters/character/xp/ReviewCharacter.vue'
+import AdvantageStep from '@/components/characters/character/wizard/blessings/AdvantageStep.vue'
 import { characterStore } from '@/components/characters/character/stores/characterStore.ts'
+import DisadvantageStep from '@/components/characters/character/wizard/blessings/DisadvantageStep.vue'
 
 const xpData = experienceStore()
 const route = useRoute()
@@ -37,7 +38,8 @@ const sections = ref([
   { name: 'Powers', isDisabled: isAdd, component: markRaw(PowerStep) },
   { name: 'Skills', isDisabled: isAdd, component: markRaw(SkillStep) },
   { name: 'Proficiencies', isDisabled: isAdd, component: markRaw(ProficiencyTableTile) },
-  { name: 'Advantages / Disadvantages', isDisabled: isAdd, component: defineAsyncComponent(async () => BlessingStep) },
+  { name: 'Advantages', isDisabled: isAdd, component: defineAsyncComponent(async () => AdvantageStep) },
+  { name: 'Disadvantages', isDisabled: isAdd, component: defineAsyncComponent(async () => DisadvantageStep) },
   { name: 'Review Character', isDisabled: isAdd, component: markRaw(ReviewCharacter) },
 ])
 
@@ -60,7 +62,9 @@ async function fetchData() {
     sections.value.splice(0, 0, { name: 'Basic Info', isDisabled: false, component: defineAsyncComponent(async () => EditCharacterDetails) })
     await xpData.updateExperience(route.params.id)
 
-    selectSection('Basic Info')
+    if (!isMobile.value) {
+      selectSection('Basic Info')
+    }
   }
 }
 
