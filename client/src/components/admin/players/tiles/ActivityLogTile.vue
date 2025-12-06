@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Card from 'primevue/card'
 import type { PropType } from 'vue'
-import type { Log } from '@/components/players/Objects/ActivityLogs'
+import type { Log } from '@/components/admin/players/types'
 
 const props = defineProps({
   log: {

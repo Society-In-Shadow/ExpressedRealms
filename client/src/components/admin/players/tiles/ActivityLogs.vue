@@ -3,11 +3,10 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import axios from 'axios'
 import InputText from 'primevue/inputtext'
-import type { Log } from '@/components/players/Objects/ActivityLogs'
 import DataTable from 'primevue/datatable'
-import type { ChangedProperty } from '@/components/players/Objects/ChangedProperty'
+import type { ChangedProperty, Log } from '@/components/admin/players/types'
 import Paginator from 'primevue/paginator'
-import ActivityLogTile from '@/components/players/Tiles/ActivityLogTile.vue'
+import ActivityLogTile from '@/components/admin/players/tiles/ActivityLogTile.vue'
 
 const startingPageSize = 25
 let logs = ref<Array<Log>>([])

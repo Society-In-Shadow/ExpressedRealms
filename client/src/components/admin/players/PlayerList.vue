@@ -1,9 +1,9 @@
 <script setup lang="ts">
 
 import { onMounted, ref, watch } from 'vue'
-import PlayerTile from '@/components/players/Tiles/PlayerTile.vue'
+import PlayerTile from '@/components/admin/players/tiles/PlayerTile.vue'
 import InputText from 'primevue/inputtext'
-import { playerList } from '@/components/players/Stores/PlayerListStore'
+import { playerList } from '@/components/admin/players/stores/playerListStore'
 import Tabs from 'primevue/tabs'
 import TabList from 'primevue/tablist'
 import Tab from 'primevue/tab'

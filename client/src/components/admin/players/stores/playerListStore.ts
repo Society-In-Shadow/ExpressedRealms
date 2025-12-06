@@ -1,5 +1,5 @@
-import {defineStore} from 'pinia'
-import type {PlayerListItem} from '@/components/players/Objects/Player'
+import { defineStore } from 'pinia'
+import type { PlayerListItem } from '@/components/admin/players/types'
 import axios from 'axios'
 
 export const playerList
