@@ -22,7 +22,7 @@ const props = defineProps({
     <a v-else class="p-1 tocItem" :href="'#' + makeIdSafe(type.name)" @click.prevent="scrollToSection(type.name)">{{ type.name }}</a>
     <div v-for="path in type.subCategories" :key="path.name" class="ps-4">
       <Skeleton v-if="props.showSkeleton" id="sub-category-skeleton" class="mb-2" height="1.5em" />
-      <a v-else class="p-1 tocItem" :href="'#' + makeIdSafe(path.name)" @click.prevent="scrollToSection(path.name)">{{ path.name }}</a>
+      <a v-else class="p-1 tocItem" :href="'#' + makeIdSafe(`${path.name}-${type.name}`)" @click.prevent="scrollToSection(`${path.name}-${type.name}`)">{{ path.name }}</a>
       <div v-for="power in path.blessings" :key="power.id" class="ps-4">
         <Skeleton v-if="props.showSkeleton" id="blessings-skeleton" class="mb-2" height="1.5em" />
         <a v-else class="p-1 tocItem" :href="'#' + makeIdSafe(power.name)" @click.prevent="scrollToSection(power.name)">{{ power.name }}</a>
