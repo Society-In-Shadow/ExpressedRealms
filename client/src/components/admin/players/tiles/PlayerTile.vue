@@ -28,7 +28,7 @@ const props = defineProps({
   },
 })
 
-var userConfirmations = userConfirmationPopups(props.playerInfo.id)
+const userConfirmations = userConfirmationPopups(props.playerInfo.id)
 
 function updatePlayerRoles() {
   fetchUserPolicies(props.playerInfo.id)

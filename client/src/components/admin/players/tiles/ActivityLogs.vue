@@ -26,7 +26,7 @@ function fetchData() {
   axios.get(`/admin/user/${props.userId}/activitylogs`)
     .then((response) => {
       response.data.logs.forEach(function (log: Log) {
-        var parsedProperties = JSON.parse(log.changedProperties)
+        const parsedProperties = JSON.parse(log.changedProperties)
         log.timeStamp = new Date(log.timeStamp)
         parsedProperties.forEach(function (property: ChangedProperty, index: number) {
           property.id = index
@@ -55,17 +55,17 @@ const sortedFilteredLogs = computed(() => {
 function filter(query: string) {
   const lowercasedQuery = query.toLowerCase().trim()
 
-  if (!lowercasedQuery) {
-    // Reset showing all players if the query is empty
-    filteredLogs.value = logs.value
-  }
-  else {
+  if (lowercasedQuery) {
     // Filter players by username or email
     filteredLogs.value = logs.value.filter(logs =>
       logs.location.toLowerCase().includes(lowercasedQuery)
       || logs.changedProperties.toLowerCase().includes(lowercasedQuery),
     )
+    return
   }
+
+  // Reset showing all players if the query is empty
+  filteredLogs.value = logs.value
 }
 
 // Debounce function
