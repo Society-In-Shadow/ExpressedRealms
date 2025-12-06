@@ -3,8 +3,8 @@
 import ToggleSwitch from 'primevue/toggleswitch'
 import { onMounted, ref } from 'vue'
 import SkeletonWrapper from '@/FormWrappers/SkeletonWrapper.vue'
-import type { RoleInfo } from '@/components/players/Objects/RoleInfo'
-import { fetchUserPolicies, updateRole } from '@/components/players/Services/PlayerRoleService'
+import type { RoleInfo } from '@/components/admin/players/types'
+import { fetchUserPolicies, updateRole } from '@/components/admin/players/services/playerRoleService'
 
 const roles = ref<Array<RoleInfo>>([{}, {}])
 const isLoading = ref(true)

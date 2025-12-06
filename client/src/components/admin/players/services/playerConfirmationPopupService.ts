@@ -1,7 +1,7 @@
-import {useConfirm} from 'primevue/useconfirm'
+import { useConfirm } from 'primevue/useconfirm'
 import toaster from '@/services/Toasters'
 import axios from 'axios'
-import {playerList} from '@/components/players/Stores/PlayerListStore'
+import { playerList } from '@/components/admin/players/stores/playerListStore'
 
 export const userConfirmationPopups = (userId: string) => {
   const confirm = useConfirm()

@@ -1,5 +1,5 @@
-import {defineStore} from 'pinia'
-import type {PlayerListItem} from '@/components/players/Objects/Player'
+import { defineStore } from 'pinia'
+import type { PlayerListItem } from '@/components/admin/players/types'
 import axios from 'axios'
 
 export const playerList
@@ -24,17 +24,16 @@ export const playerList
       filterPlayers(query: string) {
         const lowercasedQuery = query.toLowerCase().trim()
 
-        if (!lowercasedQuery) {
-          // Reset showing all players if the query is empty
-          this.filteredPlayers = this.players
-        }
-        else {
+        if (lowercasedQuery) {
           // Filter players by username or email
           this.filteredPlayers = this.players.filter(player =>
             player.username.toLowerCase().includes(lowercasedQuery)
             || player.email.toLowerCase().includes(lowercasedQuery),
           )
+          return
         }
+        // Reset showing all players if the query is empty
+        this.filteredPlayers = this.players
       },
       getPrivilegedPlayers() {
         return this.filteredPlayers.filter(x => x.roles.length > 0 && x.isDisabled === false)

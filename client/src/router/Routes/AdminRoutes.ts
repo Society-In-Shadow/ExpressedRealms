@@ -1,4 +1,5 @@
 import Layout from '@/components/LoggedInLayout.vue'
+import PlayerList from '@/components/admin/players/PlayerList.vue'
 
 export const AdminRoutes = {
   path: '/admin',
@@ -7,7 +8,7 @@ export const AdminRoutes = {
     {
       path: 'players',
       name: 'viewPlayers',
-      component: () => import('./../../components/players/PlayerList.vue'),
+      component: () => PlayerList,
       meta: { requiredRole: 'UserManagementRole' },
     },
     {
