@@ -40,6 +40,7 @@ const props = defineProps({
 })
 
 const showEdit = ref(false)
+const characterId = Number.parseInt(route.params.id as string)
 
 const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5)
 const isMobile = activeBreakpoint.smaller('md')
@@ -47,8 +48,8 @@ const isMobile = activeBreakpoint.smaller('md')
 onBeforeMount(async () => {
   await store.getBlessings()
   showEdit.value = await userInfo.hasUserRole(UserRoles.BlessingsManagementRole)
-  await characterBlessingData.getCharacterBlessings(route.params.id)
-  await xpInfo.updateExperience(route.params.id)
+  await characterBlessingData.getCharacterBlessings(characterId)
+  await xpInfo.updateExperience(characterId)
   if (!isMobile.value) {
     showAboutInfo()
   }
@@ -75,11 +76,11 @@ const filteredTypes = computed(() => {
 const wizardContentInfo = wizardContentStore()
 
 const currentType = computed(() => {
-  return filteredTypes.value.filter(y => y.name.toLowerCase() == props.type.toLowerCase())[0]
+  return filteredTypes.value.find(y => y.name.toLowerCase() == props.type.toLowerCase())
 })
 
 const selectedType = computed(() => {
-  return characterBlessingData.types.filter(y => y.name.toLowerCase() == props.type.toLowerCase())[0]
+  return characterBlessingData.types.find(y => y.name.toLowerCase() == props.type.toLowerCase())
 })
 
 const updateWizardContent = (blessing: Blessing) => {
@@ -111,8 +112,8 @@ const xpSectionType = computed(() => {
 <template>
   <Button label="Help" class="mb-2 float-end" @click="showAboutInfo" />
 
-  <h1>Selected {{ selectedType.name }}s</h1>
-  <div v-for="trait in selectedType.subCategories" :key="trait.name">
+  <h1>Selected {{ selectedType!.name }}s</h1>
+  <div v-for="trait in selectedType!.subCategories" :key="trait.name">
     <h3 class="ml-3 pb-2">
       {{ trait.name }}
     </h3>
@@ -130,11 +131,11 @@ const xpSectionType = computed(() => {
     </div>
   </div>
 
-  <h1 :id="makeIdSafe(currentType.name)" class="pb-0 mb-0">
-    Available {{ currentType.name }}s
+  <h1 :id="makeIdSafe(currentType!.name)" class="pb-0 mb-0">
+    Available {{ currentType!.name }}s
   </h1>
   <ShowXPCosts v-if="characterInfo.isInCharacterCreation" :section-type="xpSectionType" />
-  <div v-for="subCategory in currentType.subCategories" :key="subCategory.name">
+  <div v-for="subCategory in currentType!.subCategories" :key="subCategory.name">
     <h2 :id="makeIdSafe(subCategory.name)" class="pl-3 pb-2">
       {{ subCategory.name }}
     </h2>
