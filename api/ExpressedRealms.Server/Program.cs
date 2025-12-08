@@ -30,6 +30,7 @@ using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Server.Configuration;
 using ExpressedRealms.Server.Configuration.ApplicationInsights;
 using ExpressedRealms.Server.Configuration.UserRoles;
+using ExpressedRealms.Server.CronJobs;
 using ExpressedRealms.Server.DependencyInjections;
 using ExpressedRealms.Server.EndPoints;
 using ExpressedRealms.Server.EndPoints.PlayerEndpoints;
@@ -73,6 +74,9 @@ try
 
     Log.Information("Adding DB Context");
     await builder.AddDatabaseConnection(keyVaultManager, builder.Environment.IsProduction());
+
+    Log.Information("Add Quartz / Cron Scheduler");
+    builder.SetupQuartz();
 
     Log.Information("Setting Up Authentication and Identity");
     builder
