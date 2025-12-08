@@ -3,7 +3,6 @@ using ExpressedRealms.Events.API.Repositories.Events;
 using ExpressedRealms.Events.API.UseCases.Events.SendEventPublishedMessages;
 using ExpressedRealms.Events.API.UseCases.Events.TriggerEventReminder;
 using FakeItEasy;
-using Microsoft.Extensions.Internal;
 using Xunit;
 
 namespace ExpressedRealms.Events.API.Tests.Unit.Events;
@@ -14,7 +13,7 @@ public class EventReminderHandlerUseCaseTests
     private readonly IEventRepository _repository;
     private readonly List<Event> _dbModel;
     private readonly ISendEventPublishedMessagesUseCase _sendMessageUseCase;
-    private readonly ISystemClock _systemClock;
+    private readonly TimeProvider _timeProvider;
 
     public EventReminderHandlerUseCaseTests()
     {
@@ -52,18 +51,18 @@ public class EventReminderHandlerUseCaseTests
 
         _repository = A.Fake<IEventRepository>();
         _sendMessageUseCase = A.Fake<ISendEventPublishedMessagesUseCase>();
-        _systemClock = A.Fake<ISystemClock>();
+        _timeProvider = A.Fake<TimeProvider>();
         
-        A.CallTo(() => _systemClock.UtcNow).Returns(new DateTime(2025, 10, 30, 12, 0, 0));
+        A.CallTo(() => _timeProvider.GetUtcNow()).Returns(new DateTime(2025, 10, 30, 12, 0, 0));
         A.CallTo(() => _repository.GetCurrenOrFutureEvents()).Returns(_dbModel);
 
-        _useCase = new EventReminderHandlerUseCase(_repository, _sendMessageUseCase, _systemClock);
+        _useCase = new EventReminderHandlerUseCase(_repository, _sendMessageUseCase, _timeProvider);
     }
 
     [Fact]
     public async Task UseCase_WillProcessInternalReminder_5WeeksOut()
     {
-        _dbModel[0].StartDate = DateOnly.FromDateTime(_systemClock.UtcNow.DateTime).AddMonths(1).AddDays(7);
+        _dbModel[0].StartDate = DateOnly.FromDateTime(_timeProvider.GetUtcNow().DateTime).AddMonths(1).AddDays(7);
         await _useCase.ExecuteAsync();
 
         A.CallTo(() => _sendMessageUseCase.ExecuteAsync(A<SendEventPublishedMessagesModel>.That
@@ -74,7 +73,7 @@ public class EventReminderHandlerUseCaseTests
     [Fact]
     public async Task UseCase_WillProcessOneWeekReminder_1WeekOut()
     {
-        _dbModel[0].StartDate = DateOnly.FromDateTime(_systemClock.UtcNow.DateTime).AddDays(7);
+        _dbModel[0].StartDate = DateOnly.FromDateTime(_timeProvider.GetUtcNow().DateTime).AddDays(7);
         await _useCase.ExecuteAsync();
 
         A.CallTo(() => _sendMessageUseCase.ExecuteAsync(A<SendEventPublishedMessagesModel>.That
@@ -85,7 +84,7 @@ public class EventReminderHandlerUseCaseTests
     [Fact]
     public async Task UseCase_WillProcessOneMonthReminder_1MonthOut()
     {
-        _dbModel[0].StartDate = DateOnly.FromDateTime(_systemClock.UtcNow.DateTime).AddMonths(1);
+        _dbModel[0].StartDate = DateOnly.FromDateTime(_timeProvider.GetUtcNow().DateTime).AddMonths(1);
         await _useCase.ExecuteAsync();
 
         A.CallTo(() => _sendMessageUseCase.ExecuteAsync(A<SendEventPublishedMessagesModel>.That
@@ -103,7 +102,7 @@ public class EventReminderHandlerUseCaseTests
         _dbModel[0].EndDate = DateOnly.Parse("10/31/2025");
 
         var testDate = DateTimeOffset.Parse(dayOfString).Date;
-        A.CallTo(() => _systemClock.UtcNow).Returns(testDate);
+        A.CallTo(() => _timeProvider.GetUtcNow()).Returns(testDate);
 
         await _useCase.ExecuteAsync();
 

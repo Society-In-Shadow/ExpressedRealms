@@ -8,7 +8,6 @@ using ExpressedRealms.Events.API.UseCases.Events.SendEventPublishedMessages;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FakeItEasy;
-using Microsoft.Extensions.Internal;
 using Xunit;
 
 namespace ExpressedRealms.Events.API.Tests.Unit.Events;
@@ -21,7 +20,7 @@ public class SendEventPublishedMessagesUseCaseTests
     private readonly List<EventScheduleItem> dbEventItems;
     private readonly Event _dbModel;
     private readonly IDiscordService _discordService;
-    private readonly ISystemClock _systemClock;
+    private readonly TimeProvider _systemClock;
 
     public SendEventPublishedMessagesUseCaseTests()
     {
@@ -74,11 +73,11 @@ public class SendEventPublishedMessagesUseCaseTests
 
         _repository = A.Fake<IEventRepository>();
         _discordService = A.Fake<IDiscordService>();
-        _systemClock = A.Fake<ISystemClock>();
+        _systemClock = A.Fake<TimeProvider>();
 
         A.CallTo(() => _repository.FindEventAsync(_model.Id)).Returns(_dbModel);
         A.CallTo(() => _repository.GetEventScheduleItems(_model.Id)).Returns(dbEventItems);
-        A.CallTo(() => _systemClock.UtcNow).Returns(new DateTime(2025, 08, 22, 12, 0, 0));
+        A.CallTo(() => _systemClock.GetUtcNow()).Returns(new DateTime(2025, 08, 22, 12, 0, 0));
 
         var validator = new SendEventPublishedMessagesModelValidator(_repository);
 

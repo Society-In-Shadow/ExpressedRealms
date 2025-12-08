@@ -8,7 +8,6 @@ using ExpressedRealms.Events.API.Repositories.Events;
 using ExpressedRealms.Shared;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
-using Microsoft.Extensions.Internal;
 using TimeZoneConverter;
 
 namespace ExpressedRealms.Events.API.UseCases.Events.SendEventPublishedMessages;
@@ -17,7 +16,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
     IEventRepository eventRepository,
     SendEventPublishedMessagesModelValidator validator,
     IDiscordService discordService,
-    ISystemClock systemClock,
+    TimeProvider systemClock,
     CancellationToken cancellationToken
 ) : ISendEventPublishedMessagesUseCase
 {
@@ -35,7 +34,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
         var currentEvent = await eventRepository.FindEventAsync(model.Id);
         var scheduleItems = await eventRepository.GetEventScheduleItems(model.Id);
         
-        var today = DateOnly.FromDateTime(systemClock.UtcNow.DateTime);
+        var today = DateOnly.FromDateTime(systemClock.GetUtcNow().DateTime);
         if (model.PublishType == PublishType.DayOfReminder && scheduleItems.All(x => x.Date != today))
         {
             return Result.Ok();

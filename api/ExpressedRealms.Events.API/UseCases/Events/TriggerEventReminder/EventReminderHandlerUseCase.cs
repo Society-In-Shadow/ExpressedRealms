@@ -2,21 +2,20 @@ using ExpressedRealms.DB.Models.Events.EventSetup;
 using ExpressedRealms.Events.API.Repositories.Events;
 using ExpressedRealms.Events.API.UseCases.Events.SendEventPublishedMessages;
 using FluentResults;
-using Microsoft.Extensions.Internal;
 
 namespace ExpressedRealms.Events.API.UseCases.Events.TriggerEventReminder;
 
 internal sealed class EventReminderHandlerUseCase(
     IEventRepository eventRepository, 
     ISendEventPublishedMessagesUseCase sendEventPublishedMessagesUseCase,
-    ISystemClock systemClock)
+    TimeProvider systemClock)
     : IEventReminderHandlerUseCase
 {
     public async Task<Result> ExecuteAsync()
     {
         var events = await eventRepository.GetCurrenOrFutureEvents();
         
-        var today = DateOnly.FromDateTime(systemClock.UtcNow.DateTime);
+        var today = DateOnly.FromDateTime(systemClock.GetUtcNow().DateTime);
         
         var eventsToPublish = events
             .Select(x => GetEventTypeOrDefault(x, today))
