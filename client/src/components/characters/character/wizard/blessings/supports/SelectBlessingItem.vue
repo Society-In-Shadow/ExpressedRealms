@@ -40,7 +40,7 @@ const updateWizardContent = () => {
 </script>
 
 <template>
-  <div class="pl-2 my-3 d-flex flex-row align-self-center justify-content-between">
+  <div class="pl-3 my-3 d-flex flex-row align-self-center justify-content-between">
     <div class="pr-3">
       <h3 class="p-0 m-0">
         {{ props.blessing.name }}
