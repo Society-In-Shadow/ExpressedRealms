@@ -18,7 +18,6 @@ public class SendEventPublishedMessagesUseCaseTests
     private readonly IEventRepository _repository;
     private readonly SendEventPublishedMessagesModel _model;
     private readonly Event _dbModel;
-    private readonly List<EventScheduleItem> _dbEventItems;
     private readonly IDiscordService _discordService;
 
     public SendEventPublishedMessagesUseCaseTests()
@@ -39,7 +38,7 @@ public class SendEventPublishedMessagesUseCaseTests
             ConExperience = 32,
         };
 
-        _dbEventItems = new List<EventScheduleItem>()
+        var dbEventItems = new List<EventScheduleItem>()
         {
             new()
             {
@@ -74,7 +73,7 @@ public class SendEventPublishedMessagesUseCaseTests
         _discordService = A.Fake<IDiscordService>();
 
         A.CallTo(() => _repository.FindEventAsync(_model.Id)).Returns(_dbModel);
-        A.CallTo(() => _repository.GetEventScheduleItems(_model.Id)).Returns(_dbEventItems);
+        A.CallTo(() => _repository.GetEventScheduleItems(_model.Id)).Returns(dbEventItems);
 
         var validator = new SendEventPublishedMessagesModelValidator(_repository);
 
@@ -191,7 +190,6 @@ public class SendEventPublishedMessagesUseCaseTests
     [Theory]
     [InlineData(PublishType.OneMonthReminder)]
     [InlineData(PublishType.OneWeekReminder)]
-    [InlineData(PublishType.DayOfReminder)]
     public async Task UseCase_ContainsMessage_OfHowMuchXPTheyWillEarn_WithFormatting_WhenItsNotInitialAnnouncement(
         PublishType type
     )
@@ -202,7 +200,7 @@ public class SendEventPublishedMessagesUseCaseTests
                 _discordService.SendMessageToChannelAsync(
                     DiscordChannel.PublicAnnouncements,
                     A<string>.That.Contains(
-                        "Once the event starts, everyone will have access to an additional **32 XP** for this event."
+                        $"Players now have access to an additional **32 XP** for this event on their Primary Characters!"
                     ),
                     A<Embed[]>._
                 )
@@ -248,7 +246,39 @@ public class SendEventPublishedMessagesUseCaseTests
             )
             .MustNotHaveHappened();
     }
+    
+    [Fact]
+    public async Task UseCase_HeaderStatesMonthOut_WhenItIsAOneMonthReminder()
+    {
+        _model.PublishType = PublishType.OneMonthReminder;
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() =>
+                _discordService.SendMessageToChannelAsync(
+                    DiscordChannel.PublicAnnouncements,
+                    A<string>.That.Contains("# Sioux City Geek Con is about a month out!"),
+                    A<Embed[]>._
+                )
+            )
+            .MustHaveHappened();
+    }
 
+    [Fact]
+    public async Task UseCase_HeaderStatesMonthOut_WhenItIsAOneWeekReminder()
+    {
+        _model.PublishType = PublishType.OneWeekReminder;
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() =>
+                _discordService.SendMessageToChannelAsync(
+                    DiscordChannel.PublicAnnouncements,
+                    A<string>.That.Contains(
+                        "# Sioux City Geek Con is about a week away!"
+                    ),
+                    A<Embed[]>._
+                )
+            )
+            .MustHaveHappened();
+    }
+    
     [Theory]
     [InlineData(PublishType.OneMonthReminder)]
     [InlineData(PublishType.OneWeekReminder)]
@@ -349,7 +379,7 @@ public class SendEventPublishedMessagesUseCaseTests
     }
 
     [Fact]
-    public async Task UseCase_ContainsMessage_DailyScheduleWillBeReleasedLater_ForInitialAnnouncement()
+    public async Task UseCase_ContainsMessage_DailyScheduleAndXPWillBeReleasedLater_ForInitialAnnouncement()
     {
         _model.PublishType = PublishType.InitialAnnouncement;
         await _useCase.ExecuteAsync(_model);
@@ -357,7 +387,7 @@ public class SendEventPublishedMessagesUseCaseTests
                 _discordService.SendMessageToChannelAsync(
                     DiscordChannel.PublicAnnouncements,
                     A<string>.That.Contains(
-                        "The daily schedule will be provided roughly a month out from the event"
+                        "The daily schedule and assigned XP will be provided one month out from the event!"
                     ),
                     A<Embed[]>._
                 )
@@ -427,5 +457,65 @@ public class SendEventPublishedMessagesUseCaseTests
                 )
             )
             .MustHaveHappenedOnceExactly();
+    }
+    
+    [Fact]
+    public async Task UseCase_ForInternalReminder_WillUseDevGeneralChannel()
+    {
+        _model.PublishType = PublishType.InternalReminder;
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() =>
+                _discordService.SendMessageToChannelAsync(
+                    DiscordChannel.DevGeneralChannel,
+                    A<string>._,
+                    A<Embed[]>._
+                )
+            )
+            .MustHaveHappenedOnceExactly();
+    }
+    
+    [Fact]
+    public async Task UseCase_ForInternalReminder_HasCorrectHeader()
+    {
+        _model.PublishType = PublishType.InternalReminder;
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() =>
+                _discordService.SendMessageToChannelAsync(
+                    DiscordChannel.DevGeneralChannel,
+                    A<string>.That.Contains("# Reminder to Review Schedule!"),
+                    A<Embed[]>._
+                )
+            )
+            .MustHaveHappened();
+    }
+    
+    [Fact]
+    public async Task UseCase_ForInternalReminder_HasCorrectMessage()
+    {
+        _model.PublishType = PublishType.InternalReminder;
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() =>
+                _discordService.SendMessageToChannelAsync(
+                    DiscordChannel.DevGeneralChannel,
+                    A<string>.That.Contains("The following message will be sent out in a week."),
+                    A<Embed[]>._
+                )
+            )
+            .MustHaveHappened();
+    }
+    
+    [Fact]
+    public async Task UseCase_ForInternalReminder_WillShowMonthOutMessage()
+    {
+        _model.PublishType = PublishType.InternalReminder;
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() =>
+                _discordService.SendMessageToChannelAsync(
+                    DiscordChannel.DevGeneralChannel,
+                    A<string>.That.Contains($"# Sioux City Geek Con is about a month out!"),
+                    A<Embed[]>._
+                )
+            )
+            .MustHaveHappened();
     }
 }
