@@ -251,7 +251,7 @@ public class SendEventPublishedMessagesUseCaseTests
             )
             .MustNotHaveHappened();
     }
-    
+
     [Fact]
     public async Task UseCase_HeaderStatesMonthOut_WhenItIsAOneMonthReminder()
     {
@@ -275,15 +275,13 @@ public class SendEventPublishedMessagesUseCaseTests
         A.CallTo(() =>
                 _discordService.SendMessageToChannelAsync(
                     DiscordChannel.PublicAnnouncements,
-                    A<string>.That.Contains(
-                        "# Sioux City Geek Con is about a week away!"
-                    ),
+                    A<string>.That.Contains("# Sioux City Geek Con is about a week away!"),
                     A<Embed[]>._
                 )
             )
             .MustHaveHappened();
     }
-    
+
     [Theory]
     [InlineData(PublishType.OneMonthReminder)]
     [InlineData(PublishType.OneWeekReminder)]
@@ -463,7 +461,7 @@ public class SendEventPublishedMessagesUseCaseTests
             )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_ForInternalReminder_WillUseDevGeneralChannel()
     {
@@ -478,7 +476,7 @@ public class SendEventPublishedMessagesUseCaseTests
             )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_ForInternalReminder_HasCorrectHeader()
     {
@@ -493,7 +491,7 @@ public class SendEventPublishedMessagesUseCaseTests
             )
             .MustHaveHappened();
     }
-    
+
     [Fact]
     public async Task UseCase_ForInternalReminder_HasCorrectMessage()
     {
@@ -508,7 +506,7 @@ public class SendEventPublishedMessagesUseCaseTests
             )
             .MustHaveHappened();
     }
-    
+
     [Fact]
     public async Task UseCase_ForInternalReminder_WillShowMonthOutMessage()
     {
@@ -523,7 +521,7 @@ public class SendEventPublishedMessagesUseCaseTests
             )
             .MustHaveHappened();
     }
-    
+
     /// <summary>
     /// This is needed specifically because the cron job will not check if there are any scheduled
     /// events for the day

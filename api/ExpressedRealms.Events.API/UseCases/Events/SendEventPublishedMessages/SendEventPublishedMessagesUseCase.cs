@@ -33,9 +33,12 @@ internal sealed class SendEventPublishedMessagesUseCase(
 
         var currentEvent = await eventRepository.FindEventAsync(model.Id);
         var scheduleItems = await eventRepository.GetEventScheduleItems(model.Id);
-        
+
         var today = DateOnly.FromDateTime(systemClock.GetUtcNow().DateTime);
-        if (model.PublishType == PublishType.DayOfReminder && scheduleItems.All(x => x.Date != today))
+        if (
+            model.PublishType == PublishType.DayOfReminder
+            && scheduleItems.All(x => x.Date != today)
+        )
         {
             return Result.Ok();
         }
@@ -66,13 +69,13 @@ internal sealed class SendEventPublishedMessagesUseCase(
                 );
                 message.AppendLine();
                 message.AppendLine("More information can be found on their website below!");
-                
+
                 AppendEventAttendanceMessage(scheduleItems, currentEvent, message);
-                
+
                 message.AppendLine(
                     "The daily schedule and assigned XP will be provided one month out from the event!"
                 );
-                
+
                 break;
             case PublishType.OneMonthReminder:
             case PublishType.OneWeekReminder:
@@ -85,7 +88,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
                 {
                     message.AppendLine($"# {currentEvent!.Name} is about a week away!");
                 }
-                
+
                 message.AppendLine(
                     $"As a reminder, we will be attending **{currentEvent!.Name}** out in the **{currentEvent.Location}**!"
                 );
@@ -94,28 +97,28 @@ internal sealed class SendEventPublishedMessagesUseCase(
                 );
                 message.AppendLine();
                 message.AppendLine("More information can be found on their website below!");
-                
+
                 AppendEventAttendanceMessage(scheduleItems, currentEvent, message);
 
                 message.AppendLine(
                     $"Players now have access to an additional **{currentEvent.ConExperience} XP** for this event on their Primary Characters!"
                 );
-                
+
                 GenerateScheduleMessage(scheduleItems, currentEvent, message);
-                
+
                 break;
             case PublishType.DayOfReminder:
-                
+
                 // First day message
                 // Something about making sure their character is up to date online
                 // Something about how we will be starting later
                 // Something about Checkin XP Bonus
                 // Something about checking in with the convention
-                // 
+                //
                 // Middle Day Message
-                
-                // Last Day Message 
-                
+
+                // Last Day Message
+
                 message.AppendLine($"# One Week Reminder for ${currentEvent.Name}!");
                 message.AppendLine(
                     $"As a reminder, we will be attending **{currentEvent!.Name}** out in the **{currentEvent.Location}**!"
@@ -125,13 +128,13 @@ internal sealed class SendEventPublishedMessagesUseCase(
                 );
                 message.AppendLine();
                 message.AppendLine("More information can be found on their website below!");
-                
+
                 AppendEventAttendanceMessage(scheduleItems, currentEvent, message);
 
                 message.AppendLine(
                     $"Event XP has been automatically assigned out to all players, in this case you are getting **{currentEvent.ConExperience} XP** for this event."
                 );
-                
+
                 message.AppendLine();
                 message.AppendLine(
                     "** We do need you to check in at our booth (SHQ) for the following reasons:**"
@@ -149,9 +152,9 @@ internal sealed class SendEventPublishedMessagesUseCase(
                 message.AppendLine(
                     "* **Boring Stuff!** - A lot of cons want us to keep track of who is playing the game, so we will need to collect badge information."
                 );
-                
+
                 GenerateScheduleMessage(scheduleItems, currentEvent, message);
-                
+
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
@@ -180,7 +183,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
         {
             channel = DiscordChannel.DevGeneralChannel;
         }
-        
+
         await discordService.SendMessageToChannelAsync(
             channel,
             message.ToString(),
@@ -200,15 +203,18 @@ internal sealed class SendEventPublishedMessagesUseCase(
         return Result.Ok();
     }
 
-    private static void GenerateScheduleMessage(List<EventScheduleItem> scheduleItems, Event? currentEvent, StringBuilder message)
+    private static void GenerateScheduleMessage(
+        List<EventScheduleItem> scheduleItems,
+        Event? currentEvent,
+        StringBuilder message
+    )
     {
-        
         var dayGroups = scheduleItems
             .OrderBy(x => x.Date)
             .ThenBy(x => x.StartTime)
             .GroupBy(x => x.Date)
             .ToList();
-        
+
         message.AppendLine("# Schedule");
         message.AppendLine(
             $"{currentEvent.Name} is in the **{TZConvert.IanaToWindows(currentEvent.TimeZoneId)}** and our schedule below reflects that."
@@ -230,14 +236,18 @@ internal sealed class SendEventPublishedMessagesUseCase(
     /// <summary>
     /// We'll be attending every day, or a subsest of days
     /// </summary>
-    private static void AppendEventAttendanceMessage(List<EventScheduleItem> scheduleItems, Event? currentEvent, StringBuilder message)
+    private static void AppendEventAttendanceMessage(
+        List<EventScheduleItem> scheduleItems,
+        Event? currentEvent,
+        StringBuilder message
+    )
     {
         var dayGroups = scheduleItems
             .OrderBy(x => x.Date)
             .ThenBy(x => x.StartTime)
             .GroupBy(x => x.Date)
             .ToList();
-        
+
         var daysBetween =
             Math.Abs(currentEvent.EndDate.DayNumber - currentEvent.StartDate.DayNumber) + 1;
         if (dayGroups.Count == daysBetween)
@@ -253,8 +263,8 @@ internal sealed class SendEventPublishedMessagesUseCase(
                 1 => days[0],
                 2 => string.Join(" and ", days),
                 _ => string.Join(", ", days.Take(dayGroups.Count - 1))
-                     + " and "
-                     + days[dayGroups.Count - 1],
+                    + " and "
+                    + days[dayGroups.Count - 1],
             };
             message.AppendLine($"# Society in Shadows will be there on {attendingDays}!");
         }

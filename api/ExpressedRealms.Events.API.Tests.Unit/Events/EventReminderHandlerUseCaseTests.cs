@@ -52,7 +52,7 @@ public class EventReminderHandlerUseCaseTests
         _repository = A.Fake<IEventRepository>();
         _sendMessageUseCase = A.Fake<ISendEventPublishedMessagesUseCase>();
         _timeProvider = A.Fake<TimeProvider>();
-        
+
         A.CallTo(() => _timeProvider.GetUtcNow()).Returns(new DateTime(2025, 10, 30, 12, 0, 0));
         A.CallTo(() => _repository.GetCurrenOrFutureEvents()).Returns(_dbModel);
 
@@ -62,41 +62,65 @@ public class EventReminderHandlerUseCaseTests
     [Fact]
     public async Task UseCase_WillProcessInternalReminder_5WeeksOut()
     {
-        _dbModel[0].StartDate = DateOnly.FromDateTime(_timeProvider.GetUtcNow().DateTime).AddMonths(1).AddDays(7);
+        _dbModel[0].StartDate = DateOnly
+            .FromDateTime(_timeProvider.GetUtcNow().DateTime)
+            .AddMonths(1)
+            .AddDays(7);
         await _useCase.ExecuteAsync();
 
-        A.CallTo(() => _sendMessageUseCase.ExecuteAsync(A<SendEventPublishedMessagesModel>.That
-                .Matches(k => k.Id == 1 && k.PublishType == PublishType.InternalReminder)))
+        A.CallTo(() =>
+                _sendMessageUseCase.ExecuteAsync(
+                    A<SendEventPublishedMessagesModel>.That.Matches(k =>
+                        k.Id == 1 && k.PublishType == PublishType.InternalReminder
+                    )
+                )
+            )
             .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
     public async Task UseCase_WillProcessOneWeekReminder_1WeekOut()
     {
-        _dbModel[0].StartDate = DateOnly.FromDateTime(_timeProvider.GetUtcNow().DateTime).AddDays(7);
+        _dbModel[0].StartDate = DateOnly
+            .FromDateTime(_timeProvider.GetUtcNow().DateTime)
+            .AddDays(7);
         await _useCase.ExecuteAsync();
 
-        A.CallTo(() => _sendMessageUseCase.ExecuteAsync(A<SendEventPublishedMessagesModel>.That
-                .Matches(k => k.Id == 1 && k.PublishType == PublishType.OneWeekReminder)))
+        A.CallTo(() =>
+                _sendMessageUseCase.ExecuteAsync(
+                    A<SendEventPublishedMessagesModel>.That.Matches(k =>
+                        k.Id == 1 && k.PublishType == PublishType.OneWeekReminder
+                    )
+                )
+            )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_WillProcessOneMonthReminder_1MonthOut()
     {
-        _dbModel[0].StartDate = DateOnly.FromDateTime(_timeProvider.GetUtcNow().DateTime).AddMonths(1);
+        _dbModel[0].StartDate = DateOnly
+            .FromDateTime(_timeProvider.GetUtcNow().DateTime)
+            .AddMonths(1);
         await _useCase.ExecuteAsync();
 
-        A.CallTo(() => _sendMessageUseCase.ExecuteAsync(A<SendEventPublishedMessagesModel>.That
-                .Matches(k => k.Id == 1 && k.PublishType == PublishType.OneMonthReminder)))
+        A.CallTo(() =>
+                _sendMessageUseCase.ExecuteAsync(
+                    A<SendEventPublishedMessagesModel>.That.Matches(k =>
+                        k.Id == 1 && k.PublishType == PublishType.OneMonthReminder
+                    )
+                )
+            )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Theory]
     [InlineData("10/29/2025")]
     [InlineData("10/30/2025")]
     [InlineData("10/31/2025")]
-    public async Task UseCase_WillProcessDayOfReminder_BetweenStartAndEndDatesInclusive(string dayOfString)
+    public async Task UseCase_WillProcessDayOfReminder_BetweenStartAndEndDatesInclusive(
+        string dayOfString
+    )
     {
         _dbModel[0].StartDate = DateOnly.Parse("10/29/2025");
         _dbModel[0].EndDate = DateOnly.Parse("10/31/2025");
@@ -106,10 +130,13 @@ public class EventReminderHandlerUseCaseTests
 
         await _useCase.ExecuteAsync();
 
-        A.CallTo(() => _sendMessageUseCase.ExecuteAsync(
-                A<SendEventPublishedMessagesModel>.That.Matches(k =>
-                    k.Id == 1 &&
-                    k.PublishType == PublishType.DayOfReminder)))
+        A.CallTo(() =>
+                _sendMessageUseCase.ExecuteAsync(
+                    A<SendEventPublishedMessagesModel>.That.Matches(k =>
+                        k.Id == 1 && k.PublishType == PublishType.DayOfReminder
+                    )
+                )
+            )
             .MustHaveHappenedOnceExactly();
     }
 }
