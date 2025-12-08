@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Net;
 using System.Text;
 using Discord;
@@ -21,6 +22,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
 ) : ISendEventPublishedMessagesUseCase
 {
     const string FullDateFormat = "dddd MMMM d, yyyy";
+
     public async Task<Result> ExecuteAsync(SendEventPublishedMessagesModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
@@ -55,7 +57,6 @@ internal sealed class SendEventPublishedMessagesUseCase(
             model.PublishType = PublishType.OneMonthReminder;
         }
 
-        
         switch (model.PublishType)
         {
             case PublishType.InternalReminder:
@@ -159,7 +160,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
 
                 break;
             default:
-                throw new ArgumentOutOfRangeException(nameof(model.PublishType));
+                throw new UnreachableException();
         }
 
         message.AppendLine();
