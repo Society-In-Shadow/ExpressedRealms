@@ -144,7 +144,7 @@ const xpSectionType = computed(() => {
   </h1>
   <ShowXPCosts v-if="characterInfo.isInCharacterCreation" :section-type="xpSectionType" />
   <div v-for="subCategory in currentType!.subCategories" :key="subCategory.name">
-    <h2 :id="makeIdSafe(subCategory.name)" class="pl-3 pb-2">
+    <h2 :id="makeIdSafe(subCategory.name)" class="pl-md-3 pb-2">
       {{ subCategory.name }}
     </h2>
     <div v-for="blessing in subCategory.blessings" :key="blessing.id">
