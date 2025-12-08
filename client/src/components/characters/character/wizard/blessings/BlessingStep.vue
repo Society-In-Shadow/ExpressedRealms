@@ -112,20 +112,28 @@ const xpSectionType = computed(() => {
 <template>
   <Button label="Help" class="mb-2 float-end" @click="showAboutInfo" />
 
-  <h1>Selected {{ selectedType!.name }}s</h1>
-  <div v-for="trait in selectedType!.subCategories" :key="trait.name">
-    <h3 class="ml-3 pb-2">
-      {{ trait.name }}
-    </h3>
-    <div v-for="blessing in trait.blessings" :key="blessing.id">
-      <div class="ml-5 d-flex flex-column flex-md-row align-self-center justify-content-between">
-        <div>
-          <h3 class="p-0 m-0">
-            {{ blessing.name }}
-          </h3>
-        </div>
-        <div class="p-0 m-2">
-          <Button label="View" size="small" @click="updateWizardContent(blessing)" />
+  <div v-if="!selectedType && characterInfo.isInCharacterCreation">
+    No selected {{ props.type.toLowerCase() == 'advantage' ? 'advantages' : 'disadvantages' }} detected, please pick one below!
+  </div>
+  <div v-else-if="!selectedType && !characterInfo.isInCharacterCreation">
+    Below is a list of all available {{ props.type.toLowerCase() == 'advantage' ? 'advantages' : 'disadvantages' }}.
+  </div>
+  <div v-else>
+    <h1>Selected {{ selectedType!.name }}s</h1>
+    <div v-for="trait in selectedType!.subCategories" :key="trait.name">
+      <h3 class="ml-3 pb-2">
+        {{ trait.name }}
+      </h3>
+      <div v-for="blessing in trait.blessings" :key="blessing.id">
+        <div class="ml-5 d-flex flex-column flex-md-row align-self-center justify-content-between">
+          <div>
+            <h3 class="p-0 m-0">
+              {{ blessing.name }}
+            </h3>
+          </div>
+          <div class="p-0 m-2">
+            <Button label="View" size="small" @click="updateWizardContent(blessing)" />
+          </div>
         </div>
       </div>
     </div>
