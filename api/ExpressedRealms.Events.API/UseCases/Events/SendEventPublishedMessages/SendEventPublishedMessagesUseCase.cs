@@ -20,6 +20,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
     CancellationToken cancellationToken
 ) : ISendEventPublishedMessagesUseCase
 {
+    const string FullDateFormat = "dddd MMMM d, yyyy";
     public async Task<Result> ExecuteAsync(SendEventPublishedMessagesModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
@@ -54,6 +55,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
             model.PublishType = PublishType.OneMonthReminder;
         }
 
+        
         switch (model.PublishType)
         {
             case PublishType.InternalReminder:
@@ -62,10 +64,10 @@ internal sealed class SendEventPublishedMessagesUseCase(
             case PublishType.InitialAnnouncement:
                 message.AppendLine($"# {currentEvent!.Name} Has Been Confirmed!");
                 message.AppendLine(
-                    $"We are happy to announce that we will be attending **{currentEvent!.Name}** out in the **{currentEvent.Location}**!"
+                    $"We are happy to announce that we will be attending **{currentEvent.Name}** out in the **{currentEvent.Location}**!"
                 );
                 message.AppendLine(
-                    $"Their scheduled dates are **{currentEvent.StartDate.ToString("dddd MMMM d, yyyy")}** to **{currentEvent.EndDate.ToString("dddd MMMM d, yyyy")}**."
+                    $"Their scheduled dates are **{currentEvent.StartDate.ToString(FullDateFormat)}** to **{currentEvent.EndDate.ToString(FullDateFormat)}**."
                 );
                 message.AppendLine();
                 message.AppendLine("More information can be found on their website below!");
@@ -90,10 +92,10 @@ internal sealed class SendEventPublishedMessagesUseCase(
                 }
 
                 message.AppendLine(
-                    $"As a reminder, we will be attending **{currentEvent!.Name}** out in the **{currentEvent.Location}**!"
+                    $"As a reminder, we will be attending **{currentEvent.Name}** out in the **{currentEvent.Location}**!"
                 );
                 message.AppendLine(
-                    $"Their dates are **{currentEvent.StartDate.ToString("dddd MMMM d, yyyy")}** to **{currentEvent.EndDate.ToString("dddd MMMM d, yyyy")}**."
+                    $"Their dates are **{currentEvent.StartDate.ToString(FullDateFormat)}** to **{currentEvent.EndDate.ToString(FullDateFormat)}**."
                 );
                 message.AppendLine();
                 message.AppendLine("More information can be found on their website below!");
@@ -119,12 +121,12 @@ internal sealed class SendEventPublishedMessagesUseCase(
 
                 // Last Day Message
 
-                message.AppendLine($"# One Week Reminder for ${currentEvent.Name}!");
+                message.AppendLine($"# One Week Reminder for ${currentEvent!.Name}!");
                 message.AppendLine(
-                    $"As a reminder, we will be attending **{currentEvent!.Name}** out in the **{currentEvent.Location}**!"
+                    $"As a reminder, we will be attending **{currentEvent.Name}** out in the **{currentEvent.Location}**!"
                 );
                 message.AppendLine(
-                    $"Their dates are **{currentEvent.StartDate.ToString("dddd MMMM d, yyyy")}** to **{currentEvent.EndDate.ToString("dddd MMMM d, yyyy")}**."
+                    $"Their dates are **{currentEvent.StartDate.ToString(FullDateFormat)}** to **{currentEvent.EndDate.ToString(FullDateFormat)}**."
                 );
                 message.AppendLine();
                 message.AppendLine("More information can be found on their website below!");
@@ -157,13 +159,13 @@ internal sealed class SendEventPublishedMessagesUseCase(
 
                 break;
             default:
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(model.PublishType));
         }
 
         message.AppendLine();
 
         var siteEmbed = new EmbedBuilder()
-            .WithTitle(currentEvent.WebsiteName)
+            .WithTitle(currentEvent!.WebsiteName)
             .WithUrl(currentEvent.WebsiteUrl)
             .WithDescription($"{currentEvent.Name} Website!")
             .WithColor(Color.Blue)
@@ -205,7 +207,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
 
     private static void GenerateScheduleMessage(
         List<EventScheduleItem> scheduleItems,
-        Event? currentEvent,
+        Event currentEvent,
         StringBuilder message
     )
     {
@@ -234,11 +236,11 @@ internal sealed class SendEventPublishedMessagesUseCase(
     }
 
     /// <summary>
-    /// We'll be attending every day, or a subsest of days
+    /// We'll be attending every day, or a subset of days
     /// </summary>
     private static void AppendEventAttendanceMessage(
         List<EventScheduleItem> scheduleItems,
-        Event? currentEvent,
+        Event currentEvent,
         StringBuilder message
     )
     {
