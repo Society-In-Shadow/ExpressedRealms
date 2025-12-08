@@ -8,6 +8,7 @@ using ExpressedRealms.Events.API.UseCases.Events.SendEventPublishedMessages;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FakeItEasy;
+using Microsoft.Extensions.Internal;
 using Xunit;
 
 namespace ExpressedRealms.Events.API.Tests.Unit.Events;
@@ -17,8 +18,10 @@ public class SendEventPublishedMessagesUseCaseTests
     private readonly SendEventPublishedMessagesUseCase _useCase;
     private readonly IEventRepository _repository;
     private readonly SendEventPublishedMessagesModel _model;
+    private readonly List<EventScheduleItem> dbEventItems;
     private readonly Event _dbModel;
     private readonly IDiscordService _discordService;
+    private readonly ISystemClock _systemClock;
 
     public SendEventPublishedMessagesUseCaseTests()
     {
@@ -38,7 +41,7 @@ public class SendEventPublishedMessagesUseCaseTests
             ConExperience = 32,
         };
 
-        var dbEventItems = new List<EventScheduleItem>()
+        dbEventItems = new List<EventScheduleItem>()
         {
             new()
             {
@@ -71,9 +74,11 @@ public class SendEventPublishedMessagesUseCaseTests
 
         _repository = A.Fake<IEventRepository>();
         _discordService = A.Fake<IDiscordService>();
+        _systemClock = A.Fake<ISystemClock>();
 
         A.CallTo(() => _repository.FindEventAsync(_model.Id)).Returns(_dbModel);
         A.CallTo(() => _repository.GetEventScheduleItems(_model.Id)).Returns(dbEventItems);
+        A.CallTo(() => _systemClock.UtcNow).Returns(new DateTime(2025, 08, 22, 12, 0, 0));
 
         var validator = new SendEventPublishedMessagesModelValidator(_repository);
 
@@ -81,6 +86,7 @@ public class SendEventPublishedMessagesUseCaseTests
             _repository,
             validator,
             _discordService,
+            _systemClock,
             CancellationToken.None
         );
     }
@@ -517,5 +523,25 @@ public class SendEventPublishedMessagesUseCaseTests
                 )
             )
             .MustHaveHappened();
+    }
+    
+    /// <summary>
+    /// This is needed specifically because the cron job will not check if there are any scheduled
+    /// events for the day
+    /// </summary>
+    [Fact]
+    public async Task UseCase_DailyReminder_WillSkipDay_IfNoDetectedEventsForDay()
+    {
+        _model.PublishType = PublishType.DayOfReminder;
+        dbEventItems.Clear();
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() =>
+                _discordService.SendMessageToChannelAsync(
+                    A<DiscordChannel>._,
+                    A<string>._,
+                    A<Embed[]>._
+                )
+            )
+            .MustNotHaveHappened();
     }
 }

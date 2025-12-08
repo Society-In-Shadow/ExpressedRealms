@@ -69,6 +69,13 @@ internal sealed class EventRepository(
         return context.Events.ToListAsync(cancellationToken);
     }
 
+    public async Task<List<Event>> GetCurrenOrFutureEvents()
+    {
+        var now = DateOnly.FromDateTime(DateTime.UtcNow);
+        
+        return await context.Events.Where(x => x.IsPublished && x.EndDate >= now ).ToListAsync();
+    }
+
     public async Task<int> CreateEventScheduleItemAsync(EventScheduleItem eventScheduleItem)
     {
         context.EventScheduleItems.Add(eventScheduleItem);
