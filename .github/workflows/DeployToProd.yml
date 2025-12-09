@@ -129,7 +129,7 @@ jobs:
       - name: "Install Deps"
         if: ${{ needs.changes.outputs.frontend == 'true' }}
         working-directory: ./client
-        run: npm install
+        run: npm install --ignore-scripts
       - name: "Test"
         if: ${{ needs.changes.outputs.frontend == 'true' }}
         working-directory: ./client
