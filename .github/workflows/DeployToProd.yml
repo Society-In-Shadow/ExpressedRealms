@@ -40,10 +40,8 @@ jobs:
           filters: |
             frontend:
               - 'client/**'
-              - '.github/workflows/**'
             backend:
               - 'api/**'
-              - '.github/workflows/**'
 
   megalinter:
     name: MegaLinter
