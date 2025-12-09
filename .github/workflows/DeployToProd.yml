@@ -429,6 +429,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy UI to Production
     #needs: [ changes, deploy_api_to_prod ]
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
         with:
