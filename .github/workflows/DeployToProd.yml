@@ -40,8 +40,10 @@ jobs:
           filters: |
             frontend:
               - 'client/**'
+              - '.github/workflows/**'
             backend:
               - 'api/**'
+              - '.github/workflows/**'
 
   megalinter:
     name: MegaLinter
@@ -375,7 +377,7 @@ jobs:
   deploy_api_to_prod:
     name: Deploy API To Production
     runs-on: ubuntu-latest
-    needs: [changes, push_api_to_docker_hub, push_ui_to_docker_hub]
+    needs: [changes, push_api_to_docker_hub]
     permissions:
       packages: write
       contents: read
