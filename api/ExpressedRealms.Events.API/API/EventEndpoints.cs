@@ -1,4 +1,5 @@
-﻿using ExpressedRealms.Authentication;
+﻿using ExpressedRealms.Authentication.PermissionCollection;
+using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using ExpressedRealms.Events.API.API.Events.Create;
 using ExpressedRealms.Events.API.API.Events.Delete;
 using ExpressedRealms.Events.API.API.Events.Get;
@@ -8,7 +9,6 @@ using ExpressedRealms.Events.API.API.EventScheduleItem.Create;
 using ExpressedRealms.Events.API.API.EventScheduleItem.Delete;
 using ExpressedRealms.Events.API.API.EventScheduleItem.Edit;
 using ExpressedRealms.Events.API.API.EventScheduleItem.Get;
-using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
@@ -29,19 +29,19 @@ internal static class EventEndpoints
 
         endpointGroup
             .MapPost("", CreateEventEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ManageEvents);
+            .RequirePermission(Permissions.Event.Create);
 
         endpointGroup
             .MapPut("{id}", EditEventEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ManageEvents);
+            .RequirePermission(Permissions.Event.Edit);
 
         endpointGroup
             .MapDelete("{id}", DeleteEventEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ManageEvents);
+            .RequirePermission(Permissions.Event.Delete);
 
         endpointGroup
             .MapPost("{id}/publish", PublishEventEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ManageEvents);
+            .RequirePermission(Permissions.Event.Publish);
 
         endpointGroup.MapGet(
             "{eventId}/scheduleItems",
@@ -50,14 +50,14 @@ internal static class EventEndpoints
 
         endpointGroup
             .MapPost("{eventId}/scheduleItems", CreateEventScheduleItemEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ManageEvents);
+            .RequirePermission(Permissions.EventScheduleItem.Create);
 
         endpointGroup
             .MapPut("{eventId}/scheduleItems/{id}", EditEventScheduleItemEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ManageEvents);
+            .RequirePermission(Permissions.EventScheduleItem.Edit);
 
         endpointGroup
             .MapDelete("{eventId}/scheduleItems/{id}", DeleteEventScheduleItemEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ManageEvents);
+            .RequirePermission(Permissions.EventScheduleItem.Delete);;
     }
 }
