@@ -7,13 +7,12 @@ public class RolePermissionMappingConfiguration : IEntityTypeConfiguration<RoleP
 {
     public void Configure(EntityTypeBuilder<RolePermissionMapping> builder)
     {
-        builder.ToTable("role");
+        builder.ToTable("role_permission_mapping");
 
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).HasColumnName("id").IsRequired();
         builder.Property(e => e.RoleId).HasColumnName("role_id").IsRequired();
         builder.Property(e => e.PermissionId).HasColumnName("permission_id").IsRequired();
-        builder.Property(e => e.ExpireDate).HasColumnName("expire_date");
 
         builder
             .HasOne(e => e.Permission)

@@ -13,7 +13,7 @@ internal class RoleAuditTrailConfiguration
 
         builder.ConfigureAuditTrailProperties(user => user.RoleAuditTrails);
 
-        builder.Property(e => e.RoleId).HasColumnName("blessing_level_id").IsRequired();
+        builder.Property(e => e.RoleId).HasColumnName("role_id").IsRequired();
 
     }
 }

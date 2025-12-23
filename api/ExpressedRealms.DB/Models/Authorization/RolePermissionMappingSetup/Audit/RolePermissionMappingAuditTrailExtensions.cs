@@ -17,10 +17,6 @@ internal static class RolePermissionMappingAuditTrailExtensions
                 case "permission_id":
                     break;
 
-                case "expire_date":
-                    changedRecord.FriendlyName = "Expire Date";
-                    break;
-
                 default:
                     throw new MissingAuditColumnException(changedRecord.ColumnName);
             }

@@ -11,7 +11,6 @@ public class RolePermissionMapping : ISoftDelete
     public int Id { get; set; }
     public int RoleId { get; set; }
     public int PermissionId { get; set; }
-    public DateTimeOffset? ExpireDate { get; set; }
 
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
