@@ -1,4 +1,5 @@
 using ExpressedRealms.DB.Models.Authorization.PermissionResources;
+using ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup;
 
 namespace ExpressedRealms.DB.Models.Authorization.Permissions;
 
@@ -11,4 +12,5 @@ public class Permission
     public string? Description { get; set; }
 
     public virtual PermissionResource Resource { get; set; } = null!;
+    public virtual ICollection<RolePermissionMapping> RolePermissionMappings { get; set; } = new List<RolePermissionMapping>();
 }

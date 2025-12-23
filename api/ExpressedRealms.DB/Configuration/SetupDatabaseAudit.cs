@@ -3,6 +3,8 @@ using Audit.Core;
 using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels.Audit;
 using ExpressedRealms.DB.Characters.AssignedXP.AssignedXpTypeModels.Audit;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup.Audit;
+using ExpressedRealms.DB.Models.Authorization.RoleSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit;
 using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup.Audit;
@@ -52,6 +54,8 @@ public static class SetupDatabaseAudit
                             .AddEventScheduleItemAuditTrailMapping()
                             .AddAssignedXpMappingAuditTrailMapping()
                             .AddAssignedXpTypeAuditTrailMapping()
+                            .AddRoleAuditTrailMapping()
+                            .AddRolePermissionMappingAuditTrailMapping()
                             .AuditEntityAction<IAuditTable>(
                                 (evt, entry, audit) =>
                                 {

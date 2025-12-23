@@ -3,6 +3,10 @@ using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels.Audit;
 using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpTypeModels;
 using ExpressedRealms.DB.Characters.AssignedXP.AssignedXpTypeModels.Audit;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup;
+using ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup.Audit;
+using ExpressedRealms.DB.Models.Authorization.RoleSetup;
+using ExpressedRealms.DB.Models.Authorization.RoleSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup;
@@ -71,6 +75,8 @@ public static class ProcessChangedRecords
             nameof(AssignedXpType) => AssignedXpTypesAuditTrailExtensions.ProcessChangedRecords(
                 changedRecords
             ),
+            nameof(Role) => RoleAuditTrailExtensions.ProcessChangedRecords(changedRecords),
+            nameof(RolePermissionMapping) => RolePermissionMappingAuditTrailExtensions.ProcessChangedRecords(changedRecords),
             _ => throw new ArgumentException(
                 $"Table not setup in the ProcessChangedRecords class: {tableName}"
             ),
