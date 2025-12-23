@@ -9,12 +9,12 @@ internal class UserRoleMappingAuditTrailConfiguration
 {
     public void Configure(EntityTypeBuilder<UserRoleMappingAuditTrail> builder)
     {
-        builder.ToTable("role_permission_mapping_audit_trail");
+        builder.ToTable("user_role_mapping_audit_trail");
 
         builder.ConfigureAuditTrailProperties(user => user.UserRoleMappingAuditTrails);
 
-        builder.Property(e => e.UserRoleMappingId).HasColumnName("blessing_level_id").IsRequired();
-        builder.Property(e => e.RoleId).HasColumnName("role_id").IsRequired();
+        builder.Property(e => e.UserRoleMappingId).HasColumnName("user_role_mapping_id").IsRequired();
+        builder.Property(e => e.RoleId).HasColumnName("role_id").HasMaxLength(450).IsRequired();
         builder.Property(e => e.UserId).HasColumnName("user_id").IsRequired();
 
     }

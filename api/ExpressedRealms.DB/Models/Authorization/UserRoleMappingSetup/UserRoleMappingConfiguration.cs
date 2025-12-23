@@ -12,7 +12,7 @@ public class UserRoleMappingConfiguration : IEntityTypeConfiguration<UserRoleMap
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).HasColumnName("id").IsRequired();
         builder.Property(e => e.RoleId).HasColumnName("role_id").IsRequired();
-        builder.Property(e => e.UserId).HasColumnName("user_id").IsRequired();
+        builder.Property(e => e.UserId).HasMaxLength(450).HasColumnName("user_id").IsRequired();
         builder.Property(e => e.ExpireDate).HasColumnName("expire_date");
 
         builder

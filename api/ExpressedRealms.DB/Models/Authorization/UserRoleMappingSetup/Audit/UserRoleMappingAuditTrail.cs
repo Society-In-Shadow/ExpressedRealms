@@ -12,7 +12,7 @@ public class UserRoleMappingAuditTrail : IAuditTable
     public int RoleId { get; set; }
     public virtual Role Role { get; set; } = null!;
     
-    public int UserId { get; set; }
+    public string UserId { get; set; }
     public virtual User User { get; set; } = null!;
     
     public int Id { get; set; }
