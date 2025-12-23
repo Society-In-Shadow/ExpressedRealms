@@ -56,6 +56,7 @@ public static class SetupDatabaseAudit
                             .AddAssignedXpTypeAuditTrailMapping()
                             .AddRoleAuditTrailMapping()
                             .AddRolePermissionMappingAuditTrailMapping()
+                            .AddUserRoleAuditTrailMapping()
                             .AuditEntityAction<IAuditTable>(
                                 (evt, entry, audit) =>
                                 {

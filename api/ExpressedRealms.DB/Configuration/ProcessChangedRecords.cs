@@ -7,6 +7,8 @@ using ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup;
 using ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup.Audit;
 using ExpressedRealms.DB.Models.Authorization.RoleSetup;
 using ExpressedRealms.DB.Models.Authorization.RoleSetup.Audit;
+using ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup;
+using ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup;
@@ -77,6 +79,7 @@ public static class ProcessChangedRecords
             ),
             nameof(Role) => RoleAuditTrailExtensions.ProcessChangedRecords(changedRecords),
             nameof(RolePermissionMapping) => RolePermissionMappingAuditTrailExtensions.ProcessChangedRecords(changedRecords),
+            nameof(UserRoleMapping) => UserRoleMappingAuditTrailExtensions.ProcessChangedRecords(changedRecords),
             _ => throw new ArgumentException(
                 $"Table not setup in the ProcessChangedRecords class: {tableName}"
             ),
