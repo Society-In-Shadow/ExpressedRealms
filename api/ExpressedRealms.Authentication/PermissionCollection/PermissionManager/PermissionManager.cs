@@ -102,8 +102,8 @@ public class PermissionManager : IPermissionManager
         });
 
     }
-/*
-    private async Task RemoveResourceAndPermissions(IReadOnlyList<IPermissionAction> codeSidePermissions, List<PermissionResource> dbResources, List<Permission> dbPermissions)
+
+    private async Task RemoveResourceAndPermissions(IReadOnlyList<IPermissionAction> codeSidePermissions, List<Permission> dbPermissions)
     {
 
         // Find all permissions that need to be removed
@@ -115,20 +115,29 @@ public class PermissionManager : IPermissionManager
             .Where(db => !codeKeys.Contains(db.Key))
             .ToList();
 
-        var permissionIds = removedPermissions.Select(x => x.Id).ToList();
+        var deletedPermissionIds = removedPermissions.Select(x => x.Id).ToList();
 
         // Remove reference from audit mapping
+        await _context.Set<RolePermissionMappingAuditTrail>()
+            .Where(x => x.PermissionId != null && deletedPermissionIds.Contains(x.PermissionId.Value))
+            .ExecuteUpdateAsync(x => x.SetProperty(y => y.PermissionId, (int?)null));
 
         // Remove reference From Roles
+        await _context.Set<RolePermissionMapping>()
+            .Where(x => deletedPermissionIds.Contains(x.Id))
+            .ExecuteDeleteAsync();
 
         // Remove Permission(s)
         _context.Set<Permission>().RemoveRange(removedPermissions);
         await _context.SaveChangesAsync();
 
         // Remove Resource(s)
+        // Do we want a resource that doesn't have an action? - No, that should be a bug
+        await _context.Set<PermissionResource>().Where(x => x.Permissions.Count == 0)
+            .ExecuteDeleteAsync();
 
     }
-
+/*
     private async Task UpdateFeatureFlags(
         List<ReleaseFlags> codeSideFlags,
         List<Flag> hostSideFlags
@@ -179,7 +188,7 @@ public class PermissionManager : IPermissionManager
         var permissions = await _context.Set<Permission>().ToListAsync();
 
         await AddResourceAndPermissions(codeSideFlags, resources);
-        //await RemoveResourceAndPermissions(codeSideFlags, resources, permissions);
+        await RemoveResourceAndPermissions(codeSideFlags, permissions);
         //await UpdateFeatureFlags(codeSideFlags, hostSideFlags);*/
     }
 }
