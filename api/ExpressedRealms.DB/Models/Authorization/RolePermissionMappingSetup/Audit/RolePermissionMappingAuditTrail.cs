@@ -13,7 +13,7 @@ public class RolePermissionMappingAuditTrail : IAuditTable
     public int RoleId { get; set; }
     public virtual Role Role { get; set; } = null!;
     
-    public int PermissionId { get; set; }
+    public int? PermissionId { get; set; }
     public virtual Permission Permission { get; set; } = null!;
     
     public int Id { get; set; }
