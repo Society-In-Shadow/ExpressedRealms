@@ -2,6 +2,8 @@ using System.Reflection;
 using ExpressedRealms.Authentication.PermissionCollection.Support;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Models.Authorization.PermissionResources;
+using ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup;
+using ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup.Audit;
 using Microsoft.EntityFrameworkCore;
 using Permission = ExpressedRealms.DB.Models.Authorization.Permissions.Permission;
 
@@ -39,60 +41,62 @@ public class PermissionManager : IPermissionManager
 
     private async Task AddResourceAndPermissions(IReadOnlyList<IPermissionAction> codeSidePermissions, List<PermissionResource> dbResources)
     {
-
-        var permissionResources = codeSidePermissions.GroupBy(x => x.ResourceInfo.Name).ToList();
-        
-        var addedResources = permissionResources
-            .Where(g => dbResources.All(r => r.Name != g.Key))
-            .Select(g =>
-            {
-                var resourceInfo = g.First().ResourceInfo;
-
-                var permissions = g.Select(x => new Permission()
-                {
-                    Name = x.Name,
-                    Key = x.Key,
-                    Description = x.Description,
-                }).ToList();
-                
-                return new
-                {
-                    PermissionResource = new PermissionResource
-                    {
-                        Name = resourceInfo.Name,
-                        Description = resourceInfo.Description
-                    },
-                    Permissions = permissions
-                };
-            })
-            .ToList();
-
         var strategy = _context.Database.CreateExecutionStrategy();
-
         await strategy.ExecuteAsync(async () =>
         {
-            await using var tx =
-                await _context.Database.BeginTransactionAsync();
+            await using var tx = await _context.Database.BeginTransactionAsync();
+            
+            
+            // Just do a strict comparison with resources
+            var codeResources = codeSidePermissions.GroupBy(x => x.ResourceInfo.Name).ToList();
+            
+            var existingResourceNames = dbResources
+                .Select(r => r.Name)
+                .ToHashSet(StringComparer.Ordinal);
+
+            var addedResources = codeResources
+                .Where(g => !existingResourceNames.Contains(g.Key))
+                .Select(g =>
+                {
+                    var info = g.First().ResourceInfo;
+
+                    return new PermissionResource
+                    {
+                        Name = info.Name,
+                        Description = info.Description
+                    };
+                })
+                .ToList();
             
             if (addedResources.Count != 0)
             {
-                _context.Set<PermissionResource>().AddRange(addedResources.Select(x => x.PermissionResource));
+                _context.Set<PermissionResource>().AddRange(addedResources);
+                await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
-
-            var addedPermissions = addedResources
-                .SelectMany(g => g.Permissions.Select(x => new Permission()
+            
+            
+            var resourceInfo = dbResources
+                .Concat(addedResources)
+                .ToDictionary(r => r.Name, r => r.Id, StringComparer.Ordinal);
+            
+            var dbPermissions = await _context.Set<Permission>().Select(x => x.Key).ToHashSetAsync();
+            
+            var missingPermissions = codeSidePermissions
+                .Where(x => !dbPermissions.Contains(x.Key))
+                .Select(x => new Permission()
                 {
+                    Key = x.Key,
                     Name = x.Name,
                     Description = x.Description,
-                    Key = x.Key,
-                    PermissionResourceId = g.PermissionResource.Id
-                }).ToList()).ToList();
+                    PermissionResourceId = resourceInfo[x.ResourceInfo.Name]
+                })
+                .ToList();
 
-            _context.Set<Permission>().AddRange(addedPermissions);
-
-            await _context.SaveChangesAsync();
+            if (missingPermissions.Count != 0)
+            {
+                _context.Set<Permission>().AddRange(missingPermissions);
+                await _context.SaveChangesAsync();
+            }
 
             await tx.CommitAsync();
         });
