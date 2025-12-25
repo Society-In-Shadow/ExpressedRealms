@@ -5,6 +5,7 @@ using ExpressedRealms.Admin.UseCases.Configuration;
 using ExpressedRealms.Authentication.AzureKeyVault;
 using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
 using ExpressedRealms.Authentication.Configuration;
+using ExpressedRealms.Authentication.PermissionCollection.PermissionManager;
 using ExpressedRealms.Blessings.API.Configuration;
 using ExpressedRealms.Blessings.UseCases.Configuration;
 using ExpressedRealms.Characters.API.Configuration;
@@ -201,14 +202,6 @@ try
         }
     );
 
-    Log.Information("Updating Feature Flags");
-    using (var scope = app.Services.CreateScope())
-    {
-        var featureToggleManager =
-            scope.ServiceProvider.GetRequiredService<IFeatureToggleManager>();
-        await featureToggleManager.UpdateFeatureToggles();
-    }
-
     // Migrate latest database changes during startup
     Log.Information("Checking if Migrations Need to Be Run");
     using (var scope = app.Services.CreateScope())
@@ -227,6 +220,23 @@ try
         }
     }
 
+    // Make sure that table changes are applied before updating flags and permissions
+    Log.Information("Updating Feature Flags");
+    using (var scope = app.Services.CreateScope())
+    {
+        var featureToggleManager =
+            scope.ServiceProvider.GetRequiredService<IFeatureToggleManager>();
+        await featureToggleManager.UpdateFeatureToggles();
+    }
+    
+    Log.Information("Updating Permissions");
+    using (var scope = app.Services.CreateScope())
+    {
+        var permissionManager =
+            scope.ServiceProvider.GetRequiredService<IPermissionManager>();
+        await permissionManager.UpdatePermissions();
+    }
+    
     if (app.Environment.IsProduction())
     {
         Log.Information("Setting Up Forwarded Headers");

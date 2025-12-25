@@ -1,5 +1,6 @@
 using ExpressedRealms.Authentication.AzureKeyVault;
 using ExpressedRealms.Authentication.PermissionCollection.Configuration;
+using ExpressedRealms.Authentication.PermissionCollection.PermissionManager;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,6 +12,7 @@ public static class AuthenticationInjections
     {
         services.AddSingleton<IKeyVaultManager, KeyVaultManager>();
         services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
+        services.AddScoped<IPermissionManager, PermissionManager>();
         return services;
     }
 }
