@@ -13,7 +13,10 @@ public partial class Permissions
         public static readonly Permission View = new(ResourceInfo, nameof(View));
         public static readonly Permission Create = new(ResourceInfo, nameof(Create));
         public static readonly Permission Delete = new(ResourceInfo, nameof(Delete));
-        public static readonly Permission Publish = new(ResourceInfo, nameof(Publish));
+        public static readonly Permission Publish = new(ResourceInfo, nameof(Publish))
+        {
+            Description = "Will publish the event to the public site, create an event in Discord, and publish a messages to the announcements channel."
+        };
 
     }
 }

@@ -4,5 +4,5 @@ public record Permission(ResourceInfo ResourceInfo, string Action) : IPermission
 {
     public string Name { get; set; } = Action;
     public string? Description { get; set; }
-    public string Key => $"{Action.ToLowerInvariant()}.{ResourceInfo.Name.ToLowerInvariant()}";
+    public string Key => $"{ResourceInfo.Name.ToLowerInvariant()}.{Action.ToLowerInvariant()}";
 };

@@ -46,8 +46,6 @@ public class PermissionManager : IPermissionManager
         {
             await using var tx = await _context.Database.BeginTransactionAsync();
             
-            
-            // Just do a strict comparison with resources
             var codeResources = codeSidePermissions.GroupBy(x => x.ResourceInfo.Name).ToList();
             
             var existingResourceNames = dbResources
@@ -73,7 +71,6 @@ public class PermissionManager : IPermissionManager
                 _context.Set<PermissionResource>().AddRange(addedResources);
                 await _context.SaveChangesAsync();
             }
-            
             
             var resourceInfo = dbResources
                 .Concat(addedResources)
@@ -137,48 +134,34 @@ public class PermissionManager : IPermissionManager
             .ExecuteDeleteAsync();
 
     }
-/*
-    private async Task UpdateFeatureFlags(
-        List<ReleaseFlags> codeSideFlags,
-        List<Flag> hostSideFlags
-    )
+
+    private async Task UpdateResourceAndPermissions(IReadOnlyList<IPermissionAction> codeSidePermissions)
     {
-        var matchingFlags = hostSideFlags.Where(x => codeSideFlags.Any(y => y.Value == x.Key));
-
-        foreach (var matchingFlag in matchingFlags)
+        var dbPermissions = await _context.Set<Permission>().ToListAsync();
+        foreach (var dbPermission in dbPermissions)
         {
-            var codeSideFlag = codeSideFlags.First(x => x.Value == matchingFlag.Key);
-
-            if (
-                codeSideFlag.Name == matchingFlag.Name
-                && codeSideFlag.Description == matchingFlag.Description
-            )
-                continue;
-
-            matchingFlag.Name = codeSideFlag.Name;
-            matchingFlag.Description = codeSideFlag.Description;
-
-            await _fliptRestClient.ApiV1NamespacesFlagsPutAsync(
-                "default",
-                matchingFlag.Key,
-                new UpdateFlagRequest()
-                {
-                    Name = matchingFlag.Name,
-                    Description = matchingFlag.Description,
-                    Key = matchingFlag.Key,
-                    Enabled = matchingFlag.Enabled,
-                    AdditionalProperties = matchingFlag.AdditionalProperties,
-                    DefaultVariantId = matchingFlag.DefaultVariant?.Id,
-                    Metadata = matchingFlag.Metadata,
-                    NamespaceKey = matchingFlag.NamespaceKey,
-                }
-            );
+            var codeSidePermission = codeSidePermissions.First(x => x.Key == dbPermission.Key);
+            dbPermission.Description = codeSidePermission.Description;
         }
-    }*/
+        
+        var resources = codeSidePermissions
+            .GroupBy(x => x.ResourceInfo.Name)
+            .Select( x => x.First().ResourceInfo)
+            .ToList();
+        
+        var dbPermissionResource = await _context.Set<PermissionResource>().ToListAsync();
+        foreach (var resource in dbPermissionResource)
+        {
+            var codeSidePermission = resources.First(x => x.Name == resource.Name);
+            resource.Description = codeSidePermission.Description;
+        }
+        
+        await _context.SaveChangesAsync();
+    }
 
     /// <summary>
-    /// This is in here to make sure that the feature flag instance reflects what the codebase needs.
-    /// It will automatically add and remove feature flags, in addition, it will make sure that the name and description
+    /// This is in here to make sure that the permissions reflects what the codebase needs.
+    /// It will automatically add and remove permissions, in addition, it will make sure that the description
     /// stay consistent with the codebase.
     /// </summary>
     public async Task UpdatePermissions()
@@ -189,6 +172,6 @@ public class PermissionManager : IPermissionManager
 
         await AddResourceAndPermissions(codeSideFlags, resources);
         await RemoveResourceAndPermissions(codeSideFlags, permissions);
-        //await UpdateFeatureFlags(codeSideFlags, hostSideFlags);*/
+        await UpdateResourceAndPermissions(codeSideFlags);
     }
 }
