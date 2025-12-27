@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpressedRealms.DB.Migrations
 {
     /// <inheritdoc />
-    public partial class AddPermissionRoleTables : Migration
+    public partial class AddPermissionAndRoleTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,8 +16,7 @@ namespace ExpressedRealms.DB.Migrations
                 name: "permission_resource",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
                     description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true)
                 },
@@ -46,12 +45,11 @@ namespace ExpressedRealms.DB.Migrations
                 name: "permission",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    permission_resource_id = table.Column<int>(type: "integer", nullable: false),
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    permission_resource_id = table.Column<Guid>(type: "uuid", nullable: false),
                     key = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
                     name = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false)
+                    description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -129,7 +127,7 @@ namespace ExpressedRealms.DB.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     role_id = table.Column<int>(type: "integer", nullable: false),
-                    permission_id = table.Column<int>(type: "integer", nullable: false),
+                    permission_id = table.Column<Guid>(type: "uuid", nullable: false),
                     is_deleted = table.Column<bool>(type: "boolean", nullable: false),
                     deleted_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true)
                 },
@@ -201,7 +199,7 @@ namespace ExpressedRealms.DB.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     role_permission_mapping_id = table.Column<int>(type: "integer", nullable: false),
                     role_id = table.Column<int>(type: "integer", nullable: false),
-                    permission_id = table.Column<int>(type: "integer", nullable: false),
+                    permission_id = table.Column<Guid>(type: "uuid", nullable: true),
                     action = table.Column<string>(type: "text", nullable: false),
                     timestamp = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     actor_user_id = table.Column<string>(type: "text", nullable: false),
@@ -220,8 +218,7 @@ namespace ExpressedRealms.DB.Migrations
                         name: "FK_role_permission_mapping_audit_trail_permission_permission_id",
                         column: x => x.permission_id,
                         principalTable: "permission",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_role_permission_mapping_audit_trail_role_permission_mapping~",
                         column: x => x.role_permission_mapping_id,

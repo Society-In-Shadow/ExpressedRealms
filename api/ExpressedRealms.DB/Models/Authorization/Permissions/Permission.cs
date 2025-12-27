@@ -5,8 +5,8 @@ namespace ExpressedRealms.DB.Models.Authorization.Permissions;
 
 public class Permission
 {
-    public int Id { get; set; }
-    public int PermissionResourceId { get; set; }
+    public Guid Id { get; set; }
+    public Guid PermissionResourceId { get; set; }
     public required string Key { get; set; }
     public required string Name { get; set; }
     public string? Description { get; set; }

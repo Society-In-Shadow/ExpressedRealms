@@ -437,12 +437,10 @@ namespace ExpressedRealms.DB.Migrations
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.PermissionResources.PermissionResource", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .HasMaxLength(2000)
@@ -462,12 +460,10 @@ namespace ExpressedRealms.DB.Migrations
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.Permissions.Permission", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .HasMaxLength(2000)
@@ -486,8 +482,8 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("character varying(500)")
                         .HasColumnName("name");
 
-                    b.Property<int>("PermissionResourceId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("PermissionResourceId")
+                        .HasColumnType("uuid")
                         .HasColumnName("permission_resource_id");
 
                     b.HasKey("Id");
@@ -521,8 +517,8 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("text")
                         .HasColumnName("changed_properties");
 
-                    b.Property<int?>("PermissionId")
-                        .HasColumnType("integer")
+                    b.Property<Guid?>("PermissionId")
+                        .HasColumnType("uuid")
                         .HasColumnName("permission_id");
 
                     b.Property<int>("RoleId")
@@ -567,8 +563,8 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_deleted");
 
-                    b.Property<int>("PermissionId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("PermissionId")
+                        .HasColumnType("uuid")
                         .HasColumnName("permission_id");
 
                     b.Property<int>("RoleId")
