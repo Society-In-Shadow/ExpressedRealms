@@ -2,9 +2,9 @@ namespace ExpressedRealms.Authentication.PermissionCollection.Support;
 
 public interface IPermissionAction
 {
+    Guid Id { get; init; }
     ResourceInfo ResourceInfo { get; init; }
-    string Action { init; }
-    string Name { get; set; }
-    string? Description { get; set; }
+    string Name { get; init; }
+    string? Description { get; init; }
     string Key { get; }
 }
