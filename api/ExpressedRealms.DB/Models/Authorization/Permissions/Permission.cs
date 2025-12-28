@@ -12,5 +12,6 @@ public class Permission
     public string? Description { get; set; }
 
     public virtual PermissionResource Resource { get; set; } = null!;
-    public virtual ICollection<RolePermissionMapping> RolePermissionMappings { get; set; } = new List<RolePermissionMapping>();
+    public virtual ICollection<RolePermissionMapping> RolePermissionMappings { get; set; } =
+        new List<RolePermissionMapping>();
 }

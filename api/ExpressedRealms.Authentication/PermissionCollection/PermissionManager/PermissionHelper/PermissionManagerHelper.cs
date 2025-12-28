@@ -9,15 +9,14 @@ public static class PermissionManagerHelper
 {
     private static IEnumerable<IPermissionAction> GetPermissionFields(Type type)
     {
-        return type
-            .GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
-            .Where(f =>
-                typeof(IPermissionAction)
-                    .IsAssignableFrom(f.FieldType))
+        return type.GetFields(
+                BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy
+            )
+            .Where(f => typeof(IPermissionAction).IsAssignableFrom(f.FieldType))
             .Select(f => f.GetValue(null))
             .OfType<IPermissionAction>();
     }
-    
+
     public static IReadOnlyList<PermissionResource> GetCodeSidePermissions()
     {
         var assemblies = AppDomain.CurrentDomain.GetAssemblies();
@@ -27,20 +26,23 @@ public static class PermissionManagerHelper
             .SelectMany(GetPermissionFields)
             .ToList();
 
-        return permissions.GroupBy(x => x.ResourceInfo)
+        return permissions
+            .GroupBy(x => x.ResourceInfo)
             .Select(x => new PermissionResource()
-        {
-            Name = x.Key.Name,
-            Id = x.Key.Id,
-            Description = x.Key.Description,
-            Permissions = x.Select(x => new Permission()
             {
-                Id = x.Id,
-                Name = x.Name,
-                Key = x.Key,
-                Description = x.Description,
-                PermissionResourceId = x.ResourceInfo.Id
-            }).ToList()
-        }).ToList();
+                Name = x.Key.Name,
+                Id = x.Key.Id,
+                Description = x.Key.Description,
+                Permissions = x.Select(x => new Permission()
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Key = x.Key,
+                        Description = x.Description,
+                        PermissionResourceId = x.ResourceInfo.Id,
+                    })
+                    .ToList(),
+            })
+            .ToList();
     }
 }

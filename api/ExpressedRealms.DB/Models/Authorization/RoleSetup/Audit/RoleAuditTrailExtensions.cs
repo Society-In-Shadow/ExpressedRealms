@@ -31,9 +31,7 @@ internal static class RoleAuditTrailExtensions
         return changedRecordsToReturn;
     }
 
-    public static IAuditEntityMapping AddRoleAuditTrailMapping(
-        this IAuditEntityMapping mapping
-    )
+    public static IAuditEntityMapping AddRoleAuditTrailMapping(this IAuditEntityMapping mapping)
     {
         return mapping.Map<Role, RoleAuditTrail>(
             (blessing, audit) =>

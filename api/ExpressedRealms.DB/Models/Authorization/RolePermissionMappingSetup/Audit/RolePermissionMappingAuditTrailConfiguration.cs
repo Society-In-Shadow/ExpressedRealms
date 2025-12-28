@@ -13,9 +13,11 @@ internal class RolePermissionMappingAuditTrailConfiguration
 
         builder.ConfigureAuditTrailProperties(user => user.RolePermissionMappingAuditTrails);
 
-        builder.Property(e => e.RolePermissionMappingId).HasColumnName("role_permission_mapping_id").IsRequired();
+        builder
+            .Property(e => e.RolePermissionMappingId)
+            .HasColumnName("role_permission_mapping_id")
+            .IsRequired();
         builder.Property(e => e.RoleId).HasColumnName("role_id").IsRequired();
         builder.Property(e => e.PermissionId).HasColumnName("permission_id");
-
     }
 }

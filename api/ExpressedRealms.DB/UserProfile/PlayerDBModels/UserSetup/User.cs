@@ -50,10 +50,13 @@ public class User : IdentityUser
         null!;
     public virtual List<AssignedXpTypeAuditTrail> AssignedXpTypeAuditTrails { get; set; } = null!;
     public virtual List<AssignedXpMapping> AssignedXpMappings { get; set; } = null!;
-    public virtual ICollection<RoleAuditTrail> RoleAuditTrails { get; set; } = new List<RoleAuditTrail>();
+    public virtual ICollection<RoleAuditTrail> RoleAuditTrails { get; set; } =
+        new List<RoleAuditTrail>();
 
     public virtual ICollection<RolePermissionMappingAuditTrail> RolePermissionMappingAuditTrails { get; set; } =
         new List<RolePermissionMappingAuditTrail>();
-    public virtual ICollection<UserRoleMapping> UserRoleMappings { get; set; } = new List<UserRoleMapping>();
-    public virtual ICollection<UserRoleMappingAuditTrail> UserRoleMappingAuditTrails { get; set; } = new List<UserRoleMappingAuditTrail>();
+    public virtual ICollection<UserRoleMapping> UserRoleMappings { get; set; } =
+        new List<UserRoleMapping>();
+    public virtual ICollection<UserRoleMappingAuditTrail> UserRoleMappingAuditTrails { get; set; } =
+        new List<UserRoleMappingAuditTrail>();
 }

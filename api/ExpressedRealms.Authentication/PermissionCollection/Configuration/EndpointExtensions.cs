@@ -7,7 +7,8 @@ public static class EndpointExtensions
 {
     public static TBuilder RequirePermission<TBuilder>(
         this TBuilder builder,
-        IPermissionAction permission)
+        IPermissionAction permission
+    )
         where TBuilder : IEndpointConventionBuilder
     {
         return builder.RequireAuthorization(policy =>

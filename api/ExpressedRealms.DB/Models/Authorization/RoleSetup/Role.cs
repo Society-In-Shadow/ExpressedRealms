@@ -14,7 +14,9 @@ public class Role : ISoftDelete
 
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
-    
-    public virtual ICollection<RolePermissionMapping> RolePermissionMappings { get; set; } = new List<RolePermissionMapping>();
-    public virtual ICollection<UserRoleMapping> UserRoleMappings { get; set; } = new List<UserRoleMapping>();
+
+    public virtual ICollection<RolePermissionMapping> RolePermissionMappings { get; set; } =
+        new List<RolePermissionMapping>();
+    public virtual ICollection<UserRoleMapping> UserRoleMappings { get; set; } =
+        new List<UserRoleMapping>();
 }

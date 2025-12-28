@@ -4,8 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ExpressedRealms.DB.Models.Authorization.RoleSetup.Audit;
 
-internal class RoleAuditTrailConfiguration
-    : IEntityTypeConfiguration<RoleAuditTrail>
+internal class RoleAuditTrailConfiguration : IEntityTypeConfiguration<RoleAuditTrail>
 {
     public void Configure(EntityTypeBuilder<RoleAuditTrail> builder)
     {
@@ -14,6 +13,5 @@ internal class RoleAuditTrailConfiguration
         builder.ConfigureAuditTrailProperties(user => user.RoleAuditTrails);
 
         builder.Property(e => e.RoleId).HasColumnName("role_id").IsRequired();
-
     }
 }

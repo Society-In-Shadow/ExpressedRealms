@@ -13,9 +13,11 @@ internal class UserRoleMappingAuditTrailConfiguration
 
         builder.ConfigureAuditTrailProperties(user => user.UserRoleMappingAuditTrails);
 
-        builder.Property(e => e.UserRoleMappingId).HasColumnName("user_role_mapping_id").IsRequired();
+        builder
+            .Property(e => e.UserRoleMappingId)
+            .HasColumnName("user_role_mapping_id")
+            .IsRequired();
         builder.Property(e => e.RoleId).HasColumnName("role_id").HasMaxLength(450).IsRequired();
         builder.Property(e => e.UserId).HasColumnName("user_id").IsRequired();
-
     }
 }

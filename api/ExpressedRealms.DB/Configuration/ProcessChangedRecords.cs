@@ -78,8 +78,11 @@ public static class ProcessChangedRecords
                 changedRecords
             ),
             nameof(Role) => RoleAuditTrailExtensions.ProcessChangedRecords(changedRecords),
-            nameof(RolePermissionMapping) => RolePermissionMappingAuditTrailExtensions.ProcessChangedRecords(changedRecords),
-            nameof(UserRoleMapping) => UserRoleMappingAuditTrailExtensions.ProcessChangedRecords(changedRecords),
+            nameof(RolePermissionMapping) =>
+                RolePermissionMappingAuditTrailExtensions.ProcessChangedRecords(changedRecords),
+            nameof(UserRoleMapping) => UserRoleMappingAuditTrailExtensions.ProcessChangedRecords(
+                changedRecords
+            ),
             _ => throw new ArgumentException(
                 $"Table not setup in the ProcessChangedRecords class: {tableName}"
             ),

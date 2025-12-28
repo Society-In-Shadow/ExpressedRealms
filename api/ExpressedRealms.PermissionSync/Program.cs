@@ -13,7 +13,7 @@ builder.AppendLine("export const Permissions = {");
 foreach (var resource in resources)
 {
     builder.AppendLine($"  {resource.Name}: {{");
-    
+
     foreach (var permission in resource.Permissions)
     {
         builder.AppendLine($"    {permission.Name}: \'{permission.Key}\',");

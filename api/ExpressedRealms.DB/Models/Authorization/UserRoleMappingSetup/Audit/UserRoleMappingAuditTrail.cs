@@ -8,13 +8,13 @@ public class UserRoleMappingAuditTrail : IAuditTable
 {
     public int UserRoleMappingId { get; set; }
     public virtual UserRoleMapping UserRoleMapping { get; set; } = null!;
-    
+
     public int RoleId { get; set; }
     public virtual Role Role { get; set; } = null!;
-    
+
     public string UserId { get; set; }
     public virtual User User { get; set; } = null!;
-    
+
     public int Id { get; set; }
     public required string Action { get; set; }
     public DateTime Timestamp { get; set; }

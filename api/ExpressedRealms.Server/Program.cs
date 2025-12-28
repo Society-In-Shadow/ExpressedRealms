@@ -228,15 +228,14 @@ try
             scope.ServiceProvider.GetRequiredService<IFeatureToggleManager>();
         await featureToggleManager.UpdateFeatureToggles();
     }
-    
+
     Log.Information("Updating Permissions");
     using (var scope = app.Services.CreateScope())
     {
-        var permissionManager =
-            scope.ServiceProvider.GetRequiredService<IPermissionManager>();
+        var permissionManager = scope.ServiceProvider.GetRequiredService<IPermissionManager>();
         await permissionManager.UpdatePermissions();
     }
-    
+
     if (app.Environment.IsProduction())
     {
         Log.Information("Setting Up Forwarded Headers");
