@@ -5,6 +5,13 @@
 
 CONTAINER_NAME="webapi"
 
+echo "🗘 Syncing Permissions..."
+
+dotnet publish ./ExpressedRealms.PermissionSync -o ./ExpressedRealms.PermissionSync/bin/output -v q
+./ExpressedRealms.PermissionSync/bin/output/ExpressedRealms.PermissionSync > ./../client/src/types/Permissions.ts
+
+echo "✅ Synced Permissions!"
+
 echo "🔨 Building container: $CONTAINER_NAME"
 
 if ! podman compose build "$CONTAINER_NAME"; then

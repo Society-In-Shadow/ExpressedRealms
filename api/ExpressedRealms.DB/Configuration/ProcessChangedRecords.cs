@@ -3,6 +3,12 @@ using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels.Audit;
 using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpTypeModels;
 using ExpressedRealms.DB.Characters.AssignedXP.AssignedXpTypeModels.Audit;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup;
+using ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup.Audit;
+using ExpressedRealms.DB.Models.Authorization.RoleSetup;
+using ExpressedRealms.DB.Models.Authorization.RoleSetup.Audit;
+using ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup;
+using ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup;
@@ -69,6 +75,12 @@ public static class ProcessChangedRecords
             nameof(AssignedXpMapping) =>
                 AssignedXpMappingsAuditTrailExtensions.ProcessChangedRecords(changedRecords),
             nameof(AssignedXpType) => AssignedXpTypesAuditTrailExtensions.ProcessChangedRecords(
+                changedRecords
+            ),
+            nameof(Role) => RoleAuditTrailExtensions.ProcessChangedRecords(changedRecords),
+            nameof(RolePermissionMapping) =>
+                RolePermissionMappingAuditTrailExtensions.ProcessChangedRecords(changedRecords),
+            nameof(UserRoleMapping) => UserRoleMappingAuditTrailExtensions.ProcessChangedRecords(
                 changedRecords
             ),
             _ => throw new ArgumentException(
