@@ -1,6 +1,6 @@
 using System.Net.Mail;
-using ExpressedRealms.Authentication.AzureKeyVault;
-using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
+using ExpressedRealms.Shared.AzureKeyVault;
+using ExpressedRealms.Shared.AzureKeyVault.Secrets;
 using Microsoft.Extensions.Logging;
 
 namespace ExpressedRealms.Email.EmailClientAdapter;

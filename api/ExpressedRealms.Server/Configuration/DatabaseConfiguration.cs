@@ -1,8 +1,8 @@
 using Azure.Core;
 using Azure.Identity;
-using ExpressedRealms.Authentication.AzureKeyVault;
-using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
 using ExpressedRealms.DB;
+using ExpressedRealms.Shared.AzureKeyVault;
+using ExpressedRealms.Shared.AzureKeyVault.Secrets;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 

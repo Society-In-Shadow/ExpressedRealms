@@ -1,9 +1,9 @@
 using Dapr.Client;
-using ExpressedRealms.Authentication.AzureKeyVault.Secrets.Config;
+using ExpressedRealms.Shared.AzureKeyVault.Secrets.Config;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Hosting;
 
-namespace ExpressedRealms.Authentication.AzureKeyVault;
+namespace ExpressedRealms.Shared.AzureKeyVault;
 
 internal sealed class KeyVaultManager : IKeyVaultManager
 {
