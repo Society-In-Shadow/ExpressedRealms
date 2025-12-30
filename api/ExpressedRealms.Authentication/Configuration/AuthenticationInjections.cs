@@ -9,7 +9,7 @@ public static class AuthenticationInjections
 {
     public static IServiceCollection AddAuthenticationInjections(this IServiceCollection services)
     {
-        services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
+        services.AddScoped<IAuthorizationHandler, PermissionHandler>();
         services.AddScoped<IPermissionManager, PermissionManager>();
         return services;
     }
