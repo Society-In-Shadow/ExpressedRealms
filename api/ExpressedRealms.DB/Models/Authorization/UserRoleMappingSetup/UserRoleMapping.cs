@@ -10,7 +10,7 @@ public class UserRoleMapping : ISoftDelete
 {
     public int Id { get; set; }
     public int RoleId { get; set; }
-    public string UserId { get; set; }
+    public required string UserId { get; set; }
     public DateTimeOffset? ExpireDate { get; set; }
 
     public bool IsDeleted { get; set; }

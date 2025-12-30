@@ -2,7 +2,7 @@ using ExpressedRealms.Authentication.PermissionCollection.Support;
 
 namespace ExpressedRealms.Authentication.PermissionCollection;
 
-public partial class Permissions
+public static partial class Permissions
 {
     public static class Event
     {
