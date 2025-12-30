@@ -3,8 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ExpressedRealms.DB.Models.Authorization.Permissions;
 
-public class PermissionConfiguration
-    : IEntityTypeConfiguration<Permission>
+public class PermissionConfiguration : IEntityTypeConfiguration<Permission>
 {
     public void Configure(EntityTypeBuilder<Permission> builder)
     {
@@ -12,7 +11,10 @@ public class PermissionConfiguration
 
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).HasColumnName("id").IsRequired();
-        builder.Property(e => e.PermissionResourceId).HasColumnName("permission_resource_id").IsRequired();
+        builder
+            .Property(e => e.PermissionResourceId)
+            .HasColumnName("permission_resource_id")
+            .IsRequired();
         builder.Property(e => e.Key).HasColumnName("key").IsRequired().HasMaxLength(500);
         builder.Property(e => e.Name).HasColumnName("name").IsRequired().HasMaxLength(500);
         builder.Property(e => e.Description).HasColumnName("description").HasMaxLength(2000);

@@ -4,14 +4,15 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ExpressedRealms.Authentication.PermissionCollection.Configuration;
 
-public class PermissionHandler(IFeatureToggleClient featureToggleClient) : AuthorizationHandler<PermissionRequirement>
+public class PermissionHandler(IFeatureToggleClient featureToggleClient)
+    : AuthorizationHandler<PermissionRequirement>
 {
     protected override async Task HandleRequirementAsync(
         AuthorizationHandlerContext context,
         PermissionRequirement requirement
     )
     {
-        if (! await featureToggleClient.HasFeatureFlag(ReleaseFlags.UseNewPermissionSystem))
+        if (!await featureToggleClient.HasFeatureFlag(ReleaseFlags.UseNewPermissionSystem))
         {
             context.Succeed(requirement);
             return;
