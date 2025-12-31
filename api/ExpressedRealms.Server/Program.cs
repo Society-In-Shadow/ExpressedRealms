@@ -60,11 +60,10 @@ try
 
     Log.Information("Setup Azure Key Vault");
     builder.Services.AddAuthenticationInjections();
+    
+    EarlyKeyVaultManager keyVaultManager = new EarlyKeyVaultManager();
 
-    EarlyKeyVaultManager keyVaultManager = new EarlyKeyVaultManager(
-        builder.Environment.IsProduction()
-    );
-
+    builder.WebHost.UseUrls("http://+:8080", "https://+:8443");
     Log.Information("Setup Application Insights");
     await builder.SetupApplicationInsights(keyVaultManager);
 

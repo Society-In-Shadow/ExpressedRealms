@@ -1,0 +1,17 @@
+Install Dapr
+
+https://docs.dapr.io/getting-started/install-dapr-cli/
+
+make it work with podman
+
+https://docs.dapr.io/operations/hosting/self-hosted/self-hosted-with-podman/
+
+dapr init --container-runtime podman
+
+podman run --network="host" --mount type=bind,source="$(pwd)"/components,target=/components daprio/daprd:edge ./daprd -app-id <my-app-id> -app-port <my-app-port>
+
+
+secrets.json
+
+Values need to be explicetly set in this file, there isn't a way to dynamically grab the values from the env file
+

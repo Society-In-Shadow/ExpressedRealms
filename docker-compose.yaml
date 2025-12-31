@@ -62,18 +62,14 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_Kestrel__Certificates__Default__KeyPath=/https/key.pem
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/cert.pem
-      - POSTGRES-CONNECTION-STRING=Host=expressed-realms-db;Port=5432;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
-      - AZURE-STORAGEBLOB-RESOURCEENDPOINT=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1; # gitleaks:allow
-      - FRONT-END-BASE-URL=http://myapp:3001
-      - SMTP-SERVER=mailpit:1025
-      - NO-REPLY-EMAIL=no-reply@societyinshadows.org
-      - CLIENT-COOKIE-DOMAIN=.localhost
-      - FEATURE-FLAG-URL=http://flipt:8080/
-      - DISCORD-BOT-TOKEN=${DISCORD_BOT_TOKEN}
-      - APPLICATION-INSIGHTS-CONNECTION-STRING=${APPLICATION_INSIGHTS_CONNECTION_STRING}
+      - DAPR_HTTP_PORT=3500
+      - DAPR_GRPC_PORT=50001
+      - DAPR_APP_ID=webapi
+      - DAPR_GRPC_ENDPOINT=http://dapr-sidecar:50001
+      - DOTNET_URLS=http://+:8080 # optional but ensures Kestrel listens on 8080
     ports:
-      - '5000:8080'
-      - '5001:8443'
+      - "5000:8080"
+      - "5001:8443"
     volumes:
       - ${USERPROFILE}/.aspnet/https:/https:ro
     networks:
@@ -87,6 +83,21 @@ services:
         condition: service_started
       mailpit:
         condition: service_started
+      dapr-sidecar:
+        condition: service_started
+        
+  dapr-sidecar:
+    image: "daprio/daprd:edge"
+    command: [ "./daprd", "-app-id", "webapi", "-app-port", "8080", "-resources-path", "/components" ]
+    env_file:
+      - .env
+    volumes:
+      - ./dapr/components:/components
+    ports:
+      - "3500:3500"
+      - "50001:50001"
+    networks:
+      - expressed-realms-network
 
   postgres:
     container_name: expressed-realms-db

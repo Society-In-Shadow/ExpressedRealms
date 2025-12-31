@@ -407,3 +407,6 @@ megalinter-reports/
 
 # Cypress test reports for github
 client/cypress/results
+
+# Dapr Secret Store
+dapr/components/secrets.json
