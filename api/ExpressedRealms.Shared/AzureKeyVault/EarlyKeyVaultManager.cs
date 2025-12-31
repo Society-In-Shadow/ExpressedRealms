@@ -5,7 +5,7 @@ namespace ExpressedRealms.Shared.AzureKeyVault;
 
 public class EarlyKeyVaultManager
 {
-    private readonly DaprClient _secretClient = new DaprClientBuilder().UseGrpcEndpoint("http://dapr-sidecar:50001").Build();
+    private readonly DaprClient _secretClient = new DaprClientBuilder().Build();
     private const string DaprSecretStoreName = "azure-key-vault";
 
     public async Task<string> GetSecret(IKeyVaultSecret secretName)

@@ -1,7 +1,6 @@
 using Dapr.Client;
 using ExpressedRealms.Shared.AzureKeyVault.Secrets.Config;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Hosting;
 
 namespace ExpressedRealms.Shared.AzureKeyVault;
 
@@ -10,9 +9,9 @@ public sealed class KeyVaultManager : IKeyVaultManager
     private readonly DaprClient? _secretClient;
     private readonly IMemoryCache _memoryCache;
 
-    public KeyVaultManager(IMemoryCache memoryCache, IHostEnvironment environment)
+    public KeyVaultManager(IMemoryCache memoryCache)
     {
-        _secretClient = new DaprClientBuilder().UseGrpcEndpoint("http://dapr-sidecar:50001").Build();
+        _secretClient = new DaprClientBuilder().Build();
         _memoryCache = memoryCache;
     }
 

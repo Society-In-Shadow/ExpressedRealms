@@ -63,7 +63,6 @@ try
     
     EarlyKeyVaultManager keyVaultManager = new EarlyKeyVaultManager();
 
-    builder.WebHost.UseUrls("http://+:8080", "https://+:8443");
     Log.Information("Setup Application Insights");
     await builder.SetupApplicationInsights(keyVaultManager);
 
