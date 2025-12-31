@@ -40,15 +40,15 @@ endpointGroup
 ```
 
 ### Permission Syncing
-The C# objects that inherit from IPermission are the source of truth for the system.  On app startup, it will grab all 
+The C# objects that inherit from IPermission are the source of truth for the system.  On app startup, it will grab all
 permissions code side and compare them to what's in the database.  If there are differences, it will update accordingly.
 
 #### Database Update
- - On creation / update - it will simply add / update the corresponding record
- - On Deletion / Removal
-   - It will remove it from any policies
-   - It will remove the action(s)
-   - If there are no actions, it will remove the resource.
+- On creation / update - it will simply add / update the corresponding record
+- On Deletion / Removal
+  - It will remove it from any policies
+  - It will remove the action(s)
+  - If there are no actions, it will remove the resource.
 
 #### UI / TS Update
 

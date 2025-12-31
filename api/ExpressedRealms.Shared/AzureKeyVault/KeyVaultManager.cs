@@ -23,31 +23,29 @@ internal sealed class KeyVaultManager : IKeyVaultManager
 
     public async Task<string?> GetSecret(IKeyVaultSecret secretName)
     {
-        // Attempt to get secret from the cache
-        if (!_memoryCache.TryGetValue(secretName, out string cachedSecret))
+
+        if (_memoryCache.TryGetValue(secretName, out string? cachedSecret))
+            return cachedSecret;
+        
+        if (_environment.IsDevelopment())
         {
-            if (_environment.IsDevelopment())
-            {
-                cachedSecret = Environment.GetEnvironmentVariable(secretName.Name);
-            }
-            else
-            {
-                // Retrieve the database connection string from the Dapr secret store
-                var secretStoreName = "azure-key-vault"; // The name of the configured Dapr secret store
-
-                // Cache miss: Fetch secret from Azure Key Vault
-                var keyValueSecret = (
-                    await _secretClient.GetSecretAsync(secretStoreName, secretName.Name)
-                ).Values.FirstOrDefault();
-                if (keyValueSecret is null)
-                    throw new Exception($"Secret {secretName.Name} not found in Key Vault");
-
-                cachedSecret = keyValueSecret;
-            }
-
-            // Store the secret in the cache with expiration
-            _memoryCache.Set(secretName, cachedSecret, TimeSpan.FromHours(6));
+            cachedSecret = Environment.GetEnvironmentVariable(secretName.Name);
         }
+        else
+        {
+            var secretStoreName = "azure-key-vault";
+
+            if(_secretClient is null)
+                throw new NullReferenceException("Dapr secret store not configured");
+            
+            var keyValueSecret = (
+                await _secretClient.GetSecretAsync(secretStoreName, secretName.Name)
+            ).Values.FirstOrDefault();
+
+            cachedSecret = keyValueSecret ?? throw new Exception($"Secret {secretName.Name} not found in Key Vault");
+        }
+
+        _memoryCache.Set(secretName, cachedSecret, TimeSpan.FromHours(6));
 
         return cachedSecret;
     }
