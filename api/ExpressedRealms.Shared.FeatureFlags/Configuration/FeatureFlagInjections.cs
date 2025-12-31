@@ -1,7 +1,7 @@
-using ExpressedRealms.Authentication.AzureKeyVault;
-using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
 using ExpressedRealms.FeatureFlags.FeatureClient;
 using ExpressedRealms.FeatureFlags.FeatureManager;
+using ExpressedRealms.Shared.AzureKeyVault;
+using ExpressedRealms.Shared.AzureKeyVault.Secrets;
 using Microsoft.Extensions.DependencyInjection;
 using OpenFeature;
 using OpenFeature.Contrib.Providers.Flipt;

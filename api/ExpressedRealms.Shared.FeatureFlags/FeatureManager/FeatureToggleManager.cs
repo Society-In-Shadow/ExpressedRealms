@@ -1,5 +1,5 @@
-using ExpressedRealms.Authentication.AzureKeyVault;
-using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
+using ExpressedRealms.Shared.AzureKeyVault;
+using ExpressedRealms.Shared.AzureKeyVault.Secrets;
 using Flipt.Rest;
 
 namespace ExpressedRealms.FeatureFlags.FeatureManager;

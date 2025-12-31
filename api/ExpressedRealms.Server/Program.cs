@@ -2,8 +2,6 @@ using System.Text.Json;
 using Audit.Core;
 using ExpressedRealms.Admin.API.Configuration;
 using ExpressedRealms.Admin.UseCases.Configuration;
-using ExpressedRealms.Authentication.AzureKeyVault;
-using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
 using ExpressedRealms.Authentication.Configuration;
 using ExpressedRealms.Authentication.PermissionCollection.PermissionManager;
 using ExpressedRealms.Blessings.API.Configuration;
@@ -36,6 +34,9 @@ using ExpressedRealms.Server.DependencyInjections;
 using ExpressedRealms.Server.EndPoints;
 using ExpressedRealms.Server.EndPoints.PlayerEndpoints;
 using ExpressedRealms.Server.Shared.Extensions;
+using ExpressedRealms.Shared.AzureKeyVault;
+using ExpressedRealms.Shared.AzureKeyVault.Secrets;
+using ExpressedRealms.Shared.Configuration;
 using FluentValidation;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -177,6 +178,7 @@ try
     builder.Services.AddPowerUseCaseConfiguration();
     builder.Services.AddCharacterUseCaseInjections();
     builder.Services.AddEventUseCaseInjections();
+    builder.Services.AddSharedInjections();
     await builder.Services.AddFeatureFlagInjections(keyVaultManager);
 
     Log.Information("Building the App");

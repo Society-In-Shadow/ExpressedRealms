@@ -1,7 +1,7 @@
 using Azure.Identity;
 using Azure.Storage.Blobs;
-using ExpressedRealms.Authentication.AzureKeyVault;
-using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
+using ExpressedRealms.Shared.AzureKeyVault;
+using ExpressedRealms.Shared.AzureKeyVault.Secrets;
 using Microsoft.AspNetCore.DataProtection;
 
 namespace ExpressedRealms.Server.Configuration;

@@ -12,6 +12,6 @@
     <PackageReference Include="OpenFeature.Hosting" Version="2.6.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExpressedRealms.Authentication\ExpressedRealms.Authentication.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Shared\ExpressedRealms.Shared.csproj" />
   </ItemGroup>
 </Project>

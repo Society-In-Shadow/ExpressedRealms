@@ -1,7 +1,7 @@
 using Dapr.Client;
-using ExpressedRealms.Authentication.AzureKeyVault.Secrets.Config;
+using ExpressedRealms.Shared.AzureKeyVault.Secrets.Config;
 
-namespace ExpressedRealms.Authentication.AzureKeyVault;
+namespace ExpressedRealms.Shared.AzureKeyVault;
 
 public class EarlyKeyVaultManager
 {

@@ -1,7 +1,7 @@
 using Discord;
 using Discord.Rest;
-using ExpressedRealms.Authentication.AzureKeyVault;
-using ExpressedRealms.Authentication.AzureKeyVault.Secrets;
+using ExpressedRealms.Shared.AzureKeyVault;
+using ExpressedRealms.Shared.AzureKeyVault.Secrets;
 using FluentResults;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;

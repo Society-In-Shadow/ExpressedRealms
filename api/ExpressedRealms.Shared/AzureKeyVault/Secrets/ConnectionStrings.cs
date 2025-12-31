@@ -1,6 +1,6 @@
-using ExpressedRealms.Authentication.AzureKeyVault.Secrets.Config;
+using ExpressedRealms.Shared.AzureKeyVault.Secrets.Config;
 
-namespace ExpressedRealms.Authentication.AzureKeyVault.Secrets;
+namespace ExpressedRealms.Shared.AzureKeyVault.Secrets;
 
 public static class ConnectionStrings
 {
