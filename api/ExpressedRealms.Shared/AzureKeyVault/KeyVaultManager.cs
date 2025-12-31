@@ -23,10 +23,9 @@ internal sealed class KeyVaultManager : IKeyVaultManager
 
     public async Task<string?> GetSecret(IKeyVaultSecret secretName)
     {
-
         if (_memoryCache.TryGetValue(secretName, out string? cachedSecret))
             return cachedSecret;
-        
+
         if (_environment.IsDevelopment())
         {
             cachedSecret = Environment.GetEnvironmentVariable(secretName.Name);
@@ -34,12 +33,16 @@ internal sealed class KeyVaultManager : IKeyVaultManager
         else
         {
             var secretStoreName = "azure-key-vault";
-            
+
             var keyValueSecret = (
                 await _secretClient!.GetSecretAsync(secretStoreName, secretName.Name)
             ).Values.FirstOrDefault();
 
-            cachedSecret = keyValueSecret ?? throw new KeyNotFoundException($"Secret {secretName.Name} not found in Key Vault");
+            cachedSecret =
+                keyValueSecret
+                ?? throw new KeyNotFoundException(
+                    $"Secret {secretName.Name} not found in Key Vault"
+                );
         }
 
         _memoryCache.Set(secretName, cachedSecret, TimeSpan.FromHours(6));
