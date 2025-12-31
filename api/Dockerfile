@@ -18,22 +18,10 @@ FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
 EXPOSE 8080
 
-# Install netcat (Debian-based)
-RUN apt-get update \
-    && apt-get install -y netcat-openbsd \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy published app
 COPY --from=build /app/publish .
-
-# Copy the wait script
-COPY wait-for-dapr.sh /app/wait-for-dapr.sh
-RUN chmod +x /app/wait-for-dapr.sh
 
 HEALTHCHECK --interval=15s --timeout=60s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider http://0.0.0.0:8080/health || exit 1
 
 USER $APP_UID
-
-# Use the wait script as entrypoint
-ENTRYPOINT ["/app/wait-for-dapr.sh"]
+ENTRYPOINT ["dotnet", "ExpressedRealms.Server.dll"]
