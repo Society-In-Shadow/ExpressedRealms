@@ -34,15 +34,12 @@ internal sealed class KeyVaultManager : IKeyVaultManager
         else
         {
             var secretStoreName = "azure-key-vault";
-
-            if(_secretClient is null)
-                throw new NullReferenceException("Dapr secret store not configured");
             
             var keyValueSecret = (
-                await _secretClient.GetSecretAsync(secretStoreName, secretName.Name)
+                await _secretClient!.GetSecretAsync(secretStoreName, secretName.Name)
             ).Values.FirstOrDefault();
 
-            cachedSecret = keyValueSecret ?? throw new Exception($"Secret {secretName.Name} not found in Key Vault");
+            cachedSecret = keyValueSecret ?? throw new KeyNotFoundException($"Secret {secretName.Name} not found in Key Vault");
         }
 
         _memoryCache.Set(secretName, cachedSecret, TimeSpan.FromHours(6));
