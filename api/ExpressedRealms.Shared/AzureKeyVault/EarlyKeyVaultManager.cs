@@ -1,3 +1,4 @@
+using Dapr;
 using Dapr.Client;
 using ExpressedRealms.Shared.AzureKeyVault.Secrets.Config;
 
@@ -18,8 +19,21 @@ public class EarlyKeyVaultManager
 
     public async Task<bool> IsSecretSet(IKeyVaultSecret secretName)
     {
-        var keyValueSecret = (await _secretClient.GetSecretAsync(DaprSecretStoreName, secretName.Name))
-            .Values.FirstOrDefault();
-        return keyValueSecret is not null;
+        try
+        {
+            var keyValueSecret = (await _secretClient
+                    .GetSecretAsync(DaprSecretStoreName, secretName.Name))
+                .Values
+                .FirstOrDefault();
+
+            return string.IsNullOrWhiteSpace(keyValueSecret) == false;
+        }
+        catch (DaprException ex)
+        {
+            if (ex.Message.Contains("not found", StringComparison.OrdinalIgnoreCase))
+                return false;
+
+            throw;
+        }
     }
 }
