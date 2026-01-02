@@ -409,4 +409,5 @@ megalinter-reports/
 client/cypress/results
 
 # Dapr Secret Store
-dapr/components/secrets.json
+secrets.json
+secrets_docker.json

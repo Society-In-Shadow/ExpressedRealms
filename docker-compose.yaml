@@ -17,7 +17,7 @@ services:
       - VITE_HTTPS_KEY=/https/key.pem
       - VITE_HTTPS_CERT=/https/cert.pem
       - VITE_PORT=3001
-      - VITE_API_SERVER_LOCATION=https://webapi:8443
+      - VITE_API_SERVER_LOCATION=https://host.docker.internal:8443
       - VITE_COOKIE_DOMAIN_NAME=.localhost
       - DEV=true
     volumes:
@@ -26,67 +26,13 @@ services:
     command: sh -c "npx vite --host 0.0.0.0"
     networks:
       - expressed-realms-network
-    depends_on:
-      webapi:
-        condition: service_started
-
-  # myProductionApp:
-  #  container_name: societyinshadows.org
-  #  build:
-  #    context: ./client
-  #    dockerfile: Dockerfile
-  #    args:
-  #      MODE: development
-  #  ports:
-  #    - '6000:3000'
-  #    - '6001:443'
-  #  environment:
-  #    - VITE_HTTPS_KEY=/https/key.pem
-  #    - VITE_HTTPS_CERT=/https/cert.pem
-  #    - VITE_PORT=443
-  #    - VITE_API_BASE_URL=http://localhost:5000/
-  #  networks:
-  #    - expressed-realms-network
-  #  depends_on:
-  #    webapi:
-  #      condition: service_started
-
-  webapi:
-    container_name: api.societyinshadows.org
-    build:
-      context: ./api
-      dockerfile: Dockerfile
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_Kestrel__Certificates__Default__KeyPath=/https/key.pem
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/cert.pem
-      - DAPR_APP_ID=webapi
-      - DAPR_GRPC_ENDPOINT=http://dapr-sidecar:50001
-      - DOTNET_URLS=http://+:8080;https://+:8443
-    ports:
-      - '5000:8080'
-      - '5001:8443'
-    volumes:
-      - ${USERPROFILE}/.aspnet/https:/https:ro
-    networks:
-      - expressed-realms-network
-    depends_on:
-      postgres:
-        condition: service_healthy
-      azurite:
-        condition: service_started
-      flipt:
-        condition: service_started
-      mailpit:
-        condition: service_started
-      dapr-sidecar:
-        condition: service_started
         
   dapr-sidecar:
     image: "daprio/daprd:edge"
     command: [ "./daprd", "-app-id", "webapi", "-app-port", "8080", "-resources-path", "/components" ]
     volumes:
       - ./dapr/components:/components
+      - ./secrets.json:/secrets.json
     ports:
       - "3500:3500"
       - "50001:50001"
