@@ -41,7 +41,7 @@ Hot reloading using Vite won't work with docker compose, due to fundamental issu
 See:
 [Broken File Watcher](https://github.com/microsoft/WSL/issues/4739)
 
-Fundamentally, since the docker runs it's containers on WSL, when you update something on windows, that update isn't
+Fundamentally, since the docker runs its containers on WSL, when you update something on windows, that update isn't
 triggering the linux version of a file updated process, thus not vite to pick up the changes.
 
 There are some workarounds, the only one that I could get working is below.
