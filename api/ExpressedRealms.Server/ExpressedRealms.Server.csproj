@@ -51,12 +51,17 @@
     <ProjectReference Include="..\ExpressedRealms.Powers.Repository\ExpressedRealms.Powers.Repository.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Server.Shared\ExpressedRealms.Server.Shared.csproj" />
   </ItemGroup>
-  <Target Name="RunScriptOnBuild" AfterTargets="Build">
+  <Target Name="RunScriptOnBuild" AfterTargets="Build" Condition="'$(DOTNET_RUNNING_IN_CONTAINER)' != 'true'">
     <!-- Windows: PowerShell -->
     <!--<Exec Condition="'$(OS)' == 'Windows_NT'"
           Command="powershell -ExecutionPolicy Bypass -File &quot;$(ProjectDir)scripts\my-script.ps1&quot;" />-->
     <!-- Linux/macOS: Bash -->
     <Exec Condition="'$(OS)' != 'Windows_NT'"
           Command="bash &quot;$(ProjectDir)../syncPermissions.sh&quot;" />
+  </Target>
+  <!-- This will ensure that the podman is configured correctly for the API to run locally -->
+  <!-- Mainly will stop the UI and secret store, and restart them with local api settings -->
+  <Target Name="RunPodman" BeforeTargets="Build" Condition="'$(DOTNET_RUNNING_IN_CONTAINER)' != 'true' and '$(OS)' != 'Windows_NT'">
+    <Exec Command="bash &quot;$(ProjectDir)../startServicesBeforeBuild.sh&quot;" />
   </Target>
 </Project>
