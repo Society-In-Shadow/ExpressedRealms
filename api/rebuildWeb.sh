@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Script to stop, build, and restart a specific Docker Compose container
-# Usage: ./restart-container.sh
 
 CONTAINER_NAME="webapi"
 

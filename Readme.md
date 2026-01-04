@@ -27,7 +27,7 @@ To get the full experience, feel free to create a user at [https://societyinshad
 
 ## More In Depth
 
-In addition to the quick start below, the high level architecture and technologies can be found [here](/documentation/architecture.md)
+In addition to the quick start below, the high level architecture and technologies can be found in the [architecture file](/documentation/architecture.md)
 
 # Quick Start
 
@@ -40,7 +40,7 @@ In addition to the quick start below, the high level architecture and technologi
   - [Podman / Docker Integration](https://docs.dapr.io/operations/hosting/self-hosted/self-hosted-with-podman/)
 
 ### Windows vs Linux
-This project was primarily built using JetBrains Rider on Linux.  Some initial effort has been made to make it work on 
+This project was primarily built using JetBrains Rider on Linux.  Some initial effort has been made to make it work on
 Windows, though that integration has not been a primary focus as of late.
 
 Scripts were written with podman in mind, conversion to docker should be as simple as changing the podman commands to docker.
@@ -60,8 +60,8 @@ USERPROFILE="/home/<user>"
 
 Next, you need to setup SSL Certs
 
-- Windows users can follow the instructions [here](/documentation/windowsSetup.md)
-- Fedora users can follow the instructions [here](/documentation/fedoraSetup.md)
+- Windows users can follow the instructions in [windows setup](/documentation/windowsSetup.md)
+- Fedora users can follow the instructions in [fedora setup](/documentation/fedoraSetup.md)
 
 ## Data Population Scripts
 
@@ -69,7 +69,7 @@ These are stored separate if you would like access, ask about it in the discord 
 
 ## Start the Website
 
-Once you get docker up and running, get the population scripts, add the .env file if you are on linux, and get the SSL certs 
+Once you get docker up and running, get the population scripts, add the .env file if you are on linux, and get the SSL certs
 setup, you should be good to go to start the website.
 
 Details on how the site runs can be found here: [docker-podman](/documentation/docker-podman.md)

@@ -27,7 +27,7 @@ Your primary focus should be getting their version of hello world working, all y
 podman run hello-world
 ```
 
-or 
+or
 
 ```shell
 docker run hello-world

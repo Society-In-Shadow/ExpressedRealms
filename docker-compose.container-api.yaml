@@ -8,7 +8,7 @@ services:
     depends_on:
       webapi:
         condition: service_started
-  
+
   webapi:
     container_name: api.societyinshadows.org
     build:
@@ -39,7 +39,7 @@ services:
         condition: service_started
       dapr-sidecar:
         condition: service_started
-        
+
   dapr-sidecar:
     volumes:
       - ./dapr/components:/components

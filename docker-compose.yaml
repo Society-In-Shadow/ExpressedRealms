@@ -26,10 +26,10 @@ services:
     command: sh -c "npx vite --host 0.0.0.0"
     networks:
       - expressed-realms-network
-        
+
   dapr-sidecar:
     image: "daprio/daprd:edge"
-    command: [ "./daprd", "-app-id", "webapi", "-app-port", "8080", "-resources-path", "/components" ]
+    command: ["./daprd", "-app-id", "webapi", "-app-port", "8080", "-resources-path", "/components"]
     volumes:
       - ./dapr/components:/components
       - ./secrets.json:/secrets.json
