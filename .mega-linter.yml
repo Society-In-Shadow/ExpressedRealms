@@ -56,7 +56,10 @@ EMAIL_REPORTER: false
 FILEIO_REPORTER: false
 JSON_REPORTER: true
 SARIF_REPORTER: true
-REPOSITORY_CHECKOV_ARGUMENTS: --skip-check CKV2_GHA_1 --skip-paths "secrets.json,secrets_docker.json"
+REPOSITORY_CHECKOV_ARGUMENTS: >
+  --skip-check CKV2_GHA_1
+  --skip-path secrets.json
+  --skip-path secrets_docker.json
 BASH_SHFMT_ARGUMENTS: -i 2
 # The following actually does work, but it's throwing errors that I don't know how to resolve.
 # Local steps to resolve
