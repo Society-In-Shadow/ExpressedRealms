@@ -54,7 +54,7 @@
   <Target
     Name="RunScriptOnBuild"
     AfterTargets="Build"
-    Condition="'$(DOTNET_RUNNING_IN_CONTAINER)' != 'true'"
+    Condition="'$(DOTNET_RUNNING_IN_CONTAINER)' != 'true' and '$(GITHUB_ACTIONS)' != 'true'"
   >
     <!-- Windows: PowerShell -->
     <!--<Exec Condition="'$(OS)' == 'Windows_NT'"
@@ -70,7 +70,7 @@
   <Target
     Name="RunPodman"
     BeforeTargets="Build"
-    Condition="'$(DOTNET_RUNNING_IN_CONTAINER)' != 'true' and '$(OS)' != 'Windows_NT'"
+    Condition="'$(DOTNET_RUNNING_IN_CONTAINER)' != 'true' and '$(OS)' != 'Windows_NT' and '$(GITHUB_ACTIONS)' != 'true'"
   >
     <Exec Command="bash &quot;$(ProjectDir)../startServicesBeforeBuild.sh&quot;" />
   </Target>
