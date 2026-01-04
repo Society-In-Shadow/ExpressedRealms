@@ -11,22 +11,23 @@ public class EarlyKeyVaultManager
 
     public async Task<string> GetSecret(IKeyVaultSecret secretName)
     {
-        var keyValueSecret = (await _secretClient.GetSecretAsync(DaprSecretStoreName, secretName.Name))
-            .Values.FirstOrDefault();
+        var keyValueSecret = (
+            await _secretClient.GetSecretAsync(DaprSecretStoreName, secretName.Name)
+        ).Values.FirstOrDefault();
 
-        return keyValueSecret ?? throw new KeyNotFoundException($"Secret {secretName.Name} not found");
+        return keyValueSecret
+            ?? throw new KeyNotFoundException($"Secret {secretName.Name} not found");
     }
 
     public async Task<bool> IsSecretSet(IKeyVaultSecret secretName)
     {
         try
         {
-            var keyValueSecret = (await _secretClient
-                    .GetSecretAsync(DaprSecretStoreName, secretName.Name))
-                .Values
-                .FirstOrDefault();
+            var keyValueSecret = (
+                await _secretClient.GetSecretAsync(DaprSecretStoreName, secretName.Name)
+            ).Values.FirstOrDefault();
 
-            return string.IsNullOrWhiteSpace(keyValueSecret) == false;
+            return !string.IsNullOrWhiteSpace(keyValueSecret);
         }
         catch (DaprException ex)
         {

@@ -60,7 +60,7 @@ try
 
     Log.Information("Setup Azure Key Vault");
     builder.Services.AddAuthenticationInjections();
-    
+
     EarlyKeyVaultManager keyVaultManager = new EarlyKeyVaultManager();
 
     Log.Information("Setup Application Insights");

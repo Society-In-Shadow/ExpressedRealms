@@ -28,9 +28,7 @@ public sealed class KeyVaultManager : IKeyVaultManager
 
         cachedSecret =
             keyValueSecret
-            ?? throw new KeyNotFoundException(
-                $"Secret {secretName.Name} not found in Key Vault"
-            );
+            ?? throw new KeyNotFoundException($"Secret {secretName.Name} not found in Key Vault");
 
         _memoryCache.Set(secretName, cachedSecret, TimeSpan.FromHours(6));
 
