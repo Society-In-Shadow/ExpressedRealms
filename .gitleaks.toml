@@ -1,7 +1,7 @@
 [[allowlist]]
-description = "Ignore own gitleaks config file"
-
-files = [".gitleaks.toml"]
-
-# Ignore dev secrets files
-files += ["secrets.json", "secrets_docker.json"]
+description = "Ignore own gitleaks config files"
+paths = [
+  ".gitleaks.toml",
+  "secrets.json",
+  "secrets_docker.json"
+]
