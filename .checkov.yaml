@@ -1,5 +1,0 @@
----
-
-skip_path:
-  - "secrets.json" # Skip well known azure local key
-  - "secrets_docker.json" # Skip well known azure local key
