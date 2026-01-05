@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 namespace ExpressedRealms.Events.API.Discord;
 
 internal sealed class DiscordService(
-    IKeyVaultManager keyVaultManager,
     ILogger<DiscordService> logger,
     IHostEnvironment environment
 ) : IDiscordService
@@ -19,7 +18,7 @@ internal sealed class DiscordService(
 
     private async Task<bool> SetupDiscordClient()
     {
-        var discordToken = await keyVaultManager.GetSecret(DiscordSettings.DiscordBotToken);
+        var discordToken = KeyVaultManager.GetSecret(DiscordSettings.DiscordBotToken);
 
         if (string.IsNullOrWhiteSpace(discordToken) || discordToken == "Intentionally Left Blank")
         {
@@ -33,7 +32,7 @@ internal sealed class DiscordService(
         {
             await _discordRestClient.LoginAsync(
                 TokenType.Bot,
-                await keyVaultManager.GetSecret(DiscordSettings.DiscordBotToken)
+                KeyVaultManager.GetSecret(DiscordSettings.DiscordBotToken)
             );
         }
 

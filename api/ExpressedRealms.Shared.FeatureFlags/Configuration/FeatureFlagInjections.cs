@@ -10,12 +10,11 @@ namespace ExpressedRealms.FeatureFlags.Configuration;
 
 public static class FeatureFlagInjections
 {
-    public static async Task AddFeatureFlagInjections(
-        this IServiceCollection services,
-        EarlyKeyVaultManager vaultManager
+    public static void AddFeatureFlagInjections(
+        this IServiceCollection services
     )
     {
-        var url = await vaultManager.GetSecret(FeatureFlagSettings.FeatureFlagUrl);
+        var url = KeyVaultManager.GetSecret(FeatureFlagSettings.FeatureFlagUrl);
 
         services.AddOpenFeature(featureBuilder =>
         {

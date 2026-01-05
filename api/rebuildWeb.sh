@@ -20,7 +20,6 @@ fi
 
 echo "🛑 Stopping container: $CONTAINER_NAME"
 
-podman compose stop "dapr-sidecar"
 podman compose stop "myapp"
 
 if ! podman compose -f ../docker-compose.yaml -f ../docker-compose.container-api.yaml stop "$CONTAINER_NAME"; then

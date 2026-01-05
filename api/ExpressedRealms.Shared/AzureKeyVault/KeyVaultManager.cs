@@ -1,37 +1,35 @@
-using Dapr.Client;
 using ExpressedRealms.Shared.AzureKeyVault.Secrets.Config;
-using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 
 namespace ExpressedRealms.Shared.AzureKeyVault;
 
-public sealed class KeyVaultManager : IKeyVaultManager
+public static class KeyVaultManager
 {
-    private readonly DaprClient? _secretClient;
-    private readonly IMemoryCache _memoryCache;
-
-    public KeyVaultManager(IMemoryCache memoryCache)
+    private static IConfiguration? _configuration;
+    
+    public static void Initialize(IConfiguration configuration)
     {
-        _secretClient = new DaprClientBuilder().Build();
-        _memoryCache = memoryCache;
+        _configuration = configuration;
+    }
+    
+    public static string GetSecret(IKeyVaultSecret secretName)
+    {
+        if(_configuration is null)
+            throw new InvalidOperationException("KeyVaultManager must be initialized before use.");
+        
+        var keyValueSecret = _configuration[secretName.Name];
+
+        return keyValueSecret
+            ?? throw new KeyNotFoundException($"Secret {secretName.Name} not found");
     }
 
-    public async Task<string?> GetSecret(IKeyVaultSecret secretName)
+    public static bool IsSecretSet(IKeyVaultSecret secretName)
     {
-        if (_memoryCache.TryGetValue(secretName, out string? cachedSecret))
-            return cachedSecret;
+        if(_configuration is null)
+            throw new InvalidOperationException("KeyVaultManager must be initialized before use.");
+        
+        var keyValueSecret = _configuration[secretName.Name];
 
-        const string secretStoreName = "azure-key-vault";
-
-        var keyValueSecret = (
-            await _secretClient!.GetSecretAsync(secretStoreName, secretName.Name)
-        ).Values.FirstOrDefault();
-
-        cachedSecret =
-            keyValueSecret
-            ?? throw new KeyNotFoundException($"Secret {secretName.Name} not found in Key Vault");
-
-        _memoryCache.Set(secretName, cachedSecret, TimeSpan.FromHours(6));
-
-        return cachedSecret;
+        return !string.IsNullOrWhiteSpace(keyValueSecret);
     }
 }

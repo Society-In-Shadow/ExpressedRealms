@@ -6,17 +6,18 @@ namespace ExpressedRealms.Server.Configuration.ApplicationInsights;
 
 public static class ApplicationInsightConfiguration
 {
-    public static async Task SetupApplicationInsights(
-        this WebApplicationBuilder builder,
-        EarlyKeyVaultManager keyVaultManager
+    public static void SetupApplicationInsights(
+        this WebApplicationBuilder builder
     )
     {
-        if (await keyVaultManager.IsSecretSet(ConnectionStrings.ApplicationInsights))
+        if (KeyVaultManager.IsSecretSet(ConnectionStrings.ApplicationInsights))
         {
             var logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.Console();
-            var appInsightsConnectionString = await keyVaultManager.GetSecret(
+            
+            var appInsightsConnectionString = KeyVaultManager.GetSecret(
                 ConnectionStrings.ApplicationInsights
             );
+            
             logger.WriteTo.ApplicationInsights(
                 appInsightsConnectionString,
                 TelemetryConverter.Traces

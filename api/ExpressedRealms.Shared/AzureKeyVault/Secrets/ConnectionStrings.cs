@@ -9,4 +9,5 @@ public static class ConnectionStrings
         "APPLICATION-INSIGHTS-CONNECTION-STRING"
     );
     public static readonly KeyVaultSecret BlobStorage = new("AZURE-STORAGEBLOB-RESOURCEENDPOINT");
+    public static readonly KeyVaultSecret AzureKeyVault = new("AZURE_KEYVAULT_RESOURCEENDPOINT");
 }

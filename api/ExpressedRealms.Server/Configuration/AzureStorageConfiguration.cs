@@ -9,13 +9,12 @@ namespace ExpressedRealms.Server.Configuration;
 public static class AzureStorageConfiguration
 {
     public static async Task SetupBlobStorage(
-        this WebApplicationBuilder builder,
-        EarlyKeyVaultManager manager
+        this WebApplicationBuilder builder
     )
     {
         // Since we are in a container, we need to keep track of the data keys manually
 
-        var blobStorageEndpoint = await manager.GetSecret(ConnectionStrings.BlobStorage);
+        var blobStorageEndpoint = KeyVaultManager.GetSecret(ConnectionStrings.BlobStorage);
 
         BlobClient blobClient;
         if (builder.Environment.IsDevelopment())

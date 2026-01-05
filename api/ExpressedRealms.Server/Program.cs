@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Audit.Core;
+using Azure.Identity;
 using ExpressedRealms.Admin.API.Configuration;
 using ExpressedRealms.Admin.UseCases.Configuration;
 using ExpressedRealms.Authentication.Configuration;
@@ -54,6 +55,23 @@ try
 
     Log.Information("Setting Up Web App");
     var builder = WebApplication.CreateBuilder(args);
+    
+    if (builder.Environment.IsProduction())
+    {
+        builder.Configuration.AddAzureKeyVault(
+            new Uri(KeyVaultManager.GetSecret(ConnectionStrings.AzureKeyVault)),
+            new DefaultAzureCredential()
+        );
+    }
+    else if (Environment.GetEnvironmentVariable("IS_DOCKER_COMPOSE") == "true")
+    {
+        Log.Information("Setting Up Docker Compose");
+        
+        builder.Configuration
+            .AddJsonFile($"appsettings.docker.json", optional: false);
+    }
+    
+    KeyVaultManager.Initialize(builder.Configuration);
 
     Log.Information("Setup In Memory Cache");
     builder.Services.AddMemoryCache();
@@ -61,19 +79,17 @@ try
     Log.Information("Setup Azure Key Vault");
     builder.Services.AddAuthenticationInjections();
 
-    EarlyKeyVaultManager keyVaultManager = new EarlyKeyVaultManager();
-
     Log.Information("Setup Application Insights");
-    await builder.SetupApplicationInsights(keyVaultManager);
+    builder.SetupApplicationInsights();
 
     Log.Information("Setup Azure Storage Blob");
-    await builder.SetupBlobStorage(keyVaultManager);
+    await builder.SetupBlobStorage();
 
     Log.Information("Add in Health Checks");
     builder.Services.AddHealthChecks();
 
     Log.Information("Adding DB Context");
-    await builder.AddDatabaseConnection(keyVaultManager, builder.Environment.IsProduction());
+    builder.AddDatabaseConnection(builder.Environment.IsProduction());
 
     Log.Information("Add Quartz / Cron Scheduler");
     builder.SetupQuartz();
@@ -106,7 +122,7 @@ try
         options.SerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
     });
 
-    var clientCookieDomain = await keyVaultManager.GetSecret(GeneralConfig.CookieDomain);
+    var clientCookieDomain = KeyVaultManager.GetSecret(GeneralConfig.CookieDomain);
     builder
         .Services.AddAuthentication()
         .AddCookie(
@@ -148,7 +164,7 @@ try
     builder.Services.AddOpenApi();
 
     Log.Information("Adding Email Dependencies");
-    await builder.Services.AddEmailDependencies(keyVaultManager);
+    builder.Services.AddEmailDependencies();
 
     Log.Information("Configuring various things");
     builder.Services.AddValidatorsFromAssemblyContaining<Program>();
@@ -178,7 +194,7 @@ try
     builder.Services.AddCharacterUseCaseInjections();
     builder.Services.AddEventUseCaseInjections();
     builder.Services.AddSharedInjections();
-    await builder.Services.AddFeatureFlagInjections(keyVaultManager);
+    builder.Services.AddFeatureFlagInjections();
 
     Log.Information("Building the App");
     var app = builder.Build();
