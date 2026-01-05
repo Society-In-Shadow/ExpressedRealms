@@ -1,7 +1,5 @@
-[[allowlist]]
-description = "Ignore own gitleaks config files"
-files = [
-  ".gitleaks.toml",
-  "secrets.json",
-  "secrets_docker.json"
+[[allowlists]]
+description = "Allow Azure Dev Storage Key"
+regexes = [
+  '''DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://.*:10000/devstoreaccount1;'''
 ]
