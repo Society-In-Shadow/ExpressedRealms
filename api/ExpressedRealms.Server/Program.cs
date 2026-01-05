@@ -61,9 +61,7 @@ try
     Log.Information("Setup Azure Key Vault");
     builder.Services.AddAuthenticationInjections();
 
-    EarlyKeyVaultManager keyVaultManager = new EarlyKeyVaultManager(
-        builder.Environment.IsProduction()
-    );
+    EarlyKeyVaultManager keyVaultManager = new EarlyKeyVaultManager();
 
     Log.Information("Setup Application Insights");
     await builder.SetupApplicationInsights(keyVaultManager);
@@ -149,9 +147,10 @@ try
 
     builder.Services.AddOpenApi();
 
-    Log.Information("Configuring various things");
-    builder.Services.AddEmailDependencies(builder.Configuration);
+    Log.Information("Adding Email Dependencies");
+    await builder.Services.AddEmailDependencies(keyVaultManager);
 
+    Log.Information("Configuring various things");
     builder.Services.AddValidatorsFromAssemblyContaining<Program>();
     builder.Services.AddFluentValidationAutoValidation();
     builder.Services.AddSingleton<ITelemetryInitializer, RouteTemplateTelemetryInitializer>();

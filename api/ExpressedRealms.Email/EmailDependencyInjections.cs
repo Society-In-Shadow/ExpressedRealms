@@ -3,20 +3,21 @@ using ExpressedRealms.Email.IdentityEmails;
 using ExpressedRealms.Email.IdentityEmails.ConfirmAccountEmail;
 using ExpressedRealms.Email.IdentityEmails.ForgotPasswordEmail;
 using ExpressedRealms.Email.TestEmail;
+using ExpressedRealms.Shared.AzureKeyVault;
+using ExpressedRealms.Shared.AzureKeyVault.Secrets;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExpressedRealms.Email;
 
 public static class EmailDependencyInjections
 {
-    public static IServiceCollection AddEmailDependencies(
+    public static async Task<IServiceCollection> AddEmailDependencies(
         this IServiceCollection services,
-        IConfiguration configuration
+        EarlyKeyVaultManager keyVaultManager
     )
     {
-        if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("SMTP-SERVER")))
+        if (!await keyVaultManager.IsSecretSet(EmailSettings.SMTPServer))
         {
             services.AddTransient<IEmailClientAdapter, EmailClientAdapter.EmailClientAdapter>();
         }

@@ -13,16 +13,19 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:8081;http://localhost:8080",
+      "launchUrl": "https://localhost:8443/scalar",
+      "applicationUrl": "http://+:8080;https://+:8443",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DAPR_APP_ID": "webapi",
+        "DAPR_GRPC_ENDPOINT": "http://localhost:50001",
+        "DAPR_HTTP_ENDPOINT": "http://localhost:3500"
       }
     },
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "swagger",
+      "launchUrl": "scalar",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

@@ -17,7 +17,7 @@ services:
       - VITE_HTTPS_KEY=/https/key.pem
       - VITE_HTTPS_CERT=/https/cert.pem
       - VITE_PORT=3001
-      - VITE_API_SERVER_LOCATION=https://webapi:8443
+      - VITE_API_SERVER_LOCATION=https://host.docker.internal:8443
       - VITE_COOKIE_DOMAIN_NAME=.localhost
       - DEV=true
     volumes:
@@ -26,79 +26,31 @@ services:
     command: sh -c "npx vite --host 0.0.0.0"
     networks:
       - expressed-realms-network
-    depends_on:
-      webapi:
-        condition: service_started
 
-  # myProductionApp:
-  #  container_name: societyinshadows.org
-  #  build:
-  #    context: ./client
-  #    dockerfile: Dockerfile
-  #    args:
-  #      MODE: development
-  #  ports:
-  #    - '6000:3000'
-  #    - '6001:443'
-  #  environment:
-  #    - VITE_HTTPS_KEY=/https/key.pem
-  #    - VITE_HTTPS_CERT=/https/cert.pem
-  #    - VITE_PORT=443
-  #    - VITE_API_BASE_URL=http://localhost:5000/
-  #  networks:
-  #    - expressed-realms-network
-  #  depends_on:
-  #    webapi:
-  #      condition: service_started
-
-  webapi:
-    container_name: api.societyinshadows.org
-    build:
-      context: ./api
-      dockerfile: Dockerfile
-    environment:
-      - ASPNETCORE_HTTPS_PORTS=8443
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_Kestrel__Certificates__Default__KeyPath=/https/key.pem
-      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/cert.pem
-      - POSTGRES-CONNECTION-STRING=Host=expressed-realms-db;Port=5432;Database=${DB_NAME};Username=${DB_USER};Password=${DB_PASSWORD}
-      - AZURE-STORAGEBLOB-RESOURCEENDPOINT=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1; # gitleaks:allow
-      - FRONT-END-BASE-URL=http://myapp:3001
-      - SMTP-SERVER=mailpit:1025
-      - NO-REPLY-EMAIL=no-reply@societyinshadows.org
-      - CLIENT-COOKIE-DOMAIN=.localhost
-      - FEATURE-FLAG-URL=http://flipt:8080/
-      - DISCORD-BOT-TOKEN=${DISCORD_BOT_TOKEN}
-      - APPLICATION-INSIGHTS-CONNECTION-STRING=${APPLICATION_INSIGHTS_CONNECTION_STRING}
-    ports:
-      - '5000:8080'
-      - '5001:8443'
+  dapr-sidecar:
+    image: "daprio/daprd:edge"
+    command: ["./daprd", "-app-id", "webapi", "-app-port", "8080", "-resources-path", "/components"]
     volumes:
-      - ${USERPROFILE}/.aspnet/https:/https:ro
+      - ./dapr/components:/components
+      - ./secrets.json:/secrets.json
+    ports:
+      - "3500:3500"
+      - "50001:50001"
     networks:
       - expressed-realms-network
-    depends_on:
-      postgres:
-        condition: service_healthy
-      azurite:
-        condition: service_started
-      flipt:
-        condition: service_started
-      mailpit:
-        condition: service_started
 
   postgres:
     container_name: expressed-realms-db
     image: postgres:16-alpine
     ports:
-      - 5432:5432
+      - "127.0.0.1:5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_DB=expressedRealms
+      - POSTGRES_USER=dev_user
+      - POSTGRES_PASSWORD=dev_password
+
     networks:
       - expressed-realms-network
     restart: always
@@ -112,10 +64,10 @@ services:
     image: dpage/pgadmin4:latest
     container_name: expressed-realms-db-admin
     ports:
-      - "8888:80"
+      - "127.0.0.1:8888:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+      PGADMIN_DEFAULT_EMAIL: dev_admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: VeryFancyPassword1!
       # https://github.com/docker/compose/issues/8578#issuecomment-945228061
       GUNICORN_ACCESS_LOGFILE: '/dev/null'
     volumes:

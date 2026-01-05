@@ -21,9 +21,9 @@ internal sealed class DiscordService(
     {
         var discordToken = await keyVaultManager.GetSecret(DiscordSettings.DiscordBotToken);
 
-        if (string.IsNullOrWhiteSpace(discordToken))
+        if (string.IsNullOrWhiteSpace(discordToken) || discordToken == "Intentionally Left Blank")
         {
-            logger.LogWarning(
+            logger.LogCritical(
                 "No Discord Token provided. Discord Integration will be disabled.  Actions will be treated as successful."
             );
             return false;

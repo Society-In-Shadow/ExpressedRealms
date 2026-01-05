@@ -15,8 +15,8 @@ Locally, it can be found at this address
 Backend is using .Net 10, using a combination of Use Cases for business logic, and repositories to consolidate common
 ef core operations.
 
-* Use Case Details can be found [here](/useCases.md)
-* Repository standards can be found [here](/repositoryStandards.md)
+* Use Case Details can be found [use case file](/useCases.md)
+* Repository standards can be found [repository standards file](/repositoryStandards.md)
 
 The API is built using Minimal APIs, following the restful api pattern.
 
@@ -114,13 +114,24 @@ And out on prod we are using a product called Postmark
 
 We are using github actions for CI/CD.  The github actions are located in the .github/workflows folder.
 
-# Hosting
+## Hosting
 
-## Docker Compose (Local)
+### Docker Compose (Local)
 
 Locally, everything is running via docker containers.  All services should be configured through that.
 
-See more information in the [Docker](docker.md) documentation
+Broadly speaking, there are two levels to this:
+- The docker-compose.yml file - This will be the default way of running the application locally, it's assuming you are
+  running the API in an IDE of some sort
+- The docker-compose.containerapi.yml file - This should run everything including the api in docker.
+
+See more information in the [Docker](docker-podman.md) documentation
+
+### Dapr
+This is being used for secret retrieval.  Locally, there are two different versions of a "key vault", one for API usage
+inside an IDE and one for specifically for full docker setup.
+
+On prod, it connects to Azure Key Vault
 
 ## Azure
 
