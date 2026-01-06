@@ -12,12 +12,9 @@ namespace ExpressedRealms.Email;
 
 public static class EmailDependencyInjections
 {
-    public static async Task<IServiceCollection> AddEmailDependencies(
-        this IServiceCollection services,
-        EarlyKeyVaultManager keyVaultManager
-    )
+    public static IServiceCollection AddEmailDependencies(this IServiceCollection services)
     {
-        if (!await keyVaultManager.IsSecretSet(EmailSettings.SMTPServer))
+        if (!KeyVaultManager.IsSecretSet(EmailSettings.SMTPServer))
         {
             services.AddTransient<IEmailClientAdapter, EmailClientAdapter.EmailClientAdapter>();
         }
@@ -27,7 +24,7 @@ public static class EmailDependencyInjections
         }
 
         services.AddTransient<IEmailSender, IdentityEmailSender>();
-        services.InjectIndividualEmails();
+        services.InjectIndividualEmails(); // call your private static helper
         return services;
     }
 

@@ -3,7 +3,7 @@ using ExpressedRealms.Shared.AzureKeyVault.Secrets;
 
 namespace ExpressedRealms.Email.IdentityEmails.ConfirmAccountEmail;
 
-internal sealed class ConfirmAccountEmail(IKeyVaultManager keyVault) : IConfirmAccountEmail
+internal sealed class ConfirmAccountEmail : IConfirmAccountEmail
 {
     private string ParseAccountConfirmationLink(string identityEmail)
     {
@@ -17,7 +17,7 @@ internal sealed class ConfirmAccountEmail(IKeyVaultManager keyVault) : IConfirmA
     {
         var subject = "Society in Shadows Account Confirmation";
         var confirmAccountParamters = ParseAccountConfirmationLink(htmlContent);
-        var baseURL = await keyVault.GetSecret(EmailSettings.FrontEndBaseUrl);
+        var baseURL = KeyVaultManager.GetSecret(EmailSettings.FrontEndBaseUrl);
         var plainTextContext =
             $@"Welcome to Society in Shadows!  Please copy and paste the link below to confirm your account
 

@@ -5,16 +5,11 @@ using Microsoft.Extensions.Logging;
 
 namespace ExpressedRealms.Email.EmailClientAdapter;
 
-internal sealed class LocalAdapter(
-    ILogger<EmailClientAdapter> logger,
-    IKeyVaultManager keyVaultManager
-) : IEmailClientAdapter
+internal sealed class LocalAdapter(ILogger<EmailClientAdapter> logger) : IEmailClientAdapter
 {
     public async Task SendEmailAsync(EmailData data)
     {
-        var fromEmail = new MailAddress(
-            (await keyVaultManager.GetSecret(EmailSettings.NoReplyEmail))!
-        );
+        var fromEmail = new MailAddress((KeyVaultManager.GetSecret(EmailSettings.NoReplyEmail))!);
         var toEmail = new MailAddress(data.ToField);
 
         using var message = new MailMessage(fromEmail, toEmail);
@@ -22,7 +17,7 @@ internal sealed class LocalAdapter(
         message.Body = data.HtmlBody;
         message.IsBodyHtml = true;
 
-        var serverAddress = await keyVaultManager.GetSecret(EmailSettings.SMTPServer);
+        var serverAddress = KeyVaultManager.GetSecret(EmailSettings.SMTPServer);
 
         using var client = new SmtpClient(serverAddress!.Split(':')[0]);
         client.Port = int.Parse(serverAddress.Split(':')[1]);

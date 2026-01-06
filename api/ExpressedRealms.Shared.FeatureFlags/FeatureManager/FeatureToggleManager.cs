@@ -6,19 +6,13 @@ namespace ExpressedRealms.FeatureFlags.FeatureManager;
 
 public class FeatureToggleManager : IFeatureToggleManager
 {
-    private readonly IKeyVaultManager _keyVaultManager;
     private FliptRestClient _fliptRestClient = null!;
 
-    public FeatureToggleManager(IKeyVaultManager keyVaultManager)
-    {
-        _keyVaultManager = keyVaultManager;
-    }
-
-    private async Task SetupClient()
+    private void SetupClient()
     {
         var httpClient = new HttpClient();
         httpClient.BaseAddress = new Uri(
-            await _keyVaultManager.GetSecret(FeatureFlagSettings.FeatureFlagUrl),
+            KeyVaultManager.GetSecret(FeatureFlagSettings.FeatureFlagUrl),
             UriKind.RelativeOrAbsolute
         );
         httpClient.Timeout = TimeSpan.FromSeconds(30);
@@ -108,7 +102,7 @@ public class FeatureToggleManager : IFeatureToggleManager
     /// </summary>
     public async Task UpdateFeatureToggles()
     {
-        await SetupClient();
+        SetupClient();
 
         var codeSideFlags = ReleaseFlags.List.ToList();
         var hostSideFlags = await GetFeatureFlags();

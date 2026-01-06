@@ -16,10 +16,7 @@
       "launchUrl": "https://localhost:8443/scalar",
       "applicationUrl": "http://+:8080;https://+:8443",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "DAPR_APP_ID": "webapi",
-        "DAPR_GRPC_ENDPOINT": "http://localhost:50001",
-        "DAPR_HTTP_ENDPOINT": "http://localhost:3500"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "IIS Express": {

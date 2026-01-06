@@ -3,7 +3,7 @@ using ExpressedRealms.Shared.AzureKeyVault.Secrets;
 
 namespace ExpressedRealms.Email.IdentityEmails.ForgotPasswordEmail;
 
-internal sealed class ForgetPasswordEmail(IKeyVaultManager keyVault) : IForgetPasswordEmail
+internal sealed class ForgetPasswordEmail : IForgetPasswordEmail
 {
     private string ParseResetToken(string identityEmail)
     {
@@ -16,7 +16,7 @@ internal sealed class ForgetPasswordEmail(IKeyVaultManager keyVault) : IForgetPa
     {
         var subject = "Society in Shadows Password Reset";
         var resetToken = ParseResetToken(htmlContent);
-        var baseURL = await keyVault.GetSecret(EmailSettings.FrontEndBaseUrl);
+        var baseURL = KeyVaultManager.GetSecret(EmailSettings.FrontEndBaseUrl);
         var plainTextContext =
             $@"You recently requested to reset the password for your Society in Shadows account. Copy and paste the link below to proceed.
 

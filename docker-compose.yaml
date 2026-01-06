@@ -27,18 +27,6 @@ services:
     networks:
       - expressed-realms-network
 
-  dapr-sidecar:
-    image: "daprio/daprd:edge"
-    command: ["./daprd", "-app-id", "webapi", "-app-port", "8080", "-resources-path", "/components"]
-    volumes:
-      - ./dapr/components:/components
-      - ./secrets.json:/secrets.json
-    ports:
-      - "3500:3500"
-      - "50001:50001"
-    networks:
-      - expressed-realms-network
-
   postgres:
     container_name: expressed-realms-db
     image: postgres:16-alpine

@@ -10,15 +10,11 @@ namespace ExpressedRealms.Server.Configuration;
 
 public static class DatabaseConfiguration
 {
-    public static async Task AddDatabaseConnection(
-        this WebApplicationBuilder builder,
-        EarlyKeyVaultManager vaultManager,
-        bool isProduction
-    )
+    public static void AddDatabaseConnection(this WebApplicationBuilder builder, bool isProduction)
     {
         if (!isProduction)
         {
-            var connectionString = await vaultManager.GetSecret(ConnectionStrings.Database);
+            var connectionString = KeyVaultManager.GetSecret(ConnectionStrings.Database);
             // Register DbContext with reuse of the existing services
             builder.Services.AddDbContext<ExpressedRealmsDbContext>(
                 (_, options) =>
@@ -36,7 +32,7 @@ public static class DatabaseConfiguration
             return;
         }
 
-        var azureConnectionString = await vaultManager.GetSecret(ConnectionStrings.Database);
+        var azureConnectionString = KeyVaultManager.GetSecret(ConnectionStrings.Database);
         // Assuming these services are registered once and reused
         var dataSourceBuilder = new NpgsqlDataSourceBuilder(azureConnectionString);
 
