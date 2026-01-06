@@ -58,8 +58,13 @@ try
 
     if (builder.Environment.IsProduction())
     {
+        var azureKeyVaultUri = Environment.GetEnvironmentVariable(ConnectionStrings.AzureKeyVault.Name);
+        if (string.IsNullOrWhiteSpace(azureKeyVaultUri))
+        {
+            throw new KeyNotFoundException($"Secret {ConnectionStrings.AzureKeyVault.Name} not found");
+        }
         builder.Configuration.AddAzureKeyVault(
-            new Uri(Environment.GetEnvironmentVariable(ConnectionStrings.AzureKeyVault.Name)),
+            new Uri(azureKeyVaultUri),
             new DefaultAzureCredential()
         );
     }
