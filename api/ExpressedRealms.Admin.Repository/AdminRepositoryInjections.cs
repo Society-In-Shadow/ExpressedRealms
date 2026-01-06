@@ -9,6 +9,7 @@ public static class AdminRepositoryInjections
     {
         services.AddScoped<IUsersRepository, UsersRepository>();
         services.AddScoped<IActivityLogRepository, ActivityLogRepository>();
+        services.AddScoped<IRolesRepository, RolesRepository>();
 
         return services;
     }

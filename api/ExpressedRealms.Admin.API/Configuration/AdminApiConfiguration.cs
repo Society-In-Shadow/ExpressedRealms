@@ -1,5 +1,6 @@
 using ExpressedRealms.Admin.API.AdminCharacterList;
 using ExpressedRealms.Admin.API.AdminEndpoints;
+using ExpressedRealms.Admin.API.RolesEndpoints;
 using Microsoft.AspNetCore.Builder;
 
 namespace ExpressedRealms.Admin.API.Configuration;
@@ -10,5 +11,6 @@ public static class AdminApiConfiguration
     {
         app.AddAdminEndPoints();
         app.AddAdminCharacterListEndPoints();
+        app.AddRolesEndpoints();
     }
 }
