@@ -19,8 +19,6 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__KeyPath=/https/key.pem
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/cert.pem
       - IS_DOCKER_COMPOSE=true
-      - DAPR_APP_ID=webapi
-      - DAPR_GRPC_ENDPOINT=http://dapr-sidecar:50001
       - DOTNET_URLS=http://+:8080;https://+:8443
     ports:
       - '5000:8080'
@@ -38,10 +36,3 @@ services:
         condition: service_started
       mailpit:
         condition: service_started
-      dapr-sidecar:
-        condition: service_started
-
-  dapr-sidecar:
-    volumes:
-      - ./dapr/components:/components
-      - ./secrets_docker.json:/secrets.json

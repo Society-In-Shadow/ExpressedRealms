@@ -13,14 +13,12 @@ echo "✅ Synced Permissions!"
 
 echo "🔨 Building container: $CONTAINER_NAME"
 
-if ! podman compose -f ../docker-compose.yaml -f ../docker-compose.container-api.yaml build "$CONTAINER_NAME"; then
+if ! podman compose -f ../docker-compose.yaml -f ../docker-compose.container-api.yaml build "$CONTAINER_NAME" --no-cache; then
   echo "❌ Failed to build container"
   exit 1
 fi
 
 echo "🛑 Stopping container: $CONTAINER_NAME"
-
-podman compose stop "myapp"
 
 if ! podman compose -f ../docker-compose.yaml -f ../docker-compose.container-api.yaml stop "$CONTAINER_NAME"; then
   echo "❌ Failed to stop container"

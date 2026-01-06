@@ -59,7 +59,7 @@ try
     if (builder.Environment.IsProduction())
     {
         builder.Configuration.AddAzureKeyVault(
-            new Uri(KeyVaultManager.GetSecret(ConnectionStrings.AzureKeyVault)),
+            new Uri(Environment.GetEnvironmentVariable(ConnectionStrings.AzureKeyVault.Name)),
             new DefaultAzureCredential()
         );
     }
@@ -260,7 +260,7 @@ try
     }
 
     // Seed Roles
-    app.ConfigureUserRoles();
+    await app.ConfigureUserRoles();
 
     app.UseDefaultFiles();
     app.UseStaticFiles();
