@@ -10,9 +10,7 @@ namespace ExpressedRealms.FeatureFlags.Configuration;
 
 public static class FeatureFlagInjections
 {
-    public static void AddFeatureFlagInjections(
-        this IServiceCollection services
-    )
+    public static void AddFeatureFlagInjections(this IServiceCollection services)
     {
         var url = KeyVaultManager.GetSecret(FeatureFlagSettings.FeatureFlagUrl);
 

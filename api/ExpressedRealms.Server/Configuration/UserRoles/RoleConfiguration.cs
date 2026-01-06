@@ -15,11 +15,7 @@ public static class RoleConfiguration
             if (!await roleManager.RoleExistsAsync(role))
             {
                 await roleManager.CreateAsync(
-                    new Role
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        Name = role
-                    }
+                    new Role { Id = Guid.NewGuid().ToString(), Name = role }
                 );
             }
         }

@@ -8,10 +8,8 @@ using Microsoft.Extensions.Logging;
 
 namespace ExpressedRealms.Events.API.Discord;
 
-internal sealed class DiscordService(
-    ILogger<DiscordService> logger,
-    IHostEnvironment environment
-) : IDiscordService
+internal sealed class DiscordService(ILogger<DiscordService> logger, IHostEnvironment environment)
+    : IDiscordService
 {
     private readonly DiscordRestClient _discordRestClient = new();
     const ulong SocietyInShadowsGuildId = 1176957503104352347;

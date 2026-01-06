@@ -12,29 +12,26 @@ namespace ExpressedRealms.Email;
 
 public static class EmailDependencyInjections
 {
-    extension(IServiceCollection services)
+    public static IServiceCollection AddEmailDependencies(this IServiceCollection services)
     {
-        public IServiceCollection AddEmailDependencies()
+        if (!KeyVaultManager.IsSecretSet(EmailSettings.SMTPServer))
         {
-            if (!KeyVaultManager.IsSecretSet(EmailSettings.SMTPServer))
-            {
-                services.AddTransient<IEmailClientAdapter, EmailClientAdapter.EmailClientAdapter>();
-            }
-            else
-            {
-                services.AddTransient<IEmailClientAdapter, LocalAdapter>();
-            }
-
-            services.AddTransient<IEmailSender, IdentityEmailSender>();
-            services.InjectIndividualEmails();
-            return services;
+            services.AddTransient<IEmailClientAdapter, EmailClientAdapter.EmailClientAdapter>();
+        }
+        else
+        {
+            services.AddTransient<IEmailClientAdapter, LocalAdapter>();
         }
 
-        private void InjectIndividualEmails()
-        {
-            services.AddTransient<ITestEmail, TestEmail.TestEmail>();
-            services.AddTransient<IForgetPasswordEmail, ForgetPasswordEmail>();
-            services.AddTransient<IConfirmAccountEmail, ConfirmAccountEmail>();
-        }
+        services.AddTransient<IEmailSender, IdentityEmailSender>();
+        services.InjectIndividualEmails(); // call your private static helper
+        return services;
+    }
+
+    private static void InjectIndividualEmails(this IServiceCollection services)
+    {
+        services.AddTransient<ITestEmail, TestEmail.TestEmail>();
+        services.AddTransient<IForgetPasswordEmail, ForgetPasswordEmail>();
+        services.AddTransient<IConfirmAccountEmail, ConfirmAccountEmail>();
     }
 }

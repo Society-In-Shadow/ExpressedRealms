@@ -127,12 +127,6 @@ Broadly speaking, there are two levels to this:
 
 See more information in the [Docker](docker-podman.md) documentation
 
-### Dapr
-This is being used for secret retrieval.  Locally, there are two different versions of a "key vault", one for API usage
-inside an IDE and one for specifically for full docker setup.
-
-On prod, it connects to Azure Key Vault
-
 ## Azure
 
 For our production environment, we rely on Azure.  Main components are the azure container apps for both front end and

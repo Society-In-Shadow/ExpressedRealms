@@ -5,9 +5,7 @@ using PostmarkDotNet;
 
 namespace ExpressedRealms.Email.EmailClientAdapter;
 
-internal sealed class EmailClientAdapter(
-    ILogger<EmailClientAdapter> logger
-) : IEmailClientAdapter
+internal sealed class EmailClientAdapter(ILogger<EmailClientAdapter> logger) : IEmailClientAdapter
 {
     public async Task SendEmailAsync(EmailData data)
     {

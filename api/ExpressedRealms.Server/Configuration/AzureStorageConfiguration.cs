@@ -8,9 +8,7 @@ namespace ExpressedRealms.Server.Configuration;
 
 public static class AzureStorageConfiguration
 {
-    public static async Task SetupBlobStorage(
-        this WebApplicationBuilder builder
-    )
+    public static async Task SetupBlobStorage(this WebApplicationBuilder builder)
     {
         // Since we are in a container, we need to keep track of the data keys manually
 

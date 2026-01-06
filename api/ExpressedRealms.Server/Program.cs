@@ -55,7 +55,7 @@ try
 
     Log.Information("Setting Up Web App");
     var builder = WebApplication.CreateBuilder(args);
-    
+
     if (builder.Environment.IsProduction())
     {
         builder.Configuration.AddAzureKeyVault(
@@ -66,11 +66,10 @@ try
     else if (Environment.GetEnvironmentVariable("IS_DOCKER_COMPOSE") == "true")
     {
         Log.Information("Setting Up Docker Compose");
-        
-        builder.Configuration
-            .AddJsonFile($"appsettings.docker.json", optional: false);
+
+        builder.Configuration.AddJsonFile($"appsettings.docker.json", optional: false);
     }
-    
+
     KeyVaultManager.Initialize(builder.Configuration);
 
     Log.Information("Setup In Memory Cache");

@@ -10,10 +10,7 @@ namespace ExpressedRealms.Server.Configuration;
 
 public static class DatabaseConfiguration
 {
-    public static void AddDatabaseConnection(
-        this WebApplicationBuilder builder,
-        bool isProduction
-    )
+    public static void AddDatabaseConnection(this WebApplicationBuilder builder, bool isProduction)
     {
         if (!isProduction)
         {

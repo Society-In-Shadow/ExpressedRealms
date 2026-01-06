@@ -47,7 +47,7 @@ It will:
 - Reset docker configuration to ensure that docker version of the API can run successfully
 
 It is preferred to run this script initially, as you can see the progress of the dependencies being downloaded, which
-takes quite a bit of time on intiial load.
+takes quite a bit of time on intial load. 
 
 It will also ensure that everything is up and running correctly.
 
@@ -60,5 +60,5 @@ In the csproj, it's setup to trigger before the build process.
 
 Like above, it will:
 - Sync API permissions to the client folder
-  - Reset docker configuration to ensure that IDE version of the API can run successfully
-  1`2QQQ
+- Stop the existing API container if it exists
+- Load the site in debug mode, with correct config settings
