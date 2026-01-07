@@ -15,6 +15,12 @@ export const Permissions = {
     Create: 'eventscheduleitem.create',
     Delete: 'eventscheduleitem.delete',
   } as const,
+  Role: {
+    Edit: 'role.edit',
+    View: 'role.view',
+    Create: 'role.create',
+    Delete: 'role.delete',
+  } as const,
 } as const
 
 export type Permission = typeof Permissions[keyof typeof Permissions]
