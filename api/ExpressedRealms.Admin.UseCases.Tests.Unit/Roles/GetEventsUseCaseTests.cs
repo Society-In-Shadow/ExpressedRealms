@@ -1,7 +1,6 @@
 using ExpressedRealms.Admin.Repository;
 using ExpressedRealms.Admin.UseCases.Roles.Get;
 using ExpressedRealms.DB.Models.Authorization.RoleSetup;
-using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using FakeItEasy;
 using Xunit;
 
@@ -12,7 +11,6 @@ public class GetRolesUseCaseTests
     private readonly GetRolesUseCase _useCase;
     private readonly IRolesRepository _repository;
     private readonly List<Role> _dbModel;
-    private readonly IUserContext _userContext;
 
     public GetRolesUseCaseTests()
     {
