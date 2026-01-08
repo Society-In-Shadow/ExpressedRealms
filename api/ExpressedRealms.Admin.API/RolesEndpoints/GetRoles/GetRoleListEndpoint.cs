@@ -1,4 +1,4 @@
-using ExpressedRealms.Admin.UseCases.Roles.Get;
+using ExpressedRealms.Admin.UseCases.Roles.GetRoles;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 
