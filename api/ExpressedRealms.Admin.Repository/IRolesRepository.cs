@@ -9,4 +9,7 @@ public interface IRolesRepository
     Task<EditRoleDto> GetRoleForEditView(int id);
     Task<Role?> FindRoleAsync(int guid);
     Task<bool> RoleExistsAsync(int id);
+    Task<bool> RoleNameExistsAsync(string name);
+    Task<int> AddAsync(Role role);
+    Task<List<Guid>> GetInvalidPermissions(List<Guid> permissionIds);
 }

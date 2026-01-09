@@ -1,5 +1,6 @@
 using ExpressedRealms.Admin.Repository.DTOs;
 using ExpressedRealms.DB;
+using ExpressedRealms.DB.Models.Authorization.Permissions;
 using ExpressedRealms.DB.Models.Authorization.RoleSetup;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,8 +32,31 @@ internal sealed class RolesRepository(ExpressedRealmsDbContext context) : IRoles
         return await context.Set<Role>().AnyAsync(x => x.Id == id);
     }
 
+    public async Task<bool> RoleNameExistsAsync(string name)
+    {
+        return await context.Set<Role>().AnyAsync(x => x.Name == name);
+    }
+
     public async Task<Role?> FindRoleAsync(int guid)
     {
         return await context.Set<Role>().FindAsync(guid);
+    }
+
+    public async Task<int> AddAsync(Role role)
+    {
+        await context.AddAsync(role);
+        await context.SaveChangesAsync();
+        return role.Id;
+    }
+
+    public async Task<List<Guid>> GetInvalidPermissions(List<Guid> permissionIds)
+    {
+        var validPermissions = await context
+            .Set<Permission>()
+            .Where(x => permissionIds.Contains(x.Id))
+            .Select(x => x.Id)
+            .ToListAsync();
+
+        return permissionIds.Except(validPermissions).ToList();
     }
 }

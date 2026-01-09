@@ -1,6 +1,7 @@
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FluentResults;
 using FluentValidation;
+using FluentValidation.Results;
 
 namespace ExpressedRealms.UseCases.Shared;
 
@@ -33,8 +34,27 @@ public static class ValidationHelper
         );
         validationResult.Errors.RemoveAll(x => x.ErrorCode == "AlreadyDeleted");
 
-        errors.Add(new FluentValidationFailure(validationResult.ToDictionary()));
+        var invalidIdsFailures = validationResult
+            .Errors.Where(x => x.ErrorCode == "InvalidIds" && x.CustomState is IError)
+            .Select(x => (IError)x.CustomState);
+        errors.AddRange(invalidIdsFailures);
+        validationResult.Errors.RemoveAll(x => x.ErrorCode == "InvalidIds");
+
+        if (validationResult.Errors.Count != 0)
+            errors.Add(new FluentValidationFailure(validationResult.ToDictionary()));
 
         return Result.Fail(errors);
+    }
+
+    public static ValidationFailure AddInvalidIdsFailure<T>(
+        string permissionName,
+        List<T> invalidPermissions
+    )
+    {
+        return new ValidationFailure(permissionName, "One or more Ids are invalid")
+        {
+            CustomState = new InvalidIdsError<T>(permissionName, invalidPermissions),
+            ErrorCode = "InvalidIds",
+        };
     }
 }
