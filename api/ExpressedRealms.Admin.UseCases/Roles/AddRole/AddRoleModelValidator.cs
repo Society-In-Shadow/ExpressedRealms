@@ -23,14 +23,21 @@ internal sealed class AddRoleModelValidator : AbstractValidator<AddRoleModel>
             .WithMessage("Description must be at most 1000 characters.");
 
         RuleFor(x => x.PermissionIds)
-            .CustomAsync(async (x, context, y) =>
-            {
-                var invalidPermissions = await repository.GetInvalidPermissions(x);
-
-                if (invalidPermissions.Count != 0)
+            .CustomAsync(
+                async (x, context, y) =>
                 {
-                    context.AddFailure(ValidationHelper.AddInvalidIdsFailure(nameof(AddRoleModel.PermissionIds), invalidPermissions));
+                    var invalidPermissions = await repository.GetInvalidPermissions(x);
+
+                    if (invalidPermissions.Count != 0)
+                    {
+                        context.AddFailure(
+                            ValidationHelper.AddInvalidIdsFailure(
+                                nameof(AddRoleModel.PermissionIds),
+                                invalidPermissions
+                            )
+                        );
+                    }
                 }
-            });
+            );
     }
 }

@@ -12,10 +12,7 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).HasColumnName("id").IsRequired();
         builder.Property(e => e.Name).HasColumnName("name").HasMaxLength(250).IsRequired();
-        builder
-            .Property(e => e.Description)
-            .HasColumnName("description")
-            .HasMaxLength(1000);
+        builder.Property(e => e.Description).HasColumnName("description").HasMaxLength(1000);
 
         builder.HasQueryFilter(x => !x.IsDeleted);
         builder.Property(e => e.IsDeleted).HasColumnName("is_deleted");

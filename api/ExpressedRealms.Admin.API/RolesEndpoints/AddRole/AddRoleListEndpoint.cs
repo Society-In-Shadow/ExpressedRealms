@@ -12,12 +12,14 @@ public static class AddRoleEndpoint
         IAddRoleUseCase useCase
     )
     {
-        var results = await useCase.ExecuteAsync(new AddRoleModel()
-        {
-            Name = request.Name, 
-            Description = request.Description, 
-            PermissionIds = request.PermissionIds
-        });
+        var results = await useCase.ExecuteAsync(
+            new AddRoleModel()
+            {
+                Name = request.Name,
+                Description = request.Description,
+                PermissionIds = request.PermissionIds,
+            }
+        );
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;

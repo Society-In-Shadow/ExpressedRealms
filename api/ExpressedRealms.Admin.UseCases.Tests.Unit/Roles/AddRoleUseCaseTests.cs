@@ -39,15 +39,18 @@ public class AddRoleUseCaseTests
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(nameof(AddRoleModel.Name), "Name is required.");
     }
-    
+
     [Fact]
     public async Task ValidationFor_Name_WillFail_WhenItsOver_250Characters()
     {
         _model.Name = new String('x', 251);
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(AddRoleModel.Name), "Name must be at most 250 characters.");
+        results.MustHaveValidationError(
+            nameof(AddRoleModel.Name),
+            "Name must be at most 250 characters."
+        );
     }
-    
+
     [Fact]
     public async Task ValidationFor_Name_WillFail_WhenItIs_ADuplicateName()
     {
@@ -55,20 +58,24 @@ public class AddRoleUseCaseTests
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(nameof(AddRoleModel.Name), "Name has already been taken.");
     }
-    
+
     [Fact]
     public async Task ValidationFor_Description_WillFail_WhenItsOver_1000Characters()
     {
         _model.Description = new String('x', 1001);
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(AddRoleModel.Description), "Description must be at most 1000 characters.");
+        results.MustHaveValidationError(
+            nameof(AddRoleModel.Description),
+            "Description must be at most 1000 characters."
+        );
     }
 
     [Fact]
     public async Task ValidationFor_PermissionIds_WillFail_IfAnyPermissions_DoNotExist()
     {
         var returnedList = new List<Guid> { Guid.CreateVersion7(), Guid.CreateVersion7() };
-        A.CallTo(() => _repository.GetInvalidPermissions(_model.PermissionIds)).Returns(returnedList);
+        A.CallTo(() => _repository.GetInvalidPermissions(_model.PermissionIds))
+            .Returns(returnedList);
         var result = await _useCase.ExecuteAsync(_model);
         // Assert
         Assert.True(result.IsFailed);
@@ -77,10 +84,9 @@ public class AddRoleUseCaseTests
         Assert.IsType<InvalidIdsError<Guid>>(error);
 
         var typedError = (InvalidIdsError<Guid>)error;
-        Assert.Equal(returnedList.OrderBy(x => x), 
-            typedError.InvalidPermissionIds.OrderBy(x => x));
+        Assert.Equal(returnedList.OrderBy(x => x), typedError.InvalidPermissionIds.OrderBy(x => x));
     }
-    
+
     [Fact]
     public async Task UseCase_CreatesRole_WithExpectedValues()
     {
@@ -88,15 +94,17 @@ public class AddRoleUseCaseTests
         await _useCase.ExecuteAsync(_model);
 
         // Assert
-        A.CallTo(() => _repository.AddAsync(
-            A<Role>.That.Matches(role =>
-                role.Name == _model.Name &&
-                role.Description == _model.Description &&
-                role.RolePermissionMappings
-                    .Select(rpm => rpm.PermissionId)
-                    .OrderBy(id => id)
-                    .SequenceEqual(_model.PermissionIds.OrderBy(id => id))
+        A.CallTo(() =>
+                _repository.AddAsync(
+                    A<Role>.That.Matches(role =>
+                        role.Name == _model.Name
+                        && role.Description == _model.Description
+                        && role.RolePermissionMappings.Select(rpm => rpm.PermissionId)
+                            .OrderBy(id => id)
+                            .SequenceEqual(_model.PermissionIds.OrderBy(id => id))
+                    )
+                )
             )
-        )).MustHaveHappenedOnceExactly();
+            .MustHaveHappenedOnceExactly();
     }
 }

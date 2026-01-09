@@ -68,7 +68,7 @@ public static class ResultOverrides
     )
     {
         typedResults = TypedResults.ValidationProblem(new Dictionary<string, string[]>());
-        
+
         var hasFluent = result.HasError<FluentValidationFailure>();
         var hasInvalidIds = result.Errors.OfType<IInvalidIdsError>().Any();
 
@@ -141,15 +141,16 @@ public static class ResultOverrides
 
     private static IDictionary<string, string[]> GetValidationFailure(List<IError> errors)
     {
-        if(errors.Count == 0)
+        if (errors.Count == 0)
             return new Dictionary<string, string[]>();
-        
+
         var fluentFailure = errors.OfType<FluentValidationFailure>().FirstOrDefault();
 
-        var basicValidations = fluentFailure != null
-            ? fluentFailure.ValidationFailures
-            : new Dictionary<string, string[]>();
-        
+        var basicValidations =
+            fluentFailure != null
+                ? fluentFailure.ValidationFailures
+                : new Dictionary<string, string[]>();
+
         foreach (var error in errors.OfType<IInvalidIdsError>())
         {
             var existing = basicValidations.TryGetValue(error.PropertyName, out var validation)
@@ -157,11 +158,14 @@ public static class ResultOverrides
                 : Array.Empty<string>();
 
             basicValidations[error.PropertyName] = existing
-                .Concat(new[] { error.ValidationMessage }
-                    .Concat(error.InvalidIds.Cast<object>().Select(id => id.ToString())))
+                .Concat(
+                    new[] { error.ValidationMessage }.Concat(
+                        error.InvalidIds.Cast<object>().Select(id => id.ToString())
+                    )
+                )
                 .ToArray()!;
         }
-        
+
         return basicValidations;
     }
 }

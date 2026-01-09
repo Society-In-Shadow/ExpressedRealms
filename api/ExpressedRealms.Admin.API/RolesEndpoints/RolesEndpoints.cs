@@ -24,11 +24,11 @@ public static class RolesEndpoints
         endpointGroup
             .MapGet("roles/", GetRoleListEndpoint.Execute)
             .RequirePermission(Permissions.Role.View);
-        
+
         endpointGroup
             .MapGet("roles/{id}", GetRoleEndpoint.Execute)
             .RequirePermission(Permissions.Role.View);
-        
+
         endpointGroup
             .MapPost("roles/", AddRoleEndpoint.Execute)
             .RequirePermission(Permissions.Role.Create);

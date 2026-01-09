@@ -23,14 +23,16 @@ internal sealed class AddRoleUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        await rolesRepository.AddAsync(new Role()
-        {
-            Name = model.Name,
-            Description = model.Description,
-            RolePermissionMappings = model.PermissionIds
-                .Select(x => new RolePermissionMapping() { PermissionId = x })
-                .ToList(),
-        });
+        await rolesRepository.AddAsync(
+            new Role()
+            {
+                Name = model.Name,
+                Description = model.Description,
+                RolePermissionMappings = model
+                    .PermissionIds.Select(x => new RolePermissionMapping() { PermissionId = x })
+                    .ToList(),
+            }
+        );
 
         return Result.Ok();
     }

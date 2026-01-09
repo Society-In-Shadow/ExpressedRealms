@@ -31,7 +31,7 @@ internal sealed class RolesRepository(ExpressedRealmsDbContext context) : IRoles
     {
         return await context.Set<Role>().AnyAsync(x => x.Id == id);
     }
-    
+
     public async Task<bool> RoleNameExistsAsync(string name)
     {
         return await context.Set<Role>().AnyAsync(x => x.Name == name);
@@ -41,7 +41,7 @@ internal sealed class RolesRepository(ExpressedRealmsDbContext context) : IRoles
     {
         return await context.Set<Role>().FindAsync(guid);
     }
-    
+
     public async Task<int> AddAsync(Role role)
     {
         await context.AddAsync(role);
@@ -51,11 +51,12 @@ internal sealed class RolesRepository(ExpressedRealmsDbContext context) : IRoles
 
     public async Task<List<Guid>> GetInvalidPermissions(List<Guid> permissionIds)
     {
-        var validPermissions = await context.Set<Permission>()
+        var validPermissions = await context
+            .Set<Permission>()
             .Where(x => permissionIds.Contains(x.Id))
             .Select(x => x.Id)
             .ToListAsync();
-        
+
         return permissionIds.Except(validPermissions).ToList();
     }
 }
