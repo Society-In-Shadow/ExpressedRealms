@@ -230,7 +230,7 @@ public static class ResultFluentValidationExtensions
 
     private static bool HandlePropertyAndReturnSuccess<T>(
         string propertyName,
-        FluentValidationFailure validationFailure,
+        FluentValidationFailure? validationFailure,
         T? validationSpecificError = null
     )
         where T : class, IValidationSourcedError
@@ -241,18 +241,20 @@ public static class ResultFluentValidationExtensions
             if (hasProperty)
                 return true;
 
-            validationFailure.ValidationFailures.Add(
-                new KeyValuePair<string, string[]>(
-                    validationSpecificError.PropertyName,
-                    new[] { validationSpecificError.ValidationMessage }
-                )
-            );
+            if (validationFailure is null)
+            {
+                Assert.Fail($"Expected property \"{propertyName}\" not found. Only a specific error exists, which is for \"{validationSpecificError.PropertyName}\".");
+            }
+        }
+
+        if (validationFailure is not null)
+        {
+            if (validationFailure.ValidationFailures.ContainsKey(propertyName))
+                return true;
         }
         else
         {
-            var hasProperty = validationFailure.ValidationFailures.ContainsKey(propertyName);
-            if (hasProperty)
-                return true;
+            Assert.Fail($"Expected property \"{propertyName}\" not found. No validation failures are present.");
         }
 
         var stringBuilder = new StringBuilder();
