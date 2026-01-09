@@ -51,12 +51,15 @@ public static class ResultOverrides
     public static bool HasValidationError(this Result result, out ValidationProblem typedResults)
     {
         typedResults = TypedResults.ValidationProblem(new Dictionary<string, string[]>());
-        var hasError = result.HasError<FluentValidationFailure>();
 
-        if (hasError)
-            typedResults = TypedResults.ValidationProblem(GetValidationFailure(result.Errors));
+        var hasFluent = result.HasError<FluentValidationFailure>();
+        var hasInvalidIds = result.Errors.OfType<IInvalidIdsError>().Any();
 
-        return hasError;
+        if (!hasFluent && !hasInvalidIds)
+            return false;
+
+        typedResults = TypedResults.ValidationProblem(GetValidationFailure(result.Errors));
+        return true;
     }
 
     public static bool HasValidationError<T>(
@@ -65,12 +68,15 @@ public static class ResultOverrides
     )
     {
         typedResults = TypedResults.ValidationProblem(new Dictionary<string, string[]>());
-        var hasError = result.HasError<FluentValidationFailure>();
+        
+        var hasFluent = result.HasError<FluentValidationFailure>();
+        var hasInvalidIds = result.Errors.OfType<IInvalidIdsError>().Any();
 
-        if (hasError)
-            typedResults = TypedResults.ValidationProblem(GetValidationFailure(result.Errors));
+        if (!hasFluent && !hasInvalidIds)
+            return false;
 
-        return hasError;
+        typedResults = TypedResults.ValidationProblem(GetValidationFailure(result.Errors));
+        return true;
     }
 
     public static bool HasBeenDeletedAlready(
@@ -135,8 +141,27 @@ public static class ResultOverrides
 
     private static IDictionary<string, string[]> GetValidationFailure(List<IError> errors)
     {
-        if (errors.Count != 0)
-            return ((FluentValidationFailure)errors[0]).ValidationFailures;
-        return new Dictionary<string, string[]>();
+        if(errors.Count == 0)
+            return new Dictionary<string, string[]>();
+        
+        var fluentFailure = errors.OfType<FluentValidationFailure>().FirstOrDefault();
+
+        var basicValidations = fluentFailure != null
+            ? fluentFailure.ValidationFailures
+            : new Dictionary<string, string[]>();
+        
+        foreach (var error in errors.OfType<IInvalidIdsError>())
+        {
+            var existing = basicValidations.TryGetValue(error.PropertyName, out var validation)
+                ? validation
+                : Array.Empty<string>();
+
+            basicValidations[error.PropertyName] = existing
+                .Concat(new[] { error.ValidationMessage }
+                    .Concat(error.InvalidIds.Cast<object>().Select(id => id.ToString())))
+                .ToArray()!;
+        }
+        
+        return basicValidations;
     }
 }
