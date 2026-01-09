@@ -77,9 +77,9 @@ public static class ResultFluentValidationExtensions
         var validationFailure = result.Errors.OfType<FluentValidationFailure>().FirstOrDefault();
         var notFoundFailure = result.Errors.OfType<T>().FirstOrDefault();
 
-        if (validationFailure == null)
+        if (validationFailure is not null)
         {
-            Assert.Fail("No validation failure");
+            Assert.Fail("More then one validation failure.  Expected only one.");
             return;
         }
 
@@ -102,9 +102,9 @@ public static class ResultFluentValidationExtensions
         var validationFailure = result.Errors.OfType<FluentValidationFailure>().FirstOrDefault();
         var notFoundFailure = result.Errors.OfType<NotFoundFailure>().FirstOrDefault();
 
-        if (validationFailure == null)
+        if (validationFailure is not null)
         {
-            Assert.Fail("No validation failure");
+            Assert.Fail("More then one validation failure.  Expected only one.");
             return;
         }
 
