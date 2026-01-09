@@ -20,7 +20,11 @@ public static class RolesEndpoints
             .RequireAuthorization()
             .RequirePolicyAuthorization(Policies.UserManagementPolicy);
 
-        endpointGroup.MapGet("roles/", GetRoleListEndpoint.Execute).RequirePermission(Permissions.Role.View);
-        endpointGroup.MapGet("roles/{id}", GetRoleEndpoint.Execute).RequirePermission(Permissions.Role.View);
+        endpointGroup
+            .MapGet("roles/", GetRoleListEndpoint.Execute)
+            .RequirePermission(Permissions.Role.View);
+        endpointGroup
+            .MapGet("roles/{id}", GetRoleEndpoint.Execute)
+            .RequirePermission(Permissions.Role.View);
     }
 }

@@ -11,16 +11,17 @@ internal sealed class RolesRepository(ExpressedRealmsDbContext context) : IRoles
     {
         return context.Set<Role>().AsNoTracking().ToListAsync();
     }
-    
+
     public Task<EditRoleDto> GetRoleForEditView(int id)
     {
-        return context.Set<Role>()
+        return context
+            .Set<Role>()
             .Select(x => new EditRoleDto()
             {
                 Id = x.Id,
                 Description = x.Description,
                 Name = x.Name,
-                PermissionIds = x.RolePermissionMappings.Select(y => y.PermissionId).ToList()
+                PermissionIds = x.RolePermissionMappings.Select(y => y.PermissionId).ToList(),
             })
             .FirstAsync(x => x.Id == id);
     }

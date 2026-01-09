@@ -6,8 +6,9 @@ namespace ExpressedRealms.Admin.UseCases.Roles.GetRole;
 
 internal sealed class GetRoleUseCase(
     IRolesRepository rolesRepository,
-    GetRoleModelValidator validator, 
-    CancellationToken cancellationToken) : IGetRoleUseCase
+    GetRoleModelValidator validator,
+    CancellationToken cancellationToken
+) : IGetRoleUseCase
 {
     public async Task<Result<RoleBaseReturnModel>> ExecuteAsync(GetRoleModel model)
     {
@@ -16,10 +17,10 @@ internal sealed class GetRoleUseCase(
             model,
             cancellationToken
         );
-        
+
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-        
+
         var role = await rolesRepository.GetRoleForEditView(model.Id);
 
         return Result.Ok(
@@ -28,7 +29,7 @@ internal sealed class GetRoleUseCase(
                 Id = role.Id,
                 Name = role.Name,
                 Description = role.Description,
-                PermissionIds = role.PermissionIds
+                PermissionIds = role.PermissionIds,
             }
         );
     }

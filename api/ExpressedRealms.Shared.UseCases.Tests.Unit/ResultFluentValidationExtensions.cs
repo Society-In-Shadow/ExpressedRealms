@@ -90,7 +90,7 @@ public static class ResultFluentValidationExtensions
 
         Assert.True(true);
     }
-    
+
     public static void MustHaveNotFoundError<T>(
         this Result<T> result,
         string propertyName,
@@ -110,7 +110,9 @@ public static class ResultFluentValidationExtensions
 
         if (notFoundFailure is null)
         {
-            Assert.Fail($"{propertyName} did not return a Not Found Error.  Probably missing \".WithErrorCode(\"NotFound\")\" for the given property");
+            Assert.Fail(
+                $"{propertyName} did not return a Not Found Error.  Probably missing \".WithErrorCode(\"NotFound\")\" for the given property"
+            );
         }
 
         if (!HandlePropertyAndReturnSuccess(propertyName, validationFailure, notFoundFailure))

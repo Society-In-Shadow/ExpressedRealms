@@ -7,10 +7,13 @@ namespace ExpressedRealms.Admin.API.RolesEndpoints.GetRole;
 
 public static class GetRoleEndpoint
 {
-    public static async Task<Results<Ok<RoleResponse>, ValidationProblem, NotFound>> Execute(int id, IGetRoleUseCase useCase)
+    public static async Task<Results<Ok<RoleResponse>, ValidationProblem, NotFound>> Execute(
+        int id,
+        IGetRoleUseCase useCase
+    )
     {
         var results = await useCase.ExecuteAsync(new GetRoleModel() { Id = id });
-        
+
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;
         if (results.HasNotFound(out var notFound))
@@ -23,7 +26,7 @@ public static class GetRoleEndpoint
                 Id = results.Value.Id,
                 Name = results.Value.Name,
                 Description = results.Value.Description,
-                PermissionIds = results.Value.PermissionIds
+                PermissionIds = results.Value.PermissionIds,
             }
         );
     }
