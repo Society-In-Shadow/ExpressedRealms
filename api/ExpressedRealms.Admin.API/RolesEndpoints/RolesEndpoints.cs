@@ -1,3 +1,4 @@
+using ExpressedRealms.Admin.API.RolesEndpoints.AddRole;
 using ExpressedRealms.Admin.API.RolesEndpoints.GetRole;
 using ExpressedRealms.Admin.API.RolesEndpoints.GetRoles;
 using ExpressedRealms.Authentication;
@@ -23,8 +24,13 @@ public static class RolesEndpoints
         endpointGroup
             .MapGet("roles/", GetRoleListEndpoint.Execute)
             .RequirePermission(Permissions.Role.View);
+        
         endpointGroup
             .MapGet("roles/{id}", GetRoleEndpoint.Execute)
             .RequirePermission(Permissions.Role.View);
+        
+        endpointGroup
+            .MapPost("roles/", AddRoleEndpoint.Execute)
+            .RequirePermission(Permissions.Role.Create);
     }
 }
