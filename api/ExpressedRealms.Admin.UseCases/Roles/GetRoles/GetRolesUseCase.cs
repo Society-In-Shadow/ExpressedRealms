@@ -1,7 +1,7 @@
 using ExpressedRealms.Admin.Repository;
 using FluentResults;
 
-namespace ExpressedRealms.Admin.UseCases.Roles.Get;
+namespace ExpressedRealms.Admin.UseCases.Roles.GetRoles;
 
 internal sealed class GetRolesUseCase(IRolesRepository rolesRepository) : IGetRolesUseCase
 {

@@ -1,5 +1,5 @@
 using ExpressedRealms.Admin.Repository;
-using ExpressedRealms.Admin.UseCases.Roles.Get;
+using ExpressedRealms.Admin.UseCases.Roles.GetRoles;
 using ExpressedRealms.DB.Models.Authorization.RoleSetup;
 using FakeItEasy;
 using Xunit;

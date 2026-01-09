@@ -91,6 +91,38 @@ public static class ResultFluentValidationExtensions
         Assert.True(true);
     }
 
+    public static void MustHaveNotFoundError<T>(
+        this Result<T> result,
+        string propertyName,
+        string? errorMessage = null
+    )
+    {
+        Assert.False(result.IsSuccess);
+
+        var validationFailure = result.Errors.OfType<FluentValidationFailure>().FirstOrDefault();
+        var notFoundFailure = result.Errors.OfType<NotFoundFailure>().FirstOrDefault();
+
+        if (validationFailure == null)
+        {
+            Assert.Fail("No validation failure");
+            return;
+        }
+
+        if (notFoundFailure is null)
+        {
+            Assert.Fail(
+                $"{propertyName} did not return a Not Found Error.  Probably missing \".WithErrorCode(\"NotFound\")\" for the given property"
+            );
+        }
+
+        if (!HandlePropertyAndReturnSuccess(propertyName, validationFailure, notFoundFailure))
+            return;
+
+        HandleMessage(propertyName, errorMessage, validationFailure, notFoundFailure);
+
+        Assert.True(true);
+    }
+
     public static void MustHaveValidationError<T, TResult>(
         this Result<TResult> result,
         string propertyName,

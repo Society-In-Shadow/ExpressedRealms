@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Admin.UseCases.Roles.Get;
+namespace ExpressedRealms.Admin.UseCases.Roles.GetRoles;
 
 public class RolesBaseReturnModel
 {
