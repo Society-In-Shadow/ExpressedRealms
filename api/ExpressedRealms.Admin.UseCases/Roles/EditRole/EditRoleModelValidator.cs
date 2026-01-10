@@ -12,6 +12,7 @@ internal sealed class EditRoleModelValidator : AbstractValidator<EditRoleModel>
     {
         RuleFor(x => x.Id)
             .NotEmpty()
+            .WithMessage("Id is required.")
             .MustAsync(async (x, y) => await repository.RoleExistsAsync(x))
             .WithMessage("Role does not exist.")
             .WithErrorCode("NotFound");
