@@ -29,15 +29,15 @@ public class GetPermissionsUseCaseTests
                         Id = Guid.CreateVersion7(),
                         Name = "Test Permission 1",
                         Description = "Test Permission Description 1",
-                        Key = "foo.bar"
+                        Key = "foo.bar",
                     },
                     new Permission()
                     {
                         Id = Guid.CreateVersion7(),
                         Name = "Test Permission 1",
-                        Key = "foo.bar"
-                    }
-                }
+                        Key = "foo.bar",
+                    },
+                },
             },
             new()
             {
@@ -51,9 +51,9 @@ public class GetPermissionsUseCaseTests
                         Id = Guid.CreateVersion7(),
                         Name = "Test Permission 1",
                         Description = "Test Permission Description 1",
-                        Key = "foo.bar"
-                    }
-                }
+                        Key = "foo.bar",
+                    },
+                },
             },
         };
 
@@ -75,16 +75,18 @@ public class GetPermissionsUseCaseTests
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
-                    Permissions = x.Permissions.Select(y => new UseCases.Roles.GetPermissions.Permission()
-                    {
-                        Id = y.Id,
-                        Name = y.Name,
-                        Description = y.Description,
-                    }).ToList()
+                    Permissions = x
+                        .Permissions.Select(y => new UseCases.Roles.GetPermissions.Permission()
+                        {
+                            Id = y.Id,
+                            Name = y.Name,
+                            Description = y.Description,
+                        })
+                        .ToList(),
                 })
                 .ToList(),
         };
-        
+
         var results = await _useCase.ExecuteAsync();
 
         Assert.Equivalent(returnList.Resources, results.Value.Resources);

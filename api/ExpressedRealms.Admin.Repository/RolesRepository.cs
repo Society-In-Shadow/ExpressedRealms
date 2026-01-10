@@ -58,13 +58,10 @@ internal sealed class RolesRepository(
             .Include(x => x.RolePermissionMappings)
             .FirstAsync(x => x.Id == guid, cancellationToken);
     }
-    
+
     public async Task<List<PermissionResource>> GetPermissionResourcesForList()
     {
-        return await context
-            .Set<PermissionResource>()
-            .Include(x => x.Permissions)
-            .ToListAsync();
+        return await context.Set<PermissionResource>().Include(x => x.Permissions).ToListAsync();
     }
 
     public async Task<int> AddAsync(Role role)

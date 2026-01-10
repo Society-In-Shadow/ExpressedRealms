@@ -19,12 +19,14 @@ public static class GetPermissionsEndpoint
                         Id = x.Id,
                         Name = x.Name,
                         Description = x.Description,
-                        Permissions = x.Permissions.Select(y => new Permission()
-                        {
-                            Name = y.Name,
-                            Description = y.Description,
-                            Id = y.Id
-                        }).ToList()
+                        Permissions = x
+                            .Permissions.Select(y => new Permission()
+                            {
+                                Name = y.Name,
+                                Description = y.Description,
+                                Id = y.Id,
+                            })
+                            .ToList(),
                     })
                     .ToList(),
             }

@@ -31,7 +31,7 @@ public static class RolesEndpoints
         endpointGroup
             .MapGet("roles/{id}", GetRoleEndpoint.Execute)
             .RequirePermission(Permissions.Role.View);
-        
+
         endpointGroup
             .MapGet("roles/permissions", GetPermissionsEndpoint.Execute)
             .RequirePermission(Permissions.Role.View);
