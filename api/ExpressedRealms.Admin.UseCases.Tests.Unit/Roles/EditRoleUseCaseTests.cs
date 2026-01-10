@@ -35,17 +35,9 @@ public class EditRoleUseCaseTests
             Description = "Location 1",
             RolePermissionMappings = new List<RolePermissionMapping>()
             {
-                new RolePermissionMapping()
-                {
-                    RoleId = 1,
-                    PermissionId = _addPermission,
-                },
-                new RolePermissionMapping()
-                {
-                    RoleId = 1,
-                    PermissionId = editPermission,
-                },
-            }
+                new RolePermissionMapping() { RoleId = 1, PermissionId = _addPermission },
+                new RolePermissionMapping() { RoleId = 1, PermissionId = editPermission },
+            },
         };
 
         _repository = A.Fake<IRolesRepository>();
@@ -74,7 +66,7 @@ public class EditRoleUseCaseTests
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveNotFoundError(nameof(EditRoleModel.Id), "Role does not exist.");
     }
-    
+
     [Fact]
     public async Task ValidationFor_Name_WillFail_WhenIsEmpty()
     {
@@ -120,7 +112,7 @@ public class EditRoleUseCaseTests
         A.CallTo(() => _repository.GetInvalidPermissions(_model.PermissionIds))
             .Returns(returnedList);
         var result = await _useCase.ExecuteAsync(_model);
-        
+
         Assert.True(result.IsFailed);
 
         var error = Assert.Single(result.Errors);
@@ -136,7 +128,7 @@ public class EditRoleUseCaseTests
         _model.Name = "Test Event 2";
         _model.Description = "Location 2";
         _model.PermissionIds = [_addPermission, Guid.CreateVersion7()];
-        
+
         Role capturedRole = null;
 
         A.CallTo(() => _repository.EditAsync(A<Role>.Ignored))

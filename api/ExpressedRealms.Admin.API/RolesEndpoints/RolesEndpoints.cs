@@ -33,7 +33,7 @@ public static class RolesEndpoints
         endpointGroup
             .MapPost("roles/", AddRoleEndpoint.Execute)
             .RequirePermission(Permissions.Role.Create);
-        
+
         endpointGroup
             .MapPut("roles/{id}", EditRoleEndpoint.Execute)
             .RequirePermission(Permissions.Role.Edit);

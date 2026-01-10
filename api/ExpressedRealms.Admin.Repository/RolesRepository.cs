@@ -7,7 +7,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Admin.Repository;
 
-internal sealed class RolesRepository(ExpressedRealmsDbContext context, CancellationToken cancellationToken) : IRolesRepository
+internal sealed class RolesRepository(
+    ExpressedRealmsDbContext context,
+    CancellationToken cancellationToken
+) : IRolesRepository
 {
     public Task<List<Role>> GetRolesForListAsync()
     {
@@ -35,17 +38,22 @@ internal sealed class RolesRepository(ExpressedRealmsDbContext context, Cancella
 
     public async Task<bool> RoleNameExistsAsync(string name)
     {
-        return await context.Set<Role>().AnyAsync(x => x.Name.ToLower() == name.ToLower(), cancellationToken);
+        return await context
+            .Set<Role>()
+            .AnyAsync(x => x.Name.ToLower() == name.ToLower(), cancellationToken);
     }
 
     public async Task<bool> RoleNameExistsAsync(int id, string name)
     {
-        return await context.Set<Role>().AnyAsync(x => x.Name.ToLower() == name.ToLower() && x.Id != id, cancellationToken);
+        return await context
+            .Set<Role>()
+            .AnyAsync(x => x.Name.ToLower() == name.ToLower() && x.Id != id, cancellationToken);
     }
-    
+
     public async Task<Role> GetRoleForEditAsync(int guid)
     {
-        return await context.Set<Role>()
+        return await context
+            .Set<Role>()
             .Include(x => x.RolePermissionMappings)
             .FirstAsync(x => x.Id == guid, cancellationToken);
     }
@@ -67,7 +75,7 @@ internal sealed class RolesRepository(ExpressedRealmsDbContext context, Cancella
 
         return permissionIds.Except(validPermissions).ToList();
     }
-    
+
     public async Task EditAsync<TEntity>(TEntity entity)
         where TEntity : class
     {

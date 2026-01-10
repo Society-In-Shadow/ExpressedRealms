@@ -16,13 +16,13 @@ internal sealed class EditRoleModelValidator : AbstractValidator<EditRoleModel>
             .MustAsync(async (x, y) => await repository.RoleExistsAsync(x))
             .WithMessage("Role does not exist.")
             .WithErrorCode("NotFound");
-        
+
         RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage("Name is required.")
             .MaximumLength(250)
             .WithMessage("Name must be at most 250 characters.");
-        
+
         RuleFor(x => x)
             .MustAsync(async (x, y) => !await repository.RoleNameExistsAsync(x.Id, x.Name))
             .WithMessage("Name has already been taken.")

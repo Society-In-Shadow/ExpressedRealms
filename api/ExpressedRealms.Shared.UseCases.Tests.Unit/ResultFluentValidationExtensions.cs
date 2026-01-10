@@ -122,7 +122,7 @@ public static class ResultFluentValidationExtensions
 
         Assert.True(true);
     }
-    
+
     public static void MustHaveNotFoundError<T>(
         this Result<T> result,
         string propertyName,
@@ -275,7 +275,9 @@ public static class ResultFluentValidationExtensions
 
             if (validationFailure is null)
             {
-                Assert.Fail($"Expected property \"{propertyName}\" not found. Only a specific error exists, which is for \"{validationSpecificError.PropertyName}\".");
+                Assert.Fail(
+                    $"Expected property \"{propertyName}\" not found. Only a specific error exists, which is for \"{validationSpecificError.PropertyName}\"."
+                );
             }
         }
 
@@ -286,7 +288,9 @@ public static class ResultFluentValidationExtensions
         }
         else
         {
-            Assert.Fail($"Expected property \"{propertyName}\" not found. No validation failures are present.");
+            Assert.Fail(
+                $"Expected property \"{propertyName}\" not found. No validation failures are present."
+            );
         }
 
         var stringBuilder = new StringBuilder();

@@ -34,7 +34,7 @@ internal sealed class EditRoleUseCase(
             rp => rp.PermissionId,
             permissionId => new RolePermissionMapping { PermissionId = permissionId }
         );
-        
+
         await rolesRepository.EditAsync(role);
 
         return Result.Ok();
