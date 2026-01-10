@@ -1,6 +1,7 @@
 using ExpressedRealms.Admin.API.RolesEndpoints.AddRole;
 using ExpressedRealms.Admin.API.RolesEndpoints.DeleteRole;
 using ExpressedRealms.Admin.API.RolesEndpoints.EditRole;
+using ExpressedRealms.Admin.API.RolesEndpoints.GetPermissions;
 using ExpressedRealms.Admin.API.RolesEndpoints.GetRole;
 using ExpressedRealms.Admin.API.RolesEndpoints.GetRoles;
 using ExpressedRealms.Authentication;
@@ -29,6 +30,10 @@ public static class RolesEndpoints
 
         endpointGroup
             .MapGet("roles/{id}", GetRoleEndpoint.Execute)
+            .RequirePermission(Permissions.Role.View);
+
+        endpointGroup
+            .MapGet("roles/permissions", GetPermissionsEndpoint.Execute)
             .RequirePermission(Permissions.Role.View);
 
         endpointGroup

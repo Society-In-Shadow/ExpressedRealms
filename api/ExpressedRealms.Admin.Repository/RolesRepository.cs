@@ -1,6 +1,7 @@
 using ExpressedRealms.Admin.Repository.DTOs;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Helpers;
+using ExpressedRealms.DB.Models.Authorization.PermissionResources;
 using ExpressedRealms.DB.Models.Authorization.Permissions;
 using ExpressedRealms.DB.Models.Authorization.RoleSetup;
 using Microsoft.EntityFrameworkCore;
@@ -56,6 +57,11 @@ internal sealed class RolesRepository(
             .Set<Role>()
             .Include(x => x.RolePermissionMappings)
             .FirstAsync(x => x.Id == guid, cancellationToken);
+    }
+
+    public async Task<List<PermissionResource>> GetPermissionResourcesForList()
+    {
+        return await context.Set<PermissionResource>().Include(x => x.Permissions).ToListAsync();
     }
 
     public async Task<int> AddAsync(Role role)
