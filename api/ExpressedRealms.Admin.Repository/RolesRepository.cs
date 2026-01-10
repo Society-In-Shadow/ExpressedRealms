@@ -1,16 +1,17 @@
 using ExpressedRealms.Admin.Repository.DTOs;
 using ExpressedRealms.DB;
+using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.Models.Authorization.Permissions;
 using ExpressedRealms.DB.Models.Authorization.RoleSetup;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Admin.Repository;
 
-internal sealed class RolesRepository(ExpressedRealmsDbContext context) : IRolesRepository
+internal sealed class RolesRepository(ExpressedRealmsDbContext context, CancellationToken cancellationToken) : IRolesRepository
 {
     public Task<List<Role>> GetRolesForListAsync()
     {
-        return context.Set<Role>().AsNoTracking().ToListAsync();
+        return context.Set<Role>().AsNoTracking().ToListAsync(cancellationToken);
     }
 
     public Task<EditRoleDto> GetRoleForEditView(int id)
@@ -24,28 +25,35 @@ internal sealed class RolesRepository(ExpressedRealmsDbContext context) : IRoles
                 Name = x.Name,
                 PermissionIds = x.RolePermissionMappings.Select(y => y.PermissionId).ToList(),
             })
-            .FirstAsync(x => x.Id == id);
+            .FirstAsync(x => x.Id == id, cancellationToken);
     }
 
     public async Task<bool> RoleExistsAsync(int id)
     {
-        return await context.Set<Role>().AnyAsync(x => x.Id == id);
+        return await context.Set<Role>().AnyAsync(x => x.Id == id, cancellationToken);
     }
 
     public async Task<bool> RoleNameExistsAsync(string name)
     {
-        return await context.Set<Role>().AnyAsync(x => x.Name == name);
+        return await context.Set<Role>().AnyAsync(x => x.Name.ToLower() == name.ToLower(), cancellationToken);
     }
 
-    public async Task<Role?> FindRoleAsync(int guid)
+    public async Task<bool> RoleNameExistsAsync(int id, string name)
     {
-        return await context.Set<Role>().FindAsync(guid);
+        return await context.Set<Role>().AnyAsync(x => x.Name.ToLower() == name.ToLower() && x.Id != id, cancellationToken);
+    }
+    
+    public async Task<Role> GetRoleForEditAsync(int guid)
+    {
+        return await context.Set<Role>()
+            .Include(x => x.RolePermissionMappings)
+            .FirstAsync(x => x.Id == guid, cancellationToken);
     }
 
     public async Task<int> AddAsync(Role role)
     {
         await context.AddAsync(role);
-        await context.SaveChangesAsync();
+        await context.SaveChangesAsync(cancellationToken);
         return role.Id;
     }
 
@@ -55,8 +63,14 @@ internal sealed class RolesRepository(ExpressedRealmsDbContext context) : IRoles
             .Set<Permission>()
             .Where(x => permissionIds.Contains(x.Id))
             .Select(x => x.Id)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         return permissionIds.Except(validPermissions).ToList();
+    }
+    
+    public async Task EditAsync<TEntity>(TEntity entity)
+        where TEntity : class
+    {
+        await context.CommonSaveChanges(entity, cancellationToken);
     }
 }
