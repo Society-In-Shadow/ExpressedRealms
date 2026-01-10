@@ -11,7 +11,8 @@ public interface IRolesRepository : IGenericRepository
     Task<Role> GetRoleForEditAsync(int guid);
     Task<bool> RoleExistsAsync(int id);
     Task<bool> RoleNameExistsAsync(string name);
+    Task<bool> RoleNameExistsAsync(int id, string name);
     Task<int> AddAsync(Role role);
     Task<List<Guid>> GetInvalidPermissions(List<Guid> permissionIds);
-    Task<bool> RoleNameExistsAsync(int id, string name);
+
 }

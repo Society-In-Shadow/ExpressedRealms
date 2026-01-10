@@ -129,7 +129,7 @@ public class EditRoleUseCaseTests
         _model.Description = "Location 2";
         _model.PermissionIds = [_addPermission, Guid.CreateVersion7()];
 
-        Role capturedRole = null;
+        Role? capturedRole = null;
 
         A.CallTo(() => _repository.EditAsync(A<Role>.Ignored))
             .Invokes((Role r) => capturedRole = r);
