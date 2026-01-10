@@ -91,6 +91,38 @@ public static class ResultFluentValidationExtensions
         Assert.True(true);
     }
 
+    public static void MustHaveNotFoundError(
+        this Result result,
+        string propertyName,
+        string? errorMessage = null
+    )
+    {
+        Assert.False(result.IsSuccess);
+
+        var validationFailure = result.Errors.OfType<FluentValidationFailure>().FirstOrDefault();
+        var notFoundFailure = result.Errors.OfType<NotFoundFailure>().FirstOrDefault();
+
+        if (validationFailure is not null)
+        {
+            Assert.Fail("More then one validation failure.  Expected only one.");
+            return;
+        }
+
+        if (notFoundFailure is null)
+        {
+            Assert.Fail(
+                $"{propertyName} did not return a Not Found Error.  Probably missing \".WithErrorCode(\"NotFound\")\" for the given property"
+            );
+        }
+
+        if (!HandlePropertyAndReturnSuccess(propertyName, validationFailure, notFoundFailure))
+            return;
+
+        HandleMessage(propertyName, errorMessage, validationFailure, notFoundFailure);
+
+        Assert.True(true);
+    }
+
     public static void MustHaveNotFoundError<T>(
         this Result<T> result,
         string propertyName,
@@ -243,7 +275,9 @@ public static class ResultFluentValidationExtensions
 
             if (validationFailure is null)
             {
-                Assert.Fail($"Expected property \"{propertyName}\" not found. Only a specific error exists, which is for \"{validationSpecificError.PropertyName}\".");
+                Assert.Fail(
+                    $"Expected property \"{propertyName}\" not found. Only a specific error exists, which is for \"{validationSpecificError.PropertyName}\"."
+                );
             }
         }
 
@@ -254,7 +288,9 @@ public static class ResultFluentValidationExtensions
         }
         else
         {
-            Assert.Fail($"Expected property \"{propertyName}\" not found. No validation failures are present.");
+            Assert.Fail(
+                $"Expected property \"{propertyName}\" not found. No validation failures are present."
+            );
         }
 
         var stringBuilder = new StringBuilder();

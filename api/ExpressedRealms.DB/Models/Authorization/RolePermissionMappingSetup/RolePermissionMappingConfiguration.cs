@@ -24,7 +24,7 @@ public class RolePermissionMappingConfiguration : IEntityTypeConfiguration<RoleP
             .HasOne(e => e.Role)
             .WithMany(e => e.RolePermissionMappings)
             .HasForeignKey(e => e.RoleId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.ClientCascade);
 
         builder.HasQueryFilter(x => !x.IsDeleted);
         builder.Property(e => e.IsDeleted).HasColumnName("is_deleted");
