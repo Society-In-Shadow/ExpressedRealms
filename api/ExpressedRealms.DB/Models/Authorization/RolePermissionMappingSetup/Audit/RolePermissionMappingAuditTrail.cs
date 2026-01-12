@@ -7,8 +7,8 @@ namespace ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup.Aud
 
 public class RolePermissionMappingAuditTrail : IAuditTable
 {
-    public int RolePermissionMappingId { get; set; }
-    public virtual RolePermissionMapping RolePermissionMapping { get; set; } = null!;
+    public int? RolePermissionMappingId { get; set; }
+    public virtual RolePermissionMapping? RolePermissionMapping { get; set; } = null!;
 
     public int RoleId { get; set; }
     public virtual Role Role { get; set; } = null!;

@@ -1,5 +1,4 @@
 import Layout from '@/components/LoggedInLayout.vue'
-import PlayerList from '@/components/admin/players/PlayerList.vue'
 
 export const AdminRoutes = {
   path: '/admin',
@@ -8,7 +7,7 @@ export const AdminRoutes = {
     {
       path: 'players',
       name: 'viewPlayers',
-      component: () => PlayerList,
+      component: () => import('@/components/admin/players/PlayerList.vue'),
       meta: { requiredRole: 'UserManagementRole' },
     },
     {
@@ -16,6 +15,18 @@ export const AdminRoutes = {
       name: 'adminCharacterList',
       component: () => import('./../../components/admin/characterList/AdminCharacterList.vue'),
       meta: { requiredRole: 'ManagePlayerCharacterList' },
+    },
+    {
+      path: 'roles',
+      name: 'adminRoleList',
+      component: () => import('@/components/admin/roles/RoleList.vue'),
+      meta: { requiredRole: 'UserManagementRole' },
+    },
+    {
+      path: 'roles/:id',
+      name: 'editRole',
+      component: () => import('@/components/admin/roles/RolePage.vue'),
+      meta: { requiredRole: 'UserManagementRole' },
     },
     {
       path: 'events',

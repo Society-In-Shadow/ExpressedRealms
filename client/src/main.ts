@@ -21,6 +21,7 @@ import { definePreset } from '@primevue/themes'
 import Lara from '@primevue/themes/lara'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import DialogService from 'primevue/dialogservice'
+import { Tooltip } from 'primevue'
 
 axiosConfig.setupErrorHandlingInterceptors()
 axiosConfig.setAPIUrl()
@@ -81,6 +82,7 @@ const app = createApp(App)
   })
   .use(routerSetup)
 app.directive('ripple', Ripple)
+app.directive('tooltip', Tooltip)
 app.use(pinia)
 app.use(ToastService)
 app.use(ConfirmationService)

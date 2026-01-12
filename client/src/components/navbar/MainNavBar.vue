@@ -81,6 +81,14 @@ const items = ref([
         items: [
           {
             navMenuType: 'simple',
+            label: 'Role Management',
+            description: 'Manage Roles that users can have.',
+            navMenuIcon: 'group',
+            pushComponentRouteName: 'adminRoleList',
+            visible: () => userInfo.userRoles.includes('UserManagementRole'),
+          },
+          {
+            navMenuType: 'simple',
             label: 'Character Management',
             description: 'Manage any primary characters across all players.',
             navMenuIcon: 'patient_list',
