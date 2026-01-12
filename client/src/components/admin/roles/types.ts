@@ -15,3 +15,20 @@ export interface EditRole {
   description: string | null
   permissionIds: string[]
 }
+
+export interface Permission {
+  id: string // UUID
+  name: string
+  description: string | null
+}
+
+export interface Resource {
+  id?: string // UUID
+  name: string
+  description: string | null
+  permissions: Permission[]
+}
+
+export interface ResourceResponse {
+  resources: Resource[]
+}

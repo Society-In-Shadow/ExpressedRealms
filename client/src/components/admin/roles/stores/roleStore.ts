@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 
 import toaster from '@/services/Toasters'
-import type { EditRole, Role, RoleResponse } from '@/components/admin/roles/types.ts'
+import type { EditRole, Resource, ResourceResponse, Role, RoleResponse } from '@/components/admin/roles/types.ts'
 import type { RoleForm } from '@/components/admin/roles/validations/roleValidations.ts'
 
 export const RoleStore
@@ -11,7 +11,10 @@ export const RoleStore
       return {
         haveEventTypes: false,
         haveRoles: false,
+        haveRole: false,
         roles: [] as Role[],
+        resources: [] as Resource[],
+        role: {} as EditRole,
       }
     },
     actions: {
@@ -24,16 +27,19 @@ export const RoleStore
       },
       getEvent: async function (id: number): Promise<EditRole> {
         const response = await axios.get<Role>(`/admin/roles/${id}`)
-
-        return {
-          ...response.data,
+        this.role = response.data
+        if (this.resources.length === 0) {
+          const resources = await axios.get<ResourceResponse>(`/admin/roles/permissions`)
+          this.resources = resources.data.resources
         }
+        this.haveRole = true
+        return this.role
       },
-      updateEvent: async function (values: RoleForm, id: number): Promise<void> {
-        await axios.put(`/admin/roles/${id}`, {
-          name: values.name,
-          description: values.description,
-          permissions: [],
+      updateEvent: async function (): Promise<void> {
+        await axios.put(`/admin/roles/${this.role.id}`, {
+          name: this.role.name,
+          description: this.role.description,
+          permissionIds: this.role.permissionIds,
         })
           .then(async () => {
             await this.getRoles()
@@ -44,7 +50,7 @@ export const RoleStore
         await axios.post(`/admin/roles/`, {
           name: values.name,
           description: values.description,
-          permissions: [],
+          permissionIds: [],
         })
           .then(async () => {
             await this.getRoles()

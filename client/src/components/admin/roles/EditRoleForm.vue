@@ -1,38 +1,34 @@
 <script setup lang="ts">
 
-import { onMounted, ref } from 'vue'
+import { watch } from 'vue'
 import { RoleStore } from './stores/roleStore'
 import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
 import { getValidationInstance } from './validations/roleValidations'
 import Button from 'primevue/button'
 import FormWrapper from '@/FormWrappers/FormWrapper.vue'
-import type { EditRole } from '@/components/admin/roles/types.ts'
 
 const store = RoleStore()
 
 const form = getValidationInstance()
-const role = ref<EditRole>()
 
-const props = defineProps({
-  roleId: {
-    type: Number,
-    required: true,
-  },
-})
+watch(() => store.role, (role) => {
+  if (!role) return
 
-onMounted(async () => {
-  role.value = await store.getEvent(props.roleId)
-  form.setValues(role.value)
-})
+  form.setValues(store.role)
+},
+{ immediate: true },
+)
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await store.updateEvent(values, props.roleId)
+  await store.updateEvent()
+  store.role.name = values.name
+  store.role.description = values.description
 })
 
 </script>
 
 <template>
-  <FormWrapper :show-skeleton="!role" @submit="onSubmit">
+  <FormWrapper :show-skeleton="!store.haveRole" @submit="onSubmit">
     <FormInputTextWrapper v-model="form.fields.name" />
     <FormInputTextWrapper v-model="form.fields.description" />
 
