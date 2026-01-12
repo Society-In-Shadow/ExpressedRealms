@@ -4,6 +4,8 @@ import { reactive, watch } from 'vue'
 import type { Resource } from '@/components/admin/roles/types.ts'
 import { RoleStore } from '@/components/admin/roles/stores/roleStore.ts'
 import Button from 'primevue/button'
+import Panel from 'primevue/panel'
+import Checkbox from 'primevue/checkbox'
 
 const store = RoleStore()
 
@@ -71,38 +73,47 @@ const toggleResourcePermissions = (resource: Resource) => {
     <Button label="Update" class="m-2" @click="save" />
   </div>
   <div v-if="roleData.resources && roleData.haveRole" class="resource-grid">
-    <div
-      v-for="resource in roleData.resources"
-      :key="resource.id"
-      class="resource-block"
-    >
-      <!-- Resource header -->
-      <div class="d-flex justify-content-between align-items-center resource-header flex-shrink-1">
-        <span class="fw-bold">{{ resource.name }}</span>
-        <input
-          type="checkbox"
-          :checked="areAllPermissionsSelected(resource)"
-          :indeterminate="isSomePermissionsSelected(resource)"
-          @change="toggleResourcePermissions(resource)"
-        >
-      </div>
-
-      <!-- Permissions -->
+    <Panel v-for="resource in roleData.resources" :key="resource.id">
+      <template #header>
+        <div class="d-flex justify-content-between align-items-center resource-header flex-grow-1">
+          <h3 class="m-0 p-0">
+            <label :for="resource.id" class="pl-2">{{ resource.name }}</label>
+          </h3>
+          <Checkbox
+            :input-id="resource.id"
+            :model-value="areAllPermissionsSelected(resource)"
+            :indeterminate="isSomePermissionsSelected(resource)"
+            binary
+            @update:model-value="toggleResourcePermissions(resource)"
+          />
+        </div>
+      </template>
       <div class="permissions-list ms-3 mt-2 d-flex flex-column gap-2 ">
         <span
           v-for="permission in resource.permissions"
           :key="permission.id"
           class="d-flex align-items-center gap-1"
         >
-          <input
-            type="checkbox"
-            :checked="isPermissionSelected(permission.id)"
-            @change="togglePermission(permission.id)"
+          <Checkbox
+            :input-id="permission.id"
+            :model-value="isPermissionSelected(permission.id)"
+            binary
+            :aria-label="permission.name"
+            @update:model-value="togglePermission(permission.id)"
+          />
+          <label :for="permission.id" class="pl-2">{{ permission.name }}</label>
+
+          <span
+            v-if="permission.description"
+            v-tooltip.bottom="permission.description"
+            class="material-symbols-outlined"
+            :title="permission.description"
           >
-          {{ permission.name }}
+            info
+          </span>
         </span>
       </div>
-    </div>
+    </Panel>
   </div>
 </template>
 
@@ -113,13 +124,6 @@ const toggleResourcePermissions = (resource: Resource) => {
   display: grid;
   gap: 1rem; /* space between resource blocks */
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-}
-
-/* Resource block styling */
-.resource-block {
-  border: 1px solid #dee2e6;
-  border-radius: 0.25rem;
-  padding: 0.5rem;
 }
 
 </style>
