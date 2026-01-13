@@ -1,4 +1,5 @@
 using ExpressedRealms.Admin.API.RolesEndpoints.AddRole;
+using ExpressedRealms.Admin.API.RolesEndpoints.AddUserRole;
 using ExpressedRealms.Admin.API.RolesEndpoints.DeleteRole;
 using ExpressedRealms.Admin.API.RolesEndpoints.EditRole;
 using ExpressedRealms.Admin.API.RolesEndpoints.GetPermissions;
@@ -47,5 +48,9 @@ public static class RolesEndpoints
         endpointGroup
             .MapDelete("roles/{id}", DeleteRoleEndpoint.Execute)
             .RequirePermission(Permissions.Role.Delete);
+
+        endpointGroup
+            .MapPost("roles/{id}/users", AddUserRoleEndpoint.Execute)
+            .RequirePermission(Permissions.Role.Assign);
     }
 }

@@ -20,6 +20,7 @@ export const Permissions = {
     View: 'role.view',
     Create: 'role.create',
     Delete: 'role.delete',
+    Assign: 'role.assign',
   } as const,
 } as const
 

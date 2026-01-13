@@ -4,6 +4,7 @@ using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.Models.Authorization.PermissionResources;
 using ExpressedRealms.DB.Models.Authorization.Permissions;
 using ExpressedRealms.DB.Models.Authorization.RoleSetup;
+using ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Admin.Repository;
@@ -37,6 +38,13 @@ internal sealed class RolesRepository(
         return await context.Set<Role>().AnyAsync(x => x.Id == id, cancellationToken);
     }
 
+    public async Task<bool> RoleUserMappingExistsAsync(int roleId, string userId)
+    {
+        return await context
+            .Set<UserRoleMapping>()
+            .AnyAsync(x => x.RoleId == roleId && x.UserId == userId, cancellationToken);
+    }
+
     public async Task<bool> RoleNameExistsAsync(string name)
     {
         return await context
@@ -65,6 +73,13 @@ internal sealed class RolesRepository(
     }
 
     public async Task<int> AddAsync(Role role)
+    {
+        await context.AddAsync(role);
+        await context.SaveChangesAsync(cancellationToken);
+        return role.Id;
+    }
+
+    public async Task<int> AddUserRoleMappingAsync(UserRoleMapping role)
     {
         await context.AddAsync(role);
         await context.SaveChangesAsync(cancellationToken);
