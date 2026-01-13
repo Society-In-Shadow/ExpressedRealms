@@ -6,7 +6,7 @@ namespace ExpressedRealms.Admin.UseCases.Roles.GetRolesForUser;
 
 internal sealed class GetRolesForUserUseCase(
     IRolesRepository rolesRepository,
-    GetRoleSummaryModelValidator validator,
+    GetRolesForUserModelValidator validator,
     CancellationToken cancellationToken
 ) : IGetRolesForUserUseCase
 {

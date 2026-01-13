@@ -39,7 +39,7 @@ public class GetRolesForUserUseCaseTests
         var repository = A.Fake<IRolesRepository>();
         _usersRepository = A.Fake<IUsersRepository>();
 
-        var validator = new GetRoleSummaryModelValidator(_usersRepository);
+        var validator = new GetRolesForUserModelValidator(_usersRepository);
 
         A.CallTo(() => _usersRepository.UserExistsAsync(_model.UserId)).Returns(true);
         A.CallTo(() => repository.GetRolesForUserAsync(_model.UserId)).Returns(_dbModel);

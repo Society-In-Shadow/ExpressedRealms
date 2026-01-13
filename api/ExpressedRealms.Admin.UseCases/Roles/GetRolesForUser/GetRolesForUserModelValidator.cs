@@ -5,9 +5,9 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Admin.UseCases.Roles.GetRolesForUser;
 
 [UsedImplicitly]
-internal sealed class GetRoleSummaryModelValidator : AbstractValidator<GetRolesForUserModel>
+internal sealed class GetRolesForUserModelValidator : AbstractValidator<GetRolesForUserModel>
 {
-    public GetRoleSummaryModelValidator(IUsersRepository repository)
+    public GetRolesForUserModelValidator(IUsersRepository repository)
     {
         RuleFor(x => x.UserId)
             .NotEmpty()
