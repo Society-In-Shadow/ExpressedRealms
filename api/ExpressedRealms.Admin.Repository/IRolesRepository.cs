@@ -22,4 +22,5 @@ public interface IRolesRepository : IGenericRepository
     Task<int> AddUserRoleMappingAsync(UserRoleMapping role);
     Task DeleteRoleUserMappingAsync(int roleId, string userId);
     Task<List<GenericListDto<int>>> GetRoleSummaryForListAsync();
+    Task<List<RoleForUserMappingDto>> GetRolesForUserAsync(string userId);
 }

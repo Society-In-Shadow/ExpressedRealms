@@ -1,4 +1,5 @@
 using ExpressedRealms.Admin.API.AdminEndpoints.Dtos;
+using ExpressedRealms.Admin.API.AdminEndpoints.GetRolesForUser;
 using ExpressedRealms.Admin.API.AdminEndpoints.GetUsers;
 using ExpressedRealms.Admin.API.AdminEndpoints.GetUserSummary;
 using ExpressedRealms.Admin.API.AdminEndpoints.Request;
@@ -31,6 +32,10 @@ public static class AdminEndpoints
 
         endpointGroup
             .MapGet("users/summary", GetUserSummaryEndpoint.Execute)
+            .RequireAuthorization();
+
+        endpointGroup
+            .MapGet("users/{userId}/roles", GetRolesForUserEndpoint.Execute)
             .RequireAuthorization();
 
         endpointGroup
