@@ -56,7 +56,8 @@ internal sealed class RolesRepository(
 
     public async Task<List<GenericListDto<int>>> GetRoleSummaryForListAsync()
     {
-        return await context.Set<Role>()
+        return await context
+            .Set<Role>()
             .Select(x => new GenericListDto<int>()
             {
                 Id = x.Id,

@@ -15,12 +15,11 @@ public class GetRoleSummaryUseCaseTests
     {
         _dbModel = new List<GenericListDto<int>>();
         var repository = A.Fake<IRolesRepository>();
-        
+
         A.CallTo(() => repository.GetRoleSummaryForListAsync()).Returns(_dbModel);
 
         _useCase = new GetRoleSummaryUseCase(repository);
     }
-
 
     [Fact]
     public async Task UseCase_CreatesRole_WithExpectedValues()

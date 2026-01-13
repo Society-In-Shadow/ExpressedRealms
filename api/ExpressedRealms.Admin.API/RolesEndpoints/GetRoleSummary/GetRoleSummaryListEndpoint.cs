@@ -8,9 +8,9 @@ namespace ExpressedRealms.Admin.API.RolesEndpoints.GetRoleSummary;
 
 public static class GetRoleSummaryEndpoint
 {
-    public static async Task<Results<Ok<List<GenericListDto<int>>>, ValidationProblem, NotFound>> Execute(
-        IGetRoleSummaryUseCase useCase
-    )
+    public static async Task<
+        Results<Ok<List<GenericListDto<int>>>, ValidationProblem, NotFound>
+    > Execute(IGetRoleSummaryUseCase useCase)
     {
         var results = await useCase.ExecuteAsync();
 

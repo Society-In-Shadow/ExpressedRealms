@@ -4,9 +4,8 @@ using FluentResults;
 
 namespace ExpressedRealms.Admin.UseCases.Roles.GetRoleSummary;
 
-internal sealed class GetRoleSummaryUseCase(
-    IRolesRepository rolesRepository
-) : IGetRoleSummaryUseCase
+internal sealed class GetRoleSummaryUseCase(IRolesRepository rolesRepository)
+    : IGetRoleSummaryUseCase
 {
     public async Task<Result<List<GenericListDto<int>>>> ExecuteAsync()
     {
