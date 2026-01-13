@@ -1,10 +1,15 @@
 using ExpressedRealms.Admin.Repository.DTOs;
 using ExpressedRealms.DB;
+using ExpressedRealms.DB.Shared;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Admin.Repository;
 
-internal sealed class UsersRepository(ExpressedRealmsDbContext context) : IUsersRepository
+internal sealed class UsersRepository(
+    ExpressedRealmsDbContext context,
+    CancellationToken cancellationToken
+) : IUsersRepository
 {
     public async Task<List<UserListDto>> GetUsersAsync()
     {
@@ -42,5 +47,18 @@ internal sealed class UsersRepository(ExpressedRealmsDbContext context) : IUsers
     public async Task<bool> UserExistsAsync(string userId)
     {
         return await context.Users.AnyAsync(x => x.Id == userId);
+    }
+
+    public async Task<List<GenericListDto<string>>> GetUserSummaryAsync()
+    {
+        return await context
+            .Set<User>()
+            .Select(x => new GenericListDto<string>()
+            {
+                Id = x.Id,
+                Name = (x.Player != null ? x.Player.Name : "No Name Set") + " (" + x.Email + ")",
+                Description = null,
+            })
+            .ToListAsync(cancellationToken);
     }
 }

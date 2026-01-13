@@ -1,5 +1,6 @@
 using ExpressedRealms.Admin.API.AdminEndpoints.Dtos;
 using ExpressedRealms.Admin.API.AdminEndpoints.GetUsers;
+using ExpressedRealms.Admin.API.AdminEndpoints.GetUserSummary;
 using ExpressedRealms.Admin.API.AdminEndpoints.Request;
 using ExpressedRealms.Admin.API.AdminEndpoints.Response;
 using ExpressedRealms.Admin.API.AdminEndpoints.UpdateUserRoles;
@@ -27,6 +28,10 @@ public static class AdminEndpoints
             .RequirePolicyAuthorization(Policies.UserManagementPolicy);
 
         endpointGroup.MapGet("users", GetUsersEndpoint.Execute).RequireAuthorization();
+
+        endpointGroup
+            .MapGet("users/summary", GetUserSummaryEndpoint.Execute)
+            .RequireAuthorization();
 
         endpointGroup
             .MapPut("user/{userid}/role", UpdateUserRoleEndpoint.Execute)
