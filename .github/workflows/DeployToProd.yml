@@ -430,7 +430,7 @@ jobs:
     if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.frontend == 'true' }}
     runs-on: ubuntu-latest
     name: Deploy UI to Production
-    needs: [ changes, deploy_api_to_prod ]
+    needs: [changes, deploy_api_to_prod]
     permissions:
       contents: read
     steps:
