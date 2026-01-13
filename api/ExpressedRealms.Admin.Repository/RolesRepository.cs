@@ -5,6 +5,7 @@ using ExpressedRealms.DB.Models.Authorization.PermissionResources;
 using ExpressedRealms.DB.Models.Authorization.Permissions;
 using ExpressedRealms.DB.Models.Authorization.RoleSetup;
 using ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup;
+using ExpressedRealms.DB.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Admin.Repository;
@@ -51,6 +52,18 @@ internal sealed class RolesRepository(
             .Set<UserRoleMapping>()
             .Where(x => x.RoleId == roleId && x.UserId == userId)
             .ExecuteDeleteAsync(cancellationToken);
+    }
+
+    public async Task<List<GenericListDto<int>>> GetRoleSummaryForListAsync()
+    {
+        return await context.Set<Role>()
+            .Select(x => new GenericListDto<int>()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+            })
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<bool> RoleNameExistsAsync(string name)
