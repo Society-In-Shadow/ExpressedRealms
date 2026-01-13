@@ -38,4 +38,9 @@ internal sealed class UsersRepository(ExpressedRealmsDbContext context) : IUsers
 
         return players;
     }
+
+    public async Task<bool> UserExistsAsync(string userId)
+    {
+        return await context.Users.AnyAsync(x => x.Id == userId);
+    }
 }

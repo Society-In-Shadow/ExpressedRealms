@@ -1,6 +1,7 @@
 using ExpressedRealms.Admin.Repository.DTOs;
 using ExpressedRealms.DB.Models.Authorization.PermissionResources;
 using ExpressedRealms.DB.Models.Authorization.RoleSetup;
+using ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup;
 using ExpressedRealms.Shared;
 
 namespace ExpressedRealms.Admin.Repository;
@@ -16,4 +17,6 @@ public interface IRolesRepository : IGenericRepository
     Task<int> AddAsync(Role role);
     Task<List<Guid>> GetInvalidPermissions(List<Guid> permissionIds);
     Task<List<PermissionResource>> GetPermissionResourcesForList();
+    Task<bool> RoleUserMappingExistsAsync(int roleId, string userId);
+    Task<int> AddUserRoleMappingAsync(UserRoleMapping role);
 }
