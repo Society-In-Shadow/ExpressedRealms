@@ -7,6 +7,7 @@ using ExpressedRealms.Admin.API.RolesEndpoints.GetPermissions;
 using ExpressedRealms.Admin.API.RolesEndpoints.GetRole;
 using ExpressedRealms.Admin.API.RolesEndpoints.GetRoles;
 using ExpressedRealms.Admin.API.RolesEndpoints.GetRoleSummary;
+using ExpressedRealms.Admin.API.RolesEndpoints.GetUsersForRole;
 using ExpressedRealms.Authentication;
 using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Authentication.PermissionCollection.Configuration;
@@ -57,6 +58,10 @@ public static class RolesEndpoints
 
         endpointGroup
             .MapPost("roles/{id}/users", AddUserRoleEndpoint.Execute)
+            .RequirePermission(Permissions.Role.Assign);
+
+        endpointGroup
+            .MapGet("roles/{id}/users", GetUsersForRoleEndpoint.Execute)
             .RequirePermission(Permissions.Role.Assign);
 
         endpointGroup
