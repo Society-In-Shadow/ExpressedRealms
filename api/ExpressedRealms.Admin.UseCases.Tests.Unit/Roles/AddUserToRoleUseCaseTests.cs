@@ -109,7 +109,7 @@ public class AddUserToRoleUseCaseTests
     public async Task UseCase_CreatesRole_WithExpectedValues()
     {
         // Act
-        var result = await _useCase.ExecuteAsync(_model);
+        await _useCase.ExecuteAsync(_model);
 
         // Assert
         A.CallTo(() =>

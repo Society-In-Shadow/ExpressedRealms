@@ -8,7 +8,7 @@ namespace ExpressedRealms.Admin.API.RolesEndpoints.AddUserRole;
 public static class AddUserRoleEndpoint
 {
     public static async Task<Results<Ok, ValidationProblem, NotFound>> Execute(
-        int roleId,
+        int id,
         UserRoleRequest request,
         IAddUserToRoleUseCase useCase
     )
@@ -17,7 +17,7 @@ public static class AddUserRoleEndpoint
             new AddUserToRoleModel()
             {
                 UserId = request.UserId,
-                RoleId = roleId,
+                RoleId = id,
                 ExpireDate = request.ExpireDate,
             }
         );
