@@ -67,6 +67,21 @@ internal sealed class RolesRepository(
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<List<RoleForUserMappingDto>> GetRolesForUserAsync(string userId)
+    {
+        return await context
+            .Set<UserRoleMapping>()
+            .Where(x => x.UserId == userId)
+            .Select(x => new RoleForUserMappingDto()
+            {
+                RoleId = x.RoleId,
+                Name = x.Role.Name,
+                Description = x.Role.Description,
+                ExpireDate = x.ExpireDate,
+            })
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<bool> RoleNameExistsAsync(string name)
     {
         return await context
