@@ -19,4 +19,5 @@ public interface IRolesRepository : IGenericRepository
     Task<List<PermissionResource>> GetPermissionResourcesForList();
     Task<bool> RoleUserMappingExistsAsync(int roleId, string userId);
     Task<int> AddUserRoleMappingAsync(UserRoleMapping role);
+    Task DeleteRoleUserMappingAsync(int roleId, string userId);
 }

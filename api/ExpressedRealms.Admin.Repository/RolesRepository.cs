@@ -45,6 +45,14 @@ internal sealed class RolesRepository(
             .AnyAsync(x => x.RoleId == roleId && x.UserId == userId, cancellationToken);
     }
 
+    public async Task DeleteRoleUserMappingAsync(int roleId, string userId)
+    {
+        await context
+            .Set<UserRoleMapping>()
+            .Where(x => x.RoleId == roleId && x.UserId == userId)
+            .ExecuteDeleteAsync(cancellationToken);
+    }
+
     public async Task<bool> RoleNameExistsAsync(string name)
     {
         return await context
