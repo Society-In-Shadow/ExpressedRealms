@@ -6,6 +6,9 @@
     <RootNamespace>ExpressedRealms.Admin.Repository</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentResults">
+      <HintPath>..\..\..\..\.nuget\packages\fluentresults\3.16.0\lib\netstandard2.1\FluentResults.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
       <HintPath>..\..\..\..\.nuget\packages\microsoft.extensions.dependencyinjection.abstractions\8.0.0\lib\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
     </Reference>
