@@ -20,14 +20,14 @@ public class GetRolesForUserUseCaseTests
 
         _dbModel = new List<RoleForUserMappingDto>()
         {
-            new ()
+            new()
             {
                 Name = "Test Role 1",
                 Description = "Test Description 1",
                 RoleId = 1,
                 ExpireDate = null,
             },
-            new ()
+            new()
             {
                 Name = "Test Role 2",
                 Description = "Test Description 2",
