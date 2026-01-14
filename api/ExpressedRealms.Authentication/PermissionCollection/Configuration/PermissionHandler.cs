@@ -18,7 +18,7 @@ public class PermissionHandler(IFeatureToggleClient featureToggleClient)
             return;
         }
 
-        if (context.User.HasClaim("permission", requirement.Permission.Key))
+        if (context.User.HasClaim("custom_permission", requirement.Permission.Key))
         {
             context.Succeed(requirement);
         }

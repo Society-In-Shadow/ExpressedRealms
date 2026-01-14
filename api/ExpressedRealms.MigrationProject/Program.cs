@@ -11,7 +11,7 @@ builder.Services.AddDbContext<ExpressedRealmsDbContext>(
     (_, options) =>
     {
         options.UseNpgsql(
-            "foo",
+            "Host=localhost;Port=5432;Database=expressedRealms;Username=dev_user;Password=dev_password",
             postgresOptions =>
             {
                 postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");

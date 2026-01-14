@@ -24,4 +24,5 @@ public interface IRolesRepository : IGenericRepository
     Task<List<GenericListDto<int>>> GetRoleSummaryForListAsync();
     Task<List<RoleForUserMappingDto>> GetRolesForUserAsync(string userId);
     Task<List<UserForRoleMappingDto>> GetUsersForRoleAsync(int id);
+    Task<List<string>> GetPermissionKeysForUserAsync(string userId);
 }

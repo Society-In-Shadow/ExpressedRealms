@@ -2,6 +2,7 @@ using System.Text.Json;
 using Audit.Core;
 using Azure.Identity;
 using ExpressedRealms.Admin.API.Configuration;
+using ExpressedRealms.Admin.API.CustomClaimsPrincipleFactory;
 using ExpressedRealms.Admin.UseCases.Configuration;
 using ExpressedRealms.Authentication.Configuration;
 using ExpressedRealms.Authentication.PermissionCollection.PermissionManager;
@@ -108,6 +109,8 @@ try
         .AddRoles<Role>()
         .AddEntityFrameworkStores<ExpressedRealmsDbContext>()
         .AddApiEndpoints();
+    
+    builder.Services.AddScoped<IUserClaimsPrincipalFactory<User>, CustomClaimsPrincipalFactory>();
 
     builder.Services.Configure<IdentityOptions>(options =>
     {
