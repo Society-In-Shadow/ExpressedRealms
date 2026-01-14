@@ -34,7 +34,7 @@ internal static class RolePermissionMappingAuditTrailExtensions
         return mapping.Map<RolePermissionMapping, RolePermissionMappingAuditTrail>(
             (dbModel, audit) =>
             {
-                audit.RolePermissionMappingId = dbModel.Id;
+                audit.RolePermissionMappingId = dbModel.Id != 0 ? dbModel.Id : null;
                 audit.RoleId = dbModel.RoleId;
                 audit.PermissionId = dbModel.PermissionId;
                 return true;

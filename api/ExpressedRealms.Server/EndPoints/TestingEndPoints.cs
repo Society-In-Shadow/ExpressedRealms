@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using ExpressedRealms.Authentication;
 using ExpressedRealms.Email.TestEmail;
 using ExpressedRealms.Events.API.Discord;
@@ -55,5 +56,17 @@ internal static class TestingEndPoints
                 }
             )
             .RequireAuthorization();
+        
+        app.MapGet("/showClaims",
+            (ClaimsPrincipal user) =>
+            {
+                return Results.Ok(
+                    user.Claims.Select(c => new
+                    {
+                        c.Type,
+                        c.Value
+                    })
+                );
+            });
     }
 }

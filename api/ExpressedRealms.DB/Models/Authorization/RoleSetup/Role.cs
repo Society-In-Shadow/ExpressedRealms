@@ -1,6 +1,7 @@
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup;
+using ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup.Audit;
 using ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup;
 
 namespace ExpressedRealms.DB.Models.Authorization.RoleSetup;
@@ -19,4 +20,6 @@ public class Role : ISoftDelete
         new List<RolePermissionMapping>();
     public virtual ICollection<UserRoleMapping> UserRoleMappings { get; set; } =
         new List<UserRoleMapping>();
+    public virtual ICollection<RolePermissionMappingAuditTrail> UserRoleMappingAuditTrails { get; set; } =
+        new List<RolePermissionMappingAuditTrail>();
 }

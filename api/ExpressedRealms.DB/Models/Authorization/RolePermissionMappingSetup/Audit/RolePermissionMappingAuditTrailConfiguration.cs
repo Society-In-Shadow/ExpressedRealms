@@ -18,6 +18,25 @@ internal class RolePermissionMappingAuditTrailConfiguration
             .HasColumnName("role_permission_mapping_id");
 
         builder.Property(e => e.RoleId).HasColumnName("role_id").IsRequired();
+        
         builder.Property(e => e.PermissionId).HasColumnName("permission_id");
+        
+        builder.HasOne(x => x.RolePermissionMapping)
+            .WithMany(x => x.RolePermissionMappingAuditTrails)
+            .HasForeignKey(x => x.RolePermissionMappingId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.SetNull);
+        
+        builder.HasOne(x => x.Role)
+            .WithMany(x => x.UserRoleMappingAuditTrails)
+            .HasForeignKey(x => x.RoleId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
+        
+        builder.HasOne(x => x.Permission)
+            .WithMany()
+            .HasForeignKey(x => x.PermissionId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }
