@@ -36,3 +36,5 @@ services:
         condition: service_started
       mailpit:
         condition: service_started
+      redis:
+        condition: service_started

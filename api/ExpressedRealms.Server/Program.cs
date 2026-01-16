@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Audit.Core;
 using Azure.Identity;
 using ExpressedRealms.Admin.API.Configuration;
@@ -11,8 +10,6 @@ using ExpressedRealms.Characters.API.Configuration;
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.UseCases.Configuration;
 using ExpressedRealms.DB;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels.Roles;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using ExpressedRealms.Email;
 using ExpressedRealms.Events.API.API.Configuration;
 using ExpressedRealms.Events.API.UseCases.Configuration;
@@ -40,12 +37,11 @@ using ExpressedRealms.Shared.AzureKeyVault.Secrets;
 using ExpressedRealms.Shared.Configuration;
 using FluentValidation;
 using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Serilog;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
+using StackExchange.Redis;
 
 try
 {
@@ -99,73 +95,20 @@ try
     Log.Information("Adding DB Context");
     builder.AddDatabaseConnection(builder.Environment.IsProduction());
 
+    Log.Information("Adding Redis Cache");
+    builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+        ConnectionMultiplexer.Connect(
+            $"{KeyVaultManager.GetSecret(
+                            ConnectionStrings.RedisConnectionString
+                        )},abortConnect=false"
+        )
+    );
+
     Log.Information("Add Quartz / Cron Scheduler");
     builder.SetupQuartz();
 
     Log.Information("Setting Up Authentication and Identity");
-    builder
-        .Services.AddIdentityCore<User>()
-        .AddRoles<Role>()
-        .AddEntityFrameworkStores<ExpressedRealmsDbContext>()
-        .AddApiEndpoints();
-
-    builder.Services.Configure<IdentityOptions>(options =>
-    {
-        // Default Password settings.
-        options.Password.RequireDigit = true;
-        options.Password.RequireLowercase = true;
-        options.Password.RequireNonAlphanumeric = true;
-        options.Password.RequireUppercase = true;
-        options.Password.RequiredLength = 8;
-        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-        options.Lockout.AllowedForNewUsers = true;
-        options.Lockout.MaxFailedAccessAttempts = 5;
-    });
-
-    builder.AddPolicyConfiguration();
-
-    builder.Services.ConfigureHttpJsonOptions(options =>
-    {
-        options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-        options.SerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
-    });
-
-    var clientCookieDomain = KeyVaultManager.GetSecret(GeneralConfig.CookieDomain);
-    builder
-        .Services.AddAuthentication()
-        .AddCookie(
-            IdentityConstants.BearerScheme,
-            o =>
-            {
-                o.Cookie.Domain = clientCookieDomain;
-                o.SlidingExpiration = true;
-                o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                o.Cookie.SameSite = SameSiteMode.None;
-            }
-        );
-    builder.Services.AddAuthorizationBuilder();
-
-    builder.Services.AddAntiforgery(
-        (options) =>
-        {
-            options.Cookie.Domain = clientCookieDomain;
-            options.HeaderName = "T-XSRF-TOKEN";
-            options.Cookie.HttpOnly = false;
-            options.Cookie.Name = "XSRF-TOKEN";
-            options.Cookie.SameSite = SameSiteMode.None;
-            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-        }
-    );
-
-    builder.Services.Configure<ForwardedHeadersOptions>(options =>
-    {
-        options.ForwardedHeaders =
-            ForwardedHeaders.XForwardedFor
-            | ForwardedHeaders.XForwardedProto
-            | ForwardedHeaders.XForwardedHost;
-        options.KnownIPNetworks.Clear();
-        options.KnownProxies.Clear();
-    });
+    SecurityConfiguration.SetupAuthenticationAndIdentity(builder);
 
     Log.Information("Adding OpenAPI Support and Swagger Generation");
 
@@ -276,7 +219,7 @@ try
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {
-        Log.Information("Setting Up Swagger");
+        Log.Information("Setting Up Scalar API");
         app.MapOpenApi();
         app.MapScalarApiReference();
     }

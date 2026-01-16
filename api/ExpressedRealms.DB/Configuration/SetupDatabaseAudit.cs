@@ -3,6 +3,7 @@ using Audit.Core;
 using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels.Audit;
 using ExpressedRealms.DB.Characters.AssignedXP.AssignedXpTypeModels.Audit;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup;
 using ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup.Audit;
 using ExpressedRealms.DB.Models.Authorization.RoleSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit;
@@ -105,6 +106,14 @@ public static class SetupDatabaseAudit
                                         ) == 0
                                     )
                                     {
+                                        if (
+                                            entry.EntityType.Name == nameof(RolePermissionMapping)
+                                            && audit is RolePermissionMappingAuditTrail mappingAudit
+                                        )
+                                        {
+                                            mappingAudit.RolePermissionMappingId = null; // Fixes removing mapping
+                                        }
+
                                         audit.ChangedProperties = JsonSerializer.Serialize(
                                             new List<ChangedRecord>()
                                             {
