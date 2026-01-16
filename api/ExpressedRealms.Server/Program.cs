@@ -96,13 +96,21 @@ try
     builder.AddDatabaseConnection(builder.Environment.IsProduction());
 
     Log.Information("Adding Redis Cache");
-    builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
-        ConnectionMultiplexer.Connect(
-            $"{KeyVaultManager.GetSecret(
-                            ConnectionStrings.RedisConnectionString
-                        )},abortConnect=false"
-        )
+
+    var options = ConfigurationOptions.Parse(
+        KeyVaultManager.GetSecret(ConnectionStrings.RedisConnectionString)
     );
+    options.AbortOnConnectFail = false;
+
+    if (builder.Environment.IsProduction())
+    {
+        options.Ssl = true;
+        await options.ConfigureForAzureWithTokenCredentialAsync(new DefaultAzureCredential());
+    }
+
+    var multiplexer = await ConnectionMultiplexer.ConnectAsync(options);
+
+    builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
 
     Log.Information("Add Quartz / Cron Scheduler");
     builder.SetupQuartz();

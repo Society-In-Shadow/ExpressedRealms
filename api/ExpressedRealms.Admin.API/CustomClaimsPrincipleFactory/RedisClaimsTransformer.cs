@@ -45,7 +45,6 @@ public class RedisClaimsTransformer(
             identity!.AddClaim(new Claim(c.Type, c.Value));
         }
 
-
         // Middleware can cause this to be run multiple times, so cache the transformed claims
         items[$"ClaimsTransformed:{nameIdentifier}"] = principal;
         return principal;
