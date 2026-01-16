@@ -25,7 +25,7 @@ public class RedisClaimsTransformer(
         {
             if (env.IsDevelopment())
             {
-                throw new Exception(
+                throw new UnauthorizedAccessException(
                     "No NameIdentifier claim found in principal.  Probably unauthenticated.  Kicking User Out..."
                 );
             }
@@ -42,7 +42,7 @@ public class RedisClaimsTransformer(
         var identity = principal.Identity as ClaimsIdentity;
         foreach (var c in claims)
         {
-            if (!identity.HasClaim(c.Type, c.Value))
+            if (!identity!.HasClaim(c.Type, c.Value))
             {
                 identity.AddClaim(new Claim(c.Type, c.Value));
             }

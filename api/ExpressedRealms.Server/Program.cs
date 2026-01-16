@@ -1,9 +1,6 @@
-using System.Security.Claims;
-using System.Text.Json;
 using Audit.Core;
 using Azure.Identity;
 using ExpressedRealms.Admin.API.Configuration;
-using ExpressedRealms.Admin.API.CustomClaimsPrincipleFactory;
 using ExpressedRealms.Admin.UseCases.Configuration;
 using ExpressedRealms.Authentication.Configuration;
 using ExpressedRealms.Authentication.PermissionCollection.PermissionManager;
@@ -13,7 +10,6 @@ using ExpressedRealms.Characters.API.Configuration;
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.UseCases.Configuration;
 using ExpressedRealms.DB;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using ExpressedRealms.Email;
 using ExpressedRealms.Events.API.API.Configuration;
 using ExpressedRealms.Events.API.UseCases.Configuration;
@@ -41,15 +37,11 @@ using ExpressedRealms.Shared.AzureKeyVault.Secrets;
 using ExpressedRealms.Shared.Configuration;
 using FluentValidation;
 using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Serilog;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 using StackExchange.Redis;
-using Role = ExpressedRealms.DB.UserProfile.PlayerDBModels.Roles.Role;
 
 try
 {
@@ -107,8 +99,8 @@ try
     builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
         ConnectionMultiplexer.Connect(
             $"{KeyVaultManager.GetSecret(
-        ConnectionStrings.RedisConnectionString
-    )},abortConnect=false"
+                            ConnectionStrings.RedisConnectionString
+                        )},abortConnect=false"
         )
     );
 
@@ -116,87 +108,7 @@ try
     builder.SetupQuartz();
 
     Log.Information("Setting Up Authentication and Identity");
-    builder
-        .Services.AddIdentityCore<User>()
-        .AddRoles<Role>()
-        .AddEntityFrameworkStores<ExpressedRealmsDbContext>()
-        .AddApiEndpoints();
-
-    builder.Services.AddScoped<IClaimsTransformation, RedisClaimsTransformer>();
-    builder.Services.AddScoped<ClaimStash>();
-
-    builder.Services.Configure<IdentityOptions>(options =>
-    {
-        // Default Password settings.
-        options.Password.RequireDigit = true;
-        options.Password.RequireLowercase = true;
-        options.Password.RequireNonAlphanumeric = true;
-        options.Password.RequireUppercase = true;
-        options.Password.RequiredLength = 8;
-        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-        options.Lockout.AllowedForNewUsers = true;
-        options.Lockout.MaxFailedAccessAttempts = 5;
-    });
-
-    builder.AddPolicyConfiguration();
-
-    builder.Services.ConfigureHttpJsonOptions(options =>
-    {
-        options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-        options.SerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
-    });
-
-    var clientCookieDomain = KeyVaultManager.GetSecret(GeneralConfig.CookieDomain);
-    builder
-        .Services.AddAuthentication()
-        .AddCookie(
-            IdentityConstants.BearerScheme,
-            o =>
-            {
-                o.Cookie.Domain = clientCookieDomain;
-                o.SlidingExpiration = true;
-                o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                o.Cookie.SameSite = SameSiteMode.None;
-                o.Events.OnValidatePrincipal += async (context) =>
-                {
-                    var transformer =
-                        context.HttpContext.RequestServices.GetRequiredService<IClaimsTransformation>();
-                    var principal = await transformer.TransformAsync(context.Principal!);
-
-                    if (principal.Claims.Any(c => c.Type == "KickUserOut"))
-                    {
-                        context.RejectPrincipal(); // Invalidate the cookie for future requests
-                        await context.HttpContext.SignOutAsync(); // Clear cookie on browser on return
-                        context.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity()); // treat rest of request as unauthenticated
-                    }
-
-                    context.Principal = principal;
-                };
-            }
-        );
-    builder.Services.AddAuthorizationBuilder();
-
-    builder.Services.AddAntiforgery(
-        (options) =>
-        {
-            options.Cookie.Domain = clientCookieDomain;
-            options.HeaderName = "T-XSRF-TOKEN";
-            options.Cookie.HttpOnly = false;
-            options.Cookie.Name = "XSRF-TOKEN";
-            options.Cookie.SameSite = SameSiteMode.None;
-            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-        }
-    );
-
-    builder.Services.Configure<ForwardedHeadersOptions>(options =>
-    {
-        options.ForwardedHeaders =
-            ForwardedHeaders.XForwardedFor
-            | ForwardedHeaders.XForwardedProto
-            | ForwardedHeaders.XForwardedHost;
-        options.KnownIPNetworks.Clear();
-        options.KnownProxies.Clear();
-    });
+    SecurityConfiguration.SetupAuthenticationAndIdentity(builder);
 
     Log.Information("Adding OpenAPI Support and Swagger Generation");
 

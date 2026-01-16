@@ -28,7 +28,7 @@ public class ClaimStash(
             sleepDurationProvider: attempt => TimeSpan.FromMilliseconds(50 * attempt)
         );
 
-    private record ClaimDto(string Type, string Value);
+    private sealed record ClaimDto(string Type, string Value);
 
     public async Task CreateClaimsCache(User user, string nameIdentifier)
     {
@@ -149,6 +149,6 @@ public class ClaimStash(
     {
         var json = (string)redisValue!;
         var payload = JsonSerializer.Deserialize<List<ClaimDto>>(json);
-        return payload.Select(x => new Claim(x.Type, x.Value)).ToList();
+        return payload!.Select(x => new Claim(x.Type, x.Value)).ToList();
     }
 }
