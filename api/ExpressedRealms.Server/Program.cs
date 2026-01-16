@@ -96,10 +96,12 @@ try
     builder.AddDatabaseConnection(builder.Environment.IsProduction());
 
     Log.Information("Adding Redis Cache");
-    
-    var options = ConfigurationOptions.Parse(KeyVaultManager.GetSecret(ConnectionStrings.RedisConnectionString));
+
+    var options = ConfigurationOptions.Parse(
+        KeyVaultManager.GetSecret(ConnectionStrings.RedisConnectionString)
+    );
     options.AbortOnConnectFail = false;
-    
+
     if (builder.Environment.IsProduction())
     {
         options.Ssl = true;
@@ -107,7 +109,7 @@ try
     }
 
     var multiplexer = await ConnectionMultiplexer.ConnectAsync(options);
-    
+
     builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
 
     Log.Information("Add Quartz / Cron Scheduler");
