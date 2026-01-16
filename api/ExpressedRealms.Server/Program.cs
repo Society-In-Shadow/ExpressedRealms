@@ -104,9 +104,9 @@ try
     builder.AddDatabaseConnection(builder.Environment.IsProduction());
     
     Log.Information("Adding Redis Cache");
-    builder.Services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect(KeyVaultManager.GetSecret(
+    builder.Services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect($"{KeyVaultManager.GetSecret(
         ConnectionStrings.RedisConnectionString
-    )));
+    )},abortConnect=false"));
 
     Log.Information("Add Quartz / Cron Scheduler");
     builder.SetupQuartz();
