@@ -106,15 +106,17 @@ public static class SetupDatabaseAudit
                                         ) == 0
                                     )
                                     {
-                                        
                                         if (entry.EntityType.Name == nameof(RolePermissionMapping))
                                         {
-                                            if (audit is RolePermissionMappingAuditTrail mappingAudit)
+                                            if (
+                                                audit
+                                                is RolePermissionMappingAuditTrail mappingAudit
+                                            )
                                             {
-                                                mappingAudit.RolePermissionMappingId = null; // <-- critical
+                                                mappingAudit.RolePermissionMappingId = null; // Fixes removing mapping
                                             }
                                         }
-                                        
+
                                         audit.ChangedProperties = JsonSerializer.Serialize(
                                             new List<ChangedRecord>()
                                             {

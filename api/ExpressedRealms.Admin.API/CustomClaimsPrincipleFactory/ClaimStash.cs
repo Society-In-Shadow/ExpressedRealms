@@ -14,7 +14,8 @@ public class ClaimStash(
     UserManager<User> userManager,
     IRolesRepository rolesRepository,
     IConnectionMultiplexer redis,
-    ILogger<ClaimStash> logger)
+    ILogger<ClaimStash> logger
+)
 {
     /// <summary>
     /// Fail fast, as every request goes through here.
@@ -26,9 +27,9 @@ public class ClaimStash(
             retryCount: 2,
             sleepDurationProvider: attempt => TimeSpan.FromMilliseconds(50 * attempt)
         );
-    
+
     private record ClaimDto(string Type, string Value);
-    
+
     public async Task CreateClaimsCache(User user, string nameIdentifier)
     {
         if (!redis.IsConnected)
@@ -54,11 +55,17 @@ public class ClaimStash(
         }
         catch (Exception ex)
         {
-            logger.LogCritical(ex, "Redis failed after initial connection. Claims will be fetched from DB.");
+            logger.LogCritical(
+                ex,
+                "Redis failed after initial connection. Claims will be fetched from DB."
+            );
         }
     }
 
-    public async Task<List<Claim>> GetClaimsFromCache(ClaimsPrincipal principal, string nameIdentifier)
+    public async Task<List<Claim>> GetClaimsFromCache(
+        ClaimsPrincipal principal,
+        string nameIdentifier
+    )
     {
         var db = redis.GetDatabase();
 
@@ -66,7 +73,9 @@ public class ClaimStash(
 
         if (redisDown)
         {
-            logger.LogCritical("Redis connection is down, auth claim population skipping directly to DB calls");
+            logger.LogCritical(
+                "Redis connection is down, auth claim population skipping directly to DB calls"
+            );
         }
         else
         {
@@ -84,22 +93,29 @@ public class ClaimStash(
                         cachedClaims = TranslateCacheIntoClaims(redisValue);
                     }
                 });
-                
-                if (cachedClaims != null) return cachedClaims;
-                
+
+                if (cachedClaims != null)
+                    return cachedClaims;
             }
             catch (Exception ex)
             {
-                logger.LogWarning(ex, "Redis failed after initial connection. Claims will be fetched from DB.");
+                logger.LogWarning(
+                    ex,
+                    "Redis failed after initial connection. Claims will be fetched from DB."
+                );
                 redisDown = true;
             }
         }
 
         logger.LogTrace(" -- Claim Cache was missed");
-        
+
         // Before repopulating the cache, make sure the user can still be logged in
         var user = await userManager.GetUserAsync(principal);
-        if (user == null || user is { LockoutEnabled: true, LockoutEnd: not null } && user.LockoutEnd > DateTime.UtcNow)
+        if (
+            user == null
+            || user is { LockoutEnabled: true, LockoutEnd: not null }
+                && user.LockoutEnd > DateTime.UtcNow
+        )
         {
             return new List<Claim>() { new Claim("KickUserOut", "KickUserOut") };
         }
@@ -123,10 +139,12 @@ public class ClaimStash(
         var roles = await userManager.GetRolesAsync(user);
 
         var claimsToStore = roles.Select(x => new ClaimDto(ClaimTypes.Role, x)).ToList();
-        claimsToStore.AddRange(permissions.Select(x => new ClaimDto("custom_permission", x)).ToList());
+        claimsToStore.AddRange(
+            permissions.Select(x => new ClaimDto("custom_permission", x)).ToList()
+        );
         return claimsToStore;
     }
-    
+
     private static List<Claim> TranslateCacheIntoClaims(RedisValue redisValue)
     {
         var json = (string)redisValue!;

@@ -56,17 +56,13 @@ internal static class TestingEndPoints
                 }
             )
             .RequireAuthorization();
-        
-        app.MapGet("/showClaims",
+
+        app.MapGet(
+            "/showClaims",
             (ClaimsPrincipal user) =>
             {
-                return Results.Ok(
-                    user.Claims.Select(c => new
-                    {
-                        c.Type,
-                        c.Value
-                    })
-                );
-            });
+                return Results.Ok(user.Claims.Select(c => new { c.Type, c.Value }));
+            }
+        );
     }
 }

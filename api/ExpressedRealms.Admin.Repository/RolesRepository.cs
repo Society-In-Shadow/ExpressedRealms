@@ -20,17 +20,17 @@ internal sealed class RolesRepository(
         return context.Set<Role>().AsNoTracking().ToListAsync(cancellationToken);
     }
 
-    public async Task<List<string>>  GetPermissionKeysForUserAsync(string userId)
+    public async Task<List<string>> GetPermissionKeysForUserAsync(string userId)
     {
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
-        return await context.Set<UserRoleMapping>()
+        return await context
+            .Set<UserRoleMapping>()
             .Where(x => x.UserId == userId && (x.ExpireDate == null || x.ExpireDate >= today))
-            .SelectMany(x =>  x.Role.RolePermissionMappings
-                .Select(y => y.Permission.Key).ToList())
+            .SelectMany(x => x.Role.RolePermissionMappings.Select(y => y.Permission.Key).ToList())
             .Distinct()
             .ToListAsync(cancellationToken);
     }
-    
+
     public Task<EditRoleDto> GetRoleForEditView(int id)
     {
         return context

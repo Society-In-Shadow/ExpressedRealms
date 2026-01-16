@@ -102,11 +102,15 @@ try
 
     Log.Information("Adding DB Context");
     builder.AddDatabaseConnection(builder.Environment.IsProduction());
-    
+
     Log.Information("Adding Redis Cache");
-    builder.Services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect($"{KeyVaultManager.GetSecret(
+    builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+        ConnectionMultiplexer.Connect(
+            $"{KeyVaultManager.GetSecret(
         ConnectionStrings.RedisConnectionString
-    )},abortConnect=false"));
+    )},abortConnect=false"
+        )
+    );
 
     Log.Information("Add Quartz / Cron Scheduler");
     builder.SetupQuartz();
@@ -117,7 +121,7 @@ try
         .AddRoles<Role>()
         .AddEntityFrameworkStores<ExpressedRealmsDbContext>()
         .AddApiEndpoints();
-    
+
     builder.Services.AddScoped<IClaimsTransformation, RedisClaimsTransformer>();
     builder.Services.AddScoped<ClaimStash>();
 
@@ -155,18 +159,18 @@ try
                 o.Cookie.SameSite = SameSiteMode.None;
                 o.Events.OnValidatePrincipal += async (context) =>
                 {
-                    var transformer = context.HttpContext.RequestServices.GetRequiredService<IClaimsTransformation>();
+                    var transformer =
+                        context.HttpContext.RequestServices.GetRequiredService<IClaimsTransformation>();
                     var principal = await transformer.TransformAsync(context.Principal!);
-                    
+
                     if (principal.Claims.Any(c => c.Type == "KickUserOut"))
                     {
                         context.RejectPrincipal(); // Invalidate the cookie for future requests
                         await context.HttpContext.SignOutAsync(); // Clear cookie on browser on return
                         context.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity()); // treat rest of request as unauthenticated
                     }
-                    
+
                     context.Principal = principal;
-                    
                 };
             }
         );

@@ -18,5 +18,6 @@ public class RolePermissionMapping : ISoftDelete
 
     public virtual Permission Permission { get; set; } = null!;
     public virtual Role Role { get; set; } = null!;
-    public virtual ICollection<RolePermissionMappingAuditTrail> RolePermissionMappingAuditTrails { get; set; } = new List<RolePermissionMappingAuditTrail>();
+    public virtual ICollection<RolePermissionMappingAuditTrail> RolePermissionMappingAuditTrails { get; set; } =
+        new List<RolePermissionMappingAuditTrail>();
 }

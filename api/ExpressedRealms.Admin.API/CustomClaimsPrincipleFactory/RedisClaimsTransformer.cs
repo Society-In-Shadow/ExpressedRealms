@@ -8,30 +8,35 @@ using Microsoft.Extensions.Logging;
 namespace ExpressedRealms.Admin.API.CustomClaimsPrincipleFactory;
 
 public class RedisClaimsTransformer(
-    ClaimStash claimStash, 
-    IHttpContextAccessor httpContext, 
+    ClaimStash claimStash,
+    IHttpContextAccessor httpContext,
     IWebHostEnvironment env,
-    ILogger<RedisClaimsTransformer> logger) : IClaimsTransformation
+    ILogger<RedisClaimsTransformer> logger
+) : IClaimsTransformation
 {
     public async Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
     {
         var items = httpContext.HttpContext!.Items;
-        var nameIdentifier = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        var nameIdentifier = principal
+            .Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
+            ?.Value;
 
         if (nameIdentifier == null)
         {
             if (env.IsDevelopment())
             {
-                throw new Exception("No NameIdentifier claim found in principal.  Probably unauthenticated.  Kicking User Out...");
+                throw new Exception(
+                    "No NameIdentifier claim found in principal.  Probably unauthenticated.  Kicking User Out..."
+                );
             }
-            
+
             logger.LogWarning("No NameIdentifier claim found in principal.  Kicking User Out.");
             return new ClaimsPrincipal(new ClaimsIdentity());
         }
-        
+
         if (items[$"ClaimsTransformed:{nameIdentifier}"] is ClaimsPrincipal cached)
             return cached;
-        
+
         var claims = await claimStash.GetClaimsFromCache(principal, nameIdentifier);
 
         var identity = principal.Identity as ClaimsIdentity;
