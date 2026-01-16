@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ExpressedRealms.Server.Configuration;
 
-public class SecurityConfiguration
+public static class SecurityConfiguration
 {
     public static void SetupAuthenticationAndIdentity(WebApplicationBuilder webApplicationBuilder)
     {
@@ -82,7 +82,7 @@ public class SecurityConfiguration
             {
                 options.Cookie.Domain = clientCookieDomain;
                 options.HeaderName = "T-XSRF-TOKEN";
-                options.Cookie.HttpOnly = false;
+                options.Cookie.HttpOnly = true;
                 options.Cookie.Name = "XSRF-TOKEN";
                 options.Cookie.SameSite = SameSiteMode.None;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;

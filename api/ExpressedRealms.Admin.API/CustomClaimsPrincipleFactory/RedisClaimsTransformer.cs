@@ -40,13 +40,11 @@ public class RedisClaimsTransformer(
         var claims = await claimStash.GetClaimsFromCache(principal, nameIdentifier);
 
         var identity = principal.Identity as ClaimsIdentity;
-        foreach (var c in claims)
+        foreach (var c in claims.Where(c => !identity!.HasClaim(c.Type, c.Value)))
         {
-            if (!identity!.HasClaim(c.Type, c.Value))
-            {
-                identity.AddClaim(new Claim(c.Type, c.Value));
-            }
+            identity!.AddClaim(new Claim(c.Type, c.Value));
         }
+
 
         // Middleware can cause this to be run multiple times, so cache the transformed claims
         items[$"ClaimsTransformed:{nameIdentifier}"] = principal;

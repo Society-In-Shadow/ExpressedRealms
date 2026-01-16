@@ -81,17 +81,15 @@ public class ClaimStash(
         {
             try
             {
-                List<Claim>? cachedClaims = null;
-                await RedisRetryPolicy.ExecuteAsync(async () =>
+                var cachedClaims = await RedisRetryPolicy.ExecuteAsync(async () =>
                 {
                     var redisValue = await db.StringGetAsync($"claims:{nameIdentifier}");
-                    var hasCache = !redisValue.IsNullOrEmpty;
-                    if (hasCache)
-                    {
-                        logger.LogTrace($" -- Claim Cache was hit");
-                        await db.KeyExpireAsync($"claims:{nameIdentifier}", TimeSpan.FromDays(14));
-                        cachedClaims = TranslateCacheIntoClaims(redisValue);
-                    }
+                    if (redisValue.IsNullOrEmpty)
+                        return null;
+
+                    logger.LogTrace(" -- Claim Cache was hit");
+                    await db.KeyExpireAsync($"claims:{nameIdentifier}", TimeSpan.FromDays(14));
+                    return TranslateCacheIntoClaims(redisValue);
                 });
 
                 if (cachedClaims != null)
