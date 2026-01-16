@@ -112,6 +112,14 @@ services:
       - expressed-realms-network
     restart: always
 
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly no
+    restart: unless-stopped
+
 volumes:
   ignore:
   db_data:

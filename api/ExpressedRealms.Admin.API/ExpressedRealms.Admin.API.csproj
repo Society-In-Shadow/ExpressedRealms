@@ -10,4 +10,7 @@
     <ProjectReference Include="..\ExpressedRealms.Server.Shared\ExpressedRealms.Server.Shared.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Shared\ExpressedRealms.Shared.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="StackExchange.Redis.Extensions.AspNetCore" Version="11.0.0" />
+  </ItemGroup>
 </Project>

@@ -10,4 +10,5 @@ public static class ConnectionStrings
     );
     public static readonly KeyVaultSecret BlobStorage = new("AZURE-STORAGEBLOB-RESOURCEENDPOINT");
     public static readonly KeyVaultSecret AzureKeyVault = new("AZURE_KEYVAULT_RESOURCEENDPOINT");
+    public static readonly KeyVaultSecret RedisConnectionString = new("REDIS-CONNECTION-STRING");
 }

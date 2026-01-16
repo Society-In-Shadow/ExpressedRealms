@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text.Json;
 using Audit.Core;
 using Azure.Identity;
@@ -12,7 +13,6 @@ using ExpressedRealms.Characters.API.Configuration;
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.UseCases.Configuration;
 using ExpressedRealms.DB;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels.Roles;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using ExpressedRealms.Email;
 using ExpressedRealms.Events.API.API.Configuration;
@@ -41,12 +41,15 @@ using ExpressedRealms.Shared.AzureKeyVault.Secrets;
 using ExpressedRealms.Shared.Configuration;
 using FluentValidation;
 using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Serilog;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
+using StackExchange.Redis;
+using Role = ExpressedRealms.DB.UserProfile.PlayerDBModels.Roles.Role;
 
 try
 {
@@ -99,6 +102,11 @@ try
 
     Log.Information("Adding DB Context");
     builder.AddDatabaseConnection(builder.Environment.IsProduction());
+    
+    Log.Information("Adding Redis Cache");
+    builder.Services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect(KeyVaultManager.GetSecret(
+        ConnectionStrings.RedisConnectionString
+    )));
 
     Log.Information("Add Quartz / Cron Scheduler");
     builder.SetupQuartz();
@@ -110,7 +118,8 @@ try
         .AddEntityFrameworkStores<ExpressedRealmsDbContext>()
         .AddApiEndpoints();
     
-    builder.Services.AddScoped<IUserClaimsPrincipalFactory<User>, CustomClaimsPrincipalFactory>();
+    builder.Services.AddScoped<IClaimsTransformation, RedisClaimsTransformer>();
+    builder.Services.AddScoped<ClaimStash>();
 
     builder.Services.Configure<IdentityOptions>(options =>
     {
@@ -144,6 +153,21 @@ try
                 o.SlidingExpiration = true;
                 o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 o.Cookie.SameSite = SameSiteMode.None;
+                o.Events.OnValidatePrincipal += async (context) =>
+                {
+                    var transformer = context.HttpContext.RequestServices.GetRequiredService<IClaimsTransformation>();
+                    var principal = await transformer.TransformAsync(context.Principal!);
+                    
+                    if (principal.Claims.Any(c => c.Type == "KickUserOut"))
+                    {
+                        context.RejectPrincipal(); // Invalidate the cookie for future requests
+                        await context.HttpContext.SignOutAsync(); // Clear cookie on browser on return
+                        context.HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity()); // treat rest of request as unauthenticated
+                    }
+                    
+                    context.Principal = principal;
+                    
+                };
             }
         );
     builder.Services.AddAuthorizationBuilder();
@@ -279,7 +303,7 @@ try
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {
-        Log.Information("Setting Up Swagger");
+        Log.Information("Setting Up Scalar API");
         app.MapOpenApi();
         app.MapScalarApiReference();
     }

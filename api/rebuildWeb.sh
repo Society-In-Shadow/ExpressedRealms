@@ -6,6 +6,10 @@ CONTAINER_NAME="webapi"
 
 ./syncPermissions.sh
 
+echo "🧹 Removing old Images"
+
+podman image prune -f
+
 echo "🔨 Building container: $CONTAINER_NAME"
 
 if ! podman compose -f ../docker-compose.yaml -f ../docker-compose.container-api.yaml build "$CONTAINER_NAME" --no-cache; then
