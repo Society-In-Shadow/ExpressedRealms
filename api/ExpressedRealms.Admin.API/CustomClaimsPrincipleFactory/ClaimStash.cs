@@ -16,6 +16,9 @@ public class ClaimStash(
     IConnectionMultiplexer redis,
     ILogger<ClaimStash> logger)
 {
+    /// <summary>
+    /// Fail fast, as every request goes through here.
+    /// </summary>
     private static readonly AsyncRetryPolicy RedisRetryPolicy = Policy
         .Handle<RedisConnectionException>()
         .Or<TimeoutException>()
@@ -47,12 +50,11 @@ public class ClaimStash(
                 await db.StringSetAsync($"claims:{nameIdentifier}", json, TimeSpan.FromDays(14));
             });
 
-            logger.LogTrace("Claims cache successfully created for user {UserId}", user.Id);
+            logger.LogTrace("Claims cache successfully created!");
         }
         catch (Exception ex)
         {
-            // Fail-fast: Redis is down, log, and continue; DB will serve claims
-            logger.LogWarning(ex, "Failed to cache claims for user {UserId}. Claims will be fetched from DB.", user.Id);
+            logger.LogCritical(ex, "Redis failed after initial connection. Claims will be fetched from DB.");
         }
     }
 
@@ -77,7 +79,7 @@ public class ClaimStash(
                     var hasCache = !redisValue.IsNullOrEmpty;
                     if (hasCache)
                     {
-                        logger.LogInformation($" -- Claim Cache was hit");
+                        logger.LogTrace($" -- Claim Cache was hit");
                         await db.KeyExpireAsync($"claims:{nameIdentifier}", TimeSpan.FromDays(14));
                         cachedClaims = TranslateCacheIntoClaims(redisValue);
                     }
@@ -88,8 +90,7 @@ public class ClaimStash(
             }
             catch (Exception ex)
             {
-                logger.LogWarning(ex, "Failed to cache claims for user {UserId}. Claims will be fetched from DB.",
-                    nameIdentifier);
+                logger.LogWarning(ex, "Redis failed after initial connection. Claims will be fetched from DB.");
                 redisDown = true;
             }
         }
@@ -106,7 +107,7 @@ public class ClaimStash(
         // If the entry expired, and the cache isn't down, recreate the cache
         if (!redisDown)
         {
-            logger.LogInformation(" -- Claim Cache expired, recreating");
+            logger.LogTrace(" -- Claim Cache expired, recreating");
             await CreateClaimsCache(user, nameIdentifier);
             return await GetClaimsFromCache(principal, nameIdentifier);
         }
