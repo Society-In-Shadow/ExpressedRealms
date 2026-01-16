@@ -1,21 +1,37 @@
 using System.Security.Claims;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace ExpressedRealms.Admin.API.CustomClaimsPrincipleFactory;
 
-public class RedisClaimsTransformer(ClaimStash claimStash, UserManager<User> userManager) : IClaimsTransformation
+public class RedisClaimsTransformer(
+    ClaimStash claimStash, 
+    IHttpContextAccessor httpContext, 
+    IWebHostEnvironment env,
+    ILogger<RedisClaimsTransformer> logger) : IClaimsTransformation
 {
     public async Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
     {
-        if (!principal.Identity?.IsAuthenticated ?? true)
-            return principal;
-        
+        var items = httpContext.HttpContext!.Items;
         var nameIdentifier = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-        if (nameIdentifier == null)
-            return principal;
 
+        if (nameIdentifier == null)
+        {
+            if (env.IsDevelopment())
+            {
+                throw new Exception("No NameIdentifier claim found in principal.  Probably unauthenticated.  Kicking User Out...");
+            }
+            
+            logger.LogWarning("No NameIdentifier claim found in principal.  Kicking User Out.");
+            return new ClaimsPrincipal(new ClaimsIdentity());
+        }
+        
+        if (items[$"ClaimsTransformed:{nameIdentifier}"] is ClaimsPrincipal cached)
+            return cached;
+        
         var claims = await claimStash.GetClaimsFromCache(principal, nameIdentifier);
 
         var identity = principal.Identity as ClaimsIdentity;
@@ -27,6 +43,8 @@ public class RedisClaimsTransformer(ClaimStash claimStash, UserManager<User> use
             }
         }
 
+        // Middleware can cause this to be run multiple times, so cache the transformed claims
+        items[$"ClaimsTransformed:{nameIdentifier}"] = principal;
         return principal;
     }
 }
