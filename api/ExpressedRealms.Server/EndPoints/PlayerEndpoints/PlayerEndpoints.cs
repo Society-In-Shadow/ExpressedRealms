@@ -65,6 +65,24 @@ internal static class PlayerEndpoints
                 """
             )
             .RequireAuthorization();
+        
+        endpointGroup
+            .MapGet(
+                "/permissions",
+                (
+                    HttpContext http
+                ) =>
+                {
+                    var permissions = http.User.Claims
+                        .Where(x => x.Type == "custom_permission")
+                        .Select(x => x.Value)
+                        .ToList();
+
+                    return TypedResults.Ok(permissions);
+                }
+            )
+            .WithDescription("Returns permissions related to the player")
+            .RequireAuthorization();
 
         endpointGroup
             .MapPost(
