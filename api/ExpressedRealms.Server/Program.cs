@@ -41,7 +41,6 @@ using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Serilog;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
-using StackExchange.Redis;
 
 try
 {
@@ -96,20 +95,7 @@ try
     builder.AddDatabaseConnection(builder.Environment.IsProduction());
 
     Log.Information("Adding Redis Cache");
-
-    var options = ConfigurationOptions.Parse(
-        KeyVaultManager.GetSecret(ConnectionStrings.RedisConnectionString)
-    );
-    options.AbortOnConnectFail = false;
-
-    if (builder.Environment.IsProduction())
-    {
-        options.Ssl = true;
-    }
-
-    var multiplexer = await ConnectionMultiplexer.ConnectAsync(options);
-
-    builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
+    await builder.AddRedisConnection(builder.Environment.IsProduction());
 
     Log.Information("Add Quartz / Cron Scheduler");
     builder.SetupQuartz();
