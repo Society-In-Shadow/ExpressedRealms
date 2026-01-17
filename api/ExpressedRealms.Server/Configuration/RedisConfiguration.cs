@@ -7,7 +7,10 @@ namespace ExpressedRealms.Server.Configuration;
 
 public static class RedisConfiguration
 {
-    public static async Task AddRedisConnection(this WebApplicationBuilder builder, bool isProduction)
+    public static async Task AddRedisConnection(
+        this WebApplicationBuilder builder,
+        bool isProduction
+    )
     {
         var options = ConfigurationOptions.Parse(
             KeyVaultManager.GetSecret(ConnectionStrings.RedisConnectionString)
