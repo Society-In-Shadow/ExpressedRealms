@@ -1,7 +1,7 @@
 /**
  * Auto-Generated, Do Not Edit
  */
-export const Permissions = {
+export const UserPermissions = {
   Event: {
     Edit: 'event.edit',
     View: 'event.view',
@@ -22,6 +22,14 @@ export const Permissions = {
     Delete: 'role.delete',
     Assign: 'role.assign',
   } as const,
+  DevDebug: {
+    View: 'devdebug.view',
+    SendTestEmail: 'devdebug.sendtestemail',
+    GetFeatureFlag: 'devdebug.getfeatureflag',
+    SendDiscordMessage: 'devdebug.senddiscordmessage',
+    TestRedis: 'devdebug.testredis',
+  } as const,
 } as const
 
-export type Permission = typeof Permissions[keyof typeof Permissions]
+type NestedValues<T> = T extends Record<string, unknown> ? NestedValues<T[keyof T]> : T
+export type UserPermission = NestedValues<typeof UserPermissions>
