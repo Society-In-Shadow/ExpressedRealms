@@ -193,16 +193,19 @@ internal sealed class SendEventPublishedMessagesUseCase(
             embeds: [siteEmbed, locationEmbed]
         );
 
-        await discordService.CreateEventAsync(
-            new DiscordEvent()
-            {
-                Name = currentEvent.Name,
-                Location = currentEvent.Location,
-                StartDate = currentEvent.StartDate.ToUtc(currentEvent.TimeZoneId),
-                EndDate = currentEvent.EndDate.ToUtc(currentEvent.TimeZoneId),
-            }
-        );
-
+        if (model.PublishType == PublishType.InitialAnnouncement)
+        {
+            await discordService.CreateEventAsync(
+                new DiscordEvent()
+                {
+                    Name = currentEvent.Name,
+                    Location = currentEvent.Location,
+                    StartDate = currentEvent.StartDate.ToUtc(currentEvent.TimeZoneId),
+                    EndDate = currentEvent.EndDate.ToUtc(currentEvent.TimeZoneId),
+                }
+            );
+        }
+        
         return Result.Ok();
     }
 
