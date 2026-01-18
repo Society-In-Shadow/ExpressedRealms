@@ -507,35 +507,34 @@ public class SendEventPublishedMessagesUseCaseTests
             )
             .MustHaveHappened();
     }
-    
+
     [Fact]
     public async Task UseCase_CreatesEvent_OnInitialAnnouncement()
     {
         _model.PublishType = PublishType.InitialAnnouncement;
         await _useCase.ExecuteAsync(_model);
         A.CallTo(() =>
-                _discordService.CreateEventAsync(A<DiscordEvent>.That.Matches(x => x.Name == _dbModel.Name
-                    && x.Location == _dbModel.Location
-                    && x.StartDate == _dbModel.StartDate.ToUtc(_dbModel.TimeZoneId)
-                    && x.EndDate == _dbModel.EndDate.ToUtc(_dbModel.TimeZoneId)
-                ))
+                _discordService.CreateEventAsync(
+                    A<DiscordEvent>.That.Matches(x =>
+                        x.Name == _dbModel.Name
+                        && x.Location == _dbModel.Location
+                        && x.StartDate == _dbModel.StartDate.ToUtc(_dbModel.TimeZoneId)
+                        && x.EndDate == _dbModel.EndDate.ToUtc(_dbModel.TimeZoneId)
+                    )
+                )
             )
             .MustHaveHappened();
     }
-    
+
     [Theory]
     [InlineData(PublishType.OneMonthReminder)]
     [InlineData(PublishType.OneWeekReminder)]
     [InlineData(PublishType.DayOfReminder)]
-    public async Task UseCase_DoesNotCreateEvent_OnAnyOtherPublishType(
-        PublishType type
-    )
+    public async Task UseCase_DoesNotCreateEvent_OnAnyOtherPublishType(PublishType type)
     {
         _model.PublishType = type;
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() =>
-                _discordService.CreateEventAsync(A<DiscordEvent>._))
-            .MustNotHaveHappened();
+        A.CallTo(() => _discordService.CreateEventAsync(A<DiscordEvent>._)).MustNotHaveHappened();
     }
 
     [Fact]

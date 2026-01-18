@@ -19,7 +19,6 @@ public static class RedisConfiguration
         if (builder.Environment.IsProduction())
         {
             options.Ssl = true;
-            //await options.ConfigureForAzureWithTokenCredentialAsync(new DefaultAzureCredential());
         }
 
         var multiplexer = await ConnectionMultiplexer.ConnectAsync(options);

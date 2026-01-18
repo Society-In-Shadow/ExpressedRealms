@@ -205,7 +205,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
                 }
             );
         }
-        
+
         return Result.Ok();
     }
 
