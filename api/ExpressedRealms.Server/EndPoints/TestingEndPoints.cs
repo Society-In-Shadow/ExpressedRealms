@@ -1,9 +1,10 @@
-using ExpressedRealms.Authentication;
+using ExpressedRealms.Authentication.PermissionCollection;
+using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using ExpressedRealms.Email.TestEmail;
 using ExpressedRealms.Events.API.Discord;
 using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.FeatureFlags.FeatureClient;
-using ExpressedRealms.Server.Shared;
+using StackExchange.Redis;
 
 namespace ExpressedRealms.Server.EndPoints;
 
@@ -11,7 +12,12 @@ internal static class TestingEndPoints
 {
     internal static void AddTestingEndPoints(this WebApplication app)
     {
-        app.MapGet(
+        var endpoints = app.MapGroup("dev")
+            .RequireAuthorization()
+            .RequirePermission(Permissions.DevDebug.View);
+
+        endpoints
+            .MapPost(
                 "/sendTestEmail",
                 async (HttpContext httpContext, ITestEmail email) =>
                 {
@@ -32,19 +38,20 @@ internal static class TestingEndPoints
                     return Results.Ok();
                 }
             )
-            .RequireAuthorization()
-            .RequirePolicyAuthorization(Policies.UserManagementPolicy);
+            .RequirePermission(Permissions.DevDebug.SendTestEmail);
 
-        app.MapGet(
+        endpoints
+            .MapGet(
                 "/getFeatureFlag",
                 async (IFeatureToggleClient client) =>
                 {
                     return await client.HasFeatureFlag(ReleaseFlags.TestReleaseFlag);
                 }
             )
-            .RequireAuthorization();
+            .RequirePermission(Permissions.DevDebug.GetFeatureFlag);
 
-        app.MapGet(
+        endpoints
+            .MapPost(
                 "/sendDiscordTestMessage",
                 async (IDiscordService discordService) =>
                 {
@@ -54,6 +61,19 @@ internal static class TestingEndPoints
                     );
                 }
             )
-            .RequireAuthorization();
+            .RequirePermission(Permissions.DevDebug.SendDiscordMessage);
+
+        endpoints
+            .MapPost(
+                "/testRedis",
+                async (IConnectionMultiplexer redisService) =>
+                {
+                    var db = redisService.GetDatabase();
+                    await db.StringSetAsync("testKey", "testValue");
+                    var value = await db.StringGetAsync("testKey");
+                    return Results.Ok(value.ToString());
+                }
+            )
+            .RequirePermission(Permissions.DevDebug.TestRedis);
     }
 }

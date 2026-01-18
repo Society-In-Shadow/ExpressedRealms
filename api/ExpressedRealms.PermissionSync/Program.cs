@@ -9,7 +9,7 @@ builder.AppendLine("/**");
 builder.AppendLine(" * Auto-Generated, Do Not Edit");
 builder.AppendLine(" */");
 
-builder.AppendLine("export const Permissions = {");
+builder.AppendLine("export const UserPermissions = {");
 foreach (var resource in resources)
 {
     builder.AppendLine($"  {resource.Name}: {{");
@@ -23,6 +23,9 @@ foreach (var resource in resources)
 
 builder.AppendLine("} as const");
 builder.AppendLine();
-builder.Append("export type Permission = typeof Permissions[keyof typeof Permissions]");
+builder.AppendLine(
+    "type NestedValues<T> = T extends Record<string, unknown> ? NestedValues<T[keyof T]> : T"
+);
+builder.Append("export type UserPermission = NestedValues<typeof UserPermissions>");
 
 Console.WriteLine(builder.ToString());

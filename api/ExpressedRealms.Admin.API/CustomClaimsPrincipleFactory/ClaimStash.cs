@@ -30,7 +30,13 @@ public class ClaimStash(
 
     private sealed record ClaimDto(string Type, string Value);
 
-    public async Task CreateClaimsCache(User user, string nameIdentifier)
+    public async Task CreateResetClaimsCache(ClaimsPrincipal principal, string nameIdentifier)
+    {
+        var user = await userManager.GetUserAsync(principal);
+        await CreateClaimsCache(user!, nameIdentifier);
+    }
+
+    private async Task CreateClaimsCache(User user, string nameIdentifier)
     {
         if (!redis.IsConnected)
         {

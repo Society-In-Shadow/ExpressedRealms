@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { userStore } from '@/stores/userStore'
+import { type FeatureFlag, type UserRole, userStore } from '@/stores/userStore'
 import { UserRoutes } from '@/router/Routes/UserRoutes'
 import { AdminRoutes } from '@/router/Routes/AdminRoutes'
 import { OverallRoutes } from '@/router/Routes/OverallNavigationRoutes'
 import { PublicRoutes } from '@/router/Routes/PublicRoutes'
+import { type UserPermission } from '@/types/UserPermissions.ts'
 
 export const routes = [
   PublicRoutes,
@@ -40,6 +41,7 @@ routerSetup.beforeEach(async (to) => {
     if (!userInfoInitialized) {
       await userInfo.getUserInfo()
       await userInfo.updateUserRoles()
+      await userInfo.updateUserPermissions()
       userInfoInitialized = true
     }
 
@@ -57,11 +59,15 @@ routerSetup.beforeEach(async (to) => {
       return { name: 'characters' }
     }
 
-    if (to.meta.requiredRole && !userInfo.userRoles.includes(to.meta.requiredRole)) {
+    if (to.meta.requiredRole && !userInfo.userRoles.includes(to.meta.requiredRole as UserRole)) {
       return { name: 'characters' }
     }
 
-    if (to.meta.requiredFeatureFlag && !await userInfo.hasFeatureFlag(to.meta.requiredFeatureFlag)) {
+    if (to.meta.requiredPermission && !await userInfo.hasPermission(to.meta.requiredPermission as UserPermission)) {
+      return { name: 'characters' }
+    }
+
+    if (to.meta.requiredFeatureFlag && !await userInfo.hasFeatureFlag(to.meta.requiredFeatureFlag as FeatureFlag)) {
       return { name: 'characters' }
     }
   }

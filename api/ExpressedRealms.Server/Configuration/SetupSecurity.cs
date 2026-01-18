@@ -58,6 +58,15 @@ public static class SecurityConfiguration
                     o.SlidingExpiration = true;
                     o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                     o.Cookie.SameSite = SameSiteMode.None;
+                    o.Events.OnSignedIn += async (context) =>
+                    {
+                        var claimStash =
+                            context.HttpContext.RequestServices.GetRequiredService<ClaimStash>();
+                        await claimStash.CreateResetClaimsCache(
+                            context.Principal!,
+                            context.Principal!.FindFirstValue(ClaimTypes.NameIdentifier)!
+                        );
+                    };
                     o.Events.OnValidatePrincipal += async (context) =>
                     {
                         var transformer =

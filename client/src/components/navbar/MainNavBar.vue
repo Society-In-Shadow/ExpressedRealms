@@ -13,6 +13,7 @@ import SimpleMenuItem from '@/components/navbar/navMenuItems/SimpleMenuItem.vue'
 import { userStore } from '@/stores/userStore'
 import { cmsStore } from '@/stores/cmsStore.ts'
 import { storeToRefs } from 'pinia'
+import { UserPermissions } from '@/types/UserPermissions.ts'
 
 const userInfo = userStore()
 const Router = useRouter()
@@ -94,6 +95,14 @@ const items = ref([
             navMenuIcon: 'patient_list',
             pushComponentRouteName: 'adminCharacterList',
             visible: () => userInfo.userRoles.includes('ManagePlayerCharacterList'),
+          },
+          {
+            navMenuType: 'simple',
+            label: 'Dev Menu',
+            description: 'Dev testing / related functionality.',
+            navMenuIcon: 'code',
+            pushComponentRouteName: 'dev',
+            visible: () => userInfo.userPermissions.includes(UserPermissions.DevDebug.View),
           },
         ],
       },
