@@ -36,12 +36,6 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "Shows how the XP has been assigned to the character"
     );
 
-    public static readonly ReleaseFlags UseNewPermissionSystem = new(
-        "Use New Permission System",
-        "use-new-permission-system",
-        "Switches authorization from the old role system to the new resource action system"
-    );
-
     public override string ToString()
     {
         return Name;

@@ -1,26 +1,19 @@
-using ExpressedRealms.FeatureFlags;
-using ExpressedRealms.FeatureFlags.FeatureClient;
 using Microsoft.AspNetCore.Authorization;
 
 namespace ExpressedRealms.Authentication.PermissionCollection.Configuration;
 
-public class PermissionHandler(IFeatureToggleClient featureToggleClient)
-    : AuthorizationHandler<PermissionRequirement>
+public class PermissionHandler : AuthorizationHandler<PermissionRequirement>
 {
-    protected override async Task HandleRequirementAsync(
+    protected override Task HandleRequirementAsync(
         AuthorizationHandlerContext context,
         PermissionRequirement requirement
     )
     {
-        if (!await featureToggleClient.HasFeatureFlag(ReleaseFlags.UseNewPermissionSystem))
-        {
-            context.Succeed(requirement);
-            return;
-        }
-
         if (context.User.HasClaim("custom_permission", requirement.Permission.Key))
         {
             context.Succeed(requirement);
         }
+
+        return Task.CompletedTask;
     }
 }
