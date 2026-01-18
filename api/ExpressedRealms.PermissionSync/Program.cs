@@ -23,7 +23,9 @@ foreach (var resource in resources)
 
 builder.AppendLine("} as const");
 builder.AppendLine();
-builder.AppendLine("type NestedValues<T> = T extends Record<string, unknown> ? NestedValues<T[keyof T]> : T");
+builder.AppendLine(
+    "type NestedValues<T> = T extends Record<string, unknown> ? NestedValues<T[keyof T]> : T"
+);
 builder.Append("export type UserPermission = NestedValues<typeof UserPermissions>");
 
 Console.WriteLine(builder.ToString());

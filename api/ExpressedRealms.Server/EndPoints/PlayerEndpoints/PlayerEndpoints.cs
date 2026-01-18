@@ -65,16 +65,14 @@ internal static class PlayerEndpoints
                 """
             )
             .RequireAuthorization();
-        
+
         endpointGroup
             .MapGet(
                 "/permissions",
-                (
-                    HttpContext http
-                ) =>
+                (HttpContext http) =>
                 {
-                    var permissions = http.User.Claims
-                        .Where(x => x.Type == "custom_permission")
+                    var permissions = http
+                        .User.Claims.Where(x => x.Type == "custom_permission")
                         .Select(x => x.Value)
                         .ToList();
 

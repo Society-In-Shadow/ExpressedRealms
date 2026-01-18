@@ -15,8 +15,9 @@ internal static class TestingEndPoints
         var endpoints = app.MapGroup("dev")
             .RequireAuthorization()
             .RequirePermission(Permissions.DevDebug.View);
-        
-        endpoints.MapPost(
+
+        endpoints
+            .MapPost(
                 "/sendTestEmail",
                 async (HttpContext httpContext, ITestEmail email) =>
                 {
@@ -39,7 +40,8 @@ internal static class TestingEndPoints
             )
             .RequirePermission(Permissions.DevDebug.SendTestEmail);
 
-        endpoints.MapGet(
+        endpoints
+            .MapGet(
                 "/getFeatureFlag",
                 async (IFeatureToggleClient client) =>
                 {
@@ -48,7 +50,8 @@ internal static class TestingEndPoints
             )
             .RequirePermission(Permissions.DevDebug.GetFeatureFlag);
 
-        endpoints.MapPost(
+        endpoints
+            .MapPost(
                 "/sendDiscordTestMessage",
                 async (IDiscordService discordService) =>
                 {
@@ -59,14 +62,18 @@ internal static class TestingEndPoints
                 }
             )
             .RequirePermission(Permissions.DevDebug.SendDiscordMessage);
-        
-        endpoints.MapPost("/testRedis", async (IConnectionMultiplexer redisService) =>
-        {
-            var db = redisService.GetDatabase();
-            await db.StringSetAsync("testKey", "testValue");
-            var value = await db.StringGetAsync("testKey");
-            return Results.Ok(value.ToString());
-        })
-        .RequirePermission(Permissions.DevDebug.TestRedis);
+
+        endpoints
+            .MapPost(
+                "/testRedis",
+                async (IConnectionMultiplexer redisService) =>
+                {
+                    var db = redisService.GetDatabase();
+                    await db.StringSetAsync("testKey", "testValue");
+                    var value = await db.StringGetAsync("testKey");
+                    return Results.Ok(value.ToString());
+                }
+            )
+            .RequirePermission(Permissions.DevDebug.TestRedis);
     }
 }
