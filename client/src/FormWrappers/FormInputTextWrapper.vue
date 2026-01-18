@@ -41,7 +41,7 @@ const isInvalid = computed(() => (model.value.error.value ?? '').length > 0)
     <InputText
       v-else
       :id="dataCyTagCalc" v-model="model.field.value" :data-cy="dataCyTagCalc" class="w-100"
-      :invalid="isInvalid"
+      :invalid="isInvalid" v-bind="$attrs"
     />
     <small v-if="isInvalid" :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ model.error }}</small>
     <slot />
