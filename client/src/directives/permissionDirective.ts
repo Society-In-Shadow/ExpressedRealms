@@ -10,7 +10,7 @@ export const permissionDirective: Directive<
     const authStore = userStore()
 
     if (!authStore.userPermissions.includes(binding.value as UserPermission)) {
-      el.parentNode?.removeChild(el)
+      el.remove()
     }
   },
 }

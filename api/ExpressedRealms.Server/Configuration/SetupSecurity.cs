@@ -64,7 +64,7 @@ public static class SecurityConfiguration
                             context.HttpContext.RequestServices.GetRequiredService<ClaimStash>();
                         await claimStash.CreateResetClaimsCache(
                             context.Principal!,
-                            context.Principal!.FindFirstValue(ClaimTypes.NameIdentifier)
+                            context.Principal!.FindFirstValue(ClaimTypes.NameIdentifier)!
                         );
                     };
                     o.Events.OnValidatePrincipal += async (context) =>

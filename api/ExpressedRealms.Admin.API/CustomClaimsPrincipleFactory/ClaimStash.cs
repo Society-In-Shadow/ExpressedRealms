@@ -33,7 +33,7 @@ public class ClaimStash(
     public async Task CreateResetClaimsCache(ClaimsPrincipal principal, string nameIdentifier)
     {
         var user = await userManager.GetUserAsync(principal);
-        await CreateClaimsCache(user, nameIdentifier);
+        await CreateClaimsCache(user!, nameIdentifier);
     }
 
     private async Task CreateClaimsCache(User user, string nameIdentifier)
