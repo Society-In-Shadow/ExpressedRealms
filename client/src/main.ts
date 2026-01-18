@@ -22,6 +22,7 @@ import Lara from '@primevue/themes/lara'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import DialogService from 'primevue/dialogservice'
 import { Tooltip } from 'primevue'
+import { permissionDirective } from '@/directives/permissionDirective.ts'
 
 axiosConfig.setupErrorHandlingInterceptors()
 axiosConfig.setAPIUrl()
@@ -83,6 +84,7 @@ const app = createApp(App)
   .use(routerSetup)
 app.directive('ripple', Ripple)
 app.directive('tooltip', Tooltip)
+app.directive('permission', permissionDirective)
 app.use(pinia)
 app.use(ToastService)
 app.use(ConfirmationService)

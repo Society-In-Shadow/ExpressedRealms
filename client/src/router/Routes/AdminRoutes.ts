@@ -1,4 +1,5 @@
 import Layout from '@/components/LoggedInLayout.vue'
+import { UserPermissions } from '@/types/UserPermissions.ts'
 
 export const AdminRoutes = {
   path: '/admin',
@@ -39,6 +40,12 @@ export const AdminRoutes = {
       name: 'editEvent',
       component: () => import('./../../components/admin/events/EventPage.vue'),
       meta: { requiredRole: 'ManageEvents' },
+    },
+    {
+      path: 'dev',
+      name: 'dev',
+      component: () => import('@/components/admin/dev/DevTesting.vue'),
+      meta: { requiredPermission: UserPermissions.DevDebug.View },
     },
   ],
 }
