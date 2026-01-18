@@ -9,8 +9,10 @@ public static class ConnectionStrings
         "APPLICATION-INSIGHTS-CONNECTION-STRING"
     );
     public static readonly KeyVaultSecret BlobStorage = new("AZURE-STORAGEBLOB-RESOURCEENDPOINT");
+    // This is formatted differently due to it being in the github workflow file
+    // do not blindly copy this style, use "-" instead
     public static readonly KeyVaultSecret AzureKeyVault = new("AZURE_KEYVAULT_RESOURCEENDPOINT");
     public static readonly KeyVaultSecret RedisConnectionString = new(
-        "AZURE_REDIS_CONNECTIONSTRING"
+        "AZURE-REDIS-CONNECTIONSTRING"
     );
 }

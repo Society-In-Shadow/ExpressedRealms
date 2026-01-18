@@ -14,7 +14,12 @@ public static class QuartzConfiguration
                 .AddTrigger(opts =>
                     opts.ForJob(EventCronJob.Key)
                         .WithIdentity("event-trigger", "cron-group")
-                        .WithCronSchedule("0 0 4 1/1 * ? * ")
+                        .WithCronSchedule(
+                            "0 0 4 1/1 * ? *",
+                            x => x.InTimeZone(
+                                TimeZoneInfo.FindSystemTimeZoneById("America/Chicago")
+                            )
+                        )
                 ); // Every day around 4am
         });
         builder.Services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
