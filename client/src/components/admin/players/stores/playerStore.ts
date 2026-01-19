@@ -22,7 +22,10 @@ export const PlayerStore
             this.filteredPlayers = response.data.users
           })
       },
-      getPlayer(id: string) {
+      async getPlayer(id: string) {
+        if (this.players.length === 0)
+          await this.fetchPlayers()
+
         this.player = this.players.find(x => x.id === id)!
       },
       filterPlayers(query: string) {

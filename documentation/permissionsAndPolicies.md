@@ -52,8 +52,7 @@ permissions code side and compare them to what's in the database.  If there are 
 
 #### UI / TS Update
 
-There is a helper project (PermissionSync), that is a console app that will output TS file structured string of permissions,
-similar to the example below.  
+There is a console app called (PermissionSync), that will output TS file structured string of permissions, per local build.
 
 This is meant to automate adding these to the front end, as manually doing it is tedious.
 
@@ -64,7 +63,7 @@ committing any changes to the code base.
 /**
  * Auto-Generated, Do Not Edit
  */
-export const Permissions = {
+export const UserPermissions = {
   Event: {
      Edit: 'event.edit',
      View: 'event.view',
@@ -80,11 +79,48 @@ export const Permissions = {
   } as const,
 } as const
 
-export type Permission = typeof Permissions[keyof typeof Permissions]
+type NestedValues<T> = T extends Record<string, unknown> ? NestedValues<T[keyof T]> : T
+export type UserPermission = NestedValues<typeof UserPermissions>
 ```
 
-The rebuild bash script is setup to grab that output, generate [Permission.ts file](./../client/src/types/Permissions.ts)
-and put in the appropriate place.  
+The rebuild bash script is setup to grab that output, generate [UserPermissions.ts file](./../client/src/types/UserPermissions.ts)
+and put in the appropriate place.
+
+## Using Permissions on the Front End
+When using permissions on the front end, you will want to import the userPermissionStore and use the permissionCheck property.
+This will return if the given permission is assigned to the user or not.
+
+If you take a look at the permission store, you'll notice that once the permissions are loaded in, it will create a nested
+structure that mirrors the above UserPermissions object.
+
+While doing that, it will store if the permission has been assigned to the user or not, allowing for static checking across
+the front end.
+
+Below is an example of how you can use it.
+
+```ts
+import { userPermissionStore } from '@/stores/userPermissionStore.ts
+
+const userPermissionInfo = userPermissionStore()
+const permissionCheck = userPermissionInfo.permissionCheck
+```
+
+```vue
+<Button v-if="permissionCheck.DevDebug.SendTestEmail" label="Test Email" @click="testEmail" />
+```
+
+I will note that this is the preferred usage of permissions, to statically check against "permissionCheck.Resource.Action".
+
+The only place where you should need to directly call UserPermissions is in the vue routing.
+
+### Side Notes
+Creating and using a v-directive such as v-permission="permission" is not feasible.  You run into issues with how things
+render in the dom, a v-directive cannot prevent the dom from rendering, it can only modify it after the fact.
+
+Due to this, you cannot use it on things such as PrimeVue components, eg tabs.
+
+The only way around this is to use v-if="permissionCheck.Resource.Action" on the component itself, thus the evolution of
+having a statically defined permission check that is preloaded with the check.
 
 ## Legacy Permission / Policy System
 Keeping this around till full conversion has happened.

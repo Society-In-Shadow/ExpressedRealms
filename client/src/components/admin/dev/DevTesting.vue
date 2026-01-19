@@ -3,7 +3,10 @@
 import Button from 'primevue/button'
 import axios from 'axios'
 import toaster from '@/services/Toasters.ts'
-import { UserPermissions } from '@/types/UserPermissions.ts'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+
+const permissionInfo = userPermissionStore()
+const permissionCheck = permissionInfo.permissionCheck
 
 const testEmail = async () => {
   await axios.post(`/dev/sendTestEmail`)
@@ -39,9 +42,9 @@ const testRedis = async () => {
   <h1>Developer Tools</h1>
   <p>A small set of tools to test various features and services</p>
   <div class="d-flex flex-column gap-3 ">
-    <Button v-permission="UserPermissions.DevDebug.SendTestEmail" label="Test Email" @click="testEmail" />
-    <Button v-permission="UserPermissions.DevDebug.GetFeatureFlag" label="Test Feature Flags" @click="getFeatureFlag" />
-    <Button v-permission="UserPermissions.DevDebug.SendDiscordMessage" label="Test Sending Discord Message" @click="sendDiscordMessage" />
-    <Button v-permission="UserPermissions.DevDebug.TestRedis" label="Test Redis" @click="testRedis" />
+    <Button v-if="permissionCheck.DevDebug.SendTestEmail" label="Test Email" @click="testEmail" />
+    <Button v-if="permissionCheck.DevDebug.GetFeatureFlag" label="Test Feature Flags" @click="getFeatureFlag" />
+    <Button v-if="permissionCheck.DevDebug.SendDiscordMessage" label="Test Sending Discord Message" @click="sendDiscordMessage" />
+    <Button v-if="permissionCheck.DevDebug.TestRedis" label="Test Redis" @click="testRedis" />
   </div>
 </template>

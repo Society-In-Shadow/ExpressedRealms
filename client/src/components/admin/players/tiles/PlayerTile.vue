@@ -7,8 +7,11 @@ import { userConfirmationPopups } from '@/components/admin/players/services/play
 import Panel from 'primevue/panel'
 import { useRouter } from 'vue-router'
 import SplitButton from 'primevue/splitbutton'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
 const router = useRouter()
+const userPermissionInfo = userPermissionStore()
+const permissionCheck = userPermissionInfo.permissionCheck
 
 const props = defineProps({
   playerInfo: {
@@ -33,7 +36,7 @@ async function toggleEdit() {
 }
 
 onBeforeMount(async () => {
-  if (props.playerInfo.isDisabled) {
+  if (props.playerInfo.isDisabled && permissionCheck.Player.Enable) {
     items.push(
       {
         label: 'Enable Account',
@@ -42,7 +45,7 @@ onBeforeMount(async () => {
         },
       })
   }
-  else if (!props.playerInfo.isDisabled) {
+  else if (!props.playerInfo.isDisabled && permissionCheck.Player.Disable) {
     items.push(
       {
         label: 'Disable Account',
@@ -51,7 +54,7 @@ onBeforeMount(async () => {
         },
       })
   }
-  else if (props.playerInfo.lockedOut) {
+  else if (props.playerInfo.lockedOut && permissionCheck.Player.BypassLockout) {
     items.push(
       {
         label: 'Unlock Account',
@@ -60,7 +63,7 @@ onBeforeMount(async () => {
         },
       })
   }
-  if (!props.playerInfo?.emailConfirmed) {
+  if (!props.playerInfo?.emailConfirmed && permissionCheck.Player.BypassEmailConfirmation) {
     items.push({
       label: 'Bypass Email Confirmation',
       command: ($event) => {

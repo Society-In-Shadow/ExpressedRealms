@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
 import { computed, onBeforeMount, ref } from 'vue'
-import { UserRoles, userStore } from '@/stores/userStore'
 import Card from 'primevue/card'
 import { useRoute } from 'vue-router'
 import TabPanel from 'primevue/tabpanel'
@@ -17,19 +16,19 @@ import { PlayerStore } from '@/components/admin/players/stores/playerStore'
 import { userConfirmationPopups } from '@/components/admin/players/services/playerConfirmationPopupService.ts'
 import { formatDistance } from 'date-fns/formatDistance'
 import Tag from 'primevue/tag'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
-let userInfo = userStore()
 const route = useRoute()
 const playerData = PlayerStore()
-const userId = route.params.id as string
 
-const hasManageEventRole = ref(false)
+const userId = route.params.id as string
 const isLoaded = ref(false)
 
-onBeforeMount(async () => {
-  playerData.getPlayer(userId)
+const permissionInfo = userPermissionStore()
+const permissionCheck = permissionInfo.permissionCheck
 
-  hasManageEventRole.value = await userInfo.hasUserRole(UserRoles.ManageEventRole)
+onBeforeMount(async () => {
+  await playerData.getPlayer(userId)
   isLoaded.value = true
 })
 
@@ -53,7 +52,6 @@ const timeTillLockoutExpires = computed(() => {
             <SkeletonWrapper :show-skeleton="!isLoaded" height="1.2em" width="8em" class="mb-1">
               {{ playerData.player?.username }}
               <span>
-                <Tag v-if="playerData.player.emailVerified" value="Email Verified" />
                 <Tag v-if="playerData.player.isDisabled" severity="danger" value="Disabled" />
                 <Tag v-else-if="playerData.player.lockedOut" severity="warn" :value="'Locked Out for ' + timeTillLockoutExpires" />
               </span>
@@ -67,10 +65,18 @@ const timeTillLockoutExpires = computed(() => {
         </div>
         <div v-if="isLoaded">
           <div class="flex flex-column">
-            <Button v-if="playerData.player.isDisabled" label="Enable Account" class="m-2" @click="userConfirmations.enableConfirmation($event)" />
-            <Button v-else-if="!playerData.player.isDisabled" severity="danger" label="Disable Account" class="m-2" @click="userConfirmations.deleteConfirmation($event)" />
-            <Button v-else-if="playerData.player.lockedOut" label="Unlock Account" class="m-2" @click="userConfirmations.unlockConfirmation($event)" />
-            <Button v-if="!playerData.player?.emailConfirmed" severity="warn" :label=" 'Bypass Email Confirmation'" class="m-2" @click="userConfirmations.bypassConfirmation($event)" />
+            <SkeletonWrapper :show-skeleton="!isLoaded" height="1.2em">
+              <Button v-if="playerData.player.isDisabled && permissionCheck.Player.Enable" label="Enable Account" class="m-2" @click="userConfirmations.enableConfirmation($event)" />
+              <Button
+                v-else-if="!playerData.player.isDisabled && permissionCheck.Player.Disable" severity="danger" label="Disable Account" class="m-2"
+                @click="userConfirmations.deleteConfirmation($event)"
+              />
+              <Button v-else-if="playerData.player.lockedOut && permissionCheck.Player.BypassLockout" label="Unlock Account" class="m-2" @click="userConfirmations.unlockConfirmation($event)" />
+              <Button
+                v-if="!playerData.player?.emailConfirmed && permissionCheck.Player.BypassEmailConfirmation" severity="warn" :label=" 'Bypass Email Confirmation'" class="m-2"
+                @click="userConfirmations.bypassConfirmation($event)"
+              />
+            </SkeletonWrapper>
           </div>
         </div>
       </div>
@@ -79,10 +85,10 @@ const timeTillLockoutExpires = computed(() => {
           <Tab value="0">
             Basic Info
           </Tab>
-          <Tab value="1">
+          <Tab v-if="permissionCheck.Player.ManageRoles" value="1">
             Roles
           </Tab>
-          <Tab value="2">
+          <Tab v-if="permissionCheck.Player.ViewActivityLogs" value="2">
             Activity Logs
           </Tab>
         </TabList>
@@ -90,10 +96,10 @@ const timeTillLockoutExpires = computed(() => {
           <TabPanel value="0">
             <h3>No Basic Info</h3>
           </TabPanel>
-          <TabPanel value="1">
+          <TabPanel v-if="permissionCheck.Player.ManageRoles" value="1">
             <PlayerRoles :user-id="userId" />
           </TabPanel>
-          <TabPanel value="2">
+          <TabPanel v-if="permissionCheck.Player.ViewActivityLogs" value="2">
             <ActivityLogs :user-id="userId" />
           </TabPanel>
         </TabPanels>

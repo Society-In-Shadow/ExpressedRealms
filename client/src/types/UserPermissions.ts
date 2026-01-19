@@ -15,6 +15,16 @@ export const UserPermissions = {
     Create: 'eventscheduleitem.create',
     Delete: 'eventscheduleitem.delete',
   } as const,
+  Player: {
+    Edit: 'player.edit',
+    View: 'player.view',
+    Disable: 'player.disable',
+    Enable: 'player.enable',
+    BypassEmailConfirmation: 'player.bypassemailconfirmation',
+    BypassLockout: 'player.bypasslockout',
+    ManageRoles: 'player.manageroles',
+    ViewActivityLogs: 'player.viewactivitylogs',
+  } as const,
   Role: {
     Edit: 'role.edit',
     View: 'role.view',

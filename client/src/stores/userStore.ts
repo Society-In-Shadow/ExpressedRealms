@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { updateUserStoreWithEmailInfo, updateUserStoreWithPlayerInfo } from '@/services/Authentication'
-import type { UserPermission } from '@/types/UserPermissions.ts'
 
 export const UserRoles = {
   ExpressionEditor: 'ExpressionEditorRole',
@@ -36,12 +35,10 @@ export const userStore
         hasConfirmedEmail: false as boolean,
         isPlayerSetup: false as boolean,
         userRoles: [] as string[],
-        userPermissions: [] as UserPermission[],
         userFeatureFlags: [] as string[],
         loadedUserInfo: false as boolean,
         lastFeatureFlagLoad: null as Date | null,
         lastRoleLoad: null as Date | null,
-        lastPermissionLoad: null as Date | null,
         lastAuthCheck: null as Date | null,
         isLoggedInCache: false as boolean,
       }
@@ -84,16 +81,6 @@ export const userStore
             this.userRoles = response.data.roles
           })
       },
-      async updateUserPermissions() {
-        if (this.lastPermissionLoad != null && this.lastPermissionLoad.getTime() > new Date().getTime() - 300_000) {
-          return
-        }
-        this.lastPermissionLoad = new Date()
-        await axios.get('/player/permissions')
-          .then((response) => {
-            this.userPermissions = response.data
-          })
-      },
       async updateUserFeatureFlags() {
         if (this.lastFeatureFlagLoad != null && this.lastFeatureFlagLoad.getTime() > new Date().getTime() - 300_000) {
           return
@@ -111,10 +98,6 @@ export const userStore
       async hasFeatureFlag(featureFlag: FeatureFlag): Promise<boolean> {
         await this.updateUserFeatureFlags()
         return this.userFeatureFlags.includes(featureFlag)
-      },
-      async hasPermission(permission: UserPermission): Promise<boolean> {
-        await this.updateUserPermissions()
-        return this.userPermissions.includes(permission)
       },
       async getUserInfo() {
         await updateUserStoreWithPlayerInfo()
