@@ -2,12 +2,13 @@ import { defineStore } from 'pinia'
 import type { PlayerListItem } from '@/components/admin/players/types'
 import axios from 'axios'
 
-export const playerList
-  = defineStore('playerList', {
+export const PlayerStore
+  = defineStore('playerStore', {
     state: () => {
       return {
         players: [] as Array<PlayerListItem>,
         filteredPlayers: [] as Array<PlayerListItem>,
+        player: {} as PlayerListItem,
       }
     },
     actions: {
@@ -20,6 +21,9 @@ export const playerList
             this.players = response.data.users
             this.filteredPlayers = response.data.users
           })
+      },
+      getPlayer(id: string) {
+        this.player = this.players.find(x => x.id === id)!
       },
       filterPlayers(query: string) {
         const lowercasedQuery = query.toLowerCase().trim()

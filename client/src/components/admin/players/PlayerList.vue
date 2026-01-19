@@ -3,14 +3,14 @@
 import { onMounted, ref, watch } from 'vue'
 import PlayerTile from '@/components/admin/players/tiles/PlayerTile.vue'
 import InputText from 'primevue/inputtext'
-import { playerList } from '@/components/admin/players/stores/playerListStore'
+import { PlayerStore } from '@/components/admin/players/stores/playerStore'
 import Tabs from 'primevue/tabs'
 import TabList from 'primevue/tablist'
 import Tab from 'primevue/tab'
 import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
 
-const playerListStore = playerList()
+const playerListStore = PlayerStore()
 
 const searchQuery = ref<string>('')
 
