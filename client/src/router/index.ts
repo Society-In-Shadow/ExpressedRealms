@@ -5,6 +5,7 @@ import { AdminRoutes } from '@/router/Routes/AdminRoutes'
 import { OverallRoutes } from '@/router/Routes/OverallNavigationRoutes'
 import { PublicRoutes } from '@/router/Routes/PublicRoutes'
 import { type UserPermission } from '@/types/UserPermissions.ts'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
 export const routes = [
   PublicRoutes,
@@ -23,6 +24,7 @@ let userInfoInitialized = false
 
 routerSetup.beforeEach(async (to) => {
   const userInfo = userStore()
+  const userPermissions = userPermissionStore()
 
   const loggedIn = userInfo.isLoggedIn()
   const routeName: string = to.name as string
@@ -41,7 +43,7 @@ routerSetup.beforeEach(async (to) => {
     if (!userInfoInitialized) {
       await userInfo.getUserInfo()
       await userInfo.updateUserRoles()
-      await userInfo.updateUserPermissions()
+      await userPermissions.updateUserPermissions()
       userInfoInitialized = true
     }
 
@@ -63,7 +65,7 @@ routerSetup.beforeEach(async (to) => {
       return { name: 'characters' }
     }
 
-    if (to.meta.requiredPermission && !await userInfo.hasPermission(to.meta.requiredPermission as UserPermission)) {
+    if (to.meta.requiredPermission && !await userPermissions.hasPermission(to.meta.requiredPermission as UserPermission)) {
       return { name: 'characters' }
     }
 

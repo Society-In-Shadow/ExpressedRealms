@@ -1,25 +1,17 @@
 <script setup lang="ts">
-import type { PropType } from 'vue'
-import { computed, ref } from 'vue'
+import { computed, onBeforeMount, type PropType } from 'vue'
 import type { PlayerListItem } from '@/components/admin/players/types'
-import Tabs from 'primevue/tabs'
-import TabList from 'primevue/tablist'
-import Tab from 'primevue/tab'
-import TabPanels from 'primevue/tabpanels'
-import TabPanel from 'primevue/tabpanel'
-import Button from 'primevue/button'
-import PlayerRoles from '@/components/admin/players/tiles/PlayerRoles.vue'
 import Tag from 'primevue/tag'
-import { fetchUserPolicies } from '@/components/admin/players/services/playerRoleService'
-import ActivityLogs from '@/components/admin/players/tiles/ActivityLogs.vue'
 import { formatDistance } from 'date-fns/formatDistance'
 import { userConfirmationPopups } from '@/components/admin/players/services/playerConfirmationPopupService'
-import { playerList } from '@/components/admin/players/stores/playerListStore'
 import Panel from 'primevue/panel'
+import { useRouter } from 'vue-router'
+import SplitButton from 'primevue/splitbutton'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
-const playerListStore = playerList()
-
-const showInfo = ref(false)
+const router = useRouter()
+const userPermissionInfo = userPermissionStore()
+const permissionCheck = userPermissionInfo.permissionCheck
 
 const props = defineProps({
   playerInfo: {
@@ -30,13 +22,6 @@ const props = defineProps({
 
 const userConfirmations = userConfirmationPopups(props.playerInfo.id)
 
-function updatePlayerRoles() {
-  fetchUserPolicies(props.playerInfo.id)
-    .then((response) => {
-      playerListStore.fetchPlayers()
-    })
-}
-
 const timeTillLockoutExpires = computed(() => {
   if (props.playerInfo.lockedOut) {
     return formatDistance(new Date(props.playerInfo.lockedOutExpires), new Date(), { includeSeconds: true })
@@ -44,69 +29,87 @@ const timeTillLockoutExpires = computed(() => {
   return ''
 })
 
+const items = []
+
+async function toggleEdit() {
+  await router.push({ name: 'editPlayer', params: { id: props.playerInfo.id } })
+}
+
+onBeforeMount(async () => {
+  if (props.playerInfo.isDisabled && permissionCheck.Player.Enable) {
+    items.push(
+      {
+        label: 'Enable Account',
+        command: ($event) => {
+          userConfirmations.enableConfirmation($event)
+        },
+      })
+  }
+  else if (!props.playerInfo.isDisabled && permissionCheck.Player.Disable) {
+    items.push(
+      {
+        label: 'Disable Account',
+        command: ($event) => {
+          userConfirmations.deleteConfirmation($event)
+        },
+      })
+  }
+  else if (props.playerInfo.lockedOut && permissionCheck.Player.BypassLockout) {
+    items.push(
+      {
+        label: 'Unlock Account',
+        command: ($event) => {
+          userConfirmations.unlockConfirmation($event)
+        },
+      })
+  }
+  if (!props.playerInfo?.emailConfirmed && permissionCheck.Player.BypassEmailConfirmation) {
+    items.push({
+      label: 'Bypass Email Confirmation',
+      command: ($event) => {
+        userConfirmations.bypassConfirmation($event)
+      },
+    })
+  }
+})
+
 </script>
 
 <template>
   <Panel class="mb-3">
     <template #header>
-      <h1 class="m-0 p-0">
-        {{ props.playerInfo.username }}
-      </h1>
-    </template>
-    <div class="d-flex flex-column flex-md-row">
-      <div class="flex-grow-1">
+      <div class="d-flex flex-column flex-md-row flex-grow-1">
         <div class="flex-grow-1">
-          <div class="d-flex flex-md-row flex-column">
-            <div class="d-flex flex-column flex-grow-1">
-              <div>
-                <Tag v-for="role in props.playerInfo.roles" :key="role" class="m-1" :value="role" />
+          <div class="flex-grow-1">
+            <div class="d-flex flex-md-row flex-column">
+              <div class="d-flex flex-column flex-grow-1">
+                <div>
+                  <h1 class="m-0 p-0">
+                    {{ props.playerInfo.username }}
+                    <span>
+                      <Tag v-if="props.playerInfo.emailVerified" value="Email Verified" />
+                      <Tag v-if="props.playerInfo.isDisabled" severity="danger" value="Disabled" />
+                      <Tag v-else-if="props.playerInfo.lockedOut" severity="warn" :value="'Locked Out for ' + timeTillLockoutExpires" />
+                    </span>
+                  </h1>
+                  <Tag v-for="role in props.playerInfo.roles" :key="role" class="m-1" :value="role" />
+                </div>
+              </div>
+            </div>
+            <div class="d-flex flex-row align-self-center pt-3 pr-3">
+              <div class="flex-grow-1">
+                {{ props.playerInfo.email }}
               </div>
             </div>
           </div>
-          <div class="d-flex flex-row align-self-center pt-3 pr-3">
-            <div class="flex-grow-1">
-              {{ props.playerInfo.email }}
-            </div>
-            <div>
-              <Tag v-if="props.playerInfo.emailVerified" value="Email Verified" />
-              <Tag v-if="props.playerInfo.isDisabled" severity="danger" value="Disabled" />
-              <Tag v-else-if="props.playerInfo.lockedOut" severity="warn" :value="'Locked Out for ' + timeTillLockoutExpires" />
-            </div>
+        </div>
+        <div>
+          <div class="flex flex-column">
+            <SplitButton label="View" severity="info" :model="items" @click="toggleEdit()" />
           </div>
         </div>
       </div>
-      <div>
-        <div class="flex flex-column">
-          <Button v-if="props.playerInfo.isDisabled" label="Enable Account" class="m-2" @click="userConfirmations.enableConfirmation($event)" />
-          <Button v-else-if="!props.playerInfo.isDisabled" severity="danger" label="Disable Account" class="m-2" @click="userConfirmations.deleteConfirmation($event)" />
-          <Button v-else-if="props.playerInfo.lockedOut" label="Unlock Account" class="m-2" @click="userConfirmations.unlockConfirmation($event)" />
-          <Button :label="showInfo ? 'Cancel' : 'Details'" class="m-2" @click="showInfo = !showInfo" />
-          <Button v-if="!props.playerInfo?.emailConfirmed" severity="warn" :label=" 'Bypass Email Confirmation'" class="m-2" @click="userConfirmations.bypassConfirmation($event)" />
-        </div>
-      </div>
-    </div>
-    <div v-if="showInfo" class="row">
-      <div class="col">
-        <Tabs value="0" :lazy="true">
-          <TabList>
-            <Tab value="0">
-              User Policies
-            </Tab>
-            <Tab value="1">
-              Activity Logs
-            </Tab>
-          </TabList>
-          <TabPanels>
-            <TabPanel value="0">
-              <PlayerRoles :user-id="props.playerInfo.id" @policies-changed="updatePlayerRoles()" />
-            </TabPanel>
-            <TabPanel value="1">
-              <ActivityLogs :user-id="props.playerInfo.id" />
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-      </div>
-    </div>
+    </template>
   </Panel>
 </template>
 

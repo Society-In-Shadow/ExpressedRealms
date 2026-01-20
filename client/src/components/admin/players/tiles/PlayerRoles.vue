@@ -5,6 +5,10 @@ import { onMounted, ref } from 'vue'
 import SkeletonWrapper from '@/FormWrappers/SkeletonWrapper.vue'
 import type { RoleInfo } from '@/components/admin/players/types'
 import { fetchUserPolicies, updateRole } from '@/components/admin/players/services/playerRoleService'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+
+const userPermissionData = userPermissionStore()
+const permissionCheck = userPermissionData.permissionCheck
 
 const roles = ref<Array<RoleInfo>>([{}, {}])
 const isLoading = ref(true)
@@ -20,8 +24,8 @@ const props = defineProps({
   },
 })
 
-onMounted(() => {
-  fetchUserPolicies(props.userId)
+onMounted(async () => {
+  await fetchUserPolicies(props.userId)
     .then((response) => {
       roles.value = response.data.roles
       isLoading.value = false
@@ -42,7 +46,7 @@ function roleToggled(roleName: string, isEnabled: boolean) {
     <SkeletonWrapper :show-skeleton="isLoading" height="3rem" width="20em">
       <div class="d-flex d-flex-column">
         <div class="align-self-center">
-          <ToggleSwitch v-model="role.isEnabled" @change="roleToggled(role.name, role.isEnabled)" />
+          <ToggleSwitch v-model="role.isEnabled" :disabled="!permissionCheck.Player.ManageRoles" @change="roleToggled(role.name, role.isEnabled)" />
         </div>
         <div class="align-self-center p-3">
           {{ role.name }}

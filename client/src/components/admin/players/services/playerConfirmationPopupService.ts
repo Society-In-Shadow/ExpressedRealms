@@ -1,11 +1,11 @@
 import { useConfirm } from 'primevue/useconfirm'
 import toaster from '@/services/Toasters'
 import axios from 'axios'
-import { playerList } from '@/components/admin/players/stores/playerListStore'
+import { PlayerStore } from '@/components/admin/players/stores/playerStore'
 
 export const userConfirmationPopups = (userId: string) => {
   const confirm = useConfirm()
-  const playerListStore = playerList()
+  const playerListStore = PlayerStore()
 
   const deleteConfirmation = (event: MouseEvent) =>
     confirm.require({

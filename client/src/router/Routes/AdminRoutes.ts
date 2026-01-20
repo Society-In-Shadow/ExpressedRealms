@@ -12,6 +12,12 @@ export const AdminRoutes = {
       meta: { requiredRole: 'UserManagementRole' },
     },
     {
+      path: 'players/:id',
+      name: 'editPlayer',
+      component: () => import('@/components/admin/players/PlayerPage.vue'),
+      meta: { requirePermission: UserPermissions.Player.View },
+    },
+    {
       path: 'characters',
       name: 'adminCharacterList',
       component: () => import('./../../components/admin/characterList/AdminCharacterList.vue'),

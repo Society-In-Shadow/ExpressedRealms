@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Admin.API.AdminEndpoints.Dtos;
+namespace ExpressedRealms.Admin.API.AdminEndpoints.ViewActivityLogs;
 
 public class LogDto
 {

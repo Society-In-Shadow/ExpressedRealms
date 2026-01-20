@@ -1,15 +1,18 @@
+using ExpressedRealms.Admin.API.AdminEndpoints.BypassEmailConfirmation;
+using ExpressedRealms.Admin.API.AdminEndpoints.DisableUser;
 using ExpressedRealms.Admin.API.AdminEndpoints.Dtos;
+using ExpressedRealms.Admin.API.AdminEndpoints.EnableUser;
 using ExpressedRealms.Admin.API.AdminEndpoints.GetRolesForUser;
 using ExpressedRealms.Admin.API.AdminEndpoints.GetUsers;
 using ExpressedRealms.Admin.API.AdminEndpoints.GetUserSummary;
-using ExpressedRealms.Admin.API.AdminEndpoints.Request;
 using ExpressedRealms.Admin.API.AdminEndpoints.Response;
+using ExpressedRealms.Admin.API.AdminEndpoints.UnlockUser;
 using ExpressedRealms.Admin.API.AdminEndpoints.UpdateUserRoles;
-using ExpressedRealms.Admin.Repository.ActivityLogs;
-using ExpressedRealms.Authentication;
+using ExpressedRealms.Admin.API.AdminEndpoints.ViewActivityLogs;
+using ExpressedRealms.Authentication.PermissionCollection;
+using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.Roles;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
-using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -25,45 +28,23 @@ public static class AdminEndpoints
     {
         var endpointGroup = app.MapGroup("admin")
             .AddFluentValidationAutoValidation()
-            .WithTags("admin")
-            .RequirePolicyAuthorization(Policies.UserManagementPolicy);
+            .WithTags("admin");
 
-        endpointGroup.MapGet("users", GetUsersEndpoint.Execute).RequireAuthorization();
+        endpointGroup
+            .MapGet("users", GetUsersEndpoint.Execute)
+            .RequirePermission(Permissions.Player.View);
 
         endpointGroup
             .MapGet("users/summary", GetUserSummaryEndpoint.Execute)
-            .RequireAuthorization();
+            .RequirePermission(Permissions.Player.View);
 
         endpointGroup
             .MapGet("users/{userId}/roles", GetRolesForUserEndpoint.Execute)
-            .RequireAuthorization();
+            .RequirePermission(Permissions.Player.ManageRoles);
 
         endpointGroup
             .MapPut("user/{userid}/role", UpdateUserRoleEndpoint.Execute)
-            .RequireAuthorization();
-
-        endpointGroup
-            .MapPost(
-                "user/{userId}/bypassEmailConfirmation",
-                async Task<Results<NoContent, NotFound>> (
-                    string userId,
-                    UserManager<User> userManager
-                ) =>
-                {
-                    var user = await userManager.FindByIdAsync(userId);
-
-                    if (user == null)
-                    {
-                        return TypedResults.NotFound();
-                    }
-
-                    var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-                    await userManager.ConfirmEmailAsync(user, token);
-
-                    return TypedResults.NoContent();
-                }
-            )
-            .RequireAuthorization();
+            .RequirePermission(Permissions.Player.ManageRoles);
 
         endpointGroup
             .MapGet(
@@ -96,62 +77,29 @@ public static class AdminEndpoints
                     return TypedResults.Ok(new UserRoleResponse() { Roles = roles });
                 }
             )
-            .RequireAuthorization();
+            .RequirePermission(Permissions.Player.ManageRoles);
 
         endpointGroup
-            .MapGet(
-                "user/{userid}/activitylogs",
-                async Task<Ok<LogResponse>> (Guid userId, IActivityLogRepository repository) =>
-                {
-                    var userLogs = await repository.GetUserLogs(userId.ToString());
-
-                    return TypedResults.Ok(
-                        new LogResponse()
-                        {
-                            Logs = userLogs
-                                .Select(
-                                    (x, index) =>
-                                        new LogDto()
-                                        {
-                                            Id = index,
-                                            ChangedProperties = x.ChangedProperties,
-                                            Location = x.Location,
-                                            TimeStamp = x.TimeStamp,
-                                            Action = x.Action,
-                                        }
-                                )
-                                .ToList(),
-                        }
-                    );
-                }
-            )
-            .RequireAuthorization();
+            .MapGet("user/{userid}/activitylogs", ViewActivityLogsEndpoint.Execute)
+            .RequirePermission(Permissions.Player.ViewActivityLogs);
 
         endpointGroup
-            .MapPut(
-                "user/{userid}/lockout",
-                async Task<Results<NoContent, NotFound, BadRequest<string>>> (
-                    string userId,
-                    DisableUserRequest dto,
-                    UserManager<User> userManager
-                ) =>
-                {
-                    var user = await userManager.FindByIdAsync(dto.UserId);
+            .MapPut("user/{userid}/lockout", UnlockUserEndpoint.Execute)
+            .RequirePermission(Permissions.Player.BypassLockout);
 
-                    if (user == null)
-                    {
-                        return TypedResults.NotFound();
-                    }
+        endpointGroup
+            .MapPut("user/{userid}/enable", EnableUserEndpoint.Execute)
+            .RequirePermission(Permissions.Player.Enable);
 
-                    var expireDate = dto.CustomExpiryDate ?? DateTime.MaxValue;
-                    if (!dto.LockoutEnabled)
-                        expireDate = DateTime.UtcNow;
+        endpointGroup
+            .MapDelete("user/{userid}", DisableUserEndpoint.Execute)
+            .RequirePermission(Permissions.Player.Disable);
 
-                    await userManager.SetLockoutEndDateAsync(user, expireDate);
-
-                    return TypedResults.NoContent();
-                }
+        endpointGroup
+            .MapPost(
+                "user/{userId}/bypassEmailConfirmation",
+                BypassEmailConfirmationEndpoint.Execute
             )
-            .RequireAuthorization();
+            .RequirePermission(Permissions.Player.BypassEmailConfirmation);
     }
 }

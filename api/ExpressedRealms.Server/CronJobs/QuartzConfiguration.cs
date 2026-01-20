@@ -16,9 +16,8 @@ public static class QuartzConfiguration
                         .WithIdentity("event-trigger", "cron-group")
                         .WithCronSchedule(
                             "0 0 4 1/1 * ? *",
-                            x => x.InTimeZone(
-                                TimeZoneInfo.FindSystemTimeZoneById("America/Chicago")
-                            )
+                            x =>
+                                x.InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("America/Chicago"))
                         )
                 ); // Every day around 4am
         });
