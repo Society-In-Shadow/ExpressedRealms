@@ -47,11 +47,11 @@ public static class AdminEndpoints
         endpointGroup
             .MapPost("users/{userid}/roles", AddRoleUserEndpoint.Execute)
             .RequirePermission(Permissions.Player.ManageRoles);
-        
+
         endpointGroup
             .MapDelete("users/{userid}/roles/{roleId}", DeleteRoleUserMappingEndpoint.Execute)
             .RequirePermission(Permissions.Player.ManageRoles);
-        
+
         endpointGroup
             .MapPut("user/{userid}/role", UpdateUserRoleEndpoint.Execute)
             .RequirePermission(Permissions.Player.ManageRoles);
