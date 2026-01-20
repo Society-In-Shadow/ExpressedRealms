@@ -5,8 +5,9 @@ import { DateTime } from 'luxon'
 
 const validationSchema = object({
   expireDate: mixed<DateTime>()
-    .test('is-valid', 'Invalid date', val => val?.isValid ?? false)
+    .test('is-valid', 'Invalid date', val => val == null || val.isValid)
     .optional()
+    .nullable()
     .label('Expire Date'),
   user: object<ListItem>()
     .required()

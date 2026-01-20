@@ -30,7 +30,7 @@ export const assignedUsersStore
       addUserToRole: async function (roleId: number, form: AssignedUserForm) {
         await axios.post(`/admin/roles/${roleId}/users`, {
           userId: form.user.id,
-          expireDate: form.expireDate.toFormat('yyyy-LL-dd'),
+          expireDate: form.expireDate?.toFormat('yyyy-LL-dd'),
         })
         await this.getAssignedUsers(roleId)
         toaster.success('Successfully Added User to Role!')
