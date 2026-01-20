@@ -123,7 +123,7 @@ const toggleResourcePermissions = (resource: Resource) => {
 .resource-grid {
   display: grid;
   gap: 1rem; /* space between resource blocks */
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
 </style>

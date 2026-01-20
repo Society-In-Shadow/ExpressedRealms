@@ -17,6 +17,7 @@ import { userConfirmationPopups } from '@/components/admin/players/services/play
 import { formatDistance } from 'date-fns/formatDistance'
 import Tag from 'primevue/tag'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+import AssignRolesTab from '@/components/admin/players/assignedRoles/AssignRolesTab.vue'
 
 const route = useRoute()
 const playerData = PlayerStore()
@@ -91,6 +92,9 @@ const timeTillLockoutExpires = computed(() => {
           <Tab v-if="permissionCheck.Player.ViewActivityLogs" value="2">
             Activity Logs
           </Tab>
+          <Tab v-if="permissionCheck.Player.ManageRoles" value="3">
+            Manage Roles
+          </Tab>
         </TabList>
         <TabPanels>
           <TabPanel value="0">
@@ -101,6 +105,9 @@ const timeTillLockoutExpires = computed(() => {
           </TabPanel>
           <TabPanel v-if="permissionCheck.Player.ViewActivityLogs" value="2">
             <ActivityLogs :user-id="userId" />
+          </TabPanel>
+          <TabPanel v-if="permissionCheck.Player.ManageRoles" value="3">
+            <AssignRolesTab :user-id="userId" />
           </TabPanel>
         </TabPanels>
       </Tabs>

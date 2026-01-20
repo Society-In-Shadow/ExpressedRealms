@@ -1,16 +1,18 @@
 <script setup lang="ts">
 
 import { RoleStore } from './stores/roleStore'
-import { onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
 import { UserRoles, userStore } from '@/stores/userStore'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
 import RoleItem from '@/components/admin/roles/RoleItem.vue'
 import AddRoleForm from './AddRoleForm.vue'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
 const store = RoleStore()
 const userInfo = userStore()
 const hasEventManagementRole = ref(false)
+const permissionCheck = userPermissionStore().permissionCheck
 
 onBeforeMount(async () => {
   await store.getRoles()
@@ -30,6 +32,10 @@ const props = defineProps({
   },
 })
 
+const enableAdd = computed(() => {
+  return hasEventManagementRole.value && !props.isReadOnly && permissionCheck.Role.Create
+})
+
 </script>
 
 <template>
@@ -47,9 +53,9 @@ const props = defineProps({
     <RoleItem :role="role" :is-read-only="props.isReadOnly" />
   </div>
 
-  <AddRoleForm v-if="showAdd && hasEventManagementRole && !props.isReadOnly" @canceled="toggleAdd" />
+  <AddRoleForm v-if="showAdd && enableAdd" @canceled="toggleAdd" />
   <Button
-    v-if="!showAdd && hasEventManagementRole && !props.isReadOnly" class="w-100 m-2"
+    v-if="!showAdd && enableAdd" class="w-100 m-2"
     label="Add Role" @click="toggleAdd"
   />
 </template>

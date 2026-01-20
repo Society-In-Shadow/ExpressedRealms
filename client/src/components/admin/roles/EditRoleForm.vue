@@ -6,8 +6,11 @@ import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
 import { getValidationInstance } from './validations/roleValidations'
 import Button from 'primevue/button'
 import FormWrapper from '@/FormWrappers/FormWrapper.vue'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
 const store = RoleStore()
+const userPermissions = userPermissionStore()
+const permissionCheck = userPermissions.permissionCheck
 
 const form = getValidationInstance()
 
@@ -28,7 +31,7 @@ const onSubmit = form.handleSubmit(async (values) => {
 </script>
 
 <template>
-  <FormWrapper :show-skeleton="!store.haveRole" @submit="onSubmit">
+  <FormWrapper :show-skeleton="!store.haveRole" :is-disabled="!permissionCheck.Role.Edit" @submit="onSubmit">
     <FormInputTextWrapper v-model="form.fields.name" />
     <FormInputTextWrapper v-model="form.fields.description" />
 

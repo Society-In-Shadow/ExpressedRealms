@@ -7,10 +7,17 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  isDisabled: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const showSkeleton = computed(() => props.showSkeleton)
 provide('showSkeleton', showSkeleton)
+
+const isDisabled = computed(() => props.isDisabled)
+provide('isDisabled', isDisabled)
 
 </script>
 

@@ -15,10 +15,14 @@ import { ConfirmationPopup } from './services/confirmationPopupService.ts'
 import SkeletonWrapper from '@/FormWrappers/SkeletonWrapper.vue'
 import EditRoleForm from '@/components/admin/roles/EditRoleForm.vue'
 import PermissionsTab from '@/components/admin/roles/PermissionsTab.vue'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+import AssignedUsersTab from '@/components/admin/roles/assignedUsers/AssignedUsersTab.vue'
 
 let userInfo = userStore()
 const route = useRoute()
 const roleData = RoleStore()
+const permissionData = userPermissionStore()
+const permissionCheck = permissionData.permissionCheck
 const roleId = Number.parseInt(route.params.id as string)
 
 const hasManageEventRole = ref(false)
@@ -52,7 +56,7 @@ let popups = ConfirmationPopup()
           </div>
         </div>
         <div v-if="isLoaded">
-          <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event, roleData.role.id, roleData.role.name)" />
+          <Button v-if="permissionCheck.Role.Delete" class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event, roleData.role.id, roleData.role.name)" />
         </div>
       </div>
       <Tabs value="0" scrollable>
@@ -63,6 +67,9 @@ let popups = ConfirmationPopup()
           <Tab value="1">
             Permissions
           </Tab>
+          <Tab v-if="permissionCheck.Role.Assign" value="2">
+            Assigned Users
+          </Tab>
         </TabList>
         <TabPanels>
           <TabPanel value="0">
@@ -70,6 +77,9 @@ let popups = ConfirmationPopup()
           </TabPanel>
           <TabPanel value="1">
             <PermissionsTab />
+          </TabPanel>
+          <TabPanel v-if="permissionCheck.Role.Assign" value="2">
+            <AssignedUsersTab :role-id="roleId" />
           </TabPanel>
         </TabPanels>
       </Tabs>
