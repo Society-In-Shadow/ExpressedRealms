@@ -96,7 +96,10 @@ public static class AdminEndpoints
             .RequirePermission(Permissions.Player.Disable);
 
         endpointGroup
-            .MapPost("user/{userId}/bypassEmailConfirmation", BypassEmailConfirmationEndpoint.Execute)
+            .MapPost(
+                "user/{userId}/bypassEmailConfirmation",
+                BypassEmailConfirmationEndpoint.Execute
+            )
             .RequirePermission(Permissions.Player.BypassEmailConfirmation);
     }
 }
