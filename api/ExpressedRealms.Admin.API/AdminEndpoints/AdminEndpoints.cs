@@ -1,4 +1,6 @@
+using ExpressedRealms.Admin.API.AdminEndpoints.AddRoleUser;
 using ExpressedRealms.Admin.API.AdminEndpoints.BypassEmailConfirmation;
+using ExpressedRealms.Admin.API.AdminEndpoints.DeleteRoleUserMapping;
 using ExpressedRealms.Admin.API.AdminEndpoints.DisableUser;
 using ExpressedRealms.Admin.API.AdminEndpoints.Dtos;
 using ExpressedRealms.Admin.API.AdminEndpoints.EnableUser;
@@ -42,6 +44,14 @@ public static class AdminEndpoints
             .MapGet("users/{userId}/roles", GetRolesForUserEndpoint.Execute)
             .RequirePermission(Permissions.Player.ManageRoles);
 
+        endpointGroup
+            .MapPost("users/{userid}/roles", AddRoleUserEndpoint.Execute)
+            .RequirePermission(Permissions.Player.ManageRoles);
+        
+        endpointGroup
+            .MapDelete("users/{userid}/roles/{roleId}", DeleteRoleUserMappingEndpoint.Execute)
+            .RequirePermission(Permissions.Player.ManageRoles);
+        
         endpointGroup
             .MapPut("user/{userid}/role", UpdateUserRoleEndpoint.Execute)
             .RequirePermission(Permissions.Player.ManageRoles);
