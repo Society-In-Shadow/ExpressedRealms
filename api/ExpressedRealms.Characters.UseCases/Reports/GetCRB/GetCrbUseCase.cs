@@ -2,9 +2,9 @@ using ExpressedRealms.Powers.UseCases.GetCharacterPowerCardReport;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 using JetBrains.Annotations;
-using PdfSharpCore;
-using PdfSharpCore.Pdf;
-using PdfSharpCore.Pdf.IO;
+using PdfSharp;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.IO;
 
 namespace ExpressedRealms.Characters.UseCases.Reports.GetCharacterBooklet
 {
@@ -60,7 +60,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCharacterBooklet
 
             // Save the merged result to memory stream
             var finalStream = new MemoryStream();
-            finalDocument.Save(finalStream, false);
+            await finalDocument.SaveAsync(finalStream);
             finalStream.Position = 0;
 
             return finalStream;
