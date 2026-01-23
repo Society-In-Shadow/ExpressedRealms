@@ -1,8 +1,8 @@
 using ExpressedRealms.Shared.Reports;
 using HTMLQuestPDF.Extensions;
-using PdfSharpCore;
-using PdfSharpCore.Drawing;
-using PdfSharpCore.Pdf;
+using PdfSharp;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
 using QuestPDF;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;

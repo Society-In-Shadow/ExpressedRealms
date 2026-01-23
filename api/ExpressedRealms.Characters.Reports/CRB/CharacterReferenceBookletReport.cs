@@ -1,7 +1,8 @@
 using ExpressedRealms.Characters.Reports.CRB.Data;
 using ExpressedRealms.Characters.Reports.CRB.Data.SupportingData;
-using PdfSharpCore.Pdf.AcroForms;
-using PdfSharpCore.Pdf.IO;
+using PdfSharp.Fonts;
+using PdfSharp.Pdf.AcroForms;
+using PdfSharp.Pdf.IO;
 using QuestPDF;
 using QuestPDF.Infrastructure;
 
@@ -12,6 +13,7 @@ public static class CharacterReferenceBookletReport
     public static MemoryStream GenerateReport(ReportData data)
     {
         Settings.License = LicenseType.Community;
+        GlobalFontSettings.FontResolver ??= new MultiFontResolver();
 
         return MergeAllFields(data);
     }

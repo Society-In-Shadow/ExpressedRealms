@@ -2,9 +2,9 @@ using ExpressedRealms.Powers.UseCases.GetCharacterPowerCardReport;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 using JetBrains.Annotations;
-using PdfSharpCore;
-using PdfSharpCore.Pdf;
-using PdfSharpCore.Pdf.IO;
+using PdfSharp;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.IO;
 
 namespace ExpressedRealms.Characters.UseCases.Reports.GetCharacterBooklet
 {
