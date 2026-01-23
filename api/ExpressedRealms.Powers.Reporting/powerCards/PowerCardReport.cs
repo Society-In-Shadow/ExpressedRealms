@@ -61,15 +61,15 @@ public static class PowerCardReport
 
         // Load once and then switch PageNumber as we place pages
         using var form = XPdfForm.FromStream(new MemoryStream(pdfBytes));
-        int totalPages = form.PageCount -1; // Convert from 1-based to 0-based
+        int totalPages = form.PageCount - 1; // Convert from 1-based to 0-based
 
         int pageIndex = 0;
         while (pageIndex < totalPages)
         {
             var outPage = outDoc.AddPage();
             outPage.Orientation = PageOrientation.Landscape;
-            outPage.Width = sheetWidth;
-            outPage.Height = sheetHeight;
+            outPage.Width = XUnit.FromPoint(sheetWidth);
+            outPage.Height = XUnit.FromPoint(sheetHeight);
 
             using var gfx = XGraphics.FromPdfPage(outPage);
 

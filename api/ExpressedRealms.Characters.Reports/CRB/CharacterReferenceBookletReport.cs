@@ -20,10 +20,7 @@ public static class CharacterReferenceBookletReport
 
     private static MemoryStream MergeAllFields(ReportData data)
     {
-        var pdfPath = Path.Combine(
-            AppContext.BaseDirectory,
-            "overallCRB.pdf"
-        );
+        var pdfPath = Path.Combine(AppContext.BaseDirectory, "overallCRB.pdf");
         using var document = PdfReader.Open(pdfPath, PdfDocumentOpenMode.Modify);
 
         if (document.AcroForm != null)

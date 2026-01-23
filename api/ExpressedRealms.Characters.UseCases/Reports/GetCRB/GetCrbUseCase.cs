@@ -60,7 +60,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCharacterBooklet
 
             // Save the merged result to memory stream
             var finalStream = new MemoryStream();
-            finalDocument.Save(finalStream, false);
+            await finalDocument.SaveAsync(finalStream);
             finalStream.Position = 0;
 
             return finalStream;
