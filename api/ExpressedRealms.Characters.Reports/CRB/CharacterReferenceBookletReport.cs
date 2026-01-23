@@ -18,7 +18,11 @@ public static class CharacterReferenceBookletReport
 
     private static MemoryStream MergeAllFields(ReportData data)
     {
-        using var document = PdfReader.Open("overallCRB.pdf", PdfDocumentOpenMode.Modify);
+        var pdfPath = Path.Combine(
+            AppContext.BaseDirectory,
+            "overallCRB.pdf"
+        );
+        using var document = PdfReader.Open(pdfPath, PdfDocumentOpenMode.Modify);
 
         if (document.AcroForm != null)
         {

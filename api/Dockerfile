@@ -20,6 +20,14 @@ EXPOSE 8080
 
 COPY --from=build /app/publish .
 
+RUN apt-get update && apt-get install -y \
+    libgdiplus \
+    libc6-dev \
+    fontconfig \
+    fonts-dejavu \
+    && rm -rf /var/lib/apt/lists/*
+
+
 HEALTHCHECK --interval=15s --timeout=60s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider http://0.0.0.0:8080/health || exit 1
 
