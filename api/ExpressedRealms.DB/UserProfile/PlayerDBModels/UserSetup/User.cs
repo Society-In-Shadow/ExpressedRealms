@@ -8,6 +8,7 @@ using ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup;
 using ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit;
+using ExpressedRealms.DB.Models.Contacts.Audit;
 using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup.Audit;
 using ExpressedRealms.DB.Models.Events.EventSetup.Audit;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
@@ -59,4 +60,6 @@ public class User : IdentityUser
         new List<UserRoleMapping>();
     public virtual ICollection<UserRoleMappingAuditTrail> UserRoleMappingAuditTrails { get; set; } =
         new List<UserRoleMappingAuditTrail>();
+    public virtual ICollection<ContactAuditTrail> ContactAuditTrails { get; set; } =
+        new List<ContactAuditTrail>();
 }

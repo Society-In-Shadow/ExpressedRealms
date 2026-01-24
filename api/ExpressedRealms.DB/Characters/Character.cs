@@ -2,6 +2,7 @@
 using ExpressedRealms.DB.Characters.xpTables;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings;
+using ExpressedRealms.DB.Models.Contacts;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths;
@@ -61,4 +62,5 @@ public class Character : ISoftDelete
     public virtual List<CharacterBlessingMapping> CharacterBlessingMappings { get; set; } = null!;
     public virtual List<CharacterXpMapping> CharacterXpMappings { get; set; } = null!;
     public virtual List<AssignedXpMapping> AssignedXpMappings { get; set; } = null!;
+    public virtual ICollection<Contact> Contacts { get; set; } = new HashSet<Contact>();
 }
