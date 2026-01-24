@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.Models.Contacts;
 using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
 
 namespace ExpressedRealms.DB.Models.Knowledges.KnowledgeEducationLevels;
@@ -15,4 +16,5 @@ public class KnowledgeEducationLevel
     public int TotalUnknownXpCost { get; set; }
 
     public virtual List<CharacterKnowledgeMapping> CharacterKnowledgeMappings { get; set; } = null!;
+    public virtual ICollection<Contact> Contacts { get; set; } = new HashSet<Contact>();
 }
