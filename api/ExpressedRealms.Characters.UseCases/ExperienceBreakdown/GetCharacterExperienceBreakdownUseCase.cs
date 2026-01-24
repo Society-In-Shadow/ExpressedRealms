@@ -1,7 +1,6 @@
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.Events.API.Repositories.Events;
-using ExpressedRealms.FeatureFlags.FeatureClient;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
@@ -12,7 +11,6 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
     ICharacterRepository characterRepository,
     IAssignedXpMappingRepository assignedXpRepository,
     IEventRepository eventRepository,
-    IFeatureToggleClient featureToggleClient,
     GetCharacterExperienceBreakdownModelValidator validator,
     CancellationToken cancellationToken
 ) : IGetCharacterExperienceBreakdownUseCase

@@ -6,7 +6,6 @@ using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Characters.xpTables;
 using ExpressedRealms.Events.API.Repositories.Events;
 using ExpressedRealms.Events.API.Repositories.Events.Dtos;
-using ExpressedRealms.FeatureFlags.FeatureClient;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
@@ -22,7 +21,6 @@ public class GetCharacterExperienceBreakdownUseCaseTests
     private readonly IXpRepository _xpRepository;
     private readonly IAssignedXpMappingRepository _assignedXpRepository;
     private readonly IEventRepository _eventRepository;
-    private readonly IFeatureToggleClient _featureToggleClient;
     private readonly Guid PlayerId = Guid.NewGuid();
     private readonly List<CharacterXpView> _xpItems;
 
@@ -34,7 +32,6 @@ public class GetCharacterExperienceBreakdownUseCaseTests
         _characterRepository = A.Fake<ICharacterRepository>();
         _xpRepository = A.Fake<IXpRepository>();
         _assignedXpRepository = A.Fake<IAssignedXpMappingRepository>();
-        _featureToggleClient = A.Fake<IFeatureToggleClient>();
         _eventRepository = A.Fake<IEventRepository>();
 
         _xpItems = new List<CharacterXpView>()
@@ -115,7 +112,6 @@ public class GetCharacterExperienceBreakdownUseCaseTests
             _characterRepository,
             _assignedXpRepository,
             _eventRepository,
-            _featureToggleClient,
             validator,
             CancellationToken.None
         );
