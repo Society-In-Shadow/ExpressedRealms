@@ -290,8 +290,7 @@ public class GetCharacterExperienceBreakdownUseCaseTests
                 {
                     PlayerId = PlayerId,
                     IsInCharacterCreation = false,
-                    IsPrimaryCharacter = true,
-                    AssignedXp = 20,
+                    IsPrimaryCharacter = true
                 }
             );
 

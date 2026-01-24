@@ -1,6 +1,7 @@
 using ExpressedRealms.Characters.Repository.Xp.Dtos;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Characters.xpTables;
+using ExpressedRealms.Events.API.Repositories.Events;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +9,8 @@ namespace ExpressedRealms.Characters.Repository.Xp;
 
 public class XpRepository(
     ExpressedRealmsDbContext context,
+    IEventRepository eventRepository,
+    IAssignedXpMappingRepository assignedXpRepository,
     CancellationToken cancellationToken,
     IUserContext userContext
 ) : IXpRepository
@@ -118,17 +121,22 @@ public class XpRepository(
             {
                 IsPrimaryCharacter = x.IsPrimaryCharacter,
                 IsInCharacterCreation = x.IsInCharacterCreation,
-                AssignedXp = x.AssignedXp,
+                PlayerId = x.PlayerId
             })
             .FirstAsync(cancellationToken);
 
         var xpInfo = await GetCharacterXpMapping(characterId, (int)sectionType);
+        
+        var assignedXp = await assignedXpRepository.GetAllPlayerMappingsAsync(
+            characterState.PlayerId
+        );
+        var events = await eventRepository.GetEventsWithAvailableXp();
+        var xpAvailable = assignedXp.Sum(x => x.Amount) + events.Sum(x => x.ConExperience);
 
         var availableXp = characterState.IsInCharacterCreation switch
         {
             true => await GetAvailableDiscretionary(characterId) + xpInfo.SectionCap,
-            false when characterState.IsPrimaryCharacter => xpInfo.TotalCharacterCreationXp
-                + characterState.AssignedXp,
+            false when characterState.IsPrimaryCharacter => xpInfo.TotalCharacterCreationXp + xpAvailable,
             _ => 1_000_000,
         };
 

@@ -18,7 +18,6 @@ public static class UpdateCharacterXpEndpoint
             new UpdateCharacterXpModel()
             {
                 Id = characterId,
-                Xp = request.Xp,
                 PlayerNumber = request.PlayerNumber,
             }
         );

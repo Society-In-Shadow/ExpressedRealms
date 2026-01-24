@@ -1,10 +1,10 @@
-import {useDialog} from 'primevue/usedialog'
+import { useDialog } from 'primevue/usedialog'
 import UpdateCharacterXp from '@/components/admin/characterList/UpdateCharacterXp.vue'
 
 export const adminCharacterDialogs = () => {
   const dialog = useDialog()
 
-  const showUpdateXp = (characterId: number, playerNumber: number, xp: number) => {
+  const showUpdateXp = (characterId: number, playerNumber: number) => {
     dialog.open(UpdateCharacterXp, {
       props: {
         header: 'Update Character XP',
@@ -18,7 +18,6 @@ export const adminCharacterDialogs = () => {
         modal: true,
       },
       data: {
-        xp: xp,
         characterId: characterId,
         playerNumber: playerNumber,
       },

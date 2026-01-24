@@ -52,11 +52,6 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
             .HasColumnName("is_primary_character")
             .IsRequired()
             .HasDefaultValue(false);
-        builder
-            .Property(x => x.AssignedXp)
-            .HasColumnName("assigned_xp")
-            .IsRequired()
-            .HasDefaultValue(0);
 
         builder
             .Property(x => x.PlayerNumber)

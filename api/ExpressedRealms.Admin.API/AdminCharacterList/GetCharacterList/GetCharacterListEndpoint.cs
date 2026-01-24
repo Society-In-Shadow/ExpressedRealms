@@ -19,7 +19,6 @@ public static class GetCharacterListEndpoint
                     .Value.Select(x => new PrimaryCharacter()
                     {
                         PlayerName = x.PlayerName,
-                        AssignedXp = x.AssignedXp,
                         Background = x.Background,
                         Expression = x.Expression,
                         Id = x.Id,
