@@ -15,12 +15,7 @@ public static class UpdateCharacterXpEndpoint
     )
     {
         var results = await useCase.ExecuteAsync(
-            new UpdateCharacterXpModel()
-            {
-                Id = characterId,
-                Xp = request.Xp,
-                PlayerNumber = request.PlayerNumber,
-            }
+            new UpdateCharacterXpModel() { Id = characterId, PlayerNumber = request.PlayerNumber }
         );
 
         if (results.HasValidationError(out var validationProblem))

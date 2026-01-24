@@ -15,12 +15,6 @@ internal sealed class UpdateCharacterXpModelValidator : AbstractValidator<Update
             .MustAsync(async (x, y) => await repository.CharacterExistsAsync(x))
             .WithMessage("Character does not exist.");
 
-        RuleFor(x => x.Xp)
-            .NotEmpty()
-            .WithMessage("Xp is required.")
-            .GreaterThanOrEqualTo(0)
-            .WithMessage("Xp must be greater than or equal to 0.");
-
         RuleFor(x => x.PlayerNumber)
             .NotEmpty()
             .WithMessage("Player Number is required.")

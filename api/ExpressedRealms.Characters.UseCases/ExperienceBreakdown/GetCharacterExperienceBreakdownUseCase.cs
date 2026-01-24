@@ -1,8 +1,6 @@
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.Events.API.Repositories.Events;
-using ExpressedRealms.FeatureFlags;
-using ExpressedRealms.FeatureFlags.FeatureClient;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
@@ -13,7 +11,6 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
     ICharacterRepository characterRepository,
     IAssignedXpMappingRepository assignedXpRepository,
     IEventRepository eventRepository,
-    IFeatureToggleClient featureToggleClient,
     GetCharacterExperienceBreakdownModelValidator validator,
     CancellationToken cancellationToken
 ) : IGetCharacterExperienceBreakdownUseCase
@@ -36,15 +33,11 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
         var xpInfo = await xpRepository.GetCharacterXpMappings(model.CharacterId);
         var characterInfo = await characterRepository.FindCharacterAsync(model.CharacterId);
 
-        var xpAvailable = characterInfo!.AssignedXp;
-        if (await featureToggleClient.HasFeatureFlag(ReleaseFlags.ShowAssignedXpPanel))
-        {
-            var assignedXp = await assignedXpRepository.GetAllPlayerMappingsAsync(
-                characterInfo.PlayerId
-            );
-            var events = await eventRepository.GetEventsWithAvailableXp();
-            xpAvailable = assignedXp.Sum(x => x.Amount) + events.Sum(x => x.ConExperience);
-        }
+        var assignedXp = await assignedXpRepository.GetAllPlayerMappingsAsync(
+            characterInfo!.PlayerId
+        );
+        var events = await eventRepository.GetEventsWithAvailableXp();
+        var xpAvailable = assignedXp.Sum(x => x.Amount) + events.Sum(x => x.ConExperience);
 
         costs.AddRange(
             xpInfo

@@ -8,6 +8,5 @@ export interface PrimaryCharacter {
   background?: string
   expression: string
   playerName: string
-  assignedXp: number
   playerNumber: number
 }

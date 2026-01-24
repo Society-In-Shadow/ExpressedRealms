@@ -19,7 +19,6 @@ internal sealed class GetPrimaryCharactersUseCase(ICharacterRepository character
                     Id = x.Id,
                     Name = x.Name,
                     PlayerName = x.PlayerName,
-                    AssignedXp = x.AssignedXp,
                     PlayerNumber = x.PlayerNumber,
                 })
                 .ToList()

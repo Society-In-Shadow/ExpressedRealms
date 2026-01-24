@@ -57,7 +57,7 @@ async function downloadCharacterBooklet(characterId: number, characterName: stri
         <div class="text-right">
           <Button :label="showInfo ? 'Cancel' : 'Quick Notes'" class="m-2" @click="showInfo = !showInfo" />
           <Button label="Character Sheet" class="m-2" @click="redirectToCharacterSheet()" />
-          <Button label="Update Character" class="m-2" @click="dialogs.showUpdateXp(props.character.id, props.character.playerNumber, props.character.assignedXp)" />
+          <Button label="Update Character" class="m-2" @click="dialogs.showUpdateXp(props.character.id, props.character.playerNumber)" />
           <Button label="Assigned XP" class="m-2" @click="assignedXpDialogs.showAssignedXp(props.character.id, false)" />
           <Button label="CRB" class="m-2" @click="downloadCharacterBooklet(props.character.id, props.character.name, props.character?.playerName)" />
         </div>

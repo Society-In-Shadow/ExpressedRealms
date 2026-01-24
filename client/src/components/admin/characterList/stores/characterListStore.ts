@@ -1,7 +1,7 @@
-import {defineStore} from 'pinia'
+import { defineStore } from 'pinia'
 import axios from 'axios'
-import type {CharacterListResponse, PrimaryCharacter} from '@/components/admin/characterList/types.ts'
-import type {CharacterXpForm} from '@/components/admin/characterList/validators/characterXpForm.ts'
+import type { CharacterListResponse, PrimaryCharacter } from '@/components/admin/characterList/types.ts'
+import type { CharacterXpForm } from '@/components/admin/characterList/validators/characterXpForm.ts'
 
 export const adminCharacterListStore
   = defineStore('adminCharacterList', {
@@ -20,7 +20,7 @@ export const adminCharacterListStore
           })
       },
       async updateCharacterXp(formValues: CharacterXpForm, characterId: number) {
-        await axios.put(`/admin/characters/${characterId}/updateXp`, { playerNumber: formValues.playerNumber, xp: formValues.xp })
+        await axios.put(`/admin/characters/${characterId}/updateXp`, { playerNumber: formValues.playerNumber })
           .then(() => {
             this.fetchCharacters()
           })

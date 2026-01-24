@@ -49,7 +49,6 @@ internal sealed class CharacterRepository(
                 Expression = x.Expression.Name,
                 Background = x.Background,
                 PlayerName = x.Player.Name,
-                AssignedXp = x.AssignedXp,
                 PlayerNumber = x.PlayerNumber,
             })
             .ToListAsync(cancellationToken);
@@ -115,7 +114,6 @@ internal sealed class CharacterRepository(
             {
                 IsPrimaryCharacter = x.IsPrimaryCharacter,
                 IsInCharacterCreation = x.IsInCharacterCreation,
-                AssignedXp = x.AssignedXp,
             })
             .FirstAsync(cancellationToken);
     }
@@ -149,7 +147,6 @@ internal sealed class CharacterRepository(
             ExpressionId = dto.ExpressionId,
             FactionId = dto.FactionId,
             IsInCharacterCreation = true,
-            AssignedXp = 52,
         };
 
         character.PlayerId = playerId;
