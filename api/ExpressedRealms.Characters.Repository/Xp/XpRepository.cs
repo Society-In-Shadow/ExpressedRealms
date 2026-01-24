@@ -121,12 +121,12 @@ public class XpRepository(
             {
                 IsPrimaryCharacter = x.IsPrimaryCharacter,
                 IsInCharacterCreation = x.IsInCharacterCreation,
-                PlayerId = x.PlayerId
+                PlayerId = x.PlayerId,
             })
             .FirstAsync(cancellationToken);
 
         var xpInfo = await GetCharacterXpMapping(characterId, (int)sectionType);
-        
+
         var assignedXp = await assignedXpRepository.GetAllPlayerMappingsAsync(
             characterState.PlayerId
         );
@@ -136,7 +136,8 @@ public class XpRepository(
         var availableXp = characterState.IsInCharacterCreation switch
         {
             true => await GetAvailableDiscretionary(characterId) + xpInfo.SectionCap,
-            false when characterState.IsPrimaryCharacter => xpInfo.TotalCharacterCreationXp + xpAvailable,
+            false when characterState.IsPrimaryCharacter => xpInfo.TotalCharacterCreationXp
+                + xpAvailable,
             _ => 1_000_000,
         };
 

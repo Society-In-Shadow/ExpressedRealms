@@ -18,18 +18,15 @@ import TabPanel from 'primevue/tabpanel'
 import TabPanels from 'primevue/tabpanels'
 import Tabs from 'primevue/tabs'
 import AssignedXpPanel from '@/components/characters/character/xp/AssignedXpPanel.vue'
-import { FeatureFlags, userStore } from '@/stores/userStore.ts'
 
 const route = useRoute()
 const xpInfo = experienceStore()
 const characterInfo = characterStore()
-const userInfo = userStore()
 const disadvantageBucket = ref(0)
 const discretionaryBucket = ref(0)
 const overallDiscretionaryTotal = ref(0)
-const hasAssignedXpPanelFeatureToggle = ref(false)
 const showAssignedXpPanel = computed(() => {
-  return !characterInfo.isInCharacterCreation && hasAssignedXpPanelFeatureToggle.value && characterInfo.isPrimaryCharacter
+  return !characterInfo.isInCharacterCreation && characterInfo.isPrimaryCharacter
 })
 
 const characterId = Number.parseInt(route.params.id)
@@ -44,7 +41,6 @@ const props = defineProps({
 
 onMounted(async () => {
   await xpInfo.updateExperience(characterId)
-  hasAssignedXpPanelFeatureToggle.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowAssignedXpPanel)
 })
 
 watch(xpInfo.calculatedValues, () => {
