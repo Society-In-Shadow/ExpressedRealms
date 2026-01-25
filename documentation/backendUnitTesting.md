@@ -87,3 +87,51 @@ As for the test project, you can add these as dependencies
     <ProjectReference Include="..\ExpressedRealms.Powers.UseCases.Tests.Unit\ExpressedRealms.Powers.UseCases.Tests.Unit.csproj" />
   </ItemGroup>
 ```
+
+## Common Tasks
+
+### Checking against Null
+
+```csharp
+A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId))
+    .Returns(Task.FromResult<Character?>(null));
+```
+
+### Name Checks
+You need to make sure to do a trim operation on both the duplicate name check and saving the actual name
+
+```csharp
+[Theory]
+[InlineData(" test")]
+[InlineData(" test ")]
+[InlineData("test ")]
+public async Task ValidationFor_Name_WillTrimName_ForDuplicateNameCheck(string name)
+{
+    _model.Name = name;
+    A.CallTo(() => _contactRepository.HasDuplicateName(_model.CharacterId, _model.Name.Trim())).Returns(true);
+    var result = await _useCase.ExecuteAsync(_model);
+    result.MustHaveValidationError(nameof(CreateContactModel.Name), "A contact with this name already exists for this character.");
+}
+```
+
+
+```csharp
+[Theory]
+[InlineData(" test", "test")]
+[InlineData(" test ", "test")]
+[InlineData("test ", "test")]
+public async Task UseCase_WillTrimNameField(string? name, string? savedValue)
+{
+    _model.Name = name;
+
+    var result = await _useCase.ExecuteAsync(_model);
+    Assert.True(result.IsSuccess);
+
+    A.CallTo(() =>
+            _contactRepository.CreateAsync(
+                A<Contact>.That.Matches(x => x.Name == savedValue)
+            )
+        )
+        .MustHaveHappenedOnceExactly();
+}
+```
