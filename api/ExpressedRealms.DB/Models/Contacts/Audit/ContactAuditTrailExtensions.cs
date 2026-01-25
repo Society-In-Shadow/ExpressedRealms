@@ -14,8 +14,37 @@ internal static class ContactAuditTrailExtensions
             switch (changedRecord.ColumnName)
             {
                 case "contact_id":
+                case "character_id":
                     break;
 
+                case "name":
+                    changedRecord.FriendlyName = "Name";
+                    break;
+                
+                case "knowledge_level_id":
+                    changedRecord.FriendlyName = "Knowledge Level";
+                    break;
+                
+                case "knowledge_id":
+                    changedRecord.FriendlyName = "Knowledge";
+                    break;
+                
+                case "frequency":
+                    changedRecord.FriendlyName = "Frequency";
+                    break;
+                
+                case "spent_xp":
+                    changedRecord.FriendlyName = "Spent XP";
+                    break;
+                
+                case "is_approved":
+                    changedRecord.FriendlyName = "Approved";
+                    break;
+                
+                case "notes":
+                    changedRecord.FriendlyName = "Notes";
+                    break;
+                    
                 default:
                     throw new MissingAuditColumnException(changedRecord.ColumnName);
             }
