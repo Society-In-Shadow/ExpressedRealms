@@ -1,4 +1,5 @@
 using ExpressedRealms.Characters.UseCases.ExperienceBreakdown;
+using ExpressedRealms.DB.Characters.xpTables;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -34,6 +35,7 @@ internal static class GetOverallStatsEndpoint
                         CharacterCreateMax = x.Max,
                         LevelXp = x.LevelXp,
                     })
+                    .Where(x => x.SectionTypeId != (int)XpSectionTypes.Contacts)
                     .ToList(),
                 AvailableDiscretionary = status.Value.AvailableDiscretionary,
                 TotalSpentLevelXp = status.Value.TotalSpentLevelXp,
