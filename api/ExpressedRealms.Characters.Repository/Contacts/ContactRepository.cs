@@ -21,7 +21,7 @@ internal sealed class ContactRepository(
     {
         return await context.Contacts.AnyAsync(x => x.CharacterId == characterId && x.Name == name);
     }
-    
+
     public async Task EditAsync<TEntity>(TEntity entity)
         where TEntity : class
     {

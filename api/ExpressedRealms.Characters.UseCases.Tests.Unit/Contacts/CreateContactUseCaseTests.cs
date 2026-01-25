@@ -34,7 +34,7 @@ public class CreateContactUseCaseTests
             Name = "Steve",
             Notes = "123",
             KnowledgeLevel = 6,
-            ContactFrequency = 3
+            ContactFrequency = 3,
         };
 
         _characterRepository = A.Fake<ICharacterRepository>();
@@ -44,28 +44,26 @@ public class CreateContactUseCaseTests
 
         A.CallTo(() => _knowledgeRepository.IsExistingKnowledge(_model.KnowledgeId)).Returns(true);
         A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId)).Returns(true);
-        A.CallTo(() => _characterRepository.GetCharacterState(_model.CharacterId)).Returns(new CharacterStatusDto()
-        {
-            IsInCharacterCreation = false,
-            IsPrimaryCharacter = true,
-        });
+        A.CallTo(() => _characterRepository.GetCharacterState(_model.CharacterId))
+            .Returns(
+                new CharacterStatusDto()
+                {
+                    IsInCharacterCreation = false,
+                    IsPrimaryCharacter = true,
+                }
+            );
 
-        A.CallTo(() => _contactRepository.HasDuplicateName(_model.CharacterId, _model.Name)).Returns(false);
-        A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId)).Returns(new Character());
+        A.CallTo(() => _contactRepository.HasDuplicateName(_model.CharacterId, _model.Name))
+            .Returns(false);
+        A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId))
+            .Returns(new Character());
 
         A.CallTo(() =>
                 _xpRepository.GetAvailableXpForSection(_model.CharacterId, XpSectionTypes.Contacts)
             )
-            .Returns(
-                new SectionXpDto()
-                {
-                    AvailableXp = 30,
-                    SpentXp = 0,
-                }
-            );
+            .Returns(new SectionXpDto() { AvailableXp = 30, SpentXp = 0 });
         A.CallTo(() => _knowledgeRepository.GetKnowledgeAsync(_model.KnowledgeId))
             .Returns(new Knowledge() { KnowledgeTypeId = 3 });
-
 
         var validator = new CreateContactModelValidator(
             _knowledgeRepository,
@@ -117,11 +115,13 @@ public class CreateContactUseCaseTests
             "Character Id is required."
         );
     }
-    
+
     [Theory]
     [InlineData(0)]
     [InlineData(4)]
-    public async Task ValidationFor_ContactFrequency_WillFail_WhenIts_OutsideTheRange(byte frequency)
+    public async Task ValidationFor_ContactFrequency_WillFail_WhenIts_OutsideTheRange(
+        byte frequency
+    )
     {
         _model.ContactFrequency = frequency;
         var result = await _useCase.ExecuteAsync(_model);
@@ -131,7 +131,7 @@ public class CreateContactUseCaseTests
             "Contact Frequency must be between 1 and 3 times per month."
         );
     }
-    
+
     [Theory]
     [InlineData(1)]
     [InlineData(3)]
@@ -142,7 +142,7 @@ public class CreateContactUseCaseTests
 
         Assert.True(result.IsSuccess);
     }
-    
+
     [Theory]
     [InlineData(3)]
     [InlineData(7)]
@@ -156,7 +156,7 @@ public class CreateContactUseCaseTests
             "Knowledge Level must be between level 4 and 6."
         );
     }
-    
+
     [Theory]
     [InlineData(4)]
     [InlineData(6)]
@@ -175,23 +175,30 @@ public class CreateContactUseCaseTests
         var result = await _useCase.ExecuteAsync(_model);
         result.MustHaveValidationError(nameof(CreateContactModel.Name), "Name is required.");
     }
-    
+
     [Fact]
     public async Task ValidationFor_Name_WillFail_WhenItsOver300CharactersLong()
     {
         _model.Name = new String('x', 301);
         var result = await _useCase.ExecuteAsync(_model);
-        result.MustHaveValidationError(nameof(CreateContactModel.Name), "Name must be less than 300 characters.");
+        result.MustHaveValidationError(
+            nameof(CreateContactModel.Name),
+            "Name must be less than 300 characters."
+        );
     }
-    
+
     [Fact]
     public async Task ValidationFor_Name_WillFail_WhenItIsADuplicateName()
     {
-        A.CallTo(() => _contactRepository.HasDuplicateName(_model.CharacterId, _model.Name)).Returns(true);
+        A.CallTo(() => _contactRepository.HasDuplicateName(_model.CharacterId, _model.Name))
+            .Returns(true);
         var result = await _useCase.ExecuteAsync(_model);
-        result.MustHaveValidationError(nameof(CreateContactModel.Name), "A contact with this name already exists for this character.");
+        result.MustHaveValidationError(
+            nameof(CreateContactModel.Name),
+            "A contact with this name already exists for this character."
+        );
     }
-    
+
     [Theory]
     [InlineData(" test")]
     [InlineData(" test ")]
@@ -199,20 +206,25 @@ public class CreateContactUseCaseTests
     public async Task ValidationFor_Name_WillTrimName_ForDuplicateNameCheck(string name)
     {
         _model.Name = name;
-        A.CallTo(() => _contactRepository.HasDuplicateName(_model.CharacterId, _model.Name.Trim())).Returns(true);
+        A.CallTo(() => _contactRepository.HasDuplicateName(_model.CharacterId, _model.Name.Trim()))
+            .Returns(true);
         var result = await _useCase.ExecuteAsync(_model);
-        result.MustHaveValidationError(nameof(CreateContactModel.Name), "A contact with this name already exists for this character.");
+        result.MustHaveValidationError(
+            nameof(CreateContactModel.Name),
+            "A contact with this name already exists for this character."
+        );
     }
-    
+
     [Fact]
     public async Task ValidationFor_Name_WillNotCheckDuplication_IfCharacterIsNotFound()
     {
         A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId))
             .Returns(Task.FromResult<Character?>(null));
-        
+
         await _useCase.ExecuteAsync(_model);
-        
-        A.CallTo(() => _contactRepository.HasDuplicateName(_model.CharacterId, _model.Name)).MustNotHaveHappened();
+
+        A.CallTo(() => _contactRepository.HasDuplicateName(_model.CharacterId, _model.Name))
+            .MustNotHaveHappened();
     }
 
     [Fact]
@@ -253,16 +265,18 @@ public class CreateContactUseCaseTests
     [Fact]
     public async Task UseCase_WillReturn_Error_WhenCharacterIsInCharacterCreationMode()
     {
-        A.CallTo(() => _characterRepository.GetCharacterState(_model.CharacterId)).Returns(new CharacterStatusDto()
-        {
-            IsInCharacterCreation = true,
-            IsPrimaryCharacter = true,
-        });
-        
+        A.CallTo(() => _characterRepository.GetCharacterState(_model.CharacterId))
+            .Returns(
+                new CharacterStatusDto() { IsInCharacterCreation = true, IsPrimaryCharacter = true }
+            );
+
         var result = await _useCase.ExecuteAsync(_model);
 
         Assert.True(result.IsFailed);
-        Assert.Equal("You cannot add contacts while in character creation mode.", result.Errors[0].Message);
+        Assert.Equal(
+            "You cannot add contacts while in character creation mode.",
+            result.Errors[0].Message
+        );
     }
 
     [Fact]
@@ -271,13 +285,7 @@ public class CreateContactUseCaseTests
         A.CallTo(() =>
                 _xpRepository.GetAvailableXpForSection(_model.CharacterId, XpSectionTypes.Contacts)
             )
-            .Returns(
-                new SectionXpDto()
-                {
-                    AvailableXp = 25,
-                    SpentXp = 25,
-                }
-            );
+            .Returns(new SectionXpDto() { AvailableXp = 25, SpentXp = 25 });
 
         var result = await _useCase.ExecuteAsync(_model);
         Assert.True(result.HasError<NotEnoughXPFailure>());
@@ -295,14 +303,11 @@ public class CreateContactUseCaseTests
         _model.ContactFrequency = 1; // Uses 0 XP
         await _useCase.ExecuteAsync(_model);
         A.CallTo(() =>
-                _contactRepository.CreateAsync(
-                    A<Contact>.That.Matches(x => x.SpentXp == xpCost
-                    )
-                )
+                _contactRepository.CreateAsync(A<Contact>.That.Matches(x => x.SpentXp == xpCost))
             )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Theory]
     [InlineData(1, 0)]
     [InlineData(2, 4)]
@@ -310,12 +315,11 @@ public class CreateContactUseCaseTests
     public async Task UseCase_CalculatesFrequencyXP_Correctly(byte frequency, int xpCost)
     {
         _model.KnowledgeLevel = 4; // uses 6px
-        _model.ContactFrequency = frequency; 
+        _model.ContactFrequency = frequency;
         await _useCase.ExecuteAsync(_model);
         A.CallTo(() =>
                 _contactRepository.CreateAsync(
-                    A<Contact>.That.Matches(x => x.SpentXp == xpCost + 6
-                    )
+                    A<Contact>.That.Matches(x => x.SpentXp == xpCost + 6)
                 )
             )
             .MustHaveHappenedOnceExactly();
@@ -356,13 +360,11 @@ public class CreateContactUseCaseTests
         Assert.True(result.IsSuccess);
 
         A.CallTo(() =>
-                _contactRepository.CreateAsync(
-                    A<Contact>.That.Matches(x => x.Notes == savedValue)
-                )
+                _contactRepository.CreateAsync(A<Contact>.That.Matches(x => x.Notes == savedValue))
             )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Theory]
     [InlineData(" test", "test")]
     [InlineData(" test ", "test")]
@@ -375,9 +377,7 @@ public class CreateContactUseCaseTests
         Assert.True(result.IsSuccess);
 
         A.CallTo(() =>
-                _contactRepository.CreateAsync(
-                    A<Contact>.That.Matches(x => x.Name == savedValue)
-                )
+                _contactRepository.CreateAsync(A<Contact>.That.Matches(x => x.Name == savedValue))
             )
             .MustHaveHappenedOnceExactly();
     }
@@ -385,10 +385,7 @@ public class CreateContactUseCaseTests
     [Fact]
     public async Task UseCase_WillReturn_KnowledgeId_IfSuccessful()
     {
-        A.CallTo(() =>
-                _contactRepository.CreateAsync(A<Contact>._)
-            )
-            .Returns(5);
+        A.CallTo(() => _contactRepository.CreateAsync(A<Contact>._)).Returns(5);
         var result = await _useCase.ExecuteAsync(_model);
         Assert.Equal(5, result.Value);
     }
