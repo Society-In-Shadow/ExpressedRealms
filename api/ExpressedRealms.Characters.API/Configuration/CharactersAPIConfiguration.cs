@@ -1,5 +1,6 @@
 using ExpressedRealms.Characters.API.AssignedXp;
 using ExpressedRealms.Characters.API.CharacterEndPoints;
+using ExpressedRealms.Characters.API.ContactEndpoints;
 using ExpressedRealms.Characters.API.ProficiencyEndPoints;
 using ExpressedRealms.Characters.API.StatEndPoints;
 using Microsoft.AspNetCore.Builder;
@@ -14,5 +15,6 @@ public static class CharactersApiConfiguration
         app.AddStatEndPoints();
         app.AddProficiencyEndPoints();
         app.AddAssignedXpEndpoints();
+        app.AddCharacterContactEndpoints();
     }
 }
