@@ -15,7 +15,6 @@ DISABLE:
   - JAVASCRIPT
   - TYPESCRIPT
   - TEKTON
-  - tsqllint # This will throw errors with postgres scripts
 DISABLE_LINTERS:
   - JSON_PRETTIER
   - REPOSITORY_KICS
@@ -32,6 +31,7 @@ DISABLE_LINTERS:
   - REPOSITORY_DEVSKIM # There's a git ownership issue with this one : fatal: detected dubious ownership in repository at '/github/workspace/.git'
   - REPOSITORY_TRIVY # Getting fatal download errors, and too many requests errors, so ignoring for now
   - REPOSITORY_KINGFISHER # This is a new one on the block, it doesn't seem to play nicely with azure config keys and doesn't seem to consistently check keys
+  - SQL_TSQLLINT # This will throw errors with postgres scripts
 DISABLE_ERRORS_LINTERS:
   - PYTHON_BANDIT
   - PYTHON_PYRIGHT
@@ -59,7 +59,7 @@ FILEIO_REPORTER: false
 JSON_REPORTER: true
 SARIF_REPORTER: true
 YAML_YAMLLINT_DISABLE_ERRORS: true
-
+SQL_SQLFLUFF_ARGUMENTS: "--dialect postgres"
 REPOSITORY_CHECKOV_ARGUMENTS: >
   --skip-check CKV2_GHA_1
   --skip-path api/ExpressedRealms.Server/appsettings.json
