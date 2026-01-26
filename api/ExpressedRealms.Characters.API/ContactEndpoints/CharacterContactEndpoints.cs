@@ -1,4 +1,7 @@
-﻿using ExpressedRealms.Characters.API.ContactEndpoints.Create;
+﻿using ExpressedRealms.Authentication.PermissionCollection;
+using ExpressedRealms.Authentication.PermissionCollection.Configuration;
+using ExpressedRealms.Characters.API.ContactEndpoints.Approve;
+using ExpressedRealms.Characters.API.ContactEndpoints.Create;
 using ExpressedRealms.Characters.API.ContactEndpoints.Delete;
 using ExpressedRealms.Characters.API.ContactEndpoints.Edit;
 using Microsoft.AspNetCore.Builder;
@@ -19,5 +22,8 @@ internal static class CharacterContactEndpoints
         endpointGroup.MapPost("{characterId}/contacts", CreateEndpoint.ExecuteAsync);
         endpointGroup.MapPut("{characterId}/contacts/{contactId}", EditEndpoint.ExecuteAsync);
         endpointGroup.MapDelete("{characterId}/contacts/{contactId}", DeleteEndpoint.ExecuteAsync);
+        endpointGroup
+            .MapPut("{characterId}/contacts/{contactId}/approve", ApproveEndpoint.ExecuteAsync)
+            .RequirePermission(Permissions.CharacterContacts.Approve);
     }
 }
