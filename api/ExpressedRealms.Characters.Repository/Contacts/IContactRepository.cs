@@ -7,4 +7,6 @@ public interface IContactRepository : IGenericRepository
 {
     Task<int> CreateAsync(Contact contact);
     Task<bool> HasDuplicateName(int characterId, string name);
+    Task<bool> HasDuplicateName(int contactId, int characterId, string name);
+    Task<Contact?> FindContactAsync(int id);
 }
