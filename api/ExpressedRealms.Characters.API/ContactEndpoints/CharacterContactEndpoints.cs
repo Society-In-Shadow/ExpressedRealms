@@ -1,4 +1,5 @@
 ﻿using ExpressedRealms.Characters.API.ContactEndpoints.Create;
+using ExpressedRealms.Characters.API.ContactEndpoints.Edit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
@@ -15,5 +16,6 @@ internal static class CharacterContactEndpoints
             .RequireAuthorization();
 
         endpointGroup.MapPost("{characterId}/contacts", CreateEndpoint.ExecuteAsync);
+        endpointGroup.MapPost("{characterId}/contacts/{contactId}", EditEndpoint.ExecuteAsync);
     }
 }

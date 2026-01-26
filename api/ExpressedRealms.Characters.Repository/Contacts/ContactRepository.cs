@@ -22,6 +22,18 @@ internal sealed class ContactRepository(
         return await context.Contacts.AnyAsync(x => x.CharacterId == characterId && x.Name == name);
     }
 
+    public async Task<bool> HasDuplicateName(int contactId, int characterId, string name)
+    {
+        return await context.Contacts.AnyAsync(x =>
+            x.CharacterId == characterId && x.Name == name && x.Id != contactId
+        );
+    }
+
+    public async Task<Contact?> FindContactAsync(int id)
+    {
+        return await context.Contacts.FindAsync(id);
+    }
+
     public async Task EditAsync<TEntity>(TEntity entity)
         where TEntity : class
     {

@@ -6,17 +6,17 @@ using ExpressedRealms.UseCases.Shared;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FluentResults;
 
-namespace ExpressedRealms.Characters.UseCases.Contacts.Create;
+namespace ExpressedRealms.Characters.UseCases.Contacts.Edit;
 
-internal sealed class CreateContactUseCase(
+internal sealed class EditContactUseCase(
     IXpRepository xpRepository,
     IContactRepository contactRepository,
     ICharacterRepository characterRepository,
-    CreateContactModelValidator validator,
+    EditContactModelValidator validator,
     CancellationToken cancellationToken
-) : ICreateContactUseCase
+) : IEditContactUseCase
 {
-    public async Task<Result<int>> ExecuteAsync(CreateContactModel model)
+    public async Task<Result<int>> ExecuteAsync(EditContactModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,
@@ -27,17 +27,19 @@ internal sealed class CreateContactUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
+        var characterInfo = await characterRepository.GetCharacterState(model.CharacterId);
+
+        if (characterInfo.IsInCharacterCreation)
+        {
+            return Result.Fail("You cannot edit contacts while in character creation mode.");
+        }
+
         var xpInfo = await xpRepository.GetAvailableXpForSection(
             model.CharacterId,
             XpSectionTypes.Contacts
         );
 
-        var characterInfo = await characterRepository.GetCharacterState(model.CharacterId);
-
-        if (characterInfo.IsInCharacterCreation)
-        {
-            return Result.Fail("You cannot add contacts while in character creation mode.");
-        }
+        var contact = await contactRepository.FindContactAsync(model.Id);
 
         byte spentXp = 0;
         spentXp += model.KnowledgeLevel switch
@@ -62,24 +64,18 @@ internal sealed class CreateContactUseCase(
             ),
         };
 
-        if (xpInfo.SpentXp + spentXp > xpInfo.AvailableXp)
-            return Result.Fail(
-                new NotEnoughXPFailure(xpInfo.AvailableXp - xpInfo.SpentXp, spentXp)
-            );
+        var remainingXp = xpInfo.AvailableXp + contact!.SpentXp;
+        if (spentXp > remainingXp)
+            return Result.Fail(new NotEnoughXPFailure(remainingXp, spentXp));
 
-        var mappingId = await contactRepository.CreateAsync(
-            new()
-            {
-                Name = model.Name.Trim(),
-                Frequency = model.ContactFrequency,
-                KnowledgeLevelId = model.KnowledgeLevel + 1, // Id is offset by 1
-                CharacterId = model.CharacterId,
-                KnowledgeId = model.KnowledgeId,
-                SpentXp = spentXp,
-                Notes = model.Notes?.Trim() == string.Empty ? null : model.Notes?.Trim(),
-            }
-        );
+        contact.Name = model.Name.Trim();
+        contact.Frequency = model.ContactFrequency;
+        contact.KnowledgeLevelId = model.KnowledgeLevel + 1;
+        contact.SpentXp = spentXp;
+        contact.Notes = model.Notes?.Trim() == string.Empty ? null : model.Notes?.Trim();
 
-        return Result.Ok(mappingId);
+        await contactRepository.EditAsync(contact);
+
+        return Result.Ok();
     }
 }
