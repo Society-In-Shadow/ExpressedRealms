@@ -1,3 +1,4 @@
+using ExpressedRealms.Characters.Repository.Contacts.Dtos;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.Models.Contacts;
@@ -32,6 +33,24 @@ internal sealed class ContactRepository(
     public async Task<Contact?> FindContactAsync(int id)
     {
         return await context.Contacts.FindAsync(id);
+    }
+
+    public async Task<List<ContactListDto>> GetContactsForCharacter(int characterId)
+    {
+        return await context
+            .Contacts.AsNoTracking()
+            .Where(x => x.CharacterId == characterId)
+            .Select(x => new ContactListDto()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Knowledge = x.Knowledge.Name,
+                IsApproved = x.IsApproved,
+                UsesPerWeek = x.Frequency,
+                KnowledgeLevel = $"{x.KnowledgeLevel.Name} ({x.KnowledgeLevel.Level})",
+            })
+            .OrderBy(x => x.Name)
+            .ToListAsync();
     }
 
     public async Task EditAsync<TEntity>(TEntity entity)

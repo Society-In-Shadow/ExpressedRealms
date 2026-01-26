@@ -4,6 +4,7 @@ using ExpressedRealms.Characters.API.ContactEndpoints.Approve;
 using ExpressedRealms.Characters.API.ContactEndpoints.Create;
 using ExpressedRealms.Characters.API.ContactEndpoints.Delete;
 using ExpressedRealms.Characters.API.ContactEndpoints.Edit;
+using ExpressedRealms.Characters.API.ContactEndpoints.GetContacts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
@@ -19,6 +20,7 @@ internal static class CharacterContactEndpoints
             .WithTags("Character Contacts")
             .RequireAuthorization();
 
+        endpointGroup.MapGet("{characterId}/contacts", GetContactsEndpoint.ExecuteAsync);
         endpointGroup.MapPost("{characterId}/contacts", CreateEndpoint.ExecuteAsync);
         endpointGroup.MapPut("{characterId}/contacts/{contactId}", EditEndpoint.ExecuteAsync);
         endpointGroup.MapDelete("{characterId}/contacts/{contactId}", DeleteEndpoint.ExecuteAsync);
