@@ -2,6 +2,9 @@
  * Auto-Generated, Do Not Edit
  */
 export const UserPermissions = {
+  CharacterContacts: {
+    Approve: 'charactercontacts.approve',
+  } as const,
   Event: {
     Edit: 'event.edit',
     View: 'event.view',
