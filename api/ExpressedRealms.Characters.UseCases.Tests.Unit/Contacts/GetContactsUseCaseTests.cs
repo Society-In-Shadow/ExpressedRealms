@@ -24,7 +24,7 @@ public class GetContactsUseCaseTests
 
         _dbModel = new List<ContactListDto>()
         {
-            new ()
+            new()
             {
                 Name = "Luffy",
                 KnowledgeLevel = "Associate (3)",
@@ -33,7 +33,7 @@ public class GetContactsUseCaseTests
                 IsApproved = false,
                 UsesPerWeek = 1,
             },
-            new ()
+            new()
             {
                 Name = "Zoro",
                 KnowledgeLevel = "Bachalors (5)",
@@ -41,7 +41,7 @@ public class GetContactsUseCaseTests
                 Id = 2,
                 IsApproved = true,
                 UsesPerWeek = 3,
-            }
+            },
         };
 
         _characterRepository = A.Fake<ICharacterRepository>();
@@ -60,7 +60,8 @@ public class GetContactsUseCaseTests
         A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId))
             .Returns(new Character());
 
-        A.CallTo(() => _contactRepository.GetContactsForCharacter(_model.CharacterId)).Returns(_dbModel);
+        A.CallTo(() => _contactRepository.GetContactsForCharacter(_model.CharacterId))
+            .Returns(_dbModel);
 
         var validator = new GetContactsModelValidator(_characterRepository);
 
@@ -117,16 +118,19 @@ public class GetContactsUseCaseTests
     [Fact]
     public async Task UseCase_GetsContacts_WhenItHasEnoughXp()
     {
-        var contacts = _dbModel.Select(x => new ContactListReturnModel()
-        {
-            KnowledgeLevel = x.KnowledgeLevel,
-            Name = x.Name,
-            Knowledge = x.Knowledge,
-            Id = x.Id,
-            IsApproved = x.IsApproved,
-            UsesPerWeek = x.UsesPerWeek
-        }).OrderBy(x => x.Name).ToList();
-        
+        var contacts = _dbModel
+            .Select(x => new ContactListReturnModel()
+            {
+                KnowledgeLevel = x.KnowledgeLevel,
+                Name = x.Name,
+                Knowledge = x.Knowledge,
+                Id = x.Id,
+                IsApproved = x.IsApproved,
+                UsesPerWeek = x.UsesPerWeek,
+            })
+            .OrderBy(x => x.Name)
+            .ToList();
+
         var results = await _useCase.ExecuteAsync(_model);
 
         Assert.Equivalent(contacts, results.Value);

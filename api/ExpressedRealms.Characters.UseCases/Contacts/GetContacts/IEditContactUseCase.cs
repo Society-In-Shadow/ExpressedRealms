@@ -4,4 +4,5 @@ using FluentResults;
 
 namespace ExpressedRealms.Characters.UseCases.Contacts.GetContacts;
 
-public interface IGetContactsUseCase : IGenericUseCase<Result<List<ContactListReturnModel>>, GetContactsModel> { }
+public interface IGetContactsUseCase
+    : IGenericUseCase<Result<List<ContactListReturnModel>>, GetContactsModel> { }

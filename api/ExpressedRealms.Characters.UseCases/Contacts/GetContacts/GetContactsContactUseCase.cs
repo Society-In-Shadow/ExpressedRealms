@@ -30,17 +30,22 @@ internal sealed class GetContactsUseCase(
         {
             return Result.Fail("You cannot edit contacts while in character creation mode.");
         }
-        
+
         var contacts = await contactRepository.GetContactsForCharacter(model.CharacterId);
 
-        return Result.Ok(contacts.Select(x => new ContactListReturnModel()
-        {
-            KnowledgeLevel = x.KnowledgeLevel,
-            Name = x.Name,
-            Knowledge = x.Knowledge,
-            Id = x.Id,
-            IsApproved = x.IsApproved,
-            UsesPerWeek = x.UsesPerWeek
-        }).OrderBy(x => x.Name).ToList());
+        return Result.Ok(
+            contacts
+                .Select(x => new ContactListReturnModel()
+                {
+                    KnowledgeLevel = x.KnowledgeLevel,
+                    Name = x.Name,
+                    Knowledge = x.Knowledge,
+                    Id = x.Id,
+                    IsApproved = x.IsApproved,
+                    UsesPerWeek = x.UsesPerWeek,
+                })
+                .OrderBy(x => x.Name)
+                .ToList()
+        );
     }
 }

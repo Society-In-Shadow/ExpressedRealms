@@ -37,7 +37,8 @@ internal sealed class ContactRepository(
 
     public async Task<List<ContactListDto>> GetContactsForCharacter(int characterId)
     {
-        return await context.Contacts.AsNoTracking()
+        return await context
+            .Contacts.AsNoTracking()
             .Where(x => x.CharacterId == characterId)
             .Select(x => new ContactListDto()
             {
@@ -46,7 +47,7 @@ internal sealed class ContactRepository(
                 Knowledge = x.Knowledge.Name,
                 IsApproved = x.IsApproved,
                 UsesPerWeek = x.Frequency,
-                KnowledgeLevel = $"{x.KnowledgeLevel.Name} ({x.KnowledgeLevel.Level})"
+                KnowledgeLevel = $"{x.KnowledgeLevel.Name} ({x.KnowledgeLevel.Level})",
             })
             .OrderBy(x => x.Name)
             .ToListAsync();

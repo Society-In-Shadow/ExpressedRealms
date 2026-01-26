@@ -8,16 +8,12 @@ namespace ExpressedRealms.Characters.API.ContactEndpoints.GetContacts;
 
 public static class GetContactsEndpoint
 {
-    public static async Task<Results<Ok<GetContactsResponse>, NotFound, ValidationProblem>> ExecuteAsync(
-        int characterId,
-        [FromServices] IGetContactsUseCase useCase
-    )
+    public static async Task<
+        Results<Ok<GetContactsResponse>, NotFound, ValidationProblem>
+    > ExecuteAsync(int characterId, [FromServices] IGetContactsUseCase useCase)
     {
         var results = await useCase.ExecuteAsync(
-            new GetContactsModel()
-            {
-                CharacterId = characterId,
-            }
+            new GetContactsModel() { CharacterId = characterId }
         );
 
         if (results.HasValidationError(out var validationProblem))
@@ -27,17 +23,21 @@ public static class GetContactsEndpoint
 
         results.ThrowIfErrorNotHandled();
 
-        return TypedResults.Ok(new GetContactsResponse()
-        {
-            Contacts = results.Value.Select(x => new Contact()
+        return TypedResults.Ok(
+            new GetContactsResponse()
             {
-                KnowledgeLevel = x.KnowledgeLevel,
-                Name = x.Name,
-                Knowledge = x.Knowledge,
-                Id = x.Id,
-                IsApproved = x.IsApproved,
-                UsesPerWeek = x.UsesPerWeek
-            }).ToList()
-        });
+                Contacts = results
+                    .Value.Select(x => new Contact()
+                    {
+                        KnowledgeLevel = x.KnowledgeLevel,
+                        Name = x.Name,
+                        Knowledge = x.Knowledge,
+                        Id = x.Id,
+                        IsApproved = x.IsApproved,
+                        UsesPerWeek = x.UsesPerWeek,
+                    })
+                    .ToList(),
+            }
+        );
     }
 }
