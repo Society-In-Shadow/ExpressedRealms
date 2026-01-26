@@ -1,6 +1,7 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Models.Knowledges;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels;
+using ExpressedRealms.DB.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Knowledges.Repository.Knowledges;
@@ -75,5 +76,17 @@ internal sealed class KnowledgeRepository(
     public Task<List<KnowledgeType>> GetKnowledgeTypesAsync()
     {
         return context.KnowledgeTypes.AsNoTracking().ToListAsync(cancellationToken);
+    }
+
+    public Task<List<GenericListDto<int>>> GetKnowledgeSummaryAsync()
+    {
+        return context
+            .Knowledges.Select(x => new GenericListDto<int>
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+            })
+            .ToListAsync();
     }
 }
