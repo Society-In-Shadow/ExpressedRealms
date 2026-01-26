@@ -45,7 +45,10 @@ internal sealed class CreateContactUseCase(
             4 => 6, // Level 4 knowledge (Associates) is 6xp (Base xp needed to purchase contact)
             5 => 10, // Level 5 knowledge (Bachelor) is above + 4 = 10 xp
             6 => 16, // Level 6 knowledge (Masters) is above + 6 = 16 xp
-            _ => throw new ArgumentOutOfRangeException(nameof(model), $"KnowledgeLevel {model.KnowledgeLevel} is invalid"),
+            _ => throw new ArgumentOutOfRangeException(
+                nameof(model),
+                $"KnowledgeLevel {model.KnowledgeLevel} is invalid"
+            ),
         };
 
         spentXp += model.ContactFrequency switch
@@ -53,7 +56,10 @@ internal sealed class CreateContactUseCase(
             1 => 0, // Once a week is 0 xp
             2 => 4, // Twice a week is 4 xp
             3 => 10, // Three times a week is above + 6 = 10 xp
-            _ => throw new ArgumentOutOfRangeException(nameof(model), $"ContactFrequency {model.ContactFrequency} is invalid"),
+            _ => throw new ArgumentOutOfRangeException(
+                nameof(model),
+                $"ContactFrequency {model.ContactFrequency} is invalid"
+            ),
         };
 
         if (xpInfo.SpentXp + spentXp > xpInfo.AvailableXp)
