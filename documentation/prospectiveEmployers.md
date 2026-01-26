@@ -10,7 +10,7 @@ There are two different areas I wanted to cover: Communication / Writing and Cod
 To start out with, some basic info:
 
 ## Numbers
-- App consists of 70+ tables, ~150 API endpoints, 600+ unit tests, and 44,000+ lines of code
+- App consists of 80+ tables, 170+ API endpoints, 700+ unit tests, and 49,000+ lines of code
 - Launched to ~40 active players during a live event, maintaining <100ms average API response times under gameplay load.
 
 ## Communication / Writing
@@ -56,4 +56,4 @@ Following the same Blessing path here, you can take a look at the UI for it belo
 One of the core parts of a character is keeping track of their XP, both during character creation, and during gameplay.
 The following view was thrown together to handle gathering the 6 or so different XP types.
 
-- [Character XP View](./../api/ExpressedRealms.DB/Migrations/20250921054147_UpdateCharacterXpView.cs)
+- [Character XP View](./../api/ExpressedRealms.DB/Scripts/CharacterXpView.sql)
