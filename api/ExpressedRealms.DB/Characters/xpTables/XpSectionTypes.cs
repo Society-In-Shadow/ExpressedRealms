@@ -9,4 +9,5 @@ public enum XpSectionTypes
     Skills,
     Stats,
     Discretion,
+    Contacts,
 }
