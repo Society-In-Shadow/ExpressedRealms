@@ -366,10 +366,10 @@ public class CreateContactUseCaseTests
     }
 
     [Theory]
-    [InlineData(" test", "test")]
-    [InlineData(" test ", "test")]
-    [InlineData("test ", "test")]
-    public async Task UseCase_WillTrimNameField(string? name, string? savedValue)
+    [InlineData(" test")]
+    [InlineData(" test ")]
+    [InlineData("test ")]
+    public async Task UseCase_WillTrimNameField(string name)
     {
         _model.Name = name;
 
@@ -377,7 +377,7 @@ public class CreateContactUseCaseTests
         Assert.True(result.IsSuccess);
 
         A.CallTo(() =>
-                _contactRepository.CreateAsync(A<Contact>.That.Matches(x => x.Name == savedValue))
+                _contactRepository.CreateAsync(A<Contact>.That.Matches(x => x.Name == "test"))
             )
             .MustHaveHappenedOnceExactly();
     }

@@ -1,4 +1,3 @@
-drop view public.character_xp_view;
 CREATE OR REPLACE VIEW public.character_xp_view
  AS
  WITH calc AS (
