@@ -1,5 +1,5 @@
 using ExpressedRealms.Characters.UseCases.ExperienceBreakdown;
-using ExpressedRealms.DB.Characters.xpTables;
+using ExpressedRealms.FeatureFlags.FeatureClient;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -11,7 +11,11 @@ internal static class GetOverallStatsEndpoint
 {
     internal static async Task<
         Results<Ok<ExperienceBreakdownResponse>, NotFound, StatusCodeHttpResult, ValidationProblem>
-    > Execute(int id, [FromServices] IGetCharacterExperienceBreakdownUseCase repository)
+    > Execute(
+        int id,
+        [FromServices] IGetCharacterExperienceBreakdownUseCase repository,
+        [FromServices] IFeatureToggleClient featureToggles
+    )
     {
         var status = await repository.ExecuteAsync(new() { CharacterId = id });
 
@@ -35,7 +39,6 @@ internal static class GetOverallStatsEndpoint
                         CharacterCreateMax = x.Max,
                         LevelXp = x.LevelXp,
                     })
-                    .Where(x => x.SectionTypeId != (int)XpSectionTypes.Contacts)
                     .ToList(),
                 AvailableDiscretionary = status.Value.AvailableDiscretionary,
                 TotalSpentLevelXp = status.Value.TotalSpentLevelXp,

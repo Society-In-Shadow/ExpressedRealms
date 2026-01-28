@@ -12,6 +12,7 @@ export const XpSectionTypes = {
   skills: 5,
   stats: 6,
   discretionary: 7,
+  contacts: 8,
 } as const
 export type XpSectionType = (typeof XpSectionTypes)[keyof typeof XpSectionTypes]
 

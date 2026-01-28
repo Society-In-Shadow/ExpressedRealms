@@ -20,11 +20,14 @@ import ReviewCharacter from '@/components/characters/character/xp/ReviewCharacte
 import AdvantageStep from '@/components/characters/character/wizard/blessings/AdvantageStep.vue'
 import { characterStore } from '@/components/characters/character/stores/characterStore.ts'
 import DisadvantageStep from '@/components/characters/character/wizard/blessings/DisadvantageStep.vue'
+import ContactStep from '@/components/characters/character/wizard/contacts/ContactStep.vue'
+import { FeatureFlags, userStore } from '@/stores/userStore.ts'
 
 const xpData = experienceStore()
 const route = useRoute()
 const router = useRouter()
 const characterInfo = characterStore()
+const userInfo = userStore()
 const isAdd = computed(() => route.name == 'addWizard')
 const wasAdd = ref(false)
 
@@ -60,6 +63,10 @@ async function fetchData() {
   else {
     await characterInfo.getCharacterDetails(Number(route.params.id))
     sections.value.splice(0, 0, { name: 'Basic Info', isDisabled: false, component: defineAsyncComponent(async () => EditCharacterDetails) })
+
+    if (!characterInfo.isInCharacterCreation && await userInfo.hasFeatureFlag(FeatureFlags.ShowContactManagement))
+      sections.value.splice(8, 0, { name: 'Contacts', isDisabled: false, component: defineAsyncComponent(async () => ContactStep) })
+
     await xpData.updateExperience(route.params.id)
 
     if (!isMobile.value) {
@@ -126,7 +133,7 @@ const nextSection = computed(() => {
     <div v-if="!(isMobile && hasSelectedSection) || !isMobile" class="col col-md-2 custom-toc">
       <Card>
         <template #content>
-          <div v-for="section in sections" class="text-right p-2">
+          <div v-for="section in sections" :key="section.name" class="text-right p-2">
             <Button
               class="w-100" :label="section.name"
               :outlined="selectedSection !== section.name"

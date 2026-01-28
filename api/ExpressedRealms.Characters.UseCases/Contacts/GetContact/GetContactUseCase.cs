@@ -35,7 +35,7 @@ internal sealed class GetContactUseCase(
         return Result.Ok(
             new ContactReturnModel()
             {
-                KnowledgeLevelId = contact!.KnowledgeLevelId,
+                KnowledgeLevelId = contact!.KnowledgeLevelId - 1,
                 Name = contact.Name,
                 KnowledgeId = contact.KnowledgeId,
                 Id = contact.Id,

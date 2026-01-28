@@ -6,6 +6,8 @@ using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Characters.xpTables;
 using ExpressedRealms.Events.API.Repositories.Events;
 using ExpressedRealms.Events.API.Repositories.Events.Dtos;
+using ExpressedRealms.FeatureFlags;
+using ExpressedRealms.FeatureFlags.FeatureClient;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
@@ -21,6 +23,7 @@ public class GetCharacterExperienceBreakdownUseCaseTests
     private readonly IXpRepository _xpRepository;
     private readonly IAssignedXpMappingRepository _assignedXpRepository;
     private readonly IEventRepository _eventRepository;
+    private readonly IFeatureToggleClient _featureToggleClient;
     private readonly Guid PlayerId = Guid.NewGuid();
     private readonly List<CharacterXpView> _xpItems;
 
@@ -33,6 +36,7 @@ public class GetCharacterExperienceBreakdownUseCaseTests
         _xpRepository = A.Fake<IXpRepository>();
         _assignedXpRepository = A.Fake<IAssignedXpMappingRepository>();
         _eventRepository = A.Fake<IEventRepository>();
+        _featureToggleClient = A.Fake<IFeatureToggleClient>();
 
         _xpItems = new List<CharacterXpView>()
         {
@@ -68,12 +72,23 @@ public class GetCharacterExperienceBreakdownUseCaseTests
                 TotalCharacterCreationXp = 6,
                 SectionName = "Discretionary XP",
             },
+            new CharacterXpView()
+            {
+                SectionTypeId = (int)XpSectionTypes.Contacts,
+                SpentXp = 5,
+                SectionCap = 16,
+                TotalCharacterCreationXp = 6,
+                SectionName = "Contact XP",
+            },
         };
 
         A.CallTo(() =>
                 knowledgeRepository.GetExperienceSpentOnKnowledgesForCharacter(_model.CharacterId)
             )
             .Returns(1);
+
+        A.CallTo(() => _featureToggleClient.HasFeatureFlag(ReleaseFlags.ShowContactManagement))
+            .Returns(true);
 
         A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId)).Returns(true);
 
@@ -113,6 +128,7 @@ public class GetCharacterExperienceBreakdownUseCaseTests
             _assignedXpRepository,
             _eventRepository,
             validator,
+            _featureToggleClient,
             CancellationToken.None
         );
     }
@@ -223,6 +239,34 @@ public class GetCharacterExperienceBreakdownUseCaseTests
         var maxAmounts = results.Value.ExperienceSections.Select(x => x.Max);
         var providedMaxAmounts = _xpItems.Select(x => x.SectionCap);
         Assert.Equivalent(maxAmounts, providedMaxAmounts);
+    }
+
+    [Fact]
+    public async Task UseCase_WillHideContactInfo_IfFeatureFlagIsDisabled()
+    {
+        A.CallTo(() => _featureToggleClient.HasFeatureFlag(ReleaseFlags.ShowContactManagement))
+            .Returns(false);
+
+        var results = await _useCase.ExecuteAsync(_model);
+
+        var contactSection = results.Value.ExperienceSections.FirstOrDefault(x =>
+            x.TypeId == (int)XpSectionTypes.Contacts
+        );
+        Assert.Null(contactSection);
+    }
+
+    [Fact]
+    public async Task UseCase_WillHideContactInfo_IfCharacterIsNotPrimaryCharacter()
+    {
+        A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId))
+            .Returns(new Character() { PlayerId = PlayerId, IsInCharacterCreation = true });
+
+        var results = await _useCase.ExecuteAsync(_model);
+
+        var contactSection = results.Value.ExperienceSections.FirstOrDefault(x =>
+            x.TypeId == (int)XpSectionTypes.Contacts
+        );
+        Assert.Null(contactSection);
     }
 
     /// <summary>

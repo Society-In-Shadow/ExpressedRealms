@@ -30,6 +30,12 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "Allows one to see the faction dropdown on the add / edit character page"
     );
 
+    public static readonly ReleaseFlags ShowContactManagement = new(
+        "Enable / Show contacts in character builder / sheet",
+        "show-contact-management",
+        "Allows one to see contacts in character builder / sheet"
+    );
+
     public override string ToString()
     {
         return Name;

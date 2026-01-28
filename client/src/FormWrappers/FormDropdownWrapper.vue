@@ -4,6 +4,7 @@ import Select from 'primevue/select'
 import { computed, inject } from 'vue'
 import Skeleton from 'primevue/skeleton'
 import type { FormField } from '@/FormWrappers/Interfaces/FormField'
+import Message from 'primevue/message'
 
 const model = defineModel<FormField>({ required: true, type: Object })
 
@@ -32,6 +33,15 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  showDescription:
+  {
+    type: Boolean,
+    default: false,
+  },
+  isDisabled: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const dataCyTagCalc = computed(() => {
@@ -42,6 +52,7 @@ const dataCyTagCalc = computed(() => {
 })
 
 const showSkeleton = props.showSkeleton ?? inject('showSkeleton', false)
+const isDisabled = props.isDisabled ?? inject('isDisabled', false)
 const isInvalid = computed(() => (model.value.error.value ?? '').length > 0)
 
 </script>
@@ -53,9 +64,12 @@ const isInvalid = computed(() => (model.value.error.value ?? '').length > 0)
     <Select
       v-else :id="dataCyTagCalc" v-model="model.field.value" :options="options" :option-label="optionLabel"
       :data-cy="dataCyTagCalc" :invalid="isInvalid"
-      class="w-100" v-bind="$attrs"
+      class="w-100" v-bind="$attrs" :disabled="isDisabled"
     />
     <small v-if="isInvalid" :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ model.error }}</small>
+    <Message v-if="showDescription && model.field.value" class="mt-3">
+      {{ model.field.value.description }}
+    </Message>
     <slot />
   </div>
 </template>

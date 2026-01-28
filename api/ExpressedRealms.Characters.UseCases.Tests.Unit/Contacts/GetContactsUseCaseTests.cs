@@ -110,7 +110,7 @@ public class GetContactsUseCaseTests
 
         Assert.True(result.IsFailed);
         Assert.Equal(
-            "You cannot edit contacts while in character creation mode.",
+            "You cannot get contacts while in character creation mode.",
             result.Errors[0].Message
         );
     }

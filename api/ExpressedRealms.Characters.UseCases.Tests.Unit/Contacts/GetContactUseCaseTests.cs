@@ -126,7 +126,7 @@ public class GetContactUseCaseTests
     {
         var contacts = new ContactReturnModel()
         {
-            KnowledgeLevelId = _dbModel.KnowledgeLevelId,
+            KnowledgeLevelId = _dbModel.KnowledgeLevelId - 1, // Id to level is offset by 1
             Name = _dbModel.Name,
             KnowledgeId = _dbModel.KnowledgeId,
             Id = _dbModel.Id,
