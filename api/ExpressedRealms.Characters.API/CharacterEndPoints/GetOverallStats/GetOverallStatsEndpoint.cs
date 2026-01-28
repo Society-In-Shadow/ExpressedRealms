@@ -1,6 +1,4 @@
 using ExpressedRealms.Characters.UseCases.ExperienceBreakdown;
-using ExpressedRealms.DB.Characters.xpTables;
-using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.FeatureFlags.FeatureClient;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
@@ -26,29 +24,17 @@ internal static class GetOverallStatsEndpoint
             return deletedAlready;
         status.ThrowIfErrorNotHandled();
 
-        var showContactManagement = await featureToggles.HasFeatureFlag(ReleaseFlags.ShowContactManagement);
-
-        var experience = status
-            .Value.ExperienceSections.Select(x => new ExperienceSection()
-            {
-                SectionTypeId = x.TypeId,
-                Name = x.Name,
-                Total = x.Total,
-                CharacterCreateMax = x.Max,
-                LevelXp = x.LevelXp,
-            });
-
-        if (!showContactManagement)
-        {
-            experience = experience
-                .Where(x => x.SectionTypeId != (int)XpSectionTypes.Contacts);
-        }
-            
-        
         return TypedResults.Ok(
             new ExperienceBreakdownResponse()
             {
-                Experience = experience.ToList(),
+                Experience = status.Value.ExperienceSections.Select(x => new ExperienceSection()
+                {
+                    SectionTypeId = x.TypeId,
+                    Name = x.Name,
+                    Total = x.Total,
+                    CharacterCreateMax = x.Max,
+                    LevelXp = x.LevelXp,
+                }).ToList(),
                 AvailableDiscretionary = status.Value.AvailableDiscretionary,
                 TotalSpentLevelXp = status.Value.TotalSpentLevelXp,
                 TotalAvailableXp = status.Value.TotalAvailableXp,

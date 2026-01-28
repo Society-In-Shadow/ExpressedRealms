@@ -41,7 +41,6 @@ const sections = ref([
   { name: 'Proficiencies', isDisabled: isAdd, component: markRaw(ProficiencyTableTile) },
   { name: 'Advantages', isDisabled: isAdd, component: defineAsyncComponent(async () => AdvantageStep) },
   { name: 'Disadvantages', isDisabled: isAdd, component: defineAsyncComponent(async () => DisadvantageStep) },
-  { name: 'Contacts', isDisabled: isAdd, component: defineAsyncComponent(async () => ContactStep) },
   { name: 'Review Character', isDisabled: isAdd, component: markRaw(ReviewCharacter) },
 ])
 
@@ -62,6 +61,10 @@ async function fetchData() {
   else {
     await characterInfo.getCharacterDetails(Number(route.params.id))
     sections.value.splice(0, 0, { name: 'Basic Info', isDisabled: false, component: defineAsyncComponent(async () => EditCharacterDetails) })
+
+    if (!characterInfo.isInCharacterCreation)
+      sections.value.splice(8, 0, { name: 'Contacts', isDisabled: false, component: defineAsyncComponent(async () => ContactStep) })
+
     await xpData.updateExperience(route.params.id)
 
     if (!isMobile.value) {

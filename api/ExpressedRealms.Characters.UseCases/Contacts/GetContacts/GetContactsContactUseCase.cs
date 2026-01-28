@@ -28,7 +28,7 @@ internal sealed class GetContactsUseCase(
 
         if (characterInfo.IsInCharacterCreation)
         {
-            return Result.Fail("You cannot edit contacts while in character creation mode.");
+            return Result.Fail("You cannot get contacts while in character creation mode.");
         }
 
         var contacts = await contactRepository.GetContactsForCharacter(model.CharacterId);
