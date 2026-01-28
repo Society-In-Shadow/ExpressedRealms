@@ -120,7 +120,7 @@ const frequencyCost = computed(() => {
     >
       <Column selection-mode="single" header-style="width: 3rem" />
       <Column field="name" header="Name" />
-      <Column field="cost" header="XP">
+      <Column field="cost" header="XP" class="col-number">
         <template #body="slotProps">
           {{ slotProps.data.cost > knowledgeLevelCost ? "-" : "+" }}{{ Math.abs(slotProps.data.cost - knowledgeLevelCost) }}
         </template>
@@ -136,7 +136,7 @@ const frequencyCost = computed(() => {
     >
       <Column selection-mode="single" header-style="width: 3rem" />
       <Column field="frequency" header="Contacts" />
-      <Column field="cost" header="XP" header-class="text-right" body-class="text-right">
+      <Column field="cost" header="XP" class="col-number" body-class="col-number">
         <template #body="slotProps">
           {{ slotProps.data.cost > frequencyCost ? "-" : "+" }}{{ Math.abs(slotProps.data.cost - frequencyCost) }}
         </template>
@@ -146,11 +146,14 @@ const frequencyCost = computed(() => {
 </template>
 
 <style>
-:deep(th.text-center .p-datatable-column-header-content) {
-  justify-content: center;
+.p-datatable th.col-number .p-datatable-column-header-content {
+  justify-content: flex-end;
 }
-:deep(th.text-right .p-datatable-column-header-content) {
-  justify-content: right;
+
+.p-datatable td.col-number{
+  text-align: right !important;
 }
+
 .non-selectable { opacity:.6; pointer-events:none; }
+
 </style>

@@ -48,6 +48,7 @@ const dataCyTagCalc = computed(() => {
 })
 
 const showSkeleton = props.showSkeleton ?? inject('showSkeleton', false)
+const isDisabled = inject('isDisabled', false)
 const isInvalid = computed(() => (model.value.error.value ?? '').length > 0)
 
 </script>
@@ -59,7 +60,7 @@ const isInvalid = computed(() => (model.value.error.value ?? '').length > 0)
     <Select
       v-else :id="dataCyTagCalc" v-model="model.field.value" :options="options" :option-label="optionLabel"
       :data-cy="dataCyTagCalc" :invalid="isInvalid"
-      class="w-100" v-bind="$attrs"
+      class="w-100" v-bind="$attrs" :disabled="isDisabled"
     />
     <small v-if="isInvalid" :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ model.error }}</small>
     <Message v-if="showDescription && model.field.value" class="mt-3">

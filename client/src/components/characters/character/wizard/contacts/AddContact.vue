@@ -17,6 +17,7 @@ import { contactStore } from '@/components/characters/character/wizard/contacts/
 import FormDropdownWrapper from '@/FormWrappers/FormDropdownWrapper.vue'
 import { useRoute } from 'vue-router'
 import type { ContactFrequency, ContactKnowledgeLevels } from '@/components/characters/character/wizard/contacts/types.ts'
+import FormWrapper from '@/FormWrappers/FormWrapper.vue'
 
 const store = contactStore()
 const form = getValidationInstance()
@@ -75,13 +76,15 @@ const canAdd = computed(() => {
     <ShowXPCosts :section-type="XpSectionTypes.contacts" />
   </div>
   <h1>Add Contact</h1>
-
+  <Message v-if="!canAdd" severity="warn" class="my-3">
+    You do not have enough experience to add this contact
+  </Message>
   <div v-if="sectionInfo.availableXp == 0">
     <Message severity="warn" class="my-4">
       You are out of experience to spend on Contacts.
     </Message>
   </div>
-  <form @submit="onSubmit">
+  <FormWrapper :is-disabled="!canAdd" @submit="onSubmit">
     <FormInputTextWrapper v-model="form.fields.name" />
 
     <FormDropdownWrapper v-model="form.fields.knowledge" option-label="name" :options="store.knowledges" :show-description="true" filter />
@@ -98,7 +101,7 @@ const canAdd = computed(() => {
     >
       <Column selection-mode="single" header-style="width: 3rem" />
       <Column field="name" header="Name" />
-      <Column field="cost" header="XP">
+      <Column field="cost" header="XP" class="col-number">
         <template #body="slotProps">
           -{{ slotProps.data.cost }}
         </template>
@@ -114,7 +117,7 @@ const canAdd = computed(() => {
     >
       <Column selection-mode="single" header-style="width: 3rem" />
       <Column field="frequency" header="Contacts" />
-      <Column field="cost" header="XP" header-class="text-right" body-class="text-right">
+      <Column field="cost" header="XP" class="col-number">
         <template #body="slotProps">
           <span v-if="slotProps.data.cost == 0">0</span>
           <span v-else>-{{ slotProps.data.cost }}</span>
@@ -126,21 +129,22 @@ const canAdd = computed(() => {
       <strong>Cost:</strong> {{ totalCost }}
     </div>
     <Message v-if="!canAdd" severity="warn" class="my-3">
-      You do not have enough experience to add this power
+      You do not have enough experience to add this contact
     </Message>
 
     <div class="m-3 text-right">
       <Button label="Add" class="m-2" type="submit" :disabled="!canAdd" />
     </div>
-  </form>
+  </FormWrapper>
 </template>
 
 <style>
-:deep(th.text-center .p-datatable-column-header-content) {
-  justify-content: center;
+.p-datatable th.col-number .p-datatable-column-header-content {
+  justify-content: flex-end;
 }
-:deep(th.text-right .p-datatable-column-header-content) {
-  justify-content: right;
+
+.p-datatable td.col-number{
+  text-align: right !important;
 }
 .non-selectable { opacity:.6; pointer-events:none; }
 </style>
