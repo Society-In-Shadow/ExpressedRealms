@@ -20,6 +20,7 @@ import ReviewCharacter from '@/components/characters/character/xp/ReviewCharacte
 import AdvantageStep from '@/components/characters/character/wizard/blessings/AdvantageStep.vue'
 import { characterStore } from '@/components/characters/character/stores/characterStore.ts'
 import DisadvantageStep from '@/components/characters/character/wizard/blessings/DisadvantageStep.vue'
+import ContactStep from '@/components/characters/character/wizard/contacts/ContactStep.vue'
 
 const xpData = experienceStore()
 const route = useRoute()
@@ -40,6 +41,7 @@ const sections = ref([
   { name: 'Proficiencies', isDisabled: isAdd, component: markRaw(ProficiencyTableTile) },
   { name: 'Advantages', isDisabled: isAdd, component: defineAsyncComponent(async () => AdvantageStep) },
   { name: 'Disadvantages', isDisabled: isAdd, component: defineAsyncComponent(async () => DisadvantageStep) },
+  { name: 'Contacts', isDisabled: isAdd, component: defineAsyncComponent(async () => ContactStep) },
   { name: 'Review Character', isDisabled: isAdd, component: markRaw(ReviewCharacter) },
 ])
 
@@ -126,7 +128,7 @@ const nextSection = computed(() => {
     <div v-if="!(isMobile && hasSelectedSection) || !isMobile" class="col col-md-2 custom-toc">
       <Card>
         <template #content>
-          <div v-for="section in sections" class="text-right p-2">
+          <div v-for="section in sections" :key="section.name" class="text-right p-2">
             <Button
               class="w-100" :label="section.name"
               :outlined="selectedSection !== section.name"
