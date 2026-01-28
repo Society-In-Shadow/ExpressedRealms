@@ -23,7 +23,7 @@ onBeforeMount(async () => {
 const toggleEdit = (contact: Contact) => {
   wizardContentInfo.updateContent(
     {
-      headerName: 'Contact',
+      headerName: 'Edit Contact',
       component: EditContact,
       props: { contactId: contact.id },
     } as WizardContent,
@@ -33,7 +33,7 @@ const toggleEdit = (contact: Contact) => {
 const toggleAdd = () => {
   wizardContentInfo.updateContent(
     {
-      headerName: 'Contact',
+      headerName: 'Add Contact',
       component: AddContact,
     } as WizardContent)
 }

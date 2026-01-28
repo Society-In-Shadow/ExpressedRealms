@@ -84,6 +84,7 @@ export const contactStore
           id: response.data.id,
           name: response.data.name,
           notes: response.data.notes,
+          isApproved: response.data.isApproved,
           knowledge: this.knowledges.find((x: ListItem) => x.id == response.data.knowledgeId) as ListItem,
           knowledgeLevel: this.knowledgeLevels.find((x: ContactKnowledgeLevels) => x.levelId == response.data.knowledgeLevelId) as ContactKnowledgeLevels,
           usesPerWeek: this.contactFrequency.find((x: ContactFrequency) => x.frequency == response.data.usesPerWeek) as ContactFrequency,

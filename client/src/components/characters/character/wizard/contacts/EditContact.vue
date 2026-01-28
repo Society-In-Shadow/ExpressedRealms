@@ -15,17 +15,25 @@ import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
 import { contactStore } from '@/components/characters/character/wizard/contacts/stores/contactStore.ts'
 import FormDropdownWrapper from '@/FormWrappers/FormDropdownWrapper.vue'
 import { useRoute } from 'vue-router'
-import type { ContactFrequency, ContactKnowledgeLevels } from '@/components/characters/character/wizard/contacts/types.ts'
+import type {
+  ContactFrequency,
+  ContactKnowledgeLevels,
+  EditContact,
+} from '@/components/characters/character/wizard/contacts/types.ts'
 import { number } from 'yup'
 import {
   confirmationPopup,
 } from '@/components/characters/character/wizard/contacts/services/confirmationPopupService.ts'
+import FormWrapper from '@/FormWrappers/FormWrapper.vue'
 
 const store = contactStore()
 const form = getValidationInstance()
 const xpInfo = experienceStore()
 const route = useRoute()
 const sectionInfo = ref<CalculatedExperience>({})
+const originalXp = ref<number>(0)
+const initialLoad = ref<boolean>(true)
+const contact = ref<EditContact>({} as EditContact)
 
 const props = defineProps({
   contactId: {
@@ -41,9 +49,14 @@ watch(props, async () => {
 }, { immediate: true })
 
 async function loadInfo() {
-  const contact = await store.getContact(route.params.id, props.contactId)
-  form.setValues(contact)
+  contact.value = await store.getContact(route.params.id, props.contactId)
+  form.setValues(contact.value)
   sectionInfo.value = xpInfo.getExperienceInfoForSection(XpSectionTypes.contacts)
+
+  if (initialLoad.value) {
+    originalXp.value = totalCost.value
+    initialLoad.value = false
+  }
 
   // Hide options that are too expensive
   updateKnowledgeLevels()
@@ -52,15 +65,17 @@ async function loadInfo() {
 
 const updateKnowledgeLevels = () => {
   store.knowledgeLevels.forEach(function (level: ContactKnowledgeLevels) {
-    const xpCost = level.cost + form.fields.frequency?.field.value?.cost ?? 0
-    level.isDisabled = xpCost > sectionInfo.value.availableXp
+    const xpCost = Math.abs(level.cost - knowledgeLevelCost.value)
+    const isLowerLevelOrSame = level.levelId <= form.fields.knowledgeLevel.field.value.levelId
+    level.isDisabled = ((xpCost > sectionInfo.value.availableXp + newlyAvailableXp.value) && !isLowerLevelOrSame) || contact.value.isApproved
   })
 }
 
 const updateFrequencyLevels = () => {
   store.contactFrequency.forEach(function (frequency: ContactFrequency) {
-    const xpCost = frequency.cost + form.fields.knowledgeLevel.field.value.cost
-    frequency.isDisabled = xpCost > sectionInfo.value.availableXp
+    const xpCost = Math.abs(frequency.cost - frequencyCost.value)
+    const isLowerLevelOrSame = frequency.frequency <= form.fields.frequency.field.value.frequency
+    frequency.isDisabled = ((xpCost > sectionInfo.value.availableXp + newlyAvailableXp.value) && !isLowerLevelOrSame) || contact.value.isApproved
   })
 }
 
@@ -82,6 +97,8 @@ const frequencyCost = computed(() => {
   return form.fields.frequency?.field.value?.cost ?? 0
 })
 
+const newlyAvailableXp = computed(() => originalXp.value - totalCost.value)
+
 </script>
 
 <template>
@@ -92,10 +109,10 @@ const frequencyCost = computed(() => {
   <div class="mt-3 text-right">
     <strong>Cost:</strong> {{ totalCost }}
   </div>
-  <form @submit="onSubmit">
+  <FormWrapper :is-disabled="contact.isApproved" :show-skeleton="initialLoad" @submit="onSubmit">
     <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
-      <h1>Add Contact</h1>
-      <div class="p-0 m-2 d-inline-flex align-items-start align-items-center gap-2">
+      <h1>Edit Contact</h1>
+      <div v-if="!contact.isApproved" class="p-0 m-2 d-inline-flex align-items-start align-items-center gap-2">
         <Button label="Delete" size="small" severity="danger" @click="popups.deleteConfirmation($event)" />
         <Button label="Update" size="small" type="submit" />
       </div>
@@ -105,18 +122,18 @@ const frequencyCost = computed(() => {
 
     <FormDropdownWrapper
       v-model="form.fields.knowledge" option-label="name" :options="store.knowledges" :show-description="true" filter
-      disabled
+      :is-disabled="true"
     />
     <div class="mt-4">
       <FormTextAreaWrapper v-model="form.fields.notes" :disabled="sectionInfo.availableXp == 0" />
     </div>
 
     <div class="mt-3">
-      Knowledge Level
+      Knowledge Level <span class="text-danger font-italic"> (Required)</span>
     </div>
     <DataTable
       v-model:selection="form.fields.knowledgeLevel.field.value" selection-mode="single" :value="store.knowledgeLevels" data-key="levelId" :row-class="row => (row.isDisabled ? 'non-selectable' : '')"
-      @row-select="updateFrequencyLevels()"
+      :loading="initialLoad" @row-select="updateFrequencyLevels()"
     >
       <Column selection-mode="single" header-style="width: 3rem" />
       <Column field="name" header="Name" />
@@ -128,11 +145,11 @@ const frequencyCost = computed(() => {
     </DataTable>
 
     <div class="mt-3">
-      Contact Frequency Per Week
+      Contact Frequency Per Week <span class="text-danger font-italic"> (Required)</span>
     </div>
     <DataTable
       v-model:selection="form.fields.frequency.field.value" selection-mode="single" :value="store.contactFrequency" data-key="frequency" :row-class="row => (row.isDisabled ? 'non-selectable' : '')"
-      @row-select="updateKnowledgeLevels()"
+      :loading="initialLoad" @row-select="updateKnowledgeLevels()"
     >
       <Column selection-mode="single" header-style="width: 3rem" />
       <Column field="frequency" header="Contacts" />
@@ -142,7 +159,7 @@ const frequencyCost = computed(() => {
         </template>
       </Column>
     </DataTable>
-  </form>
+  </FormWrapper>
 </template>
 
 <style>
