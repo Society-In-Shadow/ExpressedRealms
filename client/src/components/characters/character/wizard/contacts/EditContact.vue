@@ -3,7 +3,6 @@
 import FormTextAreaWrapper from '@/FormWrappers/FormTextAreaWrapper.vue'
 import Button from 'primevue/button'
 import { computed, ref, watch } from 'vue'
-import Message from 'primevue/message'
 import Column from 'primevue/column'
 import DataTable from 'primevue/datatable'
 import { experienceStore, XpSectionTypes } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
@@ -18,6 +17,9 @@ import FormDropdownWrapper from '@/FormWrappers/FormDropdownWrapper.vue'
 import { useRoute } from 'vue-router'
 import type { ContactFrequency, ContactKnowledgeLevels } from '@/components/characters/character/wizard/contacts/types.ts'
 import { number } from 'yup'
+import {
+  confirmationPopup,
+} from '@/components/characters/character/wizard/contacts/services/confirmationPopupService.ts'
 
 const store = contactStore()
 const form = getValidationInstance()
@@ -32,13 +34,11 @@ const props = defineProps({
   },
 })
 
+const popups = confirmationPopup(route.params.id, props.contactId)
+
 watch(props, async () => {
   await loadInfo()
 }, { immediate: true })
-
-watch(() => store.contacts, async () => {
-  await loadInfo()
-})
 
 async function loadInfo() {
   const contact = await store.getContact(route.params.id, props.contactId)
@@ -74,8 +74,12 @@ const totalCost = computed(() => {
   return 0
 })
 
-const canAdd = computed(() => {
-  return sectionInfo.value.availableXp >= totalCost.value
+const knowledgeLevelCost = computed(() => {
+  return form.fields.knowledgeLevel?.field.value?.cost ?? 0
+})
+
+const frequencyCost = computed(() => {
+  return form.fields.frequency?.field.value?.cost ?? 0
 })
 
 </script>
@@ -84,17 +88,25 @@ const canAdd = computed(() => {
   <div>
     <ShowXPCosts :section-type="XpSectionTypes.contacts" />
   </div>
-  <h1>Add Contact</h1>
 
-  <div v-if="sectionInfo.availableXp == 0">
-    <Message severity="warn" class="my-4">
-      You are out of experience to spend on Contacts.
-    </Message>
+  <div class="mt-3 text-right">
+    <strong>Cost:</strong> {{ totalCost }}
   </div>
   <form @submit="onSubmit">
+    <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
+      <h1>Add Contact</h1>
+      <div class="p-0 m-2 d-inline-flex align-items-start align-items-center gap-2">
+        <Button label="Delete" size="small" severity="danger" @click="popups.deleteConfirmation($event)" />
+        <Button label="Update" size="small" type="submit" />
+      </div>
+    </div>
+
     <FormInputTextWrapper v-model="form.fields.name" />
 
-    <FormDropdownWrapper v-model="form.fields.knowledge" option-label="name" :options="store.knowledges" :show-description="true" filter />
+    <FormDropdownWrapper
+      v-model="form.fields.knowledge" option-label="name" :options="store.knowledges" :show-description="true" filter
+      disabled
+    />
     <div class="mt-4">
       <FormTextAreaWrapper v-model="form.fields.notes" :disabled="sectionInfo.availableXp == 0" />
     </div>
@@ -110,7 +122,7 @@ const canAdd = computed(() => {
       <Column field="name" header="Name" />
       <Column field="cost" header="XP">
         <template #body="slotProps">
-          -{{ slotProps.data.cost }}
+          {{ slotProps.data.cost > knowledgeLevelCost ? "-" : "+" }}{{ Math.abs(slotProps.data.cost - knowledgeLevelCost) }}
         </template>
       </Column>
     </DataTable>
@@ -126,22 +138,10 @@ const canAdd = computed(() => {
       <Column field="frequency" header="Contacts" />
       <Column field="cost" header="XP" header-class="text-right" body-class="text-right">
         <template #body="slotProps">
-          <span v-if="slotProps.data.cost == 0">0</span>
-          <span v-else>-{{ slotProps.data.cost }}</span>
+          {{ slotProps.data.cost > frequencyCost ? "-" : "+" }}{{ Math.abs(slotProps.data.cost - frequencyCost) }}
         </template>
       </Column>
     </DataTable>
-
-    <div class="mt-3">
-      <strong>Cost:</strong> {{ totalCost }}
-    </div>
-    <Message v-if="!canAdd" severity="warn" class="my-3">
-      You do not have enough experience to add this power
-    </Message>
-
-    <div class="m-3 text-right">
-      <Button label="Update" class="m-2" type="submit" :disabled="!canAdd" />
-    </div>
   </form>
 </template>
 

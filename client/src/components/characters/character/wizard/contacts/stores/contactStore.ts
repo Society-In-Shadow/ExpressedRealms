@@ -12,6 +12,11 @@ import type {
   EditContactResponse,
 } from '@/components/characters/character/wizard/contacts/types.ts'
 import type { ContactForm } from '@/components/characters/character/wizard/contacts/validators/contactValidations.ts'
+import { wizardContentStore } from '@/components/characters/character/wizard/stores/wizardContentStore.ts'
+import { experienceStore } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
+
+const experienceInfo = experienceStore()
+const wizardContentInfo = wizardContentStore()
 
 export const contactStore
   = defineStore(`contacts`, {
@@ -85,16 +90,16 @@ export const contactStore
 
         }
       },
-      updateContact: async function (values: ContactForm, id: number, contactId: number): Promise<void> {
-        await axios.put(`/character/${characterId}/contacts/${contactId}`, {
-          knowledgeId: values.knowledge.id,
+      updateContact: async function (values: ContactForm, characterId: number, contactId: number): Promise<void> {
+        await axios.put(`/characters/${characterId}/contacts/${contactId}`, {
           contactFrequency: values.frequency.frequency,
           name: values.name,
           notes: values.notes,
           knowledgeLevel: values.knowledgeLevel.levelId,
         })
           .then(async () => {
-            await this.getContacts()
+            await this.getContacts(characterId)
+            await experienceInfo.updateExperience(characterId)
             toaster.success('Successfully Updated Knowledge!')
           })
       },
@@ -108,19 +113,24 @@ export const contactStore
         })
           .then(async () => {
             await this.getContacts(characterId)
+            await experienceInfo.updateExperience(characterId)
+            wizardContentInfo.hideContent()
             toaster.success('Successfully Added Knowledge!')
           })
       },
-      deleteContact: async function (characterId: number) {
+      deleteContact: async function (characterId: number, contactId: number) {
         let name = 'knowledge'
 
         const contact = this.contacts.find((x: Contact) => x.id == characterId)
         if (contact)
           name = contact.name
 
-        await axios.delete(`/knowledges/${id}`)
+        await axios.delete(`/characters/${characterId}/contacts/${contactId}`)
           .then(async () => {
+            wizardContentInfo.hideContent()
             await this.getContacts(characterId)
+            await experienceInfo.updateExperience(characterId)
+
             toaster.success(`Successfully Deleted ${name}!`)
           })
       },
