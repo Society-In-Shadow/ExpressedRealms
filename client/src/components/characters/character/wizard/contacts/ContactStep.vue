@@ -57,8 +57,11 @@ const toggleAdd = () => {
       <div class="d-flex flex-column flex-md-row align-self-center justify-content-between pt-2 pb-2">
         <div class="d-flex flex-column flex-grow-1 pr-3">
           <div class="d-flex flex-fill align-content-between d-block">
-            <div class="flex-grow-1 font-bold text-900">
-              {{ contact.name }}
+            <div class="d-flex flex-grow-1 font-bold text-900">
+              <div>{{ contact.name }}</div>
+              <span v-if="contact.isApproved" class="material-symbols-outlined pl-2" title="Contact was Approved, will show up in CRB">
+                check_circle
+              </span>
             </div>
             <div>
               {{ contact.knowledgeLevel }}
