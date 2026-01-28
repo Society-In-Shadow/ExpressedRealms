@@ -23,7 +23,7 @@ const validationSchema = object({
     .required()
     .label('Contact Frequency Per Week'),
   knowledgeLevel: object<ContactKnowledgeLevels>()
-    .nullable()
+    .required()
     .label('Knowledge Level'),
 })
 

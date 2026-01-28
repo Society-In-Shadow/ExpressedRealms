@@ -3,8 +3,6 @@
 import FormTextAreaWrapper from '@/FormWrappers/FormTextAreaWrapper.vue'
 import Button from 'primevue/button'
 import { computed, ref, watch } from 'vue'
-import Column from 'primevue/column'
-import DataTable from 'primevue/datatable'
 import { experienceStore, XpSectionTypes } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
 import ShowXPCosts from '@/components/characters/character/wizard/ShowXPCosts.vue'
 import type { CalculatedExperience } from '@/components/characters/character/types.ts'
@@ -25,6 +23,7 @@ import {
   confirmationPopup,
 } from '@/components/characters/character/wizard/contacts/services/confirmationPopupService.ts'
 import FormWrapper from '@/FormWrappers/FormWrapper.vue'
+import FormRadioTableWrapper from '@/FormWrappers/FormRadioTableWrapper.vue'
 
 const store = contactStore()
 const form = getValidationInstance()
@@ -128,49 +127,28 @@ const newlyAvailableXp = computed(() => originalXp.value - totalCost.value)
       <FormTextAreaWrapper v-model="form.fields.notes" :disabled="sectionInfo.availableXp == 0" />
     </div>
 
-    <div class="mt-3">
-      Knowledge Level <span class="text-danger font-italic"> (Required)</span>
-    </div>
-    <DataTable
-      v-model:selection="form.fields.knowledgeLevel.field.value" selection-mode="single" :value="store.knowledgeLevels" data-key="levelId" :row-class="row => (row.isDisabled ? 'non-selectable' : '')"
-      :loading="initialLoad" @row-select="updateFrequencyLevels()"
-    >
-      <Column selection-mode="single" header-style="width: 3rem" />
-      <Column field="name" header="Name" />
-      <Column field="cost" header="XP" class="col-number">
-        <template #body="slotProps">
-          {{ slotProps.data.cost > knowledgeLevelCost ? "-" : "+" }}{{ Math.abs(slotProps.data.cost - knowledgeLevelCost) }}
-        </template>
-      </Column>
-    </DataTable>
+    <FormRadioTableWrapper v-model="form.fields.knowledgeLevel" row-key="levelId" :row-data="store.knowledgeLevels" @selected-item="updateFrequencyLevels">
+      <template #header>
+        <span>Name</span>
+        <span class="xp">XP</span>
+      </template>
+      <template #row="{ data }">
+        <span>{{ data.name }}</span>
+        <span class="xp">{{ data.cost > knowledgeLevelCost ? "-" : "+" }}{{ Math.abs(data.cost - knowledgeLevelCost) }}</span>
+      </template>
+    </FormRadioTableWrapper>
 
-    <div class="mt-3">
-      Contact Frequency Per Week <span class="text-danger font-italic"> (Required)</span>
-    </div>
-    <DataTable
-      v-model:selection="form.fields.frequency.field.value" selection-mode="single" :value="store.contactFrequency" data-key="frequency" :row-class="row => (row.isDisabled ? 'non-selectable' : '')"
-      :loading="initialLoad" @row-select="updateKnowledgeLevels()"
-    >
-      <Column selection-mode="single" header-style="width: 3rem" />
-      <Column field="frequency" header="Contacts" />
-      <Column field="cost" header="XP" class="col-number" body-class="col-number">
-        <template #body="slotProps">
-          {{ slotProps.data.cost > frequencyCost ? "-" : "+" }}{{ Math.abs(slotProps.data.cost - frequencyCost) }}
-        </template>
-      </Column>
-    </DataTable>
+    <FormRadioTableWrapper v-model="form.fields.frequency" row-key="frequency" :row-data="store.contactFrequency" @selected-item="updateKnowledgeLevels">
+      <template #header>
+        <span>Contacts</span>
+        <span class="xp">XP</span>
+      </template>
+      <template #row="{ data }">
+        <span>{{ data.frequency }}</span>
+        <span class="xp">
+          <span>{{ data.cost > frequencyCost ? "-" : "+" }}{{ Math.abs(data.cost - frequencyCost) }}</span>
+        </span>
+      </template>
+    </FormRadioTableWrapper>
   </FormWrapper>
 </template>
-
-<style>
-.p-datatable th.col-number .p-datatable-column-header-content {
-  justify-content: flex-end;
-}
-
-.p-datatable td.col-number{
-  text-align: right !important;
-}
-
-.non-selectable { opacity:.6; pointer-events:none; }
-
-</style>

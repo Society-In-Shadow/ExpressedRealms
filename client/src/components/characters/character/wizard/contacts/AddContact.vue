@@ -4,8 +4,6 @@ import FormTextAreaWrapper from '@/FormWrappers/FormTextAreaWrapper.vue'
 import Button from 'primevue/button'
 import { computed, onBeforeMount, ref } from 'vue'
 import Message from 'primevue/message'
-import Column from 'primevue/column'
-import DataTable from 'primevue/datatable'
 import { experienceStore, XpSectionTypes } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
 import ShowXPCosts from '@/components/characters/character/wizard/ShowXPCosts.vue'
 import type { CalculatedExperience } from '@/components/characters/character/types.ts'
@@ -18,12 +16,14 @@ import FormDropdownWrapper from '@/FormWrappers/FormDropdownWrapper.vue'
 import { useRoute } from 'vue-router'
 import type { ContactFrequency, ContactKnowledgeLevels } from '@/components/characters/character/wizard/contacts/types.ts'
 import FormWrapper from '@/FormWrappers/FormWrapper.vue'
+import FormRadioTableWrapper from '@/FormWrappers/FormRadioTableWrapper.vue'
 
 const store = contactStore()
 const form = getValidationInstance()
 const xpInfo = experienceStore()
 const route = useRoute()
 const sectionInfo = ref<CalculatedExperience>({})
+const isLoaded = ref(false)
 
 onBeforeMount(async () => {
   await loadInfo()
@@ -39,11 +39,12 @@ async function loadInfo() {
   // Hide options that are too expensive
   updateKnowledgeLevels()
   updateFrequencyLevels()
+  isLoaded.value = true
 }
 
 const updateKnowledgeLevels = () => {
   store.knowledgeLevels.forEach(function (level: ContactKnowledgeLevels) {
-    const xpCost = level.cost + form.fields.frequency?.field.value?.cost ?? 0
+    const xpCost = level.cost + form.fields.frequency.field.value.cost
     level.isDisabled = xpCost > sectionInfo.value.availableXp
   })
 }
@@ -69,6 +70,20 @@ const canAdd = computed(() => {
   return sectionInfo.value.availableXp >= totalCost.value
 })
 
+function selectKnowledgeLevel(level) {
+  if (level.isDisabled) return
+
+  form.fields.knowledgeLevel.field.value = level
+  updateFrequencyLevels()
+}
+
+function selectFrequency(freq) {
+  if (freq.isDisabled) return
+
+  form.fields.frequency.field.value = freq
+  updateKnowledgeLevels()
+}
+
 </script>
 
 <template>
@@ -84,7 +99,7 @@ const canAdd = computed(() => {
       You are out of experience to spend on Contacts.
     </Message>
   </div>
-  <FormWrapper :is-disabled="!canAdd" @submit="onSubmit">
+  <FormWrapper :is-disabled="!canAdd" :show-skeleton="!isLoaded" @submit="onSubmit">
     <FormInputTextWrapper v-model="form.fields.name" />
 
     <FormDropdownWrapper v-model="form.fields.knowledge" option-label="name" :options="store.knowledges" :show-description="true" filter />
@@ -92,38 +107,30 @@ const canAdd = computed(() => {
       <FormTextAreaWrapper v-model="form.fields.notes" :disabled="sectionInfo.availableXp == 0" />
     </div>
 
-    <div class="mt-3">
-      Knowledge Level
-    </div>
-    <DataTable
-      v-model:selection="form.fields.knowledgeLevel.field.value" selection-mode="single" :value="store.knowledgeLevels" data-key="levelId" :row-class="row => (row.isDisabled ? 'non-selectable' : '')"
-      @row-select="updateFrequencyLevels()"
-    >
-      <Column selection-mode="single" header-style="width: 3rem" />
-      <Column field="name" header="Name" />
-      <Column field="cost" header="XP" class="col-number">
-        <template #body="slotProps">
-          -{{ slotProps.data.cost }}
-        </template>
-      </Column>
-    </DataTable>
+    <FormRadioTableWrapper v-model="form.fields.knowledgeLevel" row-key="levelId" :row-data="store.knowledgeLevels" @selected-item="selectKnowledgeLevel">
+      <template #header>
+        <span>Name</span>
+        <span class="xp">XP</span>
+      </template>
+      <template #row="{ data }">
+        <span>{{ data.name }}</span>
+        <span class="xp">-{{ data.cost }}</span>
+      </template>
+    </FormRadioTableWrapper>
 
-    <div class="mt-3">
-      Contact Frequency Per Week
-    </div>
-    <DataTable
-      v-model:selection="form.fields.frequency.field.value" selection-mode="single" :value="store.contactFrequency" data-key="frequency" :row-class="row => (row.isDisabled ? 'non-selectable' : '')"
-      @row-select="updateKnowledgeLevels()"
-    >
-      <Column selection-mode="single" header-style="width: 3rem" />
-      <Column field="frequency" header="Contacts" />
-      <Column field="cost" header="XP" class="col-number">
-        <template #body="slotProps">
-          <span v-if="slotProps.data.cost == 0">0</span>
-          <span v-else>-{{ slotProps.data.cost }}</span>
-        </template>
-      </Column>
-    </DataTable>
+    <FormRadioTableWrapper v-model="form.fields.frequency" row-key="frequency" :row-data="store.contactFrequency" @selected-item="selectFrequency">
+      <template #header>
+        <span>Contacts</span>
+        <span class="xp">XP</span>
+      </template>
+      <template #row="{ data }">
+        <span>{{ data.frequency }}</span>
+        <span class="xp">
+          <span v-if="data.cost === 0">0</span>
+          <span v-else>-{{ data.cost }}</span>
+        </span>
+      </template>
+    </FormRadioTableWrapper>
 
     <div class="mt-3">
       <strong>Cost:</strong> {{ totalCost }}
@@ -137,14 +144,3 @@ const canAdd = computed(() => {
     </div>
   </FormWrapper>
 </template>
-
-<style>
-.p-datatable th.col-number .p-datatable-column-header-content {
-  justify-content: flex-end;
-}
-
-.p-datatable td.col-number{
-  text-align: right !important;
-}
-.non-selectable { opacity:.6; pointer-events:none; }
-</style>
