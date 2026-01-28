@@ -89,7 +89,7 @@ public class GetCharacterExperienceBreakdownUseCaseTests
 
         A.CallTo(() => _featureToggleClient.HasFeatureFlag(ReleaseFlags.ShowContactManagement))
             .Returns(true);
-        
+
         A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId)).Returns(true);
 
         A.CallTo(() => _xpRepository.GetCharacterXpMappings(_model.CharacterId)).Returns(_xpItems);
@@ -240,7 +240,7 @@ public class GetCharacterExperienceBreakdownUseCaseTests
         var providedMaxAmounts = _xpItems.Select(x => x.SectionCap);
         Assert.Equivalent(maxAmounts, providedMaxAmounts);
     }
-    
+
     [Fact]
     public async Task UseCase_WillHideContactInfo_IfFeatureFlagIsDisabled()
     {
@@ -249,7 +249,9 @@ public class GetCharacterExperienceBreakdownUseCaseTests
 
         var results = await _useCase.ExecuteAsync(_model);
 
-        var contactSection = results.Value.ExperienceSections.FirstOrDefault(x => x.TypeId == (int)XpSectionTypes.Contacts);
+        var contactSection = results.Value.ExperienceSections.FirstOrDefault(x =>
+            x.TypeId == (int)XpSectionTypes.Contacts
+        );
         Assert.Null(contactSection);
     }
 
@@ -258,10 +260,12 @@ public class GetCharacterExperienceBreakdownUseCaseTests
     {
         A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId))
             .Returns(new Character() { PlayerId = PlayerId, IsInCharacterCreation = true });
-        
+
         var results = await _useCase.ExecuteAsync(_model);
 
-        var contactSection = results.Value.ExperienceSections.FirstOrDefault(x => x.TypeId == (int)XpSectionTypes.Contacts);
+        var contactSection = results.Value.ExperienceSections.FirstOrDefault(x =>
+            x.TypeId == (int)XpSectionTypes.Contacts
+        );
         Assert.Null(contactSection);
     }
 

@@ -11,9 +11,12 @@ internal static class GetOverallStatsEndpoint
 {
     internal static async Task<
         Results<Ok<ExperienceBreakdownResponse>, NotFound, StatusCodeHttpResult, ValidationProblem>
-    > Execute(int id, [FromServices] IGetCharacterExperienceBreakdownUseCase repository, [FromServices] IFeatureToggleClient featureToggles)
-
-{
+    > Execute(
+        int id,
+        [FromServices] IGetCharacterExperienceBreakdownUseCase repository,
+        [FromServices] IFeatureToggleClient featureToggles
+    )
+    {
         var status = await repository.ExecuteAsync(new() { CharacterId = id });
 
         if (status.HasValidationError(out var validation))
@@ -27,14 +30,16 @@ internal static class GetOverallStatsEndpoint
         return TypedResults.Ok(
             new ExperienceBreakdownResponse()
             {
-                Experience = status.Value.ExperienceSections.Select(x => new ExperienceSection()
-                {
-                    SectionTypeId = x.TypeId,
-                    Name = x.Name,
-                    Total = x.Total,
-                    CharacterCreateMax = x.Max,
-                    LevelXp = x.LevelXp,
-                }).ToList(),
+                Experience = status
+                    .Value.ExperienceSections.Select(x => new ExperienceSection()
+                    {
+                        SectionTypeId = x.TypeId,
+                        Name = x.Name,
+                        Total = x.Total,
+                        CharacterCreateMax = x.Max,
+                        LevelXp = x.LevelXp,
+                    })
+                    .ToList(),
                 AvailableDiscretionary = status.Value.AvailableDiscretionary,
                 TotalSpentLevelXp = status.Value.TotalSpentLevelXp,
                 TotalAvailableXp = status.Value.TotalAvailableXp,

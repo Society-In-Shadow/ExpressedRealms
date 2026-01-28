@@ -36,8 +36,10 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
 
         var xpInfo = await xpRepository.GetCharacterXpMappings(model.CharacterId);
         var characterInfo = await characterRepository.FindCharacterAsync(model.CharacterId);
-        
-        var showContactManagement = await featureToggles.HasFeatureFlag(ReleaseFlags.ShowContactManagement);
+
+        var showContactManagement = await featureToggles.HasFeatureFlag(
+            ReleaseFlags.ShowContactManagement
+        );
         if (!showContactManagement || characterInfo!.IsInCharacterCreation)
         {
             xpInfo = xpInfo.Where(x => x.SectionTypeId != (int)XpSectionTypes.Contacts).ToList();
