@@ -1,5 +1,7 @@
 using ExpressedRealms.Characters.UseCases.ExperienceBreakdown;
 using ExpressedRealms.DB.Characters.xpTables;
+using ExpressedRealms.FeatureFlags;
+using ExpressedRealms.FeatureFlags.FeatureClient;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -11,8 +13,9 @@ internal static class GetOverallStatsEndpoint
 {
     internal static async Task<
         Results<Ok<ExperienceBreakdownResponse>, NotFound, StatusCodeHttpResult, ValidationProblem>
-    > Execute(int id, [FromServices] IGetCharacterExperienceBreakdownUseCase repository)
-    {
+    > Execute(int id, [FromServices] IGetCharacterExperienceBreakdownUseCase repository, [FromServices] IFeatureToggleClient featureToggles)
+
+{
         var status = await repository.ExecuteAsync(new() { CharacterId = id });
 
         if (status.HasValidationError(out var validation))
@@ -23,20 +26,29 @@ internal static class GetOverallStatsEndpoint
             return deletedAlready;
         status.ThrowIfErrorNotHandled();
 
+        var showContactManagement = await featureToggles.HasFeatureFlag(ReleaseFlags.ShowContactManagement);
+
+        var experience = status
+            .Value.ExperienceSections.Select(x => new ExperienceSection()
+            {
+                SectionTypeId = x.TypeId,
+                Name = x.Name,
+                Total = x.Total,
+                CharacterCreateMax = x.Max,
+                LevelXp = x.LevelXp,
+            });
+
+        if (!showContactManagement)
+        {
+            experience = experience
+                .Where(x => x.SectionTypeId != (int)XpSectionTypes.Contacts);
+        }
+            
+        
         return TypedResults.Ok(
             new ExperienceBreakdownResponse()
             {
-                Experience = status
-                    .Value.ExperienceSections.Select(x => new ExperienceSection()
-                    {
-                        SectionTypeId = x.TypeId,
-                        Name = x.Name,
-                        Total = x.Total,
-                        CharacterCreateMax = x.Max,
-                        LevelXp = x.LevelXp,
-                    })
-                    .Where(x => x.SectionTypeId != (int)XpSectionTypes.Contacts)
-                    .ToList(),
+                Experience = experience.ToList(),
                 AvailableDiscretionary = status.Value.AvailableDiscretionary,
                 TotalSpentLevelXp = status.Value.TotalSpentLevelXp,
                 TotalAvailableXp = status.Value.TotalAvailableXp,
