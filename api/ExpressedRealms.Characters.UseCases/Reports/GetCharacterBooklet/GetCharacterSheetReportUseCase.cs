@@ -3,6 +3,7 @@ using ExpressedRealms.Characters.Reports.CRB;
 using ExpressedRealms.Characters.Reports.CRB.Data;
 using ExpressedRealms.Characters.Reports.CRB.Data.SupportingData;
 using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.Characters.Repository.Contacts;
 using ExpressedRealms.Characters.Repository.Enums;
 using ExpressedRealms.Characters.Repository.Proficiencies;
 using ExpressedRealms.Characters.Repository.Skills;
@@ -25,6 +26,7 @@ public class GetCharacterSheetReportUseCase(
     ICharacterSkillRepository skillRepository,
     IProficiencyRepository proficiencyRepository,
     ICharacterStatRepository statRepository,
+    IContactRepository contactRepository,
     GetCharacterSheetReportModelValidator validator,
     CancellationToken cancellationToken
 ) : IGetCharacterSheetReportUseCase
@@ -52,6 +54,7 @@ public class GetCharacterSheetReportUseCase(
                 Knowledges = await GetKnowledgeInfo(model),
                 ProficiencyInfo = await GetProficiencyInfo(model),
                 StatInfo = statInfo,
+                Contacts = await GetContactinfo(model),
             }
         );
 
@@ -165,6 +168,21 @@ public class GetCharacterSheetReportUseCase(
             })
             .ToList();
         return knowledgeInfo;
+    }
+
+    private async Task<List<ContactInfo>> GetContactinfo(GetCharacterSheetReportModel model)
+    {
+        var contacts = await contactRepository.GetContactsForCRB(model.CharacterId);
+
+        return contacts
+            .Select(x => new ContactInfo()
+            {
+                Name = x.Name,
+                KnowledgeName = x.Knowledge,
+                KnowledgeLevel = x.KnowledgeLevel,
+                NumberOfUses = x.UsesPerWeek,
+            })
+            .ToList();
     }
 
     private async Task<List<PowerInfo>> GetPowerInfo(GetCharacterSheetReportModel model)

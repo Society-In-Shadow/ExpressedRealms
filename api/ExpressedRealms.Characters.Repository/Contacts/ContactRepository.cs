@@ -35,6 +35,22 @@ internal sealed class ContactRepository(
         return await context.Contacts.FindAsync(id);
     }
 
+    public async Task<List<ContactListForCrbDto>> GetContactsForCRB(int characterId)
+    {
+        return await context
+            .Contacts.AsNoTracking()
+            .Where(x => x.CharacterId == characterId)
+            .Select(x => new ContactListForCrbDto()
+            {
+                Name = x.Name,
+                Knowledge = x.Knowledge.Name,
+                UsesPerWeek = x.Frequency,
+                KnowledgeLevel = x.KnowledgeLevel.Level,
+            })
+            .OrderBy(x => x.Name)
+            .ToListAsync();
+    }
+
     public async Task<List<ContactListDto>> GetContactsForCharacter(int characterId)
     {
         return await context

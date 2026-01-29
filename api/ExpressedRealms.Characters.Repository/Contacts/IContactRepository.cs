@@ -12,4 +12,5 @@ public interface IContactRepository : IGenericRepository
     Task<Contact?> FindContactAsync(int id);
     Task<List<ContactListDto>> GetContactsForCharacter(int characterId);
     Task<List<ContactListCharacterSheetDto>> GetContactsForCharacterSheet(int characterId);
+    Task<List<ContactListForCrbDto>> GetContactsForCRB(int characterId);
 }

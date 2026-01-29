@@ -34,7 +34,10 @@ public static class CharacterReferenceBookletReport
             FillInKnowledges(fields, data.Knowledges);
             FillInProficiencies(fields, data.ProficiencyInfo);
             FillInStatInfo(fields, data.StatInfo);
+            FillInContacts(fields, data.Contacts);
         }
+
+        document.Flatten();
 
         var finalStream = new MemoryStream();
         document.Save(finalStream, false);
@@ -178,6 +181,25 @@ public static class CharacterReferenceBookletReport
             MergeField(fields, $"KnowledgeLevel{count.ToString()}", model.Level.Substring(0, 1));
             MergeField(fields, $"Specialization{count.ToString()}", model.Specialization ?? "");
             MergeField(fields, $"KnowledgeExp{count.ToString()}", model.XPCost);
+            count++;
+        }
+    }
+
+    private static void FillInContacts(
+        PdfAcroField.PdfAcroFieldCollection fields,
+        List<ContactInfo> dataPowers
+    )
+    {
+        int count = 0;
+        foreach (var model in dataPowers)
+        {
+            MergeField(fields, $"ContactName{count.ToString()}", model.Name);
+            MergeField(fields, $"ContactKnowledge{count.ToString()}", model.KnowledgeName);
+            MergeField(
+                fields,
+                $"ContactLevelUses{count.ToString()}",
+                $"{model.KnowledgeLevel} ({model.NumberOfUses})"
+            );
             count++;
         }
     }
