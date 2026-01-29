@@ -13,6 +13,20 @@ export interface Contact {
   isApproved: boolean
 }
 
+export interface ContactListCharacterSheetResponse {
+  contacts: ContactCharacterSheet[]
+}
+export interface ContactCharacterSheet {
+  name: string
+  knowledge: string
+  knowledgeLevel: string
+  id: number
+  usesPerWeek: number
+  isApproved: boolean
+  notes: string | null
+  knowledgeDescription: string
+}
+
 export interface ContactKnowledgeLevels {
   name: string
   levelId: number
