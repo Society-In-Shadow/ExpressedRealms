@@ -9,6 +9,7 @@ public class ReportData
     public SkillInfo SkillInfo { get; set; } = new();
     public List<PowerInfo> Powers { get; set; } = new();
     public List<KnowledgeInfo> Knowledges { get; set; } = new();
+    public List<ContactInfo> Contacts { get; set; } = new();
     public ProficiencyData ProficiencyInfo { get; set; }
     public StatModifierInfo StatInfo { get; set; }
 }
