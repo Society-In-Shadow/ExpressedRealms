@@ -5,8 +5,10 @@ import type { ListItem } from '@/types/ListItem'
 import toaster from '@/services/Toasters'
 import type {
   Contact,
+  ContactCharacterSheet,
   ContactFrequency,
   ContactKnowledgeLevels,
+  ContactListCharacterSheetResponse,
   ContactListResponse,
   EditContact,
   EditContactResponse,
@@ -23,6 +25,7 @@ export const contactStore
     state: () => {
       return {
         contacts: [] as Contact[],
+        contactsForCharacterSheet: [] as ContactCharacterSheet[],
         knowledgeLevels: [] as ContactKnowledgeLevels[],
         contactFrequency: [] as ContactFrequency[],
         knowledges: [] as ListItem[],
@@ -32,6 +35,10 @@ export const contactStore
       async getContacts(characterId: number) {
         const response = await axios.get<ContactListResponse>(`/characters/${characterId}/contacts`)
         this.contacts = response.data.contacts
+      },
+      async getContactsForSheet(characterId: number) {
+        const response = await axios.get<ContactListCharacterSheetResponse>(`/characters/${characterId}/contacts/characterSheet`)
+        this.contactsForCharacterSheet = response.data.contacts
       },
       async getOptions() {
         const response = await axios.get(`/knowledges/summary`)

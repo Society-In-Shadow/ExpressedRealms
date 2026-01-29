@@ -11,4 +11,5 @@ public interface IContactRepository : IGenericRepository
     Task<bool> HasDuplicateName(int contactId, int characterId, string name);
     Task<Contact?> FindContactAsync(int id);
     Task<List<ContactListDto>> GetContactsForCharacter(int characterId);
+    Task<List<ContactListCharacterSheetDto>> GetContactsForCharacterSheet(int characterId);
 }

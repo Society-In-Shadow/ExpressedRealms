@@ -20,8 +20,18 @@ import StatTile from '@/components/characters/character/stats/StatTile.vue'
 import { characterStore } from '@/components/characters/character/stores/characterStore.ts'
 import Message from 'primevue/message'
 import ReviewCharacter from '@/components/characters/character/xp/ReviewCharacter.vue'
+import ContactTab from '@/components/characters/character/contacts/ContactTab.vue'
+import { FeatureFlags, userStore } from '@/stores/userStore.ts'
+import { onBeforeMount, ref } from 'vue'
 
 const characterData = characterStore()
+const userData = userStore()
+
+const showContacts = ref(false)
+
+onBeforeMount(async () => {
+  showContacts.value = await userData.hasFeatureFlag(FeatureFlags.ShowContactManagement)
+})
 
 </script>
 
@@ -60,6 +70,9 @@ const characterData = characterStore()
           <Tab value="4">
             Advantages / Disadvantages
           </Tab>
+          <Tab v-if="showContacts" value="6">
+            Contacts
+          </Tab>
           <Tab value="5">
             XP Breakdown
           </Tab>
@@ -82,6 +95,9 @@ const characterData = characterStore()
           </TabPanel>
           <TabPanel value="4">
             <BlessingTab />
+          </TabPanel>
+          <TabPanel v-if="showContacts" value="6">
+            <ContactTab />
           </TabPanel>
           <TabPanel value="5">
             <ReviewCharacter :is-read-only="true" />

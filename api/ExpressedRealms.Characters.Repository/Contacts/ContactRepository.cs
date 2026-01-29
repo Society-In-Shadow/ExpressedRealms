@@ -53,6 +53,28 @@ internal sealed class ContactRepository(
             .ToListAsync();
     }
 
+    public async Task<List<ContactListCharacterSheetDto>> GetContactsForCharacterSheet(
+        int characterId
+    )
+    {
+        return await context
+            .Contacts.AsNoTracking()
+            .Where(x => x.CharacterId == characterId)
+            .Select(x => new ContactListCharacterSheetDto()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Knowledge = x.Knowledge.Name,
+                IsApproved = x.IsApproved,
+                UsesPerWeek = x.Frequency,
+                KnowledgeLevel = $"{x.KnowledgeLevel.Name} ({x.KnowledgeLevel.Level})",
+                KnowledgeDescription = x.Knowledge.Description,
+                Notes = x.Notes,
+            })
+            .OrderBy(x => x.Name)
+            .ToListAsync();
+    }
+
     public async Task EditAsync<TEntity>(TEntity entity)
         where TEntity : class
     {
