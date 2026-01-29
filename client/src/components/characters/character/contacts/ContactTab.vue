@@ -7,13 +7,22 @@ import AccordionPanel from 'primevue/accordionpanel'
 import Accordion from 'primevue/accordion'
 import AccordionContent from 'primevue/accordioncontent'
 import AccordionHeader from 'primevue/accordionheader'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+import type { ContactCharacterSheet } from '@/components/characters/character/wizard/contacts/types.ts'
+import Button from 'primevue/button'
 
 const contactData = contactStore()
 const route = useRoute()
+const permissionStore = userPermissionStore()
+const permissionCheck = permissionStore.permissionCheck
 
 onBeforeMount(async () => {
   await contactData.getContactsForSheet(route.params.id)
 })
+
+const approveContact = async (contact: ContactCharacterSheet) => {
+  await contactData.approveContact(route.params.id, contact.id, !contact.isApproved)
+}
 
 </script>
 
@@ -54,6 +63,9 @@ onBeforeMount(async () => {
           </h3>
           <div v-if="contact.notes">
             {{ contact.notes }}
+          </div>
+          <div class="text-right mt-3">
+            <Button v-if="permissionCheck.CharacterContacts.Approve" :label="contact.isApproved ? 'Un-Approve Contact' : 'Approve Contact'" @click="approveContact(contact)" />
           </div>
         </AccordionContent>
       </AccordionPanel>
