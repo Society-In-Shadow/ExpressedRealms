@@ -40,6 +40,11 @@ export const contactStore
         const response = await axios.get<ContactListCharacterSheetResponse>(`/characters/${characterId}/contacts/characterSheet`)
         this.contactsForCharacterSheet = response.data.contacts
       },
+      async approveContact(characterId: number, contactId: number, approved: boolean) {
+        await axios.put(`/characters/${characterId}/contacts/${contactId}/approve`, { isApproved: approved })
+        await this.getContactsForSheet(characterId)
+        toaster.success(`Successfully Approved Contact!`)
+      },
       async getOptions() {
         const response = await axios.get(`/knowledges/summary`)
 
