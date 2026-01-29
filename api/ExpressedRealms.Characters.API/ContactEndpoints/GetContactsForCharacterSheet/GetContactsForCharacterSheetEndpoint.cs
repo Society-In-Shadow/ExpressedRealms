@@ -12,9 +12,7 @@ public static class GetContactsForCharacterSheetEndpoint
         Results<Ok<GetContactsResponse>, NotFound, ValidationProblem>
     > ExecuteAsync(int characterId, [FromServices] IGetContactsForCharacterSheetUseCase useCase)
     {
-        var results = await useCase.ExecuteAsync(
-            new () { CharacterId = characterId }
-        );
+        var results = await useCase.ExecuteAsync(new() { CharacterId = characterId });
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;
@@ -36,7 +34,7 @@ public static class GetContactsForCharacterSheetEndpoint
                         IsApproved = x.IsApproved,
                         UsesPerWeek = x.UsesPerWeek,
                         KnowledgeDescription = x.KnowledgeDescription,
-                        Notes = x.Notes
+                        Notes = x.Notes,
                     })
                     .ToList(),
             }

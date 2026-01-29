@@ -52,8 +52,10 @@ internal sealed class ContactRepository(
             .OrderBy(x => x.Name)
             .ToListAsync();
     }
-    
-    public async Task<List<ContactListCharacterSheetDto>> GetContactsForCharacterSheet(int characterId)
+
+    public async Task<List<ContactListCharacterSheetDto>> GetContactsForCharacterSheet(
+        int characterId
+    )
     {
         return await context
             .Contacts.AsNoTracking()
@@ -67,7 +69,7 @@ internal sealed class ContactRepository(
                 UsesPerWeek = x.Frequency,
                 KnowledgeLevel = $"{x.KnowledgeLevel.Name} ({x.KnowledgeLevel.Level})",
                 KnowledgeDescription = x.Knowledge.Description,
-                Notes = x.Notes
+                Notes = x.Notes,
             })
             .OrderBy(x => x.Name)
             .ToListAsync();

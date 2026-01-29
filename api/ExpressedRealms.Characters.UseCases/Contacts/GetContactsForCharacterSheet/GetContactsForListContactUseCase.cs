@@ -12,7 +12,9 @@ internal sealed class GetContactsForCharacterSheetUseCase(
     CancellationToken cancellationToken
 ) : IGetContactsForCharacterSheetUseCase
 {
-    public async Task<Result<List<ContactListReturnModel>>> ExecuteAsync(GetContactsForCharacterSheetModel model)
+    public async Task<Result<List<ContactListReturnModel>>> ExecuteAsync(
+        GetContactsForCharacterSheetModel model
+    )
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,
@@ -43,7 +45,7 @@ internal sealed class GetContactsForCharacterSheetUseCase(
                     IsApproved = x.IsApproved,
                     UsesPerWeek = x.UsesPerWeek,
                     KnowledgeDescription = x.KnowledgeDescription,
-                    Notes = x.Notes
+                    Notes = x.Notes,
                 })
                 .OrderBy(x => x.Name)
                 .ToList()

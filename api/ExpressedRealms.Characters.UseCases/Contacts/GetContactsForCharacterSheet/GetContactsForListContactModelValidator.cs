@@ -5,7 +5,8 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Characters.UseCases.Contacts.GetContactsForCharacterSheet;
 
 [UsedImplicitly]
-internal sealed class GetContactsForCharacterSheetModelValidator : AbstractValidator<GetContactsForCharacterSheetModel>
+internal sealed class GetContactsForCharacterSheetModelValidator
+    : AbstractValidator<GetContactsForCharacterSheetModel>
 {
     public GetContactsForCharacterSheetModelValidator(ICharacterRepository characterRepository)
     {

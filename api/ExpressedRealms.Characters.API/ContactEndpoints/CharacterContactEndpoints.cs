@@ -23,7 +23,10 @@ internal static class CharacterContactEndpoints
             .RequireAuthorization();
 
         endpointGroup.MapGet("{characterId}/contacts", GetContactsEndpoint.ExecuteAsync);
-        endpointGroup.MapGet("{characterId}/contacts/characterSheet", GetContactsForCharacterSheetEndpoint.ExecuteAsync);
+        endpointGroup.MapGet(
+            "{characterId}/contacts/characterSheet",
+            GetContactsForCharacterSheetEndpoint.ExecuteAsync
+        );
         endpointGroup.MapGet("{characterId}/contacts/{contactId}", GetContactEndpoint.ExecuteAsync);
         endpointGroup.MapPost("{characterId}/contacts", CreateEndpoint.ExecuteAsync);
         endpointGroup.MapPut("{characterId}/contacts/{contactId}", EditEndpoint.ExecuteAsync);
