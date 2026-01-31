@@ -9,5 +9,6 @@ public class QuestionType
     public bool IsDefault { get; set; }
     public bool IsCustomizable { get; set; }
 
-    public virtual ICollection<EventQuestion> EventQuestions { get; set; } = new HashSet<EventQuestion>();
+    public virtual ICollection<EventQuestion> EventQuestions { get; set; } =
+        new HashSet<EventQuestion>();
 }

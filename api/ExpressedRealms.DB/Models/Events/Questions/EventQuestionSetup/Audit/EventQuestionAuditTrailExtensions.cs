@@ -31,7 +31,9 @@ internal static class EventQuestionAuditTrailExtensions
         return changedRecordsToReturn;
     }
 
-    public static IAuditEntityMapping AddEventQuestionAuditTrailMapping(this IAuditEntityMapping mapping)
+    public static IAuditEntityMapping AddEventQuestionAuditTrailMapping(
+        this IAuditEntityMapping mapping
+    )
     {
         return mapping.Map<EventQuestion, EventQuestionAuditTrail>(
             (model, audit) =>

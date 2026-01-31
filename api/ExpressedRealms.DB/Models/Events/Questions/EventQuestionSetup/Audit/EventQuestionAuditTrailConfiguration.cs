@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ExpressedRealms.DB.Models.Events.Questions.EventQuestionSetup.Audit;
 
-internal class EventQuestionAuditTrailConfiguration : IEntityTypeConfiguration<EventQuestionAuditTrail>
+internal class EventQuestionAuditTrailConfiguration
+    : IEntityTypeConfiguration<EventQuestionAuditTrail>
 {
     public void Configure(EntityTypeBuilder<EventQuestionAuditTrail> builder)
     {

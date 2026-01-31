@@ -15,9 +15,10 @@ public class EventQuestion : ISoftDelete
     public virtual QuestionType QuestionType { get; set; } = null!;
     public int EventId { get; set; }
     public virtual Event Event { get; set; } = null!;
-    
+
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 
-    public virtual ICollection<EventQuestionAuditTrail> EventQuestionAuditTrails { get; set; } = new HashSet<EventQuestionAuditTrail>();
+    public virtual ICollection<EventQuestionAuditTrail> EventQuestionAuditTrails { get; set; } =
+        new HashSet<EventQuestionAuditTrail>();
 }

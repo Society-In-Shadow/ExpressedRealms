@@ -24,8 +24,12 @@ public class Event : ISoftDelete
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 
-    public virtual ICollection<EventAuditTrail> EventAuditTrails { get; set; } = new HashSet<EventAuditTrail>();
-    public virtual ICollection<EventScheduleItemAuditTrail> EventScheduleAuditTrails { get; set; } = new HashSet<EventScheduleItemAuditTrail>();
-    public virtual ICollection<AssignedXpMapping> AssignedXpMappings { get; set; } = new HashSet<AssignedXpMapping>();
-    public virtual ICollection<EventQuestion> EventQuestions { get; set; } = new HashSet<EventQuestion>();
+    public virtual ICollection<EventAuditTrail> EventAuditTrails { get; set; } =
+        new HashSet<EventAuditTrail>();
+    public virtual ICollection<EventScheduleItemAuditTrail> EventScheduleAuditTrails { get; set; } =
+        new HashSet<EventScheduleItemAuditTrail>();
+    public virtual ICollection<AssignedXpMapping> AssignedXpMappings { get; set; } =
+        new HashSet<AssignedXpMapping>();
+    public virtual ICollection<EventQuestion> EventQuestions { get; set; } =
+        new HashSet<EventQuestion>();
 }
