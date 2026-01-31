@@ -3,6 +3,7 @@ using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup.Audit;
 using ExpressedRealms.DB.Models.Events.EventSetup.Audit;
+using ExpressedRealms.DB.Models.Events.Questions.EventQuestionSetup;
 
 namespace ExpressedRealms.DB.Models.Events.EventSetup;
 
@@ -23,7 +24,12 @@ public class Event : ISoftDelete
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 
-    public virtual List<EventAuditTrail> EventAuditTrails { get; set; } = null!;
-    public virtual List<EventScheduleItemAuditTrail> EventScheduleAuditTrails { get; set; } = null!;
-    public virtual List<AssignedXpMapping> AssignedXpMappings { get; set; } = null!;
+    public virtual ICollection<EventAuditTrail> EventAuditTrails { get; set; } =
+        new HashSet<EventAuditTrail>();
+    public virtual ICollection<EventScheduleItemAuditTrail> EventScheduleAuditTrails { get; set; } =
+        new HashSet<EventScheduleItemAuditTrail>();
+    public virtual ICollection<AssignedXpMapping> AssignedXpMappings { get; set; } =
+        new HashSet<AssignedXpMapping>();
+    public virtual ICollection<EventQuestion> EventQuestions { get; set; } =
+        new HashSet<EventQuestion>();
 }

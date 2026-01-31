@@ -19,6 +19,8 @@ using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup;
 using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup.Audit;
 using ExpressedRealms.DB.Models.Events.EventSetup;
 using ExpressedRealms.DB.Models.Events.EventSetup.Audit;
+using ExpressedRealms.DB.Models.Events.Questions.EventQuestionSetup;
+using ExpressedRealms.DB.Models.Events.Questions.EventQuestionSetup.Audit;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionLevels;
@@ -86,6 +88,9 @@ public static class ProcessChangedRecords
                 changedRecords
             ),
             nameof(Contact) => ContactAuditTrailExtensions.ProcessChangedRecords(changedRecords),
+            nameof(EventQuestion) => EventQuestionAuditTrailExtensions.ProcessChangedRecords(
+                changedRecords
+            ),
             _ => throw new ArgumentException(
                 $"Table not setup in the ProcessChangedRecords class: {tableName}"
             ),
