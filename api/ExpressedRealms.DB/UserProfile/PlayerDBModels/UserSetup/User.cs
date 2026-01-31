@@ -11,6 +11,7 @@ using ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit;
 using ExpressedRealms.DB.Models.Contacts.Audit;
 using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup.Audit;
 using ExpressedRealms.DB.Models.Events.EventSetup.Audit;
+using ExpressedRealms.DB.Models.Events.Questions.EventQuestionSetup.Audit;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionLevels.Audit;
@@ -62,4 +63,6 @@ public class User : IdentityUser
         new List<UserRoleMappingAuditTrail>();
     public virtual ICollection<ContactAuditTrail> ContactAuditTrails { get; set; } =
         new List<ContactAuditTrail>();
+    public virtual ICollection<EventQuestionAuditTrail> EventQuestionAuditTrails { get; set; } =
+        new List<EventQuestionAuditTrail>();
 }
