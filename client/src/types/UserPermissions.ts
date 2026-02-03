@@ -5,6 +5,12 @@ export const UserPermissions = {
   CharacterContacts: {
     Approve: 'charactercontacts.approve',
   } as const,
+  EventQuestion: {
+    Edit: 'eventquestion.edit',
+    View: 'eventquestion.view',
+    Create: 'eventquestion.create',
+    Delete: 'eventquestion.delete',
+  } as const,
   Event: {
     Edit: 'event.edit',
     View: 'event.view',
