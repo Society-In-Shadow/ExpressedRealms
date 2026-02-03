@@ -3,13 +3,12 @@ using ExpressedRealms.Events.API.Repositories.Events;
 using FluentValidation;
 using JetBrains.Annotations;
 
-namespace ExpressedRealms.Events.API.UseCases.EventQuestions.Create;
+namespace ExpressedRealms.Events.API.UseCases.EventQuestions.Edit;
 
 [UsedImplicitly]
-internal sealed class CreateEventQuestionModelValidator
-    : AbstractValidator<CreateEventQuestionModel>
+internal sealed class EditEventQuestionModelValidator : AbstractValidator<EditEventQuestionModel>
 {
-    public CreateEventQuestionModelValidator(
+    public EditEventQuestionModelValidator(
         IEventRepository repository,
         IEventQuestionRepository questionRepository
     )
@@ -25,20 +24,22 @@ internal sealed class CreateEventQuestionModelValidator
                 async (x, y) =>
                     !await questionRepository.IsDuplicateEventQuestionQuestion(
                         x.EventId,
+                        x.Id,
                         x.Question
                     )
             )
             .WithMessage("Question already exists.")
-            .WithName(nameof(CreateEventQuestionModel.Question));
+            .WithName(nameof(EditEventQuestionModel.Question));
 
-        RuleFor(x => x.QuestionTypeId)
-            .NotEmpty()
-            .WithMessage("Question Type is required.")
+        RuleFor(x => x.Id).NotEmpty().WithMessage("Id is required.");
+
+        RuleFor(x => x)
             .MustAsync(
-                async (x, y) => await questionRepository.IsExistingCustomizableQuestionType(x)
+                async (x, y) => await questionRepository.IsExistingEventQuestion(x.EventId, x.Id)
             )
-            .WithMessage("Question Type does not exist.")
-            .WithName(nameof(CreateEventQuestionModel.QuestionTypeId));
+            .WithErrorCode("NotFound")
+            .WithMessage("Question does not exist.")
+            .WithName(nameof(EditEventQuestionModel.Id));
 
         RuleFor(x => x.EventId)
             .NotEmpty()
