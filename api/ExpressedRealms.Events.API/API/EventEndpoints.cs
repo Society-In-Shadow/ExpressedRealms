@@ -66,7 +66,7 @@ internal static class EventEndpoints
         endpointGroup
             .MapDelete("{eventId}/scheduleItems/{id}", DeleteEventScheduleItemEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.EventScheduleItem.Delete);
-        
+
         endpointGroup
             .MapPost("{eventId}/questions", CreateEventQuestionEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.EventQuestion.Create);

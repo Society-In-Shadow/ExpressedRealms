@@ -20,12 +20,15 @@ internal sealed class EventQuestionRepository(
     public async Task<bool> IsExistingEventQuestion(int eventId, string question)
     {
         return await context.EventQuestions.AnyAsync(x =>
-            x.EventId == eventId && x.Question.ToLower() == question.ToLower());
+            x.EventId == eventId && x.Question.ToLower() == question.ToLower()
+        );
     }
 
     public async Task<bool> IsExistingCustomizableQuestionType(int questionTypeId)
     {
-        return await context.QuestionTypes.AnyAsync(x => x.Id == questionTypeId && x.IsCustomizable);
+        return await context.QuestionTypes.AnyAsync(x =>
+            x.Id == questionTypeId && x.IsCustomizable
+        );
     }
 
     public async Task EditAsync<TEntity>(TEntity entity)

@@ -23,13 +23,17 @@ public class CreateEventQuestionUseCaseTests
             Question = "Question",
             QuestionTypeId = 4,
         };
-        
+
         _repository = A.Fake<IEventRepository>();
         _questionRepository = A.Fake<IEventQuestionRepository>();
-        
+
         A.CallTo(() => _repository.IsExistingEvent(_model.EventId)).Returns(true);
-        A.CallTo(() => _questionRepository.IsExistingEventQuestion(_model.EventId, _model.Question)).Returns(false);
-        A.CallTo(() => _questionRepository.IsExistingCustomizableQuestionType(_model.QuestionTypeId)).Returns(true);
+        A.CallTo(() => _questionRepository.IsExistingEventQuestion(_model.EventId, _model.Question))
+            .Returns(false);
+        A.CallTo(() =>
+                _questionRepository.IsExistingCustomizableQuestionType(_model.QuestionTypeId)
+            )
+            .Returns(true);
 
         var validator = new CreateEventQuestionModelValidator(_repository, _questionRepository);
 
@@ -63,11 +67,12 @@ public class CreateEventQuestionUseCaseTests
             "Question must be between 1 and 500 characters."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_Question_WillFail_WhenItsADuplicateForTheEvent()
     {
-        A.CallTo(() => _questionRepository.IsExistingEventQuestion(_model.EventId, _model.Question)).Returns(true);
+        A.CallTo(() => _questionRepository.IsExistingEventQuestion(_model.EventId, _model.Question))
+            .Returns(true);
 
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(
@@ -115,7 +120,10 @@ public class CreateEventQuestionUseCaseTests
     [Fact]
     public async Task ValidationFor_QuestionTypeId_WillFail_WhenItDoesNotExist()
     {
-        A.CallTo(() => _questionRepository.IsExistingCustomizableQuestionType(_model.QuestionTypeId)).Returns(false);
+        A.CallTo(() =>
+                _questionRepository.IsExistingCustomizableQuestionType(_model.QuestionTypeId)
+            )
+            .Returns(false);
 
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(
@@ -123,7 +131,7 @@ public class CreateEventQuestionUseCaseTests
             "Question Type does not exist."
         );
     }
-    
+
     [Fact]
     public async Task UseCase_WillCreateTheEventQuestion()
     {

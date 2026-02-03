@@ -27,7 +27,7 @@ internal sealed class CreateEventQuestionUseCase(
             {
                 EventId = model.EventId,
                 Question = model.Question,
-                QuestionTypeId = model.QuestionTypeId
+                QuestionTypeId = model.QuestionTypeId,
             }
         );
 
