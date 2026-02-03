@@ -44,6 +44,11 @@ internal sealed class EventQuestionRepository(
         );
     }
 
+    public Task<List<EventQuestion>> GetEventQuestionsForEvent(int modelEventId)
+    {
+        return context.EventQuestions.Where(x => x.EventId == modelEventId).ToListAsync();
+    }
+
     public async Task<bool> IsExistingCustomizableQuestionType(int questionTypeId)
     {
         return await context.QuestionTypes.AnyAsync(x =>

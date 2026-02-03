@@ -4,6 +4,7 @@ using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using ExpressedRealms.Events.API.API.EventQuestions.Create;
 using ExpressedRealms.Events.API.API.EventQuestions.Delete;
 using ExpressedRealms.Events.API.API.EventQuestions.Edit;
+using ExpressedRealms.Events.API.API.EventQuestions.Get;
 using ExpressedRealms.Events.API.API.Events.Create;
 using ExpressedRealms.Events.API.API.Events.Delete;
 using ExpressedRealms.Events.API.API.Events.Get;
@@ -70,7 +71,7 @@ internal static class EventEndpoints
             .RequirePermission(Permissions.EventScheduleItem.Delete);
 
         endpointGroup
-            .MapPost("{eventId}/questions", CreateEventQuestionEndpoint.ExecuteAsync)
+            .MapPost("{eventId}/questions/", CreateEventQuestionEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.EventQuestion.Create);
 
         endpointGroup
@@ -80,5 +81,9 @@ internal static class EventEndpoints
         endpointGroup
             .MapDelete("{eventId}/questions/{questionId}", DeleteEventQuestionEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.EventQuestion.Delete);
+        
+        endpointGroup
+            .MapGet("{eventId}/questions/", GetEventQuestionEndpoint.ExecuteAsync)
+            .RequirePermission(Permissions.EventQuestion.View);
     }
 }
