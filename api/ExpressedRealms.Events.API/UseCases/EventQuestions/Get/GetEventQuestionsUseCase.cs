@@ -4,11 +4,11 @@ using FluentResults;
 
 namespace ExpressedRealms.Events.API.UseCases.EventQuestions.Get;
 
-internal sealed class GetEventQuestionUseCase(
+internal sealed class GetEventQuestionsUseCase(
     IEventQuestionRepository repository,
     GetEventQuestionModelValidator validator,
     CancellationToken cancellationToken
-) : IGetEventQuestionUseCase
+) : IGetEventQuestionsUseCase
 {
     public async Task<Result<List<QuestionReturnModel>>> ExecuteAsync(GetEventQuestionModel model)
     {

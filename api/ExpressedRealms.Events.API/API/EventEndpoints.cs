@@ -83,7 +83,7 @@ internal static class EventEndpoints
             .RequirePermission(Permissions.EventQuestion.Delete);
         
         endpointGroup
-            .MapGet("{eventId}/questions/", GetEventQuestionEndpoint.ExecuteAsync)
+            .MapGet("{eventId}/questions/", GetEventQuestionsEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.EventQuestion.View);
     }
 }

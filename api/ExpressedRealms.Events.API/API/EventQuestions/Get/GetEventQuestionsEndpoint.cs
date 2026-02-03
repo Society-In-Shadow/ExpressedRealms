@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ExpressedRealms.Events.API.API.EventQuestions.Get;
 
-public static class GetEventQuestionEndpoint
+public static class GetEventQuestionsEndpoint
 {
     public static async Task<Results<Ok<GetEventQuestionResponse>, ValidationProblem, NotFound>> ExecuteAsync(
         int eventId,
-        [FromServices] IGetEventQuestionUseCase useCase
+        [FromServices] IGetEventQuestionsUseCase useCase
     )
     {
         var results = await useCase.ExecuteAsync(
