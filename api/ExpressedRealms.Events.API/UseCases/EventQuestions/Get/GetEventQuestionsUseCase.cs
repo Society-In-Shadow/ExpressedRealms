@@ -23,11 +23,15 @@ internal sealed class GetEventQuestionsUseCase(
 
         var question = await repository.GetEventQuestionsForEvent(model.EventId);
 
-        return Result.Ok(question.Select(x => new QuestionReturnModel()
-        {
-            Id = x.Id,
-            Question = x.Question,
-            QuestionTypeId = x.QuestionTypeId
-        }).ToList());
+        return Result.Ok(
+            question
+                .Select(x => new QuestionReturnModel()
+                {
+                    Id = x.Id,
+                    Question = x.Question,
+                    QuestionTypeId = x.QuestionTypeId,
+                })
+                .ToList()
+        );
     }
 }

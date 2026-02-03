@@ -3,4 +3,5 @@ using FluentResults;
 
 namespace ExpressedRealms.Events.API.UseCases.EventQuestions.Get;
 
-public interface IGetEventQuestionsUseCase : IGenericUseCase<Result<List<QuestionReturnModel>>, GetEventQuestionModel> { }
+public interface IGetEventQuestionsUseCase
+    : IGenericUseCase<Result<List<QuestionReturnModel>>, GetEventQuestionModel> { }

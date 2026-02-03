@@ -8,17 +8,11 @@ namespace ExpressedRealms.Events.API.API.EventQuestions.Get;
 
 public static class GetEventQuestionsEndpoint
 {
-    public static async Task<Results<Ok<GetEventQuestionResponse>, ValidationProblem, NotFound>> ExecuteAsync(
-        int eventId,
-        [FromServices] IGetEventQuestionsUseCase useCase
-    )
+    public static async Task<
+        Results<Ok<GetEventQuestionResponse>, ValidationProblem, NotFound>
+    > ExecuteAsync(int eventId, [FromServices] IGetEventQuestionsUseCase useCase)
     {
-        var results = await useCase.ExecuteAsync(
-            new GetEventQuestionModel()
-            {
-                EventId = eventId
-            }
-        );
+        var results = await useCase.ExecuteAsync(new GetEventQuestionModel() { EventId = eventId });
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;
@@ -28,14 +22,18 @@ public static class GetEventQuestionsEndpoint
 
         results.ThrowIfErrorNotHandled();
 
-        return TypedResults.Ok(new GetEventQuestionResponse()
-        {
-            Questions = results.Value.Select(x => new EventQuestion()
+        return TypedResults.Ok(
+            new GetEventQuestionResponse()
             {
-                Id = x.Id,
-                QuestionTypeId = x.QuestionTypeId,
-                Question = x.Question
-            }).ToList()
-        });
+                Questions = results
+                    .Value.Select(x => new EventQuestion()
+                    {
+                        Id = x.Id,
+                        QuestionTypeId = x.QuestionTypeId,
+                        Question = x.Question,
+                    })
+                    .ToList(),
+            }
+        );
     }
 }

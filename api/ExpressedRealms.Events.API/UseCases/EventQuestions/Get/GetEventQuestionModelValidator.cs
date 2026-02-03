@@ -6,8 +6,7 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Events.API.UseCases.EventQuestions.Get;
 
 [UsedImplicitly]
-internal sealed class GetEventQuestionModelValidator
-    : AbstractValidator<GetEventQuestionModel>
+internal sealed class GetEventQuestionModelValidator : AbstractValidator<GetEventQuestionModel>
 {
     public GetEventQuestionModelValidator(
         IEventRepository repository,

@@ -18,10 +18,7 @@ public class GetEventQuestionUseCaseTests
 
     public GetEventQuestionUseCaseTests()
     {
-        _model = new GetEventQuestionModel()
-        {
-            EventId = 1,
-        };
+        _model = new GetEventQuestionModel() { EventId = 1 };
 
         _dbModel = new List<EventQuestion>()
         {
@@ -30,17 +27,16 @@ public class GetEventQuestionUseCaseTests
                 Question = "Foo",
                 EventId = 1,
                 Id = 4,
-                QuestionTypeId = 5
+                QuestionTypeId = 5,
             },
             new EventQuestion()
             {
                 Question = "Goo",
                 EventId = 1,
                 Id = 5,
-                QuestionTypeId = 4
-            }
-        }
-;
+                QuestionTypeId = 4,
+            },
+        };
 
         _repository = A.Fake<IEventRepository>();
         _questionRepository = A.Fake<IEventQuestionRepository>();
@@ -58,7 +54,7 @@ public class GetEventQuestionUseCaseTests
         );
     }
 
-   [Fact]
+    [Fact]
     public async Task ValidationFor_EventId_WillFail_WhenEmpty()
     {
         _model.EventId = 0;
@@ -85,12 +81,14 @@ public class GetEventQuestionUseCaseTests
     [Fact]
     public async Task UseCase_WillGetTheEventQuestion()
     {
-        var returnList = _dbModel.Select(x => new QuestionReturnModel()
-        {
-            Id = x.Id,
-            Question = x.Question,
-            QuestionTypeId = x.QuestionTypeId
-        }).ToList();
+        var returnList = _dbModel
+            .Select(x => new QuestionReturnModel()
+            {
+                Id = x.Id,
+                Question = x.Question,
+                QuestionTypeId = x.QuestionTypeId,
+            })
+            .ToList();
         var results = await _useCase.ExecuteAsync(_model);
 
         Assert.Equivalent(returnList, results.Value);
