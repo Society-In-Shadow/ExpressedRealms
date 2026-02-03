@@ -28,7 +28,12 @@ public class CreateEventQuestionUseCaseTests
         _questionRepository = A.Fake<IEventQuestionRepository>();
 
         A.CallTo(() => _repository.IsExistingEvent(_model.EventId)).Returns(true);
-        A.CallTo(() => _questionRepository.IsExistingEventQuestion(_model.EventId, _model.Question))
+        A.CallTo(() =>
+                _questionRepository.IsDuplicateEventQuestionQuestion(
+                    _model.EventId,
+                    _model.Question
+                )
+            )
             .Returns(false);
         A.CallTo(() =>
                 _questionRepository.IsExistingCustomizableQuestionType(_model.QuestionTypeId)
@@ -57,9 +62,9 @@ public class CreateEventQuestionUseCaseTests
     }
 
     [Fact]
-    public async Task ValidationFor_Question_WillFail_WhenOver250Characters()
+    public async Task ValidationFor_Question_WillFail_WhenOver500Characters()
     {
-        _model.Question = new string('x', 5001);
+        _model.Question = new string('x', 501);
 
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(
@@ -71,7 +76,12 @@ public class CreateEventQuestionUseCaseTests
     [Fact]
     public async Task ValidationFor_Question_WillFail_WhenItsADuplicateForTheEvent()
     {
-        A.CallTo(() => _questionRepository.IsExistingEventQuestion(_model.EventId, _model.Question))
+        A.CallTo(() =>
+                _questionRepository.IsDuplicateEventQuestionQuestion(
+                    _model.EventId,
+                    _model.Question
+                )
+            )
             .Returns(true);
 
         var results = await _useCase.ExecuteAsync(_model);

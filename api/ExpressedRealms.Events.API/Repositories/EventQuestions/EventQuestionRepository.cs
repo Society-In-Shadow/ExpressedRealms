@@ -17,10 +17,30 @@ internal sealed class EventQuestionRepository(
         return eventQuestion.Id;
     }
 
-    public async Task<bool> IsExistingEventQuestion(int eventId, string question)
+    public async Task<bool> IsDuplicateEventQuestionQuestion(int eventId, string question)
     {
         return await context.EventQuestions.AnyAsync(x =>
             x.EventId == eventId && x.Question.ToLower() == question.ToLower()
+        );
+    }
+
+    public async Task<bool> IsDuplicateEventQuestionQuestion(
+        int eventId,
+        int eventQuestionId,
+        string question
+    )
+    {
+        return await context.EventQuestions.AnyAsync(x =>
+            x.EventId == eventId
+            && x.Id != eventQuestionId
+            && x.Question.ToLower() == question.ToLower()
+        );
+    }
+
+    public async Task<bool> IsExistingEventQuestion(int eventId, int eventQuestionId)
+    {
+        return await context.EventQuestions.AnyAsync(x =>
+            x.EventId == eventId && x.Id == eventQuestionId
         );
     }
 
@@ -29,6 +49,11 @@ internal sealed class EventQuestionRepository(
         return await context.QuestionTypes.AnyAsync(x =>
             x.Id == questionTypeId && x.IsCustomizable
         );
+    }
+
+    public async Task<EventQuestion> GetEventQuestionForEdit(int eventId, int id)
+    {
+        return await context.EventQuestions.FirstAsync(x => x.Id == id && x.EventId == eventId);
     }
 
     public async Task EditAsync<TEntity>(TEntity entity)

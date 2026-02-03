@@ -1,25 +1,26 @@
-using ExpressedRealms.Events.API.UseCases.EventQuestions.Create;
+using ExpressedRealms.Events.API.UseCases.EventQuestions.Edit;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ExpressedRealms.Events.API.API.EventQuestions.Create;
+namespace ExpressedRealms.Events.API.API.EventQuestions.Edit;
 
-public static class CreateEventQuestionEndpoint
+public static class EditEventQuestionEndpoint
 {
-    public static async Task<Results<Ok<int>, ValidationProblem, NotFound>> ExecuteAsync(
+    public static async Task<Results<Ok, ValidationProblem, NotFound>> ExecuteAsync(
         int eventId,
-        [FromBody] CreateEventQuestionRequest request,
-        [FromServices] ICreateEventQuestionUseCase useCase
+        int questionId,
+        [FromBody] EditEventQuestionRequest request,
+        [FromServices] IEditEventQuestionUseCase useCase
     )
     {
         var results = await useCase.ExecuteAsync(
-            new CreateEventQuestionModel()
+            new EditEventQuestionModel()
             {
                 EventId = eventId,
                 Question = request.Question,
-                QuestionTypeId = request.QuestionTypeId,
+                Id = questionId,
             }
         );
 
@@ -31,6 +32,6 @@ public static class CreateEventQuestionEndpoint
 
         results.ThrowIfErrorNotHandled();
 
-        return TypedResults.Ok(results.Value);
+        return TypedResults.Ok();
     }
 }

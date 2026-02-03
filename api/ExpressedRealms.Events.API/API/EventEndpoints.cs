@@ -2,6 +2,7 @@
 using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using ExpressedRealms.Events.API.API.EventQuestions.Create;
+using ExpressedRealms.Events.API.API.EventQuestions.Edit;
 using ExpressedRealms.Events.API.API.Events.Create;
 using ExpressedRealms.Events.API.API.Events.Delete;
 using ExpressedRealms.Events.API.API.Events.Get;
@@ -70,5 +71,9 @@ internal static class EventEndpoints
         endpointGroup
             .MapPost("{eventId}/questions", CreateEventQuestionEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.EventQuestion.Create);
+
+        endpointGroup
+            .MapPut("{eventId}/questions/{questionId}", EditEventQuestionEndpoint.ExecuteAsync)
+            .RequirePermission(Permissions.EventQuestion.Edit);
     }
 }
