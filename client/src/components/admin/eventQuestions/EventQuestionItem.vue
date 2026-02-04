@@ -45,11 +45,27 @@ function toggleEdit() {
   </div>
   <div v-else class="d-flex flex-column flex-md-row align-self-center justify-content-between mt-3">
     <div class="flex-fill mr-3">
-      <div v-if="props.eventQuestion.questionTypeId == 3">
+      <div v-if="[3, 2].includes(props.eventQuestion.questionTypeId)">
         <FormInputTextWrapper v-model="dummyForm.fields.question" :is-disabled="true" :label-override="props.eventQuestion.question" />
       </div>
-      <div v-if="props.eventQuestion.questionTypeId == 4">
+      <div v-if="[1, 4].includes(props.eventQuestion.questionTypeId)">
         <FormCheckboxWrapper v-model="dummyForm.fields.question" :is-disabled="true" :label-override="props.eventQuestion.question" />
+      </div>
+      <div v-if="props.eventQuestion.questionTypeId == 6">
+        <div>
+          Have you brought in a new player?  If so, who are they?
+        </div>
+        <div>
+          <div>
+            <FormCheckboxWrapper v-model="dummyForm.fields.question" :is-disabled="true" :label-override="' '">
+              <template #label>
+                <div class="ml-2 w-100">
+                  <FormInputTextWrapper v-model="dummyForm.fields.question" :is-disabled="true" :label-override="' '" />
+                </div>
+              </template>
+            </FormCheckboxWrapper>
+          </div>
+        </div>
       </div>
     </div>
     <div
@@ -57,7 +73,7 @@ function toggleEdit() {
       class="p-0 m-0 d-inline-flex align-items-start align-self-center"
     >
       <Button
-        v-if="checkPermission.EventQuestion.Delete" class="mr-2" severity="danger" label="Delete"
+        v-if="checkPermission.EventQuestion.Delete && ![1, 6].includes(props.eventQuestion?.questionTypeId)" class="mr-2" severity="danger" label="Delete"
         @click="popups.deleteConfirmation(props.eventId, $event)"
       />
       <Button v-if="checkPermission.EventQuestion.Edit" class="float-end" label="Edit" @click="toggleEdit" />

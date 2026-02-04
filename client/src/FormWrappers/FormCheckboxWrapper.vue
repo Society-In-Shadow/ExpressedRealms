@@ -44,14 +44,16 @@ const isInvalid = computed(() => (model.value.error.value ?? '').length > 0)
 </script>
 
 <template>
-  <div class="mb-3 d-flex align-items-center">
+  <div class="mb-3 d-flex align-items-center align-self-center">
     <Skeleton v-if="showSkeleton" :id="dataCyTagCalc + '-skeleton'" class="w-100" height="3em" />
     <Checkbox
       v-if="!showSkeleton"
       v-model="model.field.value" :input-id="dataCyTagCalc" :data-cy="dataCyTagCalc"
       v-bind="$attrs" :invalid="isInvalid" binary :disabled="isDisabled"
     />
-    <label v-if="!showSkeleton" :for="dataCyTagCalc" class="ml-2">{{ labelOverride != '' ? labelOverride : model.label }}</label>
+    <slot name="label">
+      <label v-if="!showSkeleton" :for="dataCyTagCalc" class="ml-2">{{ labelOverride != '' ? labelOverride : model.label }}</label>
+    </slot>
     <small v-if="isInvalid" :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ model.error }}</small>
     <slot />
   </div>

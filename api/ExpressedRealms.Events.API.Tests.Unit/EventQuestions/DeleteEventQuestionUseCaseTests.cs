@@ -1,4 +1,5 @@
 using ExpressedRealms.DB.Models.Events.Questions.EventQuestionSetup;
+using ExpressedRealms.DB.Models.Events.Questions.QuestionTypeSetup;
 using ExpressedRealms.Events.API.Repositories.EventQuestions;
 using ExpressedRealms.Events.API.Repositories.Events;
 using ExpressedRealms.Events.API.UseCases.EventQuestions.Delete;
@@ -90,6 +91,26 @@ public class DeleteEventQuestionUseCaseTests
             nameof(DeleteEventQuestionModel.Id),
             "Question does not exist."
         );
+    }
+
+    [Fact]
+    public async Task UseCase_WillReturnFail_IfTheyDeleteMinorCheckQuestion()
+    {
+        _dbModel.QuestionTypeId = QuestionTypeEnum.IsMinorCheck;
+        var results = await _useCase.ExecuteAsync(_model);
+        Assert.False(results.IsSuccess);
+        Assert.Single(results.Errors);
+        Assert.Equal("Cannot delete the minor check question", results.Errors.First().Message);
+    }
+
+    [Fact]
+    public async Task UseCase_WillReturnFail_IfTheyDeleteNewPlayerCheckQuestion()
+    {
+        _dbModel.QuestionTypeId = QuestionTypeEnum.BroughtNewPlayer;
+        var results = await _useCase.ExecuteAsync(_model);
+        Assert.False(results.IsSuccess);
+        Assert.Single(results.Errors);
+        Assert.Equal("Cannot delete the new player question", results.Errors.First().Message);
     }
 
     [Fact]

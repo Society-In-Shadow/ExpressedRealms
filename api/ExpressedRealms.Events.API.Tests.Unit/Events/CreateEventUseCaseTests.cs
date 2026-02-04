@@ -1,6 +1,7 @@
 using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup;
 using ExpressedRealms.DB.Models.Events.EventSetup;
 using ExpressedRealms.Events.API.Repositories.Events;
+using ExpressedRealms.Events.API.UseCases.EventQuestions.PopulateDefaults;
 using ExpressedRealms.Events.API.UseCases.Events.Create;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
@@ -13,6 +14,7 @@ public class CreateEventUseCaseTests
     private readonly CreateEventUseCase _useCase;
     private readonly IEventRepository _repository;
     private readonly CreateEventModel _model;
+    private readonly IPopulateDefaultQuestionsUseCase _populateDefaultQuestionsUseCase;
     private readonly List<EventScheduleItem> _defaultScheduledEvents;
 
     public CreateEventUseCaseTests()
@@ -62,13 +64,19 @@ public class CreateEventUseCaseTests
         };
 
         _repository = A.Fake<IEventRepository>();
+        _populateDefaultQuestionsUseCase = A.Fake<IPopulateDefaultQuestionsUseCase>();
 
         A.CallTo(() => _repository.CreateEventAsync(A<Event>._)).Returns(1);
         A.CallTo(() => _repository.GetDefaultScheduleItems()).Returns(_defaultScheduledEvents);
 
         var validator = new CreateEventModelValidator(_repository);
 
-        _useCase = new CreateEventUseCase(_repository, validator, CancellationToken.None);
+        _useCase = new CreateEventUseCase(
+            _repository,
+            _populateDefaultQuestionsUseCase,
+            validator,
+            CancellationToken.None
+        );
     }
 
     [Fact]
@@ -338,6 +346,19 @@ public class CreateEventUseCaseTests
         A.CallTo(() =>
                 _repository.BulkAddEventScheduleItems(
                     A<List<EventScheduleItem>>.That.Matches(k => k.All(i => i.EventId == 5))
+                )
+            )
+            .MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task UseCase_WillPopulateDefaultQuestions()
+    {
+        A.CallTo(() => _repository.CreateEventAsync(A<Event>._)).Returns(7);
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() =>
+                _populateDefaultQuestionsUseCase.ExecuteAsync(
+                    A<PopulateDefaultQuestionsModel>.That.Matches(k => k.EventId == 7)
                 )
             )
             .MustHaveHappenedOnceExactly();

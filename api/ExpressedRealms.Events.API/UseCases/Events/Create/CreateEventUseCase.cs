@@ -1,5 +1,6 @@
 using ExpressedRealms.DB.Models.Events.EventSetup;
 using ExpressedRealms.Events.API.Repositories.Events;
+using ExpressedRealms.Events.API.UseCases.EventQuestions.PopulateDefaults;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
@@ -7,6 +8,7 @@ namespace ExpressedRealms.Events.API.UseCases.Events.Create;
 
 internal sealed class CreateEventUseCase(
     IEventRepository eventRepository,
+    IPopulateDefaultQuestionsUseCase populateDefaultQuestionsUseCase,
     CreateEventModelValidator validator,
     CancellationToken cancellationToken
 ) : ICreateEventUseCase
@@ -57,6 +59,9 @@ internal sealed class CreateEventUseCase(
         }
 
         await eventRepository.BulkAddEventScheduleItems(defaultSchedule);
+        await populateDefaultQuestionsUseCase.ExecuteAsync(
+            new PopulateDefaultQuestionsModel() { EventId = eventId }
+        );
 
         return Result.Ok(eventId);
     }

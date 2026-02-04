@@ -1,4 +1,5 @@
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Events.Questions.QuestionTypeSetup;
 using ExpressedRealms.Events.API.Repositories.EventQuestions;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
@@ -23,6 +24,16 @@ internal sealed class DeleteEventQuestionUseCase(
             return Result.Fail(result.Errors);
 
         var question = await repository.GetEventQuestionForEdit(model.EventId, model.Id);
+
+        if (question.QuestionTypeId == QuestionTypeEnum.IsMinorCheck)
+        {
+            return Result.Fail("Cannot delete the minor check question");
+        }
+
+        if (question.QuestionTypeId == QuestionTypeEnum.BroughtNewPlayer)
+        {
+            return Result.Fail("Cannot delete the new player question");
+        }
 
         question.SoftDelete();
 
