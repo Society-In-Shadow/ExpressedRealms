@@ -17,6 +17,11 @@ export const EventQuestionStore
     actions: {
       async getItems(eventId: number) {
         this.questionTypes = [{
+          id: 2,
+          name: 'Badge Info',
+          description: '',
+        },
+        {
           id: 3,
           name: 'Text Field',
           description: '',
