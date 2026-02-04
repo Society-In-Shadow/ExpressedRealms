@@ -14,7 +14,6 @@ public class PopulateDefaultQuestionsUseCaseTests
     private readonly IEventRepository _repository;
     private readonly IEventQuestionRepository _questionRepository;
     private readonly PopulateDefaultQuestionsModel _model;
-    private readonly List<EventQuestion> _dbModel;
 
     public PopulateDefaultQuestionsUseCaseTests()
     {
