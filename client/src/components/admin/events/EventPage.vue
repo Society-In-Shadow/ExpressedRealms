@@ -18,10 +18,14 @@ import { EventConfirmationPopup } from '@/components/admin/events/services/event
 import SkeletonWrapper from '@/FormWrappers/SkeletonWrapper.vue'
 import CharacterActivity from '@/components/admin/events/CharacterActivity.vue'
 import { formatDate } from '@/utilities/dateUtilities.ts'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+import EventQuestionList from '@/components/admin/eventQuestions/EventQuestionList.vue'
 
 let userInfo = userStore()
 const route = useRoute()
 const eventData = EventStore()
+const permissionData = userPermissionStore()
+const permissionCheck = permissionData.permissionCheck
 const eventId = Number.parseInt(route.params.id as string)
 
 const event = ref<EditEvent>({})
@@ -68,6 +72,9 @@ let popups = EventConfirmationPopup(event.value.id, event.value.name)
           <Tab value="0">
             Basic Info
           </Tab>
+          <Tab v-if="permissionCheck.EventQuestion.View" value="3">
+            Questions
+          </Tab>
           <Tab value="1">
             Schedule
           </Tab>
@@ -84,6 +91,9 @@ let popups = EventConfirmationPopup(event.value.id, event.value.name)
           </TabPanel>
           <TabPanel value="2">
             <CharacterActivity :event-id="eventId" />
+          </TabPanel>
+          <TabPanel v-if="permissionCheck.EventQuestion.View" value="3">
+            <EventQuestionList :event-id="eventId" />
           </TabPanel>
         </TabPanels>
       </Tabs>

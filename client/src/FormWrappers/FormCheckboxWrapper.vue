@@ -16,9 +16,17 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  labelOverride: {
+    type: String,
+    default: '',
+  },
   showSkeleton: {
     type: Boolean,
     default: undefined,
+  },
+  isDisabled: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -30,6 +38,7 @@ const dataCyTagCalc = computed(() => {
 })
 
 const showSkeleton = props.showSkeleton ?? inject('showSkeleton', false)
+const isDisabled = props.isDisabled ?? inject('isDisabled', false)
 const isInvalid = computed(() => (model.value.error.value ?? '').length > 0)
 
 </script>
@@ -40,9 +49,9 @@ const isInvalid = computed(() => (model.value.error.value ?? '').length > 0)
     <Checkbox
       v-if="!showSkeleton"
       v-model="model.field.value" :input-id="dataCyTagCalc" :data-cy="dataCyTagCalc"
-      v-bind="$attrs" :invalid="isInvalid" binary
+      v-bind="$attrs" :invalid="isInvalid" binary :disabled="isDisabled"
     />
-    <label v-if="!showSkeleton" :for="dataCyTagCalc" class="ml-2">{{ model.label }}</label>
+    <label v-if="!showSkeleton" :for="dataCyTagCalc" class="ml-2">{{ labelOverride != '' ? labelOverride : model.label }}</label>
     <small v-if="isInvalid" :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ model.error }}</small>
     <slot />
   </div>

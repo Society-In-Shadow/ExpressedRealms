@@ -16,9 +16,17 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  labelOverride: {
+    type: String,
+    default: '',
+  },
   showSkeleton: {
     type: Boolean,
     default: undefined,
+  },
+  isDisabled: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -30,14 +38,21 @@ const dataCyTagCalc = computed(() => {
 })
 
 const showSkeleton = props.showSkeleton ?? inject('showSkeleton', false)
-const isDisabled = inject('isDisabled', false)
+const isDisabled = props.isDisabled ?? inject('isDisabled', false)
 const isInvalid = computed(() => (model.value.error.value ?? '').length > 0)
 
 </script>
 
 <template>
   <div class="mb-3 w-100">
-    <label :for="dataCyTagCalc">{{ model.label }}<span v-if="model.isRequired" class="text-danger font-italic"> (Required)</span></label>
+    <label :for="dataCyTagCalc">
+      <span v-if="labelOverride != ''">
+        {{ labelOverride }}
+      </span>
+      <span v-else>
+        {{ model.label }}<span v-if="model.isRequired" class="text-danger font-italic"> (Required)</span>
+      </span>
+    </label>
     <Skeleton v-if="showSkeleton" :id="dataCyTagCalc + '-skeleton'" class="w-100" height="3em" />
     <InputText
       v-else
