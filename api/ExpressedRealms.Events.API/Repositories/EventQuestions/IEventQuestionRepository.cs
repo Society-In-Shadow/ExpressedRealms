@@ -12,4 +12,5 @@ public interface IEventQuestionRepository : IGenericRepository
     Task<EventQuestion> GetEventQuestionForEdit(int eventId, int id);
     Task<bool> IsExistingEventQuestion(int eventId, int eventQuestionId);
     Task<List<EventQuestion>> GetEventQuestionsForEvent(int modelEventId);
+    Task AddDefaultQuestionsToEvent(List<EventQuestion> defaultQuestions);
 }
