@@ -6,7 +6,8 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Events.API.UseCases.EventQuestions.PopulateDefaults;
 
 [UsedImplicitly]
-internal sealed class PopulateDefaultQuestionsModelValidator : AbstractValidator<PopulateDefaultQuestionsModel>
+internal sealed class PopulateDefaultQuestionsModelValidator
+    : AbstractValidator<PopulateDefaultQuestionsModel>
 {
     public PopulateDefaultQuestionsModelValidator(
         IEventRepository repository,

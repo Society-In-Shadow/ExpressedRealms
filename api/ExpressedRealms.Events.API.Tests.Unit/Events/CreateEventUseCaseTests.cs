@@ -71,7 +71,12 @@ public class CreateEventUseCaseTests
 
         var validator = new CreateEventModelValidator(_repository);
 
-        _useCase = new CreateEventUseCase(_repository, _populateDefaultQuestionsUseCase, validator, CancellationToken.None);
+        _useCase = new CreateEventUseCase(
+            _repository,
+            _populateDefaultQuestionsUseCase,
+            validator,
+            CancellationToken.None
+        );
     }
 
     [Fact]
@@ -351,11 +356,14 @@ public class CreateEventUseCaseTests
     {
         A.CallTo(() => _repository.CreateEventAsync(A<Event>._)).Returns(7);
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() => _populateDefaultQuestionsUseCase.ExecuteAsync(A<PopulateDefaultQuestionsModel>.That
-                .Matches(k => k.EventId == 7)))
+        A.CallTo(() =>
+                _populateDefaultQuestionsUseCase.ExecuteAsync(
+                    A<PopulateDefaultQuestionsModel>.That.Matches(k => k.EventId == 7)
+                )
+            )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_ScheduleItems_AdjustsToCorrectFridayDate()
     {

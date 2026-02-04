@@ -102,7 +102,7 @@ public class DeleteEventQuestionUseCaseTests
         Assert.Single(results.Errors);
         Assert.Equal("Cannot delete the minor check question", results.Errors.First().Message);
     }
-    
+
     [Fact]
     public async Task UseCase_WillReturnFail_IfTheyDeleteNewPlayerCheckQuestion()
     {
@@ -112,7 +112,7 @@ public class DeleteEventQuestionUseCaseTests
         Assert.Single(results.Errors);
         Assert.Equal("Cannot delete the new player question", results.Errors.First().Message);
     }
-    
+
     [Fact]
     public async Task UseCase_WillDeleteTheEventQuestion()
     {

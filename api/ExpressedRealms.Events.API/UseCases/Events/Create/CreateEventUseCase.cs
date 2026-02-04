@@ -59,7 +59,9 @@ internal sealed class CreateEventUseCase(
         }
 
         await eventRepository.BulkAddEventScheduleItems(defaultSchedule);
-        await populateDefaultQuestionsUseCase.ExecuteAsync(new PopulateDefaultQuestionsModel() { EventId = eventId });
+        await populateDefaultQuestionsUseCase.ExecuteAsync(
+            new PopulateDefaultQuestionsModel() { EventId = eventId }
+        );
 
         return Result.Ok(eventId);
     }

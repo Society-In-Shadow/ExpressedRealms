@@ -28,24 +28,24 @@ internal sealed class PopulateDefaultQuestionsUseCase(
             {
                 EventId = model.EventId,
                 Question = "What is your badge number / name on your badge?",
-                QuestionTypeId = 2
+                QuestionTypeId = 2,
             },
             new()
             {
                 EventId = model.EventId,
                 Question = "Are you under the age of 18?",
-                QuestionTypeId = 1
+                QuestionTypeId = 1,
             },
             new()
             {
                 EventId = model.EventId,
                 Question = "Have you brought in a new player? If so, what is their name?",
-                QuestionTypeId = 6
+                QuestionTypeId = 6,
             },
         };
 
         await repository.AddDefaultQuestionsToEvent(defaultQuestions);
-        
+
         return Result.Ok();
     }
 }

@@ -34,7 +34,7 @@ internal sealed class DeleteEventQuestionUseCase(
         {
             return Result.Fail("Cannot delete the new player question");
         }
-        
+
         question.SoftDelete();
 
         await repository.EditAsync(question);

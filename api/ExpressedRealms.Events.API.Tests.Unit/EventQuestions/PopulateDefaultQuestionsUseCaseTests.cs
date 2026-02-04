@@ -24,8 +24,11 @@ public class PopulateDefaultQuestionsUseCaseTests
         _questionRepository = A.Fake<IEventQuestionRepository>();
 
         A.CallTo(() => _repository.IsExistingEvent(_model.EventId)).Returns(true);
-        
-        var validator = new PopulateDefaultQuestionsModelValidator(_repository, _questionRepository);
+
+        var validator = new PopulateDefaultQuestionsModelValidator(
+            _repository,
+            _questionRepository
+        );
 
         _useCase = new PopulateDefaultQuestionsUseCase(
             _questionRepository,
@@ -67,31 +70,38 @@ public class PopulateDefaultQuestionsUseCaseTests
             {
                 EventId = _model.EventId,
                 Question = "What is your badge number / name on your badge?",
-                QuestionTypeId = 2
+                QuestionTypeId = 2,
             },
             new()
             {
                 EventId = _model.EventId,
                 Question = "Are you under the age of 18?",
-                QuestionTypeId = 1
+                QuestionTypeId = 1,
             },
             new()
             {
                 EventId = _model.EventId,
                 Question = "Have you brought in a new player? If so, what is their name?",
-                QuestionTypeId = 6
+                QuestionTypeId = 6,
             },
         };
-        
+
         await _useCase.ExecuteAsync(_model);
 
-        A.CallTo(() => _questionRepository.AddDefaultQuestionsToEvent(A<List<EventQuestion>>.That.Matches(actual =>
-                actual.Count == defaultQuestions.Count &&
-                actual.All(a =>
-                    defaultQuestions.Any(d =>
-                        d.EventId == a.EventId && d.Question == a.Question && d.QuestionTypeId == a.QuestionTypeId
+        A.CallTo(() =>
+                _questionRepository.AddDefaultQuestionsToEvent(
+                    A<List<EventQuestion>>.That.Matches(actual =>
+                        actual.Count == defaultQuestions.Count
+                        && actual.All(a =>
+                            defaultQuestions.Any(d =>
+                                d.EventId == a.EventId
+                                && d.Question == a.Question
+                                && d.QuestionTypeId == a.QuestionTypeId
+                            )
+                        )
                     )
-                ))))
+                )
+            )
             .MustHaveHappenedOnceExactly();
     }
 }
