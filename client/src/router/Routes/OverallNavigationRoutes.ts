@@ -1,4 +1,5 @@
 import Layout from '@/components/LoggedInLayout.vue'
+import { FeatureFlags } from '@/stores/userStore.ts'
 
 export const OverallRoutes = {
   path: '/expressedRealms',
@@ -61,7 +62,7 @@ export const OverallRoutes = {
       path: '/eventcheckin',
       name: 'eventcheckin',
       component: () => import('@/components/conCheckin/ConCheckinPage.vue'),
-      meta: { isAnonymous: true },
+      meta: { requiredFeatureFlag: FeatureFlags.ShowEventCheckin },
     },
   ],
 }

@@ -35,6 +35,12 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "show-contact-management",
         "Allows one to see contacts in character builder / sheet"
     );
+    
+    public static readonly ReleaseFlags ShowEventCheckin = new(
+        "Show Event Checkin Related Functionality",
+        "show-event-checkin",
+        "Allows one to see contacts in character builder / sheet"
+    );
 
     public override string ToString()
     {

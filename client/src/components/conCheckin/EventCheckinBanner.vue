@@ -3,8 +3,18 @@
 import Message from 'primevue/message'
 import Button from 'primevue/button'
 import { useRouter } from 'vue-router'
+import { computed, onBeforeMount, ref } from 'vue'
+import { FeatureFlags, userStore } from '@/stores/userStore.ts'
 
 const router = useRouter()
+const userInfo = userStore()
+const hasCheckinFlag = ref(false)
+
+onBeforeMount(async () => {
+  hasCheckinFlag.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowEventCheckin)
+})
+
+const showBanner = computed(() => hasCheckinFlag.value)
 
 async function redirectToCheckinDetails() {
   await router.push({ name: 'eventcheckin' })
@@ -13,7 +23,7 @@ async function redirectToCheckinDetails() {
 </script>
 
 <template>
-  <Message class="sticky-top ms-0 me-0 mt-2 mb-2 m-md-2 d-print-none custom-message" severity="info">
+  <Message v-if="showBanner" class="sticky-top ms-0 me-0 mt-2 mb-2 m-md-2 d-print-none custom-message" severity="info">
     <template #icon>
       <span class="material-symbols-outlined">
         local_activity
