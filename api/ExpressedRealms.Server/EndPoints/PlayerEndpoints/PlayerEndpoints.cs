@@ -1,5 +1,5 @@
 using ExpressedRealms.DB;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
+using ExpressedRealms.Server.EndPoints.PlayerEndpoints.Create;
 using ExpressedRealms.Server.EndPoints.PlayerEndpoints.DTOs;
 using ExpressedRealms.Server.Shared.Extensions;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -83,31 +83,7 @@ internal static class PlayerEndpoints
             .RequireAuthorization();
 
         endpointGroup
-            .MapPost(
-                "",
-                async (PlayerDTO playerDto, ExpressedRealmsDbContext dbContext, HttpContext http) =>
-                {
-                    var isExistingPlayer = await dbContext.Players.FirstOrDefaultAsync(x =>
-                        x.UserId == http.User.GetUserId()
-                    );
-
-                    if (isExistingPlayer is null)
-                    {
-                        var player = new Player()
-                        {
-                            Id = new Guid(),
-                            Name = playerDto.Name,
-                            UserId = http.User.GetUserId(),
-                        };
-
-                        await dbContext.Players.AddAsync(player);
-                        await dbContext.SaveChangesAsync();
-                    }
-
-                    return TypedResults.Created("/player");
-                }
-            )
-            .WithSummary("Will only be called once upon initial login")
+            .MapPost("", CreatePlayerEndpoint.ExecuteAsync)
             .WithDescription(
                 """
                 This will be called upon initial login, after they fill in the details.  Any further calls 
