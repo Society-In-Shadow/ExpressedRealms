@@ -57,5 +57,11 @@ export const OverallRoutes = {
       component: () => import('./../../components/public/legal/CodeOfConduct.vue'),
       meta: { isAnonymous: true },
     },
+    {
+      path: '/eventcheckin',
+      name: 'eventcheckin',
+      component: () => import('@/components/conCheckin/ConCheckinPage.vue'),
+      meta: { isAnonymous: true },
+    },
   ],
 }

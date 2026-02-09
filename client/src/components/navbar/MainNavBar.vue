@@ -14,6 +14,7 @@ import { userStore } from '@/stores/userStore'
 import { cmsStore } from '@/stores/cmsStore.ts'
 import { storeToRefs } from 'pinia'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+import EventCheckinBanner from '@/components/conCheckin/EventCheckinBanner.vue'
 
 const userInfo = userStore()
 
@@ -209,6 +210,7 @@ watch(expressionItems, (newValue) => {
 </script>
 
 <template>
+  <EventCheckinBanner />
   <MegaMenu :model="items" class="ms-0 me-0 mt-2 mb-2 m-md-2 d-print-none">
     <template #start>
       <RouterLink to="/">
