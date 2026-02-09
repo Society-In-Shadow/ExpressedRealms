@@ -27,7 +27,7 @@ async function redirectToCheckinDetails() {
 </script>
 
 <template>
-  <Message v-if="showBanner" class="ms-0 me-0 mt-2 mb-2 m-md-2 d-print-none custom-message" severity="info">
+  <Message v-if="showBanner" class="ms-0 me-0 mt-2 mb-2 m-md-2 d-print-none custom-message" severity="info" @click="redirectToCheckinDetails">
     <template #icon>
       <span class="material-symbols-outlined">
         local_activity
@@ -46,6 +46,10 @@ async function redirectToCheckinDetails() {
 
 .custom-message .p-message-text {
   width: 100%;
+}
+
+.custom-message {
+  cursor: pointer;
 }
 
 </style>

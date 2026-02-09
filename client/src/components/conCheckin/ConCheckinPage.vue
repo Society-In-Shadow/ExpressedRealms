@@ -40,10 +40,15 @@ onBeforeMount(async () => {
     <StepItem value="1">
       <Step>Initial Checkin</Step>
       <StepPanel>
+        <h3>Welcome to Event Name and Society in Shadows!</h3>
+        <p>Before we get started, lets define a few terms you will commonly hear</p>
+        <ul>
+          <li>GO - Game Official - These are the people that will run games, and help you with character creation.</li>
+          <li>SHQ - Staff Head Quarters - This is our booth that we have setup at the con.</li>
+          <li>CRB - Character Reference Booklet - This is your character sheet, it's what you'll use to play the game.</li>
+        </ul>
+        <p>With that out of the way, please present the QR Code below to a GO or SHQ to get started!</p>
         <div class="d-flex flex-column align-items-start">
-          <div>
-            <p>Present the QR Code below to a GO or SHQ to get started!</p>
-          </div>
           <div class="text-center w-md-100">
             <img :src="qrcode" alt="QR Code" class="w-md-100" style="min-width: 250px">
             <div>{{ text }}</div>
@@ -69,7 +74,7 @@ onBeforeMount(async () => {
     <StepItem value="3">
       <Step>CRB is Cooking!</Step>
       <StepPanel>
-        <h3>Your CRB is cooking!</h3>
+        <h3>The CRB is cooking!</h3>
         <p>SHQ needs time to pull together your CRB</p>
         <p>A CRB is your Character Reference Booklet, it's what you'll use to play the game.</p>
         <p>It's provided to you for free, only thing we ask is that you return all of your strips at the end of the game.</p>
