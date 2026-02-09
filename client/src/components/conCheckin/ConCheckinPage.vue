@@ -1,15 +1,25 @@
 <script setup lang="ts">
 
-import { onBeforeMount, ref } from 'vue'
+import { onBeforeMount, ref, shallowRef } from 'vue'
 import { FeatureFlags, userStore } from '@/stores/userStore.ts'
 import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
 import { useRouter } from 'vue-router'
+import { useQRCode } from '@vueuse/integrations/useQRCode'
+import Stepper from 'primevue/stepper'
+import StepItem from 'primevue/stepitem'
+import Step from 'primevue/step'
+import StepPanel from 'primevue/steppanel'
 
 const eventCheckinInfo = EventCheckinStore()
 const userInfo = userStore()
 const router = useRouter()
 
 const hasCheckinFlag = ref(false)
+const text = shallowRef('https://vueuse.org')
+let qrcode = useQRCode(text, {
+  errorCorrectionLevel: 'H',
+  margin: 5,
+})
 
 onBeforeMount(async () => {
   await eventCheckinInfo.getCheckinAvailable()
@@ -20,38 +30,65 @@ onBeforeMount(async () => {
   }
 
   await eventCheckinInfo.getCheckinInfo()
+  text.value = eventCheckinInfo.lookupId
 })
 
 </script>
 
 <template>
-  <div>
-    <h2>Step 1 - Checkin</h2>
-    <ul>
-      <li>QR Code</li>
-      <li>Find GO</li>
-      <li>Find SHQ / Booth</li>
-    </ul>
-  </div>
-  <div>
-    <h2>Step 2 - GO Approval</h2>
-    <ul>
-      <li>Find GO</li>
-      <li>They have black vests with a red logo with the following graphic on it: insert photo of logo</li>
-    </ul>
-  </div>
-  <div>
-    <h2>Step 3 - Wait For CRB Creation</h2>
-    <ul>
-      <li>SHQ Needs to create the CRB and get it ready for Play</li>
-    </ul>
-  </div>
-  <div>
-    <h2>Step 4 - Pickup CRB</h2>
-    <ul>
-      <li>Once SHQ has the CRB ready, this message will be updated to say that it's ready to be picked up</li>
-      <li>A GO may reach out if they've been notified that your CRB is ready</li>
-      <li>You can reach out to SHQ by visiting the Booth</li>
-    </ul>
-  </div>
+  <Stepper value="1">
+    <StepItem value="1">
+      <Step>Initial Checkin</Step>
+      <StepPanel>
+        <div class="d-flex flex-column align-items-start">
+          <div>
+            <p>Present the QR Code below to a GO or SHQ to get started!</p>
+          </div>
+          <div class="text-center w-md-100">
+            <img :src="qrcode" alt="QR Code" class="w-md-100" style="min-width: 250px">
+            <div>{{ text }}</div>
+          </div>
+        </div>
+      </StepPanel>
+    </StepItem>
+    <StepItem value="2">
+      <Step>GO Approval</Step>
+      <StepPanel>
+        <h3>On the hunt for a GO</h3>
+        <p>A GO is required to review your character sheet, they will ensure that your character is ready to play the game.</p>
+        <p>
+          They will also fill you in with any relevant information regarding the game, any history you might need to know,
+          and any other information they deem necessary.
+        </p>
+        <p>This is also where you want to confirm your characters background, and any other questions you might have.</p>
+        <p>SHQ can assist you in finding a GO if you are having trouble finding one.</p>
+        <p>They have black vests with a red logo with the following graphic on it: insert photo of logo</p>
+        <img src="/public/favicon.png" alt="Society in Shadows vest emblem">
+      </StepPanel>
+    </StepItem>
+    <StepItem value="3">
+      <Step>CRB is Cooking!</Step>
+      <StepPanel>
+        <h3>Your CRB is cooking!</h3>
+        <p>SHQ needs time to pull together your CRB</p>
+        <p>A CRB is your Character Reference Booklet, it's what you'll use to play the game.</p>
+        <p>It's provided to you for free, only thing we ask is that you return all of your strips at the end of the game.</p>
+      </StepPanel>
+    </StepItem>
+    <StepItem value="4">
+      <Step>CRB Ready!</Step>
+      <StepPanel>
+        <h3>Your CRB is ready!</h3>
+        <p>Please come find our booth, and pickup up your CRB!</p>
+      </StepPanel>
+    </StepItem>
+  </Stepper>
 </template>
+
+<style>
+@media(max-width: 768px){
+  .w-md-100{
+    width: 100% !important;
+  }
+}
+</style>
