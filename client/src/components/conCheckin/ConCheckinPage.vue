@@ -1,6 +1,26 @@
 <script setup lang="ts">
 
-// Grab Checkin Status
+import { onBeforeMount, ref } from 'vue'
+import { FeatureFlags, userStore } from '@/stores/userStore.ts'
+import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
+import { useRouter } from 'vue-router'
+
+const eventCheckinInfo = EventCheckinStore()
+const userInfo = userStore()
+const router = useRouter()
+
+const hasCheckinFlag = ref(false)
+
+onBeforeMount(async () => {
+  await eventCheckinInfo.getCheckinAvailable()
+  hasCheckinFlag.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowEventCheckin)
+
+  if (!hasCheckinFlag.value || !eventCheckinInfo.hasActiveEvent) {
+    await router.push({ name: 'characters' })
+  }
+
+  await eventCheckinInfo.getCheckinInfo()
+})
 
 </script>
 

@@ -5,16 +5,20 @@ import Button from 'primevue/button'
 import { useRouter } from 'vue-router'
 import { computed, onBeforeMount, ref } from 'vue'
 import { FeatureFlags, userStore } from '@/stores/userStore.ts'
+import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
 
 const router = useRouter()
 const userInfo = userStore()
+const eventCheckinInfo = EventCheckinStore()
+
 const hasCheckinFlag = ref(false)
 
 onBeforeMount(async () => {
+  await eventCheckinInfo.getCheckinAvailable()
   hasCheckinFlag.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowEventCheckin)
 })
 
-const showBanner = computed(() => hasCheckinFlag.value)
+const showBanner = computed(() => hasCheckinFlag.value && eventCheckinInfo.hasActiveEvent)
 
 async function redirectToCheckinDetails() {
   await router.push({ name: 'eventcheckin' })

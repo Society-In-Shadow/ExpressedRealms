@@ -1,6 +1,8 @@
 ﻿using ExpressedRealms.Authentication;
 using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Authentication.PermissionCollection.Configuration;
+using ExpressedRealms.Events.API.API.EventCheckin.GetBasicCheckDetails;
+using ExpressedRealms.Events.API.API.EventCheckin.GetCheckDetails;
 using ExpressedRealms.Events.API.API.EventQuestions.Create;
 using ExpressedRealms.Events.API.API.EventQuestions.Delete;
 using ExpressedRealms.Events.API.API.EventQuestions.Edit;
@@ -85,5 +87,11 @@ internal static class EventEndpoints
         endpointGroup
             .MapGet("{eventId}/questions/", GetEventQuestionsEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.EventQuestion.View);
+        
+        endpointGroup
+            .MapGet("checkin/available", GetEventCheckinShowStatusEndpoint.ExecuteAsync);
+        
+        endpointGroup
+            .MapGet("checkin/info", GetEventCheckinInfoEndpoint.ExecuteAsync);
     }
 }
