@@ -47,6 +47,7 @@ export const UserPermissions = {
     GetFeatureFlag: 'devdebug.getfeatureflag',
     SendDiscordMessage: 'devdebug.senddiscordmessage',
     TestRedis: 'devdebug.testredis',
+    RunSpecialScripts: 'devdebug.runspecialscripts',
   } as const,
 } as const
 

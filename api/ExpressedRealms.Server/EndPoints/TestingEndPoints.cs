@@ -1,9 +1,11 @@
 using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Authentication.PermissionCollection.Configuration;
+using ExpressedRealms.DB;
 using ExpressedRealms.Email.TestEmail;
 using ExpressedRealms.Events.API.Discord;
 using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.FeatureFlags.FeatureClient;
+using NanoidDotNet;
 using StackExchange.Redis;
 
 namespace ExpressedRealms.Server.EndPoints;
@@ -75,5 +77,27 @@ internal static class TestingEndPoints
                 }
             )
             .RequirePermission(Permissions.DevDebug.TestRedis);
+        
+        endpoints.MapPost("/updateLookup", async (ExpressedRealmsDbContext db) =>
+        {
+            if (!db.Players.Any(t => t.LookupId == null)) return Results.Ok();
+
+            var existingIds = new HashSet<string>(
+                db.Players.Where(t => t.LookupId != null).Select(t => t.LookupId));
+
+            foreach (var ticket in db.Players.Where(t => t.LookupId == null))
+            {
+                string id;
+                do
+                {
+                    id = await Nanoid.GenerateAsync(size: 8);
+                } while (existingIds.Contains(id));
+                ticket.LookupId = id;
+                existingIds.Add(id);
+            }
+
+            await db.SaveChangesAsync();
+            return Results.Ok();
+        }).RequirePermission(Permissions.DevDebug.RunSpecialScripts);
     }
 }
