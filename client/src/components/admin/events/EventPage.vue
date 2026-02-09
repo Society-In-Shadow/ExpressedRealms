@@ -40,7 +40,7 @@ onBeforeMount(async () => {
   isLoaded.value = true
 })
 
-let popups = EventConfirmationPopup(event.value.id, event.value.name)
+let popups = EventConfirmationPopup(eventId, event.value.name)
 
 </script>
 
