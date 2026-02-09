@@ -15,7 +15,7 @@ const userInfo = userStore()
 const router = useRouter()
 
 const hasCheckinFlag = ref(false)
-const text = shallowRef('https://vueuse.org')
+const text = shallowRef('')
 let qrcode = useQRCode(text, {
   errorCorrectionLevel: 'H',
   margin: 5,

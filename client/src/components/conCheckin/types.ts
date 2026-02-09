@@ -3,3 +3,8 @@ export interface CheckinInfo {
   checkinStageId: number
   eventId: number
 }
+
+export interface GoCheckinInfo {
+  userName: string
+  isFirstTimeUser: boolean
+}

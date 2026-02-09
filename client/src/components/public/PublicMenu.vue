@@ -6,6 +6,7 @@ import { onBeforeMount, ref } from 'vue'
 import AvatarDropdown from '@/components/navbar/AvatarDropdown.vue'
 import { FeatureFlags, userStore } from '@/stores/userStore'
 import EventCheckinBanner from '@/components/conCheckin/EventCheckinBanner.vue'
+import GoCheckinBanner from '@/components/conCheckin/GoCheckinBanner.vue'
 
 const router = useRouter()
 const userInfo = userStore()
@@ -31,6 +32,7 @@ onBeforeMount(async () => {
 
 <template>
   <EventCheckinBanner v-if="userInfo.isLoggedIn()" />
+  <GoCheckinBanner v-if="userInfo.isLoggedIn()" />
   <MegaMenu :model="items" class="ms-0 me-0 mt-2 mb-2 m-md-2">
     <template #start>
       <RouterLink to="/">

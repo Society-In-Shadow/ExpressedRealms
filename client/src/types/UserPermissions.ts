@@ -17,6 +17,7 @@ export const UserPermissions = {
     Create: 'event.create',
     Delete: 'event.delete',
     Publish: 'event.publish',
+    Checkin: 'event.checkin',
   } as const,
   EventScheduleItem: {
     Edit: 'eventscheduleitem.edit',

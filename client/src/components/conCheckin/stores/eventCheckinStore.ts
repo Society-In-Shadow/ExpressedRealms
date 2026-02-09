@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import type { CheckinInfo } from '@/components/conCheckin/types.ts'
+import type { CheckinInfo, GoCheckinInfo } from '@/components/conCheckin/types.ts'
 
 export const EventCheckinStore
   = defineStore(`eventCheckin`, {
@@ -9,6 +9,7 @@ export const EventCheckinStore
         hasActiveEvent: false,
         lookupId: '',
         eventId: 0,
+        goCheckinInfo: {} as GoCheckinInfo,
       }
     },
     actions: {
@@ -21,6 +22,14 @@ export const EventCheckinStore
 
         this.lookupId = response.data.lookupId
         this.eventId = response.data.eventId
+      },
+      async getGoCheckinInfo(lookupId: string): Promise<boolean> {
+        const response = await axios.get<GoCheckinInfo>(`/events/checkin/lookup/${lookupId}`)
+
+        if (response.status !== 200) return false
+
+        this.goCheckinInfo = response.data
+        return true
       },
     },
   })
