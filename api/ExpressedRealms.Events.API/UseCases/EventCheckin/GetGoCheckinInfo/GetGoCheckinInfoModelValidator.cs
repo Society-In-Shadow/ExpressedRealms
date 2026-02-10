@@ -7,9 +7,7 @@ namespace ExpressedRealms.Events.API.UseCases.EventCheckin.GetGoCheckinInfo;
 [UsedImplicitly]
 internal sealed class GetGoCheckinInfoModelValidator : AbstractValidator<GetGoCheckinInfoModel>
 {
-    public GetGoCheckinInfoModelValidator(
-        IEventCheckinRepository repository
-    )
+    public GetGoCheckinInfoModelValidator(IEventCheckinRepository repository)
     {
         RuleFor(x => x.LookupId)
             .NotEmpty()

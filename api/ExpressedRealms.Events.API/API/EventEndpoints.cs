@@ -89,13 +89,11 @@ internal static class EventEndpoints
         endpointGroup
             .MapGet("{eventId}/questions/", GetEventQuestionsEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.EventQuestion.View);
-        
-        endpointGroup
-            .MapGet("checkin/available", GetEventCheckinShowStatusEndpoint.ExecuteAsync);
-        
-        endpointGroup
-            .MapGet("checkin/info", GetUserCheckinInfoEndpoint.ExecuteAsync);
-        
+
+        endpointGroup.MapGet("checkin/available", GetEventCheckinShowStatusEndpoint.ExecuteAsync);
+
+        endpointGroup.MapGet("checkin/info", GetUserCheckinInfoEndpoint.ExecuteAsync);
+
         endpointGroup
             .MapGet("checkin/lookup/{lookupId}", GetGoCheckinInfoEndpoint.ExecuteAsync)
             .RequireFeatureToggle(ReleaseFlags.ShowEventCheckin)

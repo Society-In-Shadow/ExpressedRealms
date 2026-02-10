@@ -10,10 +10,10 @@ internal sealed class EventCheckinRepository(
     CancellationToken cancellationToken
 ) : IEventCheckinRepository
 {
-
     public async Task<string> GetPlayerLookupId()
     {
-        return await context.Players.AsNoTracking()
+        return await context
+            .Players.AsNoTracking()
             .Where(x => x.UserId == userContext.CurrentUserId())
             .Select(x => x.LookupId!)
             .FirstAsync(cancellationToken);
@@ -21,7 +21,8 @@ internal sealed class EventCheckinRepository(
 
     public async Task<bool> CheckinIdExistsAsync(string id)
     {
-        return await context.Players.AsNoTracking()
+        return await context
+            .Players.AsNoTracking()
             .AnyAsync(x => x.LookupId == id, cancellationToken);
     }
 
@@ -29,18 +30,19 @@ internal sealed class EventCheckinRepository(
     {
         var now = DateOnly.FromDateTime(DateTime.UtcNow);
 
-        var eventId = await context.Events.AsNoTracking()
+        var eventId = await context
+            .Events.AsNoTracking()
             .Where(x => x.IsPublished && x.StartDate <= now && x.EndDate >= now)
             .Select(x => x.Id)
             .FirstOrDefaultAsync(cancellationToken);
-        
+
         return eventId == 0 ? null : eventId;
     }
 
     public async Task<string> GetUserName(string lookupId)
     {
-        return await context.Players
-            .Where(x => x.LookupId == lookupId)
+        return await context
+            .Players.Where(x => x.LookupId == lookupId)
             .Select(x => x.Name)
             .FirstAsync(cancellationToken);
     }
@@ -48,12 +50,16 @@ internal sealed class EventCheckinRepository(
     public async Task<bool> IsFirstTimePlayer(string lookupId)
     {
         const int firstTimePlayerBonus = 4;
-        return await context.AssignedXpMappings.AsNoTracking()
-            .AnyAsync(x => x.Player.LookupId == lookupId && 
-                           x.AssignedXpTypeId == firstTimePlayerBonus, cancellationToken);
+        return await context
+            .AssignedXpMappings.AsNoTracking()
+            .AnyAsync(
+                x => x.Player.LookupId == lookupId && x.AssignedXpTypeId == firstTimePlayerBonus,
+                cancellationToken
+            );
     }
 
-    public Task EditAsync<TEntity>(TEntity entity) where TEntity : class
+    public Task EditAsync<TEntity>(TEntity entity)
+        where TEntity : class
     {
         throw new NotImplementedException();
     }

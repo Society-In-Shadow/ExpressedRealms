@@ -20,14 +20,15 @@ internal sealed class GetGoCheckinInfoUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-        
+
         var playerName = await checkinRepository.GetUserName(model.LookupId);
         var isFirstTimePlayer = await checkinRepository.IsFirstTimePlayer(model.LookupId);
 
-        return Result.Ok(new GetGoCheckinInfoReturnModel()
+        return Result.Ok(
+            new GetGoCheckinInfoReturnModel()
             {
                 Username = playerName,
-                IsFirstTimeUser = isFirstTimePlayer
+                IsFirstTimeUser = isFirstTimePlayer,
             }
         );
     }

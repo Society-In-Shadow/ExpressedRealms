@@ -8,7 +8,9 @@ namespace ExpressedRealms.Events.API.API.EventCheckin.GetUserCheckinDetails;
 
 public static class GetUserCheckinInfoEndpoint
 {
-    public static async Task<Ok<GetUserCheckinInfoResponse>> ExecuteAsync([FromServices] IGetUserCheckinInfoUseCase useCase)
+    public static async Task<Ok<GetUserCheckinInfoResponse>> ExecuteAsync(
+        [FromServices] IGetUserCheckinInfoUseCase useCase
+    )
     {
         var results = await useCase.ExecuteAsync();
         results.ThrowIfErrorNotHandled();
@@ -18,7 +20,7 @@ public static class GetUserCheckinInfoEndpoint
             {
                 LookupId = results.Value.LookupId,
                 CheckinStageId = results.Value.CheckinStageId,
-                EventId = results.Value.EventId
+                EventId = results.Value.EventId,
             }
         );
     }

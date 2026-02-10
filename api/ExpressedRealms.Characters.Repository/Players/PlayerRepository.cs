@@ -24,7 +24,7 @@ internal sealed class PlayerRepository(
         {
             lookupId = await Nanoid.GenerateAsync(size: 8);
         }
-        
+
         return lookupId;
     }
 

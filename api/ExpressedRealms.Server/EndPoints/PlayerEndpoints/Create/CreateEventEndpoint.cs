@@ -18,19 +18,17 @@ public static class CreatePlayerEndpoint
     )
     {
         var userId = http.HttpContext!.User.GetUserId();
-        var isExistingPlayer = await dbContext.Players.FirstOrDefaultAsync(x =>
-            x.UserId == userId
-        );
+        var isExistingPlayer = await dbContext.Players.FirstOrDefaultAsync(x => x.UserId == userId);
 
-        if (isExistingPlayer is not null) 
+        if (isExistingPlayer is not null)
             return TypedResults.Created("/player");
-        
+
         var player = new Player()
         {
             Id = new Guid(),
             Name = request.Name,
             UserId = userId,
-            LookupId = await playerRepository.GetUniqueLookupId()
+            LookupId = await playerRepository.GetUniqueLookupId(),
         };
 
         await dbContext.Players.AddAsync(player);

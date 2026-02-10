@@ -43,13 +43,12 @@ public static partial class Permissions
             Description =
                 "Will publish the event to the public site, create an event in Discord, and publish a messages to the announcements channel.",
         };
-        
+
         public static readonly Permission Checkin = new(ResourceInfo)
         {
             Id = new Guid("019c41ee-206e-7fea-8cb8-b67a0cacdf84"),
             Name = nameof(Checkin),
-            Description =
-                "Allows a user to checkin players for the ongoing event.",
+            Description = "Allows a user to checkin players for the ongoing event.",
         };
     }
 }
