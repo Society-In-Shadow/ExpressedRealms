@@ -19,6 +19,7 @@ internal static class PlayerAuditConfiguration
                     break;
 
                 case nameof(Player.UserId):
+                case "lookup_id":
                     skipRecord = true;
                     break;
 

@@ -1,6 +1,9 @@
 ﻿using ExpressedRealms.Authentication;
 using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Authentication.PermissionCollection.Configuration;
+using ExpressedRealms.Events.API.API.EventCheckin.GetBasicCheckDetails;
+using ExpressedRealms.Events.API.API.EventCheckin.GetGoCheckinInfo;
+using ExpressedRealms.Events.API.API.EventCheckin.GetUserCheckinDetails;
 using ExpressedRealms.Events.API.API.EventQuestions.Create;
 using ExpressedRealms.Events.API.API.EventQuestions.Delete;
 using ExpressedRealms.Events.API.API.EventQuestions.Edit;
@@ -14,6 +17,7 @@ using ExpressedRealms.Events.API.API.EventScheduleItem.Create;
 using ExpressedRealms.Events.API.API.EventScheduleItem.Delete;
 using ExpressedRealms.Events.API.API.EventScheduleItem.Edit;
 using ExpressedRealms.Events.API.API.EventScheduleItem.Get;
+using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -85,5 +89,14 @@ internal static class EventEndpoints
         endpointGroup
             .MapGet("{eventId}/questions/", GetEventQuestionsEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.EventQuestion.View);
+
+        endpointGroup.MapGet("checkin/available", GetEventCheckinShowStatusEndpoint.ExecuteAsync);
+
+        endpointGroup.MapGet("checkin/info", GetUserCheckinInfoEndpoint.ExecuteAsync);
+
+        endpointGroup
+            .MapGet("checkin/lookup/{lookupId}", GetGoCheckinInfoEndpoint.ExecuteAsync)
+            .RequireFeatureToggle(ReleaseFlags.ShowEventCheckin)
+            .RequirePermission(Permissions.Event.Checkin);
     }
 }

@@ -47,5 +47,12 @@ public static partial class Permissions
             Description =
                 "Adds then reads \"TestKey\" to / from redis forcibly.  Bypasses resiliancy",
         };
+
+        public static readonly Permission RunSpecialScripts = new(ResourceInfo)
+        {
+            Id = new Guid("019c40b9-9547-728c-a9b4-d5d38dcccbd6"),
+            Name = nameof(RunSpecialScripts),
+            Description = "This allows one to run one off scripts that need to be run via code",
+        };
     }
 }

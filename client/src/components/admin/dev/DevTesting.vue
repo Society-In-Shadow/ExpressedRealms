@@ -36,6 +36,13 @@ const testRedis = async () => {
     })
 }
 
+const RunSpecialScripts = async () => {
+  await axios.post(`/dev/updateLookup`)
+    .then(async (response) => {
+      toaster.success(`Successfully Updated Lookup!`)
+    })
+}
+
 </script>
 
 <template>
@@ -46,5 +53,6 @@ const testRedis = async () => {
     <Button v-if="permissionCheck.DevDebug.GetFeatureFlag" label="Test Feature Flags" @click="getFeatureFlag" />
     <Button v-if="permissionCheck.DevDebug.SendDiscordMessage" label="Test Sending Discord Message" @click="sendDiscordMessage" />
     <Button v-if="permissionCheck.DevDebug.TestRedis" label="Test Redis" @click="testRedis" />
+    <Button v-if="permissionCheck.DevDebug.RunSpecialScripts" label="Run Special Scripts" @click="RunSpecialScripts" />
   </div>
 </template>
