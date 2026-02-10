@@ -18,6 +18,12 @@ export const PublicRoutes = {
       meta: { isAnonymous: true },
     },
     {
+      path: 'backstory',
+      name: 'backstory',
+      component: () => import('./../../components/public/BackstoryPage.vue'),
+      meta: { isAnonymous: true },
+    },
+    {
       path: 'expressions',
       name: 'expressions',
       component: () => import('./../../components/public/PublicExpressions.vue'),

@@ -13,9 +13,10 @@ const userInfo = userStore()
 
 const items = ref([
   { root: true, label: 'Home', route: '', command: () => router.push('/') },
-  { root: true, label: 'About', route: 'about', command: () => router.push('/about') },
+  { root: true, label: 'Backstory', route: 'backstory', command: () => router.push('/backstory') },
   { root: true, label: 'Expressions', route: 'expressions', command: () => router.push('/expressions') },
   { root: true, label: 'Upcoming Events', route: 'upcoming-events', command: () => router.push('/upcoming-events') },
+  { root: true, label: 'About', route: 'about', command: () => router.push('/about') },
   { root: true, label: 'Code of Conduct', route: 'code-of-conduct', command: () => router.push('/code-of-conduct') },
 ])
 
@@ -24,7 +25,7 @@ onBeforeMount(async () => {
     items.value.splice(1, 0, { root: true, label: 'Characters', route: '/characters', command: () => router.push('/characters') })
   }
   if (await userInfo.hasFeatureFlag(FeatureFlags.ShowMarketingContactUs)) {
-    items.value.splice(3, 0, { root: true, label: 'Contact Us', route: 'contact-us', command: () => router.push('/contact-us') })
+    items.value.splice(items.value.length - 2, 0, { root: true, label: 'Contact Us', route: 'contact-us', command: () => router.push('/contact-us') })
   }
 })
 
