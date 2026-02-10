@@ -5,77 +5,81 @@ import Card from 'primevue/card'
 </script>
 
 <template>
-  <div class="d-flex flex-md-row flex-column gap-3 ">
-    <Card>
-      <template #title>
-        Society in Shadows
-      </template>
-      <template #content>
-        <p>
-          For centuries, our stories were hidden. Today, you can explore the history, the events, and the mysteries that
-          have kept the Society alive.
-        </p>
-        <div>
-          <router-link to="/about">
-            <div class="d-flex flex-row gap-1">
-              <div>Explore Who We Are</div>
-              <div>
-                <span class="material-symbols-outlined">
-                  arrow_right_alt
-                </span>
+  <div class="d-flex flex-md-row flex-column gap-3">
+    <div class="flex-fill">
+      <Card class="flex-fill">
+        <template #title>
+          Society in Shadows
+        </template>
+        <template #content>
+          <p>
+            Once secret and heavily guarded, this manual is now online, risky, but necessary. The Society preserves its
+            stories so knowledge survives beyond memory and whispers.
+          </p>
+          <div>
+            <router-link to="/about">
+              <div class="d-flex flex-row gap-1">
+                <div>Explore Who We Are</div>
+                <div>
+                  <span class="material-symbols-outlined">
+                    arrow_right_alt
+                  </span>
+                </div>
               </div>
-            </div>
-          </router-link>
-        </div>
-        <div>
-          <router-link to="/upcoming-events">
-            <div class="d-flex flex-row gap-1">
-              <div>Explore Upcoming Events</div>
-              <div>
-                <span class="material-symbols-outlined">
-                  arrow_right_alt
-                </span>
+            </router-link>
+          </div>
+          <div>
+            <router-link to="/upcoming-events">
+              <div class="d-flex flex-row gap-1">
+                <div>Explore Upcoming Events</div>
+                <div>
+                  <span class="material-symbols-outlined">
+                    arrow_right_alt
+                  </span>
+                </div>
               </div>
-            </div>
-          </router-link>
-        </div>
-      </template>
-    </Card>
-    <Card>
-      <template #title>
-        How will you Express?
-      </template>
-      <template #content>
-        <p>
-          In Society in Shadows, every character awakens to an Expression — a path that defines their abilities, choices,
-          and place in the world.
-        </p>
-        <div>
-          <router-link to="/expressions">
-            <div class="d-flex flex-row gap-1">
-              <div>Explore Expressions </div>
-              <div>
-                <span class="material-symbols-outlined">
-                  arrow_right_alt
-                </span>
+            </router-link>
+          </div>
+        </template>
+      </Card>
+    </div>
+    <div class="flex-fill">
+      <Card class="flex-fill">
+        <template #title>
+          How will you Express?
+        </template>
+        <template #content>
+          <p>
+            In Society in Shadows, every person awakens to an Expression — a path that defines your abilities, choices,
+            and place in the world.
+          </p>
+          <div>
+            <router-link to="/expressions">
+              <div class="d-flex flex-row gap-1">
+                <div>Explore Expressions </div>
+                <div>
+                  <span class="material-symbols-outlined">
+                    arrow_right_alt
+                  </span>
+                </div>
               </div>
-            </div>
-          </router-link>
-        </div>
-        <div>
-          <router-link to="/backstory">
-            <div class="d-flex flex-row gap-1">
-              <div>Explore Society's Backstory</div>
-              <div>
-                <span class="material-symbols-outlined">
-                  arrow_right_alt
-                </span>
+            </router-link>
+          </div>
+          <div>
+            <router-link to="/backstory">
+              <div class="d-flex flex-row gap-1">
+                <div>Explore Society's Backstory</div>
+                <div>
+                  <span class="material-symbols-outlined">
+                    arrow_right_alt
+                  </span>
+                </div>
               </div>
-            </div>
-          </router-link>
-        </div>
-      </template>
-    </Card>
+            </router-link>
+          </div>
+        </template>
+      </Card>
+    </div>
   </div>
 
   <HomePageCarousel />
@@ -90,7 +94,7 @@ import Card from 'primevue/card'
         Character Driven Stories
       </template>
       <template #content>
-        All players can and do have an impact on the story, it's not unusual for players to change plot direction, for better or for worse.
+        All players can and do have an impact on the story. It's not unusual for players to change plot direction, for better or for worse.
       </template>
     </Card>
     <Card class="constrain-pillars m-2">
