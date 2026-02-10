@@ -25,7 +25,7 @@ public static class CreatePlayerEndpoint
 
         var player = new Player()
         {
-            Id = new Guid(),
+            Id = Guid.NewGuid(),
             Name = request.Name,
             UserId = userId,
             LookupId = await playerRepository.GetUniqueLookupId(),

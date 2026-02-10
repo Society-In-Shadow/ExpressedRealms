@@ -35,7 +35,7 @@ public class GetGoCheckinInfoUseCaseTests
     [Fact]
     public async Task ValidationFor_LookupId_WillFail_WhenEmpty()
     {
-        _model.LookupId = null;
+        _model.LookupId = "";
 
         var results = await _useCase.ExecuteAsync(_model);
 
