@@ -13,6 +13,13 @@ const neutralStone = ref('')
 const winningMarble = ref('')
 const winningMarbleValue = ref(0)
 
+const props = defineProps({
+  hideDescription: {
+    type: Boolean,
+    default: false,
+  },
+})
+
 const stoneTypes = ['red', 'blue', 'black', 'yellow', 'green', 'white']
 let stoneBag = ['red', 'blue', 'black', 'yellow', 'green', 'white']
 
@@ -246,18 +253,7 @@ const bonusEffects = [
         </div>
       </div>
 
-      <h1>Stone Pulling</h1>
-      <p>
-        In a RBT, a drawn stone’s color is cross-referenced to the neutral stone’s color via the Random Bonus Table,
-        illustrated below. Comparing two colors generates a number between 0 and 5 called the
-        Random Bonus. For example, if a player draws a red stone and the neutral stone is green, a RB of +4 is
-        generated. If a player is entitled to draw multiple stones for the test, they choose the stone giving them the
-        highest bonus value.
-
-        The bag has 1 stone of each color.
-      </p>
-
-      <div>
+      <div v-if="props.hideDescription">
         <DataTable :value="table" striped-rows>
           <Column field="stone" header="">
             <template #body="slotProps">
@@ -296,48 +292,101 @@ const bonusEffects = [
           </Column>
         </DataTable>
       </div>
-      <h1>Lead Stone</h1>
-      <p>
-        In some instances, players are allowed to draw more than one stone. When drawing multiple stones, it is important
-        for you to specify a lead stone. To do so, you should somehow separate and designate your lead stone prior to
-        revealing. A common method for doing this is to shift one of your drawn stones into the other hand and place this
-        hand above the other to clearly designate it as the lead stone. Some tests rely on the lead stone to determine the
-        quality of the test’s result, however, the other stone(s) are typically still used for determining success.
-      </p>
-      <p>
-        For the purpose of this online tool, the top left most stone is the lead stone.
-      </p>
-      <h1>Success and Failure</h1>
-      <p>
-        All things considered, it is assumed that if you fail, you fail completely and if you succeed, that you succeed
-        completely. On some rare occasions, a successful test may not have the intended effect, and a failure may have some
-        benefits to the failing character.
-      </p>
-      <h1>Critical Success and Critical Failure</h1>
-      <p>
-        There are two rare (1-in-36 chance) circumstances that can occur when an attack is made, changing the result
-        drastically.
-      </p>
-      <p>
-        The first is a critical success and happens when the attacker’s lead stone random bonus result is +5 and the
-        defender’s is +0. The other is a critical failure and happens in the reverse circumstance when the defender’s lead
-        stone random bonus result is +5 and the attacker’s is +0.
-      </p>
-      <p>
-        In either case, the successful party may either allow the GO a free hand to describe the critical success/failure
-        with cinematic and mechanics or draw a new random bonus test and look up the result on the appropriate critical
-        table. This is called making a critical test. Some powers have a unique effect listed in the event of a critical
-        result, in these instances, a critical test is not necessary. When a critical success occurs there is no need to
-        draw for an extra damage test as this test is considered to be successful. The game official always has the final
-        say on which critical effect occurs, including making up critical effects on the fly, allowing the game official
-        to craft the cinematic of the scene.
-      </p>
-      <div>
-        <DataTable :value="bonusEffects" striped-rows>
-          <Column field="bonus" header="Bonus" />
-          <Column field="success" header="Success (Effect on Defender)" />
-          <Column field="failure" header="Failure (Effect on Attacker)" />
-        </DataTable>
+
+      <div v-if="!props.hideDescription">
+        <h1>Stone Pulling</h1>
+        <p>
+          In a RBT, a drawn stone’s color is cross-referenced to the neutral stone’s color via the Random Bonus Table,
+          illustrated below. Comparing two colors generates a number between 0 and 5 called the
+          Random Bonus. For example, if a player draws a red stone and the neutral stone is green, a RB of +4 is
+          generated. If a player is entitled to draw multiple stones for the test, they choose the stone giving them the
+          highest bonus value.
+
+          The bag has 1 stone of each color.
+        </p>
+
+        <div>
+          <DataTable :value="table" striped-rows>
+            <Column field="stone" header="">
+              <template #body="slotProps">
+                <strong>{{ slotProps.data.stone }}</strong>
+              </template>
+            </Column>
+            <Column field="black" header="Black">
+              <template #body="slotProps">
+                +{{ slotProps.data.black }}
+              </template>
+            </Column>
+            <Column field="blue" header="Blue">
+              <template #body="slotProps">
+                +{{ slotProps.data.blue }}
+              </template>
+            </Column>
+            <Column field="clear" header="Clear">
+              <template #body="slotProps">
+                +{{ slotProps.data.clear }}
+              </template>
+            </Column>
+            <Column field="green" header="Green">
+              <template #body="slotProps">
+                +{{ slotProps.data.green }}
+              </template>
+            </Column>
+            <Column field="red" header="Red">
+              <template #body="slotProps">
+                +{{ slotProps.data.red }}
+              </template>
+            </Column>
+            <Column field="white" header="White">
+              <template #body="slotProps">
+                +{{ slotProps.data.white }}
+              </template>
+            </Column>
+          </DataTable>
+        </div>
+        <h1>Lead Stone</h1>
+        <p>
+          In some instances, players are allowed to draw more than one stone. When drawing multiple stones, it is important
+          for you to specify a lead stone. To do so, you should somehow separate and designate your lead stone prior to
+          revealing. A common method for doing this is to shift one of your drawn stones into the other hand and place this
+          hand above the other to clearly designate it as the lead stone. Some tests rely on the lead stone to determine the
+          quality of the test’s result, however, the other stone(s) are typically still used for determining success.
+        </p>
+        <p>
+          For the purpose of this online tool, the top left most stone is the lead stone.
+        </p>
+        <h1>Success and Failure</h1>
+        <p>
+          All things considered, it is assumed that if you fail, you fail completely and if you succeed, that you succeed
+          completely. On some rare occasions, a successful test may not have the intended effect, and a failure may have some
+          benefits to the failing character.
+        </p>
+        <h1>Critical Success and Critical Failure</h1>
+        <p>
+          There are two rare (1-in-36 chance) circumstances that can occur when an attack is made, changing the result
+          drastically.
+        </p>
+        <p>
+          The first is a critical success and happens when the attacker’s lead stone random bonus result is +5 and the
+          defender’s is +0. The other is a critical failure and happens in the reverse circumstance when the defender’s lead
+          stone random bonus result is +5 and the attacker’s is +0.
+        </p>
+        <p>
+          In either case, the successful party may either allow the GO a free hand to describe the critical success/failure
+          with cinematic and mechanics or draw a new random bonus test and look up the result on the appropriate critical
+          table. This is called making a critical test. Some powers have a unique effect listed in the event of a critical
+          result, in these instances, a critical test is not necessary. When a critical success occurs there is no need to
+          draw for an extra damage test as this test is considered to be successful. The game official always has the final
+          say on which critical effect occurs, including making up critical effects on the fly, allowing the game official
+          to craft the cinematic of the scene.
+        </p>
+        <div>
+          <DataTable :value="bonusEffects" striped-rows>
+            <Column field="bonus" header="Bonus" />
+            <Column field="success" header="Success (Effect on Defender)" />
+            <Column field="failure" header="Failure (Effect on Attacker)" />
+          </DataTable>
+        </div>
       </div>
     </template>
   </Card>

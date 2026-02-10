@@ -73,7 +73,9 @@ async function onDetect(detectedCodes) {
     <StepItem value="5">
       <Step>Stone Pull</Step>
       <StepPanel>
-        <StonePuller />
+        <p>You can use physical stones for this, or use the digital one below.</p>
+        <p>Chart is provided as reference for physical stone pull</p>
+        <StonePuller :hide-description="true" />
       </StepPanel>
     </StepItem>
     <StepItem value="6">
