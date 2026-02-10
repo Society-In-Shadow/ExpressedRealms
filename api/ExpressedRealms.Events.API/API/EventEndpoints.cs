@@ -3,6 +3,7 @@ using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using ExpressedRealms.Events.API.API.EventCheckin.GetBasicCheckDetails;
 using ExpressedRealms.Events.API.API.EventCheckin.GetGoCheckinInfo;
+using ExpressedRealms.Events.API.API.EventCheckin.GetUserCheckinDetails;
 using ExpressedRealms.Events.API.API.EventQuestions.Create;
 using ExpressedRealms.Events.API.API.EventQuestions.Delete;
 using ExpressedRealms.Events.API.API.EventQuestions.Edit;
@@ -22,7 +23,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 using EditEventEndpoint = ExpressedRealms.Events.API.API.Events.Edit.EditEventEndpoint;
-using GetEventCheckinInfoEndpoint = ExpressedRealms.Events.API.API.EventCheckin.GetCheckDetails.GetEventCheckinInfoEndpoint;
 
 namespace ExpressedRealms.Events.API.API;
 
@@ -94,7 +94,7 @@ internal static class EventEndpoints
             .MapGet("checkin/available", GetEventCheckinShowStatusEndpoint.ExecuteAsync);
         
         endpointGroup
-            .MapGet("checkin/info", GetEventCheckinInfoEndpoint.ExecuteAsync);
+            .MapGet("checkin/info", GetUserCheckinInfoEndpoint.ExecuteAsync);
         
         endpointGroup
             .MapGet("checkin/lookup/{lookupId}", GetGoCheckinInfoEndpoint.ExecuteAsync)

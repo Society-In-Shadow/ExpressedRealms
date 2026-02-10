@@ -1,6 +1,6 @@
-namespace ExpressedRealms.Events.API.UseCases.EventCheckin.GetCheckinInfo;
+namespace ExpressedRealms.Events.API.UseCases.EventCheckin.GetUserCheckinInfo;
 
-public class CheckinInfoReturnModel
+public class GetUserCheckinInfoReturnModel
 {
     public required string LookupId { get; set; }
     public int CheckinStageId { get; set; }
