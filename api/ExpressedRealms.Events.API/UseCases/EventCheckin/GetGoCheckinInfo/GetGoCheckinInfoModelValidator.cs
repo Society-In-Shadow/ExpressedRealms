@@ -2,12 +2,12 @@ using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using FluentValidation;
 using JetBrains.Annotations;
 
-namespace ExpressedRealms.Events.API.UseCases.EventCheckin.CheckinUserInfo;
+namespace ExpressedRealms.Events.API.UseCases.EventCheckin.GetGoCheckinInfo;
 
 [UsedImplicitly]
-internal sealed class GetInitialCheckinUserInfoModelValidator : AbstractValidator<GetInitialCheckinUserInfoModel>
+internal sealed class GetGoCheckinInfoModelValidator : AbstractValidator<GetGoCheckinInfoModel>
 {
-    public GetInitialCheckinUserInfoModelValidator(
+    public GetGoCheckinInfoModelValidator(
         IEventCheckinRepository repository
     )
     {

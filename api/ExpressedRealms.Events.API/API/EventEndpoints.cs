@@ -2,7 +2,7 @@
 using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using ExpressedRealms.Events.API.API.EventCheckin.GetBasicCheckDetails;
-using ExpressedRealms.Events.API.API.EventCheckin.GetInitialCheckinUserInfo;
+using ExpressedRealms.Events.API.API.EventCheckin.GetGoCheckinInfo;
 using ExpressedRealms.Events.API.API.EventQuestions.Create;
 using ExpressedRealms.Events.API.API.EventQuestions.Delete;
 using ExpressedRealms.Events.API.API.EventQuestions.Edit;

@@ -1,19 +1,19 @@
-using ExpressedRealms.Events.API.UseCases.EventCheckin.CheckinUserInfo;
+using ExpressedRealms.Events.API.UseCases.EventCheckin.GetGoCheckinInfo;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ExpressedRealms.Events.API.API.EventCheckin.GetInitialCheckinUserInfo;
+namespace ExpressedRealms.Events.API.API.EventCheckin.GetGoCheckinInfo;
 
 public static class GetGoCheckinInfoEndpoint
 {
-    public static async Task<Results<Ok<GetInitialCheckinUserInfoResponse>, ValidationProblem, NotFound>> 
+    public static async Task<Results<Ok<GetGoCheckinInfoResponse>, ValidationProblem, NotFound>> 
         ExecuteAsync(
             string lookupId,
-            [FromServices] IGetInitialCheckinUserInfoUseCase useCase)
+            [FromServices] IGetGoCheckinInfoUseCase useCase)
     {
-        var results = await useCase.ExecuteAsync(new GetInitialCheckinUserInfoModel()
+        var results = await useCase.ExecuteAsync(new GetGoCheckinInfoModel()
         {
             LookupId = lookupId
         });
@@ -25,7 +25,7 @@ public static class GetGoCheckinInfoEndpoint
 
         results.ThrowIfErrorNotHandled();
 
-        return TypedResults.Ok(new GetInitialCheckinUserInfoResponse()
+        return TypedResults.Ok(new GetGoCheckinInfoResponse()
             {
                 UserName = results.Value.Username,
                 IsFirstTimeUser = results.Value.IsFirstTimeUser
