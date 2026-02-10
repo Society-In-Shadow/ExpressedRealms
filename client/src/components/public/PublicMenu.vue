@@ -25,7 +25,7 @@ onBeforeMount(async () => {
     items.value.splice(1, 0, { root: true, label: 'Characters', route: '/characters', command: () => router.push('/characters') })
   }
   if (await userInfo.hasFeatureFlag(FeatureFlags.ShowMarketingContactUs)) {
-    items.value.splice(items.value.length - 2, 0, { root: true, label: 'Contact Us', route: 'contact-us', command: () => router.push('/contact-us') })
+    items.value.splice(-2, 0, { root: true, label: 'Contact Us', route: 'contact-us', command: () => router.push('/contact-us') })
   }
 })
 
