@@ -102,7 +102,7 @@ import Card from 'primevue/card'
         Life Long Friendships
       </template>
       <template #content>
-        Many of our players became good friends through the hi jinx brought forth during play. It's those pesky
+        Many of our players became good friends through the hijinx brought forth during play. It's those pesky
         squirrels that connect us together.
       </template>
     </Card>
