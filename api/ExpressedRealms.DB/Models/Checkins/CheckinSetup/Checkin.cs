@@ -17,10 +17,12 @@ public class Checkin
     public Guid PlayerId { get; set; }
     public virtual Player Player { get; set; } = null!;
 
-
     public virtual ICollection<CheckinAuditTrail> CheckinAuditTrails { get; set; } =
         new HashSet<CheckinAuditTrail>();
-    public virtual ICollection<CheckinQuestionResponse> CheckinQuestionResponses { get; set; } = new HashSet<CheckinQuestionResponse>();
-    public virtual ICollection<CheckinQuestionResponseAuditTrail> CheckinQuestionResponseAuditTrails { get; set; } = new HashSet<CheckinQuestionResponseAuditTrail>();
-    public virtual ICollection<CheckinStageMapping> CheckinStageMappings { get; set; } = new HashSet<CheckinStageMapping>();
+    public virtual ICollection<CheckinQuestionResponse> CheckinQuestionResponses { get; set; } =
+        new HashSet<CheckinQuestionResponse>();
+    public virtual ICollection<CheckinQuestionResponseAuditTrail> CheckinQuestionResponseAuditTrails { get; set; } =
+        new HashSet<CheckinQuestionResponseAuditTrail>();
+    public virtual ICollection<CheckinStageMapping> CheckinStageMappings { get; set; } =
+        new HashSet<CheckinStageMapping>();
 }

@@ -8,12 +8,12 @@ namespace ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup.Audit;
 public class CheckinQuestionResponseAuditTrail : IAuditTable
 {
     public virtual CheckinQuestionResponse CheckinQuestionResponse { get; set; } = null!;
-    
+
     public int CheckinId { get; set; }
     public virtual Checkin Checkin { get; set; } = null!;
     public int EventQuestionId { get; set; }
     public virtual EventQuestion EventQuestion { get; set; } = null!;
-    
+
     public int Id { get; set; }
     public required string Action { get; set; }
     public DateTime Timestamp { get; set; }

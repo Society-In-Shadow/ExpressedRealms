@@ -8,5 +8,6 @@ public class CheckinStage
     public required string Name { get; set; }
     public required string Description { get; set; }
 
-    public virtual ICollection<CheckinStageMapping> CheckinStageMappings { get; set; } = new HashSet<CheckinStageMapping>();
+    public virtual ICollection<CheckinStageMapping> CheckinStageMappings { get; set; } =
+        new HashSet<CheckinStageMapping>();
 }

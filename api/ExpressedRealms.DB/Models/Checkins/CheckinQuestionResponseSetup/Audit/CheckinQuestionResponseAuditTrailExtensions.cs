@@ -16,7 +16,7 @@ internal static class CheckinQuestionResponseAuditTrailExtensions
                 case "event_question_id":
                 case "checkin_id":
                     continue;
-                
+
                 case "answer":
                     changedRecord.FriendlyName = "Answer";
                     break;
@@ -31,7 +31,9 @@ internal static class CheckinQuestionResponseAuditTrailExtensions
         return changedRecordsToReturn;
     }
 
-    public static IAuditEntityMapping AddCheckinQuestionResponseAuditTrailMapping(this IAuditEntityMapping mapping)
+    public static IAuditEntityMapping AddCheckinQuestionResponseAuditTrailMapping(
+        this IAuditEntityMapping mapping
+    )
     {
         return mapping.Map<CheckinQuestionResponse, CheckinQuestionResponseAuditTrail>(
             (model, audit) =>

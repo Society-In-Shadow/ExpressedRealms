@@ -23,6 +23,8 @@ public class EventQuestion : ISoftDelete
 
     public virtual ICollection<EventQuestionAuditTrail> EventQuestionAuditTrails { get; set; } =
         new HashSet<EventQuestionAuditTrail>();
-    public virtual ICollection<CheckinQuestionResponse> CheckinQuestionResponses { get; set; } = new HashSet<CheckinQuestionResponse>();
-    public virtual ICollection<CheckinQuestionResponseAuditTrail> CheckinQuestionResponseAuditTrails { get; set; } = new HashSet<CheckinQuestionResponseAuditTrail>();
+    public virtual ICollection<CheckinQuestionResponse> CheckinQuestionResponses { get; set; } =
+        new HashSet<CheckinQuestionResponse>();
+    public virtual ICollection<CheckinQuestionResponseAuditTrail> CheckinQuestionResponseAuditTrails { get; set; } =
+        new HashSet<CheckinQuestionResponseAuditTrail>();
 }

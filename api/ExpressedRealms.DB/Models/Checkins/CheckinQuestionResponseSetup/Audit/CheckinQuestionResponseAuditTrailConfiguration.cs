@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup.Audit;
 
-internal class CheckinQuestionResponseAuditTrailConfiguration : IEntityTypeConfiguration<CheckinQuestionResponseAuditTrail>
+internal class CheckinQuestionResponseAuditTrailConfiguration
+    : IEntityTypeConfiguration<CheckinQuestionResponseAuditTrail>
 {
     public void Configure(EntityTypeBuilder<CheckinQuestionResponseAuditTrail> builder)
     {
@@ -21,14 +22,14 @@ internal class CheckinQuestionResponseAuditTrailConfiguration : IEntityTypeConfi
             .HasForeignKey(x => x.CheckinId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder
             .HasOne(x => x.CheckinQuestionResponse)
             .WithMany(x => x.CheckinQuestionResponseAuditTrails)
             .HasForeignKey(x => new { x.EventQuestionId, x.CheckinId })
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder
             .HasOne(x => x.EventQuestion)
             .WithMany(x => x.CheckinQuestionResponseAuditTrails)

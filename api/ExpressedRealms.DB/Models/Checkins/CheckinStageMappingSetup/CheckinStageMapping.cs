@@ -16,5 +16,4 @@ public class CheckinStageMapping
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
     public required string ApproverUserId { get; set; }
     public virtual User ApproverUser { get; set; } = null!;
-
 }

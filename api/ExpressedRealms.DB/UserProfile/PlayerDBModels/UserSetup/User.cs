@@ -72,5 +72,6 @@ public class User : IdentityUser
         new HashSet<CheckinAuditTrail>();
     public virtual ICollection<CheckinQuestionResponseAuditTrail> CheckinQuestionResponseAuditTrails { get; set; } =
         new HashSet<CheckinQuestionResponseAuditTrail>();
-    public virtual ICollection<CheckinStageMapping> CheckinStageMappings { get; set; } = new HashSet<CheckinStageMapping>();
+    public virtual ICollection<CheckinStageMapping> CheckinStageMappings { get; set; } =
+        new HashSet<CheckinStageMapping>();
 }

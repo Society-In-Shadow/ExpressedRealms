@@ -13,23 +13,27 @@ public class CheckinStageMappingConfiguration : IEntityTypeConfiguration<Checkin
         builder.Property(e => e.Id).HasColumnName("id").IsRequired();
         builder.Property(e => e.CheckinId).HasColumnName("checkin_id").IsRequired();
         builder.Property(e => e.CheckinStageId).HasColumnName("checkin_stage_id").IsRequired();
-        builder.Property(e => e.ApproverUserId).HasColumnName("approver_user_id").IsRequired().HasMaxLength(450);
+        builder
+            .Property(e => e.ApproverUserId)
+            .HasColumnName("approver_user_id")
+            .IsRequired()
+            .HasMaxLength(450);
         builder.Property(e => e.CreatedAt).HasColumnName("created_at").IsRequired();
-        
+
         builder
             .HasOne(x => x.Checkin)
             .WithMany(x => x.CheckinStageMappings)
             .HasForeignKey(x => x.CheckinId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder
             .HasOne(x => x.CheckinStage)
             .WithMany(x => x.CheckinStageMappings)
             .HasForeignKey(x => x.CheckinStageId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder
             .HasOne(x => x.ApproverUser)
             .WithMany(x => x.CheckinStageMappings)
