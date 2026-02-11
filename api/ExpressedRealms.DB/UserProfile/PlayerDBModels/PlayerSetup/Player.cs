@@ -11,7 +11,7 @@ public class Player
     public Guid Id { get; set; }
     public string UserId { get; set; } = null!;
     public string Name { get; set; } = null!;
-    public string? LookupId { get; set; }
+    public required string LookupId { get; set; }
 
     public virtual User User { get; set; } = null!;
     public virtual List<Character> Characters { get; set; } = new();

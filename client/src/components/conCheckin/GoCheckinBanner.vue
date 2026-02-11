@@ -19,7 +19,7 @@ const hasCheckinFlag = ref(false)
 const hasCheckinPermission = ref(false)
 
 onBeforeMount(async () => {
-  await eventCheckinInfo.getCheckinInfo()
+  await eventCheckinInfo.getCheckinAvailable()
   hasCheckinFlag.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowEventCheckin)
   hasCheckinPermission.value = permissionCheck.Event.Checkin
 })

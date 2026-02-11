@@ -13,13 +13,11 @@ public class GetUserCheckinInfoUseCaseTests
     public GetUserCheckinInfoUseCaseTests()
     {
         _eventCheckinRepository = A.Fake<IEventCheckinRepository>();
-        
-        A.CallTo(() => _eventCheckinRepository.GetPlayerLookupId())
-            .Returns("123456AB");
-        
-        A.CallTo(() => _eventCheckinRepository.GetActiveEventId())
-            .Returns(2);
-        
+
+        A.CallTo(() => _eventCheckinRepository.GetPlayerLookupId()).Returns("123456AB");
+
+        A.CallTo(() => _eventCheckinRepository.GetActiveEventId()).Returns(2);
+
         _useCase = new GetUserCheckinInfoUseCase(_eventCheckinRepository);
     }
 
@@ -28,19 +26,19 @@ public class GetUserCheckinInfoUseCaseTests
     {
         A.CallTo(() => _eventCheckinRepository.GetActiveEventId())
             .Returns(Task.FromResult<int?>(null));
-        
+
         var results = await _useCase.ExecuteAsync();
         Assert.False(results.IsSuccess);
         Assert.Equal("No Active Event Found", results.Errors.First().Message);
     }
-    
+
     [Fact]
     public async Task UseCase_WillReturn_PlayersLookupId()
     {
         var results = await _useCase.ExecuteAsync();
         Assert.Equal("123456AB", results.Value.LookupId);
     }
-    
+
     [Fact]
     public async Task UseCase_WillReturn_TheActiveEventId()
     {
