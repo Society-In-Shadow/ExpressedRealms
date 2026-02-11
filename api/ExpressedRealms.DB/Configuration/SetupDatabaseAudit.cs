@@ -8,6 +8,8 @@ using ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup.Audit;
 using ExpressedRealms.DB.Models.Authorization.RoleSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit;
+using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup.Audit;
+using ExpressedRealms.DB.Models.Checkins.CheckinSetup.Audit;
 using ExpressedRealms.DB.Models.Contacts.Audit;
 using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup.Audit;
 using ExpressedRealms.DB.Models.Events.EventSetup.Audit;
@@ -62,6 +64,8 @@ public static class SetupDatabaseAudit
                             .AddUserRoleAuditTrailMapping()
                             .AddContactAuditTrailMapping()
                             .AddEventQuestionAuditTrailMapping()
+                            .AddCheckinAuditTrailMapping()
+                            .AddCheckinQuestionResponseAuditTrailMapping()
                             .AuditEntityAction<IAuditTable>(
                                 (evt, entry, audit) =>
                                 {

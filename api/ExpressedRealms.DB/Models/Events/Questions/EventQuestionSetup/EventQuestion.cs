@@ -1,5 +1,7 @@
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup;
+using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup.Audit;
 using ExpressedRealms.DB.Models.Events.EventSetup;
 using ExpressedRealms.DB.Models.Events.Questions.EventQuestionSetup.Audit;
 using ExpressedRealms.DB.Models.Events.Questions.QuestionTypeSetup;
@@ -21,4 +23,8 @@ public class EventQuestion : ISoftDelete
 
     public virtual ICollection<EventQuestionAuditTrail> EventQuestionAuditTrails { get; set; } =
         new HashSet<EventQuestionAuditTrail>();
+    public virtual ICollection<CheckinQuestionResponse> CheckinQuestionResponses { get; set; } =
+        new HashSet<CheckinQuestionResponse>();
+    public virtual ICollection<CheckinQuestionResponseAuditTrail> CheckinQuestionResponseAuditTrails { get; set; } =
+        new HashSet<CheckinQuestionResponseAuditTrail>();
 }

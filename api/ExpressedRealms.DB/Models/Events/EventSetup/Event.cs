@@ -1,6 +1,7 @@
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup.Audit;
 using ExpressedRealms.DB.Models.Events.EventSetup.Audit;
 using ExpressedRealms.DB.Models.Events.Questions.EventQuestionSetup;
@@ -32,4 +33,5 @@ public class Event : ISoftDelete
         new HashSet<AssignedXpMapping>();
     public virtual ICollection<EventQuestion> EventQuestions { get; set; } =
         new HashSet<EventQuestion>();
+    public virtual ICollection<Checkin> Checkins { get; set; } = new HashSet<Checkin>();
 }

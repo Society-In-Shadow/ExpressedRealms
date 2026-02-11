@@ -8,6 +8,9 @@ using ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup;
 using ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit;
+using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup.Audit;
+using ExpressedRealms.DB.Models.Checkins.CheckinSetup.Audit;
+using ExpressedRealms.DB.Models.Checkins.CheckinStageMappingSetup;
 using ExpressedRealms.DB.Models.Contacts.Audit;
 using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup.Audit;
 using ExpressedRealms.DB.Models.Events.EventSetup.Audit;
@@ -65,4 +68,10 @@ public class User : IdentityUser
         new List<ContactAuditTrail>();
     public virtual ICollection<EventQuestionAuditTrail> EventQuestionAuditTrails { get; set; } =
         new List<EventQuestionAuditTrail>();
+    public virtual ICollection<CheckinAuditTrail> CheckinAuditTrails { get; set; } =
+        new HashSet<CheckinAuditTrail>();
+    public virtual ICollection<CheckinQuestionResponseAuditTrail> CheckinQuestionResponseAuditTrails { get; set; } =
+        new HashSet<CheckinQuestionResponseAuditTrail>();
+    public virtual ICollection<CheckinStageMapping> CheckinStageMappings { get; set; } =
+        new HashSet<CheckinStageMapping>();
 }
