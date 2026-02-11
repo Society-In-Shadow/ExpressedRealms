@@ -22,11 +22,11 @@ public class CheckinQuestionResponseConfiguration
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
 
-        /*builder
+        builder
             .HasOne(x => x.EventQuestion)
             .WithMany(x => x.CheckinQuestionResponses)
             .HasForeignKey(x => x.EventQuestionId)
             .OnDelete(DeleteBehavior.Restrict)
-            .IsRequired();*/
+            .IsRequired();
     }
 }
