@@ -1,4 +1,14 @@
 <template>
+  <h1>Who We Are</h1>
+  <p>
+    We are a dedicated group of former players who are working to once more help bring back a game that has been beloved,
+    cherished and has helped inspire us with the world and stories told within it.  The core group working towards
+    resurrecting the game have previously played the 6 stones ran incarnation of the game for many years and we want to
+    continue the legacy of that while continuing to expand and grow the game that we all fell in love with. Our goal is
+    to have an accessible and inclusive LARP where everyone is able to tell collaborative stories no matter your
+    experience level with the medium
+  </p>
+
   <h1>About Game</h1>
   <p>
     Society in Shadows is a Live Action Role Playing game set in the modern day of our world. We are an urban fantasy
@@ -54,16 +64,6 @@
     Minneapolis and further. With a former peak of 87 players and averaging around 30-40 players, and after a brief
     interim, we have returned, better than ever. Our Main Staff has been playing the game for many years, and have been
     hard at work making this the best iteration of the game it can be.
-  </p>
-
-  <h1>Who We Are</h1>
-  <p>
-    We are a dedicated group of former players who are working to once more help bring back a game that has been beloved,
-    cherished and has helped inspire us with the world and stories told within it.  The core group working towards
-    resurrecting the game have previously played the 6 stones ran incarnation of the game for many years and we want to
-    continue the legacy of that while continuing to expand and grow the game that we all fell in love with. Our goal is
-    to have an accessible and inclusive LARP where everyone is able to tell collaborative stories no matter your
-    experience level with the medium
   </p>
 
   <h1>Concerns</h1>
