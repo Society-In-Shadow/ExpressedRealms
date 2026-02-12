@@ -11,7 +11,9 @@ internal sealed class ConfirmedUserInfoUseCase(
     CancellationToken cancellationToken
 ) : IConfirmedUserInfoUseCase
 {
-    public async Task<Result<ConfirmedUserInfoReturnModel>> ExecuteAsync(ConfirmedUserInfoModel model)
+    public async Task<Result<ConfirmedUserInfoReturnModel>> ExecuteAsync(
+        ConfirmedUserInfoModel model
+    )
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,
@@ -29,9 +31,11 @@ internal sealed class ConfirmedUserInfoUseCase(
         var playerName = await checkinRepository.GetUserName(model.LookupId);
         var isFirstTimePlayer = await checkinRepository.IsFirstTimePlayer(model.LookupId);
         var playerNumber = checkinRepository.GetPlayerNumber(model.LookupId);
-        
+
         var answeredQuestions = await checkinRepository.GetAnsweredQuestions(checkinId);
-        var primaryCharacterInformation = await checkinRepository.GetPrimaryCharacterInformation(playerId);
+        var primaryCharacterInformation = await checkinRepository.GetPrimaryCharacterInformation(
+            playerId
+        );
         var assignedXp = await checkinRepository.GetAssignedXp(playerId, eventId!.Value);
 
         PrimaryCharacterInfo? characterInfo = null;
@@ -40,7 +44,7 @@ internal sealed class ConfirmedUserInfoUseCase(
             characterInfo = new PrimaryCharacterInfo()
             {
                 CharacterId = primaryCharacterInformation.CharacterId,
-                CharacterName = primaryCharacterInformation.CharacterName
+                CharacterName = primaryCharacterInformation.CharacterName,
             };
         }
 
@@ -51,13 +55,15 @@ internal sealed class ConfirmedUserInfoUseCase(
                 IsFirstTimeUser = isFirstTimePlayer,
                 PlayerNumber = playerNumber,
                 CheckinId = checkinId,
-                QuestionAnswers = answeredQuestions.Select( x => new QuestionResponse()
-                {
-                    QuestionId = x.EventQuestionId,
-                    Response = x.Response.ToString()
-                }).ToList(),
+                QuestionAnswers = answeredQuestions
+                    .Select(x => new QuestionResponse()
+                    {
+                        QuestionId = x.EventQuestionId,
+                        Response = x.Response.ToString(),
+                    })
+                    .ToList(),
                 PrimaryCharacterInfo = characterInfo,
-                AssignedXp = assignedXp
+                AssignedXp = assignedXp,
             }
         );
     }
@@ -65,16 +71,14 @@ internal sealed class ConfirmedUserInfoUseCase(
     private async Task<int> GetCheckinId(int? eventId, Guid playerId)
     {
         int? checkinId = null;
-        
+
         var checkin = await checkinRepository.GetCheckinAsync(eventId!.Value, playerId);
         checkinId = checkin?.Id;
         if (checkin is null)
         {
-            checkinId = await checkinRepository.CreateCheckinAsync(new Checkin()
-            {
-                PlayerId = playerId,
-                EventId = eventId!.Value,
-            });
+            checkinId = await checkinRepository.CreateCheckinAsync(
+                new Checkin() { PlayerId = playerId, EventId = eventId!.Value }
+            );
         }
 
         return checkinId!.Value;

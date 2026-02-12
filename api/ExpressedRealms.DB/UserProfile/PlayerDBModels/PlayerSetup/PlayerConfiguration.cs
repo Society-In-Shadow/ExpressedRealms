@@ -15,9 +15,7 @@ internal class PlayerConfiguration : IEntityTypeConfiguration<Player>
 
         builder.Property(x => x.Id).IsRequired();
 
-        builder.Property(x => x.PlayerNumber)
-            .IsRequired(false)
-            .HasColumnName("player_number");
+        builder.Property(x => x.PlayerNumber).IsRequired(false).HasColumnName("player_number");
 
         builder
             .Property(x => x.LookupId)

@@ -22,34 +22,37 @@ internal sealed class EventCheckinRepository(
 
     public async Task<Checkin?> GetCheckinAsync(int eventId, Guid playerId)
     {
-        return await context.Checkins.AsNoTracking()
+        return await context
+            .Checkins.AsNoTracking()
             .Where(x => x.EventId == eventId && x.PlayerId == playerId)
             .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<List<CheckinQuestionResponse>> GetAnsweredQuestions(int checkinId)
     {
-        return await context.CheckinQuestionResponses
-            .Where(x => x.CheckinId == checkinId)
+        return await context
+            .CheckinQuestionResponses.Where(x => x.CheckinId == checkinId)
             .ToListAsync(cancellationToken);
     }
 
     public Task<GoCheckinPrimaryCharacterInfoDto?> GetPrimaryCharacterInformation(Guid playerId)
     {
-        return context.Characters
-            .Where(x => x.PlayerId == playerId && x.IsPrimaryCharacter)
+        return context
+            .Characters.Where(x => x.PlayerId == playerId && x.IsPrimaryCharacter)
             .Select(x => new GoCheckinPrimaryCharacterInfoDto
             {
                 CharacterId = x.Id,
-                CharacterName = x.Name
+                CharacterName = x.Name,
             })
             .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<int?> GetAssignedXp(Guid playerId, int eventId)
     {
-        return await context.AssignedXpMappings
-            .Where(x => x.PlayerId == playerId && x.EventId == eventId && x.AssignedXpTypeId == 2) // Check-in bonus
+        return await context
+            .AssignedXpMappings.Where(x =>
+                x.PlayerId == playerId && x.EventId == eventId && x.AssignedXpTypeId == 2
+            ) // Check-in bonus
             .Select(x => x.Amount)
             .FirstOrDefaultAsync(cancellationToken);
     }
@@ -90,7 +93,7 @@ internal sealed class EventCheckinRepository(
             .Select(x => x.Name)
             .FirstAsync(cancellationToken);
     }
-    
+
     public async Task<Guid> GetPlayerId(string lookupId)
     {
         return await context
@@ -109,24 +112,27 @@ internal sealed class EventCheckinRepository(
                 cancellationToken
             );
     }
-    
+
     public int GetPlayerNumber(string lookupId)
     {
         // I hate this, but only way to do this in a single trip
-        return context.Database.SqlQuery<int>($"""
-           with updated as (
-               update "Players"
-               set player_number = nextval('player_number_sequence')
-               where lookup_id = {lookupId}
-               and (player_number is null or player_number = 0)
-               returning player_number
-           )
-           select player_number from updated
-           union all
-           select player_number from "Players"
-           where lookup_id = {lookupId}
-           limit 1
-       """)
+        return context
+            .Database.SqlQuery<int>(
+                $"""
+                    with updated as (
+                        update "Players"
+                        set player_number = nextval('player_number_sequence')
+                        where lookup_id = {lookupId}
+                        and (player_number is null or player_number = 0)
+                        returning player_number
+                    )
+                    select player_number from updated
+                    union all
+                    select player_number from "Players"
+                    where lookup_id = {lookupId}
+                    limit 1
+                """
+            )
             .AsEnumerable()
             .First();
     }

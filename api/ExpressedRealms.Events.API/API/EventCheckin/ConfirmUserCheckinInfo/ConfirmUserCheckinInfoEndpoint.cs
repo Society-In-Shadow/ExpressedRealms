@@ -12,12 +12,7 @@ public static class ConfirmUserCheckinInfoEndpoint
         Results<Ok<GetGoCheckinInfoResponse>, ValidationProblem, NotFound>
     > ExecuteAsync(string lookupId, [FromServices] IConfirmedUserInfoUseCase useCase)
     {
-        var results = await useCase.ExecuteAsync(
-            new ()
-            {
-                LookupId = lookupId
-            }
-        );
+        var results = await useCase.ExecuteAsync(new() { LookupId = lookupId });
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;
@@ -34,16 +29,20 @@ public static class ConfirmUserCheckinInfoEndpoint
                 CheckinId = results.Value.CheckinId,
                 PlayerNumber = results.Value.PlayerNumber,
                 AssignedXp = results.Value.AssignedXp,
-                PrimaryCharacterInfo = results.Value.PrimaryCharacterInfo is null ? null : new PrimaryCharacterInfo()
-                {
-                    CharacterId = results.Value.PrimaryCharacterInfo.CharacterId,
-                    CharacterName = results.Value.PrimaryCharacterInfo.CharacterName
-                },
-                QuestionResponses = results.Value.QuestionAnswers.Select(x => new QuestionResponse()
-                {
-                    Response = x.Response,
-                    QuestionId = x.QuestionId
-                }).ToList()
+                PrimaryCharacterInfo = results.Value.PrimaryCharacterInfo is null
+                    ? null
+                    : new PrimaryCharacterInfo()
+                    {
+                        CharacterId = results.Value.PrimaryCharacterInfo.CharacterId,
+                        CharacterName = results.Value.PrimaryCharacterInfo.CharacterName,
+                    },
+                QuestionResponses = results
+                    .Value.QuestionAnswers.Select(x => new QuestionResponse()
+                    {
+                        Response = x.Response,
+                        QuestionId = x.QuestionId,
+                    })
+                    .ToList(),
             }
         );
     }

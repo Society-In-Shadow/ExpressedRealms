@@ -33,9 +33,7 @@ namespace ExpressedRealms.DB
         {
             base.OnModelCreating(builder);
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-            builder.HasSequence<int>("player_number_sequence")
-                .StartsAt(46)
-                .IncrementsBy(1);
+            builder.HasSequence<int>("player_number_sequence").StartsAt(46).IncrementsBy(1);
         }
 
         public ExpressedRealmsDbContext(DbContextOptions<ExpressedRealmsDbContext> options)

@@ -17,7 +17,7 @@ internal static class PlayerAuditConfiguration
                 case nameof(Player.Name):
                     changedRecord.FriendlyName = "Player Name";
                     break;
-                
+
                 case "player_number":
                     changedRecord.FriendlyName = "Player Number";
                     break;

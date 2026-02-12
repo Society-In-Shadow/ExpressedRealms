@@ -99,9 +99,12 @@ internal static class EventEndpoints
             .MapGet("checkin/lookup/{lookupId}", GetGoCheckinInfoEndpoint.ExecuteAsync)
             .RequireFeatureToggle(ReleaseFlags.ShowEventCheckin)
             .RequirePermission(Permissions.Event.Checkin);
-        
+
         endpointGroup
-            .MapGet("checkin/lookup/{lookupId}/approve", ConfirmUserCheckinInfoEndpoint.ExecuteAsync)
+            .MapGet(
+                "checkin/lookup/{lookupId}/approve",
+                ConfirmUserCheckinInfoEndpoint.ExecuteAsync
+            )
             .RequireFeatureToggle(ReleaseFlags.ShowEventCheckin)
             .RequirePermission(Permissions.Event.Checkin);
     }
