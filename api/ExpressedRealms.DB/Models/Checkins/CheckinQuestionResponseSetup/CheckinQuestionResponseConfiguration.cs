@@ -13,7 +13,7 @@ public class CheckinQuestionResponseConfiguration
         builder.HasKey(e => new { e.CheckinId, e.EventQuestionId });
         builder.Property(e => e.CheckinId).HasColumnName("checkin_id").IsRequired();
         builder.Property(e => e.EventQuestionId).HasColumnName("event_question_id").IsRequired();
-        builder.Property(e => e.Response).HasColumnName("response").IsRequired();
+        builder.Property(e => e.Response).HasColumnName("response").HasMaxLength(2000).IsRequired();
 
         builder
             .HasOne(x => x.Checkin)

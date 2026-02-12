@@ -10,6 +10,8 @@ export const EventCheckinStore
         lookupId: '',
         eventId: 0,
         goCheckinInfo: {} as GoCheckinInfo,
+        checkinId: 0,
+        playerNumber: 0,
       }
     },
     actions: {
@@ -30,6 +32,12 @@ export const EventCheckinStore
 
         this.goCheckinInfo = response.data
         return true
+      },
+      async verifiedUserInfo() {
+        const response = await axios.get(`/events/checkin/lookup/${this.lookupId}/approve`)
+
+        this.checkinId = response.data.checkinId
+        this.playerNumber = response.data.playerNumber
       },
     },
   })

@@ -18,6 +18,10 @@ internal static class PlayerAuditConfiguration
                     changedRecord.FriendlyName = "Player Name";
                     break;
 
+                case "player_number":
+                    changedRecord.FriendlyName = "Player Number";
+                    break;
+
                 case nameof(Player.UserId):
                 case "lookup_id":
                     skipRecord = true;
