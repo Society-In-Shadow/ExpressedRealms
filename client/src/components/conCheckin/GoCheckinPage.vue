@@ -29,7 +29,13 @@ onBeforeMount(async () => {
 
 const stepperStep = ref('1')
 
+async function verifiedPlayerInfo() {
+  await eventCheckinInfo.verifiedUserInfo()
+  stepperStep.value = '3'
+}
+
 async function onDetect(detectedCodes) {
+  eventCheckinInfo.lookupId = detectedCodes
   await eventCheckinInfo.getGoCheckinInfo(detectedCodes)
   stepperStep.value = '2'
 }
@@ -54,7 +60,7 @@ async function onDetect(detectedCodes) {
         <h2 v-if="eventCheckinInfo.goCheckinInfo.isFirstTimeUser">
           Looks like this is your first time playing!
         </h2>
-        <Button label="Verified" @click="activateCallback('3')" />
+        <Button label="Verified" @click="verifiedPlayerInfo" />
       </StepPanel>
     </StepItem>
     <StepItem value="3">

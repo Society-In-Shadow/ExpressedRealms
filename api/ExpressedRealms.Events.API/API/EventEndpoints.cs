@@ -1,6 +1,7 @@
 ﻿using ExpressedRealms.Authentication;
 using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Authentication.PermissionCollection.Configuration;
+using ExpressedRealms.Events.API.API.EventCheckin.ConfirmUserCheckinInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetBasicCheckDetails;
 using ExpressedRealms.Events.API.API.EventCheckin.GetGoCheckinInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetUserCheckinDetails;
@@ -96,6 +97,11 @@ internal static class EventEndpoints
 
         endpointGroup
             .MapGet("checkin/lookup/{lookupId}", GetGoCheckinInfoEndpoint.ExecuteAsync)
+            .RequireFeatureToggle(ReleaseFlags.ShowEventCheckin)
+            .RequirePermission(Permissions.Event.Checkin);
+        
+        endpointGroup
+            .MapGet("checkin/lookup/{lookupId}/approve", ConfirmUserCheckinInfoEndpoint.ExecuteAsync)
             .RequireFeatureToggle(ReleaseFlags.ShowEventCheckin)
             .RequirePermission(Permissions.Event.Checkin);
     }
