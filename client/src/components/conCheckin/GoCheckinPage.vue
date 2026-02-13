@@ -84,11 +84,42 @@ async function onDetect(detectedCodes) {
         <StonePuller :hide-description="true" />
       </StepPanel>
     </StepItem>
-    <StepItem value="6">
-      <Step>Finalize</Step>
+    <StepItem value="5">
+      <Step>Review and Finalize Initial Checkin</Step>
       <StepPanel>
-        <h3>Your CRB is ready!</h3>
-        <p>Please come find our booth, and pickup up your CRB!</p>
+        <h3>Review Answers So Far</h3>
+        <p>Answer 1</p>
+        <p>Answer 2</p>
+        <p>Answer 3</p>
+      </StepPanel>
+    </StepItem>
+    <StepItem value="6" :disabled="stepperStep !== '6'">
+      <Step>GO Approval</Step>
+      <StepPanel>
+        <h3>Link to their CRB</h3>
+        <p>I'm a Link!</p>
+        <h3>They do not have a primary character, you will need to walk them through how to do that</h3>
+        <h3>Did you approve the contacts on their CRB? (Block till they say yes)</h3>
+        <h3>Did you Check to make sure that most of their XP has been spent? (Eg, they haven't spent anything outside of character creation)</h3>
+        <h3>Is their character level within expections for the plot?</h3>
+      </StepPanel>
+    </StepItem>
+    <StepItem value="7">
+      <Step>CRB Creation</Step>
+      <StepPanel>
+        <h3>CRB needs to be created</h3>
+      </StepPanel>
+    </StepItem>
+    <StepItem value="8">
+      <Step>CRB Is Ready for Pickup</Step>
+      <StepPanel>
+        <h3>Need to scan to move to next step</h3>
+      </StepPanel>
+    </StepItem>
+    <StepItem value="9">
+      <Step>CRB Is Picked Up</Step>
+      <StepPanel>
+        <h3>Needs to be scanned again to be verified by user</h3>
       </StepPanel>
     </StepItem>
   </Stepper>
