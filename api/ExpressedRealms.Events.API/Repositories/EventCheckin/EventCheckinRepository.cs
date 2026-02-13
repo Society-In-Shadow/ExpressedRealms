@@ -1,4 +1,5 @@
 using ExpressedRealms.DB;
+using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
 using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
@@ -150,6 +151,20 @@ internal sealed class EventCheckinRepository(
             .First();
     }
 
+    public async Task<bool> HasPreAssignedXpTypes(int eventId, Guid playerId)
+    {
+        List<int> validXpTypes = [2, 4, 5]; // checkin bonus, first time player, brought friend
+        return await context.AssignedXpMappings
+            .AnyAsync(x => x.EventId == eventId && validXpTypes.Contains(x.AssignedXpTypeId) && x.PlayerId == playerId, cancellationToken);
+    }
+
+    public async Task<int> AddAssignedXpAsync(AssignedXpMapping entity)
+    {
+        context.AssignedXpMappings.Add(entity);
+        await context.SaveChangesAsync(cancellationToken);
+        return entity.Id;
+    }
+    
     public async Task EditAsync<TEntity>(TEntity entity)
         where TEntity : class
     {
