@@ -39,7 +39,11 @@ public class ConfirmedUserInfoUseCaseTests
             .Returns(new Checkin { Id = CheckinId });
         A.CallTo(() => _eventCheckinRepository.GetPlayerNumber(_model.LookupId)).Returns(1);
 
-        A.CallTo(() => _eventCheckinRepository.GetAssignedXp(PlayerId, EventId)).Returns(10);
+        A.CallTo(() => _eventCheckinRepository.GetAssignedXp(PlayerId, EventId)).Returns(new AssignedXpTypeDto()
+        {
+            TypeId = 3,
+            Amount = 10,
+        });
         A.CallTo(() => _eventCheckinRepository.GetPrimaryCharacterInformation(PlayerId))
             .Returns(Task.FromResult<GoCheckinPrimaryCharacterInfoDto?>(null));
         A.CallTo(() => _eventCheckinRepository.GetAnsweredQuestions(CheckinId))
@@ -137,7 +141,8 @@ public class ConfirmedUserInfoUseCaseTests
     public async Task UseCase_WillReturn_AssignedXp()
     {
         var results = await _useCase.ExecuteAsync(_model);
-        Assert.Equal(10, results.Value.AssignedXp);
+        Assert.Equal(10, results.Value.AssignedXp.Amount);
+        Assert.Equal(3, results.Value.AssignedXp.TypeId);
     }
 
     [Fact]

@@ -49,13 +49,16 @@ internal sealed class EventCheckinRepository(
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<int?> GetAssignedXp(Guid playerId, int eventId)
+    public async Task<AssignedXpTypeDto?> GetAssignedXp(Guid playerId, int eventId)
     {
-        return await context
-            .AssignedXpMappings.Where(x =>
-                x.PlayerId == playerId && x.EventId == eventId && x.AssignedXpTypeId == 2
-            ) // Check-in bonus
-            .Select(x => x.Amount)
+        List<int> validXpTypes = [2, 4, 5]; // checkin bonus, first time player, brought friend
+        return await context.AssignedXpMappings
+            .Where(x => x.EventId == eventId && validXpTypes.Contains(x.AssignedXpTypeId) && x.PlayerId == playerId)
+            .Select(x => new AssignedXpTypeDto()
+            {
+                Amount = x.Amount,
+                TypeId = x.AssignedXpTypeId,
+            })
             .FirstOrDefaultAsync(cancellationToken);
     }
 

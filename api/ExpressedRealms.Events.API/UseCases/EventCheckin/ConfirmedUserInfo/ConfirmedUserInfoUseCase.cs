@@ -68,7 +68,11 @@ internal sealed class ConfirmedUserInfoUseCase(
                     })
                     .ToList(),
                 PrimaryCharacterInfo = characterInfo,
-                AssignedXp = assignedXp,
+                AssignedXp = assignedXp is null ? null : new AssignedXpType()
+                {
+                    TypeId = assignedXp.TypeId,
+                    Amount = assignedXp.Amount,
+                },
             }
         );
     }
