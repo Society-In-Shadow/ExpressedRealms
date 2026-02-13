@@ -15,7 +15,7 @@ export interface ApproveCheckinInfo {
   isFirstTimeUser: boolean
   checkinId: number
   playerNumber: number
-  assignedXp: number
+  assignedXp: AssignedXpType
   questions: Array<Question>
   primaryCharacterInfo: PrimaryCharacterInfo | null
 }
@@ -30,4 +30,10 @@ export interface Question {
 export interface PrimaryCharacterInfo {
   characterId: number
   characterName: string
+}
+
+export interface AssignedXpType {
+  amount: number
+  typeId: number
+  typeName: string
 }

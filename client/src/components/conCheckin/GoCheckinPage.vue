@@ -10,10 +10,10 @@ import Step from 'primevue/step'
 import StepPanel from 'primevue/steppanel'
 import Button from 'primevue/button'
 import Checkbox from 'primevue/checkbox'
-import StonePuller from '@/components/stonePuller/StonePuller.vue'
 import CharacterScanner from '@/components/conCheckin/support/CharacterScanner.vue'
 import AnswerQuestions from '@/components/conCheckin/support/AnswerQuestions.vue'
 import type { Question } from '@/components/conCheckin/types.ts'
+import StonePullerStep from '@/components/conCheckin/support/StonePullerStep.vue'
 
 const eventCheckinInfo = EventCheckinStore()
 const userInfo = userStore()
@@ -115,9 +115,7 @@ const waiverStatus = computed(() => {
     <StepItem value="4">
       <Step>Stone Pull</Step>
       <StepPanel>
-        <p>You can use physical stones for this, or use the digital one below.</p>
-        <p>Chart is provided as reference for physical stone pull</p>
-        <StonePuller :hide-description="true" />
+        <StonePullerStep />
       </StepPanel>
     </StepItem>
     <StepItem value="5">
@@ -130,6 +128,7 @@ const waiverStatus = computed(() => {
           <p>{{ question.response }}</p>
         </div>
         <h2>Checkin Bonus</h2>
+        <p>+{{ eventCheckinInfo.assignedXp?.amount }}</p>
       </StepPanel>
     </StepItem>
     <StepItem value="6" :disabled="stepperStep !== '6'">
