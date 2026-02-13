@@ -4,7 +4,7 @@ public class XpMappingInfoDto
 {
     public int Id { get; set; }
     public BasicInfo Event { get; set; } = null!;
-    public BasicInfo Character { get; set; } = null!;
+    public BasicInfo? Character { get; set; } = null!;
     public BasicInfo XpType { get; set; } = null!;
     public BasicInfo Assigner { get; set; } = null!;
     public BasicInfo Player { get; set; } = null!;

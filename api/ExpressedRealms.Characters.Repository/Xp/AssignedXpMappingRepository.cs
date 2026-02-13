@@ -39,7 +39,11 @@ public class AssignedXpMappingRepository(
             DateAssigned = x.Timestamp,
             Assigner = new BasicInfo() { Id = 0, Name = x.AssignedByUser.Player!.Name },
             Player = new BasicInfo() { Name = x.Player.Name, Id = 0 },
-            Character = new BasicInfo() { Name = x.Character.Name, Id = x.CharacterId },
+            Character = x.Character == null ? null : new BasicInfo
+            {
+                Id = x.Character.Id,
+                Name = x.Character.Name
+            },
             Event = new BasicInfo()
             {
                 Name = $"{x.Event.Name} ({x.Event.StartDate.Year})",

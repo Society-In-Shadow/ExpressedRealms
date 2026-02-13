@@ -19,11 +19,10 @@ public class AssignedXpMapping : ISoftDelete
     [Column("id")]
     public int Id { get; set; }
 
-    [Required]
     [Column("character_id")]
-    public int CharacterId { get; set; }
+    public int? CharacterId { get; set; }
 
-    public virtual Character Character { get; set; } = null!;
+    public virtual Character? Character { get; set; }
 
     [Required]
     [Column("player_id")]

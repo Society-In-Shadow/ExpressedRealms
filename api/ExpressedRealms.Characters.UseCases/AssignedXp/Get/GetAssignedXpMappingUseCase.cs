@@ -82,7 +82,11 @@ internal sealed class GetAssignedXpMappingUseCase(
                     Notes = x.Notes,
                     Amount = x.Amount,
                     Player = new BasicInfo() { Id = x.Player.Id, Name = x.Player.Name },
-                    Character = new BasicInfo() { Id = x.Character.Id, Name = x.Character.Name },
+                    Character = x.Character == null ? null : new BasicInfo
+                    {
+                        Id = x.Character.Id,
+                        Name = x.Character.Name
+                    },
                     Event = new BasicInfo() { Id = x.Event.Id, Name = x.Event.Name },
                     XpType = new BasicInfo() { Id = x.XpType.Id, Name = x.XpType.Name },
                     Assigner = new BasicInfo() { Id = x.Assigner.Id, Name = x.Assigner.Name },
