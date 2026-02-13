@@ -36,11 +36,13 @@ public static class ConfirmUserCheckinInfoEndpoint
                         CharacterId = results.Value.PrimaryCharacterInfo.CharacterId,
                         CharacterName = results.Value.PrimaryCharacterInfo.CharacterName,
                     },
-                QuestionResponses = results
-                    .Value.QuestionAnswers.Select(x => new QuestionResponse()
+                Questions = results
+                    .Value.Questions.Select(x => new QuestionResponse()
                     {
+                        Question = x.Question,
+                        TypeId = x.QuestionTypeId,
                         Response = x.Response,
-                        QuestionId = x.QuestionId,
+                        Id = x.QuestionId,
                     })
                     .ToList(),
             }

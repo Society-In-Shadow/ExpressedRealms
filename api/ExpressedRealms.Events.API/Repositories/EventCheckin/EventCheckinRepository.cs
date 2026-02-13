@@ -1,4 +1,5 @@
 using ExpressedRealms.DB;
+using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin.Dtos;
@@ -57,6 +58,18 @@ internal sealed class EventCheckinRepository(
             .FirstOrDefaultAsync(cancellationToken);
     }
 
+    public Task<CheckinQuestionResponse?> GetCheckinQuestionResponseAsync(int checkinId, int eventQuestionId)
+    {
+        return context.CheckinQuestionResponses.FirstOrDefaultAsync(
+            x => x.CheckinId == checkinId && x.EventQuestionId == eventQuestionId, cancellationToken);
+    }
+
+    public async Task AddCheckinQuestionResponseAsync(CheckinQuestionResponse checkinQuestionResponse)
+    {
+        context.CheckinQuestionResponses.Add(checkinQuestionResponse);
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
     public async Task<string> GetPlayerLookupId()
     {
         return await context
@@ -105,7 +118,7 @@ internal sealed class EventCheckinRepository(
     public async Task<bool> IsFirstTimePlayer(string lookupId)
     {
         const int firstTimePlayerBonus = 4;
-        return await context
+        return !await context
             .AssignedXpMappings.AsNoTracking()
             .AnyAsync(
                 x => x.Player.LookupId == lookupId && x.AssignedXpTypeId == firstTimePlayerBonus,
@@ -137,9 +150,9 @@ internal sealed class EventCheckinRepository(
             .First();
     }
 
-    public Task EditAsync<TEntity>(TEntity entity)
+    public async Task EditAsync<TEntity>(TEntity entity)
         where TEntity : class
     {
-        throw new NotImplementedException();
+        await context.CommonSaveChanges(entity, cancellationToken);
     }
 }

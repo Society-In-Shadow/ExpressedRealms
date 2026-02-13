@@ -9,5 +9,5 @@ public class GetGoCheckinInfoResponse
     public int? AssignedXp { get; set; }
     public PrimaryCharacterInfo? PrimaryCharacterInfo { get; set; }
 
-    public List<QuestionResponse> QuestionResponses { get; set; } = new();
+    public List<QuestionResponse> Questions { get; set; } = new();
 }

@@ -4,4 +4,5 @@ public class GetGoCheckinInfoReturnModel
 {
     public required string Username { get; set; }
     public bool IsFirstTimeUser { get; set; }
+    public bool AlreadyCheckedIn { get; set; }
 }

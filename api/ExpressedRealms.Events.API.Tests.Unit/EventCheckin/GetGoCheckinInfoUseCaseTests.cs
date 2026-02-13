@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.Events.API.UseCases.EventCheckin.GetGoCheckinInfo;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
@@ -13,6 +14,9 @@ public class GetGoCheckinInfoUseCaseTests
     private readonly IEventCheckinRepository _eventCheckinRepository;
     private GetGoCheckinInfoModel _model;
 
+    private const int EventId = 2;
+    private Guid PlayerId = Guid.NewGuid();
+    
     public GetGoCheckinInfoUseCaseTests()
     {
         _model = new GetGoCheckinInfoModel { LookupId = "ABCDEFGH" };
@@ -22,6 +26,11 @@ public class GetGoCheckinInfoUseCaseTests
         A.CallTo(() => _eventCheckinRepository.CheckinIdExistsAsync(_model.LookupId)).Returns(true);
         A.CallTo(() => _eventCheckinRepository.GetUserName(_model.LookupId)).Returns("Test Player");
         A.CallTo(() => _eventCheckinRepository.IsFirstTimePlayer(_model.LookupId)).Returns(true);
+        A.CallTo(() => _eventCheckinRepository.GetActiveEventId()).Returns(EventId);
+
+        A.CallTo(() => _eventCheckinRepository.GetPlayerId(_model.LookupId)).Returns(PlayerId);
+        A.CallTo(() => _eventCheckinRepository.GetCheckinAsync(EventId, PlayerId))
+            .Returns(Task.FromResult<Checkin?>(null));
 
         _validator = new GetGoCheckinInfoModelValidator(_eventCheckinRepository);
 
@@ -82,5 +91,14 @@ public class GetGoCheckinInfoUseCaseTests
     {
         var results = await _useCase.ExecuteAsync(_model);
         Assert.True(results.Value.IsFirstTimeUser);
+    }
+    
+    [Fact]
+    public async Task UseCase_WillReturn_IfTheyAlreadyCheckedIn()
+    {
+        A.CallTo(() => _eventCheckinRepository.GetCheckinAsync(EventId, PlayerId))
+            .Returns(new Checkin());
+        var results = await _useCase.ExecuteAsync(_model);
+        Assert.True(results.Value.AlreadyCheckedIn);
     }
 }

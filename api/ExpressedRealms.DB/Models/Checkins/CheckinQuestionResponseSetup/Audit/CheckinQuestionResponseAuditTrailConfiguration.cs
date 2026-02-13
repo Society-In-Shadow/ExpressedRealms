@@ -26,7 +26,7 @@ internal class CheckinQuestionResponseAuditTrailConfiguration
         builder
             .HasOne(x => x.CheckinQuestionResponse)
             .WithMany(x => x.CheckinQuestionResponseAuditTrails)
-            .HasForeignKey(x => new { x.EventQuestionId, x.CheckinId })
+            .HasForeignKey(x => new { x.CheckinId, x.EventQuestionId })
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
 
