@@ -1,4 +1,5 @@
 using ExpressedRealms.DB;
+using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin.Dtos;
@@ -55,6 +56,18 @@ internal sealed class EventCheckinRepository(
             ) // Check-in bonus
             .Select(x => x.Amount)
             .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public Task<CheckinQuestionResponse?> GetCheckinQuestionResponseAsync(int checkinId, int eventQuestionId)
+    {
+        return context.CheckinQuestionResponses.FirstOrDefaultAsync(
+            x => x.CheckinId == checkinId && x.EventQuestionId == eventQuestionId, cancellationToken);
+    }
+
+    public async Task AddCheckinQuestionResponseAsync(CheckinQuestionResponse checkinQuestionResponse)
+    {
+        context.CheckinQuestionResponses.Add(checkinQuestionResponse);
+        await context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<string> GetPlayerLookupId()
@@ -137,9 +150,9 @@ internal sealed class EventCheckinRepository(
             .First();
     }
 
-    public Task EditAsync<TEntity>(TEntity entity)
+    public async Task EditAsync<TEntity>(TEntity entity)
         where TEntity : class
     {
-        throw new NotImplementedException();
+        await context.CommonSaveChanges(entity, cancellationToken);
     }
 }
