@@ -47,6 +47,19 @@ async function verifiedPlayerInfo() {
 async function onDetect(detectedCodes) {
   eventCheckinInfo.lookupId = detectedCodes
   await eventCheckinInfo.getGoCheckinInfo(detectedCodes)
+
+  if (eventCheckinInfo.goCheckinInfo.alreadyCheckedIn) {
+    await eventCheckinInfo.verifiedUserInfo()
+    const waiverQuestion = eventCheckinInfo.questions.find((x: Question) => x.typeId == 1)
+    if (waiverQuestion?.response == 'Over 18') {
+      is13OrOlder.value = true
+      is18OrOlder.value = true
+    }
+    else if (waiverQuestion?.response == 'Under 18 - Signed Waiver') {
+      is13OrOlder.value = true
+      signedWaiver.value = true
+    }
+  }
   stepperStep.value = '2'
 }
 
@@ -88,13 +101,15 @@ const waiverStatus = computed(() => {
           <label id="signedwaiver">If not, have you signed a waiver? (Front Desk will have these)</label>
         </div>
         <p>If they fall into above category, send them to the front desk to get this resolved.</p>
-        <Button label="Verified" :disabled="!is13OrOlder || !is18OrOlder && !signedWaiver" @click="verifiedPlayerInfo" />
+        <Button label="Verified" :disabled="!is13OrOlder || !is18OrOlder && !signedWaiver || eventCheckinInfo.goCheckinInfo.alreadyCheckedIn" @click="verifiedPlayerInfo" />
+        <Button label="Reviewed" icon="pi pi-arrow-right" icon-pos="right" class="mb-4" @click="stepperStep = '2'" />
       </StepPanel>
     </StepItem>
     <StepItem value="3">
       <Step>HR Questions</Step>
-      <StepPanel>
+      <StepPanel v-slot="{activateCallback}">
         <AnswerQuestions />
+        <Button label="Reviewed" icon="pi pi-arrow-right" icon-pos="right" class="mb-4" @click="activateCallback('3')" />
       </StepPanel>
     </StepItem>
     <StepItem value="4">

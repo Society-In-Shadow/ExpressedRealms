@@ -7,6 +7,7 @@ export interface CheckinInfo {
 export interface GoCheckinInfo {
   userName: string
   isFirstTimeUser: boolean
+  alreadyCheckedIn: boolean
 }
 
 export interface ApproveCheckinInfo {

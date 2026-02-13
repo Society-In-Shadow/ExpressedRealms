@@ -23,12 +23,16 @@ internal sealed class GetGoCheckinInfoUseCase(
 
         var playerName = await checkinRepository.GetUserName(model.LookupId);
         var isFirstTimePlayer = await checkinRepository.IsFirstTimePlayer(model.LookupId);
-
+        var eventId = await checkinRepository.GetActiveEventId();
+        var playerId = await checkinRepository.GetPlayerId(model.LookupId);
+        var checkin = await checkinRepository.GetCheckinAsync(eventId!.Value, playerId);
+        
         return Result.Ok(
             new GetGoCheckinInfoReturnModel()
             {
                 Username = playerName,
                 IsFirstTimeUser = isFirstTimePlayer,
+                AlreadyCheckedIn = checkin is not null,
             }
         );
     }
