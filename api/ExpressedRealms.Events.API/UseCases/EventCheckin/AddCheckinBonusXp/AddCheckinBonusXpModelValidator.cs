@@ -17,18 +17,19 @@ internal sealed class AddCheckinBonusXpModelValidator : AbstractValidator<AddChe
             .MustAsync(async (x, y) => await repository.CheckinIdExistsAsync(x))
             .WithErrorCode("NotFound")
             .WithMessage("Lookup Id does not exist.");
-        
+
         RuleFor(x => x.AssignedXpTypeId)
             .NotEmpty()
             .WithMessage("Assigned Xp Type Id is required.")
-            .Must((x) =>
+            .Must(
+                (x) =>
                 {
                     List<int> validXpTypes = [2, 4, 5]; // checkin bonus, first time player, brought friend
                     return validXpTypes.Contains(x);
                 }
             )
             .WithMessage("The Assigned Xp Type Id is not the right type.");
-        
+
         RuleFor(x => x.Amount)
             .NotEmpty()
             .WithMessage("Amount is required.")

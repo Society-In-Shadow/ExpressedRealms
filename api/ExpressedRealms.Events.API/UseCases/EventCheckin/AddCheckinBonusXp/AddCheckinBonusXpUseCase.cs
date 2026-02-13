@@ -14,9 +14,7 @@ internal sealed class AddCheckinBonusXpUseCase(
     CancellationToken cancellationToken
 ) : IAddCheckinBonusXpUseCase
 {
-    public async Task<Result> ExecuteAsync(
-        AddCheckinBonusXpModel model
-    )
+    public async Task<Result> ExecuteAsync(AddCheckinBonusXpModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,
@@ -33,15 +31,15 @@ internal sealed class AddCheckinBonusXpUseCase(
 
         if (eventId is null)
             return Result.Fail("There are no active events to assign xp to");
-        
+
         // Need to add a check to make sure to only add one of these three types to the event
-        if(await checkinRepository.HasPreAssignedXpTypes(eventId.Value, playerId))
+        if (await checkinRepository.HasPreAssignedXpTypes(eventId.Value, playerId))
             return Result.Fail("Player already has a preassigned xp type");
 
         // Force full xp for First Time player and brought new player
         if (model.AssignedXpTypeId == 4 || model.AssignedXpTypeId == 5)
             model.Amount = 5;
-        
+
         var id = await checkinRepository.AddAssignedXpAsync(
             new AssignedXpMapping()
             {
@@ -54,7 +52,7 @@ internal sealed class AddCheckinBonusXpUseCase(
                 Timestamp = timeProvider.GetUtcNow(),
             }
         );
-        
+
         return Result.Ok();
     }
 }

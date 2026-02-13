@@ -109,7 +109,7 @@ internal static class EventEndpoints
             )
             .RequireFeatureToggle(ReleaseFlags.ShowEventCheckin)
             .RequirePermission(Permissions.Event.Checkin);
-        
+
         endpointGroup
             .MapPut(
                 "checkin/lookup/{lookupId}/questions/{questionId}",
@@ -117,12 +117,9 @@ internal static class EventEndpoints
             )
             .RequireFeatureToggle(ReleaseFlags.ShowEventCheckin)
             .RequirePermission(Permissions.Event.Checkin);
-        
+
         endpointGroup
-            .MapPost(
-                "checkin/lookup/{lookupId}/assignXp",
-                AddCheckinBonusXpEndpoint.ExecuteAsync
-            )
+            .MapPost("checkin/lookup/{lookupId}/assignXp", AddCheckinBonusXpEndpoint.ExecuteAsync)
             .RequireFeatureToggle(ReleaseFlags.ShowEventCheckin)
             .RequirePermission(Permissions.Event.Checkin);
     }

@@ -20,7 +20,10 @@ public interface IEventCheckinRepository : IGenericRepository
     Task<List<CheckinQuestionResponse>> GetAnsweredQuestions(int checkinId);
     Task<GoCheckinPrimaryCharacterInfoDto?> GetPrimaryCharacterInformation(Guid playerId);
     Task<AssignedXpTypeDto?> GetAssignedXp(Guid playerId, int eventId);
-    Task<CheckinQuestionResponse?> GetCheckinQuestionResponseAsync(int checkinId, int eventQuestionId);
+    Task<CheckinQuestionResponse?> GetCheckinQuestionResponseAsync(
+        int checkinId,
+        int eventQuestionId
+    );
     Task AddCheckinQuestionResponseAsync(CheckinQuestionResponse checkinQuestionResponse);
     Task<int> AddAssignedXpAsync(AssignedXpMapping entity);
     Task<bool> HasPreAssignedXpTypes(int eventId, Guid playerId);

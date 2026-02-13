@@ -3,5 +3,4 @@ using FluentResults;
 
 namespace ExpressedRealms.Events.API.UseCases.EventCheckin.AnswerQuestion;
 
-public interface IAnswerQuestionUseCase
-    : IGenericUseCase<Result, AnswerQuestionModel> { }
+public interface IAnswerQuestionUseCase : IGenericUseCase<Result, AnswerQuestionModel> { }

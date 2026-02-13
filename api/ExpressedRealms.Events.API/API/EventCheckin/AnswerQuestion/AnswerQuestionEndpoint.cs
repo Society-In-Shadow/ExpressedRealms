@@ -8,9 +8,12 @@ namespace ExpressedRealms.Events.API.API.EventCheckin.AnswerQuestion;
 
 public static class AnswerQuestionEndpoint
 {
-    public static async Task<
-        Results<Ok, ValidationProblem, NotFound>
-    > ExecuteAsync(string lookupId, int questionId, [FromBody]AnswerQuestionRequest request, [FromServices] IAnswerQuestionUseCase useCase)
+    public static async Task<Results<Ok, ValidationProblem, NotFound>> ExecuteAsync(
+        string lookupId,
+        int questionId,
+        [FromBody] AnswerQuestionRequest request,
+        [FromServices] IAnswerQuestionUseCase useCase
+    )
     {
         var results = await useCase.ExecuteAsync(
             new AnswerQuestionModel()

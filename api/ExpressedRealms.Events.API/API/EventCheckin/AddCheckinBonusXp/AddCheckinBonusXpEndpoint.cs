@@ -10,11 +10,12 @@ public static class AddCheckinBonusXpEndpoint
 {
     public static async Task<Results<Ok, ValidationProblem, NotFound>> ExecuteAsync(
         string lookupId,
-        [FromBody]AddCheckinBonusXpRequest request, 
-        [FromServices] IAddCheckinBonusXpUseCase useCase)
+        [FromBody] AddCheckinBonusXpRequest request,
+        [FromServices] IAddCheckinBonusXpUseCase useCase
+    )
     {
         var results = await useCase.ExecuteAsync(
-            new ()
+            new()
             {
                 LookupId = lookupId,
                 AssignedXpTypeId = request.AssignedXpTypeId,

@@ -16,7 +16,7 @@ public class GetGoCheckinInfoUseCaseTests
 
     private const int EventId = 2;
     private Guid PlayerId = Guid.NewGuid();
-    
+
     public GetGoCheckinInfoUseCaseTests()
     {
         _model = new GetGoCheckinInfoModel { LookupId = "ABCDEFGH" };
@@ -92,7 +92,7 @@ public class GetGoCheckinInfoUseCaseTests
         var results = await _useCase.ExecuteAsync(_model);
         Assert.True(results.Value.IsFirstTimeUser);
     }
-    
+
     [Fact]
     public async Task UseCase_WillReturn_IfTheyAlreadyCheckedIn()
     {

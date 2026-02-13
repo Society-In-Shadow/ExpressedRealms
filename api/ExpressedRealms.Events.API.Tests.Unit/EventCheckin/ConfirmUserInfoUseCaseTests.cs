@@ -39,16 +39,14 @@ public class ConfirmedUserInfoUseCaseTests
             .Returns(new Checkin { Id = CheckinId });
         A.CallTo(() => _eventCheckinRepository.GetPlayerNumber(_model.LookupId)).Returns(1);
 
-        A.CallTo(() => _eventCheckinRepository.GetAssignedXp(PlayerId, EventId)).Returns(new AssignedXpTypeDto()
-        {
-            TypeId = 3,
-            Amount = 10,
-        });
+        A.CallTo(() => _eventCheckinRepository.GetAssignedXp(PlayerId, EventId))
+            .Returns(new AssignedXpTypeDto() { TypeId = 3, Amount = 10 });
         A.CallTo(() => _eventCheckinRepository.GetPrimaryCharacterInformation(PlayerId))
             .Returns(Task.FromResult<GoCheckinPrimaryCharacterInfoDto?>(null));
         A.CallTo(() => _eventCheckinRepository.GetAnsweredQuestions(CheckinId))
             .Returns(new List<CheckinQuestionResponse>());
-        A.CallTo(() => _questionRepository.GetEventQuestionsForEvent(EventId)).Returns(new List<EventQuestion>());
+        A.CallTo(() => _questionRepository.GetEventQuestionsForEvent(EventId))
+            .Returns(new List<EventQuestion>());
 
         _validator = new ConfirmedUserInfoModelValidator(_eventCheckinRepository);
 
@@ -188,28 +186,31 @@ public class ConfirmedUserInfoUseCaseTests
             {
                 Question = "Bar",
                 Id = 3,
-                QuestionTypeId = 2
+                QuestionTypeId = 2,
             },
             new()
             {
                 Question = "Gar",
                 Id = 2,
-                QuestionTypeId = 1
-            }
+                QuestionTypeId = 1,
+            },
         };
 
         A.CallTo(() => _eventCheckinRepository.GetAnsweredQuestions(CheckinId)).Returns(answerList);
-        A.CallTo(() => _questionRepository.GetEventQuestionsForEvent(EventId)).Returns(questionList);
+        A.CallTo(() => _questionRepository.GetEventQuestionsForEvent(EventId))
+            .Returns(questionList);
         var results = await _useCase.ExecuteAsync(_model);
 
         Assert.Equivalent(
-            questionList.Select(x => new QuestionResponse()
+            questionList
+                .Select(x => new QuestionResponse()
                 {
                     QuestionId = x.Id,
                     Question = x.Question,
                     QuestionTypeId = x.QuestionTypeId,
                     Response = answerList.FirstOrDefault(y => y.EventQuestionId == x.Id)?.Response,
-                }).ToList(),
+                })
+                .ToList(),
             results.Value.Questions
         );
     }

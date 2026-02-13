@@ -52,23 +52,30 @@ internal sealed class EventCheckinRepository(
     public async Task<AssignedXpTypeDto?> GetAssignedXp(Guid playerId, int eventId)
     {
         List<int> validXpTypes = [2, 4, 5]; // checkin bonus, first time player, brought friend
-        return await context.AssignedXpMappings
-            .Where(x => x.EventId == eventId && validXpTypes.Contains(x.AssignedXpTypeId) && x.PlayerId == playerId)
-            .Select(x => new AssignedXpTypeDto()
-            {
-                Amount = x.Amount,
-                TypeId = x.AssignedXpTypeId,
-            })
+        return await context
+            .AssignedXpMappings.Where(x =>
+                x.EventId == eventId
+                && validXpTypes.Contains(x.AssignedXpTypeId)
+                && x.PlayerId == playerId
+            )
+            .Select(x => new AssignedXpTypeDto() { Amount = x.Amount, TypeId = x.AssignedXpTypeId })
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public Task<CheckinQuestionResponse?> GetCheckinQuestionResponseAsync(int checkinId, int eventQuestionId)
+    public Task<CheckinQuestionResponse?> GetCheckinQuestionResponseAsync(
+        int checkinId,
+        int eventQuestionId
+    )
     {
         return context.CheckinQuestionResponses.FirstOrDefaultAsync(
-            x => x.CheckinId == checkinId && x.EventQuestionId == eventQuestionId, cancellationToken);
+            x => x.CheckinId == checkinId && x.EventQuestionId == eventQuestionId,
+            cancellationToken
+        );
     }
 
-    public async Task AddCheckinQuestionResponseAsync(CheckinQuestionResponse checkinQuestionResponse)
+    public async Task AddCheckinQuestionResponseAsync(
+        CheckinQuestionResponse checkinQuestionResponse
+    )
     {
         context.CheckinQuestionResponses.Add(checkinQuestionResponse);
         await context.SaveChangesAsync(cancellationToken);
@@ -157,8 +164,13 @@ internal sealed class EventCheckinRepository(
     public async Task<bool> HasPreAssignedXpTypes(int eventId, Guid playerId)
     {
         List<int> validXpTypes = [2, 4, 5]; // checkin bonus, first time player, brought friend
-        return await context.AssignedXpMappings
-            .AnyAsync(x => x.EventId == eventId && validXpTypes.Contains(x.AssignedXpTypeId) && x.PlayerId == playerId, cancellationToken);
+        return await context.AssignedXpMappings.AnyAsync(
+            x =>
+                x.EventId == eventId
+                && validXpTypes.Contains(x.AssignedXpTypeId)
+                && x.PlayerId == playerId,
+            cancellationToken
+        );
     }
 
     public async Task<int> AddAssignedXpAsync(AssignedXpMapping entity)
@@ -167,7 +179,7 @@ internal sealed class EventCheckinRepository(
         await context.SaveChangesAsync(cancellationToken);
         return entity.Id;
     }
-    
+
     public async Task EditAsync<TEntity>(TEntity entity)
         where TEntity : class
     {
