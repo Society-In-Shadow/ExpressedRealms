@@ -108,10 +108,13 @@ const waiverStatus = computed(() => {
     <StepItem value="5">
       <Step>Review and Finalize Initial Checkin</Step>
       <StepPanel>
-        <h3>Review Answers So Far</h3>
-        <p>Answer 1</p>
-        <p>Answer 2</p>
-        <p>Answer 3</p>
+        <h1>Review</h1>
+        <h2>Questions</h2>
+        <div v-for="question in eventCheckinInfo.questions" :key="question.id">
+          <h3>{{ question.question }}</h3>
+          <p>{{ question.response }}</p>
+        </div>
+        <h2>Checkin Bonus</h2>
       </StepPanel>
     </StepItem>
     <StepItem value="6" :disabled="stepperStep !== '6'">
