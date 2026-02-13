@@ -1,4 +1,5 @@
 using ExpressedRealms.DB;
+using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
 using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
@@ -48,23 +49,33 @@ internal sealed class EventCheckinRepository(
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<int?> GetAssignedXp(Guid playerId, int eventId)
+    public async Task<AssignedXpTypeDto?> GetAssignedXp(Guid playerId, int eventId)
     {
+        List<int> validXpTypes = [2, 4, 5]; // checkin bonus, first time player, brought friend
         return await context
             .AssignedXpMappings.Where(x =>
-                x.PlayerId == playerId && x.EventId == eventId && x.AssignedXpTypeId == 2
-            ) // Check-in bonus
-            .Select(x => x.Amount)
+                x.EventId == eventId
+                && validXpTypes.Contains(x.AssignedXpTypeId)
+                && x.PlayerId == playerId
+            )
+            .Select(x => new AssignedXpTypeDto() { Amount = x.Amount, TypeId = x.AssignedXpTypeId })
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public Task<CheckinQuestionResponse?> GetCheckinQuestionResponseAsync(int checkinId, int eventQuestionId)
+    public Task<CheckinQuestionResponse?> GetCheckinQuestionResponseAsync(
+        int checkinId,
+        int eventQuestionId
+    )
     {
         return context.CheckinQuestionResponses.FirstOrDefaultAsync(
-            x => x.CheckinId == checkinId && x.EventQuestionId == eventQuestionId, cancellationToken);
+            x => x.CheckinId == checkinId && x.EventQuestionId == eventQuestionId,
+            cancellationToken
+        );
     }
 
-    public async Task AddCheckinQuestionResponseAsync(CheckinQuestionResponse checkinQuestionResponse)
+    public async Task AddCheckinQuestionResponseAsync(
+        CheckinQuestionResponse checkinQuestionResponse
+    )
     {
         context.CheckinQuestionResponses.Add(checkinQuestionResponse);
         await context.SaveChangesAsync(cancellationToken);
@@ -148,6 +159,25 @@ internal sealed class EventCheckinRepository(
             )
             .AsEnumerable()
             .First();
+    }
+
+    public async Task<bool> HasPreAssignedXpTypes(int eventId, Guid playerId)
+    {
+        List<int> validXpTypes = [2, 4, 5]; // checkin bonus, first time player, brought friend
+        return await context.AssignedXpMappings.AnyAsync(
+            x =>
+                x.EventId == eventId
+                && validXpTypes.Contains(x.AssignedXpTypeId)
+                && x.PlayerId == playerId,
+            cancellationToken
+        );
+    }
+
+    public async Task<int> AddAssignedXpAsync(AssignedXpMapping entity)
+    {
+        context.AssignedXpMappings.Add(entity);
+        await context.SaveChangesAsync(cancellationToken);
+        return entity.Id;
     }
 
     public async Task EditAsync<TEntity>(TEntity entity)

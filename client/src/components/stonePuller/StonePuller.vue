@@ -13,6 +13,10 @@ const neutralStone = ref('')
 const winningMarble = ref('')
 const winningMarbleValue = ref(0)
 
+const emit = defineEmits<{
+  neutralPulled: [bonus: number]
+}>()
+
 const props = defineProps({
   hideDescription: {
     type: Boolean,
@@ -20,8 +24,8 @@ const props = defineProps({
   },
 })
 
-const stoneTypes = ['red', 'blue', 'black', 'yellow', 'green', 'white']
-let stoneBag = ['red', 'blue', 'black', 'yellow', 'green', 'white']
+const stoneTypes = ['red', 'blue', 'black', 'clear', 'green', 'white']
+let stoneBag = ['red', 'blue', 'black', 'clear', 'green', 'white']
 
 function removeStone(stoneName: string): string {
   var characterIndex = stoneBag.indexOf(stoneName)
@@ -52,7 +56,8 @@ function pullNeutralStone(stoneName: string) {
   else
     neutralStone.value = stoneName
 
-  calculateBonus()
+  let bonus = calculateBonus()
+  emit('neutralPulled', bonus)
 }
 
 function clearStones() {
@@ -98,6 +103,8 @@ function showMarbleValue(marbleName: string): string {
 }
 
 function updateTextColor(backgroundColor: string): string {
+  if (backgroundColor === 'clear')
+    return 'black'
   return backgroundColor === 'white' ? 'black' : 'default'
 }
 
@@ -233,7 +240,7 @@ const bonusEffects = [
           <Fieldset v-if="stones.length > 0" legend="Pulled Stones" class="flex-shrink-0" style="display: inline-block">
             <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
               <div v-for="stone in stones" :key="stone">
-                <div class="stone m-3 text-center align-content-center" :style="{ 'background-color': stone, 'color': updateTextColor(stone) }">
+                <div class="stone m-3 text-center align-content-center" :style="{ 'background-color': stone == 'clear' ? 'yellow' : stone, 'color': updateTextColor(stone) }">
                   {{ showMarbleValue(stone) }}
                 </div>
                 <div>{{ stone }}</div>
@@ -245,7 +252,7 @@ const bonusEffects = [
           <Fieldset v-if="neutralStone !== ''" legend="Neutral Stone" style="display: inline-block">
             <div class="flex flex-wrap justify-content-center m-3 column-gap-3">
               <div>
-                <div class="stone m-3 text-center align-content-center" :style="{ 'background-color': neutralStone, 'color': updateTextColor(neutralStone) }" />
+                <div class="stone m-3 text-center align-content-center" :style="{ 'background-color': neutralStone == 'clear' ? 'yellow' : neutralStone, 'color': updateTextColor(neutralStone) }" />
                 <div>{{ neutralStone }}</div>
               </div>
             </div>

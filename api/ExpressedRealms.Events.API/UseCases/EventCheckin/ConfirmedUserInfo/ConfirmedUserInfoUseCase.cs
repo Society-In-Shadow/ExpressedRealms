@@ -64,11 +64,19 @@ internal sealed class ConfirmedUserInfoUseCase(
                         QuestionId = x.Id,
                         Question = x.Question,
                         QuestionTypeId = x.QuestionTypeId,
-                        Response = answeredQuestions.FirstOrDefault(y => y.EventQuestionId == x.Id)?.Response,
+                        Response = answeredQuestions
+                            .FirstOrDefault(y => y.EventQuestionId == x.Id)
+                            ?.Response,
                     })
                     .ToList(),
                 PrimaryCharacterInfo = characterInfo,
-                AssignedXp = assignedXp,
+                AssignedXp = assignedXp is null
+                    ? null
+                    : new AssignedXpType()
+                    {
+                        TypeId = assignedXp.TypeId,
+                        Amount = assignedXp.Amount,
+                    },
             }
         );
     }

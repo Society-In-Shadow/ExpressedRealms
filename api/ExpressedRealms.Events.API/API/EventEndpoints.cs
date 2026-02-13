@@ -1,6 +1,7 @@
 ﻿using ExpressedRealms.Authentication;
 using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Authentication.PermissionCollection.Configuration;
+using ExpressedRealms.Events.API.API.EventCheckin.AddCheckinBonusXp;
 using ExpressedRealms.Events.API.API.EventCheckin.AnswerQuestion;
 using ExpressedRealms.Events.API.API.EventCheckin.ConfirmUserCheckinInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetBasicCheckDetails;
@@ -108,12 +109,17 @@ internal static class EventEndpoints
             )
             .RequireFeatureToggle(ReleaseFlags.ShowEventCheckin)
             .RequirePermission(Permissions.Event.Checkin);
-        
+
         endpointGroup
             .MapPut(
                 "checkin/lookup/{lookupId}/questions/{questionId}",
                 AnswerQuestionEndpoint.ExecuteAsync
             )
+            .RequireFeatureToggle(ReleaseFlags.ShowEventCheckin)
+            .RequirePermission(Permissions.Event.Checkin);
+
+        endpointGroup
+            .MapPost("checkin/lookup/{lookupId}/assignXp", AddCheckinBonusXpEndpoint.ExecuteAsync)
             .RequireFeatureToggle(ReleaseFlags.ShowEventCheckin)
             .RequirePermission(Permissions.Event.Checkin);
     }

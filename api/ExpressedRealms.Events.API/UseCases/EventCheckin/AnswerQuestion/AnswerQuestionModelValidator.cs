@@ -17,13 +17,9 @@ internal sealed class AnswerQuestionModelValidator : AbstractValidator<AnswerQue
             .MustAsync(async (x, y) => await repository.CheckinIdExistsAsync(x))
             .WithErrorCode("NotFound")
             .WithMessage("Lookup Id does not exist.");
-        
-        RuleFor(x => x.QuestionId)
-            .NotEmpty()
-            .WithMessage("Question Id is required.");
 
-        RuleFor(x => x.Response)
-            .NotEmpty()
-            .WithMessage("Question Id is required.");
+        RuleFor(x => x.QuestionId).NotEmpty().WithMessage("Question Id is required.");
+
+        RuleFor(x => x.Response).NotEmpty().WithMessage("Question Id is required.");
     }
 }

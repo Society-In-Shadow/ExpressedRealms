@@ -6,7 +6,7 @@ public class GetGoCheckinInfoResponse
     public bool IsFirstTimeUser { get; set; }
     public int CheckinId { get; set; }
     public int PlayerNumber { get; set; }
-    public int? AssignedXp { get; set; }
+    public AssignedXpType? AssignedXp { get; set; }
     public PrimaryCharacterInfo? PrimaryCharacterInfo { get; set; }
 
     public List<QuestionResponse> Questions { get; set; } = new();

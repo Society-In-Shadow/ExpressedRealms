@@ -26,7 +26,7 @@ internal sealed class GetGoCheckinInfoUseCase(
         var eventId = await checkinRepository.GetActiveEventId();
         var playerId = await checkinRepository.GetPlayerId(model.LookupId);
         var checkin = await checkinRepository.GetCheckinAsync(eventId!.Value, playerId);
-        
+
         return Result.Ok(
             new GetGoCheckinInfoReturnModel()
             {

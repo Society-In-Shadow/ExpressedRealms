@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin.Dtos;
@@ -18,7 +19,12 @@ public interface IEventCheckinRepository : IGenericRepository
     Task<Checkin?> GetCheckinAsync(int eventId, Guid playerId);
     Task<List<CheckinQuestionResponse>> GetAnsweredQuestions(int checkinId);
     Task<GoCheckinPrimaryCharacterInfoDto?> GetPrimaryCharacterInformation(Guid playerId);
-    Task<int?> GetAssignedXp(Guid playerId, int eventId);
-    Task<CheckinQuestionResponse?> GetCheckinQuestionResponseAsync(int checkinId, int eventQuestionId);
+    Task<AssignedXpTypeDto?> GetAssignedXp(Guid playerId, int eventId);
+    Task<CheckinQuestionResponse?> GetCheckinQuestionResponseAsync(
+        int checkinId,
+        int eventQuestionId
+    );
     Task AddCheckinQuestionResponseAsync(CheckinQuestionResponse checkinQuestionResponse);
+    Task<int> AddAssignedXpAsync(AssignedXpMapping entity);
+    Task<bool> HasPreAssignedXpTypes(int eventId, Guid playerId);
 }

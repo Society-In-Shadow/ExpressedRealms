@@ -8,5 +8,5 @@ public class ConfirmedUserInfoReturnModel
     public int CheckinId { get; set; }
     public List<QuestionResponse> Questions { get; set; } = new List<QuestionResponse>();
     public PrimaryCharacterInfo? PrimaryCharacterInfo { get; set; }
-    public int? AssignedXp { get; set; }
+    public AssignedXpType? AssignedXp { get; set; }
 }

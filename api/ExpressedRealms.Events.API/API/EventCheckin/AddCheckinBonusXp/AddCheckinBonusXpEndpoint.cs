@@ -1,26 +1,25 @@
-using ExpressedRealms.Events.API.UseCases.EventCheckin.AnswerQuestion;
+using ExpressedRealms.Events.API.UseCases.EventCheckin.AddCheckinBonusXp;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ExpressedRealms.Events.API.API.EventCheckin.AnswerQuestion;
+namespace ExpressedRealms.Events.API.API.EventCheckin.AddCheckinBonusXp;
 
-public static class AnswerQuestionEndpoint
+public static class AddCheckinBonusXpEndpoint
 {
     public static async Task<Results<Ok, ValidationProblem, NotFound>> ExecuteAsync(
         string lookupId,
-        int questionId,
-        [FromBody] AnswerQuestionRequest request,
-        [FromServices] IAnswerQuestionUseCase useCase
+        [FromBody] AddCheckinBonusXpRequest request,
+        [FromServices] IAddCheckinBonusXpUseCase useCase
     )
     {
         var results = await useCase.ExecuteAsync(
-            new AnswerQuestionModel()
+            new()
             {
                 LookupId = lookupId,
-                Response = request.Response,
-                QuestionId = questionId,
+                AssignedXpTypeId = request.AssignedXpTypeId,
+                Amount = request.Amount,
             }
         );
 

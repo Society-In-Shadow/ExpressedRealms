@@ -1,6 +1,13 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import type { ApproveCheckinInfo, CheckinInfo, GoCheckinInfo, Question } from '@/components/conCheckin/types.ts'
+import type {
+  ApproveCheckinInfo,
+  AssignedXpType,
+  CheckinInfo,
+  GoCheckinInfo,
+  Question,
+} from '@/components/conCheckin/types.ts'
+import toaster from '@/services/Toasters'
 
 export const EventCheckinStore
   = defineStore(`eventCheckin`, {
@@ -14,6 +21,7 @@ export const EventCheckinStore
         playerNumber: 0,
         questions: [] as Question[],
         broughtNewPlayer: false,
+        assignedXp: {} as AssignedXpType | null | undefined,
       }
     },
     actions: {
@@ -41,9 +49,16 @@ export const EventCheckinStore
         this.checkinId = response.data.checkinId
         this.playerNumber = response.data.playerNumber
         this.questions = response.data.questions
+        this.assignedXp = response.data.assignedXp
       },
       async updateQuestion(question: Question) {
         await axios.put(`/events/checkin/lookup/${this.lookupId}/questions/${question.id}`, { response: question.response })
+        toaster.success('Question updated successfully!')
+      },
+      async addAssignedXp(typeId: number, amount: number) {
+        await axios.post(`/events/checkin/lookup/${this.lookupId}/assignXp`, { amount: amount, AssignedXpTypeId: typeId })
+        await this.verifiedUserInfo()
+        toaster.success('Assigned XP successfully!')
       },
     },
   })
