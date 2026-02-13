@@ -139,7 +139,7 @@ public class ConfirmedUserInfoUseCaseTests
     public async Task UseCase_WillReturn_AssignedXp()
     {
         var results = await _useCase.ExecuteAsync(_model);
-        Assert.Equal(10, results.Value.AssignedXp.Amount);
+        Assert.Equal(10, results.Value.AssignedXp!.Amount);
         Assert.Equal(3, results.Value.AssignedXp.TypeId);
     }
 

@@ -40,7 +40,7 @@ internal sealed class AddCheckinBonusXpUseCase(
         if (model.AssignedXpTypeId == 4 || model.AssignedXpTypeId == 5)
             model.Amount = 5;
 
-        var id = await checkinRepository.AddAssignedXpAsync(
+        await checkinRepository.AddAssignedXpAsync(
             new AssignedXpMapping()
             {
                 AssignedByUserId = userContext.CurrentUserId(),

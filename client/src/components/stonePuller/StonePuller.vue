@@ -56,7 +56,7 @@ function pullNeutralStone(stoneName: string) {
   else
     neutralStone.value = stoneName
 
-  var bonus = calculateBonus()
+  let bonus = calculateBonus()
   emit('neutralPulled', bonus)
 }
 
