@@ -1,7 +1,9 @@
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
+using ExpressedRealms.DB.Models.Events.Questions.EventQuestionSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.Events.API.Repositories.EventCheckin.Dtos;
+using ExpressedRealms.Events.API.Repositories.EventQuestions;
 using ExpressedRealms.Events.API.UseCases.EventCheckin.ConfirmedUserInfo;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
@@ -14,6 +16,7 @@ public class ConfirmedUserInfoUseCaseTests
     private readonly ConfirmedUserInfoUseCase _useCase;
     private readonly ConfirmedUserInfoModelValidator _validator;
     private readonly IEventCheckinRepository _eventCheckinRepository;
+    private readonly IEventQuestionRepository _questionRepository;
     private ConfirmedUserInfoModel _model;
     private const int EventId = 2;
     private Guid PlayerId = Guid.NewGuid();
@@ -24,6 +27,7 @@ public class ConfirmedUserInfoUseCaseTests
         _model = new ConfirmedUserInfoModel { LookupId = "ABCDEFGH" };
 
         _eventCheckinRepository = A.Fake<IEventCheckinRepository>();
+        _questionRepository = A.Fake<IEventQuestionRepository>();
 
         A.CallTo(() => _eventCheckinRepository.CheckinIdExistsAsync(_model.LookupId)).Returns(true);
         A.CallTo(() => _eventCheckinRepository.GetUserName(_model.LookupId)).Returns("Test Player");
@@ -40,11 +44,13 @@ public class ConfirmedUserInfoUseCaseTests
             .Returns(Task.FromResult<GoCheckinPrimaryCharacterInfoDto?>(null));
         A.CallTo(() => _eventCheckinRepository.GetAnsweredQuestions(CheckinId))
             .Returns(new List<CheckinQuestionResponse>());
+        A.CallTo(() => _questionRepository.GetEventQuestionsForEvent(EventId)).Returns(new List<EventQuestion>());
 
         _validator = new ConfirmedUserInfoModelValidator(_eventCheckinRepository);
 
         _useCase = new ConfirmedUserInfoUseCase(
             _eventCheckinRepository,
+            _questionRepository,
             _validator,
             CancellationToken.None
         );
@@ -160,22 +166,46 @@ public class ConfirmedUserInfoUseCaseTests
     [Fact]
     public async Task UseCase_WillReturn_QuestionAnswers()
     {
-        var list = new List<CheckinQuestionResponse>()
+        var answerList = new List<CheckinQuestionResponse>()
         {
             new() { Response = "Test Response", EventQuestionId = 1 },
             new() { Response = "Test 3", EventQuestionId = 3 },
         };
+        var questionList = new List<EventQuestion>()
+        {
+            new()
+            {
+                Question = "Foo",
+                Id = 1,
+                QuestionTypeId = 4,
+            },
+            new()
+            {
+                Question = "Bar",
+                Id = 3,
+                QuestionTypeId = 2
+            },
+            new()
+            {
+                Question = "Gar",
+                Id = 2,
+                QuestionTypeId = 1
+            }
+        };
 
-        A.CallTo(() => _eventCheckinRepository.GetAnsweredQuestions(CheckinId)).Returns(list);
+        A.CallTo(() => _eventCheckinRepository.GetAnsweredQuestions(CheckinId)).Returns(answerList);
+        A.CallTo(() => _questionRepository.GetEventQuestionsForEvent(EventId)).Returns(questionList);
         var results = await _useCase.ExecuteAsync(_model);
 
         Assert.Equivalent(
-            list.Select(x => new QuestionResponse()
-            {
-                Response = x.Response,
-                QuestionId = x.EventQuestionId,
-            }),
-            results.Value.QuestionAnswers
+            questionList.Select(x => new QuestionResponse()
+                {
+                    QuestionId = x.Id,
+                    Question = x.Question,
+                    QuestionTypeId = x.QuestionTypeId,
+                    Response = answerList.FirstOrDefault(y => y.EventQuestionId == x.Id)?.Response,
+                }).ToList(),
+            results.Value.Questions
         );
     }
 

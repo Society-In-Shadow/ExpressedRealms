@@ -1,5 +1,6 @@
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
+using ExpressedRealms.Events.API.Repositories.EventQuestions;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
@@ -7,6 +8,7 @@ namespace ExpressedRealms.Events.API.UseCases.EventCheckin.ConfirmedUserInfo;
 
 internal sealed class ConfirmedUserInfoUseCase(
     IEventCheckinRepository checkinRepository,
+    IEventQuestionRepository questionRepository,
     ConfirmedUserInfoModelValidator validator,
     CancellationToken cancellationToken
 ) : IConfirmedUserInfoUseCase
@@ -32,6 +34,7 @@ internal sealed class ConfirmedUserInfoUseCase(
         var isFirstTimePlayer = await checkinRepository.IsFirstTimePlayer(model.LookupId);
         var playerNumber = checkinRepository.GetPlayerNumber(model.LookupId);
 
+        var questions = await questionRepository.GetEventQuestionsForEvent(eventId!.Value);
         var answeredQuestions = await checkinRepository.GetAnsweredQuestions(checkinId);
         var primaryCharacterInformation = await checkinRepository.GetPrimaryCharacterInformation(
             playerId
@@ -55,11 +58,13 @@ internal sealed class ConfirmedUserInfoUseCase(
                 IsFirstTimeUser = isFirstTimePlayer,
                 PlayerNumber = playerNumber,
                 CheckinId = checkinId,
-                QuestionAnswers = answeredQuestions
+                Questions = questions
                     .Select(x => new QuestionResponse()
                     {
-                        QuestionId = x.EventQuestionId,
-                        Response = x.Response.ToString(),
+                        QuestionId = x.Id,
+                        Question = x.Question,
+                        QuestionTypeId = x.QuestionTypeId,
+                        Response = answeredQuestions.FirstOrDefault(y => y.EventQuestionId == x.Id)?.Response,
                     })
                     .ToList(),
                 PrimaryCharacterInfo = characterInfo,
