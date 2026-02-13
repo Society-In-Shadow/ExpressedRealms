@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
 import { FeatureFlags, userStore } from '@/stores/userStore.ts'
 import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
 import { useRouter } from 'vue-router'
@@ -9,14 +9,20 @@ import StepItem from 'primevue/stepitem'
 import Step from 'primevue/step'
 import StepPanel from 'primevue/steppanel'
 import Button from 'primevue/button'
+import Checkbox from 'primevue/checkbox'
 import StonePuller from '@/components/stonePuller/StonePuller.vue'
 import CharacterScanner from '@/components/conCheckin/support/CharacterScanner.vue'
+import AnswerQuestions from '@/components/conCheckin/support/AnswerQuestions.vue'
+import type { Question } from '@/components/conCheckin/types.ts'
 
 const eventCheckinInfo = EventCheckinStore()
 const userInfo = userStore()
 const router = useRouter()
 
 const hasCheckinFlag = ref(false)
+const is13OrOlder = ref(false)
+const is18OrOlder = ref(false)
+const signedWaiver = ref(false)
 
 onBeforeMount(async () => {
   await eventCheckinInfo.getCheckinAvailable()
@@ -31,6 +37,10 @@ const stepperStep = ref('1')
 
 async function verifiedPlayerInfo() {
   await eventCheckinInfo.verifiedUserInfo()
+  const waiverQuestion = eventCheckinInfo.questions.find((x: Question) => x.typeId == 1)
+  waiverQuestion!.response = waiverStatus
+  await eventCheckinInfo.updateQuestion(waiverQuestion!)
+
   stepperStep.value = '3'
 }
 
@@ -39,6 +49,11 @@ async function onDetect(detectedCodes) {
   await eventCheckinInfo.getGoCheckinInfo(detectedCodes)
   stepperStep.value = '2'
 }
+
+const waiverStatus = computed(() => {
+  if (signedWaiver.value) return 'Under 18 - Signed Waiver'
+  return 'Over 18'
+})
 
 </script>
 
@@ -60,23 +75,29 @@ async function onDetect(detectedCodes) {
         <h2 v-if="eventCheckinInfo.goCheckinInfo.isFirstTimeUser">
           Looks like this is your first time playing!
         </h2>
-        <Button label="Verified" @click="verifiedPlayerInfo" />
+        <div class="d-flex self-align-center gap-2 mb-3">
+          <Checkbox id="13AgeQuestion" v-model="is13OrOlder" binary />
+          <label id="13AgeQuestion">Are you 13 years or older?</label>
+        </div>
+        <div class="d-flex self-align-center gap-2 mb-3">
+          <Checkbox id="18AgeQuestion" v-model="is18OrOlder" binary :disabled="signedWaiver" @change="is13OrOlder = true" />
+          <label id="18AgeQuestion">Are you 18 years or older?</label>
+        </div>
+        <div class="d-flex self-align-center gap-2 mb-3">
+          <Checkbox id="signedwaiver" v-model="signedWaiver" binary :disabled="is18OrOlder" @change="is13OrOlder = true" />
+          <label id="signedwaiver">If not, have you signed a waiver? (Front Desk will have these)</label>
+        </div>
+        <p>If they fall into above category, send them to the front desk to get this resolved.</p>
+        <Button label="Verified" :disabled="!is13OrOlder || !is18OrOlder && !signedWaiver" @click="verifiedPlayerInfo" />
       </StepPanel>
     </StepItem>
     <StepItem value="3">
       <Step>HR Questions</Step>
       <StepPanel>
-        <h3>HR Har Harrrr</h3>
+        <AnswerQuestions />
       </StepPanel>
     </StepItem>
     <StepItem value="4">
-      <Step>Event Questions</Step>
-      <StepPanel>
-        <h3>Your CRB is ready!</h3>
-        <p>Please come find our booth, and pickup up your CRB!</p>
-      </StepPanel>
-    </StepItem>
-    <StepItem value="5">
       <Step>Stone Pull</Step>
       <StepPanel>
         <p>You can use physical stones for this, or use the digital one below.</p>
