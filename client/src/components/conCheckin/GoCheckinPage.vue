@@ -90,15 +90,15 @@ const waiverStatus = computed(() => {
         </h2>
         <div class="d-flex self-align-center gap-2 mb-3">
           <Checkbox id="13AgeQuestion" v-model="is13OrOlder" binary />
-          <label id="13AgeQuestion">Are you 13 years or older?</label>
+          <label for="13AgeQuestion">Are you 13 years or older?</label>
         </div>
         <div class="d-flex self-align-center gap-2 mb-3">
           <Checkbox id="18AgeQuestion" v-model="is18OrOlder" binary :disabled="signedWaiver" @change="is13OrOlder = true" />
-          <label id="18AgeQuestion">Are you 18 years or older?</label>
+          <label for="18AgeQuestion">Are you 18 years or older?</label>
         </div>
         <div class="d-flex self-align-center gap-2 mb-3">
           <Checkbox id="signedwaiver" v-model="signedWaiver" binary :disabled="is18OrOlder" @change="is13OrOlder = true" />
-          <label id="signedwaiver">If not, have you signed a waiver? (Front Desk will have these)</label>
+          <label for="signedwaiver">If not, have you signed a waiver? (Front Desk will have these)</label>
         </div>
         <p>If they fall into above category, send them to the front desk to get this resolved.</p>
         <Button label="Verified" :disabled="!is13OrOlder || !is18OrOlder && !signedWaiver || eventCheckinInfo.goCheckinInfo.alreadyCheckedIn" @click="verifiedPlayerInfo" />

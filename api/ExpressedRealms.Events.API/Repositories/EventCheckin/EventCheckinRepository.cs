@@ -118,7 +118,7 @@ internal sealed class EventCheckinRepository(
     public async Task<bool> IsFirstTimePlayer(string lookupId)
     {
         const int firstTimePlayerBonus = 4;
-        return await context
+        return !await context
             .AssignedXpMappings.AsNoTracking()
             .AnyAsync(
                 x => x.Player.LookupId == lookupId && x.AssignedXpTypeId == firstTimePlayerBonus,
