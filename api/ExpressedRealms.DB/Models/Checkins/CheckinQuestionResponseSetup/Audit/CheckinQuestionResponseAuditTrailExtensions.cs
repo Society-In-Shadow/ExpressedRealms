@@ -17,8 +17,8 @@ internal static class CheckinQuestionResponseAuditTrailExtensions
                 case "checkin_id":
                     continue;
 
-                case "answer":
-                    changedRecord.FriendlyName = "Answer";
+                case "response":
+                    changedRecord.FriendlyName = "Response";
                     break;
 
                 default:

@@ -1017,9 +1017,9 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.HasIndex("ActorUserId");
 
-                    b.HasIndex("CheckinId");
+                    b.HasIndex("EventQuestionId");
 
-                    b.HasIndex("EventQuestionId", "CheckinId");
+                    b.HasIndex("CheckinId", "EventQuestionId");
 
                     b.ToTable("checkin_event_question_response_audit_trail", (string)null);
                 });
@@ -3900,7 +3900,7 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.HasOne("ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup.CheckinQuestionResponse", "CheckinQuestionResponse")
                         .WithMany("CheckinQuestionResponseAuditTrails")
-                        .HasForeignKey("EventQuestionId", "CheckinId")
+                        .HasForeignKey("CheckinId", "EventQuestionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
