@@ -60,5 +60,9 @@ export const EventCheckinStore
         await this.verifiedUserInfo()
         toaster.success('Assigned XP successfully!')
       },
+      async approveStage(stageId: number) {
+        await axios.post(`/events/checkin/lookup/${this.lookupId}/approveStage`, { stageId: stageId })
+        toaster.success('Stage approved successfully!')
+      },
     },
   })

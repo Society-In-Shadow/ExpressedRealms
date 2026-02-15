@@ -68,6 +68,10 @@ const waiverStatus = computed(() => {
   return 'Over 18'
 })
 
+const approveCheckinStage = async () => {
+  await eventCheckinInfo.approveStage(1)
+}
+
 </script>
 
 <template>
@@ -128,7 +132,8 @@ const waiverStatus = computed(() => {
           <p>{{ question.response }}</p>
         </div>
         <h2>Checkin Bonus</h2>
-        <p>+{{ eventCheckinInfo.assignedXp?.amount }}</p>
+        <p>+{{ eventCheckinInfo.assignedXp?.amount }} - {{ eventCheckinInfo.assignedXp?.typeName }}</p>
+        <Button label="Finalize Checkin" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveCheckinStage" />
       </StepPanel>
     </StepItem>
     <StepItem value="6" :disabled="stepperStep !== '6'">
