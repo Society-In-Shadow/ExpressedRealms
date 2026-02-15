@@ -37,7 +37,7 @@ onBeforeMount(async () => {
   await eventCheckinInfo.getCheckinInfo()
   text.value = eventCheckinInfo.lookupId
   currentStage.value = eventCheckinInfo.checkinStage
-  if (currentStage.value != null) {
+  if (currentStage.value) {
     stepperValue.value = (currentStage.value.id + 1).toString()
   }
   else {
