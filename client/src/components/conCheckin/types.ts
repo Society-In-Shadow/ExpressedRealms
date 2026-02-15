@@ -18,6 +18,7 @@ export interface ApproveCheckinInfo {
   assignedXp: AssignedXpType
   questions: Array<Question>
   primaryCharacterInfo: PrimaryCharacterInfo | null
+  currentStage: BasicInfo | null
 }
 
 export interface Question {

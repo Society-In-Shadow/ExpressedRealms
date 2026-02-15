@@ -1,3 +1,4 @@
+using ExpressedRealms.Events.API.API.EventCheckin.GetUserCheckinDetails;
 using ExpressedRealms.Events.API.UseCases.EventCheckin.ConfirmedUserInfo;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
@@ -51,6 +52,11 @@ public static class ConfirmUserCheckinInfoEndpoint
                         Id = x.QuestionId,
                     })
                     .ToList(),
+                CurrentStage = results.Value.CurrentStage is null ? null : new BasicInfo()
+                {
+                    Id = results.Value.CurrentStage.Id,
+                    Name = results.Value.CurrentStage.Name
+                }
             }
         );
     }

@@ -6,6 +6,7 @@ import type {
   BasicInfo,
   CheckinInfo,
   GoCheckinInfo,
+  PrimaryCharacterInfo,
   Question,
 } from '@/components/conCheckin/types.ts'
 import toaster from '@/services/Toasters'
@@ -24,6 +25,7 @@ export const EventCheckinStore
         questions: [] as Question[],
         broughtNewPlayer: false,
         assignedXp: {} as AssignedXpType | null | undefined,
+        primaryCharacter: {} as PrimaryCharacterInfo | null,
       }
     },
     actions: {
@@ -53,6 +55,8 @@ export const EventCheckinStore
         this.playerNumber = response.data.playerNumber
         this.questions = response.data.questions
         this.assignedXp = response.data.assignedXp
+        this.primaryCharacter = response.data.primaryCharacterInfo
+        this.checkinStage = response.data.currentStage
       },
       async updateQuestion(question: Question) {
         await axios.put(`/events/checkin/lookup/${this.lookupId}/questions/${question.id}`, { response: question.response })

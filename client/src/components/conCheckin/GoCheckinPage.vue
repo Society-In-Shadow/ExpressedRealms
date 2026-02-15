@@ -60,7 +60,14 @@ async function onDetect(detectedCodes) {
       signedWaiver.value = true
     }
   }
-  stepperStep.value = '2'
+
+  const stageId = eventCheckinInfo.checkinStage?.id
+  if (stageId && stageId >= 1 && stageId <= 5) {
+    stepperStep.value = String(stageId + 5)
+  }
+  else {
+    stepperStep.value = '2'
+  }
 }
 
 const waiverStatus = computed(() => {
@@ -106,7 +113,7 @@ const approveCheckinStage = async () => {
         </div>
         <p>If they fall into above category, send them to the front desk to get this resolved.</p>
         <Button label="Verified" :disabled="!is13OrOlder || !is18OrOlder && !signedWaiver || eventCheckinInfo.goCheckinInfo.alreadyCheckedIn" @click="verifiedPlayerInfo" />
-        <Button label="Reviewed" icon="pi pi-arrow-right" icon-pos="right" class="mb-4" @click="stepperStep = '2'" />
+        <Button label="Reviewed" icon="pi pi-arrow-right" icon-pos="right" class="mb-4" @click="activateCallback('2')" />
       </StepPanel>
     </StepItem>
     <StepItem value="3">
@@ -140,7 +147,14 @@ const approveCheckinStage = async () => {
       <Step>GO Approval</Step>
       <StepPanel>
         <h3>Link to their CRB</h3>
-        <p>I'm a Link!</p>
+        <p v-if="!eventCheckinInfo.primaryCharacter">
+          They do not have a primary character setup yet.
+        </p>
+        <p v-else>
+          <RouterLink :to="`/characters/${eventCheckinInfo.primaryCharacter.characterId}`" target="_blank">
+            {{ eventCheckinInfo.primaryCharacter.characterName }}
+          </RouterLink>
+        </p>
         <h3>They do not have a primary character, you will need to walk them through how to do that</h3>
         <h3>Did you approve the contacts on their CRB? (Block till they say yes)</h3>
         <h3>Did you Check to make sure that most of their XP has been spent? (Eg, they haven't spent anything outside of character creation)</h3>
