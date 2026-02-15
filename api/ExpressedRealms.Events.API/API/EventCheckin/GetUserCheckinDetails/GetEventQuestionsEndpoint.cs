@@ -19,7 +19,11 @@ public static class GetUserCheckinInfoEndpoint
             new GetUserCheckinInfoResponse()
             {
                 LookupId = results.Value.LookupId,
-                CheckinStageId = results.Value.CheckinStageId,
+                CheckinStage = results.Value.CheckinStage is null ? null : new BasicInfo()
+                {
+                    Name = results.Value.CheckinStage.Name,
+                    Id = results.Value.CheckinStage.Id
+                },
                 EventId = results.Value.EventId,
             }
         );
