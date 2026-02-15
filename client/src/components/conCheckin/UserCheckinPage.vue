@@ -106,8 +106,8 @@ onBeforeMount(async () => {
         </p>
         <p>This is also where you want to confirm your characters background, and any other questions you might have.</p>
         <p>SHQ can assist you in finding a GO if you are having trouble finding one.</p>
-        <p>They have black vests with a red logo with the following graphic on it: insert photo of logo</p>
-        <img src="/public/favicon.png" alt="Society in Shadows vest emblem">
+        <p>They have black vests with a red logo with the following graphic on it:</p>
+        <img src="/public/vest-logo.png" alt="Society in Shadows vest emblem" class="w-md-100">
       </StepPanel>
     </StepItem>
     <StepItem value="3">
