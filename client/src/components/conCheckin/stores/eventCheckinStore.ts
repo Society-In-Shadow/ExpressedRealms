@@ -3,6 +3,7 @@ import axios from 'axios'
 import type {
   ApproveCheckinInfo,
   AssignedXpType,
+  BasicInfo,
   CheckinInfo,
   GoCheckinInfo,
   Question,
@@ -16,6 +17,7 @@ export const EventCheckinStore
         hasActiveEvent: false,
         lookupId: '',
         eventId: 0,
+        checkinStage: {} as BasicInfo | null,
         goCheckinInfo: {} as GoCheckinInfo,
         checkinId: 0,
         playerNumber: 0,
@@ -34,6 +36,7 @@ export const EventCheckinStore
 
         this.lookupId = response.data.lookupId
         this.eventId = response.data.eventId
+        this.checkinStage = response.data.checkinStage
       },
       async getGoCheckinInfo(lookupId: string): Promise<boolean> {
         const response = await axios.get<GoCheckinInfo>(`/events/checkin/lookup/${lookupId}`)
