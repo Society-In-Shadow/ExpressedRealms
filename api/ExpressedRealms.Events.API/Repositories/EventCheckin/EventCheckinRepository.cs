@@ -90,7 +90,7 @@ internal sealed class EventCheckinRepository(
             .Select(x => x.LookupId!)
             .FirstAsync(cancellationToken);
     }
-    
+
     public async Task<Guid> GetCurrentPlayerId()
     {
         return await context
@@ -205,20 +205,16 @@ internal sealed class EventCheckinRepository(
 
     public async Task<List<CheckinStageMapping>> GetApprovedStages(int checkinId)
     {
-        return await context.CheckinStageMappings
-            .Where(x => x.CheckinId == checkinId)
+        return await context
+            .CheckinStageMappings.Where(x => x.CheckinId == checkinId)
             .ToListAsync(cancellationToken);
     }
 
     public async Task<BasicInfo?> GetCurrentStage(int checkinId)
     {
-        return await context.CheckinStageMappings
-            .OrderByDescending(x => x.CheckinStageId)
-            .Select(x => new BasicInfo
-            {
-                Id = x.Id,
-                Name = x.CheckinStage.Name
-            })
+        return await context
+            .CheckinStageMappings.OrderByDescending(x => x.CheckinStageId)
+            .Select(x => new BasicInfo { Id = x.Id, Name = x.CheckinStage.Name })
             .FirstOrDefaultAsync(cancellationToken);
     }
 }

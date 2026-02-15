@@ -24,17 +24,17 @@ internal sealed class ApproveStageAndSendMessageUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-        
+
         var eventId = await checkinRepository.GetActiveEventId();
         if (eventId is null)
             return Result.Fail("There are no active events to assign xp to");
-        
+
         var playerId = await checkinRepository.GetPlayerId(model.LookupId);
         var checkin = await checkinRepository.GetCheckinAsync(eventId!.Value, playerId);
-        
-        if(checkin is null)
+
+        if (checkin is null)
             return Result.Fail("Player has not checked in yet");
-        
+
         var approvedStages = await checkinRepository.GetApprovedStages(checkin.Id);
 
         if (approvedStages.Any(x => x.CheckinStageId == model.StageId))
@@ -46,14 +46,16 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         if (nextStage != model.StageId - 1)
             return Result.Fail("Stage is not next in line");
 
-        await checkinRepository.CompleteStage(new CheckinStageMapping()
-        {
-            CreatedAt = timeProvider.GetUtcNow(),
-            ApproverUserId = userContext.CurrentUserId(),
-            CheckinStageId = model.StageId,
-            CheckinId = checkin.Id
-        });
-        
+        await checkinRepository.CompleteStage(
+            new CheckinStageMapping()
+            {
+                CreatedAt = timeProvider.GetUtcNow(),
+                ApproverUserId = userContext.CurrentUserId(),
+                CheckinStageId = model.StageId,
+                CheckinId = checkin.Id,
+            }
+        );
+
         return Result.Ok();
     }
 }

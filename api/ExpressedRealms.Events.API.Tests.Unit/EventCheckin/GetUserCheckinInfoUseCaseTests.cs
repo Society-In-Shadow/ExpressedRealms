@@ -17,19 +17,13 @@ public class GetUserCheckinInfoUseCaseTests
     {
         _eventCheckinRepository = A.Fake<IEventCheckinRepository>();
 
-        
         A.CallTo(() => _eventCheckinRepository.GetPlayerLookupId()).Returns("123456AB");
         A.CallTo(() => _eventCheckinRepository.GetActiveEventId()).Returns(2);
         A.CallTo(() => _eventCheckinRepository.GetCurrentPlayerId()).Returns(_playerId);
-        A.CallTo(() => _eventCheckinRepository.GetCheckinAsync(2, _playerId)).Returns(new Checkin()
-        {
-            Id = 4
-        });
-        A.CallTo(() => _eventCheckinRepository.GetCurrentStage(4)).Returns(new BasicInfo()
-        {
-            Name = "Test",
-            Id = 3
-        });
+        A.CallTo(() => _eventCheckinRepository.GetCheckinAsync(2, _playerId))
+            .Returns(new Checkin() { Id = 4 });
+        A.CallTo(() => _eventCheckinRepository.GetCurrentStage(4))
+            .Returns(new BasicInfo() { Name = "Test", Id = 3 });
 
         _useCase = new GetUserCheckinInfoUseCase(_eventCheckinRepository);
     }
@@ -66,20 +60,22 @@ public class GetUserCheckinInfoUseCaseTests
         Assert.Equal("Test", results.Value.CheckinStage!.Name);
         Assert.Equal(3, results.Value.CheckinStage.Id);
     }
-    
+
     [Fact]
     public async Task UseCase_CanHandleNull_CurrentStage()
     {
-        A.CallTo(() => _eventCheckinRepository.GetCurrentStage(4)).Returns(Task.FromResult<BasicInfo?>(null));
+        A.CallTo(() => _eventCheckinRepository.GetCurrentStage(4))
+            .Returns(Task.FromResult<BasicInfo?>(null));
 
         var results = await _useCase.ExecuteAsync();
         Assert.Null(results.Value.CheckinStage);
     }
-    
+
     [Fact]
     public async Task UseCase_CanHandleNull_Checkin()
     {
-        A.CallTo(() => _eventCheckinRepository.GetCheckinAsync(2, _playerId)).Returns(Task.FromResult<Checkin?>(null));
+        A.CallTo(() => _eventCheckinRepository.GetCheckinAsync(2, _playerId))
+            .Returns(Task.FromResult<Checkin?>(null));
 
         var results = await _useCase.ExecuteAsync();
         Assert.Null(results.Value.CheckinStage);

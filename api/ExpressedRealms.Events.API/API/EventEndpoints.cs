@@ -123,9 +123,12 @@ internal static class EventEndpoints
             .MapPost("checkin/lookup/{lookupId}/assignXp", AddCheckinBonusXpEndpoint.ExecuteAsync)
             .RequireFeatureToggle(ReleaseFlags.ShowEventCheckin)
             .RequirePermission(Permissions.Event.Checkin);
-        
+
         endpointGroup
-            .MapPost("checkin/lookup/{lookupId}/approveStage", ApproveStageAndSendMessageEndpoint.ExecuteAsync)
+            .MapPost(
+                "checkin/lookup/{lookupId}/approveStage",
+                ApproveStageAndSendMessageEndpoint.ExecuteAsync
+            )
             .RequireFeatureToggle(ReleaseFlags.ShowEventCheckin)
             .RequirePermission(Permissions.Event.Checkin);
     }

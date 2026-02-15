@@ -5,7 +5,8 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Events.API.UseCases.EventCheckin.ApproveStageAndSendMessages;
 
 [UsedImplicitly]
-internal sealed class ApproveStageAndSendMessageModelValidator : AbstractValidator<ApproveStageAndSendMessageModel>
+internal sealed class ApproveStageAndSendMessageModelValidator
+    : AbstractValidator<ApproveStageAndSendMessageModel>
 {
     public ApproveStageAndSendMessageModelValidator(IEventCheckinRepository repository)
     {

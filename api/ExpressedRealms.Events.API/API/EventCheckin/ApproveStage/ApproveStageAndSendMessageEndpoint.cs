@@ -15,11 +15,7 @@ public static class ApproveStageAndSendMessageEndpoint
     )
     {
         var results = await useCase.ExecuteAsync(
-            new ApproveStageAndSendMessageModel()
-            {
-                LookupId = lookupId,
-                StageId = request.StageId
-            }
+            new ApproveStageAndSendMessageModel() { LookupId = lookupId, StageId = request.StageId }
         );
 
         if (results.HasValidationError(out var validationProblem))

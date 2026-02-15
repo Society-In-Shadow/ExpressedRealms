@@ -52,11 +52,13 @@ public static class ConfirmUserCheckinInfoEndpoint
                         Id = x.QuestionId,
                     })
                     .ToList(),
-                CurrentStage = results.Value.CurrentStage is null ? null : new BasicInfo()
-                {
-                    Id = results.Value.CurrentStage.Id,
-                    Name = results.Value.CurrentStage.Name
-                }
+                CurrentStage = results.Value.CurrentStage is null
+                    ? null
+                    : new BasicInfo()
+                    {
+                        Id = results.Value.CurrentStage.Id,
+                        Name = results.Value.CurrentStage.Name,
+                    },
             }
         );
     }

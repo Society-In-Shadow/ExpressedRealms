@@ -52,7 +52,7 @@ internal sealed class ConfirmedUserInfoUseCase(
         }
 
         var currentStage = await checkinRepository.GetCurrentStage(checkinId);
-        
+
         return Result.Ok(
             new ConfirmedUserInfoReturnModel()
             {
@@ -79,7 +79,7 @@ internal sealed class ConfirmedUserInfoUseCase(
                         TypeId = assignedXp.TypeId,
                         Amount = assignedXp.Amount,
                     },
-                CurrentStage = currentStage
+                CurrentStage = currentStage,
             }
         );
     }
