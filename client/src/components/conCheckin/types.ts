@@ -1,6 +1,6 @@
 export interface CheckinInfo {
   lookupId: string
-  checkinStageId: number
+  checkinStage: BasicInfo | null
   eventId: number
 }
 
@@ -18,6 +18,7 @@ export interface ApproveCheckinInfo {
   assignedXp: AssignedXpType
   questions: Array<Question>
   primaryCharacterInfo: PrimaryCharacterInfo | null
+  currentStage: BasicInfo | null
 }
 
 export interface Question {
@@ -36,4 +37,9 @@ export interface AssignedXpType {
   amount: number
   typeId: number
   typeName: string
+}
+
+export interface BasicInfo {
+  id: number
+  name: string
 }

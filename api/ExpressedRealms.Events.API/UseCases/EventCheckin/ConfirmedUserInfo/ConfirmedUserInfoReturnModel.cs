@@ -1,3 +1,5 @@
+using ExpressedRealms.Events.API.Repositories.EventCheckin.Dtos;
+
 namespace ExpressedRealms.Events.API.UseCases.EventCheckin.ConfirmedUserInfo;
 
 public class ConfirmedUserInfoReturnModel
@@ -9,4 +11,5 @@ public class ConfirmedUserInfoReturnModel
     public List<QuestionResponse> Questions { get; set; } = new List<QuestionResponse>();
     public PrimaryCharacterInfo? PrimaryCharacterInfo { get; set; }
     public AssignedXpType? AssignedXp { get; set; }
+    public BasicInfo? CurrentStage { get; set; }
 }

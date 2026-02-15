@@ -1,3 +1,5 @@
+using ExpressedRealms.Events.API.API.EventCheckin.GetUserCheckinDetails;
+
 namespace ExpressedRealms.Events.API.API.EventCheckin.ConfirmUserCheckinInfo;
 
 public class GetGoCheckinInfoResponse
@@ -10,4 +12,5 @@ public class GetGoCheckinInfoResponse
     public PrimaryCharacterInfo? PrimaryCharacterInfo { get; set; }
 
     public List<QuestionResponse> Questions { get; set; } = new();
+    public BasicInfo? CurrentStage { get; set; }
 }

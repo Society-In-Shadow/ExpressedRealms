@@ -3,8 +3,10 @@ import axios from 'axios'
 import type {
   ApproveCheckinInfo,
   AssignedXpType,
+  BasicInfo,
   CheckinInfo,
   GoCheckinInfo,
+  PrimaryCharacterInfo,
   Question,
 } from '@/components/conCheckin/types.ts'
 import toaster from '@/services/Toasters'
@@ -16,12 +18,14 @@ export const EventCheckinStore
         hasActiveEvent: false,
         lookupId: '',
         eventId: 0,
+        checkinStage: {} as BasicInfo | null,
         goCheckinInfo: {} as GoCheckinInfo,
         checkinId: 0,
         playerNumber: 0,
         questions: [] as Question[],
         broughtNewPlayer: false,
         assignedXp: {} as AssignedXpType | null | undefined,
+        primaryCharacter: {} as PrimaryCharacterInfo | null,
       }
     },
     actions: {
@@ -34,6 +38,7 @@ export const EventCheckinStore
 
         this.lookupId = response.data.lookupId
         this.eventId = response.data.eventId
+        this.checkinStage = response.data.checkinStage
       },
       async getGoCheckinInfo(lookupId: string): Promise<boolean> {
         const response = await axios.get<GoCheckinInfo>(`/events/checkin/lookup/${lookupId}`)
@@ -50,6 +55,8 @@ export const EventCheckinStore
         this.playerNumber = response.data.playerNumber
         this.questions = response.data.questions
         this.assignedXp = response.data.assignedXp
+        this.primaryCharacter = response.data.primaryCharacterInfo
+        this.checkinStage = response.data.currentStage
       },
       async updateQuestion(question: Question) {
         await axios.put(`/events/checkin/lookup/${this.lookupId}/questions/${question.id}`, { response: question.response })
@@ -59,6 +66,10 @@ export const EventCheckinStore
         await axios.post(`/events/checkin/lookup/${this.lookupId}/assignXp`, { amount: amount, AssignedXpTypeId: typeId })
         await this.verifiedUserInfo()
         toaster.success('Assigned XP successfully!')
+      },
+      async approveStage(stageId: number) {
+        await axios.post(`/events/checkin/lookup/${this.lookupId}/approveStage`, { stageId: stageId })
+        toaster.success('Stage approved successfully!')
       },
     },
   })

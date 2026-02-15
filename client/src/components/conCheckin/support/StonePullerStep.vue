@@ -3,15 +3,17 @@
 import StonePuller from '@/components/stonePuller/StonePuller.vue'
 import InputNumber from 'primevue/inputnumber'
 import Button from 'primevue/button'
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
 
 const eventCheckinInfo = EventCheckinStore()
 const checkinBonus = ref<number | null>(null)
 
-onMounted(() => {
+/* onMounted(() => {
   checkinBonus.value = eventCheckinInfo.assignedXp?.amount ?? 0
-})
+}) */
+
+watch(() => eventCheckinInfo.assignedXp, () => checkinBonus.value = eventCheckinInfo.assignedXp?.amount ?? 0)
 
 watch(() => eventCheckinInfo.broughtNewPlayer, () => {
   if (eventCheckinInfo.broughtNewPlayer)

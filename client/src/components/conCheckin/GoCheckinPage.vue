@@ -60,13 +60,37 @@ async function onDetect(detectedCodes) {
       signedWaiver.value = true
     }
   }
-  stepperStep.value = '2'
+
+  const stageId = eventCheckinInfo.checkinStage?.id
+  if (stageId && stageId >= 1 && stageId <= 5) {
+    stepperStep.value = String(stageId + 5)
+  }
+  else {
+    stepperStep.value = '2'
+  }
 }
 
 const waiverStatus = computed(() => {
   if (signedWaiver.value) return 'Under 18 - Signed Waiver'
   return 'Over 18'
 })
+
+const approveStage = async (stageId: number) => {
+  await eventCheckinInfo.approveStage(stageId)
+}
+
+const typeName = (typeId: number) => {
+  switch (typeId) {
+    case 2:
+      return 'Checkin Bonus'
+    case 5:
+      return 'Brought New Player'
+    case 4:
+      return 'First Time Player'
+    default:
+      return 'Unknown'
+  }
+}
 
 </script>
 
@@ -102,7 +126,7 @@ const waiverStatus = computed(() => {
         </div>
         <p>If they fall into above category, send them to the front desk to get this resolved.</p>
         <Button label="Verified" :disabled="!is13OrOlder || !is18OrOlder && !signedWaiver || eventCheckinInfo.goCheckinInfo.alreadyCheckedIn" @click="verifiedPlayerInfo" />
-        <Button label="Reviewed" icon="pi pi-arrow-right" icon-pos="right" class="mb-4" @click="stepperStep = '2'" />
+        <Button label="Reviewed" icon="pi pi-arrow-right" icon-pos="right" class="mb-4" @click="activateCallback('2')" />
       </StepPanel>
     </StepItem>
     <StepItem value="3">
@@ -128,36 +152,50 @@ const waiverStatus = computed(() => {
           <p>{{ question.response }}</p>
         </div>
         <h2>Checkin Bonus</h2>
-        <p>+{{ eventCheckinInfo.assignedXp?.amount }}</p>
+        <p>+{{ eventCheckinInfo.assignedXp?.amount }} - {{ typeName(eventCheckinInfo.assignedXp?.typeId) }}</p>
+        <Button label="Finalize Checkin" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(1)" />
       </StepPanel>
     </StepItem>
     <StepItem value="6" :disabled="stepperStep !== '6'">
       <Step>GO Approval</Step>
       <StepPanel>
         <h3>Link to their CRB</h3>
-        <p>I'm a Link!</p>
+        <p v-if="!eventCheckinInfo.primaryCharacter">
+          They do not have a primary character setup yet.
+        </p>
+        <p v-else>
+          <RouterLink :to="`/characters/${eventCheckinInfo.primaryCharacter.characterId}`" target="_blank">
+            {{ eventCheckinInfo.primaryCharacter.characterName }}
+          </RouterLink>
+        </p>
         <h3>They do not have a primary character, you will need to walk them through how to do that</h3>
         <h3>Did you approve the contacts on their CRB? (Block till they say yes)</h3>
         <h3>Did you Check to make sure that most of their XP has been spent? (Eg, they haven't spent anything outside of character creation)</h3>
         <h3>Is their character level within expections for the plot?</h3>
+        <Button label="GO Approval" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(2)" />
       </StepPanel>
     </StepItem>
     <StepItem value="7">
       <Step>CRB Creation</Step>
       <StepPanel>
         <h3>CRB needs to be created</h3>
+
+        <Button label="CRB Created" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(3)" />
       </StepPanel>
     </StepItem>
     <StepItem value="8">
       <Step>CRB Is Ready for Pickup</Step>
       <StepPanel>
         <h3>Need to scan to move to next step</h3>
+
+        <Button label="CRB Ready for Pickup" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(4)" />
       </StepPanel>
     </StepItem>
     <StepItem value="9">
       <Step>CRB Is Picked Up</Step>
       <StepPanel>
         <h3>Needs to be scanned again to be verified by user</h3>
+        <Button label="CRB has been Picked Up" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(5)" />
       </StepPanel>
     </StepItem>
   </Stepper>
