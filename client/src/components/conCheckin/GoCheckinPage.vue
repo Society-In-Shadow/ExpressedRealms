@@ -75,8 +75,21 @@ const waiverStatus = computed(() => {
   return 'Over 18'
 })
 
-const approveCheckinStage = async () => {
-  await eventCheckinInfo.approveStage(1)
+const approveStage = async (stageId: number) => {
+  await eventCheckinInfo.approveStage(stageId)
+}
+
+const typeName = (typeId: number) => {
+  switch (typeId) {
+    case 2:
+      return 'Checkin Bonus'
+    case 5:
+      return 'Brought New Player'
+    case 4:
+      return 'First Time Player'
+    default:
+      return 'Unknown'
+  }
 }
 
 </script>
@@ -139,8 +152,8 @@ const approveCheckinStage = async () => {
           <p>{{ question.response }}</p>
         </div>
         <h2>Checkin Bonus</h2>
-        <p>+{{ eventCheckinInfo.assignedXp?.amount }} - {{ eventCheckinInfo.assignedXp?.typeName }}</p>
-        <Button label="Finalize Checkin" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveCheckinStage" />
+        <p>+{{ eventCheckinInfo.assignedXp?.amount }} - {{ typeName(eventCheckinInfo.assignedXp?.typeId) }}</p>
+        <Button label="Finalize Checkin" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(1)" />
       </StepPanel>
     </StepItem>
     <StepItem value="6" :disabled="stepperStep !== '6'">
@@ -159,24 +172,30 @@ const approveCheckinStage = async () => {
         <h3>Did you approve the contacts on their CRB? (Block till they say yes)</h3>
         <h3>Did you Check to make sure that most of their XP has been spent? (Eg, they haven't spent anything outside of character creation)</h3>
         <h3>Is their character level within expections for the plot?</h3>
+        <Button label="GO Approval" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(2)" />
       </StepPanel>
     </StepItem>
     <StepItem value="7">
       <Step>CRB Creation</Step>
       <StepPanel>
         <h3>CRB needs to be created</h3>
+
+        <Button label="CRB Created" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(3)" />
       </StepPanel>
     </StepItem>
     <StepItem value="8">
       <Step>CRB Is Ready for Pickup</Step>
       <StepPanel>
         <h3>Need to scan to move to next step</h3>
+
+        <Button label="CRB Ready for Pickup" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(4)" />
       </StepPanel>
     </StepItem>
     <StepItem value="9">
       <Step>CRB Is Picked Up</Step>
       <StepPanel>
         <h3>Needs to be scanned again to be verified by user</h3>
+        <Button label="CRB has been Picked Up" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(5)" />
       </StepPanel>
     </StepItem>
   </Stepper>
