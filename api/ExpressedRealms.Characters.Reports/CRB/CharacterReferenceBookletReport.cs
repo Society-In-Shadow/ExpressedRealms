@@ -1,8 +1,11 @@
 using ExpressedRealms.Characters.Reports.CRB.Data;
 using ExpressedRealms.Characters.Reports.CRB.Data.SupportingData;
+using PdfSharp.Drawing;
 using PdfSharp.Fonts;
+using PdfSharp.Pdf;
 using PdfSharp.Pdf.AcroForms;
 using PdfSharp.Pdf.IO;
+using QRCoder;
 using QuestPDF;
 using QuestPDF.Infrastructure;
 
@@ -27,7 +30,7 @@ public static class CharacterReferenceBookletReport
         {
             var fields = document.AcroForm.Fields;
 
-            FillInBasicInfo(fields, data.BasicInfo);
+            FillInBasicInfo(fields, data.BasicInfo, document);
             FillInTraits(fields, data.Traits);
             FillInSkills(fields, data.SkillInfo);
             FillInPowers(fields, data.Powers);
@@ -102,10 +105,8 @@ public static class CharacterReferenceBookletReport
         MergeField(fields, "Deflect", dataProficiencyInfo.Deflect.ToString());
     }
 
-    private static void FillInBasicInfo(
-        PdfAcroField.PdfAcroFieldCollection fields,
-        BasicInfo basicInfo
-    )
+    private static void FillInBasicInfo(PdfAcroField.PdfAcroFieldCollection fields,
+        BasicInfo basicInfo, PdfDocument document)
     {
         MergeField(fields, "PlayerNumber", basicInfo.PlayerNumber);
         MergeField(fields, "LastName", basicInfo.PlayerName);
@@ -115,7 +116,71 @@ public static class CharacterReferenceBookletReport
         MergeField(fields, "CharacterClass", basicInfo.Expression);
         MergeField(fields, "Subtype", basicInfo.ProgressionPath);
         MergeField(fields, "XL", basicInfo.CharacterLevel);
+        
+        var page = document.Pages[2];
+        var anchor = document.AcroForm.Fields["QrAnchor"] as PdfTextField;
+
+        if (anchor == null)
+            throw new Exception("QrAnchor field not found.");
+
+        PdfDictionary widget;
+
+        // Try /Kids first
+        var kids = anchor.Elements["/Kids"] as PdfArray;
+
+        if (kids != null && kids.Elements.Count > 0)
+        {
+            widget = kids.Elements[0] as PdfDictionary;
+        }
+        else
+        {
+            // Field itself is the widget
+            widget = anchor;
+        }
+
+        var rect = widget.Elements.GetRectangle("/Rect");
+        
+        double x = rect.X1;
+        double y = page.Height - rect.Y2;
+        double width = rect.Width;
+        double height = rect.Height;
+        
+        using var gfx = XGraphics.FromPdfPage(page);
+
+        DrawQrCode(gfx, basicInfo.LookupId, x, y, width, height);
     }
+    
+    private static void DrawQrCode(XGraphics gfx, string content, double x, double y, double width, double height)
+    {
+        using var generator = new QRCodeGenerator();
+        using var data = generator.CreateQrCode(content, QRCodeGenerator.ECCLevel.H);
+
+        var matrix = data.ModuleMatrix;
+        int modules = matrix.Count;
+
+        double moduleSize = Math.Min(width, height) / modules;
+
+        // Center inside bounds
+        double offsetX = x + (width - modules * moduleSize) / 2;
+        double offsetY = y + (height - modules * moduleSize) / 2;
+
+        for (int row = 0; row < modules; row++)
+        {
+            for (int col = 0; col < modules; col++)
+            {
+                if (matrix[row][col] == true)
+                {
+                    gfx.DrawRectangle(
+                        XBrushes.Black,
+                        offsetX + col * moduleSize,
+                        offsetY + row * moduleSize,
+                        moduleSize,
+                        moduleSize);
+                }
+            }
+        }
+    }
+
 
     private static void FillInTraits(PdfAcroField.PdfAcroFieldCollection fields, Traits traits)
     {

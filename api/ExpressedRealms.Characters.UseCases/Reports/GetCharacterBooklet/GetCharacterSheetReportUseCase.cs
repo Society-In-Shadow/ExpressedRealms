@@ -276,6 +276,7 @@ public class GetCharacterSheetReportUseCase(
                 : $"{character.PrimaryProgressionName} Secondary {character.SecondaryProgressionName}",
             PlayerNumber = character.PlayerNumber.ToString("D3"),
             PlayerName = character.PlayerName,
+            LookupId = character.LookupId,
             CharacterLevel = characterLevel.ToString(),
         };
         return basicInfo;
