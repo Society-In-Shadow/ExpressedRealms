@@ -42,9 +42,24 @@ internal sealed class ApproveStageAndSendMessageUseCase(
             return Result.Fail("Stage has already been approved");
         }
 
-        var nextStage = approvedStages.Count > 0 ? approvedStages.Max(x => x.Id) : 0;
-        if (nextStage != model.StageId - 1)
-            return Result.Fail("Stage is not next in line");
+        var dayCheckins = new[] { 6, 7 };
+        var nextStage = approvedStages.Count > 0 ? approvedStages.Max(x => x.CheckinStageId) : 0;
+        var completedStageIds = approvedStages.Select(x => x.CheckinStageId).ToList();
+
+        // ---- Rule 1: Sequential for stages 1–5 ----
+        if (model.StageId <= 5 && model.StageId != nextStage + 1) 
+            return Result.Fail("Stage is not next in sequence.");
+
+        // ---- Rule 2: Stage 6 & 7 locked until 1–5 complete ----
+        if (dayCheckins.Contains(model.StageId))
+        {
+            bool firstFiveComplete = Enumerable.Range(1, 5)
+                .All(stage => completedStageIds.Contains(stage));
+
+            if (!firstFiveComplete)
+                return Result.Fail("Stages 1 through 5 must be completed before day check-ins.");
+        }
+
 
         await checkinRepository.CompleteStage(
             new CheckinStageMapping()
@@ -55,7 +70,22 @@ internal sealed class ApproveStageAndSendMessageUseCase(
                 CheckinId = checkin.Id,
             }
         );
-
+        
+        
+        if (model.StageId == 2)
+        {
+            // Once GO Approves, it immediately goes into CRB Creation
+            await checkinRepository.CompleteStage(
+                new CheckinStageMapping()
+                {
+                    CreatedAt = timeProvider.GetUtcNow(),
+                    ApproverUserId = userContext.CurrentUserId(),
+                    CheckinStageId = model.StageId + 1,
+                    CheckinId = checkin.Id,
+                }
+            );
+        }
+        
         return Result.Ok();
     }
 }
