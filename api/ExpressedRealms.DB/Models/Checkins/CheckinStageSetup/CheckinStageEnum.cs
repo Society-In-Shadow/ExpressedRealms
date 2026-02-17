@@ -37,4 +37,15 @@ public sealed class CheckinStageEnum : SmartEnum<CheckinStageEnum, int>
         5,
         "Player has picked up the CRB and verified that it's good to go"
     );
+    public static readonly CheckinStageEnum Day2Checkin = new(
+        "Day 2 Checkin",
+        6,
+        "Player has checked in for the day 2 activities (Usually Saturday)"
+    );
+
+    public static readonly CheckinStageEnum Day3Checkin = new(
+        "Day 3 Checkin",
+        7,
+        "Player has checked in for the day 3 activities (Usually Sunday)"
+    );
 }
