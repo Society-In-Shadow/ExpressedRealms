@@ -143,29 +143,29 @@ public static class CharacterReferenceBookletReport
         
         var rect = widget.Elements.GetRectangle("/Rect");
         
-        double x = rect.X1;
-        double y = page.Height - rect.Y2;
-        double width = rect.Width;
-        double height = rect.Height;
+        var x = XUnitPt.FromPoint(rect.X1);
+        var y = XUnitPt.FromPoint(page.Height.Point - rect.Y2);
+        var width = XUnitPt.FromPoint(rect.Width);
+        var height = XUnitPt.FromPoint(rect.Height);
         
         using var gfx = XGraphics.FromPdfPage(page);
 
         DrawQrCode(gfx, basicInfo.LookupId, x, y, width, height);
     }
     
-    private static void DrawQrCode(XGraphics gfx, string content, double x, double y, double width, double height)
+    private static void DrawQrCode(XGraphics gfx, string content, XUnitPt x, XUnitPt y, XUnitPt width, XUnitPt height)
     {
         using var generator = new QRCodeGenerator();
         using var data = generator.CreateQrCode(content, QRCodeGenerator.ECCLevel.H);
 
         var matrix = data.ModuleMatrix;
-        int modules = matrix.Count;
+        var modules = matrix.Count;
 
-        double moduleSize = Math.Min(width, height) / modules;
+        double moduleSize = XUnitPt.FromPoint(Math.Min(width, height) / modules);
 
         // Center inside bounds
-        double offsetX = x + (width - modules * moduleSize) / 2;
-        double offsetY = y + (height - modules * moduleSize) / 2;
+        var offsetX = x + (width - modules * moduleSize) / 2;
+        var offsetY = y + (height - modules * moduleSize) / 2;
         
         for (int row = 0; row < modules; row++)
         {
