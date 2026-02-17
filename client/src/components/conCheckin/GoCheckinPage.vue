@@ -202,6 +202,7 @@ const typeName = (typeId: number) => {
       <Step>Day 2 Checkin</Step>
       <StepPanel>
         <h3>This is the 2nd day the character has been in play, not the 2nd day of play</h3>
+        <p>The character has been checked in for the day.</p>
         <Button label="Day 3 Checkin" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(7)" />
       </StepPanel>
     </StepItem>
@@ -209,6 +210,7 @@ const typeName = (typeId: number) => {
       <Step>Day 3</Step>
       <StepPanel>
         <h3>Thank You and Come Again!</h3>
+        <p>The character has been checked in for the day.</p>
         <p>Everything is Done for the Con</p>
       </StepPanel>
     </StepItem>
