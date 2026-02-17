@@ -105,8 +105,11 @@ public static class CharacterReferenceBookletReport
         MergeField(fields, "Deflect", dataProficiencyInfo.Deflect.ToString());
     }
 
-    private static void FillInBasicInfo(PdfAcroField.PdfAcroFieldCollection fields,
-        BasicInfo basicInfo, PdfDocument document)
+    private static void FillInBasicInfo(
+        PdfAcroField.PdfAcroFieldCollection fields,
+        BasicInfo basicInfo,
+        PdfDocument document
+    )
     {
         MergeField(fields, "PlayerNumber", basicInfo.PlayerNumber);
         MergeField(fields, "LastName", basicInfo.PlayerName);
@@ -116,7 +119,7 @@ public static class CharacterReferenceBookletReport
         MergeField(fields, "CharacterClass", basicInfo.Expression);
         MergeField(fields, "Subtype", basicInfo.ProgressionPath);
         MergeField(fields, "XL", basicInfo.CharacterLevel);
-        
+
         var page = document.Pages[2];
         var anchor = document.AcroForm.Fields["QrAnchor"] as PdfTextField;
 
@@ -138,22 +141,29 @@ public static class CharacterReferenceBookletReport
             widget = anchor;
         }
 
-        if(widget == null)
+        if (widget == null)
             throw new InvalidOperationException("QrAnchor field not found.");
-        
+
         var rect = widget.Elements.GetRectangle("/Rect");
-        
+
         var x = XUnitPt.FromPoint(rect.X1);
         var y = XUnitPt.FromPoint(page.Height.Point - rect.Y2);
         var width = XUnitPt.FromPoint(rect.Width);
         var height = XUnitPt.FromPoint(rect.Height);
-        
+
         using var gfx = XGraphics.FromPdfPage(page);
 
         DrawQrCode(gfx, basicInfo.LookupId, x, y, width, height);
     }
-    
-    private static void DrawQrCode(XGraphics gfx, string content, XUnitPt x, XUnitPt y, XUnitPt width, XUnitPt height)
+
+    private static void DrawQrCode(
+        XGraphics gfx,
+        string content,
+        XUnitPt x,
+        XUnitPt y,
+        XUnitPt width,
+        XUnitPt height
+    )
     {
         using var generator = new QRCodeGenerator();
         using var data = generator.CreateQrCode(content, QRCodeGenerator.ECCLevel.H);
@@ -166,7 +176,7 @@ public static class CharacterReferenceBookletReport
         // Center inside bounds
         var offsetX = x + (width - modules * moduleSize) / 2;
         var offsetY = y + (height - modules * moduleSize) / 2;
-        
+
         for (int row = 0; row < modules; row++)
         {
             for (int col = 0; col < modules; col++)
@@ -178,12 +188,12 @@ public static class CharacterReferenceBookletReport
                         XUnitPt.FromPoint(offsetX + col * moduleSize),
                         XUnitPt.FromPoint(offsetY + row * moduleSize),
                         XUnitPt.FromPoint(moduleSize),
-                        XUnitPt.FromPoint(moduleSize));
+                        XUnitPt.FromPoint(moduleSize)
+                    );
                 }
             }
         }
     }
-
 
     private static void FillInTraits(PdfAcroField.PdfAcroFieldCollection fields, Traits traits)
     {
