@@ -121,9 +121,9 @@ public static class CharacterReferenceBookletReport
         var anchor = document.AcroForm.Fields["QrAnchor"] as PdfTextField;
 
         if (anchor == null)
-            throw new Exception("QrAnchor field not found.");
+            throw new InvalidOperationException("QrAnchor field not found.");
 
-        PdfDictionary widget;
+        PdfDictionary? widget;
 
         // Try /Kids first
         var kids = anchor.Elements["/Kids"] as PdfArray;
@@ -138,6 +138,9 @@ public static class CharacterReferenceBookletReport
             widget = anchor;
         }
 
+        if(widget == null)
+            throw new InvalidOperationException("QrAnchor field not found.");
+        
         var rect = widget.Elements.GetRectangle("/Rect");
         
         double x = rect.X1;
@@ -163,19 +166,19 @@ public static class CharacterReferenceBookletReport
         // Center inside bounds
         double offsetX = x + (width - modules * moduleSize) / 2;
         double offsetY = y + (height - modules * moduleSize) / 2;
-
+        
         for (int row = 0; row < modules; row++)
         {
             for (int col = 0; col < modules; col++)
             {
-                if (matrix[row][col] == true)
+                if (matrix[row][col])
                 {
                     gfx.DrawRectangle(
                         XBrushes.Black,
-                        offsetX + col * moduleSize,
-                        offsetY + row * moduleSize,
-                        moduleSize,
-                        moduleSize);
+                        XUnitPt.FromPoint(offsetX + col * moduleSize),
+                        XUnitPt.FromPoint(offsetY + row * moduleSize),
+                        XUnitPt.FromPoint(moduleSize),
+                        XUnitPt.FromPoint(moduleSize));
                 }
             }
         }
