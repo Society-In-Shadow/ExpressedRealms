@@ -8,4 +8,5 @@ public class CharacterInfo
     public int PlayerNumber { get; set; }
     public string? PrimaryProgressionName { get; set; }
     public string? SecondaryProgressionName { get; set; }
+    public required string LookupId { get; set; }
 }

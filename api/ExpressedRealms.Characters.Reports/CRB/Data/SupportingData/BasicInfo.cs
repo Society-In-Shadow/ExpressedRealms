@@ -8,4 +8,5 @@ public class BasicInfo
     public required string PlayerName { get; set; }
     public required string PlayerNumber { get; set; }
     public required string CharacterLevel { get; set; }
+    public required string LookupId { get; set; }
 }

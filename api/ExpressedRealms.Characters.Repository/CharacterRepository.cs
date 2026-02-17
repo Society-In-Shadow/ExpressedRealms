@@ -66,6 +66,7 @@ internal sealed class CharacterRepository(
                 PlayerNumber = x.PlayerNumber,
                 PlayerName = x.Player.Name,
                 Expression = x.Expression.Name,
+                LookupId = x.Player.LookupId,
                 PrimaryProgressionName =
                     x.PrimaryProgressionId == null ? "" : x.PrimaryProgressionPath!.Name,
                 SecondaryProgressionName =
