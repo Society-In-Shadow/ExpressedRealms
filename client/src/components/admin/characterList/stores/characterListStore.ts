@@ -39,6 +39,27 @@ export const adminCharacterListStore
           )
         }
       },
+      getAwaitingCheckin() {
+        return this.filteredCharacters.filter(x => x.playerStageId === null)
+      },
+      getAwaitingGoApproval() {
+        return this.filteredCharacters.filter(x => x.playerStageId === 1)
+      },
+      getAwaitingCrbCreation() {
+        return this.filteredCharacters.filter(x => x.playerStageId === 3)
+      },
+      getAwaitingPickup() {
+        return this.filteredCharacters.filter(x => x.playerStageId === 4)
+      },
+      getAwaitingDay2() {
+        return this.filteredCharacters.filter(x => x.playerStageId === 5)
+      },
+      getAwaitingDay3() {
+        return this.filteredCharacters.filter(x => x.playerStageId === 6)
+      },
+      getCompletedCharacters() {
+        return this.filteredCharacters.filter(x => x.playerStageId === 7)
+      },
     },
 
   })

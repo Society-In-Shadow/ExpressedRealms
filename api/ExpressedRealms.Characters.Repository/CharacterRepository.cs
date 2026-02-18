@@ -40,18 +40,50 @@ internal sealed class CharacterRepository(
 
     public async Task<List<PrimaryCharacterListDto>> GetPrimaryCharactersAsync()
     {
-        return await context
+        var activeEventId = await GetActiveEventId();
+
+        var maxStagePerPlayer = await context.CheckinStageMappings
+            .Where(x => x.Checkin.EventId == activeEventId)
+            .GroupBy(x => x.Checkin.PlayerId)
+            .Select(g => new
+            {
+                PlayerId = g.Key,
+                MaxStage = g.Max(x => x.CheckinStageId)
+            })
+            .ToListAsync(cancellationToken);
+        
+        var players = await context
             .Characters.Where(x => x.IsPrimaryCharacter)
             .Select(x => new PrimaryCharacterListDto()
             {
                 Id = x.Id,
                 Name = x.Name,
                 Expression = x.Expression.Name,
-                Background = x.Background,
+                PlayerId = x.PlayerId,
                 PlayerName = x.Player.Name,
-                PlayerNumber = x.PlayerNumber,
+                PlayerNumber = x.Player.PlayerNumber ?? 0,
             })
             .ToListAsync(cancellationToken);
+
+        foreach (var player in players)
+        {
+            player.PlayerStageId = maxStagePerPlayer.FirstOrDefault(p => p.PlayerId == player.PlayerId)?.MaxStage;
+        }
+        
+        return players;
+    }
+    
+    private async Task<int?> GetActiveEventId()
+    {
+        var now = DateOnly.FromDateTime(DateTime.UtcNow);
+
+        var eventId = await context
+            .Events.AsNoTracking()
+            .Where(x => x.IsPublished && x.StartDate <= now && x.EndDate >= now)
+            .Select(x => x.Id)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        return eventId == 0 ? null : eventId;
     }
 
     public async Task<CharacterInfo> GetCharacterInfoForCRB(int characterId)
@@ -130,9 +162,9 @@ internal sealed class CharacterRepository(
         await context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<Result<int>> CreateCharacterAsync(AddCharacterDto dto)
+    public async Task<Result<int>> CreateCharacterAsync(AddCharacterDto addCharacterDto)
     {
-        var result = await addValidator.ValidateAsync(dto, cancellationToken);
+        var result = await addValidator.ValidateAsync(addCharacterDto, cancellationToken);
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
 
@@ -143,10 +175,10 @@ internal sealed class CharacterRepository(
 
         var character = new Character()
         {
-            Name = dto.Name,
-            Background = dto.Background,
-            ExpressionId = dto.ExpressionId,
-            FactionId = dto.FactionId,
+            Name = addCharacterDto.Name,
+            Background = addCharacterDto.Background,
+            ExpressionId = addCharacterDto.ExpressionId,
+            FactionId = addCharacterDto.FactionId,
             IsInCharacterCreation = true,
         };
 
