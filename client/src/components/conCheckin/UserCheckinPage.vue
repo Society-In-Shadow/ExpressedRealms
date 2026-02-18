@@ -38,7 +38,10 @@ onBeforeMount(async () => {
   text.value = eventCheckinInfo.lookupId
   currentStage.value = eventCheckinInfo.checkinStage
   if (currentStage.value) {
-    stepperValue.value = (currentStage.value.id + 1).toString()
+    if (currentStage.value.id == 1)
+      stepperValue.value = '2'
+    else
+      stepperValue.value = (currentStage.value.id).toString()
   }
   else {
     stepperValue.value = '1'
@@ -131,6 +134,21 @@ onBeforeMount(async () => {
       <StepPanel>
         <h3>You've Picked up your CRB</h3>
         <p>If you misplaced it or need a new one, please let SHQ know</p>
+        <p>Please note you do need to check in at SHQ every day</p>
+      </StepPanel>
+    </StepItem>
+    <StepItem value="6">
+      <Step>Day 2</Step>
+      <StepPanel>
+        <h3>You've already checked in for the day</h3>
+        <p>Please enjoy the game!</p>
+      </StepPanel>
+    </StepItem>
+    <StepItem value="7">
+      <Step>Day 3</Step>
+      <StepPanel>
+        <h3>You've already checked in for the day</h3>
+        <p>Will quick note that there is an awards ceremony today at the end of the day, looking forward to seeing you there!</p>
       </StepPanel>
     </StepItem>
   </Stepper>

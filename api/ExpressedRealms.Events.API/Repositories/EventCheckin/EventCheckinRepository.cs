@@ -214,7 +214,7 @@ internal sealed class EventCheckinRepository(
     {
         return await context
             .CheckinStageMappings.OrderByDescending(x => x.CheckinStageId)
-            .Select(x => new BasicInfo { Id = x.Id, Name = x.CheckinStage.Name })
+            .Select(x => new BasicInfo { Id = x.CheckinStageId, Name = x.CheckinStage.Name })
             .FirstOrDefaultAsync(cancellationToken);
     }
 }

@@ -62,7 +62,7 @@ async function onDetect(detectedCodes) {
   }
 
   const stageId = eventCheckinInfo.checkinStage?.id
-  if (stageId && stageId >= 1 && stageId <= 5) {
+  if (stageId && stageId >= 1) {
     stepperStep.value = String(stageId + 5)
   }
   else {
@@ -175,27 +175,43 @@ const typeName = (typeId: number) => {
         <Button label="GO Approval" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(2)" />
       </StepPanel>
     </StepItem>
-    <StepItem value="7">
+    <StepItem value="8">
       <Step>CRB Creation</Step>
       <StepPanel>
         <h3>CRB needs to be created</h3>
 
-        <Button label="CRB Created" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(3)" />
-      </StepPanel>
-    </StepItem>
-    <StepItem value="8">
-      <Step>CRB Is Ready for Pickup</Step>
-      <StepPanel>
-        <h3>Need to scan to move to next step</h3>
-
-        <Button label="CRB Ready for Pickup" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(4)" />
+        <Button label="CRB Created and Ready for Pickup" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(4)" />
       </StepPanel>
     </StepItem>
     <StepItem value="9">
-      <Step>CRB Is Picked Up</Step>
+      <Step>CRB Is Ready for Pickup</Step>
       <StepPanel>
-        <h3>Needs to be scanned again to be verified by user</h3>
-        <Button label="CRB has been Picked Up" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(5)" />
+        <h3>Needs to be Verified by User</h3>
+        <p>User needs to check their CRB, and make sure it's good to go.  Once scanned, they can go play games</p>
+        <Button label="CRB Is Picked Up" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(5)" />
+      </StepPanel>
+    </StepItem>
+    <StepItem value="10">
+      <Step>Picked Up and Day One</Step>
+      <StepPanel>
+        <h3>Everything is Done for Day 1</h3>
+        <Button label="Day 2 Checkin" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(6)" />
+      </StepPanel>
+    </StepItem>
+    <StepItem value="11">
+      <Step>Day 2 Checkin</Step>
+      <StepPanel>
+        <h3>This is the 2nd day the character has been in play, not the 2nd day of play</h3>
+        <p>The character has been checked in for the day.</p>
+        <Button label="Day 3 Checkin" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(7)" />
+      </StepPanel>
+    </StepItem>
+    <StepItem value="12">
+      <Step>Day 3</Step>
+      <StepPanel>
+        <h3>Thank You and Come Again!</h3>
+        <p>The character has been checked in for the day.</p>
+        <p>Everything is Done for the Con</p>
       </StepPanel>
     </StepItem>
   </Stepper>
