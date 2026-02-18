@@ -12,7 +12,7 @@ const playerName = ref('')
 
 watch(() => eventCheckinInfo.questions, () => {
   const newPlayerQuestion = eventCheckinInfo.questions.find(q => q.typeId === 6)
-  if (newPlayerQuestion?.response.startsWith('Yes - ')) {
+  if (newPlayerQuestion && newPlayerQuestion.response && newPlayerQuestion?.response.startsWith('Yes - ')) {
     eventCheckinInfo.broughtNewPlayer = true
     playerName.value = newPlayerQuestion?.response.slice(6)
   }

@@ -213,7 +213,9 @@ internal sealed class EventCheckinRepository(
     public async Task<BasicInfo?> GetCurrentStage(int checkinId)
     {
         return await context
-            .CheckinStageMappings.OrderByDescending(x => x.CheckinStageId)
+            .CheckinStageMappings
+            .Where(x => x.CheckinId == checkinId)
+            .OrderByDescending(x => x.CheckinStageId)
             .Select(x => new BasicInfo { Id = x.CheckinStageId, Name = x.CheckinStage.Name })
             .FirstOrDefaultAsync(cancellationToken);
     }
