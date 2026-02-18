@@ -2,7 +2,6 @@ using ExpressedRealms.Shared.Reports;
 using HTMLQuestPDF.Extensions;
 using QuestPDF;
 using QuestPDF.Fluent;
-using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 
 namespace ExpressedRealms.Expressions.Reports.ExpressionCMSReport;
@@ -24,19 +23,13 @@ public static class ExpressionCmsReport
         {
             container.Page(page =>
             {
-                page.Size(PageSizes.Letter);
-                page.DefaultTextStyle(x => x.FontSize(7.75f));
-                page.Margin(0.75f, Unit.Inch);
-                page.MarginTop(0.25f, Unit.Inch);
-                page.MarginBottom(0.5f, Unit.Inch);
-
                 var header = $"{data.ExpressionName} Booklet";
                 if (data.IsExpression)
                 {
                     header = $"{data.ExpressionName} Background Booklet";
                 }
-
-                page.Header().AlignCenter().PaddingBottom(10).Text(header).FontSize(10).ExtraBold();
+                
+                CommonElements.AddHeader(page, header);
 
                 page.Content()
                     .Column(col =>
