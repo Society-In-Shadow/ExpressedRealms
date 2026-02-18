@@ -12,7 +12,6 @@ public static class CommonElements
         page.Footer()
             .Row(row =>
             {
-                        
                 var tzId = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
                     ? "Central Standard Time" // Windows ID
                     : "America/Chicago"; // IANA ID
@@ -54,7 +53,6 @@ public static class CommonElements
             });
     }
 
-
     public static void AddHeader(PageDescriptor page, string title)
     {
         page.Size(PageSizes.Letter);
@@ -62,7 +60,6 @@ public static class CommonElements
         page.Margin(0.75f, Unit.Inch);
         page.MarginTop(0.25f, Unit.Inch);
         page.MarginBottom(0.5f, Unit.Inch);
-
 
         page.Header().AlignCenter().PaddingBottom(10).Text(title).FontSize(10).ExtraBold();
     }

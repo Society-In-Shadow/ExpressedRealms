@@ -10,8 +10,7 @@ internal sealed class GetConAttendanceReportUseCase(
     IEventRepository eventRepository,
     GetConAttendanceReportModelValidator validator,
     CancellationToken cancellationToken
-)
-    : IGetEventAttendanceReportUseCase
+) : IGetEventAttendanceReportUseCase
 {
     public async Task<Result<MemoryStream>> ExecuteAsync(GetConAttendanceReportModel model)
     {
@@ -23,16 +22,12 @@ internal sealed class GetConAttendanceReportUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-        
+
         var conEvent = await eventRepository.GetEventAsync(model.Id);
         var conAttendees = await eventRepository.GetRegisteredAttendeesAsync(conEvent.Id);
-        
+
         var report = ConAttendanceReport.GenerateReport(
-            new ()
-            {
-                ConName = conEvent.Name,
-                Attendees = conAttendees
-            }
+            new() { ConName = conEvent.Name, Attendees = conAttendees }
         );
 
         var stream = new MemoryStream();

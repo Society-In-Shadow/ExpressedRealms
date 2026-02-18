@@ -5,7 +5,8 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Events.API.UseCases.Events.GetConAttendanceReport;
 
 [UsedImplicitly]
-internal sealed class GetConAttendanceReportModelValidator : AbstractValidator<GetConAttendanceReportModel>
+internal sealed class GetConAttendanceReportModelValidator
+    : AbstractValidator<GetConAttendanceReportModel>
 {
     public GetConAttendanceReportModelValidator(IEventRepository repository)
     {

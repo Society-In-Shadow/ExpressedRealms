@@ -61,7 +61,7 @@ internal static class EventEndpoints
             .MapPost("{id}/publish", PublishEventEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManageEvents)
             .RequirePermission(Permissions.Event.Publish);
-        
+
         endpointGroup
             .MapGet("{id}/conSummaryReport", GetConSummaryReportEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Event.DownloadConSummaryReport);

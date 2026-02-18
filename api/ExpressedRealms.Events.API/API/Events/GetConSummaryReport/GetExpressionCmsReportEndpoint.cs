@@ -8,12 +8,11 @@ namespace ExpressedRealms.Events.API.API.Events.GetConSummaryReport;
 
 internal static class GetConSummaryReportEndpoint
 {
-    internal static async Task<Results<NotFound, FileStreamHttpResult, StatusCodeHttpResult, ValidationProblem>
+    internal static async Task<
+        Results<NotFound, FileStreamHttpResult, StatusCodeHttpResult, ValidationProblem>
     > ExecuteAsync(int id, [FromServices] IGetEventAttendanceReportUseCase repository)
     {
-        var status = await repository.ExecuteAsync(
-            new () { Id = id }
-        );
+        var status = await repository.ExecuteAsync(new() { Id = id });
 
         if (status.HasValidationError<MemoryStream>(out var validation))
             return validation;

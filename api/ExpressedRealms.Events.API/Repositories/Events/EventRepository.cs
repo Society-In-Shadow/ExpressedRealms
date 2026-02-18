@@ -96,13 +96,18 @@ internal sealed class EventRepository(
             .Where(x => x.EventId == eventId)
             .ToListAsync(cancellationToken);
     }
-    
+
     public Task<List<string>> GetRegisteredAttendeesAsync(int eventId)
     {
-        return context.Checkins.Where(x => x.EventId == eventId && x.CheckinStageMappings.Count > 0)
-            .SelectMany(x => x.CheckinQuestionResponses
-                .Where(y => y.EventQuestion.QuestionTypeId == QuestionTypeEnum.PlayerBadgeNumber)
-                .Select(z => z.Response.ToString())).ToListAsync();
+        return context
+            .Checkins.Where(x => x.EventId == eventId && x.CheckinStageMappings.Count > 0)
+            .SelectMany(x =>
+                x.CheckinQuestionResponses.Where(y =>
+                        y.EventQuestion.QuestionTypeId == QuestionTypeEnum.PlayerBadgeNumber
+                    )
+                    .Select(z => z.Response.ToString())
+            )
+            .ToListAsync();
     }
 
     public async Task EditAsync<TEntity>(TEntity entity)

@@ -50,12 +50,13 @@ public static partial class Permissions
             Name = nameof(Checkin),
             Description = "Allows a user to checkin players for the ongoing event.",
         };
-        
+
         public static readonly Permission DownloadConSummaryReport = new(ResourceInfo)
         {
             Id = new Guid("019c6f75-49be-70fc-9e9a-9aefd2e56716"),
             Name = nameof(DownloadConSummaryReport),
-            Description = "Allows a user to download the report we give to cons for player tracking",
+            Description =
+                "Allows a user to download the report we give to cons for player tracking",
         };
     }
 }

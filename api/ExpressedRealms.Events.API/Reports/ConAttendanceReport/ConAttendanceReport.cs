@@ -34,7 +34,7 @@ public static class ConAttendanceReport
                             col.Item().Text(attendee).FontSize(10f);
                         }
                     });
-                
+
                 CommonElements.AddFooter(page);
             });
         });

@@ -28,7 +28,7 @@ public static class ExpressionCmsReport
                 {
                     header = $"{data.ExpressionName} Background Booklet";
                 }
-                
+
                 CommonElements.AddHeader(page, header);
 
                 page.Content()

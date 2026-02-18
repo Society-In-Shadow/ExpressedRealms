@@ -3,4 +3,5 @@ using FluentResults;
 
 namespace ExpressedRealms.Events.API.UseCases.Events.GetConAttendanceReport;
 
-public interface IGetEventAttendanceReportUseCase : IGenericUseCase<Result<MemoryStream>, GetConAttendanceReportModel> { }
+public interface IGetEventAttendanceReportUseCase
+    : IGenericUseCase<Result<MemoryStream>, GetConAttendanceReportModel> { }
