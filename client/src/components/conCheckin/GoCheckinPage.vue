@@ -161,16 +161,15 @@ const typeName = (typeId: number) => {
       <StepPanel>
         <h3>Link to their CRB</h3>
         <p v-if="!eventCheckinInfo.primaryCharacter">
-          They do not have a primary character setup yet.
+          They do not have a primary character setup yet, you will need to walk them through how to do that
         </p>
         <p v-else>
           <RouterLink :to="`/characters/${eventCheckinInfo.primaryCharacter.characterId}`" target="_blank">
             {{ eventCheckinInfo.primaryCharacter.characterName }}
           </RouterLink>
         </p>
-        <h3>They do not have a primary character, you will need to walk them through how to do that</h3>
         <h3>Did you approve the contacts on their CRB? (Block till they say yes)</h3>
-        <h3>Did you Check to make sure that most of their XP has been spent? (Eg, they haven't spent anything outside of character creation)</h3>
+        <h3>Did you Check to make sure that most of their XP has been spent? (Eg, they've spent xp outside of character creation)</h3>
         <h3>Is their character level within expections for the plot?</h3>
         <Button label="GO Approval" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(2)" />
       </StepPanel>
@@ -179,7 +178,7 @@ const typeName = (typeId: number) => {
       <Step>CRB Creation</Step>
       <StepPanel>
         <h3>CRB needs to be created</h3>
-
+        <p>SHQ needs to create the CRB.  Once ready, scan it and click the below button</p>
         <Button label="CRB Created and Ready for Pickup" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(4)" />
       </StepPanel>
     </StepItem>

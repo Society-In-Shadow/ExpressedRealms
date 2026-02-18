@@ -14,12 +14,12 @@ internal sealed class GetPrimaryCharactersUseCase(ICharacterRepository character
             primaryCharacters
                 .Select(x => new PrimaryCharacterReturnInfo()
                 {
-                    Background = x.Background,
                     Expression = x.Expression,
                     Id = x.Id,
                     Name = x.Name,
                     PlayerName = x.PlayerName,
                     PlayerNumber = x.PlayerNumber,
+                    PlayerStageId = x.PlayerStageId
                 })
                 .ToList()
         );

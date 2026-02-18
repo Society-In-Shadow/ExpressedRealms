@@ -19,11 +19,11 @@ public static class GetCharacterListEndpoint
                     .Value.Select(x => new PrimaryCharacter()
                     {
                         PlayerName = x.PlayerName,
-                        Background = x.Background,
                         Expression = x.Expression,
                         Id = x.Id,
                         Name = x.Name,
                         PlayerNumber = x.PlayerNumber,
+                        PlayerStageId = x.PlayerStageId,
                     })
                     .ToList(),
             }
