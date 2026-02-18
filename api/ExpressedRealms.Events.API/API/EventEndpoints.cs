@@ -15,6 +15,7 @@ using ExpressedRealms.Events.API.API.EventQuestions.Get;
 using ExpressedRealms.Events.API.API.Events.Create;
 using ExpressedRealms.Events.API.API.Events.Delete;
 using ExpressedRealms.Events.API.API.Events.Get;
+using ExpressedRealms.Events.API.API.Events.GetConSummaryReport;
 using ExpressedRealms.Events.API.API.Events.GetSummary;
 using ExpressedRealms.Events.API.API.Events.Publish;
 using ExpressedRealms.Events.API.API.EventScheduleItem.Create;
@@ -60,6 +61,10 @@ internal static class EventEndpoints
             .MapPost("{id}/publish", PublishEventEndpoint.ExecuteAsync)
             .RequirePolicyAuthorization(Policies.ManageEvents)
             .RequirePermission(Permissions.Event.Publish);
+
+        endpointGroup
+            .MapGet("{id}/conSummaryReport", GetConSummaryReportEndpoint.ExecuteAsync)
+            .RequirePermission(Permissions.Event.DownloadConSummaryReport);
 
         endpointGroup.MapGet(
             "{eventId}/scheduleItems",

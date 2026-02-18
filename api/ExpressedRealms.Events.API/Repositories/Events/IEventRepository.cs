@@ -19,4 +19,5 @@ public interface IEventRepository : IGenericRepository
     Task<Event?> FindEventAsync(int id);
     Task<List<EventXpDto>> GetEventsWithAvailableXp();
     Task<List<Event>> GetCurrenOrFutureEvents();
+    Task<List<string>> GetRegisteredAttendeesAsync(int eventId);
 }

@@ -20,6 +20,7 @@ import CharacterActivity from '@/components/admin/events/CharacterActivity.vue'
 import { formatDate } from '@/utilities/dateUtilities.ts'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 import EventQuestionList from '@/components/admin/eventQuestions/EventQuestionList.vue'
+import axios from 'axios'
 
 let userInfo = userStore()
 const route = useRoute()
@@ -41,6 +42,20 @@ onBeforeMount(async () => {
 })
 
 let popups = EventConfirmationPopup(eventId, event.value.name)
+
+async function downloadAttendanceReport() {
+  const res = await axios.get(`/events/${eventId}/conSummaryReport`, {
+    responseType: 'blob',
+  })
+  const url = URL.createObjectURL(res.data)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `${event.value.name} - Player Attendance Report.pdf`
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  URL.revokeObjectURL(url)
+}
 
 </script>
 
@@ -65,6 +80,7 @@ let popups = EventConfirmationPopup(eventId, event.value.name)
         <div v-if="isLoaded">
           <Button v-if="!event.isPublished" class="mr-2" severity="info" label="Publish" @click="popups.publishConfirmation($event)" />
           <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
+          <Button v-if="permissionCheck.Event.DownloadConSummaryReport" class="mr-2" severity="info" label="Con Attendance Report" @click="downloadAttendanceReport" />
         </div>
       </div>
       <Tabs value="0" scrollable>

@@ -1,9 +1,7 @@
-using System.Runtime.InteropServices;
 using ExpressedRealms.Shared.Reports;
 using HTMLQuestPDF.Extensions;
 using QuestPDF;
 using QuestPDF.Fluent;
-using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 
 namespace ExpressedRealms.Expressions.Reports.ExpressionCMSReport;
@@ -25,19 +23,13 @@ public static class ExpressionCmsReport
         {
             container.Page(page =>
             {
-                page.Size(PageSizes.Letter);
-                page.DefaultTextStyle(x => x.FontSize(7.75f));
-                page.Margin(0.75f, Unit.Inch);
-                page.MarginTop(0.25f, Unit.Inch);
-                page.MarginBottom(0.5f, Unit.Inch);
-
                 var header = $"{data.ExpressionName} Booklet";
                 if (data.IsExpression)
                 {
                     header = $"{data.ExpressionName} Background Booklet";
                 }
 
-                page.Header().AlignCenter().PaddingBottom(10).Text(header).FontSize(10).ExtraBold();
+                CommonElements.AddHeader(page, header);
 
                 page.Content()
                     .Column(col =>
@@ -68,48 +60,7 @@ public static class ExpressionCmsReport
                         }
                     });
 
-                page.Footer()
-                    .Row(row =>
-                    {
-                        var tzId = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                            ? "Central Standard Time" // Windows ID
-                            : "America/Chicago"; // IANA ID
-
-                        var central = TimeZoneInfo.FindSystemTimeZoneById(tzId);
-                        DateTimeOffset nowCentral = TimeZoneInfo.ConvertTime(
-                            DateTimeOffset.UtcNow,
-                            central
-                        );
-
-                        row.RelativeItem()
-                            .Column(x =>
-                            {
-                                x.Item().Text($"©{nowCentral.Year} Expressed Realms");
-                                x.Item().Text("Society in Shadows LARP. All rights reserved.");
-                            });
-
-                        row.RelativeItem()
-                            .AlignCenter()
-                            .Column(x =>
-                            {
-                                x.Item().Text("");
-                                x.Item()
-                                    .Text(text =>
-                                    {
-                                        text.Span("Page ");
-                                        text.CurrentPageNumber();
-                                        text.Span(" / ");
-                                        text.TotalPages();
-                                    });
-                            });
-                        row.RelativeItem()
-                            .AlignRight()
-                            .Column(x =>
-                            {
-                                x.Item().Text("");
-                                x.Item().Text($"Download Date: {nowCentral:M/d/yyyy h:mm tt} CST");
-                            });
-                    });
+                CommonElements.AddFooter(page);
             });
         });
     }

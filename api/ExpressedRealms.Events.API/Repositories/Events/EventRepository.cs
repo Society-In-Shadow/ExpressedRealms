@@ -2,6 +2,7 @@ using ExpressedRealms.DB;
 using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup;
 using ExpressedRealms.DB.Models.Events.EventSetup;
+using ExpressedRealms.DB.Models.Events.Questions.QuestionTypeSetup;
 using ExpressedRealms.Events.API.Repositories.Events.Dtos;
 using Microsoft.EntityFrameworkCore;
 
@@ -94,6 +95,19 @@ internal sealed class EventRepository(
             .EventScheduleItems.AsNoTracking()
             .Where(x => x.EventId == eventId)
             .ToListAsync(cancellationToken);
+    }
+
+    public Task<List<string>> GetRegisteredAttendeesAsync(int eventId)
+    {
+        return context
+            .Checkins.Where(x => x.EventId == eventId && x.CheckinStageMappings.Count > 0)
+            .SelectMany(x =>
+                x.CheckinQuestionResponses.Where(y =>
+                        y.EventQuestion.QuestionTypeId == QuestionTypeEnum.PlayerBadgeNumber
+                    )
+                    .Select(z => z.Response.ToString())
+            )
+            .ToListAsync();
     }
 
     public async Task EditAsync<TEntity>(TEntity entity)

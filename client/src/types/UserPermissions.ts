@@ -18,6 +18,7 @@ export const UserPermissions = {
     Delete: 'event.delete',
     Publish: 'event.publish',
     Checkin: 'event.checkin',
+    DownloadConSummaryReport: 'event.downloadconsummaryreport',
   } as const,
   EventScheduleItem: {
     Edit: 'eventscheduleitem.edit',

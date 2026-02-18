@@ -42,16 +42,12 @@ internal sealed class CharacterRepository(
     {
         var activeEventId = await GetActiveEventId();
 
-        var maxStagePerPlayer = await context.CheckinStageMappings
-            .Where(x => x.Checkin.EventId == activeEventId)
+        var maxStagePerPlayer = await context
+            .CheckinStageMappings.Where(x => x.Checkin.EventId == activeEventId)
             .GroupBy(x => x.Checkin.PlayerId)
-            .Select(g => new
-            {
-                PlayerId = g.Key,
-                MaxStage = g.Max(x => x.CheckinStageId)
-            })
+            .Select(g => new { PlayerId = g.Key, MaxStage = g.Max(x => x.CheckinStageId) })
             .ToListAsync(cancellationToken);
-        
+
         var players = await context
             .Characters.Where(x => x.IsPrimaryCharacter)
             .Select(x => new PrimaryCharacterListDto()
@@ -67,12 +63,14 @@ internal sealed class CharacterRepository(
 
         foreach (var player in players)
         {
-            player.PlayerStageId = maxStagePerPlayer.FirstOrDefault(p => p.PlayerId == player.PlayerId)?.MaxStage;
+            player.PlayerStageId = maxStagePerPlayer
+                .FirstOrDefault(p => p.PlayerId == player.PlayerId)
+                ?.MaxStage;
         }
-        
+
         return players;
     }
-    
+
     private async Task<int?> GetActiveEventId()
     {
         var now = DateOnly.FromDateTime(DateTime.UtcNow);
