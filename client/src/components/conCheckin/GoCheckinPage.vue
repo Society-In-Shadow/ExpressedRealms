@@ -15,11 +15,14 @@ import AnswerQuestions from '@/components/conCheckin/support/AnswerQuestions.vue
 import type { Question } from '@/components/conCheckin/types.ts'
 import StonePullerStep from '@/components/conCheckin/support/StonePullerStep.vue'
 import Message from 'primevue/message'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
 const eventCheckinInfo = EventCheckinStore()
+const userPermission = userPermissionStore()
 const userInfo = userStore()
 const router = useRouter()
 
+const permissionCheck = userPermission.permissionCheck
 const hasCheckinFlag = ref(false)
 const is13OrOlder = ref(false)
 const is18OrOlder = ref(false)
@@ -202,7 +205,7 @@ const typeName = (typeId: number) => {
         <h3>Did you Check to make sure that most of their XP has been spent? (Eg, they've spent xp outside of character creation)</h3>
         <h3>Is their character level within expections for the plot?</h3>
         <Button
-          label="GO Approval" :icon="isFinalized(6)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(6)"
+          label="GO Approval" :icon="isFinalized(6)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(6) || !permissionCheck.Event.GoApproval"
           @click="approveStage(2)"
         />
       </StepPanel>
@@ -213,7 +216,7 @@ const typeName = (typeId: number) => {
         <h3>CRB needs to be created</h3>
         <p>SHQ needs to create the CRB.  Once ready, scan it and click the below button</p>
         <Button
-          label="CRB Created and Ready for Pickup" :icon="isFinalized(8)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(8)"
+          label="CRB Created and Ready for Pickup" :icon="isFinalized(8)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(8) || !permissionCheck.Event.CrbHandling"
           @click="approveStage(4)"
         />
       </StepPanel>
@@ -224,7 +227,7 @@ const typeName = (typeId: number) => {
         <h3>Needs to be Verified by User</h3>
         <p>User needs to check their CRB, and make sure it's good to go.  Once scanned, they can go play games</p>
         <Button
-          label="CRB Is Picked Up" :icon="isFinalized(9)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(9)"
+          label="CRB Is Picked Up" :icon="isFinalized(9)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(9) || !permissionCheck.Event.CrbHandling"
           @click="approveStage(5)"
         />
       </StepPanel>
@@ -234,7 +237,7 @@ const typeName = (typeId: number) => {
       <StepPanel>
         <h3>Everything is Done for Day 1</h3>
         <Button
-          label="Day 2 Checkin" :icon="isFinalized(10)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(10)"
+          label="Day 2 Checkin" :icon="isFinalized(10)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(10) || !permissionCheck.Event.Day23Checkin"
           @click="approveStage(6)"
         />
       </StepPanel>
@@ -245,7 +248,7 @@ const typeName = (typeId: number) => {
         <h3>This is the 2nd day the character has been in play, not the 2nd day of play</h3>
         <p>The character has been checked in for the day.</p>
         <Button
-          label="Day 3 Checkin" :icon="isFinalized(11)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(11)"
+          label="Day 3 Checkin" :icon="isFinalized(11)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(11) || !permissionCheck.Event.Day23Checkin"
           @click="approveStage(7)"
         />
       </StepPanel>
