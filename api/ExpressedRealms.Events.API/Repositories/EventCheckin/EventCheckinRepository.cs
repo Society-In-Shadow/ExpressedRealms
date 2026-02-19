@@ -101,6 +101,15 @@ internal sealed class EventCheckinRepository(
             .FirstAsync(cancellationToken);
     }
 
+    public async Task<string> GetCurrentPlayerName()
+    {
+        return await context
+            .Players.AsNoTracking()
+            .Where(x => x.UserId == userContext.CurrentUserId())
+            .Select(x => x.Name)
+            .FirstAsync(cancellationToken);
+    }
+
     public async Task<bool> CheckinIdExistsAsync(string id)
     {
         return await context
@@ -131,11 +140,19 @@ internal sealed class EventCheckinRepository(
             .FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<string> GetUserName(string lookupId)
+    public async Task<string> GetPlayerName(string lookupId)
     {
         return await context
             .Players.Where(x => x.LookupId == lookupId)
             .Select(x => x.Name)
+            .FirstAsync(cancellationToken);
+    }
+
+    public async Task<string> GetPlayerNameWithPlayerNumber(string lookupId)
+    {
+        return await context
+            .Players.Where(x => x.LookupId == lookupId)
+            .Select(x => $"{x.Name} - ({x.PlayerNumber})")
             .FirstAsync(cancellationToken);
     }
 

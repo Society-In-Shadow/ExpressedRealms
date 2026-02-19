@@ -21,7 +21,7 @@ internal sealed class GetGoCheckinInfoUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var playerName = await checkinRepository.GetUserName(model.LookupId);
+        var playerName = await checkinRepository.GetPlayerName(model.LookupId);
         var isFirstTimePlayer = await checkinRepository.IsFirstTimePlayer(model.LookupId);
         var eventId = await checkinRepository.GetActiveEventId();
         var playerId = await checkinRepository.GetPlayerId(model.LookupId);

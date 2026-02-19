@@ -142,15 +142,15 @@ const typeName = (typeId: number) => {
           Looks like this is your first time playing!
         </h2>
         <div class="d-flex self-align-center gap-2 mb-3">
-          <Checkbox id="13AgeQuestion" v-model="is13OrOlder" binary :disabled="canFinalizeStage(5)" />
+          <Checkbox id="13AgeQuestion" v-model="is13OrOlder" binary :disabled="canFinalizeStage(5) && eventCheckinInfo.checkinStage != null" />
           <label for="13AgeQuestion">Are you 13 years or older?</label>
         </div>
         <div class="d-flex self-align-center gap-2 mb-3">
-          <Checkbox id="18AgeQuestion" v-model="is18OrOlder" binary :disabled="signedWaiver || canFinalizeStage(5)" @change="is13OrOlder = true" />
+          <Checkbox id="18AgeQuestion" v-model="is18OrOlder" binary :disabled="signedWaiver || (canFinalizeStage(5) && eventCheckinInfo.checkinStage != null)" @change="is13OrOlder = true" />
           <label for="18AgeQuestion">Are you 18 years or older?</label>
         </div>
         <div class="d-flex self-align-center gap-2 mb-3">
-          <Checkbox id="signedwaiver" v-model="signedWaiver" binary :disabled="is18OrOlder || canFinalizeStage(5)" @change="is13OrOlder = true" />
+          <Checkbox id="signedwaiver" v-model="signedWaiver" binary :disabled="is18OrOlder || (canFinalizeStage(5) && eventCheckinInfo.checkinStage != null)" @change="is13OrOlder = true" />
           <label for="signedwaiver">If not, have you signed a waiver? (Front Desk will have these)</label>
         </div>
         <p>If they fall into above category, send them to the front desk to get this resolved.</p>
@@ -168,7 +168,7 @@ const typeName = (typeId: number) => {
     <StepItem value="4">
       <Step>Stone Pull</Step>
       <StepPanel v-slot="{activateCallback}">
-        <StonePullerStep />
+        <StonePullerStep v-if="stepperStep == '4'" />
         <Button label="Reviewed" icon="pi pi-arrow-right" icon-pos="right" class="mb-4" @click="activateCallback('5')" />
       </StepPanel>
     </StepItem>
@@ -194,7 +194,7 @@ const typeName = (typeId: number) => {
       <StepPanel>
         <h3>Link to their CRB</h3>
         <p v-if="!eventCheckinInfo.primaryCharacter">
-          They do not have a primary character setup yet, you will need to walk them through how to do that
+          They do not have a primary character setup yet, you will need to walk them through how to do that.  Approving has been disabled until they have one.  You will need to recheck them in after they have one
         </p>
         <p v-else>
           <RouterLink :to="`/characters/${eventCheckinInfo.primaryCharacter.characterId}`" target="_blank">
@@ -205,7 +205,7 @@ const typeName = (typeId: number) => {
         <h3>Did you Check to make sure that most of their XP has been spent? (Eg, they've spent xp outside of character creation)</h3>
         <h3>Is their character level within expections for the plot?</h3>
         <Button
-          label="GO Approval" :icon="isFinalized(6)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(6) || !permissionCheck.Event.GoApproval"
+          label="GO Approval" :icon="isFinalized(6)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(6) || !permissionCheck.Event.GoApproval || !eventCheckinInfo.primaryCharacter"
           @click="approveStage(2)"
         />
       </StepPanel>
