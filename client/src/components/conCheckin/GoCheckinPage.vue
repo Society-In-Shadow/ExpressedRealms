@@ -142,15 +142,15 @@ const typeName = (typeId: number) => {
           Looks like this is your first time playing!
         </h2>
         <div class="d-flex self-align-center gap-2 mb-3">
-          <Checkbox id="13AgeQuestion" v-model="is13OrOlder" binary :disabled="canFinalizeStage(5) && eventCheckinInfo.checkinStage != null" />
+          <Checkbox id="13AgeQuestion" v-model="is13OrOlder" binary />
           <label for="13AgeQuestion">Are you 13 years or older?</label>
         </div>
         <div class="d-flex self-align-center gap-2 mb-3">
-          <Checkbox id="18AgeQuestion" v-model="is18OrOlder" binary :disabled="signedWaiver || (canFinalizeStage(5) && eventCheckinInfo.checkinStage != null)" @change="is13OrOlder = true" />
+          <Checkbox id="18AgeQuestion" v-model="is18OrOlder" binary :disabled="signedWaiver" @change="is13OrOlder = true" />
           <label for="18AgeQuestion">Are you 18 years or older?</label>
         </div>
         <div class="d-flex self-align-center gap-2 mb-3">
-          <Checkbox id="signedwaiver" v-model="signedWaiver" binary :disabled="is18OrOlder || (canFinalizeStage(5) && eventCheckinInfo.checkinStage != null)" @change="is13OrOlder = true" />
+          <Checkbox id="signedwaiver" v-model="signedWaiver" binary :disabled="is18OrOlder" @change="is13OrOlder = true" />
           <label for="signedwaiver">If not, have you signed a waiver? (Front Desk will have these)</label>
         </div>
         <p>If they fall into above category, send them to the front desk to get this resolved.</p>

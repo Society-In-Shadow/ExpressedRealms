@@ -32,8 +32,8 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <EventCheckinBanner v-if="userInfo.isLoggedIn()" />
-  <GoCheckinBanner v-if="userInfo.isLoggedIn()" />
+  <EventCheckinBanner v-if="userInfo.isLoggedInCache" />
+  <GoCheckinBanner v-if="userInfo.isLoggedInCache" />
   <MegaMenu :model="items" class="ms-0 me-0 mt-2 mb-2 m-md-2">
     <template #start>
       <RouterLink to="/">
