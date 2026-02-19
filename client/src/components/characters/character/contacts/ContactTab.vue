@@ -10,14 +10,17 @@ import AccordionHeader from 'primevue/accordionheader'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 import type { ContactCharacterSheet } from '@/components/characters/character/wizard/contacts/types.ts'
 import Button from 'primevue/button'
+import { characterStore } from '@/components/characters/character/stores/characterStore.ts'
 
+const characterInfo = characterStore()
 const contactData = contactStore()
 const route = useRoute()
 const permissionStore = userPermissionStore()
 const permissionCheck = permissionStore.permissionCheck
 
 onBeforeMount(async () => {
-  await contactData.getContactsForSheet(route.params.id)
+  if (!characterInfo.isInCharacterCreation)
+    await contactData.getContactsForSheet(route.params.id)
 })
 
 const approveContact = async (contact: ContactCharacterSheet) => {
@@ -28,7 +31,10 @@ const approveContact = async (contact: ContactCharacterSheet) => {
 
 <template>
   <div style="max-width: 650px; margin: 0 auto;">
-    <div v-if="contactData.contactsForCharacterSheet.length === 0">
+    <div v-if="contactData.contactsForCharacterSheet.length === 0 && characterInfo.isInCharacterCreation">
+      <p>You need to finish Character Creation before you can add and manage contacts.</p>
+    </div>
+    <div v-else-if="contactData.contactsForCharacterSheet.length === 0">
       <p>No Contacts detected, please add one in the wizard!</p>
     </div>
 
