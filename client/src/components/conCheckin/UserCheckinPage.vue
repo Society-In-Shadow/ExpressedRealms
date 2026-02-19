@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { onBeforeMount, ref, shallowRef } from 'vue'
+import { computed, onBeforeMount, ref, shallowRef } from 'vue'
 import { FeatureFlags, userStore } from '@/stores/userStore.ts'
 import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
 import { useRouter } from 'vue-router'
@@ -27,6 +27,10 @@ const currentStage = ref<BasicInfo | null>(null)
 const stepperValue = ref(null)
 
 onBeforeMount(async () => {
+  await refreshData()
+})
+
+async function refreshData() {
   await eventCheckinInfo.getCheckinAvailable()
   hasCheckinFlag.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowEventCheckin)
 
@@ -40,13 +44,41 @@ onBeforeMount(async () => {
   if (currentStage.value) {
     if (currentStage.value.id == 1)
       stepperValue.value = '2'
+    else if (currentStage.value.id == 3) {
+      setInterval(updateCountdown, 1000)
+      stepperValue.value = (currentStage.value.id).toString()
+    }
+
     else
       stepperValue.value = (currentStage.value.id).toString()
   }
   else {
     stepperValue.value = '1'
   }
+}
+
+const FIVE_MINUTES = 60 * 5 // seconds
+let remaining = ref(FIVE_MINUTES)
+
+const timeRemaining = computed(() => {
+  const minutes = Math.floor(remaining.value / 60)
+  const seconds = remaining.value % 60
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`
 })
+
+function updateCountdown() {
+  if (remaining.value <= 0) {
+    triggerRefresh()
+    remaining.value = FIVE_MINUTES
+  }
+  else {
+    remaining.value--
+  }
+}
+
+async function triggerRefresh() {
+  await refreshData()
+}
 
 </script>
 
@@ -120,6 +152,9 @@ onBeforeMount(async () => {
         <h3>The CRB is cooking!</h3>
         <p>SHQ needs time to pull together your CRB</p>
         <p>A CRB is your Character Reference Booklet, it's what you'll use to play the game.</p>
+        <p>Depending on user demand, it might take a bit to get it ready for you.</p>
+        <p>This page will automatically refresh in {{ timeRemaining }} minutes to see if it's ready yet or not.</p>
+        <p>(Do note that this timer is best effort, a proper notification system will be put in place later)</p>
         <p>It's provided to you for free, only thing we ask is that you return all of your strips at the end of the game.</p>
       </StepPanel>
     </StepItem>
