@@ -1,6 +1,5 @@
 <script setup lang="ts">
 
-import Message from 'primevue/message'
 import { RouterView } from 'vue-router'
 import Card from 'primevue/card'
 import PublicMenu from '@/components/public/PublicMenu.vue'
@@ -10,9 +9,6 @@ import DynamicDialog from 'primevue/dynamicdialog'
 
 <template>
   <div class="d-flex flex-column min-vh-98">
-    <Message icon="pi pi-exclamation-triangle" class="sticky-top ms-0 me-0 mt-2 mb-2 m-md-2" severity="warn">
-      This site is currently in a BETA state, not all features or content is in place.
-    </Message>
     <DynamicDialog />
     <PublicMenu />
     <div class="container-fluid constrain-width flex-grow-1 mb-3 mt-3">
