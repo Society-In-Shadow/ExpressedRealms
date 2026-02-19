@@ -19,6 +19,8 @@ watch(() => eventCheckinInfo.questions, () => {
 }, { immediate: true })
 
 const canFinalizeStage = (stageId: number) => {
+  if (eventCheckinInfo.checkinStage == null && stageId == 5)
+    return false
   return eventCheckinInfo.checkinStage?.id + 5 != stageId
 }
 
