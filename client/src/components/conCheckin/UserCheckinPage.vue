@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { onBeforeMount, ref, shallowRef } from 'vue'
+import { computed, onBeforeMount, ref, shallowRef } from 'vue'
 import { FeatureFlags, userStore } from '@/stores/userStore.ts'
 import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
 import { useRouter } from 'vue-router'
@@ -27,6 +27,10 @@ const currentStage = ref<BasicInfo | null>(null)
 const stepperValue = ref(null)
 
 onBeforeMount(async () => {
+  await refreshData()
+})
+
+async function refreshData() {
   await eventCheckinInfo.getCheckinAvailable()
   hasCheckinFlag.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowEventCheckin)
 
@@ -40,13 +44,41 @@ onBeforeMount(async () => {
   if (currentStage.value) {
     if (currentStage.value.id == 1)
       stepperValue.value = '2'
+    else if (currentStage.value.id == 3) {
+      setInterval(updateCountdown, 1000)
+      stepperValue.value = (currentStage.value.id).toString()
+    }
+
     else
       stepperValue.value = (currentStage.value.id).toString()
   }
   else {
     stepperValue.value = '1'
   }
+}
+
+const FIVE_MINUTES = 60 * 5 // seconds
+let remaining = ref(FIVE_MINUTES)
+
+const timeRemaining = computed(() => {
+  const minutes = Math.floor(remaining.value / 60)
+  const seconds = remaining.value % 60
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`
 })
+
+function updateCountdown() {
+  if (remaining.value <= 0) {
+    triggerRefresh()
+    remaining.value = FIVE_MINUTES
+  }
+  else {
+    remaining.value--
+  }
+}
+
+async function triggerRefresh() {
+  await refreshData()
+}
 
 </script>
 
@@ -54,7 +86,7 @@ onBeforeMount(async () => {
   <Card>
     <template #title>
       <h3 class="pb-0 mb-0">
-        Welcome to Event Name and Society in Shadows!
+        Welcome to {{ eventCheckinInfo.event.name }} and Society in Shadows!
       </h3>
     </template>
     <template #content>
@@ -66,6 +98,7 @@ onBeforeMount(async () => {
             <li>SHQ - Staff Head Quarters - This is our booth that we have setup at the con.</li>
             <li>CRB - Character Reference Booklet - This is your character sheet, it's what you'll use to play the game.</li>
           </ul>
+          <p>Also, make sure to grab your badge for {{ eventCheckinInfo.event.name }}, you need that in order to play our game.</p>
           <p>With that out of the way, please present the QR Code to a GO or SHQ to get started!</p>
         </div>
         <div>
@@ -88,7 +121,7 @@ onBeforeMount(async () => {
         <p>There's a couple of administrative related things that need to get done</p>
         <ul>
           <li>
-            Verify Age - Anyone under 13 cannot play, and anyone under 18 requires
+            Verify Age - Anyone under 13 cannot play, and anyone under 18 requires a
             <a href="https://docs.google.com/document/d/1ogaB9BuM5qFATvslI7SRd7Rc4jjlV8kL0-j-oQKmGdI/edit?usp=sharing">parental consent waiver</a>.
             These can be found at the front desk to sign.
           </li>
@@ -119,6 +152,9 @@ onBeforeMount(async () => {
         <h3>The CRB is cooking!</h3>
         <p>SHQ needs time to pull together your CRB</p>
         <p>A CRB is your Character Reference Booklet, it's what you'll use to play the game.</p>
+        <p>Depending on user demand, it might take a bit to get it ready for you.</p>
+        <p>This page will automatically refresh in {{ timeRemaining }} minutes to see if it's ready yet or not.</p>
+        <p>(Do note that this timer is best effort, a proper notification system will be put in place later)</p>
         <p>It's provided to you for free, only thing we ask is that you return all of your strips at the end of the game.</p>
       </StepPanel>
     </StepItem>

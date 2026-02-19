@@ -1,13 +1,24 @@
 <script setup lang="ts">
 
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { QrcodeStream } from 'vue-qrcode-reader'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 
+import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
+
+const eventCheckinInfo = EventCheckinStore()
 const loading = ref(true)
 const destroyed = ref(false)
 const result = ref('')
+
+watch(() => eventCheckinInfo.isReset, () => {
+  if (eventCheckinInfo.isReset) {
+    loading.value = true
+    destroyed.value = false
+    result.value = ''
+  }
+})
 
 const emit = defineEmits<{
   detectedCode: [lookupId: string]
@@ -45,6 +56,11 @@ function paintOutline(detectedCodes, ctx) {
 </script>
 
 <template>
+  <div>
+    <p>If the scanner is not working below, you can manually put in the lookup below</p>
+    <InputText v-model="result" placeholder="Manual Lookup" minlength="8" maxlength="8" :disabled="eventCheckinInfo.foundInfo" />
+    <Button label="Lookup" :disabled="eventCheckinInfo.foundInfo" @click="lookupManual" />
+  </div>
   <div class="w-100">
     <qrcode-stream
       v-if="!destroyed && result == ''"
@@ -59,10 +75,5 @@ function paintOutline(detectedCodes, ctx) {
         Loading...
       </div>
     </qrcode-stream>
-  </div>
-  <div>
-    <p>If the scanner is not working, you can manually put in the lookup below</p>
-    <InputText v-model="result" placeholder="Manual Lookup" minlength="8" maxlength="8" />
-    <Button label="Lookup" @click="lookupManual" />
   </div>
 </template>

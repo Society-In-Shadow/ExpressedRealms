@@ -1,12 +1,15 @@
 <script setup lang="ts">
 
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import Button from 'primevue/button'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import SplitButton from 'primevue/splitbutton'
 import Card from 'primevue/card'
 import Fieldset from 'primevue/fieldset'
+import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
+
+const eventCheckinInfo = EventCheckinStore()
 
 const stones = ref([])
 const neutralStone = ref('')
@@ -24,6 +27,12 @@ const props = defineProps({
   },
 })
 
+watch(() => eventCheckinInfo.isReset, () => {
+  if (eventCheckinInfo.isReset) {
+    clearStones()
+  }
+})
+
 const stoneTypes = ['red', 'blue', 'black', 'clear', 'green', 'white']
 let stoneBag = ['red', 'blue', 'black', 'clear', 'green', 'white']
 
@@ -35,6 +44,12 @@ function removeStone(stoneName: string): string {
   return stoneName
 }
 function pullStones(numberOfStones: number) {
+  if (props.hideDescription && stones.value.length >= 1) {
+    return
+  }
+  else {
+    numberOfStones = 1
+  }
   for (var i = 1; i <= numberOfStones; i++) {
     if (stoneBag.length === 0)
       return
@@ -51,6 +66,9 @@ function pullStones(numberOfStones: number) {
 }
 
 function pullNeutralStone(stoneName: string) {
+  if (props.hideDescription && neutralStone.value !== '' && neutralStone.value !== null) {
+    return
+  }
   if (stoneName == null || stoneName == '')
     neutralStone.value = stoneTypes[getRandomInt(0, 5)]
   else

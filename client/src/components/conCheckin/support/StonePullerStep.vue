@@ -9,10 +9,6 @@ import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinSt
 const eventCheckinInfo = EventCheckinStore()
 const checkinBonus = ref<number | null>(null)
 
-/* onMounted(() => {
-  checkinBonus.value = eventCheckinInfo.assignedXp?.amount ?? 0
-}) */
-
 watch(() => eventCheckinInfo.assignedXp, () => checkinBonus.value = eventCheckinInfo.assignedXp?.amount ?? 0)
 
 watch(() => eventCheckinInfo.broughtNewPlayer, () => {
@@ -27,7 +23,8 @@ watch(() => eventCheckinInfo.goCheckinInfo.isFirstTimeUser, () => {
 const overrideBonus = computed(() => eventCheckinInfo.goCheckinInfo.isFirstTimeUser || eventCheckinInfo.broughtNewPlayer)
 
 function handleStonePulled(bonus: number) {
-  checkinBonus.value = bonus
+  if (checkinBonus.value === null)
+    checkinBonus.value = bonus
 }
 
 async function permanentlySaveBonus() {
