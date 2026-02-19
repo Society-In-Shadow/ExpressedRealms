@@ -4,27 +4,23 @@ import Message from 'primevue/message'
 import Button from 'primevue/button'
 import { useRouter } from 'vue-router'
 import { computed, onBeforeMount, ref } from 'vue'
-import { FeatureFlags, userStore } from '@/stores/userStore.ts'
 import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
 const router = useRouter()
-const userInfo = userStore()
 const permissionInfo = userPermissionStore()
 const permissionCheck = permissionInfo.permissionCheck
 
 const eventCheckinInfo = EventCheckinStore()
 
-const hasCheckinFlag = ref(false)
 const hasCheckinPermission = ref(false)
 
 onBeforeMount(async () => {
   await eventCheckinInfo.getCheckinAvailable()
-  hasCheckinFlag.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowEventCheckin)
   hasCheckinPermission.value = permissionCheck.Event.Checkin
 })
 
-const showBanner = computed(() => hasCheckinFlag.value && eventCheckinInfo.hasActiveEvent && hasCheckinPermission.value)
+const showBanner = computed(() => eventCheckinInfo.hasActiveEvent && hasCheckinPermission.value)
 
 async function redirectToCheckinDetails() {
   await router.push({ name: 'gocheckin' })
