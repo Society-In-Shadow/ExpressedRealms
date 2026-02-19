@@ -16,6 +16,7 @@ export const EventCheckinStore
   = defineStore(`eventCheckin`, {
     state: () => {
       return {
+        isReset: false,
         hasActiveEvent: false,
         lookupId: '',
         event: {} as ActiveEvent,
@@ -30,6 +31,20 @@ export const EventCheckinStore
       }
     },
     actions: {
+      async resetGoPage() {
+        this.isReset = true
+        this.hasActiveEvent = false
+        this.lookupId = ''
+        this.event = {} as ActiveEvent
+        this.checkinStage = null
+        this.goCheckinInfo = {} as GoCheckinInfo
+        this.checkinId = 0
+        this.playerNumber = 0
+        this.broughtNewPlayer = false
+        this.questions = [] as Question[]
+        this.assignedXp = null
+        this.primaryCharacter = null
+      },
       async getCheckinAvailable() {
         const response = await axios.get<boolean>(`/events/checkin/available`)
         this.hasActiveEvent = response.data
@@ -58,6 +73,7 @@ export const EventCheckinStore
         this.assignedXp = response.data.assignedXp
         this.primaryCharacter = response.data.primaryCharacterInfo
         this.checkinStage = response.data.currentStage
+        this.isReset = false
       },
       async updateQuestion(question: Question) {
         await axios.put(`/events/checkin/lookup/${this.lookupId}/questions/${question.id}`, { response: question.response })
@@ -70,6 +86,7 @@ export const EventCheckinStore
       },
       async approveStage(stageId: number) {
         await axios.post(`/events/checkin/lookup/${this.lookupId}/approveStage`, { stageId: stageId })
+        await this.resetGoPage()
         toaster.success('Stage approved successfully!')
       },
     },

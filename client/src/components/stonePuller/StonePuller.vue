@@ -1,12 +1,15 @@
 <script setup lang="ts">
 
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import Button from 'primevue/button'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import SplitButton from 'primevue/splitbutton'
 import Card from 'primevue/card'
 import Fieldset from 'primevue/fieldset'
+import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
+
+const eventCheckinInfo = EventCheckinStore()
 
 const stones = ref([])
 const neutralStone = ref('')
@@ -22,6 +25,12 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+})
+
+watch(() => eventCheckinInfo.isReset, () => {
+  if (eventCheckinInfo.isReset) {
+    clearStones()
+  }
 })
 
 const stoneTypes = ['red', 'blue', 'black', 'clear', 'green', 'white']

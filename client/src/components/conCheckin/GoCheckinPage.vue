@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { computed, onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount, ref, watch } from 'vue'
 import { FeatureFlags, userStore } from '@/stores/userStore.ts'
 import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
 import { useRouter } from 'vue-router'
@@ -14,6 +14,7 @@ import CharacterScanner from '@/components/conCheckin/support/CharacterScanner.v
 import AnswerQuestions from '@/components/conCheckin/support/AnswerQuestions.vue'
 import type { Question } from '@/components/conCheckin/types.ts'
 import StonePullerStep from '@/components/conCheckin/support/StonePullerStep.vue'
+import Message from 'primevue/message'
 
 const eventCheckinInfo = EventCheckinStore()
 const userInfo = userStore()
@@ -30,6 +31,16 @@ onBeforeMount(async () => {
 
   if (!hasCheckinFlag.value || !eventCheckinInfo.hasActiveEvent) {
     await router.push({ name: 'characters' })
+  }
+})
+
+watch(() => eventCheckinInfo.isReset, (old, newValue) => {
+  if (eventCheckinInfo.isReset) {
+    hasCheckinFlag.value = false
+    is13OrOlder.value = false
+    is18OrOlder.value = false
+    signedWaiver.value = false
+    stepperStep.value = '1'
   }
 })
 
@@ -95,6 +106,9 @@ const typeName = (typeId: number) => {
 </script>
 
 <template>
+  <Message v-if="eventCheckinInfo.isReset" severity="success">
+    Successfully committed Stage!
+  </Message>
   <Stepper v-model:value="stepperStep">
     <StepItem value="1">
       <Step>Scan QR Code</Step>
