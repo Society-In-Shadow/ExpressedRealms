@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import type {
+  ActiveEvent,
   ApproveCheckinInfo,
   AssignedXpType,
   BasicInfo,
@@ -17,7 +18,7 @@ export const EventCheckinStore
       return {
         hasActiveEvent: false,
         lookupId: '',
-        eventId: 0,
+        event: {} as ActiveEvent,
         checkinStage: {} as BasicInfo | null,
         goCheckinInfo: {} as GoCheckinInfo,
         checkinId: 0,
@@ -37,7 +38,7 @@ export const EventCheckinStore
         const response = await axios.get<CheckinInfo>(`/events/checkin/info`)
 
         this.lookupId = response.data.lookupId
-        this.eventId = response.data.eventId
+        this.event = response.data.event
         this.checkinStage = response.data.checkinStage
       },
       async getGoCheckinInfo(lookupId: string): Promise<boolean> {

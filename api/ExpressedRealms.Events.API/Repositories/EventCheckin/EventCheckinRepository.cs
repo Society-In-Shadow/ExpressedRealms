@@ -4,6 +4,7 @@ using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageMappingSetup;
+using ExpressedRealms.DB.Models.Events.EventSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin.Dtos;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using Microsoft.EntityFrameworkCore;
@@ -118,6 +119,16 @@ internal sealed class EventCheckinRepository(
             .FirstOrDefaultAsync(cancellationToken);
 
         return eventId == 0 ? null : eventId;
+    }
+    
+    public async Task<Event?> GetActiveEventInfoOrDefaultAsync()
+    {
+        var now = DateOnly.FromDateTime(DateTime.UtcNow);
+
+        return await context
+            .Events.AsNoTracking()
+            .Where(x => x.IsPublished && x.StartDate <= now && x.EndDate >= now)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<string> GetUserName(string lookupId)
