@@ -50,14 +50,14 @@ public static partial class Permissions
             Name = nameof(Checkin),
             Description = "Allows a user to checkin players for the ongoing event.",
         };
-        
+
         public static readonly Permission CrbHandling = new(ResourceInfo)
         {
             Id = new Guid("019c74f3-1dce-7ec6-976d-c5e458a1c5c3"),
             Name = nameof(CrbHandling),
             Description = "Allows one to checkin CRBs and finalize them.",
         };
-        
+
         public static readonly Permission Day23Checkin = new(ResourceInfo)
         {
             Id = new Guid("019c74f3-4d84-7446-9dc6-68b142f10ed4"),
@@ -71,7 +71,7 @@ public static partial class Permissions
             Name = nameof(GoApproval),
             Description = "Allows a GO to approve a character sheet.",
         };
-        
+
         public static readonly Permission DownloadConSummaryReport = new(ResourceInfo)
         {
             Id = new Guid("019c6f75-49be-70fc-9e9a-9aefd2e56716"),

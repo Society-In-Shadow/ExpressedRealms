@@ -11,7 +11,9 @@ namespace ExpressedRealms.Events.API.API.EventCheckin.ApproveStage;
 
 public static class ApproveStageAndSendMessageEndpoint
 {
-    public static async Task<Results<Ok, ValidationProblem, NotFound, ForbidHttpResult>> ExecuteAsync(
+    public static async Task<
+        Results<Ok, ValidationProblem, NotFound, ForbidHttpResult>
+    > ExecuteAsync(
         string lookupId,
         ClaimsPrincipal user,
         [FromBody] ApproveStageAndSendMessageRequest request,
@@ -20,33 +22,41 @@ public static class ApproveStageAndSendMessageEndpoint
     {
         List<int> crbCreationStages =
         [
-            CheckinStageEnum.CrbCreation.Value, CheckinStageEnum.CrbPickedUp.Value,
-            CheckinStageEnum.CrbReadForPickup.Value
+            CheckinStageEnum.CrbCreation.Value,
+            CheckinStageEnum.CrbPickedUp.Value,
+            CheckinStageEnum.CrbReadForPickup.Value,
         ];
-        
-        if (crbCreationStages.Contains(request.StageId) && 
-            !user.HasClaim("custom_permission", Permissions.Event.CrbHandling.Key))
+
+        if (
+            crbCreationStages.Contains(request.StageId)
+            && !user.HasClaim("custom_permission", Permissions.Event.CrbHandling.Key)
+        )
         {
             return TypedResults.Forbid();
         }
-        
+
         List<int> day23CheckinStages =
         [
-            CheckinStageEnum.Day2Checkin.Value, CheckinStageEnum.Day3Checkin.Value
+            CheckinStageEnum.Day2Checkin.Value,
+            CheckinStageEnum.Day3Checkin.Value,
         ];
-        
-        if (day23CheckinStages.Contains(request.StageId) && 
-            !user.HasClaim("custom_permission", Permissions.Event.Day23Checkin.Key))
+
+        if (
+            day23CheckinStages.Contains(request.StageId)
+            && !user.HasClaim("custom_permission", Permissions.Event.Day23Checkin.Key)
+        )
         {
             return TypedResults.Forbid();
         }
-        
-        if (request.StageId == CheckinStageEnum.GoApproval.Value && 
-            !user.HasClaim("custom_permission", Permissions.Event.GoApproval.Key))
+
+        if (
+            request.StageId == CheckinStageEnum.GoApproval.Value
+            && !user.HasClaim("custom_permission", Permissions.Event.GoApproval.Key)
+        )
         {
             return TypedResults.Forbid();
         }
-        
+
         var results = await useCase.ExecuteAsync(
             new ApproveStageAndSendMessageModel() { LookupId = lookupId, StageId = request.StageId }
         );

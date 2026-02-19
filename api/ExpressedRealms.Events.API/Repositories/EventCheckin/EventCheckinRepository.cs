@@ -120,7 +120,7 @@ internal sealed class EventCheckinRepository(
 
         return eventId == 0 ? null : eventId;
     }
-    
+
     public async Task<Event?> GetActiveEventInfoOrDefaultAsync()
     {
         var now = DateOnly.FromDateTime(DateTime.UtcNow);

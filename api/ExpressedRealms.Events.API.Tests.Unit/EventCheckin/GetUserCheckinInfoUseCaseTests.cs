@@ -1,4 +1,5 @@
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
+using ExpressedRealms.DB.Models.Events.EventSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.Events.API.Repositories.EventCheckin.Dtos;
 using ExpressedRealms.Events.API.UseCases.EventCheckin.GetUserCheckinInfo;
@@ -18,7 +19,20 @@ public class GetUserCheckinInfoUseCaseTests
         _eventCheckinRepository = A.Fake<IEventCheckinRepository>();
 
         A.CallTo(() => _eventCheckinRepository.GetPlayerLookupId()).Returns("123456AB");
-        A.CallTo(() => _eventCheckinRepository.GetActiveEventId()).Returns(2);
+        A.CallTo(() => _eventCheckinRepository.GetActiveEventInfoOrDefaultAsync())
+            .Returns(
+                new Event()
+                {
+                    Id = 2,
+                    Name = "Test Event",
+                    EndDate = DateOnly.MaxValue,
+                    Location = "Foo",
+                    StartDate = DateOnly.MaxValue,
+                    WebsiteName = "foo",
+                    WebsiteUrl = "foo",
+                    TimeZoneId = "Foo",
+                }
+            );
         A.CallTo(() => _eventCheckinRepository.GetCurrentPlayerId()).Returns(_playerId);
         A.CallTo(() => _eventCheckinRepository.GetCheckinAsync(2, _playerId))
             .Returns(new Checkin() { Id = 4 });
@@ -31,12 +45,12 @@ public class GetUserCheckinInfoUseCaseTests
     [Fact]
     public async Task UseCase_WillFail_IfThereIsNoActiveEvent()
     {
-        A.CallTo(() => _eventCheckinRepository.GetActiveEventId())
-            .Returns(Task.FromResult<int?>(null));
+        A.CallTo(() => _eventCheckinRepository.GetActiveEventInfoOrDefaultAsync())
+            .Returns(Task.FromResult<Event?>(null));
 
         var results = await _useCase.ExecuteAsync();
         Assert.False(results.IsSuccess);
-        Assert.Equal("No Active Event Found", results.Errors.First().Message);
+        Assert.Equal("No Active Event Found", results.Errors[0].Message);
     }
 
     [Fact]
@@ -50,7 +64,8 @@ public class GetUserCheckinInfoUseCaseTests
     public async Task UseCase_WillReturn_TheActiveEventId()
     {
         var results = await _useCase.ExecuteAsync();
-        Assert.Equal(2, results.Value.EventId);
+        Assert.Equal(2, results.Value.Event.Id);
+        Assert.Equal("Test Event", results.Value.Event.Name);
     }
 
     [Fact]

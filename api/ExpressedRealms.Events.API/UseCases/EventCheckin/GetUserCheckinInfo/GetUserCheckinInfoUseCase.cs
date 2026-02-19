@@ -29,11 +29,7 @@ internal sealed class GetUserCheckinInfoUseCase(IEventCheckinRepository checkinR
             {
                 LookupId = lookupId,
                 CheckinStage = currentStage,
-                Event = new ActiveEvent()
-                {
-                    Id = activeEvent.Id,
-                    Name = activeEvent.Name,
-                }
+                Event = new ActiveEvent() { Id = activeEvent.Id, Name = activeEvent.Name },
             }
         );
     }
