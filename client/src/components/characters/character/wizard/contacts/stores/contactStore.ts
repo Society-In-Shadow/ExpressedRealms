@@ -51,19 +51,19 @@ export const contactStore
         this.knowledges = response.data
         this.knowledgeLevels = [
           {
-            name: 'Associates Degree (4)',
+            name: 'Associate\'s Degree (4)',
             levelId: 4,
             cost: 6,
             isDisabled: false,
           },
           {
-            name: 'Bachalors Degree (5)',
+            name: 'Bachelor\'s Degree (5)',
             levelId: 5,
             cost: 10,
             isDisabled: false,
           },
           {
-            name: 'Mastors Degree (6)',
+            name: 'Master\'s Degree (6)',
             levelId: 6,
             cost: 16,
             isDisabled: false,
