@@ -72,9 +72,6 @@ internal sealed class ApproveStageAndSendMessageUseCase(
                 CheckinId = checkin.Id,
             }
         );
-        
-
-        
 
         if (model.StageId == 2)
         {
@@ -86,9 +83,10 @@ internal sealed class ApproveStageAndSendMessageUseCase(
                     ApproverUserId = userContext.CurrentUserId(),
                     CheckinStageId = model.StageId + 1,
                     CheckinId = checkin.Id,
-                });
+                }
+            );
         }
-        
+
         await SendMessages(model, playerId);
 
         return Result.Ok();
@@ -102,31 +100,48 @@ internal sealed class ApproveStageAndSendMessageUseCase(
 
         switch (model.StageId)
         {
-            case 1:  // SHQ Approval
+            case 1: // SHQ Approval
             {
                 var seekingGoMessage = "";
 
                 if (primaryCharacterInfo is not null)
-                    seekingGoMessage = $"\"{playerName}\" with character \"{primaryCharacterInfo.CharacterName}\" needs a GO ~{approverName}";
+                    seekingGoMessage =
+                        $"\"{playerName}\" with character \"{primaryCharacterInfo.CharacterName}\" needs a GO ~{approverName}";
                 else
-                    seekingGoMessage = $"\"{playerName}\" with no primary character needs a GO ~{approverName}";
+                    seekingGoMessage =
+                        $"\"{playerName}\" with no primary character needs a GO ~{approverName}";
 
-                await discordService.SendMessageToChannelAsync(DiscordChannel.PlayersSeekingGos, seekingGoMessage);
+                await discordService.SendMessageToChannelAsync(
+                    DiscordChannel.PlayersSeekingGos,
+                    seekingGoMessage
+                );
                 break;
             }
             case 2: // GO Approval
             {
-                var seekingGoMessage = $"\"{playerName}\" with character \"{primaryCharacterInfo!.CharacterName}\" was approved by GO ~{approverName}";
-                await discordService.SendMessageToChannelAsync(DiscordChannel.PlayersSeekingGos, seekingGoMessage);
-            
-                var seekingCrbMessage = $"\"{playerName}\" with character \"{primaryCharacterInfo.CharacterName}\" needs a CRB Printed ~{approverName}";
-                await discordService.SendMessageToChannelAsync(DiscordChannel.PlayersSeekingCrbs, seekingCrbMessage);
+                var seekingGoMessage =
+                    $"\"{playerName}\" with character \"{primaryCharacterInfo!.CharacterName}\" was approved by GO ~{approverName}";
+                await discordService.SendMessageToChannelAsync(
+                    DiscordChannel.PlayersSeekingGos,
+                    seekingGoMessage
+                );
+
+                var seekingCrbMessage =
+                    $"\"{playerName}\" with character \"{primaryCharacterInfo.CharacterName}\" needs a CRB Printed ~{approverName}";
+                await discordService.SendMessageToChannelAsync(
+                    DiscordChannel.PlayersSeekingCrbs,
+                    seekingCrbMessage
+                );
                 break;
             }
             case 4: // Crb Approval
             {
-                var seekingCrbMessage = $"\"{playerName}\" with character \"{primaryCharacterInfo!.CharacterName}\" has a CRB is ready for pickup ~{approverName}";
-                await discordService.SendMessageToChannelAsync(DiscordChannel.PlayersSeekingCrbs, seekingCrbMessage);
+                var seekingCrbMessage =
+                    $"\"{playerName}\" with character \"{primaryCharacterInfo!.CharacterName}\" has a CRB ready for pickup ~{approverName}";
+                await discordService.SendMessageToChannelAsync(
+                    DiscordChannel.PlayersSeekingCrbs,
+                    seekingCrbMessage
+                );
                 break;
             }
         }

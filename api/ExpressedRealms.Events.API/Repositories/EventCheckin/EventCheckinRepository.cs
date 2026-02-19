@@ -100,7 +100,7 @@ internal sealed class EventCheckinRepository(
             .Select(x => x.Id)
             .FirstAsync(cancellationToken);
     }
-    
+
     public async Task<string> GetCurrentPlayerName()
     {
         return await context
@@ -147,7 +147,7 @@ internal sealed class EventCheckinRepository(
             .Select(x => x.Name)
             .FirstAsync(cancellationToken);
     }
-    
+
     public async Task<string> GetPlayerNameWithPlayerNumber(string lookupId)
     {
         return await context
