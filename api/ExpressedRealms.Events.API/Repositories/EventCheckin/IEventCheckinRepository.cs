@@ -13,7 +13,7 @@ public interface IEventCheckinRepository : IGenericRepository
     Task<string> GetPlayerLookupId();
     Task<int?> GetActiveEventId();
     Task<bool> CheckinIdExistsAsync(string id);
-    Task<string> GetUserName(string lookupId);
+    Task<string> GetPlayerName(string lookupId);
     Task<bool> IsFirstTimePlayer(string lookupId);
     int GetPlayerNumber(string lookupId);
     Task<Guid> GetPlayerId(string lookupId);
@@ -34,4 +34,6 @@ public interface IEventCheckinRepository : IGenericRepository
     Task<BasicInfo?> GetCurrentStage(int checkinId);
     Task<Guid> GetCurrentPlayerId();
     Task<Event?> GetActiveEventInfoOrDefaultAsync();
+    Task<string> GetCurrentPlayerName();
+    Task<string> GetPlayerNameWithPlayerNumber(string lookupId);
 }

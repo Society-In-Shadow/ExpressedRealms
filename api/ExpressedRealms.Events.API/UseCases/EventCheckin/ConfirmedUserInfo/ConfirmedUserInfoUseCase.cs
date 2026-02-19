@@ -30,7 +30,7 @@ internal sealed class ConfirmedUserInfoUseCase(
         var playerId = await checkinRepository.GetPlayerId(model.LookupId);
         var checkinId = await GetCheckinId(eventId, playerId);
 
-        var playerName = await checkinRepository.GetUserName(model.LookupId);
+        var playerName = await checkinRepository.GetPlayerName(model.LookupId);
         var isFirstTimePlayer = await checkinRepository.IsFirstTimePlayer(model.LookupId);
         var playerNumber = checkinRepository.GetPlayerNumber(model.LookupId);
 

@@ -12,7 +12,7 @@ public class GetGoCheckinInfoUseCaseTests
     private readonly GetGoCheckinInfoUseCase _useCase;
     private readonly GetGoCheckinInfoModelValidator _validator;
     private readonly IEventCheckinRepository _eventCheckinRepository;
-    private GetGoCheckinInfoModel _model;
+    private readonly GetGoCheckinInfoModel _model;
 
     private const int EventId = 2;
     private Guid PlayerId = Guid.NewGuid();
@@ -24,7 +24,7 @@ public class GetGoCheckinInfoUseCaseTests
         _eventCheckinRepository = A.Fake<IEventCheckinRepository>();
 
         A.CallTo(() => _eventCheckinRepository.CheckinIdExistsAsync(_model.LookupId)).Returns(true);
-        A.CallTo(() => _eventCheckinRepository.GetUserName(_model.LookupId)).Returns("Test Player");
+        A.CallTo(() => _eventCheckinRepository.GetPlayerName(_model.LookupId)).Returns("Test Player");
         A.CallTo(() => _eventCheckinRepository.IsFirstTimePlayer(_model.LookupId)).Returns(true);
         A.CallTo(() => _eventCheckinRepository.GetActiveEventId()).Returns(EventId);
 
