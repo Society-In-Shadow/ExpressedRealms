@@ -81,6 +81,16 @@ async function onDetect(detectedCodes) {
   }
 }
 
+const canFinalizeStage = (stageId: number) => {
+  return eventCheckinInfo.checkinStage?.id + 5 != stageId
+}
+
+const isFinalized = (stageId: number) => {
+  if (eventCheckinInfo.checkinStage?.id + 5 > stageId)
+    return 'pi pi-check'
+  return ''
+}
+
 const waiverStatus = computed(() => {
   if (signedWaiver.value) return 'Under 18 - Signed Waiver'
   return 'Over 18'
@@ -127,33 +137,34 @@ const typeName = (typeId: number) => {
           Looks like this is your first time playing!
         </h2>
         <div class="d-flex self-align-center gap-2 mb-3">
-          <Checkbox id="13AgeQuestion" v-model="is13OrOlder" binary />
+          <Checkbox id="13AgeQuestion" v-model="is13OrOlder" binary :disabled="canFinalizeStage(5)" />
           <label for="13AgeQuestion">Are you 13 years or older?</label>
         </div>
         <div class="d-flex self-align-center gap-2 mb-3">
-          <Checkbox id="18AgeQuestion" v-model="is18OrOlder" binary :disabled="signedWaiver" @change="is13OrOlder = true" />
+          <Checkbox id="18AgeQuestion" v-model="is18OrOlder" binary :disabled="signedWaiver || canFinalizeStage(5)" @change="is13OrOlder = true" />
           <label for="18AgeQuestion">Are you 18 years or older?</label>
         </div>
         <div class="d-flex self-align-center gap-2 mb-3">
-          <Checkbox id="signedwaiver" v-model="signedWaiver" binary :disabled="is18OrOlder" @change="is13OrOlder = true" />
+          <Checkbox id="signedwaiver" v-model="signedWaiver" binary :disabled="is18OrOlder || canFinalizeStage(5)" @change="is13OrOlder = true" />
           <label for="signedwaiver">If not, have you signed a waiver? (Front Desk will have these)</label>
         </div>
         <p>If they fall into above category, send them to the front desk to get this resolved.</p>
         <Button label="Verified" :disabled="!is13OrOlder || !is18OrOlder && !signedWaiver || eventCheckinInfo.goCheckinInfo.alreadyCheckedIn" @click="verifiedPlayerInfo" />
-        <Button label="Reviewed" icon="pi pi-arrow-right" icon-pos="right" class="mb-4" @click="activateCallback('2')" />
+        <Button label="Reviewed" icon="pi pi-arrow-right" icon-pos="right" class="mb-4 ml-3" @click="activateCallback('3')" />
       </StepPanel>
     </StepItem>
     <StepItem value="3">
       <Step>HR Questions</Step>
       <StepPanel v-slot="{activateCallback}">
         <AnswerQuestions />
-        <Button label="Reviewed" icon="pi pi-arrow-right" icon-pos="right" class="mb-4" @click="activateCallback('3')" />
+        <Button label="Reviewed" icon="pi pi-arrow-right" icon-pos="right" class="mb-4" @click="activateCallback('4')" />
       </StepPanel>
     </StepItem>
     <StepItem value="4">
       <Step>Stone Pull</Step>
-      <StepPanel>
+      <StepPanel v-slot="{activateCallback}">
         <StonePullerStep />
+        <Button label="Reviewed" icon="pi pi-arrow-right" icon-pos="right" class="mb-4" @click="activateCallback('5')" />
       </StepPanel>
     </StepItem>
     <StepItem value="5">
@@ -167,7 +178,10 @@ const typeName = (typeId: number) => {
         </div>
         <h2>Checkin Bonus</h2>
         <p>+{{ eventCheckinInfo.assignedXp?.amount }} - {{ typeName(eventCheckinInfo.assignedXp?.typeId) }}</p>
-        <Button label="Finalize Checkin" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(1)" />
+        <Button
+          label="Finalize Checkin" :icon="isFinalized(5)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(5)"
+          @click="approveStage(1)"
+        />
       </StepPanel>
     </StepItem>
     <StepItem value="6" :disabled="stepperStep !== '6'">
@@ -185,7 +199,10 @@ const typeName = (typeId: number) => {
         <h3>Did you approve the contacts on their CRB? (Block till they say yes)</h3>
         <h3>Did you Check to make sure that most of their XP has been spent? (Eg, they've spent xp outside of character creation)</h3>
         <h3>Is their character level within expections for the plot?</h3>
-        <Button label="GO Approval" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(2)" />
+        <Button
+          label="GO Approval" :icon="isFinalized(6)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(6)"
+          @click="approveStage(2)"
+        />
       </StepPanel>
     </StepItem>
     <StepItem value="8">
@@ -193,7 +210,10 @@ const typeName = (typeId: number) => {
       <StepPanel>
         <h3>CRB needs to be created</h3>
         <p>SHQ needs to create the CRB.  Once ready, scan it and click the below button</p>
-        <Button label="CRB Created and Ready for Pickup" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(4)" />
+        <Button
+          label="CRB Created and Ready for Pickup" :icon="isFinalized(8)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(8)"
+          @click="approveStage(4)"
+        />
       </StepPanel>
     </StepItem>
     <StepItem value="9">
@@ -201,14 +221,20 @@ const typeName = (typeId: number) => {
       <StepPanel>
         <h3>Needs to be Verified by User</h3>
         <p>User needs to check their CRB, and make sure it's good to go.  Once scanned, they can go play games</p>
-        <Button label="CRB Is Picked Up" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(5)" />
+        <Button
+          label="CRB Is Picked Up" :icon="isFinalized(9)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(9)"
+          @click="approveStage(5)"
+        />
       </StepPanel>
     </StepItem>
     <StepItem value="10">
       <Step>Picked Up and Day One</Step>
       <StepPanel>
         <h3>Everything is Done for Day 1</h3>
-        <Button label="Day 2 Checkin" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(6)" />
+        <Button
+          label="Day 2 Checkin" :icon="isFinalized(10)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(10)"
+          @click="approveStage(6)"
+        />
       </StepPanel>
     </StepItem>
     <StepItem value="11">
@@ -216,7 +242,10 @@ const typeName = (typeId: number) => {
       <StepPanel>
         <h3>This is the 2nd day the character has been in play, not the 2nd day of play</h3>
         <p>The character has been checked in for the day.</p>
-        <Button label="Day 3 Checkin" icon="pi pi-check" icon-pos="right" class="mb-4" @click="approveStage(7)" />
+        <Button
+          label="Day 3 Checkin" :icon="isFinalized(11)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(11)"
+          @click="approveStage(7)"
+        />
       </StepPanel>
     </StepItem>
     <StepItem value="12">

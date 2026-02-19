@@ -56,6 +56,11 @@ function paintOutline(detectedCodes, ctx) {
 </script>
 
 <template>
+  <div>
+    <p>If the scanner is not working below, you can manually put in the lookup below</p>
+    <InputText v-model="result" placeholder="Manual Lookup" minlength="8" maxlength="8" :disabled="eventCheckinInfo.foundInfo" />
+    <Button label="Lookup" :disabled="eventCheckinInfo.foundInfo" @click="lookupManual" />
+  </div>
   <div class="w-100">
     <qrcode-stream
       v-if="!destroyed && result == ''"
@@ -70,10 +75,5 @@ function paintOutline(detectedCodes, ctx) {
         Loading...
       </div>
     </qrcode-stream>
-  </div>
-  <div>
-    <p>If the scanner is not working, you can manually put in the lookup below</p>
-    <InputText v-model="result" placeholder="Manual Lookup" minlength="8" maxlength="8" />
-    <Button label="Lookup" @click="lookupManual" />
   </div>
 </template>

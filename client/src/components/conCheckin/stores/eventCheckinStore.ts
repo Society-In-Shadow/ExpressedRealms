@@ -16,6 +16,7 @@ export const EventCheckinStore
   = defineStore(`eventCheckin`, {
     state: () => {
       return {
+        foundInfo: false,
         isReset: false,
         hasActiveEvent: false,
         lookupId: '',
@@ -32,6 +33,7 @@ export const EventCheckinStore
     },
     actions: {
       async resetGoPage() {
+        this.foundInfo = false
         this.isReset = true
         this.hasActiveEvent = false
         this.lookupId = ''
@@ -65,8 +67,10 @@ export const EventCheckinStore
         return true
       },
       async verifiedUserInfo() {
+        this.foundInfo = false
         const response = await axios.get<ApproveCheckinInfo>(`/events/checkin/lookup/${this.lookupId}/approve`)
 
+        this.foundInfo = true
         this.checkinId = response.data.checkinId
         this.playerNumber = response.data.playerNumber
         this.questions = response.data.questions

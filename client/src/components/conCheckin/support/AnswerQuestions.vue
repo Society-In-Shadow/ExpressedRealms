@@ -18,6 +18,10 @@ watch(() => eventCheckinInfo.questions, () => {
   }
 }, { immediate: true })
 
+const canFinalizeStage = (stageId: number) => {
+  return eventCheckinInfo.checkinStage?.id + 5 != stageId
+}
+
 const updateNewPlayerQuestion = (question: Question) => {
   question.response = 'No'
   if (eventCheckinInfo.broughtNewPlayer) {
@@ -40,23 +44,23 @@ const updateNewPlayerQuestion = (question: Question) => {
       <div>
         <RadioButtonGroup v-model="eventCheckinInfo.broughtNewPlayer" class="d-flex flex-column gap-2 mb-3">
           <div class="d-flex align-items-center gap-2">
-            <RadioButton id="yes" :value="true" />
+            <RadioButton id="yes" :value="true" :disabled="canFinalizeStage(5)" />
             <label for="yes">Yes</label>
             <InputText v-if="eventCheckinInfo.broughtNewPlayer" v-model="playerName" placeholder="Who?" />
           </div>
           <div class="d-flex align-items-center gap-2">
-            <RadioButton id="no" :value="false" />
+            <RadioButton id="no" :value="false" :disabled="canFinalizeStage(5)" />
             <label for="no">No</label>
           </div>
         </RadioButtonGroup>
 
-        <Button label="Save" @click="updateNewPlayerQuestion(question)" />
+        <Button label="Save" :disabled="canFinalizeStage(5)" @click="updateNewPlayerQuestion(question)" />
       </div>
     </div>
     <div v-else>
       <h3>{{ question.question }}</h3>
-      <InputText v-model="question.response" />
-      <Button v-if="question.typeId !== 1" label="Save" @click="eventCheckinInfo.updateQuestion(question)" />
+      <InputText v-model="question.response" :disabled="canFinalizeStage(5)" />
+      <Button v-if="question.typeId !== 1" label="Save" :disabled="canFinalizeStage(5)" @click="eventCheckinInfo.updateQuestion(question)" />
     </div>
   </div>
 </template>
