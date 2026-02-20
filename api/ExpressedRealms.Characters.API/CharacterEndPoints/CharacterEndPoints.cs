@@ -1,4 +1,6 @@
 using ExpressedRealms.Authentication;
+using ExpressedRealms.Authentication.PermissionCollection;
+using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using ExpressedRealms.Characters.API.CharacterEndPoints.DTOs;
 using ExpressedRealms.Characters.API.CharacterEndPoints.EditCharacter;
 using ExpressedRealms.Characters.API.CharacterEndPoints.EditCharacterOptions;
@@ -7,6 +9,7 @@ using ExpressedRealms.Characters.API.CharacterEndPoints.GetCRB;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetOverallStats;
 using ExpressedRealms.Characters.API.CharacterEndPoints.Requests;
 using ExpressedRealms.Characters.API.CharacterEndPoints.Responses;
+using ExpressedRealms.Characters.API.CharacterEndPoints.RetireCharacter;
 using ExpressedRealms.Characters.API.StatEndPoints.Requests;
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.DTOs;
@@ -252,6 +255,10 @@ internal static class CharacterEndPoints
             .MapGet("{characterId}/getcrb", GetExpressionBookletEndpoint.Execute)
             .RequirePolicyAuthorization(Policies.ManagePlayerCharacterList)
             .RequireAuthorization();
+        
+        endpointGroup
+            .MapPut("{lookupId}/retire", RetireCharacterEndpoint.Execute)
+            .RequirePermission(Permissions.Character.Retire);
 
         endpointGroup
             .MapPost(
