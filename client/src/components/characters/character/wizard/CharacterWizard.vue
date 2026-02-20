@@ -62,6 +62,9 @@ async function fetchData() {
   }
   else {
     await characterInfo.getCharacterDetails(Number(route.params.id))
+    if (characterInfo.isRetired)
+      await router.push({ name: 'characters' })
+
     sections.value.splice(0, 0, { name: 'Basic Info', isDisabled: false, component: defineAsyncComponent(async () => EditCharacterDetails) })
 
     if (!characterInfo.isInCharacterCreation && await userInfo.hasFeatureFlag(FeatureFlags.ShowContactManagement))

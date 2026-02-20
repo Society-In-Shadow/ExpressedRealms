@@ -1,12 +1,12 @@
 <script setup lang="ts">
 
 import Card from 'primevue/card'
-import {onBeforeMount, ref} from 'vue'
-import {useRoute, useRouter} from 'vue-router'
-import {characterStore} from '@/components/characters/character/stores/characterStore'
+import { onBeforeMount, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { characterStore } from '@/components/characters/character/stores/characterStore'
 import Button from 'primevue/button'
-import {experienceStore} from '@/components/characters/character/stores/experienceBreakdownStore.ts'
-import {FeatureFlags, userStore} from '@/stores/userStore.ts'
+import { experienceStore } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
+import { FeatureFlags, userStore } from '@/stores/userStore.ts'
 import Tag from 'primevue/tag'
 
 const route = useRoute()
@@ -27,6 +27,7 @@ onBeforeMount(async () => {
       isPrimaryCharacter.value = characterInfo.isPrimaryCharacter
       isOwner.value = characterInfo.isOwner
       isInCharacterGeneration.value = characterInfo.isInCharacterCreation
+      isRetired.value = characterInfo.isRetired
     })
   showFactionInfo.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowFactionDropdown)
   await experienceInfo.updateExperience(route.params.id)
@@ -37,6 +38,7 @@ const faction = ref('')
 const expression = ref('')
 const isPrimaryCharacter = ref(false)
 const isInCharacterGeneration = ref(false)
+const isRetired = ref(false)
 
 const redirectToEdit = () => {
   router.push({ name: 'characterWizard', params: { id: route.params.id } })
@@ -56,6 +58,7 @@ const redirectToEdit = () => {
               </h1>
             </div>
             <div><Tag v-if="isPrimaryCharacter" value="Primary" severity="info" /></div>
+            <div><Tag v-if="isRetired" value="Retired" severity="warn" /></div>
           </div>
           <div v-if="!experienceInfo.isLoading && !isInCharacterGeneration">
             <em><span>XL: {{ experienceInfo.getCharacterLevel() }}</span> - {{ expression }}</em>
@@ -68,7 +71,7 @@ const redirectToEdit = () => {
           </div>
         </div>
         <div class="d-flex flex-column gap-3" style="font-size: 2.5em">
-          <Button v-if="isOwner" class="float-end" label="Edit" @click="redirectToEdit" />
+          <Button v-if="isOwner && !isRetired" class="float-end" label="Edit" @click="redirectToEdit" />
         </div>
       </div>
     </template>
