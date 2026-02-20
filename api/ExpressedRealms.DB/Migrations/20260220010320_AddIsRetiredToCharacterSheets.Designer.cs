@@ -3,6 +3,7 @@ using System;
 using ExpressedRealms.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpressedRealms.DB.Migrations
 {
     [DbContext(typeof(ExpressedRealmsDbContext))]
-    partial class ExpressedRealmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260220010320_AddIsRetiredToCharacterSheets")]
+    partial class AddIsRetiredToCharacterSheets
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -282,10 +285,6 @@ namespace ExpressedRealms.DB.Migrations
                     b.Property<int?>("PrimaryProgressionId")
                         .HasColumnType("integer")
                         .HasColumnName("primary_progression_id");
-
-                    b.Property<DateTimeOffset?>("RetiredDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("retired_date");
 
                     b.Property<int?>("SecondaryProgressionId")
                         .HasColumnType("integer")

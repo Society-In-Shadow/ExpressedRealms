@@ -1,5 +1,4 @@
 import Layout from '@/components/LoggedInLayout.vue'
-import { FeatureFlags } from '@/stores/userStore.ts'
 import { UserPermissions } from '@/types/UserPermissions.ts'
 
 export const OverallRoutes = {
@@ -63,13 +62,12 @@ export const OverallRoutes = {
       path: '/eventcheckin',
       name: 'eventcheckin',
       component: () => import('@/components/conCheckin/UserCheckinPage.vue'),
-      meta: { requiredFeatureFlag: FeatureFlags.ShowEventCheckin },
     },
     {
       path: '/gocheckin',
       name: 'gocheckin',
       component: () => import('@/components/conCheckin/GoCheckinPage.vue'),
-      meta: { requiredFeatureFlag: FeatureFlags.ShowEventCheckin, requiredPermission: UserPermissions.Event.Checkin },
+      meta: { requiredPermission: UserPermissions.Event.Checkin },
     },
   ],
 }

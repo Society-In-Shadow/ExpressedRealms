@@ -31,6 +31,10 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  isRetired: {
+    type: Boolean,
+    required: true,
+  },
 })
 
 function editCharacter() {
@@ -53,6 +57,7 @@ function editCharacter() {
           <em class="mb-3">{{ expression }}</em>
           <div class="mt-1">
             <Tag v-if="isPrimaryCharacter" value="Primary" severity="info" />
+            <Tag v-if="isRetired" value="Retired" severity="warn" />
           </div>
         </div>
         <div class="d-inline-flex flex-column">

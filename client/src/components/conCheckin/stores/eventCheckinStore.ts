@@ -93,5 +93,9 @@ export const EventCheckinStore
         await this.resetGoPage()
         toaster.success('Stage approved successfully!')
       },
+      async retireCharacter() {
+        await axios.put(`/characters/${this.lookupId}/retire`)
+        await this.resetGoPage()
+      },
     },
   })

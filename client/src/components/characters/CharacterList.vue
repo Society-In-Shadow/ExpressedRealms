@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import {onMounted} from 'vue'
+import { onMounted } from 'vue'
 import CharacterTile from '@/components/characters/tiles/CharacterTile.vue'
 import AddCharacterTile from '@/components/characters/tiles/AddCharacterTile.vue'
-import {charactersStore} from '@/components/characters/stores/charactersStore.ts'
+import { charactersStore } from '@/components/characters/stores/charactersStore.ts'
 
 const charactersData = charactersStore()
 
@@ -24,6 +24,7 @@ onMounted(async () => {
       :background-story="character.background"
       :expression="character.expression"
       :is-primary-character="character.isPrimaryCharacter"
+      :is-retired="character.isRetired"
     />
   </div>
 </template>

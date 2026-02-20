@@ -54,6 +54,14 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
             .HasDefaultValue(false);
 
         builder
+            .Property(x => x.IsRetired)
+            .HasColumnName("is_retired")
+            .IsRequired()
+            .HasDefaultValue(false);
+
+        builder.Property(x => x.RetiredDate).HasColumnName("retired_date");
+
+        builder
             .Property(x => x.PlayerNumber)
             .HasColumnName("player_number")
             .IsRequired()

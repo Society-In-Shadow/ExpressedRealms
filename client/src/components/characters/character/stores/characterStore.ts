@@ -13,6 +13,7 @@ export const characterStore
         expression: '' as string,
         expressionId: 0 as number,
         isPrimaryCharacter: false as boolean,
+        isRetired: false as boolean,
         isInCharacterCreation: false as boolean,
         primaryProgressionId: 0 as number,
         secondaryProgressionId: 0 as number,
@@ -36,6 +37,7 @@ export const characterStore
             this.isOwner = response.data.isOwner
             this.primaryProgressionId = response.data.primaryProgressionId
             this.secondaryProgressionId = response.data.secondaryProgressionId
+            this.isRetired = response.data.isRetired
 
             if (await userInfo.hasFeatureFlag(FeatureFlags.ShowFactionDropdown)) {
               await axios.get(`/characters/${characterId}/factionOptions`)

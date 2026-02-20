@@ -12,4 +12,5 @@ public sealed record GetEditCharacterDto
     public bool IsOwner { get; set; }
     public int? PrimaryProgressionId { get; set; }
     public int? SecondaryProgressionId { get; set; }
+    public bool IsRetired { get; set; }
 }
