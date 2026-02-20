@@ -126,7 +126,7 @@ const typeName = (typeId: number) => {
   <Message v-if="eventCheckinInfo.isReset" severity="success">
     Successfully committed Stage!
   </Message>
-  <div v-if="eventCheckinInfo.checkinStage.id > 2 && permissionCheck.Character.Retire" class="text-right">
+  <div v-if="permissionCheck.Character.Retire" class="text-right">
     <Button label="Retire Character" @click="popups.retireConfirmation($event, eventCheckinInfo.primaryCharacter.characterName)" />
   </div>
   <Stepper v-model:value="stepperStep">
