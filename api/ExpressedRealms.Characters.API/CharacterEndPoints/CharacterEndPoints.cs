@@ -255,7 +255,7 @@ internal static class CharacterEndPoints
             .MapGet("{characterId}/getcrb", GetExpressionBookletEndpoint.Execute)
             .RequirePolicyAuthorization(Policies.ManagePlayerCharacterList)
             .RequireAuthorization();
-        
+
         endpointGroup
             .MapPut("{lookupId}/retire", RetireCharacterEndpoint.Execute)
             .RequirePermission(Permissions.Character.Retire);

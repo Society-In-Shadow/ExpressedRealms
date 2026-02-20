@@ -14,10 +14,7 @@ internal static class RetireCharacterEndpoint
     )
     {
         var status = await repository.ExecuteAsync(
-            new RetireCharacterModel()
-            {
-                LookupId = lookupId
-            }
+            new RetireCharacterModel() { LookupId = lookupId }
         );
 
         if (status.HasNotFound(out var notFound))

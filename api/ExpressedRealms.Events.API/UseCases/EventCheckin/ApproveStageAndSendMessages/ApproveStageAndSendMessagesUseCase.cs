@@ -144,7 +144,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
                 );
                 break;
             }
-            
+
             case 5: // Crb Finalized
             {
                 var seekingCrbMessage =

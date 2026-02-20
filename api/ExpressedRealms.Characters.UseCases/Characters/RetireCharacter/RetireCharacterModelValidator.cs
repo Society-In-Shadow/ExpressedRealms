@@ -5,9 +5,7 @@ namespace ExpressedRealms.Characters.UseCases.Characters.RetireCharacter;
 
 internal sealed class RetireCharacterModelValidator : AbstractValidator<RetireCharacterModel>
 {
-    public RetireCharacterModelValidator(
-        IEventCheckinRepository repository
-    )
+    public RetireCharacterModelValidator(IEventCheckinRepository repository)
     {
         RuleFor(x => x.LookupId)
             .NotEmpty()
@@ -17,6 +15,5 @@ internal sealed class RetireCharacterModelValidator : AbstractValidator<RetireCh
             .MustAsync(async (x, y) => await repository.CheckinIdExistsAsync(x))
             .WithErrorCode("NotFound")
             .WithMessage("Lookup Id does not exist.");
-        
     }
 }
