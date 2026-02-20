@@ -52,6 +52,15 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
             .HasColumnName("is_primary_character")
             .IsRequired()
             .HasDefaultValue(false);
+        
+        builder
+            .Property(x => x.IsRetired)
+            .HasColumnName("is_retired")
+            .IsRequired()
+            .HasDefaultValue(false);
+
+        builder.Property(x => x.RetiredDate)
+            .HasColumnName("retired_date");
 
         builder
             .Property(x => x.PlayerNumber)

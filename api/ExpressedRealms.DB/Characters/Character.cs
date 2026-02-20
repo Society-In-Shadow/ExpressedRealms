@@ -35,6 +35,8 @@ public class Character : ISoftDelete
 
     public bool IsInCharacterCreation { get; set; }
     public bool IsPrimaryCharacter { get; set; }
+    public bool IsRetired { get; set; }
+    public DateTimeOffset? RetiredDate { get; set; }
     public int PlayerNumber { get; set; }
 
     public int? PrimaryProgressionId { get; set; }
