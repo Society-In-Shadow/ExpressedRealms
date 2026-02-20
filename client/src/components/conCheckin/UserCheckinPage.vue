@@ -112,10 +112,10 @@ async function triggerRefresh() {
       </div>
     </template>
   </Card>
-  <h1>Checkin Progress</h1>
+  <h1>Check-in Progress</h1>
   <Stepper v-model:value="stepperValue">
     <StepItem value="1">
-      <Step>Initial Checkin</Step>
+      <Step>Initial Check-in</Step>
       <StepPanel>
         <h3>Lets get checked in!</h3>
         <p>There's a couple of administrative related things that need to get done</p>
@@ -126,7 +126,7 @@ async function triggerRefresh() {
             These can be found at the front desk to sign.
           </li>
           <li>We need to collect your con badge info - lots of cons want a list of who played the game</li>
-          <li>Get Bonus XP for attending (5 XP max for new players or people who bring in new players or random stone pull)</li>
+          <li>Get Bonus XP for attending (5 XP max for new players or people who bring in new players, barring those, a random stone pull)</li>
         </ul>
         <p>SHQ is primarily responsible for this step, though GO's can also assist with this step.</p>
       </StepPanel>
