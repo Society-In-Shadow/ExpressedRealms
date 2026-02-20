@@ -37,7 +37,7 @@ async function redirectToCheckinDetails() {
     </template>
     <div class="d-flex flex-row justify-content-between align-self-center align-items-center">
       <div class="flex-fill">
-        Checkin User
+        Check-in User
       </div>
       <div><Button label="Checkin" size="small" @click="redirectToCheckinDetails" /></div>
     </div>

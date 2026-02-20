@@ -133,7 +133,7 @@ const typeName = (typeId: number) => {
     <StepItem value="1">
       <Step>Scan QR Code</Step>
       <StepPanel>
-        <p>Ask the user to open up their account, and click on the "Event Checkin Details" tile at the top of the page</p>
+        <p>Ask the user to open up their account, and click on the "Event Check-in" tile at the top of the page</p>
         <p>This should pull up a QR code you can scan below</p>
         <CharacterScanner @detected-code="onDetect" />
       </StepPanel>
@@ -178,7 +178,7 @@ const typeName = (typeId: number) => {
       </StepPanel>
     </StepItem>
     <StepItem value="5">
-      <Step>Review and Finalize Initial Checkin</Step>
+      <Step>Review and Finalize Initial Check-in</Step>
       <StepPanel>
         <h1>Review</h1>
         <h2>Questions</h2>
@@ -186,10 +186,10 @@ const typeName = (typeId: number) => {
           <h3>{{ question.question }}</h3>
           <p>{{ question.response }}</p>
         </div>
-        <h2>Checkin Bonus</h2>
+        <h2>Check-in Bonus</h2>
         <p>+{{ eventCheckinInfo.assignedXp?.amount }} - {{ typeName(eventCheckinInfo.assignedXp?.typeId) }}</p>
         <Button
-          label="Finalize Checkin" :icon="isFinalized(5)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(5)"
+          label="Finalize Check-in" :icon="isFinalized(5)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(5)"
           @click="approveStage(1)"
         />
       </StepPanel>
@@ -242,7 +242,7 @@ const typeName = (typeId: number) => {
       <StepPanel>
         <h3>Everything is Done for Day 1</h3>
         <Button
-          label="Day 2 Checkin" :icon="isFinalized(10)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(10) || !permissionCheck.Event.Day23Checkin"
+          label="Day 2 Check-in" :icon="isFinalized(10)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(10) || !permissionCheck.Event.Day23Checkin"
           @click="approveStage(6)"
         />
       </StepPanel>
@@ -253,7 +253,7 @@ const typeName = (typeId: number) => {
         <h3>This is the 2nd day the character has been in play, not the 2nd day of play</h3>
         <p>The character has been checked in for the day.</p>
         <Button
-          label="Day 3 Checkin" :icon="isFinalized(11)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(11) || !permissionCheck.Event.Day23Checkin"
+          label="Day 3 Check-in" :icon="isFinalized(11)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(11) || !permissionCheck.Event.Day23Checkin"
           @click="approveStage(7)"
         />
       </StepPanel>
