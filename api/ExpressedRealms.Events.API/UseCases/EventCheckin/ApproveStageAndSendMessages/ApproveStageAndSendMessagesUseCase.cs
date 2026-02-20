@@ -144,6 +144,17 @@ internal sealed class ApproveStageAndSendMessageUseCase(
                 );
                 break;
             }
+            
+            case 5: // Crb Finalized
+            {
+                var seekingCrbMessage =
+                    $"\"{playerName}\" with character \"{primaryCharacterInfo!.CharacterName}\" picked up their CRB ~{approverName}";
+                await discordService.SendMessageToChannelAsync(
+                    DiscordChannel.PlayersSeekingCrbs,
+                    seekingCrbMessage
+                );
+                break;
+            }
         }
     }
 }
