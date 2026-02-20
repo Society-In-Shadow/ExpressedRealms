@@ -33,6 +33,7 @@ internal sealed class CharacterRepository(
                 Background = x.Background,
                 Expression = x.Expression.Name,
                 IsPrimaryCharacter = x.IsPrimaryCharacter,
+                IsRetired = x.IsRetired,
                 IsInCharacterCreate = x.IsInCharacterCreation,
             })
             .ToListAsync(cancellationToken);
@@ -122,6 +123,7 @@ internal sealed class CharacterRepository(
                 IsOwner = x.Player.UserId == userContext.CurrentUserId(),
                 PrimaryProgressionId = x.PrimaryProgressionId,
                 SecondaryProgressionId = x.SecondaryProgressionId,
+                IsRetired = x.IsRetired,
             })
             .FirstOrDefaultAsync(cancellationToken);
 

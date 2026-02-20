@@ -15,4 +15,5 @@ public sealed record CharacterListDto
 
     public bool IsPrimaryCharacter { get; set; }
     public bool IsInCharacterCreate { get; set; }
+    public bool IsRetired { get; set; }
 }

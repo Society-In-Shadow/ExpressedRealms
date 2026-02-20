@@ -16,7 +16,10 @@ internal record CharacterEditResponse
         IsOwner = dto.IsOwner;
         PrimaryProgressionId = dto.PrimaryProgressionId;
         SecondaryProgressionId = dto.SecondaryProgressionId;
+        IsRetired = dto.IsRetired;
     }
+
+    public bool IsRetired { get; set; }
 
     public int? SecondaryProgressionId { get; set; }
 
