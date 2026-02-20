@@ -16,11 +16,13 @@ import type { Question } from '@/components/conCheckin/types.ts'
 import StonePullerStep from '@/components/conCheckin/support/StonePullerStep.vue'
 import Message from 'primevue/message'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+import { confirmationPopups } from '@/components/conCheckin/services/popupService.ts'
 
 const eventCheckinInfo = EventCheckinStore()
 const userPermission = userPermissionStore()
 const userInfo = userStore()
 const router = useRouter()
+const popups = confirmationPopups()
 
 const permissionCheck = userPermission.permissionCheck
 const hasCheckinFlag = ref(false)
@@ -124,6 +126,9 @@ const typeName = (typeId: number) => {
   <Message v-if="eventCheckinInfo.isReset" severity="success">
     Successfully committed Stage!
   </Message>
+  <div v-if="eventCheckinInfo.checkinStage.id > 2 && permissionCheck.Character.Retire" class="text-right">
+    <Button label="Retire Character" @click="popups.retireConfirmation($event, eventCheckinInfo.primaryCharacter.characterName)" />
+  </div>
   <Stepper v-model:value="stepperStep">
     <StepItem value="1">
       <Step>Scan QR Code</Step>
