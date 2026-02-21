@@ -79,7 +79,8 @@ public class SendEventPublishedMessagesUseCaseTests
 
         A.CallTo(() => _repository.FindEventAsync(_model.Id)).Returns(_dbModel);
         A.CallTo(() => _repository.GetEventScheduleItems(_model.Id)).Returns(dbEventItems);
-        A.CallTo(() => _systemClock.GetUtcNow()).Returns(new DateTime(2025, 08, 22, 12, 0, 0, DateTimeKind.Utc));
+        A.CallTo(() => _systemClock.GetUtcNow())
+            .Returns(new DateTime(2025, 08, 22, 12, 0, 0, DateTimeKind.Utc));
 
         var validator = new SendEventPublishedMessagesModelValidator(_repository);
 
@@ -313,7 +314,8 @@ public class SendEventPublishedMessagesUseCaseTests
     )
     {
         _model.PublishType = type;
-        A.CallTo(() => _systemClock.GetUtcNow()).Returns(new DateTime(2025, 08, 23, 12, 0, 0, DateTimeKind.Utc));
+        A.CallTo(() => _systemClock.GetUtcNow())
+            .Returns(new DateTime(2025, 08, 23, 12, 0, 0, DateTimeKind.Utc));
         await _useCase.ExecuteAsync(_model);
         A.CallTo(() =>
                 _discordService.SendMessageToChannelAsync(
@@ -336,7 +338,8 @@ public class SendEventPublishedMessagesUseCaseTests
     )
     {
         _model.PublishType = type;
-        A.CallTo(() => _systemClock.GetUtcNow()).Returns(new DateTime(2025, 08, 24, 12, 0, 0, DateTimeKind.Utc));
+        A.CallTo(() => _systemClock.GetUtcNow())
+            .Returns(new DateTime(2025, 08, 24, 12, 0, 0, DateTimeKind.Utc));
         await _useCase.ExecuteAsync(_model);
         A.CallTo(() =>
                 _discordService.SendMessageToChannelAsync(
@@ -369,42 +372,37 @@ public class SendEventPublishedMessagesUseCaseTests
     public async Task UseCase_OnDayOfReminder_WillOnlyShow_TheDatesEvents()
     {
         _model.PublishType = PublishType.DayOfReminder;
-        A.CallTo(() => _systemClock.GetUtcNow()).Returns(new DateTime(2025, 08, 24, 12, 0, 0, DateTimeKind.Utc));
+        A.CallTo(() => _systemClock.GetUtcNow())
+            .Returns(new DateTime(2025, 08, 24, 12, 0, 0, DateTimeKind.Utc));
         await _useCase.ExecuteAsync(_model);
         A.CallTo(() =>
                 _discordService.SendMessageToChannelAsync(
                     DiscordChannel.PublicAnnouncements,
-                    A<string>.That.Contains(
-                        "## Sunday"
-                    ),
+                    A<string>.That.Contains("## Sunday"),
                     A<Embed[]>._
                 )
             )
             .MustHaveHappenedOnceExactly();
-        
+
         A.CallTo(() =>
                 _discordService.SendMessageToChannelAsync(
                     DiscordChannel.PublicAnnouncements,
-                    A<string>.That.Not.Contains(
-                        "## Friday"
-                    ),
+                    A<string>.That.Not.Contains("## Friday"),
                     A<Embed[]>._
                 )
             )
-            .MustHaveHappenedOnceExactly();        
-        
+            .MustHaveHappenedOnceExactly();
+
         A.CallTo(() =>
                 _discordService.SendMessageToChannelAsync(
                     DiscordChannel.PublicAnnouncements,
-                    A<string>.That.Not.Contains(
-                        "## Saturday"
-                    ),
+                    A<string>.That.Not.Contains("## Saturday"),
                     A<Embed[]>._
                 )
             )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Theory]
     [InlineData(PublishType.OneMonthReminder)]
     [InlineData(PublishType.OneWeekReminder)]

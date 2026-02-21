@@ -37,11 +37,9 @@ public static class GetEndpoint
                         Notes = x.Notes,
                         Amount = x.Amount,
                         Player = new BasicInfo() { Id = x.Player.Id, Name = x.Player.Name },
-                        Character = x.Character is null ? null : new BasicInfo()
-                        {
-                            Id = x.Character.Id,
-                            Name = x.Character.Name,
-                        },
+                        Character = x.Character is null
+                            ? null
+                            : new BasicInfo() { Id = x.Character.Id, Name = x.Character.Name },
                         Event = new BasicInfo() { Id = x.Event.Id, Name = x.Event.Name },
                         XpType = new BasicInfo() { Id = x.XpType.Id, Name = x.XpType.Name },
                         Assigner = new BasicInfo() { Id = x.Assigner.Id, Name = x.Assigner.Name },

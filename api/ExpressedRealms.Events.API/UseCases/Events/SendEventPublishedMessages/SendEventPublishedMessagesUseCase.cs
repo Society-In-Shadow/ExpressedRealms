@@ -23,7 +23,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
 {
     private const string FullDateFormat = "dddd MMMM d, yyyy";
     private const string TimeFormat = "hh:mm tt";
-    
+
     public async Task<Result> ExecuteAsync(SendEventPublishedMessagesModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
@@ -233,7 +233,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
             var today = DateOnly.FromDateTime(systemClock.GetUtcNow().DateTime);
             dayGroups = dayGroups.Where(x => x.Key == today).ToList();
         }
-        
+
         foreach (var dayGroup in dayGroups)
         {
             message.AppendLine($"## {dayGroup.Key.ToString("dddd")}");
@@ -246,8 +246,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
             }
         }
     }
-    
-    
+
     /// <summary>
     /// We'll be attending every day, or a subset of days
     /// </summary>
