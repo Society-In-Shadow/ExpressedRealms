@@ -3,22 +3,21 @@
 import StonePuller from '@/components/stonePuller/StonePuller.vue'
 import InputNumber from 'primevue/inputnumber'
 import Button from 'primevue/button'
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
 
 const eventCheckinInfo = EventCheckinStore()
 const checkinBonus = ref<number | null>(null)
 
-watch(() => eventCheckinInfo.assignedXp, () => checkinBonus.value = eventCheckinInfo.assignedXp?.amount ?? 0)
+onMounted(() => {
+  checkinBonus.value = eventCheckinInfo.assignedXp?.amount ?? 0
 
-watch(() => eventCheckinInfo.broughtNewPlayer, () => {
   if (eventCheckinInfo.broughtNewPlayer)
     checkinBonus.value = 5
-}, { immediate: true })
-watch(() => eventCheckinInfo.goCheckinInfo.isFirstTimeUser, () => {
+
   if (eventCheckinInfo.goCheckinInfo.isFirstTimeUser)
     checkinBonus.value = 5
-}, { immediate: true })
+})
 
 const overrideBonus = computed(() => eventCheckinInfo.goCheckinInfo.isFirstTimeUser || eventCheckinInfo.broughtNewPlayer)
 
@@ -29,11 +28,11 @@ function handleStonePulled(bonus: number) {
 
 async function permanentlySaveBonus() {
   let type = 2
-  if (eventCheckinInfo.broughtNewPlayer)
-    type = 5
-  else if (eventCheckinInfo.goCheckinInfo.isFirstTimeUser)
+  if (eventCheckinInfo.goCheckinInfo.isFirstTimeUser)
     type = 4
-  await eventCheckinInfo.addAssignedXp(checkinBonus.value, type)
+  else if (eventCheckinInfo.broughtNewPlayer)
+    type = 5
+  await eventCheckinInfo.addAssignedXp(type, checkinBonus.value!)
 }
 
 </script>
