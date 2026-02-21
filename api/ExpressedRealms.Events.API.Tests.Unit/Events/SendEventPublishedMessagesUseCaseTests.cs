@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Net;
 using Discord;
 using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup;
@@ -32,8 +33,8 @@ public class SendEventPublishedMessagesUseCaseTests
             Id = 2,
             Name = "Sioux City Geek Con",
             Location = "Sioux City Convention Center Sioux City, Iowa",
-            StartDate = DateOnly.Parse("08/22/2025"),
-            EndDate = DateOnly.Parse("08/24/2025"),
+            StartDate = DateOnly.Parse("08/22/2025", CultureInfo.InvariantCulture),
+            EndDate = DateOnly.Parse("08/24/2025", CultureInfo.InvariantCulture),
             WebsiteName = "Website Name",
             AdditionalNotes = "Additional Notes",
             WebsiteUrl = "https://societyinshadows.org",
@@ -47,27 +48,27 @@ public class SendEventPublishedMessagesUseCaseTests
             {
                 Id = 1,
                 Description = "Test Event 1",
-                StartTime = TimeOnly.Parse("10:00"),
-                EndTime = TimeOnly.Parse("10:30"),
-                Date = DateOnly.Parse("08/22/2025"),
+                StartTime = TimeOnly.Parse("10:00", CultureInfo.InvariantCulture),
+                EndTime = TimeOnly.Parse("10:30", CultureInfo.InvariantCulture),
+                Date = DateOnly.Parse("08/22/2025", CultureInfo.InvariantCulture),
                 EventId = 1,
             },
             new()
             {
                 Id = 2,
                 Description = "Test Event 2",
-                StartTime = TimeOnly.Parse("11:00"),
-                EndTime = TimeOnly.Parse("11:30"),
-                Date = DateOnly.Parse("08/23/2025"),
+                StartTime = TimeOnly.Parse("11:00", CultureInfo.InvariantCulture),
+                EndTime = TimeOnly.Parse("11:30", CultureInfo.InvariantCulture),
+                Date = DateOnly.Parse("08/23/2025", CultureInfo.InvariantCulture),
                 EventId = 1,
             },
             new()
             {
                 Id = 3,
                 Description = "Test Event 3",
-                StartTime = TimeOnly.Parse("12:00"),
-                EndTime = TimeOnly.Parse("12:30"),
-                Date = DateOnly.Parse("08/24/2025"),
+                StartTime = TimeOnly.Parse("12:00", CultureInfo.InvariantCulture),
+                EndTime = TimeOnly.Parse("12:30", CultureInfo.InvariantCulture),
+                Date = DateOnly.Parse("08/24/2025", CultureInfo.InvariantCulture),
                 EventId = 1,
             },
         };
@@ -78,7 +79,7 @@ public class SendEventPublishedMessagesUseCaseTests
 
         A.CallTo(() => _repository.FindEventAsync(_model.Id)).Returns(_dbModel);
         A.CallTo(() => _repository.GetEventScheduleItems(_model.Id)).Returns(dbEventItems);
-        A.CallTo(() => _systemClock.GetUtcNow()).Returns(new DateTime(2025, 08, 22, 12, 0, 0));
+        A.CallTo(() => _systemClock.GetUtcNow()).Returns(new DateTime(2025, 08, 22, 12, 0, 0, DateTimeKind.Utc));
 
         var validator = new SendEventPublishedMessagesModelValidator(_repository);
 
@@ -179,7 +180,7 @@ public class SendEventPublishedMessagesUseCaseTests
     [Fact]
     public async Task UseCase_ContainsMessage_ThatWeWillAttendASubSetOfDays_WithFormatting()
     {
-        _dbModel.StartDate = DateOnly.Parse("08/21/2025");
+        _dbModel.StartDate = DateOnly.Parse("08/21/2025", CultureInfo.InvariantCulture);
         await _useCase.ExecuteAsync(_model);
         A.CallTo(() =>
                 _discordService.SendMessageToChannelAsync(
@@ -312,6 +313,7 @@ public class SendEventPublishedMessagesUseCaseTests
     )
     {
         _model.PublishType = type;
+        A.CallTo(() => _systemClock.GetUtcNow()).Returns(new DateTime(2025, 08, 23, 12, 0, 0, DateTimeKind.Utc));
         await _useCase.ExecuteAsync(_model);
         A.CallTo(() =>
                 _discordService.SendMessageToChannelAsync(
@@ -334,6 +336,7 @@ public class SendEventPublishedMessagesUseCaseTests
     )
     {
         _model.PublishType = type;
+        A.CallTo(() => _systemClock.GetUtcNow()).Returns(new DateTime(2025, 08, 24, 12, 0, 0, DateTimeKind.Utc));
         await _useCase.ExecuteAsync(_model);
         A.CallTo(() =>
                 _discordService.SendMessageToChannelAsync(
@@ -362,6 +365,46 @@ public class SendEventPublishedMessagesUseCaseTests
             .MustHaveHappenedOnceExactly();
     }
 
+    [Fact]
+    public async Task UseCase_OnDayOfReminder_WillOnlyShow_TheDatesEvents()
+    {
+        _model.PublishType = PublishType.DayOfReminder;
+        A.CallTo(() => _systemClock.GetUtcNow()).Returns(new DateTime(2025, 08, 24, 12, 0, 0, DateTimeKind.Utc));
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() =>
+                _discordService.SendMessageToChannelAsync(
+                    DiscordChannel.PublicAnnouncements,
+                    A<string>.That.Contains(
+                        "## Sunday"
+                    ),
+                    A<Embed[]>._
+                )
+            )
+            .MustHaveHappenedOnceExactly();
+        
+        A.CallTo(() =>
+                _discordService.SendMessageToChannelAsync(
+                    DiscordChannel.PublicAnnouncements,
+                    A<string>.That.Not.Contains(
+                        "## Friday"
+                    ),
+                    A<Embed[]>._
+                )
+            )
+            .MustHaveHappenedOnceExactly();        
+        
+        A.CallTo(() =>
+                _discordService.SendMessageToChannelAsync(
+                    DiscordChannel.PublicAnnouncements,
+                    A<string>.That.Not.Contains(
+                        "## Saturday"
+                    ),
+                    A<Embed[]>._
+                )
+            )
+            .MustHaveHappenedOnceExactly();
+    }
+    
     [Theory]
     [InlineData(PublishType.OneMonthReminder)]
     [InlineData(PublishType.OneWeekReminder)]

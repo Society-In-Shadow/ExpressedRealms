@@ -210,7 +210,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
         return Result.Ok();
     }
 
-    private static void GenerateScheduleMessage(
+    private void GenerateScheduleMessage(
         List<EventScheduleItem> scheduleItems,
         Event currentEvent,
         StringBuilder message,
@@ -230,7 +230,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
 
         if (isTodayOnly)
         {
-            var today = DateOnly.FromDateTime(DateTime.UtcNow);
+            var today = DateOnly.FromDateTime(systemClock.GetUtcNow().DateTime);
             dayGroups = dayGroups.Where(x => x.Key == today).ToList();
         }
         
