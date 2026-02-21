@@ -159,8 +159,11 @@ const typeName = (typeId: number) => {
           <label for="signedwaiver">If not, have you signed a waiver? (Front Desk will have these)</label>
         </div>
         <p>If they fall into above category, send them to the front desk to get this resolved.</p>
-        <Button label="Verified" :disabled="!is13OrOlder || !is18OrOlder && !signedWaiver || eventCheckinInfo.goCheckinInfo.alreadyCheckedIn" @click="verifiedPlayerInfo" />
-        <Button label="Reviewed" icon="pi pi-arrow-right" icon-pos="right" class="mb-4 ml-3" @click="activateCallback('3')" />
+        <Button v-if="!eventCheckinInfo.goCheckinInfo.alreadyCheckedIn" label="Verified" :disabled="!is13OrOlder || !is18OrOlder && !signedWaiver || eventCheckinInfo.goCheckinInfo.alreadyCheckedIn" @click="verifiedPlayerInfo" />
+        <Button
+          v-else label="Reviewed" icon="pi pi-arrow-right" icon-pos="right" class="mb-4 ml-3"
+          @click="activateCallback('3')"
+        />
       </StepPanel>
     </StepItem>
     <StepItem value="3">
