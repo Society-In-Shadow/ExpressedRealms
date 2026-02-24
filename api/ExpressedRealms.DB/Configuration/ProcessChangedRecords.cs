@@ -35,6 +35,7 @@ using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Audit;
 using ExpressedRealms.DB.Models.Powers;
 using ExpressedRealms.DB.Models.Powers.PowerPathSetup;
+using ExpressedRealms.DB.Models.Powers.PowerPathSetup.Audit;
 using ExpressedRealms.DB.Models.Powers.PowerSetup.Audit;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserRoles;

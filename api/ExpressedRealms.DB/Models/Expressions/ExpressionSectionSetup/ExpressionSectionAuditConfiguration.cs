@@ -11,36 +11,30 @@ internal static class ExpressionSectionAuditConfiguration
         List<ChangedRecord> changedRecordsToReturn = new();
         foreach (var changedRecord in changedRecords)
         {
-            var skipRecord = false;
             switch (changedRecord.ColumnName)
             {
-                case nameof(ExpressionSection.ExpressionId):
-                    // You cannot change the Expression Id after creation
-                    skipRecord = true;
-                    break;
+                case "expression_id":
+                    continue;
 
-                case nameof(ExpressionSection.SectionTypeId):
+                case "section_type_id":
                     changedRecord.FriendlyName = "Section Type";
                     break;
 
-                case nameof(ExpressionSection.ParentId):
+                case "parent_id":
                     changedRecord.FriendlyName = "Parent Section";
                     break;
 
-                case nameof(ExpressionSection.OrderIndex):
+                case "order_index":
                     changedRecord.FriendlyName = "Sort Order";
                     break;
 
-                case nameof(ExpressionSection.Name):
-                case nameof(ExpressionSection.Content):
+                case "name":
+                case "content":
                     break;
 
                 default:
                     throw new MissingAuditColumnException(changedRecord.ColumnName);
             }
-
-            if (skipRecord)
-                continue;
 
             changedRecordsToReturn.Add(changedRecord);
         }

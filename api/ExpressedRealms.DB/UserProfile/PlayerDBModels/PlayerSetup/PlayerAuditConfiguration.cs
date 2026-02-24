@@ -11,10 +11,9 @@ internal static class PlayerAuditConfiguration
         List<ChangedRecord> changedRecordsToReturn = new();
         foreach (var changedRecord in changedRecords)
         {
-            var skipRecord = false;
             switch (changedRecord.ColumnName)
             {
-                case nameof(Player.Name):
+                case "name":
                     changedRecord.FriendlyName = "Player Name";
                     break;
 
@@ -22,17 +21,13 @@ internal static class PlayerAuditConfiguration
                     changedRecord.FriendlyName = "Player Number";
                     break;
 
-                case nameof(Player.UserId):
+                case "user_id":
                 case "lookup_id":
-                    skipRecord = true;
-                    break;
+                    continue;
 
                 default:
                     throw new MissingAuditColumnException(changedRecord.ColumnName);
             }
-
-            if (skipRecord)
-                continue;
 
             changedRecordsToReturn.Add(changedRecord);
         }

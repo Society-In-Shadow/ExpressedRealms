@@ -11,12 +11,10 @@ internal static class ExpressionAuditConfiguration
         List<ChangedRecord> changedRecordsToReturn = new();
         foreach (var changedRecord in changedRecords)
         {
-            bool skipRecord = false;
             switch (changedRecord.ColumnName)
             {
                 case "expression_type_id":
-                    skipRecord = true;
-                    break;
+                    continue;
 
                 case "name":
                     break;
@@ -40,9 +38,6 @@ internal static class ExpressionAuditConfiguration
                 default:
                     throw new MissingAuditColumnException(changedRecord.ColumnName);
             }
-
-            if (!skipRecord)
-                changedRecordsToReturn.Add(changedRecord);
         }
 
         return changedRecordsToReturn;

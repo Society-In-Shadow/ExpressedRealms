@@ -19,7 +19,7 @@ using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionLevels.Audit;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths.Audit;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Audit;
-using ExpressedRealms.DB.Models.Powers.PowerPathSetup;
+using ExpressedRealms.DB.Models.Powers.PowerPathSetup.Audit;
 using ExpressedRealms.DB.Models.Powers.PowerSetup.Audit;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserRoles;
@@ -85,7 +85,7 @@ public static class SetupDatabaseAudit
                                         audit.ActorUserId = evt.CustomFields["UserId"]?.ToString();
                                     }
 
-                                    var changes = new List<ChangedRecord>();
+                                    List<ChangedRecord> changes;
                                     if (
                                         string.Compare(
                                             audit.Action,

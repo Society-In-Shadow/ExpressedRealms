@@ -11,51 +11,49 @@ internal static class PowerAuditTrailExtensions
         List<ChangedRecord> changedRecordsToReturn = new();
         foreach (var changedRecord in changedRecords)
         {
-            var skipRecord = false;
             switch (changedRecord.ColumnName)
             {
-                case nameof(Power.Id):
+                case "id":
                 case "power_path_id":
-                    skipRecord = true;
-                    break;
+                    continue;
 
-                case nameof(Power.Name):
+                case "name":
                     changedRecord.FriendlyName = "Name";
                     break;
 
-                case nameof(Power.Description):
+                case "description":
                     changedRecord.FriendlyName = "Description";
                     break;
 
-                case nameof(Power.LevelId):
+                case "level_id":
                     changedRecord.FriendlyName = "Power Level";
                     break;
 
-                case nameof(Power.AreaOfEffectTypeId):
+                case "area_of_effect_type_id":
                     changedRecord.FriendlyName = "Area of Effect";
                     break;
 
-                case nameof(Power.ActivationTimingTypeId):
+                case "activation_timing_type_id":
                     changedRecord.FriendlyName = "Activation Timing";
                     break;
 
-                case nameof(Power.DurationId):
+                case "duration_id":
                     changedRecord.FriendlyName = "Duration";
                     break;
 
-                case nameof(Power.IsPowerUse):
+                case "is_power_use":
                     changedRecord.FriendlyName = "Is Power Use";
                     break;
 
-                case nameof(Power.GameMechanicEffect):
+                case "game_mechanic_effect":
                     changedRecord.FriendlyName = "Game Mechanic Effect";
                     break;
 
-                case nameof(Power.Limitation):
+                case "limitation":
                     changedRecord.FriendlyName = "Limitation";
                     break;
 
-                case nameof(Power.OtherFields):
+                case "other_fields":
                     changedRecord.FriendlyName = "Other";
                     break;
 
@@ -74,9 +72,6 @@ internal static class PowerAuditTrailExtensions
                 default:
                     throw new MissingAuditColumnException(changedRecord.ColumnName);
             }
-
-            if (skipRecord)
-                continue;
 
             changedRecordsToReturn.Add(changedRecord);
         }
