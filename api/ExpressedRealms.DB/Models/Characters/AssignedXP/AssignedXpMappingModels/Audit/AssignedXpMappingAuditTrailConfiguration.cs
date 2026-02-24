@@ -9,11 +9,8 @@ internal class AssignedXpMappingAuditTrailConfiguration
 {
     public void Configure(EntityTypeBuilder<AssignedXpMappingAuditTrail> builder)
     {
-        builder.ToTable("assigned_xp_mapping_audit_trail");
-
         builder
             .Property(e => e.AssignedXpMappingId)
-            .HasColumnName("assigned_xp_mapping_id")
             .IsRequired();
 
         builder

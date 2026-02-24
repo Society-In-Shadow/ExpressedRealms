@@ -68,21 +68,21 @@ CREATE OR REPLACE VIEW public.character_xp_view
           GROUP BY characters_1.id
         )
 SELECT characters.id AS character_id,
-    xp_section_type.name AS section_name,
-       xp_section_type.id AS section_type_id,
-       xp_section_type.creation_cap AS section_cap,
-       COALESCE(case when xp_section_type.id = 2 then calc.xp_total when xp_section_type.id = 1 then 0 else xp_section_type.creation_cap end, 0) as true_section_cap,
-       COALESCE(case when xp_section_type.id = 2 then 0 else calc.xp_total end, 0) as true_total_spent,
-       COALESCE(calc.xp_total, 0::bigint) AS spent_xp,
-       CASE
-           WHEN calc.section_type_id = 1 THEN calc.xp_total
-           ELSE COALESCE(calc.xp_total - xp_section_type.creation_cap, 0::bigint)
-           END AS discretion_xp,
-       xp_mappings.total_character_creation_xp AS total_character_creation_xp,
-       COALESCE(calc.xp_total - xp_mappings.total_character_creation_xp, 0) AS level_xp
+    xp_section_types.name AS section_name,
+    xp_section_types.id AS section_type_id,
+    xp_section_types.section_cap AS section_cap,
+    COALESCE(case when xp_section_types.id = 2 then calc.xp_total when xp_section_types.id = 1 then 0 else xp_section_types.section_cap end, 0) as true_section_cap,
+    COALESCE(case when xp_section_types.id = 2 then 0 else calc.xp_total end, 0) as true_total_spent,
+    COALESCE(calc.xp_total, 0::bigint) AS spent_xp,
+    CASE
+       WHEN calc.section_type_id = 1 THEN calc.xp_total
+       ELSE COALESCE(calc.xp_total - xp_section_types.section_cap, 0::bigint)
+       END AS discretion_xp,
+    xp_mappings.total_character_creation_xp AS total_character_creation_xp,
+    COALESCE(calc.xp_total - xp_mappings.total_character_creation_xp, 0) AS level_xp
 FROM characters
-	  CROSS JOIN xp_section_type
-	  LEFT JOIN calc ON calc.character_id = characters.id AND calc.section_type_id = xp_section_type.id
-    LEFT JOIN public.character_xp_mapping xp_mappings
+    CROSS JOIN xp_section_types
+    LEFT JOIN calc ON calc.character_id = characters.id AND calc.section_type_id = xp_section_types.id
+    LEFT JOIN public.character_xp_mappings xp_mappings
     ON xp_mappings.character_id = characters.id
-    AND xp_mappings.xp_section_type_id = xp_section_type.id;
+    AND xp_mappings.xp_section_type_id = xp_section_types.id;
