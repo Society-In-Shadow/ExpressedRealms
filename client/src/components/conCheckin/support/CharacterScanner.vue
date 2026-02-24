@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { QrcodeStream } from 'vue-qrcode-reader'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
@@ -9,13 +9,24 @@ import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinSt
 
 const eventCheckinInfo = EventCheckinStore()
 const loading = ref(true)
-const destroyed = ref(false)
+const showScanner = ref(false)
+const scannerTimedOut = ref(false)
 const result = ref('')
+
+// Disable Camera When:
+// - 45 seconds elasped
+// - The QR Code was found
+// - Manual lookup initiated && succeeded
+// - Reset gets called
+
+// Prevent automatic lookup if it doesn't follow the lookup pattern
+// Need a way to show when it's invalid, and need to ability to change it
+// Need a way to re-enable lookup camera
 
 watch(() => eventCheckinInfo.isReset, () => {
   if (eventCheckinInfo.isReset) {
     loading.value = true
-    destroyed.value = false
+    showScanner.value = false
     result.value = ''
   }
 })
@@ -53,6 +64,32 @@ function paintOutline(detectedCodes, ctx) {
     ctx.stroke()
   }
 }
+
+const showReader = computed(() => !eventCheckinInfo.foundInfo && !showScanner.value)
+
+const FIVE_MINUTES = 45 // seconds
+let remaining = ref(FIVE_MINUTES)
+
+const timeRemaining = computed(() => {
+  const minutes = Math.floor(remaining.value / 60)
+  const seconds = remaining.value % 60
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`
+})
+
+function updateCountdown() {
+  if (remaining.value <= 0) {
+    triggerRefresh()
+    remaining.value = FIVE_MINUTES
+  }
+  else {
+    remaining.value--
+  }
+}
+
+async function triggerRefresh() {
+  await refreshData()
+}
+
 </script>
 
 <template>
@@ -61,9 +98,11 @@ function paintOutline(detectedCodes, ctx) {
     <InputText v-model="result" placeholder="Manual Lookup" minlength="8" maxlength="8" :disabled="eventCheckinInfo.foundInfo" />
     <Button label="Lookup" :disabled="eventCheckinInfo.foundInfo" @click="lookupManual" />
   </div>
+  <p>Auto shutoff in {</p>
   <div class="w-100">
+    <p />
     <qrcode-stream
-      v-if="!destroyed && result == ''"
+      v-if="!showScanner && result == ''"
       :track="paintOutline"
       @camera-on="onCameraOn"
       @detect="onDetect"

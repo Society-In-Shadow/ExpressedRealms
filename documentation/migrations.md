@@ -55,3 +55,19 @@ docker inspect   -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ex
 
 After that, you will need to go through and manually remove the migrations in the migration folder, plus revert the model
 snapshot to a state before you applied the changes.
+
+## Update SQL Scripts
+
+```csharp
+var assembly = Assembly.GetExecutingAssembly();
+
+using var stream = assembly.GetManifestResourceStream(
+    "ExpressedRealms.DB.Scripts.CharacterXpView.sql"
+);
+
+if (stream == null)
+    throw new InvalidOperationException("CharacterXpView.sql not found as embedded resource");
+
+using var reader = new StreamReader(stream);
+migrationBuilder.Sql(reader.ReadToEnd());
+```
