@@ -21,7 +21,8 @@ internal sealed class SendEventPublishedMessagesUseCase(
     CancellationToken cancellationToken
 ) : ISendEventPublishedMessagesUseCase
 {
-    const string FullDateFormat = "dddd MMMM d, yyyy";
+    private const string FullDateFormat = "dddd MMMM d, yyyy";
+    private const string TimeFormat = "hh:mm tt";
 
     public async Task<Result> ExecuteAsync(SendEventPublishedMessagesModel model)
     {
@@ -122,7 +123,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
 
                 // Last Day Message
 
-                message.AppendLine($"# One Week Reminder for ${currentEvent!.Name}!");
+                message.AppendLine($"# One Week Reminder for {currentEvent!.Name}!");
                 message.AppendLine(
                     $"As a reminder, we will be attending **{currentEvent.Name}** out in the **{currentEvent.Location}**!"
                 );
@@ -156,7 +157,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
                     "* **Boring Stuff!** - A lot of cons want us to keep track of who is playing the game, so we will need to collect badge information."
                 );
 
-                GenerateScheduleMessage(scheduleItems, currentEvent, message);
+                GenerateScheduleMessage(scheduleItems, currentEvent, message, true);
 
                 break;
             default:
@@ -209,10 +210,11 @@ internal sealed class SendEventPublishedMessagesUseCase(
         return Result.Ok();
     }
 
-    private static void GenerateScheduleMessage(
+    private void GenerateScheduleMessage(
         List<EventScheduleItem> scheduleItems,
         Event currentEvent,
-        StringBuilder message
+        StringBuilder message,
+        bool isTodayOnly = false
     )
     {
         var dayGroups = scheduleItems
@@ -226,6 +228,12 @@ internal sealed class SendEventPublishedMessagesUseCase(
             $"{currentEvent.Name} is in the **{TZConvert.IanaToWindows(currentEvent.TimeZoneId)}** and our schedule below reflects that."
         );
 
+        if (isTodayOnly)
+        {
+            var today = DateOnly.FromDateTime(systemClock.GetUtcNow().DateTime);
+            dayGroups = dayGroups.Where(x => x.Key == today).ToList();
+        }
+
         foreach (var dayGroup in dayGroups)
         {
             message.AppendLine($"## {dayGroup.Key.ToString("dddd")}");
@@ -233,7 +241,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
             foreach (var scheduleItem in dayGroup)
             {
                 message.AppendLine(
-                    $"**{scheduleItem.StartTime.ToString("hh:mm tt")}** - {scheduleItem.EndTime.ToString("hh:mm tt")} - **{scheduleItem.Description}**"
+                    $"**{scheduleItem.StartTime.ToString(TimeFormat)}** - {scheduleItem.EndTime.ToString(TimeFormat)} - **{scheduleItem.Description}**"
                 );
             }
         }
