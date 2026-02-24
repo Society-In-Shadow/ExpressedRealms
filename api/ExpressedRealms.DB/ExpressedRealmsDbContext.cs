@@ -44,7 +44,7 @@ namespace ExpressedRealms.DB
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSnakeCaseNamingConvention();
+            optionsBuilder.AddDatabaseConnection();
             base.OnConfiguring(optionsBuilder);
         }
 
