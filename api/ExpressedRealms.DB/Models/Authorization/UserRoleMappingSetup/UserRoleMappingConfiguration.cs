@@ -7,13 +7,11 @@ public class UserRoleMappingConfiguration : IEntityTypeConfiguration<UserRoleMap
 {
     public void Configure(EntityTypeBuilder<UserRoleMapping> builder)
     {
-        builder.ToTable("user_role_mapping");
-
         builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id).HasColumnName("id").IsRequired();
-        builder.Property(e => e.RoleId).HasColumnName("role_id").IsRequired();
-        builder.Property(e => e.UserId).HasMaxLength(450).HasColumnName("user_id").IsRequired();
-        builder.Property(e => e.ExpireDate).HasColumnName("expire_date");
+        builder.Property(e => e.Id).IsRequired();
+        builder.Property(e => e.RoleId).IsRequired();
+        builder.Property(e => e.UserId).HasMaxLength(450).IsRequired();
+        builder.Property(e => e.ExpireDate);
 
         builder
             .HasOne(e => e.User)
@@ -28,7 +26,7 @@ public class UserRoleMappingConfiguration : IEntityTypeConfiguration<UserRoleMap
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasQueryFilter(x => !x.IsDeleted);
-        builder.Property(e => e.IsDeleted).HasColumnName("is_deleted");
-        builder.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+        builder.Property(e => e.IsDeleted);
+        builder.Property(e => e.DeletedAt);
     }
 }

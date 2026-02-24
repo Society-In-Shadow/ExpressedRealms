@@ -8,10 +8,8 @@ internal class RoleAuditTrailConfiguration : IEntityTypeConfiguration<RoleAuditT
 {
     public void Configure(EntityTypeBuilder<RoleAuditTrail> builder)
     {
-        builder.ToTable("role_audit_trail");
-
         builder.ConfigureAuditTrailProperties(user => user.RoleAuditTrails);
 
-        builder.Property(e => e.RoleId).HasColumnName("role_id").IsRequired();
+        builder.Property(e => e.RoleId).IsRequired();
     }
 }

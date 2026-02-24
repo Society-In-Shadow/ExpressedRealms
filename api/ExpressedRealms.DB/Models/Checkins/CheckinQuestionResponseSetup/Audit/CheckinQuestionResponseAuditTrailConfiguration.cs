@@ -9,12 +9,10 @@ internal class CheckinQuestionResponseAuditTrailConfiguration
 {
     public void Configure(EntityTypeBuilder<CheckinQuestionResponseAuditTrail> builder)
     {
-        builder.ToTable("checkin_event_question_response_audit_trail");
-
         builder.ConfigureAuditTrailProperties(user => user.CheckinQuestionResponseAuditTrails);
 
-        builder.Property(e => e.CheckinId).HasColumnName("checkin_id").IsRequired();
-        builder.Property(e => e.EventQuestionId).HasColumnName("event_question_id").IsRequired();
+        builder.Property(e => e.CheckinId).IsRequired();
+        builder.Property(e => e.EventQuestionId).IsRequired();
 
         builder
             .HasOne(x => x.Checkin)

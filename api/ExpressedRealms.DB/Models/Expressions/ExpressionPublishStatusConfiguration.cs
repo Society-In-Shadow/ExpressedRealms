@@ -8,8 +8,6 @@ public class ExpressionPublishStatusConfiguration
 {
     public void Configure(EntityTypeBuilder<ExpressionPublishStatus> builder)
     {
-        builder.ToTable(nameof(ExpressionPublishStatus));
-
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
 

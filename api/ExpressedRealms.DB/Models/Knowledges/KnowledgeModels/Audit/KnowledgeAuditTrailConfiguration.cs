@@ -8,9 +8,7 @@ internal class KnowledgeAuditTrailConfiguration : IEntityTypeConfiguration<Knowl
 {
     public void Configure(EntityTypeBuilder<KnowledgeAuditTrail> builder)
     {
-        builder.ToTable("knowledges_audit_trail");
-
-        builder.Property(e => e.KnowledgeId).HasColumnName("knowledge_id").IsRequired();
+        builder.Property(e => e.KnowledgeId).IsRequired();
 
         builder
             .HasOne(x => x.Knowledge)

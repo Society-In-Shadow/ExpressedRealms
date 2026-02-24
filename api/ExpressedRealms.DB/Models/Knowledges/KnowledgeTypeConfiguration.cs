@@ -7,12 +7,10 @@ public class KnowledgeTypeConfiguration : IEntityTypeConfiguration<KnowledgeType
 {
     public void Configure(EntityTypeBuilder<KnowledgeType> builder)
     {
-        builder.ToTable("knowledge_type");
-
         builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id).HasColumnName("id").IsRequired();
-        builder.Property(e => e.Name).HasColumnName("name").HasMaxLength(250).IsRequired();
-        builder.Property(e => e.Description).HasColumnName("description").IsRequired();
+        builder.Property(e => e.Id).IsRequired();
+        builder.Property(e => e.Name).HasMaxLength(250).IsRequired();
+        builder.Property(e => e.Description).IsRequired();
 
         builder
             .HasMany(e => e.Knowledges)

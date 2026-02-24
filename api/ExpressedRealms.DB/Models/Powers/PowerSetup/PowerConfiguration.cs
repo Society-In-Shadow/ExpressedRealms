@@ -7,17 +7,15 @@ public class PowerConfiguration : IEntityTypeConfiguration<Power>
 {
     public void Configure(EntityTypeBuilder<Power> builder)
     {
-        builder.ToTable("power");
-
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired();
         builder.Property(e => e.Name).HasMaxLength(250).IsRequired();
         builder.Property(e => e.Description).IsRequired();
         builder.Property(e => e.LevelId).IsRequired();
-        builder.Property(e => e.PowerPathId).HasColumnName("power_path_id").IsRequired();
-        builder.Property(e => e.Cost).HasColumnName("cost");
-        builder.Property(e => e.OrderIndex).HasColumnName("order_index").IsRequired();
-        builder.Property(e => e.StatModifierGroupId).HasColumnName("stat_modifier_group");
+        builder.Property(e => e.PowerPathId).IsRequired();
+        builder.Property(e => e.Cost);
+        builder.Property(e => e.OrderIndex).IsRequired();
+        builder.Property(e => e.StatModifierGroupId);
         builder
             .HasOne(e => e.StatModifierGroup)
             .WithMany(e => e.Powers)

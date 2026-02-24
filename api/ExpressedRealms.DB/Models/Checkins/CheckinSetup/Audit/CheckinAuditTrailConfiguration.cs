@@ -8,11 +8,9 @@ internal class CheckinAuditTrailConfiguration : IEntityTypeConfiguration<Checkin
 {
     public void Configure(EntityTypeBuilder<CheckinAuditTrail> builder)
     {
-        builder.ToTable("checkin_audit_trail");
-
         builder.ConfigureAuditTrailProperties(user => user.CheckinAuditTrails);
 
-        builder.Property(e => e.CheckinId).HasColumnName("checkin_id").IsRequired();
+        builder.Property(e => e.CheckinId).IsRequired();
 
         builder
             .HasOne(x => x.Checkin)

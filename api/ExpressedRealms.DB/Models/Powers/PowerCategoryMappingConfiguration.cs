@@ -7,8 +7,6 @@ public class PowerCategoryMappingConfiguration : IEntityTypeConfiguration<PowerC
 {
     public void Configure(EntityTypeBuilder<PowerCategoryMapping> builder)
     {
-        builder.ToTable("power_category_mapping");
-
         builder.HasKey(e => new { e.PowerId, e.CategoryId });
         builder.Property(e => e.PowerId).IsRequired();
         builder.Property(e => e.CategoryId).IsRequired();

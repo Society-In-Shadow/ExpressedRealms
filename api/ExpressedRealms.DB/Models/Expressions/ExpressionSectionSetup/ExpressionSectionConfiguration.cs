@@ -7,8 +7,6 @@ internal class ExpressionSectionsConfiguration : IEntityTypeConfiguration<Expres
 {
     public void Configure(EntityTypeBuilder<ExpressionSection> builder)
     {
-        builder.ToTable("ExpressionSections");
-
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
 

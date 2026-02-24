@@ -8,11 +8,9 @@ internal class ContactAuditTrailConfiguration : IEntityTypeConfiguration<Contact
 {
     public void Configure(EntityTypeBuilder<ContactAuditTrail> builder)
     {
-        builder.ToTable("contact_audit_trail");
-
         builder.ConfigureAuditTrailProperties(user => user.ContactAuditTrails);
 
-        builder.Property(e => e.ContactId).HasColumnName("contact_id");
+        builder.Property(e => e.ContactId);
 
         builder
             .HasOne(x => x.Contact)

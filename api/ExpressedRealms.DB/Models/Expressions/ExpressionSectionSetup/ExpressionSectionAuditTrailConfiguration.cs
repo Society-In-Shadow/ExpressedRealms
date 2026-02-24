@@ -8,8 +8,6 @@ internal class ExpressionSectionAuditTrailConfiguration
 {
     public void Configure(EntityTypeBuilder<ExpressionSectionAuditTrail> builder)
     {
-        builder.ToTable("ExpressionSection_AuditTrail");
-
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
 

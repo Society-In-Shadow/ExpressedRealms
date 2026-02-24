@@ -7,8 +7,6 @@ public class ExpressionSectionTypeConfiguration : IEntityTypeConfiguration<Expre
 {
     public void Configure(EntityTypeBuilder<ExpressionSectionType> builder)
     {
-        builder.ToTable("ExpressionSectionTypes");
-
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired();
 

@@ -8,14 +8,12 @@ public class CharacterKnowledgeMappingConfiguration
 {
     public void Configure(EntityTypeBuilder<CharacterKnowledgeMapping> builder)
     {
-        builder.ToTable("character_knowledge_mapping");
-
         builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id).HasColumnName("id").IsRequired();
-        builder.Property(e => e.CharacterId).HasColumnName("character_id").IsRequired();
-        builder.Property(e => e.KnowledgeId).HasColumnName("knowledge_id").IsRequired();
-        builder.Property(e => e.KnowledgeLevelId).HasColumnName("knowledge_level_id").IsRequired();
-        builder.Property(e => e.Notes).HasColumnName("notes").HasMaxLength(5000);
+        builder.Property(e => e.Id).IsRequired();
+        builder.Property(e => e.CharacterId).IsRequired();
+        builder.Property(e => e.KnowledgeId).IsRequired();
+        builder.Property(e => e.KnowledgeLevelId).IsRequired();
+        builder.Property(e => e.Notes).HasMaxLength(5000);
 
         builder
             .HasOne(e => e.Knowledge)
@@ -36,7 +34,7 @@ public class CharacterKnowledgeMappingConfiguration
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasQueryFilter(x => !x.IsDeleted);
-        builder.Property(e => e.IsDeleted).HasColumnName("is_deleted");
-        builder.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+        builder.Property(e => e.IsDeleted);
+        builder.Property(e => e.DeletedAt);
     }
 }

@@ -7,15 +7,12 @@ public class ProgressionPathConfiguration : IEntityTypeConfiguration<Progression
 {
     public void Configure(EntityTypeBuilder<ProgressionPath> builder)
     {
-        builder.ToTable("progression_path");
-
         builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id).HasColumnName("id").IsRequired();
-        builder.Property(e => e.ExpressionId).HasColumnName("expression_id").IsRequired();
-        builder.Property(e => e.Name).HasColumnName("name").HasMaxLength(250).IsRequired();
+        builder.Property(e => e.Id).IsRequired();
+        builder.Property(e => e.ExpressionId).IsRequired();
+        builder.Property(e => e.Name).HasMaxLength(250).IsRequired();
         builder
             .Property(e => e.Description)
-            .HasColumnName("description")
             .HasMaxLength(5000)
             .IsRequired();
 
@@ -27,7 +24,7 @@ public class ProgressionPathConfiguration : IEntityTypeConfiguration<Progression
             .IsRequired();
 
         builder.HasQueryFilter(x => !x.IsDeleted);
-        builder.Property(e => e.IsDeleted).HasColumnName("is_deleted");
-        builder.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+        builder.Property(e => e.IsDeleted);
+        builder.Property(e => e.DeletedAt);
     }
 }

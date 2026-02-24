@@ -8,6 +8,7 @@ using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels.Audit
 namespace ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels;
 
 [AuditInclude]
+[Table("assigned_xp_type")]
 public class AssignedXpType : ISoftDelete
 {
     [Key]

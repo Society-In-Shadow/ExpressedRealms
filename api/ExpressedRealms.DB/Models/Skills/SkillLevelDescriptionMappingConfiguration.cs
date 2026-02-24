@@ -8,8 +8,6 @@ public class SkillLevelDescriptionMappingConfiguration
 {
     public void Configure(EntityTypeBuilder<SkillLevelDescriptionMapping> builder)
     {
-        builder.ToTable(nameof(SkillLevelDescriptionMapping));
-
         builder.HasKey(e => new { e.SkillLevelId, e.SkillTypeId });
 
         builder.Property(e => e.SkillTypeId).IsRequired();

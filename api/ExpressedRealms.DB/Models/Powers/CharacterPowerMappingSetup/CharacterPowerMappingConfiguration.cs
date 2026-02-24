@@ -7,14 +7,12 @@ public class CharacterPowerMappingConfiguration : IEntityTypeConfiguration<Chara
 {
     public void Configure(EntityTypeBuilder<CharacterPowerMapping> builder)
     {
-        builder.ToTable("character_power_mapping");
-
         builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id).HasColumnName("id").IsRequired();
-        builder.Property(e => e.CharacterId).HasColumnName("character_id").IsRequired();
-        builder.Property(e => e.PowerId).HasColumnName("power_id").IsRequired();
-        builder.Property(e => e.PowerLevelId).HasColumnName("power_level_id").IsRequired();
-        builder.Property(e => e.Notes).HasColumnName("notes").HasMaxLength(5000);
+        builder.Property(e => e.Id).IsRequired();
+        builder.Property(e => e.CharacterId).IsRequired();
+        builder.Property(e => e.PowerId).IsRequired();
+        builder.Property(e => e.PowerLevelId).IsRequired();
+        builder.Property(e => e.Notes).HasMaxLength(5000);
 
         builder
             .HasOne(e => e.Power)
@@ -35,7 +33,7 @@ public class CharacterPowerMappingConfiguration : IEntityTypeConfiguration<Chara
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasQueryFilter(x => !x.IsDeleted);
-        builder.Property(e => e.IsDeleted).HasColumnName("is_deleted");
-        builder.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+        builder.Property(e => e.IsDeleted);
+        builder.Property(e => e.DeletedAt);
     }
 }

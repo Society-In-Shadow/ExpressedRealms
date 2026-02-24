@@ -7,11 +7,9 @@ public class PermissionResourceConfiguration : IEntityTypeConfiguration<Permissi
 {
     public void Configure(EntityTypeBuilder<PermissionResource> builder)
     {
-        builder.ToTable("permission_resource");
-
         builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id).HasColumnName("id").IsRequired();
-        builder.Property(e => e.Name).HasColumnName("name").IsRequired().HasMaxLength(500);
-        builder.Property(e => e.Description).HasColumnName("description").HasMaxLength(2000);
+        builder.Property(e => e.Id).IsRequired();
+        builder.Property(e => e.Name).IsRequired().HasMaxLength(500);
+        builder.Property(e => e.Description).HasMaxLength(2000);
     }
 }

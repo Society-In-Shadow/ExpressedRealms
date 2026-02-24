@@ -42,6 +42,12 @@ namespace ExpressedRealms.DB
             SetupDatabaseAudit.SetupAudit();
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSnakeCaseNamingConvention();
+            base.OnConfiguring(optionsBuilder);
+        }
+
         public DbSet<Character> Characters { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<UserAuditTrail> UserAuditTrails { get; set; }
