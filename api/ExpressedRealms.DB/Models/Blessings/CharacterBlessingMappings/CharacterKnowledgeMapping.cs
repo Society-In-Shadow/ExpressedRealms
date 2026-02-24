@@ -1,7 +1,7 @@
-using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup;
+using ExpressedRealms.DB.Models.Characters;
 
 namespace ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings;
 

@@ -1,6 +1,6 @@
 using ExpressedRealms.DB;
-using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
 using ExpressedRealms.DB.Helpers;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageMappingSetup;

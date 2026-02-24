@@ -1,7 +1,3 @@
-using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
-using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels.Audit;
-using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpTypeModels;
-using ExpressedRealms.DB.Characters.AssignedXP.AssignedXpTypeModels.Audit;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup;
 using ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup.Audit;
@@ -13,6 +9,10 @@ using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels.Audit;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels.Audit;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup.Audit;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;

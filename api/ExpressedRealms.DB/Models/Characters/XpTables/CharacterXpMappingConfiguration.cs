@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ExpressedRealms.DB.Characters.xpTables;
+namespace ExpressedRealms.DB.Models.Characters.XpTables;
 
 public class CharacterXpMappingConfiguration : IEntityTypeConfiguration<CharacterXpMapping>
 {

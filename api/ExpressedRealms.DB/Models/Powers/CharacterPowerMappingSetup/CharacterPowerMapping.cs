@@ -1,5 +1,5 @@
-using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Characters;
 
 namespace ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup;
 

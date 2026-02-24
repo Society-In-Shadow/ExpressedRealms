@@ -1,6 +1,6 @@
 using Audit.EntityFramework;
-using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup.Audit;
 using ExpressedRealms.DB.Models.Events.EventSetup.Audit;

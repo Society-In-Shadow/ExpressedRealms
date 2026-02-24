@@ -1,5 +1,5 @@
 using ExpressedRealms.Characters.Repository.Xp.Dtos.AssignedXpInfoDtos;
-using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
 using ExpressedRealms.Shared;
 
 namespace ExpressedRealms.Characters.Repository.Xp;

@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.Models.Characters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

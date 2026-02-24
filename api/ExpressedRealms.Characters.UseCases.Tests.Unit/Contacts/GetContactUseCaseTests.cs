@@ -2,7 +2,7 @@ using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Contacts;
 using ExpressedRealms.Characters.Repository.DTOs;
 using ExpressedRealms.Characters.UseCases.Contacts.GetContact;
-using ExpressedRealms.DB.Characters;
+using ExpressedRealms.DB.Models.Characters;
 using ExpressedRealms.DB.Models.Contacts;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;

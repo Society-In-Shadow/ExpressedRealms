@@ -1,14 +1,13 @@
-using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpTypeModels;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 
-namespace ExpressedRealms.DB.Characters.AssignedXP.AssignedXpTypeModels.Audit;
+namespace ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels.Audit;
 
-public class AssignedXpTypeAuditTrail : IAuditTable
+public class AssignedXpMappingAuditTrail : IAuditTable
 {
-    public int AssignedXpTypeId { get; set; }
+    public int AssignedXpMappingId { get; set; }
 
-    public virtual AssignedXpType AssignedXpType { get; set; } = null!;
+    public virtual AssignedXpMapping AssignedXpMapping { get; set; } = null!;
 
     public int Id { get; set; }
     public required string Action { get; set; }

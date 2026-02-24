@@ -2,7 +2,7 @@ using ExpressedRealms.Blessings.Repository.Blessings;
 using ExpressedRealms.Blessings.Repository.CharacterBlessings;
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Xp;
-using ExpressedRealms.DB.Characters.xpTables;
+using ExpressedRealms.DB.Models.Characters.XpTables;
 using ExpressedRealms.UseCases.Shared;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FluentResults;

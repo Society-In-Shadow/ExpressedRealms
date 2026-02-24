@@ -1,8 +1,8 @@
 using System.Linq.Expressions;
 using ExpressedRealms.Characters.Repository.Xp.Dtos.AssignedXpInfoDtos;
 using ExpressedRealms.DB;
-using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
 using ExpressedRealms.DB.Helpers;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Characters.Repository.Xp;

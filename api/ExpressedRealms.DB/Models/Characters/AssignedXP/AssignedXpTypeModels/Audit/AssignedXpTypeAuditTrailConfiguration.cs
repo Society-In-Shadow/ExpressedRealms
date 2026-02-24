@@ -2,7 +2,7 @@ using ExpressedRealms.DB.Interceptors;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ExpressedRealms.DB.Characters.AssignedXP.AssignedXpTypeModels.Audit;
+namespace ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels.Audit;
 
 internal class AssignedXpTypeAuditTrailConfiguration
     : IEntityTypeConfiguration<AssignedXpTypeAuditTrail>

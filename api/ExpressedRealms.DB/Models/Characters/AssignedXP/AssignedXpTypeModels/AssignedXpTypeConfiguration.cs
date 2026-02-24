@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ExpressedRealms.DB.Characters.AssignedXp.AssignedXpTypeModels;
+namespace ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels;
 
 public class AssignedXpTypeConfiguration : IEntityTypeConfiguration<AssignedXpType>
 {

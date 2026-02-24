@@ -1,7 +1,7 @@
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Xp;
-using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
-using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpTypeModels;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels;
 using ExpressedRealms.Events.API.Repositories.Events;
 using FluentValidation;
 using JetBrains.Annotations;

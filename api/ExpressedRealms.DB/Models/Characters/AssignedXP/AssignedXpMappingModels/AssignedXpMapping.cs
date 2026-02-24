@@ -1,14 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Audit.EntityFramework;
-using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels.Audit;
-using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpTypeModels;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels.Audit;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels;
 using ExpressedRealms.DB.Models.Events.EventSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 
-namespace ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
+namespace ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
 
 [AuditInclude]
 [Table("assigned_xp_mapping")]

@@ -1,10 +1,10 @@
 using System.Reflection;
 using Audit.EntityFramework;
-using ExpressedRealms.DB.Characters;
-using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
-using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpTypeModels;
-using ExpressedRealms.DB.Characters.xpTables;
 using ExpressedRealms.DB.Configuration;
+using ExpressedRealms.DB.Models.Characters;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels;
+using ExpressedRealms.DB.Models.Characters.XpTables;
 using ExpressedRealms.DB.Models.Skills;
 using ExpressedRealms.DB.Models.Statistics;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;

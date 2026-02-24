@@ -1,6 +1,6 @@
 using ExpressedRealms.Characters.Repository.Xp.Dtos;
 using ExpressedRealms.DB;
-using ExpressedRealms.DB.Characters.xpTables;
+using ExpressedRealms.DB.Models.Characters.XpTables;
 using ExpressedRealms.Events.API.Repositories.Events;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using Microsoft.EntityFrameworkCore;

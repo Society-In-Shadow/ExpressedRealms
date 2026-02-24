@@ -2,8 +2,8 @@
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.Characters.Repository.Xp.Dtos.AssignedXpInfoDtos;
 using ExpressedRealms.Characters.UseCases.ExperienceBreakdown;
-using ExpressedRealms.DB.Characters;
-using ExpressedRealms.DB.Characters.xpTables;
+using ExpressedRealms.DB.Models.Characters;
+using ExpressedRealms.DB.Models.Characters.XpTables;
 using ExpressedRealms.Events.API.Repositories.Events;
 using ExpressedRealms.Events.API.Repositories.Events.Dtos;
 using ExpressedRealms.FeatureFlags;
