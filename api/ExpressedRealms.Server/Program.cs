@@ -96,9 +96,7 @@ try
     builder.Services.AddHealthChecks();
 
     Log.Information("Adding DB Context");
-    builder.Services.AddDbContext<ExpressedRealmsDbContext>(options =>
-        options.AddExpressedRealmsDbConnection()
-    );
+    builder.AddExpressedRealmsDbContext();
 
     Log.Information("Adding Redis Cache");
     await builder.AddRedisConnection(builder.Environment.IsProduction());
