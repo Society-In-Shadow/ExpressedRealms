@@ -96,7 +96,9 @@ try
     builder.Services.AddHealthChecks();
 
     Log.Information("Adding DB Context");
-    builder.Services.AddDbContext<ExpressedRealmsDbContext>(options => options.AddExpressedRealmsDbConnection());
+    builder.Services.AddDbContext<ExpressedRealmsDbContext>(options =>
+        options.AddExpressedRealmsDbConnection()
+    );
 
     Log.Information("Adding Redis Cache");
     await builder.AddRedisConnection(builder.Environment.IsProduction());
@@ -177,7 +179,7 @@ try
         {
             Log.Information("DB is missing migrations, running them now");
             await dbContext.Database.MigrateAsync();
-            
+
             // Need a way to manually run sql scripts, will assume they need to be updated
             // These need to come at the end
             // Updating a script three times will cause issues if migrations need table changes
