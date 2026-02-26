@@ -24,7 +24,7 @@ internal static class ProgressionLevelAuditTrailExtensions
                 case "progression_path_id":
                     break;
 
-                case "stat_modifier_group":
+                case "stat_modifier_group_id":
                     changedRecord.Message = "Added a stat modifier group";
                     break;
 

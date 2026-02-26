@@ -14,7 +14,7 @@ internal static class UserRoleAuditConfiguration
             switch (changedRecord.ColumnName)
             {
                 case "user_id":
-                    break;
+                    continue;
                 case "role_id":
                     changedRecord.ColumnName = "Role";
                     changedRecord.Message = "Role was updated";

@@ -225,8 +225,8 @@ public static class SetupDatabaseAudit
     {
         return entityTypeName switch
         {
-            nameof(User) => columnValues.First(x => x.Key == "Id").Value.ToString(),
-            nameof(Player) => columnValues.First(x => x.Key == "UserId").Value.ToString(),
+            nameof(User) => columnValues.First(x => x.Key == "id").Value.ToString(),
+            nameof(Player) => columnValues.First(x => x.Key == "user_Id").Value.ToString(),
             _ => throw new InvalidOperationException($"Unsupported entity type: {entityTypeName}"),
         };
     }
