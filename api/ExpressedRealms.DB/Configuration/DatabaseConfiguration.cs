@@ -2,25 +2,49 @@ using Azure.Core;
 using Azure.Identity;
 using ExpressedRealms.Shared.AzureKeyVault;
 using ExpressedRealms.Shared.AzureKeyVault.Secrets;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 
 namespace ExpressedRealms.DB.Configuration;
 
 public static class DatabaseConfiguration
 {
-    public static void AddExpressedRealmsDbConnection(this DbContextOptionsBuilder options)
+    public static void AddExpressedRealmsDbContext(this WebApplicationBuilder builder)
     {
         var isDevelopment =
             Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
         if (isDevelopment)
         {
             var connectionString = KeyVaultManager.GetSecret(ConnectionStrings.Database);
+            builder.Services.AddDbContext<ExpressedRealmsDbContext>(
+                (_, options) =>
+                {
+                    options.UseNpgsql(
+                        connectionString,
+                        postgresOptions =>
+                        {
+                            postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
+                        }
+                    )
+                    .ReplaceService<IHistoryRepository, CamelCaseHistoryContext>()
+                    .UseSnakeCaseNamingConvention();
+                }
+            );
 
-            options
-                .UseNpgsql(
-                    connectionString,
+            return;
+        }
+
+        // Needs to be built once outside the db context to prevent pool exhaustion
+        var dataSource = GetAzureDataSource();
+
+        builder.Services.AddDbContext<ExpressedRealmsDbContext>(
+            (_, options) =>
+            {
+                options.UseNpgsql(
+                    dataSource,
                     postgresOptions =>
                     {
                         postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
@@ -28,12 +52,13 @@ public static class DatabaseConfiguration
                 )
                 .ReplaceService<IHistoryRepository, CamelCaseHistoryContext>()
                 .UseSnakeCaseNamingConvention();
+            }
+        );
+    }
 
-            return;
-        }
-
+    private static NpgsqlDataSource GetAzureDataSource()
+    {
         var azureConnectionString = KeyVaultManager.GetSecret(ConnectionStrings.Database);
-        // Assuming these services are registered once and reused
         var dataSourceBuilder = new NpgsqlDataSourceBuilder(azureConnectionString);
 
         // Define the password provider once and reuse
@@ -50,7 +75,7 @@ public static class DatabaseConfiguration
             {
                 AccessToken accessToken = await sqlServerTokenProvider.GetTokenAsync(
                     new TokenRequestContext(["https://ossrdbms-aad.database.windows.net/.default"]),
-                    token // Pass the cancellation token if needed
+                    token
                 );
                 return accessToken.Token;
             }
@@ -58,16 +83,6 @@ public static class DatabaseConfiguration
 
         // Build the data source once and reuse it across DbContext instances
         var dataSource = dataSourceBuilder.Build();
-
-        options
-            .UseNpgsql(
-                dataSource,
-                postgresOptions =>
-                {
-                    postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
-                }
-            )
-            .ReplaceService<IHistoryRepository, CamelCaseHistoryContext>()
-            .UseSnakeCaseNamingConvention();
+        return dataSource;
     }
 }
