@@ -7,12 +7,10 @@ public class CheckinConfiguration : IEntityTypeConfiguration<Checkin>
 {
     public void Configure(EntityTypeBuilder<Checkin> builder)
     {
-        builder.ToTable("checkin");
-
         builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id).HasColumnName("id").IsRequired();
-        builder.Property(e => e.PlayerId).HasColumnName("player_id").IsRequired();
-        builder.Property(e => e.EventId).HasColumnName("event_id").IsRequired();
+        builder.Property(e => e.Id).IsRequired();
+        builder.Property(e => e.PlayerId).IsRequired();
+        builder.Property(e => e.EventId).IsRequired();
 
         builder
             .HasOne(x => x.Event)

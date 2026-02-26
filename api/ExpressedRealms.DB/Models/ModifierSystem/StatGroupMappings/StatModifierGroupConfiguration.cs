@@ -7,26 +7,16 @@ public class StatGroupMappingConfiguration : IEntityTypeConfiguration<StatGroupM
 {
     public void Configure(EntityTypeBuilder<StatGroupMapping> builder)
     {
-        builder.ToTable("stat_group_mapping");
-
         builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id).HasColumnName("id").IsRequired();
-        builder.Property(e => e.StatGroupId).HasColumnName("stat_group_id").IsRequired();
-        builder.Property(e => e.StatModifierId).HasColumnName("stat_modifier_id").IsRequired();
-        builder.Property(e => e.Modifier).HasColumnName("modifier").IsRequired();
-        builder.Property(e => e.TargetExpressionId).HasColumnName("target_expression_id");
+        builder.Property(e => e.Id).IsRequired();
+        builder.Property(e => e.StatGroupId).IsRequired();
+        builder.Property(e => e.StatModifierId).IsRequired();
+        builder.Property(e => e.Modifier).IsRequired();
+        builder.Property(e => e.TargetExpressionId);
 
-        builder
-            .Property(e => e.CreationSpecificBonus)
-            .HasColumnName("creation_specific_bonus")
-            .IsRequired()
-            .HasDefaultValue(false);
+        builder.Property(e => e.CreationSpecificBonus).IsRequired().HasDefaultValue(false);
 
-        builder
-            .Property(e => e.ScaleWithLevel)
-            .HasColumnName("scales_with_level")
-            .IsRequired()
-            .HasDefaultValue(false);
+        builder.Property(e => e.ScaleWithLevel).IsRequired().HasDefaultValue(false);
 
         builder
             .HasOne(e => e.StatModifierGroup)

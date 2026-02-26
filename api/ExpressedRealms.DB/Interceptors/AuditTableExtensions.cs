@@ -15,11 +15,11 @@ public static class AuditTableExtensions
     {
         // Configure the standard audit trail properties
         builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id).HasColumnName("id").IsRequired().ValueGeneratedOnAdd();
-        builder.Property(e => e.Action).HasColumnName("action").IsRequired();
-        builder.Property(e => e.ActorUserId).HasColumnName("actor_user_id").IsRequired();
-        builder.Property(e => e.Timestamp).HasColumnName("timestamp").IsRequired();
-        builder.Property(e => e.ChangedProperties).HasColumnName("changed_properties").IsRequired();
+        builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.Property(e => e.Action).IsRequired();
+        builder.Property(e => e.ActorUserId).IsRequired();
+        builder.Property(e => e.Timestamp).IsRequired();
+        builder.Property(e => e.ChangedProperties).IsRequired();
 
         // Configure the relationship to ActorUser
         builder

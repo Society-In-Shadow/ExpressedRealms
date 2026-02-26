@@ -1,13 +1,13 @@
 using System.Text.Json;
 using Audit.Core;
-using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels.Audit;
-using ExpressedRealms.DB.Characters.AssignedXP.AssignedXpTypeModels.Audit;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup;
 using ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup.Audit;
 using ExpressedRealms.DB.Models.Authorization.RoleSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels.Audit;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels.Audit;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup.Audit;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup.Audit;
 using ExpressedRealms.DB.Models.Contacts.Audit;
@@ -19,7 +19,7 @@ using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionLevels.Audit;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths.Audit;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Audit;
-using ExpressedRealms.DB.Models.Powers.PowerPathSetup;
+using ExpressedRealms.DB.Models.Powers.PowerPathSetup.Audit;
 using ExpressedRealms.DB.Models.Powers.PowerSetup.Audit;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserRoles;
@@ -85,7 +85,7 @@ public static class SetupDatabaseAudit
                                         audit.ActorUserId = evt.CustomFields["UserId"]?.ToString();
                                     }
 
-                                    var changes = new List<ChangedRecord>();
+                                    List<ChangedRecord> changes;
                                     if (
                                         string.Compare(
                                             audit.Action,
@@ -225,8 +225,8 @@ public static class SetupDatabaseAudit
     {
         return entityTypeName switch
         {
-            nameof(User) => columnValues.First(x => x.Key == "Id").Value.ToString(),
-            nameof(Player) => columnValues.First(x => x.Key == "UserId").Value.ToString(),
+            nameof(User) => columnValues.First(x => x.Key == "id").Value.ToString(),
+            nameof(Player) => columnValues.First(x => x.Key == "user_Id").Value.ToString(),
             _ => throw new InvalidOperationException($"Unsupported entity type: {entityTypeName}"),
         };
     }

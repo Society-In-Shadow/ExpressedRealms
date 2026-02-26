@@ -9,11 +9,9 @@ internal class EventQuestionAuditTrailConfiguration
 {
     public void Configure(EntityTypeBuilder<EventQuestionAuditTrail> builder)
     {
-        builder.ToTable("event_question_audit_trail");
-
         builder.ConfigureAuditTrailProperties(user => user.EventQuestionAuditTrails);
 
-        builder.Property(e => e.EventQuestionId).HasColumnName("event_question_id").IsRequired();
+        builder.Property(e => e.EventQuestionId).IsRequired();
 
         builder
             .HasOne(x => x.EventQuestion)

@@ -1,4 +1,4 @@
-using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.UseCases.Shared;

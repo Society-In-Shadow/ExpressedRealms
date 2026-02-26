@@ -7,8 +7,6 @@ public class SkillTypeConfiguration : IEntityTypeConfiguration<SkillType>
 {
     public void Configure(EntityTypeBuilder<SkillType> builder)
     {
-        builder.ToTable(nameof(SkillType));
-
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
 

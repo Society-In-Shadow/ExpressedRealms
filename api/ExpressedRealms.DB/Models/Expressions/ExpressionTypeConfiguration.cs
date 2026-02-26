@@ -7,8 +7,6 @@ public class ExpressionTypeConfiguration : IEntityTypeConfiguration<ExpressionTy
 {
     public void Configure(EntityTypeBuilder<ExpressionType> builder)
     {
-        builder.ToTable("expression_type");
-
         builder.HasData(
             new ExpressionType
             {
@@ -31,13 +29,9 @@ public class ExpressionTypeConfiguration : IEntityTypeConfiguration<ExpressionTy
         );
 
         builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id).HasColumnName("id").IsRequired().ValueGeneratedOnAdd();
+        builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
 
-        builder.Property(e => e.Name).HasColumnName("name").HasMaxLength(50).IsRequired();
-        builder
-            .Property(e => e.Description)
-            .HasColumnName("description")
-            .HasMaxLength(250)
-            .IsRequired();
+        builder.Property(e => e.Name).HasMaxLength(50).IsRequired();
+        builder.Property(e => e.Description).HasMaxLength(250).IsRequired();
     }
 }

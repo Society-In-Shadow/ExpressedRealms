@@ -1,19 +1,16 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Audit.EntityFramework;
-using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
-using ExpressedRealms.DB.Characters.AssignedXP.AssignedXpTypeModels.Audit;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels.Audit;
 
-namespace ExpressedRealms.DB.Characters.AssignedXp.AssignedXpTypeModels;
+namespace ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels;
 
 [AuditInclude]
-[Table("assigned_xp_type")]
 public class AssignedXpType : ISoftDelete
 {
     [Key]
     [Required]
-    [Column("id")]
     public int Id { get; set; }
 
     [Required]

@@ -7,17 +7,15 @@ public class PowerPathConfiguration : IEntityTypeConfiguration<PowerPath>
 {
     public void Configure(EntityTypeBuilder<PowerPath> builder)
     {
-        builder.ToTable("power_path");
-
         builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id).HasColumnName("id").IsRequired();
-        builder.Property(e => e.Name).HasColumnName("name").HasMaxLength(250).IsRequired();
-        builder.Property(e => e.Description).HasColumnName("description").IsRequired();
-        builder.Property(e => e.ExpressionId).HasColumnName("expression_id").IsRequired();
-        builder.Property(e => e.OrderIndex).HasColumnName("order_index").IsRequired();
+        builder.Property(e => e.Id).IsRequired();
+        builder.Property(e => e.Name).HasMaxLength(250).IsRequired();
+        builder.Property(e => e.Description).IsRequired();
+        builder.Property(e => e.ExpressionId).IsRequired();
+        builder.Property(e => e.OrderIndex).IsRequired();
 
-        builder.Property(e => e.IsDeleted).HasColumnName("is_deleted");
-        builder.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+        builder.Property(e => e.IsDeleted);
+        builder.Property(e => e.DeletedAt);
 
         builder.HasQueryFilter(x => !x.IsDeleted);
 

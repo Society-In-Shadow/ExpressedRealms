@@ -7,8 +7,6 @@ public class SkillLevelBenefitConfiguration : IEntityTypeConfiguration<SkillLeve
 {
     public void Configure(EntityTypeBuilder<SkillLevelBenefit> builder)
     {
-        builder.ToTable(nameof(SkillLevelBenefit));
-
         builder.HasKey(e => new
         {
             e.SkillLevelId,

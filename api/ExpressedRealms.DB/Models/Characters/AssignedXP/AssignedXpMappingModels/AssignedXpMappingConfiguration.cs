@@ -1,15 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
+namespace ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
 
 public class AssignedXpMappingConfiguration : IEntityTypeConfiguration<AssignedXpMapping>
 {
     public void Configure(EntityTypeBuilder<AssignedXpMapping> builder)
     {
         builder.HasQueryFilter(x => !x.IsDeleted);
-        builder.Property(e => e.IsDeleted).HasColumnName("is_deleted");
-        builder.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+        builder.Property(e => e.IsDeleted);
+        builder.Property(e => e.DeletedAt);
 
         builder
             .HasOne(x => x.Character)

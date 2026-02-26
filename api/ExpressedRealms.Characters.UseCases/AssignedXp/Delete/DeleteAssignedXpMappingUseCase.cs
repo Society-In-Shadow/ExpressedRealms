@@ -1,6 +1,6 @@
 using ExpressedRealms.Characters.Repository.Xp;
-using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 

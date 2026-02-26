@@ -1,4 +1,4 @@
-using ExpressedRealms.DB.Characters;
+using ExpressedRealms.DB.Models.Characters;
 
 namespace ExpressedRealms.DB.Models.Skills;
 

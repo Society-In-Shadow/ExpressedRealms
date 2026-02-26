@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ExpressedRealms.DB.Characters;
+namespace ExpressedRealms.DB.Models.Characters;
 
 public class CharacterConfiguration : IEntityTypeConfiguration<Character>
 {
@@ -25,8 +25,8 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
 
         builder.Property(x => x.StatExperiencePoints).IsRequired().HasDefaultValue(72);
 
-        builder.Property(x => x.PrimaryProgressionId).HasColumnName("primary_progression_id");
-        builder.Property(x => x.SecondaryProgressionId).HasColumnName("secondary_progression_id");
+        builder.Property(x => x.PrimaryProgressionId);
+        builder.Property(x => x.SecondaryProgressionId);
 
         builder
             .HasOne(x => x.PrimaryProgressionPath)
@@ -42,30 +42,14 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired(false);
 
-        builder
-            .Property(x => x.IsInCharacterCreation)
-            .HasColumnName("is_in_character_creation")
-            .IsRequired()
-            .HasDefaultValue(true);
-        builder
-            .Property(x => x.IsPrimaryCharacter)
-            .HasColumnName("is_primary_character")
-            .IsRequired()
-            .HasDefaultValue(false);
+        builder.Property(x => x.IsInCharacterCreation).IsRequired().HasDefaultValue(true);
+        builder.Property(x => x.IsPrimaryCharacter).IsRequired().HasDefaultValue(false);
 
-        builder
-            .Property(x => x.IsRetired)
-            .HasColumnName("is_retired")
-            .IsRequired()
-            .HasDefaultValue(false);
+        builder.Property(x => x.IsRetired).IsRequired().HasDefaultValue(false);
 
-        builder.Property(x => x.RetiredDate).HasColumnName("retired_date");
+        builder.Property(x => x.RetiredDate);
 
-        builder
-            .Property(x => x.PlayerNumber)
-            .HasColumnName("player_number")
-            .IsRequired()
-            .HasDefaultValue(0);
+        builder.Property(x => x.PlayerNumber).IsRequired().HasDefaultValue(0);
 
         builder.HasQueryFilter(x => !x.IsDeleted);
 

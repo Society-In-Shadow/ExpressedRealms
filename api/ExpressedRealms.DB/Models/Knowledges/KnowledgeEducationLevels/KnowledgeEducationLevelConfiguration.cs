@@ -1,4 +1,3 @@
-using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,26 +8,15 @@ public class KnowledgeEducationLevelConfiguration
 {
     public void Configure(EntityTypeBuilder<KnowledgeEducationLevel> builder)
     {
-        builder.ToTable("knowledge_education_level");
-
         builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id).HasColumnName("id").IsRequired();
-        builder.Property(e => e.Name).HasColumnName("name").HasMaxLength(50).IsRequired();
-        builder.Property(e => e.Level).HasColumnName("level").IsRequired();
-        builder
-            .Property(e => e.SpecializationCount)
-            .HasColumnName("specialization_count")
-            .IsRequired();
-        builder.Property(e => e.StoneModifier).HasColumnName("stone_modifier").IsRequired();
-        builder.Property(e => e.GeneralXpCost).HasColumnName("general_xp_cost").IsRequired();
-        builder
-            .Property(e => e.TotalGeneralXpCost)
-            .HasColumnName("total_general_xp_cost")
-            .IsRequired();
-        builder.Property(e => e.UnknownXpCost).HasColumnName("unknown_xp_cost").IsRequired();
-        builder
-            .Property(e => e.TotalUnknownXpCost)
-            .HasColumnName("total_unknown_xp_cost")
-            .IsRequired();
+        builder.Property(e => e.Id).IsRequired();
+        builder.Property(e => e.Name).HasMaxLength(50).IsRequired();
+        builder.Property(e => e.Level).IsRequired();
+        builder.Property(e => e.SpecializationCount).IsRequired();
+        builder.Property(e => e.StoneModifier).IsRequired();
+        builder.Property(e => e.GeneralXpCost).IsRequired();
+        builder.Property(e => e.TotalGeneralXpCost).IsRequired();
+        builder.Property(e => e.UnknownXpCost).IsRequired();
+        builder.Property(e => e.TotalUnknownXpCost).IsRequired();
     }
 }

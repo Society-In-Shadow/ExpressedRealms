@@ -7,8 +7,6 @@ public class QuestionTypeConfiguration : IEntityTypeConfiguration<QuestionType>
 {
     public void Configure(EntityTypeBuilder<QuestionType> builder)
     {
-        builder.ToTable("question_type");
-
         var data = QuestionTypeEnum
             .List.Select(x => new QuestionType
             {
@@ -21,11 +19,11 @@ public class QuestionTypeConfiguration : IEntityTypeConfiguration<QuestionType>
         builder.HasData(data);
 
         builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id).HasColumnName("id").IsRequired();
-        builder.Property(e => e.Name).HasColumnName("name").HasMaxLength(250).IsRequired();
+        builder.Property(e => e.Id).IsRequired();
+        builder.Property(e => e.Name).HasMaxLength(250).IsRequired();
 
-        builder.Property(e => e.IsDefault).HasColumnName("is_default").IsRequired();
+        builder.Property(e => e.IsDefault).IsRequired();
 
-        builder.Property(e => e.IsCustomizable).HasColumnName("is_customizable").IsRequired();
+        builder.Property(e => e.IsCustomizable).IsRequired();
     }
 }

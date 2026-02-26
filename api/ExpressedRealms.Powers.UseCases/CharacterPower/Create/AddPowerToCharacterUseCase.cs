@@ -1,5 +1,5 @@
 using ExpressedRealms.Characters.Repository.Xp;
-using ExpressedRealms.DB.Characters.xpTables;
+using ExpressedRealms.DB.Models.Characters.XpTables;
 using ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup;
 using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.Powers.Repository.Powers;

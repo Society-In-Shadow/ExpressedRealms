@@ -7,8 +7,6 @@ internal class ExpressionAuditTrailConfiguration : IEntityTypeConfiguration<Expr
 {
     public void Configure(EntityTypeBuilder<ExpressionAuditTrail> builder)
     {
-        builder.ToTable("Expression_AuditTrail");
-
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
 

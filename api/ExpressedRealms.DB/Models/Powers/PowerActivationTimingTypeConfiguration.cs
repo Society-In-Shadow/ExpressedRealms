@@ -8,8 +8,6 @@ public class PowerActivationTimingTypeConfiguration
 {
     public void Configure(EntityTypeBuilder<PowerActivationTimingType> builder)
     {
-        builder.ToTable("power_activation_timing_type");
-
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired();
         builder.Property(e => e.Name).HasMaxLength(250).IsRequired();

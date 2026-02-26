@@ -1,13 +1,13 @@
 using Audit.EntityFramework;
-using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
-using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels.Audit;
-using ExpressedRealms.DB.Characters.AssignedXP.AssignedXpTypeModels.Audit;
 using ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup.Audit;
 using ExpressedRealms.DB.Models.Authorization.RoleSetup.Audit;
 using ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup;
 using ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels.Audit;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels.Audit;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup.Audit;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup.Audit;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageMappingSetup;

@@ -12,17 +12,17 @@ internal static class UserAuditConfiguration
         {
             switch (changedRecord.ColumnName)
             {
-                case nameof(User.Email):
+                case "email":
                     changedRecordsToReturn.Add(changedRecord);
                     break;
-                case nameof(User.PasswordHash):
+                case "password_hash":
                     changedRecord.ColumnName = "Password";
                     changedRecord.Message = "Changed their password.";
                     changedRecord.NewValue = null;
                     changedRecord.OriginalValue = null;
                     changedRecordsToReturn.Add(changedRecord);
                     break;
-                case nameof(User.EmailConfirmed):
+                case "email_confirmed":
                     // This doesn't seem to reset itself on email change,
                     // Instead it does a whole update
                     changedRecord.FriendlyName = "Confirmed Email";
@@ -33,7 +33,7 @@ internal static class UserAuditConfiguration
                     changedRecordsToReturn.Add(changedRecord);
                     break;
 
-                case nameof(User.AccessFailedCount):
+                case "access_failed_count":
                     // This catches when the user is initially created
                     if (
                         changedRecord.NewValue == "0"
@@ -45,7 +45,7 @@ internal static class UserAuditConfiguration
                     changedRecordsToReturn.Add(changedRecord);
                     break;
 
-                case nameof(User.LockoutEnd):
+                case "lockout_end":
                     changedRecord.FriendlyName = "Player Status Update";
 
                     var successful = DateTimeOffset.TryParse(changedRecord.NewValue, out var date);

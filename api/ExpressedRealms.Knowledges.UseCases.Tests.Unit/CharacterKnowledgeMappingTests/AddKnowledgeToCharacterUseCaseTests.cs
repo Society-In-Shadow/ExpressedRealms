@@ -1,7 +1,7 @@
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.Characters.Repository.Xp.Dtos;
-using ExpressedRealms.DB.Characters.xpTables;
+using ExpressedRealms.DB.Models.Characters.XpTables;
 using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeEducationLevels;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels;

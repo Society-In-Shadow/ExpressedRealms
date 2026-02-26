@@ -1,6 +1,6 @@
 using Audit.EntityFramework;
-using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Characters;
 using ExpressedRealms.DB.Models.Contacts.Audit;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeEducationLevels;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels;

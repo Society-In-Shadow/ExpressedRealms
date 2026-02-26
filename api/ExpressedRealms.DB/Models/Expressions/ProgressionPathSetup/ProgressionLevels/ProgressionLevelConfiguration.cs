@@ -7,22 +7,13 @@ public class ProgressionLevelConfiguration : IEntityTypeConfiguration<Progressio
 {
     public void Configure(EntityTypeBuilder<ProgressionLevel> builder)
     {
-        builder.ToTable("progression_level");
-
         builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id).HasColumnName("id").IsRequired();
-        builder
-            .Property(e => e.ProgressionPathId)
-            .HasColumnName("progression_path_id")
-            .IsRequired();
-        builder.Property(e => e.XlLevel).HasColumnName("xl_level").IsRequired();
-        builder
-            .Property(e => e.Description)
-            .HasColumnName("description")
-            .HasMaxLength(5000)
-            .IsRequired();
+        builder.Property(e => e.Id).IsRequired();
+        builder.Property(e => e.ProgressionPathId).IsRequired();
+        builder.Property(e => e.XlLevel).IsRequired();
+        builder.Property(e => e.Description).HasMaxLength(5000).IsRequired();
 
-        builder.Property(e => e.StatModifierGroupId).HasColumnName("stat_modifier_group");
+        builder.Property(e => e.StatModifierGroupId);
         builder
             .HasOne(e => e.StatModifierGroup)
             .WithMany(e => e.ProgressionLevels)
@@ -37,7 +28,7 @@ public class ProgressionLevelConfiguration : IEntityTypeConfiguration<Progressio
             .IsRequired();
 
         builder.HasQueryFilter(x => !x.IsDeleted);
-        builder.Property(e => e.IsDeleted).HasColumnName("is_deleted");
-        builder.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+        builder.Property(e => e.IsDeleted);
+        builder.Property(e => e.DeletedAt);
     }
 }

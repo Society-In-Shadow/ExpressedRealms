@@ -1,5 +1,5 @@
 using ExpressedRealms.Characters.Repository.DTOs;
-using ExpressedRealms.DB.Characters;
+using ExpressedRealms.DB.Models.Characters;
 using FluentResults;
 
 namespace ExpressedRealms.Characters.Repository;

@@ -2,7 +2,7 @@ using Audit.EntityFramework.ConfigurationApi;
 using ExpressedRealms.DB.Exceptions;
 using ExpressedRealms.DB.Interceptors;
 
-namespace ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels.Audit;
+namespace ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels.Audit;
 
 internal static class AssignedXpMappingsAuditTrailExtensions
 {

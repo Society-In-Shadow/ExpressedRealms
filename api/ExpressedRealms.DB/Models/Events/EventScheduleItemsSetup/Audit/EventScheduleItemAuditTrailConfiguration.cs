@@ -9,14 +9,9 @@ internal class EventScheduleItemAuditTrailConfiguration
 {
     public void Configure(EntityTypeBuilder<EventScheduleItemAuditTrail> builder)
     {
-        builder.ToTable("event_schedule_item_audit_trail");
-
         builder.ConfigureAuditTrailProperties(user => user.EventScheduleItemAuditTrails);
 
-        builder
-            .Property(e => e.EventScheduleItemId)
-            .HasColumnName("event_schedule_item_id")
-            .IsRequired();
+        builder.Property(e => e.EventScheduleItemId).IsRequired();
 
         builder
             .HasOne(x => x.EventScheduleItem)

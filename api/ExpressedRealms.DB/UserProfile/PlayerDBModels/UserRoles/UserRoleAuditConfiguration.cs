@@ -1,7 +1,6 @@
 using Audit.EntityFramework.ConfigurationApi;
 using ExpressedRealms.DB.Exceptions;
 using ExpressedRealms.DB.Interceptors;
-using Microsoft.AspNetCore.Identity;
 
 namespace ExpressedRealms.DB.UserProfile.PlayerDBModels.UserRoles;
 
@@ -14,18 +13,18 @@ internal static class UserRoleAuditConfiguration
         {
             switch (changedRecord.ColumnName)
             {
-                case nameof(IdentityUserRole<string>.UserId):
-                    break;
-                case nameof(IdentityUserRole<string>.RoleId):
+                case "user_id":
+                    continue;
+                case "role_id":
                     changedRecord.ColumnName = "Role";
                     changedRecord.Message = "Role was updated";
                     changedRecord.NewValue = null;
                     changedRecord.OriginalValue = null;
-                    changedRecordsToReturn.Add(changedRecord);
                     break;
                 default:
                     throw new MissingAuditColumnException(changedRecord.ColumnName);
             }
+            changedRecordsToReturn.Add(changedRecord);
         }
 
         return changedRecordsToReturn;

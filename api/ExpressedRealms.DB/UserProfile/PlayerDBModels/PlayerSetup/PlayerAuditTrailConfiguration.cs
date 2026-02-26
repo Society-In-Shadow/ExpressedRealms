@@ -7,8 +7,6 @@ internal class PlayerAuditTrailConfiguration : IEntityTypeConfiguration<PlayerAu
 {
     public void Configure(EntityTypeBuilder<PlayerAuditTrail> builder)
     {
-        builder.ToTable("Player_AuditTrail");
-
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
 

@@ -7,37 +7,19 @@ public class ExpressionConfiguration : IEntityTypeConfiguration<Expression>
 {
     public void Configure(EntityTypeBuilder<Expression> builder)
     {
-        builder.ToTable("expression");
-
         builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id).HasColumnName("id").IsRequired().ValueGeneratedOnAdd();
+        builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
 
         builder.HasQueryFilter(x => !x.IsDeleted);
 
-        builder.Property(e => e.Name).HasColumnName("name").HasMaxLength(50).IsRequired();
-        builder
-            .Property(e => e.ShortDescription)
-            .HasColumnName("short_description")
-            .HasMaxLength(125)
-            .IsRequired();
-        builder.Property(e => e.NavMenuImage).HasColumnName("nav_menu_item").IsRequired();
-        builder
-            .Property(e => e.PublishStatusId)
-            .HasColumnName("publish_status_id")
-            .IsRequired()
-            .HasDefaultValue(1);
-        builder
-            .Property(e => e.ExpressionTypeId)
-            .HasColumnName("expression_type_id")
-            .IsRequired()
-            .HasDefaultValue(1);
-        builder
-            .Property(e => e.OrderIndex)
-            .HasColumnName("order_index")
-            .IsRequired()
-            .HasDefaultValue(1);
-        builder.Property(e => e.IsDeleted).HasColumnName("is_deleted");
-        builder.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+        builder.Property(e => e.Name).HasMaxLength(50).IsRequired();
+        builder.Property(e => e.ShortDescription).HasMaxLength(125).IsRequired();
+        builder.Property(e => e.NavMenuImage).IsRequired();
+        builder.Property(e => e.PublishStatusId).IsRequired().HasDefaultValue(1);
+        builder.Property(e => e.ExpressionTypeId).IsRequired().HasDefaultValue(1);
+        builder.Property(e => e.OrderIndex).IsRequired().HasDefaultValue(1);
+        builder.Property(e => e.IsDeleted);
+        builder.Property(e => e.DeletedAt);
 
         builder
             .HasOne(x => x.PublishStatus)

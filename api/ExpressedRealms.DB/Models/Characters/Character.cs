@@ -1,7 +1,7 @@
-﻿using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
-using ExpressedRealms.DB.Characters.xpTables;
-using ExpressedRealms.DB.Interceptors;
+﻿using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
+using ExpressedRealms.DB.Models.Characters.XpTables;
 using ExpressedRealms.DB.Models.Contacts;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
@@ -12,7 +12,7 @@ using ExpressedRealms.DB.Models.Skills;
 using ExpressedRealms.DB.Models.Statistics;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 
-namespace ExpressedRealms.DB.Characters;
+namespace ExpressedRealms.DB.Models.Characters;
 
 public class Character : ISoftDelete
 {

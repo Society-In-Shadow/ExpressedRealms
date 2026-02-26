@@ -1,7 +1,7 @@
 using ExpressedRealms.Characters.Repository.Skills.DTOs;
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.DB;
-using ExpressedRealms.DB.Characters.xpTables;
+using ExpressedRealms.DB.Models.Characters.XpTables;
 using ExpressedRealms.DB.Models.Skills;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FluentResults;

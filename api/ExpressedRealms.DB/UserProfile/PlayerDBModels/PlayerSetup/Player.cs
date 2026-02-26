@@ -1,6 +1,6 @@
 using Audit.EntityFramework;
-using ExpressedRealms.DB.Characters;
-using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
+using ExpressedRealms.DB.Models.Characters;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 

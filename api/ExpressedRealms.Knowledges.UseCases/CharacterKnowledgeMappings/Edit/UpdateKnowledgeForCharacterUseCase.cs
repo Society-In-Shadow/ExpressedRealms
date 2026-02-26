@@ -1,5 +1,5 @@
 using ExpressedRealms.Characters.Repository.Xp;
-using ExpressedRealms.DB.Characters.xpTables;
+using ExpressedRealms.DB.Models.Characters.XpTables;
 using ExpressedRealms.Knowledges.Repository;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.Knowledges;

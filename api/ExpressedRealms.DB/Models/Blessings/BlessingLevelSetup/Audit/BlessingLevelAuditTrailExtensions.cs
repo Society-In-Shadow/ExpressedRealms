@@ -32,7 +32,7 @@ internal static class BlessingLevelAuditTrailExtensions
                     changedRecord.FriendlyName = "XP Gain";
                     break;
 
-                case "stat_modifier_group":
+                case "stat_modifier_group_id":
                     changedRecord.Message = "Added a stat modifier group";
                     break;
 

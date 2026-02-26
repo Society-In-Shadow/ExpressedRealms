@@ -42,6 +42,9 @@ using Scalar.AspNetCore;
 using Serilog;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
+// Disable log warning, we want a bunch of them here
+#pragma warning disable S6664
+
 try
 {
     Log.Information("Setting Up Loggers");
@@ -92,7 +95,7 @@ try
     builder.Services.AddHealthChecks();
 
     Log.Information("Adding DB Context");
-    builder.AddDatabaseConnection(builder.Environment.IsProduction());
+    builder.Services.AddDbContext<ExpressedRealmsDbContext>();
 
     Log.Information("Adding Redis Cache");
     await builder.AddRedisConnection(builder.Environment.IsProduction());
@@ -169,10 +172,10 @@ try
     {
         var dbContext = scope.ServiceProvider.GetRequiredService<ExpressedRealmsDbContext>();
 
-        if (dbContext.Database.GetPendingMigrations().Any())
+        if ((await dbContext.Database.GetPendingMigrationsAsync()).Any())
         {
             Log.Information("DB is missing migrations, running them now");
-            dbContext.Database.Migrate();
+            await dbContext.Database.MigrateAsync();
             Log.Information("Successfully ran all migrations!");
         }
         else
@@ -248,7 +251,7 @@ try
 
     app.MapFallbackToFile("index.html");
     Log.Information("Starting Web API");
-    app.Run();
+    await app.RunAsync();
 }
 catch (Exception ex)
 {

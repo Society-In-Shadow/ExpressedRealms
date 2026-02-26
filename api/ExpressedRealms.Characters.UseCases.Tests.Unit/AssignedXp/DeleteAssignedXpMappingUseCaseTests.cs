@@ -1,8 +1,8 @@
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.Characters.UseCases.AssignedXp.Delete;
-using ExpressedRealms.DB.Characters;
-using ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels;
+using ExpressedRealms.DB.Models.Characters;
+using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
 using Xunit;

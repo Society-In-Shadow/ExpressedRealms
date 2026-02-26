@@ -1,5 +1,5 @@
 using ExpressedRealms.Characters.Repository.Xp.Dtos;
-using ExpressedRealms.DB.Characters.xpTables;
+using ExpressedRealms.DB.Models.Characters.XpTables;
 
 namespace ExpressedRealms.Characters.Repository.Xp;
 

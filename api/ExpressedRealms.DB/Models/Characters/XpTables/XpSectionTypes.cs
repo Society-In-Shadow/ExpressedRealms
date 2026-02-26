@@ -1,4 +1,4 @@
-namespace ExpressedRealms.DB.Characters.xpTables;
+namespace ExpressedRealms.DB.Models.Characters.XpTables;
 
 public enum XpSectionTypes
 {

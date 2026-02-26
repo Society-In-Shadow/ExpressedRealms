@@ -1,5 +1,5 @@
-using ExpressedRealms.DB.Characters;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Characters;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionLevels;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionLevels.Audit;

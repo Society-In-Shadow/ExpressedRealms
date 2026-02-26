@@ -1,25 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ExpressedRealms.DB.Characters.xpTables;
+namespace ExpressedRealms.DB.Models.Characters.XpTables;
 
 public class CharacterXpMappingConfiguration : IEntityTypeConfiguration<CharacterXpMapping>
 {
     public void Configure(EntityTypeBuilder<CharacterXpMapping> builder)
     {
-        builder.ToTable("character_xp_mapping");
-
         builder.HasKey(x => new { x.CharacterId, x.XpSectionTypeId });
-        builder.Property(x => x.CharacterId).HasColumnName("character_id").IsRequired();
-        builder.Property(x => x.SectionCap).HasColumnName("section_cap").IsRequired();
-        builder.Property(x => x.XpSectionTypeId).HasColumnName("xp_section_type_id").IsRequired();
-        builder.Property(x => x.DiscretionXp).HasColumnName("discretion_xp").IsRequired();
-        builder.Property(x => x.SpentXp).HasColumnName("spent_xp").IsRequired();
-        builder
-            .Property(x => x.TotalCharacterCreationXp)
-            .HasColumnName("total_character_creation_xp")
-            .IsRequired();
-        builder.Property(x => x.LevelXp).HasColumnName("level_xp").IsRequired();
+        builder.Property(x => x.CharacterId).IsRequired();
+        builder.Property(x => x.SectionCap).IsRequired();
+        builder.Property(x => x.XpSectionTypeId).IsRequired();
+        builder.Property(x => x.DiscretionXp).IsRequired();
+        builder.Property(x => x.SpentXp).IsRequired();
+        builder.Property(x => x.TotalCharacterCreationXp).IsRequired();
+        builder.Property(x => x.LevelXp).IsRequired();
 
         builder
             .HasOne(x => x.Character)

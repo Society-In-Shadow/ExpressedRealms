@@ -1,5 +1,5 @@
 using ExpressedRealms.Authentication;
-using ExpressedRealms.DB.Characters;
+using ExpressedRealms.DB.Models.Characters;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 
 namespace ExpressedRealms.Repositories.Shared;

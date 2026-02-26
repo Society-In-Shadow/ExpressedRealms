@@ -1,33 +1,33 @@
 using Azure.Core;
 using Azure.Identity;
-using ExpressedRealms.DB;
 using ExpressedRealms.Shared.AzureKeyVault;
 using ExpressedRealms.Shared.AzureKeyVault.Secrets;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql;
 
-namespace ExpressedRealms.Server.Configuration;
+namespace ExpressedRealms.DB.Configuration;
 
 public static class DatabaseConfiguration
 {
-    public static void AddDatabaseConnection(this WebApplicationBuilder builder, bool isProduction)
+    public static void AddDatabaseConnection(this DbContextOptionsBuilder options)
     {
-        if (!isProduction)
+        var isDevelopment =
+            Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+        if (isDevelopment)
         {
             var connectionString = KeyVaultManager.GetSecret(ConnectionStrings.Database);
-            // Register DbContext with reuse of the existing services
-            builder.Services.AddDbContext<ExpressedRealmsDbContext>(
-                (_, options) =>
-                {
-                    options.UseNpgsql(
-                        connectionString,
-                        postgresOptions =>
-                        {
-                            postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
-                        }
-                    );
-                }
-            );
+
+            options
+                .UseNpgsql(
+                    connectionString,
+                    postgresOptions =>
+                    {
+                        postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
+                    }
+                )
+                .ReplaceService<IHistoryRepository, CamelCaseHistoryContext>()
+                .UseSnakeCaseNamingConvention();
 
             return;
         }
@@ -59,18 +59,15 @@ public static class DatabaseConfiguration
         // Build the data source once and reuse it across DbContext instances
         var dataSource = dataSourceBuilder.Build();
 
-        // Register DbContext with reuse of the existing services
-        builder.Services.AddDbContext<ExpressedRealmsDbContext>(
-            (_, options) =>
-            {
-                options.UseNpgsql(
-                    dataSource,
-                    postgresOptions =>
-                    {
-                        postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
-                    }
-                );
-            }
-        );
+        options
+            .UseNpgsql(
+                dataSource,
+                postgresOptions =>
+                {
+                    postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
+                }
+            )
+            .ReplaceService<IHistoryRepository, CamelCaseHistoryContext>()
+            .UseSnakeCaseNamingConvention();
     }
 }

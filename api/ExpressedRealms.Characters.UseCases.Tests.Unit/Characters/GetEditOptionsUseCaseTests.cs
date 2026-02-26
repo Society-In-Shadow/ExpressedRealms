@@ -1,6 +1,6 @@
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.UseCases.Characters.GetEditOptions;
-using ExpressedRealms.DB.Characters;
+using ExpressedRealms.DB.Models.Characters;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
 using Xunit;

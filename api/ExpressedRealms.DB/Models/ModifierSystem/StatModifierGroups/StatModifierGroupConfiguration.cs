@@ -7,9 +7,7 @@ public class StatModifierGroupConfiguration : IEntityTypeConfiguration<StatModif
 {
     public void Configure(EntityTypeBuilder<StatModifierGroup> builder)
     {
-        builder.ToTable("stat_modifier_group");
-
         builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id).HasColumnName("id").IsRequired();
+        builder.Property(e => e.Id).IsRequired();
     }
 }

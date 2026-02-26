@@ -2,7 +2,7 @@ using Audit.EntityFramework.ConfigurationApi;
 using ExpressedRealms.DB.Exceptions;
 using ExpressedRealms.DB.Interceptors;
 
-namespace ExpressedRealms.DB.Models.Powers.PowerPathSetup;
+namespace ExpressedRealms.DB.Models.Powers.PowerPathSetup.Audit;
 
 internal static class PowerPathAuditTrailExtensions
 {
@@ -11,13 +11,11 @@ internal static class PowerPathAuditTrailExtensions
         List<ChangedRecord> changedRecordsToReturn = new();
         foreach (var changedRecord in changedRecords)
         {
-            var skipRecord = false;
             switch (changedRecord.ColumnName)
             {
                 case "expression_id":
                     // You cannot change the Expression Id after creation
-                    skipRecord = true;
-                    break;
+                    continue;
 
                 case "name":
                     changedRecord.FriendlyName = "Name";
@@ -34,9 +32,6 @@ internal static class PowerPathAuditTrailExtensions
                 default:
                     throw new MissingAuditColumnException(changedRecord.ColumnName);
             }
-
-            if (skipRecord)
-                continue;
 
             changedRecordsToReturn.Add(changedRecord);
         }

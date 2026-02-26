@@ -7,12 +7,10 @@ public class RolePermissionMappingConfiguration : IEntityTypeConfiguration<RoleP
 {
     public void Configure(EntityTypeBuilder<RolePermissionMapping> builder)
     {
-        builder.ToTable("role_permission_mapping");
-
         builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id).HasColumnName("id").IsRequired();
-        builder.Property(e => e.RoleId).HasColumnName("role_id").IsRequired();
-        builder.Property(e => e.PermissionId).HasColumnName("permission_id").IsRequired();
+        builder.Property(e => e.Id).IsRequired();
+        builder.Property(e => e.RoleId).IsRequired();
+        builder.Property(e => e.PermissionId).IsRequired();
 
         builder
             .HasOne(e => e.Permission)
@@ -27,7 +25,7 @@ public class RolePermissionMappingConfiguration : IEntityTypeConfiguration<RoleP
             .OnDelete(DeleteBehavior.ClientCascade);
 
         builder.HasQueryFilter(x => !x.IsDeleted);
-        builder.Property(e => e.IsDeleted).HasColumnName("is_deleted");
-        builder.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+        builder.Property(e => e.IsDeleted);
+        builder.Property(e => e.DeletedAt);
     }
 }

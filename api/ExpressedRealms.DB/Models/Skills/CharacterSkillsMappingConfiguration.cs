@@ -7,8 +7,6 @@ public class CharacterSkillsMappingConfiguration : IEntityTypeConfiguration<Char
 {
     public void Configure(EntityTypeBuilder<CharacterSkillsMapping> builder)
     {
-        builder.ToTable(nameof(CharacterSkillsMapping));
-
         builder.HasKey(e => new { e.CharacterId, e.SkillTypeId });
 
         builder.Property(e => e.SkillTypeId).IsRequired();

@@ -17,7 +17,7 @@ namespace ExpressedRealms.DB.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.0")
+                .HasAnnotation("ProductVersion", "10.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -25,7 +25,68 @@ namespace ExpressedRealms.DB.Migrations
             modelBuilder.HasSequence<int>("player_number_sequence")
                 .StartsAt(46L);
 
-            modelBuilder.Entity("ExpressedRealms.DB.Characters.AssignedXP.AssignedXpTypeModels.Audit.AssignedXpTypeAuditTrail", b =>
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.PermissionResources.PermissionResource", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_permission_resource");
+
+                    b.ToTable("permission_resource", (string)null);
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.Permissions.Permission", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("key");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("name");
+
+                    b.Property<Guid>("PermissionResourceId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("permission_resource_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_permission");
+
+                    b.HasIndex("PermissionResourceId")
+                        .HasDatabaseName("ix_permission_permission_resource_id");
+
+                    b.ToTable("permission", (string)null);
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup.Audit.RolePermissionMappingAuditTrail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -44,9 +105,289 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("text")
                         .HasColumnName("actor_user_id");
 
-                    b.Property<int>("AssignedXpTypeId")
+                    b.Property<string>("ChangedProperties")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("changed_properties");
+
+                    b.Property<Guid?>("PermissionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("permission_id");
+
+                    b.Property<int>("RoleId")
                         .HasColumnType("integer")
-                        .HasColumnName("assigned_xp_type_id");
+                        .HasColumnName("role_id");
+
+                    b.Property<int?>("RolePermissionMappingId")
+                        .HasColumnType("integer")
+                        .HasColumnName("role_permission_mapping_id");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("timestamp");
+
+                    b.HasKey("Id")
+                        .HasName("pk_role_permission_mapping_audit_trail");
+
+                    b.HasIndex("ActorUserId")
+                        .HasDatabaseName("ix_role_permission_mapping_audit_trail_actor_user_id");
+
+                    b.HasIndex("PermissionId")
+                        .HasDatabaseName("ix_role_permission_mapping_audit_trail_permission_id");
+
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_role_permission_mapping_audit_trail_role_id");
+
+                    b.HasIndex("RolePermissionMappingId")
+                        .HasDatabaseName("ix_role_permission_mapping_audit_trail_role_permission_mapping");
+
+                    b.ToTable("role_permission_mapping_audit_trail", (string)null);
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup.RolePermissionMapping", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
+
+                    b.Property<Guid>("PermissionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("permission_id");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer")
+                        .HasColumnName("role_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_role_permission_mapping");
+
+                    b.HasIndex("PermissionId")
+                        .HasDatabaseName("ix_role_permission_mapping_permission_id");
+
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_role_permission_mapping_role_id");
+
+                    b.ToTable("role_permission_mapping", (string)null);
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.RoleSetup.Audit.RoleAuditTrail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("action");
+
+                    b.Property<string>("ActorUserId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("actor_user_id");
+
+                    b.Property<string>("ChangedProperties")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("changed_properties");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer")
+                        .HasColumnName("role_id");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("timestamp");
+
+                    b.HasKey("Id")
+                        .HasName("pk_role_audit_trail");
+
+                    b.HasIndex("ActorUserId")
+                        .HasDatabaseName("ix_role_audit_trail_actor_user_id");
+
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_role_audit_trail_role_id");
+
+                    b.ToTable("role_audit_trail", (string)null);
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.RoleSetup.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)")
+                        .HasColumnName("description");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_role");
+
+                    b.ToTable("role", (string)null);
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup.Audit.UserRoleMappingAuditTrail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("action");
+
+                    b.Property<string>("ActorUserId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("actor_user_id");
+
+                    b.Property<string>("ChangedProperties")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("changed_properties");
+
+                    b.Property<int>("RoleId")
+                        .HasMaxLength(450)
+                        .HasColumnType("integer")
+                        .HasColumnName("role_id");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("timestamp");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("user_id");
+
+                    b.Property<int>("UserRoleMappingId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_role_mapping_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_user_role_mapping_audit_trail");
+
+                    b.HasIndex("ActorUserId")
+                        .HasDatabaseName("ix_user_role_mapping_audit_trail_actor_user_id");
+
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_user_role_mapping_audit_trail_role_id");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_user_role_mapping_audit_trail_user_id");
+
+                    b.HasIndex("UserRoleMappingId")
+                        .HasDatabaseName("ix_user_role_mapping_audit_trail_user_role_mapping_id");
+
+                    b.ToTable("user_role_mapping_audit_trail", (string)null);
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup.UserRoleMapping", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at");
+
+                    b.Property<DateOnly?>("ExpireDate")
+                        .HasColumnType("date")
+                        .HasColumnName("expire_date");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer")
+                        .HasColumnName("role_id");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_user_role_mapping");
+
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_user_role_mapping_role_id");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_user_role_mapping_user_id");
+
+                    b.ToTable("user_role_mapping", (string)null);
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit.BlessingLevelAuditTrail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("action");
+
+                    b.Property<string>("ActorUserId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("actor_user_id");
+
+                    b.Property<int>("BlessingId")
+                        .HasColumnType("integer")
+                        .HasColumnName("blessing_id");
+
+                    b.Property<int>("BlessingLevelId")
+                        .HasColumnType("integer")
+                        .HasColumnName("blessing_level_id");
 
                     b.Property<string>("ChangedProperties")
                         .IsRequired()
@@ -57,16 +398,217 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("timestamp");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_blessing_level_audit_trails");
 
-                    b.HasIndex("ActorUserId");
+                    b.HasIndex("ActorUserId")
+                        .HasDatabaseName("ix_blessing_level_audit_trails_actor_user_id");
 
-                    b.HasIndex("AssignedXpTypeId");
+                    b.HasIndex("BlessingId")
+                        .HasDatabaseName("ix_blessing_level_audit_trails_blessing_id");
 
-                    b.ToTable("assigned_xp_type_audit_trail", (string)null);
+                    b.HasIndex("BlessingLevelId")
+                        .HasDatabaseName("ix_blessing_level_audit_trails_blessing_level_id");
+
+                    b.ToTable("blessing_level_audit_trails", (string)null);
                 });
 
-            modelBuilder.Entity("ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels.AssignedXpMapping", b =>
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.BlessingLevel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BlessingId")
+                        .HasColumnType("integer")
+                        .HasColumnName("blessing_id");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
+
+                    b.Property<string>("Level")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("character varying(25)")
+                        .HasColumnName("level");
+
+                    b.Property<int?>("StatModifierGroupId")
+                        .HasColumnType("integer")
+                        .HasColumnName("stat_modifier_group_id");
+
+                    b.Property<int>("XpCost")
+                        .HasColumnType("integer")
+                        .HasColumnName("xp_cost");
+
+                    b.Property<int>("XpGain")
+                        .HasColumnType("integer")
+                        .HasColumnName("xp_gain");
+
+                    b.HasKey("Id")
+                        .HasName("pk_blessing_levels");
+
+                    b.HasIndex("BlessingId")
+                        .HasDatabaseName("ix_blessing_levels_blessing_id");
+
+                    b.HasIndex("StatModifierGroupId")
+                        .HasDatabaseName("ix_blessing_levels_stat_modifier_group_id");
+
+                    b.ToTable("blessing_levels", (string)null);
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit.BlessingAuditTrail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("action");
+
+                    b.Property<string>("ActorUserId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("actor_user_id");
+
+                    b.Property<int>("BlessingId")
+                        .HasColumnType("integer")
+                        .HasColumnName("blessing_id");
+
+                    b.Property<string>("ChangedProperties")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("changed_properties");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("timestamp");
+
+                    b.HasKey("Id")
+                        .HasName("pk_blessing_audit_trails");
+
+                    b.HasIndex("ActorUserId")
+                        .HasDatabaseName("ix_blessing_audit_trails_actor_user_id");
+
+                    b.HasIndex("BlessingId")
+                        .HasDatabaseName("ix_blessing_audit_trails_blessing_id");
+
+                    b.ToTable("blessing_audit_trails", (string)null);
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Blessings.BlessingSetup.Blessing", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("SubCategory")
+                        .IsRequired()
+                        .HasMaxLength(75)
+                        .HasColumnType("character varying(75)")
+                        .HasColumnName("sub_category");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id")
+                        .HasName("pk_blessings");
+
+                    b.ToTable("blessings", (string)null);
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings.CharacterBlessingMapping", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BlessingId")
+                        .HasColumnType("integer")
+                        .HasColumnName("blessing_id");
+
+                    b.Property<int>("BlessingLevelId")
+                        .HasColumnType("integer")
+                        .HasColumnName("blessing_level_id");
+
+                    b.Property<int>("CharacterId")
+                        .HasColumnType("integer")
+                        .HasColumnName("character_id");
+
+                    b.Property<DateTimeOffset?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(5000)
+                        .HasColumnType("character varying(5000)")
+                        .HasColumnName("notes");
+
+                    b.HasKey("Id")
+                        .HasName("pk_character_blessing_mappings");
+
+                    b.HasIndex("BlessingId")
+                        .HasDatabaseName("ix_character_blessing_mappings_blessing_id");
+
+                    b.HasIndex("BlessingLevelId")
+                        .HasDatabaseName("ix_character_blessing_mappings_blessing_level_id");
+
+                    b.HasIndex("CharacterId")
+                        .HasDatabaseName("ix_character_blessing_mappings_character_id");
+
+                    b.ToTable("character_blessing_mappings", (string)null);
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels.AssignedXpMapping", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -117,22 +659,28 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("timestamp");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_assigned_xp_mappings");
 
-                    b.HasIndex("AssignedByUserId");
+                    b.HasIndex("AssignedByUserId")
+                        .HasDatabaseName("ix_assigned_xp_mappings_assigned_by_user_id");
 
-                    b.HasIndex("AssignedXpTypeId");
+                    b.HasIndex("AssignedXpTypeId")
+                        .HasDatabaseName("ix_assigned_xp_mappings_assigned_xp_type_id");
 
-                    b.HasIndex("CharacterId");
+                    b.HasIndex("CharacterId")
+                        .HasDatabaseName("ix_assigned_xp_mappings_character_id");
 
-                    b.HasIndex("EventId");
+                    b.HasIndex("EventId")
+                        .HasDatabaseName("ix_assigned_xp_mappings_event_id");
 
-                    b.HasIndex("PlayerId");
+                    b.HasIndex("PlayerId")
+                        .HasDatabaseName("ix_assigned_xp_mappings_player_id");
 
-                    b.ToTable("assigned_xp_mapping");
+                    b.ToTable("assigned_xp_mappings", (string)null);
                 });
 
-            modelBuilder.Entity("ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels.Audit.AssignedXpMappingAuditTrail", b =>
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels.Audit.AssignedXpMappingAuditTrail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -164,16 +712,19 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("timestamp");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_assigned_xp_mapping_audit_trail");
 
-                    b.HasIndex("ActorUserId");
+                    b.HasIndex("ActorUserId")
+                        .HasDatabaseName("ix_assigned_xp_mapping_audit_trail_actor_user_id");
 
-                    b.HasIndex("AssignedXpMappingId");
+                    b.HasIndex("AssignedXpMappingId")
+                        .HasDatabaseName("ix_assigned_xp_mapping_audit_trail_assigned_xp_mapping_id");
 
                     b.ToTable("assigned_xp_mapping_audit_trail", (string)null);
                 });
 
-            modelBuilder.Entity("ExpressedRealms.DB.Characters.AssignedXp.AssignedXpTypeModels.AssignedXpType", b =>
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels.AssignedXpType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -188,7 +739,8 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.Property<string>("Description")
                         .HasMaxLength(1500)
-                        .HasColumnType("character varying(1500)");
+                        .HasColumnType("character varying(1500)")
+                        .HasColumnName("description");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean")
@@ -197,55 +749,111 @@ namespace ExpressedRealms.DB.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
+                        .HasColumnType("character varying(300)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_assigned_xp_types");
 
-                    b.ToTable("assigned_xp_type");
+                    b.ToTable("assigned_xp_types", (string)null);
                 });
 
-            modelBuilder.Entity("ExpressedRealms.DB.Characters.Character", b =>
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels.Audit.AssignedXpTypeAuditTrail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("action");
+
+                    b.Property<string>("ActorUserId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("actor_user_id");
+
+                    b.Property<int>("AssignedXpTypeId")
+                        .HasColumnType("integer")
+                        .HasColumnName("assigned_xp_type_id");
+
+                    b.Property<string>("ChangedProperties")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("changed_properties");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("timestamp");
+
+                    b.HasKey("Id")
+                        .HasName("pk_assigned_xp_type_audit_trail");
+
+                    b.HasIndex("ActorUserId")
+                        .HasDatabaseName("ix_assigned_xp_type_audit_trail_actor_user_id");
+
+                    b.HasIndex("AssignedXpTypeId")
+                        .HasDatabaseName("ix_assigned_xp_type_audit_trail_assigned_xp_type_id");
+
+                    b.ToTable("assigned_xp_type_audit_trail", (string)null);
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Characters.Character", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<byte>("AgilityId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("smallint")
-                        .HasDefaultValue((byte)1);
+                        .HasDefaultValue((byte)1)
+                        .HasColumnName("agility_id");
 
                     b.Property<string>("Background")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("background");
 
                     b.Property<byte>("ConstitutionId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("smallint")
-                        .HasDefaultValue((byte)1);
+                        .HasDefaultValue((byte)1)
+                        .HasColumnName("constitution_id");
 
                     b.Property<DateTimeOffset?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at");
 
                     b.Property<byte>("DexterityId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("smallint")
-                        .HasDefaultValue((byte)1);
+                        .HasDefaultValue((byte)1)
+                        .HasColumnName("dexterity_id");
 
                     b.Property<int>("ExpressionId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("expression_id");
 
                     b.Property<int?>("FactionId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("faction_id");
 
                     b.Property<byte>("IntelligenceId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("smallint")
-                        .HasDefaultValue((byte)1);
+                        .HasDefaultValue((byte)1)
+                        .HasColumnName("intelligence_id");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
 
                     b.Property<bool>("IsInCharacterCreation")
                         .ValueGeneratedOnAdd()
@@ -268,10 +876,12 @@ namespace ExpressedRealms.DB.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
+                        .HasColumnType("character varying(150)")
+                        .HasColumnName("name");
 
                     b.Property<Guid>("PlayerId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("player_id");
 
                     b.Property<int>("PlayerNumber")
                         .ValueGeneratedOnAdd()
@@ -294,46 +904,61 @@ namespace ExpressedRealms.DB.Migrations
                     b.Property<int>("StatExperiencePoints")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasDefaultValue(72);
+                        .HasDefaultValue(72)
+                        .HasColumnName("stat_experience_points");
 
                     b.Property<byte>("StrengthId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("smallint")
-                        .HasDefaultValue((byte)1);
+                        .HasDefaultValue((byte)1)
+                        .HasColumnName("strength_id");
 
                     b.Property<byte>("WillpowerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("smallint")
-                        .HasDefaultValue((byte)1);
+                        .HasDefaultValue((byte)1)
+                        .HasColumnName("willpower_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_characters");
 
-                    b.HasIndex("AgilityId");
+                    b.HasIndex("AgilityId")
+                        .HasDatabaseName("ix_characters_agility_id");
 
-                    b.HasIndex("ConstitutionId");
+                    b.HasIndex("ConstitutionId")
+                        .HasDatabaseName("ix_characters_constitution_id");
 
-                    b.HasIndex("DexterityId");
+                    b.HasIndex("DexterityId")
+                        .HasDatabaseName("ix_characters_dexterity_id");
 
-                    b.HasIndex("ExpressionId");
+                    b.HasIndex("ExpressionId")
+                        .HasDatabaseName("ix_characters_expression_id");
 
-                    b.HasIndex("FactionId");
+                    b.HasIndex("FactionId")
+                        .HasDatabaseName("ix_characters_faction_id");
 
-                    b.HasIndex("IntelligenceId");
+                    b.HasIndex("IntelligenceId")
+                        .HasDatabaseName("ix_characters_intelligence_id");
 
-                    b.HasIndex("PlayerId");
+                    b.HasIndex("PlayerId")
+                        .HasDatabaseName("ix_characters_player_id");
 
-                    b.HasIndex("PrimaryProgressionId");
+                    b.HasIndex("PrimaryProgressionId")
+                        .HasDatabaseName("ix_characters_primary_progression_id");
 
-                    b.HasIndex("SecondaryProgressionId");
+                    b.HasIndex("SecondaryProgressionId")
+                        .HasDatabaseName("ix_characters_secondary_progression_id");
 
-                    b.HasIndex("StrengthId");
+                    b.HasIndex("StrengthId")
+                        .HasDatabaseName("ix_characters_strength_id");
 
-                    b.HasIndex("WillpowerId");
+                    b.HasIndex("WillpowerId")
+                        .HasDatabaseName("ix_characters_willpower_id");
 
-                    b.ToTable("Characters");
+                    b.ToTable("characters", (string)null);
                 });
 
-            modelBuilder.Entity("ExpressedRealms.DB.Characters.xpTables.CharacterXpMapping", b =>
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Characters.XpTables.CharacterXpMapping", b =>
                 {
                     b.Property<int>("CharacterId")
                         .HasColumnType("integer")
@@ -363,14 +988,16 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("total_character_creation_xp");
 
-                    b.HasKey("CharacterId", "XpSectionTypeId");
+                    b.HasKey("CharacterId", "XpSectionTypeId")
+                        .HasName("pk_character_xp_mappings");
 
-                    b.HasIndex("XpSectionTypeId");
+                    b.HasIndex("XpSectionTypeId")
+                        .HasDatabaseName("ix_character_xp_mappings_xp_section_type_id");
 
-                    b.ToTable("character_xp_mapping", (string)null);
+                    b.ToTable("character_xp_mappings", (string)null);
                 });
 
-            modelBuilder.Entity("ExpressedRealms.DB.Characters.xpTables.CharacterXpView", b =>
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Characters.XpTables.CharacterXpView", b =>
                 {
                     b.Property<int>("CharacterId")
                         .HasColumnType("integer")
@@ -418,7 +1045,7 @@ namespace ExpressedRealms.DB.Migrations
                     b.ToView("character_xp_view", (string)null);
                 });
 
-            modelBuilder.Entity("ExpressedRealms.DB.Characters.xpTables.XpSectionType", b =>
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Characters.XpTables.XpSectionType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -435,556 +1062,12 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.Property<int>("SectionCap")
                         .HasColumnType("integer")
-                        .HasColumnName("creation_cap");
+                        .HasColumnName("section_cap");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_xp_section_types");
 
-                    b.ToTable("xp_section_type", (string)null);
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.PermissionResources.PermissionResource", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)")
-                        .HasColumnName("description");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("permission_resource", (string)null);
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.Permissions.Permission", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)")
-                        .HasColumnName("description");
-
-                    b.Property<string>("Key")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("key");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("name");
-
-                    b.Property<Guid>("PermissionResourceId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("permission_resource_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PermissionResourceId");
-
-                    b.ToTable("permission", (string)null);
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup.Audit.RolePermissionMappingAuditTrail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Action")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("action");
-
-                    b.Property<string>("ActorUserId")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("actor_user_id");
-
-                    b.Property<string>("ChangedProperties")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("changed_properties");
-
-                    b.Property<Guid?>("PermissionId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("permission_id");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("integer")
-                        .HasColumnName("role_id");
-
-                    b.Property<int?>("RolePermissionMappingId")
-                        .HasColumnType("integer")
-                        .HasColumnName("role_permission_mapping_id");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("timestamp");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActorUserId");
-
-                    b.HasIndex("PermissionId");
-
-                    b.HasIndex("RoleId");
-
-                    b.HasIndex("RolePermissionMappingId");
-
-                    b.ToTable("role_permission_mapping_audit_trail", (string)null);
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup.RolePermissionMapping", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTimeOffset?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_at");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_deleted");
-
-                    b.Property<Guid>("PermissionId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("permission_id");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("integer")
-                        .HasColumnName("role_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PermissionId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("role_permission_mapping", (string)null);
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.RoleSetup.Audit.RoleAuditTrail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Action")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("action");
-
-                    b.Property<string>("ActorUserId")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("actor_user_id");
-
-                    b.Property<string>("ChangedProperties")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("changed_properties");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("integer")
-                        .HasColumnName("role_id");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("timestamp");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActorUserId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("role_audit_trail", (string)null);
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.RoleSetup.Role", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTimeOffset?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_at");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)")
-                        .HasColumnName("description");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_deleted");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("role", (string)null);
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup.Audit.UserRoleMappingAuditTrail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Action")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("action");
-
-                    b.Property<string>("ActorUserId")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("actor_user_id");
-
-                    b.Property<string>("ChangedProperties")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("changed_properties");
-
-                    b.Property<int>("RoleId")
-                        .HasMaxLength(450)
-                        .HasColumnType("integer")
-                        .HasColumnName("role_id");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("timestamp");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("user_id");
-
-                    b.Property<int>("UserRoleMappingId")
-                        .HasColumnType("integer")
-                        .HasColumnName("user_role_mapping_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActorUserId");
-
-                    b.HasIndex("RoleId");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("UserRoleMappingId");
-
-                    b.ToTable("user_role_mapping_audit_trail", (string)null);
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup.UserRoleMapping", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTimeOffset?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_at");
-
-                    b.Property<DateOnly?>("ExpireDate")
-                        .HasColumnType("date")
-                        .HasColumnName("expire_date");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_deleted");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("integer")
-                        .HasColumnName("role_id");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("character varying(450)")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("user_role_mapping", (string)null);
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit.BlessingLevelAuditTrail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Action")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("action");
-
-                    b.Property<string>("ActorUserId")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("actor_user_id");
-
-                    b.Property<int>("BlessingId")
-                        .HasColumnType("integer")
-                        .HasColumnName("blessing_id");
-
-                    b.Property<int>("BlessingLevelId")
-                        .HasColumnType("integer")
-                        .HasColumnName("blessing_level_id");
-
-                    b.Property<string>("ChangedProperties")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("changed_properties");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("timestamp");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActorUserId");
-
-                    b.HasIndex("BlessingId");
-
-                    b.HasIndex("BlessingLevelId");
-
-                    b.ToTable("blessing_level_audit_trail", (string)null);
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.BlessingLevel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BlessingId")
-                        .HasColumnType("integer")
-                        .HasColumnName("blessing_id");
-
-                    b.Property<DateTimeOffset?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_at");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("description");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_deleted");
-
-                    b.Property<string>("Level")
-                        .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("character varying(25)")
-                        .HasColumnName("level");
-
-                    b.Property<int?>("StatModifierGroupId")
-                        .HasColumnType("integer")
-                        .HasColumnName("stat_modifier_group");
-
-                    b.Property<int>("XpCost")
-                        .HasColumnType("integer")
-                        .HasColumnName("xp_cost");
-
-                    b.Property<int>("XpGain")
-                        .HasColumnType("integer")
-                        .HasColumnName("xp_gain");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BlessingId");
-
-                    b.HasIndex("StatModifierGroupId");
-
-                    b.ToTable("blessing_level", (string)null);
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit.BlessingAuditTrail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Action")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("action");
-
-                    b.Property<string>("ActorUserId")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("actor_user_id");
-
-                    b.Property<int>("BlessingId")
-                        .HasColumnType("integer")
-                        .HasColumnName("blessing_id");
-
-                    b.Property<string>("ChangedProperties")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("changed_properties");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("timestamp");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActorUserId");
-
-                    b.HasIndex("BlessingId");
-
-                    b.ToTable("blessing_audit_trail", (string)null);
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Blessings.BlessingSetup.Blessing", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTimeOffset?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_at");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("description");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_deleted");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)")
-                        .HasColumnName("name");
-
-                    b.Property<string>("SubCategory")
-                        .IsRequired()
-                        .HasMaxLength(75)
-                        .HasColumnType("character varying(75)")
-                        .HasColumnName("sub_category");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("type");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("blessing", (string)null);
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings.CharacterBlessingMapping", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BlessingId")
-                        .HasColumnType("integer")
-                        .HasColumnName("blessing_id");
-
-                    b.Property<int>("BlessingLevelId")
-                        .HasColumnType("integer")
-                        .HasColumnName("blessing_level_id");
-
-                    b.Property<int>("CharacterId")
-                        .HasColumnType("integer")
-                        .HasColumnName("character_id");
-
-                    b.Property<DateTimeOffset?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_at");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_deleted");
-
-                    b.Property<string>("Notes")
-                        .HasMaxLength(5000)
-                        .HasColumnType("character varying(5000)")
-                        .HasColumnName("notes");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BlessingId");
-
-                    b.HasIndex("BlessingLevelId");
-
-                    b.HasIndex("CharacterId");
-
-                    b.ToTable("character_blessing_mapping", (string)null);
+                    b.ToTable("xp_section_types", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup.Audit.CheckinQuestionResponseAuditTrail", b =>
@@ -1023,15 +1106,19 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("timestamp");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_checkin_question_response_audit_trail");
 
-                    b.HasIndex("ActorUserId");
+                    b.HasIndex("ActorUserId")
+                        .HasDatabaseName("ix_checkin_question_response_audit_trail_actor_user_id");
 
-                    b.HasIndex("EventQuestionId");
+                    b.HasIndex("EventQuestionId")
+                        .HasDatabaseName("ix_checkin_question_response_audit_trail_event_question_id");
 
-                    b.HasIndex("CheckinId", "EventQuestionId");
+                    b.HasIndex("CheckinId", "EventQuestionId")
+                        .HasDatabaseName("ix_checkin_question_response_audit_trail_checkin_id_event_ques");
 
-                    b.ToTable("checkin_event_question_response_audit_trail", (string)null);
+                    b.ToTable("checkin_question_response_audit_trail", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup.CheckinQuestionResponse", b =>
@@ -1050,11 +1137,13 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("character varying(2000)")
                         .HasColumnName("response");
 
-                    b.HasKey("CheckinId", "EventQuestionId");
+                    b.HasKey("CheckinId", "EventQuestionId")
+                        .HasName("pk_checkin_question_responses");
 
-                    b.HasIndex("EventQuestionId");
+                    b.HasIndex("EventQuestionId")
+                        .HasDatabaseName("ix_checkin_question_responses_event_question_id");
 
-                    b.ToTable("checkin_question_response", (string)null);
+                    b.ToTable("checkin_question_responses", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Checkins.CheckinSetup.Audit.CheckinAuditTrail", b =>
@@ -1089,13 +1178,16 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("timestamp");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_checkin_audit_trails");
 
-                    b.HasIndex("ActorUserId");
+                    b.HasIndex("ActorUserId")
+                        .HasDatabaseName("ix_checkin_audit_trails_actor_user_id");
 
-                    b.HasIndex("CheckinId");
+                    b.HasIndex("CheckinId")
+                        .HasDatabaseName("ix_checkin_audit_trails_checkin_id");
 
-                    b.ToTable("checkin_audit_trail", (string)null);
+                    b.ToTable("checkin_audit_trails", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Checkins.CheckinSetup.Checkin", b =>
@@ -1115,13 +1207,16 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("player_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_checkins");
 
-                    b.HasIndex("EventId");
+                    b.HasIndex("EventId")
+                        .HasDatabaseName("ix_checkins_event_id");
 
-                    b.HasIndex("PlayerId");
+                    b.HasIndex("PlayerId")
+                        .HasDatabaseName("ix_checkins_player_id");
 
-                    b.ToTable("checkin", (string)null);
+                    b.ToTable("checkins", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Checkins.CheckinStageMappingSetup.CheckinStageMapping", b =>
@@ -1151,15 +1246,19 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_checkin_stage_mappings");
 
-                    b.HasIndex("ApproverUserId");
+                    b.HasIndex("ApproverUserId")
+                        .HasDatabaseName("ix_checkin_stage_mappings_approver_user_id");
 
-                    b.HasIndex("CheckinId");
+                    b.HasIndex("CheckinId")
+                        .HasDatabaseName("ix_checkin_stage_mappings_checkin_id");
 
-                    b.HasIndex("CheckinStageId");
+                    b.HasIndex("CheckinStageId")
+                        .HasDatabaseName("ix_checkin_stage_mappings_checkin_stage_id");
 
-                    b.ToTable("checkin_stage_mapping", (string)null);
+                    b.ToTable("checkin_stage_mappings", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Checkins.CheckinStageSetup.CheckinStage", b =>
@@ -1183,9 +1282,10 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("character varying(250)")
                         .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_checkin_stages");
 
-                    b.ToTable("checkin_stage", (string)null);
+                    b.ToTable("checkin_stages", (string)null);
 
                     b.HasData(
                         new
@@ -1264,11 +1364,14 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("timestamp");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_contact_audit_trail");
 
-                    b.HasIndex("ActorUserId");
+                    b.HasIndex("ActorUserId")
+                        .HasDatabaseName("ix_contact_audit_trail_actor_user_id");
 
-                    b.HasIndex("ContactId");
+                    b.HasIndex("ContactId")
+                        .HasDatabaseName("ix_contact_audit_trail_contact_id");
 
                     b.ToTable("contact_audit_trail", (string)null);
                 });
@@ -1325,15 +1428,19 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("smallint")
                         .HasColumnName("spent_xp");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_contacts");
 
-                    b.HasIndex("CharacterId");
+                    b.HasIndex("CharacterId")
+                        .HasDatabaseName("ix_contacts_character_id");
 
-                    b.HasIndex("KnowledgeId");
+                    b.HasIndex("KnowledgeId")
+                        .HasDatabaseName("ix_contacts_knowledge_id");
 
-                    b.HasIndex("KnowledgeLevelId");
+                    b.HasIndex("KnowledgeLevelId")
+                        .HasDatabaseName("ix_contacts_knowledge_level_id");
 
-                    b.ToTable("contact", (string)null);
+                    b.ToTable("contacts", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup.Audit.EventScheduleItemAuditTrail", b =>
@@ -1361,7 +1468,8 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnName("changed_properties");
 
                     b.Property<int>("EventId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("event_id");
 
                     b.Property<int>("EventScheduleItemId")
                         .HasColumnType("integer")
@@ -1371,13 +1479,17 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("timestamp");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_event_schedule_item_audit_trail");
 
-                    b.HasIndex("ActorUserId");
+                    b.HasIndex("ActorUserId")
+                        .HasDatabaseName("ix_event_schedule_item_audit_trail_actor_user_id");
 
-                    b.HasIndex("EventId");
+                    b.HasIndex("EventId")
+                        .HasDatabaseName("ix_event_schedule_item_audit_trail_event_id");
 
-                    b.HasIndex("EventScheduleItemId");
+                    b.HasIndex("EventScheduleItemId")
+                        .HasDatabaseName("ix_event_schedule_item_audit_trail_event_schedule_item_id");
 
                     b.ToTable("event_schedule_item_audit_trail", (string)null);
                 });
@@ -1421,9 +1533,10 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("time without time zone")
                         .HasColumnName("start_time");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_event_schedule_items");
 
-                    b.ToTable("event_schedule_item", (string)null);
+                    b.ToTable("event_schedule_items", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Events.EventSetup.Audit.EventAuditTrail", b =>
@@ -1458,11 +1571,14 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("timestamp");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_event_audit_trail");
 
-                    b.HasIndex("ActorUserId");
+                    b.HasIndex("ActorUserId")
+                        .HasDatabaseName("ix_event_audit_trail_actor_user_id");
 
-                    b.HasIndex("EventId");
+                    b.HasIndex("EventId")
+                        .HasDatabaseName("ix_event_audit_trail_event_id");
 
                     b.ToTable("event_audit_trail", (string)null);
                 });
@@ -1539,9 +1655,10 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("character varying(500)")
                         .HasColumnName("website_url");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_events");
 
-                    b.ToTable("event", (string)null);
+                    b.ToTable("events", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Events.Questions.EventQuestionSetup.Audit.EventQuestionAuditTrail", b =>
@@ -1576,11 +1693,14 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("timestamp");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_event_question_audit_trail");
 
-                    b.HasIndex("ActorUserId");
+                    b.HasIndex("ActorUserId")
+                        .HasDatabaseName("ix_event_question_audit_trail_actor_user_id");
 
-                    b.HasIndex("EventQuestionId");
+                    b.HasIndex("EventQuestionId")
+                        .HasDatabaseName("ix_event_question_audit_trail_event_question_id");
 
                     b.ToTable("event_question_audit_trail", (string)null);
                 });
@@ -1616,13 +1736,16 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("question_type_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_event_questions");
 
-                    b.HasIndex("EventId");
+                    b.HasIndex("EventId")
+                        .HasDatabaseName("ix_event_questions_event_id");
 
-                    b.HasIndex("QuestionTypeId");
+                    b.HasIndex("QuestionTypeId")
+                        .HasDatabaseName("ix_event_questions_question_type_id");
 
-                    b.ToTable("event_question", (string)null);
+                    b.ToTable("event_questions", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Events.Questions.QuestionTypeSetup.QuestionType", b =>
@@ -1648,9 +1771,10 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("character varying(250)")
                         .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_question_types");
 
-                    b.ToTable("question_type", (string)null);
+                    b.ToTable("question_types", (string)null);
 
                     b.HasData(
                         new
@@ -1701,130 +1825,162 @@ namespace ExpressedRealms.DB.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_expression_publish_status");
 
-                    b.ToTable("ExpressionPublishStatus", (string)null);
+                    b.ToTable("expression_publish_status", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup.ExpressionSection", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("content");
 
                     b.Property<DateTimeOffset?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at");
 
                     b.Property<int>("ExpressionId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("expression_id");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
+                        .HasColumnType("character varying(150)")
+                        .HasColumnName("name");
 
                     b.Property<int>("OrderIndex")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("order_index");
 
                     b.Property<int?>("ParentId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("parent_id");
 
                     b.Property<int>("SectionTypeId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("section_type_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_expression_sections");
 
-                    b.HasIndex("ExpressionId");
+                    b.HasIndex("ExpressionId")
+                        .HasDatabaseName("ix_expression_sections_expression_id");
 
-                    b.HasIndex("ParentId");
+                    b.HasIndex("ParentId")
+                        .HasDatabaseName("ix_expression_sections_parent_id");
 
-                    b.HasIndex("SectionTypeId");
+                    b.HasIndex("SectionTypeId")
+                        .HasDatabaseName("ix_expression_sections_section_type_id");
 
-                    b.ToTable("ExpressionSections", (string)null);
+                    b.ToTable("expression_sections", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup.ExpressionSectionAuditTrail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Action")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("action");
 
                     b.Property<string>("ActorUserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("actor_user_id");
 
                     b.Property<string>("ChangedProperties")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("changed_properties");
 
                     b.Property<int>("ExpressionId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("expression_id");
 
                     b.Property<int>("SectionId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("section_id");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("timestamp");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_expression_section_audit_trails");
 
-                    b.HasIndex("ActorUserId");
+                    b.HasIndex("ActorUserId")
+                        .HasDatabaseName("ix_expression_section_audit_trails_actor_user_id");
 
-                    b.HasIndex("ExpressionId");
+                    b.HasIndex("ExpressionId")
+                        .HasDatabaseName("ix_expression_section_audit_trails_expression_id");
 
-                    b.HasIndex("SectionId");
+                    b.HasIndex("SectionId")
+                        .HasDatabaseName("ix_expression_section_audit_trails_section_id");
 
-                    b.ToTable("ExpressionSection_AuditTrail", (string)null);
+                    b.ToTable("expression_section_audit_trails", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Expressions.ExpressionSectionType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_expression_section_types");
 
-                    b.ToTable("ExpressionSectionTypes", (string)null);
+                    b.ToTable("expression_section_types", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Expressions.ExpressionSetup.Expression", b =>
@@ -1859,7 +2015,7 @@ namespace ExpressedRealms.DB.Migrations
                     b.Property<string>("NavMenuImage")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("nav_menu_item");
+                        .HasColumnName("nav_menu_image");
 
                     b.Property<int>("OrderIndex")
                         .ValueGeneratedOnAdd()
@@ -1879,48 +2035,60 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("character varying(125)")
                         .HasColumnName("short_description");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_expressions");
 
-                    b.HasIndex("ExpressionTypeId");
+                    b.HasIndex("ExpressionTypeId")
+                        .HasDatabaseName("ix_expressions_expression_type_id");
 
-                    b.HasIndex("PublishStatusId");
+                    b.HasIndex("PublishStatusId")
+                        .HasDatabaseName("ix_expressions_publish_status_id");
 
-                    b.ToTable("expression", (string)null);
+                    b.ToTable("expressions", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Expressions.ExpressionSetup.ExpressionAuditTrail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Action")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("action");
 
                     b.Property<string>("ActorUserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("actor_user_id");
 
                     b.Property<string>("ChangedProperties")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("changed_properties");
 
                     b.Property<int>("ExpressionId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("expression_id");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("timestamp");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_expression_audit_trails");
 
-                    b.HasIndex("ActorUserId");
+                    b.HasIndex("ActorUserId")
+                        .HasDatabaseName("ix_expression_audit_trails_actor_user_id");
 
-                    b.HasIndex("ExpressionId");
+                    b.HasIndex("ExpressionId")
+                        .HasDatabaseName("ix_expression_audit_trails_expression_id");
 
-                    b.ToTable("Expression_AuditTrail", (string)null);
+                    b.ToTable("expression_audit_trails", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Expressions.ExpressionType", b =>
@@ -1944,9 +2112,10 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("character varying(50)")
                         .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_expression_types");
 
-                    b.ToTable("expression_type", (string)null);
+                    b.ToTable("expression_types", (string)null);
 
                     b.HasData(
                         new
@@ -2005,13 +2174,17 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("timestamp");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_progression_level_audit_trail");
 
-                    b.HasIndex("ActorUserId");
+                    b.HasIndex("ActorUserId")
+                        .HasDatabaseName("ix_progression_level_audit_trail_actor_user_id");
 
-                    b.HasIndex("ProgressionLevelId");
+                    b.HasIndex("ProgressionLevelId")
+                        .HasDatabaseName("ix_progression_level_audit_trail_progression_level_id");
 
-                    b.HasIndex("ProgressionPathId");
+                    b.HasIndex("ProgressionPathId")
+                        .HasDatabaseName("ix_progression_level_audit_trail_progression_path_id");
 
                     b.ToTable("progression_level_audit_trail", (string)null);
                 });
@@ -2045,17 +2218,20 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.Property<int?>("StatModifierGroupId")
                         .HasColumnType("integer")
-                        .HasColumnName("stat_modifier_group");
+                        .HasColumnName("stat_modifier_group_id");
 
                     b.Property<int>("XlLevel")
                         .HasColumnType("integer")
                         .HasColumnName("xl_level");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_progression_level");
 
-                    b.HasIndex("ProgressionPathId");
+                    b.HasIndex("ProgressionPathId")
+                        .HasDatabaseName("ix_progression_level_progression_path_id");
 
-                    b.HasIndex("StatModifierGroupId");
+                    b.HasIndex("StatModifierGroupId")
+                        .HasDatabaseName("ix_progression_level_stat_modifier_group_id");
 
                     b.ToTable("progression_level", (string)null);
                 });
@@ -2096,13 +2272,17 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("timestamp");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_progression_path_audit_trail");
 
-                    b.HasIndex("ActorUserId");
+                    b.HasIndex("ActorUserId")
+                        .HasDatabaseName("ix_progression_path_audit_trail_actor_user_id");
 
-                    b.HasIndex("ExpressionId");
+                    b.HasIndex("ExpressionId")
+                        .HasDatabaseName("ix_progression_path_audit_trail_expression_id");
 
-                    b.HasIndex("ProgressionPathId");
+                    b.HasIndex("ProgressionPathId")
+                        .HasDatabaseName("ix_progression_path_audit_trail_progression_path_id");
 
                     b.ToTable("progression_path_audit_trail", (string)null);
                 });
@@ -2140,9 +2320,11 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("character varying(250)")
                         .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_progression_path");
 
-                    b.HasIndex("ExpressionId");
+                    b.HasIndex("ExpressionId")
+                        .HasDatabaseName("ix_progression_path_expression_id");
 
                     b.ToTable("progression_path", (string)null);
                 });
@@ -2181,15 +2363,19 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("character varying(5000)")
                         .HasColumnName("notes");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_character_knowledge_mappings");
 
-                    b.HasIndex("CharacterId");
+                    b.HasIndex("CharacterId")
+                        .HasDatabaseName("ix_character_knowledge_mappings_character_id");
 
-                    b.HasIndex("KnowledgeId");
+                    b.HasIndex("KnowledgeId")
+                        .HasDatabaseName("ix_character_knowledge_mappings_knowledge_id");
 
-                    b.HasIndex("KnowledgeLevelId");
+                    b.HasIndex("KnowledgeLevelId")
+                        .HasDatabaseName("ix_character_knowledge_mappings_knowledge_level_id");
 
-                    b.ToTable("character_knowledge_mapping", (string)null);
+                    b.ToTable("character_knowledge_mappings", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeSpecializations.CharacterKnowledgeSpecialization", b =>
@@ -2230,11 +2416,13 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("character varying(10000)")
                         .HasColumnName("notes");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_character_knowledge_specializations");
 
-                    b.HasIndex("KnowledgeMappingId");
+                    b.HasIndex("KnowledgeMappingId")
+                        .HasDatabaseName("ix_character_knowledge_specializations_knowledge_mapping_id");
 
-                    b.ToTable("character_knowledge_specialization", (string)null);
+                    b.ToTable("character_knowledge_specializations", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Knowledges.KnowledgeEducationLevels.KnowledgeEducationLevel", b =>
@@ -2280,9 +2468,10 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("unknown_xp_cost");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_knowledge_education_levels");
 
-                    b.ToTable("knowledge_education_level", (string)null);
+                    b.ToTable("knowledge_education_levels", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Audit.KnowledgeAuditTrail", b =>
@@ -2317,13 +2506,16 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("timestamp");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_knowledge_audit_trails");
 
-                    b.HasIndex("ActorUserId");
+                    b.HasIndex("ActorUserId")
+                        .HasDatabaseName("ix_knowledge_audit_trails_actor_user_id");
 
-                    b.HasIndex("KnowledgeId");
+                    b.HasIndex("KnowledgeId")
+                        .HasDatabaseName("ix_knowledge_audit_trails_knowledge_id");
 
-                    b.ToTable("knowledges_audit_trail", (string)null);
+                    b.ToTable("knowledge_audit_trails", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Knowledge", b =>
@@ -2358,11 +2550,13 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("character varying(250)")
                         .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_knowledges");
 
-                    b.HasIndex("KnowledgeTypeId");
+                    b.HasIndex("KnowledgeTypeId")
+                        .HasDatabaseName("ix_knowledges_knowledge_type_id");
 
-                    b.ToTable("knowledge", (string)null);
+                    b.ToTable("knowledges", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Knowledges.KnowledgeType", b =>
@@ -2385,9 +2579,10 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("character varying(250)")
                         .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_knowledge_types");
 
-                    b.ToTable("knowledge_type", (string)null);
+                    b.ToTable("knowledge_types", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.ModifierSystem.StatGroupMappings.StatGroupMapping", b =>
@@ -2413,7 +2608,7 @@ namespace ExpressedRealms.DB.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
                         .HasDefaultValue(false)
-                        .HasColumnName("scales_with_level");
+                        .HasColumnName("scale_with_level");
 
                     b.Property<int>("StatGroupId")
                         .HasColumnType("integer")
@@ -2427,15 +2622,19 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("target_expression_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_stat_group_mappings");
 
-                    b.HasIndex("StatGroupId");
+                    b.HasIndex("StatGroupId")
+                        .HasDatabaseName("ix_stat_group_mappings_stat_group_id");
 
-                    b.HasIndex("StatModifierId");
+                    b.HasIndex("StatModifierId")
+                        .HasDatabaseName("ix_stat_group_mappings_stat_modifier_id");
 
-                    b.HasIndex("TargetExpressionId");
+                    b.HasIndex("TargetExpressionId")
+                        .HasDatabaseName("ix_stat_group_mappings_target_expression_id");
 
-                    b.ToTable("stat_group_mapping", (string)null);
+                    b.ToTable("stat_group_mappings", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.ModifierSystem.StatModifierGroups.StatModifierGroup", b =>
@@ -2447,9 +2646,10 @@ namespace ExpressedRealms.DB.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_stat_modifier_groups");
 
-                    b.ToTable("stat_modifier_group", (string)null);
+                    b.ToTable("stat_modifier_groups", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.ModifierSystem.StatModifiers.StatModifier", b =>
@@ -2467,9 +2667,10 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("character varying(250)")
                         .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_stat_modifiers");
 
-                    b.ToTable("stat_modifier", (string)null);
+                    b.ToTable("stat_modifiers", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup.CharacterPowerMapping", b =>
@@ -2506,71 +2707,88 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("power_level_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_character_power_mappings");
 
-                    b.HasIndex("CharacterId");
+                    b.HasIndex("CharacterId")
+                        .HasDatabaseName("ix_character_power_mappings_character_id");
 
-                    b.HasIndex("PowerId");
+                    b.HasIndex("PowerId")
+                        .HasDatabaseName("ix_character_power_mappings_power_id");
 
-                    b.HasIndex("PowerLevelId");
+                    b.HasIndex("PowerLevelId")
+                        .HasDatabaseName("ix_character_power_mappings_power_level_id");
 
-                    b.ToTable("character_power_mapping", (string)null);
+                    b.ToTable("character_power_mappings", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Powers.Power", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<byte>("ActivationTimingTypeId")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("activation_timing_type_id");
 
                     b.Property<byte>("AreaOfEffectTypeId")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("area_of_effect_type_id");
 
                     b.Property<string>("Cost")
                         .HasColumnType("text")
                         .HasColumnName("cost");
 
                     b.Property<DateTimeOffset?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<byte>("DurationId")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("duration_id");
 
                     b.Property<string>("GameMechanicEffect")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("game_mechanic_effect");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
 
                     b.Property<bool>("IsPowerUse")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_power_use");
 
                     b.Property<int>("LevelId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("level_id");
 
                     b.Property<string>("Limitation")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("limitation");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("name");
 
                     b.Property<int>("OrderIndex")
                         .HasColumnType("integer")
                         .HasColumnName("order_index");
 
                     b.Property<string>("OtherFields")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("other_fields");
 
                     b.Property<int>("PowerPathId")
                         .HasColumnType("integer")
@@ -2578,117 +2796,144 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.Property<int?>("StatModifierGroupId")
                         .HasColumnType("integer")
-                        .HasColumnName("stat_modifier_group");
+                        .HasColumnName("stat_modifier_group_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_powers");
 
-                    b.HasIndex("ActivationTimingTypeId");
+                    b.HasIndex("ActivationTimingTypeId")
+                        .HasDatabaseName("ix_powers_activation_timing_type_id");
 
-                    b.HasIndex("AreaOfEffectTypeId");
+                    b.HasIndex("AreaOfEffectTypeId")
+                        .HasDatabaseName("ix_powers_area_of_effect_type_id");
 
-                    b.HasIndex("DurationId");
+                    b.HasIndex("DurationId")
+                        .HasDatabaseName("ix_powers_duration_id");
 
-                    b.HasIndex("LevelId");
+                    b.HasIndex("LevelId")
+                        .HasDatabaseName("ix_powers_level_id");
 
-                    b.HasIndex("PowerPathId");
+                    b.HasIndex("PowerPathId")
+                        .HasDatabaseName("ix_powers_power_path_id");
 
-                    b.HasIndex("StatModifierGroupId");
+                    b.HasIndex("StatModifierGroupId")
+                        .HasDatabaseName("ix_powers_stat_modifier_group_id");
 
-                    b.ToTable("power", (string)null);
+                    b.ToTable("powers", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Powers.PowerActivationTimingType", b =>
                 {
                     b.Property<byte>("Id")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("id");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_power_activation_timing_types");
 
-                    b.ToTable("power_activation_timing_type", (string)null);
+                    b.ToTable("power_activation_timing_types", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Powers.PowerAreaOfEffectType", b =>
                 {
                     b.Property<byte>("Id")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("id");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_power_area_of_effect_types");
 
-                    b.ToTable("power_area_of_effect_type", (string)null);
+                    b.ToTable("power_area_of_effect_types", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Powers.PowerCategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_power_categories");
 
-                    b.ToTable("power_category", (string)null);
+                    b.ToTable("power_categories", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Powers.PowerCategoryMapping", b =>
                 {
                     b.Property<int>("PowerId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("power_id");
 
                     b.Property<int>("CategoryId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("category_id");
 
-                    b.HasKey("PowerId", "CategoryId");
+                    b.HasKey("PowerId", "CategoryId")
+                        .HasName("pk_power_category_mappings");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CategoryId")
+                        .HasDatabaseName("ix_power_category_mappings_category_id");
 
-                    b.ToTable("power_category_mapping", (string)null);
+                    b.ToTable("power_category_mappings", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Powers.PowerDuration", b =>
                 {
                     b.Property<byte>("Id")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("id");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(250)
-                        .HasColumnType("character varying(250)");
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_power_durations");
 
-                    b.ToTable("power_duration", (string)null);
+                    b.ToTable("power_durations", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Powers.PowerLevel", b =>
@@ -2721,9 +2966,10 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("xp");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_power_levels");
 
-                    b.ToTable("power_level", (string)null);
+                    b.ToTable("power_levels", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Powers.PowerPathSetup.PowerPath", b =>
@@ -2762,11 +3008,13 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("order_index");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_power_paths");
 
-                    b.HasIndex("ExpressionId");
+                    b.HasIndex("ExpressionId")
+                        .HasDatabaseName("ix_power_paths_expression_id");
 
-                    b.ToTable("power_path", (string)null);
+                    b.ToTable("power_paths", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Powers.PowerPathSetup.PowerPathAuditTrail", b =>
@@ -2805,15 +3053,19 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("timestamp");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_power_path_audit_trails");
 
-                    b.HasIndex("ActorUserId");
+                    b.HasIndex("ActorUserId")
+                        .HasDatabaseName("ix_power_path_audit_trails_actor_user_id");
 
-                    b.HasIndex("ExpressionId");
+                    b.HasIndex("ExpressionId")
+                        .HasDatabaseName("ix_power_path_audit_trails_expression_id");
 
-                    b.HasIndex("PowerPathId");
+                    b.HasIndex("PowerPathId")
+                        .HasDatabaseName("ix_power_path_audit_trails_power_path_id");
 
-                    b.ToTable("power_path_audit_trail", (string)null);
+                    b.ToTable("power_path_audit_trails", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Powers.PowerPrerequisitePowerSetup.PowerPrerequisitePower", b =>
@@ -2826,11 +3078,13 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("power_id");
 
-                    b.HasKey("PrerequisiteId", "PowerId");
+                    b.HasKey("PrerequisiteId", "PowerId")
+                        .HasName("pk_power_prerequisite_powers");
 
-                    b.HasIndex("PowerId");
+                    b.HasIndex("PowerId")
+                        .HasDatabaseName("ix_power_prerequisite_powers_power_id");
 
-                    b.ToTable("power_prerequisite_power", (string)null);
+                    b.ToTable("power_prerequisite_powers", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Powers.PowerPrerequisiteSetup.PowerPrerequisite", b =>
@@ -2850,12 +3104,14 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("required_amount");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_power_prerequisites");
 
                     b.HasIndex("PowerId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_power_prerequisites_power_id");
 
-                    b.ToTable("power_prerequisite", (string)null);
+                    b.ToTable("power_prerequisites", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Powers.PowerSetup.Audit.PowerAuditTrail", b =>
@@ -2894,35 +3150,45 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("timestamp");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_power_audit_trails");
 
-                    b.HasIndex("ActorUserId");
+                    b.HasIndex("ActorUserId")
+                        .HasDatabaseName("ix_power_audit_trails_actor_user_id");
 
-                    b.HasIndex("PowerId");
+                    b.HasIndex("PowerId")
+                        .HasDatabaseName("ix_power_audit_trails_power_id");
 
-                    b.HasIndex("PowerPathId");
+                    b.HasIndex("PowerPathId")
+                        .HasDatabaseName("ix_power_audit_trails_power_path_id");
 
-                    b.ToTable("power_audit_trail", (string)null);
+                    b.ToTable("power_audit_trails", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Skills.CharacterSkillsMapping", b =>
                 {
                     b.Property<int>("CharacterId")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("character_id");
 
                     b.Property<byte>("SkillTypeId")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("skill_type_id");
 
                     b.Property<byte>("SkillLevelId")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("skill_level_id");
 
-                    b.HasKey("CharacterId", "SkillTypeId");
+                    b.HasKey("CharacterId", "SkillTypeId")
+                        .HasName("pk_character_skills_mappings");
 
-                    b.HasIndex("SkillLevelId");
+                    b.HasIndex("SkillLevelId")
+                        .HasDatabaseName("ix_character_skills_mappings_skill_level_id");
 
-                    b.HasIndex("SkillTypeId");
+                    b.HasIndex("SkillTypeId")
+                        .HasDatabaseName("ix_character_skills_mappings_skill_type_id");
 
-                    b.ToTable("CharacterSkillsMapping", (string)null);
+                    b.ToTable("character_skills_mappings", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Skills.ModifierType", b =>
@@ -2940,9 +3206,10 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("character varying(75)")
                         .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_modifier_types");
 
-                    b.ToTable("modifier_type", (string)null);
+                    b.ToTable("modifier_types", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Skills.SkillLevel", b =>
@@ -2974,175 +3241,214 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("xp");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_skill_levels");
 
-                    b.ToTable("skill_level", (string)null);
+                    b.ToTable("skill_levels", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Skills.SkillLevelBenefit", b =>
                 {
                     b.Property<byte>("SkillLevelId")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("skill_level_id");
 
                     b.Property<byte>("SkillTypeId")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("skill_type_id");
 
                     b.Property<byte>("ModifierTypeId")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("modifier_type_id");
 
                     b.Property<byte>("Modifier")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("modifier");
 
-                    b.HasKey("SkillLevelId", "SkillTypeId", "ModifierTypeId");
+                    b.HasKey("SkillLevelId", "SkillTypeId", "ModifierTypeId")
+                        .HasName("pk_skill_level_benefits");
 
-                    b.HasIndex("ModifierTypeId");
+                    b.HasIndex("ModifierTypeId")
+                        .HasDatabaseName("ix_skill_level_benefits_modifier_type_id");
 
-                    b.HasIndex("SkillTypeId");
+                    b.HasIndex("SkillTypeId")
+                        .HasDatabaseName("ix_skill_level_benefits_skill_type_id");
 
-                    b.ToTable("SkillLevelBenefit", (string)null);
+                    b.ToTable("skill_level_benefits", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Skills.SkillLevelDescriptionMapping", b =>
                 {
                     b.Property<byte>("SkillLevelId")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("skill_level_id");
 
                     b.Property<byte>("SkillTypeId")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("skill_type_id");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("text")
-                        .HasDefaultValue("Everything is awesome!");
+                        .HasDefaultValue("Everything is awesome!")
+                        .HasColumnName("description");
 
-                    b.HasKey("SkillLevelId", "SkillTypeId");
+                    b.HasKey("SkillLevelId", "SkillTypeId")
+                        .HasName("pk_skill_level_description_mappings");
 
-                    b.HasIndex("SkillTypeId");
+                    b.HasIndex("SkillTypeId")
+                        .HasDatabaseName("ix_skill_level_description_mappings_skill_type_id");
 
-                    b.ToTable("SkillLevelDescriptionMapping", (string)null);
+                    b.ToTable("skill_level_description_mappings", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Skills.SkillSubType", b =>
                 {
                     b.Property<byte>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<byte>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(125)
-                        .HasColumnType("character varying(125)");
+                        .HasColumnType("character varying(125)")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("character varying(10)");
+                        .HasColumnType("character varying(10)")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_skill_sub_types");
 
-                    b.ToTable("SkillSubType", (string)null);
+                    b.ToTable("skill_sub_types", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Skills.SkillType", b =>
                 {
                     b.Property<byte>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<byte>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(25)
-                        .HasColumnType("character varying(25)");
+                        .HasColumnType("character varying(25)")
+                        .HasColumnName("name");
 
                     b.Property<byte>("SkillSubTypeId")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("skill_sub_type_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_skill_types");
 
-                    b.HasIndex("SkillSubTypeId");
+                    b.HasIndex("SkillSubTypeId")
+                        .HasDatabaseName("ix_skill_types_skill_sub_type_id");
 
-                    b.ToTable("SkillType", (string)null);
+                    b.ToTable("skill_types", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Statistics.StatDescriptionMapping", b =>
                 {
                     b.Property<byte>("StatTypeId")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("stat_type_id");
 
                     b.Property<byte>("StatLevelId")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("stat_level_id");
 
                     b.Property<string>("ReasonableExpectation")
                         .IsRequired()
                         .HasMaxLength(400)
-                        .HasColumnType("character varying(400)");
+                        .HasColumnType("character varying(400)")
+                        .HasColumnName("reasonable_expectation");
 
-                    b.HasKey("StatTypeId", "StatLevelId");
+                    b.HasKey("StatTypeId", "StatLevelId")
+                        .HasName("pk_stat_description_mappings");
 
-                    b.HasIndex("StatLevelId");
+                    b.HasIndex("StatLevelId")
+                        .HasDatabaseName("ix_stat_description_mappings_stat_level_id");
 
-                    b.ToTable("StatDescriptionMappings");
+                    b.ToTable("stat_description_mappings", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Statistics.StatLevel", b =>
                 {
                     b.Property<byte>("Id")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("id");
 
                     b.Property<int>("Bonus")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("bonus");
 
                     b.Property<int>("TotalXPCost")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("total_xp_cost");
 
                     b.Property<int>("XPCost")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("xp_cost");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_stat_levels");
 
-                    b.ToTable("StatLevels");
+                    b.ToTable("stat_levels", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Statistics.StatType", b =>
                 {
                     b.Property<byte>("Id")
-                        .HasColumnType("smallint");
+                        .HasColumnType("smallint")
+                        .HasColumnName("id");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("description");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(15)
-                        .HasColumnType("character varying(15)");
+                        .HasColumnType("character varying(15)")
+                        .HasColumnName("name");
 
                     b.Property<string>("ShortName")
                         .IsRequired()
                         .HasMaxLength(3)
-                        .HasColumnType("character varying(3)");
+                        .HasColumnType("character varying(3)")
+                        .HasColumnName("short_name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_state_types");
 
-                    b.ToTable("StateTypes");
+                    b.ToTable("state_types", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup.Player", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<string>("LookupId")
                         .IsRequired()
@@ -3152,7 +3458,8 @@ namespace ExpressedRealms.DB.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
 
                     b.Property<int?>("PlayerNumber")
                         .HasColumnType("integer")
@@ -3160,75 +3467,94 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("user_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_players");
 
                     b.HasIndex("LookupId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_players_lookup_id");
 
                     b.HasIndex("PlayerNumber")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_players_player_number");
 
                     b.HasIndex("UserId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_players_user_id");
 
-                    b.ToTable("Players");
+                    b.ToTable("players", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup.PlayerAuditTrail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Action")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("action");
 
                     b.Property<string>("ActorUserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("actor_user_id");
 
                     b.Property<string>("ChangedProperties")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("changed_properties");
 
                     b.Property<Guid>("PlayerId")
-                        .HasColumnType("uuid");
+                        .HasColumnType("uuid")
+                        .HasColumnName("player_id");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("timestamp");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_player_audit_trails");
 
-                    b.HasIndex("ActorUserId");
+                    b.HasIndex("ActorUserId")
+                        .HasDatabaseName("ix_player_audit_trails_actor_user_id");
 
-                    b.HasIndex("PlayerId");
+                    b.HasIndex("PlayerId")
+                        .HasDatabaseName("ix_player_audit_trails_player_id");
 
-                    b.ToTable("Player_AuditTrail", (string)null);
+                    b.ToTable("player_audit_trails", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.UserProfile.PlayerDBModels.Roles.Role", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("id");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("concurrency_stamp");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("name");
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("normalized_name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_asp_net_roles");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
@@ -3240,14 +3566,18 @@ namespace ExpressedRealms.DB.Migrations
             modelBuilder.Entity("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserRoles.UserRole", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("user_id");
 
                     b.Property<string>("RoleId")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("role_id");
 
-                    b.HasKey("UserId", "RoleId");
+                    b.HasKey("UserId", "RoleId")
+                        .HasName("pk_asp_net_user_roles");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_asp_net_user_roles_role_id");
 
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
@@ -3256,97 +3586,124 @@ namespace ExpressedRealms.DB.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Action")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("action");
 
                     b.Property<string>("ActorUserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("actor_user_id");
 
                     b.Property<string>("ChangedProperties")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("changed_properties");
 
                     b.Property<string>("MappingUserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("mapping_user_id");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("role_id");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("timestamp");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_user_role_audit_trails");
 
-                    b.HasIndex("ActorUserId");
+                    b.HasIndex("ActorUserId")
+                        .HasDatabaseName("ix_user_role_audit_trails_actor_user_id");
 
-                    b.HasIndex("MappingUserId");
+                    b.HasIndex("MappingUserId")
+                        .HasDatabaseName("ix_user_role_audit_trails_mapping_user_id");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_user_role_audit_trails_role_id");
 
-                    b.ToTable("UserRoles_AuditTrail", (string)null);
+                    b.ToTable("user_role_audit_trails", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("id");
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("access_failed_count");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("concurrency_stamp");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("email");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("email_confirmed");
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("lockout_enabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("lockout_end");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("normalized_email");
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("normalized_user_name");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("password_hash");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("phone_number");
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("phone_number_confirmed");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("security_stamp");
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("two_factor_enabled");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("user_name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_asp_net_users");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -3362,59 +3719,74 @@ namespace ExpressedRealms.DB.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Action")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("action");
 
                     b.Property<string>("ActorUserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("actor_user_id");
 
                     b.Property<string>("ChangedProperties")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("changed_properties");
 
                     b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("timestamp");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("user_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_user_audit_trails");
 
-                    b.HasIndex("ActorUserId");
+                    b.HasIndex("ActorUserId")
+                        .HasDatabaseName("ix_user_audit_trails_actor_user_id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_user_audit_trails_user_id");
 
-                    b.ToTable("User_AuditTrail", (string)null);
+                    b.ToTable("user_audit_trails", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("claim_type");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("claim_value");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("role_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_asp_net_role_claims");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_asp_net_role_claims_role_id");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
@@ -3423,23 +3795,29 @@ namespace ExpressedRealms.DB.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("claim_type");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("claim_value");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("user_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_asp_net_user_claims");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_asp_net_user_claims_user_id");
 
                     b.ToTable("AspNetUserClaims", (string)null);
                 });
@@ -3447,21 +3825,27 @@ namespace ExpressedRealms.DB.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("login_provider");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("provider_key");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("provider_display_name");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("user_id");
 
-                    b.HasKey("LoginProvider", "ProviderKey");
+                    b.HasKey("LoginProvider", "ProviderKey")
+                        .HasName("pk_asp_net_user_logins");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_asp_net_user_logins_user_id");
 
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
@@ -3469,71 +3853,314 @@ namespace ExpressedRealms.DB.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.Property<string>("UserId")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("user_id");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("login_provider");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
                     b.Property<string>("Value")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("value");
 
-                    b.HasKey("UserId", "LoginProvider", "Name");
+                    b.HasKey("UserId", "LoginProvider", "Name")
+                        .HasName("pk_asp_net_user_tokens");
 
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ExpressedRealms.DB.Characters.AssignedXP.AssignedXpTypeModels.Audit.AssignedXpTypeAuditTrail", b =>
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.Permissions.Permission", b =>
+                {
+                    b.HasOne("ExpressedRealms.DB.Models.Authorization.PermissionResources.PermissionResource", "Resource")
+                        .WithMany("Permissions")
+                        .HasForeignKey("PermissionResourceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_permission_permission_resource_permission_resource_id");
+
+                    b.Navigation("Resource");
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup.Audit.RolePermissionMappingAuditTrail", b =>
                 {
                     b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", "ActorUser")
-                        .WithMany("AssignedXpTypeAuditTrails")
+                        .WithMany("RolePermissionMappingAuditTrails")
                         .HasForeignKey("ActorUserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_role_permission_mapping_audit_trail_users_actor_user_id");
 
-                    b.HasOne("ExpressedRealms.DB.Characters.AssignedXp.AssignedXpTypeModels.AssignedXpType", "AssignedXpType")
-                        .WithMany("AssignedXpTypeAuditTrails")
-                        .HasForeignKey("AssignedXpTypeId")
+                    b.HasOne("ExpressedRealms.DB.Models.Authorization.Permissions.Permission", "Permission")
+                        .WithMany()
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("fk_role_permission_mapping_audit_trail_permission_permission_id");
+
+                    b.HasOne("ExpressedRealms.DB.Models.Authorization.RoleSetup.Role", "Role")
+                        .WithMany("UserRoleMappingAuditTrails")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_role_permission_mapping_audit_trail_role_role_id");
+
+                    b.HasOne("ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup.RolePermissionMapping", "RolePermissionMapping")
+                        .WithMany("RolePermissionMappingAuditTrails")
+                        .HasForeignKey("RolePermissionMappingId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("fk_role_permission_mapping_audit_trail_role_permission_mapping");
 
                     b.Navigation("ActorUser");
 
-                    b.Navigation("AssignedXpType");
+                    b.Navigation("Permission");
+
+                    b.Navigation("Role");
+
+                    b.Navigation("RolePermissionMapping");
                 });
 
-            modelBuilder.Entity("ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels.AssignedXpMapping", b =>
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup.RolePermissionMapping", b =>
+                {
+                    b.HasOne("ExpressedRealms.DB.Models.Authorization.Permissions.Permission", "Permission")
+                        .WithMany("RolePermissionMappings")
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_role_permission_mapping_permission_permission_id");
+
+                    b.HasOne("ExpressedRealms.DB.Models.Authorization.RoleSetup.Role", "Role")
+                        .WithMany("RolePermissionMappings")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_role_permission_mapping_role_role_id");
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.RoleSetup.Audit.RoleAuditTrail", b =>
+                {
+                    b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", "ActorUser")
+                        .WithMany("RoleAuditTrails")
+                        .HasForeignKey("ActorUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_role_audit_trail_users_actor_user_id");
+
+                    b.HasOne("ExpressedRealms.DB.Models.Authorization.RoleSetup.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_role_audit_trail_role_role_id");
+
+                    b.Navigation("ActorUser");
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup.Audit.UserRoleMappingAuditTrail", b =>
+                {
+                    b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", "ActorUser")
+                        .WithMany("UserRoleMappingAuditTrails")
+                        .HasForeignKey("ActorUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_role_mapping_audit_trail_asp_net_users_actor_user_id");
+
+                    b.HasOne("ExpressedRealms.DB.Models.Authorization.RoleSetup.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_role_mapping_audit_trail_role_role_id");
+
+                    b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_role_mapping_audit_trail_asp_net_users_user_id");
+
+                    b.HasOne("ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup.UserRoleMapping", "UserRoleMapping")
+                        .WithMany()
+                        .HasForeignKey("UserRoleMappingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_role_mapping_audit_trail_user_role_mapping_user_role_m");
+
+                    b.Navigation("ActorUser");
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
+
+                    b.Navigation("UserRoleMapping");
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup.UserRoleMapping", b =>
+                {
+                    b.HasOne("ExpressedRealms.DB.Models.Authorization.RoleSetup.Role", "Role")
+                        .WithMany("UserRoleMappings")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_role_mapping_role_role_id");
+
+                    b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", "User")
+                        .WithMany("UserRoleMappings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_role_mapping_users_user_id");
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit.BlessingLevelAuditTrail", b =>
+                {
+                    b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", "ActorUser")
+                        .WithMany("BlessingLevelAuditTrails")
+                        .HasForeignKey("ActorUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_blessing_level_audit_trails_users_actor_user_id");
+
+                    b.HasOne("ExpressedRealms.DB.Models.Blessings.BlessingSetup.Blessing", "Blessing")
+                        .WithMany("BlessingLevelAuditTrails")
+                        .HasForeignKey("BlessingId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_blessing_level_audit_trails_blessings_blessing_id");
+
+                    b.HasOne("ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.BlessingLevel", "BlessingLevel")
+                        .WithMany("BlessingLevelAuditTrails")
+                        .HasForeignKey("BlessingLevelId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_blessing_level_audit_trails_blessing_levels_blessing_level_");
+
+                    b.Navigation("ActorUser");
+
+                    b.Navigation("Blessing");
+
+                    b.Navigation("BlessingLevel");
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.BlessingLevel", b =>
+                {
+                    b.HasOne("ExpressedRealms.DB.Models.Blessings.BlessingSetup.Blessing", "Blessing")
+                        .WithMany("BlessingLevels")
+                        .HasForeignKey("BlessingId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_blessing_levels_blessings_blessing_id");
+
+                    b.HasOne("ExpressedRealms.DB.Models.ModifierSystem.StatModifierGroups.StatModifierGroup", "StatModifierGroup")
+                        .WithMany("BlessingLevels")
+                        .HasForeignKey("StatModifierGroupId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_blessing_levels_stat_modifier_groups_stat_modifier_group_id");
+
+                    b.Navigation("Blessing");
+
+                    b.Navigation("StatModifierGroup");
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit.BlessingAuditTrail", b =>
+                {
+                    b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", "ActorUser")
+                        .WithMany("BlessingAuditTrails")
+                        .HasForeignKey("ActorUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_blessing_audit_trails_users_actor_user_id");
+
+                    b.HasOne("ExpressedRealms.DB.Models.Blessings.BlessingSetup.Blessing", "Blessing")
+                        .WithMany("BlessingAuditTrails")
+                        .HasForeignKey("BlessingId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_blessing_audit_trails_blessings_blessing_id");
+
+                    b.Navigation("ActorUser");
+
+                    b.Navigation("Blessing");
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings.CharacterBlessingMapping", b =>
+                {
+                    b.HasOne("ExpressedRealms.DB.Models.Blessings.BlessingSetup.Blessing", "Blessing")
+                        .WithMany("CharacterBlessingMappings")
+                        .HasForeignKey("BlessingId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_character_blessing_mappings_blessings_blessing_id");
+
+                    b.HasOne("ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.BlessingLevel", "BlessingLevel")
+                        .WithMany("CharacterBlessingMappings")
+                        .HasForeignKey("BlessingLevelId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_character_blessing_mappings_blessing_levels_blessing_level_");
+
+                    b.HasOne("ExpressedRealms.DB.Models.Characters.Character", "Character")
+                        .WithMany("CharacterBlessingMappings")
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_character_blessing_mappings_characters_character_id");
+
+                    b.Navigation("Blessing");
+
+                    b.Navigation("BlessingLevel");
+
+                    b.Navigation("Character");
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels.AssignedXpMapping", b =>
                 {
                     b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", "AssignedByUser")
                         .WithMany("AssignedXpMappings")
                         .HasForeignKey("AssignedByUserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_assigned_xp_mappings_users_assigned_by_user_id");
 
-                    b.HasOne("ExpressedRealms.DB.Characters.AssignedXp.AssignedXpTypeModels.AssignedXpType", "AssignedXpType")
+                    b.HasOne("ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels.AssignedXpType", "AssignedXpType")
                         .WithMany("AssignedXpMappings")
                         .HasForeignKey("AssignedXpTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_assigned_xp_mappings_assigned_xp_types_assigned_xp_type_id");
 
-                    b.HasOne("ExpressedRealms.DB.Characters.Character", "Character")
+                    b.HasOne("ExpressedRealms.DB.Models.Characters.Character", "Character")
                         .WithMany("AssignedXpMappings")
                         .HasForeignKey("CharacterId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_assigned_xp_mappings_characters_character_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Events.EventSetup.Event", "Event")
                         .WithMany("AssignedXpMappings")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_assigned_xp_mappings_events_event_id");
 
                     b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup.Player", "Player")
                         .WithMany("AssignedXpMappings")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_assigned_xp_mappings_players_player_id");
 
                     b.Navigation("AssignedByUser");
 
@@ -3546,89 +4173,123 @@ namespace ExpressedRealms.DB.Migrations
                     b.Navigation("Player");
                 });
 
-            modelBuilder.Entity("ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels.Audit.AssignedXpMappingAuditTrail", b =>
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels.Audit.AssignedXpMappingAuditTrail", b =>
                 {
                     b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", "ActorUser")
                         .WithMany("AssignedXpMappingAuditTrails")
                         .HasForeignKey("ActorUserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_assigned_xp_mapping_audit_trail_users_actor_user_id");
 
-                    b.HasOne("ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels.AssignedXpMapping", "AssignedXpMapping")
+                    b.HasOne("ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels.AssignedXpMapping", "AssignedXpMapping")
                         .WithMany("AssignedXpMappingAuditTrails")
                         .HasForeignKey("AssignedXpMappingId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_assigned_xp_mapping_audit_trail_assigned_xp_mappings_assign");
 
                     b.Navigation("ActorUser");
 
                     b.Navigation("AssignedXpMapping");
                 });
 
-            modelBuilder.Entity("ExpressedRealms.DB.Characters.Character", b =>
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels.Audit.AssignedXpTypeAuditTrail", b =>
+                {
+                    b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", "ActorUser")
+                        .WithMany("AssignedXpTypeAuditTrails")
+                        .HasForeignKey("ActorUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_assigned_xp_type_audit_trail_users_actor_user_id");
+
+                    b.HasOne("ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels.AssignedXpType", "AssignedXpType")
+                        .WithMany("AssignedXpTypeAuditTrails")
+                        .HasForeignKey("AssignedXpTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_assigned_xp_type_audit_trail_assigned_xp_types_assigned_xp_");
+
+                    b.Navigation("ActorUser");
+
+                    b.Navigation("AssignedXpType");
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Characters.Character", b =>
                 {
                     b.HasOne("ExpressedRealms.DB.Models.Statistics.StatLevel", "AgilityStatLevel")
                         .WithMany("CharacterAgility")
                         .HasForeignKey("AgilityId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_characters_stat_levels_agility_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Statistics.StatLevel", "ConstitutionStatLevel")
                         .WithMany("CharacterConstitution")
                         .HasForeignKey("ConstitutionId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_characters_stat_levels_constitution_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Statistics.StatLevel", "DexterityStatLevel")
                         .WithMany("CharacterDexterity")
                         .HasForeignKey("DexterityId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_characters_stat_levels_dexterity_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Expressions.ExpressionSetup.Expression", "Expression")
                         .WithMany("Characters")
                         .HasForeignKey("ExpressionId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_characters_expressions_expression_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup.ExpressionSection", "FactionInfo")
                         .WithMany("CharactersList")
                         .HasForeignKey("FactionId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_characters_expression_sections_faction_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Statistics.StatLevel", "IntelligenceStatLevel")
                         .WithMany("CharacterIntelligence")
                         .HasForeignKey("IntelligenceId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_characters_stat_levels_intelligence_id");
 
                     b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup.Player", "Player")
                         .WithMany("Characters")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_characters_players_player_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths.ProgressionPath", "PrimaryProgressionPath")
                         .WithMany("PrimaryProgressions")
                         .HasForeignKey("PrimaryProgressionId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_characters_progression_path_primary_progression_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths.ProgressionPath", "SecondaryProgressionPath")
                         .WithMany("SecondaryProgressions")
                         .HasForeignKey("SecondaryProgressionId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_characters_progression_path_secondary_progression_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Statistics.StatLevel", "StrengthStatLevel")
                         .WithMany("CharacterStrength")
                         .HasForeignKey("StrengthId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_characters_stat_levels_strength_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Statistics.StatLevel", "WillpowerStatLevel")
                         .WithMany("CharacterWillpower")
                         .HasForeignKey("WillpowerId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_characters_stat_levels_willpower_id");
 
                     b.Navigation("AgilityStatLevel");
 
@@ -3653,250 +4314,25 @@ namespace ExpressedRealms.DB.Migrations
                     b.Navigation("WillpowerStatLevel");
                 });
 
-            modelBuilder.Entity("ExpressedRealms.DB.Characters.xpTables.CharacterXpMapping", b =>
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Characters.XpTables.CharacterXpMapping", b =>
                 {
-                    b.HasOne("ExpressedRealms.DB.Characters.Character", "Character")
+                    b.HasOne("ExpressedRealms.DB.Models.Characters.Character", "Character")
                         .WithMany("CharacterXpMappings")
                         .HasForeignKey("CharacterId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_character_xp_mappings_characters_character_id");
 
-                    b.HasOne("ExpressedRealms.DB.Characters.xpTables.XpSectionType", "XpSectionType")
+                    b.HasOne("ExpressedRealms.DB.Models.Characters.XpTables.XpSectionType", "XpSectionType")
                         .WithMany("CharacterXpMappings")
                         .HasForeignKey("XpSectionTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_character_xp_mappings_xp_section_types_xp_section_type_id");
 
                     b.Navigation("Character");
 
                     b.Navigation("XpSectionType");
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.Permissions.Permission", b =>
-                {
-                    b.HasOne("ExpressedRealms.DB.Models.Authorization.PermissionResources.PermissionResource", "Resource")
-                        .WithMany("Permissions")
-                        .HasForeignKey("PermissionResourceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Resource");
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup.Audit.RolePermissionMappingAuditTrail", b =>
-                {
-                    b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", "ActorUser")
-                        .WithMany("RolePermissionMappingAuditTrails")
-                        .HasForeignKey("ActorUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ExpressedRealms.DB.Models.Authorization.Permissions.Permission", "Permission")
-                        .WithMany()
-                        .HasForeignKey("PermissionId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("ExpressedRealms.DB.Models.Authorization.RoleSetup.Role", "Role")
-                        .WithMany("UserRoleMappingAuditTrails")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup.RolePermissionMapping", "RolePermissionMapping")
-                        .WithMany("RolePermissionMappingAuditTrails")
-                        .HasForeignKey("RolePermissionMappingId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("ActorUser");
-
-                    b.Navigation("Permission");
-
-                    b.Navigation("Role");
-
-                    b.Navigation("RolePermissionMapping");
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.RolePermissionMappingSetup.RolePermissionMapping", b =>
-                {
-                    b.HasOne("ExpressedRealms.DB.Models.Authorization.Permissions.Permission", "Permission")
-                        .WithMany("RolePermissionMappings")
-                        .HasForeignKey("PermissionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ExpressedRealms.DB.Models.Authorization.RoleSetup.Role", "Role")
-                        .WithMany("RolePermissionMappings")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-
-                    b.Navigation("Permission");
-
-                    b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.RoleSetup.Audit.RoleAuditTrail", b =>
-                {
-                    b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", "ActorUser")
-                        .WithMany("RoleAuditTrails")
-                        .HasForeignKey("ActorUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ExpressedRealms.DB.Models.Authorization.RoleSetup.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ActorUser");
-
-                    b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup.Audit.UserRoleMappingAuditTrail", b =>
-                {
-                    b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", "ActorUser")
-                        .WithMany("UserRoleMappingAuditTrails")
-                        .HasForeignKey("ActorUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ExpressedRealms.DB.Models.Authorization.RoleSetup.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup.UserRoleMapping", "UserRoleMapping")
-                        .WithMany()
-                        .HasForeignKey("UserRoleMappingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ActorUser");
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
-
-                    b.Navigation("UserRoleMapping");
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup.UserRoleMapping", b =>
-                {
-                    b.HasOne("ExpressedRealms.DB.Models.Authorization.RoleSetup.Role", "Role")
-                        .WithMany("UserRoleMappings")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", "User")
-                        .WithMany("UserRoleMappings")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit.BlessingLevelAuditTrail", b =>
-                {
-                    b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", "ActorUser")
-                        .WithMany("BlessingLevelAuditTrails")
-                        .HasForeignKey("ActorUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ExpressedRealms.DB.Models.Blessings.BlessingSetup.Blessing", "Blessing")
-                        .WithMany("BlessingLevelAuditTrails")
-                        .HasForeignKey("BlessingId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.BlessingLevel", "BlessingLevel")
-                        .WithMany("BlessingLevelAuditTrails")
-                        .HasForeignKey("BlessingLevelId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("ActorUser");
-
-                    b.Navigation("Blessing");
-
-                    b.Navigation("BlessingLevel");
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.BlessingLevel", b =>
-                {
-                    b.HasOne("ExpressedRealms.DB.Models.Blessings.BlessingSetup.Blessing", "Blessing")
-                        .WithMany("BlessingLevels")
-                        .HasForeignKey("BlessingId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ExpressedRealms.DB.Models.ModifierSystem.StatModifierGroups.StatModifierGroup", "StatModifierGroup")
-                        .WithMany("BlessingLevels")
-                        .HasForeignKey("StatModifierGroupId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Blessing");
-
-                    b.Navigation("StatModifierGroup");
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit.BlessingAuditTrail", b =>
-                {
-                    b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", "ActorUser")
-                        .WithMany("BlessingAuditTrails")
-                        .HasForeignKey("ActorUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ExpressedRealms.DB.Models.Blessings.BlessingSetup.Blessing", "Blessing")
-                        .WithMany("BlessingAuditTrails")
-                        .HasForeignKey("BlessingId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("ActorUser");
-
-                    b.Navigation("Blessing");
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings.CharacterBlessingMapping", b =>
-                {
-                    b.HasOne("ExpressedRealms.DB.Models.Blessings.BlessingSetup.Blessing", "Blessing")
-                        .WithMany("CharacterBlessingMappings")
-                        .HasForeignKey("BlessingId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.BlessingLevel", "BlessingLevel")
-                        .WithMany("CharacterBlessingMappings")
-                        .HasForeignKey("BlessingLevelId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("ExpressedRealms.DB.Characters.Character", "Character")
-                        .WithMany("CharacterBlessingMappings")
-                        .HasForeignKey("CharacterId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Blessing");
-
-                    b.Navigation("BlessingLevel");
-
-                    b.Navigation("Character");
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup.Audit.CheckinQuestionResponseAuditTrail", b =>
@@ -3905,25 +4341,29 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("CheckinQuestionResponseAuditTrails")
                         .HasForeignKey("ActorUserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_checkin_question_response_audit_trail_users_actor_user_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Checkins.CheckinSetup.Checkin", "Checkin")
                         .WithMany("CheckinQuestionResponseAuditTrails")
                         .HasForeignKey("CheckinId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_checkin_question_response_audit_trail_checkins_checkin_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Events.Questions.EventQuestionSetup.EventQuestion", "EventQuestion")
                         .WithMany("CheckinQuestionResponseAuditTrails")
                         .HasForeignKey("EventQuestionId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_checkin_question_response_audit_trail_event_questions_event");
 
                     b.HasOne("ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup.CheckinQuestionResponse", "CheckinQuestionResponse")
                         .WithMany("CheckinQuestionResponseAuditTrails")
                         .HasForeignKey("CheckinId", "EventQuestionId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_checkin_question_response_audit_trail_checkin_question_resp");
 
                     b.Navigation("ActorUser");
 
@@ -3940,13 +4380,15 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("CheckinQuestionResponses")
                         .HasForeignKey("CheckinId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_checkin_question_responses_checkins_checkin_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Events.Questions.EventQuestionSetup.EventQuestion", "EventQuestion")
                         .WithMany("CheckinQuestionResponses")
                         .HasForeignKey("EventQuestionId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_checkin_question_responses_event_questions_event_question_id");
 
                     b.Navigation("Checkin");
 
@@ -3959,13 +4401,15 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("CheckinAuditTrails")
                         .HasForeignKey("ActorUserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_checkin_audit_trails_users_actor_user_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Checkins.CheckinSetup.Checkin", "Checkin")
                         .WithMany("CheckinAuditTrails")
                         .HasForeignKey("CheckinId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_checkin_audit_trails_checkins_checkin_id");
 
                     b.Navigation("ActorUser");
 
@@ -3978,13 +4422,15 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("Checkins")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_checkins_events_event_id");
 
                     b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup.Player", "Player")
                         .WithMany("Checkins")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_checkins_players_player_id");
 
                     b.Navigation("Event");
 
@@ -3997,19 +4443,22 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("CheckinStageMappings")
                         .HasForeignKey("ApproverUserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_checkin_stage_mappings_users_approver_user_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Checkins.CheckinSetup.Checkin", "Checkin")
                         .WithMany("CheckinStageMappings")
                         .HasForeignKey("CheckinId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_checkin_stage_mappings_checkins_checkin_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Checkins.CheckinStageSetup.CheckinStage", "CheckinStage")
                         .WithMany("CheckinStageMappings")
                         .HasForeignKey("CheckinStageId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_checkin_stage_mappings_checkin_stages_checkin_stage_id");
 
                     b.Navigation("ApproverUser");
 
@@ -4024,12 +4473,14 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("ContactAuditTrails")
                         .HasForeignKey("ActorUserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_contact_audit_trail_users_actor_user_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Contacts.Contact", "Contact")
                         .WithMany("ContactAuditTrails")
                         .HasForeignKey("ContactId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("fk_contact_audit_trail_contacts_contact_id");
 
                     b.Navigation("ActorUser");
 
@@ -4038,23 +4489,26 @@ namespace ExpressedRealms.DB.Migrations
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Contacts.Contact", b =>
                 {
-                    b.HasOne("ExpressedRealms.DB.Characters.Character", "Character")
+                    b.HasOne("ExpressedRealms.DB.Models.Characters.Character", "Character")
                         .WithMany("Contacts")
                         .HasForeignKey("CharacterId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_contacts_characters_character_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Knowledge", "Knowledge")
                         .WithMany("Contacts")
                         .HasForeignKey("KnowledgeId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_contacts_knowledges_knowledge_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Knowledges.KnowledgeEducationLevels.KnowledgeEducationLevel", "KnowledgeLevel")
                         .WithMany("Contacts")
                         .HasForeignKey("KnowledgeLevelId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_contacts_knowledge_education_levels_knowledge_level_id");
 
                     b.Navigation("Character");
 
@@ -4069,19 +4523,22 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("EventScheduleItemAuditTrails")
                         .HasForeignKey("ActorUserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_event_schedule_item_audit_trail_users_actor_user_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Events.EventSetup.Event", "Event")
                         .WithMany("EventScheduleAuditTrails")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_event_schedule_item_audit_trail_events_event_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup.EventScheduleItem", "EventScheduleItem")
                         .WithMany("EventScheduleItemAuditTrails")
                         .HasForeignKey("EventScheduleItemId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_event_schedule_item_audit_trail_event_schedule_items_event_");
 
                     b.Navigation("ActorUser");
 
@@ -4096,13 +4553,15 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("EventAuditTrails")
                         .HasForeignKey("ActorUserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_event_audit_trail_users_actor_user_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Events.EventSetup.Event", "Event")
                         .WithMany("EventAuditTrails")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_event_audit_trail_events_event_id");
 
                     b.Navigation("ActorUser");
 
@@ -4115,13 +4574,15 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("EventQuestionAuditTrails")
                         .HasForeignKey("ActorUserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_event_question_audit_trail_users_actor_user_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Events.Questions.EventQuestionSetup.EventQuestion", "EventQuestion")
                         .WithMany("EventQuestionAuditTrails")
                         .HasForeignKey("EventQuestionId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_event_question_audit_trail_event_questions_event_question_id");
 
                     b.Navigation("ActorUser");
 
@@ -4134,13 +4595,15 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("EventQuestions")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_event_questions_events_event_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Events.Questions.QuestionTypeSetup.QuestionType", "QuestionType")
                         .WithMany("EventQuestions")
                         .HasForeignKey("QuestionTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_event_questions_question_types_question_type_id");
 
                     b.Navigation("Event");
 
@@ -4153,18 +4616,21 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("ExpressionSections")
                         .HasForeignKey("ExpressionId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_expression_sections_expressions_expression_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup.ExpressionSection", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_expression_sections_expression_sections_parent_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Expressions.ExpressionSectionType", "SectionType")
                         .WithMany("ExpressionSections")
                         .HasForeignKey("SectionTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_expression_sections_expression_section_types_section_type_id");
 
                     b.Navigation("Expression");
 
@@ -4179,19 +4645,22 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("ExpressionSectionAuditTrails")
                         .HasForeignKey("ActorUserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_expression_section_audit_trails_users_actor_user_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Expressions.ExpressionSetup.Expression", "Expression")
                         .WithMany("SectionAudits")
                         .HasForeignKey("ExpressionId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_expression_section_audit_trails_expressions_expression_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup.ExpressionSection", "ExpressionSection")
                         .WithMany("SectionAudits")
                         .HasForeignKey("SectionId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_expression_section_audit_trails_expression_sections_section");
 
                     b.Navigation("ActorUser");
 
@@ -4206,13 +4675,15 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("Expressions")
                         .HasForeignKey("ExpressionTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_expressions_expression_types_expression_type_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Expressions.ExpressionPublishStatus", "PublishStatus")
                         .WithMany("Expressions")
                         .HasForeignKey("PublishStatusId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_expressions_expression_publish_status_publish_status_id");
 
                     b.Navigation("ExpressionType");
 
@@ -4225,13 +4696,15 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("ExpressionAuditTrails")
                         .HasForeignKey("ActorUserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_expression_audit_trails_users_actor_user_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Expressions.ExpressionSetup.Expression", "Expression")
                         .WithMany("ExpressionAudits")
                         .HasForeignKey("ExpressionId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_expression_audit_trails_expressions_expression_id");
 
                     b.Navigation("ActorUser");
 
@@ -4244,19 +4717,22 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("ProgressionLevelAuditTrails")
                         .HasForeignKey("ActorUserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_progression_level_audit_trail_users_actor_user_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionLevels.ProgressionLevel", "ProgressionLevel")
                         .WithMany("ProgressionLevelAuditTrails")
                         .HasForeignKey("ProgressionLevelId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_progression_level_audit_trail_progression_level_progression");
 
                     b.HasOne("ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths.ProgressionPath", "ProgressionPath")
                         .WithMany("ProgressionLevelAuditTrails")
                         .HasForeignKey("ProgressionPathId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_progression_level_audit_trail_progression_path_progression_");
 
                     b.Navigation("ActorUser");
 
@@ -4271,12 +4747,14 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("ProgressionLevels")
                         .HasForeignKey("ProgressionPathId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_progression_level_progression_path_progression_path_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.ModifierSystem.StatModifierGroups.StatModifierGroup", "StatModifierGroup")
                         .WithMany("ProgressionLevels")
                         .HasForeignKey("StatModifierGroupId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_progression_level_stat_modifier_groups_stat_modifier_group_");
 
                     b.Navigation("ProgressionPath");
 
@@ -4289,19 +4767,22 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("ProgressionPathAuditTrails")
                         .HasForeignKey("ActorUserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_progression_path_audit_trail_users_actor_user_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Expressions.ExpressionSetup.Expression", "Expression")
                         .WithMany("ProgressionPathAudits")
                         .HasForeignKey("ExpressionId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_progression_path_audit_trail_expressions_expression_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths.ProgressionPath", "ProgressionPath")
                         .WithMany("ProgressionPathAuditTrails")
                         .HasForeignKey("ProgressionPathId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_progression_path_audit_trail_progression_path_progression_p");
 
                     b.Navigation("ActorUser");
 
@@ -4316,30 +4797,34 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("ProgressionPaths")
                         .HasForeignKey("ExpressionId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_progression_path_expressions_expression_id");
 
                     b.Navigation("Expression");
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings.CharacterKnowledgeMapping", b =>
                 {
-                    b.HasOne("ExpressedRealms.DB.Characters.Character", "Character")
+                    b.HasOne("ExpressedRealms.DB.Models.Characters.Character", "Character")
                         .WithMany("CharacterKnowledgeMappings")
                         .HasForeignKey("CharacterId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_character_knowledge_mappings_characters_character_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Knowledge", "Knowledge")
                         .WithMany("CharacterKnowledgeMappings")
                         .HasForeignKey("KnowledgeId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_character_knowledge_mappings_knowledges_knowledge_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Knowledges.KnowledgeEducationLevels.KnowledgeEducationLevel", "KnowledgeLevel")
                         .WithMany("CharacterKnowledgeMappings")
                         .HasForeignKey("KnowledgeLevelId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_character_knowledge_mappings_knowledge_education_levels_kno");
 
                     b.Navigation("Character");
 
@@ -4354,7 +4839,8 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("CharacterKnowledgeSpecializations")
                         .HasForeignKey("KnowledgeMappingId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_character_knowledge_specializations_character_knowledge_map");
 
                     b.Navigation("CharacterKnowledgeMapping");
                 });
@@ -4365,13 +4851,15 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("KnowledgeAuditTrails")
                         .HasForeignKey("ActorUserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_knowledge_audit_trails_users_actor_user_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Knowledge", "Knowledge")
                         .WithMany("KnowledgeAuditTrails")
                         .HasForeignKey("KnowledgeId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_knowledge_audit_trails_knowledges_knowledge_id");
 
                     b.Navigation("ActorUser");
 
@@ -4384,7 +4872,8 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("Knowledges")
                         .HasForeignKey("KnowledgeTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_knowledges_knowledge_types_knowledge_type_id");
 
                     b.Navigation("KnowledgeType");
                 });
@@ -4395,18 +4884,21 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("StatGroupMappings")
                         .HasForeignKey("StatGroupId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_stat_group_mappings_stat_modifier_groups_stat_group_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.ModifierSystem.StatModifiers.StatModifier", "StatModifier")
                         .WithMany("StatGroupMappings")
                         .HasForeignKey("StatModifierId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_stat_group_mappings_stat_modifiers_stat_modifier_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Expressions.ExpressionSetup.Expression", "Expression")
                         .WithMany("StatGroupMappings")
                         .HasForeignKey("TargetExpressionId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_stat_group_mappings_expressions_target_expression_id");
 
                     b.Navigation("Expression");
 
@@ -4417,23 +4909,26 @@ namespace ExpressedRealms.DB.Migrations
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup.CharacterPowerMapping", b =>
                 {
-                    b.HasOne("ExpressedRealms.DB.Characters.Character", "Character")
+                    b.HasOne("ExpressedRealms.DB.Models.Characters.Character", "Character")
                         .WithMany("CharacterPowerMappings")
                         .HasForeignKey("CharacterId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_character_power_mappings_characters_character_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Powers.Power", "Power")
                         .WithMany("CharacterPowerMappings")
                         .HasForeignKey("PowerId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_character_power_mappings_powers_power_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Powers.PowerLevel", "PowerLevel")
                         .WithMany("CharacterPowerMappings")
                         .HasForeignKey("PowerLevelId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_character_power_mappings_power_levels_power_level_id");
 
                     b.Navigation("Character");
 
@@ -4448,36 +4943,42 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("Powers")
                         .HasForeignKey("ActivationTimingTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_powers_power_activation_timing_types_activation_timing_type");
 
                     b.HasOne("ExpressedRealms.DB.Models.Powers.PowerAreaOfEffectType", "PowerAreaOfEffectType")
                         .WithMany("Powers")
                         .HasForeignKey("AreaOfEffectTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_powers_power_area_of_effect_types_area_of_effect_type_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Powers.PowerDuration", "PowerDuration")
                         .WithMany("Powers")
                         .HasForeignKey("DurationId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_powers_power_durations_duration_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Powers.PowerLevel", "PowerLevel")
                         .WithMany("Powers")
                         .HasForeignKey("LevelId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_powers_power_levels_level_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Powers.PowerPathSetup.PowerPath", "PowerPath")
                         .WithMany("Powers")
                         .HasForeignKey("PowerPathId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_powers_power_paths_power_path_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.ModifierSystem.StatModifierGroups.StatModifierGroup", "StatModifierGroup")
                         .WithMany("Powers")
                         .HasForeignKey("StatModifierGroupId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasConstraintName("fk_powers_stat_modifier_groups_stat_modifier_group_id");
 
                     b.Navigation("PowerActivationTimingType");
 
@@ -4498,13 +4999,15 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("PowerMappings")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_power_category_mappings_power_categories_category_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Powers.Power", "Power")
                         .WithMany("CategoryMappings")
                         .HasForeignKey("PowerId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_power_category_mappings_powers_power_id");
 
                     b.Navigation("Category");
 
@@ -4517,7 +5020,8 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("PowerPaths")
                         .HasForeignKey("ExpressionId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_power_paths_expressions_expression_id");
 
                     b.Navigation("Expression");
                 });
@@ -4528,19 +5032,22 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("PowerPathAudits")
                         .HasForeignKey("ActorUserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_power_path_audit_trails_users_actor_user_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Expressions.ExpressionSetup.Expression", "Expression")
                         .WithMany("PowerPathAudits")
                         .HasForeignKey("ExpressionId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_power_path_audit_trails_expressions_expression_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Powers.PowerPathSetup.PowerPath", "PowerPath")
                         .WithMany("PowerPathAudits")
                         .HasForeignKey("PowerPathId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_power_path_audit_trails_power_paths_power_path_id");
 
                     b.Navigation("ActorUser");
 
@@ -4555,13 +5062,15 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("PrerequisitePowers")
                         .HasForeignKey("PowerId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_power_prerequisite_powers_powers_power_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Powers.PowerPrerequisiteSetup.PowerPrerequisite", "Prerequisite")
                         .WithMany("PrerequisitePowers")
                         .HasForeignKey("PrerequisiteId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_power_prerequisite_powers_power_prerequisites_prerequisite_");
 
                     b.Navigation("Power");
 
@@ -4574,7 +5083,8 @@ namespace ExpressedRealms.DB.Migrations
                         .WithOne("Prerequisite")
                         .HasForeignKey("ExpressedRealms.DB.Models.Powers.PowerPrerequisiteSetup.PowerPrerequisite", "PowerId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_power_prerequisites_powers_power_id");
 
                     b.Navigation("Power");
                 });
@@ -4585,19 +5095,22 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("PowerAuditTrails")
                         .HasForeignKey("ActorUserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_power_audit_trails_users_actor_user_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Powers.Power", "Power")
                         .WithMany("PowerAuditTrails")
                         .HasForeignKey("PowerId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_power_audit_trails_powers_power_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Powers.PowerPathSetup.PowerPath", "PowerPath")
                         .WithMany("PowerAuditTrails")
                         .HasForeignKey("PowerPathId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_power_audit_trails_power_paths_power_path_id");
 
                     b.Navigation("ActorUser");
 
@@ -4608,23 +5121,26 @@ namespace ExpressedRealms.DB.Migrations
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Skills.CharacterSkillsMapping", b =>
                 {
-                    b.HasOne("ExpressedRealms.DB.Characters.Character", "Character")
+                    b.HasOne("ExpressedRealms.DB.Models.Characters.Character", "Character")
                         .WithMany("CharacterSkillsMappings")
                         .HasForeignKey("CharacterId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_character_skills_mappings_characters_character_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Skills.SkillLevel", "SkillLevel")
                         .WithMany("CharacterSkillsMappings")
                         .HasForeignKey("SkillLevelId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_character_skills_mappings_skill_levels_skill_level_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Skills.SkillType", "SkillType")
                         .WithMany("CharacterSkillsMappings")
                         .HasForeignKey("SkillTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_character_skills_mappings_skill_types_skill_type_id");
 
                     b.Navigation("Character");
 
@@ -4639,19 +5155,22 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("SkillLevelBenefits")
                         .HasForeignKey("ModifierTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_skill_level_benefits_modifier_types_modifier_type_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Skills.SkillLevel", "SkillLevel")
                         .WithMany("SkillLevelBenefits")
                         .HasForeignKey("SkillLevelId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_skill_level_benefits_skill_levels_skill_level_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Skills.SkillType", "SkillType")
                         .WithMany("SkillLevelBenefits")
                         .HasForeignKey("SkillTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_skill_level_benefits_skill_types_skill_type_id");
 
                     b.Navigation("ModifierType");
 
@@ -4666,13 +5185,15 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("CharacterLevelDescriptions")
                         .HasForeignKey("SkillLevelId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_skill_level_description_mappings_skill_levels_skill_level_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Skills.SkillType", "SkillType")
                         .WithMany("CharacterLevelDescriptions")
                         .HasForeignKey("SkillTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_skill_level_description_mappings_skill_types_skill_type_id");
 
                     b.Navigation("SkillLevel");
 
@@ -4685,7 +5206,8 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("SkillTypes")
                         .HasForeignKey("SkillSubTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_skill_types_skill_sub_types_skill_sub_type_id");
 
                     b.Navigation("SkillSubType");
                 });
@@ -4696,13 +5218,15 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("StatDescriptionMappings")
                         .HasForeignKey("StatLevelId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_stat_description_mappings_stat_levels_stat_level_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Statistics.StatType", "StatType")
                         .WithMany("StatDescriptionMappings")
                         .HasForeignKey("StatTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_stat_description_mappings_state_types_stat_type_id");
 
                     b.Navigation("StatLevel");
 
@@ -4715,7 +5239,8 @@ namespace ExpressedRealms.DB.Migrations
                         .WithOne("Player")
                         .HasForeignKey("ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup.Player", "UserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_players_users_user_id");
 
                     b.Navigation("User");
                 });
@@ -4726,13 +5251,15 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("PlayerAuditTrails")
                         .HasForeignKey("ActorUserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_player_audit_trails_users_actor_user_id");
 
                     b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup.Player", "Player")
                         .WithMany("PlayerAuditTrails")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_player_audit_trails_players_player_id");
 
                     b.Navigation("ActorUser");
 
@@ -4745,13 +5272,15 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_asp_net_user_roles_asp_net_roles_role_id");
 
                     b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_asp_net_user_roles_asp_net_users_user_id");
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserRoles.UserRoleAuditTrail", b =>
@@ -4760,19 +5289,22 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("UserRoleAuditTrails")
                         .HasForeignKey("ActorUserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_user_role_audit_trails_asp_net_users_actor_user_id");
 
                     b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", "MappingUser")
                         .WithMany("MappedUserRoleAuditTrails")
                         .HasForeignKey("MappingUserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_user_role_audit_trails_asp_net_users_mapping_user_id");
 
                     b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.Roles.Role", "Role")
                         .WithMany("UserRoleAuditTrails")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_user_role_audit_trails_roles_role_id");
 
                     b.Navigation("ActorUser");
 
@@ -4787,13 +5319,15 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany("UserAuditTrails")
                         .HasForeignKey("ActorUserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_user_audit_trails_asp_net_users_actor_user_id");
 
                     b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", "User")
                         .WithMany("UserActorAuditTrails")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_user_audit_trails_asp_net_users_user_id");
 
                     b.Navigation("ActorUser");
 
@@ -4806,7 +5340,8 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_asp_net_role_claims_asp_net_roles_role_id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -4815,7 +5350,8 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_asp_net_user_claims_asp_net_users_user_id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -4824,7 +5360,8 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_asp_net_user_logins_asp_net_users_user_id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -4833,41 +5370,8 @@ namespace ExpressedRealms.DB.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Characters.AssignedXp.AssignedXpMappingModels.AssignedXpMapping", b =>
-                {
-                    b.Navigation("AssignedXpMappingAuditTrails");
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Characters.AssignedXp.AssignedXpTypeModels.AssignedXpType", b =>
-                {
-                    b.Navigation("AssignedXpMappings");
-
-                    b.Navigation("AssignedXpTypeAuditTrails");
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Characters.Character", b =>
-                {
-                    b.Navigation("AssignedXpMappings");
-
-                    b.Navigation("CharacterBlessingMappings");
-
-                    b.Navigation("CharacterKnowledgeMappings");
-
-                    b.Navigation("CharacterPowerMappings");
-
-                    b.Navigation("CharacterSkillsMappings");
-
-                    b.Navigation("CharacterXpMappings");
-
-                    b.Navigation("Contacts");
-                });
-
-            modelBuilder.Entity("ExpressedRealms.DB.Characters.xpTables.XpSectionType", b =>
-                {
-                    b.Navigation("CharacterXpMappings");
+                        .IsRequired()
+                        .HasConstraintName("fk_asp_net_user_tokens_asp_net_users_user_id");
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Authorization.PermissionResources.PermissionResource", b =>
@@ -4910,6 +5414,40 @@ namespace ExpressedRealms.DB.Migrations
                     b.Navigation("BlessingLevels");
 
                     b.Navigation("CharacterBlessingMappings");
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels.AssignedXpMapping", b =>
+                {
+                    b.Navigation("AssignedXpMappingAuditTrails");
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels.AssignedXpType", b =>
+                {
+                    b.Navigation("AssignedXpMappings");
+
+                    b.Navigation("AssignedXpTypeAuditTrails");
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Characters.Character", b =>
+                {
+                    b.Navigation("AssignedXpMappings");
+
+                    b.Navigation("CharacterBlessingMappings");
+
+                    b.Navigation("CharacterKnowledgeMappings");
+
+                    b.Navigation("CharacterPowerMappings");
+
+                    b.Navigation("CharacterSkillsMappings");
+
+                    b.Navigation("CharacterXpMappings");
+
+                    b.Navigation("Contacts");
+                });
+
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Characters.XpTables.XpSectionType", b =>
+                {
+                    b.Navigation("CharacterXpMappings");
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup.CheckinQuestionResponse", b =>

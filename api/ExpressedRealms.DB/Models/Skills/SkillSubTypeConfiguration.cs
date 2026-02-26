@@ -7,8 +7,6 @@ public class SkillSubTypeConfiguration : IEntityTypeConfiguration<SkillSubType>
 {
     public void Configure(EntityTypeBuilder<SkillSubType> builder)
     {
-        builder.ToTable(nameof(SkillSubType));
-
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
 

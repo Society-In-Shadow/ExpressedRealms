@@ -9,16 +9,8 @@ internal class ProgressionLevelAuditTrailConfiguration
 {
     public void Configure(EntityTypeBuilder<ProgressionLevelAuditTrail> builder)
     {
-        builder.ToTable("progression_level_audit_trail");
-
-        builder
-            .Property(e => e.ProgressionLevelId)
-            .HasColumnName("progression_level_id")
-            .IsRequired();
-        builder
-            .Property(e => e.ProgressionPathId)
-            .HasColumnName("progression_path_id")
-            .IsRequired();
+        builder.Property(e => e.ProgressionLevelId).IsRequired();
+        builder.Property(e => e.ProgressionPathId).IsRequired();
 
         builder
             .HasOne(x => x.ProgressionPath)

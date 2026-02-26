@@ -7,18 +7,16 @@ internal class PowerPathAuditTrailConfiguration : IEntityTypeConfiguration<Power
 {
     public void Configure(EntityTypeBuilder<PowerPathAuditTrail> builder)
     {
-        builder.ToTable("power_path_audit_trail");
-
         builder.HasKey(e => e.Id);
-        builder.Property(e => e.Id).HasColumnName("id").IsRequired().ValueGeneratedOnAdd();
+        builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
 
-        builder.Property(e => e.ExpressionId).HasColumnName("expression_id").IsRequired();
-        builder.Property(e => e.PowerPathId).HasColumnName("power_path_id").IsRequired();
+        builder.Property(e => e.ExpressionId).IsRequired();
+        builder.Property(e => e.PowerPathId).IsRequired();
 
-        builder.Property(e => e.Action).HasColumnName("action").IsRequired();
-        builder.Property(e => e.ActorUserId).HasColumnName("actor_user_id").IsRequired();
-        builder.Property(e => e.Timestamp).HasColumnName("timestamp").IsRequired();
-        builder.Property(e => e.ChangedProperties).HasColumnName("changed_properties").IsRequired();
+        builder.Property(e => e.Action).IsRequired();
+        builder.Property(e => e.ActorUserId).IsRequired();
+        builder.Property(e => e.Timestamp).IsRequired();
+        builder.Property(e => e.ChangedProperties).IsRequired();
 
         builder
             .HasOne(x => x.Expression)
