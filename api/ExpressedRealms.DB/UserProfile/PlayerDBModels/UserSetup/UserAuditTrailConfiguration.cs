@@ -7,8 +7,6 @@ internal class UserAuditTrailConfiguration : IEntityTypeConfiguration<UserAuditT
 {
     public void Configure(EntityTypeBuilder<UserAuditTrail> builder)
     {
-        builder.ToTable("User_AuditTrail");
-
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
 
