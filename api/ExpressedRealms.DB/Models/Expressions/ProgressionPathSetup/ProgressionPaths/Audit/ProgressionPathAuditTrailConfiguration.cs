@@ -9,9 +9,7 @@ internal class ProgressionPathAuditTrailConfiguration
 {
     public void Configure(EntityTypeBuilder<ProgressionPathAuditTrail> builder)
     {
-        builder
-            .Property(e => e.ProgressionPathId)
-            .IsRequired();
+        builder.Property(e => e.ProgressionPathId).IsRequired();
         builder.Property(e => e.ExpressionId).IsRequired();
 
         builder

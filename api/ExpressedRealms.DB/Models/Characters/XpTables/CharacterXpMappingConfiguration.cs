@@ -13,9 +13,7 @@ public class CharacterXpMappingConfiguration : IEntityTypeConfiguration<Characte
         builder.Property(x => x.XpSectionTypeId).IsRequired();
         builder.Property(x => x.DiscretionXp).IsRequired();
         builder.Property(x => x.SpentXp).IsRequired();
-        builder
-            .Property(x => x.TotalCharacterCreationXp)
-            .IsRequired();
+        builder.Property(x => x.TotalCharacterCreationXp).IsRequired();
         builder.Property(x => x.LevelXp).IsRequired();
 
         builder

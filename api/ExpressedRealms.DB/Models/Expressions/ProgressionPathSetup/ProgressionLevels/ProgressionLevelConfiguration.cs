@@ -9,14 +9,9 @@ public class ProgressionLevelConfiguration : IEntityTypeConfiguration<Progressio
     {
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired();
-        builder
-            .Property(e => e.ProgressionPathId)
-            .IsRequired();
+        builder.Property(e => e.ProgressionPathId).IsRequired();
         builder.Property(e => e.XlLevel).IsRequired();
-        builder
-            .Property(e => e.Description)
-            .HasMaxLength(5000)
-            .IsRequired();
+        builder.Property(e => e.Description).HasMaxLength(5000).IsRequired();
 
         builder.Property(e => e.StatModifierGroupId);
         builder

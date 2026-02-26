@@ -9,9 +9,7 @@ public class PermissionConfiguration : IEntityTypeConfiguration<Permission>
     {
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired();
-        builder
-            .Property(e => e.PermissionResourceId)
-            .IsRequired();
+        builder.Property(e => e.PermissionResourceId).IsRequired();
         builder.Property(e => e.Key).IsRequired().HasMaxLength(500);
         builder.Property(e => e.Name).IsRequired().HasMaxLength(500);
         builder.Property(e => e.Description).HasMaxLength(2000);

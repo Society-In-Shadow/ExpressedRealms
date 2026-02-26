@@ -12,17 +12,11 @@ public class KnowledgeEducationLevelConfiguration
         builder.Property(e => e.Id).IsRequired();
         builder.Property(e => e.Name).HasMaxLength(50).IsRequired();
         builder.Property(e => e.Level).IsRequired();
-        builder
-            .Property(e => e.SpecializationCount)
-            .IsRequired();
+        builder.Property(e => e.SpecializationCount).IsRequired();
         builder.Property(e => e.StoneModifier).IsRequired();
         builder.Property(e => e.GeneralXpCost).IsRequired();
-        builder
-            .Property(e => e.TotalGeneralXpCost)
-            .IsRequired();
+        builder.Property(e => e.TotalGeneralXpCost).IsRequired();
         builder.Property(e => e.UnknownXpCost).IsRequired();
-        builder
-            .Property(e => e.TotalUnknownXpCost)
-            .IsRequired();
+        builder.Property(e => e.TotalUnknownXpCost).IsRequired();
     }
 }

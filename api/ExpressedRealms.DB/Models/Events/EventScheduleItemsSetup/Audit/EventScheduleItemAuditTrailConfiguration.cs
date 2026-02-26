@@ -11,9 +11,7 @@ internal class EventScheduleItemAuditTrailConfiguration
     {
         builder.ConfigureAuditTrailProperties(user => user.EventScheduleItemAuditTrails);
 
-        builder
-            .Property(e => e.EventScheduleItemId)
-            .IsRequired();
+        builder.Property(e => e.EventScheduleItemId).IsRequired();
 
         builder
             .HasOne(x => x.EventScheduleItem)

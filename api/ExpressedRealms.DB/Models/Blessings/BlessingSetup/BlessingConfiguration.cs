@@ -13,10 +13,7 @@ public class BlessingConfiguration : IEntityTypeConfiguration<Blessing>
         builder.Property(e => e.Description).IsRequired();
 
         builder.Property(e => e.Type).HasMaxLength(50).IsRequired();
-        builder
-            .Property(e => e.SubCategory)
-            .IsRequired()
-            .HasMaxLength(75);
+        builder.Property(e => e.SubCategory).IsRequired().HasMaxLength(75);
 
         builder.HasQueryFilter(x => !x.IsDeleted);
         builder.Property(e => e.IsDeleted);

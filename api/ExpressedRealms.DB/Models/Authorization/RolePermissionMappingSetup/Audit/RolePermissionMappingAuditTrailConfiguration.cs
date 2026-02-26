@@ -11,8 +11,7 @@ internal class RolePermissionMappingAuditTrailConfiguration
     {
         builder.ConfigureAuditTrailProperties(user => user.RolePermissionMappingAuditTrails);
 
-        builder
-            .Property(e => e.RolePermissionMappingId);
+        builder.Property(e => e.RolePermissionMappingId);
 
         builder.Property(e => e.RoleId).IsRequired();
 

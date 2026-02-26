@@ -13,23 +13,11 @@ public class ExpressionConfiguration : IEntityTypeConfiguration<Expression>
         builder.HasQueryFilter(x => !x.IsDeleted);
 
         builder.Property(e => e.Name).HasMaxLength(50).IsRequired();
-        builder
-            .Property(e => e.ShortDescription)
-            .HasMaxLength(125)
-            .IsRequired();
+        builder.Property(e => e.ShortDescription).HasMaxLength(125).IsRequired();
         builder.Property(e => e.NavMenuImage).IsRequired();
-        builder
-            .Property(e => e.PublishStatusId)
-            .IsRequired()
-            .HasDefaultValue(1);
-        builder
-            .Property(e => e.ExpressionTypeId)
-            .IsRequired()
-            .HasDefaultValue(1);
-        builder
-            .Property(e => e.OrderIndex)
-            .IsRequired()
-            .HasDefaultValue(1);
+        builder.Property(e => e.PublishStatusId).IsRequired().HasDefaultValue(1);
+        builder.Property(e => e.ExpressionTypeId).IsRequired().HasDefaultValue(1);
+        builder.Property(e => e.OrderIndex).IsRequired().HasDefaultValue(1);
         builder.Property(e => e.IsDeleted);
         builder.Property(e => e.DeletedAt);
 

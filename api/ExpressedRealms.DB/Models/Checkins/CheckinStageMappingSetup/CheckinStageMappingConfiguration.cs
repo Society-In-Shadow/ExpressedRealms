@@ -11,10 +11,7 @@ public class CheckinStageMappingConfiguration : IEntityTypeConfiguration<Checkin
         builder.Property(e => e.Id).IsRequired();
         builder.Property(e => e.CheckinId).IsRequired();
         builder.Property(e => e.CheckinStageId).IsRequired();
-        builder
-            .Property(e => e.ApproverUserId)
-            .IsRequired()
-            .HasMaxLength(450);
+        builder.Property(e => e.ApproverUserId).IsRequired().HasMaxLength(450);
         builder.Property(e => e.CreatedAt).IsRequired();
 
         builder

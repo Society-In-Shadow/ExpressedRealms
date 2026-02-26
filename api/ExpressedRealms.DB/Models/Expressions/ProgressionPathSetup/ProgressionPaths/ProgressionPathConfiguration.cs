@@ -11,10 +11,7 @@ public class ProgressionPathConfiguration : IEntityTypeConfiguration<Progression
         builder.Property(e => e.Id).IsRequired();
         builder.Property(e => e.ExpressionId).IsRequired();
         builder.Property(e => e.Name).HasMaxLength(250).IsRequired();
-        builder
-            .Property(e => e.Description)
-            .HasMaxLength(5000)
-            .IsRequired();
+        builder.Property(e => e.Description).HasMaxLength(5000).IsRequired();
 
         builder
             .HasOne(x => x.Expression)

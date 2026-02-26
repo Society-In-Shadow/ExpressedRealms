@@ -42,26 +42,14 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired(false);
 
-        builder
-            .Property(x => x.IsInCharacterCreation)
-            .IsRequired()
-            .HasDefaultValue(true);
-        builder
-            .Property(x => x.IsPrimaryCharacter)
-            .IsRequired()
-            .HasDefaultValue(false);
+        builder.Property(x => x.IsInCharacterCreation).IsRequired().HasDefaultValue(true);
+        builder.Property(x => x.IsPrimaryCharacter).IsRequired().HasDefaultValue(false);
 
-        builder
-            .Property(x => x.IsRetired)
-            .IsRequired()
-            .HasDefaultValue(false);
+        builder.Property(x => x.IsRetired).IsRequired().HasDefaultValue(false);
 
         builder.Property(x => x.RetiredDate);
 
-        builder
-            .Property(x => x.PlayerNumber)
-            .IsRequired()
-            .HasDefaultValue(0);
+        builder.Property(x => x.PlayerNumber).IsRequired().HasDefaultValue(0);
 
         builder.HasQueryFilter(x => !x.IsDeleted);
 

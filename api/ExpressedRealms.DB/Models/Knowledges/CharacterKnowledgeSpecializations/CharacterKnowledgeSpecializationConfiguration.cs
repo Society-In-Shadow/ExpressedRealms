@@ -10,14 +10,9 @@ public class CharacterKnowledgeSpecializationConfiguration
     {
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired();
-        builder
-            .Property(e => e.KnowledgeMappingId)
-            .IsRequired();
+        builder.Property(e => e.KnowledgeMappingId).IsRequired();
         builder.Property(e => e.Name).HasMaxLength(250).IsRequired();
-        builder
-            .Property(e => e.Description)
-            .HasMaxLength(5000)
-            .IsRequired();
+        builder.Property(e => e.Description).HasMaxLength(5000).IsRequired();
         builder.Property(e => e.Notes).HasMaxLength(10000);
 
         builder.HasQueryFilter(x => !x.IsDeleted);

@@ -10,10 +10,7 @@ public class EventScheduleItemConfiguration : IEntityTypeConfiguration<EventSche
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired();
         builder.Property(e => e.EventId).IsRequired();
-        builder
-            .Property(e => e.Description)
-            .HasMaxLength(250)
-            .IsRequired();
+        builder.Property(e => e.Description).HasMaxLength(250).IsRequired();
         builder.Property(e => e.Date).IsRequired();
         builder.Property(e => e.StartTime).IsRequired();
         builder.Property(e => e.EndTime).IsRequired();

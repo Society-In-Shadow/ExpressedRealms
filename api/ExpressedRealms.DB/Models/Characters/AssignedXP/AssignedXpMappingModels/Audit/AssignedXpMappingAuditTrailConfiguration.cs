@@ -9,9 +9,7 @@ internal class AssignedXpMappingAuditTrailConfiguration
 {
     public void Configure(EntityTypeBuilder<AssignedXpMappingAuditTrail> builder)
     {
-        builder
-            .Property(e => e.AssignedXpMappingId)
-            .IsRequired();
+        builder.Property(e => e.AssignedXpMappingId).IsRequired();
 
         builder
             .HasOne(x => x.AssignedXpMapping)

@@ -32,9 +32,6 @@ public class ExpressionTypeConfiguration : IEntityTypeConfiguration<ExpressionTy
         builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
 
         builder.Property(e => e.Name).HasMaxLength(50).IsRequired();
-        builder
-            .Property(e => e.Description)
-            .HasMaxLength(250)
-            .IsRequired();
+        builder.Property(e => e.Description).HasMaxLength(250).IsRequired();
     }
 }

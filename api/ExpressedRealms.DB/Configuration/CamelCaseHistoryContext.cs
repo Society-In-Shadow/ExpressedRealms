@@ -8,9 +8,8 @@ namespace ExpressedRealms.DB.Configuration;
 // https://github.com/efcore/EFCore.NamingConventions/issues/1#issuecomment-979473249
 public class CamelCaseHistoryContext : NpgsqlHistoryRepository
 {
-    public CamelCaseHistoryContext(HistoryRepositoryDependencies dependencies) : base(dependencies)
-    {
-    }
+    public CamelCaseHistoryContext(HistoryRepositoryDependencies dependencies)
+        : base(dependencies) { }
 
     protected override void ConfigureTable(EntityTypeBuilder<HistoryRow> history)
     {

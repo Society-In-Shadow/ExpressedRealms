@@ -18,8 +18,7 @@ public class CharacterXpViewConfiguration : IEntityTypeConfiguration<CharacterXp
         builder.Property(p => p.SpentXp);
         builder.Property(p => p.TrueTotalSpent);
         builder.Property(p => p.DiscretionXp);
-        builder
-            .Property(p => p.TotalCharacterCreationXp);
+        builder.Property(p => p.TotalCharacterCreationXp);
         builder.Property(p => p.LevelXp);
     }
 }

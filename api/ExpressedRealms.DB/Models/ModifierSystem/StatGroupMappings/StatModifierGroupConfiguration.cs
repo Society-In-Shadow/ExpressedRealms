@@ -14,15 +14,9 @@ public class StatGroupMappingConfiguration : IEntityTypeConfiguration<StatGroupM
         builder.Property(e => e.Modifier).IsRequired();
         builder.Property(e => e.TargetExpressionId);
 
-        builder
-            .Property(e => e.CreationSpecificBonus)
-            .IsRequired()
-            .HasDefaultValue(false);
+        builder.Property(e => e.CreationSpecificBonus).IsRequired().HasDefaultValue(false);
 
-        builder
-            .Property(e => e.ScaleWithLevel)
-            .IsRequired()
-            .HasDefaultValue(false);
+        builder.Property(e => e.ScaleWithLevel).IsRequired().HasDefaultValue(false);
 
         builder
             .HasOne(e => e.StatModifierGroup)

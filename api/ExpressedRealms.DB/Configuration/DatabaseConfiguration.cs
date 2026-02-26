@@ -12,21 +12,23 @@ public static class DatabaseConfiguration
 {
     public static void AddDatabaseConnection(this DbContextOptionsBuilder options)
     {
-        var isDevelopment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+        var isDevelopment =
+            Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
         if (isDevelopment)
         {
             var connectionString = KeyVaultManager.GetSecret(ConnectionStrings.Database);
 
-            options.UseNpgsql(
-                connectionString,
-                postgresOptions =>
-                {
-                    postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
-                }
-            )
-            .ReplaceService<IHistoryRepository, CamelCaseHistoryContext>()
-            .UseSnakeCaseNamingConvention();
-            
+            options
+                .UseNpgsql(
+                    connectionString,
+                    postgresOptions =>
+                    {
+                        postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
+                    }
+                )
+                .ReplaceService<IHistoryRepository, CamelCaseHistoryContext>()
+                .UseSnakeCaseNamingConvention();
+
             return;
         }
 
@@ -57,14 +59,15 @@ public static class DatabaseConfiguration
         // Build the data source once and reuse it across DbContext instances
         var dataSource = dataSourceBuilder.Build();
 
-        options.UseNpgsql(
-            dataSource,
-            postgresOptions =>
-            {
-                postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
-            }
-        )
-        .ReplaceService<IHistoryRepository, CamelCaseHistoryContext>()
-        .UseSnakeCaseNamingConvention();
+        options
+            .UseNpgsql(
+                dataSource,
+                postgresOptions =>
+                {
+                    postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
+                }
+            )
+            .ReplaceService<IHistoryRepository, CamelCaseHistoryContext>()
+            .UseSnakeCaseNamingConvention();
     }
 }
