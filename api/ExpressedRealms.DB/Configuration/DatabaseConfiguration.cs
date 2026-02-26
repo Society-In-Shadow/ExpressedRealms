@@ -10,7 +10,7 @@ namespace ExpressedRealms.DB.Configuration;
 
 public static class DatabaseConfiguration
 {
-    public static void AddDatabaseConnection(this DbContextOptionsBuilder options)
+    public static void AddExpressedRealmsDbConnection(this DbContextOptionsBuilder options)
     {
         var isDevelopment =
             Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
