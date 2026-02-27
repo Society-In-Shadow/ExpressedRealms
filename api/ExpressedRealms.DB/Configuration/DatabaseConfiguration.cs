@@ -22,15 +22,16 @@ public static class DatabaseConfiguration
             builder.Services.AddDbContext<ExpressedRealmsDbContext>(
                 (_, options) =>
                 {
-                    options.UseNpgsql(
-                        connectionString,
-                        postgresOptions =>
-                        {
-                            postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
-                        }
-                    )
-                    .ReplaceService<IHistoryRepository, CamelCaseHistoryContext>()
-                    .UseSnakeCaseNamingConvention();
+                    options
+                        .UseNpgsql(
+                            connectionString,
+                            postgresOptions =>
+                            {
+                                postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
+                            }
+                        )
+                        .ReplaceService<IHistoryRepository, CamelCaseHistoryContext>()
+                        .UseSnakeCaseNamingConvention();
                 }
             );
 
@@ -43,15 +44,16 @@ public static class DatabaseConfiguration
         builder.Services.AddDbContext<ExpressedRealmsDbContext>(
             (_, options) =>
             {
-                options.UseNpgsql(
-                    dataSource,
-                    postgresOptions =>
-                    {
-                        postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
-                    }
-                )
-                .ReplaceService<IHistoryRepository, CamelCaseHistoryContext>()
-                .UseSnakeCaseNamingConvention();
+                options
+                    .UseNpgsql(
+                        dataSource,
+                        postgresOptions =>
+                        {
+                            postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
+                        }
+                    )
+                    .ReplaceService<IHistoryRepository, CamelCaseHistoryContext>()
+                    .UseSnakeCaseNamingConvention();
             }
         );
     }
