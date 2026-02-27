@@ -135,3 +135,20 @@ public async Task UseCase_WillTrimNameField(string? name, string? savedValue)
         .MustHaveHappenedOnceExactly();
 }
 ```
+
+## Testing Common Edit Fields and Making Sure that DB Model is Being Passed Through
+
+```csharp
+[Fact]
+public async Task UseCase_WillEditBasicFields_AndPassThroughDbObject()
+{
+    await _useCase.ExecuteAsync(_model);
+
+    A.CallTo(() => _characterRepository.EditAsync(A<Character>.That.IsSameAs(_dbModel)))
+        .MustHaveHappenedOnceExactly();
+
+    Assert.Equal(_model.Name, _dbModel.Name);
+    Assert.Equal(_model.Background, _dbModel.Background);
+    Assert.Equal(_model.IsPrimaryCharacter, _dbModel.IsPrimaryCharacter);
+}
+```

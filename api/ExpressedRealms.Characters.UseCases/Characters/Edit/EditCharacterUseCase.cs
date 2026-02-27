@@ -40,7 +40,6 @@ internal sealed class EditCharacterUseCase(
 
         character!.Name = model.Name;
         character.Background = model.Background;
-        character.FactionId = model.FactionId;
         character.IsPrimaryCharacter = model.IsPrimaryCharacter;
 
         await repository.EditAsync(character);
