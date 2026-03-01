@@ -74,6 +74,13 @@ internal sealed class SendEventPublishedMessagesUseCase(
                 message.AppendLine();
                 message.AppendLine("More information can be found on their website below!");
 
+                if (!string.IsNullOrWhiteSpace(currentEvent.AdditionalNotes))
+                {
+                    message.AppendLine();
+                    message.AppendLine(currentEvent.AdditionalNotes.Trim());
+                    message.AppendLine();
+                }
+
                 AppendEventAttendanceMessage(scheduleItems, currentEvent, message);
 
                 message.AppendLine(
@@ -101,6 +108,13 @@ internal sealed class SendEventPublishedMessagesUseCase(
                 );
                 message.AppendLine();
                 message.AppendLine("More information can be found on their website below!");
+
+                if (!string.IsNullOrWhiteSpace(currentEvent.AdditionalNotes))
+                {
+                    message.AppendLine();
+                    message.AppendLine(currentEvent.AdditionalNotes.Trim());
+                    message.AppendLine();
+                }
 
                 AppendEventAttendanceMessage(scheduleItems, currentEvent, message);
 
