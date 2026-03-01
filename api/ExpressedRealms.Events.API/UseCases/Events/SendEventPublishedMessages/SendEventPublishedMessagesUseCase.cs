@@ -111,7 +111,7 @@ internal sealed class SendEventPublishedMessagesUseCase(
                 {
                     message.AppendLine(currentEvent.AdditionalNotes);
                 }
-                
+
                 AppendEventAttendanceMessage(scheduleItems, currentEvent, message);
 
                 message.AppendLine(

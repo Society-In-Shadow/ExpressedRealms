@@ -596,7 +596,7 @@ public class SendEventPublishedMessagesUseCaseTests
             )
             .MustHaveHappened();
     }
-    
+
     [Fact]
     public async Task UseCase_ForInternalReminder_WillShowMonthOutMessage()
     {
