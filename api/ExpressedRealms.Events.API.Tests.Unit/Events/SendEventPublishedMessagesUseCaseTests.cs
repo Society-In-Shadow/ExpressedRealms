@@ -578,6 +578,25 @@ public class SendEventPublishedMessagesUseCaseTests
         A.CallTo(() => _discordService.CreateEventAsync(A<DiscordEvent>._)).MustNotHaveHappened();
     }
 
+    [Theory]
+    [InlineData(PublishType.OneMonthReminder)]
+    [InlineData(PublishType.OneWeekReminder)]
+    [InlineData(PublishType.InitialAnnouncement)]
+    public async Task UseCase_ForVariousStages_WillShowAdditionalNotesSection(PublishType type)
+    {
+        _model.PublishType = type;
+        _dbModel.AdditionalNotes = "Additional Notes Section";
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() =>
+                _discordService.SendMessageToChannelAsync(
+                    DiscordChannel.DevGeneralChannel,
+                    A<string>.That.Contains($"Additional Notes Section"),
+                    A<Embed[]>._
+                )
+            )
+            .MustHaveHappened();
+    }
+    
     [Fact]
     public async Task UseCase_ForInternalReminder_WillShowMonthOutMessage()
     {
