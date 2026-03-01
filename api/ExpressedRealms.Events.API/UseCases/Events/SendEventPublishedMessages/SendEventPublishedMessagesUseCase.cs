@@ -76,7 +76,9 @@ internal sealed class SendEventPublishedMessagesUseCase(
 
                 if (!string.IsNullOrWhiteSpace(currentEvent.AdditionalNotes))
                 {
-                    message.AppendLine(currentEvent.AdditionalNotes);
+                    message.AppendLine();
+                    message.AppendLine(currentEvent.AdditionalNotes.Trim());
+                    message.AppendLine();
                 }
 
                 AppendEventAttendanceMessage(scheduleItems, currentEvent, message);
@@ -109,7 +111,9 @@ internal sealed class SendEventPublishedMessagesUseCase(
 
                 if (!string.IsNullOrWhiteSpace(currentEvent.AdditionalNotes))
                 {
-                    message.AppendLine(currentEvent.AdditionalNotes);
+                    message.AppendLine();
+                    message.AppendLine(currentEvent.AdditionalNotes.Trim());
+                    message.AppendLine();
                 }
 
                 AppendEventAttendanceMessage(scheduleItems, currentEvent, message);

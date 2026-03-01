@@ -589,6 +589,22 @@ public class SendEventPublishedMessagesUseCaseTests
         await _useCase.ExecuteAsync(_model);
         A.CallTo(() =>
                 _discordService.SendMessageToChannelAsync(
+                    DiscordChannel.PublicAnnouncements,
+                    A<string>.That.Contains($"Additional Notes Section"),
+                    A<Embed[]>._
+                )
+            )
+            .MustHaveHappened();
+    }
+
+    [Fact]
+    public async Task UseCase_InternalReminder_WillShowAdditionalNotesSection()
+    {
+        _model.PublishType = PublishType.InternalReminder;
+        _dbModel.AdditionalNotes = "Additional Notes Section";
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() =>
+                _discordService.SendMessageToChannelAsync(
                     DiscordChannel.DevGeneralChannel,
                     A<string>.That.Contains($"Additional Notes Section"),
                     A<Embed[]>._
