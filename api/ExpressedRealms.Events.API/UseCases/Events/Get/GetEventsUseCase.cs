@@ -1,4 +1,4 @@
-using ExpressedRealms.Authentication;
+using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Events.API.Repositories.Events;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using FluentResults;
@@ -10,12 +10,10 @@ internal sealed class GetEventsUseCase(IEventRepository eventRepository, IUserCo
 {
     public async Task<Result<EventBaseReturnModel>> ExecuteAsync()
     {
-        var hasEventManagementPermission = await userContext.CurrentUserHasPolicy(
-            Policies.ManageEvents
-        );
+        var hasViewEvents = await userContext.CurrentUserHasPermission(Permissions.Event.View);
 
         var events = await eventRepository.GetEventsAsync();
-        if (!hasEventManagementPermission)
+        if (!hasViewEvents)
             events = events.Where(x => x.IsPublished).ToList();
 
         return Result.Ok(
