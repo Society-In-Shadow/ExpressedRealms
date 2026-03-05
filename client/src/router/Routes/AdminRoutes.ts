@@ -39,13 +39,13 @@ export const AdminRoutes = {
       path: 'events',
       name: 'adminEventList',
       component: () => import('./../../components/admin/events/EventList.vue'),
-      meta: { requiredRole: 'ManageEvents' },
+      meta: { requiredPermission: UserPermissions.Event.View },
     },
     {
       path: 'events/:id',
       name: 'editEvent',
       component: () => import('./../../components/admin/events/EventPage.vue'),
-      meta: { requiredRole: 'ManageEvents' },
+      meta: { requiredPermission: UserPermissions.Event.View },
     },
     {
       path: 'dev',

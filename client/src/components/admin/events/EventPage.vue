@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
 import { onBeforeMount, ref } from 'vue'
-import { UserRoles, userStore } from '@/stores/userStore'
 import Card from 'primevue/card'
 import EditEvent from '@/components/admin/events/EditEvent.vue'
 import { EventStore } from '@/components/admin/events/stores/eventStore.ts'
@@ -22,7 +21,6 @@ import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 import EventQuestionList from '@/components/admin/eventQuestions/EventQuestionList.vue'
 import axios from 'axios'
 
-let userInfo = userStore()
 const route = useRoute()
 const eventData = EventStore()
 const permissionData = userPermissionStore()
@@ -31,13 +29,11 @@ const eventId = Number.parseInt(route.params.id as string)
 
 const event = ref<EditEvent>({})
 
-const hasManageEventRole = ref(false)
 const isLoaded = ref(false)
 
 onBeforeMount(async () => {
   event.value = await eventData.getEvent(eventId)
 
-  hasManageEventRole.value = await userInfo.hasUserRole(UserRoles.ManageEventRole)
   isLoaded.value = true
 })
 
@@ -66,7 +62,7 @@ async function downloadAttendanceReport() {
         <div>
           <h1 class="p-0 m-0">
             <SkeletonWrapper :show-skeleton="!isLoaded" height="1.2em" width="8em" class="mb-1">
-              {{ event?.name }} <Tag v-if="hasManageEventRole" severity="secondary">
+              {{ event?.name }} <Tag severity="secondary">
                 {{ event?.isPublished ? "Published" : "Draft" }}
               </Tag>
             </SkeletonWrapper>
@@ -78,8 +74,8 @@ async function downloadAttendanceReport() {
           </div>
         </div>
         <div v-if="isLoaded">
-          <Button v-if="!event.isPublished" class="mr-2" severity="info" label="Publish" @click="popups.publishConfirmation($event)" />
-          <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
+          <Button v-if="!event.isPublished && permissionCheck.Event.Publish" class="mr-2" severity="info" label="Publish" @click="popups.publishConfirmation($event)" />
+          <Button v-if="permissionCheck.Event.Delete" class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
           <Button v-if="permissionCheck.Event.DownloadConSummaryReport" class="mr-2" severity="info" label="Con Attendance Report" @click="downloadAttendanceReport" />
         </div>
       </div>
