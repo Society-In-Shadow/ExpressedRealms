@@ -41,6 +41,7 @@ export const UserPermissions = {
     BypassLockout: 'player.bypasslockout',
     ManageRoles: 'player.manageroles',
     ViewActivityLogs: 'player.viewactivitylogs',
+    ManageXp: 'player.managexp',
   } as const,
   Role: {
     Edit: 'role.edit',

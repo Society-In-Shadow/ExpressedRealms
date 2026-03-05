@@ -7,5 +7,5 @@ public interface IUserContext
 {
     public string CurrentUserId();
     public Task<bool> CurrentUserHasPolicy(Policies policy);
-    Task<bool> CurrentUserHasPermission(Permission permission);
+    public bool CurrentUserHasPermission(Permission permission);
 }

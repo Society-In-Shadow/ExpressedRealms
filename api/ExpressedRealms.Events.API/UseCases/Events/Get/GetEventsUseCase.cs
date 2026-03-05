@@ -10,7 +10,7 @@ internal sealed class GetEventsUseCase(IEventRepository eventRepository, IUserCo
 {
     public async Task<Result<EventBaseReturnModel>> ExecuteAsync()
     {
-        var hasViewEvents = await userContext.CurrentUserHasPermission(Permissions.Event.View);
+        var hasViewEvents = userContext.CurrentUserHasPermission(Permissions.Event.View);
 
         var events = await eventRepository.GetEventsAsync();
         if (!hasViewEvents)
