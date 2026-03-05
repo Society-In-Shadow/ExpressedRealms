@@ -3,17 +3,18 @@
 import { EventScheduleItemStore } from '@/components/admin/eventScheduleItems/stores/eventScheduleItemStore'
 import { computed, inject, onBeforeMount, type Ref, ref } from 'vue'
 import EventScheduleItemItem from '@/components/admin/eventScheduleItems/EventScheduledItemItem.vue'
-import { UserRoles, userStore } from '@/stores/userStore'
 import Button from 'primevue/button'
 import AddEventScheduledItem from '@/components/admin/eventScheduleItems/AddEventScheduledItem.vue'
 import { DateTime } from 'luxon'
 import { Message } from 'primevue'
 import { EventStore } from '@/components/admin/events/stores/eventStore.ts'
 
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+
+const userPermissionInfo = userPermissionStore()
+const permissionCheck = userPermissionInfo.permissionCheck
 const store = EventScheduleItemStore()
 const eventInfo = EventStore()
-const userInfo = userStore()
-const hasEventScheduleItemManagementRole = ref(false)
 
 const dialogRef = inject<Ref<any> | null>('dialogRef', null) as Ref
 const props = defineProps({
@@ -40,7 +41,6 @@ const isReadOnly = computed(() =>
 onBeforeMount(async () => {
   await store.getEventScheduleItems(eventId.value)
   event.value = await eventInfo.getEvent(eventId.value)
-  hasEventScheduleItemManagementRole.value = userInfo.hasUserRole(UserRoles.ManageEventRole)
 })
 
 const showAdd = ref(false)
@@ -111,9 +111,9 @@ const timezone = computed(() => {
     </div>
   </div>
 
-  <AddEventScheduledItem v-if="showAdd && hasEventScheduleItemManagementRole && !isReadOnly" :event="event" :event-id="eventId" @canceled="toggleAdd" />
+  <AddEventScheduledItem v-if="showAdd && permissionCheck.EventScheduleItem.Create && !isReadOnly" :event="event" :event-id="eventId" @canceled="toggleAdd" />
   <Button
-    v-if="!showAdd && hasEventScheduleItemManagementRole && !isReadOnly" class="w-100 m-2"
+    v-if="!showAdd && permissionCheck.EventScheduleItem.Create && !isReadOnly" class="w-100 m-2"
     label="Add Schedule Item" @click="toggleAdd"
   />
 </template>

@@ -87,7 +87,7 @@ async function downloadAttendanceReport() {
           <Tab v-if="permissionCheck.EventQuestion.View" value="3">
             Questions
           </Tab>
-          <Tab value="1">
+          <Tab v-if="permissionCheck.EventScheduleItem.View" value="1">
             Schedule
           </Tab>
           <Tab value="2">
@@ -98,7 +98,7 @@ async function downloadAttendanceReport() {
           <TabPanel value="0">
             <EditEvent :event-id="eventId" />
           </TabPanel>
-          <TabPanel value="1">
+          <TabPanel v-if="permissionCheck.EventScheduleItem.View" value="1">
             <EventScheduledItemList :event-id="eventId" :is-read-only="false" />
           </TabPanel>
           <TabPanel value="2">
