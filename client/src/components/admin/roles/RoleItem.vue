@@ -1,14 +1,15 @@
 <script setup lang="ts">
 
-import { onMounted, type PropType, ref } from 'vue'
-import { UserRoles, userStore } from '@/stores/userStore'
+import { onMounted, type PropType } from 'vue'
 import Card from 'primevue/card'
 import { ConfirmationPopup } from './services/confirmationPopupService'
 import { useRouter } from 'vue-router'
 import SplitButton from 'primevue/splitbutton'
 import type { Role } from './types.ts'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
-let userInfo = userStore()
+const userPermissionInfo = userPermissionStore()
+const permissionCheck = userPermissionInfo.permissionCheck
 const router = useRouter()
 
 const props = defineProps({
@@ -24,21 +25,17 @@ const props = defineProps({
 
 let popups = ConfirmationPopup(props.role.id, props.role.name)
 
-const showEdit = ref(false)
-
-const hasManageEventRole = ref(false)
-
-const items = [
-  {
-    label: 'Delete',
-    command: ($event) => {
-      popups.deleteConfirmation($event)
-    },
-  },
-]
+const items = []
 
 onMounted(async () => {
-  hasManageEventRole.value = await userInfo.hasUserRole(UserRoles.ManageEventRole)
+  if (permissionCheck.Role.Delete && !props.isReadOnly) {
+    items.push({
+      label: 'Delete',
+      command: ($event) => {
+        popups.deleteConfirmation($event)
+      },
+    })
+  }
 })
 
 async function toggleEdit() {
@@ -59,9 +56,7 @@ async function toggleEdit() {
           </div>
         </div>
         <div class="p-0 m-0 d-inline-flex align-items-start">
-          <div v-if="!showEdit && hasManageEventRole && !props.isReadOnly">
-            <SplitButton label="View" severity="info" :model="items" @click="toggleEdit()" />
-          </div>
+          <SplitButton label="View" severity="info" :model="items" @click="toggleEdit()" />
         </div>
       </div>
     </template>

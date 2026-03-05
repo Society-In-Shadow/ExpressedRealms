@@ -3,7 +3,6 @@
 import { EventStore } from '@/components/admin/events/stores/eventStore'
 import { computed, onBeforeMount, ref } from 'vue'
 import EventItem from '@/components/admin/events/EventItem.vue'
-import { UserRoles, userStore } from '@/stores/userStore'
 import Button from 'primevue/button'
 import AddEvent from '@/components/admin/events/AddEvent.vue'
 import { DateTime } from 'luxon'
@@ -16,13 +15,15 @@ import TabPanel from 'primevue/tabpanel'
 import type { Event } from '@/components/admin/events/types.ts'
 import Card from 'primevue/card'
 
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+
+const userPermissionInfo = userPermissionStore()
+const permissionCheck = userPermissionInfo.permissionCheck
+
 const store = EventStore()
-const userInfo = userStore()
-const hasEventManagementRole = ref(false)
 
 onBeforeMount(async () => {
   await store.getEvents()
-  hasEventManagementRole.value = await userInfo.hasUserRole(UserRoles.ManageEventRole)
 })
 
 const showAdd = ref(false)
@@ -93,9 +94,9 @@ const currentAndUnpublishedEvents = computed(() => {
     </TabPanels>
   </Tabs>
 
-  <AddEvent v-if="showAdd && hasEventManagementRole && !props.isReadOnly" @canceled="toggleAdd" />
+  <AddEvent v-if="showAdd && permissionCheck.Event.Create && !props.isReadOnly" @canceled="toggleAdd" />
   <Button
-    v-if="!showAdd && hasEventManagementRole && !props.isReadOnly" class="w-100 m-2"
+    v-if="!showAdd && permissionCheck.Event.Create && !props.isReadOnly" class="w-100 m-2"
     label="Add Event" @click="toggleAdd"
   />
 </template>

@@ -8,7 +8,10 @@ import Column from 'primevue/column'
 import { roleUserAssignmentDialogs } from '@/components/admin/roles/assignedUsers/services/dialogs.ts'
 import { ConfirmationPopup } from '@/components/admin/roles/assignedUsers/services/confirmationPopupService.ts'
 import { assignedUsersStore } from '@/components/admin/roles/assignedUsers/stores/assignedUsersStore.ts'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
+const userPermissionInfo = userPermissionStore()
+const permissionCheck = userPermissionInfo.permissionCheck
 const assignedUserData = assignedUsersStore()
 const popup = roleUserAssignmentDialogs()
 const confirmation = ConfirmationPopup()
@@ -28,7 +31,7 @@ onBeforeMount(async () => {
 
 <template>
   <div class="text-right">
-    <Button label="Add User" class="m-2" @click="popup.showAddUserPopup()" />
+    <Button v-if="permissionCheck.Role.Assign" label="Add User" class="m-2" @click="popup.showAddUserPopup()" />
   </div>
   <DataTable :value="assignedUserData.userRoles">
     <Column field="name" header="User / Email" />
@@ -44,7 +47,7 @@ onBeforeMount(async () => {
     </Column>
     <Column>
       <template #body="{data}">
-        <Button label="Remove" severity="danger" class="m-2 float-end" @click="confirmation.removeUserConfirmation($event, props.roleId, data.userId, data.name)" />
+        <Button v-if="permissionCheck.Role.Assign" label="Remove" severity="danger" class="m-2 float-end" @click="confirmation.removeUserConfirmation($event, props.roleId, data.userId, data.name)" />
       </template>
     </Column>
   </DataTable>

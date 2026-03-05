@@ -31,6 +31,10 @@ const props = defineProps({
     type: Boolean,
     default: undefined,
   },
+  isDisabled: {
+    type: Boolean,
+    default: undefined,
+  },
 })
 
 const dataCyTagCalc = computed(() => {
@@ -57,6 +61,7 @@ function luxonToDate(dt: DateTime | null): Date | null {
 }
 
 const showSkeleton = props.showSkeleton ?? inject('showSkeleton', false)
+const isDisabled = props.isDisabled || inject('isDisabled', false)
 const isInvalid = computed(() => (model.value.error.value ?? '').length > 0)
 
 </script>
@@ -70,7 +75,8 @@ const isInvalid = computed(() => (model.value.error.value ?? '').length > 0)
       :id="dataCyTagCalc" :data-cy="dataCyTagCalc" class="w-100"
       date-format="DD MM, d, yy"
       :model-value="luxonToDate(model.field.value)" v-bind="$attrs" :max-date="luxonToDate(props.maxDate)" :min-date="luxonToDate(props.minDate)"
-      :invalid="isInvalid" @update:model-value="onDateChange"
+      :invalid="isInvalid" :disabled="isDisabled"
+      @update:model-value="onDateChange"
     />
     <small v-if="isInvalid" :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ model.error }}</small>
     <slot />

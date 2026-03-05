@@ -7,6 +7,10 @@ import Button from 'primevue/button'
 import Panel from 'primevue/panel'
 import Checkbox from 'primevue/checkbox'
 
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+
+const userPermissionInfo = userPermissionStore()
+const permissionCheck = userPermissionInfo.permissionCheck
 const store = RoleStore()
 
 const selectedPermissions = reactive<string[]>([])
@@ -70,7 +74,7 @@ const toggleResourcePermissions = (resource: Resource) => {
 
 <template>
   <div class="m-3 text-right">
-    <Button label="Update" class="m-2" @click="save" />
+    <Button v-if="permissionCheck.Role.Edit" label="Update" class="m-2" @click="save" />
   </div>
   <div v-if="roleData.resources && roleData.haveRole" class="resource-grid">
     <Panel v-for="resource in roleData.resources" :key="resource.id">
@@ -84,6 +88,7 @@ const toggleResourcePermissions = (resource: Resource) => {
             :model-value="areAllPermissionsSelected(resource)"
             :indeterminate="isSomePermissionsSelected(resource)"
             binary
+            :disabled="!permissionCheck.Role.Edit"
             @update:model-value="toggleResourcePermissions(resource)"
           />
         </div>
@@ -99,6 +104,7 @@ const toggleResourcePermissions = (resource: Resource) => {
             :model-value="isPermissionSelected(permission.id)"
             binary
             :aria-label="permission.name"
+            :disabled="!permissionCheck.Role.Edit"
             @update:model-value="togglePermission(permission.id)"
           />
           <label :for="permission.id" class="pl-2">{{ permission.name }}</label>

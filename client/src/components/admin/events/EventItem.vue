@@ -2,7 +2,6 @@
 
 import { onMounted, type PropType, ref } from 'vue'
 import type { Event } from '@/components/admin/events/types'
-import { UserRoles, userStore } from '@/stores/userStore'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
 import Tag from 'primevue/tag'
@@ -11,9 +10,11 @@ import { adminEventScheduleDialogs } from '@/components/admin/eventScheduleItems
 import { DateTime } from 'luxon'
 import { useRouter } from 'vue-router'
 import SplitButton from 'primevue/splitbutton'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
-let userInfo = userStore()
 const router = useRouter()
+const userPermissions = userPermissionStore()
+const permissionCheck = userPermissions.permissionCheck
 const dialogs = adminEventScheduleDialogs()
 
 const props = defineProps({
@@ -28,28 +29,24 @@ const props = defineProps({
 })
 
 let popups = EventConfirmationPopup(props.event.id, props.event.name)
-
 const showEdit = ref(false)
-
-const hasManageEventRole = ref(false)
-
-const items = [
-  {
-    label: 'Delete',
-    command: ($event) => {
-      popups.deleteConfirmation($event)
-    },
-  },
-]
+const items = []
 
 onMounted(async () => {
-  hasManageEventRole.value = await userInfo.hasUserRole(UserRoles.ManageEventRole)
-
-  if (!props.event.isPublished) {
+  if (!props.event.isPublished && permissionCheck.Event.Publish) {
     items.push({
       label: 'Publish',
       command: ($event) => {
         popups.publishConfirmation($event)
+      },
+    })
+  }
+
+  if (permissionCheck.Event.Delete) {
+    items.push({
+      label: 'Delete',
+      command: ($event) => {
+        popups.deleteConfirmation($event)
       },
     })
   }
@@ -77,7 +74,7 @@ function formatDate(date: DateTime) {
       <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
         <div>
           <h1 class="p-0 m-0">
-            {{ props.event?.name }} <Tag v-if="hasManageEventRole" severity="secondary">
+            {{ props.event?.name }} <Tag v-if="permissionCheck.Event.View && !props.isReadOnly" severity="secondary">
               {{ props.event?.isPublished ? "Published" : "Draft" }}
             </Tag>
           </h1>
@@ -88,10 +85,10 @@ function formatDate(date: DateTime) {
           </div>
         </div>
         <div class="p-0 m-0 d-inline-flex align-items-start">
-          <div v-if="hasManageEventRole || props.event?.startDate <= DateTime.now().plus({ months: 1 })" class="mr-2">
+          <div v-if="permissionCheck.Event.View || props.event?.startDate <= DateTime.now().plus({ months: 1 })" class="mr-2">
             <Button label="Schedule" @click="dialogs.showScheduleDialog(props.event.id, props.event, true)" />
           </div>
-          <div v-if="!showEdit && hasManageEventRole && !props.isReadOnly">
+          <div v-if="!showEdit && permissionCheck.Event.View && !props.isReadOnly">
             <SplitButton label="View" severity="info" :model="items" @click="toggleEdit()" />
           </div>
         </div>

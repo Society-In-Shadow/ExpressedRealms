@@ -1,4 +1,5 @@
-using ExpressedRealms.Authentication;
+using System.Globalization;
+using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup;
 using ExpressedRealms.DB.Models.Events.EventSetup;
 using ExpressedRealms.Events.API.Repositories.Events;
@@ -23,8 +24,8 @@ public class GetEventScheduleItemUseCaseTests
     {
         _dbEventModel = new Event
         {
-            StartDate = DateOnly.Parse("10/28/2025"),
-            EndDate = DateOnly.Parse("10/31/2025"),
+            StartDate = DateOnly.Parse("10/28/2025", CultureInfo.InvariantCulture),
+            EndDate = DateOnly.Parse("10/31/2025", CultureInfo.InvariantCulture),
             Name = "Name",
             Location = "Location",
             WebsiteName = "website",
@@ -40,18 +41,18 @@ public class GetEventScheduleItemUseCaseTests
             {
                 Id = 1,
                 Description = "Test Event 1",
-                StartTime = TimeOnly.Parse("10:00"),
-                EndTime = TimeOnly.Parse("10:30"),
-                Date = DateOnly.Parse("11/02/2025"),
+                StartTime = TimeOnly.Parse("10:00", CultureInfo.InvariantCulture),
+                EndTime = TimeOnly.Parse("10:30", CultureInfo.InvariantCulture),
+                Date = DateOnly.Parse("11/02/2025", CultureInfo.InvariantCulture),
                 EventId = 1,
             },
             new()
             {
                 Id = 2,
                 Description = "Test Event 2",
-                StartTime = TimeOnly.Parse("11:00"),
-                EndTime = TimeOnly.Parse("11:30"),
-                Date = DateOnly.Parse("11/02/2025"),
+                StartTime = TimeOnly.Parse("11:00", CultureInfo.InvariantCulture),
+                EndTime = TimeOnly.Parse("11:30", CultureInfo.InvariantCulture),
+                Date = DateOnly.Parse("11/02/2025", CultureInfo.InvariantCulture),
                 EventId = 1,
             },
         };
@@ -63,7 +64,7 @@ public class GetEventScheduleItemUseCaseTests
 
         A.CallTo(() => _repository.FindEventAsync(_model.EventId)).Returns(_dbEventModel);
         A.CallTo(() => _repository.IsExistingEvent(_model.EventId)).Returns(true);
-        A.CallTo(() => _userContext.CurrentUserHasPolicy(Policies.ManageEvents)).Returns(true);
+        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.Event.View)).Returns(true);
         A.CallTo(() => _repository.GetEventScheduleItems(_model.EventId)).Returns(_dbModels);
 
         var validator = new GetEventScheduleItemModelValidator(_repository, _userContext);
@@ -97,10 +98,11 @@ public class GetEventScheduleItemUseCaseTests
     }
 
     [Fact]
-    public async Task ValidationFor_EventId_WillFail_TheyDoNotHaveManageEventsPolicy_AndItIsNotPublished()
+    public async Task ValidationFor_EventId_WillFail_WhenTheyCannotViewEvents_AndItIsNotPublished()
     {
         _dbEventModel.IsPublished = false;
-        A.CallTo(() => _userContext.CurrentUserHasPolicy(Policies.ManageEvents)).Returns(false);
+        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.Event.View))
+            .Returns(false);
 
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(
@@ -110,7 +112,7 @@ public class GetEventScheduleItemUseCaseTests
     }
 
     [Fact]
-    public async Task UseCase_WillReturnAllItems_WhenTheyHaveManageEventsPolicy()
+    public async Task UseCase_WillReturnAllItems_WhenTheyHaveViewEventPermission()
     {
         var returnList = new List<EventScheduleItemModel>()
         {
@@ -118,18 +120,18 @@ public class GetEventScheduleItemUseCaseTests
             {
                 Id = 1,
                 Description = "Test Event 1",
-                StartTime = TimeOnly.Parse("10:00"),
-                EndTime = TimeOnly.Parse("10:30"),
-                Date = DateOnly.Parse("11/02/2025"),
+                StartTime = TimeOnly.Parse("10:00", CultureInfo.InvariantCulture),
+                EndTime = TimeOnly.Parse("10:30", CultureInfo.InvariantCulture),
+                Date = DateOnly.Parse("11/02/2025", CultureInfo.InvariantCulture),
                 EventId = 1,
             },
             new()
             {
                 Id = 2,
                 Description = "Test Event 2",
-                StartTime = TimeOnly.Parse("11:00"),
-                EndTime = TimeOnly.Parse("11:30"),
-                Date = DateOnly.Parse("11/02/2025"),
+                StartTime = TimeOnly.Parse("11:00", CultureInfo.InvariantCulture),
+                EndTime = TimeOnly.Parse("11:30", CultureInfo.InvariantCulture),
+                Date = DateOnly.Parse("11/02/2025", CultureInfo.InvariantCulture),
                 EventId = 1,
             },
         };

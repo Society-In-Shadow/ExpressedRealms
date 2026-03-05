@@ -1,4 +1,4 @@
-using ExpressedRealms.Authentication;
+using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Events.API.Repositories.Events;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using FluentValidation;
@@ -21,7 +21,7 @@ internal sealed class GetEventScheduleItemModelValidator
                 async (x, y) =>
                 {
                     var thisEvent = await repository.FindEventAsync(x);
-                    var hasPolicy = await userContext.CurrentUserHasPolicy(Policies.ManageEvents);
+                    var hasPolicy = userContext.CurrentUserHasPermission(Permissions.Event.View);
 
                     return hasPolicy || thisEvent!.IsPublished;
                 }

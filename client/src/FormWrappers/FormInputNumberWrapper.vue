@@ -20,6 +20,10 @@ const props = defineProps({
     type: Boolean,
     default: undefined,
   },
+  isDisabled: {
+    type: Boolean,
+    default: undefined,
+  },
 })
 
 const dataCyTagCalc = computed(() => {
@@ -30,6 +34,7 @@ const dataCyTagCalc = computed(() => {
 })
 
 const showSkeleton = props.showSkeleton ?? inject('showSkeleton', false)
+const isDisabled = props.isDisabled || inject('isDisabled', false)
 const isInvalid = computed(() => (model.value.error.value ?? '').length > 0)
 
 </script>
@@ -42,6 +47,7 @@ const isInvalid = computed(() => (model.value.error.value ?? '').length > 0)
       v-else
       :id="dataCyTagCalc" v-model="model.field.value" :data-cy="dataCyTagCalc" class="w-100"
       :invalid="isInvalid" v-bind="$attrs"
+      :disabled="isDisabled"
     />
     <small v-if="isInvalid" :data-cy="dataCyTagCalc + '-help'" class="text-danger">{{ model.error }}</small>
     <slot />

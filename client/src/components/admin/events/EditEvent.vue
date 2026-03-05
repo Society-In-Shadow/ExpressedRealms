@@ -10,7 +10,10 @@ import Button from 'primevue/button'
 import FormInputDateOnlyWrapper from '@/FormWrappers/FormInputDateOnlyWrapper.vue'
 import FormInputNumberWrapper from '@/FormWrappers/FormInputNumberWrapper.vue'
 import FormWrapper from '@/FormWrappers/FormWrapper.vue'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
+const userPermissionInfo = userPermissionStore()
+const permissionCheck = userPermissionInfo.permissionCheck
 const store = EventStore()
 
 const form = getValidationInstance()
@@ -29,20 +32,23 @@ onMounted(async () => {
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
+  if (!permissionCheck.Event.Edit) {
+    return
+  }
   await store.updateEvent(values, props.eventId)
 })
 
 </script>
 
 <template>
-  <FormWrapper :show-skeleton="!event" @submit="onSubmit">
+  <FormWrapper :show-skeleton="!event" :is-disabled="!permissionCheck.Event.Edit" @submit="onSubmit">
     <FormInputTextWrapper v-model="form.fields.name" />
     <FormInputTextWrapper v-model="form.fields.location" />
     <FormInputTextWrapper v-model="form.fields.websiteName" />
     <FormInputTextWrapper v-model="form.fields.websiteUrl" />
     <FormInputTextWrapper v-model="form.fields.additionalNotes" />
     <FormInputNumberWrapper v-model="form.fields.conExperience" />
-    <div class="d-flex flex-row gap-2 w-100">
+    <div class="d-flex flex-column flex-md-row gap-2 w-100">
       <FormInputDateOnlyWrapper v-model="form.fields.startDate" />
       <FormInputDateOnlyWrapper v-model="form.fields.endDate" />
     </div>
@@ -54,7 +60,7 @@ const onSubmit = form.handleSubmit(async (values) => {
     />
 
     <div class="m-3 text-right">
-      <Button label="Update" class="m-2" type="submit" />
+      <Button v-if="permissionCheck.Event.Edit" label="Update" class="m-2" type="submit" />
     </div>
   </FormWrapper>
 </template>

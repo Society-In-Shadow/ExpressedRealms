@@ -78,7 +78,7 @@ const items = ref([
           navMenuIcon: 'calendar_month',
           pushComponentRouteName: 'adminEventList',
           description: 'Manage all events in the system.',
-          visible: () => userInfo.userRoles.includes('ManageEvents'),
+          visible: () => permissionCheck.Event.View,
         },
       ],
     },
