@@ -1,0 +1,50 @@
+site_name: Expressed Realms
+site_description: All in one tool for Society in Shadows
+
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.top
+    - search.highlight
+    - content.code.copy
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/brightness-2
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-7
+        name: Switch to light mode
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+
+repo_url: https://github.com/Society-In-Shadow/ExpressedRealms
+repo_name: ExpressedRealms
+
+nav:
+  - API Design: apiDesign.md
+  - Architecture: architecture.md
+  - Backend Unit Testing: backendUnitTesting.md
+  - CMS Sections: cmsSections.md
+  - Component Testing: componentTesting.md
+  - Creating GPG Keys: creatingGPGKeys.md
+  - Cypress: cypress.md
+  - Database: database.md
+  - Discord Support: discordSupport.md
+  - Docker / Podman: docker-podman.md
+  - EF Core Practices: efCorePractices.md
+  - Fedora Setup: fedoraSetup.md
+  - Forms: forms.md
+  - Migrations: migrations.md
+  - Permissions & Policies: permissionsAndPolicies.md
+  - PGAdmin Setup: pgadminSetup.md
+  - Prospective Employers: prospectiveEmployers.md
+  - Repository Standards: repositoryStandards.md
+  - Use Cases: useCases.md
+  - Vite Testing: vitesting.md
+  - Windows Setup: windowsSetup.md

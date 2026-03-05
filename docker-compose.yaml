@@ -6,6 +6,52 @@ networks:
     driver: bridge
 
 services:
+  
+  # Infrastructure
+  
+  postgres:
+    container_name: expressed-realms-db
+    image: postgres:16-alpine
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=expressedRealms
+      - POSTGRES_USER=dev_user
+      - POSTGRES_PASSWORD=dev_password
+
+    networks:
+      - expressed-realms-network
+    restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user -d expressedRealms" ]
+      interval: 2s
+      timeout: 5s
+      retries: 3
+
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    hostname: azurite
+    restart: always
+    command: "azurite-blob --blobHost 0.0.0.0 --blobPort 10000 --location /data"
+    ports:
+      - "10000:10000"
+    volumes:
+      - azurite-data:/data
+    networks:
+      - expressed-realms-network
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly no
+    restart: unless-stopped
+  
+  # Public Facing Services
+  
   myapp:
     container_name: societyinshadows.org
     image: node:23.11.0
@@ -27,27 +73,6 @@ services:
     networks:
       - expressed-realms-network
 
-  postgres:
-    container_name: expressed-realms-db
-    image: postgres:16-alpine
-    ports:
-      - "127.0.0.1:5432:5432"
-    volumes:
-      - db_data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=expressedRealms
-      - POSTGRES_USER=dev_user
-      - POSTGRES_PASSWORD=dev_password
-
-    networks:
-      - expressed-realms-network
-    restart: always
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user -d expressedRealms"]
-      interval: 2s
-      timeout: 5s
-      retries: 3
-
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: expressed-realms-db-admin
@@ -66,18 +91,6 @@ services:
     depends_on:
       postgres:
         condition: service_started
-
-  azurite:
-    image: mcr.microsoft.com/azure-storage/azurite
-    hostname: azurite
-    restart: always
-    command: "azurite-blob --blobHost 0.0.0.0 --blobPort 10000 --location /data"
-    ports:
-      - "10000:10000"
-    volumes:
-      - azurite-data:/data
-    networks:
-      - expressed-realms-network
 
   mailpit:
     image: axllent/mailpit
@@ -112,13 +125,15 @@ services:
       - expressed-realms-network
     restart: always
 
-  redis:
-    image: redis:7
-    container_name: redis
+  docs:
+    build:
+      context: ./documentation
     ports:
-      - "6379:6379"
-    command: redis-server --appendonly no
-    restart: unless-stopped
+      - "8000:8000"
+    volumes:
+      - ./documentation:/app:Z
+    environment:
+      - NODE_ENV=development
 
 volumes:
   ignore:
