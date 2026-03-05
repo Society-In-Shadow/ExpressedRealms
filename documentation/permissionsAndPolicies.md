@@ -99,7 +99,7 @@ the front end.
 Below is an example of how you can use it.
 
 ```ts
-import { userPermissionStore } from '@/stores/userPermissionStore.ts
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
 const userPermissionInfo = userPermissionStore()
 const permissionCheck = userPermissionInfo.permissionCheck
@@ -121,6 +121,20 @@ Due to this, you cannot use it on things such as PrimeVue components, eg tabs.
 
 The only way around this is to use v-if="permissionCheck.Resource.Action" on the component itself, thus the evolution of
 having a statically defined permission check that is preloaded with the check.
+
+## Permission Checklist / General Layout
+Due to the standardard UI design, the permission will show up in regular places, below is a list of said places.
+
+- Check List Route Permission - Should be based on View Permission
+- Check Page Route Permission - Should be based on View Permission
+- Tile List Permission - Should be based on View or Delete, or specific action in dropdown
+- Check Tab Visibility - Should be based on View permission
+- Basic Info Tab - Field Editability - Should be based on edit permission
+- Delete Button should be hidden behind the delete permission
+- Create Button should be hidden behind the create permission
+- Other Tabs - If editable, should be based on their permissions, eg, Event Schedule Items tab should be view, edit should be field visibility, etc
+
+
 
 ## Legacy Permission / Policy System
 Keeping this around till full conversion has happened.
