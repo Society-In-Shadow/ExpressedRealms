@@ -59,11 +59,6 @@ public static class PolicyConfiguration
             );
 
             options.AddPolicy(
-                Policies.ManageEvents.Name,
-                policy => policy.RequireRole(UserRoles.ManageEvents)
-            );
-
-            options.AddPolicy(
                 Policies.ManagePlayerExperience.Name,
                 policy => policy.RequireRole(UserRoles.ManagePlayerExperience)
             );

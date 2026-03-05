@@ -1,5 +1,4 @@
-﻿using ExpressedRealms.Authentication;
-using ExpressedRealms.Authentication.PermissionCollection;
+﻿using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using ExpressedRealms.Events.API.API.EventCheckin.AddCheckinBonusXp;
 using ExpressedRealms.Events.API.API.EventCheckin.AnswerQuestion;
@@ -44,22 +43,18 @@ internal static class EventEndpoints
 
         endpointGroup
             .MapPost("", CreateEventEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ManageEvents)
             .RequirePermission(Permissions.Event.Create);
 
         endpointGroup
             .MapPut("{id}", EditEventEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ManageEvents)
             .RequirePermission(Permissions.Event.Edit);
 
         endpointGroup
             .MapDelete("{id}", DeleteEventEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ManageEvents)
             .RequirePermission(Permissions.Event.Delete);
 
         endpointGroup
             .MapPost("{id}/publish", PublishEventEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ManageEvents)
             .RequirePermission(Permissions.Event.Publish);
 
         endpointGroup

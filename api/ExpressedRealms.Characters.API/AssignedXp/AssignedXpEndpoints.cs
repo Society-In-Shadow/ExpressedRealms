@@ -1,4 +1,6 @@
 ﻿using ExpressedRealms.Authentication;
+using ExpressedRealms.Authentication.PermissionCollection;
+using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using ExpressedRealms.Characters.API.AssignedXp.Create;
 using ExpressedRealms.Characters.API.AssignedXp.Delete;
 using ExpressedRealms.Characters.API.AssignedXp.Edit;
@@ -39,6 +41,6 @@ internal static class AssignedXpEndpoints
 
         eventEndpointGroup
             .MapGet("{eventId}/assignedXp", GetEventEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ManageEvents);
+            .RequirePermission(Permissions.Event.Checkin);
     }
 }
