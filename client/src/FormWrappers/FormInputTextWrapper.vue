@@ -38,7 +38,7 @@ const dataCyTagCalc = computed(() => {
 })
 
 const showSkeleton = props.showSkeleton ?? inject('showSkeleton', false)
-const isDisabled = props.isDisabled ?? inject('isDisabled', false)
+const isDisabled = props.isDisabled || inject('isDisabled', false)
 const isInvalid = computed(() => (model.value.error.value ?? '').length > 0)
 
 </script>
