@@ -101,7 +101,8 @@ public class GetEventScheduleItemUseCaseTests
     public async Task ValidationFor_EventId_WillFail_WhenTheyCannotViewEvents_AndItIsNotPublished()
     {
         _dbEventModel.IsPublished = false;
-        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.Event.View)).Returns(false);
+        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.Event.View))
+            .Returns(false);
 
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(
@@ -111,7 +112,7 @@ public class GetEventScheduleItemUseCaseTests
     }
 
     [Fact]
-    public async Task UseCase_WillReturnAllItems_WhenTheyHaveManageEventsPolicy()
+    public async Task UseCase_WillReturnAllItems_WhenTheyHaveViewEventPermission()
     {
         var returnList = new List<EventScheduleItemModel>()
         {

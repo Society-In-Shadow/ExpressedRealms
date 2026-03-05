@@ -17,7 +17,7 @@ public class UserContext(IHttpContextAccessor accessor) : IUserContext
     {
         return await accessor.HttpContext.UserHasPolicyAsync(policy);
     }
-    
+
     public async Task<bool> CurrentUserHasPermission(Permission permission)
     {
         return accessor.HttpContext.User.UserHasPermission(permission);

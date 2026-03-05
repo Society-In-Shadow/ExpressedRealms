@@ -21,7 +21,9 @@ internal sealed class GetEventScheduleItemModelValidator
                 async (x, y) =>
                 {
                     var thisEvent = await repository.FindEventAsync(x);
-                    var hasPolicy = await userContext.CurrentUserHasPermission(Permissions.Event.View);
+                    var hasPolicy = await userContext.CurrentUserHasPermission(
+                        Permissions.Event.View
+                    );
 
                     return hasPolicy || thisEvent!.IsPublished;
                 }

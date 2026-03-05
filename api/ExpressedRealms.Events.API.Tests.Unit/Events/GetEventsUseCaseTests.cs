@@ -60,7 +60,7 @@ public class GetEventsUseCaseTests
     }
 
     [Fact]
-    public async Task UseCase_WillReturnAllItems_WhenTheyHaveManageEventsPolicy()
+    public async Task UseCase_WillReturnAllItems_WhenTheyHaveViewEventsPermission()
     {
         var returnList = new List<EventModel>()
         {
@@ -101,7 +101,8 @@ public class GetEventsUseCaseTests
     [Fact]
     public async Task UseCase_WillOnlyReturnPublishedItems_WhenTheyDoNotHaveTheViewEventPermission()
     {
-        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.Event.View)).Returns(false);
+        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.Event.View))
+            .Returns(false);
         var returnList = new List<EventModel>()
         {
             new()

@@ -12,7 +12,6 @@ public static class UserRoles
     public const string ManagePlayerCharacterList = "ManagePlayerCharacterList";
     public const string ManageProgressionPaths = "ManageProgressionPaths";
     public const string ManageModifiers = "ManageModifiers";
-    public const string ManageEvents = "ManageEvents";
     public const string ManagePlayerExperience = "ManageUserExperience";
 
     /// <summary>
@@ -31,7 +30,6 @@ public static class UserRoles
             ManagePlayerCharacterList,
             ManageProgressionPaths,
             ManageModifiers,
-            ManageEvents,
             ManagePlayerExperience,
         };
 }
