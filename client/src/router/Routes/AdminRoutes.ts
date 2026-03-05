@@ -27,13 +27,13 @@ export const AdminRoutes = {
       path: 'roles',
       name: 'adminRoleList',
       component: () => import('@/components/admin/roles/RoleList.vue'),
-      meta: { requiredRole: 'UserManagementRole' },
+      meta: { requiredPermission: UserPermissions.Role.View },
     },
     {
       path: 'roles/:id',
       name: 'editRole',
       component: () => import('@/components/admin/roles/RolePage.vue'),
-      meta: { requiredRole: 'UserManagementRole' },
+      meta: { requiredPermission: UserPermissions.Role.View },
     },
     {
       path: 'events',

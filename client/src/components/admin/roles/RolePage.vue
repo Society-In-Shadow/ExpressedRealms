@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
 import { onBeforeMount, ref } from 'vue'
-import { UserRoles, userStore } from '@/stores/userStore'
 import Card from 'primevue/card'
 import { RoleStore } from './stores/roleStore.ts'
 import { useRoute } from 'vue-router'
@@ -18,20 +17,16 @@ import PermissionsTab from '@/components/admin/roles/PermissionsTab.vue'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 import AssignedUsersTab from '@/components/admin/roles/assignedUsers/AssignedUsersTab.vue'
 
-let userInfo = userStore()
 const route = useRoute()
 const roleData = RoleStore()
 const permissionData = userPermissionStore()
 const permissionCheck = permissionData.permissionCheck
 const roleId = Number.parseInt(route.params.id as string)
 
-const hasManageEventRole = ref(false)
 const isLoaded = ref(false)
 
 onBeforeMount(async () => {
   await roleData.getEvent(roleId)
-
-  hasManageEventRole.value = await userInfo.hasUserRole(UserRoles.ManageEventRole)
   isLoaded.value = true
 })
 

@@ -2,7 +2,6 @@
 
 import { RoleStore } from './stores/roleStore'
 import { computed, onBeforeMount, ref } from 'vue'
-import { UserRoles, userStore } from '@/stores/userStore'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
 import RoleItem from '@/components/admin/roles/RoleItem.vue'
@@ -10,13 +9,10 @@ import AddRoleForm from './AddRoleForm.vue'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
 const store = RoleStore()
-const userInfo = userStore()
-const hasEventManagementRole = ref(false)
 const permissionCheck = userPermissionStore().permissionCheck
 
 onBeforeMount(async () => {
   await store.getRoles()
-  hasEventManagementRole.value = await userInfo.hasUserRole(UserRoles.ManageEventRole)
 })
 
 const showAdd = ref(false)
@@ -33,7 +29,7 @@ const props = defineProps({
 })
 
 const enableAdd = computed(() => {
-  return hasEventManagementRole.value && !props.isReadOnly && permissionCheck.Role.Create
+  return !props.isReadOnly && permissionCheck.Role.Create
 })
 
 </script>

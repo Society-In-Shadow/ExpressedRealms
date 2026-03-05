@@ -29,16 +29,10 @@ const props = defineProps({
 })
 
 let popups = EventConfirmationPopup(props.event.id, props.event.name)
-
 const showEdit = ref(false)
-
-const hasManageEventRole = ref(false)
-
 const items = []
 
 onMounted(async () => {
-  hasManageEventRole.value = permissionCheck.Event.View
-
   if (!props.event.isPublished && permissionCheck.Event.Publish) {
     items.push({
       label: 'Publish',

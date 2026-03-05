@@ -36,7 +36,7 @@ const onSubmit = form.handleSubmit(async (values) => {
     <FormInputTextWrapper v-model="form.fields.description" />
 
     <div class="m-3 text-right">
-      <Button label="Update" class="m-2" type="submit" />
+      <Button v-if="permissionCheck.Role.Edit" label="Update" class="m-2" type="submit" />
     </div>
   </FormWrapper>
 </template>

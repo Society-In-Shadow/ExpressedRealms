@@ -13,7 +13,6 @@ export const UserRoles = {
   ManagePlayerCharacterList: 'ManagePlayerCharacterList',
   ManageProgressionPaths: 'ManageProgressionPaths',
   ManageModifiers: 'ManageModifiers',
-  ManageEventRole: 'ManageEvents',
   ManagePlayerExperience: 'ManageUserExperience',
 } as const
 
