@@ -9,7 +9,7 @@ There are three main goals for this project
 
 - Provide a cms system to store all the lore, expressions, game mechanics, and other information about the Society
 - Provide a platform for creating and maintaining character sheets for the residents of the Society
-- Provide potential employers a view into how I work on a production grade app (more targeted info can be found in [Prospective Employers](./documentation/prospectiveEmployers.md))
+- Provide potential employers a view into how I work on a production grade app (more targeted info can be found in [Prospective Employers](./documentation/docs/prospectiveEmployers.md))
 
 To get the full experience, feel free to create a user at [https://societyinshadows.org](https://society-in-shadows.com/)
 
@@ -17,7 +17,7 @@ To get the full experience, feel free to create a user at [https://societyinshad
 
 ## Quick Specs
 
-- **Numbers** 80+ tables, 170+ API endpoints, 600+ unit tests, and 49,000+ lines of code
+- **Numbers** 90+ tables, 190+ API endpoints, 800+ unit tests, and 50,000+ lines of code
 - **Frontend:** Vue 3 + Vite, TypeScript, Axios, Vue Router
 - **Backend:** .NET 10 Minimal API, EF Core, PostgreSQL
 - **Infrastructure:** Azure Container Apps, Blob Storage, Azure Key Vault
@@ -60,8 +60,8 @@ USERPROFILE="/home/<user>"
 
 Next, you need to setup SSL Certs
 
-- Windows users can follow the instructions in [windows setup](/documentation/windowsSetup.md)
-- Fedora users can follow the instructions in [fedora setup](/documentation/fedoraSetup.md)
+- Windows users can follow the instructions in [windows setup](/documentation/docs/windowsSetup.md)
+- Fedora users can follow the instructions in [fedora setup](/documentation/docs/fedoraSetup.md)
 
 ## Data Population Scripts
 
@@ -72,7 +72,7 @@ These are stored separate if you would like access, ask about it in the discord 
 Once you get docker up and running, get the population scripts, add the .env file if you are on linux, and get the SSL certs
 setup, you should be good to go to start the website.
 
-Details on how the site runs can be found here: [docker-podman](/documentation/docker-podman.md)
+Details on how the site runs can be found here: [docker-podman](/documentation/docs/docker-podman.md)
 
 But for initial setup, you want to get this working in docker, as you can see the progress of all the images downloading.
 
@@ -107,3 +107,4 @@ Links to various places locally can be found here:
 - [DB Management / pgAdmin](http://localhost:8888/login?next=%2Fbrowser%2F)
 - [Feature Flags](http://localhost:8050)
 - [Email Testing](http://localhost:8025)
+- [Documentation Site](http://localhost:8000)
