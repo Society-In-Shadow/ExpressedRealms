@@ -14,11 +14,6 @@ public static class PolicyConfiguration
             );
 
             options.AddPolicy(
-                Policies.UserManagementPolicy.Name,
-                policy => policy.RequireRole(UserRoles.UserManagementRole)
-            );
-
-            options.AddPolicy(
                 Policies.ManagePowers.Name,
                 policy => policy.RequireRole(UserRoles.PowerManagementRole)
             );
@@ -41,11 +36,6 @@ public static class PolicyConfiguration
             options.AddPolicy(
                 Policies.ManageBlessings.Name,
                 policy => policy.RequireRole(UserRoles.ManageBlessingsRole)
-            );
-
-            options.AddPolicy(
-                Policies.ManagePlayerCharacterList.Name,
-                policy => policy.RequireRole(UserRoles.ManagePlayerCharacterList)
             );
 
             options.AddPolicy(

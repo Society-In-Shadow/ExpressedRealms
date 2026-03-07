@@ -2,8 +2,9 @@
  * Auto-Generated, Do Not Edit
  */
 export const UserPermissions = {
-  Character: {
-    Retire: 'character.retire',
+  CharacterManagement: {
+    Retire: 'charactermanagement.retire',
+    View: 'charactermanagement.view',
   } as const,
   CharacterContacts: {
     Approve: 'charactercontacts.approve',

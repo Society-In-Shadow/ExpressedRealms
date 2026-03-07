@@ -1,7 +1,7 @@
 using ExpressedRealms.Admin.API.AdminCharacterList.GetCharacterList;
 using ExpressedRealms.Admin.API.AdminCharacterList.UpdateCharacterXp;
-using ExpressedRealms.Authentication;
-using ExpressedRealms.Server.Shared;
+using ExpressedRealms.Authentication.PermissionCollection;
+using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
@@ -15,7 +15,7 @@ public static class AdminCharacterListEndpoints
         var endpointGroup = app.MapGroup("admin")
             .AddFluentValidationAutoValidation()
             .WithTags("Admin Character List")
-            .RequirePolicyAuthorization(Policies.ManagePlayerCharacterList);
+            .RequirePermission(Permissions.CharacterManagement.View);
 
         endpointGroup
             .MapGet("characters/", GetCharacterListEndpoint.Execute)

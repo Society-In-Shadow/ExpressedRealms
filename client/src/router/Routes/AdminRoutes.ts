@@ -9,7 +9,7 @@ export const AdminRoutes = {
       path: 'players',
       name: 'viewPlayers',
       component: () => import('@/components/admin/players/PlayerList.vue'),
-      meta: { requiredRole: 'UserManagementRole' },
+      meta: { requirePermission: UserPermissions.Player.View },
     },
     {
       path: 'players/:id',
@@ -21,7 +21,7 @@ export const AdminRoutes = {
       path: 'characters',
       name: 'adminCharacterList',
       component: () => import('./../../components/admin/characterList/AdminCharacterList.vue'),
-      meta: { requiredRole: 'ManagePlayerCharacterList' },
+      meta: { requiredPermission: UserPermissions.CharacterManagement.View },
     },
     {
       path: 'roles',

@@ -13,14 +13,10 @@ import SimpleMenuItem from '@/components/navbar/navMenuItems/SimpleMenuItem.vue'
 import { userStore } from '@/stores/userStore'
 import { cmsStore } from '@/stores/cmsStore.ts'
 import { storeToRefs } from 'pinia'
-import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 import EventCheckinBanner from '@/components/conCheckin/EventCheckinBanner.vue'
 import GoCheckinBanner from '@/components/conCheckin/GoCheckinBanner.vue'
-
-const userInfo = userStore()
-
-const permissionInfo = userPermissionStore()
-const permissionCheck = permissionInfo.permissionCheck
+import { addRootMenuAndChildren } from '@/components/navbar/helpers/navUtilities.ts'
+import { populateAdminMenu } from '@/components/navbar/helpers/adminMenuGenerator.ts'
 
 const Router = useRouter()
 const router = useRouter()
@@ -56,63 +52,6 @@ const items = ref([
     icon: 'pi pi-file',
     subtext: 'Stone Puller',
     command: () => router.push('/stonePuller'),
-  },
-  {
-    root: true,
-    label: 'Admin',
-    icon: 'pi pi-admin',
-    visible: () => userInfo.userRoles.includes('UserManagementRole') || userInfo.userRoles.includes('ManagePlayerCharacterList'),
-    items: [[{
-      items: [
-        {
-          navMenuType: 'simple',
-          label: 'Users',
-          navMenuIcon: 'groups',
-          pushComponentRouteName: 'viewPlayers',
-          description: 'Manage all users in the system.',
-          visible: () => userInfo.userRoles.includes('UserManagementRole'),
-        },
-        {
-          navMenuType: 'simple',
-          label: 'Events',
-          navMenuIcon: 'calendar_month',
-          pushComponentRouteName: 'adminEventList',
-          description: 'Manage all events in the system.',
-          visible: () => permissionCheck.Event.View,
-        },
-      ],
-    },
-    ],
-    [
-      {
-        items: [
-          {
-            navMenuType: 'simple',
-            label: 'Role Management',
-            description: 'Manage Roles that users can have.',
-            navMenuIcon: 'group',
-            pushComponentRouteName: 'adminRoleList',
-            visible: () => userInfo.userRoles.includes('UserManagementRole'),
-          },
-          {
-            navMenuType: 'simple',
-            label: 'Character Management',
-            description: 'Manage any primary characters across all players.',
-            navMenuIcon: 'patient_list',
-            pushComponentRouteName: 'adminCharacterList',
-            visible: () => userInfo.userRoles.includes('ManagePlayerCharacterList'),
-          },
-          {
-            navMenuType: 'simple',
-            label: 'Dev Menu',
-            description: 'Dev testing / related functionality.',
-            navMenuIcon: 'code',
-            pushComponentRouteName: 'dev',
-            visible: () => permissionCheck.DevDebug.View,
-          },
-        ],
-      },
-    ]],
   },
   {
     root: true,
@@ -163,6 +102,11 @@ async function loadList() {
         Router.push('/characters/' + character.id)
       },
     }
+  }
+
+  const adminMenu = addRootMenuAndChildren('Admin', 'pi pi-admin', populateAdminMenu())
+  if (adminMenu) {
+    items.value.splice(-1, 0, adminMenu)
   }
 
   await cmsData.getCmsInformation()
