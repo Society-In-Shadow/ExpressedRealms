@@ -54,9 +54,9 @@ async function downloadCharacterBooklet(characterId: number, characterName: stri
           </div>
         </div>
         <div class="text-right">
-          <Button label="Character Sheet" class="m-2" @click="redirectToCharacterSheet()" />
+          <Button v-if="permissionCheck.CharacterManagement.ViewCharacterSheet" label="Character Sheet" class="m-2" @click="redirectToCharacterSheet()" />
           <Button v-if="permissionCheck.PlayerExperience.View" label="Assigned XP" class="m-2" @click="assignedXpDialogs.showAssignedXp(props.character.id, false)" />
-          <Button v-if="permissionCheck.CharacterManagement.DownloadCRB" label="CRB" class="m-2" @click="downloadCharacterBooklet(props.character.id, props.character.name, props.character?.playerName)" />
+          <Button v-if="permissionCheck.CharacterManagement.ViewCharacterSheet" label="CRB" class="m-2" @click="downloadCharacterBooklet(props.character.id, props.character.name, props.character?.playerName)" />
         </div>
       </div>
     </template>

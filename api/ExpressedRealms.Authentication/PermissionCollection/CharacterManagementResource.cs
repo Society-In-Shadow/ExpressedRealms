@@ -22,12 +22,14 @@ public static partial class Permissions
         {
             Id = new Guid("019cc6fc-6983-73b9-b243-cbc7e7bd9d56"),
             Name = nameof(View),
+            Description = "Allows one to view Manage Characters tab in admin"
         };
         
-        public static readonly Permission DownloadCRB = new(ResourceInfo)
+        public static readonly Permission ViewCharacterSheet = new(ResourceInfo)
         {
             Id = new Guid("019cc77c-8ea7-7fb1-980b-2d073d576c48"),
-            Name = nameof(DownloadCRB),
+            Name = nameof(ViewCharacterSheet),
+            Description = "Allows one to pull up the primary character sheet for a user and download CRBs"
         };
     }
 }

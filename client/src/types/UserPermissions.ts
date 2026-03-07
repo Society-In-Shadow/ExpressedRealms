@@ -5,7 +5,7 @@ export const UserPermissions = {
   CharacterManagement: {
     Retire: 'charactermanagement.retire',
     View: 'charactermanagement.view',
-    DownloadCRB: 'charactermanagement.downloadcrb',
+    ViewCharacterSheet: 'charactermanagement.viewcharactersheet',
   } as const,
   ContentManagementSystem: {
     DownloadReport: 'contentmanagementsystem.downloadreport',

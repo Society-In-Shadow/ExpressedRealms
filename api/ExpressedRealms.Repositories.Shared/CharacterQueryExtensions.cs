@@ -12,7 +12,7 @@ public static class CharacterQueryExtensions
         int characterId
     )
     {
-        if (userContext.CurrentUserHasPermission(Permissions.CharacterManagement.View))
+        if (userContext.CurrentUserHasPermission(Permissions.CharacterManagement.ViewCharacterSheet))
         {
             return query.Where(x =>
                 x.Id == characterId
