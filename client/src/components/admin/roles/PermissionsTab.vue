@@ -17,7 +17,7 @@ const selectedPermissions = reactive<string[]>([])
 watch(() => store.role, (role) => {
   if (!role) return
 
-  selectedPermissions.push(...(store.role.permissionIds ?? []))
+  selectedPermissions.splice(0, selectedPermissions.length, ...(store.role.permissionIds ?? []))
 },
 { immediate: true },
 )

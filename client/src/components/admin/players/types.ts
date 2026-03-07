@@ -1,3 +1,5 @@
+import type { DateTime } from 'luxon'
+
 export interface Log {
   id: number
   location: string
@@ -20,11 +22,17 @@ export interface PlayerListItem {
   id: string
   username: string
   email: string
-  roles: string[]
+  roles: AssignedRoleInfo[]
+  legacyRoles: string[]
   emailConfirmed: boolean
   isDisabled: boolean
   lockedOut: boolean
   lockedOutExpires: Date
+}
+
+export interface AssignedRoleInfo {
+  name: string
+  expirationDate: DateTime | null
 }
 
 export interface RoleInfo {

@@ -15,7 +15,7 @@ internal sealed class UsersRepository(
     {
         var userRoles = await context.UserRoles.AsNoTracking().ToListAsync();
         var roles = await context.Roles.AsNoTracking().ToListAsync();
-
+        var currentDateTime = DateOnly.FromDateTime(DateTime.UtcNow);
         var players = await context
             .Users.AsNoTracking()
             .Select(x => new UserListDto()
@@ -30,12 +30,22 @@ internal sealed class UsersRepository(
                 IsDisabled = x.LockoutEnd.HasValue && x.LockoutEnd == DateTimeOffset.MaxValue,
                 LockedOut = x.LockoutEnd.HasValue && x.LockoutEnd >= DateTimeOffset.UtcNow,
                 LockOutExpires = x.LockoutEnd,
+                Roles = x
+                    .UserRoleMappings.Where(y =>
+                        !y.ExpireDate.HasValue || y.ExpireDate >= currentDateTime
+                    )
+                    .Select(y => new RoleInfoDto()
+                    {
+                        Name = y.Role.Name,
+                        ExpirationDate = y.ExpireDate,
+                    })
+                    .ToList(),
             })
             .ToListAsync();
 
         foreach (var player in players)
         {
-            player.Roles = userRoles
+            player.LegacyRoles = userRoles
                 .Where(x => x.UserId == player.Id)
                 .Select(x => roles.First(y => y.Id == x.RoleId).Name)
                 .ToList();
