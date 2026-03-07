@@ -5,6 +5,7 @@ export const UserPermissions = {
   CharacterManagement: {
     Retire: 'charactermanagement.retire',
     View: 'charactermanagement.view',
+    DownloadCRB: 'charactermanagement.downloadcrb',
   } as const,
   ContentManagementSystem: {
     DownloadReport: 'contentmanagementsystem.downloadreport',
@@ -38,6 +39,12 @@ export const UserPermissions = {
   } as const,
   Expression: {
     DownloadBooklet: 'expression.downloadbooklet',
+  } as const,
+  PlayerExperience: {
+    Edit: 'playerexperience.edit',
+    View: 'playerexperience.view',
+    Create: 'playerexperience.create',
+    Delete: 'playerexperience.delete',
   } as const,
   Player: {
     Edit: 'player.edit',

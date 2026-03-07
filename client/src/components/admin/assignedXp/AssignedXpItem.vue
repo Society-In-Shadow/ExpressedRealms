@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import { onMounted, type PropType, ref } from 'vue'
-import { UserRoles, userStore } from '@/stores/userStore'
+import { userStore } from '@/stores/userStore'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
 import type { AssignedXpInfo } from '@/components/admin/assignedXp/types.ts'
@@ -9,7 +9,10 @@ import EditAssignedXp from '@/components/admin/assignedXp/EditAssignedXp.vue'
 import {
   xpAssignmentConfirmationPopup,
 } from '@/components/admin/assignedXp/services/xpAssignmentConfirmationPopupService.ts'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
+const userPermissionInfo = userPermissionStore()
+const permissionCheck = userPermissionInfo.permissionCheck
 let userInfo = userStore()
 
 const props = defineProps({
@@ -28,14 +31,10 @@ const props = defineProps({
 })
 
 let popups = xpAssignmentConfirmationPopup()
-
 const showEdit = ref(false)
-
-const hasManagePlayerExperienceRole = ref(false)
 const isEvent = ref(false)
 
 onMounted(async () => {
-  hasManagePlayerExperienceRole.value = await userInfo.hasUserRole(UserRoles.ManagePlayerExperience)
   isEvent.value = props.item.xpType.id == 1
 })
 
@@ -64,9 +63,9 @@ function toggleEdit() {
           </div>
         </div>
       </div>
-      <div v-if="!showEdit && hasManagePlayerExperienceRole && !props.isReadOnly && !isEvent" class="p-0 m-0 float-end">
-        <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event, props.item.id, props.characterId)" />
-        <Button label="Edit" @click="toggleEdit" />
+      <div v-if="!showEdit && !props.isReadOnly && !isEvent" class="p-0 m-0 float-end">
+        <Button v-if="permissionCheck.PlayerExperience.Delete" class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event, props.item.id, props.characterId)" />
+        <Button v-if="permissionCheck.PlayerExperience.Edit" label="Edit" @click="toggleEdit" />
       </div>
     </template>
   </Card>

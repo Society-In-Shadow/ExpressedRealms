@@ -252,7 +252,7 @@ internal static class CharacterEndPoints
 
         endpointGroup
             .MapGet("{characterId}/getcrb", GetExpressionBookletEndpoint.Execute)
-            .RequirePermission(Permissions.CharacterManagement.View)
+            .RequirePermission(Permissions.CharacterManagement.DownloadCRB)
             .RequireAuthorization();
 
         endpointGroup

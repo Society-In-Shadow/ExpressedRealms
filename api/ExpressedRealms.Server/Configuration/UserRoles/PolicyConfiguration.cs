@@ -38,10 +38,6 @@ public static class PolicyConfiguration
                 policy => policy.RequireRole(UserRoles.ManageModifiers)
             );
 
-            options.AddPolicy(
-                Policies.ManagePlayerExperience.Name,
-                policy => policy.RequireRole(UserRoles.ManagePlayerExperience)
-            );
         });
     }
 }

@@ -23,5 +23,11 @@ public static partial class Permissions
             Id = new Guid("019cc6fc-6983-73b9-b243-cbc7e7bd9d56"),
             Name = nameof(View),
         };
+        
+        public static readonly Permission DownloadCRB = new(ResourceInfo)
+        {
+            Id = new Guid("019cc77c-8ea7-7fb1-980b-2d073d576c48"),
+            Name = nameof(DownloadCRB),
+        };
     }
 }

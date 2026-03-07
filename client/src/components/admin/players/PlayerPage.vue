@@ -86,14 +86,14 @@ const timeTillLockoutExpires = computed(() => {
           <Tab value="0">
             Basic Info
           </Tab>
-          <Tab v-if="permissionCheck.Player.ManageRoles" value="1">
-            Roles
+          <Tab v-if="permissionCheck.Player.ManageRoles" value="3">
+            Manage Roles
           </Tab>
           <Tab v-if="permissionCheck.Player.ViewActivityLogs" value="2">
             Activity Logs
           </Tab>
-          <Tab v-if="permissionCheck.Player.ManageRoles" value="3">
-            Manage Roles
+          <Tab v-if="permissionCheck.Player.ManageRoles" value="1">
+            Roles (Legacy)
           </Tab>
         </TabList>
         <TabPanels>

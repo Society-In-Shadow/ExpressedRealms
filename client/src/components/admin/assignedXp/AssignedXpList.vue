@@ -3,16 +3,15 @@
 import Skeleton from 'primevue/skeleton'
 import { AssignedXpStore } from '@/components/admin/assignedXp/stores/assignedXpStore'
 import { computed, inject, onBeforeMount, type Ref, ref } from 'vue'
-import { UserRoles, userStore } from '@/stores/userStore'
 import Button from 'primevue/button'
-
 import type { AssignedXpInfo } from '@/components/admin/assignedXp/types.ts'
 import AssignedXpItem from '@/components/admin/assignedXp/AssignedXpItem.vue'
 import AddAssignedXp from '@/components/admin/assignedXp/AddAssignedXp.vue'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
+const userPermissionInfo = userPermissionStore()
+const permissionCheck = userPermissionInfo.permissionCheck
 const store = AssignedXpStore()
-const userInfo = userStore()
-const hasManagePlayerExperienceRole = ref(false)
 
 const dialogRef = inject('dialogRef') as Ref
 const characterId = ref(dialogRef.value.data.characterId)
@@ -20,7 +19,6 @@ const isReadOnly = ref(dialogRef.value.data.isReadOnly)
 
 onBeforeMount(async () => {
   await store.getAssignedXp(characterId.value)
-  hasManagePlayerExperienceRole.value = await userInfo.hasUserRole(UserRoles.ManagePlayerExperience)
 })
 
 const showAdd = ref(false)
@@ -46,9 +44,9 @@ const sortedItems = computed<AssignedXpInfo[]>(() => {
     <AssignedXpItem :character-id="characterId" :item="item" :is-read-only="isReadOnly" />
   </div>
 
-  <AddAssignedXp v-if="showAdd && hasManagePlayerExperienceRole && !isReadOnly" :character-id="characterId" @canceled="toggleAdd" />
+  <AddAssignedXp v-if="showAdd && permissionCheck.PlayerExperience.Create && !isReadOnly" :character-id="characterId" @canceled="toggleAdd" />
   <Button
-    v-if="!showAdd && hasManagePlayerExperienceRole && !isReadOnly" class="w-100 m-2"
+    v-if="!showAdd && permissionCheck.PlayerExperience.Create && !isReadOnly" class="w-100 m-2"
     label="Add XP" @click="toggleAdd"
   />
 </template>

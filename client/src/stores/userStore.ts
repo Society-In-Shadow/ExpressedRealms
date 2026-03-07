@@ -9,7 +9,6 @@ export const UserRoles = {
   BlessingsManagementRole: 'ManageBlessingsRole',
   ManageProgressionPaths: 'ManageProgressionPaths',
   ManageModifiers: 'ManageModifiers',
-  ManagePlayerExperience: 'ManageUserExperience',
 } as const
 
 export const FeatureFlags = {
