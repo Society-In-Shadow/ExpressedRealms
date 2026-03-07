@@ -59,12 +59,5 @@ public static partial class Permissions
             Id = new Guid("019bd533-a0bb-76fa-b55b-fab62ca68786"),
             Name = nameof(ViewActivityLogs),
         };
-
-        public static readonly Permission ManageXp = new(ResourceInfo)
-        {
-            Id = new Guid("019cabaa-c380-71fb-8137-b4af80c553cc"),
-            Name = nameof(ManageXp),
-            Description = "Allows one to modify the players XP",
-        };
     }
 }

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 
 import ExpressionSection from '@/components/expressions/ExpressionSection.vue'
-import {useRoute} from 'vue-router'
-import {expressionStore} from '@/stores/expressionStore'
-import {computed, nextTick, onMounted, ref, watch} from 'vue'
+import { useRoute } from 'vue-router'
+import { expressionStore } from '@/stores/expressionStore'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import Card from 'primevue/card'
 import ScrollTop from 'primevue/scrolltop'
 import CreateExpressionSection from '@/components/expressions/CreateExpressionSection.vue'
@@ -12,9 +12,12 @@ import '@he-tree/vue/style/default.css'
 import '@he-tree/vue/style/material-design.css'
 import ExpressionToC from '@/components/expressions/ExpressionToC.vue'
 import axios from 'axios'
-import {UserRoles, userStore} from '@/stores/userStore.ts'
+import { UserRoles, userStore } from '@/stores/userStore.ts'
 import BlessingToC from '@/components/expressions/BlessingToC.vue'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
+const userPermissionInfo = userPermissionStore()
+const permissionCheck = userPermissionInfo.permissionCheck
 const expressionInfo = expressionStore()
 const route = useRoute()
 const userInfo = userStore()
@@ -46,7 +49,6 @@ const isLoading = ref(true)
 const showEdit = ref(false)
 const showCreate = ref(false)
 const showPreview = ref(false)
-const showReportButton = ref(false)
 
 async function fetchData() {
   isLoading.value = true
@@ -74,7 +76,6 @@ function togglePreview() {
 
 onMounted(async () => {
   await fetchData()
-  showReportButton.value = await userInfo.hasUserRole(UserRoles.DownloadCMSReports)
 })
 
 const hasBlessingSection = computed(() => {
@@ -124,7 +125,7 @@ async function downloadExpressionBooklet() {
     <Card class="custom-card flex-grow-1">
       <template #content>
         <article id="expression-body">
-          <div v-if="showReportButton" class="d-flex flex-row justify-content-end align-items-center">
+          <div v-if="permissionCheck.Expression.DownloadBooklet" class="d-flex flex-row justify-content-end align-items-center">
             <Button label="Download Booklet" @click="downloadExpressionBooklet()" />
           </div>
           <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit && !showPreview" @refresh-list="fetchData(route.params.name)" />

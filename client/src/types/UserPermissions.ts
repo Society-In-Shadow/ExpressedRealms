@@ -2,8 +2,13 @@
  * Auto-Generated, Do Not Edit
  */
 export const UserPermissions = {
-  Character: {
-    Retire: 'character.retire',
+  CharacterManagement: {
+    Retire: 'charactermanagement.retire',
+    View: 'charactermanagement.view',
+    ViewCharacterSheet: 'charactermanagement.viewcharactersheet',
+  } as const,
+  ContentManagementSystem: {
+    DownloadReport: 'contentmanagementsystem.downloadreport',
   } as const,
   CharacterContacts: {
     Approve: 'charactercontacts.approve',
@@ -32,6 +37,15 @@ export const UserPermissions = {
     Create: 'eventscheduleitem.create',
     Delete: 'eventscheduleitem.delete',
   } as const,
+  Expression: {
+    DownloadBooklet: 'expression.downloadbooklet',
+  } as const,
+  PlayerExperience: {
+    Edit: 'playerexperience.edit',
+    View: 'playerexperience.view',
+    Create: 'playerexperience.create',
+    Delete: 'playerexperience.delete',
+  } as const,
   Player: {
     Edit: 'player.edit',
     View: 'player.view',
@@ -41,7 +55,6 @@ export const UserPermissions = {
     BypassLockout: 'player.bypasslockout',
     ManageRoles: 'player.manageroles',
     ViewActivityLogs: 'player.viewactivitylogs',
-    ManageXp: 'player.managexp',
   } as const,
   Role: {
     Edit: 'role.edit',

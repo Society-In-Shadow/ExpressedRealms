@@ -8,10 +8,8 @@ using ExpressedRealms.Admin.API.RolesEndpoints.GetRole;
 using ExpressedRealms.Admin.API.RolesEndpoints.GetRoles;
 using ExpressedRealms.Admin.API.RolesEndpoints.GetRoleSummary;
 using ExpressedRealms.Admin.API.RolesEndpoints.GetUsersForRole;
-using ExpressedRealms.Authentication;
 using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Authentication.PermissionCollection.Configuration;
-using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
@@ -25,8 +23,7 @@ public static class RolesEndpoints
         var endpointGroup = app.MapGroup("admin")
             .AddFluentValidationAutoValidation()
             .WithTags("Admin Roles List")
-            .RequireAuthorization()
-            .RequirePolicyAuthorization(Policies.UserManagementPolicy);
+            .RequireAuthorization();
 
         endpointGroup
             .MapGet("roles/", GetRoleListEndpoint.Execute)

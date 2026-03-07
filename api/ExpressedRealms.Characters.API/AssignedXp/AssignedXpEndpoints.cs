@@ -1,11 +1,9 @@
-﻿using ExpressedRealms.Authentication;
-using ExpressedRealms.Authentication.PermissionCollection;
+﻿using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using ExpressedRealms.Characters.API.AssignedXp.Create;
 using ExpressedRealms.Characters.API.AssignedXp.Delete;
 using ExpressedRealms.Characters.API.AssignedXp.Edit;
 using ExpressedRealms.Characters.API.AssignedXp.Get;
-using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
@@ -25,15 +23,15 @@ internal static class AssignedXpEndpoints
 
         endpointGroup
             .MapPost("{characterId}/assignedXp", CreateEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ManagePlayerExperience);
+            .RequirePermission(Permissions.PlayerExperience.Create);
 
         endpointGroup
             .MapPut("{characterId}/assignedXp/{mappingId}", EditEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ManagePlayerExperience);
+            .RequirePermission(Permissions.PlayerExperience.Edit);
 
         endpointGroup
             .MapDelete("{characterId}/assignedXp/{mappingId}", DeleteEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ManagePlayerExperience);
+            .RequirePermission(Permissions.PlayerExperience.Delete);
 
         var eventEndpointGroup = app.MapGroup("events")
             .AddFluentValidationAutoValidation()

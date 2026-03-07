@@ -7,9 +7,9 @@ import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
 import ExpressionSection from '@/components/expressions/ExpressionSection.vue'
 import axios from 'axios'
-import {onBeforeRouteUpdate, useRoute} from 'vue-router'
-import {expressionStore} from '@/stores/expressionStore'
-import {nextTick, onMounted, ref} from 'vue'
+import { onBeforeRouteUpdate, useRoute } from 'vue-router'
+import { expressionStore } from '@/stores/expressionStore'
+import { nextTick, onMounted, ref } from 'vue'
 import Card from 'primevue/card'
 import ScrollTop from 'primevue/scrolltop'
 import CreateExpressionSection from '@/components/expressions/CreateExpressionSection.vue'
@@ -20,9 +20,13 @@ import ExpressionToC from '@/components/expressions/ExpressionToC.vue'
 import EditExpressionSection from '@/components/expressions/EditExpressionSection.vue'
 import PowerTab from '@/components/expressions/powers/PowerTab.vue'
 import PowersToC from '@/components/expressions/PowersToC.vue'
-import {UserRoles, userStore} from '@/stores/userStore.ts'
+import { UserRoles, userStore } from '@/stores/userStore.ts'
 import ProgressionTab from '@/components/expressions/progressionPaths/ProgressionTab.vue'
 import ExpressionLogo from '@/components/common/ExpressionLogo.vue'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+
+const userPermissionInfo = userPermissionStore()
+const permissionCheck = userPermissionInfo.permissionCheck
 
 const expressionInfo = expressionStore()
 const route = useRoute()
@@ -59,7 +63,6 @@ const showEdit = ref(false)
 const showCreate = ref(false)
 const showPreview = ref(false)
 const currentTab = ref('0')
-const showReportButton = ref(false)
 const hasProgressionPathPermission = ref(false)
 
 async function fetchData() {
@@ -96,7 +99,6 @@ function togglePreview() {
 onMounted(async () => {
   await expressionInfo.getExpressionId(route)
   await fetchData()
-  showReportButton.value = await userInfo.hasUserRole(UserRoles.DownloadExpressionBooklet)
 })
 
 onBeforeRouteUpdate(async (to, from) => {
@@ -141,7 +143,7 @@ async function downloadExpressionBooklet() {
         <div class="pb-4">
           <div class="d-flex flex-column flex-md-row">
             <div class="col-12 order-1 order-md-0 col-md-8">
-              <div v-if="showReportButton" class="d-flex flex-row justify-content-end align-items-center">
+              <div v-if="permissionCheck.ContentManagementSystem.DownloadReport" class="d-flex flex-row justify-content-end align-items-center">
                 <Button label="Download Booklet" @click="downloadExpressionBooklet()" />
               </div>
               <CreateExpressionSection v-if="expressionHeader.id === 0" :add-expression-header="true" @added-section="fetchData(route.params.name)" />

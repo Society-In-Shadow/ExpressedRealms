@@ -12,20 +12,11 @@ public class Policies
 
     // Predefined static instances for each policy
     public static readonly Policies ExpressionEditorPolicy = new(nameof(ExpressionEditorPolicy));
-    public static readonly Policies UserManagementPolicy = new(nameof(UserManagementPolicy));
     public static readonly Policies ManagePowers = new(nameof(ManagePowers));
     public static readonly Policies ManageKnowledges = new(nameof(ManageKnowledges));
-    public static readonly Policies DownloadCMSReports = new(nameof(DownloadCMSReports));
-    public static readonly Policies DownloadExpressionBooklet = new(
-        nameof(DownloadExpressionBooklet)
-    );
     public static readonly Policies ManageBlessings = new(nameof(ManageBlessings));
-    public static readonly Policies ManagePlayerCharacterList = new(
-        nameof(ManagePlayerCharacterList)
-    );
     public static readonly Policies ManageProgressionPaths = new(nameof(ManageProgressionPaths));
     public static readonly Policies ManageModifiers = new(nameof(ManageModifiers));
-    public static readonly Policies ManagePlayerExperience = new(nameof(ManagePlayerExperience));
 
     // Override ToString for convenience
     public override string ToString()

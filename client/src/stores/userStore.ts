@@ -4,16 +4,11 @@ import { updateUserStoreWithEmailInfo, updateUserStoreWithPlayerInfo } from '@/s
 
 export const UserRoles = {
   ExpressionEditor: 'ExpressionEditorRole',
-  UserManagementRole: 'UserManagementRole',
   PowerManagementRole: 'PowerManagementRole',
   KnowledgeManagementRole: 'KnowledgeManagementRole',
-  DownloadCMSReports: 'DownloadCMSReports',
-  DownloadExpressionBooklet: 'DownloadExpressionBooklet',
   BlessingsManagementRole: 'ManageBlessingsRole',
-  ManagePlayerCharacterList: 'ManagePlayerCharacterList',
   ManageProgressionPaths: 'ManageProgressionPaths',
   ManageModifiers: 'ManageModifiers',
-  ManagePlayerExperience: 'ManageUserExperience',
 } as const
 
 export const FeatureFlags = {

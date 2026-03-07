@@ -14,11 +14,6 @@ public static class PolicyConfiguration
             );
 
             options.AddPolicy(
-                Policies.UserManagementPolicy.Name,
-                policy => policy.RequireRole(UserRoles.UserManagementRole)
-            );
-
-            options.AddPolicy(
                 Policies.ManagePowers.Name,
                 policy => policy.RequireRole(UserRoles.PowerManagementRole)
             );
@@ -29,23 +24,8 @@ public static class PolicyConfiguration
             );
 
             options.AddPolicy(
-                Policies.DownloadCMSReports.Name,
-                policy => policy.RequireRole(UserRoles.DownloadCMSReports)
-            );
-
-            options.AddPolicy(
-                Policies.DownloadExpressionBooklet.Name,
-                policy => policy.RequireRole(UserRoles.DownloadExpressionBooklet)
-            );
-
-            options.AddPolicy(
                 Policies.ManageBlessings.Name,
                 policy => policy.RequireRole(UserRoles.ManageBlessingsRole)
-            );
-
-            options.AddPolicy(
-                Policies.ManagePlayerCharacterList.Name,
-                policy => policy.RequireRole(UserRoles.ManagePlayerCharacterList)
             );
 
             options.AddPolicy(
@@ -56,11 +36,6 @@ public static class PolicyConfiguration
             options.AddPolicy(
                 Policies.ManageModifiers.Name,
                 policy => policy.RequireRole(UserRoles.ManageModifiers)
-            );
-
-            options.AddPolicy(
-                Policies.ManagePlayerExperience.Name,
-                policy => policy.RequireRole(UserRoles.ManagePlayerExperience)
             );
         });
     }

@@ -1,4 +1,3 @@
-using ExpressedRealms.Authentication;
 using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using ExpressedRealms.Characters.API.CharacterEndPoints.DTOs;
@@ -253,12 +252,12 @@ internal static class CharacterEndPoints
 
         endpointGroup
             .MapGet("{characterId}/getcrb", GetExpressionBookletEndpoint.Execute)
-            .RequirePolicyAuthorization(Policies.ManagePlayerCharacterList)
+            .RequirePermission(Permissions.CharacterManagement.ViewCharacterSheet)
             .RequireAuthorization();
 
         endpointGroup
             .MapPut("{lookupId}/retire", RetireCharacterEndpoint.Execute)
-            .RequirePermission(Permissions.Character.Retire);
+            .RequirePermission(Permissions.CharacterManagement.Retire);
 
         endpointGroup
             .MapPost(

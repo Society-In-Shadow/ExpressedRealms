@@ -1,4 +1,4 @@
-using ExpressedRealms.Authentication;
+using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.DB.Models.Characters;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 
@@ -12,7 +12,9 @@ public static class CharacterQueryExtensions
         int characterId
     )
     {
-        if (await userContext.CurrentUserHasPolicy(Policies.ManagePlayerCharacterList))
+        if (
+            userContext.CurrentUserHasPermission(Permissions.CharacterManagement.ViewCharacterSheet)
+        )
         {
             return query.Where(x =>
                 x.Id == characterId
