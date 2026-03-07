@@ -17,6 +17,5 @@ public static partial class Permissions
             Id = new Guid("019cc765-63cd-75aa-bebb-fa1e3a11fa85"),
             Name = nameof(DownloadReport),
         };
-
     }
 }

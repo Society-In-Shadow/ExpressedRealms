@@ -37,7 +37,6 @@ public static class PolicyConfiguration
                 Policies.ManageModifiers.Name,
                 policy => policy.RequireRole(UserRoles.ManageModifiers)
             );
-
         });
     }
 }
