@@ -21,6 +21,8 @@ When it asks for a passphrase, make sure to keep track of it, you will need it f
 Specifically, when using Rider, it will prompt you for your passphrase when you try committing.
 It should save it after asking once, but milage may vary
 
+Also, keep track of the email address you used to register the key, you'll need that to export.
+
 ```shell
 gpg --full-generate-key
 ```
@@ -89,6 +91,18 @@ Then tell git to use that when signing the key
 ```shell
 git config --global commit.gpgsign true
 git config --global user.signingkey <keyhere>
+```
+
+## Storing Key in Password Manager
+While not necessary, it is recommended that you store your private key in a password manager.  Mainly to ensure that if 
+your laptop crashes, you still have it.
+
+It also helps prove who you are later down the road.
+
+To get it, you can run the following command
+
+```shell
+gpg --export-secret-keys --armor <email used to register the key>
 ```
 
 ## Additional Stuff

@@ -6,6 +6,9 @@ export const UserPermissions = {
     Retire: 'charactermanagement.retire',
     View: 'charactermanagement.view',
   } as const,
+  ContentManagementSystem: {
+    DownloadReport: 'contentmanagementsystem.downloadreport',
+  } as const,
   CharacterContacts: {
     Approve: 'charactercontacts.approve',
   } as const,
@@ -32,6 +35,9 @@ export const UserPermissions = {
     View: 'eventscheduleitem.view',
     Create: 'eventscheduleitem.create',
     Delete: 'eventscheduleitem.delete',
+  } as const,
+  Expression: {
+    DownloadBooklet: 'expression.downloadbooklet',
   } as const,
   Player: {
     Edit: 'player.edit',

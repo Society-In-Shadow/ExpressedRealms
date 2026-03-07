@@ -6,8 +6,6 @@ export const UserRoles = {
   ExpressionEditor: 'ExpressionEditorRole',
   PowerManagementRole: 'PowerManagementRole',
   KnowledgeManagementRole: 'KnowledgeManagementRole',
-  DownloadCMSReports: 'DownloadCMSReports',
-  DownloadExpressionBooklet: 'DownloadExpressionBooklet',
   BlessingsManagementRole: 'ManageBlessingsRole',
   ManageProgressionPaths: 'ManageProgressionPaths',
   ManageModifiers: 'ManageModifiers',

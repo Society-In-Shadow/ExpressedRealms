@@ -5,8 +5,6 @@ public static class UserRoles
     public const string ExpressionEditor = "ExpressionEditorRole";
     public const string PowerManagementRole = "PowerManagementRole";
     public const string KnowledgeManagementRole = "KnowledgeManagementRole";
-    public const string DownloadCMSReports = "DownloadCMSReports";
-    public const string DownloadExpressionBooklet = "DownloadExpressionBooklet";
     public const string ManageBlessingsRole = "ManageBlessingsRole";
     public const string ManageProgressionPaths = "ManageProgressionPaths";
     public const string ManageModifiers = "ManageModifiers";
@@ -21,8 +19,6 @@ public static class UserRoles
             ExpressionEditor,
             PowerManagementRole,
             KnowledgeManagementRole,
-            DownloadCMSReports,
-            DownloadExpressionBooklet,
             ManageBlessingsRole,
             ManageProgressionPaths,
             ManageModifiers,

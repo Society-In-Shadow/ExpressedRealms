@@ -24,16 +24,6 @@ public static class PolicyConfiguration
             );
 
             options.AddPolicy(
-                Policies.DownloadCMSReports.Name,
-                policy => policy.RequireRole(UserRoles.DownloadCMSReports)
-            );
-
-            options.AddPolicy(
-                Policies.DownloadExpressionBooklet.Name,
-                policy => policy.RequireRole(UserRoles.DownloadExpressionBooklet)
-            );
-
-            options.AddPolicy(
                 Policies.ManageBlessings.Name,
                 policy => policy.RequireRole(UserRoles.ManageBlessingsRole)
             );

@@ -1,4 +1,6 @@
 using ExpressedRealms.Authentication;
+using ExpressedRealms.Authentication.PermissionCollection;
+using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.CreateExpression;
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.DeleteExpression;
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.EditExpression;
@@ -31,13 +33,11 @@ internal static class ExpressionEndpoints
 
         endpointGroup
             .MapGet("{expressionId}/report", GetExpressionCmsReportEndpoint.GetExpressionCmsReport)
-            .RequirePolicyAuthorization(Policies.DownloadCMSReports)
-            .WithSummary("Returns the report for the given expression");
+            .RequirePermission(Permissions.ContentManagementSystem.DownloadReport);
 
         endpointGroup
             .MapGet("{expressionId}/booklet", GetExpressionBookletEndpoint.GetExpressionBooklet)
-            .RequirePolicyAuthorization(Policies.DownloadExpressionBooklet)
-            .WithSummary("Returns the report for the given expression");
+            .RequirePermission(Permissions.Expression.DownloadBooklet);
 
         endpointGroup
             .MapPut("{expressionId}", EditExpressionEndpoint.EditExpression)
