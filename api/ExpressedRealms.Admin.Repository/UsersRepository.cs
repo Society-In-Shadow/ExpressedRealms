@@ -30,9 +30,16 @@ internal sealed class UsersRepository(
                 IsDisabled = x.LockoutEnd.HasValue && x.LockoutEnd == DateTimeOffset.MaxValue,
                 LockedOut = x.LockoutEnd.HasValue && x.LockoutEnd >= DateTimeOffset.UtcNow,
                 LockOutExpires = x.LockoutEnd,
-                Roles = x.UserRoleMappings
-                    .Where(y => !y.ExpireDate.HasValue || y.ExpireDate >= currentDateTime)
-                    .Select(y => new RoleInfoDto(){ Name = y.Role.Name, ExpirationDate = y.ExpireDate }).ToList(),
+                Roles = x
+                    .UserRoleMappings.Where(y =>
+                        !y.ExpireDate.HasValue || y.ExpireDate >= currentDateTime
+                    )
+                    .Select(y => new RoleInfoDto()
+                    {
+                        Name = y.Role.Name,
+                        ExpirationDate = y.ExpireDate,
+                    })
+                    .ToList(),
             })
             .ToListAsync();
 
