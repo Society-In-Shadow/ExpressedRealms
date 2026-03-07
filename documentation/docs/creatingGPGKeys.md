@@ -94,7 +94,7 @@ git config --global user.signingkey <keyhere>
 ```
 
 ## Storing Key in Password Manager
-While not necessary, it is recommended that you store your private key in a password manager.  Mainly to ensure that if 
+While not necessary, it is recommended that you store your private key in a password manager.  Mainly to ensure that if
 your laptop crashes, you still have it.
 
 It also helps prove who you are later down the road.

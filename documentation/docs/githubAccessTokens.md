@@ -1,6 +1,7 @@
 # Github Access Tokens
-Rider will require a Github Access Token to access repositories.
+Rider will require a Github Access Token to access repositories.  It will provide you with a button to generate the token,
+and it will open the corresponding page in github.
 
-You can create a new token [here](https://github.com/settings/tokens).
-Once you have created a token,
+The defaults it chooses are good, you want to aim to change this every 90 days or so.
 
+You do not need to re-create the GPG token, unless that expired.
