@@ -8,6 +8,7 @@ import Panel from 'primevue/panel'
 import { useRouter } from 'vue-router'
 import SplitButton from 'primevue/splitbutton'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+import { formatDate } from '@/utilities/dateUtilities.ts'
 
 const router = useRouter()
 const userPermissionInfo = userPermissionStore()
@@ -92,7 +93,13 @@ onBeforeMount(async () => {
                       <Tag v-else-if="props.playerInfo.lockedOut" severity="warn" :value="'Locked Out for ' + timeTillLockoutExpires" />
                     </span>
                   </h1>
-                  <Tag v-for="role in props.playerInfo.roles" :key="role" class="m-1" :value="role" />
+                  <Tag v-for="role in props.playerInfo.roles" :key="role" class="m-1" :value="role">
+                    {{ role.name }}
+                    <div v-if="role.expirationDate">
+                      (Till {{ formatDate(role.expirationDate) }})
+                    </div>
+                  </Tag>
+                  <Tag v-for="role in props.playerInfo.legacyRoles" :key="role" severity="secondary" class="m-1" :value="role" />
                 </div>
               </div>
             </div>

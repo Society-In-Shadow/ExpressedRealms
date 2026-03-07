@@ -22,7 +22,12 @@ public static class GetUsersEndpoint
                         Id = x.Id,
                         Email = x.Email,
                         Username = x.Username,
-                        Roles = x.Roles,
+                        Roles = x.Roles.Select(y => new RoleInfoDto()
+                        {
+                            Name = y.Name,
+                            ExpirationDate = y.ExpirationDate
+                        }).OrderBy(y => y.Name).ToList(),
+                        LegacyRoles = x.LegacyRoles,
                         IsDisabled = x.IsDisabled,
                         EmailConfirmed = x.EmailConfirmed,
                         LockedOut = x.LockedOut,
