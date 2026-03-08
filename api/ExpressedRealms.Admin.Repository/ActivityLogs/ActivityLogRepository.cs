@@ -101,7 +101,7 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
                 ChangedProperties = x.ChangedProperties,
             })
             .ToListAsync();
-        
+
         var userSpecificRoleLogs = await context
             .UserRoleAuditTrails.AsNoTracking()
             .IgnoreQueryFilters()
@@ -114,7 +114,7 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
                 ChangedProperties = x.ChangedProperties,
             })
             .ToListAsync();
-        
+
         var newRoleLogs = await context
             .RoleAuditTrails.AsNoTracking()
             .IgnoreQueryFilters()
@@ -127,14 +127,20 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
                 ChangedProperties = x.ChangedProperties,
             })
             .ToListAsync();
-        
+
         var newRolePermissionLogs = await context
             .RolePermissionMappingAuditTrails.AsNoTracking()
             .IgnoreQueryFilters()
             .Where(x => x.ActorUserId == userId)
             .Select(x => new Log()
             {
-                Location = $"Role \"{x.Role.Name}\" > " + (x.Permission == null ? "Resource \"Removed\" > Permission \"Removed\"" : $"Resource \"{x.Permission!.Resource.Name}\" > Permission \"{x.Permission.Name }\""),
+                Location =
+                    $"Role \"{x.Role.Name}\" > "
+                    + (
+                        x.Permission == null
+                            ? "Resource \"Removed\" > Permission \"Removed\""
+                            : $"Resource \"{x.Permission!.Resource.Name}\" > Permission \"{x.Permission.Name}\""
+                    ),
                 TimeStamp = x.Timestamp,
                 Action = x.Action,
                 ChangedProperties = x.ChangedProperties,
@@ -147,7 +153,10 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             .Where(x => x.ActorUserId == userId)
             .Select(x => new Log()
             {
-                Location = x.Action == "Insert" ? $"Role \"{x.Role.Name}\" to Player \"{x.User.Player!.Name}\"" : $"Role \"{x.Role.Name}\" from Player \"{x.User.Player!.Name}\"",
+                Location =
+                    x.Action == "Insert"
+                        ? $"Role \"{x.Role.Name}\" to Player \"{x.User.Player!.Name}\""
+                        : $"Role \"{x.Role.Name}\" from Player \"{x.User.Player!.Name}\"",
                 TimeStamp = x.Timestamp,
                 Action = x.Action == "Insert" ? "Added" : "Removed",
                 ChangedProperties = x.ChangedProperties,
@@ -160,7 +169,10 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             .Where(x => x.UserId == userId && x.ActorUserId != userId)
             .Select(x => new Log()
             {
-                Location = x.Action == "Insert" ? $"To Role \"{x.Role.Name}\" by \"{x.ActorUser.Player!.Name}\"" : $"From Role \"{x.Role.Name}\" by \"{x.ActorUser.Player!.Name}\"",
+                Location =
+                    x.Action == "Insert"
+                        ? $"To Role \"{x.Role.Name}\" by \"{x.ActorUser.Player!.Name}\""
+                        : $"From Role \"{x.Role.Name}\" by \"{x.ActorUser.Player!.Name}\"",
                 TimeStamp = x.Timestamp,
                 Action = x.Action == "Insert" ? "Added" : "Removed",
                 ChangedProperties = x.ChangedProperties,

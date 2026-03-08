@@ -26,7 +26,8 @@ public class DeleteUserRoleUseCaseTests
 
         A.CallTo(() => _usersRepository.UserExistsAsync(_model.UserId)).Returns(true);
         A.CallTo(() => _repository.RoleExistsAsync(_model.RoleId)).Returns(true);
-        A.CallTo(() => _repository.GetUserRoleMappingAsync(_model.RoleId, _model.UserId)).Returns(_dbModel);
+        A.CallTo(() => _repository.GetUserRoleMappingAsync(_model.RoleId, _model.UserId))
+            .Returns(_dbModel);
 
         _useCase = new DeleteUserRoleUseCase(_repository, validator, CancellationToken.None);
     }
@@ -68,9 +69,11 @@ public class DeleteUserRoleUseCaseTests
     {
         await _useCase.ExecuteAsync(_model);
 
-        A.CallTo(() => _repository.EditAsync(A<UserRoleMapping>.That.Matches(x => 
-                x.IsDeleted &&
-                x.DeletedAt != null)))
+        A.CallTo(() =>
+                _repository.EditAsync(
+                    A<UserRoleMapping>.That.Matches(x => x.IsDeleted && x.DeletedAt != null)
+                )
+            )
             .MustHaveHappenedOnceExactly();
     }
 }

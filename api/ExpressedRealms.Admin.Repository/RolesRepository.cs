@@ -59,7 +59,8 @@ internal sealed class RolesRepository(
 
     public async Task<UserRoleMapping> GetUserRoleMappingAsync(int roleId, string userId)
     {
-        return await context.Set<UserRoleMapping>()
+        return await context
+            .Set<UserRoleMapping>()
             .FirstAsync(x => x.RoleId == roleId && x.UserId == userId);
     }
 
