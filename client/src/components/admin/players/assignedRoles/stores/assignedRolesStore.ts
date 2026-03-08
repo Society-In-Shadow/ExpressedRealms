@@ -36,8 +36,9 @@ export const assignedRolesStore
         toaster.success('Successfully Added Role to User!')
       },
       removeRoleFromUser: async function (roleId: number, userId: string) {
-        await axios.delete(`/admin/users/${userId}/roles/${userId}`)
+        await axios.delete(`/admin/users/${userId}/roles/${roleId}`)
         await this.getAssignedRoles(userId)
+        toaster.success('Successfully Removed Role from User!')
       },
     },
   })

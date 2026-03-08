@@ -15,7 +15,7 @@ internal static class UserRoleMappingAuditTrailExtensions
             {
                 case "role_id":
                 case "user_id":
-                    break;
+                    continue;
 
                 case "expire_date":
                     changedRecord.FriendlyName = "Expire Date";

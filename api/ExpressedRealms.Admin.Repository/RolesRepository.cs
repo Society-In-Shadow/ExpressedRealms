@@ -57,12 +57,11 @@ internal sealed class RolesRepository(
             .AnyAsync(x => x.RoleId == roleId && x.UserId == userId, cancellationToken);
     }
 
-    public async Task DeleteRoleUserMappingAsync(int roleId, string userId)
+    public async Task<UserRoleMapping> GetUserRoleMappingAsync(int roleId, string userId)
     {
-        await context
+        return await context
             .Set<UserRoleMapping>()
-            .Where(x => x.RoleId == roleId && x.UserId == userId)
-            .ExecuteDeleteAsync(cancellationToken);
+            .FirstAsync(x => x.RoleId == roleId && x.UserId == userId);
     }
 
     public async Task<List<GenericListDto<int>>> GetRoleSummaryForListAsync()

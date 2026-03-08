@@ -20,9 +20,9 @@ public interface IRolesRepository : IGenericRepository
     Task<List<PermissionResource>> GetPermissionResourcesForList();
     Task<bool> RoleUserMappingExistsAsync(int roleId, string userId);
     Task<int> AddUserRoleMappingAsync(UserRoleMapping role);
-    Task DeleteRoleUserMappingAsync(int roleId, string userId);
     Task<List<GenericListDto<int>>> GetRoleSummaryForListAsync();
     Task<List<RoleForUserMappingDto>> GetRolesForUserAsync(string userId);
     Task<List<UserForRoleMappingDto>> GetUsersForRoleAsync(int id);
     Task<List<string>> GetPermissionKeysForUserAsync(string userId);
+    Task<UserRoleMapping> GetUserRoleMappingAsync(int roleId, string userId);
 }
