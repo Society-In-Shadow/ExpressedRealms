@@ -1,5 +1,6 @@
 using ExpressedRealms.Admin.Repository;
 using ExpressedRealms.Admin.UseCases.Roles.DeleteUserRole;
+using ExpressedRealms.DB.Models.Authorization.UserRoleMappingSetup;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
 using Xunit;
@@ -12,10 +13,12 @@ public class DeleteUserRoleUseCaseTests
     private readonly IRolesRepository _repository;
     private readonly IUsersRepository _usersRepository;
     private readonly DeleteUserRoleModel _model;
+    private readonly UserRoleMapping _dbModel;
 
     public DeleteUserRoleUseCaseTests()
     {
         _model = new DeleteUserRoleModel() { RoleId = 5, UserId = "userId" };
+        _dbModel = new UserRoleMapping() { RoleId = _model.RoleId, UserId = _model.UserId };
 
         _repository = A.Fake<IRolesRepository>();
         _usersRepository = A.Fake<IUsersRepository>();
@@ -23,6 +26,7 @@ public class DeleteUserRoleUseCaseTests
 
         A.CallTo(() => _usersRepository.UserExistsAsync(_model.UserId)).Returns(true);
         A.CallTo(() => _repository.RoleExistsAsync(_model.RoleId)).Returns(true);
+        A.CallTo(() => _repository.GetUserRoleMappingAsync(_model.RoleId, _model.UserId)).Returns(_dbModel);
 
         _useCase = new DeleteUserRoleUseCase(_repository, validator, CancellationToken.None);
     }
@@ -60,11 +64,13 @@ public class DeleteUserRoleUseCaseTests
     }
 
     [Fact]
-    public async Task UseCase_CreatesRole_WithExpectedValues()
+    public async Task UseCase_SoftDeletesRole_WithExpectedValues()
     {
         await _useCase.ExecuteAsync(_model);
 
-        A.CallTo(() => _repository.DeleteRoleUserMappingAsync(_model.RoleId, _model.UserId))
+        A.CallTo(() => _repository.EditAsync(A<UserRoleMapping>.That.Matches(x => 
+                x.IsDeleted &&
+                x.DeletedAt != null)))
             .MustHaveHappenedOnceExactly();
     }
 }

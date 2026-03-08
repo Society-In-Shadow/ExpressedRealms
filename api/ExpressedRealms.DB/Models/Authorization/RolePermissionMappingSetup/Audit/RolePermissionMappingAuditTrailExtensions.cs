@@ -15,6 +15,10 @@ internal static class RolePermissionMappingAuditTrailExtensions
             {
                 case "role_id":
                 case "permission_id":
+                    if (changedRecordsToReturn.Count > 1)
+                        continue;
+                    changedRecord.Message = "Operation Succeeded";
+                    changedRecord.NewValue = "";
                     break;
 
                 default:

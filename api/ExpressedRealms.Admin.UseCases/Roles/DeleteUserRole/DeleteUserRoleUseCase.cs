@@ -1,4 +1,5 @@
 using ExpressedRealms.Admin.Repository;
+using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
@@ -21,7 +22,9 @@ internal sealed class DeleteUserRoleUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        await rolesRepository.DeleteRoleUserMappingAsync(model.RoleId, model.UserId);
+        var mapping = await rolesRepository.GetUserRoleMappingAsync(model.RoleId, model.UserId);
+        mapping.SoftDelete();
+        await rolesRepository.EditAsync(mapping);
 
         return Result.Ok();
     }
