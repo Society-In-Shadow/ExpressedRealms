@@ -79,5 +79,13 @@ public static partial class Permissions
             Description =
                 "Allows a user to download the report we give to cons for player tracking",
         };
+        
+        public static readonly Permission ModifyDefaults = new(ResourceInfo)
+        {
+            Id = new Guid("019cd19c-7ce5-70fa-b1b9-362415f13392"),
+            Name = nameof(ModifyDefaults),
+            Description =
+                "Allows a user to modify the default event template, such as scheduled events and questions",
+        };
     }
 }
