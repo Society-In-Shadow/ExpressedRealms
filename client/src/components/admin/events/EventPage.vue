@@ -69,6 +69,7 @@ const showEventQuestionsTab = computed(() => {
 const showCharacterActivityTab = computed(() => {
   return eventId != 1
 })
+
 </script>
 
 <template>
@@ -93,9 +94,9 @@ const showCharacterActivityTab = computed(() => {
           </div>
         </div>
         <div v-if="isLoaded">
-          <Button v-if="!event.isPublished && permissionCheck.Event.Publish && !permissionCheck.Event.ModifyDefaults" class="mr-2" severity="info" label="Publish" @click="popups.publishConfirmation($event)" />
-          <Button v-if="permissionCheck.Event.Delete && !permissionCheck.Event.ModifyDefaults" class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
-          <Button v-if="permissionCheck.Event.DownloadConSummaryReport && !permissionCheck.Event.ModifyDefaults" class="mr-2" severity="info" label="Con Attendance Report" @click="downloadAttendanceReport" />
+          <Button v-if="!event.isPublished && permissionCheck.Event.Publish && eventId != 1" class="mr-2" severity="info" label="Publish" @click="popups.publishConfirmation($event)" />
+          <Button v-if="permissionCheck.Event.Delete && eventId != 1" class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
+          <Button v-if="permissionCheck.Event.DownloadConSummaryReport && eventId != 1" class="mr-2" severity="info" label="Con Attendance Report" @click="downloadAttendanceReport" />
         </div>
       </div>
       <Tabs value="0" scrollable>
