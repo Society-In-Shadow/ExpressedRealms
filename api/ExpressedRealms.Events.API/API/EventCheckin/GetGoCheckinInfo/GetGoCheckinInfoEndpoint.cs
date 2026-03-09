@@ -8,9 +8,10 @@ namespace ExpressedRealms.Events.API.API.EventCheckin.GetGoCheckinInfo;
 
 public static class GetGoCheckinInfoEndpoint
 {
-    public static async Task<
-        Results<Ok<GetGoCheckinInfoResponse>, ValidationProblem>
-    > ExecuteAsync(string lookupId, [FromServices] IGetGoCheckinInfoUseCase useCase)
+    public static async Task<Results<Ok<GetGoCheckinInfoResponse>, ValidationProblem>> ExecuteAsync(
+        string lookupId,
+        [FromServices] IGetGoCheckinInfoUseCase useCase
+    )
     {
         var results = await useCase.ExecuteAsync(
             new GetGoCheckinInfoModel() { LookupId = lookupId }
@@ -20,12 +21,7 @@ public static class GetGoCheckinInfoEndpoint
             return validationProblem;
         if (results.HasNotFound(out var notFound))
         {
-            return TypedResults.Ok(
-                new GetGoCheckinInfoResponse()
-                {
-                    WasFound = false,
-                }
-            );
+            return TypedResults.Ok(new GetGoCheckinInfoResponse() { WasFound = false });
         }
 
         results.ThrowIfErrorNotHandled();
