@@ -29,6 +29,8 @@ export default defineConfig(() => {
     }
   }
 
+  serverConfig.host = process.env.DEV
+
   return {
     plugins: [vue()],
     resolve: {

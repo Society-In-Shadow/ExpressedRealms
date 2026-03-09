@@ -5,7 +5,8 @@ export interface CheckinInfo {
 }
 
 export interface GoCheckinInfo {
-  userName: string
+  wasFound: boolean
+  userName: string | null
   isFirstTimeUser: boolean
   alreadyCheckedIn: boolean
 }

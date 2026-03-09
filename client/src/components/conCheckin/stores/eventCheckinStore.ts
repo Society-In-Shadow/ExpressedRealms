@@ -19,6 +19,7 @@ export const EventCheckinStore
         foundInfo: false,
         isReset: false,
         hasActiveEvent: false,
+        hasInvalidLookupId: false,
         lookupId: '',
         event: {} as ActiveEvent,
         checkinStage: {} as BasicInfo | null,
@@ -59,10 +60,14 @@ export const EventCheckinStore
         this.checkinStage = response.data.checkinStage
       },
       async getGoCheckinInfo(lookupId: string): Promise<boolean> {
-        const response = await axios.get<GoCheckinInfo>(`/events/checkin/lookup/${lookupId}`)
+        const response = await axios.get<GoCheckinInfo>(`/events/checkin/lookup/${encodeURIComponent(lookupId)}`)
 
-        if (response.status !== 200) return false
+        if (!response.data.wasFound) {
+          this.hasInvalidLookupId = true
+          return false
+        }
 
+        this.hasInvalidLookupId = false
         this.goCheckinInfo = response.data
         return true
       },

@@ -205,11 +205,8 @@ try
         await permissionManager.UpdatePermissions();
     }
 
-    if (app.Environment.IsProduction())
-    {
-        Log.Information("Setting Up Forwarded Headers");
-        app.UseForwardedHeaders();
-    }
+    Log.Information("Setting Up Forwarded Headers");
+    app.UseForwardedHeaders();
 
     // Seed Roles
     await app.ConfigureUserRoles();
