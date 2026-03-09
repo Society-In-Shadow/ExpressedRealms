@@ -1,7 +1,9 @@
+using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup;
 using ExpressedRealms.DB.Models.Events.EventSetup;
 using ExpressedRealms.Events.API.Repositories.Events;
 using ExpressedRealms.Events.API.UseCases.EventScheduleItems.Delete;
+using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FakeItEasy;
@@ -13,6 +15,7 @@ public class DeleteEventScheduleItemUseCaseTests
 {
     private readonly DeleteEventScheduleItemUseCase _useCase;
     private readonly IEventRepository _repository;
+    private readonly IUserContext _userContext;
     private readonly DeleteEventScheduleItemModel _model;
     private readonly Event _dbEventModel;
     private readonly EventScheduleItem _dbModel;
@@ -40,14 +43,16 @@ public class DeleteEventScheduleItemUseCaseTests
             EventId = 1,
         };
 
-        _model = new DeleteEventScheduleItemModel() { Id = 2, EventId = 1 };
+        _model = new DeleteEventScheduleItemModel() { Id = 2, EventId = 2 };
         _repository = A.Fake<IEventRepository>();
+        _userContext = A.Fake<IUserContext>();
 
         A.CallTo(() => _repository.GetEventScheduleItem(_model.Id)).Returns(_dbModel);
         A.CallTo(() => _repository.GetEventAsync(_model.EventId)).Returns(_dbEventModel);
         A.CallTo(() => _repository.IsExistingEvent(_model.EventId)).Returns(true);
+        A.CallTo(() => _repository.IsExistingEvent(1)).Returns(false);
 
-        var validator = new DeleteEventScheduleItemModelValidator(_repository);
+        var validator = new DeleteEventScheduleItemModelValidator(_repository, _userContext);
 
         _useCase = new DeleteEventScheduleItemUseCase(
             _repository,
@@ -100,6 +105,37 @@ public class DeleteEventScheduleItemUseCaseTests
             nameof(DeleteEventScheduleItemModel.EventId),
             "Event does not exist."
         );
+    }
+
+    [Fact]
+    public async Task ValidationFor_EventId_WillFail_WhenEventIdIsOne_WithoutModifyDefaultsPermission()
+    {
+        A.CallTo(() =>
+                _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults)
+            )
+            .Returns(false);
+        _model.EventId = 1;
+
+        var results = await _useCase.ExecuteAsync(_model);
+        results.MustHaveValidationError(
+            nameof(DeleteEventScheduleItemModel.EventId),
+            "Event does not exist."
+        );
+    }
+
+    [Fact]
+    public async Task ValidationFor_EventId_WillBypassDeleteCheck_WhenIdIsOne_AndHasModifyDefaultsPermission()
+    {
+        A.CallTo(() =>
+                _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults)
+            )
+            .Returns(true);
+        _model.EventId = 1;
+
+        var results = await _useCase.ExecuteAsync(_model);
+
+        Assert.True(results.IsSuccess);
+        A.CallTo(() => _repository.IsExistingEvent(_model.EventId)).MustNotHaveHappened();
     }
 
     [Fact]

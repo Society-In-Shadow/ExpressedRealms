@@ -44,6 +44,11 @@ internal sealed class EventRepository(
         return context.Events.FirstAsync(x => x.Id == id, cancellationToken);
     }
 
+    public Task<Event> GetAnyEventAsync(int id)
+    {
+        return context.Events.IgnoreQueryFilters().FirstAsync(x => x.Id == id, cancellationToken);
+    }
+
     public async Task<Event?> FindEventAsync(int id)
     {
         return await context.Events.FindAsync(id, cancellationToken);

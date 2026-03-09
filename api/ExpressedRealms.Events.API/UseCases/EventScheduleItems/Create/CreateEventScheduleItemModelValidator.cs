@@ -1,4 +1,7 @@
+using ExpressedRealms.Authentication.PermissionCollection;
+using ExpressedRealms.DB.Models.Events.EventSetup;
 using ExpressedRealms.Events.API.Repositories.Events;
+using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using FluentValidation;
 using JetBrains.Annotations;
 
@@ -8,7 +11,10 @@ namespace ExpressedRealms.Events.API.UseCases.EventScheduleItems.Create;
 internal sealed class CreateEventScheduleItemModelValidator
     : AbstractValidator<CreateEventScheduleItemModel>
 {
-    public CreateEventScheduleItemModelValidator(IEventRepository repository)
+    public CreateEventScheduleItemModelValidator(
+        IEventRepository repository,
+        IUserContext userContext
+    )
     {
         RuleFor(x => x.Description)
             .NotEmpty()
@@ -22,7 +28,19 @@ internal sealed class CreateEventScheduleItemModelValidator
             .MustAsync(
                 async (x, y) =>
                 {
-                    var parentEvent = await repository.GetEventAsync(x.EventId);
+                    var modifyDefault = userContext.CurrentUserHasPermission(
+                        Permissions.EventScheduleItem.ModifyDefaults
+                    );
+
+                    Event parentEvent;
+                    if (modifyDefault && x.EventId == 1)
+                    {
+                        parentEvent = await repository.GetAnyEventAsync(1);
+                    }
+                    else
+                    {
+                        parentEvent = await repository.GetEventAsync(x.EventId);
+                    }
                     return parentEvent.StartDate <= x.Date && x.Date <= parentEvent.EndDate;
                 }
             )
@@ -31,7 +49,20 @@ internal sealed class CreateEventScheduleItemModelValidator
         RuleFor(x => x.EventId)
             .NotEmpty()
             .WithMessage("Event Id is required.")
-            .MustAsync(async (x, y) => await repository.IsExistingEvent(x))
+            .MustAsync(
+                async (x, y) =>
+                {
+                    var modifyDefault = userContext.CurrentUserHasPermission(
+                        Permissions.EventScheduleItem.ModifyDefaults
+                    );
+
+                    if (modifyDefault && x == 1)
+                    {
+                        return true;
+                    }
+                    return await repository.IsExistingEvent(x);
+                }
+            )
             .WithMessage("Event does not exist.");
     }
 }

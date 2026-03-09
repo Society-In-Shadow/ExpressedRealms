@@ -41,7 +41,7 @@ const onSubmit = form.handleSubmit(async (values) => {
 </script>
 
 <template>
-  <FormWrapper :show-skeleton="!event" :is-disabled="!permissionCheck.Event.Edit" @submit="onSubmit">
+  <FormWrapper :show-skeleton="!event" :is-disabled="!permissionCheck.Event.Edit || props.eventId == 1" @submit="onSubmit">
     <FormInputTextWrapper v-model="form.fields.name" />
     <FormInputTextWrapper v-model="form.fields.location" />
     <FormInputTextWrapper v-model="form.fields.websiteName" />
@@ -60,7 +60,7 @@ const onSubmit = form.handleSubmit(async (values) => {
     />
 
     <div class="m-3 text-right">
-      <Button v-if="permissionCheck.Event.Edit" label="Update" class="m-2" type="submit" />
+      <Button v-if="permissionCheck.Event.Edit && props.eventId != 1" label="Update" class="m-2" type="submit" />
     </div>
   </FormWrapper>
 </template>

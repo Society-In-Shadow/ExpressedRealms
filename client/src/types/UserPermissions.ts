@@ -30,12 +30,14 @@ export const UserPermissions = {
     Day23Checkin: 'event.day23checkin',
     GoApproval: 'event.goapproval',
     DownloadConSummaryReport: 'event.downloadconsummaryreport',
+    ModifyDefaults: 'event.modifydefaults',
   } as const,
   EventScheduleItem: {
     Edit: 'eventscheduleitem.edit',
     View: 'eventscheduleitem.view',
     Create: 'eventscheduleitem.create',
     Delete: 'eventscheduleitem.delete',
+    ModifyDefaults: 'eventscheduleitem.modifydefaults',
   } as const,
   Expression: {
     DownloadBooklet: 'expression.downloadbooklet',

@@ -16,6 +16,15 @@ internal sealed class GetEventsUseCase(IEventRepository eventRepository, IUserCo
         if (!hasViewEvents)
             events = events.Where(x => x.IsPublished).ToList();
 
+        var hasModifyDefaultEvent = userContext.CurrentUserHasPermission(
+            Permissions.Event.ModifyDefaults
+        );
+        if (hasModifyDefaultEvent)
+        {
+            const int defaultEventId = 1;
+            events.Add(await eventRepository.GetAnyEventAsync(defaultEventId));
+        }
+
         return Result.Ok(
             new EventBaseReturnModel()
             {
