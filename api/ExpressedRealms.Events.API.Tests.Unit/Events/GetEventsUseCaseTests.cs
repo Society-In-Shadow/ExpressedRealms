@@ -71,7 +71,8 @@ public class GetEventsUseCaseTests
 
         A.CallTo(() => _repository.GetEventsAsync()).Returns(_dbModels);
         A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.Event.View)).Returns(true);
-        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.Event.ModifyDefaults)).Returns(false);
+        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.Event.ModifyDefaults))
+            .Returns(false);
         A.CallTo(() => _repository.GetAnyEventAsync(1)).Returns(_dbModel);
 
         _useCase = new GetEventsUseCase(_repository, _userContext);
@@ -81,7 +82,7 @@ public class GetEventsUseCaseTests
     public async Task UseCase_WillReturnAllItems_WhenTheyHaveViewEventsPermission()
     {
         var returnList = _dbModels.Select(EventModels());
-        
+
         var results = await _useCase.ExecuteAsync();
 
         Assert.Equivalent(returnList, results.Value.Events);
@@ -92,11 +93,9 @@ public class GetEventsUseCaseTests
     {
         A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.Event.View))
             .Returns(false);
-        
-        var returnList = _dbModels
-            .Where(x => x.IsPublished)
-            .Select(EventModels());
-        
+
+        var returnList = _dbModels.Where(x => x.IsPublished).Select(EventModels());
+
         var results = await _useCase.ExecuteAsync();
 
         Assert.Equivalent(returnList, results.Value.Events);
@@ -105,20 +104,18 @@ public class GetEventsUseCaseTests
     [Fact]
     public async Task UseCase_WillReturnDefaultEvent_WhenTheyHaveManageDefaultsPermission()
     {
-        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.Event.ModifyDefaults)).Returns(true);
-        
-        var events = _dbModels
-            .Concat([_dbModel])
-            .ToList();
-       
-       var returnList = events.Select(EventModels());
-        
+        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.Event.ModifyDefaults))
+            .Returns(true);
+
+        var events = _dbModels.Concat([_dbModel]).ToList();
+
+        var returnList = events.Select(EventModels());
+
         var results = await _useCase.ExecuteAsync();
 
         Assert.Equivalent(returnList, results.Value.Events);
     }
-    
-    
+
     private static Func<Event, EventModel> EventModels()
     {
         return x => new EventModel()

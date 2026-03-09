@@ -15,30 +15,36 @@ internal sealed class GetEventScheduleItemModelValidator
         RuleFor(x => x.EventId)
             .NotEmpty()
             .WithMessage("Event Id is required.")
-            .MustAsync(async (x, y) =>
-            {
-                var modifyDefault = userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults);
-
-                if (modifyDefault && x == 1)
+            .MustAsync(
+                async (x, y) =>
                 {
-                    return true;
+                    var modifyDefault = userContext.CurrentUserHasPermission(
+                        Permissions.EventScheduleItem.ModifyDefaults
+                    );
+
+                    if (modifyDefault && x == 1)
+                    {
+                        return true;
+                    }
+
+                    return await repository.FindEventAsync(x) is not null;
                 }
-                
-                return await repository.FindEventAsync(x) is not null;
-            })
+            )
             .WithMessage("Event does not exist.")
             .MustAsync(
                 async (x, y) =>
                 {
                     var thisEvent = await repository.FindEventAsync(x);
                     var hasPolicy = userContext.CurrentUserHasPermission(Permissions.Event.View);
-                    var modifyDefault = userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults);
+                    var modifyDefault = userContext.CurrentUserHasPermission(
+                        Permissions.EventScheduleItem.ModifyDefaults
+                    );
 
                     if (modifyDefault && x == 1)
                     {
                         return true;
                     }
-                    
+
                     return hasPolicy || thisEvent!.IsPublished;
                 }
             )

@@ -40,7 +40,7 @@ public class CreateEventScheduleItemUseCaseTests
             Date = DateOnly.Parse("10/31/2025"),
             EventId = 5,
         };
-        
+
         _repository = A.Fake<IEventRepository>();
         _userContext = A.Fake<IUserContext>();
 
@@ -48,7 +48,10 @@ public class CreateEventScheduleItemUseCaseTests
         A.CallTo(() => _repository.GetAnyEventAsync(1)).Returns(_dbEventModel);
         A.CallTo(() => _repository.IsExistingEvent(_model.EventId)).Returns(true);
         A.CallTo(() => _repository.IsExistingEvent(1)).Returns(false);
-        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults)).Returns(false);
+        A.CallTo(() =>
+                _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults)
+            )
+            .Returns(false);
 
         var validator = new CreateEventScheduleItemModelValidator(_repository, _userContext);
 
@@ -131,20 +134,23 @@ public class CreateEventScheduleItemUseCaseTests
             "Date must be within the event dates."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_Date_WillCompareToDefaultEvent_WhenIdIsOne_AndModifyDefaultsEventScheduleItem_IsAssigned()
     {
-        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults)).Returns(true);
+        A.CallTo(() =>
+                _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults)
+            )
+            .Returns(true);
         _model.EventId = 1;
         _model.Date = _dbEventModel.EndDate.AddDays(1); // outside range
-        
+
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(
             nameof(CreateEventScheduleItemModel.Date),
             "Date must be within the event dates."
         );
-        
+
         A.CallTo(() => _repository.GetEventAsync(_model.EventId)).MustNotHaveHappened();
         A.CallTo(() => _repository.GetAnyEventAsync(1)).MustHaveHappened();
     }
@@ -160,11 +166,14 @@ public class CreateEventScheduleItemUseCaseTests
             "Event Id is required."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_EventId_WillFail_WhenEventIdIsOne_WithoutModifyDefaultsPermission()
     {
-        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults)).Returns(false);
+        A.CallTo(() =>
+                _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults)
+            )
+            .Returns(false);
         _model.EventId = 1;
 
         var results = await _useCase.ExecuteAsync(_model);
@@ -173,15 +182,18 @@ public class CreateEventScheduleItemUseCaseTests
             "Event does not exist."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_EventId_WillBypassDeleteCheck_WhenIdIsOne_AndHasModifyDefaultsPermission()
     {
-        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults)).Returns(true);
+        A.CallTo(() =>
+                _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults)
+            )
+            .Returns(true);
         _model.EventId = 1;
 
         var results = await _useCase.ExecuteAsync(_model);
-        
+
         Assert.True(results.IsSuccess);
         A.CallTo(() => _repository.IsExistingEvent(_model.EventId)).MustNotHaveHappened();
     }

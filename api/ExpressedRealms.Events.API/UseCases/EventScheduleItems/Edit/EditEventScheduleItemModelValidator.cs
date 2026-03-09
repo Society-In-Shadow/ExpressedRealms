@@ -11,7 +11,10 @@ namespace ExpressedRealms.Events.API.UseCases.EventScheduleItems.Edit;
 internal sealed class EditEventScheduleItemModelValidator
     : AbstractValidator<EditEventScheduleItemModel>
 {
-    public EditEventScheduleItemModelValidator(IEventRepository repository, IUserContext userContext)
+    public EditEventScheduleItemModelValidator(
+        IEventRepository repository,
+        IUserContext userContext
+    )
     {
         RuleFor(x => x.Id)
             .NotEmpty()
@@ -31,7 +34,9 @@ internal sealed class EditEventScheduleItemModelValidator
             .MustAsync(
                 async (x, y) =>
                 {
-                    var modifyDefault = userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults);
+                    var modifyDefault = userContext.CurrentUserHasPermission(
+                        Permissions.EventScheduleItem.ModifyDefaults
+                    );
 
                     Event parentEvent;
                     if (modifyDefault && x.EventId == 1)
@@ -50,16 +55,20 @@ internal sealed class EditEventScheduleItemModelValidator
         RuleFor(x => x.EventId)
             .NotEmpty()
             .WithMessage("Event Id is required.")
-            .MustAsync(async (x, y) =>
-            {
-                var modifyDefault = userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults);
-
-                if (modifyDefault && x == 1)
+            .MustAsync(
+                async (x, y) =>
                 {
-                    return true;
+                    var modifyDefault = userContext.CurrentUserHasPermission(
+                        Permissions.EventScheduleItem.ModifyDefaults
+                    );
+
+                    if (modifyDefault && x == 1)
+                    {
+                        return true;
+                    }
+                    return await repository.IsExistingEvent(x);
                 }
-                return await repository.IsExistingEvent(x);
-            })
+            )
             .WithMessage("Event does not exist.");
     }
 }

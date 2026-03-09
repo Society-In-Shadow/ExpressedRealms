@@ -152,20 +152,23 @@ public class EditEventScheduleItemUseCaseTests
     [Fact]
     public async Task ValidationFor_Date_WillCompareToDefaultEvent_WhenIdIsOne_AndModifyDefaultsEventScheduleItem_IsAssigned()
     {
-        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults)).Returns(true);
+        A.CallTo(() =>
+                _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults)
+            )
+            .Returns(true);
         _model.EventId = 1;
         _model.Date = _dbEventModel.EndDate.AddDays(1); // outside range
-        
+
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(
             nameof(EditEventScheduleItemModel.Date),
             "Date must be within the event dates."
         );
-        
+
         A.CallTo(() => _repository.GetEventAsync(_model.EventId)).MustNotHaveHappened();
         A.CallTo(() => _repository.GetAnyEventAsync(1)).MustHaveHappened();
     }
-    
+
     [Fact]
     public async Task ValidationFor_Date_WillFail_WhenOutsideEventDates()
     {
@@ -194,7 +197,10 @@ public class EditEventScheduleItemUseCaseTests
     [Fact]
     public async Task ValidationFor_EventId_WillFail_WhenEventIdIsOne_WithoutModifyDefaultsPermission()
     {
-        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults)).Returns(false);
+        A.CallTo(() =>
+                _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults)
+            )
+            .Returns(false);
         _model.EventId = 1;
 
         var results = await _useCase.ExecuteAsync(_model);
@@ -203,19 +209,22 @@ public class EditEventScheduleItemUseCaseTests
             "Event does not exist."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_EventId_WillBypassDeleteCheck_WhenIdIsOne_AndHasModifyDefaultsPermission()
     {
-        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults)).Returns(true);
+        A.CallTo(() =>
+                _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults)
+            )
+            .Returns(true);
         _model.EventId = 1;
 
         var results = await _useCase.ExecuteAsync(_model);
-        
+
         Assert.True(results.IsSuccess);
         A.CallTo(() => _repository.IsExistingEvent(_model.EventId)).MustNotHaveHappened();
     }
-    
+
     [Fact]
     public async Task ValidationFor_EventId_WillFail_WhenEventDoesNotExist()
     {

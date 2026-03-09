@@ -15,14 +15,16 @@ internal sealed class GetEventsUseCase(IEventRepository eventRepository, IUserCo
         var events = await eventRepository.GetEventsAsync();
         if (!hasViewEvents)
             events = events.Where(x => x.IsPublished).ToList();
-        
-        var hasModifyDefaultEvent = userContext.CurrentUserHasPermission(Permissions.Event.ModifyDefaults);
+
+        var hasModifyDefaultEvent = userContext.CurrentUserHasPermission(
+            Permissions.Event.ModifyDefaults
+        );
         if (hasModifyDefaultEvent)
         {
             const int defaultEventId = 1;
             events.Add(await eventRepository.GetAnyEventAsync(defaultEventId));
         }
-        
+
         return Result.Ok(
             new EventBaseReturnModel()
             {

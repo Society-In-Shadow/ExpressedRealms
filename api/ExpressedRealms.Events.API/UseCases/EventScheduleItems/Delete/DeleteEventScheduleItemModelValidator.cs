@@ -10,7 +10,10 @@ namespace ExpressedRealms.Events.API.UseCases.EventScheduleItems.Delete;
 internal sealed class DeleteEventScheduleItemModelValidator
     : AbstractValidator<DeleteEventScheduleItemModel>
 {
-    public DeleteEventScheduleItemModelValidator(IEventRepository repository, IUserContext userContext)
+    public DeleteEventScheduleItemModelValidator(
+        IEventRepository repository,
+        IUserContext userContext
+    )
     {
         RuleFor(x => x.Id)
             .NotEmpty()
@@ -22,16 +25,20 @@ internal sealed class DeleteEventScheduleItemModelValidator
         RuleFor(x => x.EventId)
             .NotEmpty()
             .WithMessage("Event Id is required.")
-            .MustAsync(async (x, y) =>
-            {
-                var modifyDefault = userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults);
-
-                if (modifyDefault && x == 1)
+            .MustAsync(
+                async (x, y) =>
                 {
-                    return true;
+                    var modifyDefault = userContext.CurrentUserHasPermission(
+                        Permissions.EventScheduleItem.ModifyDefaults
+                    );
+
+                    if (modifyDefault && x == 1)
+                    {
+                        return true;
+                    }
+                    return await repository.IsExistingEvent(x);
                 }
-                return await repository.IsExistingEvent(x);
-            })
+            )
             .WithMessage("Event does not exist.");
     }
 }

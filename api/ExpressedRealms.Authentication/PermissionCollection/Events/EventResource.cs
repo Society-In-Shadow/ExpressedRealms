@@ -79,7 +79,7 @@ public static partial class Permissions
             Description =
                 "Allows a user to download the report we give to cons for player tracking",
         };
-        
+
         public static readonly Permission ModifyDefaults = new(ResourceInfo)
         {
             Id = new Guid("019cd19c-7ce5-70fa-b1b9-362415f13392"),
