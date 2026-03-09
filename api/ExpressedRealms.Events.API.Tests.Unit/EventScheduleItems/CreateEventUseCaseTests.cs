@@ -47,6 +47,7 @@ public class CreateEventScheduleItemUseCaseTests
         A.CallTo(() => _repository.GetEventAsync(_model.EventId)).Returns(_dbEventModel);
         A.CallTo(() => _repository.GetAnyEventAsync(1)).Returns(_dbEventModel);
         A.CallTo(() => _repository.IsExistingEvent(_model.EventId)).Returns(true);
+        A.CallTo(() => _repository.IsExistingEvent(1)).Returns(false);
         A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefault)).Returns(false);
 
         var validator = new CreateEventScheduleItemModelValidator(_repository, _userContext);
