@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
 import Card from 'primevue/card'
 import EditEvent from '@/components/admin/events/EditEvent.vue'
 import { EventStore } from '@/components/admin/events/stores/eventStore.ts'
@@ -52,7 +52,23 @@ async function downloadAttendanceReport() {
   a.remove()
   URL.revokeObjectURL(url)
 }
+const showScheduleTab = computed(() => {
+  if (eventId == 1) {
+    return permissionCheck.EventScheduleItem.ModifyDefault
+  }
+  return permissionCheck.EventScheduleItem.View
+})
 
+const showEventQuestionsTab = computed(() => {
+  if (eventId == 1) {
+    return false
+  }
+  return permissionCheck.EventQuestion.View
+})
+
+const showCharacterActivityTab = computed(() => {
+  return eventId != 1
+})
 </script>
 
 <template>
@@ -62,7 +78,10 @@ async function downloadAttendanceReport() {
         <div>
           <h1 class="p-0 m-0">
             <SkeletonWrapper :show-skeleton="!isLoaded" height="1.2em" width="8em" class="mb-1">
-              {{ event?.name }} <Tag severity="secondary">
+              <span>{{ event?.name }}</span>
+              <Tag v-if="event?.id == 1" severity="primary">
+                DEFAULT EVENT TEMPLATE
+              </Tag><Tag v-else severity="secondary">
                 {{ event?.isPublished ? "Published" : "Draft" }}
               </Tag>
             </SkeletonWrapper>
@@ -74,9 +93,9 @@ async function downloadAttendanceReport() {
           </div>
         </div>
         <div v-if="isLoaded">
-          <Button v-if="!event.isPublished && permissionCheck.Event.Publish" class="mr-2" severity="info" label="Publish" @click="popups.publishConfirmation($event)" />
-          <Button v-if="permissionCheck.Event.Delete" class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
-          <Button v-if="permissionCheck.Event.DownloadConSummaryReport" class="mr-2" severity="info" label="Con Attendance Report" @click="downloadAttendanceReport" />
+          <Button v-if="!event.isPublished && permissionCheck.Event.Publish && !permissionCheck.Event.ModifyDefaults" class="mr-2" severity="info" label="Publish" @click="popups.publishConfirmation($event)" />
+          <Button v-if="permissionCheck.Event.Delete && !permissionCheck.Event.ModifyDefaults" class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
+          <Button v-if="permissionCheck.Event.DownloadConSummaryReport && !permissionCheck.Event.ModifyDefaults" class="mr-2" severity="info" label="Con Attendance Report" @click="downloadAttendanceReport" />
         </div>
       </div>
       <Tabs value="0" scrollable>
@@ -84,13 +103,13 @@ async function downloadAttendanceReport() {
           <Tab value="0">
             Basic Info
           </Tab>
-          <Tab v-if="permissionCheck.EventQuestion.View" value="3">
+          <Tab v-if="showEventQuestionsTab" value="3">
             Questions
           </Tab>
-          <Tab v-if="permissionCheck.EventScheduleItem.View" value="1">
+          <Tab v-if="showScheduleTab" value="1">
             Schedule
           </Tab>
-          <Tab value="2">
+          <Tab v-if="showCharacterActivityTab!" value="2">
             Character Activity
           </Tab>
         </TabList>
@@ -98,13 +117,13 @@ async function downloadAttendanceReport() {
           <TabPanel value="0">
             <EditEvent :event-id="eventId" />
           </TabPanel>
-          <TabPanel v-if="permissionCheck.EventScheduleItem.View" value="1">
+          <TabPanel v-if="showScheduleTab" value="1">
             <EventScheduledItemList :event-id="eventId" :is-read-only="false" />
           </TabPanel>
-          <TabPanel value="2">
+          <TabPanel v-if="showCharacterActivityTab" value="2">
             <CharacterActivity :event-id="eventId" />
           </TabPanel>
-          <TabPanel v-if="permissionCheck.EventQuestion.View" value="3">
+          <TabPanel v-if="showEventQuestionsTab" value="3">
             <EventQuestionList :event-id="eventId" />
           </TabPanel>
         </TabPanels>
