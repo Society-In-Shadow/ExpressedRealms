@@ -24,7 +24,7 @@ internal sealed class DeleteEventScheduleItemModelValidator
             .WithMessage("Event Id is required.")
             .MustAsync(async (x, y) =>
             {
-                var modifyDefault = userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefault);
+                var modifyDefault = userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults);
 
                 if (modifyDefault && x == 1)
                 {

@@ -17,7 +17,7 @@ internal sealed class GetEventScheduleItemModelValidator
             .WithMessage("Event Id is required.")
             .MustAsync(async (x, y) =>
             {
-                var modifyDefault = userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefault);
+                var modifyDefault = userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults);
 
                 if (modifyDefault && x == 1)
                 {
@@ -32,7 +32,7 @@ internal sealed class GetEventScheduleItemModelValidator
                 {
                     var thisEvent = await repository.FindEventAsync(x);
                     var hasPolicy = userContext.CurrentUserHasPermission(Permissions.Event.View);
-                    var modifyDefault = userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefault);
+                    var modifyDefault = userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults);
 
                     if (modifyDefault && x == 1)
                     {

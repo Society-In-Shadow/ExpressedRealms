@@ -48,7 +48,7 @@ public class CreateEventScheduleItemUseCaseTests
         A.CallTo(() => _repository.GetAnyEventAsync(1)).Returns(_dbEventModel);
         A.CallTo(() => _repository.IsExistingEvent(_model.EventId)).Returns(true);
         A.CallTo(() => _repository.IsExistingEvent(1)).Returns(false);
-        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefault)).Returns(false);
+        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults)).Returns(false);
 
         var validator = new CreateEventScheduleItemModelValidator(_repository, _userContext);
 
@@ -135,7 +135,7 @@ public class CreateEventScheduleItemUseCaseTests
     [Fact]
     public async Task ValidationFor_Date_WillCompareToDefaultEvent_WhenIdIsOne_AndModifyDefaultsEventScheduleItem_IsAssigned()
     {
-        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefault)).Returns(true);
+        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults)).Returns(true);
         _model.EventId = 1;
         _model.Date = _dbEventModel.EndDate.AddDays(1); // outside range
         
@@ -164,7 +164,7 @@ public class CreateEventScheduleItemUseCaseTests
     [Fact]
     public async Task ValidationFor_EventId_WillFail_WhenEventIdIsOne_WithoutModifyDefaultsPermission()
     {
-        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefault)).Returns(false);
+        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults)).Returns(false);
         _model.EventId = 1;
 
         var results = await _useCase.ExecuteAsync(_model);
@@ -177,7 +177,7 @@ public class CreateEventScheduleItemUseCaseTests
     [Fact]
     public async Task ValidationFor_EventId_WillBypassDeleteCheck_WhenIdIsOne_AndHasModifyDefaultsPermission()
     {
-        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefault)).Returns(true);
+        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults)).Returns(true);
         _model.EventId = 1;
 
         var results = await _useCase.ExecuteAsync(_model);

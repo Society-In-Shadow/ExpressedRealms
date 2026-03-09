@@ -36,10 +36,10 @@ public static partial class Permissions
             Name = nameof(Delete),
         };
         
-        public static readonly Permission ModifyDefault = new(ResourceInfo)
+        public static readonly Permission ModifyDefaults = new(ResourceInfo)
         {
             Id = new Guid("019cd178-de18-701a-bd13-ff81ce0f168f"),
-            Name = nameof(ModifyDefault),
+            Name = nameof(ModifyDefaults),
         };
     }
 }

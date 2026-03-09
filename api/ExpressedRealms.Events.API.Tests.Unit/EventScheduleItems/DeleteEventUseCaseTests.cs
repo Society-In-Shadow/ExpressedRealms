@@ -110,7 +110,7 @@ public class DeleteEventScheduleItemUseCaseTests
     [Fact]
     public async Task ValidationFor_EventId_WillFail_WhenEventIdIsOne_WithoutModifyDefaultsPermission()
     {
-        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefault)).Returns(false);
+        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults)).Returns(false);
         _model.EventId = 1;
 
         var results = await _useCase.ExecuteAsync(_model);
@@ -123,7 +123,7 @@ public class DeleteEventScheduleItemUseCaseTests
     [Fact]
     public async Task ValidationFor_EventId_WillBypassDeleteCheck_WhenIdIsOne_AndHasModifyDefaultsPermission()
     {
-        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefault)).Returns(true);
+        A.CallTo(() => _userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults)).Returns(true);
         _model.EventId = 1;
 
         var results = await _useCase.ExecuteAsync(_model);

@@ -37,7 +37,7 @@ export const UserPermissions = {
     View: 'eventscheduleitem.view',
     Create: 'eventscheduleitem.create',
     Delete: 'eventscheduleitem.delete',
-    ModifyDefault: 'eventscheduleitem.modifydefault',
+    ModifyDefaults: 'eventscheduleitem.modifydefaults',
   } as const,
   Expression: {
     DownloadBooklet: 'expression.downloadbooklet',

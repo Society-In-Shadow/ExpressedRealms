@@ -54,7 +54,7 @@ async function downloadAttendanceReport() {
 }
 const showScheduleTab = computed(() => {
   if (eventId == 1) {
-    return permissionCheck.EventScheduleItem.ModifyDefault
+    return permissionCheck.EventScheduleItem.ModifyDefaults
   }
   return permissionCheck.EventScheduleItem.View
 })

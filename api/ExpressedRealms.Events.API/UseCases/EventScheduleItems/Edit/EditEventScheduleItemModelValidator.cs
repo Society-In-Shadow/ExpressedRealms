@@ -31,7 +31,7 @@ internal sealed class EditEventScheduleItemModelValidator
             .MustAsync(
                 async (x, y) =>
                 {
-                    var modifyDefault = userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefault);
+                    var modifyDefault = userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults);
 
                     Event parentEvent;
                     if (modifyDefault && x.EventId == 1)
@@ -52,7 +52,7 @@ internal sealed class EditEventScheduleItemModelValidator
             .WithMessage("Event Id is required.")
             .MustAsync(async (x, y) =>
             {
-                var modifyDefault = userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefault);
+                var modifyDefault = userContext.CurrentUserHasPermission(Permissions.EventScheduleItem.ModifyDefaults);
 
                 if (modifyDefault && x == 1)
                 {
