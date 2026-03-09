@@ -4,6 +4,7 @@ import { QrcodeStream } from 'vue-qrcode-reader'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
+import Message from 'primevue/message'
 
 const eventCheckinInfo = EventCheckinStore()
 const loading = ref(true)
@@ -109,6 +110,9 @@ onUnmounted(() => {
     <Button label="Lookup" :disabled="eventCheckinInfo.foundInfo" @click="lookupManual" />
   </div>
   <div class="w-100 mt-3 mb-3">
+    <Message v-if="eventCheckinInfo.hasInvalidLookupId" severity="warn">
+      The scanned QR Code is an invalid Character Code, or no longer exists.  Please try again.
+    </Message>
     <div v-if="hidden">
       <Button label="Show Camera (Shuts off to Preserve Power)" @click="resetTimer" />
     </div>

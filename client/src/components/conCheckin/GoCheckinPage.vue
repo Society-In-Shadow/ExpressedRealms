@@ -62,7 +62,9 @@ async function verifiedPlayerInfo() {
 
 async function onDetect(detectedCodes) {
   eventCheckinInfo.lookupId = detectedCodes
-  await eventCheckinInfo.getGoCheckinInfo(detectedCodes)
+  if (!await eventCheckinInfo.getGoCheckinInfo(detectedCodes)) {
+    return
+  }
 
   if (eventCheckinInfo.goCheckinInfo.alreadyCheckedIn) {
     await eventCheckinInfo.verifiedUserInfo()

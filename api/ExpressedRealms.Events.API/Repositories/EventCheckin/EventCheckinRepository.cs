@@ -182,7 +182,7 @@ internal sealed class EventCheckinRepository(
             .Database.SqlQuery<int>(
                 $"""
                     with updated as (
-                        update "Players"
+                        update players
                         set player_number = nextval('player_number_sequence')
                         where lookup_id = {lookupId}
                         and (player_number is null or player_number = 0)
@@ -190,7 +190,7 @@ internal sealed class EventCheckinRepository(
                     )
                     select player_number from updated
                     union all
-                    select player_number from "Players"
+                    select player_number from players
                     where lookup_id = {lookupId}
                     limit 1
                 """
