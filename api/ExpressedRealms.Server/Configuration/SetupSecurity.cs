@@ -54,7 +54,10 @@ public static class SecurityConfiguration
                 IdentityConstants.BearerScheme,
                 o =>
                 {
-                    o.Cookie.Domain = clientCookieDomain;
+                    if (webApplicationBuilder.Environment.IsProduction())
+                    {
+                        o.Cookie.Domain = clientCookieDomain;
+                    }
                     o.SlidingExpiration = true;
                     o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                     o.Cookie.SameSite = SameSiteMode.None;
@@ -84,12 +87,16 @@ public static class SecurityConfiguration
                     };
                 }
             );
+
         webApplicationBuilder.Services.AddAuthorizationBuilder();
 
         webApplicationBuilder.Services.AddAntiforgery(
             (options) =>
             {
-                options.Cookie.Domain = clientCookieDomain;
+                if (webApplicationBuilder.Environment.IsProduction())
+                {
+                    options.Cookie.Domain = clientCookieDomain;
+                }
                 options.HeaderName = "T-XSRF-TOKEN";
                 options.Cookie.HttpOnly = true;
                 options.Cookie.Name = "XSRF-TOKEN";
