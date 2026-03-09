@@ -19,7 +19,7 @@ public static class GetGoCheckinInfoEndpoint
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;
-        if (results.HasNotFound(out var notFound))
+        if (results.HasNotFound(out _))
         {
             return TypedResults.Ok(new GetGoCheckinInfoResponse() { WasFound = false });
         }
