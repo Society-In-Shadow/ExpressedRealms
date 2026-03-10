@@ -2,6 +2,7 @@ using Audit.EntityFramework;
 using ExpressedRealms.DB.Models.Characters;
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerAgeGroupSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 
 namespace ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
@@ -15,6 +16,11 @@ public class Player
     public required string LookupId { get; set; }
     public int? PlayerNumber { get; set; }
 
+    public int? AgeGroupId { get; set; }
+    public PlayerAgeGroup? AgeGroup { get; set; }
+    
+    public bool HasConsentForm { get; set; } = false;
+    
     public virtual User User { get; set; } = null!;
     public virtual List<Character> Characters { get; set; } = new();
     public virtual List<PlayerAuditTrail> PlayerAuditTrails { get; set; } = new();
