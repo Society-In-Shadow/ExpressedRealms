@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerAgeGroupSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
@@ -29,7 +30,8 @@ internal sealed class GetAgeInfoUseCase(
             {
                 AgeGroupId = player.AgeGroupId,
                 HasBeenVerified = !player.LastAgeGroupCheck.HasValue ? false : 
-                    DateOnly.FromDateTime(player.LastAgeGroupCheck.Value.DateTime) >= currentEventStartDate,
+                    DateOnly.FromDateTime(player.LastAgeGroupCheck.Value.DateTime) >= currentEventStartDate 
+                    || player.AgeGroupId == PlayerAgeGroupEnum.Adult,
             }
         );
     }

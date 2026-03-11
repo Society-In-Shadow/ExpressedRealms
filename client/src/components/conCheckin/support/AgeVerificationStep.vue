@@ -60,7 +60,7 @@ const verifiedMessage = computed(() => {
     <h2 v-if="ageInfo && ageInfo.ageGroupId == null">
       Looks like this is your first time playing!
     </h2>
-    <h2 v-if="signedWaiver && !eventCheckinInfo.goCheckinInfo.isFirstTimeUser">
+    <h2 v-if="signedWaiver && !ageInfo.ageGroupId == null">
       They need to reverify their age, they are in the teen bracket
     </h2>
     <div class="d-flex self-align-center gap-2 mb-3">
@@ -76,7 +76,7 @@ const verifiedMessage = computed(() => {
       <label for="signedwaiver">If not, have you signed a waiver? (Front Desk will have these)</label>
     </div>
     <p>If they fall into above category, send them to the front desk to get this resolved.</p>
-    <Button label="They are under 13" class="w-100" @click="popups.childConfirmation($event)" />
+    <Button severity="secondary" label="They are under 13" class="w-100" @click="popups.childConfirmation($event)" />
     <Button label="Verified" class="w-100 mt-3 mb-3" :disabled="!is13OrOlder || !is18OrOlder && !signedWaiver || ageInfo.hasBeenVerified" @click="verifiedPlayerInfo" />
   </div>
   <div v-else>

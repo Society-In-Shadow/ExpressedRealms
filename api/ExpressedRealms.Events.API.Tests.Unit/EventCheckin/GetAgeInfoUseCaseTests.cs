@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerAgeGroupSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.Events.API.UseCases.EventCheckin.GetAgeInfo;
@@ -120,4 +121,11 @@ public class GetAgeInfoUseCaseTests
         Assert.True(results.Value.HasBeenVerified);
     }
 
+    [Fact]
+    public async Task UseCase_WillBeVerified_IfTheyAreAnAdult()
+    {;
+        _player.AgeGroupId = PlayerAgeGroupEnum.Adult;
+        var results = await _useCase.ExecuteAsync(_model);
+        Assert.True(results.Value.HasBeenVerified);
+    }
 }
