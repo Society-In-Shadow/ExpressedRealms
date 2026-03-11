@@ -49,3 +49,14 @@ export interface ActiveEvent {
   id: number
   name: string
 }
+
+export interface AgeInfo {
+  ageGroupId: AgeGroupId | null
+  hasBeenVerified: boolean
+}
+
+export const AgeGroupId = {
+  Child: 1,
+  Teen: 2,
+  Adult: 3,
+}

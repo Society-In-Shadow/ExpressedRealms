@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import type {
   ActiveEvent,
+  AgeInfo,
   ApproveCheckinInfo,
   AssignedXpType,
   BasicInfo,
@@ -83,6 +84,17 @@ export const EventCheckinStore
         this.primaryCharacter = response.data.primaryCharacterInfo
         this.checkinStage = response.data.currentStage
         this.isReset = false
+      },
+      async verifiedAge(ageTypeId: number, hasWaiver: boolean) {
+        await axios.put(`events/checkin/lookup/${this.lookupId}/ageInfo`, {
+          ageGroupId: ageTypeId,
+          hasSignedConsentForm: hasWaiver,
+        })
+        // Refresh active step
+      },
+      async getVerifiedAge(): Promise<AgeInfo> {
+        const response = await axios.get<AgeInfo>(`events/checkin/lookup/${this.lookupId}/ageInfo`)
+        return response.data
       },
       async updateQuestion(question: Question) {
         await axios.put(`/events/checkin/lookup/${this.lookupId}/questions/${question.id}`, { response: question.response })
