@@ -4,9 +4,11 @@ using ExpressedRealms.Events.API.API.EventCheckin.AddCheckinBonusXp;
 using ExpressedRealms.Events.API.API.EventCheckin.AnswerQuestion;
 using ExpressedRealms.Events.API.API.EventCheckin.ApproveStage;
 using ExpressedRealms.Events.API.API.EventCheckin.ConfirmUserCheckinInfo;
+using ExpressedRealms.Events.API.API.EventCheckin.GetAgeInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetBasicCheckDetails;
 using ExpressedRealms.Events.API.API.EventCheckin.GetGoCheckinInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetUserCheckinDetails;
+using ExpressedRealms.Events.API.API.EventCheckin.UpdateAgeInfo;
 using ExpressedRealms.Events.API.API.EventQuestions.Create;
 using ExpressedRealms.Events.API.API.EventQuestions.Delete;
 using ExpressedRealms.Events.API.API.EventQuestions.Edit;
@@ -116,12 +118,18 @@ internal static class EventEndpoints
                 "checkin/lookup/{lookupId}/questions/{questionId}",
                 AnswerQuestionEndpoint.ExecuteAsync
             )
-            .RequireFeatureToggle(ReleaseFlags.ShowEventCheckin)
             .RequirePermission(Permissions.Event.Checkin);
 
         endpointGroup
             .MapPost("checkin/lookup/{lookupId}/assignXp", AddCheckinBonusXpEndpoint.ExecuteAsync)
-            .RequireFeatureToggle(ReleaseFlags.ShowEventCheckin)
+            .RequirePermission(Permissions.Event.Checkin);
+
+        endpointGroup
+            .MapGet("checkin/lookup/{lookupId}/ageInfo", GetAgeInfoEndpoint.ExecuteAsync)
+            .RequirePermission(Permissions.Event.Checkin);
+
+        endpointGroup
+            .MapPut("checkin/lookup/{lookupId}/ageInfo", UpdateAgeInfoEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Event.Checkin);
 
         endpointGroup
@@ -129,7 +137,6 @@ internal static class EventEndpoints
                 "checkin/lookup/{lookupId}/approveStage",
                 ApproveStageAndSendMessageEndpoint.ExecuteAsync
             )
-            .RequireFeatureToggle(ReleaseFlags.ShowEventCheckin)
             .RequirePermission(Permissions.Event.Checkin);
     }
 }

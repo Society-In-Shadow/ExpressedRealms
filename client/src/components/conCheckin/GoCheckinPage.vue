@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { computed, onBeforeMount, ref, watch } from 'vue'
+import { onBeforeMount, ref, watch } from 'vue'
 import { FeatureFlags, userStore } from '@/stores/userStore.ts'
 import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
 import { useRouter } from 'vue-router'
@@ -9,14 +9,13 @@ import StepItem from 'primevue/stepitem'
 import Step from 'primevue/step'
 import StepPanel from 'primevue/steppanel'
 import Button from 'primevue/button'
-import Checkbox from 'primevue/checkbox'
 import CharacterScanner from '@/components/conCheckin/support/CharacterScanner.vue'
 import AnswerQuestions from '@/components/conCheckin/support/AnswerQuestions.vue'
-import type { Question } from '@/components/conCheckin/types.ts'
 import StonePullerStep from '@/components/conCheckin/support/StonePullerStep.vue'
 import Message from 'primevue/message'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 import { confirmationPopups } from '@/components/conCheckin/services/popupService.ts'
+import AgeVerificationStep from '@/components/conCheckin/support/AgeVerificationStep.vue'
 
 const eventCheckinInfo = EventCheckinStore()
 const userPermission = userPermissionStore()
@@ -26,9 +25,6 @@ const popups = confirmationPopups()
 
 const permissionCheck = userPermission.permissionCheck
 const hasCheckinFlag = ref(false)
-const is13OrOlder = ref(false)
-const is18OrOlder = ref(false)
-const signedWaiver = ref(false)
 
 onBeforeMount(async () => {
   await eventCheckinInfo.getCheckinAvailable()
@@ -42,41 +38,16 @@ onBeforeMount(async () => {
 watch(() => eventCheckinInfo.isReset, (old, newValue) => {
   if (eventCheckinInfo.isReset) {
     hasCheckinFlag.value = false
-    is13OrOlder.value = false
-    is18OrOlder.value = false
-    signedWaiver.value = false
     stepperStep.value = '1'
   }
 })
 
 const stepperStep = ref('1')
 
-async function verifiedPlayerInfo() {
-  await eventCheckinInfo.verifiedUserInfo()
-  const waiverQuestion = eventCheckinInfo.questions.find((x: Question) => x.typeId == 1)
-  waiverQuestion!.response = waiverStatus
-  await eventCheckinInfo.updateQuestion(waiverQuestion!)
-
-  stepperStep.value = '3'
-}
-
 async function onDetect(detectedCodes) {
   eventCheckinInfo.lookupId = detectedCodes
   if (!await eventCheckinInfo.getGoCheckinInfo(detectedCodes)) {
     return
-  }
-
-  if (eventCheckinInfo.goCheckinInfo.alreadyCheckedIn) {
-    await eventCheckinInfo.verifiedUserInfo()
-    const waiverQuestion = eventCheckinInfo.questions.find((x: Question) => x.typeId == 1)
-    if (waiverQuestion?.response == 'Over 18') {
-      is13OrOlder.value = true
-      is18OrOlder.value = true
-    }
-    else if (waiverQuestion?.response == 'Under 18 - Signed Waiver') {
-      is13OrOlder.value = true
-      signedWaiver.value = true
-    }
   }
 
   const stageId = eventCheckinInfo.checkinStage?.id
@@ -99,11 +70,6 @@ const isFinalized = (stageId: number) => {
     return 'pi pi-check'
   return ''
 }
-
-const waiverStatus = computed(() => {
-  if (signedWaiver.value) return 'Under 18 - Signed Waiver'
-  return 'Over 18'
-})
 
 const approveStage = async (stageId: number) => {
   await eventCheckinInfo.approveStage(stageId)
@@ -142,28 +108,10 @@ const typeName = (typeId: number) => {
     </StepItem>
     <StepItem value="2">
       <Step>Verify User Info</Step>
-      <StepPanel v-slot="{activateCallback}">
-        <h1>Character Scanned!</h1>
-        <h2>Is your name {{ eventCheckinInfo.goCheckinInfo.userName }}?</h2>
-        <h2 v-if="eventCheckinInfo.goCheckinInfo.isFirstTimeUser">
-          Looks like this is your first time playing!
-        </h2>
-        <div class="d-flex self-align-center gap-2 mb-3">
-          <Checkbox id="13AgeQuestion" v-model="is13OrOlder" binary />
-          <label for="13AgeQuestion">Are you 13 years or older?</label>
-        </div>
-        <div class="d-flex self-align-center gap-2 mb-3">
-          <Checkbox id="18AgeQuestion" v-model="is18OrOlder" binary :disabled="signedWaiver" @change="is13OrOlder = true" />
-          <label for="18AgeQuestion">Are you 18 years or older?</label>
-        </div>
-        <div class="d-flex self-align-center gap-2 mb-3">
-          <Checkbox id="signedwaiver" v-model="signedWaiver" binary :disabled="is18OrOlder" @change="is13OrOlder = true" />
-          <label for="signedwaiver">If not, have you signed a waiver? (Front Desk will have these)</label>
-        </div>
-        <p>If they fall into above category, send them to the front desk to get this resolved.</p>
-        <Button v-if="!eventCheckinInfo.goCheckinInfo.alreadyCheckedIn" label="Verified" :disabled="!is13OrOlder || !is18OrOlder && !signedWaiver || eventCheckinInfo.goCheckinInfo.alreadyCheckedIn" @click="verifiedPlayerInfo" />
+      <StepPanel v-if="stepperStep == '2'" v-slot="{activateCallback}">
+        <AgeVerificationStep />
         <Button
-          v-else label="Reviewed" icon="pi pi-arrow-right" icon-pos="right" class="mb-4 ml-3"
+          label="Reviewed" icon="pi pi-arrow-right" icon-pos="right" class="mb-4 ml-3"
           @click="activateCallback('3')"
         />
       </StepPanel>

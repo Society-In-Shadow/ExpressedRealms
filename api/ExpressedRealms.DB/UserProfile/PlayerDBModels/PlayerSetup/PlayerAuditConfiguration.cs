@@ -25,6 +25,18 @@ internal static class PlayerAuditConfiguration
                 case "lookup_id":
                     continue;
 
+                case "has_signed_consent_form":
+                    changedRecord.FriendlyName = "Consent Form Signed";
+                    break;
+
+                case "last_age_group_check":
+                    changedRecord.FriendlyName = "Age Group Checked";
+                    break;
+
+                case "age_group_id":
+                    changedRecord.FriendlyName = "Age Group";
+                    break;
+
                 default:
                     throw new MissingAuditColumnException(changedRecord.ColumnName);
             }
