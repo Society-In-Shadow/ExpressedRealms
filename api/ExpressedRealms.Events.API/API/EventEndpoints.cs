@@ -126,6 +126,10 @@ internal static class EventEndpoints
             .RequirePermission(Permissions.Event.Checkin);
         
         endpointGroup
+            .MapGet("checkin/lookup/{lookupId}/ageInfo", GetAgeInfoEndpoint.ExecuteAsync)
+            .RequirePermission(Permissions.Event.Checkin);
+        
+        endpointGroup
             .MapPut("checkin/lookup/{lookupId}/ageInfo", UpdateAgeInfoEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Event.Checkin);
 
