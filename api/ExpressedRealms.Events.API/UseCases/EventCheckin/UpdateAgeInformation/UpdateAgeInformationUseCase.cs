@@ -10,6 +10,7 @@ namespace ExpressedRealms.Events.API.UseCases.EventCheckin.UpdateAgeInformation;
 internal sealed class UpdateAgeInformationUseCase(
     IEventCheckinRepository checkinRepository,
     UserManager<User> userManager,
+    TimeProvider timeProvider,
     UpdateAgeInformationModelValidator validator,
     CancellationToken cancellationToken
 ) : IUpdateAgeInformationUseCase
@@ -29,6 +30,7 @@ internal sealed class UpdateAgeInformationUseCase(
         
         player.HasSignedConsentForm = model.HasSignedConsentForm;
         player.AgeGroupId = model.AgeGroupId;
+        player.LastAgeGroupCheck = timeProvider.GetUtcNow();
 
         if (model.AgeGroupId == PlayerAgeGroupEnum.Child.Value)
         {

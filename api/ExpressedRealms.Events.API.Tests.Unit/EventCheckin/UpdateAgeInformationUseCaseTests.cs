@@ -15,18 +15,22 @@ public class UpdateAgeInformationUseCaseTests
     private readonly UpdateAgeInformationUseCase _useCase;
     private readonly UpdateAgeInformationModelValidator _validator;
     private readonly IEventCheckinRepository _eventCheckinRepository;
+    private readonly TimeProvider _timeProvider;
     private readonly UserManager<User> _userManager;
     private readonly UpdateAgeInformationModel _model;
 
     private readonly User _user = new User();
     private readonly Player _player;
+    private readonly DateTime _dateTimeNow = DateTime.UtcNow;
 
     public UpdateAgeInformationUseCaseTests()
     {
         _model = new UpdateAgeInformationModel { LookupId = "ABCDEFGH", AgeGroupId = PlayerAgeGroupEnum.Adult};
         _player = new Player() { LookupId = _model.LookupId};
         _eventCheckinRepository = A.Fake<IEventCheckinRepository>();
+        
         var store = A.Fake<IUserStore<User>>();
+        _timeProvider = A.Fake<TimeProvider>();
 
         _userManager = A.Fake<UserManager<User>>(x => x.WithArgumentsForConstructor(
         [
@@ -47,11 +51,14 @@ public class UpdateAgeInformationUseCaseTests
 
         A.CallTo(() => _userManager.FindByIdAsync(A<string>._)).Returns(_user);
         
+        A.CallTo(() => _timeProvider.GetUtcNow()).Returns(_dateTimeNow);
+        
         _validator = new UpdateAgeInformationModelValidator(_eventCheckinRepository);
 
         _useCase = new UpdateAgeInformationUseCase(
             _eventCheckinRepository,
             _userManager,
+            _timeProvider,
             _validator,
             CancellationToken.None
         );
@@ -114,6 +121,15 @@ public class UpdateAgeInformationUseCaseTests
         _model.HasSignedConsentForm = true;
         await _useCase.ExecuteAsync(_model);
         A.CallTo(() => _eventCheckinRepository.EditAsync(A<Player>.That.Matches(k => k.HasSignedConsentForm)))
+            .MustHaveHappenedOnceExactly();
+    }
+    
+    [Fact]
+    public async Task UseCase_WillUpdateTimestamp_PerCall()
+    {
+        _model.HasSignedConsentForm = true;
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() => _eventCheckinRepository.EditAsync(A<Player>.That.Matches(k => k.LastAgeGroupCheck == _dateTimeNow)))
             .MustHaveHappenedOnceExactly();
     }
 
