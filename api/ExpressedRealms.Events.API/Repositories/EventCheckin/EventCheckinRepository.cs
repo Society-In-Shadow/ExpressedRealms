@@ -130,6 +130,17 @@ internal sealed class EventCheckinRepository(
 
         return eventId == 0 ? null : eventId;
     }
+    
+    public async Task<DateOnly> GetActiveEventStartDate()
+    {
+        var now = DateOnly.FromDateTime(DateTime.UtcNow);
+
+        return await context
+            .Events.AsNoTracking()
+            .Where(x => x.IsPublished && x.StartDate <= now && x.EndDate >= now)
+            .Select(x => x.StartDate)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
 
     public async Task<Event?> GetActiveEventInfoOrDefaultAsync()
     {

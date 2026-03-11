@@ -38,4 +38,5 @@ public interface IEventCheckinRepository : IGenericRepository
     Task<string> GetCurrentPlayerName();
     Task<string> GetPlayerNameWithPlayerNumber(string lookupId);
     Task<Player> GetPlayerAsync(string lookupId);
+    Task<DateOnly> GetActiveEventStartDate();
 }
