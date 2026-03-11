@@ -27,7 +27,7 @@ internal sealed class UpdateAgeInformationUseCase(
             return Result.Fail(result.Errors);
 
         var player = await checkinRepository.GetPlayerAsync(model.LookupId);
-        
+
         player.HasSignedConsentForm = model.HasSignedConsentForm;
         player.AgeGroupId = model.AgeGroupId;
         player.LastAgeGroupCheck = timeProvider.GetUtcNow();

@@ -130,7 +130,7 @@ internal sealed class EventCheckinRepository(
 
         return eventId == 0 ? null : eventId;
     }
-    
+
     public async Task<DateOnly> GetActiveEventStartDate()
     {
         var now = DateOnly.FromDateTime(DateTime.UtcNow);
@@ -170,9 +170,7 @@ internal sealed class EventCheckinRepository(
 
     public Task<Player> GetPlayerAsync(string lookupId)
     {
-        return context.Players
-            .Where(x => x.LookupId == lookupId)
-            .FirstAsync();
+        return context.Players.Where(x => x.LookupId == lookupId).FirstAsync();
     }
 
     public async Task<Guid> GetPlayerId(string lookupId)

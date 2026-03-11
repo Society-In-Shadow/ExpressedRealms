@@ -123,11 +123,11 @@ internal static class EventEndpoints
         endpointGroup
             .MapPost("checkin/lookup/{lookupId}/assignXp", AddCheckinBonusXpEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Event.Checkin);
-        
+
         endpointGroup
             .MapGet("checkin/lookup/{lookupId}/ageInfo", GetAgeInfoEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Event.Checkin);
-        
+
         endpointGroup
             .MapPut("checkin/lookup/{lookupId}/ageInfo", UpdateAgeInfoEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Event.Checkin);

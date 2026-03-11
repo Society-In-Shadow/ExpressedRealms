@@ -26,21 +26,19 @@ internal sealed class GetGoCheckinInfoUseCase(
         var eventId = await checkinRepository.GetActiveEventId();
         var playerId = await checkinRepository.GetPlayerId(model.LookupId);
         var checkin = await checkinRepository.GetCheckinAsync(eventId!.Value, playerId);
-        //var latestCompletedStage = await checkinRepository.GetCurrentStage(checkin!.Id);
 
-        
         // If user has age group, and they are adult, automatically push them to next step
         // If user has age group, and they are 13-17, reask - they might have turned 18
         // If the user doesn't have an age group ask
-        
+
         // If user is under 13, block checkin functionality
-        
+
         // This should return
         // - User Info
         //   - User Name
         //   - Age Group
         // - Next Stage That needs to be completed
-        
+
         return Result.Ok(
             new GetGoCheckinInfoReturnModel()
             {

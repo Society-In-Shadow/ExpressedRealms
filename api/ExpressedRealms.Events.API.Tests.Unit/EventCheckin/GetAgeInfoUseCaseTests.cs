@@ -14,7 +14,7 @@ public class GetAgeInfoUseCaseTests
     private readonly GetAgeInfoModelValidator _validator;
     private readonly IEventCheckinRepository _eventCheckinRepository;
     private readonly GetAgeInfoModel _model;
-    
+
     private readonly Player _player;
 
     public GetAgeInfoUseCaseTests()
@@ -25,16 +25,15 @@ public class GetAgeInfoUseCaseTests
         {
             LookupId = _model.LookupId,
             LastAgeGroupCheck = new DateTime(2023, 1, 1),
-            AgeGroupId = 2
+            AgeGroupId = 2,
         };
 
         _eventCheckinRepository = A.Fake<IEventCheckinRepository>();
 
-        A.CallTo(() => _eventCheckinRepository.CheckinIdExistsAsync(_model.LookupId))
-            .Returns(true);
-        A.CallTo(() => _eventCheckinRepository.GetActiveEventStartDate()).Returns(DateOnly.FromDateTime(new DateTime(2023, 1, 1)));
+        A.CallTo(() => _eventCheckinRepository.CheckinIdExistsAsync(_model.LookupId)).Returns(true);
+        A.CallTo(() => _eventCheckinRepository.GetActiveEventStartDate())
+            .Returns(DateOnly.FromDateTime(new DateTime(2023, 1, 1)));
         A.CallTo(() => _eventCheckinRepository.GetPlayerAsync(_model.LookupId)).Returns(_player);
-
 
         _validator = new GetAgeInfoModelValidator(_eventCheckinRepository);
 
@@ -82,7 +81,7 @@ public class GetAgeInfoUseCaseTests
 
         results.MustHaveNotFoundError(nameof(_model.LookupId), "Lookup Id does not exist.");
     }
-    
+
     [Fact]
     public async Task UseCase_WillReturn_AgeGroupId()
     {
@@ -97,25 +96,28 @@ public class GetAgeInfoUseCaseTests
         var results = await _useCase.ExecuteAsync(_model);
         Assert.False(results.Value.HasBeenVerified);
     }
-        
+
     [Fact]
     public async Task UseCase_WillNotBeVerified_IfTheyHaveBeenCheckedIn_BeforeTheStartDate()
-    {;
+    {
+        ;
         _player.LastAgeGroupCheck = new DateTime(2022, 1, 1);
         var results = await _useCase.ExecuteAsync(_model);
         Assert.False(results.Value.HasBeenVerified);
     }
-    
+
     [Fact]
     public async Task UseCase_WillBeVerified_IfTheyHaveBeenCheckedIn_DayOfStartDate()
-    {;
+    {
+        ;
         var results = await _useCase.ExecuteAsync(_model);
         Assert.True(results.Value.HasBeenVerified);
     }
-    
+
     [Fact]
     public async Task UseCase_WillBeVerified_IfTheyHaveBeenCheckedIn_LaterThenStartDate()
-    {;
+    {
+        ;
         _player.LastAgeGroupCheck = new DateTime(2023, 1, 3);
         var results = await _useCase.ExecuteAsync(_model);
         Assert.True(results.Value.HasBeenVerified);
@@ -123,7 +125,8 @@ public class GetAgeInfoUseCaseTests
 
     [Fact]
     public async Task UseCase_WillBeVerified_IfTheyAreAnAdult()
-    {;
+    {
+        ;
         _player.AgeGroupId = PlayerAgeGroupEnum.Adult;
         var results = await _useCase.ExecuteAsync(_model);
         Assert.True(results.Value.HasBeenVerified);

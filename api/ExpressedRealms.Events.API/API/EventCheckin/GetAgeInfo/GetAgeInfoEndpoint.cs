@@ -8,10 +8,9 @@ namespace ExpressedRealms.Events.API.API.EventCheckin.GetAgeInfo;
 
 public static class GetAgeInfoEndpoint
 {
-    public static async Task<Results<Ok<GetAgeInfoResponse>, ValidationProblem, NotFound>> ExecuteAsync(
-        string lookupId,
-        [FromServices] IGetAgeInfoUseCase useCase
-    )
+    public static async Task<
+        Results<Ok<GetAgeInfoResponse>, ValidationProblem, NotFound>
+    > ExecuteAsync(string lookupId, [FromServices] IGetAgeInfoUseCase useCase)
     {
         var results = await useCase.ExecuteAsync(
             new GetAgeInfoModel() { LookupId = Uri.UnescapeDataString(lookupId) }

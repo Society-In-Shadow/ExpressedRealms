@@ -24,14 +24,18 @@ internal sealed class GetAgeInfoUseCase(
 
         var player = await checkinRepository.GetPlayerAsync(model.LookupId);
         var currentEventStartDate = await checkinRepository.GetActiveEventStartDate();
-        
+
         return Result.Ok(
             new GetAgeInfoReturnModel()
             {
                 AgeGroupId = player.AgeGroupId,
-                HasBeenVerified = !player.LastAgeGroupCheck.HasValue ? false : 
-                    DateOnly.FromDateTime(player.LastAgeGroupCheck.Value.DateTime) >= currentEventStartDate 
-                    || player.AgeGroupId == PlayerAgeGroupEnum.Adult,
+                HasBeenVerified =
+                    player.LastAgeGroupCheck.HasValue
+                    && (
+                        DateOnly.FromDateTime(player.LastAgeGroupCheck.Value.DateTime)
+                            >= currentEventStartDate
+                        || player.AgeGroupId == PlayerAgeGroupEnum.Adult
+                    ),
             }
         );
     }

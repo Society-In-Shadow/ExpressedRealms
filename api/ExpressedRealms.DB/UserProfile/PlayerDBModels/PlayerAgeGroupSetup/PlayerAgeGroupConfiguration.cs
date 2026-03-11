@@ -8,11 +8,7 @@ public class PlayerAgeGroupConfiguration : IEntityTypeConfiguration<PlayerAgeGro
     public void Configure(EntityTypeBuilder<PlayerAgeGroup> builder)
     {
         var data = PlayerAgeGroupEnum
-            .List.Select(x => new PlayerAgeGroup
-            {
-                Id = x.Value,
-                Name = x.ToString(),
-            })
+            .List.Select(x => new PlayerAgeGroup { Id = x.Value, Name = x.ToString() })
             .ToList();
         builder.HasData(data);
 

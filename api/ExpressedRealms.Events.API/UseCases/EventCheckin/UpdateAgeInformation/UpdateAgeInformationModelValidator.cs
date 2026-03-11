@@ -6,7 +6,8 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Events.API.UseCases.EventCheckin.UpdateAgeInformation;
 
 [UsedImplicitly]
-internal sealed class UpdateAgeInformationModelValidator : AbstractValidator<UpdateAgeInformationModel>
+internal sealed class UpdateAgeInformationModelValidator
+    : AbstractValidator<UpdateAgeInformationModel>
 {
     public UpdateAgeInformationModelValidator(IEventCheckinRepository repository)
     {

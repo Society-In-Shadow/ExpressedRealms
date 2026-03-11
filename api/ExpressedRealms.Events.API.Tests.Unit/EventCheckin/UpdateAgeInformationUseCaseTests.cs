@@ -25,34 +25,41 @@ public class UpdateAgeInformationUseCaseTests
 
     public UpdateAgeInformationUseCaseTests()
     {
-        _model = new UpdateAgeInformationModel { LookupId = "ABCDEFGH", AgeGroupId = PlayerAgeGroupEnum.Adult};
-        _player = new Player() { LookupId = _model.LookupId};
+        _model = new UpdateAgeInformationModel
+        {
+            LookupId = "ABCDEFGH",
+            AgeGroupId = PlayerAgeGroupEnum.Adult,
+        };
+        _player = new Player() { LookupId = _model.LookupId };
         _eventCheckinRepository = A.Fake<IEventCheckinRepository>();
-        
+
         var store = A.Fake<IUserStore<User>>();
         _timeProvider = A.Fake<TimeProvider>();
 
-        _userManager = A.Fake<UserManager<User>>(x => x.WithArgumentsForConstructor(
-        [
-            store,
-            null, // IOptions<IdentityOptions>
-            null, // IPasswordHasher<User>
-            null, // IEnumerable<IUserValidator<User>>
-            null, // IEnumerable<IPasswordValidator<User>>
-            null, // ILookupNormalizer
-            null, // IdentityErrorDescriber
-            null, // IServiceProvider
-            null  // ILogger<UserManager<User>>
-        ]));
+        _userManager = A.Fake<UserManager<User>>(x =>
+            x.WithArgumentsForConstructor(
+                [
+                    store,
+                    null, // IOptions<IdentityOptions>
+                    null, // IPasswordHasher<User>
+                    null, // IEnumerable<IUserValidator<User>>
+                    null, // IEnumerable<IPasswordValidator<User>>
+                    null, // ILookupNormalizer
+                    null, // IdentityErrorDescriber
+                    null, // IServiceProvider
+                    null, // ILogger<UserManager<User>>
+                ]
+            )
+        );
 
         A.CallTo(() => _eventCheckinRepository.CheckinIdExistsAsync(_model.LookupId)).Returns(true);
 
         A.CallTo(() => _eventCheckinRepository.GetPlayerAsync(_model.LookupId)).Returns(_player);
 
         A.CallTo(() => _userManager.FindByIdAsync(A<string>._)).Returns(_user);
-        
+
         A.CallTo(() => _timeProvider.GetUtcNow()).Returns(_dateTimeNow);
-        
+
         _validator = new UpdateAgeInformationModelValidator(_eventCheckinRepository);
 
         _useCase = new UpdateAgeInformationUseCase(
@@ -102,16 +109,28 @@ public class UpdateAgeInformationUseCaseTests
         results.MustHaveNotFoundError(nameof(_model.LookupId), "Lookup Id does not exist.");
     }
 
-    public static IEnumerable<object[]> LookupIds =>
-        PlayerAgeGroupEnum.List.Select(id => new object[] { id });
-    
+    public static TheoryData<PlayerAgeGroupEnum> LookupIds
+    {
+        get
+        {
+            var data = new TheoryData<PlayerAgeGroupEnum>();
+            foreach (var id in PlayerAgeGroupEnum.List)
+                data.Add(id);
+            return data;
+        }
+    }
+
     [Theory]
     [MemberData(nameof(LookupIds))]
     public async Task UseCase_WillSave_AgeGroupId(PlayerAgeGroupEnum ageGroup)
     {
         _model.AgeGroupId = ageGroup;
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() => _eventCheckinRepository.EditAsync(A<Player>.That.Matches(k => k.AgeGroupId == ageGroup)))
+        A.CallTo(() =>
+                _eventCheckinRepository.EditAsync(
+                    A<Player>.That.Matches(k => k.AgeGroupId == ageGroup)
+                )
+            )
             .MustHaveHappenedOnceExactly();
     }
 
@@ -120,16 +139,24 @@ public class UpdateAgeInformationUseCaseTests
     {
         _model.HasSignedConsentForm = true;
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() => _eventCheckinRepository.EditAsync(A<Player>.That.Matches(k => k.HasSignedConsentForm)))
+        A.CallTo(() =>
+                _eventCheckinRepository.EditAsync(
+                    A<Player>.That.Matches(k => k.HasSignedConsentForm)
+                )
+            )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_WillUpdateTimestamp_PerCall()
     {
         _model.HasSignedConsentForm = true;
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() => _eventCheckinRepository.EditAsync(A<Player>.That.Matches(k => k.LastAgeGroupCheck == _dateTimeNow)))
+        A.CallTo(() =>
+                _eventCheckinRepository.EditAsync(
+                    A<Player>.That.Matches(k => k.LastAgeGroupCheck == _dateTimeNow)
+                )
+            )
             .MustHaveHappenedOnceExactly();
     }
 
@@ -137,10 +164,17 @@ public class UpdateAgeInformationUseCaseTests
     public async Task UseCase_WillDisableUserAccount_IfTheyAreReportedUnder13YearsOld()
     {
         _model.AgeGroupId = PlayerAgeGroupEnum.Child.Value;
-        
+
         await _useCase.ExecuteAsync(_model);
 
-        A.CallTo(() => _userManager.SetLockoutEndDateAsync(A<User>.That.IsSameAs(_user), DateTimeOffset.MaxValue)).MustHaveHappenedOnceExactly();
-        A.CallTo(() => _userManager.UpdateSecurityStampAsync(A<User>.That.IsSameAs(_user))).MustHaveHappenedOnceExactly();
+        A.CallTo(() =>
+                _userManager.SetLockoutEndDateAsync(
+                    A<User>.That.IsSameAs(_user),
+                    DateTimeOffset.MaxValue
+                )
+            )
+            .MustHaveHappenedOnceExactly();
+        A.CallTo(() => _userManager.UpdateSecurityStampAsync(A<User>.That.IsSameAs(_user)))
+            .MustHaveHappenedOnceExactly();
     }
 }

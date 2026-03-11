@@ -7,6 +7,5 @@ public class PlayerAgeGroup
     public int Id { get; set; }
     public required string Name { get; set; }
 
-    public virtual ICollection<Player> EventQuestions { get; set; } =
-        new HashSet<Player>();
+    public virtual ICollection<Player> EventQuestions { get; set; } = new HashSet<Player>();
 }
