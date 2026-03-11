@@ -5,6 +5,7 @@ using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageMappingSetup;
 using ExpressedRealms.DB.Models.Events.EventSetup;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin.Dtos;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using Microsoft.EntityFrameworkCore;
@@ -154,6 +155,13 @@ internal sealed class EventCheckinRepository(
             .Players.Where(x => x.LookupId == lookupId)
             .Select(x => $"{x.Name} - ({x.PlayerNumber})")
             .FirstAsync(cancellationToken);
+    }
+
+    public Task<Player> GetPlayerAsync(string lookupId)
+    {
+        return context.Players
+            .Where(x => x.LookupId == lookupId)
+            .FirstAsync();
     }
 
     public async Task<Guid> GetPlayerId(string lookupId)

@@ -19,7 +19,7 @@ public class Player
     public int? AgeGroupId { get; set; }
     public PlayerAgeGroup? AgeGroup { get; set; }
     
-    public bool HasConsentForm { get; set; } = false;
+    public bool HasSignedConsentForm { get; set; } = false;
     
     public virtual User User { get; set; } = null!;
     public virtual List<Character> Characters { get; set; } = new();
