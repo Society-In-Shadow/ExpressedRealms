@@ -21,11 +21,35 @@ public static class CharacterReferenceBookletReport
         return MergeAllFields(data);
     }
 
+    private static void PrintTimeStamp(XGraphics gfx, string stampText, double centerX, double centerY)
+    {
+        var font = new XFont("Courier", 10, XFontStyleEx.Regular);
+        var size = gfx.MeasureString(stampText, font);
+
+        gfx.Save();
+        gfx.TranslateTransform(centerX, centerY);
+        gfx.RotateTransform(-90);
+        gfx.DrawString(stampText, font, XBrushes.DimGray, -size.Width / 2, font.GetHeight() / 2 -3);
+        gfx.Restore();
+    }
+
     private static MemoryStream MergeAllFields(ReportData data)
     {
         var pdfPath = Path.Combine(AppContext.BaseDirectory, "overallCRB.pdf");
         using var document = PdfReader.Open(pdfPath, PdfDocumentOpenMode.Modify);
 
+        for (int i = 0; i < document.Pages.Count; i++)
+        {
+            using var page = XGraphics.FromPdfPage(document.Pages[i]);
+
+            var centerX = XUnitPt.FromInch(3.5);
+            if (i % 2 == 1)
+            {
+                centerX = XUnitPt.FromInch(5);
+            }
+            PrintTimeStamp(page, $"{data.BasicInfo.EventName} - {DateTime.Now:MMM dd, yyyy}", centerX, XUnitPt.FromInch(7.5));
+        }
+        
         if (document.AcroForm != null)
         {
             var fields = document.AcroForm.Fields;
@@ -112,7 +136,8 @@ public static class CharacterReferenceBookletReport
     )
     {
         MergeField(fields, "PlayerNumber", basicInfo.PlayerNumber);
-        MergeField(fields, "LastName", basicInfo.PlayerName);
+        MergeField(fields, "PlayerNumberAndName", $"{basicInfo.PlayerNumber} - {basicInfo.PlayerName}");
+        MergeField(fields, "EventNameAndTimeStamp", $"{basicInfo.EventName} - {DateTime.Now:MMM dd, yyyy}");
         MergeField(fields, "CharacterName", basicInfo.CharacterName);
         MergeField(fields, "PlayerName", basicInfo.PlayerName);
         MergeField(fields, "Expression", basicInfo.Expression);
@@ -120,7 +145,7 @@ public static class CharacterReferenceBookletReport
         MergeField(fields, "Subtype", basicInfo.ProgressionPath);
         MergeField(fields, "XL", basicInfo.CharacterLevel);
 
-        var page = document.Pages[2];
+        var page = document.Pages[0];
         var anchor = document.AcroForm.Fields["QrAnchor"] as PdfTextField;
 
         if (anchor == null)
