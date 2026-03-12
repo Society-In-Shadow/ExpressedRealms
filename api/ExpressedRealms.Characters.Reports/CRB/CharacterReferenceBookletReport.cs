@@ -63,10 +63,12 @@ public static class CharacterReferenceBookletReport
             FillInTraits(fields, data.Traits);
             FillInSkills(fields, data.SkillInfo);
             FillInPowers(fields, data.Powers);
-            FillInKnowledges(fields, data.Knowledges);
             FillInProficiencies(fields, data.ProficiencyInfo, document);
             FillInStatInfo(fields, data.StatInfo, document);
             FillInContacts(fields, data.Contacts);
+            
+            FillInKnowledges(data.Knowledges, document);
+            FillInAdminKnowledges(data.Knowledges, document);
         }
 
         document.Flatten();
@@ -367,21 +369,84 @@ public static class CharacterReferenceBookletReport
             count++;
         }
     }
-
+    
     private static void FillInKnowledges(
-        PdfAcroField.PdfAcroFieldCollection fields,
-        List<KnowledgeInfo> dataPowers
+        List<KnowledgeInfo> dataPowers,
+        PdfDocument document,
+        bool showXP = false
     )
     {
-        int count = 0;
-        foreach (var model in dataPowers)
+        double totalHeight = XUnitPt.FromInch(6.15);
+        double startY = XUnitPt.FromInch(4.60); // your starting Y position
+        double startX = XUnitPt.FromInch(1.83);
+        double lineWidth = XUnitPt.FromInch(2.90);
+        int lineCount = 30;
+
+        double lineHeight = totalHeight / lineCount;
+        double fontSize = lineHeight * 0.65;
+        var font = new XFont("Courier", fontSize, XFontStyleEx.Regular);
+        using (var gfx = XGraphics.FromPdfPage(document.Pages[5]))
         {
-            MergeField(fields, $"KnowledgeName{count.ToString()}", model.Name);
-            MergeField(fields, $"KnowledgeLevel{count.ToString()}", model.Level.Substring(0, 1));
-            MergeField(fields, $"Specialization{count.ToString()}", model.Specialization ?? "");
-            MergeField(fields, $"KnowledgeExp{count.ToString()}", model.XPCost);
-            count++;
-        }
+            var linePen = new XPen(XColors.Black, 0.5);
+            for (int i = 0; i < lineCount; i++)
+            {
+                double baselineY = startY + (i * lineHeight) + (lineHeight * 0.75);
+                double lineY = baselineY + 1; // sit the rule just under the text baseline
+                
+                // Draw text (if any for this line)
+                if (i < dataPowers.Count)
+                {
+                    gfx.DrawString(dataPowers[i].Name, font, XBrushes.Black, XUnitPt.FromInch(1.90), baselineY - 3);
+                    gfx.DrawString(dataPowers[i].Specialization ?? string.Empty, font, XBrushes.Black, XUnitPt.FromInch(3.6), baselineY - 3);
+                    gfx.DrawString(dataPowers[i].Level.Substring(0, 1), font, XBrushes.Black, XUnitPt.FromInch(4.55), baselineY - 3);
+                    if (showXP)
+                    {
+                        gfx.DrawString(dataPowers[i].Level.Substring(0, 1), font, XBrushes.Black, XUnitPt.FromInch(4.55), baselineY - 3);
+
+                    }
+                }
+                
+                // Draw the underline rule
+                gfx.DrawLine(linePen, startX, lineY, startX + lineWidth, lineY);
+            }
+        };
+    }
+    
+    private static void FillInAdminKnowledges(
+        List<KnowledgeInfo> dataPowers,
+        PdfDocument document
+    )
+    {
+        double startY = XUnitPt.FromInch(0.75); // your starting Y position
+        double startX = XUnitPt.FromInch(0.3);
+        double lineWidth = XUnitPt.FromInch(4.5);
+        int lineCount = dataPowers.Count;
+
+        double lineHeight = 12;
+        double fontSize = lineHeight * 0.65;
+        var font = new XFont("Courier", fontSize, XFontStyleEx.Regular);
+        using (var gfx = XGraphics.FromPdfPage(document.Pages[5]))
+        {
+            var linePen = new XPen(XColors.Black, 0.5);
+            for (int i = 0; i < lineCount; i++)
+            {
+                // Can only show 15 knowledges in the admin area
+                if (i == 20)
+                {
+                    break;
+                }
+                double baselineY = startY + (i * lineHeight) + (lineHeight * 0.75) -3;
+                double lineY = baselineY + 1; // sit the rule just under the text baseline
+
+                gfx.DrawString(dataPowers[i].Name, font, XBrushes.Black, XUnitPt.FromInch(0.30), baselineY);
+                gfx.DrawString(dataPowers[i].Specialization ?? string.Empty, font, XBrushes.Black, XUnitPt.FromInch(2.45), baselineY );
+                gfx.DrawString(dataPowers[i].Level.Substring(0, 1), font, XBrushes.Black, XUnitPt.FromInch(4.35), baselineY);
+                gfx.DrawString(dataPowers[i].Level.Substring(0, 1), font, XBrushes.Black, XUnitPt.FromInch(4.75), baselineY);
+                
+                // Draw the underline rule
+                gfx.DrawLine(linePen, startX, lineY, startX + lineWidth, lineY);
+            }
+        };
     }
 
     private static void FillInContacts(
