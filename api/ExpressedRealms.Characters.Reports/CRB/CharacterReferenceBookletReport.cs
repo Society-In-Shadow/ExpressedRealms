@@ -13,6 +13,8 @@ namespace ExpressedRealms.Characters.Reports.CRB;
 
 public static class CharacterReferenceBookletReport
 {
+    private const string DefaultFontFace = "Courier";
+
     public static MemoryStream GenerateReport(ReportData data)
     {
         Settings.License = LicenseType.Community;
@@ -21,15 +23,21 @@ public static class CharacterReferenceBookletReport
         return MergeAllFields(data);
     }
 
-    private static void Print90DegreeMessage(XGraphics gfx, string stampText, double centerX, double centerY, XSolidBrush color)
+    private static void Print90DegreeMessage(
+        XGraphics gfx,
+        string stampText,
+        double centerX,
+        double centerY,
+        XSolidBrush color
+    )
     {
-        var font = new XFont("Courier", 10, XFontStyleEx.Regular);
+        var font = new XFont(DefaultFontFace, 10, XFontStyleEx.Regular);
         var size = gfx.MeasureString(stampText, font);
 
         gfx.Save();
         gfx.TranslateTransform(centerX, centerY);
         gfx.RotateTransform(-90);
-        gfx.DrawString(stampText, font, color, -size.Width / 2, font.GetHeight() / 2 -3);
+        gfx.DrawString(stampText, font, color, -size.Width / 2, font.GetHeight() / 2 - 3);
         gfx.Restore();
     }
 
@@ -47,14 +55,20 @@ public static class CharacterReferenceBookletReport
             {
                 centerX = XUnitPt.FromInch(5);
             }
-            
-            Print90DegreeMessage(page, $"{data.BasicInfo.EventName} - {DateTime.Now:MMM dd, yyyy}", centerX, XUnitPt.FromInch(7.5), XBrushes.DimGray);
-            
+
+            Print90DegreeMessage(
+                page,
+                $"{data.BasicInfo.EventName} - {DateTime.Now:MMM dd, yyyy}",
+                centerX,
+                XUnitPt.FromInch(7.5),
+                XBrushes.DimGray
+            );
+
             // Add Staple Markers
             Print90DegreeMessage(page, "— —", centerX, XUnitPt.FromInch(9.5), XBrushes.DimGray);
             Print90DegreeMessage(page, "— —", centerX, XUnitPt.FromInch(5.5), XBrushes.DimGray);
         }
-        
+
         if (document.AcroForm != null)
         {
             var fields = document.AcroForm.Fields;
@@ -67,7 +81,7 @@ public static class CharacterReferenceBookletReport
             FillInProficiencies(fields, data.ProficiencyInfo, document);
             FillInStatInfo(fields, data.StatInfo, document);
             FillInContacts(fields, data.Contacts);
-            
+
             FillInKnowledges(data.Knowledges, document);
             FillInAdminKnowledges(data.Knowledges, document);
         }
@@ -80,55 +94,108 @@ public static class CharacterReferenceBookletReport
         return finalStream;
     }
 
-    private static void Print90DegreeMessage(PdfPage page, string stampText, double centerX, double centerY)
+    private static void PrintStatInfo(
+        PdfPage page,
+        string stampText,
+        double centerX,
+        double centerY
+    )
     {
         using var gfx = XGraphics.FromPdfPage(page);
-        var font = new XFont("Courier", 10, XFontStyleEx.Regular);
+        var font = new XFont(DefaultFontFace, 10, XFontStyleEx.Regular);
         var size = gfx.MeasureString(stampText, font);
 
         gfx.Save();
         gfx.TranslateTransform(centerX, centerY);
         gfx.RotateTransform(-90);
-        gfx.DrawString(stampText, font, XBrushes.Black, -size.Width / 2, font.GetHeight() / 2 -3);
+        gfx.DrawString(stampText, font, XBrushes.Black, -size.Width / 2, font.GetHeight() / 2 - 3);
         gfx.Restore();
     }
-    
+
     private static void FillInStatInfo(
         PdfAcroField.PdfAcroFieldCollection fields,
         StatModifierInfo dataStatInfo,
         PdfDocument document
     )
     {
-        Print90DegreeMessage(document.Pages[1], dataStatInfo.Agility.Stat.ToString(), 
-            XUnitPt.FromInch(2.20), XUnitPt.FromInch(10.15));
-        Print90DegreeMessage(document.Pages[1], dataStatInfo.Agility.Bonus.ToString(), 
-            XUnitPt.FromInch(2.20), XUnitPt.FromInch(9.5));
-        
-        Print90DegreeMessage(document.Pages[1], dataStatInfo.Constitution.Stat.ToString(), 
-            XUnitPt.FromInch(2.50), XUnitPt.FromInch(10.15));
-        Print90DegreeMessage(document.Pages[1], dataStatInfo.Constitution.Bonus.ToString(), 
-            XUnitPt.FromInch(2.50), XUnitPt.FromInch(9.5));
-        
-        Print90DegreeMessage(document.Pages[1], dataStatInfo.Dexterity.Stat.ToString(), 
-            XUnitPt.FromInch(2.80), XUnitPt.FromInch(10.15));
-        Print90DegreeMessage(document.Pages[1], dataStatInfo.Dexterity.Bonus.ToString(), 
-            XUnitPt.FromInch(2.80), XUnitPt.FromInch(9.5));
-        
-        Print90DegreeMessage(document.Pages[1], dataStatInfo.Intelligence.Stat.ToString(), 
-            XUnitPt.FromInch(3.10), XUnitPt.FromInch(10.15));
-        Print90DegreeMessage(document.Pages[1], dataStatInfo.Intelligence.Bonus.ToString(), 
-            XUnitPt.FromInch(3.10), XUnitPt.FromInch(9.5));
-        
-        Print90DegreeMessage(document.Pages[1], dataStatInfo.Strength.Stat.ToString(), 
-            XUnitPt.FromInch(3.40), XUnitPt.FromInch(10.15));
-        Print90DegreeMessage(document.Pages[1], dataStatInfo.Strength.Bonus.ToString(), 
-            XUnitPt.FromInch(3.40), XUnitPt.FromInch(9.5));
-        
-        Print90DegreeMessage(document.Pages[1], dataStatInfo.Willpower.Stat.ToString(), 
-            XUnitPt.FromInch(3.70), XUnitPt.FromInch(10.15));
-        Print90DegreeMessage(document.Pages[1], dataStatInfo.Willpower.Bonus.ToString(), 
-            XUnitPt.FromInch(3.70), XUnitPt.FromInch(9.5));
-        
+        PrintStatInfo(
+            document.Pages[1],
+            dataStatInfo.Agility.Stat.ToString(),
+            XUnitPt.FromInch(2.20),
+            XUnitPt.FromInch(10.15)
+        );
+        PrintStatInfo(
+            document.Pages[1],
+            dataStatInfo.Agility.Bonus.ToString(),
+            XUnitPt.FromInch(2.20),
+            XUnitPt.FromInch(9.5)
+        );
+
+        PrintStatInfo(
+            document.Pages[1],
+            dataStatInfo.Constitution.Stat.ToString(),
+            XUnitPt.FromInch(2.50),
+            XUnitPt.FromInch(10.15)
+        );
+        PrintStatInfo(
+            document.Pages[1],
+            dataStatInfo.Constitution.Bonus.ToString(),
+            XUnitPt.FromInch(2.50),
+            XUnitPt.FromInch(9.5)
+        );
+
+        PrintStatInfo(
+            document.Pages[1],
+            dataStatInfo.Dexterity.Stat.ToString(),
+            XUnitPt.FromInch(2.80),
+            XUnitPt.FromInch(10.15)
+        );
+        PrintStatInfo(
+            document.Pages[1],
+            dataStatInfo.Dexterity.Bonus.ToString(),
+            XUnitPt.FromInch(2.80),
+            XUnitPt.FromInch(9.5)
+        );
+
+        PrintStatInfo(
+            document.Pages[1],
+            dataStatInfo.Intelligence.Stat.ToString(),
+            XUnitPt.FromInch(3.10),
+            XUnitPt.FromInch(10.15)
+        );
+        PrintStatInfo(
+            document.Pages[1],
+            dataStatInfo.Intelligence.Bonus.ToString(),
+            XUnitPt.FromInch(3.10),
+            XUnitPt.FromInch(9.5)
+        );
+
+        PrintStatInfo(
+            document.Pages[1],
+            dataStatInfo.Strength.Stat.ToString(),
+            XUnitPt.FromInch(3.40),
+            XUnitPt.FromInch(10.15)
+        );
+        PrintStatInfo(
+            document.Pages[1],
+            dataStatInfo.Strength.Bonus.ToString(),
+            XUnitPt.FromInch(3.40),
+            XUnitPt.FromInch(9.5)
+        );
+
+        PrintStatInfo(
+            document.Pages[1],
+            dataStatInfo.Willpower.Stat.ToString(),
+            XUnitPt.FromInch(3.70),
+            XUnitPt.FromInch(10.15)
+        );
+        PrintStatInfo(
+            document.Pages[1],
+            dataStatInfo.Willpower.Bonus.ToString(),
+            XUnitPt.FromInch(3.70),
+            XUnitPt.FromInch(9.5)
+        );
+
         MergeField(fields, "AglStat", dataStatInfo.Agility.Stat.ToString());
         MergeField(fields, "StrStat", dataStatInfo.Strength.Stat.ToString());
         MergeField(fields, "ConStat", dataStatInfo.Constitution.Stat.ToString());
@@ -150,22 +217,49 @@ public static class CharacterReferenceBookletReport
         PdfDocument document
     )
     {
-        
-        Print90DegreeMessage(document.Pages[1], dataProficiencyInfo.Vitality.ToString(), 
-            XUnitPt.FromInch(2.25), XUnitPt.FromInch(4.60));
-        Print90DegreeMessage(document.Pages[1], dataProficiencyInfo.Health.ToString(), 
-            XUnitPt.FromInch(2.50), XUnitPt.FromInch(4.60));
-        Print90DegreeMessage(document.Pages[1], dataProficiencyInfo.Blood.ToString(), 
-            XUnitPt.FromInch(2.75), XUnitPt.FromInch(4.60));
-        Print90DegreeMessage(document.Pages[1], dataProficiencyInfo.RWP.ToString(), 
-            XUnitPt.FromInch(3.00), XUnitPt.FromInch(4.60));
-        Print90DegreeMessage(document.Pages[1], dataProficiencyInfo.Reaction.ToString(), 
-            XUnitPt.FromInch(3.26), XUnitPt.FromInch(4.60));
-        Print90DegreeMessage(document.Pages[1], dataProficiencyInfo.Psyche.ToString(), 
-            XUnitPt.FromInch(3.53), XUnitPt.FromInch(4.60));
-        Print90DegreeMessage(document.Pages[1], dataProficiencyInfo.Mortis.ToString(), 
-            XUnitPt.FromInch(3.80), XUnitPt.FromInch(4.60));
-        
+        PrintStatInfo(
+            document.Pages[1],
+            dataProficiencyInfo.Vitality.ToString(),
+            XUnitPt.FromInch(2.25),
+            XUnitPt.FromInch(4.60)
+        );
+        PrintStatInfo(
+            document.Pages[1],
+            dataProficiencyInfo.Health.ToString(),
+            XUnitPt.FromInch(2.50),
+            XUnitPt.FromInch(4.60)
+        );
+        PrintStatInfo(
+            document.Pages[1],
+            dataProficiencyInfo.Blood.ToString(),
+            XUnitPt.FromInch(2.75),
+            XUnitPt.FromInch(4.60)
+        );
+        PrintStatInfo(
+            document.Pages[1],
+            dataProficiencyInfo.RWP.ToString(),
+            XUnitPt.FromInch(3.00),
+            XUnitPt.FromInch(4.60)
+        );
+        PrintStatInfo(
+            document.Pages[1],
+            dataProficiencyInfo.Reaction.ToString(),
+            XUnitPt.FromInch(3.26),
+            XUnitPt.FromInch(4.60)
+        );
+        PrintStatInfo(
+            document.Pages[1],
+            dataProficiencyInfo.Psyche.ToString(),
+            XUnitPt.FromInch(3.53),
+            XUnitPt.FromInch(4.60)
+        );
+        PrintStatInfo(
+            document.Pages[1],
+            dataProficiencyInfo.Mortis.ToString(),
+            XUnitPt.FromInch(3.80),
+            XUnitPt.FromInch(4.60)
+        );
+
         MergeField(fields, "Vitality", dataProficiencyInfo.Vitality.ToString());
         MergeField(fields, "Health", dataProficiencyInfo.Health.ToString());
         MergeField(fields, "Blood", dataProficiencyInfo.Blood.ToString());
@@ -181,45 +275,97 @@ public static class CharacterReferenceBookletReport
             dataProficiencyInfo.Mana,
             dataProficiencyInfo.Noumenon,
         };
-        
-        Print90DegreeMessage(document.Pages[1], powerPoints.Max().ToString(), 
-            XUnitPt.FromInch(4.05), XUnitPt.FromInch(4.60));
-        
+
+        PrintStatInfo(
+            document.Pages[1],
+            powerPoints.Max().ToString(),
+            XUnitPt.FromInch(4.05),
+            XUnitPt.FromInch(4.60)
+        );
+
         MergeField(fields, "PowerPoints", powerPoints.Max().ToString());
 
-        Print90DegreeMessage(document.Pages[1], dataProficiencyInfo.Strike.ToString(), 
-            XUnitPt.FromInch(2.15), XUnitPt.FromInch(8.25));
-        Print90DegreeMessage(document.Pages[1], dataProficiencyInfo.Thrust.ToString(), 
-            XUnitPt.FromInch(2.40), XUnitPt.FromInch(8.25));
-        Print90DegreeMessage(document.Pages[1], dataProficiencyInfo.Throw.ToString(), 
-            XUnitPt.FromInch(2.63), XUnitPt.FromInch(8.25));
-        Print90DegreeMessage(document.Pages[1], dataProficiencyInfo.Shoot.ToString(), 
-            XUnitPt.FromInch(2.87), XUnitPt.FromInch(8.25));
-        Print90DegreeMessage(document.Pages[1], dataProficiencyInfo.Cast.ToString(), 
-            XUnitPt.FromInch(3.10), XUnitPt.FromInch(8.25));
-        Print90DegreeMessage(document.Pages[1], dataProficiencyInfo.Project.ToString(), 
-            XUnitPt.FromInch(3.33), XUnitPt.FromInch(8.25));
-        
+        PrintStatInfo(
+            document.Pages[1],
+            dataProficiencyInfo.Strike.ToString(),
+            XUnitPt.FromInch(2.15),
+            XUnitPt.FromInch(8.25)
+        );
+        PrintStatInfo(
+            document.Pages[1],
+            dataProficiencyInfo.Thrust.ToString(),
+            XUnitPt.FromInch(2.40),
+            XUnitPt.FromInch(8.25)
+        );
+        PrintStatInfo(
+            document.Pages[1],
+            dataProficiencyInfo.Throw.ToString(),
+            XUnitPt.FromInch(2.63),
+            XUnitPt.FromInch(8.25)
+        );
+        PrintStatInfo(
+            document.Pages[1],
+            dataProficiencyInfo.Shoot.ToString(),
+            XUnitPt.FromInch(2.87),
+            XUnitPt.FromInch(8.25)
+        );
+        PrintStatInfo(
+            document.Pages[1],
+            dataProficiencyInfo.Cast.ToString(),
+            XUnitPt.FromInch(3.10),
+            XUnitPt.FromInch(8.25)
+        );
+        PrintStatInfo(
+            document.Pages[1],
+            dataProficiencyInfo.Project.ToString(),
+            XUnitPt.FromInch(3.33),
+            XUnitPt.FromInch(8.25)
+        );
+
         MergeField(fields, "Strike", dataProficiencyInfo.Strike.ToString());
         MergeField(fields, "Thrust", dataProficiencyInfo.Thrust.ToString());
         MergeField(fields, "Throw", dataProficiencyInfo.Throw.ToString());
         MergeField(fields, "Shoot", dataProficiencyInfo.Shoot.ToString());
         MergeField(fields, "Cast", dataProficiencyInfo.Cast.ToString());
         MergeField(fields, "Project", dataProficiencyInfo.Project.ToString());
-        
-        Print90DegreeMessage(document.Pages[1], dataProficiencyInfo.Dodge.ToString(), 
-            XUnitPt.FromInch(2.15), XUnitPt.FromInch(6.45));
-        Print90DegreeMessage(document.Pages[1], dataProficiencyInfo.Parry.ToString(), 
-            XUnitPt.FromInch(2.40), XUnitPt.FromInch(6.45));
-        Print90DegreeMessage(document.Pages[1], dataProficiencyInfo.Throw.ToString(), 
-            XUnitPt.FromInch(2.63), XUnitPt.FromInch(6.45));
-        Print90DegreeMessage(document.Pages[1], dataProficiencyInfo.EvadeShoot.ToString(), 
-            XUnitPt.FromInch(2.87), XUnitPt.FromInch(6.45));
-        Print90DegreeMessage(document.Pages[1], dataProficiencyInfo.Ward.ToString(), 
-            XUnitPt.FromInch(3.10), XUnitPt.FromInch(6.45));
-        Print90DegreeMessage(document.Pages[1], dataProficiencyInfo.Deflect.ToString(), 
-            XUnitPt.FromInch(3.33), XUnitPt.FromInch(6.45));
-        
+
+        PrintStatInfo(
+            document.Pages[1],
+            dataProficiencyInfo.Dodge.ToString(),
+            XUnitPt.FromInch(2.15),
+            XUnitPt.FromInch(6.45)
+        );
+        PrintStatInfo(
+            document.Pages[1],
+            dataProficiencyInfo.Parry.ToString(),
+            XUnitPt.FromInch(2.40),
+            XUnitPt.FromInch(6.45)
+        );
+        PrintStatInfo(
+            document.Pages[1],
+            dataProficiencyInfo.Throw.ToString(),
+            XUnitPt.FromInch(2.63),
+            XUnitPt.FromInch(6.45)
+        );
+        PrintStatInfo(
+            document.Pages[1],
+            dataProficiencyInfo.EvadeShoot.ToString(),
+            XUnitPt.FromInch(2.87),
+            XUnitPt.FromInch(6.45)
+        );
+        PrintStatInfo(
+            document.Pages[1],
+            dataProficiencyInfo.Ward.ToString(),
+            XUnitPt.FromInch(3.10),
+            XUnitPt.FromInch(6.45)
+        );
+        PrintStatInfo(
+            document.Pages[1],
+            dataProficiencyInfo.Deflect.ToString(),
+            XUnitPt.FromInch(3.33),
+            XUnitPt.FromInch(6.45)
+        );
+
         MergeField(fields, "Dodge", dataProficiencyInfo.Dodge.ToString());
         MergeField(fields, "Parry", dataProficiencyInfo.Parry.ToString());
         MergeField(fields, "ThrowEvade", dataProficiencyInfo.EvadeThrow.ToString());
@@ -235,8 +381,16 @@ public static class CharacterReferenceBookletReport
     )
     {
         MergeField(fields, "PlayerNumber", basicInfo.PlayerNumber);
-        MergeField(fields, "PlayerNumberAndName", $"{basicInfo.PlayerNumber} - {basicInfo.PlayerName}");
-        MergeField(fields, "EventNameAndTimeStamp", $"{basicInfo.EventName} - {DateTime.Now:MMM dd, yyyy}");
+        MergeField(
+            fields,
+            "PlayerNumberAndName",
+            $"{basicInfo.PlayerNumber} - {basicInfo.PlayerName}"
+        );
+        MergeField(
+            fields,
+            "EventNameAndTimeStamp",
+            $"{basicInfo.EventName} - {DateTime.Now:MMM dd, yyyy}"
+        );
         MergeField(fields, "CharacterName", basicInfo.CharacterName);
         MergeField(fields, "PlayerName", basicInfo.PlayerName);
         MergeField(fields, "Expression", basicInfo.Expression);
@@ -356,10 +510,7 @@ public static class CharacterReferenceBookletReport
         MergeField(fields, "DeflectionLevel", skillInfo.Deflection.ToString());
     }
 
-    private static void FillInAdminPowers(
-        List<PowerInfo> dataPowers,
-        PdfDocument document
-    )
+    private static void FillInAdminPowers(List<PowerInfo> dataPowers, PdfDocument document)
     {
         double startY = XUnitPt.FromInch(0.7); // your starting Y position
         double startX = XUnitPt.FromInch(1.7);
@@ -368,7 +519,7 @@ public static class CharacterReferenceBookletReport
 
         double lineHeight = 12;
         double fontSize = lineHeight * 0.65;
-        var font = new XFont("Courier", fontSize, XFontStyleEx.Regular);
+        var font = new XFont(DefaultFontFace, fontSize, XFontStyleEx.Regular);
         using (var gfx = XGraphics.FromPdfPage(document.Pages[4]))
         {
             var linePen = new XPen(XColors.Black, 0.5);
@@ -379,23 +530,38 @@ public static class CharacterReferenceBookletReport
                 {
                     break;
                 }
-                double baselineY = startY + (i * lineHeight) + (lineHeight * 0.75) -3;
+                double baselineY = startY + (i * lineHeight) + (lineHeight * 0.75) - 3;
                 double lineY = baselineY + 1; // sit the rule just under the text baseline
 
-                gfx.DrawString(dataPowers[i].Name, font, XBrushes.Black, XUnitPt.FromInch(0.30), baselineY);
-                gfx.DrawString(dataPowers[i].Level.Substring(0, 1), font, XBrushes.Black, XUnitPt.FromInch(4.35), baselineY);
-                gfx.DrawString(dataPowers[i].XPCost.Substring(0, 1), font, XBrushes.Black, XUnitPt.FromInch(4.75), baselineY);
-                
+                gfx.DrawString(
+                    dataPowers[i].Name,
+                    font,
+                    XBrushes.Black,
+                    XUnitPt.FromInch(1.7),
+                    baselineY
+                );
+                gfx.DrawString(
+                    dataPowers[i].Level.Substring(0, 1),
+                    font,
+                    XBrushes.Black,
+                    XUnitPt.FromInch(5.7),
+                    baselineY
+                );
+                gfx.DrawString(
+                    dataPowers[i].XPCost.Substring(0, 1),
+                    font,
+                    XBrushes.Black,
+                    XUnitPt.FromInch(6.10),
+                    baselineY
+                );
+
                 // Draw the underline rule
                 gfx.DrawLine(linePen, startX, lineY, startX + lineWidth, lineY);
             }
-        };
+        }
     }
-    
-    private static void FillInPowers(
-        List<PowerInfo> dataPowers,
-        PdfDocument document
-    )
+
+    private static void FillInPowers(List<PowerInfo> dataPowers, PdfDocument document)
     {
         double totalHeight = XUnitPt.FromInch(6.15);
         double startY = XUnitPt.FromInch(4.60); // your starting Y position
@@ -405,7 +571,7 @@ public static class CharacterReferenceBookletReport
 
         double lineHeight = totalHeight / lineCount;
         double fontSize = lineHeight * 0.65;
-        var font = new XFont("Courier", fontSize, XFontStyleEx.Regular);
+        var font = new XFont(DefaultFontFace, fontSize, XFontStyleEx.Regular);
         using (var gfx = XGraphics.FromPdfPage(document.Pages[4]))
         {
             var linePen = new XPen(XColors.Black, 0.5);
@@ -413,25 +579,33 @@ public static class CharacterReferenceBookletReport
             {
                 double baselineY = startY + (i * lineHeight) + (lineHeight * 0.75);
                 double lineY = baselineY + 1; // sit the rule just under the text baseline
-                
+
                 // Draw text (if any for this line)
                 if (i < dataPowers.Count)
                 {
-                    gfx.DrawString(dataPowers[i].Name, font, XBrushes.Black, XUnitPt.FromInch(0.40), baselineY - 3);
-                    gfx.DrawString(dataPowers[i].Level.Substring(0, 1), font, XBrushes.Black, XUnitPt.FromInch(3), baselineY - 3);
+                    gfx.DrawString(
+                        dataPowers[i].Name,
+                        font,
+                        XBrushes.Black,
+                        XUnitPt.FromInch(0.40),
+                        baselineY - 3
+                    );
+                    gfx.DrawString(
+                        dataPowers[i].Level.Substring(0, 1),
+                        font,
+                        XBrushes.Black,
+                        XUnitPt.FromInch(3),
+                        baselineY - 3
+                    );
                 }
-                
+
                 // Draw the underline rule
                 gfx.DrawLine(linePen, startX, lineY, startX + lineWidth, lineY);
             }
-        };
-        
+        }
     }
-    
-    private static void FillInKnowledges(
-        List<KnowledgeInfo> dataPowers,
-        PdfDocument document
-    )
+
+    private static void FillInKnowledges(List<KnowledgeInfo> dataPowers, PdfDocument document)
     {
         double totalHeight = XUnitPt.FromInch(6.15);
         double startY = XUnitPt.FromInch(4.60); // your starting Y position
@@ -441,7 +615,7 @@ public static class CharacterReferenceBookletReport
 
         double lineHeight = totalHeight / lineCount;
         double fontSize = lineHeight * 0.65;
-        var font = new XFont("Courier", fontSize, XFontStyleEx.Regular);
+        var font = new XFont(DefaultFontFace, fontSize, XFontStyleEx.Regular);
         using (var gfx = XGraphics.FromPdfPage(document.Pages[5]))
         {
             var linePen = new XPen(XColors.Black, 0.5);
@@ -449,25 +623,40 @@ public static class CharacterReferenceBookletReport
             {
                 double baselineY = startY + (i * lineHeight) + (lineHeight * 0.75);
                 double lineY = baselineY + 1; // sit the rule just under the text baseline
-                
+
                 // Draw text (if any for this line)
                 if (i < dataPowers.Count)
                 {
-                    gfx.DrawString(dataPowers[i].Name, font, XBrushes.Black, XUnitPt.FromInch(1.90), baselineY - 3);
-                    gfx.DrawString(dataPowers[i].Specialization ?? "-", font, XBrushes.Black, XUnitPt.FromInch(3.6), baselineY - 3);
-                    gfx.DrawString(dataPowers[i].Level.Substring(0, 1), font, XBrushes.Black, XUnitPt.FromInch(4.55), baselineY - 3);
+                    gfx.DrawString(
+                        dataPowers[i].Name,
+                        font,
+                        XBrushes.Black,
+                        XUnitPt.FromInch(1.90),
+                        baselineY - 3
+                    );
+                    gfx.DrawString(
+                        dataPowers[i].Specialization ?? "-",
+                        font,
+                        XBrushes.Black,
+                        XUnitPt.FromInch(3.6),
+                        baselineY - 3
+                    );
+                    gfx.DrawString(
+                        dataPowers[i].Level.Substring(0, 1),
+                        font,
+                        XBrushes.Black,
+                        XUnitPt.FromInch(4.55),
+                        baselineY - 3
+                    );
                 }
-                
+
                 // Draw the underline rule
                 gfx.DrawLine(linePen, startX, lineY, startX + lineWidth, lineY);
             }
-        };
+        }
     }
-    
-    private static void FillInAdminKnowledges(
-        List<KnowledgeInfo> dataPowers,
-        PdfDocument document
-    )
+
+    private static void FillInAdminKnowledges(List<KnowledgeInfo> dataPowers, PdfDocument document)
     {
         double startY = XUnitPt.FromInch(0.75); // your starting Y position
         double startX = XUnitPt.FromInch(0.3);
@@ -476,7 +665,7 @@ public static class CharacterReferenceBookletReport
 
         double lineHeight = 12;
         double fontSize = lineHeight * 0.65;
-        var font = new XFont("Courier", fontSize, XFontStyleEx.Regular);
+        var font = new XFont(DefaultFontFace, fontSize, XFontStyleEx.Regular);
         using (var gfx = XGraphics.FromPdfPage(document.Pages[5]))
         {
             var linePen = new XPen(XColors.Black, 0.5);
@@ -487,18 +676,42 @@ public static class CharacterReferenceBookletReport
                 {
                     break;
                 }
-                double baselineY = startY + (i * lineHeight) + (lineHeight * 0.75) -3;
+                double baselineY = startY + (i * lineHeight) + (lineHeight * 0.75) - 3;
                 double lineY = baselineY + 1; // sit the rule just under the text baseline
 
-                gfx.DrawString(dataPowers[i].Name, font, XBrushes.Black, XUnitPt.FromInch(0.30), baselineY);
-                gfx.DrawString(dataPowers[i].Specialization ?? "-", font, XBrushes.Black, XUnitPt.FromInch(2.45), baselineY );
-                gfx.DrawString(dataPowers[i].Level.Substring(0, 1), font, XBrushes.Black, XUnitPt.FromInch(4.35), baselineY);
-                gfx.DrawString(dataPowers[i].XPCost, font, XBrushes.Black, XUnitPt.FromInch(4.75), baselineY);
-                
+                gfx.DrawString(
+                    dataPowers[i].Name,
+                    font,
+                    XBrushes.Black,
+                    XUnitPt.FromInch(0.30),
+                    baselineY
+                );
+                gfx.DrawString(
+                    dataPowers[i].Specialization ?? "-",
+                    font,
+                    XBrushes.Black,
+                    XUnitPt.FromInch(2.45),
+                    baselineY
+                );
+                gfx.DrawString(
+                    dataPowers[i].Level.Substring(0, 1),
+                    font,
+                    XBrushes.Black,
+                    XUnitPt.FromInch(4.35),
+                    baselineY
+                );
+                gfx.DrawString(
+                    dataPowers[i].XPCost,
+                    font,
+                    XBrushes.Black,
+                    XUnitPt.FromInch(4.75),
+                    baselineY
+                );
+
                 // Draw the underline rule
                 gfx.DrawLine(linePen, startX, lineY, startX + lineWidth, lineY);
             }
-        };
+        }
     }
 
     private static void FillInContacts(

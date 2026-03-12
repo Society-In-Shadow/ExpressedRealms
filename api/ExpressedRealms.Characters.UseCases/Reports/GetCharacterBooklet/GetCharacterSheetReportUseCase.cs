@@ -281,7 +281,7 @@ public class GetCharacterSheetReportUseCase(
             PlayerName = character.PlayerName,
             LookupId = character.LookupId,
             CharacterLevel = characterLevel.ToString(),
-            EventName = eventInfo?.Name ?? "No Active Event During Print"
+            EventName = eventInfo?.Name ?? "No Active Event During Print",
         };
         return basicInfo;
     }
