@@ -55,20 +55,24 @@ const items = ref<Array<CarouselItem>>([])
   <div class="constrain-carousal mt-5 mb-5">
     <Carousel :value="items" :num-visible="1" :autoplay-interval="5000">
       <template #item="slotProps">
-        <a class="text-decoration-none text-reset" :href="slotProps.data.link">
+        <RouterLink class="text-decoration-none text-reset" :to="slotProps.data.link">
           <div class="card">
             <div class="d-flex flex-column flex-md-row align-items-center justify-content-between">
               <div class="mr-3">
-                <h2 class="mt-0 pt-0">{{ slotProps.data.name }}</h2>
+                <h2 class="mt-0 pt-0">
+                  {{ slotProps.data.name }}
+                </h2>
                 <p>{{ slotProps.data.description }}</p>
-                <p v-if="slotProps.data.dateRange">{{ slotProps.data.dateRange }}</p>
+                <p v-if="slotProps.data.dateRange">
+                  {{ slotProps.data.dateRange }}
+                </p>
               </div>
               <div>
                 <img src="/public/favicon.png" alt="Six Stones Logo" width="175px">
               </div>
             </div>
           </div>
-        </a>
+        </RouterLink>
       </template>
     </Carousel>
   </div>
