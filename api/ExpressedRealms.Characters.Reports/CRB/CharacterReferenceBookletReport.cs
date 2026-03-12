@@ -21,7 +21,7 @@ public static class CharacterReferenceBookletReport
         return MergeAllFields(data);
     }
 
-    private static void PrintTimeStamp(XGraphics gfx, string stampText, double centerX, double centerY)
+    private static void PrintTimeStamp(XGraphics gfx, string stampText, double centerX, double centerY, XSolidBrush color)
     {
         var font = new XFont("Courier", 10, XFontStyleEx.Regular);
         var size = gfx.MeasureString(stampText, font);
@@ -29,7 +29,7 @@ public static class CharacterReferenceBookletReport
         gfx.Save();
         gfx.TranslateTransform(centerX, centerY);
         gfx.RotateTransform(-90);
-        gfx.DrawString(stampText, font, XBrushes.DimGray, -size.Width / 2, font.GetHeight() / 2 -3);
+        gfx.DrawString(stampText, font, color, -size.Width / 2, font.GetHeight() / 2 -3);
         gfx.Restore();
     }
 
@@ -47,7 +47,11 @@ public static class CharacterReferenceBookletReport
             {
                 centerX = XUnitPt.FromInch(5);
             }
-            PrintTimeStamp(page, $"{data.BasicInfo.EventName} - {DateTime.Now:MMM dd, yyyy}", centerX, XUnitPt.FromInch(7.5));
+            
+            PrintTimeStamp(page, $"{data.BasicInfo.EventName} - {DateTime.Now:MMM dd, yyyy}", centerX, XUnitPt.FromInch(7.5), XBrushes.DimGray);
+            
+            PrintTimeStamp(page, "— —", centerX, XUnitPt.FromInch(9.5), XBrushes.DimGray);
+            PrintTimeStamp(page, "— —", centerX, XUnitPt.FromInch(5.5), XBrushes.DimGray);
         }
         
         if (document.AcroForm != null)
