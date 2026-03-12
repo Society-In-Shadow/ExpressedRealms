@@ -10,6 +10,7 @@ using ExpressedRealms.Characters.Repository.Skills;
 using ExpressedRealms.Characters.Repository.Stats;
 using ExpressedRealms.Characters.Repository.Stats.Enums;
 using ExpressedRealms.Characters.Repository.Xp;
+using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.UseCases.Shared;
@@ -27,6 +28,7 @@ public class GetCharacterSheetReportUseCase(
     IProficiencyRepository proficiencyRepository,
     ICharacterStatRepository statRepository,
     IContactRepository contactRepository,
+    IEventCheckinRepository eventCheckinRepository,
     GetCharacterSheetReportModelValidator validator,
     CancellationToken cancellationToken
 ) : IGetCharacterSheetReportUseCase
@@ -266,6 +268,7 @@ public class GetCharacterSheetReportUseCase(
     {
         var character = await characterRepository.GetCharacterInfoForCRB(model.CharacterId);
         var characterLevel = await xpRepository.GetCharacterXpLevel(model.CharacterId);
+        var eventInfo = await eventCheckinRepository.GetActiveEventInfoOrDefaultAsync();
 
         var basicInfo = new BasicInfo()
         {
@@ -278,6 +281,7 @@ public class GetCharacterSheetReportUseCase(
             PlayerName = character.PlayerName,
             LookupId = character.LookupId,
             CharacterLevel = characterLevel.ToString(),
+            EventName = eventInfo?.Name ?? "No Active Event During Print",
         };
         return basicInfo;
     }

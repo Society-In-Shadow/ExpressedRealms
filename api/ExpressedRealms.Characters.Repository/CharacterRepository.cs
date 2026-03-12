@@ -94,7 +94,7 @@ internal sealed class CharacterRepository(
             .Select(x => new CharacterInfo()
             {
                 CharacterName = x.Name,
-                PlayerNumber = x.PlayerNumber,
+                PlayerNumber = x.Player.PlayerNumber ?? 0,
                 PlayerName = x.Player.Name,
                 Expression = x.Expression.Name,
                 LookupId = x.Player.LookupId,
