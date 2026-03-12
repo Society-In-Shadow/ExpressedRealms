@@ -8,7 +8,14 @@ export const userPermissionStore
       return {
         userPermissions: [] as UserPermission[],
         loadedPermissions: false as boolean,
-        permissionCheck: {} as Record<string, any>,
+        permissionCheck: Object.fromEntries(
+          Object.entries(UserPermissions).map(([category, perms]) => [
+            category,
+            Object.fromEntries(
+              Object.entries(perms).map(([permName]) => [permName, false]),
+            ),
+          ]),
+        ) as Record<string, any>,
       }
     },
     actions: {

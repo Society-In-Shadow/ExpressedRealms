@@ -59,10 +59,12 @@ const gravatar = computed(() => {
     <i class="pi pi-caret-down text-lg" />
     <TieredMenu id="overlay_tmenu" ref="menu" :model="items" popup />
   </a>
-  <a v-else class="flex align-items-center p-3 cursor-pointer mb-2 gap-2 no-underline text-900" href="/login">
+  <RouterLink v-else class="flex align-items-center p-3 cursor-pointer mb-2 gap-2 no-underline text-900" to="/login">
     <Avatar class="pi pi-sign-in" shape="circle" size="large" />
-    <div class="hideIfSmall">Login</div>
-  </a>
+    <div class="hideIfSmall">
+      Login
+    </div>
+  </RouterLink>
 </template>
 
 <style scoped>
