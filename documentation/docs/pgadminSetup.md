@@ -39,3 +39,6 @@ sudo apt-get install postgresql-client-16
 
 Only thing you need to select is Do Not Save Owner and Do not Save Privileges, make sure to give the file .backup in pgAdmin.
 To restore, select the database and restore the .backup file
+
+In addition, the postgres instance in Azure gets updated automatically, so there might be times where you cannot restore
+locally, until you upgrade the db instance in the compose file
