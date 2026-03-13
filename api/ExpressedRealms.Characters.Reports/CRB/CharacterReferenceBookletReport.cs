@@ -219,7 +219,7 @@ public static class CharacterReferenceBookletReport
     )
     {
         var page = document.Pages[5];
-        
+
         PrintStatInfo(
             page,
             dataProficiencyInfo.Vitality.ToString(),
@@ -494,13 +494,8 @@ public static class CharacterReferenceBookletReport
             disadvantageCount++;
         }
     }
-    
-    private static void PrintSkills(
-        XGraphics gfx,
-        string stampText,
-        double centerX,
-        double centerY
-    )
+
+    private static void PrintSkills(XGraphics gfx, string stampText, double centerX, double centerY)
     {
         var font = new XFont(DefaultFontFace, 9, XFontStyleEx.Regular);
         var size = gfx.MeasureString(stampText, font);
@@ -519,20 +514,30 @@ public static class CharacterReferenceBookletReport
     )
     {
         using var page = XGraphics.FromPdfPage(document.Pages[5]);
-        
+
         var yPosition = XUnitPt.FromInch(5.95);
-        PrintSkills(page, skillInfo.HandToHandOffense.ToString(), XUnitPt.FromInch(1.95), yPosition);
+        PrintSkills(
+            page,
+            skillInfo.HandToHandOffense.ToString(),
+            XUnitPt.FromInch(1.95),
+            yPosition
+        );
         PrintSkills(page, skillInfo.MeleeOffense.ToString(), XUnitPt.FromInch(2.14), yPosition);
         PrintSkills(page, skillInfo.ThrownWeapons.ToString(), XUnitPt.FromInch(2.32), yPosition);
         PrintSkills(page, skillInfo.Marksmanship.ToString(), XUnitPt.FromInch(2.51), yPosition);
         PrintSkills(page, skillInfo.Spellcasting.ToString(), XUnitPt.FromInch(2.70), yPosition);
         PrintSkills(page, skillInfo.Projection.ToString(), XUnitPt.FromInch(2.89), yPosition);
-        PrintSkills(page, skillInfo.HandToHandDefense.ToString(), XUnitPt.FromInch(3.09), yPosition);
+        PrintSkills(
+            page,
+            skillInfo.HandToHandDefense.ToString(),
+            XUnitPt.FromInch(3.09),
+            yPosition
+        );
         PrintSkills(page, skillInfo.MeleeDefense.ToString(), XUnitPt.FromInch(3.26), yPosition);
         PrintSkills(page, skillInfo.Acrobatics.ToString(), XUnitPt.FromInch(3.43), yPosition);
         PrintSkills(page, skillInfo.Spellwarding.ToString(), XUnitPt.FromInch(3.62), yPosition);
         PrintSkills(page, skillInfo.Deflection.ToString(), XUnitPt.FromInch(3.81), yPosition);
-        
+
         MergeField(fields, "H2hOffenseLevel", skillInfo.HandToHandOffense.ToString());
         MergeField(fields, "MeleeOffenseLevel", skillInfo.MeleeOffense.ToString());
         MergeField(fields, "ThrownWeaponsLevel", skillInfo.ThrownWeapons.ToString());
