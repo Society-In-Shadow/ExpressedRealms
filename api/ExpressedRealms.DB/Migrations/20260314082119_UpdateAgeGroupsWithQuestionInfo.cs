@@ -12,7 +12,7 @@ namespace ExpressedRealms.DB.Migrations
         {
             migrationBuilder.Sql("""
                                  UPDATE public.players
-                                 SET age_group_id = 3
+                                 SET age_group_id = 3, last_age_group_check = Now()
                                  FROM public.checkins
                                  JOIN public.checkin_question_responses 
                                      ON checkins.id = checkin_question_responses.checkin_id
