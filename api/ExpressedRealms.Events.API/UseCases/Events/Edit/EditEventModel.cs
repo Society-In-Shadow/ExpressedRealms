@@ -12,4 +12,5 @@ public class EditEventModel
     public string? AdditionalNotes { get; set; } = null!;
     public required string TimeZoneId { get; set; }
     public int ConExperience { get; set; }
+    public bool CollectAttendeeInformation { get; set; }
 }

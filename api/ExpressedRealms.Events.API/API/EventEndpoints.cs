@@ -50,6 +50,10 @@ internal static class EventEndpoints
         endpointGroup
             .MapPut("{id}", EditEventEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Event.Edit);
+        
+        endpointGroup
+            .MapGet("{id}", EditEventEndpoint.ExecuteAsync)
+            .RequirePermission(Permissions.Event.Edit);
 
         endpointGroup
             .MapDelete("{id}", DeleteEventEndpoint.ExecuteAsync)
