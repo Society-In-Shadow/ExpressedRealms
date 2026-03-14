@@ -73,7 +73,7 @@ function toggleEdit() {
       class="p-0 m-0 d-inline-flex align-items-start align-self-center"
     >
       <Button
-        v-if="checkPermission.EventQuestion.Delete && ![1, 6].includes(props.eventQuestion?.questionTypeId)" class="mr-2" severity="danger" label="Delete"
+        v-if="checkPermission.EventQuestion.Delete && ![1, 2, 6].includes(props.eventQuestion?.questionTypeId)" class="mr-2" severity="danger" label="Delete"
         @click="popups.deleteConfirmation(props.eventId, $event)"
       />
       <Button v-if="checkPermission.EventQuestion.Edit" class="float-end" label="Edit" @click="toggleEdit" />
