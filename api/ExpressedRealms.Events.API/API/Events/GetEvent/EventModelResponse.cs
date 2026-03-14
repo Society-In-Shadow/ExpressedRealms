@@ -12,6 +12,6 @@ public class EventModelResponse
     public string? AdditionalNotes { get; set; }
     public required string TimeZoneId { get; set; }
     public int ConExperience { get; set; }
-    public bool IsPublished {get; set;}
+    public bool IsPublished { get; set; }
     public bool CollectConAttendance { get; set; }
 }

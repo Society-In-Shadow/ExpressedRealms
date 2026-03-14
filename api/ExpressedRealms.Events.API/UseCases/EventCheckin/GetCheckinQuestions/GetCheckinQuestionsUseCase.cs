@@ -35,9 +35,11 @@ internal sealed class GetCheckinQuestionsUseCase(
 
         if (!activeEvent.CollectAttendeeInformation)
         {
-            questions = questions.Where(x => x.QuestionTypeId != QuestionTypeEnum.PlayerBadgeNumber).ToList();
+            questions = questions
+                .Where(x => x.QuestionTypeId != QuestionTypeEnum.PlayerBadgeNumber)
+                .ToList();
         }
-        
+
         return Result.Ok(
             new GetCheckinQuestionsReturnModel()
             {

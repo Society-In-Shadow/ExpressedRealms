@@ -43,13 +43,13 @@ public class GetCheckinQuestionsUseCaseTests
             ConExperience = 20,
             CollectAttendeeInformation = true,
         };
-        
+
         answerList = new List<CheckinQuestionResponse>()
         {
             new() { Response = "Test Response", EventQuestionId = 1 },
             new() { Response = "Test 3", EventQuestionId = 3 },
         };
-        
+
         questionList = new List<EventQuestion>()
         {
             new()
@@ -141,8 +141,8 @@ public class GetCheckinQuestionsUseCaseTests
         var results = await _useCase.ExecuteAsync(_model);
 
         Assert.Equivalent(
-            questionList.
-                Where(x => x.QuestionTypeId != QuestionTypeEnum.PlayerBadgeNumber)
+            questionList
+                .Where(x => x.QuestionTypeId != QuestionTypeEnum.PlayerBadgeNumber)
                 .Select(x => new QuestionResponse()
                 {
                     QuestionId = x.Id,
@@ -154,7 +154,7 @@ public class GetCheckinQuestionsUseCaseTests
             results.Value.Questions
         );
     }
-    
+
     [Fact]
     public async Task UseCase_WillReturn_QuestionAnswers()
     {

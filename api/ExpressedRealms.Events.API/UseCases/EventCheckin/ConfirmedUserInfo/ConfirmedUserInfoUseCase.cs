@@ -47,6 +47,8 @@ internal sealed class ConfirmedUserInfoUseCase(
             };
         }
 
+        // If user is over 18, automatically approve them, if they haven't been yet
+        var player = await checkinRepository.GetPlayerAsync(model.LookupId);
         var currentStage = await checkinRepository.GetCurrentStage(checkinId);
 
         return Result.Ok(
