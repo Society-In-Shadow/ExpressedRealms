@@ -4,19 +4,21 @@ import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
 import RadioButtonGroup from 'primevue/radiobuttongroup'
 import RadioButton from 'primevue/radiobutton'
-import { ref, watch } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import type { Question } from '@/components/conCheckin/types.ts'
 
 const eventCheckinInfo = EventCheckinStore()
 const playerName = ref('')
+const questions = ref <Array<Question>>([])
 
-watch(() => eventCheckinInfo.questions, () => {
-  const newPlayerQuestion = eventCheckinInfo.questions.find(q => q.typeId === 6)
+onBeforeMount(async () => {
+  questions.value = await eventCheckinInfo.getQuestions()
+  const newPlayerQuestion = questions.value.find(q => q.typeId === 6)
   if (newPlayerQuestion && newPlayerQuestion.response && newPlayerQuestion?.response.startsWith('Yes - ')) {
     eventCheckinInfo.broughtNewPlayer = true
     playerName.value = newPlayerQuestion?.response.slice(6)
   }
-}, { immediate: true })
+})
 
 const canFinalizeStage = (stageId: number) => {
   if (eventCheckinInfo.checkinStage == null && stageId == 5)
@@ -35,7 +37,7 @@ const updateNewPlayerQuestion = (question: Question) => {
 </script>
 
 <template>
-  <div v-for="question in eventCheckinInfo.questions" :key="question.id">
+  <div v-for="question in questions" :key="question.id">
     <div v-if="question.typeId === 1">
       <h3>{{ question.question }}</h3>
       <p>{{ question.response }}</p>

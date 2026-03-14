@@ -22,6 +22,10 @@ export interface ApproveCheckinInfo {
   currentStage: BasicInfo | null
 }
 
+export interface GetCheckinQuestionsResponse {
+  questions: Array<Question>
+}
+
 export interface Question {
   id: number
   question: string

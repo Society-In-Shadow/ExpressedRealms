@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Events.API.API.EventCheckin.ConfirmUserCheckinInfo;
+namespace ExpressedRealms.Events.API.API.EventCheckin.GetCheckinQuestions;
 
 public class QuestionResponse
 {

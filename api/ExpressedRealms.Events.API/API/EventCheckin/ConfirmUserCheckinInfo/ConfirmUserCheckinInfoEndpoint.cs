@@ -43,15 +43,6 @@ public static class ConfirmUserCheckinInfoEndpoint
                         CharacterId = results.Value.PrimaryCharacterInfo.CharacterId,
                         CharacterName = results.Value.PrimaryCharacterInfo.CharacterName,
                     },
-                Questions = results
-                    .Value.Questions.Select(x => new QuestionResponse()
-                    {
-                        Question = x.Question,
-                        TypeId = x.QuestionTypeId,
-                        Response = x.Response,
-                        Id = x.QuestionId,
-                    })
-                    .ToList(),
                 CurrentStage = results.Value.CurrentStage is null
                     ? null
                     : new BasicInfo()

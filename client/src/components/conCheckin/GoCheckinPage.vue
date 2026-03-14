@@ -118,7 +118,7 @@ const typeName = (typeId: number) => {
     </StepItem>
     <StepItem value="3">
       <Step>HR Questions</Step>
-      <StepPanel v-slot="{activateCallback}">
+      <StepPanel v-if="stepperStep == '3'" v-slot="{activateCallback}">
         <AnswerQuestions />
         <Button label="Reviewed" icon="pi pi-arrow-right" icon-pos="right" class="mb-4" @click="activateCallback('4')" />
       </StepPanel>

@@ -27,6 +27,7 @@ public static class EditEventEndpoint
                 AdditionalNotes = request.AdditionalNotes,
                 ConExperience = request.ConExperience,
                 TimeZoneId = request.TimeZoneId,
+                CollectAttendeeInformation = request.CollectAttendeeInformation,
             }
         );
 

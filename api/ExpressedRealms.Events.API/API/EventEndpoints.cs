@@ -6,6 +6,7 @@ using ExpressedRealms.Events.API.API.EventCheckin.ApproveStage;
 using ExpressedRealms.Events.API.API.EventCheckin.ConfirmUserCheckinInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetAgeInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetBasicCheckDetails;
+using ExpressedRealms.Events.API.API.EventCheckin.GetCheckinQuestions;
 using ExpressedRealms.Events.API.API.EventCheckin.GetGoCheckinInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetUserCheckinDetails;
 using ExpressedRealms.Events.API.API.EventCheckin.UpdateAgeInfo;
@@ -17,6 +18,7 @@ using ExpressedRealms.Events.API.API.Events.Create;
 using ExpressedRealms.Events.API.API.Events.Delete;
 using ExpressedRealms.Events.API.API.Events.Get;
 using ExpressedRealms.Events.API.API.Events.GetConSummaryReport;
+using ExpressedRealms.Events.API.API.Events.GetEvent;
 using ExpressedRealms.Events.API.API.Events.GetSummary;
 using ExpressedRealms.Events.API.API.Events.Publish;
 using ExpressedRealms.Events.API.API.EventScheduleItem.Create;
@@ -49,6 +51,10 @@ internal static class EventEndpoints
 
         endpointGroup
             .MapPut("{id}", EditEventEndpoint.ExecuteAsync)
+            .RequirePermission(Permissions.Event.Edit);
+        
+        endpointGroup
+            .MapGet("{id}", GetEventEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Event.Edit);
 
         endpointGroup
@@ -117,6 +123,13 @@ internal static class EventEndpoints
             .MapPut(
                 "checkin/lookup/{lookupId}/questions/{questionId}",
                 AnswerQuestionEndpoint.ExecuteAsync
+            )
+            .RequirePermission(Permissions.Event.Checkin);
+        
+        endpointGroup
+            .MapGet(
+                "checkin/lookup/{lookupId}/questions",
+                GetCheckinQuestionsEndpoint.ExecuteAsync
             )
             .RequirePermission(Permissions.Event.Checkin);
 

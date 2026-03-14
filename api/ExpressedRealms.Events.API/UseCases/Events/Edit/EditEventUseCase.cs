@@ -32,6 +32,7 @@ internal sealed class EditEventUseCase(
         currentEvent.AdditionalNotes = model.AdditionalNotes;
         currentEvent.ConExperience = model.ConExperience;
         currentEvent.TimeZoneId = model.TimeZoneId;
+        currentEvent.CollectAttendeeInformation = model.CollectAttendeeInformation;
 
         await eventRepository.EditAsync(currentEvent);
 

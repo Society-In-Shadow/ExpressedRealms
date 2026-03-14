@@ -74,12 +74,6 @@ public class PopulateDefaultQuestionsUseCaseTests
             new()
             {
                 EventId = _model.EventId,
-                Question = "Are you under the age of 18?",
-                QuestionTypeId = 1,
-            },
-            new()
-            {
-                EventId = _model.EventId,
                 Question = "Have you brought in a new player? If so, what is their name?",
                 QuestionTypeId = 6,
             },

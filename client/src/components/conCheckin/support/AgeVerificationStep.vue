@@ -82,5 +82,6 @@ const verifiedMessage = computed(() => {
   <div v-else>
     <p>User age has been verified as {{ verifiedMessage }} for this con.</p>
     <p>If this is incorrect, please contact SHQ.</p>
+    <Button label="Verfied Info" @click="eventCheckinInfo.verifiedUserInfo()" />
   </div>
 </template>

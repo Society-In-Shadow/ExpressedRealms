@@ -16,10 +16,13 @@ export const EventStore
         haveEventTypes: false,
         haveEvents: false,
         events: [] as Event[],
+        event: {} as EditEvent,
+        eventId: 0,
       }
     },
     actions: {
       async getEvents() {
+        this.getTimezoneInfo()
         const response = await axios.get<EventResponse>(`/events`)
 
         for (const item of response.data.events) {
@@ -27,7 +30,9 @@ export const EventStore
           item.endDate = DateTime.fromISO(`${item.endDate}`)
         }
         this.events = response.data.events
-
+        this.haveEvents = true
+      },
+      getTimezoneInfo() {
         this.timeZones = [
           {
             id: 'America/New_York',
@@ -60,20 +65,23 @@ export const EventStore
             description: 'Hawaii-Aleutian Standard Time (HST) / Hawaii-Aleutian Daylight Time (HDT, rarely used)',
           },
         ]
-
-        this.haveEvents = true
       },
       getEvent: async function (id: number): Promise<EditEvent> {
-        let event = this.events.find((x: Event) => x.id == id)
+        this.getTimezoneInfo()
 
-        if (!event) {
-          await this.getEvents()
-          event = this.events.find((x: Event) => x.id == id)
+        if (this.eventId != id) {
+          const response = await axios.get<EditEvent>(`/events/${id}`)
+          const event = response.data
+
+          event.startDate = DateTime.fromISO(`${event.startDate}`)
+          event.endDate = DateTime.fromISO(`${event.endDate}`)
+          this.event = event
         }
 
+        this.eventId = id
         return {
-          ...event,
-          timeZone: this.timeZones.find((x: ListItem) => x.id == event.timeZoneId) as ListItem,
+          ...this.event,
+          timeZone: this.timeZones.find((x: ListItem) => x.id == this.event.timeZoneId) as ListItem,
         }
       },
       updateEvent: async function (values: EventForm, id: number): Promise<void> {
@@ -87,6 +95,7 @@ export const EventStore
           additionalNotes: values.additionalNotes,
           timeZoneId: values.timeZone.id,
           conExperience: values.conExperience,
+          collectAttendeeInformation: values.collectAttendeeInformation,
         })
           .then(async () => {
             await this.getEvents()

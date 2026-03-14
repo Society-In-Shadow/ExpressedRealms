@@ -10,7 +10,5 @@ public class GetGoCheckinInfoResponse
     public int PlayerNumber { get; set; }
     public AssignedXpType? AssignedXp { get; set; }
     public PrimaryCharacterInfo? PrimaryCharacterInfo { get; set; }
-
-    public List<QuestionResponse> Questions { get; set; } = new();
     public BasicInfo? CurrentStage { get; set; }
 }
