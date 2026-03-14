@@ -6,6 +6,7 @@ using ExpressedRealms.Events.API.API.EventCheckin.ApproveStage;
 using ExpressedRealms.Events.API.API.EventCheckin.ConfirmUserCheckinInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetAgeInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetBasicCheckDetails;
+using ExpressedRealms.Events.API.API.EventCheckin.GetCheckinQuestions;
 using ExpressedRealms.Events.API.API.EventCheckin.GetGoCheckinInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetUserCheckinDetails;
 using ExpressedRealms.Events.API.API.EventCheckin.UpdateAgeInfo;
@@ -122,6 +123,13 @@ internal static class EventEndpoints
             .MapPut(
                 "checkin/lookup/{lookupId}/questions/{questionId}",
                 AnswerQuestionEndpoint.ExecuteAsync
+            )
+            .RequirePermission(Permissions.Event.Checkin);
+        
+        endpointGroup
+            .MapGet(
+                "checkin/lookup/{lookupId}/questions",
+                GetCheckinQuestionsEndpoint.ExecuteAsync
             )
             .RequirePermission(Permissions.Event.Checkin);
 
