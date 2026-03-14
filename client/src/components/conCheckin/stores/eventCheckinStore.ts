@@ -7,6 +7,7 @@ import type {
   AssignedXpType,
   BasicInfo,
   CheckinInfo,
+  GetCheckinQuestionsResponse,
   GoCheckinInfo,
   PrimaryCharacterInfo,
   Question,
@@ -27,7 +28,6 @@ export const EventCheckinStore
         goCheckinInfo: {} as GoCheckinInfo,
         checkinId: 0,
         playerNumber: 0,
-        questions: [] as Question[],
         broughtNewPlayer: false,
         assignedXp: {} as AssignedXpType | null | undefined,
         primaryCharacter: {} as PrimaryCharacterInfo | null,
@@ -79,7 +79,6 @@ export const EventCheckinStore
         this.foundInfo = true
         this.checkinId = response.data.checkinId
         this.playerNumber = response.data.playerNumber
-        this.questions = response.data.questions
         this.assignedXp = response.data.assignedXp
         this.primaryCharacter = response.data.primaryCharacterInfo
         this.checkinStage = response.data.currentStage
@@ -90,11 +89,15 @@ export const EventCheckinStore
           ageGroupId: ageTypeId,
           hasSignedConsentForm: hasWaiver,
         })
-        // Refresh active step
+        await this.resetGoPage()
       },
       async getVerifiedAge(): Promise<AgeInfo> {
         const response = await axios.get<AgeInfo>(`events/checkin/lookup/${this.lookupId}/ageInfo`)
         return response.data
+      },
+      async getQuestions(): Promise<Question[]> {
+        const response = await axios.get<GetCheckinQuestionsResponse>(`events/checkin/lookup/${this.lookupId}/questions`)
+        return response.data.questions
       },
       async updateQuestion(question: Question) {
         await axios.put(`/events/checkin/lookup/${this.lookupId}/questions/${question.id}`, { response: question.response })
