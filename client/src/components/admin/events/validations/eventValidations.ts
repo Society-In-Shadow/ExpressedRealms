@@ -1,4 +1,4 @@
-import { type InferType, mixed, number, object, string } from 'yup'
+import { boolean, type InferType, mixed, number, object, string } from 'yup'
 import { useGenericForm } from '@/utilities/formUtilities'
 import type { ListItem } from '@/types/ListItem'
 import type { EditEvent } from '@/components/admin/events/types.ts'
@@ -36,6 +36,8 @@ const validationSchema = object({
   timeZone: object<ListItem>()
     .required()
     .label('Time Zone'),
+  collectAttendeeInformation: boolean()
+    .label('Collect Attendee Information'),
 })
 
 export type EventForm = InferType<typeof validationSchema>

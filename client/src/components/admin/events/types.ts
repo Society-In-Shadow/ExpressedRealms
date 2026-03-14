@@ -38,6 +38,7 @@ export interface EditEvent {
   timeZoneId: string
   conExperience: number
   isPublished: boolean
+  CollectAttendeeInformation: boolean
   timeZone: ListItem
 }
 

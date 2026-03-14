@@ -11,6 +11,7 @@ import FormInputDateOnlyWrapper from '@/FormWrappers/FormInputDateOnlyWrapper.vu
 import FormInputNumberWrapper from '@/FormWrappers/FormInputNumberWrapper.vue'
 import FormWrapper from '@/FormWrappers/FormWrapper.vue'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+import FormCheckboxWrapper from '@/FormWrappers/FormCheckboxWrapper.vue'
 
 const userPermissionInfo = userPermissionStore()
 const permissionCheck = userPermissionInfo.permissionCheck
@@ -57,6 +58,10 @@ const onSubmit = form.handleSubmit(async (values) => {
       v-model="form.fields.timeZone"
       :options="store.timeZones"
       option-label="name"
+    />
+
+    <FormCheckboxWrapper
+      v-model="form.fields.collectAttendeeInformation"
     />
 
     <div class="m-3 text-right">
