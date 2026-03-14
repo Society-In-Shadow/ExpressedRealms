@@ -55,6 +55,7 @@ export function getValidationInstance() {
     form.fields.additionalNotes.field.value = item.additionalNotes
     form.fields.conExperience.field.value = item.conExperience
     form.fields.timeZone.field.value = item.timeZone
+    form.fields.collectAttendeeInformation.field.value = item.collectConAttendance
   }
 
   return {
