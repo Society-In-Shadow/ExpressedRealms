@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.Models.Events.Questions.QuestionTypeSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.Events.API.Repositories.EventQuestions;
 using ExpressedRealms.UseCases.Shared;
@@ -25,13 +26,18 @@ internal sealed class GetCheckinQuestionsUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var eventId = await checkinRepository.GetActiveEventId();
+        var activeEvent = await checkinRepository.GetActiveEventInfoOrDefaultAsync();
         var playerId = await checkinRepository.GetPlayerId(model.LookupId);
-        var checkin = await checkinRepository.GetCheckinAsync(eventId!.Value, playerId);
+        var checkin = await checkinRepository.GetCheckinAsync(activeEvent!.Id, playerId);
 
-        var questions = await questionRepository.GetEventQuestionsForEvent(eventId!.Value);
+        var questions = await questionRepository.GetEventQuestionsForEvent(activeEvent!.Id);
         var answeredQuestions = await checkinRepository.GetAnsweredQuestions(checkin!.Id);
 
+        if (!activeEvent.CollectAttendeeInformation)
+        {
+            questions = questions.Where(x => x.QuestionTypeId != QuestionTypeEnum.PlayerBadgeNumber).ToList();
+        }
+        
         return Result.Ok(
             new GetCheckinQuestionsReturnModel()
             {

@@ -28,7 +28,7 @@ export const EventCheckinStore
         goCheckinInfo: {} as GoCheckinInfo,
         checkinId: 0,
         playerNumber: 0,
-        broughtNewPlayer: false,
+        broughtNewPlayer: null as boolean | null,
         assignedXp: {} as AssignedXpType | null | undefined,
         primaryCharacter: {} as PrimaryCharacterInfo | null,
       }
@@ -45,7 +45,6 @@ export const EventCheckinStore
         this.checkinId = 0
         this.playerNumber = 0
         this.broughtNewPlayer = false
-        this.questions = [] as Question[]
         this.assignedXp = null
         this.primaryCharacter = null
       },
