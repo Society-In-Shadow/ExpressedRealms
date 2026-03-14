@@ -23,20 +23,22 @@ internal sealed class GetEventUseCase(
 
         var currentEvent = await eventRepository.GetEventAsync(model.Id);
 
-        return Result.Ok(new GetEventReturnModel()
-        {
-            Id = currentEvent.Id,
-            Name = currentEvent.Name,
-            StartDate = currentEvent.StartDate,
-            EndDate = currentEvent.EndDate,
-            Location = currentEvent.Location,
-            WebsiteName = currentEvent.WebsiteName,
-            WebsiteUrl = currentEvent.WebsiteUrl,
-            AdditionalNotes = currentEvent.AdditionalNotes,
-            ConExperience = currentEvent.ConExperience,
-            TimeZoneId = currentEvent.TimeZoneId,
-            IsPublished = currentEvent.IsPublished,
-            CollectAttendeeInformation = currentEvent.CollectAttendeeInformation,
-        });
+        return Result.Ok(
+            new GetEventReturnModel()
+            {
+                Id = currentEvent.Id,
+                Name = currentEvent.Name,
+                StartDate = currentEvent.StartDate,
+                EndDate = currentEvent.EndDate,
+                Location = currentEvent.Location,
+                WebsiteName = currentEvent.WebsiteName,
+                WebsiteUrl = currentEvent.WebsiteUrl,
+                AdditionalNotes = currentEvent.AdditionalNotes,
+                ConExperience = currentEvent.ConExperience,
+                TimeZoneId = currentEvent.TimeZoneId,
+                IsPublished = currentEvent.IsPublished,
+                CollectAttendeeInformation = currentEvent.CollectAttendeeInformation,
+            }
+        );
     }
 }

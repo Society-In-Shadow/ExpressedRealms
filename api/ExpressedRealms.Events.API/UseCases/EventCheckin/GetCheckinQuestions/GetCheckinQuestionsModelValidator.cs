@@ -5,7 +5,8 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Events.API.UseCases.EventCheckin.GetCheckinQuestions;
 
 [UsedImplicitly]
-internal sealed class GetCheckinQuestionsModelValidator : AbstractValidator<GetCheckinQuestionsModel>
+internal sealed class GetCheckinQuestionsModelValidator
+    : AbstractValidator<GetCheckinQuestionsModel>
 {
     public GetCheckinQuestionsModelValidator(IEventCheckinRepository repository)
     {

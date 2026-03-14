@@ -56,11 +56,11 @@ internal static class EventAuditTrailExtensions
                 case "time_zone_id":
                     changedRecord.FriendlyName = "Time Zone";
                     break;
-                
+
                 case "collect_attendee_information":
                     changedRecord.FriendlyName = "Collect Attendee Information";
                     break;
-                
+
                 default:
                     throw new MissingAuditColumnException(changedRecord.ColumnName);
             }

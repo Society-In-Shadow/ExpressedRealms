@@ -52,7 +52,7 @@ internal static class EventEndpoints
         endpointGroup
             .MapPut("{id}", EditEventEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Event.Edit);
-        
+
         endpointGroup
             .MapGet("{id}", GetEventEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Event.Edit);
@@ -125,12 +125,9 @@ internal static class EventEndpoints
                 AnswerQuestionEndpoint.ExecuteAsync
             )
             .RequirePermission(Permissions.Event.Checkin);
-        
+
         endpointGroup
-            .MapGet(
-                "checkin/lookup/{lookupId}/questions",
-                GetCheckinQuestionsEndpoint.ExecuteAsync
-            )
+            .MapGet("checkin/lookup/{lookupId}/questions", GetCheckinQuestionsEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Event.Checkin);
 
         endpointGroup
