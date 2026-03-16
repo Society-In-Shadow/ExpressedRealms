@@ -77,7 +77,7 @@ const approveStage = async (stageId: number) => {
   <Stepper v-model:value="eventCheckinInfo.activeStepperStep">
     <StepItem value="1">
       <Step>Scan QR Code</Step>
-      <StepPanel>
+      <StepPanel v-if="eventCheckinInfo.activeStepperStep == '1'">
         <p>Ask the user to open up their account, and click on the "Event Check-in" tile at the top of the page</p>
         <p>This should pull up a QR code you can scan below</p>
         <CharacterScanner @detected-code="onDetect" />
@@ -101,7 +101,7 @@ const approveStage = async (stageId: number) => {
         <StonePullerStep />
       </StepPanel>
     </StepItem>
-    <StepItem value="6" :disabled="stepperStep !== '6'">
+    <StepItem value="5" :disabled="stepperStep !== '5'">
       <Step>GO Approval</Step>
       <StepPanel>
         <h3>Link to their CRB</h3>
@@ -122,7 +122,7 @@ const approveStage = async (stageId: number) => {
         />
       </StepPanel>
     </StepItem>
-    <StepItem value="8">
+    <StepItem value="6">
       <Step>CRB Creation</Step>
       <StepPanel>
         <h3>CRB needs to be created</h3>
@@ -133,7 +133,7 @@ const approveStage = async (stageId: number) => {
         />
       </StepPanel>
     </StepItem>
-    <StepItem value="9">
+    <StepItem value="7">
       <Step>CRB Is Ready for Pickup</Step>
       <StepPanel>
         <h3>Needs to be Verified by User</h3>
@@ -144,7 +144,7 @@ const approveStage = async (stageId: number) => {
         />
       </StepPanel>
     </StepItem>
-    <StepItem value="10">
+    <StepItem value="8">
       <Step>Picked Up and Day One</Step>
       <StepPanel>
         <h3>Everything is Done for Day 1</h3>
@@ -154,7 +154,7 @@ const approveStage = async (stageId: number) => {
         />
       </StepPanel>
     </StepItem>
-    <StepItem value="11">
+    <StepItem value="9">
       <Step>Day 2 Checkin</Step>
       <StepPanel>
         <h3>This is the 2nd day the character has been in play, not the 2nd day of play</h3>
@@ -165,7 +165,7 @@ const approveStage = async (stageId: number) => {
         />
       </StepPanel>
     </StepItem>
-    <StepItem value="12">
+    <StepItem value="10">
       <Step>Day 3</Step>
       <StepPanel>
         <h3>Thank You and Come Again!</h3>

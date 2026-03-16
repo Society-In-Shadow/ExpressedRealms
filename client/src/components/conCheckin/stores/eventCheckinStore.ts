@@ -15,6 +15,7 @@ import {
   type Question,
 } from '@/components/conCheckin/types.ts'
 import toaster from '@/services/Toasters'
+import router from '@/router'
 
 export const EventCheckinStore
   = defineStore(`eventCheckin`, {
@@ -46,6 +47,7 @@ export const EventCheckinStore
         this.playerNumber = 0
         this.assignedXp = null
         this.primaryCharacter = null
+        this.activeStepperStep = '1'
       },
       async getCheckinAvailable() {
         const response = await axios.get<boolean>(`/events/checkin/available`)
@@ -81,9 +83,9 @@ export const EventCheckinStore
         this.checkinStage = response.data.currentStage
         this.isReset = false
 
-        this.handleStageRedirect(response.data.currentStage.id as CheckinStage)
+        await this.handleStageRedirect(response.data.currentStage.id as CheckinStage)
       },
-      handleStageRedirect(checkinStage: CheckinStage) {
+      async handleStageRedirect(checkinStage: CheckinStage) {
         switch (checkinStage as CheckinStage) {
           default:
             // They need to verify their age
@@ -104,12 +106,19 @@ export const EventCheckinStore
           case CheckinStage.ShqApproval:
             // Stone Pulled, They need to get GO Approval next
             // Redirect them to the character sheet
+            if (this.primaryCharacter) {
+              await router.push({ name: 'characterSheet', params: { id: this.primaryCharacter.characterId } })
+              return
+            }
+            this.activeStepperStep = '5'
             break
           case CheckinStage.GoApproval:
             // Show need to print CRB
+
             break
           case CheckinStage.CrbCreation:
             // show that CRB needs to be printed
+            this.activeStepperStep = '6'
             break
           case CheckinStage.PrintedCrb:
             // show need to cut and strip CRB
@@ -150,13 +159,21 @@ export const EventCheckinStore
       },
       async addAssignedXp(typeId: number, amount: number) {
         await axios.post(`/events/checkin/lookup/${this.lookupId}/assignXp`, { amount: amount, AssignedXpTypeId: typeId })
-        this.activeStepperStep = '5'
+
         toaster.success('Assigned XP successfully!')
+        await this.handleStageRedirect(CheckinStage.ShqApproval)
       },
       async approveStage(stageId: number) {
         await axios.post(`/events/checkin/lookup/${this.lookupId}/approveStage`, { stageId: stageId })
         // await this.resetGoPage()
         toaster.success('Stage approved successfully!')
+      },
+      async approveCharacterSheet() {
+        await axios.post(`/events/checkin/lookup/${this.lookupId}/approveStage`, { stageId: CheckinStage.GoApproval })
+        toaster.success('Character Sheet Approval successfully!')
+        await this.resetGoPage()
+
+        await router.push({ name: 'gocheckin' })
       },
       async retireCharacter() {
         await axios.put(`/characters/${this.lookupId}/retire`)

@@ -19,7 +19,7 @@ onMounted(async () => {
   isFirstTimeUser.value = response.isFirstTimeUser
   assignedXpAmount.value = response.assignedXp
   isReadOnly.value = response.hasCompletedStep
-  checkinBonus.value = response.assignedXp?.amount ?? 0
+  checkinBonus.value = response.assignedXp?.amount ?? null
 
   if (broughtNewPlayer.value)
     checkinBonus.value = 5

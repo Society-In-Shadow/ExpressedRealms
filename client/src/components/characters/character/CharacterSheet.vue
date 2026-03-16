@@ -23,6 +23,7 @@ import ReviewCharacter from '@/components/characters/character/xp/ReviewCharacte
 import ContactTab from '@/components/characters/character/contacts/ContactTab.vue'
 import { FeatureFlags, userStore } from '@/stores/userStore.ts'
 import { onBeforeMount, ref } from 'vue'
+import ApproveCharacterBanner from '@/components/conCheckin/support/ApproveCharacterBanner.vue'
 
 const characterData = characterStore()
 const userData = userStore()
@@ -39,6 +40,7 @@ onBeforeMount(async () => {
   <div class="d-none">
     <DataTable />
   </div>
+  <ApproveCharacterBanner />
   <Message v-if="!characterData.isOwner && !characterData.isLoading" severity="warn" class="mb-3 mt-3">
     You have read only access to this character sheet.
   </Message>
