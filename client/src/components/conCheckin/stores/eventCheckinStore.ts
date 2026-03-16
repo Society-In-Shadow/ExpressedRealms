@@ -122,14 +122,15 @@ export const EventCheckinStore
             break
           case CheckinStage.PrintedCrb:
             // show need to cut and strip CRB
+            this.activeStepperStep = '7'
             break
           case CheckinStage.CrbReadForPickup:
             // Show need to verify user pickup
-            this.activeStepperStep = '3'
+            this.activeStepperStep = '8'
             break
           case CheckinStage.CrbPickedUp:
             // User Has picked up CRB and verified strip info
-            this.activeStepperStep = '3'
+            this.activeStepperStep = '9'
             break
         }
       },
@@ -165,6 +166,7 @@ export const EventCheckinStore
       },
       async approveStage(stageId: number) {
         await axios.post(`/events/checkin/lookup/${this.lookupId}/approveStage`, { stageId: stageId })
+        await this.handleStageRedirect(stageId)
         // await this.resetGoPage()
         toaster.success('Stage approved successfully!')
       },

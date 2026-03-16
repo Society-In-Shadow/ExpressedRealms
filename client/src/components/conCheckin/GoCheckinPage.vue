@@ -49,18 +49,6 @@ async function onDetect(detectedCodes) {
   await eventCheckinInfo.getGoCheckinInfo(detectedCodes)
 }
 
-const canFinalizeStage = (stageId: number) => {
-  if (eventCheckinInfo.checkinStage == null && stageId == 5)
-    return false
-  return eventCheckinInfo.checkinStage?.id + 5 != stageId
-}
-
-const isFinalized = (stageId: number) => {
-  if (eventCheckinInfo.checkinStage?.id + 5 > stageId)
-    return 'pi pi-check'
-  return ''
-}
-
 const approveStage = async (stageId: number) => {
   await eventCheckinInfo.approveStage(stageId)
 }
@@ -106,20 +94,8 @@ const approveStage = async (stageId: number) => {
       <StepPanel>
         <h3>Link to their CRB</h3>
         <p v-if="!eventCheckinInfo.primaryCharacter">
-          They do not have a primary character setup yet, you will need to walk them through how to do that.  Approving has been disabled until they have one.  You will need to recheck them in after they have one
+          They do not have a primary character setup yet, you will need to walk them through how to do that.  You will need to recheck them in after they have one
         </p>
-        <p v-else>
-          <RouterLink :to="`/characters/${eventCheckinInfo.primaryCharacter.characterId}`" target="_blank">
-            {{ eventCheckinInfo.primaryCharacter.characterName }}
-          </RouterLink>
-        </p>
-        <h3>Did you approve the contacts on their CRB? (Block till they say yes)</h3>
-        <h3>Did you Check to make sure that most of their XP has been spent? (Eg, they've spent xp outside of character creation)</h3>
-        <h3>Is their character level within expections for the plot?</h3>
-        <Button
-          label="GO Approval" :icon="isFinalized(6)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(6) || !permissionCheck.Event.GoApproval || !eventCheckinInfo.primaryCharacter"
-          @click="approveStage(2)"
-        />
       </StepPanel>
     </StepItem>
     <StepItem value="6">
@@ -136,7 +112,7 @@ const approveStage = async (stageId: number) => {
         <h3>CRB needs to be created</h3>
         <p>CRB was printed, need to cut and strip it.  Once done, scan it and click the below button</p>
         <Button
-          label="CRB Created and Ready for Pickup" :icon="isFinalized(8)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(8) || !permissionCheck.Event.CrbHandling"
+          label="CRB Created and Ready for Pickup" icon-pos="right" class="mb-4" :disabled="!permissionCheck.Event.CrbHandling"
           @click="approveStage(4)"
         />
       </StepPanel>
@@ -147,7 +123,7 @@ const approveStage = async (stageId: number) => {
         <h3>Needs to be Verified by User</h3>
         <p>User needs to check their CRB, and make sure it's good to go.  Once scanned, they can go play games</p>
         <Button
-          label="CRB Is Picked Up" :icon="isFinalized(9)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(9) || !permissionCheck.Event.CrbHandling"
+          label="CRB Is Picked Up" icon-pos="right" class="mb-4" :disabled="!permissionCheck.Event.CrbHandling"
           @click="approveStage(5)"
         />
       </StepPanel>
@@ -157,7 +133,7 @@ const approveStage = async (stageId: number) => {
       <StepPanel>
         <h3>Everything is Done for Day 1</h3>
         <Button
-          label="Day 2 Check-in" :icon="isFinalized(10)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(10) || !permissionCheck.Event.Day23Checkin"
+          label="Day 2 Check-in" icon-pos="right" class="mb-4" :disabled="permissionCheck.Event.Day23Checkin"
           @click="approveStage(6)"
         />
       </StepPanel>
@@ -168,7 +144,7 @@ const approveStage = async (stageId: number) => {
         <h3>This is the 2nd day the character has been in play, not the 2nd day of play</h3>
         <p>The character has been checked in for the day.</p>
         <Button
-          label="Day 3 Check-in" :icon="isFinalized(11)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(11) || !permissionCheck.Event.Day23Checkin"
+          label="Day 3 Check-in" icon-pos="right" class="mb-4" :disabled="!permissionCheck.Event.Day23Checkin"
           @click="approveStage(7)"
         />
       </StepPanel>
