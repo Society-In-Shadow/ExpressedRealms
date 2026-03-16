@@ -92,6 +92,20 @@ internal sealed class ApproveStageAndSendMessageUseCase(
                 }
             );
         }
+        
+        if (model.StageId == CheckinStageEnum.AssignedXpCheck.Value)
+        {
+            // Once applied, it goes into GO Check stage
+            await checkinRepository.CompleteStage(
+                new CheckinStageMapping()
+                {
+                    CreatedAt = timeProvider.GetUtcNow(),
+                    ApproverUserId = userContext.CurrentUserId(),
+                    CheckinStageId = CheckinStageEnum.ShqApproval.Value,
+                    CheckinId = checkin.Id,
+                }
+            );
+        }
 
         await SendMessages(model, playerId);
 

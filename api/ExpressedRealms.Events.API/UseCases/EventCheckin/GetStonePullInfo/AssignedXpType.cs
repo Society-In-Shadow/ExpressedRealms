@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Events.API.UseCases.EventCheckin.ConfirmedUserInfo;
+namespace ExpressedRealms.Events.API.UseCases.EventCheckin.GetStonePullInfo;
 
 public class AssignedXpType
 {

@@ -26,9 +26,7 @@ export interface GoCheckinInfo {
 }
 
 export interface ApproveCheckinInfo {
-  isFirstTimeUser: boolean
   playerNumber: number
-  assignedXp: AssignedXpType
   questions: Array<Question>
   primaryCharacterInfo: PrimaryCharacterInfo | null
   currentStage: BasicInfo | null
@@ -37,6 +35,12 @@ export interface ApproveCheckinInfo {
 export interface GetCheckinQuestionsResponse {
   hasCompletedStage: boolean
   questions: Array<Question>
+}
+
+export interface GetStonePullInfoResponse {
+  hasCompletedStep: boolean
+  isFirstTimeUser: boolean
+  assignedXp: AssignedXpType
 }
 
 export interface Question {

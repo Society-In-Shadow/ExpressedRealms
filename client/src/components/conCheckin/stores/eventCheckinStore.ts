@@ -9,6 +9,7 @@ import {
   type CheckinInfo,
   CheckinStage,
   type GetCheckinQuestionsResponse,
+  type GetStonePullInfoResponse,
   type GoCheckinInfo,
   type PrimaryCharacterInfo,
   type Question,
@@ -28,7 +29,6 @@ export const EventCheckinStore
         checkinStage: {} as BasicInfo | null,
         goCheckinInfo: {} as GoCheckinInfo,
         playerNumber: 0,
-        broughtNewPlayer: null as boolean | null,
         assignedXp: {} as AssignedXpType | null | undefined,
         primaryCharacter: {} as PrimaryCharacterInfo | null,
         activeStepperStep: '1',
@@ -44,7 +44,6 @@ export const EventCheckinStore
         this.checkinStage = null
         this.goCheckinInfo = {} as GoCheckinInfo
         this.playerNumber = 0
-        this.broughtNewPlayer = false
         this.assignedXp = null
         this.primaryCharacter = null
       },
@@ -78,7 +77,6 @@ export const EventCheckinStore
 
         this.foundInfo = true
         this.playerNumber = response.data.playerNumber
-        this.assignedXp = response.data.assignedXp
         this.primaryCharacter = response.data.primaryCharacterInfo
         this.checkinStage = response.data.currentStage
         this.isReset = false
@@ -146,14 +144,18 @@ export const EventCheckinStore
         await axios.put(`/events/checkin/lookup/${this.lookupId}/questions/${question.id}`, { response: question.response })
         toaster.success('Question updated successfully!')
       },
+      async getStonePullInformation(): Promise<GetStonePullInfoResponse> {
+        const response = await axios.get<GetStonePullInfoResponse>(`/events/checkin/lookup/${this.lookupId}/assignXp`)
+        return response.data
+      },
       async addAssignedXp(typeId: number, amount: number) {
         await axios.post(`/events/checkin/lookup/${this.lookupId}/assignXp`, { amount: amount, AssignedXpTypeId: typeId })
-        await this.verifiedUserInfo()
+        this.activeStepperStep = '5'
         toaster.success('Assigned XP successfully!')
       },
       async approveStage(stageId: number) {
         await axios.post(`/events/checkin/lookup/${this.lookupId}/approveStage`, { stageId: stageId })
-        await this.resetGoPage()
+        // await this.resetGoPage()
         toaster.success('Stage approved successfully!')
       },
       async retireCharacter() {

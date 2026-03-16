@@ -31,14 +31,11 @@ internal sealed class ConfirmedUserInfoUseCase(
         var eventId = await checkinRepository.GetActiveEventId();
         var player = await checkinRepository.GetPlayerAsync(model.LookupId);
         var checkinId = await GetCheckinId(eventId, player.Id);
-
-        var isFirstTimePlayer = await checkinRepository.IsFirstTimePlayer(model.LookupId);
         var playerNumber = checkinRepository.GetPlayerNumber(model.LookupId);
 
         var primaryCharacterInformation = await checkinRepository.GetPrimaryCharacterInformation(
             player.Id
         );
-        var assignedXp = await checkinRepository.GetAssignedXp(player.Id, eventId!.Value);
 
         PrimaryCharacterInfo? characterInfo = null;
         if (primaryCharacterInformation is not null)
@@ -71,14 +68,6 @@ internal sealed class ConfirmedUserInfoUseCase(
                 PlayerNumber = playerNumber,
                 CurrentStage = currentStage,
                 PrimaryCharacterInfo = characterInfo, // Needed for Go Verification - Just need to return character id
-                IsFirstTimeUser = isFirstTimePlayer, // this is the stone pull step only
-                AssignedXp = assignedXp is null // Needed for Stone Pull
-                    ? null
-                    : new AssignedXpType()
-                    {
-                        TypeId = assignedXp.TypeId,
-                        Amount = assignedXp.Amount,
-                    },
             }
         );
     }

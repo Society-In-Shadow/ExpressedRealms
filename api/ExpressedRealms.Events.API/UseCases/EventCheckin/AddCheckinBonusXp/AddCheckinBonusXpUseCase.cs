@@ -1,5 +1,7 @@
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
+using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
+using ExpressedRealms.Events.API.UseCases.EventCheckin.ApproveStageAndSendMessages;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
@@ -10,6 +12,7 @@ internal sealed class AddCheckinBonusXpUseCase(
     IEventCheckinRepository checkinRepository,
     IUserContext userContext,
     TimeProvider timeProvider,
+    IApproveStageAndSendMessageUseCase approveStageAndSendMessageUseCase,
     AddCheckinBonusXpModelValidator validator,
     CancellationToken cancellationToken
 ) : IAddCheckinBonusXpUseCase
@@ -53,6 +56,12 @@ internal sealed class AddCheckinBonusXpUseCase(
             }
         );
 
+        await approveStageAndSendMessageUseCase.ExecuteAsync(new ApproveStageAndSendMessageModel()
+        {
+            LookupId = model.LookupId,
+            StageId = CheckinStageEnum.AssignedXpCheck
+        });
+        
         return Result.Ok();
     }
 }

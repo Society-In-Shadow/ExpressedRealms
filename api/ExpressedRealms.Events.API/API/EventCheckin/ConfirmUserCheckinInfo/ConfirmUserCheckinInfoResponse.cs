@@ -4,9 +4,7 @@ namespace ExpressedRealms.Events.API.API.EventCheckin.ConfirmUserCheckinInfo;
 
 public class GetGoCheckinInfoResponse
 {
-    public bool IsFirstTimeUser { get; set; }
     public int PlayerNumber { get; set; }
-    public AssignedXpType? AssignedXp { get; set; }
     public PrimaryCharacterInfo? PrimaryCharacterInfo { get; set; }
     public BasicInfo? CurrentStage { get; set; }
 }

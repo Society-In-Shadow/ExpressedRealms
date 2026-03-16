@@ -31,7 +31,6 @@ public class ConfirmedUserInfoUseCaseTests
         _approveStage = A.Fake<IApproveStageAndSendMessageUseCase>();
 
         A.CallTo(() => _eventCheckinRepository.CheckinIdExistsAsync(_model.LookupId)).Returns(true);
-        A.CallTo(() => _eventCheckinRepository.IsFirstTimePlayer(_model.LookupId)).Returns(true);
         A.CallTo(() => _eventCheckinRepository.GetActiveEventId()).Returns(EventId);
 
         A.CallTo(() => _eventCheckinRepository.GetPlayerAsync(_model.LookupId)).Returns(new Player()
@@ -43,8 +42,6 @@ public class ConfirmedUserInfoUseCaseTests
             .Returns(new Checkin { Id = CheckinId });
         A.CallTo(() => _eventCheckinRepository.GetPlayerNumber(_model.LookupId)).Returns(1);
 
-        A.CallTo(() => _eventCheckinRepository.GetAssignedXp(PlayerId, EventId))
-            .Returns(new AssignedXpTypeDto() { TypeId = 3, Amount = 10 });
         A.CallTo(() => _eventCheckinRepository.GetPrimaryCharacterInformation(PlayerId))
             .Returns(Task.FromResult<GoCheckinPrimaryCharacterInfoDto?>(null));
 
@@ -122,14 +119,6 @@ public class ConfirmedUserInfoUseCaseTests
     }
 
     [Fact]
-    public async Task UseCase_WillReturn_AssignedXp()
-    {
-        var results = await _useCase.ExecuteAsync(_model);
-        Assert.Equal(10, results.Value.AssignedXp!.Amount);
-        Assert.Equal(3, results.Value.AssignedXp.TypeId);
-    }
-
-    [Fact]
     public async Task UseCase_WillReturn_NullablePrimaryCharacterInfo()
     {
         var results = await _useCase.ExecuteAsync(_model);
@@ -172,12 +161,5 @@ public class ConfirmedUserInfoUseCaseTests
                 x.LookupId == _model.LookupId && 
                 x.StageId == CheckinStageEnum.AgeCheckApproval)))
             .MustHaveHappenedOnceExactly();
-    }
-
-    [Fact]
-    public async Task UseCase_WillReturn_IfTheyAreFirstTimePlayer()
-    {
-        var results = await _useCase.ExecuteAsync(_model);
-        Assert.True(results.Value.IsFirstTimeUser);
     }
 }
