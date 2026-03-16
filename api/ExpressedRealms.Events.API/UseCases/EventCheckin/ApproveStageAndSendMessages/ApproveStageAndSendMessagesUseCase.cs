@@ -47,7 +47,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
 
         var dayCheckins = new[] { 6, 7 };
         var currentStage =
-            approvedStages.Count > 0 ? approvedStages.MaxBy(x => x.CreatedAt).CheckinStageId : 0;
+            approvedStages.Count > 0 ? approvedStages.MaxBy(x => x.CreatedAt)!.CheckinStageId : 0;
         var completedStageIds = approvedStages.Select(x => x.CheckinStageId).ToList();
 
         var stage = CheckinStageEnum.FromValue(model.StageId);

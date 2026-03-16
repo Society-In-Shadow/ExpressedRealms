@@ -30,7 +30,7 @@ internal sealed class GetStonePullInfoUseCase(
         var assignedXp = await checkinRepository.GetAssignedXp(playerId, eventId!.Value);
 
         var hasCompletedStep = await checkinRepository.GetStageStatus(
-            checkin.Id,
+            checkin!.Id,
             CheckinStageEnum.AssignedXpCheck
         );
 
