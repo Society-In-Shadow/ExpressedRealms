@@ -123,17 +123,25 @@ const approveStage = async (stageId: number) => {
       </StepPanel>
     </StepItem>
     <StepItem value="6">
-      <Step>CRB Creation</Step>
+      <Step>CRB Needs Printing</Step>
+      <StepPanel>
+        <h3>The CRB needs to be printed</h3>
+        <p>SHQ needs to print the CRB.</p>
+        <p>This will automatically update once it's been printed at least once</p>
+      </StepPanel>
+    </StepItem>
+    <StepItem value="7">
+      <Step>CRB Needs Creation</Step>
       <StepPanel>
         <h3>CRB needs to be created</h3>
-        <p>SHQ needs to create the CRB.  Once ready, scan it and click the below button</p>
+        <p>CRB was printed, need to cut and strip it.  Once done, scan it and click the below button</p>
         <Button
           label="CRB Created and Ready for Pickup" :icon="isFinalized(8)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(8) || !permissionCheck.Event.CrbHandling"
           @click="approveStage(4)"
         />
       </StepPanel>
     </StepItem>
-    <StepItem value="7">
+    <StepItem value="8">
       <Step>CRB Is Ready for Pickup</Step>
       <StepPanel>
         <h3>Needs to be Verified by User</h3>
@@ -144,7 +152,7 @@ const approveStage = async (stageId: number) => {
         />
       </StepPanel>
     </StepItem>
-    <StepItem value="8">
+    <StepItem value="9">
       <Step>Picked Up and Day One</Step>
       <StepPanel>
         <h3>Everything is Done for Day 1</h3>
@@ -154,7 +162,7 @@ const approveStage = async (stageId: number) => {
         />
       </StepPanel>
     </StepItem>
-    <StepItem value="9">
+    <StepItem value="10">
       <Step>Day 2 Checkin</Step>
       <StepPanel>
         <h3>This is the 2nd day the character has been in play, not the 2nd day of play</h3>
@@ -165,7 +173,7 @@ const approveStage = async (stageId: number) => {
         />
       </StepPanel>
     </StepItem>
-    <StepItem value="10">
+    <StepItem value="11">
       <Step>Day 3</Step>
       <StepPanel>
         <h3>Thank You and Come Again!</h3>

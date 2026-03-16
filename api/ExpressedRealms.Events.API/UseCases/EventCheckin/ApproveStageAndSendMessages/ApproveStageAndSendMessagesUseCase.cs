@@ -50,9 +50,10 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         var completedStageIds = approvedStages.Select(x => x.CheckinStageId).ToList();
         
         var stage = CheckinStageEnum.FromValue(model.StageId);
+        var currentStageEnum = CheckinStageEnum.FromValue(currentStage);
         
         // ---- Rule 1: Sequential for stages 1–9 ----
-        if (stage.SortOrder <= 9 && stage.Value != currentStage + 1)
+        if (stage.SortOrder <= 9 && stage.SortOrder != currentStageEnum.SortOrder + 1)
             return Result.Fail("Stage is not next in sequence.");
 
         // ---- Rule 2: Stage 10 & 11 locked until 1–5 complete ----

@@ -46,7 +46,9 @@ internal sealed class CharacterRepository(
         var maxStagePerPlayer = await context
             .CheckinStageMappings.Where(x => x.Checkin.EventId == activeEventId)
             .GroupBy(x => x.Checkin.PlayerId)
-            .Select(g => new { PlayerId = g.Key, MaxStage = g.Max(x => x.CheckinStageId) })
+            .Select(g => new { PlayerId = g.Key, MaxStage = g.OrderByDescending(x => x.CreatedAt)
+                .Select(x => x.CheckinStageId)
+                .First() })
             .ToListAsync(cancellationToken);
 
         var players = await context

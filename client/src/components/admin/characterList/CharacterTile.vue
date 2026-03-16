@@ -7,11 +7,13 @@ import { useRouter } from 'vue-router'
 import axios from 'axios'
 import { adminXpScheduleDialogs } from '@/components/admin/assignedXp/services/dialogs.ts'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+import { adminCharacterListStore } from '@/components/admin/characterList/stores/characterListStore.ts'
 
 const userPermissionInfo = userPermissionStore()
 const permissionCheck = userPermissionInfo.permissionCheck
 const router = useRouter()
 const assignedXpDialogs = adminXpScheduleDialogs()
+const characterListInfo = adminCharacterListStore()
 
 const props = defineProps({
   character: {
@@ -36,6 +38,7 @@ async function downloadCharacterBooklet(characterId: number, characterName: stri
   a.click()
   a.remove()
   URL.revokeObjectURL(url)
+  await characterListInfo.fetchCharacters()
 }
 
 </script>

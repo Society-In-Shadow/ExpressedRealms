@@ -40,13 +40,17 @@ export const adminCharacterListStore
         }
       },
       getAwaitingCheckin() {
-        return this.filteredCharacters.filter(x => x.playerStageId === null)
+        const awaitingStageIds = [8, 9]
+        return this.filteredCharacters.filter(x => x.playerStageId === null || awaitingStageIds.includes(x.playerStageId))
       },
       getAwaitingGoApproval() {
         return this.filteredCharacters.filter(x => x.playerStageId === 1)
       },
-      getAwaitingCrbCreation() {
+      getAwaitingCrbPrinting() {
         return this.filteredCharacters.filter(x => x.playerStageId === 3)
+      },
+      getPrintedCrbs() {
+        return this.filteredCharacters.filter(x => x.playerStageId === 11)
       },
       getAwaitingPickup() {
         return this.filteredCharacters.filter(x => x.playerStageId === 4)
