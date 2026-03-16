@@ -258,10 +258,12 @@ internal sealed class EventCheckinRepository(
 
     public async Task<bool> GetStageStatus(int checkinId, CheckinStageEnum stageId)
     {
-        return await context
-            .CheckinStageMappings.AnyAsync(x => x.CheckinId == checkinId && x.CheckinStageId == stageId.Value, cancellationToken);
+        return await context.CheckinStageMappings.AnyAsync(
+            x => x.CheckinId == checkinId && x.CheckinStageId == stageId.Value,
+            cancellationToken
+        );
     }
-    
+
     public async Task<BasicInfo?> GetCurrentStage(int checkinId)
     {
         return await context

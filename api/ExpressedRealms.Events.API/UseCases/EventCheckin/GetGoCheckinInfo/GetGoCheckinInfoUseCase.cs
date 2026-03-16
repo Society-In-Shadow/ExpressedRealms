@@ -22,12 +22,7 @@ internal sealed class GetGoCheckinInfoUseCase(
             return Result.Fail(result.Errors);
 
         var playerName = await checkinRepository.GetPlayerName(model.LookupId);
-        
-        return Result.Ok(
-            new GetGoCheckinInfoReturnModel()
-            {
-                Username = playerName,
-            }
-        );
+
+        return Result.Ok(new GetGoCheckinInfoReturnModel() { Username = playerName });
     }
 }

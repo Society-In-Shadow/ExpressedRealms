@@ -56,12 +56,14 @@ internal sealed class AddCheckinBonusXpUseCase(
             }
         );
 
-        await approveStageAndSendMessageUseCase.ExecuteAsync(new ApproveStageAndSendMessageModel()
-        {
-            LookupId = model.LookupId,
-            StageId = CheckinStageEnum.AssignedXpCheck
-        });
-        
+        await approveStageAndSendMessageUseCase.ExecuteAsync(
+            new ApproveStageAndSendMessageModel()
+            {
+                LookupId = model.LookupId,
+                StageId = CheckinStageEnum.AssignedXpCheck,
+            }
+        );
+
         return Result.Ok();
     }
 }

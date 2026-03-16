@@ -30,9 +30,12 @@ internal sealed class PlayerRepository(
 
     public async Task<Player> GetPlayerByCharacterId(int characterId)
     {
-        return await context.Players.FirstAsync(x => x.Characters.Any(y => y.Id == characterId), cancellationToken);
+        return await context.Players.FirstAsync(
+            x => x.Characters.Any(y => y.Id == characterId),
+            cancellationToken
+        );
     }
-    
+
     public async Task EditAsync<TEntity>(TEntity entity)
         where TEntity : class
     {

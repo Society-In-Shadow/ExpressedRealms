@@ -164,7 +164,7 @@ public class UpdateAgeInformationUseCaseTests
             )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     /// <summary>
     /// This is needed because if the user already verified their age as 18+, it won't reprompt them to reconfirm it
     /// </summary>
@@ -172,10 +172,15 @@ public class UpdateAgeInformationUseCaseTests
     public async Task UseCase_WillMarkAgeApproval_StepAsComplete_AfterSaving()
     {
         await _useCase.ExecuteAsync(_model);
-        
-        A.CallTo(() => _approveStage.ExecuteAsync(A<ApproveStageAndSendMessageModel>.That.Matches( x =>
-                x.LookupId == _model.LookupId && 
-                x.StageId == CheckinStageEnum.AgeCheckApproval)))
+
+        A.CallTo(() =>
+                _approveStage.ExecuteAsync(
+                    A<ApproveStageAndSendMessageModel>.That.Matches(x =>
+                        x.LookupId == _model.LookupId
+                        && x.StageId == CheckinStageEnum.AgeCheckApproval
+                    )
+                )
+            )
             .MustHaveHappenedOnceExactly();
     }
 

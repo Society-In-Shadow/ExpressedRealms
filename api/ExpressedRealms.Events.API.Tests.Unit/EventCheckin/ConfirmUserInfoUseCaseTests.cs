@@ -33,11 +33,8 @@ public class ConfirmedUserInfoUseCaseTests
         A.CallTo(() => _eventCheckinRepository.CheckinIdExistsAsync(_model.LookupId)).Returns(true);
         A.CallTo(() => _eventCheckinRepository.GetActiveEventId()).Returns(EventId);
 
-        A.CallTo(() => _eventCheckinRepository.GetPlayerAsync(_model.LookupId)).Returns(new Player()
-        {
-            LookupId = _model.LookupId,
-            Id = PlayerId,
-        });
+        A.CallTo(() => _eventCheckinRepository.GetPlayerAsync(_model.LookupId))
+            .Returns(new Player() { LookupId = _model.LookupId, Id = PlayerId });
         A.CallTo(() => _eventCheckinRepository.GetCheckinAsync(EventId, PlayerId))
             .Returns(new Checkin { Id = CheckinId });
         A.CallTo(() => _eventCheckinRepository.GetPlayerNumber(_model.LookupId)).Returns(1);
@@ -147,19 +144,27 @@ public class ConfirmedUserInfoUseCaseTests
     [Fact]
     public async Task UseCase_WillAutomatically_ApproveAgeCheckApprovalStage_WhenTheUserIsAnAdult()
     {
-        A.CallTo(() => _eventCheckinRepository.GetPlayerAsync(_model.LookupId)).Returns(new Player()
-        {
-            LookupId = _model.LookupId,
-            AgeGroupId = PlayerAgeGroupEnum.Adult,
-            Id = PlayerId,
-        });
-        A.CallTo(() => _eventCheckinRepository.GetCurrentStage(CheckinId)).
-            Returns(Task.FromResult<BasicInfo?>(null));
-        
+        A.CallTo(() => _eventCheckinRepository.GetPlayerAsync(_model.LookupId))
+            .Returns(
+                new Player()
+                {
+                    LookupId = _model.LookupId,
+                    AgeGroupId = PlayerAgeGroupEnum.Adult,
+                    Id = PlayerId,
+                }
+            );
+        A.CallTo(() => _eventCheckinRepository.GetCurrentStage(CheckinId))
+            .Returns(Task.FromResult<BasicInfo?>(null));
+
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() => _approveStage.ExecuteAsync(A<ApproveStageAndSendMessageModel>.That.Matches( x =>
-                x.LookupId == _model.LookupId && 
-                x.StageId == CheckinStageEnum.AgeCheckApproval)))
+        A.CallTo(() =>
+                _approveStage.ExecuteAsync(
+                    A<ApproveStageAndSendMessageModel>.That.Matches(x =>
+                        x.LookupId == _model.LookupId
+                        && x.StageId == CheckinStageEnum.AgeCheckApproval
+                    )
+                )
+            )
             .MustHaveHappenedOnceExactly();
     }
 }

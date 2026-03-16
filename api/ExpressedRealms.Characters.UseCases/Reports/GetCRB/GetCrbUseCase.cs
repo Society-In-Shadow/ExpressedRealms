@@ -75,11 +75,13 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCharacterBooklet
                     var currentStage = await checkinRepository.GetCurrentStage(checkin.Id);
                     if (currentStage.Id == CheckinStageEnum.CrbCreation)
                     {
-                        await sendMessageUseCase.ExecuteAsync(new()
-                        {
-                            LookupId = player.LookupId,
-                            StageId = CheckinStageEnum.PrintedCrb
-                        });
+                        await sendMessageUseCase.ExecuteAsync(
+                            new()
+                            {
+                                LookupId = player.LookupId,
+                                StageId = CheckinStageEnum.PrintedCrb,
+                            }
+                        );
                     }
                 }
             }

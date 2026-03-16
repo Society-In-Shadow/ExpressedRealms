@@ -174,14 +174,20 @@ public class GetCheckinQuestionsUseCaseTests
             results.Value.Questions
         );
     }
-    
+
     [Fact]
-    public async Task UseCase_WillReturn_IfStageIsComplete(){
-        A.CallTo(() => _eventCheckinRepository.GetStageStatus(CheckinId, CheckinStageEnum.EventQuestionsCheck))
+    public async Task UseCase_WillReturn_IfStageIsComplete()
+    {
+        A.CallTo(() =>
+                _eventCheckinRepository.GetStageStatus(
+                    CheckinId,
+                    CheckinStageEnum.EventQuestionsCheck
+                )
+            )
             .Returns(true);
-        
+
         var results = await _useCase.ExecuteAsync(_model);
-        
+
         Assert.True(results.Value.HasCompletedStage);
     }
 }

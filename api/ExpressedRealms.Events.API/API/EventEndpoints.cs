@@ -134,7 +134,7 @@ internal static class EventEndpoints
         endpointGroup
             .MapPost("checkin/lookup/{lookupId}/assignXp", AddCheckinBonusXpEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Event.Checkin);
-        
+
         endpointGroup
             .MapGet("checkin/lookup/{lookupId}/assignXp", GetStonePullInfoEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Event.Checkin);

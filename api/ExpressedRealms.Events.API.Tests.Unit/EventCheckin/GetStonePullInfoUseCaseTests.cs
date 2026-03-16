@@ -1,10 +1,7 @@
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerAgeGroupSetup;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.Events.API.Repositories.EventCheckin.Dtos;
-using ExpressedRealms.Events.API.UseCases.EventCheckin.ApproveStageAndSendMessages;
 using ExpressedRealms.Events.API.UseCases.EventCheckin.GetStonePullInfo;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
@@ -100,14 +97,17 @@ public class GetStonePullInfoUseCaseTests
         var results = await _useCase.ExecuteAsync(_model);
         Assert.True(results.Value.IsFirstTimeUser);
     }
-    
+
     [Fact]
-    public async Task UseCase_WillReturn_IfStageIsComplete(){
-        A.CallTo(() => _eventCheckinRepository.GetStageStatus(CheckinId, CheckinStageEnum.AssignedXpCheck))
+    public async Task UseCase_WillReturn_IfStageIsComplete()
+    {
+        A.CallTo(() =>
+                _eventCheckinRepository.GetStageStatus(CheckinId, CheckinStageEnum.AssignedXpCheck)
+            )
             .Returns(true);
-        
+
         var results = await _useCase.ExecuteAsync(_model);
-        
+
         Assert.True(results.Value.HasCompletedStep);
     }
 }

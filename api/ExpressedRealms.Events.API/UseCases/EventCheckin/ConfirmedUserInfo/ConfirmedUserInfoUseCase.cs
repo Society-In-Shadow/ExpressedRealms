@@ -48,17 +48,15 @@ internal sealed class ConfirmedUserInfoUseCase(
         }
 
         // If user is over 18, automatically approve them, if they haven't been yet
-        
+
         var currentStage = await checkinRepository.GetCurrentStage(checkinId);
 
         if (player.AgeGroupId == PlayerAgeGroupEnum.Adult && currentStage is null)
         {
-            await approveStageAndSendMessageUseCase.ExecuteAsync(new()
-            {
-                LookupId = model.LookupId,
-                StageId = CheckinStageEnum.AgeCheckApproval
-            });
-            
+            await approveStageAndSendMessageUseCase.ExecuteAsync(
+                new() { LookupId = model.LookupId, StageId = CheckinStageEnum.AgeCheckApproval }
+            );
+
             currentStage = await checkinRepository.GetCurrentStage(checkinId);
         }
 

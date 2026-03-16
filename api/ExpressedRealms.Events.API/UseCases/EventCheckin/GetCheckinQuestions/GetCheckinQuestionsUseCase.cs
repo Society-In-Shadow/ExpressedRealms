@@ -40,11 +40,14 @@ internal sealed class GetCheckinQuestionsUseCase(
                 .Where(x => x.QuestionTypeId != QuestionTypeEnum.PlayerBadgeNumber)
                 .ToList();
         }
-        
+
         return Result.Ok(
             new GetCheckinQuestionsReturnModel()
             {
-                HasCompletedStage = await checkinRepository.GetStageStatus(checkin.Id, CheckinStageEnum.EventQuestionsCheck),
+                HasCompletedStage = await checkinRepository.GetStageStatus(
+                    checkin.Id,
+                    CheckinStageEnum.EventQuestionsCheck
+                ),
                 Questions = questions
                     .Select(x => new QuestionResponse()
                     {

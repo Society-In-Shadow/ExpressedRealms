@@ -44,12 +44,10 @@ internal sealed class UpdateAgeInformationUseCase(
         }
 
         await checkinRepository.EditAsync(player);
-        
-        await approveStageAndSendMessageUseCase.ExecuteAsync(new()
-        {
-            LookupId = model.LookupId,
-            StageId = CheckinStageEnum.AgeCheckApproval
-        });
+
+        await approveStageAndSendMessageUseCase.ExecuteAsync(
+            new() { LookupId = model.LookupId, StageId = CheckinStageEnum.AgeCheckApproval }
+        );
 
         return Result.Ok();
     }

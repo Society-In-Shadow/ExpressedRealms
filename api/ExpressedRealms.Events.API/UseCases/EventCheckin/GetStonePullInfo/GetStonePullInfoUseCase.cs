@@ -1,8 +1,5 @@
-using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerAgeGroupSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
-using ExpressedRealms.Events.API.UseCases.EventCheckin.ApproveStageAndSendMessages;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
@@ -14,9 +11,7 @@ internal sealed class GetStonePullInfoUseCase(
     CancellationToken cancellationToken
 ) : IGetStonePullInfoUseCase
 {
-    public async Task<Result<GetStonePullInfoReturnModel>> ExecuteAsync(
-        GetStonePullInfoModel model
-    )
+    public async Task<Result<GetStonePullInfoReturnModel>> ExecuteAsync(GetStonePullInfoModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,
@@ -34,7 +29,10 @@ internal sealed class GetStonePullInfoUseCase(
         var isFirstTimePlayer = await checkinRepository.IsFirstTimePlayer(model.LookupId);
         var assignedXp = await checkinRepository.GetAssignedXp(playerId, eventId!.Value);
 
-        var hasCompletedStep = await checkinRepository.GetStageStatus(checkin.Id, CheckinStageEnum.AssignedXpCheck);
+        var hasCompletedStep = await checkinRepository.GetStageStatus(
+            checkin.Id,
+            CheckinStageEnum.AssignedXpCheck
+        );
 
         return Result.Ok(
             new GetStonePullInfoReturnModel()

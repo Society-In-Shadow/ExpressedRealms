@@ -46,12 +46,13 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         }
 
         var dayCheckins = new[] { 6, 7 };
-        var currentStage = approvedStages.Count > 0 ? approvedStages.MaxBy(x => x.CreatedAt).CheckinStageId : 0;
+        var currentStage =
+            approvedStages.Count > 0 ? approvedStages.MaxBy(x => x.CreatedAt).CheckinStageId : 0;
         var completedStageIds = approvedStages.Select(x => x.CheckinStageId).ToList();
-        
+
         var stage = CheckinStageEnum.FromValue(model.StageId);
         var currentStageEnum = CheckinStageEnum.FromValue(currentStage);
-        
+
         // ---- Rule 1: Sequential for stages 1–9 ----
         if (stage.SortOrder <= 9 && stage.SortOrder != currentStageEnum.SortOrder + 1)
             return Result.Fail("Stage is not next in sequence.");
@@ -77,7 +78,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
             }
         );
 
-        // This should be a separate Use Case, though it would be doing nothing 
+        // This should be a separate Use Case, though it would be doing nothing
         // Other then this for now.
         // Later down the road, it would prevent modification of the character
         if (model.StageId == CheckinStageEnum.GoApproval.Value)
@@ -93,7 +94,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
                 }
             );
         }
-        
+
         if (model.StageId == CheckinStageEnum.AssignedXpCheck.Value)
         {
             // Once applied, it goes into GO Check stage
