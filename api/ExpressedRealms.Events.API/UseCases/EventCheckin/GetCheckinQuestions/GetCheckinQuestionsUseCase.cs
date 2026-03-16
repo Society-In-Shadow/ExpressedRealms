@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.DB.Models.Events.Questions.QuestionTypeSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.Events.API.Repositories.EventQuestions;
@@ -39,10 +40,11 @@ internal sealed class GetCheckinQuestionsUseCase(
                 .Where(x => x.QuestionTypeId != QuestionTypeEnum.PlayerBadgeNumber)
                 .ToList();
         }
-
+        
         return Result.Ok(
             new GetCheckinQuestionsReturnModel()
             {
+                HasCompletedStage = await checkinRepository.GetStageStatus(checkin.Id, CheckinStageEnum.EventQuestionsCheck),
                 Questions = questions
                     .Select(x => new QuestionResponse()
                     {

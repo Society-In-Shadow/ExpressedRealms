@@ -92,9 +92,9 @@ export const EventCheckinStore
         const response = await axios.get<AgeInfo>(`events/checkin/lookup/${this.lookupId}/ageInfo`)
         return response.data
       },
-      async getQuestions(): Promise<Question[]> {
+      async getQuestions(): Promise<GetCheckinQuestionsResponse> {
         const response = await axios.get<GetCheckinQuestionsResponse>(`events/checkin/lookup/${this.lookupId}/questions`)
-        return response.data.questions
+        return response.data
       },
       async updateQuestion(question: Question) {
         await axios.put(`/events/checkin/lookup/${this.lookupId}/questions/${question.id}`, { response: question.response })

@@ -4,6 +4,7 @@ using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageMappingSetup;
+using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.DB.Models.Events.EventSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin.Dtos;
@@ -255,11 +256,17 @@ internal sealed class EventCheckinRepository(
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<bool> GetStageStatus(int checkinId, CheckinStageEnum stageId)
+    {
+        return await context
+            .CheckinStageMappings.AnyAsync(x => x.CheckinId == checkinId && x.CheckinStageId == stageId.Value, cancellationToken);
+    }
+    
     public async Task<BasicInfo?> GetCurrentStage(int checkinId)
     {
         return await context
             .CheckinStageMappings.Where(x => x.CheckinId == checkinId)
-            .OrderByDescending(x => x.CheckinStageId)
+            .OrderByDescending(x => x.CreatedAt)
             .Select(x => new BasicInfo { Id = x.CheckinStageId, Name = x.CheckinStage.Name })
             .FirstOrDefaultAsync(cancellationToken);
     }

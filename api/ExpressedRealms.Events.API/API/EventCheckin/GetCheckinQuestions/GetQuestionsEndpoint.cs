@@ -24,6 +24,7 @@ public static class GetCheckinQuestionsEndpoint
         return TypedResults.Ok(
             new GetCheckinQuestionsResponse()
             {
+                HasCompletedStage = results.Value.HasCompletedStage,
                 Questions = results
                     .Value.Questions.Select(x => new QuestionResponse()
                     {

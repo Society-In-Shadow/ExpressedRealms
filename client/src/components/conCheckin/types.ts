@@ -19,6 +19,7 @@ export interface ApproveCheckinInfo {
 }
 
 export interface GetCheckinQuestionsResponse {
+  hasCompletedStage: boolean
   questions: Array<Question>
 }
 
