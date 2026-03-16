@@ -1,16 +1,17 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import type {
-  ActiveEvent,
-  AgeInfo,
-  ApproveCheckinInfo,
-  AssignedXpType,
-  BasicInfo,
-  CheckinInfo,
-  GetCheckinQuestionsResponse,
-  GoCheckinInfo,
-  PrimaryCharacterInfo,
-  Question,
+import {
+  type ActiveEvent,
+  type AgeInfo,
+  type ApproveCheckinInfo,
+  type AssignedXpType,
+  type BasicInfo,
+  type CheckinInfo,
+  CheckinStage,
+  type GetCheckinQuestionsResponse,
+  type GoCheckinInfo,
+  type PrimaryCharacterInfo,
+  type Question,
 } from '@/components/conCheckin/types.ts'
 import toaster from '@/services/Toasters'
 
@@ -30,6 +31,7 @@ export const EventCheckinStore
         broughtNewPlayer: null as boolean | null,
         assignedXp: {} as AssignedXpType | null | undefined,
         primaryCharacter: {} as PrimaryCharacterInfo | null,
+        activeStepperStep: '1',
       }
     },
     actions: {
@@ -67,6 +69,7 @@ export const EventCheckinStore
 
         this.hasInvalidLookupId = false
         this.goCheckinInfo = response.data
+        this.activeStepperStep = '2'
         return true
       },
       async verifiedUserInfo() {
@@ -74,12 +77,54 @@ export const EventCheckinStore
         const response = await axios.get<ApproveCheckinInfo>(`/events/checkin/lookup/${this.lookupId}/approve`)
 
         this.foundInfo = true
-        this.checkinId = response.data.checkinId
         this.playerNumber = response.data.playerNumber
         this.assignedXp = response.data.assignedXp
         this.primaryCharacter = response.data.primaryCharacterInfo
         this.checkinStage = response.data.currentStage
         this.isReset = false
+
+        this.handleStageRedirect(response.data.currentStage.id as CheckinStage)
+      },
+      handleStageRedirect(checkinStage: CheckinStage) {
+        switch (checkinStage as CheckinStage) {
+          default:
+            // They need to verify their age
+            this.activeStepperStep = '2'
+            break
+          case CheckinStage.AgeCheckApproval:
+            // Age approved, They need to answer event questions next
+            this.activeStepperStep = '3'
+            break
+          case CheckinStage.EventQuestionsCheck:
+            // Questions answered, They need the Stone Puller Next
+            this.activeStepperStep = '4'
+            break
+          case CheckinStage.AssignedXpCheck:
+            // Do nothing, this should have automatically
+            // Been set SHQ Approval
+            break
+          case CheckinStage.ShqApproval:
+            // Stone Pulled, They need to get GO Approval next
+            // Redirect them to the character sheet
+            break
+          case CheckinStage.GoApproval:
+            // Show need to print CRB
+            break
+          case CheckinStage.CrbCreation:
+            // show that CRB needs to be printed
+            break
+          case CheckinStage.PrintedCrb:
+            // show need to cut and strip CRB
+            break
+          case CheckinStage.CrbReadForPickup:
+            // Show need to verify user pickup
+            this.activeStepperStep = '3'
+            break
+          case CheckinStage.CrbPickedUp:
+            // User Has picked up CRB and verified strip info
+            this.activeStepperStep = '3'
+            break
+        }
       },
       async verifiedAge(ageTypeId: number, hasWaiver: boolean) {
         await axios.put(`events/checkin/lookup/${this.lookupId}/ageInfo`, {
@@ -87,6 +132,7 @@ export const EventCheckinStore
           hasSignedConsentForm: hasWaiver,
         })
         await this.resetGoPage()
+        this.activeStepperStep = '3'
       },
       async getVerifiedAge(): Promise<AgeInfo> {
         const response = await axios.get<AgeInfo>(`events/checkin/lookup/${this.lookupId}/ageInfo`)

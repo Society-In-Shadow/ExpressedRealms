@@ -46,17 +46,7 @@ const stepperStep = ref('1')
 
 async function onDetect(detectedCodes) {
   eventCheckinInfo.lookupId = detectedCodes
-  if (!await eventCheckinInfo.getGoCheckinInfo(detectedCodes)) {
-    return
-  }
-
-  const stageId = eventCheckinInfo.checkinStage?.id
-  if (stageId && stageId >= 1) {
-    stepperStep.value = String(stageId + 5)
-  }
-  else {
-    stepperStep.value = '2'
-  }
+  await eventCheckinInfo.getGoCheckinInfo(detectedCodes)
 }
 
 const canFinalizeStage = (stageId: number) => {
@@ -75,19 +65,6 @@ const approveStage = async (stageId: number) => {
   await eventCheckinInfo.approveStage(stageId)
 }
 
-const typeName = (typeId: number) => {
-  switch (typeId) {
-    case 2:
-      return 'Checkin Bonus'
-    case 5:
-      return 'Brought New Player'
-    case 4:
-      return 'First Time Player'
-    default:
-      return 'Unknown'
-  }
-}
-
 </script>
 
 <template>
@@ -97,7 +74,7 @@ const typeName = (typeId: number) => {
   <div v-if="permissionCheck.CharacterManagement.Retire" class="text-right">
     <Button label="Retire Character" @click="popups.retireConfirmation($event, eventCheckinInfo.primaryCharacter.characterName)" />
   </div>
-  <Stepper v-model:value="stepperStep">
+  <Stepper v-model:value="eventCheckinInfo.activeStepperStep">
     <StepItem value="1">
       <Step>Scan QR Code</Step>
       <StepPanel>
@@ -108,43 +85,20 @@ const typeName = (typeId: number) => {
     </StepItem>
     <StepItem value="2">
       <Step>Verify User Info</Step>
-      <StepPanel v-if="stepperStep == '2'" v-slot="{activateCallback}">
+      <StepPanel v-if="eventCheckinInfo.activeStepperStep == '2'">
         <AgeVerificationStep />
-        <Button
-          label="Reviewed" icon="pi pi-arrow-right" icon-pos="right" class="mb-4 ml-3"
-          @click="activateCallback('3')"
-        />
       </StepPanel>
     </StepItem>
     <StepItem value="3">
       <Step>HR Questions</Step>
-      <StepPanel v-if="stepperStep == '3'" v-slot="{activateCallback}">
+      <StepPanel v-if="eventCheckinInfo.activeStepperStep == '3'">
         <AnswerQuestions />
-        <Button label="Reviewed" icon="pi pi-arrow-right" icon-pos="right" class="mb-4" @click="activateCallback('4')" />
       </StepPanel>
     </StepItem>
     <StepItem value="4">
       <Step>Stone Pull</Step>
-      <StepPanel v-slot="{activateCallback}">
-        <StonePullerStep v-if="stepperStep == '4'" />
-        <Button label="Reviewed" icon="pi pi-arrow-right" icon-pos="right" class="mb-4" @click="activateCallback('5')" />
-      </StepPanel>
-    </StepItem>
-    <StepItem value="5">
-      <Step>Review and Finalize Initial Check-in</Step>
-      <StepPanel>
-        <h1>Review</h1>
-        <h2>Questions</h2>
-        <div v-for="question in eventCheckinInfo.questions" :key="question.id">
-          <h3>{{ question.question }}</h3>
-          <p>{{ question.response }}</p>
-        </div>
-        <h2>Check-in Bonus</h2>
-        <p>+{{ eventCheckinInfo.assignedXp?.amount }} - {{ typeName(eventCheckinInfo.assignedXp?.typeId) }}</p>
-        <Button
-          label="Finalize Check-in" :icon="isFinalized(5)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(5)"
-          @click="approveStage(1)"
-        />
+      <StepPanel v-if="eventCheckinInfo.activeStepperStep == '4'">
+        <StonePullerStep />
       </StepPanel>
     </StepItem>
     <StepItem value="6" :disabled="stepperStep !== '6'">

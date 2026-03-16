@@ -1,3 +1,19 @@
+export const CheckinStage = {
+  ShqApproval: 1,
+  GoApproval: 2,
+  CrbCreation: 3,
+  CrbReadForPickup: 4,
+  CrbPickedUp: 5,
+  Day2Checkin: 6,
+  Day3Checkin: 7,
+  AgeCheckApproval: 8,
+  EventQuestionsCheck: 9,
+  AssignedXpCheck: 10,
+  PrintedCrb: 11,
+} as const
+
+export type CheckinStage = typeof CheckinStage[keyof typeof CheckinStage]
+
 export interface CheckinInfo {
   lookupId: string
   checkinStage: BasicInfo | null
