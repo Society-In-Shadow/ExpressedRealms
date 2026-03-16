@@ -48,4 +48,28 @@ public sealed class CheckinStageEnum : SmartEnum<CheckinStageEnum, int>
         7,
         "Player has checked in for the day 3 activities (Usually Sunday)"
     );
+    
+    public static readonly CheckinStageEnum AgeCheckApproval = new(
+        "Age Check Approval",
+        8,
+        "User has completed the age check approval process, or player has been previously approved as an adult"
+    );
+    
+    public static readonly CheckinStageEnum EventQuestionsCheck = new(
+        "Event Questions Check",
+        9,
+        "Event Question have been answered"
+    );
+    
+    public static readonly CheckinStageEnum AssignedXpCheck = new(
+        "Assign XP Check",
+        10,
+        "Player has been assigned XP"
+    );
+    
+    public static readonly CheckinStageEnum PrintedCrb = new(
+        "CRB has been printed",
+        11,
+        "CRB has printed at least once during this event"
+    );
 }
