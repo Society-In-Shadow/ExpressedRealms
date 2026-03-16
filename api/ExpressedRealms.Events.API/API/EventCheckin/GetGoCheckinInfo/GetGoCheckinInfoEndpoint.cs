@@ -29,8 +29,6 @@ public static class GetGoCheckinInfoEndpoint
             {
                 WasFound = true,
                 UserName = results.Value.Username,
-                IsFirstTimeUser = results.Value.IsFirstTimeUser,
-                AlreadyCheckedIn = results.Value.AlreadyCheckedIn,
             }
         );
     }

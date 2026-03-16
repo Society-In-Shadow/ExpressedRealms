@@ -26,7 +26,6 @@ export const EventCheckinStore
         event: {} as ActiveEvent,
         checkinStage: {} as BasicInfo | null,
         goCheckinInfo: {} as GoCheckinInfo,
-        checkinId: 0,
         playerNumber: 0,
         broughtNewPlayer: null as boolean | null,
         assignedXp: {} as AssignedXpType | null | undefined,
@@ -42,7 +41,6 @@ export const EventCheckinStore
         this.event = {} as ActiveEvent
         this.checkinStage = null
         this.goCheckinInfo = {} as GoCheckinInfo
-        this.checkinId = 0
         this.playerNumber = 0
         this.broughtNewPlayer = false
         this.assignedXp = null
