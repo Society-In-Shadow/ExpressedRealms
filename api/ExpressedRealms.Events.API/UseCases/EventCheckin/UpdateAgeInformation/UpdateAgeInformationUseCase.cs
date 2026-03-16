@@ -1,6 +1,8 @@
+using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerAgeGroupSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
+using ExpressedRealms.Events.API.UseCases.EventCheckin.ApproveStageAndSendMessages;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 using Microsoft.AspNetCore.Identity;
@@ -11,6 +13,7 @@ internal sealed class UpdateAgeInformationUseCase(
     IEventCheckinRepository checkinRepository,
     UserManager<User> userManager,
     TimeProvider timeProvider,
+    IApproveStageAndSendMessageUseCase approveStageAndSendMessageUseCase,
     UpdateAgeInformationModelValidator validator,
     CancellationToken cancellationToken
 ) : IUpdateAgeInformationUseCase
@@ -41,6 +44,12 @@ internal sealed class UpdateAgeInformationUseCase(
         }
 
         await checkinRepository.EditAsync(player);
+        
+        await approveStageAndSendMessageUseCase.ExecuteAsync(new()
+        {
+            LookupId = model.LookupId,
+            StageId = CheckinStageEnum.AgeCheckApproval
+        });
 
         return Result.Ok();
     }

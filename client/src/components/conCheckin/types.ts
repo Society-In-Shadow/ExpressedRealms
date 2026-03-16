@@ -12,9 +12,7 @@ export interface GoCheckinInfo {
 }
 
 export interface ApproveCheckinInfo {
-  playerName: string
   isFirstTimeUser: boolean
-  checkinId: number
   playerNumber: number
   assignedXp: AssignedXpType
   questions: Array<Question>

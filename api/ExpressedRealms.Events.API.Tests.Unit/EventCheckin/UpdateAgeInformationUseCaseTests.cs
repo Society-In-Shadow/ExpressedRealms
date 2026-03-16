@@ -1,7 +1,9 @@
+using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerAgeGroupSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
+using ExpressedRealms.Events.API.UseCases.EventCheckin.ApproveStageAndSendMessages;
 using ExpressedRealms.Events.API.UseCases.EventCheckin.UpdateAgeInformation;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
@@ -13,6 +15,7 @@ namespace ExpressedRealms.Events.API.Tests.Unit.EventCheckin;
 public class UpdateAgeInformationUseCaseTests
 {
     private readonly UpdateAgeInformationUseCase _useCase;
+    private readonly IApproveStageAndSendMessageUseCase _approveStage;
     private readonly UpdateAgeInformationModelValidator _validator;
     private readonly IEventCheckinRepository _eventCheckinRepository;
     private readonly TimeProvider _timeProvider;
@@ -32,6 +35,7 @@ public class UpdateAgeInformationUseCaseTests
         };
         _player = new Player() { LookupId = _model.LookupId };
         _eventCheckinRepository = A.Fake<IEventCheckinRepository>();
+        _approveStage = A.Fake<IApproveStageAndSendMessageUseCase>();
 
         var store = A.Fake<IUserStore<User>>();
         _timeProvider = A.Fake<TimeProvider>();
@@ -66,6 +70,7 @@ public class UpdateAgeInformationUseCaseTests
             _eventCheckinRepository,
             _userManager,
             _timeProvider,
+            _approveStage,
             _validator,
             CancellationToken.None
         );
@@ -157,6 +162,20 @@ public class UpdateAgeInformationUseCaseTests
                     A<Player>.That.Matches(k => k.LastAgeGroupCheck == _dateTimeNow)
                 )
             )
+            .MustHaveHappenedOnceExactly();
+    }
+    
+    /// <summary>
+    /// This is needed because if the user already verified their age as 18+, it won't reprompt them to reconfirm it
+    /// </summary>
+    [Fact]
+    public async Task UseCase_WillMarkAgeApproval_StepAsComplete_AfterSaving()
+    {
+        await _useCase.ExecuteAsync(_model);
+        
+        A.CallTo(() => _approveStage.ExecuteAsync(A<ApproveStageAndSendMessageModel>.That.Matches( x =>
+                x.LookupId == _model.LookupId && 
+                x.StageId == CheckinStageEnum.AgeCheckApproval)))
             .MustHaveHappenedOnceExactly();
     }
 
