@@ -5,7 +5,7 @@ import Button from 'primevue/button'
 import RadioButtonGroup from 'primevue/radiobuttongroup'
 import RadioButton from 'primevue/radiobutton'
 import { onBeforeMount, ref } from 'vue'
-import type { Question } from '@/components/conCheckin/types.ts'
+import { CheckinStage, type Question } from '@/components/conCheckin/types.ts'
 
 const eventCheckinInfo = EventCheckinStore()
 const playerName = ref('')
@@ -30,6 +30,12 @@ const updateNewPlayerQuestion = (question: Question) => {
     question.response = `Yes - ${playerName.value}`
   }
   eventCheckinInfo.updateQuestion(question)
+}
+
+const submitCheckin = async () => {
+  // Stub for now
+  await eventCheckinInfo.approveStage(CheckinStage.EventQuestionsCheck)
+  eventCheckinInfo.activeStepperStep = '4'
 }
 
 </script>
@@ -65,4 +71,5 @@ const updateNewPlayerQuestion = (question: Question) => {
       <Button v-if="question.typeId !== 1" label="Save" :disabled="isReadOnly" @click="eventCheckinInfo.updateQuestion(question)" />
     </div>
   </div>
+  <Button label="Submit Checkin" :disabled="isReadOnly" @click="submitCheckin" />
 </template>
