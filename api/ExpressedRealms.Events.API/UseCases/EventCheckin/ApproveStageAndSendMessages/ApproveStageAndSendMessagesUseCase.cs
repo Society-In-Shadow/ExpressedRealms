@@ -1,4 +1,5 @@
 using ExpressedRealms.DB.Models.Checkins.CheckinStageMappingSetup;
+using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.Events.API.Discord;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
@@ -45,22 +46,26 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         }
 
         var dayCheckins = new[] { 6, 7 };
-        var nextStage = approvedStages.Count > 0 ? approvedStages.Max(x => x.CheckinStageId) : 0;
+        var currentStage =
+            approvedStages.Count > 0 ? approvedStages.MaxBy(x => x.CreatedAt)!.CheckinStageId : 0;
         var completedStageIds = approvedStages.Select(x => x.CheckinStageId).ToList();
 
-        // ---- Rule 1: Sequential for stages 1–5 ----
-        if (model.StageId <= 5 && model.StageId != nextStage + 1)
+        var stage = CheckinStageEnum.FromValue(model.StageId);
+        var currentStageEnum = CheckinStageEnum.FromValue(currentStage);
+
+        // ---- Rule 1: Sequential for stages 1–9 ----
+        if (stage.SortOrder <= 9 && stage.SortOrder != currentStageEnum.SortOrder + 1)
             return Result.Fail("Stage is not next in sequence.");
 
-        // ---- Rule 2: Stage 6 & 7 locked until 1–5 complete ----
+        // ---- Rule 2: Stage 10 & 11 locked until 1–5 complete ----
         if (dayCheckins.Contains(model.StageId))
         {
             bool firstFiveComplete = Enumerable
-                .Range(1, 5)
-                .All(stage => completedStageIds.Contains(stage));
+                .Range(1, 9)
+                .All(stageId => completedStageIds.Contains(stageId));
 
             if (!firstFiveComplete)
-                return Result.Fail("Stages 1 through 5 must be completed before day check-ins.");
+                return Result.Fail("Stages 1 through 9 must be completed before day check-ins.");
         }
 
         await checkinRepository.CompleteStage(
@@ -73,7 +78,10 @@ internal sealed class ApproveStageAndSendMessageUseCase(
             }
         );
 
-        if (model.StageId == 2)
+        // This should be a separate Use Case, though it would be doing nothing
+        // Other then this for now.
+        // Later down the road, it would prevent modification of the character
+        if (model.StageId == CheckinStageEnum.GoApproval.Value)
         {
             // Once GO Approves, it immediately goes into CRB Creation
             await checkinRepository.CompleteStage(
@@ -81,7 +89,21 @@ internal sealed class ApproveStageAndSendMessageUseCase(
                 {
                     CreatedAt = timeProvider.GetUtcNow(),
                     ApproverUserId = userContext.CurrentUserId(),
-                    CheckinStageId = model.StageId + 1,
+                    CheckinStageId = CheckinStageEnum.CrbCreation.Value,
+                    CheckinId = checkin.Id,
+                }
+            );
+        }
+
+        if (model.StageId == CheckinStageEnum.AssignedXpCheck.Value)
+        {
+            // Once applied, it goes into GO Check stage
+            await checkinRepository.CompleteStage(
+                new CheckinStageMapping()
+                {
+                    CreatedAt = timeProvider.GetUtcNow(),
+                    ApproverUserId = userContext.CurrentUserId(),
+                    CheckinStageId = CheckinStageEnum.ShqApproval.Value,
                     CheckinId = checkin.Id,
                 }
             );

@@ -1,3 +1,7 @@
+using ExpressedRealms.Characters.Repository.Players;
+using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
+using ExpressedRealms.Events.API.Repositories.EventCheckin;
+using ExpressedRealms.Events.API.UseCases.EventCheckin.ApproveStageAndSendMessages;
 using ExpressedRealms.Powers.UseCases.GetCharacterPowerCardReport;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
@@ -12,6 +16,9 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCharacterBooklet
     internal sealed class GetCharacterBookletUseCase(
         IGetCharacterPowerCardReportUseCase powerReport,
         IGetCharacterSheetReportUseCase crbReport,
+        IPlayerRepository playerRepository,
+        IEventCheckinRepository checkinRepository,
+        IApproveStageAndSendMessageUseCase sendMessageUseCase,
         GetCharacterBookletModelValidator validator,
         CancellationToken cancellationToken
     ) : IGetCharacterBookletUseCase
@@ -56,6 +63,27 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCharacterBooklet
                 finalDocument.AddPage(page);
                 var blankPage = finalDocument.AddPage();
                 blankPage.Orientation = PageOrientation.Landscape;
+            }
+
+            var eventId = await checkinRepository.GetActiveEventId();
+            if (eventId is not null)
+            {
+                var player = await playerRepository.GetPlayerByCharacterId(model.CharacterId);
+                var checkin = await checkinRepository.GetCheckinAsync(eventId!.Value, player.Id);
+                if (checkin is not null)
+                {
+                    var currentStage = await checkinRepository.GetCurrentStage(checkin.Id);
+                    if (currentStage!.Id == CheckinStageEnum.CrbCreation)
+                    {
+                        await sendMessageUseCase.ExecuteAsync(
+                            new()
+                            {
+                                LookupId = player.LookupId,
+                                StageId = CheckinStageEnum.PrintedCrb,
+                            }
+                        );
+                    }
+                }
             }
 
             // Save the merged result to memory stream

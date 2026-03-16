@@ -1,5 +1,8 @@
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
+using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerAgeGroupSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
+using ExpressedRealms.Events.API.UseCases.EventCheckin.ApproveStageAndSendMessages;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
@@ -8,6 +11,7 @@ namespace ExpressedRealms.Events.API.UseCases.EventCheckin.ConfirmedUserInfo;
 internal sealed class ConfirmedUserInfoUseCase(
     IEventCheckinRepository checkinRepository,
     ConfirmedUserInfoModelValidator validator,
+    IApproveStageAndSendMessageUseCase approveStageAndSendMessageUseCase,
     CancellationToken cancellationToken
 ) : IConfirmedUserInfoUseCase
 {
@@ -25,17 +29,13 @@ internal sealed class ConfirmedUserInfoUseCase(
             return Result.Fail(result.Errors);
 
         var eventId = await checkinRepository.GetActiveEventId();
-        var playerId = await checkinRepository.GetPlayerId(model.LookupId);
-        var checkinId = await GetCheckinId(eventId, playerId);
-
-        var playerName = await checkinRepository.GetPlayerName(model.LookupId);
-        var isFirstTimePlayer = await checkinRepository.IsFirstTimePlayer(model.LookupId);
+        var player = await checkinRepository.GetPlayerAsync(model.LookupId);
+        var checkinId = await GetCheckinId(eventId, player.Id);
         var playerNumber = checkinRepository.GetPlayerNumber(model.LookupId);
 
         var primaryCharacterInformation = await checkinRepository.GetPrimaryCharacterInformation(
-            playerId
+            player.Id
         );
-        var assignedXp = await checkinRepository.GetAssignedXp(playerId, eventId!.Value);
 
         PrimaryCharacterInfo? characterInfo = null;
         if (primaryCharacterInformation is not null)
@@ -48,25 +48,24 @@ internal sealed class ConfirmedUserInfoUseCase(
         }
 
         // If user is over 18, automatically approve them, if they haven't been yet
-        var player = await checkinRepository.GetPlayerAsync(model.LookupId);
+
         var currentStage = await checkinRepository.GetCurrentStage(checkinId);
+
+        if (player.AgeGroupId == PlayerAgeGroupEnum.Adult && currentStage is null)
+        {
+            await approveStageAndSendMessageUseCase.ExecuteAsync(
+                new() { LookupId = model.LookupId, StageId = CheckinStageEnum.AgeCheckApproval }
+            );
+
+            currentStage = await checkinRepository.GetCurrentStage(checkinId);
+        }
 
         return Result.Ok(
             new ConfirmedUserInfoReturnModel()
             {
-                PlayerName = playerName,
-                IsFirstTimeUser = isFirstTimePlayer,
                 PlayerNumber = playerNumber,
-                CheckinId = checkinId,
-                PrimaryCharacterInfo = characterInfo,
-                AssignedXp = assignedXp is null
-                    ? null
-                    : new AssignedXpType()
-                    {
-                        TypeId = assignedXp.TypeId,
-                        Amount = assignedXp.Amount,
-                    },
                 CurrentStage = currentStage,
+                PrimaryCharacterInfo = characterInfo, // Needed for Go Verification - Just need to return character id
             }
         );
     }

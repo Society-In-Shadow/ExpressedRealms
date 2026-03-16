@@ -1,37 +1,45 @@
+using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
+using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
-using ExpressedRealms.Events.API.UseCases.EventCheckin.GetGoCheckinInfo;
+using ExpressedRealms.Events.API.Repositories.EventCheckin.Dtos;
+using ExpressedRealms.Events.API.UseCases.EventCheckin.GetStonePullInfo;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
 using Xunit;
 
 namespace ExpressedRealms.Events.API.Tests.Unit.EventCheckin;
 
-public class GetGoCheckinInfoUseCaseTests
+public class GetStonePullInfoUseCaseTests
 {
-    private readonly GetGoCheckinInfoUseCase _useCase;
-    private readonly GetGoCheckinInfoModelValidator _validator;
+    private readonly GetStonePullInfoUseCase _useCase;
+    private readonly GetStonePullInfoModelValidator _validator;
     private readonly IEventCheckinRepository _eventCheckinRepository;
-    private readonly GetGoCheckinInfoModel _model;
-
+    private readonly GetStonePullInfoModel _model;
     private const int EventId = 2;
     private Guid PlayerId = Guid.NewGuid();
+    private const int CheckinId = 5;
 
-    public GetGoCheckinInfoUseCaseTests()
+    public GetStonePullInfoUseCaseTests()
     {
-        _model = new GetGoCheckinInfoModel { LookupId = "ABCDEFGH" };
+        _model = new GetStonePullInfoModel { LookupId = "ABCDEFGH" };
 
         _eventCheckinRepository = A.Fake<IEventCheckinRepository>();
-
+        
         A.CallTo(() => _eventCheckinRepository.CheckinIdExistsAsync(_model.LookupId)).Returns(true);
-        A.CallTo(() => _eventCheckinRepository.GetPlayerName(_model.LookupId))
-            .Returns("Test Player");
+        A.CallTo(() => _eventCheckinRepository.IsFirstTimePlayer(_model.LookupId)).Returns(true);
         A.CallTo(() => _eventCheckinRepository.GetActiveEventId()).Returns(EventId);
 
         A.CallTo(() => _eventCheckinRepository.GetPlayerId(_model.LookupId)).Returns(PlayerId);
+        A.CallTo(() => _eventCheckinRepository.GetCheckinAsync(EventId, PlayerId))
+            .Returns(new Checkin { Id = CheckinId });
+        A.CallTo(() => _eventCheckinRepository.GetPlayerNumber(_model.LookupId)).Returns(1);
 
-        _validator = new GetGoCheckinInfoModelValidator(_eventCheckinRepository);
+        A.CallTo(() => _eventCheckinRepository.GetAssignedXp(PlayerId, EventId))
+            .Returns(new AssignedXpTypeDto() { TypeId = 3, Amount = 10 });
 
-        _useCase = new GetGoCheckinInfoUseCase(
+        _validator = new GetStonePullInfoModelValidator(_eventCheckinRepository);
+
+        _useCase = new GetStonePullInfoUseCase(
             _eventCheckinRepository,
             _validator,
             CancellationToken.None
@@ -77,9 +85,30 @@ public class GetGoCheckinInfoUseCaseTests
     }
 
     [Fact]
-    public async Task UseCase_WillReturnPlayerName()
+    public async Task UseCase_WillReturn_AssignedXp()
     {
         var results = await _useCase.ExecuteAsync(_model);
-        Assert.Equal("Test Player", results.Value.Username);
+        Assert.Equal(10, results.Value.AssignedXp!.Amount);
+        Assert.Equal(3, results.Value.AssignedXp.TypeId);
+    }
+
+    [Fact]
+    public async Task UseCase_WillReturn_IfTheyAreFirstTimePlayer()
+    {
+        var results = await _useCase.ExecuteAsync(_model);
+        Assert.True(results.Value.IsFirstTimeUser);
+    }
+
+    [Fact]
+    public async Task UseCase_WillReturn_IfStageIsComplete()
+    {
+        A.CallTo(() =>
+                _eventCheckinRepository.GetStageStatus(CheckinId, CheckinStageEnum.AssignedXpCheck)
+            )
+            .Returns(true);
+
+        var results = await _useCase.ExecuteAsync(_model);
+
+        Assert.True(results.Value.HasCompletedStep);
     }
 }

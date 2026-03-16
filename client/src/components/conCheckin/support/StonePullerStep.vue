@@ -8,18 +8,27 @@ import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinSt
 
 const eventCheckinInfo = EventCheckinStore()
 const checkinBonus = ref<number | null>(null)
+const isFirstTimeUser = ref(false)
+const broughtNewPlayer = ref(false)
+const assignedXpAmount = ref({})
+const isReadOnly = ref(true)
 
-onMounted(() => {
-  checkinBonus.value = eventCheckinInfo.assignedXp?.amount ?? 0
+onMounted(async () => {
+  const response = await eventCheckinInfo.getStonePullInformation()
 
-  if (eventCheckinInfo.broughtNewPlayer)
+  isFirstTimeUser.value = response.isFirstTimeUser
+  assignedXpAmount.value = response.assignedXp
+  isReadOnly.value = response.hasCompletedStep
+  checkinBonus.value = response.assignedXp?.amount ?? null
+
+  if (broughtNewPlayer.value)
     checkinBonus.value = 5
 
-  if (eventCheckinInfo.goCheckinInfo.isFirstTimeUser)
+  if (isFirstTimeUser.value)
     checkinBonus.value = 5
 })
 
-const overrideBonus = computed(() => eventCheckinInfo.goCheckinInfo.isFirstTimeUser || eventCheckinInfo.broughtNewPlayer)
+const overrideBonus = computed(() => isFirstTimeUser.value || broughtNewPlayer.value)
 
 function handleStonePulled(bonus: number) {
   if (checkinBonus.value === null)
@@ -28,9 +37,9 @@ function handleStonePulled(bonus: number) {
 
 async function permanentlySaveBonus() {
   let type = 2
-  if (eventCheckinInfo.goCheckinInfo.isFirstTimeUser)
+  if (isFirstTimeUser.value)
     type = 4
-  else if (eventCheckinInfo.broughtNewPlayer)
+  else if (broughtNewPlayer.value)
     type = 5
   await eventCheckinInfo.addAssignedXp(type, checkinBonus.value!)
 }
@@ -45,18 +54,18 @@ async function permanentlySaveBonus() {
     <div class="d-flex flex-row gap-2">
       <InputNumber
         id="stoneBonus" v-model="checkinBonus" class="flex-shrink-1" :max="5" :min="0"
-        :disabled="eventCheckinInfo.assignedXp !== null || overrideBonus"
+        :disabled="assignedXpAmount !== null || overrideBonus"
       />
-      <Button v-if="eventCheckinInfo.assignedXp === null" label="Permanently Save" @click="permanentlySaveBonus" />
-      <p v-if="eventCheckinInfo.assignedXp !== null">
+      <Button v-if="checkinBonus && (checkinBonus >= 1 || checkinBonus <=5) && !isReadOnly" label="Permanently Save" @click="permanentlySaveBonus" />
+      <p v-if="assignedXpAmount !== null">
         Already Finalized
       </p>
     </div>
   </div>
-  <p v-if="eventCheckinInfo.goCheckinInfo.isFirstTimeUser">
+  <p v-if="isFirstTimeUser">
     This is a new player, they automatically get the full 5 xp <span v-if="!eventCheckinInfo.assignedXp">, you just need to save it</span>
   </p>
-  <p v-if="eventCheckinInfo.broughtNewPlayer">
+  <p v-if="broughtNewPlayer">
     They brought in a new player, they automatically get the full 5 xp <span v-if="!eventCheckinInfo.assignedXp">, you just need to save it</span>
   </p>
 

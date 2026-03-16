@@ -46,46 +46,11 @@ const stepperStep = ref('1')
 
 async function onDetect(detectedCodes) {
   eventCheckinInfo.lookupId = detectedCodes
-  if (!await eventCheckinInfo.getGoCheckinInfo(detectedCodes)) {
-    return
-  }
-
-  const stageId = eventCheckinInfo.checkinStage?.id
-  if (stageId && stageId >= 1) {
-    stepperStep.value = String(stageId + 5)
-  }
-  else {
-    stepperStep.value = '2'
-  }
-}
-
-const canFinalizeStage = (stageId: number) => {
-  if (eventCheckinInfo.checkinStage == null && stageId == 5)
-    return false
-  return eventCheckinInfo.checkinStage?.id + 5 != stageId
-}
-
-const isFinalized = (stageId: number) => {
-  if (eventCheckinInfo.checkinStage?.id + 5 > stageId)
-    return 'pi pi-check'
-  return ''
+  await eventCheckinInfo.getGoCheckinInfo(detectedCodes)
 }
 
 const approveStage = async (stageId: number) => {
   await eventCheckinInfo.approveStage(stageId)
-}
-
-const typeName = (typeId: number) => {
-  switch (typeId) {
-    case 2:
-      return 'Checkin Bonus'
-    case 5:
-      return 'Brought New Player'
-    case 4:
-      return 'First Time Player'
-    default:
-      return 'Unknown'
-  }
 }
 
 </script>
@@ -97,10 +62,10 @@ const typeName = (typeId: number) => {
   <div v-if="permissionCheck.CharacterManagement.Retire" class="text-right">
     <Button label="Retire Character" @click="popups.retireConfirmation($event, eventCheckinInfo.primaryCharacter.characterName)" />
   </div>
-  <Stepper v-model:value="stepperStep">
+  <Stepper v-model:value="eventCheckinInfo.activeStepperStep">
     <StepItem value="1">
       <Step>Scan QR Code</Step>
-      <StepPanel>
+      <StepPanel v-if="eventCheckinInfo.activeStepperStep == '1'">
         <p>Ask the user to open up their account, and click on the "Event Check-in" tile at the top of the page</p>
         <p>This should pull up a QR code you can scan below</p>
         <CharacterScanner @detected-code="onDetect" />
@@ -108,110 +73,83 @@ const typeName = (typeId: number) => {
     </StepItem>
     <StepItem value="2">
       <Step>Verify User Info</Step>
-      <StepPanel v-if="stepperStep == '2'" v-slot="{activateCallback}">
+      <StepPanel v-if="eventCheckinInfo.activeStepperStep == '2'">
         <AgeVerificationStep />
-        <Button
-          label="Reviewed" icon="pi pi-arrow-right" icon-pos="right" class="mb-4 ml-3"
-          @click="activateCallback('3')"
-        />
       </StepPanel>
     </StepItem>
     <StepItem value="3">
       <Step>HR Questions</Step>
-      <StepPanel v-if="stepperStep == '3'" v-slot="{activateCallback}">
+      <StepPanel v-if="eventCheckinInfo.activeStepperStep == '3'">
         <AnswerQuestions />
-        <Button label="Reviewed" icon="pi pi-arrow-right" icon-pos="right" class="mb-4" @click="activateCallback('4')" />
       </StepPanel>
     </StepItem>
     <StepItem value="4">
       <Step>Stone Pull</Step>
-      <StepPanel v-slot="{activateCallback}">
-        <StonePullerStep v-if="stepperStep == '4'" />
-        <Button label="Reviewed" icon="pi pi-arrow-right" icon-pos="right" class="mb-4" @click="activateCallback('5')" />
+      <StepPanel v-if="eventCheckinInfo.activeStepperStep == '4'">
+        <StonePullerStep />
       </StepPanel>
     </StepItem>
-    <StepItem value="5">
-      <Step>Review and Finalize Initial Check-in</Step>
-      <StepPanel>
-        <h1>Review</h1>
-        <h2>Questions</h2>
-        <div v-for="question in eventCheckinInfo.questions" :key="question.id">
-          <h3>{{ question.question }}</h3>
-          <p>{{ question.response }}</p>
-        </div>
-        <h2>Check-in Bonus</h2>
-        <p>+{{ eventCheckinInfo.assignedXp?.amount }} - {{ typeName(eventCheckinInfo.assignedXp?.typeId) }}</p>
-        <Button
-          label="Finalize Check-in" :icon="isFinalized(5)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(5)"
-          @click="approveStage(1)"
-        />
-      </StepPanel>
-    </StepItem>
-    <StepItem value="6" :disabled="stepperStep !== '6'">
+    <StepItem value="5" :disabled="stepperStep !== '5'">
       <Step>GO Approval</Step>
       <StepPanel>
         <h3>Link to their CRB</h3>
         <p v-if="!eventCheckinInfo.primaryCharacter">
-          They do not have a primary character setup yet, you will need to walk them through how to do that.  Approving has been disabled until they have one.  You will need to recheck them in after they have one
+          They do not have a primary character setup yet, you will need to walk them through how to do that.  You will need to recheck them in after they have one
         </p>
-        <p v-else>
-          <RouterLink :to="`/characters/${eventCheckinInfo.primaryCharacter.characterId}`" target="_blank">
-            {{ eventCheckinInfo.primaryCharacter.characterName }}
-          </RouterLink>
-        </p>
-        <h3>Did you approve the contacts on their CRB? (Block till they say yes)</h3>
-        <h3>Did you Check to make sure that most of their XP has been spent? (Eg, they've spent xp outside of character creation)</h3>
-        <h3>Is their character level within expections for the plot?</h3>
-        <Button
-          label="GO Approval" :icon="isFinalized(6)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(6) || !permissionCheck.Event.GoApproval || !eventCheckinInfo.primaryCharacter"
-          @click="approveStage(2)"
-        />
       </StepPanel>
     </StepItem>
-    <StepItem value="8">
-      <Step>CRB Creation</Step>
+    <StepItem value="6">
+      <Step>CRB Needs Printing</Step>
+      <StepPanel>
+        <h3>The CRB needs to be printed</h3>
+        <p>SHQ needs to print the CRB.</p>
+        <p>This will automatically update once it's been printed at least once</p>
+      </StepPanel>
+    </StepItem>
+    <StepItem value="7">
+      <Step>CRB Needs Creation</Step>
       <StepPanel>
         <h3>CRB needs to be created</h3>
-        <p>SHQ needs to create the CRB.  Once ready, scan it and click the below button</p>
+        <p>CRB was printed, need to cut and strip it.  Once done, scan it and click the below button</p>
         <Button
-          label="CRB Created and Ready for Pickup" :icon="isFinalized(8)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(8) || !permissionCheck.Event.CrbHandling"
+          label="CRB Created and Ready for Pickup" icon-pos="right" class="mb-4" :disabled="!permissionCheck.Event.CrbHandling"
           @click="approveStage(4)"
         />
       </StepPanel>
     </StepItem>
-    <StepItem value="9">
+    <StepItem value="8">
       <Step>CRB Is Ready for Pickup</Step>
       <StepPanel>
         <h3>Needs to be Verified by User</h3>
         <p>User needs to check their CRB, and make sure it's good to go.  Once scanned, they can go play games</p>
         <Button
-          label="CRB Is Picked Up" :icon="isFinalized(9)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(9) || !permissionCheck.Event.CrbHandling"
+          label="CRB Is Picked Up" icon-pos="right" class="mb-4" :disabled="!permissionCheck.Event.CrbHandling"
           @click="approveStage(5)"
         />
       </StepPanel>
     </StepItem>
-    <StepItem value="10">
+    <StepItem value="9">
       <Step>Picked Up and Day One</Step>
       <StepPanel>
         <h3>Everything is Done for Day 1</h3>
         <Button
-          label="Day 2 Check-in" :icon="isFinalized(10)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(10) || !permissionCheck.Event.Day23Checkin"
+          label="Day 2 Check-in" icon-pos="right" class="mb-4" :disabled="permissionCheck.Event.Day23Checkin"
           @click="approveStage(6)"
         />
       </StepPanel>
     </StepItem>
-    <StepItem value="11">
+    <StepItem value="10">
       <Step>Day 2 Checkin</Step>
       <StepPanel>
         <h3>This is the 2nd day the character has been in play, not the 2nd day of play</h3>
         <p>The character has been checked in for the day.</p>
         <Button
-          label="Day 3 Check-in" :icon="isFinalized(11)" icon-pos="right" class="mb-4" :disabled="canFinalizeStage(11) || !permissionCheck.Event.Day23Checkin"
+          label="Day 3 Check-in" icon-pos="right" class="mb-4" :disabled="!permissionCheck.Event.Day23Checkin"
           @click="approveStage(7)"
         />
       </StepPanel>
     </StepItem>
-    <StepItem value="12">
+    <StepItem value="11">
       <Step>Day 3</Step>
       <StepPanel>
         <h3>Thank You and Come Again!</h3>

@@ -25,17 +25,7 @@ public static class ConfirmUserCheckinInfoEndpoint
         return TypedResults.Ok(
             new GetGoCheckinInfoResponse()
             {
-                PlayerName = results.Value.PlayerName,
-                IsFirstTimeUser = results.Value.IsFirstTimeUser,
-                CheckinId = results.Value.CheckinId,
                 PlayerNumber = results.Value.PlayerNumber,
-                AssignedXp = results.Value.AssignedXp is null
-                    ? null
-                    : new AssignedXpType()
-                    {
-                        Amount = results.Value.AssignedXp.Amount,
-                        TypeId = results.Value.AssignedXp.TypeId,
-                    },
                 PrimaryCharacterInfo = results.Value.PrimaryCharacterInfo is null
                     ? null
                     : new PrimaryCharacterInfo()

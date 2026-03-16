@@ -25,13 +25,7 @@ public static class GetGoCheckinInfoEndpoint
         results.ThrowIfErrorNotHandled();
 
         return TypedResults.Ok(
-            new GetGoCheckinInfoResponse()
-            {
-                WasFound = true,
-                UserName = results.Value.Username,
-                IsFirstTimeUser = results.Value.IsFirstTimeUser,
-                AlreadyCheckedIn = results.Value.AlreadyCheckedIn,
-            }
+            new GetGoCheckinInfoResponse() { WasFound = true, UserName = results.Value.Username }
         );
     }
 }

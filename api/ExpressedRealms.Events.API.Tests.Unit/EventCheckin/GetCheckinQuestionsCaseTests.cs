@@ -1,5 +1,6 @@
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
+using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.DB.Models.Events.EventSetup;
 using ExpressedRealms.DB.Models.Events.Questions.EventQuestionSetup;
 using ExpressedRealms.DB.Models.Events.Questions.QuestionTypeSetup;
@@ -172,5 +173,21 @@ public class GetCheckinQuestionsUseCaseTests
                 .ToList(),
             results.Value.Questions
         );
+    }
+
+    [Fact]
+    public async Task UseCase_WillReturn_IfStageIsComplete()
+    {
+        A.CallTo(() =>
+                _eventCheckinRepository.GetStageStatus(
+                    CheckinId,
+                    CheckinStageEnum.EventQuestionsCheck
+                )
+            )
+            .Returns(true);
+
+        var results = await _useCase.ExecuteAsync(_model);
+
+        Assert.True(results.Value.HasCompletedStage);
     }
 }

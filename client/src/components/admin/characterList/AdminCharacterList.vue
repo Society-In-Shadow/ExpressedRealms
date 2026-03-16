@@ -68,8 +68,11 @@ watch(searchQuery, (newQuery) => {
         <Tab v-if="characterListInfo.getAwaitingGoApproval().length > 0" value="1">
           Awaiting GO Approval ({{ characterListInfo.getAwaitingGoApproval().length }})
         </Tab>
-        <Tab v-if="characterListInfo.getAwaitingCrbCreation().length > 0" value="2">
-          Awaiting CRB Creation ({{ characterListInfo.getAwaitingCrbCreation().length }})
+        <Tab v-if="characterListInfo.getAwaitingCrbPrinting().length > 0" value="2">
+          Awaiting CRB Printing ({{ characterListInfo.getAwaitingCrbPrinting().length }})
+        </Tab>
+        <Tab v-if="characterListInfo.getPrintedCrbs().length > 0" value="7">
+          Awaiting CRB Assembly ({{ characterListInfo.getPrintedCrbs().length }})
         </Tab>
         <Tab v-if="characterListInfo.getAwaitingPickup().length > 0" value="3">
           Awaiting Pickup ({{ characterListInfo.getAwaitingPickup().length }})
@@ -102,11 +105,11 @@ watch(searchQuery, (newQuery) => {
           </h2>
         </TabPanel>
         <TabPanel value="2">
-          <div v-for="character in characterListInfo.getAwaitingCrbCreation()" :key="character.id">
+          <div v-for="character in characterListInfo.getAwaitingCrbPrinting()" :key="character.id">
             <CharacterTile :character="character" />
           </div>
-          <h2 v-if="characterListInfo.getAwaitingCrbCreation().length == 0">
-            No characters awaiting CRB Creation
+          <h2 v-if="characterListInfo.getAwaitingCrbPrinting().length == 0">
+            No characters awaiting to be Printed
           </h2>
         </TabPanel>
         <TabPanel value="3">
@@ -139,6 +142,14 @@ watch(searchQuery, (newQuery) => {
           </div>
           <h2 v-if="characterListInfo.getCompletedCharacters().length == 0">
             No one has completed their character yet
+          </h2>
+        </TabPanel>
+        <TabPanel value="7">
+          <div v-for="character in characterListInfo.getPrintedCrbs()" :key="character.id">
+            <CharacterTile :character="character" />
+          </div>
+          <h2 v-if="characterListInfo.getPrintedCrbs().length == 0">
+            Awaiting CRB Assembly by SHQ
           </h2>
         </TabPanel>
       </TabPanels>
