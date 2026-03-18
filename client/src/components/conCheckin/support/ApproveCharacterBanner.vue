@@ -7,9 +7,11 @@ import Message from 'primevue/message'
 import Button from 'primevue/button'
 import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+import { characterStore } from '@/components/characters/character/stores/characterStore.ts'
 
 const eventCheckinInfo = EventCheckinStore()
 const permissionInfo = userPermissionStore()
+const characterInfo = characterStore()
 const permissionCheck = permissionInfo.permissionCheck
 const reviewedContacts = ref(false)
 const hasCheckinPermission = ref(false)
@@ -19,7 +21,7 @@ onBeforeMount(async () => {
   hasCheckinPermission.value = permissionCheck.Event.GoApproval
 })
 
-const showBanner = computed(() => eventCheckinInfo.hasActiveEvent && hasCheckinPermission.value)
+const showBanner = computed(() => eventCheckinInfo.hasActiveEvent && hasCheckinPermission.value && characterInfo.isPrimaryCharacter)
 
 const reviewedCharacter = async () => {
   await eventCheckinInfo.approveCharacterSheet()
@@ -27,7 +29,7 @@ const reviewedCharacter = async () => {
 </script>
 
 <template>
-  <Message v-if="showBanner" severity="warn">
+  <Message v-if="showBanner" severity="warn" class="mb-3">
     <div class="w-100">
       <p>You need to review this character sheet.</p>
       <div>

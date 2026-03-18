@@ -61,7 +61,7 @@ const redirectToEdit = () => {
             <div><Tag v-if="isRetired" value="Retired" severity="warn" /></div>
           </div>
           <div v-if="!experienceInfo.isLoading && !isInCharacterGeneration">
-            <em><span>XL: {{ experienceInfo.getCharacterLevel() }}</span> - {{ expression }}</em>
+            <em><span>XL: {{ experienceInfo.characterLevel }}</span> - {{ expression }}</em>
           </div>
           <div v-if="!experienceInfo.isLoading && isInCharacterGeneration">
             <em>In Character Creation - {{ expression }}</em>

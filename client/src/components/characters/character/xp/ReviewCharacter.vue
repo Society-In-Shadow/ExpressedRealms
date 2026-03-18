@@ -220,7 +220,7 @@ const displayedSections = computed(() => {
         </table>
 
         <div v-if="!characterInfo.isInCharacterCreation" class="d-flex flex-row justify-content-between gap-3">
-          <div>Character Level: {{ xpInfo.getCharacterLevel() }}</div>
+          <div>Character Level: {{ xpInfo.characterLevel }}</div>
           <div />
         </div>
 

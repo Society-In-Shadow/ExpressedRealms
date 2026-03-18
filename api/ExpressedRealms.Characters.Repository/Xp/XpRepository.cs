@@ -55,17 +55,34 @@ public class XpRepository(
     public async Task<int> GetCharacterXpLevel(int characterId)
     {
         var character = await context
-            .Characters.Select(x => new { x.Id, x.IsInCharacterCreation })
+            .Characters.Select(x => new { x.Id, x.IsInCharacterCreation, x.PlayerId, x.IsPrimaryCharacter })
             .FirstAsync(x => x.Id == characterId);
         if (character.IsInCharacterCreation)
             return 0;
 
-        var totalXpSpent = await context
-            .CharacterXpViews.AsNoTracking()
-            .Where(x => x.CharacterId == characterId)
-            .SumAsync(x => x.LevelXp, cancellationToken);
-
-        return totalXpSpent switch
+        var levelXp = 0;
+        if (character.IsPrimaryCharacter)
+        {
+            var availableDate = DateOnly.FromDateTime(DateTime.UtcNow.AddMonths(1));
+            levelXp = await context
+                .Events.AsNoTracking()
+                .Where(x => x.StartDate <= availableDate && x.IsPublished)
+                .SumAsync(x => x.ConExperience, cancellationToken);
+        
+            levelXp += await context
+                .AssignedXpMappings.AsNoTracking()
+                .Where(x => x.PlayerId == character.PlayerId)
+                .SumAsync(x => x.Amount, cancellationToken);
+        }
+        else
+        {
+            levelXp = await context
+                .CharacterXpViews.AsNoTracking()
+                .Where(x => x.CharacterId == characterId)
+                .SumAsync(x => x.LevelXp, cancellationToken);
+        }
+        
+        return levelXp switch
         {
             <= 0 => 0,
             <= 25 => 1,

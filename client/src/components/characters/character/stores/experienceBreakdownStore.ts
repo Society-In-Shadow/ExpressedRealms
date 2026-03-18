@@ -29,6 +29,7 @@ export const experienceStore
         totalSpentLevelXp: 0 as number,
         totalAvailableXp: 0 as number,
         calculatedValues: [] as CalculatedExperience[],
+        characterLevel: 0 as number,
       }
     },
     actions: {
@@ -74,6 +75,7 @@ export const experienceStore
               }
             })
 
+            this.characterLevel = response.data.characterLevel
             this.availableDiscretionary = response.data.availableDiscretionary
           })
       },
@@ -87,28 +89,6 @@ export const experienceStore
           return !filteredSections.has(section.sectionTypeId)
         })
         return filteredCalculatedValues.reduce((sum, item) => sum + item.levelXp, 0)
-      },
-      getCharacterLevel(): number {
-        const total = this.getTotalXp()
-
-        if (total <= 0)
-          return 0
-        else if (total <= 25)
-          return 1
-        else if (total <= 75)
-          return 2
-        else if (total <= 150)
-          return 3
-        else if (total <= 250)
-          return 4
-        else if (total <= 375)
-          return 5
-        else if (total <= 525)
-          return 6
-        else if (total <= 700)
-          return 7
-
-        return 8
       },
     },
   })
