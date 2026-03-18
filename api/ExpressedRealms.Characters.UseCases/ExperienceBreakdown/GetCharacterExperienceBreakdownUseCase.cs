@@ -50,6 +50,7 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
         );
         var events = await eventRepository.GetEventsWithAvailableXp();
         var xpAvailable = assignedXp.Sum(x => x.Amount) + events.Sum(x => x.ConExperience);
+        var characterLevel = await xpRepository.GetCharacterXpLevel(model.CharacterId);
 
         costs.AddRange(
             xpInfo
@@ -87,6 +88,7 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
                 ),
                 TotalSpentLevelXp = xpInfo.Sum(x => x.LevelXp),
                 TotalAvailableXp = xpAvailable,
+                CharacterLevel = characterLevel,
             }
         );
     }

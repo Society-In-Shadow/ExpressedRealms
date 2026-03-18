@@ -2,6 +2,8 @@ using ExpressedRealms.Characters.Repository.Xp.Dtos;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Models.Characters.XpTables;
 using ExpressedRealms.Events.API.Repositories.Events;
+using ExpressedRealms.FeatureFlags;
+using ExpressedRealms.FeatureFlags.FeatureClient;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +13,7 @@ public class XpRepository(
     ExpressedRealmsDbContext context,
     IEventRepository eventRepository,
     IAssignedXpMappingRepository assignedXpRepository,
+    IFeatureToggleClient featureToggleClient,
     CancellationToken cancellationToken,
     IUserContext userContext
 ) : IXpRepository
@@ -55,17 +58,40 @@ public class XpRepository(
     public async Task<int> GetCharacterXpLevel(int characterId)
     {
         var character = await context
-            .Characters.Select(x => new { x.Id, x.IsInCharacterCreation })
+            .Characters.Select(x => new
+            {
+                x.Id,
+                x.IsInCharacterCreation,
+                x.PlayerId,
+                x.IsPrimaryCharacter,
+            })
             .FirstAsync(x => x.Id == characterId);
         if (character.IsInCharacterCreation)
             return 0;
 
-        var totalXpSpent = await context
-            .CharacterXpViews.AsNoTracking()
-            .Where(x => x.CharacterId == characterId)
-            .SumAsync(x => x.LevelXp, cancellationToken);
+        var levelXp = 0;
+        if (character.IsPrimaryCharacter && await featureToggleClient.HasFeatureFlag(ReleaseFlags.UseNewPrimaryXpCalculation))
+        {
+            var availableDate = DateOnly.FromDateTime(DateTime.UtcNow.AddMonths(1));
+            levelXp = await context
+                .Events.AsNoTracking()
+                .Where(x => x.StartDate <= availableDate && x.IsPublished)
+                .SumAsync(x => x.ConExperience, cancellationToken);
 
-        return totalXpSpent switch
+            levelXp += await context
+                .AssignedXpMappings.AsNoTracking()
+                .Where(x => x.PlayerId == character.PlayerId)
+                .SumAsync(x => x.Amount, cancellationToken);
+        }
+        else
+        {
+            levelXp = await context
+                .CharacterXpViews.AsNoTracking()
+                .Where(x => x.CharacterId == characterId)
+                .SumAsync(x => x.LevelXp, cancellationToken);
+        }
+
+        return levelXp switch
         {
             <= 0 => 0,
             <= 25 => 1,

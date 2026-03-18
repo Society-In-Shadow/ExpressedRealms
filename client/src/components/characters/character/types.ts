@@ -5,6 +5,7 @@ export interface ExperienceBreakdownResponse {
   availableDiscretionary: number
   totalSpentLevelXp: number
   totalAvailableXp: number
+  characterLevel: number
 }
 
 export interface ExperienceBreakdown {

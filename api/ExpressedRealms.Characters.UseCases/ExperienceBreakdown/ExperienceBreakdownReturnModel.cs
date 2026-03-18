@@ -6,4 +6,5 @@ public class ExperienceBreakdownReturnModel
     public int AvailableDiscretionary { get; set; }
     public int TotalSpentLevelXp { get; set; }
     public int TotalAvailableXp { get; set; }
+    public int CharacterLevel { get; set; }
 }

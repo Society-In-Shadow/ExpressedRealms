@@ -42,6 +42,12 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "Allows one to see contacts in character builder / sheet"
     );
 
+    public static readonly ReleaseFlags UseNewPrimaryXpCalculation = new(
+        "Primary Characters Use New Xp Calculation",
+        "use-new-xp-calculation",
+        "Primary Characters will now base XP on assigned xp, not spent xp"
+    );
+
     public override string ToString()
     {
         return Name;
