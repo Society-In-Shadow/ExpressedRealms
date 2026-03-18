@@ -24,7 +24,7 @@ public class GetStonePullInfoUseCaseTests
         _model = new GetStonePullInfoModel { LookupId = "ABCDEFGH" };
 
         _eventCheckinRepository = A.Fake<IEventCheckinRepository>();
-        
+
         A.CallTo(() => _eventCheckinRepository.CheckinIdExistsAsync(_model.LookupId)).Returns(true);
         A.CallTo(() => _eventCheckinRepository.IsFirstTimePlayer(_model.LookupId)).Returns(true);
         A.CallTo(() => _eventCheckinRepository.GetActiveEventId()).Returns(EventId);

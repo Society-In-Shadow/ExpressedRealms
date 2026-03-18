@@ -88,7 +88,7 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
                 ),
                 TotalSpentLevelXp = xpInfo.Sum(x => x.LevelXp),
                 TotalAvailableXp = xpAvailable,
-                CharacterLevel = characterLevel
+                CharacterLevel = characterLevel,
             }
         );
     }
