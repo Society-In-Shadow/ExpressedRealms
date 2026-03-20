@@ -2,9 +2,9 @@
 
 import { onBeforeMount, onMounted, ref } from 'vue'
 import {
-  type ChangedStripInfo,
   handleAdeptSidheSorcerers,
   handleShammas,
+  type TrackedStripInfo,
 } from '@/components/conCheckin/support/BreakOfDawnService.ts'
 import { getValidationInstance } from '@/components/conCheckin/validations/breakOfDawnValidations.ts'
 import FormInputNumberWrapper from '@/FormWrappers/FormInputNumberWrapper.vue'
@@ -15,7 +15,7 @@ import type { ListItem } from '@/types/ListItem.ts'
 import FormDropdownWrapper from '@/FormWrappers/FormDropdownWrapper.vue'
 
 const form = getValidationInstance()
-const changes = ref<ChangedStripInfo | null>(null)
+const changes = ref<TrackedStripInfo | null>(null)
 const proficiencyData = proficiencyStore()
 const checkinInfo = EventCheckinStore()
 const availableExpressions = ref<ListItem[] | null>(null)
@@ -69,7 +69,7 @@ const onSubmit = form.handleSubmit(async (values) => {
     psyche: proficiencyData.secondary.find(x => x.id == 17).value,
     mortis: proficiencyData.secondary.find(x => x.id == 23).value,
   }
-  const simpleNonFeeders = [1, 4, 5]
+  const simpleNonFeeders = ['1', '4', '5']
   if (simpleNonFeeders.includes(form.fields.expression.field.value.id)) {
     changes.value = handleAdeptSidheSorcerers(diffValues, maxValues)
   }
@@ -100,38 +100,38 @@ const onSubmit = form.handleSubmit(async (values) => {
     </div>
     <div v-if="changes" class="ml-3">
       <h1>What they get and why.</h1>
-      <div v-if="changes.vitality.amount > 0 || changes.vitality.reasons.length > 0">
-        <h3>+{{ changes.vitality.amount }} Vitality</h3>
+      <div v-if="changes.vitality.reasons.length > 0">
+        <h3>+{{ changes.vitality.gainedAmount }} Vitality</h3>
         <p v-for="reason in changes.vitality.reasons">
           {{ reason }}
         </p>
       </div>
-      <div v-if="changes.health.amount > 0 || changes.health.reasons.length > 0">
-        <h3>+{{ changes.health.amount }} Health</h3>
+      <div v-if="changes.health.reasons.length > 0">
+        <h3>+{{ changes.health.gainedAmount }} Health</h3>
         <p v-for="reason in changes.health.reasons">
           {{ reason }}
         </p>
       </div>
-      <div v-if="changes.blood.amount > 0 || changes.blood.reasons.length > 0">
-        <h3>+{{ changes.blood.amount }} Blood</h3>
+      <div v-if="changes.blood.reasons.length > 0">
+        <h3>+{{ changes.blood.gainedAmount }} Blood</h3>
         <p v-for="reason in changes.blood.reasons">
           {{ reason }}
         </p>
       </div>
-      <div v-if="changes.rwp.amount > 0 || changes.rwp.reasons.length > 0">
-        <h3>+{{ changes.rwp.amount }} RWP</h3>
+      <div v-if="changes.rwp.reasons.length > 0">
+        <h3>+{{ changes.rwp.gainedAmount }} RWP</h3>
         <p v-for="reason in changes.rwp.reasons">
           {{ reason }}
         </p>
       </div>
-      <div v-if="changes.psyche.amount > 0 || changes.psyche.reasons.length > 0">
-        <h3>+{{ changes.psyche.amount }} Psyche</h3>
+      <div v-if="changes.psyche.reasons.length > 0">
+        <h3>+{{ changes.psyche.gainedAmount }} Psyche</h3>
         <p v-for="reason in changes.psyche.reasons">
           {{ reason }}
         </p>
       </div>
-      <div v-if="changes.mortis.amount > 0 || changes.mortis.reasons.length > 0">
-        <h3>+{{ changes.mortis.amount }} Mortis</h3>
+      <div v-if="changes.mortis.reasons.length > 0">
+        <h3>+{{ changes.mortis.gainedAmount }} Mortis</h3>
         <p v-for="reason in changes.mortis.reasons">
           {{ reason }}
         </p>

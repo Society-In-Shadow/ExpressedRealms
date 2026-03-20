@@ -7,186 +7,186 @@ export interface StripInfo {
   mortis: number
 }
 
-export interface ChangedStripInfo {
-  vitality: ChangedInfo
-  health: ChangedInfo
-  blood: ChangedInfo
-  rwp: ChangedInfo
-  psyche: ChangedInfo
-  mortis: ChangedInfo
+export interface TrackedStripInfo {
+  vitality: TrackingInfo
+  health: TrackingInfo
+  blood: TrackingInfo
+  rwp: TrackingInfo
+  psyche: TrackingInfo
+  mortis: TrackingInfo
 }
 
-export interface ChangedInfo {
-  amount: number
-  reasons: string[]
-}
+export class TrackingInfo {
+  constructor(
+    public currentAmount: number,
+    public gainedAmount: number,
+    public maxAmount: number,
+    public reasons: string[],
+  ) {}
 
+  get needsMore(): boolean {
+    return this.currentAmount + this.gainedAmount < this.maxAmount
+  }
+
+  get isFull(): boolean {
+    return this.currentAmount + this.gainedAmount == this.maxAmount
+  }
+
+  get amountWithTotalGained(): number {
+    return this.currentAmount + this.gainedAmount
+  }
+}
 // Adept, Sidhe, Sorcerers
-export function handleAdeptSidheSorcerers(userDown: StripInfo, userMax: StripInfo): ChangedStripInfo {
-  const currentUserStats: StripInfo = {
-    blood: userMax.blood - userDown.blood,
-    health: userMax.health - userDown.health,
-    vitality: userMax.vitality - userDown.vitality,
-    rwp: userMax.rwp - userDown.rwp,
-    psyche: userMax.psyche - userDown.psyche,
-    mortis: userMax.mortis - userDown.mortis,
+export function handleAdeptSidheSorcerers(userDown: StripInfo, userMax: StripInfo): TrackedStripInfo {
+  const trackedStripInfo = {
+    vitality: new TrackingInfo(userMax.vitality - userDown.vitality, 0, userMax.vitality, []),
+    health: new TrackingInfo(userMax.health - userDown.health, 0, userMax.health, []),
+    blood: new TrackingInfo(userMax.blood - userDown.blood, 0, userMax.blood, []),
+    rwp: new TrackingInfo(userMax.rwp - userDown.rwp, 0, userMax.rwp, []),
+    psyche: new TrackingInfo(userMax.psyche - userDown.psyche, 0, userMax.psyche, []),
+    mortis: new TrackingInfo(userMax.mortis - userDown.mortis, 0, userMax.mortis, []),
   }
 
-  const changes: ChangedStripInfo = {
-    blood: { amount: 0, reasons: [] },
-    health: { amount: 0, reasons: [] },
-    vitality: { amount: 0, reasons: [] },
-    rwp: { amount: 0, reasons: [] },
-    psyche: { amount: 0, reasons: [] },
-    mortis: { amount: 0, reasons: [] },
+  if (trackedStripInfo.vitality.needsMore) {
+    trackedStripInfo.vitality.gainedAmount += 1
+    trackedStripInfo.vitality.reasons.push(`You get 1 free vitality, so it was increased by 1 for total of ${trackedStripInfo.vitality.amountWithTotalGained}/${trackedStripInfo.vitality.maxAmount}`)
   }
 
-  if (userDown.vitality > 0) {
-    changes.vitality.amount += 1
-    changes.vitality.reasons.push(`You get 1 free vitality, so it was increased by 1 for total of ${currentUserStats.vitality + 1}/${userMax.vitality}`)
-  }
-
-  if (userDown.health > 0) {
-    if (currentUserStats.health >= currentUserStats.vitality + changes.vitality.amount) {
-      changes.health.reasons.push('You did not gain health as your vitality is lower than or equal to your health')
+  if (trackedStripInfo.health.needsMore) {
+    if (trackedStripInfo.health.amountWithTotalGained >= trackedStripInfo.vitality.amountWithTotalGained) {
+      trackedStripInfo.health.reasons.push('You did not gain health as your vitality is lower than or equal to your health')
     }
-    else if (currentUserStats.health + 1 <= currentUserStats.vitality + changes.vitality.amount) {
-      changes.health.amount += 1
-      changes.health.reasons.push(`You get 1 free health, so it was increased by 1 for total of ${currentUserStats.health + 1}/${userMax.health}`)
+    else if (trackedStripInfo.health.amountWithTotalGained + 1 <= trackedStripInfo.vitality.amountWithTotalGained) {
+      trackedStripInfo.health.gainedAmount += 1
+      trackedStripInfo.health.reasons.push(`You get 1 free health, so it was increased by 1 for total of ${trackedStripInfo.health.amountWithTotalGained}/${trackedStripInfo.health.maxAmount}`)
     }
   }
 
-  if (userDown.blood > 0) {
-    if (currentUserStats.blood >= currentUserStats.vitality + changes.vitality.amount) {
-      changes.blood.reasons.push('You did not gain blood as your vitality is lower than or equal to your blood')
+  if (trackedStripInfo.blood.needsMore) {
+    if (trackedStripInfo.blood.amountWithTotalGained >= trackedStripInfo.vitality.amountWithTotalGained) {
+      trackedStripInfo.blood.reasons.push('You did not gain blood as your vitality is lower than or equal to your blood')
     }
-    else if (currentUserStats.blood + 1 <= currentUserStats.vitality + changes.vitality.amount) {
-      changes.blood.amount += 1
-      changes.blood.reasons.push(`You get 1 free blood, so it was increased by 1 for total of ${currentUserStats.blood + 1}/${userMax.blood}`)
+    else if (trackedStripInfo.blood.amountWithTotalGained + 1 <= trackedStripInfo.vitality.amountWithTotalGained) {
+      trackedStripInfo.blood.gainedAmount += 1
+      trackedStripInfo.blood.reasons.push(`You get 1 free blood, so it was increased by 1 for total of ${trackedStripInfo.blood.amountWithTotalGained}/${trackedStripInfo.blood.maxAmount}`)
     }
   }
 
-  if (userDown.psyche > 0) {
-    changes.psyche.amount += 1
-    changes.psyche.reasons.push(`You get a free Psyche, so it was increased by 1 for total of ${currentUserStats.psyche + 1}/${userMax.psyche}`)
+  if (trackedStripInfo.psyche.needsMore) {
+    trackedStripInfo.psyche.gainedAmount += 1
+    trackedStripInfo.psyche.reasons.push(`You get a free Psyche, so it was increased by 1 for total of ${trackedStripInfo.psyche.amountWithTotalGained}/${trackedStripInfo.psyche.maxAmount}`)
   }
 
-  const psycheFull = userMax.psyche == currentUserStats.psyche + changes.psyche.amount
-  if (psycheFull && userDown.rwp > 0) {
-    changes.rwp.amount += 1
-    changes.rwp.reasons.push(`Your psyche is full, so RWP was increased by 1 for total of ${currentUserStats.rwp + 1}/${userMax.rwp}`)
+  if (trackedStripInfo.psyche.isFull && trackedStripInfo.rwp.needsMore) {
+    trackedStripInfo.rwp.gainedAmount += 1
+    trackedStripInfo.rwp.reasons.push(`Your psyche is full, so RWP was increased by 1 for total of ${trackedStripInfo.rwp.amountWithTotalGained}/${trackedStripInfo.rwp.maxAmount}`)
   }
-  else if (userDown.rwp > 0) {
-    changes.rwp.reasons.push(`Your psyche is not full, so no bonus to RWP`)
-  }
-
-  const bloodFull = userMax.blood == currentUserStats.blood + changes.blood.amount
-  const vitalityFull = userMax.vitality == currentUserStats.vitality + changes.vitality.amount
-  if (bloodFull && vitalityFull && psycheFull && userDown.mortis > 0) {
-    changes.mortis.amount += 1
-    changes.mortis.reasons.push(`Your Health, Blood, and Vitality are maxed, mortis was increased by 1 for total of ${currentUserStats.mortis + 1}/${userMax.mortis}`)
-  }
-  else if (userDown.mortis > 0) {
-    changes.mortis.reasons.push(`Your Health, Blood, and Vitality are not full, so no bonus to Mortis`)
+  else if (trackedStripInfo.rwp.needsMore) {
+    trackedStripInfo.rwp.reasons.push(`Your psyche is not full, so no bonus to RWP`)
   }
 
-  return changes
+  if (trackedStripInfo.blood.isFull && trackedStripInfo.vitality.isFull && trackedStripInfo.psyche.isFull && trackedStripInfo.mortis.needsMore) {
+    trackedStripInfo.mortis.gainedAmount += 1
+    trackedStripInfo.mortis.reasons.push(`Your Health, Blood, and Vitality are maxed, mortis was increased by 1 for total of ${trackedStripInfo.mortis.amountWithTotalGained}/${trackedStripInfo.mortis.maxAmount}`)
+  }
+  else if (trackedStripInfo.mortis.needsMore) {
+    trackedStripInfo.mortis.reasons.push(`Your Health, Blood, and Vitality are not full, so no bonus to Mortis`)
+  }
+
+  return trackedStripInfo
 }
 
-export function handleShammas(userDown: StripInfo, userMax: StripInfo, xpLevel: number): ChangedStripInfo {
-  const currentUserStats: StripInfo = {
-    blood: userMax.blood - userDown.blood,
-    health: userMax.health - userDown.health,
-    vitality: userMax.vitality - userDown.vitality,
-    rwp: userMax.rwp - userDown.rwp,
-    psyche: userMax.psyche - userDown.psyche,
-    mortis: userMax.mortis - userDown.mortis,
+export function handleShammas(userDown: StripInfo, userMax: StripInfo, xpLevel: number): TrackedStripInfo {
+  const trackedStripInfo = {
+    vitality: new TrackingInfo(userMax.vitality - userDown.vitality, 0, userMax.vitality, []),
+    health: new TrackingInfo(userMax.health - userDown.health, 0, userMax.health, []),
+    blood: new TrackingInfo(userMax.blood - userDown.blood, 0, userMax.blood, []),
+    rwp: new TrackingInfo(userMax.rwp - userDown.rwp, 0, userMax.rwp, []),
+    psyche: new TrackingInfo(userMax.psyche - userDown.psyche, 0, userMax.psyche, []),
+    mortis: new TrackingInfo(userMax.mortis - userDown.mortis, 0, userMax.mortis, []),
   }
 
-  const changes: ChangedStripInfo = {
-    blood: { amount: 0, reasons: [] },
-    health: { amount: 0, reasons: [] },
-    vitality: { amount: 0, reasons: [] },
-    rwp: { amount: 0, reasons: [] },
-    psyche: { amount: 0, reasons: [] },
-    mortis: { amount: 0, reasons: [] },
-  }
-
-  if (userDown.vitality > 0) {
-    changes.vitality.amount += 1
-    changes.vitality.reasons.push(`You get 1 free vitality, so it was increased by 1 for total of ${currentUserStats.vitality + 1}/${userMax.vitality}`)
-  }
-
-  function HandleShammasFreeLevelVitality(levelBonus: number, xpLevel: number) {
+  function handleShammasBonus(targetStat: keyof typeof trackedStripInfo, levelBonus: number, xpLevel: number) {
     let vitalityChange = levelBonus
 
-    const alreadyMaxedOut = changes.vitality.amount + currentUserStats.vitality == userMax.vitality
+    const alreadyMaxedOut = trackedStripInfo[targetStat].isFull
     if (alreadyMaxedOut) {
       return // No need to add more
     }
 
-    const bonusGoesOverMax = changes.vitality.amount + vitalityChange + currentUserStats.vitality > userMax.vitality
+    const bonusGoesOverMax = trackedStripInfo[targetStat].amountWithTotalGained + vitalityChange > trackedStripInfo[targetStat].maxAmount
     if (bonusGoesOverMax) {
       // If so, only apply the amount that does not go over max
-      vitalityChange = userMax.vitality - currentUserStats.vitality - changes.vitality.amount
+      vitalityChange = trackedStripInfo[targetStat].maxAmount - trackedStripInfo[targetStat].amountWithTotalGained
     }
-    changes.vitality.amount += vitalityChange
-    changes.vitality.reasons.push(`Shammas gain ${levelBonus} additional vitality at level ${xpLevel}, so it was increased by ${vitalityChange} for total of ${currentUserStats.vitality + changes.vitality.amount}/${userMax.vitality}`)
+    trackedStripInfo[targetStat].gainedAmount += vitalityChange
+    trackedStripInfo[targetStat].reasons.push(`Shammas gain ${levelBonus} additional ${targetStat} at level ${xpLevel}, so it was increased by ${vitalityChange} for total of ${trackedStripInfo[targetStat].amountWithTotalGained}/${trackedStripInfo[targetStat].maxAmount}`)
   }
 
   if (xpLevel >= 7) {
-    HandleShammasFreeLevelVitality(3, 7)
+    handleShammasBonus('vitality', 3, 7)
+    handleShammasBonus('health', 3, 7)
+    handleShammasBonus('blood', 3, 7)
+    handleShammasBonus('psyche', 3, 7)
   }
   else if (xpLevel >= 5) {
-    HandleShammasFreeLevelVitality(2, 5)
+    handleShammasBonus('vitality', 2, 5)
+    handleShammasBonus('health', 2, 5)
+    handleShammasBonus('blood', 2, 5)
+    handleShammasBonus('psyche', 2, 5)
   }
   else if (xpLevel >= 3) {
-    HandleShammasFreeLevelVitality(1, 3)
+    handleShammasBonus('vitality', 1, 3)
+    handleShammasBonus('health', 1, 3)
+    handleShammasBonus('blood', 1, 3)
+    handleShammasBonus('psyche', 1, 3)
   }
 
-  if (userDown.health > 0) {
-    if (currentUserStats.health >= currentUserStats.vitality + changes.vitality.amount) {
-      changes.health.reasons.push('You did not gain health as your vitality is lower than or equal to your health')
-    }
-    else if (currentUserStats.health + 1 <= currentUserStats.vitality + changes.vitality.amount) {
-      changes.health.amount += 1
-      changes.health.reasons.push(`You get 1 free health, so it was increased by 1 for total of ${currentUserStats.health + 1}/${userMax.health}`)
-    }
+  if (trackedStripInfo.vitality.needsMore) {
+    trackedStripInfo.vitality.gainedAmount += 1
+    trackedStripInfo.vitality.reasons.push(`You get 1 free vitality, so it was increased by 1 for total of ${trackedStripInfo.vitality.amountWithTotalGained}/${trackedStripInfo.vitality.maxAmount}`)
   }
 
-  if (userDown.blood > 0) {
-    if (currentUserStats.blood >= currentUserStats.vitality + changes.vitality.amount) {
-      changes.blood.reasons.push('You did not gain blood as your vitality is lower than or equal to your blood')
+  if (trackedStripInfo.health.needsMore) {
+    if (trackedStripInfo.health.amountWithTotalGained >= trackedStripInfo.vitality.amountWithTotalGained) {
+      trackedStripInfo.health.reasons.push('You did not gain health as your vitality is lower than or equal to your health')
     }
-    else if (currentUserStats.blood + 1 <= currentUserStats.vitality + changes.vitality.amount) {
-      changes.blood.amount += 1
-      changes.blood.reasons.push(`You get 1 free blood, so it was increased by 1 for total of ${currentUserStats.blood + 1}/${userMax.blood}`)
+    else if (trackedStripInfo.health.amountWithTotalGained + 1 <= trackedStripInfo.vitality.amountWithTotalGained) {
+      trackedStripInfo.health.gainedAmount += 1
+      trackedStripInfo.health.reasons.push(`You get 1 free health, so it was increased by 1 for total of ${trackedStripInfo.health.amountWithTotalGained}/${trackedStripInfo.health.maxAmount}`)
     }
   }
 
-  if (userDown.psyche > 0) {
-    changes.psyche.amount += 1
-    changes.psyche.reasons.push(`You get a free Psyche, so it was increased by 1 for total of ${currentUserStats.psyche + 1}/${userMax.psyche}`)
+  if (trackedStripInfo.blood.needsMore) {
+    if (trackedStripInfo.blood.amountWithTotalGained >= trackedStripInfo.vitality.amountWithTotalGained) {
+      trackedStripInfo.blood.reasons.push('You did not gain blood as your vitality is lower than or equal to your blood')
+    }
+    else if (trackedStripInfo.blood.amountWithTotalGained + 1 <= trackedStripInfo.vitality.amountWithTotalGained) {
+      trackedStripInfo.blood.gainedAmount += 1
+      trackedStripInfo.blood.reasons.push(`You get 1 free blood, so it was increased by 1 for total of ${trackedStripInfo.blood.amountWithTotalGained}/${trackedStripInfo.blood.maxAmount}`)
+    }
   }
 
-  const psycheFull = userMax.psyche == currentUserStats.psyche + changes.psyche.amount
-  if (psycheFull && userDown.rwp > 0) {
-    changes.rwp.amount += 1
-    changes.rwp.reasons.push(`Your psyche is full, so RWP was increased by 1 for total of ${currentUserStats.rwp + 1}/${userMax.rwp}`)
-  }
-  else if (userDown.rwp > 0) {
-    changes.rwp.reasons.push(`Your psyche is not full, so no bonus to RWP`)
+  if (trackedStripInfo.psyche.needsMore) {
+    trackedStripInfo.psyche.gainedAmount += 1
+    trackedStripInfo.psyche.reasons.push(`You get a free Psyche, so it was increased by 1 for total of ${trackedStripInfo.psyche.amountWithTotalGained}/${trackedStripInfo.psyche.maxAmount}`)
   }
 
-  const bloodFull = userMax.blood == currentUserStats.blood + changes.blood.amount
-  const vitalityFull = userMax.vitality == currentUserStats.vitality + changes.vitality.amount
-  if (bloodFull && vitalityFull && psycheFull && userDown.mortis > 0) {
-    changes.mortis.amount += 1
-    changes.mortis.reasons.push(`Your Health, Blood, and Vitality are maxed, mortis was increased by 1 for total of ${currentUserStats.mortis + 1}/${userMax.mortis}`)
+  if (trackedStripInfo.psyche.isFull && trackedStripInfo.rwp.needsMore) {
+    trackedStripInfo.rwp.gainedAmount += 1
+    trackedStripInfo.rwp.reasons.push(`Your psyche is full, so RWP was increased by 1 for total of ${trackedStripInfo.rwp.amountWithTotalGained}/${trackedStripInfo.rwp.maxAmount}`)
   }
-  else if (userDown.mortis > 0) {
-    changes.mortis.reasons.push(`Your Health, Blood, and Vitality are not full, so no bonus to Mortis`)
+  else if (trackedStripInfo.rwp.needsMore) {
+    trackedStripInfo.rwp.reasons.push(`Your psyche is not full, so no bonus to RWP`)
   }
 
-  return changes
+  if (trackedStripInfo.blood.isFull && trackedStripInfo.vitality.isFull && trackedStripInfo.psyche.isFull && trackedStripInfo.mortis.needsMore) {
+    trackedStripInfo.mortis.gainedAmount += 1
+    trackedStripInfo.mortis.reasons.push(`Your Health, Blood, and Vitality are maxed, mortis was increased by 1 for total of ${trackedStripInfo.mortis.amountWithTotalGained}/${trackedStripInfo.mortis.maxAmount}`)
+  }
+  else if (trackedStripInfo.mortis.needsMore) {
+    trackedStripInfo.mortis.reasons.push(`Your Health, Blood, and Vitality are not full, so no bonus to Mortis`)
+  }
+
+  return trackedStripInfo
 }
