@@ -1,31 +1,67 @@
 <script setup lang="ts">
 
-import { onMounted, ref } from 'vue'
-import { type ChangedStripInfo, handleAdeptSidheSorcerers } from '@/components/conCheckin/support/BreakOfDawnService.ts'
+import { onBeforeMount, onMounted, ref } from 'vue'
+import {
+  type ChangedStripInfo,
+  handleAdeptSidheSorcerers,
+  handleShammas,
+} from '@/components/conCheckin/support/BreakOfDawnService.ts'
 import { getValidationInstance } from '@/components/conCheckin/validations/breakOfDawnValidations.ts'
 import FormInputNumberWrapper from '@/FormWrappers/FormInputNumberWrapper.vue'
 import Button from 'primevue/button'
 import { proficiencyStore } from '@/components/characters/character/proficiency/stores/proficiencyStore.ts'
 import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
+import type { ListItem } from '@/types/ListItem.ts'
+import FormDropdownWrapper from '@/FormWrappers/FormDropdownWrapper.vue'
 
 const form = getValidationInstance()
 const changes = ref<ChangedStripInfo | null>(null)
 const proficiencyData = proficiencyStore()
 const checkinInfo = EventCheckinStore()
+const availableExpressions = ref<ListItem[] | null>(null)
+
+onBeforeMount(() => {
+  availableExpressions.value = [{
+    id: '1',
+    name: 'Adept',
+    description: '',
+  }, {
+    id: '2',
+    name: 'Aeternari',
+    description: '',
+  }, {
+    id: '3',
+    name: 'Shammas',
+    description: '',
+  }, {
+    id: '4',
+    name: 'Sidhe',
+    description: '',
+  }, {
+    id: '5',
+    name: 'Sorcerers',
+    description: '',
+  }, {
+    id: '6',
+    name: 'Vampyres',
+    description: '',
+  }]
+})
 
 onMounted(async () => {
   await proficiencyData.getUpdateProficiencies(checkinInfo.primaryCharacter!.characterId)
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
-  changes.value = handleAdeptSidheSorcerers({
+  const diffValues = {
     rwp: values.rwp,
     blood: values.blood,
     health: values.health,
     vitality: values.vitality,
     psyche: values.psyche,
     mortis: values.mortis,
-  }, {
+  }
+  const maxValues = {
     rwp: proficiencyData.secondary.find(x => x.id == 22).value,
     blood: proficiencyData.secondary.find(x => x.id == 15).value,
     health: proficiencyData.secondary.find(x => x.id == 14).value,
@@ -33,6 +69,11 @@ const onSubmit = form.handleSubmit(async (values) => {
     psyche: proficiencyData.secondary.find(x => x.id == 17).value,
     mortis: proficiencyData.secondary.find(x => x.id == 23).value,
   })
+  }
+  const simpleNonFeeders = [1, 4, 5]
+  if (simpleNonFeeders.includes(form.fields.expression.field.value.id)) {
+    changes.value = handleAdeptSidheSorcerers(diffValues, maxValues)
+  }
 })
 
 </script>
@@ -42,6 +83,8 @@ const onSubmit = form.handleSubmit(async (values) => {
     <div>
       <h1>Are you down anything?</h1>
       <form @submit="onSubmit">
+        <FormDropdownWrapper v-model="form.fields.expression" option-label="name" :options="availableExpressions!" />
+        <FormInputNumberWrapper v-model="form.fields.xpLevel" />
         <FormInputNumberWrapper v-model="form.fields.vitality" />
         <FormInputNumberWrapper v-model="form.fields.health" />
         <FormInputNumberWrapper v-model="form.fields.blood" />
