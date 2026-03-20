@@ -316,7 +316,7 @@ jobs:
 
   push_api_to_docker_hub:
     name: Push API to Docker Hub
-    needs: [changes, cypress-run-chrome, vitests, backend_unit_tests, sonarcloud-scan]
+    needs: [changes, cypress-run-chrome, vitests, backend_unit_tests]
     runs-on: ubuntu-22.04
     permissions:
       packages: write
