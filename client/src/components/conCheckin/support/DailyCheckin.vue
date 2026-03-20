@@ -68,11 +68,13 @@ const onSubmit = form.handleSubmit(async (values) => {
     vitality: proficiencyData.secondary.find(x => x.id == 13).value,
     psyche: proficiencyData.secondary.find(x => x.id == 17).value,
     mortis: proficiencyData.secondary.find(x => x.id == 23).value,
-  })
   }
   const simpleNonFeeders = [1, 4, 5]
   if (simpleNonFeeders.includes(form.fields.expression.field.value.id)) {
     changes.value = handleAdeptSidheSorcerers(diffValues, maxValues)
+  }
+  if (form.fields.expression.field.value.id == 3) { // Shammas
+    changes.value = handleShammas(diffValues, maxValues, form.fields.xpLevel.field.value)
   }
 })
 
