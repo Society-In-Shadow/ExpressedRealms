@@ -30,9 +30,8 @@ const props = defineProps({
 
 onBeforeMount(async () => {
   const response = await axios.get<GetBreakOfDawnInfoResponse>(`/characters/${props.characterId}/dailyCheckinInfo`)
-  console.log('Goo')
+
   characterInfo.value = response.data
-  console.log(characterInfo.value.expressionId)
   availableExpressions.value = [{
     id: '1',
     name: 'Adept',
@@ -61,7 +60,6 @@ onBeforeMount(async () => {
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
-  console.log(characterInfo.value.expressionId)
   const diffValues = {
     rwp: values.rwp,
     blood: values.blood,
