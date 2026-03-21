@@ -31,7 +31,7 @@ public static class GetBreakOfDawnInfoEndpoint
                 Rwp = results.Value.Rwp,
                 Mortis = results.Value.Mortis,
                 CharacterLevel = results.Value.CharacterLevel,
-                ExpressionId = results.Value.ExpressionId
+                ExpressionId = results.Value.ExpressionId,
             }
         );
     }

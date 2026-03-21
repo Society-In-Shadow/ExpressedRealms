@@ -27,17 +27,15 @@ public class GetBreakOfDawnUseCaseTests
         _proficiencyRepository = A.Fake<IProficiencyRepository>();
         _xpRepository = A.Fake<IXpRepository>();
 
-        A.CallTo(() => _characterRepository.FindCharacterAsync(_model.Id))
-            .Returns(new Character());
+        A.CallTo(() => _characterRepository.FindCharacterAsync(_model.Id)).Returns(new Character());
 
-        A.CallTo(() => _characterRepository.GetCharacterExpressionId(_model.Id))
-            .Returns(3);
+        A.CallTo(() => _characterRepository.GetCharacterExpressionId(_model.Id)).Returns(3);
 
-        A.CallTo(() => _xpRepository.GetCharacterXpLevel(_model.Id))
-            .Returns(5);
+        A.CallTo(() => _xpRepository.GetCharacterXpLevel(_model.Id)).Returns(5);
 
         A.CallTo(() => _proficiencyRepository.GetBasicProficiencies(_model.Id))
-            .Returns(new List<ProficiencyDto>
+            .Returns(
+                new List<ProficiencyDto>
                 {
                     new()
                     {
@@ -52,7 +50,7 @@ public class GetBreakOfDawnUseCaseTests
                                 Type = ModifierType.Vitality,
                                 Name = "test",
                             },
-                        }
+                        },
                     },
                     new()
                     {
@@ -67,7 +65,7 @@ public class GetBreakOfDawnUseCaseTests
                                 Type = ModifierType.Vitality,
                                 Name = "test",
                             },
-                        }
+                        },
                     },
                     new()
                     {
@@ -82,7 +80,7 @@ public class GetBreakOfDawnUseCaseTests
                                 Type = ModifierType.Vitality,
                                 Name = "test",
                             },
-                        }
+                        },
                     },
                     new()
                     {
@@ -97,7 +95,7 @@ public class GetBreakOfDawnUseCaseTests
                                 Type = ModifierType.Vitality,
                                 Name = "test",
                             },
-                        }
+                        },
                     },
                     new()
                     {
@@ -112,7 +110,7 @@ public class GetBreakOfDawnUseCaseTests
                                 Type = ModifierType.Vitality,
                                 Name = "test",
                             },
-                        }
+                        },
                     },
                     new()
                     {
@@ -127,9 +125,10 @@ public class GetBreakOfDawnUseCaseTests
                                 Type = ModifierType.Vitality,
                                 Name = "test",
                             },
-                        }
+                        },
                     },
-                });
+                }
+            );
 
         var validator = new GetBreakOfDawnInfoModelValidator(_characterRepository);
 
@@ -176,7 +175,10 @@ public class GetBreakOfDawnUseCaseTests
     [InlineData(7, 4)]
     [InlineData(8, 5)]
     [InlineData(9, 6)]
-    public async Task UseCase_Maps_All_ExpressionIds_Correctly(int repositoryExpressionId, int expectedExpressionId)
+    public async Task UseCase_Maps_All_ExpressionIds_Correctly(
+        int repositoryExpressionId,
+        int expectedExpressionId
+    )
     {
         A.CallTo(() => _characterRepository.GetCharacterExpressionId(_model.Id))
             .Returns(repositoryExpressionId);

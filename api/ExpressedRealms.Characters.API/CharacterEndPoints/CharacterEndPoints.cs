@@ -77,7 +77,7 @@ internal static class CharacterEndPoints
             .MapGet("{id}/options", EditCharacterOptionsEndpoint.Execute)
             .WithDescription("Returns info needed for creating a character.")
             .RequireAuthorization();
-        
+
         endpointGroup
             .MapGet("{characterId}/dailyCheckinInfo", GetBreakOfDawnInfoEndpoint.ExecuteAsync)
             .RequireAuthorization();
