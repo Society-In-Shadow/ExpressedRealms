@@ -5,6 +5,7 @@ import {
   handleAdeptSidheSorcerers,
   handleAeternari,
   handleShammas,
+  handleVampyre,
   type TrackedStripInfo,
 } from '@/components/conCheckin/support/BreakOfDawnService.ts'
 import { getValidationInstance } from '@/components/conCheckin/validations/breakOfDawnValidations.ts'
@@ -80,6 +81,9 @@ const onSubmit = form.handleSubmit(async (values) => {
   }
   if (form.fields.expression.field.value.id == '2') {
     changes.value = handleAeternari(diffValues, maxValues, form.fields.xpLevel.field.value)
+  }
+  if (form.fields.expression.field.value.id == '6') {
+    changes.value = handleVampyre(diffValues, maxValues, form.fields.xpLevel.field.value)
   }
 })
 
