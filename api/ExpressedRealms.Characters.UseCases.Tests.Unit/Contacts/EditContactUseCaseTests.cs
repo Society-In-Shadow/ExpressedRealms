@@ -360,7 +360,7 @@ public class EditContactUseCaseTests
             )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_ClearsGOApproval_OnceModified()
     {
@@ -369,13 +369,7 @@ public class EditContactUseCaseTests
 
         await _useCase.ExecuteAsync(_model);
 
-        A.CallTo(() =>
-                _contactRepository.EditAsync(
-                    A<Contact>.That.Matches(x =>
-                        !x.IsApproved
-                    )
-                )
-            )
+        A.CallTo(() => _contactRepository.EditAsync(A<Contact>.That.Matches(x => !x.IsApproved)))
             .MustHaveHappenedOnceExactly();
     }
 
