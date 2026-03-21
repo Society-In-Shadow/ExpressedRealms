@@ -190,3 +190,84 @@ export function handleShammas(userDown: StripInfo, userMax: StripInfo, xpLevel: 
 
   return trackedStripInfo
 }
+
+export function handleAeternari(userDown: StripInfo, userMax: StripInfo, xpLevel: number): TrackedStripInfo {
+  const trackedStripInfo = {
+    vitality: new TrackingInfo(userMax.vitality - userDown.vitality, 0, userMax.vitality, []),
+    health: new TrackingInfo(userMax.health - userDown.health, 0, userMax.health, []),
+    blood: new TrackingInfo(userMax.blood - userDown.blood, 0, userMax.blood, []),
+    rwp: new TrackingInfo(userMax.rwp - userDown.rwp, 0, userMax.rwp, []),
+    psyche: new TrackingInfo(userMax.psyche - userDown.psyche, 0, userMax.psyche, []),
+    mortis: new TrackingInfo(userMax.mortis - userDown.mortis, 0, userMax.mortis, []),
+  }
+
+  if (trackedStripInfo.vitality.amountWithTotalGained > xpLevel) {
+    trackedStripInfo.vitality.gainedAmount -= xpLevel
+    trackedStripInfo.vitality.reasons.push(`You lost ${xpLevel} vitality due to Vitality Burn, so it was decreased by ${xpLevel} for total of ${trackedStripInfo.vitality.amountWithTotalGained}/${trackedStripInfo.vitality.maxAmount}`)
+  }
+  else {
+    // Not enough vitality to burn, so burn additional resources
+    while (trackedStripInfo.vitality.amountWithTotalGained <= xpLevel) {
+      trackedStripInfo.rwp.gainedAmount -= 1
+      trackedStripInfo.rwp.reasons.push(`You burned 1 RWP and 1 mortis to fulfill Vitality Burn, so RWP was decreased by 1 for total of ${trackedStripInfo.rwp.amountWithTotalGained}/${trackedStripInfo.rwp.maxAmount}`)
+      trackedStripInfo.mortis.gainedAmount -= 1
+      trackedStripInfo.mortis.reasons.push(`You burned 1 RWP and 1 mortis to fulfill Vitality Burn, so mortis was decreased by 1 for total of ${trackedStripInfo.mortis.amountWithTotalGained}/${trackedStripInfo.mortis.maxAmount}`)
+
+      if (trackedStripInfo.rwp.amountWithTotalGained <= 0) {
+        trackedStripInfo.rwp.reasons.push('You burned all RWP to fulfill Vitality Burn, you have entered "Death Sleep".  GO Required')
+      }
+
+      if (trackedStripInfo.mortis.amountWithTotalGained <= 0) {
+        trackedStripInfo.mortis.reasons.push('You burned all mortis to fulfill Vitality Burn, you have entered "Death Sleep".  GO Required')
+      }
+
+      if (trackedStripInfo.rwp.amountWithTotalGained <= 0 || trackedStripInfo.mortis.amountWithTotalGained <= 0) {
+        return trackedStripInfo
+      }
+
+      let vitalityChange = 6
+      const bonusGoesOverMax = trackedStripInfo.vitality.amountWithTotalGained + vitalityChange > trackedStripInfo.vitality.maxAmount
+      if (bonusGoesOverMax) {
+        // If so, only apply the amount that does not go over max
+        vitalityChange = trackedStripInfo.vitality.maxAmount - trackedStripInfo.vitality.amountWithTotalGained
+      }
+      trackedStripInfo.vitality.gainedAmount += vitalityChange
+      trackedStripInfo.vitality.reasons.push(`You burned 1 RWP and 1 mortis to fulfill Vitality Burn, so vitality was increased by ${vitalityChange} for total of ${trackedStripInfo.vitality.amountWithTotalGained}/${trackedStripInfo.vitality.maxAmount}`)
+    }
+    trackedStripInfo.vitality.gainedAmount -= xpLevel
+    trackedStripInfo.vitality.reasons.push(`You lost ${xpLevel} vitality due to Vitality Burn, so it was decreased by ${xpLevel} for total of ${trackedStripInfo.vitality.amountWithTotalGained}/${trackedStripInfo.vitality.maxAmount}`)
+  }
+
+  if (trackedStripInfo.health.needsMore) {
+    trackedStripInfo.health.gainedAmount += 1
+    trackedStripInfo.health.reasons.push(`You get 1 free health, so it was increased by 1 for total of ${trackedStripInfo.health.amountWithTotalGained}/${trackedStripInfo.health.maxAmount}`)
+  }
+
+  if (trackedStripInfo.blood.needsMore) {
+    trackedStripInfo.blood.gainedAmount += 1
+    trackedStripInfo.blood.reasons.push(`You get 1 free blood, so it was increased by 1 for total of ${trackedStripInfo.blood.amountWithTotalGained}/${trackedStripInfo.blood.maxAmount}`)
+  }
+
+  if (trackedStripInfo.psyche.needsMore) {
+    trackedStripInfo.psyche.gainedAmount += 1
+    trackedStripInfo.psyche.reasons.push(`You get a free Psyche, so it was increased by 1 for total of ${trackedStripInfo.psyche.amountWithTotalGained}/${trackedStripInfo.psyche.maxAmount}`)
+  }
+
+  if (trackedStripInfo.psyche.isFull && trackedStripInfo.rwp.needsMore) {
+    trackedStripInfo.rwp.gainedAmount += 1
+    trackedStripInfo.rwp.reasons.push(`Your psyche is full, so RWP was increased by 1 for total of ${trackedStripInfo.rwp.amountWithTotalGained}/${trackedStripInfo.rwp.maxAmount}`)
+  }
+  else if (trackedStripInfo.rwp.needsMore) {
+    trackedStripInfo.rwp.reasons.push(`Your psyche is not full, so no bonus to RWP`)
+  }
+
+  if (trackedStripInfo.vitality.isFull && trackedStripInfo.psyche.isFull && trackedStripInfo.mortis.needsMore) {
+    trackedStripInfo.mortis.gainedAmount += 1
+    trackedStripInfo.mortis.reasons.push(`Your Blood and Vitality are maxed, mortis was increased by 1 for total of ${trackedStripInfo.mortis.amountWithTotalGained}/${trackedStripInfo.mortis.maxAmount}`)
+  }
+  else if (trackedStripInfo.mortis.needsMore) {
+    trackedStripInfo.mortis.reasons.push(`Your Blood and Vitality are not full, so no bonus to Mortis`)
+  }
+
+  return trackedStripInfo
+}
