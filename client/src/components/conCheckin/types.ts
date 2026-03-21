@@ -81,3 +81,14 @@ export const AgeGroupId = {
   Teen: 2,
   Adult: 3,
 }
+
+export interface GetBreakOfDawnInfoResponse {
+  vitality: number
+  health: number
+  blood: number
+  rwp: number
+  psyche: number
+  mortis: number
+  characterLevel: number
+  expressionId: number
+}

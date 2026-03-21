@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { onBeforeMount, onMounted, ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import {
   handleAdeptSidheSorcerers,
   handleAeternari,
@@ -11,19 +11,28 @@ import {
 import { getValidationInstance } from '@/components/conCheckin/validations/breakOfDawnValidations.ts'
 import FormInputNumberWrapper from '@/FormWrappers/FormInputNumberWrapper.vue'
 import Button from 'primevue/button'
-import { proficiencyStore } from '@/components/characters/character/proficiency/stores/proficiencyStore.ts'
-import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
 import type { ListItem } from '@/types/ListItem.ts'
-import FormDropdownWrapper from '@/FormWrappers/FormDropdownWrapper.vue'
 import { formatSign } from '@/utilities/stringUtilities.ts'
+import type { GetBreakOfDawnInfoResponse } from '@/components/conCheckin/types.ts'
+import axios from 'axios'
 
 const form = getValidationInstance()
 const changes = ref<TrackedStripInfo | null>(null)
-const proficiencyData = proficiencyStore()
-const checkinInfo = EventCheckinStore()
 const availableExpressions = ref<ListItem[] | null>(null)
+const characterInfo = ref<GetBreakOfDawnInfoResponse>({})
 
-onBeforeMount(() => {
+const props = defineProps({
+  characterId: {
+    type: Number,
+    required: true,
+  },
+})
+
+onBeforeMount(async () => {
+  const response = await axios.get<GetBreakOfDawnInfoResponse>(`/characters/${props.characterId}/dailyCheckinInfo`)
+  console.log('Goo')
+  characterInfo.value = response.data
+  console.log(characterInfo.value.expressionId)
   availableExpressions.value = [{
     id: '1',
     name: 'Adept',
@@ -51,11 +60,8 @@ onBeforeMount(() => {
   }]
 })
 
-onMounted(async () => {
-  await proficiencyData.getUpdateProficiencies(checkinInfo.primaryCharacter!.characterId)
-})
-
 const onSubmit = form.handleSubmit(async (values) => {
+  console.log(characterInfo.value.expressionId)
   const diffValues = {
     rwp: values.rwp,
     blood: values.blood,
@@ -65,25 +71,26 @@ const onSubmit = form.handleSubmit(async (values) => {
     mortis: values.mortis,
   }
   const maxValues = {
-    rwp: proficiencyData.secondary.find(x => x.id == 22).value,
-    blood: proficiencyData.secondary.find(x => x.id == 15).value,
-    health: proficiencyData.secondary.find(x => x.id == 14).value,
-    vitality: proficiencyData.secondary.find(x => x.id == 13).value,
-    psyche: proficiencyData.secondary.find(x => x.id == 17).value,
-    mortis: proficiencyData.secondary.find(x => x.id == 23).value,
+    rwp: characterInfo.value.rwp,
+    blood: characterInfo.value.blood,
+    health: characterInfo.value.health,
+    vitality: characterInfo.value.vitality,
+    psyche: characterInfo.value.psyche,
+    mortis: characterInfo.value.mortis,
   }
-  const simpleNonFeeders = ['1', '4', '5']
-  if (simpleNonFeeders.includes(form.fields.expression.field.value.id)) {
+
+  const simpleNonFeeders = [1, 4, 5]
+  if (simpleNonFeeders.includes(characterInfo.value.expressionId)) {
     changes.value = handleAdeptSidheSorcerers(diffValues, maxValues)
   }
-  if (form.fields.expression.field.value.id == '3') { // Shammas
-    changes.value = handleShammas(diffValues, maxValues, form.fields.xpLevel.field.value)
+  if (characterInfo.value.expressionId == 3) { // Shammas
+    changes.value = handleShammas(diffValues, maxValues, characterInfo.value.characterLevel)
   }
-  if (form.fields.expression.field.value.id == '2') {
-    changes.value = handleAeternari(diffValues, maxValues, form.fields.xpLevel.field.value)
+  if (characterInfo.value.expressionId == 2) {
+    changes.value = handleAeternari(diffValues, maxValues, characterInfo.value.characterLevel)
   }
-  if (form.fields.expression.field.value.id == '6') {
-    changes.value = handleVampyre(diffValues, maxValues, form.fields.xpLevel.field.value)
+  if (characterInfo.value.expressionId == 6) {
+    changes.value = handleVampyre(diffValues, maxValues, characterInfo.value.characterLevel)
   }
 })
 
@@ -94,8 +101,6 @@ const onSubmit = form.handleSubmit(async (values) => {
     <div>
       <h1>Are you down anything?</h1>
       <form @submit="onSubmit">
-        <FormDropdownWrapper v-model="form.fields.expression" option-label="name" :options="availableExpressions!" />
-        <FormInputNumberWrapper v-model="form.fields.xpLevel" />
         <FormInputNumberWrapper v-model="form.fields.vitality" />
         <FormInputNumberWrapper v-model="form.fields.health" />
         <FormInputNumberWrapper v-model="form.fields.blood" />
@@ -108,7 +113,7 @@ const onSubmit = form.handleSubmit(async (values) => {
       </form>
     </div>
     <div v-if="changes" class="ml-3">
-      <h1>What they get and why.</h1>
+      <h1>Results and Reasons</h1>
       <div v-if="changes.vitality.reasons.length > 0">
         <h3>{{ formatSign(changes.vitality.gainedAmount) }} Vitality</h3>
         <p v-for="reason in changes.vitality.reasons">
