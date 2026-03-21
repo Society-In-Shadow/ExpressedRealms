@@ -70,7 +70,10 @@ public class XpRepository(
             return 0;
 
         var levelXp = 0;
-        if (character.IsPrimaryCharacter && await featureToggleClient.HasFeatureFlag(ReleaseFlags.UseNewPrimaryXpCalculation))
+        if (
+            character.IsPrimaryCharacter
+            && await featureToggleClient.HasFeatureFlag(ReleaseFlags.UseNewPrimaryXpCalculation)
+        )
         {
             var availableDate = DateOnly.FromDateTime(DateTime.UtcNow.AddMonths(1));
             levelXp = await context

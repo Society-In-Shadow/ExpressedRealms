@@ -4,6 +4,7 @@ using ExpressedRealms.Characters.API.CharacterEndPoints.DTOs;
 using ExpressedRealms.Characters.API.CharacterEndPoints.EditCharacter;
 using ExpressedRealms.Characters.API.CharacterEndPoints.EditCharacterOptions;
 using ExpressedRealms.Characters.API.CharacterEndPoints.FinalizeCharacterCreate;
+using ExpressedRealms.Characters.API.CharacterEndPoints.GetBreakOfDawnInfo;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetCRB;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetOverallStats;
 using ExpressedRealms.Characters.API.CharacterEndPoints.Requests;
@@ -75,6 +76,10 @@ internal static class CharacterEndPoints
         endpointGroup
             .MapGet("{id}/options", EditCharacterOptionsEndpoint.Execute)
             .WithDescription("Returns info needed for creating a character.")
+            .RequireAuthorization();
+
+        endpointGroup
+            .MapGet("{characterId}/dailyCheckinInfo", GetBreakOfDawnInfoEndpoint.ExecuteAsync)
             .RequireAuthorization();
 
         endpointGroup

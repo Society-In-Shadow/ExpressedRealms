@@ -24,9 +24,12 @@ import ContactTab from '@/components/characters/character/contacts/ContactTab.vu
 import { FeatureFlags, userStore } from '@/stores/userStore.ts'
 import { onBeforeMount, ref } from 'vue'
 import ApproveCharacterBanner from '@/components/conCheckin/support/ApproveCharacterBanner.vue'
+import DailyCheckin from '@/components/conCheckin/support/DailyCheckin.vue'
+import { useRoute } from 'vue-router'
 
 const characterData = characterStore()
 const userData = userStore()
+const route = useRoute()
 
 const showContacts = ref(false)
 
@@ -78,6 +81,9 @@ onBeforeMount(async () => {
           <Tab value="5">
             XP Breakdown
           </Tab>
+          <Tab value="7">
+            Daily Checkin Calc
+          </Tab>
         </TabList>
         <TabPanels class="p-2 p-md-3">
           <TabPanel value="-1">
@@ -103,6 +109,9 @@ onBeforeMount(async () => {
           </TabPanel>
           <TabPanel value="5">
             <ReviewCharacter :is-read-only="true" />
+          </TabPanel>
+          <TabPanel value="7">
+            <DailyCheckin :character-id="Number.parseInt(route.params.id as string)" />
           </TabPanel>
         </TabPanels>
       </Tabs>

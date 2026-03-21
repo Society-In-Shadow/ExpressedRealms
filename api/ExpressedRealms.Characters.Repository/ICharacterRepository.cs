@@ -20,4 +20,5 @@ public interface ICharacterRepository
     Task EditAsync<TEntity>(TEntity entity)
         where TEntity : class;
     Task<bool> CanUpdatePrimaryCharacterStatus(int id);
+    Task<int> GetCharacterExpressionId(int characterId);
 }

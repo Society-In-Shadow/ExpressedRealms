@@ -16,6 +16,7 @@ import Message from 'primevue/message'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 import { confirmationPopups } from '@/components/conCheckin/services/popupService.ts'
 import AgeVerificationStep from '@/components/conCheckin/support/AgeVerificationStep.vue'
+import DailyCheckin from '@/components/conCheckin/support/DailyCheckin.vue'
 
 const eventCheckinInfo = EventCheckinStore()
 const userPermission = userPermissionStore()
@@ -130,10 +131,11 @@ const approveStage = async (stageId: number) => {
     </StepItem>
     <StepItem value="9">
       <Step>Picked Up and Day One</Step>
-      <StepPanel>
+      <StepPanel v-if="eventCheckinInfo.activeStepperStep == '9'">
         <h3>Everything is Done for Day 1</h3>
+        <DailyCheckin :character-id="eventCheckinInfo.primaryCharacter!.characterId" />
         <Button
-          label="Day 2 Check-in" icon-pos="right" class="mb-4" :disabled="permissionCheck.Event.Day23Checkin"
+          label="Day 2 Check-in" icon-pos="right" class="mb-4" :disabled="!permissionCheck.Event.Day23Checkin"
           @click="approveStage(6)"
         />
       </StepPanel>
