@@ -73,6 +73,7 @@ internal sealed class EditContactUseCase(
         contact.KnowledgeLevelId = model.KnowledgeLevel + 1;
         contact.SpentXp = spentXp;
         contact.Notes = model.Notes?.Trim() == string.Empty ? null : model.Notes?.Trim();
+        contact.IsApproved = false;
 
         await contactRepository.EditAsync(contact);
 
