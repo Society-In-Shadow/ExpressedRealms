@@ -82,7 +82,7 @@ onBeforeMount(async () => {
             XP Breakdown
           </Tab>
           <Tab value="7">
-            Daily Checkin Calc
+            Break of Dawn Calc
           </Tab>
         </TabList>
         <TabPanels class="p-2 p-md-3">
