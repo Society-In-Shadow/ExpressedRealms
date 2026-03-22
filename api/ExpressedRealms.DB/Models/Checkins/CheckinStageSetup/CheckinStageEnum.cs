@@ -85,4 +85,11 @@ public sealed class CheckinStageEnum : SmartEnum<CheckinStageEnum, int>
         "CRB has printed at least once during this event",
         7
     );
+    
+    public static readonly CheckinStageEnum PlayerNeedsReapproval = new(
+        "Player Needs Reapproval",
+        12,
+        "This is used when a player needs to have their CRB re-printed / approved.  Usually due to retirement or sheet changes.",
+        12
+    );
 }
