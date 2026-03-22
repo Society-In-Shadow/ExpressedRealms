@@ -94,6 +94,14 @@ internal sealed class EventCheckinRepository(
             .FirstAsync(cancellationToken);
     }
 
+    public async Task<string> GetPlayerLookupId(Guid playerId)
+    {
+        return await context
+            .Players.Where(x => x.Id == playerId)
+            .Select(x => x.LookupId)
+            .FirstAsync(cancellationToken);
+    }
+
     public async Task<Guid> GetCurrentPlayerId()
     {
         return await context
