@@ -1,10 +1,30 @@
 import { useConfirm } from 'primevue/useconfirm'
 import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
-import { AgeGroupId } from '@/components/conCheckin/types.ts'
+import { AgeGroupId, CheckinStage } from '@/components/conCheckin/types.ts'
 
 export const confirmationPopups = () => {
   const confirm = useConfirm()
   const store = EventCheckinStore()
+
+  const reapproveCharacterConfirmation = (mouseEvent: MouseEvent, name: string) =>
+    confirm.require({
+      target: mouseEvent.target as HTMLElement,
+      group: 'popup',
+      message: `Do you want to send ${name} back through GO Approval?`,
+      icon: 'pi pi-info-circle',
+      rejectProps: {
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptProps: {
+        label: `Reapprove ${name}?`,
+        severity: 'danger',
+      },
+      accept: () => {
+        store.approveStage(CheckinStage.PlayerNeedsReapproval)
+      },
+    })
 
   const retireConfirmation = (mouseEvent: MouseEvent, name: string) =>
     confirm.require({
@@ -46,5 +66,5 @@ export const confirmationPopups = () => {
       },
     })
 
-  return { retireConfirmation, childConfirmation }
+  return { retireConfirmation, childConfirmation, reapproveCharacterConfirmation }
 }

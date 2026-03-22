@@ -104,6 +104,7 @@ export const EventCheckinStore
             // Been set SHQ Approval
             break
           case CheckinStage.ShqApproval:
+          case CheckinStage.PlayerNeedsReapproval:
             // Stone Pulled, They need to get GO Approval next
             // Redirect them to the character sheet
             if (this.primaryCharacter) {

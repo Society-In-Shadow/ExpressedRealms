@@ -13,6 +13,7 @@ namespace ExpressedRealms.Events.API.Repositories.EventCheckin;
 public interface IEventCheckinRepository : IGenericRepository
 {
     Task<string> GetPlayerLookupId();
+    Task<string> GetPlayerLookupId(Guid playerId);
     Task<int?> GetActiveEventId();
     Task<bool> CheckinIdExistsAsync(string id);
     Task<string> GetPlayerName(string lookupId);

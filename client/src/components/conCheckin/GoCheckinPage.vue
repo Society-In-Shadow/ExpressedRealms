@@ -61,7 +61,8 @@ const approveStage = async (stageId: number) => {
     Successfully committed Stage!
   </Message>
   <div v-if="permissionCheck.CharacterManagement.Retire" class="text-right">
-    <Button label="Retire Character" @click="popups.retireConfirmation($event, eventCheckinInfo.primaryCharacter.characterName)" />
+    <Button label="Reapprove Character" @click="popups.reapproveCharacterConfirmation($event, eventCheckinInfo.primaryCharacter.characterName)" />
+    <Button label="Retire Character" class="ml-3" @click="popups.retireConfirmation($event, eventCheckinInfo.primaryCharacter.characterName)" />
   </div>
   <Stepper v-model:value="eventCheckinInfo.activeStepperStep">
     <StepItem value="1">

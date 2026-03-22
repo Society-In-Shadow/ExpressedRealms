@@ -123,6 +123,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         switch (model.StageId)
         {
             case 1: // SHQ Approval
+            case 12: // Reapprove A Character 
             {
                 var seekingGoMessage = "";
 
