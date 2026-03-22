@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageMappingSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.Events.API.Discord;
@@ -38,35 +39,9 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         if (checkin is null)
             return Result.Fail("Player has not checked in yet");
 
-        var approvedStages = await checkinRepository.GetApprovedStages(checkin.Id);
-
-        if (approvedStages.Any(x => x.CheckinStageId == model.StageId))
-        {
-            return Result.Fail("Stage has already been approved");
-        }
-
-        var dayCheckins = new[] { 6, 7 };
-        var currentStage =
-            approvedStages.Count > 0 ? approvedStages.MaxBy(x => x.CreatedAt)!.CheckinStageId : 0;
-        var completedStageIds = approvedStages.Select(x => x.CheckinStageId).ToList();
-
-        var stage = CheckinStageEnum.FromValue(model.StageId);
-        var currentStageEnum = CheckinStageEnum.FromValue(currentStage);
-
-        // ---- Rule 1: Sequential for stages 1–9 ----
-        if (stage.SortOrder <= 9 && stage.SortOrder != currentStageEnum.SortOrder + 1)
-            return Result.Fail("Stage is not next in sequence.");
-
-        // ---- Rule 2: Stage 10 & 11 locked until 1–5 complete ----
-        if (dayCheckins.Contains(model.StageId))
-        {
-            bool firstFiveComplete = Enumerable
-                .Range(1, 9)
-                .All(stageId => completedStageIds.Contains(stageId));
-
-            if (!firstFiveComplete)
-                return Result.Fail("Stages 1 through 9 must be completed before day check-ins.");
-        }
+        var stageRuleValidation = await StageRuleValidation(model, checkin);
+        if (stageRuleValidation.IsFailed) 
+            return Result.Fail(stageRuleValidation.Errors);
 
         await checkinRepository.CompleteStage(
             new CheckinStageMapping()
@@ -112,6 +87,89 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         await SendMessages(model, playerId);
 
         return Result.Ok();
+    }
+
+    private async Task<Result<bool>> StageRuleValidation(ApproveStageAndSendMessageModel model, Checkin checkin)
+    {
+        List<CheckinStageMapping> activeList = [];
+        
+        await GetActiveApprovedStages(checkin, activeList);
+
+        var hasBeenPickedUp = activeList.Any(x => x.CheckinStageId == CheckinStageEnum.CrbPickedUp.Value);
+        if (model.StageId == CheckinStageEnum.PlayerNeedsReapproval.Value && !hasBeenPickedUp)
+        {
+            return Result.Fail("Player needs to pick up their CRB before they can re-approve");
+        }
+        
+        activeList = activeList.Where(x => x.CheckinStageId != CheckinStageEnum.PlayerNeedsReapproval.Value).ToList();
+        
+        if (activeList.Any(x => x.CheckinStageId == model.StageId))
+        {
+            return Result.Fail("Stage has already been approved");
+        }
+        
+        var dayCheckins = new[] { 6, 7 };
+
+        var completedStageIds = activeList.Select(x => x.CheckinStageId).ToList();
+        var currentStage = activeList.Count > 0 ? activeList.MaxBy(x => x.CreatedAt)!.CheckinStageId : 0;
+        var stage = CheckinStageEnum.FromValue(model.StageId);
+        
+        // ---- Rule 0: If first stage, skip the rest of the rules
+        if (stage != CheckinStageEnum.AgeCheckApproval)
+        {
+            var currentStageEnum = CheckinStageEnum.FromValue(currentStage);
+            // ---- Rule 1: Sequential for stages 1–9 ----
+            if (stage.SortOrder <= 9 && stage.SortOrder != currentStageEnum.SortOrder + 1)
+            {
+                return Result.Fail("Stage is not next in sequence.");
+            }
+
+            // ---- Rule 2: Stage 10 & 11 locked until 1–5 complete ----
+            if (dayCheckins.Contains(model.StageId))
+            {
+                bool firstFiveComplete = Enumerable
+                    .Range(1, 9)
+                    .All(stageId => completedStageIds.Contains(stageId));
+
+                if (!firstFiveComplete)
+                {
+                    return Result.Fail("Stages 1 through 9 must be completed before day check-ins.");
+                }
+            }
+        }
+        
+        return false;
+    }
+
+    private async Task GetActiveApprovedStages(Checkin checkin, List<CheckinStageMapping> activeList)
+    {
+        var approvedStages = await checkinRepository.GetApprovedStages(checkin.Id);
+        
+        var latestReapprovedStage = approvedStages
+            .Where(x => x.CheckinStageId == CheckinStageEnum.PlayerNeedsReapproval.Value)
+            .OrderByDescending(x => x.CreatedAt)
+            .FirstOrDefault();
+
+        if (latestReapprovedStage is not null)
+        {
+            var stagesThatCannotBeReapproved = new[]
+            {
+                CheckinStageEnum.AgeCheckApproval.Value,
+                CheckinStageEnum.EventQuestionsCheck.Value,
+                CheckinStageEnum.EventQuestionsCheck.Value,
+                CheckinStageEnum.AssignedXpCheck.Value,
+                CheckinStageEnum.ShqApproval.Value,
+            };
+
+            activeList.AddRange(approvedStages.Where(x => stagesThatCannotBeReapproved.Contains(x.CheckinStageId)));
+            activeList.AddRange(approvedStages.Where(x => x.CreatedAt >= latestReapprovedStage.CreatedAt)
+                .OrderByDescending(x => x.CreatedAt)
+                .ToList());
+        }
+        else
+        {
+            activeList.AddRange(approvedStages);
+        }
     }
 
     private async Task SendMessages(ApproveStageAndSendMessageModel model, Guid playerId)
