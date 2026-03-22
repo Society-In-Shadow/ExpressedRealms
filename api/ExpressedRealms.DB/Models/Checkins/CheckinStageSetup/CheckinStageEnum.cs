@@ -85,7 +85,7 @@ public sealed class CheckinStageEnum : SmartEnum<CheckinStageEnum, int>
         "CRB has printed at least once during this event",
         7
     );
-    
+
     public static readonly CheckinStageEnum PlayerNeedsReapproval = new(
         "Player Needs Reapproval",
         12,

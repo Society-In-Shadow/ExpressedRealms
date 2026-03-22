@@ -40,7 +40,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
             return Result.Fail("Player has not checked in yet");
 
         var stageRuleValidation = await StageRuleValidation(model, checkin);
-        if (stageRuleValidation.IsFailed) 
+        if (stageRuleValidation.IsFailed)
             return Result.Fail(stageRuleValidation.Errors);
 
         await checkinRepository.CompleteStage(
@@ -89,31 +89,39 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         return Result.Ok();
     }
 
-    private async Task<Result<bool>> StageRuleValidation(ApproveStageAndSendMessageModel model, Checkin checkin)
+    private async Task<Result<bool>> StageRuleValidation(
+        ApproveStageAndSendMessageModel model,
+        Checkin checkin
+    )
     {
         List<CheckinStageMapping> activeList = [];
-        
+
         await GetActiveApprovedStages(checkin, activeList);
 
-        var hasBeenPickedUp = activeList.Any(x => x.CheckinStageId == CheckinStageEnum.CrbPickedUp.Value);
+        var hasBeenPickedUp = activeList.Any(x =>
+            x.CheckinStageId == CheckinStageEnum.CrbPickedUp.Value
+        );
         if (model.StageId == CheckinStageEnum.PlayerNeedsReapproval.Value && !hasBeenPickedUp)
         {
             return Result.Fail("Player needs to pick up their CRB before they can re-approve");
         }
-        
-        activeList = activeList.Where(x => x.CheckinStageId != CheckinStageEnum.PlayerNeedsReapproval.Value).ToList();
-        
+
+        activeList = activeList
+            .Where(x => x.CheckinStageId != CheckinStageEnum.PlayerNeedsReapproval.Value)
+            .ToList();
+
         if (activeList.Any(x => x.CheckinStageId == model.StageId))
         {
             return Result.Fail("Stage has already been approved");
         }
-        
+
         var dayCheckins = new[] { 6, 7 };
 
         var completedStageIds = activeList.Select(x => x.CheckinStageId).ToList();
-        var currentStage = activeList.Count > 0 ? activeList.MaxBy(x => x.CreatedAt)!.CheckinStageId : 0;
+        var currentStage =
+            activeList.Count > 0 ? activeList.MaxBy(x => x.CreatedAt)!.CheckinStageId : 0;
         var stage = CheckinStageEnum.FromValue(model.StageId);
-        
+
         // ---- Rule 0: If first stage, skip the rest of the rules
         if (stage != CheckinStageEnum.AgeCheckApproval)
         {
@@ -133,18 +141,23 @@ internal sealed class ApproveStageAndSendMessageUseCase(
 
                 if (!firstFiveComplete)
                 {
-                    return Result.Fail("Stages 1 through 9 must be completed before day check-ins.");
+                    return Result.Fail(
+                        "Stages 1 through 9 must be completed before day check-ins."
+                    );
                 }
             }
         }
-        
+
         return false;
     }
 
-    private async Task GetActiveApprovedStages(Checkin checkin, List<CheckinStageMapping> activeList)
+    private async Task GetActiveApprovedStages(
+        Checkin checkin,
+        List<CheckinStageMapping> activeList
+    )
     {
         var approvedStages = await checkinRepository.GetApprovedStages(checkin.Id);
-        
+
         var latestReapprovedStage = approvedStages
             .Where(x => x.CheckinStageId == CheckinStageEnum.PlayerNeedsReapproval.Value)
             .OrderByDescending(x => x.CreatedAt)
@@ -161,10 +174,15 @@ internal sealed class ApproveStageAndSendMessageUseCase(
                 CheckinStageEnum.ShqApproval.Value,
             };
 
-            activeList.AddRange(approvedStages.Where(x => stagesThatCannotBeReapproved.Contains(x.CheckinStageId)));
-            activeList.AddRange(approvedStages.Where(x => x.CreatedAt >= latestReapprovedStage.CreatedAt)
-                .OrderByDescending(x => x.CreatedAt)
-                .ToList());
+            activeList.AddRange(
+                approvedStages.Where(x => stagesThatCannotBeReapproved.Contains(x.CheckinStageId))
+            );
+            activeList.AddRange(
+                approvedStages
+                    .Where(x => x.CreatedAt >= latestReapprovedStage.CreatedAt)
+                    .OrderByDescending(x => x.CreatedAt)
+                    .ToList()
+            );
         }
         else
         {
@@ -181,7 +199,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         switch (model.StageId)
         {
             case 1: // SHQ Approval
-            case 12: // Reapprove A Character 
+            case 12: // Reapprove A Character
             {
                 var seekingGoMessage = "";
 

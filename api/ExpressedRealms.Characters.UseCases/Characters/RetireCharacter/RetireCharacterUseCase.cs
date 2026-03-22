@@ -39,11 +39,13 @@ internal sealed class RetireCharacterUseCase(
         if (activeEvent is not null)
         {
             var lookupId = await checkinRepository.GetPlayerLookupId(playerId);
-            await approveStageAndSendMessageUseCase.ExecuteAsync(new ApproveStageAndSendMessageModel()
-            {
-                LookupId = lookupId,
-                StageId = CheckinStageEnum.PlayerNeedsReapproval.Value,
-            });
+            await approveStageAndSendMessageUseCase.ExecuteAsync(
+                new ApproveStageAndSendMessageModel()
+                {
+                    LookupId = lookupId,
+                    StageId = CheckinStageEnum.PlayerNeedsReapproval.Value,
+                }
+            );
         }
 
         await repository.EditAsync(character);
