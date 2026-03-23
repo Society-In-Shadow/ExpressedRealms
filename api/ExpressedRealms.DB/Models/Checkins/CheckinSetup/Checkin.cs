@@ -1,6 +1,7 @@
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup.Audit;
+using ExpressedRealms.DB.Models.Checkins.CheckinSecondaryStatsSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup.Audit;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageMappingSetup;
 using ExpressedRealms.DB.Models.Events.EventSetup;
@@ -25,4 +26,6 @@ public class Checkin
         new HashSet<CheckinQuestionResponseAuditTrail>();
     public virtual ICollection<CheckinStageMapping> CheckinStageMappings { get; set; } =
         new HashSet<CheckinStageMapping>();
+
+    public virtual CheckinSecondaryStat? CheckinSecondaryStats { get; set; } = null!;
 }
