@@ -1,5 +1,6 @@
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup;
+using ExpressedRealms.DB.Models.Checkins.CheckinSecondaryStatsSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageMappingSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
@@ -42,4 +43,5 @@ public interface IEventCheckinRepository : IGenericRepository
     Task<Player> GetPlayerAsync(string lookupId);
     Task<DateOnly> GetActiveEventStartDate();
     Task<bool> GetStageStatus(int checkinId, CheckinStageEnum stageId);
+    Task AddUpdateSecondaryStats(CheckinSecondaryStat checkinSecondaryStat);
 }

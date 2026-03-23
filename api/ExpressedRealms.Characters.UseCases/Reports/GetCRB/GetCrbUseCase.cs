@@ -1,4 +1,7 @@
 using ExpressedRealms.Characters.Repository.Players;
+using ExpressedRealms.Characters.Repository.Proficiencies;
+using ExpressedRealms.Characters.UseCases.Reports.GetCharacterBooklet;
+using ExpressedRealms.DB.Models.Checkins.CheckinSecondaryStatsSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.Events.API.UseCases.EventCheckin.ApproveStageAndSendMessages;
@@ -10,7 +13,7 @@ using PdfSharp;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
 
-namespace ExpressedRealms.Characters.UseCases.Reports.GetCharacterBooklet
+namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
 {
     [UsedImplicitly]
     internal sealed class GetCharacterBookletUseCase(
@@ -18,6 +21,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCharacterBooklet
         IGetCharacterSheetReportUseCase crbReport,
         IPlayerRepository playerRepository,
         IEventCheckinRepository checkinRepository,
+        IProficiencyRepository profRepository,
         IApproveStageAndSendMessageUseCase sendMessageUseCase,
         GetCharacterBookletModelValidator validator,
         CancellationToken cancellationToken
@@ -82,6 +86,23 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCharacterBooklet
                                 StageId = CheckinStageEnum.PrintedCrb,
                             }
                         );
+                        
+                        var proficiencies = await profRepository.GetBasicProficiencies(model.CharacterId);
+
+                        await checkinRepository.AddUpdateSecondaryStats(new CheckinSecondaryStat()
+                        {
+                            CheckinId = checkin.Id,
+                            Vitality = proficiencies.Value.First(x => x.Id == 13).Value,
+                            Health = proficiencies.Value.First(x => x.Id == 14).Value,
+                            Blood = proficiencies.Value.First(x => x.Id == 15).Value,
+                            Psyche = proficiencies.Value.First(x => x.Id == 17).Value,
+                            Rwp = proficiencies.Value.First(x => x.Id == 22).Value,
+                            Mortis = proficiencies.Value.First(x => x.Id == 23).Value,
+                            Chi = proficiencies.Value.FirstOrDefault(x => x.Id == 18)?.Value ?? 0,
+                            Essence = proficiencies.Value.FirstOrDefault(x => x.Id == 19)?.Value ?? 0,
+                            Mana = proficiencies.Value.FirstOrDefault(x => x.Id == 20)?.Value ?? 0,
+                            Noumenon = proficiencies.Value.FirstOrDefault(x => x.Id == 21)?.Value ?? 0,
+                        });
                     }
                 }
             }
