@@ -13,7 +13,7 @@ namespace ExpressedRealms.Characters.Reports.CRB;
 
 public static class CharacterReferenceBookletReport
 {
-    private const string DefaultFontFace = "Courier";
+    private const string DefaultFontFace = "Liberation Sans";
 
     public static MemoryStream GenerateReport(ReportData data)
     {
@@ -78,7 +78,7 @@ public static class CharacterReferenceBookletReport
             FillInSkills(fields, data.SkillInfo, document);
             FillInPowers(data.Powers, document);
             FillInAdminPowers(data.Powers, document);
-            FillInProficiencies(fields, data.ProficiencyInfo, document);
+            FillInProficiencies(fields, data.ProficiencyInfo, document, data.BasicInfo.Expression);
             FillInStatInfo(fields, data.StatInfo, document);
             FillInContacts(fields, data.Contacts);
 
@@ -109,6 +109,48 @@ public static class CharacterReferenceBookletReport
         gfx.TranslateTransform(centerX, centerY);
         gfx.RotateTransform(-90);
         gfx.DrawString(stampText, font, XBrushes.Black, -size.Width / 2, font.GetHeight() / 2 - 3);
+        gfx.Restore();
+    }
+
+    private static void PrintStatLabelInfo(
+        PdfPage page,
+        string label,
+        double centerX,
+        double centerY
+    )
+    {
+        using var gfx = XGraphics.FromPdfPage(page);
+        var font = new XFont(DefaultFontFace, 10, XFontStyleEx.Regular);
+        var size = gfx.MeasureString(label, font);
+
+        gfx.Save();
+        gfx.TranslateTransform(centerX, centerY);
+        gfx.RotateTransform(-90);
+        // After -90°: width is horizontal centering, ascent pins the baseline to the bottom
+        gfx.DrawString(label, font, XBrushes.Black, -size.Height - 2, 0);
+
+        gfx.Restore();
+
+        var linePen = new XPen(XColors.Black, XUnitPt.FromInch(0.015));
+        gfx.DrawLine(
+            linePen,
+            XUnitPt.FromInch(4.16),
+            XUnitPt.FromInch(4.31),
+            XUnitPt.FromInch(4.16),
+            XUnitPt.FromInch(4.82)
+        );
+    }
+
+    private static void PrintPPIdentifier(PdfPage page, double centerX, double centerY)
+    {
+        using var gfx = XGraphics.FromPdfPage(page);
+        var font = new XFont(DefaultFontFace, 4, XFontStyleEx.Regular);
+        var size = gfx.MeasureString("PP", font);
+
+        gfx.Save();
+        gfx.TranslateTransform(centerX, centerY);
+        gfx.RotateTransform(-180);
+        gfx.DrawString("PP", font, XBrushes.Black, -size.Width / 2, font.GetHeight() / 2 - 3);
         gfx.Restore();
     }
 
@@ -215,7 +257,8 @@ public static class CharacterReferenceBookletReport
     private static void FillInProficiencies(
         PdfAcroField.PdfAcroFieldCollection fields,
         ProficiencyData dataProficiencyInfo,
-        PdfDocument document
+        PdfDocument document,
+        string expression
     )
     {
         var page = document.Pages[5];
@@ -271,6 +314,61 @@ public static class CharacterReferenceBookletReport
         MergeField(fields, "RWP", dataProficiencyInfo.RWP.ToString());
         MergeField(fields, "Mortis", dataProficiencyInfo.Mortis.ToString());
 
+        switch (expression)
+        {
+            case "Adepts":
+                PrintStatLabelInfo(page, "Chi", XUnitPt.FromInch(4.12), XUnitPt.FromInch(5.48));
+                PrintPPIdentifier(page, XUnitPt.FromInch(4.06), XUnitPt.FromInch(5.68));
+                PrintStatInfo(
+                    page,
+                    dataProficiencyInfo.Chi.ToString(),
+                    XUnitPt.FromInch(4.05),
+                    XUnitPt.FromInch(4.60)
+                );
+                break;
+            case "Shammas":
+                PrintStatLabelInfo(
+                    page,
+                    "Noumenon",
+                    XUnitPt.FromInch(4.12),
+                    XUnitPt.FromInch(5.48)
+                );
+                PrintPPIdentifier(page, XUnitPt.FromInch(4.06), XUnitPt.FromInch(5.68));
+                PrintStatInfo(
+                    page,
+                    dataProficiencyInfo.Noumenon.ToString(),
+                    XUnitPt.FromInch(4.05),
+                    XUnitPt.FromInch(4.60)
+                );
+                break;
+            case "Sorcerers":
+                PrintStatLabelInfo(page, "Mana", XUnitPt.FromInch(4.12), XUnitPt.FromInch(5.48));
+                PrintPPIdentifier(page, XUnitPt.FromInch(4.06), XUnitPt.FromInch(5.68));
+                PrintStatInfo(
+                    page,
+                    dataProficiencyInfo.Mana.ToString(),
+                    XUnitPt.FromInch(4.05),
+                    XUnitPt.FromInch(4.60)
+                );
+                break;
+            case "Sidhe":
+                PrintStatLabelInfo(page, "Essence", XUnitPt.FromInch(4.12), XUnitPt.FromInch(5.48));
+                PrintPPIdentifier(page, XUnitPt.FromInch(4.06), XUnitPt.FromInch(5.68));
+                PrintStatInfo(
+                    page,
+                    dataProficiencyInfo.Essence.ToString(),
+                    XUnitPt.FromInch(4.05),
+                    XUnitPt.FromInch(4.60)
+                );
+                break;
+            case "Aeternari":
+                PrintPPIdentifier(page, XUnitPt.FromInch(2.25), XUnitPt.FromInch(5.68));
+                break;
+            case "Vampyres":
+                PrintPPIdentifier(page, XUnitPt.FromInch(2.76), XUnitPt.FromInch(5.68));
+                break;
+        }
+
         var powerPoints = new List<int>()
         {
             dataProficiencyInfo.Chi,
@@ -278,13 +376,6 @@ public static class CharacterReferenceBookletReport
             dataProficiencyInfo.Mana,
             dataProficiencyInfo.Noumenon,
         };
-
-        PrintStatInfo(
-            page,
-            powerPoints.Max().ToString(),
-            XUnitPt.FromInch(4.05),
-            XUnitPt.FromInch(4.60)
-        );
 
         MergeField(fields, "PowerPoints", powerPoints.Max().ToString());
 
