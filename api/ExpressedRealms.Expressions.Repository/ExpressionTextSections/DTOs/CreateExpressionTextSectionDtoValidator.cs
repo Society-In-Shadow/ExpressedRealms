@@ -10,7 +10,7 @@ public class CreateExpressionTextSectionDtoValidator
 {
     public CreateExpressionTextSectionDtoValidator(ExpressedRealmsDbContext dbContext)
     {
-        RuleFor(x => x.Name).MaximumLength(50).NotEmpty();
+        RuleFor(x => x.Name).MaximumLength(150).NotEmpty();
         RuleFor(x => x.Content).NotEmpty();
         RuleFor(x => x.SectionTypeId)
             .MustAsync(
