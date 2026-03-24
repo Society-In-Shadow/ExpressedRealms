@@ -23,7 +23,7 @@ internal static class ExpressionAuditConfiguration
                     changedRecord.FriendlyName = "Short Description";
                     break;
 
-                case "nav_menu_item":
+                case "nav_menu_image":
                     changedRecord.FriendlyName = "Navigation Menu Image";
                     break;
 
