@@ -156,7 +156,7 @@ const approveStage = async (stageId: number) => {
     </StepItem>
     <StepItem value="12">
       <Step>Day 3 Checkin</Step>
-      <StepPanel v-if="eventCheckinInfo.activeStepperStep == '11'">
+      <StepPanel v-if="eventCheckinInfo.activeStepperStep == '12'">
         <h3>Day 3 Checkin - Break of Dawn revitalizes the user</h3>
         <p>The character gets a free bonus for waking up, which is handled below</p>
         <DailyCheckin :lookup-id="eventCheckinInfo.lookupId" />
