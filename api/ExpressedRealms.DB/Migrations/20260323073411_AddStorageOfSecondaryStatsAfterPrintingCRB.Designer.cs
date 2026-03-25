@@ -3,6 +3,7 @@ using System;
 using ExpressedRealms.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpressedRealms.DB.Migrations
 {
     [DbContext(typeof(ExpressedRealmsDbContext))]
-    partial class ExpressedRealmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260323073411_AddStorageOfSecondaryStatsAfterPrintingCRB")]
+    partial class AddStorageOfSecondaryStatsAfterPrintingCRB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1171,10 +1174,6 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("essence");
 
-                    b.Property<int>("ExpressionId")
-                        .HasColumnType("integer")
-                        .HasColumnName("expression_id");
-
                     b.Property<int>("Health")
                         .HasColumnType("integer")
                         .HasColumnName("health");
@@ -1191,10 +1190,6 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("noumenon");
 
-                    b.Property<int>("PlayerLevel")
-                        .HasColumnType("integer")
-                        .HasColumnName("player_level");
-
                     b.Property<int>("Psyche")
                         .HasColumnType("integer")
                         .HasColumnName("psyche");
@@ -1208,13 +1203,13 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnName("vitality");
 
                     b.HasKey("Id")
-                        .HasName("pk_checkin_secondary_stats");
+                        .HasName("pk_checkin_secondary_stat");
 
                     b.HasIndex("CheckinId")
                         .IsUnique()
-                        .HasDatabaseName("ix_checkin_secondary_stats_checkin_id");
+                        .HasDatabaseName("ix_checkin_secondary_stat_checkin_id");
 
-                    b.ToTable("checkin_secondary_stats", (string)null);
+                    b.ToTable("checkin_secondary_stat", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Checkins.CheckinSetup.Audit.CheckinAuditTrail", b =>
@@ -4560,7 +4555,7 @@ namespace ExpressedRealms.DB.Migrations
                         .HasForeignKey("ExpressedRealms.DB.Models.Checkins.CheckinSecondaryStatsSetup.CheckinSecondaryStat", "CheckinId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_checkin_secondary_stats_checkins_checkin_id");
+                        .HasConstraintName("fk_checkin_secondary_stat_checkins_checkin_id");
 
                     b.Navigation("Checkin");
                 });

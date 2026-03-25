@@ -3,6 +3,7 @@ using System;
 using ExpressedRealms.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpressedRealms.DB.Migrations
 {
     [DbContext(typeof(ExpressedRealmsDbContext))]
-    partial class ExpressedRealmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260323080639_AddStorageOfSecondaryStatsAfterPrintingCRB2")]
+    partial class AddStorageOfSecondaryStatsAfterPrintingCRB2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1171,10 +1174,6 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("essence");
 
-                    b.Property<int>("ExpressionId")
-                        .HasColumnType("integer")
-                        .HasColumnName("expression_id");
-
                     b.Property<int>("Health")
                         .HasColumnType("integer")
                         .HasColumnName("health");
@@ -1190,10 +1189,6 @@ namespace ExpressedRealms.DB.Migrations
                     b.Property<int>("Noumenon")
                         .HasColumnType("integer")
                         .HasColumnName("noumenon");
-
-                    b.Property<int>("PlayerLevel")
-                        .HasColumnType("integer")
-                        .HasColumnName("player_level");
 
                     b.Property<int>("Psyche")
                         .HasColumnType("integer")

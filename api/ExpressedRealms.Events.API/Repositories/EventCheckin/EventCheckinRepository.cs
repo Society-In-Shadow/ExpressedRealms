@@ -2,6 +2,7 @@ using ExpressedRealms.DB;
 using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup;
+using ExpressedRealms.DB.Models.Checkins.CheckinSecondaryStatsSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageMappingSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
@@ -268,6 +269,43 @@ internal sealed class EventCheckinRepository(
     {
         return await context.CheckinStageMappings.AnyAsync(
             x => x.CheckinId == checkinId && x.CheckinStageId == stageId.Value,
+            cancellationToken
+        );
+    }
+
+    public async Task AddUpdateSecondaryStats(CheckinSecondaryStat checkinSecondaryStat)
+    {
+        var existing = await context.CheckinSecondaryStats.FirstOrDefaultAsync(x =>
+            x.CheckinId == checkinSecondaryStat.CheckinId
+        );
+
+        if (existing is null)
+        {
+            await context.CheckinSecondaryStats.AddAsync(checkinSecondaryStat);
+        }
+        else
+        {
+            existing.Vitality = checkinSecondaryStat.Vitality;
+            existing.Health = checkinSecondaryStat.Health;
+            existing.Blood = checkinSecondaryStat.Blood;
+            existing.Rwp = checkinSecondaryStat.Rwp;
+            existing.Psyche = checkinSecondaryStat.Psyche;
+            existing.Mortis = checkinSecondaryStat.Mortis;
+            existing.Mana = checkinSecondaryStat.Mana;
+            existing.Chi = checkinSecondaryStat.Chi;
+            existing.Essence = checkinSecondaryStat.Essence;
+            existing.Noumenon = checkinSecondaryStat.Noumenon;
+
+            context.CheckinSecondaryStats.Update(existing);
+        }
+
+        await context.SaveChangesAsync();
+    }
+
+    public async Task<CheckinSecondaryStat?> GetSecondaryProficiencies(int checkinId)
+    {
+        return await context.CheckinSecondaryStats.FirstOrDefaultAsync(
+            x => x.CheckinId == checkinId,
             cancellationToken
         );
     }

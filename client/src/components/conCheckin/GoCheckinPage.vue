@@ -134,7 +134,7 @@ const approveStage = async (stageId: number) => {
       <Step>Picked Up and Day One</Step>
       <StepPanel v-if="eventCheckinInfo.activeStepperStep == '9'">
         <h3>Everything is Done for Day 1</h3>
-        <DailyCheckin :character-id="eventCheckinInfo.primaryCharacter!.characterId" />
+        <DailyCheckin :lookup-id="eventCheckinInfo.lookupId" />
         <Button
           label="Day 2 Check-in" icon-pos="right" class="mb-4" :disabled="!permissionCheck.Event.Day23Checkin"
           @click="approveStage(6)"

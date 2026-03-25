@@ -24,14 +24,29 @@ const characterInfo = ref<GetBreakOfDawnInfoResponse>({})
 const props = defineProps({
   characterId: {
     type: Number,
-    required: true,
+    required: false,
+    default: 0,
+  },
+  lookupId: {
+    type: String,
+    required: false,
+    default: '',
   },
 })
 
 onBeforeMount(async () => {
-  const response = await axios.get<GetBreakOfDawnInfoResponse>(`/characters/${props.characterId}/dailyCheckinInfo`)
+  let data: GetBreakOfDawnInfoResponse
 
-  characterInfo.value = response.data
+  if (props.characterId != 0) {
+    const response = await axios.get<GetBreakOfDawnInfoResponse>(`/characters/${props.characterId}/dailyCheckinInfo`)
+    data = response.data
+  }
+  else {
+    const response = await axios.get<GetBreakOfDawnInfoResponse>(`/events/checkin/lookup/${props.lookupId}/breakOfDawnInfo`)
+    data = response.data
+  }
+
+  characterInfo.value = data
   availableExpressions.value = [{
     id: '1',
     name: 'Adept',

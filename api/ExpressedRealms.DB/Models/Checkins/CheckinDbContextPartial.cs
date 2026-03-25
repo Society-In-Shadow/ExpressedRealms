@@ -1,4 +1,5 @@
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup;
+using ExpressedRealms.DB.Models.Checkins.CheckinSecondaryStatsSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup.Audit;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageMappingSetup;
@@ -16,4 +17,5 @@ public partial class ExpressedRealmsDbContext
     public DbSet<CheckinQuestionResponse> CheckinQuestionResponses { get; set; }
     public DbSet<CheckinStageMapping> CheckinStageMappings { get; set; }
     public DbSet<CheckinStage> CheckinStages { get; set; }
+    public DbSet<CheckinSecondaryStat> CheckinSecondaryStats { get; set; }
 }
