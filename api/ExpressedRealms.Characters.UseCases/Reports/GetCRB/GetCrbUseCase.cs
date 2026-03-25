@@ -88,7 +88,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             var eventId = await checkinRepository.GetActiveEventId();
             if (eventId is null)
                 return;
-            
+
             var player = await playerRepository.GetPlayerByCharacterId(model.CharacterId);
             var checkin = await checkinRepository.GetCheckinAsync(eventId!.Value, player.Id);
             if (checkin is null)
@@ -98,11 +98,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             if (currentStage is not null && currentStage.Id == CheckinStageEnum.CrbCreation)
             {
                 await sendMessageUseCase.ExecuteAsync(
-                    new()
-                    {
-                        LookupId = player.LookupId,
-                        StageId = CheckinStageEnum.PrintedCrb,
-                    }
+                    new() { LookupId = player.LookupId, StageId = CheckinStageEnum.PrintedCrb }
                 );
 
                 var proficiencies = await profRepository.GetBasicProficiencies(model.CharacterId);
@@ -120,24 +116,25 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                     9 => 6, // Vampyres
                 };
 
-                await checkinRepository.AddUpdateSecondaryStats(new CheckinSecondaryStat()
-                {
-                    CheckinId = checkin.Id,
-                    Vitality = proficiencies.Value.First(x => x.Id == 13).Value,
-                    Health = proficiencies.Value.First(x => x.Id == 14).Value,
-                    Blood = proficiencies.Value.First(x => x.Id == 15).Value,
-                    Psyche = proficiencies.Value.First(x => x.Id == 17).Value,
-                    Rwp = proficiencies.Value.First(x => x.Id == 22).Value,
-                    Mortis = proficiencies.Value.First(x => x.Id == 23).Value,
-                    Chi = proficiencies.Value.FirstOrDefault(x => x.Id == 18)?.Value ?? 0,
-                    Essence = proficiencies.Value.FirstOrDefault(x => x.Id == 19)?.Value ?? 0,
-                    Mana = proficiencies.Value.FirstOrDefault(x => x.Id == 20)?.Value ?? 0,
-                    Noumenon = proficiencies.Value.FirstOrDefault(x => x.Id == 21)?.Value ?? 0,
-                    ExpressionId = expressionType,
-                    PlayerLevel = characterLevel
-                });
+                await checkinRepository.AddUpdateSecondaryStats(
+                    new CheckinSecondaryStat()
+                    {
+                        CheckinId = checkin.Id,
+                        Vitality = proficiencies.Value.First(x => x.Id == 13).Value,
+                        Health = proficiencies.Value.First(x => x.Id == 14).Value,
+                        Blood = proficiencies.Value.First(x => x.Id == 15).Value,
+                        Psyche = proficiencies.Value.First(x => x.Id == 17).Value,
+                        Rwp = proficiencies.Value.First(x => x.Id == 22).Value,
+                        Mortis = proficiencies.Value.First(x => x.Id == 23).Value,
+                        Chi = proficiencies.Value.FirstOrDefault(x => x.Id == 18)?.Value ?? 0,
+                        Essence = proficiencies.Value.FirstOrDefault(x => x.Id == 19)?.Value ?? 0,
+                        Mana = proficiencies.Value.FirstOrDefault(x => x.Id == 20)?.Value ?? 0,
+                        Noumenon = proficiencies.Value.FirstOrDefault(x => x.Id == 21)?.Value ?? 0,
+                        ExpressionId = expressionType,
+                        PlayerLevel = characterLevel,
+                    }
+                );
             }
-
         }
     }
 }

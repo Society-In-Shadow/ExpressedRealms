@@ -275,8 +275,9 @@ internal sealed class EventCheckinRepository(
 
     public async Task AddUpdateSecondaryStats(CheckinSecondaryStat checkinSecondaryStat)
     {
-        var existing = await context.CheckinSecondaryStats
-            .FirstOrDefaultAsync(x => x.CheckinId == checkinSecondaryStat.CheckinId);
+        var existing = await context.CheckinSecondaryStats.FirstOrDefaultAsync(x =>
+            x.CheckinId == checkinSecondaryStat.CheckinId
+        );
 
         if (existing is null)
         {
@@ -294,7 +295,7 @@ internal sealed class EventCheckinRepository(
             existing.Chi = checkinSecondaryStat.Chi;
             existing.Essence = checkinSecondaryStat.Essence;
             existing.Noumenon = checkinSecondaryStat.Noumenon;
-            
+
             context.CheckinSecondaryStats.Update(existing);
         }
 
@@ -303,8 +304,10 @@ internal sealed class EventCheckinRepository(
 
     public async Task<CheckinSecondaryStat?> GetSecondaryProficiencies(int checkinId)
     {
-        return await context.CheckinSecondaryStats
-            .FirstOrDefaultAsync(x => x.CheckinId == checkinId, cancellationToken);
+        return await context.CheckinSecondaryStats.FirstOrDefaultAsync(
+            x => x.CheckinId == checkinId,
+            cancellationToken
+        );
     }
 
     public async Task<BasicInfo?> GetCurrentStage(int checkinId)

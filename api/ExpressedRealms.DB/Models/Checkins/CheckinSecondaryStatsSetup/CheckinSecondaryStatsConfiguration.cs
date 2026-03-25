@@ -20,7 +20,7 @@ public class CheckinSecondaryStatsConfiguration : IEntityTypeConfiguration<Check
         builder.Property(e => e.Chi).IsRequired();
         builder.Property(e => e.Essence).IsRequired();
         builder.Property(e => e.Noumenon).IsRequired();
-        
+
         builder
             .HasOne(x => x.Checkin)
             .WithOne(x => x.CheckinSecondaryStats)

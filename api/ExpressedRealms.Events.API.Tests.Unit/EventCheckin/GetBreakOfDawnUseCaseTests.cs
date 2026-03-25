@@ -13,7 +13,7 @@ public class GetBreakOfDawnUseCaseTests
     private readonly GetBreakOfDawnInfoUseCase _useCase;
     private readonly IEventCheckinRepository _eventCheckinRepository;
     private readonly GetBreakOfDawnInfoModel _model;
-    
+
     private readonly Guid _playerId = Guid.NewGuid();
     private readonly CheckinSecondaryStat _secondaryStat;
 
@@ -33,18 +33,16 @@ public class GetBreakOfDawnUseCaseTests
             Rwp = 5,
             Vitality = 6,
             PlayerLevel = 7,
-            ExpressionId = 8
+            ExpressionId = 8,
         };
 
         A.CallTo(() => _eventCheckinRepository.CheckinIdExistsAsync(_model.LookupId)).Returns(true);
-        A.CallTo(() => _eventCheckinRepository.GetActiveEventId())
-            .Returns(3);
+        A.CallTo(() => _eventCheckinRepository.GetActiveEventId()).Returns(3);
         A.CallTo(() => _eventCheckinRepository.GetPlayerId(_model.LookupId)).Returns(_playerId);
         A.CallTo(() => _eventCheckinRepository.GetCheckinAsync(3, _playerId))
             .Returns(new Checkin() { Id = 1 });
         A.CallTo(() => _eventCheckinRepository.GetSecondaryProficiencies(1))
             .Returns(_secondaryStat);
-
 
         var validator = new GetBreakOfDawnInfoModelValidator(_eventCheckinRepository);
 
@@ -54,7 +52,6 @@ public class GetBreakOfDawnUseCaseTests
             CancellationToken.None
         );
     }
-
 
     [Fact]
     public async Task ValidationFor_LookupId_WillFail_WhenEmpty()
