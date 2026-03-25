@@ -48,7 +48,9 @@ async function refreshData() {
       setInterval(updateCountdown, 1000)
       stepperValue.value = (currentStage.value.id).toString()
     }
-
+    else if (currentStage.value.id == 11) {
+      stepperValue.value = '3'
+    }
     else
       stepperValue.value = (currentStage.value.id).toString()
   }
