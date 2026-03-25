@@ -33,6 +33,7 @@ export const EventCheckinStore
         assignedXp: {} as AssignedXpType | null | undefined,
         primaryCharacter: {} as PrimaryCharacterInfo | null,
         activeStepperStep: '1',
+        currentEventDay: 0,
       }
     },
     actions: {
@@ -82,7 +83,8 @@ export const EventCheckinStore
         this.primaryCharacter = response.data.primaryCharacterInfo
         this.checkinStage = response.data.currentStage
         this.isReset = false
-
+        this.currentEventDay = response.data.currentEventDay
+        console.log('afterVerified', this.lookupId)
         await this.handleStageRedirect(response.data.currentStage.id as CheckinStage)
       },
       async handleStageRedirect(checkinStage: CheckinStage) {
@@ -131,7 +133,21 @@ export const EventCheckinStore
             break
           case CheckinStage.CrbPickedUp:
             // User Has picked up CRB and verified strip info
-            this.activeStepperStep = '9'
+            if (this.currentEventDay === 1)
+              this.activeStepperStep = '9' // Show Friday Finalized
+            else
+              this.activeStepperStep = '10' // Show Saturday approval
+            break
+          case CheckinStage.Day2Checkin:
+            // User Has picked up CRB and verified strip info
+            if (this.currentEventDay === 2)
+              this.activeStepperStep = '11' // Show Saturday Finalized
+            else
+              this.activeStepperStep = '12' // Show Sunday Approval
+            break
+          case CheckinStage.Day3Checkin:
+            // User Has picked up CRB and verified strip info
+            this.activeStepperStep = '13' // Show Sunday Finalize
             break
         }
       },
@@ -167,8 +183,12 @@ export const EventCheckinStore
       },
       async approveStage(stageId: number) {
         await axios.post(`/events/checkin/lookup/${this.lookupId}/approveStage`, { stageId: stageId })
-        await this.handleStageRedirect(stageId)
-        // await this.resetGoPage()
+        if (stageId == CheckinStage.CrbPickedUp) {
+          await this.verifiedUserInfo()
+        }
+        else {
+          await this.handleStageRedirect(stageId)
+        }
         toaster.success('Stage approved successfully!')
       },
       async approveCharacterSheet() {
