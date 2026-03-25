@@ -31,6 +31,7 @@ export interface ApproveCheckinInfo {
   questions: Array<Question>
   primaryCharacterInfo: PrimaryCharacterInfo | null
   currentStage: BasicInfo | null
+  currentEventDay: number
 }
 
 export interface GetCheckinQuestionsResponse {
