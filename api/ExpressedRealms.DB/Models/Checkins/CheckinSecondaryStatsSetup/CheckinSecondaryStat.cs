@@ -20,4 +20,6 @@ public class CheckinSecondaryStat
     public int Chi { get; set; }
     public int Essence { get; set; }
     public int Noumenon { get; set; }
+    public int ExpressionId { get; set; }
+    public int PlayerLevel { get; set; }
 }
