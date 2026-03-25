@@ -83,9 +83,9 @@ internal sealed class ApproveStageAndSendMessageUseCase(
                 }
             );
         }
-        
+
         var currentDay = await checkinRepository.GetCurrentEventDay();
-        if(model.StageId == CheckinStageEnum.CrbPickedUp.Value && currentDay >= 2)
+        if (model.StageId == CheckinStageEnum.CrbPickedUp.Value && currentDay >= 2)
         {
             // Automatically bypass day 2
             await checkinRepository.CompleteStage(
@@ -98,8 +98,8 @@ internal sealed class ApproveStageAndSendMessageUseCase(
                 }
             );
         }
-        
-        if(model.StageId == CheckinStageEnum.CrbPickedUp.Value && currentDay >= 3)
+
+        if (model.StageId == CheckinStageEnum.CrbPickedUp.Value && currentDay >= 3)
         {
             // Automatically bypass day 3
             await checkinRepository.CompleteStage(
@@ -163,7 +163,9 @@ internal sealed class ApproveStageAndSendMessageUseCase(
             // ---- Rule 2: Stage 10 & 11 locked until 1–5 complete ----
             if (dayCheckins.Contains(model.StageId))
             {
-                var completedStageIds = activeList.Select(x => CheckinStageEnum.FromValue(x.CheckinStageId).SortOrder).ToList();
+                var completedStageIds = activeList
+                    .Select(x => CheckinStageEnum.FromValue(x.CheckinStageId).SortOrder)
+                    .ToList();
                 bool firstFiveComplete = Enumerable
                     .Range(1, 9)
                     .All(stageId => completedStageIds.Contains(stageId));

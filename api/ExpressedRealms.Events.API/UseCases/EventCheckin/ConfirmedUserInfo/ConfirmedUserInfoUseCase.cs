@@ -59,7 +59,7 @@ internal sealed class ConfirmedUserInfoUseCase(
 
             currentStage = await checkinRepository.GetCurrentStage(checkinId);
         }
-        
+
         var currentEventDay = await checkinRepository.GetCurrentEventDay();
 
         return Result.Ok(
@@ -68,7 +68,7 @@ internal sealed class ConfirmedUserInfoUseCase(
                 PlayerNumber = playerNumber,
                 CurrentStage = currentStage,
                 PrimaryCharacterInfo = characterInfo, // Needed for Go Verification - Just need to return character id
-                CurrentEventDay = currentEventDay // Needed to determine when to show day 2 / 3 checkin info
+                CurrentEventDay = currentEventDay, // Needed to determine when to show day 2 / 3 checkin info
             }
         );
     }

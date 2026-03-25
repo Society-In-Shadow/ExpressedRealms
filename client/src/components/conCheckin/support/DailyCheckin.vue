@@ -39,8 +39,6 @@ const props = defineProps({
 onBeforeMount(async () => {
   let data: GetBreakOfDawnInfoResponse
 
-  console.log('props', props.lookupId)
-  console.log('eventSTore', checkinData.lookupId)
   if (props.lookupId.length > 0) {
     const response = await axios.get<GetBreakOfDawnInfoResponse>(`/events/checkin/lookup/${props.lookupId}/breakOfDawnInfo`)
     data = response.data
@@ -50,7 +48,6 @@ onBeforeMount(async () => {
     data = response.data
   }
   else {
-    console.log('neither worked')
     return
   }
 

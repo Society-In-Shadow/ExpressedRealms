@@ -40,7 +40,7 @@ public static class ConfirmUserCheckinInfoEndpoint
                         Id = results.Value.CurrentStage.Id,
                         Name = results.Value.CurrentStage.Name,
                     },
-                CurrentEventDay = results.Value.CurrentEventDay
+                CurrentEventDay = results.Value.CurrentEventDay,
             }
         );
     }

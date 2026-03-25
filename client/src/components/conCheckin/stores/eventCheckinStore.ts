@@ -84,7 +84,6 @@ export const EventCheckinStore
         this.checkinStage = response.data.currentStage
         this.isReset = false
         this.currentEventDay = response.data.currentEventDay
-        console.log('afterVerified', this.lookupId)
         await this.handleStageRedirect(response.data.currentStage.id as CheckinStage)
       },
       async handleStageRedirect(checkinStage: CheckinStage) {

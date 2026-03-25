@@ -34,7 +34,6 @@ watch(() => eventCheckinInfo.isReset, (old, newValue) => {
 })
 
 async function verifiedPlayerInfo() {
-  console.log('this should not be hit')
   if (signedWaiver.value) {
     await eventCheckinInfo.verifiedAge(AgeGroupId.Teen, true) // Teen Group, with signed waiver
   }
