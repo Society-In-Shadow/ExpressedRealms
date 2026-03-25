@@ -15,7 +15,9 @@ import type { ListItem } from '@/types/ListItem.ts'
 import { formatSign } from '@/utilities/stringUtilities.ts'
 import type { GetBreakOfDawnInfoResponse } from '@/components/conCheckin/types.ts'
 import axios from 'axios'
+import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
 
+const checkinData = EventCheckinStore()
 const form = getValidationInstance()
 const changes = ref<TrackedStripInfo | null>(null)
 const availableExpressions = ref<ListItem[] | null>(null)
@@ -37,13 +39,16 @@ const props = defineProps({
 onBeforeMount(async () => {
   let data: GetBreakOfDawnInfoResponse
 
-  if (props.characterId != 0) {
+  if (props.lookupId.length > 0) {
+    const response = await axios.get<GetBreakOfDawnInfoResponse>(`/events/checkin/lookup/${props.lookupId}/breakOfDawnInfo`)
+    data = response.data
+  }
+  else if (props.characterId > 0) {
     const response = await axios.get<GetBreakOfDawnInfoResponse>(`/characters/${props.characterId}/dailyCheckinInfo`)
     data = response.data
   }
   else {
-    const response = await axios.get<GetBreakOfDawnInfoResponse>(`/events/checkin/lookup/${props.lookupId}/breakOfDawnInfo`)
-    data = response.data
+    return
   }
 
   characterInfo.value = data

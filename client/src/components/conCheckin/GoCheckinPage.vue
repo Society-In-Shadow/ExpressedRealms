@@ -131,9 +131,16 @@ const approveStage = async (stageId: number) => {
       </StepPanel>
     </StepItem>
     <StepItem value="9">
-      <Step>Picked Up and Day One</Step>
+      <Step>Picked Up and Day One Finalized</Step>
       <StepPanel v-if="eventCheckinInfo.activeStepperStep == '9'">
         <h3>Everything is Done for Day 1</h3>
+      </StepPanel>
+    </StepItem>
+    <StepItem value="10">
+      <Step>Day 2 Checkin</Step>
+      <StepPanel v-if="eventCheckinInfo.activeStepperStep == '10'">
+        <h3>Day 2 Checkin - Break of Dawn revitalizes the user</h3>
+        <p>The character gets a free bonus for waking up, which is handled below</p>
         <DailyCheckin :lookup-id="eventCheckinInfo.lookupId" />
         <Button
           label="Day 2 Check-in" icon-pos="right" class="mb-4" :disabled="!permissionCheck.Event.Day23Checkin"
@@ -141,19 +148,26 @@ const approveStage = async (stageId: number) => {
         />
       </StepPanel>
     </StepItem>
-    <StepItem value="10">
-      <Step>Day 2 Checkin</Step>
+    <StepItem value="11">
+      <Step>Day 2 Finalized</Step>
       <StepPanel>
-        <h3>This is the 2nd day the character has been in play, not the 2nd day of play</h3>
-        <p>The character has been checked in for the day.</p>
+        <h3>This person is fully checked in for day 2, there's nothing left to do</h3>
+      </StepPanel>
+    </StepItem>
+    <StepItem value="12">
+      <Step>Day 3 Checkin</Step>
+      <StepPanel v-if="eventCheckinInfo.activeStepperStep == '12'">
+        <h3>Day 3 Checkin - Break of Dawn revitalizes the user</h3>
+        <p>The character gets a free bonus for waking up, which is handled below</p>
+        <DailyCheckin :lookup-id="eventCheckinInfo.lookupId" />
         <Button
           label="Day 3 Check-in" icon-pos="right" class="mb-4" :disabled="!permissionCheck.Event.Day23Checkin"
           @click="approveStage(7)"
         />
       </StepPanel>
     </StepItem>
-    <StepItem value="11">
-      <Step>Day 3</Step>
+    <StepItem value="13">
+      <Step>Day 3 Finalized</Step>
       <StepPanel>
         <h3>Thank You and Come Again!</h3>
         <p>The character has been checked in for the day.</p>

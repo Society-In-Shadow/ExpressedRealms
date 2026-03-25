@@ -7,4 +7,5 @@ public class GetGoCheckinInfoResponse
     public int PlayerNumber { get; set; }
     public PrimaryCharacterInfo? PrimaryCharacterInfo { get; set; }
     public BasicInfo? CurrentStage { get; set; }
+    public int CurrentEventDay { get; set; }
 }

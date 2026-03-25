@@ -49,13 +49,19 @@ const sortedEvents = computed<Event[]>(() => {
     return nameA.localeCompare(nameB)
   })
 })
-const currentDate = DateTime.now()
-const previousEvents = computed(() => {
-  return sortedEvents.value.filter(x => x.endDate < currentDate && x.isPublished)
+const today = DateTime.now().startOf('day')
+const currentAndUnpublishedEvents = computed(() => {
+  return sortedEvents.value.filter((x) => {
+    const endOfDay = x.endDate.startOf('day')
+    return endOfDay >= today || !x.isPublished
+  })
 })
 
-const currentAndUnpublishedEvents = computed(() => {
-  return sortedEvents.value.filter(x => !(x.endDate < currentDate && x.isPublished))
+const previousEvents = computed(() => {
+  return sortedEvents.value.filter((x) => {
+    const endOfDay = x.endDate.startOf('day')
+    return endOfDay < today && x.isPublished
+  })
 })
 
 </script>
