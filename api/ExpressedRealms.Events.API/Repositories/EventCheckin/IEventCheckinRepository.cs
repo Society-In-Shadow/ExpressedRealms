@@ -44,4 +44,5 @@ public interface IEventCheckinRepository : IGenericRepository
     Task<DateOnly> GetActiveEventStartDate();
     Task<bool> GetStageStatus(int checkinId, CheckinStageEnum stageId);
     Task AddUpdateSecondaryStats(CheckinSecondaryStat checkinSecondaryStat);
+    Task<CheckinSecondaryStat?> GetSecondaryProficiencies(int checkinId);
 }

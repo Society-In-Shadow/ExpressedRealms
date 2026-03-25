@@ -301,6 +301,12 @@ internal sealed class EventCheckinRepository(
         await context.SaveChangesAsync();
     }
 
+    public async Task<CheckinSecondaryStat?> GetSecondaryProficiencies(int checkinId)
+    {
+        return await context.CheckinSecondaryStats
+            .FirstOrDefaultAsync(x => x.CheckinId == checkinId, cancellationToken);
+    }
+
     public async Task<BasicInfo?> GetCurrentStage(int checkinId)
     {
         return await context
