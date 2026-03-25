@@ -83,6 +83,35 @@ internal sealed class ApproveStageAndSendMessageUseCase(
                 }
             );
         }
+        
+        var currentDay = await checkinRepository.GetCurrentEventDay();
+        if(model.StageId == CheckinStageEnum.CrbPickedUp.Value && currentDay >= 2)
+        {
+            // Automatically bypass day 2
+            await checkinRepository.CompleteStage(
+                new CheckinStageMapping()
+                {
+                    CreatedAt = timeProvider.GetUtcNow(),
+                    ApproverUserId = userContext.CurrentUserId(),
+                    CheckinStageId = CheckinStageEnum.Day2Checkin.Value,
+                    CheckinId = checkin.Id,
+                }
+            );
+        }
+        
+        if(model.StageId == CheckinStageEnum.CrbPickedUp.Value && currentDay >= 3)
+        {
+            // Automatically bypass day 3
+            await checkinRepository.CompleteStage(
+                new CheckinStageMapping()
+                {
+                    CreatedAt = timeProvider.GetUtcNow(),
+                    ApproverUserId = userContext.CurrentUserId(),
+                    CheckinStageId = CheckinStageEnum.Day3Checkin.Value,
+                    CheckinId = checkin.Id,
+                }
+            );
+        }
 
         await SendMessages(model, playerId);
 

@@ -141,6 +141,19 @@ internal sealed class EventCheckinRepository(
         return eventId == 0 ? null : eventId;
     }
 
+    public async Task<int> GetCurrentEventDay()
+    {
+        var now = DateOnly.FromDateTime(DateTime.UtcNow);
+
+        var eventStartDate = await context
+            .Events.AsNoTracking()
+            .Where(x => x.IsPublished && x.StartDate <= now && x.EndDate >= now)
+            .Select(x => (DateOnly?)x.StartDate)
+            .FirstAsync(cancellationToken);
+
+        return now.DayNumber - eventStartDate!.Value.DayNumber + 1;
+    }
+
     public async Task<DateOnly> GetActiveEventStartDate()
     {
         var now = DateOnly.FromDateTime(DateTime.UtcNow);
