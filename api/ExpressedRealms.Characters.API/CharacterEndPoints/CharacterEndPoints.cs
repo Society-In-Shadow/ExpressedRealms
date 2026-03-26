@@ -4,6 +4,7 @@ using ExpressedRealms.Characters.API.CharacterEndPoints.DTOs;
 using ExpressedRealms.Characters.API.CharacterEndPoints.EditCharacter;
 using ExpressedRealms.Characters.API.CharacterEndPoints.EditCharacterOptions;
 using ExpressedRealms.Characters.API.CharacterEndPoints.FinalizeCharacterCreate;
+using ExpressedRealms.Characters.API.CharacterEndPoints.GetArchetypesForExpression;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetBreakOfDawnInfo;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetCRB;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetOverallStats;
@@ -21,6 +22,7 @@ using ExpressedRealms.Characters.Repository.Stats.DTOs;
 using ExpressedRealms.Characters.Repository.Stats.Enums;
 using ExpressedRealms.DB;
 using ExpressedRealms.Expressions.Repository.Expressions;
+using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.Server.Shared;
 using ExpressedRealms.Server.Shared.Extensions;
 using Microsoft.AspNetCore.Authorization;
@@ -80,6 +82,11 @@ internal static class CharacterEndPoints
 
         endpointGroup
             .MapGet("{characterId}/dailyCheckinInfo", GetBreakOfDawnInfoEndpoint.ExecuteAsync)
+            .RequireAuthorization();
+
+        endpointGroup
+            .MapGet("/archetypes/{id}", GetArchetypesForExpressionEndpoint.ExecuteAsync)
+            .RequireFeatureToggle(ReleaseFlags.ShowArchetypeSelection)
             .RequireAuthorization();
 
         endpointGroup

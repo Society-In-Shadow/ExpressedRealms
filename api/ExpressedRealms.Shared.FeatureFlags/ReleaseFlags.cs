@@ -48,6 +48,12 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "Primary Characters will now base XP on assigned xp, not spent xp"
     );
 
+    public static readonly ReleaseFlags ShowArchetypeSelection = new(
+        "Show Archetypes on Character Creation",
+        "show-archetype-selection",
+        "Will show the archetype selection on character creation"
+    );
+
     public override string ToString()
     {
         return Name;

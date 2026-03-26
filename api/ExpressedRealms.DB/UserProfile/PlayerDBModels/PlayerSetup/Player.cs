@@ -22,6 +22,8 @@ public class Player
     public bool HasSignedConsentForm { get; set; } = false;
     public DateTimeOffset? LastAgeGroupCheck { get; set; }
 
+    public bool IsArchetypeAccount { get; set; }
+
     public virtual User User { get; set; } = null!;
     public virtual List<Character> Characters { get; set; } = new();
     public virtual List<PlayerAuditTrail> PlayerAuditTrails { get; set; } = new();

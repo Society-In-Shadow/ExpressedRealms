@@ -16,6 +16,7 @@ export const FeatureFlags = {
   ShowFactionDropdown: 'show-faction-dropdown',
   ShowContactManagement: 'show-contact-management',
   ShowEventCheckin: 'show-event-checkin',
+  ShowArchetypeSelection: 'show-archetype-selection',
 } as const
 
 export type UserRole = (typeof UserRoles)[keyof typeof UserRoles]
