@@ -2,5 +2,5 @@ namespace ExpressedRealms.Characters.UseCases.Characters.GetArchetypesForExpress
 
 public class GetArchetypesForExpressionDto
 {
-    public List<ArchetypeCharacterInfoDto> Archetypes { get; set; }
+    public List<ArchetypeCharacterInfoDto> Archetypes { get; set; } = new();
 }
