@@ -22,6 +22,7 @@ using ExpressedRealms.Characters.Repository.Stats.DTOs;
 using ExpressedRealms.Characters.Repository.Stats.Enums;
 using ExpressedRealms.DB;
 using ExpressedRealms.Expressions.Repository.Expressions;
+using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.Server.Shared;
 using ExpressedRealms.Server.Shared.Extensions;
 using Microsoft.AspNetCore.Authorization;
@@ -85,6 +86,7 @@ internal static class CharacterEndPoints
         
         endpointGroup
             .MapGet("/archetypes/{id}", GetArchetypesForExpressionEndpoint.ExecuteAsync)
+            .RequireFeatureToggle(ReleaseFlags.ShowArchetypeSelection)
             .RequireAuthorization();
 
         endpointGroup
