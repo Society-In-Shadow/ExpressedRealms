@@ -18,11 +18,11 @@ public static class CharacterQueryExtensions
         {
             return query.Where(x =>
                 x.Id == characterId
-                && (x.IsPrimaryCharacter || x.Player.UserId == userContext.CurrentUserId())
+                && (x.IsPrimaryCharacter || x.Player.UserId == userContext.CurrentUserId() || x.Player.IsArchetypeAccount)
             );
         }
         return query.Where(x =>
-            x.Id == characterId && x.Player.UserId == userContext.CurrentUserId()
+            x.Id == characterId && (x.Player.UserId == userContext.CurrentUserId() || x.Player.IsArchetypeAccount)
         );
     }
 }
