@@ -83,7 +83,7 @@ internal static class CharacterEndPoints
         endpointGroup
             .MapGet("{characterId}/dailyCheckinInfo", GetBreakOfDawnInfoEndpoint.ExecuteAsync)
             .RequireAuthorization();
-        
+
         endpointGroup
             .MapGet("/archetypes/{id}", GetArchetypesForExpressionEndpoint.ExecuteAsync)
             .RequireFeatureToggle(ReleaseFlags.ShowArchetypeSelection)

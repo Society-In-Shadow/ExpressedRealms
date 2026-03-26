@@ -9,11 +9,8 @@ namespace ExpressedRealms.Characters.API.CharacterEndPoints.GetArchetypesForExpr
 internal static class GetArchetypesForExpressionEndpoint
 {
     internal static async Task<
-        Results<Ok<GetArchetypeForExpressionResponse>, NotFound,  ValidationProblem>
-    > ExecuteAsync(
-        int id,
-        [FromServices] IGetArchetypesForExpressionUseCase repository
-    )
+        Results<Ok<GetArchetypeForExpressionResponse>, NotFound, ValidationProblem>
+    > ExecuteAsync(int id, [FromServices] IGetArchetypesForExpressionUseCase repository)
     {
         var response = await repository.ExecuteAsync(new() { Id = id });
 
@@ -31,8 +28,9 @@ internal static class GetArchetypesForExpressionEndpoint
                     {
                         Id = x.Id,
                         Name = x.Name,
-                        Background = x.Background
-                    }).ToList(),
+                        Background = x.Background,
+                    })
+                    .ToList(),
             }
         );
     }

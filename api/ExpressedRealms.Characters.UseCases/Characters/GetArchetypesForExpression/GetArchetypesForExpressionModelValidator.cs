@@ -3,7 +3,8 @@ using FluentValidation;
 
 namespace ExpressedRealms.Characters.UseCases.Characters.GetArchetypesForExpression;
 
-internal sealed class GetArchetypesForExpressionModelValidator : AbstractValidator<GetArchetypesForExpressionModel>
+internal sealed class GetArchetypesForExpressionModelValidator
+    : AbstractValidator<GetArchetypesForExpressionModel>
 {
     public GetArchetypesForExpressionModelValidator(ICharacterRepository characterRepository)
     {

@@ -47,7 +47,7 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "use-new-xp-calculation",
         "Primary Characters will now base XP on assigned xp, not spent xp"
     );
-    
+
     public static readonly ReleaseFlags ShowArchetypeSelection = new(
         "Show Archetypes on Character Creation",
         "show-archetype-selection",

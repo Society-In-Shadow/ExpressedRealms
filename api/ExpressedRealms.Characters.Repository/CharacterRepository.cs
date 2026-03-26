@@ -39,7 +39,7 @@ internal sealed class CharacterRepository(
             })
             .ToListAsync(cancellationToken);
     }
-    
+
     public async Task<List<ArchetypeCharacterInfoDto>> GetArchetypesForExpression(int expressionId)
     {
         return await context

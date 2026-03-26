@@ -6,7 +6,6 @@ import axios from 'axios'
 
 const nameHelp = 'name-help'
 const factionHelp = 'faction-help'
-const backgroundHelp = 'background-help'
 
 const expressionValues = [
   { id: 1, name: 'Foo', shortDescription: 'Bar' },
@@ -61,7 +60,6 @@ describe('<AddCharacterTile />', () => {
     const wrapper = mount(AddCharacterTile)
 
     expect(wrapper.find(`[data-cy="${nameHelp}"]`).element).not.toBeVisible()
-    expect(wrapper.find(`[data-cy="${backgroundHelp}"]`).element).not.toBeVisible()
     expect(wrapper.find(`[data-cy="${factionHelp}"]`).exists()).toBe(false)
   })
 })

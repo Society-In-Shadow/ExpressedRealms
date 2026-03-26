@@ -10,7 +10,9 @@ internal sealed class GetArchetypesForExpressionUseCase(
     CancellationToken cancellationToken
 ) : IGetArchetypesForExpressionUseCase
 {
-    public async Task<Result<GetArchetypesForExpressionDto>> ExecuteAsync(GetArchetypesForExpressionModel model)
+    public async Task<Result<GetArchetypesForExpressionDto>> ExecuteAsync(
+        GetArchetypesForExpressionModel model
+    )
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,
@@ -25,12 +27,14 @@ internal sealed class GetArchetypesForExpressionUseCase(
         return Result.Ok(
             new GetArchetypesForExpressionDto()
             {
-                Archetypes = archetypes.Select(x => new ArchetypeCharacterInfoDto()
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Background = x.Background,
-                }).ToList(),
+                Archetypes = archetypes
+                    .Select(x => new ArchetypeCharacterInfoDto()
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Background = x.Background,
+                    })
+                    .ToList(),
             }
         );
     }
