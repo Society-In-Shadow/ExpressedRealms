@@ -2,22 +2,22 @@
 
 import Button from 'primevue/button'
 import axios from 'axios'
-import {useForm} from 'vee-validate'
-import {object, string} from 'yup'
+import { useForm } from 'vee-validate'
+import { object, string } from 'yup'
 import Card from 'primevue/card'
 import InputTextWrapper from '@/FormWrappers/InputTextWrapper.vue'
-import TextAreaWrapper from '@/FormWrappers/TextAreaWrapper.vue'
-import {computed, onMounted, ref} from 'vue'
-import {useRouter} from 'vue-router'
+import { computed, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import DropdownWrapper from '@/FormWrappers/DropdownWrapper.vue'
-import {makeIdSafe} from '@/utilities/stringUtilities'
+import { makeIdSafe } from '@/utilities/stringUtilities'
 import DropdownInfoWrapper from '@/FormWrappers/DropdownInfoWrapper.vue'
-import {FeatureFlags, userStore} from '@/stores/userStore.ts'
+import { FeatureFlags, userStore } from '@/stores/userStore.ts'
 import HighLevelExpressionInfo
   from '@/components/characters/character/wizard/basicInfo/supporting/HighLevelExpressionInfo.vue'
-import {wizardContentStore} from '@/components/characters/character/wizard/stores/wizardContentStore.ts'
-import type {WizardContent} from '@/components/characters/character/wizard/types.ts'
-import {breakpointsBootstrapV5, useBreakpoints} from '@vueuse/core'
+import { wizardContentStore } from '@/components/characters/character/wizard/stores/wizardContentStore.ts'
+import type { WizardContent } from '@/components/characters/character/wizard/types.ts'
+import { breakpointsBootstrapV5, useBreakpoints } from '@vueuse/core'
+import ArchetypeInfo from '@/components/characters/character/wizard/basicInfo/supporting/ArchetypeInfo.vue'
 
 const userInfo = userStore()
 const router = useRouter()
@@ -47,6 +47,7 @@ const factions = ref([])
 const isLoadingFactions = ref(true)
 const isLoadingExpressions = ref(true)
 const showFactionDropdown = ref(false)
+const showArchetypeSelection = ref(false)
 
 onMounted(async () => {
   await axios.get(`/characters/options`)
@@ -55,6 +56,7 @@ onMounted(async () => {
       isLoadingExpressions.value = false
     })
   showFactionDropdown.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowFactionDropdown)
+  showArchetypeSelection.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowArchetypeSelection)
 })
 const onSubmit = handleSubmit((values) => {
   axios.post('/characters', {
@@ -105,23 +107,42 @@ const updateWizardContent = () => {
   <div class="flex flex-xs-column flex-sm-column flex-lg-row flex-md-row gap-3">
     <Card class="mb-3 w-100">
       <template #title>
-        Add Character
+        <h1 class="m-0 p-0">
+          Character Creation
+        </h1>
       </template>
       <template #content>
         <form @submit="onSubmit">
+          <p>For character creation, you first need to pick an Expression.  An Expression will define all of your abilities and powers.</p>
+          <p>
+            There are 6 to choose from, and you can find out more about them through the dropdown below.
+          </p>
           <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" />
           <DropdownWrapper
             v-model="expression" option-label="name" :options="expressions" field-name="Expression" :error-text="errors.expressionId"
             :show-skeleton="isLoadingExpressions" @change="loadFactions()"
           />
-          <Button v-if="isMobile && expression" label="Show High Level Expression Info" class="w-100 mb-2 d-block d-md-none " @click="updateWizardContent" />
+
+          <HighLevelExpressionInfo v-if="isMobile && expression" :expression-id="expression.id" />
+
           <DropdownInfoWrapper
             v-if="expression && showFactionDropdown" v-model="faction" option-label="name" :options="factions" field-name="Faction"
             :error-text="errors.factionId" :disabled="!expression" :redirect-url="expressionRedirectURL" :show-skeleton="isLoadingFactions" :redirect-to-different-page="true"
           />
-          <TextAreaWrapper v-model="background" field-name="Background" :error-text="errors.background" />
-          <Button data-cy="add-character-button" label="Add Character" class="w-100 mb-2" type="submit" />
-          <Button label="Back" class="w-100 mb-2" severity="secondary" @click="router.push({name: 'characters'})" />
+
+          <div v-if="expression">
+            <h1>Creation Type</h1>
+            <h2>Make Custom</h2>
+            <p>You can create your own from scratch.  This provides you with full flexibilty to build as you wish.</p>
+            <Button data-cy="add-character-button" label="Create Custom Character" class="w-100 mb-2" type="submit" />
+            <div v-if="showArchetypeSelection">
+              <h2>Choose Archetype</h2>
+              <p>Or select an archetype and tweak or use that build directly.  This will limit some of the choices you have.</p>
+              <ArchetypeInfo :expression-id="expression.id" />
+            </div>
+
+            <Button label="Back" class="w-100 mt-2" severity="secondary" @click="router.push({name: 'characters'})" />
+          </div>
         </form>
       </template>
     </Card>

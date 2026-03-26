@@ -1,11 +1,11 @@
 <script setup lang="ts">
 
 import Button from 'primevue/button'
-import {ref, watch} from 'vue'
+import { ref, watch } from 'vue'
 import axios from 'axios'
-import type {HighLevelExpressionInfoResponse} from '@/components/characters/character/wizard/basicInfo/types.ts'
-import {useRouter} from 'vue-router'
-import {cmsStore} from '@/stores/cmsStore.ts'
+import type { HighLevelExpressionInfoResponse } from '@/components/characters/character/wizard/basicInfo/types.ts'
+import { useRouter } from 'vue-router'
+import { cmsStore } from '@/stores/cmsStore.ts'
 
 const cmsInfo = cmsStore()
 const router = useRouter()
@@ -39,22 +39,19 @@ function redirectToExpression() {
 </script>
 
 <template>
-  <div class="m-3">
+  <div>
     <div class="d-flex justify-content-between mt-3">
-      <h1 class="m-0 p-0">
-        {{ expressionInfo.name }}
-      </h1>
+      <h2 class="m-0 p-0">
+        Background
+      </h2>
       <div class="d-none d-md-block">
         <Button label="More information" icon="pi pi-external-link" icon-pos="right" @click="redirectToExpression" />
       </div>
+      <div class="d-block d-md-none text-right">
+        <Button label="" icon="pi pi-external-link" icon-pos="right" @click="redirectToExpression" />
+      </div>
     </div>
-    <div class="d-block d-md-none text-right">
-      <Button label="More information" icon="pi pi-external-link" icon-pos="right" @click="redirectToExpression" />
-    </div>
-    <h2>Archetypes</h2>
-    <div v-html="expressionInfo.archetypes" />
 
-    <h2>Background</h2>
     <div v-html="expressionInfo.background" />
 
     <h2>Description</h2>

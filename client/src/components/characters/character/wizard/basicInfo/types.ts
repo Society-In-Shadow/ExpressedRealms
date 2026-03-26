@@ -10,3 +10,12 @@ export interface ProgressionPath {
   name: string
   description: string
 }
+export interface Archetype {
+  id: number
+  name: string
+  background?: string | null
+}
+
+export interface ArchetypesResponse {
+  archetypes: Archetype[]
+}
