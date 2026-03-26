@@ -5,6 +5,7 @@ using ExpressedRealms.DB;
 using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Characters;
+using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.Repositories.Shared;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
@@ -37,6 +38,30 @@ internal sealed class CharacterRepository(
                 IsInCharacterCreate = x.IsInCharacterCreation,
             })
             .ToListAsync(cancellationToken);
+    }
+    
+    public async Task<List<ArchetypeCharacterInfoDto>> GetArchetypesForExpression(int expressionId)
+    {
+        return await context
+            .Characters.Where(x => x.Player.IsArchetypeAccount && x.ExpressionId == expressionId)
+            .Select(x => new ArchetypeCharacterInfoDto()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Background = x.Background,
+            })
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<bool> ExpressionExistsAsync(int id)
+    {
+        return await context.Expressions.AnyAsync(
+            x =>
+                x.Id == id
+                && x.PublishStatusId == (int)PublishTypes.Published
+                && x.ExpressionTypeId == 1,
+            cancellationToken
+        );
     }
 
     public async Task<List<PrimaryCharacterListDto>> GetPrimaryCharactersAsync()

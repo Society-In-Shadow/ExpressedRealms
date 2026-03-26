@@ -4,6 +4,7 @@ using ExpressedRealms.Characters.API.CharacterEndPoints.DTOs;
 using ExpressedRealms.Characters.API.CharacterEndPoints.EditCharacter;
 using ExpressedRealms.Characters.API.CharacterEndPoints.EditCharacterOptions;
 using ExpressedRealms.Characters.API.CharacterEndPoints.FinalizeCharacterCreate;
+using ExpressedRealms.Characters.API.CharacterEndPoints.GetArchetypesForExpression;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetBreakOfDawnInfo;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetCRB;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetOverallStats;
@@ -80,6 +81,10 @@ internal static class CharacterEndPoints
 
         endpointGroup
             .MapGet("{characterId}/dailyCheckinInfo", GetBreakOfDawnInfoEndpoint.ExecuteAsync)
+            .RequireAuthorization();
+        
+        endpointGroup
+            .MapGet("/archetypes/{id}", GetArchetypesForExpressionEndpoint.ExecuteAsync)
             .RequireAuthorization();
 
         endpointGroup

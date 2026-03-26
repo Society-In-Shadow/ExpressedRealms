@@ -21,4 +21,6 @@ public interface ICharacterRepository
         where TEntity : class;
     Task<bool> CanUpdatePrimaryCharacterStatus(int id);
     Task<int> GetCharacterExpressionId(int characterId);
+    Task<List<ArchetypeCharacterInfoDto>> GetArchetypesForExpression(int expressionId);
+    Task<bool> ExpressionExistsAsync(int id);
 }
