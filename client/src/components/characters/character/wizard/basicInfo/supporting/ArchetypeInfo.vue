@@ -5,14 +5,16 @@ import { ref, watch } from 'vue'
 import axios from 'axios'
 import type { ArchetypesResponse } from '@/components/characters/character/wizard/basicInfo/types.ts'
 import { useRouter } from 'vue-router'
-import { cmsStore } from '@/stores/cmsStore.ts'
 import { breakpointsBootstrapV5, useBreakpoints } from '@vueuse/core'
 
-const cmsInfo = cmsStore()
 const router = useRouter()
 
 const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5)
 const isMobile = activeBreakpoint.smaller('md')
+
+const emit = defineEmits<{
+  selectedArchetype: [characterId: number]
+}>()
 
 const props = defineProps({
   expressionId: {
@@ -52,7 +54,7 @@ function redirectToCharacter(characterId: number) {
               label="Show Info" size="small" class="mr-2" severity="info" icon="pi pi-external-link"
               icon-pos="right" @click="redirectToCharacter(archetype.id)"
             />
-            <Button label="Use This Build" size="small" />
+            <Button label="Use This Build" size="small" @click="emit('selectedArchetype', archetype.id)" />
           </div>
         </div>
 
@@ -73,7 +75,7 @@ function redirectToCharacter(characterId: number) {
             label="Show Info" size="small" class="mr-2" severity="info" icon="pi pi-external-link"
             icon-pos="right" @click="redirectToCharacter(archetype.id)"
           />
-          <Button label="Use This Build" size="small" />
+          <Button label="Use This Build" size="small" @click="emit('selectedArchetype', archetype.id)" />
         </div>
       </div>
     </div>

@@ -47,6 +47,10 @@ onBeforeMount(async () => {
   <Message v-if="!characterData.isOwner && !characterData.isLoading" severity="warn" class="mb-3 mt-3">
     You have read only access to this character sheet.
   </Message>
+  <Message v-if="route.query.src == 'archetype_copy'" severity="success" class="mb-3 mt-3">
+    <p>You have successfully copied the archetype! Feel free to customize via the wizard behind the edit button.</p>
+    <p>If this is the character you intend to use for game play, make sure to hit edit, and enable Primary Character on the Basic Info section.</p>
+  </Message>
   <CharacterDetailTile />
   <div class="flex flex-column flex-md-row gap-3 m-1 m-sm-3 m-md-3 m-lg-3 m-xl-3 center-content">
     <div class="static-width">
