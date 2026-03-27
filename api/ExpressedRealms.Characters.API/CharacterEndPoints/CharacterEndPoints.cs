@@ -1,5 +1,6 @@
 using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Authentication.PermissionCollection.Configuration;
+using ExpressedRealms.Characters.API.CharacterEndPoints.CopyCharacter;
 using ExpressedRealms.Characters.API.CharacterEndPoints.DTOs;
 using ExpressedRealms.Characters.API.CharacterEndPoints.EditCharacter;
 using ExpressedRealms.Characters.API.CharacterEndPoints.EditCharacterOptions;
@@ -82,6 +83,10 @@ internal static class CharacterEndPoints
 
         endpointGroup
             .MapGet("{characterId}/dailyCheckinInfo", GetBreakOfDawnInfoEndpoint.ExecuteAsync)
+            .RequireAuthorization();
+        
+        endpointGroup
+            .MapPost("{characterId}/copy", CopyCharacterEndpoint.ExecuteAsync)
             .RequireAuthorization();
 
         endpointGroup

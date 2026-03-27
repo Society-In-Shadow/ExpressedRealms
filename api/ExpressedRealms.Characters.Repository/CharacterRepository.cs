@@ -1,4 +1,5 @@
-﻿using ExpressedRealms.Characters.Repository.DTOs;
+﻿using System.Data;
+using ExpressedRealms.Characters.Repository.DTOs;
 using ExpressedRealms.Characters.Repository.Skills;
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.DB;
@@ -11,6 +12,8 @@ using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using NpgsqlTypes;
 
 namespace ExpressedRealms.Characters.Repository;
 
@@ -62,6 +65,14 @@ internal sealed class CharacterRepository(
                 && x.ExpressionTypeId == 1,
             cancellationToken
         );
+    }
+
+    public Task<Guid> GetPlayerId(string currentUserId)
+    {
+        return context.Players
+            .Where(x => x.UserId == currentUserId)
+            .Select(x => x.Id)
+            .FirstAsync();
     }
 
     public async Task<List<PrimaryCharacterListDto>> GetPrimaryCharactersAsync()
@@ -193,6 +204,24 @@ internal sealed class CharacterRepository(
     public Task<Character> GetCharacterForEdit(int characterId)
     {
         return context.Characters.FirstAsync(x => x.Id == characterId);
+    }
+
+    public async Task<int> CopyCharacterAsync(int sourceCharacterId, Guid targetPlayerId, string characterName)
+    {
+        var newCharacterIdParam = new NpgsqlParameter("new_character_id", NpgsqlDbType.Integer)
+        {
+            Direction = ParameterDirection.InputOutput,
+            Value = DBNull.Value
+        };
+
+        await context.Database.ExecuteSqlRawAsync(
+            "CALL copy_character_to_player_proc(@source_character_id, @target_player_id, @character_name, @new_character_id)",
+            new NpgsqlParameter("source_character_id", sourceCharacterId),
+            new NpgsqlParameter("target_player_id", targetPlayerId),
+            new NpgsqlParameter("character_name", characterName),
+            newCharacterIdParam);
+
+        return (int)newCharacterIdParam.Value;
     }
 
     public async Task UpdateCharacter(Character user)
