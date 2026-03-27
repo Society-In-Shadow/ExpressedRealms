@@ -87,6 +87,7 @@ internal static class CharacterEndPoints
         
         endpointGroup
             .MapPost("{characterId}/copy", CopyCharacterEndpoint.ExecuteAsync)
+            .RequireFeatureToggle(ReleaseFlags.ShowArchetypeSelection)
             .RequireAuthorization();
 
         endpointGroup
