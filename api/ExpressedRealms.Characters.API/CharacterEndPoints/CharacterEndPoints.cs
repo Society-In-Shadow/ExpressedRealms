@@ -84,7 +84,7 @@ internal static class CharacterEndPoints
         endpointGroup
             .MapGet("{characterId}/dailyCheckinInfo", GetBreakOfDawnInfoEndpoint.ExecuteAsync)
             .RequireAuthorization();
-        
+
         endpointGroup
             .MapPost("{characterId}/copy", CopyCharacterEndpoint.ExecuteAsync)
             .RequireFeatureToggle(ReleaseFlags.ShowArchetypeSelection)

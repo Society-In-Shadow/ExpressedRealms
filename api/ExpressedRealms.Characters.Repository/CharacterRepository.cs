@@ -69,10 +69,7 @@ internal sealed class CharacterRepository(
 
     public Task<Guid> GetPlayerId(string currentUserId)
     {
-        return context.Players
-            .Where(x => x.UserId == currentUserId)
-            .Select(x => x.Id)
-            .FirstAsync();
+        return context.Players.Where(x => x.UserId == currentUserId).Select(x => x.Id).FirstAsync();
     }
 
     public async Task<List<PrimaryCharacterListDto>> GetPrimaryCharactersAsync()
@@ -206,12 +203,16 @@ internal sealed class CharacterRepository(
         return context.Characters.FirstAsync(x => x.Id == characterId);
     }
 
-    public async Task<int> CopyCharacterAsync(int sourceCharacterId, Guid targetPlayerId, string characterName)
+    public async Task<int> CopyCharacterAsync(
+        int sourceCharacterId,
+        Guid targetPlayerId,
+        string characterName
+    )
     {
         var newCharacterIdParam = new NpgsqlParameter("new_character_id", NpgsqlDbType.Integer)
         {
             Direction = ParameterDirection.InputOutput,
-            Value = DBNull.Value
+            Value = DBNull.Value,
         };
 
         await context.Database.ExecuteSqlRawAsync(
@@ -219,7 +220,8 @@ internal sealed class CharacterRepository(
             new NpgsqlParameter("source_character_id", sourceCharacterId),
             new NpgsqlParameter("target_player_id", targetPlayerId),
             new NpgsqlParameter("character_name", characterName),
-            newCharacterIdParam);
+            newCharacterIdParam
+        );
 
         return (int)newCharacterIdParam.Value;
     }

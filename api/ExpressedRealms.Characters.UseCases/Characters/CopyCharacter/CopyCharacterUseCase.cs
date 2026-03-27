@@ -24,7 +24,11 @@ internal sealed class CopyCharacterUseCase(
             return Result.Fail(result.Errors);
 
         var playerId = await characterRepository.GetPlayerId(userContext.CurrentUserId());
-        var characterId = await characterRepository.CopyCharacterAsync(model.Id, playerId, model.CharacterName);
+        var characterId = await characterRepository.CopyCharacterAsync(
+            model.Id,
+            playerId,
+            model.CharacterName
+        );
 
         return Result.Ok(characterId);
     }

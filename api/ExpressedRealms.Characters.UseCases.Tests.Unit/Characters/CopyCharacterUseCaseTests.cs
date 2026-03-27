@@ -19,14 +19,10 @@ public class CopyCharacterUseCaseTests
     private readonly Character _dbModel;
 
     private readonly Guid PlayerId = Guid.NewGuid();
-    
+
     public CopyCharacterUseCaseTests()
     {
-        _model = new CopyCharacterModel()
-        {
-            Id = 10,
-            CharacterName = "Updated Name",
-        };
+        _model = new CopyCharacterModel() { Id = 10, CharacterName = "Updated Name" };
 
         _characterRepository = A.Fake<ICharacterRepository>();
         _userContext = A.Fake<IUserContext>();
@@ -35,12 +31,12 @@ public class CopyCharacterUseCaseTests
         A.CallTo(() => _userContext.CurrentUserId()).Returns(userId.ToString());
         A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.Id)).Returns(true);
         A.CallTo(() => _characterRepository.GetPlayerId(userId.ToString())).Returns(PlayerId);
-        A.CallTo(() => _characterRepository.CopyCharacterAsync(_model.Id, PlayerId, _model.CharacterName))
+        A.CallTo(() =>
+                _characterRepository.CopyCharacterAsync(_model.Id, PlayerId, _model.CharacterName)
+            )
             .Returns(3);
 
-        var validator = new CopyCharacterModelValidator(
-            _characterRepository
-        );
+        var validator = new CopyCharacterModelValidator(_characterRepository);
 
         _useCase = new CopyCharacterUseCase(
             _characterRepository,
@@ -61,8 +57,7 @@ public class CopyCharacterUseCaseTests
     [Fact]
     public async Task ValidationFor_Id_WillFail_WhenItDoesNotExist()
     {
-        A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.Id))
-            .Returns(false);
+        A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.Id)).Returns(false);
 
         var result = await _useCase.ExecuteAsync(_model);
 
@@ -100,10 +95,12 @@ public class CopyCharacterUseCaseTests
     {
         await _useCase.ExecuteAsync(_model);
 
-        A.CallTo(() => _characterRepository.CopyCharacterAsync(_model.Id, PlayerId, _model.CharacterName))
+        A.CallTo(() =>
+                _characterRepository.CopyCharacterAsync(_model.Id, PlayerId, _model.CharacterName)
+            )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_WillReturn_NewCharacterId()
     {

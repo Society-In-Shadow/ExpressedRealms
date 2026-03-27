@@ -15,11 +15,7 @@ internal static class CopyCharacterEndpoint
     )
     {
         var results = await repository.ExecuteAsync(
-            new CopyCharacterModel()
-            {
-                Id = characterId,
-                CharacterName = dto.CharacterName,
-            }
+            new CopyCharacterModel() { Id = characterId, CharacterName = dto.CharacterName }
         );
 
         if (results.HasNotFound(out var notFound))
