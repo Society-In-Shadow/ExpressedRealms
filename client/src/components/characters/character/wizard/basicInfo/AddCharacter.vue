@@ -24,7 +24,7 @@ const router = useRouter()
 const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5)
 const isMobile = activeBreakpoint.smaller('md')
 
-const { defineField, handleSubmit, errors } = useForm({
+const { defineField, handleSubmit, errors, values } = useForm({
   validationSchema: object({
     name: string().required()
       .max(150)
@@ -101,6 +101,14 @@ const updateWizardContent = () => {
   )
 }
 
+async function copyCharacter(characterId: number) {
+  const response = await axios.post<number>(`/characters/${characterId}/copy`, {
+    characterName: values.name,
+  })
+
+  await router.push({ name: 'characterSheet', params: { id: response.data }, query: { src: 'archetype_copy' } })
+}
+
 </script>
 
 <template>
@@ -138,7 +146,7 @@ const updateWizardContent = () => {
             <div v-if="showArchetypeSelection">
               <h2>Choose Archetype</h2>
               <p>Or select an archetype and tweak or use that build directly.  This will limit some of the choices you have.</p>
-              <ArchetypeInfo :expression-id="expression.id" />
+              <ArchetypeInfo :expression-id="expression.id" @selected-archetype="copyCharacter" />
             </div>
 
             <Button label="Back" class="w-100 mt-2" severity="secondary" @click="router.push({name: 'characters'})" />

@@ -100,7 +100,7 @@ const updateWizardContent = () => {
     <template #content>
       <form @submit="onSubmit">
         <FormTextWrapper v-model="form.fields.name" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
-        <FormTextWrapper v-model="form.fields.expression" disabled :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
+        <FormTextWrapper v-model="form.fields.expression" :is-disabled="true" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
         <!--        <FormDropdownWrapper v-if="showFactionInfo"
           v-model="form.fields.faction" option-label="name" :options="factions" field-name="Faction"
           :show-skeleton="characterInfo.isLoading" :redirect-url="expressionRedirectURL" @change="onSubmit"

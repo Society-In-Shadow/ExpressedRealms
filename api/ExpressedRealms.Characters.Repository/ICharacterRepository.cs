@@ -14,6 +14,7 @@ public interface ICharacterRepository
     Task<Character?> FindCharacterAsync(int id);
     Task<CharacterStatusDto> GetCharacterState(int id);
     Task<Character> GetCharacterForEdit(int characterId);
+    Task<int> CopyCharacterAsync(int sourceCharacterId, Guid targetPlayerId, string characterName);
     Task UpdateCharacter(Character user);
     Task<List<PrimaryCharacterListDto>> GetPrimaryCharactersAsync();
     Task<CharacterInfo> GetCharacterInfoForCRB(int characterId);
@@ -23,4 +24,5 @@ public interface ICharacterRepository
     Task<int> GetCharacterExpressionId(int characterId);
     Task<List<ArchetypeCharacterInfoDto>> GetArchetypesForExpression(int expressionId);
     Task<bool> ExpressionExistsAsync(int id);
+    Task<Guid> GetPlayerId(string currentUserId);
 }
