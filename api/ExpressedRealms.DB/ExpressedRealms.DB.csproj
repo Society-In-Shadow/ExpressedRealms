@@ -21,6 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\CharacterXpView.sql" />
+    <EmbeddedResource Include="Scripts\CopyCharacterToPlayerProc.sql" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ExpressedRealms.Shared\ExpressedRealms.Shared.csproj" />
