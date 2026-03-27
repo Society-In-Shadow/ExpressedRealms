@@ -1,6 +1,5 @@
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.UseCases.Characters.CopyCharacter;
-using ExpressedRealms.DB.Models.Characters;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
@@ -16,8 +15,6 @@ public class CopyCharacterUseCaseTests
     private readonly IUserContext _userContext;
 
     private readonly CopyCharacterModel _model;
-    private readonly Character _dbModel;
-
     private readonly Guid PlayerId = Guid.NewGuid();
 
     public CopyCharacterUseCaseTests()
