@@ -183,11 +183,15 @@ internal sealed class EventCheckinRepository(
             .FirstAsync(cancellationToken);
     }
 
-    public async Task<string> GetPlayerNameWithPlayerNumber(string lookupId)
+    public async Task<UserCrbEmailPreferenceDto> GetPlayerCrbEmailPreferenceWithPlayerNumber(string lookupId)
     {
         return await context
             .Players.Where(x => x.LookupId == lookupId)
-            .Select(x => $"{x.Name} - ({x.PlayerNumber})")
+            .Select(x => new UserCrbEmailPreferenceDto()
+            {
+                SendPickupCrbEmail = x.SendPickupCrbEmail,
+                UserEmailAddress = x.User.Email!,
+            })
             .FirstAsync(cancellationToken);
     }
 
