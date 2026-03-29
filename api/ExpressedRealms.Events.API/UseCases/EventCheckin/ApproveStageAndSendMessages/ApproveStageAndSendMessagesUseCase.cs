@@ -115,7 +115,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
             );
         }
 
-        await SendMessages(model, playerId);
+        await SendMessages(model);
 
         return Result.Ok();
     }
@@ -223,7 +223,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         }
     }
 
-    private async Task SendMessages(ApproveStageAndSendMessageModel model, Guid playerId)
+    private async Task SendMessages(ApproveStageAndSendMessageModel model)
     {
         if (model.StageId == CheckinStageEnum.GoApproval.Value)
         {
