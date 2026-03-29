@@ -1,6 +1,7 @@
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageMappingSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
+using ExpressedRealms.Email.EmailClientAdapter;
 using ExpressedRealms.Events.API.Discord;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
@@ -14,6 +15,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
     IUserContext userContext,
     TimeProvider timeProvider,
     IDiscordService discordService,
+    IEmailClientAdapter emailSender,
     ApproveStageAndSendMessageModelValidator validator,
     CancellationToken cancellationToken
 ) : IApproveStageAndSendMessageUseCase
@@ -113,7 +115,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
             );
         }
 
-        await SendMessages(model, playerId);
+        await SendMessages(model);
 
         return Result.Ok();
     }
@@ -221,69 +223,46 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         }
     }
 
-    private async Task SendMessages(ApproveStageAndSendMessageModel model, Guid playerId)
+    private async Task SendMessages(ApproveStageAndSendMessageModel model)
     {
-        var playerName = await checkinRepository.GetPlayerNameWithPlayerNumber(model.LookupId);
-        var primaryCharacterInfo = await checkinRepository.GetPrimaryCharacterInformation(playerId);
-        var approverName = await checkinRepository.GetCurrentPlayerName();
-
-        switch (model.StageId)
+        if (model.StageId == CheckinStageEnum.GoApproval.Value)
         {
-            case 1: // SHQ Approval
-            case 12: // Reapprove A Character
-            {
-                var seekingGoMessage = "";
+            var seekingCrbMessage = $"A CRB was approved and put into the print queue";
+            await discordService.SendMessageToChannelAsync(
+                DiscordChannel.PlayersSeekingCrbs,
+                seekingCrbMessage
+            );
+        }
 
-                if (primaryCharacterInfo is not null)
-                    seekingGoMessage =
-                        $"\"{playerName}\" with character \"{primaryCharacterInfo.CharacterName}\" needs a GO ~{approverName}";
-                else
-                    seekingGoMessage =
-                        $"\"{playerName}\" with no primary character needs a GO ~{approverName}";
-
-                await discordService.SendMessageToChannelAsync(
-                    DiscordChannel.PlayersSeekingGos,
-                    seekingGoMessage
-                );
-                break;
-            }
-            case 2: // GO Approval
+        if (model.StageId == CheckinStageEnum.CrbReadForPickup.Value)
+        {
+            var emailPreferenceInfo =
+                await checkinRepository.GetPlayerCrbEmailPreferenceWithPlayerNumber(model.LookupId);
+            if (emailPreferenceInfo.SendPickupCrbEmail)
             {
-                var seekingGoMessage =
-                    $"\"{playerName}\" with character \"{primaryCharacterInfo!.CharacterName}\" was approved by GO ~{approverName}";
-                await discordService.SendMessageToChannelAsync(
-                    DiscordChannel.PlayersSeekingGos,
-                    seekingGoMessage
-                );
+                await emailSender.SendEmailAsync(
+                    new EmailData(
+                        emailPreferenceInfo.UserEmailAddress,
+                        "CRB is Ready for Pickup!",
+                        @"Hello!
 
-                var seekingCrbMessage =
-                    $"\"{playerName}\" with character \"{primaryCharacterInfo.CharacterName}\" needs a CRB Printed ~{approverName}";
-                await discordService.SendMessageToChannelAsync(
-                    DiscordChannel.PlayersSeekingCrbs,
-                    seekingCrbMessage
-                );
-                break;
-            }
-            case 4: // Crb Approval
-            {
-                var seekingCrbMessage =
-                    $"\"{playerName}\" with character \"{primaryCharacterInfo!.CharacterName}\" has a CRB ready for pickup ~{approverName}";
-                await discordService.SendMessageToChannelAsync(
-                    DiscordChannel.PlayersSeekingCrbs,
-                    seekingCrbMessage
-                );
-                break;
-            }
+Your CRB is ready for pickup!  Feel free to stop by SHQ once you are ready to pick it up.
 
-            case 5: // Crb Finalized
-            {
-                var seekingCrbMessage =
-                    $"\"{playerName}\" with character \"{primaryCharacterInfo!.CharacterName}\" picked up their CRB ~{approverName}";
-                await discordService.SendMessageToChannelAsync(
-                    DiscordChannel.PlayersSeekingCrbs,
-                    seekingCrbMessage
+Thanks,
+Order of Archivists
+Society in Shadows
+",
+                        $"""
+                        <p>Hello!</p>
+
+                        <p>Your CRB is ready for pickup!  Feel free to stop by SHQ once you are ready to pick it up.</p>
+
+                        <p>Thanks,</p>
+                        <p>Order of Archivists</p>
+                        <p>Society in Shadows</p>
+                        """
+                    )
                 );
-                break;
             }
         }
     }

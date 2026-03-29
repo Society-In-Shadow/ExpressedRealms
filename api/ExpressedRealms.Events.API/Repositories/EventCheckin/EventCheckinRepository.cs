@@ -112,6 +112,14 @@ internal sealed class EventCheckinRepository(
             .FirstAsync(cancellationToken);
     }
 
+    public async Task<Player> GetCurrentPlayerForEditingAsync()
+    {
+        return await context
+            .Players.AsNoTracking()
+            .Where(x => x.UserId == userContext.CurrentUserId())
+            .FirstAsync(cancellationToken);
+    }
+
     public async Task<string> GetCurrentPlayerName()
     {
         return await context
@@ -183,11 +191,42 @@ internal sealed class EventCheckinRepository(
             .FirstAsync(cancellationToken);
     }
 
-    public async Task<string> GetPlayerNameWithPlayerNumber(string lookupId)
+    public async Task<UserCrbEmailPreferenceDto> GetPlayerCrbEmailPreferenceWithPlayerNumber(
+        string lookupId
+    )
     {
         return await context
             .Players.Where(x => x.LookupId == lookupId)
-            .Select(x => $"{x.Name} - ({x.PlayerNumber})")
+            .Select(x => new UserCrbEmailPreferenceDto()
+            {
+                SendPickupCrbEmail = x.SendPickupCrbEmail,
+                UserEmailAddress = x.User.Email!,
+            })
+            .FirstAsync(cancellationToken);
+    }
+
+    public async Task<UserCheckinPageDto> GetPlayerInfoForPlayerCheckinPage()
+    {
+        var now = DateOnly.FromDateTime(DateTime.UtcNow);
+
+        return await context
+            .Players.Where(x => x.UserId == userContext.CurrentUserId())
+            .Select(x => new UserCheckinPageDto()
+            {
+                LookupId = x.LookupId,
+                SendPickupCrbEmail = x.SendPickupCrbEmail,
+                CheckinId = x
+                    .Checkins.FirstOrDefault(y =>
+                        y.Event.IsPublished && y.Event.StartDate <= now && y.Event.EndDate >= now
+                    )!
+                    .Id,
+                EventName = x
+                    .Checkins.Where(y =>
+                        y.Event.IsPublished && y.Event.StartDate <= now && y.Event.EndDate >= now
+                    )
+                    .Select(y => y.Event.Name)
+                    .FirstOrDefault(),
+            })
             .FirstAsync(cancellationToken);
     }
 

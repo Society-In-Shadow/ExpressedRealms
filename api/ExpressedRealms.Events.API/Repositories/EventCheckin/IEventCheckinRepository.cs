@@ -39,11 +39,13 @@ public interface IEventCheckinRepository : IGenericRepository
     Task<Guid> GetCurrentPlayerId();
     Task<Event?> GetActiveEventInfoOrDefaultAsync();
     Task<string> GetCurrentPlayerName();
-    Task<string> GetPlayerNameWithPlayerNumber(string lookupId);
+    Task<UserCrbEmailPreferenceDto> GetPlayerCrbEmailPreferenceWithPlayerNumber(string lookupId);
     Task<Player> GetPlayerAsync(string lookupId);
     Task<DateOnly> GetActiveEventStartDate();
     Task<bool> GetStageStatus(int checkinId, CheckinStageEnum stageId);
     Task AddUpdateSecondaryStats(CheckinSecondaryStat checkinSecondaryStat);
     Task<CheckinSecondaryStat?> GetSecondaryProficiencies(int checkinId);
     Task<int> GetCurrentEventDay();
+    Task<Player> GetCurrentPlayerForEditingAsync();
+    Task<UserCheckinPageDto> GetPlayerInfoForPlayerCheckinPage();
 }

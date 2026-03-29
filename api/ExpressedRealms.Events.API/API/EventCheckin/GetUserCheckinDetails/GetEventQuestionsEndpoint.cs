@@ -19,6 +19,7 @@ public static class GetUserCheckinInfoEndpoint
             new GetUserCheckinInfoResponse()
             {
                 LookupId = results.Value.LookupId,
+                SendPickupCrbEmail = results.Value.SendPickupCrbEmail,
                 CheckinStage = results.Value.CheckinStage is null
                     ? null
                     : new BasicInfo()
@@ -26,11 +27,7 @@ public static class GetUserCheckinInfoEndpoint
                         Name = results.Value.CheckinStage.Name,
                         Id = results.Value.CheckinStage.Id,
                     },
-                Event = new ActiveEvent()
-                {
-                    Id = results.Value.Event.Id,
-                    Name = results.Value.Event.Name,
-                },
+                EventName = results.Value.EventName,
             }
         );
     }

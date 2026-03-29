@@ -23,6 +23,7 @@ public class Player
     public DateTimeOffset? LastAgeGroupCheck { get; set; }
 
     public bool IsArchetypeAccount { get; set; }
+    public bool SendPickupCrbEmail { get; set; } = false;
 
     public virtual User User { get; set; } = null!;
     public virtual List<Character> Characters { get; set; } = new();

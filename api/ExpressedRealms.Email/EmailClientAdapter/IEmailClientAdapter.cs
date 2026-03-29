@@ -1,6 +1,6 @@
 namespace ExpressedRealms.Email.EmailClientAdapter;
 
-internal interface IEmailClientAdapter
+public interface IEmailClientAdapter
 {
     Task SendEmailAsync(EmailData data);
 }

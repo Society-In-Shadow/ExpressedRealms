@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
 import { computed, onBeforeMount, ref, shallowRef } from 'vue'
-import { FeatureFlags, userStore } from '@/stores/userStore.ts'
 import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
 import { useRouter } from 'vue-router'
 import { useQRCode } from '@vueuse/integrations/useQRCode'
@@ -10,13 +9,12 @@ import StepItem from 'primevue/stepitem'
 import Step from 'primevue/step'
 import StepPanel from 'primevue/steppanel'
 import Card from 'primevue/card'
+import Checkbox from 'primevue/checkbox'
 import type { BasicInfo } from '@/components/conCheckin/types.ts'
 
 const eventCheckinInfo = EventCheckinStore()
-const userInfo = userStore()
 const router = useRouter()
 
-const hasCheckinFlag = ref(false)
 const text = shallowRef('')
 let qrcode = useQRCode(text, {
   errorCorrectionLevel: 'H',
@@ -32,15 +30,15 @@ onBeforeMount(async () => {
 
 async function refreshData() {
   await eventCheckinInfo.getCheckinAvailable()
-  hasCheckinFlag.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowEventCheckin)
 
-  if (!hasCheckinFlag.value || !eventCheckinInfo.hasActiveEvent) {
+  if (!eventCheckinInfo.hasActiveEvent) {
     await router.push({ name: 'characters' })
   }
 
   await eventCheckinInfo.getCheckinInfo()
   text.value = eventCheckinInfo.lookupId
   currentStage.value = eventCheckinInfo.checkinStage
+  const startingSteps = [8, 9, 10]
   if (currentStage.value) {
     if (currentStage.value.id == 1)
       stepperValue.value = '2'
@@ -50,6 +48,9 @@ async function refreshData() {
     }
     else if (currentStage.value.id == 11) {
       stepperValue.value = '3'
+    }
+    else if (startingSteps.includes(currentStage.value.id)) {
+      stepperValue.value = '1'
     }
     else
       stepperValue.value = (currentStage.value.id).toString()
@@ -88,7 +89,7 @@ async function triggerRefresh() {
   <Card>
     <template #title>
       <h3 class="pb-0 mb-0">
-        Welcome to {{ eventCheckinInfo.event.name }} and Society in Shadows!
+        Welcome to {{ eventCheckinInfo.eventName }} and Society in Shadows!
       </h3>
     </template>
     <template #content>
@@ -100,7 +101,7 @@ async function triggerRefresh() {
             <li>SHQ - Staff Head Quarters - This is our booth that we have setup at the con.</li>
             <li>CRB - Character Reference Booklet - This is your character sheet, it's what you'll use to play the game.</li>
           </ul>
-          <p>Also, make sure to grab your badge for {{ eventCheckinInfo.event.name }}, you need that in order to play our game.</p>
+          <p>Also, make sure to grab your badge for {{ eventCheckinInfo.eventName }}, you need that in order to play our game.</p>
           <p>With that out of the way, please present the QR Code to a GO or SHQ to get started!</p>
         </div>
         <div>
@@ -156,8 +157,11 @@ async function triggerRefresh() {
         <p>A CRB is your Character Reference Booklet, it's what you'll use to play the game.</p>
         <p>Depending on user demand, it might take a bit to get it ready for you.</p>
         <p>This page will automatically refresh in {{ timeRemaining }} minutes to see if it's ready yet or not.</p>
-        <p>(Do note that this timer is best effort, a proper notification system will be put in place later)</p>
         <p>It's provided to you for free, only thing we ask is that you return all of your strips at the end of the game.</p>
+        <div class="d-flex self-align-center gap-2 mb-3">
+          <Checkbox v-model="eventCheckinInfo.sendPickupCrbEmail" input-id="sendCrbEmail" binary @change="eventCheckinInfo.updateCrbEmailFlag()" />
+          <label for="sendCrbEmail">Opt into CRB Pickup Notification Email</label>
+        </div>
       </StepPanel>
     </StepItem>
     <StepItem value="4">
