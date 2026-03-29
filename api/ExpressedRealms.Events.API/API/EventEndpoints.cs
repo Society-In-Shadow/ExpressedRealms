@@ -108,7 +108,10 @@ internal static class EventEndpoints
         endpointGroup.MapGet("checkin/available", GetEventCheckinShowStatusEndpoint.ExecuteAsync);
 
         endpointGroup.MapGet("checkin/info", GetUserCheckinInfoEndpoint.ExecuteAsync);
-        endpointGroup.MapPut("checkin/updateCrbEmail", UpdateCrbEmailNotificationEndpoint.ExecuteAsync);
+        endpointGroup.MapPut(
+            "checkin/updateCrbEmail",
+            UpdateCrbEmailNotificationEndpoint.ExecuteAsync
+        );
 
         endpointGroup
             .MapGet("checkin/lookup/{lookupId}", GetGoCheckinInfoEndpoint.ExecuteAsync)

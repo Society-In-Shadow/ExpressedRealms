@@ -236,12 +236,12 @@ internal sealed class ApproveStageAndSendMessageUseCase(
 
         if (model.StageId == CheckinStageEnum.CrbReadForPickup.Value)
         {
-            var emailPreferenceInfo = await checkinRepository.GetPlayerCrbEmailPreferenceWithPlayerNumber(model.LookupId);
+            var emailPreferenceInfo =
+                await checkinRepository.GetPlayerCrbEmailPreferenceWithPlayerNumber(model.LookupId);
             if (emailPreferenceInfo.SendPickupCrbEmail)
             {
                 await emailSender.SendEmailAsync(
-                    new EmailData
-                    (
+                    new EmailData(
                         emailPreferenceInfo.UserEmailAddress,
                         "CRB is Ready for Pickup!",
                         @"Hello!
@@ -253,14 +253,15 @@ Order of Archivists
 Society in Shadows
 ",
                         $"""
-                                    <p>Hello!</p>
+                        <p>Hello!</p>
 
-                                    <p>Your CRB is ready for pickup!  Feel free to stop by SHQ once you are ready to pick it up.</p>
+                        <p>Your CRB is ready for pickup!  Feel free to stop by SHQ once you are ready to pick it up.</p>
 
-                                    <p>Thanks,</p>
-                                    <p>Order of Archivists</p>
-                                    <p>Society in Shadows</p>
-                                    """)
+                        <p>Thanks,</p>
+                        <p>Order of Archivists</p>
+                        <p>Society in Shadows</p>
+                        """
+                    )
                 );
             }
         }

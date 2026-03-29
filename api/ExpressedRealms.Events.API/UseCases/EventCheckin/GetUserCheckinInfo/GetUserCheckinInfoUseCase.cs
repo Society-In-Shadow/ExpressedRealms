@@ -14,7 +14,7 @@ internal sealed class GetUserCheckinInfoUseCase(IEventCheckinRepository checkinR
         {
             return Result.Fail("No Active Event Found");
         }
-        
+
         BasicInfo? currentStage = null;
         if (playerInfo.CheckinId is not null)
         {

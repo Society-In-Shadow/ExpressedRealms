@@ -11,19 +11,21 @@ public class GetUserCheckinInfoUseCaseTests
     private readonly GetUserCheckinInfoUseCase _useCase;
     private readonly IEventCheckinRepository _eventCheckinRepository;
     private readonly int _checkinId = 4;
-    
+
     public GetUserCheckinInfoUseCaseTests()
     {
         _eventCheckinRepository = A.Fake<IEventCheckinRepository>();
-        
+
         A.CallTo(() => _eventCheckinRepository.GetPlayerInfoForPlayerCheckinPage())
-            .Returns(new UserCheckinPageDto()
-            {
-                LookupId = "123456AB",
-                CheckinId = _checkinId,
-                SendPickupCrbEmail = true,
-                EventName = "Test Event"
-            });
+            .Returns(
+                new UserCheckinPageDto()
+                {
+                    LookupId = "123456AB",
+                    CheckinId = _checkinId,
+                    SendPickupCrbEmail = true,
+                    EventName = "Test Event",
+                }
+            );
         A.CallTo(() => _eventCheckinRepository.GetCurrentStage(4))
             .Returns(new BasicInfo() { Name = "Test", Id = 3 });
 
@@ -34,13 +36,15 @@ public class GetUserCheckinInfoUseCaseTests
     public async Task UseCase_WillFail_IfThereIsNoActiveEvent()
     {
         A.CallTo(() => _eventCheckinRepository.GetPlayerInfoForPlayerCheckinPage())
-            .Returns(new UserCheckinPageDto()
-            {
-                LookupId = "123456AB",
-                CheckinId = _checkinId,
-                SendPickupCrbEmail = true,
-                EventName = null
-            });
+            .Returns(
+                new UserCheckinPageDto()
+                {
+                    LookupId = "123456AB",
+                    CheckinId = _checkinId,
+                    SendPickupCrbEmail = true,
+                    EventName = null,
+                }
+            );
 
         var results = await _useCase.ExecuteAsync();
         Assert.False(results.IsSuccess);
@@ -84,13 +88,15 @@ public class GetUserCheckinInfoUseCaseTests
     public async Task UseCase_CanHandleNull_Checkin()
     {
         A.CallTo(() => _eventCheckinRepository.GetPlayerInfoForPlayerCheckinPage())
-            .Returns(new UserCheckinPageDto()
-            {
-                LookupId = "123456AB",
-                CheckinId = null,
-                SendPickupCrbEmail = false,
-                EventName = "Test Event"
-            });
+            .Returns(
+                new UserCheckinPageDto()
+                {
+                    LookupId = "123456AB",
+                    CheckinId = null,
+                    SendPickupCrbEmail = false,
+                    EventName = "Test Event",
+                }
+            );
 
         var results = await _useCase.ExecuteAsync();
         Assert.Null(results.Value.CheckinStage);

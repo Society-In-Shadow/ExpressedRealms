@@ -22,7 +22,7 @@ internal sealed class UpdateCrbEmailNotificationUseCase(
             return Result.Fail(result.Errors);
 
         var player = await checkinRepository.GetCurrentPlayerForEditingAsync();
-        
+
         player.SendPickupCrbEmail = model.EnableEmailNotification;
 
         await checkinRepository.EditAsync(player);
