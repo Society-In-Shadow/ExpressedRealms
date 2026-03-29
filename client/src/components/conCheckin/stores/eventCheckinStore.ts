@@ -34,6 +34,7 @@ export const EventCheckinStore
         primaryCharacter: {} as PrimaryCharacterInfo | null,
         activeStepperStep: '1',
         currentEventDay: 0,
+        sendPickupCrbEmail: false,
       }
     },
     actions: {
@@ -60,6 +61,7 @@ export const EventCheckinStore
         this.lookupId = response.data.lookupId
         this.event = response.data.event
         this.checkinStage = response.data.checkinStage
+        this.sendPickupCrbEmail = response.data.sendPickupCrbEmail
       },
       async getGoCheckinInfo(lookupId: string): Promise<boolean> {
         const response = await axios.get<GoCheckinInfo>(`/events/checkin/lookup/${encodeURIComponent(lookupId)}`)
@@ -199,6 +201,11 @@ export const EventCheckinStore
       },
       async retireCharacter() {
         await axios.put(`/characters/${this.lookupId}/retire`)
+        await this.resetGoPage()
+      },
+      async updateCrbEmailFlag() {
+        await axios.put(`/events/checkin/updateCrbEmail`, { enableCrbEmailNotification: this.sendPickupCrbEmail })
+        toaster.success('Notification Preference Updated!')
         await this.resetGoPage()
       },
     },

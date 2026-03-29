@@ -202,6 +202,25 @@ internal sealed class EventCheckinRepository(
             })
             .FirstAsync(cancellationToken);
     }
+    
+    public async Task<UserCheckinPageDto> GetPlayerInfoForPlayerCheckinPage()
+    {
+        var now = DateOnly.FromDateTime(DateTime.UtcNow);
+        
+        return await context
+            .Players
+            .Where(x => x.UserId == userContext.CurrentUserId())
+            .Select(x => new UserCheckinPageDto()
+            {
+                LookupId = x.LookupId,
+                SendPickupCrbEmail = x.SendPickupCrbEmail,
+                CheckinId = x.Checkins.FirstOrDefault(
+                    y => y.Event.IsPublished && y.Event.StartDate <= now && y.Event.EndDate >= now)!.Id,
+                
+                
+            })
+            .FirstAsync(cancellationToken);
+    }
 
     public Task<Player> GetPlayerAsync(string lookupId)
     {

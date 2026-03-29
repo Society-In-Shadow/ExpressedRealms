@@ -47,4 +47,5 @@ public interface IEventCheckinRepository : IGenericRepository
     Task<CheckinSecondaryStat?> GetSecondaryProficiencies(int checkinId);
     Task<int> GetCurrentEventDay();
     Task<Player> GetCurrentPlayerForEditingAsync();
+    Task<UserCheckinPageDto> GetPlayerInfoForPlayerCheckinPage();
 }

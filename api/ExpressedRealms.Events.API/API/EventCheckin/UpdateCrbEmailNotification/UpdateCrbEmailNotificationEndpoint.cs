@@ -16,7 +16,7 @@ public static class UpdateCrbEmailNotificationEndpoint
         var results = await useCase.ExecuteAsync(
             new UpdateCrbEmailNotificationModel()
             {
-                EnableEmailNotification = model.EnableEmailNotification,
+                EnableEmailNotification = model.EnableCrbEmailNotification,
             }
         );
 

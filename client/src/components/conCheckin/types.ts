@@ -19,6 +19,7 @@ export interface CheckinInfo {
   lookupId: string
   checkinStage: BasicInfo | null
   event: ActiveEvent
+  sendPickupCrbEmail: boolean
 }
 
 export interface GoCheckinInfo {
