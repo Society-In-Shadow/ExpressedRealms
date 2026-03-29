@@ -1,5 +1,3 @@
-using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
-using ExpressedRealms.DB.Models.Events.EventSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.Events.API.Repositories.EventCheckin.Dtos;
 using ExpressedRealms.Events.API.UseCases.EventCheckin.GetUserCheckinInfo;
@@ -12,30 +10,20 @@ public class GetUserCheckinInfoUseCaseTests
 {
     private readonly GetUserCheckinInfoUseCase _useCase;
     private readonly IEventCheckinRepository _eventCheckinRepository;
-    private readonly Guid _playerId = Guid.NewGuid();
-
+    private readonly int _checkinId = 4;
+    
     public GetUserCheckinInfoUseCaseTests()
     {
         _eventCheckinRepository = A.Fake<IEventCheckinRepository>();
-
-        A.CallTo(() => _eventCheckinRepository.GetPlayerLookupId()).Returns("123456AB");
-        A.CallTo(() => _eventCheckinRepository.GetActiveEventInfoOrDefaultAsync())
-            .Returns(
-                new Event()
-                {
-                    Id = 2,
-                    Name = "Test Event",
-                    EndDate = DateOnly.MaxValue,
-                    Location = "Foo",
-                    StartDate = DateOnly.MaxValue,
-                    WebsiteName = "foo",
-                    WebsiteUrl = "foo",
-                    TimeZoneId = "Foo",
-                }
-            );
-        A.CallTo(() => _eventCheckinRepository.GetCurrentPlayerId()).Returns(_playerId);
-        A.CallTo(() => _eventCheckinRepository.GetCheckinAsync(2, _playerId))
-            .Returns(new Checkin() { Id = 4 });
+        
+        A.CallTo(() => _eventCheckinRepository.GetPlayerInfoForPlayerCheckinPage())
+            .Returns(new UserCheckinPageDto()
+            {
+                LookupId = "123456AB",
+                CheckinId = _checkinId,
+                SendPickupCrbEmail = true,
+                EventName = "Test Event"
+            });
         A.CallTo(() => _eventCheckinRepository.GetCurrentStage(4))
             .Returns(new BasicInfo() { Name = "Test", Id = 3 });
 
@@ -45,8 +33,14 @@ public class GetUserCheckinInfoUseCaseTests
     [Fact]
     public async Task UseCase_WillFail_IfThereIsNoActiveEvent()
     {
-        A.CallTo(() => _eventCheckinRepository.GetActiveEventInfoOrDefaultAsync())
-            .Returns(Task.FromResult<Event?>(null));
+        A.CallTo(() => _eventCheckinRepository.GetPlayerInfoForPlayerCheckinPage())
+            .Returns(new UserCheckinPageDto()
+            {
+                LookupId = "123456AB",
+                CheckinId = _checkinId,
+                SendPickupCrbEmail = true,
+                EventName = null
+            });
 
         var results = await _useCase.ExecuteAsync();
         Assert.False(results.IsSuccess);
@@ -64,8 +58,7 @@ public class GetUserCheckinInfoUseCaseTests
     public async Task UseCase_WillReturn_TheActiveEventId()
     {
         var results = await _useCase.ExecuteAsync();
-        Assert.Equal(2, results.Value.Event.Id);
-        Assert.Equal("Test Event", results.Value.Event.Name);
+        Assert.Equal("Test Event", results.Value.EventName);
     }
 
     [Fact]
@@ -74,6 +67,7 @@ public class GetUserCheckinInfoUseCaseTests
         var results = await _useCase.ExecuteAsync();
         Assert.Equal("Test", results.Value.CheckinStage!.Name);
         Assert.Equal(3, results.Value.CheckinStage.Id);
+        Assert.True(results.Value.SendPickupCrbEmail);
     }
 
     [Fact]
@@ -89,8 +83,14 @@ public class GetUserCheckinInfoUseCaseTests
     [Fact]
     public async Task UseCase_CanHandleNull_Checkin()
     {
-        A.CallTo(() => _eventCheckinRepository.GetCheckinAsync(2, _playerId))
-            .Returns(Task.FromResult<Checkin?>(null));
+        A.CallTo(() => _eventCheckinRepository.GetPlayerInfoForPlayerCheckinPage())
+            .Returns(new UserCheckinPageDto()
+            {
+                LookupId = "123456AB",
+                CheckinId = null,
+                SendPickupCrbEmail = false,
+                EventName = "Test Event"
+            });
 
         var results = await _useCase.ExecuteAsync();
         Assert.Null(results.Value.CheckinStage);

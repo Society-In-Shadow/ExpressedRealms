@@ -89,7 +89,7 @@ async function triggerRefresh() {
   <Card>
     <template #title>
       <h3 class="pb-0 mb-0">
-        Welcome to {{ eventCheckinInfo.event.name }} and Society in Shadows!
+        Welcome to {{ eventCheckinInfo.eventName }} and Society in Shadows!
       </h3>
     </template>
     <template #content>
@@ -101,7 +101,7 @@ async function triggerRefresh() {
             <li>SHQ - Staff Head Quarters - This is our booth that we have setup at the con.</li>
             <li>CRB - Character Reference Booklet - This is your character sheet, it's what you'll use to play the game.</li>
           </ul>
-          <p>Also, make sure to grab your badge for {{ eventCheckinInfo.event.name }}, you need that in order to play our game.</p>
+          <p>Also, make sure to grab your badge for {{ eventCheckinInfo.eventName }}, you need that in order to play our game.</p>
           <p>With that out of the way, please present the QR Code to a GO or SHQ to get started!</p>
         </div>
         <div>

@@ -216,8 +216,9 @@ internal sealed class EventCheckinRepository(
                 SendPickupCrbEmail = x.SendPickupCrbEmail,
                 CheckinId = x.Checkins.FirstOrDefault(
                     y => y.Event.IsPublished && y.Event.StartDate <= now && y.Event.EndDate >= now)!.Id,
-                
-                
+                EventName = x.Checkins.Where(y => y.Event.IsPublished && y.Event.StartDate <= now && y.Event.EndDate >= now)
+                    .Select(y => y.Event.Name)
+                    .FirstOrDefault()
             })
             .FirstAsync(cancellationToken);
     }

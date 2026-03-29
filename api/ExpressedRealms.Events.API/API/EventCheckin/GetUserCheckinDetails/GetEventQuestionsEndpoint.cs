@@ -27,11 +27,7 @@ public static class GetUserCheckinInfoEndpoint
                         Name = results.Value.CheckinStage.Name,
                         Id = results.Value.CheckinStage.Id,
                     },
-                Event = new ActiveEvent()
-                {
-                    Id = results.Value.Event.Id,
-                    Name = results.Value.Event.Name,
-                },
+                EventName =results.Value.EventName
             }
         );
     }

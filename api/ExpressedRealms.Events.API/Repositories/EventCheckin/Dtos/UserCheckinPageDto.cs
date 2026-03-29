@@ -5,4 +5,5 @@ public class UserCheckinPageDto
     public bool SendPickupCrbEmail { get; set; }
     public int? CheckinId { get; set; }
     public required string LookupId { get; set; }
+    public string? EventName { get; set; }
 }

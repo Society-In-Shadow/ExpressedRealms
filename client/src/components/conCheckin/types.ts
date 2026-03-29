@@ -18,7 +18,7 @@ export type CheckinStage = typeof CheckinStage[keyof typeof CheckinStage]
 export interface CheckinInfo {
   lookupId: string
   checkinStage: BasicInfo | null
-  event: ActiveEvent
+  eventName: string
   sendPickupCrbEmail: boolean
 }
 

@@ -9,11 +9,12 @@ internal sealed class GetUserCheckinInfoUseCase(IEventCheckinRepository checkinR
 {
     public async Task<Result<GetUserCheckinInfoReturnModel>> ExecuteAsync()
     {
-        var activeEvent = await checkinRepository.GetActiveEventInfoOrDefaultAsync();
-        if (activeEvent == null)
-            return Result.Fail("No Active Event Found");
-
         var playerInfo = await checkinRepository.GetPlayerInfoForPlayerCheckinPage();
+        if (string.IsNullOrWhiteSpace(playerInfo.EventName))
+        {
+            return Result.Fail("No Active Event Found");
+        }
+        
         BasicInfo? currentStage = null;
         if (playerInfo.CheckinId is not null)
         {
@@ -26,7 +27,7 @@ internal sealed class GetUserCheckinInfoUseCase(IEventCheckinRepository checkinR
                 LookupId = playerInfo.LookupId,
                 SendPickupCrbEmail = playerInfo.SendPickupCrbEmail,
                 CheckinStage = currentStage,
-                Event = new ActiveEvent() { Id = activeEvent.Id, Name = activeEvent.Name },
+                EventName = playerInfo.EventName,
             }
         );
     }

@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import {
-  type ActiveEvent,
   type AgeInfo,
   type ApproveCheckinInfo,
   type AssignedXpType,
@@ -26,7 +25,7 @@ export const EventCheckinStore
         hasActiveEvent: false,
         hasInvalidLookupId: false,
         lookupId: '',
-        event: {} as ActiveEvent,
+        eventName: '',
         checkinStage: {} as BasicInfo | null,
         goCheckinInfo: {} as GoCheckinInfo,
         playerNumber: 0,
@@ -43,7 +42,7 @@ export const EventCheckinStore
         this.isReset = true
         this.hasActiveEvent = false
         this.lookupId = ''
-        this.event = {} as ActiveEvent
+        this.eventName = ''
         this.checkinStage = null
         this.goCheckinInfo = {} as GoCheckinInfo
         this.playerNumber = 0
@@ -59,7 +58,7 @@ export const EventCheckinStore
         const response = await axios.get<CheckinInfo>(`/events/checkin/info`)
 
         this.lookupId = response.data.lookupId
-        this.event = response.data.event
+        this.eventName = response.data.eventName
         this.checkinStage = response.data.checkinStage
         this.sendPickupCrbEmail = response.data.sendPickupCrbEmail
       },
