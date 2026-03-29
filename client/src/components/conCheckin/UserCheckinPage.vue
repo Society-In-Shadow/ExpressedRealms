@@ -38,6 +38,7 @@ async function refreshData() {
   await eventCheckinInfo.getCheckinInfo()
   text.value = eventCheckinInfo.lookupId
   currentStage.value = eventCheckinInfo.checkinStage
+  const startingSteps = [8, 9, 10]
   if (currentStage.value) {
     if (currentStage.value.id == 1)
       stepperValue.value = '2'
@@ -47,6 +48,9 @@ async function refreshData() {
     }
     else if (currentStage.value.id == 11) {
       stepperValue.value = '3'
+    }
+    else if (startingSteps.includes(currentStage.value.id)) {
+      stepperValue.value = '1'
     }
     else
       stepperValue.value = (currentStage.value.id).toString()
