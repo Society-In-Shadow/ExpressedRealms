@@ -111,6 +111,14 @@ internal sealed class EventCheckinRepository(
             .Select(x => x.Id)
             .FirstAsync(cancellationToken);
     }
+    
+    public async Task<Player> GetCurrentPlayerForEditingAsync()
+    {
+        return await context
+            .Players.AsNoTracking()
+            .Where(x => x.UserId == userContext.CurrentUserId())
+            .FirstAsync(cancellationToken);
+    }
 
     public async Task<string> GetCurrentPlayerName()
     {
