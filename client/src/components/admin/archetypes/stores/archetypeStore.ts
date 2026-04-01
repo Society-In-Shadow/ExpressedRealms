@@ -1,5 +1,6 @@
 import { defineQueryOptions, useMutation, useQueryCache } from '@pinia/colada'
 import { archetypeService } from '@/components/admin/archetypes/services/archetypeService.ts'
+import toaster from '@/services/Toasters'
 
 export const ARCHETYPE_QUERY_KEYS = {
   root: ['archetype'] as const,
@@ -17,6 +18,7 @@ export const useDeleteArchetype = () => {
   return useMutation({
     mutation: (id: number) => archetypeService.delete(id),
     async onSuccess() {
+      toaster.success('Archetype deleted successfully')
       await queryCache.invalidateQueries({ key: ARCHETYPE_QUERY_KEYS.root })
     },
   })

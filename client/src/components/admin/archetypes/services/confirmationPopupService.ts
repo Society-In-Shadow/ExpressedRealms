@@ -16,7 +16,7 @@ export const ConfirmationPopup = (id: number, name: string) => {
         outlined: true,
       },
       acceptProps: {
-        label: 'Delete Role',
+        label: 'Delete Archetype',
         severity: 'danger',
       },
       accept: () => {
