@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Admin.API.AdminEndpoints.GetArchetypes;
+namespace ExpressedRealms.Admin.API.ArchetypeEndpoints.GetArchetypes;
 
 public class ArchetypeResponse
 {

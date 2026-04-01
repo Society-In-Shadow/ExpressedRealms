@@ -2,7 +2,7 @@ using ExpressedRealms.Admin.UseCases.Archetypes.GetArchetypes;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace ExpressedRealms.Admin.API.AdminEndpoints.GetArchetypes;
+namespace ExpressedRealms.Admin.API.ArchetypeEndpoints.GetArchetypes;
 
 public static class GetArchetypeListEndpoint
 {
@@ -19,6 +19,7 @@ public static class GetArchetypeListEndpoint
                         Id = x.Id,
                         Name = x.Name,
                         Description = x.Description,
+                        ExpressionName = x.ExpressionName,
                     })
                     .ToList(),
             }
