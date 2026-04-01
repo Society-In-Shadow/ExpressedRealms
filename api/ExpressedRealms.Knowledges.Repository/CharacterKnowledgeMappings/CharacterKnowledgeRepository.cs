@@ -1,6 +1,7 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings.Projections;
+using ExpressedRealms.Repositories.Shared;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,14 +50,24 @@ public class CharacterKnowledgeRepository(
             );
     }
 
-    public Task<bool> MappingAlreadyExists(int mappingId)
+    public async Task<bool> MappingAlreadyExists(int mappingId)
     {
-        return context
+        var characterId = await context
             .CharacterKnowledgeMappings.AsNoTracking()
-            .AnyAsync(
-                x => x.Id == mappingId && x.Character.Player.UserId == userContext.CurrentUserId(),
-                cancellationToken
-            );
+            .Where(x => x.Id == mappingId)
+            .Select(x => (int?)x.CharacterId)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (characterId == null)
+            return false;
+
+        var query = await context
+            .Characters.AsNoTracking()
+            .WithUserAccessAsync(userContext, characterId.Value);
+
+        var character = await query.FirstOrDefaultAsync();
+
+        return character is not null;
     }
 
     public Task<CharacterKnowledgeMapping> GetCharacterKnowledgeMappingForEditing(

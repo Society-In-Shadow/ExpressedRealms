@@ -1,7 +1,6 @@
 using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
 using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeSpecializations;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
-using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings.Projections;
 using ExpressedRealms.Knowledges.Repository.KnowledgeSpecializations;
 using ExpressedRealms.Knowledges.UseCases.KnowledgeSpecializations.EditSpecialization;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
@@ -52,12 +51,6 @@ public class EditSpecializationUseCaseTests
                 )
             )
             .Returns(0);
-        A.CallTo(() =>
-                _mappingRepository.GetSpecializationCountForMapping(
-                    _specializationDbModel.KnowledgeMappingId
-                )
-            )
-            .Returns(new SpecializationCountProjection() { CurrentCount = 0, MaxCount = 2 });
 
         var validator = new EditSpecializationModelValidator(
             _specializationRepository,
@@ -66,7 +59,6 @@ public class EditSpecializationUseCaseTests
 
         _useCase = new EditSpecializationUseCase(
             _specializationRepository,
-            _mappingRepository,
             validator,
             CancellationToken.None
         );
@@ -184,18 +176,6 @@ public class EditSpecializationUseCaseTests
     }
 
     [Fact]
-    public async Task UseCase_CorrectlyGrabs_TheSpecializationCountForTheMapping()
-    {
-        await _useCase.ExecuteAsync(_model);
-        A.CallTo(() =>
-                _mappingRepository.GetSpecializationCountForMapping(
-                    _specializationDbModel.KnowledgeMappingId
-                )
-            )
-            .MustHaveHappenedOnceExactly();
-    }
-
-    [Fact]
     public async Task UseCase_WillEditTheSpecialization()
     {
         var knowledge = new CharacterKnowledgeSpecialization()
@@ -235,24 +215,5 @@ public class EditSpecializationUseCaseTests
                 )
             )
             .MustHaveHappenedOnceExactly();
-    }
-
-    [Fact]
-    public async Task UseCase_Fails_WhenTheyAlreadyHave_MaxAmountOfSpecializations()
-    {
-        A.CallTo(() =>
-                _mappingRepository.GetSpecializationCountForMapping(
-                    _specializationDbModel.KnowledgeMappingId
-                )
-            )
-            .Returns(new SpecializationCountProjection() { CurrentCount = 2, MaxCount = 2 });
-
-        var result = await _useCase.ExecuteAsync(_model);
-
-        Assert.False(result.IsSuccess);
-        Assert.Equal(
-            "You have reached the maximum number of specializations allowed for this knowledge.",
-            result.Errors[0].Message
-        );
     }
 }

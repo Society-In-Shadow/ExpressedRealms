@@ -25,4 +25,6 @@ public interface ICharacterRepository
     Task<List<ArchetypeCharacterInfoDto>> GetArchetypesForExpression(int expressionId);
     Task<bool> ExpressionExistsAsync(int id);
     Task<Guid> GetPlayerId(string currentUserId);
+    Task<List<ArchetypeDto>> GetBasicArchetypeListAsync();
+    Task<Guid> GetArchetypePlayerId();
 }

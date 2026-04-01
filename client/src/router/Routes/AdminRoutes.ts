@@ -53,5 +53,11 @@ export const AdminRoutes = {
       component: () => import('@/components/admin/dev/DevTesting.vue'),
       meta: { requiredPermission: UserPermissions.DevDebug.View },
     },
+    {
+      path: 'archetypes',
+      name: 'archetypes',
+      component: () => import('@/components/admin/archetypes/ArchetypeList.vue'),
+      meta: { requiredPermission: UserPermissions.Archetypes.View },
+    },
   ],
 }

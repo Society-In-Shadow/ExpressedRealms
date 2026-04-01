@@ -22,6 +22,7 @@ import { characterStore } from '@/components/characters/character/stores/charact
 import DisadvantageStep from '@/components/characters/character/wizard/blessings/DisadvantageStep.vue'
 import ContactStep from '@/components/characters/character/wizard/contacts/ContactStep.vue'
 import { FeatureFlags, userStore } from '@/stores/userStore.ts'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
 const xpData = experienceStore()
 const route = useRoute()
@@ -31,6 +32,8 @@ const userInfo = userStore()
 const isAdd = computed(() => route.name == 'addWizard')
 const wasAdd = ref(false)
 
+const userPermissionInfo = userPermissionStore()
+const permissionCheck = userPermissionInfo.permissionCheck
 const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5)
 const isMobile = activeBreakpoint.smaller('md')
 const wizardContentData = wizardContentStore()
@@ -51,6 +54,9 @@ onBeforeMount(async () => {
 })
 
 async function fetchData() {
+  if (!characterInfo.isOwner && !permissionCheck.Archetypes.Edit && !isAdd.value) {
+    await router.push({ name: 'characterSheet', params: { id: Number.parseInt(route.params.id as string) } })
+  }
   const basicInfo = sections.value.find(x => x.name == 'Basic Info')
   if (basicInfo) {
     sections.value.splice(sections.value.indexOf(basicInfo), 1)

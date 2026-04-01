@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@he-tree/vue": "^2.9.4",
+    "@pinia/colada": "^1.1.0",
     "@primevue/themes": "^4.3.7",
     "@tiptap/extension-table": "^3.0.9",
     "@tiptap/extension-underline": "^3.0.9",
@@ -33,6 +34,7 @@
     "bootstrap": "^5.3.7",
     "bootstrap-icons": "^1.13.1",
     "date-fns": "^4.1.0",
+    "lodash": "^4.17.21",
     "luxon": "^3.7.2",
     "md5": "^2.3.0",
     "pinia": "^3.0.3",
@@ -51,6 +53,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.38.0",
+    "@pinia/colada-devtools": "^0.4.5",
     "@rushstack/eslint-patch": "^1.12.0",
     "@stylistic/eslint-plugin": "^5.5.0",
     "@testing-library/jest-dom": "^6.6.4",

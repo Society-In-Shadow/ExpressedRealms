@@ -1,3 +1,4 @@
+using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.UseCases.Shared;
@@ -23,7 +24,26 @@ internal sealed class CopyCharacterUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var playerId = await characterRepository.GetPlayerId(userContext.CurrentUserId());
+        if (
+            !userContext.CurrentUserHasPermission(Permissions.Archetypes.Create)
+            && model.IsArchetype
+        )
+        {
+            return Result.Fail("You do not have permission to create an archetype character.");
+        }
+
+        Guid playerId;
+        if (
+            userContext.CurrentUserHasPermission(Permissions.Archetypes.Create) && model.IsArchetype
+        )
+        {
+            playerId = await characterRepository.GetArchetypePlayerId();
+        }
+        else
+        {
+            playerId = await characterRepository.GetPlayerId(userContext.CurrentUserId());
+        }
+
         var characterId = await characterRepository.CopyCharacterAsync(
             model.Id,
             playerId,

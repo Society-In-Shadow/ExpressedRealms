@@ -4,6 +4,7 @@ using ExpressedRealms.DB.Models.Characters.XpTables;
 using ExpressedRealms.Events.API.Repositories.Events;
 using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.FeatureFlags.FeatureClient;
+using ExpressedRealms.Repositories.Shared;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using Microsoft.EntityFrameworkCore;
 
@@ -143,9 +144,11 @@ public class XpRepository(
         XpSectionTypes sectionType
     )
     {
-        var characterState = await context
+        var query = await context
             .Characters.AsNoTracking()
-            .Where(x => x.Id == characterId && x.Player.UserId == userContext.CurrentUserId())
+            .WithUserAccessAsync(userContext, characterId);
+
+        var characterState = await query
             .Select(x => new
             {
                 IsPrimaryCharacter = x.IsPrimaryCharacter,

@@ -13,6 +13,7 @@ import App from '@/App.vue'
 import Ripple from 'primevue/ripple'
 import piniaPluginPersistedState from 'pinia-plugin-persistedstate'
 import { createPinia } from 'pinia'
+import { PiniaColada } from '@pinia/colada'
 import ToastService from 'primevue/toastservice'
 import axiosConfig from '@/config/axiosConfig'
 import ConfirmationService from 'primevue/confirmationservice'
@@ -84,6 +85,7 @@ const app = createApp(App)
 app.directive('ripple', Ripple)
 app.directive('tooltip', Tooltip)
 app.use(pinia)
+app.use(PiniaColada)
 app.use(ToastService)
 app.use(ConfirmationService)
 app.use(DialogService)
