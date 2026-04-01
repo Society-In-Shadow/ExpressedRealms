@@ -66,7 +66,7 @@ export function populateAdminMenu() {
     adminMenuItems.push({
       navMenuType: 'simple',
       label: 'Archetypes',
-      description: 'Archetypes are default characters.',
+      description: 'Archetypes are pre-generated characters.',
       navMenuIcon: 'architecture',
       pushComponentRouteName: 'archetypes',
       visible: () => permissionCheck.Archetypes.View,

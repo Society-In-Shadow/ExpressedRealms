@@ -1,10 +1,8 @@
 import { useConfirm } from 'primevue/useconfirm'
-import { RoleStore } from '../stores/roleStore'
 import { useRouter } from 'vue-router'
 
 export const ConfirmationPopup = () => {
   const confirm = useConfirm()
-  const store = RoleStore()
   const router = useRouter()
   const deleteConfirmation = (event: MouseEvent, id: number, name: string) =>
     confirm.require({
@@ -22,8 +20,8 @@ export const ConfirmationPopup = () => {
         severity: 'danger',
       },
       accept: () => {
-        store.deleteEvent(id)
-        router.push({ name: 'adminRoleList' })
+        // store.deleteEvent(id)
+        // router.push({ name: 'adminRoleList' })
       },
     })
 
