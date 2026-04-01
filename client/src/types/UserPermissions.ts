@@ -2,6 +2,10 @@
  * Auto-Generated, Do Not Edit
  */
 export const UserPermissions = {
+  Archetypes: {
+    Edit: 'archetypes.edit',
+    View: 'archetypes.view',
+  } as const,
   CharacterManagement: {
     Retire: 'charactermanagement.retire',
     View: 'charactermanagement.view',

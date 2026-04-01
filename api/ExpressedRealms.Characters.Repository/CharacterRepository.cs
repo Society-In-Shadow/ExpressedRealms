@@ -42,6 +42,20 @@ internal sealed class CharacterRepository(
             })
             .ToListAsync(cancellationToken);
     }
+    
+    public async Task<List<ArchetypeDto>> GetBasicArchetypeListAsync()
+    {
+        return await context
+            .Characters.Where(x => x.Player.IsArchetypeAccount)
+            .Select(x => new ArchetypeDto()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Background,
+                ExpressionName = x.Expression.Name,
+            })
+            .ToListAsync(cancellationToken);
+    }
 
     public async Task<List<ArchetypeCharacterInfoDto>> GetArchetypesForExpression(int expressionId)
     {

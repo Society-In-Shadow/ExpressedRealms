@@ -4,6 +4,7 @@ using ExpressedRealms.Admin.API.AdminEndpoints.DeleteRoleUserMapping;
 using ExpressedRealms.Admin.API.AdminEndpoints.DisableUser;
 using ExpressedRealms.Admin.API.AdminEndpoints.Dtos;
 using ExpressedRealms.Admin.API.AdminEndpoints.EnableUser;
+using ExpressedRealms.Admin.API.AdminEndpoints.GetArchetypes;
 using ExpressedRealms.Admin.API.AdminEndpoints.GetRolesForUser;
 using ExpressedRealms.Admin.API.AdminEndpoints.GetUsers;
 using ExpressedRealms.Admin.API.AdminEndpoints.GetUserSummary;
@@ -32,6 +33,10 @@ public static class AdminEndpoints
             .AddFluentValidationAutoValidation()
             .WithTags("admin");
 
+        endpointGroup
+            .MapGet("archetypes", GetArchetypeListEndpoint.Execute)
+            .RequirePermission(Permissions.Archetypes.View);
+        
         endpointGroup
             .MapGet("users", GetUsersEndpoint.Execute)
             .RequirePermission(Permissions.Player.View);
