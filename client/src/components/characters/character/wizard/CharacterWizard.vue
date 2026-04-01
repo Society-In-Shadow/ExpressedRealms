@@ -54,7 +54,7 @@ onBeforeMount(async () => {
 })
 
 async function fetchData() {
-  if (!characterInfo.isOwner && !permissionCheck.Archetypes.Edit) {
+  if (!characterInfo.isOwner && !permissionCheck.Archetypes.Edit && !isAdd.value) {
     await router.push({ name: 'characterSheet', params: { id: Number.parseInt(route.params.id as string) } })
   }
   const basicInfo = sections.value.find(x => x.name == 'Basic Info')

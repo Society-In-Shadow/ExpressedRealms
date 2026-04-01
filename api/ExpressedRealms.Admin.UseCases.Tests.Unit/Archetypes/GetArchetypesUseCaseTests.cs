@@ -41,13 +41,15 @@ public class GetArchetypesUseCaseTests
     [Fact]
     public async Task UseCase_WillReturnAllItems()
     {
-        var returnList = _dbModel.Select(x => new ArchetypeDto()
-        {
-            ExpressionName = x.ExpressionName,
-            Description = x.Description,
-            Id = x.Id,
-            Name = x.Name,
-        }).ToList();
+        var returnList = _dbModel
+            .Select(x => new ArchetypeDto()
+            {
+                ExpressionName = x.ExpressionName,
+                Description = x.Description,
+                Id = x.Id,
+                Name = x.Name,
+            })
+            .ToList();
         var results = await _useCase.ExecuteAsync();
 
         Assert.Equivalent(returnList, results.Value.Archetypes);

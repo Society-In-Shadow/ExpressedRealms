@@ -57,14 +57,14 @@ public class CharacterKnowledgeRepository(
             .Where(x => x.Id == mappingId)
             .Select(x => (int?)x.CharacterId)
             .FirstOrDefaultAsync(cancellationToken);
-        
-        if(characterId == null)
+
+        if (characterId == null)
             return false;
-        
+
         var query = await context
             .Characters.AsNoTracking()
             .WithUserAccessAsync(userContext, characterId.Value);
-        
+
         var character = await query.FirstOrDefaultAsync();
 
         return character is not null;

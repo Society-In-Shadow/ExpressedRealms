@@ -43,7 +43,7 @@ internal sealed class CharacterRepository(
             })
             .ToListAsync(cancellationToken);
     }
-    
+
     public async Task<List<ArchetypeDto>> GetBasicArchetypeListAsync()
     {
         return await context
@@ -86,7 +86,7 @@ internal sealed class CharacterRepository(
     {
         return context.Players.Where(x => x.UserId == currentUserId).Select(x => x.Id).FirstAsync();
     }
-    
+
     public Task<Guid> GetArchetypePlayerId()
     {
         return context.Players.Where(x => x.IsArchetypeAccount).Select(x => x.Id).FirstAsync();
@@ -258,13 +258,19 @@ internal sealed class CharacterRepository(
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
 
-        if (!userContext.CurrentUserHasPermission(Permissions.Archetypes.Create) && addCharacterDto.IsArchetype)
+        if (
+            !userContext.CurrentUserHasPermission(Permissions.Archetypes.Create)
+            && addCharacterDto.IsArchetype
+        )
         {
             return Result.Fail("You do not have permission to create an archetype character.");
         }
 
         Guid playerId;
-        if (userContext.CurrentUserHasPermission(Permissions.Archetypes.Create) && addCharacterDto.IsArchetype)
+        if (
+            userContext.CurrentUserHasPermission(Permissions.Archetypes.Create)
+            && addCharacterDto.IsArchetype
+        )
         {
             playerId = await context
                 .Players.Where(x => x.IsArchetypeAccount)
@@ -301,14 +307,13 @@ internal sealed class CharacterRepository(
 
     public async Task<Result> DeleteCharacterAsync(int id)
     {
-        var query = await context.Characters
-            .WithUserAccessAsync(userContext, id);
+        var query = await context.Characters.WithUserAccessAsync(userContext, id);
 
         if (!userContext.CurrentUserHasPermission(Permissions.Archetypes.Delete))
         {
             query = query.Where(x => !x.Player.IsArchetypeAccount);
         }
-        
+
         var character = await query.FirstOrDefaultAsync();
 
         if (character is null)

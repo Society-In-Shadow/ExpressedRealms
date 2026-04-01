@@ -24,13 +24,18 @@ internal sealed class CopyCharacterUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        if (!userContext.CurrentUserHasPermission(Permissions.Archetypes.Create) && model.IsArchetype)
+        if (
+            !userContext.CurrentUserHasPermission(Permissions.Archetypes.Create)
+            && model.IsArchetype
+        )
         {
             return Result.Fail("You do not have permission to create an archetype character.");
         }
 
         Guid playerId;
-        if (userContext.CurrentUserHasPermission(Permissions.Archetypes.Create) && model.IsArchetype)
+        if (
+            userContext.CurrentUserHasPermission(Permissions.Archetypes.Create) && model.IsArchetype
+        )
         {
             playerId = await characterRepository.GetArchetypePlayerId();
         }
@@ -38,7 +43,7 @@ internal sealed class CopyCharacterUseCase(
         {
             playerId = await characterRepository.GetPlayerId(userContext.CurrentUserId());
         }
-        
+
         var characterId = await characterRepository.CopyCharacterAsync(
             model.Id,
             playerId,

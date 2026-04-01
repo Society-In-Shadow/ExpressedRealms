@@ -31,7 +31,7 @@ public static class AdminEndpoints
         var endpointGroup = app.MapGroup("admin")
             .AddFluentValidationAutoValidation()
             .WithTags("admin");
-        
+
         endpointGroup
             .MapGet("users", GetUsersEndpoint.Execute)
             .RequirePermission(Permissions.Player.View);

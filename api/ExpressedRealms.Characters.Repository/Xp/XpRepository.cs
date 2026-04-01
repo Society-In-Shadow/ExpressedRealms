@@ -147,7 +147,7 @@ public class XpRepository(
         var query = await context
             .Characters.AsNoTracking()
             .WithUserAccessAsync(userContext, characterId);
-        
+
         var characterState = await query
             .Select(x => new
             {

@@ -1,4 +1,3 @@
-using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.KnowledgeSpecializations;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
@@ -7,7 +6,6 @@ namespace ExpressedRealms.Knowledges.UseCases.KnowledgeSpecializations.EditSpeci
 
 internal sealed class EditSpecializationUseCase(
     IKnowledgeSpecializationRepository specializationRepository,
-    ICharacterKnowledgeRepository mappingRepository,
     EditSpecializationModelValidator validator,
     CancellationToken cancellationToken
 ) : IEditSpecializationUseCase

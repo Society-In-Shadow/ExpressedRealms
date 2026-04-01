@@ -59,7 +59,6 @@ public class EditSpecializationUseCaseTests
 
         _useCase = new EditSpecializationUseCase(
             _specializationRepository,
-            _mappingRepository,
             validator,
             CancellationToken.None
         );

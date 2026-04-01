@@ -292,7 +292,7 @@ internal static class CharacterEndPoints
                             Background = request.Background,
                             ExpressionId = request.ExpressionId,
                             FactionId = request.FactionId,
-                            IsArchetype = request.IsArchetype
+                            IsArchetype = request.IsArchetype,
                         }
                     );
 

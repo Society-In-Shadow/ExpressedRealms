@@ -3,7 +3,8 @@ using FluentResults;
 
 namespace ExpressedRealms.Admin.UseCases.Archetypes.GetArchetypes;
 
-internal sealed class GetArchetypesUseCase(ICharacterRepository characterRepository) : IGetArchetypesUseCase
+internal sealed class GetArchetypesUseCase(ICharacterRepository characterRepository)
+    : IGetArchetypesUseCase
 {
     public async Task<Result<ArchetypeBaseReturnModel>> ExecuteAsync()
     {

@@ -100,10 +100,8 @@ internal sealed class CharacterStatRepository(
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
 
-        var query = await context
-            .Characters
-            .WithUserAccessAsync(userContext, dto.CharacterId);
-        
+        var query = await context.Characters.WithUserAccessAsync(userContext, dto.CharacterId);
+
         var character = await query
             .Include(x => x.AgilityStatLevel)
             .Include(x => x.StrengthStatLevel)
