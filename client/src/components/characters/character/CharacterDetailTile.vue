@@ -8,7 +8,10 @@ import Button from 'primevue/button'
 import { experienceStore } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
 import { FeatureFlags, userStore } from '@/stores/userStore.ts'
 import Tag from 'primevue/tag'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
+const userPermissionInfo = userPermissionStore()
+const permissionCheck = userPermissionInfo.permissionCheck
 const route = useRoute()
 const router = useRouter()
 const characterInfo = characterStore()
@@ -71,7 +74,7 @@ const redirectToEdit = () => {
           </div>
         </div>
         <div class="d-flex flex-column gap-3" style="font-size: 2.5em">
-          <Button v-if="isOwner && !isRetired" class="float-end" label="Edit" @click="redirectToEdit" />
+          <Button v-if="isOwner && !isRetired || permissionCheck.Archetypes.Edit" class="float-end" label="Edit" @click="redirectToEdit" />
         </div>
       </div>
     </template>

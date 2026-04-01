@@ -26,7 +26,10 @@ import { onBeforeMount, ref } from 'vue'
 import ApproveCharacterBanner from '@/components/conCheckin/support/ApproveCharacterBanner.vue'
 import DailyCheckin from '@/components/conCheckin/support/DailyCheckin.vue'
 import { useRoute } from 'vue-router'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
+const userPermissionInfo = userPermissionStore()
+const permissionCheck = userPermissionInfo.permissionCheck
 const characterData = characterStore()
 const userData = userStore()
 const route = useRoute()
@@ -44,7 +47,7 @@ onBeforeMount(async () => {
     <DataTable />
   </div>
   <ApproveCharacterBanner />
-  <Message v-if="!characterData.isOwner && !characterData.isLoading" severity="warn" class="mb-3 mt-3">
+  <Message v-if="!characterData.isOwner && !characterData.isLoading && !permissionCheck.Archetypes.Edit" severity="warn" class="mb-3 mt-3">
     You have read only access to this character sheet.
   </Message>
   <Message v-if="route.query.src == 'archetype_copy'" severity="success" class="mb-3 mt-3">
