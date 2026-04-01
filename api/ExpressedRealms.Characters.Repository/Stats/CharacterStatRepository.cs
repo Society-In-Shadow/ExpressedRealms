@@ -100,10 +100,11 @@ internal sealed class CharacterStatRepository(
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
 
-        var character = await context
-            .Characters.Where(x =>
-                x.Id == dto.CharacterId && x.Player.UserId == userContext.CurrentUserId()
-            )
+        var query = await context
+            .Characters
+            .WithUserAccessAsync(userContext, dto.CharacterId);
+        
+        var character = await query
             .Include(x => x.AgilityStatLevel)
             .Include(x => x.StrengthStatLevel)
             .Include(x => x.ConstitutionStatLevel)
@@ -139,8 +140,6 @@ internal sealed class CharacterStatRepository(
             case StatType.Willpower:
                 character.WillpowerId = dto.LevelTypeId;
                 break;
-            default:
-                throw new ArgumentOutOfRangeException();
         }
 
         await context.SaveChangesAsync(cancellationToken);
@@ -163,7 +162,6 @@ internal sealed class CharacterStatRepository(
             StatType.Dexterity => character.DexterityStatLevel.TotalXPCost,
             StatType.Intelligence => character.IntelligenceStatLevel.TotalXPCost,
             StatType.Willpower => character.WillpowerStatLevel.TotalXPCost,
-            _ => throw new ArgumentOutOfRangeException(),
         };
 
         var newTotalXpCost = await context
