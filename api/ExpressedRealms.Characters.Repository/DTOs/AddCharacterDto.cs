@@ -6,4 +6,5 @@ public sealed record AddCharacterDto
     public string? Background { get; init; }
     public int ExpressionId { get; init; }
     public int? FactionId { get; init; }
+    public bool IsArchetype { get; set; }
 }

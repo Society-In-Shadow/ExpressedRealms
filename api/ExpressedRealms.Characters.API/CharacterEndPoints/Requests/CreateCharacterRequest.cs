@@ -13,4 +13,5 @@ internal record CreateCharacterRequest
 
     /// <example>9 - The Shield Wardens</example>
     public int? FactionId { get; set; }
+    public bool IsArchetype { get; set; }
 }

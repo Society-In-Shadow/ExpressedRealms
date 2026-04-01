@@ -7,7 +7,7 @@ import { object, string } from 'yup'
 import Card from 'primevue/card'
 import InputTextWrapper from '@/FormWrappers/InputTextWrapper.vue'
 import { computed, onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import DropdownWrapper from '@/FormWrappers/DropdownWrapper.vue'
 import { makeIdSafe } from '@/utilities/stringUtilities'
 import DropdownInfoWrapper from '@/FormWrappers/DropdownInfoWrapper.vue'
@@ -21,6 +21,7 @@ import ArchetypeInfo from '@/components/characters/character/wizard/basicInfo/su
 
 const userInfo = userStore()
 const router = useRouter()
+const route = useRoute()
 const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5)
 const isMobile = activeBreakpoint.smaller('md')
 
@@ -64,6 +65,7 @@ const onSubmit = handleSubmit((values) => {
     expressionId: values.expressionId.id,
     background: values.background,
     factionId: values.factionId?.id,
+    isArchetype: route.query.src === 'archetype_add',
   })
     .then((response) => {
       router.push({ name: 'characterWizard', params: { id: response.data } })
@@ -104,6 +106,7 @@ const updateWizardContent = () => {
 async function copyCharacter(characterId: number) {
   const response = await axios.post<number>(`/characters/${characterId}/copy`, {
     characterName: values.name,
+    isArchetype: route.query.src === 'archetype_add',
   })
 
   await router.push({ name: 'characterSheet', params: { id: response.data }, query: { src: 'archetype_copy' } })

@@ -4,4 +4,5 @@ public class CopyCharacterModel
 {
     public int Id { get; set; }
     public required string CharacterName { get; set; }
+    public bool IsArchetype { get; set; }
 }

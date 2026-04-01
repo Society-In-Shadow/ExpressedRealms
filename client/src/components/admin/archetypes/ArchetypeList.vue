@@ -3,7 +3,6 @@
 import { computed, ref } from 'vue'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
-import AddRoleForm from './AddRoleForm.vue'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 import { useQuery } from '@pinia/colada'
 import { archetypeListQuery } from '@/components/admin/archetypes/stores/archetypeStore.ts'
@@ -11,19 +10,21 @@ import Skeleton from 'primevue/skeleton'
 import ArchetypeItem from '@/components/admin/archetypes/ArchetypeItem.vue'
 import type { Archetype } from '@/components/admin/archetypes/types.ts'
 import { groupBy, mapValues, orderBy } from 'lodash'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const permissionCheck = userPermissionStore().permissionCheck
 
 const { data, isLoading, error } = useQuery(archetypeListQuery)
 
 const showAdd = ref(false)
 
-const toggleAdd = () => {
-  showAdd.value = !showAdd.value
+const toggleAdd = async () => {
+  await router.push({ name: 'addWizard', query: { src: 'archetype_add' } })
 }
 
 const enableAdd = computed(() => {
-  return permissionCheck.Role.Create
+  return permissionCheck.Archetypes.Create
 })
 
 const expressions = computed(() => {
@@ -39,7 +40,17 @@ const expressions = computed(() => {
 </script>
 
 <template>
-  <h1>Archetypes</h1>
+  <div class="d-flex flex-row align-items-center">
+    <div class="flex-fill">
+      <h1>Archetypes</h1>
+    </div>
+    <div>
+      <Button
+        v-if="!showAdd && enableAdd" class="w-100 m-2"
+        label="Create Archetype" @click="toggleAdd"
+      />
+    </div>
+  </div>
   <div v-if="isLoading">
     <Skeleton v-for="height in 3" :key="height" class="mb-3 mt-3" height="100px" />
   </div>
@@ -60,11 +71,5 @@ const expressions = computed(() => {
         <ArchetypeItem :item="archetype" />
       </div>
     </div>
-
-    <AddRoleForm v-if="showAdd && enableAdd" @canceled="toggleAdd" />
-    <Button
-      v-if="!showAdd && enableAdd" class="w-100 m-2"
-      label="Add Role" @click="toggleAdd"
-    />
   </div>
 </template>

@@ -86,6 +86,11 @@ internal sealed class CharacterRepository(
     {
         return context.Players.Where(x => x.UserId == currentUserId).Select(x => x.Id).FirstAsync();
     }
+    
+    public Task<Guid> GetArchetypePlayerId()
+    {
+        return context.Players.Where(x => x.IsArchetypeAccount).Select(x => x.Id).FirstAsync();
+    }
 
     public async Task<List<PrimaryCharacterListDto>> GetPrimaryCharactersAsync()
     {
@@ -253,21 +258,36 @@ internal sealed class CharacterRepository(
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
 
-        var playerId = await context
-            .Players.Where(x => x.UserId == userContext.CurrentUserId())
-            .Select(x => x.Id)
-            .FirstAsync(cancellationToken);
+        if (!userContext.CurrentUserHasPermission(Permissions.Archetypes.Create) && addCharacterDto.IsArchetype)
+        {
+            return Result.Fail("You do not have permission to create an archetype character.");
+        }
+
+        Guid playerId;
+        if (userContext.CurrentUserHasPermission(Permissions.Archetypes.Create) && addCharacterDto.IsArchetype)
+        {
+            playerId = await context
+                .Players.Where(x => x.IsArchetypeAccount)
+                .Select(x => x.Id)
+                .FirstAsync(cancellationToken);
+        }
+        else
+        {
+            playerId = await context
+                .Players.Where(x => x.UserId == userContext.CurrentUserId())
+                .Select(x => x.Id)
+                .FirstAsync(cancellationToken);
+        }
 
         var character = new Character()
         {
+            PlayerId = playerId,
             Name = addCharacterDto.Name,
             Background = addCharacterDto.Background,
             ExpressionId = addCharacterDto.ExpressionId,
             FactionId = addCharacterDto.FactionId,
             IsInCharacterCreation = true,
         };
-
-        character.PlayerId = playerId;
 
         context.Characters.Add(character);
 
