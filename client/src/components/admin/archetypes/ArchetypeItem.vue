@@ -24,7 +24,7 @@ let popups = ConfirmationPopup(props.item.id, props.item.name)
 const items = []
 
 onMounted(async () => {
-  if (permissionCheck.Role.Delete) {
+  if (permissionCheck.Archetypes.Delete) {
     items.push({
       label: 'Delete',
       command: ($event) => {

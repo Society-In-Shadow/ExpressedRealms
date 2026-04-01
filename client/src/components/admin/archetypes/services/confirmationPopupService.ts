@@ -1,10 +1,10 @@
 import { useConfirm } from 'primevue/useconfirm'
-import { useRouter } from 'vue-router'
+import { useDeleteArchetype } from '@/components/admin/archetypes/stores/archetypeStore.ts'
 
-export const ConfirmationPopup = () => {
+export const ConfirmationPopup = (id: number, name: string) => {
   const confirm = useConfirm()
-  const router = useRouter()
-  const deleteConfirmation = (event: MouseEvent, id: number, name: string) =>
+  const { mutate: deleteArchetype } = useDeleteArchetype()
+  const deleteConfirmation = (event: MouseEvent) =>
     confirm.require({
       target: event.target as HTMLElement,
       group: 'popup',
@@ -20,8 +20,7 @@ export const ConfirmationPopup = () => {
         severity: 'danger',
       },
       accept: () => {
-        // store.deleteEvent(id)
-        // router.push({ name: 'adminRoleList' })
+        deleteArchetype(id)
       },
     })
 

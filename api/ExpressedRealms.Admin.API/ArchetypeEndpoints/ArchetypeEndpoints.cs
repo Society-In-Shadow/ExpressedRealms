@@ -1,3 +1,4 @@
+using ExpressedRealms.Admin.API.ArchetypeEndpoints.DeleteArchetype;
 using ExpressedRealms.Admin.API.ArchetypeEndpoints.GetArchetypes;
 using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Authentication.PermissionCollection.Configuration;
@@ -18,6 +19,10 @@ public static class ArchetypeEndpoints
         endpointGroup
             .MapGet("archetypes", GetArchetypeListEndpoint.Execute)
             .RequirePermission(Permissions.Archetypes.View);
+        
+        endpointGroup
+            .MapDelete("archetypes/{id}", DeleteArchetypeEndpoint.ExecuteAsync)
+            .RequirePermission(Permissions.Archetypes.Delete);
         
     }
 }

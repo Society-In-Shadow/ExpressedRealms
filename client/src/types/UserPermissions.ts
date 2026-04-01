@@ -5,6 +5,7 @@ export const UserPermissions = {
   Archetypes: {
     Edit: 'archetypes.edit',
     View: 'archetypes.view',
+    Delete: 'archetypes.delete',
   } as const,
   CharacterManagement: {
     Retire: 'charactermanagement.retire',

@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Characters.Repository.DTOs;
 using ExpressedRealms.Characters.Repository.Skills;
 using ExpressedRealms.Characters.Repository.Xp;
@@ -280,9 +281,15 @@ internal sealed class CharacterRepository(
 
     public async Task<Result> DeleteCharacterAsync(int id)
     {
-        var character = await context
-            .Characters.IgnoreQueryFilters()
-            .FirstOrDefaultAsync(x => x.Id == id && x.Player.UserId == userContext.CurrentUserId());
+        var query = await context.Characters
+            .WithUserAccessAsync(userContext, id);
+
+        if (!userContext.CurrentUserHasPermission(Permissions.Archetypes.Delete))
+        {
+            query = query.Where(x => !x.Player.IsArchetypeAccount);
+        }
+        
+        var character = await query.FirstOrDefaultAsync();
 
         if (character is null)
             return Result.Fail(new NotFoundFailure("Character"));
