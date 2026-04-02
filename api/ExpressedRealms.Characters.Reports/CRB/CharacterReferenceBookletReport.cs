@@ -84,6 +84,7 @@ public static class CharacterReferenceBookletReport
 
             FillInKnowledges(data.Knowledges, document);
             FillInAdminKnowledges(data.Knowledges, document);
+            FillInRechargePage(data.BasicInfo, data.Traits, document);
         }
 
         document.Flatten();
@@ -94,6 +95,108 @@ public static class CharacterReferenceBookletReport
         return finalStream;
     }
 
+    private static void FillInRechargePage(BasicInfo dataBasicInfo, Traits dataTraits, PdfDocument document)
+    {
+        var page = document.Pages[0];
+        var characterLevel = int.Parse(dataBasicInfo.CharacterLevel);
+        
+        // Free PP / Recharges per day
+        var recharges = characterLevel / 2 + 1;
+        var pool = 12;
+        
+        var energeticallyInfused = dataTraits.Advantages.FirstOrDefault(x => x.Name == "Energetically Infused");
+        var weakenedConnection = dataTraits.Disadvantages.FirstOrDefault(x => x.Name == "Weakened Connection to Pryma");
+        var notorious = dataTraits.Disadvantages.FirstOrDefault(x => x.Name == "Notorious / Gossip Magnet");
+        var disowned = dataTraits.Disadvantages.FirstOrDefault(x => x.Name == "Disowned / Disfavored");
+        
+        // Energetically Infused
+        if (energeticallyInfused is not null)
+        {
+            PrintStatInfo(page,  "x", XUnitPt.FromInch(0.953), XUnitPt.FromInch(5));
+            if (energeticallyInfused.Cost == "4pt")
+            {
+                recharges += 1;
+            }
+            if(energeticallyInfused.Cost == "8pt")
+            {
+                recharges += 1;
+                pool += characterLevel;
+            }
+        }
+        
+        // Notorious
+        if (notorious is not null)
+        {
+            PrintStatInfo(page,  "x", XUnitPt.FromInch(0.473), XUnitPt.FromInch(5));
+        }
+        
+        // Disowned
+        if (disowned is not null)
+        {
+            PrintStatInfo(page,  "x", XUnitPt.FromInch(0.633), XUnitPt.FromInch(5));
+            // Mark Favor Lost Box
+        }
+        
+        // Weakened
+        if (weakenedConnection is not null)
+        {
+            PrintStatInfo(page,  "x", XUnitPt.FromInch(0.793), XUnitPt.FromInch(5));
+            if (weakenedConnection.Cost == "4pt")
+            {
+                pool = 8;
+            }
+            
+            if(weakenedConnection.Cost == "8pt")
+            {
+                recharges = 1;
+                pool = 8;
+            }
+        }
+        
+        PrintStatInfo(page,  recharges.ToString(), XUnitPt.FromInch(0.5), XUnitPt.FromInch(8.77));
+        PrintStatInfo(page,  pool.ToString(), XUnitPt.FromInch(0.5), XUnitPt.FromInch(7.18));
+        
+        // Day 1
+        GenerateRechargePoolBoxes(page, pool, XUnitPt.FromInch(0.8), XUnitPt.FromInch(7.27));
+        // Day 2
+        GenerateRechargePoolBoxes(page, pool, XUnitPt.FromInch(1.65), XUnitPt.FromInch(7.27));
+        // Day 3
+        GenerateRechargePoolBoxes(page, pool, XUnitPt.FromInch(2.51), XUnitPt.FromInch(7.27));
+    }
+
+    private static void GenerateRechargePoolBoxes(PdfPage page, int pool, double startX, double startY )
+    {
+        var boxCount = 1;
+        for (int x = 0; x < 4; x++)
+        {
+            for (int y = 0; y < 5; y++)
+            {
+                var coordinateX = startX + (x * XUnitPt.FromInch(0.17));
+                var coordinateY = startY - (y * XUnitPt.FromInch(0.17));
+                //PrintPoolBox(page, coordinateX, coordinateY);
+                if (boxCount > pool)
+                {
+                    PrintStatInfo(page,  "x", coordinateX  + XUnitPt.FromInch(0.14) / 2, coordinateY + XUnitPt.FromInch(0.14) / 2);
+                }
+                boxCount++;
+            }
+        }
+    }
+
+    private static void PrintPoolBox(
+        PdfPage page,
+        double upperX,
+        double upperY
+    )
+    {
+        using var gfx = XGraphics.FromPdfPage(page);
+        var size = XUnitPt.FromInch(0.14);
+
+        gfx.Save();
+        gfx.DrawRectangle(XPens.Black, XBrushes.White, upperX, upperY, size, size );
+        gfx.Restore();
+    }
+    
     private static void PrintStatInfo(
         PdfPage page,
         string stampText,
