@@ -84,7 +84,7 @@ public static class CharacterReferenceBookletReport
 
             FillInKnowledges(data.Knowledges, document);
             FillInAdminKnowledges(data.Knowledges, document);
-            FillInRechargePage(data.BasicInfo, data.Traits, document);
+            FillInRechargePage(data.BasicInfo, data.Traits, data.BasicInfo, document);
         }
 
         document.Flatten();
@@ -95,7 +95,7 @@ public static class CharacterReferenceBookletReport
         return finalStream;
     }
 
-    private static void FillInRechargePage(BasicInfo dataBasicInfo, Traits dataTraits, PdfDocument document)
+    private static void FillInRechargePage(BasicInfo dataBasicInfo, Traits dataTraits, BasicInfo basicInfo, PdfDocument document)
     {
         var page = document.Pages[0];
         var characterLevel = int.Parse(dataBasicInfo.CharacterLevel);
@@ -155,16 +155,32 @@ public static class CharacterReferenceBookletReport
         
         PrintStatInfo(page,  recharges.ToString(), XUnitPt.FromInch(0.5), XUnitPt.FromInch(8.77));
         PrintStatInfo(page,  pool.ToString(), XUnitPt.FromInch(0.5), XUnitPt.FromInch(7.18));
-        
+
         // Day 1
-        GenerateRechargeBoxes(page, recharges, XUnitPt.FromInch(0.8), XUnitPt.FromInch(9.92));
-        GenerateRechargePoolBoxes(page, pool, XUnitPt.FromInch(0.8), XUnitPt.FromInch(7.32));
+        if (basicInfo.CurrentDay > 1)
+        {
+            GenerateRechargeBoxes(page, 0, XUnitPt.FromInch(0.8), XUnitPt.FromInch(9.92));
+            GenerateRechargePoolBoxes(page, 0, XUnitPt.FromInch(0.8), XUnitPt.FromInch(7.32));
+        }
+        else
+        {
+            GenerateRechargeBoxes(page, recharges, XUnitPt.FromInch(0.8), XUnitPt.FromInch(9.92));
+            GenerateRechargePoolBoxes(page, pool, XUnitPt.FromInch(0.8), XUnitPt.FromInch(7.32));
+        }
+
         
         // Day 2
-        GenerateRechargeBoxes(page, recharges, XUnitPt.FromInch(1.65), XUnitPt.FromInch(9.92));
-        GenerateRechargePoolBoxes(page, pool, XUnitPt.FromInch(1.65), XUnitPt.FromInch(7.32));
+        if (basicInfo.CurrentDay > 2)
+        {
+            GenerateRechargeBoxes(page, 0, XUnitPt.FromInch(1.65), XUnitPt.FromInch(9.92));
+            GenerateRechargePoolBoxes(page, 0, XUnitPt.FromInch(1.65), XUnitPt.FromInch(7.32));
+        }
+        else
+        {
+            GenerateRechargeBoxes(page, recharges, XUnitPt.FromInch(1.65), XUnitPt.FromInch(9.92));
+            GenerateRechargePoolBoxes(page, pool, XUnitPt.FromInch(1.65), XUnitPt.FromInch(7.32));
+        }
         
-        // Day 3
         GenerateRechargeBoxes(page, recharges, XUnitPt.FromInch(2.51), XUnitPt.FromInch(9.92));
         GenerateRechargePoolBoxes(page, pool, XUnitPt.FromInch(2.51), XUnitPt.FromInch(7.32));
     }

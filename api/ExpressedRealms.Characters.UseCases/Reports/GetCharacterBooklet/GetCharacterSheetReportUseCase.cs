@@ -269,6 +269,11 @@ public class GetCharacterSheetReportUseCase(
         var character = await characterRepository.GetCharacterInfoForCRB(model.CharacterId);
         var characterLevel = await xpRepository.GetCharacterXpLevel(model.CharacterId);
         var eventInfo = await eventCheckinRepository.GetActiveEventInfoOrDefaultAsync();
+        var currentDay = 0;
+        if (eventInfo is not null)
+        {
+            currentDay = await eventCheckinRepository.GetCurrentEventDay();
+        }
 
         var basicInfo = new BasicInfo()
         {
@@ -282,6 +287,7 @@ public class GetCharacterSheetReportUseCase(
             LookupId = character.LookupId,
             CharacterLevel = characterLevel.ToString(),
             EventName = eventInfo?.Name ?? "No Active Event During Print",
+            CurrentDay = currentDay,
         };
         return basicInfo;
     }
