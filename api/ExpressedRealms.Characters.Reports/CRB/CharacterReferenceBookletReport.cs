@@ -134,7 +134,7 @@ public static class CharacterReferenceBookletReport
         if (disowned is not null)
         {
             PrintStatInfo(page,  "x", XUnitPt.FromInch(0.633), XUnitPt.FromInch(5));
-            // Mark Favor Lost Box
+            CrossStampInfo(page, "x", XUnitPt.FromInch(1.70), XUnitPt.FromInch(4.73));
         }
         
         // Weakened
@@ -157,13 +157,33 @@ public static class CharacterReferenceBookletReport
         PrintStatInfo(page,  pool.ToString(), XUnitPt.FromInch(0.5), XUnitPt.FromInch(7.18));
         
         // Day 1
-        GenerateRechargePoolBoxes(page, pool, XUnitPt.FromInch(0.8), XUnitPt.FromInch(7.27));
+        GenerateRechargeBoxes(page, recharges, XUnitPt.FromInch(0.8), XUnitPt.FromInch(9.92));
+        GenerateRechargePoolBoxes(page, pool, XUnitPt.FromInch(0.8), XUnitPt.FromInch(7.32));
+        
         // Day 2
-        GenerateRechargePoolBoxes(page, pool, XUnitPt.FromInch(1.65), XUnitPt.FromInch(7.27));
+        GenerateRechargeBoxes(page, recharges, XUnitPt.FromInch(1.65), XUnitPt.FromInch(9.92));
+        GenerateRechargePoolBoxes(page, pool, XUnitPt.FromInch(1.65), XUnitPt.FromInch(7.32));
+        
         // Day 3
-        GenerateRechargePoolBoxes(page, pool, XUnitPt.FromInch(2.51), XUnitPt.FromInch(7.27));
+        GenerateRechargeBoxes(page, recharges, XUnitPt.FromInch(2.51), XUnitPt.FromInch(9.92));
+        GenerateRechargePoolBoxes(page, pool, XUnitPt.FromInch(2.51), XUnitPt.FromInch(7.32));
     }
 
+    private static void GenerateRechargeBoxes(PdfPage page, int recharges, double startX, double startY )
+    {
+        var boxCount = 1;
+        for (int y = 0; y < 4; y++)
+        {
+            var coordinateX = startX;
+            var coordinateY = startY - (y * XUnitPt.FromInch(0.78));
+            if (boxCount > recharges)
+            {
+                CrossStampInfo(page,  "x", coordinateX  + XUnitPt.FromInch(0.67) / 2 , coordinateY + XUnitPt.FromInch(0.67) / 2);
+            }
+            boxCount++;
+        }
+    }
+    
     private static void GenerateRechargePoolBoxes(PdfPage page, int pool, double startX, double startY )
     {
         var boxCount = 1;
@@ -173,7 +193,6 @@ public static class CharacterReferenceBookletReport
             {
                 var coordinateX = startX + (x * XUnitPt.FromInch(0.17));
                 var coordinateY = startY - (y * XUnitPt.FromInch(0.17));
-                //PrintPoolBox(page, coordinateX, coordinateY);
                 if (boxCount > pool)
                 {
                     PrintStatInfo(page,  "x", coordinateX  + XUnitPt.FromInch(0.14) / 2, coordinateY + XUnitPt.FromInch(0.14) / 2);
@@ -182,18 +201,22 @@ public static class CharacterReferenceBookletReport
             }
         }
     }
-
-    private static void PrintPoolBox(
+    
+    private static void CrossStampInfo(
         PdfPage page,
-        double upperX,
-        double upperY
+        string stampText,
+        double centerX,
+        double centerY
     )
     {
         using var gfx = XGraphics.FromPdfPage(page);
-        var size = XUnitPt.FromInch(0.14);
+        var font = new XFont(DefaultFontFace, 72, XFontStyleEx.Regular);
+        var size = gfx.MeasureString(stampText, font);
 
         gfx.Save();
-        gfx.DrawRectangle(XPens.Black, XBrushes.White, upperX, upperY, size, size );
+        gfx.TranslateTransform(centerX, centerY);
+        gfx.RotateTransform(-90);
+        gfx.DrawString(stampText, font, XBrushes.Black, -size.Width / 2, font.GetHeight() / 2 - XUnitPt.FromInch(0.31));
         gfx.Restore();
     }
     
