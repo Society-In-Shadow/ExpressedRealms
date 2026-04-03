@@ -147,7 +147,7 @@ public static class CharacterReferenceBookletReport
         if (disowned is not null)
         {
             PrintStatInfo(page, "x", XUnitPt.FromInch(0.633), XUnitPt.FromInch(5));
-            CrossStampInfo(page, "x", XUnitPt.FromInch(1.70), XUnitPt.FromInch(4.73));
+            CrossStampInfo(page, "☥", XUnitPt.FromInch(1.80), XUnitPt.FromInch(4.71));
         }
 
         // Weakened
@@ -166,8 +166,12 @@ public static class CharacterReferenceBookletReport
             }
         }
 
-        PrintStatInfo(page, recharges.ToString(), XUnitPt.FromInch(0.5), XUnitPt.FromInch(8.77));
-        PrintStatInfo(page, pool.ToString(), XUnitPt.FromInch(0.5), XUnitPt.FromInch(7.18));
+        var powerType = GetPowerPointTypeForExpressionName(basicInfo);
+
+        PrintStatInfo(page, powerType, XUnitPt.FromInch(0.47), XUnitPt.FromInch(9.00));
+        
+        PrintStatInfo(page, recharges.ToString(), XUnitPt.FromInch(0.47), XUnitPt.FromInch(7.79));
+        PrintStatInfo(page, pool.ToString(), XUnitPt.FromInch(0.47), XUnitPt.FromInch(6.96));
 
         // Day 1
         if (basicInfo.CurrentDay > 1)
@@ -195,6 +199,37 @@ public static class CharacterReferenceBookletReport
 
         GenerateRechargeBoxes(page, recharges, XUnitPt.FromInch(2.51), XUnitPt.FromInch(9.92));
         GenerateRechargePoolBoxes(page, pool, XUnitPt.FromInch(2.51), XUnitPt.FromInch(7.32));
+    }
+
+    private static string GetPowerPointTypeForExpressionName(BasicInfo basicInfo)
+    {
+        var powerType = string.Empty;
+        if (basicInfo.Expression == "Adepts")
+        {
+            powerType = "Chi";
+        }
+        else if(basicInfo.Expression == "Aeternari")
+        {
+            powerType = "Vitality";
+        }
+        else if(basicInfo.Expression == "Shammas")
+        {
+            powerType = "Noumenon";
+        }
+        else if(basicInfo.Expression == "Sidhe")
+        {
+            powerType = "Essence";
+        }
+        else if(basicInfo.Expression == "Sorcerers")
+        {
+            powerType = "Mana";
+        }
+        else if(basicInfo.Expression == "Vampyres")
+        {
+            powerType = "Blood";
+        }
+
+        return powerType;
     }
 
     private static void GenerateRechargeBoxes(
