@@ -4,4 +4,5 @@ public class GetCharacterPowerCardReportModel
 {
     public int CharacterId { get; set; }
     public bool IsFiveByThree { get; set; }
+    public bool IncludeWealthCard { get; set; }
 }

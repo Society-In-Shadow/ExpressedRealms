@@ -12,20 +12,22 @@ namespace ExpressedRealms.Powers.Reporting.powerCards;
 
 public static class PowerCardReport
 {
-    public static Document GenerateReport(List<PowerCardData> powerCards, bool isFiveByThree)
+    public static Document GenerateReport(List<DataCard> powerCards, bool isFiveByThree)
     {
         Settings.License = LicenseType.Community;
 
         powerCards = powerCards
-            .OrderBy(x => x.PowerLevel)
-            .ThenBy(x => x.PathName)
-            .ThenBy(x => x.Name)
-            .ToList();
+           .OrderBy(x => x.CardType == CardTypeEnum.PowerCard ? 0 : 1)
+           .ThenBy(x => x.CardType == CardTypeEnum.WealthCard ? 0 : 1)
+           .ThenBy(x => x.CardData is PowerCardData p ? p.PowerLevel : string.Empty)
+           .ThenBy(x => x.CardData is PowerCardData p ? p.PathName : string.Empty)
+           .ThenBy(x => x.CardData is PowerCardData p ? p.Name : string.Empty)
+           .ToList();
 
         return GetSingleTilePerPage(powerCards, isFiveByThree);
     }
 
-    public static MemoryStream GenerateSixUpPdf(List<PowerCardData> powerCards, bool isFiveByThree)
+    public static MemoryStream GenerateSixUpPdf(List<DataCard> powerCards, bool isFiveByThree, bool includeWealthCard = false)
     {
         var singleTileDoc = GenerateReport(powerCards, isFiveByThree);
         var srcStream = new MemoryStream();
@@ -114,7 +116,7 @@ public static class PowerCardReport
         return outStream;
     }
 
-    private static Document GetSingleTilePerPage(List<PowerCardData> powerCards, bool isFiveByThree)
+    private static Document GetSingleTilePerPage(List<DataCard> powerCards, bool isFiveByThree)
     {
         var secondaryColor = Color.FromARGB(125, 0, 0, 0);
         return Document.Create(container =>
@@ -138,9 +140,13 @@ public static class PowerCardReport
                 page.Content()
                     .Column(col =>
                     {
-                        foreach (var power in powerCards)
+                        foreach (var card in powerCards)
                         {
-                            FillPowerCard(col, power, secondaryColor);
+                            if (card.CardType == CardTypeEnum.PowerCard)
+                            {
+                                FillPowerCard(col, (PowerCardData)card.CardData, secondaryColor);
+                            }
+                            
                         }
                     });
             });

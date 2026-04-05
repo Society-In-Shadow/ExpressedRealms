@@ -2,7 +2,6 @@
 
 using Bogus;
 using ExpressedRealms.Powers.Reporting.powerCards;
-using QuestPDF.Fluent;
 
 Console.WriteLine("Hello, World!");
 
@@ -41,6 +40,6 @@ var powerCardFaker = new Faker<PowerCardData>()
 // Generate a list of fake cards
 var cards = powerCardFaker.Generate(25);
 
-var report = PowerCardReport.GenerateReport(cards, true);
+//var report = PowerCardReport.GenerateReport(cards, true);
 
-report.GeneratePdf("../test.pdf");
+//report.GeneratePdf("../test.pdf");
