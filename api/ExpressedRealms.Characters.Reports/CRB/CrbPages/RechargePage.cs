@@ -15,9 +15,51 @@ internal static class RechargePage
         var page = document.Pages[0];
         var characterLevel = int.Parse(reportData.BasicInfo.CharacterLevel);
 
+        var recharges = GetRechargesAndPool(reportData, characterLevel, page, out var pool);
+
+        var powerType = GetPowerPointTypeForExpressionName(reportData.BasicInfo);
+
+        TextPrintUtilities.PrintStatInfo(page, powerType, XUnitPt.FromInch(0.47), XUnitPt.FromInch(9.00));
+
+        TextPrintUtilities.PrintStatInfo(page, recharges.ToString(), XUnitPt.FromInch(0.47), XUnitPt.FromInch(7.79));
+        TextPrintUtilities.PrintStatInfo(page, pool.ToString(), XUnitPt.FromInch(0.47), XUnitPt.FromInch(6.96));
+        
+        TextPrintUtilities.PrintStatInfo(page, reportData.WealthInfo.WealthLevel.ToString(), XUnitPt.FromInch(3.02), XUnitPt.FromInch(5.88));
+        TextPrintUtilities.PrintStatInfo(page, reportData.WealthInfo.WealthIncome.ToString("C0"), XUnitPt.FromInch(3.02), XUnitPt.FromInch(5.01));
+
+        // Day 1
+        if (reportData.BasicInfo.CurrentDay > 1)
+        {
+            GenerateRechargeBoxes(page, 0, XUnitPt.FromInch(0.8), XUnitPt.FromInch(9.92));
+            GenerateRechargePoolBoxes(page, 0, XUnitPt.FromInch(0.8), XUnitPt.FromInch(7.32));
+        }
+        else
+        {
+            GenerateRechargeBoxes(page, recharges, XUnitPt.FromInch(0.8), XUnitPt.FromInch(9.92));
+            GenerateRechargePoolBoxes(page, pool, XUnitPt.FromInch(0.8), XUnitPt.FromInch(7.32));
+        }
+
+        // Day 2
+        if (reportData.BasicInfo.CurrentDay > 2)
+        {
+            GenerateRechargeBoxes(page, 0, XUnitPt.FromInch(1.65), XUnitPt.FromInch(9.92));
+            GenerateRechargePoolBoxes(page, 0, XUnitPt.FromInch(1.65), XUnitPt.FromInch(7.32));
+        }
+        else
+        {
+            GenerateRechargeBoxes(page, recharges, XUnitPt.FromInch(1.65), XUnitPt.FromInch(9.92));
+            GenerateRechargePoolBoxes(page, pool, XUnitPt.FromInch(1.65), XUnitPt.FromInch(7.32));
+        }
+
+        GenerateRechargeBoxes(page, recharges, XUnitPt.FromInch(2.51), XUnitPt.FromInch(9.92));
+        GenerateRechargePoolBoxes(page, pool, XUnitPt.FromInch(2.51), XUnitPt.FromInch(7.32));
+    }
+
+    private static int GetRechargesAndPool(ReportData reportData, int characterLevel, PdfPage page, out int pool)
+    {
         // Free PP / Recharges per day
         var recharges = characterLevel / 2 + 1;
-        var pool = 12;
+        pool = 12;
 
         var energeticallyInfused = reportData.Traits.Advantages.FirstOrDefault(x =>
             x.Name == "Energetically Infused"
@@ -76,42 +118,7 @@ internal static class RechargePage
             }
         }
 
-        var powerType = GetPowerPointTypeForExpressionName(reportData.BasicInfo);
-
-        TextPrintUtilities.PrintStatInfo(page, powerType, XUnitPt.FromInch(0.47), XUnitPt.FromInch(9.00));
-
-        TextPrintUtilities.PrintStatInfo(page, recharges.ToString(), XUnitPt.FromInch(0.47), XUnitPt.FromInch(7.79));
-        TextPrintUtilities.PrintStatInfo(page, pool.ToString(), XUnitPt.FromInch(0.47), XUnitPt.FromInch(6.96));
-        
-        TextPrintUtilities.PrintStatInfo(page, reportData.WealthInfo.WealthLevel.ToString(), XUnitPt.FromInch(3.02), XUnitPt.FromInch(5.88));
-        TextPrintUtilities.PrintStatInfo(page, reportData.WealthInfo.WealthIncome.ToString("C0"), XUnitPt.FromInch(3.02), XUnitPt.FromInch(5.01));
-
-        // Day 1
-        if (reportData.BasicInfo.CurrentDay > 1)
-        {
-            GenerateRechargeBoxes(page, 0, XUnitPt.FromInch(0.8), XUnitPt.FromInch(9.92));
-            GenerateRechargePoolBoxes(page, 0, XUnitPt.FromInch(0.8), XUnitPt.FromInch(7.32));
-        }
-        else
-        {
-            GenerateRechargeBoxes(page, recharges, XUnitPt.FromInch(0.8), XUnitPt.FromInch(9.92));
-            GenerateRechargePoolBoxes(page, pool, XUnitPt.FromInch(0.8), XUnitPt.FromInch(7.32));
-        }
-
-        // Day 2
-        if (reportData.BasicInfo.CurrentDay > 2)
-        {
-            GenerateRechargeBoxes(page, 0, XUnitPt.FromInch(1.65), XUnitPt.FromInch(9.92));
-            GenerateRechargePoolBoxes(page, 0, XUnitPt.FromInch(1.65), XUnitPt.FromInch(7.32));
-        }
-        else
-        {
-            GenerateRechargeBoxes(page, recharges, XUnitPt.FromInch(1.65), XUnitPt.FromInch(9.92));
-            GenerateRechargePoolBoxes(page, pool, XUnitPt.FromInch(1.65), XUnitPt.FromInch(7.32));
-        }
-
-        GenerateRechargeBoxes(page, recharges, XUnitPt.FromInch(2.51), XUnitPt.FromInch(9.92));
-        GenerateRechargePoolBoxes(page, pool, XUnitPt.FromInch(2.51), XUnitPt.FromInch(7.32));
+        return recharges;
     }
 
     private static string GetPowerPointTypeForExpressionName(BasicInfo basicInfo)

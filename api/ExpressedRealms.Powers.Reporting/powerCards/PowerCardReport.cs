@@ -18,8 +18,8 @@ public static class PowerCardReport
         Settings.License = LicenseType.Community;
 
         powerCards = powerCards
-           .OrderBy(x => x.CardType == CardTypeEnum.PowerCard ? 0 : 1)
-           .ThenBy(x => x.CardType == CardTypeEnum.WealthCard ? 0 : 1)
+           .OrderBy(x => x.CardType == CardType.PowerCard ? 0 : 1)
+           .ThenBy(x => x.CardType == CardType.WealthCard ? 0 : 1)
            .ThenBy(x => x.CardData is PowerCardData p ? p.PowerLevel : string.Empty)
            .ThenBy(x => x.CardData is PowerCardData p ? p.PathName : string.Empty)
            .ThenBy(x => x.CardData is PowerCardData p ? p.Name : string.Empty)
@@ -144,10 +144,10 @@ public static class PowerCardReport
                         {
                             switch (card.CardType)
                             {
-                                case CardTypeEnum.PowerCard:
+                                case CardType.PowerCard:
                                     PopulatePowerCard.FillCard(col, (PowerCardData)card.CardData);
                                     break;
-                                case CardTypeEnum.WealthCard:
+                                case CardType.WealthCard:
                                     PopulateWealthCard.FillCard(col, (WealthCardData)card.CardData);
                                     break;
                             }

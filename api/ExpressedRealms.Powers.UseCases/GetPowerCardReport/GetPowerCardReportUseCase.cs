@@ -45,7 +45,7 @@ public class GetPowerCardReportUseCase(
         var reportStream = PowerCardReport.GenerateSixUpPdf(
             cardData.Select(x => new DataCard()
             {
-                CardType = CardTypeEnum.PowerCard,
+                CardType = CardType.PowerCard,
                 CardData = x
             }).ToList(),
             model.IsFiveByThree

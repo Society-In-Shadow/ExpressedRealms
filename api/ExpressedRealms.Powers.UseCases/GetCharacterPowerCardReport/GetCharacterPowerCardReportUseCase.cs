@@ -73,7 +73,7 @@ public class GetCharacterPowerCardReportUseCase(
 
         var cards = powerCards.Select(x => new DataCard()
         {
-            CardType = CardTypeEnum.PowerCard,
+            CardType = CardType.PowerCard,
             CardData = x
         }).ToList();
 
@@ -99,7 +99,7 @@ public class GetCharacterPowerCardReportUseCase(
 
         cards.Add(new DataCard()
         {
-            CardType = CardTypeEnum.WealthCard,
+            CardType = CardType.WealthCard,
             CardData = new WealthCardData()
             {
                 WealthIncome = wealthInfo.WealthIncome,
