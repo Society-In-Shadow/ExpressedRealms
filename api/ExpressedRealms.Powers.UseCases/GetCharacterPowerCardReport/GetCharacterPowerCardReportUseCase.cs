@@ -106,7 +106,7 @@ public class GetCharacterPowerCardReportUseCase(
             
         var wealthLevel = 1;
         double incomeModifier = 1;
-            
+
         if (destitute is not null)
         {
             switch (destitute.LevelName)
@@ -154,20 +154,26 @@ public class GetCharacterPowerCardReportUseCase(
             0 => 0,
             1 => 50,
             2 => 100,
-            _ => 2 ^ (wealthLevel - 1) * 100
+            _ => Math.Pow(2, wealthLevel - 2) * 100
         };
 
         var wealthIncome = sessionIncome * incomeModifier;
-            
+
+        var liquidation = wealthLevel switch
+        {
+            0 => 0,
+            1 => 0,
+            _ => wealthIncome * 15
+        };
+
         cards.Add(new DataCard()
         {
             CardType = CardTypeEnum.WealthCard,
             CardData = new WealthCardData()
             {
-                IsDestitute = destitute is not null,
                 WealthIncome = wealthIncome,
                 BankedCash = wealthIncome * 30,
-                Liquadation = wealthIncome * 15,
+                Liquadation = liquidation,
                 InitialBasicItemIncome = wealthIncome * 3,
                 WealthLevel = wealthLevel
             }

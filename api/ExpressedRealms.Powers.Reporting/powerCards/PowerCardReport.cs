@@ -1,5 +1,6 @@
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes;
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.PowerCards;
+using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.WealthCards;
 using PdfSharp;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
@@ -147,6 +148,7 @@ public static class PowerCardReport
                                     PopulatePowerCard.FillCard(col, (PowerCardData)card.CardData);
                                     break;
                                 case CardTypeEnum.WealthCard:
+                                    PopulateWealthCard.FillCard(col, (WealthCardData)card.CardData);
                                     break;
                             }
                         }
