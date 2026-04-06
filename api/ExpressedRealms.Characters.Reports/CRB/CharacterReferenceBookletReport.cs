@@ -13,32 +13,12 @@ namespace ExpressedRealms.Characters.Reports.CRB;
 
 public static class CharacterReferenceBookletReport
 {
-    private const string DefaultFontFace = "Liberation Sans";
-
     public static MemoryStream GenerateReport(ReportData data)
     {
         Settings.License = LicenseType.Community;
         GlobalFontSettings.FontResolver ??= new MultiFontResolver();
 
         return MergeAllFields(data);
-    }
-
-    private static void Print90DegreeMessage(
-        XGraphics gfx,
-        string stampText,
-        double centerX,
-        double centerY,
-        XSolidBrush color
-    )
-    {
-        var font = new XFont(DefaultFontFace, 10, XFontStyleEx.Regular);
-        var size = gfx.MeasureString(stampText, font);
-
-        gfx.Save();
-        gfx.TranslateTransform(centerX, centerY);
-        gfx.RotateTransform(-90);
-        gfx.DrawString(stampText, font, color, -size.Width / 2, font.GetHeight() / 2 - 3);
-        gfx.Restore();
     }
 
     private static MemoryStream MergeAllFields(ReportData data)
@@ -56,7 +36,7 @@ public static class CharacterReferenceBookletReport
                 centerX = XUnitPt.FromInch(5);
             }
 
-            Print90DegreeMessage(
+            TextPrintUtilities.Print90DegreeMessage(
                 page,
                 $"{data.BasicInfo.EventName} - {DateTime.Now:MMM dd, yyyy}",
                 centerX,
@@ -65,8 +45,8 @@ public static class CharacterReferenceBookletReport
             );
 
             // Add Staple Markers
-            Print90DegreeMessage(page, "— —", centerX, XUnitPt.FromInch(9.5), XBrushes.DimGray);
-            Print90DegreeMessage(page, "— —", centerX, XUnitPt.FromInch(5.5), XBrushes.DimGray);
+            TextPrintUtilities.Print90DegreeMessage(page, "— —", centerX, XUnitPt.FromInch(9.5), XBrushes.DimGray);
+            TextPrintUtilities.Print90DegreeMessage(page, "— —", centerX, XUnitPt.FromInch(5.5), XBrushes.DimGray);
         }
 
         if (document.AcroForm != null)
@@ -125,7 +105,7 @@ public static class CharacterReferenceBookletReport
         // Energetically Infused
         if (energeticallyInfused is not null)
         {
-            PrintStatInfo(page, "x", XUnitPt.FromInch(0.953), XUnitPt.FromInch(5));
+            TextPrintUtilities.PrintStatInfo(page, "x", XUnitPt.FromInch(0.953), XUnitPt.FromInch(5));
             if (energeticallyInfused.Cost == "4pt")
             {
                 recharges += 1;
@@ -140,20 +120,20 @@ public static class CharacterReferenceBookletReport
         // Notorious
         if (notorious is not null)
         {
-            PrintStatInfo(page, "x", XUnitPt.FromInch(0.473), XUnitPt.FromInch(5));
+            TextPrintUtilities.PrintStatInfo(page, "x", XUnitPt.FromInch(0.473), XUnitPt.FromInch(5));
         }
 
         // Disowned
         if (disowned is not null)
         {
-            PrintStatInfo(page, "x", XUnitPt.FromInch(0.633), XUnitPt.FromInch(5));
-            CrossStampInfo(page, "☥", XUnitPt.FromInch(1.80), XUnitPt.FromInch(4.71));
+            TextPrintUtilities.PrintStatInfo(page, "x", XUnitPt.FromInch(0.633), XUnitPt.FromInch(5));
+            TextPrintUtilities.CrossStampInfo(page, "☥", XUnitPt.FromInch(1.80), XUnitPt.FromInch(4.71));
         }
 
         // Weakened
         if (weakenedConnection is not null)
         {
-            PrintStatInfo(page, "x", XUnitPt.FromInch(0.793), XUnitPt.FromInch(5));
+            TextPrintUtilities.PrintStatInfo(page, "x", XUnitPt.FromInch(0.793), XUnitPt.FromInch(5));
             if (weakenedConnection.Cost == "4pt")
             {
                 pool = 8;
@@ -168,10 +148,10 @@ public static class CharacterReferenceBookletReport
 
         var powerType = GetPowerPointTypeForExpressionName(basicInfo);
 
-        PrintStatInfo(page, powerType, XUnitPt.FromInch(0.47), XUnitPt.FromInch(9.00));
-        
-        PrintStatInfo(page, recharges.ToString(), XUnitPt.FromInch(0.47), XUnitPt.FromInch(7.79));
-        PrintStatInfo(page, pool.ToString(), XUnitPt.FromInch(0.47), XUnitPt.FromInch(6.96));
+        TextPrintUtilities.PrintStatInfo(page, powerType, XUnitPt.FromInch(0.47), XUnitPt.FromInch(9.00));
+
+        TextPrintUtilities.PrintStatInfo(page, recharges.ToString(), XUnitPt.FromInch(0.47), XUnitPt.FromInch(7.79));
+        TextPrintUtilities.PrintStatInfo(page, pool.ToString(), XUnitPt.FromInch(0.47), XUnitPt.FromInch(6.96));
 
         // Day 1
         if (basicInfo.CurrentDay > 1)
@@ -246,7 +226,7 @@ public static class CharacterReferenceBookletReport
             var coordinateY = startY - (y * XUnitPt.FromInch(0.78));
             if (boxCount > recharges)
             {
-                CrossStampInfo(
+                TextPrintUtilities.CrossStampInfo(
                     page,
                     "x",
                     coordinateX + XUnitPt.FromInch(0.67) / 2,
@@ -273,7 +253,7 @@ public static class CharacterReferenceBookletReport
                 var coordinateY = startY - (y * XUnitPt.FromInch(0.17));
                 if (boxCount > pool)
                 {
-                    PrintStatInfo(
+                    TextPrintUtilities.PrintStatInfo(
                         page,
                         "x",
                         coordinateX + XUnitPt.FromInch(0.14) / 2,
@@ -285,90 +265,6 @@ public static class CharacterReferenceBookletReport
         }
     }
 
-    private static void CrossStampInfo(
-        PdfPage page,
-        string stampText,
-        double centerX,
-        double centerY
-    )
-    {
-        using var gfx = XGraphics.FromPdfPage(page);
-        var font = new XFont(DefaultFontFace, 72, XFontStyleEx.Regular);
-        var size = gfx.MeasureString(stampText, font);
-
-        gfx.Save();
-        gfx.TranslateTransform(centerX, centerY);
-        gfx.RotateTransform(-90);
-        gfx.DrawString(
-            stampText,
-            font,
-            XBrushes.Black,
-            -size.Width / 2,
-            font.GetHeight() / 2 - XUnitPt.FromInch(0.31)
-        );
-        gfx.Restore();
-    }
-
-    private static void PrintStatInfo(
-        PdfPage page,
-        string stampText,
-        double centerX,
-        double centerY
-    )
-    {
-        using var gfx = XGraphics.FromPdfPage(page);
-        var font = new XFont(DefaultFontFace, 10, XFontStyleEx.Regular);
-        var size = gfx.MeasureString(stampText, font);
-
-        gfx.Save();
-        gfx.TranslateTransform(centerX, centerY);
-        gfx.RotateTransform(-90);
-        gfx.DrawString(stampText, font, XBrushes.Black, -size.Width / 2, font.GetHeight() / 2 - 3);
-        gfx.Restore();
-    }
-
-    private static void PrintStatLabelInfo(
-        PdfPage page,
-        string label,
-        double centerX,
-        double centerY
-    )
-    {
-        using var gfx = XGraphics.FromPdfPage(page);
-        var font = new XFont(DefaultFontFace, 10, XFontStyleEx.Regular);
-        var size = gfx.MeasureString(label, font);
-
-        gfx.Save();
-        gfx.TranslateTransform(centerX, centerY);
-        gfx.RotateTransform(-90);
-        // After -90°: width is horizontal centering, ascent pins the baseline to the bottom
-        gfx.DrawString(label, font, XBrushes.Black, -size.Height - 2, 0);
-
-        gfx.Restore();
-
-        var linePen = new XPen(XColors.Black, XUnitPt.FromInch(0.015));
-        gfx.DrawLine(
-            linePen,
-            XUnitPt.FromInch(4.16),
-            XUnitPt.FromInch(4.31),
-            XUnitPt.FromInch(4.16),
-            XUnitPt.FromInch(4.82)
-        );
-    }
-
-    private static void PrintPPIdentifier(PdfPage page, double centerX, double centerY)
-    {
-        using var gfx = XGraphics.FromPdfPage(page);
-        var font = new XFont(DefaultFontFace, 4, XFontStyleEx.Regular);
-        var size = gfx.MeasureString("PP", font);
-
-        gfx.Save();
-        gfx.TranslateTransform(centerX, centerY);
-        gfx.RotateTransform(-180);
-        gfx.DrawString("PP", font, XBrushes.Black, -size.Width / 2, font.GetHeight() / 2 - 3);
-        gfx.Restore();
-    }
-
     private static void FillInStatInfo(
         PdfAcroField.PdfAcroFieldCollection fields,
         StatModifierInfo dataStatInfo,
@@ -376,78 +272,78 @@ public static class CharacterReferenceBookletReport
     )
     {
         var page = document.Pages[5];
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataStatInfo.Agility.Stat.ToString(),
             XUnitPt.FromInch(2.20),
             XUnitPt.FromInch(10.15)
         );
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataStatInfo.Agility.Bonus.ToString(),
             XUnitPt.FromInch(2.20),
             XUnitPt.FromInch(9.7)
         );
 
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataStatInfo.Constitution.Stat.ToString(),
             XUnitPt.FromInch(2.50),
             XUnitPt.FromInch(10.15)
         );
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataStatInfo.Constitution.Bonus.ToString(),
             XUnitPt.FromInch(2.50),
             XUnitPt.FromInch(9.7)
         );
 
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataStatInfo.Dexterity.Stat.ToString(),
             XUnitPt.FromInch(2.80),
             XUnitPt.FromInch(10.15)
         );
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataStatInfo.Dexterity.Bonus.ToString(),
             XUnitPt.FromInch(2.80),
             XUnitPt.FromInch(9.7)
         );
 
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataStatInfo.Intelligence.Stat.ToString(),
             XUnitPt.FromInch(3.10),
             XUnitPt.FromInch(10.15)
         );
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataStatInfo.Intelligence.Bonus.ToString(),
             XUnitPt.FromInch(3.10),
             XUnitPt.FromInch(9.7)
         );
 
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataStatInfo.Strength.Stat.ToString(),
             XUnitPt.FromInch(3.40),
             XUnitPt.FromInch(10.15)
         );
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataStatInfo.Strength.Bonus.ToString(),
             XUnitPt.FromInch(3.40),
             XUnitPt.FromInch(9.7)
         );
 
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataStatInfo.Willpower.Stat.ToString(),
             XUnitPt.FromInch(3.70),
             XUnitPt.FromInch(10.15)
         );
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataStatInfo.Willpower.Bonus.ToString(),
             XUnitPt.FromInch(3.70),
@@ -478,43 +374,43 @@ public static class CharacterReferenceBookletReport
     {
         var page = document.Pages[5];
 
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Vitality.ToString(),
             XUnitPt.FromInch(2.25),
             XUnitPt.FromInch(4.60)
         );
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Health.ToString(),
             XUnitPt.FromInch(2.50),
             XUnitPt.FromInch(4.60)
         );
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Blood.ToString(),
             XUnitPt.FromInch(2.75),
             XUnitPt.FromInch(4.60)
         );
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.RWP.ToString(),
             XUnitPt.FromInch(3.00),
             XUnitPt.FromInch(4.60)
         );
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Reaction.ToString(),
             XUnitPt.FromInch(3.26),
             XUnitPt.FromInch(4.60)
         );
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Psyche.ToString(),
             XUnitPt.FromInch(3.53),
             XUnitPt.FromInch(4.60)
         );
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Mortis.ToString(),
             XUnitPt.FromInch(3.80),
@@ -532,9 +428,9 @@ public static class CharacterReferenceBookletReport
         switch (expression)
         {
             case "Adepts":
-                PrintStatLabelInfo(page, "Chi", XUnitPt.FromInch(4.12), XUnitPt.FromInch(5.48));
-                PrintPPIdentifier(page, XUnitPt.FromInch(4.06), XUnitPt.FromInch(5.68));
-                PrintStatInfo(
+                TextPrintUtilities.PrintStatLabelInfo(page, "Chi", XUnitPt.FromInch(4.12), XUnitPt.FromInch(5.48));
+                TextPrintUtilities.PrintPPIdentifier(page, XUnitPt.FromInch(4.06), XUnitPt.FromInch(5.68));
+                TextPrintUtilities.PrintStatInfo(
                     page,
                     dataProficiencyInfo.Chi.ToString(),
                     XUnitPt.FromInch(4.05),
@@ -542,14 +438,14 @@ public static class CharacterReferenceBookletReport
                 );
                 break;
             case "Shammas":
-                PrintStatLabelInfo(
+                TextPrintUtilities.PrintStatLabelInfo(
                     page,
                     "Noumenon",
                     XUnitPt.FromInch(4.12),
                     XUnitPt.FromInch(5.48)
                 );
-                PrintPPIdentifier(page, XUnitPt.FromInch(4.06), XUnitPt.FromInch(5.68));
-                PrintStatInfo(
+                TextPrintUtilities.PrintPPIdentifier(page, XUnitPt.FromInch(4.06), XUnitPt.FromInch(5.68));
+                TextPrintUtilities.PrintStatInfo(
                     page,
                     dataProficiencyInfo.Noumenon.ToString(),
                     XUnitPt.FromInch(4.05),
@@ -557,9 +453,9 @@ public static class CharacterReferenceBookletReport
                 );
                 break;
             case "Sorcerers":
-                PrintStatLabelInfo(page, "Mana", XUnitPt.FromInch(4.12), XUnitPt.FromInch(5.48));
-                PrintPPIdentifier(page, XUnitPt.FromInch(4.06), XUnitPt.FromInch(5.68));
-                PrintStatInfo(
+                TextPrintUtilities.PrintStatLabelInfo(page, "Mana", XUnitPt.FromInch(4.12), XUnitPt.FromInch(5.48));
+                TextPrintUtilities.PrintPPIdentifier(page, XUnitPt.FromInch(4.06), XUnitPt.FromInch(5.68));
+                TextPrintUtilities.PrintStatInfo(
                     page,
                     dataProficiencyInfo.Mana.ToString(),
                     XUnitPt.FromInch(4.05),
@@ -567,9 +463,9 @@ public static class CharacterReferenceBookletReport
                 );
                 break;
             case "Sidhe":
-                PrintStatLabelInfo(page, "Essence", XUnitPt.FromInch(4.12), XUnitPt.FromInch(5.48));
-                PrintPPIdentifier(page, XUnitPt.FromInch(4.06), XUnitPt.FromInch(5.68));
-                PrintStatInfo(
+                TextPrintUtilities.PrintStatLabelInfo(page, "Essence", XUnitPt.FromInch(4.12), XUnitPt.FromInch(5.48));
+                TextPrintUtilities.PrintPPIdentifier(page, XUnitPt.FromInch(4.06), XUnitPt.FromInch(5.68));
+                TextPrintUtilities.PrintStatInfo(
                     page,
                     dataProficiencyInfo.Essence.ToString(),
                     XUnitPt.FromInch(4.05),
@@ -577,10 +473,10 @@ public static class CharacterReferenceBookletReport
                 );
                 break;
             case "Aeternari":
-                PrintPPIdentifier(page, XUnitPt.FromInch(2.25), XUnitPt.FromInch(5.68));
+                TextPrintUtilities.PrintPPIdentifier(page, XUnitPt.FromInch(2.25), XUnitPt.FromInch(5.68));
                 break;
             case "Vampyres":
-                PrintPPIdentifier(page, XUnitPt.FromInch(2.76), XUnitPt.FromInch(5.68));
+                TextPrintUtilities.PrintPPIdentifier(page, XUnitPt.FromInch(2.76), XUnitPt.FromInch(5.68));
                 break;
         }
 
@@ -594,37 +490,37 @@ public static class CharacterReferenceBookletReport
 
         MergeField(fields, "PowerPoints", powerPoints.Max().ToString());
 
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Strike.ToString(),
             XUnitPt.FromInch(2.15),
             XUnitPt.FromInch(8.75)
         );
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Thrust.ToString(),
             XUnitPt.FromInch(2.40),
             XUnitPt.FromInch(8.75)
         );
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Throw.ToString(),
             XUnitPt.FromInch(2.63),
             XUnitPt.FromInch(8.75)
         );
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Shoot.ToString(),
             XUnitPt.FromInch(2.87),
             XUnitPt.FromInch(8.75)
         );
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Cast.ToString(),
             XUnitPt.FromInch(3.10),
             XUnitPt.FromInch(8.75)
         );
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Project.ToString(),
             XUnitPt.FromInch(3.33),
@@ -638,37 +534,37 @@ public static class CharacterReferenceBookletReport
         MergeField(fields, "Cast", dataProficiencyInfo.Cast.ToString());
         MergeField(fields, "Project", dataProficiencyInfo.Project.ToString());
 
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Dodge.ToString(),
             XUnitPt.FromInch(2.15),
             XUnitPt.FromInch(7.60)
         );
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Parry.ToString(),
             XUnitPt.FromInch(2.40),
             XUnitPt.FromInch(7.60)
         );
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Throw.ToString(),
             XUnitPt.FromInch(2.63),
             XUnitPt.FromInch(7.60)
         );
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.EvadeShoot.ToString(),
             XUnitPt.FromInch(2.87),
             XUnitPt.FromInch(7.60)
         );
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Ward.ToString(),
             XUnitPt.FromInch(3.10),
             XUnitPt.FromInch(7.60)
         );
-        PrintStatInfo(
+        TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Deflect.ToString(),
             XUnitPt.FromInch(3.33),
@@ -801,18 +697,6 @@ public static class CharacterReferenceBookletReport
         }
     }
 
-    private static void PrintSkills(XGraphics gfx, string stampText, double centerX, double centerY)
-    {
-        var font = new XFont(DefaultFontFace, 9, XFontStyleEx.Regular);
-        var size = gfx.MeasureString(stampText, font);
-
-        gfx.Save();
-        gfx.TranslateTransform(centerX, centerY);
-        gfx.RotateTransform(-90);
-        gfx.DrawString(stampText, font, XBrushes.Black, -size.Width / 2, font.GetHeight() / 2 - 3);
-        gfx.Restore();
-    }
-
     private static void FillInSkills(
         PdfAcroField.PdfAcroFieldCollection fields,
         SkillInfo skillInfo,
@@ -822,27 +706,27 @@ public static class CharacterReferenceBookletReport
         using var page = XGraphics.FromPdfPage(document.Pages[5]);
 
         var yPosition = XUnitPt.FromInch(5.95);
-        PrintSkills(
+        TextPrintUtilities.PrintSkills(
             page,
             skillInfo.HandToHandOffense.ToString(),
             XUnitPt.FromInch(1.95),
             yPosition
         );
-        PrintSkills(page, skillInfo.MeleeOffense.ToString(), XUnitPt.FromInch(2.14), yPosition);
-        PrintSkills(page, skillInfo.ThrownWeapons.ToString(), XUnitPt.FromInch(2.32), yPosition);
-        PrintSkills(page, skillInfo.Marksmanship.ToString(), XUnitPt.FromInch(2.51), yPosition);
-        PrintSkills(page, skillInfo.Spellcasting.ToString(), XUnitPt.FromInch(2.70), yPosition);
-        PrintSkills(page, skillInfo.Projection.ToString(), XUnitPt.FromInch(2.89), yPosition);
-        PrintSkills(
+        TextPrintUtilities.PrintSkills(page, skillInfo.MeleeOffense.ToString(), XUnitPt.FromInch(2.14), yPosition);
+        TextPrintUtilities.PrintSkills(page, skillInfo.ThrownWeapons.ToString(), XUnitPt.FromInch(2.32), yPosition);
+        TextPrintUtilities.PrintSkills(page, skillInfo.Marksmanship.ToString(), XUnitPt.FromInch(2.51), yPosition);
+        TextPrintUtilities.PrintSkills(page, skillInfo.Spellcasting.ToString(), XUnitPt.FromInch(2.70), yPosition);
+        TextPrintUtilities.PrintSkills(page, skillInfo.Projection.ToString(), XUnitPt.FromInch(2.89), yPosition);
+        TextPrintUtilities.PrintSkills(
             page,
             skillInfo.HandToHandDefense.ToString(),
             XUnitPt.FromInch(3.09),
             yPosition
         );
-        PrintSkills(page, skillInfo.MeleeDefense.ToString(), XUnitPt.FromInch(3.26), yPosition);
-        PrintSkills(page, skillInfo.Acrobatics.ToString(), XUnitPt.FromInch(3.43), yPosition);
-        PrintSkills(page, skillInfo.Spellwarding.ToString(), XUnitPt.FromInch(3.62), yPosition);
-        PrintSkills(page, skillInfo.Deflection.ToString(), XUnitPt.FromInch(3.81), yPosition);
+        TextPrintUtilities.PrintSkills(page, skillInfo.MeleeDefense.ToString(), XUnitPt.FromInch(3.26), yPosition);
+        TextPrintUtilities.PrintSkills(page, skillInfo.Acrobatics.ToString(), XUnitPt.FromInch(3.43), yPosition);
+        TextPrintUtilities.PrintSkills(page, skillInfo.Spellwarding.ToString(), XUnitPt.FromInch(3.62), yPosition);
+        TextPrintUtilities.PrintSkills(page, skillInfo.Deflection.ToString(), XUnitPt.FromInch(3.81), yPosition);
 
         MergeField(fields, "H2hOffenseLevel", skillInfo.HandToHandOffense.ToString());
         MergeField(fields, "MeleeOffenseLevel", skillInfo.MeleeOffense.ToString());
@@ -866,7 +750,7 @@ public static class CharacterReferenceBookletReport
 
         double lineHeight = 12;
         double fontSize = lineHeight * 0.65;
-        var font = new XFont(DefaultFontFace, fontSize, XFontStyleEx.Regular);
+        var font = new XFont(TextPrintUtilities.DefaultFontFace, fontSize, XFontStyleEx.Regular);
         using (var gfx = XGraphics.FromPdfPage(document.Pages[4]))
         {
             var linePen = new XPen(XColors.Black, 0.5);
@@ -918,7 +802,7 @@ public static class CharacterReferenceBookletReport
 
         double lineHeight = totalHeight / lineCount;
         double fontSize = lineHeight * 0.65;
-        var font = new XFont(DefaultFontFace, fontSize, XFontStyleEx.Regular);
+        var font = new XFont(TextPrintUtilities.DefaultFontFace, fontSize, XFontStyleEx.Regular);
         using (var gfx = XGraphics.FromPdfPage(document.Pages[3]))
         {
             var linePen = new XPen(XColors.Black, 0.5);
@@ -962,7 +846,7 @@ public static class CharacterReferenceBookletReport
 
         double lineHeight = totalHeight / lineCount;
         double fontSize = lineHeight * 0.65;
-        var font = new XFont(DefaultFontFace, fontSize, XFontStyleEx.Regular);
+        var font = new XFont(TextPrintUtilities.DefaultFontFace, fontSize, XFontStyleEx.Regular);
         using (var gfx = XGraphics.FromPdfPage(document.Pages[1]))
         {
             var linePen = new XPen(XColors.Black, 0.5);
@@ -1012,7 +896,7 @@ public static class CharacterReferenceBookletReport
 
         double lineHeight = 12;
         double fontSize = lineHeight * 0.65;
-        var font = new XFont(DefaultFontFace, fontSize, XFontStyleEx.Regular);
+        var font = new XFont(TextPrintUtilities.DefaultFontFace, fontSize, XFontStyleEx.Regular);
         using (var gfx = XGraphics.FromPdfPage(document.Pages[5]))
         {
             var linePen = new XPen(XColors.Black, 0.5);
