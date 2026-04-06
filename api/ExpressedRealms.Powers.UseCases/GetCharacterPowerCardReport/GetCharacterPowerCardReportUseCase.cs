@@ -37,7 +37,8 @@ public class GetCharacterPowerCardReportUseCase(
             selectedPowerInformation.Select(x => x.PowerId).ToList()
         );
 
-        var powerCards = data.Value.SelectMany(x =>
+        var powerCards = data
+            .Value.SelectMany(x =>
                 x.Powers.Select(y => new PowerCardData()
                     {
                         AreaOfEffect = y.AreaOfEffect.Name,
@@ -71,11 +72,9 @@ public class GetCharacterPowerCardReportUseCase(
             )
             .ToList();
 
-        var cards = powerCards.Select(x => new DataCard()
-        {
-            CardType = CardType.PowerCard,
-            CardData = x
-        }).ToList();
+        var cards = powerCards
+            .Select(x => new DataCard() { CardType = CardType.PowerCard, CardData = x })
+            .ToList();
 
         if (model.IncludeWealthCard)
         {
@@ -92,22 +91,27 @@ public class GetCharacterPowerCardReportUseCase(
         return reportStream;
     }
 
-    private async Task CalculateWealthCardData(GetCharacterPowerCardReportModel model, List<DataCard> cards)
+    private async Task CalculateWealthCardData(
+        GetCharacterPowerCardReportModel model,
+        List<DataCard> cards
+    )
     {
         // Grab Blessings
         var wealthInfo = await wealthRepository.GetWealthInfoAsync(model.CharacterId);
 
-        cards.Add(new DataCard()
-        {
-            CardType = CardType.WealthCard,
-            CardData = new WealthCardData()
+        cards.Add(
+            new DataCard()
             {
-                WealthIncome = wealthInfo.WealthIncome,
-                BankedCash = wealthInfo.BankedCash,
-                Liquadation = wealthInfo.Liquadation,
-                InitialBasicItemIncome = wealthInfo.InitialBasicItemIncome,
-                WealthLevel = wealthInfo.WealthLevel,
+                CardType = CardType.WealthCard,
+                CardData = new WealthCardData()
+                {
+                    WealthIncome = wealthInfo.WealthIncome,
+                    BankedCash = wealthInfo.BankedCash,
+                    Liquadation = wealthInfo.Liquadation,
+                    InitialBasicItemIncome = wealthInfo.InitialBasicItemIncome,
+                    WealthLevel = wealthInfo.WealthLevel,
+                },
             }
-        });
+        );
     }
 }

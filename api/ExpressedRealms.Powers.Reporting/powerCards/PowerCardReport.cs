@@ -18,17 +18,21 @@ public static class PowerCardReport
         Settings.License = LicenseType.Community;
 
         powerCards = powerCards
-           .OrderBy(x => x.CardType == CardType.PowerCard ? 0 : 1)
-           .ThenBy(x => x.CardType == CardType.WealthCard ? 0 : 1)
-           .ThenBy(x => x.CardData is PowerCardData p ? p.PowerLevel : string.Empty)
-           .ThenBy(x => x.CardData is PowerCardData p ? p.PathName : string.Empty)
-           .ThenBy(x => x.CardData is PowerCardData p ? p.Name : string.Empty)
-           .ToList();
+            .OrderBy(x => x.CardType == CardType.PowerCard ? 0 : 1)
+            .ThenBy(x => x.CardType == CardType.WealthCard ? 0 : 1)
+            .ThenBy(x => x.CardData is PowerCardData p ? p.PowerLevel : string.Empty)
+            .ThenBy(x => x.CardData is PowerCardData p ? p.PathName : string.Empty)
+            .ThenBy(x => x.CardData is PowerCardData p ? p.Name : string.Empty)
+            .ToList();
 
         return GetSingleTilePerPage(powerCards, isFiveByThree);
     }
 
-    public static MemoryStream GenerateSixUpPdf(List<DataCard> powerCards, bool isFiveByThree, bool includeWealthCard = false)
+    public static MemoryStream GenerateSixUpPdf(
+        List<DataCard> powerCards,
+        bool isFiveByThree,
+        bool includeWealthCard = false
+    )
     {
         var singleTileDoc = GenerateReport(powerCards, isFiveByThree);
         var srcStream = new MemoryStream();

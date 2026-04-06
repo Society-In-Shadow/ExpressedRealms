@@ -7,10 +7,7 @@ namespace ExpressedRealms.Characters.Reports.CRB.CrbPages;
 
 internal static class RechargePage
 {
-    public static void FillInRechargePage(
-        ReportData reportData,
-        PdfDocument document
-    )
+    public static void FillInRechargePage(ReportData reportData, PdfDocument document)
     {
         var page = document.Pages[0];
         var characterLevel = int.Parse(reportData.BasicInfo.CharacterLevel);
@@ -19,13 +16,38 @@ internal static class RechargePage
 
         var powerType = GetPowerPointTypeForExpressionName(reportData.BasicInfo);
 
-        TextPrintUtilities.PrintStatInfo(page, powerType, XUnitPt.FromInch(0.47), XUnitPt.FromInch(9.00));
+        TextPrintUtilities.PrintStatInfo(
+            page,
+            powerType,
+            XUnitPt.FromInch(0.47),
+            XUnitPt.FromInch(9.00)
+        );
 
-        TextPrintUtilities.PrintStatInfo(page, recharges.ToString(), XUnitPt.FromInch(0.47), XUnitPt.FromInch(7.79));
-        TextPrintUtilities.PrintStatInfo(page, pool.ToString(), XUnitPt.FromInch(0.47), XUnitPt.FromInch(6.96));
-        
-        TextPrintUtilities.PrintStatInfo(page, reportData.WealthInfo.WealthLevel.ToString(), XUnitPt.FromInch(3.02), XUnitPt.FromInch(5.88));
-        TextPrintUtilities.PrintStatInfo(page, reportData.WealthInfo.WealthIncome.ToString("C0"), XUnitPt.FromInch(3.02), XUnitPt.FromInch(5.01));
+        TextPrintUtilities.PrintStatInfo(
+            page,
+            recharges.ToString(),
+            XUnitPt.FromInch(0.47),
+            XUnitPt.FromInch(7.79)
+        );
+        TextPrintUtilities.PrintStatInfo(
+            page,
+            pool.ToString(),
+            XUnitPt.FromInch(0.47),
+            XUnitPt.FromInch(6.96)
+        );
+
+        TextPrintUtilities.PrintStatInfo(
+            page,
+            reportData.WealthInfo.WealthLevel.ToString(),
+            XUnitPt.FromInch(3.02),
+            XUnitPt.FromInch(5.88)
+        );
+        TextPrintUtilities.PrintStatInfo(
+            page,
+            reportData.WealthInfo.WealthIncome.ToString("C0"),
+            XUnitPt.FromInch(3.02),
+            XUnitPt.FromInch(5.01)
+        );
 
         // Day 1
         if (reportData.BasicInfo.CurrentDay > 1)
@@ -55,7 +77,12 @@ internal static class RechargePage
         GenerateRechargePoolBoxes(page, pool, XUnitPt.FromInch(2.51), XUnitPt.FromInch(7.32));
     }
 
-    private static int GetRechargesAndPool(ReportData reportData, int characterLevel, PdfPage page, out int pool)
+    private static int GetRechargesAndPool(
+        ReportData reportData,
+        int characterLevel,
+        PdfPage page,
+        out int pool
+    )
     {
         // Free PP / Recharges per day
         var recharges = characterLevel / 2 + 1;
@@ -77,7 +104,12 @@ internal static class RechargePage
         // Energetically Infused
         if (energeticallyInfused is not null)
         {
-            TextPrintUtilities.PrintStatInfo(page, "x", XUnitPt.FromInch(0.953), XUnitPt.FromInch(5));
+            TextPrintUtilities.PrintStatInfo(
+                page,
+                "x",
+                XUnitPt.FromInch(0.953),
+                XUnitPt.FromInch(5)
+            );
             if (energeticallyInfused.Cost == "4pt")
             {
                 recharges += 1;
@@ -92,20 +124,40 @@ internal static class RechargePage
         // Notorious
         if (notorious is not null)
         {
-            TextPrintUtilities.PrintStatInfo(page, "x", XUnitPt.FromInch(0.473), XUnitPt.FromInch(5));
+            TextPrintUtilities.PrintStatInfo(
+                page,
+                "x",
+                XUnitPt.FromInch(0.473),
+                XUnitPt.FromInch(5)
+            );
         }
 
         // Disowned
         if (disowned is not null)
         {
-            TextPrintUtilities.PrintStatInfo(page, "x", XUnitPt.FromInch(0.633), XUnitPt.FromInch(5));
-            TextPrintUtilities.CrossStampInfo(page, "☥", XUnitPt.FromInch(1.80), XUnitPt.FromInch(4.71));
+            TextPrintUtilities.PrintStatInfo(
+                page,
+                "x",
+                XUnitPt.FromInch(0.633),
+                XUnitPt.FromInch(5)
+            );
+            TextPrintUtilities.CrossStampInfo(
+                page,
+                "☥",
+                XUnitPt.FromInch(1.80),
+                XUnitPt.FromInch(4.71)
+            );
         }
 
         // Weakened
         if (weakenedConnection is not null)
         {
-            TextPrintUtilities.PrintStatInfo(page, "x", XUnitPt.FromInch(0.793), XUnitPt.FromInch(5));
+            TextPrintUtilities.PrintStatInfo(
+                page,
+                "x",
+                XUnitPt.FromInch(0.793),
+                XUnitPt.FromInch(5)
+            );
             if (weakenedConnection.Cost == "4pt")
             {
                 pool = 8;
@@ -128,23 +180,23 @@ internal static class RechargePage
         {
             powerType = "Chi";
         }
-        else if(basicInfo.Expression == "Aeternari")
+        else if (basicInfo.Expression == "Aeternari")
         {
             powerType = "Vitality";
         }
-        else if(basicInfo.Expression == "Shammas")
+        else if (basicInfo.Expression == "Shammas")
         {
             powerType = "Noumenon";
         }
-        else if(basicInfo.Expression == "Sidhe")
+        else if (basicInfo.Expression == "Sidhe")
         {
             powerType = "Essence";
         }
-        else if(basicInfo.Expression == "Sorcerers")
+        else if (basicInfo.Expression == "Sorcerers")
         {
             powerType = "Mana";
         }
-        else if(basicInfo.Expression == "Vampyres")
+        else if (basicInfo.Expression == "Vampyres")
         {
             powerType = "Blood";
         }

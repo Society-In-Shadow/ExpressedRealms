@@ -59,7 +59,7 @@ public class GetCharacterSheetReportUseCase(
                 ProficiencyInfo = await GetProficiencyInfo(model),
                 StatInfo = statInfo,
                 Contacts = await GetContactinfo(model),
-                WealthInfo = await GetWealthInfo(model)
+                WealthInfo = await GetWealthInfo(model),
             }
         );
 

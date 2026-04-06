@@ -4,30 +4,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Characters.Repository.Wealth;
 
-public class WealthRepository(
-    ExpressedRealmsDbContext context,
-    CancellationToken cancellationToken) : IWealthRepository
+public class WealthRepository(ExpressedRealmsDbContext context, CancellationToken cancellationToken)
+    : IWealthRepository
 {
     public async Task<WealthInfoDto> GetWealthInfoAsync(int characterId)
     {
         var targetBlessings = new List<string>() { "Destitute", "Wealthy" };
 
         var blessings = await context
-            .CharacterBlessingMappings
-            .Where(x => x.CharacterId == characterId && targetBlessings.Contains(x.Blessing.Name))
-            .Select(x => new
-            {
-                Name = x.Blessing.Name,
-                LevelName = x.BlessingLevel.Level,
-            })
+            .CharacterBlessingMappings.Where(x =>
+                x.CharacterId == characterId && targetBlessings.Contains(x.Blessing.Name)
+            )
+            .Select(x => new { Name = x.Blessing.Name, LevelName = x.BlessingLevel.Level })
             .ToListAsync(cancellationToken);
-            
-        var destitute = blessings.FirstOrDefault(x =>
-            x.Name == "Destitute"
-        );
-        var wealthy = blessings.FirstOrDefault(x =>
-            x.Name == "Wealthy"
-        );
+
+        var destitute = blessings.FirstOrDefault(x => x.Name == "Destitute");
+        var wealthy = blessings.FirstOrDefault(x => x.Name == "Wealthy");
 
         var wealthLevel = 1;
         double incomeModifier = 1;
@@ -79,7 +71,7 @@ public class WealthRepository(
             0 => 0,
             1 => 50,
             2 => 100,
-            _ => Math.Pow(2, wealthLevel - 2) * 100
+            _ => Math.Pow(2, wealthLevel - 2) * 100,
         };
 
         var wealthIncome = sessionIncome * incomeModifier;
@@ -88,7 +80,7 @@ public class WealthRepository(
         {
             0 => 0,
             1 => 0,
-            _ => wealthIncome * 15
+            _ => wealthIncome * 15,
         };
 
         return new WealthInfoDto()
@@ -97,7 +89,7 @@ public class WealthRepository(
             WealthIncome = wealthIncome,
             BankedCash = wealthIncome * 30,
             Liquadation = liquidation,
-            InitialBasicItemIncome = wealthIncome * 3
+            InitialBasicItemIncome = wealthIncome * 3,
         };
     }
 }

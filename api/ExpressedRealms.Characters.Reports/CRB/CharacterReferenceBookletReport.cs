@@ -46,8 +46,20 @@ public static class CharacterReferenceBookletReport
             );
 
             // Add Staple Markers
-            TextPrintUtilities.Print90DegreeMessage(page, "— —", centerX, XUnitPt.FromInch(9.5), XBrushes.DimGray);
-            TextPrintUtilities.Print90DegreeMessage(page, "— —", centerX, XUnitPt.FromInch(5.5), XBrushes.DimGray);
+            TextPrintUtilities.Print90DegreeMessage(
+                page,
+                "— —",
+                centerX,
+                XUnitPt.FromInch(9.5),
+                XBrushes.DimGray
+            );
+            TextPrintUtilities.Print90DegreeMessage(
+                page,
+                "— —",
+                centerX,
+                XUnitPt.FromInch(5.5),
+                XBrushes.DimGray
+            );
         }
 
         if (document.AcroForm != null)
@@ -239,8 +251,17 @@ public static class CharacterReferenceBookletReport
         switch (expression)
         {
             case "Adepts":
-                TextPrintUtilities.PrintStatLabelInfo(page, "Chi", XUnitPt.FromInch(4.12), XUnitPt.FromInch(5.48));
-                TextPrintUtilities.PrintPPIdentifier(page, XUnitPt.FromInch(4.06), XUnitPt.FromInch(5.68));
+                TextPrintUtilities.PrintStatLabelInfo(
+                    page,
+                    "Chi",
+                    XUnitPt.FromInch(4.12),
+                    XUnitPt.FromInch(5.48)
+                );
+                TextPrintUtilities.PrintPPIdentifier(
+                    page,
+                    XUnitPt.FromInch(4.06),
+                    XUnitPt.FromInch(5.68)
+                );
                 TextPrintUtilities.PrintStatInfo(
                     page,
                     dataProficiencyInfo.Chi.ToString(),
@@ -255,7 +276,11 @@ public static class CharacterReferenceBookletReport
                     XUnitPt.FromInch(4.12),
                     XUnitPt.FromInch(5.48)
                 );
-                TextPrintUtilities.PrintPPIdentifier(page, XUnitPt.FromInch(4.06), XUnitPt.FromInch(5.68));
+                TextPrintUtilities.PrintPPIdentifier(
+                    page,
+                    XUnitPt.FromInch(4.06),
+                    XUnitPt.FromInch(5.68)
+                );
                 TextPrintUtilities.PrintStatInfo(
                     page,
                     dataProficiencyInfo.Noumenon.ToString(),
@@ -264,8 +289,17 @@ public static class CharacterReferenceBookletReport
                 );
                 break;
             case "Sorcerers":
-                TextPrintUtilities.PrintStatLabelInfo(page, "Mana", XUnitPt.FromInch(4.12), XUnitPt.FromInch(5.48));
-                TextPrintUtilities.PrintPPIdentifier(page, XUnitPt.FromInch(4.06), XUnitPt.FromInch(5.68));
+                TextPrintUtilities.PrintStatLabelInfo(
+                    page,
+                    "Mana",
+                    XUnitPt.FromInch(4.12),
+                    XUnitPt.FromInch(5.48)
+                );
+                TextPrintUtilities.PrintPPIdentifier(
+                    page,
+                    XUnitPt.FromInch(4.06),
+                    XUnitPt.FromInch(5.68)
+                );
                 TextPrintUtilities.PrintStatInfo(
                     page,
                     dataProficiencyInfo.Mana.ToString(),
@@ -274,8 +308,17 @@ public static class CharacterReferenceBookletReport
                 );
                 break;
             case "Sidhe":
-                TextPrintUtilities.PrintStatLabelInfo(page, "Essence", XUnitPt.FromInch(4.12), XUnitPt.FromInch(5.48));
-                TextPrintUtilities.PrintPPIdentifier(page, XUnitPt.FromInch(4.06), XUnitPt.FromInch(5.68));
+                TextPrintUtilities.PrintStatLabelInfo(
+                    page,
+                    "Essence",
+                    XUnitPt.FromInch(4.12),
+                    XUnitPt.FromInch(5.48)
+                );
+                TextPrintUtilities.PrintPPIdentifier(
+                    page,
+                    XUnitPt.FromInch(4.06),
+                    XUnitPt.FromInch(5.68)
+                );
                 TextPrintUtilities.PrintStatInfo(
                     page,
                     dataProficiencyInfo.Essence.ToString(),
@@ -284,10 +327,18 @@ public static class CharacterReferenceBookletReport
                 );
                 break;
             case "Aeternari":
-                TextPrintUtilities.PrintPPIdentifier(page, XUnitPt.FromInch(2.25), XUnitPt.FromInch(5.68));
+                TextPrintUtilities.PrintPPIdentifier(
+                    page,
+                    XUnitPt.FromInch(2.25),
+                    XUnitPt.FromInch(5.68)
+                );
                 break;
             case "Vampyres":
-                TextPrintUtilities.PrintPPIdentifier(page, XUnitPt.FromInch(2.76), XUnitPt.FromInch(5.68));
+                TextPrintUtilities.PrintPPIdentifier(
+                    page,
+                    XUnitPt.FromInch(2.76),
+                    XUnitPt.FromInch(5.68)
+                );
                 break;
         }
 
@@ -523,21 +574,66 @@ public static class CharacterReferenceBookletReport
             XUnitPt.FromInch(1.95),
             yPosition
         );
-        TextPrintUtilities.PrintSkills(page, skillInfo.MeleeOffense.ToString(), XUnitPt.FromInch(2.14), yPosition);
-        TextPrintUtilities.PrintSkills(page, skillInfo.ThrownWeapons.ToString(), XUnitPt.FromInch(2.32), yPosition);
-        TextPrintUtilities.PrintSkills(page, skillInfo.Marksmanship.ToString(), XUnitPt.FromInch(2.51), yPosition);
-        TextPrintUtilities.PrintSkills(page, skillInfo.Spellcasting.ToString(), XUnitPt.FromInch(2.70), yPosition);
-        TextPrintUtilities.PrintSkills(page, skillInfo.Projection.ToString(), XUnitPt.FromInch(2.89), yPosition);
+        TextPrintUtilities.PrintSkills(
+            page,
+            skillInfo.MeleeOffense.ToString(),
+            XUnitPt.FromInch(2.14),
+            yPosition
+        );
+        TextPrintUtilities.PrintSkills(
+            page,
+            skillInfo.ThrownWeapons.ToString(),
+            XUnitPt.FromInch(2.32),
+            yPosition
+        );
+        TextPrintUtilities.PrintSkills(
+            page,
+            skillInfo.Marksmanship.ToString(),
+            XUnitPt.FromInch(2.51),
+            yPosition
+        );
+        TextPrintUtilities.PrintSkills(
+            page,
+            skillInfo.Spellcasting.ToString(),
+            XUnitPt.FromInch(2.70),
+            yPosition
+        );
+        TextPrintUtilities.PrintSkills(
+            page,
+            skillInfo.Projection.ToString(),
+            XUnitPt.FromInch(2.89),
+            yPosition
+        );
         TextPrintUtilities.PrintSkills(
             page,
             skillInfo.HandToHandDefense.ToString(),
             XUnitPt.FromInch(3.09),
             yPosition
         );
-        TextPrintUtilities.PrintSkills(page, skillInfo.MeleeDefense.ToString(), XUnitPt.FromInch(3.26), yPosition);
-        TextPrintUtilities.PrintSkills(page, skillInfo.Acrobatics.ToString(), XUnitPt.FromInch(3.43), yPosition);
-        TextPrintUtilities.PrintSkills(page, skillInfo.Spellwarding.ToString(), XUnitPt.FromInch(3.62), yPosition);
-        TextPrintUtilities.PrintSkills(page, skillInfo.Deflection.ToString(), XUnitPt.FromInch(3.81), yPosition);
+        TextPrintUtilities.PrintSkills(
+            page,
+            skillInfo.MeleeDefense.ToString(),
+            XUnitPt.FromInch(3.26),
+            yPosition
+        );
+        TextPrintUtilities.PrintSkills(
+            page,
+            skillInfo.Acrobatics.ToString(),
+            XUnitPt.FromInch(3.43),
+            yPosition
+        );
+        TextPrintUtilities.PrintSkills(
+            page,
+            skillInfo.Spellwarding.ToString(),
+            XUnitPt.FromInch(3.62),
+            yPosition
+        );
+        TextPrintUtilities.PrintSkills(
+            page,
+            skillInfo.Deflection.ToString(),
+            XUnitPt.FromInch(3.81),
+            yPosition
+        );
 
         MergeField(fields, "H2hOffenseLevel", skillInfo.HandToHandOffense.ToString());
         MergeField(fields, "MeleeOffenseLevel", skillInfo.MeleeOffense.ToString());

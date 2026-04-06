@@ -51,7 +51,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                 {
                     CharacterId = model.CharacterId,
                     IsFiveByThree = false,
-                    IncludeWealthCard = true
+                    IncludeWealthCard = true,
                 }
             );
 

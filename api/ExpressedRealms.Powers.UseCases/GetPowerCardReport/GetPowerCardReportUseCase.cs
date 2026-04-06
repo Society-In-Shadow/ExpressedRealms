@@ -13,7 +13,8 @@ public class GetPowerCardReportUseCase(
     {
         var data = await repository.GetPowerPathAndPowers(model.ExpressionId);
         var expression = await expressionRepository.GetExpression(model.ExpressionId);
-        var cardData = data.Value.SelectMany(x =>
+        var cardData = data
+            .Value.SelectMany(x =>
                 x.Powers.Select(y => new PowerCardData()
                     {
                         AreaOfEffect = y.AreaOfEffect.Name,
@@ -43,11 +44,9 @@ public class GetPowerCardReportUseCase(
             )
             .ToList();
         var reportStream = PowerCardReport.GenerateSixUpPdf(
-            cardData.Select(x => new DataCard()
-            {
-                CardType = CardType.PowerCard,
-                CardData = x
-            }).ToList(),
+            cardData
+                .Select(x => new DataCard() { CardType = CardType.PowerCard, CardData = x })
+                .ToList(),
             model.IsFiveByThree
         );
 

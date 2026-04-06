@@ -41,11 +41,9 @@ var powerCardFaker = new Faker<PowerCardData>()
 // Generate a list of fake cards
 var cards = powerCardFaker.Generate(25);
 
-var generatedCards = cards.Select(x => new DataCard()
-{
-    CardType = CardType.PowerCard,
-    CardData = x
-}).ToList();
+var generatedCards = cards
+    .Select(x => new DataCard() { CardType = CardType.PowerCard, CardData = x })
+    .ToList();
 
 var report = PowerCardReport.GenerateReport(generatedCards, true);
 
