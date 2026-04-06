@@ -1,5 +1,5 @@
-using ExpressedRealms.Blessings.Repository.CharacterBlessings;
 using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.Characters.Repository.Wealth;
 using ExpressedRealms.Powers.Reporting.powerCards;
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes;
 using ExpressedRealms.Powers.Repository.CharacterPower;
@@ -13,7 +13,7 @@ public class GetCharacterPowerCardReportUseCase(
     IPowerPathRepository repository,
     ICharacterRepository characterRepository,
     ICharacterPowerRepository mappingRepository,
-    ICharacterBlessingRepository blessingRepository,
+    IWealthRepository wealthRepository,
     GetCharacterPowerCardReportModelValidator validator,
     CancellationToken cancellationToken
 ) : IGetCharacterPowerCardReportUseCase
@@ -95,87 +95,18 @@ public class GetCharacterPowerCardReportUseCase(
     private async Task CalculateWealthCardData(GetCharacterPowerCardReportModel model, List<DataCard> cards)
     {
         // Grab Blessings
-        var blessings = await blessingRepository.GetBlessingsForCharacter(model.CharacterId);
-            
-        var destitute = blessings.FirstOrDefault(x =>
-            x.Name == "Destitute"
-        );
-        var wealthy = blessings.FirstOrDefault(x =>
-            x.Name == "Wealthy"
-        );
-            
-        var wealthLevel = 1;
-        double incomeModifier = 1;
-
-        if (destitute is not null)
-        {
-            switch (destitute.LevelName)
-            {
-                case "2pt":
-                    incomeModifier = 0.75;
-                    break;
-                case "4pt":
-                    incomeModifier = 0.5;
-                    break;
-                case "6pt":
-                    incomeModifier = 0.25;
-                    break;
-                case "8pt":
-                    wealthLevel = 0;
-                    incomeModifier = 0;
-                    break;
-            }
-        }
-
-        if (wealthy is not null)
-        {
-            switch (wealthy.LevelName)
-            {
-                case "2pt":
-                    wealthLevel = 3;
-                    break;
-                case "4pt":
-                    wealthLevel = 4;
-                    incomeModifier += 0.05;
-                    break;
-                case "6pt":
-                    wealthLevel = 5;
-                    incomeModifier += 0.1;
-                    break;
-                case "8pt":
-                    wealthLevel = 6;
-                    incomeModifier += 0.25;
-                    break;
-            }
-        }
-
-        var sessionIncome = wealthLevel switch
-        {
-            0 => 0,
-            1 => 50,
-            2 => 100,
-            _ => Math.Pow(2, wealthLevel - 2) * 100
-        };
-
-        var wealthIncome = sessionIncome * incomeModifier;
-
-        var liquidation = wealthLevel switch
-        {
-            0 => 0,
-            1 => 0,
-            _ => wealthIncome * 15
-        };
+        var wealthInfo = await wealthRepository.GetWealthInfoAsync(model.CharacterId);
 
         cards.Add(new DataCard()
         {
             CardType = CardTypeEnum.WealthCard,
             CardData = new WealthCardData()
             {
-                WealthIncome = wealthIncome,
-                BankedCash = wealthIncome * 30,
-                Liquadation = liquidation,
-                InitialBasicItemIncome = wealthIncome * 3,
-                WealthLevel = wealthLevel
+                WealthIncome = wealthInfo.WealthIncome,
+                BankedCash = wealthInfo.BankedCash,
+                Liquadation = wealthInfo.Liquadation,
+                InitialBasicItemIncome = wealthInfo.InitialBasicItemIncome,
+                WealthLevel = wealthInfo.WealthLevel,
             }
         });
     }

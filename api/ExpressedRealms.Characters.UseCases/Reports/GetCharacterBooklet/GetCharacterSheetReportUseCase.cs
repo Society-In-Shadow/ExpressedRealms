@@ -9,6 +9,7 @@ using ExpressedRealms.Characters.Repository.Proficiencies;
 using ExpressedRealms.Characters.Repository.Skills;
 using ExpressedRealms.Characters.Repository.Stats;
 using ExpressedRealms.Characters.Repository.Stats.Enums;
+using ExpressedRealms.Characters.Repository.Wealth;
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
@@ -29,6 +30,7 @@ public class GetCharacterSheetReportUseCase(
     ICharacterStatRepository statRepository,
     IContactRepository contactRepository,
     IEventCheckinRepository eventCheckinRepository,
+    IWealthRepository wealthRepository,
     GetCharacterSheetReportModelValidator validator,
     CancellationToken cancellationToken
 ) : IGetCharacterSheetReportUseCase
@@ -57,11 +59,23 @@ public class GetCharacterSheetReportUseCase(
                 ProficiencyInfo = await GetProficiencyInfo(model),
                 StatInfo = statInfo,
                 Contacts = await GetContactinfo(model),
+                WealthInfo = await GetWealthInfo(model)
             }
         );
 
         reportStream.Position = 0;
         return reportStream;
+    }
+
+    private async Task<WealthInfoDto> GetWealthInfo(GetCharacterSheetReportModel model)
+    {
+        var wealthInfo = await wealthRepository.GetWealthInfoAsync(model.CharacterId);
+
+        return new WealthInfoDto()
+        {
+            WealthIncome = wealthInfo.WealthIncome,
+            WealthLevel = wealthInfo.WealthLevel,
+        };
     }
 
     private async Task<StatModifierInfo> GetStatModifierInfo(GetCharacterSheetReportModel model)

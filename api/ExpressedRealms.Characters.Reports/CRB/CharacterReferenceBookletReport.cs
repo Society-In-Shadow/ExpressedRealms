@@ -65,7 +65,7 @@ public static class CharacterReferenceBookletReport
 
             FillInKnowledges(data.Knowledges, document);
             FillInAdminKnowledges(data.Knowledges, document);
-            RechargePage.FillInRechargePage(data.BasicInfo, data.Traits, data.BasicInfo, document);
+            RechargePage.FillInRechargePage(data, document);
         }
 
         document.Flatten();

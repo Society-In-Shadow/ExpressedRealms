@@ -1,3 +1,4 @@
+using ExpressedRealms.Characters.Reports.CRB.Data;
 using ExpressedRealms.Characters.Reports.CRB.Data.SupportingData;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
@@ -7,29 +8,27 @@ namespace ExpressedRealms.Characters.Reports.CRB.CrbPages;
 internal static class RechargePage
 {
     public static void FillInRechargePage(
-        BasicInfo dataBasicInfo,
-        Traits dataTraits,
-        BasicInfo basicInfo,
+        ReportData reportData,
         PdfDocument document
     )
     {
         var page = document.Pages[0];
-        var characterLevel = int.Parse(dataBasicInfo.CharacterLevel);
+        var characterLevel = int.Parse(reportData.BasicInfo.CharacterLevel);
 
         // Free PP / Recharges per day
         var recharges = characterLevel / 2 + 1;
         var pool = 12;
 
-        var energeticallyInfused = dataTraits.Advantages.FirstOrDefault(x =>
+        var energeticallyInfused = reportData.Traits.Advantages.FirstOrDefault(x =>
             x.Name == "Energetically Infused"
         );
-        var weakenedConnection = dataTraits.Disadvantages.FirstOrDefault(x =>
+        var weakenedConnection = reportData.Traits.Disadvantages.FirstOrDefault(x =>
             x.Name == "Weakened Connection to Pryma"
         );
-        var notorious = dataTraits.Disadvantages.FirstOrDefault(x =>
+        var notorious = reportData.Traits.Disadvantages.FirstOrDefault(x =>
             x.Name == "Notorious / Gossip Magnet"
         );
-        var disowned = dataTraits.Disadvantages.FirstOrDefault(x =>
+        var disowned = reportData.Traits.Disadvantages.FirstOrDefault(x =>
             x.Name == "Disowned / Disfavored"
         );
 
@@ -77,15 +76,18 @@ internal static class RechargePage
             }
         }
 
-        var powerType = GetPowerPointTypeForExpressionName(basicInfo);
+        var powerType = GetPowerPointTypeForExpressionName(reportData.BasicInfo);
 
         TextPrintUtilities.PrintStatInfo(page, powerType, XUnitPt.FromInch(0.47), XUnitPt.FromInch(9.00));
 
         TextPrintUtilities.PrintStatInfo(page, recharges.ToString(), XUnitPt.FromInch(0.47), XUnitPt.FromInch(7.79));
         TextPrintUtilities.PrintStatInfo(page, pool.ToString(), XUnitPt.FromInch(0.47), XUnitPt.FromInch(6.96));
+        
+        TextPrintUtilities.PrintStatInfo(page, reportData.WealthInfo.WealthLevel.ToString(), XUnitPt.FromInch(3.02), XUnitPt.FromInch(5.88));
+        TextPrintUtilities.PrintStatInfo(page, reportData.WealthInfo.WealthIncome.ToString("C0"), XUnitPt.FromInch(3.02), XUnitPt.FromInch(5.01));
 
         // Day 1
-        if (basicInfo.CurrentDay > 1)
+        if (reportData.BasicInfo.CurrentDay > 1)
         {
             GenerateRechargeBoxes(page, 0, XUnitPt.FromInch(0.8), XUnitPt.FromInch(9.92));
             GenerateRechargePoolBoxes(page, 0, XUnitPt.FromInch(0.8), XUnitPt.FromInch(7.32));
@@ -97,7 +99,7 @@ internal static class RechargePage
         }
 
         // Day 2
-        if (basicInfo.CurrentDay > 2)
+        if (reportData.BasicInfo.CurrentDay > 2)
         {
             GenerateRechargeBoxes(page, 0, XUnitPt.FromInch(1.65), XUnitPt.FromInch(9.92));
             GenerateRechargePoolBoxes(page, 0, XUnitPt.FromInch(1.65), XUnitPt.FromInch(7.32));
