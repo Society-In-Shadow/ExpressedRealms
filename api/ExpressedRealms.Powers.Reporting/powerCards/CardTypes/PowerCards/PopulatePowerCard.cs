@@ -7,12 +7,12 @@ namespace ExpressedRealms.Powers.Reporting.powerCards.CardTypes.PowerCards;
 
 internal static class PopulatePowerCard
 {
-    public static void FillPowerCard(
+    public static void FillCard(
         ColumnDescriptor card,
-        PowerCardData power,
-        Color secondaryColor
+        PowerCardData power
     )
     {
+        var secondaryColor = Color.FromARGB(125, 0, 0, 0);
         card.Item()
             .Padding(15)
             .Decoration(decorator =>

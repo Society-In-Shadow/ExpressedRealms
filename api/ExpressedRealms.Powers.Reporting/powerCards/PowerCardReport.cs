@@ -1,3 +1,4 @@
+using ExpressedRealms.Powers.Reporting.powerCards.CardTypes;
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.PowerCards;
 using PdfSharp;
 using PdfSharp.Drawing;
@@ -117,7 +118,6 @@ public static class PowerCardReport
 
     private static Document GetSingleTilePerPage(List<DataCard> powerCards, bool isFiveByThree)
     {
-        var secondaryColor = Color.FromARGB(125, 0, 0, 0);
         return Document.Create(container =>
         {
             container.Page(page =>
@@ -144,7 +144,7 @@ public static class PowerCardReport
                             switch (card.CardType)
                             {
                                 case CardTypeEnum.PowerCard:
-                                    PopulatePowerCard.FillPowerCard(col, (PowerCardData)card.CardData, secondaryColor);
+                                    PopulatePowerCard.FillCard(col, (PowerCardData)card.CardData);
                                     break;
                                 case CardTypeEnum.WealthCard:
                                     break;
