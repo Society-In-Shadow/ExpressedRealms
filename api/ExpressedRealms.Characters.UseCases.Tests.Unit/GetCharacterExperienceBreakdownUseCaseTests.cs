@@ -83,7 +83,6 @@ public class GetCharacterExperienceBreakdownUseCaseTests
             )
             .Returns(1);
 
-
         A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId)).Returns(true);
 
         A.CallTo(() => _xpRepository.GetCharacterXpMappings(_model.CharacterId)).Returns(_xpItems);
