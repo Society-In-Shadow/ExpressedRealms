@@ -6,7 +6,6 @@ using PdfSharp.Fonts;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.AcroForms;
 using PdfSharp.Pdf.IO;
-using QRCoder;
 using QuestPDF;
 using QuestPDF.Infrastructure;
 
@@ -465,79 +464,7 @@ public static class CharacterReferenceBookletReport
         MergeField(fields, "Subtype", basicInfo.ProgressionPath);
         MergeField(fields, "XL", basicInfo.CharacterLevel);
 
-        var page = document.Pages[0];
-        var anchor = document.AcroForm.Fields["QrAnchor"] as PdfTextField;
-
-        if (anchor == null)
-            throw new InvalidOperationException("QrAnchor field not found.");
-
-        PdfDictionary? widget;
-
-        // Try /Kids first
-        var kids = anchor.Elements["/Kids"] as PdfArray;
-
-        if (kids != null && kids.Elements.Count > 0)
-        {
-            widget = kids.Elements[0] as PdfDictionary;
-        }
-        else
-        {
-            // Field itself is the widget
-            widget = anchor;
-        }
-
-        if (widget == null)
-            throw new InvalidOperationException("QrAnchor field not found.");
-
-        var rect = widget.Elements.GetRectangle("/Rect");
-
-        var x = XUnitPt.FromPoint(rect.X1);
-        var y = XUnitPt.FromPoint(page.Height.Point - rect.Y2);
-        var width = XUnitPt.FromPoint(rect.Width);
-        var height = XUnitPt.FromPoint(rect.Height);
-
-        using var gfx = XGraphics.FromPdfPage(page);
-
-        DrawQrCode(gfx, basicInfo.LookupId, x, y, width, height);
-    }
-
-    private static void DrawQrCode(
-        XGraphics gfx,
-        string content,
-        XUnitPt x,
-        XUnitPt y,
-        XUnitPt width,
-        XUnitPt height
-    )
-    {
-        using var generator = new QRCodeGenerator();
-        using var data = generator.CreateQrCode(content, QRCodeGenerator.ECCLevel.H);
-
-        var matrix = data.ModuleMatrix;
-        var modules = matrix.Count;
-
-        double moduleSize = XUnitPt.FromPoint(Math.Min(width, height) / modules);
-
-        // Center inside bounds
-        var offsetX = x + (width - modules * moduleSize) / 2;
-        var offsetY = y + (height - modules * moduleSize) / 2;
-
-        for (int row = 0; row < modules; row++)
-        {
-            for (int col = 0; col < modules; col++)
-            {
-                if (matrix[row][col])
-                {
-                    gfx.DrawRectangle(
-                        XBrushes.Black,
-                        XUnitPt.FromPoint(offsetX + col * moduleSize),
-                        XUnitPt.FromPoint(offsetY + row * moduleSize),
-                        XUnitPt.FromPoint(moduleSize),
-                        XUnitPt.FromPoint(moduleSize)
-                    );
-                }
-            }
-        }
+        
     }
 
     private static void FillInTraits(PdfAcroField.PdfAcroFieldCollection fields, Traits traits)
