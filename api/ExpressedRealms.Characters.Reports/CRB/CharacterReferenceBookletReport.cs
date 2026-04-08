@@ -65,7 +65,7 @@ public static class CharacterReferenceBookletReport
         {
             var fields = document.AcroForm.Fields;
 
-            FillInBasicInfo(fields, data.BasicInfo, document);
+            FillInBasicInfo(fields, data.BasicInfo);
             FillInTraits(fields, data.Traits);
             FillInSkills(fields, data.SkillInfo, document);
             FillInPowers(data.Powers, document);
@@ -442,8 +442,7 @@ public static class CharacterReferenceBookletReport
 
     private static void FillInBasicInfo(
         PdfAcroField.PdfAcroFieldCollection fields,
-        BasicInfo basicInfo,
-        PdfDocument document
+        BasicInfo basicInfo
     )
     {
         MergeField(fields, "PlayerNumber", basicInfo.PlayerNumber);
