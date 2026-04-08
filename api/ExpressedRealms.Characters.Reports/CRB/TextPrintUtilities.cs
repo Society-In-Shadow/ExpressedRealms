@@ -6,6 +6,7 @@ namespace ExpressedRealms.Characters.Reports.CRB;
 internal static class TextPrintUtilities
 {
     public const string DefaultFontFace = "Liberation Sans";
+
     public static void Print90DegreeMessage(
         XGraphics gfx,
         string stampText,
@@ -48,12 +49,7 @@ internal static class TextPrintUtilities
         gfx.Restore();
     }
 
-    public static void PrintStatInfo(
-        PdfPage page,
-        string stampText,
-        double centerX,
-        double centerY
-    )
+    public static void PrintStatInfo(PdfPage page, string stampText, double centerX, double centerY)
     {
         using var gfx = XGraphics.FromPdfPage(page);
         var font = new XFont(DefaultFontFace, 10, XFontStyleEx.Regular);
