@@ -2,8 +2,6 @@ using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.DB.Models.Characters.XpTables;
 using ExpressedRealms.Events.API.Repositories.Events;
-using ExpressedRealms.FeatureFlags;
-using ExpressedRealms.FeatureFlags.FeatureClient;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
@@ -15,7 +13,6 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
     IAssignedXpMappingRepository assignedXpRepository,
     IEventRepository eventRepository,
     GetCharacterExperienceBreakdownModelValidator validator,
-    IFeatureToggleClient featureToggles,
     CancellationToken cancellationToken
 ) : IGetCharacterExperienceBreakdownUseCase
 {
@@ -37,10 +34,7 @@ internal sealed class GetCharacterExperienceBreakdownUseCase(
         var xpInfo = await xpRepository.GetCharacterXpMappings(model.CharacterId);
         var characterInfo = await characterRepository.FindCharacterAsync(model.CharacterId);
 
-        var showContactManagement = await featureToggles.HasFeatureFlag(
-            ReleaseFlags.ShowContactManagement
-        );
-        if (!showContactManagement || characterInfo!.IsInCharacterCreation)
+        if (characterInfo!.IsInCharacterCreation)
         {
             xpInfo = xpInfo.Where(x => x.SectionTypeId != (int)XpSectionTypes.Contacts).ToList();
         }
