@@ -21,14 +21,12 @@ import AdvantageStep from '@/components/characters/character/wizard/blessings/Ad
 import { characterStore } from '@/components/characters/character/stores/characterStore.ts'
 import DisadvantageStep from '@/components/characters/character/wizard/blessings/DisadvantageStep.vue'
 import ContactStep from '@/components/characters/character/wizard/contacts/ContactStep.vue'
-import { FeatureFlags, userStore } from '@/stores/userStore.ts'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
 const xpData = experienceStore()
 const route = useRoute()
 const router = useRouter()
 const characterInfo = characterStore()
-const userInfo = userStore()
 const isAdd = computed(() => route.name == 'addWizard')
 const wasAdd = ref(false)
 
@@ -73,7 +71,7 @@ async function fetchData() {
 
     sections.value.splice(0, 0, { name: 'Basic Info', isDisabled: false, component: defineAsyncComponent(async () => EditCharacterDetails) })
 
-    if (!characterInfo.isInCharacterCreation && await userInfo.hasFeatureFlag(FeatureFlags.ShowContactManagement))
+    if (!characterInfo.isInCharacterCreation)
       sections.value.splice(8, 0, { name: 'Contacts', isDisabled: false, component: defineAsyncComponent(async () => ContactStep) })
 
     await xpData.updateExperience(route.params.id)

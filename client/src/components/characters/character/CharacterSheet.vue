@@ -21,8 +21,6 @@ import { characterStore } from '@/components/characters/character/stores/charact
 import Message from 'primevue/message'
 import ReviewCharacter from '@/components/characters/character/xp/ReviewCharacter.vue'
 import ContactTab from '@/components/characters/character/contacts/ContactTab.vue'
-import { FeatureFlags, userStore } from '@/stores/userStore.ts'
-import { onBeforeMount, ref } from 'vue'
 import ApproveCharacterBanner from '@/components/conCheckin/support/ApproveCharacterBanner.vue'
 import DailyCheckin from '@/components/conCheckin/support/DailyCheckin.vue'
 import { useRoute } from 'vue-router'
@@ -31,14 +29,7 @@ import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 const userPermissionInfo = userPermissionStore()
 const permissionCheck = userPermissionInfo.permissionCheck
 const characterData = characterStore()
-const userData = userStore()
 const route = useRoute()
-
-const showContacts = ref(false)
-
-onBeforeMount(async () => {
-  showContacts.value = await userData.hasFeatureFlag(FeatureFlags.ShowContactManagement)
-})
 
 </script>
 
@@ -82,7 +73,7 @@ onBeforeMount(async () => {
           <Tab value="4">
             Advantages / Disadvantages
           </Tab>
-          <Tab v-if="showContacts" value="6">
+          <Tab value="6">
             Contacts
           </Tab>
           <Tab value="5">
@@ -111,7 +102,7 @@ onBeforeMount(async () => {
           <TabPanel value="4">
             <BlessingTab />
           </TabPanel>
-          <TabPanel v-if="showContacts" value="6">
+          <TabPanel value="6">
             <ContactTab />
           </TabPanel>
           <TabPanel value="5">

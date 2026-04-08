@@ -14,7 +14,6 @@ export const UserRoles = {
 export const FeatureFlags = {
   ShowMarketingContactUs: 'show-marketing-contact-us',
   ShowFactionDropdown: 'show-faction-dropdown',
-  ShowContactManagement: 'show-contact-management',
   ShowEventCheckin: 'show-event-checkin',
   ShowArchetypeSelection: 'show-archetype-selection',
 } as const
