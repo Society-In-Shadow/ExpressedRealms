@@ -1,20 +1,20 @@
-import {defineStore} from 'pinia'
+import { defineStore } from 'pinia'
 import axios from 'axios'
 import type {
-    CharacterKnowledge,
-    CharacterKnowledgeResponse,
-    KnowledgeOptionResponse,
-    KnowledgeOptions,
+  CharacterKnowledge,
+  CharacterKnowledgeResponse,
+  KnowledgeOptionResponse,
+  KnowledgeOptions,
 } from '@/components/characters/character/knowledges/types'
 import toaster from '@/services/Toasters'
 import type {
-    CharacterKnowledgeForm,
+  CharacterKnowledgeForm,
 } from '@/components/characters/character/knowledges/validations/knowledgeValidations'
 import type {
-    SpecializationForm,
+  SpecializationForm,
 } from '@/components/characters/character/knowledges/validations/specializationValidations'
-import {experienceStore} from '@/components/characters/character/stores/experienceBreakdownStore.ts'
-import {wizardContentStore} from '@/components/characters/character/wizard/stores/wizardContentStore.ts'
+import { experienceStore } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
+import { wizardContentStore } from '@/components/characters/wizard/stores/wizardContentStore.ts'
 
 const experienceInfo = experienceStore()
 const wizardContentInfo = wizardContentStore()

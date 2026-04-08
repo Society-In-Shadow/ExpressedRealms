@@ -4,10 +4,10 @@ import Button from 'primevue/button'
 import Card from 'primevue/card'
 import type { PrimaryCharacter } from '@/components/admin/characterList/types.ts'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
 import { adminXpScheduleDialogs } from '@/components/admin/assignedXp/services/dialogs.ts'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 import { adminCharacterListStore } from '@/components/admin/characterList/stores/characterListStore.ts'
+import { downloadFile } from '@/utilities/downloadUtility.ts'
 
 const userPermissionInfo = userPermissionStore()
 const permissionCheck = userPermissionInfo.permissionCheck
@@ -27,17 +27,7 @@ async function redirectToCharacterSheet() {
 }
 
 async function downloadCharacterBooklet(characterId: number, characterName: string, playerName: string) {
-  const res = await axios.get(`/characters/${characterId}/getcrb`, {
-    responseType: 'blob',
-  })
-  const url = URL.createObjectURL(res.data)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = `${characterName} - ${playerName} - CRB.pdf`
-  document.body.appendChild(a)
-  a.click()
-  a.remove()
-  URL.revokeObjectURL(url)
+  await downloadFile(`/characters/${characterId}/getcrb`, `${characterName} - ${playerName} - CRB.pdf`)
   await characterListInfo.fetchCharacters()
 }
 

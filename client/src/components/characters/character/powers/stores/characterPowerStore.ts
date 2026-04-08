@@ -1,15 +1,15 @@
-import {defineStore} from 'pinia'
+import { defineStore } from 'pinia'
 import axios from 'axios'
 import toaster from '@/services/Toasters'
 import type {
-    CharacterPowerOptionsResponse,
-    CharacterPowerResponse,
-    PowerPath,
+  CharacterPowerOptionsResponse,
+  CharacterPowerResponse,
+  PowerPath,
 } from '@/components/characters/character/powers/types.ts'
-import type {CharacterPowerForm} from '@/components/characters/character/powers/validations/powerValidations.ts'
-import {characterStore} from '@/components/characters/character/stores/characterStore.ts'
-import {experienceStore} from '@/components/characters/character/stores/experienceBreakdownStore.ts'
-import {wizardContentStore} from '@/components/characters/character/wizard/stores/wizardContentStore.ts'
+import type { CharacterPowerForm } from '@/components/characters/character/powers/validations/powerValidations.ts'
+import { characterStore } from '@/components/characters/character/stores/characterStore.ts'
+import { experienceStore } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
+import { wizardContentStore } from '@/components/characters/wizard/stores/wizardContentStore.ts'
 
 const experienceInfo = experienceStore()
 const wizardContentInfo = wizardContentStore()

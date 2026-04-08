@@ -1,3 +1,4 @@
+using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Players;
 using ExpressedRealms.Characters.Repository.Proficiencies;
@@ -8,7 +9,9 @@ using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.Events.API.UseCases.EventCheckin.ApproveStageAndSendMessages;
 using ExpressedRealms.Powers.UseCases.GetCharacterPowerCardReport;
+using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.UseCases.Shared;
+using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FluentResults;
 using JetBrains.Annotations;
 using PdfSharp;
@@ -27,6 +30,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
         ICharacterRepository characterRepository,
         IXpRepository xpRepository,
         IApproveStageAndSendMessageUseCase sendMessageUseCase,
+        IUserContext userContext,
         GetCharacterBookletModelValidator validator,
         CancellationToken cancellationToken
     ) : IGetCharacterBookletUseCase
@@ -41,6 +45,22 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
 
             if (result.IsFailed)
                 return Result.Fail(result.Errors);
+
+            var character = await characterRepository.FindCharacterAsync(model.CharacterId);
+
+            var canDownloadAllCrbs = userContext.CurrentUserHasPermission(
+                Permissions.CharacterManagement.DownloadAllCrbs
+            );
+            var canDownloadPrimaryCharacterCrbs =
+                character!.IsPrimaryCharacter
+                && userContext.CurrentUserHasPermission(
+                    Permissions.CharacterManagement.ViewCharacterSheet
+                );
+
+            if (!canDownloadAllCrbs && !canDownloadPrimaryCharacterCrbs)
+            {
+                return Result.Fail(new UnauthorizedError());
+            }
 
             var crb = await crbReport.ExecuteAsync(
                 new GetCharacterSheetReportModel() { CharacterId = model.CharacterId }

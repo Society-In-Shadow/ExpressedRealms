@@ -1,5 +1,5 @@
 /*
-import addUserProfile from "../../../../src/components/characters/character/wizard/basicInfo/AddCharacter.vue";
+import addUserProfile from "../../../../src/components/characters/wizard/basicInfo/AddCharacter.vue";
 
 const name = 'name';
 const nameHelp = 'name-help';

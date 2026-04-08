@@ -30,7 +30,15 @@ public static partial class Permissions
             Id = new Guid("019cc77c-8ea7-7fb1-980b-2d073d576c48"),
             Name = nameof(ViewCharacterSheet),
             Description =
-                "Allows one to pull up the primary character sheet for a user and download CRBs",
+                "Allows one to pull up the primary character sheet for a user and download their CRBs",
+        };
+
+        public static readonly Permission DownloadAllCrbs = new(ResourceInfo)
+        {
+            Id = new Guid("019d6c19-a944-70f3-b083-0ccf41933128"),
+            Name = nameof(DownloadAllCrbs),
+            Description =
+                "Shows Download CRB Button on any character in the tool.  Primarily used for debugging purposes.",
         };
     }
 }

@@ -22,6 +22,10 @@ public static class ValidationHelper
 
         var errors = new List<IError>();
 
+        var unAuthorizedErrors = validationResult.Errors.Where(x => x.ErrorCode == "UnAuthorized");
+        errors.AddRange(unAuthorizedErrors.Select(x => new UnauthorizedError(x.ErrorMessage)));
+        validationResult.Errors.RemoveAll(x => x.ErrorCode == "UnAuthorized");
+
         var notFoundErrors = validationResult.Errors.Where(x => x.ErrorCode == "NotFound");
         errors.AddRange(
             notFoundErrors.Select(x => new NotFoundFailure(x.PropertyName, x.ErrorMessage))

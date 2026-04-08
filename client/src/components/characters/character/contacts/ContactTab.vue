@@ -2,13 +2,13 @@
 
 import { onBeforeMount } from 'vue'
 import { useRoute } from 'vue-router'
-import { contactStore } from '@/components/characters/character/wizard/contacts/stores/contactStore.ts'
+import { contactStore } from '@/components/characters/wizard/contacts/stores/contactStore.ts'
 import AccordionPanel from 'primevue/accordionpanel'
 import Accordion from 'primevue/accordion'
 import AccordionContent from 'primevue/accordioncontent'
 import AccordionHeader from 'primevue/accordionheader'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
-import type { ContactCharacterSheet } from '@/components/characters/character/wizard/contacts/types.ts'
+import type { ContactCharacterSheet } from '@/components/characters/wizard/contacts/types.ts'
 import Button from 'primevue/button'
 import { characterStore } from '@/components/characters/character/stores/characterStore.ts'
 
