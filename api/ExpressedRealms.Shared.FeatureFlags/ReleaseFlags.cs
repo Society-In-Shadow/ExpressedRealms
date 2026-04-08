@@ -30,12 +30,6 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "Allows one to see the faction dropdown on the add / edit character page"
     );
 
-    public static readonly ReleaseFlags ShowEventCheckin = new(
-        "Show Event Checkin Related Functionality",
-        "show-event-checkin",
-        "Allows one to see contacts in character builder / sheet"
-    );
-
     public static readonly ReleaseFlags UseNewPrimaryXpCalculation = new(
         "Primary Characters Use New Xp Calculation",
         "use-new-xp-calculation",

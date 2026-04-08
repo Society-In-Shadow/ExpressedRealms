@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
 import { onBeforeMount, ref, watch } from 'vue'
-import { FeatureFlags, userStore } from '@/stores/userStore.ts'
 import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
 import { useRouter } from 'vue-router'
 import Stepper from 'primevue/stepper'
@@ -20,25 +19,21 @@ import DailyCheckin from '@/components/conCheckin/support/DailyCheckin.vue'
 
 const eventCheckinInfo = EventCheckinStore()
 const userPermission = userPermissionStore()
-const userInfo = userStore()
 const router = useRouter()
 const popups = confirmationPopups()
 
 const permissionCheck = userPermission.permissionCheck
-const hasCheckinFlag = ref(false)
 
 onBeforeMount(async () => {
   await eventCheckinInfo.getCheckinAvailable()
-  hasCheckinFlag.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowEventCheckin)
 
-  if (!hasCheckinFlag.value || !eventCheckinInfo.hasActiveEvent) {
+  if (!eventCheckinInfo.hasActiveEvent) {
     await router.push({ name: 'characters' })
   }
 })
 
 watch(() => eventCheckinInfo.isReset, (old, newValue) => {
   if (eventCheckinInfo.isReset) {
-    hasCheckinFlag.value = false
     stepperStep.value = '1'
   }
 })
