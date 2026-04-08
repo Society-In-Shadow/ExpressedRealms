@@ -30,12 +30,6 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "Allows one to see the faction dropdown on the add / edit character page"
     );
 
-    public static readonly ReleaseFlags UseNewPrimaryXpCalculation = new(
-        "Primary Characters Use New Xp Calculation",
-        "use-new-xp-calculation",
-        "Primary Characters will now base XP on assigned xp, not spent xp"
-    );
-
     public static readonly ReleaseFlags ShowArchetypeSelection = new(
         "Show Archetypes on Character Creation",
         "show-archetype-selection",

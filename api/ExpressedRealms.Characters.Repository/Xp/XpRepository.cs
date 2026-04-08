@@ -2,8 +2,6 @@ using ExpressedRealms.Characters.Repository.Xp.Dtos;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Models.Characters.XpTables;
 using ExpressedRealms.Events.API.Repositories.Events;
-using ExpressedRealms.FeatureFlags;
-using ExpressedRealms.FeatureFlags.FeatureClient;
 using ExpressedRealms.Repositories.Shared;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +12,6 @@ public class XpRepository(
     ExpressedRealmsDbContext context,
     IEventRepository eventRepository,
     IAssignedXpMappingRepository assignedXpRepository,
-    IFeatureToggleClient featureToggleClient,
     CancellationToken cancellationToken,
     IUserContext userContext
 ) : IXpRepository
@@ -71,10 +68,7 @@ public class XpRepository(
             return 0;
 
         var levelXp = 0;
-        if (
-            character.IsPrimaryCharacter
-            && await featureToggleClient.HasFeatureFlag(ReleaseFlags.UseNewPrimaryXpCalculation)
-        )
+        if (character.IsPrimaryCharacter)
         {
             var availableDate = DateOnly.FromDateTime(DateTime.UtcNow.AddMonths(1));
             levelXp = await context
