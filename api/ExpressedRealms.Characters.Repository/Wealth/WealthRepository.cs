@@ -80,14 +80,14 @@ public class WealthRepository(ExpressedRealmsDbContext context, CancellationToke
         {
             0 => 0,
             1 => 0,
-            _ => wealthIncome * 15,
+            _ => sessionIncome * 15,
         };
 
         return new WealthInfoDto()
         {
             WealthLevel = wealthLevel,
             WealthIncome = wealthIncome,
-            BankedCash = wealthIncome * 30,
+            BankedCash = sessionIncome * 30,
             Liquadation = liquidation,
             InitialBasicItemIncome = wealthIncome * 3,
         };
