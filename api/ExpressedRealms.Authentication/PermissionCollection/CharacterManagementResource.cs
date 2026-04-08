@@ -32,7 +32,7 @@ public static partial class Permissions
             Description =
                 "Allows one to pull up the primary character sheet for a user and download their CRBs",
         };
-        
+
         public static readonly Permission DownloadAllCrbs = new(ResourceInfo)
         {
             Id = new Guid("019d6c19-a944-70f3-b083-0ccf41933128"),

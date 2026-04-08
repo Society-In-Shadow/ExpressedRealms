@@ -79,10 +79,7 @@ public static class ResultOverrides
         return true;
     }
 
-    public static bool IsUnauthorized(
-        this Result result,
-        out UnauthorizedHttpResult typedResults
-    )
+    public static bool IsUnauthorized(this Result result, out UnauthorizedHttpResult typedResults)
     {
         typedResults = TypedResults.Unauthorized();
         return result.HasError<UnauthorizedError>();

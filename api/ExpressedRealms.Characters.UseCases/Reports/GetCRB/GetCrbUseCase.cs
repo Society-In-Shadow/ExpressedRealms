@@ -47,17 +47,21 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                 return Result.Fail(result.Errors);
 
             var character = await characterRepository.FindCharacterAsync(model.CharacterId);
-            
-            var canDownloadAllCrbs = userContext.CurrentUserHasPermission(Permissions.CharacterManagement.DownloadAllCrbs);
-            var canDownloadPrimaryCharacterCrbs = character!.IsPrimaryCharacter &&
-                                                  userContext.CurrentUserHasPermission(Permissions.CharacterManagement
-                                                      .ViewCharacterSheet);
-            
+
+            var canDownloadAllCrbs = userContext.CurrentUserHasPermission(
+                Permissions.CharacterManagement.DownloadAllCrbs
+            );
+            var canDownloadPrimaryCharacterCrbs =
+                character!.IsPrimaryCharacter
+                && userContext.CurrentUserHasPermission(
+                    Permissions.CharacterManagement.ViewCharacterSheet
+                );
+
             if (!canDownloadAllCrbs && !canDownloadPrimaryCharacterCrbs)
             {
                 return Result.Fail(new UnauthorizedError());
             }
-            
+
             var crb = await crbReport.ExecuteAsync(
                 new GetCharacterSheetReportModel() { CharacterId = model.CharacterId }
             );
