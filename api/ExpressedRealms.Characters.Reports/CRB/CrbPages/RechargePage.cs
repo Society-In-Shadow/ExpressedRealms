@@ -77,18 +77,12 @@ internal static class RechargePage
 
         GenerateRechargeBoxes(page, recharges, XUnitPt.FromInch(2.51), XUnitPt.FromInch(9.92));
         GenerateRechargePoolBoxes(page, pool, XUnitPt.FromInch(2.51), XUnitPt.FromInch(6.505));
-        
+
         DrawQrCode(reportData.BasicInfo.LookupId, document, page);
     }
 
-    
-    private static void DrawQrCode(
-        string content,
-        PdfDocument document,
-        PdfPage page
-    )
+    private static void DrawQrCode(string content, PdfDocument document, PdfPage page)
     {
-        
         var anchor = document.AcroForm.Fields["QrAnchor"] as PdfTextField;
 
         if (anchor == null)
@@ -121,7 +115,6 @@ internal static class RechargePage
 
         using var gfx = XGraphics.FromPdfPage(page);
 
-        
         using var generator = new QRCodeGenerator();
         using var data = generator.CreateQrCode(content, QRCodeGenerator.ECCLevel.H);
 
@@ -151,7 +144,7 @@ internal static class RechargePage
             }
         }
     }
-    
+
     private static int GetRechargesAndPool(
         ReportData reportData,
         int characterLevel,
