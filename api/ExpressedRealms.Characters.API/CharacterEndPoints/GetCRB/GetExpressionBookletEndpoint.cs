@@ -8,7 +8,7 @@ namespace ExpressedRealms.Characters.API.CharacterEndPoints.GetCRB;
 internal static class GetExpressionBookletEndpoint
 {
     internal static async Task<
-        Results<NotFound, FileStreamHttpResult, StatusCodeHttpResult, ValidationProblem>
+        Results<NotFound, FileStreamHttpResult, ValidationProblem, UnauthorizedHttpResult>
     > Execute(int characterId, IGetCharacterBookletUseCase repository)
     {
         var status = await repository.ExecuteAsync(
@@ -19,8 +19,8 @@ internal static class GetExpressionBookletEndpoint
             return validation;
         if (status.HasNotFound(out var notFound))
             return notFound;
-        if (status.HasBeenDeletedAlready(out var deletedAlready))
-            return deletedAlready;
+        if (status.IsUnauthorized(out var unauthorized))
+            return unauthorized;
         status.ThrowIfErrorNotHandled();
 
         return TypedResults.File(

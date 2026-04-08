@@ -79,6 +79,24 @@ public static class ResultOverrides
         return true;
     }
 
+    public static bool IsUnauthorized(
+        this Result result,
+        out UnauthorizedHttpResult typedResults
+    )
+    {
+        typedResults = TypedResults.Unauthorized();
+        return result.HasError<UnauthorizedError>();
+    }
+
+    public static bool IsUnauthorized<T>(
+        this Result<T> result,
+        out UnauthorizedHttpResult typedResults
+    )
+    {
+        typedResults = TypedResults.Unauthorized();
+        return result.HasError<UnauthorizedError>();
+    }
+
     public static bool HasBeenDeletedAlready(
         this Result result,
         out StatusCodeHttpResult typedResults
