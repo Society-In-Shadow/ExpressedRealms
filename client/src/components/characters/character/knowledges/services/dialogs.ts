@@ -1,10 +1,8 @@
-import {useDialog} from 'primevue/usedialog'
-import type {Knowledge} from '@/components/knowledges/types'
-import type {CharacterKnowledge, Specialization} from '@/components/characters/character/knowledges/types'
-import AddSpecializationKnowledge
-    from '@/components/characters/character/wizard/knowledges/AddSpecializationKnowledge.vue'
-import EditSpecializationKnowledge
-    from '@/components/characters/character/wizard/knowledges/EditSpecializationKnowledge.vue'
+import { useDialog } from 'primevue/usedialog'
+import type { Knowledge } from '@/components/knowledges/types'
+import type { CharacterKnowledge, Specialization } from '@/components/characters/character/knowledges/types'
+import AddSpecializationKnowledge from '@/components/characters/wizard/knowledges/AddSpecializationKnowledge.vue'
+import EditSpecializationKnowledge from '@/components/characters/wizard/knowledges/EditSpecializationKnowledge.vue'
 
 export const addKnowledgeDialog = () => {
   const dialog = useDialog()

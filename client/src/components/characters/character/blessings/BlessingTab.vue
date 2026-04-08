@@ -1,12 +1,10 @@
 <script setup lang="ts">
 
-import {onBeforeMount, ref} from 'vue'
-import {useRoute} from 'vue-router'
-import {
-  characterBlessingsStore,
-} from '@/components/characters/character/wizard/blessings/stores/characterBlessingStore.ts'
+import { onBeforeMount, ref } from 'vue'
+import { useRoute } from 'vue-router'
+import { characterBlessingsStore } from '@/components/characters/wizard/blessings/stores/characterBlessingStore.ts'
 import BlessingAccordion from '@/components/characters/character/blessings/BlessingAccordion.vue'
-import type {CharacterBlessingTypes} from '@/components/characters/character/wizard/blessings/types.ts'
+import type { CharacterBlessingTypes } from '@/components/characters/wizard/blessings/types.ts'
 
 const characterBlessingData = characterBlessingsStore()
 const route = useRoute()

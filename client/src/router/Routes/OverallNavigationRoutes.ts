@@ -28,12 +28,12 @@ export const OverallRoutes = {
     {
       path: '/characters/wizard',
       name: 'addWizard',
-      component: () => import('./../../components/characters/character/wizard/CharacterWizard.vue'),
+      component: () => import('./../../components/characters/wizard/CharacterWizard.vue'),
     },
     {
       path: '/characters/:id/wizard',
       name: 'characterWizard',
-      component: () => import('./../../components/characters/character/wizard/CharacterWizard.vue'),
+      component: () => import('./../../components/characters/wizard/CharacterWizard.vue'),
     },
     {
       path: '/rulebook/:slug',

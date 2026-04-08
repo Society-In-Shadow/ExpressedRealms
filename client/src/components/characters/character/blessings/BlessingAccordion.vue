@@ -4,7 +4,7 @@ import AccordionHeader from 'primevue/accordionheader'
 import Accordion from 'primevue/accordion'
 import AccordionPanel from 'primevue/accordionpanel'
 import AccordionContent from 'primevue/accordioncontent'
-import type {CharacterBlessing} from '@/components/characters/character/wizard/blessings/types.ts'
+import type { CharacterBlessing } from '@/components/characters/wizard/blessings/types.ts'
 
 const props = defineProps({
   blessings: {

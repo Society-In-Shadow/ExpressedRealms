@@ -1,0 +1,26 @@
+<script setup lang="ts">
+
+import Drawer from 'primevue/drawer'
+import Card from 'primevue/card'
+import { breakpointsBootstrapV5, useBreakpoints } from '@vueuse/core'
+import { wizardContentStore } from '@/components/characters/wizard/stores/wizardContentStore.ts'
+
+const wizardContentInfo = wizardContentStore()
+const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5)
+const isMobile = activeBreakpoint.smaller('md')
+
+</script>
+
+<template>
+  <Drawer v-if="isMobile" v-model:visible="wizardContentInfo.showContent" :header="wizardContentInfo.contentComponent.headerName" position="full">
+    <component :is="wizardContentInfo.contentComponent.component" v-bind="wizardContentInfo.contentComponent.props" />
+  </Drawer>
+  <Card v-else>
+    <template #content>
+      <div v-if="!wizardContentInfo.contentComponent">
+        Choose an item to get started!
+      </div>
+      <component :is="wizardContentInfo.contentComponent.component" v-else v-bind="wizardContentInfo.contentComponent.props" />
+    </template>
+  </Card>
+</template>
