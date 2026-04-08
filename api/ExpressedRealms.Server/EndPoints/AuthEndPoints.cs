@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
@@ -15,9 +16,7 @@ internal static class AuthEndPoints
             .WithTags("Authentication");
 
         endpointGroup.MapIdentityApi<User>();
-        endpointGroup.MapGet("/check", (HttpContext ctx) => ctx.User?.Identity?.IsAuthenticated == true
-            ? Results.Ok()
-            : Results.Unauthorized());
+        endpointGroup.MapGet("/check", [Authorize] () => Results.Ok());
         endpointGroup.MapPost("/logoff", (HttpContext httpContext) => Results.SignOut());
         endpointGroup
             .MapGet(
