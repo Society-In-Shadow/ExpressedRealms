@@ -6,6 +6,9 @@ import { OverallRoutes } from '@/router/Routes/OverallNavigationRoutes'
 import { PublicRoutes } from '@/router/Routes/PublicRoutes'
 import { type UserPermission } from '@/types/UserPermissions.ts'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+import { useQuery, useQueryCache } from '@pinia/colada'
+import { userInfoQuery } from '@/auth/authStore.ts'
+import { SetupState } from '@/auth/types.ts'
 
 export const routes = [
   PublicRoutes,
@@ -26,7 +29,11 @@ routerSetup.beforeEach(async (to) => {
   const userInfo = userStore()
   const userPermissions = userPermissionStore()
 
-  const loggedIn = userInfo.isLoggedIn()
+  const queryCache = useQueryCache()
+  await queryCache.refresh(queryCache.ensure(userInfoQuery))
+  const { data } = useQuery(userInfoQuery)
+
+  const loggedIn = data.value?.userInfo !== null
   const routeName: string = to.name as string
 
   // Initialize routes on first navigation
@@ -40,24 +47,23 @@ routerSetup.beforeEach(async (to) => {
   }
 
   if (loggedIn) {
+    if (data.value!.userInfo!.setupState == SetupState.UnconfirmedEmail
+      && routeName !== 'pleaseConfirmEmail' && routeName !== 'confirmAccount') {
+      return { name: 'pleaseConfirmEmail' }
+    }
+
+    if (data.value!.userInfo!.setupState == SetupState.SetProfileName
+      && routeName !== 'setupProfile') {
+      return { name: 'setupProfile' }
+    }
+
     if (!userInfoInitialized) {
-      await userInfo.getUserInfo()
       await userInfo.updateUserRoles()
       await userPermissions.updateUserPermissions()
       userInfoInitialized = true
     }
 
-    if (userInfo.hasStepsToComplete()) {
-      if (userInfo.userNextStepUrl(routeName) == routeName)
-        return
-
-      return { name: userInfo.userNextStepUrl(routeName) }
-    }
-
-    // if they are on the login page, redirect them to the characters page
-    // Also, if they landed on a setup page, redirect them to characters as the
-    // above statement should have handled that redirect
-    if (to.meta.isUserSetup) {
+    if (to.meta.isUserSetup && data.value!.userInfo!.setupState == SetupState.Done) {
       return { name: 'characters' }
     }
 

@@ -3,10 +3,12 @@
 import { nextTick, onMounted } from 'vue'
 import { publicExpressionsStore } from '@/components/public/stores/publicExpressionStore'
 import { makeIdSafe } from '@/utilities/stringUtilities'
-import { userStore } from '@/stores/userStore.ts'
+import { useQuery } from '@pinia/colada'
+import { userInfoQuery } from '@/auth/authStore.ts'
 
 const store = publicExpressionsStore()
-const userData = userStore()
+
+const { data } = useQuery(userInfoQuery)
 
 onMounted(async () => {
   await store.getExpressions()
@@ -30,7 +32,7 @@ onMounted(async () => {
       <p>
         {{ expression.description }}
       </p>
-      <p v-if="userData.isLoggedIn()">
+      <p v-if="data?.userInfo !== null">
         For full background and information, please see <a :href="`/expressions/${expression.name.toLowerCase()}`">{{ expression.name }}</a>.
       </p>
       <p v-else>

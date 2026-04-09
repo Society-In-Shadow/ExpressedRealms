@@ -8,10 +8,11 @@ import { onBeforeMount, ref } from 'vue'
 import Message from 'primevue/message'
 import { useRoute, useRouter } from 'vue-router'
 import InputTextWrapper from '@/FormWrappers/InputTextWrapper.vue'
-import { userStore } from '@/stores/userStore.ts'
+import { useQuery } from '@pinia/colada'
+import { userInfoQuery } from '@/auth/authStore.ts'
 
 const router = useRouter()
-const userInfo = userStore()
+const { refetch } = useQuery(userInfoQuery)
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
     email: string().required()
@@ -40,7 +41,7 @@ const onSubmit = handleSubmit(async (values) => {
     .then(async () => {
     // Reset antiforgery token after login
       await axios.get('/auth/antiforgeryToken')
-      await userInfo.updateLoggedInStatus()
+      await refetch()
       await router.push({ name: 'characters' })
     })
     .catch((response) => {

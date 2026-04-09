@@ -2,15 +2,17 @@
 
 import Button from 'primevue/button'
 import axios from 'axios'
-import {useRoute, useRouter} from 'vue-router'
-import {ref} from 'vue'
-import {userStore} from '@/stores/userStore'
-import {logOff} from '@/services/Authentication'
-
-let userInfo = userStore()
+import { useRoute, useRouter } from 'vue-router'
+import { ref } from 'vue'
+import { logOff } from '@/services/Authentication'
+import { useQuery } from '@pinia/colada'
+import { userInfoQuery } from '@/auth/authStore.ts'
+import { SetupState } from '@/auth/types.ts'
 
 const Router = useRouter()
 const route = useRoute()
+
+const { data, refresh } = useQuery(userInfoQuery)
 
 let hasError = ref(false)
 let isSuccessful = ref(false)
@@ -21,10 +23,8 @@ axios.get('/auth/confirmEmail', {
     code: route.query.code,
     changedEmail: route.query.changedEmail,
   },
-}).then(() => {
-  userInfo.hasConfirmedEmail = true
-  if (route.query.changedEmail)
-    userInfo.userEmail = route.query.changedEmail
+}).then(async () => {
+  await refresh()
   isSuccessful.value = true
   isLoading.value = false
 }).catch(() => {
@@ -34,7 +34,7 @@ axios.get('/auth/confirmEmail', {
 
 let sentConfirmationEmail = ref(false)
 async function resendConfirmationEmail() {
-  await axios.post('/auth/resendConfirmationEmail', { email: userInfo.userEmail })
+  await axios.post('/auth/resendConfirmationEmail', { email: data.value!.userInfo!.email })
     .then(() => {
       sentConfirmationEmail.value = true
     })
@@ -48,7 +48,7 @@ async function resendConfirmationEmail() {
   </p>
   <div v-if="isSuccessful">
     <p>Your email has been confirmed.</p>
-    <div v-if="userInfo.isLoggedIn() && !userInfo.isPlayerSetup">
+    <div v-if="data?.userInfo !== null && data!.userInfo.setupState == SetupState.SetProfileName">
       <Button data-cy="resend-confirmation-button" label="Continue Setup Process" class="w-100 mb-2" @click="Router.push('/setupProfile')" />
     </div>
     <div v-else>
@@ -56,7 +56,7 @@ async function resendConfirmationEmail() {
     </div>
   </div>
   <div v-else>
-    <div v-if="userInfo.isLoggedIn()">
+    <div v-if="data?.userInfo !== null">
       <p>An error occured while confirming your email. Please try clicking the link in the email again, or pressing the button below to send a new one.</p>
       <p v-show="sentConfirmationEmail" data-cy="resend-confirmation-message">
         You have successfully sent an email confirmation email to your email.

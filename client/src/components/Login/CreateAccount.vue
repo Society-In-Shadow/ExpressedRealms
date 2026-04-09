@@ -8,7 +8,7 @@ import InputTextWrapper from '@/FormWrappers/InputTextWrapper.vue'
 import { useRouter } from 'vue-router'
 
 const Router = useRouter()
-const { defineField, handleSubmit, errors } = useForm({
+const { defineField, handleSubmit, errors, setFieldError } = useForm({
   validationSchema: object({
     email: string().required()
       .email()
@@ -38,6 +38,13 @@ const onSubmit = handleSubmit((values) => {
       password: values.confirmPassword,
     }).then(() => {
     Router.push('login?createdUser=1')
+  }).catch(function (e) {
+    if (e.response && e.response.status === 400) {
+      const errorsFromServer = e.response.data.errors
+      if (errorsFromServer?.duplicateUserName) {
+        setFieldError('email', errorsFromServer.duplicateUserName[0])
+      }
+    }
   })
 })
 

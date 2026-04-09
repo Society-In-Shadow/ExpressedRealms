@@ -3,16 +3,18 @@
 import Button from 'primevue/button'
 import axios from 'axios'
 import { logOff } from '@/services/Authentication'
-import { userStore } from '@/stores/userStore'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useQuery } from '@pinia/colada'
+import { userInfoQuery } from '@/auth/authStore.ts'
 
-let userInfo = userStore()
 const router = useRouter()
+
+const { data } = useQuery(userInfoQuery)
 
 let sentConfirmationEmail = ref(false)
 async function resendConfirmationEmail() {
-  await axios.post('/auth/resendConfirmationEmail', { email: userInfo.userEmail })
+  await axios.post('/auth/resendConfirmationEmail', { email: data.value!.userInfo!.email })
     .then(() => {
       sentConfirmationEmail.value = true
     })
