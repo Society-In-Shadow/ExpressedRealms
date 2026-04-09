@@ -4,5 +4,5 @@ public enum SetupState
 {
     UnconfirmedEmail = 1,
     SetProfileName,
-    Done
+    Done,
 }

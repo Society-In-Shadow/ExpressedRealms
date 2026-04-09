@@ -13,24 +13,19 @@ public static class GetUserEndpoint
         [FromServices] ExpressedRealmsDbContext dbContext
     )
     {
-
         if (!httpContext.User.Identity?.IsAuthenticated ?? false)
         {
-            return TypedResults.Ok(
-                new UserResponse()
-                {
-                    UserInfo = null
-                });
-
+            return TypedResults.Ok(new UserResponse() { UserInfo = null });
         }
-        
+
         var userId = httpContext.User.GetUserId();
-        var userInfo = await dbContext.Users.Where(x => x.Id == userId)
+        var userInfo = await dbContext
+            .Users.Where(x => x.Id == userId)
             .Select(x => new
             {
                 EmailConfirmed = x.EmailConfirmed,
                 Username = x.Player != null ? x.Player.Name : null,
-                Email = x.Email
+                Email = x.Email,
             })
             .FirstAsync();
 
@@ -43,7 +38,7 @@ public static class GetUserEndpoint
         {
             stateType = SetupState.SetProfileName;
         }
-        
+
         return TypedResults.Ok(
             new UserResponse()
             {
@@ -51,8 +46,8 @@ public static class GetUserEndpoint
                 {
                     Name = userInfo.Username,
                     SetupState = stateType,
-                    Email = userInfo.Email
-                }
+                    Email = userInfo.Email,
+                },
             }
         );
     }
