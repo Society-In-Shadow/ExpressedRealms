@@ -2,11 +2,10 @@ using System.Security.Claims;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using ExpressedRealms.Server.EndPoints.AuthEndpoints.UserEndpoint;
 using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
-namespace ExpressedRealms.Server.EndPoints;
+namespace ExpressedRealms.Server.EndPoints.AuthEndpoints;
 
 internal static class AuthEndPoints
 {
@@ -18,7 +17,6 @@ internal static class AuthEndPoints
 
         endpointGroup.MapIdentityApi<User>();
         endpointGroup.MapGet("/user", GetUserEndpoint.ExecuteAsync);
-        endpointGroup.MapGet("/check", [Authorize] () => Results.Ok());
         endpointGroup.MapPost("/logoff", (HttpContext httpContext) => Results.SignOut());
         endpointGroup
             .MapGet(

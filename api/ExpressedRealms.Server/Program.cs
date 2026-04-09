@@ -31,6 +31,7 @@ using ExpressedRealms.Server.Configuration.UserRoles;
 using ExpressedRealms.Server.CronJobs;
 using ExpressedRealms.Server.DependencyInjections;
 using ExpressedRealms.Server.EndPoints;
+using ExpressedRealms.Server.EndPoints.AuthEndpoints;
 using ExpressedRealms.Server.EndPoints.PlayerEndpoints;
 using ExpressedRealms.Server.Shared.Extensions;
 using ExpressedRealms.Shared.AzureKeyVault;
