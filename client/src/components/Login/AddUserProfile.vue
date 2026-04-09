@@ -25,7 +25,7 @@ const [name] = defineField('name')
 const onSubmit = handleSubmit((values) => {
   axios.post('/player', values).then(async () => {
     await refetch()
-    Router.push({ name: 'characters' })
+    await Router.push({ name: 'characters' })
   })
 })
 

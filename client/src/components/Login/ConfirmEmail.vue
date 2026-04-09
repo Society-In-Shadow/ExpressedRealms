@@ -48,7 +48,7 @@ async function resendConfirmationEmail() {
   </p>
   <div v-if="isSuccessful">
     <p>Your email has been confirmed.</p>
-    <div v-if="data?.userInfo !== null && data!.userInfo.setupStep == SetupState.SetProfileName">
+    <div v-if="data?.userInfo !== null && data!.userInfo.setupState == SetupState.SetProfileName">
       <Button data-cy="resend-confirmation-button" label="Continue Setup Process" class="w-100 mb-2" @click="Router.push('/setupProfile')" />
     </div>
     <div v-else>

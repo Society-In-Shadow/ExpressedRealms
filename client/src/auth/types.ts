@@ -5,11 +5,11 @@ export interface UserStateResponse {
 export interface UserInfo {
   name: string | null
   email: string
-  setupStep: SetupState
+  setupState: SetupState
 }
 
 export enum SetupState {
-  UnconfirmedEmail,
+  UnconfirmedEmail = 1,
   SetProfileName,
   Done,
 }

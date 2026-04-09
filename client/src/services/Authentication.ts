@@ -1,10 +1,11 @@
 import axios from 'axios'
-import { userStore } from '@/stores/userStore'
+import { useQuery } from '@pinia/colada'
+import { userInfoQuery } from '@/auth/authStore.ts'
 
 export async function logOff(router) {
-  const userInfo = userStore()
-  axios.post('/auth/logoff').then(() => {
-    userInfo.$reset()
+  const { refetch } = useQuery(userInfoQuery)
+  await axios.post('/auth/logoff').then(async () => {
+    await refetch()
     router.push('/')
   })
 }

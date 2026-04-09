@@ -23,7 +23,12 @@ internal static class PlayerAuditConfiguration
 
                 case "user_id":
                 case "lookup_id":
+                case "is_archetype_account":
                     continue;
+                
+                case "send_pickup_crb_email":
+                    changedRecord.FriendlyName = "Send Pickup CRB Email";
+                    break;
 
                 case "has_signed_consent_form":
                     changedRecord.FriendlyName = "Consent Form Signed";

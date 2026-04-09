@@ -34,6 +34,7 @@ routerSetup.beforeEach(async (to) => {
   const { data } = useQuery(userInfoQuery)
 
   const loggedIn = data.value?.userInfo !== null
+  const routeName: string = to.name as string
 
   // Initialize routes on first navigation
   if (!routesInitialized) {
@@ -46,11 +47,13 @@ routerSetup.beforeEach(async (to) => {
   }
 
   if (loggedIn) {
-    if (data.value!.userInfo!.setupStep == SetupState.UnconfirmedEmail) {
+    if (data.value!.userInfo!.setupState == SetupState.UnconfirmedEmail
+      && routeName !== 'pleaseConfirmEmail' && routeName !== 'confirmAccount') {
       return { name: 'pleaseConfirmEmail' }
     }
 
-    if (data.value!.userInfo!.setupStep == SetupState.SetProfileName) {
+    if (data.value!.userInfo!.setupState == SetupState.SetProfileName
+      && routeName !== 'setupProfile') {
       return { name: 'setupProfile' }
     }
 
@@ -60,10 +63,7 @@ routerSetup.beforeEach(async (to) => {
       userInfoInitialized = true
     }
 
-    // if they are on the login page, redirect them to the characters page
-    // Also, if they landed on a setup page, redirect them to characters as the
-    // above statement should have handled that redirect
-    if (to.meta.isUserSetup) {
+    if (to.meta.isUserSetup && data.value!.userInfo!.setupState == SetupState.Done) {
       return { name: 'characters' }
     }
 
