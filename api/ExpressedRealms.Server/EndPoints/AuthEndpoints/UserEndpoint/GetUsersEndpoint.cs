@@ -9,7 +9,7 @@ namespace ExpressedRealms.Server.EndPoints.AuthEndpoints.UserEndpoint;
 public static class GetUserEndpoint
 {
     public static async Task<Ok<UserResponse>> ExecuteAsync(
-        [FromServices] HttpContext httpContext,
+        HttpContext httpContext,
         [FromServices] ExpressedRealmsDbContext dbContext
     )
     {
@@ -29,7 +29,8 @@ public static class GetUserEndpoint
             .Select(x => new
             {
                 EmailConfirmed = x.EmailConfirmed,
-                Username = x.Player != null ? x.Player.Name : null
+                Username = x.Player != null ? x.Player.Name : null,
+                Email = x.Email
             })
             .FirstAsync();
 
@@ -49,7 +50,8 @@ public static class GetUserEndpoint
                 UserInfo = new UserInfo()
                 {
                     Name = userInfo.Username,
-                    SetupState = stateType
+                    SetupState = stateType,
+                    Email = userInfo.Email
                 }
             }
         );
