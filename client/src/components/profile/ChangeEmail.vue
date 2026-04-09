@@ -7,9 +7,12 @@ import { useForm } from 'vee-validate'
 import { object, ref, string } from 'yup'
 import { ref as vueRef } from 'vue'
 import Message from 'primevue/message'
-import { resetEmailConfirmation } from '@/services/Authentication'
 import InputTextWrapper from '@/FormWrappers/InputTextWrapper.vue'
 import toasters from '@/services/Toasters'
+import { useQuery } from '@pinia/colada'
+import { userInfoQuery } from '@/auth/authStore.ts'
+
+const { refresh } = useQuery(userInfoQuery)
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
@@ -27,13 +30,13 @@ const [email] = defineField('email')
 const [confirmEmail] = defineField('confirmEmail')
 const successfullyChangedEmail = vueRef(false)
 
-const onEmailSubmit = handleSubmit((values, { resetForm }) => {
-  axios.post('/auth/manage/info',
+const onEmailSubmit = handleSubmit(async (values, { resetForm }) => {
+  await axios.post('/auth/manage/info',
     {
       newEmail: values.confirmEmail,
-    }).then(() => {
+    }).then(async () => {
     successfullyChangedEmail.value = true
-    resetEmailConfirmation()
+    await refresh()
     resetForm()
     toasters.success('Successfully updated email!')
   })

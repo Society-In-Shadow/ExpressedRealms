@@ -7,9 +7,12 @@ import AvatarDropdown from '@/components/navbar/AvatarDropdown.vue'
 import { FeatureFlags, userStore } from '@/stores/userStore'
 import EventCheckinBanner from '@/components/conCheckin/EventCheckinBanner.vue'
 import GoCheckinBanner from '@/components/conCheckin/GoCheckinBanner.vue'
+import { useQuery } from '@pinia/colada'
+import { userInfoQuery } from '@/auth/authStore.ts'
 
 const router = useRouter()
 const userInfo = userStore()
+const { data } = useQuery(userInfoQuery)
 
 const items = ref([
   { root: true, label: 'Home', route: '', command: () => router.push('/') },
@@ -21,7 +24,7 @@ const items = ref([
 ])
 
 onBeforeMount(async () => {
-  if (await userInfo.isLoggedIn()) {
+  if (data.value?.userInfo !== null) {
     items.value.splice(1, 0, { root: true, label: 'Characters', route: '/characters', command: () => router.push('/characters') })
   }
   if (await userInfo.hasFeatureFlag(FeatureFlags.ShowMarketingContactUs)) {
@@ -32,8 +35,8 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <EventCheckinBanner v-if="userInfo.isLoggedInCache" />
-  <GoCheckinBanner v-if="userInfo.isLoggedInCache" />
+  <EventCheckinBanner v-if="data?.userInfo !== null" />
+  <GoCheckinBanner v-if="data?.userInfo !== null" />
   <MegaMenu :model="items" class="ms-0 me-0 mt-2 mb-2 m-md-2">
     <template #start>
       <RouterLink to="/">

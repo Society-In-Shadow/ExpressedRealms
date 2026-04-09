@@ -2,15 +2,16 @@
 
 import Button from 'primevue/button'
 import axios from 'axios'
-import {useRouter} from 'vue-router'
-import {useForm} from 'vee-validate'
-import {object, string} from 'yup'
-import {logOff} from '@/services/Authentication'
+import { useRouter } from 'vue-router'
+import { useForm } from 'vee-validate'
+import { object, string } from 'yup'
+import { logOff } from '@/services/Authentication'
 import InputTextWrapper from '../../FormWrappers/InputTextWrapper.vue'
-import {userStore} from '@/stores/userStore'
+import { useQuery } from '@pinia/colada'
+import { userInfoQuery } from '@/auth/authStore.ts'
 
 const Router = useRouter()
-const userInfo = userStore()
+const { refetch } = useQuery(userInfoQuery)
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
@@ -23,7 +24,7 @@ const { defineField, handleSubmit, errors } = useForm({
 const [name] = defineField('name')
 const onSubmit = handleSubmit((values) => {
   axios.post('/player', values).then(async () => {
-    await userInfo.getUserInfo()
+    await refetch()
     Router.push({ name: 'characters' })
   })
 })

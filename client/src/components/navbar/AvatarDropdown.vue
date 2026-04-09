@@ -3,14 +3,14 @@
 import { computed, ref } from 'vue'
 import TieredMenu from 'primevue/tieredmenu'
 import Avatar from 'primevue/avatar'
-import { userStore } from '@/stores/userStore'
 import md5 from 'md5'
 import { logOff } from '@/services/Authentication'
 import { useRouter } from 'vue-router'
+import { useQuery } from '@pinia/colada'
+import { userInfoQuery } from '@/auth/authStore.ts'
 
-let userInfo = userStore()
 const Router = useRouter()
-
+const { data } = useQuery(userInfoQuery)
 const menu = ref()
 const items = ref([
   {
@@ -42,7 +42,7 @@ const toggle = (event) => {
 }
 
 const gravatar = computed(() => {
-  const hash = md5(userInfo.userEmail.trim().toLowerCase())
+  const hash = md5(data!.value.userInfo.email.trim().toLowerCase())
   return `https://www.gravatar.com/avatar/${hash}`
 })
 
@@ -53,9 +53,9 @@ const gravatar = computed(() => {
     <Avatar class="pi pi-discord" shape="circle" size="large" />
     <div class="hideIfSmall">Discord</div>
   </a>
-  <a v-if="userInfo.isLoggedIn()" class="flex align-items-center p-3 cursor-pointer mb-2 gap-2" aria-haspopup="true" aria-controls="overlay_tmenu" @click="toggle">
+  <a v-if="data!.userInfo !== null" class="flex align-items-center p-3 cursor-pointer mb-2 gap-2" aria-haspopup="true" aria-controls="overlay_tmenu" @click="toggle">
     <Avatar :image="gravatar" shape="circle" size="large" />
-    <div class="hideIfSmall">{{ userInfo.name }}</div>
+    <div class="hideIfSmall">{{ data!.userInfo.name }}</div>
     <i class="pi pi-caret-down text-lg" />
     <TieredMenu id="overlay_tmenu" ref="menu" :model="items" popup />
   </a>

@@ -5,13 +5,13 @@ import axios from 'axios'
 import { useForm } from 'vee-validate'
 import { object, string } from 'yup'
 import InputTextWrapper from '../../FormWrappers/InputTextWrapper.vue'
-import { userStore } from '@/stores/userStore'
 import Card from 'primevue/card'
 import { onMounted, ref } from 'vue'
 import toasters from '@/services/Toasters'
+import { useQuery } from '@pinia/colada'
+import { userInfoQuery } from '@/auth/authStore.ts'
 
-const userInfo = userStore()
-
+const { refresh } = useQuery(userInfoQuery)
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
     name: string().required()
@@ -21,9 +21,6 @@ const { defineField, handleSubmit, errors } = useForm({
 })
 
 const [name] = defineField('name')
-const [phoneNumber] = defineField('phoneNumber')
-const [city] = defineField('city')
-const [state] = defineField('state')
 const isLoading = ref(true)
 
 onMounted(() => {
@@ -34,9 +31,9 @@ onMounted(() => {
     })
 })
 
-const onSubmit = handleSubmit((values) => {
-  axios.put('/player', values).then(() => {
-    userInfo.name = values.name
+const onSubmit = handleSubmit(async (values) => {
+  await axios.put('/player', values).then(async () => {
+    await refresh()
   })
     .then(() => {
       toasters.success('Successfully Updated User Name!')
