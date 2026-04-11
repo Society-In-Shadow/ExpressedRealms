@@ -105,6 +105,11 @@ const xpSectionType = computed(() => {
   return props.type.toLowerCase() == 'disadvantage' ? XpSectionTypes.disadvantage : XpSectionTypes.advantage
 })
 
+function getBlessingLevelName(blessing: Blessing) {
+  const currentBlessing = characterBlessingData.blessings.find(x => x.blessingId == blessing?.id)
+  return blessing.levels.find(x => x.id == currentBlessing.blessingLevelId).name
+}
+
 </script>
 
 <template>
@@ -134,14 +139,14 @@ const xpSectionType = computed(() => {
         <h3 class="ml-3 pb-2">
           {{ trait.name }}
         </h3>
-        <div v-for="blessing in trait.blessings" :key="blessing.id">
-          <div class="ml-5 d-flex flex-column flex-md-row align-self-center justify-content-between">
+        <div v-for="blessing in trait.blessings" :key="blessing.id" class="mb-3">
+          <div class="pl-5 d-flex flex-row align-self-center justify-content-between">
             <div>
               <h3 class="p-0 m-0">
-                {{ blessing.name }}
+                {{ blessing.name }} - {{ getBlessingLevelName(blessing) }}
               </h3>
             </div>
-            <div class="p-0 m-2">
+            <div class="p-0">
               <Button label="View" size="small" @click="updateWizardContent(blessing)" />
             </div>
           </div>
