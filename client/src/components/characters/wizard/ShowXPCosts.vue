@@ -19,6 +19,11 @@ const props = defineProps({
     type: Number as unknown as () => XpSectionType,
     required: true,
   },
+  additionalAvailableXp: {
+    type: Number,
+    required: false,
+    default: 0,
+  },
 })
 
 const xp = ref<CalculatedExperience>({})
@@ -55,7 +60,7 @@ watch(() => experienceInfo.calculatedValues, () => {
       <strong>Discretionary XP:</strong> {{ xp.currentOptionalXp }} / {{ xp.optionalMaxXP }}
     </div>
     <div>
-      <strong>Available XP:</strong> {{ xp.availableXp }}
+      <strong>Available XP:</strong> {{ xp.availableXp + props.additionalAvailableXp }}
     </div>
   </div>
   <div v-else class="d-flex flex-row justify-content-between gap-3">
@@ -68,7 +73,7 @@ watch(() => experienceInfo.calculatedValues, () => {
       <div class="d-flex flex-row justify-content-center gap-2">
         <div><strong>Available XP:</strong></div>
         <div v-if="characterInfo.isPrimaryCharacter">
-          {{ xp.availableXp }}
+          {{ xp.availableXp + props.additionalAvailableXp }}
         </div>
         <div v-else>
           <span class="material-symbols-outlined">all_inclusive</span>

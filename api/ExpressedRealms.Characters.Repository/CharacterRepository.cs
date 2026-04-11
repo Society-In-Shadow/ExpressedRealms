@@ -35,7 +35,6 @@ internal sealed class CharacterRepository(
             {
                 Id = x.Id.ToString(),
                 Name = x.Name,
-                Background = x.Background,
                 Expression = x.Expression.Name,
                 IsPrimaryCharacter = x.IsPrimaryCharacter,
                 IsRetired = x.IsRetired,

@@ -22,7 +22,7 @@ const props = defineProps({
         <div class="d-flex flex-column flex-grow-1 pr-3">
           <div class="d-flex flex-fill align-content-between d-block">
             <div class="flex-grow-1 font-bold text-900">
-              {{ item.name }}
+              {{ item.name }} - {{ item.levelName }}
             </div>
             <div>
               {{ item.subCategory }}

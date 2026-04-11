@@ -29,7 +29,6 @@ export const characterBlessingsStore
     },
     actions: {
       async getCharacterBlessings(characterId: number) {
-        this.isLoading = true
         const response = await axios.get<CharacterBlessingsBaseResponse>(`/characters/${characterId}/blessings`)
 
         const selectedIds = response.data.blessings.map(x => x.blessingId)

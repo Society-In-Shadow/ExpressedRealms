@@ -25,7 +25,7 @@ export interface Blessing {
 
 export interface BlessingLevel {
   id: number
-  level: string
+  name: string
   description: string
   xpCost: number
   xpGain: number

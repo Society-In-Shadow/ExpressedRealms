@@ -35,12 +35,8 @@ const props = defineProps({
 watch(() => props.blessing, async () => {
   let sectionType: XpSectionType = props.blessing.type.toLowerCase() == 'disadvantage' ? XpSectionTypes.disadvantage : XpSectionTypes.advantage
   let xpInfo = experienceInfo.getExperienceInfoForSection(sectionType)
-  if (sectionType == XpSectionTypes.advantage) {
-    availableXp.value = xpInfo.availableXp
-  }
-  else {
-    availableXp.value = xpInfo.characterCreateMax - xpInfo.total
-  }
+
+  availableXp.value = xpInfo.availableXp
 
   form.customResetForm()
 }, { immediate: true })
@@ -50,11 +46,13 @@ const onSubmit = form.handleSubmit(async (values) => {
 })
 
 function disableOption(level: BlessingLevel) {
-  if (props.blessing.type.toLowerCase() == 'disadvantage') {
-    return level.xpGain > availableXp.value
-  }
-  return level.xpCost > availableXp.value
+  return getCost(level) > availableXp.value
 }
+
+const cannotMeetMinimumLevel = computed(() => {
+  let minimumLevelCost = getCost(props.blessing.levels[0])
+  return availableXp.value < minimumLevelCost
+})
 
 function updateLevel(level: BlessingLevel) {
   form.blessingLevel.field.value = level
@@ -63,6 +61,10 @@ function updateLevel(level: BlessingLevel) {
 const xpSectionType = computed(() => {
   return props.blessing.type.toLowerCase() == 'disadvantage' ? XpSectionTypes.disadvantage : XpSectionTypes.advantage
 })
+
+function getCost(level: BlessingLevel) {
+  return props.blessing.type.toLowerCase() == 'disadvantage' ? level.xpGain : level.xpCost
+}
 
 </script>
 
@@ -73,16 +75,27 @@ const xpSectionType = computed(() => {
 
   <div v-html="props.blessing?.description" />
   <ShowXPCosts v-if="characterInfo.isInCharacterCreation" :section-type="xpSectionType" class="pt-3" />
-  <div v-if="availableXp == 0">
+  <div v-if="!characterInfo.isInCharacterCreation">
     <Message severity="warn" class="mt-4">
-      You do not have enough experience to add this to your character.
+      You may only modify this {{ props.blessing.type.toLowerCase() }} during character creation.
     </Message>
   </div>
+  <div v-else-if="cannotMeetMinimumLevel">
+    <Message severity="warn" class="mt-4">
+      Your available XP does not match the minimum level for this {{ props.blessing.type.toLowerCase() }}.
+    </Message>
+  </div>
+  <div v-else-if="availableXp == 0">
+    <Message severity="warn" class="mt-4">
+      You've spent all the XP you can on {{ props.blessing.type.toLowerCase() }}s.
+    </Message>
+  </div>
+
   <form @submit="onSubmit">
     <div v-for="level in props.blessing.levels" :key="level.id" class="mt-3">
       <div class="d-flex flex-column flex-md-row align-self-center">
         <RadioButton :input-id="level.id.toString()" :value="level" class="mr-4" :disabled="disableOption(level) || !characterInfo.isInCharacterCreation" @click="updateLevel(level)" />
-        <label :for="level.id.toString()" :class="disableOption(level) ? 'non-selectable' : ''">{{ level.name }} – {{ level.description }}</label>
+        <label :for="level.id.toString()" :class="disableOption(level) ? 'non-selectable' : ''">-{{ Math.abs(getCost(level)) }} xp - {{ level.name }} – {{ level.description }}</label>
       </div>
     </div>
 
