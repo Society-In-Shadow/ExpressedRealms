@@ -80,14 +80,14 @@ function getCost(level: BlessingLevel) {
       You may only modify this {{ props.blessing.type.toLowerCase() }} during character creation.
     </Message>
   </div>
-  <div v-else-if="availableXp == 0">
-    <Message severity="warn" class="mt-4">
-      You've spent all the XP you can on {{ props.blessing.type.toLowerCase() }}s.
-    </Message>
-  </div>
   <div v-else-if="cannotMeetMinimumLevel">
     <Message severity="warn" class="mt-4">
       Your available XP does not match the minimum level for this {{ props.blessing.type.toLowerCase() }}.
+    </Message>
+  </div>
+  <div v-else-if="availableXp == 0">
+    <Message severity="warn" class="mt-4">
+      You've spent all the XP you can on {{ props.blessing.type.toLowerCase() }}s.
     </Message>
   </div>
 
