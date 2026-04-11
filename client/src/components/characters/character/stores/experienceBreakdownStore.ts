@@ -53,8 +53,12 @@ export const experienceStore
                 availableXp = xp.characterCreateMax - requiredXp + optionalMaxXP
               }
 
-              if (xp.sectionTypeId == XpSectionTypes.advantage || xp.sectionTypeId == XpSectionTypes.disadvantage) {
+              if (xp.sectionTypeId == XpSectionTypes.advantage) {
                 availableXp = Math.min(xp.characterCreateMax - xp.total, response.data.availableDiscretionary)
+              }
+
+              if (xp.sectionTypeId == XpSectionTypes.disadvantage) {
+                availableXp = xp.characterCreateMax - xp.total
               }
 
               if (characterInfo.isPrimaryCharacter && !characterInfo.isInCharacterCreation) {
