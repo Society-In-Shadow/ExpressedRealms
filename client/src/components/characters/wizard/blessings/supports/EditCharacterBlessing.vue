@@ -35,9 +35,10 @@ const props = defineProps({
 const mappingId = ref(0)
 const currentLevel = ref<BlessingLevel>({})
 const currentCost = computed(() => {
-  return props.blessing.type.toLowerCase() == 'disadvantage' ? currentLevel.value.xpGain : currentLevel.value.xpCost
+  return getCost(currentLevel.value)
 })
 const availableXp = ref(0)
+const spentXp = ref(0)
 
 const loadData = async () => {
   const currentBlessing = store.blessings.find(x => x.blessingId == props.blessing?.id)
@@ -46,6 +47,7 @@ const loadData = async () => {
   form.setValues(currentBlessing, currentLevel.value)
   let sectionType: XpSectionType = props.blessing.type.toLowerCase() == 'disadvantage' ? XpSectionTypes.disadvantage : XpSectionTypes.advantage
   let xpInfo = experienceInfo.getExperienceInfoForSection(sectionType)
+  spentXp.value = xpInfo.total
   availableXp.value = xpInfo.availableXp + currentCost.value
 }
 
@@ -56,19 +58,17 @@ watch(() => props.blessing.id, async () => {
 const onSubmit = form.handleSubmit(async (values) => {
   const currentBlessing = store.blessings.filter(x => x.blessingId == props.blessing?.id)[0]
   await store.updateBlessing(values, route.params.id, currentBlessing.id)
+  await loadData()
 })
 
 function disableOption(level: BlessingLevel) {
-  if (props.blessing.type.toLowerCase() == 'disadvantage') {
-    return level.xpGain > availableXp.value && level.xpGain > currentLevel.value.xpGain
-  }
-  return level.xpCost > availableXp.value && level.xpCost > currentLevel.value.xpCost
+  return getCost(level) > availableXp.value && getCost(level) > getCost(currentLevel.value)
 }
 
 const canOnlyDelete = computed(() => {
   const levelId = form.blessingLevel.field.value?.id ?? -1
   let indexLevel = props.blessing.levels.findIndex(x => x.id === levelId)
-  return indexLevel == 0 && availableXp.value == 0
+  return indexLevel == 0 && insuffecientXpToUpgrade.value
 })
 
 const canLowerOrDelete = computed(() => {
@@ -77,9 +77,26 @@ const canLowerOrDelete = computed(() => {
   return indexLevel > 0
 })
 
+const insuffecientXpToUpgrade = computed(() => {
+  const levelId = form.blessingLevel.field.value?.id ?? -1
+  let indexLevel = props.blessing.levels.findIndex(x => x.id === levelId)
+
+  if (indexLevel == props.blessing.levels.length - 1) return false
+
+  const nextLevelXp = getCost(props.blessing.levels[indexLevel + 1])
+  const currentLevelXp = getCost(props.blessing.levels[indexLevel])
+
+  let diffBetweenLevels = nextLevelXp - currentLevelXp
+  return diffBetweenLevels > availableXp.value - currentCost.value
+})
+
 const xpSectionType = computed(() => {
   return props.blessing.type.toLowerCase() == 'disadvantage' ? XpSectionTypes.disadvantage : XpSectionTypes.advantage
 })
+
+function getCost(level: BlessingLevel) {
+  return props.blessing.type.toLowerCase() == 'disadvantage' ? level.xpGain : level.xpCost
+}
 
 </script>
 
@@ -98,16 +115,10 @@ const xpSectionType = computed(() => {
     </div>
 
     <div v-html="props.blessing?.description" />
-    <ShowXPCosts v-if="characterInfo.isInCharacterCreation" :section-type="xpSectionType" class="pt-3" :additional-available-xp="currentCost" />
+    <ShowXPCosts v-if="characterInfo.isInCharacterCreation" :section-type="xpSectionType" class="pt-3" />
     <div v-if="!characterInfo.isInCharacterCreation">
       <Message severity="warn" class="mt-4">
         You may only modify this {{ props.blessing.type.toLowerCase() }} during character creation.
-      </Message>
-    </div>
-    <div v-else-if="canLowerOrDelete">
-      <Message severity="warn" class="mt-4">
-        You may lower the level of this {{ props.blessing.type.toLowerCase() }} or delete it, but you cannot increase it
-        due to insufficient XP.
       </Message>
     </div>
     <div v-else-if="canOnlyDelete">
@@ -115,10 +126,23 @@ const xpSectionType = computed(() => {
         You may only delete this {{ props.blessing.type.toLowerCase() }}.
       </Message>
     </div>
+    <div v-else-if="canLowerOrDelete && spentXp == 8">
+      <Message severity="warn" class="mt-4">
+        You may lower the level of this {{ props.blessing.type.toLowerCase() }} or delete it.  You have spent all available points on
+        {{ props.blessing.type.toLowerCase() }}s.
+      </Message>
+    </div>
+    <div v-else-if="insuffecientXpToUpgrade">
+      <Message severity="warn" class="mt-4">
+        You may lower the level of this {{ props.blessing.type.toLowerCase() }} or delete it, but you cannot increase it
+        due to insufficient XP.
+      </Message>
+    </div>
+
     <div v-for="level in props.blessing.levels" :key="level.id" class="mt-3">
       <div class="d-flex flex-column flex-md-row align-self-center">
         <RadioButton v-model="form.blessingLevel.field.value" :input-id="level.id.toString()" :value="level" class="mr-4" :disabled="disableOption(level) || !characterInfo.isInCharacterCreation" />
-        <label :for="level.id.toString()" :class="disableOption(level) ? 'non-selectable' : ''">{{ level.name }} – {{ level.description }}</label>
+        <label :for="level.id.toString()" :class="disableOption(level) ? 'non-selectable' : ''">{{ getCost(level) > currentCost ? "-" : "+" }}{{ Math.abs(getCost(level) - currentCost) }} xp – {{ level.name }} – {{ level.description }}</label>
       </div>
     </div>
 

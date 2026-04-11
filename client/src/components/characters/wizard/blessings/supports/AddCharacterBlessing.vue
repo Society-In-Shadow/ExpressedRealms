@@ -24,7 +24,6 @@ const experienceInfo = experienceStore()
 const characterInfo = characterStore()
 
 const availableXp = ref(0)
-const spentXp = ref(0)
 
 const props = defineProps({
   blessing: {
@@ -47,17 +46,11 @@ const onSubmit = form.handleSubmit(async (values) => {
 })
 
 function disableOption(level: BlessingLevel) {
-  if (props.blessing.type.toLowerCase() == 'disadvantage') {
-    return level.xpGain > availableXp.value
-  }
-  return level.xpCost > availableXp.value
+  return getCost(level) > availableXp.value
 }
 
 const cannotMeetMinimumLevel = computed(() => {
-  let minimumLevelCost = props.blessing.levels[0].xpCost
-  if (props.blessing.type.toLowerCase() == 'disadvantage') {
-    minimumLevelCost = props.blessing.levels[0].xpGain
-  }
+  let minimumLevelCost = getCost(props.blessing.levels[0])
   return availableXp.value < minimumLevelCost
 })
 
@@ -68,6 +61,10 @@ function updateLevel(level: BlessingLevel) {
 const xpSectionType = computed(() => {
   return props.blessing.type.toLowerCase() == 'disadvantage' ? XpSectionTypes.disadvantage : XpSectionTypes.advantage
 })
+
+function getCost(level: BlessingLevel) {
+  return props.blessing.type.toLowerCase() == 'disadvantage' ? level.xpGain : level.xpCost
+}
 
 </script>
 
@@ -98,7 +95,7 @@ const xpSectionType = computed(() => {
     <div v-for="level in props.blessing.levels" :key="level.id" class="mt-3">
       <div class="d-flex flex-column flex-md-row align-self-center">
         <RadioButton :input-id="level.id.toString()" :value="level" class="mr-4" :disabled="disableOption(level) || !characterInfo.isInCharacterCreation" @click="updateLevel(level)" />
-        <label :for="level.id.toString()" :class="disableOption(level) ? 'non-selectable' : ''">{{ level.name }} – {{ level.description }}</label>
+        <label :for="level.id.toString()" :class="disableOption(level) ? 'non-selectable' : ''">-{{ Math.abs(getCost(level)) }} xp - {{ level.name }} – {{ level.description }}</label>
       </div>
     </div>
 
