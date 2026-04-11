@@ -24,6 +24,7 @@ const experienceInfo = experienceStore()
 const characterInfo = characterStore()
 
 const availableXp = ref(0)
+const spentXp = ref(0)
 
 const props = defineProps({
   blessing: {
@@ -35,12 +36,8 @@ const props = defineProps({
 watch(() => props.blessing, async () => {
   let sectionType: XpSectionType = props.blessing.type.toLowerCase() == 'disadvantage' ? XpSectionTypes.disadvantage : XpSectionTypes.advantage
   let xpInfo = experienceInfo.getExperienceInfoForSection(sectionType)
-  if (sectionType == XpSectionTypes.advantage) {
-    availableXp.value = xpInfo.availableXp
-  }
-  else {
-    availableXp.value = xpInfo.characterCreateMax - xpInfo.total
-  }
+
+  availableXp.value = xpInfo.availableXp
 
   form.customResetForm()
 }, { immediate: true })
@@ -55,6 +52,14 @@ function disableOption(level: BlessingLevel) {
   }
   return level.xpCost > availableXp.value
 }
+
+const cannotMeetMinimumLevel = computed(() => {
+  let minimumLevelCost = props.blessing.levels[0].xpCost
+  if (props.blessing.type.toLowerCase() == 'disadvantage') {
+    minimumLevelCost = props.blessing.levels[0].xpGain
+  }
+  return availableXp.value < minimumLevelCost
+})
 
 function updateLevel(level: BlessingLevel) {
   form.blessingLevel.field.value = level
@@ -73,11 +78,22 @@ const xpSectionType = computed(() => {
 
   <div v-html="props.blessing?.description" />
   <ShowXPCosts v-if="characterInfo.isInCharacterCreation" :section-type="xpSectionType" class="pt-3" />
-  <div v-if="availableXp == 0">
+  <div v-if="!characterInfo.isInCharacterCreation">
     <Message severity="warn" class="mt-4">
-      You do not have enough experience to add this to your character.
+      You may only modify this {{ props.blessing.type.toLowerCase() }} during character creation.
     </Message>
   </div>
+  <div v-else-if="availableXp == 0">
+    <Message severity="warn" class="mt-4">
+      You've spent all the XP you can on {{ props.blessing.type.toLowerCase() }}s.
+    </Message>
+  </div>
+  <div v-else-if="cannotMeetMinimumLevel">
+    <Message severity="warn" class="mt-4">
+      Your available XP does not match the minimum level for this {{ props.blessing.type.toLowerCase() }}.
+    </Message>
+  </div>
+
   <form @submit="onSubmit">
     <div v-for="level in props.blessing.levels" :key="level.id" class="mt-3">
       <div class="d-flex flex-column flex-md-row align-self-center">

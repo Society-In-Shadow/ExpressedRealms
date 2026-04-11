@@ -3,7 +3,7 @@
 import FormTextAreaWrapper from '@/FormWrappers/FormTextAreaWrapper.vue'
 import Button from 'primevue/button'
 import { useRoute } from 'vue-router'
-import { computed, onBeforeMount, type PropType, ref, watch } from 'vue'
+import { computed, type PropType, ref, watch } from 'vue'
 import type { Blessing, BlessingLevel } from '@/components/blessings/types.ts'
 import RadioButton from 'primevue/radiobutton'
 import { getValidationInstance } from '@/components/characters/wizard/blessings/validators/blessingValidations.ts'
@@ -34,32 +34,24 @@ const props = defineProps({
 
 const mappingId = ref(0)
 const currentLevel = ref<BlessingLevel>({})
+const currentCost = computed(() => {
+  return props.blessing.type.toLowerCase() == 'disadvantage' ? currentLevel.value.xpGain : currentLevel.value.xpCost
+})
 const availableXp = ref(0)
 
-onBeforeMount(async () => {
-  await loadData()
-})
-
-watch(() => props.blessing, async () => {
-  await loadData()
-})
-
 const loadData = async () => {
-  const currentBlessing = store.blessings.filter(x => x.blessingId == props.blessing?.id)[0]
-  currentLevel.value = props.blessing.levels.filter(x => x.id == currentBlessing.blessingLevelId)[0]
+  const currentBlessing = store.blessings.find(x => x.blessingId == props.blessing?.id)
+  currentLevel.value = props.blessing.levels.find(x => x.id == currentBlessing.blessingLevelId) ?? {}
   mappingId.value = currentBlessing.id
   form.setValues(currentBlessing, currentLevel.value)
   let sectionType: XpSectionType = props.blessing.type.toLowerCase() == 'disadvantage' ? XpSectionTypes.disadvantage : XpSectionTypes.advantage
   let xpInfo = experienceInfo.getExperienceInfoForSection(sectionType)
-  let currentLevelXp = props.blessing.type.toLowerCase() == 'disadvantage' ? currentLevel.value.xpGain : currentLevel.value.xpCost
-
-  if (sectionType == XpSectionTypes.advantage) {
-    availableXp.value = xpInfo.availableXp
-  }
-  else {
-    availableXp.value = xpInfo.characterCreateMax - xpInfo.total + currentLevelXp
-  }
+  availableXp.value = xpInfo.availableXp + currentCost.value
 }
+
+watch(() => props.blessing.id, async () => {
+  await loadData()
+}, { immediate: true })
 
 const onSubmit = form.handleSubmit(async (values) => {
   const currentBlessing = store.blessings.filter(x => x.blessingId == props.blessing?.id)[0]
@@ -72,6 +64,18 @@ function disableOption(level: BlessingLevel) {
   }
   return level.xpCost > availableXp.value && level.xpCost > currentLevel.value.xpCost
 }
+
+const canOnlyDelete = computed(() => {
+  const levelId = form.blessingLevel.field.value?.id ?? -1
+  let indexLevel = props.blessing.levels.findIndex(x => x.id === levelId)
+  return indexLevel == 0 && availableXp.value == 0
+})
+
+const canLowerOrDelete = computed(() => {
+  const levelId = form.blessingLevel.field.value?.id ?? -1
+  let indexLevel = props.blessing.levels.findIndex(x => x.id === levelId)
+  return indexLevel > 0
+})
 
 const xpSectionType = computed(() => {
   return props.blessing.type.toLowerCase() == 'disadvantage' ? XpSectionTypes.disadvantage : XpSectionTypes.advantage
@@ -94,15 +98,26 @@ const xpSectionType = computed(() => {
     </div>
 
     <div v-html="props.blessing?.description" />
-    <ShowXPCosts v-if="characterInfo.isInCharacterCreation" :section-type="xpSectionType" class="pt-3" />
-    <div v-if="availableXp == 0">
+    <ShowXPCosts v-if="characterInfo.isInCharacterCreation" :section-type="xpSectionType" class="pt-3" :additional-available-xp="currentCost" />
+    <div v-if="!characterInfo.isInCharacterCreation">
       <Message severity="warn" class="mt-4">
-        You do not have enough experience to modify this.
+        You may only modify this {{ props.blessing.type.toLowerCase() }} during character creation.
+      </Message>
+    </div>
+    <div v-else-if="canLowerOrDelete">
+      <Message severity="warn" class="mt-4">
+        You may lower the level of this {{ props.blessing.type.toLowerCase() }} or delete it, but you cannot increase it
+        due to insufficient XP.
+      </Message>
+    </div>
+    <div v-else-if="canOnlyDelete">
+      <Message severity="warn" class="mt-4">
+        You may only delete this {{ props.blessing.type.toLowerCase() }}.
       </Message>
     </div>
     <div v-for="level in props.blessing.levels" :key="level.id" class="mt-3">
       <div class="d-flex flex-column flex-md-row align-self-center">
-        <RadioButton v-model="form.blessingLevel.field" :input-id="level.id.toString()" :value="level" class="mr-4" :disabled="disableOption(level) || !characterInfo.isInCharacterCreation" />
+        <RadioButton v-model="form.blessingLevel.field.value" :input-id="level.id.toString()" :value="level" class="mr-4" :disabled="disableOption(level) || !characterInfo.isInCharacterCreation" />
         <label :for="level.id.toString()" :class="disableOption(level) ? 'non-selectable' : ''">{{ level.name }} – {{ level.description }}</label>
       </div>
     </div>
