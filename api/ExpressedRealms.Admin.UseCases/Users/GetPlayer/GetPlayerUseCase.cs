@@ -2,7 +2,7 @@ using ExpressedRealms.Admin.Repository;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
-namespace ExpressedRealms.Admin.UseCases.GetPlayer;
+namespace ExpressedRealms.Admin.UseCases.Users.GetPlayer;
 
 internal sealed class GetPlayerUseCase(
     IUsersRepository playerRepository,

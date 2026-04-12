@@ -1,4 +1,4 @@
-using ExpressedRealms.Admin.UseCases.GetPlayer;
+using ExpressedRealms.Admin.UseCases.Users.GetPlayer;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;

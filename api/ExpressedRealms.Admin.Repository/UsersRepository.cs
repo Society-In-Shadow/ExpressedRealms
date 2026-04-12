@@ -71,6 +71,17 @@ internal sealed class UsersRepository(
         // Will never be true as you cannot assign 0 to player number which is null
         return context.Players.AnyAsync(x => x.PlayerNumber == playerNumber, cancellationToken);
     }
+    
+    public async Task<bool> PlayerNumberExceedsMaxSequenceValue(int playerNumber)
+    {
+        var lastValue = await context.Database
+            .SqlQuery<int>($"""
+                                 SELECT last_value
+                                 FROM player_number_sequence
+                             """)
+            .ToListAsync(cancellationToken);
+        return lastValue[0] < playerNumber;
+    }
 
     public Task<PlayerBasicInfoDto> GetPlayerBasicInfoAsync(Guid id)
     {

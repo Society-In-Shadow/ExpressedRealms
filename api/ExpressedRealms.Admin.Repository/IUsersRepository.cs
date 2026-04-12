@@ -16,4 +16,6 @@ public interface IUsersRepository
 
     Task EditAsync<TEntity>(TEntity entity)
         where TEntity : class;
+
+    Task<bool> PlayerNumberExceedsMaxSequenceValue(int playerNumber);
 }

@@ -1,4 +1,4 @@
-using ExpressedRealms.Admin.UseCases.UpdatePlayer;
+using ExpressedRealms.Admin.UseCases.Users.UpdatePlayer;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
