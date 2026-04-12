@@ -2,7 +2,7 @@ using ExpressedRealms.Admin.Repository;
 using FluentValidation;
 using JetBrains.Annotations;
 
-namespace ExpressedRealms.Admin.UseCases.GetPlayer;
+namespace ExpressedRealms.Admin.UseCases.Users.GetPlayer;
 
 [UsedImplicitly]
 internal sealed class GetPlayerModelValidator : AbstractValidator<GetPlayerModel>

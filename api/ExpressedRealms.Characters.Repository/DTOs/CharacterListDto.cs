@@ -6,6 +6,7 @@ public sealed record CharacterListDto
 
     /// <example>John Doe</example>
     public string Name { get; set; } = null!;
+
     /// <example>Adept</example>
     public string Expression { get; set; } = null!;
 

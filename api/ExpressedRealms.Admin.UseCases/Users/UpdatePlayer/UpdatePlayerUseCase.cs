@@ -2,7 +2,7 @@ using ExpressedRealms.Admin.Repository;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
-namespace ExpressedRealms.Admin.UseCases.UpdatePlayer;
+namespace ExpressedRealms.Admin.UseCases.Users.UpdatePlayer;
 
 internal sealed class UpdatePlayerUseCase(
     IUsersRepository playerRepository,

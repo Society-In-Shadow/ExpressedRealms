@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Admin.UseCases.GetPlayer;
+namespace ExpressedRealms.Admin.UseCases.Users.GetPlayer;
 
 public class GetPlayerModel
 {

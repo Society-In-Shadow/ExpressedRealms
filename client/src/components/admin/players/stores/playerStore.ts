@@ -32,6 +32,11 @@ export const PlayerStore
 
         this.player = this.players.find(x => x.id === id)!
       },
+      async updatePlayer(id: string) {
+        await this.fetchPlayers()
+
+        this.player = this.players.find(x => x.id === id)!
+      },
       filterPlayers(query: string) {
         const lowercasedQuery = query.toLowerCase().trim()
 

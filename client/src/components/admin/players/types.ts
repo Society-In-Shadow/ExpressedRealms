@@ -39,3 +39,11 @@ export interface RoleInfo {
   name: string
   isEnabled: boolean
 }
+
+export interface BasicUserInfoResponse {
+  playerNumber: number
+}
+
+export interface EditUserRequest {
+  playerNumber: number
+}

@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Admin.UseCases.UpdatePlayer;
+namespace ExpressedRealms.Admin.UseCases.Users.UpdatePlayer;
 
 public class UpdatePlayerModel
 {

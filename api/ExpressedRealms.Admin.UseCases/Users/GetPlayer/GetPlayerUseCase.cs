@@ -2,7 +2,7 @@ using ExpressedRealms.Admin.Repository;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
-namespace ExpressedRealms.Admin.UseCases.GetPlayer;
+namespace ExpressedRealms.Admin.UseCases.Users.GetPlayer;
 
 internal sealed class GetPlayerUseCase(
     IUsersRepository playerRepository,
@@ -23,9 +23,8 @@ internal sealed class GetPlayerUseCase(
 
         var player = await playerRepository.GetPlayerBasicInfoAsync(model.Id);
 
-        return Result.Ok(new PlayerBasicInfoReturnModel()
-        {
-            PlayerNumber = player.PlayerNumber ?? 0
-        });
+        return Result.Ok(
+            new PlayerBasicInfoReturnModel() { PlayerNumber = player.PlayerNumber ?? 0 }
+        );
     }
 }
