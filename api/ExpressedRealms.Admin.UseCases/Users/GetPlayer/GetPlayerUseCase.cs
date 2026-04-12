@@ -23,9 +23,8 @@ internal sealed class GetPlayerUseCase(
 
         var player = await playerRepository.GetPlayerBasicInfoAsync(model.Id);
 
-        return Result.Ok(new PlayerBasicInfoReturnModel()
-        {
-            PlayerNumber = player.PlayerNumber ?? 0
-        });
+        return Result.Ok(
+            new PlayerBasicInfoReturnModel() { PlayerNumber = player.PlayerNumber ?? 0 }
+        );
     }
 }

@@ -19,7 +19,7 @@ internal sealed class UsersRepository(
         var userRoles = await context.UserRoles.AsNoTracking().ToListAsync();
         var roles = await context.Roles.AsNoTracking().ToListAsync();
         var currentDateTime = DateOnly.FromDateTime(DateTime.UtcNow);
-        
+
         var players = await context
             .Users.AsNoTracking()
             .Select(x => new UserListDto()
@@ -27,7 +27,10 @@ internal sealed class UsersRepository(
                 Id = x.Id,
                 Email = x.Email!,
                 EmailConfirmed = x.EmailConfirmed,
-                Username = x.Player != null ? $"{x.Player.Name} ({(x.Player.PlayerNumber ?? 0):D3})" : "Name hasn't been set yet.",
+                Username =
+                    x.Player != null
+                        ? $"{x.Player.Name} ({(x.Player.PlayerNumber ?? 0):D3})"
+                        : "Name hasn't been set yet.",
                 IsDisabled = x.LockoutEnd.HasValue && x.LockoutEnd == DateTimeOffset.MaxValue,
                 LockedOut = x.LockoutEnd.HasValue && x.LockoutEnd >= DateTimeOffset.UtcNow,
                 LockOutExpires = x.LockoutEnd,
@@ -62,37 +65,36 @@ internal sealed class UsersRepository(
 
     public async Task<Player?> GetPlayerByUserIdForEditing(string userId)
     {
-        return await context.Players
-            .FirstAsync(x => x.UserId == userId, cancellationToken);
+        return await context.Players.FirstAsync(x => x.UserId == userId, cancellationToken);
     }
-    
+
     public Task<bool> PlayerNumberExists(int playerNumber)
     {
-        if(playerNumber == 0)
+        if (playerNumber == 0)
             return Task.FromResult(false);
         // Will never be true as you cannot assign 0 to player number which is null
         return context.Players.AnyAsync(x => x.PlayerNumber == playerNumber, cancellationToken);
     }
-    
+
     public async Task<bool> PlayerNumberExceedsMaxSequenceValue(int playerNumber)
     {
-        var lastValue = await context.Database
-            .SqlQuery<int>($"""
-                                 SELECT last_value
-                                 FROM player_number_sequence
-                             """)
+        var lastValue = await context
+            .Database.SqlQuery<int>(
+                $"""
+                    SELECT last_value
+                    FROM player_number_sequence
+                """
+            )
             .ToListAsync(cancellationToken);
         return lastValue[0] < playerNumber;
     }
 
     public Task<PlayerBasicInfoDto> GetPlayerBasicInfoAsync(Guid id)
     {
-        return context.Players.AsNoTracking()
+        return context
+            .Players.AsNoTracking()
             .Where(x => x.UserId == id.ToString())
-            .Select(x => new PlayerBasicInfoDto()
-            {
-                PlayerNumber = x.PlayerNumber
-            })
+            .Select(x => new PlayerBasicInfoDto() { PlayerNumber = x.PlayerNumber })
             .FirstAsync(cancellationToken);
     }
 
@@ -108,7 +110,7 @@ internal sealed class UsersRepository(
             })
             .ToListAsync(cancellationToken);
     }
-    
+
     public async Task EditAsync<TEntity>(TEntity entity)
         where TEntity : class
     {

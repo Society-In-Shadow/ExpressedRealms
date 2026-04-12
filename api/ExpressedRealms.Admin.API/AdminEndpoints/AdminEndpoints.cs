@@ -94,11 +94,11 @@ public static class AdminEndpoints
         endpointGroup
             .MapGet("user/{userid}/activitylogs", ViewActivityLogsEndpoint.Execute)
             .RequirePermission(Permissions.Player.ViewActivityLogs);
-        
+
         endpointGroup
             .MapGet("user/{userid}/", GetPlayerEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Player.View);
-        
+
         endpointGroup
             .MapPut("user/{userid}/", UpdatePlayerEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Player.Edit);
