@@ -74,11 +74,13 @@ internal sealed class UsersRepository(
 
     public Task<PlayerBasicInfoDto> GetPlayerBasicInfoAsync(Guid id)
     {
-        return context.Players.AsNoTracking().Select(x => new PlayerBasicInfoDto()
+        return context.Players.AsNoTracking()
+            .Where(x => x.UserId == id.ToString())
+            .Select(x => new PlayerBasicInfoDto()
             {
                 PlayerNumber = x.PlayerNumber
             })
-            .FirstAsync();
+            .FirstAsync(cancellationToken);
     }
 
     public async Task<List<GenericListDto<string>>> GetUserSummaryAsync()
