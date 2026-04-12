@@ -6,7 +6,6 @@ namespace ExpressedRealms.Characters.Repository.Players;
 public interface IPlayerRepository : IGenericRepository
 {
     Task<Player?> FindPlayerAsync(Guid id);
-    Task<bool> PlayerExistsAsync(Guid id);
     Task<string> GetUniqueLookupId();
     Task<Player> GetPlayerByCharacterId(int characterId);
 }

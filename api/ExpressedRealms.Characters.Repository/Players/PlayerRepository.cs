@@ -16,11 +16,6 @@ internal sealed class PlayerRepository(
         return await context.Players.FindAsync([id], cancellationToken);
     }
 
-    public Task<bool> PlayerExistsAsync(Guid id)
-    {
-        return context.Players.AnyAsync(x => x.Id == id, cancellationToken);
-    }
-
     public async Task<string> GetUniqueLookupId()
     {
         var lookupId = await Nanoid.GenerateAsync(size: 8);
