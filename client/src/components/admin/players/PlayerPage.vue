@@ -18,6 +18,7 @@ import { formatDistance } from 'date-fns/formatDistance'
 import Tag from 'primevue/tag'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 import AssignRolesTab from '@/components/admin/players/assignedRoles/AssignRolesTab.vue'
+import EditPlayerTab from '@/components/admin/players/EditPlayerTab.vue'
 
 const route = useRoute()
 const playerData = PlayerStore()
@@ -98,7 +99,7 @@ const timeTillLockoutExpires = computed(() => {
         </TabList>
         <TabPanels>
           <TabPanel value="0">
-            <h3>No Basic Info</h3>
+            <EditPlayerTab :user-id="userId" />
           </TabPanel>
           <TabPanel v-if="permissionCheck.Player.ManageRoles" value="1">
             <PlayerRoles :user-id="userId" />
