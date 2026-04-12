@@ -16,6 +16,7 @@ internal sealed class UsersRepository(
         var userRoles = await context.UserRoles.AsNoTracking().ToListAsync();
         var roles = await context.Roles.AsNoTracking().ToListAsync();
         var currentDateTime = DateOnly.FromDateTime(DateTime.UtcNow);
+        
         var players = await context
             .Users.AsNoTracking()
             .Select(x => new UserListDto()
@@ -23,10 +24,7 @@ internal sealed class UsersRepository(
                 Id = x.Id,
                 Email = x.Email!,
                 EmailConfirmed = x.EmailConfirmed,
-                Username =
-                    x.Player != null && x.Player!.Name != ""
-                        ? x.Player.Name
-                        : "Name hasn't been set yet.",
+                Username = x.Player != null ? $"{x.Player.Name} ({(x.Player.PlayerNumber ?? 0):D3})" : "Name hasn't been set yet.",
                 IsDisabled = x.LockoutEnd.HasValue && x.LockoutEnd == DateTimeOffset.MaxValue,
                 LockedOut = x.LockoutEnd.HasValue && x.LockoutEnd >= DateTimeOffset.UtcNow,
                 LockOutExpires = x.LockoutEnd,
