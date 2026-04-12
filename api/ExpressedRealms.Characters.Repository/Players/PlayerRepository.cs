@@ -1,3 +1,4 @@
+using ExpressedRealms.Characters.Repository.Players.Dtos;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
@@ -14,6 +15,11 @@ internal sealed class PlayerRepository(
     public async Task<Player?> FindPlayerAsync(Guid id)
     {
         return await context.Players.FindAsync([id], cancellationToken);
+    }
+
+    public Task<bool> PlayerExistsAsync(Guid id)
+    {
+        return context.Players.AnyAsync(x => x.Id == id, cancellationToken);
     }
 
     public async Task<string> GetUniqueLookupId()
@@ -44,6 +50,15 @@ internal sealed class PlayerRepository(
     public Task<bool> PlayerNumberExists(int playerNumber)
     {
         return context.Players.AnyAsync(x => x.PlayerNumber == playerNumber, cancellationToken);
+    }
+
+    public Task<PlayerBasicInfoDto> GetPlayerBasicInfoAsync(Guid id)
+    {
+        return context.Players.AsNoTracking().Select(x => new PlayerBasicInfoDto()
+            {
+                PlayerNumber = x.PlayerNumber
+            })
+            .FirstAsync();
     }
 
     public async Task EditAsync<TEntity>(TEntity entity)
