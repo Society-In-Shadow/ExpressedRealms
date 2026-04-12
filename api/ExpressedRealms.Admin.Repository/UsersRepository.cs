@@ -1,6 +1,9 @@
 using ExpressedRealms.Admin.Repository.DTOs;
+using ExpressedRealms.Admin.Repository.Users.Dtos;
 using ExpressedRealms.DB;
+using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.Shared;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +19,7 @@ internal sealed class UsersRepository(
         var userRoles = await context.UserRoles.AsNoTracking().ToListAsync();
         var roles = await context.Roles.AsNoTracking().ToListAsync();
         var currentDateTime = DateOnly.FromDateTime(DateTime.UtcNow);
+        
         var players = await context
             .Users.AsNoTracking()
             .Select(x => new UserListDto()
@@ -23,10 +27,7 @@ internal sealed class UsersRepository(
                 Id = x.Id,
                 Email = x.Email!,
                 EmailConfirmed = x.EmailConfirmed,
-                Username =
-                    x.Player != null && x.Player!.Name != ""
-                        ? x.Player.Name
-                        : "Name hasn't been set yet.",
+                Username = x.Player != null ? $"{x.Player.Name} ({(x.Player.PlayerNumber ?? 0):D3})" : "Name hasn't been set yet.",
                 IsDisabled = x.LockoutEnd.HasValue && x.LockoutEnd == DateTimeOffset.MaxValue,
                 LockedOut = x.LockoutEnd.HasValue && x.LockoutEnd >= DateTimeOffset.UtcNow,
                 LockOutExpires = x.LockoutEnd,
@@ -59,6 +60,29 @@ internal sealed class UsersRepository(
         return await context.Users.AnyAsync(x => x.Id == userId);
     }
 
+    public async Task<Player?> GetPlayerByUserIdForEditing(string userId)
+    {
+        return await context.Players
+            .FirstAsync(x => x.UserId == userId, cancellationToken);
+    }
+    
+    public Task<bool> PlayerNumberExists(int playerNumber)
+    {
+        // Will never be true as you cannot assign 0 to player number which is null
+        return context.Players.AnyAsync(x => x.PlayerNumber == playerNumber, cancellationToken);
+    }
+
+    public Task<PlayerBasicInfoDto> GetPlayerBasicInfoAsync(Guid id)
+    {
+        return context.Players.AsNoTracking()
+            .Where(x => x.UserId == id.ToString())
+            .Select(x => new PlayerBasicInfoDto()
+            {
+                PlayerNumber = x.PlayerNumber
+            })
+            .FirstAsync(cancellationToken);
+    }
+
     public async Task<List<GenericListDto<string>>> GetUserSummaryAsync()
     {
         return await context
@@ -70,5 +94,11 @@ internal sealed class UsersRepository(
                 Description = null,
             })
             .ToListAsync(cancellationToken);
+    }
+    
+    public async Task EditAsync<TEntity>(TEntity entity)
+        where TEntity : class
+    {
+        await context.CommonSaveChanges(entity, cancellationToken);
     }
 }

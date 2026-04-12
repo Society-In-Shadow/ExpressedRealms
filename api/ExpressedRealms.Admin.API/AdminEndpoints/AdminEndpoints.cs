@@ -4,11 +4,13 @@ using ExpressedRealms.Admin.API.AdminEndpoints.DeleteRoleUserMapping;
 using ExpressedRealms.Admin.API.AdminEndpoints.DisableUser;
 using ExpressedRealms.Admin.API.AdminEndpoints.Dtos;
 using ExpressedRealms.Admin.API.AdminEndpoints.EnableUser;
+using ExpressedRealms.Admin.API.AdminEndpoints.GetPlayer;
 using ExpressedRealms.Admin.API.AdminEndpoints.GetRolesForUser;
 using ExpressedRealms.Admin.API.AdminEndpoints.GetUsers;
 using ExpressedRealms.Admin.API.AdminEndpoints.GetUserSummary;
 using ExpressedRealms.Admin.API.AdminEndpoints.Response;
 using ExpressedRealms.Admin.API.AdminEndpoints.UnlockUser;
+using ExpressedRealms.Admin.API.AdminEndpoints.UpdatePlayer;
 using ExpressedRealms.Admin.API.AdminEndpoints.UpdateUserRoles;
 using ExpressedRealms.Admin.API.AdminEndpoints.ViewActivityLogs;
 using ExpressedRealms.Authentication.PermissionCollection;
@@ -92,6 +94,14 @@ public static class AdminEndpoints
         endpointGroup
             .MapGet("user/{userid}/activitylogs", ViewActivityLogsEndpoint.Execute)
             .RequirePermission(Permissions.Player.ViewActivityLogs);
+        
+        endpointGroup
+            .MapGet("user/{userid}/", GetPlayerEndpoint.ExecuteAsync)
+            .RequirePermission(Permissions.Player.View);
+        
+        endpointGroup
+            .MapPut("user/{userid}/", UpdatePlayerEndpoint.ExecuteAsync)
+            .RequirePermission(Permissions.Player.Edit);
 
         endpointGroup
             .MapPut("user/{userid}/lockout", UnlockUserEndpoint.Execute)

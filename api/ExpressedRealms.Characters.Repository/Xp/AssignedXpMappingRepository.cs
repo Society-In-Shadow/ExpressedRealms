@@ -38,7 +38,7 @@ public class AssignedXpMappingRepository(
             Amount = x.Amount,
             DateAssigned = x.Timestamp,
             Assigner = new BasicInfo() { Id = 0, Name = x.AssignedByUser.Player!.Name },
-            Player = new BasicInfo() { Name = x.Player.Name, Id = 0 },
+            Player = new BasicInfo() { Name = $"{x.Player.Name} ({(x.Player.PlayerNumber ?? 0):D3})", Id = 0 },
             Character =
                 x.Character == null
                     ? null
