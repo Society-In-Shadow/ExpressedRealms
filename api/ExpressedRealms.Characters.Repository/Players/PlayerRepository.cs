@@ -36,6 +36,16 @@ internal sealed class PlayerRepository(
         );
     }
 
+    public async Task<Player> GetPlayerByIdForEdit(Guid playerId)
+    {
+        return await context.Players.FirstAsync(x => x.Id == playerId);
+    }
+    
+    public Task<bool> PlayerNumberExists(int playerNumber)
+    {
+        return context.Players.AnyAsync(x => x.PlayerNumber == playerNumber, cancellationToken);
+    }
+
     public async Task EditAsync<TEntity>(TEntity entity)
         where TEntity : class
     {

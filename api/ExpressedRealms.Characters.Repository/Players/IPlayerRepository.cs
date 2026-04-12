@@ -8,4 +8,6 @@ public interface IPlayerRepository : IGenericRepository
     Task<Player?> FindPlayerAsync(Guid id);
     Task<string> GetUniqueLookupId();
     Task<Player> GetPlayerByCharacterId(int characterId);
+    Task<Player> GetPlayerByIdForEdit(Guid playerId);
+    Task<bool> PlayerNumberExists(int playerNumber);
 }
