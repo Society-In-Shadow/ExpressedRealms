@@ -1,11 +1,11 @@
-using ExpressedRealms.Characters.Repository.Players;
+using ExpressedRealms.Admin.Repository;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
 namespace ExpressedRealms.Admin.UseCases.GetPlayer;
 
 internal sealed class GetPlayerUseCase(
-    IPlayerRepository playerRepository,
+    IUsersRepository playerRepository,
     GetPlayerModelValidator validator,
     CancellationToken cancellationToken
 ) : IGetPlayerUseCase

@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Admin.API.AdminCharacterList.UpdatePlayer;
+namespace ExpressedRealms.Admin.API.AdminEndpoints.UpdatePlayer;
 
 public class UpdatePlayerRequest
 {

@@ -1,4 +1,3 @@
-using ExpressedRealms.Characters.Repository.Players.Dtos;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
@@ -40,25 +39,6 @@ internal sealed class PlayerRepository(
             x => x.Characters.Any(y => y.Id == characterId),
             cancellationToken
         );
-    }
-
-    public async Task<Player> GetPlayerByIdForEdit(Guid playerId)
-    {
-        return await context.Players.FirstAsync(x => x.Id == playerId);
-    }
-    
-    public Task<bool> PlayerNumberExists(int playerNumber)
-    {
-        return context.Players.AnyAsync(x => x.PlayerNumber == playerNumber, cancellationToken);
-    }
-
-    public Task<PlayerBasicInfoDto> GetPlayerBasicInfoAsync(Guid id)
-    {
-        return context.Players.AsNoTracking().Select(x => new PlayerBasicInfoDto()
-            {
-                PlayerNumber = x.PlayerNumber
-            })
-            .FirstAsync();
     }
 
     public async Task EditAsync<TEntity>(TEntity entity)

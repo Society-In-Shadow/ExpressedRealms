@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Admin.API.AdminCharacterList.GetPlayer;
+namespace ExpressedRealms.Admin.API.AdminEndpoints.GetPlayer;
 
 public class GetPlayerResponse
 {

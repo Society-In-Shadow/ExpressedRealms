@@ -1,5 +1,4 @@
 using ExpressedRealms.Admin.API.AdminCharacterList.GetCharacterList;
-using ExpressedRealms.Admin.API.AdminCharacterList.UpdatePlayer;
 using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using Microsoft.AspNetCore.Builder;
@@ -19,10 +18,6 @@ public static class AdminCharacterListEndpoints
 
         endpointGroup
             .MapGet("characters/", GetCharacterListEndpoint.Execute)
-            .RequireAuthorization();
-
-        endpointGroup
-            .MapPut("characters/{characterId}/updateXp", UpdatePlayerEndpoint.ExecuteAsync)
             .RequireAuthorization();
     }
 }

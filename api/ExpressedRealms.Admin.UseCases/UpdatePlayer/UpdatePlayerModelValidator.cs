@@ -1,4 +1,4 @@
-using ExpressedRealms.Characters.Repository.Players;
+using ExpressedRealms.Admin.Repository;
 using FluentValidation;
 using JetBrains.Annotations;
 
@@ -7,12 +7,12 @@ namespace ExpressedRealms.Admin.UseCases.UpdatePlayer;
 [UsedImplicitly]
 internal sealed class UpdatePlayerModelValidator : AbstractValidator<UpdatePlayerModel>
 {
-    public UpdatePlayerModelValidator(IPlayerRepository repository)
+    public UpdatePlayerModelValidator(IUsersRepository repository)
     {
         RuleFor(x => x.Id)
             .NotEmpty()
             .WithMessage("Id is required.")
-            .MustAsync(async (x, y) => await repository.FindPlayerAsync(x) is not null)
+            .MustAsync(async (x, y) => await repository.UserExistsAsync(x.ToString()))
             .WithMessage("Character does not exist.");
 
         RuleFor(x => x.PlayerNumber)

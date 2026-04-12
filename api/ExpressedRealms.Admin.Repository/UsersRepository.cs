@@ -1,6 +1,9 @@
 using ExpressedRealms.Admin.Repository.DTOs;
+using ExpressedRealms.Admin.Repository.Users.Dtos;
 using ExpressedRealms.DB;
+using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.Shared;
+using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using Microsoft.EntityFrameworkCore;
 
@@ -57,6 +60,27 @@ internal sealed class UsersRepository(
         return await context.Users.AnyAsync(x => x.Id == userId);
     }
 
+    public async Task<Player?> GetPlayerByUserIdForEditing(string userId)
+    {
+        return await context.Players
+            .FirstAsync(x => x.UserId == userId, cancellationToken);
+    }
+    
+    public Task<bool> PlayerNumberExists(int playerNumber)
+    {
+        // Will never be true as you cannot assign 0 to player number which is null
+        return context.Players.AnyAsync(x => x.PlayerNumber == playerNumber, cancellationToken);
+    }
+
+    public Task<PlayerBasicInfoDto> GetPlayerBasicInfoAsync(Guid id)
+    {
+        return context.Players.AsNoTracking().Select(x => new PlayerBasicInfoDto()
+            {
+                PlayerNumber = x.PlayerNumber
+            })
+            .FirstAsync();
+    }
+
     public async Task<List<GenericListDto<string>>> GetUserSummaryAsync()
     {
         return await context
@@ -68,5 +92,11 @@ internal sealed class UsersRepository(
                 Description = null,
             })
             .ToListAsync(cancellationToken);
+    }
+    
+    public async Task EditAsync<TEntity>(TEntity entity)
+        where TEntity : class
+    {
+        await context.CommonSaveChanges(entity, cancellationToken);
     }
 }

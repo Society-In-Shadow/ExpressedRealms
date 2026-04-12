@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Characters.Repository.Players.Dtos;
+namespace ExpressedRealms.Admin.Repository.Users.Dtos;
 
 public class PlayerBasicInfoDto
 {

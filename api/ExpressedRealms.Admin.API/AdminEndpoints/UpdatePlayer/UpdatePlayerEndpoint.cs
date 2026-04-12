@@ -1,21 +1,21 @@
-using ExpressedRealms.Admin.UseCases.GetPlayer;
 using ExpressedRealms.Admin.UseCases.UpdatePlayer;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ExpressedRealms.Admin.API.AdminCharacterList.GetPlayer;
+namespace ExpressedRealms.Admin.API.AdminEndpoints.UpdatePlayer;
 
-public static class GetPlayerEndpoint
+public static class UpdatePlayerEndpoint
 {
     public static async Task<Results<Ok, ValidationProblem, NotFound>> ExecuteAsync(
-        Guid playerId,
-        [FromServices] IGetPlayerUseCase useCase
+        Guid userId,
+        [FromBody] UpdatePlayerRequest request,
+        [FromServices] IUpdatePlayerUseCase useCase
     )
     {
         var results = await useCase.ExecuteAsync(
-            new UpdatePlayerModel() { Id = playerId }
+            new UpdatePlayerModel() { Id = userId, PlayerNumber = request.PlayerNumber }
         );
 
         if (results.HasValidationError(out var validationProblem))
@@ -24,9 +24,6 @@ public static class GetPlayerEndpoint
             return notFound;
         results.ThrowIfErrorNotHandled();
 
-        return TypedResults.Ok(new GetPlayerResponse()
-        {
-            PlayerNumber = results.Value.PlayerNumber
-        });
+        return TypedResults.Ok();
     }
 }

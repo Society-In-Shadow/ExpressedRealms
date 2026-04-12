@@ -1,11 +1,11 @@
-using ExpressedRealms.Characters.Repository.Players;
+using ExpressedRealms.Admin.Repository;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
 namespace ExpressedRealms.Admin.UseCases.UpdatePlayer;
 
 internal sealed class UpdatePlayerUseCase(
-    IPlayerRepository playerRepository,
+    IUsersRepository playerRepository,
     UpdatePlayerModelValidator validator,
     CancellationToken cancellationToken
 ) : IUpdatePlayerUseCase
@@ -21,7 +21,7 @@ internal sealed class UpdatePlayerUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var character = await playerRepository.FindPlayerAsync(model.Id);
+        var character = await playerRepository.GetPlayerByUserIdForEditing(model.Id.ToString());
 
         character!.PlayerNumber = model.PlayerNumber == 0 ? null : model.PlayerNumber;
 
