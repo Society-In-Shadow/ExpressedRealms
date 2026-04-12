@@ -38,9 +38,26 @@ const sortedItems = computed<AssignedXpInfo[]>(() => {
         {{ formatDate(data.dateAssigned) }}
       </template>
     </Column>
-    <Column field="assigner.name" header="Assigner" />
-    <Column field="character.name" header="Character" />
-    <Column field="xpType.name" header="XP Type" />
+    <Column header="Assigner">
+      <template #body="{ data }">
+        {{ data.assigner?.name }}
+      </template>
+    </Column>
+    <Column header="Player / Character">
+      <template #body="{data}">
+        <span v-if="data.player">
+          {{ data.player.name }}
+        </span>
+        <span v-if="data.character">
+          - {{ data.character.name }}
+        </span>
+      </template>
+    </Column>
+    <Column header="XP Type">
+      <template #body="{ data }">
+        {{ data.xpType?.name }}
+      </template>
+    </Column>
     <Column field="amount" header="Amount" />
     <Column field="notes" header="Notes" />
   </DataTable>
