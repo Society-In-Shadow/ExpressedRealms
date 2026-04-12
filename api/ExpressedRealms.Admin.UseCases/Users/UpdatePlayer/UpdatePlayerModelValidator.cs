@@ -16,8 +16,6 @@ internal sealed class UpdatePlayerModelValidator : AbstractValidator<UpdatePlaye
             .WithMessage("Character does not exist.");
 
         RuleFor(x => x.PlayerNumber)
-            .NotEmpty()
-            .WithMessage("Player Number is required.")
             .GreaterThanOrEqualTo(0)
             .WithMessage("Player Number be greater than or equal to 0.")
             .MustAsync(async (x, y) => !await repository.PlayerNumberExists(x))

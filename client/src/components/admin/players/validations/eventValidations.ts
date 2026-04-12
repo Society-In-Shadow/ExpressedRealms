@@ -4,7 +4,7 @@ import type { BasicUserInfoResponse } from '@/components/admin/players/types.ts'
 
 const validationSchema = object({
   playerNumber: number()
-    .required()
+    .min(0)
     .label('Player Number'),
 })
 

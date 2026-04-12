@@ -4,10 +4,12 @@ import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
 import { getValidationInstance } from '@/components/admin/players/validations/eventValidations.ts'
 import Button from 'primevue/button'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+import toaster from '@/services/Toasters'
 import { watch } from 'vue'
 import FormWrapper from '@/FormWrappers/FormWrapper.vue'
 import { basicUserInfoById } from '@/components/admin/players/stores/userStore.ts'
 import { userService } from '@/components/admin/players/services/userService.ts'
+import { PlayerStore } from '@/components/admin/players/stores/playerStore.ts'
 
 const props = defineProps({
   userId: {
@@ -16,6 +18,7 @@ const props = defineProps({
   },
 })
 
+const playerData = PlayerStore()
 const userPermissions = userPermissionStore()
 const permissionCheck = userPermissions.permissionCheck
 const { data, isLoading } = useQuery(basicUserInfoById(props.userId))
@@ -29,6 +32,8 @@ watch(() => isLoading.value, () => {
 const onSubmit = form.handleSubmit(async (values) => {
   try {
     await userService.edit(props.userId, values)
+    toaster.success('User updated successfully')
+    await playerData.updatePlayer(props.userId)
   }
   catch (error) {
     const errors = error?.response.data?.errors as Record<string, string[] | string> | undefined

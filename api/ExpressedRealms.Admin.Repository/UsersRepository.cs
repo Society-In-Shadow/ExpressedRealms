@@ -68,6 +68,8 @@ internal sealed class UsersRepository(
     
     public Task<bool> PlayerNumberExists(int playerNumber)
     {
+        if(playerNumber == 0)
+            return Task.FromResult(false);
         // Will never be true as you cannot assign 0 to player number which is null
         return context.Players.AnyAsync(x => x.PlayerNumber == playerNumber, cancellationToken);
     }
