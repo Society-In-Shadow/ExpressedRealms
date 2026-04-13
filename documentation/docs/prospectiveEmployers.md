@@ -35,25 +35,26 @@ comprehensive, but I am starting to make an effort to update or add as I go.
 ### Complex Use Case Example
 Use cases are where I put all the domain logic, it's a domain driven design concept.
 
-- [Update Blessings For Character Use Case](./../api/ExpressedRealms.Blessings.UseCases/CharacterBlessingMappings/Edit/UpdateBlessingForCharacterUseCase.cs)
-- [Add Blessings To Character Use Case](./../api/ExpressedRealms.Blessings.UseCases/CharacterBlessingMappings/Create/AddBlessingToCharacterUseCase.cs)
+- [Update Blessings For Character Use Case](./../../api/ExpressedRealms.Blessings.UseCases/CharacterBlessingMappings/Edit/UpdateBlessingForCharacterUseCase.cs)
+- [Add Blessings To Character Use Case](./../../api/ExpressedRealms.Blessings.UseCases/CharacterBlessingMappings/Create/AddBlessingToCharacterUseCase.cs)
 
 ### API Example
 The newer API endpoints tend to follow the same pattern, I have a Endpoints class that connects all the endpoints together.
 
-- [Character Blessing Endpoints](./../api/ExpressedRealms.Blessings.API/BlessingLevels/BlessingLevelEndpoints.cs)
-- [Create Blessing Mapping Endpoint](./../api/ExpressedRealms.Blessings.API/BlessingLevels/EditBlessingLevel/EditBlessingLevelEndpoint.cs)
+- [Character Blessing Endpoints](./../../api/ExpressedRealms.Blessings.API/BlessingLevels/BlessingLevelEndpoints.cs)
+- [Create Blessing Mapping Endpoint](./../../api/ExpressedRealms.Blessings.API/BlessingLevels/EditBlessingLevel/EditBlessingLevelEndpoint.cs)
 
 ### Unit Testing
-- [Add Blessing To Character Use Case Tests](./../api/ExpressedRealms.Blessings.UseCases.Tests.Unit/CharacterBlessingMappings/AddBlessingToCharacterUseCaseTests.cs)
+- [Add Blessing To Character Use Case Tests](./../../api/ExpressedRealms.Blessings.UseCases.Tests.Unit/CharacterBlessingMappings/AddBlessingToCharacterUseCaseTests.cs)
 
 ### UI Examples
 Following the same Blessing path here, you can take a look at the UI for it below
 
-- [Blessing UI Structure](./../client/src/components/blessings)
+- [Blessing UI Structure](./../../client/src/components/blessings)
 
 ### SQL Example
 One of the core parts of a character is keeping track of their XP, both during character creation, and during gameplay.
 The following view was thrown together to handle gathering the 6 or so different XP types.
 
-- [Character XP View](./../api/ExpressedRealms.DB/Scripts/CharacterXpView.sql)
+- [Character XP View](./../../api/ExpressedRealms.DB/Scripts/CharacterXpView.sql)
+- [Copy Character Archetype](./../../api/ExpressedRealms.DB/Scripts/CopyCharacterToPlayerProc.sql)
