@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Powers.Reporting.powerCards.CardTypes;
+namespace ExpressedRealms.Powers.Reporting.powerCards.CardTypes.WealthCards;
 
 public class WealthCardData : ICardData
 {
@@ -7,4 +7,6 @@ public class WealthCardData : ICardData
     public double BankedCash { get; set; }
     public double Liquadation { get; set; }
     public double InitialBasicItemIncome { get; set; }
+    public string CharacterName { get; set; }
+    public List<WealthTableLine> WealthTableLines { get; set; }
 }

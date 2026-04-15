@@ -1,8 +1,8 @@
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Wealth;
 using ExpressedRealms.Powers.Reporting.powerCards;
-using ExpressedRealms.Powers.Reporting.powerCards.CardTypes;
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.CashCards;
+using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.WealthCards;
 using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.Powers.Repository.PowerPaths;
 using ExpressedRealms.UseCases.Shared;

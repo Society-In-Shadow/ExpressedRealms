@@ -1,3 +1,4 @@
+using QuestPDF.Elements.Table;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 
@@ -8,7 +9,10 @@ internal static class PopulateWealthCard
     public static void FillCard(ColumnDescriptor card, WealthCardData wealthData)
     {
         card.Item()
-            .Padding(15)
+            .PaddingTop(15)
+            .PaddingLeft(15)
+            .PaddingRight(15)
+            .PaddingRight(7)
             .Decoration(decorator =>
             {
                 decorator
@@ -23,12 +27,16 @@ internal static class PopulateWealthCard
                                     .Item()
                                     .Row(initialIncomeRow =>
                                     {
-                                        initialIncomeRow
-                                            .RelativeItem()
-                                            .Text("Wealth Card")
-                                            .Bold()
-                                            .FontSize(11)
-                                            .ExtraBold();
+                                        initialIncomeRow.RelativeItem().Text(text =>
+                                        {
+                                            text.Span("Wealth Card").Bold().FontSize(11).ExtraBold();
+
+                                                text.Span($" - asdf")
+                                                    .Italic()
+                                                    .FontSize(11)
+                                                    .FontColor(CustomColors.SecondaryTextColor);
+                                        });
+                                        
                                         initialIncomeRow
                                             .RelativeItem()
                                             .AlignRight()
@@ -42,175 +50,156 @@ internal static class PopulateWealthCard
                                     .Item()
                                     .PaddingTop(5)
                                     .Text(
-                                        "Warning: Do not throw this card away after spending everything"
+                                        "Warning: Do not throw this card away, this is part of your character sheet"
                                     );
-
                                 leftSide
                                     .Item()
-                                    .PaddingTop(5)
-                                    .Row(initialIncomeRow =>
-                                    {
-                                        initialIncomeRow
-                                            .RelativeItem()
-                                            .AlignMiddle()
-                                            .Column(initialIncomeColumn =>
-                                            {
-                                                initialIncomeColumn
-                                                    .Item()
-                                                    .Text("Con Income")
-                                                    .Bold()
-                                                    .AlignCenter()
-                                                    .FontSize(8);
-                                                initialIncomeColumn
-                                                    .Item()
-                                                    .Text(wealthData.WealthIncome.ToString("C0"))
-                                                    .Bold()
-                                                    .AlignCenter()
-                                                    .FontSize(11);
-                                            });
-
-                                        initialIncomeRow
-                                            .RelativeItem()
-                                            .AlignMiddle()
-                                            .Column(initialIncomeColumn =>
-                                            {
-                                                initialIncomeColumn
-                                                    .Item()
-                                                    .Text("Banked Cash")
-                                                    .Bold()
-                                                    .AlignCenter()
-                                                    .FontSize(8);
-                                                initialIncomeColumn
-                                                    .Item()
-                                                    .Text(wealthData.BankedCash.ToString("C0"))
-                                                    .Bold()
-                                                    .AlignCenter()
-                                                    .FontSize(11);
-                                            });
-
-                                        initialIncomeRow
-                                            .RelativeItem()
-                                            .AlignMiddle()
-                                            .Column(initialIncomeColumn =>
-                                            {
-                                                initialIncomeColumn
-                                                    .Item()
-                                                    .Text("Liquidation Value")
-                                                    .Bold()
-                                                    .AlignCenter()
-                                                    .FontSize(8);
-                                                initialIncomeColumn
-                                                    .Item()
-                                                    .Text(wealthData.Liquadation.ToString("C0"))
-                                                    .Bold()
-                                                    .AlignCenter()
-                                                    .FontSize(11);
-                                            });
-                                    });
-                                foreach (var rowCount in Enumerable.Range(1, 2))
-                                {
-                                    leftSide
-                                        .Item()
-                                        .PaddingTop(10)
-                                        .Row(costRow =>
-                                        {
-                                            costRow
-                                                .ConstantItem(0.67f, Unit.Inch)
-                                                .Width(0.67f, Unit.Inch)
-                                                .Height(0.67f, Unit.Inch)
-                                                .Border(1)
-                                                .BorderLinearGradient(
-                                                    0,
-                                                    [Color.FromARGB(255, 0, 0, 0)]
-                                                );
-
-                                            costRow
-                                                .RelativeItem()
-                                                .PaddingLeft(5)
-                                                .PaddingRight(5)
-                                                .PaddingTop(20)
-                                                .BorderTop(1)
-                                                .BorderBottom(1);
-
-                                            costRow
-                                                .ConstantItem(0.67f, Unit.Inch)
-                                                .Width(0.67f, Unit.Inch)
-                                                .Height(0.67f, Unit.Inch)
-                                                .Border(1)
-                                                .BorderLinearGradient(
-                                                    0,
-                                                    [Color.FromARGB(255, 0, 0, 0)]
-                                                );
-
-                                            costRow
-                                                .RelativeItem()
-                                                .PaddingLeft(5)
-                                                .PaddingTop(20)
-                                                .BorderTop(1)
-                                                .BorderBottom(1);
-                                        });
-                                }
-                            });
-
-                        row.ConstantItem(1.75f, Unit.Inch)
-                            .Column(rightSide =>
-                            {
-                                rightSide
+                                    .Text(
+                                        "Level Increase / Liquidations are story driven - you need a GO to do either"
+                                    );
+                                
+                                leftSide
                                     .Item()
                                     .Row(initialIncomeRow =>
                                     {
+                                        
+                                        // Left Side Stamp Boxes
                                         initialIncomeRow
-                                            .ConstantItem(1.08f, Unit.Inch)
+                                            .ConstantItem(1.45f, Unit.Inch)
                                             .AlignMiddle()
+                                            .PaddingBottom(3)
                                             .Column(initialIncomeColumn =>
                                             {
-                                                initialIncomeColumn
-                                                    .Item()
-                                                    .Text("Initial Basic Income")
-                                                    .Bold()
-                                                    .AlignCenter()
-                                                    .FontSize(8);
-                                                initialIncomeColumn
-                                                    .Item()
-                                                    .Text(
-                                                        wealthData.InitialBasicItemIncome.ToString(
-                                                            "C0"
-                                                        )
-                                                    )
-                                                    .Bold()
-                                                    .AlignCenter()
-                                                    .FontSize(11);
+                                                initialIncomeColumn.Item().Row(levelIncreaseRow =>
+                                                {
+                                                    levelIncreaseRow.RelativeItem().PaddingBottom(5).CreateStamp("Level Increase");
+                                                    levelIncreaseRow.RelativeItem().CreateStamp("Level Increase");
+                                                });
+                                                
+                                                initialIncomeColumn.Item().Row(levelIncreaseRow =>
+                                                {
+                                                    levelIncreaseRow.RelativeItem().PaddingBottom(5).CreateStamp("Level Liquidated");
+                                                    levelIncreaseRow.RelativeItem().CreateStamp("Level Liquidated");
+                                                });
                                             });
+                                        
+                                        // Right Side Info
                                         initialIncomeRow
                                             .RelativeItem()
-                                            .Width(0.67f, Unit.Inch)
-                                            .Height(0.67f, Unit.Inch)
-                                            .Border(1)
-                                            .BorderLinearGradient(0, [Color.FromARGB(255, 0, 0, 0)])
-                                            .AlignCenter()
-                                            .AlignMiddle()
-                                            .Text("Spent Initial Income")
-                                            .FontSize(8);
+                                            .Column(tableRow =>
+                                            {
+                                                tableRow.Item().Row(rightTopRow =>
+                                                {
+                                                    rightTopRow.RelativeItem().Text("Modifiers");
+                                                    
+                                                    rightTopRow.RelativeItem()
+                                                        .PaddingTop(5)
+                                                        .AlignRight()
+                                                    .Row(initialIncomeRow =>
+                                                    {
+                                                        initialIncomeRow
+                                                            .RelativeItem()
+                                                            .AlignMiddle()
+                                                            .Column(initialIncomeColumn =>
+                                                            {
+                                                                initialIncomeColumn
+                                                                    .Item()
+                                                                    .Text("Initial Basic Income")
+                                                                    .Bold()
+                                                                    .AlignCenter()
+                                                                    .FontSize(8);
+                                                                initialIncomeColumn
+                                                                    .Item()
+                                                                    .Text(
+                                                                        wealthData.InitialBasicItemIncome.ToString(
+                                                                            "C0"
+                                                                        )
+                                                                    )
+                                                                    .Bold()
+                                                                    .AlignCenter()
+                                                                    .FontSize(11);
+                                                            });
+                                                        initialIncomeRow.RelativeItem().AlignRight().CreateStamp("Spent Session Income");
+                                                    });
+                                                });
+                                                
+                                                tableRow.Item().Row(levelTableRow =>
+                                                {
+                                                    levelTableRow.RelativeItem().AlignRight().AlignBottom().Table(wealthTable =>
+                                                    {
+                                                        wealthTable.ColumnsDefinition(columns =>
+                                                        {
+                                                            columns.ConstantColumn(0.41f, Unit.Inch);
+                                                            columns.ConstantColumn(1.01f, Unit.Inch);
+                                                            columns.ConstantColumn(0.861f, Unit.Inch);
+                                                            columns.ConstantColumn(1.07f, Unit.Inch);
+                                                        });
+                                                        
+                                                        wealthTable.Header(header =>
+                                                        {
+                                                            header.Cell().AddFormattedHeaderCell("Level");
+                                                            header.Cell().AddFormattedHeaderCell("Session Income");
+                                                            header.Cell().AddFormattedHeaderCell("Cash to Level Up");
+                                                            header.Cell().AddFormattedHeaderCell("Liquidation Value");
+                                                        });
+
+                                                        int i = 1;
+                                                        foreach (var level  in wealthData.WealthTableLines)
+                                                        {
+                                                            wealthTable.Cell().AddFormattedCell(level.Level.ToString(), i == 3);
+                                                            wealthTable.Cell().AddFormattedCell(level.Income.ToString("C0"), i == 3);
+                                                            wealthTable.Cell().AddFormattedCell(level.CashToLevelUp.ToString("C0"), i == 3);
+                                                            wealthTable.Cell().AddFormattedCell(level.LiquidationAmount.ToString("C0"), i == 3);
+                                                            i++;
+                                                        }
+                                                    });
+                                                });
+                                            });
+
                                     });
-
-                                foreach (var rowCount in Enumerable.Range(1, 5))
-                                {
-                                    rightSide
-                                        .Item()
-                                        .PaddingTop(5)
-                                        .Row(costRow =>
-                                        {
-                                            costRow
-                                                .ConstantItem(0.6f, Unit.Inch)
-                                                .Height(0.25f, Unit.Inch)
-                                                .BorderBottom(1);
-
-                                            costRow.RelativeItem().PaddingLeft(5).BorderBottom(1);
-                                        });
-                                }
                             });
                     });
             });
         card.Item().PageBreak();
+    }
+    private static void AddFormattedCell(this ITableCellContainer initialIncomeRow, string stampText, bool isBold = false)
+    {
+        var text = initialIncomeRow
+            .Border(1)
+            .BorderLinearGradient(0, [Color.FromARGB(255, 0, 0, 0)])
+            .Padding(3)
+
+            .AlignCenter()
+            .AlignMiddle()
+            .Text(stampText);
+        
+        if(isBold)
+            text.ExtraBold();
+    }
+    
+    private static void AddFormattedHeaderCell(this ITableCellContainer initialIncomeRow, string stampText)
+    {
+        initialIncomeRow
+            .Border(1)
+            .BorderLinearGradient(0, [Color.FromARGB(255, 0, 0, 0)])
+            .PaddingTop(3)
+            .PaddingBottom(3)
+            .AlignCenter()
+            .AlignMiddle()
+            .Text(stampText)
+            .Bold();
+    }
+    
+    private static void CreateStamp(this IContainer initialIncomeRow, string stampText)
+    {
+        initialIncomeRow
+            .Width(0.67f, Unit.Inch)
+            .Height(0.67f, Unit.Inch)
+            .Border(1)
+            .BorderLinearGradient(0, [Color.FromARGB(255, 0, 0, 0)])
+            .AlignCenter()
+            .AlignMiddle()
+            .Text(stampText)
+            .FontSize(8);
     }
 }
