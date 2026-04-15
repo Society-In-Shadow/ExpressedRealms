@@ -35,7 +35,7 @@ internal static class PopulateCashCard
                                 {
                                     leftSide
                                         .Item()
-                                        .PaddingTop(10)
+                                        .PaddingTop(5)
                                         .Row(costRow =>
                                         {
                                             foreach (var columnCount in Enumerable.Range(1, 2))
@@ -56,7 +56,9 @@ internal static class PopulateCashCard
                                                     .PaddingRight(5)
                                                     .PaddingTop(20)
                                                     .BorderTop(1)
-                                                    .BorderBottom(1);
+                                                    .BorderBottom(1)
+                                                    .AlignBottom()
+                                                    .Text("New Total").FontColor(Color.FromARGB(45, 0, 0, 0));
                                             }
                                         });
                                 }
