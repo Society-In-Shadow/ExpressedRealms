@@ -25,6 +25,10 @@ onBeforeMount(async () => {
     is13OrOlder.value = true
     signedWaiver.value = true
   }
+
+  if (ageInfo.value) {
+    eventCheckinInfo.verifiedUserInfo()
+  }
 })
 
 watch(() => eventCheckinInfo.isReset, (old, newValue) => {

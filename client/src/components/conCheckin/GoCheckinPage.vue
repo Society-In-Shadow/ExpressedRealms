@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { onBeforeMount, ref, watch } from 'vue'
+import { onBeforeMount, onMounted, ref, watch } from 'vue'
 import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
 import { useRouter } from 'vue-router'
 import Stepper from 'primevue/stepper'
@@ -11,11 +11,11 @@ import Button from 'primevue/button'
 import CharacterScanner from '@/components/conCheckin/support/CharacterScanner.vue'
 import AnswerQuestions from '@/components/conCheckin/support/AnswerQuestions.vue'
 import StonePullerStep from '@/components/conCheckin/support/StonePullerStep.vue'
-import Message from 'primevue/message'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 import { confirmationPopups } from '@/components/conCheckin/services/popupService.ts'
 import AgeVerificationStep from '@/components/conCheckin/support/AgeVerificationStep.vue'
 import DailyCheckin from '@/components/conCheckin/support/DailyCheckin.vue'
+import SplitButton from 'primevue/splitbutton'
 
 const eventCheckinInfo = EventCheckinStore()
 const userPermission = userPermissionStore()
@@ -39,12 +39,67 @@ watch(() => eventCheckinInfo.isReset, (old, newValue) => {
 })
 
 const stepperStep = ref('1')
+function waitForElement(selector, timeout = 300) {
+  return new Promise((resolve) => {
+    const start = Date.now()
 
+    const check = () => {
+      const el = document.querySelector(selector)
+      if (el && Date.now() - start > timeout) return resolve(el)
+
+      if (Date.now() - start > timeout) return resolve(null)
+
+      requestAnimationFrame(check)
+    }
+
+    check()
+  })
+}
 async function onDetect(detectedCodes) {
   eventCheckinInfo.lookupId = detectedCodes
   await eventCheckinInfo.getGoCheckinInfo(detectedCodes)
+
+  const activeEl = await waitForElement('.active-panel')
+
+  console.log(activeEl)
+
+  activeEl?.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start',
+    inline: 'nearest',
+  })
 }
 
+const items = []
+
+onMounted(async () => {
+  items.push({
+    label: 'Reapprove Character',
+    command: ($event) => {
+      popups.reapproveCharacterConfirmation($event, eventCheckinInfo.primaryCharacter.characterName)
+    },
+  })
+  if (permissionCheck.CharacterManagement.Retire) {
+    items.push({
+      label: 'Retire Character',
+      command: ($event) => {
+        popups.retireConfirmation($event, eventCheckinInfo.primaryCharacter.characterName)
+      },
+    })
+  }
+})
+
+watch(() => eventCheckinInfo.activeStepperStep, async (oldValue, newValue) => {
+  const activeEl = await waitForElement('.p-megamenu')
+
+  console.log(activeEl)
+
+  activeEl?.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start',
+    inline: 'nearest',
+  })
+})
 const approveStage = async (stageId: number) => {
   await eventCheckinInfo.approveStage(stageId)
 }
@@ -52,12 +107,8 @@ const approveStage = async (stageId: number) => {
 </script>
 
 <template>
-  <Message v-if="eventCheckinInfo.isReset" severity="success">
-    Successfully committed Stage!
-  </Message>
-  <div v-if="permissionCheck.CharacterManagement.Retire" class="text-right">
-    <Button label="Reapprove Character" @click="popups.reapproveCharacterConfirmation($event, eventCheckinInfo.primaryCharacter.characterName)" />
-    <Button label="Retire Character" class="ml-3" @click="popups.retireConfirmation($event, eventCheckinInfo.primaryCharacter.characterName)" />
+  <div v-if="permissionCheck.CharacterManagement.Retire" class="text-right sticky-top">
+    <SplitButton label="Reset Scan" severity="info" :model="items" @click="eventCheckinInfo.resetGoPage()" />
   </div>
   <Stepper v-model:value="eventCheckinInfo.activeStepperStep">
     <StepItem value="1">

@@ -40,9 +40,7 @@ export const EventCheckinStore
       async resetGoPage() {
         this.foundInfo = false
         this.isReset = true
-        this.hasActiveEvent = false
         this.lookupId = ''
-        this.eventName = ''
         this.checkinStage = null
         this.goCheckinInfo = {} as GoCheckinInfo
         this.playerNumber = 0
