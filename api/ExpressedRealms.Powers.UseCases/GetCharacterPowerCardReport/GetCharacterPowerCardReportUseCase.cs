@@ -111,7 +111,7 @@ public class GetCharacterPowerCardReportUseCase(
 
         if (wealthInfo.WealthLevel <= 1)
         {
-            for(int i = 0; i < 5 - wealthLevels.Count; i++)
+            for(int i = 0; i <= 5 - wealthLevels.Count; i++)
             {
                 wealthLevels.Add(new WealthTableLine()
                 {

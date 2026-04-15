@@ -37,15 +37,15 @@ public class WealthRepository(ExpressedRealmsDbContext context, CancellationToke
                     break;
                 case "4pt":
                     wealthLevel = 4;
-                    incomeModifier = 0.05;
+                    incomeModifier += 0.05;
                     break;
                 case "6pt":
                     wealthLevel = 5;
-                    incomeModifier = 0.1;
+                    incomeModifier += 0.1;
                     break;
                 case "8pt":
                     wealthLevel = 6;
-                    incomeModifier = 0.25;
+                    incomeModifier += 0.25;
                     break;
             }
         }
@@ -111,6 +111,7 @@ public class WealthRepository(ExpressedRealmsDbContext context, CancellationToke
             WealthLevel = wealthLevel,
             InitialBasicItemIncome = tableRows.First(x => x.Level == wealthLevel).SessionIncome * 3,
             WealthTable = tableRows,
+            AppliedBlessings = appliedBlessings,
         };
     }
 
