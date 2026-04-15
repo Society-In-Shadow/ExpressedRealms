@@ -146,10 +146,15 @@ internal static class PopulateWealthCard
                                                         int i = 1;
                                                         foreach (var level  in wealthData.WealthTableLines)
                                                         {
-                                                            wealthTable.Cell().AddFormattedCell(level.Level.ToString(), i == 3);
-                                                            wealthTable.Cell().AddFormattedCell(level.Income.ToString("C0"), i == 3);
-                                                            wealthTable.Cell().AddFormattedCell(level.CashToLevelUp.ToString("C0"), i == 3);
-                                                            wealthTable.Cell().AddFormattedCell(level.LiquidationAmount.ToString("C0"), i == 3);
+                                                            var levelNumber = level.Level == -1 ? "N/A" : level.Level.ToString();
+                                                            var levelIncome = Math.Abs(level.Income - (-1)) < 0 ? "N/A" : level.Income.ToString("C0");
+                                                            var levelCash = Math.Abs(level.CashToLevelUp - (-1)) < 0 ? "N/A" : level.CashToLevelUp.ToString("C0");
+                                                            var levelLiquidation = Math.Abs(level.LiquidationAmount - (-1)) < 0 ? "N/A" : level.LiquidationAmount.ToString("C0");
+                                                            
+                                                            wealthTable.Cell().AddFormattedCell(levelNumber, i == 3);
+                                                            wealthTable.Cell().AddFormattedCell(levelIncome, i == 3);
+                                                            wealthTable.Cell().AddFormattedCell(levelCash, i == 3);
+                                                            wealthTable.Cell().AddFormattedCell(levelLiquidation, i == 3);
                                                             i++;
                                                         }
                                                     });

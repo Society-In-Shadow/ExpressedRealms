@@ -25,9 +25,11 @@ public class WealthRepository(ExpressedRealmsDbContext context, CancellationToke
         var wealthLevel = 1;
         double incomeModifier = 1;
         double bankCashModifier = 1;
+        var appliedBlessings = new List<KeyValuePair<string, string>>();
 
         if (wealthy is not null)
         {
+            appliedBlessings.Add(new KeyValuePair<string, string>(wealthy.Name, wealthy.LevelName));
             switch (wealthy.LevelName)
             {
                 case "2pt":
@@ -50,12 +52,14 @@ public class WealthRepository(ExpressedRealmsDbContext context, CancellationToke
         
         if (disOwned is not null && disOwned.LevelName == "8pt")
         {
+            appliedBlessings.Add(new KeyValuePair<string, string>(disOwned.Name, disOwned.LevelName));
             wealthLevel = 0;
             bankCashModifier += 0.1;
         }
         
         if (destitute is not null)
         {
+            appliedBlessings.Add(new KeyValuePair<string, string>(destitute.Name, destitute.LevelName));
             switch (destitute.LevelName)
             {
                 case "2pt":
@@ -78,24 +82,35 @@ public class WealthRepository(ExpressedRealmsDbContext context, CancellationToke
             }
         }
 
-        var sessionIncome = SessionIncome(wealthLevel);
-
-        var wealthIncome = sessionIncome * incomeModifier;
-
-        var liquidation = wealthLevel switch
+        var tableRows = new List<WealthTableRow>();
+        var topRange = Math.Max(10, wealthLevel + 2);
+        foreach (var level in Enumerable.Range(0, topRange + 1))
         {
-            0 => 0,
-            1 => 0,
-            _ => sessionIncome * 15,
-        };
+            var sessionIncome = SessionIncome(level);
+
+            var wealthIncome = sessionIncome * incomeModifier;
+
+            var liquidation = level switch
+            {
+                0 => 0,
+                1 => 0,
+                _ => sessionIncome * 15,
+            };
+
+            tableRows.Add(new WealthTableRow()
+            {
+                Level = level,
+                SessionIncome = wealthIncome,
+                CashToLevelUp = SessionIncome(level + 1) * 30 * bankCashModifier,
+                LiquidationValue = liquidation,
+            });
+        }
 
         return new WealthInfoDto()
         {
             WealthLevel = wealthLevel,
-            WealthIncome = wealthIncome,
-            BankedCash = SessionIncome(wealthLevel + 1) * 30 * bankCashModifier,
-            Liquadation = liquidation,
-            InitialBasicItemIncome = wealthIncome * 3,
+            InitialBasicItemIncome = tableRows.First(x => x.Level == wealthLevel).SessionIncome * 3,
+            WealthTable = tableRows,
         };
     }
 
