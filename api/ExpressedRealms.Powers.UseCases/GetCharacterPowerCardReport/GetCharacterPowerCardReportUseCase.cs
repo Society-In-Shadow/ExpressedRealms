@@ -2,6 +2,7 @@ using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Wealth;
 using ExpressedRealms.Powers.Reporting.powerCards;
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes;
+using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.CashCards;
 using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.Powers.Repository.PowerPaths;
 using ExpressedRealms.UseCases.Shared;
@@ -110,6 +111,17 @@ public class GetCharacterPowerCardReportUseCase(
                     Liquadation = wealthInfo.Liquadation,
                     InitialBasicItemIncome = wealthInfo.InitialBasicItemIncome,
                     WealthLevel = wealthInfo.WealthLevel,
+                },
+            }
+        );
+        
+        cards.Add(
+            new DataCard()
+            {
+                CardType = CardType.CashCard,
+                CardData = new CashCardData()
+                {
+                    ConIncome = wealthInfo.WealthIncome
                 },
             }
         );
