@@ -140,7 +140,17 @@ public static class PowerCardReport
                 }
 
                 page.DefaultTextStyle(x => x.FontSize(7.75f));
-
+                page.Background()
+                    .Column(col =>
+                    {
+                        var backgroundTextColor = Color.FromARGB(45, 0, 0, 0);
+                        col.Item()
+                            .PaddingTop(0.06f, Unit.Inch)
+                            .PaddingRight(0.25f, Unit.Inch)
+                            .Text($"Society in Shadows - {DateTime.Now.ToString("MMMM/d/yyyy")}")
+                            .FontColor(backgroundTextColor)
+                            .AlignEnd();
+                    });
                 page.Content()
                     .Column(col =>
                     {
