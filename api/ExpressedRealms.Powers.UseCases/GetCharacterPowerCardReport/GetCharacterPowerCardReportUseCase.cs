@@ -101,29 +101,36 @@ public class GetCharacterPowerCardReportUseCase(
         // Grab Blessings
         var wealthInfo = await wealthRepository.GetWealthInfoAsync(model.CharacterId);
 
-        var wealthLevels = wealthInfo.WealthTable.Select(x => new WealthTableLine()
-        {
-            CashToLevelUp = x.CashToLevelUp,
-            Income = x.SessionIncome,
-            Level = x.Level,
-            LiquidationAmount = x.LiquidationValue
-        }).Where(x => x.Level >= wealthInfo.WealthLevel - 2 && x.Level <= wealthInfo.WealthLevel + 2).ToList();
+        var wealthLevels = wealthInfo
+            .WealthTable.Select(x => new WealthTableLine()
+            {
+                CashToLevelUp = x.CashToLevelUp,
+                Income = x.SessionIncome,
+                Level = x.Level,
+                LiquidationAmount = x.LiquidationValue,
+            })
+            .Where(x =>
+                x.Level >= wealthInfo.WealthLevel - 2 && x.Level <= wealthInfo.WealthLevel + 2
+            )
+            .ToList();
 
         if (wealthInfo.WealthLevel <= 1)
         {
-            for(int i = 0; i <= 5 - wealthLevels.Count; i++)
+            for (int i = 0; i <= 5 - wealthLevels.Count; i++)
             {
-                wealthLevels.Add(new WealthTableLine()
-                {
-                    CashToLevelUp = -1,
-                    Income = -1,
-                    Level = -1,
-                    LiquidationAmount = -1
-                });
+                wealthLevels.Add(
+                    new WealthTableLine()
+                    {
+                        CashToLevelUp = -1,
+                        Income = -1,
+                        Level = -1,
+                        LiquidationAmount = -1,
+                    }
+                );
             }
             wealthLevels = wealthLevels.OrderBy(x => x.Level).ToList();
         }
-        
+
         cards.Add(
             new DataCard()
             {
@@ -134,18 +141,20 @@ public class GetCharacterPowerCardReportUseCase(
                     WealthLevel = wealthInfo.WealthLevel,
                     AppliedBlessings = wealthInfo.AppliedBlessings,
                     CharacterName = characterName,
-                    WealthTableLines = wealthLevels
+                    WealthTableLines = wealthLevels,
                 },
             }
         );
-        
+
         cards.Add(
             new DataCard()
             {
                 CardType = CardType.CashCard,
                 CardData = new CashCardData()
                 {
-                    ConIncome = wealthInfo.WealthTable.First(x => x.Level == wealthInfo.WealthLevel).SessionIncome
+                    ConIncome = wealthInfo
+                        .WealthTable.First(x => x.Level == wealthInfo.WealthLevel)
+                        .SessionIncome,
                 },
             }
         );

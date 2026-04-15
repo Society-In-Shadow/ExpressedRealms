@@ -4,5 +4,5 @@ public enum CardType
 {
     PowerCard = 1,
     WealthCard = 2,
-    CashCard
+    CashCard,
 }

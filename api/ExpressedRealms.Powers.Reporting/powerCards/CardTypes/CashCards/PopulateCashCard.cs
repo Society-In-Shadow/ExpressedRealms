@@ -25,12 +25,14 @@ internal static class PopulateCashCard
                                     {
                                         initialIncomeRow
                                             .RelativeItem()
-                                            .Text($"Initial Cash Card - {wealthData.ConIncome.ToString("C0")}")
+                                            .Text(
+                                                $"Initial Cash Card - {wealthData.ConIncome.ToString("C0")}"
+                                            )
                                             .Bold()
                                             .FontSize(11)
                                             .ExtraBold();
                                     });
-                                
+
                                 foreach (var rowCount in Enumerable.Range(1, 3))
                                 {
                                     leftSide
@@ -58,7 +60,8 @@ internal static class PopulateCashCard
                                                     .BorderTop(1)
                                                     .BorderBottom(1)
                                                     .AlignBottom()
-                                                    .Text("New Total").FontColor(Color.FromARGB(45, 0, 0, 0));
+                                                    .Text("New Total")
+                                                    .FontColor(Color.FromARGB(45, 0, 0, 0));
                                             }
                                         });
                                 }

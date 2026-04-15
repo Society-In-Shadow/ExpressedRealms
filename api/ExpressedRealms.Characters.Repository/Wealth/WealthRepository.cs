@@ -9,7 +9,12 @@ public class WealthRepository(ExpressedRealmsDbContext context, CancellationToke
 {
     public async Task<WealthInfoDto> GetWealthInfoAsync(int characterId)
     {
-        var targetBlessings = new List<string>() { "Destitute", "Wealthy", "Disowned / Disfavored" };
+        var targetBlessings = new List<string>()
+        {
+            "Destitute",
+            "Wealthy",
+            "Disowned / Disfavored",
+        };
 
         var blessings = await context
             .CharacterBlessingMappings.Where(x =>
@@ -49,17 +54,21 @@ public class WealthRepository(ExpressedRealmsDbContext context, CancellationToke
                     break;
             }
         }
-        
+
         if (disOwned is not null && disOwned.LevelName == "8pt")
         {
-            appliedBlessings.Add(new KeyValuePair<string, string>(disOwned.Name, disOwned.LevelName));
+            appliedBlessings.Add(
+                new KeyValuePair<string, string>(disOwned.Name, disOwned.LevelName)
+            );
             wealthLevel = 0;
             bankCashModifier += 0.1;
         }
-        
+
         if (destitute is not null)
         {
-            appliedBlessings.Add(new KeyValuePair<string, string>(destitute.Name, destitute.LevelName));
+            appliedBlessings.Add(
+                new KeyValuePair<string, string>(destitute.Name, destitute.LevelName)
+            );
             switch (destitute.LevelName)
             {
                 case "2pt":
@@ -97,13 +106,15 @@ public class WealthRepository(ExpressedRealmsDbContext context, CancellationToke
                 _ => sessionIncome * 15,
             };
 
-            tableRows.Add(new WealthTableRow()
-            {
-                Level = level,
-                SessionIncome = wealthIncome,
-                CashToLevelUp = SessionIncome(level + 1) * 30 * bankCashModifier,
-                LiquidationValue = liquidation,
-            });
+            tableRows.Add(
+                new WealthTableRow()
+                {
+                    Level = level,
+                    SessionIncome = wealthIncome,
+                    CashToLevelUp = SessionIncome(level + 1) * 30 * bankCashModifier,
+                    LiquidationValue = liquidation,
+                }
+            );
         }
 
         return new WealthInfoDto()
