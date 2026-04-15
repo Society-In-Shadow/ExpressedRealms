@@ -33,7 +33,7 @@ internal static class TextPrintUtilities
     )
     {
         using var gfx = XGraphics.FromPdfPage(page);
-        var font = new XFont(DefaultFontFace, 72, XFontStyleEx.Regular);
+        var font = new XFont(DefaultFontFace, 12, XFontStyleEx.Regular);
         var size = gfx.MeasureString(stampText, font);
 
         gfx.Save();
@@ -44,7 +44,7 @@ internal static class TextPrintUtilities
             font,
             XBrushes.Black,
             -size.Width / 2,
-            font.GetHeight() / 2 - XUnitPt.FromInch(0.31)
+            font.GetHeight() / 2 - XUnitPt.FromInch(0.05)
         );
         gfx.Restore();
     }

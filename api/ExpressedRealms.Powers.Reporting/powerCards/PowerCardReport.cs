@@ -1,4 +1,5 @@
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes;
+using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.CashCards;
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.PowerCards;
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.WealthCards;
 using PdfSharp;
@@ -20,6 +21,7 @@ public static class PowerCardReport
         powerCards = powerCards
             .OrderBy(x => x.CardType == CardType.PowerCard ? 0 : 1)
             .ThenBy(x => x.CardType == CardType.WealthCard ? 0 : 1)
+            .ThenBy(x => x.CardType == CardType.CashCard ? 0 : 1)
             .ThenBy(x => x.CardData is PowerCardData p ? p.PowerLevel : string.Empty)
             .ThenBy(x => x.CardData is PowerCardData p ? p.PathName : string.Empty)
             .ThenBy(x => x.CardData is PowerCardData p ? p.Name : string.Empty)
@@ -140,7 +142,17 @@ public static class PowerCardReport
                 }
 
                 page.DefaultTextStyle(x => x.FontSize(7.75f));
-
+                page.Background()
+                    .Column(col =>
+                    {
+                        var backgroundTextColor = Color.FromARGB(45, 0, 0, 0);
+                        col.Item()
+                            .PaddingTop(0.06f, Unit.Inch)
+                            .PaddingRight(0.25f, Unit.Inch)
+                            .Text($"Society in Shadows - {DateTime.Now.ToString("MMMM/d/yyyy")}")
+                            .FontColor(backgroundTextColor)
+                            .AlignEnd();
+                    });
                 page.Content()
                     .Column(col =>
                     {
@@ -153,6 +165,9 @@ public static class PowerCardReport
                                     break;
                                 case CardType.WealthCard:
                                     PopulateWealthCard.FillCard(col, (WealthCardData)card.CardData);
+                                    break;
+                                case CardType.CashCard:
+                                    PopulateCashCard.FillCard(col, (CashCardData)card.CardData);
                                     break;
                             }
                         }

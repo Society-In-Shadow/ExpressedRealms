@@ -73,7 +73,9 @@ public class GetCharacterSheetReportUseCase(
 
         return new WealthInfoDto()
         {
-            WealthIncome = wealthInfo.WealthIncome,
+            WealthIncome = wealthInfo
+                .WealthTable.First(x => x.Level == wealthInfo.WealthLevel)
+                .SessionIncome,
             WealthLevel = wealthInfo.WealthLevel,
         };
     }

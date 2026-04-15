@@ -9,7 +9,12 @@ public class WealthRepository(ExpressedRealmsDbContext context, CancellationToke
 {
     public async Task<WealthInfoDto> GetWealthInfoAsync(int characterId)
     {
-        var targetBlessings = new List<string>() { "Destitute", "Wealthy" };
+        var targetBlessings = new List<string>()
+        {
+            "Destitute",
+            "Wealthy",
+            "Disowned / Disfavored",
+        };
 
         var blessings = await context
             .CharacterBlessingMappings.Where(x =>
@@ -20,32 +25,16 @@ public class WealthRepository(ExpressedRealmsDbContext context, CancellationToke
 
         var destitute = blessings.FirstOrDefault(x => x.Name == "Destitute");
         var wealthy = blessings.FirstOrDefault(x => x.Name == "Wealthy");
+        var disOwned = blessings.FirstOrDefault(x => x.Name == "Disowned / Disfavored");
 
         var wealthLevel = 1;
         double incomeModifier = 1;
-
-        if (destitute is not null)
-        {
-            switch (destitute.LevelName)
-            {
-                case "2pt":
-                    incomeModifier = 0.75;
-                    break;
-                case "4pt":
-                    incomeModifier = 0.5;
-                    break;
-                case "6pt":
-                    incomeModifier = 0.25;
-                    break;
-                case "8pt":
-                    wealthLevel = 0;
-                    incomeModifier = 0;
-                    break;
-            }
-        }
+        double bankCashModifier = 1;
+        var appliedBlessings = new List<KeyValuePair<string, string>>();
 
         if (wealthy is not null)
         {
+            appliedBlessings.Add(new KeyValuePair<string, string>(wealthy.Name, wealthy.LevelName));
             switch (wealthy.LevelName)
             {
                 case "2pt":
@@ -66,30 +55,85 @@ public class WealthRepository(ExpressedRealmsDbContext context, CancellationToke
             }
         }
 
-        var sessionIncome = wealthLevel switch
+        if (disOwned is not null && disOwned.LevelName == "8pt")
+        {
+            appliedBlessings.Add(
+                new KeyValuePair<string, string>(disOwned.Name, disOwned.LevelName)
+            );
+            wealthLevel = 0;
+            bankCashModifier += 0.1;
+        }
+
+        if (destitute is not null)
+        {
+            appliedBlessings.Add(
+                new KeyValuePair<string, string>(destitute.Name, destitute.LevelName)
+            );
+            switch (destitute.LevelName)
+            {
+                case "2pt":
+                    incomeModifier -= 0.25;
+                    bankCashModifier += 0.25;
+                    break;
+                case "4pt":
+                    incomeModifier -= 0.5;
+                    bankCashModifier += 0.50;
+                    break;
+                case "6pt":
+                    incomeModifier -= 0.75;
+                    bankCashModifier += 0.50;
+                    break;
+                case "8pt":
+                    wealthLevel = 0;
+                    incomeModifier = 0;
+                    bankCashModifier += 0.50;
+                    break;
+            }
+        }
+
+        var tableRows = new List<WealthTableRow>();
+        var topRange = Math.Max(10, wealthLevel + 2);
+        foreach (var level in Enumerable.Range(0, topRange + 1))
+        {
+            var sessionIncome = SessionIncome(level);
+
+            var wealthIncome = sessionIncome * incomeModifier;
+
+            var liquidation = level switch
+            {
+                0 => 0,
+                1 => 0,
+                _ => sessionIncome * 15,
+            };
+
+            tableRows.Add(
+                new WealthTableRow()
+                {
+                    Level = level,
+                    SessionIncome = wealthIncome,
+                    CashToLevelUp = SessionIncome(level + 1) * 30 * bankCashModifier,
+                    LiquidationValue = liquidation,
+                }
+            );
+        }
+
+        return new WealthInfoDto()
+        {
+            WealthLevel = wealthLevel,
+            InitialBasicItemIncome = tableRows.First(x => x.Level == wealthLevel).SessionIncome * 3,
+            WealthTable = tableRows,
+            AppliedBlessings = appliedBlessings,
+        };
+    }
+
+    private static double SessionIncome(int wealthLevel)
+    {
+        return wealthLevel switch
         {
             0 => 0,
             1 => 50,
             2 => 100,
             _ => Math.Pow(2, wealthLevel - 2) * 100,
-        };
-
-        var wealthIncome = sessionIncome * incomeModifier;
-
-        var liquidation = wealthLevel switch
-        {
-            0 => 0,
-            1 => 0,
-            _ => sessionIncome * 15,
-        };
-
-        return new WealthInfoDto()
-        {
-            WealthLevel = wealthLevel,
-            WealthIncome = wealthIncome,
-            BankedCash = sessionIncome * 30,
-            Liquadation = liquidation,
-            InitialBasicItemIncome = wealthIncome * 3,
         };
     }
 }

@@ -1,7 +1,8 @@
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Wealth;
 using ExpressedRealms.Powers.Reporting.powerCards;
-using ExpressedRealms.Powers.Reporting.powerCards.CardTypes;
+using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.CashCards;
+using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.WealthCards;
 using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.Powers.Repository.PowerPaths;
 using ExpressedRealms.UseCases.Shared;
@@ -78,7 +79,7 @@ public class GetCharacterPowerCardReportUseCase(
 
         if (model.IncludeWealthCard)
         {
-            await CalculateWealthCardData(model, cards);
+            await CalculateWealthCardData(model, expression.Value.Name, cards);
         }
 
         var reportStream = PowerCardReport.GenerateSixUpPdf(
@@ -93,11 +94,42 @@ public class GetCharacterPowerCardReportUseCase(
 
     private async Task CalculateWealthCardData(
         GetCharacterPowerCardReportModel model,
+        string characterName,
         List<DataCard> cards
     )
     {
         // Grab Blessings
         var wealthInfo = await wealthRepository.GetWealthInfoAsync(model.CharacterId);
+
+        var wealthLevels = wealthInfo
+            .WealthTable.Select(x => new WealthTableLine()
+            {
+                CashToLevelUp = x.CashToLevelUp,
+                Income = x.SessionIncome,
+                Level = x.Level,
+                LiquidationAmount = x.LiquidationValue,
+            })
+            .Where(x =>
+                x.Level >= wealthInfo.WealthLevel - 2 && x.Level <= wealthInfo.WealthLevel + 2
+            )
+            .ToList();
+
+        if (wealthInfo.WealthLevel <= 1)
+        {
+            for (int i = 0; i <= 5 - wealthLevels.Count; i++)
+            {
+                wealthLevels.Add(
+                    new WealthTableLine()
+                    {
+                        CashToLevelUp = -1,
+                        Income = -1,
+                        Level = -1,
+                        LiquidationAmount = -1,
+                    }
+                );
+            }
+            wealthLevels = wealthLevels.OrderBy(x => x.Level).ToList();
+        }
 
         cards.Add(
             new DataCard()
@@ -105,11 +137,24 @@ public class GetCharacterPowerCardReportUseCase(
                 CardType = CardType.WealthCard,
                 CardData = new WealthCardData()
                 {
-                    WealthIncome = wealthInfo.WealthIncome,
-                    BankedCash = wealthInfo.BankedCash,
-                    Liquadation = wealthInfo.Liquadation,
                     InitialBasicItemIncome = wealthInfo.InitialBasicItemIncome,
                     WealthLevel = wealthInfo.WealthLevel,
+                    AppliedBlessings = wealthInfo.AppliedBlessings,
+                    CharacterName = characterName,
+                    WealthTableLines = wealthLevels,
+                },
+            }
+        );
+
+        cards.Add(
+            new DataCard()
+            {
+                CardType = CardType.CashCard,
+                CardData = new CashCardData()
+                {
+                    ConIncome = wealthInfo
+                        .WealthTable.First(x => x.Level == wealthInfo.WealthLevel)
+                        .SessionIncome,
                 },
             }
         );

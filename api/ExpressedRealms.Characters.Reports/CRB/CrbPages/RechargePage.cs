@@ -295,7 +295,7 @@ internal static class RechargePage
             {
                 TextPrintUtilities.CrossStampInfo(
                     page,
-                    "x",
+                    "N/A",
                     coordinateX + XUnitPt.FromInch(0.67) / 2,
                     coordinateY + XUnitPt.FromInch(0.67) / 2
                 );
