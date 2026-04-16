@@ -68,6 +68,7 @@ const onSubmit = form.handleSubmit((values) => {
     characterInfo.isPrimaryCharacter = values.isPrimaryCharacter
     await xpInfo.updateExperience(route.params.id)
     await characterInfo.getEditOptions(Number(route.params.id))
+    await characterInfo.getCharacterDetails(Number(route.params.id))
     toaster.success('Successfully Updated Character Info!')
   })
 })
