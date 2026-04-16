@@ -687,24 +687,17 @@ public static class CharacterReferenceBookletReport
                 double lineY = baselineY + 1; // sit the rule just under the text baseline
 
                 // Draw text (if any for this line)
-                if (i < dataPowers.Count)
+                if (i < Math.Min(30, dataPowers.Count))
                 {
                     gfx.DrawString(
-                        dataPowers[i].Name,
+                        dataPowers[i].Name.Substring(0, Math.Min(30, dataPowers[i].Name.Length)),
                         font,
                         XBrushes.Black,
                         XUnitPt.FromInch(1.90),
                         baselineY - 3
                     );
                     gfx.DrawString(
-                        dataPowers[i].Specialization ?? "-",
-                        font,
-                        XBrushes.Black,
-                        XUnitPt.FromInch(3.6),
-                        baselineY - 3
-                    );
-                    gfx.DrawString(
-                        dataPowers[i].Level.Substring(0, 1),
+                        dataPowers[i].Level.Substring(0, Math.Min(1, dataPowers[i].Level.Length)),
                         font,
                         XBrushes.Black,
                         XUnitPt.FromInch(4.55),
@@ -722,7 +715,7 @@ public static class CharacterReferenceBookletReport
     {
         double startY = XUnitPt.FromInch(0.75); // your starting Y position
         double startX = XUnitPt.FromInch(0.3);
-        double lineWidth = XUnitPt.FromInch(4.5);
+        double lineWidth = XUnitPt.FromInch(3.08);
         int lineCount = dataPowers.Count;
 
         double lineHeight = 12;
@@ -731,42 +724,31 @@ public static class CharacterReferenceBookletReport
         using (var gfx = XGraphics.FromPdfPage(document.Pages[5]))
         {
             var linePen = new XPen(XColors.Black, 0.5);
-            for (int i = 0; i < lineCount; i++)
+            var maxSize = Math.Min(lineCount, 20);
+            for (int i = 0; i < maxSize; i++)
             {
-                // Can only show 15 knowledges in the admin area
-                if (i == 20)
-                {
-                    break;
-                }
                 double baselineY = startY + (i * lineHeight) + (lineHeight * 0.75) - 3;
                 double lineY = baselineY + 1; // sit the rule just under the text baseline
 
                 gfx.DrawString(
-                    dataPowers[i].Name,
+                    dataPowers[i].Name.Substring(0, Math.Min(30, dataPowers[i].Name.Length)),
                     font,
                     XBrushes.Black,
                     XUnitPt.FromInch(0.30),
                     baselineY
                 );
                 gfx.DrawString(
-                    dataPowers[i].Specialization ?? "-",
+                    dataPowers[i].Level.Substring(0, Math.Min(1, dataPowers[i].Level.Length)),
                     font,
                     XBrushes.Black,
-                    XUnitPt.FromInch(2.45),
-                    baselineY
-                );
-                gfx.DrawString(
-                    dataPowers[i].Level.Substring(0, 1),
-                    font,
-                    XBrushes.Black,
-                    XUnitPt.FromInch(4.35),
+                    XUnitPt.FromInch(2.95),
                     baselineY
                 );
                 gfx.DrawString(
                     dataPowers[i].XPCost,
                     font,
                     XBrushes.Black,
-                    XUnitPt.FromInch(4.75),
+                    XUnitPt.FromInch(3.24),
                     baselineY
                 );
 

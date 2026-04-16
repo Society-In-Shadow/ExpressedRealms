@@ -157,35 +157,28 @@ public class GetCharacterSheetReportUseCase(
 
     private async Task<List<KnowledgeInfo>> GetKnowledgeInfo(GetCharacterSheetReportModel model)
     {
-        var knowledges = await knowledgeRepository.GetKnowledgesForCharacter(model.CharacterId);
+        var knowledges = await knowledgeRepository.GetKnowledgesForCharacterCRB(model.CharacterId);
 
-        var knowledgeInfo = knowledges
-            .SelectMany(x =>
+        var knowledgeList = new List<KnowledgeInfo>();
+
+        foreach (var knowledge in knowledges)
+        {
+            knowledgeList.Add(new KnowledgeInfo()
             {
-                if (x.Specializations?.Any() == true)
-                {
-                    return x.Specializations.Select(spec => new KnowledgeInfo()
-                    {
-                        Name = x.Knowledge.Name,
-                        XPCost = "5",
-                        Level = x.Level.ToString(),
-                        Specialization = spec.Name,
-                    });
-                }
+                Name = knowledge.Name,
+                XPCost = "5",
+                Level = knowledge.Level.ToString(),
+            });
 
-                return new[]
-                {
-                    new KnowledgeInfo()
-                    {
-                        Name = x.Knowledge.Name,
-                        XPCost = "5",
-                        Level = x.Level.ToString(),
-                        Specialization = null,
-                    },
-                };
-            })
-            .ToList();
-        return knowledgeInfo;
+            knowledgeList.AddRange(knowledge.Specializations.Select(spec => new KnowledgeInfo()
+            {
+                Name = $" - {spec}",
+                XPCost = "5",
+                Level = String.Empty
+            }));
+
+        }
+        return knowledgeList;
     }
 
     private async Task<List<ContactInfo>> GetContactinfo(GetCharacterSheetReportModel model)
