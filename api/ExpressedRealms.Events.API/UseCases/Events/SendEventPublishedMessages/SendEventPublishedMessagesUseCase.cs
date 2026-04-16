@@ -183,14 +183,18 @@ internal sealed class SendEventPublishedMessagesUseCase(
         return Result.Ok();
     }
 
-    private void HandleDailyReminderMessages(List<EventScheduleItem> scheduleItems, StringBuilder message, Event? currentEvent)
+    private void HandleDailyReminderMessages(
+        List<EventScheduleItem> scheduleItems,
+        StringBuilder message,
+        Event? currentEvent
+    )
     {
         var dayGroups = scheduleItems
             .OrderBy(x => x.Date)
             .ThenBy(x => x.StartTime)
             .GroupBy(x => x.Date)
             .ToList();
-                
+
         var todayDate = DateOnly.FromDateTime(systemClock.GetUtcNow().DateTime);
         var dayIndex = dayGroups.FindIndex(x => x.Key == todayDate);
 
@@ -204,62 +208,106 @@ internal sealed class SendEventPublishedMessagesUseCase(
                 message.AppendLine(
                     $"Directions to **{currentEvent.Name}** is attached down below!"
                 );
-                    
+
                 message.AppendLine();
-                message.AppendLine("With the start of the event, when you log into your account, you will see a **\"Event Check-in\"** banner at the top of the page.");
-                message.AppendLine("At it's core, this is where you will find information regarding what you need to do to get started, and as you progress through our check-in process, what you need to do next.");
-                    
+                message.AppendLine(
+                    "With the start of the event, when you log into your account, you will see a **\"Event Check-in\"** banner at the top of the page."
+                );
+                message.AppendLine(
+                    "At it's core, this is where you will find information regarding what you need to do to get started, and as you progress through our check-in process, what you need to do next."
+                );
+
                 message.AppendLine();
-                message.AppendLine("With that out of the way, have a safe trip to the convention, no need to rush on your part, we'll be here all night.");
+                message.AppendLine(
+                    "With that out of the way, have a safe trip to the convention, no need to rush on your part, we'll be here all night."
+                );
                 message.AppendLine();
                 message.AppendLine("Once you do arrive and get settled in, stop by SHQ to:");
-                message.AppendLine("* **Exchange Friends!** - Bring a Friend who is new to the game and gain 5xp (once per event)");
-                message.AppendLine("* **Character Review!** - Get checked in, so you can corner a GO (Game Official) to review and approve your character");
-                message.AppendLine("* **Booklets!** - Get a CRB (Character Reference Booklet) free of charge, which you use to play the game");
+                message.AppendLine(
+                    "* **Exchange Friends!** - Bring a Friend who is new to the game and gain 5xp (once per event)"
+                );
+                message.AppendLine(
+                    "* **Character Review!** - Get checked in, so you can corner a GO (Game Official) to review and approve your character"
+                );
+                message.AppendLine(
+                    "* **Booklets!** - Get a CRB (Character Reference Booklet) free of charge, which you use to play the game"
+                );
                 message.AppendLine("* **Catch up!** - We love to see both old and new players!");
 
                 message.AppendLine();
-                message.AppendLine("This is an exciting weekend for us, and we have lots of ground to cover!");
+                message.AppendLine(
+                    "This is an exciting weekend for us, and we have lots of ground to cover!"
+                );
                 break;
             case 1:
                 message.AppendLine($"# Welcome to day 2 at {currentEvent!.Name}!");
-                    
+
                 message.AppendLine();
-                message.AppendLine($"If you just arrived at the realm, no worries, please see yesterdays message to get started!");
-                    
+                message.AppendLine(
+                    $"If you just arrived at the realm, no worries, please see yesterdays message to get started!"
+                );
+
                 message.AppendLine();
-                message.AppendLine($"For those of you who managed to survive the first night, please stop by SHQ to get:");
-                    
-                message.AppendLine("* **Break of Dawn** - Congrats, you survived yesterday, you wake up slightly more energized!");
-                message.AppendLine("* **Recharges** - Some of you might still feel a little lacking, get your pick-me-up at the Nexus (SHQ)");
-                message.AppendLine("* **Checked Out** - Even if you survived without any sort of peril, we still need to check you out");
-                    
+                message.AppendLine(
+                    $"For those of you who managed to survive the first night, please stop by SHQ to get:"
+                );
+
+                message.AppendLine(
+                    "* **Break of Dawn** - Congrats, you survived yesterday, you wake up slightly more energized!"
+                );
+                message.AppendLine(
+                    "* **Recharges** - Some of you might still feel a little lacking, get your pick-me-up at the Nexus (SHQ)"
+                );
+                message.AppendLine(
+                    "* **Checked Out** - Even if you survived without any sort of peril, we still need to check you out"
+                );
+
                 message.AppendLine();
-                message.AppendLine("We have lots in store for you guys today, and we are excited to where we wind up.");
-                    
+                message.AppendLine(
+                    "We have lots in store for you guys today, and we are excited to where we wind up."
+                );
+
                 message.AppendLine();
-                message.AppendLine("As a reminder, we have a social hour at the end of the day for everyone to play games and catch up!");
+                message.AppendLine(
+                    "As a reminder, we have a social hour at the end of the day for everyone to play games and catch up!"
+                );
                 break;
             case 2:
                 message.AppendLine($"# Welcome to our Last Day at {currentEvent!.Name}!");
-                    
+
                 message.AppendLine();
-                message.AppendLine($"This is the last day, you gotta gather your wits and make it through, we are so close to getting out of here.");
+                message.AppendLine(
+                    $"This is the last day, you gotta gather your wits and make it through, we are so close to getting out of here."
+                );
                 message.AppendLine();
-                message.AppendLine($"Please be aware that we do have a hard stop of accepting new players at noon.");
-                    
+                message.AppendLine(
+                    $"Please be aware that we do have a hard stop of accepting new players at noon."
+                );
+
                 message.AppendLine();
-                message.AppendLine($"For those of you who managed to survive the second night, please stop by SHQ to get:");
-                    
-                message.AppendLine("* **Break of Dawn** - Congrats, you survived yesterday, you wake up slightly more energized!");
-                message.AppendLine("* **Recharges** - Some of you might still feel a little lacking, get your pick-me-up at the Nexus (SHQ)");
-                message.AppendLine("* **Checked Out** - Even if you survived without any sort of peril, we still need to check you out");
-                    
+                message.AppendLine(
+                    $"For those of you who managed to survive the second night, please stop by SHQ to get:"
+                );
+
+                message.AppendLine(
+                    "* **Break of Dawn** - Congrats, you survived yesterday, you wake up slightly more energized!"
+                );
+                message.AppendLine(
+                    "* **Recharges** - Some of you might still feel a little lacking, get your pick-me-up at the Nexus (SHQ)"
+                );
+                message.AppendLine(
+                    "* **Checked Out** - Even if you survived without any sort of peril, we still need to check you out"
+                );
+
                 message.AppendLine();
-                message.AppendLine("We have lots in store for you guys today, and we are excited to where we wind up.");
-                    
+                message.AppendLine(
+                    "We have lots in store for you guys today, and we are excited to where we wind up."
+                );
+
                 message.AppendLine();
-                message.AppendLine("As a reminder, we have rewards / wrap up ceremony at the end of the day, see the schedule below!");
+                message.AppendLine(
+                    "As a reminder, we have rewards / wrap up ceremony at the end of the day, see the schedule below!"
+                );
                 break;
         }
     }

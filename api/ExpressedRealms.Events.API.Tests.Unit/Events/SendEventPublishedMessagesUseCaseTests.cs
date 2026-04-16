@@ -361,15 +361,13 @@ public class SendEventPublishedMessagesUseCaseTests
         A.CallTo(() =>
                 _discordService.SendMessageToChannelAsync(
                     DiscordChannel.PublicAnnouncements,
-                    A<string>.That.Contains(
-                        $"# Welcome to our First day at Sioux City Geek Con!"
-                    ),
+                    A<string>.That.Contains($"# Welcome to our First day at Sioux City Geek Con!"),
                     A<Embed[]>._
                 )
             )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_ContainsMessage_WelcomeToDay2_OnDayOfReminder()
     {
@@ -380,15 +378,13 @@ public class SendEventPublishedMessagesUseCaseTests
         A.CallTo(() =>
                 _discordService.SendMessageToChannelAsync(
                     DiscordChannel.PublicAnnouncements,
-                    A<string>.That.Contains(
-                        $"# Welcome to day 2 at Sioux City Geek Con!"
-                    ),
+                    A<string>.That.Contains($"# Welcome to day 2 at Sioux City Geek Con!"),
                     A<Embed[]>._
                 )
             )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_ContainsMessage_WelcomeToDay3_OnDayOfReminder()
     {
@@ -399,9 +395,7 @@ public class SendEventPublishedMessagesUseCaseTests
         A.CallTo(() =>
                 _discordService.SendMessageToChannelAsync(
                     DiscordChannel.PublicAnnouncements,
-                    A<string>.That.Contains(
-                        $"# Welcome to our Last Day at Sioux City Geek Con!"
-                    ),
+                    A<string>.That.Contains($"# Welcome to our Last Day at Sioux City Geek Con!"),
                     A<Embed[]>._
                 )
             )
