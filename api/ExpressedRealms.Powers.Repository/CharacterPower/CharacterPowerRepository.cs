@@ -30,6 +30,8 @@ internal sealed class CharacterPowerRepository(
     {
         return await context
             .CharacterPowerMappings.Where(x => x.CharacterId == characterId)
+            .OrderBy(x => x.Power.PowerPath.OrderIndex)
+            .ThenBy(x => x.Power.OrderIndex)
             .Select(x => new CharacterCrbInfo()
             {
                 Name = x.Power.Name,

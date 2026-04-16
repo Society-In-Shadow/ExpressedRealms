@@ -106,37 +106,17 @@ internal static class PopulateWealthCard
             {
                 blessingRow.Spacing(10);
 
-                var hasDestitute =
-                    wealthData.AppliedBlessings.Any(x =>
-                        x.Key == "Destitute"
-                    );
-                var hasDisowned =
-                    wealthData.AppliedBlessings.Any(x =>
-                        x.Key == "Disowned / Disfavored"
-                    );
-                var hasWealthy =
-                    wealthData.AppliedBlessings.Any(x =>
-                        x.Key == "Wealthy"
-                    );
+                var hasDestitute = wealthData.AppliedBlessings.Any(x => x.Key == "Destitute");
+                var hasDisowned = wealthData.AppliedBlessings.Any(x =>
+                    x.Key == "Disowned / Disfavored"
+                );
+                var hasWealthy = wealthData.AppliedBlessings.Any(x => x.Key == "Wealthy");
 
+                blessingRow.AutoItem().CheckboxItem(hasDestitute ? "X" : "", "Destitute");
                 blessingRow
                     .AutoItem()
-                    .CheckboxItem(
-                        hasDestitute ? "X" : "",
-                        "Destitute"
-                    );
-                blessingRow
-                    .AutoItem()
-                    .CheckboxItem(
-                        hasDisowned ? "X" : "",
-                        "Disowned / Disfavored"
-                    );
-                blessingRow
-                    .AutoItem()
-                    .CheckboxItem(
-                        hasWealthy ? "X" : "",
-                        "Wealthy"
-                    );
+                    .CheckboxItem(hasDisowned ? "X" : "", "Disowned / Disfavored");
+                blessingRow.AutoItem().CheckboxItem(hasWealthy ? "X" : "", "Wealthy");
             });
     }
 

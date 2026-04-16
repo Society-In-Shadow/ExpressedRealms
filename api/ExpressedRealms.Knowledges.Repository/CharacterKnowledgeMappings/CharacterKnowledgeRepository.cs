@@ -86,10 +86,30 @@ public class CharacterKnowledgeRepository(
         await context.SaveChangesAsync(cancellationToken);
     }
 
+    public async Task<List<KnowledgeCrbProjection>> GetKnowledgesForCharacterCRB(int characterId)
+    {
+        return await context
+            .CharacterKnowledgeMappings.Where(x => x.CharacterId == characterId)
+            .OrderByDescending(x => x.KnowledgeLevel.Level)
+            .ThenBy(x => x.Knowledge.Name)
+            .Select(x => new KnowledgeCrbProjection()
+            {
+                Name = x.Knowledge.Name,
+                Level = x.KnowledgeLevel.Level,
+                Specializations = x
+                    .CharacterKnowledgeSpecializations.OrderBy(x => x.Name)
+                    .Select(y => y.Name)
+                    .ToList(),
+            })
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<List<CharacterKnowledgeProjection>> GetKnowledgesForCharacter(int characterId)
     {
         return await context
             .CharacterKnowledgeMappings.Where(x => x.CharacterId == characterId)
+            .OrderByDescending(x => x.KnowledgeLevel.Level)
+            .ThenBy(x => x.Knowledge.Name)
             .Select(x => new CharacterKnowledgeProjection()
             {
                 MappingId = x.Id,
