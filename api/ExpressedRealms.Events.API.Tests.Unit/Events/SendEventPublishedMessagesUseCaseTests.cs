@@ -352,15 +352,55 @@ public class SendEventPublishedMessagesUseCaseTests
     }
 
     [Fact]
-    public async Task UseCase_ContainsMessage_CheckInWithBooth_OnDayOfReminder()
+    public async Task UseCase_ContainsMessage_WelcomeToDay1_OnDayOfReminder()
     {
         _model.PublishType = PublishType.DayOfReminder;
+        A.CallTo(() => _systemClock.GetUtcNow())
+            .Returns(new DateTime(2025, 08, 22, 12, 0, 0, DateTimeKind.Utc));
         await _useCase.ExecuteAsync(_model);
         A.CallTo(() =>
                 _discordService.SendMessageToChannelAsync(
                     DiscordChannel.PublicAnnouncements,
                     A<string>.That.Contains(
-                        "** We do need you to check in at our booth (SHQ) for the following reasons:**"
+                        $"# Welcome to our First day at Sioux City Geek Con!"
+                    ),
+                    A<Embed[]>._
+                )
+            )
+            .MustHaveHappenedOnceExactly();
+    }
+    
+    [Fact]
+    public async Task UseCase_ContainsMessage_WelcomeToDay2_OnDayOfReminder()
+    {
+        _model.PublishType = PublishType.DayOfReminder;
+        A.CallTo(() => _systemClock.GetUtcNow())
+            .Returns(new DateTime(2025, 08, 23, 12, 0, 0, DateTimeKind.Utc));
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() =>
+                _discordService.SendMessageToChannelAsync(
+                    DiscordChannel.PublicAnnouncements,
+                    A<string>.That.Contains(
+                        $"# Welcome to day 2 at Sioux City Geek Con!"
+                    ),
+                    A<Embed[]>._
+                )
+            )
+            .MustHaveHappenedOnceExactly();
+    }
+    
+    [Fact]
+    public async Task UseCase_ContainsMessage_WelcomeToDay3_OnDayOfReminder()
+    {
+        _model.PublishType = PublishType.DayOfReminder;
+        A.CallTo(() => _systemClock.GetUtcNow())
+            .Returns(new DateTime(2025, 08, 24, 12, 0, 0, DateTimeKind.Utc));
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() =>
+                _discordService.SendMessageToChannelAsync(
+                    DiscordChannel.PublicAnnouncements,
+                    A<string>.That.Contains(
+                        $"# Welcome to our Last Day at Sioux City Geek Con!"
                     ),
                     A<Embed[]>._
                 )
