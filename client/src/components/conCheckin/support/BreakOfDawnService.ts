@@ -85,7 +85,7 @@ export function handleAdeptSidheSorcerers(userDown: StripInfo, userMax: StripInf
     trackedStripInfo.rwp.reasons.push(`Your psyche is not full, so no bonus to RWP`)
   }
 
-  if (trackedStripInfo.blood.isFull && trackedStripInfo.vitality.isFull && trackedStripInfo.psyche.isFull && trackedStripInfo.mortis.needsMore) {
+  if (trackedStripInfo.blood.isFull && trackedStripInfo.vitality.isFull && trackedStripInfo.health.isFull && trackedStripInfo.mortis.needsMore) {
     trackedStripInfo.mortis.gainedAmount += 1
     trackedStripInfo.mortis.reasons.push(`Your Health, Blood, and Vitality are maxed, mortis was increased by 1 for total of ${trackedStripInfo.mortis.amountWithTotalGained}/${trackedStripInfo.mortis.maxAmount}`)
   }
@@ -180,7 +180,7 @@ export function handleShammas(userDown: StripInfo, userMax: StripInfo, xpLevel: 
     trackedStripInfo.rwp.reasons.push(`Your psyche is not full, so no bonus to RWP`)
   }
 
-  if (trackedStripInfo.blood.isFull && trackedStripInfo.vitality.isFull && trackedStripInfo.psyche.isFull && trackedStripInfo.mortis.needsMore) {
+  if (trackedStripInfo.blood.isFull && trackedStripInfo.vitality.isFull && trackedStripInfo.vitality.isFull && trackedStripInfo.mortis.needsMore) {
     trackedStripInfo.mortis.gainedAmount += 1
     trackedStripInfo.mortis.reasons.push(`Your Health, Blood, and Vitality are maxed, mortis was increased by 1 for total of ${trackedStripInfo.mortis.amountWithTotalGained}/${trackedStripInfo.mortis.maxAmount}`)
   }
@@ -261,12 +261,12 @@ export function handleAeternari(userDown: StripInfo, userMax: StripInfo, xpLevel
     trackedStripInfo.rwp.reasons.push(`Your psyche is not full, so no bonus to RWP`)
   }
 
-  if (trackedStripInfo.vitality.isFull && trackedStripInfo.psyche.isFull && trackedStripInfo.mortis.needsMore) {
+  if (trackedStripInfo.health.isFull && trackedStripInfo.blood.isFull && trackedStripInfo.mortis.needsMore) {
     trackedStripInfo.mortis.gainedAmount += 1
-    trackedStripInfo.mortis.reasons.push(`Your Blood and Vitality are maxed, mortis was increased by 1 for total of ${trackedStripInfo.mortis.amountWithTotalGained}/${trackedStripInfo.mortis.maxAmount}`)
+    trackedStripInfo.mortis.reasons.push(`Your Blood and Health are maxed, mortis was increased by 1 for total of ${trackedStripInfo.mortis.amountWithTotalGained}/${trackedStripInfo.mortis.maxAmount}`)
   }
   else if (trackedStripInfo.mortis.needsMore) {
-    trackedStripInfo.mortis.reasons.push(`Your Blood and Vitality are not full, so no bonus to Mortis`)
+    trackedStripInfo.mortis.reasons.push(`Your Blood and Health are not full, so no bonus to Mortis`)
   }
 
   return trackedStripInfo
@@ -353,7 +353,7 @@ export function handleVampyre(userDown: StripInfo, userMax: StripInfo, xpLevel: 
     trackedStripInfo.rwp.reasons.push(`Your psyche is not full, so no bonus to RWP`)
   }
 
-  if (trackedStripInfo.blood.isFull && trackedStripInfo.vitality.isFull && trackedStripInfo.mortis.needsMore) {
+  if (trackedStripInfo.health.isFull && trackedStripInfo.vitality.isFull && trackedStripInfo.mortis.needsMore) {
     trackedStripInfo.mortis.gainedAmount += 1
     trackedStripInfo.mortis.reasons.push(`Your Health and Vitality are maxed, mortis was increased by 1 for total of ${trackedStripInfo.mortis.amountWithTotalGained}/${trackedStripInfo.mortis.maxAmount}`)
   }
