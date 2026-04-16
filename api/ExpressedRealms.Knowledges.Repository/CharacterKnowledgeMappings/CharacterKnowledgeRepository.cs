@@ -85,7 +85,7 @@ public class CharacterKnowledgeRepository(
         context.Update(mapping);
         await context.SaveChangesAsync(cancellationToken);
     }
-    
+
     public async Task<List<KnowledgeCrbProjection>> GetKnowledgesForCharacterCRB(int characterId)
     {
         return await context
@@ -96,8 +96,8 @@ public class CharacterKnowledgeRepository(
             {
                 Name = x.Knowledge.Name,
                 Level = x.KnowledgeLevel.Level,
-                Specializations = x.CharacterKnowledgeSpecializations
-                    .OrderBy(x => x.Name)
+                Specializations = x
+                    .CharacterKnowledgeSpecializations.OrderBy(x => x.Name)
                     .Select(y => y.Name)
                     .ToList(),
             })

@@ -29,10 +29,9 @@ internal sealed class CharacterPowerRepository(
     public async Task<List<CharacterCrbInfo>> GetCharacterPowerInfoForCRB(int characterId)
     {
         return await context
-            .CharacterPowerMappings
-            .Where(x => x.CharacterId == characterId)
+            .CharacterPowerMappings.Where(x => x.CharacterId == characterId)
             .OrderBy(x => x.Power.PowerPath.OrderIndex)
-                .ThenBy(x => x.Power.OrderIndex)
+            .ThenBy(x => x.Power.OrderIndex)
             .Select(x => new CharacterCrbInfo()
             {
                 Name = x.Power.Name,
