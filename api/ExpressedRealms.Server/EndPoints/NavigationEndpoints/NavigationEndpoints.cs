@@ -146,8 +146,8 @@ internal static class NavigationEndpoints
                 {
                     var characters = await dbContext
                         .Characters.Where(x => x.Player.UserId == http.User.GetUserId())
-                        .OrderByDescending(x => x.IsPrimaryCharacter ? 1 : 0)
-                        .ThenByDescending(x => x.Name)
+                        .OrderByDescending(x => x.IsPrimaryCharacter)
+                        .ThenBy(x => x.Name)
                         .Select(x => new CharacterNavResponse(
                             x.Id,
                             x.Name,

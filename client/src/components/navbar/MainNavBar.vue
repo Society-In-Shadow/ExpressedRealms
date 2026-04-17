@@ -4,7 +4,6 @@ import { onMounted, ref, watch } from 'vue'
 import MegaMenu from 'primevue/megamenu'
 import AvatarDropdown from '@/components/navbar/AvatarDropdown.vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
 
 import ExpressionMenuItem from '@/components/navbar/navMenuItems/ExpressionMenuItem.vue'
 import CharacterMenuItem from '@/components/navbar/navMenuItems/CharacterMenuItem.vue'
@@ -17,8 +16,9 @@ import EventCheckinBanner from '@/components/conCheckin/EventCheckinBanner.vue'
 import GoCheckinBanner from '@/components/conCheckin/GoCheckinBanner.vue'
 import { addRootMenuAndChildren } from '@/components/navbar/helpers/navUtilities.ts'
 import { populateAdminMenu } from '@/components/navbar/helpers/adminMenuGenerator.ts'
+import { useQuery, useQueryCache } from '@pinia/colada'
+import { characterListQuery } from '@/components/navbar/stores/archetypeStore.ts'
 
-const Router = useRouter()
 const router = useRouter()
 const cmsData = cmsStore()
 
@@ -28,7 +28,6 @@ const items = ref([
     label: 'Characters',
     icon: 'pi pi-file',
     subtext: 'Characters',
-    command: () => router.push('/characters'),
     items: [],
   },
   {
@@ -64,7 +63,7 @@ const items = ref([
 function MapData(expression, navMenuHeading: string) {
   return {
     navMenuType: navMenuHeading,
-    expression: expression,
+    data: expression,
   }
 }
 
@@ -90,20 +89,6 @@ async function loadList() {
   const userInfo = userStore()
   await userInfo.updateUserFeatureFlags()
 
-  function MapCharacterData(character) {
-    return {
-      id: character.id,
-      name: character.name,
-      icon: 'pi pi-cloud',
-      background: character.background,
-      expression: character.expression,
-      navMenuType: 'character',
-      command: () => {
-        Router.push('/characters/' + character.id)
-      },
-    }
-  }
-
   const adminMenu = addRootMenuAndChildren('Admin', 'pi pi-admin', populateAdminMenu())
   if (adminMenu) {
     items.value.splice(-1, 0, adminMenu)
@@ -113,32 +98,19 @@ async function loadList() {
   fillMenu(cmsData.worldBackgroundItems, 'World Background', 'worldbackground')
   fillMenu(cmsData.rulebookItems, 'Rule Book', 'rulebook')
   fillMenu(cmsData.expressionItems, 'Expressions', 'expressions')
-
-  axios.get('/navMenu/characters')
-    .then((response) => {
-      const characters = response.data
-
-      const column1 = characters.slice(0, Math.ceil(characters.length / 2))
-      const column2 = characters.slice(Math.ceil(characters.length / 2), characters.length)
-
-      const expressionMenu = items.value.find(item => item.label === 'Characters')?.items
-
-      expressionMenu.length = 0
-
-      if (expressionMenu !== undefined) {
-        expressionMenu.push([{
-          items: column1.map(MapCharacterData),
-        }])
-        expressionMenu.push([{
-          items: column2.map(MapCharacterData),
-        }])
-      }
-    })
 }
 
 onMounted(async () => {
+  await populateCharacterMenu()
   await loadList()
 })
+
+const populateCharacterMenu = async () => {
+  const queryCache = useQueryCache()
+  await queryCache.refresh(queryCache.ensure(characterListQuery))
+  const { data } = useQuery(characterListQuery)
+  fillMenu(data.value!, 'Characters', 'character')
+}
 
 const { worldBackgroundItems, rulebookItems, expressionItems } = storeToRefs(cmsData)
 
@@ -166,8 +138,8 @@ watch(expressionItems, (newValue) => {
     <template #item="{ item }">
       <RootNodeMenuItem v-if="item.root" :item="item" />
       <SimpleMenuItem v-else-if="item.navMenuType == 'simple'" :item="item" />
-      <CharacterMenuItem v-else-if="item.navMenuType == 'character'" :item="item" />
-      <ExpressionMenuItem v-else :item="item.expression" :nav-heading="item.navMenuType" />
+      <CharacterMenuItem v-else-if="item.navMenuType == 'character'" :item="item.data" />
+      <ExpressionMenuItem v-else :item="item.data" :nav-heading="item.navMenuType" />
     </template>
     <template #end>
       <avatar-dropdown />
