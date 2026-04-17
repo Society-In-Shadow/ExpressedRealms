@@ -124,7 +124,7 @@ try
     builder.Services.AddResponseCompression(options =>
     {
         options.EnableForHttps = true;
-         
+
         options.Providers.Add<GzipCompressionProvider>();
         options.Providers.Add<BrotliCompressionProvider>();
     });
