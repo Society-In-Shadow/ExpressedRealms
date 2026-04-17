@@ -13,6 +13,7 @@ using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.DependencyInjection;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 using DetailedInformation = ExpressedRealms.Powers.API.PowerEndpoints.Responses.PowerList.DetailedInformation;
 
@@ -75,6 +76,7 @@ internal static class PowerPathEndpoints
                     );
                 }
             )
+            .CacheOutput(builder => builder.Expire(TimeSpan.FromMinutes(20)))
             .WithSummary("Returns the list of power paths for a given expression")
             .RequireAuthorization();
 
