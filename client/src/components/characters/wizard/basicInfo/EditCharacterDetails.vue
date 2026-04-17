@@ -20,8 +20,11 @@ import FormCheckboxWrapper from '@/FormWrappers/FormCheckboxWrapper.vue'
 import SelectProgressionPaths from '@/components/characters/wizard/basicInfo/SelectProgressionPaths.vue'
 import Message from 'primevue/message'
 import { experienceStore } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
+import { useQuery } from '@pinia/colada'
+import { characterListQuery } from '@/components/navbar/stores/navMenuStore.ts'
 
 const route = useRoute()
+const { refresh } = useQuery(characterListQuery)
 
 const characterInfo = characterStore()
 const userInfo = userStore()
@@ -69,6 +72,7 @@ const onSubmit = form.handleSubmit((values) => {
     await xpInfo.updateExperience(route.params.id)
     await characterInfo.getEditOptions(Number(route.params.id))
     await characterInfo.getCharacterDetails(Number(route.params.id))
+    await refresh()
     toaster.success('Successfully Updated Character Info!')
   })
 })

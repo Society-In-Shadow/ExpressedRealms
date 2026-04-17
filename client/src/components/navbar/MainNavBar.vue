@@ -17,7 +17,7 @@ import GoCheckinBanner from '@/components/conCheckin/GoCheckinBanner.vue'
 import { addRootMenuAndChildren } from '@/components/navbar/helpers/navUtilities.ts'
 import { populateAdminMenu } from '@/components/navbar/helpers/adminMenuGenerator.ts'
 import { useQuery, useQueryCache } from '@pinia/colada'
-import { characterListQuery } from '@/components/navbar/stores/archetypeStore.ts'
+import { characterListQuery } from '@/components/navbar/stores/navMenuStore.ts'
 
 const router = useRouter()
 const cmsData = cmsStore()
@@ -105,14 +105,20 @@ onMounted(async () => {
   await loadList()
 })
 
+const { data } = useQuery(characterListQuery)
+
 const populateCharacterMenu = async () => {
   const queryCache = useQueryCache()
   await queryCache.refresh(queryCache.ensure(characterListQuery))
-  const { data } = useQuery(characterListQuery)
+
   fillMenu(data.value!, 'Characters', 'character')
 }
 
 const { worldBackgroundItems, rulebookItems, expressionItems } = storeToRefs(cmsData)
+
+watch(data, async () => {
+  await populateCharacterMenu()
+})
 
 watch(worldBackgroundItems, (newValue) => {
   fillMenu(newValue, 'World Background', 'worldbackground')
