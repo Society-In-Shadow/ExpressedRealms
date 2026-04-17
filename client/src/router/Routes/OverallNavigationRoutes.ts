@@ -23,7 +23,8 @@ export const OverallRoutes = {
     {
       path: '/characters/:id',
       name: 'characterSheet',
-      component: () => import('./../../components/characters/character/CharacterSheet.vue'),
+      component: () => import('@/components/characters/character/CharacterSheet.vue'),
+      meta: { reloadOnParamChange: true },
     },
     {
       path: '/characters/wizard',
