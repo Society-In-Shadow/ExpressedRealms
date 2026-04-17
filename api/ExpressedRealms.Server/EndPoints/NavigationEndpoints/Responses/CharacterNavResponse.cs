@@ -1,6 +1,5 @@
 namespace ExpressedRealms.Server.EndPoints.NavigationEndpoints.Responses;
 
-public record CharacterNavResponse(int Id, string Name, string Expression, string Background)
+public record CharacterNavResponse(int Id, string Name, string Expression, bool isPrimaryCharacter)
 {
-    public string Background { get; set; } = Background;
 }

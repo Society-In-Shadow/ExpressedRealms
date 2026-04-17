@@ -146,22 +146,24 @@ internal static class NavigationEndpoints
                 {
                     var characters = await dbContext
                         .Characters.Where(x => x.Player.UserId == http.User.GetUserId())
+                        .OrderByDescending(x => x.IsPrimaryCharacter ? 1 : 0)
+                        .ThenByDescending(x => x.Name)
                         .Select(x => new CharacterNavResponse(
                             x.Id,
                             x.Name,
                             x.Expression.Name,
-                            x.Background.Substring(0, 51) ?? ""
+                            x.IsPrimaryCharacter
                         ))
+                        .Take(6)
                         .ToListAsync();
 
-                    characters.ForEach(x =>
+                    if (characters.Count > 1)
                     {
-                        if (x.Background.Length > 50)
-                        {
-                            x.Background = x.Background.Substring(0, 50) + "...";
-                        }
-                    });
-
+                        var bottomOfFirstColumn = characters.Count / 2;
+                        characters.Insert(bottomOfFirstColumn, new CharacterNavResponse(-1, "View Characters", "Add Character", false)); 
+                    }
+                    characters.Add(new CharacterNavResponse(-2, "Add Character", "Add Character", false));
+                    
                     return TypedResults.Ok(characters);
                 }
             )
