@@ -25,7 +25,7 @@ export const PublicRoutes = {
     },
     {
       path: 'expressions',
-      name: 'expressions',
+      name: 'public-expressions',
       component: () => import('./../../components/public/PublicExpressions.vue'),
       meta: { isAnonymous: true },
     },

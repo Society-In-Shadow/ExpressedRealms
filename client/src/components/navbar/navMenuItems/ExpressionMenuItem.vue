@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
 import Button from 'primevue/button'
-import { useRouter } from 'vue-router'
 import axios from 'axios'
 import toaster from '@/services/Toasters'
 import Badge from 'primevue/badge'
@@ -9,8 +8,8 @@ import type { ExpressionMenuItem } from '@/components/navbar/navMenuItems/types.
 import { type PropType, ref } from 'vue'
 import { expressionDialogService } from '@/components/expressions/services/dialogs.ts'
 import { cmsStore } from '@/stores/cmsStore.ts'
+import { navigateWithNewTabSupport } from '@/router/navigationHelpers.ts'
 
-const Router = useRouter()
 const expressionDialogs = expressionDialogService()
 const cmsData = cmsStore()
 
@@ -25,12 +24,13 @@ let props = defineProps({
   },
 })
 
-function redirect() {
+function redirect(event: MouseEvent) {
   if (props.item.id === 0) {
     expressionDialogs.showAddExpression(props.item?.expressionTypeId)
     return
   }
-  Router.push(`/${props.navHeading}/` + props.item?.slug)
+
+  navigateWithNewTabSupport({ name: props.navHeading, params: { slug: props.item?.slug } }, event)
 }
 
 function getStatus() {
@@ -61,7 +61,7 @@ function toggleDelete() {
 
 </script>
 <template>
-  <div class="flex flex-shrink-1 align-items-center cursor-pointer gap-2 mb-2" @click="redirect">
+  <div class="flex flex-shrink-1 align-items-center cursor-pointer gap-2 mb-2" @click="redirect" @click.middle="redirect">
     <div class="flex gap-3 align-items-center flex-grow-1 p-3">
       <span class="inline-flex flex-none align-items-center justify-content-center border-circle bg-primary w-3rem h-3rem">
         <i :class="['material-symbols-outlined', 'text-white']"> {{ item.navMenuImage }}</i>

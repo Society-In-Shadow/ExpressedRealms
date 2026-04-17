@@ -50,7 +50,7 @@ export const OverallRoutes = {
     },
     {
       path: '/expressions/:slug',
-      name: 'viewExpression',
+      name: 'expressions',
       component: () => import('./../../components/expressions/ExpressionBase.vue'),
     },
     {

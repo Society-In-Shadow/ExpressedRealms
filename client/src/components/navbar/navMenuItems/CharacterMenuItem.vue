@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import ExpressionLogo from '@/components/common/ExpressionLogo.vue'
-import router from '@/router'
 import Badge from 'primevue/badge'
 import { CharacterState } from '@/components/navbar/types.ts'
+import { navigateWithNewTabSupport } from '@/router/navigationHelpers.ts'
 
 const props = defineProps({
   item: {
@@ -11,21 +11,21 @@ const props = defineProps({
   },
 })
 
-async function redirect() {
+async function redirect(event: MouseEvent) {
+  let route = { name: 'characterSheet', params: { id: props.item?.id } }
+
   if (props.item.id === -1) {
-    await router.push({ name: 'characters' })
-    return
+    route = { name: 'characters' }
   }
   if (props.item.id === -2) {
-    await router.push({ name: 'addWizard' })
-    return
+    route = { name: 'addWizard' }
   }
-  await router.push({ name: 'characterSheet', params: { id: props.item?.id } })
+  navigateWithNewTabSupport(route, event)
 }
 
 </script>
 <template>
-  <div class="flex flex-shrink-1 align-items-center p-3 cursor-pointer mb-2 gap-2" @click="redirect">
+  <div class="flex flex-shrink-1 align-items-center p-3 cursor-pointer gap-2" @click="redirect" @click.middle="redirect">
     <span v-if="item.id == -1" class="inline-flex flex-none align-items-center justify-content-center border-circle bg-primary w-3rem h-3rem ">
       <i class="material-symbols-outlined text-white">list</i>
     </span>

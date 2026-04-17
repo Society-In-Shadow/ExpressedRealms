@@ -4,11 +4,10 @@ import Button from 'primevue/button'
 import { ref, watch } from 'vue'
 import axios from 'axios'
 import type { HighLevelExpressionInfoResponse } from '@/components/characters/wizard/basicInfo/types.ts'
-import { useRouter } from 'vue-router'
 import { cmsStore } from '@/stores/cmsStore.ts'
+import { navigateWithNewTabSupport } from '@/router/navigationHelpers.ts'
 
 const cmsInfo = cmsStore()
-const router = useRouter()
 
 const props = defineProps({
   expressionId: {
@@ -30,10 +29,9 @@ watch(() => props.expressionId, async (newValue) => {
   await loadInfo()
 }, { immediate: true, deep: true })
 
-function redirectToExpression() {
+function redirectToExpression(event: MouseEvent) {
   const currentExpression = cmsInfo.expressionItems.find(x => x.id == props.expressionId)
-  const routeData = router.resolve({ name: 'viewExpression', params: { slug: currentExpression.slug } })
-  window.open(routeData.href, '_blank')
+  navigateWithNewTabSupport({ name: 'expressions', params: { slug: currentExpression.slug } }, event)
 }
 
 </script>
