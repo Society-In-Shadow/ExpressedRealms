@@ -8,7 +8,6 @@ using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.Extensions.DependencyInjection;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 using ExpressionSectionDto = ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.DTOs.ExpressionSectionDto;
 using SectionTypeDto = ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.DTOs.SectionTypeDto;
@@ -68,7 +67,6 @@ internal static class ExpectedSubSectionsEndpoints
                     );
                 }
             )
-            .CacheOutput(builder => builder.Expire(TimeSpan.FromMinutes(20)))
             .RequireAuthorization();
 
         endpointGroup
