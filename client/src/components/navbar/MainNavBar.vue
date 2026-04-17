@@ -1,10 +1,9 @@
 <script setup lang="ts">
 
-import { onMounted, ref, watch } from 'vue'
+import { computed, onMounted } from 'vue'
 import MegaMenu from 'primevue/megamenu'
 import AvatarDropdown from '@/components/navbar/AvatarDropdown.vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
 
 import ExpressionMenuItem from '@/components/navbar/navMenuItems/ExpressionMenuItem.vue'
 import CharacterMenuItem from '@/components/navbar/navMenuItems/CharacterMenuItem.vue'
@@ -12,144 +11,108 @@ import RootNodeMenuItem from '@/components/navbar/navMenuItems/RootNodeMenuItem.
 import SimpleMenuItem from '@/components/navbar/navMenuItems/SimpleMenuItem.vue'
 import { userStore } from '@/stores/userStore'
 import { cmsStore } from '@/stores/cmsStore.ts'
-import { storeToRefs } from 'pinia'
 import EventCheckinBanner from '@/components/conCheckin/EventCheckinBanner.vue'
 import GoCheckinBanner from '@/components/conCheckin/GoCheckinBanner.vue'
-import { addRootMenuAndChildren } from '@/components/navbar/helpers/navUtilities.ts'
 import { populateAdminMenu } from '@/components/navbar/helpers/adminMenuGenerator.ts'
+import { useQuery, useQueryCache } from '@pinia/colada'
+import { characterListQuery } from '@/components/navbar/stores/navMenuStore.ts'
+import { type Character, CharacterState } from '@/components/navbar/types.ts'
+import { breakpointsBootstrapV5, useBreakpoints } from '@vueuse/core'
+import { addAdminMenuItems, fillComputedMenu } from '@/components/navbar/helpers/navUtilities.ts'
 
-const Router = useRouter()
 const router = useRouter()
 const cmsData = cmsStore()
 
-const items = ref([
+const items = computed(() => [
   {
     root: true,
     label: 'Characters',
-    icon: 'pi pi-file',
-    subtext: 'Characters',
-    command: () => router.push('/characters'),
-    items: [],
+    items: charactersMenu.value,
   },
   {
     root: true,
     label: 'Rule Book',
-    items: [],
+    items: ruleBookMenu.value,
   },
   {
     root: true,
     label: 'Expressions',
-    items: [],
+    items: expressionMenu.value,
   },
   {
     root: true,
     label: 'World Background',
-    items: [],
+    items: worldBackgroundMenu.value,
   },
   {
     root: true,
     label: 'Stone Puller',
     icon: 'pi pi-file',
-    subtext: 'Stone Puller',
     command: () => router.push('/stonePuller'),
   },
   {
     root: true,
+    label: 'Admin',
+    icon: 'pi pi-admin',
+    visible: () => (adminMenu.value?.length ?? 0) > 0,
+    items: adminMenu.value,
+  },
+  {
+    root: true,
     label: 'Code of Conduct',
-    route: 'code-of-conduct',
     command: () => router.push('/codeofconduct'),
   },
 ])
 
-function MapData(expression, navMenuHeading: string) {
-  return {
-    navMenuType: navMenuHeading,
-    expression: expression,
-  }
-}
-
-function fillMenu(menuItems: any[], menuLabel: string, navMenuHeading: string) {
-  const column1 = menuItems.slice(0, Math.ceil(menuItems.length / 2))
-  const column2 = menuItems.slice(Math.ceil(menuItems.length / 2), menuItems.length)
-
-  const expressionMenu = items.value.find(item => item.label === menuLabel)?.items
-
-  expressionMenu.length = 0
-
-  if (expressionMenu !== undefined) {
-    expressionMenu.push([{
-      items: column1.map(x => MapData(x, navMenuHeading)),
-    }])
-    expressionMenu.push([{
-      items: column2.map(x => MapData(x, navMenuHeading)),
-    }])
-  }
-}
-
 async function loadList() {
   const userInfo = userStore()
   await userInfo.updateUserFeatureFlags()
-
-  function MapCharacterData(character) {
-    return {
-      id: character.id,
-      name: character.name,
-      icon: 'pi pi-cloud',
-      background: character.background,
-      expression: character.expression,
-      navMenuType: 'character',
-      command: () => {
-        Router.push('/characters/' + character.id)
-      },
-    }
-  }
-
-  const adminMenu = addRootMenuAndChildren('Admin', 'pi pi-admin', populateAdminMenu())
-  if (adminMenu) {
-    items.value.splice(-1, 0, adminMenu)
-  }
-
   await cmsData.getCmsInformation()
-  fillMenu(cmsData.worldBackgroundItems, 'World Background', 'worldbackground')
-  fillMenu(cmsData.rulebookItems, 'Rule Book', 'rulebook')
-  fillMenu(cmsData.expressionItems, 'Expressions', 'expressions')
-
-  axios.get('/navMenu/characters')
-    .then((response) => {
-      const characters = response.data
-
-      const column1 = characters.slice(0, Math.ceil(characters.length / 2))
-      const column2 = characters.slice(Math.ceil(characters.length / 2), characters.length)
-
-      const expressionMenu = items.value.find(item => item.label === 'Characters')?.items
-
-      expressionMenu.length = 0
-
-      if (expressionMenu !== undefined) {
-        expressionMenu.push([{
-          items: column1.map(MapCharacterData),
-        }])
-        expressionMenu.push([{
-          items: column2.map(MapCharacterData),
-        }])
-      }
-    })
 }
 
 onMounted(async () => {
+  await populateCharacterMenu()
   await loadList()
 })
 
-const { worldBackgroundItems, rulebookItems, expressionItems } = storeToRefs(cmsData)
+const { data: characterData } = useQuery(characterListQuery)
 
-watch(worldBackgroundItems, (newValue) => {
-  fillMenu(newValue, 'World Background', 'worldbackground')
+const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5)
+const isMobile = activeBreakpoint.smaller('md')
+
+const populateCharacterMenu = async () => {
+  const queryCache = useQueryCache()
+  await queryCache.refresh(queryCache.ensure(characterListQuery))
+}
+
+const charactersMenu = computed(() => {
+  const list = characterData.value ?? []
+  const characters: Array<Character> = [...list]
+  if (characters.length > 0) {
+    const insertSpot = isMobile.value
+      ? characters.length
+      : Math.max(Math.floor(characters.length / 2), 1)
+    characters.splice(insertSpot, 0, { id: -1, name: 'View Characters', expression: '', state: CharacterState.Regular })
+  }
+
+  characters.push({ id: -2, name: 'Add Character', expression: '', state: CharacterState.Regular })
+  return fillComputedMenu(characters, 'character')
 })
-watch(rulebookItems, (newValue) => {
-  fillMenu(newValue, 'Rule Book', 'rulebook')
+
+const worldBackgroundMenu = computed(() => {
+  return fillComputedMenu(cmsData.worldBackgroundItems ?? [], 'worldbackground')
 })
-watch(expressionItems, (newValue) => {
-  fillMenu(newValue, 'Expressions', 'expressions')
+
+const ruleBookMenu = computed(() => {
+  return fillComputedMenu(cmsData.rulebookItems ?? [], 'rulebook')
+})
+
+const expressionMenu = computed(() => {
+  return fillComputedMenu(cmsData.expressionItems ?? [], 'expressions')
+})
+
+const adminMenu = computed(() => {
+  return addAdminMenuItems(populateAdminMenu())
 })
 
 </script>
@@ -166,11 +129,36 @@ watch(expressionItems, (newValue) => {
     <template #item="{ item }">
       <RootNodeMenuItem v-if="item.root" :item="item" />
       <SimpleMenuItem v-else-if="item.navMenuType == 'simple'" :item="item" />
-      <CharacterMenuItem v-else-if="item.navMenuType == 'character'" :item="item" />
-      <ExpressionMenuItem v-else :item="item.expression" :nav-heading="item.navMenuType" />
+      <CharacterMenuItem v-else-if="item.navMenuType == 'character'" :item="item.data" />
+      <ExpressionMenuItem v-else :item="item.data" :nav-heading="item.navMenuType" />
     </template>
     <template #end>
       <avatar-dropdown />
     </template>
   </MegaMenu>
 </template>
+
+<style>
+
+@media(min-width: 768px) {
+  .p-megamenu-overlay {
+    margin-top: 3em !important;
+  }
+}
+
+.p-megamenu-submenu-label{
+  padding: 0 !important
+}
+.p-megamenu-col-12{
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+.p-megamenu-submenu {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+.p-megamenu-item {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+</style>

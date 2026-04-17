@@ -1,10 +1,8 @@
 <script setup lang="ts">
 
-import { useRouter } from 'vue-router'
 import type { SimpleMenuItem } from '@/components/navbar/navMenuItems/types.ts'
 import { type PropType } from 'vue'
-
-const Router = useRouter()
+import { navigateWithNewTabSupport } from '@/router/navigationHelpers.ts'
 
 let props = defineProps({
   item: {
@@ -13,13 +11,13 @@ let props = defineProps({
   },
 })
 
-function redirect() {
-  Router.push({ name: props.item.pushComponentRouteName })
+function redirect(event: MouseEvent) {
+  navigateWithNewTabSupport({ name: props.item.pushComponentRouteName }, event)
 }
 
 </script>
 <template>
-  <div class="flex flex-shrink-1 align-items-center cursor-pointer gap-2 mb-2" @click="redirect">
+  <div class="flex flex-shrink-1 align-items-center cursor-pointer gap-2 mb-2" @click="redirect" @click.middle="redirect">
     <div class="flex gap-3 align-items-center flex-grow-1 p-3">
       <span class="inline-flex flex-none align-items-center justify-content-center border-circle bg-primary w-3rem h-3rem">
         <i :class="['material-symbols-outlined', 'text-white']"> {{ item.navMenuIcon }}</i>

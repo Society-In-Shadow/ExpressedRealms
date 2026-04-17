@@ -146,30 +146,24 @@ internal static class NavigationEndpoints
                 {
                     var characters = await dbContext
                         .Characters.Where(x => x.Player.UserId == http.User.GetUserId())
+                        .OrderByDescending(x => x.IsPrimaryCharacter)
+                        .ThenBy(x => x.Name)
                         .Select(x => new CharacterNavResponse(
                             x.Id,
                             x.Name,
                             x.Expression.Name,
-                            x.Background.Substring(0, 51) ?? ""
+                            x.IsPrimaryCharacter ? 1
+                                : x.IsRetired ? 2
+                                : 0
                         ))
+                        .Take(6)
                         .ToListAsync();
-
-                    characters.ForEach(x =>
-                    {
-                        if (x.Background.Length > 50)
-                        {
-                            x.Background = x.Background.Substring(0, 50) + "...";
-                        }
-                    });
 
                     return TypedResults.Ok(characters);
                 }
             )
-            .WithSummary(
-                "Returns a simplified version of the characters for display in the nav menu."
-            )
             .WithDescription(
-                "Returns the all characters with their name, expression, and a truncated background (50 characters + '...',  or less)."
+                "Returns primary character first if it exists, then an alphabetized list of characters.  Will only return 6 characters total."
             )
             .RequireAuthorization();
     }

@@ -2,6 +2,10 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 
 import toaster from '@/services/Toasters'
+import { useQuery } from '@pinia/colada'
+import { characterListQuery } from '@/components/navbar/stores/navMenuStore.ts'
+
+const { refresh } = useQuery(characterListQuery)
 
 export const charactersStore
   = defineStore('charactersStore', {
@@ -21,6 +25,7 @@ export const charactersStore
         await axios.delete(`/characters/${id}`)
           .then(async () => {
             await this.getCharacters()
+            await refresh()
             toaster.success('Successfully Deleted Character!')
           })
       },
