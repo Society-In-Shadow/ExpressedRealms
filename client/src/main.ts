@@ -85,7 +85,11 @@ const app = createApp(App)
 app.directive('ripple', Ripple)
 app.directive('tooltip', Tooltip)
 app.use(pinia)
-app.use(PiniaColada)
+app.use(PiniaColada, {
+  queryOptions: {
+    staleTime: Infinity,
+  },
+})
 app.use(ToastService)
 app.use(ConfirmationService)
 app.use(DialogService)
