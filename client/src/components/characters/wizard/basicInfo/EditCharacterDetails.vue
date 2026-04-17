@@ -24,7 +24,7 @@ import { useQuery } from '@pinia/colada'
 import { characterListQuery } from '@/components/navbar/stores/navMenuStore.ts'
 
 const route = useRoute()
-const { refresh } = useQuery(characterListQuery)
+const { refetch } = useQuery(characterListQuery)
 
 const characterInfo = characterStore()
 const userInfo = userStore()
@@ -72,7 +72,7 @@ const onSubmit = form.handleSubmit((values) => {
     await xpInfo.updateExperience(route.params.id)
     await characterInfo.getEditOptions(Number(route.params.id))
     await characterInfo.getCharacterDetails(Number(route.params.id))
-    await refresh()
+    await refetch()
     toaster.success('Successfully Updated Character Info!')
   })
 })
