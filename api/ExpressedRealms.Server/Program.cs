@@ -1,3 +1,4 @@
+using System.IO.Compression;
 using Audit.Core;
 using Azure.Identity;
 using ExpressedRealms.Admin.API.Configuration;
@@ -119,6 +120,23 @@ try
     builder.Services.AddValidatorsFromAssemblyContaining<Program>();
     builder.Services.AddFluentValidationAutoValidation();
     builder.Services.AddSingleton<ITelemetryInitializer, RouteTemplateTelemetryInitializer>();
+    builder.Services.AddResponseCompression(options =>
+    {
+        options.EnableForHttps = true;
+         
+        options.Providers.Add<GzipCompressionProvider>();
+        options.Providers.Add<BrotliCompressionProvider>();
+    });
+
+    builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
+    {
+        options.Level = CompressionLevel.Fastest;
+    });
+
+    builder.Services.Configure<GzipCompressionProviderOptions>(options =>
+    {
+        options.Level = CompressionLevel.Fastest;
+    });
 
     builder.Services.AddHttpContextAccessor();
     // https://stackoverflow.com/questions/64122616/cancellation-token-injection/77342914#77342914
@@ -212,6 +230,8 @@ try
     // Seed Roles
     await app.ConfigureUserRoles();
 
+    app.UseResponseCompression();
+    app.UseOutputCache();
     app.UseDefaultFiles();
     app.UseStaticFiles();
 
