@@ -40,6 +40,7 @@ using ExpressedRealms.Shared.AzureKeyVault.Secrets;
 using ExpressedRealms.Shared.Configuration;
 using FluentValidation;
 using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Serilog;
@@ -137,6 +138,7 @@ try
     {
         options.Level = CompressionLevel.Fastest;
     });
+    builder.Services.AddOutputCache();
 
     builder.Services.AddHttpContextAccessor();
     // https://stackoverflow.com/questions/64122616/cancellation-token-injection/77342914#77342914
