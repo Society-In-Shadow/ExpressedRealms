@@ -152,11 +152,13 @@ internal static class NavigationEndpoints
                             x.Id,
                             x.Name,
                             x.Expression.Name,
-                            x.IsPrimaryCharacter ? 1 : x.IsRetired ? 2 : 0
+                            x.IsPrimaryCharacter ? 1
+                                : x.IsRetired ? 2
+                                : 0
                         ))
                         .Take(6)
                         .ToListAsync();
-                    
+
                     return TypedResults.Ok(characters);
                 }
             )

@@ -54,7 +54,7 @@ const items = computed(() => [
     root: true,
     label: 'Admin',
     icon: 'pi pi-admin',
-    show: (adminMenu.value?.length ?? 0) > 0,
+    visible: () => (adminMenu.value?.length ?? 0) > 0,
     items: adminMenu.value,
   },
   {
