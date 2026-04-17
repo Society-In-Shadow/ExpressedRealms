@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { onMounted, ref, watch } from 'vue'
+import { computed, onMounted } from 'vue'
 import MegaMenu from 'primevue/megamenu'
 import AvatarDropdown from '@/components/navbar/AvatarDropdown.vue'
 import { useRouter } from 'vue-router'
@@ -11,93 +11,63 @@ import RootNodeMenuItem from '@/components/navbar/navMenuItems/RootNodeMenuItem.
 import SimpleMenuItem from '@/components/navbar/navMenuItems/SimpleMenuItem.vue'
 import { userStore } from '@/stores/userStore'
 import { cmsStore } from '@/stores/cmsStore.ts'
-import { storeToRefs } from 'pinia'
 import EventCheckinBanner from '@/components/conCheckin/EventCheckinBanner.vue'
 import GoCheckinBanner from '@/components/conCheckin/GoCheckinBanner.vue'
-import { addRootMenuAndChildren } from '@/components/navbar/helpers/navUtilities.ts'
 import { populateAdminMenu } from '@/components/navbar/helpers/adminMenuGenerator.ts'
 import { useQuery, useQueryCache } from '@pinia/colada'
 import { characterListQuery } from '@/components/navbar/stores/navMenuStore.ts'
+import { type Character, CharacterState } from '@/components/navbar/types.ts'
+import { breakpointsBootstrapV5, useBreakpoints } from '@vueuse/core'
+import { addAdminMenuItems, fillComputedMenu } from '@/components/navbar/helpers/navUtilities.ts'
 
 const router = useRouter()
 const cmsData = cmsStore()
 
-const items = ref([
+const items = computed(() => [
   {
     root: true,
     label: 'Characters',
-    icon: 'pi pi-file',
-    subtext: 'Characters',
-    items: [],
+    items: charactersMenu.value,
   },
   {
     root: true,
     label: 'Rule Book',
-    items: [],
+    items: ruleBookMenu.value,
   },
   {
     root: true,
     label: 'Expressions',
-    items: [],
+    items: expressionMenu.value,
   },
   {
     root: true,
     label: 'World Background',
-    items: [],
+    items: worldBackgroundMenu.value,
   },
   {
     root: true,
     label: 'Stone Puller',
     icon: 'pi pi-file',
-    subtext: 'Stone Puller',
     command: () => router.push('/stonePuller'),
   },
   {
     root: true,
+    label: 'Admin',
+    icon: 'pi pi-admin',
+    show: (adminMenu.value?.length ?? 0) > 0,
+    items: adminMenu.value,
+  },
+  {
+    root: true,
     label: 'Code of Conduct',
-    route: 'code-of-conduct',
     command: () => router.push('/codeofconduct'),
   },
 ])
 
-function MapData(expression, navMenuHeading: string) {
-  return {
-    navMenuType: navMenuHeading,
-    data: expression,
-  }
-}
-
-function fillMenu(menuItems: any[], menuLabel: string, navMenuHeading: string) {
-  const column1 = menuItems.slice(0, Math.ceil(menuItems.length / 2))
-  const column2 = menuItems.slice(Math.ceil(menuItems.length / 2), menuItems.length)
-
-  const expressionMenu = items.value.find(item => item.label === menuLabel)?.items
-
-  expressionMenu.length = 0
-
-  if (expressionMenu !== undefined) {
-    expressionMenu.push([{
-      items: column1.map(x => MapData(x, navMenuHeading)),
-    }])
-    expressionMenu.push([{
-      items: column2.map(x => MapData(x, navMenuHeading)),
-    }])
-  }
-}
-
 async function loadList() {
   const userInfo = userStore()
   await userInfo.updateUserFeatureFlags()
-
-  const adminMenu = addRootMenuAndChildren('Admin', 'pi pi-admin', populateAdminMenu())
-  if (adminMenu) {
-    items.value.splice(-1, 0, adminMenu)
-  }
-
   await cmsData.getCmsInformation()
-  fillMenu(cmsData.worldBackgroundItems, 'World Background', 'worldbackground')
-  fillMenu(cmsData.rulebookItems, 'Rule Book', 'rulebook')
-  fillMenu(cmsData.expressionItems, 'Expressions', 'expressions')
 }
 
 onMounted(async () => {
@@ -105,29 +75,44 @@ onMounted(async () => {
   await loadList()
 })
 
-const { data } = useQuery(characterListQuery)
+const { data: characterData } = useQuery(characterListQuery)
+
+const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5)
+const isMobile = activeBreakpoint.smaller('md')
 
 const populateCharacterMenu = async () => {
   const queryCache = useQueryCache()
   await queryCache.refresh(queryCache.ensure(characterListQuery))
-
-  fillMenu(data.value!, 'Characters', 'character')
 }
 
-const { worldBackgroundItems, rulebookItems, expressionItems } = storeToRefs(cmsData)
+const charactersMenu = computed(() => {
+  const list = characterData.value ?? []
+  const characters: Array<Character> = [...list]
+  if (characters.length > 0) {
+    const insertSpot = isMobile.value
+      ? characters.length
+      : Math.floor(characters.length / 2)
+    characters.splice(insertSpot, 0, { id: -1, name: 'View Characters', expression: '', state: CharacterState.Regular })
+  }
 
-watch(data, async () => {
-  await populateCharacterMenu()
+  characters.push({ id: -2, name: 'Add Character', expression: '', state: CharacterState.Regular })
+  return fillComputedMenu(characters, 'character')
 })
 
-watch(worldBackgroundItems, (newValue) => {
-  fillMenu(newValue, 'World Background', 'worldbackground')
+const worldBackgroundMenu = computed(() => {
+  return fillComputedMenu(cmsData.worldBackgroundItems ?? [], 'worldbackground')
 })
-watch(rulebookItems, (newValue) => {
-  fillMenu(newValue, 'Rule Book', 'rulebook')
+
+const ruleBookMenu = computed(() => {
+  return fillComputedMenu(cmsData.rulebookItems ?? [], 'rulebook')
 })
-watch(expressionItems, (newValue) => {
-  fillMenu(newValue, 'Expressions', 'expressions')
+
+const expressionMenu = computed(() => {
+  return fillComputedMenu(cmsData.expressionItems ?? [], 'expressions')
+})
+
+const adminMenu = computed(() => {
+  return addAdminMenuItems(populateAdminMenu())
 })
 
 </script>
@@ -152,3 +137,28 @@ watch(expressionItems, (newValue) => {
     </template>
   </MegaMenu>
 </template>
+
+<style>
+
+@media(min-width: 768px) {
+  .p-megamenu-overlay {
+    margin-top: 3em !important;
+  }
+}
+
+.p-megamenu-submenu-label{
+  padding: 0 !important
+}
+.p-megamenu-col-12{
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+.p-megamenu-submenu {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+.p-megamenu-item {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+</style>
