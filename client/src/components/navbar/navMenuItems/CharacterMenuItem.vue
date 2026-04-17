@@ -2,6 +2,7 @@
 import ExpressionLogo from '@/components/common/ExpressionLogo.vue'
 import router from '@/router'
 import Badge from 'primevue/badge'
+import { CharacterState } from '@/components/navbar/types.ts'
 
 const props = defineProps({
   item: {
@@ -36,12 +37,11 @@ async function redirect() {
     </span>
     <span class="inline-flex flex-column gap-1 pl-2">
       <span class="font-medium text-lg text-900">
-        {{ item.name }}<span v-if="item.id > 0"> - {{ item.expression }}</span>
+        {{ item.name }}
+        <Badge v-if="item.state === CharacterState.Primary" value="Primary Character" severity="info" class="ml-2" />
+        <Badge v-if="item.state === CharacterState.Retired" value="Retired" severity="warn" />
       </span>
-      <span>
-        <Badge v-if="item.isPrimaryCharacter" value="Primary Character" severity="info" />
-        <Badge v-if="item.isRetired" value="Retired" severity="warn" />
-      </span>
+      <span v-if="item.id > 0">{{ item.expression }}</span>
     </span>
   </div>
 </template>

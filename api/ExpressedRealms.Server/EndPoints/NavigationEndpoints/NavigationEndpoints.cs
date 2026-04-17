@@ -152,26 +152,16 @@ internal static class NavigationEndpoints
                             x.Id,
                             x.Name,
                             x.Expression.Name,
-                            x.IsPrimaryCharacter
+                            x.IsPrimaryCharacter ? 1 : x.IsRetired ? 2 : 0
                         ))
                         .Take(6)
                         .ToListAsync();
-
-                    if (characters.Count > 1)
-                    {
-                        var bottomOfFirstColumn = characters.Count / 2;
-                        characters.Insert(bottomOfFirstColumn, new CharacterNavResponse(-1, "View Characters", "Add Character", false)); 
-                    }
-                    characters.Add(new CharacterNavResponse(-2, "Add Character", "Add Character", false));
                     
                     return TypedResults.Ok(characters);
                 }
             )
-            .WithSummary(
-                "Returns a simplified version of the characters for display in the nav menu."
-            )
             .WithDescription(
-                "Returns the all characters with their name, expression, and a truncated background (50 characters + '...',  or less)."
+                "Returns primary character first if it exists, then an alphabetized list of characters.  Will only return 6 characters total."
             )
             .RequireAuthorization();
     }
