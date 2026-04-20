@@ -17,6 +17,7 @@ import { wizardContentStore } from '@/components/characters/wizard/stores/wizard
 import type { WizardContent } from '@/components/characters/wizard/types.ts'
 import { breakpointsBootstrapV5, useBreakpoints } from '@vueuse/core'
 import { XpSectionTypes } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
+import ProficiencyTableTile from '@/components/characters/character/proficiency/ProficiencyTableTile.vue'
 
 const route = useRoute()
 const skillData = skillStore()
@@ -53,6 +54,15 @@ const updateWizardContent = (skill: CharacterSkillsResponse) => {
 </script>
 
 <template>
+  <h2>Skills</h2>
+  <p>
+    Select Skills Hand-to-Hand Offense, Projection, Acrobatics, etc, they affect your proficiencies for attacking and
+    defending, as well as having secondary effects with many powers.
+  </p>
+  <p>
+    Each skill starts at level 0 untrained. A skill level of 3 or 4 will provide additional bonuses, see the full
+    skills section for details.
+  </p>
   <ShowXPCosts :section-type="XpSectionTypes.skills" />
   <div>
     <Panel v-for="skillType in skillTypes" class="mb-3 flex-shrink-1">
@@ -67,39 +77,43 @@ const updateWizardContent = (skill: CharacterSkillsResponse) => {
         </div>
       </template>
       <DataTable :value="skillType.skills" data-key="statTypeId">
-        <Column v-if="isMobile">
-          <template #body="slotProps">
-            <Button class="float-end " size="small" label="View" @click="updateWizardContent(slotProps.data)" />
-          </template>
-        </Column>
         <Column field="name" header="Name">
           <template #body="slotProps">
             <SkeletonWrapper height="1.5rem" width="2rem" :show-skeleton="skillData.isLoadingSkills">
-              {{ slotProps.data.name }}
+              <div>
+                {{ slotProps.data.name }}
+              </div>
+              <div>{{ slotProps.data.levelName }} ({{ slotProps.data.levelNumber }})</div>
             </SkeletonWrapper>
           </template>
         </Column>
-        <Column field="level" header="Name" header-class="text-center" body-class="text-center">
-          <template #body="slotProps">
-            <SkeletonWrapper height="1.5rem" width="2rem" :show-skeleton="skillData.isLoadingSkills">
-              {{ slotProps.data.levelName }}
-            </SkeletonWrapper>
-          </template>
-        </Column>
-        <Column field="bonus" header="Level" header-class="text-center" body-class="text-center">
-          <template #body="slotProps">
-            <SkeletonWrapper height="1.5rem" width="2rem" :show-skeleton="skillData.isLoadingSkills">
-              {{ slotProps.data.levelNumber }}
-            </SkeletonWrapper>
-          </template>
-        </Column>
-        <Column v-if="!isMobile">
+        <Column>
           <template #body="slotProps">
             <Button class="float-end " size="small" label="View" @click="updateWizardContent(slotProps.data)" />
           </template>
         </Column>
       </DataTable>
     </Panel>
+  </div>
+  <div>
+    <h3>Proficiencies</h3>
+    <p>
+      Proficiencies are the aspect of your character that you will be using most often. Proficiencies are used when
+      characters are interacting with and affecting each other. Each proficiency consists of two of your character’s
+      statistics added together.
+    </p>
+    <p>
+      There are two kinds of proficiencies: Offensive and defensive. Every offensive proficiency
+      has a default matching defensive proficiency.
+    </p>
+    <p>
+      How you spend your points to customize your statistics when you first make your character will have a major effect
+      upon how well your character can do different things.
+    </p>
+    <p>
+      Click on each one below to get more details on how they are calculated
+    </p>
+    <ProficiencyTableTile />
   </div>
 </template>
 

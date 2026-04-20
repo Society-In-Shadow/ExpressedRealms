@@ -36,6 +36,15 @@ const updateWizardContent = (statTypeId: number) => {
 
 <template>
   <h2>Stats</h2>
+  <p>
+    Purchase character statistics agility (AGL), constitution (CON), dexterity (DEX), strength (STR), intelligence (INT),
+    and willpower (WIL).
+  </p>
+  <p>These statistics affect your proficiencies, secondary statistics, feat tests, and many powers.</p>
+  <p>
+    Each starts at level 1, and may be purchased to increase its level. 2 is considered a human average, and 7 is
+    considered the absolute pinnacle.
+  </p>
   <ShowXPCosts :section-type="XpSectionTypes.stats" />
   <div>
     <DataTable :value="statData.stats" data-key="statTypeId">

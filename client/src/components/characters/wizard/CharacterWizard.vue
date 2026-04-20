@@ -7,7 +7,6 @@ import { experienceStore } from '@/components/characters/character/stores/experi
 import PowerStep from '@/components/characters/wizard/powers/PowerStep.vue'
 import StatStep from '@/components/characters/wizard/stats/StatStep.vue'
 import SkillStep from '@/components/characters/wizard/skills/SkillStep.vue'
-import ProficiencyTableTile from '@/components/characters/character/proficiency/ProficiencyTableTile.vue'
 import { useRoute, useRouter } from 'vue-router'
 import DataTable from 'primevue/datatable'
 import EditCharacterDetails from '@/components/characters/wizard/basicInfo/EditCharacterDetails.vue'
@@ -38,7 +37,6 @@ const wizardContentData = wizardContentStore()
 const sections = ref([
   { name: 'Stats', isDisabled: isAdd, component: markRaw(StatStep) },
   { name: 'Skills', isDisabled: isAdd, component: markRaw(SkillStep) },
-  { name: 'Proficiencies', isDisabled: isAdd, component: markRaw(ProficiencyTableTile) },
   { name: 'Powers', isDisabled: isAdd, component: markRaw(PowerStep) },
   { name: 'Knowledges', isDisabled: isAdd, component: markRaw(KnowledgeStep) },
   { name: 'Advantages', isDisabled: isAdd, component: defineAsyncComponent(async () => AdvantageStep) },
@@ -71,7 +69,7 @@ async function fetchData() {
     sections.value.splice(0, 0, { name: 'Basic Info', isDisabled: false, component: defineAsyncComponent(async () => EditCharacterDetails) })
 
     if (!characterInfo.isInCharacterCreation)
-      sections.value.splice(6, 0, { name: 'Contacts', isDisabled: false, component: defineAsyncComponent(async () => ContactStep) })
+      sections.value.splice(5, 0, { name: 'Contacts', isDisabled: false, component: defineAsyncComponent(async () => ContactStep) })
 
     await xpData.getExperience(route.params.id)
 
