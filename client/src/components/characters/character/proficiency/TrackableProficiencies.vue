@@ -17,6 +17,11 @@ const props = defineProps({
     required: false,
     default: true,
   },
+  showHelpText: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
 })
 
 const { data, isLoading } = useQueryWithLoading(proficienciesByCharacterId(Number.parseInt(route.params.id)))
@@ -32,6 +37,16 @@ const openItems = ref([])
       </h1>
     </template>
     <template #content>
+      <p v-if="showHelpText">
+        Secondary Statistics are, for the most part, derived from your character's primary Statistics and serve as a
+        measure of your character's capacity and inner nature.
+      </p>
+      <p v-if="showHelpText">
+        These are your resources that you will spending and keeping track of throughout the course of your adventure.
+      </p>
+      <p v-if="showHelpText">
+        Click on each one below to get more details on how they are calculated
+      </p>
       <div v-if="isLoading">
         <Skeleton height="3em" />
         <Skeleton height="3em" />
