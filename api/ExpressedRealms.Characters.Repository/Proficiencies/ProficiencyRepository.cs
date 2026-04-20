@@ -82,7 +82,12 @@ internal sealed class ProficiencyRepository(
         );
 
         var currentLevel = await xpRepository.GetCharacterXpLevel(characterId);
-        var character = await characterRepository.GetCharacterForEdit(characterId);
+        var expressionId = await context
+            .Characters.AsNoTracking()
+            .Where(x => x.Id == characterId)
+            .Select(x => x.ExpressionId)
+            .FirstOrDefaultAsync(cancellationToken);
+
 
         var extraModifiers = new List<ModifierDescription>();
         var dbModifiers = new List<ProficiencyModifierInfoDto>();
@@ -94,7 +99,7 @@ internal sealed class ProficiencyRepository(
         );
         dbModifiers = dbModifiers
             .Where(x =>
-                x.TargetExpressionId == null || x.TargetExpressionId == character.ExpressionId
+                x.TargetExpressionId == null || x.TargetExpressionId == expressionId
             )
             .ToList();
 
@@ -118,13 +123,7 @@ internal sealed class ProficiencyRepository(
 
             return modifier.Modifier * currentLevel;
         }
-
-        var expressionId = await context
-            .Characters.AsNoTracking()
-            .Where(x => x.Id == characterId)
-            .Select(x => x.ExpressionId)
-            .FirstOrDefaultAsync(cancellationToken);
-
+        
         var proficiencies = ProficiencyDtos.GetProficiencies(expressionId);
 
         foreach (var proficiency in proficiencies)
