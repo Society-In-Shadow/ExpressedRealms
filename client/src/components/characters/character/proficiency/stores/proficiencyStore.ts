@@ -2,8 +2,8 @@ import { defineQueryOptions } from '@pinia/colada'
 import { proficienciesService } from '@/components/characters/character/proficiency/services/proficienciesServices.ts'
 
 export const PROFICIENCY_QUERY_KEYS = {
-  root: ['proficiency'] as const,
-  proficienciesById: (id: number) => ['proficiencies', id] as const,
+  root: ['proficiencies'] as const,
+  proficienciesById: (id: number) => [...PROFICIENCY_QUERY_KEYS.root, id.toString()] as const,
 }
 
 export const proficienciesByCharacterId

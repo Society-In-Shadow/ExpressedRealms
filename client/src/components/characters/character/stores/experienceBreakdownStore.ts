@@ -5,8 +5,6 @@ import { characterStore } from '@/components/characters/character/stores/charact
 import { useQueryCache } from '@pinia/colada'
 import { PROFICIENCY_QUERY_KEYS } from '@/components/characters/character/proficiency/stores/proficiencyStore.ts'
 
-const queryCache = useQueryCache()
-
 export const XpSectionTypes = {
   advantage: 1,
   disadvantage: 2,
@@ -91,12 +89,17 @@ export const experienceStore
       },
       async updateExperience(characterId: number) {
         this.isLoading = true
-        await queryCache.invalidateQueries({ key: PROFICIENCY_QUERY_KEYS.proficienciesById(characterId) })
+
         await axios.get<ExperienceBreakdownResponse>(`/characters/${characterId}/overallexperience`)
           .then((response) => {
             this.isLoading = false
             calculateExperienceBreakdown.call(this, response)
           })
+        const queryCache = useQueryCache()
+        await queryCache.invalidateQueries({
+          key: PROFICIENCY_QUERY_KEYS.proficienciesById(characterId),
+          exact: true,
+        })
       },
       getExperienceInfoForSection(sectionTypeId: XpSectionType) {
         return this.calculatedValues.filter(x => x.sectionTypeId === sectionTypeId)[0]
