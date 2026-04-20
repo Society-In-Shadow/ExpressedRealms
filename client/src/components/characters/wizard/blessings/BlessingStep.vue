@@ -47,7 +47,7 @@ onBeforeMount(async () => {
   await store.getBlessings()
   showEdit.value = await userInfo.hasUserRole(UserRoles.BlessingsManagementRole)
   await characterBlessingData.getCharacterBlessings(characterId)
-  await xpInfo.updateExperience(characterId)
+  await xpInfo.getExperience(characterId)
   if (!isMobile.value) {
     showAboutInfo()
   }

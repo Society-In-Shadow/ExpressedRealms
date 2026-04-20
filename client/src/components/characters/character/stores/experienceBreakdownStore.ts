@@ -1,8 +1,11 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
+import axios, { type AxiosResponse } from 'axios'
 import type { CalculatedExperience, ExperienceBreakdownResponse } from '@/components/characters/character/types.ts'
 import { characterStore } from '@/components/characters/character/stores/characterStore.ts'
-import { proficiencyStore } from '@/components/characters/character/proficiency/stores/proficiencyStore.ts'
+import { useQueryCache } from '@pinia/colada'
+import { PROFICIENCY_QUERY_KEYS } from '@/components/characters/character/proficiency/stores/proficiencyStore.ts'
+
+const queryCache = useQueryCache()
 
 export const XpSectionTypes = {
   advantage: 1,
@@ -17,7 +20,52 @@ export const XpSectionTypes = {
 export type XpSectionType = (typeof XpSectionTypes)[keyof typeof XpSectionTypes]
 
 const characterInfo = characterStore()
-const proficiencyInfo = proficiencyStore()
+
+function calculateExperienceBreakdown<T>(response: AxiosResponse<T>) {
+  this.experienceBreakdown = response.data
+  this.totalSpentLevelXp = response.data.totalSpentLevelXp
+  this.totalAvailableXp = response.data.totalAvailableXp
+
+  this.calculatedValues = response.data.experience.map((xp) => {
+    const requiredXp = xp.total >= xp.characterCreateMax ? xp.characterCreateMax : xp.total
+    const currentOptionalXp = xp.total >= xp.characterCreateMax ? xp.total - xp.characterCreateMax : 0
+    const optionalMaxXP = currentOptionalXp + response.data.availableDiscretionary
+    let availableXp = optionalMaxXP - currentOptionalXp
+
+    if (requiredXp < xp.characterCreateMax) {
+      availableXp = xp.characterCreateMax - requiredXp + optionalMaxXP
+    }
+
+    if (xp.sectionTypeId == XpSectionTypes.advantage) {
+      availableXp = Math.min(xp.characterCreateMax - xp.total, response.data.availableDiscretionary)
+    }
+
+    if (xp.sectionTypeId == XpSectionTypes.disadvantage) {
+      availableXp = xp.characterCreateMax - xp.total
+    }
+
+    if (characterInfo.isPrimaryCharacter && !characterInfo.isInCharacterCreation) {
+      const xpSpentPostCreation = xp.characterCreateMax - xp.total // total = spentxp, characterCreateMax = availableXp
+      availableXp = xpSpentPostCreation - this.totalSpentLevelXp + xp.levelXp
+    }
+
+    return {
+      name: xp.name,
+      requiredXp,
+      currentOptionalXp,
+      optionalMaxXP,
+      availableXp,
+      characterCreateMax: xp.characterCreateMax,
+      total: xp.total,
+      sectionTypeId: xp.sectionTypeId,
+      levelXp: xp.levelXp,
+    }
+  })
+
+  this.characterLevel = response.data.characterLevel
+  this.availableDiscretionary = response.data.availableDiscretionary
+}
+
 export const experienceStore
   = defineStore('experienceStore', {
     state: () => {
@@ -33,54 +81,21 @@ export const experienceStore
       }
     },
     actions: {
+      async getExperience(characterId: number) {
+        this.isLoading = true
+        await axios.get<ExperienceBreakdownResponse>(`/characters/${characterId}/overallexperience`)
+          .then((response) => {
+            this.isLoading = false
+            calculateExperienceBreakdown.call(this, response)
+          })
+      },
       async updateExperience(characterId: number) {
         this.isLoading = true
         await queryCache.invalidateQueries({ key: PROFICIENCY_QUERY_KEYS.proficienciesById(characterId) })
         await axios.get<ExperienceBreakdownResponse>(`/characters/${characterId}/overallexperience`)
           .then((response) => {
             this.isLoading = false
-            this.experienceBreakdown = response.data
-            this.totalSpentLevelXp = response.data.totalSpentLevelXp
-            this.totalAvailableXp = response.data.totalAvailableXp
-
-            this.calculatedValues = response.data.experience.map((xp) => {
-              const requiredXp = xp.total >= xp.characterCreateMax ? xp.characterCreateMax : xp.total
-              const currentOptionalXp = xp.total >= xp.characterCreateMax ? xp.total - xp.characterCreateMax : 0
-              const optionalMaxXP = currentOptionalXp + response.data.availableDiscretionary
-              let availableXp = optionalMaxXP - currentOptionalXp
-
-              if (requiredXp < xp.characterCreateMax) {
-                availableXp = xp.characterCreateMax - requiredXp + optionalMaxXP
-              }
-
-              if (xp.sectionTypeId == XpSectionTypes.advantage) {
-                availableXp = Math.min(xp.characterCreateMax - xp.total, response.data.availableDiscretionary)
-              }
-
-              if (xp.sectionTypeId == XpSectionTypes.disadvantage) {
-                availableXp = xp.characterCreateMax - xp.total
-              }
-
-              if (characterInfo.isPrimaryCharacter && !characterInfo.isInCharacterCreation) {
-                const xpSpentPostCreation = xp.characterCreateMax - xp.total // total = spentxp, characterCreateMax = availableXp
-                availableXp = xpSpentPostCreation - this.totalSpentLevelXp + xp.levelXp
-              }
-
-              return {
-                name: xp.name,
-                requiredXp,
-                currentOptionalXp,
-                optionalMaxXP,
-                availableXp,
-                characterCreateMax: xp.characterCreateMax,
-                total: xp.total,
-                sectionTypeId: xp.sectionTypeId,
-                levelXp: xp.levelXp,
-              }
-            })
-
-            this.characterLevel = response.data.characterLevel
-            this.availableDiscretionary = response.data.availableDiscretionary
+            calculateExperienceBreakdown.call(this, response)
           })
       },
       getExperienceInfoForSection(sectionTypeId: XpSectionType) {
