@@ -10,7 +10,6 @@ import SkillStep from '@/components/characters/wizard/skills/SkillStep.vue'
 import ProficiencyTableTile from '@/components/characters/character/proficiency/ProficiencyTableTile.vue'
 import { useRoute, useRouter } from 'vue-router'
 import DataTable from 'primevue/datatable'
-import SecondaryProficiencies from '@/components/characters/wizard/proficiencies/SecondaryProficiencies.vue'
 import EditCharacterDetails from '@/components/characters/wizard/basicInfo/EditCharacterDetails.vue'
 import AddCharacter from '@/components/characters/wizard/basicInfo/AddCharacter.vue'
 import WizardContent from '@/components/characters/wizard/WizardContent.vue'
@@ -38,10 +37,10 @@ const wizardContentData = wizardContentStore()
 
 const sections = ref([
   { name: 'Stats', isDisabled: isAdd, component: markRaw(StatStep) },
-  { name: 'Knowledges', isDisabled: isAdd, component: markRaw(KnowledgeStep) },
-  { name: 'Powers', isDisabled: isAdd, component: markRaw(PowerStep) },
   { name: 'Skills', isDisabled: isAdd, component: markRaw(SkillStep) },
   { name: 'Proficiencies', isDisabled: isAdd, component: markRaw(ProficiencyTableTile) },
+  { name: 'Powers', isDisabled: isAdd, component: markRaw(PowerStep) },
+  { name: 'Knowledges', isDisabled: isAdd, component: markRaw(KnowledgeStep) },
   { name: 'Advantages', isDisabled: isAdd, component: defineAsyncComponent(async () => AdvantageStep) },
   { name: 'Disadvantages', isDisabled: isAdd, component: defineAsyncComponent(async () => DisadvantageStep) },
   { name: 'Review Character', isDisabled: isAdd, component: markRaw(ReviewCharacter) },
@@ -72,7 +71,7 @@ async function fetchData() {
     sections.value.splice(0, 0, { name: 'Basic Info', isDisabled: false, component: defineAsyncComponent(async () => EditCharacterDetails) })
 
     if (!characterInfo.isInCharacterCreation)
-      sections.value.splice(8, 0, { name: 'Contacts', isDisabled: false, component: defineAsyncComponent(async () => ContactStep) })
+      sections.value.splice(6, 0, { name: 'Contacts', isDisabled: false, component: defineAsyncComponent(async () => ContactStep) })
 
     await xpData.getExperience(route.params.id)
 
@@ -134,7 +133,6 @@ const nextSection = computed(() => {
     <div>
       <Button v-if="isMobile && hasSelectedSection" label="Back to Sections" @click="resetSection" />
     </div>
-    <SecondaryProficiencies />
   </div>
   <div class="row pt-3">
     <div v-if="!(isMobile && hasSelectedSection) || !isMobile" class="col col-md-2 custom-toc">
