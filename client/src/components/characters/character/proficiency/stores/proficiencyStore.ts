@@ -1,4 +1,4 @@
-import {defineStore} from 'pinia'
+import { defineStore } from 'pinia'
 import axios from 'axios'
 
 export const proficiencyStore
@@ -16,13 +16,10 @@ export const proficiencyStore
         this.isLoading = true
         await axios.get(`proficiencies/${characterId}`)
           .then((response) => {
-            this.offensive = response.data.proficiencies.filter(x => x.type === 'Offensive')
-            this.defensive = response.data.proficiencies.filter(x => x.type === 'Defensive')
-            this.secondary = response.data.proficiencies.filter(x => x.type === 'Secondary')
+            this.offensive = response.data.proficiencies.filter(x => x.type === 1)
+            this.defensive = response.data.proficiencies.filter(x => x.type === 2)
+            this.secondary = response.data.proficiencies.filter(x => x.type === 3)
 
-            this.secondary.map((x) => {
-              x.maxValue = x.value
-            })
             this.isLoading = false
           })
       },

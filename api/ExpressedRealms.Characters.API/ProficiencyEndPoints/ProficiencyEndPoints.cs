@@ -1,10 +1,12 @@
 using ExpressedRealms.Characters.API.ProficiencyEndPoints.Responses;
 using ExpressedRealms.Characters.Repository.Proficiencies;
+using ExpressedRealms.Characters.Repository.Proficiencies.DTOs;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
+using ModifierDescription = ExpressedRealms.Characters.API.ProficiencyEndPoints.Responses.ModifierDescription;
 
 namespace ExpressedRealms.Characters.API.ProficiencyEndPoints;
 
@@ -38,16 +40,11 @@ internal static class ProficiencyEndPoints
                                     Id = x.Id,
                                     Value = x.Value,
                                     Name = x.Name,
-                                    Description = x.Description,
-                                    Modifiers = x.Modifiers,
-                                    CorrespondingId = x.SortOrder,
-                                    Type = x.Type,
+                                    Type = GetProficiencyTypeId(x),
                                     AppliedModifiers = x
                                         .AppliedModifiers.Select(y => new ModifierDescription()
                                         {
                                             Value = y.Value,
-                                            Type = y.Type,
-                                            Message = y.Message,
                                             Name = y.Name,
                                         })
                                         .ToList(),
@@ -59,5 +56,10 @@ internal static class ProficiencyEndPoints
             )
             .WithSummary("Returns all basic proficiencies for the given character")
             .RequireAuthorization();
+    }
+
+    private static int GetProficiencyTypeId(ProficiencyDto x)
+    {
+        return x.Type == "Offensive" ? 1 : x.Type == "Defensive" ? 2 : x.Type == "Secondary" ? 3 : 0;
     }
 }

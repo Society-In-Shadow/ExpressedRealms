@@ -26,7 +26,7 @@ const toggle = (event) => {
   <div class="d-md-flex flex-row justify-content-end flex-wrap d-none">
     <div v-for="proficiency in profStore.secondary" class="statTile pt-2 pb-2 pr-3 pl-3 mr-2 ml-2 mt-3">
       <span class="mr-3">{{ proficiency.name }}</span>
-      <span>{{ proficiency.maxValue }}</span>
+      <span>{{ proficiency.value }}</span>
     </div>
   </div>
 
@@ -34,7 +34,7 @@ const toggle = (event) => {
     <div class="d-flex flex-row justify-content-end flex-wrap">
       <div v-for="proficiency in profStore.secondary" class="statTile pt-2 pb-2 pr-3 pl-3 mr-2 ml-2 mt-3">
         <span class="mr-3">{{ proficiency.name }}</span>
-        <span>{{ proficiency.maxValue }}</span>
+        <span>{{ proficiency.value }}</span>
       </div>
     </div>
   </Popover>
