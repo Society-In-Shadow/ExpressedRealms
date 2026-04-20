@@ -18,7 +18,7 @@ import './commands'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
-import {mount} from 'cypress/vue'
+import { mount } from 'cypress/vue'
 import 'primeicons/primeicons.css'
 import 'primeicons/fonts/primeicons.ttf'
 import 'primeicons/fonts/primeicons.woff'
@@ -30,13 +30,15 @@ import 'bootstrap/dist/css/bootstrap-utilities.css'
 import Lara from '@primevue/themes/lara'
 
 import PrimeVue from 'primevue/config'
-import {createMemoryHistory, createRouter} from 'vue-router'
-import {routes} from '../../src/router'
+import { createMemoryHistory, createRouter } from 'vue-router'
+import { routes } from '../../src/router'
 import Ripple from 'primevue/ripple'
 import piniaPluginPersistedState from 'pinia-plugin-persistedstate'
-import {createPinia} from 'pinia'
+import { createPinia } from 'pinia'
 import ToastService from 'primevue/toastservice'
-import {setupErrorHandlingInterceptors} from '../../src/config/axiosConfig' // adjust path
+import { setupErrorHandlingInterceptors } from '../../src/config/axiosConfig'
+import { PiniaColadaDelay } from '@pinia/colada-plugin-delay' // adjust path
+import { PiniaColada } from '@pinia/colada'
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedState)
@@ -73,6 +75,17 @@ Cypress.Commands.add('mount', (component, options = {}) => {
       })
         .use(options.router)
       app.use(pinia)
+      app.use(PiniaColada, {
+        plugins: [
+          PiniaColadaDelay({
+            delay: 500,
+          }),
+        ],
+        queryOptions: {
+          staleTime: Infinity,
+          gcTime: 10 * 60 * 1000, // 10 minutes
+        },
+      })
       app.directive('ripple', Ripple)
       app.use(ToastService)
     },
