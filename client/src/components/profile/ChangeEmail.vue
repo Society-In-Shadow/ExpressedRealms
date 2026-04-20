@@ -10,6 +10,7 @@ import Message from 'primevue/message'
 import InputTextWrapper from '@/FormWrappers/InputTextWrapper.vue'
 import toasters from '@/services/Toasters'
 import { userInfoQuery } from '@/auth/authStore.ts'
+import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 
 const { refresh } = useQueryWithLoading(userInfoQuery)
 
