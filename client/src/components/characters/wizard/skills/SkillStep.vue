@@ -56,8 +56,7 @@ const updateWizardContent = (skill: CharacterSkillsResponse) => {
 <template>
   <h2>Skills</h2>
   <p>
-    Select Skills Hand-to-Hand Offense, Projection, Acrobatics, etc, they affect your proficiencies for attacking and
-    defending, as well as having secondary effects with many powers.
+    Skills affect your proficiencies for attacking and defending, as well as having secondary effects with many powers.
   </p>
   <p>
     Each skill starts at level 0 untrained. A skill level of 3 or 4 will provide additional bonuses, see the full
@@ -107,7 +106,7 @@ const updateWizardContent = (skill: CharacterSkillsResponse) => {
       has a default matching defensive proficiency.
     </p>
     <p>
-      How you spend your points to customize your statistics when you first make your character will have a major effect
+      How you spend your points to customize your statistics and skills when you first make your character will have a major effect
       upon how well your character can do different things.
     </p>
     <p>
