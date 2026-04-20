@@ -34,16 +34,16 @@ internal static class ProficiencyEndPoints
                     return TypedResults.Ok(
                         new BaseProficiencyResponse()
                         {
-                            Offensive = results.Value
-                                .Where(x => x.Type == "Offensive")
+                            Offensive = results
+                                .Value.Where(x => x.Type == "Offensive")
                                 .Select(SelectProficiencies())
                                 .ToList(),
-                            Defensive = results.Value
-                                .Where(x => x.Type == "Defensive")
+                            Defensive = results
+                                .Value.Where(x => x.Type == "Defensive")
                                 .Select(SelectProficiencies())
                                 .ToList(),
-                            Secondary = results.Value
-                                .Where(x => x.Type == "Secondary")
+                            Secondary = results
+                                .Value.Where(x => x.Type == "Secondary")
                                 .Select(SelectProficiencies())
                                 .ToList(),
                         }
