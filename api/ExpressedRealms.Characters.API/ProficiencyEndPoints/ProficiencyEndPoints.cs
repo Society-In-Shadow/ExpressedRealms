@@ -34,21 +34,17 @@ internal static class ProficiencyEndPoints
                     return TypedResults.Ok(
                         new BaseProficiencyResponse()
                         {
-                            Proficiencies = results
-                                .Value.Select(x => new ProficienciesDto()
-                                {
-                                    Id = x.Id,
-                                    Value = x.Value,
-                                    Name = x.Name,
-                                    Type = GetProficiencyTypeId(x),
-                                    AppliedModifiers = x
-                                        .AppliedModifiers.Select(y => new ModifierDescription()
-                                        {
-                                            Value = y.Value,
-                                            Name = y.Name,
-                                        })
-                                        .ToList(),
-                                })
+                            Offensive = results.Value
+                                .Where(x => x.Type == "Offensive")
+                                .Select(SelectProficiencies())
+                                .ToList(),
+                            Defensive = results.Value
+                                .Where(x => x.Type == "Defensive")
+                                .Select(SelectProficiencies())
+                                .ToList(),
+                            Secondary = results.Value
+                                .Where(x => x.Type == "Secondary")
+                                .Select(SelectProficiencies())
                                 .ToList(),
                         }
                     );
@@ -58,8 +54,20 @@ internal static class ProficiencyEndPoints
             .RequireAuthorization();
     }
 
-    private static int GetProficiencyTypeId(ProficiencyDto x)
+    private static Func<ProficiencyDto, ProficienciesDto> SelectProficiencies()
     {
-        return x.Type == "Offensive" ? 1 : x.Type == "Defensive" ? 2 : x.Type == "Secondary" ? 3 : 0;
+        return x => new ProficienciesDto()
+        {
+            Id = x.Id,
+            Value = x.Value,
+            Name = x.Name,
+            AppliedModifiers = x
+                .AppliedModifiers.Select(y => new ModifierDescription()
+                {
+                    Value = y.Value,
+                    Name = y.Name,
+                })
+                .ToList(),
+        };
     }
 }

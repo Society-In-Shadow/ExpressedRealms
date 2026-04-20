@@ -6,5 +6,4 @@ public class ProficienciesDto
     public List<ModifierDescription> AppliedModifiers { get; set; } = new();
     public int Value { get; set; }
     public int Id { get; set; }
-    public int Type { get; set; }
 }
