@@ -3,10 +3,8 @@ import axios from 'axios'
 import type { LevelInfo, Stat } from '@/components/characters/wizard/stats/types.ts'
 import toasters from '@/services/Toasters.ts'
 import { experienceStore } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
-import { proficiencyStore } from '@/components/characters/character/proficiency/stores/proficiencyStore.ts'
 
 const experienceInfo = experienceStore()
-const profStore = proficiencyStore()
 
 export const statStore
   = defineStore('statStore', {
@@ -45,7 +43,6 @@ export const statStore
           characterId: characterId,
         })
         await experienceInfo.updateExperience(characterId)
-        await profStore.getUpdateProficiencies(characterId)
         await this.loadData(characterId)
         toasters.success('Successfully updated Level!')
       },

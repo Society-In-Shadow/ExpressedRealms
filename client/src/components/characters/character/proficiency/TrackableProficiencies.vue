@@ -3,12 +3,13 @@
 import Card from 'primevue/card'
 import Accordion from 'primevue/accordion'
 import ProficiencyAccordionPanel from '@/components/characters/character/proficiency/ProficiencyAccordionPanel.vue'
-import {onMounted, ref} from 'vue'
-import {useRoute} from 'vue-router'
-import {proficiencyStore} from '@/components/characters/character/proficiency/stores/proficiencyStore'
+import { ref } from 'vue'
+import { proficienciesByCharacterId } from '@/components/characters/character/proficiency/stores/proficiencyStore'
+import { useQuery } from '@pinia/colada'
+import { useRoute } from 'vue-router'
+import Skeleton from 'primevue/skeleton'
 
 const route = useRoute()
-const profStore = proficiencyStore()
 
 const props = defineProps({
   showTitle: {
@@ -18,9 +19,7 @@ const props = defineProps({
   },
 })
 
-onMounted(() => {
-  profStore.getUpdateProficiencies(route.params.id)
-})
+const { data, isLoading } = useQuery(proficienciesByCharacterId(Number.parseInt(route.params.id)))
 
 const openItems = ref([])
 </script>
@@ -28,14 +27,29 @@ const openItems = ref([])
 <template>
   <Card class="p-1 p-md-3">
     <template #header>
-      <h1 v-if="showTitle" class="text-center p-0 m-0">
+      <h1 v-if="props.showTitle" class="text-center p-0 m-0">
         Secondary Statistics
       </h1>
     </template>
     <template #content>
-      <Accordion :value="openItems" multiple :lazy="true" expand-icon="pi pi-info-circle" collapse-icon="pi pi-times-circle">
-        <ProficiencyAccordionPanel v-for="proficiency in profStore.secondary" :key="proficiency.id" :value="proficiency.id" :proficiency="proficiency" />
-      </Accordion>
+      <div v-if="isLoading">
+        <Skeleton height="3em" />
+        <Skeleton height="3em" />
+        <Skeleton height="3em" />
+        <Skeleton height="3em" />
+        <Skeleton height="3em" />
+        <Skeleton height="3em" />
+        <Skeleton height="3em" />
+        <Skeleton height="3em" />
+      </div>
+      <div v-else>
+        <Accordion
+          :value="openItems" multiple :lazy="true" expand-icon="pi pi-info-circle"
+          collapse-icon="pi pi-times-circle"
+        >
+          <ProficiencyAccordionPanel v-for="proficiency in data?.secondary ?? []" :key="proficiency.id" :value="proficiency.id" :proficiency="proficiency" />
+        </Accordion>
+      </div>
     </template>
   </Card>
 </template>

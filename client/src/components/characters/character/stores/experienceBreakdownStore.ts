@@ -35,7 +35,7 @@ export const experienceStore
     actions: {
       async updateExperience(characterId: number) {
         this.isLoading = true
-        await proficiencyInfo.getUpdateProficiencies(characterId)
+        await queryCache.invalidateQueries({ key: PROFICIENCY_QUERY_KEYS.proficienciesById(characterId) })
         await axios.get<ExperienceBreakdownResponse>(`/characters/${characterId}/overallexperience`)
           .then((response) => {
             this.isLoading = false

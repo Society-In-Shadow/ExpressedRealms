@@ -1,13 +1,17 @@
-interface ProficienciesDto {
+export interface ProficienciesDto {
   name: string
-  description: string
   appliedModifiers: ModifierDescription[]
   value: number
   id: number
-  type: string
 }
 
-interface ModifierDescription {
+export interface ModifierDescription {
   value: number
   name: string
+}
+
+export interface ProficienciesResponse {
+  offensive: ProficienciesDto[]
+  defensive: ProficienciesDto[]
+  secondary: ProficienciesDto[]
 }

@@ -1,17 +1,15 @@
 <script setup lang="ts">
 
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import Button from 'primevue/button'
 import Popover from 'primevue/popover'
-import { proficiencyStore } from '@/components/characters/character/proficiency/stores/proficiencyStore'
+import { proficienciesByCharacterId } from '@/components/characters/character/proficiency/stores/proficiencyStore'
+import { useQuery } from '@pinia/colada'
 
 const route = useRoute()
-const profStore = proficiencyStore()
 
-onMounted(() => {
-  profStore.getUpdateProficiencies(route.params.id)
-})
+const { data, isLoading } = useQuery(proficienciesByCharacterId(Number.parseInt(route.params.id[0])))
 
 const op = ref()
 const toggle = (event) => {
@@ -24,7 +22,7 @@ const toggle = (event) => {
   <Button type="button" label="Sec. Prof." class="d-block d-md-none" @click="toggle" />
 
   <div class="d-md-flex flex-row justify-content-end flex-wrap d-none">
-    <div v-for="proficiency in profStore.secondary" class="statTile pt-2 pb-2 pr-3 pl-3 mr-2 ml-2 mt-3">
+    <div v-for="proficiency in data.secondary" :key="proficiency.id" class="statTile pt-2 pb-2 pr-3 pl-3 mr-2 ml-2 mt-3">
       <span class="mr-3">{{ proficiency.name }}</span>
       <span>{{ proficiency.value }}</span>
     </div>
@@ -32,7 +30,7 @@ const toggle = (event) => {
 
   <Popover ref="op" class="d-md-none">
     <div class="d-flex flex-row justify-content-end flex-wrap">
-      <div v-for="proficiency in profStore.secondary" class="statTile pt-2 pb-2 pr-3 pl-3 mr-2 ml-2 mt-3">
+      <div v-for="proficiency in data.secondary" :key="proficiency.id" class="statTile pt-2 pb-2 pr-3 pl-3 mr-2 ml-2 mt-3">
         <span class="mr-3">{{ proficiency.name }}</span>
         <span>{{ proficiency.value }}</span>
       </div>

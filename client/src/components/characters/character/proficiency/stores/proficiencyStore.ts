@@ -1,27 +1,14 @@
-import { defineStore } from 'pinia'
-import axios from 'axios'
+import { defineQueryOptions } from '@pinia/colada'
+import { proficienciesService } from '@/components/characters/character/proficiency/services/proficienciesServices.ts'
 
-export const proficiencyStore
-  = defineStore('proficiencies', {
-    state: () => {
-      return {
-        isLoading: true as boolean,
-        offensive: [] as ProficienciesDto[],
-        defensive: [] as ProficienciesDto[],
-        secondary: [] as ProficienciesDto[],
-      }
-    },
-    actions: {
-      async getUpdateProficiencies(characterId: number) {
-        this.isLoading = true
-        await axios.get(`proficiencies/${characterId}`)
-          .then((response) => {
-            this.offensive = response.data.proficiencies.filter(x => x.type === 1)
-            this.defensive = response.data.proficiencies.filter(x => x.type === 2)
-            this.secondary = response.data.proficiencies.filter(x => x.type === 3)
+export const PROFICIENCY_QUERY_KEYS = {
+  root: ['proficiency'] as const,
+  proficienciesById: (id: number) => ['proficiencies', id] as const,
+}
 
-            this.isLoading = false
-          })
-      },
-    },
-  })
+export const proficienciesByCharacterId
+  = defineQueryOptions((id: number) => ({
+    key: PROFICIENCY_QUERY_KEYS.proficienciesById(id),
+    query: () => proficienciesService.getProficiencies(id),
+  }),
+  )
