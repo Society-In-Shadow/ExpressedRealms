@@ -8,10 +8,10 @@ import InputTextWrapper from '../../FormWrappers/InputTextWrapper.vue'
 import Card from 'primevue/card'
 import { onMounted, ref } from 'vue'
 import toasters from '@/services/Toasters'
-import { useQuery } from '@pinia/colada'
 import { userInfoQuery } from '@/auth/authStore.ts'
+import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 
-const { refresh } = useQuery(userInfoQuery)
+const { refresh } = useQueryWithLoading(userInfoQuery)
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
     name: string().required()

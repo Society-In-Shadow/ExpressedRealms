@@ -4,18 +4,18 @@ import { computed, ref } from 'vue'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
-import { useQuery } from '@pinia/colada'
 import { archetypeListQuery } from '@/components/admin/archetypes/stores/archetypeStore.ts'
 import Skeleton from 'primevue/skeleton'
 import ArchetypeItem from '@/components/admin/archetypes/ArchetypeItem.vue'
 import type { Archetype } from '@/components/admin/archetypes/types.ts'
 import { groupBy, mapValues, orderBy } from 'lodash'
 import { useRouter } from 'vue-router'
+import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 
 const router = useRouter()
 const permissionCheck = userPermissionStore().permissionCheck
 
-const { data, isLoading, error } = useQuery(archetypeListQuery)
+const { data, isLoading, error } = useQueryWithLoading(archetypeListQuery)
 
 const showAdd = ref(false)
 

@@ -14,11 +14,12 @@ import { cmsStore } from '@/stores/cmsStore.ts'
 import EventCheckinBanner from '@/components/conCheckin/EventCheckinBanner.vue'
 import GoCheckinBanner from '@/components/conCheckin/GoCheckinBanner.vue'
 import { populateAdminMenu } from '@/components/navbar/helpers/adminMenuGenerator.ts'
-import { useQuery, useQueryCache } from '@pinia/colada'
+import { useQueryCache } from '@pinia/colada'
 import { characterListQuery } from '@/components/navbar/stores/navMenuStore.ts'
 import { type Character, CharacterState } from '@/components/navbar/types.ts'
 import { breakpointsBootstrapV5, useBreakpoints } from '@vueuse/core'
 import { addAdminMenuItems, fillComputedMenu } from '@/components/navbar/helpers/navUtilities.ts'
+import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 
 const router = useRouter()
 const cmsData = cmsStore()
@@ -75,7 +76,7 @@ onMounted(async () => {
   await loadList()
 })
 
-const { data: characterData } = useQuery(characterListQuery)
+const { data: characterData } = useQueryWithLoading(characterListQuery)
 
 const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5)
 const isMobile = activeBreakpoint.smaller('md')

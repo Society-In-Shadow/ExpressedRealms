@@ -6,14 +6,14 @@ import { proficienciesByCharacterId } from '@/components/characters/character/pr
 import Panel from 'primevue/panel'
 import Accordion from 'primevue/accordion'
 import ProficiencyAccordionPanel from '@/components/characters/character/proficiency/ProficiencyAccordionPanel.vue'
-import { useQuery } from '@pinia/colada'
 import Skeleton from 'primevue/skeleton'
+import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 
 const route = useRoute()
 
 const openItems = ref([])
 
-const { data, isLoading } = useQuery(proficienciesByCharacterId(Number.parseInt(route.params.id)))
+const { data, isLoading } = useQueryWithLoading(proficienciesByCharacterId(Number.parseInt(route.params.id)))
 
 const types = computed(() => [
   { name: 'Offensive Proficiencies', items: data.value?.offensive ?? [] },

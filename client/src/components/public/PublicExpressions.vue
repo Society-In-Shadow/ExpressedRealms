@@ -3,12 +3,12 @@
 import { nextTick, onMounted } from 'vue'
 import { publicExpressionsStore } from '@/components/public/stores/publicExpressionStore'
 import { makeIdSafe } from '@/utilities/stringUtilities'
-import { useQuery } from '@pinia/colada'
 import { userInfoQuery } from '@/auth/authStore.ts'
+import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 
 const store = publicExpressionsStore()
 
-const { data } = useQuery(userInfoQuery)
+const { data } = useQueryWithLoading(userInfoQuery)
 
 onMounted(async () => {
   await store.getExpressions()

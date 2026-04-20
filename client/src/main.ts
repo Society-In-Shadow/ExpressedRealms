@@ -23,6 +23,7 @@ import Lara from '@primevue/themes/lara'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import DialogService from 'primevue/dialogservice'
 import { Tooltip } from 'primevue'
+import { PiniaColadaDelay } from '@pinia/colada-plugin-delay'
 
 axiosConfig.setupErrorHandlingInterceptors()
 axiosConfig.setAPIUrl()
@@ -86,8 +87,14 @@ app.directive('ripple', Ripple)
 app.directive('tooltip', Tooltip)
 app.use(pinia)
 app.use(PiniaColada, {
+  plugins: [
+    PiniaColadaDelay({
+      delay: 500,
+    }),
+  ],
   queryOptions: {
     staleTime: Infinity,
+    gcTime: 10 * 60 * 1000, // 10 minutes
   },
 })
 app.use(ToastService)

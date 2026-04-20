@@ -5,9 +5,9 @@ import Accordion from 'primevue/accordion'
 import ProficiencyAccordionPanel from '@/components/characters/character/proficiency/ProficiencyAccordionPanel.vue'
 import { ref } from 'vue'
 import { proficienciesByCharacterId } from '@/components/characters/character/proficiency/stores/proficiencyStore'
-import { useQuery } from '@pinia/colada'
 import { useRoute } from 'vue-router'
 import Skeleton from 'primevue/skeleton'
+import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 
 const route = useRoute()
 
@@ -19,7 +19,7 @@ const props = defineProps({
   },
 })
 
-const { data, isLoading } = useQuery(proficienciesByCharacterId(Number.parseInt(route.params.id)))
+const { data, isLoading } = useQueryWithLoading(proficienciesByCharacterId(Number.parseInt(route.params.id)))
 
 const openItems = ref([])
 </script>

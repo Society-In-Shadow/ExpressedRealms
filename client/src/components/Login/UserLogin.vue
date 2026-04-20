@@ -8,11 +8,11 @@ import { onBeforeMount, ref } from 'vue'
 import Message from 'primevue/message'
 import { useRoute, useRouter } from 'vue-router'
 import InputTextWrapper from '@/FormWrappers/InputTextWrapper.vue'
-import { useQuery } from '@pinia/colada'
 import { userInfoQuery } from '@/auth/authStore.ts'
+import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 
 const router = useRouter()
-const { refetch } = useQuery(userInfoQuery)
+const { refetch } = useQueryWithLoading(userInfoQuery)
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
     email: string().required()

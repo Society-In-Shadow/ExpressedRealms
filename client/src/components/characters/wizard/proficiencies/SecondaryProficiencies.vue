@@ -5,11 +5,12 @@ import { useRoute } from 'vue-router'
 import Button from 'primevue/button'
 import Popover from 'primevue/popover'
 import { proficienciesByCharacterId } from '@/components/characters/character/proficiency/stores/proficiencyStore'
-import { useQuery } from '@pinia/colada'
+import Skeleton from 'primevue/skeleton'
+import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 
 const route = useRoute()
 
-const { data, isLoading } = useQuery(proficienciesByCharacterId(Number.parseInt(route.params.id[0])))
+const { data, isLoading } = useQueryWithLoading(proficienciesByCharacterId(Number.parseInt(route.params.id)))
 
 const op = ref()
 const toggle = (event) => {
@@ -20,22 +21,35 @@ const toggle = (event) => {
 
 <template>
   <Button type="button" label="Sec. Prof." class="d-block d-md-none" @click="toggle" />
-
-  <div class="d-md-flex flex-row justify-content-end flex-wrap d-none">
-    <div v-for="proficiency in data.secondary" :key="proficiency.id" class="statTile pt-2 pb-2 pr-3 pl-3 mr-2 ml-2 mt-3">
-      <span class="mr-3">{{ proficiency.name }}</span>
-      <span>{{ proficiency.value }}</span>
+  <div v-if="isLoading">
+    <div class="d-md-flex flex-row justify-content-end flex-wrap d-none">
+      <Skeleton height="3em" width="6em" />
+      <Skeleton height="3em" width="6em" />
+      <Skeleton height="3em" width="6em" />
+      <Skeleton height="3em" width="6em" />
+      <Skeleton height="3em" width="6em" />
+      <Skeleton height="3em" width="6em" />
+      <Skeleton height="3em" width="6em" />
+      <Skeleton height="3em" width="6em" />
     </div>
   </div>
-
-  <Popover ref="op" class="d-md-none">
-    <div class="d-flex flex-row justify-content-end flex-wrap">
-      <div v-for="proficiency in data.secondary" :key="proficiency.id" class="statTile pt-2 pb-2 pr-3 pl-3 mr-2 ml-2 mt-3">
+  <div v-else>
+    <div class="d-md-flex flex-row justify-content-end flex-wrap d-none">
+      <div v-for="proficiency in data?.secondary ?? []" :key="proficiency.id" class="statTile pt-2 pb-2 pr-3 pl-3 mr-2 ml-2 mt-3">
         <span class="mr-3">{{ proficiency.name }}</span>
         <span>{{ proficiency.value }}</span>
       </div>
     </div>
-  </Popover>
+
+    <Popover ref="op" class="d-md-none">
+      <div class="d-flex flex-row justify-content-end flex-wrap">
+        <div v-for="proficiency in data?.secondary ?? []" :key="proficiency.id" class="statTile pt-2 pb-2 pr-3 pl-3 mr-2 ml-2 mt-3">
+          <span class="mr-3">{{ proficiency.name }}</span>
+          <span>{{ proficiency.value }}</span>
+        </div>
+      </div>
+    </Popover>
+  </div>
 </template>
 
 <style scoped>

@@ -7,11 +7,11 @@ import { useForm } from 'vee-validate'
 import { object, string } from 'yup'
 import { logOff } from '@/services/Authentication'
 import InputTextWrapper from '../../FormWrappers/InputTextWrapper.vue'
-import { useQuery } from '@pinia/colada'
 import { userInfoQuery } from '@/auth/authStore.ts'
+import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 
 const Router = useRouter()
-const { refetch } = useQuery(userInfoQuery)
+const { refetch } = useQueryWithLoading(userInfoQuery)
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({

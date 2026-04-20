@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useQuery } from '@pinia/colada'
 import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
 import { getValidationInstance } from '@/components/admin/players/validations/eventValidations.ts'
 import Button from 'primevue/button'
@@ -10,6 +9,7 @@ import FormWrapper from '@/FormWrappers/FormWrapper.vue'
 import { basicUserInfoById } from '@/components/admin/players/stores/userStore.ts'
 import { userService } from '@/components/admin/players/services/userService.ts'
 import { PlayerStore } from '@/components/admin/players/stores/playerStore.ts'
+import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 
 const props = defineProps({
   userId: {
@@ -21,7 +21,7 @@ const props = defineProps({
 const playerData = PlayerStore()
 const userPermissions = userPermissionStore()
 const permissionCheck = userPermissions.permissionCheck
-const { data, isLoading } = useQuery(basicUserInfoById(props.userId))
+const { data, isLoading } = useQueryWithLoading(basicUserInfoById(props.userId))
 const form = getValidationInstance()
 
 watch(() => isLoading.value, () => {
