@@ -7,12 +7,12 @@ import AvatarDropdown from '@/components/navbar/AvatarDropdown.vue'
 import { FeatureFlags, userStore } from '@/stores/userStore'
 import EventCheckinBanner from '@/components/conCheckin/EventCheckinBanner.vue'
 import GoCheckinBanner from '@/components/conCheckin/GoCheckinBanner.vue'
-import { useQuery } from '@pinia/colada'
 import { userInfoQuery } from '@/auth/authStore.ts'
+import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 
 const router = useRouter()
 const userInfo = userStore()
-const { data } = useQuery(userInfoQuery)
+const { data } = useQueryWithLoading(userInfoQuery)
 
 const items = ref([
   { root: true, label: 'Home', route: '', command: () => router.push('/') },

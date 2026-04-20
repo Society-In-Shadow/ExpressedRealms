@@ -6,7 +6,6 @@ import type { SkillResponse } from '@/components/characters/character/skills/int
 import { useRoute } from 'vue-router'
 import toasters from '@/services/Toasters'
 import { skillStore } from '@/components/characters/character/skills/Stores/skillStore'
-import { proficiencyStore } from '@/components/characters/character/proficiency/stores/proficiencyStore'
 import { experienceStore, XpSectionTypes } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
 import type {
   CharacterSkillsResponse,
@@ -26,7 +25,6 @@ const props = defineProps({
 
 const route = useRoute()
 const experienceInfo = experienceStore()
-const profStore = proficiencyStore()
 const skillInfo = skillStore()
 
 const emptySkill: SkillResponse = {
@@ -81,7 +79,6 @@ function handleStatUpdate(skill: SkillResponse) {
     props.skill.levelId = selectedSkillItem.value.levelId
     await skillInfo.getSkills(route.params.id)
     await experienceInfo.updateExperience(route.params.id)
-    await profStore.getUpdateProficiencies(route.params.id)
     await getEditOptions()
     toasters.success('Successfully updated level!')
   })

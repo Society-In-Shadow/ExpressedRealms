@@ -2,10 +2,10 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 
 import toaster from '@/services/Toasters'
-import { useQuery } from '@pinia/colada'
 import { characterListQuery } from '@/components/navbar/stores/navMenuStore.ts'
+import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 
-const { refresh } = useQuery(characterListQuery)
+const { refresh } = useQueryWithLoading(characterListQuery)
 
 export const charactersStore
   = defineStore('charactersStore', {

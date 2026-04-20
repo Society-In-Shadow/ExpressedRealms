@@ -40,7 +40,7 @@ const props = defineProps({
 })
 
 onMounted(async () => {
-  await xpInfo.updateExperience(characterId)
+  await xpInfo.getExperience(characterId)
 })
 
 watch(xpInfo.calculatedValues, () => {

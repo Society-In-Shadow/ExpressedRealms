@@ -17,10 +17,10 @@ import { wizardContentStore } from '@/components/characters/wizard/stores/wizard
 import type { WizardContent } from '@/components/characters/wizard/types.ts'
 import { breakpointsBootstrapV5, useBreakpoints } from '@vueuse/core'
 import ArchetypeInfo from '@/components/characters/wizard/basicInfo/supporting/ArchetypeInfo.vue'
-import { useQuery } from '@pinia/colada'
 import { characterListQuery } from '@/components/navbar/stores/navMenuStore.ts'
+import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 
-const { refresh } = useQuery(characterListQuery)
+const { refresh } = useQueryWithLoading(characterListQuery)
 
 const userInfo = userStore()
 const router = useRouter()

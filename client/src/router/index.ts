@@ -6,9 +6,10 @@ import { OverallRoutes } from '@/router/Routes/OverallNavigationRoutes'
 import { PublicRoutes } from '@/router/Routes/PublicRoutes'
 import { type UserPermission } from '@/types/UserPermissions.ts'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
-import { useQuery, useQueryCache } from '@pinia/colada'
+import { useQueryCache } from '@pinia/colada'
 import { userInfoQuery } from '@/auth/authStore.ts'
 import { SetupState } from '@/auth/types.ts'
+import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 
 export const routes = [
   PublicRoutes,
@@ -31,7 +32,7 @@ routerSetup.beforeEach(async (to) => {
 
   const queryCache = useQueryCache()
   await queryCache.refresh(queryCache.ensure(userInfoQuery))
-  const { data } = useQuery(userInfoQuery)
+  const { data } = useQueryWithLoading(userInfoQuery)
 
   const loggedIn = data.value?.userInfo !== null
   const routeName: string = to.name as string

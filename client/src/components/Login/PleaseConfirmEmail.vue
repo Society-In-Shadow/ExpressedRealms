@@ -5,12 +5,12 @@ import axios from 'axios'
 import { logOff } from '@/services/Authentication'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useQuery } from '@pinia/colada'
 import { userInfoQuery } from '@/auth/authStore.ts'
+import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 
 const router = useRouter()
 
-const { data } = useQuery(userInfoQuery)
+const { data } = useQueryWithLoading(userInfoQuery)
 
 let sentConfirmationEmail = ref(false)
 async function resendConfirmationEmail() {

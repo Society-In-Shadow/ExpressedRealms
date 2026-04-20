@@ -9,10 +9,9 @@ import { ref as vueRef } from 'vue'
 import Message from 'primevue/message'
 import InputTextWrapper from '@/FormWrappers/InputTextWrapper.vue'
 import toasters from '@/services/Toasters'
-import { useQuery } from '@pinia/colada'
 import { userInfoQuery } from '@/auth/authStore.ts'
 
-const { refresh } = useQuery(userInfoQuery)
+const { refresh } = useQueryWithLoading(userInfoQuery)
 
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({

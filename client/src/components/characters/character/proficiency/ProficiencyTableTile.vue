@@ -1,26 +1,24 @@
 <script setup lang="ts">
 
-import {computed, onMounted, ref} from 'vue'
-import {useRoute} from 'vue-router'
-import {proficiencyStore} from '@/components/characters/character/proficiency/stores/proficiencyStore'
+import { computed, ref } from 'vue'
+import { useRoute } from 'vue-router'
+import { proficienciesByCharacterId } from '@/components/characters/character/proficiency/stores/proficiencyStore'
 import Panel from 'primevue/panel'
 import Accordion from 'primevue/accordion'
 import ProficiencyAccordionPanel from '@/components/characters/character/proficiency/ProficiencyAccordionPanel.vue'
+import Skeleton from 'primevue/skeleton'
+import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 
 const route = useRoute()
 
 const openItems = ref([])
 
-const profStore = proficiencyStore()
+const { data, isLoading } = useQueryWithLoading(proficienciesByCharacterId(Number.parseInt(route.params.id)))
 
 const types = computed(() => [
-  { name: 'Offensive Proficiencies', items: profStore.offensive },
-  { name: 'Defensive Proficiencies', items: profStore.defensive },
+  { name: 'Offensive Proficiencies', items: data.value?.offensive ?? [] },
+  { name: 'Defensive Proficiencies', items: data.value?.defensive ?? [] },
 ])
-
-onMounted(() => {
-  profStore.getUpdateProficiencies(route.params.id)
-})
 
 </script>
 
@@ -32,7 +30,18 @@ onMounted(() => {
           {{ type.name }}
         </h3>
       </template>
-      <Accordion :value="openItems" multiple :lazy="true" expand-icon="pi pi-info-circle" collapse-icon="pi pi-times-circle">
+      <div v-if="isLoading">
+        <Skeleton height="3em" />
+        <Skeleton height="3em" />
+        <Skeleton height="3em" />
+        <Skeleton height="3em" />
+        <Skeleton height="3em" />
+        <Skeleton height="3em" />
+      </div>
+      <Accordion
+        v-else :value="openItems" multiple :lazy="true" expand-icon="pi pi-info-circle"
+        collapse-icon="pi pi-times-circle"
+      >
         <ProficiencyAccordionPanel v-for="proficiency in type.items" :key="proficiency.id" :value="proficiency.id" :proficiency="proficiency" />
       </Accordion>
     </Panel>

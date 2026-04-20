@@ -1,10 +1,12 @@
 using ExpressedRealms.Characters.API.ProficiencyEndPoints.Responses;
 using ExpressedRealms.Characters.Repository.Proficiencies;
+using ExpressedRealms.Characters.Repository.Proficiencies.DTOs;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
+using ModifierDescription = ExpressedRealms.Characters.API.ProficiencyEndPoints.Responses.ModifierDescription;
 
 namespace ExpressedRealms.Characters.API.ProficiencyEndPoints;
 
@@ -32,26 +34,17 @@ internal static class ProficiencyEndPoints
                     return TypedResults.Ok(
                         new BaseProficiencyResponse()
                         {
-                            Proficiencies = results
-                                .Value.Select(x => new ProficienciesDto()
-                                {
-                                    Id = x.Id,
-                                    Value = x.Value,
-                                    Name = x.Name,
-                                    Description = x.Description,
-                                    Modifiers = x.Modifiers,
-                                    CorrespondingId = x.SortOrder,
-                                    Type = x.Type,
-                                    AppliedModifiers = x
-                                        .AppliedModifiers.Select(y => new ModifierDescription()
-                                        {
-                                            Value = y.Value,
-                                            Type = y.Type,
-                                            Message = y.Message,
-                                            Name = y.Name,
-                                        })
-                                        .ToList(),
-                                })
+                            Offensive = results.Value
+                                .Where(x => x.Type == "Offensive")
+                                .Select(SelectProficiencies())
+                                .ToList(),
+                            Defensive = results.Value
+                                .Where(x => x.Type == "Defensive")
+                                .Select(SelectProficiencies())
+                                .ToList(),
+                            Secondary = results.Value
+                                .Where(x => x.Type == "Secondary")
+                                .Select(SelectProficiencies())
                                 .ToList(),
                         }
                     );
@@ -59,5 +52,22 @@ internal static class ProficiencyEndPoints
             )
             .WithSummary("Returns all basic proficiencies for the given character")
             .RequireAuthorization();
+    }
+
+    private static Func<ProficiencyDto, ProficienciesDto> SelectProficiencies()
+    {
+        return x => new ProficienciesDto()
+        {
+            Id = x.Id,
+            Value = x.Value,
+            Name = x.Name,
+            AppliedModifiers = x
+                .AppliedModifiers.Select(y => new ModifierDescription()
+                {
+                    Value = y.Value,
+                    Name = y.Name,
+                })
+                .ToList(),
+        };
     }
 }

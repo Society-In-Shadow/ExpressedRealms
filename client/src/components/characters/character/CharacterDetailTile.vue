@@ -35,7 +35,7 @@ onBeforeMount(async () => {
       isRetired.value = characterInfo.isRetired
     })
   showFactionInfo.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowFactionDropdown)
-  await experienceInfo.updateExperience(characterId)
+  await experienceInfo.getExperience(characterId)
 })
 
 const name = ref('')

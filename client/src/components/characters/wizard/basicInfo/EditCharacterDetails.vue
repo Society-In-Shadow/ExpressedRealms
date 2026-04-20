@@ -20,11 +20,11 @@ import FormCheckboxWrapper from '@/FormWrappers/FormCheckboxWrapper.vue'
 import SelectProgressionPaths from '@/components/characters/wizard/basicInfo/SelectProgressionPaths.vue'
 import Message from 'primevue/message'
 import { experienceStore } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
-import { useQuery } from '@pinia/colada'
 import { characterListQuery } from '@/components/navbar/stores/navMenuStore.ts'
+import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 
 const route = useRoute()
-const { refetch } = useQuery(characterListQuery)
+const { refetch } = useQueryWithLoading(characterListQuery)
 
 const characterInfo = characterStore()
 const userInfo = userStore()

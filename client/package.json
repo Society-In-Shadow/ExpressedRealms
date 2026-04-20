@@ -22,6 +22,7 @@
   "dependencies": {
     "@he-tree/vue": "^2.9.4",
     "@pinia/colada": "^1.1.0",
+    "@pinia/colada-plugin-delay": "^0.2.1",
     "@primevue/themes": "^4.3.7",
     "@tiptap/extension-table": "^3.0.9",
     "@tiptap/extension-underline": "^3.0.9",

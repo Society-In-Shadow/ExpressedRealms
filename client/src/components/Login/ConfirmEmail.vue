@@ -5,14 +5,14 @@ import axios from 'axios'
 import { useRoute, useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { logOff } from '@/services/Authentication'
-import { useQuery } from '@pinia/colada'
 import { userInfoQuery } from '@/auth/authStore.ts'
 import { SetupState } from '@/auth/types.ts'
+import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 
 const Router = useRouter()
 const route = useRoute()
 
-const { data, refresh } = useQuery(userInfoQuery)
+const { data, refresh } = useQueryWithLoading(userInfoQuery)
 
 let hasError = ref(false)
 let isSuccessful = ref(false)

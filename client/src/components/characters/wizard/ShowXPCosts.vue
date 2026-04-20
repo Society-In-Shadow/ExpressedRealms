@@ -29,7 +29,7 @@ const props = defineProps({
 const xp = ref<CalculatedExperience>({})
 
 onMounted(async () => {
-  await experienceInfo.updateExperience(route.params.id)
+  await experienceInfo.getExperience(route.params.id)
 })
 
 watch(experienceInfo, () => {

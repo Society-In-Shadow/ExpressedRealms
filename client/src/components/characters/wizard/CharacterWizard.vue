@@ -74,7 +74,7 @@ async function fetchData() {
     if (!characterInfo.isInCharacterCreation)
       sections.value.splice(8, 0, { name: 'Contacts', isDisabled: false, component: defineAsyncComponent(async () => ContactStep) })
 
-    await xpData.updateExperience(route.params.id)
+    await xpData.getExperience(route.params.id)
 
     if (!isMobile.value) {
       selectSection('Basic Info')

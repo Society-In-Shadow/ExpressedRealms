@@ -84,7 +84,10 @@ public class StatModifierRepository(
         int currentLevel
     )
     {
-        var character = await context.Characters.Where(x => x.Id == characterId).FirstAsync();
+        var character = await context.Characters
+            .Where(x => x.Id == characterId)
+            .Select(x => new { x.ExpressionId, x.PrimaryProgressionId})
+            .FirstAsync();
 
         var progressionExpression = context.ProgressionLevel.Where(x =>
             x.ProgressionPath.ExpressionId == character.ExpressionId
