@@ -88,7 +88,6 @@ internal sealed class ProficiencyRepository(
             .Select(x => x.ExpressionId)
             .FirstOrDefaultAsync(cancellationToken);
 
-
         var extraModifiers = new List<ModifierDescription>();
         var dbModifiers = new List<ProficiencyModifierInfoDto>();
 
@@ -98,9 +97,7 @@ internal sealed class ProficiencyRepository(
             await statModifierRepository.GetModifiersFromXlLevel(characterId, currentLevel)
         );
         dbModifiers = dbModifiers
-            .Where(x =>
-                x.TargetExpressionId == null || x.TargetExpressionId == expressionId
-            )
+            .Where(x => x.TargetExpressionId == null || x.TargetExpressionId == expressionId)
             .ToList();
 
         extraModifiers.AddRange(
@@ -123,7 +120,7 @@ internal sealed class ProficiencyRepository(
 
             return modifier.Modifier * currentLevel;
         }
-        
+
         var proficiencies = ProficiencyDtos.GetProficiencies(expressionId);
 
         foreach (var proficiency in proficiencies)
