@@ -26,7 +26,7 @@ internal static class PopulateCashCard
                                         initialIncomeRow
                                             .RelativeItem()
                                             .Text(
-                                                $"Initial Cash Card - {wealthData.ConIncome.ToString("C0")}"
+                                                $"Initial Cash Card - ${wealthData.ConIncome.ToString("N0")}"
                                             )
                                             .Bold()
                                             .FontSize(11)

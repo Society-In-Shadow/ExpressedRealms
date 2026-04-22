@@ -17,6 +17,7 @@ onMounted(async () => {
   const response = await eventCheckinInfo.getStonePullInformation()
 
   isFirstTimeUser.value = response.isFirstTimeUser
+  broughtNewPlayer.value = response.broughtFriend
   assignedXpAmount.value = response.assignedXp
   isReadOnly.value = response.hasCompletedStep
   checkinBonus.value = response.assignedXp?.amount ?? null
@@ -63,10 +64,10 @@ async function permanentlySaveBonus() {
     </div>
   </div>
   <p v-if="isFirstTimeUser">
-    This is a new player, they automatically get the full 5 xp <span v-if="!eventCheckinInfo.assignedXp">, you just need to save it</span>
+    This is a new player, they automatically get the full 5 xp <span v-if="assignedXpAmount == null">, you just need to save it</span>
   </p>
-  <p v-if="broughtNewPlayer">
-    They brought in a new player, they automatically get the full 5 xp <span v-if="!eventCheckinInfo.assignedXp">, you just need to save it</span>
+  <p v-if="broughtNewPlayer && !isFirstTimeUser">
+    They brought in a new player, they automatically get the full 5 xp <span v-if="assignedXpAmount == null">, you just need to save it</span>
   </p>
 
   <StonePuller :hide-description="true" @neutral-pulled="handleStonePulled" />

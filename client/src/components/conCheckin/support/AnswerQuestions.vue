@@ -11,6 +11,7 @@ const eventCheckinInfo = EventCheckinStore()
 const playerName = ref('')
 const questions = ref <Array<Question>>([])
 const isReadOnly = ref(true)
+const broughtNewPlayer = ref(false)
 
 onBeforeMount(async () => {
   const response = await eventCheckinInfo.getQuestions()
@@ -18,16 +19,16 @@ onBeforeMount(async () => {
   isReadOnly.value = response.hasCompletedStage
 
   const newPlayerQuestion = questions.value.find(q => q.typeId === 6)
-  if (newPlayerQuestion && newPlayerQuestion.response && newPlayerQuestion?.response.startsWith('Yes - ')) {
-    eventCheckinInfo.broughtNewPlayer = true
+  if (newPlayerQuestion && newPlayerQuestion.response && newPlayerQuestion?.response.startsWith('Yes')) {
+    broughtNewPlayer.value = true
     playerName.value = newPlayerQuestion?.response.slice(6)
   }
 })
 
 const updateNewPlayerQuestion = (question: Question) => {
   question.response = 'No'
-  if (eventCheckinInfo.broughtNewPlayer) {
-    question.response = `Yes - ${playerName.value}`
+  if (broughtNewPlayer.value) {
+    question.response = `Yes`
   }
   eventCheckinInfo.updateQuestion(question)
 }
@@ -48,13 +49,12 @@ const submitCheckin = async () => {
     </div>
 
     <div v-else-if="question.typeId === 6">
-      <h3>Have you brought in a new player? If so what is their name?</h3>
+      <h3>Have you brought in a new player?</h3>
       <div>
-        <RadioButtonGroup v-model="eventCheckinInfo.broughtNewPlayer" class="d-flex flex-column gap-2 mb-3">
+        <RadioButtonGroup v-model="broughtNewPlayer" class="d-flex flex-column gap-2 mb-3">
           <div class="d-flex align-items-center gap-2">
             <RadioButton id="yes" :value="true" :disabled="isReadOnly" />
             <label for="yes">Yes</label>
-            <InputText v-if="eventCheckinInfo.broughtNewPlayer" v-model="playerName" placeholder="Who?" />
           </div>
           <div class="d-flex align-items-center gap-2">
             <RadioButton id="no" :value="false" :disabled="isReadOnly" />

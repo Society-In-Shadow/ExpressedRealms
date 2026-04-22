@@ -145,7 +145,7 @@ public static class PowerCardReport
                         col.Item()
                             .PaddingTop(0.06f, Unit.Inch)
                             .PaddingRight(0.25f, Unit.Inch)
-                            .Text($"Society in Shadows - {DateTime.Now.ToString("MMMM/d/yyyy")}")
+                            .Text($"Society in Shadows - {DateTime.Now.ToString("MMMM d, yyyy")}")
                             .FontColor(backgroundTextColor)
                             .AlignEnd();
                     });

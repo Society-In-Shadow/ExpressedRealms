@@ -43,6 +43,7 @@ export interface GetCheckinQuestionsResponse {
 export interface GetStonePullInfoResponse {
   hasCompletedStep: boolean
   isFirstTimeUser: boolean
+  broughtFriend: boolean
   assignedXp: AssignedXpType
 }
 

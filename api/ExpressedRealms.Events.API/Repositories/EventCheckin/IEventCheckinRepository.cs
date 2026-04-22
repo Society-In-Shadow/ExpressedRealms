@@ -48,4 +48,5 @@ public interface IEventCheckinRepository : IGenericRepository
     Task<int> GetCurrentEventDay();
     Task<Player> GetCurrentPlayerForEditingAsync();
     Task<UserCheckinPageDto> GetPlayerInfoForPlayerCheckinPage();
+    Task<bool> DidBringFriendToCon(int checkinId);
 }
