@@ -46,7 +46,7 @@ internal static class RechargePage
         );
         TextPrintUtilities.PrintStatInfo(
             page,
-            reportData.WealthInfo.WealthIncome.ToString("C0"),
+            $"${reportData.WealthInfo.WealthIncome.ToString("N0")}",
             XUnitPt.FromInch(3.02),
             XUnitPt.FromInch(4.68)
         );

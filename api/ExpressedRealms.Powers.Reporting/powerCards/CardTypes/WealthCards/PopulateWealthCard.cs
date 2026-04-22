@@ -81,7 +81,7 @@ internal static class PopulateWealthCard
                                             .AlignMiddle()
                                             .AlignCenter()
                                             .CreateStamp(
-                                                $"Spent Session Income \n{wealthData.InitialBasicItemIncome:C0}"
+                                                $"Spent Session Income \n${wealthData.InitialBasicItemIncome:N0}"
                                             );
                                     });
 
@@ -178,15 +178,15 @@ internal static class PopulateWealthCard
                 {
                     var levelNumber = level.Level == -1 ? "N/A" : level.Level.ToString();
                     var levelIncome =
-                        Math.Abs(level.Income - (-1)) < 1 ? "N/A" : level.Income.ToString("C0");
+                        Math.Abs(level.Income - (-1)) < 1 ? "N/A" : $"${level.Income.ToString("N0")}";
                     var levelCash =
                         Math.Abs(level.CashToLevelUp - (-1)) < 1
                             ? "N/A"
-                            : level.CashToLevelUp.ToString("C0");
+                            : $"${level.CashToLevelUp.ToString("N0")}";
                     var levelLiquidation =
                         Math.Abs(level.LiquidationAmount - (-1)) < 1
                             ? "N/A"
-                            : level.LiquidationAmount.ToString("C0");
+                            : $"${level.LiquidationAmount.ToString("N0")}";
 
                     wealthTable.Cell().AddFormattedCell(levelNumber, i == 3);
                     wealthTable.Cell().AddFormattedCell(levelIncome, i == 3);
