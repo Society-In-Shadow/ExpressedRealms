@@ -27,6 +27,7 @@ internal sealed class GetStonePullInfoUseCase(
         var checkin = await checkinRepository.GetCheckinAsync(eventId!.Value, playerId);
 
         var isFirstTimePlayer = await checkinRepository.IsFirstTimePlayer(model.LookupId);
+        var broughtFriend = await checkinRepository.DidBringFriendToCon(checkin!.Id);
         var assignedXp = await checkinRepository.GetAssignedXp(playerId, eventId!.Value);
 
         var hasCompletedStep = await checkinRepository.GetStageStatus(
@@ -39,6 +40,7 @@ internal sealed class GetStonePullInfoUseCase(
             {
                 HasCompletedStep = hasCompletedStep,
                 IsFirstTimeUser = isFirstTimePlayer,
+                BroughtFriend = broughtFriend,
                 AssignedXp = assignedXp is null
                     ? null
                     : new AssignedXpType()

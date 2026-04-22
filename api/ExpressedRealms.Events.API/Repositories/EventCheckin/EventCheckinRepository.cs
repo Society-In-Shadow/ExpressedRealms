@@ -7,6 +7,7 @@ using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageMappingSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.DB.Models.Events.EventSetup;
+using ExpressedRealms.DB.Models.Events.Questions.QuestionTypeSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin.Dtos;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
@@ -41,6 +42,16 @@ internal sealed class EventCheckinRepository(
             .CheckinQuestionResponses.Where(x => x.CheckinId == checkinId)
             .ToListAsync(cancellationToken);
     }
+    
+    public async Task<bool> DidBringFriendToCon(int checkinId)
+    {
+        return await context
+            .CheckinQuestionResponses.Where(x => x.CheckinId == checkinId && 
+                                                 x.EventQuestion.QuestionTypeId == QuestionTypeEnum.BroughtNewPlayer &&
+                                                 x.Response.Contains("Yes"))
+            .AnyAsync(cancellationToken);
+    }
+
 
     public Task<GoCheckinPrimaryCharacterInfoDto?> GetPrimaryCharacterInformation(Guid playerId)
     {

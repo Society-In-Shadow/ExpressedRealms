@@ -33,6 +33,7 @@ public class GetStonePullInfoUseCaseTests
         A.CallTo(() => _eventCheckinRepository.GetCheckinAsync(EventId, PlayerId))
             .Returns(new Checkin { Id = CheckinId });
         A.CallTo(() => _eventCheckinRepository.GetPlayerNumber(_model.LookupId)).Returns(1);
+        A.CallTo(() => _eventCheckinRepository.DidBringFriendToCon(CheckinId)).Returns(false);
 
         A.CallTo(() => _eventCheckinRepository.GetAssignedXp(PlayerId, EventId))
             .Returns(new AssignedXpTypeDto() { TypeId = 3, Amount = 10 });
@@ -97,6 +98,15 @@ public class GetStonePullInfoUseCaseTests
     {
         var results = await _useCase.ExecuteAsync(_model);
         Assert.True(results.Value.IsFirstTimeUser);
+    }
+    
+    [Fact]
+    public async Task UseCase_WillReturn_IfBroughtAFriend()
+    {
+        
+        A.CallTo(() => _eventCheckinRepository.DidBringFriendToCon(CheckinId)).Returns(true);
+        var results = await _useCase.ExecuteAsync(_model);
+        Assert.True(results.Value.BroughtFriend);
     }
 
     [Fact]

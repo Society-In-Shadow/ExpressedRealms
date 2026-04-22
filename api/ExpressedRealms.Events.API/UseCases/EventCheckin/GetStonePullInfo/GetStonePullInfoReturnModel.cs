@@ -5,4 +5,5 @@ public class GetStonePullInfoReturnModel
     public bool IsFirstTimeUser { get; set; }
     public AssignedXpType? AssignedXp { get; set; }
     public bool HasCompletedStep { get; set; }
+    public bool BroughtFriend { get; set; }
 }
