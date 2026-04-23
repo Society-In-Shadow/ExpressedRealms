@@ -92,7 +92,7 @@ const charactersMenu = computed(() => {
   if (characters.length > 0) {
     const insertSpot = isMobile.value
       ? characters.length
-      : Math.max(Math.floor(characters.length / 2), 1)
+      : Math.max(Math.ceil(characters.length / 2), 1)
     characters.splice(insertSpot, 0, { id: -1, name: 'View Characters', expression: '', state: CharacterState.Regular })
   }
 
