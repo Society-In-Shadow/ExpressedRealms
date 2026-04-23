@@ -23,11 +23,7 @@ export const userConfirmationPopups = (userId: string) => {
         severity: 'danger',
       },
       accept: () => {
-        axios.put(`/admin/user/${userId}/lockout`,
-          {
-            userId: userId,
-            lockoutEnabled: true,
-          })
+        axios.delete(`/admin/user/${userId}`)
           .then(async () => {
             await playerListStore.fetchPlayers()
             toaster.success('Successfully Disabled Player!')

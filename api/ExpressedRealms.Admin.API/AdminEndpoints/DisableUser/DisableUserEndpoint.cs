@@ -19,7 +19,7 @@ public static class DisableUserEndpoint
             return TypedResults.NotFound();
         }
 
-        await userManager.SetLockoutEndDateAsync(user, DateTime.MaxValue);
+        await userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
 
         return TypedResults.NoContent();
     }
