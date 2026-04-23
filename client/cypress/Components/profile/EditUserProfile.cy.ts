@@ -1,7 +1,7 @@
 import addUserProfile from '../../../src/components/profile/EditUserProfile.vue'
 
-const name = 'name'
-const nameHelp = 'name-help'
+const name = 'preferred-name'
+const nameHelp = 'preferred-name-help'
 const updateProfileButton = 'update-profile-button'
 
 describe('<EditUserProfile />', () => {
@@ -35,9 +35,9 @@ describe('<EditUserProfile />', () => {
   it('Name Field follows all Schema Validations', () => {
     cy.dataCy(name).clear()
     cy.dataCy(updateProfileButton).click()
-    cy.dataCy(nameHelp).contains('Name is a required field')
+    cy.dataCy(nameHelp).contains('Preferred Name is a required field')
     cy.dataCy(name).type('1'.repeat(101), { delay: 0 })
-    cy.dataCy(nameHelp).contains('Name must be at most 100 characters')
+    cy.dataCy(nameHelp).contains('Preferred Name must be at most 100 characters')
     cy.dataCy(name).type('{backspace}')
     cy.dataCy(nameHelp).should('not.be.visible')
   })

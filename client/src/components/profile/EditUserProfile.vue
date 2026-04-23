@@ -17,7 +17,7 @@ const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
     name: string().required()
       .max(100)
-      .label('Name'),
+      .label('Preferred Name'),
   }),
 })
 
