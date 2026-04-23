@@ -10,6 +10,7 @@ import { onMounted, ref } from 'vue'
 import toasters from '@/services/Toasters'
 import { userInfoQuery } from '@/auth/authStore.ts'
 import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
+import Message from 'primevue/message'
 
 const { refresh } = useQueryWithLoading(userInfoQuery)
 const { defineField, handleSubmit, errors } = useForm({
@@ -49,7 +50,10 @@ const onSubmit = handleSubmit(async (values) => {
     </template>
     <template #content>
       <form @submit="onSubmit">
-        <InputTextWrapper v-model="name" field-name="Name" :error-text="errors.name" :show-skeleton="isLoading" />
+        <InputTextWrapper v-model="name" field-name="Preferred Name" :error-text="errors.name" :show-skeleton="isLoading" />
+        <Message class="mb-3">
+          Your preferred name is a nick name or actual name, something that we can reliably get your attention within a crowd.
+        </Message>
         <Button data-cy="update-profile-button" label="Update Profile" class="w-100 mb-2" type="submit" :disabled="isLoading" />
       </form>
     </template>
