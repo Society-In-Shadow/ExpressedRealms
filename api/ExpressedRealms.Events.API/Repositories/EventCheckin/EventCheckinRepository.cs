@@ -220,7 +220,13 @@ internal sealed class EventCheckinRepository(
     {
         var now = DateOnly.FromDateTime(DateTime.UtcNow);
 
-        return await context
+        var eventName = await context
+            .Events.AsNoTracking()
+            .Where(x => x.IsPublished && x.StartDate <= now && x.EndDate >= now)
+            .Select(x => x.Name)
+            .FirstOrDefaultAsync(cancellationToken);
+        
+        var info = await context
             .Players.Where(x => x.UserId == userContext.CurrentUserId())
             .Select(x => new UserCheckinPageDto()
             {
@@ -231,14 +237,11 @@ internal sealed class EventCheckinRepository(
                         y.Event.IsPublished && y.Event.StartDate <= now && y.Event.EndDate >= now
                     )!
                     .Id,
-                EventName = x
-                    .Checkins.Where(y =>
-                        y.Event.IsPublished && y.Event.StartDate <= now && y.Event.EndDate >= now
-                    )
-                    .Select(y => y.Event.Name)
-                    .FirstOrDefault(),
             })
             .FirstAsync(cancellationToken);
+
+        info.EventName = eventName;
+        return info;
     }
 
     public Task<Player> GetPlayerAsync(string lookupId)
