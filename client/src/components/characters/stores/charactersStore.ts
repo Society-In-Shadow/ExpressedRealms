@@ -5,7 +5,7 @@ import toaster from '@/services/Toasters'
 import { characterListQuery } from '@/components/navbar/stores/navMenuStore.ts'
 import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 
-const { refresh } = useQueryWithLoading(characterListQuery)
+const { refetch } = useQueryWithLoading(characterListQuery)
 
 export const charactersStore
   = defineStore('charactersStore', {
@@ -25,7 +25,7 @@ export const charactersStore
         await axios.delete(`/characters/${id}`)
           .then(async () => {
             await this.getCharacters()
-            await refresh()
+            await refetch()
             toaster.success('Successfully Deleted Character!')
           })
       },

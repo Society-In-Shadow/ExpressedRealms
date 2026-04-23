@@ -20,7 +20,7 @@ import ArchetypeInfo from '@/components/characters/wizard/basicInfo/supporting/A
 import { characterListQuery } from '@/components/navbar/stores/navMenuStore.ts'
 import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 
-const { refresh } = useQueryWithLoading(characterListQuery)
+const { refetch } = useQueryWithLoading(characterListQuery)
 
 const userInfo = userStore()
 const router = useRouter()
@@ -71,7 +71,7 @@ const onSubmit = handleSubmit((values) => {
     isArchetype: route.query.src === 'archetype_add',
   })
     .then(async (response) => {
-      await refresh()
+      await refetch()
       await router.push({ name: 'characterWizard', params: { id: response.data } })
     })
 })

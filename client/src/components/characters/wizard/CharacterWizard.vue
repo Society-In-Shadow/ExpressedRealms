@@ -34,14 +34,16 @@ const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5)
 const isMobile = activeBreakpoint.smaller('md')
 const wizardContentData = wizardContentStore()
 
-const sections = ref([
-  { name: 'Stats', isDisabled: isAdd, component: markRaw(StatStep) },
-  { name: 'Skills', isDisabled: isAdd, component: markRaw(SkillStep) },
-  { name: 'Powers', isDisabled: isAdd, component: markRaw(PowerStep) },
-  { name: 'Knowledges', isDisabled: isAdd, component: markRaw(KnowledgeStep) },
-  { name: 'Advantages', isDisabled: isAdd, component: defineAsyncComponent(async () => AdvantageStep) },
-  { name: 'Disadvantages', isDisabled: isAdd, component: defineAsyncComponent(async () => DisadvantageStep) },
-  { name: 'Review Character', isDisabled: isAdd, component: markRaw(ReviewCharacter) },
+const sections = computed(() => [
+  { name: 'Basic Info', component: isAdd.value ? markRaw(AddCharacter) : markRaw(EditCharacterDetails) },
+  { name: 'Stats', isDisabled: isAdd.value, component: markRaw(StatStep) },
+  { name: 'Skills', isDisabled: isAdd.value, component: markRaw(SkillStep) },
+  { name: 'Powers', isDisabled: isAdd.value, component: markRaw(PowerStep) },
+  { name: 'Knowledges', isDisabled: isAdd.value, component: markRaw(KnowledgeStep) },
+  { name: 'Contacts', isDisabled: isAdd.value, visible: () => !characterInfo.isInCharacterCreation && !isAdd.value, component: markRaw(ContactStep) },
+  { name: 'Advantages', isDisabled: isAdd.value, component: defineAsyncComponent(async () => AdvantageStep) },
+  { name: 'Disadvantages', isDisabled: isAdd.value, component: defineAsyncComponent(async () => DisadvantageStep) },
+  { name: 'Review Character', isDisabled: isAdd.value, component: markRaw(ReviewCharacter) },
 ])
 
 onBeforeMount(async () => {
@@ -52,12 +54,8 @@ async function fetchData() {
   if (!characterInfo.isOwner && !permissionCheck.Archetypes.Edit && !isAdd.value) {
     await router.push({ name: 'characterSheet', params: { id: Number.parseInt(route.params.id as string) } })
   }
-  const basicInfo = sections.value.find(x => x.name == 'Basic Info')
-  if (basicInfo) {
-    sections.value.splice(sections.value.indexOf(basicInfo), 1)
-  }
+
   if (isAdd.value) {
-    sections.value.splice(0, 0, { name: 'Basic Info', isDisabled: false, component: defineAsyncComponent(async () => AddCharacter) })
     selectSection('Basic Info')
     wasAdd.value = true
   }
@@ -65,11 +63,6 @@ async function fetchData() {
     await characterInfo.getCharacterDetails(Number(route.params.id))
     if (characterInfo.isRetired)
       await router.push({ name: 'characters' })
-
-    sections.value.splice(0, 0, { name: 'Basic Info', isDisabled: false, component: defineAsyncComponent(async () => EditCharacterDetails) })
-
-    if (!characterInfo.isInCharacterCreation)
-      sections.value.splice(5, 0, { name: 'Contacts', isDisabled: false, component: defineAsyncComponent(async () => ContactStep) })
 
     await xpData.getExperience(route.params.id)
 
@@ -136,17 +129,18 @@ const nextSection = computed(() => {
     <div v-if="!(isMobile && hasSelectedSection) || !isMobile" class="col col-md-2 custom-toc">
       <Card>
         <template #content>
-          <div v-for="section in sections" :key="section.name" class="text-right p-2">
+          <div v-for="section in sections" :key="section.name">
             <Button
-              class="w-100" :label="section.name"
+              v-if="section.visible ? section.visible() : true"
+              class="w-100 mb-2 mt-2" :label="section.name"
               :outlined="selectedSection !== section.name"
               :disabled="section.isDisabled"
               @click="selectSection(section.name)"
             />
           </div>
-          <div v-if="!isAdd" class="p-2">
+          <div v-if="!isAdd">
             <Button
-              class="w-100" label="Character Sheet" :outlined="true" icon="pi pi-arrow-left"
+              class="w-100 mb-2 mt-2" label="Character Sheet" :outlined="true" icon="pi pi-arrow-left"
               @click="redirectToEdit"
             />
           </div>

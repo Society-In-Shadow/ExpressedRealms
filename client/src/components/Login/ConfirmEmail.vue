@@ -12,7 +12,7 @@ import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 const Router = useRouter()
 const route = useRoute()
 
-const { data, refresh } = useQueryWithLoading(userInfoQuery)
+const { data, refetch } = useQueryWithLoading(userInfoQuery)
 
 let hasError = ref(false)
 let isSuccessful = ref(false)
@@ -24,7 +24,7 @@ axios.get('/auth/confirmEmail', {
     changedEmail: route.query.changedEmail,
   },
 }).then(async () => {
-  await refresh()
+  await refetch()
   isSuccessful.value = true
   isLoading.value = false
 }).catch(() => {
