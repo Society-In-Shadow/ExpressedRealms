@@ -81,7 +81,7 @@ internal static class PopulateWealthCard
                                             .AlignMiddle()
                                             .AlignCenter()
                                             .CreateStamp(
-                                                $"Spent Session Income \n${wealthData.InitialBasicItemIncome:N0}"
+                                                $"Starting Income \n${wealthData.InitialBasicItemIncome:N0}"
                                             );
                                     });
 
