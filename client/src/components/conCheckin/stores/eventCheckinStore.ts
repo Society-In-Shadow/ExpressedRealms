@@ -108,7 +108,7 @@ export const EventCheckinStore
             // Stone Pulled, They need to get GO Approval next
             // Redirect them to the character sheet
             if (this.primaryCharacter) {
-              await router.push({ name: 'characterSheet', params: { id: this.primaryCharacter.characterId } })
+              await router.push({ name: 'characterSheet', params: { id: this.primaryCharacter.characterId }, query: { src: 'approve_character' } })
               return
             }
             this.activeStepperStep = '5'
