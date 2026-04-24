@@ -54,8 +54,17 @@ async function loadInfo() {
   sectionInfo.value = xpInfo.getExperienceInfoForSection(XpSectionTypes.knowledges)
 
   store.knowledgeLevels.map(function (level: KnowledgeOptions) {
-    const xpCost = isUnknownKnowledge.value ? level.totalUnknownXpCost : level.totalGeneralXpCost
+    var index = store.knowledgeLevels.indexOf(level)
     const isLowerLevel = level.id > knowledge.value.levelId
+
+    let xpCost = 0
+    if (index === 0) {
+      xpCost = level.totalGeneralXpCost
+    }
+    else {
+      xpCost = level.totalGeneralXpCost - getCurrentXpLevel(knowledge.value.levelId)
+    }
+
     level.disabled = xpCost > sectionInfo.value.availableXp && isLowerLevel
     return level
   })

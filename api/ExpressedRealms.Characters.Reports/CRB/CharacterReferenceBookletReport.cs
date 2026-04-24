@@ -409,7 +409,7 @@ public static class CharacterReferenceBookletReport
         );
         TextPrintUtilities.PrintStatInfo(
             page,
-            dataProficiencyInfo.Throw.ToString(),
+            dataProficiencyInfo.EvadeThrow.ToString(),
             XUnitPt.FromInch(2.63),
             XUnitPt.FromInch(7.60)
         );
