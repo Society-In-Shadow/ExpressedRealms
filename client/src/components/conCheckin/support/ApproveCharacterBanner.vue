@@ -8,6 +8,7 @@ import Button from 'primevue/button'
 import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 import { characterStore } from '@/components/characters/character/stores/characterStore.ts'
+import { useRoute } from 'vue-router'
 
 const eventCheckinInfo = EventCheckinStore()
 const permissionInfo = userPermissionStore()
@@ -15,13 +16,15 @@ const characterInfo = characterStore()
 const permissionCheck = permissionInfo.permissionCheck
 const reviewedContacts = ref(false)
 const hasCheckinPermission = ref(false)
+const route = useRoute()
 
 onBeforeMount(async () => {
   await eventCheckinInfo.getCheckinAvailable()
   hasCheckinPermission.value = permissionCheck.Event.GoApproval
 })
 
-const showBanner = computed(() => eventCheckinInfo.hasActiveEvent && hasCheckinPermission.value && characterInfo.isPrimaryCharacter)
+const showBanner = computed(() => eventCheckinInfo.hasActiveEvent && hasCheckinPermission.value
+  && characterInfo.isPrimaryCharacter && route.query.src == 'approve_character')
 
 const reviewedCharacter = async () => {
   await eventCheckinInfo.approveCharacterSheet()
