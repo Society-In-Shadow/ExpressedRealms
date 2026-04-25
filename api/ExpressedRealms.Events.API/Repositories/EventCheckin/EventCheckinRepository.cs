@@ -52,7 +52,6 @@ internal sealed class EventCheckinRepository(
             .AnyAsync(cancellationToken);
     }
 
-
     public Task<GoCheckinPrimaryCharacterInfoDto?> GetPrimaryCharacterInformation(Guid playerId)
     {
         return context
@@ -149,11 +148,14 @@ internal sealed class EventCheckinRepository(
 
     public async Task<int?> GetActiveEventId()
     {
-        var now = DateOnly.FromDateTime(DateTime.UtcNow);
-
         var eventId = await context
-            .Events.AsNoTracking()
-            .Where(x => x.IsPublished && x.StartDate <= now && x.EndDate >= now)
+            .Events.FromSql($@"
+        SELECT *
+        FROM public.events
+        WHERE is_published = true
+        AND (NOW() AT TIME ZONE time_zone_id)::date BETWEEN start_date AND end_date and is_deleted = false
+        LIMIT 1
+    ")
             .Select(x => x.Id)
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -167,7 +169,7 @@ internal sealed class EventCheckinRepository(
         SELECT (((NOW() AT TIME ZONE time_zone_id)::date - start_date + 1)::int) AS ""Value""
         FROM public.events
         WHERE is_published = true
-        AND (NOW() AT TIME ZONE time_zone_id)::date BETWEEN start_date AND end_date
+        AND (NOW() AT TIME ZONE time_zone_id)::date BETWEEN start_date AND end_date and is_deleted = false
         LIMIT 1
     ").FirstOrDefaultAsync(cancellationToken);
         
@@ -175,23 +177,28 @@ internal sealed class EventCheckinRepository(
 
     public async Task<DateOnly> GetActiveEventStartDate()
     {
-        var now = DateOnly.FromDateTime(DateTime.UtcNow);
-
         return await context
-            .Events.AsNoTracking()
-            .Where(x => x.IsPublished && x.StartDate <= now && x.EndDate >= now)
+            .Events.FromSql($@"
+        SELECT *
+        FROM public.events
+        WHERE is_published = true
+        AND (NOW() AT TIME ZONE time_zone_id)::date BETWEEN start_date AND end_date and is_deleted = false
+        LIMIT 1
+    ")
             .Select(x => x.StartDate)
             .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<Event?> GetActiveEventInfoOrDefaultAsync()
     {
-        var now = DateOnly.FromDateTime(DateTime.UtcNow);
-
         return await context
-            .Events.AsNoTracking()
-            .Where(x => x.IsPublished && x.StartDate <= now && x.EndDate >= now)
-            .FirstOrDefaultAsync(cancellationToken);
+            .Events.FromSql($@"
+        SELECT *
+        FROM public.events
+        WHERE is_published = true
+        AND (NOW() AT TIME ZONE time_zone_id)::date BETWEEN start_date AND end_date and is_deleted = false
+        LIMIT 1
+    ").FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<string> GetPlayerName(string lookupId)
@@ -218,13 +225,15 @@ internal sealed class EventCheckinRepository(
 
     public async Task<UserCheckinPageDto> GetPlayerInfoForPlayerCheckinPage()
     {
-        var now = DateOnly.FromDateTime(DateTime.UtcNow);
 
-        var eventName = await context
-            .Events.AsNoTracking()
-            .Where(x => x.IsPublished && x.StartDate <= now && x.EndDate >= now)
-            .Select(x => x.Name)
-            .FirstOrDefaultAsync(cancellationToken);
+        var currentEvent = await context
+            .Events.FromSql($@"
+        SELECT *
+        FROM public.events
+        WHERE is_published = true
+        AND (NOW() AT TIME ZONE time_zone_id)::date BETWEEN start_date AND end_date and is_deleted = false
+        LIMIT 1
+    ").Select(x => new { x.Id, x.Name }).FirstOrDefaultAsync(cancellationToken);
         
         var info = await context
             .Players.Where(x => x.UserId == userContext.CurrentUserId())
@@ -234,13 +243,13 @@ internal sealed class EventCheckinRepository(
                 SendPickupCrbEmail = x.SendPickupCrbEmail,
                 CheckinId = x
                     .Checkins.FirstOrDefault(y =>
-                        y.Event.IsPublished && y.Event.StartDate <= now && y.Event.EndDate >= now
+                        y.EventId == currentEvent!.Id
                     )!
                     .Id,
             })
             .FirstAsync(cancellationToken);
 
-        info.EventName = eventName;
+        info.EventName = currentEvent!.Name;
         return info;
     }
 
