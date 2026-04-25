@@ -162,15 +162,15 @@ internal sealed class EventCheckinRepository(
 
     public async Task<int> GetCurrentEventDay()
     {
-        var now = DateOnly.FromDateTime(DateTime.UtcNow);
-
-        var eventStartDate = await context
-            .Events.AsNoTracking()
-            .Where(x => x.IsPublished && x.StartDate <= now && x.EndDate >= now)
-            .Select(x => (DateOnly?)x.StartDate)
-            .FirstAsync(cancellationToken);
-
-        return now.DayNumber - eventStartDate!.Value.DayNumber + 1;
+        return await context.Database
+            .SqlQuery<int>($@"
+        SELECT (((NOW() AT TIME ZONE time_zone_id)::date - start_date + 1)::int) AS ""Value""
+        FROM public.events
+        WHERE is_published = true
+        AND (NOW() AT TIME ZONE time_zone_id)::date BETWEEN start_date AND end_date
+        LIMIT 1
+    ").FirstOrDefaultAsync(cancellationToken);
+        
     }
 
     public async Task<DateOnly> GetActiveEventStartDate()
