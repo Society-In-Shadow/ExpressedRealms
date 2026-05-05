@@ -1,4 +1,4 @@
-using ExpressedRealms.Powers.API.PowerEndpoints.Responses.PowerList;
+using ExpressedRealms.Powers.API.PowerEndpoints.GetPowersForPowerPath;
 
 namespace ExpressedRealms.Powers.API.PowerPathEndpoints.Responses.PowerPathList;
 

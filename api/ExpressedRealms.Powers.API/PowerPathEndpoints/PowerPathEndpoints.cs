@@ -1,5 +1,5 @@
 using ExpressedRealms.Authentication;
-using ExpressedRealms.Powers.API.PowerEndpoints.Responses.PowerList;
+using ExpressedRealms.Powers.API.PowerEndpoints.GetPowersForPowerPath;
 using ExpressedRealms.Powers.API.PowerPathEndpoints.Requests;
 using ExpressedRealms.Powers.API.PowerPathEndpoints.Responses.PowerPathList;
 using ExpressedRealms.Powers.Repository.PowerPaths;
@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
-using DetailedInformation = ExpressedRealms.Powers.API.PowerEndpoints.Responses.PowerList.DetailedInformation;
+using DetailedInformation = ExpressedRealms.Powers.API.PowerEndpoints.GetPowersForPowerPath.DetailedInformation;
 
 namespace ExpressedRealms.Powers.API.PowerPathEndpoints;
 

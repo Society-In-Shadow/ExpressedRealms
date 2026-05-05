@@ -1,6 +1,6 @@
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerList;
 
-namespace ExpressedRealms.Powers.API.PowerEndpoints.Responses.PowerList;
+namespace ExpressedRealms.Powers.API.PowerEndpoints.GetPowersForPowerPath;
 
 public class PowerInformationResponse
 {

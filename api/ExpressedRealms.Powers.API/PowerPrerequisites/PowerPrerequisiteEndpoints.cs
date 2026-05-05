@@ -1,5 +1,5 @@
 using ExpressedRealms.Authentication;
-using ExpressedRealms.Powers.API.PowerEndpoints.Responses.Options;
+using ExpressedRealms.Powers.API.PowerEndpoints.GetPowerOptions;
 using ExpressedRealms.Powers.API.PowerPrerequisites.Requests.CreatePrerequisite;
 using ExpressedRealms.Powers.API.PowerPrerequisites.Requests.EditPrerequisite;
 using ExpressedRealms.Powers.API.PowerPrerequisites.Responses;

@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Powers.API.PowerEndpoints.Responses.Options;
+namespace ExpressedRealms.Powers.API.PowerEndpoints.GetPowerOptions;
 
 public class DetailedEditInformation
 {

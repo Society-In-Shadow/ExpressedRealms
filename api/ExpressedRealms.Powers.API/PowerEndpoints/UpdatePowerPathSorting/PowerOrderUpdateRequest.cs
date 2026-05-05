@@ -1,6 +1,6 @@
 using ExpressedRealms.Powers.API.PowerPathEndpoints.Requests;
 
-namespace ExpressedRealms.Powers.API.PowerEndpoints.Requests.UpdateOrder;
+namespace ExpressedRealms.Powers.API.PowerEndpoints.UpdatePowerPathSorting;
 
 public class PowerOrderUpdateRequest
 {

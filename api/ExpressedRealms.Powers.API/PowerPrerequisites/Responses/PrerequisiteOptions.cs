@@ -1,4 +1,4 @@
-using ExpressedRealms.Powers.API.PowerEndpoints.Responses.Options;
+using ExpressedRealms.Powers.API.PowerEndpoints.GetPowerOptions;
 
 namespace ExpressedRealms.Powers.API.PowerPrerequisites.Responses;
 

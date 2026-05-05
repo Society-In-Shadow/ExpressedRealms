@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Powers.API.PowerEndpoints.Requests.CreatePower;
+namespace ExpressedRealms.Powers.API.PowerEndpoints.CreatePower;
 
 public class CreatePowerRequest
 {

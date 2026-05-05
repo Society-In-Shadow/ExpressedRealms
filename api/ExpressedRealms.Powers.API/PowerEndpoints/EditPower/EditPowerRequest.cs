@@ -1,6 +1,6 @@
-namespace ExpressedRealms.Powers.API.PowerEndpoints.Responses.PowerList;
+namespace ExpressedRealms.Powers.API.PowerEndpoints.EditPower;
 
-public class EditPowerInformationResponse
+public class EditPowerRequest
 {
     public int Id { get; set; }
     public required string Name { get; set; }
@@ -8,12 +8,11 @@ public class EditPowerInformationResponse
     public required string Description { get; set; }
     public required string GameMechanicEffect { get; set; }
     public string? Limitation { get; set; }
-    public int PowerDurationId { get; set; }
-    public int AreaOfEffectId { get; set; }
+    public byte PowerDurationId { get; set; }
+    public byte AreaOfEffectId { get; set; }
     public int PowerLevelId { get; set; }
-    public int PowerActivationTypeId { get; set; }
+    public byte PowerActivationTypeId { get; set; }
     public string? Other { get; set; }
     public bool IsPowerUse { get; set; }
     public string? Cost { get; set; }
-    public int? StatModifierGroup { get; set; }
 }
