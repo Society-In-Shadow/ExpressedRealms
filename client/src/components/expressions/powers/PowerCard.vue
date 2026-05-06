@@ -2,15 +2,14 @@
 
 import Card from 'primevue/card'
 import Button from 'primevue/button'
-import {onMounted, type PropType, ref} from 'vue'
-import type {Power} from '@/components/expressions/powers/types'
+import { type PropType, ref } from 'vue'
+import type { Power } from '@/components/expressions/powers/types'
 import EditPower from '@/components/expressions/powers/EditPower.vue'
-import {powerConfirmationPopups} from '@/components/expressions/powers/services/powerConfirmationPopupService'
-import {UserRoles, userStore} from '@/stores/userStore'
-import {isNullOrWhiteSpace, makeIdSafe} from '@/utilities/stringUtilities'
-import {scrollToSection} from '@/components/expressions/expressionUtilities'
+import { powerConfirmationPopups } from '@/components/expressions/powers/services/powerConfirmationPopupService'
+import { isNullOrWhiteSpace, makeIdSafe } from '@/utilities/stringUtilities'
+import { scrollToSection } from '@/components/expressions/expressionUtilities'
+import { can } from '@/stores/userPermissionStore.ts'
 
-let userInfo = userStore()
 const props = defineProps({
   power: {
     type: Object as PropType<Power>,
@@ -26,12 +25,6 @@ const props = defineProps({
   },
 })
 
-const hasPowerManagementRole = ref(false)
-
-onMounted(async () => {
-  hasPowerManagementRole.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole)
-})
-
 const popups = powerConfirmationPopups(props.power.id, props.power.name, props.powerPathId)
 
 const showEdit = ref(false)
@@ -44,7 +37,7 @@ const toggleEdit = () => {
 
 <template>
   <EditPower
-    v-if="showEdit && hasPowerManagementRole && !props.isReadOnly" :power-id="props.power.id"
+    v-if="showEdit && can.Powers.Edit && !props.isReadOnly" :power-id="props.power.id"
     :power-path-id="props.powerPathId" @canceled="toggleEdit"
   />
   <Card v-else :id="makeIdSafe(props.power.name)" class="card-body-fix">
@@ -59,11 +52,11 @@ const toggleEdit = () => {
           </div>
         </div>
         <div
-          v-if="!showEdit && hasPowerManagementRole && !props.isReadOnly"
+          v-if="!showEdit && (can.Powers.Edit || can.Powers.Delete) && !props.isReadOnly"
           class="p-0 m-0 d-inline-flex align-items-start"
         >
-          <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
-          <Button class="float-end" label="Edit" @click="toggleEdit" />
+          <Button v-if="can.Powers.Delete" class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
+          <Button v-if="can.Powers.Edit" class="float-end" label="Edit" @click="toggleEdit" />
         </div>
       </div>
     </template>
@@ -146,7 +139,7 @@ const toggleEdit = () => {
         </div>
         <div v-else-if="props.power.prerequisites.powers.length == props.power.prerequisites.requiredAmount">
           All of the following powers :
-          <span v-for="(power, index) in props.power.prerequisites.powers">
+          <span v-for="(power, index) in props.power.prerequisites.powers" :key="makeIdSafe(power)">
             <a :href="'#' + makeIdSafe(power)" @click.prevent="scrollToSection(power)">{{ power }}</a>
             <span v-if="index != props.power.prerequisites.powers.length -1"> and </span>
           </span>
@@ -155,7 +148,7 @@ const toggleEdit = () => {
           Any of
           <span v-if="props.power.prerequisites.requiredAmount != 1">{{ props.power.prerequisites.requiredAmount }}</span>
           the following powers :
-          <span v-for="(power, index) in props.power.prerequisites.powers">
+          <span v-for="(power, index) in props.power.prerequisites.powers" :key="makeIdSafe(power)">
             <a :href="'#' + makeIdSafe(power)" @click.prevent="scrollToSection(power)">{{ power }}</a>
             <span v-if="index != props.power.prerequisites.powers.length -1"> or </span>
           </span>

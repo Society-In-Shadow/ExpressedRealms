@@ -1,17 +1,15 @@
 <script setup lang="ts">
 
-import {UserRoles, userStore} from '@/stores/userStore'
-import {powersStore} from '@/components/expressions/powers/stores/powersStore'
-import {Drag, DropList} from 'vue-easy-dnd'
+import { powersStore } from '@/components/expressions/powers/stores/powersStore'
+import { Drag, DropList } from 'vue-easy-dnd'
 import Button from 'primevue/button'
-import {onMounted, ref} from 'vue'
+import { ref } from 'vue'
 import axios from 'axios'
-import {getSortAndIdsForPowerPaths} from '@/components/expressions/powerPaths/utilities/powerPathUtilities'
+import { getSortAndIdsForPowerPaths } from '@/components/expressions/powerPaths/utilities/powerPathUtilities'
 import toaster from '@/services/Toasters'
-import type {Power} from '@/components/expressions/powers/types'
+import type { Power } from '@/components/expressions/powers/types'
 
-let userInfo = userStore()
-let powers = powersStore()
+let powerInfo = powersStore()
 
 const props = defineProps({
   powerPathId: {
@@ -32,12 +30,6 @@ const emit = defineEmits<{
   togglePreview: []
 }>()
 
-const hasPowerManagementRole = ref(false)
-
-onMounted(async () => {
-  hasPowerManagementRole.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole)
-})
-
 function saveChanges() {
   axios.put(`/powerpath/${props.powerPathId}/updateSorting`, {
     expressionId: props.powerPathId,
@@ -52,7 +44,7 @@ function saveChanges() {
 const showPowerPathReorder = ref(false)
 function toggleEdit() {
   if (showPowerPathReorder.value)
-    powers.updatePowersByPathId(props.powerPathId)
+    powerInfo.updatePowersByPathId(props.powerPathId)
 
   emit('togglePreview')
   showPowerPathReorder.value = !showPowerPathReorder.value
@@ -62,10 +54,7 @@ function toggleEdit() {
 
 <template>
   <div class="row">
-    <Button
-      v-if="hasPowerManagementRole" class="col m-2"
-      :label="showPowerPathReorder ? 'Cancel' : 'Reorder Powers'" @click="toggleEdit"
-    />
+    <Button class="col m-2" :label="showPowerPathReorder ? 'Cancel' : 'Reorder Powers'" @click="toggleEdit" />
     <Button v-if="showPowerPathReorder" label="Save" class="col m-2" @click="saveChanges" />
   </div>
 

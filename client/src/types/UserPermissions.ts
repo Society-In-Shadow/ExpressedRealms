@@ -49,6 +49,12 @@ export const UserPermissions = {
   Expression: {
     DownloadBooklet: 'expression.downloadbooklet',
   } as const,
+  Powers: {
+    Edit: 'powers.edit',
+    View: 'powers.view',
+    Create: 'powers.create',
+    Delete: 'powers.delete',
+  } as const,
   PlayerExperience: {
     Edit: 'playerexperience.edit',
     View: 'playerexperience.view',
