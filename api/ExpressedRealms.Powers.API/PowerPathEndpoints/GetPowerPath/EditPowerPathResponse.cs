@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Powers.API.PowerPathEndpoints.Responses.PowerPathList;
+namespace ExpressedRealms.Powers.API.PowerPathEndpoints.GetPowerPath;
 
 public class EditPowerPathResponse
 {

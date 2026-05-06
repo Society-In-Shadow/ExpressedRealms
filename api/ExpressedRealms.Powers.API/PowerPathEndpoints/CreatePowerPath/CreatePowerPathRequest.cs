@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Powers.API.PowerPathEndpoints.Requests;
+namespace ExpressedRealms.Powers.API.PowerPathEndpoints.CreatePowerPath;
 
 public class CreatePowerPathRequest
 {

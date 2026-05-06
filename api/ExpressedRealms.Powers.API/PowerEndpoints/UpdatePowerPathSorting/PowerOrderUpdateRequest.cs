@@ -1,4 +1,4 @@
-using ExpressedRealms.Powers.API.PowerPathEndpoints.Requests;
+using ExpressedRealms.Powers.API.PowerPathEndpoints.UpdatePowerPathSorting;
 
 namespace ExpressedRealms.Powers.API.PowerEndpoints.UpdatePowerPathSorting;
 
