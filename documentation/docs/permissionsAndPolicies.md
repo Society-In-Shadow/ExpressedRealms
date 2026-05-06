@@ -96,7 +96,7 @@ structure that mirrors the above UserPermissions object.
 While doing that, it will store if the permission has been assigned to the user or not, allowing for static checking across
 the front end.
 
-Below is an example of how you can use it.
+Below is an old example of how you can use it.
 
 ```ts
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
@@ -107,6 +107,15 @@ const permissionCheck = userPermissionInfo.permissionCheck
 
 ```vue
 <Button v-if="permissionCheck.DevDebug.SendTestEmail" label="Test Email" @click="testEmail" />
+```
+
+Going forward, you should use this approach instead
+
+```ts
+import { can } from '@/stores/userPermissionStore.ts'
+```
+```vue
+<Button v-if="can.DevDebug.SendTestEmail" label="Test Email" @click="testEmail" />
 ```
 
 I will note that this is the preferred usage of permissions, to statically check against "permissionCheck.Resource.Action".

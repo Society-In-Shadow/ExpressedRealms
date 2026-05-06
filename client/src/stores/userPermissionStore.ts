@@ -2,20 +2,19 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import { type UserPermission, UserPermissions } from '@/types/UserPermissions.ts'
 
+type PermissionCheck = {
+  [K in keyof typeof UserPermissions]: {
+    [P in keyof typeof UserPermissions[K]]: boolean
+  }
+}
+
 export const userPermissionStore
   = defineStore('userPermissions', {
     state: () => {
       return {
         userPermissions: [] as UserPermission[],
         loadedPermissions: false as boolean,
-        permissionCheck: Object.fromEntries(
-          Object.entries(UserPermissions).map(([category, perms]) => [
-            category,
-            Object.fromEntries(
-              Object.entries(perms).map(([permName]) => [permName, false]),
-            ),
-          ]),
-        ) as Record<string, any>,
+        permissionCheck: {} as PermissionCheck,
       }
     },
     actions: {
@@ -34,7 +33,7 @@ export const userPermissionStore
               ]),
             ),
           ]),
-        )
+        ) as PermissionCheck
 
         this.loadedPermissions = true
       },
@@ -53,3 +52,14 @@ export const userPermissionStore
 
     },
   })
+
+export const can = new Proxy({} as PermissionCheck, {
+  get(_, category: keyof PermissionCheck) {
+    return new Proxy({} as PermissionCheck[typeof category], {
+      get(_, perm: string) {
+        const store = userPermissionStore()
+        return store.permissionCheck[category][perm]
+      },
+    })
+  },
+})
