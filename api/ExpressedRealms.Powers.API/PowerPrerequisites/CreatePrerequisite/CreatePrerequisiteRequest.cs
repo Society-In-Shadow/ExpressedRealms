@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Powers.API.PowerPrerequisites.Requests.CreatePrerequisite;
+namespace ExpressedRealms.Powers.API.PowerPrerequisites.CreatePrerequisite;
 
 public class CreatePrerequisiteRequest
 {

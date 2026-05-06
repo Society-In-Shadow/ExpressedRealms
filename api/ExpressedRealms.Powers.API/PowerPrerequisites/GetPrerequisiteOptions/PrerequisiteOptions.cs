@@ -1,6 +1,6 @@
 using ExpressedRealms.Powers.API.PowerEndpoints.GetPowerOptions;
 
-namespace ExpressedRealms.Powers.API.PowerPrerequisites.Responses;
+namespace ExpressedRealms.Powers.API.PowerPrerequisites.GetPrerequisiteOptions;
 
 public class PrerequisiteOptions
 {

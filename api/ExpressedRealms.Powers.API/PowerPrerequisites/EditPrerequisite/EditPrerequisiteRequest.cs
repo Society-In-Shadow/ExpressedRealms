@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Powers.API.PowerPrerequisites.Requests.EditPrerequisite;
+namespace ExpressedRealms.Powers.API.PowerPrerequisites.EditPrerequisite;
 
 public class EditPrerequisiteRequest
 {

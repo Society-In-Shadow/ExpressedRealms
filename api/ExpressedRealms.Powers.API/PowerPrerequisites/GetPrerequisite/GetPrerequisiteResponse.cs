@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Powers.API.PowerPrerequisites.Responses.GetPrerequisites;
+namespace ExpressedRealms.Powers.API.PowerPrerequisites.GetPrerequisite;
 
 public class GetPrerequisiteResponse
 {
