@@ -35,17 +35,5 @@ public static partial class Permissions
             Id = new Guid("019dfa39-8195-7e60-b66d-ca49c44f1ce6"),
             Name = nameof(Delete),
         };
-        
-        public static readonly Permission DownloadBooklet = new(ResourceInfo)
-        {
-            Id = new Guid("019dfa39-71b1-74a9-a337-0960e78d5e8c"),
-            Name = nameof(DownloadBooklet),
-        };
-        
-        public static readonly Permission DownloadAllPowerCards = new(ResourceInfo)
-        {
-            Id = new Guid("019dfb97-ef56-7ac3-ae23-ba7009ab57eb"),
-            Name = nameof(DownloadAllPowerCards),
-        };
     }
 }

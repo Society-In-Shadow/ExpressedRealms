@@ -30,12 +30,12 @@ internal static class PowerPathEndpoints
         expressionGroup
             .MapGet("/{expressionId}/getPowerCards", DownloadPowerCardsEndpoint.Execute)
             .WithDescription("Downloads the power cards for the given expression")
-            .RequirePermission(Permissions.Powers.DownloadAllPowerCards);
+            .RequireAuthorization();
 
         expressionGroup
             .MapGet("/{expressionId}/powerBooklet", DownloadPowerBookletEndpoint.Execute)
             .WithDescription("Downloads the power cards for the given expression")
-            .RequirePermission(Permissions.Powers.DownloadBooklet);
+            .RequireAuthorization();
 
         expressionGroup
             .MapPut("/{expressionId}/updateSorting", UpdatePowerPathSortingEndpoint.Execute)
