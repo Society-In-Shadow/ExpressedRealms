@@ -1,15 +1,14 @@
 <script setup lang="ts">
 
-import {onBeforeMount, ref} from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import Button from 'primevue/button'
 import Divider from 'primevue/divider'
-import {UserRoles, userStore} from '@/stores/userStore'
-import {progressionPathStore} from '@/components/expressions/progressionPaths/stores/progressionPathsStore.ts'
+import { progressionPathStore } from '@/components/expressions/progressionPaths/stores/progressionPathsStore.ts'
 import AddProgressionPath from '@/components/expressions/progressionPaths/AddProgressionPath.vue'
 import ShowProgressionPath from '@/components/expressions/progressionPaths/ShowProgressionPath.vue'
 import ListProgressionLevels from '@/components/expressions/progressionLevels/ListProgressionLevels.vue'
+import { can } from '@/stores/userPermissionStore.ts'
 
-let userInfo = userStore()
 let progressionPaths = progressionPathStore()
 
 const props = defineProps({
@@ -19,11 +18,8 @@ const props = defineProps({
   },
 })
 
-const hasManageProgressionPathsRole = ref(false)
-
 onBeforeMount(async () => {
   await progressionPaths.getProgressionPaths(props.expressionId)
-  hasManageProgressionPathsRole.value = await userInfo.hasUserRole(UserRoles.ManageProgressionPaths)
 })
 
 const showAddPower = ref(false)
@@ -44,11 +40,11 @@ const toggleAddPower = () => {
   </div>
 
   <Button
-    v-if="!showAddPower && hasManageProgressionPathsRole" class="w-100 m-2"
+    v-if="!showAddPower && can.ProgressionPath.Create" class="w-100 m-2"
     label="Add Progression Path" @click="toggleAddPower"
   />
   <AddProgressionPath
-    v-if="showAddPower && hasManageProgressionPathsRole"
+    v-if="showAddPower && can.ProgressionPath.Create"
     :expression-id="props.expressionId" @canceled="toggleAddPower"
   />
 </template>

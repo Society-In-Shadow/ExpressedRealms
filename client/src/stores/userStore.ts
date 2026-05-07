@@ -5,7 +5,6 @@ export const UserRoles = {
   ExpressionEditor: 'ExpressionEditorRole',
   KnowledgeManagementRole: 'KnowledgeManagementRole',
   BlessingsManagementRole: 'ManageBlessingsRole',
-  ManageProgressionPaths: 'ManageProgressionPaths',
   ManageModifiers: 'ManageModifiers',
 } as const
 

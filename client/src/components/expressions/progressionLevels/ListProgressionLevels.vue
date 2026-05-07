@@ -1,10 +1,11 @@
 <script setup lang="ts">
 
-import {type PropType, ref} from 'vue'
+import { type PropType, ref } from 'vue'
 import Button from 'primevue/button'
 import AddProgressionLevel from '@/components/expressions/progressionLevels/AddProgressionLevel.vue'
-import type {ProgressionLevel} from '@/components/expressions/progressionPaths/types.ts'
+import type { ProgressionLevel } from '@/components/expressions/progressionPaths/types.ts'
 import ShowProgressionLevel from '@/components/expressions/progressionLevels/ShowProgressionLevel.vue'
+import { can } from '@/stores/userPermissionStore.ts'
 
 const props = defineProps({
   expressionId: {
@@ -35,11 +36,11 @@ const toggleAddPower = () => {
   </div>
 
   <Button
-    v-if="!showAddPower" class="w-100 m-2"
+    v-if="!showAddPower && can.ProgressionPath.Create" class="w-100 m-2"
     label="Add Progression Levels" @click="toggleAddPower"
   />
   <AddProgressionLevel
-    v-if="showAddPower"
+    v-if="showAddPower && can.ProgressionPath.Create"
     :expression-id="props.expressionId" :progression-id="props.progressionId" @canceled="toggleAddPower"
   />
 </template>

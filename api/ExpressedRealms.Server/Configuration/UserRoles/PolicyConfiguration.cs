@@ -24,11 +24,6 @@ public static class PolicyConfiguration
             );
 
             options.AddPolicy(
-                Policies.ManageProgressionPaths.Name,
-                policy => policy.RequireRole(UserRoles.ManageProgressionPaths)
-            );
-
-            options.AddPolicy(
                 Policies.ManageModifiers.Name,
                 policy => policy.RequireRole(UserRoles.ManageModifiers)
             );
