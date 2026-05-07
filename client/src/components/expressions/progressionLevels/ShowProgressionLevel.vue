@@ -1,13 +1,13 @@
 <script setup lang="ts">
 
-import {onMounted, type PropType, ref} from 'vue'
+import { onMounted, type PropType, ref } from 'vue'
 import Button from 'primevue/button'
-import {UserRoles, userStore} from '@/stores/userStore'
+import { UserRoles, userStore } from '@/stores/userStore'
 import EditProgressionLevel from '@/components/expressions/progressionLevels/EditProgressionLevel.vue'
 import {
   progressionLevelConfirmationPopupService,
 } from '@/components/expressions/progressionLevels/services/progressionLevelConfirmationPopupService.ts'
-import type {ProgressionLevel} from '@/components/expressions/progressionPaths/types.ts'
+import type { ProgressionLevel } from '@/components/expressions/progressionPaths/types.ts'
 
 let userInfo = userStore()
 
@@ -16,10 +16,10 @@ const toggleEdit = () => {
   showEdit.value = !showEdit.value
 }
 
-const hasPowerManagementRole = ref(false)
+const hasProgressionPathsRole = ref(false)
 
 onMounted(async () => {
-  hasPowerManagementRole.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole)
+  hasProgressionPathsRole.value = await userInfo.hasUserRole(UserRoles.ManageProgressionPaths)
 })
 
 const props = defineProps({
@@ -51,7 +51,7 @@ const popups = progressionLevelConfirmationPopupService(props.progressionId, pro
       <h1 class="p-0 m-0">
         XL {{ props.path.xlLevel }}
       </h1>
-      <div v-if="hasPowerManagementRole && !props.isReadOnly" class="d-inline-flex align-items-start">
+      <div v-if="hasProgressionPathsRole && !props.isReadOnly" class="d-inline-flex align-items-start">
         <Button class="m-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event, props.path.id)" />
         <Button label="Edit" class="float-end m-2" @click="toggleEdit()" />
       </div>

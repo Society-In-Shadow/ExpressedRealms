@@ -23,7 +23,7 @@ import PowersToC from '@/components/expressions/PowersToC.vue'
 import { UserRoles, userStore } from '@/stores/userStore.ts'
 import ProgressionTab from '@/components/expressions/progressionPaths/ProgressionTab.vue'
 import ExpressionLogo from '@/components/common/ExpressionLogo.vue'
-import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+import { can, userPermissionStore } from '@/stores/userPermissionStore.ts'
 
 const userPermissionInfo = userPermissionStore()
 const permissionCheck = userPermissionInfo.permissionCheck
@@ -59,7 +59,7 @@ const expressionHeader = ref({})
 
 const isLoading = ref(true)
 const headerIsLoading = ref(true)
-const showEdit = ref(false)
+const showEdit = can.Powers.Edit
 const showCreate = ref(false)
 const showPreview = ref(false)
 const currentTab = ref('0')
@@ -71,7 +71,6 @@ async function fetchData() {
   await expressionInfo.getExpressionSections()
     .then(async () => {
       sections.value = expressionInfo.sections
-      showEdit.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole)
       hasProgressionPathPermission.value = await userInfo.hasUserRole(UserRoles.ManageProgressionPaths)
       isLoading.value = false
       if (location.hash) {
