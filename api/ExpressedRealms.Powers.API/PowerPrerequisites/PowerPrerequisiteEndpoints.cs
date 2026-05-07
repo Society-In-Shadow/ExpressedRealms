@@ -14,8 +14,7 @@ internal static class PowerPrerequisiteEndpoints
 {
     internal static void AddPowerPrerequisiteApi(this WebApplication app)
     {
-        var endpointGroup = app.MapGroup("powers")
-            .WithTags("Powers - Prerequisites");
+        var endpointGroup = app.MapGroup("powers").WithTags("Powers - Prerequisites");
 
         endpointGroup
             .MapGet("/{powerId}/prerequisites", GetPrerequisiteEndpoint.Execute)
@@ -33,18 +32,12 @@ internal static class PowerPrerequisiteEndpoints
             .RequirePermission(Permissions.Powers.Edit);
 
         endpointGroup
-            .MapPut(
-                "/{powerId}/prerequisite/{prerequisiteId}",
-                EditPrerequisiteEndpoint.Execute
-            )
+            .MapPut("/{powerId}/prerequisite/{prerequisiteId}", EditPrerequisiteEndpoint.Execute)
             .RequirePermission(Permissions.Powers.Edit);
 
         app.MapGroup("/powerpath/")
             .WithTags("Power Paths")
-            .MapGet(
-                "/{id}/powerprerequisites/options",
-                GetPrerequisiteOptionsEndpoint.Execute
-            )
+            .MapGet("/{id}/powerprerequisites/options", GetPrerequisiteOptionsEndpoint.Execute)
             .RequirePermission(Permissions.Powers.Edit);
     }
 }

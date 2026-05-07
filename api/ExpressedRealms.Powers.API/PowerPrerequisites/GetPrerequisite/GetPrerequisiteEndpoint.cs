@@ -13,9 +13,7 @@ public static class GetPrerequisiteEndpoint
         [FromServices] IGetPrerequisiteUseCase getCase
     )
     {
-        var results = await getCase.ExecuteAsync(
-            new GetPrerequisiteModel() { PowerId = powerId }
-        );
+        var results = await getCase.ExecuteAsync(new GetPrerequisiteModel() { PowerId = powerId });
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;

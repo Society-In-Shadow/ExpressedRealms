@@ -16,9 +16,7 @@ internal static class PowerEndpoints
 {
     internal static void AddPowerApi(this WebApplication app)
     {
-        var endpointGroup = app.MapGroup("powers")
-            .RequireAuthorization()
-            .WithTags("Powers");
+        var endpointGroup = app.MapGroup("powers").RequireAuthorization().WithTags("Powers");
 
         app.MapGroup("/powerpath/")
             .WithTags("Power Paths")
@@ -26,10 +24,7 @@ internal static class PowerEndpoints
 
         app.MapGroup("powerpath")
             .WithTags("Power Paths")
-            .MapPut(
-                "/{powerPathId}/updateSorting",
-                UpdatePowerPathPowerSortingEndpoint.Execute
-            )
+            .MapPut("/{powerPathId}/updateSorting", UpdatePowerPathPowerSortingEndpoint.Execute)
             .RequirePermission(Permissions.Powers.Edit);
 
         endpointGroup

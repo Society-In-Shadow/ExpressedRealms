@@ -17,11 +17,9 @@ internal static class PowerPathEndpoints
 {
     internal static void AddPowerPathApi(this WebApplication app)
     {
-        var endpointGroup = app.MapGroup("powerpath")
-            .WithTags("Power Paths");
+        var endpointGroup = app.MapGroup("powerpath").WithTags("Power Paths");
 
-        var expressionGroup = app.MapGroup("expression")
-            .WithTags("Expressions");
+        var expressionGroup = app.MapGroup("expression").WithTags("Expressions");
 
         expressionGroup
             .MapGet("/{expressionId}/powerPaths", GetPowerPathsForExpressionEndpoint.Execute)
