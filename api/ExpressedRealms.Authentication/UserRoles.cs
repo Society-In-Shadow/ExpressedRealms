@@ -5,7 +5,6 @@ public static class UserRoles
     public const string ExpressionEditor = "ExpressionEditorRole";
     public const string KnowledgeManagementRole = "KnowledgeManagementRole";
     public const string ManageBlessingsRole = "ManageBlessingsRole";
-    public const string ManageProgressionPaths = "ManageProgressionPaths";
     public const string ManageModifiers = "ManageModifiers";
 
     /// <summary>
@@ -17,7 +16,6 @@ public static class UserRoles
             ExpressionEditor,
             KnowledgeManagementRole,
             ManageBlessingsRole,
-            ManageProgressionPaths,
             ManageModifiers,
         };
 }

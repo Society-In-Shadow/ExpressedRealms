@@ -1,8 +1,7 @@
 <script setup lang="ts">
 
-import { onMounted, type PropType, ref } from 'vue'
+import { type PropType, ref } from 'vue'
 import Button from 'primevue/button'
-import { UserRoles, userStore } from '@/stores/userStore'
 import EditProgressionLevel from '@/components/expressions/progressionLevels/EditProgressionLevel.vue'
 import {
   progressionLevelConfirmationPopupService,
@@ -10,18 +9,10 @@ import {
 import type { ProgressionLevel } from '@/components/expressions/progressionPaths/types.ts'
 import { can } from '@/stores/userPermissionStore.ts'
 
-let userInfo = userStore()
-
 const showEdit = ref(false)
 const toggleEdit = () => {
   showEdit.value = !showEdit.value
 }
-
-const hasProgressionPathsRole = ref(false)
-
-onMounted(async () => {
-  hasProgressionPathsRole.value = await userInfo.hasUserRole(UserRoles.ManageProgressionPaths)
-})
 
 const props = defineProps({
   expressionId: {
