@@ -11,11 +11,5 @@ public static class UserRoles
     /// Add items to this list to automatically add them to the database.
     /// </summary>
     public static string[] RolesForPermissions =>
-        new[]
-        {
-            ExpressionEditor,
-            KnowledgeManagementRole,
-            ManageBlessingsRole,
-            ManageModifiers,
-        };
+        new[] { ExpressionEditor, KnowledgeManagementRole, ManageBlessingsRole, ManageModifiers };
 }
