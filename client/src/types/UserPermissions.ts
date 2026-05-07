@@ -55,6 +55,12 @@ export const UserPermissions = {
     Create: 'powers.create',
     Delete: 'powers.delete',
   } as const,
+  ProgressionPath: {
+    Edit: 'progressionpath.edit',
+    View: 'progressionpath.view',
+    Create: 'progressionpath.create',
+    Delete: 'progressionpath.delete',
+  } as const,
   PlayerExperience: {
     Edit: 'playerexperience.edit',
     View: 'playerexperience.view',

@@ -20,7 +20,6 @@ import ExpressionToC from '@/components/expressions/ExpressionToC.vue'
 import EditExpressionSection from '@/components/expressions/EditExpressionSection.vue'
 import PowerTab from '@/components/expressions/powers/PowerTab.vue'
 import PowersToC from '@/components/expressions/PowersToC.vue'
-import { UserRoles, userStore } from '@/stores/userStore.ts'
 import ProgressionTab from '@/components/expressions/progressionPaths/ProgressionTab.vue'
 import ExpressionLogo from '@/components/common/ExpressionLogo.vue'
 import { can, userPermissionStore } from '@/stores/userPermissionStore.ts'
@@ -30,7 +29,6 @@ const permissionCheck = userPermissionInfo.permissionCheck
 
 const expressionInfo = expressionStore()
 const route = useRoute()
-const userInfo = userStore()
 
 let sections = ref([
   {
@@ -63,7 +61,6 @@ const showEdit = can.Powers.Edit
 const showCreate = ref(false)
 const showPreview = ref(false)
 const currentTab = ref('0')
-const hasProgressionPathPermission = ref(false)
 
 async function fetchData() {
   isLoading.value = true
@@ -71,7 +68,6 @@ async function fetchData() {
   await expressionInfo.getExpressionSections()
     .then(async () => {
       sections.value = expressionInfo.sections
-      hasProgressionPathPermission.value = await userInfo.hasUserRole(UserRoles.ManageProgressionPaths)
       isLoading.value = false
       if (location.hash) {
         await nextTick()
@@ -131,7 +127,7 @@ async function downloadExpressionBooklet() {
         Table Of Contents
       </template>
       <template #content>
-        <article id="expression-body">
+        <article id="expression-toc">
           <ExpressionToC v-if="currentTab == '0'" v-model="sections" :can-edit="showEdit" :show-skeleton="isLoading" @toggle-preview="togglePreview" />
           <PowersToC v-else :show-skeleton="isLoading" />
         </article>
@@ -164,7 +160,7 @@ async function downloadExpressionBooklet() {
             <Tab value="1">
               Powers
             </Tab>
-            <Tab v-if="hasProgressionPathPermission" value="2">
+            <Tab v-if="can.ProgressionPath.View" value="2">
               Progressions
             </Tab>
           </TabList>
@@ -181,7 +177,7 @@ async function downloadExpressionBooklet() {
             <TabPanel value="1">
               <PowerTab v-if="expressionInfo.isDoneLoading" :expression-id="expressionInfo.currentExpressionId" />
             </TabPanel>
-            <TabPanel v-if="hasProgressionPathPermission" value="2">
+            <TabPanel v-if="can.ProgressionPath.View" value="2">
               <ProgressionTab v-if="expressionInfo.isDoneLoading" :expression-id="expressionInfo.currentExpressionId" />
             </TabPanel>
           </TabPanels>
