@@ -3,7 +3,6 @@ namespace ExpressedRealms.Server.Configuration.UserRoles;
 public static class UserRoles
 {
     public const string ExpressionEditor = "ExpressionEditorRole";
-    public const string PowerManagementRole = "PowerManagementRole";
     public const string KnowledgeManagementRole = "KnowledgeManagementRole";
     public const string ManageBlessingsRole = "ManageBlessingsRole";
     public const string ManageProgressionPaths = "ManageProgressionPaths";
@@ -16,7 +15,6 @@ public static class UserRoles
         new[]
         {
             ExpressionEditor,
-            PowerManagementRole,
             KnowledgeManagementRole,
             ManageBlessingsRole,
             ManageProgressionPaths,

@@ -1,0 +1,13 @@
+namespace ExpressedRealms.Powers.API.PowerEndpoints.GetPowersForPowerPath;
+
+public class DetailedInformation
+{
+    public DetailedInformation(Repository.Powers.DTOs.PowerList.DetailedInformation dto)
+    {
+        Name = dto.Name;
+        Description = dto.Description;
+    }
+
+    public string Name { get; set; }
+    public string Description { get; set; }
+}

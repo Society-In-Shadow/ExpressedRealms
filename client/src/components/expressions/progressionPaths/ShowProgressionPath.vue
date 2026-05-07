@@ -1,9 +1,9 @@
 <script setup lang="ts">
 
-import {onMounted, ref} from 'vue'
+import { onMounted, ref } from 'vue'
 import Button from 'primevue/button'
-import {UserRoles, userStore} from '@/stores/userStore'
-import {makeIdSafe} from '@/utilities/stringUtilities'
+import { UserRoles, userStore } from '@/stores/userStore'
+import { makeIdSafe } from '@/utilities/stringUtilities'
 import EditProgressionPath from '@/components/expressions/progressionPaths/EditProgressionPath.vue'
 import {
   progressionPathConfirmationPopupService,
@@ -16,10 +16,10 @@ const toggleEdit = () => {
   showEdit.value = !showEdit.value
 }
 
-const hasPowerManagementRole = ref(false)
+const hasProgressionPathRole = ref(false)
 
 onMounted(async () => {
-  hasPowerManagementRole.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole)
+  hasProgressionPathRole.value = await userInfo.hasUserRole(UserRoles.ManageProgressionPaths)
 })
 
 const props = defineProps({
@@ -47,7 +47,7 @@ const popups = progressionPathConfirmationPopupService(props.path.id, props.path
       <h1 class="p-0 m-0">
         {{ props.path.name }}
       </h1>
-      <div v-if="hasPowerManagementRole && !props.isReadOnly" class="d-inline-flex align-items-start">
+      <div v-if="hasProgressionPathRole && !props.isReadOnly" class="d-inline-flex align-items-start">
         <Button class="m-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
         <Button label="Edit" class="float-end m-2" @click="toggleEdit()" />
       </div>

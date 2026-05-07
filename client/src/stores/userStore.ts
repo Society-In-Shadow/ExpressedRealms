@@ -3,7 +3,6 @@ import axios from 'axios'
 
 export const UserRoles = {
   ExpressionEditor: 'ExpressionEditorRole',
-  PowerManagementRole: 'PowerManagementRole',
   KnowledgeManagementRole: 'KnowledgeManagementRole',
   BlessingsManagementRole: 'ManageBlessingsRole',
   ManageProgressionPaths: 'ManageProgressionPaths',

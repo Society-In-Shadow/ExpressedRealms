@@ -10,7 +10,9 @@ import { useRoute, useRouter } from 'vue-router'
 import InputTextWrapper from '@/FormWrappers/InputTextWrapper.vue'
 import { userInfoQuery } from '@/auth/authStore.ts'
 import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
+const userPermissions = userPermissionStore()
 const router = useRouter()
 const { refetch } = useQueryWithLoading(userInfoQuery)
 const { defineField, handleSubmit, errors } = useForm({
@@ -42,6 +44,7 @@ const onSubmit = handleSubmit(async (values) => {
     // Reset antiforgery token after login
       await axios.get('/auth/antiforgeryToken')
       await refetch()
+      await userPermissions.updateUserPermissions()
       await router.push({ name: 'characters' })
     })
     .catch((response) => {

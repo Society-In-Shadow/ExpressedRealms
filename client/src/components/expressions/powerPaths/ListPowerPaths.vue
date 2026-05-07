@@ -1,20 +1,19 @@
 <script setup lang="ts">
 
-import {powerPathStore} from '@/components/expressions/powerPaths/stores/powerPathStore'
-import {onBeforeMount, ref} from 'vue'
+import { powerPathStore } from '@/components/expressions/powerPaths/stores/powerPathStore'
+import { onBeforeMount, ref } from 'vue'
 import Button from 'primevue/button'
 import ListPowers from '@/components/expressions/powers/ListPowers.vue'
 import AddPowerPath from '@/components/expressions/powerPaths/AddPowerPath.vue'
 import Divider from 'primevue/divider'
 import ShowPowerPath from '@/components/expressions/powerPaths/ShowPowerPath.vue'
-import {UserRoles, userStore} from '@/stores/userStore'
 import PowerPathReorder from '@/components/expressions/powerPaths/PowerPathReorder.vue'
 import axios from 'axios'
-import {expressionStore} from '@/stores/expressionStore.ts'
-import {useRoute} from 'vue-router'
+import { expressionStore } from '@/stores/expressionStore.ts'
+import { useRoute } from 'vue-router'
 import SplitButton from 'primevue/splitbutton'
+import { can } from '@/stores/userPermissionStore.ts'
 
-let userInfo = userStore()
 let powerPaths = powerPathStore()
 
 let expressionInfo = expressionStore()
@@ -27,11 +26,8 @@ const props = defineProps({
   },
 })
 
-const hasPowerManagementRole = ref(false)
-
 onBeforeMount(async () => {
   await powerPaths.getPowerPaths(props.expressionId)
-  hasPowerManagementRole.value = await userInfo.hasUserRole(UserRoles.PowerManagementRole)
 })
 
 const showAddPower = ref(false)
@@ -100,7 +96,7 @@ const items = [
     <SplitButton label="Download Power Booklet" :model="items" @click="downloadPowerBooklet()" />
   </div>
 
-  <PowerPathReorder v-if="hasPowerManagementRole" @toggle-preview="toggleReadOnly" />
+  <PowerPathReorder v-if="can.Powers.Edit" @toggle-preview="toggleReadOnly" />
   <div v-for="path in powerPaths.powerPaths" :key="path.id">
     <Divider />
     <ShowPowerPath :path="path" :expression-id="props.expressionId" :is-read-only="readOnly" />
@@ -111,11 +107,11 @@ const items = [
   </div>
 
   <Button
-    v-if="!showAddPower && hasPowerManagementRole && !readOnly" class="w-100 m-2"
+    v-if="!showAddPower && can.Powers.Create && !readOnly" class="w-100 m-2"
     label="Add Power Path" @click="toggleAddPower"
   />
   <AddPowerPath
-    v-if="showAddPower && hasPowerManagementRole && !readOnly"
+    v-if="showAddPower && can.Powers.Create && !readOnly"
     :expression-id="props.expressionId" @canceled="toggleAddPower"
   />
 </template>

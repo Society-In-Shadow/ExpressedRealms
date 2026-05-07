@@ -1,17 +1,16 @@
 <script setup lang="ts">
 
-import {powerPathStore} from '@/components/expressions/powerPaths/stores/powerPathStore'
-import {UserRoles, userStore} from '@/stores/userStore'
-import {Drag, DropList} from 'vue-easy-dnd'
+import { powerPathStore } from '@/components/expressions/powerPaths/stores/powerPathStore'
+import { Drag, DropList } from 'vue-easy-dnd'
 import Button from 'primevue/button'
-import {onMounted, ref, toRaw} from 'vue'
+import { ref, toRaw } from 'vue'
 import axios from 'axios'
-import type {PowerPath} from '@/components/expressions/powerPaths/types'
-import {getSortAndIdsForPowerPaths} from '@/components/expressions/powerPaths/utilities/powerPathUtilities'
-import {expressionStore} from '@/stores/expressionStore'
+import type { PowerPath } from '@/components/expressions/powerPaths/types'
+import { getSortAndIdsForPowerPaths } from '@/components/expressions/powerPaths/utilities/powerPathUtilities'
+import { expressionStore } from '@/stores/expressionStore'
 import toaster from '@/services/Toasters'
+import { can } from '@/stores/userPermissionStore.ts'
 
-let userInfo = userStore()
 let powerPaths = powerPathStore()
 
 const expressionInfo = expressionStore()
@@ -20,12 +19,6 @@ const emit = defineEmits<{
 }>()
 
 let originalModel: PowerPath[]
-
-const hasPowerManagementRole = ref(false)
-
-onMounted(() => {
-  hasPowerManagementRole.value = userInfo.hasUserRole(UserRoles.PowerManagementRole)
-})
 
 function saveChanges() {
   axios.put(`/expression/${expressionInfo.currentExpressionId}/updateSorting`, {
@@ -55,7 +48,7 @@ function toggleEdit() {
 <template>
   <div class="row">
     <Button
-      v-if="hasPowerManagementRole" class="col m-2"
+      v-if="can.Powers.Edit" class="col m-2"
       :label="showPowerPathReorder ? 'Cancel' : 'Reorder Power Paths'" @click="toggleEdit"
     />
     <Button v-if="showPowerPathReorder" label="Save" class="col m-2" @click="saveChanges" />

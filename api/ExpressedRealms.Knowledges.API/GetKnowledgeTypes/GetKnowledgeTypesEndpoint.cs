@@ -1,5 +1,5 @@
 using ExpressedRealms.Knowledges.UseCases.KnowledgeTypes.GetKnowledgeTypes;
-using ExpressedRealms.Powers.API.PowerEndpoints.Responses.Options;
+using ExpressedRealms.Powers.API.PowerEndpoints.GetPowerOptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 
