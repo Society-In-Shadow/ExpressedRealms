@@ -99,11 +99,10 @@ public class GetStonePullInfoUseCaseTests
         var results = await _useCase.ExecuteAsync(_model);
         Assert.True(results.Value.IsFirstTimeUser);
     }
-    
+
     [Fact]
     public async Task UseCase_WillReturn_IfBroughtAFriend()
     {
-        
         A.CallTo(() => _eventCheckinRepository.DidBringFriendToCon(CheckinId)).Returns(true);
         var results = await _useCase.ExecuteAsync(_model);
         Assert.True(results.Value.BroughtFriend);

@@ -178,7 +178,9 @@ internal static class PopulateWealthCard
                 {
                     var levelNumber = level.Level == -1 ? "N/A" : level.Level.ToString();
                     var levelIncome =
-                        Math.Abs(level.Income - (-1)) < 1 ? "N/A" : $"${level.Income.ToString("N0")}";
+                        Math.Abs(level.Income - (-1)) < 1
+                            ? "N/A"
+                            : $"${level.Income.ToString("N0")}";
                     var levelCash =
                         Math.Abs(level.CashToLevelUp - (-1)) < 1
                             ? "N/A"

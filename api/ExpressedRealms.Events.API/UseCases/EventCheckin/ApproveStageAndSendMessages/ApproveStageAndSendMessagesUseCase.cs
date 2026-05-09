@@ -89,7 +89,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         var currentDay = await checkinRepository.GetCurrentEventDay();
         if (model.StageId == CheckinStageEnum.CrbPickedUp.Value && currentDay >= 2)
         {
-            // Automatically bypass day 2
+            // Automatically go to day 2
             await checkinRepository.CompleteStage(
                 new CheckinStageMapping()
                 {
@@ -103,7 +103,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
 
         if (model.StageId == CheckinStageEnum.CrbPickedUp.Value && currentDay >= 3)
         {
-            // Automatically bypass day 3
+            // Automatically go to day 3
             await checkinRepository.CompleteStage(
                 new CheckinStageMapping()
                 {
