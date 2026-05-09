@@ -42,13 +42,15 @@ internal sealed class EventCheckinRepository(
             .CheckinQuestionResponses.Where(x => x.CheckinId == checkinId)
             .ToListAsync(cancellationToken);
     }
-    
+
     public async Task<bool> DidBringFriendToCon(int checkinId)
     {
         return await context
-            .CheckinQuestionResponses.Where(x => x.CheckinId == checkinId && 
-                                                 x.EventQuestion.QuestionTypeId == QuestionTypeEnum.BroughtNewPlayer &&
-                                                 x.Response.Contains("Yes"))
+            .CheckinQuestionResponses.Where(x =>
+                x.CheckinId == checkinId
+                && x.EventQuestion.QuestionTypeId == QuestionTypeEnum.BroughtNewPlayer
+                && x.Response.Contains("Yes")
+            )
             .AnyAsync(cancellationToken);
     }
 
@@ -149,13 +151,15 @@ internal sealed class EventCheckinRepository(
     public async Task<int?> GetActiveEventId()
     {
         var eventId = await context
-            .Events.FromSql($@"
+            .Events.FromSql(
+                $@"
         SELECT *
         FROM public.events
         WHERE is_published = true
         AND (NOW() AT TIME ZONE time_zone_id)::date BETWEEN start_date AND end_date and is_deleted = false
         LIMIT 1
-    ")
+    "
+            )
             .Select(x => x.Id)
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -164,27 +168,31 @@ internal sealed class EventCheckinRepository(
 
     public async Task<int> GetCurrentEventDay()
     {
-        return await context.Database
-            .SqlQuery<int>($@"
+        return await context
+            .Database.SqlQuery<int>(
+                $@"
         SELECT (((NOW() AT TIME ZONE time_zone_id)::date - start_date + 1)::int) AS ""Value""
         FROM public.events
         WHERE is_published = true
         AND (NOW() AT TIME ZONE time_zone_id)::date BETWEEN start_date AND end_date and is_deleted = false
         LIMIT 1
-    ").FirstOrDefaultAsync(cancellationToken);
-        
+    "
+            )
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<DateOnly> GetActiveEventStartDate()
     {
         return await context
-            .Events.FromSql($@"
+            .Events.FromSql(
+                $@"
         SELECT *
         FROM public.events
         WHERE is_published = true
         AND (NOW() AT TIME ZONE time_zone_id)::date BETWEEN start_date AND end_date and is_deleted = false
         LIMIT 1
-    ")
+    "
+            )
             .Select(x => x.StartDate)
             .FirstOrDefaultAsync(cancellationToken);
     }
@@ -192,13 +200,16 @@ internal sealed class EventCheckinRepository(
     public async Task<Event?> GetActiveEventInfoOrDefaultAsync()
     {
         return await context
-            .Events.FromSql($@"
+            .Events.FromSql(
+                $@"
         SELECT *
         FROM public.events
         WHERE is_published = true
         AND (NOW() AT TIME ZONE time_zone_id)::date BETWEEN start_date AND end_date and is_deleted = false
         LIMIT 1
-    ").FirstOrDefaultAsync(cancellationToken);
+    "
+            )
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<string> GetPlayerName(string lookupId)
@@ -225,27 +236,26 @@ internal sealed class EventCheckinRepository(
 
     public async Task<UserCheckinPageDto> GetPlayerInfoForPlayerCheckinPage()
     {
-
         var currentEvent = await context
-            .Events.FromSql($@"
+            .Events.FromSql(
+                $@"
         SELECT *
         FROM public.events
         WHERE is_published = true
         AND (NOW() AT TIME ZONE time_zone_id)::date BETWEEN start_date AND end_date and is_deleted = false
         LIMIT 1
-    ").Select(x => new { x.Id, x.Name }).FirstOrDefaultAsync(cancellationToken);
-        
+    "
+            )
+            .Select(x => new { x.Id, x.Name })
+            .FirstOrDefaultAsync(cancellationToken);
+
         var info = await context
             .Players.Where(x => x.UserId == userContext.CurrentUserId())
             .Select(x => new UserCheckinPageDto()
             {
                 LookupId = x.LookupId,
                 SendPickupCrbEmail = x.SendPickupCrbEmail,
-                CheckinId = x
-                    .Checkins.FirstOrDefault(y =>
-                        y.EventId == currentEvent!.Id
-                    )!
-                    .Id,
+                CheckinId = x.Checkins.FirstOrDefault(y => y.EventId == currentEvent!.Id)!.Id,
             })
             .FirstAsync(cancellationToken);
 
