@@ -1,5 +1,5 @@
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.UpdateHierarchy;
-using ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.DTOs;
+using ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.GetExpressionSectionOptions;
 using ExpressedRealms.Expressions.Repository.ExpressionTextSections.DTOs;
 using ExpressionSectionDto = ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.DTOs.ExpressionSectionDto;
 

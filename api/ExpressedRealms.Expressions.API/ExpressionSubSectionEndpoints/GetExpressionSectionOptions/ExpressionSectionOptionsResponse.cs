@@ -1,6 +1,4 @@
-using ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.DTOs;
-
-namespace ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.Responses;
+namespace ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.GetExpressionSectionOptions;
 
 public class ExpressionSectionOptionsResponse
 {
