@@ -60,14 +60,14 @@ function toggleDelete() {
   deleteConfirm.value = !deleteConfirm.value
 }
 
-var canEdit = computed(() => {
+const canEdit = computed(() => {
   if (props.item?.expressionTypeId == 1 && can.Expression.Edit)
     return true
 
   return (props.item?.expressionTypeId == 13 || props.item?.expressionTypeId == 14) && can.ContentManagementSystem.Edit
 })
 
-var canDelete = computed(() => {
+const canDelete = computed(() => {
   if (props.item?.expressionTypeId == 1 && can.Expression.Delete)
     return true
 

@@ -77,7 +77,7 @@ internal sealed class ExpressionRepository(
 
         return new GetExpressionDto
         {
-            Name = expression.Name,
+            Name = expression!.Name,
             Id = expression.Id,
             ShortDescription = expression.ShortDescription,
             NavMenuImage = expression.NavMenuImage,
@@ -99,14 +99,14 @@ internal sealed class ExpressionRepository(
 
         if (
             expressionTypeLookup == 1
-            && !userContext.CurrentUserHasPermission(Permissions.Expression.View)
+            && !userContext.CurrentUserHasPermission(Permissions.Expression.Edit)
         )
             return Result.Fail(new NotFoundFailure(nameof(Expression)));
 
         var cmsTypes = new List<int> { 13, 14 };
         if (
             cmsTypes.Contains(expressionTypeLookup)
-            && !userContext.CurrentUserHasPermission(Permissions.ContentManagementSystem.View)
+            && !userContext.CurrentUserHasPermission(Permissions.ContentManagementSystem.Edit)
         )
             return Result.Fail(new NotFoundFailure(nameof(Expression)));
 
