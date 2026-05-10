@@ -12,15 +12,13 @@ import '@he-tree/vue/style/default.css'
 import '@he-tree/vue/style/material-design.css'
 import ExpressionToC from '@/components/expressions/ExpressionToC.vue'
 import axios from 'axios'
-import { UserRoles, userStore } from '@/stores/userStore.ts'
 import BlessingToC from '@/components/expressions/BlessingToC.vue'
-import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+import { can, userPermissionStore } from '@/stores/userPermissionStore.ts'
 
 const userPermissionInfo = userPermissionStore()
 const permissionCheck = userPermissionInfo.permissionCheck
 const expressionInfo = expressionStore()
 const route = useRoute()
-const userInfo = userStore()
 
 let sections = ref([
   {
@@ -46,7 +44,6 @@ let sections = ref([
 ])
 
 const isLoading = ref(true)
-const showEdit = ref(false)
 const showCreate = ref(false)
 const showPreview = ref(false)
 
@@ -57,7 +54,6 @@ async function fetchData() {
   await expressionInfo.getExpressionSections()
     .then(async () => {
       sections.value = expressionInfo.sections
-      showEdit.value = await userInfo.hasUserRole(UserRoles.ExpressionEditor)
       isLoading.value = false
       if (location.hash) {
         await nextTick()
@@ -107,6 +103,20 @@ async function downloadExpressionBooklet() {
   URL.revokeObjectURL(url)
 }
 
+const canEdit = computed(() => {
+  if (expressionInfo.expressionTypeId == 1 && can.Expression.Edit)
+    return true
+
+  return (expressionInfo.expressionTypeId == 13 || expressionInfo.expressionTypeId == 14) && can.ContentManagementSystem.Edit
+})
+
+const canCreate = computed(() => {
+  if (expressionInfo.expressionTypeId == 1 && can.Expression.Create)
+    return true
+
+  return (expressionInfo.expressionTypeId == 13 || expressionInfo.expressionTypeId == 14) && can.ContentManagementSystem.Create
+})
+
 </script>
 
 <template>
@@ -116,8 +126,8 @@ async function downloadExpressionBooklet() {
         Table Of Contents
       </template>
       <template #content>
-        <article id="expression-body">
-          <ExpressionToC v-model="sections" :can-edit="showEdit" :show-skeleton="isLoading" @toggle-preview="togglePreview" />
+        <article id="expression-toc">
+          <ExpressionToC v-model="sections" :can-edit="canEdit" :show-skeleton="isLoading" @toggle-preview="togglePreview" />
           <BlessingToC v-if="hasBlessingSection" :show-skeleton="isLoading" />
         </article>
       </template>
@@ -125,11 +135,11 @@ async function downloadExpressionBooklet() {
     <Card class="custom-card flex-grow-1">
       <template #content>
         <article id="expression-body">
-          <div v-if="permissionCheck.Expression.DownloadBooklet" class="d-flex flex-row justify-content-end align-items-center">
+          <div v-if="permissionCheck.ContentManagementSystem.DownloadReport" class="d-flex flex-row justify-content-end align-items-center">
             <Button label="Download Booklet" @click="downloadExpressionBooklet()" />
           </div>
-          <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit && !showPreview" @refresh-list="fetchData(route.params.name)" />
-          <Button v-if="showEdit && !showPreview" label="Add Section" class="m-2" @click="toggleCreate" />
+          <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :is-read-only="showPreview" @refresh-list="fetchData(route.params.name)" />
+          <Button v-if="canCreate && !showPreview" label="Add Section" class="m-2" @click="toggleCreate" />
           <div v-if="showCreate">
             <CreateExpressionSection @cancel-event="toggleCreate" @added-section="fetchData(route.params.name)" />
           </div>

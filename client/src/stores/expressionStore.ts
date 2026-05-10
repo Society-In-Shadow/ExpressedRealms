@@ -13,6 +13,7 @@ export const expressionStore
         currentExpressionName: '' as string,
         isDoneLoading: false as boolean,
         isSpecialExpression: false as boolean,
+        expressionTypeId: 0 as number,
       }
     },
     actions: {
@@ -31,6 +32,7 @@ export const expressionStore
         if (filter && filter.length > 0) {
           this.currentExpressionId = filter[0].id
           this.currentExpressionName = filter[0].name
+          this.expressionTypeId = filter[0].expressionTypeId
           return
         }
         router.push('/characters')

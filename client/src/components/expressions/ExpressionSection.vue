@@ -23,7 +23,7 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
-  showEdit: {
+  isReadOnly: {
     type: Boolean,
     required: true,
   },
@@ -33,10 +33,10 @@ const props = defineProps({
 
 <template>
   <div v-for="(value) in props.sections" :key="value.id">
-    <EditExpressionSection :section-info="value" :current-level="currentLevel" :show-skeleton="showSkeleton" :show-edit="showEdit" @refresh-list="passThroughAddedSection" />
+    <EditExpressionSection :section-info="value" :current-level="currentLevel" :show-skeleton="showSkeleton" :is-read-only="isReadOnly" @refresh-list="passThroughAddedSection" />
     <div>
       <ExpressionSection
-        v-if="value.subSections" :sections="value.subSections" :current-level="props.currentLevel + 1" :show-skeleton="showSkeleton" :show-edit="showEdit"
+        v-if="value.subSections" :sections="value.subSections" :current-level="props.currentLevel + 1" :show-skeleton="showSkeleton" :is-read-only="isReadOnly"
         @refresh-list="passThroughAddedSection"
       />
     </div>
