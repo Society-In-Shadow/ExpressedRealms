@@ -27,7 +27,8 @@ internal static class ExpressionEndpoints
 
         endpointGroup.MapPut("{expressionId}", EditExpressionEndpoint.EditExpression);
 
-        endpointGroup.MapPut("{expressionId}/updateHierarchy", UpdateHierarchyEndpoint.UpdateHierarchy)
+        endpointGroup
+            .MapPut("{expressionId}/updateHierarchy", UpdateHierarchyEndpoint.UpdateHierarchy)
             .WithDescription(
                 "This is an all or nothing operation.  It needs to be called with all the items, not a subset of them."
             );
@@ -35,7 +36,7 @@ internal static class ExpressionEndpoints
         endpointGroup.MapPost("", CreateExpressionEndpoint.CreateExpression);
 
         endpointGroup.MapDelete("{id}", DeleteExpressionEndpoint.DeleteExpression);
-        
+
         endpointGroup
             .MapGet("{expressionId}/report", GetExpressionCmsReportEndpoint.GetExpressionCmsReport)
             .RequirePermission(Permissions.ContentManagementSystem.DownloadReport);

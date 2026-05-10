@@ -28,18 +28,29 @@ internal static class ExpectedSubSectionsEndpoints
             .RequireAuthorization();
 
         // These permissions are done on the use case level
-        endpointGroup.MapGet("{expressionId}/{sectionId}", GetExpressionTextSectionEndpoint.ExecuteAsync);
+        endpointGroup.MapGet(
+            "{expressionId}/{sectionId}",
+            GetExpressionTextSectionEndpoint.ExecuteAsync
+        );
 
-        endpointGroup
-            .MapGet("{expressionId}/{sectionId}/options", GetExpressionSectionOptionsEndpoint.ExecuteAsync);
+        endpointGroup.MapGet(
+            "{expressionId}/{sectionId}/options",
+            GetExpressionSectionOptionsEndpoint.ExecuteAsync
+        );
 
-        endpointGroup
-            .MapPut("{expressionId}/{sectionId}", EditExpressionSubSectionTextEndpoint.ExecuteAsync);
+        endpointGroup.MapPut(
+            "{expressionId}/{sectionId}",
+            EditExpressionSubSectionTextEndpoint.ExecuteAsync
+        );
 
-        endpointGroup
-            .MapPost("{expressionId}", CreateExpressionSubSectionTextEndpoint.ExecuteAsync);
+        endpointGroup.MapPost(
+            "{expressionId}",
+            CreateExpressionSubSectionTextEndpoint.ExecuteAsync
+        );
 
-        endpointGroup
-            .MapDelete("{expressionId}/{sectionId}", DeleteExpressionSubSectionTextEndpoint.ExecuteAsync);
+        endpointGroup.MapDelete(
+            "{expressionId}/{sectionId}",
+            DeleteExpressionSubSectionTextEndpoint.ExecuteAsync
+        );
     }
 }

@@ -9,11 +9,9 @@ namespace ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.GetExpre
 
 internal static class GetExpressionSectionOptionsEndpoint
 {
-    internal static async Task<Results<ValidationProblem, Ok<ExpressionSectionOptionsResponse>>> ExecuteAsync(
-        int expressionId,
-        int sectionId,
-        IExpressionTextSectionRepository repository
-    )
+    internal static async Task<
+        Results<ValidationProblem, Ok<ExpressionSectionOptionsResponse>>
+    > ExecuteAsync(int expressionId, int sectionId, IExpressionTextSectionRepository repository)
     {
         var optionsResult = await repository.GetExpressionTextSectionOptions(
             new GetExpressionTestSectionOptionsDto()

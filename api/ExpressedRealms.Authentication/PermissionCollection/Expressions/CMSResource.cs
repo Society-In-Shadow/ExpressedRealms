@@ -11,7 +11,7 @@ public static partial class Permissions
             Id = new Guid("019cc765-63cd-7f5d-879a-30003d1ca1f8"),
             Name = nameof(ContentManagementSystem),
         };
-        
+
         public static readonly Permission Edit = new(ResourceInfo)
         {
             Id = new Guid("019e0f4e-29ac-7f4a-9c75-3bec9d4941e1"),

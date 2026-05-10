@@ -35,13 +35,13 @@ public static partial class Permissions
             Id = new Guid("019e0f2c-060e-704a-bf59-f6430ae8a2a1"),
             Name = nameof(Delete),
         };
-        
+
         public static readonly Permission SeeBetaExpressions = new(ResourceInfo)
         {
             Id = new Guid("019e0f2b-f461-7744-aa66-08f4705ba997"),
             Name = nameof(SeeBetaExpressions),
         };
-        
+
         public static readonly Permission DownloadBooklet = new(ResourceInfo)
         {
             Id = new Guid("019cc765-63cd-7fe5-875e-868b10700919"),

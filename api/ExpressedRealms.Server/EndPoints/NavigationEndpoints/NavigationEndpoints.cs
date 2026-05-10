@@ -87,17 +87,23 @@ internal static class NavigationEndpoints
 
                     if (httpContext.User.UserHasPermission(Permissions.Expression.Create))
                     {
-                        menuItems.Add(new ExpressionMenuItem()
-                        {
-                            Id = 0,
-                            Name = $"Add Expression",
-                            ShortDescription = $"Use this to add a new Expression",
-                            ExpressionTypeId = 1,
-                            NavMenuImage = "add",
-                            OrderIndex = 1000000000,
-                        });
+                        menuItems.Add(
+                            new ExpressionMenuItem()
+                            {
+                                Id = 0,
+                                Name = $"Add Expression",
+                                ShortDescription = $"Use this to add a new Expression",
+                                ExpressionTypeId = 1,
+                                NavMenuImage = "add",
+                                OrderIndex = 1000000000,
+                            }
+                        );
                     }
-                    if (httpContext.User.UserHasPermission(Permissions.ContentManagementSystem.Create))
+                    if (
+                        httpContext.User.UserHasPermission(
+                            Permissions.ContentManagementSystem.Create
+                        )
+                    )
                     {
                         menuItems.AddRange(
                             [
@@ -129,9 +135,7 @@ internal static class NavigationEndpoints
                         .ThenBy(x => x.OrderIndex)
                         .ToList();
 
-                    return TypedResults.Ok(
-                        new ExpressionMenuResponse() { MenuItems = sorted }
-                    );
+                    return TypedResults.Ok(new ExpressionMenuResponse() { MenuItems = sorted });
                 }
             )
             .RequireAuthorization();

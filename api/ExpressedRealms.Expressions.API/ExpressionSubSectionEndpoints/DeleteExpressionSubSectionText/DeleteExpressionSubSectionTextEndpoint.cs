@@ -13,10 +13,7 @@ internal static class DeleteExpressionSubSectionTextEndpoint
         IExpressionTextSectionRepository repository
     )
     {
-        var results = await repository.DeleteExpressionTextSectionAsync(
-            expressionId,
-            sectionId
-        );
+        var results = await repository.DeleteExpressionTextSectionAsync(expressionId, sectionId);
 
         if (results.HasNotFound(out var notFound))
             return notFound;
