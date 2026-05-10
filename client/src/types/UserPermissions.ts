@@ -55,6 +55,7 @@ export const UserPermissions = {
     View: 'expression.view',
     Create: 'expression.create',
     Delete: 'expression.delete',
+    SeeBetaExpressions: 'expression.seebetaexpressions',
     DownloadBooklet: 'expression.downloadbooklet',
   } as const,
   Powers: {

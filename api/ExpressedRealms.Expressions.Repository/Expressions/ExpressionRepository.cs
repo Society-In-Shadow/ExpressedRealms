@@ -1,13 +1,14 @@
-using ExpressedRealms.Authentication;
+using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.Expressions.Repository.Expressions.DTOs;
-using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Repositories.Shared.Helpers;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
+using FluentValidationFailure = ExpressedRealms.Repositories.Shared.CommonFailureTypes.FluentValidationFailure;
+using NotFoundFailure = ExpressedRealms.Repositories.Shared.CommonFailureTypes.NotFoundFailure;
 
 namespace ExpressedRealms.Expressions.Repository.Expressions;
 
@@ -21,16 +22,24 @@ internal sealed class ExpressionRepository(
 {
     public async Task<Result<List<ExpressionNavigationMenuItem>>> GetNavigationMenuItems()
     {
-        var canSeeBetaAndDrafts = await userContext.CurrentUserHasPolicy(
-            Policies.ExpressionEditorPolicy
-        );
-
-        var expression = context.Expressions.AsNoTracking();
-
-        if (!canSeeBetaAndDrafts)
+        var allowedStatuses = new List<int>
         {
-            expression = expression.Where(e => e.PublishStatusId == (int)PublishTypes.Published);
+            (int)PublishTypes.Published
+        };
+
+        if (userContext.CurrentUserHasPermission(Permissions.Expression.Edit))
+        {
+            allowedStatuses.Add((int)PublishTypes.Draft);
         }
+
+        if (userContext.CurrentUserHasPermission(Permissions.Expression.SeeBetaExpressions))
+        {
+            allowedStatuses.Add((int)PublishTypes.Beta);
+        }
+
+        var expression = context.Expressions
+            .AsNoTracking()
+            .Where(e => allowedStatuses.Contains(e.PublishStatusId));
 
         return await expression
             .Select(x => new ExpressionNavigationMenuItem()
@@ -50,14 +59,26 @@ internal sealed class ExpressionRepository(
 
     public async Task<Result<GetExpressionDto>> GetExpression(int expressionId)
     {
+        var results = await CheckUserPermissionsForExpressionEdit(expressionId);
+
+        if (!results.IsSuccess)
+            return results;
+        
         var expression = await context
             .Expressions.Where(x => x.Id == expressionId)
+            .Select(expression => new 
+            {
+                expression.Name,
+                expression.Id,
+                expression.ShortDescription,
+                expression.NavMenuImage,
+                expression.PublishStatusId,
+                expression.OrderIndex,
+                expression.ExpressionTypeId,
+            })
             .FirstOrDefaultAsync();
-
-        if (expression is null)
-            return Result.Fail(new NotFoundFailure(nameof(Expression)));
-
-        return new GetExpressionDto()
+        
+        return new GetExpressionDto
         {
             Name = expression.Name,
             Id = expression.Id,
@@ -65,8 +86,60 @@ internal sealed class ExpressionRepository(
             NavMenuImage = expression.NavMenuImage,
             PublishStatus = (PublishTypes)expression.PublishStatusId,
             PublishTypes = EnumHelpers.GetEnumKeyValuePairs<PublishTypes>(),
-            OrderIndex = expression.OrderIndex,
+            OrderIndex = expression.OrderIndex
         };
+    }
+
+    private async Task<Result<GetExpressionDto>> CheckUserPermissionsForExpressionEdit(int expressionId)
+    {
+        var expressionTypeLookup = await context.Expressions.AsNoTracking()
+            .Where(x => x.Id == expressionId)
+            .Select(x => x.ExpressionTypeId)
+            .FirstOrDefaultAsync();
+
+        if(expressionTypeLookup == 1 && !userContext.CurrentUserHasPermission(Permissions.Expression.View))
+            return Result.Fail(new NotFoundFailure(nameof(Expression)));
+
+        var cmsTypes = new List<int> { 13, 14 };
+        if(cmsTypes.Contains(expressionTypeLookup) && !userContext.CurrentUserHasPermission(Permissions.ContentManagementSystem.View))
+            return Result.Fail(new NotFoundFailure(nameof(Expression)));
+        
+        if (expressionTypeLookup == 0)
+            return Result.Fail(new NotFoundFailure(nameof(Expression)));
+
+        return Result.Ok();
+    }
+    
+    private async Task<Result<GetExpressionDto>> CheckUserPermissionsForExpressionDelete(int expressionId)
+    {
+        var expressionTypeLookup = await context.Expressions.AsNoTracking()
+            .Where(x => x.Id == expressionId)
+            .Select(x => x.ExpressionTypeId)
+            .FirstOrDefaultAsync();
+
+        if(expressionTypeLookup == 1 && !userContext.CurrentUserHasPermission(Permissions.Expression.Delete))
+            return Result.Fail(new NotFoundFailure(nameof(Expression)));
+
+        var cmsTypes = new List<int> { 13, 14 };
+        if(cmsTypes.Contains(expressionTypeLookup) && !userContext.CurrentUserHasPermission(Permissions.ContentManagementSystem.Delete))
+            return Result.Fail(new NotFoundFailure(nameof(Expression)));
+        
+        if (expressionTypeLookup == 0)
+            return Result.Fail(new NotFoundFailure(nameof(Expression)));
+
+        return Result.Ok();
+    }
+
+    private Result<GetExpressionDto> ExpressionTypePermissionCheck(int expressionTypeLookup)
+    {
+        if(expressionTypeLookup == 1 && !userContext.CurrentUserHasPermission(Permissions.Expression.Create))
+            return Result.Fail(new NotFoundFailure(nameof(Expression)));
+
+        var cmsTypes = new List<int> { 13, 14 };
+        if(cmsTypes.Contains(expressionTypeLookup) && !userContext.CurrentUserHasPermission(Permissions.ContentManagementSystem.Create))
+            return Result.Fail(new NotFoundFailure(nameof(Expression)));
+
+        return Result.Ok();
     }
 
     public async Task<Result<int>> CreateExpressionAsync(CreateExpressionDto dto)
@@ -75,6 +148,10 @@ internal sealed class ExpressionRepository(
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
 
+        var authResult = ExpressionTypePermissionCheck(dto.ExpressionTypeId);
+        if(authResult.IsFailed)
+            return authResult.ToResult();
+        
         var maxSort = await context
             .Expressions.Where(x => x.ExpressionTypeId == dto.ExpressionTypeId)
             .MaxAsync(x => x.OrderIndex, cancellationToken);
@@ -101,12 +178,13 @@ internal sealed class ExpressionRepository(
         var result = await editExpressionDtoValidator.ValidateAsync(dto, cancellationToken);
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
-
-        var expression = await context.Expressions.Where(x => x.Id == dto.Id).FirstOrDefaultAsync();
-
-        if (expression is null)
-            return Result.Fail(new NotFoundFailure(nameof(Expression)));
-
+        
+        var authResult = await CheckUserPermissionsForExpressionEdit(dto.Id);
+        if(authResult.IsFailed)
+            return authResult.ToResult();
+        
+        var expression = await context.Expressions.Where(x => x.Id == dto.Id).FirstAsync();
+        
         expression.Name = dto.Name;
         expression.ShortDescription = dto.ShortDescription;
         expression.NavMenuImage = dto.NavMenuImage;
@@ -146,15 +224,12 @@ internal sealed class ExpressionRepository(
 
     public async Task<Result> DeleteExpressionAsync(int id)
     {
-        var expression = await context
-            .Expressions.IgnoreQueryFilters()
-            .FirstOrDefaultAsync(x => x.Id == id);
-
-        if (expression is null)
-            return Result.Fail(new NotFoundFailure(nameof(Expression)));
-
-        if (expression.IsDeleted)
-            return Result.Fail(new AlreadyDeletedFailure(nameof(Expression)));
+        var authResult = await CheckUserPermissionsForExpressionDelete(id);
+        if(authResult.IsFailed)
+            return authResult.ToResult();
+        
+        var expression = await context.Expressions
+            .FirstAsync(x => x.Id == id);
 
         expression.SoftDelete();
         await context.SaveChangesAsync(cancellationToken);
