@@ -9,7 +9,7 @@ import ExpressionSection from '@/components/expressions/ExpressionSection.vue'
 import axios from 'axios'
 import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 import { expressionStore } from '@/stores/expressionStore'
-import { nextTick, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import Card from 'primevue/card'
 import ScrollTop from 'primevue/scrolltop'
 import CreateExpressionSection from '@/components/expressions/CreateExpressionSection.vue'
@@ -118,6 +118,13 @@ async function downloadExpressionBooklet() {
   URL.revokeObjectURL(url)
 }
 
+const canCreate = computed(() => {
+  if (expressionInfo.expressionTypeId == 1 && can.Expression.Create)
+    return true
+
+  return (expressionInfo.expressionTypeId == 13 || expressionInfo.expressionTypeId == 14) && can.ContentManagementSystem.Create
+})
+
 </script>
 
 <template>
@@ -138,12 +145,12 @@ async function downloadExpressionBooklet() {
         <div class="pb-4">
           <div class="d-flex flex-column flex-md-row">
             <div class="col-12 order-1 order-md-0 col-md-8">
-              <div v-if="permissionCheck.ContentManagementSystem.DownloadReport" class="d-flex flex-row justify-content-end align-items-center">
+              <div v-if="permissionCheck.Expression.DownloadBooklet" class="d-flex flex-row justify-content-end align-items-center">
                 <Button label="Download Booklet" @click="downloadExpressionBooklet()" />
               </div>
               <CreateExpressionSection v-if="expressionHeader.id === 0" :add-expression-header="true" @added-section="fetchData(route.params.name)" />
               <EditExpressionSection
-                v-else :section-info="expressionHeader" :current-level="1" :show-skeleton="headerIsLoading" :show-edit="showEdit"
+                v-else :section-info="expressionHeader" :current-level="1" :show-skeleton="headerIsLoading" :is-read-only="showPreview"
                 :is-header-section="true"
               />
             </div>
@@ -167,8 +174,8 @@ async function downloadExpressionBooklet() {
           <TabPanels>
             <TabPanel value="0">
               <article id="expression-body">
-                <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :show-edit="showEdit && !showPreview" @refresh-list="fetchData(route.params.name)" />
-                <Button v-if="showEdit && !showPreview" label="Add Section" class="m-2" @click="toggleCreate" />
+                <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :is-read-only="showPreview" @refresh-list="fetchData(route.params.name)" />
+                <Button v-if="canCreate && !showPreview" label="Add Section" class="m-2" @click="toggleCreate" />
                 <div v-if="showCreate">
                   <CreateExpressionSection @cancel-event="toggleCreate" @added-section="fetchData(route.params.name)" />
                 </div>

@@ -9,7 +9,6 @@ export const cmsStore
         rulebookItems: [] as ExpressionMenuItem[],
         worldBackgroundItems: [] as ExpressionMenuItem[],
         expressionItems: [] as ExpressionMenuItem[],
-        canEdit: false as boolean,
         isDoneLoading: false as boolean,
       }
     },
@@ -22,7 +21,6 @@ export const cmsStore
       async refreshCmsInformation() {
         const expressionData = await axios.get<ExpressionMenuResponse>('/navMenu/content')
 
-        this.canEdit = expressionData.data.canEdit
         this.expressionItems = expressionData.data.menuItems.filter(x => x.expressionTypeId == 1)
         this.rulebookItems = expressionData.data.menuItems.filter(x => x.expressionTypeId == 13)
         this.worldBackgroundItems = expressionData.data.menuItems.filter(x => x.expressionTypeId == 14)

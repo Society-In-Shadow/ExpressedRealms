@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.DTOs;
+namespace ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.GetExpressionSectionOptions;
 
 public class AvailableParentsDto
 {

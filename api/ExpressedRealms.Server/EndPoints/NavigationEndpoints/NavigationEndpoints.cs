@@ -1,12 +1,11 @@
 using System.Security.Claims;
-using ExpressedRealms.Authentication;
+using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.DB;
 using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.FeatureFlags.FeatureClient;
 using ExpressedRealms.Server.EndPoints.NavigationEndpoints.DTOs;
 using ExpressedRealms.Server.EndPoints.NavigationEndpoints.Responses;
-using ExpressedRealms.Server.Shared;
 using ExpressedRealms.Server.Shared.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -82,27 +81,32 @@ internal static class NavigationEndpoints
                 {
                     var navMenuItems = await repository.GetNavigationMenuItems();
 
-                    var hasEditPolicy = await httpContext.UserHasPolicyAsync(
-                        Policies.ExpressionEditorPolicy
-                    );
-
                     var menuItems = navMenuItems
                         .Value.Select(x => new ExpressionMenuItem(x))
                         .ToList();
 
-                    if (hasEditPolicy)
+                    if (httpContext.User.UserHasPermission(Permissions.Expression.Create))
+                    {
+                        menuItems.Add(
+                            new ExpressionMenuItem()
+                            {
+                                Id = 0,
+                                Name = $"Add Expression",
+                                ShortDescription = $"Use this to add a new Expression",
+                                ExpressionTypeId = 1,
+                                NavMenuImage = "add",
+                                OrderIndex = 1000000000,
+                            }
+                        );
+                    }
+                    if (
+                        httpContext.User.UserHasPermission(
+                            Permissions.ContentManagementSystem.Create
+                        )
+                    )
                     {
                         menuItems.AddRange(
                             [
-                                new ExpressionMenuItem()
-                                {
-                                    Id = 0,
-                                    Name = $"Add Expression",
-                                    ShortDescription = $"Use this to add a new Expression",
-                                    ExpressionTypeId = 1,
-                                    NavMenuImage = "add",
-                                    OrderIndex = 1000000000,
-                                },
                                 new ExpressionMenuItem()
                                 {
                                     Id = 0,
@@ -131,9 +135,7 @@ internal static class NavigationEndpoints
                         .ThenBy(x => x.OrderIndex)
                         .ToList();
 
-                    return TypedResults.Ok(
-                        new ExpressionMenuResponse() { CanEdit = hasEditPolicy, MenuItems = sorted }
-                    );
+                    return TypedResults.Ok(new ExpressionMenuResponse() { MenuItems = sorted });
                 }
             )
             .RequireAuthorization();
