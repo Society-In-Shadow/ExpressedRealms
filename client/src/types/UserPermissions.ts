@@ -14,9 +14,6 @@ export const UserPermissions = {
     ViewCharacterSheet: 'charactermanagement.viewcharactersheet',
     DownloadAllCrbs: 'charactermanagement.downloadallcrbs',
   } as const,
-  ContentManagementSystem: {
-    DownloadReport: 'contentmanagementsystem.downloadreport',
-  } as const,
   CharacterContacts: {
     Approve: 'charactercontacts.approve',
   } as const,
@@ -46,7 +43,18 @@ export const UserPermissions = {
     Delete: 'eventscheduleitem.delete',
     ModifyDefaults: 'eventscheduleitem.modifydefaults',
   } as const,
+  ContentManagementSystem: {
+    Edit: 'contentmanagementsystem.edit',
+    View: 'contentmanagementsystem.view',
+    Create: 'contentmanagementsystem.create',
+    Delete: 'contentmanagementsystem.delete',
+    DownloadReport: 'contentmanagementsystem.downloadreport',
+  } as const,
   Expression: {
+    Edit: 'expression.edit',
+    View: 'expression.view',
+    Create: 'expression.create',
+    Delete: 'expression.delete',
     DownloadBooklet: 'expression.downloadbooklet',
   } as const,
   Powers: {
