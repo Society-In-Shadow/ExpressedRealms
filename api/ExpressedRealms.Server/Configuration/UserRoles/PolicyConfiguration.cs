@@ -9,11 +9,6 @@ public static class PolicyConfiguration
         builder.Services.AddAuthorization(options =>
         {
             options.AddPolicy(
-                Policies.ExpressionEditorPolicy.Name,
-                policy => policy.RequireRole(UserRoles.ExpressionEditor)
-            );
-
-            options.AddPolicy(
                 Policies.ManageKnowledges.Name,
                 policy => policy.RequireRole(UserRoles.KnowledgeManagementRole)
             );
