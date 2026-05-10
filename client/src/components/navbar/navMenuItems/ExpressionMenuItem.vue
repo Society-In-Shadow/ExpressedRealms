@@ -5,10 +5,11 @@ import axios from 'axios'
 import toaster from '@/services/Toasters'
 import Badge from 'primevue/badge'
 import type { ExpressionMenuItem } from '@/components/navbar/navMenuItems/types.ts'
-import { type PropType, ref } from 'vue'
+import { computed, type PropType, ref } from 'vue'
 import { expressionDialogService } from '@/components/expressions/services/dialogs.ts'
 import { cmsStore } from '@/stores/cmsStore.ts'
 import { navigateWithNewTabSupport } from '@/router/navigationHelpers.ts'
+import { can } from '@/stores/userPermissionStore.ts'
 
 const expressionDialogs = expressionDialogService()
 const cmsData = cmsStore()
@@ -59,6 +60,20 @@ function toggleDelete() {
   deleteConfirm.value = !deleteConfirm.value
 }
 
+var canEdit = computed(() => {
+  if (props.item?.expressionTypeId == 1 && can.Expression.Edit)
+    return true
+
+  return (props.item?.expressionTypeId == 13 || props.item?.expressionTypeId == 14) && can.ContentManagementSystem.Edit
+})
+
+var canDelete = computed(() => {
+  if (props.item?.expressionTypeId == 1 && can.Expression.Delete)
+    return true
+
+  return (props.item?.expressionTypeId == 13 || props.item?.expressionTypeId == 14) && can.ContentManagementSystem.Delete
+})
+
 </script>
 <template>
   <div class="flex flex-shrink-1 align-items-center cursor-pointer gap-2 mb-2" @click="redirect" @click.middle="redirect">
@@ -72,14 +87,14 @@ function toggleDelete() {
       </span>
     </div>
 
-    <span v-if="cmsData.canEdit && item.id !==0" class="inline-flex flex-column gap-1">
+    <span v-if="(canEdit || canDelete) && item.id !==0" class="inline-flex flex-column gap-1">
       <template v-if="deleteConfirm">
         <Button label="Confirm Delete" severity="danger" @click.stop="deleteExpression" />
         <Button label="Cancel" severity="secondary" @click.stop="toggleDelete" />
       </template>
       <template v-else>
-        <Button label="Edit" @click.stop="expressionDialogs.showEditExpression(item.id, item.expressionTypeId)" />
-        <Button label="Delete" severity="danger" @click.stop="toggleDelete" />
+        <Button v-if="canEdit" label="Edit" @click.stop="expressionDialogs.showEditExpression(item.id, item.expressionTypeId)" />
+        <Button v-if="canDelete" label="Delete" severity="danger" @click.stop="toggleDelete" />
       </template>
 
     </span>
