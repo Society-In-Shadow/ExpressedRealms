@@ -90,7 +90,7 @@ internal sealed class ExpressionRepository(
         };
     }
 
-    private async Task<Result<GetExpressionDto>> CheckUserPermissionsForExpressionEdit(int expressionId)
+    public async Task<Result<GetExpressionDto>> CheckUserPermissionsForExpressionEdit(int expressionId)
     {
         var expressionTypeLookup = await context.Expressions.AsNoTracking()
             .Where(x => x.Id == expressionId)
@@ -110,7 +110,7 @@ internal sealed class ExpressionRepository(
         return Result.Ok();
     }
     
-    private async Task<Result<GetExpressionDto>> CheckUserPermissionsForExpressionDelete(int expressionId)
+    public async Task<Result<GetExpressionDto>> CheckUserPermissionsForExpressionDelete(int expressionId)
     {
         var expressionTypeLookup = await context.Expressions.AsNoTracking()
             .Where(x => x.Id == expressionId)
@@ -122,6 +122,46 @@ internal sealed class ExpressionRepository(
 
         var cmsTypes = new List<int> { 13, 14 };
         if(cmsTypes.Contains(expressionTypeLookup) && !userContext.CurrentUserHasPermission(Permissions.ContentManagementSystem.Delete))
+            return Result.Fail(new NotFoundFailure(nameof(Expression)));
+        
+        if (expressionTypeLookup == 0)
+            return Result.Fail(new NotFoundFailure(nameof(Expression)));
+
+        return Result.Ok();
+    }
+    
+    public async Task<Result<GetExpressionDto>> CheckUserPermissionsForExpressionCreate(int expressionId)
+    {
+        var expressionTypeLookup = await context.Expressions.AsNoTracking()
+            .Where(x => x.Id == expressionId)
+            .Select(x => x.ExpressionTypeId)
+            .FirstOrDefaultAsync();
+
+        if(expressionTypeLookup == 1 && !userContext.CurrentUserHasPermission(Permissions.Expression.Create))
+            return Result.Fail(new NotFoundFailure(nameof(Expression)));
+
+        var cmsTypes = new List<int> { 13, 14 };
+        if(cmsTypes.Contains(expressionTypeLookup) && !userContext.CurrentUserHasPermission(Permissions.ContentManagementSystem.Create))
+            return Result.Fail(new NotFoundFailure(nameof(Expression)));
+        
+        if (expressionTypeLookup == 0)
+            return Result.Fail(new NotFoundFailure(nameof(Expression)));
+
+        return Result.Ok();
+    }
+    
+    public async Task<Result<GetExpressionDto>> CheckUserPermissionsForExpressionView(int expressionId)
+    {
+        var expressionTypeLookup = await context.Expressions.AsNoTracking()
+            .Where(x => x.Id == expressionId)
+            .Select(x => x.ExpressionTypeId)
+            .FirstOrDefaultAsync();
+
+        if(expressionTypeLookup == 1 && !userContext.CurrentUserHasPermission(Permissions.Expression.View))
+            return Result.Fail(new NotFoundFailure(nameof(Expression)));
+
+        var cmsTypes = new List<int> { 13, 14 };
+        if(cmsTypes.Contains(expressionTypeLookup) && !userContext.CurrentUserHasPermission(Permissions.ContentManagementSystem.View))
             return Result.Fail(new NotFoundFailure(nameof(Expression)));
         
         if (expressionTypeLookup == 0)

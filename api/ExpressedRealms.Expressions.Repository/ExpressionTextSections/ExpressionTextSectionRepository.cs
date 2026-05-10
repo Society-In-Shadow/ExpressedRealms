@@ -1,6 +1,7 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
+using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.Expressions.Repository.ExpressionTextSections.DTOs;
 using ExpressedRealms.Expressions.Repository.ExpressionTextSections.Helpers;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
@@ -14,6 +15,7 @@ internal sealed class ExpressionTextSectionRepository(
     CreateExpressionTextSectionDtoValidator createExpressionDtoValidator,
     EditExpressionTextSectionDtoValidator editExpressionDtoValidator,
     GetExpressionTestSectionOptionsValidator getExpressionTestSectionOptionsDtoValidator,
+    IExpressionRepository expressionRepository,
     CancellationToken cancellationToken
 ) : IExpressionTextSectionRepository
 {
@@ -25,6 +27,10 @@ internal sealed class ExpressionTextSectionRepository(
 
         if (expressionSection is null)
             return Result.Fail(new NotFoundFailure("Expression Section"));
+
+        var authResult = await expressionRepository.CheckUserPermissionsForExpressionView(expressionSection.ExpressionId);
+        if(authResult.IsFailed)
+            return authResult.ToResult();
 
         return new GetExpressionTextSectionDto()
         {
@@ -44,9 +50,14 @@ internal sealed class ExpressionTextSectionRepository(
             optionsDto,
             cancellationToken
         );
+        
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
 
+        var authResult = await expressionRepository.CheckUserPermissionsForExpressionView(optionsDto.ExpressionId);
+        if(authResult.IsFailed)
+            return authResult.ToResult();
+        
         var availableParents = await GetParentSectionList(
             optionsDto.ExpressionId,
             optionsDto.SectionId
@@ -97,6 +108,10 @@ internal sealed class ExpressionTextSectionRepository(
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
 
+        var authResult = await expressionRepository.CheckUserPermissionsForExpressionCreate(dto.ExpressionId);
+        if(authResult.IsFailed)
+            return authResult.ToResult();
+        
         var nextPlaceOnList = await context
             .ExpressionSections.AsNoTracking()
             .Where(x => x.ExpressionId == dto.ExpressionId && x.ParentId == dto.ParentId)
@@ -125,10 +140,14 @@ internal sealed class ExpressionTextSectionRepository(
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
 
+        var authResult = await expressionRepository.CheckUserPermissionsForExpressionEdit(dto.ExpressionId);
+        if(authResult.IsFailed)
+            return authResult.ToResult();
+        
         var section = await context
             .ExpressionSections.Where(x => x.Id == dto.Id)
             .FirstOrDefaultAsync();
-
+        
         if (section is null)
             return Result.Fail(new NotFoundFailure("Expression Section"));
 
@@ -146,6 +165,10 @@ internal sealed class ExpressionTextSectionRepository(
 
     public async Task<Result> DeleteExpressionTextSectionAsync(int expressionId, int id)
     {
+        var authResult = await expressionRepository.CheckUserPermissionsForExpressionDelete(expressionId);
+        if(authResult.IsFailed)
+            return authResult.ToResult();
+        
         var section = await context
             .ExpressionSections.IgnoreQueryFilters()
             .FirstAsync(x => x.ExpressionId == expressionId && x.Id == id);

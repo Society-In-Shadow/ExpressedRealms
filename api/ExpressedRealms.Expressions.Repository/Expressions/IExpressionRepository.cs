@@ -16,4 +16,8 @@ public interface IExpressionRepository
     Task<bool> ExpressionTypeExists(int id);
     Task<List<Expression>> GetAllEnabledExpressions();
     Task<bool> ExpressionExistsForModifiers(int id);
+    Task<Result<GetExpressionDto>> CheckUserPermissionsForExpressionEdit(int expressionId);
+    Task<Result<GetExpressionDto>> CheckUserPermissionsForExpressionDelete(int expressionId);
+    Task<Result<GetExpressionDto>> CheckUserPermissionsForExpressionCreate(int expressionId);
+    Task<Result<GetExpressionDto>> CheckUserPermissionsForExpressionView(int expressionId);
 }

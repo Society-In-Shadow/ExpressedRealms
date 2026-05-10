@@ -1,4 +1,3 @@
-using ExpressedRealms.Authentication;
 using ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.CreateExpressionSubSectionText;
 using ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.DeleteExpressionSubSectionText;
 using ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.EditExpressionSubSectionText;
@@ -6,7 +5,6 @@ using ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.GetExpressio
 using ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.GetExpressionSectionOptions;
 using ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.GetExpressionTextSection;
 using ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.GetExpressionTextSections;
-using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
@@ -29,24 +27,19 @@ internal static class ExpectedSubSectionsEndpoints
             .MapGet("{id}", GetExpressionTextSectionsEndpoint.ExecuteAsync)
             .RequireAuthorization();
 
-        endpointGroup
-            .MapGet("{expressionId}/{sectionId}", GetExpressionTextSectionEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ExpressionEditorPolicy);
+        // These permissions are done on the use case level
+        endpointGroup.MapGet("{expressionId}/{sectionId}", GetExpressionTextSectionEndpoint.ExecuteAsync);
 
         endpointGroup
-            .MapGet("{expressionId}/{sectionId}/options", GetExpressionSectionOptionsEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ExpressionEditorPolicy);
+            .MapGet("{expressionId}/{sectionId}/options", GetExpressionSectionOptionsEndpoint.ExecuteAsync);
 
         endpointGroup
-            .MapPut("{expressionId}/{sectionId}", EditExpressionSubSectionTextEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ExpressionEditorPolicy);
+            .MapPut("{expressionId}/{sectionId}", EditExpressionSubSectionTextEndpoint.ExecuteAsync);
 
         endpointGroup
-            .MapPost("{expressionId}", CreateExpressionSubSectionTextEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ExpressionEditorPolicy);
+            .MapPost("{expressionId}", CreateExpressionSubSectionTextEndpoint.ExecuteAsync);
 
         endpointGroup
-            .MapDelete("{expressionId}/{sectionId}", DeleteExpressionSubSectionTextEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ExpressionEditorPolicy);
+            .MapDelete("{expressionId}/{sectionId}", DeleteExpressionSubSectionTextEndpoint.ExecuteAsync);
     }
 }
