@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 
 export const UserRoles = {
-  KnowledgeManagementRole: 'KnowledgeManagementRole',
   BlessingsManagementRole: 'ManageBlessingsRole',
   ManageModifiers: 'ManageModifiers',
 } as const

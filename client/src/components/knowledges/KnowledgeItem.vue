@@ -1,13 +1,11 @@
 <script setup lang="ts">
 
-import {onMounted, type PropType, ref} from 'vue'
-import type {Knowledge} from '@/components/knowledges/types'
-import {UserRoles, userStore} from '@/stores/userStore'
+import { type PropType, ref } from 'vue'
+import type { Knowledge } from '@/components/knowledges/types'
 import Button from 'primevue/button'
-import {knowledgeConfirmationPopup} from '@/components/knowledges/services/knowledgeConfirmationPopupService'
+import { knowledgeConfirmationPopup } from '@/components/knowledges/services/knowledgeConfirmationPopupService'
 import EditKnowledge from '@/components/knowledges/EditKnowledge.vue'
-
-let userInfo = userStore()
+import { can } from '@/stores/userPermissionStore.ts'
 
 const props = defineProps({
   knowledge: {
@@ -23,12 +21,6 @@ const props = defineProps({
 let popups = knowledgeConfirmationPopup(props.knowledge.id, props.knowledge.name)
 
 const showEdit = ref(false)
-
-const hasKnowledgeManagementRole = ref(false)
-
-onMounted(async () => {
-  hasKnowledgeManagementRole.value = await userInfo.hasUserRole(UserRoles.KnowledgeManagementRole)
-})
 
 function toggleEdit() {
   showEdit.value = !showEdit.value
@@ -49,11 +41,11 @@ function toggleEdit() {
       </div>
     </div>
     <div
-      v-if="!showEdit && hasKnowledgeManagementRole && !props.isReadOnly"
+      v-if="!showEdit && (can.Knowledges.Edit ||can.Knowledges.Delete) && !props.isReadOnly"
       class="p-0 m-0 d-inline-flex align-items-start"
     >
-      <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
-      <Button class="float-end" label="Edit" @click="toggleEdit" />
+      <Button v-if="can.Knowledges.Delete" class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
+      <Button v-if="can.Knowledges.Edit" class="float-end" label="Edit" @click="toggleEdit" />
     </div>
   </div>
   <p>{{ props.knowledge.description }}</p>
