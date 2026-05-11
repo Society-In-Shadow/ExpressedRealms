@@ -11,7 +11,6 @@ public class Policies
     }
 
     // Predefined static instances for each policy
-    public static readonly Policies ManageKnowledges = new(nameof(ManageKnowledges));
     public static readonly Policies ManageBlessings = new(nameof(ManageBlessings));
     public static readonly Policies ManageModifiers = new(nameof(ManageModifiers));
 
