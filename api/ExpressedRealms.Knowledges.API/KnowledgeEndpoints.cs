@@ -15,8 +15,7 @@ internal static class KnowledgeEndpoints
 {
     internal static void AddKnowledgeEndpoints(this WebApplication app)
     {
-        var endpointGroup = app.MapGroup("knowledges")
-            .WithTags("Knowledges");
+        var endpointGroup = app.MapGroup("knowledges").WithTags("Knowledges");
 
         endpointGroup.MapGet("", GetKnowledgesEndpoint.GetKnowledges);
 

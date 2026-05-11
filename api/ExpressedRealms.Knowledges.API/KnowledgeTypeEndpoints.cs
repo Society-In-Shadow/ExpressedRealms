@@ -10,8 +10,7 @@ public static class KnowledgeTypeEndpoints
 {
     internal static void AddKnowledgeTypesEndpoints(this WebApplication app)
     {
-        var endpointGroup = app.MapGroup("knowledgetypes")
-            .WithTags("Knowledges");
+        var endpointGroup = app.MapGroup("knowledgetypes").WithTags("Knowledges");
 
         endpointGroup
             .MapGet("", GetKnowledgeTypesEndpoint.GetKnowledgeTypes)

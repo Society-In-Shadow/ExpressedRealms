@@ -8,6 +8,5 @@ public static class UserRoles
     /// <summary>
     /// Add items to this list to automatically add them to the database.
     /// </summary>
-    public static string[] RolesForPermissions =>
-        new[] { ManageBlessingsRole, ManageModifiers };
+    public static string[] RolesForPermissions => new[] { ManageBlessingsRole, ManageModifiers };
 }
