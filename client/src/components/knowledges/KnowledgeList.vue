@@ -1,19 +1,16 @@
 <script setup lang="ts">
 
-import {knowledgeStore} from '@/components/knowledges/stores/knowledgeStore'
-import {computed, onMounted, ref} from 'vue'
+import { knowledgeStore } from '@/components/knowledges/stores/knowledgeStore'
+import { computed, onMounted, ref } from 'vue'
 import KnowledgeItem from '@/components/knowledges/KnowledgeItem.vue'
-import {UserRoles, userStore} from '@/stores/userStore'
 import Button from 'primevue/button'
 import AddKnowledge from '@/components/knowledges/AddKnowledge.vue'
+import { can } from '@/stores/userPermissionStore.ts'
 
 const store = knowledgeStore()
-const userInfo = userStore()
-const hasKnowledgeManagementRole = ref(false)
 
 onMounted(async () => {
   await store.getKnowledges()
-  hasKnowledgeManagementRole.value = await userInfo.hasUserRole(UserRoles.KnowledgeManagementRole)
 })
 
 const showAdd = ref(false)
@@ -47,9 +44,9 @@ const sortedKnowledges = computed(() => {
     <KnowledgeItem :knowledge="knowledge" :is-read-only="props.isReadOnly" />
   </div>
 
-  <AddKnowledge v-if="showAdd && hasKnowledgeManagementRole && !props.isReadOnly" @canceled="toggleAdd" />
+  <AddKnowledge v-if="showAdd && can.Knowledges.Create && !props.isReadOnly" @canceled="toggleAdd" />
   <Button
-    v-if="!showAdd && hasKnowledgeManagementRole && !props.isReadOnly" class="w-100 m-2"
+    v-if="!showAdd && can.Knowledges.Create && !props.isReadOnly" class="w-100 m-2"
     label="Add Knowledge" @click="toggleAdd"
   />
 </template>

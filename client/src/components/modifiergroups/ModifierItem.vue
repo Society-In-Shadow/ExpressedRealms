@@ -29,10 +29,10 @@ let popups = modifierConfirmationPopup()
 
 const showEdit = ref(false)
 
-const hasKnowledgeManagementRole = ref(false)
+const hasManageModifiersRole = ref(false)
 
 onMounted(async () => {
-  hasKnowledgeManagementRole.value = await userInfo.hasUserRole(UserRoles.KnowledgeManagementRole)
+  hasManageModifiersRole.value = await userInfo.hasUserRole(UserRoles.ManageModifiers)
 })
 
 function toggleEdit() {
@@ -62,7 +62,7 @@ function formatWithSign(number: number) {
       </Tag>
     </div>
     <div
-      v-if="!showEdit && hasKnowledgeManagementRole && !props.isReadOnly"
+      v-if="!showEdit && hasManageModifiersRole && !props.isReadOnly"
       class="p-0 m-0 d-inline-flex align-items-start"
     >
       <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event, props.groupId, props.modifier.id)" />

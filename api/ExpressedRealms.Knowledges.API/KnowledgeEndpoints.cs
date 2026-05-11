@@ -1,14 +1,13 @@
-﻿using ExpressedRealms.Authentication;
+﻿using ExpressedRealms.Authentication.PermissionCollection;
+using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using ExpressedRealms.Knowledges.API.CreateKnowledge;
 using ExpressedRealms.Knowledges.API.DeleteKnowledge;
 using ExpressedRealms.Knowledges.API.EditKnowledge;
 using ExpressedRealms.Knowledges.API.GetAllKnowledges;
 using ExpressedRealms.Knowledges.API.GetKnowledge;
 using ExpressedRealms.Knowledges.API.GetKnowledgeSummary;
-using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
 namespace ExpressedRealms.Knowledges.API;
 
@@ -16,9 +15,7 @@ internal static class KnowledgeEndpoints
 {
     internal static void AddKnowledgeEndpoints(this WebApplication app)
     {
-        var endpointGroup = app.MapGroup("knowledges")
-            .AddFluentValidationAutoValidation()
-            .WithTags("Knowledges");
+        var endpointGroup = app.MapGroup("knowledges").WithTags("Knowledges");
 
         endpointGroup.MapGet("", GetKnowledgesEndpoint.GetKnowledges);
 
@@ -26,18 +23,18 @@ internal static class KnowledgeEndpoints
 
         endpointGroup
             .MapGet("{id}", GetKnowledgeEndpoint.GetKnowledge)
-            .RequirePolicyAuthorization(Policies.ManageKnowledges);
+            .RequirePermission(Permissions.Knowledges.View);
 
         endpointGroup
             .MapPost("", CreateKnowledgeEndpoint.CreateKnowledge)
-            .RequirePolicyAuthorization(Policies.ManageKnowledges);
+            .RequirePermission(Permissions.Knowledges.Create);
 
         endpointGroup
             .MapPut("{id}", EditKnowledgeEndpoint.EditKnowledges)
-            .RequirePolicyAuthorization(Policies.ManageKnowledges);
+            .RequirePermission(Permissions.Knowledges.Edit);
 
         endpointGroup
             .MapDelete("{id}", DeleteKnowledgeEndpoint.DeleteKnowledge)
-            .RequirePolicyAuthorization(Policies.ManageKnowledges);
+            .RequirePermission(Permissions.Knowledges.Delete);
     }
 }

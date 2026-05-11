@@ -1,9 +1,8 @@
-using ExpressedRealms.Authentication;
+using ExpressedRealms.Authentication.PermissionCollection;
+using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using ExpressedRealms.Knowledges.API.GetKnowledgeTypes;
-using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
 namespace ExpressedRealms.Knowledges.API;
 
@@ -11,12 +10,10 @@ public static class KnowledgeTypeEndpoints
 {
     internal static void AddKnowledgeTypesEndpoints(this WebApplication app)
     {
-        var endpointGroup = app.MapGroup("knowledgetypes")
-            .AddFluentValidationAutoValidation()
-            .WithTags("Knowledges");
+        var endpointGroup = app.MapGroup("knowledgetypes").WithTags("Knowledges");
 
         endpointGroup
             .MapGet("", GetKnowledgeTypesEndpoint.GetKnowledgeTypes)
-            .RequirePolicyAuthorization(Policies.ManageKnowledges);
+            .RequirePermission(Permissions.Knowledges.View);
     }
 }
