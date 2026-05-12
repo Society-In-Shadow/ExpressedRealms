@@ -1,17 +1,16 @@
 <script setup lang="ts">
 
-import {onMounted, type PropType, ref} from 'vue'
-import type {Blessing} from '@/components/blessings/types'
+import { type PropType, ref } from 'vue'
+import type { Blessing } from '@/components/blessings/types'
 import EditBlessing from '@/components/blessings/EditBlessing.vue'
-import {UserRoles, userStore} from '@/stores/userStore.ts'
 import Button from 'primevue/button'
-import {blessingConfirmationPopup} from '@/components/blessings/services/blessingConfirmationPopupService.ts'
-import {addBlessingDialog} from '@/components/blessings/services/dialogs.ts'
-import {makeIdSafe} from '@/utilities/stringUtilities.ts'
+import { blessingConfirmationPopup } from '@/components/blessings/services/blessingConfirmationPopupService.ts'
+import { addBlessingDialog } from '@/components/blessings/services/dialogs.ts'
+import { makeIdSafe } from '@/utilities/stringUtilities.ts'
+import { can } from '@/stores/userPermissionStore.ts'
 
 const popups = blessingConfirmationPopup()
 const dialogs = addBlessingDialog()
-const userInfo = userStore()
 const props = defineProps({
   blessing: {
     type: Object as PropType<Blessing>,
@@ -24,11 +23,6 @@ const props = defineProps({
 })
 
 const showEdit = ref(false)
-const hasBlessingRole = ref(false)
-
-onMounted(async () => {
-  hasBlessingRole.value = await userInfo.hasUserRole(UserRoles.BlessingsManagementRole)
-})
 
 function toggleEdit() {
   showEdit.value = !showEdit.value
@@ -46,11 +40,11 @@ function toggleEdit() {
       </h3>
     </div>
     <div
-      v-if="!showEdit && hasBlessingRole && !props.isReadOnly"
+      v-if="!showEdit && (can.Blessings.Edit || can.Blessings.Delete) && !props.isReadOnly"
       class="p-0 m-0 d-inline-flex align-items-start"
     >
-      <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event, props.blessing.id)" />
-      <Button class="float-end" label="Edit" @click="toggleEdit" />
+      <Button v-if="can.Blessings.Delete" class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event, props.blessing.id)" />
+      <Button v-if="can.Blessings.Edit" class="float-end" label="Edit" @click="toggleEdit" />
     </div>
   </div>
   <div v-html="props.blessing?.description" />
@@ -59,15 +53,15 @@ function toggleEdit() {
       <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
         <div>{{ level.name }} – {{ level.description }}</div>
         <div
-          v-if="!showEdit && hasBlessingRole && !props.isReadOnly"
+          v-if="!showEdit && (can.Blessings.Edit || can.Blessings.Delete) && !props.isReadOnly"
           class="p-0 m-0 d-inline-flex align-items-start"
         >
-          <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteBlessingLevelConfirmation($event, props.blessing.id, level.id)" />
-          <Button class="float-end" label="Edit" @click="dialogs.showEditBlessingLevel(props.blessing.id, level.id, level.modifierGroupId)" />
+          <Button v-if="can.Blessings.Delete" class="mr-2" severity="danger" label="Delete" @click="popups.deleteBlessingLevelConfirmation($event, props.blessing.id, level.id)" />
+          <Button v-if="can.Blessings.Edit" class="float-end" label="Edit" @click="dialogs.showEditBlessingLevel(props.blessing.id, level.id, level.modifierGroupId)" />
         </div>
       </div>
     </li>
-    <li v-if="hasBlessingRole">
+    <li v-if="can.Blessings.Create">
       <Button label="Add Level" @click="dialogs.showAddBlessingLevel(props.blessing.id)" />
     </li>
   </ul>

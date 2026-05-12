@@ -3,13 +3,12 @@
 import { onMounted, ref } from 'vue'
 import { blessingsStore } from '@/components/blessings/stores/blessingsStore'
 import BlessingItem from '@/components/blessings/BlessingItem.vue'
-import { UserRoles, userStore } from '@/stores/userStore.ts'
 import AddBlessing from '@/components/blessings/AddBlessing.vue'
 import Button from 'primevue/button'
 import { makeIdSafe } from '@/utilities/stringUtilities.ts'
+import { can } from '@/stores/userPermissionStore.ts'
 
 const store = blessingsStore()
-const userInfo = userStore()
 
 const props = defineProps({
   isReadOnly: {
@@ -18,7 +17,6 @@ const props = defineProps({
   },
 })
 
-const showEdit = ref(false)
 const showAdd = ref(false)
 
 const toggleAdd = () => {
@@ -27,13 +25,12 @@ const toggleAdd = () => {
 
 onMounted(async () => {
   await store.getBlessings()
-  showEdit.value = await userInfo.hasUserRole(UserRoles.BlessingsManagementRole)
 })
 
 </script>
 
 <template>
-  <div v-if="showEdit" class="text-right">
+  <div v-if="can.Blessings.Create" class="text-right">
     <Button v-if="!showAdd" label="Add Advantage" @click="toggleAdd" />
     <Button v-else label="Cancel Add" @click="toggleAdd" />
   </div>

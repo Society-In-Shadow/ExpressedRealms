@@ -1,8 +1,7 @@
 <script setup lang="ts">
 
-import { computed, onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount } from 'vue'
 import { blessingsStore } from '@/components/blessings/stores/blessingsStore'
-import { UserRoles, userStore } from '@/stores/userStore.ts'
 import { makeIdSafe } from '@/utilities/stringUtilities.ts'
 import SelectBlessingItem from '@/components/characters/wizard/blessings/supports/SelectBlessingItem.vue'
 import { characterBlessingsStore } from '@/components/characters/wizard/blessings/stores/characterBlessingStore.ts'
@@ -22,7 +21,6 @@ import Skeleton from 'primevue/skeleton'
 const route = useRoute()
 const store = blessingsStore()
 const characterBlessingData = characterBlessingsStore()
-const userInfo = userStore()
 const xpInfo = experienceStore()
 const characterInfo = characterStore()
 
@@ -37,7 +35,6 @@ const props = defineProps({
   },
 })
 
-const showEdit = ref(false)
 const characterId = Number.parseInt(route.params.id as string)
 
 const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5)
@@ -45,7 +42,6 @@ const isMobile = activeBreakpoint.smaller('md')
 
 onBeforeMount(async () => {
   await store.getBlessings()
-  showEdit.value = await userInfo.hasUserRole(UserRoles.BlessingsManagementRole)
   await characterBlessingData.getCharacterBlessings(characterId)
   await xpInfo.getExperience(characterId)
   if (!isMobile.value) {

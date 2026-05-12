@@ -1,14 +1,11 @@
 <script setup lang="ts">
 
-import { onMounted, type PropType, ref } from 'vue'
+import { type PropType } from 'vue'
 import type { Blessing } from '@/components/blessings/types'
-import { UserRoles, userStore } from '@/stores/userStore.ts'
 import Button from 'primevue/button'
 import AddCharacterBlessing from '@/components/characters/wizard/blessings/supports/AddCharacterBlessing.vue'
 import { wizardContentStore } from '@/components/characters/wizard/stores/wizardContentStore.ts'
 import type { WizardContent } from '@/components/characters/wizard/types.ts'
-
-const userInfo = userStore()
 
 const props = defineProps({
   blessing: {
@@ -19,12 +16,6 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
-})
-
-const hasBlessingRole = ref(false)
-
-onMounted(async () => {
-  hasBlessingRole.value = await userInfo.hasUserRole(UserRoles.BlessingsManagementRole)
 })
 
 const wizardContentInfo = wizardContentStore()
