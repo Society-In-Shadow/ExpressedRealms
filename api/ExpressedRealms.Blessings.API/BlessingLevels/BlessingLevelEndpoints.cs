@@ -1,12 +1,11 @@
-using ExpressedRealms.Authentication;
+using ExpressedRealms.Authentication.PermissionCollection;
+using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using ExpressedRealms.Blessings.API.BlessingLevels.CreateBlessingLevel;
 using ExpressedRealms.Blessings.API.BlessingLevels.DeleteBlessingLevel;
 using ExpressedRealms.Blessings.API.BlessingLevels.EditBlessingLevel;
 using ExpressedRealms.Blessings.API.BlessingLevels.GetAllBlessings;
-using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
 namespace ExpressedRealms.Blessings.API.BlessingLevels;
 
@@ -14,21 +13,22 @@ internal static class BlessingLevelEndpoints
 {
     internal static void AddBlessingLevelEndpoints(this WebApplication app)
     {
-        var endpointGroup = app.MapGroup("blessings")
-            .AddFluentValidationAutoValidation()
-            .RequireAuthorization()
-            .WithTags("Blessings")
-            .RequirePolicyAuthorization(Policies.ManageBlessings);
+        var endpointGroup = app.MapGroup("blessings").WithTags("Blessings");
 
-        endpointGroup.MapGet("{blessingId}/level/{levelId}", GetBlessingLevelEndpoint.Execute);
+        endpointGroup
+            .MapGet("{blessingId}/level/{levelId}", GetBlessingLevelEndpoint.Execute)
+            .RequirePermission(Permissions.Blessings.View);
 
-        endpointGroup.MapPost("{blessingId}/level", CreateBlessingLevelEndpoint.Execute);
+        endpointGroup
+            .MapPost("{blessingId}/level", CreateBlessingLevelEndpoint.Execute)
+            .RequirePermission(Permissions.Blessings.Create);
 
-        endpointGroup.MapPut("{blessingId}/level/{levelId}", EditBlessingLevelEndpoint.Execute);
+        endpointGroup
+            .MapPut("{blessingId}/level/{levelId}", EditBlessingLevelEndpoint.Execute)
+            .RequirePermission(Permissions.Blessings.Edit);
 
-        endpointGroup.MapDelete(
-            "{blessingId}/level/{levelId}",
-            DeleteBlessingLevelEndpoint.Execute
-        );
+        endpointGroup
+            .MapDelete("{blessingId}/level/{levelId}", DeleteBlessingLevelEndpoint.Execute)
+            .RequirePermission(Permissions.Blessings.Delete);
     }
 }

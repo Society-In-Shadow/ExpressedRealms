@@ -9,11 +9,6 @@ public static class PolicyConfiguration
         builder.Services.AddAuthorization(options =>
         {
             options.AddPolicy(
-                Policies.ManageBlessings.Name,
-                policy => policy.RequireRole(UserRoles.ManageBlessingsRole)
-            );
-
-            options.AddPolicy(
                 Policies.ManageModifiers.Name,
                 policy => policy.RequireRole(UserRoles.ManageModifiers)
             );

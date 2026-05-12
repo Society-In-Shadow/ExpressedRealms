@@ -8,6 +8,12 @@ export const UserPermissions = {
     Create: 'archetypes.create',
     Delete: 'archetypes.delete',
   } as const,
+  Blessings: {
+    Edit: 'blessings.edit',
+    View: 'blessings.view',
+    Create: 'blessings.create',
+    Delete: 'blessings.delete',
+  } as const,
   CharacterManagement: {
     Retire: 'charactermanagement.retire',
     View: 'charactermanagement.view',
