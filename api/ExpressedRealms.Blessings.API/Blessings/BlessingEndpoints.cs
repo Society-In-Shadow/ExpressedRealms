@@ -1,9 +1,9 @@
-using ExpressedRealms.Authentication;
+using ExpressedRealms.Authentication.PermissionCollection;
+using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using ExpressedRealms.Blessings.API.Blessings.CreateBlessing;
 using ExpressedRealms.Blessings.API.Blessings.DeleteBlessing;
 using ExpressedRealms.Blessings.API.Blessings.EditBlessing;
 using ExpressedRealms.Blessings.API.Blessings.GetAllBlessings;
-using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
@@ -27,14 +27,14 @@ internal static class BlessingEndpoints
 
         endpointGroup
             .MapPost("", CreateBlessingEndpoint.Execute)
-            .RequirePolicyAuthorization(Policies.ManageBlessings);
+            .RequirePermission(Permissions.Blessings.Create);
 
         endpointGroup
             .MapPut("{id}", EditBlessingEndpoint.Execute)
-            .RequirePolicyAuthorization(Policies.ManageBlessings);
+            .RequirePermission(Permissions.Blessings.Edit);
 
         endpointGroup
             .MapDelete("{id}", DeleteBlessingEndpoint.Execute)
-            .RequirePolicyAuthorization(Policies.ManageBlessings);
+            .RequirePermission(Permissions.Blessings.Delete);
     }
 }
