@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using ExpressedRealms.DB.Models.ModifierSystem.StatGroupMappings;
 using ExpressedRealms.Expressions.Repository.StatModifier;
 using ExpressedRealms.UseCases.Shared;
@@ -7,6 +8,7 @@ namespace ExpressedRealms.Expressions.UseCases.StatModifiers.Add;
 
 internal sealed class AddStatModifierUseCase(
     IStatModifierRepository repository,
+    StatModifierPermissionChecks permissionChecks,
     AddStatModifierModelValidator validator,
     CancellationToken cancellationToken
 ) : IAddStatModifierUseCase
@@ -22,6 +24,9 @@ internal sealed class AddStatModifierUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
+        if (permissionChecks.HasPermissionPolicyForStatModifiers(model.SourceTable, out var fail)) 
+            return fail;
+        
         var groupId = model.StatModifierGroupId ?? 0;
         if (!model.StatModifierGroupId.HasValue)
         {
@@ -40,7 +45,7 @@ internal sealed class AddStatModifierUseCase(
                     await repository.UpdatePowerGroupId(model.SourceId, groupId);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new InvalidEnumArgumentException(nameof(model.SourceTable), (int)model.SourceTable, typeof(SourceTableEnum));
             }
         }
 
