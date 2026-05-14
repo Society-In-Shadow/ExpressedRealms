@@ -12,10 +12,9 @@ internal static class GetStatModifierTypesEndpoint
         IGetModifierTypesUseCase getModifierTypesUseCase
     )
     {
-        var modifierTypeResults = await getModifierTypesUseCase.ExecuteAsync(new GetModifierTypesModel()
-        {
-            Source = Helpers.RouteTypeNameToEnum(typeName),
-        });
+        var modifierTypeResults = await getModifierTypesUseCase.ExecuteAsync(
+            new GetModifierTypesModel() { Source = Helpers.RouteTypeNameToEnum(typeName) }
+        );
 
         if (modifierTypeResults.HasValidationError(out var modifierTypeValidationProblem))
             return modifierTypeValidationProblem;

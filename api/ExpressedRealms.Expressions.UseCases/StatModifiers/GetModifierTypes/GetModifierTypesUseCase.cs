@@ -14,8 +14,8 @@ internal sealed class GetModifierTypesUseCase(
     {
         var groupMapping = await repository.GetModifierTypes();
         var expressions = await expressionRepository.GetAllEnabledExpressions();
-        
-        if (permissionChecks.HasPermissionPolicyForStatModifiers(model.Source, out var fail)) 
+
+        if (permissionChecks.HasPermissionPolicyForStatModifiers(model.Source, out var fail))
             return fail;
 
         return Result.Ok(

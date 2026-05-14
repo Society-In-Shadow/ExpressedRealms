@@ -14,5 +14,7 @@ internal sealed class GetModifiersModelValidator : AbstractValidator<GetModifier
             .WithMessage("Group Id is required.")
             .MustAsync(async (x, y) => await statModifierRepository.GroupIdExists(x))
             .WithMessage("Group does not exist.");
+
+        RuleFor(x => x.Source).IsInEnum();
     }
 }

@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.Expressions.Repository.StatModifier;
 using FluentValidation;
@@ -28,7 +29,11 @@ internal sealed class AddStatModifierModelValidator : AbstractValidator<AddStatM
                         case SourceTableEnum.Powers:
                             return await statModifierRepository.PowerExists(x.SourceId);
                         default:
-                            throw new ArgumentOutOfRangeException();
+                            throw new InvalidEnumArgumentException(
+                                nameof(x.SourceTable),
+                                (int)x.SourceTable,
+                                typeof(SourceTableEnum)
+                            );
                     }
                 }
             )
@@ -51,5 +56,7 @@ internal sealed class AddStatModifierModelValidator : AbstractValidator<AddStatM
             )
             .When(x => x.TargetExpressionId.HasValue)
             .WithMessage("The Expression does not exist.");
+
+        RuleFor(x => x.SourceTable).IsInEnum();
     }
 }

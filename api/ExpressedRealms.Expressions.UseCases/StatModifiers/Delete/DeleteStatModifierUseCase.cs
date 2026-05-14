@@ -21,8 +21,8 @@ internal sealed class DeleteStatModifierUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-        
-        if (permissionChecks.HasPermissionPolicyForStatModifiers(model.Source, out var fail)) 
+
+        if (permissionChecks.HasPermissionPolicyForStatModifiers(model.Source, out var fail))
             return fail;
 
         var groupMapping = await repository.GetGroupMappingForEditing(model.Id);

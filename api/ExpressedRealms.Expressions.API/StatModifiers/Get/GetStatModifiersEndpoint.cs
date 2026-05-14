@@ -13,11 +13,13 @@ internal static class GetStatModifiersEndpoint
         IGetModifiersUseCase useCase
     )
     {
-        var results = await useCase.ExecuteAsync(new GetModifiersModel()
-        {
-            GroupId = groupId,
-            Source = Helpers.RouteTypeNameToEnum(typeName),
-        });
+        var results = await useCase.ExecuteAsync(
+            new GetModifiersModel()
+            {
+                GroupId = groupId,
+                Source = Helpers.RouteTypeNameToEnum(typeName),
+            }
+        );
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;

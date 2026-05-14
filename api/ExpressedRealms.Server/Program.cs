@@ -28,7 +28,6 @@ using ExpressedRealms.Powers.UseCases.Configuration;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Server.Configuration;
 using ExpressedRealms.Server.Configuration.ApplicationInsights;
-using ExpressedRealms.Server.Configuration.UserRoles;
 using ExpressedRealms.Server.CronJobs;
 using ExpressedRealms.Server.DependencyInjections;
 using ExpressedRealms.Server.EndPoints;
@@ -228,9 +227,6 @@ try
 
     Log.Information("Setting Up Forwarded Headers");
     app.UseForwardedHeaders();
-
-    // Seed Roles
-    await app.ConfigureUserRoles();
 
     app.UseResponseCompression();
     app.UseOutputCache();

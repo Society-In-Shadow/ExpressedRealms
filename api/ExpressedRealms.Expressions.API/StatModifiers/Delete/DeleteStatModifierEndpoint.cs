@@ -15,10 +15,11 @@ internal static class DeleteStatModifierEndpoint
     )
     {
         var results = await useCase.ExecuteAsync(
-            new DeleteStatModifierModel() { 
-                Id = mappingId, 
-                StatModifierGroupId = groupId, 
-                Source = Helpers.RouteTypeNameToEnum(typeName)
+            new DeleteStatModifierModel()
+            {
+                Id = mappingId,
+                StatModifierGroupId = groupId,
+                Source = Helpers.RouteTypeNameToEnum(typeName),
             }
         );
 

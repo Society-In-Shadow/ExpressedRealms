@@ -4,7 +4,6 @@ using ExpressedRealms.Admin.API.CustomClaimsPrincipleFactory;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.Roles;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
-using ExpressedRealms.Server.Configuration.UserRoles;
 using ExpressedRealms.Shared.AzureKeyVault;
 using ExpressedRealms.Shared.AzureKeyVault.Secrets;
 using Microsoft.AspNetCore.Authentication;
@@ -38,8 +37,6 @@ public static class SecurityConfiguration
             options.Lockout.AllowedForNewUsers = true;
             options.Lockout.MaxFailedAccessAttempts = 5;
         });
-
-        webApplicationBuilder.AddPolicyConfiguration();
 
         webApplicationBuilder.Services.ConfigureHttpJsonOptions(options =>
         {

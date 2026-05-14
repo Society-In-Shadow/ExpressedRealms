@@ -9,12 +9,17 @@ namespace ExpressedRealms.Expressions.UseCases.StatModifiers;
 
 internal class StatModifierPermissionChecks(IUserContext userContext)
 {
-    internal bool HasPermissionPolicyForStatModifiers(SourceTableEnum sourceTableEnum, out Result fail)
+    internal bool HasPermissionPolicyForStatModifiers(
+        SourceTableEnum sourceTableEnum,
+        out Result fail
+    )
     {
         switch (sourceTableEnum)
         {
             case SourceTableEnum.ProgressionLevels:
-                if (!userContext.CurrentUserHasPermission(Permissions.ProgressionPath.EditModifiers))
+                if (
+                    !userContext.CurrentUserHasPermission(Permissions.ProgressionPath.EditModifiers)
+                )
                 {
                     fail = Result.Fail(new NotFoundFailure("Stat Modifier", ""));
                     return true;
@@ -38,11 +43,15 @@ internal class StatModifierPermissionChecks(IUserContext userContext)
 
                 break;
             default:
-                throw new InvalidEnumArgumentException(nameof(sourceTableEnum), (int)sourceTableEnum, typeof(SourceTableEnum));
+                throw new InvalidEnumArgumentException(
+                    nameof(sourceTableEnum),
+                    (int)sourceTableEnum,
+                    typeof(SourceTableEnum)
+                );
         }
 
         fail = Result.Ok();
-        
+
         return false;
     }
 }

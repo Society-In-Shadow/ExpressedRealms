@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { type FeatureFlag, type UserRole, userStore } from '@/stores/userStore'
+import { type FeatureFlag, userStore } from '@/stores/userStore'
 import { UserRoutes } from '@/router/Routes/UserRoutes'
 import { AdminRoutes } from '@/router/Routes/AdminRoutes'
 import { OverallRoutes } from '@/router/Routes/OverallNavigationRoutes'
@@ -59,16 +59,11 @@ routerSetup.beforeEach(async (to) => {
     }
 
     if (!userInfoInitialized) {
-      await userInfo.updateUserRoles()
       await userPermissions.updateUserPermissions()
       userInfoInitialized = true
     }
 
     if (to.meta.isUserSetup && data.value!.userInfo!.setupState == SetupState.Done) {
-      return { name: 'characters' }
-    }
-
-    if (to.meta.requiredRole && !userInfo.userRoles.includes(to.meta.requiredRole as UserRole)) {
       return { name: 'characters' }
     }
 

@@ -24,9 +24,9 @@ internal sealed class AddStatModifierUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        if (permissionChecks.HasPermissionPolicyForStatModifiers(model.SourceTable, out var fail)) 
+        if (permissionChecks.HasPermissionPolicyForStatModifiers(model.SourceTable, out var fail))
             return fail;
-        
+
         var groupId = model.StatModifierGroupId ?? 0;
         if (!model.StatModifierGroupId.HasValue)
         {
@@ -45,7 +45,11 @@ internal sealed class AddStatModifierUseCase(
                     await repository.UpdatePowerGroupId(model.SourceId, groupId);
                     break;
                 default:
-                    throw new InvalidEnumArgumentException(nameof(model.SourceTable), (int)model.SourceTable, typeof(SourceTableEnum));
+                    throw new InvalidEnumArgumentException(
+                        nameof(model.SourceTable),
+                        (int)model.SourceTable,
+                        typeof(SourceTableEnum)
+                    );
             }
         }
 
