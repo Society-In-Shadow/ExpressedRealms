@@ -1,14 +1,11 @@
 <script setup lang="ts">
 
-import { onMounted, type PropType, ref } from 'vue'
-import { UserRoles, userStore } from '@/stores/userStore'
+import { type PropType, ref } from 'vue'
 import Button from 'primevue/button'
 import { type StatModifierReturnModel } from '@/components/modifiergroups/types.ts'
 import { modifierConfirmationPopup } from '@/components/modifiergroups/services/confirmationPopupService.ts'
 import EditModifier from '@/components/modifiergroups/EditModifier.vue'
 import Tag from 'primevue/tag'
-
-let userInfo = userStore()
 
 const props = defineProps({
   groupId: {
@@ -19,21 +16,11 @@ const props = defineProps({
     type: Object as PropType<StatModifierReturnModel>,
     required: true,
   },
-  isReadOnly: {
-    type: Boolean,
-    required: true,
-  },
 })
 
 let popups = modifierConfirmationPopup()
 
 const showEdit = ref(false)
-
-const hasManageModifiersRole = ref(false)
-
-onMounted(async () => {
-  hasManageModifiersRole.value = await userInfo.hasUserRole(UserRoles.ManageModifiers)
-})
 
 function toggleEdit() {
   showEdit.value = !showEdit.value
@@ -62,7 +49,7 @@ function formatWithSign(number: number) {
       </Tag>
     </div>
     <div
-      v-if="!showEdit && hasManageModifiersRole && !props.isReadOnly"
+      v-if="!showEdit"
       class="p-0 m-0 d-inline-flex align-items-start"
     >
       <Button class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event, props.groupId, props.modifier.id)" />

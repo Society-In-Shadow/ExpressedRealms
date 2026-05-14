@@ -19,5 +19,7 @@ internal sealed class DeleteStatModifierModelValidator : AbstractValidator<Delet
                     await statModifierRepository.GroupMappingExists(x.StatModifierGroupId, x.Id)
             )
             .WithMessage("Stat Modifier does not exist.");
+
+        RuleFor(x => x.Source).IsInEnum();
     }
 }

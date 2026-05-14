@@ -9,6 +9,7 @@ import {
   type StatModifiersResponse,
 } from '@/components/modifiergroups/types.ts'
 import type { ModifierForm } from '@/components/modifiergroups/validations/modifierValidations.ts'
+import { can } from '@/stores/userPermissionStore.ts'
 
 const modifierGroupStore
   = defineStore(`modifierGroups`, {
@@ -18,14 +19,27 @@ const modifierGroupStore
         expressions: [] as StatModifier[],
         haveModifierTypes: false,
         statModifiers: new Map<number, StatModifierReturnModel[]>(),
+        sourceType: null as SourceTableEnum | null,
+        sourceTypeName: String,
       }
     },
     actions: {
+      canViewModifiers(): boolean {
+        switch (this.sourceType) {
+          case SourceTableEnum.Blessings:
+            return can.Blessings.EditModifiers
+          case SourceTableEnum.Powers:
+            return can.Powers.EditModifiers
+          case SourceTableEnum.ProgressionLevels:
+            return can.ProgressionPath.EditModifiers
+          default: return false
+        }
+      },
       async getOptions() {
         if (this.haveModifierTypes)
           return
 
-        await axios.get(`/modifiergroups/modifiers/options`)
+        await axios.get(`/modifiergroups/${this.sourceTypeName}/modifiers/options`)
           .then((response) => {
             this.modifierTypes = response.data.modifierTypes
             this.expressions = response.data.expressions
@@ -34,7 +48,7 @@ const modifierGroupStore
       },
       async getModifiers(groupId: number) {
         await this.getOptions()
-        const response = await axios.get<StatModifiersResponse>(`/modifiergroups/${groupId}/modifiers`)
+        const response = await axios.get<StatModifiersResponse>(`/modifiergroups/${this.sourceTypeName}/${groupId}/modifiers`)
 
         response.data.modifiers.forEach((modifier) => {
           modifier.statModifier = this.modifierTypes.find(x => x.id == modifier.statModifierId)
@@ -55,7 +69,7 @@ const modifierGroupStore
         return this.modifierTypes.find((x: StatModifier) => x.id == id) as StatModifier
       },
       updateModifier: async function (values: ModifierForm, groupId: number, mappingId: number): Promise<void> {
-        await axios.put(`/modifiergroups/${groupId}/modifiers/${mappingId}`, {
+        await axios.put(`/modifiergroups/${this.sourceTypeName}/${groupId}/modifiers/${mappingId}`, {
           scaleWithLevel: values.scaleWithLevel,
           modifier: values.modifier,
           creationSpecificBonus: values.creationSpecificBonus,
@@ -68,12 +82,11 @@ const modifierGroupStore
           })
       },
       addModifier: async function (values: ModifierForm, groupId: number | null, sourceId: number, sourceTable: SourceTableEnum): Promise<number> {
-        console.log('hii')
-
         let newGroupId
-        let url = `/modifiergroups/${groupId}/modifiers/`
+
+        let url = `/modifiergroups/${this.sourceTypeName}/${groupId}/modifiers/`
         if (groupId == null || groupId == 0) {
-          url = `/modifiergroups/modifiers`
+          url = `/modifiergroups/${this.sourceTypeName}/modifiers`
         }
 
         await axios.post(url, {
@@ -93,7 +106,7 @@ const modifierGroupStore
         return newGroupId
       },
       deleteModifier: async function (groupId: number, mappingId: number) {
-        await axios.delete(`/modifiergroups/${groupId}/modifiers/${mappingId}`)
+        await axios.delete(`/modifiergroups/${this.sourceTypeName}/${groupId}/modifiers/${mappingId}`)
           .then(async () => {
             await this.getModifiers(groupId)
             toaster.success(`Successfully Deleted Modifier!`)

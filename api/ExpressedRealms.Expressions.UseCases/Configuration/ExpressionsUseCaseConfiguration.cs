@@ -1,4 +1,5 @@
 using System.Reflection;
+using ExpressedRealms.Expressions.UseCases.StatModifiers;
 using ExpressedRealms.Shared;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +13,7 @@ public static class ExpressionsUseCaseConfiguration
     {
         services.ImportGenericUseCases(Assembly.GetExecutingAssembly());
         services.ImportValidators(Assembly.GetExecutingAssembly());
+        services.AddScoped<StatModifierPermissionChecks>();
 
         return services;
     }

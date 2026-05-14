@@ -13,6 +13,7 @@ export const UserPermissions = {
     View: 'blessings.view',
     Create: 'blessings.create',
     Delete: 'blessings.delete',
+    EditModifiers: 'blessings.editmodifiers',
   } as const,
   CharacterManagement: {
     Retire: 'charactermanagement.retire',
@@ -69,12 +70,14 @@ export const UserPermissions = {
     View: 'powers.view',
     Create: 'powers.create',
     Delete: 'powers.delete',
+    EditModifiers: 'powers.editmodifiers',
   } as const,
   ProgressionPath: {
     Edit: 'progressionpath.edit',
     View: 'progressionpath.view',
     Create: 'progressionpath.create',
     Delete: 'progressionpath.delete',
+    EditModifiers: 'progressionpath.editmodifiers',
   } as const,
   Knowledges: {
     Edit: 'knowledges.edit',

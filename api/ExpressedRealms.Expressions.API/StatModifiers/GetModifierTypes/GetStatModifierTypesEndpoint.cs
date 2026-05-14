@@ -8,10 +8,13 @@ namespace ExpressedRealms.Expressions.API.StatModifiers.GetModifierTypes;
 internal static class GetStatModifierTypesEndpoint
 {
     public static async Task<Results<ValidationProblem, Ok<StatModifiersResponse>>> ExecuteAsync(
+        string typeName,
         IGetModifierTypesUseCase getModifierTypesUseCase
     )
     {
-        var modifierTypeResults = await getModifierTypesUseCase.ExecuteAsync();
+        var modifierTypeResults = await getModifierTypesUseCase.ExecuteAsync(
+            new GetModifierTypesModel() { Source = Helpers.RouteTypeNameToEnum(typeName) }
+        );
 
         if (modifierTypeResults.HasValidationError(out var modifierTypeValidationProblem))
             return modifierTypeValidationProblem;

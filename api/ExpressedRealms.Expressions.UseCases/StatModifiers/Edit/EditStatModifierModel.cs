@@ -1,3 +1,5 @@
+using ExpressedRealms.Expressions.UseCases.StatModifiers.Add;
+
 namespace ExpressedRealms.Expressions.UseCases.StatModifiers.Edit;
 
 public class EditStatModifierModel
@@ -9,4 +11,5 @@ public class EditStatModifierModel
     public bool CreationSpecificBonus { get; set; }
     public int StatModifierId { get; set; }
     public int? TargetExpressionId { get; set; }
+    public SourceTableEnum Source { get; set; }
 }

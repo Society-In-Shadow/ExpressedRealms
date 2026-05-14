@@ -8,13 +8,19 @@ namespace ExpressedRealms.Expressions.API.StatModifiers.Delete;
 internal static class DeleteStatModifierEndpoint
 {
     public static async Task<Results<ValidationProblem, Ok>> ExecuteAsync(
+        string typeName,
         int groupId,
         int mappingId,
         IDeleteStatModifierUseCase useCase
     )
     {
         var results = await useCase.ExecuteAsync(
-            new DeleteStatModifierModel() { Id = mappingId, StatModifierGroupId = groupId }
+            new DeleteStatModifierModel()
+            {
+                Id = mappingId,
+                StatModifierGroupId = groupId,
+                Source = Helpers.RouteTypeNameToEnum(typeName),
+            }
         );
 
         if (results.HasValidationError(out var validationProblem))

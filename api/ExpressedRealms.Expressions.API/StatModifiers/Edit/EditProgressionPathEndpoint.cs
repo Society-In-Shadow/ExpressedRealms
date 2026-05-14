@@ -8,6 +8,7 @@ namespace ExpressedRealms.Expressions.API.StatModifiers.Edit;
 internal static class EditStatModifierEndpoint
 {
     public static async Task<Results<ValidationProblem, Ok>> ExecuteAsync(
+        string typeName,
         int groupId,
         int mappingId,
         EditStatModifier request,
@@ -24,6 +25,7 @@ internal static class EditStatModifierEndpoint
                 StatModifierGroupId = groupId,
                 CreationSpecificBonus = request.CreationSpecificBonus,
                 TargetExpressionId = request.TargetExpressionId,
+                Source = Helpers.RouteTypeNameToEnum(typeName),
             }
         );
 

@@ -6,6 +6,7 @@ namespace ExpressedRealms.Expressions.UseCases.StatModifiers.Delete;
 
 internal sealed class DeleteStatModifierUseCase(
     IStatModifierRepository repository,
+    StatModifierPermissionChecks permissionChecks,
     DeleteStatModifierModelValidator validator,
     CancellationToken cancellationToken
 ) : IDeleteStatModifierUseCase
@@ -20,6 +21,9 @@ internal sealed class DeleteStatModifierUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
+
+        if (permissionChecks.HasPermissionPolicyForStatModifiers(model.Source, out var fail))
+            return fail;
 
         var groupMapping = await repository.GetGroupMappingForEditing(model.Id);
         await repository.HardDeleteGroupMapping(groupMapping);

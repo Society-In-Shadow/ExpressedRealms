@@ -35,5 +35,7 @@ internal sealed class EditStatModifierModelValidator : AbstractValidator<EditSta
             )
             .When(x => x.TargetExpressionId.HasValue)
             .WithMessage("The Expression does not exist.");
+
+        RuleFor(x => x.Source).IsInEnum();
     }
 }

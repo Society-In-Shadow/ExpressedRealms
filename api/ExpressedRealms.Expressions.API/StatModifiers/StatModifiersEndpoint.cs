@@ -1,13 +1,10 @@
-using ExpressedRealms.Authentication;
 using ExpressedRealms.Expressions.API.StatModifiers.Create;
 using ExpressedRealms.Expressions.API.StatModifiers.Delete;
 using ExpressedRealms.Expressions.API.StatModifiers.Edit;
 using ExpressedRealms.Expressions.API.StatModifiers.Get;
 using ExpressedRealms.Expressions.API.StatModifiers.GetModifierTypes;
-using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
 namespace ExpressedRealms.Expressions.API.StatModifiers;
 
@@ -15,30 +12,36 @@ internal static class StatModifiersEndpoint
 {
     internal static void AddStatModifiersEndpoints(this WebApplication app)
     {
-        var endpointGroup = app.MapGroup("modifiergroups")
-            .AddFluentValidationAutoValidation()
-            .WithTags("Stat Modifier Groups");
+        var endpointGroup = app.MapGroup("modifiergroups").WithTags("Stat Modifier Groups");
 
-        endpointGroup.MapGet("{groupId}/modifiers", GetStatModifiersEndpoint.ExecuteAsync);
+        endpointGroup.MapGet(
+            "{typeName}/{groupId}/modifiers",
+            GetStatModifiersEndpoint.ExecuteAsync
+        );
 
-        endpointGroup
-            .MapGet("/modifiers/options", GetStatModifierTypesEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ManageModifiers);
+        endpointGroup.MapGet(
+            "{typeName}/modifiers/options",
+            GetStatModifierTypesEndpoint.ExecuteAsync
+        );
 
-        endpointGroup
-            .MapPut("{groupId}/modifiers/{mappingId}", EditStatModifierEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ManageModifiers);
+        endpointGroup.MapPut(
+            "{typeName}/{groupId}/modifiers/{mappingId}",
+            EditStatModifierEndpoint.ExecuteAsync
+        );
 
-        endpointGroup
-            .MapPost("{groupId:int?}/modifiers", CreateStatModifierEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ManageModifiers);
+        endpointGroup.MapPost(
+            "{typeName}/{groupId:int?}/modifiers",
+            CreateStatModifierEndpoint.ExecuteAsync
+        );
 
-        endpointGroup
-            .MapPost("/modifiers", CreateStatModifierNoGroupEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ManageModifiers);
+        endpointGroup.MapPost(
+            "{typeName}/modifiers",
+            CreateStatModifierNoGroupEndpoint.ExecuteAsync
+        );
 
-        endpointGroup
-            .MapDelete("{groupId}/modifiers/{mappingId}", DeleteStatModifierEndpoint.ExecuteAsync)
-            .RequirePolicyAuthorization(Policies.ManageModifiers);
+        endpointGroup.MapDelete(
+            "{typeName}/{groupId}/modifiers/{mappingId}",
+            DeleteStatModifierEndpoint.ExecuteAsync
+        );
     }
 }

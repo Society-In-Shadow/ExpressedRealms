@@ -8,11 +8,18 @@ namespace ExpressedRealms.Expressions.API.StatModifiers.Get;
 internal static class GetStatModifiersEndpoint
 {
     public static async Task<Results<ValidationProblem, Ok<StatModifiersResponse>>> ExecuteAsync(
+        string typeName,
         int groupId,
         IGetModifiersUseCase useCase
     )
     {
-        var results = await useCase.ExecuteAsync(new GetModifiersModel() { GroupId = groupId });
+        var results = await useCase.ExecuteAsync(
+            new GetModifiersModel()
+            {
+                GroupId = groupId,
+                Source = Helpers.RouteTypeNameToEnum(typeName),
+            }
+        );
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;

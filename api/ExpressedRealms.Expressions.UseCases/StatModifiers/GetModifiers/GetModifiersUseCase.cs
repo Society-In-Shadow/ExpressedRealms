@@ -6,6 +6,7 @@ namespace ExpressedRealms.Expressions.UseCases.StatModifiers.GetModifiers;
 
 internal sealed class GetModifiersUseCase(
     IStatModifierRepository repository,
+    StatModifierPermissionChecks permissionChecks,
     GetModifiersModelValidator validator,
     CancellationToken cancellationToken
 ) : IGetModifiersUseCase
@@ -20,6 +21,9 @@ internal sealed class GetModifiersUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
+
+        if (permissionChecks.HasPermissionPolicyForStatModifiers(model.Source, out var fail))
+            return fail;
 
         var groupMapping = await repository.GetGroupMappings(model.GroupId);
 
