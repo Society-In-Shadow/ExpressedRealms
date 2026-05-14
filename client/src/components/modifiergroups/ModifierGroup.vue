@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
 import { computed, onMounted, type PropType, ref, watch } from 'vue'
-import { UserRoles, userStore } from '@/stores/userStore'
 import Button from 'primevue/button'
 import modifierGroupStore from '@/components/modifiergroups/stores/modifierGroupStore.ts'
 import { SourceTableEnum } from '@/components/modifiergroups/types.ts'
@@ -9,12 +8,10 @@ import AddModifier from '@/components/modifiergroups/AddModifier.vue'
 import ModifierItem from '@/components/modifiergroups/ModifierItem.vue'
 
 const store = modifierGroupStore()
-const userInfo = userStore()
-const hasManageModifierRole = ref(false)
 
 onMounted(async () => {
-  await store.getOptions()
-  hasManageModifierRole.value = await userInfo.hasUserRole(UserRoles.ManageModifiers)
+  store.sourceType = props.source
+  store.sourceTypeName = SourceTableEnum[props.source]
 })
 
 const showAdd = ref(false)
@@ -49,28 +46,32 @@ const props = defineProps({
 const groupId = computed(() => props.groupId ?? newGroupId.value)
 
 watch([() => props.groupId, () => newGroupId], async (oldValue, newValue) => {
-  if (groupId.value !== null && groupId.value !== 0)
+  store.sourceType = props.source
+  store.sourceTypeName = SourceTableEnum[props.source]
+  if (groupId.value !== null && groupId.value !== 0 && store.canViewModifiers())
     await store.getModifiers(groupId.value)
 }, { immediate: true })
 
 </script>
 
 <template>
-  <h1>Modifiers</h1>
-  <div v-for="modifier in store.getModifierList(groupId)" :key="modifier.id">
-    <ModifierItem :modifier="modifier" :is-read-only="!hasManageModifierRole" :group-id="groupId" />
-  </div>
+  <div v-if="store.canViewModifiers()">
+    <h1>Modifiers</h1>
+    <div v-for="modifier in store.getModifierList(groupId)" :key="modifier.id">
+      <ModifierItem :modifier="modifier" :group-id="groupId" />
+    </div>
 
-  <AddModifier
-    v-if="showAdd && hasManageModifierRole"
-    :group-id="groupId"
-    :source="props.source"
-    :source-id="props.sourceId"
-    @canceled="toggleAdd"
-    @update-group-id="updateGroupId"
-  />
-  <Button
-    v-if="!showAdd && hasManageModifierRole" class="w-100 m-2"
-    label="Add Modifier" @click="toggleAdd"
-  />
+    <AddModifier
+      v-if="showAdd"
+      :group-id="groupId"
+      :source="props.source"
+      :source-id="props.sourceId"
+      @canceled="toggleAdd"
+      @update-group-id="updateGroupId"
+    />
+    <Button
+      v-if="!showAdd" class="w-100 m-2"
+      label="Add Modifier" @click="toggleAdd"
+    />
+  </div>
 </template>

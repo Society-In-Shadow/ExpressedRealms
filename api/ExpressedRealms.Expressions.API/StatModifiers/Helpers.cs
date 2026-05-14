@@ -10,7 +10,7 @@ internal static class Helpers
         {
             case "powers": return SourceTableEnum.Powers;
             case "blessings": return SourceTableEnum.Blessings;
-            case "powerpaths": return SourceTableEnum.ProgressionLevels;
+            case "progressionlevels": return SourceTableEnum.ProgressionLevels;
             default: throw new NotImplementedException(nameof(name));
         }
     }
