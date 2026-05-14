@@ -35,5 +35,11 @@ public static partial class Permissions
             Id = new Guid("019e0045-49be-7f1f-8ad7-986d9796ec59"),
             Name = nameof(Delete),
         };
+
+        public static readonly Permission EditModifiers = new(ResourceInfo)
+        {
+            Id = new Guid("019e23f9-41e4-7d15-83e1-146b207688a7"),
+            Name = nameof(EditModifiers),
+        };
     }
 }
