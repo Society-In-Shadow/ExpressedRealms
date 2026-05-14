@@ -8,6 +8,7 @@ namespace ExpressedRealms.Expressions.API.StatModifiers.Create;
 internal static class CreateStatModifierNoGroupEndpoint
 {
     public static async Task<Results<ValidationProblem, Created<NewIds>>> ExecuteAsync(
+        string typeName,
         CreateStatModifier request,
         IAddStatModifierUseCase useCase
     )
@@ -19,7 +20,7 @@ internal static class CreateStatModifierNoGroupEndpoint
                 ScaleWithLevel = request.ScaleWithLevel,
                 CreationSpecificBonus = request.CreationSpecificBonus,
                 SourceId = request.SourceId,
-                SourceTable = request.SourceTable,
+                SourceTable = Helpers.RouteTypeNameToEnum(typeName),
                 StatModifierGroupId = null,
                 StatModifierId = request.StatModifierId,
                 TargetExpressionId = request.TargetExpressionId,
