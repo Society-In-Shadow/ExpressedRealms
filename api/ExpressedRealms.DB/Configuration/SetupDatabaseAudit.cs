@@ -23,7 +23,6 @@ using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Audit;
 using ExpressedRealms.DB.Models.Powers.PowerPathSetup.Audit;
 using ExpressedRealms.DB.Models.Powers.PowerSetup.Audit;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserRoles;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 
 namespace ExpressedRealms.DB.Configuration;
@@ -41,15 +40,13 @@ public static class SetupDatabaseAudit
             nameof(ISoftDelete.DeletedAt),
             "deleted_at",
         };
-        Audit
-            .Core.Configuration.Setup()
+        Audit.Core.Configuration.Setup()
             .UseEntityFramework(x =>
                 x.AuditTypeExplicitMapper(m =>
                         m.AddExpressionSectionAuditTrailMapping()
                             .AddExpressionAuditTrailMapping()
                             .AddUserAuditTrailMapping()
                             .AddPlayerAuditTrailMapping()
-                            .AddUserRoleAuditTrailMapping()
                             .AddPowerPathAuditTrailMapping()
                             .AddPowerAuditTrailMapping()
                             .AddKnowledgeAuditTrailMapping()
@@ -63,7 +60,6 @@ public static class SetupDatabaseAudit
                             .AddAssignedXpTypeAuditTrailMapping()
                             .AddRoleAuditTrailMapping()
                             .AddRolePermissionMappingAuditTrailMapping()
-                            .AddUserRoleAuditTrailMapping()
                             .AddContactAuditTrailMapping()
                             .AddEventQuestionAuditTrailMapping()
                             .AddCheckinAuditTrailMapping()

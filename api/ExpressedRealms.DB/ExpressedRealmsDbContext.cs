@@ -8,8 +8,6 @@ using ExpressedRealms.DB.Models.Characters.XpTables;
 using ExpressedRealms.DB.Models.Skills;
 using ExpressedRealms.DB.Models.Statistics;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels.Roles;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserRoles;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -20,10 +18,10 @@ namespace ExpressedRealms.DB
     public partial class ExpressedRealmsDbContext
         : AuditIdentityDbContext<
             User,
-            Role,
+            IdentityRole<string>,
             string,
             IdentityUserClaim<string>,
-            UserRole,
+            IdentityUserRole<string>,
             IdentityUserLogin<string>,
             IdentityRoleClaim<string>,
             IdentityUserToken<string>
@@ -46,7 +44,6 @@ namespace ExpressedRealms.DB
         public DbSet<Player> Players { get; set; }
         public DbSet<UserAuditTrail> UserAuditTrails { get; set; }
         public DbSet<PlayerAuditTrail> PlayerAuditTrails { get; set; }
-        public DbSet<UserRoleAuditTrail> UserRoleAuditTrails { get; set; }
         public DbSet<StatType> StateTypes { get; set; }
         public DbSet<StatLevel> StatLevels { get; set; }
         public DbSet<StatDescriptionMapping> StatDescriptionMappings { get; set; }
