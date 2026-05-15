@@ -11,7 +11,6 @@ import TabPanels from 'primevue/tabpanels'
 import Button from 'primevue/button'
 import SkeletonWrapper from '@/FormWrappers/SkeletonWrapper.vue'
 import ActivityLogs from '@/components/admin/players/tiles/ActivityLogs.vue'
-import PlayerRoles from '@/components/admin/players/tiles/PlayerRoles.vue'
 import { PlayerStore } from '@/components/admin/players/stores/playerStore'
 import { userConfirmationPopups } from '@/components/admin/players/services/playerConfirmationPopupService.ts'
 import { formatDistance } from 'date-fns/formatDistance'
@@ -93,16 +92,10 @@ const timeTillLockoutExpires = computed(() => {
           <Tab v-if="permissionCheck.Player.ViewActivityLogs" value="2">
             Activity Logs
           </Tab>
-          <Tab v-if="permissionCheck.Player.ManageRoles" value="1">
-            Roles (Legacy)
-          </Tab>
         </TabList>
         <TabPanels>
           <TabPanel value="0">
             <EditPlayerTab :user-id="userId" />
-          </TabPanel>
-          <TabPanel v-if="permissionCheck.Player.ManageRoles" value="1">
-            <PlayerRoles :user-id="userId" />
           </TabPanel>
           <TabPanel v-if="permissionCheck.Player.ViewActivityLogs" value="2">
             <ActivityLogs :user-id="userId" />
