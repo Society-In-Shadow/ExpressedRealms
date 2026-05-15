@@ -89,32 +89,6 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             })
             .ToListAsync();
 
-        var userRoleLogs = await context
-            .UserRoleAuditTrails.AsNoTracking()
-            .IgnoreQueryFilters()
-            .Where(x => x.ActorUserId == userId)
-            .Select(x => new Log()
-            {
-                Location = $"Role \"{x.Role.Name}\" for Player \"{x.MappingUser.Player!.Name}\"",
-                TimeStamp = x.Timestamp,
-                Action = x.Action,
-                ChangedProperties = x.ChangedProperties,
-            })
-            .ToListAsync();
-
-        var userSpecificRoleLogs = await context
-            .UserRoleAuditTrails.AsNoTracking()
-            .IgnoreQueryFilters()
-            .Where(x => x.MappingUserId == userId && x.ActorUserId != userId)
-            .Select(x => new Log()
-            {
-                Location = $"Role \"{x.Role.Name}\" was modified by \"{x.ActorUser.Player!.Name}\"",
-                TimeStamp = x.Timestamp,
-                Action = x.Action,
-                ChangedProperties = x.ChangedProperties,
-            })
-            .ToListAsync();
-
         var newRoleLogs = await context
             .RoleAuditTrails.AsNoTracking()
             .IgnoreQueryFilters()
@@ -226,8 +200,6 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             .Concat(userSpecificLogs)
             .Concat(playerLogs)
             .Concat(playerSpecificLogs)
-            .Concat(userRoleLogs)
-            .Concat(userSpecificRoleLogs)
             .Concat(powerPathLogs)
             .Concat(powerLogs)
             .Concat(knowledgeLogs)

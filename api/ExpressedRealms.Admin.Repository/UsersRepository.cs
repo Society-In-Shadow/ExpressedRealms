@@ -16,8 +16,6 @@ internal sealed class UsersRepository(
 {
     public async Task<List<UserListDto>> GetUsersAsync()
     {
-        var userRoles = await context.UserRoles.AsNoTracking().ToListAsync();
-        var roles = await context.Roles.AsNoTracking().ToListAsync();
         var currentDateTime = DateOnly.FromDateTime(DateTime.UtcNow);
 
         var players = await context
@@ -46,14 +44,6 @@ internal sealed class UsersRepository(
                     .ToList(),
             })
             .ToListAsync();
-
-        foreach (var player in players)
-        {
-            player.LegacyRoles = userRoles
-                .Where(x => x.UserId == player.Id)
-                .Select(x => roles.First(y => y.Id == x.RoleId).Name)
-                .ToList();
-        }
 
         return players;
     }

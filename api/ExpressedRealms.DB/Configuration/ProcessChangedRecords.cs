@@ -38,7 +38,6 @@ using ExpressedRealms.DB.Models.Powers.PowerPathSetup;
 using ExpressedRealms.DB.Models.Powers.PowerPathSetup.Audit;
 using ExpressedRealms.DB.Models.Powers.PowerSetup.Audit;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserRoles;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 
 namespace ExpressedRealms.DB.Configuration;
@@ -60,7 +59,6 @@ public static class ProcessChangedRecords
                 changedRecords
             ),
             nameof(Player) => PlayerAuditConfiguration.ProcessChangedRecords(changedRecords),
-            nameof(UserRole) => UserRoleAuditConfiguration.ProcessChangedRecords(changedRecords),
             nameof(PowerPath) => PowerPathAuditTrailExtensions.ProcessChangedRecords(
                 changedRecords
             ),

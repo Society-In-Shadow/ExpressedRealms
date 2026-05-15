@@ -2,7 +2,6 @@ using System.Security.Claims;
 using System.Text.Json;
 using ExpressedRealms.Admin.API.CustomClaimsPrincipleFactory;
 using ExpressedRealms.DB;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels.Roles;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using ExpressedRealms.Shared.AzureKeyVault;
 using ExpressedRealms.Shared.AzureKeyVault.Secrets;
@@ -18,7 +17,6 @@ public static class SecurityConfiguration
     {
         webApplicationBuilder
             .Services.AddIdentityCore<User>()
-            .AddRoles<Role>()
             .AddEntityFrameworkStores<ExpressedRealmsDbContext>()
             .AddApiEndpoints();
 

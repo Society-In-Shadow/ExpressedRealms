@@ -23,7 +23,6 @@ using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Audit;
 using ExpressedRealms.DB.Models.Powers.PowerPathSetup;
 using ExpressedRealms.DB.Models.Powers.PowerSetup.Audit;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
-using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserRoles;
 using Microsoft.AspNetCore.Identity;
 
 namespace ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
@@ -38,8 +37,6 @@ public class User : IdentityUser
     public virtual List<UserAuditTrail> UserActorAuditTrails { get; set; } = new();
     public virtual List<UserAuditTrail> UserAuditTrails { get; set; } = new();
     public virtual List<PlayerAuditTrail> PlayerAuditTrails { get; set; } = new();
-    public virtual List<UserRoleAuditTrail> UserRoleAuditTrails { get; set; } = new();
-    public virtual List<UserRoleAuditTrail> MappedUserRoleAuditTrails { get; set; } = new();
     public virtual List<PowerPathAuditTrail> PowerPathAudits { get; set; } = new();
     public virtual List<PowerAuditTrail> PowerAuditTrails { get; set; } = new();
     public virtual List<KnowledgeAuditTrail> KnowledgeAuditTrails { get; set; } = new();
