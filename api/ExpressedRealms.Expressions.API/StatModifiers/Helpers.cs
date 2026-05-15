@@ -16,7 +16,9 @@ internal static class Helpers
             case "progressionlevels":
                 return SourceTableEnum.ProgressionLevels;
             default:
-                throw new InvalidEnumArgumentException($"{name} was not converted into a valid SourceTableEnum.");
+                throw new InvalidEnumArgumentException(
+                    $"{name} was not converted into a valid SourceTableEnum."
+                );
         }
     }
 }
