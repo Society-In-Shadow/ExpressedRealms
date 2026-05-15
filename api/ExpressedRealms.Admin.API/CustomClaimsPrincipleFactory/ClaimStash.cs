@@ -140,13 +140,7 @@ public class ClaimStash(
     private async Task<List<ClaimDto>> GetUserClaimsFromDatabase(User user)
     {
         var permissions = await rolesRepository.GetPermissionKeysForUserAsync(user.Id);
-        var roles = await userManager.GetRolesAsync(user);
-
-        var claimsToStore = roles.Select(x => new ClaimDto(ClaimTypes.Role, x)).ToList();
-        claimsToStore.AddRange(
-            permissions.Select(x => new ClaimDto("custom_permission", x)).ToList()
-        );
-        return claimsToStore;
+        return permissions.Select(x => new ClaimDto("custom_permission", x)).ToList();
     }
 
     private static List<Claim> TranslateCacheIntoClaims(RedisValue redisValue)
