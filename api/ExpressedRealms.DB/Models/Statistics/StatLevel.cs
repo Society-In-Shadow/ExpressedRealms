@@ -1,4 +1,5 @@
 using ExpressedRealms.DB.Models.Characters;
+using ExpressedRealms.DB.Models.Statistics.CharacterStatMappings;
 
 namespace ExpressedRealms.DB.Models.Statistics;
 
@@ -16,4 +17,5 @@ public class StatLevel
     public virtual List<Character> CharacterStrength { get; set; } = null!;
     public virtual List<Character> CharacterIntelligence { get; set; } = null!;
     public virtual List<Character> CharacterWillpower { get; set; } = null!;
+    public virtual ICollection<CharacterStatMapping> CharacterStatMappings { get; set; }  = new HashSet<CharacterStatMapping>();
 }

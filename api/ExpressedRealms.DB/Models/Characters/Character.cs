@@ -10,6 +10,7 @@ using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
 using ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup;
 using ExpressedRealms.DB.Models.Skills;
 using ExpressedRealms.DB.Models.Statistics;
+using ExpressedRealms.DB.Models.Statistics.CharacterStatMappings;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 
 namespace ExpressedRealms.DB.Models.Characters;
@@ -64,4 +65,5 @@ public class Character : ISoftDelete
     public virtual List<CharacterXpMapping> CharacterXpMappings { get; set; } = null!;
     public virtual List<AssignedXpMapping> AssignedXpMappings { get; set; } = null!;
     public virtual ICollection<Contact> Contacts { get; set; } = new HashSet<Contact>();
+    public virtual ICollection<CharacterStatMapping> CharacterStatMappings { get; set; }  = new HashSet<CharacterStatMapping>();
 }
