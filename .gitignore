@@ -407,3 +407,6 @@ megalinter-reports/
 
 # Cypress test reports for github
 client/cypress/results
+
+# k6 Secrets file
+k6/secrets.ts
