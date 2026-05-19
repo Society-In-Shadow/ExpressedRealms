@@ -1,6 +1,6 @@
 import http from 'k6/http';
 import {BASE_URL, GetAuthCookieValue, loginParams} from "./auth.ts";
-import {normalSustainTest} from "./optionTypes.ts";
+import {realisticLoadTest} from "./optionTypes.ts";
 
 export function setup() {
   return {
@@ -9,7 +9,7 @@ export function setup() {
 }
 
 export const options = {
-  ...normalSustainTest
+  ...realisticLoadTest
 };
 
 export default function (data) {
