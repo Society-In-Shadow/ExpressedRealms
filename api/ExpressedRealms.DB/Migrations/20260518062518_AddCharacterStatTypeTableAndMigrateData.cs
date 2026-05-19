@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System.Reflection;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -73,6 +74,18 @@ namespace ExpressedRealms.DB.Migrations
                                  (id, 6, willpower_id)
                                  ) v(character_id, stat_type_id, stat_level_id)
                                  """);
+            
+            var assembly = Assembly.GetExecutingAssembly();
+
+            using var stream = assembly.GetManifestResourceStream(
+                "ExpressedRealms.DB.Scripts.CharacterXpView.sql"
+            );
+
+            if (stream == null)
+                throw new InvalidOperationException("CharacterXpView.sql not found as embedded resource");
+
+            using var reader = new StreamReader(stream);
+            migrationBuilder.Sql(reader.ReadToEnd());
         }
 
         /// <inheritdoc />
