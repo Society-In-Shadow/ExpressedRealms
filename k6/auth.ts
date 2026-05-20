@@ -23,7 +23,7 @@ export function GetAuthCookieValue() {
   // 1. Target the raw .NET Identity bearer cookie string
   let authCookie = res.cookies['.AspNetCore.Identity.Bearer'];
 
-  if (!authCookie || !authCookie[0] || !authCookie[0].value) {
+  if (!authCookie[0]?.value) {
     throw new Error("Authentication failed: .AspNetCore.Identity.Bearer cookie payload missing!");
   }
 
