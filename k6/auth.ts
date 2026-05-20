@@ -34,7 +34,8 @@ export function GetAuthCookieValue() {
 export function loginParams(data) {
   return {
     headers: {
-      'Cookie': `.AspNetCore.Identity.Bearer=${data.rawToken}`
+      'Cookie': `.AspNetCore.Identity.Bearer=${data.rawToken}`,
+      'Content-Type': 'application/json',
     }
   };
 }

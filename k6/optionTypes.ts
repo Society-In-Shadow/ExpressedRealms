@@ -24,6 +24,7 @@ export const realisticLoadTest = {
     http_reqs: [
       'rate>50',
     ],
+    http_req_failed: ['rate<0.01'],
   },
   stages: [
     { duration: '30s', target: 30 },
@@ -42,6 +43,7 @@ export const performanceTargetTests = {
     http_reqs: [
       'rate>100',
     ],
+    http_req_failed: ['rate<0.01'],
   },
   stages: [
     { duration: '30s', target: 100 },

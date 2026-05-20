@@ -39,8 +39,6 @@ export const statStore
       async updateStat(stat: Stat, characterId: number, statTypeId: number) {
         await axios.put(`/characters/${characterId}/stat/${statTypeId}`, {
           levelTypeId: stat.statLevelInfo.level,
-          statTypeId: statTypeId,
-          characterId: characterId,
         })
         await experienceInfo.updateExperience(characterId)
         await this.loadData(characterId)
