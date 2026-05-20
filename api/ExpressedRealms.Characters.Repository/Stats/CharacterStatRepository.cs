@@ -163,6 +163,7 @@ internal sealed class CharacterStatRepository(
                 ShortName = x.StatType.ShortName,
                 Name = x.StatType.Name,
             })
+            .OrderBy(x => x.StatTypeId)
             .ToListAsync(cancellationToken);
     }
 
