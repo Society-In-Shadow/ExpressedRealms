@@ -11,6 +11,7 @@ using ExpressedRealms.Characters.API.CharacterEndPoints.GetBreakOfDawnInfo;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetCRB;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetDetailedStatInfo;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetOverallStats;
+using ExpressedRealms.Characters.API.CharacterEndPoints.GetStatsForCharacter;
 using ExpressedRealms.Characters.API.CharacterEndPoints.Requests;
 using ExpressedRealms.Characters.API.CharacterEndPoints.Responses;
 using ExpressedRealms.Characters.API.CharacterEndPoints.RetireCharacter;
@@ -19,7 +20,6 @@ using ExpressedRealms.Characters.Repository.DTOs;
 using ExpressedRealms.Characters.Repository.Enums;
 using ExpressedRealms.Characters.Repository.Skills;
 using ExpressedRealms.Characters.Repository.Skills.DTOs;
-using ExpressedRealms.Characters.Repository.Stats;
 using ExpressedRealms.DB;
 using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.FeatureFlags;
@@ -31,7 +31,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
-using SmallStatInfo = ExpressedRealms.Characters.API.StatEndPoints.Responses.SmallStatInfo;
 
 namespace ExpressedRealms.Characters.API.CharacterEndPoints;
 
@@ -338,26 +337,7 @@ internal static class CharacterEndPoints
             .RequireAuthorization();
 
         endpointGroup
-            .MapGet(
-                "{characterId}/stats",
-                [Authorize]
-                async Task<Results<NotFound, Ok<List<SmallStatInfo>>>> (
-                    int characterId,
-                    ICharacterStatRepository repository
-                ) =>
-                {
-                    var results = await repository.GetAllStats(characterId);
-
-                    if (results.HasNotFound(out var notFound))
-                        return notFound;
-                    results.ThrowIfErrorNotHandled();
-
-                    return TypedResults.Ok(
-                        results.Value.Select(x => new SmallStatInfo(x)).ToList()
-                    );
-                }
-            )
-            .WithSummary("Returns the info needed for displaying the small stat tiles")
+            .MapGet("{characterId}/stats", GetStatsForCharacterEndpoint.ExecuteAsync)
             .WithDescription(
                 "Returns the info needed for displaying the small stat tiles, mainly the bonus, stat name and level."
             )
