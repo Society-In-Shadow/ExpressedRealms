@@ -7,6 +7,7 @@ using ExpressedRealms.DB;
 using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Characters;
+using ExpressedRealms.DB.Models.Statistics.CharacterStatMappings;
 using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.Repositories.Shared;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
@@ -298,6 +299,18 @@ internal sealed class CharacterRepository(
 
         await context.SaveChangesAsync(cancellationToken);
 
+        for (byte i = 1; i < 7; i++)
+        {
+            context.CharacterStatMappings.Add(new CharacterStatMapping
+            {
+                CharacterId = character.Id,
+                StatLevelId = 1,
+                StatTypeId = i
+            });
+        }
+        
+        await context.SaveChangesAsync(cancellationToken);
+        
         await skillRepository.AddDefaultSkills(character.Id);
         await xpRepository.AddDefaultCharacterXpMappings(character.Id);
 
