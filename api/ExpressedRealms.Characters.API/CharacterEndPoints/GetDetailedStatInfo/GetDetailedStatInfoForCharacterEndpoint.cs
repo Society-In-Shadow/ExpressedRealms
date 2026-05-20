@@ -9,7 +9,7 @@ using SingleStatInfo = ExpressedRealms.Characters.API.StatEndPoints.Responses.Si
 
 namespace ExpressedRealms.Characters.API.CharacterEndPoints.GetDetailedStatInfo;
 
-internal static class GetDetailedStatInfoForCharacter
+internal static class GetDetailedStatInfoForCharacterEndpoint
 {
     internal static async Task<Results<NotFound, ValidationProblem, Ok<SingleStatInfo>>> ExecuteAsync(
         int characterId,

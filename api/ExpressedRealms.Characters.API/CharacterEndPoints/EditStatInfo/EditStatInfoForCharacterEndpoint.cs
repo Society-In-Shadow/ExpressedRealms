@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace ExpressedRealms.Characters.API.CharacterEndPoints.EditStatInfo;
 
-internal static class EditStatInfoForCharacter
+internal static class EditStatInfoForCharacterEndpoint
 {
     internal static async Task<Results<NotFound, NoContent, ValidationProblem, BadRequest<string>>> ExecuteAsync(
         int characterId,
