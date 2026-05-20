@@ -50,5 +50,6 @@ public class Character : ISoftDelete
     public virtual List<CharacterXpMapping> CharacterXpMappings { get; set; } = null!;
     public virtual List<AssignedXpMapping> AssignedXpMappings { get; set; } = null!;
     public virtual ICollection<Contact> Contacts { get; set; } = new HashSet<Contact>();
-    public virtual ICollection<CharacterStatMapping> CharacterStatMappings { get; set; }  = new HashSet<CharacterStatMapping>();
+    public virtual ICollection<CharacterStatMapping> CharacterStatMappings { get; set; } =
+        new HashSet<CharacterStatMapping>();
 }

@@ -29,26 +29,27 @@ internal sealed class CharacterStatRepository(
         var result = await detailedStatValidator.ValidateAsync(dto);
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
-        
+
         var query = await context
             .Characters.AsNoTracking()
             .WithUserAccessAsync(userContext, dto.CharacterId);
-            
+
         var character = await query.Select(x => x.Id).FirstOrDefaultAsync();
         if (character == 0)
             return Result.Fail(new NotFoundFailure("Character"));
-        
-        var stats = await context.CharacterStatMappings.AsNoTracking()
+
+        var stats = await context
+            .CharacterStatMappings.AsNoTracking()
             .Where(x => x.CharacterId == dto.CharacterId)
             .Select(x => new
             {
                 x.Id,
                 x.StatTypeId,
                 x.StatLevelId,
-                x.StatLevel.TotalXPCost
+                x.StatLevel.TotalXPCost,
             })
             .ToListAsync(cancellationToken);
-        
+
         var statMapping = stats.First(x => x.StatTypeId == (byte)dto.StatTypeId);
 
         var statInfo = await context
@@ -87,13 +88,15 @@ internal sealed class CharacterStatRepository(
         var query = await context
             .Characters.AsNoTracking()
             .WithUserAccessAsync(userContext, dto.CharacterId);
-            
+
         var character = await query.Select(x => x.Id).FirstOrDefaultAsync();
         if (character == 0)
             return Result.Fail(new NotFoundFailure("Character"));
 
-        var mapping = await context.CharacterStatMappings
-            .Where(x => x.CharacterId == dto.CharacterId && x.StatTypeId == (byte)dto.StatTypeId)
+        var mapping = await context
+            .CharacterStatMappings.Where(x =>
+                x.CharacterId == dto.CharacterId && x.StatTypeId == (byte)dto.StatTypeId
+            )
             .FirstAsync();
 
         var xpCheck = await EditStatXpCheck(dto, mapping);
@@ -113,15 +116,11 @@ internal sealed class CharacterStatRepository(
             statMapping.CharacterId,
             XpSectionTypes.Stats
         );
-        
+
         var levels = new List<byte>() { statMapping.StatLevelId, dto.LevelTypeId };
         var types = await context
             .StatLevels.Where(x => levels.Contains(x.Id))
-            .Select(x => new
-            {
-                x.Id,
-                x.TotalXPCost
-            })
+            .Select(x => new { x.Id, x.TotalXPCost })
             .ToListAsync(cancellationToken);
 
         var oldTotalXpCost = types.First(x => x.Id == statMapping.StatLevelId).TotalXPCost;
@@ -148,12 +147,13 @@ internal sealed class CharacterStatRepository(
         var query = await context
             .Characters.AsNoTracking()
             .WithUserAccessAsync(userContext, characterId);
-            
+
         var character = await query.Select(x => x.Id).FirstOrDefaultAsync();
         if (character == 0)
             return Result.Fail(new NotFoundFailure("Character"));
 
-        return await context.CharacterStatMappings.AsNoTracking()
+        return await context
+            .CharacterStatMappings.AsNoTracking()
             .Where(x => x.CharacterId == characterId)
             .Select(x => new SmallStatInfo()
             {
@@ -166,5 +166,4 @@ internal sealed class CharacterStatRepository(
             .OrderBy(x => x.StatTypeId)
             .ToListAsync(cancellationToken);
     }
-
 }

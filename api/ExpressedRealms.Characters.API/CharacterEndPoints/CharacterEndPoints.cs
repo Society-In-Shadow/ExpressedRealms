@@ -329,11 +329,17 @@ internal static class CharacterEndPoints
         endpointGroup.MapPut("{id}", EditCharacterEndpoint.Execute).RequireAuthorization();
 
         endpointGroup
-            .MapGet("{characterId}/stat/{statTypeId}",GetDetailedStatInfoForCharacterEndpoint.ExecuteAsync)
+            .MapGet(
+                "{characterId}/stat/{statTypeId}",
+                GetDetailedStatInfoForCharacterEndpoint.ExecuteAsync
+            )
             .RequireAuthorization();
 
         endpointGroup
-            .MapPut("{characterId}/stat/{statTypeId}", EditStatInfoForCharacterEndpoint.ExecuteAsync)
+            .MapPut(
+                "{characterId}/stat/{statTypeId}",
+                EditStatInfoForCharacterEndpoint.ExecuteAsync
+            )
             .RequireAuthorization();
 
         endpointGroup

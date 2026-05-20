@@ -10,7 +10,9 @@ namespace ExpressedRealms.Characters.API.CharacterEndPoints.EditStatInfo;
 
 internal static class EditStatInfoForCharacterEndpoint
 {
-    internal static async Task<Results<NotFound, NoContent, ValidationProblem, BadRequest<string>>> ExecuteAsync(
+    internal static async Task<
+        Results<NotFound, NoContent, ValidationProblem, BadRequest<string>>
+    > ExecuteAsync(
         int characterId,
         StatType statTypeId,
         EditStatRequest request,

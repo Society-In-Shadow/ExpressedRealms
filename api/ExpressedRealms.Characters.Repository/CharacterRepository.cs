@@ -301,16 +301,18 @@ internal sealed class CharacterRepository(
 
         for (byte i = 1; i < 7; i++)
         {
-            context.CharacterStatMappings.Add(new CharacterStatMapping
-            {
-                CharacterId = character.Id,
-                StatLevelId = 1,
-                StatTypeId = i
-            });
+            context.CharacterStatMappings.Add(
+                new CharacterStatMapping
+                {
+                    CharacterId = character.Id,
+                    StatLevelId = 1,
+                    StatTypeId = i,
+                }
+            );
         }
-        
+
         await context.SaveChangesAsync(cancellationToken);
-        
+
         await skillRepository.AddDefaultSkills(character.Id);
         await xpRepository.AddDefaultCharacterXpMappings(character.Id);
 

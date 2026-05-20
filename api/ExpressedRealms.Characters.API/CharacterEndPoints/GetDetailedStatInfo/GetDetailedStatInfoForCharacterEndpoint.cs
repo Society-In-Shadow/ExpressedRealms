@@ -11,11 +11,13 @@ namespace ExpressedRealms.Characters.API.CharacterEndPoints.GetDetailedStatInfo;
 
 internal static class GetDetailedStatInfoForCharacterEndpoint
 {
-    internal static async Task<Results<NotFound, ValidationProblem, Ok<SingleStatInfo>>> ExecuteAsync(
+    internal static async Task<
+        Results<NotFound, ValidationProblem, Ok<SingleStatInfo>>
+    > ExecuteAsync(
         int characterId,
         StatType statTypeId,
-        [FromServices]ICharacterStatRepository repository
-        )
+        [FromServices] ICharacterStatRepository repository
+    )
     {
         var results = await repository.GetDetailedStatInfo(
             new GetDetailedStatInfoDto(characterId, statTypeId)

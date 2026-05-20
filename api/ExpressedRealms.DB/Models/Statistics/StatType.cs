@@ -10,5 +10,6 @@ public class StatType
     public string Description { get; set; }
 
     public virtual List<StatDescriptionMapping> StatDescriptionMappings { get; set; } = null!;
-    public virtual ICollection<CharacterStatMapping> CharacterStatMappings { get; set; }  = new HashSet<CharacterStatMapping>();
+    public virtual ICollection<CharacterStatMapping> CharacterStatMappings { get; set; } =
+        new HashSet<CharacterStatMapping>();
 }

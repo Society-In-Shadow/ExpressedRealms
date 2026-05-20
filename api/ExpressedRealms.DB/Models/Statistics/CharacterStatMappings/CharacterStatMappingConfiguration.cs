@@ -12,19 +12,19 @@ public class CharacterStatMappingConfiguration : IEntityTypeConfiguration<Charac
         builder.Property(e => e.CharacterId).IsRequired();
         builder.Property(e => e.StatTypeId).IsRequired();
         builder.Property(e => e.StatLevelId).IsRequired();
-        
+
         builder
             .HasOne(e => e.StatType)
             .WithMany(e => e.CharacterStatMappings)
             .HasForeignKey(e => e.StatTypeId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         builder
             .HasOne(e => e.StatLevel)
             .WithMany(e => e.CharacterStatMappings)
             .HasForeignKey(e => e.StatLevelId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         builder
             .HasOne(e => e.Character)
             .WithMany(e => e.CharacterStatMappings)

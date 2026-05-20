@@ -11,8 +11,8 @@ internal static class GetStatsForCharacterEndpoint
 {
     internal static async Task<Results<NotFound, Ok<List<SmallStatInfo>>>> ExecuteAsync(
         int characterId,
-        [FromServices]ICharacterStatRepository repository
-        )
+        [FromServices] ICharacterStatRepository repository
+    )
     {
         var results = await repository.GetAllStats(characterId);
 
@@ -20,8 +20,6 @@ internal static class GetStatsForCharacterEndpoint
             return notFound;
         results.ThrowIfErrorNotHandled();
 
-        return TypedResults.Ok(
-            results.Value.Select(x => new SmallStatInfo(x)).ToList()
-        );
+        return TypedResults.Ok(results.Value.Select(x => new SmallStatInfo(x)).ToList());
     }
 }
