@@ -7,6 +7,7 @@ using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels;
 using ExpressedRealms.DB.Models.Characters.XpTables;
 using ExpressedRealms.DB.Models.Skills;
 using ExpressedRealms.DB.Models.Statistics;
+using ExpressedRealms.DB.Models.Statistics.CharacterStatMappings;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
 using Microsoft.AspNetCore.Identity;
@@ -46,6 +47,7 @@ namespace ExpressedRealms.DB
         public DbSet<PlayerAuditTrail> PlayerAuditTrails { get; set; }
         public DbSet<StatType> StateTypes { get; set; }
         public DbSet<StatLevel> StatLevels { get; set; }
+        public DbSet<CharacterStatMapping> CharacterStatMappings { get; set; }
         public DbSet<StatDescriptionMapping> StatDescriptionMappings { get; set; }
         public DbSet<CharacterSkillsMapping> CharacterSkillsMappings { get; set; }
         public DbSet<ModifierType> ModifierTypes { get; set; }

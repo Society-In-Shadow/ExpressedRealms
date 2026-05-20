@@ -3,6 +3,7 @@ using System;
 using ExpressedRealms.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpressedRealms.DB.Migrations
 {
     [DbContext(typeof(ExpressedRealmsDbContext))]
-    partial class ExpressedRealmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260518062518_AddCharacterStatTypeTableAndMigrateData")]
+    partial class AddCharacterStatTypeTableAndMigrateData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -811,13 +814,31 @@ namespace ExpressedRealms.DB.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<byte>("AgilityId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasDefaultValue((byte)1)
+                        .HasColumnName("agility_id");
+
                     b.Property<string>("Background")
                         .HasColumnType("text")
                         .HasColumnName("background");
 
+                    b.Property<byte>("ConstitutionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasDefaultValue((byte)1)
+                        .HasColumnName("constitution_id");
+
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("deleted_at");
+
+                    b.Property<byte>("DexterityId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasDefaultValue((byte)1)
+                        .HasColumnName("dexterity_id");
 
                     b.Property<int>("ExpressionId")
                         .HasColumnType("integer")
@@ -826,6 +847,12 @@ namespace ExpressedRealms.DB.Migrations
                     b.Property<int?>("FactionId")
                         .HasColumnType("integer")
                         .HasColumnName("faction_id");
+
+                    b.Property<byte>("IntelligenceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasDefaultValue((byte)1)
+                        .HasColumnName("intelligence_id");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean")
@@ -883,14 +910,38 @@ namespace ExpressedRealms.DB.Migrations
                         .HasDefaultValue(72)
                         .HasColumnName("stat_experience_points");
 
+                    b.Property<byte>("StrengthId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasDefaultValue((byte)1)
+                        .HasColumnName("strength_id");
+
+                    b.Property<byte>("WillpowerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint")
+                        .HasDefaultValue((byte)1)
+                        .HasColumnName("willpower_id");
+
                     b.HasKey("Id")
                         .HasName("pk_characters");
+
+                    b.HasIndex("AgilityId")
+                        .HasDatabaseName("ix_characters_agility_id");
+
+                    b.HasIndex("ConstitutionId")
+                        .HasDatabaseName("ix_characters_constitution_id");
+
+                    b.HasIndex("DexterityId")
+                        .HasDatabaseName("ix_characters_dexterity_id");
 
                     b.HasIndex("ExpressionId")
                         .HasDatabaseName("ix_characters_expression_id");
 
                     b.HasIndex("FactionId")
                         .HasDatabaseName("ix_characters_faction_id");
+
+                    b.HasIndex("IntelligenceId")
+                        .HasDatabaseName("ix_characters_intelligence_id");
 
                     b.HasIndex("PlayerId")
                         .HasDatabaseName("ix_characters_player_id");
@@ -900,6 +951,12 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.HasIndex("SecondaryProgressionId")
                         .HasDatabaseName("ix_characters_secondary_progression_id");
+
+                    b.HasIndex("StrengthId")
+                        .HasDatabaseName("ix_characters_strength_id");
+
+                    b.HasIndex("WillpowerId")
+                        .HasDatabaseName("ix_characters_willpower_id");
 
                     b.ToTable("characters", (string)null);
                 });
@@ -3437,18 +3494,18 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnName("stat_type_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_character_stat_mappings");
+                        .HasName("pk_character_stat_mapping");
 
                     b.HasIndex("CharacterId")
-                        .HasDatabaseName("ix_character_stat_mappings_character_id");
+                        .HasDatabaseName("ix_character_stat_mapping_character_id");
 
                     b.HasIndex("StatLevelId")
-                        .HasDatabaseName("ix_character_stat_mappings_stat_level_id");
+                        .HasDatabaseName("ix_character_stat_mapping_stat_level_id");
 
                     b.HasIndex("StatTypeId")
-                        .HasDatabaseName("ix_character_stat_mappings_stat_type_id");
+                        .HasDatabaseName("ix_character_stat_mapping_stat_type_id");
 
-                    b.ToTable("character_stat_mappings", (string)null);
+                    b.ToTable("character_stat_mapping", (string)null);
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Statistics.StatDescriptionMapping", b =>
@@ -4312,6 +4369,27 @@ namespace ExpressedRealms.DB.Migrations
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Characters.Character", b =>
                 {
+                    b.HasOne("ExpressedRealms.DB.Models.Statistics.StatLevel", "AgilityStatLevel")
+                        .WithMany("CharacterAgility")
+                        .HasForeignKey("AgilityId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_characters_stat_levels_agility_id");
+
+                    b.HasOne("ExpressedRealms.DB.Models.Statistics.StatLevel", "ConstitutionStatLevel")
+                        .WithMany("CharacterConstitution")
+                        .HasForeignKey("ConstitutionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_characters_stat_levels_constitution_id");
+
+                    b.HasOne("ExpressedRealms.DB.Models.Statistics.StatLevel", "DexterityStatLevel")
+                        .WithMany("CharacterDexterity")
+                        .HasForeignKey("DexterityId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_characters_stat_levels_dexterity_id");
+
                     b.HasOne("ExpressedRealms.DB.Models.Expressions.ExpressionSetup.Expression", "Expression")
                         .WithMany("Characters")
                         .HasForeignKey("ExpressionId")
@@ -4324,6 +4402,13 @@ namespace ExpressedRealms.DB.Migrations
                         .HasForeignKey("FactionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .HasConstraintName("fk_characters_expression_sections_faction_id");
+
+                    b.HasOne("ExpressedRealms.DB.Models.Statistics.StatLevel", "IntelligenceStatLevel")
+                        .WithMany("CharacterIntelligence")
+                        .HasForeignKey("IntelligenceId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_characters_stat_levels_intelligence_id");
 
                     b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup.Player", "Player")
                         .WithMany("Characters")
@@ -4344,15 +4429,41 @@ namespace ExpressedRealms.DB.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .HasConstraintName("fk_characters_progression_path_secondary_progression_id");
 
+                    b.HasOne("ExpressedRealms.DB.Models.Statistics.StatLevel", "StrengthStatLevel")
+                        .WithMany("CharacterStrength")
+                        .HasForeignKey("StrengthId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_characters_stat_levels_strength_id");
+
+                    b.HasOne("ExpressedRealms.DB.Models.Statistics.StatLevel", "WillpowerStatLevel")
+                        .WithMany("CharacterWillpower")
+                        .HasForeignKey("WillpowerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_characters_stat_levels_willpower_id");
+
+                    b.Navigation("AgilityStatLevel");
+
+                    b.Navigation("ConstitutionStatLevel");
+
+                    b.Navigation("DexterityStatLevel");
+
                     b.Navigation("Expression");
 
                     b.Navigation("FactionInfo");
+
+                    b.Navigation("IntelligenceStatLevel");
 
                     b.Navigation("Player");
 
                     b.Navigation("PrimaryProgressionPath");
 
                     b.Navigation("SecondaryProgressionPath");
+
+                    b.Navigation("StrengthStatLevel");
+
+                    b.Navigation("WillpowerStatLevel");
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Characters.XpTables.CharacterXpMapping", b =>
@@ -5272,21 +5383,21 @@ namespace ExpressedRealms.DB.Migrations
                         .HasForeignKey("CharacterId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_character_stat_mappings_characters_character_id");
+                        .HasConstraintName("fk_character_stat_mapping_characters_character_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Statistics.StatLevel", "StatLevel")
                         .WithMany("CharacterStatMappings")
                         .HasForeignKey("StatLevelId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_character_stat_mappings_stat_levels_stat_level_id");
+                        .HasConstraintName("fk_character_stat_mapping_stat_levels_stat_level_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Statistics.StatType", "StatType")
                         .WithMany("CharacterStatMappings")
                         .HasForeignKey("StatTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_character_stat_mappings_state_types_stat_type_id");
+                        .HasConstraintName("fk_character_stat_mapping_state_types_stat_type_id");
 
                     b.Navigation("Character");
 
@@ -5761,7 +5872,19 @@ namespace ExpressedRealms.DB.Migrations
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Statistics.StatLevel", b =>
                 {
+                    b.Navigation("CharacterAgility");
+
+                    b.Navigation("CharacterConstitution");
+
+                    b.Navigation("CharacterDexterity");
+
+                    b.Navigation("CharacterIntelligence");
+
                     b.Navigation("CharacterStatMappings");
+
+                    b.Navigation("CharacterStrength");
+
+                    b.Navigation("CharacterWillpower");
 
                     b.Navigation("StatDescriptionMappings");
                 });

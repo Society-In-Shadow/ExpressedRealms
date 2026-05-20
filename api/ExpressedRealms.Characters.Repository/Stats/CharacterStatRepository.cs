@@ -2,8 +2,8 @@ using ExpressedRealms.Characters.Repository.Stats.DTOs;
 using ExpressedRealms.Characters.Repository.Stats.Enums;
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.DB;
-using ExpressedRealms.DB.Models.Characters;
 using ExpressedRealms.DB.Models.Characters.XpTables;
+using ExpressedRealms.DB.Models.Statistics.CharacterStatMappings;
 using ExpressedRealms.Repositories.Shared;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Shared;
@@ -34,51 +34,32 @@ internal sealed class CharacterStatRepository(
             .Characters.AsNoTracking()
             .WithUserAccessAsync(userContext, dto.CharacterId);
 
-        var character = await query
-            .Select(x => new
-            {
-                AgilityId = x.AgilityId,
-                ConstitutionId = x.ConstitutionId,
-                DexterityId = x.DexterityId,
-                StrengthId = x.StrengthId,
-                IntelligenceId = x.IntelligenceId,
-                WillpowerId = x.WillpowerId,
-                AvailableXP = StartingExperience.StartingStats
-                    - (
-                        x.AgilityStatLevel.TotalXPCost
-                        + x.ConstitutionStatLevel.TotalXPCost
-                        + x.DexterityStatLevel.TotalXPCost
-                        + x.StrengthStatLevel.TotalXPCost
-                        + x.IntelligenceStatLevel.TotalXPCost
-                        + x.WillpowerStatLevel.TotalXPCost
-                    ),
-            })
-            .FirstOrDefaultAsync(cancellationToken);
-
-        if (character is null)
+        var character = await query.Select(x => x.Id).FirstOrDefaultAsync();
+        if (character == 0)
             return Result.Fail(new NotFoundFailure("Character"));
 
-        var statLevelId = dto.StatTypeId switch
-        {
-            StatType.Agility => character.AgilityId,
-            StatType.Constitution => character.ConstitutionId,
-            StatType.Dexterity => character.DexterityId,
-            StatType.Strength => character.StrengthId,
-            StatType.Intelligence => character.IntelligenceId,
-            StatType.Willpower => character.WillpowerId,
-        };
+        var stats = await context
+            .CharacterStatMappings.AsNoTracking()
+            .Where(x => x.CharacterId == dto.CharacterId)
+            .Select(x => new
+            {
+                x.Id,
+                x.StatTypeId,
+                x.StatLevelId,
+                x.StatLevel.TotalXPCost,
+            })
+            .ToListAsync(cancellationToken);
+
+        var statMapping = stats.First(x => x.StatTypeId == (byte)dto.StatTypeId);
 
         var statInfo = await context
             .StateTypes.Where(x => x.Id == (byte)dto.StatTypeId)
             .Select(x => new SingleStatInfo()
             {
-                Id = (StatType)x.Id,
                 Name = x.Name,
                 Description = x.Description,
-                StatLevel = statLevelId,
-                AvailableXP = character.AvailableXP,
                 StatLevelInfo = x
-                    .StatDescriptionMappings.Where(y => y.StatLevelId == statLevelId)
+                    .StatDescriptionMappings.Where(y => y.StatLevelId == statMapping.StatLevelId)
                     .Select(y => new StatDetails()
                     {
                         Level = y.StatLevelId,
@@ -91,6 +72,10 @@ internal sealed class CharacterStatRepository(
             })
             .FirstAsync(cancellationToken);
 
+        statInfo.Id = dto.StatTypeId;
+        statInfo.StatLevel = statMapping.StatLevelId;
+        statInfo.AvailableXP = StartingExperience.StartingStats - stats.Sum(x => x.TotalXPCost);
+
         return Result.Ok(statInfo);
     }
 
@@ -100,73 +85,46 @@ internal sealed class CharacterStatRepository(
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
 
-        var query = await context.Characters.WithUserAccessAsync(userContext, dto.CharacterId);
+        var query = await context
+            .Characters.AsNoTracking()
+            .WithUserAccessAsync(userContext, dto.CharacterId);
 
-        var character = await query
-            .Include(x => x.AgilityStatLevel)
-            .Include(x => x.StrengthStatLevel)
-            .Include(x => x.ConstitutionStatLevel)
-            .Include(x => x.DexterityStatLevel)
-            .Include(x => x.IntelligenceStatLevel)
-            .Include(x => x.WillpowerStatLevel)
-            .FirstOrDefaultAsync(cancellationToken);
-
-        if (character is null)
+        var character = await query.Select(x => x.Id).FirstOrDefaultAsync();
+        if (character == 0)
             return Result.Fail(new NotFoundFailure("Character"));
 
-        var xpCheck = await EditStatXpCheck(dto, character);
+        var mapping = await context
+            .CharacterStatMappings.Where(x =>
+                x.CharacterId == dto.CharacterId && x.StatTypeId == (byte)dto.StatTypeId
+            )
+            .FirstAsync();
+
+        var xpCheck = await EditStatXpCheck(dto, mapping);
         if (xpCheck.IsFailed)
             return xpCheck;
 
-        switch (dto.StatTypeId)
-        {
-            case StatType.Agility:
-                character.AgilityId = dto.LevelTypeId;
-                break;
-            case StatType.Constitution:
-                character.ConstitutionId = dto.LevelTypeId;
-                break;
-            case StatType.Dexterity:
-                character.DexterityId = dto.LevelTypeId;
-                break;
-            case StatType.Strength:
-                character.StrengthId = dto.LevelTypeId;
-                break;
-            case StatType.Intelligence:
-                character.IntelligenceId = dto.LevelTypeId;
-                break;
-            case StatType.Willpower:
-                character.WillpowerId = dto.LevelTypeId;
-                break;
-        }
+        mapping.StatLevelId = dto.LevelTypeId;
 
         await context.SaveChangesAsync(cancellationToken);
 
         return Result.Ok();
     }
 
-    private async Task<Result> EditStatXpCheck(EditStatDto dto, Character character)
+    private async Task<Result> EditStatXpCheck(EditStatDto dto, CharacterStatMapping statMapping)
     {
         var xpInfo = await xpRepository.GetAvailableXpForSection(
-            character.Id,
+            statMapping.CharacterId,
             XpSectionTypes.Stats
         );
 
-        var oldTotalXpCost = dto.StatTypeId switch
-        {
-            StatType.Agility => character.AgilityStatLevel.TotalXPCost,
-            StatType.Strength => character.StrengthStatLevel.TotalXPCost,
-            StatType.Constitution => character.ConstitutionStatLevel.TotalXPCost,
-            StatType.Dexterity => character.DexterityStatLevel.TotalXPCost,
-            StatType.Intelligence => character.IntelligenceStatLevel.TotalXPCost,
-            StatType.Willpower => character.WillpowerStatLevel.TotalXPCost,
-        };
+        var levels = new List<byte>() { statMapping.StatLevelId, dto.LevelTypeId };
+        var types = await context
+            .StatLevels.Where(x => levels.Contains(x.Id))
+            .Select(x => new { x.Id, x.TotalXPCost })
+            .ToListAsync(cancellationToken);
 
-        var newTotalXpCost = await context
-            .StatLevels.Where(x => x.Id == dto.LevelTypeId)
-            .Select(x => x.TotalXPCost)
-            .FirstAsync(cancellationToken);
-
+        var oldTotalXpCost = types.First(x => x.Id == statMapping.StatLevelId).TotalXPCost;
+        var newTotalXpCost = types.First(x => x.Id == dto.LevelTypeId).TotalXPCost;
         var spentXp = xpInfo.SpentXp;
 
         spentXp -= oldTotalXpCost;
@@ -190,94 +148,22 @@ internal sealed class CharacterStatRepository(
             .Characters.AsNoTracking()
             .WithUserAccessAsync(userContext, characterId);
 
-        var character = await query
-            .Include(x => x.AgilityStatLevel)
-            .Include(x => x.ConstitutionStatLevel)
-            .Include(x => x.DexterityStatLevel)
-            .Include(x => x.StrengthStatLevel)
-            .Include(x => x.IntelligenceStatLevel)
-            .Include(x => x.WillpowerStatLevel)
-            .FirstOrDefaultAsync();
-
-        if (character is null)
+        var character = await query.Select(x => x.Id).FirstOrDefaultAsync();
+        if (character == 0)
             return Result.Fail(new NotFoundFailure("Character"));
 
-        var statTypes = await context.StateTypes.ToListAsync(cancellationToken);
-
-        var characterStats = new List<SmallStatInfo>()
-        {
-            new()
+        return await context
+            .CharacterStatMappings.AsNoTracking()
+            .Where(x => x.CharacterId == characterId)
+            .Select(x => new SmallStatInfo()
             {
-                StatTypeId = StatType.Agility,
-                Bonus = character.AgilityStatLevel.Bonus,
-                Level = character.AgilityStatLevel.Id,
-                ShortName = statTypes.First(x => x.Id == (byte)StatType.Agility).ShortName,
-                Name = statTypes.First(x => x.Id == (byte)StatType.Agility).Name,
-            },
-            new()
-            {
-                StatTypeId = StatType.Constitution,
-                Bonus = character.ConstitutionStatLevel.Bonus,
-                Level = character.ConstitutionStatLevel.Id,
-                ShortName = statTypes.First(x => x.Id == (byte)StatType.Constitution).ShortName,
-                Name = statTypes.First(x => x.Id == (byte)StatType.Constitution).Name,
-            },
-            new()
-            {
-                StatTypeId = StatType.Dexterity,
-                Bonus = character.DexterityStatLevel.Bonus,
-                Level = character.DexterityStatLevel.Id,
-                ShortName = statTypes.First(x => x.Id == (byte)StatType.Dexterity).ShortName,
-                Name = statTypes.First(x => x.Id == (byte)StatType.Dexterity).Name,
-            },
-            new()
-            {
-                StatTypeId = StatType.Strength,
-                Bonus = character.StrengthStatLevel.Bonus,
-                Level = character.StrengthStatLevel.Id,
-                ShortName = statTypes.First(x => x.Id == (byte)StatType.Strength).ShortName,
-                Name = statTypes.First(x => x.Id == (byte)StatType.Strength).Name,
-            },
-            new()
-            {
-                StatTypeId = StatType.Intelligence,
-                Bonus = character.IntelligenceStatLevel.Bonus,
-                Level = character.IntelligenceStatLevel.Id,
-                ShortName = statTypes.First(x => x.Id == (byte)StatType.Intelligence).ShortName,
-                Name = statTypes.First(x => x.Id == (byte)StatType.Intelligence).Name,
-            },
-            new()
-            {
-                StatTypeId = StatType.Willpower,
-                Bonus = character.WillpowerStatLevel.Bonus,
-                Level = character.WillpowerStatLevel.Id,
-                ShortName = statTypes.First(x => x.Id == (byte)StatType.Willpower).ShortName,
-                Name = statTypes.First(x => x.Id == (byte)StatType.Willpower).Name,
-            },
-        };
-
-        return Result.Ok(characterStats);
-    }
-
-    public async Task<int> GetExperienceSpentOnStatsForCharacter(int characterId)
-    {
-        var character = await context
-            .Characters.Include(x => x.AgilityStatLevel)
-            .Include(x => x.ConstitutionStatLevel)
-            .Include(x => x.DexterityStatLevel)
-            .Include(x => x.StrengthStatLevel)
-            .Include(x => x.IntelligenceStatLevel)
-            .Include(x => x.WillpowerStatLevel)
-            .FirstOrDefaultAsync(
-                x => x.Id == characterId && x.Player.UserId == userContext.CurrentUserId(),
-                cancellationToken
-            );
-
-        return character!.AgilityStatLevel.TotalXPCost
-            + character.ConstitutionStatLevel.TotalXPCost
-            + character.DexterityStatLevel.TotalXPCost
-            + character.StrengthStatLevel.TotalXPCost
-            + character.IntelligenceStatLevel.TotalXPCost
-            + character.WillpowerStatLevel.TotalXPCost;
+                StatTypeId = (StatType)x.StatTypeId,
+                Bonus = x.StatLevel.Bonus,
+                Level = x.StatLevelId,
+                ShortName = x.StatType.ShortName,
+                Name = x.StatType.Name,
+            })
+            .OrderBy(x => x.StatTypeId)
+            .ToListAsync(cancellationToken);
     }
 }

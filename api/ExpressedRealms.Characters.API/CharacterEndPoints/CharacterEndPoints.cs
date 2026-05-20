@@ -4,23 +4,22 @@ using ExpressedRealms.Characters.API.CharacterEndPoints.CopyCharacter;
 using ExpressedRealms.Characters.API.CharacterEndPoints.DTOs;
 using ExpressedRealms.Characters.API.CharacterEndPoints.EditCharacter;
 using ExpressedRealms.Characters.API.CharacterEndPoints.EditCharacterOptions;
+using ExpressedRealms.Characters.API.CharacterEndPoints.EditStatInfo;
 using ExpressedRealms.Characters.API.CharacterEndPoints.FinalizeCharacterCreate;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetArchetypesForExpression;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetBreakOfDawnInfo;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetCRB;
+using ExpressedRealms.Characters.API.CharacterEndPoints.GetDetailedStatInfo;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetOverallStats;
+using ExpressedRealms.Characters.API.CharacterEndPoints.GetStatsForCharacter;
 using ExpressedRealms.Characters.API.CharacterEndPoints.Requests;
 using ExpressedRealms.Characters.API.CharacterEndPoints.Responses;
 using ExpressedRealms.Characters.API.CharacterEndPoints.RetireCharacter;
-using ExpressedRealms.Characters.API.StatEndPoints.Requests;
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.DTOs;
 using ExpressedRealms.Characters.Repository.Enums;
 using ExpressedRealms.Characters.Repository.Skills;
 using ExpressedRealms.Characters.Repository.Skills.DTOs;
-using ExpressedRealms.Characters.Repository.Stats;
-using ExpressedRealms.Characters.Repository.Stats.DTOs;
-using ExpressedRealms.Characters.Repository.Stats.Enums;
 using ExpressedRealms.DB;
 using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.FeatureFlags;
@@ -32,8 +31,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
-using SingleStatInfo = ExpressedRealms.Characters.API.CharacterEndPoints.StatDTOs.SingleStatInfo;
-using SmallStatInfo = ExpressedRealms.Characters.API.StatEndPoints.Responses.SmallStatInfo;
 
 namespace ExpressedRealms.Characters.API.CharacterEndPoints;
 
@@ -334,86 +331,19 @@ internal static class CharacterEndPoints
         endpointGroup
             .MapGet(
                 "{characterId}/stat/{statTypeId}",
-                [Authorize]
-                async Task<Results<NotFound, ValidationProblem, Ok<SingleStatInfo>>> (
-                    int characterId,
-                    StatType statTypeId,
-                    ICharacterStatRepository repository
-                ) =>
-                {
-                    var results = await repository.GetDetailedStatInfo(
-                        new GetDetailedStatInfoDto(characterId, statTypeId)
-                    );
-
-                    if (results.HasNotFound(out var notFound))
-                        return notFound;
-                    if (results.HasValidationError(out var validationProblem))
-                        return validationProblem;
-                    results.ThrowIfErrorNotHandled();
-
-                    return TypedResults.Ok(new SingleStatInfo(results.Value));
-                }
-            )
-            .WithSummary("This returns the detailed information for the given stat")
-            .WithDescription(
-                "This returns the detailed information for the given stat.  This will include the full name, what it does, current level, bonus, xp, and description."
+                GetDetailedStatInfoForCharacterEndpoint.ExecuteAsync
             )
             .RequireAuthorization();
 
         endpointGroup
             .MapPut(
                 "{characterId}/stat/{statTypeId}",
-                [Authorize]
-                async Task<Results<NotFound, NoContent, ValidationProblem, BadRequest<string>>> (
-                    EditStatRequest request,
-                    ICharacterStatRepository repository
-                ) =>
-                {
-                    var results = await repository.UpdateCharacterStat(
-                        new EditStatDto()
-                        {
-                            CharacterId = request.CharacterId,
-                            LevelTypeId = request.LevelTypeId,
-                            StatTypeId = request.StatTypeId,
-                        }
-                    );
-
-                    if (results.HasNotFound(out var notFound))
-                        return notFound;
-                    if (results.HasValidationError(out var validationProblem))
-                        return validationProblem;
-                    if (results.HasInsufficientXP(out var insufficientXPMessage))
-                        return insufficientXPMessage;
-                    results.ThrowIfErrorNotHandled();
-
-                    return TypedResults.NoContent();
-                }
+                EditStatInfoForCharacterEndpoint.ExecuteAsync
             )
-            .WithSummary("Allows user to update the given state with the provided level")
-            .WithDescription("Allows user to update the given state with the provided level")
             .RequireAuthorization();
 
         endpointGroup
-            .MapGet(
-                "{characterId}/stats",
-                [Authorize]
-                async Task<Results<NotFound, Ok<List<SmallStatInfo>>>> (
-                    int characterId,
-                    ICharacterStatRepository repository
-                ) =>
-                {
-                    var results = await repository.GetAllStats(characterId);
-
-                    if (results.HasNotFound(out var notFound))
-                        return notFound;
-                    results.ThrowIfErrorNotHandled();
-
-                    return TypedResults.Ok(
-                        results.Value.Select(x => new SmallStatInfo(x)).ToList()
-                    );
-                }
-            )
-            .WithSummary("Returns the info needed for displaying the small stat tiles")
+            .MapGet("{characterId}/stats", GetStatsForCharacterEndpoint.ExecuteAsync)
             .WithDescription(
                 "Returns the info needed for displaying the small stat tiles, mainly the bonus, stat name and level."
             )
