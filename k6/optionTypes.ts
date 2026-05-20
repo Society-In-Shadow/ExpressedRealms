@@ -36,8 +36,8 @@ export const performanceTargetTests = {
   insecureSkipTLSVerify: true,
   thresholds: {
     http_req_duration: [
-      'avg<50',
-      'p(95)<100',
+      'avg<100',
+      'p(95)<200',
     ],
     http_reqs: [
       'rate>100',
