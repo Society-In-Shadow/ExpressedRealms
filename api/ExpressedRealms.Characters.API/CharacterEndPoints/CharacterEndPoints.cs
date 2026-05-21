@@ -3,6 +3,7 @@ using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using ExpressedRealms.Characters.API.CharacterEndPoints.CopyCharacter;
 using ExpressedRealms.Characters.API.CharacterEndPoints.DTOs;
 using ExpressedRealms.Characters.API.CharacterEndPoints.EditCharacter;
+using ExpressedRealms.Characters.API.CharacterEndPoints.EditCharacterGoFields;
 using ExpressedRealms.Characters.API.CharacterEndPoints.EditCharacterOptions;
 using ExpressedRealms.Characters.API.CharacterEndPoints.EditStatInfo;
 using ExpressedRealms.Characters.API.CharacterEndPoints.FinalizeCharacterCreate;
@@ -91,6 +92,10 @@ internal static class CharacterEndPoints
             .MapGet("/archetypes/{id}", GetArchetypesForExpressionEndpoint.ExecuteAsync)
             .RequireFeatureToggle(ReleaseFlags.ShowArchetypeSelection)
             .RequireAuthorization();
+
+        endpointGroup
+            .MapPut("{characterId}/goFields", EditCharacterGoFieldsEndpoint.ExecuteAsync)
+            .RequirePermission(Permissions.CharacterManagement.ModifyGoFields);
 
         endpointGroup
             .MapGet(
