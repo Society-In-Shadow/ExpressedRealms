@@ -3,4 +3,5 @@ using FluentResults;
 
 namespace ExpressedRealms.Characters.UseCases.Characters.EditCharacterGoFields;
 
-public interface IEditCharacterGoFieldsUseCase : IGenericUseCase<Result, EditCharacterGoFieldsModel> { }
+public interface IEditCharacterGoFieldsUseCase
+    : IGenericUseCase<Result, EditCharacterGoFieldsModel> { }

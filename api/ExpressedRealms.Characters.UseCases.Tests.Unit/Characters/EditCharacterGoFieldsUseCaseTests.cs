@@ -22,7 +22,7 @@ public class EditCharacterGoFieldsUseCaseTests
             WealthLevel = 1,
             PrimaFragments = 1,
             Motes = 1,
-            VoidFragments = 1
+            VoidFragments = 1,
         };
 
         _dbModel = new Character
@@ -31,7 +31,7 @@ public class EditCharacterGoFieldsUseCaseTests
             WealthLevel = 0,
             PrimaFragments = 0,
             Motes = 0,
-            VoidFragments = 0
+            VoidFragments = 0,
         };
 
         _characterRepository = A.Fake<ICharacterRepository>();
@@ -54,7 +54,10 @@ public class EditCharacterGoFieldsUseCaseTests
 
         var result = await _useCase.ExecuteAsync(_model);
 
-        result.MustHaveValidationError(nameof(EditCharacterGoFieldsModel.Id), "'Id' must not be empty.");
+        result.MustHaveValidationError(
+            nameof(EditCharacterGoFieldsModel.Id),
+            "'Id' must not be empty."
+        );
     }
 
     [Fact]
@@ -79,7 +82,10 @@ public class EditCharacterGoFieldsUseCaseTests
 
         var result = await _useCase.ExecuteAsync(_model);
 
-        result.MustHaveValidationError(nameof(EditCharacterGoFieldsModel.Id), "Character does not exist.");
+        result.MustHaveValidationError(
+            nameof(EditCharacterGoFieldsModel.Id),
+            "Character does not exist."
+        );
     }
 
     [Fact]

@@ -93,7 +93,8 @@ internal static class CharacterEndPoints
             .RequireFeatureToggle(ReleaseFlags.ShowArchetypeSelection)
             .RequireAuthorization();
 
-        endpointGroup.MapPut("{characterId}/goFields", EditCharacterGoFieldsEndpoint.ExecuteAsync)
+        endpointGroup
+            .MapPut("{characterId}/goFields", EditCharacterGoFieldsEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.CharacterManagement.ModifyGoFields);
 
         endpointGroup

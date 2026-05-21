@@ -28,13 +28,13 @@ internal sealed class EditCharacterGoFieldsUseCase(
             model.Motes += Math.DivRem(model.PrimaFragments, 5, out var remainder);
             model.PrimaFragments -= remainder;
         }
-        
+
         if (model.VoidFragments >= 5)
         {
             model.Motes += Math.DivRem(model.PrimaFragments, 5, out var remainder);
             model.VoidFragments -= remainder;
         }
-        
+
         character!.PrimaFragments = model.PrimaFragments;
         character.WealthLevel = model.WealthLevel;
         character.VoidFragments = model.VoidFragments;
