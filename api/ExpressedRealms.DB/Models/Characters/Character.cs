@@ -33,7 +33,10 @@ public class Character : ISoftDelete
     public int PlayerNumber { get; set; }
 
     public int WealthLevel { get; set; }
-    public byte PrimaVoid { get; set; }
+    public byte VoidFragments { get; set; }
+    public byte VoidMotes { get; set; }
+    public byte PrimaFragments { get; set; }
+    public byte PrimaMotes { get; set; }
 
     public int? PrimaryProgressionId { get; set; }
     public int? SecondaryProgressionId { get; set; }

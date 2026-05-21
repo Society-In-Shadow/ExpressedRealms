@@ -865,9 +865,13 @@ namespace ExpressedRealms.DB.Migrations
                         .HasDefaultValue(0)
                         .HasColumnName("player_number");
 
-                    b.Property<byte>("PrimaVoid")
+                    b.Property<byte>("PrimaFragments")
                         .HasColumnType("smallint")
-                        .HasColumnName("prima_void");
+                        .HasColumnName("prima_fragments");
+
+                    b.Property<byte>("PrimaMotes")
+                        .HasColumnType("smallint")
+                        .HasColumnName("prima_motes");
 
                     b.Property<int?>("PrimaryProgressionId")
                         .HasColumnType("integer")
@@ -886,6 +890,14 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("integer")
                         .HasDefaultValue(72)
                         .HasColumnName("stat_experience_points");
+
+                    b.Property<byte>("VoidFragments")
+                        .HasColumnType("smallint")
+                        .HasColumnName("void_fragments");
+
+                    b.Property<byte>("VoidMotes")
+                        .HasColumnType("smallint")
+                        .HasColumnName("void_motes");
 
                     b.Property<int>("WealthLevel")
                         .HasColumnType("integer")
