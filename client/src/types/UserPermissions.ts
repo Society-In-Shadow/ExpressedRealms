@@ -20,6 +20,7 @@ export const UserPermissions = {
     View: 'charactermanagement.view',
     ViewCharacterSheet: 'charactermanagement.viewcharactersheet',
     DownloadAllCrbs: 'charactermanagement.downloadallcrbs',
+    ModifyGoFields: 'charactermanagement.modifygofields',
   } as const,
   CharacterContacts: {
     Approve: 'charactercontacts.approve',

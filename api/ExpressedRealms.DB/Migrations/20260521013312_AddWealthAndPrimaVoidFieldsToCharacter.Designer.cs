@@ -3,6 +3,7 @@ using System;
 using ExpressedRealms.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpressedRealms.DB.Migrations
 {
     [DbContext(typeof(ExpressedRealmsDbContext))]
-    partial class ExpressedRealmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260521013312_AddWealthAndPrimaVoidFieldsToCharacter")]
+    partial class AddWealthAndPrimaVoidFieldsToCharacter
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -865,13 +868,9 @@ namespace ExpressedRealms.DB.Migrations
                         .HasDefaultValue(0)
                         .HasColumnName("player_number");
 
-                    b.Property<byte>("PrimaFragments")
+                    b.Property<byte>("PrimaVoid")
                         .HasColumnType("smallint")
-                        .HasColumnName("prima_fragments");
-
-                    b.Property<byte>("PrimaMotes")
-                        .HasColumnType("smallint")
-                        .HasColumnName("prima_motes");
+                        .HasColumnName("prima_void");
 
                     b.Property<int?>("PrimaryProgressionId")
                         .HasColumnType("integer")
@@ -890,14 +889,6 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("integer")
                         .HasDefaultValue(72)
                         .HasColumnName("stat_experience_points");
-
-                    b.Property<byte>("VoidFragments")
-                        .HasColumnType("smallint")
-                        .HasColumnName("void_fragments");
-
-                    b.Property<byte>("VoidMotes")
-                        .HasColumnType("smallint")
-                        .HasColumnName("void_motes");
 
                     b.Property<int>("WealthLevel")
                         .HasColumnType("integer")

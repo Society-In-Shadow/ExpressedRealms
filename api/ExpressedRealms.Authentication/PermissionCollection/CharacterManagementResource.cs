@@ -40,5 +40,12 @@ public static partial class Permissions
             Description =
                 "Shows Download CRB Button on any character in the tool.  Primarily used for debugging purposes.",
         };
+
+        public static readonly Permission ModifyGoFields = new(ResourceInfo)
+        {
+            Id = new Guid("019e482d-f98b-7433-99d4-8cc253df187a"),
+            Name = nameof(ModifyGoFields),
+            Description = "Allows one to modify wealth levels and Prima/Void",
+        };
     }
 }
