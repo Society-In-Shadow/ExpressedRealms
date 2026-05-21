@@ -19,9 +19,8 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
         builder.Property(x => x.StatExperiencePoints).IsRequired().HasDefaultValue(72);
 
         builder.Property(x => x.WealthLevel);
-        builder.Property(x => x.PrimaMotes);
         builder.Property(x => x.PrimaFragments);
-        builder.Property(x => x.VoidMotes);
+        builder.Property(x => x.Motes);
         builder.Property(x => x.VoidFragments);
 
         builder.Property(x => x.PrimaryProgressionId);
