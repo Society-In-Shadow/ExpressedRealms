@@ -32,6 +32,9 @@ public class Character : ISoftDelete
     public DateTimeOffset? RetiredDate { get; set; }
     public int PlayerNumber { get; set; }
 
+    public int WealthLevel { get; set; }
+    public byte PrimaVoid { get; set; }
+    
     public int? PrimaryProgressionId { get; set; }
     public int? SecondaryProgressionId { get; set; }
     public virtual ProgressionPath? PrimaryProgressionPath { get; set; }

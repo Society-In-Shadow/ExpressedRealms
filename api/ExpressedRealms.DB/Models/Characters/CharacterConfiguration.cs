@@ -18,6 +18,9 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
 
         builder.Property(x => x.StatExperiencePoints).IsRequired().HasDefaultValue(72);
 
+        builder.Property(x => x.WealthLevel);
+        builder.Property(x => x.PrimaVoid);
+        
         builder.Property(x => x.PrimaryProgressionId);
         builder.Property(x => x.SecondaryProgressionId);
 
