@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import fs from 'node:fs'
 import { fileURLToPath, URL } from 'node:url'
+import visualizer from 'rollup-plugin-visualizer'
 
 export default defineConfig(() => {
   // Needs to be above 1024, as any below that will be protected / require administrative rights
@@ -32,7 +33,11 @@ export default defineConfig(() => {
   serverConfig.host = process.env.DEV
 
   return {
-    plugins: [vue()],
+    plugins: [vue(), visualizer({
+      open: true,
+      gzipSize: true,
+      brotliSize: true,
+    })],
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)), // ✅ works in ESM + Cypress
