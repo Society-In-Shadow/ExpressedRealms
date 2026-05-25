@@ -24,6 +24,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import DialogService from 'primevue/dialogservice'
 import { Tooltip } from 'primevue'
 import { PiniaColadaDelay } from '@pinia/colada-plugin-delay'
+import './styles/tableLayout.css'
 
 axiosConfig.setupErrorHandlingInterceptors()
 axiosConfig.setAPIUrl()

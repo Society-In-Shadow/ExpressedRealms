@@ -3,7 +3,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import Skeleton from 'primevue/skeleton'
 import ContextMenu from 'primevue/contextmenu'
-import { EditorContent, useEditor } from '@tiptap/vue-3'
+import { EditorContent, mergeAttributes, useEditor } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import { Table, TableCell, TableHeader, TableRow } from '@tiptap/extension-table'
 
@@ -36,24 +36,24 @@ const props = defineProps({
 const editorValue = ref(model.value)
 const startupComplete = ref(false)
 
-const CustomTable = Table.configure().extend({
-  renderHTML({ HTMLAttributes }) {
-    // Add a new class to the table element
-    const tableAttributes = {
-      ...HTMLAttributes, // Spread existing table attributes
-      class: `${HTMLAttributes.class || 'w-100 custom-table'}`.trim(), // Append new class
+const CustomTable = Table.extend({
+  addAttributes() {
+    return {
+      ...this.parent?.(),
     }
+  },
 
+  renderHTML({ HTMLAttributes }) {
     return [
-      'div', // Outer div
-      { class: 'custom-table-container' }, // Add custom attributes to the wrapper div
+      'div',
+      { class: 'tableWrapper-container' },
       [
-
         'table',
-        tableAttributes, // Pass the original HTML attributes to the table
-        0, // This represents a placeholder for the table's children (rows, cells, etc.)
+        mergeAttributes(HTMLAttributes, {
+          class: 'w-100 custom-table',
+        }),
+        0,
       ],
-
     ]
   },
 })

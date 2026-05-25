@@ -8,7 +8,6 @@ import PowerStep from '@/components/characters/wizard/powers/PowerStep.vue'
 import StatStep from '@/components/characters/wizard/stats/StatStep.vue'
 import SkillStep from '@/components/characters/wizard/skills/SkillStep.vue'
 import { useRoute, useRouter } from 'vue-router'
-import DataTable from 'primevue/datatable'
 import EditCharacterDetails from '@/components/characters/wizard/basicInfo/EditCharacterDetails.vue'
 import AddCharacter from '@/components/characters/wizard/basicInfo/AddCharacter.vue'
 import WizardContent from '@/components/characters/wizard/WizardContent.vue'
@@ -117,9 +116,6 @@ const nextSection = computed(() => {
 </script>
 
 <template>
-  <div class="d-none">
-    <DataTable />
-  </div>
   <div v-if="!isAdd" class="d-flex justify-content-between">
     <div>
       <Button v-if="isMobile && hasSelectedSection" label="Back to Sections" @click="resetSection" />
