@@ -186,7 +186,7 @@ jobs:
         if: ${{ needs.changes.outputs.frontend == 'true' }}
 
       - name: Run Cypress Tests
-        uses: cypress-io/github-action@b8ba51a856ba5f4c15cf39007636d4ab04f23e3c
+        uses: cypress-io/github-action@dace029018fcdf86e0df89a31bc3cfa5b32570d8
         if: ${{ needs.changes.outputs.frontend == 'true' }}
         with:
           component: true
