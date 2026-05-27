@@ -15,12 +15,13 @@ export const userPermissionStore
         userPermissions: [] as UserPermission[],
         loadedPermissions: false as boolean,
         permissionCheck: {} as PermissionCheck,
+        initialized: false as boolean,
       }
     },
     actions: {
-      async updateUserPermissions() {
-        const response = await axios.get('/player/permissions')
-        this.userPermissions = response.data
+      initialize() {
+        if (this.initialized)
+          return
 
         // Build reactive nested object
         this.permissionCheck = Object.fromEntries(
@@ -34,6 +35,12 @@ export const userPermissionStore
             ),
           ]),
         ) as PermissionCheck
+
+        this.initialized = true
+      },
+      async updateUserPermissions() {
+        const response = await axios.get('/player/permissions')
+        this.userPermissions = response.data
 
         this.loadedPermissions = true
       },

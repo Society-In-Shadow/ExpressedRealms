@@ -24,31 +24,27 @@ const props = defineProps({
       </div>
     </AccordionHeader>
     <AccordionContent>
-      <table class="w-100">
-        <thead>
-          <tr>
-            <th class="text-left">
-              Source
-            </th>
-            <th class="text-right">
-              Bonus
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(modifier, index) in props.proficiency.appliedModifiers" :key="index"
-            :class="index % 2 === 0 ? 'p-row-even' : 'p-row-odd'"
-          >
-            <td>
-              {{ modifier.name }}
-            </td>
-            <td class="text-right">
-              {{ modifier.value >= 0 ? '+' : '' }}{{ modifier.value }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="flex flex-column w-100">
+        <div class="flex flex-row w-100 align-content-between">
+          <div class="flex-fill">
+            <strong>Source</strong>
+          </div>
+          <div>
+            <strong>Bonus</strong>
+          </div>
+        </div>
+        <div
+          v-for="(modifier, index) in props.proficiency.appliedModifiers" :key="index"
+          class="flex flex-row w-100"
+        >
+          <div class="flex-fill">
+            {{ modifier.name }}
+          </div>
+          <div class="text-right">
+            {{ modifier.value >= 0 ? '+' : '' }}{{ modifier.value }}
+          </div>
+        </div>
+      </div>
     </AccordionContent>
   </AccordionPanel>
 </template>

@@ -25,6 +25,7 @@ import DialogService from 'primevue/dialogservice'
 import { Tooltip } from 'primevue'
 import { PiniaColadaDelay } from '@pinia/colada-plugin-delay'
 import './styles/tableLayout.css'
+import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
 axiosConfig.setupErrorHandlingInterceptors()
 axiosConfig.setAPIUrl()
@@ -101,5 +102,8 @@ app.use(PiniaColada, {
 app.use(ToastService)
 app.use(ConfirmationService)
 app.use(DialogService)
+
+const permissions = userPermissionStore()
+permissions.initialize()
 
 app.mount('#app')
