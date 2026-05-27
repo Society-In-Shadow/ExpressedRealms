@@ -10,7 +10,9 @@ internal sealed class GetCharacterGoFieldsUseCase(
     CancellationToken cancellationToken
 ) : IGetCharacterGoFieldsUseCase
 {
-    public async Task<Result<GetCharacterGoFieldReturnModel>> ExecuteAsync(GetCharacterGoFieldsModel model)
+    public async Task<Result<GetCharacterGoFieldReturnModel>> ExecuteAsync(
+        GetCharacterGoFieldsModel model
+    )
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,
@@ -23,12 +25,14 @@ internal sealed class GetCharacterGoFieldsUseCase(
 
         var character = await repository.FindCharacterAsync(model.Id);
 
-        return Result.Ok(new GetCharacterGoFieldReturnModel()
-        {
-            WealthLevel = character!.WealthLevel,
-            VoidFragments = character.VoidFragments,
-            Motes = character.Motes,
-            PrimaFragments = character.PrimaFragments
-        });
+        return Result.Ok(
+            new GetCharacterGoFieldReturnModel()
+            {
+                WealthLevel = character!.WealthLevel,
+                VoidFragments = character.VoidFragments,
+                Motes = character.Motes,
+                PrimaFragments = character.PrimaFragments,
+            }
+        );
     }
 }

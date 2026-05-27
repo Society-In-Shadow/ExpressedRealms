@@ -8,16 +8,12 @@ namespace ExpressedRealms.Characters.API.CharacterEndPoints.GetCharacterGoFields
 
 internal static class GetCharacterGoFieldsEndpoint
 {
-    internal static async Task<Results<NotFound, Ok<GetCharacterGoFieldsResponse>, ValidationProblem>> ExecuteAsync(
-        int characterId,
-        [FromServices] IGetCharacterGoFieldsUseCase repository
-    )
+    internal static async Task<
+        Results<NotFound, Ok<GetCharacterGoFieldsResponse>, ValidationProblem>
+    > ExecuteAsync(int characterId, [FromServices] IGetCharacterGoFieldsUseCase repository)
     {
         var response = await repository.ExecuteAsync(
-            new GetCharacterGoFieldsModel()
-            {
-                Id = characterId,
-            }
+            new GetCharacterGoFieldsModel() { Id = characterId }
         );
 
         if (response.HasNotFound(out var notFound))
@@ -26,12 +22,14 @@ internal static class GetCharacterGoFieldsEndpoint
             return validationProblem;
         response.ThrowIfErrorNotHandled();
 
-        return TypedResults.Ok(new GetCharacterGoFieldsResponse()
-        {
-            WealthLevel = response.Value.WealthLevel,
-            Motes = response.Value.Motes,
-            PrimaFragments = response.Value.PrimaFragments,
-            VoidFragments = response.Value.VoidFragments,
-        });
+        return TypedResults.Ok(
+            new GetCharacterGoFieldsResponse()
+            {
+                WealthLevel = response.Value.WealthLevel,
+                Motes = response.Value.Motes,
+                PrimaFragments = response.Value.PrimaFragments,
+                VoidFragments = response.Value.VoidFragments,
+            }
+        );
     }
 }

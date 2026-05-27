@@ -97,7 +97,7 @@ internal static class CharacterEndPoints
         endpointGroup
             .MapPut("{characterId}/goFields", EditCharacterGoFieldsEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.CharacterManagement.ModifyGoFields);
-        
+
         endpointGroup
             .MapGet("{characterId}/goFields", GetCharacterGoFieldsEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.CharacterManagement.ModifyGoFields);

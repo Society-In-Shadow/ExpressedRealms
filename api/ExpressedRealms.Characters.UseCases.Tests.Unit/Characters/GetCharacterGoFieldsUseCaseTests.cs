@@ -16,10 +16,7 @@ public class GetCharacterGoFieldsUseCaseTests
 
     public GetCharacterGoFieldsUseCaseTests()
     {
-        _model = new GetCharacterGoFieldsModel
-        {
-            Id = 10,
-        };
+        _model = new GetCharacterGoFieldsModel { Id = 10 };
 
         _dbModel = new Character
         {
@@ -88,7 +85,7 @@ public class GetCharacterGoFieldsUseCaseTests
     public async Task UseCase_WillEditGoFields_AndPassThroughDbObject()
     {
         var result = await _useCase.ExecuteAsync(_model);
-        
+
         Assert.Equal(result.Value.WealthLevel, _dbModel.WealthLevel);
         Assert.Equal(result.Value.PrimaFragments, _dbModel.PrimaFragments);
         Assert.Equal(result.Value.Motes, _dbModel.Motes);
