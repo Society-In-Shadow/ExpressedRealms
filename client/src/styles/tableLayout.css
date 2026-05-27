@@ -18,6 +18,11 @@
         --custom-table-border-color: var(--p-surface-900);
     }
 }
+
+.custom-table + .custom-table {
+    margin-top: -1px;
+}
+
 .custom-table {
     width: 100%;
     border-collapse: collapse;
@@ -37,7 +42,7 @@
     background: var(--custom-odd-row-color);
 }
 
-.custom-table td {
+.custom-table td, th {
     text-align: start;
     border-color: var(--custom-table-border-color);
     border-style: solid;
@@ -68,7 +73,7 @@
     background: var(--custom-odd-row-color);
 }
 
-.tableWrapper td {
+.tableWrapper td, th {
     text-align: start;
     border-color: var(--custom-table-border-color);
     border-style: solid;

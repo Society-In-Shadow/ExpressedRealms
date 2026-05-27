@@ -37,56 +37,84 @@ const props = defineProps({
     <div style="overflow: auto">
       <div class="custom-table-container">
         <table class="w-100 custom-table">
-          <tr>
-            <td>
-              <p>Category</p>
-            </td>
-            <td>
-              <p>Power Duration</p>
-            </td>
-            <td>
-              <p>Area of Effect</p>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <p v-for="category in props.power.category" v-if="props.power.category && props.power.category.length > 0" :key="category.id" class="pr-3">
-                {{ category.name }}
-              </p>
-              <p v-else>
-                N/A
-              </p>
-            </td>
-            <td :title="props.power.powerDuration.description">
-              <p>{{ props.power.powerDuration.name }}</p>
-            </td>
-            <td :title="props.power.areaOfEffect.description">
-              <p>{{ props.power.areaOfEffect.name }}</p>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <p>Activation Type</p>
-            </td>
-            <td>
-              <p>Power Used?</p>
-            </td>
-            <td>
-              <p>Cost</p>
-            </td>
-          </tr>
-          <tr>
-            <td :title="props.power.powerActivationType.description">
-              <p>{{ props.power.powerActivationType.name }}</p>
-            </td>
-            <td><p>{{ props.power.isPowerUse ? "Yes" : "No" }}</p></td>
-            <td>
-              <p>
-                <span v-if="!isNullOrWhiteSpace(props.power.cost)">{{ props.power.cost }}</span>
-                <span v-else>N/A</span>
-              </p>
-            </td>
-          </tr>
+          <tbody>
+            <tr>
+              <th scope="col">
+                <p>Category</p>
+              </th>
+
+              <th scope="col">
+                <p>Power Duration</p>
+              </th>
+
+              <th scope="col">
+                <p>Area of Effect</p>
+              </th>
+            </tr>
+
+            <tr>
+              <td>
+                <p
+                  v-for="category in props.power.category"
+                  v-if="props.power.category && props.power.category.length > 0"
+                  :key="category.id"
+                  class="pr-3"
+                >
+                  {{ category.name }}
+                </p>
+
+                <p v-else>
+                  N/A
+                </p>
+              </td>
+
+              <td :title="props.power.powerDuration.description">
+                <p>{{ props.power.powerDuration.name }}</p>
+              </td>
+
+              <td :title="props.power.areaOfEffect.description">
+                <p>{{ props.power.areaOfEffect.name }}</p>
+              </td>
+            </tr>
+          </tbody>
+
+          <tbody>
+            <tr>
+              <th scope="col">
+                <p>Activation Type</p>
+              </th>
+
+              <th scope="col">
+                <p>Power Used?</p>
+              </th>
+
+              <th scope="col">
+                <p>Cost</p>
+              </th>
+            </tr>
+
+            <tr>
+              <td :title="props.power.powerActivationType.description">
+                <p>{{ props.power.powerActivationType.name }}</p>
+              </td>
+
+              <td>
+                <p>{{ props.power.isPowerUse ? "Yes" : "No" }}</p>
+              </td>
+
+              <td>
+                <p>
+                  <span v-if="!isNullOrWhiteSpace(props.power.cost)">
+                    {{ props.power.cost }}
+                  </span>
+
+                  <span v-else>
+                    N/A
+                  </span>
+                </p>
+              </td>
+            </tr>
+          </tbody>
         </table>
       </div>
 
