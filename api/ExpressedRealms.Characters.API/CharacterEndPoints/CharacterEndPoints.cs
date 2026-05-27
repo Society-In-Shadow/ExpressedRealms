@@ -9,6 +9,7 @@ using ExpressedRealms.Characters.API.CharacterEndPoints.EditStatInfo;
 using ExpressedRealms.Characters.API.CharacterEndPoints.FinalizeCharacterCreate;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetArchetypesForExpression;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetBreakOfDawnInfo;
+using ExpressedRealms.Characters.API.CharacterEndPoints.GetCharacterGoFields;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetCRB;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetDetailedStatInfo;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetOverallStats;
@@ -95,6 +96,10 @@ internal static class CharacterEndPoints
 
         endpointGroup
             .MapPut("{characterId}/goFields", EditCharacterGoFieldsEndpoint.ExecuteAsync)
+            .RequirePermission(Permissions.CharacterManagement.ModifyGoFields);
+
+        endpointGroup
+            .MapGet("{characterId}/goFields", GetCharacterGoFieldsEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.CharacterManagement.ModifyGoFields);
 
         endpointGroup
