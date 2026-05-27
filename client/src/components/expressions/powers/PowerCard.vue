@@ -64,58 +64,83 @@ const toggleEdit = () => {
       <div v-html="props.power.description" />
     </template>
     <template #content>
-      <div style="overflow: auto">
-        <table class="p-datatable-table">
-          <!-- Table header -->
-          <thead class="p-datatable-thead">
+      <div class="custom-table-container">
+        <table class="w-100 custom-table">
+          <tbody>
             <tr>
-              <th class="p-datatable-header-cell">
-                Category
+              <th scope="col">
+                <p>Category</p>
               </th>
-              <th class="p-datatable-header-cell">
-                Power Duration
+
+              <th scope="col">
+                <p>Power Duration</p>
               </th>
-              <th class="p-datatable-header-cell">
-                Area of Effect
+
+              <th scope="col">
+                <p>Area of Effect</p>
               </th>
             </tr>
-          </thead>
-          <tbody class="p-datatable-tbody">
-            <tr class="p-row-even">
+
+            <tr>
               <td>
-                <p v-for="category in props.power.category" v-if="props.power.category && props.power.category.length > 0" :key="category.id" class="pr-3">
+                <p
+                  v-for="category in props.power.category"
+                  v-if="props.power.category && props.power.category.length > 0"
+                  :key="category.id"
+                  class="pr-3"
+                >
                   {{ category.name }}
                 </p>
+
                 <p v-else>
                   N/A
                 </p>
               </td>
+
               <td :title="props.power.powerDuration.description">
-                {{ props.power.powerDuration.name }}
+                <p>{{ props.power.powerDuration.name }}</p>
               </td>
+
               <td :title="props.power.areaOfEffect.description">
-                {{ props.power.areaOfEffect.name }}
+                <p>{{ props.power.areaOfEffect.name }}</p>
               </td>
             </tr>
+          </tbody>
+
+          <tbody>
             <tr>
-              <td class="p-datatable-header-cell">
-                Activation Type
-              </td>
-              <td class="p-datatable-header-cell">
-                Power Used?
-              </td>
-              <td class="p-datatable-header-cell">
-                Cost
-              </td>
+              <th scope="col">
+                <p>Activation Type</p>
+              </th>
+
+              <th scope="col">
+                <p>Power Used?</p>
+              </th>
+
+              <th scope="col">
+                <p>Cost</p>
+              </th>
             </tr>
-            <tr class="p-row-even">
+
+            <tr>
               <td :title="props.power.powerActivationType.description">
-                {{ props.power.powerActivationType.name }}
+                <p>{{ props.power.powerActivationType.name }}</p>
               </td>
-              <td>{{ props.power.isPowerUse ? "Yes" : "No" }}</td>
+
               <td>
-                <span v-if="!isNullOrWhiteSpace(props.power.cost)">{{ props.power.cost }}</span>
-                <span v-else>N/A</span>
+                <p>{{ props.power.isPowerUse ? "Yes" : "No" }}</p>
+              </td>
+
+              <td>
+                <p>
+                  <span v-if="!isNullOrWhiteSpace(props.power.cost)">
+                    {{ props.power.cost }}
+                  </span>
+
+                  <span v-else>
+                    N/A
+                  </span>
+                </p>
               </td>
             </tr>
           </tbody>

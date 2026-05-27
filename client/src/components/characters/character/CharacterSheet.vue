@@ -8,7 +8,6 @@ import TabPanel from 'primevue/tabpanel'
 
 import Card from 'primevue/card'
 import SkillTile from '@/components/characters/character/skills/SkillTile.vue'
-import DataTable from 'primevue/datatable'
 
 import ProficiencyTableTile from '@/components/characters/character/proficiency/ProficiencyTableTile.vue'
 import CharacterDetailTile from '@/components/characters/character/CharacterDetailTile.vue'
@@ -34,9 +33,6 @@ const route = useRoute()
 </script>
 
 <template>
-  <div class="d-none">
-    <DataTable />
-  </div>
   <ApproveCharacterBanner />
   <Message v-if="!characterData.isOwner && !characterData.isLoading && !permissionCheck.Archetypes.Edit" severity="warn" class="mb-3 mt-3">
     You have read only access to this character sheet.

@@ -18,12 +18,13 @@ import ToastService from 'primevue/toastservice'
 import axiosConfig from '@/config/axiosConfig'
 import ConfirmationService from 'primevue/confirmationservice'
 import 'vue-easy-dnd/dist/dnd.css'
-import { definePreset } from '@primevue/themes'
-import Lara from '@primevue/themes/lara'
+import { definePreset } from '@primeuix/themes'
+import Lara from '@primeuix/themes/lara'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import DialogService from 'primevue/dialogservice'
 import { Tooltip } from 'primevue'
 import { PiniaColadaDelay } from '@pinia/colada-plugin-delay'
+import './styles/tableLayout.css'
 
 axiosConfig.setupErrorHandlingInterceptors()
 axiosConfig.setAPIUrl()

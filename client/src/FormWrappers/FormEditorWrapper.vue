@@ -2,9 +2,8 @@
 
 import { computed, inject, onMounted, ref, watch } from 'vue'
 import Skeleton from 'primevue/skeleton'
-import Editor from 'primevue/editor'
 import ContextMenu from 'primevue/contextmenu'
-import { EditorContent, useEditor } from '@tiptap/vue-3'
+import { EditorContent, mergeAttributes, useEditor } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import { Table, TableCell, TableHeader, TableRow } from '@tiptap/extension-table'
 import type { FormField } from '@/FormWrappers/Interfaces/FormField'
@@ -29,24 +28,24 @@ const props = defineProps({
 const editorValue = ref(model.value.field)
 const startupComplete = ref(false)
 
-const CustomTable = Table.configure().extend({
-  renderHTML({ HTMLAttributes }) {
-    // Add a new class to the table element
-    const tableAttributes = {
-      ...HTMLAttributes, // Spread existing table attributes
-      class: `${HTMLAttributes.class || 'w-100 custom-table'}`.trim(), // Append new class
+const CustomTable = Table.extend({
+  addAttributes() {
+    return {
+      ...this.parent?.(),
     }
+  },
 
+  renderHTML({ HTMLAttributes }) {
     return [
-      'div', // Outer div
-      { class: 'custom-table-container' }, // Add custom attributes to the wrapper div
+      'div',
+      { class: 'custom-table-container' },
       [
-
         'table',
-        tableAttributes, // Pass the original HTML attributes to the table
-        0, // This represents a placeholder for the table's children (rows, cells, etc.)
+        mergeAttributes(HTMLAttributes, {
+          class: 'w-100 custom-table',
+        }),
+        0,
       ],
-
     ]
   },
 })
@@ -189,9 +188,6 @@ const isInvalid = computed(() => (model.value.error.value ?? '').length > 0)
 <template>
   <div class="mb-3 w-100">
     <ContextMenu v-if="focusingOnTable" ref="menu" :model="contextOptions" />
-    <div class="d-none">
-      <Editor />
-    </div>
     <label :for="dataCyTagCalc">{{ model.label }}<span v-if="model.isRequired" class="text-danger font-italic"> (Required)</span></label>
     <Skeleton v-if="showSkeleton" :id="dataCyTagCalc + '-skeleton'" class="w-100" height="10em" />
     <div v-else class="p-editor" :class="{ 'p-invalid': isInvalid }">
@@ -258,6 +254,67 @@ const isInvalid = computed(() => (model.value.error.value ?? '').length > 0)
     margin-inline-start: 0em !important;
     padding-inline-start: 0em !important;
     font-size: 1rem;
+  }
+
+  .p-editor .p-editor-toolbar.ql-snow {
+    border: 1px solid var(--p-inputtext-border-color);
+  }
+  .p-editor .p-editor-toolbar {
+    background: var(--p-tabs-tab-background);
+    border-start-end-radius: var(--p-border-radius-md);
+    border-start-start-radius: var(--p-border-radius-md);
+  }
+  .ql-toolbar.ql-snow {
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    padding: 8px;
+  }
+
+  .ql-toolbar.ql-snow + .ql-container.ql-snow {
+    border-block-start: 0;
+  }
+  .p-editor .p-editor-content.ql-snow {
+    border: 1px solid var(--p-inputtext-border-color)
+  }
+  .p-editor .p-editor-content {
+    border-end-end-radius: var(--p-border-radius-md);
+    border-end-start-radius: var(--p-border-radius-md);
+  }
+  .ql-container.ql-snow {
+    border: 1px solid #ccc;
+  }
+  .ql-snow {
+    box-sizing: border-box;
+  }
+  .ql-container {
+    box-sizing: border-box;
+    font-family: Helvetica,Arial,sans-serif;
+    font-size: 13px;
+    height: 100%;
+    margin: 0;
+    position: relative;
+  }
+
+  .p-editor .p-editor-content .ql-editor {
+    background: var(--p-inputtext-background);
+    color: var(--p-inputtext-color);
+    border-end-end-radius:  var(--p-border-radius-md);
+    border-end-start-radius:  var(--p-border-radius-md);
+  }
+
+  .ql-editor {
+    box-sizing: border-box;
+    line-height: 1.42;
+    height: 100%;
+    outline: none;
+    overflow-y: auto;
+    padding: 12px 15px;
+    tab-size: 4;
+    -moz-tab-size: 4;
+    text-align: left;
+    white-space: pre-wrap;
+    word-wrap: break-word;
   }
 
 </style>

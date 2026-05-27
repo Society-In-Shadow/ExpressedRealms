@@ -35,100 +35,127 @@ const props = defineProps({
     </div>
     <div v-html="props.power.description" />
     <div style="overflow: auto">
-      <table class="p-datatable-table">
-        <!-- Table header -->
-        <thead class="p-datatable-thead">
-          <tr>
-            <th class="p-datatable-header-cell">
-              Category
-            </th>
-            <th class="p-datatable-header-cell">
-              Power Duration
-            </th>
-            <th class="p-datatable-header-cell">
-              Area of Effect
-            </th>
-          </tr>
-        </thead>
-        <tbody class="p-datatable-tbody">
-          <tr class="p-row-even">
-            <td>
-              <p v-for="category in props.power.category" v-if="props.power.category && props.power.category.length > 0" :key="category.id" class="pr-3">
-                {{ category.name }}
-              </p>
-              <p v-else>
-                N/A
-              </p>
-            </td>
-            <td :title="props.power.powerDuration.description">
-              {{ props.power.powerDuration.name }}
-            </td>
-            <td :title="props.power.areaOfEffect.description">
-              {{ props.power.areaOfEffect.name }}
-            </td>
-          </tr>
-          <tr>
-            <td class="p-datatable-header-cell">
-              Activation Type
-            </td>
-            <td class="p-datatable-header-cell">
-              Power Used?
-            </td>
-            <td class="p-datatable-header-cell">
-              Cost
-            </td>
-          </tr>
-          <tr class="p-row-even">
-            <td :title="props.power.powerActivationType.description">
-              {{ props.power.powerActivationType.name }}
-            </td>
-            <td>{{ props.power.isPowerUse ? "Yes" : "No" }}</td>
-            <td>
-              <span v-if="!isNullOrWhiteSpace(props.power.cost)">{{ props.power.cost }}</span>
-              <span v-else>N/A</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="custom-table-container">
+        <table class="w-100 custom-table">
+          <tbody>
+            <tr>
+              <th scope="col">
+                <p>Category</p>
+              </th>
+
+              <th scope="col">
+                <p>Power Duration</p>
+              </th>
+
+              <th scope="col">
+                <p>Area of Effect</p>
+              </th>
+            </tr>
+
+            <tr>
+              <td>
+                <p
+                  v-for="category in props.power.category"
+                  v-if="props.power.category && props.power.category.length > 0"
+                  :key="category.id"
+                  class="pr-3"
+                >
+                  {{ category.name }}
+                </p>
+
+                <p v-else>
+                  N/A
+                </p>
+              </td>
+
+              <td :title="props.power.powerDuration.description">
+                <p>{{ props.power.powerDuration.name }}</p>
+              </td>
+
+              <td :title="props.power.areaOfEffect.description">
+                <p>{{ props.power.areaOfEffect.name }}</p>
+              </td>
+            </tr>
+          </tbody>
+
+          <tbody>
+            <tr>
+              <th scope="col">
+                <p>Activation Type</p>
+              </th>
+
+              <th scope="col">
+                <p>Power Used?</p>
+              </th>
+
+              <th scope="col">
+                <p>Cost</p>
+              </th>
+            </tr>
+
+            <tr>
+              <td :title="props.power.powerActivationType.description">
+                <p>{{ props.power.powerActivationType.name }}</p>
+              </td>
+
+              <td>
+                <p>{{ props.power.isPowerUse ? "Yes" : "No" }}</p>
+              </td>
+
+              <td>
+                <p>
+                  <span v-if="!isNullOrWhiteSpace(props.power.cost)">
+                    {{ props.power.cost }}
+                  </span>
+
+                  <span v-else>
+                    N/A
+                  </span>
+                </p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Game Mechanic Effect</h2>
+      <div v-html="props.power.gameMechanicEffect" />
+
+      <h2 v-if="!isNullOrWhiteSpace(props.power.limitation)">
+        Limitations
+      </h2>
+      <div v-if="!isNullOrWhiteSpace(props.power.limitation)" v-html="props.power.limitation" />
+
+      <h2 v-if="props.power.prerequisites">
+        Prerequisites
+      </h2>
+      <div v-if="props.power.prerequisites">
+        <div v-if="props.power.prerequisites.powers.length == 1">
+          <a :href="'#' + makeIdSafe(props.power.prerequisites.powers[0])" @click.prevent="scrollToSection(props.power.prerequisites.powers[0])">{{ props.power.prerequisites.powers[0] }}</a>
+        </div>
+        <div v-else-if="props.power.prerequisites.powers.length == props.power.prerequisites.requiredAmount">
+          All of the following powers :
+          <span v-for="(power, index) in props.power.prerequisites.powers">
+            <a :href="'#' + makeIdSafe(power)" @click.prevent="scrollToSection(power)">{{ power }}</a>
+            <span v-if="index != props.power.prerequisites.powers.length -1"> and </span>
+          </span>
+        </div>
+        <div v-else>
+          Any of
+          <span v-if="props.power.prerequisites.requiredAmount != 1">{{ props.power.prerequisites.requiredAmount }}</span>
+          the following powers :
+          <span v-for="(power, index) in props.power.prerequisites.powers">
+            <a :href="'#' + makeIdSafe(power)" @click.prevent="scrollToSection(power)">{{ power }}</a>
+            <span v-if="index != props.power.prerequisites.powers.length -1"> or </span>
+          </span>
+        </div>
+      </div>
+
+      <h2 v-if="!isNullOrWhiteSpace(props.power.other)">
+        Additional Information
+      </h2>
+      <div v-if="!isNullOrWhiteSpace(props.power.other)" v-html="props.power.other" />
     </div>
-
-    <h2>Game Mechanic Effect</h2>
-    <div v-html="props.power.gameMechanicEffect" />
-
-    <h2 v-if="!isNullOrWhiteSpace(props.power.limitation)">
-      Limitations
-    </h2>
-    <div v-if="!isNullOrWhiteSpace(props.power.limitation)" v-html="props.power.limitation" />
-
-    <h2 v-if="props.power.prerequisites">
-      Prerequisites
-    </h2>
-    <div v-if="props.power.prerequisites">
-      <div v-if="props.power.prerequisites.powers.length == 1">
-        <a :href="'#' + makeIdSafe(props.power.prerequisites.powers[0])" @click.prevent="scrollToSection(props.power.prerequisites.powers[0])">{{ props.power.prerequisites.powers[0] }}</a>
-      </div>
-      <div v-else-if="props.power.prerequisites.powers.length == props.power.prerequisites.requiredAmount">
-        All of the following powers :
-        <span v-for="(power, index) in props.power.prerequisites.powers">
-          <a :href="'#' + makeIdSafe(power)" @click.prevent="scrollToSection(power)">{{ power }}</a>
-          <span v-if="index != props.power.prerequisites.powers.length -1"> and </span>
-        </span>
-      </div>
-      <div v-else>
-        Any of
-        <span v-if="props.power.prerequisites.requiredAmount != 1">{{ props.power.prerequisites.requiredAmount }}</span>
-        the following powers :
-        <span v-for="(power, index) in props.power.prerequisites.powers">
-          <a :href="'#' + makeIdSafe(power)" @click.prevent="scrollToSection(power)">{{ power }}</a>
-          <span v-if="index != props.power.prerequisites.powers.length -1"> or </span>
-        </span>
-      </div>
-    </div>
-
-    <h2 v-if="!isNullOrWhiteSpace(props.power.other)">
-      Additional Information
-    </h2>
-    <div v-if="!isNullOrWhiteSpace(props.power.other)" v-html="props.power.other" />
   </div>
 </template>
 

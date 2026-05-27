@@ -1,0 +1,83 @@
+.custom-table-container {
+    display: block;
+    margin: 1rem 0;
+    overflow-x: auto;
+    border-radius: 4px;
+}
+
+:root, :host {
+    --custom-even-row-color: var(--p-surface-0);
+    --custom-odd-row-color: var(--p-surface-100);
+    --custom-table-border-color: var(--p-surface-200);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root, :host {
+        --custom-even-row-color: var(--p-surface-800);
+        --custom-odd-row-color: var(--p-surface-700);
+        --custom-table-border-color: var(--p-surface-900);
+    }
+}
+
+.custom-table + .custom-table {
+    margin-top: -1px;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.custom-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+
+.custom-table tr {
+    background: var(--custom-even-row-color);
+}
+
+.custom-table tr:nth-child(odd) {
+    background: var(--custom-odd-row-color);
+}
+
+.custom-table td, th {
+    text-align: start;
+    border-color: var(--custom-table-border-color);
+    border-style: solid;
+    border-width: 3px;
+    padding: 0 1rem;
+    margin: 0
+}
+
+/* This forces the tip tap interactive view to match the normal table layout */
+/* tableWrapper is tip taps internal representation of a table */
+
+.tableWrapper {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+}
+
+.tableWrapper table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tableWrapper tr {
+    background: var(--custom-even-row-color);
+}
+
+.tableWrapper tr:nth-child(odd) {
+    background: var(--custom-odd-row-color);
+}
+
+.tableWrapper td, th {
+    text-align: start;
+    border-color: var(--custom-table-border-color);
+    border-style: solid;
+    border-width: 3px;
+    padding: 0 1rem;
+    margin: 0
+}

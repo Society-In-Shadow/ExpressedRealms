@@ -27,7 +27,7 @@ import 'primeflex/primeflex.css'
 
 import 'bootstrap/dist/css/bootstrap-grid.css'
 import 'bootstrap/dist/css/bootstrap-utilities.css'
-import Lara from '@primevue/themes/lara'
+import Lara from '@primeuix/themes/lara'
 
 import PrimeVue from 'primevue/config'
 import { createMemoryHistory, createRouter } from 'vue-router'
