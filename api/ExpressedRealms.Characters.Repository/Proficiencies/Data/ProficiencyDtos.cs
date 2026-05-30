@@ -184,7 +184,7 @@ public static class ProficiencyDtos
             new ProficiencyDto()
             {
                 Id = 13,
-                Name = "Vitality",
+                Name = expressionId == 2 ? "Vitality (PP)" : "Vitality",
                 Type = Secondary,
                 Modifiers = new List<ModifierType>()
                 {
@@ -210,7 +210,7 @@ public static class ProficiencyDtos
             new ProficiencyDto()
             {
                 Id = 15,
-                Name = "Blood",
+                Name = expressionId == 9 ? "Blood (PP)" : "Blood",
                 Type = Secondary,
                 Modifiers = new List<ModifierType>()
                 {
@@ -231,7 +231,7 @@ public static class ProficiencyDtos
                     ModifierType.Dexterity,
                     ModifierType.Intelligence,
                 },
-                SortOrder = 4,
+                SortOrder = 5,
             },
             new ProficiencyDto()
             {
@@ -244,7 +244,7 @@ public static class ProficiencyDtos
                     ModifierType.Constitution,
                     ModifierType.Willpower,
                 },
-                SortOrder = 5,
+                SortOrder = 6,
             },
             new ProficiencyDto()
             {
@@ -252,7 +252,7 @@ public static class ProficiencyDtos
                 Name = "RWP",
                 Type = Secondary,
                 Modifiers = new List<ModifierType>() { ModifierType.Willpower, ModifierType.RWP },
-                SortOrder = 10,
+                SortOrder = 4,
             },
             new ProficiencyDto()
             {
@@ -260,7 +260,7 @@ public static class ProficiencyDtos
                 Name = "Mortis",
                 Type = Secondary,
                 Modifiers = new List<ModifierType>() { ModifierType.Mortis },
-                SortOrder = 11,
+                SortOrder = 7,
             },
             new ProficiencyDto()
             {
@@ -290,7 +290,7 @@ public static class ProficiencyDtos
             Adepts => new ProficiencyDto()
             {
                 Id = 18,
-                Name = "Chi",
+                Name = "Chi (PP)",
                 Type = Secondary,
                 Modifiers = new List<ModifierType>()
                 {
@@ -298,12 +298,12 @@ public static class ProficiencyDtos
                     ModifierType.Constitution,
                     ModifierType.Intelligence,
                 },
-                SortOrder = 6,
+                SortOrder = 8,
             },
             Sidhe => new ProficiencyDto()
             {
                 Id = 19,
-                Name = "Essence",
+                Name = "Essence (PP)",
                 Type = Secondary,
                 Modifiers = new List<ModifierType>()
                 {
@@ -311,12 +311,12 @@ public static class ProficiencyDtos
                     ModifierType.Willpower,
                     ModifierType.Willpower,
                 },
-                SortOrder = 7,
+                SortOrder = 9,
             },
             Sorcerers => new ProficiencyDto()
             {
                 Id = 20,
-                Name = "Mana",
+                Name = "Mana (PP)",
                 Type = Secondary,
                 Modifiers = new List<ModifierType>()
                 {
@@ -324,12 +324,12 @@ public static class ProficiencyDtos
                     ModifierType.Willpower,
                     ModifierType.Willpower,
                 },
-                SortOrder = 8,
+                SortOrder = 10,
             },
             Shammas => new ProficiencyDto()
             {
                 Id = 21,
-                Name = "Noumenon",
+                Name = "Noumenon (PP)",
                 Type = Secondary,
                 Modifiers = new List<ModifierType>()
                 {
@@ -337,7 +337,7 @@ public static class ProficiencyDtos
                     ModifierType.Intelligence,
                     ModifierType.Intelligence,
                 },
-                SortOrder = 9,
+                SortOrder = 11,
             },
             _ => null,
         };

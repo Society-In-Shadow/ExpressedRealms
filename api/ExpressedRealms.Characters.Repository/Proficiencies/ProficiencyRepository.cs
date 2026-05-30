@@ -148,17 +148,14 @@ internal sealed class ProficiencyRepository(
                 );
             }
 
+            var modifierType = ModiferConversions.GetModifierType(proficiency);
+            
             proficiency.AppliedModifiers.AddRange(
-                extraModifiers.Where(x =>
-                    x.Type.Name.Equals(
-                        proficiency.Name,
-                        StringComparison.InvariantCultureIgnoreCase
-                    )
-                )
+                extraModifiers.Where(x => x.Type == modifierType)
             );
         }
 
-        return proficiencies;
+        return proficiencies.OrderBy(x => x.SortOrder).ToList();
     }
 
     private async Task FetchCharacterSkillsModifiers(int characterId, List<ModifierDescription> availableModifiers)
