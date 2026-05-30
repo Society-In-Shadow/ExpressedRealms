@@ -76,7 +76,7 @@ internal static class ModiferConversions
             ),
         };
     }
-    
+
     public static ModifierType GetModifierType(ProficiencyDto mapping)
     {
         return mapping.Id switch
@@ -106,11 +106,7 @@ internal static class ModiferConversions
             23 => ModifierType.Mortis,
             24 => ModifierType.Motes,
             25 => ModifierType.WealthLevel,
-            _ => throw new ArgumentOutOfRangeException(
-                nameof(mapping),
-                mapping.Id,
-                null
-            ),
+            _ => throw new ArgumentOutOfRangeException(nameof(mapping), mapping.Id, null),
         };
     }
 }

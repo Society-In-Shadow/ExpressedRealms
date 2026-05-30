@@ -55,6 +55,6 @@ public sealed class ModifierType : SmartEnum<ModifierType, byte>
 
     public static readonly ModifierType Motes = new("Motes", 42);
     public static readonly ModifierType WealthLevel = new("Wealth Level", 43);
-    
+
     public override string ToString() => Name;
 }

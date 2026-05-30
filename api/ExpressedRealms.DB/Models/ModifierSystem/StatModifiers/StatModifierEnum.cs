@@ -5,9 +5,7 @@ namespace ExpressedRealms.DB.Models.ModifierSystem.StatModifiers;
 public sealed class StatModifierEnum : SmartEnum<StatModifierEnum, int>
 {
     private StatModifierEnum(string name, int id)
-        : base(name, id)
-    {
-    }
+        : base(name, id) { }
 
     public static readonly StatModifierEnum Vitality = new("Vitality", 1);
     public static readonly StatModifierEnum Health = new("Health", 2);
@@ -20,7 +18,7 @@ public sealed class StatModifierEnum : SmartEnum<StatModifierEnum, int>
     public static readonly StatModifierEnum Essence = new("Essence", 9);
     public static readonly StatModifierEnum Mana = new("Mana", 10);
     public static readonly StatModifierEnum Noumenon = new("Noumenon", 11);
-    
+
     public static readonly StatModifierEnum Strike = new("Strike", 12);
     public static readonly StatModifierEnum Thrust = new("Thrust", 13);
     public static readonly StatModifierEnum Throw = new("Throw", 14);

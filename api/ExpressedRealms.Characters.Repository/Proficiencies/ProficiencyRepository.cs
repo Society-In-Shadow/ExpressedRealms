@@ -30,16 +30,18 @@ internal sealed class ProficiencyRepository(
             .WithUserAccessAsync(userContext, characterId);
 
         var character = await query
-            .Select(x => new { 
-                x.Id, 
-                x.ExpressionId, 
+            .Select(x => new
+            {
+                x.Id,
+                x.ExpressionId,
                 x.PrimaryProgressionId,
                 x.IsPrimaryCharacter,
                 x.IsInCharacterCreation,
                 x.Motes,
-                x.WealthLevel
-                }).FirstOrDefaultAsync();
-        
+                x.WealthLevel,
+            })
+            .FirstOrDefaultAsync();
+
         if (character is null)
             return Result.Fail(new NotFoundFailure("Character"));
 
@@ -48,13 +50,9 @@ internal sealed class ProficiencyRepository(
         var stats = await context
             .CharacterStatMappings.AsNoTracking()
             .Where(x => x.CharacterId == characterId)
-            .Select(x => new
-            {
-                x.StatLevelId,
-                x.StatTypeId,
-            })
+            .Select(x => new { x.StatLevelId, x.StatTypeId })
             .ToListAsync(cancellationToken);
-        
+
         availableModifiers.AddRange(
             stats.Select(x =>
             {
@@ -81,7 +79,7 @@ internal sealed class ProficiencyRepository(
                 Name = "Mortis",
             }
         );
-        
+
         availableModifiers.Add(
             new ModifierDescription()
             {
@@ -91,7 +89,7 @@ internal sealed class ProficiencyRepository(
                 Name = "Assigned Wealth Level",
             }
         );
-        
+
         availableModifiers.Add(
             new ModifierDescription()
             {
@@ -102,17 +100,27 @@ internal sealed class ProficiencyRepository(
             }
         );
 
-        var currentLevel = await xpRepository.GetCharacterXpLevel(characterId, character.IsPrimaryCharacter, character.IsInCharacterCreation);
+        var currentLevel = await xpRepository.GetCharacterXpLevel(
+            characterId,
+            character.IsPrimaryCharacter,
+            character.IsInCharacterCreation
+        );
         var extraModifiers = new List<ModifierDescription>();
         var dbModifiers = new List<ProficiencyModifierInfoDto>();
 
         dbModifiers.AddRange(await statModifierRepository.GetModifiersFromBlessings(characterId));
         dbModifiers.AddRange(await statModifierRepository.GetModifiersFromPowers(characterId));
         dbModifiers.AddRange(
-            await statModifierRepository.GetModifiersFromXlLevel(currentLevel, character.ExpressionId, character.PrimaryProgressionId)
+            await statModifierRepository.GetModifiersFromXlLevel(
+                currentLevel,
+                character.ExpressionId,
+                character.PrimaryProgressionId
+            )
         );
         dbModifiers = dbModifiers
-            .Where(x => x.TargetExpressionId == null || x.TargetExpressionId == character.ExpressionId)
+            .Where(x =>
+                x.TargetExpressionId == null || x.TargetExpressionId == character.ExpressionId
+            )
             .ToList();
 
         extraModifiers.AddRange(
@@ -149,7 +157,7 @@ internal sealed class ProficiencyRepository(
             }
 
             var modifierType = ModiferConversions.GetModifierType(proficiency);
-            
+
             proficiency.AppliedModifiers.AddRange(
                 extraModifiers.Where(x => x.Type == modifierType)
             );
@@ -158,7 +166,10 @@ internal sealed class ProficiencyRepository(
         return proficiencies.OrderBy(x => x.SortOrder).ToList();
     }
 
-    private async Task FetchCharacterSkillsModifiers(int characterId, List<ModifierDescription> availableModifiers)
+    private async Task FetchCharacterSkillsModifiers(
+        int characterId,
+        List<ModifierDescription> availableModifiers
+    )
     {
         var skills = await context
             .CharacterSkillsMappings.AsNoTracking()
@@ -181,7 +192,9 @@ internal sealed class ProficiencyRepository(
             })
         );
 
-        if (skills.Any(x => (SkillTypes)x.SkillTypeId == SkillTypes.Deflection && x.LevelValue == 4))
+        if (
+            skills.Any(x => (SkillTypes)x.SkillTypeId == SkillTypes.Deflection && x.LevelValue == 4)
+        )
         {
             availableModifiers.Add(
                 new ModifierDescription()

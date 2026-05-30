@@ -13,5 +13,9 @@ public interface IXpRepository
     Task<SectionXpDto> GetAvailableXpForSection(int characterId, XpSectionTypes sectionType);
     Task FinalizeCreateXp(int charactterId);
     Task<int> GetCharacterXpLevel(int characterId);
-    Task<int> GetCharacterXpLevel(int characterId, bool isPrimaryCharacter, bool isInCharacterCreation);
+    Task<int> GetCharacterXpLevel(
+        int characterId,
+        bool isPrimaryCharacter,
+        bool isInCharacterCreation
+    );
 }
