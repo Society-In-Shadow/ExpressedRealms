@@ -67,6 +67,8 @@ internal static class ModiferConversions
             21 => ModifierType.EvadeShoot,
             22 => ModifierType.Ward,
             23 => ModifierType.Deflect,
+            24 => ModifierType.Motes,
+            25 => ModifierType.WealthLevel,
             _ => throw new ArgumentOutOfRangeException(
                 nameof(mapping),
                 mapping.ModifierTypeId,

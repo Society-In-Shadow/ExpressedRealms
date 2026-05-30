@@ -45,7 +45,7 @@ public class StatModifierRepository(
                 x.BlessingLevel.StatModifierGroup!.StatGroupMappings.Select(
                     y => new ProficiencyModifierInfoDto
                     {
-                        Source = $"{x.Blessing.Name} {x.Blessing.Type}",
+                        Source = $"{x.Blessing.Name} {x.BlessingLevel.Level} {x.Blessing.Type}",
                         Modifier = y.Modifier,
                         ModifierTypeId = y.StatModifierId,
                         ScaleWithLevel = y.ScaleWithLevel,

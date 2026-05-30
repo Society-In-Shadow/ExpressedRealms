@@ -36,23 +36,25 @@ public sealed class ModifierType : SmartEnum<ModifierType, byte>
 
     public static readonly ModifierType Dodge = new("Dodge", 24);
     public static readonly ModifierType Parry = new("Parry", 25);
-    public static readonly ModifierType Evade = new("Evade", 26);
+    public static readonly ModifierType EvadeThrow = new("Evade Throw", 40);
+    public static readonly ModifierType EvadeShoot = new("Evade Shoot", 41);
     public static readonly ModifierType Ward = new("Ward", 27);
     public static readonly ModifierType Deflect = new("Deflect", 28);
-    public static readonly ModifierType RWP = new("RWP", 29);
-    public static readonly ModifierType Mortis = new("Mortis", 30);
 
     public static readonly ModifierType Vitality = new("Vitality", 31);
     public static readonly ModifierType Health = new("Health", 32);
     public static readonly ModifierType Blood = new("Blood", 33);
     public static readonly ModifierType Reaction = new("Reaction", 34);
     public static readonly ModifierType Psyche = new("Psyche", 35);
+    public static readonly ModifierType RWP = new("RWP", 29);
+    public static readonly ModifierType Mortis = new("Mortis", 30);
     public static readonly ModifierType Chi = new("Chi", 36);
     public static readonly ModifierType Essence = new("Essence", 37);
     public static readonly ModifierType Mana = new("Mana", 38);
     public static readonly ModifierType Noumenon = new("Noumenon", 39);
-    public static readonly ModifierType EvadeThrow = new("Evade Throw", 40);
-    public static readonly ModifierType EvadeShoot = new("Evade Shoot", 41);
 
+    public static readonly ModifierType Motes = new("Motes", 42);
+    public static readonly ModifierType WealthLevel = new("Wealth Level", 43);
+    
     public override string ToString() => Name;
 }

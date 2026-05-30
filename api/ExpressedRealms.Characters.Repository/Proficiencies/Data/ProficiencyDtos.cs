@@ -5,7 +5,6 @@ namespace ExpressedRealms.Characters.Repository.Proficiencies.Data;
 
 public static class ProficiencyDtos
 {
-    private const string StaticDescription = "Lorem Ipsum";
     private const string Offensive = "Offensive";
     private const string Defensive = "Defensive";
     private const string Secondary = "Secondary";
@@ -18,7 +17,6 @@ public static class ProficiencyDtos
             {
                 Id = 1,
                 Name = "Strike",
-                Description = StaticDescription,
                 Type = Offensive,
                 Modifiers = new List<ModifierType>()
                 {
@@ -33,7 +31,6 @@ public static class ProficiencyDtos
             {
                 Id = 2,
                 Name = "Dodge",
-                Description = StaticDescription,
                 Modifiers = new List<ModifierType>()
                 {
                     ModifierType.Agility,
@@ -48,7 +45,6 @@ public static class ProficiencyDtos
             {
                 Id = 3,
                 Name = "Thrust",
-                Description = StaticDescription,
                 Type = Offensive,
                 Modifiers = new List<ModifierType>()
                 {
@@ -63,7 +59,6 @@ public static class ProficiencyDtos
             {
                 Id = 4,
                 Name = "Parry",
-                Description = StaticDescription,
                 Type = Defensive,
                 Modifiers = new List<ModifierType>()
                 {
@@ -78,7 +73,6 @@ public static class ProficiencyDtos
             {
                 Id = 5,
                 Name = "Throw",
-                Description = StaticDescription,
                 Type = Offensive,
                 Modifiers = new List<ModifierType>()
                 {
@@ -92,15 +86,14 @@ public static class ProficiencyDtos
             new ProficiencyDto()
             {
                 Id = 6,
-                Name = "Evade",
-                Description = StaticDescription,
+                Name = "Evade Throw",
                 Type = Defensive,
                 Modifiers = new List<ModifierType>()
                 {
                     ModifierType.Agility,
                     ModifierType.Intelligence,
                     ModifierType.Acrobatics,
-                    ModifierType.Evade,
+                    ModifierType.EvadeThrow,
                 },
                 SortOrder = 3,
             },
@@ -108,7 +101,6 @@ public static class ProficiencyDtos
             {
                 Id = 7,
                 Name = "Shoot",
-                Description = StaticDescription,
                 Type = Offensive,
                 Modifiers = new List<ModifierType>()
                 {
@@ -122,15 +114,14 @@ public static class ProficiencyDtos
             new ProficiencyDto()
             {
                 Id = 8,
-                Name = "Evade",
-                Description = StaticDescription,
+                Name = "Evade Shoot",
                 Type = Defensive,
                 Modifiers = new List<ModifierType>()
                 {
                     ModifierType.Agility,
                     ModifierType.Intelligence,
                     ModifierType.Acrobatics,
-                    ModifierType.Evade,
+                    ModifierType.EvadeShoot,
                 },
                 SortOrder = 4,
             },
@@ -138,7 +129,6 @@ public static class ProficiencyDtos
             {
                 Id = 9,
                 Name = "Cast",
-                Description = StaticDescription,
                 Type = Offensive,
                 Modifiers = new List<ModifierType>()
                 {
@@ -153,7 +143,6 @@ public static class ProficiencyDtos
             {
                 Id = 10,
                 Name = "Ward",
-                Description = StaticDescription,
                 Type = Defensive,
                 Modifiers = new List<ModifierType>()
                 {
@@ -168,7 +157,6 @@ public static class ProficiencyDtos
             {
                 Id = 11,
                 Name = "Project",
-                Description = StaticDescription,
                 Type = Offensive,
                 Modifiers = new List<ModifierType>()
                 {
@@ -183,7 +171,6 @@ public static class ProficiencyDtos
             {
                 Id = 12,
                 Name = "Deflect",
-                Description = StaticDescription,
                 Type = Defensive,
                 Modifiers = new List<ModifierType>()
                 {
@@ -198,7 +185,6 @@ public static class ProficiencyDtos
             {
                 Id = 13,
                 Name = "Vitality",
-                Description = StaticDescription,
                 Type = Secondary,
                 Modifiers = new List<ModifierType>()
                 {
@@ -212,7 +198,6 @@ public static class ProficiencyDtos
             {
                 Id = 14,
                 Name = "Health",
-                Description = StaticDescription,
                 Type = Secondary,
                 Modifiers = new List<ModifierType>()
                 {
@@ -226,7 +211,6 @@ public static class ProficiencyDtos
             {
                 Id = 15,
                 Name = "Blood",
-                Description = StaticDescription,
                 Type = Secondary,
                 Modifiers = new List<ModifierType>()
                 {
@@ -240,7 +224,6 @@ public static class ProficiencyDtos
             {
                 Id = 16,
                 Name = "Reaction",
-                Description = StaticDescription,
                 Type = Secondary,
                 Modifiers = new List<ModifierType>()
                 {
@@ -254,7 +237,6 @@ public static class ProficiencyDtos
             {
                 Id = 17,
                 Name = "Psyche",
-                Description = StaticDescription,
                 Type = Secondary,
                 Modifiers = new List<ModifierType>()
                 {
@@ -268,7 +250,6 @@ public static class ProficiencyDtos
             {
                 Id = 22,
                 Name = "RWP",
-                Description = "Reserve Will Power",
                 Type = Secondary,
                 Modifiers = new List<ModifierType>() { ModifierType.Willpower, ModifierType.RWP },
                 SortOrder = 10,
@@ -277,10 +258,25 @@ public static class ProficiencyDtos
             {
                 Id = 23,
                 Name = "Mortis",
-                Description = StaticDescription,
                 Type = Secondary,
                 Modifiers = new List<ModifierType>() { ModifierType.Mortis },
                 SortOrder = 11,
+            },
+            new ProficiencyDto()
+            {
+                Id = 24,
+                Name = "Void Motes",
+                Type = Secondary,
+                Modifiers = new List<ModifierType>() { ModifierType.Motes },
+                SortOrder = 12,
+            },
+            new ProficiencyDto()
+            {
+                Id = 25,
+                Name = "Wealth Level",
+                Type = Secondary,
+                Modifiers = new List<ModifierType>() { ModifierType.WealthLevel },
+                SortOrder = 13,
             },
         };
 
@@ -295,7 +291,6 @@ public static class ProficiencyDtos
             {
                 Id = 18,
                 Name = "Chi",
-                Description = StaticDescription,
                 Type = Secondary,
                 Modifiers = new List<ModifierType>()
                 {
@@ -309,7 +304,6 @@ public static class ProficiencyDtos
             {
                 Id = 19,
                 Name = "Essence",
-                Description = StaticDescription,
                 Type = Secondary,
                 Modifiers = new List<ModifierType>()
                 {
@@ -323,7 +317,6 @@ public static class ProficiencyDtos
             {
                 Id = 20,
                 Name = "Mana",
-                Description = StaticDescription,
                 Type = Secondary,
                 Modifiers = new List<ModifierType>()
                 {
@@ -337,7 +330,6 @@ public static class ProficiencyDtos
             {
                 Id = 21,
                 Name = "Noumenon",
-                Description = StaticDescription,
                 Type = Secondary,
                 Modifiers = new List<ModifierType>()
                 {
