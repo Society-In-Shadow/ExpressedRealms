@@ -29,8 +29,16 @@ internal sealed class ProficiencyRepository(
             .Characters.AsNoTracking()
             .WithUserAccessAsync(userContext, characterId);
 
-        var character = await query.Select(x => x.Id).FirstOrDefaultAsync();
-        if (character == 0)
+        var character = await query
+            .Select(x => new { 
+                x.Id, 
+                x.ExpressionId, 
+                x.PrimaryProgressionId,
+                x.IsPrimaryCharacter,
+                x.IsInCharacterCreation
+                }).FirstOrDefaultAsync();
+        
+        if (character is null)
             return Result.Fail(new NotFoundFailure("Character"));
 
         var availableModifiers = new List<ModifierDescription>();
@@ -72,23 +80,17 @@ internal sealed class ProficiencyRepository(
             }
         );
 
-        var currentLevel = await xpRepository.GetCharacterXpLevel(characterId);
-        var expressionId = await context
-            .Characters.AsNoTracking()
-            .Where(x => x.Id == characterId)
-            .Select(x => x.ExpressionId)
-            .FirstOrDefaultAsync(cancellationToken);
-
+        var currentLevel = await xpRepository.GetCharacterXpLevel(characterId, character.IsPrimaryCharacter, character.IsInCharacterCreation);
         var extraModifiers = new List<ModifierDescription>();
         var dbModifiers = new List<ProficiencyModifierInfoDto>();
 
         dbModifiers.AddRange(await statModifierRepository.GetModifiersFromBlessings(characterId));
         dbModifiers.AddRange(await statModifierRepository.GetModifiersFromPowers(characterId));
         dbModifiers.AddRange(
-            await statModifierRepository.GetModifiersFromXlLevel(characterId, currentLevel)
+            await statModifierRepository.GetModifiersFromXlLevel(currentLevel, character.ExpressionId, character.PrimaryProgressionId)
         );
         dbModifiers = dbModifiers
-            .Where(x => x.TargetExpressionId == null || x.TargetExpressionId == expressionId)
+            .Where(x => x.TargetExpressionId == null || x.TargetExpressionId == character.ExpressionId)
             .ToList();
 
         extraModifiers.AddRange(
@@ -112,7 +114,7 @@ internal sealed class ProficiencyRepository(
             return modifier.Modifier * currentLevel;
         }
 
-        var proficiencies = ProficiencyDtos.GetProficiencies(expressionId);
+        var proficiencies = ProficiencyDtos.GetProficiencies(character.ExpressionId);
 
         foreach (var proficiency in proficiencies)
         {
