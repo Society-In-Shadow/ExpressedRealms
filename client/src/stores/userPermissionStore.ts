@@ -19,8 +19,8 @@ export const userPermissionStore
       }
     },
     actions: {
-      initialize() {
-        if (this.initialized)
+      initialize(override: boolean = false) {
+        if (this.initialized && !override)
           return
 
         // Build reactive nested object
@@ -41,7 +41,7 @@ export const userPermissionStore
       async updateUserPermissions() {
         const response = await axios.get('/player/permissions')
         this.userPermissions = response.data
-
+        this.initialize(true)
         this.loadedPermissions = true
       },
 

@@ -60,26 +60,45 @@ public class XpRepository(
             {
                 x.Id,
                 x.IsInCharacterCreation,
-                x.PlayerId,
                 x.IsPrimaryCharacter,
             })
             .FirstAsync(x => x.Id == characterId);
-        if (character.IsInCharacterCreation)
+
+        return await GetCharacterXpLevel(
+            characterId,
+            character.IsPrimaryCharacter,
+            character.IsInCharacterCreation
+        );
+    }
+
+    public async Task<int> GetCharacterXpLevel(
+        int characterId,
+        bool isPrimaryCharacter,
+        bool isInCharacterCreation
+    )
+    {
+        if (isInCharacterCreation)
             return 0;
 
         var levelXp = 0;
-        if (character.IsPrimaryCharacter)
+        if (isPrimaryCharacter)
         {
             var availableDate = DateOnly.FromDateTime(DateTime.UtcNow.AddMonths(1));
-            levelXp = await context
-                .Events.AsNoTracking()
-                .Where(x => x.StartDate <= availableDate && x.IsPublished)
-                .SumAsync(x => x.ConExperience, cancellationToken);
+            var xp = await context
+                .Characters.Where(x => x.Id == characterId)
+                .Select(x => new
+                {
+                    EventXp = context
+                        .Events.Where(e => e.StartDate <= availableDate && e.IsPublished)
+                        .Sum(e => (int?)e.ConExperience) ?? 0,
 
-            levelXp += await context
-                .AssignedXpMappings.AsNoTracking()
-                .Where(x => x.PlayerId == character.PlayerId)
-                .SumAsync(x => x.Amount, cancellationToken);
+                    AssignedXp = context
+                        .AssignedXpMappings.Where(a => a.PlayerId == x.PlayerId)
+                        .Sum(a => (int?)a.Amount) ?? 0,
+                })
+                .FirstAsync(cancellationToken);
+
+            levelXp = xp.EventXp + xp.AssignedXp;
         }
         else
         {

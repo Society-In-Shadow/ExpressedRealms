@@ -45,7 +45,7 @@ public class StatModifierRepository(
                 x.BlessingLevel.StatModifierGroup!.StatGroupMappings.Select(
                     y => new ProficiencyModifierInfoDto
                     {
-                        Source = $"{x.Blessing.Name} {x.Blessing.Type}",
+                        Source = $"{x.Blessing.Name} {x.BlessingLevel.Level} {x.Blessing.Type}",
                         Modifier = y.Modifier,
                         ModifierTypeId = y.StatModifierId,
                         ScaleWithLevel = y.ScaleWithLevel,
@@ -80,32 +80,28 @@ public class StatModifierRepository(
     }
 
     public async Task<List<ProficiencyModifierInfoDto>> GetModifiersFromXlLevel(
-        int characterId,
-        int currentLevel
+        int currentLevel,
+        int expressionId,
+        int? primaryProgressionId
     )
     {
-        var character = await context
-            .Characters.Where(x => x.Id == characterId)
-            .Select(x => new { x.ExpressionId, x.PrimaryProgressionId })
-            .FirstAsync();
-
         var progressionExpression = context.ProgressionLevel.Where(x =>
-            x.ProgressionPath.ExpressionId == character.ExpressionId
+            x.ProgressionPath.ExpressionId == expressionId
             && x.StatModifierGroup != null
             && x.XlLevel <= currentLevel
         );
 
         // Sorcerer, Adept, Vampyre, Shammas
-        if (character.PrimaryProgressionId.HasValue)
+        if (primaryProgressionId.HasValue)
         {
             progressionExpression = progressionExpression.Where(x =>
-                x.ProgressionPathId == character.PrimaryProgressionId
+                x.ProgressionPathId == primaryProgressionId
             );
         }
         else
         {
             var availableProgressions = await context.ProgressionPath.FirstAsync(x =>
-                x.ExpressionId == character.ExpressionId
+                x.ExpressionId == expressionId
             );
             progressionExpression = progressionExpression.Where(x =>
                 x.ProgressionPathId == availableProgressions.Id
