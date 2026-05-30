@@ -35,7 +35,9 @@ internal sealed class ProficiencyRepository(
                 x.ExpressionId, 
                 x.PrimaryProgressionId,
                 x.IsPrimaryCharacter,
-                x.IsInCharacterCreation
+                x.IsInCharacterCreation,
+                x.Motes,
+                x.WealthLevel
                 }).FirstOrDefaultAsync();
         
         if (character is null)
@@ -77,6 +79,26 @@ internal sealed class ProficiencyRepository(
                 Message = "Standard",
                 Type = ModifierType.Mortis,
                 Name = "Mortis",
+            }
+        );
+        
+        availableModifiers.Add(
+            new ModifierDescription()
+            {
+                Value = character.WealthLevel,
+                Message = "Standard",
+                Type = ModifierType.WealthLevel,
+                Name = "Assigned Wealth Level",
+            }
+        );
+        
+        availableModifiers.Add(
+            new ModifierDescription()
+            {
+                Value = character.Motes,
+                Message = "Standard",
+                Type = ModifierType.Motes,
+                Name = "Assigned Prima / Void",
             }
         );
 
