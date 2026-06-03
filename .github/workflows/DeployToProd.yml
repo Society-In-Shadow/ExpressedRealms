@@ -51,14 +51,16 @@ jobs:
         id: flags
         shell: bash
         run: |
-          echo "run_megalinter=$RUN_MEGALINTER" >> "$GITHUB_OUTPUT"
-          echo "run_vitests=$RUN_VITESTS" >> "$GITHUB_OUTPUT"
-          echo "run_cypress=$RUN_CYPRESS" >> "$GITHUB_OUTPUT"
-          echo "run_backend_unit_tests=$RUN_BACKEND_UNIT_TESTS" >> "$GITHUB_OUTPUT"
-          echo "run_sonarcloud_scan=$RUN_SONARCLOUD_SCAN" >> "$GITHUB_OUTPUT"
-          echo "run_push_api_to_acr=$RUN_PUSH_API_TO_ACR" >> "$GITHUB_OUTPUT"
-          echo "run_deploy_api_to_prod=$RUN_DEPLOY_API_TO_PROD" >> "$GITHUB_OUTPUT"
-          echo "run_deploy_ui_to_prod=$RUN_DEPLOY_UI_TO_PROD" >> "$GITHUB_OUTPUT"
+          {
+            echo "run_megalinter=$RUN_MEGALINTER"
+            echo "run_vitests=$RUN_VITESTS"
+            echo "run_cypress=$RUN_CYPRESS"
+            echo "run_backend_unit_tests=$RUN_BACKEND_UNIT_TESTS"
+            echo "run_sonarcloud_scan=$RUN_SONARCLOUD_SCAN"
+            echo "run_push_api_to_acr=$RUN_PUSH_API_TO_ACR"
+            echo "run_deploy_api_to_prod=$RUN_DEPLOY_API_TO_PROD"
+            echo "run_deploy_ui_to_prod=$RUN_DEPLOY_UI_TO_PROD"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Paths filter
         id: filter
