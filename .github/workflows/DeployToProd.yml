@@ -414,7 +414,7 @@ jobs:
     name: Deploy API To Production
     runs-on: ubuntu-latest
     needs: [changes, push_api_to_azure_container_registry]
-    if: ${{ needs.changes.outputs.run_deploy_api_to_prod == 'true' && !contains(needs.*.result, 'failure') && needs.changes.outputs.backend == 'true' && needs.changes.outputs.deploy == 'true' }}
+#    if: ${{ needs.changes.outputs.run_deploy_api_to_prod == 'true' && !contains(needs.*.result, 'failure') && needs.changes.outputs.backend == 'true' && needs.changes.outputs.deploy == 'true' }}
     permissions:
       packages: write
       contents: read
@@ -422,25 +422,25 @@ jobs:
       statuses: write
       checks: write
     steps:
-      - name: Mark Deploy API To Production as Skipped
-        if: ${{ needs.changes.outputs.backend != 'true' || needs.changes.outputs.deploy != 'true' }}
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const { owner, repo } = context.repo;
-            await github.rest.checks.create({
-              owner,
-              repo,
-              name: 'Primary Workflow / Deploy API To Production Skipped',
-              head_sha: context.sha,
-              status: 'completed',
-              conclusion: 'skipped',
-              output: {
-                title: 'No Backend / API Changes Detected',
-                summary: 'No Backend / API changes detected for this commit.'
-              }
-            });
+#      - name: Mark Deploy API To Production as Skipped
+#        if: ${{ needs.changes.outputs.backend != 'true' || needs.changes.outputs.deploy != 'true' }}
+#        uses: actions/github-script@v7
+#        with:
+#          github-token: ${{ secrets.GITHUB_TOKEN }}
+#          script: |
+#            const { owner, repo } = context.repo;
+#            await github.rest.checks.create({
+#              owner,
+#              repo,
+#              name: 'Primary Workflow / Deploy API To Production Skipped',
+#              head_sha: context.sha,
+#              status: 'completed',
+#              conclusion: 'skipped',
+#              output: {
+#                title: 'No Backend / API Changes Detected',
+#                summary: 'No Backend / API changes detected for this commit.'
+#              }
+#            });
 
       # Step 2: Deploy Container to Azure
       - name: Build and Push Container to Azure
