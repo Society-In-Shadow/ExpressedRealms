@@ -407,7 +407,7 @@ jobs:
           
       - name: Build and Push
         run: |
-          docker build -t expressedrealms.azurecr.io/api:${{ github.sha }} .
+          docker build -t expressedrealms.azurecr.io/api:${{ github.sha }} -f ./api/Dockerfile ./api
           docker push expressedrealms.azurecr.io/api:${{ github.sha }}
 
   deploy_api_to_prod:
