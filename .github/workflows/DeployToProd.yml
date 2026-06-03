@@ -452,17 +452,12 @@ jobs:
       # Step 2: Deploy Container to Azure
       - name: Build and Push Container to Azure
         uses: azure/container-apps-deploy-action@8dff69dac3367c32ceb2690d8f13adbeab462703
-#        if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
+        if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
         with:
-          appSourcePath: ${{ github.workspace }}
-          _dockerfilePathKey_: _dockerfilePath_
-          _targetLabelKey_: _targetLabel_
           registryUrl: expressedrealms.azurecr.io
-          registryUsername: ${{ secrets.CAEXPRESSEDREALMSAPI_REGISTRY_USERNAME }}
-          registryPassword: ${{ secrets.CAEXPRESSEDREALMSAPI_REGISTRY_PASSWORD }}
+          imageToDeploy: expressedrealms.azurecr.io/api:${{ github.sha }}
           containerAppName: ca-expressedrealms-api
           resourceGroup: RG_ExpressedRealms
-          imageToBuild: expressedrealms.azurecr.io/ca-expressedrealms-api:${{ github.sha }}
           environmentVariables: ASPNETCORE_ENVIRONMENT=secretref:aspnetcore-environment AZURE_KEYVAULT_RESOURCEENDPOINT=secretref:azure-keyvault-resourceendpoint-dc543
 
   deploy_ui_to_prod:
