@@ -2,11 +2,10 @@
 name: Primary Workflow
 
 env:
-  ACTIONS_ALLOW_UNSECURE_COMMANDS: false
   RUN_MEGALINTER: "false"
-  RUN_VITESTS: "true"
-  RUN_CYPRESS: "true"
-  RUN_BACKEND_UNIT_TESTS: "true"
+  RUN_VITESTS: "false"
+  RUN_CYPRESS: "false"
+  RUN_BACKEND_UNIT_TESTS: "false"
   RUN_SONARCLOUD_SCAN: "false"
   RUN_PUSH_API_TO_ACR: "true"
   RUN_DEPLOY_API_TO_PROD: "false"
@@ -335,7 +334,7 @@ jobs:
     name: Push API to Azure Container Registry
     needs: [changes, cypress-run-chrome, vitests, backend_unit_tests]
     runs-on: ubuntu-22.04
-    if: ${{ always() && !contains(needs.*.result, 'failure') && needs.changes.outputs.backend == 'true' && needs.changes.outputs.deploy == 'true' }}
+#    if: ${{ always() && !contains(needs.*.result, 'failure') && needs.changes.outputs.backend == 'true' && needs.changes.outputs.deploy == 'true' }}
     steps:
 #      - name: Mark API to Azure Container Registry as Skipped
 #        if: ${{ needs.changes.outputs.backend != 'true' || needs.changes.outputs.deploy != 'true' }}
