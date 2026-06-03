@@ -354,11 +354,8 @@ jobs:
     runs-on: ubuntu-22.04
 #    if: ${{ needs.changes.outputs.run_push_api_to_acr == 'true' && !contains(needs.*.result, 'failure') && needs.changes.outputs.backend == 'true' && needs.changes.outputs.deploy == 'true' }}
     permissions:
-      packages: write
       contents: read
       id-token: write
-      statuses: write
-      checks: write
     steps:
 #      - name: Mark API to Azure Container Registry as Skipped
 #        if: ${{ needs.changes.outputs.backend != 'true' || needs.changes.outputs.deploy != 'true' }}
@@ -416,11 +413,7 @@ jobs:
     needs: [changes, push_api_to_azure_container_registry]
 #    if: ${{ needs.changes.outputs.run_deploy_api_to_prod == 'true' && !contains(needs.*.result, 'failure') && needs.changes.outputs.backend == 'true' && needs.changes.outputs.deploy == 'true' }}
     permissions:
-      packages: write
-      contents: read
       id-token: write
-      statuses: write
-      checks: write
     steps:
 #      - name: Mark Deploy API To Production as Skipped
 #        if: ${{ needs.changes.outputs.backend != 'true' || needs.changes.outputs.deploy != 'true' }}
