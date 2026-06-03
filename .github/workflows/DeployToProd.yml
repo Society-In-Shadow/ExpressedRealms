@@ -64,8 +64,8 @@ jobs:
     steps:
       # Git Checkout
       - name: Checkout Code
-        uses: actions/checkout@v4
         if: ${{ fromJSON(env.RUN_MEGALINTER) }}
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
           fetch-depth: 0 # If you use VALIDATE_ALL_CODEBASE = true, you can remove this line to improve performances
@@ -357,12 +357,12 @@ jobs:
 #            });
 
       - name: Checkout Repository
-        if: ${{ fromJSON(env.RUN_PUSH_API_TO_ACR) && !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
+#        if: ${{ fromJSON(env.RUN_PUSH_API_TO_ACR) && !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
         uses: actions/checkout@v4
 
       # Step 1: Azure Login
       - name: Azure Login
-        if: ${{ fromJSON(env.RUN_PUSH_API_TO_ACR) && !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
+#        if: ${{ fromJSON(env.RUN_PUSH_API_TO_ACR) && !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
         uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5
         with:
           client-id: ${{ secrets.EXPRESSEDREALMSAPI_AZURE_CLIENT_ID }}
@@ -370,13 +370,13 @@ jobs:
           subscription-id: ${{ secrets.EXPRESSEDREALMSAPI_AZURE_SUBSCRIPTION_ID }}
 
       - name: Login to ACR
-        if: ${{ fromJSON(env.RUN_PUSH_API_TO_ACR) && !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
+#        if: ${{ fromJSON(env.RUN_PUSH_API_TO_ACR) && !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
         uses: azure/docker-login@v2
         with:
           login-server: expressedrealms.azurecr.io
           
       - name: Build and Push
-        if: ${{ fromJSON(env.RUN_PUSH_API_TO_ACR) && !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
+ #       if: ${{ fromJSON(env.RUN_PUSH_API_TO_ACR) && !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
         run: |
           docker build -t expressedrealms.azurecr.io/api:${{ github.sha }} .
           docker push expressedrealms.azurecr.io/api:${{ github.sha }}
