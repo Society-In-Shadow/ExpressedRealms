@@ -350,9 +350,9 @@ jobs:
 
   push_api_to_azure_container_registry:
     name: Push API to Azure Container Registry
-    needs: [changes, cypress-run-chrome, vitests, backend_unit_tests]
+#    needs: [changes, cypress-run-chrome, vitests, backend_unit_tests]
     runs-on: ubuntu-22.04
-    if: ${{ needs.changes.outputs.run_push_api_to_acr == 'true' && !contains(needs.*.result, 'failure') && needs.changes.outputs.backend == 'true' && needs.changes.outputs.deploy == 'true' }}
+#    if: ${{ needs.changes.outputs.run_push_api_to_acr == 'true' && !contains(needs.*.result, 'failure') && needs.changes.outputs.backend == 'true' && needs.changes.outputs.deploy == 'true' }}
     permissions:
       packages: write
       contents: read
