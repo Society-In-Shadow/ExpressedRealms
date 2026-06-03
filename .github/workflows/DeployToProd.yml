@@ -2,14 +2,14 @@
 name: Primary Workflow
 
 env:
-  RUN_MEGALINTER: "false"
-  RUN_VITESTS: "false"
-  RUN_CYPRESS: "false"
-  RUN_BACKEND_UNIT_TESTS: "false"
-  RUN_SONARCLOUD_SCAN: "false"
+  RUN_MEGALINTER: "true"
+  RUN_VITESTS: "true"
+  RUN_CYPRESS: "true"
+  RUN_BACKEND_UNIT_TESTS: "true"
+  RUN_SONARCLOUD_SCAN: "true"
   RUN_PUSH_API_TO_ACR: "true"
-  RUN_DEPLOY_API_TO_PROD: "false"
-  RUN_DEPLOY_UI_TO_PROD: "false"
+  RUN_DEPLOY_API_TO_PROD: "true"
+  RUN_DEPLOY_UI_TO_PROD: "true"
 
 on: # yamllint disable-line truthy
   push:
