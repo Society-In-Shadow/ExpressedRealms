@@ -350,32 +350,32 @@ jobs:
 
   push_api_to_azure_container_registry:
     name: Push API to Azure Container Registry
-#    needs: [changes, cypress-run-chrome, vitests, backend_unit_tests]
+    needs: [changes, cypress-run-chrome, vitests, backend_unit_tests]
     runs-on: ubuntu-22.04
-#    if: ${{ needs.changes.outputs.run_push_api_to_acr == 'true' && !contains(needs.*.result, 'failure') && needs.changes.outputs.backend == 'true' && needs.changes.outputs.deploy == 'true' }}
+    if: ${{ needs.changes.outputs.run_push_api_to_acr == 'true' && !contains(needs.*.result, 'failure') && needs.changes.outputs.backend == 'true' && needs.changes.outputs.deploy == 'true' }}
     permissions:
       contents: read
       id-token: write
     steps:
-#      - name: Mark API to Azure Container Registry as Skipped
-#        if: ${{ needs.changes.outputs.backend != 'true' || needs.changes.outputs.deploy != 'true' }}
-#        uses: actions/github-script@v7
-#        with:
-#          github-token: ${{ secrets.GITHUB_TOKEN }}
-#          script: |
-#            const { owner, repo } = context.repo;
-#            await github.rest.checks.create({
-#              owner,
-#              repo,
-#              name: 'Primary Workflow / Push API to Azure Container Registry Skipped',
-#              head_sha: context.sha,
-#              status: 'completed',
-#              conclusion: 'skipped',
-#              output: {
-#                title: 'No Backend / API Changes Detected',
-#                summary: 'No backend changes detected for this commit.'
-#              }
-#            });
+      - name: Mark API to Azure Container Registry as Skipped
+        if: ${{ needs.changes.outputs.backend != 'true' || needs.changes.outputs.deploy != 'true' }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            await github.rest.checks.create({
+              owner,
+              repo,
+              name: 'Primary Workflow / Push API to Azure Container Registry Skipped',
+              head_sha: context.sha,
+              status: 'completed',
+              conclusion: 'skipped',
+              output: {
+                title: 'No Backend / API Changes Detected',
+                summary: 'No backend changes detected for this commit.'
+              }
+            });
 
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -394,7 +394,7 @@ jobs:
           ACR_TOKEN=$(az acr login --name expressedrealms --expose-token --output tsv --query accessToken)
           echo "::add-mask::$ACR_TOKEN" # mask the token in workflow logs
           echo "token=$ACR_TOKEN" >> "$GITHUB_OUTPUT"
-          
+
       - name: Login to ACR
         uses: docker/login-action@v4
         with:
@@ -411,29 +411,29 @@ jobs:
     name: Deploy API To Production
     runs-on: ubuntu-latest
     needs: [changes, push_api_to_azure_container_registry]
-#    if: ${{ needs.changes.outputs.run_deploy_api_to_prod == 'true' && !contains(needs.*.result, 'failure') && needs.changes.outputs.backend == 'true' && needs.changes.outputs.deploy == 'true' }}
+    if: ${{ needs.changes.outputs.run_deploy_api_to_prod == 'true' && !contains(needs.*.result, 'failure') && needs.changes.outputs.backend == 'true' && needs.changes.outputs.deploy == 'true' }}
     permissions:
       id-token: write
     steps:
-#      - name: Mark Deploy API To Production as Skipped
-#        if: ${{ needs.changes.outputs.backend != 'true' || needs.changes.outputs.deploy != 'true' }}
-#        uses: actions/github-script@v7
-#        with:
-#          github-token: ${{ secrets.GITHUB_TOKEN }}
-#          script: |
-#            const { owner, repo } = context.repo;
-#            await github.rest.checks.create({
-#              owner,
-#              repo,
-#              name: 'Primary Workflow / Deploy API To Production Skipped',
-#              head_sha: context.sha,
-#              status: 'completed',
-#              conclusion: 'skipped',
-#              output: {
-#                title: 'No Backend / API Changes Detected',
-#                summary: 'No Backend / API changes detected for this commit.'
-#              }
-#            });
+      - name: Mark Deploy API To Production as Skipped
+        if: ${{ needs.changes.outputs.backend != 'true' || needs.changes.outputs.deploy != 'true' }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo } = context.repo;
+            await github.rest.checks.create({
+              owner,
+              repo,
+              name: 'Primary Workflow / Deploy API To Production Skipped',
+              head_sha: context.sha,
+              status: 'completed',
+              conclusion: 'skipped',
+              output: {
+                title: 'No Backend / API Changes Detected',
+                summary: 'No Backend / API changes detected for this commit.'
+              }
+            });
       # Step 1: Azure Login
       - name: Azure Login
         uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5
@@ -441,11 +441,11 @@ jobs:
           client-id: ${{ secrets.EXPRESSEDREALMSAPI_AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.EXPRESSEDREALMSAPI_AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.EXPRESSEDREALMSAPI_AZURE_SUBSCRIPTION_ID }}
-          
+
       # Step 2: Deploy Container to Azure
       - name: Build and Push Container to Azure
         uses: azure/container-apps-deploy-action@8dff69dac3367c32ceb2690d8f13adbeab462703
-#        if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
+        if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
         with:
           registryUrl: expressedrealms.azurecr.io
           imageToDeploy: expressedrealms.azurecr.io/api:${{ github.sha }}
