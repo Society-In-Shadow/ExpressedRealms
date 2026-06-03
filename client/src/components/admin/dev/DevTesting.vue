@@ -48,6 +48,7 @@ const RunSpecialScripts = async () => {
 <template>
   <h1>Developer Tools</h1>
   <p>A small set of tools to test various features and services</p>
+  <p>Test Azure Container App Deployment</p>
   <div class="d-flex flex-column gap-3 ">
     <Button v-if="permissionCheck.DevDebug.SendTestEmail" label="Test Email" @click="testEmail" />
     <Button v-if="permissionCheck.DevDebug.GetFeatureFlag" label="Test Feature Flags" @click="getFeatureFlag" />

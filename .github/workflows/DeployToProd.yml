@@ -445,7 +445,7 @@ jobs:
       # Step 2: Deploy Container to Azure
       - name: Build and Push Container to Azure
         uses: azure/container-apps-deploy-action@8dff69dac3367c32ceb2690d8f13adbeab462703
-        if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
+#        if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
         with:
           registryUrl: expressedrealms.azurecr.io
           imageToDeploy: expressedrealms.azurecr.io/api:${{ github.sha }}
