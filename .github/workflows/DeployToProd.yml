@@ -2,7 +2,14 @@
 name: Primary Workflow
 
 env:
-  ACTIONS_ALLOW_UNSECURE_COMMANDS: false
+  RUN_MEGALINTER: "true"
+  RUN_VITESTS: "true"
+  RUN_CYPRESS: "true"
+  RUN_BACKEND_UNIT_TESTS: "true"
+  RUN_SONARCLOUD_SCAN: "true"
+  RUN_PUSH_API_TO_ACR: "true"
+  RUN_DEPLOY_API_TO_PROD: "true"
+  RUN_DEPLOY_UI_TO_PROD: "true"
 
 on: # yamllint disable-line truthy
   push:
@@ -18,6 +25,14 @@ jobs:
       frontend: ${{ steps.filter.outputs.frontend }}
       backend: ${{ steps.filter.outputs.backend }}
       deploy: ${{ steps.branch.outputs.deploy }}
+      run_megalinter: ${{ steps.flags.outputs.run_megalinter }}
+      run_vitests: ${{ steps.flags.outputs.run_vitests }}
+      run_cypress: ${{ steps.flags.outputs.run_cypress }}
+      run_backend_unit_tests: ${{ steps.flags.outputs.run_backend_unit_tests }}
+      run_sonarcloud_scan: ${{ steps.flags.outputs.run_sonarcloud_scan }}
+      run_push_api_to_acr: ${{ steps.flags.outputs.run_push_api_to_acr }}
+      run_deploy_api_to_prod: ${{ steps.flags.outputs.run_deploy_api_to_prod }}
+      run_deploy_ui_to_prod: ${{ steps.flags.outputs.run_deploy_ui_to_prod }}
     permissions:
       contents: read
     env:
@@ -31,6 +46,21 @@ jobs:
         run: |
           echo "deploy=$DEPLOY" >> "$GITHUB_OUTPUT"
           echo "deploy=$DEPLOY"
+
+      - name: Pass Through Run Flags to Output
+        id: flags
+        shell: bash
+        run: |
+          {
+            echo "run_megalinter=$RUN_MEGALINTER"
+            echo "run_vitests=$RUN_VITESTS"
+            echo "run_cypress=$RUN_CYPRESS"
+            echo "run_backend_unit_tests=$RUN_BACKEND_UNIT_TESTS"
+            echo "run_sonarcloud_scan=$RUN_SONARCLOUD_SCAN"
+            echo "run_push_api_to_acr=$RUN_PUSH_API_TO_ACR"
+            echo "run_deploy_api_to_prod=$RUN_DEPLOY_API_TO_PROD"
+            echo "run_deploy_ui_to_prod=$RUN_DEPLOY_UI_TO_PROD"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Paths filter
         id: filter
@@ -49,6 +79,8 @@ jobs:
     name: MegaLinter
     runs-on: ubuntu-latest
     continue-on-error: true
+    needs: changes
+    if: ${{ needs.changes.outputs.run_megalinter == 'true' }}
     permissions:
       issues: write
       pull-requests: write
@@ -78,7 +110,7 @@ jobs:
 
       # Upload MegaLinter artifacts
       - name: Archive production artifacts
-        if: success() || failure()
+        if: ${{ (success() || failure()) }}
         uses: actions/upload-artifact@v4
         with:
           name: MegaLinter reports
@@ -87,7 +119,7 @@ jobs:
             mega-linter.log
 
       - name: Upload MegaLinter scan results to GitHub Security tab
-        if: success() || failure()
+        if: ${{ (success() || failure()) }}
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: "megalinter-reports/megalinter-report.sarif"
@@ -97,6 +129,7 @@ jobs:
     name: Run ViTests
     runs-on: ubuntu-latest
     needs: changes
+    if: ${{ needs.changes.outputs.run_vitests == 'true' }}
     permissions:
       contents: read
       pull-requests: write
@@ -153,6 +186,7 @@ jobs:
   cypress-run-chrome:
     name: Run Cypress - Chrome
     runs-on: ubuntu-22.04
+    if: ${{ needs.changes.outputs.run_cypress == 'true' }}
     permissions:
       checks: write
       pull-requests: write
@@ -216,6 +250,7 @@ jobs:
     name: Run xUnit Unit Tests
     runs-on: ubuntu-latest
     needs: changes
+    if: ${{ needs.changes.outputs.run_backend_unit_tests == 'true' }}
     permissions:
       checks: write
     steps:
@@ -267,6 +302,7 @@ jobs:
     name: Run SonarCloud Scan
     runs-on: windows-latest
     needs: changes
+    if: ${{ needs.changes.outputs.run_sonarcloud_scan == 'true' }}
     steps:
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -290,7 +326,7 @@ jobs:
           key: ${{ runner.os }}-sonar-scanner
           restore-keys: ${{ runner.os }}-sonar-scanner
       - name: Install SonarQube Cloud scanner
-        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        if: ${{ steps.cache-sonar-scanner.outputs.cache-hit != 'true' }}
         shell: powershell
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
@@ -314,18 +350,16 @@ jobs:
           dotnet-coverage collect "dotnet test ./api --no-restore" -f xml -o "coverage.xml"
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
 
-  push_api_to_docker_hub:
-    name: Push API to Docker Hub
+  push_api_to_azure_container_registry:
+    name: Push API to Azure Container Registry
     needs: [changes, cypress-run-chrome, vitests, backend_unit_tests]
     runs-on: ubuntu-22.04
+    if: ${{ needs.changes.outputs.run_push_api_to_acr == 'true' && !contains(needs.*.result, 'failure') && needs.changes.outputs.backend == 'true' && needs.changes.outputs.deploy == 'true' }}
     permissions:
-      packages: write
       contents: read
-      attestations: write
       id-token: write
-      checks: write
     steps:
-      - name: Mark API to Docker Hub as Skipped
+      - name: Mark API to Azure Container Registry as Skipped
         if: ${{ needs.changes.outputs.backend != 'true' || needs.changes.outputs.deploy != 'true' }}
         uses: actions/github-script@v7
         with:
@@ -335,7 +369,7 @@ jobs:
             await github.rest.checks.create({
               owner,
               repo,
-              name: 'Primary Workflow / Push API to Docker Hub Skipped',
+              name: 'Primary Workflow / Push API to Azure Container Registry Skipped',
               head_sha: context.sha,
               status: 'completed',
               conclusion: 'skipped',
@@ -347,45 +381,43 @@ jobs:
 
       - name: Checkout Repository
         uses: actions/checkout@v4
-        if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a # Pinned SHA for security
-        if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
+      # Step 1: Azure Login
+      - name: Azure Login
+        uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          client-id: ${{ secrets.EXPRESSEDREALMSAPI_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.EXPRESSEDREALMSAPI_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.EXPRESSEDREALMSAPI_AZURE_SUBSCRIPTION_ID }}
 
-      - name: Extract Docker Metadata
-        id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7 # Pinned SHA for security
-        if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
-        with:
-          images: noremacskich/expressedrealms-frontend
+      - name: Get ACR access token
+        id: acr-token
+        run: |
+          ACR_TOKEN=$(az acr login --name expressedrealms --expose-token --output tsv --query accessToken)
+          echo "::add-mask::$ACR_TOKEN" # mask the token in workflow logs
+          echo "token=$ACR_TOKEN" >> "$GITHUB_OUTPUT"
 
-      - name: Build and Push Docker Image
-        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
-        if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
-        id: push
+      - name: Login to ACR
+        uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee
         with:
-          context: ./api
-          file: ./api/Dockerfile
-          push: true
-          tags: noremacskich/expressedrealms-api:${{ github.sha }}
-          labels: ${{ steps.meta.outputs.labels }}
+          registry: expressedrealms.azurecr.io
+          username: 00000000-0000-0000-0000-000000000000
+          password: ${{ steps.acr-token.outputs.token }}
+          
+      - name: Build and Push
+        run: |
+          docker build -t expressedrealms.azurecr.io/api:${{ github.sha }} -f ./api/Dockerfile ./api
+          docker push expressedrealms.azurecr.io/api:${{ github.sha }}
 
   deploy_api_to_prod:
     name: Deploy API To Production
     runs-on: ubuntu-latest
-    needs: [changes, push_api_to_docker_hub]
+    needs: [changes, push_api_to_azure_container_registry]
+    if: ${{ needs.changes.outputs.run_deploy_api_to_prod == 'true' && !contains(needs.*.result, 'failure') && needs.changes.outputs.backend == 'true' && needs.changes.outputs.deploy == 'true' }}
     permissions:
-      packages: write
-      contents: read
       id-token: write
-      statuses: write
-      checks: write
     steps:
-      - name: Mark Deploy API To Productionas Skipped
+      - name: Mark Deploy API To Production as Skipped
         if: ${{ needs.changes.outputs.backend != 'true' || needs.changes.outputs.deploy != 'true' }}
         uses: actions/github-script@v7
         with:
@@ -407,7 +439,6 @@ jobs:
       # Step 1: Azure Login
       - name: Azure Login
         uses: azure/login@a457da9ea143d694b1b9c7c869ebb04ebe844ef5
-        if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
         with:
           client-id: ${{ secrets.EXPRESSEDREALMSAPI_AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.EXPRESSEDREALMSAPI_AZURE_TENANT_ID }}
@@ -418,16 +449,14 @@ jobs:
         uses: azure/container-apps-deploy-action@8dff69dac3367c32ceb2690d8f13adbeab462703
         if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.backend == 'true' }}
         with:
-          registryUrl: ${{ vars.EXPRESSEDREALMSFRONTEND_REGISTRY_URL }}
-          registryUsername: ${{ secrets.EXPRESSEDREALMSFRONTEND_REGISTRY_USERNAME }}
-          registryPassword: ${{ secrets.EXPRESSEDREALMSAPI_REGISTRY_PASSWORD }}
-          imageToDeploy: ${{ vars.EXPRESSEDREALMSFRONTEND_REGISTRY_URL }}/noremacskich/expressedrealms-api:${{ github.sha }}
+          registryUrl: expressedrealms.azurecr.io
+          imageToDeploy: expressedrealms.azurecr.io/api:${{ github.sha }}
           containerAppName: ca-expressedrealms-api
           resourceGroup: RG_ExpressedRealms
           environmentVariables: ASPNETCORE_ENVIRONMENT=secretref:aspnetcore-environment AZURE_KEYVAULT_RESOURCEENDPOINT=secretref:azure-keyvault-resourceendpoint-dc543
 
   deploy_ui_to_prod:
-    if: ${{ !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.frontend == 'true' }}
+    if: ${{ needs.changes.outputs.run_deploy_ui_to_prod == 'true' && !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.frontend == 'true' }}
     runs-on: ubuntu-latest
     name: Deploy UI to Production
     needs: [changes, deploy_api_to_prod]
