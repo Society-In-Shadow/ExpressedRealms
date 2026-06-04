@@ -17,6 +17,7 @@ export const characterStore
         isInCharacterCreation: false as boolean,
         primaryProgressionId: 0 as number,
         secondaryProgressionId: 0 as number,
+        isArchetypeCharacter: false as boolean,
         isOwner: false as boolean,
         factions: [] as any[],
         faction: {} as any,
@@ -38,6 +39,7 @@ export const characterStore
             this.primaryProgressionId = response.data.primaryProgressionId
             this.secondaryProgressionId = response.data.secondaryProgressionId
             this.isRetired = response.data.isRetired
+            this.isArchetypeCharacter = response.data.isArchetypeCharacter
 
             if (await userInfo.hasFeatureFlag(FeatureFlags.ShowFactionDropdown)) {
               await axios.get(`/characters/${characterId}/factionOptions`)

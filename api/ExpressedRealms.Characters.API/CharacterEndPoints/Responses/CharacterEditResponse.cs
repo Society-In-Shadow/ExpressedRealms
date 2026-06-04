@@ -17,7 +17,10 @@ internal record CharacterEditResponse
         PrimaryProgressionId = dto.PrimaryProgressionId;
         SecondaryProgressionId = dto.SecondaryProgressionId;
         IsRetired = dto.IsRetired;
+        IsArchetypeCharacter = dto.IsArchetypeCharacter;
     }
+
+    public bool IsArchetypeCharacter { get; set; }
 
     public bool IsRetired { get; set; }
 
