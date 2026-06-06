@@ -1,13 +1,13 @@
 import { useDialog } from 'primevue/usedialog'
-import UpdateCharacterXp from '@/components/admin/characterList/UpdateCharacterXp.vue'
+import UpdateGoFields from '@/components/admin/characterList/UpdateGoFields.vue'
 
-export const adminCharacterDialogs = () => {
+export const characterGoFieldsDialog = () => {
   const dialog = useDialog()
 
-  const showUpdateXp = (characterId: number, playerNumber: number) => {
-    dialog.open(UpdateCharacterXp, {
+  const showUpdateGoFields = (characterId: number) => {
+    dialog.open(UpdateGoFields, {
       props: {
-        header: 'Update Character XP',
+        header: 'Update Character GO Fields',
         style: {
           width: '500px',
         },
@@ -19,11 +19,10 @@ export const adminCharacterDialogs = () => {
       },
       data: {
         characterId: characterId,
-        playerNumber: playerNumber,
       },
     })
   }
   return {
-    showUpdateXp,
+    showUpdateGoFields,
   }
 }
