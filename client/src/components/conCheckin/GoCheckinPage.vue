@@ -16,6 +16,7 @@ import { confirmationPopups } from '@/components/conCheckin/services/popupServic
 import AgeVerificationStep from '@/components/conCheckin/support/AgeVerificationStep.vue'
 import DailyCheckin from '@/components/conCheckin/support/DailyCheckin.vue'
 import SplitButton from 'primevue/splitbutton'
+import { characterGoFieldsDialog } from '@/components/admin/characterList/services/dialogs.ts'
 
 const eventCheckinInfo = EventCheckinStore()
 const userPermission = userPermissionStore()
@@ -23,6 +24,7 @@ const router = useRouter()
 const popups = confirmationPopups()
 
 const permissionCheck = userPermission.permissionCheck
+const updateGoFieldsDialog = characterGoFieldsDialog()
 
 onBeforeMount(async () => {
   await eventCheckinInfo.getCheckinAvailable()
@@ -84,6 +86,14 @@ onMounted(async () => {
       label: 'Retire Character',
       command: ($event) => {
         popups.retireConfirmation($event, eventCheckinInfo.primaryCharacter.characterName)
+      },
+    })
+  }
+  if (permissionCheck.CharacterManagement.ModifyGoFields) {
+    items.push({
+      label: 'Modify Wealth / Motes',
+      command: ($event) => {
+        updateGoFieldsDialog.showUpdateGoFields(eventCheckinInfo.primaryCharacter.characterId)
       },
     })
   }

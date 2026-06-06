@@ -52,7 +52,7 @@ async function downloadCharacterBooklet(characterId: number, characterName: stri
           <Button v-if="permissionCheck.CharacterManagement.ViewCharacterSheet" label="Character Sheet" class="m-2" @click="redirectToCharacterSheet()" />
           <Button v-if="permissionCheck.PlayerExperience.View" label="Assigned XP" class="m-2" @click="assignedXpDialogs.showAssignedXp(props.character.id, false)" />
           <Button v-if="permissionCheck.CharacterManagement.ViewCharacterSheet" label="CRB" class="m-2" @click="downloadCharacterBooklet(props.character.id, props.character.name, props.character?.playerName)" />
-          <Button v-if="permissionCheck.CharacterManagement.ViewCharacterSheet" label="GO Fields" class="m-2" @click="characterGoFieldsDialogs.showUpdateGoFields(props.character.id)" />
+          <Button v-if="permissionCheck.CharacterManagement.ModifyGoFields" label="GO Fields" class="m-2" @click="characterGoFieldsDialogs.showUpdateGoFields(props.character.id)" />
         </div>
       </div>
     </template>
