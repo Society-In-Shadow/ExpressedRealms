@@ -7,7 +7,16 @@ type FormFields<T> = {
   [K in keyof T]: FormField<T[K]>
 }
 
-export function useGenericForm<T extends Record<string, any>>(validationSchema: ObjectSchema<T>) {
+export type GenericForm<T> = {
+  fields: FormFields<T>
+  handleSubmit: ReturnType<typeof useForm<T>>['handleSubmit']
+  handleReset: ReturnType<typeof useForm<T>>['handleReset']
+  errors: ReturnType<typeof useForm<T>>['errors']
+  setErrors: ReturnType<typeof useForm<T>>['setErrors']
+  setValues: ReturnType<typeof useForm<T>>['setValues']
+}
+
+export function useGenericForm<T extends Record<string, any>>(validationSchema: ObjectSchema<T>): GenericForm<T> {
   const { defineField, handleSubmit, errors, handleReset, setErrors } = useForm<T>({
     validationSchema,
     validateOnMount: false,

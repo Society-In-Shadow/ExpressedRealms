@@ -1,5 +1,5 @@
-import { type InferType, number, object } from 'yup'
-import { useGenericForm } from '@/utilities/formUtilities'
+import { number, object } from 'yup'
+import { type GenericForm, useGenericForm } from '@/utilities/formUtilities'
 import type { GoFields } from '@/components/admin/characterList/types.ts'
 
 const validationSchema = object({
@@ -15,11 +15,14 @@ const validationSchema = object({
   primaFragments: number()
     .required()
     .label('Prima Fragments'),
-})
+}).transform(values => ({
+  wealthLevel: values.wealthLevel,
+  voidFragments: values.voidFragments,
+  motes: values.motes,
+  primaFragments: values.primaFragments,
+} as GoFields))
 
-export type CharacterGoFieldsForm = InferType<typeof validationSchema>
-
-export function getValidationInstance() {
+export function getValidationInstance(): GenericForm<GoFields> {
   const form = useGenericForm(validationSchema)
 
   const setValues = (data: GoFields) => {
