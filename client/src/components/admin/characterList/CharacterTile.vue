@@ -8,11 +8,13 @@ import { adminXpScheduleDialogs } from '@/components/admin/assignedXp/services/d
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 import { adminCharacterListStore } from '@/components/admin/characterList/stores/characterListStore.ts'
 import { downloadFile } from '@/utilities/downloadUtility.ts'
+import { characterGoFieldsDialog } from '@/components/admin/characterList/services/dialogs.ts'
 
 const userPermissionInfo = userPermissionStore()
 const permissionCheck = userPermissionInfo.permissionCheck
 const router = useRouter()
 const assignedXpDialogs = adminXpScheduleDialogs()
+const characterGoFieldsDialogs = characterGoFieldsDialog()
 const characterListInfo = adminCharacterListStore()
 
 const props = defineProps({
@@ -50,6 +52,7 @@ async function downloadCharacterBooklet(characterId: number, characterName: stri
           <Button v-if="permissionCheck.CharacterManagement.ViewCharacterSheet" label="Character Sheet" class="m-2" @click="redirectToCharacterSheet()" />
           <Button v-if="permissionCheck.PlayerExperience.View" label="Assigned XP" class="m-2" @click="assignedXpDialogs.showAssignedXp(props.character.id, false)" />
           <Button v-if="permissionCheck.CharacterManagement.ViewCharacterSheet" label="CRB" class="m-2" @click="downloadCharacterBooklet(props.character.id, props.character.name, props.character?.playerName)" />
+          <Button v-if="permissionCheck.CharacterManagement.ModifyGoFields" label="GO Fields" class="m-2" @click="characterGoFieldsDialogs.showUpdateGoFields(props.character.id)" />
         </div>
       </div>
     </template>

@@ -10,3 +10,10 @@ export interface PrimaryCharacter {
   playerName: string
   playerNumber: number
 }
+
+export interface GoFields {
+  wealthLevel: number
+  voidFragments: number
+  motes: number
+  primaFragments: number
+}

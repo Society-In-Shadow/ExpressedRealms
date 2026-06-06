@@ -17,6 +17,7 @@ export const adminCharacterListStore
           .then((response) => {
             this.primaryCharacters = response.data.characters
             this.filteredCharacters = response.data.characters
+            this.sortCharacters()
           })
       },
       async updateCharacterXp(formValues: CharacterXpForm, characterId: number) {
@@ -38,6 +39,10 @@ export const adminCharacterListStore
             || character.playerNumber.toString().padStart(3, '0').includes(lowercasedQuery),
           )
         }
+        this.sortCharacters()
+      },
+      sortCharacters() {
+        this.filteredCharacters = this.filteredCharacters.sort((a, b) => a.name.localeCompare(b.name))
       },
       getAwaitingCheckin() {
         const awaitingStageIds = [8, 9]
