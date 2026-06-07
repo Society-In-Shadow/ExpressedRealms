@@ -1,11 +1,15 @@
+using ExpressedRealms.Characters.Repository.Proficiencies;
 using ExpressedRealms.Characters.Repository.Wealth.Dtos;
 using ExpressedRealms.DB;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Characters.Repository.Wealth;
 
-public class WealthRepository(ExpressedRealmsDbContext context, CancellationToken cancellationToken)
-    : IWealthRepository
+public class WealthRepository(
+    ExpressedRealmsDbContext context,
+    IProficiencyRepository proficiencyRepository,
+    CancellationToken cancellationToken
+) : IWealthRepository
 {
     public async Task<WealthInfoDto> GetWealthInfoAsync(int characterId)
     {
@@ -27,7 +31,9 @@ public class WealthRepository(ExpressedRealmsDbContext context, CancellationToke
         var wealthy = blessings.FirstOrDefault(x => x.Name == "Wealthy");
         var disOwned = blessings.FirstOrDefault(x => x.Name == "Disowned / Disfavored");
 
-        var wealthLevel = 1;
+        var proficiency = await proficiencyRepository.GetBasicProficiencies(characterId);
+        const int wealthLevelId = 25;
+        var wealthLevel = proficiency.Value.First(x => x.Id == wealthLevelId).Value;
         double incomeModifier = 1;
         double bankCashModifier = 1;
         var appliedBlessings = new List<KeyValuePair<string, string>>();
@@ -38,18 +44,14 @@ public class WealthRepository(ExpressedRealmsDbContext context, CancellationToke
             switch (wealthy.LevelName)
             {
                 case "2pt":
-                    wealthLevel = 3;
                     break;
                 case "4pt":
-                    wealthLevel = 4;
                     incomeModifier += 0.05;
                     break;
                 case "6pt":
-                    wealthLevel = 5;
                     incomeModifier += 0.1;
                     break;
                 case "8pt":
-                    wealthLevel = 6;
                     incomeModifier += 0.25;
                     break;
             }
