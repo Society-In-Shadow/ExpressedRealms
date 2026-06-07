@@ -413,7 +413,15 @@ jobs:
     name: Deploy API To Production
     runs-on: ubuntu-latest
     needs: [changes, push_api_to_azure_container_registry]
-    if: ${{ needs.changes.outputs.run_deploy_api_to_prod == 'true' && !contains(needs.*.result, 'failure') && needs.changes.outputs.backend == 'true' && needs.changes.outputs.deploy == 'true' }}
+    if: |
+      always() &&
+      needs.changes.outputs.run_deploy_ui_to_prod == 'true' &&
+      needs.changes.outputs.deploy == 'true' &&
+      needs.changes.outputs.frontend == 'true' &&
+      (
+        needs.deploy_api_to_prod.result == 'success' ||
+        needs.deploy_api_to_prod.result == 'skipped'
+      )
     permissions:
       id-token: write
     steps:
