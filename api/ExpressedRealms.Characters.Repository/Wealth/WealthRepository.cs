@@ -5,8 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Characters.Repository.Wealth;
 
-public class WealthRepository(ExpressedRealmsDbContext context, IProficiencyRepository proficiencyRepository, CancellationToken cancellationToken)
-    : IWealthRepository
+public class WealthRepository(
+    ExpressedRealmsDbContext context,
+    IProficiencyRepository proficiencyRepository,
+    CancellationToken cancellationToken
+) : IWealthRepository
 {
     public async Task<WealthInfoDto> GetWealthInfoAsync(int characterId)
     {
