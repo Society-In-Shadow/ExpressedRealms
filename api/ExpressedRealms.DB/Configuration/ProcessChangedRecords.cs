@@ -99,7 +99,9 @@ public static class ProcessChangedRecords
             nameof(Checkin) => CheckinAuditTrailExtensions.ProcessChangedRecords(changedRecords),
             nameof(CheckinQuestionResponse) =>
                 CheckinQuestionResponseAuditTrailExtensions.ProcessChangedRecords(changedRecords),
-            nameof(Character) => CharacterAuditTrailExtensions.ProcessChangedRecords(changedRecords),
+            nameof(Character) => CharacterAuditTrailExtensions.ProcessChangedRecords(
+                changedRecords
+            ),
             _ => throw new ArgumentException(
                 $"Table not setup in the ProcessChangedRecords class: {tableName}"
             ),

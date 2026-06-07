@@ -193,7 +193,7 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
                 ChangedProperties = x.ChangedProperties,
             })
             .ToListAsync();
-        
+
         var characterLogs = await context
             .CharacterAuditTrails.AsNoTracking()
             .IgnoreQueryFilters()
@@ -206,7 +206,7 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
                 ChangedProperties = x.ChangedProperties,
             })
             .ToListAsync();
-        
+
         var characterPlayerLogs = await context
             .CharacterAuditTrails.AsNoTracking()
             .IgnoreQueryFilters()

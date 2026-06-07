@@ -23,11 +23,11 @@ namespace ExpressedRealms.DB.Models.Characters.Audit
                     case "prima_fragments":
                         changedRecord.FriendlyName = "Prima Fragments";
                         break;
-                    
+
                     case "motes":
                         changedRecord.FriendlyName = "Prima / Void";
                         break;
-                    
+
                     // This is an opt in approach, not opt out - There's a lot of fields here
                     default:
                         continue;
@@ -39,7 +39,9 @@ namespace ExpressedRealms.DB.Models.Characters.Audit
             return changedRecordsToReturn;
         }
 
-        public static IAuditEntityMapping AddCharacterAuditTrailMapping(this IAuditEntityMapping mapping)
+        public static IAuditEntityMapping AddCharacterAuditTrailMapping(
+            this IAuditEntityMapping mapping
+        )
         {
             return mapping.Map<Character, CharacterAuditTrail>(
                 (blessing, audit) =>
