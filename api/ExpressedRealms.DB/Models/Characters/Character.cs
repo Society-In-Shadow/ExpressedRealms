@@ -1,4 +1,5 @@
-﻿using ExpressedRealms.DB.Interceptors;
+﻿using Audit.EntityFramework;
+using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings;
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
 using ExpressedRealms.DB.Models.Characters.XpTables;
@@ -14,6 +15,7 @@ using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 
 namespace ExpressedRealms.DB.Models.Characters;
 
+[AuditInclude]
 public class Character : ISoftDelete
 {
     public int Id { get; set; }

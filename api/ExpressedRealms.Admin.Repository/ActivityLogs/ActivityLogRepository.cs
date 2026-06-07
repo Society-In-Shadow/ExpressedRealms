@@ -194,6 +194,33 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             })
             .ToListAsync();
 
+        var characterLogs = await context
+            .CharacterAuditTrails.AsNoTracking()
+            .IgnoreQueryFilters()
+            .Where(x => x.ActorUserId == userId)
+            .Select(x => new Log()
+            {
+                Location = $"Character \"{x.Character.Name}\"",
+                TimeStamp = x.Timestamp,
+                Action = x.Action,
+                ChangedProperties = x.ChangedProperties,
+            })
+            .ToListAsync();
+
+        var characterPlayerLogs = await context
+            .CharacterAuditTrails.AsNoTracking()
+            .IgnoreQueryFilters()
+            .Where(x => x.Character.Player.UserId == userId && x.ActorUserId != userId)
+            .Select(x => new Log()
+            {
+                Location =
+                    $"Player \"{x.Character.Player.Name}\" was modified by \"{x.ActorUser.Player!.Name}\"",
+                TimeStamp = x.Timestamp,
+                Action = x.Action,
+                ChangedProperties = x.ChangedProperties,
+            })
+            .ToListAsync();
+
         return expressionLogs
             .Concat(expressionSectionsLogs)
             .Concat(userLogs)
@@ -207,6 +234,8 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             .Concat(newRolePermissionLogs)
             .Concat(newActorUserRoleLogs)
             .Concat(userSpecificNewRoleLogs)
+            .Concat(characterLogs)
+            .Concat(characterPlayerLogs)
             .ToList();
     }
 }

@@ -293,6 +293,7 @@ internal sealed class CharacterRepository(
             Background = addCharacterDto.Background,
             ExpressionId = addCharacterDto.ExpressionId,
             FactionId = addCharacterDto.FactionId,
+            WealthLevel = 1,
             IsInCharacterCreation = true,
         };
 
