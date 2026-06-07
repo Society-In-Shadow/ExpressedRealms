@@ -39,7 +39,7 @@ jobs:
       DEPLOY: ${{ github.ref == 'refs/heads/main' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Pass Through Deploy Flag to Output
         id: branch
         shell: bash
@@ -64,7 +64,7 @@ jobs:
 
       - name: Paths filter
         id: filter
-        uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36
+        uses: dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           filters: |
@@ -89,9 +89,8 @@ jobs:
     steps:
       # Git Checkout
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
-          token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
           fetch-depth: 0 # If you use VALIDATE_ALL_CODEBASE = true, you can remove this line to improve performances
 
       # Mega-Linter
@@ -99,7 +98,7 @@ jobs:
         id: ml
         # You can override Mega-Linter flavor used to have faster performances
         # More info at https://megalinter.github.io/flavors/
-        uses: oxsecurity/megalinter@9f605c4496977db7664f9d066c6e304bef9e7d66
+        uses: oxsecurity/megalinter@0e3ce9b9c8c10effb9b269509cc47ca17cae31c7
         env:
           # All available variables are described in documentation
           # https://megalinter.github.io/configuration/
@@ -154,10 +153,10 @@ jobs:
                 summary: 'No UI changes detected for this commit.'
               }
             });
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         if: ${{ needs.changes.outputs.frontend == 'true' }}
       - name: "Install Node"
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         if: ${{ needs.changes.outputs.frontend == 'true' }}
         with:
           node-version: "20.x"
@@ -170,7 +169,7 @@ jobs:
         working-directory: ./client
         run: npm exec vitest -- --coverage.enabled true
       - name: "Upload Coverage"
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: ${{ needs.changes.outputs.frontend == 'true' }}
         with:
           name: vitest-coverage
@@ -179,7 +178,7 @@ jobs:
         # Set if: always() to also generate the report if tests are failing
         # Only works if you set `reportOnFailure: true` in your vite config as specified above
         if: ${{ always() && needs.changes.outputs.frontend == 'true' }}
-        uses: davelosert/vitest-coverage-report-action@8ab049ff5a2c6e78f78af446329379b318544a1a
+        uses: davelosert/vitest-coverage-report-action@02f3c2e641286b7fa308cd3e430783103ce6103b
         with:
           working-directory: ./client
 
@@ -212,7 +211,7 @@ jobs:
               }
             });
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         if: ${{ needs.changes.outputs.frontend == 'true' }}
 
       - name: Build Docker Image
@@ -275,12 +274,12 @@ jobs:
             });
 
       # Step 1: Checkout code
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         if: ${{ needs.changes.outputs.backend == 'true' }}
 
       # Step 2: Setup .NET
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         if: ${{ needs.changes.outputs.backend == 'true' }}
         with:
           dotnet-version: 10.0.x
@@ -309,7 +308,7 @@ jobs:
         with:
           java-version: 17
           distribution: "zulu" # Alternative distribution options are available.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
       - name: Cache SonarQube Cloud packages
@@ -380,7 +379,7 @@ jobs:
             });
 
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       # Step 1: Azure Login
       - name: Azure Login
@@ -413,15 +412,7 @@ jobs:
     name: Deploy API To Production
     runs-on: ubuntu-latest
     needs: [changes, push_api_to_azure_container_registry]
-    if: |
-      always() &&
-      needs.changes.outputs.run_deploy_ui_to_prod == 'true' &&
-      needs.changes.outputs.deploy == 'true' &&
-      needs.changes.outputs.frontend == 'true' &&
-      (
-        needs.deploy_api_to_prod.result == 'success' ||
-        needs.deploy_api_to_prod.result == 'skipped'
-      )
+    if: ${{ needs.changes.outputs.run_deploy_api_to_prod == 'true' && !contains(needs.*.result, 'failure') && needs.changes.outputs.backend == 'true' && needs.changes.outputs.deploy == 'true' }}
     permissions:
       id-token: write
     steps:
@@ -464,14 +455,22 @@ jobs:
           environmentVariables: ASPNETCORE_ENVIRONMENT=secretref:aspnetcore-environment AZURE_KEYVAULT_RESOURCEENDPOINT=secretref:azure-keyvault-resourceendpoint-dc543
 
   deploy_ui_to_prod:
-    if: ${{ needs.changes.outputs.run_deploy_ui_to_prod == 'true' && !contains(needs.*.result, 'failure') && needs.changes.outputs.deploy == 'true' && needs.changes.outputs.frontend == 'true' }}
     runs-on: ubuntu-latest
     name: Deploy UI to Production
     needs: [changes, deploy_api_to_prod]
+    if: |
+      always() &&
+      needs.changes.outputs.run_deploy_ui_to_prod == 'true' &&
+      needs.changes.outputs.deploy == 'true' &&
+      needs.changes.outputs.frontend == 'true' &&
+      (
+        needs.deploy_api_to_prod.result == 'success' ||
+        needs.deploy_api_to_prod.result == 'skipped'
+      )
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: true
           lfs: false
