@@ -10,7 +10,7 @@ BEGIN
 
     -- insert new character record, and grab the id
     insert into public.characters (name, player_id, expression_id, stat_experience_points, is_in_character_creation, is_primary_character, player_number, primary_progression_id, secondary_progression_id, wealth_level, void_fragments, motes, prima_fragments)
-    select character_name, target_player_id, expression_id, stat_experience_points, is_in_character_creation, is_primary_character, player_number, primary_progression_id, secondary_progression_id, 0, 0, 0, 0 from public.characters
+    select character_name, target_player_id, expression_id, stat_experience_points, is_in_character_creation, is_primary_character, player_number, primary_progression_id, secondary_progression_id, 1, 0, 0, 0 from public.characters
     where is_deleted = false and id = source_character_id
     RETURNING id INTO new_character_id;
 

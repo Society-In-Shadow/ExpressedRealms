@@ -9,10 +9,12 @@ using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit;
+using ExpressedRealms.DB.Models.Characters;
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels.Audit;
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels;
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels.Audit;
+using ExpressedRealms.DB.Models.Characters.Audit;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup.Audit;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
@@ -97,6 +99,7 @@ public static class ProcessChangedRecords
             nameof(Checkin) => CheckinAuditTrailExtensions.ProcessChangedRecords(changedRecords),
             nameof(CheckinQuestionResponse) =>
                 CheckinQuestionResponseAuditTrailExtensions.ProcessChangedRecords(changedRecords),
+            nameof(Character) => CharacterAuditTrailExtensions.ProcessChangedRecords(changedRecords),
             _ => throw new ArgumentException(
                 $"Table not setup in the ProcessChangedRecords class: {tableName}"
             ),

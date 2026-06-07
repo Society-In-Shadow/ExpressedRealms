@@ -4,6 +4,7 @@ using ExpressedRealms.DB.Configuration;
 using ExpressedRealms.DB.Models.Characters;
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels;
+using ExpressedRealms.DB.Models.Characters.Audit;
 using ExpressedRealms.DB.Models.Characters.XpTables;
 using ExpressedRealms.DB.Models.Skills;
 using ExpressedRealms.DB.Models.Statistics;
@@ -42,6 +43,7 @@ namespace ExpressedRealms.DB
         }
 
         public DbSet<Character> Characters { get; set; }
+        public DbSet<CharacterAuditTrail> CharacterAuditTrails { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<UserAuditTrail> UserAuditTrails { get; set; }
         public DbSet<PlayerAuditTrail> PlayerAuditTrails { get; set; }

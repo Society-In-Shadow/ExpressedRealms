@@ -8,6 +8,7 @@ using ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit;
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels.Audit;
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels.Audit;
+using ExpressedRealms.DB.Models.Characters.Audit;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup.Audit;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup.Audit;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageMappingSetup;
@@ -71,4 +72,6 @@ public class User : IdentityUser
         new HashSet<CheckinQuestionResponseAuditTrail>();
     public virtual ICollection<CheckinStageMapping> CheckinStageMappings { get; set; } =
         new HashSet<CheckinStageMapping>();
+    public virtual ICollection<CharacterAuditTrail> CharacterAuditTrails { get; set; } =
+        new HashSet<CharacterAuditTrail>();
 }
