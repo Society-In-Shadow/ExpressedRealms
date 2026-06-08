@@ -11,7 +11,6 @@ internal class PowerAuditTrailConfiguration : IEntityTypeConfiguration<PowerAudi
         builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
 
         builder.Property(e => e.PowerId).IsRequired();
-        builder.Property(e => e.PowerPathId).IsRequired();
 
         builder.Property(e => e.Action).IsRequired();
         builder.Property(e => e.ActorUserId).IsRequired();
@@ -22,13 +21,6 @@ internal class PowerAuditTrailConfiguration : IEntityTypeConfiguration<PowerAudi
             .HasOne(x => x.Power)
             .WithMany(x => x.PowerAuditTrails)
             .HasForeignKey(x => x.PowerId)
-            .OnDelete(DeleteBehavior.Restrict)
-            .IsRequired();
-
-        builder
-            .HasOne(x => x.PowerPath)
-            .WithMany(x => x.PowerAuditTrails)
-            .HasForeignKey(x => x.PowerPathId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
 

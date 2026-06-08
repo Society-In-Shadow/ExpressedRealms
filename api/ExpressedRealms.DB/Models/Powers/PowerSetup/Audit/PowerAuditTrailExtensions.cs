@@ -14,7 +14,6 @@ internal static class PowerAuditTrailExtensions
             switch (changedRecord.ColumnName)
             {
                 case "id":
-                case "power_path_id":
                     continue;
 
                 case "name":
@@ -61,10 +60,6 @@ internal static class PowerAuditTrailExtensions
                     changedRecord.FriendlyName = "Cost";
                     break;
 
-                case "order_index":
-                    changedRecord.FriendlyName = "Sort Order";
-                    break;
-
                 case "stat_modifier_group_id":
                     changedRecord.Message = "Added a stat modifier group";
                     break;
@@ -85,7 +80,6 @@ internal static class PowerAuditTrailExtensions
             (table, audit) =>
             {
                 audit.PowerId = table.Id;
-                audit.PowerPathId = table.PowerPathId;
                 return true;
             }
         );

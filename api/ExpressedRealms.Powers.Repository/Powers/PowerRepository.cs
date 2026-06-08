@@ -161,13 +161,11 @@ internal sealed class PowerRepository(
             AreaOfEffectTypeId = createPowerModel.AreaOfEffect,
             ActivationTimingTypeId = createPowerModel.PowerActivationType,
             DurationId = createPowerModel.PowerDuration,
-            PowerPathId = createPowerModel.PowerPathId,
             IsPowerUse = createPowerModel.IsPowerUse,
             GameMechanicEffect = createPowerModel.GameMechanicEffect,
             Limitation = createPowerModel.Limitation,
             OtherFields = createPowerModel.Other,
             Cost = createPowerModel.Cost,
-            OrderIndex = nextPlaceOnList + 1,
         };
 
         context.Powers.Add(newPower);
@@ -305,7 +303,7 @@ internal sealed class PowerRepository(
         return await context
             .Powers.AsNoTracking()
             .AnyAsync(
-                x => x.Id == powerId && x.PowerPath.ExpressionId == characterExpressionId,
+                x => x.Id == powerId && x.PowerPathPowerMapping!.PowerPath.ExpressionId == characterExpressionId,
                 cancellationToken
             );
     }

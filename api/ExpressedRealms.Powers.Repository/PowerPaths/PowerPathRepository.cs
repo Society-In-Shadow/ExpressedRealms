@@ -44,7 +44,7 @@ internal sealed class PowerPathRepository(
     public async Task<Result<List<PowerPathToc>>> GetPowerPathAndPowers(List<int> powerIds)
     {
         var items = await context
-            .PowerPaths.Where(x => x.Powers.Any(y => powerIds.Contains(y.Id)))
+            .PowerPaths.Where(x => x.PowerPathPowerMappings.Any(y => powerIds.Contains(y.PowerId)))
             .OrderBy(x => x.OrderIndex)
             .Select(x => new PowerPathToc()
             {

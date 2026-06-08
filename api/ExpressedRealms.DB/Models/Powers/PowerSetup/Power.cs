@@ -3,7 +3,6 @@ using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.ModifierSystem.StatModifierGroups;
 using ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup;
 using ExpressedRealms.DB.Models.Powers.PowerPathPowerMappingSetup;
-using ExpressedRealms.DB.Models.Powers.PowerPathSetup;
 using ExpressedRealms.DB.Models.Powers.PowerPrerequisitePowerSetup;
 using ExpressedRealms.DB.Models.Powers.PowerPrerequisiteSetup;
 using ExpressedRealms.DB.Models.Powers.PowerSetup.Audit;
@@ -29,9 +28,6 @@ public class Power : ISoftDelete
     public byte DurationId { get; set; }
     public virtual PowerDuration PowerDuration { get; set; } = null!;
 
-    public int PowerPathId { get; set; }
-    public virtual PowerPath PowerPath { get; set; } = null!;
-
     public int? StatModifierGroupId { get; set; }
     public StatModifierGroup? StatModifierGroup { get; set; }
 
@@ -40,14 +36,13 @@ public class Power : ISoftDelete
     public string? Limitation { get; set; }
     public string? OtherFields { get; set; }
     public string? Cost { get; set; }
-    public int OrderIndex { get; set; }
 
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 
     public virtual List<PowerCategoryMapping> CategoryMappings { get; set; } = null!;
 
-    public virtual PowerPathPowerMapping PowerPathPowerMapping { get; set; } = null!;
+    public virtual PowerPathPowerMapping? PowerPathPowerMapping { get; set; }
     
     public virtual PowerPrerequisite? Prerequisite { get; set; } = null!;
     public virtual List<PowerPrerequisitePower> PrerequisitePowers { get; set; } = null!;

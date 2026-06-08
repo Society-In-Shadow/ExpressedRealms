@@ -12,9 +12,7 @@ public class PowerConfiguration : IEntityTypeConfiguration<Power>
         builder.Property(e => e.Name).HasMaxLength(250).IsRequired();
         builder.Property(e => e.Description).IsRequired();
         builder.Property(e => e.LevelId).IsRequired();
-        builder.Property(e => e.PowerPathId).IsRequired();
         builder.Property(e => e.Cost);
-        builder.Property(e => e.OrderIndex).IsRequired();
         builder.Property(e => e.StatModifierGroupId);
         builder
             .HasOne(e => e.StatModifierGroup)
@@ -48,10 +46,5 @@ public class PowerConfiguration : IEntityTypeConfiguration<Power>
             .HasForeignKey(e => e.DurationId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder
-            .HasOne(e => e.PowerPath)
-            .WithMany(e => e.Powers)
-            .HasForeignKey(e => e.PowerPathId)
-            .OnDelete(DeleteBehavior.Restrict);
     }
 }
