@@ -45,6 +45,5 @@ public class PowerConfiguration : IEntityTypeConfiguration<Power>
             .WithMany(e => e.Powers)
             .HasForeignKey(e => e.DurationId)
             .OnDelete(DeleteBehavior.Restrict);
-
     }
 }

@@ -31,10 +31,11 @@ internal sealed class PowerPathRepository(
                 Id = x.Id,
                 Name = x.Name,
                 Description = x.Description,
-                Powers = x.PowerPathPowerMappings.AsQueryable()
+                Powers = x
+                    .PowerPathPowerMappings.AsQueryable()
                     .OrderBy(y => y.OrderIndex)
                     .Select(PowerInformation.Selector())
-                    .ToList()
+                    .ToList(),
             })
             .ToListAsync(cancellationToken);
 
@@ -51,11 +52,12 @@ internal sealed class PowerPathRepository(
                 Id = x.Id,
                 Name = x.Name,
                 Description = x.Description,
-                Powers = x.PowerPathPowerMappings.AsQueryable()
+                Powers = x
+                    .PowerPathPowerMappings.AsQueryable()
                     .Where(y => powerIds.Contains(y.PowerId))
                     .OrderBy(y => y.OrderIndex)
                     .Select(PowerInformation.Selector())
-                    .ToList()
+                    .ToList(),
             })
             .ToListAsync(cancellationToken);
 

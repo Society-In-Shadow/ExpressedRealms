@@ -11,8 +11,8 @@ public class PowerInformation
         {
             Id = x.Power.Id,
             Name = x.Power.Name,
-            Category = x.Power
-                .CategoryMappings.Select(y => new DetailedInformation(
+            Category = x
+                .Power.CategoryMappings.Select(y => new DetailedInformation(
                     y.Category.Name,
                     y.Category.Description
                 ))
@@ -46,8 +46,8 @@ public class PowerInformation
                     ? new PrerequisiteDetails
                     {
                         RequiredAmount = x.Power.Prerequisite.RequiredAmount,
-                        Powers = x.Power
-                            .Prerequisite.PrerequisitePowers.Select(pp => pp.Power.Name)
+                        Powers = x
+                            .Power.Prerequisite.PrerequisitePowers.Select(pp => pp.Power.Name)
                             .ToList(),
                     }
                     : null,

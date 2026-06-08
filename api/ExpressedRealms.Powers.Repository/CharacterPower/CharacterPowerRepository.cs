@@ -89,7 +89,10 @@ internal sealed class CharacterPowerRepository(
 
         // Grab all powers plus prerequisite data
         var allPowers = await context
-            .Powers.Where(x => x.PowerPathPowerMapping != null && x.PowerPathPowerMapping.PowerPath.ExpressionId == expressionId)
+            .Powers.Where(x =>
+                x.PowerPathPowerMapping != null
+                && x.PowerPathPowerMapping.PowerPath.ExpressionId == expressionId
+            )
             .Select(x => new
             {
                 PowerId = x.Id,

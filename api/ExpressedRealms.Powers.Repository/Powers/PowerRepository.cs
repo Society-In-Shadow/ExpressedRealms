@@ -30,8 +30,8 @@ internal sealed class PowerRepository(
             {
                 Id = x.Power.Id,
                 Name = x.Power.Name,
-                Category = x.Power
-                    .CategoryMappings.Select(y => new DetailedInformation(
+                Category = x
+                    .Power.CategoryMappings.Select(y => new DetailedInformation(
                         y.Category.Name,
                         y.Category.Description
                     ))
@@ -47,7 +47,10 @@ internal sealed class PowerRepository(
                     x.Power.PowerAreaOfEffectType.Name,
                     x.Power.PowerAreaOfEffectType.Description
                 ),
-                PowerLevel = new DetailedInformation(x.Power.PowerLevel.Name, x.Power.PowerLevel.Description),
+                PowerLevel = new DetailedInformation(
+                    x.Power.PowerLevel.Name,
+                    x.Power.PowerLevel.Description
+                ),
                 PowerActivationType = new DetailedInformation(
                     x.Power.PowerActivationTimingType.Name,
                     x.Power.PowerActivationTimingType.Description
@@ -171,12 +174,14 @@ internal sealed class PowerRepository(
         context.Powers.Add(newPower);
         await context.SaveChangesAsync(cancellationToken);
 
-        context.PowerPathPowerMappings.Add(new PowerPathPowerMapping()
-        {
-            PowerId = newPower.Id,
-            PowerPathId = createPowerModel.PowerPathId,
-            OrderIndex = nextPlaceOnList + 1
-        });
+        context.PowerPathPowerMappings.Add(
+            new PowerPathPowerMapping()
+            {
+                PowerId = newPower.Id,
+                PowerPathId = createPowerModel.PowerPathId,
+                OrderIndex = nextPlaceOnList + 1,
+            }
+        );
 
         if (createPowerModel.Category == null || createPowerModel.Category.Count == 0)
         {
@@ -303,7 +308,9 @@ internal sealed class PowerRepository(
         return await context
             .Powers.AsNoTracking()
             .AnyAsync(
-                x => x.Id == powerId && x.PowerPathPowerMapping!.PowerPath.ExpressionId == characterExpressionId,
+                x =>
+                    x.Id == powerId
+                    && x.PowerPathPowerMapping!.PowerPath.ExpressionId == characterExpressionId,
                 cancellationToken
             );
     }
