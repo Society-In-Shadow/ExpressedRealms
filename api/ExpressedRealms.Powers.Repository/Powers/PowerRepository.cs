@@ -278,7 +278,7 @@ internal sealed class PowerRepository(
 
         foreach (var item in dto.Items)
         {
-            var section = sections.First(x => x.Id == item.Id);
+            var section = sections.First(x => x.PowerId == item.Id);
             section.OrderIndex = item.SortOrder;
         }
 
