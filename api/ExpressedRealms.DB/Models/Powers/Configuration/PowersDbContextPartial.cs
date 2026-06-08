@@ -1,5 +1,6 @@
 using ExpressedRealms.DB.Models.Powers;
 using ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup;
+using ExpressedRealms.DB.Models.Powers.PowerPathPowerMappingSetup;
 using ExpressedRealms.DB.Models.Powers.PowerPathSetup;
 using ExpressedRealms.DB.Models.Powers.PowerPrerequisitePowerSetup;
 using ExpressedRealms.DB.Models.Powers.PowerPrerequisiteSetup;
@@ -24,4 +25,5 @@ public partial class ExpressedRealmsDbContext
     public DbSet<PowerAuditTrail> PowerAuditTrails { get; set; }
     public DbSet<PowerPrerequisitePower> PowerPrerequisitePowers { get; set; }
     public DbSet<CharacterPowerMapping> CharacterPowerMappings { get; set; }
+    public DbSet<PowerPathPowerMapping> PowerPathPowerMappings { get; set; }
 }
