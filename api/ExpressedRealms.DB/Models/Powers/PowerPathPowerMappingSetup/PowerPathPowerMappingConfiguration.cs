@@ -14,12 +14,6 @@ public class PowerPathPowerMappingConfiguration : IEntityTypeConfiguration<Power
         builder.Property(e => e.OrderIndex).IsRequired();
 
         builder
-            .HasOne(e => e.Power)
-            .WithMany(e => e.PowerPathPowerMappings)
-            .HasForeignKey(e => e.PowerId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder
             .HasOne(e => e.PowerPath)
             .WithMany(e => e.PowerPathPowerMappings)
             .HasForeignKey(e => e.PowerPathId)
