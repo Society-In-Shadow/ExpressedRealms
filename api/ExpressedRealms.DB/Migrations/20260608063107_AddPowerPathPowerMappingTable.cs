@@ -47,8 +47,11 @@ namespace ExpressedRealms.DB.Migrations
                 name: "ix_power_path_power_mappings_power_path_id",
                 table: "power_path_power_mappings",
                 column: "power_path_id");
-            
-            
+
+            migrationBuilder.Sql("""
+                                 insert into public.power_path_power_mappings (power_id, power_path_id, order_index)
+                                 select id, power_path_id, order_index FROM public.powers
+                                 """);
         }
 
         /// <inheritdoc />
