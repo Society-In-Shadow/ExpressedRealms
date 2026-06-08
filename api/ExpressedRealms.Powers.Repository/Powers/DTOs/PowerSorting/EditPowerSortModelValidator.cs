@@ -24,13 +24,14 @@ public class EditPowerSortModelValidator : AbstractValidator<EditPowerSortModel>
                 async (dto, cancellationToken) =>
                 {
                     var powers = await dbContext
-                        .Powers.Where(x => x.PowerPathId == dto.PowerPathId)
+                        .PowerPathPowerMappings.Where(x => x.PowerPathId == dto.PowerPathId)
+                        .Select(x => x.Id)
                         .ToListAsync(cancellationToken);
 
                     return dto
                         .Items.Select(x => x.Id)
                         .OrderBy(id => id)
-                        .SequenceEqual(powers.Select(x => x.Id).OrderBy(id => id));
+                        .SequenceEqual(powers.Select(x => x).OrderBy(id => id));
                 }
             )
             .WithMessage(

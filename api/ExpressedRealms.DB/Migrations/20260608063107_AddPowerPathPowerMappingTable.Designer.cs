@@ -3,6 +3,7 @@ using System;
 using ExpressedRealms.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpressedRealms.DB.Migrations
 {
     [DbContext(typeof(ExpressedRealmsDbContext))]
-    partial class ExpressedRealmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260608063107_AddPowerPathPowerMappingTable")]
+    partial class AddPowerPathPowerMappingTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3022,9 +3025,17 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("character varying(250)")
                         .HasColumnName("name");
 
+                    b.Property<int>("OrderIndex")
+                        .HasColumnType("integer")
+                        .HasColumnName("order_index");
+
                     b.Property<string>("OtherFields")
                         .HasColumnType("text")
                         .HasColumnName("other_fields");
+
+                    b.Property<int>("PowerPathId")
+                        .HasColumnType("integer")
+                        .HasColumnName("power_path_id");
 
                     b.Property<int?>("StatModifierGroupId")
                         .HasColumnType("integer")
@@ -3044,6 +3055,9 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.HasIndex("LevelId")
                         .HasDatabaseName("ix_powers_level_id");
+
+                    b.HasIndex("PowerPathId")
+                        .HasDatabaseName("ix_powers_power_path_id");
 
                     b.HasIndex("StatModifierGroupId")
                         .HasDatabaseName("ix_powers_stat_modifier_group_id");
@@ -3226,7 +3240,6 @@ namespace ExpressedRealms.DB.Migrations
                         .HasName("pk_power_path_power_mappings");
 
                     b.HasIndex("PowerId")
-                        .IsUnique()
                         .HasDatabaseName("ix_power_path_power_mappings_power_id");
 
                     b.HasIndex("PowerPathId")
@@ -3405,6 +3418,10 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("power_id");
 
+                    b.Property<int>("PowerPathId")
+                        .HasColumnType("integer")
+                        .HasColumnName("power_path_id");
+
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("timestamp");
@@ -3417,6 +3434,9 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.HasIndex("PowerId")
                         .HasDatabaseName("ix_power_audit_trails_power_id");
+
+                    b.HasIndex("PowerPathId")
+                        .HasDatabaseName("ix_power_audit_trails_power_path_id");
 
                     b.ToTable("power_audit_trails", (string)null);
                 });
@@ -5246,6 +5266,13 @@ namespace ExpressedRealms.DB.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_powers_power_levels_level_id");
 
+                    b.HasOne("ExpressedRealms.DB.Models.Powers.PowerPathSetup.PowerPath", "PowerPath")
+                        .WithMany("Powers")
+                        .HasForeignKey("PowerPathId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_powers_power_paths_power_path_id");
+
                     b.HasOne("ExpressedRealms.DB.Models.ModifierSystem.StatModifierGroups.StatModifierGroup", "StatModifierGroup")
                         .WithMany("Powers")
                         .HasForeignKey("StatModifierGroupId")
@@ -5259,6 +5286,8 @@ namespace ExpressedRealms.DB.Migrations
                     b.Navigation("PowerDuration");
 
                     b.Navigation("PowerLevel");
+
+                    b.Navigation("PowerPath");
 
                     b.Navigation("StatModifierGroup");
                 });
@@ -5287,9 +5316,9 @@ namespace ExpressedRealms.DB.Migrations
             modelBuilder.Entity("ExpressedRealms.DB.Models.Powers.PowerPathPowerMappingSetup.PowerPathPowerMapping", b =>
                 {
                     b.HasOne("ExpressedRealms.DB.Models.Powers.Power", "Power")
-                        .WithOne("PowerPathPowerMapping")
-                        .HasForeignKey("ExpressedRealms.DB.Models.Powers.PowerPathPowerMappingSetup.PowerPathPowerMapping", "PowerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("PowerPathPowerMappings")
+                        .HasForeignKey("PowerId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_power_path_power_mappings_powers_power_id");
 
@@ -5396,9 +5425,18 @@ namespace ExpressedRealms.DB.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_power_audit_trails_powers_power_id");
 
+                    b.HasOne("ExpressedRealms.DB.Models.Powers.PowerPathSetup.PowerPath", "PowerPath")
+                        .WithMany("PowerAuditTrails")
+                        .HasForeignKey("PowerPathId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_power_audit_trails_power_paths_power_path_id");
+
                     b.Navigation("ActorUser");
 
                     b.Navigation("Power");
+
+                    b.Navigation("PowerPath");
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Skills.CharacterSkillsMapping", b =>
@@ -5914,7 +5952,7 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.Navigation("PowerAuditTrails");
 
-                    b.Navigation("PowerPathPowerMapping");
+                    b.Navigation("PowerPathPowerMappings");
 
                     b.Navigation("Prerequisite");
 
@@ -5950,9 +5988,13 @@ namespace ExpressedRealms.DB.Migrations
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Powers.PowerPathSetup.PowerPath", b =>
                 {
+                    b.Navigation("PowerAuditTrails");
+
                     b.Navigation("PowerPathAudits");
 
                     b.Navigation("PowerPathPowerMappings");
+
+                    b.Navigation("Powers");
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Powers.PowerPrerequisiteSetup.PowerPrerequisite", b =>

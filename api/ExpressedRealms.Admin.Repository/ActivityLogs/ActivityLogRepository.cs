@@ -170,11 +170,11 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
         var powerLogs = await context
             .PowerAuditTrails.AsNoTracking()
             .IgnoreQueryFilters()
-            .Where(x => x.ActorUserId == userId)
+            .Where(x => x.ActorUserId == userId && x.Power.PowerPathPowerMapping != null)
             .Select(x => new Log()
             {
                 Location =
-                    $"{x.PowerPath.Expression.ExpressionType.Name} \"{x.Power.PowerPath.Expression.Name}\" > Power Path \"{x.PowerPath.Name}\" > Power \"{x.Power.Name}\"",
+                    $"{x.Power.PowerPathPowerMapping!.PowerPath.Expression.ExpressionType.Name} \"{x.Power.PowerPathPowerMapping.PowerPath.Expression.Name}\" > Power Path \"{x.Power.PowerPathPowerMapping.PowerPath.Name}\" > Power \"{x.Power.Name}\"",
                 TimeStamp = x.Timestamp,
                 Action = x.Action,
                 ChangedProperties = x.ChangedProperties,

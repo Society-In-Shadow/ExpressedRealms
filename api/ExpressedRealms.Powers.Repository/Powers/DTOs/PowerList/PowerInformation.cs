@@ -1,57 +1,59 @@
 using System.Linq.Expressions;
-using ExpressedRealms.DB.Models.Powers;
+using ExpressedRealms.DB.Models.Powers.PowerPathPowerMappingSetup;
 
 namespace ExpressedRealms.Powers.Repository.Powers.DTOs.PowerList;
 
 public class PowerInformation
 {
-    public static readonly Expression<Func<Power, PowerInformation>> Selector =
-        x => new PowerInformation
+    public static Expression<Func<PowerPathPowerMapping, PowerInformation>> Selector()
+    {
+        return x => new PowerInformation
         {
-            Id = x.Id,
-            Name = x.Name,
+            Id = x.Power.Id,
+            Name = x.Power.Name,
             Category = x
-                .CategoryMappings.Select(y => new DetailedInformation(
+                .Power.CategoryMappings.Select(y => new DetailedInformation(
                     y.Category.Name,
                     y.Category.Description
                 ))
                 .ToList(),
-            Description = x.Description,
-            GameMechanicEffect = x.GameMechanicEffect ?? string.Empty,
-            Limitation = x.Limitation ?? string.Empty,
+            Description = x.Power.Description,
+            GameMechanicEffect = x.Power.GameMechanicEffect ?? string.Empty,
+            Limitation = x.Power.Limitation ?? string.Empty,
             PowerDuration = new DetailedInformation(
-                x.PowerDuration.Name,
-                x.PowerDuration.Description
+                x.Power.PowerDuration.Name,
+                x.Power.PowerDuration.Description
             ),
             AreaOfEffect = new DetailedInformation(
-                x.PowerAreaOfEffectType.Name,
-                x.PowerAreaOfEffectType.Description
+                x.Power.PowerAreaOfEffectType.Name,
+                x.Power.PowerAreaOfEffectType.Description
             ),
             PowerLevel = new DetailedInformation(
-                x.PowerLevel.Id,
-                x.PowerLevel.Name,
-                x.PowerLevel.Description
+                x.Power.PowerLevel.Id,
+                x.Power.PowerLevel.Name,
+                x.Power.PowerLevel.Description
             ),
             PowerActivationType = new DetailedInformation(
-                x.PowerActivationTimingType.Name,
-                x.PowerActivationTimingType.Description
+                x.Power.PowerActivationTimingType.Name,
+                x.Power.PowerActivationTimingType.Description
             ),
-            Other = x.OtherFields,
-            IsPowerUse = x.IsPowerUse,
-            Cost = x.Cost,
+            Other = x.Power.OtherFields,
+            IsPowerUse = x.Power.IsPowerUse,
+            Cost = x.Power.Cost,
             SortOrder = x.OrderIndex,
             Prerequisites =
-                x.Prerequisite != null
+                x.Power.Prerequisite != null
                     ? new PrerequisiteDetails
                     {
-                        RequiredAmount = x.Prerequisite.RequiredAmount,
+                        RequiredAmount = x.Power.Prerequisite.RequiredAmount,
                         Powers = x
-                            .Prerequisite.PrerequisitePowers.Select(pp => pp.Power.Name)
+                            .Power.Prerequisite.PrerequisitePowers.Select(pp => pp.Power.Name)
                             .ToList(),
                     }
                     : null,
-            ModifierGroupId = x.StatModifierGroupId,
+            ModifierGroupId = x.Power.StatModifierGroupId,
         };
+    }
 
     public int? ModifierGroupId { get; set; }
 

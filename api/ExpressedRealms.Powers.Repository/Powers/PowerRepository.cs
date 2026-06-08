@@ -1,6 +1,7 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Powers;
+using ExpressedRealms.DB.Models.Powers.PowerPathPowerMappingSetup;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.Options;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerCreate;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerEdit;
@@ -23,44 +24,47 @@ internal sealed class PowerRepository(
     public async Task<Result<List<PowerInformation>>> GetPowersAsync(int powerPathId)
     {
         var items = await context
-            .Powers.Where(x => x.PowerPathId == powerPathId)
+            .PowerPathPowerMappings.Where(x => x.PowerPathId == powerPathId)
             .OrderBy(x => x.OrderIndex)
             .Select(x => new PowerInformation
             {
-                Id = x.Id,
-                Name = x.Name,
+                Id = x.Power.Id,
+                Name = x.Power.Name,
                 Category = x
-                    .CategoryMappings.Select(y => new DetailedInformation(
+                    .Power.CategoryMappings.Select(y => new DetailedInformation(
                         y.Category.Name,
                         y.Category.Description
                     ))
                     .ToList(),
-                Description = x.Description,
-                GameMechanicEffect = x.GameMechanicEffect,
-                Limitation = x.Limitation,
+                Description = x.Power.Description,
+                GameMechanicEffect = x.Power.GameMechanicEffect!,
+                Limitation = x.Power.Limitation,
                 PowerDuration = new DetailedInformation(
-                    x.PowerDuration.Name,
-                    x.PowerDuration.Description
+                    x.Power.PowerDuration.Name,
+                    x.Power.PowerDuration.Description
                 ),
                 AreaOfEffect = new DetailedInformation(
-                    x.PowerAreaOfEffectType.Name,
-                    x.PowerAreaOfEffectType.Description
+                    x.Power.PowerAreaOfEffectType.Name,
+                    x.Power.PowerAreaOfEffectType.Description
                 ),
-                PowerLevel = new DetailedInformation(x.PowerLevel.Name, x.PowerLevel.Description),
+                PowerLevel = new DetailedInformation(
+                    x.Power.PowerLevel.Name,
+                    x.Power.PowerLevel.Description
+                ),
                 PowerActivationType = new DetailedInformation(
-                    x.PowerActivationTimingType.Name,
-                    x.PowerActivationTimingType.Description
+                    x.Power.PowerActivationTimingType.Name,
+                    x.Power.PowerActivationTimingType.Description
                 ),
-                Other = x.OtherFields,
-                IsPowerUse = x.IsPowerUse,
-                Cost = x.Cost,
+                Other = x.Power.OtherFields,
+                IsPowerUse = x.Power.IsPowerUse,
+                Cost = x.Power.Cost,
                 Prerequisites =
-                    x.Prerequisite != null
+                    x.Power.Prerequisite != null
                         ? new PrerequisiteDetails()
                         {
-                            RequiredAmount = x.Prerequisite.RequiredAmount,
+                            RequiredAmount = x.Power.Prerequisite.RequiredAmount,
                             Powers = x
-                                .Prerequisite.PrerequisitePowers.Select(x => x.Power.Name)
+                                .Power.Prerequisite.PrerequisitePowers.Select(x => x.Power.Name)
                                 .ToList(),
                         }
                         : null,
@@ -148,7 +152,7 @@ internal sealed class PowerRepository(
             return Result.Fail(result.Errors);
 
         var nextPlaceOnList = await context
-            .Powers.AsNoTracking()
+            .PowerPathPowerMappings.AsNoTracking()
             .Where(x => x.PowerPathId == createPowerModel.PowerPathId)
             .CountAsync();
 
@@ -160,20 +164,28 @@ internal sealed class PowerRepository(
             AreaOfEffectTypeId = createPowerModel.AreaOfEffect,
             ActivationTimingTypeId = createPowerModel.PowerActivationType,
             DurationId = createPowerModel.PowerDuration,
-            PowerPathId = createPowerModel.PowerPathId,
             IsPowerUse = createPowerModel.IsPowerUse,
             GameMechanicEffect = createPowerModel.GameMechanicEffect,
             Limitation = createPowerModel.Limitation,
             OtherFields = createPowerModel.Other,
             Cost = createPowerModel.Cost,
-            OrderIndex = nextPlaceOnList + 1,
         };
 
         context.Powers.Add(newPower);
         await context.SaveChangesAsync(cancellationToken);
 
+        context.PowerPathPowerMappings.Add(
+            new PowerPathPowerMapping()
+            {
+                PowerId = newPower.Id,
+                PowerPathId = createPowerModel.PowerPathId,
+                OrderIndex = nextPlaceOnList + 1,
+            }
+        );
+
         if (createPowerModel.Category == null || createPowerModel.Category.Count == 0)
         {
+            await context.SaveChangesAsync(cancellationToken);
             return Result.Ok(newPower.Id);
         }
 
@@ -266,12 +278,12 @@ internal sealed class PowerRepository(
     public async Task<Result> UpdatePowerPathSortOrder(EditPowerSortModel dto)
     {
         var sections = await context
-            .Powers.Where(x => x.PowerPathId == dto.PowerPathId)
+            .PowerPathPowerMappings.Where(x => x.PowerPathId == dto.PowerPathId)
             .ToListAsync();
 
         foreach (var item in dto.Items)
         {
-            var section = sections.First(x => x.Id == item.Id);
+            var section = sections.First(x => x.PowerId == item.Id);
             section.OrderIndex = item.SortOrder;
         }
 
@@ -296,7 +308,9 @@ internal sealed class PowerRepository(
         return await context
             .Powers.AsNoTracking()
             .AnyAsync(
-                x => x.Id == powerId && x.PowerPath.ExpressionId == characterExpressionId,
+                x =>
+                    x.Id == powerId
+                    && x.PowerPathPowerMapping!.PowerPath.ExpressionId == characterExpressionId,
                 cancellationToken
             );
     }
