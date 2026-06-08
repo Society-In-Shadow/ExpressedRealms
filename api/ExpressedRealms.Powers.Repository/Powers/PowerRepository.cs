@@ -37,7 +37,7 @@ internal sealed class PowerRepository(
                     ))
                     .ToList(),
                 Description = x.Power.Description,
-                GameMechanicEffect = x.Power.GameMechanicEffect,
+                GameMechanicEffect = x.Power.GameMechanicEffect!,
                 Limitation = x.Power.Limitation,
                 PowerDuration = new DetailedInformation(
                     x.Power.PowerDuration.Name,
