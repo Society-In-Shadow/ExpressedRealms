@@ -3,6 +3,7 @@ using System;
 using ExpressedRealms.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpressedRealms.DB.Migrations
 {
     [DbContext(typeof(ExpressedRealmsDbContext))]
-    partial class ExpressedRealmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260610052211_AddFactionTable")]
+    partial class AddFactionTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2512,9 +2515,9 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("deleted_at");
 
-                    b.Property<int>("ExpressionId")
+                    b.Property<int>("FactionTypeId")
                         .HasColumnType("integer")
-                        .HasColumnName("expression_id");
+                        .HasColumnName("faction_type_id");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean")
@@ -2528,9 +2531,6 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_factions");
-
-                    b.HasIndex("ExpressionId")
-                        .HasDatabaseName("ix_factions_expression_id");
 
                     b.ToTable("factions", (string)null);
                 });
@@ -5201,18 +5201,6 @@ namespace ExpressedRealms.DB.Migrations
                     b.Navigation("Faction");
                 });
 
-            modelBuilder.Entity("ExpressedRealms.DB.Models.Factions.FactionModels.Faction", b =>
-                {
-                    b.HasOne("ExpressedRealms.DB.Models.Expressions.ExpressionSetup.Expression", "Expression")
-                        .WithMany("Factions")
-                        .HasForeignKey("ExpressionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("fk_factions_expressions_expression_id");
-
-                    b.Navigation("Expression");
-                });
-
             modelBuilder.Entity("ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings.CharacterKnowledgeMapping", b =>
                 {
                     b.HasOne("ExpressedRealms.DB.Models.Characters.Character", "Character")
@@ -5958,8 +5946,6 @@ namespace ExpressedRealms.DB.Migrations
                     b.Navigation("ExpressionAudits");
 
                     b.Navigation("ExpressionSections");
-
-                    b.Navigation("Factions");
 
                     b.Navigation("PowerPathAudits");
 

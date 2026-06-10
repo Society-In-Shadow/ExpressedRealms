@@ -20,6 +20,7 @@ using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionLevels.Audit;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths.Audit;
+using ExpressedRealms.DB.Models.Factions.FactionModels.Audit;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Audit;
 using ExpressedRealms.DB.Models.Powers.PowerPathSetup;
 using ExpressedRealms.DB.Models.Powers.PowerSetup.Audit;
@@ -74,4 +75,6 @@ public class User : IdentityUser
         new HashSet<CheckinStageMapping>();
     public virtual ICollection<CharacterAuditTrail> CharacterAuditTrails { get; set; } =
         new HashSet<CharacterAuditTrail>();
+    public virtual ICollection<FactionAuditTrail> FactionAuditTrails { get; set; } =
+        new HashSet<FactionAuditTrail>();
 }

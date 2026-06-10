@@ -10,7 +10,7 @@ There are two different areas I wanted to cover: Communication / Writing and Cod
 To start out with, some basic info:
 
 ## Numbers
-- App consists of 90+ tables, 190+ API endpoints, 800+ unit tests, and 50,000+ lines of code
+- App consists of 90+ tables, 200+ API endpoints, 900+ unit tests, and 55,000+ lines of code
 - Launched to ~40 active players during a live event, maintaining <100ms average API response times under gameplay load.
 
 ## Communication / Writing
@@ -35,7 +35,7 @@ comprehensive, but I am starting to make an effort to update or add as I go.
 ### Complex Use Case Example
 Use cases are where I put all the domain logic, it's a domain driven design concept.
 
-- [Update Blessings For Character Use Case](./../../api/ExpressedRealms.Blessings.UseCases/CharacterBlessingMappings/Edit/UpdateBlessingForCharacterUseCase.cs)
+- [Approving Stages For Event Checkin Process](./../../api/ExpressedRealms.Events.API/UseCases/EventCheckin/ApproveStageAndSendMessages/ApproveStageAndSendMessagesUseCase.cs)
 - [Add Blessings To Character Use Case](./../../api/ExpressedRealms.Blessings.UseCases/CharacterBlessingMappings/Create/AddBlessingToCharacterUseCase.cs)
 
 ### API Example

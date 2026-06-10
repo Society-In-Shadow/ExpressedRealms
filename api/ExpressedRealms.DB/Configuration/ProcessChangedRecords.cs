@@ -33,6 +33,8 @@ using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionLeve
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionLevels.Audit;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths.Audit;
+using ExpressedRealms.DB.Models.Factions.FactionModels;
+using ExpressedRealms.DB.Models.Factions.FactionModels.Audit;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Audit;
 using ExpressedRealms.DB.Models.Powers;
@@ -102,6 +104,7 @@ public static class ProcessChangedRecords
             nameof(Character) => CharacterAuditTrailExtensions.ProcessChangedRecords(
                 changedRecords
             ),
+            nameof(Faction) => FactionAuditTrailExtensions.ProcessChangedRecords(changedRecords),
             _ => throw new ArgumentException(
                 $"Table not setup in the ProcessChangedRecords class: {tableName}"
             ),
