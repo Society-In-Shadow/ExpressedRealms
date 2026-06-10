@@ -15,7 +15,7 @@ internal static class FactionAuditTrailExtensions
             {
                 case "expression_id":
                     continue;
-                
+
                 case "name":
                     changedRecord.FriendlyName = "Name";
                     break;
@@ -34,9 +34,7 @@ internal static class FactionAuditTrailExtensions
         return changedRecordsToReturn;
     }
 
-    public static IAuditEntityMapping AddFactionAuditTrailMapping(
-        this IAuditEntityMapping mapping
-    )
+    public static IAuditEntityMapping AddFactionAuditTrailMapping(this IAuditEntityMapping mapping)
     {
         return mapping.Map<Faction, FactionAuditTrail>(
             (powerPath, audit) =>

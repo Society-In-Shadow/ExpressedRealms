@@ -19,7 +19,7 @@ public class FactionConfiguration : IEntityTypeConfiguration<Faction>
             .HasForeignKey(x => x.ExpressionId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder.HasQueryFilter(x => !x.IsDeleted);
         builder.Property(e => e.IsDeleted);
         builder.Property(e => e.DeletedAt);

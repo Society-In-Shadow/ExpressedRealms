@@ -16,6 +16,7 @@ public class Faction : ISoftDelete
     public DateTimeOffset? DeletedAt { get; set; }
 
     public virtual Expression Expression { get; set; } = null!;
-    public virtual ICollection<FactionAuditTrail> FactionAuditTrails { get; set; } = new HashSet<FactionAuditTrail>();
+    public virtual ICollection<FactionAuditTrail> FactionAuditTrails { get; set; } =
+        new HashSet<FactionAuditTrail>();
     public virtual ICollection<Contact> Contacts { get; set; } = new HashSet<Contact>();
 }
