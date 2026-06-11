@@ -1,0 +1,27 @@
+using ExpressedRealms.Entities.UseCases.Entities.GetEditEntity;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
+
+namespace ExpressedRealms.Entities.API.GetEntity;
+
+public static class GetEntityEndpoint
+{
+    public static async Task<Ok<GetEntityResponse>> GetEntity(
+        int id,
+        IGetEditEntityUseCase createEntityUseCase
+    )
+    {
+        var results = await createEntityUseCase.ExecuteAsync(
+            new GetEditEntityModel() { Id = id }
+        );
+
+        return TypedResults.Ok(
+            new GetEntityResponse()
+            {
+                Id = results.Value.Id,
+                Name = results.Value.Name,
+                Description = results.Value.Description
+            }
+        );
+    }
+}

@@ -1,0 +1,6 @@
+namespace ExpressedRealms.Entities.API.GetAllExpressions;
+
+public class EntityResponse
+{
+    public List<EntityViewModel> Entities { get; set; } = new();
+}

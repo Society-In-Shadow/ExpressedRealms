@@ -1,0 +1,7 @@
+namespace ExpressedRealms.Entities.API.EditEntity;
+
+public class EditEntityRequest
+{
+    public required string Name { get; set; } = null!;
+    public required string Description { get; set; }
+}

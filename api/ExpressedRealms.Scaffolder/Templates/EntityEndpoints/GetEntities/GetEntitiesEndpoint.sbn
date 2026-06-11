@@ -1,0 +1,33 @@
+using ExpressedRealms.Entities.API.GetAllExpressions;
+using ExpressedRealms.Entities.UseCases.Entities.GetEntities;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
+
+namespace ExpressedRealms.Entities.API.GetAllEntities;
+
+public static class GetEntitiesEndpoint
+{
+    public static async Task<Ok<EntityResponse>> GetEntities(
+        IGetEntitiesUseCase createEntityUseCase
+    )
+    {
+        var results = await createEntityUseCase.ExecuteAsync();
+
+        return TypedResults.Ok(
+            new EntityResponse()
+            {
+                Entities = results
+                    .Value.EntityTypes.Select(x => new EntityViewModel()
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Description = x.Description,
+                        TypeName = x.TypeName,
+                        TypeDescription = x.TypeDescription,
+                        TypeId = x.TypeId,
+                    })
+                    .ToList(),
+            }
+        );
+    }
+}

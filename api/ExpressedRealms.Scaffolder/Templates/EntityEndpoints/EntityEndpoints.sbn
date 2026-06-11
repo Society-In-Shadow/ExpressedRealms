@@ -1,0 +1,44 @@
+﻿using ExpressedRealms.Authentication.PermissionCollection;
+using ExpressedRealms.Authentication.PermissionCollection.Configuration;
+using ExpressedRealms.Entities.API.CreateEntity;
+using ExpressedRealms.Entities.API.DeleteEntity;
+using ExpressedRealms.Entities.API.EditEntity;
+using ExpressedRealms.Entities.API.GetAllEntities;
+using ExpressedRealms.Entities.API.GetEntity;
+using ExpressedRealms.Entities.API.GetEntitiesummary;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+
+namespace ExpressedRealms.Entities.API;
+
+internal static class EntityEndpoints
+{
+    internal static void AddEntityEndpoints(this WebApplication app)
+    {
+        var endpointGroup = app
+            .MapGroup("{{ route }}")
+            .WithTags("Entities");
+    
+        endpointGroup.MapGet("", GetEntitiesEndpoint.GetEntities);
+    
+        endpointGroup.MapGet(
+            "summary",
+            GetEntitiesummaryEndpoint.ExecuteAsync);
+    
+        endpointGroup
+            .MapGet("{id}", GetEntityEndpoint.GetEntity)
+           .RequirePermission(Permissions.Entities.View);
+    
+        endpointGroup
+            .MapPost("", CreateEntityEndpoint.CreateEntity)
+          .RequirePermission(Permissions.Entities.Create);
+    
+        endpointGroup
+            .MapPut("{id}", EditEntityEndpoint.EditEntities)
+           .RequirePermission(Permissions.Entities.Edit);
+    
+        endpointGroup
+            .MapDelete("{id}", DeleteEntityEndpoint.DeleteEntity)
+        .RequirePermission(Permissions.Entities.Delete);
+    }
+}
