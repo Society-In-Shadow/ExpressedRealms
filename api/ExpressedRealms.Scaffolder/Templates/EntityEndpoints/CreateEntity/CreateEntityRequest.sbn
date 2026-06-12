@@ -1,6 +1,6 @@
-namespace ExpressedRealms.Entities.API.CreateEntity;
+namespace {{ namespacebase }}.{{ singular }}Endpoints.Create{{ singular }};
 
-public class CreateEntityRequest
+public class Create{{ singular }}Request
 {
     public required string Name { get; set; } = null!;
     public required string Description { get; set; }

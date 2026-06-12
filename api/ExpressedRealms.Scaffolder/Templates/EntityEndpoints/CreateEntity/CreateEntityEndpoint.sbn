@@ -1,20 +1,20 @@
-using ExpressedRealms.Entities.UseCases.Entities.CreateEntity;
+using ExpressedRealms.{{ plural }}.UseCases.{{ plural }}.Create{{ singular }};
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ExpressedRealms.Entities.API.CreateEntity;
+namespace {{ namespacebase }}.{{ singular }}Endpoints.Create{{ singular }};
 
-public static class CreateEntityEndpoint
+public static class Create{{ singular }}Endpoint
 {
-    public static async Task<Results<Ok<int>, NotFound, ValidationProblem>> CreateEntity(
-        [FromBody] CreateEntityRequest request,
-        [FromServices] ICreateEntityUseCase createEntityUseCase
+    public static async Task<Results<Ok<int>, NotFound, ValidationProblem>> Create{{ singular }}(
+        [FromBody] Create{{ singular }}Request request,
+        [FromServices] ICreate{{ singular }}UseCase create{{ singular }}UseCase
     )
     {
-        var results = await createEntityUseCase.ExecuteAsync(
-            new CreateEntityModel()
+        var results = await create{{ singular }}UseCase.ExecuteAsync(
+            new Create{{ singular }}Model()
             {
                 Name = request.Name,
                 Description = request.Description,

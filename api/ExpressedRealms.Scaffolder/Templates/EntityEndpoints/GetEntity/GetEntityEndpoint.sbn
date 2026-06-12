@@ -1,22 +1,22 @@
-using ExpressedRealms.Entities.UseCases.Entities.GetEditEntity;
+using ExpressedRealms.{{ plural }}.UseCases.{{ plural }}.GetEdit{{ singular }};
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace ExpressedRealms.Entities.API.GetEntity;
+namespace {{ namespacebase }}.{{ singular }}Endpoints.Get{{ singular }};
 
-public static class GetEntityEndpoint
+public static class Get{{ singular }}Endpoint
 {
-    public static async Task<Ok<GetEntityResponse>> GetEntity(
+    public static async Task<Ok<Get{{ singular }}Response>> Get{{ singular }}(
         int id,
-        IGetEditEntityUseCase createEntityUseCase
+        IGetEdit{{ singular }}UseCase create{{ singular }}UseCase
     )
     {
-        var results = await createEntityUseCase.ExecuteAsync(
-            new GetEditEntityModel() { Id = id }
+        var results = await create{{ singular }}UseCase.ExecuteAsync(
+            new GetEdit{{ singular }}Model() { Id = id }
         );
 
         return TypedResults.Ok(
-            new GetEntityResponse()
+            new Get{{ singular }}Response()
             {
                 Id = results.Value.Id,
                 Name = results.Value.Name,

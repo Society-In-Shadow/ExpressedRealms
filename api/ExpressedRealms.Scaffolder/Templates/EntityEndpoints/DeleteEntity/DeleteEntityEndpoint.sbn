@@ -1,19 +1,19 @@
-using ExpressedRealms.Entities.UseCases.Entities.DeleteEntity;
+using ExpressedRealms.{{ plural }}.UseCases.{{ plural }}.Delete{{ singular }};
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ExpressedRealms.Entities.API.DeleteEntity;
+namespace {{ namespacebase }}.{{ singular }}Endpoints.Delete{{ singular }};
 
-public static class DeleteEntityEndpoint
+public static class Delete{{ singular }}Endpoint
 {
-    public static async Task<Results<Ok, NotFound, ValidationProblem>> DeleteEntity(
+    public static async Task<Results<Ok, NotFound, ValidationProblem>> Delete{{ singular }}(
         int id,
-        [FromServices] IDeleteEntityUseCase useCase
+        [FromServices] IDelete{{ singular }}UseCase useCase
     )
     {
-        var results = await useCase.ExecuteAsync(new DeleteEntityModel() { Id = id });
+        var results = await useCase.ExecuteAsync(new Delete{{ singular }}Model() { Id = id });
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;

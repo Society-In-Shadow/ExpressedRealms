@@ -4,12 +4,7 @@ public static class CrudGenerator
 {
     public static void Generate(string singular, string plural, string route, string output)
     {
-        var model = new
-        {
-            singular,
-            plural,
-            route
-        };
+
 
         var templateRoot =
             Path.Combine(AppContext.BaseDirectory, "Templates", "EntityEndpoints");
@@ -17,8 +12,24 @@ public static class CrudGenerator
         var outputSource = string.IsNullOrWhiteSpace(output) ? Environment.CurrentDirectory : Path.GetFullPath(output);
         
         var outputRoot =
-            Path.Combine(outputSource, plural, "Endpoints");
+            Path.Combine(outputSource, $"{singular}Endpoints");
+        
+        var start = outputSource.IndexOf("ExpressedRealms.");
 
+        if (start < 0)
+            throw new InvalidOperationException("Base namespace not found.");
+
+        var namespacebase = outputSource.Substring(start);
+        
+        Console.WriteLine(namespacebase);
+        var model = new
+        {
+            singular,
+            plural,
+            route,
+            namespacebase
+        };
+        
         GenerateDirectory(templateRoot, outputRoot, model);
     }
 

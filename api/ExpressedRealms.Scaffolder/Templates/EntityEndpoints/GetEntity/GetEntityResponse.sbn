@@ -1,6 +1,6 @@
-namespace ExpressedRealms.Entities.API.GetEntity;
+namespace {{ namespacebase }}.{{ singular }}Endpoints.Get{{ singular }};
 
-public class GetEntityResponse
+public class Get{{ singular }}Response
 {
     public int Id { get; set; }
     public required string Name { get; set; } = null!;

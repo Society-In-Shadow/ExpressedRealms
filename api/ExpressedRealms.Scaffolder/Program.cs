@@ -7,10 +7,6 @@ class Program
 {
     static int Main(string[] args)
     {
-        /*Option<FileInfo> fileOption = new("--file")
-        {
-            Description = "The file to read and display on the console"
-        };*/
         Option<string> entityName = new("--singular")
         {
             Aliases = { "-s" },
@@ -30,7 +26,6 @@ class Program
         };
 
         RootCommand rootCommand = new("Sample app for System.CommandLine");
-        //rootCommand.Options.Add(fileOption);
         rootCommand.Options.Add(entityName);
         rootCommand.Options.Add(entitiesName);
         rootCommand.Options.Add(outputOption);
@@ -51,13 +46,5 @@ class Program
             Console.Error.WriteLine(parseError.Message);
         }
         return 1;
-    }
-
-    static void ReadFile(FileInfo file)
-    {
-        foreach (string line in File.ReadLines(file.FullName))
-        {
-            Console.WriteLine(line);
-        }
     }
 }

@@ -1,6 +1,6 @@
-namespace ExpressedRealms.Entities.API.GetAllExpressions;
+namespace {{ namespacebase }}.{{ singular }}Endpoints.Get{{ plural }};
 
-public class EntityResponse
+public class {{ singular }}Response
 {
-    public List<EntityViewModel> Entities { get; set; } = new();
+    public List<{{ singular }}ViewModel> {{ plural }} { get; set; } = new();
 }

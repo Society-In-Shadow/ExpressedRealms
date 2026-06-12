@@ -1,44 +1,39 @@
 ﻿using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Authentication.PermissionCollection.Configuration;
-using ExpressedRealms.Entities.API.CreateEntity;
-using ExpressedRealms.Entities.API.DeleteEntity;
-using ExpressedRealms.Entities.API.EditEntity;
-using ExpressedRealms.Entities.API.GetAllEntities;
-using ExpressedRealms.Entities.API.GetEntity;
-using ExpressedRealms.Entities.API.GetEntitiesummary;
+using {{ namespacebase }}.{{ singular }}Endpoints.Create{{ singular }};
+using {{ namespacebase }}.{{ singular }}Endpoints.Delete{{ singular }};
+using {{ namespacebase }}.{{ singular }}Endpoints.Edit{{ singular }};
+using {{ namespacebase }}.{{ singular }}Endpoints.Get{{ plural }};
+using {{ namespacebase }}.{{ singular }}Endpoints.Get{{ singular }};
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 
-namespace ExpressedRealms.Entities.API;
+namespace {{ namespacebase }}.{{ singular }}Endpoints;
 
-internal static class EntityEndpoints
+internal static class {{ singular }}Endpoints
 {
-    internal static void AddEntityEndpoints(this WebApplication app)
+    internal static void Add{{ singular }}Endpoints(this WebApplication app)
     {
         var endpointGroup = app
-            .MapGroup("{{ route }}")
-            .WithTags("Entities");
+            .MapGroup("{{ plural | string.downcase }}")
+            .WithTags("{{ plural }}");
     
-        endpointGroup.MapGet("", GetEntitiesEndpoint.GetEntities);
-    
-        endpointGroup.MapGet(
-            "summary",
-            GetEntitiesummaryEndpoint.ExecuteAsync);
+        endpointGroup.MapGet("", Get{{ plural }}Endpoint.Get{{ plural }});
     
         endpointGroup
-            .MapGet("{id}", GetEntityEndpoint.GetEntity)
-           .RequirePermission(Permissions.Entities.View);
+            .MapGet("{id}", Get{{ singular }}Endpoint.Get{{ singular }})
+           .RequirePermission(Permissions.{{ plural }}.View);
     
         endpointGroup
-            .MapPost("", CreateEntityEndpoint.CreateEntity)
-          .RequirePermission(Permissions.Entities.Create);
+            .MapPost("", Create{{ singular }}Endpoint.Create{{ singular }})
+          .RequirePermission(Permissions.{{ plural }}.Create);
     
         endpointGroup
-            .MapPut("{id}", EditEntityEndpoint.EditEntities)
-           .RequirePermission(Permissions.Entities.Edit);
+            .MapPut("{id}", Edit{{ singular }}Endpoint.Edit{{ plural }})
+           .RequirePermission(Permissions.{{ plural }}.Edit);
     
         endpointGroup
-            .MapDelete("{id}", DeleteEntityEndpoint.DeleteEntity)
-        .RequirePermission(Permissions.Entities.Delete);
+            .MapDelete("{id}", Delete{{ singular }}Endpoint.Delete{{ singular }})
+        .RequirePermission(Permissions.{{ plural }}.Delete);
     }
 }
