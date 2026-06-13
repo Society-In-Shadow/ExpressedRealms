@@ -20,6 +20,14 @@ public static class CrudGenerator
         Generate(model, templateRoot, $"{model.singular}Endpoints");
     }
     
+    public static void GenerateRepository(GenerateUseCasesModel model)
+    {
+        var templateRoot =
+            Path.Combine(AppContext.BaseDirectory, "Templates", "EntityRepository");
+        
+        Generate(model, templateRoot, $"{model.plural}");
+    }
+    
     
     
     private static void Generate(GenerateUseCasesModel generationModel, string templateRoot, string baseFolderName)
@@ -45,7 +53,6 @@ public static class CrudGenerator
             generationModel.singular,
             generationModel.plural,
             generationModel.route,
-            namespacebase
             namespacebase,
             projectname
         };

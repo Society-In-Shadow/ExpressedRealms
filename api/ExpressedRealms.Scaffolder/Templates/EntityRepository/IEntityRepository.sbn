@@ -1,0 +1,16 @@
+using ExpressedRealms.DB.Models.{{ plural }};
+using ExpressedRealms.DB.Models.{{ plural }}.{{ singular }}Models;
+using ExpressedRealms.DB.Shared;
+
+namespace {{ namespacebase }}.{{ plural }};
+
+public interface I{{ singular }}Repository
+{
+    Task<int> Create{{ singular }}Async({{ singular }} {{ singular | string.downcase }});
+    Task<bool> HasDuplicateName(string name, int {{ singular | string.downcase }}Id = 0);
+    Task<bool> IsExisting{{ singular }}(int {{ singular | string.downcase }}Id);
+    Task Edit{{ singular }}Async({{ singular }} {{ singular | string.downcase }});
+    Task<{{ singular }}> Get{{ singular }}ForEditingAsync(int modelId);
+    Task<List<{{ singular }}>> Get{{ singular }}s();
+    Task<{{ singular }}> Get{{ singular }}Async(int modelId);
+}
