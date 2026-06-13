@@ -1,4 +1,4 @@
-using ExpressedRealms.{{ plural }}.UseCases.{{ plural }}.Get{{ plural }};
+using ExpressedRealms.{{ projectname }}.UseCases.{{ singular }}UseCases.Get{{ plural }};
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -16,7 +16,7 @@ public static class Get{{ plural }}Endpoint
             new {{ singular }}Response()
             {
                 {{ plural }} = results
-                    .Value.{{ singular }}Types.Select(x => new {{ singular }}ViewModel()
+                    .Value.{{ plural }}.Select(x => new {{ singular }}ViewModel()
                     {
                         Id = x.Id,
                         Name = x.Name,

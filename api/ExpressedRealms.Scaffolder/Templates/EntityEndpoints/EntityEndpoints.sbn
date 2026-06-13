@@ -18,7 +18,8 @@ internal static class {{ singular }}Endpoints
             .MapGroup("{{ plural | string.downcase }}")
             .WithTags("{{ plural }}");
     
-        endpointGroup.MapGet("", Get{{ plural }}Endpoint.Get{{ plural }});
+        endpointGroup.MapGet("", Get{{ plural }}Endpoint.Get{{ plural }})
+            .RequireAuthorization();;
     
         endpointGroup
             .MapGet("{id}", Get{{ singular }}Endpoint.Get{{ singular }})

@@ -1,4 +1,4 @@
-using ExpressedRealms.{{ plural }}.UseCases.{{ plural }}.Delete{{ singular }};
+using ExpressedRealms.{{ projectname }}.UseCases.{{ singular }}UseCases.Delete{{ singular }};
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;

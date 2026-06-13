@@ -1,4 +1,4 @@
-using ExpressedRealms.{{ plural }}.UseCases.{{ plural }}.GetEdit{{ singular }};
+using ExpressedRealms.{{ projectname }}.UseCases.{{ singular }}UseCases.Get{{ singular }};
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -8,11 +8,11 @@ public static class Get{{ singular }}Endpoint
 {
     public static async Task<Ok<Get{{ singular }}Response>> Get{{ singular }}(
         int id,
-        IGetEdit{{ singular }}UseCase create{{ singular }}UseCase
+        IGet{{ singular }}UseCase create{{ singular }}UseCase
     )
     {
         var results = await create{{ singular }}UseCase.ExecuteAsync(
-            new GetEdit{{ singular }}Model() { Id = id }
+            new Get{{ singular }}Model() { Id = id }
         );
 
         return TypedResults.Ok(
