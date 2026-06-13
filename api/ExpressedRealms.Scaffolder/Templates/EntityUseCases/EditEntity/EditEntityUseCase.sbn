@@ -1,5 +1,5 @@
 using ExpressedRealms.DB.Models.{{ singular }}s.{{ singular }}Models;
-using ExpressedRealms.{{ singular }}s.Repository.{{ singular }}s;
+using ExpressedRealms.{{ projectname }}.Repository.{{ plural }};
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 

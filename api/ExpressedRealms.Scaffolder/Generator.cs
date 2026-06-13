@@ -35,13 +35,19 @@ public static class CrudGenerator
 
         var namespacebase = outputSource.Substring(start);
         
+        var parts = namespacebase.Split('.');
+        var projectname = parts.Length > 1 ? parts[1] : "";
+        
         Console.WriteLine(namespacebase);
+        Console.WriteLine(projectname);
         var model = new
         {
             generationModel.singular,
             generationModel.plural,
             generationModel.route,
             namespacebase
+            namespacebase,
+            projectname
         };
         
         GenerateDirectory(templateRoot, outputRoot, model);

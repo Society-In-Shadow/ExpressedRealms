@@ -1,4 +1,4 @@
-using ExpressedRealms.{{ singular }}s.Repository.{{ singular }}s;
+using ExpressedRealms.{{ projectname }}.Repository.{{ plural }};
 using FluentResults;
 
 namespace {{ namespacebase }}.{{ singular }}UseCases.Get{{ singular }}s;
