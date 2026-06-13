@@ -1,0 +1,7 @@
+namespace {{ namespacebase }}.{{ singular }}UseCases.Create{{ singular }};
+
+public class Create{{ singular }}Model
+{
+    public required string Name { get; set; }
+    public required string Description { get; set; }
+}

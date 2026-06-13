@@ -1,0 +1,6 @@
+using ExpressedRealms.Shared;
+using FluentResults;
+
+namespace {{ namespacebase }}.{{ singular }}UseCases.Get{{ singular }}s;
+
+public interface IGet{{ plural }}UseCase : IGenericUseCase<Result<{{ plural }}ReturnModel>> { }

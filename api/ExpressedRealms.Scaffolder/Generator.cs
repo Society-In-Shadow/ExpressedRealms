@@ -2,17 +2,31 @@ using Scriban;
 
 public static class CrudGenerator
 {
-    public static void Generate(string singular, string plural, string route, string output)
+    public record GenerateUseCasesModel(string singular, string plural, string route, string targetFolder);
+
+    public static void GenerateUseCases(GenerateUseCasesModel model)
     {
+        var templateRoot =
+            Path.Combine(AppContext.BaseDirectory, "Templates", "EntityUseCases");
+        
+        Generate(model, templateRoot, $"{model.singular}UseCases");
+    }
 
-
+    public static void GenerateAPIs(GenerateUseCasesModel model)
+    {
         var templateRoot =
             Path.Combine(AppContext.BaseDirectory, "Templates", "EntityEndpoints");
-
-        var outputSource = string.IsNullOrWhiteSpace(output) ? Environment.CurrentDirectory : Path.GetFullPath(output);
         
-        var outputRoot =
-            Path.Combine(outputSource, $"{singular}Endpoints");
+        Generate(model, templateRoot, $"{model.singular}Endpoints");
+    }
+    
+    
+    
+    private static void Generate(GenerateUseCasesModel generationModel, string templateRoot, string baseFolderName)
+    {
+        var outputSource = string.IsNullOrWhiteSpace(generationModel.targetFolder) ? Environment.CurrentDirectory : Path.GetFullPath(generationModel.targetFolder);
+        
+        var outputRoot = Path.Combine(outputSource, baseFolderName);
         
         var start = outputSource.IndexOf("ExpressedRealms.");
 
@@ -24,9 +38,9 @@ public static class CrudGenerator
         Console.WriteLine(namespacebase);
         var model = new
         {
-            singular,
-            plural,
-            route,
+            generationModel.singular,
+            generationModel.plural,
+            generationModel.route,
             namespacebase
         };
         

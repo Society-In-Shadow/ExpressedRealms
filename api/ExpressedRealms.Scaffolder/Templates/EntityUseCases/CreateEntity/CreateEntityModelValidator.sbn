@@ -1,0 +1,22 @@
+using ExpressedRealms.{{ singular }}s.Repository.{{ singular }}s;
+using FluentValidation;
+using JetBrains.Annotations;
+
+namespace {{ namespacebase }}.{{ singular }}UseCases.Create{{ singular }};
+
+[UsedImplicitly]
+internal sealed class Create{{ singular }}ModelValidator : AbstractValidator<Create{{ singular }}Model>
+{
+    public Create{{ singular }}ModelValidator(I{{ singular }}Repository repository)
+    {
+        RuleFor(x => x.Name)
+            .NotEmpty()
+            .WithMessage("Name is required.")
+            .MaximumLength(150)
+            .WithMessage("Name must be between 1 and 150 characters.")
+            .MustAsync(async (x, y) => !await repository.HasDuplicateName(x))
+            .WithMessage("{{ singular }} with this name already exists.");
+
+        RuleFor(x => x.Description).NotEmpty().WithMessage("Description is required.");
+    }
+}

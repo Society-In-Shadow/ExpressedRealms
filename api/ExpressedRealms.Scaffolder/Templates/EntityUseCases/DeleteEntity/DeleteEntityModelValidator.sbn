@@ -1,0 +1,19 @@
+using ExpressedRealms.{{ singular }}s.Repository.{{ singular }}s;
+using FluentValidation;
+using JetBrains.Annotations;
+
+namespace {{ namespacebase }}.{{ singular }}UseCases.Delete{{ singular }};
+
+[UsedImplicitly]
+internal sealed class Delete{{ singular }}ModelValidator : AbstractValidator<Delete{{ singular }}Model>
+{
+    public Delete{{ singular }}ModelValidator(I{{ singular }}Repository repository)
+    {
+        RuleFor(x => x.Id)
+            .NotEmpty()
+            .WithMessage("Id is required.")
+            .MustAsync(async (x, y) => await repository.IsExisting{{ singular }}(x))
+            .WithMessage("NotFound")
+            .WithMessage("This {{ singular }} was not found.");
+    }
+}

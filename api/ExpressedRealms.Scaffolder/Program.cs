@@ -38,7 +38,7 @@ class Program
         
         if (parseResult.Errors.Count == 0)
         {
-            CrudGenerator.Generate(singularArg, pluralArg, "foo", outputArg);
+            CrudGenerator.GenerateUseCases( new CrudGenerator.GenerateUseCasesModel(singularArg, pluralArg, "foo", outputArg));
             return 0;
         }
         foreach (ParseError parseError in parseResult.Errors)

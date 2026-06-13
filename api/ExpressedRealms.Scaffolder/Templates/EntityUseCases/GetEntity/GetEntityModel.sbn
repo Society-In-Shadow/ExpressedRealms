@@ -1,0 +1,6 @@
+namespace {{ namespacebase }}.{{ singular }}UseCases.Get{{ singular }};
+
+public class Get{{ singular }}Model
+{
+    public int Id { get; set; }
+}

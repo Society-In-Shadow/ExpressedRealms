@@ -1,0 +1,35 @@
+using ExpressedRealms.DB.Models.{{ singular }}s.{{ singular }}Models;
+using ExpressedRealms.{{ singular }}s.Repository.{{ singular }}s;
+using ExpressedRealms.UseCases.Shared;
+using FluentResults;
+
+namespace {{ namespacebase }}.{{ singular }}UseCases.Create{{ singular }};
+
+internal sealed class Create{{ singular }}UseCase(
+    I{{ singular }}Repository {{ singular | string.downcase  }}Repository,
+    Create{{ singular }}ModelValidator validator,
+    CancellationToken cancellationToken
+) : ICreate{{ singular }}UseCase
+{
+    public async Task<Result<int>> ExecuteAsync(Create{{ singular }}Model model)
+    {
+        var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
+            validator,
+            model,
+            cancellationToken
+        );
+
+        if (result.IsFailed)
+            return Result.Fail(result.Errors);
+
+        var {{ singular | string.downcase  }}Id = await {{ singular | string.downcase }}Repository.Create{{ singular }}Async(
+            new {{ singular }}()
+            {
+                Name = model.Name,
+                Description = model.Description,
+            }
+        );
+
+        return Result.Ok({{ singular | string.downcase  }}Id);
+    }
+}

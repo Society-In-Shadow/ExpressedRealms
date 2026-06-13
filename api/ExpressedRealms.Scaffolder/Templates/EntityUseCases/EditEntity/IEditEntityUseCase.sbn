@@ -1,0 +1,6 @@
+using ExpressedRealms.Shared;
+using FluentResults;
+
+namespace {{ namespacebase }}.{{ singular }}UseCases.Edit{{ singular }};
+
+public interface IEdit{{ singular }}UseCase : IGenericUseCase<Result, Edit{{ singular }}Model> { }

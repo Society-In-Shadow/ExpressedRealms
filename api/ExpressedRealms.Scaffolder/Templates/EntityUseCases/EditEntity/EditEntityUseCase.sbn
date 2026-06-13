@@ -1,0 +1,34 @@
+using ExpressedRealms.DB.Models.{{ singular }}s.{{ singular }}Models;
+using ExpressedRealms.{{ singular }}s.Repository.{{ singular }}s;
+using ExpressedRealms.UseCases.Shared;
+using FluentResults;
+
+namespace {{ namespacebase }}.{{ singular }}UseCases.Edit{{ singular }};
+
+internal sealed class Edit{{ singular }}UseCase(
+    I{{ singular }}Repository {{ singular | string.downcase  }}Repository,
+    Edit{{ singular }}ModelValidator validator,
+    CancellationToken cancellationToken
+) : IEdit{{ singular }}UseCase
+{
+    public async Task<Result> ExecuteAsync(Edit{{ singular }}Model model)
+    {
+        var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
+            validator,
+            model,
+            cancellationToken
+        );
+
+        if (result.IsFailed)
+            return Result.Fail(result.Errors);
+
+        var {{ singular | string.downcase }} = await {{ singular | string.downcase }}Repository.Get{{ singular }}ForEditingAsync(model.Id);
+
+        {{ singular | string.downcase }}.Name = model.Name;
+        {{ singular | string.downcase }}.Description = model.Description;
+
+        await {{ singular | string.downcase }}Repository.Edit{{ singular }}Async({{ singular | string.downcase }});
+
+        return Result.Ok();
+    }
+}

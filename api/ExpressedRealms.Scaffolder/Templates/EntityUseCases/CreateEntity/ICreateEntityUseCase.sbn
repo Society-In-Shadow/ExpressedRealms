@@ -1,0 +1,6 @@
+using ExpressedRealms.Shared;
+using FluentResults;
+
+namespace {{ namespacebase }}.{{ singular }}UseCases.Create{{ singular }};
+
+public interface ICreate{{ singular }}UseCase : IGenericUseCase<Result<int>, Create{{ singular }}Model> { }
