@@ -9,17 +9,17 @@ class Program
 {
     static int Main(string[] args)
     {
-        Option<string> entityName = new("--singular")
+        Argument<string> generationType = new("generation-type")
         {
-            Aliases = { "-s" },
-            Description = "The singular name of the entity",
-            Required = true
+            Description = "The generation type is the type of files you want to create.  You have Everything, API, UseCase, Tests, Repository. (Case Insensitive)",
         };
-        Option<string> entitiesName = new("--plural")
+        Argument<string> entityName = new("singular-name")
         {
-            Aliases = { "-p" },
+            Description = "The singular name of the entity",
+        };
+        Argument<string> entitiesName = new("plural-name")
+        {
             Description = "The plural name of the entity",
-            Required = true
         };
         Option<string> outputOption = new("--out")
         {
@@ -33,8 +33,9 @@ class Program
         };
 
         RootCommand rootCommand = new("Sample app for System.CommandLine");
-        rootCommand.Options.Add(entityName);
-        rootCommand.Options.Add(entitiesName);
+        rootCommand.Arguments.Add(generationType);
+        rootCommand.Arguments.Add(entityName);
+        rootCommand.Arguments.Add(entitiesName);
         rootCommand.Options.Add(outputOption);
         rootCommand.Options.Add(additionalPropertiesArg);
 
@@ -49,8 +50,26 @@ class Program
                 AdditionalProperties = GetAdditionalProperties(parseResult.GetValue(additionalPropertiesArg)),
                 TargetFolder = parseResult.GetValue(outputOption)!
             };
-            
-            CrudGenerator.GenerateUseCases( model);
+
+            switch (parseResult.GetRequiredValue(generationType).ToLower())
+            {
+                case "everything":
+                    Console.WriteLine("To Be Implemented");
+                    break;
+                case "api":
+                    CrudGenerator.GenerateAPIs(model);
+                    break;
+                case "usecase":
+                case "usecases":
+                    CrudGenerator.GenerateUseCases(model);
+                    break;
+                case "test":
+                    CrudGenerator.GenerateUseCaseTests(model);
+                    break;
+                case "repository":
+                    CrudGenerator.GenerateRepository(model);
+                    break;
+            }
             return 0;
         }
         foreach (ParseError parseError in parseResult.Errors)
