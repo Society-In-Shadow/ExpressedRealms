@@ -1,0 +1,74 @@
+using ExpressedRealms.DB.Models.{{ plural }}.{{ singular }}Models;
+using ExpressedRealms.{{ projectname }}.Repository.{{ plural }};
+using ExpressedRealms.{{ projectname }}.UseCases.{{ singular }}UseCases.Get{{ plural }};
+using ExpressedRealms.Shared.UseCases.Tests.Unit;
+using FakeItEasy;
+using Xunit;
+
+namespace ExpressedRealms.{{ projectname }}.UseCases.Tests.Unit.{{ plural }};
+
+public class Get{{ plural }}UseCaseTests
+{
+    private readonly Get{{ plural }}UseCase _useCase;
+    private readonly I{{ singular }}Repository _repository;
+
+    public Get{{ plural }}UseCaseTests()
+    {
+        _repository = A.Fake<I{{ singular }}Repository>();
+
+        _useCase = new Get{{ plural }}UseCase(_repository);
+    }
+
+    [Fact]
+    public async Task UseCase_Grabs_The{{ plural }}()
+    {
+        await _useCase.ExecuteAsync();
+
+        A.CallTo(() => _repository.Get{{ plural }}()).MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task UseCase_Returns_FlattenedListOf_The{{ plural }}_And{{ singular }}Types()
+    {
+        var listTest = new List<{{ singular }}>()
+        {
+            new {{ singular }}()
+            {
+                Id = 1,
+                Name = "Test {{ singular }} 1",
+                Description = "Test Description 1",
+            },
+            new {{ singular }}()
+            {
+                Id = 2,
+                Name = "Test {{ singular }} 2",
+                Description = "Test Description 2",
+            },
+        };
+
+        var expectedReturn = new {{ plural }}ReturnModel()
+        {
+            {{ plural }} = new List<{{singular}}Model>()
+            {
+                new()
+                {
+                    Id = 1,
+                    Name = "Test {{singular}} 1",
+                    Description = "Test Description 1",
+                },
+                new()
+                {
+                    Id = 2,
+                    Name = "Test {{singular}} 2",
+                    Description = "Test Description 2",
+                },
+            },
+        };
+
+        A.CallTo(() => _repository.Get{{ plural }}()).Returns(listTest);
+
+        var results = await _useCase.ExecuteAsync();
+
+        Assert.Equivalent(expectedReturn.{{ plural }}, results.Value.{{ plural }});
+    }
+}

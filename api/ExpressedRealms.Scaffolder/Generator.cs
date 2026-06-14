@@ -29,6 +29,14 @@ public static class CrudGenerator
     }
     
     
+    public static void GenerateUseCaseTests(GenerateUseCasesModel model)
+    {
+        var templateRoot =
+            Path.Combine(AppContext.BaseDirectory, "Templates", "EntitiesUseCaseTests");
+        
+        Generate(model, templateRoot, $"{model.plural}");
+    }
+    
     
     private static void Generate(GenerateUseCasesModel generationModel, string templateRoot, string baseFolderName)
     {

@@ -7,12 +7,12 @@ using Xunit;
 
 namespace ExpressedRealms.Knowledges.UseCases.Tests.Unit;
 
-public class GetKnowledgeUseCaseTests
+public class GetKnowledgesUseCaseTests
 {
     private readonly GetKnowledgesUseCase _useCase;
     private readonly IKnowledgeRepository _repository;
 
-    public GetKnowledgeUseCaseTests()
+    public GetKnowledgesUseCaseTests()
     {
         _repository = A.Fake<IKnowledgeRepository>();
 
