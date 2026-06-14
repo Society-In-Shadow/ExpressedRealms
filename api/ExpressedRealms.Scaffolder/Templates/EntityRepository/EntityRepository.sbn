@@ -1,7 +1,5 @@
 using ExpressedRealms.DB;
-using ExpressedRealms.DB.Models.{{ plural }};
 using ExpressedRealms.DB.Models.{{ plural }}.{{ singular }}Models;
-using ExpressedRealms.DB.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace {{ namespacebase }}.{{ plural }};

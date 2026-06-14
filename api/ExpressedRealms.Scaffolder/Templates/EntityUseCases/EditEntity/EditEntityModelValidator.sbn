@@ -26,7 +26,5 @@ internal sealed class Edit{{ singular }}ModelValidator : AbstractValidator<Edit{
             .MustAsync(async (x, y) => !await repository.HasDuplicateName(x.Name, x.Id))
             .WithName("Name")
             .WithMessage("{{ singular }} with this name already exists.");
-
-        RuleFor(x => x.Description).NotEmpty().WithMessage("Description is required.");
     }
 }

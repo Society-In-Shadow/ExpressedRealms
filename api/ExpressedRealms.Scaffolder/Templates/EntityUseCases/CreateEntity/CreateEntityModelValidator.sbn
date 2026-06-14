@@ -16,7 +16,5 @@ internal sealed class Create{{ singular }}ModelValidator : AbstractValidator<Cre
             .WithMessage("Name must be between 1 and 150 characters.")
             .MustAsync(async (x, y) => !await repository.HasDuplicateName(x))
             .WithMessage("{{ singular }} with this name already exists.");
-
-        RuleFor(x => x.Description).NotEmpty().WithMessage("Description is required.");
     }
 }

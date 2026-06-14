@@ -26,7 +26,6 @@ internal sealed class Create{{ singular }}UseCase(
             new {{ singular }}()
             {
                 Name = model.Name,
-                Description = model.Description,
                 {{ render_list_properties properties "model" ~}}
             }
         );

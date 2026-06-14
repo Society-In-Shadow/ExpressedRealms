@@ -18,7 +18,7 @@ internal sealed class Get{{ plural }}UseCase(I{{ singular }}Repository {{ singul
                     {
                         Id = x.Id,
                         Name = x.Name,
-                        Description = x.Description,
+                        {{ render_list_properties properties "x" ~}}
                     })
                     .ToList(),
             }

@@ -1,6 +1,4 @@
-using ExpressedRealms.DB.Models.{{ plural }};
 using ExpressedRealms.DB.Models.{{ plural }}.{{ singular }}Models;
-using ExpressedRealms.DB.Shared;
 
 namespace {{ namespacebase }}.{{ plural }};
 

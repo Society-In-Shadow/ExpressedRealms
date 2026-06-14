@@ -32,7 +32,7 @@ internal static class RenderProperties
             foreach (var property in properties)
             {
                 sb.AppendLine(
-                    $"{property.Name} = {accessorName}.{property.Name};"
+                    $"{property.Name} = {accessorName}.{property.Name},"
                 );
             }
 
@@ -49,7 +49,7 @@ internal static class RenderProperties
             foreach (var property in properties)
             {
                 sb.AppendLine(
-                    $"{assignerName}.{property.Name} = {accessorName}.{property.Name},"
+                    $"{assignerName}.{property.Name} = {accessorName}.{property.Name};"
                 );
             }
 
