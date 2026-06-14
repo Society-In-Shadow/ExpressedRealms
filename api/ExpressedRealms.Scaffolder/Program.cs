@@ -1,6 +1,7 @@
 ﻿using System.CommandLine;
 using System.CommandLine.Parsing;
-using ExpressedRealms.Scaffolder;
+using ExpressedRealms.Scaffolder.Generator;
+using ExpressedRealms.Scaffolder.Generator.Records;
 
 namespace scl;
 
@@ -25,7 +26,7 @@ class Program
             Aliases = { "-o" },
             Description = "Target Directory.  Use . to indicate current directory (Default)"
         };
-        Option<string> additionalProperties = new("--properties")
+        Option<string> additionalPropertiesArg = new("--properties")
         {
             Aliases = { "-props" },
             Description = "Add additional properties that need to be handled.  Format : \"name:type[:required], etc\""
@@ -35,18 +36,21 @@ class Program
         rootCommand.Options.Add(entityName);
         rootCommand.Options.Add(entitiesName);
         rootCommand.Options.Add(outputOption);
-        rootCommand.Options.Add(additionalProperties);
+        rootCommand.Options.Add(additionalPropertiesArg);
 
         ParseResult parseResult = rootCommand.Parse(args);
-        
-        var singularArg = parseResult.GetValue(entityName);
-        var pluralArg = parseResult.GetValue(entitiesName);
-        var outputArg = parseResult.GetValue(outputOption);
-        var additionalPropertiesArg = parseResult.GetValue(additionalProperties);
-        
+
         if (parseResult.Errors.Count == 0)
         {
-            CrudGenerator.GenerateAPIs( new CrudGenerator.GenerateUseCasesModel(singularArg, pluralArg, "foo", outputArg, additionalPropertiesArg));
+            var model = new GenerateUseCasesModel()
+            {
+                Plural = parseResult.GetRequiredValue(entitiesName)!,
+                Singular = parseResult.GetRequiredValue(entityName)!,
+                AdditionalProperties = GetAdditionalProperties(parseResult.GetValue(additionalPropertiesArg)),
+                TargetFolder = parseResult.GetValue(outputOption)!
+            };
+            
+            CrudGenerator.GenerateAPIs( model);
             return 0;
         }
         foreach (ParseError parseError in parseResult.Errors)
@@ -54,5 +58,27 @@ class Program
             Console.Error.WriteLine(parseError.Message);
         }
         return 1;
+    }
+
+    private static List<PropertyDefinition> GetAdditionalProperties(string? additionalPropertiesArgValue)
+    {
+        var additionalProperties = new List<PropertyDefinition>();
+        
+        if(string.IsNullOrEmpty(additionalPropertiesArgValue))
+            return additionalProperties;
+        
+        var propertyList = additionalPropertiesArgValue.Split(",");
+
+        return propertyList.Select(x =>
+        {
+            var parts = x.Split(':');
+
+            return new PropertyDefinition(
+                Name: parts[0],
+                Type: parts[1],
+                Required: parts.Length > 2 &&
+                          parts[2].Equals("required",
+                              StringComparison.OrdinalIgnoreCase));
+        }).ToList();
     }
 }

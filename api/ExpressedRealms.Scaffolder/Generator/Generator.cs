@@ -1,23 +1,18 @@
 using System.Text;
+using ExpressedRealms.Scaffolder.Generator.Records;
 using Scriban;
 using Scriban.Runtime;
 
-namespace ExpressedRealms.Scaffolder;
+namespace ExpressedRealms.Scaffolder.Generator;
 
 public static class CrudGenerator
 {
-    public record GenerateUseCasesModel(string singular, string plural, string route, string targetFolder, string additionalProperties);
-    private record PropertyDefinition(
-        string Name,
-        string Type,
-        bool Required
-    );
     public static void GenerateUseCases(GenerateUseCasesModel model)
     {
         var templateRoot =
             Path.Combine(AppContext.BaseDirectory, "Templates", "EntityUseCases");
         
-        Generate(model, templateRoot, $"{model.singular}UseCases");
+        Generate(model, templateRoot, $"{model.Singular}UseCases");
     }
 
     public static void GenerateAPIs(GenerateUseCasesModel model)
@@ -25,7 +20,7 @@ public static class CrudGenerator
         var templateRoot =
             Path.Combine(AppContext.BaseDirectory, "Templates", "EntityEndpoints");
         
-        Generate(model, templateRoot, $"{model.singular}Endpoints");
+        Generate(model, templateRoot, $"{model.Singular}Endpoints");
     }
     
     public static void GenerateRepository(GenerateUseCasesModel model)
@@ -33,7 +28,7 @@ public static class CrudGenerator
         var templateRoot =
             Path.Combine(AppContext.BaseDirectory, "Templates", "EntityRepository");
         
-        Generate(model, templateRoot, $"{model.plural}");
+        Generate(model, templateRoot, $"{model.Plural}");
     }
     
     
@@ -42,13 +37,13 @@ public static class CrudGenerator
         var templateRoot =
             Path.Combine(AppContext.BaseDirectory, "Templates", "EntitiesUseCaseTests");
         
-        Generate(model, templateRoot, $"{model.plural}");
+        Generate(model, templateRoot, $"{model.Plural}");
     }
     
     
     private static void Generate(GenerateUseCasesModel generationModel, string templateRoot, string baseFolderName)
     {
-        var outputSource = string.IsNullOrWhiteSpace(generationModel.targetFolder) ? Environment.CurrentDirectory : Path.GetFullPath(generationModel.targetFolder);
+        var outputSource = string.IsNullOrWhiteSpace(generationModel.TargetFolder) ? Environment.CurrentDirectory : Path.GetFullPath(generationModel.TargetFolder);
         
         var outputRoot = Path.Combine(outputSource, baseFolderName);
         
@@ -62,32 +57,13 @@ public static class CrudGenerator
         var parts = namespacebase.Split('.');
         var projectname = parts.Length > 1 ? parts[1] : "";
         
-        Console.WriteLine(namespacebase);
-        Console.WriteLine(projectname);
-
-        var additionalProperties = generationModel.additionalProperties.Split(",");
-
-        var properties = additionalProperties.Select(x =>
-        {
-            var parts = x.Split(':');
-
-            return new PropertyDefinition(
-                Name: parts[0],
-                Type: parts[1],
-                Required: parts.Length > 2 &&
-                          parts[2].Equals("required",
-                              StringComparison.OrdinalIgnoreCase));
-        }).ToList();
-        
-        Console.WriteLine(properties);
         var model = new
         {
-            generationModel.singular,
-            generationModel.plural,
-            generationModel.route,
+            singular = generationModel.Singular,
+            plural = generationModel.Plural,
             namespacebase,
             projectname,
-            properties
+            properties = generationModel.AdditionalProperties
         };
         
         GenerateDirectory(templateRoot, outputRoot, model);
