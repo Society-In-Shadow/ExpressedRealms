@@ -1,9 +1,17 @@
+using System.Text;
 using Scriban;
+using Scriban.Runtime;
+
+namespace ExpressedRealms.Scaffolder;
 
 public static class CrudGenerator
 {
-    public record GenerateUseCasesModel(string singular, string plural, string route, string targetFolder);
-
+    public record GenerateUseCasesModel(string singular, string plural, string route, string targetFolder, string additionalProperties);
+    private record PropertyDefinition(
+        string Name,
+        string Type,
+        bool Required
+    );
     public static void GenerateUseCases(GenerateUseCasesModel model)
     {
         var templateRoot =
@@ -56,13 +64,30 @@ public static class CrudGenerator
         
         Console.WriteLine(namespacebase);
         Console.WriteLine(projectname);
+
+        var additionalProperties = generationModel.additionalProperties.Split(",");
+
+        var properties = additionalProperties.Select(x =>
+        {
+            var parts = x.Split(':');
+
+            return new PropertyDefinition(
+                Name: parts[0],
+                Type: parts[1],
+                Required: parts.Length > 2 &&
+                          parts[2].Equals("required",
+                              StringComparison.OrdinalIgnoreCase));
+        }).ToList();
+        
+        Console.WriteLine(properties);
         var model = new
         {
             generationModel.singular,
             generationModel.plural,
             generationModel.route,
             namespacebase,
-            projectname
+            projectname,
+            properties
         };
         
         GenerateDirectory(templateRoot, outputRoot, model);
@@ -92,16 +117,38 @@ public static class CrudGenerator
 
             var templateText = File.ReadAllText(file);
             var template = Template.Parse(templateText);
-            var rendered = template.Render(model);
+            var context = new TemplateContext();
+
+            var scriptObject = new ScriptObject();
+            scriptObject.Import(model);
+            scriptObject.Import("render_properties", new Func<IEnumerable<PropertyDefinition>, string>(RenderProperties));
+
+            context.PushGlobal(scriptObject);
+
+            var result = template.Render(context);
 
             File.WriteAllText(
                 Path.Combine(outputDir, fileName),
-                rendered);
+                result);
 
             Console.WriteLine($"Created {fileName}");
         }
     }
 
+    private static string RenderProperties(IEnumerable<PropertyDefinition> properties)
+    {
+        var sb = new StringBuilder();
+
+        foreach (var property in properties)
+        {
+            sb.AppendLine(
+                $"public {(property.Required ? "required " : "")}{property.Type} {property.Name} {{ get; set; }}"
+            );
+        }
+
+        return sb.ToString();
+    }
+    
     private static string Transform(string input, object model)
     {
         var singular = Get(model, "singular");
