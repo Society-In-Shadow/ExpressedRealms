@@ -29,6 +29,7 @@ internal sealed class Get{{ singular }}UseCase(
                 Id = {{ singular | string.downcase }}.Id,
                 Description = {{ singular | string.downcase }}.Description,
                 Name = {{ singular | string.downcase }}.Name,
+                {{ render_list_properties properties (singular | string.downcase) ~}}
             }
         );
     }

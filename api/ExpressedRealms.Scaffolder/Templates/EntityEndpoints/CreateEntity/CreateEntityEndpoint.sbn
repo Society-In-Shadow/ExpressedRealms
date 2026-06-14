@@ -18,6 +18,7 @@ public static class Create{{ singular }}Endpoint
             {
                 Name = request.Name,
                 Description = request.Description,
+                {{ render_list_properties properties "request" ~}}
             }
         );
 

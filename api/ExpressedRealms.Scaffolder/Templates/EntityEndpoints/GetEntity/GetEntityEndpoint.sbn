@@ -20,7 +20,8 @@ public static class Get{{ singular }}Endpoint
             {
                 Id = results.Value.Id,
                 Name = results.Value.Name,
-                Description = results.Value.Description
+                Description = results.Value.Description,
+                {{ render_list_properties properties "results" ~}}
             }
         );
     }

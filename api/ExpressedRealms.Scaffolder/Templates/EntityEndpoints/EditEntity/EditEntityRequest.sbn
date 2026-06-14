@@ -4,4 +4,5 @@ public class Edit{{ singular }}Request
 {
     public required string Name { get; set; } = null!;
     public required string Description { get; set; }
+    {{ render_class_properties properties ~}}
 }

@@ -1,5 +1,5 @@
-using System.Text;
 using ExpressedRealms.Scaffolder.Generator.Records;
+using ExpressedRealms.Scaffolder.Generator.Renderers;
 using Scriban;
 using Scriban.Runtime;
 
@@ -97,7 +97,9 @@ public static class CrudGenerator
 
             var scriptObject = new ScriptObject();
             scriptObject.Import(model);
-            scriptObject.Import("render_properties", new Func<IEnumerable<PropertyDefinition>, string>(RenderProperties));
+            scriptObject.AddRenderClassProperties();
+            scriptObject.AddRenderListProperties();
+            scriptObject.AddRenderAssignmentProperties();
 
             context.PushGlobal(scriptObject);
 
@@ -111,20 +113,6 @@ public static class CrudGenerator
         }
     }
 
-    private static string RenderProperties(IEnumerable<PropertyDefinition> properties)
-    {
-        var sb = new StringBuilder();
-
-        foreach (var property in properties)
-        {
-            sb.AppendLine(
-                $"public {(property.Required ? "required " : "")}{property.Type} {property.Name} {{ get; set; }}"
-            );
-        }
-
-        return sb.ToString();
-    }
-    
     private static string Transform(string input, object model)
     {
         var singular = Get(model, "singular");

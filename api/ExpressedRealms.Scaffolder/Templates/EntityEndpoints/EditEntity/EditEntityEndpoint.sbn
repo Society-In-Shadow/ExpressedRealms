@@ -19,7 +19,8 @@ public static class Edit{{ singular }}Endpoint
             {
                 Id = id,
                 Name = request.Name,
-                Description = request.Description
+                Description = request.Description,
+                {{ render_list_properties properties "request" ~}}
             }
         );
 

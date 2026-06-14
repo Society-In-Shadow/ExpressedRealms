@@ -50,7 +50,7 @@ class Program
                 TargetFolder = parseResult.GetValue(outputOption)!
             };
             
-            CrudGenerator.GenerateAPIs( model);
+            CrudGenerator.GenerateUseCases( model);
             return 0;
         }
         foreach (ParseError parseError in parseResult.Errors)
