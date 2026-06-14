@@ -20,7 +20,7 @@ public static class Get{{ plural }}Endpoint
                     {
                         Id = x.Id,
                         Name = x.Name,
-                        Description = x.Description,
+                        {{ render_list_properties properties "x" ~}}
                     })
                     .ToList(),
             }

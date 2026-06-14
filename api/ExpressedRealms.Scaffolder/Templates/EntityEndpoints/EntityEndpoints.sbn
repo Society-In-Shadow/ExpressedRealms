@@ -19,7 +19,7 @@ internal static class {{ singular }}Endpoints
             .WithTags("{{ plural }}");
     
         endpointGroup.MapGet("", Get{{ plural }}Endpoint.Get{{ plural }})
-            .RequireAuthorization();;
+            .RequireAuthorization();
     
         endpointGroup
             .MapGet("{id}", Get{{ singular }}Endpoint.Get{{ singular }})

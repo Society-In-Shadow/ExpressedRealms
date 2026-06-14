@@ -4,5 +4,5 @@ public class {{ singular }}ViewModel
 {
     public int Id { get; set; }
     public required string Name { get; set; } = null!;
-    public required string Description { get; set; }
+    {{ render_class_properties properties ~}}
 }

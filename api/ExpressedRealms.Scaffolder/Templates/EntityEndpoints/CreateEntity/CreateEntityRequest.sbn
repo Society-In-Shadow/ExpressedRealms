@@ -2,7 +2,6 @@ namespace {{ namespacebase }}.{{ singular }}Endpoints.Create{{ singular }};
 
 public class Create{{ singular }}Request
 {
-    public required string Name { get; set; } = null!;
-    public required string Description { get; set; }
+    public required string Name { get; set; }
     {{ render_class_properties properties ~}}
 }
