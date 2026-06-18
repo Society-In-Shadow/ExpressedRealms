@@ -95,12 +95,19 @@ class Program
         {
             var parts = x.Split(':');
 
+            var containsMinValue = parts.FirstOrDefault(x => x.StartsWith("min."));
+            var containsMaxValue = parts.FirstOrDefault(x => x.StartsWith("max."));
+
             return new PropertyDefinition(
                 Name: parts[0],
                 Type: parts[1],
                 Required: parts.Length > 2 &&
                           parts[2].Equals("required",
-                              StringComparison.OrdinalIgnoreCase));
+                              StringComparison.OrdinalIgnoreCase),
+                MinValue: containsMinValue != null ? int.Parse(containsMinValue.Substring(4)) : null,
+                MaxValue: containsMaxValue != null ? int.Parse(containsMaxValue.Substring(4)) : null
+                );
+            
         }).ToList();
     }
 }

@@ -16,3 +16,11 @@ Where:
 - `"Background:string:required,ExpressionId:int"` is an example of how to specify properties. It specifies that the 
 entity has a property called `Background` of type `string` and is required, and a property called `ExpressionId` 
 of type `int`.
+  - "Background" - This is the name of the property to be used throughout the backend
+  - "string" - This is the type of the property
+  - "required" - This is a flag that specifies that the property is required - can be in any order after type
+  - "min.10" - This is a flag that specifies the minimum length of the string property. Number after period is the value.
+  - "max.20" - This is a flag that specifies the maximum length of the string property. Number after the period is the value.
+
+Things to add
+ - Identify the Primary Id's, for things such as edit, get item, and delete
