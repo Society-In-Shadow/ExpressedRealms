@@ -10,10 +10,6 @@ internal sealed class Get{{ singular }}ModelValidator : AbstractValidator<Get{{ 
     public Get{{ singular }}ModelValidator(I{{ singular }}Repository repository)
     {
         RuleFor(x => x.Id)
-            .NotEmpty()
-            .WithMessage("Id is required.")
-            .MustAsync(async (x, y) => await repository.IsExisting{{ singular }}(x))
-            .WithMessage("NotFound")
-            .WithMessage("This {{ singular }} was not found.");
+            .NotEmpty();
     }
 }

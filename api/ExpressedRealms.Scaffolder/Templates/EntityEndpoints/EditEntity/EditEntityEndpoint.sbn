@@ -18,7 +18,6 @@ public static class Edit{{ singular }}Endpoint
             new Edit{{ singular }}Model()
             {
                 Id = id,
-                Name = request.Name,
                 {{ render_list_properties properties "request" ~}}
             }
         );

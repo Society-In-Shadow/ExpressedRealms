@@ -3,6 +3,5 @@ namespace {{ namespacebase }}.{{ singular }}Endpoints.Get{{ singular }};
 public class Get{{ singular }}Response
 {
     public int Id { get; set; }
-    public required string Name { get; set; }
     {{ render_class_properties properties ~}}
 }

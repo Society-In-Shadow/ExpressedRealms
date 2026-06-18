@@ -16,7 +16,6 @@ public static class Create{{ singular }}Endpoint
         var results = await create{{ singular }}UseCase.ExecuteAsync(
             new Create{{ singular }}Model()
             {
-                Name = request.Name,
                 {{ render_list_properties properties "request" ~}}
             }
         );

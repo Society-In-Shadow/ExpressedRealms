@@ -19,7 +19,6 @@ public static class Get{{ singular }}Endpoint
             new Get{{ singular }}Response()
             {
                 Id = results.Value.Id,
-                Name = results.Value.Name,
                 {{ render_list_properties properties "results.Value" ~}}
             }
         );

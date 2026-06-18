@@ -2,6 +2,5 @@ namespace {{ namespacebase }}.{{ singular }}Endpoints.Edit{{ singular }};
 
 public class Edit{{ singular }}Request
 {
-    public required string Name { get; set; }
     {{ render_class_properties properties ~}}
 }

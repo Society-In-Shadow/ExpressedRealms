@@ -9,12 +9,6 @@ internal sealed class Create{{ singular }}ModelValidator : AbstractValidator<Cre
 {
     public Create{{ singular }}ModelValidator(I{{ singular }}Repository repository)
     {
-        RuleFor(x => x.Name)
-            .NotEmpty()
-            .WithMessage("Name is required.")
-            .MaximumLength(150)
-            .WithMessage("Name must be between 1 and 150 characters.")
-            .MustAsync(async (x, y) => !await repository.HasDuplicateName(x))
-            .WithMessage("{{ singular }} with this name already exists.");
+        {{ validation_rule_generator properties ~}}
     }
 }

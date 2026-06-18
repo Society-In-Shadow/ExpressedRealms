@@ -25,7 +25,6 @@ internal sealed class Create{{ singular }}UseCase(
         var {{ singular | string.downcase  }}Id = await {{ singular | string.downcase }}Repository.Create{{ singular }}Async(
             new {{ singular }}()
             {
-                Name = model.Name,
                 {{ render_list_properties properties "model" ~}}
             }
         );

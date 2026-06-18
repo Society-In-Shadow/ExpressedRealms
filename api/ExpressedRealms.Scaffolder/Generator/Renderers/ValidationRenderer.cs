@@ -6,6 +6,40 @@ namespace ExpressedRealms.Scaffolder.Generator.Renderers;
 
 public static class ValidationRenderer
 {
+    internal static void AddValidationRuleGenerator(this ScriptObject scriptObject)
+    {
+        scriptObject.Import("validation_rule_generator", new Func<IEnumerable<PropertyDefinition>, string>((properties) =>
+        {
+            var sb = new StringBuilder();
+            
+            var propertyDefinitions = properties as PropertyDefinition[] ?? properties.ToArray();
+            foreach (var property in propertyDefinitions)
+            {
+                sb.Append($"RuleFor(x => x.{property.Name})");
+                
+                if (property.Required)
+                {
+                    sb.Append($"{Environment.NewLine}    .NotEmpty()");
+                }
+                if (property.MaxValue != null)
+                {
+                    sb.Append($"{Environment.NewLine}    .MaximumLength({property.MaxValue})");
+                }
+                if (property.MinValue != null)
+                {
+                    sb.Append($"{Environment.NewLine}    .MinimumLength({property.MinValue})");
+                }
+
+                sb.AppendLine(";");
+                
+                if(propertyDefinitions.IndexOf(property) != propertyDefinitions.Length - 1)
+                    sb.AppendLine();
+            }
+
+            return sb.ToString();
+        }));
+    }
+    
     internal static void AddValidationPropertyTests(this ScriptObject scriptObject)
     {
         scriptObject.Import("validation_property_tests", new Func<IEnumerable<PropertyDefinition>, string, string>((properties, targetModel) =>

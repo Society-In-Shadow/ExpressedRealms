@@ -19,7 +19,6 @@ public static class Get{{ plural }}Endpoint
                     .Value.{{ plural }}.Select(x => new {{ singular }}ViewModel()
                     {
                         Id = x.Id,
-                        Name = x.Name,
                         {{ render_list_properties properties "x" ~}}
                     })
                     .ToList(),

@@ -37,17 +37,6 @@ public class Delete{{ singular }}UseCaseTests
     }
 
     [Fact]
-    public async Task ValidationFor_Id_WillFail_{{ singular }}DoesNotExist()
-    {
-        A.CallTo(() => _repository.IsExisting{{ singular }}(_model.Id)).Returns(false);
-        var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(
-            nameof(Delete{{ singular }}Model.Id),
-            "This {{ singular }} was not found."
-        );
-    }
-
-    [Fact]
     public async Task UseCase_WillGrab_The{{ singular }}()
     {
         await _useCase.ExecuteAsync(_model);

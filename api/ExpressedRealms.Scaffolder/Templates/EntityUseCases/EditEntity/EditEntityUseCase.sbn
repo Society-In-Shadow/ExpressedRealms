@@ -24,7 +24,6 @@ internal sealed class Edit{{ singular }}UseCase(
 
         var {{ singular | string.downcase }} = await {{ singular | string.downcase }}Repository.Get{{ singular }}ForEditingAsync(model.Id);
 
-        {{ singular | string.downcase }}.Name = model.Name;
         {{ render_assignment_properties properties (singular | string.downcase) "model" ~}}
 
         await {{ singular | string.downcase }}Repository.Edit{{ singular }}Async({{ singular | string.downcase }});

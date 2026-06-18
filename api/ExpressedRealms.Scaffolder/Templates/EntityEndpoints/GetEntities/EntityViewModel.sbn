@@ -3,6 +3,5 @@ namespace {{ namespacebase }}.{{ singular }}Endpoints.Get{{ plural }};
 public class {{ singular }}ViewModel
 {
     public int Id { get; set; }
-    public required string Name { get; set; } = null!;
     {{ render_class_properties properties ~}}
 }

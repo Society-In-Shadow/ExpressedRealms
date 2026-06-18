@@ -17,7 +17,6 @@ internal sealed class Get{{ plural }}UseCase(I{{ singular }}Repository {{ singul
                     .Select(x => new {{ singular }}Model()
                     {
                         Id = x.Id,
-                        Name = x.Name,
                         {{ render_list_properties properties "x" ~}}
                     })
                     .ToList(),

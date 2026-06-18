@@ -27,7 +27,6 @@ internal sealed class Get{{ singular }}UseCase(
             new Get{{ singular }}ReturnModel()
             {
                 Id = {{ singular | string.downcase }}.Id,
-                Name = {{ singular | string.downcase }}.Name,
                 {{ render_list_properties properties (singular | string.downcase) ~}}
             }
         );

@@ -9,22 +9,6 @@ internal sealed class Edit{{ singular }}ModelValidator : AbstractValidator<Edit{
 {
     public Edit{{ singular }}ModelValidator(I{{ singular }}Repository repository)
     {
-        RuleFor(x => x.Id)
-            .NotEmpty()
-            .WithMessage("Id is required.")
-            .MustAsync(async (x, y) => await repository.IsExisting{{ singular }}(x))
-            .WithMessage("NotFound")
-            .WithMessage("This {{ singular }} was not found.");
-
-        RuleFor(x => x.Name)
-            .NotEmpty()
-            .WithMessage("Name is required.")
-            .MaximumLength(150)
-            .WithMessage("Name must be between 1 and 150 characters.");
-
-        RuleFor(x => x)
-            .MustAsync(async (x, y) => !await repository.HasDuplicateName(x.Name, x.Id))
-            .WithName("Name")
-            .WithMessage("{{ singular }} with this name already exists.");
+        {{ validation_rule_generator properties ~}}
     }
 }
