@@ -100,6 +100,9 @@ public static class CrudGenerator
             scriptObject.AddRenderClassProperties();
             scriptObject.AddRenderListProperties();
             scriptObject.AddRenderAssignmentProperties();
+            scriptObject.AddValidationPropertyTests();
+            scriptObject.AddRenderUnitTestChecksProperties();
+            scriptObject.AddRenderUnitTestAssignmentProperties();
 
             context.PushGlobal(scriptObject);
 

@@ -64,6 +64,9 @@ class Program
                     CrudGenerator.GenerateUseCases(model);
                     break;
                 case "test":
+                case "tests":
+                case "unittests":
+                case "unittest":
                     CrudGenerator.GenerateUseCaseTests(model);
                     break;
                 case "repository":

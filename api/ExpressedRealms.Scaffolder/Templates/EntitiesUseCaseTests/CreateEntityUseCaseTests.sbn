@@ -17,79 +17,31 @@ public class Create{{ singular }}UseCaseTests
     {
         _model = new Create{{ singular }}Model()
         {
-            Name = "Test {{ singular }}",
-            Description = "Test Description"
+            {{ render_unit_test_assignment_properties properties "x" ~}}
         };
 
         _repository = A.Fake<I{{ singular }}Repository>();
-
-        A.CallTo(() => _repository.HasDuplicateName(_model.Name, 0)).Returns(false);
 
         var validator = new Create{{ singular }}ModelValidator(_repository);
 
         _useCase = new Create{{ singular }}UseCase(_repository, validator, CancellationToken.None);
     }
 
-    [Fact]
-    public async Task ValidationFor_Name_WillFail_WhenName_IsEmpty()
-    {
-        _model.Name = string.Empty;
-
-        var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(Create{{ singular }}Model.Name), "Name is required.");
-    }
-
-    [Fact]
-    public async Task ValidationFor_Name_WillFail_WhenName_IsOver150Characters()
-    {
-        _model.Name = new string('x', 151);
-
-        var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(
-            nameof(Create{{ singular }}Model.Name),
-            "Name must be between 1 and 150 characters."
-        );
-    }
-
-    [Fact]
-    public async Task ValidationFor_Name_WillFail_WhenName_AlreadyExists()
-    {
-        A.CallTo(() => _repository.HasDuplicateName(_model.Name, 0)).Returns(true);
-
-        var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(
-            nameof(Create{{ singular }}Model.Name),
-            "{{ singular }} with this name already exists."
-        );
-    }
-
-    [Fact]
-    public async Task ValidationFor_Description_WillFail_WhenItsEmpty()
-    {
-        _model.Description = string.Empty;
-
-        var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(
-            nameof(Create{{ singular }}Model.Description),
-            "Description is required."
-        );
-    }
+    {{ validation_property_tests properties $"Create{singular}Model" ~}}
 
     [Fact]
     public async Task UseCase_WillCreateThe{{ singular }}()
     {
-        var {{ singular }} = new {{ singular }}()
+        var {{ singular | string.downcase  }} = new {{ singular }}()
         {
-            Name = _model.Name,
-            Description = _model.Description,
+            {{ render_list_properties properties "_model" ~}}
         };
 
         await _useCase.ExecuteAsync(_model);
         A.CallTo(() =>
                 _repository.Create{{ singular }}Async(
                     A<{{ singular }}>.That.Matches(k =>
-                        k.Name == {{ singular }}.Name
-                        && k.Description == {{ singular }}.Description
+                        {{ render_unit_test_check_properties properties "k" (singular | string.downcase) ~}}
                     )
                 )
             )

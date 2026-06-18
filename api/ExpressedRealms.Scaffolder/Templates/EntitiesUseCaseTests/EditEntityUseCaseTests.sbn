@@ -18,22 +18,17 @@ public class Edit{{ singular }}UseCaseTests
     {
         _model = new Edit{{ singular }}Model()
         {
-            Id = 4,
-            Name = "Test {{ singular }}",
-            Description = "Test Description"
+            {{ render_unit_test_assignment_properties properties "x" ~}}
         };
 
         _dbModel = new {{ singular }}()
         {
-            Id = 4,
-            Name = "Test {{ singular }} 3",
-            Description = "Test Description 2"
+            {{ render_unit_test_assignment_properties properties "x" ~}}
         };
 
         _repository = A.Fake<I{{ singular }}Repository>();
 
         A.CallTo(() => _repository.IsExisting{{ singular }}(_model.Id)).Returns(true);
-        A.CallTo(() => _repository.HasDuplicateName(_model.Name, _model.Id)).Returns(false);
         A.CallTo(() => _repository.Get{{ singular }}ForEditingAsync(_model.Id)).Returns(_dbModel);
 
         var validator = new Edit{{ singular }}ModelValidator(_repository);
@@ -41,69 +36,7 @@ public class Edit{{ singular }}UseCaseTests
         _useCase = new Edit{{ singular }}UseCase(_repository, validator, CancellationToken.None);
     }
 
-    [Fact]
-    public async Task ValidationFor_Id_WillFail_WhenId_IsEmpty()
-    {
-        _model.Id = 0;
-        var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(Edit{{ singular }}Model.Id), "Id is required.");
-    }
-
-    [Fact]
-    public async Task ValidationFor_Id_WillFail_{{ singular }}DoesNotExist()
-    {
-        A.CallTo(() => _repository.IsExisting{{ singular }}(_model.Id)).Returns(false);
-        var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(
-            nameof(Edit{{ singular }}Model.Id),
-            "This {{ singular }} was not found."
-        );
-    }
-
-    [Fact]
-    public async Task ValidationFor_Name_WillFail_WhenName_IsEmpty()
-    {
-        _model.Name = string.Empty;
-
-        var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(Edit{{ singular }}Model.Name), "Name is required.");
-    }
-
-    [Fact]
-    public async Task ValidationFor_Name_WillFail_WhenName_IsOver150Characters()
-    {
-        _model.Name = new string('x', 151);
-
-        var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(
-            nameof(Edit{{ singular }}Model.Name),
-            "Name must be between 1 and 150 characters."
-        );
-    }
-
-    [Fact]
-    public async Task ValidationFor_Name_WillFail_WhenName_AlreadyExists()
-    {
-        A.CallTo(() => _repository.HasDuplicateName(_model.Name, _model.Id)).Returns(true);
-
-        var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(
-            nameof(Edit{{ singular }}Model.Name),
-            "{{ singular }} with this name already exists."
-        );
-    }
-
-    [Fact]
-    public async Task ValidationFor_Description_WillFail_WhenItsEmpty()
-    {
-        _model.Description = string.Empty;
-
-        var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(
-            nameof(Edit{{ singular }}Model.Description),
-            "Description is required."
-        );
-    }
+    {{ validation_property_tests properties $"Edit{singular}Model" ~}}
 
     [Fact]
     public async Task UseCase_WillGrab_The{{ singular }}()
@@ -124,21 +57,16 @@ public class Edit{{ singular }}UseCaseTests
     [Fact]
     public async Task UseCase_WillEditThe{{ singular }}()
     {
-        var {{ singular }} = new {{ singular }}()
+        var {{ singular | string.downcase }} = new {{ singular }}()
         {
-            Id = _model.Id,
-            Name = _model.Name,
-            Description = _model.Description,
+            {{ render_list_properties properties "_model" ~}}
         };
 
         await _useCase.ExecuteAsync(_model);
         A.CallTo(() =>
                 _repository.Edit{{ singular }}Async(
                     A<{{ singular }}>.That.Matches(k =>
-                        k.Id == {{ singular }}.Id
-                        && k.Name == {{ singular }}.Name
-                        && k.Description == {{ singular }}.Description
-                        && k.{{ singular }}TypeId == {{ singular }}.{{ singular }}TypeId
+                        {{ render_unit_test_check_properties properties "k" (singular | string.downcase) ~}}
                     )
                 )
             )
