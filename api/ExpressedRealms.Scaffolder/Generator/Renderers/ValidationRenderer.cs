@@ -20,14 +20,31 @@ public static class ValidationRenderer
                 if (property.Required)
                 {
                     sb.Append($"{Environment.NewLine}    .NotEmpty()");
+                    sb.Append($"{Environment.NewLine}    .WithMessage(\"{property.Name} is required.\")");
                 }
                 if (property.MaxValue != null)
                 {
                     sb.Append($"{Environment.NewLine}    .MaximumLength({property.MaxValue})");
+                    if (property.Type.ToLowerInvariant() == "string")
+                    {
+                        sb.Append($"{Environment.NewLine}    .WithMessage(\"{property.Name} cannot exceed {property.MaxValue} characters.\")");
+                    }
+                    else
+                    {
+                        sb.Append($"{Environment.NewLine}    .WithMessage(\"{property.Name} cannot exceed{property.MaxValue}.\")");
+                    }
                 }
                 if (property.MinValue != null)
                 {
                     sb.Append($"{Environment.NewLine}    .MinimumLength({property.MinValue})");
+                    if (property.Type.ToLowerInvariant() == "string")
+                    {
+                        sb.Append($"{Environment.NewLine}    .WithMessage(\"{property.Name} cannot be below {property.MinValue} characters.\")");
+                    }
+                    else
+                    {
+                        sb.Append($"{Environment.NewLine}    .WithMessage(\"{property.Name} cannot be below {property.MinValue}.\")");
+                    }
                 }
 
                 sb.AppendLine(";");
