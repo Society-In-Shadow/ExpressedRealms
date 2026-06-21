@@ -120,4 +120,19 @@ internal static class RenderProperties
             return sb.ToString();
         }));
     }
+
+    internal static void AddRenderUnitTestChecksSingleLineProperties(this ScriptObject scriptObject)
+    {
+        scriptObject.Import("render_unit_test_check_single_line_properties", new Func<List<PropertyDefinition>, string, string>((properties, singular) =>
+        {
+            var sb = new StringBuilder();
+
+            foreach (var property in properties)
+            {
+                sb.AppendLine($"Assert.Equal({singular}DbModel.{property.Name}, results.Value.{property.Name});");
+            }
+
+            return sb.ToString();
+        }));
+    }
 }

@@ -48,14 +48,14 @@ public class Delete{{ singular }}UseCaseTests
     [Fact]
     public async Task UseCase_WillSoftDelete_The{{ singular }}()
     {
-        var {{ singular }} = new {{ singular }}() { Id = _model.Id, IsDeleted = true };
+        var {{ singular | string.downcase }} = new {{ singular }}() { Id = _model.Id, IsDeleted = true };
 
         await _useCase.ExecuteAsync(_model);
 
         A.CallTo(() =>
                 _repository.Edit{{ singular }}Async(
                     A<{{ singular }}>.That.Matches(k =>
-                        k.Id == {{ singular }}.Id && k.IsDeleted == {{ singular }}.IsDeleted
+                        k.Id == {{ singular | string.downcase }}.Id && k.IsDeleted == {{ singular | string.downcase }}.IsDeleted
                     )
                 )
             )

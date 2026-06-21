@@ -104,6 +104,7 @@ public static class CrudGenerator
             scriptObject.AddRenderUnitTestChecksProperties();
             scriptObject.AddRenderUnitTestAssignmentProperties();
             scriptObject.AddValidationRuleGenerator();
+            scriptObject.AddRenderUnitTestChecksSingleLineProperties();
 
             context.PushGlobal(scriptObject);
 

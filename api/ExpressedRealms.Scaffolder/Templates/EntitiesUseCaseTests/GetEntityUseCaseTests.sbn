@@ -20,9 +20,7 @@ public class Get{{ singular }}UseCaseTests
         _model = new Get{{ singular }}Model() { Id = 4 };
         {{ singular }}DbModel = new {{ singular }}()
         {
-            Id = _model.Id,
-            Name = "Test {{ singular }}",
-            Description = "Test Description",
+            {{ render_unit_test_assignment_properties properties "x" ~}}
         };
 
         _repository = A.Fake<I{{ singular }}Repository>();
@@ -67,7 +65,6 @@ public class Get{{ singular }}UseCaseTests
     {
         var results = await _useCase.ExecuteAsync(_model);
 
-        Assert.Equal({{ singular }}DbModel.Name, results.Value.Name);
-        Assert.Equal({{ singular }}DbModel.Description, results.Value.Description);
+        {{ render_unit_test_check_single_line_properties properties singular ~}}
     }
 }
