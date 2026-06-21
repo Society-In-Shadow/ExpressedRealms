@@ -44,11 +44,7 @@ internal static class RenderProperties
     internal static void AddRenderUnitTestAssignmentProperties(this ScriptObject scriptObject)
     {
         Randomizer.Seed = new Random(8675309);
-
         var faker = new Faker();
-
-        Console.WriteLine(faker.Name.FullName());
-        Console.WriteLine(faker.Random.Int());
         
         scriptObject.Import("render_unit_test_assignment_properties", new Func<IEnumerable<PropertyDefinition>, string, string>((properties, accessorName) =>
         {
@@ -131,6 +127,42 @@ internal static class RenderProperties
             {
                 sb.AppendLine($"Assert.Equal({singular}DbModel.{property.Name}, results.Value.{property.Name});");
             }
+
+            return sb.ToString();
+        }));
+    }
+    
+    internal static void AddRenderUnitTestListObjectProperties(this ScriptObject scriptObject)
+    {
+
+        scriptObject.Import("render_unit_test_list_object_properties", new Func<List<PropertyDefinition>, string>((properties) =>
+        {
+            Randomizer.Seed = new Random(434724);
+            var faker = new Faker();
+            var sb = new StringBuilder();
+
+            sb.AppendLine($"new ()");
+            sb.AppendLine("{");
+            sb.AppendLine("    Id = 1,");
+            foreach (var property in properties)
+            {
+                var dummyValue = GetDummyValue(property, faker);
+                sb.AppendLine(
+                    $"    {property.Name} = {dummyValue},"
+                );
+            }
+            sb.AppendLine("},");
+            sb.AppendLine($"new ()");
+            sb.AppendLine("{");
+            sb.AppendLine("    Id = 2,");
+            foreach (var property in properties)
+            {
+                var dummyValue = GetDummyValue(property, faker);
+                sb.AppendLine(
+                    $"    {property.Name} = {dummyValue},"
+                );
+            }
+            sb.AppendLine("}");
 
             return sb.ToString();
         }));

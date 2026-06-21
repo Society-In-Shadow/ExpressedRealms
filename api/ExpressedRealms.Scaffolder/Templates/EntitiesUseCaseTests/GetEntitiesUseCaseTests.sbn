@@ -28,40 +28,18 @@ public class Get{{ plural }}UseCaseTests
     }
 
     [Fact]
-    public async Task UseCase_Returns_FlattenedListOf_The{{ plural }}_And{{ singular }}Types()
+    public async Task UseCase_Returns_ListOf{{ plural }}()
     {
         var listTest = new List<{{ singular }}>()
         {
-            new {{ singular }}()
-            {
-                Id = 1,
-                Name = "Test {{ singular }} 1",
-                Description = "Test Description 1",
-            },
-            new {{ singular }}()
-            {
-                Id = 2,
-                Name = "Test {{ singular }} 2",
-                Description = "Test Description 2",
-            },
+            {{ render_unit_test_list_object_properties properties ~}}
         };
 
         var expectedReturn = new {{ plural }}ReturnModel()
         {
             {{ plural }} = new List<{{singular}}Model>()
             {
-                new()
-                {
-                    Id = 1,
-                    Name = "Test {{singular}} 1",
-                    Description = "Test Description 1",
-                },
-                new()
-                {
-                    Id = 2,
-                    Name = "Test {{singular}} 2",
-                    Description = "Test Description 2",
-                },
+                {{ render_unit_test_list_object_properties properties ~}}
             },
         };
 
