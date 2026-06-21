@@ -18,6 +18,7 @@ public class Edit{{ singular }}UseCaseTests
     {
         _model = new Edit{{ singular }}Model()
         {
+            Id = 1,
             {{ render_unit_test_assignment_properties properties "x" ~}}
         };
 
@@ -28,12 +29,27 @@ public class Edit{{ singular }}UseCaseTests
 
         _repository = A.Fake<I{{ singular }}Repository>();
 
-        A.CallTo(() => _repository.IsExisting{{ singular }}(_model.Id)).Returns(true);
         A.CallTo(() => _repository.Get{{ singular }}ForEditingAsync(_model.Id)).Returns(_dbModel);
 
         var validator = new Edit{{ singular }}ModelValidator(_repository);
 
         _useCase = new Edit{{ singular }}UseCase(_repository, validator, CancellationToken.None);
+    }
+
+    [Fact]
+    public async Task ValidationFor_Id_WillFail_WhenId_IsEmpty()
+    {
+        _model.Id = 0;
+        var results = await _useCase.ExecuteAsync(_model);
+        results.MustHaveValidationError(nameof(Edit{{ singular }}Model.Id), "Id is required.");
+    }
+
+    [Fact]
+    public async Task ValidationFor_Id_WillFail_When{{ singular }}DoesNotExist()
+    {
+        A.CallTo(() => _repository.Get{{ singular }}ForEditingAsync(_model.Id))!.Returns(Task.FromResult(({{ singular }})null!));
+        var results = await _useCase.ExecuteAsync(_model);
+        results.MustHaveNotFoundError(nameof(Edit{{ singular }}Model.Id), "This {{ singular }} was not found.");
     }
 
     {{ validation_property_tests properties $"Edit{singular}Model" ~}}

@@ -9,6 +9,10 @@ internal sealed class Edit{{ singular }}ModelValidator : AbstractValidator<Edit{
 {
     public Edit{{ singular }}ModelValidator(I{{ singular }}Repository repository)
     {
+        RuleFor(x => x.Id)
+            .NotEmpty()
+            .WithMessage("Id is required.");
+
         {{ validation_rule_generator properties ~}}
     }
 }
