@@ -56,10 +56,10 @@ internal sealed class {{ singular }}Repository(
             .ToListAsync(cancellationToken);
     }
 
-    public Task<{{ singular }}> Get{{ singular }}Async(int modelId)
+    public Task<{{ singular }}?> Get{{ singular }}Async(int modelId)
     {
         return context
             .{{ plural }}.AsNoTracking()
-            .FirstAsync(x => x.Id == modelId, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == modelId, cancellationToken);
     }
 }

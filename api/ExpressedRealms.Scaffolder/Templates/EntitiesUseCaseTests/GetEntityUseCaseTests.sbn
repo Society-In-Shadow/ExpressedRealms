@@ -25,7 +25,6 @@ public class Get{{ singular }}UseCaseTests
 
         _repository = A.Fake<I{{ singular }}Repository>();
 
-        A.CallTo(() => _repository.IsExisting{{ singular }}(_model.Id)).Returns(true);
         A.CallTo(() => _repository.Get{{ singular }}Async(_model.Id)).Returns({{ singular }}DbModel);
 
         var validator = new Get{{ singular }}ModelValidator(_repository);
@@ -42,14 +41,11 @@ public class Get{{ singular }}UseCaseTests
     }
 
     [Fact]
-    public async Task ValidationFor_Id_WillFail_{{ singular }}DoesNotExist()
+    public async Task ValidationFor_Id_WillFail_When{{ singular }}DoesNotExist()
     {
-        A.CallTo(() => _repository.IsExisting{{ singular }}(_model.Id)).Returns(false);
+        A.CallTo(() => _repository.Get{{ singular }}Async(_model.Id))!.Returns(Task.FromResult(({{ singular }})null!));
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(
-            nameof(Get{{ singular }}Model.Id),
-            "This {{ singular }} was not found."
-        );
+        results.MustHaveNotFoundError(nameof(Get{{ singular }}Model.Id), "This {{ singular }} was not found.");
     }
 
     [Fact]

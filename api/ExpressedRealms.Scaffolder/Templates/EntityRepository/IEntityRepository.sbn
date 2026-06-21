@@ -10,5 +10,5 @@ public interface I{{ singular }}Repository
     Task Edit{{ singular }}Async({{ singular }} {{ singular | string.downcase }});
     Task<{{ singular }}> Get{{ singular }}ForEditingAsync(int modelId);
     Task<List<{{ singular }}>> Get{{ singular }}s();
-    Task<{{ singular }}> Get{{ singular }}Async(int modelId);
+    Task<{{ singular }}?> Get{{ singular }}Async(int modelId);
 }

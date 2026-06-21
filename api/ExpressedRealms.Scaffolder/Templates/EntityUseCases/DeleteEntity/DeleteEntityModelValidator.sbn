@@ -10,6 +10,7 @@ internal sealed class Delete{{ singular }}ModelValidator : AbstractValidator<Del
     public Delete{{ singular }}ModelValidator(I{{ singular }}Repository repository)
     {
         RuleFor(x => x.Id)
-            .NotEmpty();
+            .NotEmpty()
+            .WithMessage("Id is required.");
     }
 }

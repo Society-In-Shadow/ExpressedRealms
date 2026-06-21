@@ -1,5 +1,6 @@
 using ExpressedRealms.{{ projectname }}.Repository.{{ plural }};
 using ExpressedRealms.UseCases.Shared;
+using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FluentResults;
 
 namespace {{ namespacebase }}.{{ singular }}UseCases.Get{{ singular }};
@@ -22,6 +23,11 @@ internal sealed class Get{{ singular }}UseCase(
             return Result.Fail(result.Errors);
 
         var {{ singular | string.downcase }} = await {{ singular | string.downcase }}Repository.Get{{ singular }}Async(model.Id);
+
+        if ({{ singular | string.downcase }} is null)
+        {
+            return Result.Fail(new NotFoundFailure(nameof(Get{{ singular }}Model.Id), "This {{ singular }} was not found."));
+        }
 
         return Result.Ok(
             new Get{{ singular }}ReturnModel()
