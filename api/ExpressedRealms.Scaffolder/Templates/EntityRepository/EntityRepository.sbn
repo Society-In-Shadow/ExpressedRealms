@@ -32,22 +32,15 @@ internal sealed class {{ singular }}Repository(
             .AnyAsync(x => x.Name.ToLower() == name.ToLower(), cancellationToken);
     }
 
-    public async Task<bool> IsExisting{{ singular }}(int {{ singular | string.downcase }}Id)
-    {
-        return await context
-            .{{ plural }}.AsNoTracking()
-            .AnyAsync(x => x.Id == {{ singular | string.downcase }}Id, cancellationToken);
-    }
-
     public async Task Edit{{ singular }}Async({{ singular }} {{ singular | string.downcase }})
     {
         context.{{ plural }}.Update({{ singular | string.downcase }});
         await context.SaveChangesAsync(cancellationToken);
     }
 
-    public Task<{{ singular }}> Get{{ singular }}ForEditingAsync(int modelId)
+    public Task<{{ singular }}?> Get{{ singular }}ForEditingAsync(int id)
     {
-        return context.{{ plural }}.FirstAsync(x => x.Id == modelId, cancellationToken);
+        return context.{{ plural }}.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
     public async Task<List<{{ singular }}>> Get{{ plural }}()
@@ -56,10 +49,10 @@ internal sealed class {{ singular }}Repository(
             .ToListAsync(cancellationToken);
     }
 
-    public Task<{{ singular }}?> Get{{ singular }}Async(int modelId)
+    public Task<{{ singular }}?> Get{{ singular }}Async(int id)
     {
         return context
             .{{ plural }}.AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == modelId, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 }
