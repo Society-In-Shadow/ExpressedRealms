@@ -8,7 +8,7 @@ namespace {{ namespacebase }}.{{ singular }}Endpoints.Create{{ singular }};
 
 public static class Create{{ singular }}Endpoint
 {
-    public static async Task<Results<Ok<int>, NotFound, ValidationProblem>> Create{{ singular }}(
+    public static async Task<Results<Ok<int>, NotFound, ValidationProblem>> ExecuteAsync(
         [FromBody] Create{{ singular }}Request request,
         [FromServices] ICreate{{ singular }}UseCase create{{ singular }}UseCase
     )

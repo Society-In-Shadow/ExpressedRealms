@@ -8,7 +8,7 @@ namespace {{ namespacebase }}.{{ singular }}Endpoints.Edit{{ singular }};
 
 public static class Edit{{ singular }}Endpoint
 {
-    public static async Task<Results<Ok, NotFound, ValidationProblem>> Edit{{ plural }}(
+    public static async Task<Results<Ok, NotFound, ValidationProblem>> ExecuteAsync(
         int id,
         [FromBody] Edit{{ singular }}Request request,
         [FromServices] IEdit{{ singular }}UseCase edit{{ singular }}UseCase

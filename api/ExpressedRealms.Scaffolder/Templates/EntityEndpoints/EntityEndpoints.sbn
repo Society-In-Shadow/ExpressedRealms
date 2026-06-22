@@ -16,25 +16,17 @@ internal static class {{ singular }}Endpoints
     {
         var endpointGroup = app
             .MapGroup("{{ plural | string.downcase }}")
-            .WithTags("{{ plural }}");
-    
-        endpointGroup.MapGet("", Get{{ plural }}Endpoint.Get{{ plural }})
+            .WithTags("{{ plural }}")
             .RequireAuthorization();
-    
-        endpointGroup
-            .MapGet("{id}", Get{{ singular }}Endpoint.Get{{ singular }})
-           .RequirePermission(Permissions.{{ plural }}.View);
-    
-        endpointGroup
-            .MapPost("", Create{{ singular }}Endpoint.Create{{ singular }})
-          .RequirePermission(Permissions.{{ plural }}.Create);
-    
-        endpointGroup
-            .MapPut("{id}", Edit{{ singular }}Endpoint.Edit{{ plural }})
-           .RequirePermission(Permissions.{{ plural }}.Edit);
-    
-        endpointGroup
-            .MapDelete("{id}", Delete{{ singular }}Endpoint.Delete{{ singular }})
-        .RequirePermission(Permissions.{{ plural }}.Delete);
+
+        endpointGroup.MapGet("", Get{{ plural }}Endpoint.ExecuteAsync);
+
+        endpointGroup.MapGet("{id}", Get{{ singular }}Endpoint.ExecuteAsync);
+
+        endpointGroup.MapPost("", Create{{ singular }}Endpoint.ExecuteAsync);
+
+        endpointGroup.MapPut("{id}", Edit{{ singular }}Endpoint.ExecuteAsync);
+
+        endpointGroup.MapDelete("{id}", Delete{{ singular }}Endpoint.ExecuteAsync);
     }
 }

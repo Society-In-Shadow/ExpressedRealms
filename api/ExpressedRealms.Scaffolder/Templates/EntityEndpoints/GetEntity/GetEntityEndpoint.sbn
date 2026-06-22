@@ -6,7 +6,7 @@ namespace {{ namespacebase }}.{{ singular }}Endpoints.Get{{ singular }};
 
 public static class Get{{ singular }}Endpoint
 {
-    public static async Task<Ok<Get{{ singular }}Response>> Get{{ singular }}(
+    public static async Task<Ok<Get{{ singular }}Response>> ExecuteAsync(
         int id,
         IGet{{ singular }}UseCase create{{ singular }}UseCase
     )

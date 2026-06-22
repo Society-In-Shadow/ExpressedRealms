@@ -8,7 +8,7 @@ namespace {{ namespacebase }}.{{ singular }}Endpoints.Delete{{ singular }};
 
 public static class Delete{{ singular }}Endpoint
 {
-    public static async Task<Results<Ok, NotFound, ValidationProblem>> Delete{{ singular }}(
+    public static async Task<Results<Ok, NotFound, ValidationProblem>> ExecuteAsync(
         int id,
         [FromServices] IDelete{{ singular }}UseCase useCase
     )
