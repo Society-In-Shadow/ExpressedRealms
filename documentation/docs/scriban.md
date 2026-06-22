@@ -4,8 +4,27 @@ cases, repository, and unit tests for a given entity.
 
 You can generally run it by doing this
 
+## Initial Setup
+To get this tool up and running, you will need to install the tool globally.
+
+To do this, navigate to the scriban directory and run the following command:
+
 ```bash
-dotnet run --project ./../ExpressedRealms.Scaffolder/ExpressedRealms.Scaffolder.csproj -- tests Faction Factions -props "Id:int:required,Name:string:required:max.250,Background:string:required:max.20000,ExpressionId:int"
+./installUpdateTool.sh
+```
+
+## Usage
+Detailed usage of the tool can be found in the help section once installed
+
+```bash
+scaffold --help
+```
+
+## Example
+Here's an example on how to create the tests for all use cases:
+
+```bash
+scaffold tests Faction Factions -props "Name:string:required:max.250,Background:string:required:max.20000,ExpressionId:int"
 ```
 
 Where:

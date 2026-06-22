@@ -13,6 +13,8 @@ internal static class GenerateUnitTestsCommand
         useCaseCommand.Aliases.Add("unittest");
         useCaseCommand.Aliases.Add("unittests");
         
+        useCaseCommand.Description = "Intended to be used in the root of the Unit Test project.  Will create tests for all use cases generate by the use case command.";
+        
         useCaseCommand.SetAction(parseResult =>
         {
             var model = commonBase.GenerateCommonUseCaseModel(parseResult);
