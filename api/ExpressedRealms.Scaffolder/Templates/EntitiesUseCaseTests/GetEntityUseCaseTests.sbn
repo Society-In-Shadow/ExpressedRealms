@@ -1,0 +1,66 @@
+using ExpressedRealms.DB.Models.{{ plural }}.{{ singular }}Models;
+using ExpressedRealms.{{ projectname }}.Repository.{{ plural }};
+using ExpressedRealms.{{ projectname }}.UseCases.{{ singular }}UseCases.Get{{ singular }};
+using ExpressedRealms.Shared.UseCases.Tests.Unit;
+using FakeItEasy;
+using Xunit;
+
+namespace ExpressedRealms.{{ projectname }}.UseCases.Tests.Unit.{{ plural }};
+
+public class Get{{ singular }}UseCaseTests
+{
+    private readonly Get{{ singular }}UseCase _useCase;
+    private readonly I{{ singular }}Repository _repository;
+    private readonly Get{{ singular }}Model _model;
+
+    private {{ singular }} {{ singular }}DbModel { get; set; }
+
+    public Get{{ singular }}UseCaseTests()
+    {
+        _model = new Get{{ singular }}Model() { Id = 4 };
+        {{ singular }}DbModel = new {{ singular }}()
+        {
+            {{ render_unit_test_assignment_properties properties "x" ~}}
+        };
+
+        _repository = A.Fake<I{{ singular }}Repository>();
+
+        A.CallTo(() => _repository.Get{{ singular }}Async(_model.Id)).Returns({{ singular }}DbModel);
+
+        var validator = new Get{{ singular }}ModelValidator(_repository);
+
+        _useCase = new Get{{ singular }}UseCase(_repository, validator, CancellationToken.None);
+    }
+
+    [Fact]
+    public async Task ValidationFor_Id_WillFail_WhenId_IsEmpty()
+    {
+        _model.Id = 0;
+        var results = await _useCase.ExecuteAsync(_model);
+        results.MustHaveValidationError(nameof(Get{{ singular }}Model.Id), "Id is required.");
+    }
+
+    [Fact]
+    public async Task ValidationFor_Id_WillFail_When{{ singular }}DoesNotExist()
+    {
+        A.CallTo(() => _repository.Get{{ singular }}Async(_model.Id))!.Returns(Task.FromResult(({{ singular }})null!));
+        var results = await _useCase.ExecuteAsync(_model);
+        results.MustHaveNotFoundError(nameof(Get{{ singular }}Model.Id), "This {{ singular }} was not found.");
+    }
+
+    [Fact]
+    public async Task UseCase_Grabs_The{{ singular }}()
+    {
+        await _useCase.ExecuteAsync(_model);
+
+        A.CallTo(() => _repository.Get{{ singular }}Async(_model.Id)).MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task UseCase_Returns_AllPropertiesForThe{{ singular }}()
+    {
+        var results = await _useCase.ExecuteAsync(_model);
+
+        {{ render_unit_test_check_single_line_properties properties singular ~}}
+    }
+}

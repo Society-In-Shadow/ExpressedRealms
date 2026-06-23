@@ -1,0 +1,6 @@
+namespace {{ namespacebase }}.{{ singular }}Endpoints.Edit{{ singular }};
+
+public class Edit{{ singular }}Request
+{
+    {{ render_class_properties properties ~}}
+}

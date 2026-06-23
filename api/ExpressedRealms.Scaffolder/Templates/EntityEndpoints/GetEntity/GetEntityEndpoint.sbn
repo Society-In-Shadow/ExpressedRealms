@@ -1,0 +1,26 @@
+using ExpressedRealms.{{ projectname }}.UseCases.{{ singular }}UseCases.Get{{ singular }};
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
+
+namespace {{ namespacebase }}.{{ singular }}Endpoints.Get{{ singular }};
+
+public static class Get{{ singular }}Endpoint
+{
+    public static async Task<Ok<Get{{ singular }}Response>> ExecuteAsync(
+        int id,
+        IGet{{ singular }}UseCase create{{ singular }}UseCase
+    )
+    {
+        var results = await create{{ singular }}UseCase.ExecuteAsync(
+            new Get{{ singular }}Model() { Id = id }
+        );
+
+        return TypedResults.Ok(
+            new Get{{ singular }}Response()
+            {
+                Id = results.Value.Id,
+                {{ render_list_properties properties "results.Value" ~}}
+            }
+        );
+    }
+}

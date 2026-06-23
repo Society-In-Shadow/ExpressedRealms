@@ -1,0 +1,6 @@
+namespace {{ namespacebase }}.{{ singular }}Endpoints.Get{{ plural }};
+
+public class {{ singular }}Response
+{
+    public List<{{ singular }}ViewModel> {{ plural }} { get; set; } = new();
+}

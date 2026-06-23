@@ -1,0 +1,39 @@
+using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.{{ projectname }}.Repository.{{ plural }};
+using ExpressedRealms.UseCases.Shared;
+using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
+using FluentResults;
+
+namespace {{ namespacebase }}.{{ singular }}UseCases.Delete{{ singular }};
+
+internal sealed class Delete{{ singular }}UseCase(
+    I{{ singular }}Repository {{ singular | string.downcase  }}Repository,
+    Delete{{ singular }}ModelValidator validator,
+    CancellationToken cancellationToken
+) : IDelete{{ singular }}UseCase
+{
+    public async Task<Result> ExecuteAsync(Delete{{ singular }}Model model)
+    {
+        var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
+            validator,
+            model,
+            cancellationToken
+        );
+
+        if (result.IsFailed)
+            return Result.Fail(result.Errors);
+
+        var {{ singular | string.downcase }} = await {{ singular | string.downcase }}Repository.Get{{ singular }}ForEditingAsync(model.Id);
+
+        if ({{ singular | string.downcase }} is null)
+        {
+            return Result.Fail(new NotFoundFailure(nameof(Delete{{ singular }}Model.Id), "This {{ singular }} was not found."));
+        }
+
+        {{ singular | string.downcase }}.SoftDelete();
+
+        await {{ singular | string.downcase }}Repository.Edit{{ singular }}Async({{ singular | string.downcase }});
+
+        return Result.Ok();
+    }
+}

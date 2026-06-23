@@ -1,0 +1,28 @@
+using ExpressedRealms.{{ projectname }}.UseCases.{{ singular }}UseCases.Get{{ plural }};
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
+
+namespace {{ namespacebase }}.{{ singular }}Endpoints.Get{{ plural }};
+
+public static class Get{{ plural }}Endpoint
+{
+    public static async Task<Ok<{{ singular }}Response>> ExecuteAsync(
+        IGet{{ plural }}UseCase create{{ singular }}UseCase
+    )
+    {
+        var results = await create{{ singular }}UseCase.ExecuteAsync();
+
+        return TypedResults.Ok(
+            new {{ singular }}Response()
+            {
+                {{ plural }} = results
+                    .Value.{{ plural }}.Select(x => new {{ singular }}ViewModel()
+                    {
+                        Id = x.Id,
+                        {{ render_list_properties properties "x" ~}}
+                    })
+                    .ToList(),
+            }
+        );
+    }
+}

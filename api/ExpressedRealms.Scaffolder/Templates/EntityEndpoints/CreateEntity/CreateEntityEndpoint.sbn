@@ -1,0 +1,32 @@
+using ExpressedRealms.{{ projectname }}.UseCases.{{ singular }}UseCases.Create{{ singular }};
+using ExpressedRealms.Server.Shared;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+
+namespace {{ namespacebase }}.{{ singular }}Endpoints.Create{{ singular }};
+
+public static class Create{{ singular }}Endpoint
+{
+    public static async Task<Results<Ok<int>, NotFound, ValidationProblem>> ExecuteAsync(
+        [FromBody] Create{{ singular }}Request request,
+        [FromServices] ICreate{{ singular }}UseCase create{{ singular }}UseCase
+    )
+    {
+        var results = await create{{ singular }}UseCase.ExecuteAsync(
+            new Create{{ singular }}Model()
+            {
+                {{ render_list_properties properties "request" ~}}
+            }
+        );
+
+        if (results.HasValidationError(out var validationProblem))
+            return validationProblem;
+        if (results.HasNotFound(out var notFound))
+            return notFound;
+
+        results.ThrowIfErrorNotHandled();
+
+        return TypedResults.Ok(results.Value);
+    }
+}

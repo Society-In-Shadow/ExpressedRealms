@@ -1,0 +1,6 @@
+using ExpressedRealms.Shared;
+using FluentResults;
+
+namespace {{ namespacebase }}.{{ singular }}UseCases.Delete{{ singular }};
+
+public interface IDelete{{ singular }}UseCase : IGenericUseCase<Result, Delete{{ singular }}Model> { }

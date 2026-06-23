@@ -1,0 +1,6 @@
+namespace {{ namespacebase }}.{{ singular }}UseCases.Get{{ singular }}s;
+
+public class {{ plural }}ReturnModel
+{
+    public List<{{ singular }}Model> {{ plural }} { get; set; } = new();
+}

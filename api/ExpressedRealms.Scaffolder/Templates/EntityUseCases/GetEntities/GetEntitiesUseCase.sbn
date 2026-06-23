@@ -1,0 +1,26 @@
+using ExpressedRealms.{{ projectname }}.Repository.{{ plural }};
+using FluentResults;
+
+namespace {{ namespacebase }}.{{ singular }}UseCases.Get{{ singular }}s;
+
+internal sealed class Get{{ plural }}UseCase(I{{ singular }}Repository {{ singular | string.downcase }}Repository)
+    : IGet{{ plural }}UseCase
+{
+    public async Task<Result<{{ plural }}ReturnModel>> ExecuteAsync()
+    {
+        var {{ plural | string.downcase }} = await {{ singular | string.downcase }}Repository.Get{{ singular }}s();
+
+        return Result.Ok(
+            new {{ plural }}ReturnModel()
+            {
+                {{ plural }} = {{ plural | string.downcase }}
+                    .Select(x => new {{ singular }}Model()
+                    {
+                        Id = x.Id,
+                        {{ render_list_properties properties "x" ~}}
+                    })
+                    .ToList(),
+            }
+        );
+    }
+}

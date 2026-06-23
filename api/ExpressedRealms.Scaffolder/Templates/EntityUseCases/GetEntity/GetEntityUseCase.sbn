@@ -1,0 +1,40 @@
+using ExpressedRealms.{{ projectname }}.Repository.{{ plural }};
+using ExpressedRealms.UseCases.Shared;
+using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
+using FluentResults;
+
+namespace {{ namespacebase }}.{{ singular }}UseCases.Get{{ singular }};
+
+internal sealed class Get{{ singular }}UseCase(
+    I{{ singular }}Repository {{ singular | string.downcase }}Repository,
+    Get{{ singular }}ModelValidator validator,
+    CancellationToken cancellationToken
+) : IGet{{ singular }}UseCase
+{
+    public async Task<Result<Get{{ singular }}ReturnModel>> ExecuteAsync(Get{{ singular }}Model model)
+    {
+        var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
+            validator,
+            model,
+            cancellationToken
+        );
+
+        if (result.IsFailed)
+            return Result.Fail(result.Errors);
+
+        var {{ singular | string.downcase }} = await {{ singular | string.downcase }}Repository.Get{{ singular }}Async(model.Id);
+
+        if ({{ singular | string.downcase }} is null)
+        {
+            return Result.Fail(new NotFoundFailure(nameof(Get{{ singular }}Model.Id), "This {{ singular }} was not found."));
+        }
+
+        return Result.Ok(
+            new Get{{ singular }}ReturnModel()
+            {
+                Id = {{ singular | string.downcase }}.Id,
+                {{ render_list_properties properties (singular | string.downcase) ~}}
+            }
+        );
+    }
+}

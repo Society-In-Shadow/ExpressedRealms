@@ -1,0 +1,34 @@
+using ExpressedRealms.{{ projectname }}.UseCases.{{ singular }}UseCases.Edit{{ singular }};
+using ExpressedRealms.Server.Shared;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+
+namespace {{ namespacebase }}.{{ singular }}Endpoints.Edit{{ singular }};
+
+public static class Edit{{ singular }}Endpoint
+{
+    public static async Task<Results<Ok, NotFound, ValidationProblem>> ExecuteAsync(
+        int id,
+        [FromBody] Edit{{ singular }}Request request,
+        [FromServices] IEdit{{ singular }}UseCase edit{{ singular }}UseCase
+    )
+    {
+        var results = await edit{{ singular }}UseCase.ExecuteAsync(
+            new Edit{{ singular }}Model()
+            {
+                Id = id,
+                {{ render_list_properties properties "request" ~}}
+            }
+        );
+
+        if (results.HasValidationError(out var validationProblem))
+            return validationProblem;
+        if (results.HasNotFound(out var notFound))
+            return notFound;
+
+        results.ThrowIfErrorNotHandled();
+
+        return TypedResults.Ok();
+    }
+}

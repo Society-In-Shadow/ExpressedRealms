@@ -1,0 +1,6 @@
+namespace {{ namespacebase }}.{{ singular }}Endpoints.Create{{ singular }};
+
+public class Create{{ singular }}Request
+{
+    {{ render_class_properties properties ~}}
+}

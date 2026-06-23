@@ -1,0 +1,7 @@
+namespace {{ namespacebase }}.{{ singular }}Endpoints.Get{{ plural }};
+
+public class {{ singular }}ViewModel
+{
+    public int Id { get; set; }
+    {{ render_class_properties properties ~}}
+}

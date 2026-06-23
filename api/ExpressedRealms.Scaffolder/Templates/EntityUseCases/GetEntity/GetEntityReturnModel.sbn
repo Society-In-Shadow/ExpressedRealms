@@ -1,0 +1,7 @@
+namespace {{ namespacebase }}.{{ singular }}UseCases.Get{{ singular }};
+
+public class Get{{ singular }}ReturnModel
+{
+    public int Id { get; set; }
+    {{ render_class_properties properties ~}}
+}

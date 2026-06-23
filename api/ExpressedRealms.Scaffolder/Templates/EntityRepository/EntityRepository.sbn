@@ -1,0 +1,58 @@
+using ExpressedRealms.DB;
+using ExpressedRealms.DB.Models.{{ plural }}.{{ singular }}Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace {{ namespacebase }}.{{ plural }};
+
+internal sealed class {{ singular }}Repository(
+    ExpressedRealmsDbContext context,
+    CancellationToken cancellationToken
+) : I{{ singular }}Repository
+{
+    public async Task<int> Create{{ singular }}Async({{ singular }} {{ singular | string.downcase }})
+    {
+        context.{{ plural }}.Add({{ singular | string.downcase }});
+        await context.SaveChangesAsync(cancellationToken);
+        return {{ singular | string.downcase }}.Id;
+    }
+
+    public async Task<bool> HasDuplicateName(string name, int {{ singular | string.downcase }}Id = 0)
+    {
+        if ({{ singular | string.downcase }}Id != 0)
+        {
+            return await context
+                .{{ plural }}.AsNoTracking()
+                .AnyAsync(
+                    x => x.Name.ToLower() == name.ToLower() && x.Id != {{ singular | string.downcase }}Id,
+                    cancellationToken
+                );
+        }
+        return await context
+            .{{ plural }}.AsNoTracking()
+            .AnyAsync(x => x.Name.ToLower() == name.ToLower(), cancellationToken);
+    }
+
+    public async Task Edit{{ singular }}Async({{ singular }} {{ singular | string.downcase }})
+    {
+        context.{{ plural }}.Update({{ singular | string.downcase }});
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
+    public Task<{{ singular }}?> Get{{ singular }}ForEditingAsync(int id)
+    {
+        return context.{{ plural }}.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+    }
+
+    public async Task<List<{{ singular }}>> Get{{ plural }}()
+    {
+        return await context.{{ plural }}
+            .ToListAsync(cancellationToken);
+    }
+
+    public Task<{{ singular }}?> Get{{ singular }}Async(int id)
+    {
+        return context
+            .{{ plural }}.AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+    }
+}

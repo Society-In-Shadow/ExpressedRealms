@@ -1,0 +1,59 @@
+using ExpressedRealms.DB.Models.{{ plural }}.{{ singular }}Models;
+using ExpressedRealms.{{ projectname }}.Repository.{{ plural }};
+using ExpressedRealms.{{ projectname }}.UseCases.{{ singular }}UseCases.Create{{ singular }};
+using ExpressedRealms.Shared.UseCases.Tests.Unit;
+using FakeItEasy;
+using Xunit;
+
+namespace ExpressedRealms.{{ projectname }}.UseCases.Tests.Unit.{{ plural }};
+
+public class Create{{ singular }}UseCaseTests
+{
+    private readonly Create{{ singular }}UseCase _useCase;
+    private readonly I{{ singular }}Repository _repository;
+    private readonly Create{{ singular }}Model _model;
+
+    public Create{{ singular }}UseCaseTests()
+    {
+        _model = new Create{{ singular }}Model()
+        {
+            {{ render_unit_test_assignment_properties properties "x" ~}}
+        };
+
+        _repository = A.Fake<I{{ singular }}Repository>();
+
+        var validator = new Create{{ singular }}ModelValidator(_repository);
+
+        _useCase = new Create{{ singular }}UseCase(_repository, validator, CancellationToken.None);
+    }
+
+    {{ validation_property_tests properties $"Create{singular}Model" ~}}
+
+    [Fact]
+    public async Task UseCase_WillCreateThe{{ singular }}()
+    {
+        var {{ singular | string.downcase  }} = new {{ singular }}()
+        {
+            {{ render_list_properties properties "_model" ~}}
+        };
+
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() =>
+                _repository.Create{{ singular }}Async(
+                    A<{{ singular }}>.That.Matches(k =>
+                        {{ render_unit_test_check_properties properties "k" (singular | string.downcase) ~}}
+                    )
+                )
+            )
+            .MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task UseCase_WillReturn_{{ singular }}Id_IfSuccessful()
+    {
+        A.CallTo(() => _repository.Create{{ singular }}Async(A<{{ singular }}>._)).Returns(5);
+
+        var result = await _useCase.ExecuteAsync(_model);
+        Assert.Equal(5, result.Value);
+    }
+}

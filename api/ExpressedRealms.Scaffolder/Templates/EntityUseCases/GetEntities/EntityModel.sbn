@@ -1,0 +1,7 @@
+namespace {{ namespacebase }}.{{ singular }}UseCases.Get{{ singular }}s;
+
+public class {{ singular }}Model
+{
+    public int Id { get; set; }
+    {{ render_class_properties properties ~}}
+}

@@ -45,6 +45,7 @@ nav:
   - PGAdmin Setup: pgadminSetup.md
   - Prospective Employers: prospectiveEmployers.md
   - Repository Standards: repositoryStandards.md
+  - Scriban: scriban.md
   - Use Cases: useCases.md
   - Vite Testing: vitesting.md
   - Windows Setup: windowsSetup.md

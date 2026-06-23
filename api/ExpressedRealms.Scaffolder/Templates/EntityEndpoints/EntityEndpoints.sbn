@@ -1,0 +1,32 @@
+﻿using ExpressedRealms.Authentication.PermissionCollection;
+using ExpressedRealms.Authentication.PermissionCollection.Configuration;
+using {{ namespacebase }}.{{ singular }}Endpoints.Create{{ singular }};
+using {{ namespacebase }}.{{ singular }}Endpoints.Delete{{ singular }};
+using {{ namespacebase }}.{{ singular }}Endpoints.Edit{{ singular }};
+using {{ namespacebase }}.{{ singular }}Endpoints.Get{{ plural }};
+using {{ namespacebase }}.{{ singular }}Endpoints.Get{{ singular }};
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+
+namespace {{ namespacebase }}.{{ singular }}Endpoints;
+
+internal static class {{ singular }}Endpoints
+{
+    internal static void Add{{ singular }}Endpoints(this WebApplication app)
+    {
+        var endpointGroup = app
+            .MapGroup("{{ plural | string.downcase }}")
+            .WithTags("{{ plural }}")
+            .RequireAuthorization();
+
+        endpointGroup.MapGet("", Get{{ plural }}Endpoint.ExecuteAsync);
+
+        endpointGroup.MapGet("{id}", Get{{ singular }}Endpoint.ExecuteAsync);
+
+        endpointGroup.MapPost("", Create{{ singular }}Endpoint.ExecuteAsync);
+
+        endpointGroup.MapPut("{id}", Edit{{ singular }}Endpoint.ExecuteAsync);
+
+        endpointGroup.MapDelete("{id}", Delete{{ singular }}Endpoint.ExecuteAsync);
+    }
+}

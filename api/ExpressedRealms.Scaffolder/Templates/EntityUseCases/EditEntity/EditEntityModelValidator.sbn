@@ -1,0 +1,18 @@
+using ExpressedRealms.{{ projectname }}.Repository.{{ plural }};
+using FluentValidation;
+using JetBrains.Annotations;
+
+namespace {{ namespacebase }}.{{ singular }}UseCases.Edit{{ singular }};
+
+[UsedImplicitly]
+internal sealed class Edit{{ singular }}ModelValidator : AbstractValidator<Edit{{ singular }}Model>
+{
+    public Edit{{ singular }}ModelValidator(I{{ singular }}Repository repository)
+    {
+        RuleFor(x => x.Id)
+            .NotEmpty()
+            .WithMessage("Id is required.");
+
+        {{ validation_rule_generator properties ~}}
+    }
+}

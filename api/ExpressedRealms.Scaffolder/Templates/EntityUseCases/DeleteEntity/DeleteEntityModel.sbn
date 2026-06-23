@@ -1,0 +1,6 @@
+namespace {{ namespacebase }}.{{ singular }}UseCases.Delete{{ singular }};
+
+public class Delete{{ singular }}Model
+{
+    public int Id { get; set; }
+}

@@ -1,0 +1,7 @@
+namespace {{ namespacebase }}.{{ singular }}UseCases.Edit{{ singular }};
+
+public class Edit{{ singular }}Model
+{
+    public int Id { get; set; }
+    {{ render_class_properties properties ~}}
+}

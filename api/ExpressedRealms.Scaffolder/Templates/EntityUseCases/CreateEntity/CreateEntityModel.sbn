@@ -1,0 +1,6 @@
+namespace {{ namespacebase }}.{{ singular }}UseCases.Create{{ singular }};
+
+public class Create{{ singular }}Model
+{
+    {{ render_class_properties properties ~}}
+}

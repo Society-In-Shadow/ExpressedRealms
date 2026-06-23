@@ -1,0 +1,13 @@
+using ExpressedRealms.DB.Models.{{ plural }}.{{ singular }}Models;
+
+namespace {{ namespacebase }}.{{ plural }};
+
+public interface I{{ singular }}Repository
+{
+    Task<int> Create{{ singular }}Async({{ singular }} {{ singular | string.downcase }});
+    Task<bool> HasDuplicateName(string name, int {{ singular | string.downcase }}Id = 0);
+    Task Edit{{ singular }}Async({{ singular }} {{ singular | string.downcase }});
+    Task<{{ singular }}?> Get{{ singular }}ForEditingAsync(int id);
+    Task<List<{{ singular }}>> Get{{ singular }}s();
+    Task<{{ singular }}?> Get{{ singular }}Async(int id);
+}
