@@ -9,34 +9,31 @@ public static class CrudGenerator
 {
     public static void GenerateUseCases(GenerateUseCasesModel model)
     {
-        var templateRoot = Path.Combine(AppContext.BaseDirectory, "Templates", "EntityUseCases");
-
+        var templateRoot = GetTemplateLocation("EntityUseCases");
         Generate(model, templateRoot, $"{model.Singular}UseCases");
     }
 
     public static void GenerateAPIs(GenerateUseCasesModel model)
     {
-        var templateRoot = Path.Combine(AppContext.BaseDirectory, "Templates", "EntityEndpoints");
-
+        var templateRoot = GetTemplateLocation("EntityEndpoints");
         Generate(model, templateRoot, $"{model.Singular}Endpoints");
     }
 
     public static void GenerateRepository(GenerateUseCasesModel model)
     {
-        var templateRoot = Path.Combine(AppContext.BaseDirectory, "Templates", "EntityRepository");
-
+        var templateRoot = GetTemplateLocation("EntityRepository");
         Generate(model, templateRoot, $"{model.Plural}");
     }
 
     public static void GenerateUseCaseTests(GenerateUseCasesModel model)
     {
-        var templateRoot = Path.Combine(
-            AppContext.BaseDirectory,
-            "Templates",
-            "EntitiesUseCaseTests"
-        );
-
+        var templateRoot = GetTemplateLocation("EntitiesUseCaseTests");
         Generate(model, templateRoot, $"{model.Plural}");
+    }
+    
+    private static string GetTemplateLocation(string folder)
+    {
+        return Path.Combine(AppContext.BaseDirectory, "Templates", folder);
     }
 
     private static void Generate(
@@ -97,7 +94,7 @@ public static class CrudGenerator
             scriptObject.AddRenderClassProperties();
             scriptObject.AddRenderListProperties();
             scriptObject.AddRenderAssignmentProperties();
-            scriptObject.AddValidationPropertyTests();
+            scriptObject.AddValidationTestsRenderer();
             scriptObject.AddRenderUnitTestChecksProperties();
             scriptObject.AddRenderUnitTestAssignmentProperties();
             scriptObject.AddValidationRuleGenerator();

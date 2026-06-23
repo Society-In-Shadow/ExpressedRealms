@@ -71,7 +71,7 @@ internal class CommonArguments
         };
     }
 
-    private List<PropertyDefinition> GetAdditionalProperties(string? additionalPropertiesArgValue)
+    private static List<PropertyDefinition> GetAdditionalProperties(string? additionalPropertiesArgValue)
     {
         var additionalProperties = new List<PropertyDefinition>();
 
