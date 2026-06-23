@@ -45,7 +45,7 @@ public static class ValidationRenderer
         sb.Append(
             $"{Environment.NewLine}    .MinimumLength({property.MinValue})"
         );
-        if (property.Type.ToLowerInvariant() == "string")
+        if (string.Equals(property.Type.ToLowerInvariant(), "string", StringComparison.InvariantCultureIgnoreCase))
         {
             sb.Append(
                 $"{Environment.NewLine}    .WithMessage(\"{property.Name} cannot be below {property.MinValue} characters.\")"
@@ -66,7 +66,7 @@ public static class ValidationRenderer
         sb.Append(
             $"{Environment.NewLine}    .MaximumLength({property.MaxValue})"
         );
-        if (property.Type.ToLowerInvariant() == "string")
+        if (string.Equals(property.Type.ToLowerInvariant(), "string", StringComparison.InvariantCultureIgnoreCase))
         {
             sb.Append(
                 $"{Environment.NewLine}    .WithMessage(\"{property.Name} cannot exceed {property.MaxValue} characters.\")"
