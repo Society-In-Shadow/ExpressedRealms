@@ -18,16 +18,20 @@ internal static class FactionEndpoints
 
         endpointGroup.MapGet("expressions/{expressionId}", GetFactionsEndpoint.ExecuteAsync);
 
-        endpointGroup.MapGet("{id}", GetFactionEndpoint.ExecuteAsync)
+        endpointGroup
+            .MapGet("{id}", GetFactionEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Faction.View);
 
-        endpointGroup.MapPost("", CreateFactionEndpoint.ExecuteAsync)
+        endpointGroup
+            .MapPost("", CreateFactionEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Faction.Create);
 
-        endpointGroup.MapPut("{id}", EditFactionEndpoint.ExecuteAsync)
+        endpointGroup
+            .MapPut("{id}", EditFactionEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Faction.Edit);
 
-        endpointGroup.MapDelete("{id}", DeleteFactionEndpoint.ExecuteAsync)
+        endpointGroup
+            .MapDelete("{id}", DeleteFactionEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Faction.Delete);
     }
 }

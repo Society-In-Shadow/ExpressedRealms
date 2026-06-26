@@ -11,30 +11,30 @@ public class GetFactionsUseCaseTests
 {
     private readonly GetFactionsUseCase _useCase;
     private readonly IFactionRepository _factionRepository;
-    
+
     private readonly GetFactionsModel _model;
 
     public GetFactionsUseCaseTests()
     {
         _factionRepository = A.Fake<IFactionRepository>();
 
-        _model = new GetFactionsModel()
-        {
-            ExpressionId = 1
-        };
-        
+        _model = new GetFactionsModel() { ExpressionId = 1 };
+
         var validator = new GetFactionsModelValidator();
 
         _useCase = new GetFactionsUseCase(_factionRepository, validator, CancellationToken.None);
     }
-    
+
     [Fact]
     public async Task ValidationFor_ExpressionId_WillFail_WhenItIsEmpty()
     {
         _model.ExpressionId = 0;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(GetFactionsModel.ExpressionId), "Expression Id is required.");
+        results.MustHaveValidationError(
+            nameof(GetFactionsModel.ExpressionId),
+            "Expression Id is required."
+        );
     }
 
     [Fact]
@@ -42,7 +42,8 @@ public class GetFactionsUseCaseTests
     {
         await _useCase.ExecuteAsync(_model);
 
-        A.CallTo(() => _factionRepository.GetFactions(_model.ExpressionId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _factionRepository.GetFactions(_model.ExpressionId))
+            .MustHaveHappenedOnceExactly();
     }
 
     [Fact]

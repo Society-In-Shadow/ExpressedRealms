@@ -11,10 +11,9 @@ public static class GetFactionsEndpoint
         IGetFactionsUseCase createFactionUseCase
     )
     {
-        var results = await createFactionUseCase.ExecuteAsync(new GetFactionsModel()
-        {
-            ExpressionId = expressionId
-        });
+        var results = await createFactionUseCase.ExecuteAsync(
+            new GetFactionsModel() { ExpressionId = expressionId }
+        );
 
         return TypedResults.Ok(
             new FactionResponse()
@@ -24,7 +23,7 @@ public static class GetFactionsEndpoint
                     {
                         Id = x.Id,
                         Name = x.Name,
-                        Background = x.Background
+                        Background = x.Background,
                     })
                     .ToList(),
             }

@@ -18,7 +18,7 @@ public static class GetFactionEndpoint
             {
                 Id = results.Value.Id,
                 Name = results.Value.Name,
-                Background = results.Value.Background
+                Background = results.Value.Background,
             }
         );
     }

@@ -23,14 +23,22 @@ internal sealed class CreateFactionUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-        
-        var isExpressionType = await expressionRepository.ExpressionIsExpressionType(model.ExpressionId);
+
+        var isExpressionType = await expressionRepository.ExpressionIsExpressionType(
+            model.ExpressionId
+        );
         if (!isExpressionType)
-            return ValidationHelper.AddSingleValidationFailure(nameof(model.ExpressionId), "Expression Id is not of an expression type.");
-        
+            return ValidationHelper.AddSingleValidationFailure(
+                nameof(model.ExpressionId),
+                "Expression Id is not of an expression type."
+            );
+
         var isDuplicateName = await factionRepository.HasDuplicateName(model.Name);
         if (isDuplicateName)
-            return ValidationHelper.AddSingleValidationFailure(nameof(model.Name), "This name already exists.");
+            return ValidationHelper.AddSingleValidationFailure(
+                nameof(model.Name),
+                "This name already exists."
+            );
 
         var factionId = await factionRepository.CreateFactionAsync(
             new Faction()

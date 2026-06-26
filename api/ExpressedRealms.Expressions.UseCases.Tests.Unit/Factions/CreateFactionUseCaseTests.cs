@@ -26,13 +26,19 @@ public class CreateFactionUseCaseTests
 
         _factionRepository = A.Fake<IFactionRepository>();
         _expressionRepository = A.Fake<IExpressionRepository>();
-        
-        A.CallTo(() => _expressionRepository.ExpressionIsExpressionType(_model.ExpressionId)).Returns(true);
+
+        A.CallTo(() => _expressionRepository.ExpressionIsExpressionType(_model.ExpressionId))
+            .Returns(true);
         A.CallTo(() => _factionRepository.HasDuplicateName(_model.Name)).Returns(false);
-        
+
         var validator = new CreateFactionModelValidator();
 
-        _useCase = new CreateFactionUseCase(_factionRepository, _expressionRepository, validator, CancellationToken.None);
+        _useCase = new CreateFactionUseCase(
+            _factionRepository,
+            _expressionRepository,
+            validator,
+            CancellationToken.None
+        );
     }
 
     [Fact]
@@ -91,23 +97,30 @@ public class CreateFactionUseCaseTests
             "Background cannot exceed 20000 characters."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_ExpressionId_WillFail_WhenItIsEmpty()
     {
         _model.ExpressionId = 0;
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(CreateFactionModel.ExpressionId), "Expression Id is required.");
+        results.MustHaveValidationError(
+            nameof(CreateFactionModel.ExpressionId),
+            "Expression Id is required."
+        );
     }
-    
+
     [Fact]
     public async Task ValidationFor_ExpressionId_WillFail_WhenExpressionId_IsNotAnExpression()
     {
-        A.CallTo(() => _expressionRepository.ExpressionIsExpressionType(_model.ExpressionId)).Returns(false);
+        A.CallTo(() => _expressionRepository.ExpressionIsExpressionType(_model.ExpressionId))
+            .Returns(false);
 
         var results = await _useCase.ExecuteAsync(_model);
-        results.MustHaveValidationError(nameof(CreateFactionModel.ExpressionId), "Expression Id is not of an expression type.");
+        results.MustHaveValidationError(
+            nameof(CreateFactionModel.ExpressionId),
+            "Expression Id is not of an expression type."
+        );
     }
 
     [Fact]

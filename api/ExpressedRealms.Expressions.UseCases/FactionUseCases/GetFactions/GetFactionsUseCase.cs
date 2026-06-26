@@ -17,10 +17,10 @@ internal sealed class GetFactionsUseCase(
             model,
             cancellationToken
         );
-        
+
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-        
+
         var factions = await factionRepository.GetFactions(model.ExpressionId);
 
         return Result.Ok(

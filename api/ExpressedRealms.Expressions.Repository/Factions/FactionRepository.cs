@@ -45,7 +45,8 @@ internal sealed class FactionRepository(
 
     public async Task<List<Faction>> GetFactions(int expressionId)
     {
-        return await context.Factions.AsNoTracking()
+        return await context
+            .Factions.AsNoTracking()
             .Where(x => x.ExpressionId == expressionId)
             .ToListAsync(cancellationToken);
     }

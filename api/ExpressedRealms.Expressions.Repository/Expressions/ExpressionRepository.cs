@@ -337,7 +337,10 @@ internal sealed class ExpressionRepository(
 
     public async Task<bool> ExpressionIsExpressionType(int expressionId)
     {
-        return await context.Expressions.AnyAsync(x => x.Id == expressionId && x.ExpressionTypeId == 1, cancellationToken);
+        return await context.Expressions.AnyAsync(
+            x => x.Id == expressionId && x.ExpressionTypeId == 1,
+            cancellationToken
+        );
     }
 
     public async Task<List<Expression>> GetAllEnabledExpressions()

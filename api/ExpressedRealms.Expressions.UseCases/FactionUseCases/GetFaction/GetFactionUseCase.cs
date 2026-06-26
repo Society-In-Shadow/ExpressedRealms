@@ -36,7 +36,7 @@ internal sealed class GetFactionUseCase(
             {
                 Id = faction.Id,
                 Name = faction.Name,
-                Background = faction.Background
+                Background = faction.Background,
             }
         );
     }

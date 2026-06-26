@@ -22,9 +22,9 @@ internal sealed class DeleteFactionUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-        
+
         var faction = await factionRepository.GetFactionForEditingAsync(model.Id);
-        
+
         if (faction is null)
         {
             return Result.Fail(

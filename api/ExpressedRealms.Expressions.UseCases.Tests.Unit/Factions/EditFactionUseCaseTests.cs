@@ -21,7 +21,7 @@ public class EditFactionUseCaseTests
         {
             Id = 1,
             Name = "parse",
-            Background = "View"
+            Background = "View",
         };
 
         _dbModel = new Faction()
@@ -115,7 +115,6 @@ public class EditFactionUseCaseTests
         );
     }
 
-
     [Fact]
     public async Task UseCase_WillGrab_TheFaction()
     {
@@ -135,18 +134,13 @@ public class EditFactionUseCaseTests
     [Fact]
     public async Task UseCase_WillEditTheFaction()
     {
-        var faction = new Faction()
-        {
-            Name = _model.Name,
-            Background = _model.Background
-        };
+        var faction = new Faction() { Name = _model.Name, Background = _model.Background };
 
         await _useCase.ExecuteAsync(_model);
         A.CallTo(() =>
                 _factionRepository.EditFactionAsync(
                     A<Faction>.That.Matches(k =>
-                        k.Name == faction.Name
-                        && k.Background == faction.Background
+                        k.Name == faction.Name && k.Background == faction.Background
                     )
                 )
             )
