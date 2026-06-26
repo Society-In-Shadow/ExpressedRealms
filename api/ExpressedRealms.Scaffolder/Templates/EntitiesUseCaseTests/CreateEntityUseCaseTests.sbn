@@ -22,7 +22,7 @@ public class Create{{ singular }}UseCaseTests
 
         _repository = A.Fake<I{{ singular }}Repository>();
 
-        var validator = new Create{{ singular }}ModelValidator(_repository);
+        var validator = new Create{{ singular }}ModelValidator();
 
         _useCase = new Create{{ singular }}UseCase(_repository, validator, CancellationToken.None);
     }

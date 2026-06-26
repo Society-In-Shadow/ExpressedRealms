@@ -27,7 +27,7 @@ public class Get{{ singular }}UseCaseTests
 
         A.CallTo(() => _repository.Get{{ singular }}Async(_model.Id)).Returns({{ singular }}DbModel);
 
-        var validator = new Get{{ singular }}ModelValidator(_repository);
+        var validator = new Get{{ singular }}ModelValidator();
 
         _useCase = new Get{{ singular }}UseCase(_repository, validator, CancellationToken.None);
     }

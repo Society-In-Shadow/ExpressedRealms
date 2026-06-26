@@ -31,7 +31,7 @@ public class Edit{{ singular }}UseCaseTests
 
         A.CallTo(() => _repository.Get{{ singular }}ForEditingAsync(_model.Id)).Returns(_dbModel);
 
-        var validator = new Edit{{ singular }}ModelValidator(_repository);
+        var validator = new Edit{{ singular }}ModelValidator();
 
         _useCase = new Edit{{ singular }}UseCase(_repository, validator, CancellationToken.None);
     }

@@ -22,7 +22,7 @@ public class Delete{{ singular }}UseCaseTests
         A.CallTo(() => _repository.Get{{ singular }}ForEditingAsync(_model.Id))
             .Returns(new {{ singular }}() { Id = _model.Id });
 
-        var validator = new Delete{{ singular }}ModelValidator(_repository);
+        var validator = new Delete{{ singular }}ModelValidator();
 
         _useCase = new Delete{{ singular }}UseCase(_repository, validator, CancellationToken.None);
     }

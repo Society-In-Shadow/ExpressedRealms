@@ -7,7 +7,7 @@ namespace {{ namespacebase }}.{{ singular }}UseCases.Get{{ singular }};
 [UsedImplicitly]
 internal sealed class Get{{ singular }}ModelValidator : AbstractValidator<Get{{ singular }}Model>
 {
-    public Get{{ singular }}ModelValidator(I{{ singular }}Repository repository)
+    public Get{{ singular }}ModelValidator()
     {
         RuleFor(x => x.Id)
             .NotEmpty()
