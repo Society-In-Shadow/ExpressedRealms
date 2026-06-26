@@ -43,7 +43,7 @@ public static class ValidationTestsRenderer
         sb.AppendLine(
             $$"""
               [Fact]
-              public async Task ValidationFor_{{property.Name}}_WillFail_When{{property.Name}}_IsEmpty()
+              public async Task ValidationFor_{{property.Name}}_WillFail_WhenItIsEmpty()
               {
                   _model.{{property.Name}} = {{emptyValue}};
 
