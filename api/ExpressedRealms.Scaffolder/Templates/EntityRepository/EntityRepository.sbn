@@ -45,7 +45,7 @@ internal sealed class {{ singular }}Repository(
 
     public async Task<List<{{ singular }}>> Get{{ plural }}()
     {
-        return await context.{{ plural }}
+        return await context.{{ plural }}.AsNoTracking()
             .ToListAsync(cancellationToken);
     }
 

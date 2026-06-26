@@ -17,7 +17,7 @@ public static class ValidationRenderer
 
                     var propertyDefinitions =
                         properties as PropertyDefinition[] ?? properties.ToArray();
-                    
+
                     foreach (var property in propertyDefinitions)
                     {
                         sb.Append($"RuleFor(x => x.{property.Name})");
@@ -40,12 +40,17 @@ public static class ValidationRenderer
 
     private static void HandleMinLengthValidation(PropertyDefinition property, StringBuilder sb)
     {
-        if (property.MinValue == null) return;
-        
-        sb.Append(
-            $"{Environment.NewLine}    .MinimumLength({property.MinValue})"
-        );
-        if (string.Equals(property.Type.ToLowerInvariant(), "string", StringComparison.InvariantCultureIgnoreCase))
+        if (property.MinValue == null)
+            return;
+
+        sb.Append($"{Environment.NewLine}    .MinimumLength({property.MinValue})");
+        if (
+            string.Equals(
+                property.Type.ToLowerInvariant(),
+                "string",
+                StringComparison.InvariantCultureIgnoreCase
+            )
+        )
         {
             sb.Append(
                 $"{Environment.NewLine}    .WithMessage(\"{property.Name} cannot be below {property.MinValue} characters.\")"
@@ -61,12 +66,17 @@ public static class ValidationRenderer
 
     private static void HandleMaxLengthValidation(PropertyDefinition property, StringBuilder sb)
     {
-        if (property.MaxValue == null) return;
-        
-        sb.Append(
-            $"{Environment.NewLine}    .MaximumLength({property.MaxValue})"
-        );
-        if (string.Equals(property.Type.ToLowerInvariant(), "string", StringComparison.InvariantCultureIgnoreCase))
+        if (property.MaxValue == null)
+            return;
+
+        sb.Append($"{Environment.NewLine}    .MaximumLength({property.MaxValue})");
+        if (
+            string.Equals(
+                property.Type.ToLowerInvariant(),
+                "string",
+                StringComparison.InvariantCultureIgnoreCase
+            )
+        )
         {
             sb.Append(
                 $"{Environment.NewLine}    .WithMessage(\"{property.Name} cannot exceed {property.MaxValue} characters.\")"
@@ -82,12 +92,10 @@ public static class ValidationRenderer
 
     private static void HandleRequiredValidation(PropertyDefinition property, StringBuilder sb)
     {
-        if (!property.Required) return;
-        
+        if (!property.Required)
+            return;
+
         sb.Append($"{Environment.NewLine}    .NotEmpty()");
-        sb.Append(
-            $"{Environment.NewLine}    .WithMessage(\"{property.Name} is required.\")"
-        );
+        sb.Append($"{Environment.NewLine}    .WithMessage(\"{property.Name} is required.\")");
     }
-    
 }

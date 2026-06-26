@@ -66,6 +66,12 @@ export const UserPermissions = {
     SeeBetaExpressions: 'expression.seebetaexpressions',
     DownloadBooklet: 'expression.downloadbooklet',
   } as const,
+  Faction: {
+    Edit: 'faction.edit',
+    View: 'faction.view',
+    Create: 'faction.create',
+    Delete: 'faction.delete',
+  } as const,
   Powers: {
     Edit: 'powers.edit',
     View: 'powers.view',

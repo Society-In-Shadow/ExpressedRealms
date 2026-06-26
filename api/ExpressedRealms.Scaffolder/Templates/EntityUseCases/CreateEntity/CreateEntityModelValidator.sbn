@@ -7,7 +7,7 @@ namespace {{ namespacebase }}.{{ singular }}UseCases.Create{{ singular }};
 [UsedImplicitly]
 internal sealed class Create{{ singular }}ModelValidator : AbstractValidator<Create{{ singular }}Model>
 {
-    public Create{{ singular }}ModelValidator(I{{ singular }}Repository repository)
+    public Create{{ singular }}ModelValidator()
     {
         {{ validation_rule_generator properties ~}}
     }

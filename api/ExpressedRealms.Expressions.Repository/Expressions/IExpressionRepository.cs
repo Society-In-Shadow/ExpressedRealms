@@ -20,4 +20,5 @@ public interface IExpressionRepository
     Task<Result<GetExpressionDto>> CheckUserPermissionsForExpressionDelete(int expressionId);
     Task<Result<GetExpressionDto>> CheckUserPermissionsForExpressionCreate(int expressionId);
     Task<Result<GetExpressionDto>> CheckUserPermissionsForExpressionView(int expressionId);
+    Task<bool> ExpressionIsExpressionType(int expressionId);
 }

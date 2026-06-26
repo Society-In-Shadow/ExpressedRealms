@@ -7,7 +7,7 @@ namespace {{ namespacebase }}.{{ singular }}UseCases.Edit{{ singular }};
 [UsedImplicitly]
 internal sealed class Edit{{ singular }}ModelValidator : AbstractValidator<Edit{{ singular }}Model>
 {
-    public Edit{{ singular }}ModelValidator(I{{ singular }}Repository repository)
+    public Edit{{ singular }}ModelValidator()
     {
         RuleFor(x => x.Id)
             .NotEmpty()

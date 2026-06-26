@@ -30,7 +30,7 @@ public static class CrudGenerator
         var templateRoot = GetTemplateLocation("EntitiesUseCaseTests");
         Generate(model, templateRoot, $"{model.Plural}");
     }
-    
+
     private static string GetTemplateLocation(string folder)
     {
         return Path.Combine(AppContext.BaseDirectory, "Templates", folder);
