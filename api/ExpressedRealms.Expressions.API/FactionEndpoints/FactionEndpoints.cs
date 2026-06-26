@@ -1,3 +1,5 @@
+using ExpressedRealms.Authentication.PermissionCollection;
+using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using ExpressedRealms.Expressions.API.FactionEndpoints.CreateFaction;
 using ExpressedRealms.Expressions.API.FactionEndpoints.DeleteFaction;
 using ExpressedRealms.Expressions.API.FactionEndpoints.EditFaction;
@@ -14,14 +16,18 @@ internal static class FactionEndpoints
     {
         var endpointGroup = app.MapGroup("factions").WithTags("Factions").RequireAuthorization();
 
-        endpointGroup.MapGet("", GetFactionsEndpoint.ExecuteAsync);
+        endpointGroup.MapGet("expressions/{expressionId}", GetFactionsEndpoint.ExecuteAsync);
 
-        endpointGroup.MapGet("{id}", GetFactionEndpoint.ExecuteAsync);
+        endpointGroup.MapGet("{id}", GetFactionEndpoint.ExecuteAsync)
+            .RequirePermission(Permissions.Faction.View);
 
-        endpointGroup.MapPost("", CreateFactionEndpoint.ExecuteAsync);
+        endpointGroup.MapPost("", CreateFactionEndpoint.ExecuteAsync)
+            .RequirePermission(Permissions.Faction.Create);
 
-        endpointGroup.MapPut("{id}", EditFactionEndpoint.ExecuteAsync);
+        endpointGroup.MapPut("{id}", EditFactionEndpoint.ExecuteAsync)
+            .RequirePermission(Permissions.Faction.Edit);
 
-        endpointGroup.MapDelete("{id}", DeleteFactionEndpoint.ExecuteAsync);
+        endpointGroup.MapDelete("{id}", DeleteFactionEndpoint.ExecuteAsync)
+            .RequirePermission(Permissions.Faction.Delete);
     }
 }
