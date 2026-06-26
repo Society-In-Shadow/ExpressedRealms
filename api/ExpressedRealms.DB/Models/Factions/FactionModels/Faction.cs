@@ -9,8 +9,8 @@ public class Faction : ISoftDelete
 {
     public int Id { get; set; }
     public int ExpressionId { get; set; }
-    public required string Name { get; set; }
-    public required string Background { get; set; }
+    public string Name { get; set; } = null!;
+    public string Background { get; set; } = null!;
 
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
