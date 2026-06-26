@@ -61,4 +61,9 @@ public static class ValidationHelper
             ErrorCode = "InvalidIds",
         };
     }
+    
+    public static Result AddSingleValidationFailure(string propertyName, string message)
+    {
+        return Result.Fail(new FluentValidationFailure(new Dictionary<string, string[]> { { propertyName, [message] } }));
+    }
 }
