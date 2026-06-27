@@ -1,7 +1,7 @@
-import {type InferType, object, string} from 'yup'
-import {useGenericForm} from '@/utilities/formUtilities'
-import type {ListItem} from '@/types/ListItem'
-import type {EditKnowledge} from '@/components/knowledges/types'
+import { type InferType, object, string } from 'yup'
+import { useGenericForm } from '@/utilities/formUtilities'
+import type { ListItem } from '@/types/ListItem'
+import type { EditKnowledge } from '@/components/knowledges/types'
 
 const validationSchema = object({
   name: string()

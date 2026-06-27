@@ -1,5 +1,5 @@
-import {useConfirm} from 'primevue/useconfirm'
-import {blessingsStore} from '@/components/blessings/stores/blessingsStore.ts'
+import { useConfirm } from 'primevue/useconfirm'
+import { blessingsStore } from '@/components/blessings/stores/blessingsStore.ts'
 
 export const blessingConfirmationPopup = () => {
   const confirm = useConfirm()

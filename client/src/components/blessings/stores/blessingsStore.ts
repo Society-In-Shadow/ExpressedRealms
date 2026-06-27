@@ -1,7 +1,7 @@
-import {defineStore} from 'pinia'
+import { defineStore } from 'pinia'
 import axios from 'axios'
-import type {BlessingLevel, BlessingRequest, BlessingType, SubCategory} from '@/components/blessings/types'
-import type {BlessingForm} from '@/components/blessings/validations/blessingForm.ts'
+import type { BlessingLevel, BlessingRequest, BlessingType, SubCategory } from '@/components/blessings/types'
+import type { BlessingForm } from '@/components/blessings/validations/blessingForm.ts'
 import toaster from '@/services/Toasters'
 
 export const blessingsStore

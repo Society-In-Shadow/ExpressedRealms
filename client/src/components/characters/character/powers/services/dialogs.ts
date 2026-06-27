@@ -1,6 +1,6 @@
-import {useDialog} from 'primevue/usedialog'
+import { useDialog } from 'primevue/usedialog'
 import AddCharacterPower from '@/components/characters/character/powers/AddCharacterPower.vue'
-import type {Power} from '@/components/characters/character/powers/types.ts'
+import type { Power } from '@/components/characters/character/powers/types.ts'
 import EditCharacterPower from '@/components/characters/character/powers/EditCharacterPower.vue'
 
 export const characterPowerDialogs = () => {

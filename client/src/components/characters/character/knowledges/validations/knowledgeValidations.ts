@@ -1,6 +1,6 @@
-import {type InferType, object, string} from 'yup'
-import {useGenericForm} from '@/utilities/formUtilities'
-import type {CharacterKnowledge, KnowledgeOptions} from '@/components/characters/character/knowledges/types'
+import { type InferType, object, string } from 'yup'
+import { useGenericForm } from '@/utilities/formUtilities'
+import type { CharacterKnowledge, KnowledgeOptions } from '@/components/characters/character/knowledges/types'
 
 const validationSchema = object({
   notes: string().nullable()

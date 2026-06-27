@@ -1,5 +1,5 @@
-import type {ListItem} from '@/types/ListItem'
-import type {CharacterKnowledge} from '@/components/characters/character/knowledges/types.ts'
+import type { ListItem } from '@/types/ListItem'
+import type { CharacterKnowledge } from '@/components/characters/character/knowledges/types.ts'
 
 export interface Knowledge {
   id: number

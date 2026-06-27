@@ -1,7 +1,7 @@
-import {defineStore} from 'pinia'
+import { defineStore } from 'pinia'
 import axios from 'axios'
 
-import type {ProgressionPath, ProgressionPathResponse} from '@/components/expressions/progressionPaths/types.ts'
+import type { ProgressionPath, ProgressionPathResponse } from '@/components/expressions/progressionPaths/types.ts'
 
 export const progressionPathStore
   = defineStore('progressionPaths', {

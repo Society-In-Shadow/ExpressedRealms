@@ -1,5 +1,5 @@
-import {useConfirm} from 'primevue/useconfirm'
-import {charactersStore} from '@/components/characters/stores/charactersStore.ts'
+import { useConfirm } from 'primevue/useconfirm'
+import { charactersStore } from '@/components/characters/stores/charactersStore.ts'
 
 export const overallCharacterConfirmationService = () => {
   const confirm = useConfirm()

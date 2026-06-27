@@ -4,11 +4,11 @@ import FormInputNumberWrapper from '@/FormWrappers/FormInputNumberWrapper.vue'
 import FormTextAreaWrapper from '@/FormWrappers/FormTextAreaWrapper.vue'
 import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
 import Button from 'primevue/button'
-import {getValidationInstance} from '@/components/blessings/validations/blessingLevelForm.ts'
-import {blessingsStore} from '@/components/blessings/stores/blessingsStore.ts'
-import {inject, onBeforeMount, type Ref, ref} from 'vue'
+import { getValidationInstance } from '@/components/blessings/validations/blessingLevelForm.ts'
+import { blessingsStore } from '@/components/blessings/stores/blessingsStore.ts'
+import { inject, onBeforeMount, type Ref, ref } from 'vue'
 import ModifierGroup from '@/components/modifiergroups/ModifierGroup.vue'
-import {SourceTableEnum} from '@/components/modifiergroups/types.ts'
+import { SourceTableEnum } from '@/components/modifiergroups/types.ts'
 
 const store = blessingsStore()
 const form = getValidationInstance()

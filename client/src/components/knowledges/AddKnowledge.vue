@@ -1,11 +1,11 @@
 <script setup lang="ts">
 
-import {knowledgeStore} from '@/components/knowledges/stores/knowledgeStore'
+import { knowledgeStore } from '@/components/knowledges/stores/knowledgeStore'
 import FormDropdownWrapper from '@/FormWrappers/FormDropdownWrapper.vue'
 import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
-import {getValidationInstance} from '@/components/knowledges/Validations/knowledgeValidations'
+import { getValidationInstance } from '@/components/knowledges/Validations/knowledgeValidations'
 import Button from 'primevue/button'
-import {onBeforeMount} from 'vue'
+import { onBeforeMount } from 'vue'
 import FormTextAreaWrapper from '@/FormWrappers/FormTextAreaWrapper.vue'
 
 const store = knowledgeStore()

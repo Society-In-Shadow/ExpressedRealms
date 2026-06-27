@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
-import {computed, onMounted, ref, type Ref} from 'vue'
-import type {SkillResponse} from '@/components/characters/character/skills/interfaces/SkillOptionsResponse'
-import {useRoute} from 'vue-router'
+import { computed, onMounted, ref, type Ref } from 'vue'
+import type { SkillResponse } from '@/components/characters/character/skills/interfaces/SkillOptionsResponse'
+import { useRoute } from 'vue-router'
 import axios from 'axios'
 import SkeletonWrapper from '@/FormWrappers/SkeletonWrapper.vue'
 

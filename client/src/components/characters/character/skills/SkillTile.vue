@@ -2,8 +2,8 @@
 
 import axios from 'axios'
 import Panel from 'primevue/panel'
-import {onMounted, ref, type Ref} from 'vue'
-import {useRoute} from 'vue-router'
+import { onMounted, ref, type Ref } from 'vue'
+import { useRoute } from 'vue-router'
 import Accordion from 'primevue/accordion'
 import AccordionPanel from 'primevue/accordionpanel'
 import AccordionHeader from 'primevue/accordionheader'

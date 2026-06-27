@@ -2,10 +2,10 @@
 
 import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
 import Button from 'primevue/button'
-import {getValidationInstance} from '@/components/blessings/validations/blessingLevelForm.ts'
-import {blessingsStore} from '@/components/blessings/stores/blessingsStore.ts'
+import { getValidationInstance } from '@/components/blessings/validations/blessingLevelForm.ts'
+import { blessingsStore } from '@/components/blessings/stores/blessingsStore.ts'
 import FormInputNumberWrapper from '@/FormWrappers/FormInputNumberWrapper.vue'
-import {inject, type Ref, ref} from 'vue'
+import { inject, type Ref, ref } from 'vue'
 import FormTextAreaWrapper from '@/FormWrappers/FormTextAreaWrapper.vue'
 
 const store = blessingsStore()

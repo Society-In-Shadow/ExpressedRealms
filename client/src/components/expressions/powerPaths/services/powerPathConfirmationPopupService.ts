@@ -1,8 +1,8 @@
-import {useConfirm} from 'primevue/useconfirm'
+import { useConfirm } from 'primevue/useconfirm'
 import toaster from '@/services/Toasters'
 import axios from 'axios'
-import {expressionStore} from '@/stores/expressionStore'
-import {powerPathStore} from '@/components/expressions/powerPaths/stores/powerPathStore'
+import { expressionStore } from '@/stores/expressionStore'
+import { powerPathStore } from '@/components/expressions/powerPaths/stores/powerPathStore'
 
 export const powerPathConfirmationPopups = (id: number, name: string) => {
   const confirm = useConfirm()

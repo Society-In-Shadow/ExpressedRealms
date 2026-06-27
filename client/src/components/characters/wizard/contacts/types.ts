@@ -1,4 +1,4 @@
-import type ListItem from 'quill/formats/list'
+import type { ListItem } from '@/types/ListItem.ts'
 
 export interface ContactListResponse {
   contacts: Contact[]

@@ -1,10 +1,10 @@
-import {defineStore} from 'pinia'
+import { defineStore } from 'pinia'
 import axios from 'axios'
 
-import type {ListItem} from '@/types/ListItem'
+import type { ListItem } from '@/types/ListItem'
 import toaster from '@/services/Toasters'
-import type {EditKnowledge, EditKnowledgeRequest, Knowledge} from '@/components/knowledges/types'
-import type {KnowledgeForm} from '@/components/knowledges/Validations/knowledgeValidations'
+import type { EditKnowledge, EditKnowledgeRequest, Knowledge } from '@/components/knowledges/types'
+import type { KnowledgeForm } from '@/components/knowledges/Validations/knowledgeValidations'
 
 export const knowledgeStore
   = defineStore(`knowledges`, {

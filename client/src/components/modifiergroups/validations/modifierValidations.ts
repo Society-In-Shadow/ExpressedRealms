@@ -1,7 +1,7 @@
-import {boolean, type InferType, number, object} from 'yup'
-import {useGenericForm} from '@/utilities/formUtilities'
-import type {ListItem} from '@/types/ListItem'
-import type {StatModifierReturnModel} from '@/components/modifiergroups/types.ts'
+import { boolean, type InferType, number, object } from 'yup'
+import { useGenericForm } from '@/utilities/formUtilities'
+import type { ListItem } from '@/types/ListItem'
+import type { StatModifierReturnModel } from '@/components/modifiergroups/types.ts'
 
 const validationSchema = object({
   modifierType: object<ListItem>().nullable()

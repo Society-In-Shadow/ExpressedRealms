@@ -1,5 +1,5 @@
-import {useConfirm} from 'primevue/useconfirm'
-import {knowledgeStore} from '@/components/knowledges/stores/knowledgeStore'
+import { useConfirm } from 'primevue/useconfirm'
+import { knowledgeStore } from '@/components/knowledges/stores/knowledgeStore'
 
 export const knowledgeConfirmationPopup = (id: number, name: string) => {
   const confirm = useConfirm()

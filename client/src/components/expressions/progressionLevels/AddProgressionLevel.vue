@@ -5,7 +5,7 @@ import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
 import Button from 'primevue/button'
 import axios from 'axios'
 import toaster from '@/services/Toasters'
-import {progressionPathStore} from '@/components/expressions/progressionPaths/stores/progressionPathsStore.ts'
+import { progressionPathStore } from '@/components/expressions/progressionPaths/stores/progressionPathsStore.ts'
 import {
   getValidationInstance,
 } from '@/components/expressions/progressionLevels/validations/progressionLevelValidations.ts'

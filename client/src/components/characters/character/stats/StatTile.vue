@@ -2,8 +2,8 @@
 
 import Fieldset from 'primevue/fieldset'
 import axios from 'axios'
-import {onMounted, ref} from 'vue'
-import {useRoute} from 'vue-router'
+import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import SkeletonWrapper from '@/FormWrappers/SkeletonWrapper.vue'
 import StatInfo from '@/components/characters/character/stats/StatInfo.vue'
 

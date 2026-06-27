@@ -1,4 +1,4 @@
-import type {Power} from '@/components/expressions/powers/types'
+import type { Power } from '@/components/expressions/powers/types'
 
 export interface PowerPath {
   id: number

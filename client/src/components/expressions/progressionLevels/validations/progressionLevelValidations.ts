@@ -1,6 +1,6 @@
-import {number, object, string} from 'yup'
-import {useGenericForm} from '@/utilities/formUtilities'
-import type {ProgressionLevel} from '@/components/expressions/progressionLevels/types.ts'
+import { number, object, string } from 'yup'
+import { useGenericForm } from '@/utilities/formUtilities'
+import type { ProgressionLevel } from '@/components/expressions/progressionLevels/types.ts'
 
 export function getValidationInstance() {
   const validationSchema = object({

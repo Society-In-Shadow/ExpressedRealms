@@ -1,6 +1,6 @@
-import {type InferType, object, string} from 'yup'
-import {useGenericForm} from '@/utilities/formUtilities'
-import type {Specialization} from '@/components/characters/character/knowledges/types'
+import { type InferType, object, string } from 'yup'
+import { useGenericForm } from '@/utilities/formUtilities'
+import type { Specialization } from '@/components/characters/character/knowledges/types'
 
 const validationSchema = object({
   name: string()

@@ -1,8 +1,8 @@
-import {defineStore} from 'pinia'
+import { defineStore } from 'pinia'
 import axios from 'axios'
 
-import type {EditPowerPath, PowerPath} from '@/components/expressions/powerPaths/types'
-import type {Power} from '@/components/expressions/powers/types'
+import type { EditPowerPath, PowerPath } from '@/components/expressions/powerPaths/types'
+import type { Power } from '@/components/expressions/powers/types'
 
 export const powerPathStore
   = defineStore('powerPaths', {

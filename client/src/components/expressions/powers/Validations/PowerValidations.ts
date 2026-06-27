@@ -1,7 +1,7 @@
-import {array, boolean, type InferType, number, object, string} from 'yup'
-import type {ListItem} from '@/types/ListItem'
-import {useGenericForm} from '@/utilities/formUtilities'
-import type {EditPower} from '@/components/expressions/powers/types'
+import { array, boolean, type InferType, number, object, string } from 'yup'
+import type { ListItem } from '@/types/ListItem'
+import { useGenericForm } from '@/utilities/formUtilities'
+import type { EditPower } from '@/components/expressions/powers/types'
 
 const validationSchema = object({
   name: string()

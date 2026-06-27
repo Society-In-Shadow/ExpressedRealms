@@ -1,7 +1,7 @@
-import {useForm} from 'vee-validate'
-import {object, string} from 'yup'
-import {computed} from 'vue'
-import type {FormField} from '@/FormWrappers/Interfaces/FormField'
+import { useForm } from 'vee-validate'
+import { object, string } from 'yup'
+import { computed } from 'vue'
+import type { FormField } from '@/FormWrappers/Interfaces/FormField'
 
 const validationSchema = object({
   name: string()

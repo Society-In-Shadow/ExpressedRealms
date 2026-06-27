@@ -1,4 +1,4 @@
-import {useDialog} from 'primevue/usedialog'
+import { useDialog } from 'primevue/usedialog'
 import OverallExperience from '@/components/characters/character/OverallExperience.vue'
 
 export const characterPopupDialogs = () => {
