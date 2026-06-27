@@ -15,7 +15,7 @@ export default defineConfig({
       framework: 'vue',
       bundler: 'vite',
     },
-    reporter: 'mocha-junit-reporter',
+    reporter: 'junit',
     reporterOptions: {
       mochaFile: 'cypress/results/results-[hash].xml',
       toConsole: false,
