@@ -15,14 +15,10 @@ export default defineConfig({
       framework: 'vue',
       bundler: 'vite',
     },
-    reporter: 'cypress-multi-reporters',
+    reporter: 'mocha-junit-reporter',
     reporterOptions: {
-      reporterEnabled: 'spec, mocha-junit-reporter',
-      mochaJunitReporterReporterOptions: {
-        mochaFile: 'cypress/results/test-results-[hash].xml', // Path to store XML files
-        toConsole: false, // Set to true to log JUnit output in console
-      },
+      mochaFile: 'cypress/results/results-[hash].xml',
+      toConsole: false,
     },
-
   },
 })

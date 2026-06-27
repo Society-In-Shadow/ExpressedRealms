@@ -2,7 +2,7 @@
 version: '3.4'
 
 services:
-  myapp:
+  ui:
     environment:
       - VITE_API_SERVER_LOCATION=https://webapi:8443
     depends_on:
