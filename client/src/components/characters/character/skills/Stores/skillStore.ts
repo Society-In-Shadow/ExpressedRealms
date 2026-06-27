@@ -1,8 +1,8 @@
-import {defineStore} from 'pinia'
+import { defineStore } from 'pinia'
 import axios from 'axios'
-import type {SkillResponse} from '@/components/characters/character/skills/interfaces/SkillOptionsResponse.ts'
+import type { SkillResponse } from '@/components/characters/character/skills/interfaces/SkillOptionsResponse.ts'
 import type {
-    CharacterSkillsResponse,
+  CharacterSkillsResponse,
 } from '@/components/characters/character/skills/interfaces/CharacterSkillsResponse.ts'
 
 export const skillStore

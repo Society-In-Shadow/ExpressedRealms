@@ -1,4 +1,4 @@
-import {useDialog} from 'primevue/usedialog'
+import { useDialog } from 'primevue/usedialog'
 import EditBlessingLevel from '@/components/blessings/BlessingLevels/EditBlessingLevel.vue'
 import AddBlessingLevel from '@/components/blessings/BlessingLevels/AddBlessingLevel.vue'
 

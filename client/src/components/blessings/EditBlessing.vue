@@ -2,10 +2,10 @@
 
 import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
 import Button from 'primevue/button'
-import {getValidationInstance} from '@/components/blessings/validations/blessingForm.ts'
-import {blessingsStore} from '@/components/blessings/stores/blessingsStore.ts'
-import {onBeforeMount, type PropType} from 'vue'
-import type {Blessing} from '@/components/blessings/types.ts'
+import { getValidationInstance } from '@/components/blessings/validations/blessingForm.ts'
+import { blessingsStore } from '@/components/blessings/stores/blessingsStore.ts'
+import { onBeforeMount, type PropType } from 'vue'
+import type { Blessing } from '@/components/blessings/types.ts'
 import FormEditorWrapper from '@/FormWrappers/FormEditorWrapper.vue'
 
 const store = blessingsStore()

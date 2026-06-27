@@ -1,15 +1,15 @@
 <script setup lang="ts">
 
-import {powersStore} from '@/components/expressions/powers/stores/powersStore'
-import {computed, onBeforeMount, ref} from 'vue'
-import type {PowerPrerequisiteOptions, RawPowerPrerequisite,} from '@/components/expressions/powers/types'
+import { powersStore } from '@/components/expressions/powers/stores/powersStore'
+import { computed, onBeforeMount, ref } from 'vue'
+import type { PowerPrerequisiteOptions, RawPowerPrerequisite } from '@/components/expressions/powers/types'
 import FormMultiSelectWrapper from '@/FormWrappers/FormMultiSelectWrapper.vue'
 import FormDropdownWrapper from '@/FormWrappers/FormDropdownWrapper.vue'
-import {getValidationInstance} from '@/components/expressions/powers/Validations/PrerequisiteValidations'
+import { getValidationInstance } from '@/components/expressions/powers/Validations/PrerequisiteValidations'
 import Button from 'primevue/button'
 import axios from 'axios'
 import toaster from '@/services/Toasters'
-import type {ListItem} from '@/types/ListItem'
+import type { ListItem } from '@/types/ListItem'
 import {
   powerPrerequisiteConfirmationPopups,
 } from '@/components/expressions/powers/services/powerPrerequisiteConfirmationPopupService'

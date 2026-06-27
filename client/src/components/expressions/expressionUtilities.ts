@@ -1,5 +1,5 @@
-import {makeIdSafe} from '@/utilities/stringUtilities'
-import {isProxy, toRaw} from 'vue'
+import { makeIdSafe } from '@/utilities/stringUtilities'
+import { isProxy, toRaw } from 'vue'
 
 /**
  * Smoothly scrolls to a specific section on the page by element ID.

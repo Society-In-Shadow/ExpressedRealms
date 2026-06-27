@@ -3,17 +3,17 @@
 import axios from 'axios'
 import toaster from '@/services/Toasters'
 import Button from 'primevue/button'
-import {useRouter} from 'vue-router'
+import { useRouter } from 'vue-router'
 import {
   handleSubmit,
   nameField,
   navMenuImageField,
-  shortDescriptionField
+  shortDescriptionField,
 } from '@/components/expressions/expression/AddExpressionValidation'
 import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
 import FormTextAreaWrapper from '@/FormWrappers/FormTextAreaWrapper.vue'
-import {cmsStore} from '@/stores/cmsStore.ts'
-import {inject, ref} from 'vue'
+import { cmsStore } from '@/stores/cmsStore.ts'
+import { inject, ref } from 'vue'
 
 const router = useRouter()
 

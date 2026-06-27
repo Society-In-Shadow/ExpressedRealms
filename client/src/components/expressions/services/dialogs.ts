@@ -1,4 +1,4 @@
-import {useDialog} from 'primevue/usedialog'
+import { useDialog } from 'primevue/usedialog'
 import AddExpression from '@/components/expressions/AddExpression.vue'
 import EditExpression from '@/components/expressions/EditExpression.vue'
 

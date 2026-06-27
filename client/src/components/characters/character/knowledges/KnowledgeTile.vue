@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
-import {onBeforeMount, ref} from 'vue'
-import {characterKnowledgeStore} from '@/components/characters/character/knowledges/stores/characterKnowledgeStore'
-import {useRoute} from 'vue-router'
+import { onBeforeMount, ref } from 'vue'
+import { characterKnowledgeStore } from '@/components/characters/character/knowledges/stores/characterKnowledgeStore'
+import { useRoute } from 'vue-router'
 import Tag from 'primevue/tag'
 import AccordionPanel from 'primevue/accordionpanel'
 import Accordion from 'primevue/accordion'

@@ -1,18 +1,18 @@
-import {defineStore} from 'pinia'
+import { defineStore } from 'pinia'
 import axios from 'axios'
 
 import type {
-    EditPower,
-    EditPowerResponse,
-    Power,
-    PowerPrerequisiteOptions,
-    PowerStore,
-    RawPowerPrerequisite,
+  EditPower,
+  EditPowerResponse,
+  Power,
+  PowerPrerequisiteOptions,
+  PowerStore,
+  RawPowerPrerequisite,
 } from '@/components/expressions/powers/types'
-import type {ListItem} from '@/types/ListItem'
-import {powerPathStore} from '@/components/expressions/powerPaths/stores/powerPathStore'
+import type { ListItem } from '@/types/ListItem'
+import { powerPathStore } from '@/components/expressions/powerPaths/stores/powerPathStore'
 import toaster from '@/services/Toasters'
-import type {PowerFormData} from '@/components/expressions/powers/Validations/PowerValidations'
+import type { PowerFormData } from '@/components/expressions/powers/Validations/PowerValidations'
 
 const powerPaths = powerPathStore()
 

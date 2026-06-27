@@ -1,4 +1,4 @@
-import type {ListItem} from '@/types/ListItem'
+import type { ListItem } from '@/types/ListItem'
 
 export interface DetailedInformation {
   name: string

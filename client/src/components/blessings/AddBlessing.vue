@@ -2,8 +2,8 @@
 
 import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
 import Button from 'primevue/button'
-import {getValidationInstance} from '@/components/blessings/validations/blessingForm.ts'
-import {blessingsStore} from '@/components/blessings/stores/blessingsStore.ts'
+import { getValidationInstance } from '@/components/blessings/validations/blessingForm.ts'
+import { blessingsStore } from '@/components/blessings/stores/blessingsStore.ts'
 import FormEditorWrapper from '@/FormWrappers/FormEditorWrapper.vue'
 
 const store = blessingsStore()

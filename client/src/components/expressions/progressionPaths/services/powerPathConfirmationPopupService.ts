@@ -1,8 +1,8 @@
-import {useConfirm} from 'primevue/useconfirm'
+import { useConfirm } from 'primevue/useconfirm'
 import toaster from '@/services/Toasters'
 import axios from 'axios'
-import {expressionStore} from '@/stores/expressionStore'
-import {progressionPathStore} from '@/components/expressions/progressionPaths/stores/progressionPathsStore.ts'
+import { expressionStore } from '@/stores/expressionStore'
+import { progressionPathStore } from '@/components/expressions/progressionPaths/stores/progressionPathsStore.ts'
 
 export const progressionPathConfirmationPopupService = (id: number, name: string) => {
   const confirm = useConfirm()

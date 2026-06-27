@@ -1,14 +1,14 @@
 <script setup lang="ts">
 
-import {makeIdSafe} from '@/utilities/stringUtilities'
+import { makeIdSafe } from '@/utilities/stringUtilities'
 import Skeleton from 'primevue/skeleton'
-import {BaseTree, Draggable} from '@he-tree/vue'
-import {ref, toRaw} from 'vue'
+import { BaseTree, Draggable } from '@he-tree/vue'
+import { ref, toRaw } from 'vue'
 import Button from 'primevue/button'
 import axios from 'axios'
 import toaster from '@/services/Toasters'
-import {expressionStore} from '@/stores/expressionStore'
-import {getIdsWithDynamicSortForArray, scrollToSection} from '@/components/expressions/expressionUtilities'
+import { expressionStore } from '@/stores/expressionStore'
+import { getIdsWithDynamicSortForArray, scrollToSection } from '@/components/expressions/expressionUtilities'
 
 const expressionInfo = expressionStore()
 

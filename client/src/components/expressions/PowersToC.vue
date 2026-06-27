@@ -1,9 +1,9 @@
 <script setup lang="ts">
 
-import {makeIdSafe} from '@/utilities/stringUtilities'
+import { makeIdSafe } from '@/utilities/stringUtilities'
 import Skeleton from 'primevue/skeleton'
-import {scrollToSection} from '@/components/expressions/expressionUtilities'
-import {powerPathStore} from '@/components/expressions/powerPaths/stores/powerPathStore'
+import { scrollToSection } from '@/components/expressions/expressionUtilities'
+import { powerPathStore } from '@/components/expressions/powerPaths/stores/powerPathStore'
 
 const powerPaths = powerPathStore()
 

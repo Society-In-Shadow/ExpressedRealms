@@ -1,4 +1,4 @@
-import type {BenefitItemResponse} from '@/components/characters/character/interfaces/BenefitItemResponse'
+import type { BenefitItemResponse } from '@/components/characters/character/interfaces/BenefitItemResponse'
 
 export interface SkillResponse {
   skillTypeId: number

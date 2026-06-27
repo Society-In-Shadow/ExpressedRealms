@@ -1,4 +1,4 @@
-import type {DetailedInformation, PrerequisiteDisplay} from '@/components/expressions/powers/types.ts'
+import type { DetailedInformation, PrerequisiteDisplay } from '@/components/expressions/powers/types.ts'
 
 export interface CharacterKnowledgeResponse {
   knowledges: Array<CharacterKnowledge>

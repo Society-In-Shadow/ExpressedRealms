@@ -5,8 +5,8 @@ import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
 import Button from 'primevue/button'
 import axios from 'axios'
 import toaster from '@/services/Toasters'
-import {getValidationInstance} from '@/components/expressions/powerPaths/validations/powerPathValidations'
-import {powerPathStore} from '@/components/expressions/powerPaths/stores/powerPathStore'
+import { getValidationInstance } from '@/components/expressions/powerPaths/validations/powerPathValidations'
+import { powerPathStore } from '@/components/expressions/powerPaths/stores/powerPathStore'
 
 const form = getValidationInstance()
 const powerPaths = powerPathStore()

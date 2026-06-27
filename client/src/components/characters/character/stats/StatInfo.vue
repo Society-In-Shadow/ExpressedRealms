@@ -1,11 +1,11 @@
 <script setup lang="ts">
 
 import axios from 'axios'
-import {onMounted, ref, type Ref} from 'vue'
-import {useRoute} from 'vue-router'
+import { onMounted, ref, type Ref } from 'vue'
+import { useRoute } from 'vue-router'
 import Button from 'primevue/button'
 import SkeletonWrapper from '@/FormWrappers/SkeletonWrapper.vue'
-import type {Stat} from '@/components/characters/character/stats/type.ts'
+import type { Stat } from '@/components/characters/character/stats/type.ts'
 
 const route = useRoute()
 

@@ -1,4 +1,4 @@
-import {useConfirm} from 'primevue/useconfirm'
+import { useConfirm } from 'primevue/useconfirm'
 import modifierGroupStore from '@/components/modifiergroups/stores/modifierGroupStore.ts'
 
 export const modifierConfirmationPopup = () => {

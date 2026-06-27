@@ -1,6 +1,6 @@
-import {type InferType, object, string} from 'yup'
-import {useGenericForm} from '@/utilities/formUtilities'
-import type {Power} from '@/components/characters/character/powers/types.ts'
+import { type InferType, object, string } from 'yup'
+import { useGenericForm } from '@/utilities/formUtilities'
+import type { Power } from '@/components/characters/character/powers/types.ts'
 
 const validationSchema = object({
   notes: string().nullable()

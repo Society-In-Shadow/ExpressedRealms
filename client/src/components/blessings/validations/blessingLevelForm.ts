@@ -1,6 +1,6 @@
-import {number, object, string} from 'yup'
-import {useGenericForm} from '@/utilities/formUtilities'
-import type {BlessingLevel} from '@/components/blessings/types.ts'
+import { number, object, string } from 'yup'
+import { useGenericForm } from '@/utilities/formUtilities'
+import type { BlessingLevel } from '@/components/blessings/types.ts'
 
 const validationSchema = object({
   level: string()

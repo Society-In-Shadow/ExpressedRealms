@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import SplitButton from 'primevue/splitbutton'
-import {computed, onBeforeMount} from 'vue'
-import {useRoute} from 'vue-router'
-import {characterPowersStore} from '@/components/characters/character/powers/stores/characterPowerStore.ts'
+import { computed, onBeforeMount } from 'vue'
+import { useRoute } from 'vue-router'
+import { characterPowersStore } from '@/components/characters/character/powers/stores/characterPowerStore.ts'
 import PowerCard from '@/components/characters/character/powers/PowerCard.vue'
 
 const characterKnowledgeData = characterPowersStore()

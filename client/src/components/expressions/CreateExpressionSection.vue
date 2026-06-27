@@ -1,14 +1,14 @@
 <script setup lang="ts">
 
 import Button from 'primevue/button'
-import {onMounted, ref, watch} from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import axios from 'axios'
-import {useForm} from 'vee-validate'
-import {object, string} from 'yup'
+import { useForm } from 'vee-validate'
+import { object, string } from 'yup'
 import InputTextWrapper from '@/FormWrappers/InputTextWrapper.vue'
 import DropdownWrapper from '@/FormWrappers/DropdownWrapper.vue'
 
-import {expressionStore} from '@/stores/expressionStore'
+import { expressionStore } from '@/stores/expressionStore'
 import EditorWrapper from '@/FormWrappers/EditorWrapper.vue'
 import toaster from '@/services/Toasters'
 

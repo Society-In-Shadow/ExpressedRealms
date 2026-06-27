@@ -1,5 +1,5 @@
-import {useConfirm} from 'primevue/useconfirm'
-import {characterPowersStore} from '@/components/characters/character/powers/stores/characterPowerStore.ts'
+import { useConfirm } from 'primevue/useconfirm'
+import { characterPowersStore } from '@/components/characters/character/powers/stores/characterPowerStore.ts'
 
 export const confirmationPopup = (characterId: number) => {
   const confirm = useConfirm()

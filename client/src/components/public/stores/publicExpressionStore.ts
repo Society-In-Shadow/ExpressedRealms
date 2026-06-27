@@ -1,5 +1,5 @@
-import {defineStore} from 'pinia'
-import type {ExpressionInfo} from '@/components/public/types'
+import { defineStore } from 'pinia'
+import type { ExpressionInfo } from '@/components/public/types'
 
 export const publicExpressionsStore
   = defineStore(`publicExpressions`, {

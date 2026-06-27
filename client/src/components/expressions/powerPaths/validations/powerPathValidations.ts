@@ -1,6 +1,6 @@
-import {object, string} from 'yup'
-import {useGenericForm} from '@/utilities/formUtilities'
-import type {ProgressionPath} from '@/components/expressions/progressionPaths/types.ts'
+import { object, string } from 'yup'
+import { useGenericForm } from '@/utilities/formUtilities'
+import type { ProgressionPath } from '@/components/expressions/progressionPaths/types.ts'
 
 export function getValidationInstance() {
   const validationSchema = object({

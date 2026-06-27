@@ -1,6 +1,6 @@
-import {type InferType, object, string} from 'yup'
-import {useGenericForm} from '@/utilities/formUtilities'
-import type {Blessing} from '@/components/blessings/types.ts'
+import { type InferType, object, string } from 'yup'
+import { useGenericForm } from '@/utilities/formUtilities'
+import type { Blessing } from '@/components/blessings/types.ts'
 
 const validationSchema = object({
   name: string()

@@ -4,15 +4,15 @@ import FormEditorWrapper from '@/FormWrappers/FormEditorWrapper.vue'
 import Button from 'primevue/button'
 import axios from 'axios'
 import toaster from '@/services/Toasters'
-import {onBeforeMount, type PropType} from 'vue'
-import {progressionPathStore} from '@/components/expressions/progressionPaths/stores/progressionPathsStore.ts'
+import { onBeforeMount, type PropType } from 'vue'
+import { progressionPathStore } from '@/components/expressions/progressionPaths/stores/progressionPathsStore.ts'
 
 import FormInputNumberWrapper from '@/FormWrappers/FormInputNumberWrapper.vue'
 import {
   getValidationInstance,
 } from '@/components/expressions/progressionLevels/validations/progressionLevelValidations.ts'
-import type {ProgressionLevel} from '@/components/expressions/progressionPaths/types.ts'
-import {SourceTableEnum} from '@/components/modifiergroups/types.ts'
+import type { ProgressionLevel } from '@/components/expressions/progressionPaths/types.ts'
+import { SourceTableEnum } from '@/components/modifiergroups/types.ts'
 import ModifierGroup from '@/components/modifiergroups/ModifierGroup.vue'
 
 const form = getValidationInstance()

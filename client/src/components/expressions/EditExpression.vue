@@ -1,14 +1,14 @@
 <script setup lang="ts">
 
-import {useForm} from 'vee-validate'
-import {number, object, string} from 'yup'
+import { useForm } from 'vee-validate'
+import { number, object, string } from 'yup'
 import InputTextWrapper from '@/FormWrappers/InputTextWrapper.vue'
 import TextAreaWrapper from '@/FormWrappers/TextAreaWrapper.vue'
 import DropdownWrapper from '@/FormWrappers/DropdownWrapper.vue'
-import {inject, onMounted, ref} from 'vue'
+import { inject, onMounted, ref } from 'vue'
 import axios from 'axios'
 import toaster from '@/services/Toasters'
-import {cmsStore} from '@/stores/cmsStore.ts'
+import { cmsStore } from '@/stores/cmsStore.ts'
 import Button from 'primevue/button'
 
 const isLoading = ref(true)

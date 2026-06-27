@@ -1,15 +1,15 @@
 <script setup lang="ts">
 
 import Card from 'primevue/card'
-import {type PropType, ref} from 'vue'
-import {isNullOrWhiteSpace, makeIdSafe} from '@/utilities/stringUtilities'
-import {scrollToSection} from '@/components/expressions/expressionUtilities'
+import { type PropType, ref } from 'vue'
+import { isNullOrWhiteSpace, makeIdSafe } from '@/utilities/stringUtilities'
+import { scrollToSection } from '@/components/expressions/expressionUtilities'
 import AccordionHeader from 'primevue/accordionheader'
 import Accordion from 'primevue/accordion'
 import AccordionPanel from 'primevue/accordionpanel'
 import AccordionContent from 'primevue/accordioncontent'
 import Tag from 'primevue/tag'
-import type {PowerPath} from '@/components/characters/character/powers/types.ts'
+import type { PowerPath } from '@/components/characters/character/powers/types.ts'
 
 const props = defineProps({
   powerPath: {
