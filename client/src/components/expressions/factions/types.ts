@@ -12,3 +12,9 @@ export interface EditSingleFactionInfo {
   name: string
   background: string
 }
+
+export interface CreateSingleFactionInfo {
+  name: string
+  background: string
+  expressionId: number
+}

@@ -58,7 +58,7 @@ async function toggleEdit() {
             {{ props.item?.name }}
           </h1>
           <div class="p-0 m-0">
-            <div>{{ props.item?.background }}</div>
+            <div v-html="props.item.background" />
           </div>
         </div>
         <div class="p-0 m-0 d-inline-flex align-items-start">
