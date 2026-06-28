@@ -56,6 +56,21 @@ const enableAdd = computed(() => {
       </template>
     </Card>
   </div>
+  <div v-else-if="data && data.factions.length === 0">
+    <Card>
+      <template #title>
+        No Factions
+      </template>
+      <template #content>
+        <p v-if="can.Faction.Create">
+          Create one to get started!
+        </p>
+        <p v-else>
+          There are no known factions for this expression
+        </p>
+      </template>
+    </Card>
+  </div>
   <div v-else>
     <div v-for="item in data!.factions" :key="item.id">
       <FactionItem :item="item" />
