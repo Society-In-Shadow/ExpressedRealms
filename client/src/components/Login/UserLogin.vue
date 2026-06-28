@@ -11,10 +11,12 @@ import InputTextWrapper from '@/FormWrappers/InputTextWrapper.vue'
 import { userInfoQuery } from '@/auth/authStore.ts'
 import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+import { featureFlagQuery } from '@/stores/featureFlags/featureFlagStore.ts'
 
 const userPermissions = userPermissionStore()
 const router = useRouter()
 const { refetch } = useQueryWithLoading(userInfoQuery)
+const { refetch: featureRefetch } = useQueryWithLoading(featureFlagQuery)
 const { defineField, handleSubmit, errors } = useForm({
   validationSchema: object({
     email: string().required()
@@ -44,6 +46,7 @@ const onSubmit = handleSubmit(async (values) => {
     // Reset antiforgery token after login
       await axios.get('/auth/antiforgeryToken')
       await refetch()
+      await featureRefetch()
       await userPermissions.updateUserPermissions()
       await router.push({ name: 'characters' })
     })
