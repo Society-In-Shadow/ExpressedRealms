@@ -19,7 +19,8 @@ public static class GetFactionsEndpoint
             new FactionResponse()
             {
                 Factions = results
-                    .Value.Factions.Select(x => new FactionViewModel()
+                    .Value.Factions.OrderBy(x => x.Name)
+                    .Select(x => new FactionViewModel()
                     {
                         Id = x.Id,
                         Name = x.Name,
