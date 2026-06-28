@@ -5,5 +5,10 @@ export interface FactionResponse {
 export interface Faction {
   id: number
   name: string
-  background: string | null
+  background: string
+}
+
+export interface EditSingleFactionInfo {
+  name: string
+  background: string
 }

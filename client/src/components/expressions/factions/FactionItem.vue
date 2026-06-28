@@ -7,6 +7,7 @@ import { useRouter } from 'vue-router'
 import SplitButton from 'primevue/splitbutton'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 import type { Faction } from '@/components/expressions/factions/types.ts'
+import { factionDialogs } from '@/components/expressions/factions/services/dialogs.ts'
 
 const userPermissionInfo = userPermissionStore()
 const permissionCheck = userPermissionInfo.permissionCheck
@@ -20,6 +21,7 @@ const props = defineProps({
 })
 
 let popups = ConfirmationPopup(props.item.id, props.item.name)
+let editItemPopup = factionDialogs()
 
 const items = []
 
@@ -29,6 +31,14 @@ onMounted(async () => {
       label: 'Delete',
       command: ($event) => {
         popups.deleteConfirmation($event)
+      },
+    })
+  }
+  if (permissionCheck.Faction.Edit) {
+    items.push({
+      label: 'Edit',
+      command: ($event) => {
+        editItemPopup.showUpdateFaction(props.item.id)
       },
     })
   }
