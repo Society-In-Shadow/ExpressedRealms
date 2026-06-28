@@ -9,4 +9,5 @@ export const LOGIN_QUERY_KEYS = {
 export const userInfoQuery = defineQueryOptions({
   key: LOGIN_QUERY_KEYS.root,
   query: authEndpoints.userState,
+  gcTime: false,
 })

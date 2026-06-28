@@ -36,6 +36,12 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "Will show the archetype selection on character creation"
     );
 
+    public static readonly ReleaseFlags ShowFactions = new(
+        "Shows Faction Functionality",
+        "show-factions",
+        "Shows faction info in the expressions, and allows one to join a faction in the character editor"
+    );
+
     public override string ToString()
     {
         return Name;

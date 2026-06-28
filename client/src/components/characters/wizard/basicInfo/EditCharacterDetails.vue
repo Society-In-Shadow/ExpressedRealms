@@ -7,7 +7,6 @@ import { useRoute } from 'vue-router'
 import toaster from '@/services/Toasters'
 import { makeIdSafe } from '@/utilities/stringUtilities'
 import { characterStore } from '@/components/characters/character/stores/characterStore'
-import { FeatureFlags, userStore } from '@/stores/userStore.ts'
 import HighLevelExpressionInfo from '@/components/characters/wizard/basicInfo/supporting/HighLevelExpressionInfo.vue'
 import { wizardContentStore } from '@/components/characters/wizard/stores/wizardContentStore.ts'
 import type { WizardContent } from '@/components/characters/wizard/types.ts'
@@ -27,14 +26,11 @@ const route = useRoute()
 const { refetch } = useQueryWithLoading(characterListQuery)
 
 const characterInfo = characterStore()
-const userInfo = userStore()
 const xpInfo = experienceStore()
 const form = getValidationInstance()
 
 const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5)
 const isMobile = activeBreakpoint.smaller('md')
-
-const showFactionInfo = ref(false)
 
 onBeforeMount(async () => {
   await characterInfo.getCharacterDetails(Number(route.params.id))
@@ -45,7 +41,6 @@ onBeforeMount(async () => {
       form.fields.faction.field.value = characterInfo.faction
       form.fields.isPrimaryCharacter.field.value = characterInfo.isPrimaryCharacter
     })
-  showFactionInfo.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowFactionDropdown)
   await characterInfo.getEditOptions(Number(route.params.id))
   if (!isMobile.value) {
     updateWizardContent()
@@ -103,7 +98,7 @@ const updateWizardContent = () => {
       <form @submit="onSubmit">
         <FormTextWrapper v-model="form.fields.name" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
         <FormTextWrapper v-model="form.fields.expression" :is-disabled="true" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
-        <!--        <FormDropdownWrapper v-if="showFactionInfo"
+        <!--        <FormDropdownWrapper v-if="hasFlag.ShowFactionDropdown"
           v-model="form.fields.faction" option-label="name" :options="factions" field-name="Faction"
           :show-skeleton="characterInfo.isLoading" :redirect-url="expressionRedirectURL" @change="onSubmit"
         />-->

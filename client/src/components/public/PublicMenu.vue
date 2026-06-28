@@ -2,33 +2,30 @@
 
 import MegaMenu from 'primevue/megamenu'
 import { useRouter } from 'vue-router'
-import { onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount } from 'vue'
 import AvatarDropdown from '@/components/navbar/AvatarDropdown.vue'
-import { FeatureFlags, userStore } from '@/stores/userStore'
 import EventCheckinBanner from '@/components/conCheckin/EventCheckinBanner.vue'
 import GoCheckinBanner from '@/components/conCheckin/GoCheckinBanner.vue'
 import { userInfoQuery } from '@/auth/authStore.ts'
 import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
+import { hasFlag } from '@/stores/featureFlags/featureFlagStore.ts'
 
 const router = useRouter()
-const userInfo = userStore()
 const { data } = useQueryWithLoading(userInfoQuery)
 
-const items = ref([
+const items = computed(() => [
   { root: true, label: 'Home', route: '', command: () => router.push('/') },
   { root: true, label: 'Backstory', route: 'backstory', command: () => router.push('/backstory') },
   { root: true, label: 'Expressions', route: 'expressions', command: () => router.push('/expressions') },
   { root: true, label: 'Upcoming Events', route: 'upcoming-events', command: () => router.push('/upcoming-events') },
   { root: true, label: 'About', route: 'about', command: () => router.push('/about') },
+  { root: true, visible: () => hasFlag.ShowMarketingContactUsPage, label: 'Contact Us', route: 'contact-us', command: () => router.push('/contact-us') },
   { root: true, label: 'Code of Conduct', route: 'code-of-conduct', command: () => router.push('/code-of-conduct') },
 ])
 
 onBeforeMount(async () => {
   if (data.value?.userInfo !== null) {
     items.value.splice(1, 0, { root: true, label: 'Characters', route: '/characters', command: () => router.push('/characters') })
-  }
-  if (await userInfo.hasFeatureFlag(FeatureFlags.ShowMarketingContactUs)) {
-    items.value.splice(-2, 0, { root: true, label: 'Contact Us', route: 'contact-us', command: () => router.push('/contact-us') })
   }
 })
 

@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { type FeatureFlag, userStore } from '@/stores/userStore'
 import { UserRoutes } from '@/router/Routes/UserRoutes'
 import { AdminRoutes } from '@/router/Routes/AdminRoutes'
 import { OverallRoutes } from '@/router/Routes/OverallNavigationRoutes'
@@ -10,6 +9,8 @@ import { useQueryCache } from '@pinia/colada'
 import { userInfoQuery } from '@/auth/authStore.ts'
 import { SetupState } from '@/auth/types.ts'
 import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
+import { checkFlag, featureFlagQuery } from '@/stores/featureFlags/featureFlagStore.ts'
+import type { FeatureFlag } from '@/types/FeatureFlags.ts'
 
 export const routes = [
   PublicRoutes,
@@ -23,29 +24,20 @@ const routerSetup = createRouter({
   routes,
 })
 
-let routesInitialized = false
 let userInfoInitialized = false
 
 routerSetup.beforeEach(async (to) => {
-  const userInfo = userStore()
   const userPermissions = userPermissionStore()
 
   const queryCache = useQueryCache()
   await queryCache.refresh(queryCache.ensure(userInfoQuery))
   const { data } = useQueryWithLoading(userInfoQuery)
 
+  const featureFlagCache = useQueryCache()
+  await featureFlagCache.refresh(featureFlagCache.ensure(featureFlagQuery))
+
   const loggedIn = data.value?.userInfo !== null
   const routeName: string = to.name as string
-
-  // Initialize routes on first navigation
-  if (!routesInitialized) {
-    await userInfo.updateUserFeatureFlags()
-
-    routesInitialized = true
-
-    // Re-trigger navigation to the same route
-    return to
-  }
 
   if (loggedIn) {
     if (data.value!.userInfo!.setupState == SetupState.UnconfirmedEmail
@@ -71,7 +63,7 @@ routerSetup.beforeEach(async (to) => {
       return { name: 'characters' }
     }
 
-    if (to.meta.requiredFeatureFlag && !await userInfo.hasFeatureFlag(to.meta.requiredFeatureFlag as FeatureFlag)) {
+    if (to.meta.requiredFeatureFlag && !checkFlag(to.meta.requiredFeatureFlag as FeatureFlag)) {
       return { name: 'characters' }
     }
   }

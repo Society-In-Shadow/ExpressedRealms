@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
 import { type PropType, ref } from 'vue'
-import { userStore } from '@/stores/userStore'
 import Button from 'primevue/button'
 import type { Question } from '@/components/admin/eventQuestions/types.ts'
 import FormCheckboxWrapper from '@/FormWrappers/FormCheckboxWrapper.vue'
@@ -11,7 +10,6 @@ import { confirmationPopups } from '@/components/admin/eventQuestions/services/p
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 import EditEventQuestion from '@/components/admin/eventQuestions/EditEventQuestion.vue'
 
-let userInfo = userStore()
 const userPermissionData = userPermissionStore()
 const checkPermission = userPermissionData.permissionCheck
 const props = defineProps({

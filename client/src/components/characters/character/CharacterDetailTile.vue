@@ -1,15 +1,15 @@
 <script setup lang="ts">
 
 import Card from 'primevue/card'
-import { computed, onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { characterStore } from '@/components/characters/character/stores/characterStore'
 import Button from 'primevue/button'
 import { experienceStore } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
-import { FeatureFlags, userStore } from '@/stores/userStore.ts'
 import Tag from 'primevue/tag'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 import { downloadFile } from '@/utilities/downloadUtility.ts'
+import { hasFlag } from '@/stores/featureFlags/featureFlagStore.ts'
 
 const userPermissionInfo = userPermissionStore()
 const permissionCheck = userPermissionInfo.permissionCheck
@@ -17,14 +17,11 @@ const route = useRoute()
 const router = useRouter()
 const characterInfo = characterStore()
 const experienceInfo = experienceStore()
-const userInfo = userStore()
 
 const characterId = Number(route.params.id)
-const showFactionInfo = ref(false)
 
 onBeforeMount(async () => {
   await characterInfo.getCharacterDetails(characterId)
-  showFactionInfo.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowFactionDropdown)
   await experienceInfo.getExperience(characterId)
 })
 
@@ -71,7 +68,7 @@ const canEditCharacterSheet = computed(() => (characterInfo.isOwner && !characte
           <div v-if="!experienceInfo.isLoading && characterInfo.isInCharacterCreation">
             <em>In Character Creation - {{ characterInfo.expression }}</em>
           </div>
-          <div v-if="showFactionInfo">
+          <div v-if="hasFlag.ShowFactionDropdown">
             <em>{{ characterInfo.faction?.name ?? 'No Faction' }}</em>
           </div>
         </div>
