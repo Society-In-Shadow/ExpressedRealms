@@ -8,7 +8,7 @@ export interface Command {
   label: string
   command: (event: any) => void
   isVisible?: boolean
-  severity?: string | 'secondary' | 'success' | 'info' | 'warn' | 'help' | 'danger' | 'contrast' | undefined
+  severity?: string | 'secondary' | 'success' | 'info' | 'warn' | 'help' | 'danger' | 'contrast'
 }
 
 const props = defineProps({

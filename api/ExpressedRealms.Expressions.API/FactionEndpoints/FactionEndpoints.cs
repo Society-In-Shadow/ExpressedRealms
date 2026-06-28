@@ -16,7 +16,8 @@ internal static class FactionEndpoints
 {
     internal static void AddFactionEndpoints(this WebApplication app)
     {
-        var endpointGroup = app.MapGroup("factions").WithTags("Factions")
+        var endpointGroup = app.MapGroup("factions")
+            .WithTags("Factions")
             .RequireAuthorization()
             .RequireFeatureToggle(ReleaseFlags.ShowFactions);
 
