@@ -11,7 +11,6 @@ import { useRoute, useRouter } from 'vue-router'
 import DropdownWrapper from '@/FormWrappers/DropdownWrapper.vue'
 import { makeIdSafe } from '@/utilities/stringUtilities'
 import DropdownInfoWrapper from '@/FormWrappers/DropdownInfoWrapper.vue'
-import { FeatureFlags, userStore } from '@/stores/userStore.ts'
 import HighLevelExpressionInfo from '@/components/characters/wizard/basicInfo/supporting/HighLevelExpressionInfo.vue'
 import { wizardContentStore } from '@/components/characters/wizard/stores/wizardContentStore.ts'
 import type { WizardContent } from '@/components/characters/wizard/types.ts'
@@ -19,10 +18,10 @@ import { breakpointsBootstrapV5, useBreakpoints } from '@vueuse/core'
 import ArchetypeInfo from '@/components/characters/wizard/basicInfo/supporting/ArchetypeInfo.vue'
 import { characterListQuery } from '@/components/navbar/stores/navMenuStore.ts'
 import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
+import { hasFlag } from '@/stores/featureFlags/featureFlagStore.ts'
 
 const { refetch } = useQueryWithLoading(characterListQuery)
 
-const userInfo = userStore()
 const router = useRouter()
 const route = useRoute()
 const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5)
@@ -50,8 +49,6 @@ const expressions = ref([])
 const factions = ref([])
 const isLoadingFactions = ref(true)
 const isLoadingExpressions = ref(true)
-const showFactionDropdown = ref(false)
-const showArchetypeSelection = ref(false)
 
 onMounted(async () => {
   await axios.get(`/characters/options`)
@@ -59,8 +56,6 @@ onMounted(async () => {
       expressions.value = response.data.expressions
       isLoadingExpressions.value = false
     })
-  showFactionDropdown.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowFactionDropdown)
-  showArchetypeSelection.value = await userInfo.hasFeatureFlag(FeatureFlags.ShowArchetypeSelection)
 })
 const onSubmit = handleSubmit((values) => {
   axios.post('/characters', {
@@ -141,7 +136,7 @@ async function copyCharacter(characterId: number) {
           <HighLevelExpressionInfo v-if="isMobile && expression" :expression-id="expression.id" />
 
           <DropdownInfoWrapper
-            v-if="expression && showFactionDropdown" v-model="faction" option-label="name" :options="factions" field-name="Faction"
+            v-if="expression && hasFlag.ShowFactionDropdown" v-model="faction" option-label="name" :options="factions" field-name="Faction"
             :error-text="errors.factionId" :disabled="!expression" :redirect-url="expressionRedirectURL" :show-skeleton="isLoadingFactions" :redirect-to-different-page="true"
           />
 
@@ -150,7 +145,7 @@ async function copyCharacter(characterId: number) {
             <h2>Make Custom</h2>
             <p>You can create your own from scratch.  This provides you with full flexibilty to build as you wish.</p>
             <Button data-cy="add-character-button" label="Create Custom Character" class="w-100 mb-2" type="submit" />
-            <div v-if="showArchetypeSelection">
+            <div v-if="hasFlag.ShowArchetypeSelection">
               <h2>Choose Archetype</h2>
               <p>Or select an archetype and tweak or use that build directly.  This will limit some of the choices you have.</p>
               <ArchetypeInfo :expression-id="expression.id" @selected-archetype="copyCharacter" />

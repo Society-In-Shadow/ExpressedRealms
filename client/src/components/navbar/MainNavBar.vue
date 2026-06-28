@@ -9,7 +9,6 @@ import ExpressionMenuItem from '@/components/navbar/navMenuItems/ExpressionMenuI
 import CharacterMenuItem from '@/components/navbar/navMenuItems/CharacterMenuItem.vue'
 import RootNodeMenuItem from '@/components/navbar/navMenuItems/RootNodeMenuItem.vue'
 import SimpleMenuItem from '@/components/navbar/navMenuItems/SimpleMenuItem.vue'
-import { userStore } from '@/stores/userStore'
 import { cmsStore } from '@/stores/cmsStore.ts'
 import EventCheckinBanner from '@/components/conCheckin/EventCheckinBanner.vue'
 import GoCheckinBanner from '@/components/conCheckin/GoCheckinBanner.vue'
@@ -66,8 +65,6 @@ const items = computed(() => [
 ])
 
 async function loadList() {
-  const userInfo = userStore()
-  await userInfo.updateUserFeatureFlags()
   await cmsData.getCmsInformation()
 }
 

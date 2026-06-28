@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
 import { onMounted, type PropType, ref } from 'vue'
-import { userStore } from '@/stores/userStore'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
 import type { AssignedXpInfo } from '@/components/admin/assignedXp/types.ts'
@@ -13,7 +12,6 @@ import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
 const userPermissionInfo = userPermissionStore()
 const permissionCheck = userPermissionInfo.permissionCheck
-let userInfo = userStore()
 
 const props = defineProps({
   item: {

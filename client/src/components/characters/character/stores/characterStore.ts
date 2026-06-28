@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import { FeatureFlags, userStore } from '@/stores/userStore.ts'
+import { hasFlag } from '@/stores/featureFlags/featureFlagStore.ts'
 
-const userInfo = userStore()
 export const characterStore
   = defineStore('character', {
     state: () => {
@@ -41,7 +40,7 @@ export const characterStore
             this.isRetired = response.data.isRetired
             this.isArchetypeCharacter = response.data.isArchetypeCharacter
 
-            if (await userInfo.hasFeatureFlag(FeatureFlags.ShowFactionDropdown)) {
+            if (hasFlag.ShowFactionDropdown) {
               await axios.get(`/characters/${characterId}/factionOptions`)
                 .then((factionResponse) => {
                   this.factions = factionResponse.data
