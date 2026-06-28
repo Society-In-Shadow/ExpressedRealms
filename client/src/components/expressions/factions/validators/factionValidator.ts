@@ -20,7 +20,7 @@ export function getValidationInstance(): GenericForm<EditSingleFactionInfo> {
   const form = useGenericForm(validationSchema)
 
   const setValues = (data: EditSingleFactionInfo) => {
-    form.fields.name.field.value = 'test'
+    form.fields.name.field.value = data.name
     form.fields.background.field.value = data.background
   }
 
