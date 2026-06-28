@@ -10,6 +10,7 @@ import { useQueryCache } from '@pinia/colada'
 import { userInfoQuery } from '@/auth/authStore.ts'
 import { SetupState } from '@/auth/types.ts'
 import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
+import { featureFlagQuery } from '@/stores/featureFlags/featureFlagStore.ts'
 
 export const routes = [
   PublicRoutes,
@@ -23,7 +24,6 @@ const routerSetup = createRouter({
   routes,
 })
 
-let routesInitialized = false
 let userInfoInitialized = false
 
 routerSetup.beforeEach(async (to) => {
@@ -34,18 +34,11 @@ routerSetup.beforeEach(async (to) => {
   await queryCache.refresh(queryCache.ensure(userInfoQuery))
   const { data } = useQueryWithLoading(userInfoQuery)
 
+  const featureFlagCache = useQueryCache()
+  await featureFlagCache.refresh(featureFlagCache.ensure(featureFlagQuery))
+
   const loggedIn = data.value?.userInfo !== null
   const routeName: string = to.name as string
-
-  // Initialize routes on first navigation
-  if (!routesInitialized) {
-    await userInfo.updateUserFeatureFlags()
-
-    routesInitialized = true
-
-    // Re-trigger navigation to the same route
-    return to
-  }
 
   if (loggedIn) {
     if (data.value!.userInfo!.setupState == SetupState.UnconfirmedEmail
