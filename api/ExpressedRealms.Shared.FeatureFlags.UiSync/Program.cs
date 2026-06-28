@@ -7,9 +7,7 @@ var resources = ReleaseFlags.List;
 var fieldNames = typeof(ReleaseFlags)
     .GetFields(BindingFlags.Public | BindingFlags.Static)
     .Where(f => f.FieldType == typeof(ReleaseFlags))
-    .ToDictionary(
-        f => (ReleaseFlags)f.GetValue(null)!,
-        f => f.Name);
+    .ToDictionary(f => (ReleaseFlags)f.GetValue(null)!, f => f.Name);
 
 var builder = new StringBuilder();
 

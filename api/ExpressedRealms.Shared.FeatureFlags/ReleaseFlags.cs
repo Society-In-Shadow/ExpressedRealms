@@ -35,7 +35,7 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "show-archetype-selection",
         "Will show the archetype selection on character creation"
     );
-    
+
     public static readonly ReleaseFlags ShowFactions = new(
         "Shows Faction Functionality",
         "show-factions",
