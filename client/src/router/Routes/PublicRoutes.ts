@@ -1,5 +1,5 @@
 import PublicLayout from '@/components/public/PublicLayout.vue'
-import { FeatureFlags } from '@/stores/userStore'
+import { FeatureFlags } from '@/types/FeatureFlags.ts'
 
 export const PublicRoutes = {
   path: '/',
@@ -33,7 +33,7 @@ export const PublicRoutes = {
       path: 'contact-us',
       name: 'contactus',
       component: () => import('./../../components/public/ContactUs.vue'),
-      meta: { isAnonymous: true, requiredFeatureFlag: FeatureFlags.ShowMarketingContactUs },
+      meta: { isAnonymous: true, requiredFeatureFlag: FeatureFlags.ShowMarketingContactUsPage },
     },
     {
       path: 'upcoming-events',
