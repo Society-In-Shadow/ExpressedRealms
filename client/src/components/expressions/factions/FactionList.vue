@@ -3,14 +3,13 @@
 import { computed, ref } from 'vue'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
-import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+import { can } from '@/stores/userPermissionStore.ts'
 import Skeleton from 'primevue/skeleton'
 import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 import FactionItem from '@/components/expressions/factions/FactionItem.vue'
 import { factionListQuery } from '@/components/expressions/factions/stores/factionStore.ts'
 import { factionDialogs } from '@/components/expressions/factions/services/dialogs.ts'
 
-const permissionCheck = userPermissionStore().permissionCheck
 const dialogs = factionDialogs()
 
 const props = defineProps({
@@ -29,7 +28,7 @@ const toggleAdd = async () => {
 }
 
 const enableAdd = computed(() => {
-  return permissionCheck.Archetypes.Create
+  return can.Faction.Create
 })
 
 </script>

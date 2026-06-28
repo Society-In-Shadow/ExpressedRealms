@@ -1,17 +1,15 @@
 <script setup lang="ts">
 
-import { onMounted, type PropType } from 'vue'
+import { onMounted, type PropType, ref } from 'vue'
 import Card from 'primevue/card'
 import { ConfirmationPopup } from './services/confirmationPopupService'
-import { useRouter } from 'vue-router'
-import SplitButton from 'primevue/splitbutton'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 import type { Faction } from '@/components/expressions/factions/types.ts'
 import { factionDialogs } from '@/components/expressions/factions/services/dialogs.ts'
+import CommandButton, { type Command } from '@/uiComponents/CommandButton.vue'
 
 const userPermissionInfo = userPermissionStore()
 const permissionCheck = userPermissionInfo.permissionCheck
-const router = useRouter()
 
 const props = defineProps({
   item: {
@@ -23,30 +21,29 @@ const props = defineProps({
 let popups = ConfirmationPopup(props.item.id, props.item.name)
 let editItemPopup = factionDialogs()
 
-const items = []
+const items = ref<Command[]>([])
 
 onMounted(async () => {
-  if (permissionCheck.Faction.Delete) {
-    items.push({
-      label: 'Delete',
-      command: ($event) => {
-        popups.deleteConfirmation($event)
-      },
-    })
-  }
   if (permissionCheck.Faction.Edit) {
-    items.push({
+    items.value.push({
       label: 'Edit',
+      severity: 'primary',
       command: ($event) => {
         editItemPopup.showUpdateFaction(props.item.id)
       },
     })
   }
+  if (permissionCheck.Faction.Delete) {
+    items.value.push({
+      label: 'Delete',
+      command: ($event) => {
+        popups.deleteConfirmation($event)
+      },
+      severity: 'danger',
+    })
+  }
 })
 
-async function toggleEdit() {
-  await router.push({ name: 'characterSheet', params: { id: props.item.id } })
-}
 </script>
 
 <template>
@@ -62,7 +59,7 @@ async function toggleEdit() {
           </div>
         </div>
         <div class="p-0 m-0 d-inline-flex align-items-start">
-          <SplitButton label="View" severity="info" :model="items" @click="toggleEdit()" />
+          <CommandButton :commands="items" />
         </div>
       </div>
     </template>
