@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ExpressedRealms.DB.Models.Factions.FactionLevelModels.Audit;
 
-internal class FactionLevelAuditTrailConfiguration : IEntityTypeConfiguration<FactionLevelAuditTrail>
+internal class FactionLevelAuditTrailConfiguration
+    : IEntityTypeConfiguration<FactionLevelAuditTrail>
 {
     public void Configure(EntityTypeBuilder<FactionLevelAuditTrail> builder)
     {

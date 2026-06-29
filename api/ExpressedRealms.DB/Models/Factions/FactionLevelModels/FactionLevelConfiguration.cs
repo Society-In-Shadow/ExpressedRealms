@@ -21,14 +21,14 @@ public class FactionLevelConfiguration : IEntityTypeConfiguration<FactionLevel>
             .HasForeignKey(x => x.FactionId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder
             .HasOne(x => x.FactionRank)
             .WithMany(x => x.FactionLevels)
             .HasForeignKey(x => x.FactionRankId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder
             .HasOne(x => x.Knowledge)
             .WithMany(x => x.FactionLevels)
@@ -40,7 +40,7 @@ public class FactionLevelConfiguration : IEntityTypeConfiguration<FactionLevel>
             .WithMany(x => x.FactionLevels)
             .HasForeignKey(x => x.KnowledgeLevelId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         builder.HasQueryFilter(x => !x.IsDeleted);
         builder.Property(e => e.IsDeleted);
         builder.Property(e => e.DeletedAt);

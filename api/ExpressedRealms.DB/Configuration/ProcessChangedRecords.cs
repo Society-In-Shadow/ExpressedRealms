@@ -107,7 +107,9 @@ public static class ProcessChangedRecords
                 changedRecords
             ),
             nameof(Faction) => FactionAuditTrailExtensions.ProcessChangedRecords(changedRecords),
-            nameof(FactionLevel) => FactionLevelAuditTrailExtensions.ProcessChangedRecords(changedRecords),
+            nameof(FactionLevel) => FactionLevelAuditTrailExtensions.ProcessChangedRecords(
+                changedRecords
+            ),
             _ => throw new ArgumentException(
                 $"Table not setup in the ProcessChangedRecords class: {tableName}"
             ),

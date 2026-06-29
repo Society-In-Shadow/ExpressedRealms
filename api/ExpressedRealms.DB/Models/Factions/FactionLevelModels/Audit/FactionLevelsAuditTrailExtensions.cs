@@ -28,7 +28,7 @@ internal static class FactionLevelAuditTrailExtensions
                 case "specialization":
                     changedRecord.FriendlyName = "Specialization";
                     break;
-                
+
                 default:
                     throw new MissingAuditColumnException(changedRecord.ColumnName);
             }
@@ -39,7 +39,9 @@ internal static class FactionLevelAuditTrailExtensions
         return changedRecordsToReturn;
     }
 
-    public static IAuditEntityMapping AddFactionLevelAuditTrailMapping(this IAuditEntityMapping mapping)
+    public static IAuditEntityMapping AddFactionLevelAuditTrailMapping(
+        this IAuditEntityMapping mapping
+    )
     {
         return mapping.Map<FactionLevel, FactionLevelAuditTrail>(
             (model, audit) =>
