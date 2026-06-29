@@ -1,10 +1,12 @@
+using Audit.EntityFramework;
 using ExpressedRealms.DB.Interceptors;
-using ExpressedRealms.DB.Models.Contacts;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
+using ExpressedRealms.DB.Models.Factions.FactionLevelModels;
 using ExpressedRealms.DB.Models.Factions.FactionModels.Audit;
 
 namespace ExpressedRealms.DB.Models.Factions.FactionModels;
 
+[AuditInclude]
 public class Faction : ISoftDelete
 {
     public int Id { get; set; }
@@ -18,5 +20,5 @@ public class Faction : ISoftDelete
     public virtual Expression Expression { get; set; } = null!;
     public virtual ICollection<FactionAuditTrail> FactionAuditTrails { get; set; } =
         new HashSet<FactionAuditTrail>();
-    public virtual ICollection<Contact> Contacts { get; set; } = new HashSet<Contact>();
+    public virtual ICollection<FactionLevel> FactionLevels { get; set; } = new HashSet<FactionLevel>();
 }

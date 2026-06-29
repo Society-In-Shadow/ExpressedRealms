@@ -1,5 +1,6 @@
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Contacts;
+using ExpressedRealms.DB.Models.Factions.FactionLevelModels;
 using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Audit;
 
@@ -19,4 +20,6 @@ public class Knowledge : ISoftDelete
     public virtual List<KnowledgeAuditTrail> KnowledgeAuditTrails { get; set; } = null!;
     public virtual List<CharacterKnowledgeMapping> CharacterKnowledgeMappings { get; set; } = null!;
     public virtual ICollection<Contact> Contacts { get; set; } = new HashSet<Contact>();
+    public virtual ICollection<FactionLevel> FactionLevels { get; set; } =
+        new HashSet<FactionLevel>();
 }
