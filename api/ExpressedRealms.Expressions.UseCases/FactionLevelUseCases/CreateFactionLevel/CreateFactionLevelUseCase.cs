@@ -34,12 +34,12 @@ internal sealed class CreateFactionLevelUseCase(
         
         var factionLevels = new List<FactionLevel>()
         {
-            new FactionLevel()
+            new ()
             {
                 FactionId = model.FactionId,
                 FactionRankId = FactionRankEnum.Basic.Value
             },
-            new FactionLevel()
+            new ()
             {
                 FactionId = model.FactionId,
                 FactionRankId = FactionRankEnum.Intermediate.Value,
@@ -47,7 +47,7 @@ internal sealed class CreateFactionLevelUseCase(
                 KnowledgeLevelId = 3, // Student, level 2 knowledge
                 Specialization = model.Specialization,
             },
-            new FactionLevel()
+            new ()
             {
                 FactionId = model.FactionId,
                 FactionRankId = FactionRankEnum.Advance.Value,
@@ -55,7 +55,7 @@ internal sealed class CreateFactionLevelUseCase(
                 KnowledgeLevelId = 5, // Associates, level 4 knowledge
                 Specialization = model.Specialization,
             },
-            new FactionLevel()
+            new ()
             {
                 FactionId = model.FactionId,
                 FactionRankId = FactionRankEnum.Supreme.Value,

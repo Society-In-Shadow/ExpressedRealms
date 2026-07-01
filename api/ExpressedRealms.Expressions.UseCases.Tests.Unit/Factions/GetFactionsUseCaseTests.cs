@@ -1,5 +1,5 @@
-using ExpressedRealms.DB.Models.Factions.FactionModels;
 using ExpressedRealms.Expressions.Repository.Factions;
+using ExpressedRealms.Expressions.Repository.Factions.Dtos;
 using ExpressedRealms.Expressions.UseCases.FactionUseCases.GetFactions;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
@@ -49,13 +49,26 @@ public class GetFactionsUseCaseTests
     [Fact]
     public async Task UseCase_Returns_ListOfFactions()
     {
-        var listTest = new List<Faction>()
+        var listTest = new List<FactionDto>()
         {
             new()
             {
                 Id = 1,
                 Name = "Washington",
                 Background = "Money Market Account",
+                Levels = new List<FactionLevelListDto>()
+                {
+                    new ()
+                    {
+                        RankName = "Basic",
+                        KnowledgeLevel = "Foo",
+                        Knowledge = "Goo",
+                        KnowledgeLevelId = 1,
+                        Id = 5,
+                        Specialization = "Bar",
+                        KnowledgeId = 3
+                    }
+                }
             },
             new()
             {
@@ -74,6 +87,19 @@ public class GetFactionsUseCaseTests
                     Id = 1,
                     Name = "Washington",
                     Background = "Money Market Account",
+                    FactionLevels = new List<FactionLevelModel>()
+                    {
+                        new ()
+                        {
+                            RankName = "Basic",
+                            KnowledgeLevel = "Foo",
+                            Knowledge = "Goo",
+                            KnowledgeLevelId = 1,
+                            Id = 5,
+                            Specialization = "Bar",
+                            KnowledgeId = 3
+                        }
+                    }
                 },
                 new()
                 {
