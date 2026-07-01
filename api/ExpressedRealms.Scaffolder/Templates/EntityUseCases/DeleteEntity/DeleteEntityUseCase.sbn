@@ -7,7 +7,7 @@ using FluentResults;
 namespace {{ namespacebase }}.{{ singular }}UseCases.Delete{{ singular }};
 
 internal sealed class Delete{{ singular }}UseCase(
-    I{{ singular }}Repository {{ singular | string.downcase  }}Repository,
+    I{{ singular }}Repository {{ singular | string.initial_case  }}Repository,
     Delete{{ singular }}ModelValidator validator,
     CancellationToken cancellationToken
 ) : IDelete{{ singular }}UseCase
@@ -23,16 +23,16 @@ internal sealed class Delete{{ singular }}UseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var {{ singular | string.downcase }} = await {{ singular | string.downcase }}Repository.Get{{ singular }}ForEditingAsync(model.Id);
+        var {{ singular | string.initial_case }} = await {{ singular | string.initial_case }}Repository.Get{{ singular }}ForEditingAsync(model.Id);
 
-        if ({{ singular | string.downcase }} is null)
+        if ({{ singular | string.initial_case }} is null)
         {
             return Result.Fail(new NotFoundFailure(nameof(Delete{{ singular }}Model.Id), "This {{ singular }} was not found."));
         }
 
-        {{ singular | string.downcase }}.SoftDelete();
+        {{ singular | string.initial_case }}.SoftDelete();
 
-        await {{ singular | string.downcase }}Repository.Edit{{ singular }}Async({{ singular | string.downcase }});
+        await {{ singular | string.initial_case }}Repository.Edit{{ singular }}Async({{ singular | string.initial_case }});
 
         return Result.Ok();
     }

@@ -28,7 +28,7 @@ internal class CommonArguments
             Additional properties to generate.
 
             Format:
-              name:type[:required][:min.X][:max.Y],
+              name:type[:required][:min.X][:max.Y][:optional],
 
             Where:
               "," - Separates multiple properties.
@@ -39,7 +39,10 @@ internal class CommonArguments
               Name:string:required
               Age:int:min.1:max.120
               IsActive:bool
-              
+
+            Additional Details
+              optional - Will treat the property as nullable by adding ?, eg int?
+
             Multiple Examples:
               Name:string:required,Age:int:min.1:max.120,IsActive:bool
             """,
@@ -100,7 +103,10 @@ internal class CommonArguments
                         : null,
                     MaxValue: containsMaxValue != null
                         ? int.Parse(containsMaxValue.Substring(4))
-                        : null
+                        : null,
+                    Optional: parts.Any(y =>
+                        y.Equals("optional", StringComparison.OrdinalIgnoreCase)
+                    )
                 );
             })
             .ToList();

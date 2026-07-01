@@ -18,7 +18,7 @@ internal static class RenderProperties
                 foreach (var property in properties)
                 {
                     sb.AppendLine(
-                        $"public {(property.Required ? "required " : "")}{property.Type} {property.Name} {{ get; set; }}"
+                        $"public {(property.Required ? "required " : "")}{property.Type}{(property.Optional ? "?" : "")} {property.Name} {{ get; set; }}"
                     );
                 }
 

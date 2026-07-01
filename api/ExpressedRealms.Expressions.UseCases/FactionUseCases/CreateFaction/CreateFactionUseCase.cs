@@ -1,6 +1,7 @@
 using ExpressedRealms.DB.Models.Factions.FactionModels;
 using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.Expressions.Repository.Factions;
+using ExpressedRealms.Expressions.UseCases.FactionLevelUseCases.CreateFactionLevel;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
@@ -10,6 +11,7 @@ internal sealed class CreateFactionUseCase(
     IFactionRepository factionRepository,
     IExpressionRepository expressionRepository,
     CreateFactionModelValidator validator,
+    ICreateFactionLevelUseCase createFactionLevelUseCase,
     CancellationToken cancellationToken
 ) : ICreateFactionUseCase
 {
@@ -48,6 +50,18 @@ internal sealed class CreateFactionUseCase(
                 ExpressionId = model.ExpressionId,
             }
         );
+
+        var results = await createFactionLevelUseCase.ExecuteAsync(
+            new CreateFactionLevelModel()
+            {
+                FactionId = factionId,
+                Specialization = model.Specialization,
+                KnowledgeId = model.KnowledgeId,
+            }
+        );
+
+        if (results.IsFailed)
+            return results;
 
         return Result.Ok(factionId);
     }

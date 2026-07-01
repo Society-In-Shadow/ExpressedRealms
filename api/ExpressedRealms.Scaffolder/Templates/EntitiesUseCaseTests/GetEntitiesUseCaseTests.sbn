@@ -10,13 +10,13 @@ namespace ExpressedRealms.{{ projectname }}.UseCases.Tests.Unit.{{ plural }};
 public class Get{{ plural }}UseCaseTests
 {
     private readonly Get{{ plural }}UseCase _useCase;
-    private readonly I{{ singular }}Repository _{{singular | string.downcase}}Repository;
+    private readonly I{{ singular }}Repository _{{singular | string.initial_case}}Repository;
 
     public Get{{ plural }}UseCaseTests()
     {
-        _{{singular | string.downcase}}Repository = A.Fake<I{{ singular }}Repository>();
+        _{{singular | string.initial_case}}Repository = A.Fake<I{{ singular }}Repository>();
 
-        _useCase = new Get{{ plural }}UseCase(_{{singular | string.downcase}}Repository);
+        _useCase = new Get{{ plural }}UseCase(_{{singular | string.initial_case}}Repository);
     }
 
     [Fact]
@@ -24,7 +24,7 @@ public class Get{{ plural }}UseCaseTests
     {
         await _useCase.ExecuteAsync();
 
-        A.CallTo(() => _{{singular | string.downcase}}Repository.Get{{ plural }}()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _{{singular | string.initial_case}}Repository.Get{{ plural }}()).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -43,7 +43,7 @@ public class Get{{ plural }}UseCaseTests
             },
         };
 
-        A.CallTo(() => _{{singular | string.downcase}}Repository.Get{{ plural }}()).Returns(listTest);
+        A.CallTo(() => _{{singular | string.initial_case}}Repository.Get{{ plural }}()).Returns(listTest);
 
         var results = await _useCase.ExecuteAsync();
 

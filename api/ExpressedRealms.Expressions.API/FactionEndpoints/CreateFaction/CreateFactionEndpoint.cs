@@ -19,6 +19,8 @@ public static class CreateFactionEndpoint
                 Name = request.Name,
                 Background = request.Background,
                 ExpressionId = request.ExpressionId,
+                Specialization = request.Specialization,
+                KnowledgeId = request.KnowledgeId,
             }
         );
 

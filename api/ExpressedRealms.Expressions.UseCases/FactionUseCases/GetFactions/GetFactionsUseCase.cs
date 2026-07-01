@@ -32,6 +32,18 @@ internal sealed class GetFactionsUseCase(
                         Id = x.Id,
                         Name = x.Name,
                         Background = x.Background,
+                        FactionLevels = x
+                            .Levels.Select(y => new FactionLevelModel()
+                            {
+                                Id = y.Id,
+                                RankName = y.RankName,
+                                KnowledgeId = y.KnowledgeId,
+                                Knowledge = y.Knowledge,
+                                KnowledgeLevel = y.KnowledgeLevel,
+                                Specialization = y.Specialization,
+                                KnowledgeLevelId = y.KnowledgeLevelId,
+                            })
+                            .ToList(),
                     })
                     .ToList(),
             }

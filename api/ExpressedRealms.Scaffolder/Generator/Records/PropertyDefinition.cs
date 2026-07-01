@@ -5,5 +5,6 @@ public record PropertyDefinition(
     string Type,
     bool Required,
     int? MinValue,
-    int? MaxValue
+    int? MaxValue,
+    bool Optional
 );

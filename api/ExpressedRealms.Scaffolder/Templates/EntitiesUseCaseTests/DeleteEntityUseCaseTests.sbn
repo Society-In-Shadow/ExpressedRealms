@@ -10,21 +10,21 @@ namespace ExpressedRealms.{{ projectname }}.UseCases.Tests.Unit.{{ plural }};
 public class Delete{{ singular }}UseCaseTests
 {
     private readonly Delete{{ singular }}UseCase _useCase;
-    private readonly I{{ singular }}Repository _{{singular | string.downcase}}Repository;
+    private readonly I{{ singular }}Repository _{{singular | string.initial_case}}Repository;
     private readonly Delete{{ singular }}Model _model;
 
     public Delete{{ singular }}UseCaseTests()
     {
         _model = new Delete{{ singular }}Model() { Id = 4 };
 
-        _{{singular | string.downcase}}Repository = A.Fake<I{{ singular }}Repository>();
+        _{{singular | string.initial_case}}Repository = A.Fake<I{{ singular }}Repository>();
 
-        A.CallTo(() => _{{singular | string.downcase}}Repository.Get{{ singular }}ForEditingAsync(_model.Id))
+        A.CallTo(() => _{{singular | string.initial_case}}Repository.Get{{ singular }}ForEditingAsync(_model.Id))
             .Returns(new {{ singular }}() { Id = _model.Id });
 
         var validator = new Delete{{ singular }}ModelValidator();
 
-        _useCase = new Delete{{ singular }}UseCase(_{{singular | string.downcase}}Repository, validator, CancellationToken.None);
+        _useCase = new Delete{{ singular }}UseCase(_{{singular | string.initial_case}}Repository, validator, CancellationToken.None);
     }
 
     [Fact]
@@ -38,7 +38,7 @@ public class Delete{{ singular }}UseCaseTests
     [Fact]
     public async Task ValidationFor_Id_WillFail_When{{ singular }}DoesNotExist()
     {
-        A.CallTo(() => _{{singular | string.downcase}}Repository.Get{{ singular }}ForEditingAsync(_model.Id))!.Returns(Task.FromResult(({{ singular }})null!));
+        A.CallTo(() => _{{singular | string.initial_case}}Repository.Get{{ singular }}ForEditingAsync(_model.Id))!.Returns(Task.FromResult(({{ singular }})null!));
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveNotFoundError(nameof(Delete{{ singular }}Model.Id), "This {{ singular }} was not found.");
     }
@@ -48,21 +48,21 @@ public class Delete{{ singular }}UseCaseTests
     {
         await _useCase.ExecuteAsync(_model);
 
-        A.CallTo(() => _{{singular | string.downcase}}Repository.Get{{ singular }}ForEditingAsync(_model.Id))
+        A.CallTo(() => _{{singular | string.initial_case}}Repository.Get{{ singular }}ForEditingAsync(_model.Id))
             .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
     public async Task UseCase_WillSoftDelete_The{{ singular }}()
     {
-        var {{ singular | string.downcase }} = new {{ singular }}() { Id = _model.Id, IsDeleted = true };
+        var {{ singular | string.initial_case }} = new {{ singular }}() { Id = _model.Id, IsDeleted = true };
 
         await _useCase.ExecuteAsync(_model);
 
         A.CallTo(() =>
-                _{{singular | string.downcase}}Repository.Edit{{ singular }}Async(
+                _{{singular | string.initial_case}}Repository.Edit{{ singular }}Async(
                     A<{{ singular }}>.That.Matches(k =>
-                        k.Id == {{ singular | string.downcase }}.Id && k.IsDeleted == {{ singular | string.downcase }}.IsDeleted
+                        k.Id == {{ singular | string.initial_case }}.Id && k.IsDeleted == {{ singular | string.initial_case }}.IsDeleted
                     )
                 )
             )
