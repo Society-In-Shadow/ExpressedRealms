@@ -1,3 +1,5 @@
+import type { ListItem } from '@/types/ListItem.ts'
+
 export interface FactionResponse {
   factions: Array<Faction>
 }
@@ -16,5 +18,14 @@ export interface EditSingleFactionInfo {
 export interface CreateSingleFactionInfo {
   name: string
   background: string
+  knowledge: ListItem
+  specialization: string
+}
+
+export interface CreateSingleFactionPost {
+  name: string
+  background: string
   expressionId: number
+  knowledgeId: number
+  specialization: string
 }

@@ -2,7 +2,7 @@ import { defineQuery, defineQueryOptions, useMutation, useQueryCache } from '@pi
 import toaster from '@/services/Toasters'
 import { factionService } from '@/components/expressions/factions/services/factionService.ts'
 import { handleValidationErrors } from '@/utilities/piniaColadaUtilities.ts'
-import type { CreateSingleFactionInfo, EditSingleFactionInfo } from '@/components/expressions/factions/types.ts'
+import type { CreateSingleFactionPost, EditSingleFactionInfo } from '@/components/expressions/factions/types.ts'
 
 export const FACTION_QUERY_KEYS = {
   root: ['faction'] as const,
@@ -51,7 +51,7 @@ export const factionCreate = (onValidationError?: (errors: Record<string, any>) 
   const queryCache = useQueryCache()
 
   return useMutation({
-    mutation: ({ data }: { data: CreateSingleFactionInfo }) => factionService.createFaction(data),
+    mutation: ({ data }: { data: CreateSingleFactionPost }) => factionService.createFaction(data),
     async onSuccess() {
       await queryCache.invalidateQueries({ key: FACTION_QUERY_KEYS.root })
     },

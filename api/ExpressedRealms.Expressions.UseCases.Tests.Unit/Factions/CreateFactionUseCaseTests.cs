@@ -1,6 +1,7 @@
 using ExpressedRealms.DB.Models.Factions.FactionModels;
 using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.Expressions.Repository.Factions;
+using ExpressedRealms.Expressions.UseCases.FactionLevelUseCases.CreateFactionLevel;
 using ExpressedRealms.Expressions.UseCases.FactionUseCases.CreateFaction;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
@@ -11,9 +12,12 @@ namespace ExpressedRealms.Expressions.UseCases.Tests.Unit.Factions;
 public class CreateFactionUseCaseTests
 {
     private readonly CreateFactionUseCase _useCase;
+    private readonly ICreateFactionLevelUseCase _createFactionLevelUseCase;
     private readonly IFactionRepository _factionRepository;
     private readonly IExpressionRepository _expressionRepository;
     private readonly CreateFactionModel _model;
+
+    private const int NewFactionId = 5;
 
     public CreateFactionUseCaseTests()
     {
@@ -22,14 +26,18 @@ public class CreateFactionUseCaseTests
             Name = "parse",
             Background = "View",
             ExpressionId = 1,
+            KnowledgeId = 2,
+            Specialization = "Specialization"
         };
 
         _factionRepository = A.Fake<IFactionRepository>();
         _expressionRepository = A.Fake<IExpressionRepository>();
+        _createFactionLevelUseCase = A.Fake<ICreateFactionLevelUseCase>();
 
         A.CallTo(() => _expressionRepository.ExpressionIsExpressionType(_model.ExpressionId))
             .Returns(true);
         A.CallTo(() => _factionRepository.HasDuplicateName(_model.Name)).Returns(false);
+        A.CallTo(() => _factionRepository.CreateFactionAsync(A<Faction>._)).Returns(NewFactionId);
 
         var validator = new CreateFactionModelValidator();
 
@@ -37,6 +45,7 @@ public class CreateFactionUseCaseTests
             _factionRepository,
             _expressionRepository,
             validator,
+            _createFactionLevelUseCase,
             CancellationToken.None
         );
     }
@@ -145,12 +154,26 @@ public class CreateFactionUseCaseTests
             )
             .MustHaveHappenedOnceExactly();
     }
+    
+    [Fact]
+    public async Task UseCase_WillCall_CreateFactionLevelsUseCase()
+    {
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() =>
+                _createFactionLevelUseCase.ExecuteAsync(
+                    A<CreateFactionLevelModel>.That.Matches(k =>
+                        k.FactionId == NewFactionId &&
+                        k.Specialization == _model.Specialization &&
+                        k.KnowledgeId == _model.KnowledgeId
+                    )
+                )
+            )
+            .MustHaveHappenedOnceExactly();
+    }
 
     [Fact]
     public async Task UseCase_WillReturn_FactionId_IfSuccessful()
     {
-        A.CallTo(() => _factionRepository.CreateFactionAsync(A<Faction>._)).Returns(5);
-
         var result = await _useCase.ExecuteAsync(_model);
         Assert.Equal(5, result.Value);
     }

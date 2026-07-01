@@ -1,6 +1,6 @@
 import axios from 'axios'
 import type {
-  CreateSingleFactionInfo,
+  CreateSingleFactionPost,
   EditSingleFactionInfo,
   FactionResponse,
 } from '@/components/expressions/factions/types.ts'
@@ -12,7 +12,7 @@ export const factionService = {
     .then(async (response) => { return response.data }),
   editFaction: (id: number, faction: EditSingleFactionInfo): Promise<EditSingleFactionInfo> => axios.put<EditSingleFactionInfo>(`/factions/${id}`, faction)
     .then(async (response) => { return response.data }),
-  createFaction: (faction: CreateSingleFactionInfo): Promise<number> => axios.post<number>(`/factions/`, faction)
+  createFaction: (faction: CreateSingleFactionPost): Promise<number> => axios.post<number>(`/factions/`, faction)
     .then(async (response) => { return response.data }),
   delete: (id: number) => axios.delete(`/factions/${id}`)
     .then(async (response) => { return response.data }),
