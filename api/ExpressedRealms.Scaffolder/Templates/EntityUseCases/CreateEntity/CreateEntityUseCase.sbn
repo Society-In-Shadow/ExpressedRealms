@@ -6,7 +6,7 @@ using FluentResults;
 namespace {{ namespacebase }}.{{ singular }}UseCases.Create{{ singular }};
 
 internal sealed class Create{{ singular }}UseCase(
-    I{{ singular }}Repository {{ singular | string.downcase  }}Repository,
+    I{{ singular }}Repository {{ singular | string.initial_case  }}Repository,
     Create{{ singular }}ModelValidator validator,
     CancellationToken cancellationToken
 ) : ICreate{{ singular }}UseCase
@@ -22,13 +22,13 @@ internal sealed class Create{{ singular }}UseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var {{ singular | string.downcase  }}Id = await {{ singular | string.downcase }}Repository.Create{{ singular }}Async(
+        var {{ singular | string.initial_case  }}Id = await {{ singular | string.initial_case }}Repository.Create{{ singular }}Async(
             new {{ singular }}()
             {
                 {{ render_list_properties properties "model" ~}}
             }
         );
 
-        return Result.Ok({{ singular | string.downcase  }}Id);
+        return Result.Ok({{ singular | string.initial_case  }}Id);
     }
 }

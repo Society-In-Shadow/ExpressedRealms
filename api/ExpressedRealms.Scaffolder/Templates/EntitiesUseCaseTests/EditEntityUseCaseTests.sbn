@@ -10,7 +10,7 @@ namespace ExpressedRealms.{{ projectname }}.UseCases.Tests.Unit.{{ plural }};
 public class Edit{{ singular }}UseCaseTests
 {
     private readonly Edit{{ singular }}UseCase _useCase;
-    private readonly I{{ singular }}Repository _{{singular | string.downcase}}Repository;
+    private readonly I{{ singular }}Repository _{{singular | string.initial_case}}Repository;
     private readonly Edit{{ singular }}Model _model;
     private readonly {{ singular }} _dbModel;
 
@@ -27,13 +27,13 @@ public class Edit{{ singular }}UseCaseTests
             {{ render_unit_test_assignment_properties properties "x" ~}}
         };
 
-        _{{singular | string.downcase}}Repository = A.Fake<I{{ singular }}Repository>();
+        _{{singular | string.initial_case}}Repository = A.Fake<I{{ singular }}Repository>();
 
-        A.CallTo(() => _{{singular | string.downcase}}Repository.Get{{ singular }}ForEditingAsync(_model.Id)).Returns(_dbModel);
+        A.CallTo(() => _{{singular | string.initial_case}}Repository.Get{{ singular }}ForEditingAsync(_model.Id)).Returns(_dbModel);
 
         var validator = new Edit{{ singular }}ModelValidator();
 
-        _useCase = new Edit{{ singular }}UseCase(_{{singular | string.downcase}}Repository, validator, CancellationToken.None);
+        _useCase = new Edit{{ singular }}UseCase(_{{singular | string.initial_case}}Repository, validator, CancellationToken.None);
     }
 
     [Fact]
@@ -47,7 +47,7 @@ public class Edit{{ singular }}UseCaseTests
     [Fact]
     public async Task ValidationFor_Id_WillFail_When{{ singular }}DoesNotExist()
     {
-        A.CallTo(() => _{{singular | string.downcase}}Repository.Get{{ singular }}ForEditingAsync(_model.Id))!.Returns(Task.FromResult(({{ singular }})null!));
+        A.CallTo(() => _{{singular | string.initial_case}}Repository.Get{{ singular }}ForEditingAsync(_model.Id))!.Returns(Task.FromResult(({{ singular }})null!));
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveNotFoundError(nameof(Edit{{ singular }}Model.Id), "This {{ singular }} was not found.");
     }
@@ -58,7 +58,7 @@ public class Edit{{ singular }}UseCaseTests
     public async Task UseCase_WillGrab_The{{ singular }}()
     {
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() => _{{singular | string.downcase}}Repository.Get{{ singular }}ForEditingAsync(_model.Id))
+        A.CallTo(() => _{{singular | string.initial_case}}Repository.Get{{ singular }}ForEditingAsync(_model.Id))
             .MustHaveHappenedOnceExactly();
     }
 
@@ -66,23 +66,23 @@ public class Edit{{ singular }}UseCaseTests
     public async Task UseCase_PassesThrough_TheDb{{ singular }}()
     {
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() => _{{singular | string.downcase}}Repository.Edit{{ singular }}Async(A<{{ singular }}>.That.IsSameAs(_dbModel)))
+        A.CallTo(() => _{{singular | string.initial_case}}Repository.Edit{{ singular }}Async(A<{{ singular }}>.That.IsSameAs(_dbModel)))
             .MustHaveHappenedOnceExactly();
     }
 
     [Fact]
     public async Task UseCase_WillEditThe{{ singular }}()
     {
-        var {{ singular | string.downcase }} = new {{ singular }}()
+        var {{ singular | string.initial_case }} = new {{ singular }}()
         {
             {{ render_list_properties properties "_model" ~}}
         };
 
         await _useCase.ExecuteAsync(_model);
         A.CallTo(() =>
-                _{{singular | string.downcase}}Repository.Edit{{ singular }}Async(
+                _{{singular | string.initial_case}}Repository.Edit{{ singular }}Async(
                     A<{{ singular }}>.That.Matches(k =>
-                        {{ render_unit_test_check_properties properties "k" (singular | string.downcase) ~}}
+                        {{ render_unit_test_check_properties properties "k" (singular | string.initial_case) ~}}
                     )
                 )
             )
