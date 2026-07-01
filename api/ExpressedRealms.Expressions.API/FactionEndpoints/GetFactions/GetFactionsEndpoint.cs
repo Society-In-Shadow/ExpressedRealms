@@ -25,16 +25,18 @@ public static class GetFactionsEndpoint
                         Id = x.Id,
                         Name = x.Name,
                         Background = x.Background,
-                        FactionLevels = x.FactionLevels.Select(y => new FactionLevelModel()
-                        {
-                            Id = y.Id,
-                            RankName = y.RankName,
-                            KnowledgeId = y.KnowledgeId,
-                            Knowledge = y.Knowledge,
-                            KnowledgeLevel = y.KnowledgeLevel,
-                            Specialization = y.Specialization,
-                            KnowledgeLevelId = y.KnowledgeLevelId
-                        }).ToList()
+                        FactionLevels = x
+                            .FactionLevels.Select(y => new FactionLevelModel()
+                            {
+                                Id = y.Id,
+                                RankName = y.RankName,
+                                KnowledgeId = y.KnowledgeId,
+                                Knowledge = y.Knowledge,
+                                KnowledgeLevel = y.KnowledgeLevel,
+                                Specialization = y.Specialization,
+                                KnowledgeLevelId = y.KnowledgeLevelId,
+                            })
+                            .ToList(),
                     })
                     .ToList(),
             }

@@ -29,7 +29,8 @@ internal sealed class FactionLevelRepository(
 
     public async Task<List<FactionLevelListDto>> GetFactionLevels()
     {
-        return await context.FactionLevels.AsNoTracking()
+        return await context
+            .FactionLevels.AsNoTracking()
             .Select(x => new FactionLevelListDto()
             {
                 Id = x.Id,

@@ -25,21 +25,22 @@ internal sealed class CreateFactionLevelUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-        
+
         // Faction Check skipped, as this should only be called from withing the Create Faction Use Case
 
         var knowledgeExists = await knowledgeRepository.IsExistingKnowledge(model.KnowledgeId);
         if (!knowledgeExists)
-            return Result.Fail(new NotFoundFailure(nameof(CreateFactionLevelModel.KnowledgeId), "Knowledge not found"));
-        
+            return Result.Fail(
+                new NotFoundFailure(
+                    nameof(CreateFactionLevelModel.KnowledgeId),
+                    "Knowledge not found"
+                )
+            );
+
         var factionLevels = new List<FactionLevel>()
         {
-            new ()
-            {
-                FactionId = model.FactionId,
-                FactionRankId = FactionRankEnum.Basic.Value
-            },
-            new ()
+            new() { FactionId = model.FactionId, FactionRankId = FactionRankEnum.Basic.Value },
+            new()
             {
                 FactionId = model.FactionId,
                 FactionRankId = FactionRankEnum.Intermediate.Value,
@@ -47,7 +48,7 @@ internal sealed class CreateFactionLevelUseCase(
                 KnowledgeLevelId = 3, // Student, level 2 knowledge
                 Specialization = model.Specialization,
             },
-            new ()
+            new()
             {
                 FactionId = model.FactionId,
                 FactionRankId = FactionRankEnum.Advance.Value,
@@ -55,16 +56,16 @@ internal sealed class CreateFactionLevelUseCase(
                 KnowledgeLevelId = 5, // Associates, level 4 knowledge
                 Specialization = model.Specialization,
             },
-            new ()
+            new()
             {
                 FactionId = model.FactionId,
                 FactionRankId = FactionRankEnum.Supreme.Value,
                 KnowledgeId = model.KnowledgeId,
                 KnowledgeLevelId = 7, // Master's, level 6 knowledge
                 Specialization = model.Specialization,
-            }
+            },
         };
-        
+
         await factionLevelRepository.CreateFactionLevelsAsync(factionLevels);
 
         return Result.Ok();

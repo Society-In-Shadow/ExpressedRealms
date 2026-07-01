@@ -58,7 +58,7 @@ public class GetFactionsUseCaseTests
                 Background = "Money Market Account",
                 Levels = new List<FactionLevelListDto>()
                 {
-                    new ()
+                    new()
                     {
                         RankName = "Basic",
                         KnowledgeLevel = "Foo",
@@ -66,9 +66,9 @@ public class GetFactionsUseCaseTests
                         KnowledgeLevelId = 1,
                         Id = 5,
                         Specialization = "Bar",
-                        KnowledgeId = 3
-                    }
-                }
+                        KnowledgeId = 3,
+                    },
+                },
             },
             new()
             {
@@ -89,7 +89,7 @@ public class GetFactionsUseCaseTests
                     Background = "Money Market Account",
                     FactionLevels = new List<FactionLevelModel>()
                     {
-                        new ()
+                        new()
                         {
                             RankName = "Basic",
                             KnowledgeLevel = "Foo",
@@ -97,9 +97,9 @@ public class GetFactionsUseCaseTests
                             KnowledgeLevelId = 1,
                             Id = 5,
                             Specialization = "Bar",
-                            KnowledgeId = 3
-                        }
-                    }
+                            KnowledgeId = 3,
+                        },
+                    },
                 },
                 new()
                 {

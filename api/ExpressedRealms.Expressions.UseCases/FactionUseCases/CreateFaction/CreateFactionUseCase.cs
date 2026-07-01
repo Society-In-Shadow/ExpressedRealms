@@ -50,15 +50,17 @@ internal sealed class CreateFactionUseCase(
                 ExpressionId = model.ExpressionId,
             }
         );
-        
-        var results = await createFactionLevelUseCase.ExecuteAsync(new CreateFactionLevelModel()
-        {
-            FactionId = factionId,
-            Specialization = model.Specialization,
-            KnowledgeId = model.KnowledgeId
-        });
-        
-        if(results.IsFailed)
+
+        var results = await createFactionLevelUseCase.ExecuteAsync(
+            new CreateFactionLevelModel()
+            {
+                FactionId = factionId,
+                Specialization = model.Specialization,
+                KnowledgeId = model.KnowledgeId,
+            }
+        );
+
+        if (results.IsFailed)
             return results;
 
         return Result.Ok(factionId);

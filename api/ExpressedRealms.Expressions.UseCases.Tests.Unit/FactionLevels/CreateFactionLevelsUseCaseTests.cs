@@ -23,7 +23,7 @@ public class CreateFactionLevelUseCaseTests
         {
             FactionId = 1,
             KnowledgeId = 2,
-            Specialization = "Specialization"
+            Specialization = "Specialization",
         };
 
         _factionLevelRepository = A.Fake<IFactionLevelRepository>();

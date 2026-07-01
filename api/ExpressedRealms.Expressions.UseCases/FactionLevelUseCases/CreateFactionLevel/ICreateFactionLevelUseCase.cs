@@ -3,4 +3,5 @@ using FluentResults;
 
 namespace ExpressedRealms.Expressions.UseCases.FactionLevelUseCases.CreateFactionLevel;
 
-public interface ICreateFactionLevelUseCase : IGenericUseCase<Result<int>, CreateFactionLevelModel> { }
+public interface ICreateFactionLevelUseCase
+    : IGenericUseCase<Result<int>, CreateFactionLevelModel> { }

@@ -102,11 +102,12 @@ public static class CrudGenerator
             scriptObject.AddRenderUnitTestChecksSingleLineProperties();
             scriptObject.AddRenderUnitTestListObjectProperties();
 
-            var stringObject = (ScriptObject)context.BuiltinObject["string"];
+            var stringObject = (ScriptObject)context.BuiltinObject["string"]!;
 
             stringObject!.Import(
                 "initial_case",
-                new Func<string, string>(StringUtilities.InitialCase));
+                new Func<string, string>(StringUtilities.InitialCase)
+            );
 
             context.PushGlobal(scriptObject);
 

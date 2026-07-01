@@ -8,14 +8,10 @@ internal sealed class CreateFactionLevelModelValidator : AbstractValidator<Creat
 {
     public CreateFactionLevelModelValidator()
     {
-        RuleFor(x => x.FactionId)
-            .NotEmpty()
-            .WithMessage("Faction Id is required.");
-        
-        RuleFor(x => x.KnowledgeId)
-            .NotEmpty()
-            .WithMessage("Knowledge Id is required.");
-        
+        RuleFor(x => x.FactionId).NotEmpty().WithMessage("Faction Id is required.");
+
+        RuleFor(x => x.KnowledgeId).NotEmpty().WithMessage("Knowledge Id is required.");
+
         RuleFor(x => x.Specialization)
             .NotEmpty()
             .WithMessage("Specialization is required.")

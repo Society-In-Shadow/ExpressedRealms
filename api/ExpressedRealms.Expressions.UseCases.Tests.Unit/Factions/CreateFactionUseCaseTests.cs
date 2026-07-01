@@ -27,7 +27,7 @@ public class CreateFactionUseCaseTests
             Background = "View",
             ExpressionId = 1,
             KnowledgeId = 2,
-            Specialization = "Specialization"
+            Specialization = "Specialization",
         };
 
         _factionRepository = A.Fake<IFactionRepository>();
@@ -154,7 +154,7 @@ public class CreateFactionUseCaseTests
             )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_WillCall_CreateFactionLevelsUseCase()
     {
@@ -162,9 +162,9 @@ public class CreateFactionUseCaseTests
         A.CallTo(() =>
                 _createFactionLevelUseCase.ExecuteAsync(
                     A<CreateFactionLevelModel>.That.Matches(k =>
-                        k.FactionId == NewFactionId &&
-                        k.Specialization == _model.Specialization &&
-                        k.KnowledgeId == _model.KnowledgeId
+                        k.FactionId == NewFactionId
+                        && k.Specialization == _model.Specialization
+                        && k.KnowledgeId == _model.KnowledgeId
                     )
                 )
             )

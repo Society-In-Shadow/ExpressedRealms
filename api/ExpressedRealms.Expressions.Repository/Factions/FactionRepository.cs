@@ -55,16 +55,21 @@ internal sealed class FactionRepository(
                 Name = x.Name,
                 Background = x.Background,
                 ExpressionId = x.ExpressionId,
-                Levels = x.FactionLevels.Select(y => new FactionLevelListDto()
-                {
-                    Id = y.Id,
-                    RankName = y.FactionRank.Name,
-                    KnowledgeId = y.KnowledgeId,
-                    Knowledge = y.KnowledgeId == null ? null : y.Knowledge!.Name,
-                    KnowledgeLevel = y.KnowledgeLevelId == null ? null : $"{y.KnowledgeLevel!.Name} ({y.KnowledgeLevel.Level})",
-                    KnowledgeLevelId = y.KnowledgeLevelId,
-                    Specialization = y.Specialization,
-                }).ToList()
+                Levels = x
+                    .FactionLevels.Select(y => new FactionLevelListDto()
+                    {
+                        Id = y.Id,
+                        RankName = y.FactionRank.Name,
+                        KnowledgeId = y.KnowledgeId,
+                        Knowledge = y.KnowledgeId == null ? null : y.Knowledge!.Name,
+                        KnowledgeLevel =
+                            y.KnowledgeLevelId == null
+                                ? null
+                                : $"{y.KnowledgeLevel!.Name} ({y.KnowledgeLevel.Level})",
+                        KnowledgeLevelId = y.KnowledgeLevelId,
+                        Specialization = y.Specialization,
+                    })
+                    .ToList(),
             })
             .Where(x => x.ExpressionId == expressionId)
             .ToListAsync(cancellationToken);

@@ -39,10 +39,10 @@ internal class CommonArguments
               Name:string:required
               Age:int:min.1:max.120
               IsActive:bool
-            
+
             Additional Details
               optional - Will treat the property as nullable by adding ?, eg int?
-            
+
             Multiple Examples:
               Name:string:required,Age:int:min.1:max.120,IsActive:bool
             """,
@@ -104,7 +104,9 @@ internal class CommonArguments
                     MaxValue: containsMaxValue != null
                         ? int.Parse(containsMaxValue.Substring(4))
                         : null,
-                    Optional: parts.Any(y => y.Equals("optional", StringComparison.OrdinalIgnoreCase))
+                    Optional: parts.Any(y =>
+                        y.Equals("optional", StringComparison.OrdinalIgnoreCase)
+                    )
                 );
             })
             .ToList();
