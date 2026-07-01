@@ -1,6 +1,6 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Models.Factions.FactionLevelModels;
-using ExpressedRealms.Expressions.Repository.FactionLevels.Dtos;
+using ExpressedRealms.Expressions.Repository.Factions.Dtos;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Expressions.Repository.FactionLevels;

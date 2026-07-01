@@ -8,6 +8,17 @@ export interface Faction {
   id: number
   name: string
   background: string
+  factionLevels?: FactionLevel[]
+}
+
+export interface FactionLevel {
+  id?: number | string
+  rankName: string
+  knowledgeId?: number | string | null
+  knowledge?: string | null
+  knowledgeLevel?: string | null
+  specialization?: string | null
+  knowledgeLevelId?: number | string | null
 }
 
 export interface EditSingleFactionInfo {

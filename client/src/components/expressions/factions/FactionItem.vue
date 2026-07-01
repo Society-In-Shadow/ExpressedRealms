@@ -50,16 +50,29 @@ onMounted(async () => {
   <Card>
     <template #content>
       <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
-        <div>
-          <h1 class="p-0 m-0">
-            {{ props.item?.name }}
-          </h1>
-          <div class="p-0 m-0">
-            <div v-html="props.item.background" />
-          </div>
-        </div>
+        <h1 class="p-0 m-0 flex-fill">
+          {{ props.item?.name }}
+        </h1>
         <div class="p-0 m-0 d-inline-flex align-items-start">
           <CommandButton :commands="items" />
+        </div>
+      </div>
+      <div class="p-0 m-0">
+        <div v-html="props.item.background" />
+      </div>
+
+      <div v-for="level in props.item.factionLevels" :key="level.id">
+        <h2>{{ level.rankName }} Rank</h2>
+        <h3>Requirements:</h3>
+        <div v-if="level.rankName == 'Basic'">
+          No Requirements to join
+        </div>
+        <div v-else>
+          <p>Knowledge in {{ level.knowledge }} at a {{ level.knowledgeLevel }} level with a specialization in {{ level.specialization }}.</p>
+        </div>
+        <h2>Rank Power</h2>
+        <div>
+          Fancy Power Info
         </div>
       </div>
     </template>

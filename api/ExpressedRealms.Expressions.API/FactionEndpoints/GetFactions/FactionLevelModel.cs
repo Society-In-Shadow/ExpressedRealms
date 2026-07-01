@@ -1,6 +1,6 @@
-namespace ExpressedRealms.Expressions.Repository.FactionLevels.Dtos;
+namespace ExpressedRealms.Expressions.API.FactionEndpoints.GetFactions;
 
-public class FactionLevelListDto
+public class FactionLevelModel
 {
     public int Id { get; set; }
     public required string RankName { get; set; }
