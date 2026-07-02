@@ -55,7 +55,7 @@ public class PowerInformation
             ModifierGroupId = x.Power.StatModifierGroupId,
         };
     }
-    
+
     public static Expression<Func<Power, PowerInformation>> PowerSelector()
     {
         return x => new PowerInformation

@@ -65,7 +65,6 @@ internal sealed class PowerPathRepository(
         return Result.Ok(items);
     }
 
-
     public async Task<Result<List<PowerPathInformation>>> GetPowerPathsAsync(int expressionId)
     {
         var items = await context

@@ -86,8 +86,7 @@ public class GetFactionsUseCaseTests
 
         await _useCase.ExecuteAsync(_model);
         var powerIds = new List<int>() { 8 };
-        A.CallTo(() => _powerRepository.GetPowers(powerIds))
-            .MustHaveHappenedOnceExactly();
+        A.CallTo(() => _powerRepository.GetPowers(powerIds)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -174,8 +173,7 @@ public class GetFactionsUseCaseTests
 
         var powerIds = new List<int>() { 8 };
         A.CallTo(() => _factionRepository.GetFactions(_model.ExpressionId)).Returns(listTest);
-        A.CallTo(() => _powerRepository.GetPowers(powerIds))
-            .Returns([power]);
+        A.CallTo(() => _powerRepository.GetPowers(powerIds)).Returns([power]);
 
         var results = await _useCase.ExecuteAsync(_model);
 

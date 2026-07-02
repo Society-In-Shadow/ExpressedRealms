@@ -24,12 +24,11 @@ internal sealed class GetFactionsUseCase(
             return Result.Fail(result.Errors);
 
         var factions = await factionRepository.GetFactions(model.ExpressionId);
-        
-        var powerIds = factions.SelectMany(x => x.Levels
-            .Where(x => x.PowerId != null)
-            .Select(y => y.PowerId!.Value)
-        ).ToList();
-        
+
+        var powerIds = factions
+            .SelectMany(x => x.Levels.Where(x => x.PowerId != null).Select(y => y.PowerId!.Value))
+            .ToList();
+
         var powers = await powersRepository.GetPowers(powerIds);
 
         return Result.Ok(
