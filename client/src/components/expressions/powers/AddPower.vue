@@ -4,7 +4,7 @@ import FormDropdownWrapper from '@/FormWrappers/FormDropdownWrapper.vue'
 import FormEditorWrapper from '@/FormWrappers/FormEditorWrapper.vue'
 import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
 import Button from 'primevue/button'
-import { onBeforeMount, ref } from 'vue'
+import { onBeforeMount, type PropType, ref } from 'vue'
 import axios from 'axios'
 import toaster from '@/services/Toasters'
 import { getValidationInstance } from '@/components/expressions/powers/Validations/PowerValidations'
@@ -12,15 +12,21 @@ import FormCheckboxWrapper from '@/FormWrappers/FormCheckboxWrapper.vue'
 import FormMultiSelectWrapper from '@/FormWrappers/FormMultiSelectWrapper.vue'
 import { powersStore } from '@/components/expressions/powers/stores/powersStore'
 import PowerPrerequisites from '@/components/expressions/powers/PowerPrerequisites.vue'
+import { TargetPowerType } from '@/components/expressions/powers/types.ts'
 
 const form = getValidationInstance()
 
 const emit = defineEmits<{
   cancelled: []
+  updated: []
 }>()
 
 const props = defineProps({
-  powerPathId: {
+  target: {
+    type: Object as PropType<TargetPowerType>,
+    required: true,
+  },
+  targetId: {
     type: Number,
     required: true,
   },
@@ -35,7 +41,8 @@ onBeforeMount(async () => {
 
 const onSubmit = form.handleSubmit(async (values) => {
   await axios.post(`/powers`, {
-    powerPathId: props.powerPathId,
+    target: props.target,
+    targetId: props.targetId,
     name: values.name,
     description: values.description,
     gameMechanicEffect: values.gameMechanicEffect,
@@ -51,8 +58,10 @@ const onSubmit = form.handleSubmit(async (values) => {
   })
     .then(async (response) => {
       const newPowerId = response.data
-      await prerequisiteChild.value.addUpdatePrerequisite(newPowerId)
-      await powers.updatePowersByPathId(props.powerPathId)
+      if (props.target === TargetPowerType.PowerPath) {
+        await prerequisiteChild.value.addUpdatePrerequisite(newPowerId)
+      }
+      emit('updated')
       toaster.success('Successfully Added Power!')
       reset()
     })
@@ -112,7 +121,7 @@ const reset = () => {
 
       <FormEditorWrapper v-model="form.other" />
 
-      <PowerPrerequisites ref="prerequisiteChild" :power-path-id="props.powerPathId" />
+      <PowerPrerequisites v-if="props.target === TargetPowerType.PowerPath" ref="prerequisiteChild" :power-path-id="props.targetId" />
 
       <div class="float-end">
         <Button label="Cancel" class="m-2" type="reset" @click="reset" />

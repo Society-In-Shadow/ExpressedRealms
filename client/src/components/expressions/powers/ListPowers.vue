@@ -4,9 +4,12 @@ import AddPower from '@/components/expressions/powers/AddPower.vue'
 import PowerCard from '@/components/expressions/powers/PowerCard.vue'
 import Button from 'primevue/button'
 
-import type { Power } from '@/components/expressions/powers/types'
+import { type Power, TargetPowerType } from '@/components/expressions/powers/types'
 import PowerReorder from '@/components/expressions/powers/PowerReorder.vue'
 import { can } from '@/stores/userPermissionStore.ts'
+import { powersStore } from '@/components/expressions/powers/stores/powersStore.ts'
+
+const powerInfo = powersStore()
 
 const props = defineProps({
   powerPathId: {
@@ -34,6 +37,10 @@ const toggleReadOnly = () => {
   readOnly.value = !readOnly.value
 }
 
+const updatePowerPaths = async () => {
+  await powerInfo.updatePowersByPathId(props.powerPathId)
+}
+
 </script>
 
 <template>
@@ -45,8 +52,8 @@ const toggleReadOnly = () => {
   </div>
 
   <AddPower
-    v-if="showAddPower && can.Powers.Create && (!props.isReadOnly || !readOnly)"
-    :power-path-id="props.powerPathId" @cancelled="toggleAddPower"
+    v-if="showAddPower && can.Powers.Create && (!props.isReadOnly || !readOnly)" :target="TargetPowerType.PowerPath"
+    :target-id="props.powerPathId" @cancelled="toggleAddPower" @updated="updatePowerPaths"
   />
   <Button
     v-if="!showAddPower && can.Powers.Create && (!props.isReadOnly || !readOnly)" class="w-100 m-2"

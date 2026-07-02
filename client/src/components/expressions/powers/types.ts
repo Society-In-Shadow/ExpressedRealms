@@ -6,6 +6,11 @@ export interface DetailedInformation {
   id: number
 }
 
+export enum TargetPowerType {
+  PowerPath = 1,
+  FactionLevel = 2,
+}
+
 export interface PowerStore {
   powerPathId: number
   powers: Power[]
