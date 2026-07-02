@@ -74,7 +74,7 @@ public class CreatePowerModelValidator : AbstractValidator<CreatePowerModel>
             )
             .WithMessage("This is not a valid Power Activation Type");
 
-        RuleFor(x => x.PowerPathId)
+        RuleFor(x => x.TargetId)
             .MustAsync(
                 async (powerPathId, cancellationToken) =>
                 {

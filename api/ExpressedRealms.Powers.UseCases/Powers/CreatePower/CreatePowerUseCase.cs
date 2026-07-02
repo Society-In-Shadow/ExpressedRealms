@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using ExpressedRealms.DB.Models.Powers;
 using ExpressedRealms.DB.Models.Powers.PowerPathPowerMappingSetup;
 using ExpressedRealms.Powers.Repository.PowerPaths;
@@ -46,12 +47,26 @@ internal sealed class CreatePowerUseCase(
 
         var powerId = await powerRepository.CreatePower(newPower);
 
-        await powerPathRepository.AddPowerToPowerPath(
-            new PowerPathPowerMapping()
-            {
-                PowerId = powerId,
-                PowerPathId = model.PowerPathId
-            });
+        switch (model.Target)
+        {
+            case CreatePowerTarget.PowerPath:
+                await powerPathRepository.AddPowerToPowerPath(
+                    new PowerPathPowerMapping()
+                    {
+                        PowerId = powerId,
+                        PowerPathId = model.TargetId
+                    });
+                break;
+            case CreatePowerTarget.FactionLevel:
+                await powerRepository.AddPowerToFactionLevel(powerId, model.TargetId);
+                break;
+            default:
+                throw new InvalidEnumArgumentException(
+                    nameof(model.Target),
+                    (int)model.Target,
+                    typeof(CreatePowerTarget)
+                );
+        }
         
         return Result.Ok(powerId);
     }

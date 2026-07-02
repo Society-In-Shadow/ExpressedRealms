@@ -15,6 +15,7 @@ public static class CreatePowerEndpoint
         var results = await repository.ExecuteAsync(
             new CreatePowerModel()
             {
+                Target = request.Target,
                 Name = request.Name,
                 Category = request.CategoryIds,
                 Description = request.Description,
@@ -25,7 +26,7 @@ public static class CreatePowerEndpoint
                 PowerLevel = request.PowerLevel,
                 PowerActivationType = request.PowerActivationType,
                 Other = request.Other,
-                PowerPathId = request.PowerPathId,
+                TargetId = request.TargetId,
                 IsPowerUse = request.IsPowerUse,
                 Cost = request.Cost,
             }

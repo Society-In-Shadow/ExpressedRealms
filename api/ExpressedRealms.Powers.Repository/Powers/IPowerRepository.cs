@@ -23,4 +23,5 @@ public interface IPowerRepository
     Task<bool> IsValidRequirement(int id);
     Task<PowerLevel> GetPowerLevelForPower(int id);
     Task<int> GetPowerExperienceCost(int powerId);
+    Task AddPowerToFactionLevel(int powerId, int targetId);
 }
