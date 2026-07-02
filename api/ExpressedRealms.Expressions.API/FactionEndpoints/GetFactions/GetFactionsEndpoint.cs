@@ -35,7 +35,7 @@ public static class GetFactionsEndpoint
                                 KnowledgeLevel = y.KnowledgeLevel,
                                 Specialization = y.Specialization,
                                 KnowledgeLevelId = y.KnowledgeLevelId,
-                                PowerId = y.PowerId,
+                                Power = y.Power,
                             })
                             .ToList(),
                     })

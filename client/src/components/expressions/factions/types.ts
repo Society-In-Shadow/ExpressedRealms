@@ -1,4 +1,5 @@
 import type { ListItem } from '@/types/ListItem.ts'
+import type { Power } from '@/components/expressions/powers/types.ts'
 
 export interface FactionResponse {
   factions: Array<Faction>
@@ -19,7 +20,7 @@ export interface FactionLevel {
   knowledgeLevel?: string | null
   specialization?: string | null
   knowledgeLevelId?: number | string | null
-  powerId?: number | null
+  power?: Power | null
 }
 
 export interface EditSingleFactionInfo {

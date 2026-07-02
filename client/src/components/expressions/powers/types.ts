@@ -16,6 +16,12 @@ export interface AddPowerType {
   targetId: number
 }
 
+export interface EditPowerPopup {
+  target: TargetPowerType
+  powerId: number
+  powerPathId: number | undefined
+}
+
 export interface PowerStore {
   powerPathId: number
   powers: Power[]

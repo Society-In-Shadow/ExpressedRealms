@@ -1,5 +1,5 @@
 import { useDialog } from 'primevue/usedialog'
-import { type Component } from 'vue'
+import { type Component, type Ref } from 'vue'
 
 type ComponentLoader = () => Promise<{ default: Component }>
 

@@ -1,4 +1,5 @@
 using ExpressedRealms.Expressions.Repository.Factions;
+using ExpressedRealms.Powers.Repository.Powers;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
@@ -6,6 +7,7 @@ namespace ExpressedRealms.Expressions.UseCases.FactionUseCases.GetFactions;
 
 internal sealed class GetFactionsUseCase(
     IFactionRepository factionRepository,
+    IPowerRepository powersRepository,
     GetFactionsModelValidator validator,
     CancellationToken cancellationToken
 ) : IGetFactionsUseCase
@@ -22,6 +24,12 @@ internal sealed class GetFactionsUseCase(
             return Result.Fail(result.Errors);
 
         var factions = await factionRepository.GetFactions(model.ExpressionId);
+
+        var powerIds = factions
+            .SelectMany(x => x.Levels.Where(x => x.PowerId != null).Select(y => y.PowerId!.Value))
+            .ToList();
+
+        var powers = await powersRepository.GetPowers(powerIds);
 
         return Result.Ok(
             new FactionsReturnModel()
@@ -42,7 +50,7 @@ internal sealed class GetFactionsUseCase(
                                 KnowledgeLevel = y.KnowledgeLevel,
                                 Specialization = y.Specialization,
                                 KnowledgeLevelId = y.KnowledgeLevelId,
-                                PowerId = y.PowerId,
+                                Power = powers.FirstOrDefault(z => z.Id == y.PowerId),
                             })
                             .ToList(),
                     })
