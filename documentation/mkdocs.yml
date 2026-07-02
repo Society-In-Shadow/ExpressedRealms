@@ -35,6 +35,7 @@ nav:
   - Creating GPG Keys: creatingGPGKeys.md
   - Cypress: cypress.md
   - Database: database.md
+  - Dialogs: dialogs.md
   - Discord Support: discordSupport.md
   - Docker / Podman: docker-podman.md
   - EF Core Practices: efCorePractices.md

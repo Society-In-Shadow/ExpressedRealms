@@ -86,13 +86,11 @@ public class CreatePowerModelValidator : AbstractValidator<CreatePowerModel>
                                 x => x.Id == model.TargetId,
                                 cancellationToken
                             );
-                            break;
                         case CreatePowerTarget.FactionLevel:
                             return await dbContext.FactionLevels.AnyAsync(
                                 x => x.Id == model.TargetId,
                                 cancellationToken
                             );
-                            break;
                         default:
                             throw new InvalidEnumArgumentException(
                                 nameof(model.Target),
