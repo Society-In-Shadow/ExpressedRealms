@@ -67,7 +67,7 @@ public class GetFactionsUseCaseTests
                         Id = 5,
                         Specialization = "Bar",
                         KnowledgeId = 3,
-                        PowerId = 8
+                        PowerId = 8,
                     },
                 },
             },
@@ -99,7 +99,7 @@ public class GetFactionsUseCaseTests
                             Id = 5,
                             Specialization = "Bar",
                             KnowledgeId = 3,
-                            PowerId = 8
+                            PowerId = 8,
                         },
                     },
                 },

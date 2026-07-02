@@ -100,7 +100,6 @@ public class CreatePowerModelValidator : AbstractValidator<CreatePowerModel>
                                 typeof(CreatePowerTarget)
                             );
                     }
-
                 }
             )
             .WithErrorCode("NotFound")

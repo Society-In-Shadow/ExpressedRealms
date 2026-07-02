@@ -186,14 +186,14 @@ internal sealed class PowerPathRepository(
         await context.SaveChangesAsync();
         return Result.Ok();
     }
-    
+
     public async Task AddPowerToPowerPath(PowerPathPowerMapping model)
     {
         var nextPlaceOnList = await context
             .PowerPathPowerMappings.AsNoTracking()
             .Where(x => x.PowerPathId == model.PowerPathId)
             .CountAsync();
-        
+
         model.OrderIndex = nextPlaceOnList + 1;
 
         context.PowerPathPowerMappings.Add(model);

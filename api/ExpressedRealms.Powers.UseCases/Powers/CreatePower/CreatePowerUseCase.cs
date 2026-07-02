@@ -39,10 +39,9 @@ internal sealed class CreatePowerUseCase(
             Limitation = model.Limitation,
             OtherFields = model.Other,
             Cost = model.Cost,
-            CategoryMappings = model.Category.Select(x => new PowerCategoryMapping()
-            {
-                CategoryId = x,
-            }).ToList()
+            CategoryMappings = model
+                .Category.Select(x => new PowerCategoryMapping() { CategoryId = x })
+                .ToList(),
         };
 
         var powerId = await powerRepository.CreatePower(newPower);
@@ -51,11 +50,8 @@ internal sealed class CreatePowerUseCase(
         {
             case CreatePowerTarget.PowerPath:
                 await powerPathRepository.AddPowerToPowerPath(
-                    new PowerPathPowerMapping()
-                    {
-                        PowerId = powerId,
-                        PowerPathId = model.TargetId
-                    });
+                    new PowerPathPowerMapping() { PowerId = powerId, PowerPathId = model.TargetId }
+                );
                 break;
             case CreatePowerTarget.FactionLevel:
                 await powerRepository.AddPowerToFactionLevel(powerId, model.TargetId);
@@ -67,9 +63,7 @@ internal sealed class CreatePowerUseCase(
                     typeof(CreatePowerTarget)
                 );
         }
-        
+
         return Result.Ok(powerId);
     }
-
-
 }

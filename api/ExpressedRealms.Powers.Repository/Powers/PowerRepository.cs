@@ -291,11 +291,11 @@ internal sealed class PowerRepository(
             .ToListAsync(cancellationToken);
         return powers.Count == ids.Count;
     }
-    
+
     public async Task AddPowerToFactionLevel(int powerId, int targetId)
     {
-        await context.FactionLevels
-            .Where(x => x.Id == targetId)
+        await context
+            .FactionLevels.Where(x => x.Id == targetId)
             .ExecuteUpdateAsync(x => x.SetProperty(y => y.PowerId, powerId));
     }
 }
