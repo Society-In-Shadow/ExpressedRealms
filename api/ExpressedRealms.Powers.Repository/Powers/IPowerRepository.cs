@@ -24,4 +24,5 @@ public interface IPowerRepository
     Task<PowerLevel> GetPowerLevelForPower(int id);
     Task<int> GetPowerExperienceCost(int powerId);
     Task AddPowerToFactionLevel(int powerId, int targetId);
+    Task<List<PowerInformation>> GetPowers(List<int> powerIds);
 }

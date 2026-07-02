@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using ExpressedRealms.DB.Models.Powers;
 using ExpressedRealms.DB.Models.Powers.PowerPathPowerMappingSetup;
 
 namespace ExpressedRealms.Powers.Repository.Powers.DTOs.PowerList;
@@ -52,6 +53,55 @@ public class PowerInformation
                     }
                     : null,
             ModifierGroupId = x.Power.StatModifierGroupId,
+        };
+    }
+    
+    public static Expression<Func<Power, PowerInformation>> PowerSelector()
+    {
+        return x => new PowerInformation
+        {
+            Id = x.Id,
+            Name = x.Name,
+            Category = x
+                .CategoryMappings.Select(y => new DetailedInformation(
+                    y.Category.Name,
+                    y.Category.Description
+                ))
+                .ToList(),
+            Description = x.Description,
+            GameMechanicEffect = x.GameMechanicEffect ?? string.Empty,
+            Limitation = x.Limitation ?? string.Empty,
+            PowerDuration = new DetailedInformation(
+                x.PowerDuration.Name,
+                x.PowerDuration.Description
+            ),
+            AreaOfEffect = new DetailedInformation(
+                x.PowerAreaOfEffectType.Name,
+                x.PowerAreaOfEffectType.Description
+            ),
+            PowerLevel = new DetailedInformation(
+                x.PowerLevel.Id,
+                x.PowerLevel.Name,
+                x.PowerLevel.Description
+            ),
+            PowerActivationType = new DetailedInformation(
+                x.PowerActivationTimingType.Name,
+                x.PowerActivationTimingType.Description
+            ),
+            Other = x.OtherFields,
+            IsPowerUse = x.IsPowerUse,
+            Cost = x.Cost,
+            Prerequisites =
+                x.Prerequisite != null
+                    ? new PrerequisiteDetails
+                    {
+                        RequiredAmount = x.Prerequisite.RequiredAmount,
+                        Powers = x
+                            .Prerequisite.PrerequisitePowers.Select(pp => pp.Power.Name)
+                            .ToList(),
+                    }
+                    : null,
+            ModifierGroupId = x.StatModifierGroupId,
         };
     }
 

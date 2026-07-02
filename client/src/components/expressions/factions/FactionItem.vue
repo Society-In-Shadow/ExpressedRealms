@@ -13,6 +13,7 @@ import Button from 'primevue/button'
 import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 import { factionListQuery } from '@/components/expressions/factions/stores/factionStore.ts'
 import { expressionStore } from '@/stores/expressionStore.ts'
+import PowerCard from '@/components/expressions/powers/PowerCard.vue'
 
 const userPermissionInfo = userPermissionStore()
 const permissionCheck = userPermissionInfo.permissionCheck
@@ -99,18 +100,16 @@ function PopulateFactionActions() {
           </h3>
           <div class="p-0 m-0 d-inline-flex align-items-start">
             <Button
-              v-if="can.Faction.Edit && !level.powerId" class="w-100 m-2"
+              v-if="can.Faction.Edit && !level.power" class="w-100 m-2"
               label="Add Power" size="small" @click="showAddPower(level.id)"
             />
             <Button
-              v-if="can.Faction.Edit && level.powerId" class="w-100 m-2"
+              v-if="can.Faction.Edit && level.power" class="w-100 m-2"
               label="Edit Power" size="small" disabled
             />
           </div>
         </div>
-        <div>
-          Fancy Power Info
-        </div>
+        <PowerCard v-if="level.power" :power="level.power" :power-path-id="-1" :is-read-only="true" />
       </div>
     </template>
   </Card>

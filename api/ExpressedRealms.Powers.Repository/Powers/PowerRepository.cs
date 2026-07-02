@@ -298,4 +298,12 @@ internal sealed class PowerRepository(
             .FactionLevels.Where(x => x.Id == targetId)
             .ExecuteUpdateAsync(x => x.SetProperty(y => y.PowerId, powerId));
     }
+    
+    public async Task<List<PowerInformation>> GetPowers(List<int> powerIds)
+    {
+        return await context
+            .Powers.Where(x => powerIds.Contains(x.Id))
+            .Select(PowerInformation.PowerSelector())
+            .ToListAsync(cancellationToken);
+    }
 }

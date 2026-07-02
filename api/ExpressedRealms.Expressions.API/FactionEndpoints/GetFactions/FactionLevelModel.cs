@@ -1,3 +1,5 @@
+using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerList;
+
 namespace ExpressedRealms.Expressions.API.FactionEndpoints.GetFactions;
 
 public class FactionLevelModel
@@ -9,5 +11,5 @@ public class FactionLevelModel
     public string? KnowledgeLevel { get; set; }
     public string? Specialization { get; set; }
     public int? KnowledgeLevelId { get; set; }
-    public int? PowerId { get; set; }
+    public PowerInformation? Power { get; set; }
 }
