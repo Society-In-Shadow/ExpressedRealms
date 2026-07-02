@@ -1,5 +1,4 @@
 using ExpressedRealms.DB;
-using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerCreate;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 

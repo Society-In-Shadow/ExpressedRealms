@@ -1,6 +1,5 @@
 using ExpressedRealms.DB.Models.Powers;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.Options;
-using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerCreate;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerEdit;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerList;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerSorting;
@@ -11,7 +10,7 @@ namespace ExpressedRealms.Powers.Repository.Powers;
 public interface IPowerRepository
 {
     Task<Result<List<PowerInformation>>> GetPowersAsync(int powerPathId);
-    Task<Result<int>> CreatePower(CreatePowerModel createPowerModel);
+    Task<int> CreatePower(Power power);
     Task<Result> EditPower(EditPowerModel editPowerModel);
     Task<Result> DeletePowerAsync(int id);
     Task<Result<PowerOptions>> GetPowerOptionsAsync();

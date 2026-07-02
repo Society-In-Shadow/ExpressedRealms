@@ -1,5 +1,4 @@
-using ExpressedRealms.Powers.Repository.Powers;
-using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerCreate;
+using ExpressedRealms.Powers.UseCases.Powers.CreatePower;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -10,10 +9,10 @@ public static class CreatePowerEndpoint
 {
     public static async Task<Results<ValidationProblem, NotFound, Created<int>>> Execute(
         CreatePowerRequest request,
-        IPowerRepository repository
+        ICreatePowerUseCase repository
     )
     {
-        var results = await repository.CreatePower(
+        var results = await repository.ExecuteAsync(
             new CreatePowerModel()
             {
                 Name = request.Name,

@@ -2,7 +2,7 @@ using ExpressedRealms.DB;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
-namespace ExpressedRealms.Powers.Repository.Powers.DTOs.PowerCreate;
+namespace ExpressedRealms.Powers.UseCases.Powers.CreatePower;
 
 public class CreatePowerModelValidator : AbstractValidator<CreatePowerModel>
 {

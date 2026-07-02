@@ -1,9 +1,9 @@
-namespace ExpressedRealms.Powers.Repository.Powers.DTOs.PowerCreate;
+namespace ExpressedRealms.Powers.UseCases.Powers.CreatePower;
 
 public class CreatePowerModel
 {
     public required string Name { get; set; }
-    public List<int>? Category { get; set; }
+    public List<int> Category { get; set; } = new();
     public required string Description { get; set; }
     public required string GameMechanicEffect { get; set; }
     public string? Limitation { get; set; }

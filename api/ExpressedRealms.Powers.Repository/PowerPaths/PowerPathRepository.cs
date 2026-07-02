@@ -1,5 +1,6 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Powers.PowerPathPowerMappingSetup;
 using ExpressedRealms.DB.Models.Powers.PowerPathSetup;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathCreate;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathEdit;
@@ -184,5 +185,18 @@ internal sealed class PowerPathRepository(
 
         await context.SaveChangesAsync();
         return Result.Ok();
+    }
+    
+    public async Task AddPowerToPowerPath(PowerPathPowerMapping model)
+    {
+        var nextPlaceOnList = await context
+            .PowerPathPowerMappings.AsNoTracking()
+            .Where(x => x.PowerPathId == model.PowerPathId)
+            .CountAsync();
+        
+        model.OrderIndex = nextPlaceOnList + 1;
+
+        context.PowerPathPowerMappings.Add(model);
+        await context.SaveChangesAsync();
     }
 }
