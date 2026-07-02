@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.Models.Powers.PowerPathPowerMappingSetup;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathCreate;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathEdit;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathLIst;
@@ -17,4 +18,5 @@ public interface IPowerPathRepository
     Task<Result> UpdatePowerPathSortOrder(EditPowerPathSortModel dto);
     Task<Result<List<PowerPathToc>>> GetPowerPathAndPowers(int expressionId);
     Task<Result<List<PowerPathToc>>> GetPowerPathAndPowers(List<int> powerIds);
+    Task AddPowerToPowerPath(PowerPathPowerMapping model);
 }

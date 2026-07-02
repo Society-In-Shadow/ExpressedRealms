@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import AddPower from '@/components/expressions/powers/AddPower.vue'
 import PowerCard from '@/components/expressions/powers/PowerCard.vue'
 import Button from 'primevue/button'
 
-import type { Power } from '@/components/expressions/powers/types'
+import { type Power, TargetPowerType } from '@/components/expressions/powers/types'
 import PowerReorder from '@/components/expressions/powers/PowerReorder.vue'
 import { can } from '@/stores/userPermissionStore.ts'
+import { powersStore } from '@/components/expressions/powers/stores/powersStore.ts'
+import { powerDialogs } from '@/components/expressions/powers/services/dialogs.ts'
+
+const powerInfo = powersStore()
+
+const dialogs = powerDialogs()
 
 const props = defineProps({
   powerPathId: {
@@ -23,15 +28,17 @@ const props = defineProps({
   },
 })
 
-const showAddPower = ref(false)
-
-const toggleAddPower = () => {
-  showAddPower.value = !showAddPower.value
-}
-
 const readOnly = ref(false)
 const toggleReadOnly = () => {
   readOnly.value = !readOnly.value
+}
+
+const showAddPower = async () => {
+  const result = await dialogs.showAddPower({ target: TargetPowerType.PowerPath, targetId: props.powerPathId })
+
+  if (result?.action == 'added') {
+    await powerInfo.updatePowersByPathId(props.powerPathId)
+  }
 }
 
 </script>
@@ -44,12 +51,8 @@ const toggleReadOnly = () => {
     </div>
   </div>
 
-  <AddPower
-    v-if="showAddPower && can.Powers.Create && (!props.isReadOnly || !readOnly)"
-    :power-path-id="props.powerPathId" @cancelled="toggleAddPower"
-  />
   <Button
-    v-if="!showAddPower && can.Powers.Create && (!props.isReadOnly || !readOnly)" class="w-100 m-2"
-    label="Add Power" @click="toggleAddPower"
+    v-if="can.Powers.Create && (!props.isReadOnly || !readOnly)" class="w-100 m-2"
+    label="Add Power" @click="showAddPower"
   />
 </template>

@@ -4,7 +4,7 @@ import FormDropdownWrapper from '@/FormWrappers/FormDropdownWrapper.vue'
 import FormEditorWrapper from '@/FormWrappers/FormEditorWrapper.vue'
 import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
 import Button from 'primevue/button'
-import { onBeforeMount, ref } from 'vue'
+import { inject, onBeforeMount, ref } from 'vue'
 import axios from 'axios'
 import toaster from '@/services/Toasters'
 import { getValidationInstance } from '@/components/expressions/powers/Validations/PowerValidations'
@@ -12,19 +12,12 @@ import FormCheckboxWrapper from '@/FormWrappers/FormCheckboxWrapper.vue'
 import FormMultiSelectWrapper from '@/FormWrappers/FormMultiSelectWrapper.vue'
 import { powersStore } from '@/components/expressions/powers/stores/powersStore'
 import PowerPrerequisites from '@/components/expressions/powers/PowerPrerequisites.vue'
+import { type AddPowerType, TargetPowerType } from '@/components/expressions/powers/types.ts'
+import type { DialogRef } from '@/utilities/dialogUtilities.ts'
 
 const form = getValidationInstance()
 
-const emit = defineEmits<{
-  cancelled: []
-}>()
-
-const props = defineProps({
-  powerPathId: {
-    type: Number,
-    required: true,
-  },
-})
+const dialogRef = inject('dialogRef') as DialogRef<AddPowerType>
 
 const powers = powersStore()
 const prerequisiteChild = ref()
@@ -35,7 +28,8 @@ onBeforeMount(async () => {
 
 const onSubmit = form.handleSubmit(async (values) => {
   await axios.post(`/powers`, {
-    powerPathId: props.powerPathId,
+    target: dialogRef.value.data.target,
+    targetId: dialogRef.value.data.targetId,
     name: values.name,
     description: values.description,
     gameMechanicEffect: values.gameMechanicEffect,
@@ -51,8 +45,12 @@ const onSubmit = form.handleSubmit(async (values) => {
   })
     .then(async (response) => {
       const newPowerId = response.data
-      await prerequisiteChild.value.addUpdatePrerequisite(newPowerId)
-      await powers.updatePowersByPathId(props.powerPathId)
+      if (dialogRef.value.data.target === TargetPowerType.PowerPath) {
+        await prerequisiteChild.value.addUpdatePrerequisite(newPowerId)
+      }
+      dialogRef.value.close({
+        action: 'added',
+      })
       toaster.success('Successfully Added Power!')
       reset()
     })
@@ -60,7 +58,9 @@ const onSubmit = form.handleSubmit(async (values) => {
 
 const reset = () => {
   form.customResetForm()
-  emit('cancelled')
+  dialogRef.value.close({
+    action: 'cancelled',
+  })
 }
 
 </script>
@@ -112,7 +112,7 @@ const reset = () => {
 
       <FormEditorWrapper v-model="form.other" />
 
-      <PowerPrerequisites ref="prerequisiteChild" :power-path-id="props.powerPathId" />
+      <PowerPrerequisites v-if="dialogRef.data.target === TargetPowerType.PowerPath" ref="prerequisiteChild" :power-path-id="dialogRef.data.targetId" />
 
       <div class="float-end">
         <Button label="Cancel" class="m-2" type="reset" @click="reset" />

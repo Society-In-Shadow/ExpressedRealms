@@ -1,5 +1,6 @@
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Factions.FactionLevelModels;
 using ExpressedRealms.DB.Models.ModifierSystem.StatModifierGroups;
 using ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup;
 using ExpressedRealms.DB.Models.Powers.PowerPathPowerMappingSetup;
@@ -48,4 +49,6 @@ public class Power : ISoftDelete
     public virtual List<PowerPrerequisitePower> PrerequisitePowers { get; set; } = null!;
     public virtual List<PowerAuditTrail> PowerAuditTrails { get; set; } = null!;
     public virtual List<CharacterPowerMapping> CharacterPowerMappings { get; set; } = null!;
+    public virtual ICollection<FactionLevel> FactionLevels { get; set; } =
+        new HashSet<FactionLevel>();
 }

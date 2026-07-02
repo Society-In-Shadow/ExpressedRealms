@@ -9,4 +9,5 @@ public class FactionLevelListDto
     public string? KnowledgeLevel { get; set; }
     public string? Specialization { get; set; }
     public int? KnowledgeLevelId { get; set; }
+    public int? PowerId { get; set; }
 }

@@ -1,9 +1,7 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Powers;
-using ExpressedRealms.DB.Models.Powers.PowerPathPowerMappingSetup;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.Options;
-using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerCreate;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerEdit;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerList;
 using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerSorting;
@@ -16,7 +14,6 @@ namespace ExpressedRealms.Powers.Repository.Powers;
 
 internal sealed class PowerRepository(
     ExpressedRealmsDbContext context,
-    CreatePowerModelValidator createPowerModelValidator,
     EditPowerModelValidator editPowerModelValidator,
     CancellationToken cancellationToken
 ) : IPowerRepository
@@ -140,66 +137,11 @@ internal sealed class PowerRepository(
         );
     }
 
-    public async Task<Result<int>> CreatePower(CreatePowerModel createPowerModel)
+    public async Task<int> CreatePower(Power power)
     {
-        var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
-            createPowerModelValidator,
-            createPowerModel,
-            cancellationToken
-        );
-
-        if (result.IsFailed)
-            return Result.Fail(result.Errors);
-
-        var nextPlaceOnList = await context
-            .PowerPathPowerMappings.AsNoTracking()
-            .Where(x => x.PowerPathId == createPowerModel.PowerPathId)
-            .CountAsync();
-
-        var newPower = new Power
-        {
-            Name = createPowerModel.Name,
-            Description = createPowerModel.Description,
-            LevelId = createPowerModel.PowerLevel,
-            AreaOfEffectTypeId = createPowerModel.AreaOfEffect,
-            ActivationTimingTypeId = createPowerModel.PowerActivationType,
-            DurationId = createPowerModel.PowerDuration,
-            IsPowerUse = createPowerModel.IsPowerUse,
-            GameMechanicEffect = createPowerModel.GameMechanicEffect,
-            Limitation = createPowerModel.Limitation,
-            OtherFields = createPowerModel.Other,
-            Cost = createPowerModel.Cost,
-        };
-
-        context.Powers.Add(newPower);
+        context.Powers.Add(power);
         await context.SaveChangesAsync(cancellationToken);
-
-        context.PowerPathPowerMappings.Add(
-            new PowerPathPowerMapping()
-            {
-                PowerId = newPower.Id,
-                PowerPathId = createPowerModel.PowerPathId,
-                OrderIndex = nextPlaceOnList + 1,
-            }
-        );
-
-        if (createPowerModel.Category == null || createPowerModel.Category.Count == 0)
-        {
-            await context.SaveChangesAsync(cancellationToken);
-            return Result.Ok(newPower.Id);
-        }
-
-        context.PowerCategoryMappings.AddRange(
-            createPowerModel.Category.Select(x => new PowerCategoryMapping()
-            {
-                PowerId = newPower.Id,
-                CategoryId = x,
-            })
-        );
-
-        await context.SaveChangesAsync(cancellationToken);
-
-        return Result.Ok(newPower.Id);
+        return power.Id;
     }
 
     public async Task<Result> EditPower(EditPowerModel editPowerModel)
@@ -348,5 +290,12 @@ internal sealed class PowerRepository(
             .Powers.Where(x => ids.Contains(x.Id))
             .ToListAsync(cancellationToken);
         return powers.Count == ids.Count;
+    }
+
+    public async Task AddPowerToFactionLevel(int powerId, int targetId)
+    {
+        await context
+            .FactionLevels.Where(x => x.Id == targetId)
+            .ExecuteUpdateAsync(x => x.SetProperty(y => y.PowerId, powerId));
     }
 }

@@ -68,6 +68,7 @@ internal sealed class FactionRepository(
                                 : $"{y.KnowledgeLevel!.Name} ({y.KnowledgeLevel.Level})",
                         KnowledgeLevelId = y.KnowledgeLevelId,
                         Specialization = y.Specialization,
+                        PowerId = y.PowerId,
                     })
                     .ToList(),
             })

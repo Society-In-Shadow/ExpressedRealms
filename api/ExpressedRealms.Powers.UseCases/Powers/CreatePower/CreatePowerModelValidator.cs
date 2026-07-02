@@ -1,8 +1,9 @@
+using System.ComponentModel;
 using ExpressedRealms.DB;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
-namespace ExpressedRealms.Powers.Repository.Powers.DTOs.PowerCreate;
+namespace ExpressedRealms.Powers.UseCases.Powers.CreatePower;
 
 public class CreatePowerModelValidator : AbstractValidator<CreatePowerModel>
 {
@@ -74,17 +75,32 @@ public class CreatePowerModelValidator : AbstractValidator<CreatePowerModel>
             )
             .WithMessage("This is not a valid Power Activation Type");
 
-        RuleFor(x => x.PowerPathId)
+        RuleFor(x => x)
             .MustAsync(
-                async (powerPathId, cancellationToken) =>
+                async (model, cancellationToken) =>
                 {
-                    return await dbContext.PowerPaths.AnyAsync(
-                        x => x.Id == powerPathId,
-                        cancellationToken
-                    );
+                    switch (model.Target)
+                    {
+                        case CreatePowerTarget.PowerPath:
+                            return await dbContext.PowerPaths.AnyAsync(
+                                x => x.Id == model.TargetId,
+                                cancellationToken
+                            );
+                        case CreatePowerTarget.FactionLevel:
+                            return await dbContext.FactionLevels.AnyAsync(
+                                x => x.Id == model.TargetId,
+                                cancellationToken
+                            );
+                        default:
+                            throw new InvalidEnumArgumentException(
+                                nameof(model.Target),
+                                (int)model.Target,
+                                typeof(CreatePowerTarget)
+                            );
+                    }
                 }
             )
             .WithErrorCode("NotFound")
-            .WithMessage("This is not a valid Power Path");
+            .WithMessage("This is not a valid Id for the given target");
     }
 }

@@ -3,13 +3,22 @@
 import { onMounted, type PropType, ref } from 'vue'
 import Card from 'primevue/card'
 import { ConfirmationPopup } from './services/confirmationPopupService'
-import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+import { can, userPermissionStore } from '@/stores/userPermissionStore.ts'
 import type { Faction } from '@/components/expressions/factions/types.ts'
 import { factionDialogs } from '@/components/expressions/factions/services/dialogs.ts'
 import CommandButton, { type Command } from '@/uiComponents/CommandButton.vue'
+import { powerDialogs } from '@/components/expressions/powers/services/dialogs.ts'
+import { TargetPowerType } from '@/components/expressions/powers/types.ts'
+import Button from 'primevue/button'
+import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
+import { factionListQuery } from '@/components/expressions/factions/stores/factionStore.ts'
+import { expressionStore } from '@/stores/expressionStore.ts'
 
 const userPermissionInfo = userPermissionStore()
 const permissionCheck = userPermissionInfo.permissionCheck
+
+const dialogs = powerDialogs()
+const expressionData = expressionStore()
 
 const props = defineProps({
   item: {
@@ -21,9 +30,23 @@ const props = defineProps({
 let popups = ConfirmationPopup(props.item.id, props.item.name)
 let editItemPopup = factionDialogs()
 
+const { refetch } = useQueryWithLoading(factionListQuery(expressionData.currentExpressionId))
+
 const items = ref<Command[]>([])
 
 onMounted(async () => {
+  PopulateFactionActions()
+})
+
+const showAddPower = async (levelId: number) => {
+  const result = await dialogs.showAddPower({ target: TargetPowerType.FactionLevel, targetId: levelId })
+
+  if (result?.action == 'added') {
+    await refetch()
+  }
+}
+
+function PopulateFactionActions() {
   if (permissionCheck.Faction.Edit) {
     items.value.push({
       label: 'Edit',
@@ -42,7 +65,7 @@ onMounted(async () => {
       severity: 'danger',
     })
   }
-})
+}
 
 </script>
 
@@ -70,7 +93,21 @@ onMounted(async () => {
         <div v-else>
           <p>Knowledge in {{ level.knowledge }} at a {{ level.knowledgeLevel }} level with a specialization in {{ level.specialization }}.</p>
         </div>
-        <h2>Rank Power</h2>
+        <div class="d-flex flex-column flex-md-row align-self-center justify-content-between mt-3">
+          <h3 class="p-0 m-0 flex-fill">
+            Rank Power
+          </h3>
+          <div class="p-0 m-0 d-inline-flex align-items-start">
+            <Button
+              v-if="can.Faction.Edit && !level.powerId" class="w-100 m-2"
+              label="Add Power" size="small" @click="showAddPower(level.id)"
+            />
+            <Button
+              v-if="can.Faction.Edit && level.powerId" class="w-100 m-2"
+              label="Edit Power" size="small" disabled
+            />
+          </div>
+        </div>
         <div>
           Fancy Power Info
         </div>

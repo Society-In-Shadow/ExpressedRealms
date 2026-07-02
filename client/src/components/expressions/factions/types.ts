@@ -12,13 +12,14 @@ export interface Faction {
 }
 
 export interface FactionLevel {
-  id?: number | string
+  id: number
   rankName: string
   knowledgeId?: number | string | null
   knowledge?: string | null
   knowledgeLevel?: string | null
   specialization?: string | null
   knowledgeLevelId?: number | string | null
+  powerId?: number | null
 }
 
 export interface EditSingleFactionInfo {

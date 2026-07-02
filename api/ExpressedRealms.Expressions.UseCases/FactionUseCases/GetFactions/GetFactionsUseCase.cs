@@ -42,6 +42,7 @@ internal sealed class GetFactionsUseCase(
                                 KnowledgeLevel = y.KnowledgeLevel,
                                 Specialization = y.Specialization,
                                 KnowledgeLevelId = y.KnowledgeLevelId,
+                                PowerId = y.PowerId,
                             })
                             .ToList(),
                     })
