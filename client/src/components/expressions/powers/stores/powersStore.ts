@@ -82,7 +82,7 @@ export const powersStore
         const response = await axios.get<RawPowerPrerequisite | null>(`/powers/${powerId}/prerequisites`)
         return response.data
       },
-      updatePower: async function (values: PowerFormData, powerId: number, powerPathId: number): Promise<void> {
+      updatePower: async function (values: PowerFormData, powerId: number): Promise<void> {
         await axios.put(`/powers/${powerId}`, {
           id: powerId,
           name: values.name,
@@ -99,7 +99,6 @@ export const powersStore
           cost: values.cost,
         })
           .then(async () => {
-            await this.updatePowersByPathId(powerPathId)
             toaster.success('Successfully Updated Power!')
           })
       },

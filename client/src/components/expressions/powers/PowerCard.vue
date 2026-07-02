@@ -2,22 +2,28 @@
 
 import Card from 'primevue/card'
 import Button from 'primevue/button'
-import { type PropType, ref } from 'vue'
-import type { Power } from '@/components/expressions/powers/types'
-import EditPower from '@/components/expressions/powers/EditPower.vue'
+import { computed, type PropType } from 'vue'
+import { type Power, TargetPowerType } from '@/components/expressions/powers/types'
 import { powerConfirmationPopups } from '@/components/expressions/powers/services/powerConfirmationPopupService'
 import { isNullOrWhiteSpace, makeIdSafe } from '@/utilities/stringUtilities'
 import { scrollToSection } from '@/components/expressions/expressionUtilities'
 import { can } from '@/stores/userPermissionStore.ts'
+import { powerDialogs } from '@/components/expressions/powers/services/dialogs.ts'
+import { powersStore } from '@/components/expressions/powers/stores/powersStore.ts'
 
 const props = defineProps({
+  targetType: {
+    type: Object as PropType<TargetPowerType>,
+    required: true,
+  },
   power: {
     type: Object as PropType<Power>,
     required: true,
   },
   powerPathId: {
     type: Number,
-    required: true,
+    required: false,
+    default: 0,
   },
   isReadOnly: {
     type: Boolean,
@@ -25,22 +31,49 @@ const props = defineProps({
   },
 })
 
+const emits = defineEmits<{
+  modified: []
+}>()
+
 const popups = powerConfirmationPopups(props.power.id, props.power.name, props.powerPathId)
+const dialogs = powerDialogs()
+const powerInfo = powersStore()
 
-const showEdit = ref(false)
+const showEditPopup = async () => {
+  const result = await dialogs.showEditPower({ powerId: props.power.id, target: props.targetType, powerPathId: props.powerPathId })
 
-const toggleEdit = () => {
-  showEdit.value = !showEdit.value
+  if (result?.action == 'modified') {
+    emits('modified')
+    await powerInfo.updatePowersByPathId(props.powerPathId)
+  }
 }
+
+const canEdit = computed(() => {
+  switch (props.targetType) {
+    case TargetPowerType.PowerPath:
+      return can.Powers.Edit
+    case TargetPowerType.FactionLevel:
+      return can.Faction.Edit
+    default:
+      return false
+  }
+})
+
+const canDelete = computed(() => {
+  switch (props.targetType) {
+    case TargetPowerType.PowerPath:
+      return can.Powers.Edit
+    case TargetPowerType.FactionLevel:
+      return false
+    default:
+      return false
+  }
+})
 
 </script>
 
 <template>
-  <EditPower
-    v-if="showEdit && can.Powers.Edit && !props.isReadOnly" :power-id="props.power.id"
-    :power-path-id="props.powerPathId" @canceled="toggleEdit"
-  />
-  <Card v-else :id="makeIdSafe(props.power.name)" class="card-body-fix">
+  <Card :id="makeIdSafe(props.power.name)" class="card-body-fix">
     <template #title>
       <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
         <div>
@@ -52,11 +85,11 @@ const toggleEdit = () => {
           </div>
         </div>
         <div
-          v-if="!showEdit && (can.Powers.Edit || can.Powers.Delete) && !props.isReadOnly"
+          v-if="(canEdit || canDelete) && !props.isReadOnly"
           class="p-0 m-0 d-inline-flex align-items-start"
         >
-          <Button v-if="can.Powers.Delete" class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
-          <Button v-if="can.Powers.Edit" class="float-end" label="Edit" @click="toggleEdit" />
+          <Button v-if="canDelete" class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
+          <Button v-if="canEdit" class="float-end" label="Edit" @click="showEditPopup" />
         </div>
       </div>
     </template>

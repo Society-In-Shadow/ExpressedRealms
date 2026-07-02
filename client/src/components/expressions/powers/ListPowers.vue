@@ -47,7 +47,7 @@ const showAddPower = async () => {
   <PowerReorder v-if="can.Powers.Edit" :powers="props.powers" :power-path-id="props.powerPathId" @toggle-preview="toggleReadOnly" />
   <div v-if="props.powers && props.powers.length > 0">
     <div v-for="power in props.powers" :key="power.id">
-      <PowerCard :power="power" :power-path-id="props.powerPathId" :is-read-only="props.isReadOnly || readOnly" />
+      <PowerCard :target-type="TargetPowerType.PowerPath" :power="power" :power-path-id="props.powerPathId" :is-read-only="props.isReadOnly || readOnly" />
     </div>
   </div>
 

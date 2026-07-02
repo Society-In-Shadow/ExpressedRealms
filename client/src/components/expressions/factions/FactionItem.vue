@@ -47,6 +47,10 @@ const showAddPower = async (levelId: number) => {
   }
 }
 
+const modifiedPower = async () => {
+  await refetch()
+}
+
 function PopulateFactionActions() {
   if (permissionCheck.Faction.Edit) {
     items.value.push({
@@ -103,13 +107,9 @@ function PopulateFactionActions() {
               v-if="can.Faction.Edit && !level.power" class="w-100 m-2"
               label="Add Power" size="small" @click="showAddPower(level.id)"
             />
-            <Button
-              v-if="can.Faction.Edit && level.power" class="w-100 m-2"
-              label="Edit Power" size="small" disabled
-            />
           </div>
         </div>
-        <PowerCard v-if="level.power" :power="level.power" :power-path-id="-1" :is-read-only="true" />
+        <PowerCard v-if="level.power" :target-type="TargetPowerType.FactionLevel" :power="level.power" :power-path-id="-1" @modified="modifiedPower" />
       </div>
     </template>
   </Card>
