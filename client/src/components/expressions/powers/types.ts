@@ -11,6 +11,11 @@ export enum TargetPowerType {
   FactionLevel = 2,
 }
 
+export interface AddPowerType {
+  target: TargetPowerType
+  targetId: number
+}
+
 export interface PowerStore {
   powerPathId: number
   powers: Power[]
