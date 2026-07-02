@@ -24,6 +24,10 @@ internal static class FactionLevelAuditTrailExtensions
                 case "knowledge_level_id":
                     changedRecord.FriendlyName = "Knowledge Level";
                     break;
+                
+                case "power_id":
+                    changedRecord.FriendlyName = "Power";
+                    break;
 
                 case "specialization":
                     changedRecord.FriendlyName = "Specialization";

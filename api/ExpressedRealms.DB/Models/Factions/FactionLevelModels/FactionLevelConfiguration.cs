@@ -40,6 +40,12 @@ public class FactionLevelConfiguration : IEntityTypeConfiguration<FactionLevel>
             .WithMany(x => x.FactionLevels)
             .HasForeignKey(x => x.KnowledgeLevelId)
             .OnDelete(DeleteBehavior.Restrict);
+        
+        builder
+            .HasOne(x => x.Power)
+            .WithMany(x => x.FactionLevels)
+            .HasForeignKey(x => x.PowerId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasQueryFilter(x => !x.IsDeleted);
         builder.Property(e => e.IsDeleted);
