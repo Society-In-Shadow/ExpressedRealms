@@ -50,7 +50,15 @@ public static class FactionReport
             });
         });
     }
+    
+    private static string GetArticle(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return "A";
 
+        return "AEIOUaeiou".Contains(value[0]) ? "An" : "A";
+    }
+    
     private static void FillSection(this ColumnDescriptor card, FactionData section)
     {
         card.Item()
@@ -77,10 +85,14 @@ public static class FactionReport
             {
                 card.Item()
                     .Text(
-                        $" - A Knowledge in {level.KnowledgeName} at {level.KnowledgeLevel} level with a specialization in {level.KnowledgeSpecialization}."
+                        $" - {GetArticle(level.KnowledgeLevel)} \"{level.KnowledgeLevel}\" level in the {level.KnowledgeName} knowledge."
                     );
                 card.Item()
-                    .Text($" - GO Approval with the completion of one or more tasks / trails.");
+                    .Text(
+                        $" - Specialization in {level.KnowledgeSpecialization} for above knowledge."
+                    );
+                card.Item()
+                    .Text(" - GO approval with the completion of one or more tasks / trails.");
             }
 
             card.Item().PaddingTop(10);

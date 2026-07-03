@@ -72,6 +72,10 @@ function PopulateFactionActions() {
   }
 }
 
+function article(value: string): 'A' | 'An' {
+  return /^[aeiou]/i.test(value) ? 'An' : 'A'
+}
+
 </script>
 
 <template>
@@ -96,7 +100,11 @@ function PopulateFactionActions() {
           No Requirements to join
         </div>
         <div v-else>
-          <p>Knowledge in {{ level.knowledge }} at a {{ level.knowledgeLevel }} level with a specialization in {{ level.specialization }}.</p>
+          <ul>
+            <li>{{ article(level.knowledgeLevel) }} "{{ level.knowledgeLevel }}" level in the "{{ level.knowledge }}" knowledge</li>
+            <li>Specialization in "{{ level.specialization }}" for above knowledge</li>
+            <li>GO approval with the completion of one or more tasks / trials</li>
+          </ul>
         </div>
         <div class="d-flex flex-column flex-md-row align-self-center justify-content-between mt-3">
           <div class="p-0 m-0 d-inline-flex align-items-start">
