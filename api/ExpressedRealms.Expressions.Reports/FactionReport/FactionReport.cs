@@ -102,7 +102,7 @@ public static class FactionReport
             }
             else
             {
-                card.Item().Text("No Known Powers for this Rank.");
+                card.Item().PaddingBottom(10).Text("No Known Powers for this Rank.");
             }
         }
     }
