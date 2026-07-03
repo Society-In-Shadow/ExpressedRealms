@@ -246,10 +246,4 @@ const childHeaderFix = computed(() => {
     padding-left: 0 !important;
     padding-right: 0 !important;
   }
-  .p-card-title h3,
-  .p-card-title h4,
-  .p-card-title h5,
-  .p-card-title h6 {
-    font-size: revert;
-  }
 </style>

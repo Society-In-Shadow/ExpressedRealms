@@ -6,8 +6,7 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Expressions.UseCases.ExpressionTextSections.GetFactionReport;
 
 [UsedImplicitly]
-internal sealed class GetFactionReportModelValidator
-    : AbstractValidator<GetFactionReportModel>
+internal sealed class GetFactionReportModelValidator : AbstractValidator<GetFactionReportModel>
 {
     public GetFactionReportModelValidator(
         IExpressionTextSectionRepository textRepository,

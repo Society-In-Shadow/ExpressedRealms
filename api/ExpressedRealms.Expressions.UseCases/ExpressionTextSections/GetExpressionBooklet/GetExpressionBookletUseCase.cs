@@ -37,7 +37,7 @@ internal sealed class GetExpressionBookletUseCase(
         await factionReport.ExecuteAsync(
             new GetFactionReportModel() { ExpressionId = model.ExpressionId }
         );
-        
+
         powerReport.GenerateMemoryStream = false;
         await powerReport.ExecuteAsync(
             new GetPowerBookletReportModel() { ExpressionId = model.ExpressionId }

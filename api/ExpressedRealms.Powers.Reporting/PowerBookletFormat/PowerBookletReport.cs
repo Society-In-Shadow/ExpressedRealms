@@ -125,7 +125,11 @@ public static class PowerBookletReport
         });
     }
 
-    public static void FillPowerCard(ColumnDescriptor card, PowerData power, bool extraBoldHeader = true)
+    public static void FillPowerCard(
+        ColumnDescriptor card,
+        PowerData power,
+        bool extraBoldHeader = true
+    )
     {
         card.Item()
             .PaddingBottom(10)
@@ -139,7 +143,6 @@ public static class PowerBookletReport
                 {
                     col.Item().Section(power.Name).Text(power.Name).Bold();
                 }
-                
 
                 col.Item()
                     .Row(row =>

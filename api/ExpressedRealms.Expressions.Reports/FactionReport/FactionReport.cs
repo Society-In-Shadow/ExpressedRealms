@@ -60,31 +60,31 @@ public static class FactionReport
             .Bold()
             .FontSize(11)
             .ExtraBold();
-        
+
         card.FormatMainSection(null, section.Background);
 
         foreach (var level in section.FactionLevels)
         {
-            card.Item()
-                .Text($"{level.RankName} Rank")
-                .Bold()
-                .FontSize(11);
+            card.Item().Text($"{level.RankName} Rank").Bold().FontSize(11);
 
-            card.Item()
-                .PaddingTop(10).Text($"Requirements:").Bold();
-            
+            card.Item().PaddingTop(10).Text($"Requirements:").Bold();
+
             if (string.IsNullOrWhiteSpace(level.KnowledgeName))
             {
                 card.Item().Text("No Requirements to Join.");
             }
             else
             {
-                card.Item().Text($" - A Knowledge in {level.KnowledgeName} at {level.KnowledgeLevel} level with a specialization in {level.KnowledgeSpecialization}.");
-                card.Item().Text($" - GO Approval with the completion of one or more tasks / trails.");
+                card.Item()
+                    .Text(
+                        $" - A Knowledge in {level.KnowledgeName} at {level.KnowledgeLevel} level with a specialization in {level.KnowledgeSpecialization}."
+                    );
+                card.Item()
+                    .Text($" - GO Approval with the completion of one or more tasks / trails.");
             }
 
             card.Item().PaddingTop(10);
-            if(level.Power is not null)
+            if (level.Power is not null)
             {
                 PowerBookletReport.FillPowerCard(card, level.Power, false);
             }
