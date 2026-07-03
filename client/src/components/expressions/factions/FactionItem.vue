@@ -99,9 +99,6 @@ function PopulateFactionActions() {
           <p>Knowledge in {{ level.knowledge }} at a {{ level.knowledgeLevel }} level with a specialization in {{ level.specialization }}.</p>
         </div>
         <div class="d-flex flex-column flex-md-row align-self-center justify-content-between mt-3">
-          <h3 class="p-0 m-0 flex-fill">
-            Rank Power
-          </h3>
           <div class="p-0 m-0 d-inline-flex align-items-start">
             <Button
               v-if="can.Faction.Edit && !level.power" class="w-100 m-2"
@@ -109,7 +106,13 @@ function PopulateFactionActions() {
             />
           </div>
         </div>
-        <PowerCard v-if="level.power" :target-type="TargetPowerType.FactionLevel" :power="level.power" :power-path-id="-1" @modified="modifiedPower" />
+        <PowerCard
+          v-if="level.power" :target-type="TargetPowerType.FactionLevel" :power="level.power" :power-path-id="-1" :starting-header="3"
+          @modified="modifiedPower"
+        />
+        <div v-else>
+          No Known Powers for this rank
+        </div>
       </div>
     </template>
   </Card>
