@@ -29,6 +29,10 @@ const props = defineProps({
     type: Boolean,
     required: false,
   },
+  startingHeader: {
+    type: Number,
+    default: 1,
+  },
 })
 
 const emits = defineEmits<{
@@ -70,33 +74,44 @@ const canDelete = computed(() => {
   }
 })
 
+const parentHeader = computed(() => {
+  return `h${Math.min(props.startingHeader, 6)}`
+})
+
+const childHeader = computed(() => {
+  return `h${Math.min(props.startingHeader + 1, 6)}`
+})
+
+const childHeaderFix = computed(() => {
+  return (props.startingHeader * 0.3)
+})
+
 </script>
 
 <template>
   <Card :id="makeIdSafe(props.power.name)" class="card-body-fix">
-    <template #title>
-      <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
-        <div>
-          <h1 class="p-0 m-0">
-            {{ props.power.name }}
-          </h1>
-          <div class="p-0 m-0">
-            {{ props.power.powerLevel.name }}
+    <template #content>
+      <div>
+        <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
+          <div>
+            <component :is="parentHeader" class="p-0 m-0">
+              {{ props.power.name }}
+            </component>
+            <component :is="childHeader" class="p-0 m-0">
+              {{ props.power.powerLevel.name }}
+            </component>
+          </div>
+          <div
+            v-if="(canEdit || canDelete) && !props.isReadOnly"
+            class="p-0 m-0 d-inline-flex align-items-start"
+          >
+            <Button v-if="canDelete" class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
+            <Button v-if="canEdit" class="float-end" label="Edit" @click="showEditPopup" />
           </div>
         </div>
-        <div
-          v-if="(canEdit || canDelete) && !props.isReadOnly"
-          class="p-0 m-0 d-inline-flex align-items-start"
-        >
-          <Button v-if="canDelete" class="mr-2" severity="danger" label="Delete" @click="popups.deleteConfirmation($event)" />
-          <Button v-if="canEdit" class="float-end" label="Edit" @click="showEditPopup" />
-        </div>
       </div>
-    </template>
-    <template #subtitle>
-      <div v-html="props.power.description" />
-    </template>
-    <template #content>
+
+      <div class="p-card-subtitle" v-html="props.power.description" />
       <div class="custom-table-container">
         <table class="w-100 custom-table">
           <tbody>
@@ -180,17 +195,19 @@ const canDelete = computed(() => {
         </table>
       </div>
 
-      <h2>Game Mechanic Effect</h2>
+      <component :is="childHeader">
+        Game Mechanic Effect
+      </component>
       <div v-html="props.power.gameMechanicEffect" />
 
-      <h2 v-if="!isNullOrWhiteSpace(props.power.limitation)">
+      <component :is="childHeader" v-if="!isNullOrWhiteSpace(props.power.limitation)">
         Limitations
-      </h2>
+      </component>
       <div v-if="!isNullOrWhiteSpace(props.power.limitation)" v-html="props.power.limitation" />
 
-      <h2 v-if="props.power.prerequisites">
+      <component :is="childHeader" v-if="props.power.prerequisites">
         Prerequisites
-      </h2>
+      </component>
       <div v-if="props.power.prerequisites">
         <div v-if="props.power.prerequisites.powers.length == 1">
           <a :href="'#' + makeIdSafe(props.power.prerequisites.powers[0])" @click.prevent="scrollToSection(props.power.prerequisites.powers[0])">{{ props.power.prerequisites.powers[0] }}</a>
@@ -213,18 +230,20 @@ const canDelete = computed(() => {
         </div>
       </div>
 
-      <h2 v-if="!isNullOrWhiteSpace(props.power.other)">
+      <component
+        :is="childHeader"
+        v-if="!isNullOrWhiteSpace(props.power.other)"
+      >
         Additional Information
-      </h2>
+      </component>
       <div v-if="!isNullOrWhiteSpace(props.power.other)" v-html="props.power.other" />
     </template>
   </Card>
 </template>
 
 <style>
-@media(max-width: 768px){
   .card-body-fix .p-card-body{
-    padding: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
-}
 </style>

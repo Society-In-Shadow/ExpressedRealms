@@ -19,7 +19,6 @@ public static class PowerBookletReport
 
     private static Document GetSingleTilePerPage(PowerBookletData powerCards)
     {
-        var secondaryColor = Color.FromARGB(125, 0, 0, 0);
         return Document.Create(container =>
         {
             container.Page(page =>
@@ -73,7 +72,7 @@ public static class PowerBookletReport
 
                                             foreach (var power in powerPath.Powers)
                                             {
-                                                FillPowerCard(columnContent, power, secondaryColor);
+                                                FillPowerCard(columnContent, power);
                                             }
                                         }
                                     });
@@ -126,13 +125,24 @@ public static class PowerBookletReport
         });
     }
 
-    private static void FillPowerCard(ColumnDescriptor card, PowerData power, Color secondaryColor)
+    public static void FillPowerCard(
+        ColumnDescriptor card,
+        PowerData power,
+        bool extraBoldHeader = true
+    )
     {
         card.Item()
             .PaddingBottom(10)
             .Column(col =>
             {
-                col.Item().Section(power.Name).Text(power.Name).Bold().FontSize(11).ExtraBold();
+                if (extraBoldHeader)
+                {
+                    col.Item().Section(power.Name).Text(power.Name).Bold().FontSize(11).ExtraBold();
+                }
+                else
+                {
+                    col.Item().Section(power.Name).Text(power.Name).Bold();
+                }
 
                 col.Item()
                     .Row(row =>

@@ -8,6 +8,7 @@
     <PackageReference Include="QuestPDF.HTML" Version="1.4.5" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ExpressedRealms.Powers.Reporting\ExpressedRealms.Powers.Reporting.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Shared.Reports\ExpressedRealms.Shared.Reports.csproj" />
   </ItemGroup>
 </Project>
