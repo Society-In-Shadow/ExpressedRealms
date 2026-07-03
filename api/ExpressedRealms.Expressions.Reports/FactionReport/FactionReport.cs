@@ -85,7 +85,7 @@ public static class FactionReport
             {
                 card.Item()
                     .Text(
-                        $" - {GetArticle(level.KnowledgeLevel)} \"{level.KnowledgeLevel}\" level in the {level.KnowledgeName} knowledge."
+                        $" - {GetArticle(level.KnowledgeLevel!)} \"{level.KnowledgeLevel}\" level in the {level.KnowledgeName} knowledge."
                     );
                 card.Item()
                     .Text(
