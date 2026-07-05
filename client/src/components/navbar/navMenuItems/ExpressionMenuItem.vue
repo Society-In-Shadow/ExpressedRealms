@@ -79,6 +79,10 @@ const canCopy = computed(() => {
   return props.item?.expressionTypeId == 1 && can.Expression.Copy
 })
 
+const canViewBetaBadge = computed(() => {
+  return props.item?.expressionTypeId == 1 && can.Expression.SeeBetaExpressions && props.item?.statusName == 'Beta'
+})
+
 const items = ref<Command[]>([])
 
 onMounted(() => {
@@ -114,7 +118,7 @@ function PopulateFactionActions() {
         <i :class="['material-symbols-outlined', 'text-white']"> {{ item.navMenuImage }}</i>
       </span>
       <span class="inline-flex flex-grow-1 flex-column gap-1">
-        <span class="font-medium text-lg text-900">{{ item.name }} <Badge v-if="canEdit || can.Expression.SeeBetaExpressions && item.id !== 0" :value="item.statusName" :severity="getStatus()" /></span>
+        <span class="font-medium text-lg text-900">{{ item.name }} <Badge v-if="canEdit || canViewBetaBadge && item.id !== 0" :value="item.statusName" :severity="getStatus()" /></span>
         <span class="">{{ item.shortDescription }}</span>
       </span>
     </div>
