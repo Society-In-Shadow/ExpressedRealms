@@ -17,11 +17,15 @@ select expression_name, short_description, nav_menu_image, 3, expression_type_id
 where id = source_expression_id
 RETURNING id INTO new_expression_id;
 
+
+-- Copy Over Stat Modifiers across all mappings in expressions
+
+
 -- Copy over stat modifier groups - they are the lowest hanging fruit
 CREATE TEMP TABLE stat_modifer_group_ids (
-                                             old_id bigint NOT NULL,
-                                             new_id bigint NULL,
-                                             PRIMARY KEY (old_id)
+    old_id bigint NOT NULL,
+    new_id bigint NULL,
+    PRIMARY KEY (old_id)
 );
 
 -- all stat modifier groups in powers and power paths
@@ -81,6 +85,9 @@ select stat_modifer_group_ids.new_id, stat_modifier_id, modifier, scale_with_lev
                                          join stat_modifer_group_ids on stat_modifer_group_ids.old_id = stat_group_mappings.stat_group_id;
 
 
+-- Copy Powers for all expression mappings
+
+
 create temp table power_ids (
     old_id bigint NOT NULL,
     new_id bigint NULL,
@@ -110,8 +117,15 @@ select name, description, level_id, area_of_effect_type_id, activation_timing_ty
 update power_ids set new_id = powers.id from powers 
 where powers.clone_source_id = power_ids.old_id and powers.clone_batch_id = clone_batch_id;
 
+-- Copy over Categories
+insert into public.power_category_mappings(power_id, category_id)
+select power_ids.new_id, category_id 
+from public.power_category_mappings 
+join power_ids on power_ids.old_id = power_category_mappings.power_id;
+
 
 -- Copy Factions
+
 
 create temp table faction_ids (
     old_id bigint NOT NULL,
@@ -134,60 +148,35 @@ join faction_ids on faction_ids.old_id = faction_levels.faction_id
 left join power_ids on power_ids.old_id = faction_levels.power_id
 where faction_levels.is_deleted = false;
 
--- Power Paths
 
-insert into public.power_paths (name, description, expression_id, order_index, is_deleted)
-select name, description, new_expression_id, order_index, false from public.power_paths
+-- Copy Power Paths + Power Path Mappings
+
+
+create temp table power_path_ids (
+    old_id bigint NOT NULL,
+    new_id bigint NOT NULL,
+    PRIMARY KEY (old_id)
+);
+
+
+insert into public.power_paths (name, description, expression_id, order_index, is_deleted, clone_source_id, clone_batch_id)
+select name, description, new_expression_id, order_index, false, id, clone_batch_id from public.power_paths
 where expression_id = source_expression_id and is_deleted = false;
 
--- Power Paths
-WITH source AS (
-    SELECT id, name, description, order_index
-    FROM power_paths
-    WHERE expression_id = source_expression_id and is_deleted = false
-),
-inserted AS (
-    insert into public.power_paths (name, description, expression_id, order_index, is_deleted)
-    select name, description, new_expression_id, order_index, false from source
-    RETURNING id, order_index
-)
-INSERT INTO id_map (table_name, old_id, new_id)
-SELECT
-    'power_paths',
-    s.id,
-    i.id
-FROM source s
-JOIN inserted i
-    ON i.order_index = s.order_index;
+insert into power_path_ids (new_id, old_id)
+select id, clone_source_id from public.power_paths where clone_batch_id = clone_batch_id;
+
+insert into public.power_path_power_mappings (power_path_id, power_id, order_index)
+select power_path_ids.new_id, power_ids.new_id, order_index from public.power_path_power_mappings
+join power_path_ids on power_path_ids.old_id = power_path_power_mappings.power_path_id
+join power_ids on power_ids.old_id = power_path_power_mappings.power_id;
 
 
--- Power Path Mappings
-WITH source AS (
-    SELECT id, id_map.new_id, power_id, order_index
-    FROM power_path_power_mappings
-    join id_map on id_map.old_id = power_path_id and id_map.table_name = 'power_paths'
-),
-     inserted AS (
-         insert into public.power_path_power_mappings (power_path_id, power_id, order_index)
-             select name, description, new_expression_id, order_index, false from source
-             RETURNING id, order_index
-     )
-INSERT INTO id_map (table_name, old_id, new_id)
-SELECT
-    'power_paths',
-    s.id,
-    i.id
-FROM source s
-         JOIN inserted i
-              ON i.order_index = s.order_index;
 -- Power Path Mappings
 -- powers (subset of copying)
 --   Stat Modifiers (It's own subset of issues)
 --   Categories
 --   Prerequisite
-
-
-
 
 -- Progression Path
 -- Progression Levels
