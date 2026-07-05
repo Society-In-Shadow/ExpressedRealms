@@ -14,13 +14,19 @@ public class ProgressionPath : ISoftDelete
     public string Name { get; set; } = null!;
     public string Description { get; set; } = null!;
 
+    public int? CloneSourceId { get; set; }
+    public Guid? CloneBatchId { get; set; }
+    
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 
     public Expression Expression { get; set; } = null!;
+    public ProgressionPath? CloneSource { get; set; }
     public virtual List<Character> PrimaryProgressions { get; set; } = null!;
     public virtual List<Character> SecondaryProgressions { get; set; } = null!;
     public List<ProgressionLevel> ProgressionLevels { get; set; } = null!;
     public List<ProgressionPathAuditTrail> ProgressionPathAuditTrails { get; set; } = null!;
     public List<ProgressionLevelAuditTrail> ProgressionLevelAuditTrails { get; set; } = null!;
+    public virtual ICollection<ProgressionPath> Clones { get; set; } =
+        new HashSet<ProgressionPath>();
 }

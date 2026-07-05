@@ -12,7 +12,15 @@ public class ProgressionPathConfiguration : IEntityTypeConfiguration<Progression
         builder.Property(e => e.ExpressionId).IsRequired();
         builder.Property(e => e.Name).HasMaxLength(250).IsRequired();
         builder.Property(e => e.Description).HasMaxLength(5000).IsRequired();
+        builder.Property(e => e.CloneSourceId);
+        builder.Property(e => e.CloneBatchId);
 
+        builder
+            .HasOne(x => x.CloneSource)
+            .WithMany(x => x.Clones)
+            .HasForeignKey(x => x.CloneSourceId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
         builder
             .HasOne(x => x.Expression)
             .WithMany(x => x.ProgressionPaths)
