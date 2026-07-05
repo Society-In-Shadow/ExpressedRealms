@@ -107,6 +107,21 @@ select power_ids.new_id, category_id
 from public.power_category_mappings 
 join power_ids on power_ids.old_id = power_category_mappings.power_id;
 
+-- Copy over prerequisites
+insert into public.power_prerequisites(power_id, required_amount, clone_source_id, clone_batch_id)
+select power_ids.new_id, required_amount, power_prerequisites.id, v_clone_batch_id from public.power_prerequisites
+join power_ids on power_ids.old_id = power_prerequisites.power_id;
+
+with power_prerequisites_ids as(
+    select id as new_id, clone_source_id as old_id
+    from public.power_prerequisites
+    where clone_batch_id = v_clone_batch_id
+)
+insert into public.power_prerequisite_powers(prerequisite_id, power_id) 
+select power_prerequisites_ids.new_id, power_ids.new_id from public.power_prerequisite_powers
+join power_prerequisites_ids on power_prerequisites_ids.old_id = power_prerequisite_powers.prerequisite_id
+join power_ids on power_ids.old_id = power_prerequisite_powers.power_id;
+
 
 -- Copy Factions
 
