@@ -114,7 +114,7 @@ function PopulateFactionActions() {
         <i :class="['material-symbols-outlined', 'text-white']"> {{ item.navMenuImage }}</i>
       </span>
       <span class="inline-flex flex-grow-1 flex-column gap-1">
-        <span class="font-medium text-lg text-900">{{ item.name }} <Badge v-if="cmsData.canEdit && item.id !== 0" :value="item.statusName" :severity="getStatus()" /></span>
+        <span class="font-medium text-lg text-900">{{ item.name }} <Badge v-if="canEdit || can.Expression.SeeBetaExpressions && item.id !== 0" :value="item.statusName" :severity="getStatus()" /></span>
         <span class="">{{ item.shortDescription }}</span>
       </span>
     </div>

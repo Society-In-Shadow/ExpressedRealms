@@ -16,7 +16,7 @@ public class ProgressionPath : ISoftDelete
 
     public int? CloneSourceId { get; set; }
     public Guid? CloneBatchId { get; set; }
-    
+
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 

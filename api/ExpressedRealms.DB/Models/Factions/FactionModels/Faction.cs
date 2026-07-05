@@ -25,6 +25,5 @@ public class Faction : ISoftDelete
         new HashSet<FactionAuditTrail>();
     public virtual ICollection<FactionLevel> FactionLevels { get; set; } =
         new HashSet<FactionLevel>();
-    public virtual ICollection<Faction> Clones { get; set; } =
-        new HashSet<Faction>();
+    public virtual ICollection<Faction> Clones { get; set; } = new HashSet<Faction>();
 }

@@ -16,7 +16,7 @@ internal static class ProgressionPathAuditTrailExtensions
                 case "clone_source_id":
                 case "clone_batch_id":
                     continue;
-                
+
                 case "name":
                     changedRecord.FriendlyName = "Name";
                     break;

@@ -209,36 +209,6 @@ FROM mapping m
                    ON m_parent.old_id = original.parent_id
 WHERE c.id = m.new_id;
 
--- To copy an expression
---  Start by copying all the modifier groups, those attach to powers and progression paths
---  Then Find all powers assigned across faction levels and power paths, then copy those powers
---  Then
-
--- TODO: Copy Expression Sections
--- TODO: Find any targeted modifiers in blessings and point to new expression
-
--- Power Path Mappings
--- powers (subset of copying)
---   Stat Modifiers (It's own subset of issues)
---   Categories
---   Prerequisite
-
--- Progression Path
--- Progression Levels
--- Stat Modifiers (It's own subset of issues)
---   Copy Group
---   Copy Group Mappings
---   Will need new Expression Ids for power specific stuff
-
--- Factions
--- Faction Levels
--- Powers (subset of copying)
---   Stat Modifiers (It's own subset of issues)
---   Categories
-
-
-
-
 commit;
 END
 $$

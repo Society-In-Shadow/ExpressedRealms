@@ -19,7 +19,7 @@ public class PowerConfiguration : IEntityTypeConfiguration<Power>
         builder.Property(e => e.StatModifierGroupId);
         builder.Property(e => e.CloneSourceId);
         builder.Property(e => e.CloneBatchId);
-        
+
         builder
             .HasOne(e => e.CloneSource)
             .WithMany(e => e.CloneTargets)

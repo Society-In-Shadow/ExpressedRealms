@@ -20,7 +20,7 @@ public class ProgressionPathConfiguration : IEntityTypeConfiguration<Progression
             .WithMany(x => x.Clones)
             .HasForeignKey(x => x.CloneSourceId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         builder
             .HasOne(x => x.Expression)
             .WithMany(x => x.ProgressionPaths)

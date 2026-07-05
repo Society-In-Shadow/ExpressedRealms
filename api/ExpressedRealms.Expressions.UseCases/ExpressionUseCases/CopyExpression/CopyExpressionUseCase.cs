@@ -20,7 +20,7 @@ internal sealed class CopyExpressionUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-        
+
         var expressionId = await expressionRepository.CopyExpressionAsync(
             model.Id,
             model.ExpressionName

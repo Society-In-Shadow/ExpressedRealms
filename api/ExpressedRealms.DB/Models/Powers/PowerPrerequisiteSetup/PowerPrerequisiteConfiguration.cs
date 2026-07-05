@@ -18,7 +18,7 @@ public class PowerPrerequisiteConfiguration : IEntityTypeConfiguration<PowerPrer
             .WithMany(e => e.Clones)
             .HasForeignKey(x => x.CloneSourceId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         builder
             .HasOne(e => e.Power)
             .WithOne(e => e.Prerequisite)

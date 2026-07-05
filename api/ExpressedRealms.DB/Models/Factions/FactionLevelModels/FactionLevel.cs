@@ -33,6 +33,5 @@ public class FactionLevel : ISoftDelete
     public virtual Power? Power { get; set; }
     public virtual ICollection<FactionLevelAuditTrail> FactionLevelAuditTrails { get; set; } =
         new HashSet<FactionLevelAuditTrail>();
-    public virtual ICollection<FactionLevel> Clones { get; set; } =
-        new HashSet<FactionLevel>();
+    public virtual ICollection<FactionLevel> Clones { get; set; } = new HashSet<FactionLevel>();
 }

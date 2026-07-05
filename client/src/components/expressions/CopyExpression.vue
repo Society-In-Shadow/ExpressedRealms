@@ -31,7 +31,7 @@ const onSubmit = handleSubmit((values) => {
     name: values.name,
   }).then(async (response) => {
     await cmsData.refreshCmsInformation()
-    const slug = cmsData.expressionItems.filter(x => x.id == response.data)[0].slug
+    const slug = cmsData.expressionItems.find(x => x.id == response.data)!.slug
     router.push('/expressions/' + slug)
     toaster.success('Successfully Copied Expression!')
     dialogRef.value.close()

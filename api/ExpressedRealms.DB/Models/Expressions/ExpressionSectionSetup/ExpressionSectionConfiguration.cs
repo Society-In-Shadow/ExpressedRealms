@@ -29,7 +29,7 @@ internal class ExpressionSectionsConfiguration : IEntityTypeConfiguration<Expres
             .WithMany(e => e.Clones)
             .HasForeignKey(e => e.CloneSourceId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         builder
             .HasOne(e => e.Parent)
             .WithMany(e => e.Children)

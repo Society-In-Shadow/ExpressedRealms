@@ -26,7 +26,8 @@ internal static class ExpressionEndpoints
         // Permissions are dependent on the expression type id, not expression id
         endpointGroup.MapGet("{expressionId}", GetEditExpressionEndpoint.GetEditExpression);
 
-        endpointGroup.MapPut("{expressionId}", EditExpressionEndpoint.EditExpression)
+        endpointGroup
+            .MapPut("{expressionId}", EditExpressionEndpoint.EditExpression)
             .RequirePermission(Permissions.Expression.Edit);
 
         endpointGroup
@@ -36,13 +37,16 @@ internal static class ExpressionEndpoints
             )
             .RequirePermission(Permissions.Expression.Edit);
 
-        endpointGroup.MapPost("", CreateExpressionEndpoint.CreateExpression)
+        endpointGroup
+            .MapPost("", CreateExpressionEndpoint.CreateExpression)
             .RequirePermission(Permissions.Expression.Create);
-        
-        endpointGroup.MapPost("{expressionId}/copy", CopyExpressionEndpoint.ExecuteAsync)
+
+        endpointGroup
+            .MapPost("{expressionId}/copy", CopyExpressionEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Expression.Copy);
 
-        endpointGroup.MapDelete("{id}", DeleteExpressionEndpoint.DeleteExpression)
+        endpointGroup
+            .MapDelete("{id}", DeleteExpressionEndpoint.DeleteExpression)
             .RequirePermission(Permissions.Expression.Delete);
 
         endpointGroup

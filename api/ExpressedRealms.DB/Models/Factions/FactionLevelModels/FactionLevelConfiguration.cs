@@ -22,7 +22,7 @@ public class FactionLevelConfiguration : IEntityTypeConfiguration<FactionLevel>
             .WithMany(x => x.Clones)
             .HasForeignKey(x => x.CloneSourceId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         builder
             .HasOne(x => x.Faction)
             .WithMany(x => x.FactionLevels)

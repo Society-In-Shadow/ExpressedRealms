@@ -18,7 +18,7 @@ public class FactionConfiguration : IEntityTypeConfiguration<Faction>
             .WithMany(x => x.Clones)
             .HasForeignKey(x => x.CloneSourceId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         builder
             .HasOne(x => x.Expression)
             .WithMany(x => x.Factions)

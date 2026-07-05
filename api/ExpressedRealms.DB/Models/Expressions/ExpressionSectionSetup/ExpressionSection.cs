@@ -17,7 +17,7 @@ public class ExpressionSection : ISoftDelete
     public string Content { get; set; } = null!;
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
-    
+
     public int? CloneSourceId { get; set; }
     public Guid? CloneBatchId { get; set; }
 
