@@ -1,3 +1,4 @@
+using System.Data;
 using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Interceptors;
@@ -7,6 +8,8 @@ using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Repositories.Shared.Helpers;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using NpgsqlTypes;
 using FluentValidationFailure = ExpressedRealms.Repositories.Shared.CommonFailureTypes.FluentValidationFailure;
 using NotFoundFailure = ExpressedRealms.Repositories.Shared.CommonFailureTypes.NotFoundFailure;
 
@@ -299,6 +302,24 @@ internal sealed class ExpressionRepository(
         await context.SaveChangesAsync(cancellationToken);
 
         return Result.Ok(expression.Id);
+    }
+
+    public async Task<int> CopyExpressionAsync(int expressionId, string expressionName)
+    {
+        var newExpressionId = new NpgsqlParameter("new_expression_id", NpgsqlDbType.Integer)
+        {
+            Direction = ParameterDirection.InputOutput,
+            Value = DBNull.Value,
+        };
+
+        await context.Database.ExecuteSqlRawAsync(
+            "CALL copy_expression(@expression_id, @expression_name, @new_expression_id)",
+            new NpgsqlParameter("expression_id", expressionId),
+            new NpgsqlParameter("expression_name", expressionName),
+            newExpressionId
+        );
+
+        return (int)newExpressionId.Value;
     }
 
     public async Task<Result> DeleteExpressionAsync(int id)

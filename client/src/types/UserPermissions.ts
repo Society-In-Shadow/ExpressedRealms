@@ -62,6 +62,7 @@ export const UserPermissions = {
     Edit: 'expression.edit',
     View: 'expression.view',
     Create: 'expression.create',
+    Copy: 'expression.copy',
     Delete: 'expression.delete',
     SeeBetaExpressions: 'expression.seebetaexpressions',
     DownloadBooklet: 'expression.downloadbooklet',

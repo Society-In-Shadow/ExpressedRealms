@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE copy_character_to_player_proc(
+CREATE OR REPLACE PROCEDURE copy_expression(
     source_expression_id     INT,
     expression_name          TEXT,
     INOUT new_expression_id  INT
@@ -193,6 +193,8 @@ where progression_level.is_deleted = false;
 --  Then Find all powers assigned across faction levels and power paths, then copy those powers
 --  Then
 
+-- TODO: Copy Expression Sections
+-- TODO: Find any targeted modifiers in blessings and point to new expression
 
 -- Power Path Mappings
 -- powers (subset of copying)

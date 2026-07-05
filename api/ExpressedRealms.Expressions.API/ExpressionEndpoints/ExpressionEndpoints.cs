@@ -1,5 +1,6 @@
 using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Authentication.PermissionCollection.Configuration;
+using ExpressedRealms.Expressions.API.ExpressionEndpoints.CopyExpression;
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.CreateExpression;
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.DeleteExpression;
 using ExpressedRealms.Expressions.API.ExpressionEndpoints.EditExpression;
@@ -25,17 +26,24 @@ internal static class ExpressionEndpoints
         // Permissions are dependent on the expression type id, not expression id
         endpointGroup.MapGet("{expressionId}", GetEditExpressionEndpoint.GetEditExpression);
 
-        endpointGroup.MapPut("{expressionId}", EditExpressionEndpoint.EditExpression);
+        endpointGroup.MapPut("{expressionId}", EditExpressionEndpoint.EditExpression)
+            .RequirePermission(Permissions.Expression.Edit);
 
         endpointGroup
             .MapPut("{expressionId}/updateHierarchy", UpdateHierarchyEndpoint.UpdateHierarchy)
             .WithDescription(
                 "This is an all or nothing operation.  It needs to be called with all the items, not a subset of them."
-            );
+            )
+            .RequirePermission(Permissions.Expression.Edit);
 
-        endpointGroup.MapPost("", CreateExpressionEndpoint.CreateExpression);
+        endpointGroup.MapPost("", CreateExpressionEndpoint.CreateExpression)
+            .RequirePermission(Permissions.Expression.Create);
+        
+        endpointGroup.MapPost("{expressionId}/copy", CopyExpressionEndpoint.ExecuteAsync)
+            .RequirePermission(Permissions.Expression.Copy);
 
-        endpointGroup.MapDelete("{id}", DeleteExpressionEndpoint.DeleteExpression);
+        endpointGroup.MapDelete("{id}", DeleteExpressionEndpoint.DeleteExpression)
+            .RequirePermission(Permissions.Expression.Delete);
 
         endpointGroup
             .MapGet("{expressionId}/report", GetExpressionCmsReportEndpoint.GetExpressionCmsReport)

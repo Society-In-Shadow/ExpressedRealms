@@ -29,6 +29,12 @@ public static partial class Permissions
             Id = new Guid("019e0f2c-060e-7708-8a22-84f4420ef4f1"),
             Name = nameof(Create),
         };
+        
+        public static readonly Permission Copy = new(ResourceInfo)
+        {
+            Id = new Guid("019f3279-a52b-7e87-8188-72cac2ff9b5e"),
+            Name = nameof(Copy),
+        };
 
         public static readonly Permission Delete = new(ResourceInfo)
         {

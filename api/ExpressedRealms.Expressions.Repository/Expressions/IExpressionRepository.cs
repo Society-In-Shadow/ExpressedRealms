@@ -8,6 +8,7 @@ public interface IExpressionRepository
 {
     Task<Result<int>> CreateExpressionAsync(CreateExpressionDto dto);
     Task<Result<int>> EditExpressionAsync(EditExpressionDto dto);
+    Task<int> CopyExpressionAsync(int expressionId, string expressionName);
     Task<Result> DeleteExpressionAsync(int id);
     Task<Result<List<ExpressionNavigationMenuItem>>> GetNavigationMenuItems();
     Task<Result<GetExpressionDto>> GetExpression(int expressionId);
