@@ -25,6 +25,12 @@ internal class ExpressionSectionsConfiguration : IEntityTypeConfiguration<Expres
         builder.Property(e => e.Content).IsRequired();
 
         builder
+            .HasOne(e => e.CloneSource)
+            .WithMany(e => e.Clones)
+            .HasForeignKey(e => e.CloneSourceId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
+        builder
             .HasOne(e => e.Parent)
             .WithMany(e => e.Children)
             .HasForeignKey(e => e.ParentId)

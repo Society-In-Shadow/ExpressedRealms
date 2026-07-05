@@ -3,6 +3,7 @@ using System;
 using ExpressedRealms.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpressedRealms.DB.Migrations
 {
     [DbContext(typeof(ExpressedRealmsDbContext))]
-    partial class ExpressedRealmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260705140535_AddExpressionAddCloneFieldsToStatModifierGroup")]
+    partial class AddExpressionAddCloneFieldsToStatModifierGroup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1970,14 +1973,6 @@ namespace ExpressedRealms.DB.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid?>("CloneBatchId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("clone_batch_id");
-
-                    b.Property<int?>("CloneSourceId")
-                        .HasColumnType("integer")
-                        .HasColumnName("clone_source_id");
-
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("text")
@@ -2015,9 +2010,6 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_expression_sections");
-
-                    b.HasIndex("CloneSourceId")
-                        .HasDatabaseName("ix_expression_sections_clone_source_id");
 
                     b.HasIndex("ExpressionId")
                         .HasDatabaseName("ix_expression_sections_expression_id");
@@ -5209,12 +5201,6 @@ namespace ExpressedRealms.DB.Migrations
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup.ExpressionSection", b =>
                 {
-                    b.HasOne("ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup.ExpressionSection", "CloneSource")
-                        .WithMany("Clones")
-                        .HasForeignKey("CloneSourceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("fk_expression_sections_expression_sections_clone_source_id");
-
                     b.HasOne("ExpressedRealms.DB.Models.Expressions.ExpressionSetup.Expression", "Expression")
                         .WithMany("ExpressionSections")
                         .HasForeignKey("ExpressionId")
@@ -5234,8 +5220,6 @@ namespace ExpressedRealms.DB.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_expression_sections_expression_section_types_section_type_id");
-
-                    b.Navigation("CloneSource");
 
                     b.Navigation("Expression");
 
@@ -6287,8 +6271,6 @@ namespace ExpressedRealms.DB.Migrations
                     b.Navigation("CharactersList");
 
                     b.Navigation("Children");
-
-                    b.Navigation("Clones");
 
                     b.Navigation("SectionAudits");
                 });

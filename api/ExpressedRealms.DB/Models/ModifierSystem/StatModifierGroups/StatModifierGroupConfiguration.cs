@@ -9,5 +9,11 @@ public class StatModifierGroupConfiguration : IEntityTypeConfiguration<StatModif
     {
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired();
+        
+        builder
+            .HasOne(x => x.CloneSource)
+            .WithMany(x => x.Clones)
+            .HasForeignKey(x => x.CloneSourceId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

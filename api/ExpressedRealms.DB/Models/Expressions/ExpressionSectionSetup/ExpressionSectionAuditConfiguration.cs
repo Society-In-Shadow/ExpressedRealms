@@ -14,6 +14,8 @@ internal static class ExpressionSectionAuditConfiguration
             switch (changedRecord.ColumnName)
             {
                 case "expression_id":
+                case "clone_source_id":
+                case "clone_batch_id":
                     continue;
 
                 case "section_type_id":
