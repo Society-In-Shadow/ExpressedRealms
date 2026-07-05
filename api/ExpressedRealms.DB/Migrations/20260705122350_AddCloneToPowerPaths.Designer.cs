@@ -3,6 +3,7 @@ using System;
 using ExpressedRealms.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpressedRealms.DB.Migrations
 {
     [DbContext(typeof(ExpressedRealmsDbContext))]
-    partial class ExpressedRealmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260705122350_AddCloneToPowerPaths")]
+    partial class AddCloneToPowerPaths
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1970,14 +1973,6 @@ namespace ExpressedRealms.DB.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid?>("CloneBatchId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("clone_batch_id");
-
-                    b.Property<int?>("CloneSourceId")
-                        .HasColumnType("integer")
-                        .HasColumnName("clone_source_id");
-
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("text")
@@ -2015,9 +2010,6 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_expression_sections");
-
-                    b.HasIndex("CloneSourceId")
-                        .HasDatabaseName("ix_expression_sections_clone_source_id");
 
                     b.HasIndex("ExpressionId")
                         .HasDatabaseName("ix_expression_sections_expression_id");
@@ -2420,14 +2412,6 @@ namespace ExpressedRealms.DB.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid?>("CloneBatchId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("clone_batch_id");
-
-                    b.Property<int?>("CloneSourceId")
-                        .HasColumnType("integer")
-                        .HasColumnName("clone_source_id");
-
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("deleted_at");
@@ -2454,9 +2438,6 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_progression_path");
-
-                    b.HasIndex("CloneSourceId")
-                        .HasDatabaseName("ix_progression_path_clone_source_id");
 
                     b.HasIndex("ExpressionId")
                         .HasDatabaseName("ix_progression_path_expression_id");
@@ -3039,19 +3020,8 @@ namespace ExpressedRealms.DB.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid?>("CloneBatchId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("clone_batch_id");
-
-                    b.Property<int?>("CloneSourceId")
-                        .HasColumnType("integer")
-                        .HasColumnName("clone_source_id");
-
                     b.HasKey("Id")
                         .HasName("pk_stat_modifier_groups");
-
-                    b.HasIndex("CloneSourceId")
-                        .HasDatabaseName("ix_stat_modifier_groups_clone_source_id");
 
                     b.ToTable("stat_modifier_groups", (string)null);
                 });
@@ -3677,14 +3647,6 @@ namespace ExpressedRealms.DB.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid?>("CloneBatchId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("clone_batch_id");
-
-                    b.Property<int?>("CloneSourceId")
-                        .HasColumnType("integer")
-                        .HasColumnName("clone_source_id");
-
                     b.Property<int>("PowerId")
                         .HasColumnType("integer")
                         .HasColumnName("power_id");
@@ -3695,9 +3657,6 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_power_prerequisites");
-
-                    b.HasIndex("CloneSourceId")
-                        .HasDatabaseName("ix_power_prerequisites_clone_source_id");
 
                     b.HasIndex("PowerId")
                         .IsUnique()
@@ -5220,12 +5179,6 @@ namespace ExpressedRealms.DB.Migrations
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup.ExpressionSection", b =>
                 {
-                    b.HasOne("ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup.ExpressionSection", "CloneSource")
-                        .WithMany("Clones")
-                        .HasForeignKey("CloneSourceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("fk_expression_sections_expression_sections_clone_source_id");
-
                     b.HasOne("ExpressedRealms.DB.Models.Expressions.ExpressionSetup.Expression", "Expression")
                         .WithMany("ExpressionSections")
                         .HasForeignKey("ExpressionId")
@@ -5245,8 +5198,6 @@ namespace ExpressedRealms.DB.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_expression_sections_expression_section_types_section_type_id");
-
-                    b.Navigation("CloneSource");
 
                     b.Navigation("Expression");
 
@@ -5409,20 +5360,12 @@ namespace ExpressedRealms.DB.Migrations
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths.ProgressionPath", b =>
                 {
-                    b.HasOne("ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths.ProgressionPath", "CloneSource")
-                        .WithMany("Clones")
-                        .HasForeignKey("CloneSourceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("fk_progression_path_progression_path_clone_source_id");
-
                     b.HasOne("ExpressedRealms.DB.Models.Expressions.ExpressionSetup.Expression", "Expression")
                         .WithMany("ProgressionPaths")
                         .HasForeignKey("ExpressionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_progression_path_expressions_expression_id");
-
-                    b.Navigation("CloneSource");
 
                     b.Navigation("Expression");
                 });
@@ -5646,17 +5589,6 @@ namespace ExpressedRealms.DB.Migrations
                     b.Navigation("StatModifierGroup");
                 });
 
-            modelBuilder.Entity("ExpressedRealms.DB.Models.ModifierSystem.StatModifierGroups.StatModifierGroup", b =>
-                {
-                    b.HasOne("ExpressedRealms.DB.Models.ModifierSystem.StatModifierGroups.StatModifierGroup", "CloneSource")
-                        .WithMany("Clones")
-                        .HasForeignKey("CloneSourceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("fk_stat_modifier_groups_stat_modifier_groups_clone_source_id");
-
-                    b.Navigation("CloneSource");
-                });
-
             modelBuilder.Entity("ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup.CharacterPowerMapping", b =>
                 {
                     b.HasOne("ExpressedRealms.DB.Models.Characters.Character", "Character")
@@ -5857,20 +5789,12 @@ namespace ExpressedRealms.DB.Migrations
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Powers.PowerPrerequisiteSetup.PowerPrerequisite", b =>
                 {
-                    b.HasOne("ExpressedRealms.DB.Models.Powers.PowerPrerequisiteSetup.PowerPrerequisite", "CloneSource")
-                        .WithMany("Clones")
-                        .HasForeignKey("CloneSourceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("fk_power_prerequisites_power_prerequisites_clone_source_id");
-
                     b.HasOne("ExpressedRealms.DB.Models.Powers.Power", "Power")
                         .WithOne("Prerequisite")
                         .HasForeignKey("ExpressedRealms.DB.Models.Powers.PowerPrerequisiteSetup.PowerPrerequisite", "PowerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_power_prerequisites_powers_power_id");
-
-                    b.Navigation("CloneSource");
 
                     b.Navigation("Power");
                 });
@@ -6307,8 +6231,6 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.Navigation("Children");
 
-                    b.Navigation("Clones");
-
                     b.Navigation("SectionAudits");
                 });
 
@@ -6352,8 +6274,6 @@ namespace ExpressedRealms.DB.Migrations
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths.ProgressionPath", b =>
                 {
-                    b.Navigation("Clones");
-
                     b.Navigation("PrimaryProgressions");
 
                     b.Navigation("ProgressionLevelAuditTrails");
@@ -6419,8 +6339,6 @@ namespace ExpressedRealms.DB.Migrations
             modelBuilder.Entity("ExpressedRealms.DB.Models.ModifierSystem.StatModifierGroups.StatModifierGroup", b =>
                 {
                     b.Navigation("BlessingLevels");
-
-                    b.Navigation("Clones");
 
                     b.Navigation("Powers");
 
@@ -6491,8 +6409,6 @@ namespace ExpressedRealms.DB.Migrations
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Powers.PowerPrerequisiteSetup.PowerPrerequisite", b =>
                 {
-                    b.Navigation("Clones");
-
                     b.Navigation("PrerequisitePowers");
                 });
 

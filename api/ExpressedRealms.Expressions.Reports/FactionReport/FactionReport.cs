@@ -50,7 +50,7 @@ public static class FactionReport
             });
         });
     }
-    
+
     private static string GetArticle(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
@@ -58,7 +58,7 @@ public static class FactionReport
 
         return "AEIOUaeiou".Contains(value[0]) ? "An" : "A";
     }
-    
+
     private static void FillSection(this ColumnDescriptor card, FactionData section)
     {
         card.Item()

@@ -14,6 +14,8 @@ internal static class PowerAuditTrailExtensions
             switch (changedRecord.ColumnName)
             {
                 case "id":
+                case "clone_source_id":
+                case "clone_token":
                     continue;
 
                 case "name":

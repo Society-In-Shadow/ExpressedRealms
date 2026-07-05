@@ -15,6 +15,8 @@ internal static class FactionLevelAuditTrailExtensions
             {
                 case "faction_id":
                 case "faction_rank_id":
+                case "clone_source_id":
+                case "clone_batch_id":
                     continue;
 
                 case "knowledge_id":

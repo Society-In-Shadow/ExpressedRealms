@@ -20,6 +20,12 @@ public class PowerPathConfiguration : IEntityTypeConfiguration<PowerPath>
         builder.HasQueryFilter(x => !x.IsDeleted);
 
         builder
+            .HasOne(e => e.CloneSource)
+            .WithMany(e => e.Clones)
+            .HasForeignKey(e => e.CloneSourceId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder
             .HasOne(e => e.Expression)
             .WithMany(e => e.PowerPaths)
             .HasForeignKey(e => e.ExpressionId)

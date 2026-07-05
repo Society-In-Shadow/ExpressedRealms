@@ -13,8 +13,9 @@ internal static class PowerPathAuditTrailExtensions
         {
             switch (changedRecord.ColumnName)
             {
-                case "expression_id":
-                    // You cannot change the Expression Id after creation
+                case "expression_id": // You cannot change the Expression Id after creation
+                case "clone_source_id":
+                case "clone_batch_id":
                     continue;
 
                 case "name":

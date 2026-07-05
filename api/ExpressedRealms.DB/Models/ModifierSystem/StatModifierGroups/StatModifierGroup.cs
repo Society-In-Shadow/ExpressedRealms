@@ -8,9 +8,14 @@ namespace ExpressedRealms.DB.Models.ModifierSystem.StatModifierGroups;
 public class StatModifierGroup
 {
     public int Id { get; set; }
+    public int? CloneSourceId { get; set; }
+    public Guid? CloneBatchId { get; set; }
 
+    public virtual StatModifierGroup CloneSource { get; set; } = null!;
     public virtual List<StatGroupMapping> StatGroupMappings { get; set; } = null!;
     public virtual List<Power> Powers { get; set; } = null!;
     public virtual List<BlessingLevel> BlessingLevels { get; set; } = null!;
     public virtual List<ProgressionLevel> ProgressionLevels { get; set; } = null!;
+    public virtual ICollection<StatModifierGroup> Clones { get; set; } =
+        new HashSet<StatModifierGroup>();
 }

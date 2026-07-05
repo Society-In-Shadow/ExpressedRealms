@@ -19,15 +19,19 @@ public class FactionLevel : ISoftDelete
     public int? KnowledgeLevelId { get; set; }
     public string? Specialization { get; set; }
     public int? PowerId { get; set; }
+    public int? CloneSourceId { get; set; }
+    public Guid? CloneBatchId { get; set; }
 
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 
     public virtual Faction Faction { get; set; } = null!;
+    public virtual FactionLevel? CloneSource { get; set; }
     public virtual FactionRank FactionRank { get; set; } = null!;
     public virtual Knowledge? Knowledge { get; set; }
     public virtual KnowledgeEducationLevel? KnowledgeLevel { get; set; }
     public virtual Power? Power { get; set; }
     public virtual ICollection<FactionLevelAuditTrail> FactionLevelAuditTrails { get; set; } =
         new HashSet<FactionLevelAuditTrail>();
+    public virtual ICollection<FactionLevel> Clones { get; set; } = new HashSet<FactionLevel>();
 }

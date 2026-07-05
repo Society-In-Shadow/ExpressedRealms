@@ -5,11 +5,12 @@ import axios from 'axios'
 import toaster from '@/services/Toasters'
 import Badge from 'primevue/badge'
 import type { ExpressionMenuItem } from '@/components/navbar/navMenuItems/types.ts'
-import { computed, type PropType, ref } from 'vue'
+import { computed, onMounted, type PropType, ref } from 'vue'
 import { expressionDialogService } from '@/components/expressions/services/dialogs.ts'
 import { cmsStore } from '@/stores/cmsStore.ts'
 import { navigateWithNewTabSupport } from '@/router/navigationHelpers.ts'
 import { can } from '@/stores/userPermissionStore.ts'
+import CommandButton, { type Command } from '@/uiComponents/CommandButton.vue'
 
 const expressionDialogs = expressionDialogService()
 const cmsData = cmsStore()
@@ -74,6 +75,41 @@ const canDelete = computed(() => {
   return (props.item?.expressionTypeId == 13 || props.item?.expressionTypeId == 14) && can.ContentManagementSystem.Delete
 })
 
+const canCopy = computed(() => {
+  return props.item?.expressionTypeId == 1 && can.Expression.Copy
+})
+
+const canViewBetaBadge = computed(() => {
+  return props.item?.expressionTypeId == 1 && can.Expression.SeeBetaExpressions && props.item?.statusName == 'Beta'
+})
+
+const items = ref<Command[]>([])
+
+onMounted(() => {
+  PopulateFactionActions()
+})
+
+function PopulateFactionActions() {
+  if (canEdit.value) {
+    items.value.push({
+      label: 'Edit',
+      severity: 'primary',
+      command: ($event) => {
+        expressionDialogs.showEditExpression(props.item.id, props.item.expressionTypeId)
+      },
+    })
+  }
+  if (canCopy.value) {
+    items.value.push({
+      label: 'Copy',
+      command: ($event) => {
+        expressionDialogs.showCopyExpression(props.item.id, props.item.expressionTypeId)
+      },
+      severity: 'danger',
+    })
+  }
+}
+
 </script>
 <template>
   <div class="flex flex-shrink-1 align-items-center cursor-pointer gap-2 mb-2" @click="redirect" @click.middle="redirect">
@@ -82,7 +118,7 @@ const canDelete = computed(() => {
         <i :class="['material-symbols-outlined', 'text-white']"> {{ item.navMenuImage }}</i>
       </span>
       <span class="inline-flex flex-grow-1 flex-column gap-1">
-        <span class="font-medium text-lg text-900">{{ item.name }} <Badge v-if="cmsData.canEdit && item.id !== 0" :value="item.statusName" :severity="getStatus()" /></span>
+        <span class="font-medium text-lg text-900">{{ item.name }} <Badge v-if="canEdit || canViewBetaBadge && item.id !== 0" :value="item.statusName" :severity="getStatus()" /></span>
         <span class="">{{ item.shortDescription }}</span>
       </span>
     </div>
@@ -93,7 +129,9 @@ const canDelete = computed(() => {
         <Button label="Cancel" severity="secondary" @click.stop="toggleDelete" />
       </template>
       <template v-else>
-        <Button v-if="canEdit" label="Edit" @click.stop="expressionDialogs.showEditExpression(item.id, item.expressionTypeId)" />
+        <CommandButton
+          :commands="items"
+        />
         <Button v-if="canDelete" label="Delete" severity="danger" @click.stop="toggleDelete" />
       </template>
 

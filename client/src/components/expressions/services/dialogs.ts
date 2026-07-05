@@ -1,9 +1,12 @@
-import { useDialog } from 'primevue/usedialog'
-import AddExpression from '@/components/expressions/AddExpression.vue'
-import EditExpression from '@/components/expressions/EditExpression.vue'
+import { useAppDialog } from '@/utilities/dialogUtilities.ts'
+
+const AddExpression = () => import ('@/components/expressions/AddExpression.vue')
+const EditExpression = () => import('@/components/expressions/EditExpression.vue')
+
+const CopyExpression = () => import('@/components/expressions/CopyExpression.vue')
 
 export const expressionDialogService = () => {
-  const dialog = useDialog()
+  const dialog = useAppDialog()
 
   function getDialogTitle(expressionTypeId: number) {
     switch (expressionTypeId) {
@@ -13,18 +16,7 @@ export const expressionDialogService = () => {
     }
   }
   const showAddExpression = (expressionTypeId: number) => {
-    dialog.open(AddExpression, {
-      props: {
-        header: `Add ${getDialogTitle(expressionTypeId)}`,
-        style: {
-          width: '500px',
-        },
-        breakpoints: {
-          '960px': '75vw',
-          '640px': '90vw',
-        },
-        modal: true,
-      },
+    dialog.open(AddExpression, { header: `Add ${getDialogTitle(expressionTypeId)}`,
       data: {
         expressionTypeId: expressionTypeId,
       },
@@ -32,18 +24,15 @@ export const expressionDialogService = () => {
   }
 
   const showEditExpression = (expressionId: number, expressionTypeId: number) => {
-    dialog.open(EditExpression, {
-      props: {
-        header: `Edit ${getDialogTitle(expressionTypeId)}`,
-        style: {
-          width: '500px',
-        },
-        breakpoints: {
-          '960px': '75vw',
-          '640px': '90vw',
-        },
-        modal: true,
+    dialog.open(EditExpression, { header: `Edit ${getDialogTitle(expressionTypeId)}`,
+      data: {
+        expressionId: expressionId,
       },
+    })
+  }
+
+  const showCopyExpression = (expressionId: number, expressionTypeId: number) => {
+    dialog.open(CopyExpression, { header: `Copy ${getDialogTitle(expressionTypeId)}`,
       data: {
         expressionId: expressionId,
       },
@@ -53,5 +42,6 @@ export const expressionDialogService = () => {
   return {
     showAddExpression,
     showEditExpression,
+    showCopyExpression,
   }
 }

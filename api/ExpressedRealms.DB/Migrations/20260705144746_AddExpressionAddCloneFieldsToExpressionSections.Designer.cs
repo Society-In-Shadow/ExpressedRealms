@@ -3,6 +3,7 @@ using System;
 using ExpressedRealms.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpressedRealms.DB.Migrations
 {
     [DbContext(typeof(ExpressedRealmsDbContext))]
-    partial class ExpressedRealmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260705144746_AddExpressionAddCloneFieldsToExpressionSections")]
+    partial class AddExpressionAddCloneFieldsToExpressionSections
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -3677,14 +3680,6 @@ namespace ExpressedRealms.DB.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid?>("CloneBatchId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("clone_batch_id");
-
-                    b.Property<int?>("CloneSourceId")
-                        .HasColumnType("integer")
-                        .HasColumnName("clone_source_id");
-
                     b.Property<int>("PowerId")
                         .HasColumnType("integer")
                         .HasColumnName("power_id");
@@ -3695,9 +3690,6 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_power_prerequisites");
-
-                    b.HasIndex("CloneSourceId")
-                        .HasDatabaseName("ix_power_prerequisites_clone_source_id");
 
                     b.HasIndex("PowerId")
                         .IsUnique()
@@ -5857,20 +5849,12 @@ namespace ExpressedRealms.DB.Migrations
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Powers.PowerPrerequisiteSetup.PowerPrerequisite", b =>
                 {
-                    b.HasOne("ExpressedRealms.DB.Models.Powers.PowerPrerequisiteSetup.PowerPrerequisite", "CloneSource")
-                        .WithMany("Clones")
-                        .HasForeignKey("CloneSourceId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("fk_power_prerequisites_power_prerequisites_clone_source_id");
-
                     b.HasOne("ExpressedRealms.DB.Models.Powers.Power", "Power")
                         .WithOne("Prerequisite")
                         .HasForeignKey("ExpressedRealms.DB.Models.Powers.PowerPrerequisiteSetup.PowerPrerequisite", "PowerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_power_prerequisites_powers_power_id");
-
-                    b.Navigation("CloneSource");
 
                     b.Navigation("Power");
                 });
@@ -6491,8 +6475,6 @@ namespace ExpressedRealms.DB.Migrations
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Powers.PowerPrerequisiteSetup.PowerPrerequisite", b =>
                 {
-                    b.Navigation("Clones");
-
                     b.Navigation("PrerequisitePowers");
                 });
 
