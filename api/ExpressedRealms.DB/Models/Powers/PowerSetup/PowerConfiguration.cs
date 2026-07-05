@@ -10,10 +10,22 @@ public class PowerConfiguration : IEntityTypeConfiguration<Power>
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired();
         builder.Property(e => e.Name).HasMaxLength(250).IsRequired();
-        builder.Property(e => e.Description).IsRequired();
+        builder.Property(e => e.Description).IsRequired().HasMaxLength(20_000);
         builder.Property(e => e.LevelId).IsRequired();
-        builder.Property(e => e.Cost);
+        builder.Property(e => e.Cost).HasMaxLength(250);
+        builder.Property(e => e.GameMechanicEffect).HasMaxLength(20_000);
+        builder.Property(e => e.Limitation).HasMaxLength(20_000);
+        builder.Property(e => e.OtherFields).HasMaxLength(20_000);
         builder.Property(e => e.StatModifierGroupId);
+        builder.Property(e => e.CloneSourceId);
+        builder.Property(e => e.CloneBatchId);
+        
+        builder
+            .HasOne(e => e.CloneSource)
+            .WithMany(e => e.CloneTargets)
+            .HasForeignKey(e => e.CloneSourceId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder
             .HasOne(e => e.StatModifierGroup)
             .WithMany(e => e.Powers)

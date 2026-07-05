@@ -5,10 +5,13 @@ CREATE OR REPLACE PROCEDURE copy_character_to_player_proc(
 )
     LANGUAGE plpgsql
 AS $$
+DECLARE clone_batch_id uuid := gen_random_uuid();
 BEGIN
 
 -- Copy
 -- Expression
+
+
 insert into public.expressions (name, short_description, nav_menu_image, publish_status_id, expression_type_id, order_index)
 select expression_name, short_description, nav_menu_image, 3, expression_type_id, order_index from public.expressions
 where id = source_expression_id
@@ -99,19 +102,37 @@ select power_id from public.powers
 where factions.expression_id = source_expression_id and powers.is_deleted = false;
 
 -- Copy Powers Over
-insert into public.powers(name, description, level_id, area_of_effect_type_id, activation_timing_type_id, duration_id, is_power_use, game_mechanic_effect, limitation, other_fields, is_deleted, deleted_at, cost, stat_modifier_group_id)
-select name, description, level_id, area_of_effect_type_id, activation_timing_type_id, duration_id, is_power_use, game_mechanic_effect, limitation, other_fields, is_deleted, deleted_at, cost, stat_modifer_group_ids.new_id from public.powers
+insert into public.powers(name, description, level_id, area_of_effect_type_id, activation_timing_type_id, duration_id, is_power_use, game_mechanic_effect, limitation, other_fields, is_deleted, deleted_at, cost, stat_modifier_group_id, clone_source_id, clone_batch_id)
+select name, description, level_id, area_of_effect_type_id, activation_timing_type_id, duration_id, is_power_use, game_mechanic_effect, limitation, other_fields, is_deleted, deleted_at, cost, stat_modifer_group_ids.new_id, powers.id, clone_batch_id from public.powers
                                          join power_ids on powers.id = power_ids.old_id
                                          left join stat_modifer_group_ids on powers.stat_modifier_group_id = stat_modifer_group_ids.old_id;
 
-CREATE TEMP TABLE id_map (
-    table_name regclass NOT NULL,
+update power_ids set new_id = powers.id from powers 
+where powers.clone_source_id = power_ids.old_id and powers.clone_batch_id = clone_batch_id;
+
+
+-- Copy Factions
+
+create temp table faction_ids (
     old_id bigint NOT NULL,
     new_id bigint NOT NULL,
-    PRIMARY KEY (table_name, old_id)
+    PRIMARY KEY (old_id)
 );
 
--- ExpressionSection (recursive)
+insert into public.factions(expression_id, name, background, is_deleted, deleted_at, clone_batch_id, clone_source_id)
+select new_expression_id, name, background, is_deleted, deleted_at, clone_batch_id, id from public.factions 
+where expression_id = source_expression_id and is_deleted = false;
+
+-- Get old / new key combo
+insert into faction_ids (new_id, old_id)
+select id, clone_source_id from public.factions where expression_id = new_expression_id and clone_batch_id == clone_batch_id;
+
+-- Insert faction levels, complete with new power mappings
+insert into public.faction_levels(faction_id, faction_rank_id, knowledge_id, knowledge_level_id, specialization, is_deleted, deleted_at, power_id, clone_batch_id, clone_source_id)
+select faction_ids.new_id, faction_rank_id, knowledge_id, knowledge_level_id, specialization, is_deleted, deleted_at, power_ids.new_id, clone_batch_id, powers.id from public.faction_levels
+join faction_ids on faction_ids.old_id = faction_levels.faction_id
+left join power_ids on power_ids.old_id = faction_levels.power_id
+where faction_levels.is_deleted = false;
 
 -- Power Paths
 

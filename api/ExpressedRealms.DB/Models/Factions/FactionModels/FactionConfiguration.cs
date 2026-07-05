@@ -14,6 +14,12 @@ public class FactionConfiguration : IEntityTypeConfiguration<Faction>
         builder.Property(e => e.Background).IsRequired().HasMaxLength(10_000);
 
         builder
+            .HasOne(x => x.CloneSource)
+            .WithMany(x => x.Clones)
+            .HasForeignKey(x => x.CloneSourceId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
+        builder
             .HasOne(x => x.Expression)
             .WithMany(x => x.Factions)
             .HasForeignKey(x => x.ExpressionId)

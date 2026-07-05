@@ -14,7 +14,15 @@ public class FactionLevelConfiguration : IEntityTypeConfiguration<FactionLevel>
         builder.Property(e => e.KnowledgeId);
         builder.Property(e => e.KnowledgeLevelId);
         builder.Property(e => e.Specialization).HasMaxLength(250);
+        builder.Property(e => e.CloneSourceId);
+        builder.Property(e => e.CloneBatchId);
 
+        builder
+            .HasOne(x => x.CloneSource)
+            .WithMany(x => x.Clones)
+            .HasForeignKey(x => x.CloneSourceId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
         builder
             .HasOne(x => x.Faction)
             .WithMany(x => x.FactionLevels)

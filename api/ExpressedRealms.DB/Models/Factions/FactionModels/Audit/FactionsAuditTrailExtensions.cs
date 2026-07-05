@@ -14,6 +14,8 @@ internal static class FactionAuditTrailExtensions
             switch (changedRecord.ColumnName)
             {
                 case "expression_id":
+                case "clone_source_id":
+                case "clone_batch_id":
                     continue;
 
                 case "name":

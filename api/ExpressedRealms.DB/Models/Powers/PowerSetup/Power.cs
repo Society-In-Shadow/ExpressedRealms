@@ -37,10 +37,14 @@ public class Power : ISoftDelete
     public string? Limitation { get; set; }
     public string? OtherFields { get; set; }
     public string? Cost { get; set; }
+    
+    public int? CloneSourceId { get; set; }
+    public Guid? CloneBatchId { get; set; }
 
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 
+    public virtual Power? CloneSource { get; set; }
     public virtual List<PowerCategoryMapping> CategoryMappings { get; set; } = null!;
 
     public virtual PowerPathPowerMapping? PowerPathPowerMapping { get; set; }
@@ -51,4 +55,6 @@ public class Power : ISoftDelete
     public virtual List<CharacterPowerMapping> CharacterPowerMappings { get; set; } = null!;
     public virtual ICollection<FactionLevel> FactionLevels { get; set; } =
         new HashSet<FactionLevel>();
+    public virtual ICollection<Power> CloneTargets { get; set; } =
+        new HashSet<Power>();
 }

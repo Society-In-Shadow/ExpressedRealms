@@ -16,10 +16,15 @@ public class Faction : ISoftDelete
 
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
+    public int? CloneSourceId { get; set; }
+    public Guid? CloneBatchId { get; set; }
 
     public virtual Expression Expression { get; set; } = null!;
+    public virtual Faction CloneSource { get; set; } = null!;
     public virtual ICollection<FactionAuditTrail> FactionAuditTrails { get; set; } =
         new HashSet<FactionAuditTrail>();
     public virtual ICollection<FactionLevel> FactionLevels { get; set; } =
         new HashSet<FactionLevel>();
+    public virtual ICollection<Faction> Clones { get; set; } =
+        new HashSet<Faction>();
 }
