@@ -2,10 +2,9 @@
 
 import axios from 'axios'
 import Card from 'primevue/card'
-import { computed, onBeforeMount, ref } from 'vue'
+import { onBeforeMount } from 'vue'
 import { useRoute } from 'vue-router'
 import toaster from '@/services/Toasters'
-import { makeIdSafe } from '@/utilities/stringUtilities'
 import { characterStore } from '@/components/characters/character/stores/characterStore'
 import HighLevelExpressionInfo from '@/components/characters/wizard/basicInfo/supporting/HighLevelExpressionInfo.vue'
 import { wizardContentStore } from '@/components/characters/wizard/stores/wizardContentStore.ts'
@@ -38,7 +37,6 @@ onBeforeMount(async () => {
       form.fields.name.field.value = characterInfo.name
       form.fields.background.field.value = characterInfo.background
       form.fields.expression.field.value = characterInfo.expression
-      form.fields.faction.field.value = characterInfo.faction
       form.fields.isPrimaryCharacter.field.value = characterInfo.isPrimaryCharacter
     })
   await characterInfo.getEditOptions(Number(route.params.id))
@@ -47,22 +45,16 @@ onBeforeMount(async () => {
   }
 })
 
-const expression = ref('')
-const isLoading = ref(true)
-const factions = ref([])
-
 const onSubmit = form.handleSubmit((values) => {
   axios.put(`/characters/${route.params.id}`, {
     name: values.name,
     background: values.background,
-    factionId: values.faction?.id,
     isPrimaryCharacter: values.isPrimaryCharacter,
     primaryProgressionId: values.primaryProgression?.id,
     secondaryProgressionId: values.secondaryProgression?.id,
   }).then(async () => {
     characterInfo.name = values.name
     characterInfo.background = values.background
-    characterInfo.faction = values.faction
     characterInfo.isPrimaryCharacter = values.isPrimaryCharacter
     await xpInfo.updateExperience(route.params.id)
     await characterInfo.getEditOptions(Number(route.params.id))
@@ -70,13 +62,6 @@ const onSubmit = form.handleSubmit((values) => {
     await refetch()
     toaster.success('Successfully Updated Character Info!')
   })
-})
-
-let expressionRedirectURL = computed(() => {
-  if (!isLoading.value) {
-    return `/expressions/${expression.value.toLowerCase()}#${makeIdSafe(form.field.faction.value.name)}`
-  }
-  return ''
 })
 
 const wizardContentInfo = wizardContentStore()
@@ -98,10 +83,6 @@ const updateWizardContent = () => {
       <form @submit="onSubmit">
         <FormTextWrapper v-model="form.fields.name" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
         <FormTextWrapper v-model="form.fields.expression" :is-disabled="true" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
-        <!--        <FormDropdownWrapper v-if="hasFlag.ShowFactionDropdown"
-          v-model="form.fields.faction" option-label="name" :options="factions" field-name="Faction"
-          :show-skeleton="characterInfo.isLoading" :redirect-url="expressionRedirectURL" @change="onSubmit"
-        />-->
         <FormTextAreaWrapper v-model="form.fields.background" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
         <FormCheckboxWrapper v-if="characterInfo.canModifyPrimaryCharacter" v-model="form.fields.isPrimaryCharacter" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
         <Message v-if="characterInfo.canModifyPrimaryCharacter" severity="info" class="mb-3">

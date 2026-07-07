@@ -25,7 +25,6 @@ public class EditCharacterUseCaseTests
             Id = 10,
             Name = "Updated Name",
             Background = "Updated Background",
-            FactionId = 7,
             IsPrimaryCharacter = false,
             PrimaryProgressionId = 111,
             SecondaryProgressionId = 222,
@@ -37,7 +36,6 @@ public class EditCharacterUseCaseTests
             Name = "Original Name",
             Background = "Original Background",
             ExpressionId = 3, // valid for PrimaryProgression
-            FactionId = null,
             IsPrimaryCharacter = false,
             PrimaryProgressionId = null,
             SecondaryProgressionId = null,

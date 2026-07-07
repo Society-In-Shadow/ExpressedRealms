@@ -141,44 +141,6 @@ internal static class CharacterEndPoints
 
         endpointGroup
             .MapGet(
-                "FactionOptions/{expressionId}",
-                [Authorize]
-                async Task<Results<NotFound, Ok<List<FactionOptionResponse>>>> (
-                    int expressionId,
-                    ExpressedRealmsDbContext dbContext,
-                    HttpContext http,
-                    CancellationToken cancellationToken
-                ) =>
-                {
-                    var isValidExpression = await dbContext.Expressions.AnyAsync(
-                        x =>
-                            x.Id == expressionId
-                            && x.PublishStatusId == (int)PublishTypes.Published,
-                        cancellationToken
-                    );
-
-                    if (!isValidExpression)
-                    {
-                        return TypedResults.NotFound();
-                    }
-
-                    var factions = await dbContext
-                        .ExpressionSections.Where(x =>
-                            x.ExpressionId == expressionId
-                            && x.SectionTypeId == (int)ExpressionSectionType.FactionType
-                        )
-                        .Select(x => new FactionOptionResponse(x.Id, x.Name, x.Content))
-                        .ToListAsync(cancellationToken);
-
-                    return TypedResults.Ok(factions);
-                }
-            )
-            .WithSummary("Returns info needed for selecting a faction for character create")
-            .WithDescription("Returns info needed for selecting a faction for character create.")
-            .RequireAuthorization();
-
-        endpointGroup
-            .MapGet(
                 "ProgressionOptions/{expressionId}",
                 [Authorize]
                 async Task<Results<NotFound, Ok<List<PowerPathOptionResponse>>>> (
@@ -295,9 +257,7 @@ internal static class CharacterEndPoints
                         new AddCharacterDto()
                         {
                             Name = request.Name,
-                            Background = request.Background,
                             ExpressionId = request.ExpressionId,
-                            FactionId = request.FactionId,
                             IsArchetype = request.IsArchetype,
                         }
                     );
