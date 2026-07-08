@@ -58,21 +58,35 @@ internal static class CharacterEndPoints
             .MapGet(
                 "options",
                 [Authorize]
-                async (ExpressedRealmsDbContext dbContext, ICharacterRepository repository, IUserContext userContext) =>
+                async (
+                    ExpressedRealmsDbContext dbContext,
+                    ICharacterRepository repository,
+                    IUserContext userContext
+                ) =>
                 {
                     var allowedStatuses = new List<int> { (int)PublishTypes.Published };
-                    if (userContext.CurrentUserHasPermission(Permissions.Expression.SeeBetaExpressions))
+                    if (
+                        userContext.CurrentUserHasPermission(
+                            Permissions.Expression.SeeBetaExpressions
+                        )
+                    )
                     {
                         allowedStatuses.Add((int)PublishTypes.Beta);
                     }
-                    
+
                     var expressions = await dbContext
                         .Expressions.AsNoTracking()
                         .Where(x =>
-                            allowedStatuses.Contains(x.PublishStatusId)
-                            && x.ExpressionTypeId == 1
+                            allowedStatuses.Contains(x.PublishStatusId) && x.ExpressionTypeId == 1
                         )
-                        .Select(x => new CharacterOptionExpression() { Id = x.Id, Name = x.PublishStatusId == (int)PublishTypes.Beta ? x.Name + " (Beta)" : x.Name })
+                        .Select(x => new CharacterOptionExpression()
+                        {
+                            Id = x.Id,
+                            Name =
+                                x.PublishStatusId == (int)PublishTypes.Beta
+                                    ? x.Name + " (Beta)"
+                                    : x.Name,
+                        })
                         .OrderBy(x => x.Name)
                         .ToListAsync();
 
@@ -114,10 +128,19 @@ internal static class CharacterEndPoints
             .MapGet(
                 "options/{expressionId}",
                 [Authorize]
-                async (int expressionId, ExpressedRealmsDbContext dbContext, HttpContext http, IUserContext userContext) =>
+                async (
+                    int expressionId,
+                    ExpressedRealmsDbContext dbContext,
+                    HttpContext http,
+                    IUserContext userContext
+                ) =>
                 {
                     var allowedStatuses = new List<int> { (int)PublishTypes.Published };
-                    if (userContext.CurrentUserHasPermission(Permissions.Expression.SeeBetaExpressions))
+                    if (
+                        userContext.CurrentUserHasPermission(
+                            Permissions.Expression.SeeBetaExpressions
+                        )
+                    )
                     {
                         allowedStatuses.Add((int)PublishTypes.Beta);
                     }
@@ -164,7 +187,9 @@ internal static class CharacterEndPoints
                     CancellationToken cancellationToken
                 ) =>
                 {
-                    var isValidExpression = await characterRepository.ExpressionExistsAsync(expressionId);
+                    var isValidExpression = await characterRepository.ExpressionExistsAsync(
+                        expressionId
+                    );
 
                     if (!isValidExpression)
                     {
