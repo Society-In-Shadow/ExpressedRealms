@@ -1,8 +1,7 @@
-using ExpressedRealms.DB.Models.Expressions.CmsTypeSetup;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ExpressedRealms.DB.Models.Expressions;
+namespace ExpressedRealms.DB.Models.Expressions.CmsTypeSetup;
 
 public class CmsTypeConfiguration : IEntityTypeConfiguration<CmsType>
 {

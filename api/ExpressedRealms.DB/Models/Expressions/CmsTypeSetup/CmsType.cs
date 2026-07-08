@@ -1,6 +1,6 @@
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 
-namespace ExpressedRealms.DB.Models.Expressions;
+namespace ExpressedRealms.DB.Models.Expressions.CmsTypeSetup;
 
 public class CmsType
 {
