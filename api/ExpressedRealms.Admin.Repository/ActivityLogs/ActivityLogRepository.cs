@@ -14,7 +14,7 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             .Where(x => x.ActorUserId == userId)
             .Select(x => new Log()
             {
-                Location = $"{x.Expression.ExpressionType.Name} \"{x.Expression.Name}\"",
+                Location = $"{x.Expression.CmsType.Name} \"{x.Expression.Name}\"",
                 TimeStamp = x.Timestamp,
                 Action = x.Action,
                 ChangedProperties = x.ChangedProperties,
@@ -28,7 +28,7 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             .Select(x => new Log()
             {
                 Location =
-                    $"{x.Expression.ExpressionType.Name} \"{x.Expression.Name}\" > Section \"{x.ExpressionSection.Name}\"",
+                    $"{x.Expression.CmsType.Name} \"{x.Expression.Name}\" > Section \"{x.ExpressionSection.Name}\"",
                 TimeStamp = x.Timestamp,
                 Action = x.Action,
                 ChangedProperties = x.ChangedProperties,
@@ -160,7 +160,7 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             .Select(x => new Log()
             {
                 Location =
-                    $"{x.Expression.ExpressionType.Name} \"{x.Expression.Name}\" > Power Path \"{x.PowerPath.Name}\"",
+                    $"{x.Expression.CmsType.Name} \"{x.Expression.Name}\" > Power Path \"{x.PowerPath.Name}\"",
                 TimeStamp = x.Timestamp,
                 Action = x.Action,
                 ChangedProperties = x.ChangedProperties,
@@ -174,7 +174,7 @@ public class ActivityLogRepository(ExpressedRealmsDbContext context) : IActivity
             .Select(x => new Log()
             {
                 Location =
-                    $"{x.Power.PowerPathPowerMapping!.PowerPath.Expression.ExpressionType.Name} \"{x.Power.PowerPathPowerMapping.PowerPath.Expression.Name}\" > Power Path \"{x.Power.PowerPathPowerMapping.PowerPath.Name}\" > Power \"{x.Power.Name}\"",
+                    $"{x.Power.PowerPathPowerMapping!.PowerPath.Expression.CmsType.Name} \"{x.Power.PowerPathPowerMapping.PowerPath.Expression.Name}\" > Power Path \"{x.Power.PowerPathPowerMapping.PowerPath.Name}\" > Power \"{x.Power.Name}\"",
                 TimeStamp = x.Timestamp,
                 Action = x.Action,
                 ChangedProperties = x.ChangedProperties,

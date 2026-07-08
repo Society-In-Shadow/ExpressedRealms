@@ -82,7 +82,7 @@ internal sealed class CharacterRepository(
             x =>
                 x.Id == id
                 && allowedStatuses.Contains(x.PublishStatusId)
-                && x.ExpressionTypeId == 1,
+                && x.CmsTypeId == 1,
             cancellationToken
         );
     }

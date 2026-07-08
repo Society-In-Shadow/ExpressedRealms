@@ -77,7 +77,7 @@ internal static class CharacterEndPoints
                     var expressions = await dbContext
                         .Expressions.AsNoTracking()
                         .Where(x =>
-                            allowedStatuses.Contains(x.PublishStatusId) && x.ExpressionTypeId == 1
+                            allowedStatuses.Contains(x.PublishStatusId) && x.CmsTypeId == 1
                         )
                         .Select(x => new CharacterOptionExpression()
                         {
@@ -148,7 +148,7 @@ internal static class CharacterEndPoints
                         .Expressions.AsNoTracking()
                         .Where(x =>
                             allowedStatuses.Contains(x.PublishStatusId)
-                            && x.ExpressionTypeId == 1
+                            && x.CmsTypeId == 1
                             && x.Id == expressionId
                         )
                         .Select(x => new HighLevelExpressionInfoResponse()
