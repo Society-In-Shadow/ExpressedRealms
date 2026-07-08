@@ -89,7 +89,7 @@ const updateWizardContent = () => {
           Toggle above to denote the character you intend on having in play. Only one of these are allowed per account.
           This will make this character visible to GOs for printing the booklet and handing out XP.  It does not give them the ability to modify the character.
         </Message>
-        <SelectProgressionPaths :primary-progression="form.fields.primaryProgression" :secondary-progression="form.fields.secondaryProgression" :expression-type-id="characterInfo.expressionId" @change="onSubmit" />
+        <SelectProgressionPaths :primary-progression="form.fields.primaryProgression" :secondary-progression="form.fields.secondaryProgression" :expression-id="characterInfo.expressionId" :expression-type-id="characterInfo.expressionSubTypeId!" @change="onSubmit" />
       </form>
       <Button label="Show High Level Expression Info" class="w-100 mb-2 d-block d-md-none " :disabled="characterInfo.isLoading && characterInfo.expressionId !== 0" @click="updateWizardContent" />
     </template>

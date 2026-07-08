@@ -9,7 +9,7 @@ internal record CharacterEditResponse
         Name = dto.Name;
         Background = dto.Background;
         Expression = dto.Expression;
-        FactionId = dto.FactionId;
+        ExpressionSubTypeId = dto.ExpressionSubTypeId;
         ExpressionId = dto.ExpressionId;
         IsPrimaryCharacter = dto.IsPrimaryCharacter;
         IsInCharacterCreation = dto.IsInCharacterCreation;
@@ -48,6 +48,5 @@ internal record CharacterEditResponse
     /// <example>Adept</example>
     public string Expression { get; set; }
 
-    /// <example>8</example>
-    public int? FactionId { get; set; }
+    public int? ExpressionSubTypeId { get; set; }
 }

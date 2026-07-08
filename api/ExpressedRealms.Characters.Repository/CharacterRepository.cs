@@ -197,6 +197,7 @@ internal sealed class CharacterRepository(
                 SecondaryProgressionId = x.SecondaryProgressionId,
                 IsRetired = x.IsRetired,
                 IsArchetypeCharacter = x.Player.IsArchetypeAccount,
+                ExpressionSubTypeId = x.Expression.ExpressionSubTypeId
             })
             .FirstOrDefaultAsync(cancellationToken);
 

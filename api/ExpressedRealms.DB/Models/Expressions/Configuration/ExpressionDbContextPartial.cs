@@ -2,6 +2,7 @@ using ExpressedRealms.DB.Models.Expressions;
 using ExpressedRealms.DB.Models.Expressions.CmsTypeSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
+using ExpressedRealms.DB.Models.Expressions.ExpressionSubTypeSetup;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionLevels;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ namespace ExpressedRealms.DB;
 public partial class ExpressedRealmsDbContext
 {
     public DbSet<Expression> Expressions { get; set; }
+    public DbSet<ExpressionSubType> ExpressionSubTypes { get; set; }
     public DbSet<CmsType> CmsTypes { get; set; }
     public DbSet<ExpressionSection> ExpressionSections { get; set; }
     public DbSet<ExpressionSectionType> ExpressionSectionTypes { get; set; }

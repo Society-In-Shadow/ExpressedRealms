@@ -14,4 +14,5 @@ public sealed record GetEditCharacterDto
     public int? SecondaryProgressionId { get; set; }
     public bool IsRetired { get; set; }
     public bool IsArchetypeCharacter { get; set; }
+    public int? ExpressionSubTypeId { get; set; }
 }
