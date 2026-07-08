@@ -19,7 +19,6 @@ internal static class EditCharacterEndpoint
             {
                 Name = dto.Name,
                 Background = dto.Background,
-                FactionId = dto.FactionId,
                 Id = id,
                 IsPrimaryCharacter = dto.IsPrimaryCharacter,
                 PrimaryProgressionId = dto.PrimaryProgressionId,

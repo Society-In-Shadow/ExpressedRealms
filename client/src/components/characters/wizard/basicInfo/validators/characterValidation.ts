@@ -2,7 +2,6 @@ import { boolean, type InferType, object, string } from 'yup'
 import { useGenericForm } from '@/utilities/formUtilities'
 import type { BlessingLevel } from '@/components/blessings/types.ts'
 import type { CharacterBlessing } from '@/components/characters/wizard/blessings/types.ts'
-import type { Faction } from '@/components/characters/character/interfaces/Faction.ts'
 import type { ProgressionPath } from '@/components/characters/wizard/basicInfo/types.ts'
 
 const validationSchema = object({
@@ -11,8 +10,6 @@ const validationSchema = object({
     .label('Name'),
   expression: string().nullable()
     .label('Expression'),
-  faction: object<Faction>().nullable()
-    .label('Faction'),
   background: string().nullable()
     .label('Background'),
   isPrimaryCharacter: boolean()
@@ -34,7 +31,6 @@ export function getValidationInstance() {
   const customResetForm = () => {
     form.fields.name.field.value = ''
     form.fields.expression.field.value = ''
-    form.fields.faction.field.value = null
     form.fields.background.field.value = ''
     form.fields.primaryProgression.field.value = null
     form.fields.secondaryProgression.field.value = null

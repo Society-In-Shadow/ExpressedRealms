@@ -25,6 +25,7 @@ using ExpressedRealms.Characters.Repository.Skills.DTOs;
 using ExpressedRealms.DB;
 using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.FeatureFlags;
+using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Server.Shared;
 using ExpressedRealms.Server.Shared.Extensions;
 using Microsoft.AspNetCore.Authorization;
@@ -57,15 +58,36 @@ internal static class CharacterEndPoints
             .MapGet(
                 "options",
                 [Authorize]
-                async (ExpressedRealmsDbContext dbContext, ICharacterRepository repository) =>
+                async (
+                    ExpressedRealmsDbContext dbContext,
+                    ICharacterRepository repository,
+                    IUserContext userContext
+                ) =>
                 {
+                    var allowedStatuses = new List<int> { (int)PublishTypes.Published };
+                    if (
+                        userContext.CurrentUserHasPermission(
+                            Permissions.Expression.SeeBetaExpressions
+                        )
+                    )
+                    {
+                        allowedStatuses.Add((int)PublishTypes.Beta);
+                    }
+
                     var expressions = await dbContext
                         .Expressions.AsNoTracking()
                         .Where(x =>
-                            x.PublishStatusId == (int)PublishTypes.Published
-                            && x.ExpressionTypeId == 1
+                            allowedStatuses.Contains(x.PublishStatusId) && x.ExpressionTypeId == 1
                         )
-                        .Select(x => new CharacterOptionExpression() { Id = x.Id, Name = x.Name })
+                        .Select(x => new CharacterOptionExpression()
+                        {
+                            Id = x.Id,
+                            Name =
+                                x.PublishStatusId == (int)PublishTypes.Beta
+                                    ? x.Name + " (Beta)"
+                                    : x.Name,
+                        })
+                        .OrderBy(x => x.Name)
                         .ToListAsync();
 
                     return TypedResults.Ok(new CharacterOptions() { Expressions = expressions });
@@ -106,12 +128,26 @@ internal static class CharacterEndPoints
             .MapGet(
                 "options/{expressionId}",
                 [Authorize]
-                async (int expressionId, ExpressedRealmsDbContext dbContext, HttpContext http) =>
+                async (
+                    int expressionId,
+                    ExpressedRealmsDbContext dbContext,
+                    HttpContext http,
+                    IUserContext userContext
+                ) =>
                 {
+                    var allowedStatuses = new List<int> { (int)PublishTypes.Published };
+                    if (
+                        userContext.CurrentUserHasPermission(
+                            Permissions.Expression.SeeBetaExpressions
+                        )
+                    )
+                    {
+                        allowedStatuses.Add((int)PublishTypes.Beta);
+                    }
                     var expressionInfo = await dbContext
                         .Expressions.AsNoTracking()
                         .Where(x =>
-                            x.PublishStatusId == (int)PublishTypes.Published
+                            allowedStatuses.Contains(x.PublishStatusId)
                             && x.ExpressionTypeId == 1
                             && x.Id == expressionId
                         )
@@ -141,58 +177,18 @@ internal static class CharacterEndPoints
 
         endpointGroup
             .MapGet(
-                "FactionOptions/{expressionId}",
-                [Authorize]
-                async Task<Results<NotFound, Ok<List<FactionOptionResponse>>>> (
-                    int expressionId,
-                    ExpressedRealmsDbContext dbContext,
-                    HttpContext http,
-                    CancellationToken cancellationToken
-                ) =>
-                {
-                    var isValidExpression = await dbContext.Expressions.AnyAsync(
-                        x =>
-                            x.Id == expressionId
-                            && x.PublishStatusId == (int)PublishTypes.Published,
-                        cancellationToken
-                    );
-
-                    if (!isValidExpression)
-                    {
-                        return TypedResults.NotFound();
-                    }
-
-                    var factions = await dbContext
-                        .ExpressionSections.Where(x =>
-                            x.ExpressionId == expressionId
-                            && x.SectionTypeId == (int)ExpressionSectionType.FactionType
-                        )
-                        .Select(x => new FactionOptionResponse(x.Id, x.Name, x.Content))
-                        .ToListAsync(cancellationToken);
-
-                    return TypedResults.Ok(factions);
-                }
-            )
-            .WithSummary("Returns info needed for selecting a faction for character create")
-            .WithDescription("Returns info needed for selecting a faction for character create.")
-            .RequireAuthorization();
-
-        endpointGroup
-            .MapGet(
                 "ProgressionOptions/{expressionId}",
                 [Authorize]
                 async Task<Results<NotFound, Ok<List<PowerPathOptionResponse>>>> (
                     int expressionId,
                     ExpressedRealmsDbContext dbContext,
+                    ICharacterRepository characterRepository,
                     HttpContext http,
                     CancellationToken cancellationToken
                 ) =>
                 {
-                    var isValidExpression = await dbContext.Expressions.AnyAsync(
-                        x =>
-                            x.Id == expressionId
-                            && x.PublishStatusId == (int)PublishTypes.Published,
-                        cancellationToken
+                    var isValidExpression = await characterRepository.ExpressionExistsAsync(
+                        expressionId
                     );
 
                     if (!isValidExpression)
@@ -295,9 +291,7 @@ internal static class CharacterEndPoints
                         new AddCharacterDto()
                         {
                             Name = request.Name,
-                            Background = request.Background,
                             ExpressionId = request.ExpressionId,
-                            FactionId = request.FactionId,
                             IsArchetype = request.IsArchetype,
                         }
                     );

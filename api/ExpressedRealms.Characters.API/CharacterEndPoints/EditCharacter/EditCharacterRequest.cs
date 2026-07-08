@@ -8,9 +8,6 @@ internal record EditCharacterRequest
     /// <example>John Doe is a high elf from the northern woods.</example>
     public string? Background { get; set; }
 
-    /// <example>9</example>
-    public int? FactionId { get; set; }
-
     public bool IsPrimaryCharacter { get; set; }
     public int? PrimaryProgressionId { get; set; }
     public int? SecondaryProgressionId { get; set; }

@@ -73,10 +73,15 @@ internal sealed class CharacterRepository(
 
     public async Task<bool> ExpressionExistsAsync(int id)
     {
+        var allowedStatuses = new List<int> { (int)PublishTypes.Published };
+        if (userContext.CurrentUserHasPermission(Permissions.Expression.SeeBetaExpressions))
+        {
+            allowedStatuses.Add((int)PublishTypes.Beta);
+        }
         return await context.Expressions.AnyAsync(
             x =>
                 x.Id == id
-                && x.PublishStatusId == (int)PublishTypes.Published
+                && allowedStatuses.Contains(x.PublishStatusId)
                 && x.ExpressionTypeId == 1,
             cancellationToken
         );
@@ -259,6 +264,9 @@ internal sealed class CharacterRepository(
         if (!result.IsValid)
             return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
 
+        if (!await ExpressionExistsAsync(addCharacterDto.ExpressionId))
+            return Result.Fail("Expression Id was not found");
+
         if (
             !userContext.CurrentUserHasPermission(Permissions.Archetypes.Create)
             && addCharacterDto.IsArchetype
@@ -290,9 +298,7 @@ internal sealed class CharacterRepository(
         {
             PlayerId = playerId,
             Name = addCharacterDto.Name,
-            Background = addCharacterDto.Background,
             ExpressionId = addCharacterDto.ExpressionId,
-            FactionId = addCharacterDto.FactionId,
             WealthLevel = 1,
             IsInCharacterCreation = true,
         };
