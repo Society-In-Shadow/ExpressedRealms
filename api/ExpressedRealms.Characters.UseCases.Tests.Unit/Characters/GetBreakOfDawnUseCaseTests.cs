@@ -29,9 +29,10 @@ public class GetBreakOfDawnUseCaseTests
 
         A.CallTo(() => _characterRepository.FindCharacterAsync(_model.Id)).Returns(new Character());
 
-        A.CallTo(() => _characterRepository.GetCharacterExpressionId(_model.Id)).Returns(3);
+        A.CallTo(() => _characterRepository.GetCharacterExpressionSubTypeId(_model.Id)).Returns(3);
 
         A.CallTo(() => _xpRepository.GetCharacterXpLevel(_model.Id)).Returns(5);
+        A.CallTo(() => _characterRepository.GetCharacterExpressionSubTypeId(_model.Id)).Returns(7);
 
         A.CallTo(() => _proficiencyRepository.GetBasicProficiencies(_model.Id))
             .Returns(
@@ -168,27 +169,6 @@ public class GetBreakOfDawnUseCaseTests
         );
     }
 
-    [Theory]
-    [InlineData(2, 2)]
-    [InlineData(3, 1)]
-    [InlineData(4, 3)]
-    [InlineData(7, 4)]
-    [InlineData(8, 5)]
-    [InlineData(9, 6)]
-    public async Task UseCase_Maps_All_ExpressionIds_Correctly(
-        int repositoryExpressionId,
-        int expectedExpressionId
-    )
-    {
-        A.CallTo(() => _characterRepository.GetCharacterExpressionId(_model.Id))
-            .Returns(repositoryExpressionId);
-
-        var results = await _useCaseTests.ExecuteAsync(_model);
-
-        Assert.True(results.IsSuccess);
-        Assert.Equal(expectedExpressionId, results.Value.ExpressionId);
-    }
-
     [Fact]
     public async Task UseCase_Returns_BreakOfDawnInfo_With_Mapped_Proficiencies()
     {
@@ -201,6 +181,7 @@ public class GetBreakOfDawnUseCaseTests
         Assert.Equal(15, results.Value.Rwp);
         Assert.Equal(14, results.Value.Psyche);
         Assert.Equal(16, results.Value.Mortis);
+        Assert.Equal(7, results.Value.ExpressionId);
         Assert.Equal(5, results.Value.CharacterLevel);
     }
 }

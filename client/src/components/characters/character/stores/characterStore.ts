@@ -11,6 +11,7 @@ export const characterStore
         background: '' as string,
         expression: '' as string,
         expressionId: 0 as number,
+        expressionSubTypeId: 0 as number | undefined,
         isPrimaryCharacter: false as boolean,
         isRetired: false as boolean,
         isInCharacterCreation: false as boolean,
@@ -39,6 +40,7 @@ export const characterStore
             this.secondaryProgressionId = response.data.secondaryProgressionId
             this.isRetired = response.data.isRetired
             this.isArchetypeCharacter = response.data.isArchetypeCharacter
+            this.expressionSubTypeId = response.data.expressionSubTypeId
 
             if (hasFlag.ShowFactionDropdown) {
               await axios.get(`/characters/${characterId}/factionOptions`)

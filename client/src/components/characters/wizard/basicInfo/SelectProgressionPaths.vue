@@ -13,6 +13,10 @@ const emit = defineEmits<{
 }>()
 
 const props = defineProps({
+  expressionId: {
+    type: Number,
+    required: true,
+  },
   expressionTypeId: {
     type: Number,
     required: true,
@@ -29,18 +33,18 @@ const props = defineProps({
 
 const characterInfo = characterStore()
 
-const adeptId = 3
-const shammasId = 4
-const sorcererId = 8
-const vampyreId = 9
+const adeptId = 1
+const shammasId = 3
+const sorcererId = 5
+const vampyreId = 6
 
 const progressionOptions = ref<ProgressionPath[]>([])
 const isLoading = ref(true)
 const primaryExpressions = new Set([adeptId, shammasId, sorcererId, vampyreId])
 
-watch(() => props.expressionTypeId, async () => {
+watch(() => props.expressionId, async () => {
   isLoading.value = true
-  const results = await axios.get(`/characters/progressionOptions/${props.expressionTypeId}`)
+  const results = await axios.get(`/characters/progressionOptions/${props.expressionId}`)
   progressionOptions.value = results.data
   isLoading.value = false
   props.primaryProgression.field.value = progressionOptions.value.find(x => x.id == characterInfo.primaryProgressionId) as ProgressionPath

@@ -1,4 +1,6 @@
 using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.Characters.Repository.DTOs;
+using ExpressedRealms.DB.Models.Expressions.ExpressionSubTypeSetup;
 using ExpressedRealms.Expressions.Repository.ProgressionPaths;
 using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.Powers.Repository.PowerPaths;
@@ -35,63 +37,14 @@ internal sealed class GetAvailablePowersUseCase(
 
         var powers = await powerPathRepository.GetPowerPathAndPowers(powerIds);
 
-        var character = await characterRepository.GetCharacterForEdit(model.CharacterId);
+        var character = await characterRepository.GetCharacterInfoForPickablePowers(
+            model.CharacterId
+        );
 
         var filteredPowers = powers.Value;
-        if (character.ExpressionId == 8) // Sorcerer
+        if (character.ExpressionSubTypeId == ExpressionSubTypeEnum.Sorcerers)
         {
-            if (
-                !(
-                    character.PrimaryProgressionId.HasValue
-                    && character.SecondaryProgressionId.HasValue
-                )
-            )
-            {
-                filteredPowers = new List<PowerPathToc>();
-            }
-            else
-            {
-                var primaryElement = await progressionPathRepository.GetProgressionPathName(
-                    character.PrimaryProgressionId.Value
-                );
-                var secondaryElement = await progressionPathRepository.GetProgressionPathName(
-                    character.SecondaryProgressionId.Value
-                );
-
-                // Primary element gets all powers
-                // Secondary element gets all powers that are intermediate or below (<= 2)
-                filteredPowers = filteredPowers
-                    .Select(x => new PowerPathToc()
-                    {
-                        Id = x.Id,
-                        Description = x.Description,
-                        Name = x.Name,
-                        Powers = x
-                            .Powers.Where(y =>
-                                (y.Category!.Any(z => z.Name == primaryElement))
-                                || (
-                                    y.Category!.Any(z =>
-                                        z.Name.Equals(
-                                            "general",
-                                            StringComparison.InvariantCultureIgnoreCase
-                                        )
-                                    )
-                                )
-                                || (
-                                    y.Category!.Any(z =>
-                                        z.Name.Equals(
-                                            secondaryElement,
-                                            StringComparison.InvariantCultureIgnoreCase
-                                        )
-                                    )
-                                    && y.PowerLevel.Id < 3
-                                )
-                            )
-                            .ToList(),
-                    })
-                    .Where(x => x.Powers.Any())
-                    .ToList();
-            }
+            filteredPowers = await LimitSorcererPowers(character, filteredPowers);
         }
 
         return Result.Ok(
@@ -131,5 +84,59 @@ internal sealed class GetAvailablePowersUseCase(
                 })
                 .ToList()
         );
+    }
+
+    private async Task<List<PowerPathToc>> LimitSorcererPowers(
+        CharacterPickablePowersDto character,
+        List<PowerPathToc> filteredPowers
+    )
+    {
+        if (!(character.PrimaryProgressionId.HasValue && character.SecondaryProgressionId.HasValue))
+        {
+            return new List<PowerPathToc>();
+        }
+        else
+        {
+            var primaryElement = await progressionPathRepository.GetProgressionPathName(
+                character.PrimaryProgressionId.Value
+            );
+            var secondaryElement = await progressionPathRepository.GetProgressionPathName(
+                character.SecondaryProgressionId.Value
+            );
+
+            // Primary element gets all powers
+            // Secondary element gets all powers that are intermediate or below (<= 2)
+            return filteredPowers
+                .Select(x => new PowerPathToc()
+                {
+                    Id = x.Id,
+                    Description = x.Description,
+                    Name = x.Name,
+                    Powers = x
+                        .Powers.Where(y =>
+                            (y.Category!.Any(z => z.Name == primaryElement))
+                            || (
+                                y.Category!.Any(z =>
+                                    z.Name.Equals(
+                                        "general",
+                                        StringComparison.InvariantCultureIgnoreCase
+                                    )
+                                )
+                            )
+                            || (
+                                y.Category!.Any(z =>
+                                    z.Name.Equals(
+                                        secondaryElement,
+                                        StringComparison.InvariantCultureIgnoreCase
+                                    )
+                                )
+                                && y.PowerLevel.Id < 3
+                            )
+                        )
+                        .ToList(),
+                })
+                .Where(x => x.Powers.Any())
+                .ToList();
+        }
     }
 }

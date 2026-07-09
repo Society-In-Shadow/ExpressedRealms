@@ -124,18 +124,10 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
 
                 var proficiencies = await profRepository.GetBasicProficiencies(model.CharacterId);
 
-                var character = await characterRepository.FindCharacterAsync(model.CharacterId);
+                var character = await characterRepository.GetCharacterInfoForPickablePowers(
+                    model.CharacterId
+                );
                 var characterLevel = await xpRepository.GetCharacterXpLevel(model.CharacterId);
-
-                var expressionType = character!.ExpressionId switch
-                {
-                    2 => 2, // Aeternari
-                    3 => 1, // Adepts
-                    4 => 3, // Shammas
-                    7 => 4, // Sidhe
-                    8 => 5, // Sorcerers
-                    9 => 6, // Vampyres
-                };
 
                 await checkinRepository.AddUpdateSecondaryStats(
                     new CheckinSecondaryStat()
@@ -151,7 +143,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                         Essence = proficiencies.Value.FirstOrDefault(x => x.Id == 19)?.Value ?? 0,
                         Mana = proficiencies.Value.FirstOrDefault(x => x.Id == 20)?.Value ?? 0,
                         Noumenon = proficiencies.Value.FirstOrDefault(x => x.Id == 21)?.Value ?? 0,
-                        ExpressionId = expressionType,
+                        ExpressionId = character!.ExpressionSubTypeId,
                         PlayerLevel = characterLevel,
                     }
                 );

@@ -1,4 +1,5 @@
 using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.DB.Models.Expressions.ExpressionSubTypeSetup;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
@@ -22,18 +23,27 @@ internal sealed class EditCharacterUseCase(
             return Result.Fail(result.Errors);
 
         var character = await repository.FindCharacterAsync(model.Id);
+        var subExpressionTypeId = await repository.GetExpressionSubTypeId(character!.ExpressionId);
 
-        var validExpressionsForProgressions = new List<int> { 3, 4, 8, 9 }; // Adepts, Shammas, Sorcerer, Vampyres
+        var validExpressionsForProgressions = new List<int>
+        {
+            ExpressionSubTypeEnum.Adepts,
+            ExpressionSubTypeEnum.Shammas,
+            ExpressionSubTypeEnum.Sorcerers,
+            ExpressionSubTypeEnum.Vampyre,
+        };
         if (
             model.PrimaryProgressionId is not null
-            && validExpressionsForProgressions.Contains(character!.ExpressionId)
+            && validExpressionsForProgressions.Contains(subExpressionTypeId)
         )
         {
             character.PrimaryProgressionId = model.PrimaryProgressionId;
         }
 
-        const int SorcererId = 8;
-        if (model.SecondaryProgressionId is not null && character!.ExpressionId == SorcererId)
+        if (
+            model.SecondaryProgressionId is not null
+            && subExpressionTypeId == ExpressionSubTypeEnum.Sorcerers
+        )
         {
             character.SecondaryProgressionId = model.SecondaryProgressionId;
         }

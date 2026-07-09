@@ -1,7 +1,9 @@
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Characters;
+using ExpressedRealms.DB.Models.Expressions.CmsTypeSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
+using ExpressedRealms.DB.Models.Expressions.ExpressionSubTypeSetup;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths.Audit;
 using ExpressedRealms.DB.Models.Factions.FactionModels;
@@ -18,13 +20,15 @@ public class Expression : ISoftDelete
     public string ShortDescription { get; set; } = null!;
     public string NavMenuImage { get; set; } = null!;
     public int PublishStatusId { get; set; }
-    public int ExpressionTypeId { get; set; }
+    public int CmsTypeId { get; set; }
     public int OrderIndex { get; set; }
     public bool IsDeleted { get; set; }
+    public int? ExpressionSubTypeId { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 
     public virtual ExpressionPublishStatus PublishStatus { get; set; } = null!;
-    public virtual ExpressionType ExpressionType { get; set; } = null!;
+    public virtual CmsType CmsType { get; set; } = null!;
+    public virtual ExpressionSubType? ExpressionSubType { get; set; }
     public virtual List<ExpressionSection> ExpressionSections { get; set; } = null!;
     public virtual List<Character> Characters { get; set; } = null!;
     public virtual List<ExpressionSectionAuditTrail> SectionAudits { get; set; } = null!;

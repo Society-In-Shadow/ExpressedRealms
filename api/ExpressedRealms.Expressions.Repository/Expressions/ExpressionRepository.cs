@@ -44,7 +44,7 @@ internal sealed class ExpressionRepository(
         return await expression
             .Select(x => new ExpressionNavigationMenuItem()
             {
-                ExpressionTypeId = x.ExpressionTypeId,
+                ExpressionTypeId = x.CmsTypeId,
                 Name = x.Name,
                 Id = x.Id,
                 ShortDescription = x.ShortDescription,
@@ -74,7 +74,7 @@ internal sealed class ExpressionRepository(
                 expression.NavMenuImage,
                 expression.PublishStatusId,
                 expression.OrderIndex,
-                expression.ExpressionTypeId,
+                ExpressionTypeId = expression.CmsTypeId,
             })
             .FirstOrDefaultAsync();
 
@@ -97,7 +97,7 @@ internal sealed class ExpressionRepository(
         var expressionTypeLookup = await context
             .Expressions.AsNoTracking()
             .Where(x => x.Id == expressionId)
-            .Select(x => x.ExpressionTypeId)
+            .Select(x => x.CmsTypeId)
             .FirstOrDefaultAsync();
 
         if (
@@ -126,7 +126,7 @@ internal sealed class ExpressionRepository(
         var expressionTypeLookup = await context
             .Expressions.AsNoTracking()
             .Where(x => x.Id == expressionId)
-            .Select(x => x.ExpressionTypeId)
+            .Select(x => x.CmsTypeId)
             .FirstOrDefaultAsync();
 
         if (
@@ -155,7 +155,7 @@ internal sealed class ExpressionRepository(
         var expressionTypeLookup = await context
             .Expressions.AsNoTracking()
             .Where(x => x.Id == expressionId)
-            .Select(x => x.ExpressionTypeId)
+            .Select(x => x.CmsTypeId)
             .FirstOrDefaultAsync();
 
         if (
@@ -184,7 +184,7 @@ internal sealed class ExpressionRepository(
         var expressionTypeLookup = await context
             .Expressions.AsNoTracking()
             .Where(x => x.Id == expressionId)
-            .Select(x => x.ExpressionTypeId)
+            .Select(x => x.CmsTypeId)
             .FirstOrDefaultAsync();
 
         if (
@@ -235,7 +235,7 @@ internal sealed class ExpressionRepository(
             return authResult.ToResult();
 
         var maxSort = await context
-            .Expressions.Where(x => x.ExpressionTypeId == dto.ExpressionTypeId)
+            .Expressions.Where(x => x.CmsTypeId == dto.ExpressionTypeId)
             .MaxAsync(x => x.OrderIndex, cancellationToken);
 
         var expression = new Expression()
@@ -244,7 +244,7 @@ internal sealed class ExpressionRepository(
             ShortDescription = dto.ShortDescription,
             NavMenuImage = dto.NavMenuImage,
             PublishStatusId = (int)PublishTypes.Draft,
-            ExpressionTypeId = dto.ExpressionTypeId,
+            CmsTypeId = dto.ExpressionTypeId,
             OrderIndex = maxSort + 1,
         };
 
@@ -273,7 +273,7 @@ internal sealed class ExpressionRepository(
         expression.PublishStatusId = (int)dto.PublishStatus;
 
         var sections = await context
-            .Expressions.Where(x => x.ExpressionTypeId == expression.ExpressionTypeId)
+            .Expressions.Where(x => x.CmsTypeId == expression.CmsTypeId)
             .OrderBy(x => x.OrderIndex)
             .ToListAsync();
 
@@ -348,24 +348,24 @@ internal sealed class ExpressionRepository(
 
     public async Task<bool> ExpressionExistsForModifiers(int id)
     {
-        return await context.Expressions.AnyAsync(x => x.Id == id && x.ExpressionTypeId == 1);
+        return await context.Expressions.AnyAsync(x => x.Id == id && x.CmsTypeId == 1);
     }
 
     public async Task<bool> ExpressionTypeExists(int id)
     {
-        return await context.ExpressionTypes.AnyAsync(x => x.Id == id, cancellationToken);
+        return await context.CmsTypes.AnyAsync(x => x.Id == id, cancellationToken);
     }
 
     public async Task<bool> ExpressionIsExpressionType(int expressionId)
     {
         return await context.Expressions.AnyAsync(
-            x => x.Id == expressionId && x.ExpressionTypeId == 1,
+            x => x.Id == expressionId && x.CmsTypeId == 1,
             cancellationToken
         );
     }
 
     public async Task<List<Expression>> GetAllEnabledExpressions()
     {
-        return await context.Expressions.Where(x => x.ExpressionTypeId == 1).ToListAsync(); // 1 = expression
+        return await context.Expressions.Where(x => x.CmsTypeId == 1).ToListAsync(); // 1 = expression
     }
 }

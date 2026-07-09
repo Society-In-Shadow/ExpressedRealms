@@ -19,7 +19,6 @@ using ExpressedRealms.Characters.API.CharacterEndPoints.Responses;
 using ExpressedRealms.Characters.API.CharacterEndPoints.RetireCharacter;
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.DTOs;
-using ExpressedRealms.Characters.Repository.Enums;
 using ExpressedRealms.Characters.Repository.Skills;
 using ExpressedRealms.Characters.Repository.Skills.DTOs;
 using ExpressedRealms.DB;
@@ -27,7 +26,6 @@ using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Server.Shared;
-using ExpressedRealms.Server.Shared.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -76,9 +74,7 @@ internal static class CharacterEndPoints
 
                     var expressions = await dbContext
                         .Expressions.AsNoTracking()
-                        .Where(x =>
-                            allowedStatuses.Contains(x.PublishStatusId) && x.ExpressionTypeId == 1
-                        )
+                        .Where(x => allowedStatuses.Contains(x.PublishStatusId) && x.CmsTypeId == 1)
                         .Select(x => new CharacterOptionExpression()
                         {
                             Id = x.Id,
@@ -148,7 +144,7 @@ internal static class CharacterEndPoints
                         .Expressions.AsNoTracking()
                         .Where(x =>
                             allowedStatuses.Contains(x.PublishStatusId)
-                            && x.ExpressionTypeId == 1
+                            && x.CmsTypeId == 1
                             && x.Id == expressionId
                         )
                         .Select(x => new HighLevelExpressionInfoResponse()
@@ -210,41 +206,6 @@ internal static class CharacterEndPoints
             .WithDescription(
                 "Returns info needed for selecting a progression path for character create."
             )
-            .RequireAuthorization();
-
-        endpointGroup
-            .MapGet(
-                "{characterId}/factionOptions",
-                [Authorize]
-                async Task<Results<NotFound, Ok<List<FactionOptionResponse>>>> (
-                    int characterId,
-                    ExpressedRealmsDbContext dbContext,
-                    HttpContext http,
-                    CancellationToken cancellationToken
-                ) =>
-                {
-                    var character = await dbContext.Characters.FirstOrDefaultAsync(x =>
-                        x.Id == characterId && x.Player.UserId == http.User.GetUserId()
-                    );
-
-                    if (character is null || character.IsDeleted)
-                    {
-                        return TypedResults.NotFound();
-                    }
-
-                    var factions = await dbContext
-                        .ExpressionSections.Where(x =>
-                            x.ExpressionId == character.ExpressionId
-                            && x.SectionTypeId == (int)ExpressionSectionType.FactionType
-                        )
-                        .Select(x => new FactionOptionResponse(x.Id, x.Name, x.Content))
-                        .ToListAsync(cancellationToken);
-
-                    return TypedResults.Ok(factions);
-                }
-            )
-            .WithSummary("Returns info needed for selecting a faction on edit character.")
-            .WithDescription("Returns info needed for selecting a faction on edit character.")
             .RequireAuthorization();
 
         endpointGroup

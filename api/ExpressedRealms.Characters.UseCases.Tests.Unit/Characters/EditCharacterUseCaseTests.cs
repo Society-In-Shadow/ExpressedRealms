@@ -1,6 +1,7 @@
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.UseCases.Characters.Edit;
 using ExpressedRealms.DB.Models.Characters;
+using ExpressedRealms.DB.Models.Expressions.ExpressionSubTypeSetup;
 using ExpressedRealms.Expressions.Repository.ProgressionPaths;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
@@ -59,6 +60,9 @@ public class EditCharacterUseCaseTests
 
         A.CallTo(() => _characterRepository.CanUpdatePrimaryCharacterStatus(_model.Id))
             .Returns(true);
+
+        A.CallTo(() => _characterRepository.GetExpressionSubTypeId(_dbModel.ExpressionId))
+            .Returns(ExpressionSubTypeEnum.Sidhe);
 
         var validator = new EditCharacterModelValidator(
             _progressionPathRepository,
@@ -213,14 +217,15 @@ public class EditCharacterUseCaseTests
     }
 
     [Theory]
-    [InlineData(3)] // Adepts
-    [InlineData(4)] // Shammas
-    [InlineData(9)] // Vampyres
+    [InlineData(1)] // Adepts
+    [InlineData(3)] // Shammas
+    [InlineData(6)] // Vampyres
     public async Task UseCase_PassesThrough_OnlyPrimaryProgression_ForNonSorcererAllowedExpressions(
-        int expressionId
+        int expressionSubTypeId
     )
     {
-        _dbModel.ExpressionId = expressionId;
+        A.CallTo(() => _characterRepository.GetExpressionSubTypeId(_dbModel.ExpressionId))
+            .Returns(expressionSubTypeId);
 
         _dbModel.PrimaryProgressionId = null;
         _dbModel.SecondaryProgressionId = null;
@@ -234,7 +239,8 @@ public class EditCharacterUseCaseTests
     [Fact]
     public async Task UseCase_PassesThrough_BothPrimaryAndSecondaryProgression_ForSorcerer()
     {
-        _dbModel.ExpressionId = 8; // Sorcerer
+        A.CallTo(() => _characterRepository.GetExpressionSubTypeId(_dbModel.ExpressionId))
+            .Returns(ExpressionSubTypeEnum.Sorcerers);
 
         _dbModel.PrimaryProgressionId = null;
         _dbModel.SecondaryProgressionId = null;
@@ -248,8 +254,9 @@ public class EditCharacterUseCaseTests
     [Fact]
     public async Task UseCase_DoesNotPassThrough_AnyProgressions_ForExpressionsThatDoNotSupportProgressions()
     {
-        _dbModel.ExpressionId = 2; // not in {3,4,8,9}
-
+        // not in {Adepts, Shammas, Sorcerers, Vampyre}
+        A.CallTo(() => _characterRepository.GetExpressionSubTypeId(_dbModel.ExpressionId))
+            .Returns(ExpressionSubTypeEnum.Aeternari);
         _dbModel.PrimaryProgressionId = null;
         _dbModel.SecondaryProgressionId = null;
 

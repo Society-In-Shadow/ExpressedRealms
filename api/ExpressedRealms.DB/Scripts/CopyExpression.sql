@@ -12,8 +12,8 @@ BEGIN
 -- Expression
 
 
-insert into public.expressions (name, short_description, nav_menu_image, publish_status_id, expression_type_id, order_index)
-select expression_name, short_description, nav_menu_image, 3, expression_type_id, order_index from public.expressions
+insert into public.expressions (name, short_description, nav_menu_image, publish_status_id, cms_type_id, order_index, expression_sub_type_id)
+select expression_name, short_description, nav_menu_image, 3, cms_type_id, order_index, expression_sub_type_id from public.expressions
 where id = source_expression_id
 RETURNING id INTO new_expression_id;
 
