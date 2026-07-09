@@ -86,6 +86,23 @@ internal sealed class CharacterRepository(
             cancellationToken
         );
     }
+    
+    public async Task<int> GetExpressionSubTypeId(int expressionId)
+    {
+        var allowedStatuses = new List<int> { (int)PublishTypes.Published };
+        if (userContext.CurrentUserHasPermission(Permissions.Expression.SeeBetaExpressions))
+        {
+            allowedStatuses.Add((int)PublishTypes.Beta);
+        }
+        var expressionSubTypeId = await context.Expressions.Where(
+            x => x.Id == expressionId
+                 && allowedStatuses.Contains(x.PublishStatusId)
+                && x.CmsTypeId == 1
+        ).Select(x => x.ExpressionSubTypeId)
+        .FirstAsync();
+
+        return expressionSubTypeId!.Value;
+    }
 
     public Task<Guid> GetPlayerId(string currentUserId)
     {
