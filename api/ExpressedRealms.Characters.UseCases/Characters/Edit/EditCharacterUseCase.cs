@@ -25,7 +25,8 @@ internal sealed class EditCharacterUseCase(
         var character = await repository.FindCharacterAsync(model.Id);
         var subExpressionTypeId = await repository.GetExpressionSubTypeId(character!.ExpressionId);
 
-        var validExpressionsForProgressions = new List<int> { 
+        var validExpressionsForProgressions = new List<int>
+        {
             ExpressionSubTypeEnum.Adepts,
             ExpressionSubTypeEnum.Shammas,
             ExpressionSubTypeEnum.Sorcerers,
@@ -39,7 +40,10 @@ internal sealed class EditCharacterUseCase(
             character.PrimaryProgressionId = model.PrimaryProgressionId;
         }
 
-        if (model.SecondaryProgressionId is not null && subExpressionTypeId == ExpressionSubTypeEnum.Sorcerers)
+        if (
+            model.SecondaryProgressionId is not null
+            && subExpressionTypeId == ExpressionSubTypeEnum.Sorcerers
+        )
         {
             character.SecondaryProgressionId = model.SecondaryProgressionId;
         }

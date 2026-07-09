@@ -13,6 +13,14 @@ public sealed class CmsTypeEnum : SmartEnum<CmsTypeEnum, int>
     }
 
     public static readonly CmsTypeEnum Expression = new("Expression", 1, "Expression Menu Item");
-    public static readonly CmsTypeEnum RuleBook = new("Rule Book Section", 13, "Sections that should show up in the rule book.");
-    public static readonly CmsTypeEnum WorldBackground = new("World Background Section", 14, "Sections that should show up in the world background.");
+    public static readonly CmsTypeEnum RuleBook = new(
+        "Rule Book Section",
+        13,
+        "Sections that should show up in the rule book."
+    );
+    public static readonly CmsTypeEnum WorldBackground = new(
+        "World Background Section",
+        14,
+        "Sections that should show up in the world background."
+    );
 }

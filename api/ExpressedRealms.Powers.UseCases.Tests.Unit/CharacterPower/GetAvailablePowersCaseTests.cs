@@ -222,8 +222,8 @@ public class GetAvailablePowersUseCaseTests
 
         Assert.Equivalent(translatedInformation, result.Value);
     }
-    
-     [Fact]
+
+    [Fact]
     public async Task UseCase_WillReturn_NoPowers_ForSorcerer_WhenPrimaryAndSecondaryProgressionsAreMissing()
     {
         A.CallTo(() => _characterRepository.GetCharacterInfoForPickablePowers(model.CharacterId))
@@ -308,7 +308,7 @@ public class GetAvailablePowersUseCaseTests
                 "Primary Expert Power",
                 "General Power",
                 "Secondary Basic Power",
-                "Secondary Intermediate Power"
+                "Secondary Intermediate Power",
             ],
             result.Value.Single().Powers.Select(x => x.Name)
         );

@@ -79,14 +79,11 @@ internal sealed class CharacterRepository(
             allowedStatuses.Add((int)PublishTypes.Beta);
         }
         return await context.Expressions.AnyAsync(
-            x =>
-                x.Id == id
-                && allowedStatuses.Contains(x.PublishStatusId)
-                && x.CmsTypeId == 1,
+            x => x.Id == id && allowedStatuses.Contains(x.PublishStatusId) && x.CmsTypeId == 1,
             cancellationToken
         );
     }
-    
+
     public async Task<int> GetExpressionSubTypeId(int expressionId)
     {
         var allowedStatuses = new List<int> { (int)PublishTypes.Published };
@@ -94,12 +91,14 @@ internal sealed class CharacterRepository(
         {
             allowedStatuses.Add((int)PublishTypes.Beta);
         }
-        var expressionSubTypeId = await context.Expressions.Where(
-            x => x.Id == expressionId
-                 && allowedStatuses.Contains(x.PublishStatusId)
+        var expressionSubTypeId = await context
+            .Expressions.Where(x =>
+                x.Id == expressionId
+                && allowedStatuses.Contains(x.PublishStatusId)
                 && x.CmsTypeId == 1
-        ).Select(x => x.ExpressionSubTypeId)
-        .FirstAsync();
+            )
+            .Select(x => x.ExpressionSubTypeId)
+            .FirstAsync();
 
         return expressionSubTypeId!.Value;
     }
@@ -192,7 +191,9 @@ internal sealed class CharacterRepository(
         var query = await context
             .Characters.AsNoTracking()
             .WithUserAccessAsync(userContext, characterId);
-        return await query.Select(x => x.Expression.ExpressionSubTypeId!.Value).FirstAsync(cancellationToken);
+        return await query
+            .Select(x => x.Expression.ExpressionSubTypeId!.Value)
+            .FirstAsync(cancellationToken);
     }
 
     public async Task<Result<GetEditCharacterDto>> GetCharacterInfoAsync(int id)
@@ -214,7 +215,7 @@ internal sealed class CharacterRepository(
                 SecondaryProgressionId = x.SecondaryProgressionId,
                 IsRetired = x.IsRetired,
                 IsArchetypeCharacter = x.Player.IsArchetypeAccount,
-                ExpressionSubTypeId = x.Expression.ExpressionSubTypeId
+                ExpressionSubTypeId = x.Expression.ExpressionSubTypeId,
             })
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -246,16 +247,16 @@ internal sealed class CharacterRepository(
     {
         return context.Characters.FirstAsync(x => x.Id == characterId);
     }
-    
+
     public Task<CharacterPickablePowersDto> GetCharacterInfoForPickablePowers(int characterId)
     {
-        return context.Characters.
-            Where(x => x.Id == characterId)
+        return context
+            .Characters.Where(x => x.Id == characterId)
             .Select(x => new CharacterPickablePowersDto()
             {
                 PrimaryProgressionId = x.PrimaryProgressionId,
                 SecondaryProgressionId = x.SecondaryProgressionId,
-                ExpressionSubTypeId = x.Expression.ExpressionSubTypeId!.Value
+                ExpressionSubTypeId = x.Expression.ExpressionSubTypeId!.Value,
             })
             .FirstAsync();
     }

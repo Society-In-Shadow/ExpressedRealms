@@ -34,7 +34,7 @@ public class ExpressionConfiguration : IEntityTypeConfiguration<Expression>
             .HasForeignKey(x => x.CmsTypeId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder
             .HasOne(x => x.ExpressionSubType)
             .WithMany(x => x.Expressions)

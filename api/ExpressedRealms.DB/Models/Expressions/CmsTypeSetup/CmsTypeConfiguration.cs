@@ -10,9 +10,9 @@ public class CmsTypeConfiguration : IEntityTypeConfiguration<CmsType>
         var data = CmsTypeEnum
             .List.Select(x => new CmsType()
             {
-                Id = x.Value, 
-                Name = x.ToString(), 
-                Description = x.Description
+                Id = x.Value,
+                Name = x.ToString(),
+                Description = x.Description,
             })
             .ToList();
         builder.HasData(data);

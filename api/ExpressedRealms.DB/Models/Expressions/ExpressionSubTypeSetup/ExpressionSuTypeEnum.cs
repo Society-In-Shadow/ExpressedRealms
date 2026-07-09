@@ -4,10 +4,8 @@ namespace ExpressedRealms.DB.Models.Expressions.ExpressionSubTypeSetup;
 
 public sealed class ExpressionSubTypeEnum : SmartEnum<ExpressionSubTypeEnum, int>
 {
-
     private ExpressionSubTypeEnum(string name, int id)
-        : base(name, id)
-    {}
+        : base(name, id) { }
 
     public static readonly ExpressionSubTypeEnum Adepts = new("Adepts", 1);
     public static readonly ExpressionSubTypeEnum Aeternari = new("Aeternari", 2);

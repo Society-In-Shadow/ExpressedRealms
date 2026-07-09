@@ -37,7 +37,9 @@ internal sealed class GetAvailablePowersUseCase(
 
         var powers = await powerPathRepository.GetPowerPathAndPowers(powerIds);
 
-        var character = await characterRepository.GetCharacterInfoForPickablePowers(model.CharacterId);
+        var character = await characterRepository.GetCharacterInfoForPickablePowers(
+            model.CharacterId
+        );
 
         var filteredPowers = powers.Value;
         if (character.ExpressionSubTypeId == ExpressionSubTypeEnum.Sorcerers)
@@ -84,14 +86,12 @@ internal sealed class GetAvailablePowersUseCase(
         );
     }
 
-    private async Task<List<PowerPathToc>> LimitSorcererPowers(CharacterPickablePowersDto character, List<PowerPathToc> filteredPowers)
+    private async Task<List<PowerPathToc>> LimitSorcererPowers(
+        CharacterPickablePowersDto character,
+        List<PowerPathToc> filteredPowers
+    )
     {
-        if (
-            !(
-                character.PrimaryProgressionId.HasValue
-                && character.SecondaryProgressionId.HasValue
-            )
-        )
+        if (!(character.PrimaryProgressionId.HasValue && character.SecondaryProgressionId.HasValue))
         {
             return new List<PowerPathToc>();
         }

@@ -124,7 +124,9 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
 
                 var proficiencies = await profRepository.GetBasicProficiencies(model.CharacterId);
 
-                var character = await characterRepository.GetCharacterInfoForPickablePowers(model.CharacterId);
+                var character = await characterRepository.GetCharacterInfoForPickablePowers(
+                    model.CharacterId
+                );
                 var characterLevel = await xpRepository.GetCharacterXpLevel(model.CharacterId);
 
                 await checkinRepository.AddUpdateSecondaryStats(

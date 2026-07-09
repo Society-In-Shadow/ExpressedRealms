@@ -8,11 +8,7 @@ public class CmsTypeConfiguration : IEntityTypeConfiguration<ExpressionSubType>
     public void Configure(EntityTypeBuilder<ExpressionSubType> builder)
     {
         var data = ExpressionSubTypeEnum
-            .List.Select(x => new ExpressionSubType()
-            {
-                Id = x.Value, 
-                Name = x.ToString()
-            })
+            .List.Select(x => new ExpressionSubType() { Id = x.Value, Name = x.ToString() })
             .ToList();
         builder.HasData(data);
 
