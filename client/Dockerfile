@@ -9,7 +9,7 @@ COPY .env.production /usr/share/nginx/html
 
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 COPY . .
 RUN npm run build-only -- --mode $MODE
 
