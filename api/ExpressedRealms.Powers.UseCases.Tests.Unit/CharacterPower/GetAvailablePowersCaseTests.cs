@@ -303,14 +303,13 @@ public class GetAvailablePowersUseCaseTests
 
         Assert.Single(result.Value);
         Assert.Equal(
-            new[]
-            {
+            [
                 "Primary Adept Power",
                 "Primary Expert Power",
                 "General Power",
                 "Secondary Basic Power",
-                "Secondary Intermediate Power",
-            },
+                "Secondary Intermediate Power"
+            ],
             result.Value.Single().Powers.Select(x => x.Name)
         );
     }

@@ -80,8 +80,6 @@ const primaryLabel = computed(() => {
   if (props.expressionTypeId == shammasId) {
     return 'Breed'
   }
-
-  // TODO: Need to handle the new name for Shammas
   if (props.expressionTypeId == sorcererId) {
     return 'Primary Elemental'
   }
