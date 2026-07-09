@@ -246,6 +246,19 @@ internal sealed class CharacterRepository(
     {
         return context.Characters.FirstAsync(x => x.Id == characterId);
     }
+    
+    public Task<CharacterPickablePowersDto> GetCharacterInfoForPickablePowers(int characterId)
+    {
+        return context.Characters.
+            Where(x => x.Id == characterId)
+            .Select(x => new CharacterPickablePowersDto()
+            {
+                PrimaryProgressionId = x.PrimaryProgressionId,
+                SecondaryProgressionId = x.SecondaryProgressionId,
+                ExpressionSubTypeId = x.Expression.ExpressionSubTypeId!.Value
+            })
+            .FirstAsync();
+    }
 
     public async Task<int> CopyCharacterAsync(
         int sourceCharacterId,

@@ -1,4 +1,6 @@
 using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.Characters.Repository.DTOs;
+using ExpressedRealms.DB.Models.Expressions.ExpressionSubTypeSetup;
 using ExpressedRealms.Expressions.Repository.ProgressionPaths;
 using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.Powers.Repository.PowerPaths;
@@ -118,6 +120,14 @@ public class GetAvailablePowersUseCaseTests
 
         A.CallTo(() => _powerPathRepository.GetPowerPathAndPowers(_powerIds)).Returns(_dbModels);
 
+        A.CallTo(() => _characterRepository.GetCharacterInfoForPickablePowers(model.CharacterId))
+            .Returns(
+                new CharacterPickablePowersDto()
+                {
+                    ExpressionSubTypeId = ExpressionSubTypeEnum.Adepts.Value,
+                }
+            );
+
         var validator = new GetAvailablePowersModelValidator(_characterRepository);
 
         _useCase = new GetAvailablePowersUseCase(
@@ -211,5 +221,118 @@ public class GetAvailablePowersUseCaseTests
             .ToList();
 
         Assert.Equivalent(translatedInformation, result.Value);
+    }
+    
+     [Fact]
+    public async Task UseCase_WillReturn_NoPowers_ForSorcerer_WhenPrimaryAndSecondaryProgressionsAreMissing()
+    {
+        A.CallTo(() => _characterRepository.GetCharacterInfoForPickablePowers(model.CharacterId))
+            .Returns(
+                new CharacterPickablePowersDto()
+                {
+                    ExpressionSubTypeId = ExpressionSubTypeEnum.Sorcerers.Value,
+                }
+            );
+
+        var result = await _useCase.ExecuteAsync(model);
+
+        Assert.Empty(result.Value);
+    }
+
+    [Fact]
+    public async Task UseCase_WillReturn_NoPowers_ForSorcerer_WhenSecondaryProgressionIsMissing()
+    {
+        A.CallTo(() => _characterRepository.GetCharacterInfoForPickablePowers(model.CharacterId))
+            .Returns(
+                new CharacterPickablePowersDto()
+                {
+                    ExpressionSubTypeId = ExpressionSubTypeEnum.Sorcerers.Value,
+                    PrimaryProgressionId = 1,
+                }
+            );
+
+        var result = await _useCase.ExecuteAsync(model);
+
+        Assert.Empty(result.Value);
+    }
+
+    [Fact]
+    public async Task UseCase_WillReturn_PrimaryGeneralAndLowLevelSecondaryPowers_ForSorcerer()
+    {
+        const int primaryProgressionId = 1;
+        const int secondaryProgressionId = 2;
+        const string primaryElement = "Fire";
+        const string secondaryElement = "Water";
+
+        _dbModels.Clear();
+        _dbModels.Add(
+            new PowerPathToc()
+            {
+                Id = 1,
+                Name = "Elemental Path",
+                Description = "Elemental Path Description",
+                Powers = new List<PowerInformation>()
+                {
+                    CreatePower("Primary Adept Power", primaryElement, 3),
+                    CreatePower("Primary Expert Power", primaryElement, 4),
+                    CreatePower("General Power", "general", 4),
+                    CreatePower("Secondary Basic Power", secondaryElement, 1),
+                    CreatePower("Secondary Intermediate Power", secondaryElement, 2),
+                    CreatePower("Secondary Advanced Power", secondaryElement, 3),
+                    CreatePower("Unrelated Power", "Earth", 1),
+                },
+            }
+        );
+
+        A.CallTo(() => _characterRepository.GetCharacterInfoForPickablePowers(model.CharacterId))
+            .Returns(
+                new CharacterPickablePowersDto()
+                {
+                    ExpressionSubTypeId = ExpressionSubTypeEnum.Sorcerers.Value,
+                    PrimaryProgressionId = primaryProgressionId,
+                    SecondaryProgressionId = secondaryProgressionId,
+                }
+            );
+
+        A.CallTo(() => _progressionPathRepository.GetProgressionPathName(primaryProgressionId))
+            .Returns(primaryElement);
+        A.CallTo(() => _progressionPathRepository.GetProgressionPathName(secondaryProgressionId))
+            .Returns(secondaryElement);
+
+        var result = await _useCase.ExecuteAsync(model);
+
+        Assert.Single(result.Value);
+        Assert.Equal(
+            new[]
+            {
+                "Primary Adept Power",
+                "Primary Expert Power",
+                "General Power",
+                "Secondary Basic Power",
+                "Secondary Intermediate Power",
+            },
+            result.Value.Single().Powers.Select(x => x.Name)
+        );
+    }
+
+    private static PowerInformation CreatePower(string name, string categoryName, int powerLevelId)
+    {
+        return new PowerInformation()
+        {
+            Id = powerLevelId,
+            Name = name,
+            Description = $"{name} Description",
+            GameMechanicEffect = $"{name} Game Mechanic Effect",
+            PowerLevel = new DetailedInformation(powerLevelId, $"Level {powerLevelId}", ""),
+            AreaOfEffect = new DetailedInformation("Area of effect", ""),
+            PowerActivationType = new DetailedInformation("Power activation type", ""),
+            PowerDuration = new DetailedInformation("Power duration", ""),
+            Category = new List<DetailedInformation>()
+            {
+                new DetailedInformation(categoryName, $"{categoryName} Description"),
+            },
+            IsPowerUse = true,
+            SortOrder = powerLevelId,
+        };
     }
 }

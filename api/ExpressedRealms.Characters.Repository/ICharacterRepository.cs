@@ -28,4 +28,5 @@ public interface ICharacterRepository
     Task<List<ArchetypeDto>> GetBasicArchetypeListAsync();
     Task<Guid> GetArchetypePlayerId();
     Task<int> GetExpressionSubTypeId(int expressionId);
+    Task<CharacterPickablePowersDto> GetCharacterInfoForPickablePowers(int characterId);
 }
