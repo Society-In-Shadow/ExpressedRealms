@@ -187,12 +187,12 @@ internal sealed class CharacterRepository(
             .FirstAsync(cancellationToken);
     }
 
-    public async Task<int> GetCharacterExpressionId(int characterId)
+    public async Task<int> GetCharacterExpressionSubTypeId(int characterId)
     {
         var query = await context
             .Characters.AsNoTracking()
             .WithUserAccessAsync(userContext, characterId);
-        return await query.Select(x => x.Expression.Id).FirstAsync(cancellationToken);
+        return await query.Select(x => x.Expression.ExpressionSubTypeId!.Value).FirstAsync(cancellationToken);
     }
 
     public async Task<Result<GetEditCharacterDto>> GetCharacterInfoAsync(int id)

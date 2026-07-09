@@ -27,17 +27,7 @@ internal sealed class GetBreakOfDawnInfoUseCase(
 
         var proficiencies = await profRepository.GetBasicProficiencies(model.Id);
         var characterLevel = await xpRepository.GetCharacterXpLevel(model.Id);
-        var expressionId = await repository.GetCharacterExpressionId(model.Id);
-
-        var expressionType = expressionId switch
-        {
-            2 => 2, // Aeternari
-            3 => 1, // Adepts
-            4 => 3, // Shammas
-            7 => 4, // Sidhe
-            8 => 5, // Sorcerers
-            9 => 6, // Vampyres
-        };
+        var expressionSubTypeId = await repository.GetCharacterExpressionSubTypeId(model.Id);
 
         return Result.Ok(
             new GetBreakOfDawnInfoDto()
@@ -67,7 +57,7 @@ internal sealed class GetBreakOfDawnInfoUseCase(
                     .Select(x => x.Value)
                     .FirstOrDefault(),
                 CharacterLevel = characterLevel,
-                ExpressionId = expressionType,
+                ExpressionId = expressionSubTypeId,
             }
         );
     }

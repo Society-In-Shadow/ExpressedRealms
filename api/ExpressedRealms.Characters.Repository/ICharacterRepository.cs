@@ -21,7 +21,7 @@ public interface ICharacterRepository
     Task EditAsync<TEntity>(TEntity entity)
         where TEntity : class;
     Task<bool> CanUpdatePrimaryCharacterStatus(int id);
-    Task<int> GetCharacterExpressionId(int characterId);
+    Task<int> GetCharacterExpressionSubTypeId(int characterId);
     Task<List<ArchetypeCharacterInfoDto>> GetArchetypesForExpression(int expressionId);
     Task<bool> ExpressionExistsAsync(int id);
     Task<Guid> GetPlayerId(string currentUserId);

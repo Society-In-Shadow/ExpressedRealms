@@ -29,7 +29,7 @@ public class GetBreakOfDawnUseCaseTests
 
         A.CallTo(() => _characterRepository.FindCharacterAsync(_model.Id)).Returns(new Character());
 
-        A.CallTo(() => _characterRepository.GetCharacterExpressionId(_model.Id)).Returns(3);
+        A.CallTo(() => _characterRepository.GetCharacterExpressionSubTypeId(_model.Id)).Returns(3);
 
         A.CallTo(() => _xpRepository.GetCharacterXpLevel(_model.Id)).Returns(5);
 
@@ -180,7 +180,7 @@ public class GetBreakOfDawnUseCaseTests
         int expectedExpressionId
     )
     {
-        A.CallTo(() => _characterRepository.GetCharacterExpressionId(_model.Id))
+        A.CallTo(() => _characterRepository.GetCharacterExpressionSubTypeId(_model.Id))
             .Returns(repositoryExpressionId);
 
         var results = await _useCaseTests.ExecuteAsync(_model);
