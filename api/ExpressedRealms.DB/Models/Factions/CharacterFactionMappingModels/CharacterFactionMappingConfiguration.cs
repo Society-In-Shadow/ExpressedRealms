@@ -37,6 +37,5 @@ public class FactionLevelConfiguration : IEntityTypeConfiguration<CharacterFacti
             .WithMany(x => x.CharacterFactionMappings)
             .HasForeignKey(x => x.CharacterId)
             .OnDelete(DeleteBehavior.Restrict);
-        
     }
 }
