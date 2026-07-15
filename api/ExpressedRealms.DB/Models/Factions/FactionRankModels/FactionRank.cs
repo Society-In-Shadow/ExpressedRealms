@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.Models.Factions.CharacterFactionMappingModels;
 using ExpressedRealms.DB.Models.Factions.FactionLevelModels;
 
 namespace ExpressedRealms.DB.Models.Factions.FactionRankModels;
@@ -9,4 +10,6 @@ public class FactionRank
 
     public virtual ICollection<FactionLevel> FactionLevels { get; set; } =
         new HashSet<FactionLevel>();
+    public virtual ICollection<CharacterFactionMapping> CharacterFactionMappings { get; set; } =
+        new HashSet<CharacterFactionMapping>();
 }

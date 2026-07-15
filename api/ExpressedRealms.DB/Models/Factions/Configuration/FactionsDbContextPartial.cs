@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.Models.Factions.CharacterFactionMappingModels;
 using ExpressedRealms.DB.Models.Factions.FactionLevelModels;
 using ExpressedRealms.DB.Models.Factions.FactionModels;
 using ExpressedRealms.DB.Models.Factions.FactionModels.Audit;
@@ -12,4 +13,5 @@ public partial class ExpressedRealmsDbContext
     public DbSet<FactionAuditTrail> FactionAuditTrails { get; set; }
     public DbSet<FactionLevel> FactionLevels { get; set; }
     public DbSet<FactionRank> FactionRanks { get; set; }
+    public DbSet<CharacterFactionMapping> CharacterFactionMappings { get; set; }
 }
