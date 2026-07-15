@@ -7,6 +7,7 @@ using ExpressedRealms.DB.Models.Contacts;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths;
+using ExpressedRealms.DB.Models.Factions.CharacterFactionMappingModels;
 using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
 using ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup;
 using ExpressedRealms.DB.Models.Skills;
@@ -59,4 +60,6 @@ public class Character : ISoftDelete
     public virtual ICollection<Contact> Contacts { get; set; } = new HashSet<Contact>();
     public virtual ICollection<CharacterStatMapping> CharacterStatMappings { get; set; } =
         new HashSet<CharacterStatMapping>();
+    public virtual ICollection<CharacterFactionMapping> CharacterFactionMappings { get; set; } =
+        new HashSet<CharacterFactionMapping>();
 }
