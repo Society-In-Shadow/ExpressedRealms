@@ -11,4 +11,5 @@ public interface IFactionRepository
     Task<Faction?> GetFactionForEditingAsync(int id);
     Task<List<FactionDto>> GetFactions(int expressionId);
     Task<Faction?> GetFactionAsync(int id);
+    Task<int?> GetBasicFactionRankId(int id, int expressionId);
 }

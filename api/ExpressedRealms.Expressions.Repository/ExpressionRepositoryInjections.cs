@@ -1,3 +1,4 @@
+using ExpressedRealms.Expressions.Repository.CharacterFactions;
 using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.Expressions.Repository.Expressions.DTOs;
 using ExpressedRealms.Expressions.Repository.ExpressionTextSections;
@@ -30,6 +31,7 @@ public static class ExpressionRepositoryInjections
         services.AddScoped<IStatModifierRepository, StatModifierRepository>();
         services.AddScoped<IFactionRepository, FactionRepository>();
         services.AddScoped<IFactionLevelRepository, FactionLevelRepository>();
+        services.AddScoped<ICharacterFactionRepository, CharacterFactionRepository>();
         return services;
     }
 }
