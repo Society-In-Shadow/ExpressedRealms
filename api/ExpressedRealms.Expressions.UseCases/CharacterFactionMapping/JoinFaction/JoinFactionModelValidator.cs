@@ -8,12 +8,8 @@ internal sealed class JoinFactionModelValidator : AbstractValidator<JoinFactionM
 {
     public JoinFactionModelValidator()
     {
-        RuleFor(x => x.CharacterId)
-            .NotEmpty()
-            .WithMessage("Character Id is required.");
-        
-        RuleFor(x => x.FactionId)
-            .NotEmpty()
-            .WithMessage("Faction Id is required.");
+        RuleFor(x => x.CharacterId).NotEmpty().WithMessage("Character Id is required.");
+
+        RuleFor(x => x.FactionId).NotEmpty().WithMessage("Faction Id is required.");
     }
 }

@@ -17,15 +17,14 @@ public class FactionLevelConfiguration : IEntityTypeConfiguration<CharacterFacti
         builder.Property(e => e.CharacterNotes).HasMaxLength(20_000);
         builder.Property(e => e.ApprovalReason).HasMaxLength(20_000);
         builder.Property(e => e.ApprovalDate).IsRequired();
-        
+
         builder.HasQueryFilter(x => !x.IsDeleted);
 
         builder
             .HasOne(x => x.ApprovedByUser)
             .WithMany(x => x.CharacterFactionMappings)
             .HasForeignKey(x => x.ApprovedByUserId)
-            .OnDelete(DeleteBehavior.Restrict)
-            .IsRequired();
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder
             .HasOne(x => x.FactionLevel)

@@ -15,11 +15,7 @@ public static class JoinFactionEndpoint
     )
     {
         var results = await joinFactionUseCase.ExecuteAsync(
-            new JoinFactionModel()
-            {
-                CharacterId = characterId,
-                FactionId = factionId,
-            }
+            new JoinFactionModel() { CharacterId = characterId, FactionId = factionId }
         );
 
         if (results.HasValidationError(out var validationProblem))

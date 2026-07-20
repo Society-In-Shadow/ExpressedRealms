@@ -44,10 +44,15 @@ internal sealed class FactionRepository(
     {
         return context.Factions.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
-    
+
     public Task<int?> GetBasicFactionRankId(int id, int expressionId)
     {
-        return context.FactionLevels.Where(x => x.FactionId == id && x.Faction.ExpressionId == expressionId && x.FactionRank.Id == FactionRankEnum.Basic.Value)
+        return context
+            .FactionLevels.Where(x =>
+                x.FactionId == id
+                && x.Faction.ExpressionId == expressionId
+                && x.FactionRank.Id == FactionRankEnum.Basic.Value
+            )
             .Select(x => (int?)x.Id)
             .FirstOrDefaultAsync(cancellationToken);
     }

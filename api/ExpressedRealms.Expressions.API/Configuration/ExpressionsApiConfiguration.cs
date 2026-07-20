@@ -1,3 +1,4 @@
+using ExpressedRealms.Expressions.API.CharacterFactionEndpoints;
 using ExpressedRealms.Expressions.API.ExpressionEndpoints;
 using ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints;
 using ExpressedRealms.Expressions.API.FactionEndpoints;
@@ -16,5 +17,6 @@ public static class ExpressionsApiConfiguration
         app.AddProgressionEndpoints();
         app.AddStatModifiersEndpoints();
         app.AddFactionEndpoints();
+        app.AddCharacterFactionEndpoints();
     }
 }

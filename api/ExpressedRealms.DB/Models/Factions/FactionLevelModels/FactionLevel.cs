@@ -35,5 +35,6 @@ public class FactionLevel : ISoftDelete
     public virtual ICollection<FactionLevelAuditTrail> FactionLevelAuditTrails { get; set; } =
         new HashSet<FactionLevelAuditTrail>();
     public virtual ICollection<FactionLevel> Clones { get; set; } = new HashSet<FactionLevel>();
-    public virtual ICollection<CharacterFactionMapping> CharacterFactionMappings { get; set; } = new HashSet<CharacterFactionMapping>();
+    public virtual ICollection<CharacterFactionMapping> CharacterFactionMappings { get; set; } =
+        new HashSet<CharacterFactionMapping>();
 }
