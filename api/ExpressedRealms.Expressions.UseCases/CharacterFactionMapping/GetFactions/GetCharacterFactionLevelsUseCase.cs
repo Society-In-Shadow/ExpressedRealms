@@ -1,3 +1,4 @@
+using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Expressions.Repository.CharacterFactions;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.UseCases.Shared;
@@ -8,6 +9,7 @@ namespace ExpressedRealms.Expressions.UseCases.CharacterFactionMapping.GetFactio
 internal sealed class GetCharacterFactionLevelsUseCase(
     ICharacterFactionRepository characterFactionRepository,
     ICharacterKnowledgeRepository knowledgeRepository,
+    ICharacterRepository characterRepository,
     GetCharacterFactionLevelsModelValidator validator,
     CancellationToken cancellationToken
 ) : IGetCharacterFactionLevelsUseCase
@@ -22,6 +24,13 @@ internal sealed class GetCharacterFactionLevelsUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
+        
+        var character = await characterRepository.FindCharacterAsync(model.CharacterId);
+        if (character is null)
+            return ValidationHelper.AddSingleValidationFailure(
+                nameof(model.CharacterId),
+                "Character Id does not exist."
+            );
 
         var factionLevels = await characterFactionRepository.GetLatestPlayerFactionLevels(model.CharacterId);
         var knowledgeInfo = await knowledgeRepository.GetSimpleKnowledgesForCharacter(model.CharacterId);
