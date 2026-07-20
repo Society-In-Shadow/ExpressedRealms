@@ -3,6 +3,7 @@ using System;
 using ExpressedRealms.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpressedRealms.DB.Migrations
 {
     [DbContext(typeof(ExpressedRealmsDbContext))]
-    partial class ExpressedRealmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260720082644_CharacterFactionMappingShouldPointToFactionLevel")]
+    partial class CharacterFactionMappingShouldPointToFactionLevel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2556,17 +2559,13 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("character varying(20000)")
                         .HasColumnName("character_notes");
 
-                    b.Property<DateTimeOffset?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_at");
-
                     b.Property<int>("FactionLevelId")
                         .HasColumnType("integer")
                         .HasColumnName("faction_level_id");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_deleted");
+                    b.Property<int?>("FactionRankId")
+                        .HasColumnType("integer")
+                        .HasColumnName("faction_rank_id");
 
                     b.Property<bool>("RequestPromotion")
                         .HasColumnType("boolean")
@@ -2588,6 +2587,9 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.HasIndex("FactionLevelId")
                         .HasDatabaseName("ix_character_faction_mappings_faction_level_id");
+
+                    b.HasIndex("FactionRankId")
+                        .HasDatabaseName("ix_character_faction_mappings_faction_rank_id");
 
                     b.ToTable("character_faction_mappings", (string)null);
                 });
@@ -5586,6 +5588,11 @@ namespace ExpressedRealms.DB.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_character_faction_mappings_faction_levels_faction_level_id");
 
+                    b.HasOne("ExpressedRealms.DB.Models.Factions.FactionRankModels.FactionRank", null)
+                        .WithMany("CharacterFactionMappings")
+                        .HasForeignKey("FactionRankId")
+                        .HasConstraintName("fk_character_faction_mappings_faction_ranks_faction_rank_id");
+
                     b.Navigation("ApprovedByUser");
 
                     b.Navigation("Character");
@@ -6558,6 +6565,8 @@ namespace ExpressedRealms.DB.Migrations
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Factions.FactionRankModels.FactionRank", b =>
                 {
+                    b.Navigation("CharacterFactionMappings");
+
                     b.Navigation("FactionLevels");
                 });
 

@@ -1,5 +1,6 @@
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Models.Factions.FactionModels;
+using ExpressedRealms.DB.Models.Factions.FactionRankModels;
 using ExpressedRealms.Expressions.Repository.Factions.Dtos;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,6 +43,13 @@ internal sealed class FactionRepository(
     public Task<Faction?> GetFactionForEditingAsync(int id)
     {
         return context.Factions.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+    }
+    
+    public Task<int?> GetBasicFactionRankId(int id, int expressionId)
+    {
+        return context.FactionLevels.Where(x => x.FactionId == id && x.Faction.ExpressionId == expressionId && x.FactionRank.Id == FactionRankEnum.Basic.Value)
+            .Select(x => (int?)x.Id)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<List<FactionDto>> GetFactions(int expressionId)

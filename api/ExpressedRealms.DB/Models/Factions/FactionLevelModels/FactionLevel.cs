@@ -1,5 +1,6 @@
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Factions.CharacterFactionMappingModels;
 using ExpressedRealms.DB.Models.Factions.FactionLevelModels.Audit;
 using ExpressedRealms.DB.Models.Factions.FactionModels;
 using ExpressedRealms.DB.Models.Factions.FactionRankModels;
@@ -34,4 +35,5 @@ public class FactionLevel : ISoftDelete
     public virtual ICollection<FactionLevelAuditTrail> FactionLevelAuditTrails { get; set; } =
         new HashSet<FactionLevelAuditTrail>();
     public virtual ICollection<FactionLevel> Clones { get; set; } = new HashSet<FactionLevel>();
+    public virtual ICollection<CharacterFactionMapping> CharacterFactionMappings { get; set; } = new HashSet<CharacterFactionMapping>();
 }
