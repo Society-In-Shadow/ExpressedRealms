@@ -138,6 +138,22 @@ public class CharacterKnowledgeRepository(
             })
             .ToListAsync(cancellationToken);
     }
+    
+    public async Task<List<SimpleCharacterKnowledgeProjection>> GetSimpleKnowledgesForCharacter(int characterId)
+    {
+        return await context
+            .CharacterKnowledgeMappings.Where(x => x.CharacterId == characterId)
+            .OrderByDescending(x => x.KnowledgeLevel.Level)
+            .ThenBy(x => x.Knowledge.Name)
+            .Select(x => new SimpleCharacterKnowledgeProjection()
+            {
+                Id = x.KnowledgeId,
+                LevelId = x.KnowledgeLevelId,
+                Specializations = x.CharacterKnowledgeSpecializations.Select(y => y.Name)
+                    .ToList(),
+            })
+            .ToListAsync(cancellationToken);
+    }
 
     public async Task<SpecializationCountProjection> GetSpecializationCountForMapping(int mappingId)
     {
