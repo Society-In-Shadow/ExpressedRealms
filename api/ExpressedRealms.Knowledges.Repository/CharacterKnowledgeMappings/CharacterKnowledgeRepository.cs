@@ -150,7 +150,7 @@ public class CharacterKnowledgeRepository(
             .Select(x => new SimpleCharacterKnowledgeProjection()
             {
                 Id = x.KnowledgeId,
-                LevelId = x.KnowledgeLevelId,
+                Level = x.KnowledgeLevel.Level,
                 Specializations = x.CharacterKnowledgeSpecializations.Select(y => y.Name).ToList(),
             })
             .ToListAsync(cancellationToken);

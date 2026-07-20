@@ -38,6 +38,29 @@ internal sealed class CharacterFactionRepository(
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<List<BasicFactionLevelProjection>> GetFactionLevels(int characterId)
+    {
+        var factionId = await context
+            .CharacterFactionMappings.Where(x => x.CharacterId == characterId)
+            .Select(x => new { x.FactionLevel.FactionId })
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (factionId == null)
+            return new List<BasicFactionLevelProjection>();
+
+        return await context
+            .FactionLevels.Where(x => x.FactionId == factionId.FactionId)
+            .Select(x => new BasicFactionLevelProjection()
+            {
+                Id = x.Id,
+                KnowledgeLevel = x.KnowledgeLevel != null ? x.KnowledgeLevel.Level : null,
+                Specialization = x.Specialization,
+                FactionRankId = x.FactionRankId,
+                KnowledgeId = x.KnowledgeId,
+            })
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<PlayerFactionInfoDto?> GetPlayerFactionInfo(int characterId)
     {
         return await context

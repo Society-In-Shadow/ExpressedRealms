@@ -3,6 +3,6 @@ namespace ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings.Proje
 public class SimpleCharacterKnowledgeProjection
 {
     public int Id { get; set; }
-    public int LevelId { get; set; }
+    public int Level { get; set; }
     public List<string> Specializations { get; set; } = new();
 }

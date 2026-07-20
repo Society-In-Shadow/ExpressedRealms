@@ -1,4 +1,5 @@
 using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.DB.Models.Factions.FactionRankModels;
 using ExpressedRealms.Expressions.Repository.CharacterFactions;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.UseCases.Shared;
@@ -34,9 +35,12 @@ internal sealed class GetCharacterFactionLevelsUseCase(
                 "Character Id does not exist."
             );
 
-        var factionLevels = await characterFactionRepository.GetLatestPlayerFactionLevels(
+        var playerLevels = await characterFactionRepository.GetLatestPlayerFactionLevels(
             model.CharacterId
         );
+
+        var factionLevels = await characterFactionRepository.GetFactionLevels(model.CharacterId);
+
         var knowledgeInfo = await knowledgeRepository.GetSimpleKnowledgesForCharacter(
             model.CharacterId
         );
@@ -48,22 +52,34 @@ internal sealed class GetCharacterFactionLevelsUseCase(
                     .Select(x =>
                     {
                         var knowledge = knowledgeInfo.FirstOrDefault(y => y.Id == x.KnowledgeId);
+                        var playerLevel = playerLevels.FirstOrDefault(y =>
+                            y.FactionLevelId == x.Id
+                        );
 
-                        return new CharacterFactionLevelInfo()
+                        var factionLevel = new CharacterFactionLevelInfo()
                         {
-                            FactionLevelId = x.FactionLevelId,
-                            Approver = x.Approver,
-                            ApprovalReason = x.ApprovalReason,
-                            RequestedPromotion = x.RequestedPromotion,
+                            FactionLevelId = x.Id,
                             HasKnowledge = knowledge is not null,
-                            HasKnowledgeLevel = knowledge?.LevelId == x.KnowledgeLevel?.Id,
-                            HasSpecialization = x.KnowledgeSpecialization is not null
-                                ? knowledge?.Specializations.Contains(x.KnowledgeSpecialization)
+                            HasKnowledgeLevel =
+                                knowledge?.Level >= x.KnowledgeLevel
+                                && x.FactionRankId != FactionRankEnum.Basic,
+                            HasSpecialization = x.Specialization is not null
+                                ? knowledge?.Specializations.Contains(x.Specialization)
                                 : false,
-                            RequestedPromotionReason = x.RequestedPromotionReason,
-                            CharacterNotes = x.CharacterNotes,
-                            ApprovalDate = x.ApprovalDate,
                         };
+
+                        if (playerLevel is null)
+                            return factionLevel;
+
+                        factionLevel.Approver = playerLevel.Approver;
+                        factionLevel.ApprovalReason = playerLevel.ApprovalReason;
+                        factionLevel.RequestedPromotion = playerLevel.RequestedPromotion;
+                        factionLevel.RequestedPromotionReason =
+                            playerLevel.RequestedPromotionReason;
+                        factionLevel.CharacterNotes = playerLevel.CharacterNotes;
+                        factionLevel.ApprovalDate = playerLevel.ApprovalDate;
+
+                        return factionLevel;
                     })
                     .ToList(),
             }

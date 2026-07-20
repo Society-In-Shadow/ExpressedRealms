@@ -1,6 +1,6 @@
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.DB.Models.Characters;
-using ExpressedRealms.DB.Models.Knowledges.KnowledgeEducationLevels;
+using ExpressedRealms.DB.Models.Factions.FactionRankModels;
 using ExpressedRealms.Expressions.Repository.CharacterFactions;
 using ExpressedRealms.Expressions.Repository.CharacterFactions.Dtos;
 using ExpressedRealms.Expressions.UseCases.CharacterFactionMapping.GetFactions;
@@ -36,6 +36,9 @@ public class GetCharacterFactionLevelsUseCaseTests
 
         A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
             .Returns(new List<CharacterFactionDto>());
+
+        A.CallTo(() => _characterFactionRepository.GetFactionLevels(_model.CharacterId))
+            .Returns(new List<BasicFactionLevelProjection>());
 
         A.CallTo(() => _knowledgeRepository.GetSimpleKnowledgesForCharacter(_model.CharacterId))
             .Returns(new List<SimpleCharacterKnowledgeProjection>());
@@ -81,7 +84,32 @@ public class GetCharacterFactionLevelsUseCaseTests
     [Fact]
     public async Task UseCase_WillReturn_FactionLevels()
     {
+        A.CallTo(() => _characterFactionRepository.GetFactionLevels(_model.CharacterId))
+            .Returns(
+                new List<BasicFactionLevelProjection>()
+                {
+                    new() { Id = 7, FactionRankId = FactionRankEnum.Basic.Value },
+                }
+            );
+
+        var result = await _useCase.ExecuteAsync(_model);
+
+        var factionLevel = Assert.Single(result.Value.FactionLevels);
+        Assert.Equal(7, factionLevel.FactionLevelId);
+    }
+
+    [Fact]
+    public async Task UseCase_WillReturn_PlayerFactionLevelDetails_WhenCharacterHasFactionLevel()
+    {
         var approvalDate = DateTimeOffset.UtcNow;
+
+        A.CallTo(() => _characterFactionRepository.GetFactionLevels(_model.CharacterId))
+            .Returns(
+                new List<BasicFactionLevelProjection>()
+                {
+                    new() { Id = 7, FactionRankId = FactionRankEnum.Basic.Value },
+                }
+            );
 
         A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
             .Returns(
@@ -113,13 +141,58 @@ public class GetCharacterFactionLevelsUseCaseTests
     }
 
     [Fact]
-    public async Task UseCase_WillReturn_HasKnowledge_AsFalse_WhenCharacterDoesNotHaveKnowledge()
+    public async Task UseCase_WillNotReturn_PlayerFactionLevelDetails_WhenCharacterDoesNotHaveFactionLevel()
     {
+        A.CallTo(() => _characterFactionRepository.GetFactionLevels(_model.CharacterId))
+            .Returns(
+                new List<BasicFactionLevelProjection>()
+                {
+                    new() { Id = 7, FactionRankId = FactionRankEnum.Basic.Value },
+                }
+            );
+
         A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
             .Returns(
                 new List<CharacterFactionDto>()
                 {
-                    new() { FactionLevelId = 7, KnowledgeId = 3 },
+                    new()
+                    {
+                        FactionLevelId = 8,
+                        Approver = "Approver Name",
+                        ApprovalReason = "Approved because reasons.",
+                        RequestedPromotion = true,
+                        RequestedPromotionReason = "Please promote me.",
+                        ApprovalDate = DateTimeOffset.UtcNow,
+                        CharacterNotes = "Character notes.",
+                    },
+                }
+            );
+
+        var result = await _useCase.ExecuteAsync(_model);
+
+        var factionLevel = Assert.Single(result.Value.FactionLevels);
+        Assert.Equal(7, factionLevel.FactionLevelId);
+        Assert.Null(factionLevel.Approver);
+        Assert.Null(factionLevel.ApprovalReason);
+        Assert.False(factionLevel.RequestedPromotion);
+        Assert.Null(factionLevel.RequestedPromotionReason);
+        Assert.Null(factionLevel.ApprovalDate);
+        Assert.Null(factionLevel.CharacterNotes);
+    }
+
+    [Fact]
+    public async Task UseCase_WillReturn_HasKnowledge_AsFalse_WhenCharacterDoesNotHaveKnowledge()
+    {
+        A.CallTo(() => _characterFactionRepository.GetFactionLevels(_model.CharacterId))
+            .Returns(
+                new List<BasicFactionLevelProjection>()
+                {
+                    new()
+                    {
+                        Id = 7,
+                        KnowledgeId = 3,
+                        FactionRankId = FactionRankEnum.Intermediate.Value,
+                    },
                 }
             );
 
@@ -135,11 +208,16 @@ public class GetCharacterFactionLevelsUseCaseTests
     [Fact]
     public async Task UseCase_WillReturn_HasKnowledge_AsTrue_WhenCharacterHasKnowledge()
     {
-        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+        A.CallTo(() => _characterFactionRepository.GetFactionLevels(_model.CharacterId))
             .Returns(
-                new List<CharacterFactionDto>()
+                new List<BasicFactionLevelProjection>()
                 {
-                    new() { FactionLevelId = 7, KnowledgeId = 3 },
+                    new()
+                    {
+                        Id = 7,
+                        KnowledgeId = 3,
+                        FactionRankId = FactionRankEnum.Intermediate.Value,
+                    },
                 }
             );
 
@@ -155,15 +233,16 @@ public class GetCharacterFactionLevelsUseCaseTests
     [Fact]
     public async Task UseCase_WillReturn_HasKnowledgeLevel_AsFalse_WhenCharacterDoesNotHaveRequiredKnowledgeLevel()
     {
-        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+        A.CallTo(() => _characterFactionRepository.GetFactionLevels(_model.CharacterId))
             .Returns(
-                new List<CharacterFactionDto>()
+                new List<BasicFactionLevelProjection>()
                 {
                     new()
                     {
-                        FactionLevelId = 7,
+                        Id = 7,
                         KnowledgeId = 3,
-                        KnowledgeLevel = new KnowledgeEducationLevel() { Id = 2 },
+                        KnowledgeLevel = 2,
+                        FactionRankId = FactionRankEnum.Intermediate.Value,
                     },
                 }
             );
@@ -172,7 +251,7 @@ public class GetCharacterFactionLevelsUseCaseTests
             .Returns(
                 new List<SimpleCharacterKnowledgeProjection>()
                 {
-                    new() { Id = 3, LevelId = 1 },
+                    new() { Id = 3, Level = 1 },
                 }
             );
 
@@ -185,15 +264,16 @@ public class GetCharacterFactionLevelsUseCaseTests
     [Fact]
     public async Task UseCase_WillReturn_HasKnowledgeLevel_AsTrue_WhenCharacterHasRequiredKnowledgeLevel()
     {
-        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+        A.CallTo(() => _characterFactionRepository.GetFactionLevels(_model.CharacterId))
             .Returns(
-                new List<CharacterFactionDto>()
+                new List<BasicFactionLevelProjection>()
                 {
                     new()
                     {
-                        FactionLevelId = 7,
+                        Id = 7,
                         KnowledgeId = 3,
-                        KnowledgeLevel = new KnowledgeEducationLevel() { Id = 2 },
+                        KnowledgeLevel = 2,
+                        FactionRankId = FactionRankEnum.Intermediate.Value,
                     },
                 }
             );
@@ -202,7 +282,7 @@ public class GetCharacterFactionLevelsUseCaseTests
             .Returns(
                 new List<SimpleCharacterKnowledgeProjection>()
                 {
-                    new() { Id = 3, LevelId = 2 },
+                    new() { Id = 3, Level = 2 },
                 }
             );
 
@@ -213,17 +293,80 @@ public class GetCharacterFactionLevelsUseCaseTests
     }
 
     [Fact]
-    public async Task UseCase_WillReturn_HasSpecialization_AsFalse_WhenFactionLevelDoesNotRequireSpecialization()
+    public async Task UseCase_WillReturn_HasKnowledgeLevel_AsTrue_WhenCharacterHasHigherThanRequiredKnowledgeLevel()
     {
-        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+        A.CallTo(() => _characterFactionRepository.GetFactionLevels(_model.CharacterId))
             .Returns(
-                new List<CharacterFactionDto>()
+                new List<BasicFactionLevelProjection>()
                 {
                     new()
                     {
-                        FactionLevelId = 7,
+                        Id = 7,
                         KnowledgeId = 3,
-                        KnowledgeSpecialization = null,
+                        KnowledgeLevel = 2,
+                        FactionRankId = FactionRankEnum.Intermediate.Value,
+                    },
+                }
+            );
+
+        A.CallTo(() => _knowledgeRepository.GetSimpleKnowledgesForCharacter(_model.CharacterId))
+            .Returns(
+                new List<SimpleCharacterKnowledgeProjection>()
+                {
+                    new() { Id = 3, Level = 3 },
+                }
+            );
+
+        var result = await _useCase.ExecuteAsync(_model);
+
+        var factionLevel = Assert.Single(result.Value.FactionLevels);
+        Assert.True(factionLevel.HasKnowledgeLevel);
+    }
+
+    [Fact]
+    public async Task UseCase_WillReturn_HasKnowledgeLevel_AsFalse_ForBasicFactionRank()
+    {
+        A.CallTo(() => _characterFactionRepository.GetFactionLevels(_model.CharacterId))
+            .Returns(
+                new List<BasicFactionLevelProjection>()
+                {
+                    new()
+                    {
+                        Id = 7,
+                        KnowledgeId = 3,
+                        KnowledgeLevel = 1,
+                        FactionRankId = FactionRankEnum.Basic.Value,
+                    },
+                }
+            );
+
+        A.CallTo(() => _knowledgeRepository.GetSimpleKnowledgesForCharacter(_model.CharacterId))
+            .Returns(
+                new List<SimpleCharacterKnowledgeProjection>()
+                {
+                    new() { Id = 3, Level = 3 },
+                }
+            );
+
+        var result = await _useCase.ExecuteAsync(_model);
+
+        var factionLevel = Assert.Single(result.Value.FactionLevels);
+        Assert.False(factionLevel.HasKnowledgeLevel);
+    }
+
+    [Fact]
+    public async Task UseCase_WillReturn_HasSpecialization_AsFalse_WhenFactionLevelDoesNotRequireSpecialization()
+    {
+        A.CallTo(() => _characterFactionRepository.GetFactionLevels(_model.CharacterId))
+            .Returns(
+                new List<BasicFactionLevelProjection>()
+                {
+                    new()
+                    {
+                        Id = 7,
+                        KnowledgeId = 3,
+                        Specialization = null,
+                        FactionRankId = FactionRankEnum.Intermediate.Value,
                     },
                 }
             );
@@ -249,15 +392,16 @@ public class GetCharacterFactionLevelsUseCaseTests
     [Fact]
     public async Task UseCase_WillReturn_HasSpecialization_AsFalse_WhenCharacterDoesNotHaveRequiredSpecialization()
     {
-        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+        A.CallTo(() => _characterFactionRepository.GetFactionLevels(_model.CharacterId))
             .Returns(
-                new List<CharacterFactionDto>()
+                new List<BasicFactionLevelProjection>()
                 {
                     new()
                     {
-                        FactionLevelId = 7,
+                        Id = 7,
                         KnowledgeId = 3,
-                        KnowledgeSpecialization = "Cooking",
+                        Specialization = "Cooking",
+                        FactionRankId = FactionRankEnum.Intermediate.Value,
                     },
                 }
             );
@@ -283,15 +427,16 @@ public class GetCharacterFactionLevelsUseCaseTests
     [Fact]
     public async Task UseCase_WillReturn_HasSpecialization_AsTrue_WhenCharacterHasRequiredSpecialization()
     {
-        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+        A.CallTo(() => _characterFactionRepository.GetFactionLevels(_model.CharacterId))
             .Returns(
-                new List<CharacterFactionDto>()
+                new List<BasicFactionLevelProjection>()
                 {
                     new()
                     {
-                        FactionLevelId = 7,
+                        Id = 7,
                         KnowledgeId = 3,
-                        KnowledgeSpecialization = "Cooking",
+                        Specialization = "Cooking",
+                        FactionRankId = FactionRankEnum.Intermediate.Value,
                     },
                 }
             );
@@ -317,12 +462,12 @@ public class GetCharacterFactionLevelsUseCaseTests
     [Fact]
     public async Task UseCase_WillReturn_AllFactionLevels()
     {
-        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+        A.CallTo(() => _characterFactionRepository.GetFactionLevels(_model.CharacterId))
             .Returns(
-                new List<CharacterFactionDto>()
+                new List<BasicFactionLevelProjection>()
                 {
-                    new() { FactionLevelId = 7 },
-                    new() { FactionLevelId = 8 },
+                    new() { Id = 7, FactionRankId = FactionRankEnum.Basic.Value },
+                    new() { Id = 8, FactionRankId = FactionRankEnum.Intermediate.Value },
                 }
             );
 
