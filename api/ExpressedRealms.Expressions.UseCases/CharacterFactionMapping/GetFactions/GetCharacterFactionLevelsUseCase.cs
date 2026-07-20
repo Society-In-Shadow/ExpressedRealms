@@ -14,7 +14,9 @@ internal sealed class GetCharacterFactionLevelsUseCase(
     CancellationToken cancellationToken
 ) : IGetCharacterFactionLevelsUseCase
 {
-    public async Task<Result<FactionsReturnModel>> ExecuteAsync(GetCharacterFactionLevelsModel model)
+    public async Task<Result<FactionsReturnModel>> ExecuteAsync(
+        GetCharacterFactionLevelsModel model
+    )
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,
@@ -24,7 +26,7 @@ internal sealed class GetCharacterFactionLevelsUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-        
+
         var character = await characterRepository.FindCharacterAsync(model.CharacterId);
         if (character is null)
             return ValidationHelper.AddSingleValidationFailure(
@@ -32,16 +34,21 @@ internal sealed class GetCharacterFactionLevelsUseCase(
                 "Character Id does not exist."
             );
 
-        var factionLevels = await characterFactionRepository.GetLatestPlayerFactionLevels(model.CharacterId);
-        var knowledgeInfo = await knowledgeRepository.GetSimpleKnowledgesForCharacter(model.CharacterId);
-        
+        var factionLevels = await characterFactionRepository.GetLatestPlayerFactionLevels(
+            model.CharacterId
+        );
+        var knowledgeInfo = await knowledgeRepository.GetSimpleKnowledgesForCharacter(
+            model.CharacterId
+        );
+
         return Result.Ok(
             new FactionsReturnModel()
             {
-                FactionLevels = factionLevels.Select(x =>
+                FactionLevels = factionLevels
+                    .Select(x =>
                     {
                         var knowledge = knowledgeInfo.FirstOrDefault(y => y.Id == x.KnowledgeId);
-                        
+
                         return new CharacterFactionLevelInfo()
                         {
                             FactionLevelId = x.FactionLevelId,
@@ -50,7 +57,9 @@ internal sealed class GetCharacterFactionLevelsUseCase(
                             RequestedPromotion = x.RequestedPromotion,
                             HasKnowledge = knowledge is not null,
                             HasKnowledgeLevel = knowledge?.LevelId == x.KnowledgeLevel?.Id,
-                            HasSpecialization = x.KnowledgeSpecialization is not null ? knowledge?.Specializations.Contains(x.KnowledgeSpecialization) : false,
+                            HasSpecialization = x.KnowledgeSpecialization is not null
+                                ? knowledge?.Specializations.Contains(x.KnowledgeSpecialization)
+                                : false,
                             RequestedPromotionReason = x.RequestedPromotionReason,
                             CharacterNotes = x.CharacterNotes,
                             ApprovalDate = x.ApprovalDate,

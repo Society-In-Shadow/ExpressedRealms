@@ -20,8 +20,8 @@ internal sealed class CharacterFactionRepository(
 
     public async Task<List<CharacterFactionDto>> GetLatestPlayerFactionLevels(int characterId)
     {
-        return await context.CharacterFactionMappings
-            .Where(x => x.CharacterId == characterId)
+        return await context
+            .CharacterFactionMappings.Where(x => x.CharacterId == characterId)
             .Select(x => new CharacterFactionDto()
             {
                 FactionLevelId = x.FactionLevelId,
@@ -40,8 +40,8 @@ internal sealed class CharacterFactionRepository(
 
     public async Task<PlayerFactionInfoDto?> GetPlayerFactionInfo(int characterId)
     {
-        return await context.CharacterFactionMappings
-            .Where(x => x.CharacterId == characterId)
+        return await context
+            .CharacterFactionMappings.Where(x => x.CharacterId == characterId)
             .OrderBy(x => x.ApprovalDate)
             .Select(x => new PlayerFactionInfoDto()
             {

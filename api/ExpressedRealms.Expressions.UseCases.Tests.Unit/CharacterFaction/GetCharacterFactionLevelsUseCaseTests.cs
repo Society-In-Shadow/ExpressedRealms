@@ -23,22 +23,16 @@ public class GetCharacterFactionLevelsUseCaseTests
 
     public GetCharacterFactionLevelsUseCaseTests()
     {
-        _model = new GetCharacterFactionLevelsModel()
-        {
-            CharacterId = 1,
-        };
+        _model = new GetCharacterFactionLevelsModel() { CharacterId = 1 };
 
-        _character = new Character()
-        {
-            Id = _model.CharacterId,
-            ExpressionId = 3,
-        };
+        _character = new Character() { Id = _model.CharacterId, ExpressionId = 3 };
 
         _characterFactionRepository = A.Fake<ICharacterFactionRepository>();
         _knowledgeRepository = A.Fake<ICharacterKnowledgeRepository>();
         _characterRepository = A.Fake<ICharacterRepository>();
 
-        A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId)).Returns(_character);
+        A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId))
+            .Returns(_character);
 
         A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
             .Returns(new List<CharacterFactionDto>());
@@ -125,24 +119,12 @@ public class GetCharacterFactionLevelsUseCaseTests
             .Returns(
                 new List<CharacterFactionDto>()
                 {
-                    new()
-                    {
-                        FactionLevelId = 7,
-                        KnowledgeId = 3,
-                    },
+                    new() { FactionLevelId = 7, KnowledgeId = 3 },
                 }
             );
 
         A.CallTo(() => _knowledgeRepository.GetSimpleKnowledgesForCharacter(_model.CharacterId))
-            .Returns(
-                new List<SimpleCharacterKnowledgeProjection>()
-                {
-                    new()
-                    {
-                        Id = 4,
-                    },
-                }
-            );
+            .Returns(new List<SimpleCharacterKnowledgeProjection>() { new() { Id = 4 } });
 
         var result = await _useCase.ExecuteAsync(_model);
 
@@ -157,24 +139,12 @@ public class GetCharacterFactionLevelsUseCaseTests
             .Returns(
                 new List<CharacterFactionDto>()
                 {
-                    new()
-                    {
-                        FactionLevelId = 7,
-                        KnowledgeId = 3,
-                    },
+                    new() { FactionLevelId = 7, KnowledgeId = 3 },
                 }
             );
 
         A.CallTo(() => _knowledgeRepository.GetSimpleKnowledgesForCharacter(_model.CharacterId))
-            .Returns(
-                new List<SimpleCharacterKnowledgeProjection>()
-                {
-                    new()
-                    {
-                        Id = 3,
-                    },
-                }
-            );
+            .Returns(new List<SimpleCharacterKnowledgeProjection>() { new() { Id = 3 } });
 
         var result = await _useCase.ExecuteAsync(_model);
 
@@ -193,10 +163,7 @@ public class GetCharacterFactionLevelsUseCaseTests
                     {
                         FactionLevelId = 7,
                         KnowledgeId = 3,
-                        KnowledgeLevel = new KnowledgeEducationLevel()
-                        {
-                            Id = 2,
-                        },
+                        KnowledgeLevel = new KnowledgeEducationLevel() { Id = 2 },
                     },
                 }
             );
@@ -205,11 +172,7 @@ public class GetCharacterFactionLevelsUseCaseTests
             .Returns(
                 new List<SimpleCharacterKnowledgeProjection>()
                 {
-                    new()
-                    {
-                        Id = 3,
-                        LevelId = 1,
-                    },
+                    new() { Id = 3, LevelId = 1 },
                 }
             );
 
@@ -230,10 +193,7 @@ public class GetCharacterFactionLevelsUseCaseTests
                     {
                         FactionLevelId = 7,
                         KnowledgeId = 3,
-                        KnowledgeLevel = new KnowledgeEducationLevel()
-                        {
-                            Id = 2,
-                        },
+                        KnowledgeLevel = new KnowledgeEducationLevel() { Id = 2 },
                     },
                 }
             );
@@ -242,11 +202,7 @@ public class GetCharacterFactionLevelsUseCaseTests
             .Returns(
                 new List<SimpleCharacterKnowledgeProjection>()
                 {
-                    new()
-                    {
-                        Id = 3,
-                        LevelId = 2,
-                    },
+                    new() { Id = 3, LevelId = 2 },
                 }
             );
 
@@ -279,10 +235,7 @@ public class GetCharacterFactionLevelsUseCaseTests
                     new()
                     {
                         Id = 3,
-                        Specializations = new List<string>()
-                        {
-                            "Alchemy",
-                        },
+                        Specializations = new List<string>() { "Alchemy" },
                     },
                 }
             );
@@ -316,10 +269,7 @@ public class GetCharacterFactionLevelsUseCaseTests
                     new()
                     {
                         Id = 3,
-                        Specializations = new List<string>()
-                        {
-                            "Alchemy",
-                        },
+                        Specializations = new List<string>() { "Alchemy" },
                     },
                 }
             );
@@ -353,11 +303,7 @@ public class GetCharacterFactionLevelsUseCaseTests
                     new()
                     {
                         Id = 3,
-                        Specializations = new List<string>()
-                        {
-                            "Alchemy",
-                            "Cooking",
-                        },
+                        Specializations = new List<string>() { "Alchemy", "Cooking" },
                     },
                 }
             );
@@ -375,14 +321,8 @@ public class GetCharacterFactionLevelsUseCaseTests
             .Returns(
                 new List<CharacterFactionDto>()
                 {
-                    new()
-                    {
-                        FactionLevelId = 7,
-                    },
-                    new()
-                    {
-                        FactionLevelId = 8,
-                    },
+                    new() { FactionLevelId = 7 },
+                    new() { FactionLevelId = 8 },
                 }
             );
 

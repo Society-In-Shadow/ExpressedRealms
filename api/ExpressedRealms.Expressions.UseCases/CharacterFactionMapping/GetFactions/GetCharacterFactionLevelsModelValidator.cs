@@ -4,7 +4,8 @@ using JetBrains.Annotations;
 namespace ExpressedRealms.Expressions.UseCases.CharacterFactionMapping.GetFactions;
 
 [UsedImplicitly]
-internal sealed class GetCharacterFactionLevelsModelValidator : AbstractValidator<GetCharacterFactionLevelsModel>
+internal sealed class GetCharacterFactionLevelsModelValidator
+    : AbstractValidator<GetCharacterFactionLevelsModel>
 {
     public GetCharacterFactionLevelsModelValidator()
     {

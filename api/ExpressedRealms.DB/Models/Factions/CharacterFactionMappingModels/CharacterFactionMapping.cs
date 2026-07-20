@@ -22,7 +22,7 @@ public class CharacterFactionMapping : ISoftDelete
     public virtual Character Character { get; set; } = null!;
     public virtual FactionLevel FactionLevel { get; set; } = null!;
     public virtual User? ApprovedByUser { get; set; }
-    
+
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 }

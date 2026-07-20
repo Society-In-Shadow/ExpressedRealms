@@ -32,7 +32,10 @@ internal sealed class JoinFactionUseCase(
                 "Character Id is not of an expression type."
             );
 
-        var factionRankId = await factionRepository.GetBasicFactionRankId(model.FactionId, character.ExpressionId);
+        var factionRankId = await factionRepository.GetBasicFactionRankId(
+            model.FactionId,
+            character.ExpressionId
+        );
         if (factionRankId is null)
             return ValidationHelper.AddSingleValidationFailure(
                 nameof(model.FactionId),
@@ -45,7 +48,7 @@ internal sealed class JoinFactionUseCase(
                 CharacterId = model.CharacterId,
                 FactionLevelId = factionRankId.Value,
                 RequestPromotion = false,
-                ApprovalDate = DateTimeOffset.UtcNow
+                ApprovalDate = DateTimeOffset.UtcNow,
             }
         );
 

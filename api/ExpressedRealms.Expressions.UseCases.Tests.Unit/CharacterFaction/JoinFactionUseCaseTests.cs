@@ -23,29 +23,24 @@ public class JoinFactionUseCaseTests
 
     public JoinFactionUseCaseTests()
     {
-        _model = new JoinFactionModel()
-        {
-            CharacterId = 1,
-            FactionId = 2,
-        };
+        _model = new JoinFactionModel() { CharacterId = 1, FactionId = 2 };
 
-        _character = new Character()
-        {
-            Id = _model.CharacterId,
-            ExpressionId = 3,
-        };
+        _character = new Character() { Id = _model.CharacterId, ExpressionId = 3 };
 
         _factionRepository = A.Fake<IFactionRepository>();
         _characterRepository = A.Fake<ICharacterRepository>();
         _characterFactionRepository = A.Fake<ICharacterFactionRepository>();
 
-        A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId)).Returns(_character);
+        A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId))
+            .Returns(_character);
         A.CallTo(() =>
                 _factionRepository.GetBasicFactionRankId(_model.FactionId, _character.ExpressionId)
             )
             .Returns(FactionRankId);
         A.CallTo(() =>
-                _characterFactionRepository.JoinFaction(A<DB.Models.Factions.CharacterFactionMappingModels.CharacterFactionMapping>._)
+                _characterFactionRepository.JoinFaction(
+                    A<DB.Models.Factions.CharacterFactionMappingModels.CharacterFactionMapping>._
+                )
             )
             .Returns(CharacterFactionMappingId);
 
@@ -119,10 +114,11 @@ public class JoinFactionUseCaseTests
 
         A.CallTo(() =>
                 _characterFactionRepository.JoinFaction(
-                    A<DB.Models.Factions.CharacterFactionMappingModels.CharacterFactionMapping>.That.Matches(k =>
-                        k.CharacterId == _model.CharacterId
-                        && k.FactionLevelId == FactionRankId
-                        && !k.RequestPromotion
+                    A<DB.Models.Factions.CharacterFactionMappingModels.CharacterFactionMapping>.That.Matches(
+                        k =>
+                            k.CharacterId == _model.CharacterId
+                            && k.FactionLevelId == FactionRankId
+                            && !k.RequestPromotion
                     )
                 )
             )
@@ -140,8 +136,8 @@ public class JoinFactionUseCaseTests
 
         A.CallTo(() =>
                 _characterFactionRepository.JoinFaction(
-                    A<DB.Models.Factions.CharacterFactionMappingModels.CharacterFactionMapping>.That.Matches(k =>
-                        k.ApprovalDate >= before && k.ApprovalDate <= after
+                    A<DB.Models.Factions.CharacterFactionMappingModels.CharacterFactionMapping>.That.Matches(
+                        k => k.ApprovalDate >= before && k.ApprovalDate <= after
                     )
                 )
             )

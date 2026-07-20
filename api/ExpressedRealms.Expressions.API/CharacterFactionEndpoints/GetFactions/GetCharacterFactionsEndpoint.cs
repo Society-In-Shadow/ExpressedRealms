@@ -11,14 +11,13 @@ public static class GetCharacterFactionsEndpoint
         IGetCharacterFactionLevelsUseCase createFactionUseCase
     )
     {
-        var results = await createFactionUseCase.ExecuteAsync(
-            new () { CharacterId = characterId }
-        );
+        var results = await createFactionUseCase.ExecuteAsync(new() { CharacterId = characterId });
 
         return TypedResults.Ok(
             new FactionResponse()
             {
-                FactionLevels = results.Value.FactionLevels.Select(x => new FactionLevelModel()
+                FactionLevels = results
+                    .Value.FactionLevels.Select(x => new FactionLevelModel()
                     {
                         FactionLevelId = x.FactionLevelId,
                         Approver = x.Approver,

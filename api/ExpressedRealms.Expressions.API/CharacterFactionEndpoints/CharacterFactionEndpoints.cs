@@ -18,6 +18,9 @@ internal static class CharacterFactionMappingEndpoints
 
         endpointGroup.MapGet("{characterId}/factions", GetCharacterFactionsEndpoint.ExecuteAsync);
 
-        endpointGroup.MapPost("{characterId}/factions/{factionId}", JoinFactionEndpoint.ExecuteAsync);
+        endpointGroup.MapPost(
+            "{characterId}/factions/{factionId}",
+            JoinFactionEndpoint.ExecuteAsync
+        );
     }
 }

@@ -138,8 +138,10 @@ public class CharacterKnowledgeRepository(
             })
             .ToListAsync(cancellationToken);
     }
-    
-    public async Task<List<SimpleCharacterKnowledgeProjection>> GetSimpleKnowledgesForCharacter(int characterId)
+
+    public async Task<List<SimpleCharacterKnowledgeProjection>> GetSimpleKnowledgesForCharacter(
+        int characterId
+    )
     {
         return await context
             .CharacterKnowledgeMappings.Where(x => x.CharacterId == characterId)
@@ -149,8 +151,7 @@ public class CharacterKnowledgeRepository(
             {
                 Id = x.KnowledgeId,
                 LevelId = x.KnowledgeLevelId,
-                Specializations = x.CharacterKnowledgeSpecializations.Select(y => y.Name)
-                    .ToList(),
+                Specializations = x.CharacterKnowledgeSpecializations.Select(y => y.Name).ToList(),
             })
             .ToListAsync(cancellationToken);
     }
