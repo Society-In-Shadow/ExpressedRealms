@@ -11,4 +11,5 @@ public class FactionLevelModel
     public bool HasKnowledge { get; set; }
     public bool HasKnowledgeLevel { get; set; }
     public bool? HasSpecialization { get; set; }
+    public string? CharacterNotes { get; set; }
 }

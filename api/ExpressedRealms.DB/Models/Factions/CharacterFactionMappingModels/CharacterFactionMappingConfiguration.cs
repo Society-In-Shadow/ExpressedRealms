@@ -24,8 +24,7 @@ public class FactionLevelConfiguration : IEntityTypeConfiguration<CharacterFacti
             .HasOne(x => x.ApprovedByUser)
             .WithMany(x => x.CharacterFactionMappings)
             .HasForeignKey(x => x.ApprovedByUserId)
-            .OnDelete(DeleteBehavior.Restrict)
-            .IsRequired();
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder
             .HasOne(x => x.FactionLevel)

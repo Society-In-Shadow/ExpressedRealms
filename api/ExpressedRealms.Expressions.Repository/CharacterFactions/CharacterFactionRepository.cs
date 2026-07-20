@@ -32,6 +32,7 @@ internal sealed class CharacterFactionRepository(
                 KnowledgeId = x.FactionLevel.KnowledgeId,
                 KnowledgeLevel = x.FactionLevel.KnowledgeLevel,
                 KnowledgeSpecialization = x.FactionLevel.Specialization,
+                CharacterNotes = x.CharacterNotes,
                 ApprovalDate = x.ApprovalDate,
             })
             .ToListAsync(cancellationToken);

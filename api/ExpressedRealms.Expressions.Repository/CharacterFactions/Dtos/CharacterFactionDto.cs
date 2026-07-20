@@ -13,4 +13,5 @@ public class CharacterFactionDto
     public int? KnowledgeId { get; set; }
     public KnowledgeEducationLevel? KnowledgeLevel { get; set; }
     public string? KnowledgeSpecialization { get; set; }
+    public string? CharacterNotes { get; set; }
 }

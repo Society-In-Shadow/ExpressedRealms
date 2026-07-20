@@ -29,6 +29,7 @@ public static class GetCharacterFactionsEndpoint
                         HasSpecialization = x.HasSpecialization,
                         RequestedPromotionReason = x.RequestedPromotionReason,
                         ApprovalDate = x.ApprovalDate,
+                        CharacterNotes = x.CharacterNotes,
                     })
                     .ToList(),
             }

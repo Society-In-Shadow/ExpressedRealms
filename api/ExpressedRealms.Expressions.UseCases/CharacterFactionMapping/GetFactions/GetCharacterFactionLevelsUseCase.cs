@@ -43,6 +43,7 @@ internal sealed class GetCharacterFactionLevelsUseCase(
                             HasKnowledgeLevel = knowledge?.LevelId == x.KnowledgeLevel?.Id,
                             HasSpecialization = x.KnowledgeSpecialization is not null ? knowledge?.Specializations.Contains(x.KnowledgeSpecialization) : false,
                             RequestedPromotionReason = x.RequestedPromotionReason,
+                            CharacterNotes = x.CharacterNotes,
                             ApprovalDate = x.ApprovalDate,
                         };
                     })
