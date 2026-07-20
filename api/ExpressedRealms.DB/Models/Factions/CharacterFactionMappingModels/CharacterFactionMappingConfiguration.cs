@@ -10,13 +10,15 @@ public class FactionLevelConfiguration : IEntityTypeConfiguration<CharacterFacti
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired();
         builder.Property(e => e.CharacterId).IsRequired();
-        builder.Property(e => e.FactionRankId).IsRequired();
+        builder.Property(e => e.FactionLevelId).IsRequired();
 
         builder.Property(e => e.ApprovedByUserId).IsRequired(false).HasMaxLength(450);
         builder.Property(e => e.RequestReason).HasMaxLength(20_000);
         builder.Property(e => e.CharacterNotes).HasMaxLength(20_000);
         builder.Property(e => e.ApprovalReason).HasMaxLength(20_000);
         builder.Property(e => e.ApprovalDate).IsRequired();
+        
+        builder.HasQueryFilter(x => !x.IsDeleted);
 
         builder
             .HasOne(x => x.ApprovedByUser)
@@ -26,9 +28,9 @@ public class FactionLevelConfiguration : IEntityTypeConfiguration<CharacterFacti
             .IsRequired();
 
         builder
-            .HasOne(x => x.FactionRank)
+            .HasOne(x => x.FactionLevel)
             .WithMany(x => x.CharacterFactionMappings)
-            .HasForeignKey(x => x.FactionRankId)
+            .HasForeignKey(x => x.FactionLevelId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
 

@@ -121,7 +121,7 @@ public class JoinFactionUseCaseTests
                 _characterFactionRepository.JoinFaction(
                     A<DB.Models.Factions.CharacterFactionMappingModels.CharacterFactionMapping>.That.Matches(k =>
                         k.CharacterId == _model.CharacterId
-                        && k.FactionRankId == FactionRankId
+                        && k.FactionLevelId == FactionRankId
                         && !k.RequestPromotion
                     )
                 )

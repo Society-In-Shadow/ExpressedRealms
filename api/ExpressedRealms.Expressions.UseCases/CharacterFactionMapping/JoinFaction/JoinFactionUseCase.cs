@@ -43,7 +43,7 @@ internal sealed class JoinFactionUseCase(
             new DB.Models.Factions.CharacterFactionMappingModels.CharacterFactionMapping()
             {
                 CharacterId = model.CharacterId,
-                FactionRankId = factionRankId.Value,
+                FactionLevelId = factionRankId.Value,
                 RequestPromotion = false,
                 ApprovalDate = DateTimeOffset.UtcNow
             }
