@@ -34,6 +34,9 @@ public class GetCharacterFactionLevelsUseCaseTests
         A.CallTo(() => _characterRepository.FindCharacterAsync(_model.CharacterId))
             .Returns(_character);
 
+        A.CallTo(() => _characterFactionRepository.GetPlayerFactionInfo(_model.CharacterId))
+            .Returns(new PlayerFactionInfoDto() { FactionId = 5 });
+        
         A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
             .Returns(new List<CharacterFactionDto>());
 
@@ -460,7 +463,7 @@ public class GetCharacterFactionLevelsUseCaseTests
     }
 
     [Fact]
-    public async Task UseCase_WillReturn_AllFactionLevels()
+    public async Task UseCase_WillReturn_AllFactionLevelsAndFactionId()
     {
         A.CallTo(() => _characterFactionRepository.GetFactionLevels(_model.CharacterId))
             .Returns(
@@ -474,6 +477,7 @@ public class GetCharacterFactionLevelsUseCaseTests
         var result = await _useCase.ExecuteAsync(_model);
 
         Assert.Equal(2, result.Value.FactionLevels.Count);
+        Assert.Equal(5, result.Value.FactionId);
         Assert.Contains(result.Value.FactionLevels, x => x.FactionLevelId == 7);
         Assert.Contains(result.Value.FactionLevels, x => x.FactionLevelId == 8);
     }

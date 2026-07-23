@@ -3,4 +3,5 @@ namespace ExpressedRealms.Expressions.UseCases.CharacterFactionMapping.GetFactio
 public class FactionsReturnModel
 {
     public List<CharacterFactionLevelInfo> FactionLevels { get; set; } = new();
+    public int? FactionId { get; set; }
 }

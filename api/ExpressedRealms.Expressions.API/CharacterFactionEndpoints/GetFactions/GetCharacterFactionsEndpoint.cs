@@ -31,6 +31,7 @@ public static class GetCharacterFactionsEndpoint
                         CharacterNotes = x.CharacterNotes,
                     })
                     .ToList(),
+                FactionId = results.Value.FactionId
             }
         );
     }
