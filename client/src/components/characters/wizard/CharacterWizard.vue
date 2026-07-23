@@ -51,6 +51,20 @@ onBeforeMount(async () => {
   await fetchData()
 })
 
+const routeSection = computed(() => {
+  const section = route.query.section
+
+  return typeof section === 'string' ? section : null
+})
+
+const visibleSections = computed(() =>
+  sections.value.filter(section => section.visible ? section.visible() : true),
+)
+
+const isValidRouteSection = computed(() =>
+  visibleSections.value.some(section => section.name === routeSection.value && !section.isDisabled),
+)
+
 async function fetchData() {
   if (!characterInfo.isOwner && !permissionCheck.Archetypes.Edit && !isAdd.value) {
     await router.push({ name: 'characterSheet', params: { id: Number.parseInt(route.params.id as string) } })
@@ -67,7 +81,10 @@ async function fetchData() {
 
     await xpData.getExperience(route.params.id)
 
-    if (!isMobile.value) {
+    if (isValidRouteSection.value) {
+      selectSection(routeSection.value!)
+    }
+    else if (!isMobile.value) {
       selectSection('Basic Info')
     }
   }
@@ -82,18 +99,42 @@ watch(
   },
 )
 
+watch(
+  () => route.query.section,
+  () => {
+    if (isValidRouteSection.value) {
+      selectedSection.value = routeSection.value!
+    }
+    else if (!routeSection.value) {
+      selectedSection.value = ''
+    }
+  },
+)
+
 const selectedSection = ref<string>('')
 const currentView = computed(() => sections.value.filter(x => x.name == selectedSection.value)[0].component)
 const hasSelectedSection = computed(() => selectedSection.value !== '')
 
-const selectSection = (name: string) => {
+const selectSection = async (name: string) => {
   wizardContentData.hideContent()
   selectedSection.value = name
+
+  await router.push({
+    query: {
+      ...route.query,
+      section: name,
+    },
+  })
 }
 
-const resetSection = () => {
+const resetSection = async () => {
   wizardContentData.hideContent()
   selectedSection.value = ''
+
+  const query = { ...route.query }
+  delete query.section
+
+  await router.replace({ query })
 }
 
 const redirectToEdit = () => {
