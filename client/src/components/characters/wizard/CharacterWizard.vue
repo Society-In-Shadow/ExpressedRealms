@@ -1,26 +1,49 @@
 <script setup lang="ts">
 import Button from 'primevue/button'
 import Card from 'primevue/card'
-import { computed, defineAsyncComponent, markRaw, onBeforeMount, ref, watch } from 'vue'
-import KnowledgeStep from '@/components/characters/wizard/knowledges/KnowledgeStep.vue'
+import { computed, defineAsyncComponent, onBeforeMount, ref, watch } from 'vue'
 import { experienceStore } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
-import PowerStep from '@/components/characters/wizard/powers/PowerStep.vue'
-import StatStep from '@/components/characters/wizard/stats/StatStep.vue'
-import SkillStep from '@/components/characters/wizard/skills/SkillStep.vue'
 import { useRoute, useRouter } from 'vue-router'
-import EditCharacterDetails from '@/components/characters/wizard/basicInfo/EditCharacterDetails.vue'
-import AddCharacter from '@/components/characters/wizard/basicInfo/AddCharacter.vue'
 import WizardContent from '@/components/characters/wizard/WizardContent.vue'
 import { breakpointsBootstrapV5, useBreakpoints } from '@vueuse/core'
 import { wizardContentStore } from '@/components/characters/wizard/stores/wizardContentStore.ts'
-import ReviewCharacter from '@/components/characters/character/xp/ReviewCharacter.vue'
-import AdvantageStep from '@/components/characters/wizard/blessings/AdvantageStep.vue'
 import { characterStore } from '@/components/characters/character/stores/characterStore.ts'
-import DisadvantageStep from '@/components/characters/wizard/blessings/DisadvantageStep.vue'
-import ContactStep from '@/components/characters/wizard/contacts/ContactStep.vue'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
-import FactionSelectList from '@/components/characters/wizard/factions/FactionSelectionList.vue'
 import { hasFlag } from '@/stores/featureFlags/featureFlagStore.ts'
+
+const BasicInfoStep = defineAsyncComponent(() =>
+  import('@/components/characters/wizard/basicInfo/EditCharacterDetails.vue'),
+)
+const AddCharacterStep = defineAsyncComponent(() =>
+  import('@/components/characters/wizard/basicInfo/AddCharacter.vue'),
+)
+const StatStep = defineAsyncComponent(() =>
+  import('@/components/characters/wizard/stats/StatStep.vue'),
+)
+const SkillStep = defineAsyncComponent(() =>
+  import('@/components/characters/wizard/skills/SkillStep.vue'),
+)
+const FactionSelectList = defineAsyncComponent(() =>
+  import('@/components/characters/wizard/factions/FactionSelectionList.vue'),
+)
+const PowerStep = defineAsyncComponent(() =>
+  import('@/components/characters/wizard/powers/PowerStep.vue'),
+)
+const KnowledgeStep = defineAsyncComponent(() =>
+  import('@/components/characters/wizard/knowledges/KnowledgeStep.vue'),
+)
+const ContactStep = defineAsyncComponent(() =>
+  import('@/components/characters/wizard/contacts/ContactStep.vue'),
+)
+const AdvantageStep = defineAsyncComponent(() =>
+  import('@/components/characters/wizard/blessings/AdvantageStep.vue'),
+)
+const DisadvantageStep = defineAsyncComponent(() =>
+  import('@/components/characters/wizard/blessings/DisadvantageStep.vue'),
+)
+const ReviewCharacterStep = defineAsyncComponent(() =>
+  import('@/components/characters/character/xp/ReviewCharacter.vue'),
+)
 
 const xpData = experienceStore()
 const route = useRoute()
@@ -36,16 +59,16 @@ const isMobile = activeBreakpoint.smaller('md')
 const wizardContentData = wizardContentStore()
 
 const sections = computed(() => [
-  { name: 'Basic Info', component: isAdd.value ? markRaw(AddCharacter) : markRaw(EditCharacterDetails) },
-  { name: 'Stats', isDisabled: isAdd.value, component: markRaw(StatStep) },
-  { name: 'Skills', isDisabled: isAdd.value, component: markRaw(SkillStep) },
-  { name: 'Faction', isDisabled: isAdd.value, component: markRaw(FactionSelectList), visible: () => hasFlag.ShowFactions },
-  { name: 'Powers', isDisabled: isAdd.value, component: markRaw(PowerStep) },
-  { name: 'Knowledges', isDisabled: isAdd.value, component: markRaw(KnowledgeStep) },
-  { name: 'Contacts', isDisabled: isAdd.value, visible: () => !characterInfo.isInCharacterCreation && !isAdd.value, component: markRaw(ContactStep) },
-  { name: 'Advantages', isDisabled: isAdd.value, component: defineAsyncComponent(async () => AdvantageStep) },
-  { name: 'Disadvantages', isDisabled: isAdd.value, component: defineAsyncComponent(async () => DisadvantageStep) },
-  { name: 'Review Character', isDisabled: isAdd.value, component: markRaw(ReviewCharacter) },
+  { name: 'Basic Info', component: isAdd.value ? AddCharacterStep : BasicInfoStep },
+  { name: 'Stats', isDisabled: isAdd.value, component: StatStep },
+  { name: 'Skills', isDisabled: isAdd.value, component: SkillStep },
+  { name: 'Faction', isDisabled: isAdd.value, component: FactionSelectList, visible: () => hasFlag.ShowFactions },
+  { name: 'Powers', isDisabled: isAdd.value, component: PowerStep },
+  { name: 'Knowledges', isDisabled: isAdd.value, component: KnowledgeStep },
+  { name: 'Contacts', isDisabled: isAdd.value, visible: () => !characterInfo.isInCharacterCreation && !isAdd.value, component: ContactStep },
+  { name: 'Advantages', isDisabled: isAdd.value, component: AdvantageStep },
+  { name: 'Disadvantages', isDisabled: isAdd.value, component: DisadvantageStep },
+  { name: 'Review Character', isDisabled: isAdd.value, component: ReviewCharacterStep },
 ])
 
 onBeforeMount(async () => {
