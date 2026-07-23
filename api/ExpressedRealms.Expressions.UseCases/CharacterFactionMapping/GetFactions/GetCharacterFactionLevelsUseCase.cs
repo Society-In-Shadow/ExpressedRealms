@@ -45,6 +45,8 @@ internal sealed class GetCharacterFactionLevelsUseCase(
             model.CharacterId
         );
 
+        var currentFaction = await characterFactionRepository.GetPlayerFactionInfo(model.CharacterId);
+
         return Result.Ok(
             new FactionsReturnModel()
             {
@@ -82,6 +84,7 @@ internal sealed class GetCharacterFactionLevelsUseCase(
                         return factionLevel;
                     })
                     .ToList(),
+                FactionId = currentFaction?.FactionId
             }
         );
     }

@@ -42,6 +42,7 @@ internal sealed class CharacterFactionRepository(
     {
         var factionId = await context
             .CharacterFactionMappings.Where(x => x.CharacterId == characterId)
+            .OrderBy(x => x.ApprovalDate)
             .Select(x => new { x.FactionLevel.FactionId })
             .FirstOrDefaultAsync(cancellationToken);
 

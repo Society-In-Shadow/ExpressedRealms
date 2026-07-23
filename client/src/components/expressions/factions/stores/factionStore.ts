@@ -13,6 +13,7 @@ export const FACTION_QUERY_KEYS = {
 export const factionListQuery = defineQueryOptions((expressionId: number) => ({
   key: FACTION_QUERY_KEYS.getFactionList(expressionId),
   query: () => factionService.getFactions(expressionId),
+  enabled: () => expressionId != 0,
 }))
 
 export const useDeleteFaction = () => {

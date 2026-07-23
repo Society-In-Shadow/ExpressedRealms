@@ -21,6 +21,7 @@ export const characterStore
         isOwner: false as boolean,
         factions: [] as any[],
         faction: {} as any,
+        characterId: 0 as number,
         canModifyPrimaryCharacter: false as boolean,
       }
     },
@@ -29,6 +30,7 @@ export const characterStore
         this.isLoading = false
         return await axios.get(`/characters/${characterId}`)
           .then(async (response) => {
+            this.characterId = characterId
             this.name = response.data.name
             this.background = response.data.background
             this.expression = response.data.expression
