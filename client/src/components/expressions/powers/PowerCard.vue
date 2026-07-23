@@ -13,7 +13,7 @@ import { powersStore } from '@/components/expressions/powers/stores/powersStore.
 
 const props = defineProps({
   targetType: {
-    type: Object as PropType<TargetPowerType>,
+    type: Number as PropType<TargetPowerType>,
     required: true,
   },
   power: {

@@ -19,6 +19,7 @@ import { characterStore } from '@/components/characters/character/stores/charact
 import DisadvantageStep from '@/components/characters/wizard/blessings/DisadvantageStep.vue'
 import ContactStep from '@/components/characters/wizard/contacts/ContactStep.vue'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+import FactionSelectList from '@/components/characters/wizard/factions/FactionSelectionList.vue'
 
 const xpData = experienceStore()
 const route = useRoute()
@@ -37,6 +38,7 @@ const sections = computed(() => [
   { name: 'Basic Info', component: isAdd.value ? markRaw(AddCharacter) : markRaw(EditCharacterDetails) },
   { name: 'Stats', isDisabled: isAdd.value, component: markRaw(StatStep) },
   { name: 'Skills', isDisabled: isAdd.value, component: markRaw(SkillStep) },
+  { name: 'Faction', isDisabled: isAdd.value, component: markRaw(FactionSelectList) },
   { name: 'Powers', isDisabled: isAdd.value, component: markRaw(PowerStep) },
   { name: 'Knowledges', isDisabled: isAdd.value, component: markRaw(KnowledgeStep) },
   { name: 'Contacts', isDisabled: isAdd.value, visible: () => !characterInfo.isInCharacterCreation && !isAdd.value, component: markRaw(ContactStep) },
