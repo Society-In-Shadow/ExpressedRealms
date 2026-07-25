@@ -11,8 +11,9 @@ import { factionListQuery } from '@/components/expressions/factions/stores/facti
 import { expressionStore } from '@/stores/expressionStore.ts'
 import PowerCard from '@/components/expressions/powers/PowerCard.vue'
 import { characterStore } from '@/components/characters/character/stores/characterStore.ts'
-import { pickedFactionQuery, pickFaction } from '@/components/characters/wizard/factions/stores/factionStore.ts'
+import { pickedFactionQuery } from '@/components/characters/wizard/factions/stores/factionStore.ts'
 import StatusIcon from '@/components/characters/wizard/factions/StatusIcon.vue'
+import { ConfirmationPopup } from '@/components/characters/wizard/factions/services/confirmationPopupService.ts'
 
 const expressionData = expressionStore()
 const characterInfo = characterStore()
@@ -27,6 +28,7 @@ const props = defineProps({
 const { refetch } = useQueryWithLoading(factionListQuery(expressionData.currentExpressionId))
 const { data, isLoading } = useQueryWithLoading(pickedFactionQuery(characterInfo.characterId))
 const items = ref<Command[]>([])
+const popups = ConfirmationPopup(characterInfo.characterId)
 
 onMounted(async () => {
   PopulateFactionActions()
@@ -42,8 +44,7 @@ function PopulateFactionActions() {
       label: 'Leave',
       severity: 'danger',
       command: async ($event) => {
-        const action = pickFaction()
-        await action.mutateAsync({ data: { characterId: characterInfo.characterId, factionId: props.item.id } })
+        await popups.deleteConfirmation($event)
       },
     })
   }
