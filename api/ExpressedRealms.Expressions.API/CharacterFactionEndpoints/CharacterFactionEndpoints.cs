@@ -1,5 +1,6 @@
 using ExpressedRealms.Expressions.API.CharacterFactionEndpoints.GetFactions;
 using ExpressedRealms.Expressions.API.CharacterFactionEndpoints.JoinFaction;
+using ExpressedRealms.Expressions.API.CharacterFactionEndpoints.LeaveFaction;
 using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
@@ -21,6 +22,11 @@ internal static class CharacterFactionMappingEndpoints
         endpointGroup.MapPost(
             "{characterId}/factions/{factionId}",
             JoinFactionEndpoint.ExecuteAsync
+        );
+        
+        endpointGroup.MapDelete(
+            "{characterId}/factions/leave",
+            LeaveFactionEndpoint.ExecuteAsync
         );
     }
 }
