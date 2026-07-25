@@ -43,8 +43,7 @@ internal sealed class JoinFactionUseCase(
                 "This faction does not exist for the character's expression."
             );
 
-        var factionId = await characterFactionRepository.JoinFaction(
-            new DB.Models.Factions.CharacterFactionMappingModels.CharacterFactionMapping()
+        var factionId = await characterFactionRepository.AddCharacterFactionMapping(
             new CharacterFactionMapping()
             {
                 CharacterId = model.CharacterId,

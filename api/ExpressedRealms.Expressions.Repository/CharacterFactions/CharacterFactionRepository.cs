@@ -10,7 +10,7 @@ internal sealed class CharacterFactionRepository(
     CancellationToken cancellationToken
 ) : ICharacterFactionRepository
 {
-    public async Task<int> JoinFaction(CharacterFactionMapping characterFactionMapping)
+    public async Task<int> AddCharacterFactionMapping(CharacterFactionMapping characterFactionMapping)
     {
         context.CharacterFactionMappings.Add(characterFactionMapping);
         await context.SaveChangesAsync(cancellationToken);
