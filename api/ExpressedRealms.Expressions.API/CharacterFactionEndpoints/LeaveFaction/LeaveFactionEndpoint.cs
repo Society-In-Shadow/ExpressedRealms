@@ -1,4 +1,4 @@
-using ExpressedRealms.Expressions.UseCases.CharacterFactionMapping.LeaveFaction;
+using ExpressedRealms.Expressions.UseCases.CharacterFactionMappings.LeaveFaction;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;

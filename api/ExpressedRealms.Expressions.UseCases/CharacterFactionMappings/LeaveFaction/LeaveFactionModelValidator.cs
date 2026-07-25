@@ -1,7 +1,7 @@
 using FluentValidation;
 using JetBrains.Annotations;
 
-namespace ExpressedRealms.Expressions.UseCases.CharacterFactionMapping.LeaveFaction;
+namespace ExpressedRealms.Expressions.UseCases.CharacterFactionMappings.LeaveFaction;
 
 [UsedImplicitly]
 internal sealed class LeaveFactionModelValidator : AbstractValidator<LeaveFactionModel>

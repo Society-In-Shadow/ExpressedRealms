@@ -1,5 +1,6 @@
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.DB.Models.Characters;
+using ExpressedRealms.DB.Models.Factions.CharacterFactionMappingModels;
 using ExpressedRealms.Expressions.Repository.CharacterFactions;
 using ExpressedRealms.Expressions.Repository.Factions;
 using ExpressedRealms.Expressions.UseCases.CharacterFactionMappings.JoinFaction;
@@ -40,6 +41,7 @@ public class JoinFactionUseCaseTests
         A.CallTo(() =>
                 _characterFactionRepository.JoinFaction(
                     A<DB.Models.Factions.CharacterFactionMappingModels.CharacterFactionMapping>._
+                    A<CharacterFactionMapping>._
                 )
             )
             .Returns(CharacterFactionMappingId);
@@ -115,6 +117,7 @@ public class JoinFactionUseCaseTests
         A.CallTo(() =>
                 _characterFactionRepository.JoinFaction(
                     A<DB.Models.Factions.CharacterFactionMappingModels.CharacterFactionMapping>.That.Matches(
+                    A<CharacterFactionMapping>.That.Matches(
                         k =>
                             k.CharacterId == _model.CharacterId
                             && k.FactionLevelId == FactionRankId
@@ -137,6 +140,7 @@ public class JoinFactionUseCaseTests
         A.CallTo(() =>
                 _characterFactionRepository.JoinFaction(
                     A<DB.Models.Factions.CharacterFactionMappingModels.CharacterFactionMapping>.That.Matches(
+                    A<CharacterFactionMapping>.That.Matches(
                         k => k.ApprovalDate >= before && k.ApprovalDate <= after
                     )
                 )

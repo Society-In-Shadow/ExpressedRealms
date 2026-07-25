@@ -1,7 +1,8 @@
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.DB.Models.Characters;
+using ExpressedRealms.DB.Models.Factions.CharacterFactionMappingModels;
 using ExpressedRealms.Expressions.Repository.CharacterFactions;
-using ExpressedRealms.Expressions.UseCases.CharacterFactionMapping.LeaveFaction;
+using ExpressedRealms.Expressions.UseCases.CharacterFactionMappings.LeaveFaction;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
 using Xunit;
@@ -32,7 +33,7 @@ public class LeaveFactionUseCaseTests
                 _characterFactionRepository.GetFactionLevelsForBulkEditing(_model.CharacterId)
             )
             .Returns(
-                new List<DB.Models.Factions.CharacterFactionMappingModels.CharacterFactionMapping>()
+                new List<CharacterFactionMapping>()
             );
 
         var validator = new LeaveFactionModelValidator();
@@ -76,7 +77,7 @@ public class LeaveFactionUseCaseTests
     public async Task UseCase_WillSoftDelete_AndBulkEdit_AllFactionMappings()
     {
         var factionMappings =
-            new List<DB.Models.Factions.CharacterFactionMappingModels.CharacterFactionMapping>()
+            new List<CharacterFactionMapping>()
             {
                 new() { Id = 7, CharacterId = _model.CharacterId },
                 new() { Id = 8, CharacterId = _model.CharacterId },
@@ -92,7 +93,7 @@ public class LeaveFactionUseCaseTests
         A.CallTo(() =>
                 _characterFactionRepository.BulkEditCharacterFactionAsync(
                     A<
-                        List<DB.Models.Factions.CharacterFactionMappingModels.CharacterFactionMapping>
+                        List<CharacterFactionMapping>
                     >.That.Matches(k =>
                         k.Count == 2 && k.All(x => x.IsDeleted) && k.All(x => x.DeletedAt != null)
                     )
