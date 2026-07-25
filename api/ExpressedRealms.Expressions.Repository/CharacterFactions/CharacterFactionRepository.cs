@@ -18,6 +18,12 @@ internal sealed class CharacterFactionRepository(
         return characterFactionMapping.Id;
     }
 
+    public async Task BulkEditCharacterFactionAsync(List<CharacterFactionMapping> factionMappings)
+    {
+        context.CharacterFactionMappings.UpdateRange(factionMappings);
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
     public async Task<List<CharacterFactionDto>> GetLatestPlayerFactionLevels(int characterId)
     {
         return await context
@@ -25,7 +31,7 @@ internal sealed class CharacterFactionRepository(
             .Select(x => new CharacterFactionDto()
             {
                 FactionLevelId = x.FactionLevelId,
-                Approver = x.ApprovedByUser == null ? "" : x.ApprovedByUser!.Player!.Name,
+                Approver = x.ApprovedByUser == null ? "" : x.ApprovedByUser.Player!.Name,
                 ApprovalReason = x.ApprovalReason,
                 RequestedPromotion = x.RequestPromotion,
                 RequestedPromotionReason = x.RequestReason,
@@ -62,11 +68,17 @@ internal sealed class CharacterFactionRepository(
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<List<CharacterFactionMapping>> GetFactionLevelsForBulkEditing(int characterId)
+    {
+        return await context
+            .CharacterFactionMappings.Where(x => x.CharacterId == characterId)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<PlayerFactionInfoDto?> GetPlayerFactionInfo(int characterId)
     {
         return await context
             .CharacterFactionMappings.Where(x => x.CharacterId == characterId)
-            .OrderBy(x => x.ApprovalDate)
             .Select(x => new PlayerFactionInfoDto()
             {
                 FactionId = x.FactionLevel.FactionId,

@@ -5,7 +5,7 @@ using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
-namespace ExpressedRealms.Expressions.UseCases.CharacterFactionMapping.GetFactions;
+namespace ExpressedRealms.Expressions.UseCases.CharacterFactionMappings.GetFactions;
 
 internal sealed class GetCharacterFactionLevelsUseCase(
     ICharacterFactionRepository characterFactionRepository,
@@ -45,7 +45,9 @@ internal sealed class GetCharacterFactionLevelsUseCase(
             model.CharacterId
         );
 
-        var currentFaction = await characterFactionRepository.GetPlayerFactionInfo(model.CharacterId);
+        var currentFaction = await characterFactionRepository.GetPlayerFactionInfo(
+            model.CharacterId
+        );
 
         return Result.Ok(
             new FactionsReturnModel()
@@ -84,7 +86,7 @@ internal sealed class GetCharacterFactionLevelsUseCase(
                         return factionLevel;
                     })
                     .ToList(),
-                FactionId = currentFaction?.FactionId
+                FactionId = currentFaction?.FactionId,
             }
         );
     }

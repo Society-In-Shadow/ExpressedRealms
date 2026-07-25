@@ -4,7 +4,7 @@ using ExpressedRealms.Expressions.Repository.Factions;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
-namespace ExpressedRealms.Expressions.UseCases.CharacterFactionMapping.JoinFaction;
+namespace ExpressedRealms.Expressions.UseCases.CharacterFactionMappings.JoinFaction;
 
 internal sealed class JoinFactionUseCase(
     IFactionRepository factionRepository,

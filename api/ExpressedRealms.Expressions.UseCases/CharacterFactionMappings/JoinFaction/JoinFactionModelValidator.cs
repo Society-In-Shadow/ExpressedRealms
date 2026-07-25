@@ -1,7 +1,7 @@
 using FluentValidation;
 using JetBrains.Annotations;
 
-namespace ExpressedRealms.Expressions.UseCases.CharacterFactionMapping.JoinFaction;
+namespace ExpressedRealms.Expressions.UseCases.CharacterFactionMappings.JoinFaction;
 
 [UsedImplicitly]
 internal sealed class JoinFactionModelValidator : AbstractValidator<JoinFactionModel>

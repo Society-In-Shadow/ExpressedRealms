@@ -9,4 +9,6 @@ public interface ICharacterFactionRepository
     Task<List<CharacterFactionDto>> GetLatestPlayerFactionLevels(int characterId);
     Task<PlayerFactionInfoDto?> GetPlayerFactionInfo(int characterId);
     Task<List<BasicFactionLevelProjection>> GetFactionLevels(int characterId);
+    Task<List<CharacterFactionMapping>> GetFactionLevelsForBulkEditing(int characterId);
+    Task BulkEditCharacterFactionAsync(List<CharacterFactionMapping> factionMappings);
 }

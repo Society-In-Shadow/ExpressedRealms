@@ -40,6 +40,10 @@ export interface PickFactionInfo {
   factionId: number
 }
 
+export interface LeaveFactionInfo {
+  characterId: number
+}
+
 export interface FactionLevelsResponse {
   factionLevels: FactionLevel[]
   factionId: number | null

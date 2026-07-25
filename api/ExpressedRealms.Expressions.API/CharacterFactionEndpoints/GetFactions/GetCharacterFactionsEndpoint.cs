@@ -1,4 +1,4 @@
-using ExpressedRealms.Expressions.UseCases.CharacterFactionMapping.GetFactions;
+using ExpressedRealms.Expressions.UseCases.CharacterFactionMappings.GetFactions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -31,7 +31,7 @@ public static class GetCharacterFactionsEndpoint
                         CharacterNotes = x.CharacterNotes,
                     })
                     .ToList(),
-                FactionId = results.Value.FactionId
+                FactionId = results.Value.FactionId,
             }
         );
     }

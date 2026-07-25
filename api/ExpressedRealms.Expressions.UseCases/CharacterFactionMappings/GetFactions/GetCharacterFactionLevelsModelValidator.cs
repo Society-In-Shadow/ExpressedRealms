@@ -1,7 +1,7 @@
 using FluentValidation;
 using JetBrains.Annotations;
 
-namespace ExpressedRealms.Expressions.UseCases.CharacterFactionMapping.GetFactions;
+namespace ExpressedRealms.Expressions.UseCases.CharacterFactionMappings.GetFactions;
 
 [UsedImplicitly]
 internal sealed class GetCharacterFactionLevelsModelValidator

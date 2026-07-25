@@ -1,14 +1,13 @@
 import { useConfirm } from 'primevue/useconfirm'
-import { useDeleteFaction } from '@/components/expressions/factions/stores/factionStore.ts'
+import { leaveFaction } from '@/components/characters/wizard/factions/stores/factionStore.ts'
 
-export const ConfirmationPopup = (id: number, name: string) => {
+export const ConfirmationPopup = (id: number) => {
   const confirm = useConfirm()
-  const { mutate: deleteFaction } = useDeleteFaction()
-  const deleteConfirmation = (event: MouseEvent) =>
+  const deleteConfirmation = async (event: MouseEvent) =>
     confirm.require({
       target: event.target as HTMLElement,
       group: 'popup',
-      message: `Do you want to delete ${name}?`,
+      message: `Do you want to leave this faction?  You WILL lose all existing ranks.`,
       icon: 'pi pi-info-circle',
       rejectProps: {
         label: 'Cancel',
@@ -16,11 +15,12 @@ export const ConfirmationPopup = (id: number, name: string) => {
         outlined: true,
       },
       acceptProps: {
-        label: 'Delete Archetype',
+        label: 'Leave Faction',
         severity: 'danger',
       },
-      accept: () => {
-        deleteFaction(id)
+      accept: async () => {
+        const action = leaveFaction()
+        await action.mutateAsync({ data: { characterId: id } })
       },
     })
 
