@@ -17,7 +17,7 @@ public class CharacterFactionMapping : ISoftDelete
     public string? CharacterNotes { get; set; }
     public bool RequestPromotion { get; set; }
     public string? RequestReason { get; set; }
-    public DateTimeOffset ApprovalDate { get; set; }
+    public DateTimeOffset? ApprovalDate { get; set; }
 
     public virtual Character Character { get; set; } = null!;
     public virtual FactionLevel FactionLevel { get; set; } = null!;
