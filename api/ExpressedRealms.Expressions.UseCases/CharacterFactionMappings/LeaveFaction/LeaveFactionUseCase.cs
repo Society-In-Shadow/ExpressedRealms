@@ -39,7 +39,7 @@ internal sealed class LeaveFactionUseCase(
         {
             factionMapping.SoftDelete();
         }
-        
+
         await characterFactionRepository.BulkEditCharacterFactionAsync(factionMappings);
 
         return Result.Ok();

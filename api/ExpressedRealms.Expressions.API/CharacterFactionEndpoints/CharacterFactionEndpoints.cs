@@ -23,10 +23,7 @@ internal static class CharacterFactionMappingEndpoints
             "{characterId}/factions/{factionId}",
             JoinFactionEndpoint.ExecuteAsync
         );
-        
-        endpointGroup.MapDelete(
-            "{characterId}/factions/leave",
-            LeaveFactionEndpoint.ExecuteAsync
-        );
+
+        endpointGroup.MapDelete("{characterId}/factions/leave", LeaveFactionEndpoint.ExecuteAsync);
     }
 }

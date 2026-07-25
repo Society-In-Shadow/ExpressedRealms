@@ -17,7 +17,7 @@ internal sealed class CharacterFactionRepository(
 
         return characterFactionMapping.Id;
     }
-    
+
     public async Task BulkEditCharacterFactionAsync(List<CharacterFactionMapping> factionMappings)
     {
         context.CharacterFactionMappings.UpdateRange(factionMappings);
@@ -67,7 +67,7 @@ internal sealed class CharacterFactionRepository(
             })
             .ToListAsync(cancellationToken);
     }
-    
+
     public async Task<List<CharacterFactionMapping>> GetFactionLevelsForBulkEditing(int characterId)
     {
         return await context

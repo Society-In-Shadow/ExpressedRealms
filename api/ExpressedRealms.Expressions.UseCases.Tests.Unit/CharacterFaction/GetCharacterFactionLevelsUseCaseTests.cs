@@ -36,7 +36,7 @@ public class GetCharacterFactionLevelsUseCaseTests
 
         A.CallTo(() => _characterFactionRepository.GetPlayerFactionInfo(_model.CharacterId))
             .Returns(new PlayerFactionInfoDto() { FactionId = 5 });
-        
+
         A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
             .Returns(new List<CharacterFactionDto>());
 
