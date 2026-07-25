@@ -1,4 +1,4 @@
-using ExpressedRealms.Expressions.UseCases.CharacterFactionMapping.GetFactions;
+using ExpressedRealms.Expressions.UseCases.CharacterFactionMappings.GetFactions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 

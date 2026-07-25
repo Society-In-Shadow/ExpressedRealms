@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Expressions.UseCases.CharacterFactionMapping.GetFactions;
+namespace ExpressedRealms.Expressions.UseCases.CharacterFactionMappings.GetFactions;
 
 public class FactionsReturnModel
 {

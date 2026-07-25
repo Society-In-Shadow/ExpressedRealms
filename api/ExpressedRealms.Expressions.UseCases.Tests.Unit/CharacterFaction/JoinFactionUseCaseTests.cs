@@ -2,7 +2,7 @@ using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.DB.Models.Characters;
 using ExpressedRealms.Expressions.Repository.CharacterFactions;
 using ExpressedRealms.Expressions.Repository.Factions;
-using ExpressedRealms.Expressions.UseCases.CharacterFactionMapping.JoinFaction;
+using ExpressedRealms.Expressions.UseCases.CharacterFactionMappings.JoinFaction;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using FakeItEasy;
 using Xunit;

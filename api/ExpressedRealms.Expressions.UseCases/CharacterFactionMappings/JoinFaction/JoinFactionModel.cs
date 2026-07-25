@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Expressions.UseCases.CharacterFactionMapping.JoinFaction;
+namespace ExpressedRealms.Expressions.UseCases.CharacterFactionMappings.JoinFaction;
 
 public class JoinFactionModel
 {

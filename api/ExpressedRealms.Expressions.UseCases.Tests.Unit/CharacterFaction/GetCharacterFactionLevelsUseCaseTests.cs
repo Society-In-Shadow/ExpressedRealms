@@ -3,7 +3,7 @@ using ExpressedRealms.DB.Models.Characters;
 using ExpressedRealms.DB.Models.Factions.FactionRankModels;
 using ExpressedRealms.Expressions.Repository.CharacterFactions;
 using ExpressedRealms.Expressions.Repository.CharacterFactions.Dtos;
-using ExpressedRealms.Expressions.UseCases.CharacterFactionMapping.GetFactions;
+using ExpressedRealms.Expressions.UseCases.CharacterFactionMappings.GetFactions;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings.Projections;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;

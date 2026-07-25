@@ -5,7 +5,7 @@ using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
-namespace ExpressedRealms.Expressions.UseCases.CharacterFactionMapping.GetFactions;
+namespace ExpressedRealms.Expressions.UseCases.CharacterFactionMappings.GetFactions;
 
 internal sealed class GetCharacterFactionLevelsUseCase(
     ICharacterFactionRepository characterFactionRepository,

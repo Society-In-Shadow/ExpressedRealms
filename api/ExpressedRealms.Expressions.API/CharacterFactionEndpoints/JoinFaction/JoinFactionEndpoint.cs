@@ -1,4 +1,4 @@
-using ExpressedRealms.Expressions.UseCases.CharacterFactionMapping.JoinFaction;
+using ExpressedRealms.Expressions.UseCases.CharacterFactionMappings.JoinFaction;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
