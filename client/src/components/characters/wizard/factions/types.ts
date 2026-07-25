@@ -1,4 +1,3 @@
-import type { ListItem } from '@/types/ListItem.ts'
 import type { Power } from '@/components/expressions/powers/types.ts'
 
 export interface FactionResponse {
@@ -29,10 +28,7 @@ export interface EditSingleFactionInfo {
 }
 
 export interface CreateSingleFactionInfo {
-  name: string
-  background: string
-  knowledge: ListItem
-  specialization: string
+  requestReason: string
 }
 
 export interface PickFactionInfo {
@@ -42,6 +38,12 @@ export interface PickFactionInfo {
 
 export interface LeaveFactionInfo {
   characterId: number
+}
+
+export interface RequestPromotionInfo {
+  characterId: number
+  requestReason: string | null
+  factionLevelId: number
 }
 
 export interface FactionLevelsResponse {

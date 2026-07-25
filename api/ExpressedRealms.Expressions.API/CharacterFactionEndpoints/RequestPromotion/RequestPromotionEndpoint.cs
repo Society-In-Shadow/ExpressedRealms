@@ -16,7 +16,12 @@ public static class RequestPromotionEndpoint
     )
     {
         var results = await leaveFactionUseCase.ExecuteAsync(
-            new () { CharacterId = characterId, RequestReason = request.RequestReason }
+            new ()
+            {
+                CharacterId = characterId, 
+                FactionLevelId = request.FactionLevelId, 
+                RequestReason = request.RequestReason
+            }
         );
 
         if (results.HasValidationError(out var validationProblem))

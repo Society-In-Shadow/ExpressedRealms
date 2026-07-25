@@ -201,10 +201,10 @@ public class CharacterKnowledgeRepository(
             );
     }
 
-    public async Task<bool> HasFactionPrerequisites(int knowledgeId, int knowledgeLevel, string specialization)
+    public async Task<bool> HasFactionPrerequisites(int characterId, int knowledgeId, int knowledgeLevel, string specialization)
     {
         return await context.CharacterKnowledgeMappings.AsNoTracking()
-            .Where(x => x.KnowledgeId == knowledgeId && x.KnowledgeLevelId == knowledgeLevel 
+            .Where(x => x.KnowledgeId == knowledgeId && x.KnowledgeLevelId >= knowledgeLevel && x.CharacterId == characterId
                  && x.CharacterKnowledgeSpecializations.Any(y => y.Name.ToLower() == specialization.ToLower()))
             .AnyAsync(cancellationToken);
     }

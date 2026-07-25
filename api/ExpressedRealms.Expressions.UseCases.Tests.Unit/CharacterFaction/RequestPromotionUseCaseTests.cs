@@ -69,6 +69,7 @@ public class RequestPromotionUseCaseTests
 
         A.CallTo(() =>
                 _knowledgeRepository.HasFactionPrerequisites(
+                    _model.CharacterId,
                     _factionLevel.KnowledgeId.Value,
                     _factionLevel.KnowledgeLevelId.Value,
                     _factionLevel.Specialization
@@ -242,6 +243,7 @@ public class RequestPromotionUseCaseTests
     {
         A.CallTo(() =>
                 _knowledgeRepository.HasFactionPrerequisites(
+                    _model.CharacterId,
                     _factionLevel.KnowledgeId!.Value,
                     _factionLevel.KnowledgeLevelId!.Value,
                     _factionLevel.Specialization!

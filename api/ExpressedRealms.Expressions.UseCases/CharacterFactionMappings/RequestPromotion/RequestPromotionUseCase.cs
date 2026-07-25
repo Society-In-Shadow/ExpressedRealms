@@ -74,7 +74,7 @@ internal sealed class RequestPromotionUseCase(
                 "Character does not have a previous rank approved."
             );
 
-        var hasKnowledgePrerequisites = await knowledgeLevelRepository.HasFactionPrerequisites(factionLevel.KnowledgeId!.Value, factionLevel.KnowledgeLevelId!.Value, factionLevel.Specialization!);
+        var hasKnowledgePrerequisites = await knowledgeLevelRepository.HasFactionPrerequisites(model.CharacterId, factionLevel.KnowledgeId!.Value, factionLevel.KnowledgeLevelId!.Value, factionLevel.Specialization!);
         if(!hasKnowledgePrerequisites)
             return ValidationHelper.AddSingleValidationFailure(
                 nameof(model.FactionLevelId),
