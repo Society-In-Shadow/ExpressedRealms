@@ -1,4 +1,5 @@
 using ExpressedRealms.DB;
+using ExpressedRealms.DB.Models.Factions.FactionLevelModels;
 using ExpressedRealms.DB.Models.Factions.FactionModels;
 using ExpressedRealms.DB.Models.Factions.FactionRankModels;
 using ExpressedRealms.Expressions.Repository.Factions.Dtos;
@@ -55,6 +56,11 @@ internal sealed class FactionRepository(
             )
             .Select(x => (int?)x.Id)
             .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public Task<FactionLevel?> GetFactionLevelAsync(int factionLevelId)
+    {
+        return context.FactionLevels.FirstOrDefaultAsync(x => x.Id == factionLevelId, cancellationToken);
     }
 
     public async Task<List<FactionDto>> GetFactions(int expressionId)

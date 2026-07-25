@@ -6,4 +6,5 @@ public class PlayerFactionInfoDto
     public string FactionName { get; set; } = null!;
     public int FactionLevelId { get; set; }
     public string FactionRank { get; set; } = null!;
+    public int FactionRankId { get; set; }
 }

@@ -78,13 +78,15 @@ internal sealed class CharacterFactionRepository(
     public async Task<PlayerFactionInfoDto?> GetPlayerFactionInfo(int characterId)
     {
         return await context
-            .CharacterFactionMappings.Where(x => x.CharacterId == characterId)
+            .CharacterFactionMappings.Where(x => x.CharacterId == characterId && x.ApprovalDate != null)
+            .OrderByDescending(x => x.FactionLevel.FactionRank.Id)
             .Select(x => new PlayerFactionInfoDto()
             {
                 FactionId = x.FactionLevel.FactionId,
                 FactionName = x.FactionLevel.Faction.Name,
                 FactionLevelId = x.FactionLevelId,
                 FactionRank = x.FactionLevel.FactionRank.Name,
+                FactionRankId = x.FactionLevel.FactionRankId,
             })
             .FirstOrDefaultAsync(cancellationToken);
     }
