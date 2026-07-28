@@ -65,7 +65,7 @@ function lookupFactionLevel(level: FactionLevel) {
 function showRequestPromotionButton(level: FactionLevel, previousLevel: FactionLevel) {
   if (!data.value) return null
   const currentLevel = data.value!.factionLevels.find(f => f.factionLevelId == level.id)
-  if (currentLevel.approvalDate == null && currentLevel.requestedPromotion == true)
+  if (currentLevel.approvalDate == null && currentLevel.requestedPromotion)
     return false
   const previousLevelApproved = (data.value!.factionLevels.find(f => f.factionLevelId == previousLevel.id))?.approvalDate != null
   return previousLevelApproved && currentLevel?.hasKnowledge && currentLevel?.hasKnowledgeLevel && currentLevel?.hasSpecialization
@@ -74,7 +74,7 @@ function showRequestPromotionButton(level: FactionLevel, previousLevel: FactionL
 function awaitingPromotion(level: FactionLevel) {
   if (!data.value) return null
   const currentLevel = data.value!.factionLevels.find(f => f.factionLevelId == level.id)
-  return currentLevel.approvalDate == null && currentLevel.requestedPromotion == true
+  return currentLevel.approvalDate == null && currentLevel.requestedPromotion
 }
 
 </script>
