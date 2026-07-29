@@ -50,7 +50,7 @@ const cancel = () => {
     <li>It's possible that you will fail the promotion</li>
     <li>A promotion might take a couple of cons to complete</li>
   </ul>
-  <p>While not required, it is appreciated if you could request a promotion before an event, so we can incorporate it into the overall plot.</p>
+  <p>If you do want a promotion, please make sure to request it a week or two before con.  This way we can incorporate it into the overall plot.</p>
   <p>If you have an idea of what you would like to do for a promotion, please write it down below.</p>
   <p>Upon successful completion of the task(s), a GO will approve your promotion.</p>
   <FormWrapper @submit="onSubmit">
