@@ -16,7 +16,6 @@ public class FactionLevelConfiguration : IEntityTypeConfiguration<CharacterFacti
         builder.Property(e => e.RequestReason).HasMaxLength(20_000);
         builder.Property(e => e.CharacterNotes).HasMaxLength(20_000);
         builder.Property(e => e.ApprovalReason).HasMaxLength(20_000);
-        builder.Property(e => e.ApprovalDate).IsRequired();
 
         builder.HasQueryFilter(x => !x.IsDeleted);
 

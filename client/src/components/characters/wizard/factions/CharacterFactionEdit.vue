@@ -14,6 +14,7 @@ import { characterStore } from '@/components/characters/character/stores/charact
 import { pickedFactionQuery } from '@/components/characters/wizard/factions/stores/factionStore.ts'
 import StatusIcon from '@/components/characters/wizard/factions/StatusIcon.vue'
 import { ConfirmationPopup } from '@/components/characters/wizard/factions/services/confirmationPopupService.ts'
+import { factionDialogs } from '@/components/characters/wizard/factions/services/dialogs.ts'
 
 const expressionData = expressionStore()
 const characterInfo = characterStore()
@@ -29,6 +30,12 @@ const { refetch } = useQueryWithLoading(factionListQuery(expressionData.currentE
 const { data, isLoading } = useQueryWithLoading(pickedFactionQuery(characterInfo.characterId))
 const items = ref<Command[]>([])
 const popups = ConfirmationPopup(characterInfo.characterId)
+
+const dialogs = factionDialogs()
+
+const showPromotionDialog = async (factionLevelId: number) => {
+  await dialogs.requestPromotion({ characterId: characterInfo.characterId, factionLevelId: factionLevelId, requestReason: null })
+}
 
 onMounted(async () => {
   PopulateFactionActions()
@@ -58,8 +65,16 @@ function lookupFactionLevel(level: FactionLevel) {
 function showRequestPromotionButton(level: FactionLevel, previousLevel: FactionLevel) {
   if (!data.value) return null
   const currentLevel = data.value!.factionLevels.find(f => f.factionLevelId == level.id)
+  if (currentLevel.approvalDate == null && currentLevel.requestedPromotion)
+    return false
   const previousLevelApproved = (data.value!.factionLevels.find(f => f.factionLevelId == previousLevel.id))?.approvalDate != null
   return previousLevelApproved && currentLevel?.hasKnowledge && currentLevel?.hasKnowledgeLevel && currentLevel?.hasSpecialization
+}
+
+function awaitingPromotion(level: FactionLevel) {
+  if (!data.value) return null
+  const currentLevel = data.value!.factionLevels.find(f => f.factionLevelId == level.id)
+  return currentLevel.approvalDate == null && currentLevel.requestedPromotion
 }
 
 </script>
@@ -93,7 +108,10 @@ function showRequestPromotionButton(level: FactionLevel, previousLevel: FactionL
             <div><StatusIcon :value="lookupFactionLevel(level)?.hasSpecialization" /> -  Specialization in "{{ level.specialization }}"</div>
           </div>
           <div v-if="showRequestPromotionButton(level, props.item.factionLevels[index -1])">
-            <Button :label="`Request Promotion to ${level.rankName} Rank`" severity="primary" class="w-100 mt-3" />
+            <Button :label="`Request Promotion to ${level.rankName} Rank`" severity="primary" class="w-100 mt-3" @click="showPromotionDialog(level.id)" />
+          </div>
+          <div v-if="awaitingPromotion(level)">
+            <h2>Awaiting Promotion</h2>
           </div>
         </div>
 

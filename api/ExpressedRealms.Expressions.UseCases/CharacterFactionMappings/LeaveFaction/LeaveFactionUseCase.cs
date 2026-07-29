@@ -4,7 +4,7 @@ using ExpressedRealms.Expressions.Repository.CharacterFactions;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
-namespace ExpressedRealms.Expressions.UseCases.CharacterFactionMapping.LeaveFaction;
+namespace ExpressedRealms.Expressions.UseCases.CharacterFactionMappings.LeaveFaction;
 
 internal sealed class LeaveFactionUseCase(
     ICharacterRepository characterRepository,

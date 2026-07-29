@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Expressions.UseCases.CharacterFactionMapping.LeaveFaction;
+namespace ExpressedRealms.Expressions.UseCases.CharacterFactionMappings.LeaveFaction;
 
 public class LeaveFactionModel
 {

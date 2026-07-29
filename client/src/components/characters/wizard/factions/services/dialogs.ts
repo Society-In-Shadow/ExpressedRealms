@@ -1,48 +1,12 @@
-import { useDialog } from 'primevue/usedialog'
-import FactionEdit from '@/components/expressions/factions/FactionEdit.vue'
-import FactionCreate from '@/components/expressions/factions/FactionCreate.vue'
+import { useAppDialog } from '@/utilities/dialogUtilities.ts'
+import type { RequestPromotionInfo } from '@/components/characters/wizard/factions/types.ts'
+
+const requestPromotionDialogLoader = () => import('@/components/characters/wizard/factions/RequestPromotionDialog.vue')
 
 export const factionDialogs = () => {
-  const dialog = useDialog()
+  const dialog = useAppDialog()
 
-  const showUpdateFaction = (factionId: number) => {
-    dialog.open(FactionEdit, {
-      props: {
-        header: 'Update Faction',
-        style: {
-          width: '500px',
-        },
-        breakpoints: {
-          '960px': '75vw',
-          '640px': '90vw',
-        },
-        modal: true,
-      },
-      data: {
-        factionId: factionId,
-      },
-    })
-  }
-
-  const showCreateFaction = () => {
-    dialog.open(FactionCreate, {
-      props: {
-        header: 'Create Faction',
-        style: {
-          width: '500px',
-        },
-        breakpoints: {
-          '960px': '75vw',
-          '640px': '90vw',
-        },
-        modal: true,
-      },
-      data: {
-      },
-    })
-  }
   return {
-    showUpdateFaction,
-    showCreateFaction,
+    requestPromotion: (data: RequestPromotionInfo) => dialog.open(requestPromotionDialogLoader, { header: 'Request Promotion', data: data }),
   }
 }

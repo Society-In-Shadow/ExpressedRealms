@@ -5,7 +5,7 @@ namespace ExpressedRealms.Expressions.Repository.CharacterFactions;
 
 public interface ICharacterFactionRepository
 {
-    Task<int> JoinFaction(CharacterFactionMapping characterFactionMapping);
+    Task<int> AddCharacterFactionMapping(CharacterFactionMapping characterFactionMapping);
     Task<List<CharacterFactionDto>> GetLatestPlayerFactionLevels(int characterId);
     Task<PlayerFactionInfoDto?> GetPlayerFactionInfo(int characterId);
     Task<List<BasicFactionLevelProjection>> GetFactionLevels(int characterId);

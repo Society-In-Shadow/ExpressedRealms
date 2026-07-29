@@ -1,24 +1,11 @@
 import { object, string } from 'yup'
 import { type GenericForm, useGenericForm } from '@/utilities/formUtilities'
-import type { CreateSingleFactionInfo } from '@/components/expressions/factions/types.ts'
-import type { ListItem } from '@/types/ListItem.ts'
+import type { CreateSingleFactionInfo } from '@/components/characters/wizard/factions/types.ts'
 
 const validationSchema = object({
-  name: string()
-    .required()
-    .max(250)
-    .label('Name'),
-  background: string()
-    .required()
+  requestReason: string()
     .max(20_000)
-    .label('Background'),
-  knowledge: object<ListItem>()
-    .required()
-    .label('Faction Knowledge'),
-  specialization: string()
-    .required()
-    .label('Faction Specialization')
-    .max(250),
+    .label('Request Reason'),
 })
 
 export function getValidationInstance(): GenericForm<CreateSingleFactionInfo> {

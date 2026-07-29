@@ -15,7 +15,7 @@ internal static class PowerAuditTrailExtensions
             {
                 case "id":
                 case "clone_source_id":
-                case "clone_token":
+                case "clone_batch_id":
                     continue;
 
                 case "name":

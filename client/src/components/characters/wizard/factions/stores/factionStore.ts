@@ -1,7 +1,11 @@
 import { defineQueryOptions, useMutation, useQueryCache } from '@pinia/colada'
 import { characterFactionService } from '@/components/characters/wizard/factions/services/factionService.ts'
 import { handleValidationErrors } from '@/utilities/piniaColadaUtilities.ts'
-import type { LeaveFactionInfo, PickFactionInfo } from '@/components/characters/wizard/factions/types.ts'
+import type {
+  LeaveFactionInfo,
+  PickFactionInfo,
+  RequestPromotionInfo,
+} from '@/components/characters/wizard/factions/types.ts'
 import toaster from '@/services/Toasters'
 
 export const CHARACTER_FACTION_QUERY_KEYS = {
@@ -38,6 +42,20 @@ export const leaveFaction = (onValidationError?: (errors: Record<string, any>) =
     async onSuccess() {
       await queryCache.invalidateQueries({ key: CHARACTER_FACTION_QUERY_KEYS.root })
       toaster.success('Successfully left the faction!')
+    },
+    onError(error: any) {
+      handleValidationErrors(error, onValidationError)
+    },
+  })
+}
+
+export const requestPromotion = (onValidationError?: (errors: Record<string, any>) => void | undefined) => {
+  const queryCache = useQueryCache()
+
+  return useMutation({
+    mutation: ({ data }: { data: RequestPromotionInfo }) => characterFactionService.requestPromotion(data.characterId, data.factionLevelId, data.requestReason),
+    async onSuccess() {
+      await queryCache.invalidateQueries({ key: CHARACTER_FACTION_QUERY_KEYS.root })
     },
     onError(error: any) {
       handleValidationErrors(error, onValidationError)

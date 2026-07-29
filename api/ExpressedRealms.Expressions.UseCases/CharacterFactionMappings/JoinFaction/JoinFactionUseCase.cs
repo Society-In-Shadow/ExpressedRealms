@@ -1,4 +1,5 @@
 using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.DB.Models.Factions.CharacterFactionMappingModels;
 using ExpressedRealms.Expressions.Repository.CharacterFactions;
 using ExpressedRealms.Expressions.Repository.Factions;
 using ExpressedRealms.UseCases.Shared;
@@ -42,8 +43,8 @@ internal sealed class JoinFactionUseCase(
                 "This faction does not exist for the character's expression."
             );
 
-        var factionId = await characterFactionRepository.JoinFaction(
-            new DB.Models.Factions.CharacterFactionMappingModels.CharacterFactionMapping()
+        var factionId = await characterFactionRepository.AddCharacterFactionMapping(
+            new CharacterFactionMapping()
             {
                 CharacterId = model.CharacterId,
                 FactionLevelId = factionRankId.Value,
