@@ -25,7 +25,7 @@ import DailyCheckin from '@/components/conCheckin/support/DailyCheckin.vue'
 import { useRoute } from 'vue-router'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 import FactionCharacterList from '@/components/characters/character/factions/FactionCharacterList.vue'
-import { FeatureFlags } from '@/types/FeatureFlags.ts'
+import { hasFlag } from '@/stores/featureFlags/featureFlagStore.ts'
 
 const userPermissionInfo = userPermissionStore()
 const permissionCheck = userPermissionInfo.permissionCheck
@@ -59,7 +59,7 @@ const route = useRoute()
           <Tab value="0">
             Proficiencies
           </Tab>
-          <Tab v-if="FeatureFlags.ShowFactions" value="8">
+          <Tab v-if="hasFlag.ShowFactions" value="8">
             Faction
           </Tab>
           <Tab value="1">
@@ -112,7 +112,7 @@ const route = useRoute()
           <TabPanel value="7">
             <DailyCheckin :character-id="Number.parseInt(route.params.id as string)" />
           </TabPanel>
-          <TabPanel v-if="FeatureFlags.ShowFactions" value="8">
+          <TabPanel v-if="hasFlag.ShowFactions" value="8">
             <FactionCharacterList />
           </TabPanel>
         </TabPanels>

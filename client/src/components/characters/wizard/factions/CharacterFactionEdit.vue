@@ -75,7 +75,13 @@ function approvalStatus(level: FactionLevel) {
   if (!data.value) return null
   const currentLevel = data.value!.factionLevels.find(f => f.factionLevelId == level.id)
   const isAwaiting = currentLevel!.approvalDate == null && currentLevel!.requestedPromotion
-  return isAwaiting ? 'Awaiting Promotion' : currentLevel!.approvalDate != null ? 'Approved' : 'Not Approved'
+  if (isAwaiting) {
+    return 'Awaiting Promotion'
+  }
+  else if (currentLevel!.approvalDate != null) {
+    return 'Approved'
+  }
+  return 'Not Approved'
 }
 
 </script>
