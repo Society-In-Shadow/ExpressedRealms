@@ -462,6 +462,8 @@ public static class CharacterReferenceBookletReport
         MergeField(fields, "CharacterClass", basicInfo.Expression);
         MergeField(fields, "Subtype", basicInfo.ProgressionPath);
         MergeField(fields, "XL", basicInfo.CharacterLevel);
+        MergeField(fields, "FactionName", basicInfo.FactionName);
+        MergeField(fields, "FactionRank", basicInfo.FactionRank);
     }
 
     private static void FillInTraits(PdfAcroField.PdfAcroFieldCollection fields, Traits traits)

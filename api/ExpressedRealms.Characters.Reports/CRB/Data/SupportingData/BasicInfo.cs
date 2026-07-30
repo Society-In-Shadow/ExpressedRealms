@@ -10,5 +10,7 @@ public class BasicInfo
     public required string CharacterLevel { get; set; }
     public required string LookupId { get; set; }
     public required string EventName { get; set; }
+    public required string FactionName { get; set; }
+    public required string FactionRank { get; set; }
     public int CurrentDay { get; set; }
 }
