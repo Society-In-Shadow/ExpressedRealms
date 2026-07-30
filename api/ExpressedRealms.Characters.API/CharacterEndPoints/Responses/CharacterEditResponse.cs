@@ -18,7 +18,13 @@ internal record CharacterEditResponse
         SecondaryProgressionId = dto.SecondaryProgressionId;
         IsRetired = dto.IsRetired;
         IsArchetypeCharacter = dto.IsArchetypeCharacter;
+        FactionRank = dto.FactionRank;
+        FactionName = dto.FactionName;
     }
+
+    public string? FactionName { get; set; }
+
+    public string? FactionRank { get; set; }
 
     public bool IsArchetypeCharacter { get; set; }
 

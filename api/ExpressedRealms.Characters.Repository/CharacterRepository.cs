@@ -8,6 +8,7 @@ using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Characters;
 using ExpressedRealms.DB.Models.Statistics.CharacterStatMappings;
+using ExpressedRealms.Expressions.Repository.CharacterFactions;
 using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.Repositories.Shared;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
@@ -25,7 +26,8 @@ internal sealed class CharacterRepository(
     AddCharacterDtoValidator addValidator,
     CancellationToken cancellationToken,
     ICharacterSkillRepository skillRepository,
-    IXpRepository xpRepository
+    IXpRepository xpRepository,
+    ICharacterFactionRepository characterFactionRepository
 ) : ICharacterRepository
 {
     public async Task<List<CharacterListDto>> GetCharactersAsync()
@@ -97,10 +99,10 @@ internal sealed class CharacterRepository(
                 && allowedStatuses.Contains(x.PublishStatusId)
                 && x.CmsTypeId == 1
             )
-            .Select(x => x.ExpressionSubTypeId)
+            .Select(x => x.ExpressionSubTypeId!.Value)
             .FirstAsync();
 
-        return expressionSubTypeId!.Value;
+        return expressionSubTypeId;
     }
 
     public Task<Guid> GetPlayerId(string currentUserId)
@@ -219,8 +221,19 @@ internal sealed class CharacterRepository(
             })
             .FirstOrDefaultAsync(cancellationToken);
 
+
+        
         if (character is null)
             return Result.Fail(new NotFoundFailure("Character"));
+        
+        var factionInfo = await characterFactionRepository.GetPlayerFactionInfo(id);
+
+        if (factionInfo is not null)
+        {
+            character.FactionRank = factionInfo.FactionRank;
+            character.FactionName = factionInfo.FactionName;
+        }
+            
 
         return Result.Ok(character);
     }

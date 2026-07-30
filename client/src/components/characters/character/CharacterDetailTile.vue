@@ -53,7 +53,7 @@ const canEditCharacterSheet = computed(() => (characterInfo.isOwner && !characte
             <div class="d-flex flex-row align-content-between gap-3">
               <div class="d-md-none d-block flex-fill">
                 <div v-if="!experienceInfo.isLoading && !characterInfo.isInCharacterCreation">
-                  <em><span>XL: {{ experienceInfo.characterLevel }}</span> - {{ characterInfo.expression }}</em>
+                  <em>{{ characterInfo.expression }} - <span>XL: {{ experienceInfo.characterLevel }}</span></em>
                 </div>
               </div>
               <div class="align-content-center">
@@ -63,13 +63,13 @@ const canEditCharacterSheet = computed(() => (characterInfo.isOwner && !characte
             </div>
           </div>
           <div v-if="!experienceInfo.isLoading && !characterInfo.isInCharacterCreation" class="d-md-block d-none">
-            <em><span>XL: {{ experienceInfo.characterLevel }}</span> - {{ characterInfo.expression }}</em>
+            <em>{{ characterInfo.expression }} - <span>XL: {{ experienceInfo.characterLevel }}</span></em>
           </div>
           <div v-if="!experienceInfo.isLoading && characterInfo.isInCharacterCreation">
             <em>In Character Creation - {{ characterInfo.expression }}</em>
           </div>
-          <div v-if="hasFlag.ShowFactionDropdown">
-            <em>{{ characterInfo.faction?.name ?? 'No Faction' }}</em>
+          <div v-if="characterInfo.factionName && hasFlag.ShowFactions">
+            <em>{{ characterInfo.factionName }} ({{ characterInfo.factionRank }})</em>
           </div>
         </div>
         <div class="mt-3 text-right">
