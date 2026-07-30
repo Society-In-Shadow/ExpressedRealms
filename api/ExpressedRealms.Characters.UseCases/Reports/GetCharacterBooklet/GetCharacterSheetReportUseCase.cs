@@ -223,7 +223,7 @@ public class GetCharacterSheetReportUseCase(
             {
                 Name = x.Name,
                 Level = x.Level,
-                XPCost = x.XPCost,
+                XPCost = x.XpCost,
             })
             .ToList();
 
