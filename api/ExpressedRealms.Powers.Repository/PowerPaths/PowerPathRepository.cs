@@ -64,6 +64,14 @@ internal sealed class PowerPathRepository(
 
         return Result.Ok(items);
     }
+    
+    public async Task<List<PowerInformation>> GetPowers(List<int> powerIds)
+    {
+        return await context
+            .Powers.Where(y => powerIds.Contains(y.Id))
+            .Select(PowerInformation.PowerSelector())
+            .ToListAsync(cancellationToken);
+    }
 
     public async Task<Result<List<PowerPathInformation>>> GetPowerPathsAsync(int expressionId)
     {

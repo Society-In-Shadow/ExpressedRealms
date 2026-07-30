@@ -43,6 +43,20 @@ internal sealed class CharacterFactionRepository(
             })
             .ToListAsync(cancellationToken);
     }
+    
+    public async Task<List<AppliedFactionPowersProjection>> GetAppliedFactionPowerIds(int characterId)
+    {
+        return await context
+            .CharacterFactionMappings.Where(x => x.CharacterId == characterId && x.FactionLevel.PowerId != null)
+            .Where(x => x.ApprovalDate != null)
+            .OrderBy(x => x.FactionLevel.FactionRankId)
+            .Select(x => new AppliedFactionPowersProjection()
+            {
+                FactionRankName = $"{x.FactionLevel.FactionRank.Name} Rank",
+                PowerId = x.FactionLevel.PowerId!.Value
+            })
+            .ToListAsync(cancellationToken);
+    }
 
     public async Task<List<BasicFactionLevelProjection>> GetFactionLevels(int characterId)
     {
