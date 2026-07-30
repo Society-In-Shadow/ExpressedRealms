@@ -205,8 +205,9 @@ public class GetCharacterSheetReportUseCase(
     private async Task<List<PowerInfo>> GetPowerInfo(GetCharacterSheetReportModel model)
     {
         var powerMappings = await mappingRepository.GetCharacterPowerInfoForCRB(model.CharacterId);
+        var factionMappings = await characterFactionRepository.GetAppliedFactionPowerInfoForCrb(model.CharacterId);
 
-        return powerMappings
+        var powers = powerMappings
             .Select(x => new PowerInfo()
             {
                 Name = x.Name,
@@ -214,6 +215,16 @@ public class GetCharacterSheetReportUseCase(
                 XPCost = x.Exp.ToString(),
             })
             .ToList();
+        
+        var factionPowers = factionMappings.Select(x => new PowerInfo()
+            {
+                Name = x.Name,
+                Level = x.Level,
+                XPCost = x.XPCost,
+            })
+            .ToList();
+
+        return powers.Concat(factionPowers).ToList();
     }
 
     private async Task<SkillInfo> GetSkillInfo(GetCharacterSheetReportModel model)
