@@ -32,9 +32,7 @@ public class LeaveFactionUseCaseTests
         A.CallTo(() =>
                 _characterFactionRepository.GetFactionLevelsForBulkEditing(_model.CharacterId)
             )
-            .Returns(
-                new List<CharacterFactionMapping>()
-            );
+            .Returns(new List<CharacterFactionMapping>());
 
         var validator = new LeaveFactionModelValidator();
 
@@ -76,12 +74,11 @@ public class LeaveFactionUseCaseTests
     [Fact]
     public async Task UseCase_WillSoftDelete_AndBulkEdit_AllFactionMappings()
     {
-        var factionMappings =
-            new List<CharacterFactionMapping>()
-            {
-                new() { Id = 7, CharacterId = _model.CharacterId },
-                new() { Id = 8, CharacterId = _model.CharacterId },
-            };
+        var factionMappings = new List<CharacterFactionMapping>()
+        {
+            new() { Id = 7, CharacterId = _model.CharacterId },
+            new() { Id = 8, CharacterId = _model.CharacterId },
+        };
 
         A.CallTo(() =>
                 _characterFactionRepository.GetFactionLevelsForBulkEditing(_model.CharacterId)
@@ -92,9 +89,7 @@ public class LeaveFactionUseCaseTests
 
         A.CallTo(() =>
                 _characterFactionRepository.BulkEditCharacterFactionAsync(
-                    A<
-                        List<CharacterFactionMapping>
-                    >.That.Matches(k =>
+                    A<List<CharacterFactionMapping>>.That.Matches(k =>
                         k.Count == 2 && k.All(x => x.IsDeleted) && k.All(x => x.DeletedAt != null)
                     )
                 )

@@ -221,11 +221,9 @@ internal sealed class CharacterRepository(
             })
             .FirstOrDefaultAsync(cancellationToken);
 
-
-        
         if (character is null)
             return Result.Fail(new NotFoundFailure("Character"));
-        
+
         var factionInfo = await characterFactionRepository.GetPlayerFactionInfo(id);
 
         if (factionInfo is not null)
@@ -233,7 +231,6 @@ internal sealed class CharacterRepository(
             character.FactionRank = factionInfo.FactionRank;
             character.FactionName = factionInfo.FactionName;
         }
-            
 
         return Result.Ok(character);
     }

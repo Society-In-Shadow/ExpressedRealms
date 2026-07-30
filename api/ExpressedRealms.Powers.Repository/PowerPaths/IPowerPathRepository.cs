@@ -4,6 +4,7 @@ using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathEdit;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathLIst;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathSorting;
 using ExpressedRealms.Powers.Repository.PowerPaths.DTOs.PowerPathToC;
+using ExpressedRealms.Powers.Repository.Powers.DTOs.PowerList;
 using FluentResults;
 
 namespace ExpressedRealms.Powers.Repository.PowerPaths;
@@ -19,4 +20,5 @@ public interface IPowerPathRepository
     Task<Result<List<PowerPathToc>>> GetPowerPathAndPowers(int expressionId);
     Task<Result<List<PowerPathToc>>> GetPowerPathAndPowers(List<int> powerIds);
     Task AddPowerToPowerPath(PowerPathPowerMapping model);
+    Task<List<PowerInformation>> GetPowers(List<int> powerIds);
 }

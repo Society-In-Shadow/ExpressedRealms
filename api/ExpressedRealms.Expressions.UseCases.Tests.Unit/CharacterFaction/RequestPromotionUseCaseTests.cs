@@ -209,7 +209,7 @@ public class RequestPromotionUseCaseTests
             "GO already approved this rank."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_FactionLevelId_WillFail_WhenGoAlreadyApprovedRank_OnceRemoved()
     {

@@ -39,9 +39,7 @@ public class JoinFactionUseCaseTests
             )
             .Returns(FactionRankId);
         A.CallTo(() =>
-                _characterFactionRepository.AddCharacterFactionMapping(
-                    A<CharacterFactionMapping>._
-                )
+                _characterFactionRepository.AddCharacterFactionMapping(A<CharacterFactionMapping>._)
             )
             .Returns(CharacterFactionMappingId);
 
@@ -115,11 +113,10 @@ public class JoinFactionUseCaseTests
 
         A.CallTo(() =>
                 _characterFactionRepository.AddCharacterFactionMapping(
-                    A<CharacterFactionMapping>.That.Matches(
-                        k =>
-                            k.CharacterId == _model.CharacterId
-                            && k.FactionLevelId == FactionRankId
-                            && !k.RequestPromotion
+                    A<CharacterFactionMapping>.That.Matches(k =>
+                        k.CharacterId == _model.CharacterId
+                        && k.FactionLevelId == FactionRankId
+                        && !k.RequestPromotion
                     )
                 )
             )
@@ -137,8 +134,8 @@ public class JoinFactionUseCaseTests
 
         A.CallTo(() =>
                 _characterFactionRepository.AddCharacterFactionMapping(
-                    A<CharacterFactionMapping>.That.Matches(
-                        k => k.ApprovalDate >= before && k.ApprovalDate <= after
+                    A<CharacterFactionMapping>.That.Matches(k =>
+                        k.ApprovalDate >= before && k.ApprovalDate <= after
                     )
                 )
             )

@@ -24,7 +24,7 @@ internal static class CharacterFactionMappingEndpoints
             "{characterId}/factions/{factionId}",
             JoinFactionEndpoint.ExecuteAsync
         );
-        
+
         endpointGroup.MapPut(
             "{characterId}/factions/requestPromotion",
             RequestPromotionEndpoint.ExecuteAsync

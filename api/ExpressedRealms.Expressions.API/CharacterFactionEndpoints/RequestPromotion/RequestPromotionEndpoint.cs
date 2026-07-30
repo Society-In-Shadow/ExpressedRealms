@@ -16,11 +16,11 @@ public static class RequestPromotionEndpoint
     )
     {
         var results = await leaveFactionUseCase.ExecuteAsync(
-            new ()
+            new()
             {
-                CharacterId = characterId, 
-                FactionLevelId = request.FactionLevelId, 
-                RequestReason = request.RequestReason
+                CharacterId = characterId,
+                FactionLevelId = request.FactionLevelId,
+                RequestReason = request.RequestReason,
             }
         );
 

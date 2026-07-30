@@ -351,41 +351,42 @@ public static class CharacterReferenceBookletReport
 
         MergeField(fields, "PowerPoints", powerPoints.Max().ToString());
 
+        var offensiveCenterOffset = XUnitPt.FromInch(8.72);
         TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Strike.ToString(),
-            XUnitPt.FromInch(2.15),
-            XUnitPt.FromInch(8.75)
+            XUnitPt.FromInch(2.14),
+            offensiveCenterOffset
         );
         TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Thrust.ToString(),
-            XUnitPt.FromInch(2.40),
-            XUnitPt.FromInch(8.75)
+            XUnitPt.FromInch(2.34),
+            offensiveCenterOffset
         );
         TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Throw.ToString(),
-            XUnitPt.FromInch(2.63),
-            XUnitPt.FromInch(8.75)
+            XUnitPt.FromInch(2.54),
+            offensiveCenterOffset
         );
         TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Shoot.ToString(),
-            XUnitPt.FromInch(2.87),
-            XUnitPt.FromInch(8.75)
+            XUnitPt.FromInch(2.75),
+            offensiveCenterOffset
         );
         TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Cast.ToString(),
-            XUnitPt.FromInch(3.10),
-            XUnitPt.FromInch(8.75)
+            XUnitPt.FromInch(2.95),
+            offensiveCenterOffset
         );
         TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Project.ToString(),
-            XUnitPt.FromInch(3.33),
-            XUnitPt.FromInch(8.75)
+            XUnitPt.FromInch(3.14),
+            offensiveCenterOffset
         );
 
         MergeField(fields, "Strike", dataProficiencyInfo.Strike.ToString());
@@ -395,41 +396,42 @@ public static class CharacterReferenceBookletReport
         MergeField(fields, "Cast", dataProficiencyInfo.Cast.ToString());
         MergeField(fields, "Project", dataProficiencyInfo.Project.ToString());
 
+        var defensiveOffset = XUnitPt.FromInch(7.55);
         TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Dodge.ToString(),
-            XUnitPt.FromInch(2.15),
-            XUnitPt.FromInch(7.60)
+            XUnitPt.FromInch(2.14),
+            defensiveOffset
         );
         TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Parry.ToString(),
-            XUnitPt.FromInch(2.40),
-            XUnitPt.FromInch(7.60)
+            XUnitPt.FromInch(2.34),
+            defensiveOffset
         );
         TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.EvadeThrow.ToString(),
-            XUnitPt.FromInch(2.63),
-            XUnitPt.FromInch(7.60)
+            XUnitPt.FromInch(2.54),
+            defensiveOffset
         );
         TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.EvadeShoot.ToString(),
-            XUnitPt.FromInch(2.87),
-            XUnitPt.FromInch(7.60)
+            XUnitPt.FromInch(2.75),
+            defensiveOffset
         );
         TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Ward.ToString(),
-            XUnitPt.FromInch(3.10),
-            XUnitPt.FromInch(7.60)
+            XUnitPt.FromInch(2.95),
+            defensiveOffset
         );
         TextPrintUtilities.PrintStatInfo(
             page,
             dataProficiencyInfo.Deflect.ToString(),
-            XUnitPt.FromInch(3.33),
-            XUnitPt.FromInch(7.60)
+            XUnitPt.FromInch(3.14),
+            defensiveOffset
         );
 
         MergeField(fields, "Dodge", dataProficiencyInfo.Dodge.ToString());
@@ -462,6 +464,8 @@ public static class CharacterReferenceBookletReport
         MergeField(fields, "CharacterClass", basicInfo.Expression);
         MergeField(fields, "Subtype", basicInfo.ProgressionPath);
         MergeField(fields, "XL", basicInfo.CharacterLevel);
+        MergeField(fields, "FactionName", basicInfo.FactionName);
+        MergeField(fields, "FactionRank", basicInfo.FactionRank);
     }
 
     private static void FillInTraits(PdfAcroField.PdfAcroFieldCollection fields, Traits traits)

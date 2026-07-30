@@ -43,44 +43,51 @@ internal sealed class RequestPromotionUseCase(
                 "This faction level does not exist."
             );
 
-        var characterFactionInfo = await characterFactionRepository.GetPlayerFactionInfo(model.CharacterId);
-        if(characterFactionInfo is null)
+        var characterFactionInfo = await characterFactionRepository.GetPlayerFactionInfo(
+            model.CharacterId
+        );
+        if (characterFactionInfo is null)
             return ValidationHelper.AddSingleValidationFailure(
                 nameof(model.CharacterId),
                 "Character does not have a faction."
             );
-        
-        if(factionLevel.FactionId != characterFactionInfo.FactionId)
+
+        if (factionLevel.FactionId != characterFactionInfo.FactionId)
             return ValidationHelper.AddSingleValidationFailure(
                 nameof(model.FactionLevelId),
                 "This faction level does not belong to the character's faction."
             );
-        
-        if(factionLevel.FactionRankId == FactionRankEnum.Basic)
+
+        if (factionLevel.FactionRankId == FactionRankEnum.Basic)
             return ValidationHelper.AddSingleValidationFailure(
                 nameof(model.FactionLevelId),
                 "Basic faction levels are automatically approved upon joining."
             );
-        
-        if(factionLevel.FactionRankId <= characterFactionInfo.FactionRankId)
+
+        if (factionLevel.FactionRankId <= characterFactionInfo.FactionRankId)
             return ValidationHelper.AddSingleValidationFailure(
                 nameof(model.FactionLevelId),
                 "GO already approved this rank."
             );
-        
-        if(characterFactionInfo.FactionRankId != factionLevel.FactionRankId - 1)
+
+        if (characterFactionInfo.FactionRankId != factionLevel.FactionRankId - 1)
             return ValidationHelper.AddSingleValidationFailure(
                 nameof(model.FactionLevelId),
                 "Character does not have a previous rank approved."
             );
 
-        var hasKnowledgePrerequisites = await knowledgeLevelRepository.HasFactionPrerequisites(model.CharacterId, factionLevel.KnowledgeId!.Value, factionLevel.KnowledgeLevelId!.Value, factionLevel.Specialization!);
-        if(!hasKnowledgePrerequisites)
+        var hasKnowledgePrerequisites = await knowledgeLevelRepository.HasFactionPrerequisites(
+            model.CharacterId,
+            factionLevel.KnowledgeId!.Value,
+            factionLevel.KnowledgeLevelId!.Value,
+            factionLevel.Specialization!
+        );
+        if (!hasKnowledgePrerequisites)
             return ValidationHelper.AddSingleValidationFailure(
                 nameof(model.FactionLevelId),
                 "Character does not have one or more of the required knowledge, knowledge level, or specialization for this faction level."
             );
-        
+
         await characterFactionRepository.AddCharacterFactionMapping(
             new CharacterFactionMapping()
             {

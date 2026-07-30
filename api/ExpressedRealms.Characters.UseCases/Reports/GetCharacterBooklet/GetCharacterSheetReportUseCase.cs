@@ -12,8 +12,10 @@ using ExpressedRealms.Characters.Repository.Stats.Enums;
 using ExpressedRealms.Characters.Repository.Wealth;
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
+using ExpressedRealms.Expressions.Repository.CharacterFactions;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Powers.Repository.CharacterPower;
+using ExpressedRealms.Shared;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
@@ -31,6 +33,7 @@ public class GetCharacterSheetReportUseCase(
     IContactRepository contactRepository,
     IEventCheckinRepository eventCheckinRepository,
     IWealthRepository wealthRepository,
+    ICharacterFactionRepository characterFactionRepository,
     GetCharacterSheetReportModelValidator validator,
     CancellationToken cancellationToken
 ) : IGetCharacterSheetReportUseCase
@@ -202,8 +205,11 @@ public class GetCharacterSheetReportUseCase(
     private async Task<List<PowerInfo>> GetPowerInfo(GetCharacterSheetReportModel model)
     {
         var powerMappings = await mappingRepository.GetCharacterPowerInfoForCRB(model.CharacterId);
+        var factionMappings = await characterFactionRepository.GetAppliedFactionPowerInfoForCrb(
+            model.CharacterId
+        );
 
-        return powerMappings
+        var powers = powerMappings
             .Select(x => new PowerInfo()
             {
                 Name = x.Name,
@@ -211,6 +217,17 @@ public class GetCharacterSheetReportUseCase(
                 XPCost = x.Exp.ToString(),
             })
             .ToList();
+
+        var factionPowers = factionMappings
+            .Select(x => new PowerInfo()
+            {
+                Name = x.Name,
+                Level = x.Level,
+                XPCost = x.XpCost,
+            })
+            .ToList();
+
+        return powers.Concat(factionPowers).ToList();
     }
 
     private async Task<SkillInfo> GetSkillInfo(GetCharacterSheetReportModel model)
@@ -281,6 +298,7 @@ public class GetCharacterSheetReportUseCase(
         var character = await characterRepository.GetCharacterInfoForCRB(model.CharacterId);
         var characterLevel = await xpRepository.GetCharacterXpLevel(model.CharacterId);
         var eventInfo = await eventCheckinRepository.GetActiveEventInfoOrDefaultAsync();
+        var factionInfo = await characterFactionRepository.GetPlayerFactionInfo(model.CharacterId);
         var currentDay = 0;
         if (eventInfo is not null)
         {
@@ -300,6 +318,8 @@ public class GetCharacterSheetReportUseCase(
             CharacterLevel = characterLevel.ToString(),
             EventName = eventInfo?.Name ?? "No Active Event During Print",
             CurrentDay = currentDay,
+            FactionName = factionInfo?.FactionName.Limit(21, ".") ?? "No Active Faction",
+            FactionRank = factionInfo?.FactionRank.Limit(7, ".") ?? "-",
         };
         return basicInfo;
     }
