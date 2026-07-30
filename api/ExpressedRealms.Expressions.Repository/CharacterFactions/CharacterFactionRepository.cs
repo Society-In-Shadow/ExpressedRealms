@@ -10,7 +10,9 @@ internal sealed class CharacterFactionRepository(
     CancellationToken cancellationToken
 ) : ICharacterFactionRepository
 {
-    public async Task<int> AddCharacterFactionMapping(CharacterFactionMapping characterFactionMapping)
+    public async Task<int> AddCharacterFactionMapping(
+        CharacterFactionMapping characterFactionMapping
+    )
     {
         context.CharacterFactionMappings.Add(characterFactionMapping);
         await context.SaveChangesAsync(cancellationToken);
@@ -43,32 +45,38 @@ internal sealed class CharacterFactionRepository(
             })
             .ToListAsync(cancellationToken);
     }
-    
-    public async Task<List<AppliedFactionPowersProjection>> GetAppliedFactionPowerIds(int characterId)
+
+    public async Task<List<AppliedFactionPowersProjection>> GetAppliedFactionPowerIds(
+        int characterId
+    )
     {
         return await context
-            .CharacterFactionMappings.Where(x => x.CharacterId == characterId && x.FactionLevel.PowerId != null)
+            .CharacterFactionMappings.Where(x =>
+                x.CharacterId == characterId && x.FactionLevel.PowerId != null
+            )
             .Where(x => x.ApprovalDate != null)
             .OrderBy(x => x.FactionLevel.FactionRankId)
             .Select(x => new AppliedFactionPowersProjection()
             {
                 FactionRankName = $"{x.FactionLevel.FactionRank.Name} Rank",
-                PowerId = x.FactionLevel.PowerId!.Value
+                PowerId = x.FactionLevel.PowerId!.Value,
             })
             .ToListAsync(cancellationToken);
     }
-    
+
     public async Task<List<PowerInfoProjection>> GetAppliedFactionPowerInfoForCrb(int characterId)
     {
         return await context
-            .CharacterFactionMappings.Where(x => x.CharacterId == characterId && x.FactionLevel.PowerId != null)
+            .CharacterFactionMappings.Where(x =>
+                x.CharacterId == characterId && x.FactionLevel.PowerId != null
+            )
             .Where(x => x.ApprovalDate != null)
             .OrderBy(x => x.FactionLevel.FactionRankId)
             .Select(x => new PowerInfoProjection()
-            { 
+            {
                 Name = x.FactionLevel.Power!.Name,
                 Level = x.FactionLevel.Power.PowerLevel.Name,
-                XPCost = "-"
+                XPCost = "-",
             })
             .ToListAsync(cancellationToken);
     }
@@ -107,7 +115,9 @@ internal sealed class CharacterFactionRepository(
     public async Task<PlayerFactionInfoDto?> GetPlayerFactionInfo(int characterId)
     {
         return await context
-            .CharacterFactionMappings.Where(x => x.CharacterId == characterId && x.ApprovalDate != null)
+            .CharacterFactionMappings.Where(x =>
+                x.CharacterId == characterId && x.ApprovalDate != null
+            )
             .OrderByDescending(x => x.FactionLevel.FactionRank.Id)
             .Select(x => new PlayerFactionInfoDto()
             {

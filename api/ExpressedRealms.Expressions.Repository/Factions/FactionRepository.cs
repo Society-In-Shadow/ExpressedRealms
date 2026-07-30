@@ -60,7 +60,10 @@ internal sealed class FactionRepository(
 
     public Task<FactionLevel?> GetFactionLevelAsync(int factionLevelId)
     {
-        return context.FactionLevels.FirstOrDefaultAsync(x => x.Id == factionLevelId, cancellationToken);
+        return context.FactionLevels.FirstOrDefaultAsync(
+            x => x.Id == factionLevelId,
+            cancellationToken
+        );
     }
 
     public async Task<List<FactionDto>> GetFactions(int expressionId)

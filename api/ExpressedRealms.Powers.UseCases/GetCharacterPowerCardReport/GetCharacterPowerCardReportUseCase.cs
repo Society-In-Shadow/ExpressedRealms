@@ -34,11 +34,12 @@ public class GetCharacterPowerCardReportUseCase(
             return Result.Fail(result.Errors);
 
         var expression = await characterRepository.GetCharacterInfoAsync(model.CharacterId);
-        
+
         var powerCards = await GetPowerCardData(model, expression);
         var factionPowerCards = await GetFactionPowerCards(model);
 
-        var cards = powerCards.Concat(factionPowerCards)
+        var cards = powerCards
+            .Concat(factionPowerCards)
             .Select(x => new DataCard() { CardType = CardType.PowerCard, CardData = x })
             .ToList();
 
@@ -57,7 +58,10 @@ public class GetCharacterPowerCardReportUseCase(
         return reportStream;
     }
 
-    private async Task<List<PowerCardData>> GetPowerCardData(GetCharacterPowerCardReportModel model, Result<GetEditCharacterDto> expression)
+    private async Task<List<PowerCardData>> GetPowerCardData(
+        GetCharacterPowerCardReportModel model,
+        Result<GetEditCharacterDto> expression
+    )
     {
         var selectedPowerInformation = await mappingRepository.GetCharacterPowerMappingInfo(
             model.CharacterId
@@ -65,7 +69,7 @@ public class GetCharacterPowerCardReportUseCase(
         var data = await repository.GetPowerPathAndPowers(
             selectedPowerInformation.Select(x => x.PowerId).ToList()
         );
-        
+
         var powerCards = data
             .Value.SelectMany(x =>
                 x.Powers.Select(y => new PowerCardData()
@@ -103,16 +107,18 @@ public class GetCharacterPowerCardReportUseCase(
         return powerCards;
     }
 
-    private async Task<List<PowerCardData>> GetFactionPowerCards(GetCharacterPowerCardReportModel model)
+    private async Task<List<PowerCardData>> GetFactionPowerCards(
+        GetCharacterPowerCardReportModel model
+    )
     {
         var factionInfo = await factionRepository.GetPlayerFactionInfo(model.CharacterId);
-        if(factionInfo == null)
+        if (factionInfo == null)
             return [];
 
         var factionPowerData = await factionRepository.GetAppliedFactionPowerIds(model.CharacterId);
         var factionPowerIds = factionPowerData.Select(x => x.PowerId).ToList();
         var factionPowers = await repository.GetPowers(factionPowerIds);
-        
+
         var lookup = factionPowers.ToDictionary(x => x.Id);
 
         var sortedFactionPowers = factionPowerIds
@@ -120,7 +126,8 @@ public class GetCharacterPowerCardReportUseCase(
             .Select(id => lookup[id])
             .ToList();
 
-        var factionPowerCards = sortedFactionPowers.Select(y => new PowerCardData()
+        var factionPowerCards = sortedFactionPowers
+            .Select(y => new PowerCardData()
             {
                 AreaOfEffect = y.AreaOfEffect.Name,
                 Name = y.Name,

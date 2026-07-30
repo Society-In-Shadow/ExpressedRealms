@@ -17,5 +17,10 @@ public interface ICharacterKnowledgeRepository
     Task<bool> HasExistingSpecializationForMappingEdit(int id, string name);
     Task<List<KnowledgeCrbProjection>> GetKnowledgesForCharacterCRB(int characterId);
     Task<List<SimpleCharacterKnowledgeProjection>> GetSimpleKnowledgesForCharacter(int characterId);
-    Task<bool> HasFactionPrerequisites(int characterId, int knowledgeId, int knowledgeLevel, string specialization);
+    Task<bool> HasFactionPrerequisites(
+        int characterId,
+        int knowledgeId,
+        int knowledgeLevel,
+        string specialization
+    );
 }

@@ -205,7 +205,9 @@ public class GetCharacterSheetReportUseCase(
     private async Task<List<PowerInfo>> GetPowerInfo(GetCharacterSheetReportModel model)
     {
         var powerMappings = await mappingRepository.GetCharacterPowerInfoForCRB(model.CharacterId);
-        var factionMappings = await characterFactionRepository.GetAppliedFactionPowerInfoForCrb(model.CharacterId);
+        var factionMappings = await characterFactionRepository.GetAppliedFactionPowerInfoForCrb(
+            model.CharacterId
+        );
 
         var powers = powerMappings
             .Select(x => new PowerInfo()
@@ -215,8 +217,9 @@ public class GetCharacterSheetReportUseCase(
                 XPCost = x.Exp.ToString(),
             })
             .ToList();
-        
-        var factionPowers = factionMappings.Select(x => new PowerInfo()
+
+        var factionPowers = factionMappings
+            .Select(x => new PowerInfo()
             {
                 Name = x.Name,
                 Level = x.Level,
@@ -316,7 +319,7 @@ public class GetCharacterSheetReportUseCase(
             EventName = eventInfo?.Name ?? "No Active Event During Print",
             CurrentDay = currentDay,
             FactionName = factionInfo?.FactionName.Limit(21, ".") ?? "No Active Faction",
-            FactionRank = factionInfo?.FactionRank.Limit(7, ".") ?? "-"
+            FactionRank = factionInfo?.FactionRank.Limit(7, ".") ?? "-",
         };
         return basicInfo;
     }
