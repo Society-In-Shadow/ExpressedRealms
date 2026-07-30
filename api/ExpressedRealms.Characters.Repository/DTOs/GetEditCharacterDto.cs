@@ -15,4 +15,6 @@ public sealed record GetEditCharacterDto
     public bool IsRetired { get; set; }
     public bool IsArchetypeCharacter { get; set; }
     public int? ExpressionSubTypeId { get; set; }
+    public string? FactionRank { get; set; }
+    public string? FactionName { get; set; }
 }

@@ -23,6 +23,8 @@ export const characterStore
         faction: {} as any,
         characterId: 0 as number,
         canModifyPrimaryCharacter: false as boolean,
+        factionRank: '' as string,
+        factionName: '' as string,
       }
     },
     actions: {
@@ -43,6 +45,8 @@ export const characterStore
             this.isRetired = response.data.isRetired
             this.isArchetypeCharacter = response.data.isArchetypeCharacter
             this.expressionSubTypeId = response.data.expressionSubTypeId
+            this.factionRank = response.data.factionRank
+            this.factionName = response.data.factionName
 
             if (hasFlag.ShowFactionDropdown) {
               await axios.get(`/characters/${characterId}/factionOptions`)
