@@ -1,3 +1,6 @@
+using ExpressedRealms.Authentication.PermissionCollection;
+using ExpressedRealms.Authentication.PermissionCollection.Configuration;
+using ExpressedRealms.Expressions.API.CharacterFactionEndpoints.ApprovePromotion;
 using ExpressedRealms.Expressions.API.CharacterFactionEndpoints.GetFactions;
 using ExpressedRealms.Expressions.API.CharacterFactionEndpoints.JoinFaction;
 using ExpressedRealms.Expressions.API.CharacterFactionEndpoints.LeaveFaction;
@@ -29,6 +32,9 @@ internal static class CharacterFactionMappingEndpoints
             "{characterId}/factions/requestPromotion",
             RequestPromotionEndpoint.ExecuteAsync
         );
+        
+        endpointGroup.MapPut("{characterId}/factions/approvePromotion", ApprovePromotionEndpoint.ExecuteAsync)
+            .RequirePermission(Permissions.Faction.ApprovePromotion);
 
         endpointGroup.MapDelete("{characterId}/factions/leave", LeaveFactionEndpoint.ExecuteAsync);
     }
