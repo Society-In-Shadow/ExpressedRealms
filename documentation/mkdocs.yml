@@ -27,26 +27,31 @@ repo_url: https://github.com/Society-In-Shadow/ExpressedRealms
 repo_name: Expressed Realms
 
 nav:
-  - API Design: apiDesign.md
-  - Architecture: architecture.md
-  - Backend Unit Testing: backendUnitTesting.md
+  - Setup / Architecture:
+      - API Design: apiDesign.md
+      - Architecture: architecture.md
+      - Creating GPG Keys: creatingGPGKeys.md
+      - Database: database.md
+      - Docker / Podman: docker-podman.md
+      - Fedora Setup: fedoraSetup.md
+      - Github Access Tokens: githubAccessTokens.md
+      - Migrations: migrations.md
+      - PGAdmin Setup: pgadminSetup.md
+      - Prospective Employers: prospectiveEmployers.md
+      - Windows Setup: windowsSetup.md
+      - Linux Setup: linuxSetupInstructions.md
+  - Testing:
+    - Backend Unit Testing: backendUnitTesting.md
+    - Component Testing: componentTesting.md
+    - Cypress: cypress.md
+    - Vite Testing: vitesting.md
   - CMS Sections: cmsSections.md
-  - Component Testing: componentTesting.md
-  - Creating GPG Keys: creatingGPGKeys.md
-  - Cypress: cypress.md
-  - Database: database.md
   - Dialogs: dialogs.md
   - Discord Support: discordSupport.md
-  - Docker / Podman: docker-podman.md
   - EF Core Practices: efCorePractices.md
-  - Fedora Setup: fedoraSetup.md
   - Forms: forms.md
-  - Migrations: migrations.md
+  - Modifier System: modifierSystem.md
   - Permissions & Policies: permissionsAndPolicies.md
-  - PGAdmin Setup: pgadminSetup.md
-  - Prospective Employers: prospectiveEmployers.md
   - Repository Standards: repositoryStandards.md
   - Scriban: scriban.md
   - Use Cases: useCases.md
-  - Vite Testing: vitesting.md
-  - Windows Setup: windowsSetup.md
