@@ -31,6 +31,10 @@ export interface CreateSingleFactionInfo {
   requestReason: string
 }
 
+export interface ApprovePromotionForm {
+  approvalReason: string
+}
+
 export interface PickFactionInfo {
   characterId: number
   factionId: number
@@ -43,6 +47,12 @@ export interface LeaveFactionInfo {
 export interface RequestPromotionInfo {
   characterId: number
   requestReason: string | null
+  factionLevelId: number
+}
+
+export interface ApprovePromotionInfo {
+  characterId: number
+  approvalReason: string | null
   factionLevelId: number
 }
 

@@ -68,7 +68,7 @@ function showRequestPromotionButton(level: FactionLevel, previousLevel: FactionL
   if (currentLevel.approvalDate == null && currentLevel.requestedPromotion)
     return false
   const previousLevelApproved = (data.value!.factionLevels.find(f => f.factionLevelId == previousLevel.id))?.approvalDate != null
-  return previousLevelApproved && currentLevel?.hasKnowledge && currentLevel?.hasKnowledgeLevel && currentLevel?.hasSpecialization
+  return previousLevelApproved && currentLevel?.hasKnowledge && currentLevel?.hasKnowledgeLevel && currentLevel?.hasSpecialization && !currentLevel.approvalDate
 }
 
 function approvalStatus(level: FactionLevel) {
@@ -108,6 +108,14 @@ function approvalStatus(level: FactionLevel) {
         <h4 class="m-0 p-0">
           <span class="text-color-secondary"><em>({{ approvalStatus(level) }})</em></span>
         </h4>
+        <div v-if="lookupFactionLevel(level)?.requestedPromotionReason">
+          <h3>Promotion Request</h3>
+          <p>{{ lookupFactionLevel(level)?.requestedPromotionReason }}</p>
+        </div>
+        <div v-if="lookupFactionLevel(level)?.approvalReason">
+          <h3>Approval Reason</h3>
+          <p>{{ lookupFactionLevel(level)?.approvalReason }}</p>
+        </div>
         <h3>Requirements:</h3>
         <div v-if="level.rankName == 'Basic'">
           No Requirements to join

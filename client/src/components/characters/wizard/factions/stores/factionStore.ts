@@ -7,6 +7,7 @@ import type {
   RequestPromotionInfo,
 } from '@/components/characters/wizard/factions/types.ts'
 import toaster from '@/services/Toasters'
+import type { ApprovePromotionInfo } from '@/components/characters/character/factions/types.ts'
 
 export const CHARACTER_FACTION_QUERY_KEYS = {
   root: ['character_faction'] as const,
@@ -54,6 +55,20 @@ export const requestPromotion = (onValidationError?: (errors: Record<string, any
 
   return useMutation({
     mutation: ({ data }: { data: RequestPromotionInfo }) => characterFactionService.requestPromotion(data.characterId, data.factionLevelId, data.requestReason),
+    async onSuccess() {
+      await queryCache.invalidateQueries({ key: CHARACTER_FACTION_QUERY_KEYS.root })
+    },
+    onError(error: any) {
+      handleValidationErrors(error, onValidationError)
+    },
+  })
+}
+
+export const approvePromotion = (onValidationError?: (errors: Record<string, any>) => void | undefined) => {
+  const queryCache = useQueryCache()
+
+  return useMutation({
+    mutation: ({ data }: { data: ApprovePromotionInfo }) => characterFactionService.approvePromotion(data.characterId, data.factionLevelId, data.approvalReason),
     async onSuccess() {
       await queryCache.invalidateQueries({ key: CHARACTER_FACTION_QUERY_KEYS.root })
     },

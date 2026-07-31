@@ -11,6 +11,9 @@ import PowerCard from '@/components/expressions/powers/PowerCard.vue'
 import { characterStore } from '@/components/characters/character/stores/characterStore.ts'
 import { pickedFactionQuery } from '@/components/characters/wizard/factions/stores/factionStore.ts'
 import StatusIcon from '@/components/characters/wizard/factions/StatusIcon.vue'
+import { can } from '@/stores/userPermissionStore.ts'
+import Button from 'primevue/button'
+import { factionDialogs } from '@/components/characters/character/factions/services/dialogs.ts'
 
 const expressionData = expressionStore()
 const characterInfo = characterStore()
@@ -34,17 +37,45 @@ function lookupFactionLevel(level: FactionLevel) {
   return data.value!.factionLevels.find(f => f.factionLevelId == level.id)
 }
 
-function approvalStatus(level: FactionLevel) {
+enum ApprovalStatus {
+  NotApproved,
+  AwaitingPromotion,
+  Approved,
+}
+
+function getApprovalStatus(level: FactionLevel) {
   if (!data.value) return null
   const currentLevel = data.value!.factionLevels.find(f => f.factionLevelId == level.id)
   const isAwaiting = currentLevel!.approvalDate == null && currentLevel!.requestedPromotion
   if (isAwaiting) {
-    return 'Awaiting Promotion'
+    return ApprovalStatus.AwaitingPromotion
   }
   else if (currentLevel!.approvalDate != null) {
-    return 'Approved'
+    return ApprovalStatus.Approved
   }
-  return 'Not Approved'
+  return ApprovalStatus.NotApproved
+}
+
+function approvalStatusDisplay(status: ApprovalStatus | null): string {
+  switch (status) {
+    case ApprovalStatus.AwaitingPromotion:
+      return 'Awaiting Promotion'
+
+    case ApprovalStatus.Approved:
+      return 'Approved'
+
+    case ApprovalStatus.NotApproved:
+      return 'Not Approved'
+
+    default:
+      return ''
+  }
+}
+
+const dialogs = factionDialogs()
+
+const showApprovePromotion = async (factionLevelId: number) => {
+  await dialogs.approvePromotion({ characterId: characterInfo.characterId, factionLevelId: factionLevelId, approvalReason: null })
 }
 
 </script>
@@ -62,12 +93,27 @@ function approvalStatus(level: FactionLevel) {
       </div>
 
       <div v-for="(level, index) in props.item.factionLevels" :key="level.id">
-        <h2 class="mb-0">
-          {{ level.rankName }} Rank
-        </h2>
-        <h4 class="m-0 p-0">
-          <span class="text-color-secondary"><em>({{ approvalStatus(level) }})</em></span>
-        </h4>
+        <div class="d-flex flex-row">
+          <div class="flex-fill">
+            <h2 class="mb-0">
+              {{ level.rankName }} Rank
+            </h2>
+            <h4 class="m-0 p-0">
+              <span class="text-color-secondary"><em>({{ approvalStatusDisplay(getApprovalStatus(level)) }})</em></span>
+            </h4>
+          </div>
+          <div v-if="can.Faction.ApprovePromotion && getApprovalStatus(level) == ApprovalStatus.AwaitingPromotion">
+            <Button label="Approve Promotion" @click="showApprovePromotion(level.id)" />
+          </div>
+        </div>
+        <div v-if="lookupFactionLevel(level)?.requestedPromotionReason">
+          <h3>Promotion Request</h3>
+          <p>{{ lookupFactionLevel(level)?.requestedPromotionReason }}</p>
+        </div>
+        <div v-if="lookupFactionLevel(level)?.approvalReason">
+          <h3>Approval Reason</h3>
+          <p>{{ lookupFactionLevel(level)?.approvalReason }}</p>
+        </div>
         <h3>Requirements:</h3>
         <div v-if="level.rankName == 'Basic'">
           No Requirements to join
