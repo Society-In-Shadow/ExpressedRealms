@@ -1,4 +1,5 @@
 using ExpressedRealms.DB;
+using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.Models.Factions.CharacterFactionMappingModels;
 using ExpressedRealms.Expressions.Repository.CharacterFactions.Dtos;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,18 @@ internal sealed class CharacterFactionRepository(
         await context.SaveChangesAsync(cancellationToken);
 
         return characterFactionMapping.Id;
+    }
+
+    public Task<CharacterFactionMapping?> GetCharacterFactionMapping(
+        int characterId,
+        int factionLevel
+    )
+    {
+        return context
+            .CharacterFactionMappings.Where(x =>
+                x.CharacterId == characterId && x.FactionLevelId == factionLevel
+            )
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task BulkEditCharacterFactionAsync(List<CharacterFactionMapping> factionMappings)
@@ -128,5 +141,11 @@ internal sealed class CharacterFactionRepository(
                 FactionRankId = x.FactionLevel.FactionRankId,
             })
             .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task EditAsync<TEntity>(TEntity entity)
+        where TEntity : class
+    {
+        await context.CommonSaveChanges(entity, cancellationToken);
     }
 }

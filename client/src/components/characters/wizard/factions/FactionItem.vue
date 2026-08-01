@@ -82,7 +82,7 @@ function article(value: string): 'A' | 'An' {
         </div>
         <PowerCard
           v-if="level.power" :target-type="TargetPowerType.FactionLevel" :power="level.power" :power-path-id="-1" :starting-header="3"
-          @modified="modifiedPower"
+          :is-read-only="true" @modified="modifiedPower"
         />
         <div v-else>
           No Known Powers for this rank

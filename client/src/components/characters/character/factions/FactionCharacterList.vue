@@ -6,8 +6,8 @@ import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 import { factionListQuery } from '@/components/expressions/factions/stores/factionStore.ts'
 import { characterStore } from '@/components/characters/character/stores/characterStore.ts'
 import { computed } from 'vue'
-import { pickedFactionQuery } from '@/components/characters/character/factions/stores/factionStore.ts'
 import CharacterFactionEdit from '@/components/characters/character/factions/CharacterFactionEdit.vue'
+import { pickedFactionQuery } from '../../wizard/factions/stores/factionStore'
 
 const characterInfo = characterStore()
 

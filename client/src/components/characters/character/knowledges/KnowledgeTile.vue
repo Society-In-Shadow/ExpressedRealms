@@ -23,7 +23,7 @@ const openKnowledgeItems = ref([])
 <template>
   <div style="max-width: 650px; margin: 0 auto;">
     <Accordion :value="openKnowledgeItems" multiple :lazy="true" expand-icon="pi pi-info-circle" collapse-icon="pi pi-times-circle">
-      <AccordionPanel v-for="knowledge in characterKnowledgeData.knowledges" :key="knowledge.name" :value="knowledge.mappingId">
+      <AccordionPanel v-for="knowledge in characterKnowledgeData.knowledges" :key="knowledge.mappingId" :value="knowledge.mappingId">
         <AccordionHeader>
           <div class="d-flex flex-column flex-grow-1 pr-3">
             <div class="d-flex flex-fill align-content-between d-block">
