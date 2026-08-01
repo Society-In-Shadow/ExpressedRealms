@@ -69,6 +69,9 @@ export const adminCharacterListStore
       getCompletedCharacters() {
         return this.filteredCharacters.filter(x => x.playerStageId === 7)
       },
+      getFactionPromotions() {
+        return this.filteredCharacters.filter(x => x.hasPromotionRequest)
+      },
     },
 
   })

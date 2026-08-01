@@ -62,6 +62,9 @@ watch(searchQuery, (newQuery) => {
     </div>
     <Tabs value="0">
       <TabList>
+        <Tab value="8">
+          Requested Promotions ({{ characterListInfo.getFactionPromotions().length }})
+        </Tab>
         <Tab value="0">
           Awaiting Checkin ({{ characterListInfo.getAwaitingCheckin().length }})
         </Tab>
@@ -150,6 +153,14 @@ watch(searchQuery, (newQuery) => {
           </div>
           <h2 v-if="characterListInfo.getPrintedCrbs().length == 0">
             Awaiting CRB Assembly by SHQ
+          </h2>
+        </TabPanel>
+        <TabPanel value="8">
+          <div v-for="character in characterListInfo.getFactionPromotions()" :key="character.id">
+            <CharacterTile :character="character" />
+          </div>
+          <h2 v-if="characterListInfo.getFactionPromotions().length == 0">
+            No Characters have Faction Promotion Requests
           </h2>
         </TabPanel>
       </TabPanels>

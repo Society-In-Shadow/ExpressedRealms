@@ -9,6 +9,7 @@ export interface PrimaryCharacter {
   expression: string
   playerName: string
   playerNumber: number
+  hasPromotionRequest: boolean
 }
 
 export interface GoFields {

@@ -131,6 +131,13 @@ internal sealed class CharacterRepository(
             })
             .ToListAsync(cancellationToken);
 
+        var characterPromotionRequests = await context
+            .CharacterFactionMappings.Where(x =>
+                x.Character.IsPrimaryCharacter && x.RequestPromotion && x.ApprovalDate == null
+            )
+            .Select(x => x.CharacterId)
+            .ToListAsync();
+
         var players = await context
             .Characters.Where(x => x.IsPrimaryCharacter)
             .Select(x => new PrimaryCharacterListDto()
@@ -149,6 +156,7 @@ internal sealed class CharacterRepository(
             player.PlayerStageId = maxStagePerPlayer
                 .FirstOrDefault(p => p.PlayerId == player.PlayerId)
                 ?.MaxStage;
+            player.HasPromotionRequest = characterPromotionRequests.Contains(player.Id);
         }
 
         return players;
