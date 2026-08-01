@@ -9,4 +9,5 @@ public sealed record PrimaryCharacterListDto
     public int PlayerNumber { get; set; }
     public int? PlayerStageId { get; set; }
     public Guid PlayerId { get; set; }
+    public bool HasPromotionRequest { get; set; }
 }
