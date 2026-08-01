@@ -71,17 +71,65 @@ function showRequestPromotionButton(level: FactionLevel, previousLevel: FactionL
   return previousLevelApproved && currentLevel?.hasKnowledge && currentLevel?.hasKnowledgeLevel && currentLevel?.hasSpecialization && !currentLevel.approvalDate
 }
 
-function approvalStatus(level: FactionLevel) {
+enum ApprovalStatus {
+  AwaitingPromotion,
+  Approved,
+  CanApprove,
+  CanRequestPromotion,
+  RequirementsNotMet,
+}
+
+function getApprovalStatus(level: FactionLevel) {
   if (!data.value) return null
   const currentLevel = data.value!.factionLevels.find(f => f.factionLevelId == level.id)
+  const levelIndex = props.item.factionLevels!.indexOf(level)
   const isAwaiting = currentLevel!.approvalDate == null && currentLevel!.requestedPromotion
-  if (isAwaiting) {
-    return 'Awaiting Promotion'
+
+  const isBasicLevel = levelIndex == 0
+  if (isBasicLevel)
+    return ApprovalStatus.Approved
+
+  const previousLevel = props.item.factionLevels![levelIndex - 1]
+  const previousLevelApproved = (data.value!.factionLevels.find(x => x.factionLevelId == previousLevel.id)!.approvalDate != null)
+  const canApprove = previousLevelApproved
+    && currentLevel?.hasKnowledge
+    && currentLevel?.hasKnowledgeLevel
+    && currentLevel?.hasSpecialization
+    && !currentLevel.approvalDate
+
+  if (canApprove)
+    return ApprovalStatus.CanRequestPromotion
+
+  else if (isAwaiting) {
+    return ApprovalStatus.AwaitingPromotion
   }
+
   else if (currentLevel!.approvalDate != null) {
-    return 'Approved'
+    return ApprovalStatus.Approved
   }
-  return 'Not Approved'
+  return ApprovalStatus.RequirementsNotMet
+}
+
+function approvalStatusDisplay(status: ApprovalStatus | null): string {
+  switch (status) {
+    case ApprovalStatus.RequirementsNotMet:
+      return 'Requirements Not Met'
+
+    case ApprovalStatus.CanApprove:
+      return 'Can Approve'
+
+    case ApprovalStatus.AwaitingPromotion:
+      return 'Awaiting Promotion'
+
+    case ApprovalStatus.CanRequestPromotion:
+      return 'Can Request Promotion'
+
+    case ApprovalStatus.Approved:
+      return 'Approved'
+
+    default:
+      return ''
+  }
 }
 
 </script>
@@ -106,7 +154,7 @@ function approvalStatus(level: FactionLevel) {
           {{ level.rankName }} Rank
         </h2>
         <h4 class="m-0 p-0">
-          <span class="text-color-secondary"><em>({{ approvalStatus(level) }})</em></span>
+          <span class="text-color-secondary"><em>({{ approvalStatusDisplay(getApprovalStatus(level)) }})</em></span>
         </h4>
         <div v-if="lookupFactionLevel(level)?.requestedPromotionReason">
           <h3>Promotion Request</h3>
@@ -127,7 +175,7 @@ function approvalStatus(level: FactionLevel) {
             <div><StatusIcon :value="lookupFactionLevel(level)?.hasKnowledgeLevel" /> - Knowledge Level of "{{ level.knowledgeLevel }}" </div>
             <div><StatusIcon :value="lookupFactionLevel(level)?.hasSpecialization" /> -  Specialization in "{{ level.specialization }}"</div>
           </div>
-          <div v-if="showRequestPromotionButton(level, props.item.factionLevels[index -1])">
+          <div v-if="getApprovalStatus(level) == ApprovalStatus.CanRequestPromotion">
             <Button :label="`Request Promotion to ${level.rankName} Rank`" severity="primary" class="w-100 mt-3" @click="showPromotionDialog(level.id)" />
           </div>
         </div>
