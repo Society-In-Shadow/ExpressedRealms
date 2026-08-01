@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { onBeforeMount, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeMount, ref, watch } from 'vue'
 import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
 import { useRouter } from 'vue-router'
 import Stepper from 'primevue/stepper'
@@ -11,12 +11,12 @@ import Button from 'primevue/button'
 import CharacterScanner from '@/components/conCheckin/support/CharacterScanner.vue'
 import AnswerQuestions from '@/components/conCheckin/support/AnswerQuestions.vue'
 import StonePullerStep from '@/components/conCheckin/support/StonePullerStep.vue'
-import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+import { can, userPermissionStore } from '@/stores/userPermissionStore.ts'
 import { confirmationPopups } from '@/components/conCheckin/services/popupService.ts'
 import AgeVerificationStep from '@/components/conCheckin/support/AgeVerificationStep.vue'
 import DailyCheckin from '@/components/conCheckin/support/DailyCheckin.vue'
-import SplitButton from 'primevue/splitbutton'
 import { characterGoFieldsDialog } from '@/components/admin/characterList/services/dialogs.ts'
+import CommandButton from '@/uiComponents/CommandButton.vue'
 
 const eventCheckinInfo = EventCheckinStore()
 const userPermission = userPermissionStore()
@@ -72,32 +72,47 @@ async function onDetect(detectedCodes) {
   })
 }
 
-const items = []
-
-onMounted(async () => {
-  items.push({
-    label: 'Reapprove Character',
-    command: ($event) => {
-      popups.reapproveCharacterConfirmation($event, eventCheckinInfo.primaryCharacter.characterName)
+const items = computed(() => [
+  {
+    label: 'View Character Sheet',
+    isVisible: () => can.CharacterManagement.ViewCharacterSheet,
+    command: async () => {
+      await router.push({
+        name: 'characterSheet',
+        params: { id: eventCheckinInfo.primaryCharacter!.characterId },
+        query: { src: 'approve_character' },
+      })
     },
-  })
-  if (permissionCheck.CharacterManagement.Retire) {
-    items.push({
-      label: 'Retire Character',
-      command: ($event) => {
-        popups.retireConfirmation($event, eventCheckinInfo.primaryCharacter.characterName)
-      },
-    })
-  }
-  if (permissionCheck.CharacterManagement.ModifyGoFields) {
-    items.push({
-      label: 'Modify Wealth / Motes',
-      command: ($event) => {
-        updateGoFieldsDialog.showUpdateGoFields(eventCheckinInfo.primaryCharacter.characterId)
-      },
-    })
-  }
-})
+  },
+  {
+    label: 'Reapprove Character',
+    command: ($event: any) => {
+      popups.reapproveCharacterConfirmation(
+        $event,
+        eventCheckinInfo.primaryCharacter.characterName,
+      )
+    },
+  },
+  {
+    label: 'Retire Character',
+    isVisible: () => permissionCheck.CharacterManagement.Retire,
+    command: ($event: any) => {
+      popups.retireConfirmation(
+        $event,
+        eventCheckinInfo.primaryCharacter.characterName,
+      )
+    },
+  },
+  {
+    label: 'Modify Wealth / Motes',
+    isVisible: () => permissionCheck.CharacterManagement.ModifyGoFields,
+    command: () => {
+      updateGoFieldsDialog.showUpdateGoFields(
+        eventCheckinInfo.primaryCharacter.characterId,
+      )
+    },
+  },
+])
 
 watch(() => eventCheckinInfo.activeStepperStep, async (oldValue, newValue) => {
   const activeEl = await waitForElement('.p-megamenu')
@@ -117,8 +132,8 @@ const approveStage = async (stageId: number) => {
 </script>
 
 <template>
-  <div v-if="permissionCheck.CharacterManagement.Retire" class="text-right sticky-top">
-    <SplitButton label="Reset Scan" severity="info" :model="items" @click="eventCheckinInfo.resetGoPage()" />
+  <div v-if="eventCheckinInfo.foundInfo" class="text-right sticky-top">
+    <CommandButton :commands="items" />
   </div>
   <Stepper v-model:value="eventCheckinInfo.activeStepperStep">
     <StepItem value="1">
