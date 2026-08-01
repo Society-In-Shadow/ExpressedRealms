@@ -21,9 +21,16 @@ internal sealed class CharacterFactionRepository(
         return characterFactionMapping.Id;
     }
 
-    public Task<CharacterFactionMapping?> GetCharacterFactionMapping(int characterId, int factionLevel)
+    public Task<CharacterFactionMapping?> GetCharacterFactionMapping(
+        int characterId,
+        int factionLevel
+    )
     {
-        return context.CharacterFactionMappings.Where(x => x.CharacterId == characterId && x.FactionLevelId == factionLevel).FirstOrDefaultAsync(cancellationToken);
+        return context
+            .CharacterFactionMappings.Where(x =>
+                x.CharacterId == characterId && x.FactionLevelId == factionLevel
+            )
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task BulkEditCharacterFactionAsync(List<CharacterFactionMapping> factionMappings)
@@ -135,8 +142,9 @@ internal sealed class CharacterFactionRepository(
             })
             .FirstOrDefaultAsync(cancellationToken);
     }
-    
-    public async Task EditAsync<TEntity>(TEntity entity) where TEntity : class
+
+    public async Task EditAsync<TEntity>(TEntity entity)
+        where TEntity : class
     {
         await context.CommonSaveChanges(entity, cancellationToken);
     }

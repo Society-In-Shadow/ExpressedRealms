@@ -91,20 +91,22 @@ internal sealed class ApprovePromotionUseCase(
                 "Character does not have one or more of the required knowledge, knowledge level, or specialization for this faction level."
             );
 
-        var existingFactionLevel = await 
-            characterFactionRepository.GetCharacterFactionMapping(model.CharacterId, model.FactionLevelId);
+        var existingFactionLevel = await characterFactionRepository.GetCharacterFactionMapping(
+            model.CharacterId,
+            model.FactionLevelId
+        );
 
         if (existingFactionLevel != null)
         {
             existingFactionLevel.ApprovalDate = timeProvider.GetUtcNow();
             existingFactionLevel.ApprovedByUserId = userContext.CurrentUserId();
             existingFactionLevel.ApprovalReason = model.ApprovalReason;
-            
+
             await characterFactionRepository.EditAsync(existingFactionLevel);
-            
+
             return Result.Ok();
         }
-        
+
         await characterFactionRepository.AddCharacterFactionMapping(
             new CharacterFactionMapping()
             {
@@ -112,7 +114,7 @@ internal sealed class ApprovePromotionUseCase(
                 FactionLevelId = model.FactionLevelId,
                 ApprovalDate = timeProvider.GetUtcNow(),
                 ApprovalReason = model.ApprovalReason,
-                ApprovedByUserId = userContext.CurrentUserId()
+                ApprovedByUserId = userContext.CurrentUserId(),
             }
         );
 

@@ -14,5 +14,6 @@ public interface ICharacterFactionRepository
     Task BulkEditCharacterFactionAsync(List<CharacterFactionMapping> factionMappings);
     Task<List<AppliedFactionPowersProjection>> GetAppliedFactionPowerIds(int characterId);
     Task<List<PowerInfoProjection>> GetAppliedFactionPowerInfoForCrb(int characterId);
-    Task EditAsync<TEntity>(TEntity entity) where TEntity : class;
+    Task EditAsync<TEntity>(TEntity entity)
+        where TEntity : class;
 }

@@ -15,6 +15,7 @@ internal sealed class ApprovePromotionModelValidator : AbstractValidator<Approve
         RuleFor(x => x.ApprovalReason)
             .MinimumLength(20)
             .MaximumLength(20_000)
-            .NotEmpty().WithMessage("Approval Reason is required.");
+            .NotEmpty()
+            .WithMessage("Approval Reason is required.");
     }
 }

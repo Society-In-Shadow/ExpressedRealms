@@ -32,8 +32,12 @@ internal static class CharacterFactionMappingEndpoints
             "{characterId}/factions/requestPromotion",
             RequestPromotionEndpoint.ExecuteAsync
         );
-        
-        endpointGroup.MapPut("{characterId}/factions/approvePromotion", ApprovePromotionEndpoint.ExecuteAsync)
+
+        endpointGroup
+            .MapPut(
+                "{characterId}/factions/approvePromotion",
+                ApprovePromotionEndpoint.ExecuteAsync
+            )
             .RequirePermission(Permissions.Faction.ApprovePromotion);
 
         endpointGroup.MapDelete("{characterId}/factions/leave", LeaveFactionEndpoint.ExecuteAsync);

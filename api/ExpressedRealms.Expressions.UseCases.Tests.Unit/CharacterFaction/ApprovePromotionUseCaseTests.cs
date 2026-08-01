@@ -39,11 +39,7 @@ public class ApprovePromotionUseCaseTests
             ApprovalReason = "The character completed the required faction trial.",
         };
 
-        var character = new Character()
-        {
-            Id = _model.CharacterId,
-            ExpressionId = 3,
-        };
+        var character = new Character() { Id = _model.CharacterId, ExpressionId = 3 };
 
         _factionLevel = new FactionLevel()
         {
@@ -388,9 +384,7 @@ public class ApprovePromotionUseCaseTests
         await _useCase.ExecuteAsync(_model);
 
         A.CallTo(() =>
-                _characterFactionRepository.AddCharacterFactionMapping(
-                    A<CharacterFactionMapping>._
-                )
+                _characterFactionRepository.AddCharacterFactionMapping(A<CharacterFactionMapping>._)
             )
             .MustNotHaveHappened();
     }
