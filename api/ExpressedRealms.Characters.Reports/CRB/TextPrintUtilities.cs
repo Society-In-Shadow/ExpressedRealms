@@ -52,7 +52,7 @@ internal static class TextPrintUtilities
     public static void PrintStatInfo(PdfPage page, string stampText, double centerX, double centerY)
     {
         using var gfx = XGraphics.FromPdfPage(page);
-        var font = new XFont(DefaultFontFace, 10, XFontStyleEx.Regular);
+        var font = new XFont(DefaultFontFace, 9, XFontStyleEx.Regular);
         var size = gfx.MeasureString(stampText, font);
 
         gfx.Save();
