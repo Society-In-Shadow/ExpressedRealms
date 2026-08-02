@@ -17,23 +17,21 @@ internal static class StatPage
         var page = document.Pages[5];
 
         HandleAdminFields(fields, dataProficiencyInfo);
-        
+
         PrintProficiencyStats(dataProficiencyInfo, expression, page);
         PrintOffensiveStats(dataProficiencyInfo, page);
         PrintDefensiveStats(dataProficiencyInfo, page);
         PrintMovement(dataProficiencyInfo, page);
-        
     }
 
     private static void PrintMovement(ProficiencyData dataProficiencyInfo, PdfPage page)
     {
-        
         var walkingOffset = XUnitPt.FromInch(3.52);
 
         var offensiveOffset = XUnitPt.FromInch(8.72);
         var pacesOffset = XUnitPt.FromInch(8.15);
         var defensiveOffset = XUnitPt.FromInch(7.56);
-        
+
         TextPrintUtilities.PrintStatInfo(
             page,
             Math.Min(-1 + dataProficiencyInfo.WalkingOffensiveProficiencies, 0).ToString(),
@@ -43,18 +41,13 @@ internal static class StatPage
 
         var minWalkingPaces = 1;
         var maxWalkingPaces = minWalkingPaces + dataProficiencyInfo.WalkingPaces + 1;
-        var walkingPaceString = minWalkingPaces == maxWalkingPaces
-            ? minWalkingPaces.ToString()
-            : $"{minWalkingPaces} - {maxWalkingPaces}";
+        var walkingPaceString =
+            minWalkingPaces == maxWalkingPaces
+                ? minWalkingPaces.ToString()
+                : $"{minWalkingPaces} - {maxWalkingPaces}";
 
-        
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            walkingPaceString,
-            walkingOffset,
-            pacesOffset
-        );
-        
+        TextPrintUtilities.PrintStatInfo(page, walkingPaceString, walkingOffset, pacesOffset);
+
         TextPrintUtilities.PrintStatInfo(
             page,
             Math.Min(0 + dataProficiencyInfo.WalkingDefensiveProficiencies, 0).ToString(),
@@ -72,24 +65,20 @@ internal static class StatPage
 
         var minRunningPaces = maxWalkingPaces + 1;
         var maxRunningPaces = minRunningPaces + dataProficiencyInfo.RunningPaces + 1;
-        var runningPaceString = minRunningPaces == maxRunningPaces
-            ? minRunningPaces.ToString()
-            : $"{minRunningPaces} - {maxRunningPaces}";
-        
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            runningPaceString,
-            runningOffset,
-            pacesOffset
-        );
-        
+        var runningPaceString =
+            minRunningPaces == maxRunningPaces
+                ? minRunningPaces.ToString()
+                : $"{minRunningPaces} - {maxRunningPaces}";
+
+        TextPrintUtilities.PrintStatInfo(page, runningPaceString, runningOffset, pacesOffset);
+
         TextPrintUtilities.PrintStatInfo(
             page,
             Math.Min(0 + dataProficiencyInfo.RunningDefensiveProficiencies, 0).ToString(),
             runningOffset,
             defensiveOffset
         );
-        
+
         var sprintingOffset = XUnitPt.FromInch(3.85);
         TextPrintUtilities.PrintStatInfo(
             page,
@@ -101,17 +90,13 @@ internal static class StatPage
         var minSprintingPaces = maxRunningPaces + 1;
         var maxSprintingPaces = minSprintingPaces + dataProficiencyInfo.SprintingPaces;
 
-        var sprintingPaceString = minSprintingPaces == maxSprintingPaces
-            ? minSprintingPaces.ToString()
-            : $"{minSprintingPaces} - {maxSprintingPaces}";
-        
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            sprintingPaceString,
-            sprintingOffset,
-            pacesOffset
-        );
-        
+        var sprintingPaceString =
+            minSprintingPaces == maxSprintingPaces
+                ? minSprintingPaces.ToString()
+                : $"{minSprintingPaces} - {maxSprintingPaces}";
+
+        TextPrintUtilities.PrintStatInfo(page, sprintingPaceString, sprintingOffset, pacesOffset);
+
         TextPrintUtilities.PrintStatInfo(
             page,
             Math.Min(-3 + dataProficiencyInfo.SprintingDefensiveProficiencies, 0).ToString(),
@@ -119,6 +104,7 @@ internal static class StatPage
             defensiveOffset
         );
     }
+
     private static void PrintDefensiveStats(ProficiencyData dataProficiencyInfo, PdfPage page)
     {
         var defensiveOffset = XUnitPt.FromInch(7.55);
@@ -159,6 +145,7 @@ internal static class StatPage
             defensiveOffset
         );
     }
+
     private static void PrintOffensiveStats(ProficiencyData dataProficiencyInfo, PdfPage page)
     {
         var offensiveCenterOffset = XUnitPt.FromInch(8.72);
@@ -199,7 +186,12 @@ internal static class StatPage
             offensiveCenterOffset
         );
     }
-    private static void PrintProficiencyStats(ProficiencyData dataProficiencyInfo, string expression, PdfPage page)
+
+    private static void PrintProficiencyStats(
+        ProficiencyData dataProficiencyInfo,
+        string expression,
+        PdfPage page
+    )
     {
         TextPrintUtilities.PrintStatInfo(
             page,
@@ -338,8 +330,8 @@ internal static class StatPage
                 break;
         }
     }
-    
-        private static void FillInStatInfo(
+
+    private static void FillInStatInfo(
         PdfAcroField.PdfAcroFieldCollection fields,
         StatModifierInfo dataStatInfo,
         PdfDocument document
@@ -439,9 +431,11 @@ internal static class StatPage
         Helpers.MergeField(fields, "WilBonus", dataStatInfo.Willpower.Bonus.ToString());
     }
 
-    private static void HandleAdminFields(PdfAcroField.PdfAcroFieldCollection fields, ProficiencyData dataProficiencyInfo)
+    private static void HandleAdminFields(
+        PdfAcroField.PdfAcroFieldCollection fields,
+        ProficiencyData dataProficiencyInfo
+    )
     {
-        
         var powerPoints = new List<int>()
         {
             dataProficiencyInfo.Chi,
@@ -450,7 +444,6 @@ internal static class StatPage
             dataProficiencyInfo.Noumenon,
         };
 
-        
         // Secondary
         Helpers.MergeField(fields, "Vitality", dataProficiencyInfo.Vitality.ToString());
         Helpers.MergeField(fields, "Health", dataProficiencyInfo.Health.ToString());
@@ -459,9 +452,9 @@ internal static class StatPage
         Helpers.MergeField(fields, "Psyche", dataProficiencyInfo.Psyche.ToString());
         Helpers.MergeField(fields, "RWP", dataProficiencyInfo.RWP.ToString());
         Helpers.MergeField(fields, "Mortis", dataProficiencyInfo.Mortis.ToString());
-        
+
         Helpers.MergeField(fields, "PowerPoints", powerPoints.Max().ToString());
-        
+
         // Offensive
         Helpers.MergeField(fields, "Strike", dataProficiencyInfo.Strike.ToString());
         Helpers.MergeField(fields, "Thrust", dataProficiencyInfo.Thrust.ToString());
@@ -469,7 +462,7 @@ internal static class StatPage
         Helpers.MergeField(fields, "Shoot", dataProficiencyInfo.Shoot.ToString());
         Helpers.MergeField(fields, "Cast", dataProficiencyInfo.Cast.ToString());
         Helpers.MergeField(fields, "Project", dataProficiencyInfo.Project.ToString());
-        
+
         // Defensive
         Helpers.MergeField(fields, "Dodge", dataProficiencyInfo.Dodge.ToString());
         Helpers.MergeField(fields, "Parry", dataProficiencyInfo.Parry.ToString());
@@ -478,6 +471,4 @@ internal static class StatPage
         Helpers.MergeField(fields, "Ward", dataProficiencyInfo.Ward.ToString());
         Helpers.MergeField(fields, "Deflect", dataProficiencyInfo.Deflect.ToString());
     }
-    
-
 }

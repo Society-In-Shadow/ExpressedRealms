@@ -2,7 +2,6 @@ using PdfSharp.Pdf.AcroForms;
 
 namespace ExpressedRealms.Characters.Reports.CRB;
 
-
 public static class Helpers
 {
     internal static void MergeField(

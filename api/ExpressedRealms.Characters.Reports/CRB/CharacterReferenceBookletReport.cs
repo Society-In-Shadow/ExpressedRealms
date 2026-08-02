@@ -11,7 +11,6 @@ using QuestPDF.Infrastructure;
 
 namespace ExpressedRealms.Characters.Reports.CRB;
 
-
 public static class CharacterReferenceBookletReport
 {
     public static MemoryStream GenerateReport(ReportData data)
@@ -71,7 +70,12 @@ public static class CharacterReferenceBookletReport
             FillInSkills(fields, data.SkillInfo, document);
             FillInPowers(data.Powers, document);
             FillInAdminPowers(data.Powers, document);
-            StatPage.FillInProficiencies(fields, data.ProficiencyInfo, document, data.BasicInfo.Expression);
+            StatPage.FillInProficiencies(
+                fields,
+                data.ProficiencyInfo,
+                document,
+                data.BasicInfo.Expression
+            );
             FillInStatInfo(fields, data.StatInfo, document);
             FillInContacts(fields, data.Contacts);
 
@@ -182,13 +186,20 @@ public static class CharacterReferenceBookletReport
 
         Helpers.MergeField(fields, "AglBonus", dataStatInfo.Agility.Bonus.ShowPlusMinusSigns());
         Helpers.MergeField(fields, "StrBonus", dataStatInfo.Strength.Bonus.ShowPlusMinusSigns());
-        Helpers.MergeField(fields, "ConBonus", dataStatInfo.Constitution.Bonus.ShowPlusMinusSigns());
+        Helpers.MergeField(
+            fields,
+            "ConBonus",
+            dataStatInfo.Constitution.Bonus.ShowPlusMinusSigns()
+        );
         Helpers.MergeField(fields, "DexBonus", dataStatInfo.Dexterity.Bonus.ShowPlusMinusSigns());
-        Helpers.MergeField(fields, "IntBonus", dataStatInfo.Intelligence.Bonus.ShowPlusMinusSigns());
+        Helpers.MergeField(
+            fields,
+            "IntBonus",
+            dataStatInfo.Intelligence.Bonus.ShowPlusMinusSigns()
+        );
         Helpers.MergeField(fields, "WilBonus", dataStatInfo.Willpower.Bonus.ShowPlusMinusSigns());
     }
 
-    
     public static string ShowPlusMinusSigns(this int value)
     {
         if (value >= 0)
@@ -228,15 +239,27 @@ public static class CharacterReferenceBookletReport
         foreach (var advantage in traits.Advantages)
         {
             Helpers.MergeField(fields, $"Advantages{advantageCount.ToString()}", advantage.Name);
-            Helpers.MergeField(fields, $"AdvantagesCost{advantageCount.ToString()}", advantage.Cost);
+            Helpers.MergeField(
+                fields,
+                $"AdvantagesCost{advantageCount.ToString()}",
+                advantage.Cost
+            );
             advantageCount++;
         }
 
         int disadvantageCount = 0;
         foreach (var advantage in traits.Disadvantages)
         {
-            Helpers.MergeField(fields, $"Disadvantages{disadvantageCount.ToString()}", advantage.Name);
-            Helpers.MergeField(fields, $"DisadvantagesCost{disadvantageCount.ToString()}", advantage.Cost);
+            Helpers.MergeField(
+                fields,
+                $"Disadvantages{disadvantageCount.ToString()}",
+                advantage.Name
+            );
+            Helpers.MergeField(
+                fields,
+                $"DisadvantagesCost{disadvantageCount.ToString()}",
+                advantage.Cost
+            );
             disadvantageCount++;
         }
     }

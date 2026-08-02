@@ -157,33 +157,41 @@ public class GetCharacterSheetReportUseCase(
         proficiencyInfo.Project = proficiencies.Value.First(x => x.Id == 11).Value;
         proficiencyInfo.Deflect = proficiencies.Value.First(x => x.Id == 12).Value;
 
-        proficiencyInfo.WalkingOffensiveProficiencies = proficiencies.Value
-            .First(x => x.Id == StatModifierEnum.WalkingOffensiveProficiency.Value).Value;
+        proficiencyInfo.WalkingOffensiveProficiencies = proficiencies
+            .Value.First(x => x.Id == StatModifierEnum.WalkingOffensiveProficiency.Value)
+            .Value;
 
-        proficiencyInfo.WalkingDefensiveProficiencies = proficiencies.Value
-            .First(x => x.Id == StatModifierEnum.WalkingDefensiveProficiency.Value).Value;
+        proficiencyInfo.WalkingDefensiveProficiencies = proficiencies
+            .Value.First(x => x.Id == StatModifierEnum.WalkingDefensiveProficiency.Value)
+            .Value;
 
-        proficiencyInfo.WalkingPaces = proficiencies.Value
-            .First(x => x.Id == StatModifierEnum.WalkingPaces.Value).Value;
+        proficiencyInfo.WalkingPaces = proficiencies
+            .Value.First(x => x.Id == StatModifierEnum.WalkingPaces.Value)
+            .Value;
 
-        proficiencyInfo.RunningOffensiveProficiencies = proficiencies.Value
-            .First(x => x.Id == StatModifierEnum.RunningOffensiveProficiency.Value).Value;
+        proficiencyInfo.RunningOffensiveProficiencies = proficiencies
+            .Value.First(x => x.Id == StatModifierEnum.RunningOffensiveProficiency.Value)
+            .Value;
 
-        proficiencyInfo.RunningDefensiveProficiencies = proficiencies.Value
-            .First(x => x.Id == StatModifierEnum.RunningDefensiveProficiency.Value).Value;
+        proficiencyInfo.RunningDefensiveProficiencies = proficiencies
+            .Value.First(x => x.Id == StatModifierEnum.RunningDefensiveProficiency.Value)
+            .Value;
 
-        proficiencyInfo.RunningPaces = proficiencies.Value
-            .First(x => x.Id == StatModifierEnum.RunningPaces.Value).Value;
+        proficiencyInfo.RunningPaces = proficiencies
+            .Value.First(x => x.Id == StatModifierEnum.RunningPaces.Value)
+            .Value;
 
-        proficiencyInfo.SprintingOffensiveProficiencies = proficiencies.Value
-            .First(x => x.Id == StatModifierEnum.SprintingOffensiveProficiency.Value).Value;
+        proficiencyInfo.SprintingOffensiveProficiencies = proficiencies
+            .Value.First(x => x.Id == StatModifierEnum.SprintingOffensiveProficiency.Value)
+            .Value;
 
-        proficiencyInfo.SprintingDefensiveProficiencies = proficiencies.Value
-            .First(x => x.Id == StatModifierEnum.SprintingDefensiveProficiency.Value).Value;
+        proficiencyInfo.SprintingDefensiveProficiencies = proficiencies
+            .Value.First(x => x.Id == StatModifierEnum.SprintingDefensiveProficiency.Value)
+            .Value;
 
-        proficiencyInfo.SprintingPaces = proficiencies.Value
-            .First(x => x.Id == StatModifierEnum.SprintingPaces.Value).Value;
-        
+        proficiencyInfo.SprintingPaces = proficiencies
+            .Value.First(x => x.Id == StatModifierEnum.SprintingPaces.Value)
+            .Value;
 
         return proficiencyInfo;
     }
