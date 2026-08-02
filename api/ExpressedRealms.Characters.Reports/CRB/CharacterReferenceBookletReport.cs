@@ -11,6 +11,7 @@ using QuestPDF.Infrastructure;
 
 namespace ExpressedRealms.Characters.Reports.CRB;
 
+
 public static class CharacterReferenceBookletReport
 {
     public static MemoryStream GenerateReport(ReportData data)
@@ -70,7 +71,7 @@ public static class CharacterReferenceBookletReport
             FillInSkills(fields, data.SkillInfo, document);
             FillInPowers(data.Powers, document);
             FillInAdminPowers(data.Powers, document);
-            FillInProficiencies(fields, data.ProficiencyInfo, document, data.BasicInfo.Expression);
+            StatPage.FillInProficiencies(fields, data.ProficiencyInfo, document, data.BasicInfo.Expression);
             FillInStatInfo(fields, data.StatInfo, document);
             FillInContacts(fields, data.Contacts);
 
@@ -172,300 +173,47 @@ public static class CharacterReferenceBookletReport
             XUnitPt.FromInch(9.7)
         );
 
-        MergeField(fields, "AglStat", dataStatInfo.Agility.Stat.ToString());
-        MergeField(fields, "StrStat", dataStatInfo.Strength.Stat.ToString());
-        MergeField(fields, "ConStat", dataStatInfo.Constitution.Stat.ToString());
-        MergeField(fields, "DexStat", dataStatInfo.Dexterity.Stat.ToString());
-        MergeField(fields, "IntStat", dataStatInfo.Intelligence.Stat.ToString());
-        MergeField(fields, "WilStat", dataStatInfo.Willpower.Stat.ToString());
+        Helpers.MergeField(fields, "AglStat", dataStatInfo.Agility.Stat.ToString());
+        Helpers.MergeField(fields, "StrStat", dataStatInfo.Strength.Stat.ToString());
+        Helpers.MergeField(fields, "ConStat", dataStatInfo.Constitution.Stat.ToString());
+        Helpers.MergeField(fields, "DexStat", dataStatInfo.Dexterity.Stat.ToString());
+        Helpers.MergeField(fields, "IntStat", dataStatInfo.Intelligence.Stat.ToString());
+        Helpers.MergeField(fields, "WilStat", dataStatInfo.Willpower.Stat.ToString());
 
-        MergeField(fields, "AglBonus", dataStatInfo.Agility.Bonus.ToString());
-        MergeField(fields, "StrBonus", dataStatInfo.Strength.Bonus.ToString());
-        MergeField(fields, "ConBonus", dataStatInfo.Constitution.Bonus.ToString());
-        MergeField(fields, "DexBonus", dataStatInfo.Dexterity.Bonus.ToString());
-        MergeField(fields, "IntBonus", dataStatInfo.Intelligence.Bonus.ToString());
-        MergeField(fields, "WilBonus", dataStatInfo.Willpower.Bonus.ToString());
+        Helpers.MergeField(fields, "AglBonus", dataStatInfo.Agility.Bonus.ToString());
+        Helpers.MergeField(fields, "StrBonus", dataStatInfo.Strength.Bonus.ToString());
+        Helpers.MergeField(fields, "ConBonus", dataStatInfo.Constitution.Bonus.ToString());
+        Helpers.MergeField(fields, "DexBonus", dataStatInfo.Dexterity.Bonus.ToString());
+        Helpers.MergeField(fields, "IntBonus", dataStatInfo.Intelligence.Bonus.ToString());
+        Helpers.MergeField(fields, "WilBonus", dataStatInfo.Willpower.Bonus.ToString());
     }
 
-    private static void FillInProficiencies(
-        PdfAcroField.PdfAcroFieldCollection fields,
-        ProficiencyData dataProficiencyInfo,
-        PdfDocument document,
-        string expression
-    )
-    {
-        var page = document.Pages[5];
 
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            dataProficiencyInfo.Vitality.ToString(),
-            XUnitPt.FromInch(2.25),
-            XUnitPt.FromInch(4.60)
-        );
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            dataProficiencyInfo.Health.ToString(),
-            XUnitPt.FromInch(2.50),
-            XUnitPt.FromInch(4.60)
-        );
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            dataProficiencyInfo.Blood.ToString(),
-            XUnitPt.FromInch(2.75),
-            XUnitPt.FromInch(4.60)
-        );
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            dataProficiencyInfo.RWP.ToString(),
-            XUnitPt.FromInch(3.00),
-            XUnitPt.FromInch(4.60)
-        );
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            dataProficiencyInfo.Reaction.ToString(),
-            XUnitPt.FromInch(3.26),
-            XUnitPt.FromInch(4.60)
-        );
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            dataProficiencyInfo.Psyche.ToString(),
-            XUnitPt.FromInch(3.53),
-            XUnitPt.FromInch(4.60)
-        );
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            dataProficiencyInfo.Mortis.ToString(),
-            XUnitPt.FromInch(3.80),
-            XUnitPt.FromInch(4.60)
-        );
-
-        MergeField(fields, "Vitality", dataProficiencyInfo.Vitality.ToString());
-        MergeField(fields, "Health", dataProficiencyInfo.Health.ToString());
-        MergeField(fields, "Blood", dataProficiencyInfo.Blood.ToString());
-        MergeField(fields, "Reaction", dataProficiencyInfo.Reaction.ToString());
-        MergeField(fields, "Psyche", dataProficiencyInfo.Psyche.ToString());
-        MergeField(fields, "RWP", dataProficiencyInfo.RWP.ToString());
-        MergeField(fields, "Mortis", dataProficiencyInfo.Mortis.ToString());
-
-        switch (expression)
-        {
-            case "Adepts":
-                TextPrintUtilities.PrintStatLabelInfo(
-                    page,
-                    "Chi",
-                    XUnitPt.FromInch(4.12),
-                    XUnitPt.FromInch(5.48)
-                );
-                TextPrintUtilities.PrintPPIdentifier(
-                    page,
-                    XUnitPt.FromInch(4.06),
-                    XUnitPt.FromInch(5.68)
-                );
-                TextPrintUtilities.PrintStatInfo(
-                    page,
-                    dataProficiencyInfo.Chi.ToString(),
-                    XUnitPt.FromInch(4.05),
-                    XUnitPt.FromInch(4.60)
-                );
-                break;
-            case "Shammas":
-                TextPrintUtilities.PrintStatLabelInfo(
-                    page,
-                    "Noumenon",
-                    XUnitPt.FromInch(4.12),
-                    XUnitPt.FromInch(5.48)
-                );
-                TextPrintUtilities.PrintPPIdentifier(
-                    page,
-                    XUnitPt.FromInch(4.06),
-                    XUnitPt.FromInch(5.68)
-                );
-                TextPrintUtilities.PrintStatInfo(
-                    page,
-                    dataProficiencyInfo.Noumenon.ToString(),
-                    XUnitPt.FromInch(4.05),
-                    XUnitPt.FromInch(4.60)
-                );
-                break;
-            case "Sorcerers":
-                TextPrintUtilities.PrintStatLabelInfo(
-                    page,
-                    "Mana",
-                    XUnitPt.FromInch(4.12),
-                    XUnitPt.FromInch(5.48)
-                );
-                TextPrintUtilities.PrintPPIdentifier(
-                    page,
-                    XUnitPt.FromInch(4.06),
-                    XUnitPt.FromInch(5.68)
-                );
-                TextPrintUtilities.PrintStatInfo(
-                    page,
-                    dataProficiencyInfo.Mana.ToString(),
-                    XUnitPt.FromInch(4.05),
-                    XUnitPt.FromInch(4.60)
-                );
-                break;
-            case "Sidhe":
-                TextPrintUtilities.PrintStatLabelInfo(
-                    page,
-                    "Essence",
-                    XUnitPt.FromInch(4.12),
-                    XUnitPt.FromInch(5.48)
-                );
-                TextPrintUtilities.PrintPPIdentifier(
-                    page,
-                    XUnitPt.FromInch(4.06),
-                    XUnitPt.FromInch(5.68)
-                );
-                TextPrintUtilities.PrintStatInfo(
-                    page,
-                    dataProficiencyInfo.Essence.ToString(),
-                    XUnitPt.FromInch(4.05),
-                    XUnitPt.FromInch(4.60)
-                );
-                break;
-            case "Aeternari":
-                TextPrintUtilities.PrintPPIdentifier(
-                    page,
-                    XUnitPt.FromInch(2.25),
-                    XUnitPt.FromInch(5.68)
-                );
-                break;
-            case "Vampyres":
-                TextPrintUtilities.PrintPPIdentifier(
-                    page,
-                    XUnitPt.FromInch(2.76),
-                    XUnitPt.FromInch(5.68)
-                );
-                break;
-        }
-
-        var powerPoints = new List<int>()
-        {
-            dataProficiencyInfo.Chi,
-            dataProficiencyInfo.Essence,
-            dataProficiencyInfo.Mana,
-            dataProficiencyInfo.Noumenon,
-        };
-
-        MergeField(fields, "PowerPoints", powerPoints.Max().ToString());
-
-        var offensiveCenterOffset = XUnitPt.FromInch(8.72);
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            dataProficiencyInfo.Strike.ToString(),
-            XUnitPt.FromInch(2.14),
-            offensiveCenterOffset
-        );
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            dataProficiencyInfo.Thrust.ToString(),
-            XUnitPt.FromInch(2.34),
-            offensiveCenterOffset
-        );
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            dataProficiencyInfo.Throw.ToString(),
-            XUnitPt.FromInch(2.54),
-            offensiveCenterOffset
-        );
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            dataProficiencyInfo.Shoot.ToString(),
-            XUnitPt.FromInch(2.75),
-            offensiveCenterOffset
-        );
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            dataProficiencyInfo.Cast.ToString(),
-            XUnitPt.FromInch(2.95),
-            offensiveCenterOffset
-        );
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            dataProficiencyInfo.Project.ToString(),
-            XUnitPt.FromInch(3.14),
-            offensiveCenterOffset
-        );
-
-        MergeField(fields, "Strike", dataProficiencyInfo.Strike.ToString());
-        MergeField(fields, "Thrust", dataProficiencyInfo.Thrust.ToString());
-        MergeField(fields, "Throw", dataProficiencyInfo.Throw.ToString());
-        MergeField(fields, "Shoot", dataProficiencyInfo.Shoot.ToString());
-        MergeField(fields, "Cast", dataProficiencyInfo.Cast.ToString());
-        MergeField(fields, "Project", dataProficiencyInfo.Project.ToString());
-
-        var defensiveOffset = XUnitPt.FromInch(7.55);
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            dataProficiencyInfo.Dodge.ToString(),
-            XUnitPt.FromInch(2.14),
-            defensiveOffset
-        );
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            dataProficiencyInfo.Parry.ToString(),
-            XUnitPt.FromInch(2.34),
-            defensiveOffset
-        );
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            dataProficiencyInfo.EvadeThrow.ToString(),
-            XUnitPt.FromInch(2.54),
-            defensiveOffset
-        );
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            dataProficiencyInfo.EvadeShoot.ToString(),
-            XUnitPt.FromInch(2.75),
-            defensiveOffset
-        );
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            dataProficiencyInfo.Ward.ToString(),
-            XUnitPt.FromInch(2.95),
-            defensiveOffset
-        );
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            dataProficiencyInfo.Deflect.ToString(),
-            XUnitPt.FromInch(3.14),
-            defensiveOffset
-        );
-
-        MergeField(fields, "Dodge", dataProficiencyInfo.Dodge.ToString());
-        MergeField(fields, "Parry", dataProficiencyInfo.Parry.ToString());
-        MergeField(fields, "ThrowEvade", dataProficiencyInfo.EvadeThrow.ToString());
-        MergeField(fields, "ShootEvade", dataProficiencyInfo.EvadeShoot.ToString());
-        MergeField(fields, "Ward", dataProficiencyInfo.Ward.ToString());
-        MergeField(fields, "Deflect", dataProficiencyInfo.Deflect.ToString());
-    }
 
     private static void FillInBasicInfo(
         PdfAcroField.PdfAcroFieldCollection fields,
         BasicInfo basicInfo
     )
     {
-        MergeField(fields, "PlayerNumber", basicInfo.PlayerNumber);
-        MergeField(
+        Helpers.MergeField(fields, "PlayerNumber", basicInfo.PlayerNumber);
+        Helpers.MergeField(
             fields,
             "PlayerNumberAndName",
             $"{basicInfo.PlayerNumber} - {basicInfo.PlayerName}"
         );
-        MergeField(
+        Helpers.MergeField(
             fields,
             "EventNameAndTimeStamp",
             $"{basicInfo.EventName} - {DateTime.Now:MMM dd, yyyy}"
         );
-        MergeField(fields, "CharacterName", basicInfo.CharacterName);
-        MergeField(fields, "PlayerName", basicInfo.PlayerName);
-        MergeField(fields, "Expression", basicInfo.Expression);
-        MergeField(fields, "CharacterClass", basicInfo.Expression);
-        MergeField(fields, "Subtype", basicInfo.ProgressionPath);
-        MergeField(fields, "XL", basicInfo.CharacterLevel);
-        MergeField(fields, "FactionName", basicInfo.FactionName);
-        MergeField(fields, "FactionRank", basicInfo.FactionRank);
+        Helpers.MergeField(fields, "CharacterName", basicInfo.CharacterName);
+        Helpers.MergeField(fields, "PlayerName", basicInfo.PlayerName);
+        Helpers.MergeField(fields, "Expression", basicInfo.Expression);
+        Helpers.MergeField(fields, "CharacterClass", basicInfo.Expression);
+        Helpers.MergeField(fields, "Subtype", basicInfo.ProgressionPath);
+        Helpers.MergeField(fields, "XL", basicInfo.CharacterLevel);
+        Helpers.MergeField(fields, "FactionName", basicInfo.FactionName);
+        Helpers.MergeField(fields, "FactionRank", basicInfo.FactionRank);
     }
 
     private static void FillInTraits(PdfAcroField.PdfAcroFieldCollection fields, Traits traits)
@@ -473,16 +221,16 @@ public static class CharacterReferenceBookletReport
         int advantageCount = 0;
         foreach (var advantage in traits.Advantages)
         {
-            MergeField(fields, $"Advantages{advantageCount.ToString()}", advantage.Name);
-            MergeField(fields, $"AdvantagesCost{advantageCount.ToString()}", advantage.Cost);
+            Helpers.MergeField(fields, $"Advantages{advantageCount.ToString()}", advantage.Name);
+            Helpers.MergeField(fields, $"AdvantagesCost{advantageCount.ToString()}", advantage.Cost);
             advantageCount++;
         }
 
         int disadvantageCount = 0;
         foreach (var advantage in traits.Disadvantages)
         {
-            MergeField(fields, $"Disadvantages{disadvantageCount.ToString()}", advantage.Name);
-            MergeField(fields, $"DisadvantagesCost{disadvantageCount.ToString()}", advantage.Cost);
+            Helpers.MergeField(fields, $"Disadvantages{disadvantageCount.ToString()}", advantage.Name);
+            Helpers.MergeField(fields, $"DisadvantagesCost{disadvantageCount.ToString()}", advantage.Cost);
             disadvantageCount++;
         }
     }
@@ -563,17 +311,17 @@ public static class CharacterReferenceBookletReport
             yPosition
         );
 
-        MergeField(fields, "H2hOffenseLevel", skillInfo.HandToHandOffense.ToString());
-        MergeField(fields, "MeleeOffenseLevel", skillInfo.MeleeOffense.ToString());
-        MergeField(fields, "ThrownWeaponsLevel", skillInfo.ThrownWeapons.ToString());
-        MergeField(fields, "MarksmanshipLevel", skillInfo.Marksmanship.ToString());
-        MergeField(fields, "SpellcastingLevel", skillInfo.Spellcasting.ToString());
-        MergeField(fields, "ProjectionLevel", skillInfo.Projection.ToString());
-        MergeField(fields, "H2hDefenseLevel", skillInfo.HandToHandDefense.ToString());
-        MergeField(fields, "MeleeDefenseLevel", skillInfo.MeleeDefense.ToString());
-        MergeField(fields, "AcrobaticsLevel", skillInfo.Acrobatics.ToString());
-        MergeField(fields, "SpellwardingLevel", skillInfo.Spellwarding.ToString());
-        MergeField(fields, "DeflectionLevel", skillInfo.Deflection.ToString());
+        Helpers.MergeField(fields, "H2hOffenseLevel", skillInfo.HandToHandOffense.ToString());
+        Helpers.MergeField(fields, "MeleeOffenseLevel", skillInfo.MeleeOffense.ToString());
+        Helpers.MergeField(fields, "ThrownWeaponsLevel", skillInfo.ThrownWeapons.ToString());
+        Helpers.MergeField(fields, "MarksmanshipLevel", skillInfo.Marksmanship.ToString());
+        Helpers.MergeField(fields, "SpellcastingLevel", skillInfo.Spellcasting.ToString());
+        Helpers.MergeField(fields, "ProjectionLevel", skillInfo.Projection.ToString());
+        Helpers.MergeField(fields, "H2hDefenseLevel", skillInfo.HandToHandDefense.ToString());
+        Helpers.MergeField(fields, "MeleeDefenseLevel", skillInfo.MeleeDefense.ToString());
+        Helpers.MergeField(fields, "AcrobaticsLevel", skillInfo.Acrobatics.ToString());
+        Helpers.MergeField(fields, "SpellwardingLevel", skillInfo.Spellwarding.ToString());
+        Helpers.MergeField(fields, "DeflectionLevel", skillInfo.Deflection.ToString());
     }
 
     private static void FillInAdminPowers(List<PowerInfo> dataPowers, PdfDocument document)
@@ -770,38 +518,14 @@ public static class CharacterReferenceBookletReport
         int count = 0;
         foreach (var model in dataPowers)
         {
-            MergeField(fields, $"ContactName{count.ToString()}", model.Name);
-            MergeField(fields, $"ContactKnowledge{count.ToString()}", model.KnowledgeName);
-            MergeField(
+            Helpers.MergeField(fields, $"ContactName{count.ToString()}", model.Name);
+            Helpers.MergeField(fields, $"ContactKnowledge{count.ToString()}", model.KnowledgeName);
+            Helpers.MergeField(
                 fields,
                 $"ContactLevelUses{count.ToString()}",
                 $"{model.KnowledgeLevel} ({model.NumberOfUses})"
             );
             count++;
-        }
-    }
-
-    private static void MergeField(
-        PdfAcroField.PdfAcroFieldCollection fields,
-        string targetField,
-        string data
-    )
-    {
-        var indexes = fields
-            .Names.Select((value, index) => new { value, index })
-            .Where(x => x.value == targetField)
-            .Select(x => x.index)
-            .ToList();
-
-        foreach (var index in indexes)
-        {
-            var pdfCompatibleData = data.Replace("\n", "\r\n").Replace("\r\r", "\r\n");
-
-            if (fields[index] is PdfTextField textField)
-            {
-                textField.Text = pdfCompatibleData;
-                textField.MultiLine = true;
-            }
         }
     }
 }
