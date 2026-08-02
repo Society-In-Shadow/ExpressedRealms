@@ -25,4 +25,13 @@ public class ProficiencyData
     public int EvadeShoot { get; set; }
     public int Ward { get; set; }
     public int Deflect { get; set; }
+    public int WalkingOffensiveProficiencies { get; set; }
+    public int WalkingDefensiveProficiencies { get; set; }
+    public int WalkingPaces { get; set; }
+    public int RunningOffensiveProficiencies { get; set; }
+    public int RunningDefensiveProficiencies { get; set; }
+    public int RunningPaces { get; set; }
+    public int SprintingOffensiveProficiencies { get; set; }
+    public int SprintingDefensiveProficiencies { get; set; }
+    public int SprintingPaces { get; set; }
 }

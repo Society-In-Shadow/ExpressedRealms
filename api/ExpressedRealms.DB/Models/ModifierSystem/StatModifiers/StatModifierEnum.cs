@@ -35,4 +35,49 @@ public sealed class StatModifierEnum : SmartEnum<StatModifierEnum, int>
 
     public static readonly StatModifierEnum Motes = new("Prima / Void", 24);
     public static readonly StatModifierEnum WealthLevel = new("Wealth Level", 25);
+
+    public static readonly StatModifierEnum WalkingOffensiveProficiency = new StatModifierEnum(
+        "Walking Offensive Proficiency",
+        26
+    );
+
+    public static readonly StatModifierEnum WalkingDefensiveProficiency = new StatModifierEnum(
+        "Walking Defensive Proficiency",
+        27
+    );
+
+    public static readonly StatModifierEnum WalkingPaces = new StatModifierEnum(
+        "Walking Paces",
+        28
+    );
+
+    public static readonly StatModifierEnum RunningOffensiveProficiency = new StatModifierEnum(
+        "Running Offensive Proficiency",
+        29
+    );
+
+    public static readonly StatModifierEnum RunningDefensiveProficiency = new StatModifierEnum(
+        "Running Defensive Proficiency",
+        30
+    );
+
+    public static readonly StatModifierEnum RunningPaces = new StatModifierEnum(
+        "Running Paces",
+        31
+    );
+
+    public static readonly StatModifierEnum SprintingOffensiveProficiency = new StatModifierEnum(
+        "Sprinting Offensive Proficiency",
+        32
+    );
+
+    public static readonly StatModifierEnum SprintingDefensiveProficiency = new StatModifierEnum(
+        "Sprinting Defensive Proficiency",
+        33
+    );
+
+    public static readonly StatModifierEnum SprintingPaces = new StatModifierEnum(
+        "Sprinting Paces",
+        34
+    );
 }

@@ -56,5 +56,41 @@ public sealed class ModifierType : SmartEnum<ModifierType, byte>
     public static readonly ModifierType Motes = new("Motes", 42);
     public static readonly ModifierType WealthLevel = new("Wealth Level", 43);
 
+    public static readonly ModifierType WalkingOffensiveProficiency = new ModifierType(
+        "Walking Offensive Proficiency",
+        44
+    );
+
+    public static readonly ModifierType WalkingDefensiveProficiency = new ModifierType(
+        "Walking Defensive Proficiency",
+        45
+    );
+
+    public static readonly ModifierType WalkingPaces = new ModifierType("Walking Paces", 46);
+
+    public static readonly ModifierType RunningOffensiveProficiency = new ModifierType(
+        "Running Offensive Proficiency",
+        47
+    );
+
+    public static readonly ModifierType RunningDefensiveProficiency = new ModifierType(
+        "Running Defensive Proficiency",
+        48
+    );
+
+    public static readonly ModifierType RunningPaces = new ModifierType("Running Paces", 49);
+
+    public static readonly ModifierType SprintingOffensiveProficiency = new ModifierType(
+        "Sprinting Offensive Proficiency",
+        50
+    );
+
+    public static readonly ModifierType SprintingDefensiveProficiency = new ModifierType(
+        "Sprinting Defensive Proficiency",
+        51
+    );
+
+    public static readonly ModifierType SprintingPaces = new ModifierType("Sprinting Paces", 52);
+
     public override string ToString() => Name;
 }

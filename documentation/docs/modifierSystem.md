@@ -7,32 +7,7 @@ For each of those, any number of modifiers can be applied
 ## Modifier Fields / Use
 
 - Modifier - It's the actual modifier, +1, +3, etc
-- Modifier Type - List of modifiers that you can adjust
-  - Vitality
-  - Health
-  - Blood
-  - Reaction
-  - Psyche
-  - RWP
-  - Mortis
-  - Chi
-  - Essence
-  - Mana
-  - Noumenon
-  - Strike
-  - Thrust
-  - Throw
-  - Shoot
-  - Cast
-  - Project
-  - Dodge
-  - Parry
-  - Evade Throw
-  - Evade Shoot
-  - Ward
-  - Deflect
-  - Wealth Level
-  - Prima / Void
+- Modifier Type - List of modifiers that you can adjust - over 25 types
 - Scale with Level - Basically, take the modifier defined above and multiply it by the characters level
 - Include Level 0 With Scale - ???
 - Target Expression - This modifier should only apply to a specific expression (Common with Power Points)
