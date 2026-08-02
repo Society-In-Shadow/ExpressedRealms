@@ -103,9 +103,9 @@ public static class CharacterReferenceBookletReport
         );
         TextPrintUtilities.PrintStatInfo(
             page,
-            dataStatInfo.Agility.Bonus.ToString(),
+            dataStatInfo.Agility.Bonus.ShowPlusMinusSigns(),
             XUnitPt.FromInch(2.20),
-            XUnitPt.FromInch(9.7)
+            XUnitPt.FromInch(9.8)
         );
 
         TextPrintUtilities.PrintStatInfo(
@@ -116,9 +116,9 @@ public static class CharacterReferenceBookletReport
         );
         TextPrintUtilities.PrintStatInfo(
             page,
-            dataStatInfo.Constitution.Bonus.ToString(),
+            dataStatInfo.Constitution.Bonus.ShowPlusMinusSigns(),
             XUnitPt.FromInch(2.50),
-            XUnitPt.FromInch(9.7)
+            XUnitPt.FromInch(9.8)
         );
 
         TextPrintUtilities.PrintStatInfo(
@@ -129,9 +129,9 @@ public static class CharacterReferenceBookletReport
         );
         TextPrintUtilities.PrintStatInfo(
             page,
-            dataStatInfo.Dexterity.Bonus.ToString(),
+            dataStatInfo.Dexterity.Bonus.ShowPlusMinusSigns(),
             XUnitPt.FromInch(2.80),
-            XUnitPt.FromInch(9.7)
+            XUnitPt.FromInch(9.8)
         );
 
         TextPrintUtilities.PrintStatInfo(
@@ -142,9 +142,9 @@ public static class CharacterReferenceBookletReport
         );
         TextPrintUtilities.PrintStatInfo(
             page,
-            dataStatInfo.Intelligence.Bonus.ToString(),
+            dataStatInfo.Intelligence.Bonus.ShowPlusMinusSigns(),
             XUnitPt.FromInch(3.10),
-            XUnitPt.FromInch(9.7)
+            XUnitPt.FromInch(9.8)
         );
 
         TextPrintUtilities.PrintStatInfo(
@@ -155,9 +155,9 @@ public static class CharacterReferenceBookletReport
         );
         TextPrintUtilities.PrintStatInfo(
             page,
-            dataStatInfo.Strength.Bonus.ToString(),
+            dataStatInfo.Strength.Bonus.ShowPlusMinusSigns(),
             XUnitPt.FromInch(3.40),
-            XUnitPt.FromInch(9.7)
+            XUnitPt.FromInch(9.8)
         );
 
         TextPrintUtilities.PrintStatInfo(
@@ -168,9 +168,9 @@ public static class CharacterReferenceBookletReport
         );
         TextPrintUtilities.PrintStatInfo(
             page,
-            dataStatInfo.Willpower.Bonus.ToString(),
+            dataStatInfo.Willpower.Bonus.ShowPlusMinusSigns(),
             XUnitPt.FromInch(3.70),
-            XUnitPt.FromInch(9.7)
+            XUnitPt.FromInch(9.8)
         );
 
         Helpers.MergeField(fields, "AglStat", dataStatInfo.Agility.Stat.ToString());
@@ -180,15 +180,21 @@ public static class CharacterReferenceBookletReport
         Helpers.MergeField(fields, "IntStat", dataStatInfo.Intelligence.Stat.ToString());
         Helpers.MergeField(fields, "WilStat", dataStatInfo.Willpower.Stat.ToString());
 
-        Helpers.MergeField(fields, "AglBonus", dataStatInfo.Agility.Bonus.ToString());
-        Helpers.MergeField(fields, "StrBonus", dataStatInfo.Strength.Bonus.ToString());
-        Helpers.MergeField(fields, "ConBonus", dataStatInfo.Constitution.Bonus.ToString());
-        Helpers.MergeField(fields, "DexBonus", dataStatInfo.Dexterity.Bonus.ToString());
-        Helpers.MergeField(fields, "IntBonus", dataStatInfo.Intelligence.Bonus.ToString());
-        Helpers.MergeField(fields, "WilBonus", dataStatInfo.Willpower.Bonus.ToString());
+        Helpers.MergeField(fields, "AglBonus", dataStatInfo.Agility.Bonus.ShowPlusMinusSigns());
+        Helpers.MergeField(fields, "StrBonus", dataStatInfo.Strength.Bonus.ShowPlusMinusSigns());
+        Helpers.MergeField(fields, "ConBonus", dataStatInfo.Constitution.Bonus.ShowPlusMinusSigns());
+        Helpers.MergeField(fields, "DexBonus", dataStatInfo.Dexterity.Bonus.ShowPlusMinusSigns());
+        Helpers.MergeField(fields, "IntBonus", dataStatInfo.Intelligence.Bonus.ShowPlusMinusSigns());
+        Helpers.MergeField(fields, "WilBonus", dataStatInfo.Willpower.Bonus.ShowPlusMinusSigns());
     }
 
-
+    
+    public static string ShowPlusMinusSigns(this int value)
+    {
+        if (value >= 0)
+            return $"+{value}";
+        return value.ToString();
+    }
 
     private static void FillInBasicInfo(
         PdfAcroField.PdfAcroFieldCollection fields,
