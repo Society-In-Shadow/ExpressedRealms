@@ -1,5 +1,6 @@
 using ExpressedRealms.Characters.Repository.Proficiencies.DTOs;
 using ExpressedRealms.Characters.Repository.Proficiencies.Enums;
+using ExpressedRealms.DB.Models.ModifierSystem.StatModifiers;
 
 namespace ExpressedRealms.Characters.Repository.Proficiencies.Data;
 
@@ -8,6 +9,7 @@ public static class ProficiencyDtos
     private const string Offensive = "Offensive";
     private const string Defensive = "Defensive";
     private const string Secondary = "Secondary";
+    private const string Movement = "Movement";
 
     public static List<ProficiencyDto> GetProficiencies(int expressionId)
     {
@@ -277,6 +279,78 @@ public static class ProficiencyDtos
                 Type = Secondary,
                 Modifiers = new List<ModifierType>() { ModifierType.WealthLevel },
                 SortOrder = 13,
+            },
+            new ProficiencyDto()
+            {
+                Id = StatModifierEnum.WalkingOffensiveProficiency,
+                Name = "Walking Offensive Proficiency",
+                Type = Movement,
+                Modifiers = new List<ModifierType>() { ModifierType.WalkingOffensiveProficiency },
+                SortOrder = 14,
+            },
+            new ProficiencyDto()
+            {
+                Id = StatModifierEnum.WalkingDefensiveProficiency,
+                Name = "Walking Defensive Proficiency",
+                Type = Movement,
+                Modifiers = new List<ModifierType>() { ModifierType.WalkingDefensiveProficiency },
+                SortOrder = 15,
+            },
+            new ProficiencyDto()
+            {
+                Id = StatModifierEnum.WalkingPaces,
+                Name = "Walking Paces",
+                Type = Movement,
+                Modifiers = new List<ModifierType>() { ModifierType.WalkingPaces },
+                SortOrder = 16,
+            },
+            new ProficiencyDto()
+            {
+                Id = StatModifierEnum.RunningOffensiveProficiency,
+                Name = "Running Offensive Proficiency",
+                Type = Movement,
+                Modifiers = new List<ModifierType>() { ModifierType.RunningOffensiveProficiency },
+                SortOrder = 17,
+            },
+            new ProficiencyDto()
+            {
+                Id = StatModifierEnum.RunningDefensiveProficiency,
+                Name = "Running Defensive Proficiency",
+                Type = Movement,
+                Modifiers = new List<ModifierType>() { ModifierType.RunningDefensiveProficiency },
+                SortOrder = 18,
+            },
+            new ProficiencyDto()
+            {
+                Id = StatModifierEnum.RunningPaces,
+                Name = "Running Paces",
+                Type = Movement,
+                Modifiers = new List<ModifierType>() { ModifierType.RunningPaces },
+                SortOrder = 19,
+            },
+            new ProficiencyDto()
+            {
+                Id = StatModifierEnum.SprintingOffensiveProficiency,
+                Name = "Sprinting Offensive Proficiency",
+                Type = Movement,
+                Modifiers = new List<ModifierType>() { ModifierType.SprintingOffensiveProficiency },
+                SortOrder = 20,
+            },
+            new ProficiencyDto()
+            {
+                Id = StatModifierEnum.SprintingDefensiveProficiency,
+                Name = "Sprinting Defensive Proficiency",
+                Type = Movement,
+                Modifiers = new List<ModifierType>() { ModifierType.SprintingDefensiveProficiency },
+                SortOrder = 21,
+            },
+            new ProficiencyDto()
+            {
+                Id = StatModifierEnum.SprintingPaces,
+                Name = "Sprinting Paces",
+                Type = Movement,
+                Modifiers = new List<ModifierType>() { ModifierType.SprintingPaces },
+                SortOrder = 22,
             },
         };
 
