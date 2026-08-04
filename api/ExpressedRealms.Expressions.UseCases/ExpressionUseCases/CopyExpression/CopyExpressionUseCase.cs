@@ -21,6 +21,10 @@ internal sealed class CopyExpressionUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
+        var isDuplicateName = await expressionRepository.HasDuplicateName(model.ExpressionName);
+        if(isDuplicateName)
+            return ValidationHelper.AddSingleValidationFailure(nameof(model.ExpressionName), "This is a duplicate name.");
+
         var expressionId = await expressionRepository.CopyExpressionAsync(
             model.Id,
             model.ExpressionName
