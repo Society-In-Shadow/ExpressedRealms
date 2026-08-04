@@ -9,7 +9,7 @@ import {
   nameField,
   navMenuImageField,
   shortDescriptionField,
-} from '@/components/expressions/expression/AddExpressionValidation'
+} from '@/components/expressions/expression/validators/AddExpressionValidation'
 import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
 import FormTextAreaWrapper from '@/FormWrappers/FormTextAreaWrapper.vue'
 import { cmsStore } from '@/stores/cmsStore.ts'

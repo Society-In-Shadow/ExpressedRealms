@@ -1,9 +1,9 @@
 import { useAppDialog } from '@/utilities/dialogUtilities.ts'
 
-const AddExpression = () => import ('@/components/expressions/AddExpression.vue')
-const EditExpression = () => import('@/components/expressions/EditExpression.vue')
+const AddExpression = () => import ('@/components/expressions/expression/AddExpression.vue')
+const EditExpression = () => import('@/components/expressions/expression/EditExpression.vue')
 
-const CopyExpression = () => import('@/components/expressions/CopyExpression.vue')
+const CopyExpression = () => import('@/components/expressions/expression/CopyExpression.vue')
 
 export const expressionDialogService = () => {
   const dialog = useAppDialog()
