@@ -14,7 +14,7 @@ internal static class CopyExpressionEndpoint
     )
     {
         var results = await useCase.ExecuteAsync(
-            new CopyExpressionModel() { Id = expressionId, ExpressionName = request.Name }
+            new CopyExpressionModel() { Id = expressionId, Name = request.Name }
         );
 
         if (results.HasValidationError(out var validationProblem))

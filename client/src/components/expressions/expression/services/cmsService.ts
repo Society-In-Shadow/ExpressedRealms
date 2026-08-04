@@ -1,6 +1,6 @@
 import axios from 'axios'
 import type { EditSingleFactionInfo } from '@/components/expressions/factions/types.ts'
-import type { AddExpressionPost, CmsSections } from '@/components/expressions/expression/types.ts'
+import type { AddExpressionPost, CmsSections, CopyExpressionPost } from '@/components/expressions/expression/types.ts'
 import type { ExpressionMenuResponse } from '@/components/navbar/navMenuItems/types.ts'
 
 export const cmsService = {
@@ -15,6 +15,8 @@ export const cmsService = {
   editFaction: (id: number, faction: EditSingleFactionInfo): Promise<EditSingleFactionInfo> => axios.put<EditSingleFactionInfo>(`/factions/${id}`, faction)
     .then(async (response) => { return response.data }),
   create: (model: AddExpressionPost): Promise<number> => axios.post<number>(`/expression/`, model)
+    .then(async (response) => { return response.data }),
+  copy: (id: number, model: CopyExpressionPost): Promise<number> => axios.post<number>(`/expression/${id}/copy`, model)
     .then(async (response) => { return response.data }),
   delete: (id: number) => axios.delete(`/factions/${id}`)
     .then(async (response) => { return response.data }),

@@ -48,7 +48,6 @@ const onSubmit = form.handleSubmit(async (values) => {
     case 1:
       toaster.success(`Successfully added ${values.name} Expression as a Draft!`)
       slug = data.value!.expressionItems.find(x => x.id == addedItemId)!.slug
-      console.log('boo', slug)
       router.push('/expressions/' + slug)
       break
     case 13:

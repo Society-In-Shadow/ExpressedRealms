@@ -13,6 +13,14 @@ export interface AddExpressionPost {
   expressionTypeId: number
 }
 
+export interface CopyExpressionFields {
+  name: string
+}
+
+export interface CopyExpressionPost {
+  name: string
+}
+
 export interface CmsSections {
   rulebookItems: ExpressionMenuItem[]
   worldBackgroundItems: ExpressionMenuItem[]

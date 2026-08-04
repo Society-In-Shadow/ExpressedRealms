@@ -1,6 +1,6 @@
 import { defineQueryOptions, useMutation, useQueryCache } from '@pinia/colada'
 import { handleValidationErrors } from '@/utilities/piniaColadaUtilities.ts'
-import type { AddExpressionPost } from '@/components/expressions/expression/types.ts'
+import type { AddExpressionPost, CopyExpressionPost } from '@/components/expressions/expression/types.ts'
 import { cmsService } from '@/components/expressions/expression/services/cmsService.ts'
 import { cmsStore } from '@/stores/cmsStore.ts'
 
@@ -13,6 +13,24 @@ export const cmsItemsQuery = defineQueryOptions(() => ({
   key: CmsService_QUERY_KEYS.getCmsItems(),
   query: () => cmsService.getCmsValues(),
 }))
+
+export const copy = (onValidationError?: (errors: Record<string, any>) => void | undefined) => {
+  const queryCache = useQueryCache()
+
+  return useMutation({
+    mutation: ({ id, data }: { id: number, data: CopyExpressionPost }) => cmsService.copy(id, data),
+    async onSuccess() {
+      await queryCache.invalidateQueries({ key: CmsService_QUERY_KEYS.root })
+
+      // TODO: Temp work around till all expression data is stored in pinia colada
+      const cmsData = cmsStore()
+      await cmsData.refreshCmsInformation()
+    },
+    onError(error: any) {
+      handleValidationErrors(error, onValidationError)
+    },
+  })
+}
 
 export const create = (onValidationError?: (errors: Record<string, any>) => void | undefined) => {
   const queryCache = useQueryCache()

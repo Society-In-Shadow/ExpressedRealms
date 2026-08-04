@@ -21,13 +21,13 @@ internal sealed class CopyExpressionUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var isDuplicateName = await expressionRepository.HasDuplicateName(model.ExpressionName);
+        var isDuplicateName = await expressionRepository.HasDuplicateName(model.Name);
         if(isDuplicateName)
-            return ValidationHelper.AddSingleValidationFailure(nameof(model.ExpressionName), "This is a duplicate name.");
+            return ValidationHelper.AddSingleValidationFailure(nameof(model.Name), "This is a duplicate name.");
 
         var expressionId = await expressionRepository.CopyExpressionAsync(
             model.Id,
-            model.ExpressionName
+            model.Name
         );
 
         return Result.Ok(expressionId);
