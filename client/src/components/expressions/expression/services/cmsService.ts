@@ -1,6 +1,11 @@
 import axios from 'axios'
-import type { EditSingleFactionInfo } from '@/components/expressions/factions/types.ts'
-import type { AddExpressionPost, CmsSections, CopyExpressionPost } from '@/components/expressions/expression/types.ts'
+import type {
+  AddExpressionPost,
+  CmsSections,
+  CopyExpressionPost,
+  EditExpressionPut,
+  EditItem,
+} from '@/components/expressions/expression/types.ts'
 import type { ExpressionMenuResponse } from '@/components/navbar/navMenuItems/types.ts'
 
 export const cmsService = {
@@ -10,9 +15,9 @@ export const cmsService = {
       rulebookItems: response.data.menuItems.filter(x => x.expressionTypeId === 13),
       worldBackgroundItems: response.data.menuItems.filter(x => x.expressionTypeId === 14),
     })),
-  getFaction: (id: number): Promise<EditSingleFactionInfo> => axios.get<EditSingleFactionInfo>(`/factions/${id}`)
+  getEdit: (id: number): Promise<EditItem> => axios.get(`/expression/${id}`)
     .then(async (response) => { return response.data }),
-  editFaction: (id: number, faction: EditSingleFactionInfo): Promise<EditSingleFactionInfo> => axios.put<EditSingleFactionInfo>(`/factions/${id}`, faction)
+  edit: (id: number, faction: EditExpressionPut) => axios.put<EditExpressionPut>(`/expression/${id}`, faction)
     .then(async (response) => { return response.data }),
   create: (model: AddExpressionPost): Promise<number> => axios.post<number>(`/expression/`, model)
     .then(async (response) => { return response.data }),

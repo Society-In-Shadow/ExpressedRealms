@@ -17,7 +17,7 @@ internal static class EditExpressionEndpoint
         var results = await repository.EditExpressionAsync(
             new EditExpressionDto()
             {
-                Id = editExpressionRequest.Id,
+                Id = expressionId,
                 Name = editExpressionRequest.Name,
                 PublishStatus = editExpressionRequest.PublishStatus,
                 ShortDescription = editExpressionRequest.ShortDescription,
