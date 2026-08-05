@@ -12,5 +12,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ExpressedRealms.DB\ExpressedRealms.DB.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Repositories.Shared\ExpressedRealms.Repositories.Shared.csproj" />
+    <ProjectReference Include="..\ExpressedRealms.Shared.UseCases\ExpressedRealms.Shared.UseCases.csproj" />
   </ItemGroup>
 </Project>

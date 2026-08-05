@@ -6,11 +6,12 @@ using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.Expressions.Repository.Expressions.DTOs;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Repositories.Shared.Helpers;
+using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using NpgsqlTypes;
-using FluentValidationFailure = ExpressedRealms.Repositories.Shared.CommonFailureTypes.FluentValidationFailure;
+using FluentValidationFailureUseCase = ExpressedRealms.UseCases.Shared.CommonFailureTypes.FluentValidationFailure;
 using NotFoundFailure = ExpressedRealms.Repositories.Shared.CommonFailureTypes.NotFoundFailure;
 
 namespace ExpressedRealms.Expressions.Repository.Expressions;
@@ -228,7 +229,14 @@ internal sealed class ExpressionRepository(
     {
         var result = await createExpressionDtoValidator.ValidateAsync(dto, cancellationToken);
         if (!result.IsValid)
-            return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
+            return Result.Fail(new FluentValidationFailureUseCase(result.ToDictionary()));
+
+        var isDuplicateName = await HasDuplicateName(dto.Name);
+        if (isDuplicateName)
+            return ValidationHelper.AddSingleValidationFailure(
+                nameof(dto.Name),
+                "This is a duplicate name."
+            );
 
         var authResult = ExpressionTypePermissionCheck(dto.ExpressionTypeId);
         if (authResult.IsFailed)
@@ -259,11 +267,18 @@ internal sealed class ExpressionRepository(
     {
         var result = await editExpressionDtoValidator.ValidateAsync(dto, cancellationToken);
         if (!result.IsValid)
-            return Result.Fail(new FluentValidationFailure(result.ToDictionary()));
+            return Result.Fail(new FluentValidationFailureUseCase(result.ToDictionary()));
 
         var authResult = await CheckUserPermissionsForExpressionEdit(dto.Id);
         if (authResult.IsFailed)
             return authResult.ToResult();
+
+        var isDuplicateName = await HasDuplicateName(dto.Name);
+        if (isDuplicateName)
+            return ValidationHelper.AddSingleValidationFailure(
+                nameof(dto.Name),
+                "This is a duplicate name."
+            );
 
         var expression = await context.Expressions.Where(x => x.Id == dto.Id).FirstAsync();
 
@@ -302,6 +317,22 @@ internal sealed class ExpressionRepository(
         await context.SaveChangesAsync(cancellationToken);
 
         return Result.Ok(expression.Id);
+    }
+
+    public async Task<bool> HasDuplicateName(string name, int expressionId = 0)
+    {
+        if (expressionId != 0)
+        {
+            return await context
+                .Expressions.AsNoTracking()
+                .AnyAsync(
+                    x => x.Name.ToLower() == name.ToLower() && x.Id != expressionId,
+                    cancellationToken
+                );
+        }
+        return await context
+            .Expressions.AsNoTracking()
+            .AnyAsync(x => x.Name.ToLower() == name.ToLower(), cancellationToken);
     }
 
     public async Task<int> CopyExpressionAsync(int expressionId, string expressionName)

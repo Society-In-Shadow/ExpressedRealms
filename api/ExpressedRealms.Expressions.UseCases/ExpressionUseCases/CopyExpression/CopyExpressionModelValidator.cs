@@ -14,6 +14,6 @@ internal sealed class CopyExpressionModelValidator : AbstractValidator<CopyExpre
             .MustAsync(async (x, y) => await repository.ExpressionExists(x) is not null)
             .WithMessage("Expression does not exist.");
 
-        RuleFor(x => x.ExpressionName).NotEmpty().MaximumLength(250);
+        RuleFor(x => x.Name).NotEmpty().MaximumLength(250);
     }
 }

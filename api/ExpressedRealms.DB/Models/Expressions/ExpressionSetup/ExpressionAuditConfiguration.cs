@@ -14,6 +14,8 @@ internal static class ExpressionAuditConfiguration
             switch (changedRecord.ColumnName)
             {
                 case "expression_type_id":
+                case "cms_type_id":
+                case "expression_sub_type_id":
                     continue;
 
                 case "name":

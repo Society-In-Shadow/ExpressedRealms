@@ -22,4 +22,5 @@ public interface IExpressionRepository
     Task<Result<GetExpressionDto>> CheckUserPermissionsForExpressionCreate(int expressionId);
     Task<Result<GetExpressionDto>> CheckUserPermissionsForExpressionView(int expressionId);
     Task<bool> ExpressionIsExpressionType(int expressionId);
+    Task<bool> HasDuplicateName(string name, int expressionId = 0);
 }
