@@ -232,9 +232,12 @@ internal sealed class ExpressionRepository(
             return Result.Fail(new FluentValidationFailureUseCase(result.ToDictionary()));
 
         var isDuplicateName = await HasDuplicateName(dto.Name);
-        if(isDuplicateName)
-            return ValidationHelper.AddSingleValidationFailure(nameof(dto.Name), "This is a duplicate name.");
-        
+        if (isDuplicateName)
+            return ValidationHelper.AddSingleValidationFailure(
+                nameof(dto.Name),
+                "This is a duplicate name."
+            );
+
         var authResult = ExpressionTypePermissionCheck(dto.ExpressionTypeId);
         if (authResult.IsFailed)
             return authResult.ToResult();
@@ -269,10 +272,13 @@ internal sealed class ExpressionRepository(
         var authResult = await CheckUserPermissionsForExpressionEdit(dto.Id);
         if (authResult.IsFailed)
             return authResult.ToResult();
-        
+
         var isDuplicateName = await HasDuplicateName(dto.Name);
-        if(isDuplicateName)
-            return ValidationHelper.AddSingleValidationFailure(nameof(dto.Name), "This is a duplicate name.");
+        if (isDuplicateName)
+            return ValidationHelper.AddSingleValidationFailure(
+                nameof(dto.Name),
+                "This is a duplicate name."
+            );
 
         var expression = await context.Expressions.Where(x => x.Id == dto.Id).FirstAsync();
 
@@ -312,7 +318,7 @@ internal sealed class ExpressionRepository(
 
         return Result.Ok(expression.Id);
     }
-    
+
     public async Task<bool> HasDuplicateName(string name, int expressionId = 0)
     {
         if (expressionId != 0)
