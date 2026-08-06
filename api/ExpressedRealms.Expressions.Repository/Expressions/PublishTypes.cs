@@ -5,5 +5,5 @@ public enum PublishTypes
     Published = 1,
     Beta,
     Draft,
-    PlayTesting
+    PlayTesting,
 }

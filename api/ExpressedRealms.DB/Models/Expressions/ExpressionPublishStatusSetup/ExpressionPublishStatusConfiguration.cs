@@ -18,7 +18,7 @@ public class ExpressionPublishStatusConfiguration
             })
             .ToList();
         builder.HasData(data);
-        
+
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired().ValueGeneratedOnAdd();
 

@@ -3,10 +3,7 @@ using Ardalis.SmartEnum;
 
 namespace ExpressedRealms.DB.Models.Expressions.ExpressionPublishStatusSetup;
 
-[SuppressMessage(
-    "Reliability",
-    "S3453",
-    Justification = "This is a smart enum")]
+[SuppressMessage("Reliability", "S3453", Justification = "This is a smart enum")]
 public sealed class ExpressionPublishStatusEnum : SmartEnum<ExpressionPublishStatusEnum, int>
 {
     public string Description { get; set; }
@@ -17,7 +14,11 @@ public sealed class ExpressionPublishStatusEnum : SmartEnum<ExpressionPublishSta
         Description = description;
     }
 
-    public static readonly ExpressionPublishStatusEnum Published = new("Published", 1, "This has been released to all users");
+    public static readonly ExpressionPublishStatusEnum Published = new(
+        "Published",
+        1,
+        "This has been released to all users"
+    );
     public static readonly ExpressionPublishStatusEnum Beta = new(
         "Beta",
         2,

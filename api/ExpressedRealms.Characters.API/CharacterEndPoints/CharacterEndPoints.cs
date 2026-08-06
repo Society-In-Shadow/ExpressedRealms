@@ -62,7 +62,11 @@ internal static class CharacterEndPoints
                     IUserContext userContext
                 ) =>
                 {
-                    var allowedStatuses = new List<int> { ExpressionPublishStatusEnum.Published, ExpressionPublishStatusEnum.PlayTesting };
+                    var allowedStatuses = new List<int>
+                    {
+                        ExpressionPublishStatusEnum.Published,
+                        ExpressionPublishStatusEnum.PlayTesting,
+                    };
                     if (
                         userContext.CurrentUserHasPermission(
                             Permissions.Expression.SeeBetaExpressions
@@ -75,11 +79,7 @@ internal static class CharacterEndPoints
                     var expressions = await dbContext
                         .Expressions.AsNoTracking()
                         .Where(x => allowedStatuses.Contains(x.PublishStatusId) && x.CmsTypeId == 1)
-                        .Select(x => new CharacterOptionExpression()
-                        {
-                            Id = x.Id,
-                            Name = x.Name,
-                        })
+                        .Select(x => new CharacterOptionExpression() { Id = x.Id, Name = x.Name })
                         .OrderBy(x => x.Name)
                         .ToListAsync();
 
@@ -128,7 +128,11 @@ internal static class CharacterEndPoints
                     IUserContext userContext
                 ) =>
                 {
-                    var allowedStatuses = new List<int> { ExpressionPublishStatusEnum.Published, ExpressionPublishStatusEnum.PlayTesting };
+                    var allowedStatuses = new List<int>
+                    {
+                        ExpressionPublishStatusEnum.Published,
+                        ExpressionPublishStatusEnum.PlayTesting,
+                    };
                     if (
                         userContext.CurrentUserHasPermission(
                             Permissions.Expression.SeeBetaExpressions

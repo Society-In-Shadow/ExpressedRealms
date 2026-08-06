@@ -26,12 +26,12 @@ internal sealed class ExpressionRepository(
 {
     public async Task<Result<List<ExpressionNavigationMenuItem>>> GetNavigationMenuItems()
     {
-        var allowedStatuses = new List<int> { ExpressionPublishStatusEnum.Published, ExpressionPublishStatusEnum.PlayTesting };
-        if (
-            userContext.CurrentUserHasPermission(
-                Permissions.Expression.SeeBetaExpressions
-            )
-        )
+        var allowedStatuses = new List<int>
+        {
+            ExpressionPublishStatusEnum.Published,
+            ExpressionPublishStatusEnum.PlayTesting,
+        };
+        if (userContext.CurrentUserHasPermission(Permissions.Expression.SeeBetaExpressions))
         {
             allowedStatuses.Add(ExpressionPublishStatusEnum.Beta);
         }
@@ -56,7 +56,7 @@ internal sealed class ExpressionRepository(
                 PublishStatusName = x.PublishStatus.Name,
                 PublishStatusId = (PublishTypes)x.PublishStatusId,
                 OrderIndex = x.OrderIndex,
-                ExpressionSubTypeId = x.ExpressionSubTypeId
+                ExpressionSubTypeId = x.ExpressionSubTypeId,
             })
             .OrderBy(x => x.OrderIndex)
             .ToListAsync(cancellationToken);
@@ -90,7 +90,9 @@ internal sealed class ExpressionRepository(
             ShortDescription = expression.ShortDescription,
             NavMenuImage = expression.NavMenuImage,
             PublishStatus = (PublishTypes)expression.PublishStatusId,
-            PublishTypes = ExpressionPublishStatusEnum.List.Select(x => new KeyValuePair<int, string>(x.Value, x.Name)).ToList(),
+            PublishTypes = ExpressionPublishStatusEnum
+                .List.Select(x => new KeyValuePair<int, string>(x.Value, x.Name))
+                .ToList(),
             OrderIndex = expression.OrderIndex,
         };
     }

@@ -76,12 +76,12 @@ internal sealed class CharacterRepository(
 
     public async Task<bool> ExpressionExistsAsync(int id)
     {
-        var allowedStatuses = new List<int> { ExpressionPublishStatusEnum.Published, ExpressionPublishStatusEnum.PlayTesting };
-        if (
-            userContext.CurrentUserHasPermission(
-                Permissions.Expression.SeeBetaExpressions
-            )
-        )
+        var allowedStatuses = new List<int>
+        {
+            ExpressionPublishStatusEnum.Published,
+            ExpressionPublishStatusEnum.PlayTesting,
+        };
+        if (userContext.CurrentUserHasPermission(Permissions.Expression.SeeBetaExpressions))
         {
             allowedStatuses.Add(ExpressionPublishStatusEnum.Beta);
         }
@@ -93,12 +93,12 @@ internal sealed class CharacterRepository(
 
     public async Task<int> GetExpressionSubTypeId(int expressionId)
     {
-        var allowedStatuses = new List<int> { ExpressionPublishStatusEnum.Published, ExpressionPublishStatusEnum.PlayTesting };
-        if (
-            userContext.CurrentUserHasPermission(
-                Permissions.Expression.SeeBetaExpressions
-            )
-        )
+        var allowedStatuses = new List<int>
+        {
+            ExpressionPublishStatusEnum.Published,
+            ExpressionPublishStatusEnum.PlayTesting,
+        };
+        if (userContext.CurrentUserHasPermission(Permissions.Expression.SeeBetaExpressions))
         {
             allowedStatuses.Add(ExpressionPublishStatusEnum.Beta);
         }
@@ -230,7 +230,8 @@ internal sealed class CharacterRepository(
                 IsPrimaryCharacter = x.IsPrimaryCharacter,
                 IsInCharacterCreation = x.IsInCharacterCreation,
                 IsOwner = x.Player.UserId == userContext.CurrentUserId(),
-                IsPlaytestExpression = x.Expression.PublishStatusId == ExpressionPublishStatusEnum.PlayTesting,
+                IsPlaytestExpression =
+                    x.Expression.PublishStatusId == ExpressionPublishStatusEnum.PlayTesting,
                 PrimaryProgressionId = x.PrimaryProgressionId,
                 SecondaryProgressionId = x.SecondaryProgressionId,
                 IsRetired = x.IsRetired,
@@ -428,9 +429,11 @@ internal sealed class CharacterRepository(
     public async Task<bool> CanUpdatePrimaryCharacterStatus(int id)
     {
         var hasAnyPrimary = await context.Characters.AnyAsync(x =>
-            x.IsPrimaryCharacter && x.Player.UserId == userContext.CurrentUserId() && x.Expression.PublishStatusId != ExpressionPublishStatusEnum.PlayTesting
+            x.IsPrimaryCharacter
+            && x.Player.UserId == userContext.CurrentUserId()
+            && x.Expression.PublishStatusId != ExpressionPublishStatusEnum.PlayTesting
         );
-        
+
         if (!hasAnyPrimary)
             return true;
 
