@@ -19,7 +19,10 @@ public class ExpressionMenuItem
         Slug = helper.GenerateSlug(expressionNavigationMenuItem.Name);
         ExpressionTypeId = expressionNavigationMenuItem.ExpressionTypeId;
         OrderIndex = expressionNavigationMenuItem.OrderIndex;
+        ExpressionSubTypeId = expressionNavigationMenuItem.ExpressionSubTypeId;
     }
+
+    public int? ExpressionSubTypeId { get; set; }
 
     public int OrderIndex { get; set; }
     public int ExpressionTypeId { get; set; }

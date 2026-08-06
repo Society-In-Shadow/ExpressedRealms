@@ -2,6 +2,7 @@ export interface Character {
   id: number | string
   name: string
   expression: string
+  expressionSubTypeId: number | undefined
   state: CharacterState
 }
 

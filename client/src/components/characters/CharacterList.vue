@@ -19,12 +19,7 @@ onMounted(async () => {
     <CharacterTile
       v-for="character in charactersData.characters"
       :key="character.id"
-      :character-id="Number(character.id)"
-      :character-name="character.name"
-      :background-story="character.background"
-      :expression="character.expression"
-      :is-primary-character="character.isPrimaryCharacter"
-      :is-retired="character.isRetired"
+      :character="character"
     />
   </div>
 </template>

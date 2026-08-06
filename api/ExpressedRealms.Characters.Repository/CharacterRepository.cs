@@ -36,9 +36,10 @@ internal sealed class CharacterRepository(
             .Characters.Where(x => x.Player.UserId == userContext.CurrentUserId())
             .Select(x => new CharacterListDto()
             {
-                Id = x.Id.ToString(),
+                Id = x.Id,
                 Name = x.Name,
-                Expression = x.Expression.Name,
+                ExpressionName = x.Expression.Name,
+                ExpressionSubTypeId = x.Expression.ExpressionSubTypeId,
                 IsPrimaryCharacter = x.IsPrimaryCharacter,
                 IsRetired = x.IsRetired,
                 IsInCharacterCreate = x.IsInCharacterCreation,
