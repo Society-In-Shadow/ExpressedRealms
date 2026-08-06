@@ -168,7 +168,10 @@ public static class PowerCardReport
                                     PopulateCashCard.FillCard(col, (CashCardData)card.CardData);
                                     break;
                                 case CardType.PrimaVoidCard:
-                                    PopulatePrimaVoidCard.FillCard(col, (PrimaVoidCardData)card.CardData);
+                                    PopulatePrimaVoidCard.FillCard(
+                                        col,
+                                        (PrimaVoidCardData)card.CardData
+                                    );
                                     break;
                             }
                         }

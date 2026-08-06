@@ -110,22 +110,17 @@ public class GetCharacterPowerCardReportUseCase(
         return powerCards;
     }
 
-    private async Task<DataCard> GetPrimaVoidCards(
-        GetCharacterPowerCardReportModel model
-    )
+    private async Task<DataCard> GetPrimaVoidCards(GetCharacterPowerCardReportModel model)
     {
         var character = await characterRepository.FindCharacterAsync(model.CharacterId);
 
         return new DataCard()
         {
             CardType = CardType.PrimaVoidCard,
-            CardData = new PrimaVoidCardData()
-            {
-                Motes = character!.Motes
-            }
+            CardData = new PrimaVoidCardData() { Motes = character!.Motes },
         };
     }
-    
+
     private async Task<List<PowerCardData>> GetFactionPowerCards(
         GetCharacterPowerCardReportModel model
     )
