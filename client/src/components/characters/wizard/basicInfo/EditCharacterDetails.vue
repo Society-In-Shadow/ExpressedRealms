@@ -84,10 +84,13 @@ const updateWizardContent = () => {
         <FormTextWrapper v-model="form.fields.name" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
         <FormTextWrapper v-model="form.fields.expression" :is-disabled="true" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
         <FormTextAreaWrapper v-model="form.fields.background" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
-        <FormCheckboxWrapper v-if="characterInfo.canModifyPrimaryCharacter" v-model="form.fields.isPrimaryCharacter" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
+        <FormCheckboxWrapper v-if="characterInfo.canModifyPrimaryCharacter && characterInfo.isPlaytestExpression" v-model="form.fields.isPrimaryCharacter" :show-skeleton="characterInfo.isLoading" @change="onSubmit" />
         <Message v-if="characterInfo.canModifyPrimaryCharacter" severity="info" class="mb-3">
           Toggle above to denote the character you intend on having in play. Only one of these are allowed per account.
           This will make this character visible to GOs for printing the booklet and handing out XP.  It does not give them the ability to modify the character.
+        </Message>
+        <Message v-if="characterInfo.isPlaytestExpression" severity="warn" class="mb-3">
+          Playtest Expressions are not allowed to be Primary Characters
         </Message>
         <SelectProgressionPaths :primary-progression="form.fields.primaryProgression" :secondary-progression="form.fields.secondaryProgression" :expression-id="characterInfo.expressionId" :expression-type-id="characterInfo.expressionSubTypeId!" @change="onSubmit" />
       </form>
