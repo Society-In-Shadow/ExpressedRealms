@@ -20,7 +20,10 @@ internal record CharacterEditResponse
         IsArchetypeCharacter = dto.IsArchetypeCharacter;
         FactionRank = dto.FactionRank;
         FactionName = dto.FactionName;
+        IsPlaytestExpression = dto.IsPlaytestExpression;
     }
+
+    public bool IsPlaytestExpression { get; set; }
 
     public string? FactionName { get; set; }
 

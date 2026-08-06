@@ -25,6 +25,7 @@ export const characterStore
         canModifyPrimaryCharacter: false as boolean,
         factionRank: '' as string,
         factionName: '' as string,
+        isPlaytestExpression: false as boolean,
       }
     },
     actions: {
@@ -47,6 +48,7 @@ export const characterStore
             this.expressionSubTypeId = response.data.expressionSubTypeId
             this.factionRank = response.data.factionRank
             this.factionName = response.data.factionName
+            this.isPlaytestExpression = response.data.isPlaytestExpression
 
             if (hasFlag.ShowFactionDropdown) {
               await axios.get(`/characters/${characterId}/factionOptions`)
