@@ -157,7 +157,7 @@ const canCreate = computed(() => {
               />
             </div>
             <div class="col-12 align-self-center text-center order-0 order-md-1 col-md-4">
-              <ExpressionLogo :expression-name="expressionInfo.currentExpressionName" :is-loading="headerIsLoading" />
+              <ExpressionLogo :expression-sub-type-id="expressionInfo.expressionSubTypeId" :is-loading="headerIsLoading" />
             </div>
           </div>
         </div>

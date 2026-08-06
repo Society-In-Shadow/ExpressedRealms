@@ -10,4 +10,5 @@ public class ExpressionNavigationMenuItem
     public PublishTypes PublishStatusId { get; set; }
     public int ExpressionTypeId { get; set; }
     public int OrderIndex { get; set; }
+    public int? ExpressionSubTypeId { get; set; }
 }

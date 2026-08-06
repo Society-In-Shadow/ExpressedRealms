@@ -1,3 +1,5 @@
+import type { ExpressionSubTypes } from '@/components/expressions/expressionSubTypes'
+
 export interface ExpressionMenuItem {
   id: number
   name: string
@@ -7,6 +9,7 @@ export interface ExpressionMenuItem {
   statusId: number
   slug: string
   expressionTypeId: number
+  expressionSubTypeId: ExpressionSubTypes
   orderIndex: number
 }
 

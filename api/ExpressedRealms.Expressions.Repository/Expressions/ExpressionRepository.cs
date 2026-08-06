@@ -53,6 +53,7 @@ internal sealed class ExpressionRepository(
                 PublishStatusName = x.PublishStatus.Name,
                 PublishStatusId = (PublishTypes)x.PublishStatusId,
                 OrderIndex = x.OrderIndex,
+                ExpressionSubTypeId = x.ExpressionSubTypeId
             })
             .OrderBy(x => x.OrderIndex)
             .ToListAsync(cancellationToken);

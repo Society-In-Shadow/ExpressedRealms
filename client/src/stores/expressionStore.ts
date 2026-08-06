@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import { cmsStore } from '@/stores/cmsStore.ts'
 import router from '@/router'
+import type { ExpressionSubTypes } from '@/components/expressions/expressionSubTypes'
 
 const cmsInfo = cmsStore()
 export const expressionStore
@@ -14,6 +15,7 @@ export const expressionStore
         isDoneLoading: false as boolean,
         isSpecialExpression: false as boolean,
         expressionTypeId: 0 as number,
+        expressionSubTypeId: 0 as ExpressionSubTypes,
       }
     },
     actions: {
@@ -33,6 +35,7 @@ export const expressionStore
           this.currentExpressionId = filter[0].id
           this.currentExpressionName = filter[0].name
           this.expressionTypeId = filter[0].expressionTypeId
+          this.expressionSubTypeId = filter[0].expressionSubTypeId
           return
         }
         router.push('/characters')
