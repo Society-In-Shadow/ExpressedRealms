@@ -48,7 +48,7 @@ internal static class PopulatePrimaVoidCard
                                 
                                 leftSide.Item()
                                     .Text(
-                                        " - For the right, if void is taken, use a negative number, positive if pryma");
+                                        " - For the right, if void is taken, use a negative number, positive if Pryma");
                                 
                                 leftSide.Item()
                                     .Text(
