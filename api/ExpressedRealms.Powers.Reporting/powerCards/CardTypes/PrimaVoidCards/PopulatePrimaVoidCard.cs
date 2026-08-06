@@ -115,10 +115,9 @@ internal static class PopulatePrimaVoidCard
                                             .PaddingLeft(5)
                                             .PaddingRight(5)
                                             .PaddingTop(5)
-                                            .AlignBottom()
-                                            .BorderBottom(1)
                                             .AlignCenter()
-                                            .Text(data.Motes);
+                                            .BorderBottom(1)
+                                            .Text(data.Motes.ToString());
 
                                         initialIncomeRow
                                             .RelativeItem()
