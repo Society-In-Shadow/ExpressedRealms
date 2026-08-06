@@ -33,7 +33,7 @@ async function redirect(event: MouseEvent) {
       <i class="material-symbols-outlined text-white">add</i>
     </span>
     <span v-else class="inline-flex flex-none align-items-center justify-content-center border-circle bg-primary w-3rem h-3rem ">
-      <ExpressionLogo :expression-name="item.expression" />
+      <ExpressionLogo :expression-sub-type-id="item.expressionSubTypeId" />
     </span>
     <span class="inline-flex flex-column gap-1 pl-2">
       <span class="font-medium text-lg text-900">

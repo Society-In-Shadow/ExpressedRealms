@@ -154,6 +154,7 @@ internal static class NavigationEndpoints
                             x.Id,
                             x.Name,
                             x.Expression.Name,
+                            x.Expression.ExpressionSubTypeId,
                             x.IsPrimaryCharacter ? 1
                                 : x.IsRetired ? 2
                                 : 0
