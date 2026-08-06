@@ -22,7 +22,7 @@ using ExpressedRealms.Characters.Repository.DTOs;
 using ExpressedRealms.Characters.Repository.Skills;
 using ExpressedRealms.Characters.Repository.Skills.DTOs;
 using ExpressedRealms.DB;
-using ExpressedRealms.Expressions.Repository.Expressions;
+using ExpressedRealms.DB.Models.Expressions.ExpressionPublishStatusSetup;
 using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Server.Shared;
@@ -62,14 +62,14 @@ internal static class CharacterEndPoints
                     IUserContext userContext
                 ) =>
                 {
-                    var allowedStatuses = new List<int> { (int)PublishTypes.Published };
+                    var allowedStatuses = new List<int> { ExpressionPublishStatusEnum.Published, ExpressionPublishStatusEnum.PlayTesting };
                     if (
                         userContext.CurrentUserHasPermission(
                             Permissions.Expression.SeeBetaExpressions
                         )
                     )
                     {
-                        allowedStatuses.Add((int)PublishTypes.Beta);
+                        allowedStatuses.Add(ExpressionPublishStatusEnum.Beta);
                     }
 
                     var expressions = await dbContext
@@ -78,10 +78,7 @@ internal static class CharacterEndPoints
                         .Select(x => new CharacterOptionExpression()
                         {
                             Id = x.Id,
-                            Name =
-                                x.PublishStatusId == (int)PublishTypes.Beta
-                                    ? x.Name + " (Beta)"
-                                    : x.Name,
+                            Name = x.Name,
                         })
                         .OrderBy(x => x.Name)
                         .ToListAsync();
@@ -131,14 +128,14 @@ internal static class CharacterEndPoints
                     IUserContext userContext
                 ) =>
                 {
-                    var allowedStatuses = new List<int> { (int)PublishTypes.Published };
+                    var allowedStatuses = new List<int> { ExpressionPublishStatusEnum.Published, ExpressionPublishStatusEnum.PlayTesting };
                     if (
                         userContext.CurrentUserHasPermission(
                             Permissions.Expression.SeeBetaExpressions
                         )
                     )
                     {
-                        allowedStatuses.Add((int)PublishTypes.Beta);
+                        allowedStatuses.Add(ExpressionPublishStatusEnum.Beta);
                     }
                     var expressionInfo = await dbContext
                         .Expressions.AsNoTracking()

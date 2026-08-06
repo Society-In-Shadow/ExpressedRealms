@@ -2,10 +2,10 @@ using System.Data;
 using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Expressions.ExpressionPublishStatusSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.Expressions.Repository.Expressions.DTOs;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
-using ExpressedRealms.Repositories.Shared.Helpers;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
@@ -26,16 +26,19 @@ internal sealed class ExpressionRepository(
 {
     public async Task<Result<List<ExpressionNavigationMenuItem>>> GetNavigationMenuItems()
     {
-        var allowedStatuses = new List<int> { (int)PublishTypes.Published };
+        var allowedStatuses = new List<int> { ExpressionPublishStatusEnum.Published, ExpressionPublishStatusEnum.PlayTesting };
+        if (
+            userContext.CurrentUserHasPermission(
+                Permissions.Expression.SeeBetaExpressions
+            )
+        )
+        {
+            allowedStatuses.Add(ExpressionPublishStatusEnum.Beta);
+        }
 
         if (userContext.CurrentUserHasPermission(Permissions.Expression.Edit))
         {
-            allowedStatuses.Add((int)PublishTypes.Draft);
-        }
-
-        if (userContext.CurrentUserHasPermission(Permissions.Expression.SeeBetaExpressions))
-        {
-            allowedStatuses.Add((int)PublishTypes.Beta);
+            allowedStatuses.Add(ExpressionPublishStatusEnum.Draft);
         }
 
         var expression = context
@@ -87,7 +90,7 @@ internal sealed class ExpressionRepository(
             ShortDescription = expression.ShortDescription,
             NavMenuImage = expression.NavMenuImage,
             PublishStatus = (PublishTypes)expression.PublishStatusId,
-            PublishTypes = EnumHelpers.GetEnumKeyValuePairs<PublishTypes>(),
+            PublishTypes = ExpressionPublishStatusEnum.List.Select(x => new KeyValuePair<int, string>(x.Value, x.Name)).ToList(),
             OrderIndex = expression.OrderIndex,
         };
     }
@@ -274,7 +277,7 @@ internal sealed class ExpressionRepository(
         if (authResult.IsFailed)
             return authResult.ToResult();
 
-        var isDuplicateName = await HasDuplicateName(dto.Name);
+        var isDuplicateName = await HasDuplicateName(dto.Name, dto.Id);
         if (isDuplicateName)
             return ValidationHelper.AddSingleValidationFailure(
                 nameof(dto.Name),

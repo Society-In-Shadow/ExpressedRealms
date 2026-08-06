@@ -7,9 +7,9 @@ using ExpressedRealms.DB;
 using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Characters;
+using ExpressedRealms.DB.Models.Expressions.ExpressionPublishStatusSetup;
 using ExpressedRealms.DB.Models.Statistics.CharacterStatMappings;
 using ExpressedRealms.Expressions.Repository.CharacterFactions;
-using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.Repositories.Shared;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
@@ -76,10 +76,14 @@ internal sealed class CharacterRepository(
 
     public async Task<bool> ExpressionExistsAsync(int id)
     {
-        var allowedStatuses = new List<int> { (int)PublishTypes.Published };
-        if (userContext.CurrentUserHasPermission(Permissions.Expression.SeeBetaExpressions))
+        var allowedStatuses = new List<int> { ExpressionPublishStatusEnum.Published, ExpressionPublishStatusEnum.PlayTesting };
+        if (
+            userContext.CurrentUserHasPermission(
+                Permissions.Expression.SeeBetaExpressions
+            )
+        )
         {
-            allowedStatuses.Add((int)PublishTypes.Beta);
+            allowedStatuses.Add(ExpressionPublishStatusEnum.Beta);
         }
         return await context.Expressions.AnyAsync(
             x => x.Id == id && allowedStatuses.Contains(x.PublishStatusId) && x.CmsTypeId == 1,
@@ -89,10 +93,14 @@ internal sealed class CharacterRepository(
 
     public async Task<int> GetExpressionSubTypeId(int expressionId)
     {
-        var allowedStatuses = new List<int> { (int)PublishTypes.Published };
-        if (userContext.CurrentUserHasPermission(Permissions.Expression.SeeBetaExpressions))
+        var allowedStatuses = new List<int> { ExpressionPublishStatusEnum.Published, ExpressionPublishStatusEnum.PlayTesting };
+        if (
+            userContext.CurrentUserHasPermission(
+                Permissions.Expression.SeeBetaExpressions
+            )
+        )
         {
-            allowedStatuses.Add((int)PublishTypes.Beta);
+            allowedStatuses.Add(ExpressionPublishStatusEnum.Beta);
         }
         var expressionSubTypeId = await context
             .Expressions.Where(x =>
