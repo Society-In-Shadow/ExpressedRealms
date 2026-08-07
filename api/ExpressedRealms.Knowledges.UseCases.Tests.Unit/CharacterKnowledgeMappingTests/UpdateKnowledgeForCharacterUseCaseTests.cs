@@ -250,7 +250,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
                     {
                         KnowledgeLevel = new KnowledgeEducationLevel()
                         {
-                            Id = 1,
+                            Id = 3,
                         },
                     },
                 ]
@@ -274,7 +274,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
                     {
                         KnowledgeLevel = new KnowledgeEducationLevel()
                         {
-                            Id = 1,
+                            Id = 3,
                         },
                     },
                 ]
@@ -286,6 +286,66 @@ public class UpdateKnowledgeForCharacterUseCaseTests
                 _mappingRepository.UpdateCharacterKnowledgeMapping(A<CharacterKnowledgeMapping>._)
             )
             .MustNotHaveHappened();
+    }
+
+    [Fact]
+    public async Task UseCase_WillAllowKnowledgeLevelChange_WhenFactionLevelIsEqualToRequestedLevel()
+    {
+        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+            .Returns(
+                [
+                    new CharacterFactionDto()
+                    {
+                        KnowledgeLevel = new KnowledgeEducationLevel()
+                        {
+                            Id = _model.KnowledgeLevelId,
+                        },
+                    },
+                ]
+            );
+
+        var result = await _useCase.ExecuteAsync(_model);
+
+        Assert.True(result.IsSuccess);
+    }
+
+    [Fact]
+    public async Task UseCase_WillAllowKnowledgeLevelChange_WhenFactionLevelIsLowerThanRequestedLevel()
+    {
+        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+            .Returns(
+                [
+                    new CharacterFactionDto()
+                    {
+                        KnowledgeLevel = new KnowledgeEducationLevel()
+                        {
+                            Id = _model.KnowledgeLevelId - 1,
+                        },
+                    },
+                ]
+            );
+
+        var result = await _useCase.ExecuteAsync(_model);
+
+        Assert.True(result.IsSuccess);
+    }
+
+    [Fact]
+    public async Task UseCase_WillIgnoreFactionLevels_WithoutKnowledgeLevel()
+    {
+        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+            .Returns(
+                [
+                    new CharacterFactionDto()
+                    {
+                        KnowledgeLevel = null,
+                    },
+                ]
+            );
+
+        var result = await _useCase.ExecuteAsync(_model);
+
+        Assert.True(result.IsSuccess);
     }
 
     [Fact]

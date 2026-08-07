@@ -39,7 +39,7 @@ internal sealed class UpdateKnowledgeForCharacterUseCase(
         {
             var factionKnowledge = await characterFactionRepository.GetLatestPlayerFactionLevels(model.CharacterId);
             // This only works because knowledge level ids are in order
-            if (factionKnowledge.Any(x => x.KnowledgeLevel?.Id < model.KnowledgeLevelId))
+            if (factionKnowledge.Any(x => x.KnowledgeLevel != null && x.KnowledgeLevel?.Id > model.KnowledgeLevelId))
             {
                 return ValidationHelper.AddSingleValidationFailure(nameof(model.KnowledgeLevelId),
                     "Your faction level prevents you from applying this knowledge level change.");
