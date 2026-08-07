@@ -9,15 +9,18 @@ export interface CharacterKnowledge {
   notes: string | null
   level: number
   levelId: number
+  minimumKnowledgeId: number
   specializationCount: number
   knowledge: Knowledge
   specializations: Array<Specialization>
 }
 
 export interface Knowledge {
+  id: number
   name: string
   description: string
   type: string
+  blockFactionChanges: boolean
 }
 
 export interface Specialization {
@@ -25,6 +28,7 @@ export interface Specialization {
   name: string
   description: string
   notes: string | null
+  blockFactionChanges: boolean
 }
 
 export interface KnowledgeOptionResponse {

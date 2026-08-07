@@ -6,4 +6,5 @@ public class KnowledgeReturnModel
     public required string Description { get; set; }
     public required string Type { get; set; }
     public int Id { get; set; }
+    public bool BlockFactionChanges { get; set; }
 }

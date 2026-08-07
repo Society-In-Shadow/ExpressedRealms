@@ -2,6 +2,7 @@ namespace ExpressedRealms.Knowledges.UseCases.KnowledgeSpecializations.EditSpeci
 
 public class EditSpecializationModel
 {
+    public int CharacterId { get; set; }
     public required string Name { get; set; }
     public required string Description { get; set; }
     public int Id { get; set; }

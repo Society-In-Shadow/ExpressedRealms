@@ -1,4 +1,7 @@
 using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.DB.Models.Knowledges.KnowledgeEducationLevels;
+using ExpressedRealms.Expressions.Repository.CharacterFactions;
+using ExpressedRealms.Expressions.Repository.CharacterFactions.Dtos;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings.Projections;
 using ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.GetReadOnly;
@@ -13,6 +16,7 @@ public class GetReadOnlyKnowledgesForCharacterUseCaseTests
     private readonly GetKnowledgesForCharacterUseCase _useCase;
     private readonly ICharacterKnowledgeRepository _mappingRepository;
     private readonly ICharacterRepository _characterRepository;
+    private readonly ICharacterFactionRepository _characterFactionRepository;
     private readonly GetKnowledgesForCharacterModel _model;
     private readonly List<CharacterKnowledgeProjection> _dbModel;
 
@@ -77,16 +81,20 @@ public class GetReadOnlyKnowledgesForCharacterUseCaseTests
 
         _mappingRepository = A.Fake<ICharacterKnowledgeRepository>();
         _characterRepository = A.Fake<ICharacterRepository>();
+        _characterFactionRepository = A.Fake<ICharacterFactionRepository>();
 
         A.CallTo(() => _mappingRepository.GetKnowledgesForCharacter(_model.CharacterId))
             .Returns(_dbModel);
 
         A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId)).Returns(true);
+        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+            .Returns([]);
 
         var validator = new GetKnowledgesForCharacterModelValidator(_characterRepository);
 
         _useCase = new GetKnowledgesForCharacterUseCase(
             _mappingRepository,
+            _characterFactionRepository,
             validator,
             CancellationToken.None
         );
@@ -127,6 +135,15 @@ public class GetReadOnlyKnowledgesForCharacterUseCaseTests
     }
 
     [Fact]
+    public async Task UseCase_GetsLatestPlayerFactionLevels()
+    {
+        await _useCase.ExecuteAsync(_model);
+
+        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+            .MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
     public async Task UseCase_ReturnsKnowledgesForCharacter()
     {
         var results = await _useCase.ExecuteAsync(_model);
@@ -142,6 +159,7 @@ public class GetReadOnlyKnowledgesForCharacterUseCaseTests
                     Name = x.Knowledge.Name,
                     Description = x.Knowledge.Description,
                     Type = x.Knowledge.Type,
+                    BlockFactionChanges = true,
                 },
                 StoneModifier = x.StoneModifier,
                 LevelName = x.LevelName,
@@ -149,6 +167,7 @@ public class GetReadOnlyKnowledgesForCharacterUseCaseTests
                 Notes = x.Notes,
                 SpecializationCount = x.SpecializationCount,
                 LevelId = x.LevelId,
+                MinimumKnowledgeId = null,
                 Specializations = x
                     .Specializations.Select(y => new SpecializationReturnModel()
                     {
@@ -156,11 +175,118 @@ public class GetReadOnlyKnowledgesForCharacterUseCaseTests
                         Description = y.Description,
                         Id = y.Id,
                         Notes = y.Notes,
+                        BlockFactionChanges = false,
                     })
                     .ToList(),
             })
             .ToList();
 
         Assert.Equivalent(knowledges, results.Value);
+    }
+
+    [Fact]
+    public async Task UseCase_WillMarkKnowledge_AsBlockedFromFactionChanges_WhenFactionDoesNotRequireKnowledge()
+    {
+        var results = await _useCase.ExecuteAsync(_model);
+
+        Assert.True(results.Value.Single(x => x.Knowledge.Id == 29).Knowledge.BlockFactionChanges);
+        Assert.True(results.Value.Single(x => x.Knowledge.Id == 30).Knowledge.BlockFactionChanges);
+    }
+
+    [Fact]
+    public async Task UseCase_WillMarkKnowledge_AsNotBlockedFromFactionChanges_WhenFactionRequiresKnowledge()
+    {
+        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+            .Returns(
+                [
+                    new CharacterFactionDto()
+                    {
+                        KnowledgeId = 29,
+                        KnowledgeLevel = new KnowledgeEducationLevel() { Id = 3 },
+                    },
+                ]
+            );
+
+        var results = await _useCase.ExecuteAsync(_model);
+
+        Assert.False(results.Value.Single(x => x.Knowledge.Id == 29).Knowledge.BlockFactionChanges);
+        Assert.True(results.Value.Single(x => x.Knowledge.Id == 30).Knowledge.BlockFactionChanges);
+    }
+
+    [Fact]
+    public async Task UseCase_WillSetMinimumKnowledgeId_WhenFactionRequiresKnowledge()
+    {
+        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+            .Returns(
+                [
+                    new CharacterFactionDto()
+                    {
+                        KnowledgeId = 29,
+                        KnowledgeLevel = new KnowledgeEducationLevel() { Id = 3 },
+                    },
+                    new CharacterFactionDto()
+                    {
+                        KnowledgeId = 29,
+                        KnowledgeLevel = new KnowledgeEducationLevel() { Id = 5 },
+                    },
+                ]
+            );
+
+        var results = await _useCase.ExecuteAsync(_model);
+
+        Assert.Equal(5, results.Value.Single(x => x.Knowledge.Id == 29).MinimumKnowledgeId);
+        Assert.Null(results.Value.Single(x => x.Knowledge.Id == 30).MinimumKnowledgeId);
+    }
+
+    [Fact]
+    public async Task UseCase_WillMarkSpecialization_AsBlockedFromFactionChanges_WhenFactionRequiresSpecialization()
+    {
+        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+            .Returns(
+                [
+                    new CharacterFactionDto()
+                    {
+                        KnowledgeId = 29,
+                        KnowledgeSpecialization = "Specialization",
+                    },
+                ]
+            );
+
+        var results = await _useCase.ExecuteAsync(_model);
+
+        var knowledge = results.Value.Single(x => x.Knowledge.Id == 29);
+
+        Assert.True(
+            knowledge.Specializations.Single(x => x.Name == "Specialization").BlockFactionChanges
+        );
+        Assert.False(
+            knowledge.Specializations.Single(x => x.Name == "Specialization 2").BlockFactionChanges
+        );
+    }
+
+    [Fact]
+    public async Task UseCase_WillNotMarkSpecialization_AsBlockedFromFactionChanges_WhenFactionRequiresSameSpecializationName_ForDifferentKnowledge()
+    {
+        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+            .Returns(
+                [
+                    new CharacterFactionDto()
+                    {
+                        KnowledgeId = 30,
+                        KnowledgeSpecialization = "Specialization",
+                    },
+                ]
+            );
+
+        var results = await _useCase.ExecuteAsync(_model);
+
+        var knowledge = results.Value.Single(x => x.Knowledge.Id == 29);
+
+        Assert.False(
+            knowledge.Specializations.Single(x => x.Name == "Specialization").BlockFactionChanges
+        );
+        Assert.False(
+            knowledge.Specializations.Single(x => x.Name == "Specialization 2").BlockFactionChanges
+        );
     }
 }

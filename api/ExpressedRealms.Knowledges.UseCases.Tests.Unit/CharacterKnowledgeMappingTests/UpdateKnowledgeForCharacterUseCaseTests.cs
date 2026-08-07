@@ -1,9 +1,12 @@
+using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.Characters.Repository.Xp.Dtos;
 using ExpressedRealms.DB.Models.Characters.XpTables;
 using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeEducationLevels;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels;
+using ExpressedRealms.Expressions.Repository.CharacterFactions;
+using ExpressedRealms.Expressions.Repository.CharacterFactions.Dtos;
 using ExpressedRealms.Knowledges.Repository;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.Knowledges;
@@ -25,6 +28,8 @@ public class UpdateKnowledgeForCharacterUseCaseTests
     private readonly IKnowledgeLevelRepository _levelRepository;
     private readonly UpdateKnowledgeForCharacterModel _model;
     private readonly IXpRepository _xpRepository;
+    private readonly ICharacterRepository _characterRepository;
+    private readonly ICharacterFactionRepository _characterFactionRepository;
     private readonly CharacterKnowledgeMapping _dbModel;
 
     public UpdateKnowledgeForCharacterUseCaseTests()
@@ -34,12 +39,13 @@ public class UpdateKnowledgeForCharacterUseCaseTests
             MappingId = 1,
             KnowledgeLevelId = 2,
             Notes = "123",
+            CharacterId = 2,
         };
 
         _dbModel = new CharacterKnowledgeMapping()
         {
             KnowledgeLevelId = 3,
-            CharacterId = 2,
+            CharacterId = _model.CharacterId,
             KnowledgeId = 4,
             Notes = "123",
         };
@@ -48,6 +54,8 @@ public class UpdateKnowledgeForCharacterUseCaseTests
         _mappingRepository = A.Fake<ICharacterKnowledgeRepository>();
         _levelRepository = A.Fake<IKnowledgeLevelRepository>();
         _xpRepository = A.Fake<IXpRepository>();
+        _characterRepository = A.Fake<ICharacterRepository>();
+        _characterFactionRepository = A.Fake<ICharacterFactionRepository>();
 
         A.CallTo(() => _mappingRepository.GetCharacterKnowledgeMappingForEditing(_model.MappingId))
             .Returns(_dbModel);
@@ -55,6 +63,9 @@ public class UpdateKnowledgeForCharacterUseCaseTests
         A.CallTo(() => _levelRepository.KnowledgeLevelExists(_model.KnowledgeLevelId))
             .Returns(true);
         A.CallTo(() => _mappingRepository.MappingAlreadyExists(_model.MappingId)).Returns(true);
+        A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId)).Returns(true);
+        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+            .Returns([]);
         A.CallTo(() =>
                 _xpRepository.GetAvailableXpForSection(
                     _dbModel.CharacterId,
@@ -78,13 +89,15 @@ public class UpdateKnowledgeForCharacterUseCaseTests
         var validator = new UpdateKnowledgeForCharacterModelValidator(
             _knowledgeRepository,
             _mappingRepository,
-            _levelRepository
+            _levelRepository,
+            _characterRepository
         );
 
         _useCase = new UpdateKnowledgeForCharacterUseCase(
             _mappingRepository,
             _levelRepository,
             _knowledgeRepository,
+            _characterFactionRepository,
             _xpRepository,
             validator,
             CancellationToken.None
@@ -112,6 +125,33 @@ public class UpdateKnowledgeForCharacterUseCaseTests
         result.MustHaveValidationError(
             nameof(UpdateKnowledgeForCharacterModel.MappingId),
             "The Knowledge Mapping does not exist."
+        );
+    }
+
+    [Fact]
+    public async Task ValidationFor_CharacterId_WillFail_WhenItsEmpty()
+    {
+        _model.CharacterId = 0;
+
+        var result = await _useCase.ExecuteAsync(_model);
+
+        result.MustHaveValidationError(
+            nameof(UpdateKnowledgeForCharacterModel.CharacterId),
+            "Character Id is required."
+        );
+    }
+
+    [Fact]
+    public async Task ValidationFor_CharacterId_WillFail_WhenItDoesNotExist()
+    {
+        A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId))
+            .Returns(false);
+
+        var result = await _useCase.ExecuteAsync(_model);
+
+        result.MustHaveValidationError(
+            nameof(UpdateKnowledgeForCharacterModel.CharacterId),
+            "This Character was not found."
         );
     }
 
@@ -178,6 +218,153 @@ public class UpdateKnowledgeForCharacterUseCaseTests
 
         A.CallTo(() => _mappingRepository.GetCharacterKnowledgeMappingForEditing(_model.MappingId))
             .MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task UseCase_GetsLatestPlayerFactionLevels_WhenKnowledgeLevelChanges()
+    {
+        await _useCase.ExecuteAsync(_model);
+
+        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+            .MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task UseCase_DoesNotGetLatestPlayerFactionLevels_WhenOnlyNotesChange()
+    {
+        _model.KnowledgeLevelId = 3;
+        _dbModel.KnowledgeLevelId = 3;
+
+        await _useCase.ExecuteAsync(_model);
+
+        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+            .MustNotHaveHappened();
+    }
+
+    [Fact]
+    public async Task UseCase_WillFail_WhenFactionLevelPreventsKnowledgeLevelChange()
+    {
+        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+            .Returns(
+                [
+                    new CharacterFactionDto()
+                    {
+                        KnowledgeId = _dbModel.KnowledgeId,
+                        KnowledgeLevel = new KnowledgeEducationLevel() { Id = 3 },
+                    },
+                ]
+            );
+
+        var result = await _useCase.ExecuteAsync(_model);
+
+        result.MustHaveValidationError(
+            nameof(UpdateKnowledgeForCharacterModel.KnowledgeLevelId),
+            "Your faction level prevents you from applying this knowledge level change."
+        );
+    }
+
+    [Fact]
+    public async Task UseCase_WillNotUpdate_WhenFactionLevelPreventsKnowledgeLevelChange()
+    {
+        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+            .Returns(
+                [
+                    new CharacterFactionDto()
+                    {
+                        KnowledgeId = _dbModel.KnowledgeId,
+                        KnowledgeLevel = new KnowledgeEducationLevel() { Id = 3 },
+                    },
+                ]
+            );
+
+        await _useCase.ExecuteAsync(_model);
+
+        A.CallTo(() =>
+                _mappingRepository.UpdateCharacterKnowledgeMapping(A<CharacterKnowledgeMapping>._)
+            )
+            .MustNotHaveHappened();
+    }
+
+    [Fact]
+    public async Task UseCase_WillAllowKnowledgeLevelChange_WhenFactionLevelIsForDifferentKnowledge()
+    {
+        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+            .Returns(
+                [
+                    new CharacterFactionDto()
+                    {
+                        KnowledgeId = _dbModel.KnowledgeId + 1,
+                        KnowledgeLevel = new KnowledgeEducationLevel() { Id = 3 },
+                    },
+                ]
+            );
+
+        var result = await _useCase.ExecuteAsync(_model);
+
+        Assert.True(result.IsSuccess);
+    }
+
+    [Fact]
+    public async Task UseCase_WillAllowKnowledgeLevelChange_WhenFactionLevelIsEqualToRequestedLevel()
+    {
+        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+            .Returns(
+                [
+                    new CharacterFactionDto()
+                    {
+                        KnowledgeId = _dbModel.KnowledgeId,
+                        KnowledgeLevel = new KnowledgeEducationLevel()
+                        {
+                            Id = _model.KnowledgeLevelId,
+                        },
+                    },
+                ]
+            );
+
+        var result = await _useCase.ExecuteAsync(_model);
+
+        Assert.True(result.IsSuccess);
+    }
+
+    [Fact]
+    public async Task UseCase_WillAllowKnowledgeLevelChange_WhenFactionLevelIsLowerThanRequestedLevel()
+    {
+        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+            .Returns(
+                [
+                    new CharacterFactionDto()
+                    {
+                        KnowledgeId = _dbModel.KnowledgeId,
+                        KnowledgeLevel = new KnowledgeEducationLevel()
+                        {
+                            Id = _model.KnowledgeLevelId - 1,
+                        },
+                    },
+                ]
+            );
+
+        var result = await _useCase.ExecuteAsync(_model);
+
+        Assert.True(result.IsSuccess);
+    }
+
+    [Fact]
+    public async Task UseCase_WillIgnoreFactionLevels_WithoutKnowledgeLevel()
+    {
+        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+            .Returns(
+                [
+                    new CharacterFactionDto()
+                    {
+                        KnowledgeId = _dbModel.KnowledgeId,
+                        KnowledgeLevel = null,
+                    },
+                ]
+            );
+
+        var result = await _useCase.ExecuteAsync(_model);
+
+        Assert.True(result.IsSuccess);
     }
 
     [Fact]

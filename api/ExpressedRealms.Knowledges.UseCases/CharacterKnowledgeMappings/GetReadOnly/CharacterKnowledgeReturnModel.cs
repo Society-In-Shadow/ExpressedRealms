@@ -1,5 +1,3 @@
-using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings.Projections;
-
 namespace ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.GetReadOnly;
 
 public class CharacterKnowledgeReturnModel
@@ -13,4 +11,6 @@ public class CharacterKnowledgeReturnModel
     public string? Notes { get; set; }
     public int LevelId { get; set; }
     public int SpecializationCount { get; set; }
+    public bool CanSelectLevel { get; set; }
+    public int? MinimumKnowledgeId { get; set; }
 }
