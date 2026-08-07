@@ -248,6 +248,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
                 [
                     new CharacterFactionDto()
                     {
+                        KnowledgeId = _dbModel.KnowledgeId,
                         KnowledgeLevel = new KnowledgeEducationLevel()
                         {
                             Id = 3,
@@ -272,6 +273,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
                 [
                     new CharacterFactionDto()
                     {
+                        KnowledgeId = _dbModel.KnowledgeId,
                         KnowledgeLevel = new KnowledgeEducationLevel()
                         {
                             Id = 3,
@@ -289,6 +291,28 @@ public class UpdateKnowledgeForCharacterUseCaseTests
     }
 
     [Fact]
+    public async Task UseCase_WillAllowKnowledgeLevelChange_WhenFactionLevelIsForDifferentKnowledge()
+    {
+        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+            .Returns(
+                [
+                    new CharacterFactionDto()
+                    {
+                        KnowledgeId = _dbModel.KnowledgeId + 1,
+                        KnowledgeLevel = new KnowledgeEducationLevel()
+                        {
+                            Id = 3,
+                        },
+                    },
+                ]
+            );
+
+        var result = await _useCase.ExecuteAsync(_model);
+
+        Assert.True(result.IsSuccess);
+    }
+
+    [Fact]
     public async Task UseCase_WillAllowKnowledgeLevelChange_WhenFactionLevelIsEqualToRequestedLevel()
     {
         A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
@@ -296,6 +320,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
                 [
                     new CharacterFactionDto()
                     {
+                        KnowledgeId = _dbModel.KnowledgeId,
                         KnowledgeLevel = new KnowledgeEducationLevel()
                         {
                             Id = _model.KnowledgeLevelId,
@@ -317,6 +342,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
                 [
                     new CharacterFactionDto()
                     {
+                        KnowledgeId = _dbModel.KnowledgeId,
                         KnowledgeLevel = new KnowledgeEducationLevel()
                         {
                             Id = _model.KnowledgeLevelId - 1,
@@ -338,6 +364,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
                 [
                     new CharacterFactionDto()
                     {
+                        KnowledgeId = _dbModel.KnowledgeId,
                         KnowledgeLevel = null,
                     },
                 ]
