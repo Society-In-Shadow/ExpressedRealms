@@ -1,5 +1,6 @@
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.DB.Models.Characters.XpTables;
+using ExpressedRealms.Expressions.Repository.CharacterFactions;
 using ExpressedRealms.Knowledges.Repository;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.Knowledges;
@@ -13,6 +14,7 @@ internal sealed class UpdateKnowledgeForCharacterUseCase(
     ICharacterKnowledgeRepository mappingRepository,
     IKnowledgeLevelRepository knowledgeLevelRepository,
     IKnowledgeRepository knowledgeRepository,
+    ICharacterFactionRepository characterFactionRepository,
     IXpRepository xpRepository,
     UpdateKnowledgeForCharacterModelValidator validator,
     CancellationToken cancellationToken
@@ -35,6 +37,14 @@ internal sealed class UpdateKnowledgeForCharacterUseCase(
 
         if (mapping.KnowledgeLevelId != model.KnowledgeLevelId)
         {
+            var factionKnowledge = await characterFactionRepository.GetLatestPlayerFactionLevels(model.CharacterId);
+            // This only works because knowledge level ids are in order
+            if (factionKnowledge.Any(x => x.KnowledgeLevel?.Id < model.KnowledgeLevelId))
+            {
+                return ValidationHelper.AddSingleValidationFailure(nameof(model.KnowledgeLevelId),
+                    "Your faction level prevents you from applying this knowledge level change.");
+            }
+            
             var xpInfo = await xpRepository.GetAvailableXpForSection(
                 mapping.CharacterId,
                 XpSectionTypes.Knowledge

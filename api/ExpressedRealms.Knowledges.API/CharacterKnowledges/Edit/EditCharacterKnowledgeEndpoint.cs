@@ -20,6 +20,7 @@ public static class EditCharacterKnowledgeEndpoint
         var results = await editKnowledgeUseCase.ExecuteAsync(
             new UpdateKnowledgeForCharacterModel()
             {
+                CharacterId = characterId,
                 MappingId = mappingId,
                 KnowledgeLevelId = request.KnowledgeLevelId,
                 Notes = request.Notes,
