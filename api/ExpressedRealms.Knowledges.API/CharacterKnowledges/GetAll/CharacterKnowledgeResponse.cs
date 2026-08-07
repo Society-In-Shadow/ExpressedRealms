@@ -1,5 +1,3 @@
-using ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.GetReadOnly;
-
 namespace ExpressedRealms.Knowledges.API.CharacterKnowledges.GetAll;
 
 public class CharacterKnowledgeResponse
@@ -13,4 +11,5 @@ public class CharacterKnowledgeResponse
     public string? Notes { get; set; }
     public int LevelId { get; set; }
     public int SpecializationCount { get; set; }
+    public int? MinimumKnowledgeId { get; set; }
 }

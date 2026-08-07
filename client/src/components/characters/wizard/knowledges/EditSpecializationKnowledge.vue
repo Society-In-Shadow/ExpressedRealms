@@ -45,7 +45,11 @@ const onSubmit = form.handleSubmit(async (values) => {
 
   <h2>Specialization</h2>
   <form @submit="onSubmit">
-    <FormInputTextWrapper v-model="form.name" />
+    <FormInputTextWrapper v-model="form.name" :is-disabled="specialization.blockFactionChanges" />
+
+    <p v-if="specialization.blockFactionChanges">
+      You cannot change this specialization name due to faction requirements.
+    </p>
 
     <FormTextAreaWrapper v-model="form.description" />
 

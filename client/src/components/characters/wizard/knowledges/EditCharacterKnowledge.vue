@@ -65,7 +65,8 @@ async function loadInfo() {
       xpCost = level.totalGeneralXpCost - getCurrentXpLevel(knowledge.value.levelId)
     }
 
-    level.disabled = xpCost > sectionInfo.value.availableXp && isLowerLevel
+    const factionRequirementMinimum = knowledge.value.minimumKnowledgeId > level.id
+    level.disabled = xpCost > sectionInfo.value.availableXp && isLowerLevel || factionRequirementMinimum
     return level
   })
 
@@ -110,7 +111,7 @@ const onRowUnselect = (event) => {
         <div>{{ knowledge.knowledge.type }}</div>
       </div>
       <div class="p-0 m-2 d-inline-flex align-items-start align-items-center gap-2">
-        <Button label="Delete" size="small" severity="danger" @click="popupService.deleteConfirmation($event, knowledge.mappingId )" />
+        <Button v-if="knowledge.knowledge.blockFactionChanges" label="Delete" size="small" severity="danger" @click="popupService.deleteConfirmation($event, knowledge.mappingId )" />
         <Button label="Update" size="small" type="submit" />
       </div>
     </div>
@@ -122,6 +123,11 @@ const onRowUnselect = (event) => {
     <div v-if="sectionInfo.availableXp == 0">
       <Message severity="warn" class="my-4">
         You are out of experience to spend on Knowledges.
+      </Message>
+    </div>
+    <div v-if="!knowledge.knowledge.blockFactionChanges">
+      <Message severity="warn" class="my-4">
+        Your faction level affects the levels you can choose below
       </Message>
     </div>
     <DataTable
@@ -180,7 +186,7 @@ const onRowUnselect = (event) => {
       </p>
 
       <div class="p-0 m-0 d-flex justify-content-between">
-        <Button label="Delete" severity="danger" @click="popupService.deleteSpecializationConfirmation($event, knowledge.mappingId, special.id)" />
+        <Button v-if="!special.blockFactionChanges" label="Delete" severity="danger" @click="popupService.deleteSpecializationConfirmation($event, knowledge.mappingId, special.id)" />
         <Button label="Edit" @click="dialogService.showEditSpecialization(knowledge, special)" />
       </div>
     </div>
