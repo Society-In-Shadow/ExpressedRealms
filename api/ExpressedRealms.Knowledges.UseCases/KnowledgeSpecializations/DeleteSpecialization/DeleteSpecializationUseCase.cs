@@ -1,5 +1,6 @@
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.Expressions.Repository.CharacterFactions;
+using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.KnowledgeSpecializations;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
@@ -9,6 +10,7 @@ namespace ExpressedRealms.Knowledges.UseCases.KnowledgeSpecializations.DeleteSpe
 internal sealed class DeleteSpecializationUseCase(
     IKnowledgeSpecializationRepository knowledgeRepository,
     ICharacterFactionRepository characterFactionRepository,
+    ICharacterKnowledgeRepository characterKnowledgeRepository,
     DeleteSpecializationModelValidator validator,
     CancellationToken cancellationToken
 ) : IDeleteSpecializationUseCase
@@ -24,18 +26,20 @@ internal sealed class DeleteSpecializationUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var knowledge = await knowledgeRepository.GetSpecialization(model.Id);
+        var specialization = await knowledgeRepository.GetSpecialization(model.Id);
+        var characterMapping =
+            await characterKnowledgeRepository.GetCharacterKnowledgeMappingForEditing(specialization.KnowledgeMappingId);
         var factionKnowledge = await characterFactionRepository.GetLatestPlayerFactionLevels(model.CharacterId);
 
-        if (factionKnowledge.Any(x => x.KnowledgeSpecialization == knowledge.Name))
+        if (factionKnowledge.Any(x => x.KnowledgeSpecialization == specialization.Name && x.KnowledgeId == characterMapping.KnowledgeId))
         {
             return ValidationHelper.AddSingleValidationFailure(nameof(model.Id),
                 "Your faction level prevents you from removing this knowledge specialization");
         }
 
-        knowledge.SoftDelete();
+        specialization.SoftDelete();
 
-        await knowledgeRepository.UpdateSpecialization(knowledge);
+        await knowledgeRepository.UpdateSpecialization(specialization);
 
         return Result.Ok();
     }

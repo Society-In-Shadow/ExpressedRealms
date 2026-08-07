@@ -255,6 +255,7 @@ public class GetReadOnlyKnowledgesForCharacterUseCaseTests
                 [
                     new CharacterFactionDto()
                     {
+                        KnowledgeId = 29,
                         KnowledgeSpecialization = "Specialization",
                     },
                 ]
@@ -265,6 +266,32 @@ public class GetReadOnlyKnowledgesForCharacterUseCaseTests
         var knowledge = results.Value.Single(x => x.Knowledge.Id == 29);
 
         Assert.True(
+            knowledge.Specializations.Single(x => x.Name == "Specialization").BlockFactionChanges
+        );
+        Assert.False(
+            knowledge.Specializations.Single(x => x.Name == "Specialization 2").BlockFactionChanges
+        );
+    }
+
+    [Fact]
+    public async Task UseCase_WillNotMarkSpecialization_AsBlockedFromFactionChanges_WhenFactionRequiresSameSpecializationName_ForDifferentKnowledge()
+    {
+        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+            .Returns(
+                [
+                    new CharacterFactionDto()
+                    {
+                        KnowledgeId = 30,
+                        KnowledgeSpecialization = "Specialization",
+                    },
+                ]
+            );
+
+        var results = await _useCase.ExecuteAsync(_model);
+
+        var knowledge = results.Value.Single(x => x.Knowledge.Id == 29);
+
+        Assert.False(
             knowledge.Specializations.Single(x => x.Name == "Specialization").BlockFactionChanges
         );
         Assert.False(

@@ -54,7 +54,7 @@ internal sealed class GetKnowledgesForCharacterUseCase(
                         Description = y.Description,
                         Id = y.Id,
                         Notes = y.Notes,
-                        BlockFactionChanges = characterFactionLevels.Any(z => z.KnowledgeSpecialization == y.Name)
+                        BlockFactionChanges = characterFactionLevels.Any(z => z.KnowledgeSpecialization == y.Name && z.KnowledgeId == x.Knowledge.Id)
                     })
                     .ToList(),
             })

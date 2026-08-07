@@ -48,6 +48,8 @@ public class EditSpecializationUseCaseTests
 
         A.CallTo(() => _specializationRepository.GetSpecialization(_model.Id))
             .Returns(_specializationDbModel);
+        A.CallTo(() => _mappingRepository.GetCharacterKnowledgeMappingForEditing(_specializationDbModel.KnowledgeMappingId))
+            .Returns(_mappingDbModel);
         A.CallTo(() => _specializationRepository.SpecializationExists(_model.Id)).Returns(true);
         A.CallTo(() =>
                 _mappingRepository.HasExistingSpecializationForMappingEdit(_model.Id, _model.Name)
@@ -76,6 +78,7 @@ public class EditSpecializationUseCaseTests
         _useCase = new EditSpecializationUseCase(
             _specializationRepository,
             _characterFactionRepository,
+            _mappingRepository,
             validator,
             CancellationToken.None
         );
@@ -219,6 +222,15 @@ public class EditSpecializationUseCaseTests
     }
 
     [Fact]
+    public async Task UseCase_CorrectlyGrabs_TheKnowledgeMapping()
+    {
+        await _useCase.ExecuteAsync(_model);
+
+        A.CallTo(() => _mappingRepository.GetCharacterKnowledgeMappingForEditing(_specializationDbModel.KnowledgeMappingId))
+            .MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
     public async Task UseCase_WillGrab_TheLatestPlayerFactionLevels()
     {
         await _useCase.ExecuteAsync(_model);
@@ -235,6 +247,7 @@ public class EditSpecializationUseCaseTests
                 [
                     new CharacterFactionDto()
                     {
+                        KnowledgeId = _mappingDbModel.KnowledgeId,
                         KnowledgeSpecialization = "Old Specialization Name",
                     },
                 ]
@@ -256,6 +269,7 @@ public class EditSpecializationUseCaseTests
                 [
                     new CharacterFactionDto()
                     {
+                        KnowledgeId = _mappingDbModel.KnowledgeId,
                         KnowledgeSpecialization = "Old Specialization Name",
                     },
                 ]
@@ -272,6 +286,25 @@ public class EditSpecializationUseCaseTests
     }
 
     [Fact]
+    public async Task UseCase_WillAllowEdit_WhenFactionLevelRequires_TheExistingKnowledgeSpecialization_AndNameChanges_ForDifferentKnowledge()
+    {
+        A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
+            .Returns(
+                [
+                    new CharacterFactionDto()
+                    {
+                        KnowledgeId = _mappingDbModel.KnowledgeId + 1,
+                        KnowledgeSpecialization = "Old Specialization Name",
+                    },
+                ]
+            );
+
+        var results = await _useCase.ExecuteAsync(_model);
+
+        Assert.True(results.IsSuccess);
+    }
+
+    [Fact]
     public async Task UseCase_WillAllowEdit_WhenFactionLevelRequires_TheExistingKnowledgeSpecialization_AndNameDoesNotChange()
     {
         _model.Name = "Old Specialization Name";
@@ -280,6 +313,7 @@ public class EditSpecializationUseCaseTests
                 [
                     new CharacterFactionDto()
                     {
+                        KnowledgeId = _mappingDbModel.KnowledgeId,
                         KnowledgeSpecialization = "Old Specialization Name",
                     },
                 ]
