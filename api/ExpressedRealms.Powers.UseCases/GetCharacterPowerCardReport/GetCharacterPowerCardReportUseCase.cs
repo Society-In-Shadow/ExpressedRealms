@@ -4,6 +4,7 @@ using ExpressedRealms.Characters.Repository.Wealth;
 using ExpressedRealms.Expressions.Repository.CharacterFactions;
 using ExpressedRealms.Powers.Reporting.powerCards;
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.CashCards;
+using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.PrimaVoidCards;
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.WealthCards;
 using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.Powers.Repository.PowerPaths;
@@ -46,6 +47,8 @@ public class GetCharacterPowerCardReportUseCase(
         if (model.IncludeWealthCard)
         {
             await CalculateWealthCardData(model, expression.Value.Name, cards);
+            // Cludgy work around - shouldn't display this if the wealth card isn't being shown
+            cards.Add(await GetPrimaVoidCards(model));
         }
 
         var reportStream = PowerCardReport.GenerateSixUpPdf(
@@ -105,6 +108,17 @@ public class GetCharacterPowerCardReportUseCase(
             )
             .ToList();
         return powerCards;
+    }
+
+    private async Task<DataCard> GetPrimaVoidCards(GetCharacterPowerCardReportModel model)
+    {
+        var character = await characterRepository.FindCharacterAsync(model.CharacterId);
+
+        return new DataCard()
+        {
+            CardType = CardType.PrimaVoidCard,
+            CardData = new PrimaVoidCardData() { Motes = character!.Motes },
+        };
     }
 
     private async Task<List<PowerCardData>> GetFactionPowerCards(
