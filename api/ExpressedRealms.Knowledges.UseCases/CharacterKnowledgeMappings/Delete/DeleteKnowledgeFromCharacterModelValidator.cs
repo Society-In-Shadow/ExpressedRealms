@@ -1,7 +1,5 @@
 using ExpressedRealms.Characters.Repository;
-using ExpressedRealms.Knowledges.Repository;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
-using ExpressedRealms.Knowledges.Repository.Knowledges;
 using FluentValidation;
 using JetBrains.Annotations;
 
@@ -12,7 +10,8 @@ internal sealed class DeleteKnowledgeFromCharacterModelValidator
     : AbstractValidator<DeleteKnowledgeFromCharacterModel>
 {
     public DeleteKnowledgeFromCharacterModelValidator(
-        ICharacterKnowledgeRepository mappingRepository
+        ICharacterKnowledgeRepository mappingRepository,
+        ICharacterRepository characterRepository
     )
     {
         RuleFor(x => x.MappingId)
@@ -20,5 +19,12 @@ internal sealed class DeleteKnowledgeFromCharacterModelValidator
             .WithMessage("Mapping Id is required.")
             .MustAsync(async (x, y) => await mappingRepository.MappingAlreadyExists(x))
             .WithMessage("The Knowledge Mapping does not exist.");
+        
+        RuleFor(x => x.CharacterId)
+            .NotEmpty()
+            .WithMessage("Character Id is required.")
+            .MustAsync(async (x, y) => await characterRepository.CharacterExistsAsync(x))
+            .WithMessage("NotFound")
+            .WithMessage("This Character was not found.");
     }
 }
