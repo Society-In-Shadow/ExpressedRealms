@@ -28,13 +28,24 @@ internal sealed class DeleteSpecializationUseCase(
 
         var specialization = await knowledgeRepository.GetSpecialization(model.Id);
         var characterMapping =
-            await characterKnowledgeRepository.GetCharacterKnowledgeMappingForEditing(specialization.KnowledgeMappingId);
-        var factionKnowledge = await characterFactionRepository.GetLatestPlayerFactionLevels(model.CharacterId);
+            await characterKnowledgeRepository.GetCharacterKnowledgeMappingForEditing(
+                specialization.KnowledgeMappingId
+            );
+        var factionKnowledge = await characterFactionRepository.GetLatestPlayerFactionLevels(
+            model.CharacterId
+        );
 
-        if (factionKnowledge.Any(x => x.KnowledgeSpecialization == specialization.Name && x.KnowledgeId == characterMapping.KnowledgeId))
+        if (
+            factionKnowledge.Any(x =>
+                x.KnowledgeSpecialization == specialization.Name
+                && x.KnowledgeId == characterMapping.KnowledgeId
+            )
+        )
         {
-            return ValidationHelper.AddSingleValidationFailure(nameof(model.Id),
-                "Your faction level prevents you from removing this knowledge specialization");
+            return ValidationHelper.AddSingleValidationFailure(
+                nameof(model.Id),
+                "Your faction level prevents you from removing this knowledge specialization"
+            );
         }
 
         specialization.SoftDelete();

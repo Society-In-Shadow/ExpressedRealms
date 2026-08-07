@@ -6,6 +6,7 @@ public class SpecializationReturnModel
     public required string Name { get; set; }
     public required string Description { get; set; }
     public string? Notes { get; set; }
+
     /// <summary>
     /// This should block the ability to edit the name and delete the specialization
     /// </summary>

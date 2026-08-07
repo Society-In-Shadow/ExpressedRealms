@@ -26,15 +26,27 @@ internal sealed class EditSpecializationUseCase(
             return Result.Fail(result.Errors);
 
         var specialization = await specializationRepository.GetSpecialization(model.Id);
-        
-        var characterMapping =
-            await characterKnowledgeRepository.GetCharacterKnowledgeMappingForEditing(specialization.KnowledgeMappingId);
-        var factionKnowledge = await characterFactionRepository.GetLatestPlayerFactionLevels(model.CharacterId);
 
-        if (factionKnowledge.Any(x => x.KnowledgeSpecialization == specialization.Name && specialization.Name != model.Name && x.KnowledgeId == characterMapping.KnowledgeId))
+        var characterMapping =
+            await characterKnowledgeRepository.GetCharacterKnowledgeMappingForEditing(
+                specialization.KnowledgeMappingId
+            );
+        var factionKnowledge = await characterFactionRepository.GetLatestPlayerFactionLevels(
+            model.CharacterId
+        );
+
+        if (
+            factionKnowledge.Any(x =>
+                x.KnowledgeSpecialization == specialization.Name
+                && specialization.Name != model.Name
+                && x.KnowledgeId == characterMapping.KnowledgeId
+            )
+        )
         {
-            return ValidationHelper.AddSingleValidationFailure(nameof(model.Name),
-                "Your faction level prevents you from renaming this knowledge specialization");
+            return ValidationHelper.AddSingleValidationFailure(
+                nameof(model.Name),
+                "Your faction level prevents you from renaming this knowledge specialization"
+            );
         }
 
         specialization.Name = model.Name;

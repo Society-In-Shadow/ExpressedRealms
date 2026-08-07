@@ -26,7 +26,9 @@ internal sealed class GetKnowledgesForCharacterUseCase(
             return Result.Fail(result.Errors);
 
         var knowledges = await mappingRepository.GetKnowledgesForCharacter(model.CharacterId);
-        var characterFactionLevels = await characterFactionRepository.GetLatestPlayerFactionLevels(model.CharacterId);
+        var characterFactionLevels = await characterFactionRepository.GetLatestPlayerFactionLevels(
+            model.CharacterId
+        );
 
         var items = knowledges
             .Select(x => new CharacterKnowledgeReturnModel()
@@ -38,7 +40,9 @@ internal sealed class GetKnowledgesForCharacterUseCase(
                     Name = x.Knowledge.Name,
                     Description = x.Knowledge.Description,
                     Type = x.Knowledge.Type,
-                    BlockFactionChanges = characterFactionLevels.All(y => y.KnowledgeId != x.Knowledge.Id)
+                    BlockFactionChanges = characterFactionLevels.All(y =>
+                        y.KnowledgeId != x.Knowledge.Id
+                    ),
                 },
                 StoneModifier = x.StoneModifier,
                 LevelName = x.LevelName,
@@ -46,7 +50,9 @@ internal sealed class GetKnowledgesForCharacterUseCase(
                 LevelId = x.LevelId,
                 Notes = x.Notes,
                 SpecializationCount = x.SpecializationCount,
-                MinimumKnowledgeId = characterFactionLevels.Where(y => y.KnowledgeId == x.Knowledge.Id).Max(y => y.KnowledgeLevel?.Id),
+                MinimumKnowledgeId = characterFactionLevels
+                    .Where(y => y.KnowledgeId == x.Knowledge.Id)
+                    .Max(y => y.KnowledgeLevel?.Id),
                 Specializations = x
                     .Specializations.Select(y => new SpecializationReturnModel()
                     {
@@ -54,13 +60,13 @@ internal sealed class GetKnowledgesForCharacterUseCase(
                         Description = y.Description,
                         Id = y.Id,
                         Notes = y.Notes,
-                        BlockFactionChanges = characterFactionLevels.Any(z => z.KnowledgeSpecialization == y.Name && z.KnowledgeId == x.Knowledge.Id)
+                        BlockFactionChanges = characterFactionLevels.Any(z =>
+                            z.KnowledgeSpecialization == y.Name && z.KnowledgeId == x.Knowledge.Id
+                        ),
                     })
                     .ToList(),
             })
             .ToList();
-        
-        
 
         return Result.Ok(items.ToList());
     }

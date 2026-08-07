@@ -28,7 +28,7 @@ public static class GetCharacterKnowledgesEndpoint
                             Name = x.Knowledge.Name,
                             Description = x.Knowledge.Description,
                             Type = x.Knowledge.Type,
-                            BlockFactionChanges = x.Knowledge.BlockFactionChanges
+                            BlockFactionChanges = x.Knowledge.BlockFactionChanges,
                         },
                         StoneModifier = x.StoneModifier,
                         LevelName = x.LevelName,
@@ -44,7 +44,7 @@ public static class GetCharacterKnowledgesEndpoint
                                 Description = y.Description,
                                 Id = y.Id,
                                 Notes = y.Notes,
-                                BlockFactionChanges = y.BlockFactionChanges
+                                BlockFactionChanges = y.BlockFactionChanges,
                             })
                             .ToList(),
                     })

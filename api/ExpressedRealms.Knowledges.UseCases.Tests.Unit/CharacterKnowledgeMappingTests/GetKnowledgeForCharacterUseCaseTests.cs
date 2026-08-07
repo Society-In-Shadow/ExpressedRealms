@@ -202,10 +202,7 @@ public class GetReadOnlyKnowledgesForCharacterUseCaseTests
                     new CharacterFactionDto()
                     {
                         KnowledgeId = 29,
-                        KnowledgeLevel = new KnowledgeEducationLevel()
-                        {
-                            Id = 3,
-                        },
+                        KnowledgeLevel = new KnowledgeEducationLevel() { Id = 3 },
                     },
                 ]
             );
@@ -225,18 +222,12 @@ public class GetReadOnlyKnowledgesForCharacterUseCaseTests
                     new CharacterFactionDto()
                     {
                         KnowledgeId = 29,
-                        KnowledgeLevel = new KnowledgeEducationLevel()
-                        {
-                            Id = 3,
-                        },
+                        KnowledgeLevel = new KnowledgeEducationLevel() { Id = 3 },
                     },
                     new CharacterFactionDto()
                     {
                         KnowledgeId = 29,
-                        KnowledgeLevel = new KnowledgeEducationLevel()
-                        {
-                            Id = 5,
-                        },
+                        KnowledgeLevel = new KnowledgeEducationLevel() { Id = 5 },
                     },
                 ]
             );

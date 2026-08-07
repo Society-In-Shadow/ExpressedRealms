@@ -27,13 +27,17 @@ internal sealed class DeleteKnowledgeFromCharacterUseCase(
         var mapping = await mappingRepository.GetCharacterKnowledgeMappingForEditing(
             model.MappingId
         );
-        
-        var factionKnowledge = await characterFactionRepository.GetLatestPlayerFactionLevels(model.CharacterId);
+
+        var factionKnowledge = await characterFactionRepository.GetLatestPlayerFactionLevels(
+            model.CharacterId
+        );
 
         if (factionKnowledge.Any(x => x.KnowledgeId == mapping.KnowledgeId))
         {
-            return ValidationHelper.AddSingleValidationFailure(nameof(model.MappingId),
-                "Your faction level prevents you from removing this knowledge");
+            return ValidationHelper.AddSingleValidationFailure(
+                nameof(model.MappingId),
+                "Your faction level prevents you from removing this knowledge"
+            );
         }
 
         mapping.SoftDelete();

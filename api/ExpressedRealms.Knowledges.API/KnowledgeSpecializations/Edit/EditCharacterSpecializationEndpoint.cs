@@ -23,7 +23,7 @@ public static class EditCharacterSpecializationEndpoint
                 Description = request.Description,
                 Name = request.Name,
                 Notes = request.Notes,
-                CharacterId = characterId
+                CharacterId = characterId,
             }
         );
 

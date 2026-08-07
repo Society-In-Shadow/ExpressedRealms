@@ -48,7 +48,11 @@ public class EditSpecializationUseCaseTests
 
         A.CallTo(() => _specializationRepository.GetSpecialization(_model.Id))
             .Returns(_specializationDbModel);
-        A.CallTo(() => _mappingRepository.GetCharacterKnowledgeMappingForEditing(_specializationDbModel.KnowledgeMappingId))
+        A.CallTo(() =>
+                _mappingRepository.GetCharacterKnowledgeMappingForEditing(
+                    _specializationDbModel.KnowledgeMappingId
+                )
+            )
             .Returns(_mappingDbModel);
         A.CallTo(() => _specializationRepository.SpecializationExists(_model.Id)).Returns(true);
         A.CallTo(() =>
@@ -203,7 +207,8 @@ public class EditSpecializationUseCaseTests
     [Fact]
     public async Task ValidationFor_CharacterId_WillFail_WhenCharacterDoesNotExist()
     {
-        A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId)).Returns(false);
+        A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId))
+            .Returns(false);
 
         var results = await _useCase.ExecuteAsync(_model);
 
@@ -226,7 +231,11 @@ public class EditSpecializationUseCaseTests
     {
         await _useCase.ExecuteAsync(_model);
 
-        A.CallTo(() => _mappingRepository.GetCharacterKnowledgeMappingForEditing(_specializationDbModel.KnowledgeMappingId))
+        A.CallTo(() =>
+                _mappingRepository.GetCharacterKnowledgeMappingForEditing(
+                    _specializationDbModel.KnowledgeMappingId
+                )
+            )
             .MustHaveHappenedOnceExactly();
     }
 

@@ -43,12 +43,7 @@ public class DeleteSpecializationUseCaseTests
                 }
             );
         A.CallTo(() => _mappingRepository.GetCharacterKnowledgeMappingForEditing(8))
-            .Returns(
-                new CharacterKnowledgeMapping()
-                {
-                    KnowledgeId = 12,
-                }
-            );
+            .Returns(new CharacterKnowledgeMapping() { KnowledgeId = 12 });
         A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
             .Returns([]);
 
@@ -129,9 +124,7 @@ public class DeleteSpecializationUseCaseTests
 
         await _useCase.ExecuteAsync(_model);
 
-        A.CallTo(() =>
-                _repository.UpdateSpecialization(A<CharacterKnowledgeSpecialization>._)
-            )
+        A.CallTo(() => _repository.UpdateSpecialization(A<CharacterKnowledgeSpecialization>._))
             .MustNotHaveHappened();
     }
 

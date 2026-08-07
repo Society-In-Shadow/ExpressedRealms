@@ -9,7 +9,10 @@ namespace ExpressedRealms.Knowledges.UseCases.KnowledgeSpecializations.DeleteSpe
 internal sealed class DeleteSpecializationModelValidator
     : AbstractValidator<DeleteSpecializationModel>
 {
-    public DeleteSpecializationModelValidator(IKnowledgeSpecializationRepository repository, ICharacterRepository characterRepository)
+    public DeleteSpecializationModelValidator(
+        IKnowledgeSpecializationRepository repository,
+        ICharacterRepository characterRepository
+    )
     {
         RuleFor(x => x.Id)
             .NotEmpty()
@@ -17,7 +20,7 @@ internal sealed class DeleteSpecializationModelValidator
             .MustAsync(async (x, y) => await repository.SpecializationExists(x))
             .WithMessage("NotFound")
             .WithMessage("This Specialization was not found.");
-        
+
         RuleFor(x => x.CharacterId)
             .NotEmpty()
             .WithMessage("Character Id is required.")

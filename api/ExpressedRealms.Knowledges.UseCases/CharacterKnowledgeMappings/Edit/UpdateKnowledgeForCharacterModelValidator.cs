@@ -18,14 +18,13 @@ internal sealed class UpdateKnowledgeForCharacterModelValidator
         ICharacterRepository characterRepository
     )
     {
-        
         RuleFor(x => x.CharacterId)
             .NotEmpty()
             .WithMessage("Character Id is required.")
             .MustAsync(async (x, y) => await characterRepository.CharacterExistsAsync(x))
             .WithMessage("NotFound")
             .WithMessage("This Character was not found.");
-        
+
         RuleFor(x => x.MappingId)
             .NotEmpty()
             .WithMessage("Mapping Id is required.")

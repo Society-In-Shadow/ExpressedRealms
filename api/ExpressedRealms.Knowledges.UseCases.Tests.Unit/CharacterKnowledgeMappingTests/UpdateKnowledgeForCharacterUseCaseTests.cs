@@ -144,7 +144,8 @@ public class UpdateKnowledgeForCharacterUseCaseTests
     [Fact]
     public async Task ValidationFor_CharacterId_WillFail_WhenItDoesNotExist()
     {
-        A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId)).Returns(false);
+        A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId))
+            .Returns(false);
 
         var result = await _useCase.ExecuteAsync(_model);
 
@@ -249,10 +250,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
                     new CharacterFactionDto()
                     {
                         KnowledgeId = _dbModel.KnowledgeId,
-                        KnowledgeLevel = new KnowledgeEducationLevel()
-                        {
-                            Id = 3,
-                        },
+                        KnowledgeLevel = new KnowledgeEducationLevel() { Id = 3 },
                     },
                 ]
             );
@@ -274,10 +272,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
                     new CharacterFactionDto()
                     {
                         KnowledgeId = _dbModel.KnowledgeId,
-                        KnowledgeLevel = new KnowledgeEducationLevel()
-                        {
-                            Id = 3,
-                        },
+                        KnowledgeLevel = new KnowledgeEducationLevel() { Id = 3 },
                     },
                 ]
             );
@@ -299,10 +294,7 @@ public class UpdateKnowledgeForCharacterUseCaseTests
                     new CharacterFactionDto()
                     {
                         KnowledgeId = _dbModel.KnowledgeId + 1,
-                        KnowledgeLevel = new KnowledgeEducationLevel()
-                        {
-                            Id = 3,
-                        },
+                        KnowledgeLevel = new KnowledgeEducationLevel() { Id = 3 },
                     },
                 ]
             );

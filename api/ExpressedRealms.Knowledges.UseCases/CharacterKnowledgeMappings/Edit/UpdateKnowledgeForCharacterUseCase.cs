@@ -37,14 +37,24 @@ internal sealed class UpdateKnowledgeForCharacterUseCase(
 
         if (mapping.KnowledgeLevelId != model.KnowledgeLevelId)
         {
-            var factionKnowledge = await characterFactionRepository.GetLatestPlayerFactionLevels(model.CharacterId);
+            var factionKnowledge = await characterFactionRepository.GetLatestPlayerFactionLevels(
+                model.CharacterId
+            );
             // This only works because knowledge level ids are in order
-            if (factionKnowledge.Any(x => x.KnowledgeLevel != null && x.KnowledgeLevel?.Id > model.KnowledgeLevelId && x.KnowledgeId == mapping.KnowledgeId))
+            if (
+                factionKnowledge.Any(x =>
+                    x.KnowledgeLevel != null
+                    && x.KnowledgeLevel?.Id > model.KnowledgeLevelId
+                    && x.KnowledgeId == mapping.KnowledgeId
+                )
+            )
             {
-                return ValidationHelper.AddSingleValidationFailure(nameof(model.KnowledgeLevelId),
-                    "Your faction level prevents you from applying this knowledge level change.");
+                return ValidationHelper.AddSingleValidationFailure(
+                    nameof(model.KnowledgeLevelId),
+                    "Your faction level prevents you from applying this knowledge level change."
+                );
             }
-            
+
             var xpInfo = await xpRepository.GetAvailableXpForSection(
                 mapping.CharacterId,
                 XpSectionTypes.Knowledge

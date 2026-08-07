@@ -96,7 +96,8 @@ public class DeleteKnowledgeFromCharacterUseCaseTests
     [Fact]
     public async Task ValidationFor_CharacterId_WillFail_WhenCharacterDoesNotExist()
     {
-        A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId)).Returns(false);
+        A.CallTo(() => _characterRepository.CharacterExistsAsync(_model.CharacterId))
+            .Returns(false);
 
         var result = await _useCase.ExecuteAsync(_model);
 
@@ -128,14 +129,7 @@ public class DeleteKnowledgeFromCharacterUseCaseTests
     public async Task UseCase_WillFail_WhenFactionLevelRequires_TheKnowledge()
     {
         A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
-            .Returns(
-                [
-                    new CharacterFactionDto()
-                    {
-                        KnowledgeId = 4,
-                    },
-                ]
-            );
+            .Returns([new CharacterFactionDto() { KnowledgeId = 4 }]);
 
         var result = await _useCase.ExecuteAsync(_model);
 
@@ -149,14 +143,7 @@ public class DeleteKnowledgeFromCharacterUseCaseTests
     public async Task UseCase_WillNotUpdateDeleteFields_WhenFactionLevelRequires_TheKnowledge()
     {
         A.CallTo(() => _characterFactionRepository.GetLatestPlayerFactionLevels(_model.CharacterId))
-            .Returns(
-                [
-                    new CharacterFactionDto()
-                    {
-                        KnowledgeId = 4,
-                    },
-                ]
-            );
+            .Returns([new CharacterFactionDto() { KnowledgeId = 4 }]);
 
         await _useCase.ExecuteAsync(_model);
 
