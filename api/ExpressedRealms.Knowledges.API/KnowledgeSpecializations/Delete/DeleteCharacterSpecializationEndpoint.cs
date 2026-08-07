@@ -16,7 +16,7 @@ public static class DeleteCharacterSpecializationEndpoint
     )
     {
         var results = await useCase.ExecuteAsync(
-            new DeleteSpecializationModel() { Id = specializationId }
+            new DeleteSpecializationModel() { Id = specializationId, CharacterId = characterId}
         );
 
         if (results.HasValidationError(out var validationProblem))

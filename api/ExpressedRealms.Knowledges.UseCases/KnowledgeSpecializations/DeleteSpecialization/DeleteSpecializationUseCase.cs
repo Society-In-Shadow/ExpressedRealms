@@ -1,7 +1,6 @@
 using ExpressedRealms.DB.Interceptors;
-using ExpressedRealms.Knowledges.Repository.Knowledges;
+using ExpressedRealms.Expressions.Repository.CharacterFactions;
 using ExpressedRealms.Knowledges.Repository.KnowledgeSpecializations;
-using ExpressedRealms.Knowledges.UseCases.Knowledges.DeleteKnowledge;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
@@ -9,6 +8,7 @@ namespace ExpressedRealms.Knowledges.UseCases.KnowledgeSpecializations.DeleteSpe
 
 internal sealed class DeleteSpecializationUseCase(
     IKnowledgeSpecializationRepository knowledgeRepository,
+    ICharacterFactionRepository characterFactionRepository,
     DeleteSpecializationModelValidator validator,
     CancellationToken cancellationToken
 ) : IDeleteSpecializationUseCase
@@ -25,6 +25,13 @@ internal sealed class DeleteSpecializationUseCase(
             return Result.Fail(result.Errors);
 
         var knowledge = await knowledgeRepository.GetSpecialization(model.Id);
+        var factionKnowledge = await characterFactionRepository.GetLatestPlayerFactionLevels(model.CharacterId);
+
+        if (factionKnowledge.Any(x => x.KnowledgeSpecialization == knowledge.Name))
+        {
+            return ValidationHelper.AddSingleValidationFailure(nameof(model.Id),
+                "Your faction level prevents you from removing this knowledge specialization");
+        }
 
         knowledge.SoftDelete();
 

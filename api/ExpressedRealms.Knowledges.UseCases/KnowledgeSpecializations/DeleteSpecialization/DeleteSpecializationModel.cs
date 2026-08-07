@@ -3,4 +3,5 @@ namespace ExpressedRealms.Knowledges.UseCases.KnowledgeSpecializations.DeleteSpe
 public class DeleteSpecializationModel
 {
     public int Id { get; set; }
+    public int CharacterId { get; set; }
 }

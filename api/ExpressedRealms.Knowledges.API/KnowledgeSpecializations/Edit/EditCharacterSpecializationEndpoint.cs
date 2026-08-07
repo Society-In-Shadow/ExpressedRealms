@@ -1,5 +1,3 @@
-using ExpressedRealms.Knowledges.API.CharacterKnowledges.Edit;
-using ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.Edit;
 using ExpressedRealms.Knowledges.UseCases.KnowledgeSpecializations.EditSpecialization;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
@@ -25,6 +23,7 @@ public static class EditCharacterSpecializationEndpoint
                 Description = request.Description,
                 Name = request.Name,
                 Notes = request.Notes,
+                CharacterId = characterId
             }
         );
 
