@@ -96,6 +96,7 @@ function getApprovalStatus(level: FactionLevel) {
     && currentLevel?.hasKnowledgeLevel
     && currentLevel?.hasSpecialization
     && !currentLevel.approvalDate
+    && !currentLevel.requestedPromotion
 
   if (canApprove)
     return ApprovalStatus.CanRequestPromotion
