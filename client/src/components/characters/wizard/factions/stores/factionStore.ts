@@ -11,13 +11,12 @@ import type { ApprovePromotionInfo } from '@/components/characters/character/fac
 
 export const CHARACTER_FACTION_QUERY_KEYS = {
   root: ['character_faction'] as const,
-  getCharacterFactions: (characterId: number) => ['character_faction', 'list', characterId] as const,
+  getCharacterFactions: (characterId: number) => [...CHARACTER_FACTION_QUERY_KEYS.root, 'list', characterId.toString()] as const,
 }
 
 export const pickedFactionQuery = defineQueryOptions((characterId: number) => ({
   key: CHARACTER_FACTION_QUERY_KEYS.getCharacterFactions(characterId),
   query: () => characterFactionService.getCharacterFaction(characterId),
-  enabled: () => characterId != 0,
 }))
 
 export const pickFaction = (onValidationError?: (errors: Record<string, any>) => void | undefined) => {

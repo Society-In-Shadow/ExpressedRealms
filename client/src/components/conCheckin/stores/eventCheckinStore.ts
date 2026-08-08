@@ -154,7 +154,6 @@ export const EventCheckinStore
           ageGroupId: ageTypeId,
           hasSignedConsentForm: hasWaiver,
         })
-        await this.resetGoPage()
         this.activeStepperStep = '3'
       },
       async getVerifiedAge(): Promise<AgeInfo> {

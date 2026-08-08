@@ -132,7 +132,8 @@ const approveStage = async (stageId: number) => {
 </script>
 
 <template>
-  <div v-if="eventCheckinInfo.foundInfo" class="text-right sticky-top">
+  <div v-if="eventCheckinInfo.foundInfo" class="sticky-top d-flex flex-row justify-content-end">
+    <Button class="mr-3" label="Reset Scanner" @click="eventCheckinInfo.resetGoPage()" />
     <CommandButton :commands="items" />
   </div>
   <Stepper v-model:value="eventCheckinInfo.activeStepperStep">
