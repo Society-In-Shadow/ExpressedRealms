@@ -44,6 +44,9 @@ internal sealed class AddStatModifierUseCase(
                 case SourceTableEnum.Powers:
                     await repository.UpdatePowerGroupId(model.SourceId, groupId);
                     break;
+                case SourceTableEnum.Characters:
+                    await repository.UpdateCharacterGroupId(model.SourceId, groupId);
+                    break;
                 default:
                     throw new InvalidEnumArgumentException(
                         nameof(model.SourceTable),

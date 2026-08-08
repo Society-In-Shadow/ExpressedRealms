@@ -47,5 +47,12 @@ public static partial class Permissions
             Name = nameof(ModifyGoFields),
             Description = "Allows one to modify wealth levels and Prima/Void",
         };
+        
+        public static readonly Permission EditModifiers = new(ResourceInfo)
+        {
+            Id = new Guid("019fe0c2-752d-712e-b6c0-642607a20bf5"),
+            Name = nameof(EditModifiers),
+            Description = "Allows one to adhoc add modifiers to the character",
+        };
     }
 }

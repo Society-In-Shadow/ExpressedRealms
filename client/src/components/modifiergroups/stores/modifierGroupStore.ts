@@ -32,6 +32,8 @@ const modifierGroupStore
             return can.Powers.EditModifiers
           case SourceTableEnum.ProgressionLevels:
             return can.ProgressionPath.EditModifiers
+          case SourceTableEnum.Characters:
+            return can.CharacterManagement.EditModifiers
           default: return false
         }
       },

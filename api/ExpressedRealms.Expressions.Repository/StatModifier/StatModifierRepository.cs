@@ -170,6 +170,13 @@ public class StatModifierRepository(
         power.StatModifierGroupId = groupId;
         await context.SaveChangesAsync(cancellationToken);
     }
+    
+    public async Task UpdateCharacterGroupId(int characterId, int groupId)
+    {
+        var power = await context.Characters.FirstAsync(x => x.Id == characterId);
+        power.StatModifierGroupId = groupId;
+        await context.SaveChangesAsync(cancellationToken);
+    }
 
     public Task UpdateGroupMapping(StatGroupMapping mapping)
     {

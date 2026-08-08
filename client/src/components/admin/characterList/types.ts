@@ -17,4 +17,5 @@ export interface GoFields {
   voidFragments: number
   motes: number
   primaFragments: number
+  statModifierGroupId: number | undefined
 }

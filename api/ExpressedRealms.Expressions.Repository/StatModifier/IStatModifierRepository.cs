@@ -30,4 +30,5 @@ public interface IStatModifierRepository
         int expressionId,
         int? primaryProgressionId
     );
+    Task UpdateCharacterGroupId(int characterId, int groupId);
 }

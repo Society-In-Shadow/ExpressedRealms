@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.Expressions.Repository.StatModifier;
 using FluentValidation;
@@ -11,6 +12,7 @@ internal sealed class AddStatModifierModelValidator : AbstractValidator<AddStatM
 {
     public AddStatModifierModelValidator(
         IStatModifierRepository statModifierRepository,
+        ICharacterRepository characterRepository,
         IExpressionRepository expressionRepository
     )
     {
@@ -28,6 +30,8 @@ internal sealed class AddStatModifierModelValidator : AbstractValidator<AddStatM
                             return await statModifierRepository.BlessingLevelExists(x.SourceId);
                         case SourceTableEnum.Powers:
                             return await statModifierRepository.PowerExists(x.SourceId);
+                        case SourceTableEnum.Characters:
+                            return await characterRepository.CharacterExistsAsync(x.SourceId);
                         default:
                             throw new InvalidEnumArgumentException(
                                 nameof(x.SourceTable),
