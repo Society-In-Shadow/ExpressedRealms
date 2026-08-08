@@ -3,7 +3,7 @@
   <ConfirmDialog group="dialog" />
   <ConfirmPopup group="popup" />
   <DynamicDialog />
-  <main-nav-bar class="d-print-none" />
+  <main-nav-bar />
   <div class="main-container">
     <router-view />
   </div>

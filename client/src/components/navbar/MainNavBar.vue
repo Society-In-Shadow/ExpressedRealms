@@ -116,24 +116,26 @@ const adminMenu = computed(() => {
 </script>
 
 <template>
-  <EventCheckinBanner />
-  <GoCheckinBanner />
-  <MegaMenu :model="items" class="ms-0 me-0 mt-2 mb-2 m-md-2 d-print-none">
-    <template #start>
-      <RouterLink to="/">
-        <img src="/favicon.png" alt="A white, black, blue, red, green, and transparent marbles organized in a pentagon pattern. The white stone is at the top and the transparent stone is in the center." height="50" width="50" class="m-2">
-      </RouterLink>
-    </template>
-    <template #item="{ item }">
-      <RootNodeMenuItem v-if="item.root" :item="item" />
-      <SimpleMenuItem v-else-if="item.navMenuType == 'simple'" :item="item" />
-      <CharacterMenuItem v-else-if="item.navMenuType == 'character'" :item="item.data" />
-      <ExpressionMenuItem v-else :item="item.data" :nav-heading="item.navMenuType" />
-    </template>
-    <template #end>
-      <avatar-dropdown />
-    </template>
-  </MegaMenu>
+  <div class="d-print-none">
+    <EventCheckinBanner />
+    <GoCheckinBanner />
+    <MegaMenu :model="items" class="ms-0 me-0 mt-2 mb-2 m-md-2 d-print-none">
+      <template #start>
+        <RouterLink to="/">
+          <img src="/favicon.png" alt="A white, black, blue, red, green, and transparent marbles organized in a pentagon pattern. The white stone is at the top and the transparent stone is in the center." height="50" width="50" class="m-2">
+        </RouterLink>
+      </template>
+      <template #item="{ item }">
+        <RootNodeMenuItem v-if="item.root" :item="item" />
+        <SimpleMenuItem v-else-if="item.navMenuType == 'simple'" :item="item" />
+        <CharacterMenuItem v-else-if="item.navMenuType == 'character'" :item="item.data" />
+        <ExpressionMenuItem v-else :item="item.data" :nav-heading="item.navMenuType" />
+      </template>
+      <template #end>
+        <avatar-dropdown />
+      </template>
+    </MegaMenu>
+  </div>
 </template>
 
 <style>
