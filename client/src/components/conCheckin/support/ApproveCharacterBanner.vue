@@ -39,7 +39,7 @@ const reviewedCharacter = async () => {
 }
 
 const showFactionInfo = computed(() => {
-  return !characterDataLoading.value && characterData.value!.factionLevels.find(x => x.requestedPromotion && x.approvalDate == null)
+  return !characterDataLoading.value && characterData.value && characterData.value.factionLevels.find(x => x.requestedPromotion && x.approvalDate == null)
 })
 
 const enableReviewButton = computed(() => {
