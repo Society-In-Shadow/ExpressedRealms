@@ -19,6 +19,5 @@ public class StatModifierGroup
     public virtual List<ProgressionLevel> ProgressionLevels { get; set; } = null!;
     public virtual ICollection<StatModifierGroup> Clones { get; set; } =
         new HashSet<StatModifierGroup>();
-    public virtual ICollection<Character> Characters { get; set; } =
-        new HashSet<Character>();
+    public virtual ICollection<Character> Characters { get; set; } = new HashSet<Character>();
 }

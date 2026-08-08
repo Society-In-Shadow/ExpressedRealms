@@ -118,7 +118,7 @@ internal sealed class ProficiencyRepository(
             )
         );
         dbModifiers.AddRange(await statModifierRepository.GetModifiersFromCharacter(characterId));
-        
+
         dbModifiers = dbModifiers
             .Where(x =>
                 x.TargetExpressionId == null || x.TargetExpressionId == character.ExpressionId

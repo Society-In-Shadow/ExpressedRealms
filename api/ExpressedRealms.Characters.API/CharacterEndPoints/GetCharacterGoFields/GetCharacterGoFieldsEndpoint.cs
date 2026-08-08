@@ -29,7 +29,7 @@ internal static class GetCharacterGoFieldsEndpoint
                 Motes = response.Value.Motes,
                 PrimaFragments = response.Value.PrimaFragments,
                 VoidFragments = response.Value.VoidFragments,
-                StatModifierGroupId = response.Value.StatModifierGroupId
+                StatModifierGroupId = response.Value.StatModifierGroupId,
             }
         );
     }

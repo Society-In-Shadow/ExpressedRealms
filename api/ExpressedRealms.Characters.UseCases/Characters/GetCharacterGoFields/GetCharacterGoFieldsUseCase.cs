@@ -32,7 +32,7 @@ internal sealed class GetCharacterGoFieldsUseCase(
                 VoidFragments = character.VoidFragments,
                 Motes = character.Motes,
                 PrimaFragments = character.PrimaFragments,
-                StatModifierGroupId = character.StatModifierGroupId
+                StatModifierGroupId = character.StatModifierGroupId,
             }
         );
     }

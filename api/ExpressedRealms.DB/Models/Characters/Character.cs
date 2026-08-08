@@ -45,10 +45,10 @@ public class Character : ISoftDelete
     public int? SecondaryProgressionId { get; set; }
     public virtual ProgressionPath? PrimaryProgressionPath { get; set; }
     public virtual ProgressionPath? SecondaryProgressionPath { get; set; }
-    
+
     public int? StatModifierGroupId { get; set; }
     public StatModifierGroup? StatModifierGroup { get; set; }
-    
+
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 

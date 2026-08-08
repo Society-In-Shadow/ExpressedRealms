@@ -32,7 +32,7 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
             .HasForeignKey(x => x.StatModifierGroupId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired(false);
-        
+
         builder
             .HasOne(x => x.PrimaryProgressionPath)
             .WithMany(x => x.PrimaryProgressions)

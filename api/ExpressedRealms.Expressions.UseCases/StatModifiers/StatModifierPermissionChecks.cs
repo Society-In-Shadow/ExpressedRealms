@@ -42,9 +42,13 @@ internal class StatModifierPermissionChecks(IUserContext userContext)
                 }
 
                 break;
-            
+
             case SourceTableEnum.Characters:
-                if (!userContext.CurrentUserHasPermission(Permissions.CharacterManagement.EditModifiers))
+                if (
+                    !userContext.CurrentUserHasPermission(
+                        Permissions.CharacterManagement.EditModifiers
+                    )
+                )
                 {
                     fail = Result.Fail(new NotFoundFailure("Stat Modifier", ""));
                     return true;
