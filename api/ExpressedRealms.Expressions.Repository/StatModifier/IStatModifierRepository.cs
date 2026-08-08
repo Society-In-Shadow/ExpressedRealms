@@ -30,4 +30,6 @@ public interface IStatModifierRepository
         int expressionId,
         int? primaryProgressionId
     );
+    Task UpdateCharacterGroupId(int characterId, int groupId);
+    Task<List<ProficiencyModifierInfoDto>> GetModifiersFromCharacter(int characterId);
 }

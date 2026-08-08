@@ -9,6 +9,7 @@ using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths;
 using ExpressedRealms.DB.Models.Factions.CharacterFactionMappingModels;
 using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
+using ExpressedRealms.DB.Models.ModifierSystem.StatModifierGroups;
 using ExpressedRealms.DB.Models.Powers.CharacterPowerMappingSetup;
 using ExpressedRealms.DB.Models.Skills;
 using ExpressedRealms.DB.Models.Statistics.CharacterStatMappings;
@@ -44,6 +45,9 @@ public class Character : ISoftDelete
     public int? SecondaryProgressionId { get; set; }
     public virtual ProgressionPath? PrimaryProgressionPath { get; set; }
     public virtual ProgressionPath? SecondaryProgressionPath { get; set; }
+
+    public int? StatModifierGroupId { get; set; }
+    public StatModifierGroup? StatModifierGroup { get; set; }
 
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }

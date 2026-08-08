@@ -1,4 +1,5 @@
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup;
+using ExpressedRealms.DB.Models.Characters;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionLevels;
 using ExpressedRealms.DB.Models.ModifierSystem.StatGroupMappings;
 using ExpressedRealms.DB.Models.Powers;
@@ -18,4 +19,5 @@ public class StatModifierGroup
     public virtual List<ProgressionLevel> ProgressionLevels { get; set; } = null!;
     public virtual ICollection<StatModifierGroup> Clones { get; set; } =
         new HashSet<StatModifierGroup>();
+    public virtual ICollection<Character> Characters { get; set; } = new HashSet<Character>();
 }

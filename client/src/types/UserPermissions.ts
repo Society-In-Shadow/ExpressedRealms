@@ -21,6 +21,7 @@ export const UserPermissions = {
     ViewCharacterSheet: 'charactermanagement.viewcharactersheet',
     DownloadAllCrbs: 'charactermanagement.downloadallcrbs',
     ModifyGoFields: 'charactermanagement.modifygofields',
+    EditModifiers: 'charactermanagement.editmodifiers',
   } as const,
   CharacterContacts: {
     Approve: 'charactercontacts.approve',

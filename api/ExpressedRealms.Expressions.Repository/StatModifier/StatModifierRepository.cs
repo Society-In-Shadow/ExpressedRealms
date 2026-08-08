@@ -79,6 +79,24 @@ public class StatModifierRepository(
             .ToListAsync();
     }
 
+    public async Task<List<ProficiencyModifierInfoDto>> GetModifiersFromCharacter(int characterId)
+    {
+        return await context
+            .Characters.Where(x => x.Id == characterId && x.StatModifierGroup != null)
+            .SelectMany(x =>
+                x.StatModifierGroup!.StatGroupMappings.Select(y => new ProficiencyModifierInfoDto
+                {
+                    Source = $"GO Character Override",
+                    Modifier = y.Modifier,
+                    ModifierTypeId = y.StatModifierId,
+                    ScaleWithLevel = y.ScaleWithLevel,
+                    CreationSpecificBonus = y.CreationSpecificBonus,
+                    TargetExpressionId = y.TargetExpressionId,
+                })
+            )
+            .ToListAsync();
+    }
+
     public async Task<List<ProficiencyModifierInfoDto>> GetModifiersFromXlLevel(
         int currentLevel,
         int expressionId,
@@ -167,6 +185,13 @@ public class StatModifierRepository(
     public async Task UpdatePowerGroupId(int powerId, int groupId)
     {
         var power = await context.Powers.FirstAsync(x => x.Id == powerId);
+        power.StatModifierGroupId = groupId;
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task UpdateCharacterGroupId(int characterId, int groupId)
+    {
+        var power = await context.Characters.FirstAsync(x => x.Id == characterId);
         power.StatModifierGroupId = groupId;
         await context.SaveChangesAsync(cancellationToken);
     }

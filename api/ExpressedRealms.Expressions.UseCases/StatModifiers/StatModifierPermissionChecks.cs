@@ -14,6 +14,7 @@ internal class StatModifierPermissionChecks(IUserContext userContext)
         out Result fail
     )
     {
+        const string statModifierString = "Stat Modifier";
         switch (sourceTableEnum)
         {
             case SourceTableEnum.ProgressionLevels:
@@ -21,7 +22,7 @@ internal class StatModifierPermissionChecks(IUserContext userContext)
                     !userContext.CurrentUserHasPermission(Permissions.ProgressionPath.EditModifiers)
                 )
                 {
-                    fail = Result.Fail(new NotFoundFailure("Stat Modifier", ""));
+                    fail = Result.Fail(new NotFoundFailure(statModifierString, ""));
                     return true;
                 }
 
@@ -29,7 +30,7 @@ internal class StatModifierPermissionChecks(IUserContext userContext)
             case SourceTableEnum.Blessings:
                 if (!userContext.CurrentUserHasPermission(Permissions.Blessings.EditModifiers))
                 {
-                    fail = Result.Fail(new NotFoundFailure("Stat Modifier", ""));
+                    fail = Result.Fail(new NotFoundFailure(statModifierString, ""));
                     return true;
                 }
 
@@ -37,7 +38,20 @@ internal class StatModifierPermissionChecks(IUserContext userContext)
             case SourceTableEnum.Powers:
                 if (!userContext.CurrentUserHasPermission(Permissions.Powers.EditModifiers))
                 {
-                    fail = Result.Fail(new NotFoundFailure("Stat Modifier", ""));
+                    fail = Result.Fail(new NotFoundFailure(statModifierString, ""));
+                    return true;
+                }
+
+                break;
+
+            case SourceTableEnum.Characters:
+                if (
+                    !userContext.CurrentUserHasPermission(
+                        Permissions.CharacterManagement.EditModifiers
+                    )
+                )
+                {
+                    fail = Result.Fail(new NotFoundFailure(statModifierString, ""));
                     return true;
                 }
 

@@ -15,6 +15,8 @@ internal static class Helpers
                 return SourceTableEnum.Blessings;
             case "progressionlevels":
                 return SourceTableEnum.ProgressionLevels;
+            case "characters":
+                return SourceTableEnum.Characters;
             default:
                 throw new InvalidEnumArgumentException(
                     $"{name} was not converted into a valid SourceTableEnum."

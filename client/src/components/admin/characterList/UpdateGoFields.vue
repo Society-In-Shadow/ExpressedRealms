@@ -10,6 +10,9 @@ import { useQuery } from '@pinia/colada'
 import { goFieldQuery, useUpdateGoFields } from '@/components/admin/characterList/stores/goFieldColada.ts'
 import type { GoFields } from '@/components/admin/characterList/types.ts'
 import { useHydrateFormOnce } from '@/utilities/piniaColadaUtilities.ts'
+import { SourceTableEnum } from '@/components/modifiergroups/types.ts'
+import ModifierGroup from '@/components/modifiergroups/ModifierGroup.vue'
+import { can } from '@/stores/userPermissionStore.ts'
 
 const form = getValidationInstance()
 const dialogRef = inject('dialogRef') as Ref
@@ -45,4 +48,10 @@ const cancel = () => {
     <FormInputNumberWrapper v-model="form.fields.voidFragments" />
     <Button label="Update" class="m-2" type="submit" />
   </FormWrapper>
+
+  <div v-if="can.CharacterManagement.EditModifiers">
+    <p>For the modifiers below, these are permanent additions to the character sheet recieved via role play.</p>
+    <p>This is not meant to be used to get around bugs in the app</p>
+    <ModifierGroup v-if="!isPending" :group-id="data!.statModifierGroupId" :source="SourceTableEnum.Characters" :source-id="characterId" />
+  </div>
 </template>

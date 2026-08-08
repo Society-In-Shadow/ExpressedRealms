@@ -2,6 +2,7 @@ export enum SourceTableEnum {
   ProgressionLevels = 1,
   Blessings = 2,
   Powers = 3,
+  Characters = 4,
 }
 
 export interface CreateStatModifier {
