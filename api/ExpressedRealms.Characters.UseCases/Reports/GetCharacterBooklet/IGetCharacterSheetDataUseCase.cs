@@ -5,4 +5,4 @@ using FluentResults;
 namespace ExpressedRealms.Characters.UseCases.Reports.GetCharacterBooklet;
 
 public interface IGetCharacterSheetDataUseCase
-    : IGenericUseCase<Result<ReportData>, GetCharacterSheetDataReportModel> { }
+    : IGenericUseCase<Result<ReportData>, GetCharacterSheetDataModel> { }
