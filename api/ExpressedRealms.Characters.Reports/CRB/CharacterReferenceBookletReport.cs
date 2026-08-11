@@ -363,7 +363,7 @@ public static class CharacterReferenceBookletReport
         double lineHeight = 12;
         double fontSize = lineHeight * 0.65;
         var font = new XFont(TextPrintUtilities.DefaultFontFace, fontSize, XFontStyleEx.Regular);
-        using (var gfx = XGraphics.FromPdfPage(document.Pages[4]))
+        using (var gfx = XGraphics.FromPdfPage(document.Pages[3]))
         {
             var linePen = new XPen(XColors.Black, 0.5);
             for (int i = 0; i < lineCount; i++)
@@ -502,7 +502,7 @@ public static class CharacterReferenceBookletReport
         double lineHeight = 12;
         double fontSize = lineHeight * 0.65;
         var font = new XFont(TextPrintUtilities.DefaultFontFace, fontSize, XFontStyleEx.Regular);
-        using (var gfx = XGraphics.FromPdfPage(document.Pages[5]))
+        using (var gfx = XGraphics.FromPdfPage(document.Pages[1]))
         {
             var linePen = new XPen(XColors.Black, 0.5);
             var maxSize = Math.Min(lineCount, 20);
