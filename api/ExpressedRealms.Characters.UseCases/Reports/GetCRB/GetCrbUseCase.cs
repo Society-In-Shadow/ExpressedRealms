@@ -167,14 +167,14 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             List<ContactInfo> contacts
         )
         {
-            if (contacts.Count > 1)
+            if (contacts.Count > 6)
             {
                 cardTiles.Add(
                     new PopulateContactOverflowCard(
                         new ContactsOverflowCardData()
                         {
                             Contacts = contacts
-                                .Take(new Range(1, contacts.Count + 1))
+                                .Take(new Range(6, contacts.Count + 1))
                                 .Select(x => new Contact()
                                 {
                                     Name = x.Name, 

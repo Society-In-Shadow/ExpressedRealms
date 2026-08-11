@@ -77,7 +77,7 @@ public static class CharacterReferenceBookletReport
                 data.BasicInfo.Expression
             );
             FillInStatInfo(fields, data.StatInfo, document);
-            FillInContacts(fields, data.Contacts);
+            ContactsPage.FillInContacts(document, data.Contacts);
 
             FillInKnowledges(data.Knowledges, document);
 
@@ -529,25 +529,6 @@ public static class CharacterReferenceBookletReport
 
                 columns++;
             }
-        }
-    }
-
-    private static void FillInContacts(
-        PdfAcroField.PdfAcroFieldCollection fields,
-        List<ContactInfo> dataPowers
-    )
-    {
-        int count = 0;
-        foreach (var model in dataPowers)
-        {
-            Helpers.MergeField(fields, $"ContactName{count.ToString()}", model.Name);
-            Helpers.MergeField(fields, $"ContactKnowledge{count.ToString()}", model.KnowledgeName);
-            Helpers.MergeField(
-                fields,
-                $"ContactLevelUses{count.ToString()}",
-                $"{model.KnowledgeLevel} ({model.NumberOfUses})"
-            );
-            count++;
         }
     }
 }
