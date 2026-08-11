@@ -28,7 +28,6 @@ public static class PowerCardReport
             .ThenBy(x => x.CardType == CardType.WealthCard ? 0 : 1)
             .ThenBy(x => x.CardType == CardType.CashCard ? 0 : 1)
             .ThenBy(x => x.CardType == CardType.PrimaVoidCard ? 0 : 1)
-            .ThenBy(x => x.CardType == CardType.KnowledgeOverflowCard ? 0 : 1)
             .ToList();
 
         return GetSingleTilePerPage(powerCards, isFiveByThree, cardTiles);
