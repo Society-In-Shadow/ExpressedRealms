@@ -72,9 +72,11 @@ public class PopulateContactOverflowCard : ICardTile
                                                         .PaddingTop(2)
                                                         .PaddingBottom(5)
                                                         .AlignMiddle()
-                                                        .Text($"{knowledge.Name.Limit(25, ".")} - {knowledge.KnowledgeName.Limit(30, ".")} - {knowledge.KnowledgeLevel}");
+                                                        .Text(
+                                                            $"{knowledge.Name.Limit(25, ".")} - {knowledge.KnowledgeName.Limit(30, ".")} - {knowledge.KnowledgeLevel}"
+                                                        );
                                                 });
-                                            
+
                                             rightSide
                                                 .Item()
                                                 .AlignCenter()
@@ -82,13 +84,24 @@ public class PopulateContactOverflowCard : ICardTile
                                                 .PaddingBottom(2)
                                                 .Row(costRow =>
                                                 {
-                                                    CreateStamp(costRow.RelativeItem(), string.Empty);
-                                                    CreateStamp(costRow.RelativeItem(), knowledge.NumberOfUses >= 2 ? string.Empty : "X");
-                                                    CreateStamp(costRow.RelativeItem(), knowledge.NumberOfUses >= 3 ? string.Empty : "X");
+                                                    CreateStamp(
+                                                        costRow.RelativeItem(),
+                                                        string.Empty
+                                                    );
+                                                    CreateStamp(
+                                                        costRow.RelativeItem(),
+                                                        knowledge.NumberOfUses >= 2
+                                                            ? string.Empty
+                                                            : "X"
+                                                    );
+                                                    CreateStamp(
+                                                        costRow.RelativeItem(),
+                                                        knowledge.NumberOfUses >= 3
+                                                            ? string.Empty
+                                                            : "X"
+                                                    );
                                                 });
                                         }
-                                        
-                                        
                                     });
                             });
                     });
@@ -96,7 +109,7 @@ public class PopulateContactOverflowCard : ICardTile
 
         col.Item().PageBreak();
     }
-    
+
     private static void CreateStamp(IContainer initialIncomeRow, string stampText)
     {
         initialIncomeRow

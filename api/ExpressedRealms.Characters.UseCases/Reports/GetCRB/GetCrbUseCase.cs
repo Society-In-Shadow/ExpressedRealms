@@ -133,14 +133,18 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                         {
                             Powers = powers
                                 .Take(new Range(30, powers.Count + 1))
-                                .Select(x => new Power() { Name = x.Name, Level = x.Level.Substring(0, 1) })
+                                .Select(x => new Power()
+                                {
+                                    Name = x.Name,
+                                    Level = x.Level.Substring(0, 1),
+                                })
                                 .ToList(),
                         }
                     )
                 );
             }
         }
-        
+
         private static void PopulateKnowledgeOverflowCardData(
             List<ICardTile> cardTiles,
             List<KnowledgeInfo> knowledges
@@ -161,7 +165,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                 );
             }
         }
-        
+
         private static void PopulateContactsOverflowCardData(
             List<ICardTile> cardTiles,
             List<ContactInfo> contacts
@@ -177,10 +181,10 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                                 .Take(new Range(6, contacts.Count + 1))
                                 .Select(x => new Contact()
                                 {
-                                    Name = x.Name, 
+                                    Name = x.Name,
                                     KnowledgeName = x.KnowledgeName,
                                     KnowledgeLevel = x.KnowledgeLevel,
-                                    NumberOfUses = x.NumberOfUses
+                                    NumberOfUses = x.NumberOfUses,
                                 })
                                 .ToList(),
                         }

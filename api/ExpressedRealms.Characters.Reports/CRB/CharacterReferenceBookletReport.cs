@@ -81,49 +81,58 @@ public static class CharacterReferenceBookletReport
 
             FillInKnowledges(data.Knowledges, document);
 
-            FillInAdminSmallList(new AdminListOptions<KnowledgeInfo>()
-            {
-                PageNumber = 1,
-                DataItems = data.Knowledges,
-                Document = document,
-                PopulateLine = (knowledge) =>
+            FillInAdminSmallList(
+                new AdminListOptions<KnowledgeInfo>()
                 {
-                    var name = knowledge.Name.Limit(20);
-                    var level = knowledge.Level.Substring(0, Math.Min(1, knowledge.Level.Length));
-                    return $"{level} - {name}";
+                    PageNumber = 1,
+                    DataItems = data.Knowledges,
+                    Document = document,
+                    PopulateLine = (knowledge) =>
+                    {
+                        var name = knowledge.Name.Limit(20);
+                        var level = knowledge.Level.Substring(
+                            0,
+                            Math.Min(1, knowledge.Level.Length)
+                        );
+                        return $"{level} - {name}";
+                    },
                 }
-            });
-            
-            FillInAdminSmallList(new AdminListOptions<PowerInfo>()
-            {
-                PageNumber = 3,
-                DataItems = data.Powers,
-                Document = document,
-                PopulateLine = (power) =>
+            );
+
+            FillInAdminSmallList(
+                new AdminListOptions<PowerInfo>()
                 {
-                    var name = power.Name.Limit(20, ".");
-                    var level = power.Level.Substring(0, 1);
-                    return $"{level} - {name}";
+                    PageNumber = 3,
+                    DataItems = data.Powers,
+                    Document = document,
+                    PopulateLine = (power) =>
+                    {
+                        var name = power.Name.Limit(20, ".");
+                        var level = power.Level.Substring(0, 1);
+                        return $"{level} - {name}";
+                    },
                 }
-            });
-            
-            FillInAdminSmallList(new AdminListOptions<ContactInfo>()
-            {
-                PageNumber = 2,
-                DataItems = data.Contacts,
-                Document = document,
-                PopulateLine = (contact) =>
+            );
+
+            FillInAdminSmallList(
+                new AdminListOptions<ContactInfo>()
                 {
-                    var name = contact.Name.Limit(20);
-                    var knowledge = contact.KnowledgeName.Limit(20);
-                    var level = contact.KnowledgeLevel;
-                    var uses = contact.NumberOfUses;
-                    return $"{name} - {knowledge} - {level} ({uses})";
-                },
-                NumberOfColumns = 4,
-                CharacterLimit = 50
-            });
-            
+                    PageNumber = 2,
+                    DataItems = data.Contacts,
+                    Document = document,
+                    PopulateLine = (contact) =>
+                    {
+                        var name = contact.Name.Limit(20);
+                        var knowledge = contact.KnowledgeName.Limit(20);
+                        var level = contact.KnowledgeLevel;
+                        var uses = contact.NumberOfUses;
+                        return $"{name} - {knowledge} - {level} ({uses})";
+                    },
+                    NumberOfColumns = 4,
+                    CharacterLimit = 50,
+                }
+            );
+
             RechargePage.FillInRechargePage(data, document);
         }
 
@@ -486,14 +495,14 @@ public static class CharacterReferenceBookletReport
 
     private class AdminListOptions<T>()
     {
-        public int PageNumber {get; set;}
-        public List<T> DataItems {get; set;}
-        public PdfDocument Document {get; set;}
+        public int PageNumber { get; set; }
+        public List<T> DataItems { get; set; }
+        public PdfDocument Document { get; set; }
         public Func<T, string> PopulateLine { get; set; }
         public int NumberOfColumns { get; set; } = 5;
         public int CharacterLimit { get; set; } = 30;
     }
-    
+
     private static void FillInAdminSmallList<T>(AdminListOptions<T> options)
     {
         double startY = XUnitPt.FromInch(0.63);
@@ -516,9 +525,11 @@ public static class CharacterReferenceBookletReport
                 for (int i = 0; i < maxSize && itemCount < options.DataItems.Count; i++)
                 {
                     double baselineY = startY + (i * lineHeight) + (lineHeight * 0.75) - 3;
-                    
+
                     gfx.DrawString(
-                        options.PopulateLine.Invoke(options.DataItems[itemCount]).Limit(options.CharacterLimit, "."),
+                        options
+                            .PopulateLine.Invoke(options.DataItems[itemCount])
+                            .Limit(options.CharacterLimit, "."),
                         font,
                         XBrushes.Black,
                         columnStart,
