@@ -1,6 +1,7 @@
 using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Characters.Reports.CRB;
 using ExpressedRealms.Characters.Reports.CRB.Data.SupportingData;
+using ExpressedRealms.Characters.Reports.CRB.DataCards.ContactsOverflowCards;
 using ExpressedRealms.Characters.Reports.CRB.DataCards.KnowledgeOverflowCards;
 using ExpressedRealms.Characters.Reports.CRB.DataCards.PowerOverflowCards;
 using ExpressedRealms.Characters.Repository;
@@ -22,6 +23,7 @@ using JetBrains.Annotations;
 using PdfSharp;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
+using PopulatePowerOverflowCard = ExpressedRealms.Characters.Reports.CRB.DataCards.PowerOverflowCards.PopulatePowerOverflowCard;
 
 namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
 {
@@ -77,6 +79,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             var cardTiles = new List<ICardTile>();
             PopulateKnowledgeOverflowCardData(cardTiles, crbData.Value.Knowledges);
             PopulatePowersOverflowCardData(cardTiles, crbData.Value.Powers);
+            PopulateContactsOverflowCardData(cardTiles, crbData.Value.Contacts);
 
             var powerCards = await powerReport.ExecuteAsync(
                 new GetCharacterPowerCardReportModel()
@@ -152,6 +155,33 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                             Knowledges = knowledges
                                 .Take(new Range(30, knowledges.Count + 1))
                                 .Select(x => new Knowledge() { Name = x.Name, Level = x.Level })
+                                .ToList(),
+                        }
+                    )
+                );
+            }
+        }
+        
+        private static void PopulateContactsOverflowCardData(
+            List<ICardTile> cardTiles,
+            List<ContactInfo> contacts
+        )
+        {
+            if (contacts.Count > 1)
+            {
+                cardTiles.Add(
+                    new PopulateContactOverflowCard(
+                        new ContactsOverflowCardData()
+                        {
+                            Contacts = contacts
+                                .Take(new Range(1, contacts.Count + 1))
+                                .Select(x => new Contact()
+                                {
+                                    Name = x.Name, 
+                                    KnowledgeName = x.KnowledgeName,
+                                    KnowledgeLevel = x.KnowledgeLevel,
+                                    NumberOfUses = x.NumberOfUses
+                                })
                                 .ToList(),
                         }
                     )
