@@ -189,19 +189,13 @@ public class GetCharacterSheetDataUseCase(
         foreach (var knowledge in knowledges)
         {
             knowledgeList.Add(
-                new KnowledgeInfo()
-                {
-                    Name = knowledge.Name,
-                    XPCost = "5",
-                    Level = knowledge.Level.ToString(),
-                }
+                new KnowledgeInfo() { Name = knowledge.Name, Level = knowledge.Level.ToString() }
             );
 
             knowledgeList.AddRange(
                 knowledge.Specializations.Select(spec => new KnowledgeInfo()
                 {
                     Name = $" - {spec}",
-                    XPCost = "5",
                     Level = String.Empty,
                 })
             );

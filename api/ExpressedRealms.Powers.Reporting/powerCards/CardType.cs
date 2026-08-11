@@ -6,5 +6,5 @@ public enum CardType
     WealthCard = 2,
     CashCard,
     PrimaVoidCard,
-    KnowledgeOverflowCard
+    KnowledgeOverflowCard,
 }

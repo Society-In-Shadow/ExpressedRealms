@@ -516,8 +516,10 @@ public static class CharacterReferenceBookletReport
                 {
                     double baselineY = startY + (i * lineHeight) + (lineHeight * 0.75) - 3;
 
-                    var name = dataPowers[itemCount].Name.Substring(0, Math.Min(30, dataPowers[itemCount].Name.Length));
-                    var level = dataPowers[itemCount].Level.Substring(0, Math.Min(1, dataPowers[itemCount].Level.Length));
+                    var name = dataPowers[itemCount]
+                        .Name.Substring(0, Math.Min(30, dataPowers[itemCount].Name.Length));
+                    var level = dataPowers[itemCount]
+                        .Level.Substring(0, Math.Min(1, dataPowers[itemCount].Level.Length));
                     gfx.DrawString(
                         $"{level} - {name}".Limit(23, "."),
                         font,
@@ -530,7 +532,6 @@ public static class CharacterReferenceBookletReport
 
                 columns++;
             }
-
         }
     }
 

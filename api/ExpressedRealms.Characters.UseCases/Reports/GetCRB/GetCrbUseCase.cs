@@ -69,20 +69,20 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             var crbData = await crbDataUseCase.ExecuteAsync(
                 new GetCharacterSheetDataReportModel() { CharacterId = model.CharacterId }
             );
-            
+
             var reportStream = CharacterReferenceBookletReport.GenerateReport(crbData.Value);
             reportStream.Position = 0;
-            
+
             var cardTiles = new List<ICardTile>();
             PopulateKnowledgeOverflowCardData(cardTiles, crbData.Value.Knowledges);
-            
+
             var powerCards = await powerReport.ExecuteAsync(
                 new GetCharacterPowerCardReportModel()
                 {
                     CharacterId = model.CharacterId,
                     IsFiveByThree = false,
                     IncludeWealthCard = true,
-                    CardTiles = cardTiles
+                    CardTiles = cardTiles,
                 }
             );
 
@@ -115,19 +115,24 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             return finalStream;
         }
 
-        private static void PopulateKnowledgeOverflowCardData(List<ICardTile> cardTiles, List<KnowledgeInfo> knowledges)
+        private static void PopulateKnowledgeOverflowCardData(
+            List<ICardTile> cardTiles,
+            List<KnowledgeInfo> knowledges
+        )
         {
             if (knowledges.Count > 30)
             {
-                cardTiles.Add(new PopulateKnowledgeOverflowCard(new KnowledgeOverflowCardData()
-                {
-                    Knowledges = knowledges.Take(new Range(30, knowledges.Count + 1))
-                        .Select(x => new Knowledge()
+                cardTiles.Add(
+                    new PopulateKnowledgeOverflowCard(
+                        new KnowledgeOverflowCardData()
                         {
-                            Name = x.Name,
-                            Level = x.Level,
-                        }).ToList()
-                }));
+                            Knowledges = knowledges
+                                .Take(new Range(30, knowledges.Count + 1))
+                                .Select(x => new Knowledge() { Name = x.Name, Level = x.Level })
+                                .ToList(),
+                        }
+                    )
+                );
             }
         }
 
