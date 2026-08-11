@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Characters.Reports.CRB.KnowledgeOverflowCards;
+namespace ExpressedRealms.Characters.Reports.CRB.DataCards.KnowledgeOverflowCards;
 
 public class KnowledgeOverflowCardData
 {

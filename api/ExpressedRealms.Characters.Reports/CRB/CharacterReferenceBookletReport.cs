@@ -70,7 +70,6 @@ public static class CharacterReferenceBookletReport
             FillInTraits(fields, data.Traits);
             FillInSkills(fields, data.SkillInfo, document);
             FillInPowers(data.Powers, document);
-            FillInAdminPowers(data.Powers, document);
             StatPage.FillInProficiencies(
                 fields,
                 data.ProficiencyInfo,
@@ -81,7 +80,19 @@ public static class CharacterReferenceBookletReport
             FillInContacts(fields, data.Contacts);
 
             FillInKnowledges(data.Knowledges, document);
-            FillInAdminKnowledges(data.Knowledges, document);
+            FillInAdminSmallList(1, data.Knowledges, document, (knowledge) =>
+            {
+                var name = knowledge.Name.Substring(0, Math.Min(30, knowledge.Name.Length));
+                var level = knowledge.Level.Substring(0, Math.Min(1, knowledge.Level.Length));
+                return $"{level} - {name}";
+            });
+            
+            FillInAdminSmallList(3, data.Powers, document, (power) =>
+            {
+                var name = power.Name.Substring(0, Math.Min(30, power.Name.Length));
+                var level = power.Level.Substring(0, 1);
+                return $"{level} - {name}";
+            });
             RechargePage.FillInRechargePage(data, document);
         }
 
@@ -354,57 +365,6 @@ public static class CharacterReferenceBookletReport
         Helpers.MergeField(fields, "DeflectionLevel", skillInfo.Deflection.ToString());
     }
 
-    private static void FillInAdminPowers(List<PowerInfo> dataPowers, PdfDocument document)
-    {
-        double startY = XUnitPt.FromInch(0.7); // your starting Y position
-        double startX = XUnitPt.FromInch(1.7);
-        double lineWidth = XUnitPt.FromInch(4.5);
-        int lineCount = dataPowers.Count;
-
-        double lineHeight = 12;
-        double fontSize = lineHeight * 0.65;
-        var font = new XFont(TextPrintUtilities.DefaultFontFace, fontSize, XFontStyleEx.Regular);
-        using (var gfx = XGraphics.FromPdfPage(document.Pages[3]))
-        {
-            var linePen = new XPen(XColors.Black, 0.5);
-            for (int i = 0; i < lineCount; i++)
-            {
-                // Max Number that can be shown in admin area
-                if (i == 20)
-                {
-                    break;
-                }
-                double baselineY = startY + (i * lineHeight) + (lineHeight * 0.75) - 3;
-                double lineY = baselineY + 1; // sit the rule just under the text baseline
-
-                gfx.DrawString(
-                    dataPowers[i].Name,
-                    font,
-                    XBrushes.Black,
-                    XUnitPt.FromInch(1.7),
-                    baselineY
-                );
-                gfx.DrawString(
-                    dataPowers[i].Level.Substring(0, 1),
-                    font,
-                    XBrushes.Black,
-                    XUnitPt.FromInch(5.7),
-                    baselineY
-                );
-                gfx.DrawString(
-                    dataPowers[i].XPCost.Substring(0, 1),
-                    font,
-                    XBrushes.Black,
-                    XUnitPt.FromInch(6.10),
-                    baselineY
-                );
-
-                // Draw the underline rule
-                gfx.DrawLine(linePen, startX, lineY, startX + lineWidth, lineY);
-            }
-        }
-    }
-
     private static void FillInPowers(List<PowerInfo> dataPowers, PdfDocument document)
     {
         double totalHeight = XUnitPt.FromInch(6.15);
@@ -493,35 +453,31 @@ public static class CharacterReferenceBookletReport
         }
     }
 
-    private static void FillInAdminKnowledges(List<KnowledgeInfo> dataPowers, PdfDocument document)
+    private static void FillInAdminSmallList<T>(int pageNumber, List<T> dataItems, PdfDocument document, Func<T, string> populateLine)
     {
-        double startY = XUnitPt.FromInch(0.75); // your starting Y position
+        double startY = XUnitPt.FromInch(0.63);
         double startX = XUnitPt.FromInch(0.3);
-        double lineWidth = XUnitPt.FromInch(1.375);
-        int lineCount = dataPowers.Count;
+        double lineWidth = XUnitPt.FromInch(1.5);
+        int lineCount = dataItems.Count;
 
-        double lineHeight = 12;
+        double lineHeight = 11;
         double fontSize = lineHeight * 0.65;
         var font = new XFont(TextPrintUtilities.DefaultFontFace, fontSize, XFontStyleEx.Regular);
-        using (var gfx = XGraphics.FromPdfPage(document.Pages[1]))
+        using (var gfx = XGraphics.FromPdfPage(document.Pages[pageNumber]))
         {
-            var maxSize = Math.Min(lineCount, 17);
+            var maxSize = Math.Min(lineCount, 20);
             var columns = 0;
             var itemCount = 0;
 
-            while (columns < 6 && itemCount < dataPowers.Count)
+            while (columns < 5 && itemCount < dataItems.Count)
             {
                 var columnStart = startX + (lineWidth * columns);
-                for (int i = 0; i < maxSize && itemCount < dataPowers.Count; i++)
+                for (int i = 0; i < maxSize && itemCount < dataItems.Count; i++)
                 {
                     double baselineY = startY + (i * lineHeight) + (lineHeight * 0.75) - 3;
-
-                    var name = dataPowers[itemCount]
-                        .Name.Substring(0, Math.Min(30, dataPowers[itemCount].Name.Length));
-                    var level = dataPowers[itemCount]
-                        .Level.Substring(0, Math.Min(1, dataPowers[itemCount].Level.Length));
+                    
                     gfx.DrawString(
-                        $"{level} - {name}".Limit(23, "."),
+                        populateLine.Invoke(dataItems[itemCount]).Limit(30, "."),
                         font,
                         XBrushes.Black,
                         columnStart,
