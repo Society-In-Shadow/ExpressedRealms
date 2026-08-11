@@ -6,16 +6,16 @@ namespace ExpressedRealms.Characters.Reports.CRB.KnowledgeOverflowCards;
 
 public class PopulateKnowledgeOverflowCard : ICardTile
 {
-    private KnowledgeOverflowCardData _cardData;
+    private readonly KnowledgeOverflowCardData _cardData;
 
     public PopulateKnowledgeOverflowCard(KnowledgeOverflowCardData data)
     {
         _cardData = data;
     }
 
-    public void Populate(ColumnDescriptor card)
+    public void Populate(ColumnDescriptor col)
     {
-        card.Item()
+        col.Item()
             .PaddingTop(15)
             .PaddingLeft(15)
             .PaddingRight(15)
@@ -99,6 +99,6 @@ public class PopulateKnowledgeOverflowCard : ICardTile
                     });
             });
 
-        card.Item().PageBreak();
+        col.Item().PageBreak();
     }
 }
