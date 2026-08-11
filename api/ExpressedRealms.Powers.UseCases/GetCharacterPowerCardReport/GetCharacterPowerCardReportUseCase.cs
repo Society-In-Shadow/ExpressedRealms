@@ -54,7 +54,8 @@ public class GetCharacterPowerCardReportUseCase(
         var reportStream = PowerCardReport.GenerateSixUpPdf(
             cards,
             model.IsFiveByThree,
-            model.IncludeWealthCard
+            model.IncludeWealthCard,
+            model.CardTiles
         );
 
         reportStream.Position = 0;

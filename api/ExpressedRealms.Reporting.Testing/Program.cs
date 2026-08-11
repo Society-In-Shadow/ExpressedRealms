@@ -45,6 +45,6 @@ var generatedCards = cards
     .Select(x => new DataCard() { CardType = CardType.PowerCard, CardData = x })
     .ToList();
 
-var report = PowerCardReport.GenerateReport(generatedCards, true);
+var report = PowerCardReport.GenerateReport(generatedCards, true, []);
 
 report.GeneratePdf("../test.pdf");

@@ -1,4 +1,7 @@
 using ExpressedRealms.Authentication.PermissionCollection;
+using ExpressedRealms.Characters.Reports.CRB;
+using ExpressedRealms.Characters.Reports.CRB.Data.SupportingData;
+using ExpressedRealms.Characters.Reports.CRB.KnowledgeOverflowCards;
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Players;
 using ExpressedRealms.Characters.Repository.Proficiencies;
@@ -8,6 +11,7 @@ using ExpressedRealms.DB.Models.Checkins.CheckinSecondaryStatsSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.Events.API.UseCases.EventCheckin.ApproveStageAndSendMessages;
+using ExpressedRealms.Powers.Reporting.powerCards.CardPluginSystem;
 using ExpressedRealms.Powers.UseCases.GetCharacterPowerCardReport;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.UseCases.Shared;
@@ -23,7 +27,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
     [UsedImplicitly]
     internal sealed class GetCharacterBookletUseCase(
         IGetCharacterPowerCardReportUseCase powerReport,
-        IGetCharacterSheetReportUseCase crbReport,
+        IGetCharacterSheetDataUseCase crbDataUseCase,
         IPlayerRepository playerRepository,
         IEventCheckinRepository checkinRepository,
         IProficiencyRepository profRepository,
@@ -62,9 +66,15 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                 return Result.Fail(new UnauthorizedError());
             }
 
-            var crb = await crbReport.ExecuteAsync(
-                new GetCharacterSheetReportModel() { CharacterId = model.CharacterId }
+            var crbData = await crbDataUseCase.ExecuteAsync(
+                new GetCharacterSheetDataModel() { CharacterId = model.CharacterId }
             );
+
+            var reportStream = CharacterReferenceBookletReport.GenerateReport(crbData.Value);
+            reportStream.Position = 0;
+
+            var cardTiles = new List<ICardTile>();
+            PopulateKnowledgeOverflowCardData(cardTiles, crbData.Value.Knowledges);
 
             var powerCards = await powerReport.ExecuteAsync(
                 new GetCharacterPowerCardReportModel()
@@ -72,6 +82,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                     CharacterId = model.CharacterId,
                     IsFiveByThree = false,
                     IncludeWealthCard = true,
+                    CardTiles = cardTiles,
                 }
             );
 
@@ -79,7 +90,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             using var finalDocument = new PdfDocument();
 
             // Add pages from the QuestPDF document
-            using var questPdfDoc = PdfReader.Open(crb.Value, PdfDocumentOpenMode.Import);
+            using var questPdfDoc = PdfReader.Open(reportStream, PdfDocumentOpenMode.Import);
             foreach (PdfPage page in questPdfDoc.Pages)
             {
                 finalDocument.AddPage(page);
@@ -104,6 +115,27 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             return finalStream;
         }
 
+        private static void PopulateKnowledgeOverflowCardData(
+            List<ICardTile> cardTiles,
+            List<KnowledgeInfo> knowledges
+        )
+        {
+            if (knowledges.Count > 30)
+            {
+                cardTiles.Add(
+                    new PopulateKnowledgeOverflowCard(
+                        new KnowledgeOverflowCardData()
+                        {
+                            Knowledges = knowledges
+                                .Take(new Range(30, knowledges.Count + 1))
+                                .Select(x => new Knowledge() { Name = x.Name, Level = x.Level })
+                                .ToList(),
+                        }
+                    )
+                );
+            }
+        }
+
         private async Task ProcessCheckinAndUpdateStats(GetCharacterBookletModel model)
         {
             var eventId = await checkinRepository.GetActiveEventId();
@@ -111,7 +143,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                 return;
 
             var player = await playerRepository.GetPlayerByCharacterId(model.CharacterId);
-            var checkin = await checkinRepository.GetCheckinAsync(eventId!.Value, player.Id);
+            var checkin = await checkinRepository.GetCheckinAsync(eventId.Value, player.Id);
             if (checkin is null)
                 return;
 
@@ -143,7 +175,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                         Essence = proficiencies.Value.FirstOrDefault(x => x.Id == 19)?.Value ?? 0,
                         Mana = proficiencies.Value.FirstOrDefault(x => x.Id == 20)?.Value ?? 0,
                         Noumenon = proficiencies.Value.FirstOrDefault(x => x.Id == 21)?.Value ?? 0,
-                        ExpressionId = character!.ExpressionSubTypeId,
+                        ExpressionId = character.ExpressionSubTypeId,
                         PlayerLevel = characterLevel,
                     }
                 );

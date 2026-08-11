@@ -1,5 +1,4 @@
 using ExpressedRealms.Blessings.Repository.CharacterBlessings;
-using ExpressedRealms.Characters.Reports.CRB;
 using ExpressedRealms.Characters.Reports.CRB.Data;
 using ExpressedRealms.Characters.Reports.CRB.Data.SupportingData;
 using ExpressedRealms.Characters.Repository;
@@ -17,13 +16,12 @@ using ExpressedRealms.Expressions.Repository.CharacterFactions;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.Shared;
-using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 using StatModifier = ExpressedRealms.Characters.Reports.CRB.Data.SupportingData.StatModifier;
 
 namespace ExpressedRealms.Characters.UseCases.Reports.GetCharacterBooklet;
 
-public class GetCharacterSheetReportUseCase(
+public class GetCharacterSheetDataUseCase(
     ICharacterKnowledgeRepository knowledgeRepository,
     ICharacterRepository characterRepository,
     IXpRepository xpRepository,
@@ -35,44 +33,30 @@ public class GetCharacterSheetReportUseCase(
     IContactRepository contactRepository,
     IEventCheckinRepository eventCheckinRepository,
     IWealthRepository wealthRepository,
-    ICharacterFactionRepository characterFactionRepository,
-    GetCharacterSheetReportModelValidator validator,
-    CancellationToken cancellationToken
-) : IGetCharacterSheetReportUseCase
+    ICharacterFactionRepository characterFactionRepository
+) : IGetCharacterSheetDataUseCase
 {
-    public async Task<Result<MemoryStream>> ExecuteAsync(GetCharacterSheetReportModel model)
+    public async Task<Result<ReportData>> ExecuteAsync(GetCharacterSheetDataModel model)
     {
-        var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
-            validator,
-            model,
-            cancellationToken
-        );
-
-        if (result.IsFailed)
-            return Result.Fail(result.Errors);
+        // This function assumes character id has already been validated
 
         var statInfo = await GetStatModifierInfo(model);
 
-        var reportStream = CharacterReferenceBookletReport.GenerateReport(
-            new ReportData()
-            {
-                BasicInfo = await GetBasicInfo(model),
-                Traits = await GetTraits(model),
-                SkillInfo = await GetSkillInfo(model),
-                Powers = await GetPowerInfo(model),
-                Knowledges = await GetKnowledgeInfo(model),
-                ProficiencyInfo = await GetProficiencyInfo(model),
-                StatInfo = statInfo,
-                Contacts = await GetContactinfo(model),
-                WealthInfo = await GetWealthInfo(model),
-            }
-        );
-
-        reportStream.Position = 0;
-        return reportStream;
+        return new ReportData()
+        {
+            BasicInfo = await GetBasicInfo(model),
+            Traits = await GetTraits(model),
+            SkillInfo = await GetSkillInfo(model),
+            Powers = await GetPowerInfo(model),
+            Knowledges = await GetKnowledgeInfo(model),
+            ProficiencyInfo = await GetProficiencyInfo(model),
+            StatInfo = statInfo,
+            Contacts = await GetContactinfo(model),
+            WealthInfo = await GetWealthInfo(model),
+        };
     }
 
-    private async Task<WealthInfoDto> GetWealthInfo(GetCharacterSheetReportModel model)
+    private async Task<WealthInfoDto> GetWealthInfo(GetCharacterSheetDataModel model)
     {
         var wealthInfo = await wealthRepository.GetWealthInfoAsync(model.CharacterId);
 
@@ -85,7 +69,7 @@ public class GetCharacterSheetReportUseCase(
         };
     }
 
-    private async Task<StatModifierInfo> GetStatModifierInfo(GetCharacterSheetReportModel model)
+    private async Task<StatModifierInfo> GetStatModifierInfo(GetCharacterSheetDataModel model)
     {
         var stats = await statRepository.GetAllStats(model.CharacterId);
 
@@ -125,7 +109,7 @@ public class GetCharacterSheetReportUseCase(
         return statInfo;
     }
 
-    private async Task<ProficiencyData> GetProficiencyInfo(GetCharacterSheetReportModel model)
+    private async Task<ProficiencyData> GetProficiencyInfo(GetCharacterSheetDataModel model)
     {
         var proficiencies = await proficiencyRepository.GetBasicProficiencies(model.CharacterId);
 
@@ -196,7 +180,7 @@ public class GetCharacterSheetReportUseCase(
         return proficiencyInfo;
     }
 
-    private async Task<List<KnowledgeInfo>> GetKnowledgeInfo(GetCharacterSheetReportModel model)
+    private async Task<List<KnowledgeInfo>> GetKnowledgeInfo(GetCharacterSheetDataModel model)
     {
         var knowledges = await knowledgeRepository.GetKnowledgesForCharacterCRB(model.CharacterId);
 
@@ -205,19 +189,13 @@ public class GetCharacterSheetReportUseCase(
         foreach (var knowledge in knowledges)
         {
             knowledgeList.Add(
-                new KnowledgeInfo()
-                {
-                    Name = knowledge.Name,
-                    XPCost = "5",
-                    Level = knowledge.Level.ToString(),
-                }
+                new KnowledgeInfo() { Name = knowledge.Name, Level = knowledge.Level.ToString() }
             );
 
             knowledgeList.AddRange(
                 knowledge.Specializations.Select(spec => new KnowledgeInfo()
                 {
                     Name = $" - {spec}",
-                    XPCost = "5",
                     Level = String.Empty,
                 })
             );
@@ -225,7 +203,7 @@ public class GetCharacterSheetReportUseCase(
         return knowledgeList;
     }
 
-    private async Task<List<ContactInfo>> GetContactinfo(GetCharacterSheetReportModel model)
+    private async Task<List<ContactInfo>> GetContactinfo(GetCharacterSheetDataModel model)
     {
         var contacts = await contactRepository.GetContactsForCRB(model.CharacterId);
 
@@ -240,7 +218,7 @@ public class GetCharacterSheetReportUseCase(
             .ToList();
     }
 
-    private async Task<List<PowerInfo>> GetPowerInfo(GetCharacterSheetReportModel model)
+    private async Task<List<PowerInfo>> GetPowerInfo(GetCharacterSheetDataModel model)
     {
         var powerMappings = await mappingRepository.GetCharacterPowerInfoForCRB(model.CharacterId);
         var factionMappings = await characterFactionRepository.GetAppliedFactionPowerInfoForCrb(
@@ -268,7 +246,7 @@ public class GetCharacterSheetReportUseCase(
         return powers.Concat(factionPowers).ToList();
     }
 
-    private async Task<SkillInfo> GetSkillInfo(GetCharacterSheetReportModel model)
+    private async Task<SkillInfo> GetSkillInfo(GetCharacterSheetDataModel model)
     {
         var skills = await skillRepository.GetCharacterSkills(model.CharacterId);
 
@@ -311,7 +289,7 @@ public class GetCharacterSheetReportUseCase(
         return skillInfo;
     }
 
-    private async Task<Traits> GetTraits(GetCharacterSheetReportModel model)
+    private async Task<Traits> GetTraits(GetCharacterSheetDataModel model)
     {
         var blessings = await blessingRepository.GetBlessingsForCharacter(model.CharacterId);
 
@@ -331,7 +309,7 @@ public class GetCharacterSheetReportUseCase(
         return trait;
     }
 
-    private async Task<BasicInfo> GetBasicInfo(GetCharacterSheetReportModel model)
+    private async Task<BasicInfo> GetBasicInfo(GetCharacterSheetDataModel model)
     {
         var character = await characterRepository.GetCharacterInfoForCRB(model.CharacterId);
         var characterLevel = await xpRepository.GetCharacterXpLevel(model.CharacterId);
