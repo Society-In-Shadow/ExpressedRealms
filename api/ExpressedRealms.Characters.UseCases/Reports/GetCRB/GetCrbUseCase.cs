@@ -1,7 +1,8 @@
 using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Characters.Reports.CRB;
 using ExpressedRealms.Characters.Reports.CRB.Data.SupportingData;
-using ExpressedRealms.Characters.Reports.CRB.KnowledgeOverflowCards;
+using ExpressedRealms.Characters.Reports.CRB.DataCards.KnowledgeOverflowCards;
+using ExpressedRealms.Characters.Reports.CRB.DataCards.PowerOverflowCards;
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Players;
 using ExpressedRealms.Characters.Repository.Proficiencies;
@@ -75,6 +76,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
 
             var cardTiles = new List<ICardTile>();
             PopulateKnowledgeOverflowCardData(cardTiles, crbData.Value.Knowledges);
+            PopulatePowersOverflowCardData(cardTiles, crbData.Value.Powers);
 
             var powerCards = await powerReport.ExecuteAsync(
                 new GetCharacterPowerCardReportModel()
@@ -115,6 +117,27 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             return finalStream;
         }
 
+        private static void PopulatePowersOverflowCardData(
+            List<ICardTile> cardTiles,
+            List<PowerInfo> powers
+        )
+        {
+            if (powers.Count > 30)
+            {
+                cardTiles.Add(
+                    new PopulatePowerOverflowCard(
+                        new PowerOverflowCardData()
+                        {
+                            Powers = powers
+                                .Take(new Range(30, powers.Count + 1))
+                                .Select(x => new Power() { Name = x.Name, Level = x.Level.Substring(0, 1) })
+                                .ToList(),
+                        }
+                    )
+                );
+            }
+        }
+        
         private static void PopulateKnowledgeOverflowCardData(
             List<ICardTile> cardTiles,
             List<KnowledgeInfo> knowledges

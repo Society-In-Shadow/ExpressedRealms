@@ -2,13 +2,13 @@ using ExpressedRealms.Powers.Reporting.powerCards.CardPluginSystem;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 
-namespace ExpressedRealms.Characters.Reports.CRB.KnowledgeOverflowCards;
+namespace ExpressedRealms.Characters.Reports.CRB.DataCards.PowerOverflowCards;
 
-public class PopulateKnowledgeOverflowCard : ICardTile
+public class PopulatePowerOverflowCard : ICardTile
 {
-    private readonly KnowledgeOverflowCardData _cardData;
+    private readonly PowerOverflowCardData _cardData;
 
-    public PopulateKnowledgeOverflowCard(KnowledgeOverflowCardData data)
+    public PopulatePowerOverflowCard(PowerOverflowCardData data)
     {
         _cardData = data;
     }
@@ -32,7 +32,7 @@ public class PopulateKnowledgeOverflowCard : ICardTile
                             {
                                 header
                                     .Item()
-                                    .Text("Knowledge Overflow Card")
+                                    .Text("Power Overflow Card")
                                     .Bold()
                                     .FontSize(11)
                                     .ExtraBold();
@@ -47,7 +47,7 @@ public class PopulateKnowledgeOverflowCard : ICardTile
                                             .PaddingBottom(5)
                                             .PaddingTop(5)
                                             .AlignLeft()
-                                            .Text("Name - Specialization")
+                                            .Text("Name")
                                             .Bold();
 
                                         costRow
@@ -69,7 +69,7 @@ public class PopulateKnowledgeOverflowCard : ICardTile
                                     .PaddingRight(5)
                                     .Column(rightSide =>
                                     {
-                                        foreach (var knowledge in _cardData.Knowledges)
+                                        foreach (var knowledge in _cardData.Powers)
                                         {
                                             rightSide
                                                 .Item()
