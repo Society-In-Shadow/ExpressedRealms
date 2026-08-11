@@ -1,6 +1,7 @@
 using ExpressedRealms.Characters.Reports.CRB.CrbPages;
 using ExpressedRealms.Characters.Reports.CRB.Data;
 using ExpressedRealms.Characters.Reports.CRB.Data.SupportingData;
+using ExpressedRealms.Shared;
 using PdfSharp.Drawing;
 using PdfSharp.Fonts;
 using PdfSharp.Pdf;
@@ -496,7 +497,7 @@ public static class CharacterReferenceBookletReport
     {
         double startY = XUnitPt.FromInch(0.75); // your starting Y position
         double startX = XUnitPt.FromInch(0.3);
-        double lineWidth = XUnitPt.FromInch(3.08);
+        double lineWidth = XUnitPt.FromInch(1.375);
         int lineCount = dataPowers.Count;
 
         double lineHeight = 12;
@@ -504,38 +505,32 @@ public static class CharacterReferenceBookletReport
         var font = new XFont(TextPrintUtilities.DefaultFontFace, fontSize, XFontStyleEx.Regular);
         using (var gfx = XGraphics.FromPdfPage(document.Pages[1]))
         {
-            var linePen = new XPen(XColors.Black, 0.5);
-            var maxSize = Math.Min(lineCount, 20);
-            for (int i = 0; i < maxSize; i++)
+            var maxSize = Math.Min(lineCount, 17);
+            var columns = 0;
+            var itemCount = 0;
+
+            while (columns < 6 && itemCount < dataPowers.Count)
             {
-                double baselineY = startY + (i * lineHeight) + (lineHeight * 0.75) - 3;
-                double lineY = baselineY + 1; // sit the rule just under the text baseline
+                var columnStart = startX + (lineWidth * columns);
+                for (int i = 0; i < maxSize && itemCount < dataPowers.Count; i++)
+                {
+                    double baselineY = startY + (i * lineHeight) + (lineHeight * 0.75) - 3;
 
-                gfx.DrawString(
-                    dataPowers[i].Name.Substring(0, Math.Min(30, dataPowers[i].Name.Length)),
-                    font,
-                    XBrushes.Black,
-                    XUnitPt.FromInch(0.30),
-                    baselineY
-                );
-                gfx.DrawString(
-                    dataPowers[i].Level.Substring(0, Math.Min(1, dataPowers[i].Level.Length)),
-                    font,
-                    XBrushes.Black,
-                    XUnitPt.FromInch(2.95),
-                    baselineY
-                );
-                gfx.DrawString(
-                    dataPowers[i].XPCost,
-                    font,
-                    XBrushes.Black,
-                    XUnitPt.FromInch(3.24),
-                    baselineY
-                );
+                    var name = dataPowers[itemCount].Name.Substring(0, Math.Min(30, dataPowers[itemCount].Name.Length));
+                    var level = dataPowers[itemCount].Level.Substring(0, Math.Min(1, dataPowers[itemCount].Level.Length));
+                    gfx.DrawString(
+                        $"{level} - {name}".Limit(23, "."),
+                        font,
+                        XBrushes.Black,
+                        columnStart,
+                        baselineY
+                    );
+                    itemCount++;
+                }
 
-                // Draw the underline rule
-                gfx.DrawLine(linePen, startX, lineY, startX + lineWidth, lineY);
+                columns++;
             }
+
         }
     }
 
