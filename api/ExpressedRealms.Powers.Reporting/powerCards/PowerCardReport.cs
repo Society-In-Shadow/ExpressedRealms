@@ -1,4 +1,5 @@
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.CashCards;
+using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.KnowledgeOverflowCards;
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.PowerCards;
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.PrimaVoidCards;
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.WealthCards;
@@ -23,6 +24,7 @@ public static class PowerCardReport
             .ThenBy(x => x.CardType == CardType.WealthCard ? 0 : 1)
             .ThenBy(x => x.CardType == CardType.CashCard ? 0 : 1)
             .ThenBy(x => x.CardType == CardType.PrimaVoidCard ? 0 : 1)
+            .ThenBy(x => x.CardType == CardType.KnowledgeOverflowCard ? 0 : 1)
             .ToList();
 
         return GetSingleTilePerPage(powerCards, isFiveByThree);
@@ -172,6 +174,9 @@ public static class PowerCardReport
                                         col,
                                         (PrimaVoidCardData)card.CardData
                                     );
+                                    break;
+                                case CardType.KnowledgeOverflowCard:
+                                    PopulateKnowledgeOverflowCard.FillCard(col, (KnowledgeOverflowCardData)card.CardData);
                                     break;
                             }
                         }

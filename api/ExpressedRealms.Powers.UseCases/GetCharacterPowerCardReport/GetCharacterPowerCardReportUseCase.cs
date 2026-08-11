@@ -2,8 +2,10 @@ using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.DTOs;
 using ExpressedRealms.Characters.Repository.Wealth;
 using ExpressedRealms.Expressions.Repository.CharacterFactions;
+using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Powers.Reporting.powerCards;
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.CashCards;
+using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.KnowledgeOverflowCards;
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.PrimaVoidCards;
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.WealthCards;
 using ExpressedRealms.Powers.Repository.CharacterPower;
@@ -16,6 +18,7 @@ namespace ExpressedRealms.Powers.UseCases.GetCharacterPowerCardReport;
 public class GetCharacterPowerCardReportUseCase(
     IPowerPathRepository repository,
     ICharacterRepository characterRepository,
+    ICharacterKnowledgeRepository characterKnowledgeRepository,
     ICharacterPowerRepository mappingRepository,
     IWealthRepository wealthRepository,
     GetCharacterPowerCardReportModelValidator validator,
@@ -49,6 +52,7 @@ public class GetCharacterPowerCardReportUseCase(
             await CalculateWealthCardData(model, expression.Value.Name, cards);
             // Cludgy work around - shouldn't display this if the wealth card isn't being shown
             cards.Add(await GetPrimaVoidCards(model));
+            await PopulateKnowledgeOverflowCards(model, cards);
         }
 
         var reportStream = PowerCardReport.GenerateSixUpPdf(
@@ -119,6 +123,43 @@ public class GetCharacterPowerCardReportUseCase(
             CardType = CardType.PrimaVoidCard,
             CardData = new PrimaVoidCardData() { Motes = character!.Motes },
         };
+    }
+    
+    private async Task PopulateKnowledgeOverflowCards(GetCharacterPowerCardReportModel model, List<DataCard> cards)
+    {
+        var characterKnowledges = await characterKnowledgeRepository.GetKnowledgesForCharacterCRB(model.CharacterId);
+        
+        var knowledgeList = new List<Knowledge>();
+        foreach (var knowledge in characterKnowledges)
+        {
+            knowledgeList.Add(
+                new Knowledge()
+                {
+                    Name = knowledge.Name,
+                    Level = knowledge.Level.ToString(),
+                }
+            );
+
+            knowledgeList.AddRange(
+                knowledge.Specializations.Select(spec => new Knowledge()
+                {
+                    Name = $" - {spec}",
+                    Level = String.Empty,
+                })
+            );
+        }
+        
+        if (knowledgeList.Count <= 30)
+            return;
+        
+        cards.Add(new DataCard()
+        {
+            CardType = CardType.KnowledgeOverflowCard,
+            CardData = new KnowledgeOverflowCardData()
+            {
+                Knowledges = knowledgeList.Take(new Range(29, characterKnowledges.Count + 1)).ToList()
+            },
+        });
     }
 
     private async Task<List<PowerCardData>> GetFactionPowerCards(
