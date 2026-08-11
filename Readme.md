@@ -17,7 +17,7 @@ To get the full experience, feel free to create a user at [https://societyinshad
 
 ## Quick Specs
 
-- **Numbers** 90+ tables, 200+ API endpoints, 900+ unit tests, and 55,000+ lines of code
+- **Numbers** 100+ tables, 200+ API endpoints, 900+ unit tests, and 61,000+ lines of code
 - **Frontend:** Vue 3 + Vite, TypeScript, Axios, Vue Router
 - **Backend:** .NET 10 Minimal API, EF Core, PostgreSQL
 - **Infrastructure:** Azure Container Apps, Blob Storage, Azure Key Vault

@@ -10,7 +10,7 @@ There are two different areas I wanted to cover: Communication / Writing and Cod
 To start out with, some basic info:
 
 ## Numbers
-- App consists of 90+ tables, 200+ API endpoints, 900+ unit tests, and 55,000+ lines of code
+- App consists of 10+ tables, 200+ API endpoints, 1000+ unit tests, and 61,000+ lines of code
 - Launched to ~40 active players during a live event, maintaining <100ms average API response times under gameplay load.
 
 ## Communication / Writing
@@ -21,6 +21,7 @@ have been implemented.  When I'm responsible for drawing up specs, this is how I
 - [Character XP Tracking System](https://github.com/Society-In-Shadow/ExpressedRealms/issues/803)
 - [Event Checking System](https://github.com/Society-In-Shadow/ExpressedRealms/issues/799)
 - [Character Tracking System](https://github.com/Society-In-Shadow/ExpressedRealms/issues/798)
+- [Primevue Has Gone Commercial](https://github.com/Society-In-Shadow/ExpressedRealms/issues/1187)
 
 ### Technical Documentation
 I do like writing technical documentation, I think it's important for a team to be on the same page when it comes to
