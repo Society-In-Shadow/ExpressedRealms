@@ -1,5 +1,5 @@
+using ExpressedRealms.Powers.Reporting.powerCards.CardPluginSystem;
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.CashCards;
-using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.KnowledgeOverflowCards;
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.PowerCards;
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.PrimaVoidCards;
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.WealthCards;
@@ -15,7 +15,7 @@ namespace ExpressedRealms.Powers.Reporting.powerCards;
 
 public static class PowerCardReport
 {
-    public static Document GenerateReport(List<DataCard> powerCards, bool isFiveByThree)
+    public static Document GenerateReport(List<DataCard> powerCards, bool isFiveByThree, List<ICardTile> cardTiles)
     {
         Settings.License = LicenseType.Community;
 
@@ -27,16 +27,19 @@ public static class PowerCardReport
             .ThenBy(x => x.CardType == CardType.KnowledgeOverflowCard ? 0 : 1)
             .ToList();
 
-        return GetSingleTilePerPage(powerCards, isFiveByThree);
+        return GetSingleTilePerPage(powerCards, isFiveByThree, cardTiles);
     }
 
     public static MemoryStream GenerateSixUpPdf(
         List<DataCard> powerCards,
         bool isFiveByThree,
-        bool includeWealthCard = false
+        bool includeWealthCard = false, 
+        List<ICardTile>? cardTiles = null
     )
     {
-        var singleTileDoc = GenerateReport(powerCards, isFiveByThree);
+        cardTiles ??= [];
+        
+        var singleTileDoc = GenerateReport(powerCards, isFiveByThree, cardTiles);
         var srcStream = new MemoryStream();
         singleTileDoc.GeneratePdf(srcStream);
 
@@ -123,7 +126,7 @@ public static class PowerCardReport
         return outStream;
     }
 
-    private static Document GetSingleTilePerPage(List<DataCard> powerCards, bool isFiveByThree)
+    private static Document GetSingleTilePerPage(List<DataCard> powerCards, bool isFiveByThree, List<ICardTile> cardTiles)
     {
         return Document.Create(container =>
         {
@@ -175,10 +178,12 @@ public static class PowerCardReport
                                         (PrimaVoidCardData)card.CardData
                                     );
                                     break;
-                                case CardType.KnowledgeOverflowCard:
-                                    PopulateKnowledgeOverflowCard.FillCard(col, (KnowledgeOverflowCardData)card.CardData);
-                                    break;
                             }
+                        }
+
+                        foreach (var cardTile in cardTiles)
+                        {
+                            cardTile.Populate(col);
                         }
                     });
             });

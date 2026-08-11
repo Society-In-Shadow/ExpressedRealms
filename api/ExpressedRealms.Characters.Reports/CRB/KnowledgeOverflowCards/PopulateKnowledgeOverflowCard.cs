@@ -1,11 +1,19 @@
+using ExpressedRealms.Powers.Reporting.powerCards.CardPluginSystem;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 
-namespace ExpressedRealms.Powers.Reporting.powerCards.CardTypes.KnowledgeOverflowCards;
+namespace ExpressedRealms.Characters.Reports.CRB.KnowledgeOverflowCards;
 
-internal static class PopulateKnowledgeOverflowCard
+public class PopulateKnowledgeOverflowCard : ICardTile
 {
-    public static void FillCard(ColumnDescriptor card, KnowledgeOverflowCardData data)
+    private KnowledgeOverflowCardData _cardData;
+
+    public PopulateKnowledgeOverflowCard(KnowledgeOverflowCardData data)
+    {
+        _cardData = data;
+    }
+    
+    public void Populate(ColumnDescriptor card)
     {
         card.Item()
             .PaddingTop(15)
@@ -61,7 +69,7 @@ internal static class PopulateKnowledgeOverflowCard
                                 .PaddingRight(5)
                                 .Column(rightSide =>
                                 {
-                                    foreach (var knowledge in data.Knowledges)
+                                    foreach (var knowledge in _cardData.Knowledges)
                                     {
                                         rightSide
                                             .Item()

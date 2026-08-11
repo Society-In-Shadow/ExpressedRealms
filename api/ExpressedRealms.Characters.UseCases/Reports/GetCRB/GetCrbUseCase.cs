@@ -1,4 +1,5 @@
 using ExpressedRealms.Authentication.PermissionCollection;
+using ExpressedRealms.Characters.Reports.CRB.KnowledgeOverflowCards;
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Players;
 using ExpressedRealms.Characters.Repository.Proficiencies;
@@ -8,6 +9,8 @@ using ExpressedRealms.DB.Models.Checkins.CheckinSecondaryStatsSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.Events.API.UseCases.EventCheckin.ApproveStageAndSendMessages;
+using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
+using ExpressedRealms.Powers.Reporting.powerCards.CardPluginSystem;
 using ExpressedRealms.Powers.UseCases.GetCharacterPowerCardReport;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.UseCases.Shared;
@@ -22,6 +25,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
 {
     [UsedImplicitly]
     internal sealed class GetCharacterBookletUseCase(
+        ICharacterKnowledgeRepository characterKnowledgeRepository,
         IGetCharacterPowerCardReportUseCase powerReport,
         IGetCharacterSheetReportUseCase crbReport,
         IPlayerRepository playerRepository,
@@ -66,12 +70,18 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                 new GetCharacterSheetReportModel() { CharacterId = model.CharacterId }
             );
 
+            var cardTiles = new List<ICardTile>();
+            var knowledgeCard = await PopulateKnowledgeOverflowCards(model.CharacterId);
+            if (knowledgeCard is not null)
+                cardTiles.Add(new PopulateKnowledgeOverflowCard(knowledgeCard));
+            
             var powerCards = await powerReport.ExecuteAsync(
                 new GetCharacterPowerCardReportModel()
                 {
                     CharacterId = model.CharacterId,
                     IsFiveByThree = false,
                     IncludeWealthCard = true,
+                    CardTiles = cardTiles
                 }
             );
 
@@ -104,6 +114,40 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             return finalStream;
         }
 
+            
+        private async Task<KnowledgeOverflowCardData?> PopulateKnowledgeOverflowCards(int characterId)
+        {
+            var characterKnowledges = await characterKnowledgeRepository.GetKnowledgesForCharacterCRB(characterId);
+        
+            var knowledgeList = new List<Knowledge>();
+            foreach (var knowledge in characterKnowledges)
+            {
+                knowledgeList.Add(
+                    new Knowledge()
+                    {
+                        Name = knowledge.Name,
+                        Level = knowledge.Level.ToString(),
+                    }
+                );
+
+                knowledgeList.AddRange(
+                    knowledge.Specializations.Select(spec => new Knowledge()
+                    {
+                        Name = $" - {spec}",
+                        Level = String.Empty,
+                    })
+                );
+            }
+        
+            if (knowledgeList.Count <= 30)
+                return null;
+        
+            return new KnowledgeOverflowCardData()
+            {
+                Knowledges = knowledgeList.Take(new Range(30, characterKnowledges.Count + 1)).ToList()
+            };
+        }
+        
         private async Task ProcessCheckinAndUpdateStats(GetCharacterBookletModel model)
         {
             var eventId = await checkinRepository.GetActiveEventId();
