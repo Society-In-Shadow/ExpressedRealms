@@ -80,19 +80,50 @@ public static class CharacterReferenceBookletReport
             FillInContacts(fields, data.Contacts);
 
             FillInKnowledges(data.Knowledges, document);
-            FillInAdminSmallList(1, data.Knowledges, document, (knowledge) =>
+
+            FillInAdminSmallList(new AdminListOptions<KnowledgeInfo>()
             {
-                var name = knowledge.Name.Substring(0, Math.Min(30, knowledge.Name.Length));
-                var level = knowledge.Level.Substring(0, Math.Min(1, knowledge.Level.Length));
-                return $"{level} - {name}";
+                PageNumber = 1,
+                DataItems = data.Knowledges,
+                Document = document,
+                PopulateLine = (knowledge) =>
+                {
+                    var name = knowledge.Name.Limit(20);
+                    var level = knowledge.Level.Substring(0, Math.Min(1, knowledge.Level.Length));
+                    return $"{level} - {name}";
+                }
             });
             
-            FillInAdminSmallList(3, data.Powers, document, (power) =>
+            FillInAdminSmallList(new AdminListOptions<PowerInfo>()
             {
-                var name = power.Name.Substring(0, Math.Min(30, power.Name.Length));
-                var level = power.Level.Substring(0, 1);
-                return $"{level} - {name}";
+                PageNumber = 3,
+                DataItems = data.Powers,
+                Document = document,
+                PopulateLine = (power) =>
+                {
+                    var name = power.Name.Limit(20, ".");
+                    var level = power.Level.Substring(0, 1);
+                    return $"{level} - {name}";
+                }
             });
+            
+            FillInAdminSmallList(new AdminListOptions<ContactInfo>()
+            {
+                PageNumber = 2,
+                DataItems = data.Contacts,
+                Document = document,
+                PopulateLine = (contact) =>
+                {
+                    var name = contact.Name.Limit(20);
+                    var knowledge = contact.KnowledgeName.Limit(20);
+                    var level = contact.KnowledgeLevel;
+                    var uses = contact.NumberOfUses;
+                    return $"{name} - {knowledge} - {level} ({uses})";
+                },
+                NumberOfColumns = 4,
+                CharacterLimit = 50
+            });
+            
             RechargePage.FillInRechargePage(data, document);
         }
 
@@ -453,31 +484,41 @@ public static class CharacterReferenceBookletReport
         }
     }
 
-    private static void FillInAdminSmallList<T>(int pageNumber, List<T> dataItems, PdfDocument document, Func<T, string> populateLine)
+    private class AdminListOptions<T>()
+    {
+        public int PageNumber {get; set;}
+        public List<T> DataItems {get; set;}
+        public PdfDocument Document {get; set;}
+        public Func<T, string> PopulateLine { get; set; }
+        public int NumberOfColumns { get; set; } = 5;
+        public int CharacterLimit { get; set; } = 30;
+    }
+    
+    private static void FillInAdminSmallList<T>(AdminListOptions<T> options)
     {
         double startY = XUnitPt.FromInch(0.63);
         double startX = XUnitPt.FromInch(0.3);
-        double lineWidth = XUnitPt.FromInch(1.5);
-        int lineCount = dataItems.Count;
+        double lineWidth = XUnitPt.FromInch(8.9) / (options.NumberOfColumns + 1);
+        int lineCount = options.DataItems.Count;
 
         double lineHeight = 11;
         double fontSize = lineHeight * 0.65;
         var font = new XFont(TextPrintUtilities.DefaultFontFace, fontSize, XFontStyleEx.Regular);
-        using (var gfx = XGraphics.FromPdfPage(document.Pages[pageNumber]))
+        using (var gfx = XGraphics.FromPdfPage(options.Document.Pages[options.PageNumber]))
         {
             var maxSize = Math.Min(lineCount, 20);
             var columns = 0;
             var itemCount = 0;
 
-            while (columns < 5 && itemCount < dataItems.Count)
+            while (columns < options.NumberOfColumns && itemCount < options.DataItems.Count)
             {
                 var columnStart = startX + (lineWidth * columns);
-                for (int i = 0; i < maxSize && itemCount < dataItems.Count; i++)
+                for (int i = 0; i < maxSize && itemCount < options.DataItems.Count; i++)
                 {
                     double baselineY = startY + (i * lineHeight) + (lineHeight * 0.75) - 3;
                     
                     gfx.DrawString(
-                        populateLine.Invoke(dataItems[itemCount]).Limit(30, "."),
+                        options.PopulateLine.Invoke(options.DataItems[itemCount]).Limit(options.CharacterLimit, "."),
                         font,
                         XBrushes.Black,
                         columnStart,
