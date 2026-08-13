@@ -60,7 +60,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
             // Create an archived copy of the primary character
             // This allows us to do diffs later
             await checkinRepository.CreatePrimaryCharacterArchiveAsync(playerId);
-            
+
             // Once GO Approves, it immediately goes into CRB Creation
             await checkinRepository.CompleteStage(
                 new CheckinStageMapping()

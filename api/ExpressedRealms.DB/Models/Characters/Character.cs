@@ -48,11 +48,11 @@ public class Character : ISoftDelete
 
     public int? StatModifierGroupId { get; set; }
     public StatModifierGroup? StatModifierGroup { get; set; }
-    
+
     public int? SourceCharacterId { get; set; }
     public DateTimeOffset CreateDate { get; set; }
     public bool IsArchived { get; set; }
-    
+
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 
@@ -71,6 +71,5 @@ public class Character : ISoftDelete
         new HashSet<CharacterStatMapping>();
     public virtual ICollection<CharacterFactionMapping> CharacterFactionMappings { get; set; } =
         new HashSet<CharacterFactionMapping>();
-    public virtual ICollection<Character> CharacterCopies { get; set; } =
-        new HashSet<Character>();
+    public virtual ICollection<Character> CharacterCopies { get; set; } = new HashSet<Character>();
 }

@@ -406,21 +406,14 @@ internal sealed class EventCheckinRepository(
             .Select(x => new BasicInfo { Id = x.CheckinStageId, Name = x.CheckinStage.Name })
             .FirstOrDefaultAsync(cancellationToken);
     }
-    
-    public async Task<int> CreatePrimaryCharacterArchiveAsync(
-        Guid targetPlayerId
-    )
+
+    public async Task<int> CreatePrimaryCharacterArchiveAsync(Guid targetPlayerId)
     {
-        var characterInfo =
-            await context.Characters
-                .Where(x => x.PlayerId == targetPlayerId && x.IsPrimaryCharacter)
-                .Select(x => new
-                {
-                    x.Id,
-                    x.Name
-                })
-                .FirstAsync();
-        
+        var characterInfo = await context
+            .Characters.Where(x => x.PlayerId == targetPlayerId && x.IsPrimaryCharacter)
+            .Select(x => new { x.Id, x.Name })
+            .FirstAsync();
+
         // NOTE: There is a copy of this in Event Repository - There was a circular dependency loop
         var newCharacterIdParam = new NpgsqlParameter("new_character_id", NpgsqlDbType.Integer)
         {

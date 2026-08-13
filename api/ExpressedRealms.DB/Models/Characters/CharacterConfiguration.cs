@@ -34,7 +34,7 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
             .HasForeignKey(x => x.SourceCharacterId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired(false);
-        
+
         builder
             .HasOne(x => x.StatModifierGroup)
             .WithMany(x => x.Characters)
