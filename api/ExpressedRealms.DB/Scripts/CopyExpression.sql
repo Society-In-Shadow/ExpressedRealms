@@ -17,16 +17,12 @@ select expression_name, short_description, nav_menu_image, 3, cms_type_id, order
 where id = source_expression_id
 RETURNING id INTO new_expression_id;
 
-
--- Copy Over Stat Modifiers across all mappings in expressions
-
-
 -- Copy over stat modifier groups - they are the lowest hanging fruit
 CREATE TEMP TABLE stat_modifer_group_ids (
     old_id bigint NOT NULL,
     new_id bigint NULL,
     PRIMARY KEY (old_id)
-);
+) on commit drop;
 
 -- all stat modifier groups in powers and power paths
 insert into stat_modifer_group_ids (old_id)
@@ -48,25 +44,16 @@ select stat_modifier_group_id from public.powers
                                        join public.factions on faction_levels.faction_id = factions.id
 where factions.expression_id = source_expression_id and powers.stat_modifier_group_id is not null;
 
--- Add new modifier groups, tie to old id's - this time they don't need to match up 1:1, I just need new blank groups
--- to insert into
 
-insert into public.stat_modifier_groups(clone_source_id, clone_batch_id)
-select id, v_clone_batch_id from public.stat_modifier_groups 
-join stat_modifer_group_ids on stat_modifer_group_ids.old_id = stat_modifier_groups.id;
+-- Copy Over Stat Modifiers across all mappings in expressions
+call public.copy_modifiers(v_clone_batch_id);
 
-update stat_modifer_group_ids set new_id = stat_modifier_groups.id from stat_modifier_groups
-where stat_modifier_groups.clone_source_id = stat_modifer_group_ids.old_id and stat_modifier_groups.clone_batch_id = v_clone_batch_id;
-    
-
-insert into public.stat_group_mappings(stat_group_id, stat_modifier_id, modifier, scale_with_level, creation_specific_bonus, target_expression_id)
-select stat_modifer_group_ids.new_id, stat_modifier_id, modifier, scale_with_level, creation_specific_bonus,
-       CASE
-           WHEN target_expression_id = source_expression_id
-               THEN new_expression_id
-           ELSE stat_group_mappings.target_expression_id
-           END AS expression_id from public.stat_group_mappings
- join stat_modifer_group_ids on stat_modifer_group_ids.old_id = stat_group_mappings.stat_group_id;
+-- If any of the copies were targeting the old expression, make sure they now target the new one
+update public.stat_group_mappings
+set target_expression_id = new_expression_id
+from public.stat_modifier_groups
+where target_expression_id = source_expression_id and stat_modifier_groups.clone_batch_id = v_clone_batch_id 
+  and stat_group_mappings.stat_group_id = stat_modifier_groups.id;
 
 
 -- Copy Powers for all expression mappings
