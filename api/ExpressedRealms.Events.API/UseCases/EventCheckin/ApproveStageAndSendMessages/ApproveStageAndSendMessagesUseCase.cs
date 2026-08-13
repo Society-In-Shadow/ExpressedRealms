@@ -36,7 +36,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
             return Result.Fail("There are no active events to assign xp to");
 
         var playerId = await checkinRepository.GetPlayerId(model.LookupId);
-        var checkin = await checkinRepository.GetCheckinAsync(eventId!.Value, playerId);
+        var checkin = await checkinRepository.GetCheckinAsync(eventId.Value, playerId);
 
         if (checkin is null)
             return Result.Fail("Player has not checked in yet");
@@ -55,11 +55,12 @@ internal sealed class ApproveStageAndSendMessageUseCase(
             }
         );
 
-        // This should be a separate Use Case, though it would be doing nothing
-        // Other then this for now.
-        // Later down the road, it would prevent modification of the character
         if (model.StageId == CheckinStageEnum.GoApproval.Value)
         {
+            // Create an archived copy of the primary character
+            // This allows us to do diffs later
+            await checkinRepository.CreatePrimaryCharacterArchiveAsync(playerId);
+
             // Once GO Approves, it immediately goes into CRB Creation
             await checkinRepository.CompleteStage(
                 new CheckinStageMapping()

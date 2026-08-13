@@ -5,6 +5,4 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCharacterBooklet;
 
 [UsedImplicitly]
 internal sealed class GetCharacterSheetDataModelValidator
-    : AbstractValidator<GetCharacterSheetDataModel>
-{
-}
+    : AbstractValidator<GetCharacterSheetDataModel> { }

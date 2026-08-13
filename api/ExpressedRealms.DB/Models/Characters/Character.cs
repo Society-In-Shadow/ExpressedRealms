@@ -49,12 +49,17 @@ public class Character : ISoftDelete
     public int? StatModifierGroupId { get; set; }
     public StatModifierGroup? StatModifierGroup { get; set; }
 
+    public int? SourceCharacterId { get; set; }
+    public DateTimeOffset CreateDate { get; set; }
+    public bool IsArchived { get; set; }
+
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 
     public virtual Player Player { get; set; } = null!;
     public virtual Expression Expression { get; set; } = null!;
     public virtual ExpressionSection? FactionInfo { get; set; } = null!;
+    public virtual Character? SourceCharacter { get; set; }
     public virtual List<CharacterSkillsMapping> CharacterSkillsMappings { get; set; } = null!;
     public virtual List<CharacterKnowledgeMapping> CharacterKnowledgeMappings { get; set; } = null!;
     public virtual List<CharacterPowerMapping> CharacterPowerMappings { get; set; } = null!;
@@ -66,4 +71,5 @@ public class Character : ISoftDelete
         new HashSet<CharacterStatMapping>();
     public virtual ICollection<CharacterFactionMapping> CharacterFactionMappings { get; set; } =
         new HashSet<CharacterFactionMapping>();
+    public virtual ICollection<Character> CharacterCopies { get; set; } = new HashSet<Character>();
 }

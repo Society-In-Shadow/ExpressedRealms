@@ -49,4 +49,5 @@ public interface IEventCheckinRepository : IGenericRepository
     Task<Player> GetCurrentPlayerForEditingAsync();
     Task<UserCheckinPageDto> GetPlayerInfoForPlayerCheckinPage();
     Task<bool> DidBringFriendToCon(int checkinId);
+    Task<int> CreatePrimaryCharacterArchiveAsync(Guid targetPlayerId);
 }

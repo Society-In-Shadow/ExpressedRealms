@@ -296,6 +296,7 @@ internal sealed class CharacterRepository(
         string characterName
     )
     {
+        // NOTE: There is a copy of this in Event Repository - There was a circular dependency loop
         var newCharacterIdParam = new NpgsqlParameter("new_character_id", NpgsqlDbType.Integer)
         {
             Direction = ParameterDirection.InputOutput,
@@ -303,10 +304,10 @@ internal sealed class CharacterRepository(
         };
 
         await context.Database.ExecuteSqlRawAsync(
-            "CALL copy_character_to_player_proc(@source_character_id, @target_player_id, @character_name, @new_character_id)",
-            new NpgsqlParameter("source_character_id", sourceCharacterId),
-            new NpgsqlParameter("target_player_id", targetPlayerId),
-            new NpgsqlParameter("character_name", characterName),
+            "CALL copy_character_to_player_proc(@p_source_character_id, @p_target_player_id, @p_character_name, @new_character_id)",
+            new NpgsqlParameter("p_source_character_id", sourceCharacterId),
+            new NpgsqlParameter("p_target_player_id", targetPlayerId),
+            new NpgsqlParameter("p_character_name", characterName),
             newCharacterIdParam
         );
 
@@ -362,6 +363,7 @@ internal sealed class CharacterRepository(
             ExpressionId = addCharacterDto.ExpressionId,
             WealthLevel = 1,
             IsInCharacterCreation = true,
+            CreateDate = DateTimeOffset.UtcNow,
         };
 
         context.Characters.Add(character);
