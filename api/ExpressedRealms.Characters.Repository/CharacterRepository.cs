@@ -296,6 +296,7 @@ internal sealed class CharacterRepository(
         string characterName
     )
     {
+        // NOTE: There is a copy of this in Event Repository - There was a circular dependency loop
         var newCharacterIdParam = new NpgsqlParameter("new_character_id", NpgsqlDbType.Integer)
         {
             Direction = ParameterDirection.InputOutput,

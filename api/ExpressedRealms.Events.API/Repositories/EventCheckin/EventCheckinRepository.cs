@@ -1,3 +1,4 @@
+using System.Data;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
@@ -12,6 +13,8 @@ using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin.Dtos;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
+using NpgsqlTypes;
 
 namespace ExpressedRealms.Events.API.Repositories.EventCheckin;
 
@@ -103,7 +106,7 @@ internal sealed class EventCheckinRepository(
         return await context
             .Players.AsNoTracking()
             .Where(x => x.UserId == userContext.CurrentUserId())
-            .Select(x => x.LookupId!)
+            .Select(x => x.LookupId)
             .FirstAsync(cancellationToken);
     }
 
@@ -402,5 +405,37 @@ internal sealed class EventCheckinRepository(
             .OrderByDescending(x => x.CreatedAt)
             .Select(x => new BasicInfo { Id = x.CheckinStageId, Name = x.CheckinStage.Name })
             .FirstOrDefaultAsync(cancellationToken);
+    }
+    
+    public async Task<int> CreatePrimaryCharacterArchiveAsync(
+        Guid targetPlayerId
+    )
+    {
+        var characterInfo =
+            await context.Characters
+                .Where(x => x.PlayerId == targetPlayerId && x.IsPrimaryCharacter)
+                .Select(x => new
+                {
+                    x.Id,
+                    x.Name
+                })
+                .FirstAsync();
+        
+        // NOTE: There is a copy of this in Event Repository - There was a circular dependency loop
+        var newCharacterIdParam = new NpgsqlParameter("new_character_id", NpgsqlDbType.Integer)
+        {
+            Direction = ParameterDirection.InputOutput,
+            Value = DBNull.Value,
+        };
+
+        await context.Database.ExecuteSqlRawAsync(
+            "CALL copy_character_to_player_proc(@p_source_character_id, @p_target_player_id, @p_character_name, @new_character_id)",
+            new NpgsqlParameter("p_source_character_id", characterInfo.Id),
+            new NpgsqlParameter("p_target_player_id", targetPlayerId),
+            new NpgsqlParameter("p_character_name", characterInfo.Name),
+            newCharacterIdParam
+        );
+
+        return (int)newCharacterIdParam.Value;
     }
 }
