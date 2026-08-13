@@ -65,7 +65,8 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
 
         builder.Property(x => x.PlayerNumber).IsRequired().HasDefaultValue(0);
 
-        builder.HasQueryFilter(x => !x.IsDeleted);
+        builder.HasQueryFilter("SoftDelete", x => !x.IsDeleted);
+        builder.HasQueryFilter("ArchivedCharacters", x => !x.IsArchived);
 
         builder
             .HasOne(x => x.Player)
