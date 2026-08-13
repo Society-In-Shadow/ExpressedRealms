@@ -362,6 +362,7 @@ internal sealed class CharacterRepository(
             ExpressionId = addCharacterDto.ExpressionId,
             WealthLevel = 1,
             IsInCharacterCreation = true,
+            CreateDate = DateTimeOffset.UtcNow
         };
 
         context.Characters.Add(character);

@@ -26,6 +26,15 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
         builder.Property(x => x.PrimaryProgressionId);
         builder.Property(x => x.SecondaryProgressionId);
 
+        builder.Property(x => x.CreateDate).IsRequired();
+
+        builder
+            .HasOne(x => x.SourceCharacter)
+            .WithMany(x => x.CharacterCopies)
+            .HasForeignKey(x => x.SourceCharacterId)
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired(false);
+        
         builder
             .HasOne(x => x.StatModifierGroup)
             .WithMany(x => x.Characters)
