@@ -19,11 +19,13 @@ WITH calc AS (
     WHERE blessings.is_deleted = false AND character_blessing_mappings.is_deleted = false AND blessings.type = 'Disadvantage'
     GROUP BY character_blessing_mappings.character_id
     UNION ALL
-    SELECT ckm.character_id AS character_id,
-           SUM(kel.total_general_xp_cost) + (COALESCE(spec.spec_count, 0) * 2) AS xp_total,
-           3 AS section_type_id
+    SELECT
+        ckm.character_id AS character_id,
+        SUM(kel.total_general_xp_cost + (COALESCE(spec.spec_count, 0) * 2))::bigint  AS xp_total,
+        3 AS section_type_id
     FROM character_knowledge_mappings ckm
-             JOIN knowledge_education_levels kel ON ckm.knowledge_level_id = kel.id
+             JOIN knowledge_education_levels kel
+                  ON ckm.knowledge_level_id = kel.id
              LEFT JOIN (
         SELECT
             knowledge_mapping_id,
@@ -31,9 +33,10 @@ WITH calc AS (
         FROM character_knowledge_specializations
         WHERE is_deleted = false
         GROUP BY knowledge_mapping_id
-    ) spec ON ckm.id = spec.knowledge_mapping_id
+    ) spec
+                       ON ckm.id = spec.knowledge_mapping_id
     WHERE ckm.is_deleted = false
-    GROUP BY ckm.character_id, spec.spec_count
+    GROUP BY ckm.character_id
     UNION ALL
     SELECT character_power_mappings.character_id AS character_id,
            sum(power_levels.xp) AS xp_total,
@@ -50,12 +53,12 @@ WITH calc AS (
              JOIN skill_levels ON character_skills_mappings.skill_level_id = skill_levels.id
     GROUP BY character_skills_mappings.character_id
     UNION ALL
-    SELECT character_stat_mapping.character_id AS character_id,
+    SELECT character_stat_mappings.character_id AS character_id,
            sum(levels.total_xp_cost) AS xp_total,
            6 AS section_type_id
-    FROM character_stat_mapping
-             JOIN stat_levels levels ON character_stat_mapping.stat_level_id = levels.id
-    GROUP BY character_stat_mapping.character_id
+    FROM character_stat_mappings
+             JOIN stat_levels levels ON character_stat_mappings.stat_level_id = levels.id
+    GROUP BY character_stat_mappings.character_id
     UNION ALL
     SELECT contacts.character_id AS character_id,
            sum(contacts.spent_xp) AS total_xp,
