@@ -12,9 +12,9 @@ namespace ExpressedRealms.DB.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("DROP PROCEDURE copy_character_to_player_proc");
-            migrationBuilder.ExecuteEmbeddedSqlScript("ExpressedRealms.DB.Scripts.CopyExpression.sql");
-            migrationBuilder.ExecuteEmbeddedSqlScript("ExpressedRealms.DB.Scripts.CopyCharacterToPlayerProc.sql");
-            migrationBuilder.ExecuteEmbeddedSqlScript("ExpressedRealms.DB.Scripts.CopyModifiers.sql");
+            migrationBuilder.ExecuteEmbeddedSqlScript(MigrationHelpers.EmbeddedFiles.CopyExpression);
+            migrationBuilder.ExecuteEmbeddedSqlScript(MigrationHelpers.EmbeddedFiles.CopyCharacterToPlayerProc);
+            migrationBuilder.ExecuteEmbeddedSqlScript(MigrationHelpers.EmbeddedFiles.CopyModifiers);
         }
 
         /// <inheritdoc />
