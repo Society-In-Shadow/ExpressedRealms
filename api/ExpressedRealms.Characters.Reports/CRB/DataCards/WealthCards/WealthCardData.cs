@@ -1,8 +1,6 @@
-using ExpressedRealms.Powers.Reporting.powerCards;
-
 namespace ExpressedRealms.Characters.Reports.CRB.DataCards.WealthCards;
 
-public class WealthCardData : ICardData
+public class WealthCardData
 {
     public int WealthLevel { get; set; }
     public double InitialBasicItemIncome { get; set; }

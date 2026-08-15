@@ -1,6 +1,6 @@
 namespace ExpressedRealms.Powers.Reporting.powerCards;
 
-public class PowerCardData : ICardData
+public class PowerCardData
 {
     public required string ExpressionName { get; set; }
     public required string PathName { get; set; }
