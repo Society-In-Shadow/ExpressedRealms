@@ -12,12 +12,12 @@ internal sealed class GetModifierTypesUseCase(
 {
     public async Task<Result<OptionsReturnModel>> ExecuteAsync(GetModifierTypesModel model)
     {
-        var groupMapping = await repository.GetModifierTypes();
-        var expressions = await expressionRepository.GetAllEnabledExpressions();
-
         if (permissionChecks.HasPermissionPolicyForStatModifiers(model.Source, out var fail))
             return fail;
-
+        
+        var groupMapping = await repository.GetModifierTypes();
+        var expressions = await expressionRepository.GetAllEnabledExpressionAndSubpaths();
+        
         return Result.Ok(
             new OptionsReturnModel()
             {
@@ -25,7 +25,16 @@ internal sealed class GetModifierTypesUseCase(
                     .Select(x => new ModifierTypesReturnModel() { Id = x.Id, Name = x.Name })
                     .ToList(),
                 Expressions = expressions
-                    .Select(x => new KeyValuePair<int, string>(x.Id, x.Name))
+                    .Select(x => new ExpressionReturnModel()
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        ProgressionPaths = x.ProgressionPaths.Select(y => new ProgressionPath()
+                        {
+                            Id = y.Id,
+                            Name = y.Name
+                        }).ToList()
+                    })
                     .ToList(),
             }
         );

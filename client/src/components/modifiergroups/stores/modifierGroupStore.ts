@@ -3,8 +3,10 @@ import axios from 'axios'
 import toaster from '@/services/Toasters'
 import {
   type CreateStatModifier,
+  type ExpressionInfo,
   SourceTableEnum,
   type StatModifier,
+  type StatModifierOptionResponse,
   type StatModifierReturnModel,
   type StatModifiersResponse,
 } from '@/components/modifiergroups/types.ts'
@@ -16,7 +18,7 @@ const modifierGroupStore
     state: () => {
       return {
         modifierTypes: [] as StatModifier[],
-        expressions: [] as StatModifier[],
+        expressions: [] as ExpressionInfo[],
         haveModifierTypes: false,
         statModifiers: new Map<number, StatModifierReturnModel[]>(),
         sourceType: null as SourceTableEnum | null,
@@ -41,7 +43,7 @@ const modifierGroupStore
         if (this.haveModifierTypes)
           return
 
-        await axios.get(`/modifiergroups/${this.sourceTypeName}/modifiers/options`)
+        await axios.get<StatModifierOptionResponse>(`/modifiergroups/${this.sourceTypeName}/modifiers/options`)
           .then((response) => {
             this.modifierTypes = response.data.modifierTypes
             this.expressions = response.data.expressions

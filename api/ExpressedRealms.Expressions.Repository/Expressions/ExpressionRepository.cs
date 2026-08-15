@@ -2,6 +2,7 @@ using System.Data;
 using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Interceptors;
+using ExpressedRealms.DB.Models.Expressions.CmsTypeSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionPublishStatusSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.Expressions.Repository.Expressions.DTOs;
@@ -401,8 +402,19 @@ internal sealed class ExpressionRepository(
         );
     }
 
-    public async Task<List<Expression>> GetAllEnabledExpressions()
+    public async Task<List<ExpressionInfoForModifiersProjection>> GetAllEnabledExpressionAndSubpaths()
     {
-        return await context.Expressions.Where(x => x.CmsTypeId == 1).ToListAsync(); // 1 = expression
+        return await context.Expressions.Where(x => x.CmsTypeId == CmsTypeEnum.Expression.Value)
+            .Select(x => new ExpressionInfoForModifiersProjection()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                ProgressionPaths = x.ProgressionPaths.Select(x => new ExpressionPathProjection()
+                {
+                    Id = x.Id,
+                    Name = x.Name
+                }).ToList()
+            })
+            .ToListAsync();
     }
 }

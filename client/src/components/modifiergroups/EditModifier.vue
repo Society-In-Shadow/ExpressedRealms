@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { onBeforeMount, type PropType } from 'vue'
+import { computed, onBeforeMount, type PropType } from 'vue'
 import FormDropdownWrapper from '@/FormWrappers/FormDropdownWrapper.vue'
 import { getValidationInstance } from '@/components/modifiergroups/validations/modifierValidations.ts'
 import Button from 'primevue/button'
@@ -40,6 +40,15 @@ const cancel = () => {
   emit('canceled')
 }
 
+const targetPaths = computed(() => {
+  const targetExpression = form.fields.targetExpression.field.value
+
+  if (!targetExpression)
+    return []
+
+  return store.expressions.find(x => x.id === targetExpression.id)?.progressionPaths ?? []
+})
+
 </script>
 
 <template>
@@ -59,6 +68,13 @@ const cancel = () => {
     <FormDropdownWrapper
       v-model="form.fields.targetExpression"
       :options="store.expressions"
+      option-label="name"
+    />
+
+    <FormDropdownWrapper
+      v-if="targetPaths.length > 0"
+      v-model="form.fields.targetPath"
+      :options="targetPaths"
       option-label="name"
     />
 
