@@ -1,9 +1,11 @@
 using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Characters.Reports.CRB;
 using ExpressedRealms.Characters.Reports.CRB.Data.SupportingData;
+using ExpressedRealms.Characters.Reports.CRB.DataCards.CashCards;
 using ExpressedRealms.Characters.Reports.CRB.DataCards.ContactsOverflowCards;
 using ExpressedRealms.Characters.Reports.CRB.DataCards.KnowledgeOverflowCards;
 using ExpressedRealms.Characters.Reports.CRB.DataCards.PowerOverflowCards;
+using ExpressedRealms.Characters.Reports.CRB.DataCards.WealthCards;
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Players;
 using ExpressedRealms.Characters.Repository.Proficiencies;
@@ -80,6 +82,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             PopulateKnowledgeOverflowCardData(cardTiles, crbData.Value.Knowledges);
             PopulatePowersOverflowCardData(cardTiles, crbData.Value.Powers);
             PopulateContactsOverflowCardData(cardTiles, crbData.Value.Contacts);
+            PopulateWealthCardsCardData(cardTiles, crbData.Value.WealthInfo);
 
             var powerCards = await powerReport.ExecuteAsync(
                 new GetCharacterPowerCardReportModel()
@@ -166,6 +169,34 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             }
         }
 
+        private static void PopulateWealthCardsCardData(
+            List<ICardTile> cardTiles,
+            WealthInfoDto wealthInfo
+        )
+        {
+            cardTiles.Add(
+                new PopulateWealthCard(
+                    new WealthCardData()
+                    {
+                        InitialBasicItemIncome = wealthInfo.InitialBasicItemIncome,
+                        WealthLevel = wealthInfo.WealthLevel,
+                        AppliedBlessings = wealthInfo.AppliedBlessings,
+                        CharacterName = wealthInfo.CharacterName,
+                        WealthTableLines = wealthInfo.WealthTableLines,
+                    }
+                )
+            );
+            
+            cardTiles.Add(
+                new PopulateCashCard(
+                    new CashCardData()
+                    {
+                        ConIncome = wealthInfo.WealthIncome
+                    }
+                )
+            );
+        }
+        
         private static void PopulateContactsOverflowCardData(
             List<ICardTile> cardTiles,
             List<ContactInfo> contacts

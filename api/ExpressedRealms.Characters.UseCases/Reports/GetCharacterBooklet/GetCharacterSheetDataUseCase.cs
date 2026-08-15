@@ -1,6 +1,7 @@
 using ExpressedRealms.Blessings.Repository.CharacterBlessings;
 using ExpressedRealms.Characters.Reports.CRB.Data;
 using ExpressedRealms.Characters.Reports.CRB.Data.SupportingData;
+using ExpressedRealms.Characters.Reports.CRB.DataCards.WealthCards;
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Contacts;
 using ExpressedRealms.Characters.Repository.Enums;
@@ -42,7 +43,7 @@ public class GetCharacterSheetDataUseCase(
 
         var statInfo = await GetStatModifierInfo(model);
 
-        return new ReportData()
+        var reportData = new ReportData()
         {
             BasicInfo = await GetBasicInfo(model),
             Traits = await GetTraits(model),
@@ -52,13 +53,49 @@ public class GetCharacterSheetDataUseCase(
             ProficiencyInfo = await GetProficiencyInfo(model),
             StatInfo = statInfo,
             Contacts = await GetContactinfo(model),
-            WealthInfo = await GetWealthInfo(model),
         };
+        
+        reportData.WealthInfo = await GetWealthInfo(model);
+        reportData.WealthInfo.CharacterName = reportData.BasicInfo.CharacterName;
+
+        return reportData;
+
     }
 
     private async Task<WealthInfoDto> GetWealthInfo(GetCharacterSheetDataModel model)
     {
         var wealthInfo = await wealthRepository.GetWealthInfoAsync(model.CharacterId);
+        
+        
+        var wealthLevels = wealthInfo
+            .WealthTable.Select(x => new WealthTableLine()
+            {
+                CashToLevelUp = x.CashToLevelUp,
+                Income = x.SessionIncome,
+                Level = x.Level,
+                LiquidationAmount = x.LiquidationValue,
+            })
+            .Where(x =>
+                x.Level >= wealthInfo.WealthLevel - 2 && x.Level <= wealthInfo.WealthLevel + 2
+            )
+            .ToList();
+
+        if (wealthInfo.WealthLevel <= 1)
+        {
+            for (int i = 0; i <= 5 - wealthLevels.Count; i++)
+            {
+                wealthLevels.Add(
+                    new WealthTableLine()
+                    {
+                        CashToLevelUp = -1,
+                        Income = -1,
+                        Level = -1,
+                        LiquidationAmount = -1,
+                    }
+                );
+            }
+            wealthLevels = wealthLevels.OrderBy(x => x.Level).ToList();
+        }
 
         return new WealthInfoDto()
         {
@@ -66,6 +103,10 @@ public class GetCharacterSheetDataUseCase(
                 .WealthTable.First(x => x.Level == wealthInfo.WealthLevel)
                 .SessionIncome,
             WealthLevel = wealthInfo.WealthLevel,
+            InitialBasicItemIncome = wealthInfo.InitialBasicItemIncome,
+            CharacterName = string.Empty,
+            AppliedBlessings = wealthInfo.AppliedBlessings,
+            WealthTableLines = wealthLevels,
         };
     }
 

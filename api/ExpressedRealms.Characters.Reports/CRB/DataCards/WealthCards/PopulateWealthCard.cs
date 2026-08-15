@@ -1,12 +1,19 @@
-using QuestPDF.Elements.Table;
+using ExpressedRealms.Powers.Reporting.powerCards.CardPluginSystem;
+using ExpressedRealms.Powers.Reporting.powerCards.CardTypes;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 
-namespace ExpressedRealms.Powers.Reporting.powerCards.CardTypes.WealthCards;
+namespace ExpressedRealms.Characters.Reports.CRB.DataCards.WealthCards;
 
-internal static class PopulateWealthCard
+public class PopulateWealthCard : ICardTile
 {
-    public static void FillCard(ColumnDescriptor card, WealthCardData wealthData)
+    private readonly WealthCardData _data;
+    public PopulateWealthCard(WealthCardData data)
+    {
+        _data = data;
+    }
+    
+    public void Populate(ColumnDescriptor card)
     {
         card.Item()
             .PaddingTop(15)
@@ -36,7 +43,7 @@ internal static class PopulateWealthCard
                                                     .FontSize(11)
                                                     .ExtraBold();
 
-                                                text.Span($" - {wealthData.CharacterName}")
+                                                text.Span($" - {_data.CharacterName}")
                                                     .Italic()
                                                     .FontSize(11)
                                                     .FontColor(CustomColors.SecondaryTextColor);
@@ -45,7 +52,7 @@ internal static class PopulateWealthCard
                                         initialIncomeRow
                                             .RelativeItem()
                                             .AlignRight()
-                                            .Text("Wealth Level: " + wealthData.WealthLevel)
+                                            .Text("Wealth Level: " + _data.WealthLevel)
                                             .Bold()
                                             .FontSize(11)
                                             .ExtraBold();
@@ -72,7 +79,7 @@ internal static class PopulateWealthCard
                                                         "Level Increase / Liquidations are story driven - you need a GO to do either"
                                                     );
 
-                                                FillBlessings(wealthData, descriptions);
+                                                FillBlessings(_data, descriptions);
                                             });
 
                                         topRow
@@ -81,7 +88,7 @@ internal static class PopulateWealthCard
                                             .AlignMiddle()
                                             .AlignCenter()
                                             .CreateStamp(
-                                                $"Starting Income \n${wealthData.InitialBasicItemIncome:N0}"
+                                                $"Starting Income \n${_data.InitialBasicItemIncome:N0}"
                                             );
                                     });
 
@@ -89,7 +96,7 @@ internal static class PopulateWealthCard
                                     .Item()
                                     .Row(initialIncomeRow =>
                                     {
-                                        GenerateWealthTableAndStamps(wealthData, initialIncomeRow);
+                                        GenerateWealthTableAndStamps(_data, initialIncomeRow);
                                     });
                             });
                     });
@@ -196,75 +203,6 @@ internal static class PopulateWealthCard
                     wealthTable.Cell().AddFormattedCell(levelLiquidation, i == 3);
                     i++;
                 }
-            });
-    }
-
-    private static void AddFormattedCell(
-        this ITableCellContainer initialIncomeRow,
-        string stampText,
-        bool isBold = false
-    )
-    {
-        var text = initialIncomeRow
-            .Border(1)
-            .BorderLinearGradient(0, [Color.FromARGB(255, 0, 0, 0)])
-            .Padding(3)
-            .AlignCenter()
-            .AlignMiddle()
-            .Text(stampText);
-
-        if (isBold)
-            text.ExtraBold();
-    }
-
-    private static void AddFormattedHeaderCell(
-        this ITableCellContainer initialIncomeRow,
-        string stampText
-    )
-    {
-        initialIncomeRow
-            .Border(1)
-            .BorderLinearGradient(0, [Color.FromARGB(255, 0, 0, 0)])
-            .PaddingTop(3)
-            .PaddingBottom(3)
-            .AlignCenter()
-            .AlignMiddle()
-            .Text(stampText)
-            .Bold();
-    }
-
-    private static void CreateStamp(this IContainer initialIncomeRow, string stampText)
-    {
-        initialIncomeRow
-            .Width(0.67f, Unit.Inch)
-            .Height(0.67f, Unit.Inch)
-            .Border(1)
-            .BorderLinearGradient(0, [Color.FromARGB(255, 0, 0, 0)])
-            .AlignCenter()
-            .AlignMiddle()
-            .Text(stampText)
-            .FontSize(8);
-    }
-
-    private static void CheckboxItem(this IContainer container, string stampText, string label)
-    {
-        container
-            .AlignMiddle()
-            .Row(inner =>
-            {
-                inner.Spacing(3);
-
-                inner
-                    .ConstantItem(0.11f, Unit.Inch)
-                    .Height(0.11f, Unit.Inch)
-                    .Border(1)
-                    .BorderLinearGradient(0, [Color.FromARGB(255, 0, 0, 0)])
-                    .AlignCenter()
-                    .AlignMiddle()
-                    .Text(stampText)
-                    .FontSize(6);
-
-                inner.AutoItem().AlignMiddle().PaddingTop(-1).Text(label);
             });
     }
 }

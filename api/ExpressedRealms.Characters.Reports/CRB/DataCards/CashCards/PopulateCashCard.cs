@@ -1,11 +1,18 @@
+using ExpressedRealms.Powers.Reporting.powerCards.CardPluginSystem;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 
-namespace ExpressedRealms.Powers.Reporting.powerCards.CardTypes.CashCards;
+namespace ExpressedRealms.Characters.Reports.CRB.DataCards.CashCards;
 
-internal static class PopulateCashCard
+public class PopulateCashCard : ICardTile
 {
-    public static void FillCard(ColumnDescriptor card, CashCardData wealthData)
+    private readonly CashCardData _wealthData;
+    public PopulateCashCard(CashCardData data)
+    {
+        _wealthData = data;
+    }
+    
+    public void Populate(ColumnDescriptor card)
     {
         card.Item()
             .Padding(15)
@@ -26,7 +33,7 @@ internal static class PopulateCashCard
                                         initialIncomeRow
                                             .RelativeItem()
                                             .Text(
-                                                $"Initial Cash Card - ${wealthData.ConIncome.ToString("N0")}"
+                                                $"Initial Cash Card - ${_wealthData.ConIncome.ToString("N0")}"
                                             )
                                             .Bold()
                                             .FontSize(11)

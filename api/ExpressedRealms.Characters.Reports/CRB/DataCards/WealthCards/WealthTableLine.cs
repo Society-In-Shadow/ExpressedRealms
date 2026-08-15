@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Powers.Reporting.powerCards.CardTypes.WealthCards;
+namespace ExpressedRealms.Characters.Reports.CRB.DataCards.WealthCards;
 
 public class WealthTableLine
 {
