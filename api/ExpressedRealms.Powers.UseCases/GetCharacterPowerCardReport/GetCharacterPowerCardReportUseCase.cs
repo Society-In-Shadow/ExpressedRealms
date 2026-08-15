@@ -74,9 +74,8 @@ public class GetCharacterPowerCardReportUseCase(
                 Limitation = y.Limitation,
                 Other = y.Other,
                 UserNotes =
-                    selectedPowerInformation
-                        .FirstOrDefault(x => x.PowerId == y.Id)
-                        ?.UserNotes ?? null,
+                    selectedPowerInformation.FirstOrDefault(x => x.PowerId == y.Id)?.UserNotes
+                    ?? null,
                 Prerequisites = y.Prerequisites is not null
                     ? new PrerequisiteData()
                     {

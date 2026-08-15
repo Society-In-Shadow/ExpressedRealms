@@ -12,9 +12,7 @@ public class CrbPowerInformation
             Id = x.Power.Id,
             Name = x.Power.Name,
             PathName = x.PowerPath.Name,
-            Category = x
-                .Power.CategoryMappings.Select(y => y.Category.Name)
-                .ToList(),
+            Category = x.Power.CategoryMappings.Select(y => y.Category.Name).ToList(),
             Description = x.Power.Description,
             GameMechanicEffect = x.Power.GameMechanicEffect ?? string.Empty,
             Limitation = x.Power.Limitation ?? string.Empty,

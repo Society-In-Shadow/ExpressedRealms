@@ -53,20 +53,18 @@ public class GetCharacterSheetDataUseCase(
             ProficiencyInfo = await GetProficiencyInfo(model),
             StatInfo = statInfo,
             Contacts = await GetContactinfo(model),
-            WealthInfo = await GetWealthInfo(model)
+            WealthInfo = await GetWealthInfo(model),
         };
-        
+
         reportData.WealthInfo.CharacterName = reportData.BasicInfo.CharacterName;
 
         return reportData;
-
     }
 
     private async Task<WealthInfoDto> GetWealthInfo(GetCharacterSheetDataModel model)
     {
         var wealthInfo = await wealthRepository.GetWealthInfoAsync(model.CharacterId);
-        
-        
+
         var wealthLevels = wealthInfo
             .WealthTable.Select(x => new WealthTableLine()
             {
@@ -267,19 +265,11 @@ public class GetCharacterSheetDataUseCase(
         );
 
         var powers = powerMappings
-            .Select(x => new PowerInfo()
-            {
-                Name = x.Name,
-                Level = x.Level
-            })
+            .Select(x => new PowerInfo() { Name = x.Name, Level = x.Level })
             .ToList();
 
         var factionPowers = factionMappings
-            .Select(x => new PowerInfo()
-            {
-                Name = x.Name,
-                Level = x.Level,
-            })
+            .Select(x => new PowerInfo() { Name = x.Name, Level = x.Level })
             .ToList();
 
         return [.. powers, .. factionPowers];
@@ -375,7 +365,7 @@ public class GetCharacterSheetDataUseCase(
             CurrentDay = currentDay,
             FactionName = factionInfo?.FactionName.Limit(21, ".") ?? "No Active Faction",
             FactionRank = factionInfo?.FactionRank.Limit(7, ".") ?? "-",
-            Motes = character.Motes
+            Motes = character.Motes,
         };
         return basicInfo;
     }

@@ -23,7 +23,7 @@ internal static class Utilities
         if (isBold)
             text.ExtraBold();
     }
-    
+
     public static void AddFormattedHeaderCell(
         this ITableCellContainer initialIncomeRow,
         string stampText

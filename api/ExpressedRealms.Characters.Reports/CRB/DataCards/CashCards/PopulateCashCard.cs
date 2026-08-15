@@ -7,14 +7,15 @@ namespace ExpressedRealms.Characters.Reports.CRB.DataCards.CashCards;
 public class PopulateCashCard : ICardTile
 {
     private readonly CashCardData _wealthData;
+
     public PopulateCashCard(CashCardData data)
     {
         _wealthData = data;
     }
-    
-    public void Populate(ColumnDescriptor card)
+
+    public void Populate(ColumnDescriptor col)
     {
-        card.Item()
+        col.Item()
             .Padding(15)
             .Decoration(decorator =>
             {
@@ -75,6 +76,6 @@ public class PopulateCashCard : ICardTile
                             });
                     });
             });
-        card.Item().PageBreak();
+        col.Item().PageBreak();
     }
 }

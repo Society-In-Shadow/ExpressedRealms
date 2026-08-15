@@ -8,14 +8,15 @@ namespace ExpressedRealms.Characters.Reports.CRB.DataCards.WealthCards;
 public class PopulateWealthCard : ICardTile
 {
     private readonly WealthCardData _data;
+
     public PopulateWealthCard(WealthCardData data)
     {
         _data = data;
     }
-    
-    public void Populate(ColumnDescriptor card)
+
+    public void Populate(ColumnDescriptor col)
     {
-        card.Item()
+        col.Item()
             .PaddingTop(15)
             .PaddingLeft(15)
             .PaddingRight(15)
@@ -101,7 +102,7 @@ public class PopulateWealthCard : ICardTile
                             });
                     });
             });
-        card.Item().PageBreak();
+        col.Item().PageBreak();
     }
 
     private static void FillBlessings(WealthCardData wealthData, ColumnDescriptor descriptions)

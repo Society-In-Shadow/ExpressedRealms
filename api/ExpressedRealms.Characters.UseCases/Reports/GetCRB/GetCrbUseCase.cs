@@ -187,17 +187,12 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                     }
                 )
             );
-            
+
             cardTiles.Add(
-                new PopulateCashCard(
-                    new CashCardData()
-                    {
-                        ConIncome = wealthInfo.WealthIncome
-                    }
-                )
+                new PopulateCashCard(new CashCardData() { ConIncome = wealthInfo.WealthIncome })
             );
         }
-        
+
         private static void PopulateContactsOverflowCardData(
             List<ICardTile> cardTiles,
             List<ContactInfo> contacts
@@ -224,19 +219,14 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                 );
             }
         }
-        
+
         private static void PopulatePrymaVoidCardData(
             List<ICardTile> cardTiles,
             BasicInfo basicInfo
         )
         {
             cardTiles.Add(
-                new PopulatePrymaVoidCard(
-                    new PrymaVoidCardData()
-                    {
-                        Motes = basicInfo.Motes
-                    }
-                )
+                new PopulatePrymaVoidCard(new PrymaVoidCardData() { Motes = basicInfo.Motes })
             );
         }
 

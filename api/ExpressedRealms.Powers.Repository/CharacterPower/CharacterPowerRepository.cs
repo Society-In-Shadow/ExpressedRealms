@@ -32,11 +32,7 @@ internal sealed class CharacterPowerRepository(
             .CharacterPowerMappings.Where(x => x.CharacterId == characterId)
             .OrderBy(x => x.Power.PowerPathPowerMapping!.PowerPath.OrderIndex)
             .ThenBy(x => x.Power.PowerPathPowerMapping!.OrderIndex)
-            .Select(x => new CharacterCrbInfo()
-            {
-                Name = x.Power.Name,
-                Level = x.PowerLevel.Name,
-            })
+            .Select(x => new CharacterCrbInfo() { Name = x.Power.Name, Level = x.PowerLevel.Name })
             .ToListAsync(token);
     }
 

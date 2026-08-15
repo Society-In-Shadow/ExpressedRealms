@@ -201,7 +201,7 @@ internal sealed class CharacterRepository(
                     x.PrimaryProgressionId == null ? "" : x.PrimaryProgressionPath!.Name,
                 SecondaryProgressionName =
                     x.SecondaryProgressionId == null ? "" : x.SecondaryProgressionPath!.Name,
-                Motes = x.Motes
+                Motes = x.Motes,
             })
             .FirstAsync(cancellationToken);
     }
