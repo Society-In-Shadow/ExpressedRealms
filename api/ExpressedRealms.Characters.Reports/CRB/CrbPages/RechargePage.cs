@@ -178,11 +178,11 @@ internal static class RechargePage
                 XUnitPt.FromInch(0.77),
                 XUnitPt.FromInch(8.30)
             );
-            if (energeticallyInfused.Cost == "4pt")
+            if (energeticallyInfused.LevelName == "4pt")
             {
                 recharges += 1;
             }
-            if (energeticallyInfused.Cost == "8pt")
+            if (energeticallyInfused.LevelName == "8pt")
             {
                 // 1 PP Bonus
                 TextPrintUtilities.PrintStatInfo(
@@ -233,12 +233,12 @@ internal static class RechargePage
                 XUnitPt.FromInch(0.77),
                 XUnitPt.FromInch(9.045)
             );
-            if (weakenedConnection.Cost == "4pt")
+            if (weakenedConnection.LevelName == "4pt")
             {
                 pool = 8;
             }
 
-            if (weakenedConnection.Cost == "8pt")
+            if (weakenedConnection.LevelName == "8pt")
             {
                 recharges = 1;
                 pool = 8;

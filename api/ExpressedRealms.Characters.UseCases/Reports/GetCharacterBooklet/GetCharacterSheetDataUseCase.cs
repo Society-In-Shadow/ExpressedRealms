@@ -322,17 +322,34 @@ public class GetCharacterSheetDataUseCase(
     {
         var blessings = await blessingRepository.GetBlessingsForCharacter(model.CharacterId);
 
+        var blessingInfo = blessings
+            .Select(x => new
+            {
+                TypeInfo = x.Type,
+                TraitInfo = new TraitInfo()
+                {
+                    Name = x.Name,
+                    Description = x.Description,
+                    LevelName = x.LevelName,
+                    LevelDescription = x.LevelDescription,
+                    UserNotes = x.Notes,
+                },
+            })
+            .ToList();
+
         var trait = new Traits()
         {
-            Advantages = blessings
-                .Where(x => x.Type.Equals("Advantage", StringComparison.CurrentCultureIgnoreCase))
-                .Select(x => new TraitInfo() { Name = x.Name, Cost = x.LevelName })
-                .ToList(),
-            Disadvantages = blessings
+            Advantages = blessingInfo
                 .Where(x =>
-                    x.Type.Equals("Disadvantage", StringComparison.CurrentCultureIgnoreCase)
+                    x.TypeInfo.Equals("Advantage", StringComparison.CurrentCultureIgnoreCase)
                 )
-                .Select(x => new TraitInfo() { Name = x.Name, Cost = x.LevelName })
+                .Select(x => x.TraitInfo)
+                .ToList(),
+            Disadvantages = blessingInfo
+                .Where(x =>
+                    x.TypeInfo.Equals("Disadvantage", StringComparison.CurrentCultureIgnoreCase)
+                )
+                .Select(x => x.TraitInfo)
                 .ToList(),
         };
         return trait;
