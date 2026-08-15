@@ -21,4 +21,5 @@ public interface IPowerPathRepository
     Task<Result<List<PowerPathToc>>> GetPowerPathAndPowers(List<int> powerIds);
     Task AddPowerToPowerPath(PowerPathPowerMapping model);
     Task<List<PowerInformation>> GetPowers(List<int> powerIds);
+    Task<List<CrbPowerInformation>> GetPowerPathAndPowersForCrb(List<int> powerIds);
 }
