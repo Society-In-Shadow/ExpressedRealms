@@ -193,7 +193,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                 new PopulateCashCard(new CashCardData() { ConIncome = wealthInfo.WealthIncome })
             );
         }
-        
+
         private static void PopulateAdvantageDisadvantageData(
             List<ICardTile> cardTiles,
             Traits data
@@ -208,28 +208,23 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                     Description = x.Description,
                     LevelName = x.LevelName,
                     LevelDescription = x.LevelDescription,
-                    UserNotes = x.UserNotes
+                    UserNotes = x.UserNotes,
                 }),
-                
-                .. data.Disadvantages.Select(x => new BlessingInfo()
-                {
-                    Name = x.Name,
-                    BlessingType = "Disadvantage",
-                    Description = x.Description,
-                    LevelName = x.LevelName,
-                    LevelDescription = x.LevelDescription,
-                    UserNotes = x.UserNotes
-                }).ToList()
-
+                .. data
+                    .Disadvantages.Select(x => new BlessingInfo()
+                    {
+                        Name = x.Name,
+                        BlessingType = "Disadvantage",
+                        Description = x.Description,
+                        LevelName = x.LevelName,
+                        LevelDescription = x.LevelDescription,
+                        UserNotes = x.UserNotes,
+                    })
+                    .ToList(),
             ];
 
             cardTiles.Add(
-                new PopulateAdDisadCards(
-                    new AddDisadCardData()
-                    {
-                        Blessings = blessings
-                    }
-                )
+                new PopulateAdDisadCards(new AddDisadCardData() { Blessings = blessings })
             );
         }
 

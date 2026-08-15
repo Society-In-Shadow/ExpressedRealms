@@ -23,7 +23,7 @@ public class PopulateAdDisadCards : ICardTile
             col.Item().PageBreak();
         }
     }
-    
+
     public static void FillCard(ColumnDescriptor card, BlessingInfo blessing)
     {
         var secondaryColor = Color.FromARGB(125, 0, 0, 0);
@@ -48,7 +48,6 @@ public class PopulateAdDisadCards : ICardTile
                     .Content()
                     .Row(row =>
                     {
-                        
                         row.RelativeItem()
                             .PaddingRight(5)
                             .Column(leftSide =>
@@ -56,25 +55,31 @@ public class PopulateAdDisadCards : ICardTile
                                 leftSide
                                     .Item()
                                     .Section(blessing.Name)
-                                    .Text($"{blessing.Name} - {blessing.LevelName}").Bold().FontSize(11).ExtraBold();
-                                
+                                    .Text($"{blessing.Name} - {blessing.LevelName}")
+                                    .Bold()
+                                    .FontSize(11)
+                                    .ExtraBold();
+
                                 leftSide
                                     .Item()
                                     .Text(blessing.BlessingType)
                                     .Italic()
                                     .FontSize(6)
                                     .FontColor(secondaryColor);
-                                
+
                                 FormatMainSection(leftSide, "Description", blessing.Description);
-                                FormatMainSection(leftSide, "Level Effect", blessing.LevelDescription);
-                                if(!string.IsNullOrWhiteSpace(blessing.UserNotes))
+                                FormatMainSection(
+                                    leftSide,
+                                    "Level Effect",
+                                    blessing.LevelDescription
+                                );
+                                if (!string.IsNullOrWhiteSpace(blessing.UserNotes))
                                     FormatMainSection(leftSide, "User Notes", blessing.UserNotes);
-                                
                             });
                     });
             });
     }
-        
+
     private static void FormatMainSection(
         ColumnDescriptor cell,
         string? name,
