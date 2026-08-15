@@ -88,8 +88,7 @@ internal sealed class CharacterFactionRepository(
             .Select(x => new PowerInfoProjection()
             {
                 Name = x.FactionLevel.Power!.Name,
-                Level = x.FactionLevel.Power.PowerLevel.Name,
-                XpCost = "-",
+                Level = x.FactionLevel.Power.PowerLevel.Name
             })
             .ToListAsync(cancellationToken);
     }

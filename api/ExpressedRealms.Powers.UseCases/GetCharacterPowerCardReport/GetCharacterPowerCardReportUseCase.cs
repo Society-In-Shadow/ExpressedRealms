@@ -34,13 +34,8 @@ public class GetCharacterPowerCardReportUseCase(
         var powerCards = await GetPowerCardData(model, expression);
         var factionPowerCards = await GetFactionPowerCards(model);
 
-        var cards = powerCards
-            .Concat(factionPowerCards)
-            .Select(x => new DataCard() { CardType = CardType.PowerCard, CardData = x })
-            .ToList();
-
         var reportStream = PowerCardReport.GenerateSixUpPdf(
-            cards,
+            [.. powerCards, .. factionPowerCards],
             model.IsFiveByThree,
             model.CardTiles
         );

@@ -36,7 +36,6 @@ internal sealed class CharacterPowerRepository(
             {
                 Name = x.Power.Name,
                 Level = x.PowerLevel.Name,
-                Exp = x.PowerLevel.Xp,
             })
             .ToListAsync(token);
     }

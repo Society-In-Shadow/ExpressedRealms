@@ -13,22 +13,18 @@ namespace ExpressedRealms.Powers.Reporting.powerCards;
 public static class PowerCardReport
 {
     public static Document GenerateReport(
-        List<DataCard> powerCards,
+        List<PowerCardData> powerCards,
         bool isFiveByThree,
         List<ICardTile> cardTiles
     )
     {
         Settings.License = LicenseType.Community;
 
-        powerCards = powerCards
-            .OrderBy(x => x.CardType == CardType.PowerCard ? 0 : 1)
-            .ToList();
-
         return GetSingleTilePerPage(powerCards, isFiveByThree, cardTiles);
     }
 
     public static MemoryStream GenerateSixUpPdf(
-        List<DataCard> powerCards,
+        List<PowerCardData> powerCards,
         bool isFiveByThree,
         List<ICardTile>? cardTiles = null
     )
@@ -123,7 +119,7 @@ public static class PowerCardReport
     }
 
     private static Document GetSingleTilePerPage(
-        List<DataCard> powerCards,
+        List<PowerCardData> powerCards,
         bool isFiveByThree,
         List<ICardTile> cardTiles
     )
@@ -161,12 +157,7 @@ public static class PowerCardReport
                     {
                         foreach (var card in powerCards)
                         {
-                            switch (card.CardType)
-                            {
-                                case CardType.PowerCard:
-                                    PopulatePowerCard.FillCard(col, (PowerCardData)card.CardData);
-                                    break;
-                            }
+                            PopulatePowerCard.FillCard(col, card);
                         }
 
                         foreach (var cardTile in cardTiles)

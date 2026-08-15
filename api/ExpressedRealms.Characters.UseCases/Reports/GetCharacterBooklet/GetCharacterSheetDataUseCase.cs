@@ -270,8 +270,7 @@ public class GetCharacterSheetDataUseCase(
             .Select(x => new PowerInfo()
             {
                 Name = x.Name,
-                Level = x.Level,
-                XPCost = x.Exp.ToString(),
+                Level = x.Level
             })
             .ToList();
 
@@ -280,11 +279,10 @@ public class GetCharacterSheetDataUseCase(
             {
                 Name = x.Name,
                 Level = x.Level,
-                XPCost = x.XpCost,
             })
             .ToList();
 
-        return powers.Concat(factionPowers).ToList();
+        return [.. powers, .. factionPowers];
     }
 
     private async Task<SkillInfo> GetSkillInfo(GetCharacterSheetDataModel model)

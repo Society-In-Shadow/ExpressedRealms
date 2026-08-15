@@ -43,12 +43,8 @@ public class GetPowerCardReportUseCase(
                     .ToList()
             )
             .ToList();
-        var reportStream = PowerCardReport.GenerateSixUpPdf(
-            cardData
-                .Select(x => new DataCard() { CardType = CardType.PowerCard, CardData = x })
-                .ToList(),
-            model.IsFiveByThree
-        );
+        
+        var reportStream = PowerCardReport.GenerateSixUpPdf(cardData, model.IsFiveByThree);
 
         reportStream.Position = 0;
         return reportStream;
