@@ -45,11 +45,10 @@ public class GetPowerCardReportUseCase(
             )
             .ToList();
 
-        var reportStream = PowerCardReport.GenerateSixUpPdf(new PowerReportData()
-        {
-            CharacterName = string.Empty,
-            PowerCards = cardData
-        }, model.IsFiveByThree);
+        var reportStream = PowerCardReport.GenerateSixUpPdf(
+            new PowerReportData() { CharacterName = string.Empty, PowerCards = cardData },
+            model.IsFiveByThree
+        );
 
         reportStream.Position = 0;
         return reportStream;

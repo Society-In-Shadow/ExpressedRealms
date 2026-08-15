@@ -112,7 +112,7 @@ public static class CharacterReferenceBookletReport
                         return $"{level} - {name}";
                     },
                     NumberOfColumns = 4,
-                    CharacterLimit = 45
+                    CharacterLimit = 45,
                 }
             );
 

@@ -151,7 +151,7 @@ public static class PowerCardReport
                             .Text(data.CharacterName)
                             .FontColor(backgroundTextColor)
                             .AlignStart();
-                        
+
                         col.RelativeItem()
                             .PaddingTop(0.06f, Unit.Inch)
                             .PaddingRight(15)

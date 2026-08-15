@@ -77,7 +77,7 @@ public class PopulatePrymaVoidCard : ICardTile
                                     .Text(
                                         " - During Checkout, final number will be stored on the character sheet permanently"
                                     );
-                                
+
                                 leftSide
                                     .Item()
                                     .Text(

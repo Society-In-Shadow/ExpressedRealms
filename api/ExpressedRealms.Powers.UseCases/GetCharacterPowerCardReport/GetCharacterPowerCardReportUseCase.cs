@@ -37,10 +37,10 @@ public class GetCharacterPowerCardReportUseCase(
 
         var reportStream = PowerCardReport.GenerateSixUpPdf(
             new PowerReportData()
-                {
-                    CharacterName = expression.Value.Name,
-                    PowerCards = [.. powerCards, .. factionPowerCards]
-                },
+            {
+                CharacterName = expression.Value.Name,
+                PowerCards = [.. powerCards, .. factionPowerCards],
+            },
             model.IsFiveByThree,
             model.CardTiles
         );

@@ -42,10 +42,10 @@ var powerCardFaker = new Faker<PowerCardData>()
 // Generate a list of fake cards
 var cards = powerCardFaker.Generate(25);
 
-var report = PowerCardReport.GenerateReport(new PowerReportData()
-{
-    CharacterName = "Test",
-    PowerCards = cards
-}, true, []);
+var report = PowerCardReport.GenerateReport(
+    new PowerReportData() { CharacterName = "Test", PowerCards = cards },
+    true,
+    []
+);
 
 report.GeneratePdf("../test.pdf");
