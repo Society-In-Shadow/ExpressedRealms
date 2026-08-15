@@ -1,5 +1,4 @@
 using ExpressedRealms.Powers.Reporting.powerCards.CardPluginSystem;
-using ExpressedRealms.Powers.Reporting.powerCards.CardTypes;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 
@@ -37,18 +36,10 @@ public class PopulateWealthCard : ICardTile
                                     {
                                         initialIncomeRow
                                             .RelativeItem()
-                                            .Text(text =>
-                                            {
-                                                text.Span("Wealth Card")
-                                                    .Bold()
-                                                    .FontSize(11)
-                                                    .ExtraBold();
-
-                                                text.Span($" - {_data.CharacterName}")
-                                                    .Italic()
-                                                    .FontSize(11)
-                                                    .FontColor(CustomColors.SecondaryTextColor);
-                                            });
+                                            .Text("Wealth Card")
+                                            .Bold()
+                                            .FontSize(11)
+                                            .ExtraBold();
 
                                         initialIncomeRow
                                             .RelativeItem()

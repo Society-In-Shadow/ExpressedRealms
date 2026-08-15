@@ -21,14 +21,12 @@ public static class ContactsPage
         var textFont = new XFont("Arial", 9);
         var stampFont = new XFont("Arial", 36);
 
-        for(var i = 0; i < 6; i++)
+        for (var i = 0; i < 6; i++)
         {
-            var knowledge = i < data.Count
-                ? data[i]
-                : null;
+            var knowledge = i < data.Count ? data[i] : null;
 
             DrawContactDetails(knowledge, x, y, width, rowHeight, gfx, textFont);
-            
+
             y += rowHeight + 5;
 
             GenerateStampsForContact(width, knowledge, x, stampSize, gfx, y, stampFont);
@@ -37,36 +35,45 @@ public static class ContactsPage
         }
     }
 
-    private static void GenerateStampsForContact(double width, ContactInfo? knowledge, double x, double stampSize,
-        XGraphics gfx, double y, XFont stampFont)
+    private static void GenerateStampsForContact(
+        double width,
+        ContactInfo? knowledge,
+        double x,
+        double stampSize,
+        XGraphics gfx,
+        double y,
+        XFont stampFont
+    )
     {
         var slotWidth = width / 3;
 
         var stampTexts = new[] { string.Empty, string.Empty, string.Empty };
-            
-        if(knowledge is not null)
+
+        if (knowledge is not null)
             stampTexts =
             [
                 string.Empty,
                 knowledge.NumberOfUses >= 2 ? string.Empty : "X",
-                knowledge.NumberOfUses >= 3 ? string.Empty : "X"
+                knowledge.NumberOfUses >= 3 ? string.Empty : "X",
             ];
 
         for (var j = 0; j < stampTexts.Length; j++)
         {
             var stampX = x + (slotWidth * j) + ((slotWidth - stampSize) / 2);
 
-            CreateStamp(
-                gfx,
-                new XRect(stampX, y, stampSize, stampSize),
-                stampTexts[j],
-                stampFont
-            );
+            CreateStamp(gfx, new XRect(stampX, y, stampSize, stampSize), stampTexts[j], stampFont);
         }
     }
 
-    private static void DrawContactDetails(ContactInfo? knowledge, double x, double y, double width, double rowHeight,
-        XGraphics gfx, XFont textFont)
+    private static void DrawContactDetails(
+        ContactInfo? knowledge,
+        double x,
+        double y,
+        double width,
+        double rowHeight,
+        XGraphics gfx,
+        XFont textFont
+    )
     {
         if (knowledge is not null)
         {
@@ -81,6 +88,16 @@ public static class ContactsPage
         }
         else
         {
+            var textRect = new XRect(x, y + 2, width, rowHeight);
+
+            gfx.DrawString(
+                "Name - Knowledge - Level (Cross out Unusable Boxes Below)",
+                new XFont("Arial", 7),
+                XBrushes.LightGray,
+                textRect,
+                XStringFormats.CenterLeft
+            );
+
             var linePen = new XPen(XColors.Black, 0.5);
             gfx.DrawLine(linePen, x, y + rowHeight, x + width, y + rowHeight);
         }
