@@ -89,7 +89,7 @@ public static class CharacterReferenceBookletReport
                     Document = document,
                     PopulateLine = (knowledge) =>
                     {
-                        var name = knowledge.Name.Limit(20);
+                        var name = knowledge.Name;
                         var level = knowledge.Level.Substring(
                             0,
                             Math.Min(1, knowledge.Level.Length)
@@ -107,10 +107,12 @@ public static class CharacterReferenceBookletReport
                     Document = document,
                     PopulateLine = (power) =>
                     {
-                        var name = power.Name.Limit(20, ".");
+                        var name = power.Name;
                         var level = power.Level.Substring(0, 1);
                         return $"{level} - {name}";
                     },
+                    NumberOfColumns = 4,
+                    CharacterLimit = 45
                 }
             );
 

@@ -81,6 +81,10 @@ public static class ContactsPage
         }
         else
         {
+            var textRect = new XRect(x, y + 2, width, rowHeight);
+            
+            gfx.DrawString("Name - Knowledge - Level (Cross out Unusable Boxes Below)", new XFont("Arial", 7), XBrushes.LightGray, textRect, XStringFormats.CenterLeft);
+            
             var linePen = new XPen(XColors.Black, 0.5);
             gfx.DrawLine(linePen, x, y + rowHeight, x + width, y + rowHeight);
         }

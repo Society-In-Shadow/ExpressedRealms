@@ -1,5 +1,6 @@
 using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.Powers.Reporting.powerCards;
+using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.PowerCards;
 using ExpressedRealms.Powers.Repository.PowerPaths;
 
 namespace ExpressedRealms.Powers.UseCases.GetPowerCardReport;
@@ -44,7 +45,11 @@ public class GetPowerCardReportUseCase(
             )
             .ToList();
 
-        var reportStream = PowerCardReport.GenerateSixUpPdf(cardData, model.IsFiveByThree);
+        var reportStream = PowerCardReport.GenerateSixUpPdf(new PowerReportData()
+        {
+            CharacterName = string.Empty,
+            PowerCards = cardData
+        }, model.IsFiveByThree);
 
         reportStream.Position = 0;
         return reportStream;

@@ -7,11 +7,11 @@ namespace ExpressedRealms.Characters.Reports.CRB.DataCards.PrymaVoidCards;
 
 public class PopulatePrymaVoidCard : ICardTile
 {
-    private readonly PrymaVoidCardData _cardData;
+    private readonly PrymaVoidCardData _data;
 
     public PopulatePrymaVoidCard(PrymaVoidCardData data)
     {
-        _cardData = data;
+        _data = data;
     }
 
     public void Populate(ColumnDescriptor col)
@@ -30,7 +30,7 @@ public class PopulatePrymaVoidCard : ICardTile
                             {
                                 leftSide
                                     .Item()
-                                    .Text($"Pryma / Void Card")
+                                    .Text("Pryma / Void Card")
                                     .Bold()
                                     .FontSize(11)
                                     .ExtraBold();
@@ -76,6 +76,12 @@ public class PopulatePrymaVoidCard : ICardTile
                                     .Item()
                                     .Text(
                                         " - During Checkout, final number will be stored on the character sheet permanently"
+                                    );
+                                
+                                leftSide
+                                    .Item()
+                                    .Text(
+                                        " - Most people fold this card in half and store inside their badges, or other secure area"
                                     );
                             });
 
@@ -124,9 +130,9 @@ public class PopulatePrymaVoidCard : ICardTile
                                             .PaddingLeft(5)
                                             .PaddingRight(5)
                                             .PaddingTop(5)
-                                            .AlignCenter()
                                             .BorderBottom(1)
-                                            .Text(_cardData.Motes.ToString());
+                                            .AlignCenter()
+                                            .Text(_data.Motes.ToString());
 
                                         initialIncomeRow
                                             .RelativeItem()

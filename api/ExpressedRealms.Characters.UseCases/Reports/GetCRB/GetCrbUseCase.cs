@@ -183,7 +183,6 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                         InitialBasicItemIncome = wealthInfo.InitialBasicItemIncome,
                         WealthLevel = wealthInfo.WealthLevel,
                         AppliedBlessings = wealthInfo.AppliedBlessings,
-                        CharacterName = wealthInfo.CharacterName,
                         WealthTableLines = wealthInfo.WealthTableLines,
                     }
                 )

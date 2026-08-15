@@ -13,25 +13,25 @@ namespace ExpressedRealms.Powers.Reporting.powerCards;
 public static class PowerCardReport
 {
     public static Document GenerateReport(
-        List<PowerCardData> powerCards,
+        PowerReportData data,
         bool isFiveByThree,
         List<ICardTile> cardTiles
     )
     {
         Settings.License = LicenseType.Community;
 
-        return GetSingleTilePerPage(powerCards, isFiveByThree, cardTiles);
+        return GetSingleTilePerPage(data, isFiveByThree, cardTiles);
     }
 
     public static MemoryStream GenerateSixUpPdf(
-        List<PowerCardData> powerCards,
+        PowerReportData data,
         bool isFiveByThree,
         List<ICardTile>? cardTiles = null
     )
     {
         cardTiles ??= [];
 
-        var singleTileDoc = GenerateReport(powerCards, isFiveByThree, cardTiles);
+        var singleTileDoc = GenerateReport(data, isFiveByThree, cardTiles);
         var srcStream = new MemoryStream();
         singleTileDoc.GeneratePdf(srcStream);
 
@@ -119,7 +119,7 @@ public static class PowerCardReport
     }
 
     private static Document GetSingleTilePerPage(
-        List<PowerCardData> powerCards,
+        PowerReportData data,
         bool isFiveByThree,
         List<ICardTile> cardTiles
     )
@@ -142,12 +142,19 @@ public static class PowerCardReport
 
                 page.DefaultTextStyle(x => x.FontSize(7.75f));
                 page.Background()
-                    .Column(col =>
+                    .Row(col =>
                     {
                         var backgroundTextColor = Color.FromARGB(45, 0, 0, 0);
-                        col.Item()
+                        col.RelativeItem()
                             .PaddingTop(0.06f, Unit.Inch)
-                            .PaddingRight(0.25f, Unit.Inch)
+                            .PaddingLeft(15)
+                            .Text(data.CharacterName)
+                            .FontColor(backgroundTextColor)
+                            .AlignStart();
+                        
+                        col.RelativeItem()
+                            .PaddingTop(0.06f, Unit.Inch)
+                            .PaddingRight(15)
                             .Text($"Society in Shadows - {DateTime.Now.ToString("MMMM d, yyyy")}")
                             .FontColor(backgroundTextColor)
                             .AlignEnd();
@@ -155,7 +162,7 @@ public static class PowerCardReport
                 page.Content()
                     .Column(col =>
                     {
-                        foreach (var card in powerCards)
+                        foreach (var card in data.PowerCards)
                         {
                             PopulatePowerCard.FillCard(col, card);
                         }

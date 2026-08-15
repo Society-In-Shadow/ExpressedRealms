@@ -2,6 +2,7 @@ using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.DTOs;
 using ExpressedRealms.Expressions.Repository.CharacterFactions;
 using ExpressedRealms.Powers.Reporting.powerCards;
+using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.PowerCards;
 using ExpressedRealms.Powers.Repository.CharacterPower;
 using ExpressedRealms.Powers.Repository.PowerPaths;
 using ExpressedRealms.UseCases.Shared;
@@ -35,7 +36,11 @@ public class GetCharacterPowerCardReportUseCase(
         var factionPowerCards = await GetFactionPowerCards(model);
 
         var reportStream = PowerCardReport.GenerateSixUpPdf(
-            [.. powerCards, .. factionPowerCards],
+            new PowerReportData()
+                {
+                    CharacterName = expression.Value.Name,
+                    PowerCards = [.. powerCards, .. factionPowerCards]
+                },
             model.IsFiveByThree,
             model.CardTiles
         );
