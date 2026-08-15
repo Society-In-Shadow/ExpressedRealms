@@ -1,13 +1,22 @@
+using ExpressedRealms.Powers.Reporting.powerCards.CardPluginSystem;
+using ExpressedRealms.Powers.Reporting.powerCards.CardTypes;
 using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
 
-namespace ExpressedRealms.Powers.Reporting.powerCards.CardTypes.PrimaVoidCards;
+namespace ExpressedRealms.Characters.Reports.CRB.DataCards.PrymaVoidCards;
 
-internal static class PopulatePrimaVoidCard
+public class PopulatePrymaVoidCard : ICardTile
 {
-    public static void FillCard(ColumnDescriptor card, PrimaVoidCardData data)
+    private readonly PrymaVoidCardData _cardData;
+
+    public PopulatePrymaVoidCard(PrymaVoidCardData data)
     {
-        card.Item()
+        _cardData = data;
+    }
+
+    public void Populate(ColumnDescriptor col)
+    {
+        col.Item()
             .Padding(15)
             .Decoration(decorator =>
             {
@@ -117,7 +126,7 @@ internal static class PopulatePrimaVoidCard
                                             .PaddingTop(5)
                                             .AlignCenter()
                                             .BorderBottom(1)
-                                            .Text(data.Motes.ToString());
+                                            .Text(_cardData.Motes.ToString());
 
                                         initialIncomeRow
                                             .RelativeItem()
@@ -176,6 +185,6 @@ internal static class PopulatePrimaVoidCard
                             });
                     });
             });
-        card.Item().PageBreak();
+        col.Item().PageBreak();
     }
 }

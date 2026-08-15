@@ -1,6 +1,5 @@
 using ExpressedRealms.Powers.Reporting.powerCards.CardPluginSystem;
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.PowerCards;
-using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.PrimaVoidCards;
 using PdfSharp;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
@@ -23,7 +22,6 @@ public static class PowerCardReport
 
         powerCards = powerCards
             .OrderBy(x => x.CardType == CardType.PowerCard ? 0 : 1)
-            .ThenBy(x => x.CardType == CardType.PrimaVoidCard ? 0 : 1)
             .ToList();
 
         return GetSingleTilePerPage(powerCards, isFiveByThree, cardTiles);
@@ -32,7 +30,6 @@ public static class PowerCardReport
     public static MemoryStream GenerateSixUpPdf(
         List<DataCard> powerCards,
         bool isFiveByThree,
-        bool includeWealthCard = false,
         List<ICardTile>? cardTiles = null
     )
     {
@@ -168,12 +165,6 @@ public static class PowerCardReport
                             {
                                 case CardType.PowerCard:
                                     PopulatePowerCard.FillCard(col, (PowerCardData)card.CardData);
-                                    break;
-                                case CardType.PrimaVoidCard:
-                                    PopulatePrimaVoidCard.FillCard(
-                                        col,
-                                        (PrimaVoidCardData)card.CardData
-                                    );
                                     break;
                             }
                         }

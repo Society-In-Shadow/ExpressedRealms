@@ -9,4 +9,5 @@ public class CharacterInfo
     public string? PrimaryProgressionName { get; set; }
     public string? SecondaryProgressionName { get; set; }
     public required string LookupId { get; set; }
+    public int Motes { get; set; }
 }

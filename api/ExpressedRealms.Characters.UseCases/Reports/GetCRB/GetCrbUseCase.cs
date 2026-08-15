@@ -5,6 +5,7 @@ using ExpressedRealms.Characters.Reports.CRB.DataCards.CashCards;
 using ExpressedRealms.Characters.Reports.CRB.DataCards.ContactsOverflowCards;
 using ExpressedRealms.Characters.Reports.CRB.DataCards.KnowledgeOverflowCards;
 using ExpressedRealms.Characters.Reports.CRB.DataCards.PowerOverflowCards;
+using ExpressedRealms.Characters.Reports.CRB.DataCards.PrymaVoidCards;
 using ExpressedRealms.Characters.Reports.CRB.DataCards.WealthCards;
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Players;
@@ -83,13 +84,13 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             PopulatePowersOverflowCardData(cardTiles, crbData.Value.Powers);
             PopulateContactsOverflowCardData(cardTiles, crbData.Value.Contacts);
             PopulateWealthCardsCardData(cardTiles, crbData.Value.WealthInfo);
+            PopulatePrymaVoidCardData(cardTiles, crbData.Value.BasicInfo);
 
             var powerCards = await powerReport.ExecuteAsync(
                 new GetCharacterPowerCardReportModel()
                 {
                     CharacterId = model.CharacterId,
                     IsFiveByThree = false,
-                    IncludeWealthCard = true,
                     CardTiles = cardTiles,
                 }
             );
@@ -222,6 +223,21 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                     )
                 );
             }
+        }
+        
+        private static void PopulatePrymaVoidCardData(
+            List<ICardTile> cardTiles,
+            BasicInfo basicInfo
+        )
+        {
+            cardTiles.Add(
+                new PopulatePrymaVoidCard(
+                    new PrymaVoidCardData()
+                    {
+                        Motes = basicInfo.Motes
+                    }
+                )
+            );
         }
 
         private async Task ProcessCheckinAndUpdateStats(GetCharacterBookletModel model)

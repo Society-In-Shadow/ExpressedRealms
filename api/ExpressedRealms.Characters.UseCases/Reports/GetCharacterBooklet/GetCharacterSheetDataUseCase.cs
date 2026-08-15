@@ -53,9 +53,9 @@ public class GetCharacterSheetDataUseCase(
             ProficiencyInfo = await GetProficiencyInfo(model),
             StatInfo = statInfo,
             Contacts = await GetContactinfo(model),
+            WealthInfo = await GetWealthInfo(model)
         };
         
-        reportData.WealthInfo = await GetWealthInfo(model);
         reportData.WealthInfo.CharacterName = reportData.BasicInfo.CharacterName;
 
         return reportData;
@@ -377,6 +377,7 @@ public class GetCharacterSheetDataUseCase(
             CurrentDay = currentDay,
             FactionName = factionInfo?.FactionName.Limit(21, ".") ?? "No Active Faction",
             FactionRank = factionInfo?.FactionRank.Limit(7, ".") ?? "-",
+            Motes = character.Motes
         };
         return basicInfo;
     }

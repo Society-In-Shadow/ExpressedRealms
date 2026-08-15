@@ -13,4 +13,5 @@ public class BasicInfo
     public required string FactionName { get; set; }
     public required string FactionRank { get; set; }
     public int CurrentDay { get; set; }
+    public int Motes { get; set; }
 }
