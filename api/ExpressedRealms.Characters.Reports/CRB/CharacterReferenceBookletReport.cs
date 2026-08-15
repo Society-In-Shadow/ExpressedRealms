@@ -294,7 +294,7 @@ public static class CharacterReferenceBookletReport
             Helpers.MergeField(
                 fields,
                 $"AdvantagesCost{advantageCount.ToString()}",
-                advantage.Cost
+                advantage.LevelName
             );
             advantageCount++;
         }
@@ -310,7 +310,7 @@ public static class CharacterReferenceBookletReport
             Helpers.MergeField(
                 fields,
                 $"DisadvantagesCost{disadvantageCount.ToString()}",
-                advantage.Cost
+                advantage.LevelName
             );
             disadvantageCount++;
         }
@@ -493,7 +493,7 @@ public static class CharacterReferenceBookletReport
         }
     }
 
-    private class AdminListOptions<T>()
+    private sealed class AdminListOptions<T>()
     {
         public int PageNumber { get; set; }
         public List<T> DataItems { get; set; }

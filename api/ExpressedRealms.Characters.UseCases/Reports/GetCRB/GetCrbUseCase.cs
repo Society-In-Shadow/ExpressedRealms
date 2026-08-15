@@ -1,6 +1,7 @@
 using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Characters.Reports.CRB;
 using ExpressedRealms.Characters.Reports.CRB.Data.SupportingData;
+using ExpressedRealms.Characters.Reports.CRB.DataCards.AdDisadCards;
 using ExpressedRealms.Characters.Reports.CRB.DataCards.CashCards;
 using ExpressedRealms.Characters.Reports.CRB.DataCards.ContactsOverflowCards;
 using ExpressedRealms.Characters.Reports.CRB.DataCards.KnowledgeOverflowCards;
@@ -26,7 +27,6 @@ using JetBrains.Annotations;
 using PdfSharp;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
-using PopulatePowerOverflowCard = ExpressedRealms.Characters.Reports.CRB.DataCards.PowerOverflowCards.PopulatePowerOverflowCard;
 
 namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
 {
@@ -83,6 +83,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             PopulateKnowledgeOverflowCardData(cardTiles, crbData.Value.Knowledges);
             PopulatePowersOverflowCardData(cardTiles, crbData.Value.Powers);
             PopulateContactsOverflowCardData(cardTiles, crbData.Value.Contacts);
+            PopulateAdvantageDisadvantageData(cardTiles, crbData.Value.Traits);
             PopulateWealthCardsCardData(cardTiles, crbData.Value.WealthInfo);
             PopulatePrymaVoidCardData(cardTiles, crbData.Value.BasicInfo);
 
@@ -190,6 +191,45 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
 
             cardTiles.Add(
                 new PopulateCashCard(new CashCardData() { ConIncome = wealthInfo.WealthIncome })
+            );
+        }
+        
+        private static void PopulateAdvantageDisadvantageData(
+            List<ICardTile> cardTiles,
+            Traits data
+        )
+        {
+            List<BlessingInfo> blessings =
+            [
+                .. data.Advantages.Select(x => new BlessingInfo()
+                {
+                    Name = x.Name,
+                    BlessingType = "Advantage",
+                    Description = x.Description,
+                    LevelName = x.LevelName,
+                    LevelDescription = x.LevelDescription,
+                    UserNotes = x.UserNotes
+                }),
+                
+                .. data.Disadvantages.Select(x => new BlessingInfo()
+                {
+                    Name = x.Name,
+                    BlessingType = "Disadvantage",
+                    Description = x.Description,
+                    LevelName = x.LevelName,
+                    LevelDescription = x.LevelDescription,
+                    UserNotes = x.UserNotes
+                }).ToList()
+
+            ];
+
+            cardTiles.Add(
+                new PopulateAdDisadCards(
+                    new AddDisadCardData()
+                    {
+                        Blessings = blessings
+                    }
+                )
             );
         }
 
