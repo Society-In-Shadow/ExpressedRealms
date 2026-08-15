@@ -12,5 +12,5 @@ public class ReportData
     public List<ContactInfo> Contacts { get; set; } = new();
     public ProficiencyData ProficiencyInfo { get; set; } = new();
     public required StatModifierInfo StatInfo { get; set; }
-    public WealthInfoDto WealthInfo { get; set; } = new();
+    public required WealthInfoDto WealthInfo { get; set; }
 }

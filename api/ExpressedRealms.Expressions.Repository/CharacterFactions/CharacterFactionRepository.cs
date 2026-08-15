@@ -89,7 +89,6 @@ internal sealed class CharacterFactionRepository(
             {
                 Name = x.FactionLevel.Power!.Name,
                 Level = x.FactionLevel.Power.PowerLevel.Name,
-                XpCost = "-",
             })
             .ToListAsync(cancellationToken);
     }

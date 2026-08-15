@@ -1,8 +1,5 @@
 using ExpressedRealms.Powers.Reporting.powerCards.CardPluginSystem;
-using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.CashCards;
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.PowerCards;
-using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.PrimaVoidCards;
-using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.WealthCards;
 using PdfSharp;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
@@ -16,27 +13,19 @@ namespace ExpressedRealms.Powers.Reporting.powerCards;
 public static class PowerCardReport
 {
     public static Document GenerateReport(
-        List<DataCard> powerCards,
+        List<PowerCardData> powerCards,
         bool isFiveByThree,
         List<ICardTile> cardTiles
     )
     {
         Settings.License = LicenseType.Community;
 
-        powerCards = powerCards
-            .OrderBy(x => x.CardType == CardType.PowerCard ? 0 : 1)
-            .ThenBy(x => x.CardType == CardType.WealthCard ? 0 : 1)
-            .ThenBy(x => x.CardType == CardType.CashCard ? 0 : 1)
-            .ThenBy(x => x.CardType == CardType.PrimaVoidCard ? 0 : 1)
-            .ToList();
-
         return GetSingleTilePerPage(powerCards, isFiveByThree, cardTiles);
     }
 
     public static MemoryStream GenerateSixUpPdf(
-        List<DataCard> powerCards,
+        List<PowerCardData> powerCards,
         bool isFiveByThree,
-        bool includeWealthCard = false,
         List<ICardTile>? cardTiles = null
     )
     {
@@ -130,7 +119,7 @@ public static class PowerCardReport
     }
 
     private static Document GetSingleTilePerPage(
-        List<DataCard> powerCards,
+        List<PowerCardData> powerCards,
         bool isFiveByThree,
         List<ICardTile> cardTiles
     )
@@ -168,24 +157,7 @@ public static class PowerCardReport
                     {
                         foreach (var card in powerCards)
                         {
-                            switch (card.CardType)
-                            {
-                                case CardType.PowerCard:
-                                    PopulatePowerCard.FillCard(col, (PowerCardData)card.CardData);
-                                    break;
-                                case CardType.WealthCard:
-                                    PopulateWealthCard.FillCard(col, (WealthCardData)card.CardData);
-                                    break;
-                                case CardType.CashCard:
-                                    PopulateCashCard.FillCard(col, (CashCardData)card.CardData);
-                                    break;
-                                case CardType.PrimaVoidCard:
-                                    PopulatePrimaVoidCard.FillCard(
-                                        col,
-                                        (PrimaVoidCardData)card.CardData
-                                    );
-                                    break;
-                            }
+                            PopulatePowerCard.FillCard(col, card);
                         }
 
                         foreach (var cardTile in cardTiles)

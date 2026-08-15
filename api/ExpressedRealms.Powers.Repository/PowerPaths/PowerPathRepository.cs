@@ -65,6 +65,16 @@ internal sealed class PowerPathRepository(
         return Result.Ok(items);
     }
 
+    public async Task<List<CrbPowerInformation>> GetPowerPathAndPowersForCrb(List<int> powerIds)
+    {
+        return await context
+            .PowerPathPowerMappings.Where(y => powerIds.Contains(y.PowerId))
+            .OrderBy(x => x.PowerPath.OrderIndex)
+            .ThenBy(y => y.OrderIndex)
+            .Select(CrbPowerInformation.Selector())
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<List<PowerInformation>> GetPowers(List<int> powerIds)
     {
         return await context
