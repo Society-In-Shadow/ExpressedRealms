@@ -7,7 +7,7 @@ namespace ExpressedRealms.Characters.Reports.CRB.CrbPages;
 
 public static class ContactsPage
 {
-    public static void FillInContacts(PdfDocument document, List<ContactInfo> dataPowers)
+    public static void FillInContacts(PdfDocument document, List<ContactInfo> data)
     {
         using var gfx = XGraphics.FromPdfPage(document.Pages[2]);
 
@@ -21,9 +21,55 @@ public static class ContactsPage
         var textFont = new XFont("Arial", 9);
         var stampFont = new XFont("Arial", 36);
 
-        foreach (var knowledge in dataPowers.Take(6))
+        for(var i = 0; i < 6; i++)
         {
-            // Knowledge description
+            var knowledge = i < data.Count
+                ? data[i]
+                : null;
+
+            DrawContactDetails(knowledge, x, y, width, rowHeight, gfx, textFont);
+            
+            y += rowHeight + 5;
+
+            GenerateStampsForContact(width, knowledge, x, stampSize, gfx, y, stampFont);
+
+            y += stampSize + 2;
+        }
+    }
+
+    private static void GenerateStampsForContact(double width, ContactInfo? knowledge, double x, double stampSize,
+        XGraphics gfx, double y, XFont stampFont)
+    {
+        var slotWidth = width / 3;
+
+        var stampTexts = new[] { string.Empty, string.Empty, string.Empty };
+            
+        if(knowledge is not null)
+            stampTexts =
+            [
+                string.Empty,
+                knowledge.NumberOfUses >= 2 ? string.Empty : "X",
+                knowledge.NumberOfUses >= 3 ? string.Empty : "X"
+            ];
+
+        for (var j = 0; j < stampTexts.Length; j++)
+        {
+            var stampX = x + (slotWidth * j) + ((slotWidth - stampSize) / 2);
+
+            CreateStamp(
+                gfx,
+                new XRect(stampX, y, stampSize, stampSize),
+                stampTexts[j],
+                stampFont
+            );
+        }
+    }
+
+    private static void DrawContactDetails(ContactInfo? knowledge, double x, double y, double width, double rowHeight,
+        XGraphics gfx, XFont textFont)
+    {
+        if (knowledge is not null)
+        {
             var text =
                 $"{knowledge.Name.Limit(25, ".")} - "
                 + $"{knowledge.KnowledgeName.Limit(30, ".")} - "
@@ -32,32 +78,11 @@ public static class ContactsPage
             var textRect = new XRect(x, y + 2, width, rowHeight);
 
             gfx.DrawString(text, textFont, XBrushes.Black, textRect, XStringFormats.CenterLeft);
-
-            y += rowHeight + 5;
-
-            // Stamps
-            var slotWidth = width / 3;
-
-            var stampTexts = new[]
-            {
-                string.Empty,
-                knowledge.NumberOfUses >= 2 ? string.Empty : "X",
-                knowledge.NumberOfUses >= 3 ? string.Empty : "X",
-            };
-
-            for (var i = 0; i < stampTexts.Length; i++)
-            {
-                var stampX = x + (slotWidth * i) + ((slotWidth - stampSize) / 2);
-
-                CreateStamp(
-                    gfx,
-                    new XRect(stampX, y, stampSize, stampSize),
-                    stampTexts[i],
-                    stampFont
-                );
-            }
-
-            y += stampSize + 2;
+        }
+        else
+        {
+            var linePen = new XPen(XColors.Black, 0.5);
+            gfx.DrawLine(linePen, x, y + rowHeight, x + width, y + rowHeight);
         }
     }
 
