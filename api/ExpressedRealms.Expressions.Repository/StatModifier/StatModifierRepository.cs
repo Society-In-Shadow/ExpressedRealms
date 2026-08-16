@@ -51,6 +51,7 @@ public class StatModifierRepository(
                         ScaleWithLevel = y.ScaleWithLevel,
                         CreationSpecificBonus = y.CreationSpecificBonus,
                         TargetExpressionId = y.TargetExpressionId,
+                        TargetProgressionPathId = y.TargetProgressionPathId
                     }
                 )
             )
@@ -73,6 +74,7 @@ public class StatModifierRepository(
                         ScaleWithLevel = y.ScaleWithLevel,
                         CreationSpecificBonus = y.CreationSpecificBonus,
                         TargetExpressionId = y.TargetExpressionId,
+                        TargetProgressionPathId = y.TargetProgressionPathId
                     }
                 )
             )
@@ -92,6 +94,7 @@ public class StatModifierRepository(
                     ScaleWithLevel = y.ScaleWithLevel,
                     CreationSpecificBonus = y.CreationSpecificBonus,
                     TargetExpressionId = y.TargetExpressionId,
+                    TargetProgressionPathId = y.TargetProgressionPathId
                 })
             )
             .ToListAsync();
@@ -136,6 +139,7 @@ public class StatModifierRepository(
                     ScaleWithLevel = y.ScaleWithLevel,
                     CreationSpecificBonus = y.CreationSpecificBonus,
                     TargetExpressionId = y.TargetExpressionId,
+                    TargetProgressionPathId = y.TargetProgressionPathId
                 })
             )
             .ToListAsync();
