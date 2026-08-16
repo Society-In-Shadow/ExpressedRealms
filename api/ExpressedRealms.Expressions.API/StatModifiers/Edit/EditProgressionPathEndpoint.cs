@@ -26,7 +26,7 @@ internal static class EditStatModifierEndpoint
                 CreationSpecificBonus = request.CreationSpecificBonus,
                 TargetExpressionId = request.TargetExpressionId,
                 Source = Helpers.RouteTypeNameToEnum(typeName),
-                TargetProgressionPathId = request.TargetProgressionPathId
+                TargetProgressionPathId = request.TargetProgressionPathId,
             }
         );
 

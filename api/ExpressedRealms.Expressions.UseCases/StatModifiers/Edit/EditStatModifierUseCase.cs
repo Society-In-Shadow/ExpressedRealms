@@ -23,19 +23,28 @@ internal sealed class EditStatModifierUseCase(
 
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-        
+
         if (model.TargetExpressionId is not null)
         {
             var expressionOptions = await expressionRepository.GetAllEnabledExpressionAndSubpaths();
-            var expression = expressionOptions.FirstOrDefault(x => x.Id == model.TargetExpressionId);
-            
-            if (expression is null)
-                return ValidationHelper.AddSingleValidationFailure(nameof(model.TargetExpressionId),
-                    "Expression does not exist");
+            var expression = expressionOptions.FirstOrDefault(x =>
+                x.Id == model.TargetExpressionId
+            );
 
-            if (model.TargetProgressionPathId is not null && expression.ProgressionPaths.All(x => x.Id != model.TargetProgressionPathId))
-                return ValidationHelper.AddSingleValidationFailure(nameof(model.TargetProgressionPathId),
-                    "This is not a valid progression path for the expression");
+            if (expression is null)
+                return ValidationHelper.AddSingleValidationFailure(
+                    nameof(model.TargetExpressionId),
+                    "Expression does not exist"
+                );
+
+            if (
+                model.TargetProgressionPathId is not null
+                && expression.ProgressionPaths.All(x => x.Id != model.TargetProgressionPathId)
+            )
+                return ValidationHelper.AddSingleValidationFailure(
+                    nameof(model.TargetProgressionPathId),
+                    "This is not a valid progression path for the expression"
+                );
         }
 
         if (permissionChecks.HasPermissionPolicyForStatModifiers(model.Source, out var fail))

@@ -30,6 +30,7 @@ public class ProgressionPath : ISoftDelete
     public List<ProgressionLevelAuditTrail> ProgressionLevelAuditTrails { get; set; } = null!;
     public virtual ICollection<ProgressionPath> Clones { get; set; } =
         new HashSet<ProgressionPath>();
-    
-    public virtual ICollection<StatGroupMapping> StatGroupMappings { get; set; } = new HashSet<StatGroupMapping>();
+
+    public virtual ICollection<StatGroupMapping> StatGroupMappings { get; set; } =
+        new HashSet<StatGroupMapping>();
 }

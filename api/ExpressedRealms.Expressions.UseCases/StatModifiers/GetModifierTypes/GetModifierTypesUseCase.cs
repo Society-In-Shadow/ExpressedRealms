@@ -14,10 +14,10 @@ internal sealed class GetModifierTypesUseCase(
     {
         if (permissionChecks.HasPermissionPolicyForStatModifiers(model.Source, out var fail))
             return fail;
-        
+
         var groupMapping = await repository.GetModifierTypes();
         var expressions = await expressionRepository.GetAllEnabledExpressionAndSubpaths();
-        
+
         return Result.Ok(
             new OptionsReturnModel()
             {
@@ -29,11 +29,13 @@ internal sealed class GetModifierTypesUseCase(
                     {
                         Id = x.Id,
                         Name = x.Name,
-                        ProgressionPaths = x.ProgressionPaths.Select(y => new ProgressionPath()
-                        {
-                            Id = y.Id,
-                            Name = y.Name
-                        }).ToList()
+                        ProgressionPaths = x
+                            .ProgressionPaths.Select(y => new ProgressionPath()
+                            {
+                                Id = y.Id,
+                                Name = y.Name,
+                            })
+                            .ToList(),
                     })
                     .ToList(),
             }

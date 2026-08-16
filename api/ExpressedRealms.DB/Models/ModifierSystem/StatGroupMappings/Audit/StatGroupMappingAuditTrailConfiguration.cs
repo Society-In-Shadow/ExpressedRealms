@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ExpressedRealms.DB.Models.ModifierSystem.StatGroupMappings.Audit;
 
-internal class StatGroupMappingAuditTrailConfiguration : IEntityTypeConfiguration<StatGroupMappingAuditTrail>
+internal class StatGroupMappingAuditTrailConfiguration
+    : IEntityTypeConfiguration<StatGroupMappingAuditTrail>
 {
     public void Configure(EntityTypeBuilder<StatGroupMappingAuditTrail> builder)
     {

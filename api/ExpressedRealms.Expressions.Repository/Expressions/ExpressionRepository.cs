@@ -402,18 +402,23 @@ internal sealed class ExpressionRepository(
         );
     }
 
-    public async Task<List<ExpressionInfoForModifiersProjection>> GetAllEnabledExpressionAndSubpaths()
+    public async Task<
+        List<ExpressionInfoForModifiersProjection>
+    > GetAllEnabledExpressionAndSubpaths()
     {
-        return await context.Expressions.Where(x => x.CmsTypeId == CmsTypeEnum.Expression.Value)
+        return await context
+            .Expressions.Where(x => x.CmsTypeId == CmsTypeEnum.Expression.Value)
             .Select(x => new ExpressionInfoForModifiersProjection()
             {
                 Id = x.Id,
                 Name = x.Name,
-                ProgressionPaths = x.ProgressionPaths.Select(x => new ExpressionPathProjection()
-                {
-                    Id = x.Id,
-                    Name = x.Name
-                }).ToList()
+                ProgressionPaths = x
+                    .ProgressionPaths.Select(x => new ExpressionPathProjection()
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                    })
+                    .ToList(),
             })
             .ToListAsync();
     }

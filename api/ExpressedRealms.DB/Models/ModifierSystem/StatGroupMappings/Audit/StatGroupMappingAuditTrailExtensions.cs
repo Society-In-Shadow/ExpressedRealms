@@ -50,7 +50,9 @@ internal static class StatGroupMappingAuditTrailExtensions
         return changedRecordsToReturn;
     }
 
-    public static IAuditEntityMapping AddStatGroupMappingAuditTrailMapping(this IAuditEntityMapping mapping)
+    public static IAuditEntityMapping AddStatGroupMappingAuditTrailMapping(
+        this IAuditEntityMapping mapping
+    )
     {
         return mapping.Map<StatGroupMapping, StatGroupMappingAuditTrail>(
             (model, audit) =>

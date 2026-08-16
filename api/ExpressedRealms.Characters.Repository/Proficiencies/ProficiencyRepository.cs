@@ -120,12 +120,18 @@ internal sealed class ProficiencyRepository(
         );
         dbModifiers.AddRange(await statModifierRepository.GetModifiersFromCharacter(characterId));
 
-        var availableProgressions = new List<int?>() { character.PrimaryProgressionId, character.SecondaryProgressionId };
+        var availableProgressions = new List<int?>()
+        {
+            character.PrimaryProgressionId,
+            character.SecondaryProgressionId,
+        };
         dbModifiers = dbModifiers
             .Where(x =>
-                x.TargetExpressionId == null || 
-                x.TargetExpressionId == character.ExpressionId && x.TargetProgressionPathId is null || 
-                x.TargetExpressionId == character.ExpressionId && availableProgressions.Contains(x.TargetProgressionPathId)
+                x.TargetExpressionId == null
+                || x.TargetExpressionId == character.ExpressionId
+                    && x.TargetProgressionPathId is null
+                || x.TargetExpressionId == character.ExpressionId
+                    && availableProgressions.Contains(x.TargetProgressionPathId)
             )
             .ToList();
 
