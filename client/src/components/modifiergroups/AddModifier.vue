@@ -81,7 +81,7 @@ const targetPaths = computed(() => {
 
     <FormDropdownWrapper
       v-if="targetPaths.length > 0"
-      v-model="form.fields.targetPath"
+      v-model="form.fields.targetProgressionPath"
       :options="targetPaths"
       option-label="name"
     />

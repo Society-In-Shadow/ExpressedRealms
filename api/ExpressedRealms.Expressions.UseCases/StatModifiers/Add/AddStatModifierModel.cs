@@ -10,4 +10,5 @@ public class AddStatModifierModel
     public bool CreationSpecificBonus { get; set; }
     public int StatModifierId { get; set; }
     public int? TargetExpressionId { get; set; }
+    public int? TargetProgressionPathId { get; set; }
 }

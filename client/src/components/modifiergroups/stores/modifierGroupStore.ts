@@ -57,6 +57,7 @@ const modifierGroupStore
         response.data.modifiers.forEach((modifier) => {
           modifier.statModifier = this.modifierTypes.find(x => x.id == modifier.statModifierId)
           modifier.targetExpression = this.expressions.find(x => x.id == modifier.targetExpressionId)
+          modifier.targetProgressionPath = this.expressions.find(x => x.id == modifier.targetExpressionId)!.progressionPaths.find(x => x.id == modifier.targetProgressionPathId)
         })
 
         this.statModifiers.set(groupId, response.data.modifiers)
@@ -79,6 +80,7 @@ const modifierGroupStore
           creationSpecificBonus: values.creationSpecificBonus,
           statModifierId: values.modifierType.id,
           targetExpressionId: values.targetExpression?.id,
+          targetProgressionPathId: values.targetProgressionPath?.id,
         })
           .then(async () => {
             await this.getModifiers(groupId)
@@ -101,6 +103,7 @@ const modifierGroupStore
           creationSpecificBonus: values.creationSpecificBonus,
           statModifierId: values.modifierType.id,
           targetExpressionId: values.targetExpression?.id ?? null,
+          targetProgressionPathId: values.targetProgressionPath?.id ?? null,
         } as CreateStatModifier)
           .then(async (response) => {
             newGroupId = response.data.groupId

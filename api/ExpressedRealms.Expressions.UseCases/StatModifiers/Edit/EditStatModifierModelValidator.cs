@@ -29,13 +29,6 @@ internal sealed class EditStatModifierModelValidator : AbstractValidator<EditSta
             )
             .WithMessage("Stat Modifier does not exist.");
 
-        RuleFor(x => x.TargetExpressionId)
-            .MustAsync(
-                async (x, y) => await expressionRepository.ExpressionExistsForModifiers(x!.Value)
-            )
-            .When(x => x.TargetExpressionId.HasValue)
-            .WithMessage("The Expression does not exist.");
-
         RuleFor(x => x.Source).IsInEnum();
     }
 }

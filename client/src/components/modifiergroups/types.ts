@@ -47,6 +47,8 @@ export interface StatModifierReturnModel {
   statModifier: StatModifier
   targetExpression: StatModifier
   targetExpressionId: number | null
+  targetProgressionPathId: number | null
+  targetProgressionPath: StatModifier | null
   modifier: number
   scaleWithLevel: boolean
   creationSpecificBonus: boolean

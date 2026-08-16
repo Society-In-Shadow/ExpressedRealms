@@ -8,4 +8,5 @@ public class StatModifierReturnModel
     public bool ScaleWithLevel { get; set; }
     public bool CreationSpecificBonus { get; set; }
     public int? TargetExpressionId { get; set; }
+    public int? TargetProgressionPathId { get; set; }
 }
