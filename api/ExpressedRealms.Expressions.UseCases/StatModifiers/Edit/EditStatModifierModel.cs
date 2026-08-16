@@ -12,4 +12,5 @@ public class EditStatModifierModel
     public int StatModifierId { get; set; }
     public int? TargetExpressionId { get; set; }
     public SourceTableEnum Source { get; set; }
+    public int? TargetProgressionPathId { get; set; }
 }

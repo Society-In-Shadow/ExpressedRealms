@@ -1,3 +1,5 @@
+import type { ListItem } from '@/types/ListItem.ts'
+
 export enum SourceTableEnum {
   ProgressionLevels = 1,
   Blessings = 2,
@@ -18,6 +20,17 @@ export interface StatModifiersResponse {
   modifiers: Array<StatModifierReturnModel>
 }
 
+export interface StatModifierOptionResponse {
+  modifierTypes: Array<StatModifier>
+  expressions: Array<ExpressionInfo>
+}
+
+export interface ExpressionInfo {
+  id: number
+  name: string
+  progressionPaths: Array<ListItem>
+}
+
 export interface StatModifier {
   id: number
   name: string
@@ -34,6 +47,8 @@ export interface StatModifierReturnModel {
   statModifier: StatModifier
   targetExpression: StatModifier
   targetExpressionId: number | null
+  targetProgressionPathId: number | null
+  targetProgressionPath: StatModifier | null
   modifier: number
   scaleWithLevel: boolean
   creationSpecificBonus: boolean

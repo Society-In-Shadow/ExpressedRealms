@@ -24,6 +24,7 @@ internal static class CreateStatModifierNoGroupEndpoint
                 StatModifierGroupId = null,
                 StatModifierId = request.StatModifierId,
                 TargetExpressionId = request.TargetExpressionId,
+                TargetProgressionPathId = request.TargetProgressionPathId,
             }
         );
 

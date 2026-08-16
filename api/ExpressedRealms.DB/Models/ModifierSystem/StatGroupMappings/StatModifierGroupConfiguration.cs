@@ -35,5 +35,11 @@ public class StatGroupMappingConfiguration : IEntityTypeConfiguration<StatGroupM
             .WithMany(e => e.StatGroupMappings)
             .HasForeignKey(e => e.TargetExpressionId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder
+            .HasOne(e => e.ProgressionPath)
+            .WithMany(e => e.StatGroupMappings)
+            .HasForeignKey(e => e.TargetProgressionPathId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -24,6 +24,7 @@ using ExpressedRealms.DB.Models.Factions.CharacterFactionMappingModels;
 using ExpressedRealms.DB.Models.Factions.FactionLevelModels.Audit;
 using ExpressedRealms.DB.Models.Factions.FactionModels.Audit;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Audit;
+using ExpressedRealms.DB.Models.ModifierSystem.StatGroupMappings.Audit;
 using ExpressedRealms.DB.Models.Powers.PowerPathSetup;
 using ExpressedRealms.DB.Models.Powers.PowerSetup.Audit;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
@@ -83,4 +84,6 @@ public class User : IdentityUser
         new HashSet<FactionLevelAuditTrail>();
     public virtual ICollection<CharacterFactionMapping> CharacterFactionMappings { get; set; } =
         new HashSet<CharacterFactionMapping>();
+    public virtual ICollection<StatGroupMappingAuditTrail> StatGroupMappingAuditTrails { get; set; } =
+        new HashSet<StatGroupMappingAuditTrail>();
 }

@@ -4,6 +4,7 @@ using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionLevels;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionLevels.Audit;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths.Audit;
+using ExpressedRealms.DB.Models.ModifierSystem.StatGroupMappings;
 
 namespace ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths;
 
@@ -29,4 +30,7 @@ public class ProgressionPath : ISoftDelete
     public List<ProgressionLevelAuditTrail> ProgressionLevelAuditTrails { get; set; } = null!;
     public virtual ICollection<ProgressionPath> Clones { get; set; } =
         new HashSet<ProgressionPath>();
+
+    public virtual ICollection<StatGroupMapping> StatGroupMappings { get; set; } =
+        new HashSet<StatGroupMapping>();
 }

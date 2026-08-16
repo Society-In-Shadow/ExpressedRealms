@@ -15,7 +15,6 @@ public interface IExpressionRepository
     Task<Expression?> GetExpressionForDeletion(int id);
     Task<Expression?> ExpressionExists(int id);
     Task<bool> ExpressionTypeExists(int id);
-    Task<List<Expression>> GetAllEnabledExpressions();
     Task<bool> ExpressionExistsForModifiers(int id);
     Task<Result<GetExpressionDto>> CheckUserPermissionsForExpressionEdit(int expressionId);
     Task<Result<GetExpressionDto>> CheckUserPermissionsForExpressionDelete(int expressionId);
@@ -23,4 +22,5 @@ public interface IExpressionRepository
     Task<Result<GetExpressionDto>> CheckUserPermissionsForExpressionView(int expressionId);
     Task<bool> ExpressionIsExpressionType(int expressionId);
     Task<bool> HasDuplicateName(string name, int expressionId = 0);
+    Task<List<ExpressionInfoForModifiersProjection>> GetAllEnabledExpressionAndSubpaths();
 }

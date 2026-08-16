@@ -45,7 +45,7 @@ function formatWithSign(number: number) {
         <span title="Use this to bypass modifier being multiplied by level 0">IL0</span>
       </Tag>
       <Tag v-if="props.modifier?.targetExpression" severity="info" class="ml-2">
-        <span>{{ props.modifier.targetExpression.name }}</span>
+        <span>{{ props.modifier.targetExpression.name }}</span><span v-if="props.modifier.targetProgressionPath"> - {{ props.modifier.targetProgressionPath.name }}</span>
       </Tag>
     </div>
     <div

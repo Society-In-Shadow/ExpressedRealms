@@ -3,7 +3,7 @@
 import FormDropdownWrapper from '@/FormWrappers/FormDropdownWrapper.vue'
 import { getValidationInstance } from '@/components/modifiergroups/validations/modifierValidations'
 import Button from 'primevue/button'
-import { onBeforeMount, type PropType } from 'vue'
+import { computed, onBeforeMount, type PropType } from 'vue'
 import ModifierGroupStore from '@/components/modifiergroups/stores/modifierGroupStore.ts'
 import FormInputNumberWrapper from '@/FormWrappers/FormInputNumberWrapper.vue'
 import FormCheckboxWrapper from '@/FormWrappers/FormCheckboxWrapper.vue'
@@ -49,6 +49,14 @@ const cancel = () => {
   emit('canceled')
 }
 
+const targetPaths = computed(() => {
+  const targetExpression = form.fields.targetExpression.field.value
+
+  if (!targetExpression)
+    return []
+
+  return store.expressions.find(x => x.id === targetExpression.id)?.progressionPaths ?? []
+})
 </script>
 
 <template>
@@ -68,6 +76,13 @@ const cancel = () => {
     <FormDropdownWrapper
       v-model="form.fields.targetExpression"
       :options="store.expressions"
+      option-label="name"
+    />
+
+    <FormDropdownWrapper
+      v-if="targetPaths.length > 0"
+      v-model="form.fields.targetProgressionPath"
+      :options="targetPaths"
       option-label="name"
     />
 

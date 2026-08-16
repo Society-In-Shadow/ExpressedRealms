@@ -39,6 +39,8 @@ using ExpressedRealms.DB.Models.Factions.FactionModels;
 using ExpressedRealms.DB.Models.Factions.FactionModels.Audit;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Audit;
+using ExpressedRealms.DB.Models.ModifierSystem.StatGroupMappings;
+using ExpressedRealms.DB.Models.ModifierSystem.StatGroupMappings.Audit;
 using ExpressedRealms.DB.Models.Powers;
 using ExpressedRealms.DB.Models.Powers.PowerPathSetup;
 using ExpressedRealms.DB.Models.Powers.PowerPathSetup.Audit;
@@ -108,6 +110,9 @@ public static class ProcessChangedRecords
             ),
             nameof(Faction) => FactionAuditTrailExtensions.ProcessChangedRecords(changedRecords),
             nameof(FactionLevel) => FactionLevelAuditTrailExtensions.ProcessChangedRecords(
+                changedRecords
+            ),
+            nameof(StatGroupMapping) => StatGroupMappingAuditTrailExtensions.ProcessChangedRecords(
                 changedRecords
             ),
             _ => throw new ArgumentException(

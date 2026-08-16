@@ -1,14 +1,16 @@
 import { boolean, type InferType, number, object } from 'yup'
 import { useGenericForm } from '@/utilities/formUtilities'
 import type { ListItem } from '@/types/ListItem'
-import type { StatModifierReturnModel } from '@/components/modifiergroups/types.ts'
+import type { ExpressionInfo, StatModifierReturnModel } from '@/components/modifiergroups/types.ts'
 
 const validationSchema = object({
   modifierType: object<ListItem>().nullable()
     .required()
     .label('Modifier Type'),
-  targetExpression: object<ListItem>().nullable()
+  targetExpression: object<ExpressionInfo>().nullable()
     .label('Target Expression'),
+  targetProgressionPath: object<ListItem>().nullable()
+    .label('Target Path'),
   modifier: number().required()
     .label('Modifier'),
   creationSpecificBonus: boolean()
@@ -28,6 +30,7 @@ export function getValidationInstance() {
     form.fields.scaleWithLevel.field.value = model.scaleWithLevel
     form.fields.modifierType.field.value = model.statModifier
     form.fields.targetExpression.field.value = model.targetExpression
+    form.fields.targetProgressionPath.field.value = model.targetProgressionPath
   }
 
   const customResetForm = () => {

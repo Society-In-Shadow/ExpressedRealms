@@ -37,6 +37,7 @@ internal sealed class GetModifiersUseCase(
                     Id = x.Id,
                     StatModifierId = x.StatModifierId,
                     TargetExpressionId = x.TargetExpressionId,
+                    TargetProgressionPathId = x.TargetProgressionPathId,
                 })
                 .ToList()
         );

@@ -23,6 +23,7 @@ using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPath
 using ExpressedRealms.DB.Models.Factions.FactionLevelModels.Audit;
 using ExpressedRealms.DB.Models.Factions.FactionModels.Audit;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Audit;
+using ExpressedRealms.DB.Models.ModifierSystem.StatGroupMappings.Audit;
 using ExpressedRealms.DB.Models.Powers.PowerPathSetup.Audit;
 using ExpressedRealms.DB.Models.Powers.PowerSetup.Audit;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
@@ -71,6 +72,7 @@ public static class SetupDatabaseAudit
                             .AddCharacterAuditTrailMapping()
                             .AddFactionAuditTrailMapping()
                             .AddFactionLevelAuditTrailMapping()
+                            .AddStatGroupMappingAuditTrailMapping()
                             .AuditEntityAction<IAuditTable>(
                                 (evt, entry, audit) =>
                                 {

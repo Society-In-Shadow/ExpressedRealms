@@ -54,13 +54,6 @@ internal sealed class AddStatModifierModelValidator : AbstractValidator<AddStatM
             .MustAsync(async (x, y) => await statModifierRepository.ModifierTypeExists(x))
             .WithMessage("The Stat Modifier does not exist.");
 
-        RuleFor(x => x.TargetExpressionId)
-            .MustAsync(
-                async (x, y) => await expressionRepository.ExpressionExistsForModifiers(x!.Value)
-            )
-            .When(x => x.TargetExpressionId.HasValue)
-            .WithMessage("The Expression does not exist.");
-
         RuleFor(x => x.SourceTable).IsInEnum();
     }
 }

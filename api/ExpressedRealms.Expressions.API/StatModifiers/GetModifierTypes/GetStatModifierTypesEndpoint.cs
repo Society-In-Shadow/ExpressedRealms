@@ -27,7 +27,18 @@ internal static class GetStatModifierTypesEndpoint
                     .Value.ModifierTypes.Select(x => new ListItem() { Id = x.Id, Name = x.Name })
                     .ToList(),
                 Expressions = modifierTypeResults
-                    .Value.Expressions.Select(x => new ListItem() { Id = x.Key, Name = x.Value })
+                    .Value.Expressions.Select(x => new ExpressionReturnModel()
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        ProgressionPaths = x
+                            .ProgressionPaths.Select(y => new ProgressionPath()
+                            {
+                                Id = y.Id,
+                                Name = y.Name,
+                            })
+                            .ToList(),
+                    })
                     .ToList(),
             }
         );

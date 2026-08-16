@@ -3,8 +3,10 @@ import axios from 'axios'
 import toaster from '@/services/Toasters'
 import {
   type CreateStatModifier,
+  type ExpressionInfo,
   SourceTableEnum,
   type StatModifier,
+  type StatModifierOptionResponse,
   type StatModifierReturnModel,
   type StatModifiersResponse,
 } from '@/components/modifiergroups/types.ts'
@@ -16,7 +18,7 @@ const modifierGroupStore
     state: () => {
       return {
         modifierTypes: [] as StatModifier[],
-        expressions: [] as StatModifier[],
+        expressions: [] as ExpressionInfo[],
         haveModifierTypes: false,
         statModifiers: new Map<number, StatModifierReturnModel[]>(),
         sourceType: null as SourceTableEnum | null,
@@ -41,7 +43,7 @@ const modifierGroupStore
         if (this.haveModifierTypes)
           return
 
-        await axios.get(`/modifiergroups/${this.sourceTypeName}/modifiers/options`)
+        await axios.get<StatModifierOptionResponse>(`/modifiergroups/${this.sourceTypeName}/modifiers/options`)
           .then((response) => {
             this.modifierTypes = response.data.modifierTypes
             this.expressions = response.data.expressions
@@ -55,6 +57,7 @@ const modifierGroupStore
         response.data.modifiers.forEach((modifier) => {
           modifier.statModifier = this.modifierTypes.find(x => x.id == modifier.statModifierId)
           modifier.targetExpression = this.expressions.find(x => x.id == modifier.targetExpressionId)
+          modifier.targetProgressionPath = this.expressions.find(x => x.id == modifier.targetExpressionId)!.progressionPaths.find(x => x.id == modifier.targetProgressionPathId)
         })
 
         this.statModifiers.set(groupId, response.data.modifiers)
@@ -77,6 +80,7 @@ const modifierGroupStore
           creationSpecificBonus: values.creationSpecificBonus,
           statModifierId: values.modifierType.id,
           targetExpressionId: values.targetExpression?.id,
+          targetProgressionPathId: values.targetProgressionPath?.id,
         })
           .then(async () => {
             await this.getModifiers(groupId)
@@ -99,6 +103,7 @@ const modifierGroupStore
           creationSpecificBonus: values.creationSpecificBonus,
           statModifierId: values.modifierType.id,
           targetExpressionId: values.targetExpression?.id ?? null,
+          targetProgressionPathId: values.targetProgressionPath?.id ?? null,
         } as CreateStatModifier)
           .then(async (response) => {
             newGroupId = response.data.groupId
