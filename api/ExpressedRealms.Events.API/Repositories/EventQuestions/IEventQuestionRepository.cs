@@ -1,4 +1,5 @@
 using ExpressedRealms.DB.Models.Events.Questions.EventQuestionSetup;
+using ExpressedRealms.Events.API.Repositories.EventQuestions.Dtos;
 using ExpressedRealms.Shared;
 
 namespace ExpressedRealms.Events.API.Repositories.EventQuestions;
@@ -13,4 +14,5 @@ public interface IEventQuestionRepository : IGenericRepository
     Task<bool> IsExistingEventQuestion(int eventId, int eventQuestionId);
     Task<List<EventQuestion>> GetEventQuestionsForEvent(int modelEventId);
     Task AddDefaultQuestionsToEvent(List<EventQuestion> defaultQuestions);
+    Task<List<QuestionResponseDto>> GetAllQuestionResponsesForEvent(int eventId);
 }

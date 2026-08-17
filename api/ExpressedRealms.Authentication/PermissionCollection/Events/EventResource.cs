@@ -87,5 +87,13 @@ public static partial class Permissions
             Description =
                 "Allows a user to modify the default event template, such as scheduled events and questions",
         };
+        
+        public static readonly Permission ViewQuestionResponses = new(ResourceInfo)
+        {
+            Id = new Guid("01a01173-2817-75be-9753-43517927b779"),
+            Name = nameof(ViewQuestionResponses),
+            Description =
+                "Allows one to see the responses to all questions on the events page",
+        };
     }
 }

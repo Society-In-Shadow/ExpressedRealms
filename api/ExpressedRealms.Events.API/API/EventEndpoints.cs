@@ -17,8 +17,10 @@ using ExpressedRealms.Events.API.API.EventQuestions.Create;
 using ExpressedRealms.Events.API.API.EventQuestions.Delete;
 using ExpressedRealms.Events.API.API.EventQuestions.Edit;
 using ExpressedRealms.Events.API.API.EventQuestions.Get;
+using ExpressedRealms.Events.API.API.EventQuestions.GetAllAnswers;
 using ExpressedRealms.Events.API.API.Events.Create;
 using ExpressedRealms.Events.API.API.Events.Delete;
+using ExpressedRealms.Events.API.API.Events.Edit;
 using ExpressedRealms.Events.API.API.Events.Get;
 using ExpressedRealms.Events.API.API.Events.GetConSummaryReport;
 using ExpressedRealms.Events.API.API.Events.GetEvent;
@@ -31,7 +33,6 @@ using ExpressedRealms.Events.API.API.EventScheduleItem.Get;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
-using EditEventEndpoint = ExpressedRealms.Events.API.API.Events.Edit.EditEventEndpoint;
 
 namespace ExpressedRealms.Events.API.API;
 
@@ -57,6 +58,10 @@ internal static class EventEndpoints
         endpointGroup
             .MapGet("{id}", GetEventEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Event.Edit);
+        
+        endpointGroup
+            .MapGet("{id}/questionResponses", GetEventQuestionResponsesEndpoint.ExecuteAsync)
+            .RequirePermission(Permissions.Event.ViewQuestionResponses);
 
         endpointGroup
             .MapDelete("{id}", DeleteEventEndpoint.ExecuteAsync)
