@@ -61,7 +61,7 @@ internal sealed class EventQuestionRepository(
                 QuestionId = x.EventQuestionId,
                 Question = x.EventQuestion.Question,
                 PlayerName = $"{x.Checkin.Player.Name} ({x.Checkin.Player.PlayerNumber})",
-                Approver = $"{x.ActorUser.Player.Name} ({x.ActorUser.Player.PlayerNumber})",
+                Approver = $"{x.ActorUser.Player!.Name} ({x.ActorUser.Player.PlayerNumber})",
                 ApprovalDate = x.Timestamp,
                 Answer = x.ChangedProperties,
             })
