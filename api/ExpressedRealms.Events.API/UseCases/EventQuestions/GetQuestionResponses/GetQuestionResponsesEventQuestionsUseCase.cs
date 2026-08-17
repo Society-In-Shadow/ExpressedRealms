@@ -10,7 +10,9 @@ internal sealed class GetEventQuestionResponsesUseCase(
     CancellationToken cancellationToken
 ) : IGetEventQuestionResponsesUseCase
 {
-    public async Task<Result<List<AnsweredQuestionReturnModel>>> ExecuteAsync(GetEventQuestionResponsesModel model)
+    public async Task<Result<List<AnsweredQuestionReturnModel>>> ExecuteAsync(
+        GetEventQuestionResponsesModel model
+    )
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,
@@ -32,7 +34,7 @@ internal sealed class GetEventQuestionResponsesUseCase(
                     Approver = x.Approver,
                     ApprovalDate = x.ApprovalDate,
                     Question = x.Question,
-                    Answer = x.Answer
+                    Answer = x.Answer,
                 })
                 .ToList()
         );

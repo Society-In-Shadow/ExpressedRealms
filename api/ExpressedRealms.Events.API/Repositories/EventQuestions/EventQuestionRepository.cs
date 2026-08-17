@@ -51,11 +51,11 @@ internal sealed class EventQuestionRepository(
     {
         return context.EventQuestions.Where(x => x.EventId == modelEventId).ToListAsync();
     }
-    
+
     public async Task<List<QuestionResponseDto>> GetAllQuestionResponsesForEvent(int eventId)
     {
-        var responses = await context.CheckinQuestionResponseAuditTrails
-            .Where(x => x.Checkin.EventId == eventId)
+        var responses = await context
+            .CheckinQuestionResponseAuditTrails.Where(x => x.Checkin.EventId == eventId)
             .Select(x => new QuestionResponseDto()
             {
                 QuestionId = x.EventQuestionId,
@@ -63,21 +63,25 @@ internal sealed class EventQuestionRepository(
                 PlayerName = $"{x.Checkin.Player.Name} ({x.Checkin.Player.PlayerNumber})",
                 Approver = $"{x.ActorUser.Player.Name} ({x.ActorUser.Player.PlayerNumber})",
                 ApprovalDate = x.Timestamp,
-                Answer = x.ChangedProperties
+                Answer = x.ChangedProperties,
             })
             .ToListAsync(cancellationToken);
-        
-        var result = responses.Select(x => new QuestionResponseDto()
-        {
-            QuestionId = x.QuestionId,
-            PlayerName = x.PlayerName,
-            Approver = x.Approver,
-            ApprovalDate = x.ApprovalDate,
-            Question = x.Question,
-            Answer = JsonSerializer.Deserialize<List<ChangedRecord>>(x.Answer)?
-                .FirstOrDefault(p => p.ColumnName == "response")?
-                .NewValue ?? String.Empty
-        }).ToList();
+
+        var result = responses
+            .Select(x => new QuestionResponseDto()
+            {
+                QuestionId = x.QuestionId,
+                PlayerName = x.PlayerName,
+                Approver = x.Approver,
+                ApprovalDate = x.ApprovalDate,
+                Question = x.Question,
+                Answer =
+                    JsonSerializer
+                        .Deserialize<List<ChangedRecord>>(x.Answer)
+                        ?.FirstOrDefault(p => p.ColumnName == "response")
+                        ?.NewValue ?? String.Empty,
+            })
+            .ToList();
 
         return result;
     }

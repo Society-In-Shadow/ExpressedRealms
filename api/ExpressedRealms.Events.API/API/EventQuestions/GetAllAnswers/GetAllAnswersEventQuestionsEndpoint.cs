@@ -12,7 +12,7 @@ public static class GetEventQuestionResponsesEndpoint
         Results<Ok<GetEventQuestionResponsesResponse>, ValidationProblem, NotFound>
     > ExecuteAsync(int id, [FromServices] IGetEventQuestionResponsesUseCase useCase)
     {
-        var results = await useCase.ExecuteAsync(new () { EventId = id });
+        var results = await useCase.ExecuteAsync(new() { EventId = id });
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;
@@ -33,7 +33,7 @@ public static class GetEventQuestionResponsesEndpoint
                         Approver = x.Approver,
                         ApprovalDate = x.ApprovalDate,
                         Question = x.Question,
-                        Answer = x.Answer
+                        Answer = x.Answer,
                     })
                     .ToList(),
             }
