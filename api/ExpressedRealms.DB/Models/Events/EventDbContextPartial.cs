@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup.Audit;
 using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup;
 using ExpressedRealms.DB.Models.Events.EventSetup;
 using ExpressedRealms.DB.Models.Events.Questions.EventQuestionSetup;
@@ -14,4 +15,5 @@ public partial class ExpressedRealmsDbContext
     public DbSet<EventScheduleItem> EventScheduleItems { get; set; }
     public DbSet<QuestionType> QuestionTypes { get; set; }
     public DbSet<EventQuestion> EventQuestions { get; set; }
+    public DbSet<CheckinQuestionResponseAuditTrail> CheckinQuestionResponseAuditTrails { get; set; }
 }

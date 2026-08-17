@@ -44,6 +44,7 @@ export const UserPermissions = {
     GoApproval: 'event.goapproval',
     DownloadConSummaryReport: 'event.downloadconsummaryreport',
     ModifyDefaults: 'event.modifydefaults',
+    ViewQuestionResponses: 'event.viewquestionresponses',
   } as const,
   EventScheduleItem: {
     Edit: 'eventscheduleitem.edit',

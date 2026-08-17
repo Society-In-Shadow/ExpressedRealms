@@ -1,6 +1,9 @@
+using System.Text.Json;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Helpers;
+using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Events.Questions.EventQuestionSetup;
+using ExpressedRealms.Events.API.Repositories.EventQuestions.Dtos;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Events.API.Repositories.EventQuestions;
@@ -47,6 +50,40 @@ internal sealed class EventQuestionRepository(
     public Task<List<EventQuestion>> GetEventQuestionsForEvent(int modelEventId)
     {
         return context.EventQuestions.Where(x => x.EventId == modelEventId).ToListAsync();
+    }
+
+    public async Task<List<QuestionResponseDto>> GetAllQuestionResponsesForEvent(int eventId)
+    {
+        var responses = await context
+            .CheckinQuestionResponseAuditTrails.Where(x => x.Checkin.EventId == eventId)
+            .Select(x => new QuestionResponseDto()
+            {
+                QuestionId = x.EventQuestionId,
+                Question = x.EventQuestion.Question,
+                PlayerName = $"{x.Checkin.Player.Name} ({x.Checkin.Player.PlayerNumber})",
+                Approver = $"{x.ActorUser.Player!.Name} ({x.ActorUser.Player.PlayerNumber})",
+                ApprovalDate = x.Timestamp,
+                Answer = x.ChangedProperties,
+            })
+            .ToListAsync(cancellationToken);
+
+        var result = responses
+            .Select(x => new QuestionResponseDto()
+            {
+                QuestionId = x.QuestionId,
+                PlayerName = x.PlayerName,
+                Approver = x.Approver,
+                ApprovalDate = x.ApprovalDate,
+                Question = x.Question,
+                Answer =
+                    JsonSerializer
+                        .Deserialize<List<ChangedRecord>>(x.Answer)
+                        ?.FirstOrDefault(p => p.ColumnName == "response")
+                        ?.NewValue ?? String.Empty,
+            })
+            .ToList();
+
+        return result;
     }
 
     public async Task AddDefaultQuestionsToEvent(List<EventQuestion> defaultQuestions)

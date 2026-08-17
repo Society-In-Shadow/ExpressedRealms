@@ -20,6 +20,7 @@ import { formatDate } from '@/utilities/dateUtilities.ts'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 import EventQuestionList from '@/components/admin/eventQuestions/EventQuestionList.vue'
 import axios from 'axios'
+import QuestionResponses from '@/components/admin/eventQuestions/QuestionResponses.vue'
 
 const route = useRoute()
 const eventData = EventStore()
@@ -107,6 +108,9 @@ const showCharacterActivityTab = computed(() => {
           <Tab v-if="showEventQuestionsTab" value="3">
             Questions
           </Tab>
+          <Tab v-if="permissionCheck.Event.ViewQuestionResponses" value="4">
+            Question Responses
+          </Tab>
           <Tab v-if="showScheduleTab" value="1">
             Schedule
           </Tab>
@@ -126,6 +130,9 @@ const showCharacterActivityTab = computed(() => {
           </TabPanel>
           <TabPanel v-if="showEventQuestionsTab" value="3">
             <EventQuestionList :event-id="eventId" />
+          </TabPanel>
+          <TabPanel v-if="permissionCheck.Event.ViewQuestionResponses" value="4">
+            <QuestionResponses :event-id="eventId" />
           </TabPanel>
         </TabPanels>
       </Tabs>
