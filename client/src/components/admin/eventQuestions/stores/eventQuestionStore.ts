@@ -2,19 +2,34 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 
 import toaster from '@/services/Toasters'
-import type { EventQuestionResponse, Question } from '@/components/admin/eventQuestions/types.ts'
+import type {
+  EventQuestionResponse,
+  Question,
+  QuestionResponse,
+  QuestionResponses,
+} from '@/components/admin/eventQuestions/types.ts'
 import type { ListItem } from '@/types/ListItem.ts'
 import type { EventQuestionForm } from '@/components/admin/eventQuestions/validations/eventQuestionValidation.ts'
+import { DateTime } from 'luxon'
 
 export const EventQuestionStore
   = defineStore(`EventQuestion`, {
     state: () => {
       return {
         questions: {} as Question[],
+        questionResponses: [] as QuestionResponse[],
         questionTypes: [] as ListItem[],
       }
     },
     actions: {
+      async getQuestionResponses(eventId: number) {
+        const response = await axios.get<QuestionResponses>(`/events/${eventId}/questionResponses`)
+
+        for (const item of response.data.responses) {
+          item.approvalDate = DateTime.fromISO(`${item.approvalDate}`)
+        }
+        this.questionResponses = response.data.responses
+      },
       async getItems(eventId: number) {
         this.questionTypes = [{
           id: 2,

@@ -10,3 +10,16 @@ export interface Question {
   questionTypeId: number
   questionType: ListItem | null
 }
+
+export interface QuestionResponse {
+  questionId: number | string
+  playerName: string
+  approver: string
+  answer: string
+  question: string
+  approvalDate?: string
+}
+
+export interface QuestionResponses {
+  responses: QuestionResponse[]
+}
