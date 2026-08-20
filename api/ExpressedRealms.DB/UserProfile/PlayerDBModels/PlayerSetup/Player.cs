@@ -1,6 +1,7 @@
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Models.Characters;
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
+using ExpressedRealms.DB.Models.Characters.CharacterStorage.CharacterStorageModels;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerAgeGroupSetup;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup;
@@ -31,4 +32,6 @@ public class Player
 
     public virtual List<AssignedXpMapping> AssignedXpMappings { get; set; } = null!;
     public virtual ICollection<Checkin> Checkins { get; set; } = new HashSet<Checkin>();
+    public ICollection<CharacterStorageInfo> CharacterStorageCollectorUsers { get; set; }  = new HashSet<CharacterStorageInfo>();
+    public ICollection<CharacterStorageInfo> CharacterStorageSignOffUsers { get; set; }  = new HashSet<CharacterStorageInfo>();
 }

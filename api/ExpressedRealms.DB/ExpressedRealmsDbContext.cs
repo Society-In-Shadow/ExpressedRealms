@@ -1,11 +1,6 @@
 using System.Reflection;
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Configuration;
-using ExpressedRealms.DB.Models.Characters;
-using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
-using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels;
-using ExpressedRealms.DB.Models.Characters.Audit;
-using ExpressedRealms.DB.Models.Characters.XpTables;
 using ExpressedRealms.DB.Models.Skills;
 using ExpressedRealms.DB.Models.Statistics;
 using ExpressedRealms.DB.Models.Statistics.CharacterStatMappings;
@@ -42,8 +37,6 @@ namespace ExpressedRealms.DB
             SetupDatabaseAudit.SetupAudit();
         }
 
-        public DbSet<Character> Characters { get; set; }
-        public DbSet<CharacterAuditTrail> CharacterAuditTrails { get; set; }
         public DbSet<Player> Players { get; set; }
         public DbSet<UserAuditTrail> UserAuditTrails { get; set; }
         public DbSet<PlayerAuditTrail> PlayerAuditTrails { get; set; }
@@ -58,10 +51,6 @@ namespace ExpressedRealms.DB
         public DbSet<SkillSubType> SkillSubTypes { get; set; }
         public DbSet<SkillType> SkillTypes { get; set; }
         public DbSet<SkillLevelDescriptionMapping> SkillLevelDescriptionMappings { get; set; }
-        public DbSet<CharacterXpMapping> CharacterXpMappings { get; set; }
-        public DbSet<XpSectionType> XpSectionTypes { get; set; }
-        public DbSet<CharacterXpView> CharacterXpViews { get; set; }
-        public DbSet<AssignedXpMapping> AssignedXpMappings { get; set; }
-        public DbSet<AssignedXpType> AssignedXpTypes { get; set; }
+        
     }
 }

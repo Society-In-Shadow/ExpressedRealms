@@ -15,6 +15,8 @@ using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels.Au
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels;
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels.Audit;
 using ExpressedRealms.DB.Models.Characters.Audit;
+using ExpressedRealms.DB.Models.Characters.CharacterStorage.CharacterStorageModels;
+using ExpressedRealms.DB.Models.Characters.CharacterStorage.CharacterStorageModels.Audit;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup.Audit;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
@@ -113,6 +115,9 @@ public static class ProcessChangedRecords
                 changedRecords
             ),
             nameof(StatGroupMapping) => StatGroupMappingAuditTrailExtensions.ProcessChangedRecords(
+                changedRecords
+            ),
+            nameof(CharacterStorageInfo) => CharacterStorageInfoAuditTrailExtensions.ProcessChangedRecords(
                 changedRecords
             ),
             _ => throw new ArgumentException(
