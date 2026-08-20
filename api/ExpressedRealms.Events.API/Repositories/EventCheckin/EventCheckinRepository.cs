@@ -2,6 +2,7 @@ using System.Data;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
+using ExpressedRealms.DB.Models.Characters.CharacterStorage.CharacterStorageModels;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinSecondaryStatsSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
@@ -430,5 +431,19 @@ internal sealed class EventCheckinRepository(
         );
 
         return (int)newCharacterIdParam.Value;
+    }
+
+    public Task<CharacterStorageInfo?> GetCharacterStorageInfo(Guid playerId, int eventId)
+    {
+        return context.CharacterStorageInfos
+            .Where(x => x.PlayerId == playerId && x.EventId == eventId)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+    
+    public async Task<int> AddCharacterStorageInfo(CharacterStorageInfo characterStorageInfo)
+    {
+        context.CharacterStorageInfos.Add(characterStorageInfo);
+        await context.SaveChangesAsync(cancellationToken);
+        return characterStorageInfo.Id; 
     }
 }
