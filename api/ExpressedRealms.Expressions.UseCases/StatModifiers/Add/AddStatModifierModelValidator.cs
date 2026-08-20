@@ -16,7 +16,12 @@ internal sealed class AddStatModifierModelValidator : AbstractValidator<AddStatM
         IExpressionRepository expressionRepository
     )
     {
-        RuleFor(x => x.SourceTable).NotEmpty().WithMessage("Source Table is required.").IsInEnum();
+        RuleFor(x => x.SourceTable)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty()
+            .WithMessage("Source Table is required.")
+            .IsInEnum()
+            .WithMessage("Source Table is not recognized as a valid value.");
 
         RuleFor(x => x)
             .MustAsync(
@@ -41,6 +46,7 @@ internal sealed class AddStatModifierModelValidator : AbstractValidator<AddStatM
                     }
                 }
             )
+            .When(x => Enum.IsDefined(x.SourceTable))
             .WithMessage("Source Id does not exist in the Corresponding Source Table.");
 
         RuleFor(x => x.StatModifierGroupId)
@@ -53,8 +59,6 @@ internal sealed class AddStatModifierModelValidator : AbstractValidator<AddStatM
             .WithMessage("Stat Modifier Id is required.")
             .MustAsync(async (x, y) => await statModifierRepository.ModifierTypeExists(x))
             .WithMessage("The Stat Modifier does not exist.");
-
-        RuleFor(x => x.SourceTable).IsInEnum();
         
         RuleFor(x => x.Notes).MaximumLength(1000)
             .When(x => x.Notes is not null);
