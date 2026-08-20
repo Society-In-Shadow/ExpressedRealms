@@ -39,6 +39,10 @@ internal static class StatGroupMappingAuditTrailExtensions
                 case "target_progression_path_id":
                     changedRecord.FriendlyName = "Target Progression Path";
                     break;
+                
+                case "notes":
+                    changedRecord.FriendlyName = "Notes";
+                    break;
 
                 default:
                     throw new MissingAuditColumnException(changedRecord.ColumnName);

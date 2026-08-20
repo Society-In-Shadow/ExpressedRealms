@@ -16,6 +16,7 @@ public class StatGroupMapping
     public bool CreationSpecificBonus { get; set; }
     public int? TargetExpressionId { get; set; }
     public int? TargetProgressionPathId { get; set; }
+    public string? Notes { get; set; }
     public StatModifierGroup StatModifierGroup { get; set; } = null!;
     public StatModifier StatModifier { get; set; } = null!;
     public Expression? Expression { get; set; }

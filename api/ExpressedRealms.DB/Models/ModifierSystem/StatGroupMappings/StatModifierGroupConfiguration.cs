@@ -13,6 +13,7 @@ public class StatGroupMappingConfiguration : IEntityTypeConfiguration<StatGroupM
         builder.Property(e => e.StatModifierId).IsRequired();
         builder.Property(e => e.Modifier).IsRequired();
         builder.Property(e => e.TargetExpressionId);
+        builder.Property(e => e.Notes).HasMaxLength(1000);
 
         builder.Property(e => e.CreationSpecificBonus).IsRequired().HasDefaultValue(false);
 
