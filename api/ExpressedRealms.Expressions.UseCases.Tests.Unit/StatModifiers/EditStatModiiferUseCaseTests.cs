@@ -327,8 +327,7 @@ public class EditStatModifierUseCaseTests
         await _useCase.ExecuteAsync(_model);
 
         A.CallTo(() => _repository.GetGroupMappingForEditing(_model.Id)).MustNotHaveHappened();
-        A.CallTo(() => _repository.UpdateGroupMapping(A<StatGroupMapping>._))
-            .MustNotHaveHappened();
+        A.CallTo(() => _repository.UpdateGroupMapping(A<StatGroupMapping>._)).MustNotHaveHappened();
     }
 
     [Fact]
@@ -363,10 +362,7 @@ public class EditStatModifierUseCaseTests
     public void UseCase_SourceTableEnums_WillCover_AllSourceTableEnumValues()
     {
         var expectedEnums = Enum.GetValues<SourceTableEnum>().Order().ToList();
-        var coveredEnums = SourceTableEnums
-            .Select(x => (SourceTableEnum)x)
-            .Order()
-            .ToList();
+        var coveredEnums = SourceTableEnums.Select(x => (SourceTableEnum)x).Order().ToList();
 
         Assert.Equal(expectedEnums, coveredEnums);
     }

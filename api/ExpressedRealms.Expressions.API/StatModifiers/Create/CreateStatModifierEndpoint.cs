@@ -26,7 +26,7 @@ internal static class CreateStatModifierEndpoint
                 StatModifierId = request.StatModifierId,
                 TargetExpressionId = request.TargetExpressionId,
                 TargetProgressionPathId = request.TargetProgressionPathId,
-                Notes = request.Notes
+                Notes = request.Notes,
             }
         );
 

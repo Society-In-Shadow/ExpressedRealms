@@ -101,10 +101,7 @@ public class GetModifiersUseCaseTests
 
         var result = await _useCase.ExecuteAsync(_model);
 
-        result.MustHaveValidationError(
-            nameof(GetModifiersModel.GroupId),
-            "Group Id is required."
-        );
+        result.MustHaveValidationError(nameof(GetModifiersModel.GroupId), "Group Id is required.");
     }
 
     [Fact]
@@ -114,10 +111,7 @@ public class GetModifiersUseCaseTests
 
         var result = await _useCase.ExecuteAsync(_model);
 
-        result.MustHaveValidationError(
-            nameof(GetModifiersModel.GroupId),
-            "Group does not exist."
-        );
+        result.MustHaveValidationError(nameof(GetModifiersModel.GroupId), "Group does not exist.");
     }
 
     [Fact]
@@ -198,8 +192,7 @@ public class GetModifiersUseCaseTests
     {
         await _useCase.ExecuteAsync(_model);
 
-        A.CallTo(() => _repository.GetGroupMappings(_model.GroupId))
-            .MustHaveHappenedOnceExactly();
+        A.CallTo(() => _repository.GetGroupMappings(_model.GroupId)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -241,10 +234,7 @@ public class GetModifiersUseCaseTests
     public void UseCase_SourceTableEnums_WillCover_AllSourceTableEnumValues()
     {
         var expectedEnums = Enum.GetValues<SourceTableEnum>().Order().ToList();
-        var coveredEnums = SourceTableEnums
-            .Select(x => (SourceTableEnum)x)
-            .Order()
-            .ToList();
+        var coveredEnums = SourceTableEnums.Select(x => (SourceTableEnum)x).Order().ToList();
 
         Assert.Equal(expectedEnums, coveredEnums);
     }

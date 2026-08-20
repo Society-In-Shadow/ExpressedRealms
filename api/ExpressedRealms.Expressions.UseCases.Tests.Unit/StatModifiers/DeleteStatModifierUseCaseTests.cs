@@ -199,7 +199,9 @@ public class DeleteStatModifierUseCaseTests
         A.CallTo(() => _repository.GetGroupMappingForEditing(_model.Id))
             .MustHaveHappenedOnceExactly();
 
-        A.CallTo(() => _repository.HardDeleteGroupMapping(A<StatGroupMapping>.That.IsSameAs(_dbModel)))
+        A.CallTo(() =>
+                _repository.HardDeleteGroupMapping(A<StatGroupMapping>.That.IsSameAs(_dbModel))
+            )
             .MustHaveHappenedOnceExactly();
     }
 
@@ -215,10 +217,7 @@ public class DeleteStatModifierUseCaseTests
     public void UseCase_SourceTableEnums_WillCover_AllSourceTableEnumValues()
     {
         var expectedEnums = Enum.GetValues<SourceTableEnum>().Order().ToList();
-        var coveredEnums = SourceTableEnums
-            .Select(x => (SourceTableEnum)x)
-            .Order()
-            .ToList();
+        var coveredEnums = SourceTableEnums.Select(x => (SourceTableEnum)x).Order().ToList();
 
         Assert.Equal(expectedEnums, coveredEnums);
     }

@@ -31,7 +31,6 @@ internal sealed class EditStatModifierModelValidator : AbstractValidator<EditSta
 
         RuleFor(x => x.Source).IsInEnum();
 
-        RuleFor(x => x.Notes).MaximumLength(1000)
-            .When(x => x.Notes is not null);
+        RuleFor(x => x.Notes).MaximumLength(1000).When(x => x.Notes is not null);
     }
 }

@@ -51,7 +51,8 @@ public class AddStatModifierUseCaseTests
         A.CallTo(() => _repository.GroupIdExists(_model.StatModifierGroupId.Value)).Returns(true);
         A.CallTo(() => _repository.ModifierTypeExists(_model.StatModifierId)).Returns(true);
         A.CallTo(() => _repository.AddGroup()).Returns(NewGroupId);
-        A.CallTo(() => _repository.AddStatGroupMapping(A<StatGroupMapping>._)).Returns(NewMappingId);
+        A.CallTo(() => _repository.AddStatGroupMapping(A<StatGroupMapping>._))
+            .Returns(NewMappingId);
 
         A.CallTo(() =>
                 _userContext.CurrentUserHasPermission(Permissions.ProgressionPath.EditModifiers)
@@ -102,7 +103,7 @@ public class AddStatModifierUseCaseTests
             "Source Table is required."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_SourceTable_WillFail_WhenSourceTable_IsOutsideEnumRange()
     {
@@ -219,7 +220,7 @@ public class AddStatModifierUseCaseTests
             "The length of 'Notes' must be 1000 characters or fewer. You entered 1001 characters."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_TargetExpressionId_WillFail_WhenExpressionDoesNotExist()
     {
@@ -243,7 +244,7 @@ public class AddStatModifierUseCaseTests
             "Expression does not exist"
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_TargetProgressionPathId_WillFail_WhenTargetExpressionId_IsNull()
     {
@@ -288,7 +289,7 @@ public class AddStatModifierUseCaseTests
             "This is not a valid progression path for the expression"
         );
     }
-    
+
     [Theory]
     [MemberData(nameof(SourceTableEnums))]
     public async Task UseCase_WillCheckPermission_BySourceTable(SourceTableEnum sourceTable)
@@ -386,7 +387,9 @@ public class AddStatModifierUseCaseTests
         switch (sourceTable)
         {
             case SourceTableEnum.ProgressionLevels:
-                A.CallTo(() => _repository.UpdateProgressionPathGroupId(_model.SourceId, NewGroupId))
+                A.CallTo(() =>
+                        _repository.UpdateProgressionPathGroupId(_model.SourceId, NewGroupId)
+                    )
                     .MustHaveHappenedOnceExactly();
                 break;
 
@@ -409,15 +412,12 @@ public class AddStatModifierUseCaseTests
                 throw new ArgumentOutOfRangeException(nameof(sourceTable), sourceTable, null);
         }
     }
-    
+
     [Fact]
     public void UseCase_SourceTableEnums_WillCover_AllSourceTableEnumValues()
     {
         var expectedEnums = Enum.GetValues<SourceTableEnum>().Order().ToList();
-        var coveredEnums = SourceTableEnums
-            .Select(x => (SourceTableEnum)x)
-            .Order()
-            .ToList();
+        var coveredEnums = SourceTableEnums.Select(x => (SourceTableEnum)x).Order().ToList();
 
         Assert.Equal(expectedEnums, coveredEnums);
     }

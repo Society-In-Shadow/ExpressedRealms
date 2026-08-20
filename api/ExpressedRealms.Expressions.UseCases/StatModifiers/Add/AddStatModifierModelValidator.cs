@@ -59,8 +59,7 @@ internal sealed class AddStatModifierModelValidator : AbstractValidator<AddStatM
             .WithMessage("Stat Modifier Id is required.")
             .MustAsync(async (x, y) => await statModifierRepository.ModifierTypeExists(x))
             .WithMessage("The Stat Modifier does not exist.");
-        
-        RuleFor(x => x.Notes).MaximumLength(1000)
-            .When(x => x.Notes is not null);
+
+        RuleFor(x => x.Notes).MaximumLength(1000).When(x => x.Notes is not null);
     }
 }

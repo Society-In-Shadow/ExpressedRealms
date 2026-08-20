@@ -20,10 +20,10 @@ internal sealed class GetModifierTypesUseCase(
             model,
             cancellationToken
         );
-        
+
         if (result.IsFailed)
             return Result.Fail(result.Errors);
-        
+
         if (permissionChecks.HasPermissionPolicyForStatModifiers(model.Source, out var fail))
             return fail;
 

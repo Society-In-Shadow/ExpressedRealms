@@ -25,23 +25,12 @@ public class GetModifierTypesUseCaseTests
 
     public GetModifierTypesUseCaseTests()
     {
-        _model = new GetModifierTypesModel()
-        {
-            Source = SourceTableEnum.ProgressionLevels,
-        };
+        _model = new GetModifierTypesModel() { Source = SourceTableEnum.ProgressionLevels };
 
         _modifierTypes =
         [
-            new DbStatModifier()
-            {
-                Id = 10,
-                Name = "Body",
-            },
-            new DbStatModifier()
-            {
-                Id = 11,
-                Name = "Mind",
-            },
+            new DbStatModifier() { Id = 10, Name = "Body" },
+            new DbStatModifier() { Id = 11, Name = "Mind" },
         ];
 
         _expressions =
@@ -52,16 +41,8 @@ public class GetModifierTypesUseCaseTests
                 Name = "Expression One",
                 ProgressionPaths =
                 [
-                    new ExpressionPathProjection()
-                    {
-                        Id = 30,
-                        Name = "Path One",
-                    },
-                    new ExpressionPathProjection()
-                    {
-                        Id = 31,
-                        Name = "Path Two",
-                    },
+                    new ExpressionPathProjection() { Id = 30, Name = "Path One" },
+                    new ExpressionPathProjection() { Id = 31, Name = "Path Two" },
                 ],
             },
             new ExpressionInfoForModifiersProjection()
@@ -126,7 +107,7 @@ public class GetModifierTypesUseCaseTests
             "Source is not recognized as a valid value."
         );
     }
-    
+
     [Fact]
     public async Task ValidationFor_Source_WillFail_WhenSource_IsEmpty()
     {
@@ -134,10 +115,7 @@ public class GetModifierTypesUseCaseTests
 
         var result = await _useCase.ExecuteAsync(_model);
 
-        result.MustHaveValidationError(
-            nameof(GetModifierTypesModel.Source),
-            "Source is required."
-        );
+        result.MustHaveValidationError(nameof(GetModifierTypesModel.Source), "Source is required.");
     }
 
     [Fact]
@@ -311,10 +289,7 @@ public class GetModifierTypesUseCaseTests
     public void UseCase_SourceTableEnums_WillCover_AllSourceTableEnumValues()
     {
         var expectedEnums = Enum.GetValues<SourceTableEnum>().Order().ToList();
-        var coveredEnums = SourceTableEnums
-            .Select(x => (SourceTableEnum)x)
-            .Order()
-            .ToList();
+        var coveredEnums = SourceTableEnums.Select(x => (SourceTableEnum)x).Order().ToList();
 
         Assert.Equal(expectedEnums, coveredEnums);
     }
