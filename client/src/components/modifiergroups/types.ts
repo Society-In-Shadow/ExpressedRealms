@@ -14,6 +14,7 @@ export interface CreateStatModifier {
   modifier: number
   creationSpecificBonus: boolean
   statModifierId: number
+  notes: string | undefined
 }
 
 export interface StatModifiersResponse {
@@ -52,4 +53,5 @@ export interface StatModifierReturnModel {
   modifier: number
   scaleWithLevel: boolean
   creationSpecificBonus: boolean
+  notes: string | undefined
 }

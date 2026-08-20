@@ -1,0 +1,5 @@
+
+/* Material Design Override - Allows icon to be centered with rest of text */
+.inline-icon {
+    vertical-align: bottom;
+}

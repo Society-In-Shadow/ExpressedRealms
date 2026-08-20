@@ -38,6 +38,14 @@ function formatWithSign(number: number) {
   <div v-else class="d-flex flex-column flex-md-row align-self-center justify-content-between m-2">
     <div class="align-self-center">
       {{ formatWithSign(props.modifier.modifier) }} {{ props.modifier?.statModifier.name }}
+      <span
+        v-if="props.modifier.notes"
+        v-tooltip.bottom="props.modifier.notes"
+        class="material-symbols-outlined inline-icon"
+        :title="props.modifier.notes"
+      >
+        info
+      </span>
       <Tag v-if="props.modifier?.scaleWithLevel" severity="info" class="mx-2">
         <span title="Scales with Level">SwL</span>
       </Tag>

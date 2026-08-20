@@ -1,4 +1,4 @@
-import { boolean, type InferType, number, object } from 'yup'
+import { boolean, type InferType, number, object, string } from 'yup'
 import { useGenericForm } from '@/utilities/formUtilities'
 import type { ListItem } from '@/types/ListItem'
 import type { ExpressionInfo, StatModifierReturnModel } from '@/components/modifiergroups/types.ts'
@@ -17,6 +17,9 @@ const validationSchema = object({
     .label('Include Level 0 With Scale'),
   scaleWithLevel: boolean()
     .label('Scale With Level'),
+  notes: string()
+    .max(1000)
+    .label('Notes'),
 })
 
 export type ModifierForm = InferType<typeof validationSchema>
@@ -31,6 +34,7 @@ export function getValidationInstance() {
     form.fields.modifierType.field.value = model.statModifier
     form.fields.targetExpression.field.value = model.targetExpression
     form.fields.targetProgressionPath.field.value = model.targetProgressionPath
+    form.fields.notes.field.value = model.notes
   }
 
   const customResetForm = () => {
