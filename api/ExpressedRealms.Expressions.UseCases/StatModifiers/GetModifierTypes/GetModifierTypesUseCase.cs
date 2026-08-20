@@ -1,5 +1,6 @@
 using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.Expressions.Repository.StatModifier;
+using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
 namespace ExpressedRealms.Expressions.UseCases.StatModifiers.GetModifierTypes;
@@ -7,11 +8,22 @@ namespace ExpressedRealms.Expressions.UseCases.StatModifiers.GetModifierTypes;
 internal sealed class GetModifierTypesUseCase(
     IStatModifierRepository repository,
     StatModifierPermissionChecks permissionChecks,
-    IExpressionRepository expressionRepository
+    IExpressionRepository expressionRepository,
+    GetModifierTypesModelValidator validator,
+    CancellationToken cancellationToken
 ) : IGetModifierTypesUseCase
 {
     public async Task<Result<OptionsReturnModel>> ExecuteAsync(GetModifierTypesModel model)
     {
+        var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
+            validator,
+            model,
+            cancellationToken
+        );
+        
+        if (result.IsFailed)
+            return Result.Fail(result.Errors);
+        
         if (permissionChecks.HasPermissionPolicyForStatModifiers(model.Source, out var fail))
             return fail;
 

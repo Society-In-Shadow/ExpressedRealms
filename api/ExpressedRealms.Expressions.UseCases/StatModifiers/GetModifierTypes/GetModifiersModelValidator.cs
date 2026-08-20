@@ -9,6 +9,11 @@ internal sealed class GetModifierTypesModelValidator : AbstractValidator<GetModi
 {
     public GetModifierTypesModelValidator(IStatModifierRepository statModifierRepository)
     {
-        RuleFor(x => x.Source).IsInEnum();
+        RuleFor(x => x.Source)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty()
+            .WithMessage("Source is required.")
+            .IsInEnum()
+            .WithMessage("Source is not recognized as a valid value.");
     }
 }

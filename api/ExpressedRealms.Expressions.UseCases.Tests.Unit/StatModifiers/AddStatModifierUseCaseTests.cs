@@ -409,11 +409,9 @@ public class AddStatModifierUseCaseTests
                 throw new ArgumentOutOfRangeException(nameof(sourceTable), sourceTable, null);
         }
     }
-
-    
     
     [Fact]
-    public void SourceTableEnums_WillCover_AllSourceTableEnumValues()
+    public void UseCase_SourceTableEnums_WillCover_AllSourceTableEnumValues()
     {
         var expectedEnums = Enum.GetValues<SourceTableEnum>().Order().ToList();
         var coveredEnums = SourceTableEnums
