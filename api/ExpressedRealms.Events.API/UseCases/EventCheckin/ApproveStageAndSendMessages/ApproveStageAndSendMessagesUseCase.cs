@@ -147,36 +147,54 @@ internal sealed class ApproveStageAndSendMessageUseCase(
             return Result.Fail("Stage has already been approved");
         }
 
-        var dayCheckins = new[] { 6, 7 };
-
-        var currentStage =
-            activeList.Count > 0 ? activeList.MaxBy(x => x.CreatedAt)!.CheckinStageId : 0;
+        var currentStage = activeList.Count > 0 ? activeList.MaxBy(x => x.CreatedAt)!.CheckinStageId : 0;
         var stage = CheckinStageEnum.FromValue(model.StageId);
 
         // ---- Rule 0: If first stage, skip the rest of the rules
         if (stage != CheckinStageEnum.AgeCheckApproval)
         {
             var currentStageEnum = CheckinStageEnum.FromValue(currentStage);
-            // ---- Rule 1: Sequential for stages 1–9 ----
-            if (stage.SortOrder <= 9 && stage.SortOrder != currentStageEnum.SortOrder + 1)
+            
+            // ---- Rule 1: The following stages are sequential and must go in order ----
+            var initialCheckinSequence = new List<CheckinStageEnum>()
             {
-                return Result.Fail("Stage is not next in sequence.");
+                CheckinStageEnum.AgeCheckApproval,
+                CheckinStageEnum.EventQuestionsCheck,
+                CheckinStageEnum.CharacterStorageQuestion,
+                CheckinStageEnum.AssignedXpCheck,
+                CheckinStageEnum.ShqApproval,
+                CheckinStageEnum.GoApproval,
+                CheckinStageEnum.CrbCreation,
+                CheckinStageEnum.CrbReadForPickup,
+                CheckinStageEnum.CrbPickedUp
+            };
+            
+            var requestedStageIndex = initialCheckinSequence.IndexOf(stage);
+
+            if (requestedStageIndex >= 0)
+            {
+                var currentStageIndex = initialCheckinSequence.IndexOf(currentStageEnum);
+
+                if (requestedStageIndex != currentStageIndex + 1)
+                {
+                    return Result.Fail("Stage is not next in sequence.");
+                }
             }
 
             // ---- Rule 2: Stage 10 & 11 locked until 1–5 complete ----
-            if (dayCheckins.Contains(model.StageId))
+            var dayCheckins = new[] { CheckinStageEnum.Day2Checkin, CheckinStageEnum.Day3Checkin };
+            if (dayCheckins.Contains(stage))
             {
-                var completedStageIds = activeList
-                    .Select(x => CheckinStageEnum.FromValue(x.CheckinStageId).SortOrder)
+                var completedStages = activeList
+                    .Select(x => CheckinStageEnum.FromValue(x.CheckinStageId))
                     .ToList();
-                bool firstFiveComplete = Enumerable
-                    .Range(1, 9)
-                    .All(stageId => completedStageIds.Contains(stageId));
+                
+                bool initialCheckinComplete = initialCheckinSequence.All(completedStages.Contains);
 
-                if (!firstFiveComplete)
+                if (!initialCheckinComplete)
                 {
                     return Result.Fail(
-                        "Stages 1 through 9 must be completed before day check-ins."
+                        "CRB needs to be picked up before day check-ins."
                     );
                 }
             }
