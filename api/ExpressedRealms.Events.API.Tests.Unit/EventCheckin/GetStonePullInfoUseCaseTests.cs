@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.Models.Characters.CharacterStorage.CharacterStorageModels;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
@@ -34,6 +35,7 @@ public class GetStonePullInfoUseCaseTests
             .Returns(new Checkin { Id = CheckinId });
         A.CallTo(() => _eventCheckinRepository.GetPlayerNumber(_model.LookupId)).Returns(1);
         A.CallTo(() => _eventCheckinRepository.DidBringFriendToCon(CheckinId)).Returns(false);
+        A.CallTo(() => _eventCheckinRepository.GetCharacterStorageInfo(PlayerId, EventId)).Returns(Task.FromResult<CharacterStorageInfo?>(null));
 
         A.CallTo(() => _eventCheckinRepository.GetAssignedXp(PlayerId, EventId))
             .Returns(new AssignedXpTypeDto() { TypeId = 3, Amount = 10 });
@@ -106,6 +108,14 @@ public class GetStonePullInfoUseCaseTests
         A.CallTo(() => _eventCheckinRepository.DidBringFriendToCon(CheckinId)).Returns(true);
         var results = await _useCase.ExecuteAsync(_model);
         Assert.True(results.Value.BroughtFriend);
+    }
+    
+    [Fact]
+    public async Task UseCase_WillReturn_IfTheyHaveCharacterStorage()
+    {
+        A.CallTo(() => _eventCheckinRepository.GetCharacterStorageInfo(PlayerId, EventId)).Returns(new CharacterStorageInfo());
+        var results = await _useCase.ExecuteAsync(_model);
+        Assert.True(results.Value.HasCharacterStorage);
     }
 
     [Fact]

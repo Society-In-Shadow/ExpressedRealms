@@ -51,6 +51,6 @@ public interface IEventCheckinRepository : IGenericRepository
     Task<UserCheckinPageDto> GetPlayerInfoForPlayerCheckinPage();
     Task<bool> DidBringFriendToCon(int checkinId);
     Task<int> CreatePrimaryCharacterArchiveAsync(Guid targetPlayerId);
-    Task<CharacterStorageInfo> GetCharacterStorageInfo(Guid playerId, int eventId);
+    Task<CharacterStorageInfo?> GetCharacterStorageInfo(Guid playerId, int eventId);
     Task<int> AddCharacterStorageInfo(CharacterStorageInfo characterStorageInfo);
 }

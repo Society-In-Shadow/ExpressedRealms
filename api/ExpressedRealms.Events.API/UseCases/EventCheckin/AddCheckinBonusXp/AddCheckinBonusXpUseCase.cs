@@ -1,5 +1,6 @@
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
+using ExpressedRealms.DB.Models.ModifierSystem.StatModifiers;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.Events.API.UseCases.EventCheckin.ApproveStageAndSendMessages;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
@@ -39,8 +40,13 @@ internal sealed class AddCheckinBonusXpUseCase(
         if (await checkinRepository.HasPreAssignedXpTypes(eventId.Value, playerId))
             return Result.Fail("Player already has a preassigned xp type");
 
-        // Force full xp for First Time player and brought new player
-        if (model.AssignedXpTypeId == 4 || model.AssignedXpTypeId == 5)
+        List<int> fullXpTypes =
+        [
+            AssignedXpTypeEnum.FirstTimePlayerXp,
+            AssignedXpTypeEnum.BroughtNewPlayerXp,
+            AssignedXpTypeEnum.BoughtCharacterStorage
+        ];
+        if (fullXpTypes.Contains(model.AssignedXpTypeId))
             model.Amount = 5;
 
         await checkinRepository.AddAssignedXpAsync(

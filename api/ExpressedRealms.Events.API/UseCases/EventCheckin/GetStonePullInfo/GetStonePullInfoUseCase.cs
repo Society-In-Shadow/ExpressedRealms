@@ -28,10 +28,11 @@ internal sealed class GetStonePullInfoUseCase(
 
         var isFirstTimePlayer = await checkinRepository.IsFirstTimePlayer(model.LookupId);
         var broughtFriend = await checkinRepository.DidBringFriendToCon(checkin!.Id);
-        var assignedXp = await checkinRepository.GetAssignedXp(playerId, eventId!.Value);
+        var paidForCharacterStorage = await checkinRepository.GetCharacterStorageInfo(playerId, eventId.Value);
+        var assignedXp = await checkinRepository.GetAssignedXp(playerId, eventId.Value);
 
         var hasCompletedStep = await checkinRepository.GetStageStatus(
-            checkin!.Id,
+            checkin.Id,
             CheckinStageEnum.AssignedXpCheck
         );
 
@@ -41,6 +42,7 @@ internal sealed class GetStonePullInfoUseCase(
                 HasCompletedStep = hasCompletedStep,
                 IsFirstTimeUser = isFirstTimePlayer,
                 BroughtFriend = broughtFriend,
+                HasCharacterStorage = paidForCharacterStorage is null,
                 AssignedXp = assignedXp is null
                     ? null
                     : new AssignedXpType()
