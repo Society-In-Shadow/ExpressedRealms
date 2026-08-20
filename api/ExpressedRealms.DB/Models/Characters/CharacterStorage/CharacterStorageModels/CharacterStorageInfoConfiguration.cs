@@ -9,9 +9,15 @@ public class CharacterStorageInfoConfiguration : IEntityTypeConfiguration<Charac
     {
 
         builder
-            .HasOne(x => x.CollectorUser)
+            .HasOne(x => x.Player)
+            .WithMany(x => x.CharacterStorageInfos)
+            .HasForeignKey(x => x.PlayerId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
+        builder
+            .HasOne(x => x.CollectorPlayer)
             .WithMany(x => x.CharacterStorageCollectorUsers)
-            .HasForeignKey(x => x.CollectorUserId)
+            .HasForeignKey(x => x.CollectorPlayerId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
@@ -21,9 +27,9 @@ public class CharacterStorageInfoConfiguration : IEntityTypeConfiguration<Charac
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasOne(x => x.SignOffUser)
+            .HasOne(x => x.SignOffPlayer)
             .WithMany(x => x.CharacterStorageSignOffUsers)
-            .HasForeignKey(x => x.SignOffUserId)
+            .HasForeignKey(x => x.SignOffPlayerId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

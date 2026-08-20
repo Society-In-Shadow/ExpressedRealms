@@ -19,17 +19,22 @@ public class CharacterStorageInfo
     public int EventId { get; set; }
 
     public virtual Event Event { get; set; } = null!;
+    
+    [Required]
+    public Guid PlayerId { get; set; }
+
+    public virtual Player Player { get; set; } = null!;
 
     [Required]
-    public Guid CollectorUserId { get; set; }
+    public Guid CollectorPlayerId { get; set; }
 
-    public virtual Player CollectorUser { get; set; } = null!;
+    public virtual Player CollectorPlayer { get; set; } = null!;
     
     public int Amount { get; set; }
     
-    public Guid? SignOffUserId { get; set; }
+    public Guid? SignOffPlayerId { get; set; }
 
-    public virtual Player? SignOffUser { get; set; } = null!;
+    public virtual Player? SignOffPlayer { get; set; } = null!;
 
     [Required]
     [AuditIgnore]
