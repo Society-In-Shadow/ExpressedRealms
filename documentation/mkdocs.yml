@@ -45,13 +45,17 @@ nav:
     - Component Testing: componentTesting.md
     - Cypress: cypress.md
     - Vite Testing: vitesting.md
-  - CMS Sections: cmsSections.md
-  - Dialogs: dialogs.md
-  - Discord Support: discordSupport.md
-  - EF Core Practices: efCorePractices.md
-  - Forms: forms.md
-  - Modifier System: modifierSystem.md
-  - Permissions & Policies: permissionsAndPolicies.md
-  - Repository Standards: repositoryStandards.md
-  - Scriban: scriban.md
-  - Use Cases: useCases.md
+  - UI:
+    - Tooltips: tooltips.md
+    - Forms: forms.md
+    - Dialogs: dialogs.md
+  - Backend:
+    - CMS Sections: cmsSections.md
+    - Discord Support: discordSupport.md
+    - Modifier System: modifierSystem.md
+    - Permissions & Policies: permissionsAndPolicies.md
+    - Repository Standards: repositoryStandards.md
+    - Scriban: scriban.md
+    - Use Cases: useCases.md
+  - Database:
+      - EF Core Practices: efCorePractices.md
