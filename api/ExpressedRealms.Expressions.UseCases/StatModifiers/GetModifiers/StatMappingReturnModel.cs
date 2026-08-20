@@ -9,4 +9,5 @@ public class StatMappingReturnModel
     public bool CreationSpecificBonus { get; set; }
     public int? TargetExpressionId { get; set; }
     public int? TargetProgressionPathId { get; set; }
+    public string? Notes { get; set; }
 }

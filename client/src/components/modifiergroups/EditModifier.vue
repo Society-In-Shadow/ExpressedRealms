@@ -8,6 +8,7 @@ import { type StatModifierReturnModel } from '@/components/modifiergroups/types.
 import modifierGroupStore from '@/components/modifiergroups/stores/modifierGroupStore.ts'
 import FormInputNumberWrapper from '@/FormWrappers/FormInputNumberWrapper.vue'
 import FormCheckboxWrapper from '@/FormWrappers/FormCheckboxWrapper.vue'
+import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
 
 const store = modifierGroupStore()
 
@@ -64,6 +65,8 @@ const targetPaths = computed(() => {
     <FormCheckboxWrapper v-model="form.fields.scaleWithLevel" />
 
     <FormCheckboxWrapper v-model="form.fields.creationSpecificBonus" />
+
+    <FormInputTextWrapper v-model="form.fields.notes" />
 
     <FormDropdownWrapper
       v-model="form.fields.targetExpression"

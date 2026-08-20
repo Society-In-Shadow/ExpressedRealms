@@ -30,5 +30,7 @@ internal sealed class EditStatModifierModelValidator : AbstractValidator<EditSta
             .WithMessage("Stat Modifier does not exist.");
 
         RuleFor(x => x.Source).IsInEnum();
+
+        RuleFor(x => x.Notes).MaximumLength(1000).When(x => x.Notes is not null);
     }
 }

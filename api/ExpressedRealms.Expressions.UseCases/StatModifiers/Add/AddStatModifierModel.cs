@@ -11,4 +11,5 @@ public class AddStatModifierModel
     public int StatModifierId { get; set; }
     public int? TargetExpressionId { get; set; }
     public int? TargetProgressionPathId { get; set; }
+    public string? Notes { get; set; }
 }

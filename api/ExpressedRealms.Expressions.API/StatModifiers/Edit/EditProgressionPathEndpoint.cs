@@ -27,6 +27,7 @@ internal static class EditStatModifierEndpoint
                 TargetExpressionId = request.TargetExpressionId,
                 Source = Helpers.RouteTypeNameToEnum(typeName),
                 TargetProgressionPathId = request.TargetProgressionPathId,
+                Notes = request.Notes,
             }
         );
 

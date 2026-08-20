@@ -58,6 +58,7 @@ internal sealed class EditStatModifierUseCase(
         groupMapping.StatModifierId = model.StatModifierId;
         groupMapping.TargetExpressionId = model.TargetExpressionId;
         groupMapping.TargetProgressionPathId = model.TargetProgressionPathId;
+        groupMapping.Notes = model.Notes;
 
         await repository.UpdateGroupMapping(groupMapping);
 

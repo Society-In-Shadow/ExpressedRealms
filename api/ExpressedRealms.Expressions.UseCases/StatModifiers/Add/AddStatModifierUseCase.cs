@@ -91,6 +91,7 @@ internal sealed class AddStatModifierUseCase(
                 StatModifierId = model.StatModifierId,
                 TargetExpressionId = model.TargetExpressionId,
                 TargetProgressionPathId = model.TargetProgressionPathId,
+                Notes = model.Notes,
             }
         );
 

@@ -8,6 +8,7 @@ import ModifierGroupStore from '@/components/modifiergroups/stores/modifierGroup
 import FormInputNumberWrapper from '@/FormWrappers/FormInputNumberWrapper.vue'
 import FormCheckboxWrapper from '@/FormWrappers/FormCheckboxWrapper.vue'
 import { SourceTableEnum } from '@/components/modifiergroups/types.ts'
+import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
 
 const store = ModifierGroupStore()
 
@@ -72,6 +73,8 @@ const targetPaths = computed(() => {
     <FormCheckboxWrapper v-model="form.fields.scaleWithLevel" />
 
     <FormCheckboxWrapper v-model="form.fields.creationSpecificBonus" />
+
+    <FormInputTextWrapper v-model="form.fields.notes" />
 
     <FormDropdownWrapper
       v-model="form.fields.targetExpression"
