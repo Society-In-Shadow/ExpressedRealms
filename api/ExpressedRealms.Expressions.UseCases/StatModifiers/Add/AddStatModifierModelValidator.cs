@@ -55,5 +55,8 @@ internal sealed class AddStatModifierModelValidator : AbstractValidator<AddStatM
             .WithMessage("The Stat Modifier does not exist.");
 
         RuleFor(x => x.SourceTable).IsInEnum();
+        
+        RuleFor(x => x.Notes).MaximumLength(1000)
+            .When(x => x.Notes is not null);
     }
 }
