@@ -176,7 +176,7 @@ public class AddStatModifierUseCaseTests
     [Fact]
     public async Task ValidationFor_StatModifierGroupId_WillFail_WhenGroup_DoesNotExist()
     {
-        A.CallTo(() => _repository.GroupIdExists(_model.StatModifierGroupId.Value)).Returns(false);
+        A.CallTo(() => _repository.GroupIdExists(_model.StatModifierGroupId!.Value)).Returns(false);
 
         var results = await _useCase.ExecuteAsync(_model);
         results.MustHaveValidationError(
