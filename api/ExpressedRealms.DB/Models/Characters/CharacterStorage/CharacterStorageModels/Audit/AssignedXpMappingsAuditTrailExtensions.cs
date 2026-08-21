@@ -13,8 +13,8 @@ internal static class CharacterStorageInfoAuditTrailExtensions
         {
             switch (changedRecord.ColumnName)
             {
-                case "character_id":
-                    changedRecord.FriendlyName = "Character";
+                case "opted_in":
+                    changedRecord.FriendlyName = "Opted In";
                     break;
 
                 case "player_id":
@@ -25,20 +25,17 @@ internal static class CharacterStorageInfoAuditTrailExtensions
                     changedRecord.FriendlyName = "Event";
                     break;
 
-                case "reason":
-                    changedRecord.FriendlyName = "Reason";
-                    break;
 
                 case "amount":
                     changedRecord.FriendlyName = "Amount";
                     break;
 
-                case "assigned_by_user_id":
-                    changedRecord.FriendlyName = "Assigned By";
+                case "collector_player_id":
+                    changedRecord.FriendlyName = "Collector Player";
                     break;
 
-                case "assigned_xp_type_id":
-                    changedRecord.FriendlyName = "XP Type";
+                case "sign_off_player_id":
+                    changedRecord.FriendlyName = "Sign Off Player";
                     break;
 
                 default:
