@@ -87,14 +87,12 @@ async function triggerRefresh() {
 
 <template>
   <Card>
-    <template #title>
-      <h3 class="pb-0 mb-0">
-        Welcome to {{ eventCheckinInfo.eventName }} and Society in Shadows!
-      </h3>
-    </template>
     <template #content>
       <div class="d-flex flex-column flex-md-row justify-content-between">
-        <div>
+        <div class="order-2 order-md-1">
+          <h2 class="pb-0 mb-0">
+            Welcome to {{ eventCheckinInfo.eventName }} and Society in Shadows!
+          </h2>
           <p>Before we get started, lets define a few terms you will commonly hear</p>
           <ul>
             <li>GO - Game Official - These are the people that will run games, and help you with character creation.</li>
@@ -103,8 +101,28 @@ async function triggerRefresh() {
           </ul>
           <p>Also, make sure to grab your badge for {{ eventCheckinInfo.eventName }}, you need that in order to play our game.</p>
           <p>With that out of the way, please present the QR Code to a GO or SHQ to get started!</p>
+          <h2>Character Storage</h2>
+          <p>
+            Character Storage is a service where we store and transport your primary character’s Prop Cards, Power Cards, and Money
+            between conventions. This allows you not to worry about losing the items between games. Character storage
+            is not required to play the game and is an additional service offered. The reason we are offering this is to offset
+            some of the costs we have for conventions and web-hosting. The cost of character storage is <strong>$20 dollars</strong> and is
+            <strong>nonrefundable</strong>, due at checkin, and entitles you to the following:
+          </p>
+          <ul>
+            <li>Max random bonus for experience (+5) at current event</li>
+            <li>
+              Your items cards, power cards, and in game money stored at SHQ between the event paid and your next attended
+              event tp to the end of the chronicle.
+            </li>
+            <li>Access to non-plot relevant props provided by SHQ</li>
+            <li>
+              Access to early con check-in allowing you to get and spend xp up to 11:59pm the night before the convention
+              and have your character printed and ready to go when you arrive.
+            </li>
+          </ul>
         </div>
-        <div>
+        <div class="order-1 order-md-2">
           <div class="d-flex flex-column align-items-start">
             <div class="text-center w-md-100">
               <img :src="qrcode" alt="QR Code" class="w-md-100" style="min-width: 250px">
