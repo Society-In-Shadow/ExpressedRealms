@@ -42,7 +42,7 @@ internal sealed class GetStonePullInfoUseCase(
                 HasCompletedStep = hasCompletedStep,
                 IsFirstTimeUser = isFirstTimePlayer,
                 BroughtFriend = broughtFriend,
-                HasCharacterStorage = paidForCharacterStorage is null,
+                HasCharacterStorage = paidForCharacterStorage is not null,
                 AssignedXp = assignedXp is null
                     ? null
                     : new AssignedXpType()

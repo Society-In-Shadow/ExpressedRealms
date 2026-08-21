@@ -44,6 +44,7 @@ export interface GetStonePullInfoResponse {
   hasCompletedStep: boolean
   isFirstTimeUser: boolean
   broughtFriend: boolean
+  hasCharacterStorage: boolean
   assignedXp: AssignedXpType
 }
 

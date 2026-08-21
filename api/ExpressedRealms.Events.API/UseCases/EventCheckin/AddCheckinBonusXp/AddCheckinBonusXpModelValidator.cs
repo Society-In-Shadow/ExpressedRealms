@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.Models.ModifierSystem.StatModifiers;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using FluentValidation;
 using JetBrains.Annotations;
@@ -24,8 +25,14 @@ internal sealed class AddCheckinBonusXpModelValidator : AbstractValidator<AddChe
             .Must(
                 (x) =>
                 {
-                    List<int> validXpTypes = [2, 4, 5]; // checkin bonus, first time player, brought friend
-                    return validXpTypes.Contains(x);
+                    List<int> fullXpTypes =
+                    [
+                        AssignedXpTypeEnum.FirstTimePlayerXp,
+                        AssignedXpTypeEnum.BroughtNewPlayerXp,
+                        AssignedXpTypeEnum.BoughtCharacterStorage,
+                        AssignedXpTypeEnum.CheckinBonus
+                    ];
+                    return fullXpTypes.Contains(x);
                 }
             )
             .WithMessage("The Assigned Xp Type Id is not the right type.");
