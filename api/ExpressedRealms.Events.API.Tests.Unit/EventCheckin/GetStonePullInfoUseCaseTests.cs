@@ -113,9 +113,17 @@ public class GetStonePullInfoUseCaseTests
     [Fact]
     public async Task UseCase_WillReturn_IfTheyHaveCharacterStorage()
     {
-        A.CallTo(() => _eventCheckinRepository.GetCharacterStorageInfo(PlayerId, EventId)).Returns(new CharacterStorageInfo());
+        A.CallTo(() => _eventCheckinRepository.GetCharacterStorageInfo(PlayerId, EventId)).Returns(new CharacterStorageInfo() { OptedIn = true});
         var results = await _useCase.ExecuteAsync(_model);
         Assert.True(results.Value.HasCharacterStorage);
+    }
+    
+    [Fact]
+    public async Task UseCase_WillReturn_False_IfTheyHaveNotOptedIntoCharacterStorage()
+    {
+        A.CallTo(() => _eventCheckinRepository.GetCharacterStorageInfo(PlayerId, EventId)).Returns(new CharacterStorageInfo() { OptedIn = false});
+        var results = await _useCase.ExecuteAsync(_model);
+        Assert.False(results.Value.HasCharacterStorage);
     }
 
     [Fact]
