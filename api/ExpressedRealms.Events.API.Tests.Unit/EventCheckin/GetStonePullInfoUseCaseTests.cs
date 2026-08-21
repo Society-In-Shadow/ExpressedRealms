@@ -35,7 +35,8 @@ public class GetStonePullInfoUseCaseTests
             .Returns(new Checkin { Id = CheckinId });
         A.CallTo(() => _eventCheckinRepository.GetPlayerNumber(_model.LookupId)).Returns(1);
         A.CallTo(() => _eventCheckinRepository.DidBringFriendToCon(CheckinId)).Returns(false);
-        A.CallTo(() => _eventCheckinRepository.GetCharacterStorageInfo(PlayerId, EventId)).Returns(Task.FromResult<CharacterStorageInfo?>(null));
+        A.CallTo(() => _eventCheckinRepository.GetCharacterStorageInfo(PlayerId, EventId))
+            .Returns(Task.FromResult<CharacterStorageInfo?>(null));
 
         A.CallTo(() => _eventCheckinRepository.GetAssignedXp(PlayerId, EventId))
             .Returns(new AssignedXpTypeDto() { TypeId = 3, Amount = 10 });
@@ -109,19 +110,21 @@ public class GetStonePullInfoUseCaseTests
         var results = await _useCase.ExecuteAsync(_model);
         Assert.True(results.Value.BroughtFriend);
     }
-    
+
     [Fact]
     public async Task UseCase_WillReturn_IfTheyHaveCharacterStorage()
     {
-        A.CallTo(() => _eventCheckinRepository.GetCharacterStorageInfo(PlayerId, EventId)).Returns(new CharacterStorageInfo() { OptedIn = true});
+        A.CallTo(() => _eventCheckinRepository.GetCharacterStorageInfo(PlayerId, EventId))
+            .Returns(new CharacterStorageInfo() { OptedIn = true });
         var results = await _useCase.ExecuteAsync(_model);
         Assert.True(results.Value.HasCharacterStorage);
     }
-    
+
     [Fact]
     public async Task UseCase_WillReturn_False_IfTheyHaveNotOptedIntoCharacterStorage()
     {
-        A.CallTo(() => _eventCheckinRepository.GetCharacterStorageInfo(PlayerId, EventId)).Returns(new CharacterStorageInfo() { OptedIn = false});
+        A.CallTo(() => _eventCheckinRepository.GetCharacterStorageInfo(PlayerId, EventId))
+            .Returns(new CharacterStorageInfo() { OptedIn = false });
         var results = await _useCase.ExecuteAsync(_model);
         Assert.False(results.Value.HasCharacterStorage);
     }

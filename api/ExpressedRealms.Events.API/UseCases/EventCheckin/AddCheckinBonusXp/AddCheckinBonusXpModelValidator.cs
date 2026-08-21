@@ -30,7 +30,7 @@ internal sealed class AddCheckinBonusXpModelValidator : AbstractValidator<AddChe
                         AssignedXpTypeEnum.FirstTimePlayerXp,
                         AssignedXpTypeEnum.BroughtNewPlayerXp,
                         AssignedXpTypeEnum.BoughtCharacterStorage,
-                        AssignedXpTypeEnum.CheckinBonus
+                        AssignedXpTypeEnum.CheckinBonus,
                     ];
                     return fullXpTypes.Contains(x);
                 }

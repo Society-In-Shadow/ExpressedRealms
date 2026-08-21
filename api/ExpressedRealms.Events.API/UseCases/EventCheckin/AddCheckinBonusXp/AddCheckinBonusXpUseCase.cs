@@ -44,7 +44,7 @@ internal sealed class AddCheckinBonusXpUseCase(
         [
             AssignedXpTypeEnum.FirstTimePlayerXp,
             AssignedXpTypeEnum.BroughtNewPlayerXp,
-            AssignedXpTypeEnum.BoughtCharacterStorage
+            AssignedXpTypeEnum.BoughtCharacterStorage,
         ];
         if (fullXpTypes.Contains(model.AssignedXpTypeId))
             model.Amount = 5;

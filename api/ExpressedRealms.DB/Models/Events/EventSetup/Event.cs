@@ -33,7 +33,8 @@ public class Event : ISoftDelete
         new HashSet<EventScheduleItemAuditTrail>();
     public virtual ICollection<AssignedXpMapping> AssignedXpMappings { get; set; } =
         new HashSet<AssignedXpMapping>();
-    public ICollection<CharacterStorageInfo> CharacterStorageInfo { get; set; }  = new HashSet<CharacterStorageInfo>();
+    public ICollection<CharacterStorageInfo> CharacterStorageInfo { get; set; } =
+        new HashSet<CharacterStorageInfo>();
     public virtual ICollection<EventQuestion> EventQuestions { get; set; } =
         new HashSet<EventQuestion>();
     public virtual ICollection<Checkin> Checkins { get; set; } = new HashSet<Checkin>();

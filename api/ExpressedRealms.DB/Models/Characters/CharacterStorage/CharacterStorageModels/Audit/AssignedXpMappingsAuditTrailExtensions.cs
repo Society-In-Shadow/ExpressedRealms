@@ -25,7 +25,6 @@ internal static class CharacterStorageInfoAuditTrailExtensions
                     changedRecord.FriendlyName = "Event";
                     break;
 
-
                 case "amount":
                     changedRecord.FriendlyName = "Amount";
                     break;

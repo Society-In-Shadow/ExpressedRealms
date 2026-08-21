@@ -34,21 +34,26 @@ internal sealed class UpdateCharacterStorageInfoUseCase(
             return Result.Fail("You need an active event to update character storage.");
         }
 
-        var characterStorageInfo = await checkinRepository.GetCharacterStorageInfo(playerId, eventId.Value);
+        var characterStorageInfo = await checkinRepository.GetCharacterStorageInfo(
+            playerId,
+            eventId.Value
+        );
         if (characterStorageInfo is not null)
         {
             return Result.Fail("Character Storage has already been tracked.");
         }
 
-        await checkinRepository.AddCharacterStorageInfo(new CharacterStorageInfo()
-        {
-            PlayerId = playerId,
-            EventId = eventId.Value,
-            CollectorPlayerId = await checkinRepository.GetCurrentPlayerId(),
-            Timestamp = timeProvider.GetUtcNow(),
-            OptedIn = model.OptedIn,
-            Amount = 15
-        });
+        await checkinRepository.AddCharacterStorageInfo(
+            new CharacterStorageInfo()
+            {
+                PlayerId = playerId,
+                EventId = eventId.Value,
+                CollectorPlayerId = await checkinRepository.GetCurrentPlayerId(),
+                Timestamp = timeProvider.GetUtcNow(),
+                OptedIn = model.OptedIn,
+                Amount = 15,
+            }
+        );
 
         await approveStageAndSendMessageUseCase.ExecuteAsync(
             new() { LookupId = model.LookupId, StageId = CheckinStageEnum.CharacterStorageQuestion }

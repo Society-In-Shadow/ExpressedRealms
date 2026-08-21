@@ -87,5 +87,6 @@ public class User : IdentityUser
         new HashSet<CharacterFactionMapping>();
     public virtual ICollection<StatGroupMappingAuditTrail> StatGroupMappingAuditTrails { get; set; } =
         new HashSet<StatGroupMappingAuditTrail>();
-    public ICollection<CharacterStorageInfoAuditTrail> CharacterStorageInfoAuditTrails { get; set; }  = new HashSet<CharacterStorageInfoAuditTrail>();
+    public ICollection<CharacterStorageInfoAuditTrail> CharacterStorageInfoAuditTrails { get; set; } =
+        new HashSet<CharacterStorageInfoAuditTrail>();
 }

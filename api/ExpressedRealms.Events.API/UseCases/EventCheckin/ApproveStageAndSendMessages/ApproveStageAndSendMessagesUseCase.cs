@@ -147,14 +147,15 @@ internal sealed class ApproveStageAndSendMessageUseCase(
             return Result.Fail("Stage has already been approved");
         }
 
-        var currentStage = activeList.Count > 0 ? activeList.MaxBy(x => x.CreatedAt)!.CheckinStageId : 0;
+        var currentStage =
+            activeList.Count > 0 ? activeList.MaxBy(x => x.CreatedAt)!.CheckinStageId : 0;
         var stage = CheckinStageEnum.FromValue(model.StageId);
 
         // ---- Rule 0: If first stage, skip the rest of the rules
         if (stage != CheckinStageEnum.AgeCheckApproval)
         {
             var currentStageEnum = CheckinStageEnum.FromValue(currentStage);
-            
+
             // ---- Rule 1: The following stages are sequential and must go in order ----
             var initialCheckinSequence = new List<CheckinStageEnum>()
             {
@@ -167,9 +168,9 @@ internal sealed class ApproveStageAndSendMessageUseCase(
                 CheckinStageEnum.CrbCreation,
                 CheckinStageEnum.PrintedCrb,
                 CheckinStageEnum.CrbReadForPickup,
-                CheckinStageEnum.CrbPickedUp
+                CheckinStageEnum.CrbPickedUp,
             };
-            
+
             var requestedStageIndex = initialCheckinSequence.IndexOf(stage);
 
             if (requestedStageIndex >= 0)
@@ -189,14 +190,12 @@ internal sealed class ApproveStageAndSendMessageUseCase(
                 var completedStages = activeList
                     .Select(x => CheckinStageEnum.FromValue(x.CheckinStageId))
                     .ToList();
-                
+
                 bool initialCheckinComplete = initialCheckinSequence.All(completedStages.Contains);
 
                 if (!initialCheckinComplete)
                 {
-                    return Result.Fail(
-                        "CRB needs to be picked up before day check-ins."
-                    );
+                    return Result.Fail("CRB needs to be picked up before day check-ins.");
                 }
             }
         }
@@ -224,7 +223,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
                 CheckinStageEnum.EventQuestionsCheck.Value,
                 CheckinStageEnum.CharacterStorageQuestion.Value,
                 CheckinStageEnum.AssignedXpCheck.Value,
-                CheckinStageEnum.ShqApproval.Value
+                CheckinStageEnum.ShqApproval.Value,
             };
 
             activeList.AddRange(

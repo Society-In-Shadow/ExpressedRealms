@@ -117,9 +117,8 @@ public static class ProcessChangedRecords
             nameof(StatGroupMapping) => StatGroupMappingAuditTrailExtensions.ProcessChangedRecords(
                 changedRecords
             ),
-            nameof(CharacterStorageInfo) => CharacterStorageInfoAuditTrailExtensions.ProcessChangedRecords(
-                changedRecords
-            ),
+            nameof(CharacterStorageInfo) =>
+                CharacterStorageInfoAuditTrailExtensions.ProcessChangedRecords(changedRecords),
             _ => throw new ArgumentException(
                 $"Table not setup in the ProcessChangedRecords class: {tableName}"
             ),

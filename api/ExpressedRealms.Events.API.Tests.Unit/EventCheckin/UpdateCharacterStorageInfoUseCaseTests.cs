@@ -25,11 +25,7 @@ public class UpdateCharacterStorageInfoUseCaseTests
 
     public UpdateCharacterStorageInfoUseCaseTests()
     {
-        _model = new UpdateCharacterStorageInfoModel
-        {
-            LookupId = "ABCDEFGH",
-            OptedIn = true,
-        };
+        _model = new UpdateCharacterStorageInfoModel { LookupId = "ABCDEFGH", OptedIn = true };
 
         _eventCheckinRepository = A.Fake<IEventCheckinRepository>();
         _approveStage = A.Fake<IApproveStageAndSendMessageUseCase>();
@@ -42,8 +38,9 @@ public class UpdateCharacterStorageInfoUseCaseTests
         A.CallTo(() => _eventCheckinRepository.GetActiveEventId()).Returns(_eventId);
 
         A.CallTo(() => _eventCheckinRepository.GetCurrentPlayerId()).Returns(_collectorPlayerId);
-        
-        A.CallTo(() => _eventCheckinRepository.GetCharacterStorageInfo(_playerId, _eventId)).Returns(Task.FromResult<CharacterStorageInfo?>(null));
+
+        A.CallTo(() => _eventCheckinRepository.GetCharacterStorageInfo(_playerId, _eventId))
+            .Returns(Task.FromResult<CharacterStorageInfo?>(null));
 
         A.CallTo(() => _timeProvider.GetUtcNow()).Returns(_dateTimeNow);
 
@@ -99,7 +96,8 @@ public class UpdateCharacterStorageInfoUseCaseTests
     [Fact]
     public async Task UseCase_WillFail_WhenThereIsNoActiveEvent()
     {
-        A.CallTo(() => _eventCheckinRepository.GetActiveEventId()).Returns(Task.FromResult<int?>(null));
+        A.CallTo(() => _eventCheckinRepository.GetActiveEventId())
+            .Returns(Task.FromResult<int?>(null));
 
         var results = await _useCase.ExecuteAsync(_model);
 
@@ -109,19 +107,18 @@ public class UpdateCharacterStorageInfoUseCaseTests
             x => x.Message == "You need an active event to update character storage."
         );
 
-        A.CallTo(() =>
-                _eventCheckinRepository.AddCharacterStorageInfo(A<CharacterStorageInfo>._)
-            )
+        A.CallTo(() => _eventCheckinRepository.AddCharacterStorageInfo(A<CharacterStorageInfo>._))
             .MustNotHaveHappened();
 
         A.CallTo(() => _approveStage.ExecuteAsync(A<ApproveStageAndSendMessageModel>._))
             .MustNotHaveHappened();
     }
-    
+
     [Fact]
     public async Task UseCase_WillFail_WhenThisHasAlreadyBeenDenoted()
     {
-        A.CallTo(() => _eventCheckinRepository.GetCharacterStorageInfo(_playerId, _eventId)).Returns(new CharacterStorageInfo());
+        A.CallTo(() => _eventCheckinRepository.GetCharacterStorageInfo(_playerId, _eventId))
+            .Returns(new CharacterStorageInfo());
 
         var results = await _useCase.ExecuteAsync(_model);
 
@@ -131,9 +128,7 @@ public class UpdateCharacterStorageInfoUseCaseTests
             x => x.Message == "Character Storage has already been tracked."
         );
 
-        A.CallTo(() =>
-                _eventCheckinRepository.AddCharacterStorageInfo(A<CharacterStorageInfo>._)
-            )
+        A.CallTo(() => _eventCheckinRepository.AddCharacterStorageInfo(A<CharacterStorageInfo>._))
             .MustNotHaveHappened();
 
         A.CallTo(() => _approveStage.ExecuteAsync(A<ApproveStageAndSendMessageModel>._))

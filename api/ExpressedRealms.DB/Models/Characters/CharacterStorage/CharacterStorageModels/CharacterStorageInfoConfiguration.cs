@@ -7,13 +7,12 @@ public class CharacterStorageInfoConfiguration : IEntityTypeConfiguration<Charac
 {
     public void Configure(EntityTypeBuilder<CharacterStorageInfo> builder)
     {
-
         builder
             .HasOne(x => x.Player)
             .WithMany(x => x.CharacterStorageInfos)
             .HasForeignKey(x => x.PlayerId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         builder
             .HasOne(x => x.CollectorPlayer)
             .WithMany(x => x.CharacterStorageCollectorUsers)

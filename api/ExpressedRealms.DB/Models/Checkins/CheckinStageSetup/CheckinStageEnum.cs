@@ -78,7 +78,7 @@ public sealed class CheckinStageEnum : SmartEnum<CheckinStageEnum, int>
         12,
         "This is used when a player needs to have their CRB re-printed / approved.  Usually due to retirement or sheet changes."
     );
-    
+
     public static readonly CheckinStageEnum CharacterStorageQuestion = new(
         "Character Storage Question",
         13,

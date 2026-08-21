@@ -318,11 +318,12 @@ internal sealed class EventCheckinRepository(
 
     public async Task<bool> HasPreAssignedXpTypes(int eventId, Guid playerId)
     {
-        List<int> validXpTypes = [
-            AssignedXpTypeEnum.CheckinBonus, 
-            AssignedXpTypeEnum.FirstTimePlayerXp, 
-            AssignedXpTypeEnum.BroughtNewPlayerXp, 
-            AssignedXpTypeEnum.BoughtCharacterStorage
+        List<int> validXpTypes =
+        [
+            AssignedXpTypeEnum.CheckinBonus,
+            AssignedXpTypeEnum.FirstTimePlayerXp,
+            AssignedXpTypeEnum.BroughtNewPlayerXp,
+            AssignedXpTypeEnum.BoughtCharacterStorage,
         ];
         return await context.AssignedXpMappings.AnyAsync(
             x =>
@@ -441,15 +442,15 @@ internal sealed class EventCheckinRepository(
 
     public Task<CharacterStorageInfo?> GetCharacterStorageInfo(Guid playerId, int eventId)
     {
-        return context.CharacterStorageInfos
-            .Where(x => x.PlayerId == playerId && x.EventId == eventId)
+        return context
+            .CharacterStorageInfos.Where(x => x.PlayerId == playerId && x.EventId == eventId)
             .FirstOrDefaultAsync(cancellationToken);
     }
-    
+
     public async Task<int> AddCharacterStorageInfo(CharacterStorageInfo characterStorageInfo)
     {
         context.CharacterStorageInfos.Add(characterStorageInfo);
         await context.SaveChangesAsync(cancellationToken);
-        return characterStorageInfo.Id; 
+        return characterStorageInfo.Id;
     }
 }

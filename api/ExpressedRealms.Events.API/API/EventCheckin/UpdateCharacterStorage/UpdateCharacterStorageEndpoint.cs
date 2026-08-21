@@ -15,11 +15,7 @@ public static class UpdateCharacterStorageInfoEndpoint
     )
     {
         var results = await useCase.ExecuteAsync(
-            new ()
-            {
-                LookupId = Uri.UnescapeDataString(lookupId),
-                OptedIn = model.OptedIn,
-            }
+            new() { LookupId = Uri.UnescapeDataString(lookupId), OptedIn = model.OptedIn }
         );
 
         if (results.HasValidationError(out var validationProblem))

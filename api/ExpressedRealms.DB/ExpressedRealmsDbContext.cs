@@ -51,6 +51,5 @@ namespace ExpressedRealms.DB
         public DbSet<SkillSubType> SkillSubTypes { get; set; }
         public DbSet<SkillType> SkillTypes { get; set; }
         public DbSet<SkillLevelDescriptionMapping> SkillLevelDescriptionMappings { get; set; }
-        
     }
 }

@@ -32,7 +32,10 @@ public class Player
 
     public virtual List<AssignedXpMapping> AssignedXpMappings { get; set; } = null!;
     public virtual ICollection<Checkin> Checkins { get; set; } = new HashSet<Checkin>();
-    public ICollection<CharacterStorageInfo> CharacterStorageCollectorUsers { get; set; }  = new HashSet<CharacterStorageInfo>();
-    public ICollection<CharacterStorageInfo> CharacterStorageSignOffUsers { get; set; }  = new HashSet<CharacterStorageInfo>();
-    public ICollection<CharacterStorageInfo> CharacterStorageInfos { get; set; }  = new HashSet<CharacterStorageInfo>();
+    public ICollection<CharacterStorageInfo> CharacterStorageCollectorUsers { get; set; } =
+        new HashSet<CharacterStorageInfo>();
+    public ICollection<CharacterStorageInfo> CharacterStorageSignOffUsers { get; set; } =
+        new HashSet<CharacterStorageInfo>();
+    public ICollection<CharacterStorageInfo> CharacterStorageInfos { get; set; } =
+        new HashSet<CharacterStorageInfo>();
 }
