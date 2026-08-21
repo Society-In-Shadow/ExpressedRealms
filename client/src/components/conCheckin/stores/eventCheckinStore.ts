@@ -99,6 +99,9 @@ export const EventCheckinStore
             // Questions answered, They need the Stone Puller Next
             this.activeStepperStep = '4'
             break
+          case CheckinStage.CharacterStorageQuestion:
+            this.activeStepperStep = '5'
+            break
           case CheckinStage.AssignedXpCheck:
             // Do nothing, this should have automatically
             // Been set SHQ Approval
@@ -111,7 +114,7 @@ export const EventCheckinStore
               await router.push({ name: 'characterSheet', params: { id: this.primaryCharacter.characterId }, query: { src: 'approve_character' } })
               return
             }
-            this.activeStepperStep = '5'
+            this.activeStepperStep = '6'
             break
           case CheckinStage.GoApproval:
             // Show need to print CRB
@@ -119,33 +122,33 @@ export const EventCheckinStore
             break
           case CheckinStage.CrbCreation:
             // show that CRB needs to be printed
-            this.activeStepperStep = '6'
+            this.activeStepperStep = '7'
             break
           case CheckinStage.PrintedCrb:
             // show need to cut and strip CRB
-            this.activeStepperStep = '7'
+            this.activeStepperStep = '8'
             break
           case CheckinStage.CrbReadForPickup:
             // Show need to verify user pickup
-            this.activeStepperStep = '8'
+            this.activeStepperStep = '9'
             break
           case CheckinStage.CrbPickedUp:
             // User Has picked up CRB and verified strip info
             if (this.currentEventDay === 1)
-              this.activeStepperStep = '9' // Show Friday Finalized
+              this.activeStepperStep = '10' // Show Friday Finalized
             else
-              this.activeStepperStep = '10' // Show Saturday approval
+              this.activeStepperStep = '11' // Show Saturday approval
             break
           case CheckinStage.Day2Checkin:
             // User Has picked up CRB and verified strip info
             if (this.currentEventDay === 2)
-              this.activeStepperStep = '11' // Show Saturday Finalized
+              this.activeStepperStep = '12' // Show Saturday Finalized
             else
-              this.activeStepperStep = '12' // Show Sunday Approval
+              this.activeStepperStep = '13' // Show Sunday Approval
             break
           case CheckinStage.Day3Checkin:
             // User Has picked up CRB and verified strip info
-            this.activeStepperStep = '13' // Show Sunday Finalize
+            this.activeStepperStep = '14' // Show Sunday Finalize
             break
         }
       },
@@ -155,6 +158,12 @@ export const EventCheckinStore
           hasSignedConsentForm: hasWaiver,
         })
         this.activeStepperStep = '3'
+      },
+      async updateCharacterStorage(optedIn: boolean) {
+        await axios.put(`events/checkin/lookup/${this.lookupId}/characterStorage`, {
+          optedIn: optedIn,
+        })
+        toaster.success('Character Storage Status Updated!')
       },
       async getVerifiedAge(): Promise<AgeInfo> {
         const response = await axios.get<AgeInfo>(`events/checkin/lookup/${this.lookupId}/ageInfo`)

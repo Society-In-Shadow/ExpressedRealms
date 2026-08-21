@@ -4,7 +4,6 @@ import Checkbox from 'primevue/checkbox'
 import { onBeforeMount, ref, watch } from 'vue'
 import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
 import Button from 'primevue/button'
-import { CheckinStage } from '@/components/conCheckin/types.ts'
 
 const eventCheckinInfo = EventCheckinStore()
 
@@ -22,7 +21,6 @@ watch(() => eventCheckinInfo.isReset, (old, newValue) => {
 
 async function updateCharacterStorage() {
   await eventCheckinInfo.updateCharacterStorage(optedIn.value)
-  await eventCheckinInfo.approveStage(CheckinStage.CharacterStorageQuestion)
   eventCheckinInfo.activeStepperStep = '5'
 }
 

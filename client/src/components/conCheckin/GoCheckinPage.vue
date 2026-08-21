@@ -17,6 +17,7 @@ import AgeVerificationStep from '@/components/conCheckin/support/AgeVerification
 import DailyCheckin from '@/components/conCheckin/support/DailyCheckin.vue'
 import { characterGoFieldsDialog } from '@/components/admin/characterList/services/dialogs.ts'
 import CommandButton from '@/uiComponents/CommandButton.vue'
+import CharacterStorageQuestion from '@/components/conCheckin/support/CharacterStorageQuestion.vue'
 
 const eventCheckinInfo = EventCheckinStore()
 const userPermission = userPermissionStore()
@@ -158,12 +159,18 @@ const approveStage = async (stageId: number) => {
       </StepPanel>
     </StepItem>
     <StepItem value="4">
-      <Step>Stone Pull</Step>
+      <Step>Character Storage Question</Step>
       <StepPanel v-if="eventCheckinInfo.activeStepperStep == '4'">
+        <CharacterStorageQuestion />
+      </StepPanel>
+    </StepItem>
+    <StepItem value="5">
+      <Step>Stone Pull</Step>
+      <StepPanel v-if="eventCheckinInfo.activeStepperStep == '5'">
         <StonePullerStep />
       </StepPanel>
     </StepItem>
-    <StepItem value="5" :disabled="stepperStep !== '5'">
+    <StepItem value="6" :disabled="stepperStep !== '6'">
       <Step>GO Approval</Step>
       <StepPanel>
         <h3>Link to their CRB</h3>
@@ -172,7 +179,7 @@ const approveStage = async (stageId: number) => {
         </p>
       </StepPanel>
     </StepItem>
-    <StepItem value="6">
+    <StepItem value="7">
       <Step>CRB Needs Printing</Step>
       <StepPanel>
         <h3>The CRB needs to be printed</h3>
@@ -180,7 +187,7 @@ const approveStage = async (stageId: number) => {
         <p>This will automatically update once it's been printed at least once</p>
       </StepPanel>
     </StepItem>
-    <StepItem value="7">
+    <StepItem value="8">
       <Step>CRB Needs Creation</Step>
       <StepPanel>
         <h3>CRB needs to be created</h3>
@@ -191,7 +198,7 @@ const approveStage = async (stageId: number) => {
         />
       </StepPanel>
     </StepItem>
-    <StepItem value="8">
+    <StepItem value="9">
       <Step>CRB Is Ready for Pickup</Step>
       <StepPanel>
         <h3>Needs to be Verified by User</h3>
@@ -202,15 +209,15 @@ const approveStage = async (stageId: number) => {
         />
       </StepPanel>
     </StepItem>
-    <StepItem value="9">
+    <StepItem value="10">
       <Step>Picked Up and Day One Finalized</Step>
-      <StepPanel v-if="eventCheckinInfo.activeStepperStep == '9'">
+      <StepPanel v-if="eventCheckinInfo.activeStepperStep == '10'">
         <h3>Everything is Done for Day 1</h3>
       </StepPanel>
     </StepItem>
-    <StepItem value="10">
+    <StepItem value="11">
       <Step>Day 2 Checkin</Step>
-      <StepPanel v-if="eventCheckinInfo.activeStepperStep == '10'">
+      <StepPanel v-if="eventCheckinInfo.activeStepperStep == '11'">
         <h3>Day 2 Checkin - Break of Dawn revitalizes the user</h3>
         <p>The character gets a free bonus for waking up, which is handled below</p>
         <DailyCheckin :lookup-id="eventCheckinInfo.lookupId" />
@@ -220,15 +227,15 @@ const approveStage = async (stageId: number) => {
         />
       </StepPanel>
     </StepItem>
-    <StepItem value="11">
+    <StepItem value="12">
       <Step>Day 2 Finalized</Step>
       <StepPanel>
         <h3>This person is fully checked in for day 2, there's nothing left to do</h3>
       </StepPanel>
     </StepItem>
-    <StepItem value="12">
+    <StepItem value="13">
       <Step>Day 3 Checkin</Step>
-      <StepPanel v-if="eventCheckinInfo.activeStepperStep == '12'">
+      <StepPanel v-if="eventCheckinInfo.activeStepperStep == '13'">
         <h3>Day 3 Checkin - Break of Dawn revitalizes the user</h3>
         <p>The character gets a free bonus for waking up, which is handled below</p>
         <DailyCheckin :lookup-id="eventCheckinInfo.lookupId" />
@@ -238,7 +245,7 @@ const approveStage = async (stageId: number) => {
         />
       </StepPanel>
     </StepItem>
-    <StepItem value="13">
+    <StepItem value="14">
       <Step>Day 3 Finalized</Step>
       <StepPanel>
         <h3>Thank You and Come Again!</h3>

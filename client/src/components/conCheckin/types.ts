@@ -11,6 +11,7 @@ export const CheckinStage = {
   AssignedXpCheck: 10,
   PrintedCrb: 11,
   PlayerNeedsReapproval: 12,
+  CharacterStorageQuestion: 13,
 } as const
 
 export type CheckinStage = typeof CheckinStage[keyof typeof CheckinStage]

@@ -165,6 +165,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
                 CheckinStageEnum.ShqApproval,
                 CheckinStageEnum.GoApproval,
                 CheckinStageEnum.CrbCreation,
+                CheckinStageEnum.PrintedCrb,
                 CheckinStageEnum.CrbReadForPickup,
                 CheckinStageEnum.CrbPickedUp
             };
@@ -221,9 +222,9 @@ internal sealed class ApproveStageAndSendMessageUseCase(
             {
                 CheckinStageEnum.AgeCheckApproval.Value,
                 CheckinStageEnum.EventQuestionsCheck.Value,
-                CheckinStageEnum.EventQuestionsCheck.Value,
+                CheckinStageEnum.CharacterStorageQuestion.Value,
                 CheckinStageEnum.AssignedXpCheck.Value,
-                CheckinStageEnum.ShqApproval.Value,
+                CheckinStageEnum.ShqApproval.Value
             };
 
             activeList.AddRange(
