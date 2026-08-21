@@ -4,10 +4,12 @@ import Checkbox from 'primevue/checkbox'
 import { onBeforeMount, ref, watch } from 'vue'
 import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
 import Button from 'primevue/button'
+import { confirmationPopups } from '@/components/conCheckin/services/popupService.ts'
 
 const eventCheckinInfo = EventCheckinStore()
 
 const optedIn = ref(false)
+const popups = confirmationPopups()
 
 onBeforeMount(async () => {
   // ageInfo.value = await eventCheckinInfo.getVerifiedAge()
@@ -18,11 +20,6 @@ watch(() => eventCheckinInfo.isReset, (old, newValue) => {
     optedIn.value = false
   }
 })
-
-async function updateCharacterStorage() {
-  await eventCheckinInfo.updateCharacterStorage(optedIn.value)
-  eventCheckinInfo.activeStepperStep = '5'
-}
 
 </script>
 
@@ -69,5 +66,5 @@ async function updateCharacterStorage() {
     <Checkbox v-model="optedIn" input-id="opt-in" binary /><label class="ml-2" for="opt-in">Opted In - Paid in Cash</label>
   </div>
 
-  <Button label="Update Character Storage" class="mt-3" @click="updateCharacterStorage" />
+  <Button label="Update Character Storage" class="mt-3" @click="popups.characterStorageConfirmation($event, optedIn)" />
 </template>

@@ -66,5 +66,25 @@ export const confirmationPopups = () => {
       },
     })
 
-  return { retireConfirmation, childConfirmation, reapproveCharacterConfirmation }
+  const characterStorageConfirmation = (mouseEvent: MouseEvent, optIn: boolean) =>
+    confirm.require({
+      target: mouseEvent.target as HTMLElement,
+      group: 'popup',
+      message: `You will be responsible for making sure SHQ records the money as deposited`,
+      icon: 'pi pi-info-circle',
+      rejectProps: {
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptProps: {
+        label: `I will wait for deposit confirmation`,
+        severity: 'warning',
+      },
+      accept: async () => {
+        await store.updateCharacterStorage(optIn)
+      },
+    })
+
+  return { retireConfirmation, childConfirmation, reapproveCharacterConfirmation, characterStorageConfirmation }
 }

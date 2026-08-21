@@ -164,6 +164,7 @@ export const EventCheckinStore
           optedIn: optedIn,
         })
         toaster.success('Character Storage Status Updated!')
+        this.activeStepperStep = '5'
       },
       async getVerifiedAge(): Promise<AgeInfo> {
         const response = await axios.get<AgeInfo>(`events/checkin/lookup/${this.lookupId}/ageInfo`)
