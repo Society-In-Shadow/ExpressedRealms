@@ -42,6 +42,8 @@ public class UpdateCharacterStorageInfoUseCaseTests
         A.CallTo(() => _eventCheckinRepository.GetActiveEventId()).Returns(_eventId);
 
         A.CallTo(() => _eventCheckinRepository.GetCurrentPlayerId()).Returns(_collectorPlayerId);
+        
+        A.CallTo(() => _eventCheckinRepository.GetCharacterStorageInfo(_playerId, _eventId)).Returns(Task.FromResult<CharacterStorageInfo?>(null));
 
         A.CallTo(() => _timeProvider.GetUtcNow()).Returns(_dateTimeNow);
 
@@ -105,6 +107,28 @@ public class UpdateCharacterStorageInfoUseCaseTests
         Assert.Contains(
             results.Errors,
             x => x.Message == "You need an active event to update character storage."
+        );
+
+        A.CallTo(() =>
+                _eventCheckinRepository.AddCharacterStorageInfo(A<CharacterStorageInfo>._)
+            )
+            .MustNotHaveHappened();
+
+        A.CallTo(() => _approveStage.ExecuteAsync(A<ApproveStageAndSendMessageModel>._))
+            .MustNotHaveHappened();
+    }
+    
+    [Fact]
+    public async Task UseCase_WillFail_WhenThisHasAlreadyBeenDenoted()
+    {
+        A.CallTo(() => _eventCheckinRepository.GetCharacterStorageInfo(_playerId, _eventId)).Returns(new CharacterStorageInfo());
+
+        var results = await _useCase.ExecuteAsync(_model);
+
+        Assert.True(results.IsFailed);
+        Assert.Contains(
+            results.Errors,
+            x => x.Message == "Character Storage has already been tracked."
         );
 
         A.CallTo(() =>

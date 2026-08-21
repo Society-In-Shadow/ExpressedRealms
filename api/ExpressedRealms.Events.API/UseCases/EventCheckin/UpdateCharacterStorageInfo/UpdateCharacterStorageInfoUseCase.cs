@@ -34,6 +34,12 @@ internal sealed class UpdateCharacterStorageInfoUseCase(
             return Result.Fail("You need an active event to update character storage.");
         }
 
+        var characterStorageInfo = await checkinRepository.GetCharacterStorageInfo(playerId, eventId.Value);
+        if (characterStorageInfo is not null)
+        {
+            return Result.Fail("Character Storage has already been tracked.");
+        }
+
         await checkinRepository.AddCharacterStorageInfo(new CharacterStorageInfo()
         {
             PlayerId = playerId,
