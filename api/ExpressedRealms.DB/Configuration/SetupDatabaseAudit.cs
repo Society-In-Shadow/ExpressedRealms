@@ -10,6 +10,7 @@ using ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit;
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels.Audit;
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels.Audit;
 using ExpressedRealms.DB.Models.Characters.Audit;
+using ExpressedRealms.DB.Models.Characters.CharacterStorage.CharacterStorageModels.Audit;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup.Audit;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup.Audit;
 using ExpressedRealms.DB.Models.Contacts.Audit;
@@ -73,6 +74,7 @@ public static class SetupDatabaseAudit
                             .AddFactionAuditTrailMapping()
                             .AddFactionLevelAuditTrailMapping()
                             .AddStatGroupMappingAuditTrailMapping()
+                            .AddCharacterStorageInfoAuditTrailMapping()
                             .AuditEntityAction<IAuditTable>(
                                 (evt, entry, audit) =>
                                 {

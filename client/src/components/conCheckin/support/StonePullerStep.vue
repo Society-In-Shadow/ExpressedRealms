@@ -12,6 +12,7 @@ const isFirstTimeUser = ref(false)
 const broughtNewPlayer = ref(false)
 const assignedXpAmount = ref({})
 const isReadOnly = ref(true)
+const hasCharacterStorage = ref(false)
 
 onMounted(async () => {
   const response = await eventCheckinInfo.getStonePullInformation()
@@ -21,15 +22,19 @@ onMounted(async () => {
   assignedXpAmount.value = response.assignedXp
   isReadOnly.value = response.hasCompletedStep
   checkinBonus.value = response.assignedXp?.amount ?? null
+  hasCharacterStorage.value = response.hasCharacterStorage
 
   if (broughtNewPlayer.value)
     checkinBonus.value = 5
 
   if (isFirstTimeUser.value)
     checkinBonus.value = 5
+
+  if (hasCharacterStorage.value)
+    checkinBonus.value = 5
 })
 
-const overrideBonus = computed(() => isFirstTimeUser.value || broughtNewPlayer.value)
+const overrideBonus = computed(() => isFirstTimeUser.value || broughtNewPlayer.value || hasCharacterStorage.value)
 
 function handleStonePulled(bonus: number) {
   if (checkinBonus.value === null)
@@ -42,6 +47,8 @@ async function permanentlySaveBonus() {
     type = 4
   else if (broughtNewPlayer.value)
     type = 5
+  else if (hasCharacterStorage.value)
+    type = 7
   await eventCheckinInfo.addAssignedXp(type, checkinBonus.value!)
 }
 
@@ -69,6 +76,9 @@ async function permanentlySaveBonus() {
   <p v-if="broughtNewPlayer && !isFirstTimeUser">
     They brought in a new player, they automatically get the full 5 xp <span v-if="assignedXpAmount == null">, you just need to save it</span>
   </p>
+  <p v-if="hasCharacterStorage && !isFirstTimeUser">
+    They paid for character storage, they automatically get the full 5 xp <span v-if="assignedXpAmount == null">, you just need to save it</span>
+  </p>
 
-  <StonePuller :hide-description="true" @neutral-pulled="handleStonePulled" />
+  <StonePuller v-if="!overrideBonus" :hide-description="true" @neutral-pulled="handleStonePulled" />
 </template>

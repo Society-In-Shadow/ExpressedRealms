@@ -2,6 +2,7 @@ using System.Data;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Helpers;
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
+using ExpressedRealms.DB.Models.Characters.CharacterStorage.CharacterStorageModels;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinSecondaryStatsSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
@@ -9,6 +10,7 @@ using ExpressedRealms.DB.Models.Checkins.CheckinStageMappingSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.DB.Models.Events.EventSetup;
 using ExpressedRealms.DB.Models.Events.Questions.QuestionTypeSetup;
+using ExpressedRealms.DB.Models.ModifierSystem.StatModifiers;
 using ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin.Dtos;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
@@ -316,7 +318,13 @@ internal sealed class EventCheckinRepository(
 
     public async Task<bool> HasPreAssignedXpTypes(int eventId, Guid playerId)
     {
-        List<int> validXpTypes = [2, 4, 5]; // checkin bonus, first time player, brought friend
+        List<int> validXpTypes =
+        [
+            AssignedXpTypeEnum.CheckinBonus,
+            AssignedXpTypeEnum.FirstTimePlayerXp,
+            AssignedXpTypeEnum.BroughtNewPlayerXp,
+            AssignedXpTypeEnum.BoughtCharacterStorage,
+        ];
         return await context.AssignedXpMappings.AnyAsync(
             x =>
                 x.EventId == eventId
@@ -430,5 +438,19 @@ internal sealed class EventCheckinRepository(
         );
 
         return (int)newCharacterIdParam.Value;
+    }
+
+    public Task<CharacterStorageInfo?> GetCharacterStorageInfo(Guid playerId, int eventId)
+    {
+        return context
+            .CharacterStorageInfos.Where(x => x.PlayerId == playerId && x.EventId == eventId)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<int> AddCharacterStorageInfo(CharacterStorageInfo characterStorageInfo)
+    {
+        context.CharacterStorageInfos.Add(characterStorageInfo);
+        await context.SaveChangesAsync(cancellationToken);
+        return characterStorageInfo.Id;
     }
 }

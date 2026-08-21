@@ -1,4 +1,5 @@
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
+using ExpressedRealms.DB.Models.Characters.CharacterStorage.CharacterStorageModels;
 using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinSecondaryStatsSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
@@ -50,4 +51,6 @@ public interface IEventCheckinRepository : IGenericRepository
     Task<UserCheckinPageDto> GetPlayerInfoForPlayerCheckinPage();
     Task<bool> DidBringFriendToCon(int checkinId);
     Task<int> CreatePrimaryCharacterArchiveAsync(Guid targetPlayerId);
+    Task<CharacterStorageInfo?> GetCharacterStorageInfo(Guid playerId, int eventId);
+    Task<int> AddCharacterStorageInfo(CharacterStorageInfo characterStorageInfo);
 }

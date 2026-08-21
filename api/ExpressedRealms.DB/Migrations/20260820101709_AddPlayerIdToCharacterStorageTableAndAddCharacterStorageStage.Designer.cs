@@ -3,6 +3,7 @@ using System;
 using ExpressedRealms.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpressedRealms.DB.Migrations
 {
     [DbContext(typeof(ExpressedRealmsDbContext))]
-    partial class ExpressedRealmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260820101709_AddPlayerIdToCharacterStorageTableAndAddCharacterStorageStage")]
+    partial class AddPlayerIdToCharacterStorageTableAndAddCharacterStorageStage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -756,57 +759,6 @@ namespace ExpressedRealms.DB.Migrations
                         .HasName("pk_assigned_xp_types");
 
                     b.ToTable("assigned_xp_types", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 3,
-                            Description = "XP assigned out for best costume, etc",
-                            IsDeleted = false,
-                            Name = "Awarded XP"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Description = "When a user pays for character storage, they get max of 5 XP",
-                            IsDeleted = false,
-                            Name = "Bought Character Storage"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Description = "Player introduced new player, will get max XP",
-                            IsDeleted = false,
-                            Name = "Brought New Player XP"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "XP earned when they initially check in",
-                            IsDeleted = false,
-                            Name = "Check-in Bonus"
-                        },
-                        new
-                        {
-                            Id = 1,
-                            Description = "XP that comes from Events that is automatically assigned",
-                            IsDeleted = false,
-                            Name = "Event XP"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Description = "First time players will get max of 5 XP",
-                            IsDeleted = false,
-                            Name = "First Time Player XP"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Description = "XP is being assigned out for uncommon reason",
-                            IsDeleted = false,
-                            Name = "Other"
-                        });
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels.Audit.AssignedXpTypeAuditTrail", b =>

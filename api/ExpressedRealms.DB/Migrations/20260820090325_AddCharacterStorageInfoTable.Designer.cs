@@ -3,6 +3,7 @@ using System;
 using ExpressedRealms.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpressedRealms.DB.Migrations
 {
     [DbContext(typeof(ExpressedRealmsDbContext))]
-    partial class ExpressedRealmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260820090325_AddCharacterStorageInfoTable")]
+    partial class AddCharacterStorageInfoTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -756,57 +759,6 @@ namespace ExpressedRealms.DB.Migrations
                         .HasName("pk_assigned_xp_types");
 
                     b.ToTable("assigned_xp_types", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 3,
-                            Description = "XP assigned out for best costume, etc",
-                            IsDeleted = false,
-                            Name = "Awarded XP"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Description = "When a user pays for character storage, they get max of 5 XP",
-                            IsDeleted = false,
-                            Name = "Bought Character Storage"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Description = "Player introduced new player, will get max XP",
-                            IsDeleted = false,
-                            Name = "Brought New Player XP"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "XP earned when they initially check in",
-                            IsDeleted = false,
-                            Name = "Check-in Bonus"
-                        },
-                        new
-                        {
-                            Id = 1,
-                            Description = "XP that comes from Events that is automatically assigned",
-                            IsDeleted = false,
-                            Name = "Event XP"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Description = "First time players will get max of 5 XP",
-                            IsDeleted = false,
-                            Name = "First Time Player XP"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Description = "XP is being assigned out for uncommon reason",
-                            IsDeleted = false,
-                            Name = "Other"
-                        });
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpTypeModels.Audit.AssignedXpTypeAuditTrail", b =>
@@ -1096,9 +1048,9 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("amount");
 
-                    b.Property<Guid>("CollectorPlayerId")
+                    b.Property<Guid>("CollectorUserId")
                         .HasColumnType("uuid")
-                        .HasColumnName("collector_player_id");
+                        .HasColumnName("collector_user_id");
 
                     b.Property<int>("EventId")
                         .HasColumnType("integer")
@@ -1108,13 +1060,9 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("opted_in");
 
-                    b.Property<Guid>("PlayerId")
+                    b.Property<Guid?>("SignOffUserId")
                         .HasColumnType("uuid")
-                        .HasColumnName("player_id");
-
-                    b.Property<Guid?>("SignOffPlayerId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("sign_off_player_id");
+                        .HasColumnName("sign_off_user_id");
 
                     b.Property<DateTimeOffset>("Timestamp")
                         .HasColumnType("timestamp with time zone")
@@ -1123,17 +1071,14 @@ namespace ExpressedRealms.DB.Migrations
                     b.HasKey("Id")
                         .HasName("pk_character_storage_infos");
 
-                    b.HasIndex("CollectorPlayerId")
-                        .HasDatabaseName("ix_character_storage_infos_collector_player_id");
+                    b.HasIndex("CollectorUserId")
+                        .HasDatabaseName("ix_character_storage_infos_collector_user_id");
 
                     b.HasIndex("EventId")
                         .HasDatabaseName("ix_character_storage_infos_event_id");
 
-                    b.HasIndex("PlayerId")
-                        .HasDatabaseName("ix_character_storage_infos_player_id");
-
-                    b.HasIndex("SignOffPlayerId")
-                        .HasDatabaseName("ix_character_storage_infos_sign_off_player_id");
+                    b.HasIndex("SignOffUserId")
+                        .HasDatabaseName("ix_character_storage_infos_sign_off_user_id");
 
                     b.ToTable("character_storage_infos", (string)null);
                 });
@@ -1550,12 +1495,6 @@ namespace ExpressedRealms.DB.Migrations
                             Id = 10,
                             Description = "Player has been assigned XP",
                             Name = "Assign XP Check"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Description = "Players have the ability to pay for character storage, this step gets that sorted out.",
-                            Name = "Character Storage Question"
                         },
                         new
                         {
@@ -5382,12 +5321,12 @@ namespace ExpressedRealms.DB.Migrations
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Characters.CharacterStorage.CharacterStorageModels.CharacterStorageInfo", b =>
                 {
-                    b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup.Player", "CollectorPlayer")
+                    b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup.Player", "CollectorUser")
                         .WithMany("CharacterStorageCollectorUsers")
-                        .HasForeignKey("CollectorPlayerId")
+                        .HasForeignKey("CollectorUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_character_storage_infos_players_collector_player_id");
+                        .HasConstraintName("fk_character_storage_infos_players_collector_user_id");
 
                     b.HasOne("ExpressedRealms.DB.Models.Events.EventSetup.Event", "Event")
                         .WithMany("CharacterStorageInfo")
@@ -5396,26 +5335,17 @@ namespace ExpressedRealms.DB.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_character_storage_infos_events_event_id");
 
-                    b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup.Player", "Player")
-                        .WithMany("CharacterStorageInfos")
-                        .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired()
-                        .HasConstraintName("fk_character_storage_infos_players_player_id");
-
-                    b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup.Player", "SignOffPlayer")
+                    b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup.Player", "SignOffUser")
                         .WithMany("CharacterStorageSignOffUsers")
-                        .HasForeignKey("SignOffPlayerId")
+                        .HasForeignKey("SignOffUserId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("fk_character_storage_infos_players_sign_off_player_id");
+                        .HasConstraintName("fk_character_storage_infos_players_sign_off_user_id");
 
-                    b.Navigation("CollectorPlayer");
+                    b.Navigation("CollectorUser");
 
                     b.Navigation("Event");
 
-                    b.Navigation("Player");
-
-                    b.Navigation("SignOffPlayer");
+                    b.Navigation("SignOffUser");
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Characters.XpTables.CharacterXpMapping", b =>
@@ -7149,8 +7079,6 @@ namespace ExpressedRealms.DB.Migrations
                     b.Navigation("AssignedXpMappings");
 
                     b.Navigation("CharacterStorageCollectorUsers");
-
-                    b.Navigation("CharacterStorageInfos");
 
                     b.Navigation("CharacterStorageSignOffUsers");
 

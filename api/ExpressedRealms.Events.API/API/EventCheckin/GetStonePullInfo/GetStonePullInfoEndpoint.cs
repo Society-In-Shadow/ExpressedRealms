@@ -27,6 +27,7 @@ public static class GetStonePullInfoEndpoint
                 HasCompletedStep = results.Value.HasCompletedStep,
                 IsFirstTimeUser = results.Value.IsFirstTimeUser,
                 BroughtFriend = results.Value.BroughtFriend,
+                HasCharacterStorage = results.Value.HasCharacterStorage,
                 AssignedXp = results.Value.AssignedXp is null
                     ? null
                     : new AssignedXpType()
