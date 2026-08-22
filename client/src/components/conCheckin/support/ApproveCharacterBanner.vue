@@ -11,6 +11,7 @@ import { characterStore } from '@/components/characters/character/stores/charact
 import { useRoute } from 'vue-router'
 import { pickedFactionQuery } from '@/components/characters/wizard/factions/stores/factionStore.ts'
 import { useQuery } from '@pinia/colada'
+import { goCheckList } from '@/components/conCheckin/stores/goStore.ts'
 
 const eventCheckinInfo = EventCheckinStore()
 const permissionInfo = userPermissionStore()
@@ -34,6 +35,11 @@ const { data: characterData, isLoading: characterDataLoading } = useQuery(() => 
   enabled: showBanner.value,
 }))
 
+const { data: goCheckData, isLoading: goChecksLoading } = useQuery(() => ({
+  ...goCheckList(Number.parseInt(route.params.id)),
+  enabled: showBanner.value,
+}))
+
 const reviewedCharacter = async () => {
   await eventCheckinInfo.approveCharacterSheet()
 }
@@ -42,9 +48,18 @@ const showFactionInfo = computed(() => {
   return !characterDataLoading.value && characterData.value && characterData.value.factionLevels.find(x => x.requestedPromotion && x.approvalDate == null)
 })
 
+const showKnowledgeList = computed(() => {
+  return !goChecksLoading.value && goCheckData.value
+})
+
 const enableReviewButton = computed(() => {
+  if (!showKnowledgeList.value)
+    return false
+
+  const allKnowledgesReviewed = goCheckData!.value!.knowledgeChecks!.every(x => x.isReviewed)
+
   return reviewedContacts.value
-    && (!showFactionInfo.value || reviewedFactionPromotionRequest.value)
+    && (!showFactionInfo.value || reviewedFactionPromotionRequest.value) && allKnowledgesReviewed
 })
 
 </script>
@@ -61,7 +76,16 @@ const enableReviewButton = computed(() => {
         <Checkbox v-model="reviewedFactionPromotionRequest" input-id="reviewed" class="mr-2" binary />
         <label for="reviewed">I have addressed their faction promotion request</label>
       </div>
-
+      <div v-if="showKnowledgeList">
+        <h2>Knowledge Review</h2>
+        <div v-for="knowledge in goCheckData!.knowledgeChecks" :key="knowledge.id" class="pt-1 mb-1">
+          <Checkbox v-model="knowledge.isReviewed" :input-id="'knowledge-' + knowledge.id" class="mr-2" binary />
+          <label :for="'knowledge-' + knowledge.id"><strong>{{ knowledge.name }}</strong> -
+            <span v-if="knowledge.isDoctorateLevel">Is at a doctorate level, needs a quest or approval of a quest</span>
+            <span v-if="knowledge.isUnknownKnowledge">Is an unknown knowledge, these are hidden and need to be approved by a GO</span>
+          </label>
+        </div>
+      </div>
       <Button label="Reviewed Character" class="mt-3" :disabled="!enableReviewButton" @click="reviewedCharacter" />
     </div>
   </Message>

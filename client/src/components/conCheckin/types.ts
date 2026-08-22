@@ -98,3 +98,15 @@ export interface GetBreakOfDawnInfoResponse {
   characterLevel: number
   expressionId: number
 }
+
+export interface GoChecksResponse {
+  knowledgeChecks?: KnowledgeCheck[]
+}
+
+export interface KnowledgeCheck {
+  id?: number | string
+  name: string
+  isDoctorateLevel?: boolean
+  isUnknownKnowledge?: boolean
+  isReviewed: boolean
+}

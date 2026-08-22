@@ -11,11 +11,11 @@ internal static class GetGoCheckinInfoEndpoint
     internal static async Task<
         Results<Ok<GoCheckinChecks>, NotFound, StatusCodeHttpResult, ValidationProblem>
     > ExecuteAsync(
-        int id,
+        int characterId,
         [FromServices] IGetGoCheckinInfoUseCase repository
     )
     {
-        var status = await repository.ExecuteAsync(new() { Id = id });
+        var status = await repository.ExecuteAsync(new() { Id = characterId });
 
         if (status.HasValidationError(out var validation))
             return validation;
