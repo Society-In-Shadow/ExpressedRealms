@@ -1,4 +1,4 @@
-namespace ExpressedRealms.Characters.UseCases.Characters.GetGoCheckinInfo;
+namespace ExpressedRealms.Characters.API.CharacterEndPoints.GetGoCheckinInfo;
 
 public class ContactCheck
 {
