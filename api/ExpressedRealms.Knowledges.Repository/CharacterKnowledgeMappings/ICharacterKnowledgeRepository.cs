@@ -23,4 +23,8 @@ public interface ICharacterKnowledgeRepository
         int knowledgeLevel,
         string specialization
     );
+
+    Task<List<GoApprovalKnowledgeProjection>> GetGoApprovalKnowledges(
+        int characterId
+    );
 }

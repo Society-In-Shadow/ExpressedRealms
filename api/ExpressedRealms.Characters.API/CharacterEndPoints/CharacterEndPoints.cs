@@ -12,6 +12,7 @@ using ExpressedRealms.Characters.API.CharacterEndPoints.GetBreakOfDawnInfo;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetCharacterGoFields;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetCRB;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetDetailedStatInfo;
+using ExpressedRealms.Characters.API.CharacterEndPoints.GetGoCheckinInfo;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetOverallStats;
 using ExpressedRealms.Characters.API.CharacterEndPoints.GetStatsForCharacter;
 using ExpressedRealms.Characters.API.CharacterEndPoints.Requests;
@@ -305,6 +306,13 @@ internal static class CharacterEndPoints
             .MapPut(
                 "{characterId}/stat/{statTypeId}",
                 EditStatInfoForCharacterEndpoint.ExecuteAsync
+            )
+            .RequireAuthorization();
+        
+        endpointGroup
+            .MapGet(
+                "{characterId}/goChecks",
+                GetGoCheckinInfoEndpoint.ExecuteAsync
             )
             .RequireAuthorization();
 
