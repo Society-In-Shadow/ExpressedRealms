@@ -55,6 +55,13 @@ const onSubmit = form.handleSubmit(async (values) => {
   await store.addKnowledge(values, route.params.id, props.knowledge.id)
 })
 
+function getCost(knowledge: Knowledge, knowledgeLevel: KnowledgeOptions) {
+  if (knowledge.typeName === 'Unknown') {
+    return knowledgeLevel.totalUnknownXpCost
+  }
+  return knowledgeLevel.totalGeneralXpCost
+}
+
 </script>
 
 <template>
@@ -74,10 +81,14 @@ const onSubmit = form.handleSubmit(async (values) => {
   <form @submit="onSubmit">
     <DataTable v-model:selection="form.knowledgeLevel2.field.value" selection-mode="single" :value="store.knowledgeLevels" data-key="id" :row-class="row => (row.disabled ? 'non-selectable' : '')">
       <Column selection-mode="single" header-style="width: 3rem" />
-      <Column field="name" header="Name" />
+      <Column field="name" header="Name">
+        <template #body="slotProps">
+          {{ slotProps.data.name }} ({{ slotProps.data.level }})
+        </template>
+      </Column>
       <Column field="totalGeneralXpCost" header="XP" header-class="text-center" body-class="text-center">
         <template #body="slotProps">
-          -{{ slotProps.data.totalGeneralXpCost }}
+          -{{ getCost(props.knowledge, slotProps.data) }}
         </template>
       </Column>
       <Column field="stoneModifier" header="Stones" header-class="text-center" body-class="text-center" />

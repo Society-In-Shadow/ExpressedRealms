@@ -156,6 +156,25 @@ public class CharacterKnowledgeRepository(
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<List<GoApprovalKnowledgeProjection>> GetGoApprovalKnowledges(int characterId)
+    {
+        return await context
+            .CharacterKnowledgeMappings.Where(x =>
+                x.CharacterId == characterId
+                && (x.KnowledgeLevelId == 8 || x.Knowledge.KnowledgeTypeId == 3)
+            )
+            .OrderByDescending(x => x.KnowledgeLevel.Level)
+            .ThenBy(x => x.Knowledge.Name)
+            .Select(x => new GoApprovalKnowledgeProjection()
+            {
+                Id = x.KnowledgeId,
+                Name = x.Knowledge.Name,
+                LevelId = x.KnowledgeLevelId,
+                KnowledgeTypeId = x.Knowledge.KnowledgeTypeId,
+            })
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<SpecializationCountProjection> GetSpecializationCountForMapping(int mappingId)
     {
         return await context
