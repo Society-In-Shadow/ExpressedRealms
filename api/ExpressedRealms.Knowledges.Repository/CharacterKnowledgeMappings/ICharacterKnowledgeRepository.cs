@@ -24,7 +24,5 @@ public interface ICharacterKnowledgeRepository
         string specialization
     );
 
-    Task<List<GoApprovalKnowledgeProjection>> GetGoApprovalKnowledges(
-        int characterId
-    );
+    Task<List<GoApprovalKnowledgeProjection>> GetGoApprovalKnowledges(int characterId);
 }

@@ -3,8 +3,7 @@ using FluentValidation;
 
 namespace ExpressedRealms.Characters.UseCases.Characters.GetGoCheckinInfo;
 
-internal sealed class GetGoCheckinInfoModelValidator
-    : AbstractValidator<GetGoCheckinInfoModel>
+internal sealed class GetGoCheckinInfoModelValidator : AbstractValidator<GetGoCheckinInfoModel>
 {
     public GetGoCheckinInfoModelValidator(ICharacterRepository characterRepository)
     {

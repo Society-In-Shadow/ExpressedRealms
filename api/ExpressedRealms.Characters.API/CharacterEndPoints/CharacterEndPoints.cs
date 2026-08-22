@@ -308,12 +308,9 @@ internal static class CharacterEndPoints
                 EditStatInfoForCharacterEndpoint.ExecuteAsync
             )
             .RequireAuthorization();
-        
+
         endpointGroup
-            .MapGet(
-                "{characterId}/goChecks",
-                GetGoCheckinInfoEndpoint.ExecuteAsync
-            )
+            .MapGet("{characterId}/goChecks", GetGoCheckinInfoEndpoint.ExecuteAsync)
             .RequireAuthorization();
 
         endpointGroup

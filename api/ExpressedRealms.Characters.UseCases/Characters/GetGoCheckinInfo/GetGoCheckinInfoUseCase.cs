@@ -31,18 +31,19 @@ internal sealed class GetGoCheckinInfoUseCase(
         return Result.Ok(
             new GetCharacterGoFieldReturnModel()
             {
-                Contacts = contacts.Where(x => !x.IsApproved).Select(x => new ContactCheck()
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                }).ToList(),
-                Knowledges = knowledges.Select(x => new KnowledgeToCheck()
-                {
-                    Name = x.Name,
-                    IsDoctorateLevel = x.LevelId == 8,
-                    IsUnknownKnowledge = x.KnowledgeTypeId == 3,
-                    Id = x.Id
-                }).ToList()
+                Contacts = contacts
+                    .Where(x => !x.IsApproved)
+                    .Select(x => new ContactCheck() { Id = x.Id, Name = x.Name })
+                    .ToList(),
+                Knowledges = knowledges
+                    .Select(x => new KnowledgeToCheck()
+                    {
+                        Name = x.Name,
+                        IsDoctorateLevel = x.LevelId == 8,
+                        IsUnknownKnowledge = x.KnowledgeTypeId == 3,
+                        Id = x.Id,
+                    })
+                    .ToList(),
             }
         );
     }

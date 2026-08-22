@@ -10,10 +10,7 @@ internal static class GetGoCheckinInfoEndpoint
 {
     internal static async Task<
         Results<Ok<GoCheckinChecks>, NotFound, StatusCodeHttpResult, ValidationProblem>
-    > ExecuteAsync(
-        int characterId,
-        [FromServices] IGetGoCheckinInfoUseCase repository
-    )
+    > ExecuteAsync(int characterId, [FromServices] IGetGoCheckinInfoUseCase repository)
     {
         var status = await repository.ExecuteAsync(new() { Id = characterId });
 
@@ -28,18 +25,16 @@ internal static class GetGoCheckinInfoEndpoint
         return TypedResults.Ok(
             new GoCheckinChecks()
             {
-                Contacts = status.Value.Contacts.Select(x => new ContactCheck()
-                {
-                    Id = x.Id,
-                    Name = x.Name
-                }).ToList(),
+                Contacts = status
+                    .Value.Contacts.Select(x => new ContactCheck() { Id = x.Id, Name = x.Name })
+                    .ToList(),
                 KnowledgeChecks = status
                     .Value.Knowledges.Select(x => new KnowledgeCheck()
                     {
                         Name = x.Name,
                         Id = x.Id,
                         IsDoctorateLevel = x.IsDoctorateLevel,
-                        IsUnknownKnowledge = x.IsUnknownKnowledge
+                        IsUnknownKnowledge = x.IsUnknownKnowledge,
                     })
                     .ToList(),
             }
