@@ -51,7 +51,7 @@ internal sealed class UpdateCharacterStorageInfoUseCase(
                 CollectorPlayerId = await checkinRepository.GetCurrentPlayerId(),
                 Timestamp = timeProvider.GetUtcNow(),
                 OptedIn = model.OptedIn,
-                Amount = 15,
+                Amount = 20,
             }
         );
 

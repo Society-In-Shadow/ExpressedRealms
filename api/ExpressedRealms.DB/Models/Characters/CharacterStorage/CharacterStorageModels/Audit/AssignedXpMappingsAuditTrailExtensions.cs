@@ -33,10 +33,6 @@ internal static class CharacterStorageInfoAuditTrailExtensions
                     changedRecord.FriendlyName = "Collector Player";
                     break;
 
-                case "sign_off_player_id":
-                    changedRecord.FriendlyName = "Sign Off Player";
-                    break;
-
                 default:
                     throw new MissingAuditColumnException(changedRecord.ColumnName);
             }
