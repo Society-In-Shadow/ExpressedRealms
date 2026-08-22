@@ -70,7 +70,7 @@ export const confirmationPopups = () => {
     confirm.require({
       target: mouseEvent.target as HTMLElement,
       group: 'popup',
-      message: `You will be responsible for making sure SHQ records the money as deposited`,
+      message: `You will be responsible depositing the money correctly`,
       icon: 'pi pi-info-circle',
       rejectProps: {
         label: 'Cancel',
@@ -78,7 +78,7 @@ export const confirmationPopups = () => {
         outlined: true,
       },
       acceptProps: {
-        label: `I will wait for deposit confirmation`,
+        label: `I will make sure to deposit the money correctly`,
         severity: 'warning',
       },
       accept: async () => {
