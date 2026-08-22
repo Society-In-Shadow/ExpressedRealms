@@ -24,11 +24,5 @@ public class CharacterStorageInfoConfiguration : IEntityTypeConfiguration<Charac
             .WithMany(x => x.CharacterStorageInfo)
             .HasForeignKey(x => x.EventId)
             .OnDelete(DeleteBehavior.Restrict);
-
-        builder
-            .HasOne(x => x.SignOffPlayer)
-            .WithMany(x => x.CharacterStorageSignOffUsers)
-            .HasForeignKey(x => x.SignOffPlayerId)
-            .OnDelete(DeleteBehavior.Restrict);
     }
 }

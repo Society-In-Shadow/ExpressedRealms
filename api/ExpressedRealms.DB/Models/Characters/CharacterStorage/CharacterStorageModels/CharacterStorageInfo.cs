@@ -32,10 +32,6 @@ public class CharacterStorageInfo
 
     public int Amount { get; set; }
 
-    public Guid? SignOffPlayerId { get; set; }
-
-    public virtual Player? SignOffPlayer { get; set; } = null!;
-
     [Required]
     [AuditIgnore]
     public DateTimeOffset Timestamp { get; set; }

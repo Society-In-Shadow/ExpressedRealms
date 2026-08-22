@@ -152,7 +152,7 @@ public class UpdateCharacterStorageInfoUseCaseTests
                         && x.CollectorPlayerId == _collectorPlayerId
                         && x.Timestamp == _dateTimeNow
                         && x.OptedIn == optedIn
-                        && x.Amount == 15
+                        && x.Amount == 20
                     )
                 )
             )

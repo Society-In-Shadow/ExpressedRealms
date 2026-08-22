@@ -46,24 +46,15 @@ watch(() => eventCheckinInfo.isReset, (old, newValue) => {
   </ul>
   <h2>GO's / SHQ</h2>
   <p>
-    The verification of the money drop-off is a separate manual process, the moment you click opt in below, you are on
-    the hook for making sure SHQ denotes that you have dropped off the money for a specific character. This website will
+    Lead GO is responsible for cash box on the first day of con, to allow SHQ the ability to focus on printing out CRBs.
+    The remaining days SHQ will be responsible for handling the cash box
+  </p>
+  <p>
+    By clicking the button below, you are on the hook for making sure the money gets handled correctly. This website will
     keep a ledger of who owes how much.
   </p>
-  <p>
-    Money will be considered dropped off only when we have specifically told you that we have it tracked in the tool,
-    and until then, you are fully on the hook for the money.
-  </p>
-  <p>
-    <strong><em>
-      Just dropping it off at the front desk and expecting us to handle it when we are free will not be tolerated
-    </em></strong>
-  </p>
-  <p>
-    You may send them to SHQ if you are not comfortable collecting and handling the money
-  </p>
   <div>
-    <Checkbox v-model="optedIn" input-id="opt-in" binary /><label class="ml-2" for="opt-in">Opted In - Paid in Cash</label>
+    <Checkbox v-model="optedIn" input-id="opt-in" binary /><label class="ml-2" for="opt-in">Paid in Cash</label>
   </div>
 
   <Button label="Update Character Storage" class="mt-3" @click="popups.characterStorageConfirmation($event, optedIn)" />
