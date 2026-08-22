@@ -100,13 +100,20 @@ export interface GetBreakOfDawnInfoResponse {
 }
 
 export interface GoChecksResponse {
-  knowledgeChecks?: KnowledgeCheck[]
+  knowledgeChecks: KnowledgeCheck[]
+  contacts: ContactCheck[]
 }
 
 export interface KnowledgeCheck {
-  id?: number | string
+  id: number
   name: string
   isDoctorateLevel?: boolean
   isUnknownKnowledge?: boolean
+  isReviewed: boolean
+}
+
+export interface ContactCheck {
+  id: number
+  name: string
   isReviewed: boolean
 }

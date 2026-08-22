@@ -28,6 +28,11 @@ internal static class GetGoCheckinInfoEndpoint
         return TypedResults.Ok(
             new GoCheckinChecks()
             {
+                Contacts = status.Value.Contacts.Select(x => new ContactCheck()
+                {
+                    Id = x.Id,
+                    Name = x.Name
+                }).ToList(),
                 KnowledgeChecks = status
                     .Value.Knowledges.Select(x => new KnowledgeCheck()
                     {

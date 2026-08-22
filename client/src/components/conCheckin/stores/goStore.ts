@@ -9,4 +9,14 @@ export const GO_CHECKS_QUERY_KEYS = {
 export const goCheckList = defineQueryOptions((characterId: number) => ({
   key: GO_CHECKS_QUERY_KEYS.getChecks(characterId),
   query: () => goService.getGoChecks(characterId),
+  select: data => ({
+    contacts: data.contacts.map(x => ({
+      ...x,
+      isReviewed: false,
+    })),
+    knowledgeChecks: data.knowledgeChecks.map(x => ({
+      ...x,
+      isReviewed: false,
+    })),
+  }),
 }))
