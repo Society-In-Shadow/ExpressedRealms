@@ -59,10 +59,10 @@ async function loadInfo() {
 
     let xpCost = 0
     if (index === 0) {
-      xpCost = level.totalGeneralXpCost
+      xpCost = getCurrentXpLevel(level.id)
     }
     else {
-      xpCost = level.totalGeneralXpCost - getCurrentXpLevel(knowledge.value.levelId)
+      xpCost = getCurrentXpLevel(level.id) - getCurrentXpLevel(knowledge.value.levelId)
     }
 
     const factionRequirementMinimum = knowledge.value.minimumKnowledgeId > level.id
@@ -83,8 +83,11 @@ const onSubmit = form.handleSubmit(async (values) => {
 
 function getCurrentXpLevel(levelId: number) {
   let level = store.knowledgeLevels.filter(function (level: KnowledgeOptions) {
-    return level.id === levelId
+    return level.level === levelId
   })[0]
+
+  if (!level)
+    return 0
 
   if (isUnknownKnowledge.value) {
     return level.totalUnknownXpCost
@@ -135,10 +138,14 @@ const onRowUnselect = (event) => {
       @row-unselect="onRowUnselect"
     >
       <Column selection-mode="single" header-style="width: 3rem" />
-      <Column field="name" header="Name" />
+      <Column field="name" header="Name">
+        <template #body="slotProps">
+          {{ slotProps.data.name }} ({{ slotProps.data.level }})
+        </template>
+      </Column>
       <Column field="totalGeneralXpCost" header="XP" header-class="text-center" body-class="text-center">
         <template #body="slotProps">
-          {{ slotProps.data.totalGeneralXpCost > getCurrentXpLevel(knowledge.levelId) ? "-" : "+" }}{{ Math.abs(slotProps.data.totalGeneralXpCost - getCurrentXpLevel(knowledge.levelId)) }}
+          {{ getCurrentXpLevel(slotProps.data.level) > getCurrentXpLevel(knowledge.levelId -1) ? "-" : "+" }}{{ Math.abs(getCurrentXpLevel(slotProps.data.level) - getCurrentXpLevel(knowledge.levelId - 1)) }}
         </template>
       </Column>
       <Column field="stoneModifier" header="Stones" header-class="text-center" body-class="text-center" />

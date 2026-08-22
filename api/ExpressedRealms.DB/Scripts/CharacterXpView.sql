@@ -21,11 +21,18 @@ WITH calc AS (
     UNION ALL
     SELECT
         ckm.character_id AS character_id,
-        SUM(kel.total_general_xp_cost + (COALESCE(spec.spec_count, 0) * 2))::bigint  AS xp_total,
+        SUM(
+                CASE
+                    WHEN knowledges.knowledge_type_id = 3 THEN /* Unknowns are treated differently */
+                        kel.total_unknown_xp_cost + COALESCE(spec.spec_count, 0::bigint) * 2
+                    ELSE
+                        kel.total_general_xp_cost + COALESCE(spec.spec_count, 0::bigint) * 2
+                    END
+        )::bigint AS xp_total,
         3 AS section_type_id
     FROM character_knowledge_mappings ckm
-             JOIN knowledge_education_levels kel
-                  ON ckm.knowledge_level_id = kel.id
+             JOIN knowledge_education_levels kel ON ckm.knowledge_level_id = kel.id
+             JOIN knowledges on ckm.knowledge_id = knowledges.id
              LEFT JOIN (
         SELECT
             knowledge_mapping_id,
