@@ -42,11 +42,7 @@ const props = defineProps({
 // Create a computed property for sorted Events
 const sortedEvents = computed<Event[]>(() => {
   return [...store.events].sort((a, b) => {
-    // Assuming you want to sort by a property like 'title' or 'name'
-    // Replace 'title' with the actual property you want to sort by
-    const nameA = a.name?.toLowerCase() || ''
-    const nameB = b.name?.toLowerCase() || ''
-    return nameA.localeCompare(nameB)
+    return b.startDate - a.startDate
   })
 })
 const today = DateTime.now().startOf('day')
