@@ -13,7 +13,7 @@ const { data, isLoading, error } = useQueryWithLoading(participantsQuery)
 <template>
   <div class="d-flex flex-row align-items-center">
     <div class="flex-fill">
-      <h1>Faction Participants</h1>
+      <h1>Faction Members</h1>
     </div>
   </div>
   <div v-if="isLoading">
@@ -22,7 +22,7 @@ const { data, isLoading, error } = useQueryWithLoading(participantsQuery)
   <div v-else-if="error">
     <Card>
       <template #title>
-        Error Loading Archetypes
+        Error Loading Faction Members
       </template>
       <template #content>
         Please try again, or open an issue on discord
