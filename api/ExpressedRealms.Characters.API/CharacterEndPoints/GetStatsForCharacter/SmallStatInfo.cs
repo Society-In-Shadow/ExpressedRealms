@@ -1,6 +1,6 @@
 using ExpressedRealms.Characters.Repository.Stats.Enums;
 
-namespace ExpressedRealms.Characters.API.StatEndPoints.Responses;
+namespace ExpressedRealms.Characters.API.CharacterEndPoints.GetStatsForCharacter;
 
 public class SmallStatInfo(Repository.Stats.DTOs.SmallStatInfo smallStatInfo)
 {

@@ -13,9 +13,12 @@ import { wizardContentStore } from '@/components/characters/wizard/stores/wizard
 import type { WizardContent } from '@/components/characters/wizard/types.ts'
 import { XpSectionTypes } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
 import TrackableProficiencies from '@/components/characters/character/proficiency/TrackableProficiencies.vue'
+import { characterStore } from '@/components/characters/character/stores/characterStore.ts'
+import Checkbox from 'primevue/checkbox'
 
 const route = useRoute()
 const statData = statStore()
+const characterData = characterStore()
 
 onMounted(async () => {
   await statData.loadData(route.params.id)
@@ -47,7 +50,7 @@ const updateWizardContent = (statTypeId: number) => {
   </p>
   <ShowXPCosts :section-type="XpSectionTypes.stats" />
   <div>
-    <DataTable :value="statData.stats" data-key="statTypeId">
+    <DataTable :value="statData.stats" data-key="statTypeId" class="pb-3">
       <Column field="name" header="Name">
         <template #body="slotProps">
           <SkeletonWrapper height="1.5rem" width="2rem" :show-skeleton="statData.isLoading">
@@ -68,6 +71,23 @@ const updateWizardContent = (statTypeId: number) => {
         </template>
       </Column>
     </DataTable>
+    <div v-if="characterData.isInCharacterCreation">
+      Extra Mortis can only be purchased outside of character creation.
+    </div>
+    <div v-else>
+      <h3>Mortis</h3>
+      <p>
+        Mortis represents your character’s ability to withstand incapacitation without dying, and is therefore the
+        ultimate measure of your character’s deepest bodily reserves. You may think of it as your character’s personal
+        death-danger meter.
+      </p>
+      <p>
+        The higher your Mortis, the better the chance you will survive being incapacitated. Supernatural characters
+        begin with a max Mortis of 7. It is possible for a supernatural character to develop it, with experience, to 8.
+      </p>
+      <p>Extra Mortis is a one time purchase you can opt into after character creation for 12xp.  As it implies, it gives you one extra mortis point.</p>
+      <Checkbox v-model="statData.hasExtraMortis" input-id="extra-mortis" binary @change="statData.updateMortis(route.params.id)" /><label class="ml-2" for="extra-mortis">+1 Mortis - 12xp</label>
+    </div>
     <div class="mt-3">
       <TrackableProficiencies :show-help-text="true" />
     </div>

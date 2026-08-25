@@ -13,6 +13,7 @@ export const statStore
         stats: [{}, {}, {}, {}, {}, {}],
         isLoading: false as boolean,
         statLevels: [] as Array<LevelInfo>,
+        hasExtraMortis: false as boolean,
       }
     },
     actions: {
@@ -20,9 +21,17 @@ export const statStore
         this.isLoading = true
         await axios.get(`/characters/${characterId}/stats`)
           .then((response) => {
-            this.stats = response.data
+            this.stats = response.data.stats
+            this.hasExtraMortis = response.data.hasExtraMortis
             this.isLoading = false
           })
+      },
+      async updateMortis(characterId: number) {
+        await axios.put(`/characters/${characterId}/stats/extraMortis`, {
+          hasExtraMortis: this.hasExtraMortis,
+        })
+        await experienceInfo.updateExperience(characterId)
+        toasters.success('Successfully updated Extra Mortis!')
       },
       async getEditOptions(statTypeId: number) {
         await axios.get(`/stats/${statTypeId}`)

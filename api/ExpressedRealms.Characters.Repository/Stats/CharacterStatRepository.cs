@@ -142,28 +142,32 @@ internal sealed class CharacterStatRepository(
         return Result.Ok();
     }
 
-    public async Task<Result<List<SmallStatInfo>>> GetAllStats(int characterId)
+    public async Task<Result<GetAllStatsInfo>> GetAllStats(int characterId)
     {
         var query = await context
             .Characters.AsNoTracking()
             .WithUserAccessAsync(userContext, characterId);
 
-        var character = await query.Select(x => x.Id).FirstOrDefaultAsync();
-        if (character == 0)
+        var character = await query.Select(x => new { x.Id, x.ExtraMortis }).FirstOrDefaultAsync();
+        if (character is null)
             return Result.Fail(new NotFoundFailure("Character"));
 
-        return await context
-            .CharacterStatMappings.AsNoTracking()
-            .Where(x => x.CharacterId == characterId)
-            .Select(x => new SmallStatInfo()
-            {
-                StatTypeId = (StatType)x.StatTypeId,
-                Bonus = x.StatLevel.Bonus,
-                Level = x.StatLevelId,
-                ShortName = x.StatType.ShortName,
-                Name = x.StatType.Name,
-            })
-            .OrderBy(x => x.StatTypeId)
-            .ToListAsync(cancellationToken);
+        return new GetAllStatsInfo()
+        {
+            ExtraMortis = character.ExtraMortis,
+            StatInfos = await context
+                .CharacterStatMappings.AsNoTracking()
+                .Where(x => x.CharacterId == characterId)
+                .Select(x => new SmallStatInfo()
+                {
+                    StatTypeId = (StatType)x.StatTypeId,
+                    Bonus = x.StatLevel.Bonus,
+                    Level = x.StatLevelId,
+                    ShortName = x.StatType.ShortName,
+                    Name = x.StatType.Name,
+                })
+                .OrderBy(x => x.StatTypeId)
+                .ToListAsync(cancellationToken),
+        };
     }
 }

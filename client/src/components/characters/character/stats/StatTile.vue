@@ -16,7 +16,7 @@ const isLoading = ref(true)
 onMounted(async () => {
   axios.get(`/characters/${route.params.id}/stats`)
     .then((response) => {
-      stats.value = response.data
+      stats.value = response.data.stats
       isLoading.value = false
     })
 })

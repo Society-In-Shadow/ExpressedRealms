@@ -60,12 +60,17 @@ WITH calc AS (
              JOIN skill_levels ON character_skills_mappings.skill_level_id = skill_levels.id
     GROUP BY character_skills_mappings.character_id
     UNION ALL
-    SELECT character_stat_mappings.character_id AS character_id,
-           sum(levels.total_xp_cost) AS xp_total,
+    SELECT c.id AS character_id,
+           COALESCE(SUM(sl.total_xp_cost), 0)
+               + CASE
+                     WHEN c.extra_mortis THEN 12
+                     ELSE 0
+               END AS xp_total,
            6 AS section_type_id
-    FROM character_stat_mappings
-             JOIN stat_levels levels ON character_stat_mappings.stat_level_id = levels.id
-    GROUP BY character_stat_mappings.character_id
+    FROM public.characters c
+             LEFT JOIN character_stat_mappings csm ON csm.character_id = c.id
+             LEFT JOIN stat_levels sl ON csm.stat_level_id = sl.id
+    GROUP BY c.id, c.extra_mortis
     UNION ALL
     SELECT contacts.character_id AS character_id,
            sum(contacts.spent_xp) AS total_xp,
