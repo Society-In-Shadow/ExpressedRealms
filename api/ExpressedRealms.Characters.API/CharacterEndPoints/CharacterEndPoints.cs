@@ -18,6 +18,7 @@ using ExpressedRealms.Characters.API.CharacterEndPoints.GetStatsForCharacter;
 using ExpressedRealms.Characters.API.CharacterEndPoints.Requests;
 using ExpressedRealms.Characters.API.CharacterEndPoints.Responses;
 using ExpressedRealms.Characters.API.CharacterEndPoints.RetireCharacter;
+using ExpressedRealms.Characters.API.CharacterEndPoints.ToggleExtraMortis;
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.DTOs;
 using ExpressedRealms.Characters.Repository.Skills;
@@ -318,6 +319,10 @@ internal static class CharacterEndPoints
             .WithDescription(
                 "Returns the info needed for displaying the small stat tiles, mainly the bonus, stat name and level."
             )
+            .RequireAuthorization();
+        
+        endpointGroup
+            .MapPut("{characterId}/stats/extraMortis", ToggleExtraMortisEndpoint.ExecuteAsync)
             .RequireAuthorization();
 
         endpointGroup

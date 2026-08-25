@@ -86,7 +86,7 @@ const updateWizardContent = (statTypeId: number) => {
         begin with a max Mortis of 7. It is possible for a supernatural character to develop it, with experience, to 8.
       </p>
       <p>Extra Mortis is a one time purchase you can opt into after character creation for 12xp.  As it implies, it gives you one extra mortis point.</p>
-      <Checkbox v-model="statData.hasExtraMortis" input-id="extra-mortis" binary /><label class="ml-2" for="extra-mortis">+1 Mortis - 12xp</label>
+      <Checkbox v-model="statData.hasExtraMortis" input-id="extra-mortis" binary @change="statData.updateMortis(route.params.id)" /><label class="ml-2" for="extra-mortis">+1 Mortis - 12xp</label>
     </div>
     <div class="mt-3">
       <TrackableProficiencies :show-help-text="true" />

@@ -26,6 +26,13 @@ export const statStore
             this.isLoading = false
           })
       },
+      async updateMortis(characterId: number) {
+        await axios.put(`/characters/${characterId}/stats/extraMortis`, {
+          hasExtraMortis: this.hasExtraMortis,
+        })
+        await experienceInfo.updateExperience(characterId)
+        toasters.success('Successfully updated Extra Mortis!')
+      },
       async getEditOptions(statTypeId: number) {
         await axios.get(`/stats/${statTypeId}`)
           .then((response) => {
