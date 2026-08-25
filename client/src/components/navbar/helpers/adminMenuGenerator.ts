@@ -76,8 +76,8 @@ export function populateAdminMenu() {
   if (permissionCheck.Faction.ViewAllParticipants) {
     adminMenuItems.push({
       navMenuType: 'simple',
-      label: 'Faction Participants',
-      description: 'All factions and their participants.',
+      label: 'Faction Members',
+      description: 'List of all factions and any members.',
       navMenuIcon: 'person_raised_hand',
       pushComponentRouteName: 'factions',
       visible: () => permissionCheck.Faction.ViewAllParticipants,
