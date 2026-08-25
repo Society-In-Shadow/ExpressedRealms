@@ -53,4 +53,5 @@ public interface IEventCheckinRepository : IGenericRepository
     Task<int> CreatePrimaryCharacterArchiveAsync(Guid targetPlayerId);
     Task<CharacterStorageInfo?> GetCharacterStorageInfo(Guid playerId, int eventId);
     Task<int> AddCharacterStorageInfo(CharacterStorageInfo characterStorageInfo);
+    Task<List<CharacterStorageOptin>> GeCharacterStorageUsersForEvent(int activeEventId);
 }
