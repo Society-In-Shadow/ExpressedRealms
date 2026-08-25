@@ -59,5 +59,11 @@ export const AdminRoutes = {
       component: () => import('@/components/admin/archetypes/ArchetypeList.vue'),
       meta: { requiredPermission: UserPermissions.Archetypes.View },
     },
+    {
+      path: 'factions',
+      name: 'factions',
+      component: () => import('@/components/admin/factions/FactionList.vue'),
+      meta: { requiredPermission: UserPermissions.Faction.ViewAllParticipants },
+    },
   ],
 }

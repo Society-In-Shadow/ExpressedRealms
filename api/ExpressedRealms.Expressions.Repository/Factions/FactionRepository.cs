@@ -1,9 +1,13 @@
 using ExpressedRealms.DB;
+using ExpressedRealms.DB.Models.Expressions.CmsTypeSetup;
+using ExpressedRealms.DB.Models.Expressions.ExpressionPublishStatusSetup;
 using ExpressedRealms.DB.Models.Factions.FactionLevelModels;
 using ExpressedRealms.DB.Models.Factions.FactionModels;
 using ExpressedRealms.DB.Models.Factions.FactionRankModels;
 using ExpressedRealms.Expressions.Repository.Factions.Dtos;
+using ExpressedRealms.Expressions.Repository.Factions.Dtos.ExpressionFactionDtos;
 using Microsoft.EntityFrameworkCore;
+using FactionDto = ExpressedRealms.Expressions.Repository.Factions.Dtos.FactionDto;
 
 namespace ExpressedRealms.Expressions.Repository.Factions;
 
@@ -95,6 +99,53 @@ internal sealed class FactionRepository(
                     .ToList(),
             })
             .Where(x => x.ExpressionId == expressionId)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<List<ExpressionDto>> GetExpressionFactions()
+    {
+        List<int> availableExpressions =
+        [
+            ExpressionPublishStatusEnum.Published.Value,
+            ExpressionPublishStatusEnum.PlayTesting.Value,
+        ];
+        return await context
+            .Expressions.Where(x =>
+                availableExpressions.Contains(x.PublishStatusId)
+                && x.CmsTypeId == CmsTypeEnum.Expression
+            )
+            .OrderBy(x => x.Name)
+            .Select(x => new ExpressionDto()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Factions = x
+                    .Factions.OrderBy(x => x.Name)
+                    .Select(y => new ExpressionFactionDto()
+                    {
+                        Id = y.Id,
+                        Name = y.Name,
+                        Players = y
+                            .FactionLevels.OrderBy(x => x.FactionRankId)
+                            .SelectMany(z =>
+                                z.CharacterFactionMappings.Where(x =>
+                                        x.Character.IsPrimaryCharacter
+                                    )
+                                    .Select(a => new PlayerDto()
+                                    {
+                                        Id = a.Character.Id,
+                                        CharacterName = a.Character.Name,
+                                        Level = z.FactionRank.Id,
+                                        LevelName = z.FactionRank.Name,
+                                        Player =
+                                            $"{a.Character.Player.Name} ({a.Character.Player.PlayerNumber})",
+                                    })
+                                    .ToList()
+                            )
+                            .ToList(),
+                    })
+                    .ToList(),
+            })
             .ToListAsync(cancellationToken);
     }
 

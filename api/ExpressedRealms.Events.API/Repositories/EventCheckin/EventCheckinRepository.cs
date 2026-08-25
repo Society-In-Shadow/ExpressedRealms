@@ -456,15 +456,15 @@ internal sealed class EventCheckinRepository(
 
     public Task<List<CharacterStorageOptin>> GetCharacterStorageUsersForEvent(int activeEventId)
     {
-        return context.CharacterStorageInfos
-            .Where(x => x.EventId == activeEventId && x.OptedIn)
+        return context
+            .CharacterStorageInfos.Where(x => x.EventId == activeEventId && x.OptedIn)
             .Select(x => new CharacterStorageOptin()
             {
                 Id = x.Id,
                 Timestamp = x.Timestamp,
                 PlayerName = $"{x.Player.Name} ({x.Player.PlayerNumber})",
                 ApproverName = $"{x.CollectorPlayer.Name} ({x.CollectorPlayer.PlayerNumber})",
-                Amount = x.Amount
+                Amount = x.Amount,
             })
             .ToListAsync(cancellationToken);
     }

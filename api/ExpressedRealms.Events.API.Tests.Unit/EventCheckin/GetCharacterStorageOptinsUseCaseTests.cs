@@ -39,14 +39,14 @@ public class GetCharacterStorageOptinsUseCaseTests
                     TimeZoneId = "America/New_York",
                     Location = string.Empty,
                     WebsiteName = string.Empty,
-                    WebsiteUrl = string.Empty
+                    WebsiteUrl = string.Empty,
                 }
             );
 
         A.CallTo(() => _eventCheckinRepository.GetCharacterStorageUsersForEvent(_activeEventId))
             .Returns(
                 [
-                    new ()
+                    new()
                     {
                         Id = 1,
                         Timestamp = _timestamp,
@@ -54,7 +54,7 @@ public class GetCharacterStorageOptinsUseCaseTests
                         PlayerName = "Player One (002)",
                         Amount = 20,
                     },
-                    new ()
+                    new()
                     {
                         Id = 2,
                         Timestamp = _timestamp.AddMinutes(5),
