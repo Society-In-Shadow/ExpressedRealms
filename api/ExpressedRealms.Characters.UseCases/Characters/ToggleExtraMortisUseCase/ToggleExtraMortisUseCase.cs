@@ -23,7 +23,10 @@ internal sealed class ToggleExtraMortisUseCase(
 
         var character = await repository.FindCharacterAsync(model.Id);
 
-        character!.ExtraMortis = model.HasExtraMortis;
+        if (character!.IsInCharacterCreation)
+            return Result.Fail("You cannot modify extra mortis during character creatio.");
+
+        character.ExtraMortis = model.HasExtraMortis;
 
         await repository.EditAsync(character);
 

@@ -71,9 +71,9 @@ const updateWizardContent = (statTypeId: number) => {
         </template>
       </Column>
     </DataTable>
-    <Message v-if="characterData.isInCharacterCreation" severity="warn">
+    <div v-if="characterData.isInCharacterCreation">
       Extra Mortis can only be purchased outside of character creation.
-    </Message>
+    </div>
     <div v-else>
       <h3>Mortis</h3>
       <p>
