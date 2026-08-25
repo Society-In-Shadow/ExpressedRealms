@@ -94,5 +94,12 @@ public static partial class Permissions
             Name = nameof(ViewQuestionResponses),
             Description = "Allows one to see the responses to all questions on the events page",
         };
+        
+        public static readonly Permission ViewCharacterStorageOptins = new(ResourceInfo)
+        {
+            Id = new Guid("01a036ae-0150-77e9-bb83-ff96ff47e9ba"),
+            Name = nameof(ViewCharacterStorageOptins),
+            Description = "Allows one to see all players who opted into character storage on the events page",
+        };
     }
 }

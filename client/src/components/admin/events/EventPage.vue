@@ -17,10 +17,11 @@ import { EventConfirmationPopup } from '@/components/admin/events/services/event
 import SkeletonWrapper from '@/FormWrappers/SkeletonWrapper.vue'
 import CharacterActivity from '@/components/admin/events/CharacterActivity.vue'
 import { formatDate } from '@/utilities/dateUtilities.ts'
-import { userPermissionStore } from '@/stores/userPermissionStore.ts'
+import { can, userPermissionStore } from '@/stores/userPermissionStore.ts'
 import EventQuestionList from '@/components/admin/eventQuestions/EventQuestionList.vue'
 import axios from 'axios'
 import QuestionResponses from '@/components/admin/eventQuestions/QuestionResponses.vue'
+import CharacterStorageOptins from '@/components/admin/events/CharacterStorageOptins.vue'
 
 const route = useRoute()
 const eventData = EventStore()
@@ -117,6 +118,9 @@ const showCharacterActivityTab = computed(() => {
           <Tab v-if="showCharacterActivityTab!" value="2">
             Character Activity
           </Tab>
+          <Tab v-if="can.Event.ViewCharacterStorageOptins" value="5">
+            Character Storage Optins
+          </Tab>
         </TabList>
         <TabPanels>
           <TabPanel value="0">
@@ -133,6 +137,9 @@ const showCharacterActivityTab = computed(() => {
           </TabPanel>
           <TabPanel v-if="permissionCheck.Event.ViewQuestionResponses" value="4">
             <QuestionResponses :event-id="eventId" />
+          </TabPanel>
+          <TabPanel v-if="can.Event.ViewCharacterStorageOptins" value="5">
+            <CharacterStorageOptins :event-id="eventId" />
           </TabPanel>
         </TabPanels>
       </Tabs>

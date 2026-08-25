@@ -57,3 +57,16 @@ export interface AssignedXpInfo {
   notes?: string | null
   dateAssigned: DateTime
 }
+
+export interface CharacterStorageOptin {
+  id?: number
+  timestamp: string
+  timestampAssigned: DateTime
+  approverName: string
+  playerName: string
+  amount?: number
+}
+
+export interface CharacterStorageOptinsResponse {
+  characterStorageOptins: CharacterStorageOptin[]
+}
