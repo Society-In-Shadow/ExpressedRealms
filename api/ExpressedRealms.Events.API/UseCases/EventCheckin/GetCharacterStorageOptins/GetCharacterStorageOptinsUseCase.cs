@@ -25,7 +25,7 @@ internal sealed class GetCharacterStorageOptinsUseCase(
 
         var activeEvent = await checkinRepository.GetActiveEventInfoOrDefaultAsync();
 
-        var characterStorageOptins = await checkinRepository.GeCharacterStorageUsersForEvent(activeEvent!.Id);
+        var characterStorageOptins = await checkinRepository.GetCharacterStorageUsersForEvent(activeEvent!.Id);
 
 
         return Result.Ok(

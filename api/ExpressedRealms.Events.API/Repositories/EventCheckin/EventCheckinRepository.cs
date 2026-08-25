@@ -454,7 +454,7 @@ internal sealed class EventCheckinRepository(
         return characterStorageInfo.Id;
     }
 
-    public Task<List<CharacterStorageOptin>> GeCharacterStorageUsersForEvent(int activeEventId)
+    public Task<List<CharacterStorageOptin>> GetCharacterStorageUsersForEvent(int activeEventId)
     {
         return context.CharacterStorageInfos
             .Where(x => x.EventId == activeEventId && x.OptedIn)
