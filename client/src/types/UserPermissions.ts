@@ -76,6 +76,7 @@ export const UserPermissions = {
     Create: 'faction.create',
     Delete: 'faction.delete',
     ApprovePromotion: 'faction.approvepromotion',
+    ViewAllParticipants: 'faction.viewallparticipants',
   } as const,
   Powers: {
     Edit: 'powers.edit',

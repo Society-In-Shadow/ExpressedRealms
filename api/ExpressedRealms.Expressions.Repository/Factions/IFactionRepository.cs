@@ -1,6 +1,7 @@
 using ExpressedRealms.DB.Models.Factions.FactionLevelModels;
 using ExpressedRealms.DB.Models.Factions.FactionModels;
 using ExpressedRealms.Expressions.Repository.Factions.Dtos;
+using ExpressedRealms.Expressions.Repository.Factions.Dtos.ExpressionFactionDtos;
 
 namespace ExpressedRealms.Expressions.Repository.Factions;
 
@@ -14,4 +15,5 @@ public interface IFactionRepository
     Task<Faction?> GetFactionAsync(int id);
     Task<int?> GetBasicFactionRankId(int id, int expressionId);
     Task<FactionLevel?> GetFactionLevelAsync(int factionLevelId);
+    Task<List<ExpressionDto>> GetExpressionFactions();
 }

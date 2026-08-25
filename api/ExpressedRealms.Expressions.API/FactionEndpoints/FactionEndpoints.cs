@@ -4,6 +4,7 @@ using ExpressedRealms.Expressions.API.FactionEndpoints.CreateFaction;
 using ExpressedRealms.Expressions.API.FactionEndpoints.DeleteFaction;
 using ExpressedRealms.Expressions.API.FactionEndpoints.EditFaction;
 using ExpressedRealms.Expressions.API.FactionEndpoints.GetFaction;
+using ExpressedRealms.Expressions.API.FactionEndpoints.GetFactionParticipants;
 using ExpressedRealms.Expressions.API.FactionEndpoints.GetFactions;
 using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.Server.Shared;
@@ -38,5 +39,9 @@ internal static class FactionEndpoints
         endpointGroup
             .MapDelete("{id}", DeleteFactionEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Faction.Delete);
+        
+        endpointGroup
+            .MapGet("participants", GetAllFactionParticipantsEndpoint.ExecuteAsync)
+            .RequirePermission(Permissions.Faction.ViewAllParticipants);
     }
 }
