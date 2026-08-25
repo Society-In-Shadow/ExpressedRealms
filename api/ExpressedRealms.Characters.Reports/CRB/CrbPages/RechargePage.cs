@@ -38,7 +38,7 @@ internal static class RechargePage
             XUnitPt.FromInch(6.15)
         );
 
-        if(reportData.BasicInfo.PaidCharacterStorage)
+        if (reportData.BasicInfo.PaidCharacterStorage)
         {
             TextPrintUtilities.CrossStampInfo(
                 page,
@@ -48,7 +48,7 @@ internal static class RechargePage
                 65
             );
         }
-        
+
         // Day 1
         if (reportData.BasicInfo.CurrentDay > 1)
         {
