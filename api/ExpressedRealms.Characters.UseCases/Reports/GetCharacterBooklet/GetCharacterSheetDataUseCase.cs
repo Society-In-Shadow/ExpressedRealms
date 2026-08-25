@@ -360,11 +360,23 @@ public class GetCharacterSheetDataUseCase(
         var character = await characterRepository.GetCharacterInfoForCRB(model.CharacterId);
         var characterLevel = await xpRepository.GetCharacterXpLevel(model.CharacterId);
         var eventInfo = await eventCheckinRepository.GetActiveEventInfoOrDefaultAsync();
-        var factionInfo = await characterFactionRepository.GetPlayerFactionInfo(model.CharacterId);
         var currentDay = 0;
         if (eventInfo is not null)
         {
             currentDay = await eventCheckinRepository.GetCurrentEventDay();
+        }
+
+        var factionInfo = await characterFactionRepository.GetPlayerFactionInfo(model.CharacterId);
+
+        var paidStorage = false;
+        if (eventInfo is not null)
+        {
+            paidStorage =
+                await eventCheckinRepository.GetCharacterStorageInfo(
+                    character.PlayerId,
+                    eventInfo.Id
+                )
+                    is not null;
         }
 
         var basicInfo = new BasicInfo()
@@ -383,6 +395,7 @@ public class GetCharacterSheetDataUseCase(
             FactionName = factionInfo?.FactionName.Limit(21, ".") ?? "No Active Faction",
             FactionRank = factionInfo?.FactionRank.Limit(7, ".") ?? "-",
             Motes = character.Motes,
+            PaidCharacterStorage = paidStorage,
         };
         return basicInfo;
     }

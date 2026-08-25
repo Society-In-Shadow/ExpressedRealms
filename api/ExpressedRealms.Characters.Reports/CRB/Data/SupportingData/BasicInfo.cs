@@ -14,4 +14,5 @@ public class BasicInfo
     public required string FactionRank { get; set; }
     public int CurrentDay { get; set; }
     public int Motes { get; set; }
+    public bool PaidCharacterStorage { get; set; }
 }

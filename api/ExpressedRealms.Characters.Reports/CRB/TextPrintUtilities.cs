@@ -29,11 +29,12 @@ internal static class TextPrintUtilities
         PdfPage page,
         string stampText,
         double centerX,
-        double centerY
+        double centerY,
+        int fontSize = 12
     )
     {
         using var gfx = XGraphics.FromPdfPage(page);
-        var font = new XFont(DefaultFontFace, 12, XFontStyleEx.Regular);
+        var font = new XFont(DefaultFontFace, fontSize, XFontStyleEx.Regular);
         var size = gfx.MeasureString(stampText, font);
 
         gfx.Save();
