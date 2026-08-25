@@ -116,33 +116,33 @@ public class GetCharacterSheetDataUseCase(
         {
             Constitution = new StatModifier()
             {
-                Stat = stats.Value.First(x => x.StatTypeId == StatType.Constitution).Level,
-                Bonus = stats.Value.First(x => x.StatTypeId == StatType.Constitution).Bonus,
+                Stat = stats.Value.StatInfos.First(x => x.StatTypeId == StatType.Constitution).Level,
+                Bonus = stats.Value.StatInfos.First(x => x.StatTypeId == StatType.Constitution).Bonus,
             },
             Strength = new StatModifier()
             {
-                Stat = stats.Value.First(x => x.StatTypeId == StatType.Strength).Level,
-                Bonus = stats.Value.First(x => x.StatTypeId == StatType.Strength).Bonus,
+                Stat = stats.Value.StatInfos.First(x => x.StatTypeId == StatType.Strength).Level,
+                Bonus = stats.Value.StatInfos.First(x => x.StatTypeId == StatType.Strength).Bonus,
             },
             Dexterity = new StatModifier()
             {
-                Stat = stats.Value.First(x => x.StatTypeId == StatType.Dexterity).Level,
-                Bonus = stats.Value.First(x => x.StatTypeId == StatType.Dexterity).Bonus,
+                Stat = stats.Value.StatInfos.First(x => x.StatTypeId == StatType.Dexterity).Level,
+                Bonus = stats.Value.StatInfos.First(x => x.StatTypeId == StatType.Dexterity).Bonus,
             },
             Intelligence = new StatModifier()
             {
-                Stat = stats.Value.First(x => x.StatTypeId == StatType.Intelligence).Level,
-                Bonus = stats.Value.First(x => x.StatTypeId == StatType.Intelligence).Bonus,
+                Stat = stats.Value.StatInfos.First(x => x.StatTypeId == StatType.Intelligence).Level,
+                Bonus = stats.Value.StatInfos.First(x => x.StatTypeId == StatType.Intelligence).Bonus,
             },
             Willpower = new StatModifier()
             {
-                Stat = stats.Value.First(x => x.StatTypeId == StatType.Willpower).Level,
-                Bonus = stats.Value.First(x => x.StatTypeId == StatType.Willpower).Bonus,
+                Stat = stats.Value.StatInfos.First(x => x.StatTypeId == StatType.Willpower).Level,
+                Bonus = stats.Value.StatInfos.First(x => x.StatTypeId == StatType.Willpower).Bonus,
             },
             Agility = new StatModifier()
             {
-                Stat = stats.Value.First(x => x.StatTypeId == StatType.Agility).Level,
-                Bonus = stats.Value.First(x => x.StatTypeId == StatType.Agility).Bonus,
+                Stat = stats.Value.StatInfos.First(x => x.StatTypeId == StatType.Agility).Level,
+                Bonus = stats.Value.StatInfos.First(x => x.StatTypeId == StatType.Agility).Bonus,
             },
         };
         return statInfo;

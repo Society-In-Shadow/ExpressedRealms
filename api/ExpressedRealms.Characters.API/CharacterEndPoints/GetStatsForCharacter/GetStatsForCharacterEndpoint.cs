@@ -3,13 +3,12 @@ using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using SmallStatInfo = ExpressedRealms.Characters.API.StatEndPoints.Responses.SmallStatInfo;
 
 namespace ExpressedRealms.Characters.API.CharacterEndPoints.GetStatsForCharacter;
 
 internal static class GetStatsForCharacterEndpoint
 {
-    internal static async Task<Results<NotFound, Ok<List<SmallStatInfo>>>> ExecuteAsync(
+    internal static async Task<Results<NotFound, Ok<GetAllStatsResponse>>> ExecuteAsync(
         int characterId,
         [FromServices] ICharacterStatRepository repository
     )
@@ -20,6 +19,11 @@ internal static class GetStatsForCharacterEndpoint
             return notFound;
         results.ThrowIfErrorNotHandled();
 
-        return TypedResults.Ok(results.Value.Select(x => new SmallStatInfo(x)).ToList());
+        return TypedResults.Ok(
+            new GetAllStatsResponse()
+            {
+                HasExtraMortis = results.Value.ExtraMortis,
+                Stats = [.. results.Value.StatInfos.Select(x => new SmallStatInfo(x))]
+            });
     }
 }

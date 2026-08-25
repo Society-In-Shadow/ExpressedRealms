@@ -13,6 +13,7 @@ export const statStore
         stats: [{}, {}, {}, {}, {}, {}],
         isLoading: false as boolean,
         statLevels: [] as Array<LevelInfo>,
+        hasExtraMortis: false as boolean,
       }
     },
     actions: {
@@ -20,7 +21,8 @@ export const statStore
         this.isLoading = true
         await axios.get(`/characters/${characterId}/stats`)
           .then((response) => {
-            this.stats = response.data
+            this.stats = response.data.stats
+            this.hasExtraMortis = response.data.hasExtraMortis
             this.isLoading = false
           })
       },
