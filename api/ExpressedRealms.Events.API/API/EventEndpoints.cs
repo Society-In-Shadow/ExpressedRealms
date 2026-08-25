@@ -23,6 +23,7 @@ using ExpressedRealms.Events.API.API.Events.Create;
 using ExpressedRealms.Events.API.API.Events.Delete;
 using ExpressedRealms.Events.API.API.Events.Edit;
 using ExpressedRealms.Events.API.API.Events.Get;
+using ExpressedRealms.Events.API.API.Events.GetCharacterStorageOptins;
 using ExpressedRealms.Events.API.API.Events.GetConSummaryReport;
 using ExpressedRealms.Events.API.API.Events.GetEvent;
 using ExpressedRealms.Events.API.API.Events.GetSummary;
@@ -59,6 +60,10 @@ internal static class EventEndpoints
         endpointGroup
             .MapGet("{id}", GetEventEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Event.Edit);
+        
+        endpointGroup
+            .MapGet("{id}/characterStorageOptins", GetCharacterStorageOptinsEndpoint.ExecuteAsync)
+            .RequirePermission(Permissions.Event.ViewCharacterStorageOptins);
 
         endpointGroup
             .MapGet("{id}/questionResponses", GetEventQuestionResponsesEndpoint.ExecuteAsync)

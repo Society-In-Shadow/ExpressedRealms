@@ -45,6 +45,7 @@ export const UserPermissions = {
     DownloadConSummaryReport: 'event.downloadconsummaryreport',
     ModifyDefaults: 'event.modifydefaults',
     ViewQuestionResponses: 'event.viewquestionresponses',
+    ViewCharacterStorageOptins: 'event.viewcharacterstorageoptins',
   } as const,
   EventScheduleItem: {
     Edit: 'eventscheduleitem.edit',
