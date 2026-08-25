@@ -12,8 +12,8 @@ BEGIN
     -- insert new character record, and grab the id
     -- NOTE: Is Archived is based on is primary character - Copies as of time of writing come only from archetypes which are never primary
     --  or are triggered when a GO finalizes a primary character.  There is no general copy functionality available to anyone
-    insert into public.characters (name, player_id, expression_id, stat_experience_points, is_in_character_creation, is_primary_character, player_number, primary_progression_id, secondary_progression_id, wealth_level, void_fragments, motes, prima_fragments, source_character_id, create_date, is_archived)
-    select p_character_name, p_target_player_id, expression_id, stat_experience_points, is_in_character_creation, is_primary_character, player_number, primary_progression_id, secondary_progression_id, wealth_level, void_fragments, motes, prima_fragments, p_source_character_id, CURRENT_TIMESTAMP, is_primary_character from public.characters
+    insert into public.characters (name, player_id, expression_id, stat_experience_points, is_in_character_creation, is_primary_character, player_number, primary_progression_id, secondary_progression_id, wealth_level, void_fragments, motes, prima_fragments, source_character_id, create_date, is_archived, extra_mortis)
+    select p_character_name, p_target_player_id, expression_id, stat_experience_points, is_in_character_creation, is_primary_character, player_number, primary_progression_id, secondary_progression_id, wealth_level, void_fragments, motes, prima_fragments, p_source_character_id, CURRENT_TIMESTAMP, is_primary_character, extra_mortis from public.characters
     where is_deleted = false and id = p_source_character_id
     RETURNING id INTO new_character_id;
 
