@@ -3,14 +3,13 @@ using FluentResults;
 
 namespace ExpressedRealms.Expressions.UseCases.FactionUseCases.GetAllFactionParticipants;
 
-internal sealed class GetAllFactionParticipants(
-    IFactionRepository factionRepository
-) : IGetAllFactionParticipants
+internal sealed class GetAllFactionParticipants(IFactionRepository factionRepository)
+    : IGetAllFactionParticipants
 {
     public async Task<Result<GetAllFactionParticipantsReturnModel>> ExecuteAsync()
     {
         var expressions = await factionRepository.GetExpressionFactions();
-        
+
         return Result.Ok(
             new GetAllFactionParticipantsReturnModel()
             {
@@ -34,13 +33,13 @@ internal sealed class GetAllFactionParticipants(
                                         CharacterName = a.CharacterName,
                                         Level = a.Id,
                                         LevelName = a.LevelName,
-                                        Player = a.Player
-                                    })
-                                ]
-                            })
-                        ]
-                    })
-                ]
+                                        Player = a.Player,
+                                    }),
+                                ],
+                            }),
+                        ],
+                    }),
+                ],
             }
         );
     }

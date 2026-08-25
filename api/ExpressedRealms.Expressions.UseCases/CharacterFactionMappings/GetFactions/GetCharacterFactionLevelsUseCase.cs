@@ -68,7 +68,13 @@ internal sealed class GetCharacterFactionLevelsUseCase(
                                 knowledge?.Level >= x.KnowledgeLevel
                                 && x.FactionRankId != FactionRankEnum.Basic,
                             HasSpecialization = x.Specialization is not null
-                                ? knowledge?.Specializations.Any(y => string.Equals(y, x.Specialization, StringComparison.InvariantCultureIgnoreCase))
+                                ? knowledge?.Specializations.Any(y =>
+                                    string.Equals(
+                                        y,
+                                        x.Specialization,
+                                        StringComparison.InvariantCultureIgnoreCase
+                                    )
+                                )
                                 : false,
                         };
 

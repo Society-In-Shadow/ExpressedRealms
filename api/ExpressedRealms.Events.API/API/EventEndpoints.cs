@@ -60,7 +60,7 @@ internal static class EventEndpoints
         endpointGroup
             .MapGet("{id}", GetEventEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Event.Edit);
-        
+
         endpointGroup
             .MapGet("{id}/characterStorageOptins", GetCharacterStorageOptinsEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Event.ViewCharacterStorageOptins);

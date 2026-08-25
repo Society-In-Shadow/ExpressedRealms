@@ -35,13 +35,13 @@ public static class GetAllFactionParticipantsEndpoint
                                         CharacterName = a.CharacterName,
                                         Level = a.Id,
                                         LevelName = a.LevelName,
-                                        Player = a.Player
-                                    })
-                                ]
-                            })
-                        ]
-                    })
-                ]
+                                        Player = a.Player,
+                                    }),
+                                ],
+                            }),
+                        ],
+                    }),
+                ],
             }
         );
     }

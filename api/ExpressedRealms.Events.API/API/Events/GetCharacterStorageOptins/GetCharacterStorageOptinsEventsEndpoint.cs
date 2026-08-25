@@ -12,22 +12,23 @@ public static class GetCharacterStorageOptinsEndpoint
         [FromServices] IGetCharacterStorageOptinsUseCase useCase
     )
     {
-        var results = await useCase.ExecuteAsync(new GetCharacterStorageOptinsModel()
-        {
-            EventId = id
-        });
+        var results = await useCase.ExecuteAsync(
+            new GetCharacterStorageOptinsModel() { EventId = id }
+        );
 
         return TypedResults.Ok(
             new GetCharacterStorageOptinsResponse()
             {
-                CharacterStorageOptins = results.Value.CharacterStorageOptins.Select(x => new CharacterStorageOptin()
-                {
-                    Id = x.Id,
-                    ApproverName = x.ApproverName,
-                    PlayerName = x.PlayerName,
-                    Amount = x.Amount,
-                    Timestamp = x.Timestamp
-                }).ToList()
+                CharacterStorageOptins = results
+                    .Value.CharacterStorageOptins.Select(x => new CharacterStorageOptin()
+                    {
+                        Id = x.Id,
+                        ApproverName = x.ApproverName,
+                        PlayerName = x.PlayerName,
+                        Amount = x.Amount,
+                        Timestamp = x.Timestamp,
+                    })
+                    .ToList(),
             }
         );
     }

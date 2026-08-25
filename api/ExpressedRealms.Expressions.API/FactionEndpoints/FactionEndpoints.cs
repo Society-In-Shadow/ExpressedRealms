@@ -39,7 +39,7 @@ internal static class FactionEndpoints
         endpointGroup
             .MapDelete("{id}", DeleteFactionEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Faction.Delete);
-        
+
         endpointGroup
             .MapGet("participants", GetAllFactionParticipantsEndpoint.ExecuteAsync)
             .RequirePermission(Permissions.Faction.ViewAllParticipants);

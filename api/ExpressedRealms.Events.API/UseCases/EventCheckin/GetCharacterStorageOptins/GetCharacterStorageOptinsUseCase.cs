@@ -25,8 +25,9 @@ internal sealed class GetCharacterStorageOptinsUseCase(
 
         var activeEvent = await checkinRepository.GetActiveEventInfoOrDefaultAsync();
 
-        var characterStorageOptins = await checkinRepository.GetCharacterStorageUsersForEvent(activeEvent!.Id);
-
+        var characterStorageOptins = await checkinRepository.GetCharacterStorageUsersForEvent(
+            activeEvent!.Id
+        );
 
         return Result.Ok(
             new GetCharacterStorageOptinsReturnModel()
@@ -38,7 +39,7 @@ internal sealed class GetCharacterStorageOptinsUseCase(
                         Timestamp = x.Timestamp,
                         ApproverName = x.ApproverName,
                         PlayerName = x.PlayerName,
-                        Amount = x.Amount
+                        Amount = x.Amount,
                     })
                     .ToList(),
             }

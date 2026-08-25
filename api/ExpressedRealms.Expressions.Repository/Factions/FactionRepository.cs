@@ -101,36 +101,52 @@ internal sealed class FactionRepository(
             .Where(x => x.ExpressionId == expressionId)
             .ToListAsync(cancellationToken);
     }
-    
+
     public async Task<List<ExpressionDto>> GetExpressionFactions()
     {
-        List<int> availableExpressions = [ExpressionPublishStatusEnum.Published.Value, ExpressionPublishStatusEnum.PlayTesting.Value];
-        return await context.Expressions
-            .Where(x => availableExpressions.Contains(x.PublishStatusId) && x.CmsTypeId == CmsTypeEnum.Expression)
+        List<int> availableExpressions =
+        [
+            ExpressionPublishStatusEnum.Published.Value,
+            ExpressionPublishStatusEnum.PlayTesting.Value,
+        ];
+        return await context
+            .Expressions.Where(x =>
+                availableExpressions.Contains(x.PublishStatusId)
+                && x.CmsTypeId == CmsTypeEnum.Expression
+            )
             .OrderBy(x => x.Name)
             .Select(x => new ExpressionDto()
             {
                 Id = x.Id,
                 Name = x.Name,
-                Factions = x.Factions
-                    .OrderBy(x => x.Name)
+                Factions = x
+                    .Factions.OrderBy(x => x.Name)
                     .Select(y => new ExpressionFactionDto()
                     {
                         Id = y.Id,
                         Name = y.Name,
-                        Players = y.FactionLevels.OrderBy(x => x.FactionRankId).SelectMany(z => z.CharacterFactionMappings
-                            .Where(x => x.Character.IsPrimaryCharacter)
-                            .Select(a => new PlayerDto()
-                            {
-                                Id = a.Character.Id,
-                                CharacterName = a.Character.Name,
-                                Level = z.FactionRank.Id,
-                                LevelName = z.FactionRank.Name,
-                                Player = $"{a.Character.Player.Name} ({a.Character.Player.PlayerNumber})"
-                            }).ToList()
-                        ).ToList()
-                    }).ToList()
-                }).ToListAsync(cancellationToken);
+                        Players = y
+                            .FactionLevels.OrderBy(x => x.FactionRankId)
+                            .SelectMany(z =>
+                                z.CharacterFactionMappings.Where(x =>
+                                        x.Character.IsPrimaryCharacter
+                                    )
+                                    .Select(a => new PlayerDto()
+                                    {
+                                        Id = a.Character.Id,
+                                        CharacterName = a.Character.Name,
+                                        Level = z.FactionRank.Id,
+                                        LevelName = z.FactionRank.Name,
+                                        Player =
+                                            $"{a.Character.Player.Name} ({a.Character.Player.PlayerNumber})",
+                                    })
+                                    .ToList()
+                            )
+                            .ToList(),
+                    })
+                    .ToList(),
+            })
+            .ToListAsync(cancellationToken);
     }
 
     public Task<Faction?> GetFactionAsync(int id)
