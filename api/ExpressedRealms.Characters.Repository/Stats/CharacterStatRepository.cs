@@ -148,7 +148,7 @@ internal sealed class CharacterStatRepository(
             .Characters.AsNoTracking()
             .WithUserAccessAsync(userContext, characterId);
 
-        var character = await query.Select(x => new {x.Id, x.ExtraMortis }).FirstOrDefaultAsync();
+        var character = await query.Select(x => new { x.Id, x.ExtraMortis }).FirstOrDefaultAsync();
         if (character is null)
             return Result.Fail(new NotFoundFailure("Character"));
 
@@ -167,7 +167,7 @@ internal sealed class CharacterStatRepository(
                     Name = x.StatType.Name,
                 })
                 .OrderBy(x => x.StatTypeId)
-                .ToListAsync(cancellationToken)
+                .ToListAsync(cancellationToken),
         };
     }
 }

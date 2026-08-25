@@ -3,8 +3,7 @@ using FluentValidation;
 
 namespace ExpressedRealms.Characters.UseCases.Characters.ToggleExtraMortisUseCase;
 
-internal sealed class ToggleExtraMortisModelValidator
-    : AbstractValidator<ToggleExtraMortisModel>
+internal sealed class ToggleExtraMortisModelValidator : AbstractValidator<ToggleExtraMortisModel>
 {
     public ToggleExtraMortisModelValidator(ICharacterRepository characterRepository)
     {

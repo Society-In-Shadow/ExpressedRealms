@@ -320,7 +320,7 @@ internal static class CharacterEndPoints
                 "Returns the info needed for displaying the small stat tiles, mainly the bonus, stat name and level."
             )
             .RequireAuthorization();
-        
+
         endpointGroup
             .MapPut("{characterId}/stats/extraMortis", ToggleExtraMortisEndpoint.ExecuteAsync)
             .RequireAuthorization();

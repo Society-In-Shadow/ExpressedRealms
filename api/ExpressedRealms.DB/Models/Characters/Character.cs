@@ -52,7 +52,7 @@ public class Character : ISoftDelete
     public int? SourceCharacterId { get; set; }
     public DateTimeOffset CreateDate { get; set; }
     public bool IsArchived { get; set; }
-    
+
     public bool ExtraMortis { get; set; }
 
     public bool IsDeleted { get; set; }

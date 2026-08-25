@@ -15,11 +15,7 @@ internal static class ToggleExtraMortisEndpoint
     )
     {
         var status = await repository.ExecuteAsync(
-            new ToggleExtraMortisModel()
-            {
-                Id = characterId,
-                HasExtraMortis = dto.HasExtraMortis
-            }
+            new ToggleExtraMortisModel() { Id = characterId, HasExtraMortis = dto.HasExtraMortis }
         );
 
         if (status.HasNotFound(out var notFound))

@@ -116,8 +116,12 @@ public class GetCharacterSheetDataUseCase(
         {
             Constitution = new StatModifier()
             {
-                Stat = stats.Value.StatInfos.First(x => x.StatTypeId == StatType.Constitution).Level,
-                Bonus = stats.Value.StatInfos.First(x => x.StatTypeId == StatType.Constitution).Bonus,
+                Stat = stats
+                    .Value.StatInfos.First(x => x.StatTypeId == StatType.Constitution)
+                    .Level,
+                Bonus = stats
+                    .Value.StatInfos.First(x => x.StatTypeId == StatType.Constitution)
+                    .Bonus,
             },
             Strength = new StatModifier()
             {
@@ -131,8 +135,12 @@ public class GetCharacterSheetDataUseCase(
             },
             Intelligence = new StatModifier()
             {
-                Stat = stats.Value.StatInfos.First(x => x.StatTypeId == StatType.Intelligence).Level,
-                Bonus = stats.Value.StatInfos.First(x => x.StatTypeId == StatType.Intelligence).Bonus,
+                Stat = stats
+                    .Value.StatInfos.First(x => x.StatTypeId == StatType.Intelligence)
+                    .Level,
+                Bonus = stats
+                    .Value.StatInfos.First(x => x.StatTypeId == StatType.Intelligence)
+                    .Bonus,
             },
             Willpower = new StatModifier()
             {

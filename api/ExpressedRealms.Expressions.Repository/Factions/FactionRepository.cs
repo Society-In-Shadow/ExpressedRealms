@@ -128,23 +128,20 @@ internal sealed class FactionRepository(
                         Players = y
                             .FactionLevels.OrderBy(x => x.FactionRankId)
                             .SelectMany(z => z.CharacterFactionMappings)
-                            .Where(x =>
-                                x.Character.IsPrimaryCharacter &&
-                                x.ApprovalDate != null
-                            )
+                            .Where(x => x.Character.IsPrimaryCharacter && x.ApprovalDate != null)
                             .GroupBy(x => x.Character.Id)
-                            .Select(g => g
-                                .OrderByDescending(x => x.FactionLevel.FactionRank.Id)
-                                .Select(a => new PlayerDto()
-                                {
-                                    Id = a.Character.Id,
-                                    CharacterName = a.Character.Name,
-                                    Level = a.FactionLevel.FactionRank.Id,
-                                    LevelName = a.FactionLevel.FactionRank.Name,
-                                    Player =
-                                        $"{a.Character.Player.Name} ({a.Character.Player.PlayerNumber})",
-                                })
-                                .First()
+                            .Select(g =>
+                                g.OrderByDescending(x => x.FactionLevel.FactionRank.Id)
+                                    .Select(a => new PlayerDto()
+                                    {
+                                        Id = a.Character.Id,
+                                        CharacterName = a.Character.Name,
+                                        Level = a.FactionLevel.FactionRank.Id,
+                                        LevelName = a.FactionLevel.FactionRank.Name,
+                                        Player =
+                                            $"{a.Character.Player.Name} ({a.Character.Player.PlayerNumber})",
+                                    })
+                                    .First()
                             )
                             .ToList(),
                     })

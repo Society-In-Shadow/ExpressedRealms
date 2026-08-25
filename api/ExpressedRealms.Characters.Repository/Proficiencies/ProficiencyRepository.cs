@@ -40,7 +40,7 @@ internal sealed class ProficiencyRepository(
                 x.IsInCharacterCreation,
                 x.Motes,
                 x.WealthLevel,
-                x.ExtraMortis
+                x.ExtraMortis,
             })
             .FirstOrDefaultAsync();
 

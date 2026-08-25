@@ -22,7 +22,7 @@ internal sealed class ToggleExtraMortisUseCase(
             return Result.Fail(result.Errors);
 
         var character = await repository.FindCharacterAsync(model.Id);
-        
+
         character!.ExtraMortis = model.HasExtraMortis;
 
         await repository.EditAsync(character);

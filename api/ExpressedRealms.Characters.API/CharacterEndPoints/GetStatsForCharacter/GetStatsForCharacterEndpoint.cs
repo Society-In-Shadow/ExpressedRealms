@@ -23,7 +23,8 @@ internal static class GetStatsForCharacterEndpoint
             new GetAllStatsResponse()
             {
                 HasExtraMortis = results.Value.ExtraMortis,
-                Stats = [.. results.Value.StatInfos.Select(x => new SmallStatInfo(x))]
-            });
+                Stats = [.. results.Value.StatInfos.Select(x => new SmallStatInfo(x))],
+            }
+        );
     }
 }
