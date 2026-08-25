@@ -10,4 +10,5 @@ public class CharacterInfo
     public string? SecondaryProgressionName { get; set; }
     public required string LookupId { get; set; }
     public int Motes { get; set; }
+    public Guid PlayerId { get; set; }
 }

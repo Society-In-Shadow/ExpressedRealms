@@ -38,19 +38,17 @@ internal static class RechargePage
             XUnitPt.FromInch(6.15)
         );
 
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            reportData.WealthInfo.WealthLevel.ToString(),
-            XUnitPt.FromInch(3.02),
-            XUnitPt.FromInch(5.38)
-        );
-        TextPrintUtilities.PrintStatInfo(
-            page,
-            $"${reportData.WealthInfo.WealthIncome.ToString("N0")}",
-            XUnitPt.FromInch(3.02),
-            XUnitPt.FromInch(4.68)
-        );
-
+        if(reportData.BasicInfo.PaidCharacterStorage)
+        {
+            TextPrintUtilities.CrossStampInfo(
+                page,
+                "☥",
+                XUnitPt.FromInch(1.90),
+                XUnitPt.FromInch(4.98),
+                65
+            );
+        }
+        
         // Day 1
         if (reportData.BasicInfo.CurrentDay > 1)
         {
@@ -219,8 +217,9 @@ internal static class RechargePage
             TextPrintUtilities.CrossStampInfo(
                 page,
                 "☥",
-                XUnitPt.FromInch(2.155),
-                XUnitPt.FromInch(4.98)
+                XUnitPt.FromInch(2.67),
+                XUnitPt.FromInch(4.98),
+                65
             );
         }
 

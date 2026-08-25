@@ -192,6 +192,7 @@ internal sealed class CharacterRepository(
         return await query
             .Select(x => new CharacterInfo()
             {
+                PlayerId = x.PlayerId,
                 CharacterName = x.Name,
                 PlayerNumber = x.Player.PlayerNumber ?? 0,
                 PlayerName = x.Player.Name,
