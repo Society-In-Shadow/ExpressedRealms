@@ -11,7 +11,7 @@ import ShowXPCosts from '@/components/characters/wizard/ShowXPCosts.vue'
 import { statStore } from '@/components/characters/wizard/stats/stores/statStore.ts'
 import { wizardContentStore } from '@/components/characters/wizard/stores/wizardContentStore.ts'
 import type { WizardContent } from '@/components/characters/wizard/types.ts'
-import { XpSectionTypes } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
+import { experienceStore, XpSectionTypes } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
 import TrackableProficiencies from '@/components/characters/character/proficiency/TrackableProficiencies.vue'
 import { characterStore } from '@/components/characters/character/stores/characterStore.ts'
 import Checkbox from 'primevue/checkbox'
@@ -19,6 +19,8 @@ import Checkbox from 'primevue/checkbox'
 const route = useRoute()
 const statData = statStore()
 const characterData = characterStore()
+
+const xpInfo = experienceStore()
 
 onMounted(async () => {
   await statData.loadData(route.params.id)
@@ -86,7 +88,10 @@ const updateWizardContent = (statTypeId: number) => {
         begin with a max Mortis of 7. It is possible for a supernatural character to develop it, with experience, to 8.
       </p>
       <p>Extra Mortis is a one time purchase you can opt into after character creation for 12xp.  As it implies, it gives you one extra mortis point.</p>
-      <Checkbox v-model="statData.hasExtraMortis" input-id="extra-mortis" binary @change="statData.updateMortis(route.params.id)" /><label class="ml-2" for="extra-mortis">+1 Mortis - 12xp</label>
+      <p v-if="xpInfo.calculatedValues[0].availableXp < 12 && !statData.hasExtraMortis">
+        You do not have enough xp to purchase this.
+      </p>
+      <Checkbox v-model="statData.hasExtraMortis" input-id="extra-mortis" binary :disabled="xpInfo.calculatedValues[0].availableXp < 12 && !statData.hasExtraMortis" @change="statData.updateMortis(route.params.id)" /><label class="ml-2" for="extra-mortis">+1 Mortis - 12xp</label>
     </div>
     <div class="mt-3">
       <TrackableProficiencies :show-help-text="true" />
