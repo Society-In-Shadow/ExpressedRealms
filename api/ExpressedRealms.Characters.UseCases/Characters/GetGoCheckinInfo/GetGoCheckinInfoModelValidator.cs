@@ -7,8 +7,6 @@ internal sealed class GetGoCheckinInfoModelValidator : AbstractValidator<GetGoCh
 {
     public GetGoCheckinInfoModelValidator(ICharacterRepository characterRepository)
     {
-        RuleFor(x => x.Id)
-            .NotEmpty()
-            .GreaterThan(0);
+        RuleFor(x => x.Id).NotEmpty().GreaterThan(0);
     }
 }

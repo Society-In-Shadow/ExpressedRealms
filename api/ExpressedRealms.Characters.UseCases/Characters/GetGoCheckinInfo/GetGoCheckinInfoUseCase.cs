@@ -32,11 +32,14 @@ internal sealed class GetGoCheckinInfoUseCase(
 
         var character = await characterRepository.FindCharacterAsync(model.Id);
         if (character is null)
-            return ValidationHelper.AddSingleValidationFailure(nameof(model.Id), "Character does not exist.");
-        
+            return ValidationHelper.AddSingleValidationFailure(
+                nameof(model.Id),
+                "Character does not exist."
+            );
+
         var knowledges = await knowledgeRepository.GetGoApprovalKnowledges(model.Id);
         var contacts = await repository.GetContactsForCharacterSheet(model.Id);
-        
+
         // This technically doesn't matter as this is post character creation, we just need the available xp bit
         var xpCheck = await xpRepository.GetAvailableXpForSection(model.Id, XpSectionTypes.Stats);
 
