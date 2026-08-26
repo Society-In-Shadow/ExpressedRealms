@@ -25,6 +25,8 @@ internal static class GetGoCheckinInfoEndpoint
         return TypedResults.Ok(
             new GoCheckinChecks()
             {
+                StillInCharacterCreation = status.Value.StillInCharacterCreation,
+                SpentTooMuchXp = status.Value.SpentTooMuchXp,
                 Contacts = status
                     .Value.Contacts.Select(x => new ContactCheck() { Id = x.Id, Name = x.Name })
                     .ToList(),

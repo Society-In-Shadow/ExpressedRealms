@@ -68,7 +68,7 @@ const enableReviewButton = computed(() => {
   const allKnowledgesReviewed = reviewData.value?.knowledgeChecks?.every(x => x.isReviewed) ?? false
   const allContactsReviewed = reviewData.value?.contacts?.every(x => x.isReviewed) ?? false
 
-  return (!showFactionInfo.value || reviewedFactionPromotionRequest.value) && allKnowledgesReviewed && allContactsReviewed
+  return (!showFactionInfo.value || reviewedFactionPromotionRequest.value) && allKnowledgesReviewed && allContactsReviewed && !goCheckData?.value?.spentTooMuchXp && !goCheckData?.value?.stillInCharacterCreation
 })
 
 </script>
@@ -77,28 +77,43 @@ const enableReviewButton = computed(() => {
   <Message v-if="showBanner" severity="warn" class="mb-3">
     <div class="w-100">
       <p>You need to review this character sheet.</p>
-      <div v-if="showFactionInfo">
-        <Checkbox v-model="reviewedFactionPromotionRequest" input-id="reviewed" class="mr-2" binary />
-        <label for="reviewed">I have addressed their faction promotion request</label>
+      <div v-if="goCheckData?.stillInCharacterCreation">
+        <h2>In Character Creation</h2>
+        <p>Their character is still in character creation, help them finalize it, then recheck them in or refresh this page.</p>
       </div>
-      <div v-if="showGoLists && (reviewData?.contacts?.length ?? 0) > 0">
-        <h2>Contacts Review</h2>
-        <div v-for="contactCheck in reviewData!.contacts" :key="contactCheck.id" class="pt-1 mb-1">
-          <Checkbox v-model="contactCheck.isReviewed" :input-id="'contact-' + contactCheck.id" class="mr-2" binary />
-          <label :for="'contact-' + contactCheck.id"><strong>{{ contactCheck.name }}</strong> - Needs Approval</label>
+      <div v-else>
+        <div v-if="goCheckData?.spentTooMuchXp">
+          <h2>Spent Too Much XP</h2>
+          <p>Somehow they have spent too much XP</p>
+          <ul>
+            <li>Fix the issue on their character sheet</li>
+            <li>If it's an issue with the website, reach out to the Toolkit Director at SHQ or post something in Con Discord Channel</li>
+            <li>Then recheck them in or refresh this page.</li>
+          </ul>
         </div>
-      </div>
-      <div v-if="showGoLists && (goCheckData?.knowledgeChecks?.length ?? 0) > 0">
-        <h2>Knowledge Review</h2>
-        <div v-for="knowledge in reviewData!.knowledgeChecks" :key="knowledge.id" class="pt-1 mb-1">
-          <Checkbox v-model="knowledge.isReviewed" :input-id="'knowledge-' + knowledge.id" class="mr-2" binary />
-          <label :for="'knowledge-' + knowledge.id"><strong>{{ knowledge.name }}</strong> -
-            <span v-if="knowledge.isDoctorateLevel">Is at a doctorate level, needs a quest or approval of a quest</span>
-            <span v-if="knowledge.isUnknownKnowledge">Is an unknown knowledge, these are hidden and need to be approved by a GO</span>
-          </label>
+        <div v-if="showFactionInfo">
+          <Checkbox v-model="reviewedFactionPromotionRequest" input-id="reviewed" class="mr-2" binary />
+          <label for="reviewed">I have addressed their faction promotion request</label>
         </div>
+        <div v-if="showGoLists && (reviewData?.contacts?.length ?? 0) > 0">
+          <h2>Contacts Review</h2>
+          <div v-for="contactCheck in reviewData!.contacts" :key="contactCheck.id" class="pt-1 mb-1">
+            <Checkbox v-model="contactCheck.isReviewed" :input-id="'contact-' + contactCheck.id" class="mr-2" binary />
+            <label :for="'contact-' + contactCheck.id"><strong>{{ contactCheck.name }}</strong> - Needs Approval</label>
+          </div>
+        </div>
+        <div v-if="showGoLists && (goCheckData?.knowledgeChecks?.length ?? 0) > 0">
+          <h2>Knowledge Review</h2>
+          <div v-for="knowledge in reviewData!.knowledgeChecks" :key="knowledge.id" class="pt-1 mb-1">
+            <Checkbox v-model="knowledge.isReviewed" :input-id="'knowledge-' + knowledge.id" class="mr-2" binary />
+            <label :for="'knowledge-' + knowledge.id"><strong>{{ knowledge.name }}</strong> -
+              <span v-if="knowledge.isDoctorateLevel">Is at a doctorate level, needs a quest or approval of a quest</span>
+              <span v-if="knowledge.isUnknownKnowledge">Is an unknown knowledge, these are hidden and need to be approved by a GO</span>
+            </label>
+          </div>
+        </div>
+        <Button label="Reviewed Character" class="mt-3" :disabled="!enableReviewButton" @click="reviewedCharacter" />
       </div>
-      <Button label="Reviewed Character" class="mt-3" :disabled="!enableReviewButton" @click="reviewedCharacter" />
     </div>
   </Message>
 </template>
