@@ -100,6 +100,8 @@ export interface GetBreakOfDawnInfoResponse {
 }
 
 export interface GoChecksResponse {
+  stillInCharacterCreation: boolean
+  spentTooMuchXp: boolean
   knowledgeChecks: KnowledgeCheck[]
   contacts: ContactCheck[]
 }
