@@ -14,7 +14,7 @@ public static class GetSummaryEventsEndpoint
         var results = await useCase.ExecuteAsync();
 
         return TypedResults.Ok(
-            results.Value.Events.Select(x => new ListItem() { Id = x.Id, Name = x.Name }).ToList()
+            results.Value.Events.Select(x => new ListItem() { Id = x.Id, Name = $"{x.Name} ({x.StartDate.Year})" }).ToList()
         );
     }
 }
