@@ -323,7 +323,7 @@ internal sealed class EventCheckinRepository(
             AssignedXpTypeEnum.CheckinBonus,
             AssignedXpTypeEnum.FirstTimePlayerXp,
             AssignedXpTypeEnum.BroughtNewPlayerXp,
-            AssignedXpTypeEnum.BoughtCharacterStorage,
+            AssignedXpTypeEnum.BoughtInitialCharacterStorage,
         ];
         return await context.AssignedXpMappings.AnyAsync(
             x =>

@@ -3,6 +3,7 @@ using System;
 using ExpressedRealms.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpressedRealms.DB.Migrations
 {
     [DbContext(typeof(ExpressedRealmsDbContext))]
-    partial class ExpressedRealmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260902055251_AddPaidItForwardCharacterStorageType")]
+    partial class AddPaidItForwardCharacterStorageType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -802,17 +805,17 @@ namespace ExpressedRealms.DB.Migrations
                         },
                         new
                         {
-                            Id = 8,
-                            Description = "XP User gets for opting into character storage at the last con.",
-                            IsDeleted = false,
-                            Name = "Ongoing Character Storage Bonus"
-                        },
-                        new
-                        {
                             Id = 6,
                             Description = "XP is being assigned out for uncommon reason",
                             IsDeleted = false,
                             Name = "Other"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Description = "This is the XP one gets for every event after the initial purchase, assuming they paid for it from the previous event.",
+                            IsDeleted = false,
+                            Name = "Paid It Forward Character Storage Bonus"
                         });
                 });
 
