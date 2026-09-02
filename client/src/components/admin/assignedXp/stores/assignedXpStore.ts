@@ -55,6 +55,16 @@ export const AssignedXpStore
             name: 'Other',
             description: 'XP is being assigned out for uncommon reason',
           },
+          {
+            id: 7,
+            name: 'Initial Character Storage',
+            description: 'XP Assigned out when they initially opt into character storage.',
+          },
+          {
+            id: 7,
+            name: 'Ongoing Character Storage',
+            description: 'XP User gets for opting into character storage at the last con.',
+          },
         ]
         this.hasItems = true
       },

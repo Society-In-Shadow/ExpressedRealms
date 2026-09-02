@@ -42,9 +42,14 @@ public sealed class AssignedXpTypeEnum : SmartEnum<AssignedXpTypeEnum, int>
         "Other",
         "XP is being assigned out for uncommon reason"
     );
-    public static readonly AssignedXpTypeEnum BoughtCharacterStorage = new(
+    public static readonly AssignedXpTypeEnum BoughtInitialCharacterStorage = new(
         7,
-        "Bought Character Storage",
-        "When a user pays for character storage, they get max of 5 XP"
+        "Initial Character Storage Bonus",
+        "When a user pays for character storage, they get max of 5 XP on their first purchase"
+    );
+    public static readonly AssignedXpTypeEnum OnGoingCharacterStorage = new(
+        8,
+        "Ongoing Character Storage Bonus",
+        "XP User gets for opting into character storage at the last con."
     );
 }
