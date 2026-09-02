@@ -11,7 +11,7 @@ import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
 import {
   getValidationInstance,
 } from '@/components/characters/character/knowledges/validations/specializationValidations'
-import type { CharacterKnowledge } from '@/components/characters/character/knowledges/types'
+import type { EditKnowledge } from '@/components/characters/character/knowledges/types'
 import ShowXPCosts from '@/components/characters/wizard/ShowXPCosts.vue'
 import { experienceStore, XpSectionTypes } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
 import type { CalculatedExperience } from '@/components/characters/character/types.ts'
@@ -24,7 +24,8 @@ const sectionInfo = ref<CalculatedExperience>({})
 
 const dialogRef = inject('dialogRef')
 
-const knowledge = ref<CharacterKnowledge>(dialogRef.value.data.knowledge)
+const knowledge = ref<EditKnowledge>(dialogRef.value.data.knowledge)
+const mappingId = ref<EditKnowledge>(dialogRef.value.data.mappingId)
 
 onBeforeMount(async () => {
   await store.getKnowledgeLevels(route.params.id)
@@ -36,7 +37,7 @@ const closeDialog = () => {
 }
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await store.addSpecialization(values, route.params.id, knowledge.value.mappingId)
+  await store.addSpecialization(values, route.params.id, mappingId.value)
   closeDialog()
 })
 
@@ -44,10 +45,10 @@ const onSubmit = form.handleSubmit(async (values) => {
 
 <template>
   <h1 class="pt-0 mt-0">
-    {{ knowledge.knowledge.name }}
+    {{ knowledge.name }}
   </h1>
-  <h3>{{ knowledge.knowledge.type }}</h3>
-  <p>{{ knowledge.knowledge.description }}</p>
+  <h3>{{ knowledge.knowledgeType }}</h3>
+  <p>{{ knowledge.description }}</p>
 
   <ShowXPCosts :section-type="XpSectionTypes.knowledges" />
 

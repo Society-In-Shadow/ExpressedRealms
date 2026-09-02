@@ -7,7 +7,7 @@ import EditSpecializationKnowledge from '@/components/characters/wizard/knowledg
 export const addKnowledgeDialog = () => {
   const dialog = useDialog()
 
-  const showAddSpecialization = (knowledge: Knowledge) => {
+  const showAddSpecialization = (knowledge: Knowledge, mappingId: number) => {
     dialog.open(AddSpecializationKnowledge, {
       props: {
         header: 'Add Specialization',
@@ -22,6 +22,7 @@ export const addKnowledgeDialog = () => {
       },
       data: {
         knowledge: knowledge,
+        mappingId: mappingId,
       },
     })
   }

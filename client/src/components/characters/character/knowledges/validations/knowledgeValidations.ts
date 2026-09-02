@@ -1,6 +1,6 @@
 import { type InferType, object, string } from 'yup'
 import { useGenericForm } from '@/utilities/formUtilities'
-import type { CharacterKnowledge, KnowledgeOptions } from '@/components/characters/character/knowledges/types'
+import type { EditKnowledge, KnowledgeOptions } from '@/components/characters/character/knowledges/types'
 
 const validationSchema = object({
   notes: string().nullable()
@@ -15,7 +15,7 @@ export type CharacterKnowledgeForm = InferType<typeof validationSchema>
 export function getValidationInstance() {
   const form = useGenericForm(validationSchema)
 
-  const setValues = (model: CharacterKnowledge) => {
+  const setValues = (model: EditKnowledge) => {
     form.fields.notes.field.value = model.notes
   }
 

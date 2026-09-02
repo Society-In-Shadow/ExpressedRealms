@@ -48,3 +48,26 @@ export interface KnowledgeOptions {
   totalUnknownXpCost: number
   disabled: boolean
 }
+
+export interface KnowledgeLevel {
+  id: number
+  name: string
+  stones: number
+  level: number
+  totalXpCost: number
+  specializationCount: number
+  isSelected: boolean
+}
+
+export interface EditKnowledge {
+  id: number
+  name: string
+  knowledgeType: string
+  description: string
+  notes?: string | null
+  selectedLevelId: number
+  minimumKnowledgeId: number
+  blockFactionChanges: boolean
+  knowledgeLevels: KnowledgeLevel[]
+  specializations: Array<Specialization>
+}
