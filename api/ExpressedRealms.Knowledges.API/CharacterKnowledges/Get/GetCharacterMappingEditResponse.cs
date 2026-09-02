@@ -8,4 +8,8 @@ public class GetCharacterMappingEditResponse
     public string? Notes { get; set; }
     public int SelectedLevelId { get; set; }
     public List<KnowledgeLevel> KnowledgeLevels { get; set; } = [];
+    public string KnowledgeType { get; set; } = string.Empty;
+    public List<Specialization> Specializations { get; set; } = [];
+    public int? MinimumKnowledgeId { get; set; }
+    public bool BlockFactionChanges { get; set; }
 }

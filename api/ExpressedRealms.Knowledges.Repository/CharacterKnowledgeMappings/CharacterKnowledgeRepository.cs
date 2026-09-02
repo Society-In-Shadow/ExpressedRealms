@@ -156,6 +156,20 @@ public class CharacterKnowledgeRepository(
             .ToListAsync(cancellationToken);
     }
 
+    public Task<List<SpecializationProjection>> GetSpecializationsForKnowledge(int knowledgeMappingId)
+    {
+        return context.CharacterKnowledgeSpecializations
+            .Where(x => x.KnowledgeMappingId == knowledgeMappingId)
+            .Select(y => new SpecializationProjection()
+            {
+                Name = y.Name,
+                Description = y.Description,
+                Id = y.Id,
+                Notes = y.Notes,
+            })
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<List<SimpleCharacterKnowledgeProjection>> GetSimpleKnowledgesForCharacter(
         int characterId
     )

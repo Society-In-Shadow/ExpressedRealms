@@ -13,7 +13,7 @@ public static class GetCharacterKnowledgeEndpoint
     )
     {
         var results = await createKnowledgeUseCase.ExecuteAsync(
-            new () { MappingId = mappingId }
+            new () { MappingId = mappingId, CharacterId = characterId }
         );
 
         return TypedResults.Ok(
@@ -21,6 +21,7 @@ public static class GetCharacterKnowledgeEndpoint
             {
                 Id = results.Value.Id,
                 Description = results.Value.Description,
+                KnowledgeType = results.Value.KnowledgeType,
                 Name = results.Value.Name,
                 SelectedLevelId = results.Value.SelectedLevelId,
                 Notes = results.Value.Notes,
@@ -33,7 +34,18 @@ public static class GetCharacterKnowledgeEndpoint
                     Stones = x.Stones,
                     TotalXpCost = x.TotalXpCost,
                     IsSelected = x.IsSelected
-                }).ToList()
+                }).ToList(),
+                MinimumKnowledgeId = results.Value.MinimumKnowledgeId,
+                BlockFactionChanges = results.Value.BlockFactionChanges,
+                Specializations = results.Value.Specializations.Select(y => new Specialization()
+                    {
+                        Name = y.Name,
+                        Description = y.Description,
+                        Id = y.Id,
+                        Notes = y.Notes,
+                        BlockFactionChanges = y.BlockFactionChanges
+                    })
+                    .ToList()
             }
         );
     }

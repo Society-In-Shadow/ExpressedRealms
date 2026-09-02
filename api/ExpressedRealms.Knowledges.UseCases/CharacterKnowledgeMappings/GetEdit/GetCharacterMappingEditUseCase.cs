@@ -1,4 +1,5 @@
 using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.Expressions.Repository.CharacterFactions;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Knowledges.Repository.Knowledges;
 using ExpressedRealms.UseCases.Shared;
@@ -9,6 +10,7 @@ namespace ExpressedRealms.Knowledges.UseCases.CharacterKnowledgeMappings.GetEdit
 internal sealed class GetCharacterMappingEditUseCase(
     IKnowledgeRepository knowledgeRepository,
     ICharacterKnowledgeRepository characterKnowledgeRepository,
+    ICharacterFactionRepository characterFactionRepository,
     ICharacterRepository characterRepository,
     GetCharacterMappingEditModelValidator validator,
     CancellationToken cancellationToken
@@ -34,7 +36,11 @@ internal sealed class GetCharacterMappingEditUseCase(
             return ValidationHelper.AddSingleValidationFailure(nameof(model.MappingId), "Mapping does not exist");
         
         var knowledgeLevels = await knowledgeRepository.GetLevelsForKnowledge(mapping.IsUnknownType);
-
+        var characterFactionLevels = await characterFactionRepository.GetLatestPlayerFactionLevels(
+            model.CharacterId
+        );
+        var specializations = await characterKnowledgeRepository.GetSpecializationsForKnowledge(model.MappingId);
+        
         return Result.Ok(
             new GetCharacterMappingEditReturnModel()
             {
@@ -42,6 +48,7 @@ internal sealed class GetCharacterMappingEditUseCase(
                 Description = mapping.Description,
                 Name = mapping.Name,
                 SelectedLevelId = mapping.SelectedLevelId,
+                KnowledgeType = mapping.Type,
                 Notes = mapping.Notes,
                 KnowledgeLevels = knowledgeLevels.Select(x => new KnowledgeLevel()
                 {
@@ -52,7 +59,24 @@ internal sealed class GetCharacterMappingEditUseCase(
                     Stones = x.Stones,
                     TotalXpCost = x.TotalXpCost,
                     IsSelected = x.Id == mapping.SelectedLevelId
-                }).ToList()
+                }).ToList(),
+                MinimumKnowledgeId = characterFactionLevels
+                    .Where(y => y.KnowledgeId == mapping.KnowledgeId)
+                    .Max(y => y.KnowledgeLevel?.Id),
+                BlockFactionChanges = characterFactionLevels.All(y =>
+                    y.KnowledgeId != mapping.KnowledgeId
+                ),
+                Specializations = specializations.Select(y => new SpecializationReturnModel()
+                    {
+                        Name = y.Name,
+                        Description = y.Description,
+                        Id = y.Id,
+                        Notes = y.Notes,
+                        BlockFactionChanges = characterFactionLevels.Any(z =>
+                            z.KnowledgeSpecialization == y.Name && z.KnowledgeId == mapping.KnowledgeId
+                        ),
+                    })
+                    .ToList()
             }
         );
     }
