@@ -1,6 +1,7 @@
 using ExpressedRealms.DB.Models.Knowledges;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels;
 using ExpressedRealms.DB.Shared;
+using ExpressedRealms.Knowledges.Repository.Knowledges.Dtos;
 
 namespace ExpressedRealms.Knowledges.Repository.Knowledges;
 
@@ -16,4 +17,5 @@ public interface IKnowledgeRepository
     Task<Knowledge> GetKnowledgeAsync(int modelId);
     Task<List<KnowledgeType>> GetKnowledgeTypesAsync();
     Task<List<GenericListDto<int>>> GetKnowledgeSummaryAsync();
+    Task<List<KnowledgeLevelDto>> GetLevelsForKnowledge(bool isUnknown);
 }

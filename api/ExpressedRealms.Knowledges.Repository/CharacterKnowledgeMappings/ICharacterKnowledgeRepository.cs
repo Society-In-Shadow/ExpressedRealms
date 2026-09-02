@@ -25,4 +25,5 @@ public interface ICharacterKnowledgeRepository
     );
 
     Task<List<GoApprovalKnowledgeProjection>> GetGoApprovalKnowledges(int characterId);
+    Task<CharacterKnowledgeMappingProjection?> GetCharacterKnowledgeMappingForViewing(int mappingId);
 }
