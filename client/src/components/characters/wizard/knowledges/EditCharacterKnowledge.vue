@@ -39,7 +39,6 @@ watch(props, async () => {
 }, { immediate: true })
 
 async function loadInfo() {
-  console.log('loaded')
   knowledge.value = await axios.get<EditKnowledge>(`characters/${route.params.id}/knowledges/${props.knowledgeMappingId}`)
     .then(async (response) => { return response.data })
 
@@ -66,15 +65,14 @@ const onSubmit = form.handleSubmit(async (values) => {
 })
 
 function getCurrentXpLevel(levelId: number) {
-  return knowledge.value.knowledgeLevels.filter(function (level: KnowledgeLevel) {
-    return level.id === levelId
-  })[0].totalXpCost ?? 0
+  return knowledge.value.knowledgeLevels.find(level => level.id === levelId)?.totalXpCost ?? 0
 }
 
 function getFactionLevel() {
-  const level = knowledge.value.knowledgeLevels.filter(function (level: KnowledgeLevel) {
-    return level.id === knowledge.value.minimumKnowledgeId
-  })[0]
+  const level = knowledge.value.knowledgeLevels.find(level => level.id === knowledge.value.minimumKnowledgeId)
+
+  if (!level)
+    return ''
 
   return `${level.name} (${level.level})`
 }
