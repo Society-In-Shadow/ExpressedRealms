@@ -25,10 +25,9 @@ const sectionInfo = ref<CalculatedExperience>({})
 const dialogRef = inject('dialogRef')
 
 const knowledge = ref<EditKnowledge>(dialogRef.value.data.knowledge)
-const mappingId = ref<EditKnowledge>(dialogRef.value.data.mappingId)
+const mappingId = ref<number>(dialogRef.value.data.mappingId)
 
 onBeforeMount(async () => {
-  await store.getKnowledgeLevels(route.params.id)
   sectionInfo.value = xpInfo.getExperienceInfoForSection(XpSectionTypes.knowledges)
 })
 
@@ -38,7 +37,9 @@ const closeDialog = () => {
 
 const onSubmit = form.handleSubmit(async (values) => {
   await store.addSpecialization(values, route.params.id, mappingId.value)
-  closeDialog()
+  dialogRef.value.close({
+    action: 'added',
+  })
 })
 
 </script>

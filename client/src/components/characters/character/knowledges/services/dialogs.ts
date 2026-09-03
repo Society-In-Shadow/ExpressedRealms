@@ -1,54 +1,13 @@
-import { useDialog } from 'primevue/usedialog'
-import type { Knowledge } from '@/components/knowledges/types'
-import type { CharacterKnowledge, Specialization } from '@/components/characters/character/knowledges/types'
-import AddSpecializationKnowledge from '@/components/characters/wizard/knowledges/AddSpecializationKnowledge.vue'
-import EditSpecializationKnowledge from '@/components/characters/wizard/knowledges/EditSpecializationKnowledge.vue'
+import { useAppDialog } from '@/utilities/dialogUtilities.ts'
+
+const AddSpecialization = () => import('@/components/characters/wizard/knowledges/AddSpecializationKnowledge.vue')
+const EditSpecialization = () => import('@/components/characters/wizard/knowledges/EditSpecializationKnowledge.vue')
 
 export const addKnowledgeDialog = () => {
-  const dialog = useDialog()
-
-  const showAddSpecialization = (knowledge: Knowledge, mappingId: number) => {
-    dialog.open(AddSpecializationKnowledge, {
-      props: {
-        header: 'Add Specialization',
-        style: {
-          width: '500px',
-        },
-        breakpoints: {
-          '960px': '75vw',
-          '640px': '90vw',
-        },
-        modal: true,
-      },
-      data: {
-        knowledge: knowledge,
-        mappingId: mappingId,
-      },
-    })
-  }
-
-  const showEditSpecialization = (knowledge: CharacterKnowledge, specialization: Specialization) => {
-    dialog.open(EditSpecializationKnowledge, {
-      props: {
-        header: 'Edit Specialization',
-        style: {
-          width: '500px',
-        },
-        breakpoints: {
-          '960px': '75vw',
-          '640px': '90vw',
-        },
-        modal: true,
-      },
-      data: {
-        knowledge: knowledge,
-        specialization: specialization,
-      },
-    })
-  }
+  const dialog = useAppDialog()
 
   return {
-    showAddSpecialization,
-    showEditSpecialization,
+    showAddSpecialization: data => dialog.open(AddSpecialization, { header: 'Add Specialization', data }),
+    showEditSpecialization: data => dialog.open(EditSpecialization, { header: 'Edit Specialization', data }),
   }
 }

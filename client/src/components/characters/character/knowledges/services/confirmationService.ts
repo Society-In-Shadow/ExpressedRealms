@@ -25,25 +25,41 @@ export const confirmationPopup = (characterId: number) => {
       },
     })
 
-  const deleteSpecializationConfirmation = (event: MouseEvent, mappingId: number, specializationId: number) =>
-    confirm.require({
-      target: event.target as HTMLElement,
-      group: 'popup',
-      message: `Do you want to delete this specialization?`,
-      icon: 'pi pi-info-circle',
-      rejectProps: {
-        label: 'Cancel',
-        severity: 'secondary',
-        outlined: true,
-      },
-      acceptProps: {
-        label: 'Delete Specialization',
-        severity: 'danger',
-      },
-      accept: () => {
-        store.deleteSpecialization(characterId, mappingId, specializationId)
-      },
+  const deleteSpecializationConfirmation = (
+    event: MouseEvent,
+    mappingId: number,
+    specializationId: number,
+  ): Promise<string> => {
+    return new Promise((resolve) => {
+      confirm.require({
+        target: event.target as HTMLElement,
+        group: 'popup',
+        message: 'Do you want to delete this specialization?',
+        icon: 'pi pi-info-circle',
+        rejectProps: {
+          label: 'Cancel',
+          severity: 'secondary',
+          outlined: true,
+        },
+        acceptProps: {
+          label: 'Delete Specialization',
+          severity: 'danger',
+        },
+        accept: async () => {
+          await store.deleteSpecialization(
+            characterId,
+            mappingId,
+            specializationId,
+          )
+
+          resolve('deleted')
+        },
+        reject: () => {
+          resolve('cancelled')
+        },
+      })
     })
+  }
 
   return { deleteConfirmation, deleteSpecializationConfirmation }
 }
