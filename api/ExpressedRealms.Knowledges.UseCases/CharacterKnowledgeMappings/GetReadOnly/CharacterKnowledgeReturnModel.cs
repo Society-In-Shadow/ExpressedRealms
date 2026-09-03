@@ -12,5 +12,4 @@ public class CharacterKnowledgeReturnModel
     public int LevelId { get; set; }
     public int SpecializationCount { get; set; }
     public bool CanSelectLevel { get; set; }
-    public int? MinimumKnowledgeId { get; set; }
 }
