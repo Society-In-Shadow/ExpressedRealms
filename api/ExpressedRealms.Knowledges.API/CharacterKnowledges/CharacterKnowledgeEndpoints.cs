@@ -36,7 +36,7 @@ internal static class CharacterKnowledgeEndpoints
             "{characterId}/knowledges/{mappingId}",
             EditCharacterKnowledgeEndpoint.EditKnowledges
         );
-        
+
         endpointGroup.MapGet(
             "{characterId}/knowledges/{mappingId}",
             GetCharacterKnowledgeEndpoint.ExecuteAsync

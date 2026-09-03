@@ -70,31 +70,35 @@ public class CharacterKnowledgeRepository(
         return character is not null;
     }
 
-    public Task<CharacterKnowledgeMapping> GetCharacterKnowledgeMappingForEditing(int modelMappingId)
+    public Task<CharacterKnowledgeMapping> GetCharacterKnowledgeMappingForEditing(
+        int modelMappingId
+    )
     {
         return context.CharacterKnowledgeMappings.FirstAsync(
             x => x.Id == modelMappingId,
             cancellationToken
         );
     }
-    
-    public Task<CharacterKnowledgeMappingProjection?> GetCharacterKnowledgeMappingForViewing(int mappingId)
+
+    public Task<CharacterKnowledgeMappingProjection?> GetCharacterKnowledgeMappingForViewing(
+        int mappingId
+    )
     {
-        return context.CharacterKnowledgeMappings.Where(
-            x => x.Id == mappingId
-        ).Select(x => new CharacterKnowledgeMappingProjection()
-        {
-            Id = x.Id,
-            KnowledgeId = x.KnowledgeId,
-            Name = x.Knowledge.Name,
-            Description = x.Knowledge.Description,
-            Type = x.Knowledge.KnowledgeType.Name,
-            SelectedLevelId = x.KnowledgeLevelId,
-            IsUnknownType = x.Knowledge.KnowledgeTypeId == 3,
-            CharacterId = x.CharacterId,
-            Notes = x.Notes
-        })
-        .FirstOrDefaultAsync(cancellationToken);
+        return context
+            .CharacterKnowledgeMappings.Where(x => x.Id == mappingId)
+            .Select(x => new CharacterKnowledgeMappingProjection()
+            {
+                Id = x.Id,
+                KnowledgeId = x.KnowledgeId,
+                Name = x.Knowledge.Name,
+                Description = x.Knowledge.Description,
+                Type = x.Knowledge.KnowledgeType.Name,
+                SelectedLevelId = x.KnowledgeLevelId,
+                IsUnknownType = x.Knowledge.KnowledgeTypeId == 3,
+                CharacterId = x.CharacterId,
+                Notes = x.Notes,
+            })
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task UpdateCharacterKnowledgeMapping(CharacterKnowledgeMapping mapping)
@@ -156,10 +160,14 @@ public class CharacterKnowledgeRepository(
             .ToListAsync(cancellationToken);
     }
 
-    public Task<List<SpecializationProjection>> GetSpecializationsForKnowledge(int knowledgeMappingId)
+    public Task<List<SpecializationProjection>> GetSpecializationsForKnowledge(
+        int knowledgeMappingId
+    )
     {
-        return context.CharacterKnowledgeSpecializations
-            .Where(x => x.KnowledgeMappingId == knowledgeMappingId)
+        return context
+            .CharacterKnowledgeSpecializations.Where(x =>
+                x.KnowledgeMappingId == knowledgeMappingId
+            )
             .Select(y => new SpecializationProjection()
             {
                 Name = y.Name,

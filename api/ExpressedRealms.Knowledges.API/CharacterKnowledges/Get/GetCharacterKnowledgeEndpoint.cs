@@ -13,7 +13,7 @@ public static class GetCharacterKnowledgeEndpoint
     )
     {
         var results = await createKnowledgeUseCase.ExecuteAsync(
-            new () { MappingId = mappingId, CharacterId = characterId }
+            new() { MappingId = mappingId, CharacterId = characterId }
         );
 
         return TypedResults.Ok(
@@ -25,27 +25,30 @@ public static class GetCharacterKnowledgeEndpoint
                 Name = results.Value.Name,
                 SelectedLevelId = results.Value.SelectedLevelId,
                 Notes = results.Value.Notes,
-                KnowledgeLevels = results.Value.KnowledgeLevels.Select(x => new KnowledgeLevel()
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    Level = x.Level,
-                    SpecializationCount = x.SpecializationCount,
-                    Stones = x.Stones,
-                    TotalXpCost = x.TotalXpCost,
-                    IsSelected = x.IsSelected
-                }).ToList(),
+                KnowledgeLevels = results
+                    .Value.KnowledgeLevels.Select(x => new KnowledgeLevel()
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Level = x.Level,
+                        SpecializationCount = x.SpecializationCount,
+                        Stones = x.Stones,
+                        TotalXpCost = x.TotalXpCost,
+                        IsSelected = x.IsSelected,
+                    })
+                    .ToList(),
                 MinimumKnowledgeId = results.Value.MinimumKnowledgeId,
                 BlockFactionChanges = results.Value.BlockFactionChanges,
-                Specializations = results.Value.Specializations.Select(y => new Specialization()
+                Specializations = results
+                    .Value.Specializations.Select(y => new Specialization()
                     {
                         Name = y.Name,
                         Description = y.Description,
                         Id = y.Id,
                         Notes = y.Notes,
-                        BlockFactionChanges = y.BlockFactionChanges
+                        BlockFactionChanges = y.BlockFactionChanges,
                     })
-                    .ToList()
+                    .ToList(),
             }
         );
     }

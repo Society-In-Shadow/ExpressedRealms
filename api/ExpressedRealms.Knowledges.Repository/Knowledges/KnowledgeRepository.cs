@@ -93,14 +93,16 @@ internal sealed class KnowledgeRepository(
 
     public Task<List<KnowledgeLevelDto>> GetLevelsForKnowledge(bool isUnknown)
     {
-        return context.KnowledgeEducationLevels.Select(x => new KnowledgeLevelDto()
-        {
-            Id = x.Id,
-            Name = x.Name,
-            TotalXpCost = isUnknown ? x.TotalUnknownXpCost : x.TotalGeneralXpCost,
-            Level = x.Level,
-            Stones = x.StoneModifier,
-            SpecializationCount = x.SpecializationCount
-        }).ToListAsync(cancellationToken);
+        return context
+            .KnowledgeEducationLevels.Select(x => new KnowledgeLevelDto()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                TotalXpCost = isUnknown ? x.TotalUnknownXpCost : x.TotalGeneralXpCost,
+                Level = x.Level,
+                Stones = x.StoneModifier,
+                SpecializationCount = x.SpecializationCount,
+            })
+            .ToListAsync(cancellationToken);
     }
 }
