@@ -2,6 +2,7 @@ using ExpressedRealms.DB;
 using ExpressedRealms.DB.Models.Knowledges;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels;
 using ExpressedRealms.DB.Shared;
+using ExpressedRealms.Knowledges.Repository.Knowledges.Dtos;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Knowledges.Repository.Knowledges;
@@ -88,5 +89,20 @@ internal sealed class KnowledgeRepository(
                 Description = x.Description,
             })
             .ToListAsync();
+    }
+
+    public Task<List<KnowledgeLevelDto>> GetLevelsForKnowledge(bool isUnknown)
+    {
+        return context
+            .KnowledgeEducationLevels.Select(x => new KnowledgeLevelDto()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                TotalXpCost = isUnknown ? x.TotalUnknownXpCost : x.TotalGeneralXpCost,
+                Level = x.Level,
+                Stones = x.StoneModifier,
+                SpecializationCount = x.SpecializationCount,
+            })
+            .ToListAsync(cancellationToken);
     }
 }

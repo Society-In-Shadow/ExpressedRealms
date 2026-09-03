@@ -6,7 +6,7 @@ import { characterKnowledgeStore } from '@/components/characters/character/knowl
 import { useRoute } from 'vue-router'
 import { inject, onBeforeMount, ref } from 'vue'
 
-import type { CharacterKnowledge, Specialization } from '@/components/characters/character/knowledges/types'
+import type { EditKnowledge, Specialization } from '@/components/characters/character/knowledges/types'
 import FormInputTextWrapper from '@/FormWrappers/FormInputTextWrapper.vue'
 import {
   getValidationInstance,
@@ -18,8 +18,9 @@ const route = useRoute()
 
 const dialogRef = inject('dialogRef')
 
-const knowledge = ref<CharacterKnowledge>(dialogRef.value.data.knowledge)
+const knowledge = ref<EditKnowledge>(dialogRef.value.data.knowledge)
 const specialization = ref<Specialization>(dialogRef.value.data.specialization)
+const mappingId = ref<number>(dialogRef.value.data.mappingId)
 
 const closeDialog = () => {
   dialogRef.value.close()
@@ -30,18 +31,20 @@ onBeforeMount(async () => {
 })
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await store.editSpecialization(values, route.params.id, knowledge.value.mappingId, specialization.value.id)
-  closeDialog()
+  await store.editSpecialization(values, route.params.id, mappingId.value, specialization.value.id)
+  dialogRef.value.close({
+    action: 'edited',
+  })
 })
 
 </script>
 
 <template>
   <h1 class="pt-0 mt-0">
-    {{ knowledge.knowledge.name }}
+    {{ knowledge.name }}
   </h1>
-  <h3>{{ knowledge.knowledge.type }}</h3>
-  <p>{{ knowledge.knowledge.description }}</p>
+  <h3>{{ knowledge.knowledgeType }}</h3>
+  <p>{{ knowledge.description }}</p>
 
   <h2>Specialization</h2>
   <form @submit="onSubmit">

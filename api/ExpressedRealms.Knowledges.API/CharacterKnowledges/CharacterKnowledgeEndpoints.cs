@@ -1,6 +1,7 @@
 ﻿using ExpressedRealms.Knowledges.API.CharacterKnowledges.Create;
 using ExpressedRealms.Knowledges.API.CharacterKnowledges.Delete;
 using ExpressedRealms.Knowledges.API.CharacterKnowledges.Edit;
+using ExpressedRealms.Knowledges.API.CharacterKnowledges.Get;
 using ExpressedRealms.Knowledges.API.CharacterKnowledges.GetAll;
 using ExpressedRealms.Knowledges.API.CharacterKnowledges.GetOptions;
 using Microsoft.AspNetCore.Builder;
@@ -34,6 +35,11 @@ internal static class CharacterKnowledgeEndpoints
         endpointGroup.MapPut(
             "{characterId}/knowledges/{mappingId}",
             EditCharacterKnowledgeEndpoint.EditKnowledges
+        );
+
+        endpointGroup.MapGet(
+            "{characterId}/knowledges/{mappingId}",
+            GetCharacterKnowledgeEndpoint.ExecuteAsync
         );
 
         endpointGroup.MapDelete(

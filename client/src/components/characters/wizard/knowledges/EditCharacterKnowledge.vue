@@ -5,7 +5,7 @@ import { getValidationInstance } from '@/components/characters/character/knowled
 import { characterKnowledgeStore } from '@/components/characters/character/knowledges/stores/characterKnowledgeStore'
 import { useRoute } from 'vue-router'
 import { ref, watch } from 'vue'
-import type { CharacterKnowledge, KnowledgeOptions } from '@/components/characters/character/knowledges/types'
+import type { EditKnowledge, KnowledgeLevel, KnowledgeOptions } from '@/components/characters/character/knowledges/types'
 import Message from 'primevue/message'
 import { addKnowledgeDialog } from '@/components/characters/character/knowledges/services/dialogs.ts'
 import DataTable from 'primevue/datatable'
@@ -14,6 +14,7 @@ import { confirmationPopup } from '@/components/characters/character/knowledges/
 import { experienceStore, XpSectionTypes } from '@/components/characters/character/stores/experienceBreakdownStore.ts'
 import ShowXPCosts from '@/components/characters/wizard/ShowXPCosts.vue'
 import type { CalculatedExperience } from '@/components/characters/character/types.ts'
+import axios from 'axios'
 
 const dialogService = addKnowledgeDialog()
 const store = characterKnowledgeStore()
@@ -23,7 +24,7 @@ const route = useRoute()
 const popupService = confirmationPopup(route.params.id)
 const sectionInfo = ref<CalculatedExperience>({})
 
-const selectedKnowledgeLevel = ref<KnowledgeOptions>()
+const selectedKnowledgeLevel = ref<KnowledgeLevel>()
 
 const props = defineProps({
   knowledgeMappingId: {
@@ -31,95 +32,95 @@ const props = defineProps({
     required: true,
   },
 })
-const knowledge = ref<CharacterKnowledge>({})
-const isUnknownKnowledge = ref(false)
+const knowledge = ref<EditKnowledge>({})
 
 watch(props, async () => {
   await loadInfo()
 }, { immediate: true })
 
-watch(() => store.knowledges, async () => {
-  await loadInfo()
-}, { immediate: true, deep: true })
-
 async function loadInfo() {
-  knowledge.value = store.knowledges.find(function (characterKnowledge: CharacterKnowledge) {
-    return characterKnowledge.mappingId == props.knowledgeMappingId
-  })
-
-  isUnknownKnowledge.value = knowledge.value.knowledge.type === 'Unknown'
-
-  await store.getKnowledgeLevels(route.params.id)
+  knowledge.value = await axios.get<EditKnowledge>(`characters/${route.params.id}/knowledges/${props.knowledgeMappingId}`)
+    .then(async (response) => { return response.data })
 
   sectionInfo.value = xpInfo.getExperienceInfoForSection(XpSectionTypes.knowledges)
 
-  store.knowledgeLevels.map(function (level: KnowledgeOptions) {
-    var index = store.knowledgeLevels.indexOf(level)
-    const isLowerLevel = level.id > knowledge.value.levelId
-
-    let xpCost = 0
-    if (index === 0) {
-      xpCost = getCurrentXpLevel(level.id)
-    }
-    else {
-      xpCost = getCurrentXpLevel(level.id) - getCurrentXpLevel(knowledge.value.levelId)
-    }
+  knowledge.value.knowledgeLevels.map(function (level: KnowledgeLevel) {
+    let xpCost = getCurrentXpLevel(level.id) - getCurrentXpLevel(knowledge.value.selectedLevelId)
 
     const factionRequirementMinimum = knowledge.value.minimumKnowledgeId > level.id
-    level.disabled = xpCost > sectionInfo.value.availableXp && isLowerLevel || factionRequirementMinimum
+    level.disabled = xpCost > sectionInfo.value.availableXp || factionRequirementMinimum
     return level
   })
 
-  selectedKnowledgeLevel.value = store.knowledgeLevels.find(function (level: KnowledgeOptions) {
-    return level.id === knowledge.value.levelId
+  selectedKnowledgeLevel.value = knowledge.value.knowledgeLevels.find(function (level: KnowledgeOptions) {
+    return level.id === knowledge.value.selectedLevelId
   })
 
   form.setValues(knowledge.value)
 }
 
 const onSubmit = form.handleSubmit(async (values) => {
-  await store.editKnowledge(values, selectedKnowledgeLevel.value.id, route.params.id, knowledge.value.mappingId)
+  await store.editKnowledge(values, selectedKnowledgeLevel.value.id, route.params.id, props.knowledgeMappingId)
+  await loadInfo()
 })
 
 function getCurrentXpLevel(levelId: number) {
-  let level = store.knowledgeLevels.filter(function (level: KnowledgeOptions) {
-    return level.level === levelId
-  })[0]
+  return knowledge.value.knowledgeLevels.find(level => level.id === levelId)?.totalXpCost ?? 0
+}
+
+function getFactionLevel() {
+  const level = knowledge.value.knowledgeLevels.find(level => level.id === knowledge.value.minimumKnowledgeId)
 
   if (!level)
-    return 0
+    return ''
 
-  if (isUnknownKnowledge.value) {
-    return level.totalUnknownXpCost
-  }
-  return level.totalGeneralXpCost
+  return `${level.name} (${level.level})`
 }
 
 const onRowUnselect = (event) => {
-  let level = store.knowledgeLevels.find(function (level: KnowledgeOptions) {
-    return level.id === knowledge.value.levelId
-  })
-  selectedKnowledgeLevel.value = level
+  selectedKnowledgeLevel.value = event.data
 }
 
+const showEditSpecialization = async (special) => {
+  const result = await dialogService.showEditSpecialization({ knowledge: knowledge.value, specialization: special, mappingId: props.knowledgeMappingId })
+
+  if (result?.action == 'edited') {
+    await loadInfo()
+  }
+}
+
+const showAddSpecialization = async () => {
+  const result = await dialogService.showAddSpecialization({ knowledge: knowledge.value, mappingId: props.knowledgeMappingId })
+
+  if (result?.action == 'added') {
+    await loadInfo()
+  }
+}
+
+const showDeleteConfirmation = async (event, id: number) => {
+  const result = await popupService.deleteSpecializationConfirmation(event, props.knowledgeMappingId, id)
+
+  if (result == 'deleted')
+    await loadInfo()
+}
 </script>
 
 <template>
-  <form @submit="onSubmit">
+  <form v-if="knowledge.name" @submit="onSubmit">
     <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
       <div>
         <h2 class="p-0 m-0">
-          {{ knowledge.knowledge.name }}
+          {{ knowledge.name }}
         </h2>
-        <div>{{ knowledge.knowledge.type }}</div>
+        <div>{{ knowledge.knowledgeType }}</div>
       </div>
       <div class="p-0 m-2 d-inline-flex align-items-start align-items-center gap-2">
-        <Button v-if="knowledge.knowledge.blockFactionChanges" label="Delete" size="small" severity="danger" @click="popupService.deleteConfirmation($event, knowledge.mappingId )" />
+        <Button v-if="knowledge.blockFactionChanges" label="Delete" size="small" severity="danger" @click="popupService.deleteConfirmation($event, props.knowledgeMappingId )" />
         <Button label="Update" size="small" type="submit" />
       </div>
     </div>
 
-    <p>{{ knowledge.knowledge.description }}</p>
+    <p>{{ knowledge.description }}</p>
     <div>
       <ShowXPCosts :section-type="XpSectionTypes.knowledges" />
     </div>
@@ -128,13 +129,13 @@ const onRowUnselect = (event) => {
         You are out of experience to spend on Knowledges.
       </Message>
     </div>
-    <div v-if="!knowledge.knowledge.blockFactionChanges">
+    <div v-if="!knowledge.blockFactionChanges">
       <Message severity="warn" class="my-4">
-        Your faction level affects the levels you can choose below
+        Your faction level requires you to be at least {{ getFactionLevel(selectedKnowledgeLevel.level) }}
       </Message>
     </div>
     <DataTable
-      v-model:selection="selectedKnowledgeLevel" selection-mode="single" :value="store.knowledgeLevels" data-key="id" :row-class="row => (row.disabled ? 'non-selectable' : '')"
+      v-model:selection="selectedKnowledgeLevel" selection-mode="single" :value="knowledge.knowledgeLevels" data-key="id" :row-class="row => (row.disabled ? 'non-selectable' : '')"
       @row-unselect="onRowUnselect"
     >
       <Column selection-mode="single" header-style="width: 3rem" />
@@ -145,10 +146,12 @@ const onRowUnselect = (event) => {
       </Column>
       <Column field="totalGeneralXpCost" header="XP" header-class="text-center" body-class="text-center">
         <template #body="slotProps">
-          {{ getCurrentXpLevel(slotProps.data.level) > getCurrentXpLevel(knowledge.levelId -1) ? "-" : "+" }}{{ Math.abs(getCurrentXpLevel(slotProps.data.level) - getCurrentXpLevel(knowledge.levelId - 1)) }}
+          {{
+            getCurrentXpLevel(slotProps.data.id) > getCurrentXpLevel(knowledge.selectedLevelId) ? "-" : "+"
+          }}{{ Math.abs(getCurrentXpLevel(slotProps.data.id) - getCurrentXpLevel(knowledge.selectedLevelId)) }}
         </template>
       </Column>
-      <Column field="stoneModifier" header="Stones" header-class="text-center" body-class="text-center" />
+      <Column field="stones" header="Stones" header-class="text-center" body-class="text-center" />
       <Column field="specializationCount" header="Specials" header-class="text-center" body-class="text-center" />
     </DataTable>
 
@@ -170,36 +173,38 @@ const onRowUnselect = (event) => {
     </div>
   </form>
 
-  <hr v-if="knowledge.specializations.length > 0" class="mt-2 mb-2">
-  <h1 v-if="knowledge.specializations.length > 0" class="mt-3">
-    Specializations
-  </h1>
-  <div v-if="knowledge.specializations.length > 0">
-    <div v-for="special in knowledge.specializations" :key="special.id">
-      <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
-        <div>
-          <h2 class="m-0 p-0">
-            {{ special.name }}
-          </h2>
+  <div v-if="knowledge.name">
+    <hr v-if="knowledge.specializations.length > 0" class="mt-2 mb-2">
+    <h1 v-if="knowledge.specializations.length > 0" class="mt-3">
+      Specializations
+    </h1>
+    <div v-if="knowledge.specializations.length > 0">
+      <div v-for="special in knowledge.specializations" :key="special.id">
+        <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
+          <div>
+            <h2 class="m-0 p-0">
+              {{ special.name }}
+            </h2>
+          </div>
+        </div>
+
+        <p>{{ special.description }}</p>
+        <h4 v-if="special.notes">
+          Notes
+        </h4>
+        <p v-if="special.notes">
+          {{ special.notes }}
+        </p>
+
+        <div class="p-0 m-0 d-flex justify-content-between">
+          <Button v-if="!special.blockFactionChanges" label="Delete" severity="danger" @click="showDeleteConfirmation($event, special.id)" />
+          <Button label="Edit" @click="showEditSpecialization( special )" />
         </div>
       </div>
-
-      <p>{{ special.description }}</p>
-      <h4 v-if="special.notes">
-        Notes
-      </h4>
-      <p v-if="special.notes">
-        {{ special.notes }}
-      </p>
-
-      <div class="p-0 m-0 d-flex justify-content-between">
-        <Button v-if="!special.blockFactionChanges" label="Delete" severity="danger" @click="popupService.deleteSpecializationConfirmation($event, knowledge.mappingId, special.id)" />
-        <Button label="Edit" @click="dialogService.showEditSpecialization(knowledge, special)" />
-      </div>
     </div>
-  </div>
-  <div class="text-right mt-2">
-    <Button v-if="knowledge.specializationCount > knowledge.specializations.length" class="btn btn-primary text-right" label="Add Specialization" @click="dialogService.showAddSpecialization(knowledge)" />
+    <div class="text-right mt-2">
+      <Button v-if="selectedKnowledgeLevel!.specializationCount > knowledge.specializations.length" class="btn btn-primary text-right" label="Add Specialization" @click="showAddSpecialization()" />
+    </div>
   </div>
 </template>
 
