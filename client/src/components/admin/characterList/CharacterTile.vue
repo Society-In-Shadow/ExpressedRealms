@@ -9,6 +9,7 @@ import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 import { adminCharacterListStore } from '@/components/admin/characterList/stores/characterListStore.ts'
 import { downloadFile } from '@/utilities/downloadUtility.ts'
 import { characterGoFieldsDialog } from '@/components/admin/characterList/services/dialogs.ts'
+import { CheckinStage } from '@/components/conCheckin/types.ts'
 
 const userPermissionInfo = userPermissionStore()
 const permissionCheck = userPermissionInfo.permissionCheck
@@ -25,6 +26,12 @@ const props = defineProps({
 })
 
 async function redirectToCharacterSheet() {
+  const awaitingApproval = [CheckinStage.ShqApproval, CheckinStage.PlayerNeedsReapproval]
+  if (awaitingApproval.includes(props.character?.playerStageId)) {
+    await router.push({ name: 'characterSheet', params: { id: props.character.id }, query: { src: 'approve_character' } })
+    return
+  }
+
   await router.push({ name: 'characterSheet', params: { id: props.character.id } })
 }
 
