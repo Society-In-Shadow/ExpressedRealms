@@ -57,18 +57,26 @@ public class GetCharacterPowerCardReportUseCase(
     )
     {
         var selectedPowers = new List<CharacterPowerInfo>();
-        var characterStorageOptin = await characterRepository.CharacterHasCharacterStorage(model.CharacterId);
+        var characterStorageOptin = await characterRepository.CharacterHasCharacterStorage(
+            model.CharacterId
+        );
         var previousTwoArchives = await characterRepository.GetCharacterDiffIds(model.CharacterId);
         if (characterStorageOptin && previousTwoArchives is not null && !model.OverwriteArchiveDiff)
         {
-            var currentUserPowers =
-                await mappingRepository.GetCharacterPowerMappingInfo(previousTwoArchives.NewestCharacterId);
-            var previousCharacterPowers =
-                await mappingRepository.GetCharacterPowerMappingInfo(previousTwoArchives.PreviousCharacterId);
+            var currentUserPowers = await mappingRepository.GetCharacterPowerMappingInfo(
+                previousTwoArchives.NewestCharacterId
+            );
+            var previousCharacterPowers = await mappingRepository.GetCharacterPowerMappingInfo(
+                previousTwoArchives.PreviousCharacterId
+            );
 
-            selectedPowers.AddRange(currentUserPowers.Where(currentPower => 
-                !previousCharacterPowers.Any(x => x.PowerId == currentPower.PowerId && 
-                                                  x.UserNotes == currentPower.UserNotes)));
+            selectedPowers.AddRange(
+                currentUserPowers.Where(currentPower =>
+                    !previousCharacterPowers.Any(x =>
+                        x.PowerId == currentPower.PowerId && x.UserNotes == currentPower.UserNotes
+                    )
+                )
+            );
         }
         else
         {
@@ -99,8 +107,7 @@ public class GetCharacterPowerCardReportUseCase(
                 Limitation = y.Limitation,
                 Other = y.Other,
                 UserNotes =
-                    selectedPowers.FirstOrDefault(x => x.PowerId == y.Id)?.UserNotes
-                    ?? null,
+                    selectedPowers.FirstOrDefault(x => x.PowerId == y.Id)?.UserNotes ?? null,
                 Prerequisites = y.Prerequisites is not null
                     ? new PrerequisiteData()
                     {
@@ -122,25 +129,30 @@ public class GetCharacterPowerCardReportUseCase(
             return [];
 
         var selectedPowers = new List<AppliedFactionPowersProjection>();
-        var characterStorageOptin = await characterRepository.CharacterHasCharacterStorage(model.CharacterId);
+        var characterStorageOptin = await characterRepository.CharacterHasCharacterStorage(
+            model.CharacterId
+        );
         var previousTwoArchives = await characterRepository.GetCharacterDiffIds(model.CharacterId);
         if (characterStorageOptin && previousTwoArchives is not null && !model.OverwriteArchiveDiff)
         {
-            var currentUserPowers =
-                await factionRepository.GetAppliedFactionPowerIds(previousTwoArchives.NewestCharacterId);
-            var previousCharacterPowers =
-                await factionRepository.GetAppliedFactionPowerIds(previousTwoArchives.PreviousCharacterId);
+            var currentUserPowers = await factionRepository.GetAppliedFactionPowerIds(
+                previousTwoArchives.NewestCharacterId
+            );
+            var previousCharacterPowers = await factionRepository.GetAppliedFactionPowerIds(
+                previousTwoArchives.PreviousCharacterId
+            );
 
-            selectedPowers.AddRange(currentUserPowers.Where(currentPower => 
-                previousCharacterPowers.All(x => x.PowerId != currentPower.PowerId)));
+            selectedPowers.AddRange(
+                currentUserPowers.Where(currentPower =>
+                    previousCharacterPowers.All(x => x.PowerId != currentPower.PowerId)
+                )
+            );
         }
         else
         {
-            selectedPowers = await factionRepository.GetAppliedFactionPowerIds(
-                model.CharacterId
-            );
+            selectedPowers = await factionRepository.GetAppliedFactionPowerIds(model.CharacterId);
         }
-        
+
         var factionPowerIds = selectedPowers.Select(x => x.PowerId).ToList();
         var factionPowers = await repository.GetPowers(factionPowerIds);
 

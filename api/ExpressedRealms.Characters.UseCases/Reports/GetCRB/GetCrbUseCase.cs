@@ -76,12 +76,18 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             if (model.UseLatestApproved)
             {
                 characterRepository.GloballyToggleIncludeArchivedCharactersFilter(true);
-                var archivedCharacterId = await  characterRepository.MostRecentApprovedCharacterId(model.CharacterId);
+                var archivedCharacterId = await characterRepository.MostRecentApprovedCharacterId(
+                    model.CharacterId
+                );
                 characterId = archivedCharacterId ?? model.CharacterId;
             }
-            
+
             var crbData = await crbDataUseCase.ExecuteAsync(
-                new GetCharacterSheetDataModel() { CharacterId = characterId, OverwriteArchiveDiff = model.OverwriteArchiveDiff}
+                new GetCharacterSheetDataModel()
+                {
+                    CharacterId = characterId,
+                    OverwriteArchiveDiff = model.OverwriteArchiveDiff,
+                }
             );
 
             var reportStream = CharacterReferenceBookletReport.GenerateReport(crbData.Value);
@@ -91,8 +97,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             PopulateKnowledgeOverflowCardData(cardTiles, crbData.Value.Knowledges);
             PopulatePowersOverflowCardData(cardTiles, crbData.Value.Powers);
             PopulateContactsOverflowCardData(cardTiles, crbData.Value.Contacts);
-            
-            
+
             PopulateAdvantageDisadvantageData(cardTiles, crbData.Value.Traits);
             PopulateWealthCardsCardData(cardTiles, crbData.Value.WealthInfo);
             PopulatePrymaVoidCardData(cardTiles, crbData.Value.BasicInfo);
@@ -103,7 +108,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                     CharacterId = characterId,
                     IsFiveByThree = false,
                     CardTiles = cardTiles,
-                    OverwriteArchiveDiff = model.OverwriteArchiveDiff
+                    OverwriteArchiveDiff = model.OverwriteArchiveDiff,
                 }
             );
 
@@ -210,28 +215,31 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             Traits data
         )
         {
-            
             List<BlessingInfo> blessings =
             [
-                .. data.Advantages.Where(x => x.IncludeInPrintOut).Select(x => new BlessingInfo()
-                {
-                    Name = x.Name,
-                    BlessingType = "Advantage",
-                    Description = x.Description,
-                    LevelName = x.LevelName,
-                    LevelDescription = x.LevelDescription,
-                    UserNotes = x.UserNotes,
-                }),
-                .. data.Disadvantages.Where(x => x.IncludeInPrintOut).Select(x => new BlessingInfo()
-                {
-                    Name = x.Name,
-                    BlessingType = "Disadvantage",
-                    Description = x.Description,
-                    LevelName = x.LevelName,
-                    LevelDescription = x.LevelDescription,
-                    UserNotes = x.UserNotes,
-                })
-                .ToList(),
+                .. data
+                    .Advantages.Where(x => x.IncludeInPrintOut)
+                    .Select(x => new BlessingInfo()
+                    {
+                        Name = x.Name,
+                        BlessingType = "Advantage",
+                        Description = x.Description,
+                        LevelName = x.LevelName,
+                        LevelDescription = x.LevelDescription,
+                        UserNotes = x.UserNotes,
+                    }),
+                .. data
+                    .Disadvantages.Where(x => x.IncludeInPrintOut)
+                    .Select(x => new BlessingInfo()
+                    {
+                        Name = x.Name,
+                        BlessingType = "Disadvantage",
+                        Description = x.Description,
+                        LevelName = x.LevelName,
+                        LevelDescription = x.LevelDescription,
+                        UserNotes = x.UserNotes,
+                    })
+                    .ToList(),
             ];
 
             cardTiles.Add(

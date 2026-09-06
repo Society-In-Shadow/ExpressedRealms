@@ -30,13 +30,15 @@ namespace ExpressedRealms.DB
         /// Ignore everywhere else.
         /// </summary>
         public bool IgnoreArchedCharactersFilter { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             builder.HasSequence<int>("player_number_sequence").StartsAt(46).IncrementsBy(1);
-            
-            builder.Entity<Character>()
+
+            builder
+                .Entity<Character>()
                 .HasQueryFilter(
                     "ArchivedCharacters",
                     x => IgnoreArchedCharactersFilter || !x.IsArchived

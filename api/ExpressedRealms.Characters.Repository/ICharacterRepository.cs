@@ -30,6 +30,7 @@ public interface ICharacterRepository
     Task<int> GetExpressionSubTypeId(int expressionId);
     Task<CharacterPickablePowersDto> GetCharacterInfoForPickablePowers(int characterId);
     Task<int?> MostRecentApprovedCharacterId(int characterId);
+
     /// <summary>
     /// Returns the character id's that need to be diffed.
     /// </summary>

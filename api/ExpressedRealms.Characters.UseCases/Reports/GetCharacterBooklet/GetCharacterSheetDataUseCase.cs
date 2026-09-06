@@ -329,26 +329,31 @@ public class GetCharacterSheetDataUseCase(
 
     private async Task<Traits> GetTraits(GetCharacterSheetDataModel model)
     {
-        
         var differentTraits = new List<CharacterBlessingDto>();
-        var characterStorageOptin = await characterRepository.CharacterHasCharacterStorage(model.CharacterId);
+        var characterStorageOptin = await characterRepository.CharacterHasCharacterStorage(
+            model.CharacterId
+        );
         var previousTwoArchives = await characterRepository.GetCharacterDiffIds(model.CharacterId);
         if (characterStorageOptin && previousTwoArchives is not null && !model.OverwriteArchiveDiff)
         {
-            var currentUserPowers =
-                await blessingRepository.GetBlessingsForCharacter(previousTwoArchives.NewestCharacterId);
-            var previousCharacterPowers =
-                await blessingRepository.GetBlessingsForCharacter(previousTwoArchives.PreviousCharacterId);
+            var currentUserPowers = await blessingRepository.GetBlessingsForCharacter(
+                previousTwoArchives.NewestCharacterId
+            );
+            var previousCharacterPowers = await blessingRepository.GetBlessingsForCharacter(
+                previousTwoArchives.PreviousCharacterId
+            );
 
-            differentTraits.AddRange(currentUserPowers.Where(currentPower => 
-                !previousCharacterPowers.Any(x => x.BlessingId == currentPower.BlessingId && 
-                                                  x.Notes == currentPower.Notes)));
+            differentTraits.AddRange(
+                currentUserPowers.Where(currentPower =>
+                    !previousCharacterPowers.Any(x =>
+                        x.BlessingId == currentPower.BlessingId && x.Notes == currentPower.Notes
+                    )
+                )
+            );
         }
         else
         {
-            differentTraits = await blessingRepository.GetBlessingsForCharacter(
-                model.CharacterId
-            );
+            differentTraits = await blessingRepository.GetBlessingsForCharacter(model.CharacterId);
         }
 
         var blessings = await blessingRepository.GetBlessingsForCharacter(model.CharacterId);
@@ -363,7 +368,7 @@ public class GetCharacterSheetDataUseCase(
                     LevelName = x.LevelName,
                     LevelDescription = x.LevelDescription,
                     UserNotes = x.Notes,
-                    IncludeInPrintOut = differentTraits.Any(y => y.Id == x.Id)
+                    IncludeInPrintOut = differentTraits.Any(y => y.Id == x.Id),
                 },
             })
             .ToList();

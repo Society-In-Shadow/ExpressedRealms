@@ -294,29 +294,26 @@ internal sealed class CharacterRepository(
 
     public Task<int?> MostRecentApprovedCharacterId(int characterId)
     {
-        return context.Characters
-            .IgnoreQueryFilters(["ArchivedCharacters"])
+        return context
+            .Characters.IgnoreQueryFilters(["ArchivedCharacters"])
             .Where(x => x.SourceCharacterId == characterId && x.IsArchived)
             .OrderByDescending(x => x.CreateDate)
             .Select(x => (int?)x.Id)
             .FirstOrDefaultAsync(cancellationToken);
     }
-    
+
     public async Task<CharacterDiffIdsDto?> GetCharacterDiffIds(int characterId)
     {
-        var character = await context.Characters.Where(x => x.Id == characterId)
-            .Select(x => new
-            {
-                x.IsArchived,
-                x.SourceCharacterId
-            })
+        var character = await context
+            .Characters.Where(x => x.Id == characterId)
+            .Select(x => new { x.IsArchived, x.SourceCharacterId })
             .FirstAsync(cancellationToken);
 
         if (!character.IsArchived)
             return null;
-        
-        var availableCharacters = await context.Characters
-            .IgnoreQueryFilters(["ArchivedCharacters"])
+
+        var availableCharacters = await context
+            .Characters.IgnoreQueryFilters(["ArchivedCharacters"])
             .Where(x => x.SourceCharacterId == character.SourceCharacterId && x.IsArchived)
             .OrderByDescending(x => x.CreateDate)
             .Select(x => (int?)x.Id)
@@ -329,14 +326,14 @@ internal sealed class CharacterRepository(
         return new CharacterDiffIdsDto()
         {
             NewestCharacterId = availableCharacters[0]!.Value,
-            PreviousCharacterId = availableCharacters[1]!.Value
+            PreviousCharacterId = availableCharacters[1]!.Value,
         };
     }
 
     public Task<bool> CharacterHasCharacterStorage(int characterId)
     {
-        return context.CharacterStorageInfos
-            .Where(x => x.Player.Characters.Any(y => y.Id == characterId))
+        return context
+            .CharacterStorageInfos.Where(x => x.Player.Characters.Any(y => y.Id == characterId))
             .OrderByDescending(x => x.Timestamp)
             .Skip(1)
             .Select(x => x.OptedIn)

@@ -10,14 +10,18 @@ internal static class GetExpressionBookletEndpoint
 {
     internal static async Task<
         Results<NotFound, FileStreamHttpResult, ValidationProblem, UnauthorizedHttpResult>
-    > Execute(int characterId, [AsParameters]GetExpressionBookletRequest model, [FromServices]IGetCharacterBookletUseCase repository)
+    > Execute(
+        int characterId,
+        [AsParameters] GetExpressionBookletRequest model,
+        [FromServices] IGetCharacterBookletUseCase repository
+    )
     {
         var status = await repository.ExecuteAsync(
             new GetCharacterBookletModel()
             {
                 CharacterId = characterId,
                 UseLatestApproved = model.UseLatestApproved ?? false,
-                OverwriteArchiveDiff = model.OverwriteArchiveDiff ?? false
+                OverwriteArchiveDiff = model.OverwriteArchiveDiff ?? false,
             }
         );
 
