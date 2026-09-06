@@ -7,4 +7,5 @@ public class TraitInfo
     public required string LevelName { get; set; }
     public required string LevelDescription { get; set; }
     public string? UserNotes { get; set; }
+    public bool IncludeInPrintOut { get; set; }
 }

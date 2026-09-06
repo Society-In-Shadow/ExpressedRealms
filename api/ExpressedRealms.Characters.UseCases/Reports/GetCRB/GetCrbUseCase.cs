@@ -91,6 +91,8 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             PopulateKnowledgeOverflowCardData(cardTiles, crbData.Value.Knowledges);
             PopulatePowersOverflowCardData(cardTiles, crbData.Value.Powers);
             PopulateContactsOverflowCardData(cardTiles, crbData.Value.Contacts);
+            
+            
             PopulateAdvantageDisadvantageData(cardTiles, crbData.Value.Traits);
             PopulateWealthCardsCardData(cardTiles, crbData.Value.WealthInfo);
             PopulatePrymaVoidCardData(cardTiles, crbData.Value.BasicInfo);
@@ -207,9 +209,10 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             Traits data
         )
         {
+            
             List<BlessingInfo> blessings =
             [
-                .. data.Advantages.Select(x => new BlessingInfo()
+                .. data.Advantages.Where(x => x.IncludeInPrintOut).Select(x => new BlessingInfo()
                 {
                     Name = x.Name,
                     BlessingType = "Advantage",
@@ -218,17 +221,16 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                     LevelDescription = x.LevelDescription,
                     UserNotes = x.UserNotes,
                 }),
-                .. data
-                    .Disadvantages.Select(x => new BlessingInfo()
-                    {
-                        Name = x.Name,
-                        BlessingType = "Disadvantage",
-                        Description = x.Description,
-                        LevelName = x.LevelName,
-                        LevelDescription = x.LevelDescription,
-                        UserNotes = x.UserNotes,
-                    })
-                    .ToList(),
+                .. data.Disadvantages.Where(x => x.IncludeInPrintOut).Select(x => new BlessingInfo()
+                {
+                    Name = x.Name,
+                    BlessingType = "Disadvantage",
+                    Description = x.Description,
+                    LevelName = x.LevelName,
+                    LevelDescription = x.LevelDescription,
+                    UserNotes = x.UserNotes,
+                })
+                .ToList(),
             ];
 
             cardTiles.Add(
