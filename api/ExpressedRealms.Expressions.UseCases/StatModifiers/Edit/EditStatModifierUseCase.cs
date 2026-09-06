@@ -36,13 +36,14 @@ internal sealed class EditStatModifierUseCase(
                     nameof(model.TargetExpressionId),
                     "Expression does not exist"
                 );
-            
+
             if (model.TargetProgressionPathId is not null)
             {
-                var progressionPath =
-                    expression.ProgressionPaths.FirstOrDefault(x => x.Id == model.TargetProgressionPathId);
-                
-                if(progressionPath is null)
+                var progressionPath = expression.ProgressionPaths.FirstOrDefault(x =>
+                    x.Id == model.TargetProgressionPathId
+                );
+
+                if (progressionPath is null)
                 {
                     return ValidationHelper.AddSingleValidationFailure(
                         nameof(model.TargetProgressionPathId),
@@ -51,11 +52,12 @@ internal sealed class EditStatModifierUseCase(
                 }
 
                 if (model.TargetProgressionLevelId is not null)
-                {                
-                    var progressionLevel = progressionPath.Levels
-                        .FirstOrDefault(x => x.Id == model.TargetProgressionLevelId);
-                    
-                    if(progressionLevel is null)
+                {
+                    var progressionLevel = progressionPath.Levels.FirstOrDefault(x =>
+                        x.Id == model.TargetProgressionLevelId
+                    );
+
+                    if (progressionLevel is null)
                         return ValidationHelper.AddSingleValidationFailure(
                             nameof(model.TargetProgressionLevelId),
                             "This is not a valid progression path level for the expression"

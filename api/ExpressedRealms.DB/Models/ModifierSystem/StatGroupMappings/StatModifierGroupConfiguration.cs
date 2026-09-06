@@ -42,7 +42,7 @@ public class StatGroupMappingConfiguration : IEntityTypeConfiguration<StatGroupM
             .WithMany(e => e.StatGroupMappings)
             .HasForeignKey(e => e.TargetProgressionPathId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         builder
             .HasOne(e => e.TargetProgressionLevel)
             .WithMany(e => e.StatGroupMappings)

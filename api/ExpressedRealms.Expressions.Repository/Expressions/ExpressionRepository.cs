@@ -417,11 +417,14 @@ internal sealed class ExpressionRepository(
                     {
                         Id = y.Id,
                         Name = y.Name,
-                        Levels = y.ProgressionLevels.OrderBy(x => x.XlLevel).Select(z => new ExpressionPathLevelProjection()
-                        {
-                            Id = z.Id,
-                            Name = $"XL {z.XlLevel}"
-                        }).ToList()
+                        Levels = y
+                            .ProgressionLevels.OrderBy(x => x.XlLevel)
+                            .Select(z => new ExpressionPathLevelProjection()
+                            {
+                                Id = z.Id,
+                                Name = $"XL {z.XlLevel}",
+                            })
+                            .ToList(),
                     })
                     .ToList(),
             })
