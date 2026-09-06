@@ -337,6 +337,8 @@ internal sealed class CharacterRepository(
     {
         return context.CharacterStorageInfos
             .Where(x => x.Player.Characters.Any(y => y.Id == characterId))
+            .OrderByDescending(x => x.Timestamp)
+            .Skip(1)
             .Select(x => x.OptedIn)
             .FirstOrDefaultAsync(cancellationToken);
     }
