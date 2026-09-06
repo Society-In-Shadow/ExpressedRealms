@@ -1,7 +1,9 @@
 using ExpressedRealms.Characters.UseCases.Reports.GetCharacterBooklet;
+using ExpressedRealms.Characters.UseCases.Reports.GetCRB;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ExpressedRealms.Characters.API.CharacterEndPoints.GetCRB;
 
@@ -9,10 +11,14 @@ internal static class GetExpressionBookletEndpoint
 {
     internal static async Task<
         Results<NotFound, FileStreamHttpResult, ValidationProblem, UnauthorizedHttpResult>
-    > Execute(int characterId, IGetCharacterBookletUseCase repository)
+    > Execute(int characterId, [AsParameters]GetExpressionBookletRequest model, [FromServices]IGetCharacterBookletUseCase repository)
     {
         var status = await repository.ExecuteAsync(
-            new GetCharacterBookletModel() { CharacterId = characterId }
+            new GetCharacterBookletModel()
+            {
+                CharacterId = characterId,
+                UseLatestApproved = model.UseLatestApproved ?? false
+            }
         );
 
         if (status.HasValidationError(out var validation))

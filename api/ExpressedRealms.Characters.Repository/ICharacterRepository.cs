@@ -29,4 +29,6 @@ public interface ICharacterRepository
     Task<Guid> GetArchetypePlayerId();
     Task<int> GetExpressionSubTypeId(int expressionId);
     Task<CharacterPickablePowersDto> GetCharacterInfoForPickablePowers(int characterId);
+    Task<int?> MostRecentApprovedCharacterId(int characterId);
+    void GloballyToggleIncludeArchivedCharactersFilter(bool state);
 }

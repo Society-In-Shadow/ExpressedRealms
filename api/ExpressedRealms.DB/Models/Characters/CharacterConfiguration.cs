@@ -66,7 +66,7 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
         builder.Property(x => x.PlayerNumber).IsRequired().HasDefaultValue(0);
 
         builder.HasQueryFilter("SoftDelete", x => !x.IsDeleted);
-        builder.HasQueryFilter("ArchivedCharacters", x => !x.IsArchived);
+        // Note: Archived Characters is defined in the DbContext to allow global disabling for the CRB Report.
 
         builder
             .HasOne(x => x.Player)

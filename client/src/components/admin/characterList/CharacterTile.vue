@@ -29,7 +29,7 @@ async function redirectToCharacterSheet() {
 }
 
 async function downloadCharacterBooklet(characterId: number, characterName: string, playerName: string) {
-  await downloadFile(`/characters/${characterId}/getcrb`, `${characterName} - ${playerName} - CRB.pdf`)
+  await downloadFile(`/characters/${characterId}/getcrb?&UseLatestApproved=true`, `${characterName} - ${playerName} - CRB.pdf`)
   await characterListInfo.fetchCharacters()
 }
 

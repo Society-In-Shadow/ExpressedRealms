@@ -1,3 +1,4 @@
+using ExpressedRealms.Characters.UseCases.Reports.GetCRB;
 using ExpressedRealms.Shared;
 using FluentResults;
 

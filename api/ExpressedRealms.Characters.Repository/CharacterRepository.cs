@@ -292,6 +292,21 @@ internal sealed class CharacterRepository(
             .FirstAsync();
     }
 
+    public Task<int?> MostRecentApprovedCharacterId(int characterId)
+    {
+        return context.Characters
+            .IgnoreQueryFilters(["ArchivedCharacters"])
+            .Where(x => x.SourceCharacterId == characterId && x.IsArchived)
+            .OrderByDescending(x => x.CreateDate)
+            .Select(x => (int?)x.Id)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public void GloballyToggleIncludeArchivedCharactersFilter(bool state)
+    {
+        context.IgnoreArchedCharactersFilter = state;
+    }
+
     public async Task<int> CopyCharacterAsync(
         int sourceCharacterId,
         Guid targetPlayerId,

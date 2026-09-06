@@ -1,4 +1,5 @@
 using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.Characters.UseCases.Reports.GetCRB;
 using ExpressedRealms.Expressions.Repository.Expressions;
 using FluentValidation;
 using JetBrains.Annotations;
