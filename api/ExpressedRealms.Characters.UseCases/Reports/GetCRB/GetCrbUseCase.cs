@@ -81,7 +81,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             }
             
             var crbData = await crbDataUseCase.ExecuteAsync(
-                new GetCharacterSheetDataModel() { CharacterId = characterId }
+                new GetCharacterSheetDataModel() { CharacterId = characterId, OverwriteArchiveDiff = model.OverwriteArchiveDiff}
             );
 
             var reportStream = CharacterReferenceBookletReport.GenerateReport(crbData.Value);
