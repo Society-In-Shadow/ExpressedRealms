@@ -103,6 +103,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                     CharacterId = characterId,
                     IsFiveByThree = false,
                     CardTiles = cardTiles,
+                    OverwriteArchiveDiff = model.OverwriteArchiveDiff
                 }
             );
 

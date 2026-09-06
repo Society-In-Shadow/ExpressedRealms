@@ -4,5 +4,6 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
     {
         public int CharacterId { get; set; }
         public bool UseLatestApproved { get; set; }
+        public bool OverwriteArchiveDiff { get; set; }
     }
 }

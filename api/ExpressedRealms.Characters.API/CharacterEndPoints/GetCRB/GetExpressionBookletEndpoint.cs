@@ -1,4 +1,3 @@
-using ExpressedRealms.Characters.UseCases.Reports.GetCharacterBooklet;
 using ExpressedRealms.Characters.UseCases.Reports.GetCRB;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
@@ -17,7 +16,8 @@ internal static class GetExpressionBookletEndpoint
             new GetCharacterBookletModel()
             {
                 CharacterId = characterId,
-                UseLatestApproved = model.UseLatestApproved ?? false
+                UseLatestApproved = model.UseLatestApproved ?? false,
+                OverwriteArchiveDiff = model.OverwriteArchiveDiff ?? false
             }
         );
 

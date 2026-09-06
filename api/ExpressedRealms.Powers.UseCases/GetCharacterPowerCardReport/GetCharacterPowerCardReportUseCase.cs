@@ -59,7 +59,7 @@ public class GetCharacterPowerCardReportUseCase(
         var selectedPowers = new List<CharacterPowerInfo>();
         var characterStorageOptin = await characterRepository.CharacterHasCharacterStorage(model.CharacterId);
         var previousTwoArchives = await characterRepository.GetCharacterDiffIds(model.CharacterId);
-        if (characterStorageOptin && previousTwoArchives is not null)
+        if (characterStorageOptin && previousTwoArchives is not null && !model.OverwriteArchiveDiff)
         {
             var currentUserPowers =
                 await mappingRepository.GetCharacterPowerMappingInfo(previousTwoArchives.NewestCharacterId);
@@ -124,7 +124,7 @@ public class GetCharacterPowerCardReportUseCase(
         var selectedPowers = new List<AppliedFactionPowersProjection>();
         var characterStorageOptin = await characterRepository.CharacterHasCharacterStorage(model.CharacterId);
         var previousTwoArchives = await characterRepository.GetCharacterDiffIds(model.CharacterId);
-        if (characterStorageOptin && previousTwoArchives is not null)
+        if (characterStorageOptin && previousTwoArchives is not null && !model.OverwriteArchiveDiff)
         {
             var currentUserPowers =
                 await factionRepository.GetAppliedFactionPowerIds(previousTwoArchives.NewestCharacterId);

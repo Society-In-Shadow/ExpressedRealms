@@ -333,7 +333,7 @@ public class GetCharacterSheetDataUseCase(
         var differentTraits = new List<CharacterBlessingDto>();
         var characterStorageOptin = await characterRepository.CharacterHasCharacterStorage(model.CharacterId);
         var previousTwoArchives = await characterRepository.GetCharacterDiffIds(model.CharacterId);
-        if (characterStorageOptin && previousTwoArchives is not null)
+        if (characterStorageOptin && previousTwoArchives is not null && !model.OverwriteArchiveDiff)
         {
             var currentUserPowers =
                 await blessingRepository.GetBlessingsForCharacter(previousTwoArchives.NewestCharacterId);
