@@ -1,8 +1,9 @@
 <script setup lang="ts">
 
-import { computed, type PropType } from 'vue'
+import { computed } from 'vue'
 import SplitButton from 'primevue/splitbutton'
 import Button from 'primevue/button'
+import type { HintedString } from '@primevue/core'
 
 export interface Command {
   label: string
@@ -11,12 +12,10 @@ export interface Command {
   severity?: string | 'secondary' | 'success' | 'info' | 'warn' | 'help' | 'danger' | 'contrast'
 }
 
-const props = defineProps({
-  commands: {
-    type: Object as PropType<Command[]>,
-    required: true,
-  },
-})
+const props = defineProps<{
+  commands: Command[]
+  size?: HintedString<'small' | 'large'>
+}>()
 const visibleCommands = computed(() =>
   props.commands.filter(command => command.isVisible?.() ?? true),
 )
@@ -28,9 +27,9 @@ const subCommands = computed(() => visibleCommands.value.slice(1).map(command =>
 <template>
   <div v-if="visibleCommands.length == 0" />
   <div v-else-if="visibleCommands.length == 1">
-    <Button :label="mainCommand.label" :severity="mainCommand.severity" @click="mainCommand.command" />
+    <Button :label="mainCommand.label" :severity="mainCommand.severity" :size="props.size" @click="mainCommand.command" />
   </div>
   <div v-else>
-    <SplitButton :label="mainCommand.label" :severity="mainCommand.severity" :model="subCommands" @click="mainCommand.command" />
+    <SplitButton :label="mainCommand.label" :severity="mainCommand.severity" :model="subCommands" :size="props.size" @click="mainCommand.command" />
   </div>
 </template>

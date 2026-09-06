@@ -7,4 +7,5 @@ public class GetCharacterPowerCardReportModel
     public int CharacterId { get; set; }
     public bool IsFiveByThree { get; set; }
     public List<ICardTile> CardTiles { get; set; } = [];
+    public bool OverwriteArchiveDiff { get; set; }
 }

@@ -48,7 +48,7 @@ internal sealed class GetKnowledgesForCharacterUseCase(
                         Name = y.Name,
                         Description = y.Description,
                         Id = y.Id,
-                        Notes = y.Notes
+                        Notes = y.Notes,
                     })
                     .ToList(),
             })

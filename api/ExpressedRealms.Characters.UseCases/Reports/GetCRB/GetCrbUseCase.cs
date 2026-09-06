@@ -72,8 +72,22 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                 return Result.Fail(new UnauthorizedError());
             }
 
+            var characterId = model.CharacterId;
+            if (model.UseLatestApproved)
+            {
+                characterRepository.GloballyToggleIncludeArchivedCharactersFilter(true);
+                var archivedCharacterId = await characterRepository.MostRecentApprovedCharacterId(
+                    model.CharacterId
+                );
+                characterId = archivedCharacterId ?? model.CharacterId;
+            }
+
             var crbData = await crbDataUseCase.ExecuteAsync(
-                new GetCharacterSheetDataModel() { CharacterId = model.CharacterId }
+                new GetCharacterSheetDataModel()
+                {
+                    CharacterId = characterId,
+                    OverwriteArchiveDiff = model.OverwriteArchiveDiff,
+                }
             );
 
             var reportStream = CharacterReferenceBookletReport.GenerateReport(crbData.Value);
@@ -83,6 +97,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             PopulateKnowledgeOverflowCardData(cardTiles, crbData.Value.Knowledges);
             PopulatePowersOverflowCardData(cardTiles, crbData.Value.Powers);
             PopulateContactsOverflowCardData(cardTiles, crbData.Value.Contacts);
+
             PopulateAdvantageDisadvantageData(cardTiles, crbData.Value.Traits);
             PopulateWealthCardsCardData(cardTiles, crbData.Value.WealthInfo);
             PopulatePrymaVoidCardData(cardTiles, crbData.Value.BasicInfo);
@@ -90,9 +105,10 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             var powerCards = await powerReport.ExecuteAsync(
                 new GetCharacterPowerCardReportModel()
                 {
-                    CharacterId = model.CharacterId,
+                    CharacterId = characterId,
                     IsFiveByThree = false,
                     CardTiles = cardTiles,
+                    OverwriteArchiveDiff = model.OverwriteArchiveDiff,
                 }
             );
 
@@ -115,7 +131,8 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                 blankPage.Orientation = PageOrientation.Landscape;
             }
 
-            await ProcessCheckinAndUpdateStats(model);
+            characterRepository.GloballyToggleIncludeArchivedCharactersFilter(false);
+            await ProcessCheckinAndUpdateStats(model.CharacterId);
 
             // Save the merged result to memory stream
             var finalStream = new MemoryStream();
@@ -200,17 +217,20 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
         {
             List<BlessingInfo> blessings =
             [
-                .. data.Advantages.Select(x => new BlessingInfo()
-                {
-                    Name = x.Name,
-                    BlessingType = "Advantage",
-                    Description = x.Description,
-                    LevelName = x.LevelName,
-                    LevelDescription = x.LevelDescription,
-                    UserNotes = x.UserNotes,
-                }),
                 .. data
-                    .Disadvantages.Select(x => new BlessingInfo()
+                    .Advantages.Where(x => x.IncludeInPrintOut)
+                    .Select(x => new BlessingInfo()
+                    {
+                        Name = x.Name,
+                        BlessingType = "Advantage",
+                        Description = x.Description,
+                        LevelName = x.LevelName,
+                        LevelDescription = x.LevelDescription,
+                        UserNotes = x.UserNotes,
+                    }),
+                .. data
+                    .Disadvantages.Where(x => x.IncludeInPrintOut)
+                    .Select(x => new BlessingInfo()
                     {
                         Name = x.Name,
                         BlessingType = "Disadvantage",
@@ -264,13 +284,13 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             );
         }
 
-        private async Task ProcessCheckinAndUpdateStats(GetCharacterBookletModel model)
+        private async Task ProcessCheckinAndUpdateStats(int characterId)
         {
             var eventId = await checkinRepository.GetActiveEventId();
             if (eventId is null)
                 return;
 
-            var player = await playerRepository.GetPlayerByCharacterId(model.CharacterId);
+            var player = await playerRepository.GetPlayerByCharacterId(characterId);
             var checkin = await checkinRepository.GetCheckinAsync(eventId.Value, player.Id);
             if (checkin is null)
                 return;
@@ -282,12 +302,12 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                     new() { LookupId = player.LookupId, StageId = CheckinStageEnum.PrintedCrb }
                 );
 
-                var proficiencies = await profRepository.GetBasicProficiencies(model.CharacterId);
+                var proficiencies = await profRepository.GetBasicProficiencies(characterId);
 
                 var character = await characterRepository.GetCharacterInfoForPickablePowers(
-                    model.CharacterId
+                    characterId
                 );
-                var characterLevel = await xpRepository.GetCharacterXpLevel(model.CharacterId);
+                var characterLevel = await xpRepository.GetCharacterXpLevel(characterId);
 
                 await checkinRepository.AddUpdateSecondaryStats(
                     new CheckinSecondaryStat()
