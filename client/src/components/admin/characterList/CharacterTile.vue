@@ -4,14 +4,12 @@ import Button from 'primevue/button'
 import type { PrimaryCharacter } from '@/components/admin/characterList/types.ts'
 import { useRouter } from 'vue-router'
 import { adminXpScheduleDialogs } from '@/components/admin/assignedXp/services/dialogs.ts'
-import { can, userPermissionStore } from '@/stores/userPermissionStore.ts'
+import { can } from '@/stores/userPermissionStore.ts'
 import { adminCharacterListStore } from '@/components/admin/characterList/stores/characterListStore.ts'
 import { downloadFile } from '@/utilities/downloadUtility.ts'
 import { characterGoFieldsDialog } from '@/components/admin/characterList/services/dialogs.ts'
 import CommandButton, { type Command } from '@/uiComponents/CommandButton.vue'
 
-const userPermissionInfo = userPermissionStore()
-const permissionCheck = userPermissionInfo.permissionCheck
 const router = useRouter()
 const assignedXpDialogs = adminXpScheduleDialogs()
 const characterGoFieldsDialogs = characterGoFieldsDialog()
@@ -31,8 +29,8 @@ onMounted(() => {
       command: async ($event) => {
         await downloadCharacterBooklet(props.character.id, props.character.name, props.character?.playerName)
       },
-    })
-    items.value.push({
+    },
+    {
       label: 'CRB (Ignore Diff)',
       command: async ($event) => {
         await downloadCharacterBookletOverride(props.character.id, props.character.name, props.character?.playerName)
@@ -76,7 +74,7 @@ async function downloadCharacterBookletOverride(characterId: number, characterNa
 <template>
   <div class="d-flex flex-column flex-md-row pt-3 pb-3">
     <div class="d-flex align-content-end flex-row order-last order-md-first pr-3">
-      <Button v-if="permissionCheck.CharacterManagement.ViewCharacterSheet" label="Character Sheet" class="mr-2 text-md-nowrap" size="small" @click="redirectToCharacterSheet()" />
+      <Button v-if="can.CharacterManagement.ViewCharacterSheet" label="Character Sheet" class="mr-2 text-md-nowrap" size="small" @click="redirectToCharacterSheet()" />
       <CommandButton :commands="items" size="small" />
     </div>
     <div class="align-self-md-center align-content-start">
