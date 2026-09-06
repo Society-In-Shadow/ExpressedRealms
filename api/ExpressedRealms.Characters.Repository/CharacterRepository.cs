@@ -301,6 +301,45 @@ internal sealed class CharacterRepository(
             .Select(x => (int?)x.Id)
             .FirstOrDefaultAsync(cancellationToken);
     }
+    
+    public async Task<CharacterDiffIdsDto?> GetCharacterDiffIds(int characterId)
+    {
+        var character = await context.Characters.Where(x => x.Id == characterId)
+            .Select(x => new
+            {
+                x.IsArchived,
+                x.SourceCharacterId
+            })
+            .FirstAsync(cancellationToken);
+
+        if (!character.IsArchived)
+            return null;
+        
+        var availableCharacters = await context.Characters
+            .IgnoreQueryFilters(["ArchivedCharacters"])
+            .Where(x => x.SourceCharacterId == character.SourceCharacterId && x.IsArchived)
+            .OrderByDescending(x => x.CreateDate)
+            .Select(x => (int?)x.Id)
+            .Take(2)
+            .ToListAsync(cancellationToken);
+
+        if (availableCharacters.Count != 2)
+            return null;
+
+        return new CharacterDiffIdsDto()
+        {
+            NewestCharacterId = availableCharacters[0]!.Value,
+            PreviousCharacterId = availableCharacters[1]!.Value
+        };
+    }
+
+    public Task<bool> CharacterHasCharacterStorage(int characterId)
+    {
+        return context.CharacterStorageInfos
+            .Where(x => x.Player.Characters.Any(y => y.Id == characterId))
+            .Select(x => x.OptedIn)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
 
     public void GloballyToggleIncludeArchivedCharactersFilter(bool state)
     {

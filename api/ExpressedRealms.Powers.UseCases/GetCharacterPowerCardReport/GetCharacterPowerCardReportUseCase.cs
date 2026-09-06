@@ -4,6 +4,7 @@ using ExpressedRealms.Expressions.Repository.CharacterFactions;
 using ExpressedRealms.Powers.Reporting.powerCards;
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.PowerCards;
 using ExpressedRealms.Powers.Repository.CharacterPower;
+using ExpressedRealms.Powers.Repository.CharacterPower.DTO;
 using ExpressedRealms.Powers.Repository.PowerPaths;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
@@ -54,11 +55,29 @@ public class GetCharacterPowerCardReportUseCase(
         Result<GetEditCharacterDto> expression
     )
     {
-        var selectedPowerInformation = await mappingRepository.GetCharacterPowerMappingInfo(
-            model.CharacterId
-        );
+        var selectedPowers = new List<CharacterPowerInfo>();
+        var characterStorageOptin = await characterRepository.CharacterHasCharacterStorage(model.CharacterId);
+        var previousTwoArchives = await characterRepository.GetCharacterDiffIds(model.CharacterId);
+        if (characterStorageOptin && previousTwoArchives is not null)
+        {
+            var currentUserPowers =
+                await mappingRepository.GetCharacterPowerMappingInfo(previousTwoArchives.NewestCharacterId);
+            var previousCharacterPowers =
+                await mappingRepository.GetCharacterPowerMappingInfo(previousTwoArchives.PreviousCharacterId);
+
+            selectedPowers.AddRange(currentUserPowers.Where(currentPower => 
+                !previousCharacterPowers.Any(x => x.PowerId == currentPower.PowerId && 
+                                                  x.UserNotes == currentPower.UserNotes)));
+        }
+        else
+        {
+            selectedPowers = await mappingRepository.GetCharacterPowerMappingInfo(
+                model.CharacterId
+            );
+        }
+
         var data = await repository.GetPowerPathAndPowersForCrb(
-            selectedPowerInformation.Select(x => x.PowerId).ToList()
+            selectedPowers.Select(x => x.PowerId).ToList()
         );
 
         var powerCards = data.Select(y => new PowerCardData()
@@ -79,7 +98,7 @@ public class GetCharacterPowerCardReportUseCase(
                 Limitation = y.Limitation,
                 Other = y.Other,
                 UserNotes =
-                    selectedPowerInformation.FirstOrDefault(x => x.PowerId == y.Id)?.UserNotes
+                    selectedPowers.FirstOrDefault(x => x.PowerId == y.Id)?.UserNotes
                     ?? null,
                 Prerequisites = y.Prerequisites is not null
                     ? new PrerequisiteData()

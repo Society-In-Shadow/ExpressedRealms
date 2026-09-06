@@ -30,5 +30,12 @@ public interface ICharacterRepository
     Task<int> GetExpressionSubTypeId(int expressionId);
     Task<CharacterPickablePowersDto> GetCharacterInfoForPickablePowers(int characterId);
     Task<int?> MostRecentApprovedCharacterId(int characterId);
+    /// <summary>
+    /// Returns the character id's that need to be diffed.
+    /// </summary>
+    /// <param name="characterId"></param>
+    /// <returns>Returns null when the character is not archived, or if it's the only archived character</returns>
+    Task<CharacterDiffIdsDto?> GetCharacterDiffIds(int characterId);
+    Task<bool> CharacterHasCharacterStorage(int characterId);
     void GloballyToggleIncludeArchivedCharactersFilter(bool state);
 }
