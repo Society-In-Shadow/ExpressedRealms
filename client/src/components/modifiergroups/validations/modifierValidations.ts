@@ -1,7 +1,7 @@
 import { boolean, type InferType, number, object, string } from 'yup'
 import { useGenericForm } from '@/utilities/formUtilities'
 import type { ListItem } from '@/types/ListItem'
-import type { ExpressionInfo, StatModifierReturnModel } from '@/components/modifiergroups/types.ts'
+import type { ExpressionInfo, ProgressionPath, StatModifierReturnModel } from '@/components/modifiergroups/types.ts'
 
 const validationSchema = object({
   modifierType: object<ListItem>().nullable()
@@ -9,15 +9,17 @@ const validationSchema = object({
     .label('Modifier Type'),
   targetExpression: object<ExpressionInfo>().nullable()
     .label('Target Expression'),
-  targetProgressionPath: object<ListItem>().nullable()
+  targetProgressionPath: object<ProgressionPath>().nullable()
     .label('Target Path'),
+  targetProgressionLevel: object<ListItem>().nullable()
+    .label('Target Level'),
   modifier: number().required()
     .label('Modifier'),
   creationSpecificBonus: boolean()
     .label('Include Level 0 With Scale'),
   scaleWithLevel: boolean()
     .label('Scale With Level'),
-  notes: string()
+  notes: string().nullable()
     .max(1000)
     .label('Notes'),
 })
@@ -34,6 +36,7 @@ export function getValidationInstance() {
     form.fields.modifierType.field.value = model.statModifier
     form.fields.targetExpression.field.value = model.targetExpression
     form.fields.targetProgressionPath.field.value = model.targetProgressionPath
+    form.fields.targetProgressionLevel.field.value = model.targetProgressionLevel
     form.fields.notes.field.value = model.notes
   }
 

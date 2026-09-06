@@ -29,7 +29,14 @@ export interface StatModifierOptionResponse {
 export interface ExpressionInfo {
   id: number
   name: string
-  progressionPaths: Array<ListItem>
+  progressionPaths: Array<ProgressionPath>
+}
+
+export interface ProgressionPath
+{
+  id: number
+  name: string
+  levels: Array<ListItem>
 }
 
 export interface StatModifier {
@@ -49,7 +56,9 @@ export interface StatModifierReturnModel {
   targetExpression: StatModifier
   targetExpressionId: number | null
   targetProgressionPathId: number | null
-  targetProgressionPath: StatModifier | null
+  targetProgressionPath: ProgressionPath | null
+  targetProgressionLevelId: number | null
+  targetProgressionLevel: ListItem | null
   modifier: number
   scaleWithLevel: boolean
   creationSpecificBonus: boolean
