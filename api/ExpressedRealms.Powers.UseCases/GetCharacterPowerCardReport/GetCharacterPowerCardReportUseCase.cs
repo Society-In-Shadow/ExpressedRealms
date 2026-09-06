@@ -1,6 +1,7 @@
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.DTOs;
 using ExpressedRealms.Expressions.Repository.CharacterFactions;
+using ExpressedRealms.Expressions.Repository.CharacterFactions.Dtos;
 using ExpressedRealms.Powers.Reporting.powerCards;
 using ExpressedRealms.Powers.Reporting.powerCards.CardTypes.PowerCards;
 using ExpressedRealms.Powers.Repository.CharacterPower;
@@ -120,8 +121,27 @@ public class GetCharacterPowerCardReportUseCase(
         if (factionInfo == null)
             return [];
 
-        var factionPowerData = await factionRepository.GetAppliedFactionPowerIds(model.CharacterId);
-        var factionPowerIds = factionPowerData.Select(x => x.PowerId).ToList();
+        var selectedPowers = new List<AppliedFactionPowersProjection>();
+        var characterStorageOptin = await characterRepository.CharacterHasCharacterStorage(model.CharacterId);
+        var previousTwoArchives = await characterRepository.GetCharacterDiffIds(model.CharacterId);
+        if (characterStorageOptin && previousTwoArchives is not null)
+        {
+            var currentUserPowers =
+                await factionRepository.GetAppliedFactionPowerIds(previousTwoArchives.NewestCharacterId);
+            var previousCharacterPowers =
+                await factionRepository.GetAppliedFactionPowerIds(previousTwoArchives.PreviousCharacterId);
+
+            selectedPowers.AddRange(currentUserPowers.Where(currentPower => 
+                previousCharacterPowers.All(x => x.PowerId != currentPower.PowerId)));
+        }
+        else
+        {
+            selectedPowers = await factionRepository.GetAppliedFactionPowerIds(
+                model.CharacterId
+            );
+        }
+        
+        var factionPowerIds = selectedPowers.Select(x => x.PowerId).ToList();
         var factionPowers = await repository.GetPowers(factionPowerIds);
 
         var lookup = factionPowers.ToDictionary(x => x.Id);
@@ -138,7 +158,7 @@ public class GetCharacterPowerCardReportUseCase(
                 Name = y.Name,
                 Category = y.Category?.Select(z => z.Name).ToList(),
                 Description = y.Description,
-                PathName = factionPowerData.First(x => x.PowerId == y.Id).FactionRankName,
+                PathName = selectedPowers.First(x => x.PowerId == y.Id).FactionRankName,
                 GameMechanicEffect = y.GameMechanicEffect,
                 ExpressionName = factionInfo.FactionName,
                 PowerActivationType = y.PowerActivationType.Name,
