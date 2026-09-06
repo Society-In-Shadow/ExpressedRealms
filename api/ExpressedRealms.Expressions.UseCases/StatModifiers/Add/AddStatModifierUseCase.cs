@@ -41,15 +41,32 @@ internal sealed class AddStatModifierUseCase(
                     nameof(model.TargetExpressionId),
                     "Expression does not exist"
                 );
+            
+            if (model.TargetProgressionPathId is not null)
+            {
+                var progressionPath =
+                    expression.ProgressionPaths.FirstOrDefault(x => x.Id == model.TargetProgressionPathId);
+                
+                if(progressionPath is null)
+                {
+                    return ValidationHelper.AddSingleValidationFailure(
+                        nameof(model.TargetProgressionPathId),
+                        "This is not a valid progression path for the expression"
+                    );
+                }
 
-            if (
-                model.TargetProgressionPathId is not null
-                && expression.ProgressionPaths.All(x => x.Id != model.TargetProgressionPathId)
-            )
-                return ValidationHelper.AddSingleValidationFailure(
-                    nameof(model.TargetProgressionPathId),
-                    "This is not a valid progression path for the expression"
-                );
+                if (model.TargetProgressionLevelId is not null)
+                {                
+                    var progressionLevel = progressionPath.Levels
+                        .FirstOrDefault(x => x.Id == model.TargetProgressionLevelId);
+                    
+                    if(progressionLevel is null)
+                        return ValidationHelper.AddSingleValidationFailure(
+                            nameof(model.TargetProgressionLevelId),
+                            "This is not a valid progression path level for the expression"
+                        );
+                }
+            }
         }
 
         var groupId = model.StatModifierGroupId ?? 0;
@@ -91,6 +108,7 @@ internal sealed class AddStatModifierUseCase(
                 StatModifierId = model.StatModifierId,
                 TargetExpressionId = model.TargetExpressionId,
                 TargetProgressionPathId = model.TargetProgressionPathId,
+                TargetProgressionLevelId = model.TargetProgressionLevelId,
                 Notes = model.Notes,
             }
         );

@@ -1,8 +1,7 @@
 namespace ExpressedRealms.Expressions.Repository.Expressions.DTOs;
 
-public class ExpressionPathProjection
+public class ExpressionPathLevelProjection
 {
     public int Id { get; set; }
     public required string Name { get; set; }
-    public List<ExpressionPathLevelProjection> Levels { get; set; } = [];
 }
