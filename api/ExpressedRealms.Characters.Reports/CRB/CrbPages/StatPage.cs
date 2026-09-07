@@ -131,7 +131,7 @@ internal static class StatPage
             7
         );
     }
-    
+
     private static void PrintDefensiveStats(ProficiencyData dataProficiencyInfo, PdfPage page)
     {
         var defensiveOffset = XUnitPt.FromInch(7.55);

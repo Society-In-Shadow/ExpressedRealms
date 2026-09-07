@@ -80,9 +80,6 @@ public sealed class StatModifierEnum : SmartEnum<StatModifierEnum, int>
         "Sprinting Paces",
         34
     );
-    
-    public static readonly StatModifierEnum Initiative = new StatModifierEnum(
-        "Initiative",
-        35
-    );
+
+    public static readonly StatModifierEnum Initiative = new StatModifierEnum("Initiative", 35);
 }

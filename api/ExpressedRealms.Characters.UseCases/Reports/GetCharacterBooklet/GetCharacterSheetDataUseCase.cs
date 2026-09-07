@@ -224,7 +224,7 @@ public class GetCharacterSheetDataUseCase(
         proficiencyInfo.SprintingPaces = proficiencies
             .Value.First(x => x.Id == StatModifierEnum.SprintingPaces.Value)
             .Value;
-        
+
         proficiencyInfo.InitiativeBonus = proficiencies
             .Value.First(x => x.Id == StatModifierEnum.Initiative.Value)
             .Value;
