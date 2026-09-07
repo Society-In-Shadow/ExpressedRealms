@@ -91,6 +91,7 @@ public sealed class ModifierType : SmartEnum<ModifierType, byte>
     );
 
     public static readonly ModifierType SprintingPaces = new ModifierType("Sprinting Paces", 52);
+    public static readonly ModifierType Initiative = new ModifierType("Initiative", 53);
 
     public override string ToString() => Name;
 }

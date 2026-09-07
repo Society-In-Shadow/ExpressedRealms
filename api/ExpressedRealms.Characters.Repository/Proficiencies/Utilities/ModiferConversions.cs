@@ -78,6 +78,7 @@ internal static class ModiferConversions
             32 => ModifierType.SprintingOffensiveProficiency,
             33 => ModifierType.SprintingDefensiveProficiency,
             34 => ModifierType.SprintingPaces,
+            35 => ModifierType.Initiative,
             _ => throw new ArgumentOutOfRangeException(
                 nameof(mapping),
                 mapping.ModifierTypeId,
@@ -124,6 +125,7 @@ internal static class ModiferConversions
             32 => ModifierType.SprintingOffensiveProficiency,
             33 => ModifierType.SprintingDefensiveProficiency,
             34 => ModifierType.SprintingPaces,
+            35 => ModifierType.Initiative,
             _ => throw new ArgumentOutOfRangeException(nameof(mapping), mapping.Id, null),
         };
     }

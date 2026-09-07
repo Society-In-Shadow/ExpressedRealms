@@ -50,10 +50,16 @@ internal static class TextPrintUtilities
         gfx.Restore();
     }
 
-    public static void PrintStatInfo(PdfPage page, string stampText, double centerX, double centerY)
+    public static void PrintStatInfo(
+        PdfPage page,
+        string stampText,
+        double centerX,
+        double centerY,
+        double fontSize = 9
+    )
     {
         using var gfx = XGraphics.FromPdfPage(page);
-        var font = new XFont(DefaultFontFace, 9, XFontStyleEx.Regular);
+        var font = new XFont(DefaultFontFace, fontSize, XFontStyleEx.Regular);
         var size = gfx.MeasureString(stampText, font);
 
         gfx.Save();

@@ -352,6 +352,14 @@ public static class ProficiencyDtos
                 Modifiers = new List<ModifierType>() { ModifierType.SprintingPaces },
                 SortOrder = 22,
             },
+            new ProficiencyDto()
+            {
+                Id = StatModifierEnum.Initiative,
+                Name = "Initiative",
+                Type = Movement,
+                Modifiers = new List<ModifierType>() { ModifierType.Initiative },
+                SortOrder = 23,
+            },
         };
 
         const int Adepts = 3;

@@ -34,4 +34,5 @@ public class ProficiencyData
     public int SprintingOffensiveProficiencies { get; set; }
     public int SprintingDefensiveProficiencies { get; set; }
     public int SprintingPaces { get; set; }
+    public int InitiativeBonus { get; set; }
 }
