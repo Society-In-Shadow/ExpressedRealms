@@ -1,4 +1,5 @@
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
+using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionLevels;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths;
 using ExpressedRealms.DB.Models.ModifierSystem.StatGroupMappings.Audit;
 using ExpressedRealms.DB.Models.ModifierSystem.StatModifierGroups;
@@ -16,11 +17,13 @@ public class StatGroupMapping
     public bool CreationSpecificBonus { get; set; }
     public int? TargetExpressionId { get; set; }
     public int? TargetProgressionPathId { get; set; }
+    public int? TargetProgressionLevelId { get; set; }
     public string? Notes { get; set; }
     public StatModifierGroup StatModifierGroup { get; set; } = null!;
     public StatModifier StatModifier { get; set; } = null!;
     public Expression? Expression { get; set; }
     public ProgressionPath? ProgressionPath { get; set; }
+    public ProgressionLevel? TargetProgressionLevel { get; set; }
     public virtual ICollection<StatGroupMappingAuditTrail> StatGroupMappingAuditTrails { get; set; } =
         new HashSet<StatGroupMappingAuditTrail>();
 }

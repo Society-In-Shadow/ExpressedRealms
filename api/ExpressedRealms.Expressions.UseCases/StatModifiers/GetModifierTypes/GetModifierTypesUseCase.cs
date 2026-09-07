@@ -46,6 +46,13 @@ internal sealed class GetModifierTypesUseCase(
                             {
                                 Id = y.Id,
                                 Name = y.Name,
+                                Levels = y
+                                    .Levels.Select(z => new ProgressionLevel()
+                                    {
+                                        Id = z.Id,
+                                        Name = z.Name,
+                                    })
+                                    .ToList(),
                             })
                             .ToList(),
                     })

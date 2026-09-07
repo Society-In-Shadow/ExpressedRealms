@@ -38,6 +38,7 @@ internal static class GetStatModifiersEndpoint
                         Id = x.Id,
                         TargetExpressionId = x.TargetExpressionId,
                         TargetProgressionPathId = x.TargetProgressionPathId,
+                        TargetProgressionLevelId = x.TargetProgressionLevelId,
                         Notes = x.Notes,
                     })
                     .ToList(),

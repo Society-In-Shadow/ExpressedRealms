@@ -10,4 +10,5 @@ public class StatMappingReturnModel
     public int? TargetExpressionId { get; set; }
     public int? TargetProgressionPathId { get; set; }
     public string? Notes { get; set; }
+    public int? TargetProgressionLevelId { get; set; }
 }

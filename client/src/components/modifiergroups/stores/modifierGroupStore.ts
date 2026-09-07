@@ -57,8 +57,13 @@ const modifierGroupStore
         response.data.modifiers.forEach((modifier) => {
           modifier.statModifier = this.modifierTypes.find(x => x.id == modifier.statModifierId)
           modifier.targetExpression = this.expressions.find(x => x.id == modifier.targetExpressionId)
-          if (modifier.targetExpression)
+          if (modifier.targetExpression) {
             modifier.targetProgressionPath = this.expressions.find(x => x.id == modifier.targetExpressionId)!.progressionPaths.find(x => x.id == modifier.targetProgressionPathId)
+            if (modifier.targetProgressionPath) {
+              console.log('hit')
+              modifier.targetProgressionLevel = modifier.targetProgressionPath.levels.find(x => x.id == modifier.targetProgressionLevelId)
+            }
+          }
         })
 
         this.statModifiers.set(groupId, response.data.modifiers)
@@ -82,6 +87,7 @@ const modifierGroupStore
           statModifierId: values.modifierType.id,
           targetExpressionId: values.targetExpression?.id,
           targetProgressionPathId: values.targetProgressionPath?.id,
+          targetProgressionLevelId: values.targetProgressionLevel?.id,
           notes: values.notes,
         })
           .then(async () => {
@@ -106,6 +112,7 @@ const modifierGroupStore
           statModifierId: values.modifierType.id,
           targetExpressionId: values.targetExpression?.id ?? null,
           targetProgressionPathId: values.targetProgressionPath?.id ?? null,
+          targetProgressionLevelId: values.targetProgressionLevel.id ?? null,
           notes: values.notes,
         } as CreateStatModifier)
           .then(async (response) => {

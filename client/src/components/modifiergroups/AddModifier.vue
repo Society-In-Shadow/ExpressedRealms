@@ -58,6 +58,15 @@ const targetPaths = computed(() => {
 
   return store.expressions.find(x => x.id === targetExpression.id)?.progressionPaths ?? []
 })
+
+const targetLevels = computed(() => {
+  const targetExpression = form.fields.targetProgressionPath.field.value
+
+  if (!targetExpression)
+    return []
+
+  return targetPaths.value.find(x => x.id === targetExpression.id)?.levels ?? []
+})
 </script>
 
 <template>
@@ -86,6 +95,13 @@ const targetPaths = computed(() => {
       v-if="targetPaths.length > 0"
       v-model="form.fields.targetProgressionPath"
       :options="targetPaths"
+      option-label="name"
+    />
+
+    <FormDropdownWrapper
+      v-if="targetLevels.length > 0"
+      v-model="form.fields.targetProgressionLevel"
+      :options="targetLevels"
       option-label="name"
     />
 

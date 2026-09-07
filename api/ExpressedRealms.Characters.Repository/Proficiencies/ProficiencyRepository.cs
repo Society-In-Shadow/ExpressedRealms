@@ -144,8 +144,13 @@ internal sealed class ProficiencyRepository(
                 x.TargetExpressionId == null
                 || x.TargetExpressionId == character.ExpressionId
                     && x.TargetProgressionPathId is null
+                    && x.TargetProgressionLevel is null
                 || x.TargetExpressionId == character.ExpressionId
                     && availableProgressions.Contains(x.TargetProgressionPathId)
+                    && x.TargetProgressionLevel is null
+                || x.TargetExpressionId == character.ExpressionId
+                    && availableProgressions.Contains(x.TargetProgressionPathId)
+                    && x.TargetProgressionLevel == currentLevel
             )
             .ToList();
 

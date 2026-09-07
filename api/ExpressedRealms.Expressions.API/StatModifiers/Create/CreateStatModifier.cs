@@ -9,5 +9,6 @@ public class CreateStatModifier
     public int StatModifierId { get; set; }
     public int? TargetExpressionId { get; set; }
     public int? TargetProgressionPathId { get; set; }
+    public int? TargetProgressionLevelId { get; set; }
     public string? Notes { get; set; }
 }

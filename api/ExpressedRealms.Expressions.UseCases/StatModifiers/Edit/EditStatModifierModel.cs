@@ -14,4 +14,5 @@ public class EditStatModifierModel
     public SourceTableEnum Source { get; set; }
     public int? TargetProgressionPathId { get; set; }
     public string? Notes { get; set; }
+    public int? TargetProgressionLevelId { get; set; }
 }
