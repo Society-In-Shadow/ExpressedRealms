@@ -22,6 +22,7 @@ internal static class StatPage
         PrintOffensiveStats(dataProficiencyInfo, page);
         PrintDefensiveStats(dataProficiencyInfo, page);
         PrintMovement(dataProficiencyInfo, page);
+        PrintInitiativeModifiers(dataProficiencyInfo, page);
     }
 
     private static void PrintMovement(ProficiencyData dataProficiencyInfo, PdfPage page)
@@ -105,6 +106,32 @@ internal static class StatPage
         );
     }
 
+    private static void PrintInitiativeModifiers(ProficiencyData dataProficiencyInfo, PdfPage page)
+    {
+        var actionYCenter = XUnitPt.FromInch(4.06);
+        TextPrintUtilities.PrintStatInfo(
+            page,
+            (20 + dataProficiencyInfo.InitiativeBonus).ToString(),
+            actionYCenter,
+            XUnitPt.FromInch(9.27),
+            7
+        );
+        TextPrintUtilities.PrintStatInfo(
+            page,
+            $"{22 + dataProficiencyInfo.InitiativeBonus} | {16 + dataProficiencyInfo.InitiativeBonus}",
+            actionYCenter,
+            XUnitPt.FromInch(7.66),
+            7
+        );
+        TextPrintUtilities.PrintStatInfo(
+            page,
+            $"{24 + dataProficiencyInfo.InitiativeBonus} | {18 + dataProficiencyInfo.InitiativeBonus} | {12 + dataProficiencyInfo.InitiativeBonus}",
+            actionYCenter,
+            XUnitPt.FromInch(6.12),
+            7
+        );
+    }
+    
     private static void PrintDefensiveStats(ProficiencyData dataProficiencyInfo, PdfPage page)
     {
         var defensiveOffset = XUnitPt.FromInch(7.55);
