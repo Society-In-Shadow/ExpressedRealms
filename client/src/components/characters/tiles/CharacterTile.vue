@@ -40,6 +40,7 @@ function editCharacter() {
           <div class="mt-1">
             <Tag v-if="props.character.isPrimaryCharacter" value="Primary" severity="info" />
             <Tag v-if="props.character.isRetired" value="Retired" severity="warn" />
+            <Tag v-if="props.character?.isInCharacterCreate" value="Creation" severity="info" />
           </div>
         </div>
         <div class="d-inline-flex flex-column">

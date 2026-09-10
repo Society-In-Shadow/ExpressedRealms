@@ -39,4 +39,5 @@ public interface ICharacterRepository
     Task<CharacterDiffIdsDto?> GetCharacterDiffIds(int characterId);
     Task<bool> CharacterHasCharacterStorage(int characterId);
     void GloballyToggleIncludeArchivedCharactersFilter(bool state);
+    Task<CharacterGoInformationProjection?> GetCharacterGoInformation(int id);
 }

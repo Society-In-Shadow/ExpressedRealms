@@ -100,6 +100,9 @@ export interface GetBreakOfDawnInfoResponse {
 }
 
 export interface GoChecksResponse {
+  isLegacyExpression: boolean
+  xpSpentPercentage: number
+  dealWithDevil: boolean
   stillInCharacterCreation: boolean
   spentTooMuchXp: boolean
   knowledgeChecks: KnowledgeCheck[]

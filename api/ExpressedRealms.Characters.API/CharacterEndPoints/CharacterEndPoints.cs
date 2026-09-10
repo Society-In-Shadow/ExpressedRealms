@@ -68,6 +68,7 @@ internal static class CharacterEndPoints
                     {
                         ExpressionPublishStatusEnum.Published,
                         ExpressionPublishStatusEnum.PlayTesting,
+                        ExpressionPublishStatusEnum.Legacy
                     };
                     if (
                         userContext.CurrentUserHasPermission(
@@ -134,6 +135,7 @@ internal static class CharacterEndPoints
                     {
                         ExpressionPublishStatusEnum.Published,
                         ExpressionPublishStatusEnum.PlayTesting,
+                        ExpressionPublishStatusEnum.Legacy,
                     };
                     if (
                         userContext.CurrentUserHasPermission(
