@@ -18,4 +18,5 @@ public sealed record GetEditCharacterDto
     public string? FactionRank { get; set; }
     public string? FactionName { get; set; }
     public bool IsPlaytestExpression { get; set; }
+    public bool IsLegacyExpression { get; set; }
 }

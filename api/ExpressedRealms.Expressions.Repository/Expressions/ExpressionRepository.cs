@@ -31,6 +31,7 @@ internal sealed class ExpressionRepository(
         {
             ExpressionPublishStatusEnum.Published,
             ExpressionPublishStatusEnum.PlayTesting,
+            ExpressionPublishStatusEnum.Legacy
         };
         if (userContext.CurrentUserHasPermission(Permissions.Expression.SeeBetaExpressions))
         {

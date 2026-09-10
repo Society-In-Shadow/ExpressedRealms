@@ -76,11 +76,12 @@ internal sealed class CharacterRepository(
 
     public async Task<bool> ExpressionExistsAsync(int id)
     {
-        var allowedStatuses = new List<int>
-        {
+        List<int> allowedStatuses =
+        [
             ExpressionPublishStatusEnum.Published,
             ExpressionPublishStatusEnum.PlayTesting,
-        };
+            ExpressionPublishStatusEnum.Legacy
+        ];
         if (userContext.CurrentUserHasPermission(Permissions.Expression.SeeBetaExpressions))
         {
             allowedStatuses.Add(ExpressionPublishStatusEnum.Beta);
@@ -93,11 +94,12 @@ internal sealed class CharacterRepository(
 
     public async Task<int> GetExpressionSubTypeId(int expressionId)
     {
-        var allowedStatuses = new List<int>
-        {
+        List<int> allowedStatuses =
+        [
             ExpressionPublishStatusEnum.Published,
             ExpressionPublishStatusEnum.PlayTesting,
-        };
+            ExpressionPublishStatusEnum.Legacy
+        ];
         if (userContext.CurrentUserHasPermission(Permissions.Expression.SeeBetaExpressions))
         {
             allowedStatuses.Add(ExpressionPublishStatusEnum.Beta);
@@ -239,6 +241,7 @@ internal sealed class CharacterRepository(
                 IsRetired = x.IsRetired,
                 IsArchetypeCharacter = x.Player.IsArchetypeAccount,
                 ExpressionSubTypeId = x.Expression.ExpressionSubTypeId,
+                IsLegacyExpression = x.Expression.PublishStatusId == ExpressionPublishStatusEnum.Legacy
             })
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -485,17 +488,23 @@ internal sealed class CharacterRepository(
 
     public async Task<bool> CanUpdatePrimaryCharacterStatus(int id)
     {
-        var hasAnyPrimary = await context.Characters.AnyAsync(x =>
-            x.IsPrimaryCharacter
+        List<int> invalidPublishTypes = [ExpressionPublishStatusEnum.Legacy.Value, ExpressionPublishStatusEnum.PlayTesting.Value];
+        var character = await context.Characters.Where(x => x.Id == id
             && x.Player.UserId == userContext.CurrentUserId()
-            && x.Expression.PublishStatusId != ExpressionPublishStatusEnum.PlayTesting
-        );
+        ).Select(x => new
+        {
+            x.IsPrimaryCharacter,
+            x.Expression.PublishStatusId
+        }).FirstOrDefaultAsync();
 
-        if (!hasAnyPrimary)
+        if (character is null)
+            return false;
+
+        // Always allow a player to unselect a primary character
+        if (character.IsPrimaryCharacter)
             return true;
 
-        return await context.Characters.AnyAsync(x =>
-            x.Id == id && x.IsPrimaryCharacter && x.Player.UserId == userContext.CurrentUserId()
-        );
+        return !invalidPublishTypes.Contains(character.PublishStatusId);
+
     }
 }

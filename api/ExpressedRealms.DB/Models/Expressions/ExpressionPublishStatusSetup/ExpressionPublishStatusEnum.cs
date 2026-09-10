@@ -34,4 +34,9 @@ public sealed class ExpressionPublishStatusEnum : SmartEnum<ExpressionPublishSta
         4,
         "Everyone can view and create characters with this expression, but cannot be used as a primary character"
     );
+    public static readonly ExpressionPublishStatusEnum Legacy = new(
+        "Legacy",
+        5,
+        "Everyone can view and create characters with this expression, but cannot be used as a primary character"
+    );
 }

@@ -21,7 +21,10 @@ internal record CharacterEditResponse
         FactionRank = dto.FactionRank;
         FactionName = dto.FactionName;
         IsPlaytestExpression = dto.IsPlaytestExpression;
+        IsLegacyExpression = dto.IsLegacyExpression;
     }
+
+    public bool IsLegacyExpression { get; set; }
 
     public bool IsPlaytestExpression { get; set; }
 
