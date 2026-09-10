@@ -1,3 +1,4 @@
+using ExpressedRealms.Blessings.Repository.CharacterBlessings;
 using ExpressedRealms.Characters.Repository;
 using ExpressedRealms.Characters.Repository.Contacts;
 using ExpressedRealms.Characters.Repository.Xp;
@@ -13,6 +14,7 @@ internal sealed class GetGoCheckinInfoUseCase(
     IXpRepository xpRepository,
     IContactRepository repository,
     ICharacterKnowledgeRepository knowledgeRepository,
+    ICharacterBlessingRepository blessingRepository,
     GetGoCheckinInfoModelValidator validator,
     CancellationToken cancellationToken
 ) : IGetGoCheckinInfoUseCase
@@ -30,7 +32,7 @@ internal sealed class GetGoCheckinInfoUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var character = await characterRepository.FindCharacterAsync(model.Id);
+        var character = await characterRepository.GetCharacterGoInformation(model.Id);
         if (character is null)
             return ValidationHelper.AddSingleValidationFailure(
                 nameof(model.Id),
@@ -39,6 +41,7 @@ internal sealed class GetGoCheckinInfoUseCase(
 
         var knowledges = await knowledgeRepository.GetGoApprovalKnowledges(model.Id);
         var contacts = await repository.GetContactsForCharacterSheet(model.Id);
+        var blessings = await blessingRepository.GetBlessingsForCharacter(model.Id);
 
         // This technically doesn't matter as this is post character creation, we just need the available xp bit
         var xpCheck = await xpRepository.GetAvailableXpForSection(model.Id, XpSectionTypes.Stats);
@@ -46,8 +49,11 @@ internal sealed class GetGoCheckinInfoUseCase(
         return Result.Ok(
             new GetCharacterGoFieldReturnModel()
             {
+                IsLegacyExpression = character.ExpressionIsLegacy,
+                XpSpentPercentage = (int)Math.Round((double)xpCheck.SpentXp / xpCheck.AvailableXp * 100),
                 SpentTooMuchXp = xpCheck.AvailableXp - xpCheck.SpentXp < 0,
                 StillInCharacterCreation = character.IsInCharacterCreation,
+                DealWithDevil = blessings.Any(x => x.Name == "Deal with the Devil"),
                 Contacts = contacts
                     .Where(x => !x.IsApproved)
                     .Select(x => new ContactCheck() { Id = x.Id, Name = x.Name })

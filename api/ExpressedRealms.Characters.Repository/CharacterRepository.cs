@@ -276,6 +276,20 @@ internal sealed class CharacterRepository(
             })
             .FirstAsync(cancellationToken);
     }
+    
+    public async Task<CharacterGoInformationProjection?> GetCharacterGoInformation(int id)
+    {
+        var query = await context.Characters.AsNoTracking().WithUserAccessAsync(userContext, id);
+
+        return await query
+            .Select(x => new CharacterGoInformationProjection()
+            {
+                Id = x.Id,
+                IsInCharacterCreation = x.IsInCharacterCreation,
+                ExpressionIsLegacy = x.Expression.PublishStatusId == ExpressionPublishStatusEnum.Legacy
+            })
+            .FirstAsync(cancellationToken);
+    }
 
     public Task<Character> GetCharacterForEdit(int characterId)
     {

@@ -6,4 +6,7 @@ public class GetCharacterGoFieldReturnModel
     public List<ContactCheck> Contacts { get; set; } = [];
     public bool StillInCharacterCreation { get; set; }
     public bool SpentTooMuchXp { get; set; }
+    public int XpSpentPercentage { get; set; }
+    public bool IsLegacyExpression { get; set; }
+    public bool DealWithDevil { get; set; }
 }

@@ -25,6 +25,9 @@ internal static class GetGoCheckinInfoEndpoint
         return TypedResults.Ok(
             new GoCheckinChecks()
             {
+                IsLegacyExpression = status.Value.IsLegacyExpression,
+                XpSpentPercentage = status.Value.XpSpentPercentage,
+                DealWithDevil = status.Value.DealWithDevil,
                 StillInCharacterCreation = status.Value.StillInCharacterCreation,
                 SpentTooMuchXp = status.Value.SpentTooMuchXp,
                 Contacts = status
