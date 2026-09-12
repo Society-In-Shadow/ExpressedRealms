@@ -170,6 +170,26 @@ internal sealed class EventCheckinRepository(
 
         return eventId == 0 ? null : eventId;
     }
+    
+    public async Task<int?> GetExclusivePreCheckinEventId()
+    {
+        var eventId = await context
+            .Events.FromSql(
+                $@"
+        SELECT *
+        FROM public.events
+        WHERE is_published = true
+          AND is_deleted = false
+          AND (NOW() AT TIME ZONE time_zone_id)::date
+              BETWEEN start_date - INTERVAL '14 days' AND start_date - INTERVAL '1 days'
+        LIMIT 1;
+    "
+            )
+            .Select(x => x.Id)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        return eventId == 0 ? null : eventId;
+    }
 
     public async Task<int> GetCurrentEventDay()
     {

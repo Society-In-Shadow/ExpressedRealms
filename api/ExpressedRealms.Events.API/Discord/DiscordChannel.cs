@@ -7,4 +7,5 @@ public enum DiscordChannel : ulong
     DevTestingChannel = 1432197730851094538,
     PlayersSeekingGos = 1474124710018289939,
     PlayersSeekingCrbs = 1474124857837879328,
+    PreCheckinLoadingBay = 1540519594756931706,
 }
