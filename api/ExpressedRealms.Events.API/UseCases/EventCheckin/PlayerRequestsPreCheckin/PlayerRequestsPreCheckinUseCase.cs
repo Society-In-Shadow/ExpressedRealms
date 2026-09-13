@@ -1,6 +1,9 @@
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
+using ExpressedRealms.DB.Models.Checkins.CheckinStageMappingSetup;
+using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.Events.API.Discord;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
+using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
@@ -9,6 +12,9 @@ namespace ExpressedRealms.Events.API.UseCases.EventCheckin.PlayerRequestsPreChec
 internal sealed class PlayerRequestsPreCheckinUseCase(
     IEventCheckinRepository checkinRepository,
     IDiscordService discordService,
+    
+    IUserContext userContext,
+    TimeProvider timeProvider,
     PlayerRequestsPreCheckinModelValidator validator,
     CancellationToken cancellationToken
 ) : IPlayerRequestsPreCheckinUseCase
@@ -25,12 +31,32 @@ internal sealed class PlayerRequestsPreCheckinUseCase(
             return Result.Fail(result.Errors);
 
         var eventId = await checkinRepository.GetExclusivePreCheckinEventId();
+        if (eventId is null)
+            return Result.Fail("There are no active events to assign xp to");
         var playerId = await checkinRepository.GetCurrentPlayerId();
         var checkinId = await GetCheckinId(eventId, playerId);
         
-        // TODO: Approve Early Checkin Approval Step
+        await checkinRepository.CompleteStage(
+            new CheckinStageMapping()
+            {
+                CreatedAt = timeProvider.GetUtcNow(),
+                ApproverUserId = userContext.CurrentUserId(),
+                CheckinStageId = CheckinStageEnum.AssignedXpCheck.Value,
+                CheckinId = checkinId,
+            }
+        );
         
-        var seekingCrbMessage = $"A Character was put into Early Checkin Queue";
+        await checkinRepository.CompleteStage(
+            new CheckinStageMapping()
+            {
+                CreatedAt = timeProvider.GetUtcNow(),
+                ApproverUserId = userContext.CurrentUserId(),
+                CheckinStageId = CheckinStageEnum.PlayerEarlyCheckin.Value,
+                CheckinId = checkinId,
+            }
+        );
+        
+        var seekingCrbMessage = $"A Character has Requested Pre GO Approval";
         await discordService.SendMessageToChannelAsync(
             DiscordChannel.PreCheckinLoadingBay,
             seekingCrbMessage
