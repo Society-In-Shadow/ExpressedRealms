@@ -3,6 +3,7 @@ using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
 using ExpressedRealms.DB.Models.Characters.CharacterStorage.CharacterStorageModels;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
+using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup;
 using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup.Audit;
 using ExpressedRealms.DB.Models.Events.EventSetup.Audit;
 using ExpressedRealms.DB.Models.Events.Questions.EventQuestionSetup;
@@ -38,4 +39,5 @@ public class Event : ISoftDelete
     public virtual ICollection<EventQuestion> EventQuestions { get; set; } =
         new HashSet<EventQuestion>();
     public virtual ICollection<Checkin> Checkins { get; set; } = new HashSet<Checkin>();
+    public virtual ICollection<EventScheduleItem> EventScheduleItems { get; set; } = new HashSet<EventScheduleItem>();
 }
