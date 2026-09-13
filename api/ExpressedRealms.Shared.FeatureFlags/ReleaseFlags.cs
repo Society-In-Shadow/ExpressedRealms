@@ -41,6 +41,12 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "show-factions",
         "Shows faction info in the expressions, and allows one to join a faction in the character editor"
     );
+    
+    public static readonly ReleaseFlags ShowPreCheckinFunctionality = new(
+        "Show Pre-Checkin Functionality",
+        "show-pre-checkin",
+        "Enables pre-checkin actions, both user and admin side"
+    );
 
     public override string ToString()
     {

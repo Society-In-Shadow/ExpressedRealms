@@ -19,6 +19,7 @@ import { type Character, CharacterState } from '@/components/navbar/types.ts'
 import { breakpointsBootstrapV5, useBreakpoints } from '@vueuse/core'
 import { addAdminMenuItems, fillComputedMenu } from '@/components/navbar/helpers/navUtilities.ts'
 import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
+import EarlyCheckinBanner from '@/components/conCheckin/support/EarlyCheckinBanner.vue'
 
 const router = useRouter()
 const cmsData = cmsStore()
@@ -119,6 +120,7 @@ const adminMenu = computed(() => {
   <div class="d-print-none">
     <EventCheckinBanner />
     <GoCheckinBanner />
+    <EarlyCheckinBanner />
     <MegaMenu :model="items" class="ms-0 me-0 mt-2 mb-2 m-md-2 d-print-none">
       <template #start>
         <RouterLink to="/">
