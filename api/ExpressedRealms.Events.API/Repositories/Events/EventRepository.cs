@@ -101,6 +101,21 @@ internal sealed class EventRepository(
             .Where(x => x.EventId == eventId)
             .ToListAsync(cancellationToken);
     }
+    
+    public Task<ScheduledStartInfoProjection> GetFirstScheduledDayForEvent(int eventId)
+    {
+        return context
+            .EventScheduleItems.AsNoTracking()
+            .Where(x => x.Id == eventId)
+            .OrderByDescending(x => x.Date)
+            .Select(x => new ScheduledStartInfoProjection()
+            {
+                EventId = x.EventId,
+                EventName = x.Event.Name,
+                StartDate = x.Date
+            })
+            .FirstAsync(cancellationToken);
+    }
 
     public Task<List<string>> GetRegisteredAttendeesAsync(int eventId)
     {

@@ -8,6 +8,7 @@ using ExpressedRealms.Events.API.API.EventCheckin.GetAgeInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetBasicCheckDetails;
 using ExpressedRealms.Events.API.API.EventCheckin.GetBreakOfDawnInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetCheckinQuestions;
+using ExpressedRealms.Events.API.API.EventCheckin.GetEarlyCheckinInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetGoCheckinInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetStonePullInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetUserCheckinDetails;
@@ -174,6 +175,12 @@ internal static class EventEndpoints
             )
             .RequirePermission(Permissions.Event.Checkin);
 
+        endpointGroup
+            .MapGet(
+                "checkin/earlyCheckin",
+                GetEarlyCheckinInfoEndpoint.ExecuteAsync
+            );
+        
         endpointGroup
             .MapPost(
                 "checkin/lookup/{lookupId}/approveStage",

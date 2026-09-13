@@ -496,6 +496,16 @@ internal sealed class EventCheckinRepository(
             })
             .ToListAsync(cancellationToken);
     }
+    
+    public Task<bool> PlayerHasCharacterStorage(Guid playerId)
+    {
+        return context
+            .CharacterStorageInfos.Where(x => x.PlayerId == playerId)
+            .OrderByDescending(x => x.Timestamp)
+            .Skip(1)
+            .Select(x => x.OptedIn)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
 
     public async Task<List<CheckinStageMapping>> GetActiveApprovedStages(int checkinId)
     {

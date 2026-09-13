@@ -21,4 +21,5 @@ public interface IEventRepository : IGenericRepository
     Task<List<Event>> GetCurrenOrFutureEvents();
     Task<List<string>> GetRegisteredAttendeesAsync(int eventId);
     Task<Event> GetAnyEventAsync(int id);
+    Task<ScheduledStartInfoProjection> GetFirstScheduledDayForEvent(int eventId);
 }
