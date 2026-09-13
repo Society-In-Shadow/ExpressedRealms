@@ -106,8 +106,8 @@ internal sealed class EventRepository(
     {
         return context
             .EventScheduleItems.AsNoTracking()
-            .Where(x => x.Id == eventId)
-            .OrderByDescending(x => x.Date)
+            .Where(x => x.EventId == eventId)
+            .OrderBy(x => x.Date)
             .Select(x => new ScheduledStartInfoProjection()
             {
                 EventId = x.EventId,

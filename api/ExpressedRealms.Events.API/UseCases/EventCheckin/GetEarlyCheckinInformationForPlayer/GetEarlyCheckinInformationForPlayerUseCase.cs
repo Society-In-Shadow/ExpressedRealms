@@ -40,7 +40,7 @@ internal sealed class GetEarlyCheckinInformationForPlayerUseCase(
             {
                 EventId = targetEventDate.EventId,
                 EventName = targetEventDate.EventName,
-                StartDate = targetEventDate.StartDate
+                StartDate = targetEventDate.StartDate.AddDays(-1)
             },
             Character = primaryCharacter is null ? null : new KeyValuePair<int, string>(primaryCharacter.CharacterId, primaryCharacter.CharacterName),
             NextStage = new KeyValuePair<int, string>(currentStage.Value, currentStage.Name)

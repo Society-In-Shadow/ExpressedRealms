@@ -1,3 +1,5 @@
+import type { DateTime } from 'luxon'
+
 export const CheckinStage = {
   ShqApproval: 1,
   GoApproval: 2,
@@ -12,6 +14,7 @@ export const CheckinStage = {
   PrintedCrb: 11,
   PlayerNeedsReapproval: 12,
   CharacterStorageQuestion: 13,
+  PlayerEarlyCheckin: 14,
 } as const
 
 export type CheckinStage = typeof CheckinStage[keyof typeof CheckinStage]
@@ -121,4 +124,23 @@ export interface ContactCheck {
   id: number
   name: string
   isReviewed: boolean
+}
+
+export interface KeyValue {
+  key: number | string
+  value: string | null
+}
+
+export interface Event {
+  eventId?: number | string
+  eventName?: string
+  startDate?: string
+  dueDate?: DateTime
+}
+
+export interface EarlyCheckinInfo {
+  showBanner: boolean
+  character: KeyValue | null
+  event: Event | null
+  nextStage: KeyValue | null
 }

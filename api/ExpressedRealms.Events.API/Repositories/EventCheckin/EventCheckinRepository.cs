@@ -182,7 +182,7 @@ internal sealed class EventCheckinRepository(
           AND is_deleted = false
           AND (NOW() AT TIME ZONE time_zone_id)::date
               BETWEEN start_date - INTERVAL '14 days' AND start_date - INTERVAL '1 days'
-        LIMIT 1;
+        LIMIT 1
     "
             )
             .Select(x => x.Id)
