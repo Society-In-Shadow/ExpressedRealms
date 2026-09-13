@@ -1,10 +1,12 @@
 import { useConfirm } from 'primevue/useconfirm'
 import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
 import { AgeGroupId, CheckinStage } from '@/components/conCheckin/types.ts'
+import { requestGoApproval } from '@/components/conCheckin/services/earlyCheckinService.ts'
 
 export const confirmationPopups = () => {
   const confirm = useConfirm()
   const store = EventCheckinStore()
+  const { mutate: requestApproval } = requestGoApproval()
 
   const reapproveCharacterConfirmation = (mouseEvent: MouseEvent, name: string) =>
     confirm.require({
@@ -86,5 +88,31 @@ export const confirmationPopups = () => {
       },
     })
 
-  return { retireConfirmation, childConfirmation, reapproveCharacterConfirmation, characterStorageConfirmation }
+  const earlyCheckinConfirmation = (mouseEvent: MouseEvent) =>
+    confirm.require({
+      target: mouseEvent.target as HTMLElement,
+      group: 'popup',
+      message: `You sure your character is good to be reviewed?`,
+      icon: 'pi pi-info-circle',
+      rejectProps: {
+        label: 'Nope!',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptProps: {
+        label: `Yep!`,
+        severity: 'warning',
+      },
+      accept: async () => {
+        requestApproval()
+      },
+    })
+
+  return {
+    retireConfirmation,
+    childConfirmation,
+    reapproveCharacterConfirmation,
+    characterStorageConfirmation,
+    earlyCheckinConfirmation,
+  }
 }

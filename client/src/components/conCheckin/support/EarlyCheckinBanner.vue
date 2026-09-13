@@ -9,12 +9,15 @@ import { earlyCheckinQuery } from '@/components/conCheckin/services/earlyCheckin
 import { DateTime } from 'luxon'
 import { useRouter } from 'vue-router'
 import { CheckinStage } from '@/components/conCheckin/types.ts'
+import { confirmationPopups } from '@/components/conCheckin/services/popupService.ts'
 
 const router = useRouter()
 
 const showFullMessage = ref(false)
 
 const { data, isPending } = useQuery(earlyCheckinQuery)
+
+const popups = confirmationPopups()
 
 const showBanner = computed(() => hasFlag.ShowPreCheckinFunctionality && !isPending.value && data.value.showBanner)
 
@@ -65,7 +68,7 @@ async function redirectToCharacterSheet() {
           <li>As per normal, once the CRB is ready for pickup, you will get an email notification denoting it is ready for pickup</li>
         </ul>
         <div v-if="data?.nextStage?.key == CheckinStage.PlayerEarlyCheckin">
-          <Button label="Understood and Check In" />
+          <Button label="Understood and Check In" @click="popups.earlyCheckinConfirmation($event)" />
         </div>
         <div v-else>
           <h4>Status</h4>
@@ -79,7 +82,7 @@ async function redirectToCharacterSheet() {
             Character has been approved, and printed.  It's awaiting for assembly.
           </p>
           <p v-if="data?.nextStage?.key == CheckinStage.CrbReadForPickup">
-            Character has been approved, CRB is ready for pickup at SHQ.<
+            Character has been approved, CRB is ready for pickup at SHQ.
           </p>
         </div>
       </div>

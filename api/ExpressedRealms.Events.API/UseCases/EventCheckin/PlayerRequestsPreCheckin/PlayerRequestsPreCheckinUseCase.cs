@@ -4,7 +4,6 @@ using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.Events.API.Discord;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
-using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 
 namespace ExpressedRealms.Events.API.UseCases.EventCheckin.PlayerRequestsPreCheckin;
@@ -12,24 +11,12 @@ namespace ExpressedRealms.Events.API.UseCases.EventCheckin.PlayerRequestsPreChec
 internal sealed class PlayerRequestsPreCheckinUseCase(
     IEventCheckinRepository checkinRepository,
     IDiscordService discordService,
-    
     IUserContext userContext,
-    TimeProvider timeProvider,
-    PlayerRequestsPreCheckinModelValidator validator,
-    CancellationToken cancellationToken
+    TimeProvider timeProvider
 ) : IPlayerRequestsPreCheckinUseCase
 {
-    public async Task<Result> ExecuteAsync(PlayerRequestsPreCheckinModel model)
+    public async Task<Result> ExecuteAsync()
     {
-        var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
-            validator,
-            model,
-            cancellationToken
-        );
-
-        if (result.IsFailed)
-            return Result.Fail(result.Errors);
-
         var eventId = await checkinRepository.GetExclusivePreCheckinEventId();
         if (eventId is null)
             return Result.Fail("There are no active events to assign xp to");

@@ -4,4 +4,4 @@ using FluentResults;
 namespace ExpressedRealms.Events.API.UseCases.EventCheckin.PlayerRequestsPreCheckin;
 
 public interface IPlayerRequestsPreCheckinUseCase
-    : IGenericUseCase<Result, PlayerRequestsPreCheckinModel> { }
+    : IGenericUseCase<Result> { }

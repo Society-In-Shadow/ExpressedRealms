@@ -12,6 +12,7 @@ using ExpressedRealms.Events.API.API.EventCheckin.GetEarlyCheckinInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetGoCheckinInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetStonePullInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetUserCheckinDetails;
+using ExpressedRealms.Events.API.API.EventCheckin.PlayerRequestsPreCheckin;
 using ExpressedRealms.Events.API.API.EventCheckin.UpdateAgeInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.UpdateCharacterStorage;
 using ExpressedRealms.Events.API.API.EventCheckin.UpdateCrbEmailNotification;
@@ -179,6 +180,12 @@ internal static class EventEndpoints
             .MapGet(
                 "checkin/earlyCheckin",
                 GetEarlyCheckinInfoEndpoint.ExecuteAsync
+            );
+        
+        endpointGroup
+            .MapPost(
+                "checkin/earlyCheckin/requestApproval",
+                PlayerRequestedPreCheckinEndpoint.ExecuteAsync
             );
         
         endpointGroup
