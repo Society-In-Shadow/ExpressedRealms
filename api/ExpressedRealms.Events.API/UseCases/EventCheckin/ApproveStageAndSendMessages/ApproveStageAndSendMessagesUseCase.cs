@@ -126,10 +126,11 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         Checkin checkin
     )
     {
-        List<CheckinStageMapping> activeList = [];
-
-        await GetActiveApprovedStages(checkin, activeList);
-
+        // Filters stages, makes sure that stages between initial checkin and anything before reapproval gets removed
+        var activeList = await checkinRepository.GetActiveApprovedStages(checkin.Id);
+        
+        // Need to figure out if this was an edge case, or me just not understanding things
+        // Leaning towards the later
         var hasBeenPickedUp = activeList.Any(x =>
             x.CheckinStageId == CheckinStageEnum.CrbPickedUp.Value
         );
@@ -201,45 +202,6 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         }
 
         return false;
-    }
-
-    private async Task GetActiveApprovedStages(
-        Checkin checkin,
-        List<CheckinStageMapping> activeList
-    )
-    {
-        var approvedStages = await checkinRepository.GetApprovedStages(checkin.Id);
-
-        var latestReapprovedStage = approvedStages
-            .Where(x => x.CheckinStageId == CheckinStageEnum.PlayerNeedsReapproval.Value)
-            .OrderByDescending(x => x.CreatedAt)
-            .FirstOrDefault();
-
-        if (latestReapprovedStage is not null)
-        {
-            var stagesThatCannotBeReapproved = new[]
-            {
-                CheckinStageEnum.AgeCheckApproval.Value,
-                CheckinStageEnum.EventQuestionsCheck.Value,
-                CheckinStageEnum.CharacterStorageQuestion.Value,
-                CheckinStageEnum.AssignedXpCheck.Value,
-                CheckinStageEnum.ShqApproval.Value,
-            };
-
-            activeList.AddRange(
-                approvedStages.Where(x => stagesThatCannotBeReapproved.Contains(x.CheckinStageId))
-            );
-            activeList.AddRange(
-                approvedStages
-                    .Where(x => x.CreatedAt >= latestReapprovedStage.CreatedAt)
-                    .OrderByDescending(x => x.CreatedAt)
-                    .ToList()
-            );
-        }
-        else
-        {
-            activeList.AddRange(approvedStages);
-        }
     }
 
     private async Task SendMessages(ApproveStageAndSendMessageModel model)

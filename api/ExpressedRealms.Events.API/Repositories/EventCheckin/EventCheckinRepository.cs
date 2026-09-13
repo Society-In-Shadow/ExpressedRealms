@@ -496,4 +496,45 @@ internal sealed class EventCheckinRepository(
             })
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<List<CheckinStageMapping>> GetActiveApprovedStages(int checkinId)
+    {
+        var activeList = new List<CheckinStageMapping>();
+        var approvedStages = await GetApprovedStages(checkinId);
+
+        var latestReapprovedStage = approvedStages
+            .Where(x => x.CheckinStageId == CheckinStageEnum.PlayerNeedsReapproval.Value)
+            .OrderByDescending(x => x.CreatedAt)
+            .FirstOrDefault();
+
+        if (latestReapprovedStage is not null)
+        {
+            // Effectively keep the initial approval stages, then keep the reapprove stage and anything after that
+            // Treat that list as the Canon List
+            var stagesThatCannotBeReapproved = new[]
+            {
+                CheckinStageEnum.AgeCheckApproval.Value,
+                CheckinStageEnum.EventQuestionsCheck.Value,
+                CheckinStageEnum.CharacterStorageQuestion.Value,
+                CheckinStageEnum.AssignedXpCheck.Value,
+                CheckinStageEnum.ShqApproval.Value,
+            };
+
+            activeList.AddRange(
+                approvedStages.Where(x => stagesThatCannotBeReapproved.Contains(x.CheckinStageId))
+            );
+            activeList.AddRange(
+                approvedStages
+                    .Where(x => x.CreatedAt >= latestReapprovedStage.CreatedAt)
+                    .OrderByDescending(x => x.CreatedAt)
+                    .ToList()
+            );
+        }
+        else
+        {
+            activeList.AddRange(approvedStages);
+        }
+
+        return activeList.ToList();
+    }
 }

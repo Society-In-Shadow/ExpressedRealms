@@ -81,14 +81,22 @@ internal sealed class ApprovePreApprovalStageAndSendMessageUseCase(
         return Result.Ok();
     }
 
+    public static List<CheckinStageEnum> PreCheckinSequence =
+    [
+        CheckinStageEnum.PlayerEarlyCheckin,
+        CheckinStageEnum.GoApproval,
+        CheckinStageEnum.CrbCreation,
+        CheckinStageEnum.PrintedCrb,
+        CheckinStageEnum.CrbReadForPickup
+    ];
+    
     private async Task<Result> StageRuleValidation(
         ApprovePreApprovalStageAndSendMessageModel model,
         Checkin checkin
     )
     {
-        List<CheckinStageEnum> activeList = [];
-
-        await GetActiveApprovedStages(checkin, activeList);
+        var approvedStages = await checkinRepository.GetActiveApprovedStages(checkin.Id);
+        var activeList = approvedStages.Select(x => CheckinStageEnum.FromValue(x.CheckinStageId)).ToList();
 
         if (activeList.Any(x => x == model.StageId))
         {
@@ -97,18 +105,10 @@ internal sealed class ApprovePreApprovalStageAndSendMessageUseCase(
 
         var stage = CheckinStageEnum.FromValue(model.StageId);
         
-        var preCheckinSequence = new List<CheckinStageEnum>()
-        {
-            CheckinStageEnum.PlayerEarlyCheckin,
-            CheckinStageEnum.GoApproval,
-            CheckinStageEnum.CrbCreation,
-            CheckinStageEnum.PrintedCrb,
-            CheckinStageEnum.CrbReadForPickup,
-        };
 
-        var currentStageIndex = preCheckinSequence.FindLastIndex(activeList.Contains);
+        var currentStageIndex = PreCheckinSequence.FindLastIndex(activeList.Contains);
 
-        var requestedStageIndex = preCheckinSequence.IndexOf(stage);
+        var requestedStageIndex = PreCheckinSequence.IndexOf(stage);
 
         if (requestedStageIndex < 0)
             return Result.Fail("Stage is not relevant to this workflow");
@@ -119,37 +119,6 @@ internal sealed class ApprovePreApprovalStageAndSendMessageUseCase(
         }
 
         return Result.Ok();
-    }
-
-    private async Task GetActiveApprovedStages(
-        Checkin checkin,
-        List<CheckinStageEnum> activeList
-    )
-    {
-        var approvedStages = await checkinRepository.GetApprovedStages(checkin.Id);
-
-        // This will still work, as anything approved after this stage would be newer anyways
-        // The out of order nature of the pre-checkin will further filter these after the fact.
-        var latestReapproval = approvedStages
-            .Where(x => x.CheckinStageId == CheckinStageEnum.PlayerNeedsReapproval.Value)
-            .OrderByDescending(x => x.CreatedAt)
-            .FirstOrDefault();
-
-        if (latestReapproval is not null)
-        {
-            // Do not include the reapproval record, that is not a core part of the workflow steps, just a easy
-            // way to denote old records
-            activeList.AddRange(
-                approvedStages
-                    .Where(x => x.CreatedAt > latestReapproval.CreatedAt)
-                    .OrderByDescending(x => x.CreatedAt)
-                    .Select(x => CheckinStageEnum.FromValue(x.CheckinStageId))
-            );
-        }
-        else
-        {
-            activeList.AddRange(approvedStages.Select(x => CheckinStageEnum.FromValue(x.CheckinStageId)));
-        }
     }
     
 }
