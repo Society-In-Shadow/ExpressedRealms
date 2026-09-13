@@ -84,4 +84,10 @@ public sealed class CheckinStageEnum : SmartEnum<CheckinStageEnum, int>
         13,
         "Players have the ability to pay for character storage, this step gets that sorted out."
     );
+
+    public static readonly CheckinStageEnum PlayerEarlyCheckin = new(
+        "Player Early Checkin",
+        14,
+        "This is the player opting into early checkin for a convention, they will be recorded as responsible for this step."
+    );
 }

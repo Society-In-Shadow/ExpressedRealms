@@ -300,6 +300,14 @@ internal sealed class EventCheckinRepository(
             .Select(x => x.Id)
             .FirstAsync(cancellationToken);
     }
+    
+    public async Task<Guid> GetPlayerIdFromCharacter(int characterId)
+    {
+        return await context
+            .Characters.Where(x => x.Id == characterId)
+            .Select(x => x.PlayerId)
+            .FirstAsync(cancellationToken);
+    }
 
     public async Task<bool> IsFirstTimePlayer(string lookupId)
     {
