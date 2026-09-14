@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import type { CharacterListResponse, PrimaryCharacter } from '@/components/admin/characterList/types.ts'
 import type { CharacterXpForm } from '@/components/admin/characterList/validators/characterXpForm.ts'
+import { CheckinStage } from '@/components/conCheckin/types.ts'
 
 export const adminCharacterListStore
   = defineStore('adminCharacterList', {
@@ -68,6 +69,9 @@ export const adminCharacterListStore
       },
       getCompletedCharacters() {
         return this.filteredCharacters.filter(x => x.playerStageId === 7)
+      },
+      getAwaitingGoPreApproval() {
+        return this.filteredCharacters.filter(x => x.playerStageId === CheckinStage.PlayerEarlyCheckin)
       },
       getFactionPromotions() {
         return this.filteredCharacters.filter(x => x.hasPromotionRequest)

@@ -9,14 +9,23 @@ import TabPanel from 'primevue/tabpanel'
 import TabList from 'primevue/tablist'
 import TabPanels from 'primevue/tabpanels'
 import Tabs from 'primevue/tabs'
+import { useRoute } from 'vue-router'
 
 const characterListInfo = adminCharacterListStore()
+const route = useRoute()
 
 const searchQuery = ref<string>('')
 
 onMounted(async () => {
   await characterListInfo.fetchCharacters()
 })
+
+watch(
+  () => route.fullPath,
+  async () => {
+    await characterListInfo.fetchCharacters()
+  },
+)
 
 // Debounce function
 function debounce(fn: Function, delay: number) {
@@ -88,6 +97,9 @@ watch(searchQuery, (newQuery) => {
         </Tab>
         <Tab v-if="characterListInfo.getCompletedCharacters().length > 0" value="6">
           Completed Characters ({{ characterListInfo.getCompletedCharacters().length }})
+        </Tab>
+        <Tab v-if="characterListInfo.getAwaitingGoPreApproval().length > 0" value="9">
+          Awaiting Early Checkin ({{ characterListInfo.getAwaitingGoPreApproval().length }})
         </Tab>
       </TabList>
       <TabPanels>
@@ -161,6 +173,14 @@ watch(searchQuery, (newQuery) => {
           </div>
           <h2 v-if="characterListInfo.getFactionPromotions().length == 0">
             No Characters have Faction Promotion Requests
+          </h2>
+        </TabPanel>
+        <TabPanel value="9">
+          <div v-for="character in characterListInfo.getAwaitingGoPreApproval()" :key="character.id">
+            <CharacterTile :character="character" />
+          </div>
+          <h2 v-if="characterListInfo.getAwaitingGoPreApproval().length == 0">
+            No Characters are awaiting GO pre-approval.
           </h2>
         </TabPanel>
       </TabPanels>
