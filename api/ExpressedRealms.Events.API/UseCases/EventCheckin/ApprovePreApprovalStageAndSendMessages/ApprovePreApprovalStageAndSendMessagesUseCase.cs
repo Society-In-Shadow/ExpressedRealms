@@ -29,7 +29,7 @@ internal sealed class ApprovePreApprovalStageAndSendMessageUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var eventId = await checkinRepository.GetExclusivePreCheckinEventId();
+        var eventId = await checkinRepository.GetInclusivePreCheckinEventId();
         if (eventId is null)
             return Result.Fail("There are no active events to approve");
 
@@ -81,7 +81,7 @@ internal sealed class ApprovePreApprovalStageAndSendMessageUseCase(
         return Result.Ok();
     }
 
-    public static List<CheckinStageEnum> PreCheckinSequence =
+    public static readonly List<CheckinStageEnum> PreCheckinSequence =
     [
         CheckinStageEnum.PlayerEarlyCheckin,
         CheckinStageEnum.GoApproval,

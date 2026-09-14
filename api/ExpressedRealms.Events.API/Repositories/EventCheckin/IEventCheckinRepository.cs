@@ -58,4 +58,5 @@ public interface IEventCheckinRepository : IGenericRepository
     Task<Guid> GetPlayerIdFromCharacter(int characterId);
     Task<bool> PlayerHasCharacterStorage(Guid playerId);
     Task<List<CheckinStageMapping>> GetActiveApprovedStages(int checkinId);
+    Task<int?> GetInclusivePreCheckinEventId();
 }
