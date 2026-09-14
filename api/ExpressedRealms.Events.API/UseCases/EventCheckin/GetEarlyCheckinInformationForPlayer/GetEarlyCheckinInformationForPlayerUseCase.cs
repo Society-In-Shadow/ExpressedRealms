@@ -31,7 +31,7 @@ internal sealed class GetEarlyCheckinInformationForPlayerUseCase(
         var approvedStages = await checkinRepository.GetActiveApprovedStages(checkin!.Id);
         var activeList = approvedStages.Select(x => CheckinStageEnum.FromValue(x.CheckinStageId)).ToList();
         var currentStageIndex = ApprovePreApprovalStageAndSendMessageUseCase.PreCheckinSequence.FindLastIndex(activeList.Contains);
-        var currentStage = ApprovePreApprovalStageAndSendMessageUseCase.PreCheckinSequence[Math.Min(currentStageIndex + 1, ApprovePreApprovalStageAndSendMessageUseCase.PreCheckinSequence.Count)];
+        var currentStage = ApprovePreApprovalStageAndSendMessageUseCase.PreCheckinSequence[Math.Min(currentStageIndex + 1, ApprovePreApprovalStageAndSendMessageUseCase.PreCheckinSequence.Count - 1)];
         
         return Result.Ok(new GetEarlyCheckinInformationForPlayerReturnModel()
         {
