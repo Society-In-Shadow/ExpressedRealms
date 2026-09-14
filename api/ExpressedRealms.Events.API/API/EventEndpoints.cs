@@ -2,6 +2,7 @@
 using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using ExpressedRealms.Events.API.API.EventCheckin.AddCheckinBonusXp;
 using ExpressedRealms.Events.API.API.EventCheckin.AnswerQuestion;
+using ExpressedRealms.Events.API.API.EventCheckin.ApprovePreApprovalStage;
 using ExpressedRealms.Events.API.API.EventCheckin.ApproveStage;
 using ExpressedRealms.Events.API.API.EventCheckin.ConfirmUserCheckinInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetAgeInfo;
@@ -186,6 +187,13 @@ internal static class EventEndpoints
             .MapPost(
                 "checkin/earlyCheckin/requestApproval",
                 PlayerRequestedPreCheckinEndpoint.ExecuteAsync
+            );
+        
+        // Permission handled within the endpoint - it's a bit dynamic
+        endpointGroup
+            .MapPost(
+                "checkin/earlyCheckin/character/{characterId}/reviewed",
+                ApprovePreApprovalStageEndpoint.ExecuteAsync
             );
         
         endpointGroup
