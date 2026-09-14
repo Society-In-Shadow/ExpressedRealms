@@ -9,6 +9,8 @@ import { adminCharacterListStore } from '@/components/admin/characterList/stores
 import { downloadFile } from '@/utilities/downloadUtility.ts'
 import { characterGoFieldsDialog } from '@/components/admin/characterList/services/dialogs.ts'
 import CommandButton, { type Command } from '@/uiComponents/CommandButton.vue'
+import { CheckinStage } from '@/components/conCheckin/types.ts'
+import { approvePreCheckinStage } from '@/components/conCheckin/services/earlyCheckinService.ts'
 
 const router = useRouter()
 const assignedXpDialogs = adminXpScheduleDialogs()
@@ -21,6 +23,9 @@ const props = defineProps({
     required: true,
   },
 })
+
+const approvePrecheckinStage = approvePreCheckinStage()
+
 const items = ref<Command[]>([])
 onMounted(() => {
   if (can.CharacterManagement.ViewCharacterSheet) {
@@ -53,10 +58,22 @@ onMounted(() => {
       },
     })
   }
+  if (props.character?.playerStageId == CheckinStage.PrintedCrb) {
+    items.value.push({
+      label: 'CRB Ready For Pickup',
+      command: async ($event) => {
+        await approvePrecheckinStage.mutateAsync({ characterId: props.character.id, stageId: CheckinStage.CrbReadForPickup })
+        await characterListInfo.fetchCharacters()
+      },
+    })
+  }
 })
 
 async function redirectToCharacterSheet() {
-  await router.push({ name: 'characterSheet', params: { id: props.character.id } })
+  if (props.character?.playerStageId == CheckinStage.PlayerEarlyCheckin)
+    await router.push({ name: 'characterSheet', params: { id: props.character.id }, query: { src: 'approve_character' } })
+  else
+    await router.push({ name: 'characterSheet', params: { id: props.character.id } })
 }
 
 async function downloadCharacterBooklet(characterId: number, characterName: string, playerName: string) {

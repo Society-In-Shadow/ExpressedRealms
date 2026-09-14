@@ -8,11 +8,12 @@ import Button from 'primevue/button'
 import { EventCheckinStore } from '@/components/conCheckin/stores/eventCheckinStore.ts'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 import { characterStore } from '@/components/characters/character/stores/characterStore.ts'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { pickedFactionQuery } from '@/components/characters/wizard/factions/stores/factionStore.ts'
 import { useQuery } from '@pinia/colada'
 import { goCheckList } from '@/components/conCheckin/stores/goStore.ts'
-import type { GoChecksResponse } from '@/components/conCheckin/types.ts'
+import { CheckinStage, type GoChecksResponse } from '@/components/conCheckin/types.ts'
+import { approvePreCheckinStage, earlyCheckinQuery } from '@/components/conCheckin/services/earlyCheckinService.ts'
 
 const eventCheckinInfo = EventCheckinStore()
 const permissionInfo = userPermissionStore()
@@ -22,13 +23,16 @@ const reviewedFactionPromotionRequest = ref(false)
 const reviewedDealWithDevil = ref(false)
 const hasCheckinPermission = ref(false)
 const route = useRoute()
+const router = useRouter()
 
 onBeforeMount(async () => {
   await eventCheckinInfo.getCheckinAvailable()
   hasCheckinPermission.value = permissionCheck.Event.GoApproval
 })
 
-const showBanner = computed(() => eventCheckinInfo.hasActiveEvent && hasCheckinPermission.value
+const { data: earlyCheckinData, isPending: earlyCheckinPending } = useQuery(earlyCheckinQuery)
+
+const showBanner = computed(() => (eventCheckinInfo.hasActiveEvent || earlyCheckinData) && hasCheckinPermission.value
   && characterInfo.isPrimaryCharacter && route.query.src == 'approve_character')
 
 const { data: characterData, isLoading: characterDataLoading } = useQuery(() => ({
@@ -41,8 +45,15 @@ const { data: goCheckData, isLoading: goChecksLoading } = useQuery(() => ({
   enabled: showBanner.value,
 }))
 
+const approvePrecheckinStage = approvePreCheckinStage()
+
 const reviewedCharacter = async () => {
-  await eventCheckinInfo.approveCharacterSheet()
+  if (earlyCheckinData.value.showBanner) {
+    approvePrecheckinStage.mutate({ characterId: Number.parseInt(route.params.id), stageId: CheckinStage.GoApproval })
+    await router.push({ name: 'adminCharacterList' })
+  }
+  else
+    await eventCheckinInfo.approveCharacterSheet()
 }
 
 const showFactionInfo = computed(() => {

@@ -16,6 +16,7 @@ using ExpressedRealms.Characters.UseCases.Reports.GetCharacterBooklet;
 using ExpressedRealms.DB.Models.Checkins.CheckinSecondaryStatsSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
+using ExpressedRealms.Events.API.UseCases.EventCheckin.ApprovePreApprovalStageAndSendMessages;
 using ExpressedRealms.Events.API.UseCases.EventCheckin.ApproveStageAndSendMessages;
 using ExpressedRealms.Powers.Reporting.powerCards.CardPluginSystem;
 using ExpressedRealms.Powers.UseCases.GetCharacterPowerCardReport;
@@ -40,6 +41,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
         ICharacterRepository characterRepository,
         IXpRepository xpRepository,
         IApproveStageAndSendMessageUseCase sendMessageUseCase,
+        IApprovePreApprovalStageAndSendMessageUseCase preApproveMessageUseCase,
         IUserContext userContext,
         GetCharacterBookletModelValidator validator,
         CancellationToken cancellationToken
@@ -286,22 +288,32 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
 
         private async Task ProcessCheckinAndUpdateStats(int characterId)
         {
-            var eventId = await checkinRepository.GetActiveEventId();
-            if (eventId is null)
+            var activeEventId = await checkinRepository.GetActiveEventId();
+            var eventId = await checkinRepository.GetExclusivePreCheckinEventId();
+
+            if (eventId is null && activeEventId is null)
                 return;
 
             var player = await playerRepository.GetPlayerByCharacterId(characterId);
-            var checkin = await checkinRepository.GetCheckinAsync(eventId.Value, player.Id);
+            var checkin = await checkinRepository.GetCheckinAsync(activeEventId ?? eventId!.Value, player.Id);
             if (checkin is null)
                 return;
 
             var currentStage = await checkinRepository.GetCurrentStage(checkin.Id);
             if (currentStage is not null && currentStage.Id == CheckinStageEnum.CrbCreation)
             {
-                await sendMessageUseCase.ExecuteAsync(
-                    new() { LookupId = player.LookupId, StageId = CheckinStageEnum.PrintedCrb }
-                );
-
+                if (activeEventId is not null)
+                    await sendMessageUseCase.ExecuteAsync(
+                        new() { LookupId = player.LookupId, StageId = CheckinStageEnum.PrintedCrb }
+                    );
+                else
+                    await preApproveMessageUseCase.ExecuteAsync(new ApprovePreApprovalStageAndSendMessageModel()
+                    {
+                        CharacterId = characterId,
+                        StageId = CheckinStageEnum.PrintedCrb
+                    });
+                
+                
                 var proficiencies = await profRepository.GetBasicProficiencies(characterId);
 
                 var character = await characterRepository.GetCharacterInfoForPickablePowers(

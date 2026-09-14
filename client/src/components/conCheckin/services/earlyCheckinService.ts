@@ -12,6 +12,10 @@ const earlyCheckinService = {
     }),
   requestApproval: () => axios.post('/events/checkin/earlyCheckin/requestApproval')
     .then((response) => { return response.data }),
+  approveStage: (characterId: number, stageId: number) => axios.post(`/events/checkin/earlyCheckin/character/${characterId}/reviewed`, {
+    stageId: stageId,
+  })
+    .then((response) => { return response.data }),
 }
 
 export const EARLY_CHECKIN_QUERY_KEYS = {
@@ -31,6 +35,21 @@ export const requestGoApproval = () => {
     mutation: () => earlyCheckinService.requestApproval(),
     async onSuccess() {
       toaster.success('Successfully Requested Approval')
+      await queryCache.invalidateQueries({ key: EARLY_CHECKIN_QUERY_KEYS.dialogState })
+    },
+  })
+}
+
+export const approvePreCheckinStage = () => {
+  const queryCache = useQueryCache()
+
+  return useMutation({
+    mutation: ({ characterId, stageId }: {
+      characterId: number
+      stageId: number
+    }) => earlyCheckinService.approveStage(characterId, stageId),
+    async onSuccess() {
+      toaster.success('Successfully Approved Stage!')
       await queryCache.invalidateQueries({ key: EARLY_CHECKIN_QUERY_KEYS.dialogState })
     },
   })
