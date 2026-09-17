@@ -16,7 +16,6 @@ using ExpressedRealms.Characters.UseCases.Reports.GetCharacterBooklet;
 using ExpressedRealms.DB.Models.Checkins.CheckinSecondaryStatsSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
-using ExpressedRealms.Events.API.UseCases.EventCheckin.ApprovePreApprovalStageAndSendMessages;
 using ExpressedRealms.Events.API.UseCases.EventCheckin.ApproveStageAndSendMessages;
 using ExpressedRealms.Powers.Reporting.powerCards.CardPluginSystem;
 using ExpressedRealms.Powers.UseCases.GetCharacterPowerCardReport;
@@ -41,7 +40,6 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
         ICharacterRepository characterRepository,
         IXpRepository xpRepository,
         IApproveStageAndSendMessageUseCase sendMessageUseCase,
-        IApprovePreApprovalStageAndSendMessageUseCase preApproveMessageUseCase,
         IUserContext userContext,
         GetCharacterBookletModelValidator validator,
         CancellationToken cancellationToken
@@ -302,17 +300,9 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             var currentStage = await checkinRepository.GetCurrentStage(checkin.Id);
             if (currentStage is not null && currentStage.Id == CheckinStageEnum.CrbCreation)
             {
-                if (activeEventId is not null)
-                    await sendMessageUseCase.ExecuteAsync(
-                        new() { LookupId = player.LookupId, StageId = CheckinStageEnum.PrintedCrb }
-                    );
-                else
-                    await preApproveMessageUseCase.ExecuteAsync(new ApprovePreApprovalStageAndSendMessageModel()
-                    {
-                        CharacterId = characterId,
-                        StageId = CheckinStageEnum.PrintedCrb
-                    });
-                
+                await sendMessageUseCase.ExecuteAsync(
+                    new() { LookupId = player.LookupId, StageId = CheckinStageEnum.PrintedCrb }
+                );
                 
                 var proficiencies = await profRepository.GetBasicProficiencies(characterId);
 

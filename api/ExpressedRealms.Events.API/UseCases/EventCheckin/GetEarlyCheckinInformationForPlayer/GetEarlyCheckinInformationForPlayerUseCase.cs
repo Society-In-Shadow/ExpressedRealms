@@ -1,7 +1,7 @@
 using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.Events.API.Repositories.Events;
-using ExpressedRealms.Events.API.UseCases.EventCheckin.ApprovePreApprovalStageAndSendMessages;
+using ExpressedRealms.Events.API.UseCases.EventCheckin.ApproveStageAndSendMessages;
 using FluentResults;
 
 namespace ExpressedRealms.Events.API.UseCases.EventCheckin.GetEarlyCheckinInformationForPlayer;
@@ -30,8 +30,8 @@ internal sealed class GetEarlyCheckinInformationForPlayerUseCase(
         
         var approvedStages = await checkinRepository.GetActiveApprovedStages(checkin!.Id);
         var activeList = approvedStages.Select(x => CheckinStageEnum.FromValue(x.CheckinStageId)).ToList();
-        var currentStageIndex = ApprovePreApprovalStageAndSendMessageUseCase.PreCheckinSequence.FindLastIndex(activeList.Contains);
-        var currentStage = ApprovePreApprovalStageAndSendMessageUseCase.PreCheckinSequence[Math.Min(currentStageIndex + 1, ApprovePreApprovalStageAndSendMessageUseCase.PreCheckinSequence.Count - 1)];
+        var currentStageIndex = ApproveStageAndSendMessageUseCase.PreCheckinSequence.FindLastIndex(activeList.Contains);
+        var currentStage = ApproveStageAndSendMessageUseCase.PreCheckinSequence[Math.Min(currentStageIndex + 1, ApproveStageAndSendMessageUseCase.PreCheckinSequence.Count - 1)];
         
         return Result.Ok(new GetEarlyCheckinInformationForPlayerReturnModel()
         {
