@@ -14,11 +14,15 @@ internal sealed class GetEarlyCheckinInformationForPlayerUseCase(
     public async Task<Result<GetEarlyCheckinInformationForPlayerReturnModel>> ExecuteAsync()
     {
         var targetEvent = await checkinRepository.GetExclusivePreCheckinEventId();
+
+        // Early Checkin should never happen during an event
+        var currentEvent = await checkinRepository.GetActiveEventId();
+        var hasTimeConflict = currentEvent.HasValue && targetEvent.HasValue && currentEvent.Value != targetEvent.Value;
         
         var playerId = await checkinRepository.GetCurrentPlayerId();
         var hasPaidForCharacterStorage = await checkinRepository.PlayerHasCharacterStorage(playerId);
 
-        if (targetEvent is null || !hasPaidForCharacterStorage)
+        if (targetEvent is null || !hasPaidForCharacterStorage || hasTimeConflict)
             return new GetEarlyCheckinInformationForPlayerReturnModel()
             {
                 ShowBanner = false
@@ -32,7 +36,7 @@ internal sealed class GetEarlyCheckinInformationForPlayerUseCase(
         var activeList = approvedStages.Select(x => CheckinStageEnum.FromValue(x.CheckinStageId)).ToList();
         var currentStageIndex = ApproveStageAndSendMessageUseCase.PreCheckinSequence.FindLastIndex(activeList.Contains);
         var currentStage = ApproveStageAndSendMessageUseCase.PreCheckinSequence[Math.Min(currentStageIndex + 1, ApproveStageAndSendMessageUseCase.PreCheckinSequence.Count - 1)];
-        
+         
         return Result.Ok(new GetEarlyCheckinInformationForPlayerReturnModel()
         {
             ShowBanner = true,
