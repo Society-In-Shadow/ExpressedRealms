@@ -155,10 +155,9 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         // Automatically approve the stage, as the only rules going forward add missing steps after this one
         await CompleteStage(model.StageId, checkin.Id);
         
-        if (model.StageId == CheckinStageEnum.AssignedXpCheck.Value)
+        if (model.StageId == CheckinStageEnum.CrbReadForPickup.Value)
         {
-            // Once applied, it goes into GO Check stage
-            await CompleteStage(CheckinStageEnum.ShqApproval, checkin.Id);
+            await SendPickupCrbEmailIfNeeded(playerId);
         }
 
         var currentDay = await checkinRepository.GetCurrentEventDay();
@@ -175,8 +174,6 @@ internal sealed class ApproveStageAndSendMessageUseCase(
             await CompleteStage(CheckinStageEnum.Day2Checkin, checkin.Id);
             await CompleteStage(CheckinStageEnum.Day3Checkin, checkin.Id);
         }
-        
-        await SendMessages(model);
 
         return Result.Ok();
     }
@@ -221,19 +218,18 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         return new SequenceData(completedStages, previousStepCompleted);
     }
 
-    private async Task SendMessages(ApproveStageAndSendMessageModel model)
+
+    private async Task SendPickupCrbEmailIfNeeded(Guid playerId)
     {
-        if (model.StageId == CheckinStageEnum.CrbReadForPickup.Value)
+        var emailPreferenceInfo =
+            await checkinRepository.GetPlayerCrbEmailPreferenceWithPlayerNumber(playerId);
+        if (emailPreferenceInfo.SendPickupCrbEmail)
         {
-            var emailPreferenceInfo =
-                await checkinRepository.GetPlayerCrbEmailPreferenceWithPlayerNumber(model.LookupId);
-            if (emailPreferenceInfo.SendPickupCrbEmail)
-            {
-                await emailSender.SendEmailAsync(
-                    new EmailData(
-                        emailPreferenceInfo.UserEmailAddress,
-                        "CRB is Ready for Pickup!",
-                        @"Hello!
+            await emailSender.SendEmailAsync(
+                new EmailData(
+                    emailPreferenceInfo.UserEmailAddress,
+                    "CRB is Ready for Pickup!",
+                    @"Hello!
 
 Your CRB is ready for pickup!  Feel free to stop by SHQ once you are ready to pick it up.
 
@@ -241,18 +237,17 @@ Thanks,
 Order of Archivists
 Society in Shadows
 ",
-                        $"""
-                        <p>Hello!</p>
+                    $"""
+                     <p>Hello!</p>
 
-                        <p>Your CRB is ready for pickup!  Feel free to stop by SHQ once you are ready to pick it up.</p>
+                     <p>Your CRB is ready for pickup!  Feel free to stop by SHQ once you are ready to pick it up.</p>
 
-                        <p>Thanks,</p>
-                        <p>Order of Archivists</p>
-                        <p>Society in Shadows</p>
-                        """
-                    )
-                );
-            }
+                     <p>Thanks,</p>
+                     <p>Order of Archivists</p>
+                     <p>Society in Shadows</p>
+                     """
+                )
+            );
         }
     }
 }

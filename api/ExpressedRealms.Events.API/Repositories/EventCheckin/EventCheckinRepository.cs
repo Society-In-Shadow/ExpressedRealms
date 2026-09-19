@@ -266,11 +266,11 @@ internal sealed class EventCheckinRepository(
     }
 
     public async Task<UserCrbEmailPreferenceDto> GetPlayerCrbEmailPreferenceWithPlayerNumber(
-        string lookupId
+        Guid playerId
     )
     {
         return await context
-            .Players.Where(x => x.LookupId == lookupId)
+            .Players.Where(x => x.Id == playerId)
             .Select(x => new UserCrbEmailPreferenceDto()
             {
                 SendPickupCrbEmail = x.SendPickupCrbEmail,
