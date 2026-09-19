@@ -11,7 +11,17 @@ public static class ResultOverrides
     public static void ThrowIfErrorNotHandled(this Result result)
     {
         if (result.IsFailed)
-            throw new NotImplementedException("A Result Error Was Not Handled");
+        {
+            var builder = new StringBuilder();
+
+            builder.AppendLine($"One or More Result Failures not handled.");
+            foreach (var failure in result.Errors)
+            {
+                builder.AppendLine($"Failure: {failure.Message}");
+            }
+            throw new NotImplementedException(builder.ToString());
+        }
+            
     }
 
     public static void ThrowIfErrorNotHandled<T>(this Result<T> result)
