@@ -530,7 +530,6 @@ internal sealed class EventCheckinRepository(
         return context
             .CharacterStorageInfos.Where(x => x.PlayerId == playerId)
             .OrderByDescending(x => x.Timestamp)
-            .Skip(1)
             .Select(x => x.OptedIn)
             .FirstOrDefaultAsync(cancellationToken);
     }

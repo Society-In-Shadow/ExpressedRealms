@@ -19,7 +19,7 @@ const { data, isPending } = useQuery(earlyCheckinQuery)
 
 const popups = confirmationPopups()
 
-const showBanner = computed(() => hasFlag.ShowPreCheckinFunctionality && !isPending.value && data.value.showBanner)
+const showBanner = computed(() => hasFlag.ShowPreCheckinFunctionality && !isPending.value && (data?.value?.showBanner ?? false))
 
 const now = DateTime.now()
 const formatted = computed(() => {
