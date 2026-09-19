@@ -321,12 +321,20 @@ internal sealed class EventCheckinRepository(
             .FirstAsync(cancellationToken);
     }
     
-    public async Task<Guid> GetPlayerIdFromCharacter(int characterId)
+    public async Task<Guid?> GetPlayerIdOrDefault(string lookupId)
+    {
+        return await context
+            .Players.Where(x => x.LookupId == lookupId)
+            .Select(x => (Guid?)x.Id)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+    
+    public async Task<Guid?> GetPlayerIdFromCharacter(int characterId)
     {
         return await context
             .Characters.Where(x => x.Id == characterId)
-            .Select(x => x.PlayerId)
-            .FirstAsync(cancellationToken);
+            .Select(x => (Guid?)x.PlayerId)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<bool> IsFirstTimePlayer(string lookupId)

@@ -59,7 +59,24 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         if (eventId is null)
             return Result.Fail("There are no active events to checkin into");
 
-        var playerId = await checkinRepository.GetPlayerId(model.LookupId);
+        Guid playerId;
+        if (model.LookupId is not null)
+        {
+            var retrievedPlayerId = await checkinRepository.GetPlayerIdOrDefault(model.LookupId);
+            if (retrievedPlayerId is null)
+                return ValidationHelper.AddSingleValidationFailure(nameof(model.LookupId), "Lookup Id does not exist");
+
+            playerId = retrievedPlayerId.Value;
+        }
+        else
+        {
+            var retrievedPlayerId = await checkinRepository.GetPlayerIdFromCharacter(model.CharacterId!.Value);
+            if (retrievedPlayerId is null)
+                return ValidationHelper.AddSingleValidationFailure(nameof(model.CharacterId),
+                    "Character Id does not exist");
+            playerId = retrievedPlayerId.Value;
+        }
+
         var checkin = await checkinRepository.GetCheckinAsync(eventId.Value, playerId);
 
         if (checkin is null)
@@ -121,6 +138,13 @@ internal sealed class ApproveStageAndSendMessageUseCase(
                 );                
             }
 
+            return Result.Ok();
+        }
+
+        if (requestedStage == CheckinStageEnum.AgeCheckApproval)
+        {
+            // First stage always gets automatically approved
+            await CompleteStage(model.StageId, checkin.Id);
             return Result.Ok();
         }
         

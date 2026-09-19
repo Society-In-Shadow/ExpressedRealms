@@ -3,5 +3,6 @@ namespace ExpressedRealms.Events.API.UseCases.EventCheckin.ApproveStageAndSendMe
 public class ApproveStageAndSendMessageModel
 {
     public int StageId { get; set; }
-    public required string LookupId { get; set; }
+    public string? LookupId { get; set; }
+    public int? CharacterId { get; set; }
 }

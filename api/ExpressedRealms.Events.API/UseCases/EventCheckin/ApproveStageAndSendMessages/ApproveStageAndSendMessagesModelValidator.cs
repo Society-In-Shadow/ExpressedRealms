@@ -12,11 +12,15 @@ internal sealed class ApproveStageAndSendMessageModelValidator
     {
         RuleFor(x => x.LookupId)
             .NotEmpty()
-            .WithMessage("Lookup Id is required.")
+            .WithMessage("Lookup Id is required if Character Id is empty.")
+            .When(x => x.CharacterId is null)
             .Length(8)
             .WithMessage("Lookup Id must be 8 characters long.")
-            .MustAsync(async (x, y) => await repository.CheckinIdExistsAsync(x))
-            .WithErrorCode("NotFound")
-            .WithMessage("Lookup Id does not exist.");
+            .When(x => x.CharacterId is null);
+
+        RuleFor(x => x.CharacterId)
+            .NotEmpty()
+            .WithMessage("Character Id is required if Lookup Id is empty.")
+            .When(x => x.LookupId is null);
     }
 }

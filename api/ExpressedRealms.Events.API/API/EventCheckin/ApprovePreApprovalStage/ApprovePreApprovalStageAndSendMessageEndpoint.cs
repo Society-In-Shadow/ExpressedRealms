@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
-using ExpressedRealms.Events.API.UseCases.EventCheckin.ApprovePreApprovalStageAndSendMessages;
+using ExpressedRealms.Events.API.UseCases.EventCheckin.ApproveStageAndSendMessages;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -17,7 +17,7 @@ public static class ApprovePreApprovalStageEndpoint
         int characterId,
         ClaimsPrincipal user,
         [FromBody] ApprovePreApprovalStageRequest request,
-        [FromServices] IApprovePreApprovalStageAndSendMessageUseCase useCase
+        [FromServices] IApproveStageAndSendMessageUseCase useCase
     )
     {
         List<int> crbCreationStages =

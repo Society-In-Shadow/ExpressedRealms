@@ -48,12 +48,9 @@ const { data: goCheckData, isLoading: goChecksLoading } = useQuery(() => ({
 const approvePrecheckinStage = approvePreCheckinStage()
 
 const reviewedCharacter = async () => {
-  if (earlyCheckinData.value.showBanner) {
-    approvePrecheckinStage.mutate({ characterId: Number.parseInt(route.params.id), stageId: CheckinStage.GoApproval })
-    await router.push({ name: 'adminCharacterList' })
-  }
-  else
-    await eventCheckinInfo.approveCharacterSheet()
+  await approvePrecheckinStage.mutateAsync({ characterId: Number.parseInt(route.params.id), stageId: CheckinStage.GoApproval })
+  // TODO: Determine source and redirect back to it
+  await router.push({ name: 'adminCharacterList' })
 }
 
 const showFactionInfo = computed(() => {
