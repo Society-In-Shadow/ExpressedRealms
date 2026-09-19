@@ -30,7 +30,7 @@ public static class GetEarlyCheckinInfoEndpoint
         return TypedResults.Ok(
             new GetEarlyCheckinInfoResponse()
             {
-                ShowBanner = true,
+                ShowBanner = results.Value.ShowBanner,
                 Event = results.Value.Event is null ? null : new EventInfo()
                 {
                     EventId = results.Value.Event.EventId,

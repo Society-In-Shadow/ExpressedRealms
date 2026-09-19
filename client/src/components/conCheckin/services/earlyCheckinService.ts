@@ -7,7 +7,8 @@ import toaster from '@/services/Toasters.ts'
 const earlyCheckinService = {
   getCheckinInfo: (): Promise<EarlyCheckinInfo> => axios.get<EarlyCheckinInfo>(`/events/checkin/earlyCheckin`)
     .then(async (response) => {
-      response.data.event.dueDate = DateTime.fromISO(`${response.data.event.startDate}`)
+      if (response.data.event)
+        response.data.event.dueDate = DateTime.fromISO(`${response.data.event.startDate}`)
       return response.data
     }),
   requestApproval: () => axios.post('/events/checkin/earlyCheckin/requestApproval')
