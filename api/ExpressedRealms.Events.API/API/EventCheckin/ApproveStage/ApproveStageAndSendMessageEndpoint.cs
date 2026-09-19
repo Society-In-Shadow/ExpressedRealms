@@ -22,7 +22,7 @@ public static class ApproveStageAndSendMessageEndpoint
     {
         List<int> crbCreationStages =
         [
-            CheckinStageEnum.CrbCreation.Value,
+            CheckinStageEnum.CrbPrinted.Value,
             CheckinStageEnum.CrbPickedUp.Value,
             CheckinStageEnum.CrbReadForPickup.Value,
         ];

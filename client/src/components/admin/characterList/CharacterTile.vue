@@ -58,11 +58,11 @@ onMounted(() => {
       },
     })
   }
-  if (props.character?.playerStageId == CheckinStage.PrintedCrb) {
+  if (props.character?.playerStageId == CheckinStage.CrbPrinted) {
     items.value.push({
       label: 'CRB Ready For Pickup',
       command: async ($event) => {
-        await approvePrecheckinStage.mutateAsync({ characterId: props.character.id, stageId: CheckinStage.CrbReadForPickup })
+        await approvePrecheckinStage.mutateAsync({ characterId: props.character.id, stageId: CheckinStage.CrbAssembled })
         await characterListInfo.fetchCharacters()
       },
     })

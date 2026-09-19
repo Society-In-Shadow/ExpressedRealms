@@ -23,9 +23,8 @@ internal sealed class ApproveStageAndSendMessageUseCase(
     [
         CheckinStageEnum.PlayerEarlyCheckin,
         CheckinStageEnum.GoApproval,
-        CheckinStageEnum.CrbCreation,
-        CheckinStageEnum.PrintedCrb,
-        CheckinStageEnum.CrbReadForPickup
+        CheckinStageEnum.CrbPrinted,
+        CheckinStageEnum.CrbAssembled
     ];
 
     public static readonly List<CheckinStageEnum> InitialCheckinSequence =
@@ -34,11 +33,9 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         CheckinStageEnum.EventQuestionsCheck,
         CheckinStageEnum.CharacterStorageQuestion,
         CheckinStageEnum.AssignedXpCheck,
-        CheckinStageEnum.ShqApproval,
-        CheckinStageEnum.GoApproval,
-        CheckinStageEnum.CrbCreation,
-        CheckinStageEnum.PrintedCrb,
-        CheckinStageEnum.CrbReadForPickup,
+        CheckinStageEnum.GoApproval, 
+        CheckinStageEnum.CrbPrinted,
+        CheckinStageEnum.CrbAssembled,
         CheckinStageEnum.CrbPickedUp,
         CheckinStageEnum.Day2Checkin,
         CheckinStageEnum.Day3Checkin
@@ -119,7 +116,6 @@ internal sealed class ApproveStageAndSendMessageUseCase(
 
             // Once GO Approves, it immediately goes into CRB Creation
             await CompleteStage(requestedStage, checkin.Id);
-            await CompleteStage(CheckinStageEnum.CrbCreation, checkin.Id);
 
             if (earlyCheckinBypass)
             {
@@ -155,7 +151,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         // Automatically approve the stage, as the only rules going forward add missing steps after this one
         await CompleteStage(model.StageId, checkin.Id);
         
-        if (model.StageId == CheckinStageEnum.CrbReadForPickup.Value)
+        if (model.StageId == CheckinStageEnum.CrbAssembled.Value)
         {
             await SendPickupCrbEmailIfNeeded(playerId);
         }

@@ -22,13 +22,13 @@ public sealed class CheckinStageEnum : SmartEnum<CheckinStageEnum, int>
         2,
         "GO has reviewed the character and approved it to good for play."
     );
-    public static readonly CheckinStageEnum CrbCreation = new(
-        "CRB Creation",
+    public static readonly CheckinStageEnum CrbPrinted = new(
+        "CRB Printed",
         3,
-        "SHQ has received that it needs to print and ready the CRB."
+        "The CRB has been printed, just needs assembly"
     );
     public static readonly CheckinStageEnum CrbReadForPickup = new(
-        "CRB Read For Pickup",
+        "CRB Read For Pickup (Depreciated)",
         4,
         "Player can now stop by SHQ  to pick up the CRB"
     );
@@ -67,10 +67,10 @@ public sealed class CheckinStageEnum : SmartEnum<CheckinStageEnum, int>
         "Player has been assigned XP"
     );
 
-    public static readonly CheckinStageEnum PrintedCrb = new(
-        "CRB has been printed",
+    public static readonly CheckinStageEnum CrbAssembled = new(
+        "CRB has been Assembled",
         11,
-        "CRB has printed at least once during this event"
+        "CRB is fully assembled, including power cards, strips and badge"
     );
 
     public static readonly CheckinStageEnum PlayerNeedsReapproval = new(

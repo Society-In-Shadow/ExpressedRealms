@@ -53,7 +53,8 @@ export const adminCharacterListStore
         return this.filteredCharacters.filter(x => x.playerStageId === 1)
       },
       getAwaitingCrbPrinting() {
-        return this.filteredCharacters.filter(x => x.playerStageId === 3)
+        const awaitingStageIds = [2, 3]
+        return this.filteredCharacters.filter(x => awaitingStageIds.includes(x.playerStageId))
       },
       getPrintedCrbs() {
         return this.filteredCharacters.filter(x => x.playerStageId === 11)

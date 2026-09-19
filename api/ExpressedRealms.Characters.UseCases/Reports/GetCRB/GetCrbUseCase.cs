@@ -298,10 +298,10 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                 return;
 
             var currentStage = await checkinRepository.GetCurrentStage(checkin.Id);
-            if (currentStage is not null && currentStage.Id == CheckinStageEnum.CrbCreation)
+            if (currentStage is not null && currentStage.Id == CheckinStageEnum.GoApproval)
             {
                 await sendMessageUseCase.ExecuteAsync(
-                    new() { LookupId = player.LookupId, StageId = CheckinStageEnum.PrintedCrb }
+                    new() { CharacterId = characterId, StageId = CheckinStageEnum.CrbPrinted }
                 );
                 
                 var proficiencies = await profRepository.GetBasicProficiencies(characterId);

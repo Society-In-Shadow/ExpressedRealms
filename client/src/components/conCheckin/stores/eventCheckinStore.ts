@@ -93,20 +93,20 @@ export const EventCheckinStore
             break
           case CheckinStage.AgeCheckApproval:
             // Age approved, They need to answer event questions next
-            this.activeStepperStep = '3'
+            this.activeStepperStep = '2'
             break
           case CheckinStage.EventQuestionsCheck:
             // Questions answered, They need the Stone Puller Next
-            this.activeStepperStep = '4'
+            this.activeStepperStep = '3'
             break
           case CheckinStage.CharacterStorageQuestion:
-            this.activeStepperStep = '5'
+            this.activeStepperStep = '4'
             break
           case CheckinStage.AssignedXpCheck:
             // Do nothing, this should have automatically
             // Been set SHQ Approval
             break
-          case CheckinStage.ShqApproval:
+          case CheckinStage.GoApproval:
           case CheckinStage.PlayerNeedsReapproval:
             // Stone Pulled, They need to get GO Approval next
             // Redirect them to the character sheet
@@ -116,28 +116,16 @@ export const EventCheckinStore
             }
             this.activeStepperStep = '6'
             break
-          case CheckinStage.GoApproval:
-            // Show need to print CRB
-
-            break
-          case CheckinStage.CrbCreation:
+          case CheckinStage.CrbPrinted:
             // show that CRB needs to be printed
-            this.activeStepperStep = '7'
-            break
-          case CheckinStage.PrintedCrb:
-            // show need to cut and strip CRB
             this.activeStepperStep = '8'
             break
-          case CheckinStage.CrbReadForPickup:
+          case CheckinStage.CrbAssembled:
             // Show need to verify user pickup
             this.activeStepperStep = '9'
             break
           case CheckinStage.CrbPickedUp:
-            // User Has picked up CRB and verified strip info
-            if (this.currentEventDay === 1)
-              this.activeStepperStep = '10' // Show Friday Finalized
-            else
-              this.activeStepperStep = '11' // Show Saturday approval
+            this.activeStepperStep = '10'
             break
           case CheckinStage.Day2Checkin:
             // User Has picked up CRB and verified strip info
@@ -164,7 +152,7 @@ export const EventCheckinStore
           optedIn: optedIn,
         })
         toaster.success('Character Storage Status Updated!')
-        this.activeStepperStep = '5'
+        await this.verifiedUserInfo()
       },
       async getVerifiedAge(): Promise<AgeInfo> {
         const response = await axios.get<AgeInfo>(`events/checkin/lookup/${this.lookupId}/ageInfo`)
