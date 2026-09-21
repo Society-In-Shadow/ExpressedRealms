@@ -2,15 +2,18 @@
 using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using ExpressedRealms.Events.API.API.EventCheckin.AddCheckinBonusXp;
 using ExpressedRealms.Events.API.API.EventCheckin.AnswerQuestion;
+using ExpressedRealms.Events.API.API.EventCheckin.ApprovePreApprovalStage;
 using ExpressedRealms.Events.API.API.EventCheckin.ApproveStage;
 using ExpressedRealms.Events.API.API.EventCheckin.ConfirmUserCheckinInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetAgeInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetBasicCheckDetails;
 using ExpressedRealms.Events.API.API.EventCheckin.GetBreakOfDawnInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetCheckinQuestions;
+using ExpressedRealms.Events.API.API.EventCheckin.GetEarlyCheckinInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetGoCheckinInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetStonePullInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetUserCheckinDetails;
+using ExpressedRealms.Events.API.API.EventCheckin.PlayerRequestsPreCheckin;
 using ExpressedRealms.Events.API.API.EventCheckin.UpdateAgeInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.UpdateCharacterStorage;
 using ExpressedRealms.Events.API.API.EventCheckin.UpdateCrbEmailNotification;
@@ -173,6 +176,19 @@ internal static class EventEndpoints
                 GetBreakOfDawnInfoEndpoint.ExecuteAsync
             )
             .RequirePermission(Permissions.Event.Checkin);
+
+        endpointGroup.MapGet("checkin/earlyCheckin", GetEarlyCheckinInfoEndpoint.ExecuteAsync);
+
+        endpointGroup.MapPost(
+            "checkin/earlyCheckin/requestApproval",
+            PlayerRequestedPreCheckinEndpoint.ExecuteAsync
+        );
+
+        // Permission handled within the endpoint - it's a bit dynamic
+        endpointGroup.MapPost(
+            "checkin/earlyCheckin/character/{characterId}/reviewed",
+            ApprovePreApprovalStageEndpoint.ExecuteAsync
+        );
 
         endpointGroup
             .MapPost(

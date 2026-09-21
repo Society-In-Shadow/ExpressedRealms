@@ -18,6 +18,7 @@ import DailyCheckin from '@/components/conCheckin/support/DailyCheckin.vue'
 import { characterGoFieldsDialog } from '@/components/admin/characterList/services/dialogs.ts'
 import CommandButton from '@/uiComponents/CommandButton.vue'
 import CharacterStorageQuestion from '@/components/conCheckin/support/CharacterStorageQuestion.vue'
+import { CheckinStage } from '@/components/conCheckin/types.ts'
 
 const eventCheckinInfo = EventCheckinStore()
 const userPermission = userPermissionStore()
@@ -28,6 +29,7 @@ const permissionCheck = userPermission.permissionCheck
 const updateGoFieldsDialog = characterGoFieldsDialog()
 
 onBeforeMount(async () => {
+  await eventCheckinInfo.resetGoPage()
   await eventCheckinInfo.getCheckinAvailable()
 
   if (!eventCheckinInfo.hasActiveEvent) {
@@ -179,40 +181,39 @@ const approveStage = async (stageId: number) => {
         </p>
       </StepPanel>
     </StepItem>
-    <StepItem value="7">
-      <Step>CRB Needs Printing</Step>
-      <StepPanel>
-        <h3>The CRB needs to be printed</h3>
-        <p>SHQ needs to print the CRB.</p>
-        <p>This will automatically update once it's been printed at least once</p>
-      </StepPanel>
-    </StepItem>
     <StepItem value="8">
-      <Step>CRB Needs Creation</Step>
+      <Step>CRB Printed</Step>
       <StepPanel>
-        <h3>CRB needs to be created</h3>
-        <p>CRB was printed, need to cut and strip it.  Once done, scan it and click the below button</p>
-        <Button
-          label="CRB Created and Ready for Pickup" icon-pos="right" class="mb-4" :disabled="!permissionCheck.Event.CrbHandling"
-          @click="approveStage(4)"
-        />
+        <h3>Awaiting to be Printed</h3>
+        <p>SHQ Needs to print off their character sheet before moving forward</p>
       </StepPanel>
     </StepItem>
     <StepItem value="9">
-      <Step>CRB Is Ready for Pickup</Step>
+      <Step>CRB Assembled</Step>
       <StepPanel>
-        <h3>Needs to be Verified by User</h3>
-        <p>User needs to check their CRB, and make sure it's good to go.  Once scanned, they can go play games</p>
+        <h3>CRB needs to be Assembled</h3>
+        <p>CRB was printed, need to cut and strip it.  Once done, scan it and click the below button</p>
         <Button
-          label="CRB Is Picked Up" icon-pos="right" class="mb-4" :disabled="!permissionCheck.Event.CrbHandling"
-          @click="approveStage(5)"
+          label="CRB Created and Ready for Pickup" icon-pos="right" class="mb-4" :disabled="!permissionCheck.Event.CrbHandling"
+          @click="approveStage(11)"
         />
       </StepPanel>
     </StepItem>
     <StepItem value="10">
-      <Step>Picked Up and Day One Finalized</Step>
+      <Step>Day 1 Finalized</Step>
       <StepPanel v-if="eventCheckinInfo.activeStepperStep == '10'">
-        <h3>Everything is Done for Day 1</h3>
+        <div v-if="eventCheckinInfo.currentEventDay == 2 || eventCheckinInfo.checkinStage.id == CheckinStage.CrbPickedUp">
+          <h3>Needs to be Verified by User</h3>
+          <p>User needs to check their CRB, and make sure it's good to go.  Once scanned, they can go play games</p>
+          <Button
+            label="CRB Is Picked Up" icon-pos="right" class="mb-4" :disabled="!permissionCheck.Event.CrbHandling"
+            @click="approveStage(5)"
+          />
+        </div>
+        <div v-else>
+          <h3>Player is Done</h3>
+          <p>Player has completed all steps for today.</p>
+        </div>
       </StepPanel>
     </StepItem>
     <StepItem value="11">

@@ -156,13 +156,80 @@ internal sealed class EventCheckinRepository(
     public async Task<int?> GetActiveEventId()
     {
         var eventId = await context
+            .EventScheduleItems.FromSql(
+                $@"
+        SELECT event_schedule_items.*
+        FROM public.event_schedule_items
+        join public.events on events.id = event_schedule_items.event_id
+        WHERE events.is_published = true
+        AND (NOW() AT TIME ZONE time_zone_id)::date = event_schedule_items.date and events.is_deleted = false and event_schedule_items.is_deleted = false
+        LIMIT 1
+    "
+            )
+            .Select(x => x.EventId)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        return eventId == 0 ? null : eventId;
+    }
+
+    public async Task<int?> GetExclusivePreCheckinEventId()
+    {
+        var eventId = await context
             .Events.FromSql(
                 $@"
-        SELECT *
-        FROM public.events
-        WHERE is_published = true
-        AND (NOW() AT TIME ZONE time_zone_id)::date BETWEEN start_date AND end_date and is_deleted = false
+        SELECT e.*
+        FROM public.events e
+        JOIN (
+            SELECT event_id, MIN(date) AS first_event_date
+            FROM public.event_schedule_items
+            WHERE is_deleted = false
+            GROUP BY event_id 
+        ) esi ON esi.event_id = e.id
+        WHERE e.is_published = true
+          AND e.is_deleted = false
+          AND (NOW() AT TIME ZONE e.time_zone_id)::date
+                      BETWEEN esi.first_event_date - 14
+          AND esi.first_event_date - 1
         LIMIT 1
+    "
+            )
+            .Select(x => x.Id)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        return eventId == 0 ? null : eventId;
+    }
+
+    public async Task<int?> GetInclusivePreCheckinEventId()
+    {
+        var eventId = await context
+            .Events.FromSql(
+                $@"
+SELECT e.*
+FROM public.events e
+JOIN (
+    SELECT
+        event_id,
+        MIN(date) AS first_event_date
+    FROM public.event_schedule_items
+    WHERE is_deleted = false
+    GROUP BY event_id
+) first_day
+    ON first_day.event_id = e.id
+WHERE e.is_published = true
+  AND e.is_deleted = false
+  AND (
+      (NOW() AT TIME ZONE e.time_zone_id)::date
+          BETWEEN first_day.first_event_date - 14
+              AND first_day.first_event_date - 1
+      OR EXISTS (
+          SELECT 1
+          FROM public.event_schedule_items esi
+          WHERE esi.event_id = e.id
+            AND esi.is_deleted = false
+            AND esi.date = (NOW() AT TIME ZONE e.time_zone_id)::date
+      )
+  )
+LIMIT 1
     "
             )
             .Select(x => x.Id)
@@ -176,11 +243,25 @@ internal sealed class EventCheckinRepository(
         return await context
             .Database.SqlQuery<int>(
                 $@"
-        SELECT (((NOW() AT TIME ZONE time_zone_id)::date - start_date + 1)::int) AS ""Value""
-        FROM public.events
-        WHERE is_published = true
-        AND (NOW() AT TIME ZONE time_zone_id)::date BETWEEN start_date AND end_date and is_deleted = false
-        LIMIT 1
+            SELECT (
+                (
+                    (NOW() AT TIME ZONE e.time_zone_id)::date
+                    - esi.first_event_date
+                    + 1
+                )::int
+            ) AS ""Value""
+            FROM public.events e
+            JOIN (
+                SELECT event_id, MIN(date) AS first_event_date
+                FROM public.event_schedule_items
+                WHERE is_deleted = false
+                GROUP BY event_id
+            ) esi ON esi.event_id = e.id
+            WHERE e.is_published = true
+              AND e.is_deleted = false
+              AND (NOW() AT TIME ZONE e.time_zone_id)::date
+                  BETWEEN esi.first_event_date AND e.end_date
+            LIMIT 1
     "
             )
             .FirstOrDefaultAsync(cancellationToken);
@@ -226,11 +307,11 @@ internal sealed class EventCheckinRepository(
     }
 
     public async Task<UserCrbEmailPreferenceDto> GetPlayerCrbEmailPreferenceWithPlayerNumber(
-        string lookupId
+        Guid playerId
     )
     {
         return await context
-            .Players.Where(x => x.LookupId == lookupId)
+            .Players.Where(x => x.Id == playerId)
             .Select(x => new UserCrbEmailPreferenceDto()
             {
                 SendPickupCrbEmail = x.SendPickupCrbEmail,
@@ -279,6 +360,22 @@ internal sealed class EventCheckinRepository(
             .Players.Where(x => x.LookupId == lookupId)
             .Select(x => x.Id)
             .FirstAsync(cancellationToken);
+    }
+
+    public async Task<Guid?> GetPlayerIdOrDefault(string lookupId)
+    {
+        return await context
+            .Players.Where(x => x.LookupId == lookupId)
+            .Select(x => (Guid?)x.Id)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<Guid?> GetPlayerIdFromCharacter(int characterId)
+    {
+        return await context
+            .Characters.Where(x => x.Id == characterId)
+            .Select(x => (Guid?)x.PlayerId)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<bool> IsFirstTimePlayer(string lookupId)
@@ -467,5 +564,55 @@ internal sealed class EventCheckinRepository(
                 Amount = x.Amount,
             })
             .ToListAsync(cancellationToken);
+    }
+
+    public Task<bool> PlayerHasCharacterStorage(Guid playerId)
+    {
+        return context
+            .CharacterStorageInfos.Where(x => x.PlayerId == playerId)
+            .OrderByDescending(x => x.Timestamp)
+            .Select(x => x.OptedIn)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<List<CheckinStageMapping>> GetActiveApprovedStages(int checkinId)
+    {
+        var activeList = new List<CheckinStageMapping>();
+        var approvedStages = await GetApprovedStages(checkinId);
+
+        var latestReapprovedStage = approvedStages
+            .Where(x => x.CheckinStageId == CheckinStageEnum.PlayerNeedsReapproval.Value)
+            .OrderByDescending(x => x.CreatedAt)
+            .FirstOrDefault();
+
+        if (latestReapprovedStage is not null)
+        {
+            // Effectively keep the initial approval stages, then keep the reapprove stage and anything after that
+            // Treat that list as the Canon List
+            var stagesThatCannotBeReapproved = new[]
+            {
+                CheckinStageEnum.AgeCheckApproval.Value,
+                CheckinStageEnum.EventQuestionsCheck.Value,
+                CheckinStageEnum.CharacterStorageQuestion.Value,
+                CheckinStageEnum.AssignedXpCheck.Value,
+                CheckinStageEnum.ShqApproval.Value,
+            };
+
+            activeList.AddRange(
+                approvedStages.Where(x => stagesThatCannotBeReapproved.Contains(x.CheckinStageId))
+            );
+            activeList.AddRange(
+                approvedStages
+                    .Where(x => x.CreatedAt >= latestReapprovedStage.CreatedAt)
+                    .OrderByDescending(x => x.CreatedAt)
+                    .ToList()
+            );
+        }
+        else
+        {
+            activeList.AddRange(approvedStages);
+        }
+
+        return activeList.ToList();
     }
 }

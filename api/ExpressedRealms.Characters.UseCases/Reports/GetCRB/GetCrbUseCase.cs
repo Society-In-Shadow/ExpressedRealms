@@ -286,20 +286,25 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
 
         private async Task ProcessCheckinAndUpdateStats(int characterId)
         {
-            var eventId = await checkinRepository.GetActiveEventId();
-            if (eventId is null)
+            var activeEventId = await checkinRepository.GetActiveEventId();
+            var eventId = await checkinRepository.GetExclusivePreCheckinEventId();
+
+            if (eventId is null && activeEventId is null)
                 return;
 
             var player = await playerRepository.GetPlayerByCharacterId(characterId);
-            var checkin = await checkinRepository.GetCheckinAsync(eventId.Value, player.Id);
+            var checkin = await checkinRepository.GetCheckinAsync(
+                activeEventId ?? eventId!.Value,
+                player.Id
+            );
             if (checkin is null)
                 return;
 
             var currentStage = await checkinRepository.GetCurrentStage(checkin.Id);
-            if (currentStage is not null && currentStage.Id == CheckinStageEnum.CrbCreation)
+            if (currentStage is not null && currentStage.Id == CheckinStageEnum.GoApproval)
             {
                 await sendMessageUseCase.ExecuteAsync(
-                    new() { LookupId = player.LookupId, StageId = CheckinStageEnum.PrintedCrb }
+                    new() { CharacterId = characterId, StageId = CheckinStageEnum.CrbPrinted }
                 );
 
                 var proficiencies = await profRepository.GetBasicProficiencies(characterId);

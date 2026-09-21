@@ -1563,15 +1563,9 @@ namespace ExpressedRealms.DB.Migrations
                         },
                         new
                         {
-                            Id = 3,
-                            Description = "SHQ has received that it needs to print and ready the CRB.",
-                            Name = "CRB Creation"
-                        },
-                        new
-                        {
                             Id = 11,
-                            Description = "CRB has printed at least once during this event",
-                            Name = "CRB has been printed"
+                            Description = "CRB is fully assembled, including power cards, strips and badge",
+                            Name = "CRB has been Assembled"
                         },
                         new
                         {
@@ -1581,9 +1575,15 @@ namespace ExpressedRealms.DB.Migrations
                         },
                         new
                         {
+                            Id = 3,
+                            Description = "The CRB has been printed, just needs assembly",
+                            Name = "CRB Printed"
+                        },
+                        new
+                        {
                             Id = 4,
                             Description = "Player can now stop by SHQ  to pick up the CRB",
-                            Name = "CRB Read For Pickup"
+                            Name = "CRB Read For Pickup (Depreciated)"
                         },
                         new
                         {
@@ -1608,6 +1608,12 @@ namespace ExpressedRealms.DB.Migrations
                             Id = 2,
                             Description = "GO has reviewed the character and approved it to good for play.",
                             Name = "GO Approval"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Description = "This is the player opting into early checkin for a convention, they will be recorded as responsible for this step.",
+                            Name = "Player Early Checkin"
                         },
                         new
                         {
@@ -1826,6 +1832,9 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_event_schedule_items");
+
+                    b.HasIndex("EventId")
+                        .HasDatabaseName("ix_event_schedule_items_event_id");
 
                     b.ToTable("event_schedule_items", (string)null);
                 });
@@ -5677,6 +5686,18 @@ namespace ExpressedRealms.DB.Migrations
                     b.Navigation("EventScheduleItem");
                 });
 
+            modelBuilder.Entity("ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup.EventScheduleItem", b =>
+                {
+                    b.HasOne("ExpressedRealms.DB.Models.Events.EventSetup.Event", "Event")
+                        .WithMany("EventScheduleItems")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
+                        .HasConstraintName("fk_event_schedule_items_events_event_id");
+
+                    b.Navigation("Event");
+                });
+
             modelBuilder.Entity("ExpressedRealms.DB.Models.Events.EventSetup.Audit.EventAuditTrail", b =>
                 {
                     b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.UserSetup.User", "ActorUser")
@@ -6887,6 +6908,8 @@ namespace ExpressedRealms.DB.Migrations
                     b.Navigation("EventQuestions");
 
                     b.Navigation("EventScheduleAuditTrails");
+
+                    b.Navigation("EventScheduleItems");
                 });
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Events.Questions.EventQuestionSetup.EventQuestion", b =>

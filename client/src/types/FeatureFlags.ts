@@ -5,6 +5,7 @@ export const FeatureFlags = {
   ShowArchetypeSelection: 'show-archetype-selection',
   ShowFactionDropdown: 'show-faction-dropdown',
   ShowMarketingContactUsPage: 'show-marketing-contact-us',
+  ShowPreCheckinFunctionality: 'show-pre-checkin',
   ShowFactions: 'show-factions',
   TestReleaseFlag: 'test-feature-flag',
 } as const

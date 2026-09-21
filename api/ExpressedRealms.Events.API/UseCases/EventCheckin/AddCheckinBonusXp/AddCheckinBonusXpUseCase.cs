@@ -37,30 +37,30 @@ internal sealed class AddCheckinBonusXpUseCase(
             return Result.Fail("There are no active events to assign xp to");
 
         // Need to add a check to make sure to only add one of these three types to the event
-        if (await checkinRepository.HasPreAssignedXpTypes(eventId.Value, playerId))
-            return Result.Fail("Player already has a preassigned xp type");
+        if (!await checkinRepository.HasPreAssignedXpTypes(eventId.Value, playerId))
+        {
+            List<int> fullXpTypes =
+            [
+                AssignedXpTypeEnum.FirstTimePlayerXp,
+                AssignedXpTypeEnum.BroughtNewPlayerXp,
+                AssignedXpTypeEnum.BoughtInitialCharacterStorage,
+            ];
+            if (fullXpTypes.Contains(model.AssignedXpTypeId))
+                model.Amount = 5;
 
-        List<int> fullXpTypes =
-        [
-            AssignedXpTypeEnum.FirstTimePlayerXp,
-            AssignedXpTypeEnum.BroughtNewPlayerXp,
-            AssignedXpTypeEnum.BoughtInitialCharacterStorage,
-        ];
-        if (fullXpTypes.Contains(model.AssignedXpTypeId))
-            model.Amount = 5;
-
-        await checkinRepository.AddAssignedXpAsync(
-            new AssignedXpMapping()
-            {
-                AssignedByUserId = userContext.CurrentUserId(),
-                EventId = eventId.Value,
-                AssignedXpTypeId = model.AssignedXpTypeId,
-                CharacterId = primaryCharacter?.CharacterId,
-                PlayerId = playerId,
-                Amount = model.Amount,
-                Timestamp = timeProvider.GetUtcNow(),
-            }
-        );
+            await checkinRepository.AddAssignedXpAsync(
+                new AssignedXpMapping()
+                {
+                    AssignedByUserId = userContext.CurrentUserId(),
+                    EventId = eventId.Value,
+                    AssignedXpTypeId = model.AssignedXpTypeId,
+                    CharacterId = primaryCharacter?.CharacterId,
+                    PlayerId = playerId,
+                    Amount = model.Amount,
+                    Timestamp = timeProvider.GetUtcNow(),
+                }
+            );
+        }
 
         await approveStageAndSendMessageUseCase.ExecuteAsync(
             new ApproveStageAndSendMessageModel()

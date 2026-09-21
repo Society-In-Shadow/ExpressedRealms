@@ -1,4 +1,3 @@
-using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageMappingSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.Email.EmailClientAdapter;
@@ -20,6 +19,30 @@ internal sealed class ApproveStageAndSendMessageUseCase(
     CancellationToken cancellationToken
 ) : IApproveStageAndSendMessageUseCase
 {
+    public static readonly List<CheckinStageEnum> PreCheckinSequence =
+    [
+        CheckinStageEnum.PlayerEarlyCheckin,
+        CheckinStageEnum.GoApproval,
+        CheckinStageEnum.CrbPrinted,
+        CheckinStageEnum.CrbAssembled,
+        CheckinStageEnum.CrbPickedUp,
+    ];
+
+    public static readonly List<CheckinStageEnum> InitialCheckinSequence =
+    [
+        CheckinStageEnum.AgeCheckApproval,
+        CheckinStageEnum.EventQuestionsCheck,
+        CheckinStageEnum.CharacterStorageQuestion,
+        CheckinStageEnum.AssignedXpCheck,
+        CheckinStageEnum.GoApproval,
+        CheckinStageEnum.CrbPrinted,
+        CheckinStageEnum.CrbAssembled,
+        CheckinStageEnum.CrbPickedUp,
+        CheckinStageEnum.Day2Checkin,
+        CheckinStageEnum.Day3Checkin,
+        CheckinStageEnum.FinalStage,
+    ];
+
     public async Task<Result> ExecuteAsync(ApproveStageAndSendMessageModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
@@ -31,239 +54,196 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var eventId = await checkinRepository.GetActiveEventId();
+        var eventId = await checkinRepository.GetInclusivePreCheckinEventId();
         if (eventId is null)
-            return Result.Fail("There are no active events to assign xp to");
+            return Result.Fail("There are no active events to checkin into");
 
-        var playerId = await checkinRepository.GetPlayerId(model.LookupId);
+        Guid playerId;
+        if (model.LookupId is not null)
+        {
+            var retrievedPlayerId = await checkinRepository.GetPlayerIdOrDefault(model.LookupId);
+            if (retrievedPlayerId is null)
+                return ValidationHelper.AddSingleValidationFailure(
+                    nameof(model.LookupId),
+                    "Lookup Id does not exist"
+                );
+
+            playerId = retrievedPlayerId.Value;
+        }
+        else
+        {
+            var retrievedPlayerId = await checkinRepository.GetPlayerIdFromCharacter(
+                model.CharacterId!.Value
+            );
+            if (retrievedPlayerId is null)
+                return ValidationHelper.AddSingleValidationFailure(
+                    nameof(model.CharacterId),
+                    "Character Id does not exist"
+                );
+            playerId = retrievedPlayerId.Value;
+        }
+
         var checkin = await checkinRepository.GetCheckinAsync(eventId.Value, playerId);
 
         if (checkin is null)
             return Result.Fail("Player has not checked in yet");
 
-        var stageRuleValidation = await StageRuleValidation(model, checkin);
-        if (stageRuleValidation.IsFailed)
-            return Result.Fail(stageRuleValidation.Errors);
+        var requestedStage = CheckinStageEnum.FromValue(model.StageId);
+        var sequenceData = await GetSequenceData(checkin.Id, requestedStage);
 
-        await checkinRepository.CompleteStage(
-            new CheckinStageMapping()
+        var hasBeenCompleted = sequenceData.CompletedStages.Contains(requestedStage);
+        if (hasBeenCompleted)
+            return Result.Fail("Stage has been completed already");
+
+        var inPreCheckinPeriod = await checkinRepository.GetExclusivePreCheckinEventId();
+        if (inPreCheckinPeriod.HasValue && !PreCheckinSequence.Contains(requestedStage))
+        {
+            return Result.Fail(
+                "Precheckin Period doesn't allow this type of stage to be completed."
+            );
+        }
+
+        if (requestedStage == CheckinStageEnum.PlayerEarlyCheckin)
+        {
+            // Check to make sure they have early checkin priveleges
+            var hasEarlyPermission = false;
+            if (hasEarlyPermission)
             {
-                CreatedAt = timeProvider.GetUtcNow(),
-                ApproverUserId = userContext.CurrentUserId(),
-                CheckinStageId = model.StageId,
-                CheckinId = checkin.Id,
+                await CompleteStage(CheckinStageEnum.PlayerEarlyCheckin, checkin.Id);
+                // Short Circuit, this is all that needs to happen with this stage
+                return Result.Ok();
             }
-        );
 
-        if (model.StageId == CheckinStageEnum.GoApproval.Value)
+            return Result.Fail("The user does not have Early Checkin Privileges");
+        }
+
+        var earlyCheckinBypass = sequenceData.CompletedStages.Contains(
+            CheckinStageEnum.PlayerEarlyCheckin
+        );
+        if (
+            requestedStage == CheckinStageEnum.GoApproval
+            && (sequenceData.PreviousStageComplete || earlyCheckinBypass)
+        )
         {
             // Create an archived copy of the primary character
             // This allows us to do diffs later
             await checkinRepository.CreatePrimaryCharacterArchiveAsync(playerId);
 
             // Once GO Approves, it immediately goes into CRB Creation
-            await checkinRepository.CompleteStage(
-                new CheckinStageMapping()
-                {
-                    CreatedAt = timeProvider.GetUtcNow(),
-                    ApproverUserId = userContext.CurrentUserId(),
-                    CheckinStageId = CheckinStageEnum.CrbCreation.Value,
-                    CheckinId = checkin.Id,
-                }
-            );
+            await CompleteStage(requestedStage, checkin.Id);
+
+            if (earlyCheckinBypass)
+            {
+                var seekingCrbMessage = $"A GO has Approved a Character for Print Out";
+                await discordService.SendMessageToChannelAsync(
+                    DiscordChannel.PreCheckinLoadingBay,
+                    seekingCrbMessage
+                );
+            }
+            else
+            {
+                var seekingCrbMessage = $"A CRB was approved and put into the print queue";
+                await discordService.SendMessageToChannelAsync(
+                    DiscordChannel.PlayersSeekingCrbs,
+                    seekingCrbMessage
+                );
+            }
+
+            return Result.Ok();
         }
 
-        if (model.StageId == CheckinStageEnum.AssignedXpCheck.Value)
+        if (requestedStage == CheckinStageEnum.AgeCheckApproval)
         {
-            // Once applied, it goes into GO Check stage
-            await checkinRepository.CompleteStage(
-                new CheckinStageMapping()
-                {
-                    CreatedAt = timeProvider.GetUtcNow(),
-                    ApproverUserId = userContext.CurrentUserId(),
-                    CheckinStageId = CheckinStageEnum.ShqApproval.Value,
-                    CheckinId = checkin.Id,
-                }
-            );
+            // First stage always gets automatically approved
+            await CompleteStage(model.StageId, checkin.Id);
+            return Result.Ok();
+        }
+
+        // Default rule, previous Stage needs to have existed before approving this one
+        if (!sequenceData.PreviousStageComplete)
+            return Result.Fail("Previous stage has not been completed");
+
+        // Automatically approve the stage, as the only rules going forward add missing steps after this one
+        await CompleteStage(model.StageId, checkin.Id);
+
+        if (model.StageId == CheckinStageEnum.CrbAssembled.Value)
+        {
+            await SendPickupCrbEmailIfNeeded(playerId);
         }
 
         var currentDay = await checkinRepository.GetCurrentEventDay();
         if (model.StageId == CheckinStageEnum.CrbPickedUp.Value && currentDay >= 2)
         {
             // Automatically go to day 2
-            await checkinRepository.CompleteStage(
-                new CheckinStageMapping()
-                {
-                    CreatedAt = timeProvider.GetUtcNow(),
-                    ApproverUserId = userContext.CurrentUserId(),
-                    CheckinStageId = CheckinStageEnum.Day2Checkin.Value,
-                    CheckinId = checkin.Id,
-                }
-            );
+            await CompleteStage(requestedStage, checkin.Id);
+            await CompleteStage(CheckinStageEnum.Day2Checkin, checkin.Id);
         }
 
         if (model.StageId == CheckinStageEnum.CrbPickedUp.Value && currentDay >= 3)
         {
-            // Automatically go to day 3
-            await checkinRepository.CompleteStage(
-                new CheckinStageMapping()
-                {
-                    CreatedAt = timeProvider.GetUtcNow(),
-                    ApproverUserId = userContext.CurrentUserId(),
-                    CheckinStageId = CheckinStageEnum.Day3Checkin.Value,
-                    CheckinId = checkin.Id,
-                }
-            );
+            await CompleteStage(requestedStage, checkin.Id);
+            await CompleteStage(CheckinStageEnum.Day2Checkin, checkin.Id);
+            await CompleteStage(CheckinStageEnum.Day3Checkin, checkin.Id);
         }
-
-        await SendMessages(model);
 
         return Result.Ok();
     }
 
-    private async Task<Result<bool>> StageRuleValidation(
-        ApproveStageAndSendMessageModel model,
-        Checkin checkin
+    private async Task CompleteStage(int stageId, int checkinId)
+    {
+        await checkinRepository.CompleteStage(
+            new CheckinStageMapping()
+            {
+                CreatedAt = timeProvider.GetUtcNow(),
+                ApproverUserId = userContext.CurrentUserId(),
+                CheckinStageId = stageId,
+                CheckinId = checkinId,
+            }
+        );
+    }
+
+    private sealed record SequenceData(
+        List<CheckinStageEnum> CompletedStages,
+        bool PreviousStageComplete
+    );
+
+    private async Task<SequenceData> GetSequenceData(
+        int checkinId,
+        CheckinStageEnum currentTargetStage
     )
     {
-        List<CheckinStageMapping> activeList = [];
+        // Filters stages, makes sure that stages between initial checkin and anything before reapproval gets removed
+        var activeList = await checkinRepository.GetActiveApprovedStages(checkinId);
 
-        await GetActiveApprovedStages(checkin, activeList);
-
-        var hasBeenPickedUp = activeList.Any(x =>
-            x.CheckinStageId == CheckinStageEnum.CrbPickedUp.Value
-        );
-        if (model.StageId == CheckinStageEnum.PlayerNeedsReapproval.Value && !hasBeenPickedUp)
-        {
-            return Result.Fail("Player needs to pick up their CRB before they can re-approve");
-        }
-
-        activeList = activeList
-            .Where(x => x.CheckinStageId != CheckinStageEnum.PlayerNeedsReapproval.Value)
+        var completedStages = activeList
+            .Select(x => CheckinStageEnum.FromValue(x.CheckinStageId))
             .ToList();
 
-        if (activeList.Any(x => x.CheckinStageId == model.StageId))
-        {
-            return Result.Fail("Stage has already been approved");
-        }
+        if (completedStages.Count == 0)
+            return new SequenceData(completedStages, false);
 
-        var currentStage =
-            activeList.Count > 0 ? activeList.MaxBy(x => x.CreatedAt)!.CheckinStageId : 0;
-        var stage = CheckinStageEnum.FromValue(model.StageId);
+        var requestedStageIndex = InitialCheckinSequence.IndexOf(currentTargetStage);
 
-        // ---- Rule 0: If first stage, skip the rest of the rules
-        if (stage != CheckinStageEnum.AgeCheckApproval)
-        {
-            var currentStageEnum = CheckinStageEnum.FromValue(currentStage);
-
-            // ---- Rule 1: The following stages are sequential and must go in order ----
-            var initialCheckinSequence = new List<CheckinStageEnum>()
-            {
-                CheckinStageEnum.AgeCheckApproval,
-                CheckinStageEnum.EventQuestionsCheck,
-                CheckinStageEnum.CharacterStorageQuestion,
-                CheckinStageEnum.AssignedXpCheck,
-                CheckinStageEnum.ShqApproval,
-                CheckinStageEnum.GoApproval,
-                CheckinStageEnum.CrbCreation,
-                CheckinStageEnum.PrintedCrb,
-                CheckinStageEnum.CrbReadForPickup,
-                CheckinStageEnum.CrbPickedUp,
-            };
-
-            var requestedStageIndex = initialCheckinSequence.IndexOf(stage);
-
-            if (requestedStageIndex >= 0)
-            {
-                var currentStageIndex = initialCheckinSequence.IndexOf(currentStageEnum);
-
-                if (requestedStageIndex != currentStageIndex + 1)
-                {
-                    return Result.Fail("Stage is not next in sequence.");
-                }
-            }
-
-            // ---- Rule 2: Stage 10 & 11 locked until 1–5 complete ----
-            var dayCheckins = new[] { CheckinStageEnum.Day2Checkin, CheckinStageEnum.Day3Checkin };
-            if (dayCheckins.Contains(stage))
-            {
-                var completedStages = activeList
-                    .Select(x => CheckinStageEnum.FromValue(x.CheckinStageId))
-                    .ToList();
-
-                bool initialCheckinComplete = initialCheckinSequence.All(completedStages.Contains);
-
-                if (!initialCheckinComplete)
-                {
-                    return Result.Fail("CRB needs to be picked up before day check-ins.");
-                }
-            }
-        }
-
-        return false;
-    }
-
-    private async Task GetActiveApprovedStages(
-        Checkin checkin,
-        List<CheckinStageMapping> activeList
-    )
-    {
-        var approvedStages = await checkinRepository.GetApprovedStages(checkin.Id);
-
-        var latestReapprovedStage = approvedStages
-            .Where(x => x.CheckinStageId == CheckinStageEnum.PlayerNeedsReapproval.Value)
-            .OrderByDescending(x => x.CreatedAt)
+        var previousStage = InitialCheckinSequence
+            .Where((x, y) => y == requestedStageIndex - 1)
             .FirstOrDefault();
 
-        if (latestReapprovedStage is not null)
-        {
-            var stagesThatCannotBeReapproved = new[]
-            {
-                CheckinStageEnum.AgeCheckApproval.Value,
-                CheckinStageEnum.EventQuestionsCheck.Value,
-                CheckinStageEnum.CharacterStorageQuestion.Value,
-                CheckinStageEnum.AssignedXpCheck.Value,
-                CheckinStageEnum.ShqApproval.Value,
-            };
-
-            activeList.AddRange(
-                approvedStages.Where(x => stagesThatCannotBeReapproved.Contains(x.CheckinStageId))
-            );
-            activeList.AddRange(
-                approvedStages
-                    .Where(x => x.CreatedAt >= latestReapprovedStage.CreatedAt)
-                    .OrderByDescending(x => x.CreatedAt)
-                    .ToList()
-            );
-        }
-        else
-        {
-            activeList.AddRange(approvedStages);
-        }
+        var previousStepCompleted =
+            previousStage is not null && completedStages.Contains(previousStage);
+        return new SequenceData(completedStages, previousStepCompleted);
     }
 
-    private async Task SendMessages(ApproveStageAndSendMessageModel model)
+    private async Task SendPickupCrbEmailIfNeeded(Guid playerId)
     {
-        if (model.StageId == CheckinStageEnum.GoApproval.Value)
+        var emailPreferenceInfo =
+            await checkinRepository.GetPlayerCrbEmailPreferenceWithPlayerNumber(playerId);
+        if (emailPreferenceInfo.SendPickupCrbEmail)
         {
-            var seekingCrbMessage = $"A CRB was approved and put into the print queue";
-            await discordService.SendMessageToChannelAsync(
-                DiscordChannel.PlayersSeekingCrbs,
-                seekingCrbMessage
-            );
-        }
-
-        if (model.StageId == CheckinStageEnum.CrbReadForPickup.Value)
-        {
-            var emailPreferenceInfo =
-                await checkinRepository.GetPlayerCrbEmailPreferenceWithPlayerNumber(model.LookupId);
-            if (emailPreferenceInfo.SendPickupCrbEmail)
-            {
-                await emailSender.SendEmailAsync(
-                    new EmailData(
-                        emailPreferenceInfo.UserEmailAddress,
-                        "CRB is Ready for Pickup!",
-                        @"Hello!
+            await emailSender.SendEmailAsync(
+                new EmailData(
+                    emailPreferenceInfo.UserEmailAddress,
+                    "CRB is Ready for Pickup!",
+                    @"Hello!
 
 Your CRB is ready for pickup!  Feel free to stop by SHQ once you are ready to pick it up.
 
@@ -271,18 +251,17 @@ Thanks,
 Order of Archivists
 Society in Shadows
 ",
-                        $"""
-                        <p>Hello!</p>
+                    $"""
+                    <p>Hello!</p>
 
-                        <p>Your CRB is ready for pickup!  Feel free to stop by SHQ once you are ready to pick it up.</p>
+                    <p>Your CRB is ready for pickup!  Feel free to stop by SHQ once you are ready to pick it up.</p>
 
-                        <p>Thanks,</p>
-                        <p>Order of Archivists</p>
-                        <p>Society in Shadows</p>
-                        """
-                    )
-                );
-            }
+                    <p>Thanks,</p>
+                    <p>Order of Archivists</p>
+                    <p>Society in Shadows</p>
+                    """
+                )
+            );
         }
     }
 }

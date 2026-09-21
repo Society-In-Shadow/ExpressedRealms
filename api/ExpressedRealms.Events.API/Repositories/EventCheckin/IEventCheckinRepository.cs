@@ -40,7 +40,7 @@ public interface IEventCheckinRepository : IGenericRepository
     Task<Guid> GetCurrentPlayerId();
     Task<Event?> GetActiveEventInfoOrDefaultAsync();
     Task<string> GetCurrentPlayerName();
-    Task<UserCrbEmailPreferenceDto> GetPlayerCrbEmailPreferenceWithPlayerNumber(string lookupId);
+    Task<UserCrbEmailPreferenceDto> GetPlayerCrbEmailPreferenceWithPlayerNumber(Guid playerId);
     Task<Player> GetPlayerAsync(string lookupId);
     Task<DateOnly> GetActiveEventStartDate();
     Task<bool> GetStageStatus(int checkinId, CheckinStageEnum stageId);
@@ -54,4 +54,10 @@ public interface IEventCheckinRepository : IGenericRepository
     Task<CharacterStorageInfo?> GetCharacterStorageInfo(Guid playerId, int eventId);
     Task<int> AddCharacterStorageInfo(CharacterStorageInfo characterStorageInfo);
     Task<List<CharacterStorageOptin>> GetCharacterStorageUsersForEvent(int activeEventId);
+    Task<int?> GetExclusivePreCheckinEventId();
+    Task<Guid?> GetPlayerIdFromCharacter(int characterId);
+    Task<bool> PlayerHasCharacterStorage(Guid playerId);
+    Task<List<CheckinStageMapping>> GetActiveApprovedStages(int checkinId);
+    Task<int?> GetInclusivePreCheckinEventId();
+    Task<Guid?> GetPlayerIdOrDefault(string lookupId);
 }

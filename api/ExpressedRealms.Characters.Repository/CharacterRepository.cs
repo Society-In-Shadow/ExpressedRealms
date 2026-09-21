@@ -9,6 +9,7 @@ using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Characters;
 using ExpressedRealms.DB.Models.Expressions.ExpressionPublishStatusSetup;
 using ExpressedRealms.DB.Models.Statistics.CharacterStatMappings;
+using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.Expressions.Repository.CharacterFactions;
 using ExpressedRealms.Repositories.Shared;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
@@ -22,6 +23,7 @@ namespace ExpressedRealms.Characters.Repository;
 
 internal sealed class CharacterRepository(
     ExpressedRealmsDbContext context,
+    IEventCheckinRepository eventCheckinRepository,
     IUserContext userContext,
     AddCharacterDtoValidator addValidator,
     CancellationToken cancellationToken,
@@ -80,7 +82,7 @@ internal sealed class CharacterRepository(
         [
             ExpressionPublishStatusEnum.Published,
             ExpressionPublishStatusEnum.PlayTesting,
-            ExpressionPublishStatusEnum.Legacy
+            ExpressionPublishStatusEnum.Legacy,
         ];
         if (userContext.CurrentUserHasPermission(Permissions.Expression.SeeBetaExpressions))
         {
@@ -98,7 +100,7 @@ internal sealed class CharacterRepository(
         [
             ExpressionPublishStatusEnum.Published,
             ExpressionPublishStatusEnum.PlayTesting,
-            ExpressionPublishStatusEnum.Legacy
+            ExpressionPublishStatusEnum.Legacy,
         ];
         if (userContext.CurrentUserHasPermission(Permissions.Expression.SeeBetaExpressions))
         {
@@ -128,8 +130,9 @@ internal sealed class CharacterRepository(
 
     public async Task<List<PrimaryCharacterListDto>> GetPrimaryCharactersAsync()
     {
-        var activeEventId = await GetActiveEventId();
+        var activeEventId = await eventCheckinRepository.GetInclusivePreCheckinEventId();
 
+        // TODO: This is wrong, above is needed to make sure we pull in data for precheckin
         var maxStagePerPlayer = await context
             .CheckinStageMappings.Where(x => x.Checkin.EventId == activeEventId)
             .GroupBy(x => x.Checkin.PlayerId)
@@ -171,19 +174,6 @@ internal sealed class CharacterRepository(
         }
 
         return players;
-    }
-
-    private async Task<int?> GetActiveEventId()
-    {
-        var now = DateOnly.FromDateTime(DateTime.UtcNow);
-
-        var eventId = await context
-            .Events.AsNoTracking()
-            .Where(x => x.IsPublished && x.StartDate <= now && x.EndDate >= now)
-            .Select(x => x.Id)
-            .FirstOrDefaultAsync(cancellationToken);
-
-        return eventId == 0 ? null : eventId;
     }
 
     public async Task<CharacterInfo> GetCharacterInfoForCRB(int characterId)
@@ -241,7 +231,8 @@ internal sealed class CharacterRepository(
                 IsRetired = x.IsRetired,
                 IsArchetypeCharacter = x.Player.IsArchetypeAccount,
                 ExpressionSubTypeId = x.Expression.ExpressionSubTypeId,
-                IsLegacyExpression = x.Expression.PublishStatusId == ExpressionPublishStatusEnum.Legacy
+                IsLegacyExpression =
+                    x.Expression.PublishStatusId == ExpressionPublishStatusEnum.Legacy,
             })
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -276,7 +267,7 @@ internal sealed class CharacterRepository(
             })
             .FirstAsync(cancellationToken);
     }
-    
+
     public async Task<CharacterGoInformationProjection?> GetCharacterGoInformation(int id)
     {
         var query = await context.Characters.AsNoTracking().WithUserAccessAsync(userContext, id);
@@ -286,7 +277,8 @@ internal sealed class CharacterRepository(
             {
                 Id = x.Id,
                 IsInCharacterCreation = x.IsInCharacterCreation,
-                ExpressionIsLegacy = x.Expression.PublishStatusId == ExpressionPublishStatusEnum.Legacy
+                ExpressionIsLegacy =
+                    x.Expression.PublishStatusId == ExpressionPublishStatusEnum.Legacy,
             })
             .FirstAsync(cancellationToken);
     }
@@ -502,14 +494,15 @@ internal sealed class CharacterRepository(
 
     public async Task<bool> CanUpdatePrimaryCharacterStatus(int id)
     {
-        List<int> invalidPublishTypes = [ExpressionPublishStatusEnum.Legacy.Value, ExpressionPublishStatusEnum.PlayTesting.Value];
-        var character = await context.Characters.Where(x => x.Id == id
-            && x.Player.UserId == userContext.CurrentUserId()
-        ).Select(x => new
-        {
-            x.IsPrimaryCharacter,
-            x.Expression.PublishStatusId
-        }).FirstOrDefaultAsync();
+        List<int> invalidPublishTypes =
+        [
+            ExpressionPublishStatusEnum.Legacy.Value,
+            ExpressionPublishStatusEnum.PlayTesting.Value,
+        ];
+        var character = await context
+            .Characters.Where(x => x.Id == id && x.Player.UserId == userContext.CurrentUserId())
+            .Select(x => new { x.IsPrimaryCharacter, x.Expression.PublishStatusId })
+            .FirstOrDefaultAsync();
 
         if (character is null)
             return false;
@@ -519,6 +512,5 @@ internal sealed class CharacterRepository(
             return true;
 
         return !invalidPublishTypes.Contains(character.PublishStatusId);
-
     }
 }

@@ -1,5 +1,6 @@
 <template>
-  <Toast position="top-center" />
+  <Toast position="top-center" group="desktop" />
+  <Toast position="bottom-center" group="mobile" />
   <ConfirmDialog group="dialog" />
   <ConfirmPopup group="popup" />
   <DynamicDialog />
