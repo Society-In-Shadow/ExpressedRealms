@@ -34,15 +34,13 @@ const testRouter = createRouter({
 // Add plugins globally
 config.global.plugins = [PrimeVue, testRouter, pinia]
 
-beforeAll(() => {
-  window.matchMedia = vi.fn().mockImplementation(query => ({
-    matches: false, // Default mock value (can be adjusted per test)
-    media: query,
-    onchange: null,
-    addListener: vi.fn(), // Legacy method
-    removeListener: vi.fn(), // Legacy method
-    addEventListener: vi.fn(), // Modern method
-    removeEventListener: vi.fn(), // Modern method
-    dispatchEvent: vi.fn(),
-  }))
-})
+window.matchMedia = vi.fn().mockImplementation(query => ({
+  matches: false, // Default mock value (can be adjusted per test)
+  media: query,
+  onchange: null,
+  addListener: vi.fn(), // Legacy method
+  removeListener: vi.fn(), // Legacy method
+  addEventListener: vi.fn(), // Modern method
+  removeEventListener: vi.fn(), // Modern method
+  dispatchEvent: vi.fn(),
+}))
