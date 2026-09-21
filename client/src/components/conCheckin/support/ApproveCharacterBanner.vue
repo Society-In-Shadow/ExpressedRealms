@@ -32,9 +32,9 @@ onBeforeMount(async () => {
 
 const { data: earlyCheckinData, isPending: earlyCheckinPending } = useQuery(earlyCheckinQuery)
 
-const showBannerSources = ['approve_character_checkin', 'approve_character_early']
+const showBannerSources = new Set(['approve_character_checkin', 'approve_character_early'])
 const showBanner = computed(() => (eventCheckinInfo.hasActiveEvent || earlyCheckinData) && hasCheckinPermission.value
-  && characterInfo.isPrimaryCharacter && showBannerSources.includes(route.query.src))
+  && characterInfo.isPrimaryCharacter && showBannerSources.has(route.query.src))
 
 const { data: characterData, isLoading: characterDataLoading } = useQuery(() => ({
   ...pickedFactionQuery(Number.parseInt(route.params.id)),

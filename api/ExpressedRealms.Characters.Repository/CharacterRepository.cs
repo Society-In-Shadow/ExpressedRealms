@@ -176,19 +176,6 @@ internal sealed class CharacterRepository(
         return players;
     }
 
-    private async Task<int?> GetActiveEventId()
-    {
-        var now = DateOnly.FromDateTime(DateTime.UtcNow);
-
-        var eventId = await context
-            .Events.AsNoTracking()
-            .Where(x => x.IsPublished && x.StartDate <= now && x.EndDate >= now)
-            .Select(x => x.Id)
-            .FirstOrDefaultAsync(cancellationToken);
-
-        return eventId == 0 ? null : eventId;
-    }
-
     public async Task<CharacterInfo> GetCharacterInfoForCRB(int characterId)
     {
         var query = await context

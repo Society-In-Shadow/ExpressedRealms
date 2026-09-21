@@ -83,7 +83,7 @@ internal sealed class ConfirmedUserInfoUseCase(
         var latestCompleted = ApproveStageAndSendMessageUseCase.InitialCheckinSequence
             .LastOrDefault(x => completedStages.Contains(x));
 
-        return earliestIncomplete ?? latestCompleted;
+        return (earliestIncomplete ?? latestCompleted)!;
     }
 
     private async Task<int> GetCheckinId(int? eventId, Guid playerId)

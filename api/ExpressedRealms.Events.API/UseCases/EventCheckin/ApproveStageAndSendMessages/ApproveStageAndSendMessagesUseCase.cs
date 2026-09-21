@@ -54,7 +54,6 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        // TODO: Update This
         var eventId = await checkinRepository.GetInclusivePreCheckinEventId();
         if (eventId is null)
             return Result.Fail("There are no active events to checkin into");
@@ -190,7 +189,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         );            
     }
 
-    private record SequenceData(
+    private sealed record SequenceData(
         List<CheckinStageEnum> CompletedStages,
         bool PreviousStageComplete);
     

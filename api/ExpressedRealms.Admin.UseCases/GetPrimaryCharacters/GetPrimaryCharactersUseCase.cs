@@ -1,9 +1,10 @@
 using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using FluentResults;
 
 namespace ExpressedRealms.Admin.UseCases.GetPrimaryCharacters;
 
-internal sealed class GetPrimaryCharactersUseCase(ICharacterRepository characterRepository)
+internal sealed class GetPrimaryCharactersUseCase(ICharacterRepository characterRepository, IEventCheckinRepository checkinRepository)
     : IGetPrimaryCharactersUseCase
 {
     public async Task<Result<List<PrimaryCharacterReturnInfo>>> ExecuteAsync()
