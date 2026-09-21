@@ -75,13 +75,13 @@ async function redirectToCharacterSheet() {
           <p v-if="data?.nextStage?.key == CheckinStage.GoApproval">
             Character is awaiting GO Approval
           </p>
-          <p v-if="data?.nextStage?.key == CheckinStage.CrbCreation">
+          <p v-if="data?.nextStage?.key == CheckinStage.CrbPrinted">
             Character has been approved and is awaiting to be printed
           </p>
-          <p v-if="data?.nextStage?.key == CheckinStage.PrintedCrb">
+          <p v-if="data?.nextStage?.key == CheckinStage.CrbAssembled">
             Character has been approved, and printed.  It's awaiting for assembly.
           </p>
-          <p v-if="data?.nextStage?.key == CheckinStage.CrbReadForPickup">
+          <p v-if="data?.nextStage?.key == CheckinStage.CrbPickedUp">
             Character has been approved, CRB is ready for pickup at SHQ.
           </p>
         </div>

@@ -206,21 +206,27 @@ internal sealed class EventCheckinRepository(
                 $@"
 SELECT e.*
 FROM public.events e
+JOIN (
+    SELECT
+        event_id,
+        MIN(date) AS first_event_date
+    FROM public.event_schedule_items
+    WHERE is_deleted = false
+    GROUP BY event_id
+) first_day
+    ON first_day.event_id = e.id
 WHERE e.is_published = true
   AND e.is_deleted = false
   AND (
-      (NOW() AT TIME ZONE e.time_zone_id)::date = (
-          SELECT MIN(esi.date) - INTERVAL '14 days'
-          FROM public.event_schedule_items esi
-          WHERE esi.event_id = e.id
-            AND esi.is_deleted = false
-      )
+      (NOW() AT TIME ZONE e.time_zone_id)::date
+          BETWEEN first_day.first_event_date - 14
+              AND first_day.first_event_date - 1
       OR EXISTS (
           SELECT 1
           FROM public.event_schedule_items esi
           WHERE esi.event_id = e.id
             AND esi.is_deleted = false
-            AND (NOW() AT TIME ZONE e.time_zone_id)::date = esi.date
+            AND esi.date = (NOW() AT TIME ZONE e.time_zone_id)::date
       )
   )
 LIMIT 1

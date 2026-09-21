@@ -9,6 +9,7 @@ using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Characters;
 using ExpressedRealms.DB.Models.Expressions.ExpressionPublishStatusSetup;
 using ExpressedRealms.DB.Models.Statistics.CharacterStatMappings;
+using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.Expressions.Repository.CharacterFactions;
 using ExpressedRealms.Repositories.Shared;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
@@ -22,6 +23,7 @@ namespace ExpressedRealms.Characters.Repository;
 
 internal sealed class CharacterRepository(
     ExpressedRealmsDbContext context,
+    IEventCheckinRepository eventCheckinRepository,
     IUserContext userContext,
     AddCharacterDtoValidator addValidator,
     CancellationToken cancellationToken,
@@ -128,8 +130,9 @@ internal sealed class CharacterRepository(
 
     public async Task<List<PrimaryCharacterListDto>> GetPrimaryCharactersAsync()
     {
-        var activeEventId = await GetActiveEventId();
+        var activeEventId = await eventCheckinRepository.GetInclusivePreCheckinEventId();
 
+        // TODO: This is wrong, above is needed to make sure we pull in data for precheckin
         var maxStagePerPlayer = await context
             .CheckinStageMappings.Where(x => x.Checkin.EventId == activeEventId)
             .GroupBy(x => x.Checkin.PlayerId)

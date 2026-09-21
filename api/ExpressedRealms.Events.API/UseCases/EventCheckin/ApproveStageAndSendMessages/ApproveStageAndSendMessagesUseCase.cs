@@ -24,7 +24,8 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         CheckinStageEnum.PlayerEarlyCheckin,
         CheckinStageEnum.GoApproval,
         CheckinStageEnum.CrbPrinted,
-        CheckinStageEnum.CrbAssembled
+        CheckinStageEnum.CrbAssembled,
+        CheckinStageEnum.CrbPickedUp
     ];
 
     public static readonly List<CheckinStageEnum> InitialCheckinSequence =
