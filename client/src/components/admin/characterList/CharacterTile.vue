@@ -71,7 +71,7 @@ onMounted(() => {
 
 async function redirectToCharacterSheet() {
   if (props.character?.playerStageId == CheckinStage.PlayerEarlyCheckin)
-    await router.push({ name: 'characterSheet', params: { id: props.character.id }, query: { src: 'approve_character' } })
+    await router.push({ name: 'characterSheet', params: { id: props.character.id }, query: { src: 'approve_character_early' } })
   else
     await router.push({ name: 'characterSheet', params: { id: props.character.id } })
 }

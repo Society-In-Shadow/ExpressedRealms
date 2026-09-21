@@ -32,8 +32,9 @@ onBeforeMount(async () => {
 
 const { data: earlyCheckinData, isPending: earlyCheckinPending } = useQuery(earlyCheckinQuery)
 
+const showBannerSources = ['approve_character_checkin', 'approve_character_early']
 const showBanner = computed(() => (eventCheckinInfo.hasActiveEvent || earlyCheckinData) && hasCheckinPermission.value
-  && characterInfo.isPrimaryCharacter && route.query.src == 'approve_character')
+  && characterInfo.isPrimaryCharacter && showBannerSources.includes(route.query.src))
 
 const { data: characterData, isLoading: characterDataLoading } = useQuery(() => ({
   ...pickedFactionQuery(Number.parseInt(route.params.id)),
@@ -49,8 +50,12 @@ const approvePrecheckinStage = approvePreCheckinStage()
 
 const reviewedCharacter = async () => {
   await approvePrecheckinStage.mutateAsync({ characterId: Number.parseInt(route.params.id), stageId: CheckinStage.GoApproval })
-  // TODO: Determine source and redirect back to it
-  await router.push({ name: 'adminCharacterList' })
+  if (route.query.src == 'approve_character_checkin') {
+    await router.push({ name: 'gocheckin' })
+  }
+  else if (route.query.src == 'approve_character_early') {
+    await router.push({ name: 'adminCharacterList' })
+  }
 }
 
 const showFactionInfo = computed(() => {
