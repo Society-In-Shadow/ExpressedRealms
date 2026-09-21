@@ -293,7 +293,10 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                 return;
 
             var player = await playerRepository.GetPlayerByCharacterId(characterId);
-            var checkin = await checkinRepository.GetCheckinAsync(activeEventId ?? eventId!.Value, player.Id);
+            var checkin = await checkinRepository.GetCheckinAsync(
+                activeEventId ?? eventId!.Value,
+                player.Id
+            );
             if (checkin is null)
                 return;
 
@@ -303,7 +306,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
                 await sendMessageUseCase.ExecuteAsync(
                     new() { CharacterId = characterId, StageId = CheckinStageEnum.CrbPrinted }
                 );
-                
+
                 var proficiencies = await profRepository.GetBasicProficiencies(characterId);
 
                 var character = await characterRepository.GetCharacterInfoForPickablePowers(

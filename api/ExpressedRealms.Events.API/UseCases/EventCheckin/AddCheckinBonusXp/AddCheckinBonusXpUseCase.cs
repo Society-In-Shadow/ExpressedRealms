@@ -61,7 +61,7 @@ internal sealed class AddCheckinBonusXpUseCase(
                 }
             );
         }
-        
+
         await approveStageAndSendMessageUseCase.ExecuteAsync(
             new ApproveStageAndSendMessageModel()
             {

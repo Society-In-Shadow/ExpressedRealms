@@ -22,7 +22,7 @@ internal sealed class PlayerRequestsPreCheckinUseCase(
             return Result.Fail("There are no active events to assign xp to");
         var playerId = await checkinRepository.GetCurrentPlayerId();
         var checkinId = await GetCheckinId(eventId, playerId);
-        
+
         await checkinRepository.CompleteStage(
             new CheckinStageMapping()
             {
@@ -32,7 +32,7 @@ internal sealed class PlayerRequestsPreCheckinUseCase(
                 CheckinId = checkinId,
             }
         );
-        
+
         await checkinRepository.CompleteStage(
             new CheckinStageMapping()
             {
@@ -42,7 +42,7 @@ internal sealed class PlayerRequestsPreCheckinUseCase(
                 CheckinId = checkinId,
             }
         );
-        
+
         var seekingCrbMessage = $"A Character has Requested Pre GO Approval";
         await discordService.SendMessageToChannelAsync(
             DiscordChannel.PreCheckinLoadingBay,
@@ -51,7 +51,7 @@ internal sealed class PlayerRequestsPreCheckinUseCase(
 
         return Result.Ok();
     }
-    
+
     private async Task<int> GetCheckinId(int? eventId, Guid playerId)
     {
         int? checkinId = null;

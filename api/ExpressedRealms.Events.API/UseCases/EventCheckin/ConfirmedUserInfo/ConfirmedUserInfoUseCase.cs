@@ -50,7 +50,10 @@ internal sealed class ConfirmedUserInfoUseCase(
 
         var stageInfo = await GetEarliestIncompleteStage(checkinId);
         // If user is over 18, automatically approve them, if they haven't been yet
-        if (player.AgeGroupId == PlayerAgeGroupEnum.Adult && stageInfo == CheckinStageEnum.AgeCheckApproval)
+        if (
+            player.AgeGroupId == PlayerAgeGroupEnum.Adult
+            && stageInfo == CheckinStageEnum.AgeCheckApproval
+        )
         {
             await approveStageAndSendMessageUseCase.ExecuteAsync(
                 new() { LookupId = model.LookupId, StageId = CheckinStageEnum.AgeCheckApproval }
@@ -65,23 +68,30 @@ internal sealed class ConfirmedUserInfoUseCase(
             new ConfirmedUserInfoReturnModel()
             {
                 PlayerNumber = playerNumber,
-                CurrentStage = new BasicInfo(){ Id = stageInfo.Value, Name = stageInfo.Name},
+                CurrentStage = new BasicInfo() { Id = stageInfo.Value, Name = stageInfo.Name },
                 PrimaryCharacterInfo = characterInfo, // Needed for Go Verification - Just need to return character id
                 CurrentEventDay = currentEventDay, // Needed to determine when to show day 2 / 3 checkin info
             }
         );
     }
+
     // This needs to happen during character management grab
     private async Task<CheckinStageEnum> GetEarliestIncompleteStage(int checkinId)
     {
         var activeList = await checkinRepository.GetActiveApprovedStages(checkinId);
-        var completedStages = activeList.Select(x => CheckinStageEnum.FromValue(x.CheckinStageId)).ToList();
-        
-        var earliestIncomplete = ApproveStageAndSendMessageUseCase.InitialCheckinSequence
-            .FirstOrDefault(x => !completedStages.Contains(x));
+        var completedStages = activeList
+            .Select(x => CheckinStageEnum.FromValue(x.CheckinStageId))
+            .ToList();
 
-        var latestCompleted = ApproveStageAndSendMessageUseCase.InitialCheckinSequence
-            .LastOrDefault(x => completedStages.Contains(x));
+        var earliestIncomplete =
+            ApproveStageAndSendMessageUseCase.InitialCheckinSequence.FirstOrDefault(x =>
+                !completedStages.Contains(x)
+            );
+
+        var latestCompleted =
+            ApproveStageAndSendMessageUseCase.InitialCheckinSequence.LastOrDefault(x =>
+                completedStages.Contains(x)
+            );
 
         return (earliestIncomplete ?? latestCompleted)!;
     }

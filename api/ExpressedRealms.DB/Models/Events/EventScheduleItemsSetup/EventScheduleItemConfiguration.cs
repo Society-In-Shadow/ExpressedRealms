@@ -14,14 +14,14 @@ public class EventScheduleItemConfiguration : IEntityTypeConfiguration<EventSche
         builder.Property(e => e.Date).IsRequired();
         builder.Property(e => e.StartTime).IsRequired();
         builder.Property(e => e.EndTime).IsRequired();
-        
+
         builder
             .HasOne(x => x.Event)
             .WithMany(x => x.EventScheduleItems)
             .HasForeignKey(x => x.EventId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        
+
         builder.HasQueryFilter(x => !x.IsDeleted);
         builder.Property(e => e.IsDeleted);
         builder.Property(e => e.DeletedAt);

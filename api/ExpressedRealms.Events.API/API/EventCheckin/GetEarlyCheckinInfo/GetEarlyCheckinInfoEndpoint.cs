@@ -17,12 +17,9 @@ public static class GetEarlyCheckinInfoEndpoint
     {
         if (!await toggleClient.HasFeatureFlag(ReleaseFlags.ShowPreCheckinFunctionality))
         {
-            return TypedResults.Ok(new GetEarlyCheckinInfoResponse()
-            {
-                ShowBanner = false
-            });
+            return TypedResults.Ok(new GetEarlyCheckinInfoResponse() { ShowBanner = false });
         }
-        
+
         var results = await useCase.ExecuteAsync();
 
         results.ThrowIfErrorNotHandled();
@@ -31,14 +28,16 @@ public static class GetEarlyCheckinInfoEndpoint
             new GetEarlyCheckinInfoResponse()
             {
                 ShowBanner = results.Value.ShowBanner,
-                Event = results.Value.Event is null ? null : new EventInfo()
-                {
-                    EventId = results.Value.Event.EventId,
-                    EventName = results.Value.Event.EventName,
-                    StartDate = results.Value.Event.StartDate
-                },
+                Event = results.Value.Event is null
+                    ? null
+                    : new EventInfo()
+                    {
+                        EventId = results.Value.Event.EventId,
+                        EventName = results.Value.Event.EventName,
+                        StartDate = results.Value.Event.StartDate,
+                    },
                 Character = results.Value.Character,
-                NextStage = results.Value.NextStage
+                NextStage = results.Value.NextStage,
             }
         );
     }

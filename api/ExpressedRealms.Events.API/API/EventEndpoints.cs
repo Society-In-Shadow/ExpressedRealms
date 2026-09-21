@@ -177,25 +177,19 @@ internal static class EventEndpoints
             )
             .RequirePermission(Permissions.Event.Checkin);
 
-        endpointGroup
-            .MapGet(
-                "checkin/earlyCheckin",
-                GetEarlyCheckinInfoEndpoint.ExecuteAsync
-            );
-        
-        endpointGroup
-            .MapPost(
-                "checkin/earlyCheckin/requestApproval",
-                PlayerRequestedPreCheckinEndpoint.ExecuteAsync
-            );
-        
+        endpointGroup.MapGet("checkin/earlyCheckin", GetEarlyCheckinInfoEndpoint.ExecuteAsync);
+
+        endpointGroup.MapPost(
+            "checkin/earlyCheckin/requestApproval",
+            PlayerRequestedPreCheckinEndpoint.ExecuteAsync
+        );
+
         // Permission handled within the endpoint - it's a bit dynamic
-        endpointGroup
-            .MapPost(
-                "checkin/earlyCheckin/character/{characterId}/reviewed",
-                ApprovePreApprovalStageEndpoint.ExecuteAsync
-            );
-        
+        endpointGroup.MapPost(
+            "checkin/earlyCheckin/character/{characterId}/reviewed",
+            ApprovePreApprovalStageEndpoint.ExecuteAsync
+        );
+
         endpointGroup
             .MapPost(
                 "checkin/lookup/{lookupId}/approveStage",

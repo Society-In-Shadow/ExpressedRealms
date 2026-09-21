@@ -25,7 +25,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         CheckinStageEnum.GoApproval,
         CheckinStageEnum.CrbPrinted,
         CheckinStageEnum.CrbAssembled,
-        CheckinStageEnum.CrbPickedUp
+        CheckinStageEnum.CrbPickedUp,
     ];
 
     public static readonly List<CheckinStageEnum> InitialCheckinSequence =
@@ -34,15 +34,15 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         CheckinStageEnum.EventQuestionsCheck,
         CheckinStageEnum.CharacterStorageQuestion,
         CheckinStageEnum.AssignedXpCheck,
-        CheckinStageEnum.GoApproval, 
+        CheckinStageEnum.GoApproval,
         CheckinStageEnum.CrbPrinted,
         CheckinStageEnum.CrbAssembled,
         CheckinStageEnum.CrbPickedUp,
         CheckinStageEnum.Day2Checkin,
         CheckinStageEnum.Day3Checkin,
-        CheckinStageEnum.FinalStage
+        CheckinStageEnum.FinalStage,
     ];
-    
+
     public async Task<Result> ExecuteAsync(ApproveStageAndSendMessageModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
@@ -63,16 +63,23 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         {
             var retrievedPlayerId = await checkinRepository.GetPlayerIdOrDefault(model.LookupId);
             if (retrievedPlayerId is null)
-                return ValidationHelper.AddSingleValidationFailure(nameof(model.LookupId), "Lookup Id does not exist");
+                return ValidationHelper.AddSingleValidationFailure(
+                    nameof(model.LookupId),
+                    "Lookup Id does not exist"
+                );
 
             playerId = retrievedPlayerId.Value;
         }
         else
         {
-            var retrievedPlayerId = await checkinRepository.GetPlayerIdFromCharacter(model.CharacterId!.Value);
+            var retrievedPlayerId = await checkinRepository.GetPlayerIdFromCharacter(
+                model.CharacterId!.Value
+            );
             if (retrievedPlayerId is null)
-                return ValidationHelper.AddSingleValidationFailure(nameof(model.CharacterId),
-                    "Character Id does not exist");
+                return ValidationHelper.AddSingleValidationFailure(
+                    nameof(model.CharacterId),
+                    "Character Id does not exist"
+                );
             playerId = retrievedPlayerId.Value;
         }
 
@@ -91,9 +98,11 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         var inPreCheckinPeriod = await checkinRepository.GetExclusivePreCheckinEventId();
         if (inPreCheckinPeriod.HasValue && !PreCheckinSequence.Contains(requestedStage))
         {
-            return Result.Fail("Precheckin Period doesn't allow this type of stage to be completed.");
+            return Result.Fail(
+                "Precheckin Period doesn't allow this type of stage to be completed."
+            );
         }
-        
+
         if (requestedStage == CheckinStageEnum.PlayerEarlyCheckin)
         {
             // Check to make sure they have early checkin priveleges
@@ -102,15 +111,19 @@ internal sealed class ApproveStageAndSendMessageUseCase(
             {
                 await CompleteStage(CheckinStageEnum.PlayerEarlyCheckin, checkin.Id);
                 // Short Circuit, this is all that needs to happen with this stage
-                return Result.Ok();                
+                return Result.Ok();
             }
-            
-            return Result.Fail("The user does not have Early Checkin Privileges");
 
+            return Result.Fail("The user does not have Early Checkin Privileges");
         }
-        
-        var earlyCheckinBypass = sequenceData.CompletedStages.Contains(CheckinStageEnum.PlayerEarlyCheckin);
-        if (requestedStage == CheckinStageEnum.GoApproval && (sequenceData.PreviousStageComplete || earlyCheckinBypass))
+
+        var earlyCheckinBypass = sequenceData.CompletedStages.Contains(
+            CheckinStageEnum.PlayerEarlyCheckin
+        );
+        if (
+            requestedStage == CheckinStageEnum.GoApproval
+            && (sequenceData.PreviousStageComplete || earlyCheckinBypass)
+        )
         {
             // Create an archived copy of the primary character
             // This allows us to do diffs later
@@ -133,7 +146,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
                 await discordService.SendMessageToChannelAsync(
                     DiscordChannel.PlayersSeekingCrbs,
                     seekingCrbMessage
-                );                
+                );
             }
 
             return Result.Ok();
@@ -145,14 +158,14 @@ internal sealed class ApproveStageAndSendMessageUseCase(
             await CompleteStage(model.StageId, checkin.Id);
             return Result.Ok();
         }
-        
+
         // Default rule, previous Stage needs to have existed before approving this one
         if (!sequenceData.PreviousStageComplete)
-            return Result.Fail("Previous stage has not been completed");        
+            return Result.Fail("Previous stage has not been completed");
 
         // Automatically approve the stage, as the only rules going forward add missing steps after this one
         await CompleteStage(model.StageId, checkin.Id);
-        
+
         if (model.StageId == CheckinStageEnum.CrbAssembled.Value)
         {
             await SendPickupCrbEmailIfNeeded(playerId);
@@ -186,13 +199,14 @@ internal sealed class ApproveStageAndSendMessageUseCase(
                 CheckinStageId = stageId,
                 CheckinId = checkinId,
             }
-        );            
+        );
     }
 
     private sealed record SequenceData(
         List<CheckinStageEnum> CompletedStages,
-        bool PreviousStageComplete);
-    
+        bool PreviousStageComplete
+    );
+
     private async Task<SequenceData> GetSequenceData(
         int checkinId,
         CheckinStageEnum currentTargetStage
@@ -201,21 +215,23 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         // Filters stages, makes sure that stages between initial checkin and anything before reapproval gets removed
         var activeList = await checkinRepository.GetActiveApprovedStages(checkinId);
 
-        var completedStages = activeList.Select(x => CheckinStageEnum.FromValue(x.CheckinStageId)).ToList();
+        var completedStages = activeList
+            .Select(x => CheckinStageEnum.FromValue(x.CheckinStageId))
+            .ToList();
 
         if (completedStages.Count == 0)
             return new SequenceData(completedStages, false);
 
         var requestedStageIndex = InitialCheckinSequence.IndexOf(currentTargetStage);
-        
+
         var previousStage = InitialCheckinSequence
             .Where((x, y) => y == requestedStageIndex - 1)
             .FirstOrDefault();
 
-        var previousStepCompleted = previousStage is not null && completedStages.Contains(previousStage);
+        var previousStepCompleted =
+            previousStage is not null && completedStages.Contains(previousStage);
         return new SequenceData(completedStages, previousStepCompleted);
     }
-
 
     private async Task SendPickupCrbEmailIfNeeded(Guid playerId)
     {
@@ -236,14 +252,14 @@ Order of Archivists
 Society in Shadows
 ",
                     $"""
-                     <p>Hello!</p>
+                    <p>Hello!</p>
 
-                     <p>Your CRB is ready for pickup!  Feel free to stop by SHQ once you are ready to pick it up.</p>
+                    <p>Your CRB is ready for pickup!  Feel free to stop by SHQ once you are ready to pick it up.</p>
 
-                     <p>Thanks,</p>
-                     <p>Order of Archivists</p>
-                     <p>Society in Shadows</p>
-                     """
+                    <p>Thanks,</p>
+                    <p>Order of Archivists</p>
+                    <p>Society in Shadows</p>
+                    """
                 )
             );
         }

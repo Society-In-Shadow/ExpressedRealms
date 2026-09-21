@@ -6,5 +6,5 @@ public enum PublishTypes
     Beta,
     Draft,
     PlayTesting,
-    Legacy
+    Legacy,
 }

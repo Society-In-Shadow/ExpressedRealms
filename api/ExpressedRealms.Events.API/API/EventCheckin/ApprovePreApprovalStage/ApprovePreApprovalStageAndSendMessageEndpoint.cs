@@ -35,7 +35,6 @@ public static class ApprovePreApprovalStageEndpoint
             return TypedResults.Forbid();
         }
 
-
         if (
             request.StageId == CheckinStageEnum.GoApproval.Value
             && !user.HasClaim("custom_permission", Permissions.Event.GoApproval.Key)
@@ -45,7 +44,7 @@ public static class ApprovePreApprovalStageEndpoint
         }
 
         var results = await useCase.ExecuteAsync(
-            new () { StageId = request.StageId, CharacterId = characterId}
+            new() { StageId = request.StageId, CharacterId = characterId }
         );
 
         if (results.HasValidationError(out var validationProblem))

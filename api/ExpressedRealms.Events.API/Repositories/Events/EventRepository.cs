@@ -101,7 +101,7 @@ internal sealed class EventRepository(
             .Where(x => x.EventId == eventId)
             .ToListAsync(cancellationToken);
     }
-    
+
     public Task<ScheduledStartInfoProjection> GetFirstScheduledDayForEvent(int eventId)
     {
         return context
@@ -112,7 +112,7 @@ internal sealed class EventRepository(
             {
                 EventId = x.EventId,
                 EventName = x.Event.Name,
-                StartDate = x.Date
+                StartDate = x.Date,
             })
             .FirstAsync(cancellationToken);
     }

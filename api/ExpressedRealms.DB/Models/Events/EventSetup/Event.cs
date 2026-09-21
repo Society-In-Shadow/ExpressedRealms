@@ -39,5 +39,6 @@ public class Event : ISoftDelete
     public virtual ICollection<EventQuestion> EventQuestions { get; set; } =
         new HashSet<EventQuestion>();
     public virtual ICollection<Checkin> Checkins { get; set; } = new HashSet<Checkin>();
-    public virtual ICollection<EventScheduleItem> EventScheduleItems { get; set; } = new HashSet<EventScheduleItem>();
+    public virtual ICollection<EventScheduleItem> EventScheduleItems { get; set; } =
+        new HashSet<EventScheduleItem>();
 }

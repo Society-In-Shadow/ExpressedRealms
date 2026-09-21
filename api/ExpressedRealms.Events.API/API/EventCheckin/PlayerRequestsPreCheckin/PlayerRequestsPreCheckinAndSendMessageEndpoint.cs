@@ -10,9 +10,7 @@ public static class PlayerRequestedPreCheckinEndpoint
 {
     public static async Task<
         Results<Ok, ValidationProblem, NotFound, ForbidHttpResult>
-    > ExecuteAsync(
-        [FromServices] IPlayerRequestsPreCheckinUseCase useCase
-    )
+    > ExecuteAsync([FromServices] IPlayerRequestsPreCheckinUseCase useCase)
     {
         var results = await useCase.ExecuteAsync();
 

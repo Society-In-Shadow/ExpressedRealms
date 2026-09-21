@@ -4,8 +4,10 @@ using FluentResults;
 
 namespace ExpressedRealms.Admin.UseCases.GetPrimaryCharacters;
 
-internal sealed class GetPrimaryCharactersUseCase(ICharacterRepository characterRepository, IEventCheckinRepository checkinRepository)
-    : IGetPrimaryCharactersUseCase
+internal sealed class GetPrimaryCharactersUseCase(
+    ICharacterRepository characterRepository,
+    IEventCheckinRepository checkinRepository
+) : IGetPrimaryCharactersUseCase
 {
     public async Task<Result<List<PrimaryCharacterReturnInfo>>> ExecuteAsync()
     {

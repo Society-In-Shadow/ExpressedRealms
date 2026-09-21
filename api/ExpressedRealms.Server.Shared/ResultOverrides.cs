@@ -21,7 +21,6 @@ public static class ResultOverrides
             }
             throw new NotImplementedException(builder.ToString());
         }
-            
     }
 
     public static void ThrowIfErrorNotHandled<T>(this Result<T> result)

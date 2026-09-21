@@ -50,7 +50,8 @@ internal sealed class GetGoCheckinInfoUseCase(
             new GetCharacterGoFieldReturnModel()
             {
                 IsLegacyExpression = character.ExpressionIsLegacy,
-                XpSpentPercentage = (int)Math.Round((double)xpCheck.SpentXp / xpCheck.AvailableXp * 100),
+                XpSpentPercentage = (int)
+                    Math.Round((double)xpCheck.SpentXp / xpCheck.AvailableXp * 100),
                 SpentTooMuchXp = xpCheck.AvailableXp - xpCheck.SpentXp < 0,
                 StillInCharacterCreation = character.IsInCharacterCreation,
                 DealWithDevil = blessings.Any(x => x.Name == "Deal with the Devil"),

@@ -82,7 +82,7 @@ internal sealed class CharacterRepository(
         [
             ExpressionPublishStatusEnum.Published,
             ExpressionPublishStatusEnum.PlayTesting,
-            ExpressionPublishStatusEnum.Legacy
+            ExpressionPublishStatusEnum.Legacy,
         ];
         if (userContext.CurrentUserHasPermission(Permissions.Expression.SeeBetaExpressions))
         {
@@ -100,7 +100,7 @@ internal sealed class CharacterRepository(
         [
             ExpressionPublishStatusEnum.Published,
             ExpressionPublishStatusEnum.PlayTesting,
-            ExpressionPublishStatusEnum.Legacy
+            ExpressionPublishStatusEnum.Legacy,
         ];
         if (userContext.CurrentUserHasPermission(Permissions.Expression.SeeBetaExpressions))
         {
@@ -231,7 +231,8 @@ internal sealed class CharacterRepository(
                 IsRetired = x.IsRetired,
                 IsArchetypeCharacter = x.Player.IsArchetypeAccount,
                 ExpressionSubTypeId = x.Expression.ExpressionSubTypeId,
-                IsLegacyExpression = x.Expression.PublishStatusId == ExpressionPublishStatusEnum.Legacy
+                IsLegacyExpression =
+                    x.Expression.PublishStatusId == ExpressionPublishStatusEnum.Legacy,
             })
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -266,7 +267,7 @@ internal sealed class CharacterRepository(
             })
             .FirstAsync(cancellationToken);
     }
-    
+
     public async Task<CharacterGoInformationProjection?> GetCharacterGoInformation(int id)
     {
         var query = await context.Characters.AsNoTracking().WithUserAccessAsync(userContext, id);
@@ -276,7 +277,8 @@ internal sealed class CharacterRepository(
             {
                 Id = x.Id,
                 IsInCharacterCreation = x.IsInCharacterCreation,
-                ExpressionIsLegacy = x.Expression.PublishStatusId == ExpressionPublishStatusEnum.Legacy
+                ExpressionIsLegacy =
+                    x.Expression.PublishStatusId == ExpressionPublishStatusEnum.Legacy,
             })
             .FirstAsync(cancellationToken);
     }
@@ -492,14 +494,15 @@ internal sealed class CharacterRepository(
 
     public async Task<bool> CanUpdatePrimaryCharacterStatus(int id)
     {
-        List<int> invalidPublishTypes = [ExpressionPublishStatusEnum.Legacy.Value, ExpressionPublishStatusEnum.PlayTesting.Value];
-        var character = await context.Characters.Where(x => x.Id == id
-            && x.Player.UserId == userContext.CurrentUserId()
-        ).Select(x => new
-        {
-            x.IsPrimaryCharacter,
-            x.Expression.PublishStatusId
-        }).FirstOrDefaultAsync();
+        List<int> invalidPublishTypes =
+        [
+            ExpressionPublishStatusEnum.Legacy.Value,
+            ExpressionPublishStatusEnum.PlayTesting.Value,
+        ];
+        var character = await context
+            .Characters.Where(x => x.Id == id && x.Player.UserId == userContext.CurrentUserId())
+            .Select(x => new { x.IsPrimaryCharacter, x.Expression.PublishStatusId })
+            .FirstOrDefaultAsync();
 
         if (character is null)
             return false;
@@ -509,6 +512,5 @@ internal sealed class CharacterRepository(
             return true;
 
         return !invalidPublishTypes.Contains(character.PublishStatusId);
-
     }
 }

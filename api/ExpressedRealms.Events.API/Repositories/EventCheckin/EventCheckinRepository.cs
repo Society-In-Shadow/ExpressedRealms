@@ -171,7 +171,7 @@ internal sealed class EventCheckinRepository(
 
         return eventId == 0 ? null : eventId;
     }
-    
+
     public async Task<int?> GetExclusivePreCheckinEventId()
     {
         var eventId = await context
@@ -198,7 +198,7 @@ internal sealed class EventCheckinRepository(
 
         return eventId == 0 ? null : eventId;
     }
-    
+
     public async Task<int?> GetInclusivePreCheckinEventId()
     {
         var eventId = await context
@@ -361,7 +361,7 @@ LIMIT 1
             .Select(x => x.Id)
             .FirstAsync(cancellationToken);
     }
-    
+
     public async Task<Guid?> GetPlayerIdOrDefault(string lookupId)
     {
         return await context
@@ -369,7 +369,7 @@ LIMIT 1
             .Select(x => (Guid?)x.Id)
             .FirstOrDefaultAsync(cancellationToken);
     }
-    
+
     public async Task<Guid?> GetPlayerIdFromCharacter(int characterId)
     {
         return await context
@@ -565,7 +565,7 @@ LIMIT 1
             })
             .ToListAsync(cancellationToken);
     }
-    
+
     public Task<bool> PlayerHasCharacterStorage(Guid playerId)
     {
         return context
