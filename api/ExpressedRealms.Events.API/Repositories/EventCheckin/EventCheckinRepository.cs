@@ -156,16 +156,17 @@ internal sealed class EventCheckinRepository(
     public async Task<int?> GetActiveEventId()
     {
         var eventId = await context
-            .Events.FromSql(
+            .EventScheduleItems.FromSql(
                 $@"
-        SELECT *
-        FROM public.events
-        WHERE is_published = true
-        AND (NOW() AT TIME ZONE time_zone_id)::date BETWEEN start_date AND end_date and is_deleted = false
+        SELECT event_schedule_items.*
+        FROM public.event_schedule_items
+        join public.events on events.id = event_schedule_items.event_id
+        WHERE events.is_published = true
+        AND (NOW() AT TIME ZONE time_zone_id)::date = event_schedule_items.date and events.is_deleted = false and event_schedule_items.is_deleted = false
         LIMIT 1
     "
             )
-            .Select(x => x.Id)
+            .Select(x => x.EventId)
             .FirstOrDefaultAsync(cancellationToken);
 
         return eventId == 0 ? null : eventId;
@@ -176,12 +177,19 @@ internal sealed class EventCheckinRepository(
         var eventId = await context
             .Events.FromSql(
                 $@"
-        SELECT *
-        FROM public.events
-        WHERE is_published = true
-          AND is_deleted = false
-          AND (NOW() AT TIME ZONE time_zone_id)::date
-              BETWEEN start_date - INTERVAL '14 days' AND start_date - INTERVAL '1 days'
+        SELECT e.*
+        FROM public.events e
+        JOIN (
+            SELECT event_id, MIN(date) AS first_event_date
+            FROM public.event_schedule_items
+            WHERE is_deleted = false
+            GROUP BY event_id 
+        ) esi ON esi.event_id = e.id
+        WHERE e.is_published = true
+          AND e.is_deleted = false
+          AND (NOW() AT TIME ZONE e.time_zone_id)::date
+                      BETWEEN esi.first_event_date - 14
+          AND esi.first_event_date - 1
         LIMIT 1
     "
             )
@@ -196,13 +204,26 @@ internal sealed class EventCheckinRepository(
         var eventId = await context
             .Events.FromSql(
                 $@"
-        SELECT *
-        FROM public.events
-        WHERE is_published = true
-          AND is_deleted = false
-          AND (NOW() AT TIME ZONE time_zone_id)::date
-              BETWEEN start_date - INTERVAL '14 days' AND end_date
-        LIMIT 1
+SELECT e.*
+FROM public.events e
+WHERE e.is_published = true
+  AND e.is_deleted = false
+  AND (
+      (NOW() AT TIME ZONE e.time_zone_id)::date = (
+          SELECT MIN(esi.date) - INTERVAL '14 days'
+          FROM public.event_schedule_items esi
+          WHERE esi.event_id = e.id
+            AND esi.is_deleted = false
+      )
+      OR EXISTS (
+          SELECT 1
+          FROM public.event_schedule_items esi
+          WHERE esi.event_id = e.id
+            AND esi.is_deleted = false
+            AND (NOW() AT TIME ZONE e.time_zone_id)::date = esi.date
+      )
+  )
+LIMIT 1
     "
             )
             .Select(x => x.Id)
@@ -216,11 +237,25 @@ internal sealed class EventCheckinRepository(
         return await context
             .Database.SqlQuery<int>(
                 $@"
-        SELECT (((NOW() AT TIME ZONE time_zone_id)::date - start_date + 1)::int) AS ""Value""
-        FROM public.events
-        WHERE is_published = true
-        AND (NOW() AT TIME ZONE time_zone_id)::date BETWEEN start_date AND end_date and is_deleted = false
-        LIMIT 1
+            SELECT (
+                (
+                    (NOW() AT TIME ZONE e.time_zone_id)::date
+                    - esi.first_event_date
+                    + 1
+                )::int
+            ) AS ""Value""
+            FROM public.events e
+            JOIN (
+                SELECT event_id, MIN(date) AS first_event_date
+                FROM public.event_schedule_items
+                WHERE is_deleted = false
+                GROUP BY event_id
+            ) esi ON esi.event_id = e.id
+            WHERE e.is_published = true
+              AND e.is_deleted = false
+              AND (NOW() AT TIME ZONE e.time_zone_id)::date
+                  BETWEEN esi.first_event_date AND e.end_date
+            LIMIT 1
     "
             )
             .FirstOrDefaultAsync(cancellationToken);

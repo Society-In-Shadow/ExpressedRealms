@@ -90,4 +90,10 @@ public sealed class CheckinStageEnum : SmartEnum<CheckinStageEnum, int>
         14,
         "This is the player opting into early checkin for a convention, they will be recorded as responsible for this step."
     );
+    
+    public static readonly CheckinStageEnum FinalStage = new(
+        "Final Stage",
+        15,
+        "The player has completed all steps, and is fully checked in for all the days of the event."
+    );
 }

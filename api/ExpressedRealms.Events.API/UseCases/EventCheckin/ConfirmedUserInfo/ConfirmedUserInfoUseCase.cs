@@ -71,7 +71,7 @@ internal sealed class ConfirmedUserInfoUseCase(
             }
         );
     }
-    
+    // This needs to happen during character management grab
     private async Task<CheckinStageEnum> GetEarliestIncompleteStage(int checkinId)
     {
         var activeList = await checkinRepository.GetActiveApprovedStages(checkinId);

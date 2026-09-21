@@ -38,7 +38,8 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         CheckinStageEnum.CrbAssembled,
         CheckinStageEnum.CrbPickedUp,
         CheckinStageEnum.Day2Checkin,
-        CheckinStageEnum.Day3Checkin
+        CheckinStageEnum.Day3Checkin,
+        CheckinStageEnum.FinalStage
     ];
     
     public async Task<Result> ExecuteAsync(ApproveStageAndSendMessageModel model)
@@ -52,6 +53,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
+        // TODO: Update This
         var eventId = await checkinRepository.GetInclusivePreCheckinEventId();
         if (eventId is null)
             return Result.Fail("There are no active events to checkin into");

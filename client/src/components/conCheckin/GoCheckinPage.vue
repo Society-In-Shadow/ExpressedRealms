@@ -18,6 +18,7 @@ import DailyCheckin from '@/components/conCheckin/support/DailyCheckin.vue'
 import { characterGoFieldsDialog } from '@/components/admin/characterList/services/dialogs.ts'
 import CommandButton from '@/uiComponents/CommandButton.vue'
 import CharacterStorageQuestion from '@/components/conCheckin/support/CharacterStorageQuestion.vue'
+import { CheckinStage } from '@/components/conCheckin/types.ts'
 
 const eventCheckinInfo = EventCheckinStore()
 const userPermission = userPermissionStore()
@@ -200,12 +201,18 @@ const approveStage = async (stageId: number) => {
     <StepItem value="10">
       <Step>Day 1 Finalized</Step>
       <StepPanel v-if="eventCheckinInfo.activeStepperStep == '10'">
-        <h3>Needs to be Verified by User</h3>
-        <p>User needs to check their CRB, and make sure it's good to go.  Once scanned, they can go play games</p>
-        <Button
-          label="CRB Is Picked Up" icon-pos="right" class="mb-4" :disabled="!permissionCheck.Event.CrbHandling"
-          @click="approveStage(5)"
-        />
+        <div v-if="eventCheckinInfo.currentEventDay == 2 || eventCheckinInfo.checkinStage.id == CheckinStage.CrbPickedUp">
+          <h3>Needs to be Verified by User</h3>
+          <p>User needs to check their CRB, and make sure it's good to go.  Once scanned, they can go play games</p>
+          <Button
+            label="CRB Is Picked Up" icon-pos="right" class="mb-4" :disabled="!permissionCheck.Event.CrbHandling"
+            @click="approveStage(5)"
+          />
+        </div>
+        <div v-else>
+          <h3>Player is Done</h3>
+          <p>Player has completed all steps for today.</p>
+        </div>
       </StepPanel>
     </StepItem>
     <StepItem value="11">
