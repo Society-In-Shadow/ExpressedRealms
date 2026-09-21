@@ -29,6 +29,7 @@ const permissionCheck = userPermission.permissionCheck
 const updateGoFieldsDialog = characterGoFieldsDialog()
 
 onBeforeMount(async () => {
+  await eventCheckinInfo.resetGoPage()
   await eventCheckinInfo.getCheckinAvailable()
 
   if (!eventCheckinInfo.hasActiveEvent) {
@@ -184,7 +185,7 @@ const approveStage = async (stageId: number) => {
       <Step>CRB Printed</Step>
       <StepPanel>
         <h3>Awaiting to be Printed</h3>
-        <p>SHQ Needs to print off their charcter sheet before moving forward</p>
+        <p>SHQ Needs to print off their character sheet before moving forward</p>
       </StepPanel>
     </StepItem>
     <StepItem value="9">
