@@ -98,16 +98,16 @@ const onSubmit = form.handleSubmit(async (values) => {
   }
 
   const simpleNonFeeders = [1, 4, 5]
-  if (simpleNonFeeders.includes(characterInfo.value.expressionId)) {
+  if (simpleNonFeeders.includes(characterInfo.value.expressionSubTypeId)) {
     changes.value = handleAdeptSidheSorcerers(diffValues, maxValues)
   }
-  if (characterInfo.value.expressionId == 3) { // Shammas
+  if (characterInfo.value.expressionSubTypeId == 3) { // Shammas
     changes.value = handleShammas(diffValues, maxValues, characterInfo.value.characterLevel)
   }
-  if (characterInfo.value.expressionId == 2) {
+  if (characterInfo.value.expressionSubTypeId == 2) {
     changes.value = handleAeternari(diffValues, maxValues, characterInfo.value.characterLevel)
   }
-  if (characterInfo.value.expressionId == 6) {
+  if (characterInfo.value.expressionSubTypeId == 6) {
     changes.value = handleVampyre(diffValues, maxValues, characterInfo.value.characterLevel)
   }
 })

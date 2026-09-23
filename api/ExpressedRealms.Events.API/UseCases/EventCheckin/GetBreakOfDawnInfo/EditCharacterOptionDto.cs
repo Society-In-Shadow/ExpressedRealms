@@ -10,4 +10,5 @@ public class GetBreakOfDawnInfoDto
     public int Mortis { get; set; }
     public int CharacterLevel { get; set; }
     public int ExpressionId { get; set; }
+    public int ExpressionSubType { get; set; }
 }

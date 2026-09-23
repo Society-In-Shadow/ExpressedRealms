@@ -9,5 +9,5 @@ public class GetBreakOfDawnInfoResponse
     public int Psyche { get; set; }
     public int Mortis { get; set; }
     public int CharacterLevel { get; set; }
-    public int ExpressionId { get; set; }
+    public int ExpressionSubTypeId { get; set; }
 }
