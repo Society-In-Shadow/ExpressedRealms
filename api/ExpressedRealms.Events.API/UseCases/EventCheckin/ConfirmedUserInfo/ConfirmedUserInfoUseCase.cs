@@ -83,15 +83,13 @@ internal sealed class ConfirmedUserInfoUseCase(
             .Select(x => CheckinStageEnum.FromValue(x.CheckinStageId))
             .ToList();
 
-        var earliestIncomplete =
-            CheckinWorkflows.InitialCheckinSequence.FirstOrDefault(x =>
-                !completedStages.Contains(x)
-            );
+        var earliestIncomplete = CheckinWorkflows.InitialCheckinSequence.FirstOrDefault(x =>
+            !completedStages.Contains(x)
+        );
 
-        var latestCompleted =
-            CheckinWorkflows.InitialCheckinSequence.LastOrDefault(x =>
-                completedStages.Contains(x)
-            );
+        var latestCompleted = CheckinWorkflows.InitialCheckinSequence.LastOrDefault(x =>
+            completedStages.Contains(x)
+        );
 
         return (earliestIncomplete ?? latestCompleted)!;
     }

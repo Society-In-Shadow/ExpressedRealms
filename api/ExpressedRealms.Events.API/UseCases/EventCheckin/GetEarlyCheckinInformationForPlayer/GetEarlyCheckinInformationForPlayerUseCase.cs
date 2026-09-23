@@ -42,10 +42,7 @@ internal sealed class GetEarlyCheckinInformationForPlayerUseCase(
             activeList.Contains
         );
         var currentStage = CheckinWorkflows.PreCheckinSequence[
-            Math.Min(
-                currentStageIndex + 1,
-                CheckinWorkflows.PreCheckinSequence.Count - 1
-            )
+            Math.Min(currentStageIndex + 1, CheckinWorkflows.PreCheckinSequence.Count - 1)
         ];
 
         return Result.Ok(

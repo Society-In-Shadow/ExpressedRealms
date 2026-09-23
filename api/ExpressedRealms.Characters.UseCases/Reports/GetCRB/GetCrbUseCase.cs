@@ -303,7 +303,7 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             var approveCrbPrinted = await sendMessageUseCase.ExecuteAsync(
                 new() { CharacterId = characterId, StageId = CheckinStageEnum.CrbPrinted }
             );
-            
+
             if (approveCrbPrinted.IsSuccess)
             {
                 var proficiencies = await profRepository.GetBasicProficiencies(characterId);

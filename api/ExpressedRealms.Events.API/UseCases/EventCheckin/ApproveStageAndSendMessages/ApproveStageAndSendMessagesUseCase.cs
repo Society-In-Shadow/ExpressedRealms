@@ -72,7 +72,10 @@ internal sealed class ApproveStageAndSendMessageUseCase(
             return Result.Fail("Stage has been completed already");
 
         var inPreCheckinPeriod = await checkinRepository.GetExclusivePreCheckinEventId();
-        if (inPreCheckinPeriod.HasValue && !CheckinWorkflows.PreCheckinSequence.Contains(requestedStage))
+        if (
+            inPreCheckinPeriod.HasValue
+            && !CheckinWorkflows.PreCheckinSequence.Contains(requestedStage)
+        )
         {
             return Result.Fail(
                 "Precheckin Period doesn't allow this type of stage to be completed."
@@ -198,10 +201,12 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         if (completedStages.Count == 0)
             return new SequenceData(completedStages, false);
 
-        var requestedStageIndex = CheckinWorkflows.InitialCheckinSequence.IndexOf(currentTargetStage);
+        var requestedStageIndex = CheckinWorkflows.InitialCheckinSequence.IndexOf(
+            currentTargetStage
+        );
 
-        var previousStage = CheckinWorkflows.InitialCheckinSequence
-            .Where((x, y) => y == requestedStageIndex - 1)
+        var previousStage = CheckinWorkflows
+            .InitialCheckinSequence.Where((x, y) => y == requestedStageIndex - 1)
             .FirstOrDefault();
 
         var previousStepCompleted =

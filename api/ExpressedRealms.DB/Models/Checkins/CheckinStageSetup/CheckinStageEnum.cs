@@ -96,7 +96,7 @@ public sealed class CheckinStageEnum : SmartEnum<CheckinStageEnum, int>
         15,
         "The player has completed all steps, and is fully checked in for all the days of the event."
     );
-    
+
     public static readonly CheckinStageEnum AwaitingInitialCheckin = new(
         "Awaitin Checkin",
         16,
