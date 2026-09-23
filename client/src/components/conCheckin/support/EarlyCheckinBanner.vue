@@ -74,7 +74,7 @@ async function redirectToCharacterSheet() {
           <li>Do note, depending on how things align, you may need to wait a bit for your booklet after check in.</li>
           <li>As per normal, once the CRB is ready for pickup, you will get an email notification denoting it is ready for pickup</li>
         </ul>
-        <div v-if="data?.nextStage?.key == CheckinStage.PlayerEarlyCheckin">
+        <div v-if="!data?.nextStage?.key">
           <Button label="Understood and Check In" @click="popups.earlyCheckinConfirmation($event)" />
         </div>
         <div v-else>
