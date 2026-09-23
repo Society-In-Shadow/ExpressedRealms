@@ -19,12 +19,17 @@ async function redirectToCheckinDetails() {
 </script>
 
 <template>
-  <div v-if="eventCheckinInfo.hasActiveEvent" class="custom-message m-1 m-md-3 pl-3 pr-3 pt-2 pb-2" @click="redirectToCheckinDetails">
+  <div
+    v-if="eventCheckinInfo.hasActiveEvent" class="custom-message m-1 m-md-3 pl-3 pr-3 pt-2 pb-2" role="button"
+    @click="redirectToCheckinDetails"
+    @keydown.enter="redirectToCheckinDetails"
+    @keydown.space.prevent="redirectToCheckinDetails"
+  >
     <div class="d-flex align-items-center">
       <h3 class="m-0 p-0 flex-fill">
         Event Check-in
       </h3>
-      <Button label="Checkin" size="small" @click="redirectToCheckinDetails" />
+      <Button label="Checkin" size="small" @click.prevent />
     </div>
   </div>
 </template>

@@ -38,12 +38,19 @@ async function redirectToCharacterSheet() {
 </script>
 
 <template>
-  <div v-if="showBanner" class="custom-message m-1 m-md-3 pl-3 pr-3 pt-2 pb-2">
-    <div class="d-flex align-items-center" @click="showFullMessage = !showFullMessage">
+  <div
+    v-if="showBanner" class="custom-message m-1 m-md-3 pl-3 pr-3 pt-2 pb-2"
+  >
+    <div
+      class="d-flex align-items-center" role="button"
+      @click="showFullMessage = !showFullMessage"
+      @keydown.enter="showFullMessage = !showFullMessage"
+      @keydown.space.prevent="showFullMessage = !showFullMessage"
+    >
       <h3 class="m-0 p-0 flex-fill">
         Early Check In
       </h3>
-      <Button :label="showFullMessage ? 'Show Less' : 'Show More'" size="small" />
+      <Button :label="showFullMessage ? 'Show Less' : 'Show More'" size="small" @click.prevent />
     </div>
     <div v-if="showFullMessage">
       <p>You have paid for character storage, which enables Early Check In for you. This allows GO's to review, reach out if needed, finalize, and print out your character before con.</p>
