@@ -34,16 +34,20 @@ internal sealed class GetEarlyCheckinInformationForPlayerUseCase(
         var primaryCharacter = await checkinRepository.GetPrimaryCharacterInformation(playerId);
         var checkin = await checkinRepository.GetCheckinAsync(targetEvent.Value, playerId);
 
-        var approvedStages = await checkinRepository.GetActiveApprovedStages(checkin!.Id);
-        var activeList = approvedStages
-            .Select(x => CheckinStageEnum.FromValue(x.CheckinStageId))
-            .ToList();
-        var currentStageIndex = CheckinWorkflows.PreCheckinSequence.FindLastIndex(
-            activeList.Contains
-        );
-        var currentStage = CheckinWorkflows.PreCheckinSequence[
-            Math.Min(currentStageIndex + 1, CheckinWorkflows.PreCheckinSequence.Count - 1)
-        ];
+        CheckinStageEnum? currentStage = null;
+        if (checkin is not null)
+        {
+            var approvedStages = await checkinRepository.GetActiveApprovedStages(checkin.Id);
+            var activeList = approvedStages
+                .Select(x => CheckinStageEnum.FromValue(x.CheckinStageId))
+                .ToList();
+            var currentStageIndex = CheckinWorkflows.PreCheckinSequence.FindLastIndex(
+                activeList.Contains
+            );
+            currentStage = CheckinWorkflows.PreCheckinSequence[
+                Math.Min(currentStageIndex + 1, CheckinWorkflows.PreCheckinSequence.Count - 1)
+            ];
+        }
 
         return Result.Ok(
             new GetEarlyCheckinInformationForPlayerReturnModel()
@@ -61,7 +65,9 @@ internal sealed class GetEarlyCheckinInformationForPlayerUseCase(
                         primaryCharacter.CharacterId,
                         primaryCharacter.CharacterName
                     ),
-                NextStage = new KeyValuePair<int, string>(currentStage.Value, currentStage.Name),
+                NextStage = currentStage is null
+                    ? null
+                    : new KeyValuePair<int, string>(currentStage.Value, currentStage.Name),
             }
         );
     }
