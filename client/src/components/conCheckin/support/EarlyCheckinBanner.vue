@@ -25,7 +25,7 @@ const now = DateTime.now()
 const formatted = computed(() => {
   const dateDiff = Math.round(data.value.event?.dueDate.diff(now, 'days').days)
 
-  if (dateDiff <= 1)
+  if (dateDiff <= 0)
     return `Today at 11:59 pm`
 
   return `${data.value?.event?.dueDate.toFormat('MMM. d, yyyy') ?? ''} at 11:59 pm CST (~${dateDiff} days from now)`
