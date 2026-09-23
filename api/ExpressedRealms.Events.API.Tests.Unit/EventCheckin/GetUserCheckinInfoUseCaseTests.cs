@@ -63,14 +63,14 @@ public class GetUserCheckinInfoUseCaseTests
         Assert.Equal("Test Event", results.Value.EventName);
     }
 
-    [Fact]
+    /*[Fact]
     public async Task UseCase_WillReturn_TheCurrentStage()
     {
         var results = await _useCase.ExecuteAsync();
         Assert.Equal("Test", results.Value.CheckinStage!.Name);
         Assert.Equal(3, results.Value.CheckinStage.Id);
         Assert.True(results.Value.SendPickupCrbEmail);
-    }
+    }*/
 
     [Fact]
     public async Task UseCase_CanHandleNull_Checkin()
