@@ -26,8 +26,6 @@ public class GetUserCheckinInfoUseCaseTests
                     EventName = "Test Event",
                 }
             );
-        A.CallTo(() => _eventCheckinRepository.GetCurrentStage(4))
-            .Returns(new BasicInfo() { Name = "Test", Id = 3 });
 
         _useCase = new GetUserCheckinInfoUseCase(_eventCheckinRepository);
     }
@@ -75,16 +73,6 @@ public class GetUserCheckinInfoUseCaseTests
     }
 
     [Fact]
-    public async Task UseCase_CanHandleNull_CurrentStage()
-    {
-        A.CallTo(() => _eventCheckinRepository.GetCurrentStage(4))
-            .Returns(Task.FromResult<BasicInfo?>(null));
-
-        var results = await _useCase.ExecuteAsync();
-        Assert.Null(results.Value.CheckinStage);
-    }
-
-    [Fact]
     public async Task UseCase_CanHandleNull_Checkin()
     {
         A.CallTo(() => _eventCheckinRepository.GetPlayerInfoForPlayerCheckinPage())
@@ -100,6 +88,5 @@ public class GetUserCheckinInfoUseCaseTests
 
         var results = await _useCase.ExecuteAsync();
         Assert.Null(results.Value.CheckinStage);
-        A.CallTo(() => _eventCheckinRepository.GetCurrentStage(A<int>._)).MustNotHaveHappened();
     }
 }
