@@ -14,6 +14,7 @@ using ExpressedRealms.Characters.Repository.Wealth;
 using ExpressedRealms.Characters.Repository.Xp;
 using ExpressedRealms.DB.Models.ModifierSystem.StatModifiers;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
+using ExpressedRealms.Events.API.Repositories.Events;
 using ExpressedRealms.Expressions.Repository.CharacterFactions;
 using ExpressedRealms.Knowledges.Repository.CharacterKnowledgeMappings;
 using ExpressedRealms.Powers.Repository.CharacterPower;
@@ -34,6 +35,7 @@ public class GetCharacterSheetDataUseCase(
     ICharacterStatRepository statRepository,
     IContactRepository contactRepository,
     IEventCheckinRepository eventCheckinRepository,
+    IEventRepository eventRepository,
     IWealthRepository wealthRepository,
     ICharacterFactionRepository characterFactionRepository
 ) : IGetCharacterSheetDataUseCase
@@ -399,24 +401,24 @@ public class GetCharacterSheetDataUseCase(
     {
         var character = await characterRepository.GetCharacterInfoForCRB(model.CharacterId);
         var characterLevel = await xpRepository.GetCharacterXpLevel(model.CharacterId);
-        var eventInfo = await eventCheckinRepository.GetActiveEventInfoOrDefaultAsync();
-        var currentDay = 0;
-        if (eventInfo is not null)
-        {
-            currentDay = await eventCheckinRepository.GetCurrentEventDay();
-        }
+        var eventId = await eventCheckinRepository.GetInclusivePreCheckinEventId();
 
         var factionInfo = await characterFactionRepository.GetPlayerFactionInfo(model.CharacterId);
 
         var paidStorage = false;
-        if (eventInfo is not null)
+        var currentDay = 0;
+        string? eventName = null;
+        if (eventId is not null)
         {
             paidStorage =
                 await eventCheckinRepository.GetCharacterStorageInfo(
                     character.PlayerId,
-                    eventInfo.Id
+                    eventId.Value
                 )
                     is not null;
+            var eventInfo = await eventRepository.GetEventAsync(eventId.Value);
+            eventName = eventInfo.Name;
+            currentDay = await eventCheckinRepository.GetCurrentEventDay();
         }
 
         var basicInfo = new BasicInfo()
@@ -430,7 +432,7 @@ public class GetCharacterSheetDataUseCase(
             PlayerName = character.PlayerName,
             LookupId = character.LookupId,
             CharacterLevel = characterLevel.ToString(),
-            EventName = eventInfo?.Name ?? "No Active Event During Print",
+            EventName = eventName ?? "No Active Event During Print",
             CurrentDay = currentDay,
             FactionName = factionInfo?.FactionName.Limit(21, ".") ?? "No Active Faction",
             FactionRank = factionInfo?.FactionRank.Limit(7, ".") ?? "-",
