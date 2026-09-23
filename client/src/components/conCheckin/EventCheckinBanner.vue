@@ -1,6 +1,5 @@
 <script setup lang="ts">
 
-import Message from 'primevue/message'
 import Button from 'primevue/button'
 import { useRouter } from 'vue-router'
 import { onBeforeMount } from 'vue'
@@ -20,26 +19,22 @@ async function redirectToCheckinDetails() {
 </script>
 
 <template>
-  <Message v-if="eventCheckinInfo.hasActiveEvent" class="ms-0 me-0 mt-2 mb-2 m-md-2 d-print-none custom-message" severity="info" @click="redirectToCheckinDetails">
-    <template #icon>
-      <span class="material-symbols-outlined">
-        local_activity
-      </span>
-    </template>
-    <div class="d-flex flex-row justify-content-between align-self-center align-items-center">
-      <div class="flex-fill">
+  <div
+    v-if="eventCheckinInfo.hasActiveEvent" class="custom-message m-1 m-md-3 pl-3 pr-3 pt-2 pb-2" role="button"
+    @click="redirectToCheckinDetails"
+    @keydown.enter="redirectToCheckinDetails"
+    @keydown.space.prevent="redirectToCheckinDetails"
+  >
+    <div class="d-flex align-items-center">
+      <h3 class="m-0 p-0 flex-fill">
         Event Check-in
-      </div>
-      <div><Button label="Checkin" size="small" @click="redirectToCheckinDetails" /></div>
+      </h3>
+      <Button label="Checkin" size="small" @click.prevent />
     </div>
-  </Message>
+  </div>
 </template>
 
 <style>
-
-.custom-message .p-message-text {
-  width: 100%;
-}
 
 .custom-message {
   cursor: pointer;

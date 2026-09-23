@@ -26,7 +26,7 @@ export const EventCheckinStore
         hasInvalidLookupId: false,
         lookupId: '',
         eventName: '',
-        checkinStage: {} as BasicInfo | null,
+        checkinStage: {} as BasicInfo,
         goCheckinInfo: {} as GoCheckinInfo,
         playerNumber: 0,
         assignedXp: {} as AssignedXpType | null | undefined,

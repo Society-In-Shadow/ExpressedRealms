@@ -25,7 +25,7 @@ const now = DateTime.now()
 const formatted = computed(() => {
   const dateDiff = Math.round(data.value.event?.dueDate.diff(now, 'days').days)
 
-  if (dateDiff <= 1)
+  if (dateDiff <= 0)
     return `Today at 11:59 pm`
 
   return `${data.value?.event?.dueDate.toFormat('MMM. d, yyyy') ?? ''} at 11:59 pm CST (~${dateDiff} days from now)`
@@ -38,12 +38,19 @@ async function redirectToCharacterSheet() {
 </script>
 
 <template>
-  <div v-if="showBanner" class="custom-message m-1 m-md-3 pl-3 pr-3 pt-2 pb-2">
-    <div class="d-flex align-items-center" @click="showFullMessage = !showFullMessage">
+  <div
+    v-if="showBanner" class="custom-message m-1 m-md-3 pl-3 pr-3 pt-2 pb-2"
+  >
+    <div
+      class="d-flex align-items-center" role="button"
+      @click="showFullMessage = !showFullMessage"
+      @keydown.enter="showFullMessage = !showFullMessage"
+      @keydown.space.prevent="showFullMessage = !showFullMessage"
+    >
       <h3 class="m-0 p-0 flex-fill">
         Early Check In
       </h3>
-      <Button :label="showFullMessage ? 'Show Less' : 'Show More'" size="small" />
+      <Button :label="showFullMessage ? 'Show Less' : 'Show More'" size="small" @click.prevent />
     </div>
     <div v-if="showFullMessage">
       <p>You have paid for character storage, which enables Early Check In for you. This allows GO's to review, reach out if needed, finalize, and print out your character before con.</p>
@@ -89,14 +96,3 @@ async function redirectToCharacterSheet() {
     </div>
   </div>
 </template>
-
-<style>
- .custom-message{
-   background: color-mix(in srgb,var(--p-blue-500),transparent 84%);
-   color: var(--p-blue-500);
-   border-radius:  var(--p-content-border-radius);
-   outline-width:  var(--p-content-border-width);
-   outline-style: solid;
-   -webkit-tap-highlight-color: transparent;
- }
-</style>

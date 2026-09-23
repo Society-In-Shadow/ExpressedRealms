@@ -503,15 +503,6 @@ LIMIT 1
         );
     }
 
-    public async Task<BasicInfo?> GetCurrentStage(int checkinId)
-    {
-        return await context
-            .CheckinStageMappings.Where(x => x.CheckinId == checkinId)
-            .OrderByDescending(x => x.CreatedAt)
-            .Select(x => new BasicInfo { Id = x.CheckinStageId, Name = x.CheckinStage.Name })
-            .FirstOrDefaultAsync(cancellationToken);
-    }
-
     public async Task<int> CreatePrimaryCharacterArchiveAsync(Guid targetPlayerId)
     {
         var characterInfo = await context

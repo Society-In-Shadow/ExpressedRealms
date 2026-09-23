@@ -151,16 +151,14 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         }
 
         var currentDay = await checkinRepository.GetCurrentEventDay();
-        if (model.StageId == CheckinStageEnum.CrbPickedUp.Value && currentDay >= 2)
+        if (model.StageId == CheckinStageEnum.CrbPickedUp.Value && currentDay == 2)
         {
             // Automatically go to day 2
-            await CompleteStage(requestedStage, checkin.Id);
             await CompleteStage(CheckinStageEnum.Day2Checkin, checkin.Id);
         }
 
-        if (model.StageId == CheckinStageEnum.CrbPickedUp.Value && currentDay >= 3)
+        if (model.StageId == CheckinStageEnum.CrbPickedUp.Value && currentDay == 3)
         {
-            await CompleteStage(requestedStage, checkin.Id);
             await CompleteStage(CheckinStageEnum.Day2Checkin, checkin.Id);
             await CompleteStage(CheckinStageEnum.Day3Checkin, checkin.Id);
         }

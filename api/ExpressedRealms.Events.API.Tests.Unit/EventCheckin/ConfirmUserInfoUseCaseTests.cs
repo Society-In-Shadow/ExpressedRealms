@@ -153,8 +153,6 @@ public class ConfirmedUserInfoUseCaseTests
                     Id = PlayerId,
                 }
             );
-        A.CallTo(() => _eventCheckinRepository.GetCurrentStage(CheckinId))
-            .Returns(Task.FromResult<BasicInfo?>(null));
 
         await _useCase.ExecuteAsync(_model);
         A.CallTo(() =>

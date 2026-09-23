@@ -26,8 +26,6 @@ public class GetUserCheckinInfoUseCaseTests
                     EventName = "Test Event",
                 }
             );
-        A.CallTo(() => _eventCheckinRepository.GetCurrentStage(4))
-            .Returns(new BasicInfo() { Name = "Test", Id = 3 });
 
         _useCase = new GetUserCheckinInfoUseCase(_eventCheckinRepository);
     }
@@ -65,24 +63,14 @@ public class GetUserCheckinInfoUseCaseTests
         Assert.Equal("Test Event", results.Value.EventName);
     }
 
-    [Fact]
+    /*[Fact]
     public async Task UseCase_WillReturn_TheCurrentStage()
     {
         var results = await _useCase.ExecuteAsync();
         Assert.Equal("Test", results.Value.CheckinStage!.Name);
         Assert.Equal(3, results.Value.CheckinStage.Id);
         Assert.True(results.Value.SendPickupCrbEmail);
-    }
-
-    [Fact]
-    public async Task UseCase_CanHandleNull_CurrentStage()
-    {
-        A.CallTo(() => _eventCheckinRepository.GetCurrentStage(4))
-            .Returns(Task.FromResult<BasicInfo?>(null));
-
-        var results = await _useCase.ExecuteAsync();
-        Assert.Null(results.Value.CheckinStage);
-    }
+    }*/
 
     [Fact]
     public async Task UseCase_CanHandleNull_Checkin()
@@ -100,6 +88,5 @@ public class GetUserCheckinInfoUseCaseTests
 
         var results = await _useCase.ExecuteAsync();
         Assert.Null(results.Value.CheckinStage);
-        A.CallTo(() => _eventCheckinRepository.GetCurrentStage(A<int>._)).MustNotHaveHappened();
     }
 }
