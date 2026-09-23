@@ -41,7 +41,7 @@ internal sealed class ProficiencyRepository(
                 x.Motes,
                 x.WealthLevel,
                 x.ExtraMortis,
-                x.Expression.ExpressionSubTypeId
+                x.Expression.ExpressionSubTypeId,
             })
             .FirstOrDefaultAsync();
 

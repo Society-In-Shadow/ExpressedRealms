@@ -505,7 +505,8 @@ LIMIT 1
 
     public async Task<int> GetExpressionTypeId(int expressionId)
     {
-        return await context.Expressions.Where(x => x.Id == expressionId)
+        return await context
+            .Expressions.Where(x => x.Id == expressionId)
             .Select(x => x.ExpressionSubTypeId!.Value)
             .FirstAsync(cancellationToken);
     }

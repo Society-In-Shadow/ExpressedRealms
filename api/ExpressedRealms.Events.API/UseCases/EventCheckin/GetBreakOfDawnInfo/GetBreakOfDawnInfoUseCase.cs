@@ -26,7 +26,9 @@ internal sealed class GetBreakOfDawnInfoUseCase(
         var checkin = await checkinRepository.GetCheckinAsync(currentEventId!.Value, player);
 
         var proficiencies = await checkinRepository.GetSecondaryProficiencies(checkin!.Id);
-        var secondaryExpression = await checkinRepository.GetExpressionTypeId(proficiencies!.ExpressionId);
+        var secondaryExpression = await checkinRepository.GetExpressionTypeId(
+            proficiencies!.ExpressionId
+        );
 
         return Result.Ok(
             new GetBreakOfDawnInfoDto()
@@ -39,7 +41,7 @@ internal sealed class GetBreakOfDawnInfoUseCase(
                 Psyche = proficiencies.Psyche,
                 CharacterLevel = proficiencies.PlayerLevel,
                 ExpressionId = proficiencies.ExpressionId,
-                ExpressionSubType = secondaryExpression
+                ExpressionSubType = secondaryExpression,
             }
         );
     }
