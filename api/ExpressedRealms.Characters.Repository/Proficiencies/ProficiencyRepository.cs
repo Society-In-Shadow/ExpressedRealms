@@ -41,6 +41,7 @@ internal sealed class ProficiencyRepository(
                 x.Motes,
                 x.WealthLevel,
                 x.ExtraMortis,
+                x.Expression.ExpressionSubTypeId,
             })
             .FirstOrDefaultAsync();
 
@@ -175,7 +176,7 @@ internal sealed class ProficiencyRepository(
             return modifier.Modifier * currentLevel;
         }
 
-        var proficiencies = ProficiencyDtos.GetProficiencies(character.ExpressionId);
+        var proficiencies = ProficiencyDtos.GetProficiencies(character.ExpressionSubTypeId!.Value);
 
         foreach (var proficiency in proficiencies)
         {

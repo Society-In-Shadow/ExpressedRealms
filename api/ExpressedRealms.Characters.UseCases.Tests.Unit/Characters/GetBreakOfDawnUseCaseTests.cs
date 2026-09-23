@@ -181,7 +181,7 @@ public class GetBreakOfDawnUseCaseTests
         Assert.Equal(15, results.Value.Rwp);
         Assert.Equal(14, results.Value.Psyche);
         Assert.Equal(16, results.Value.Mortis);
-        Assert.Equal(7, results.Value.ExpressionId);
+        Assert.Equal(7, results.Value.ExpressionSubTypeId);
         Assert.Equal(5, results.Value.CharacterLevel);
     }
 }

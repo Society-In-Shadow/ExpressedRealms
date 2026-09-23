@@ -59,4 +59,5 @@ public interface IEventCheckinRepository : IGenericRepository
     Task<List<CheckinStageMapping>> GetActiveApprovedStages(int checkinId);
     Task<int?> GetInclusivePreCheckinEventId();
     Task<Guid?> GetPlayerIdOrDefault(string lookupId);
+    Task<int> GetExpressionTypeId(int expressionId);
 }

@@ -102,6 +102,7 @@ export interface GetBreakOfDawnInfoResponse {
   mortis: number
   characterLevel: number
   expressionId: number
+  expressionSubTypeId: number
 }
 
 export interface GoChecksResponse {

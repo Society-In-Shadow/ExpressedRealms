@@ -57,7 +57,7 @@ internal sealed class GetBreakOfDawnInfoUseCase(
                     .Select(x => x.Value)
                     .FirstOrDefault(),
                 CharacterLevel = characterLevel,
-                ExpressionId = expressionSubTypeId,
+                ExpressionSubTypeId = expressionSubTypeId,
             }
         );
     }
