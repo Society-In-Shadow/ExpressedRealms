@@ -5,7 +5,7 @@ export interface CharacterListResponse {
 export interface PrimaryCharacter {
   id: number
   name: string
-  playerStageId?: number | null
+  activeStages: Array<number>
   expression: string
   playerName: string
   playerNumber: number

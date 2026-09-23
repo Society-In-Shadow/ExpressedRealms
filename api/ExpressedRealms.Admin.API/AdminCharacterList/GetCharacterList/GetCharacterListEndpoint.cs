@@ -23,7 +23,7 @@ public static class GetCharacterListEndpoint
                         Id = x.Id,
                         Name = x.Name,
                         PlayerNumber = x.PlayerNumber,
-                        PlayerStageId = x.PlayerStageId,
+                        ActiveStages = x.ActiveStages,
                         HasPromotionRequest = x.HasPromotionRequest,
                     })
                     .ToList(),

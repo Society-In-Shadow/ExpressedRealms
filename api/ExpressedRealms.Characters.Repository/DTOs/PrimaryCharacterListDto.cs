@@ -7,7 +7,7 @@ public sealed record PrimaryCharacterListDto
     public string Expression { get; set; } = null!;
     public required string PlayerName { get; set; }
     public int PlayerNumber { get; set; }
-    public int? PlayerStageId { get; set; }
     public Guid PlayerId { get; set; }
     public bool HasPromotionRequest { get; set; }
+    public List<int> ActiveStages { get; set; } = [];
 }

@@ -132,16 +132,13 @@ internal sealed class CharacterRepository(
     {
         var activeEventId = await eventCheckinRepository.GetInclusivePreCheckinEventId();
 
-        // TODO: This is wrong, above is needed to make sure we pull in data for precheckin
         var maxStagePerPlayer = await context
             .CheckinStageMappings.Where(x => x.Checkin.EventId == activeEventId)
             .GroupBy(x => x.Checkin.PlayerId)
             .Select(g => new
             {
                 PlayerId = g.Key,
-                MaxStage = g.OrderByDescending(x => x.CreatedAt)
-                    .Select(x => x.CheckinStageId)
-                    .First(),
+                Stages = g.OrderBy(x => x.CreatedAt).Select(x => x.CheckinStageId).ToList(),
             })
             .ToListAsync(cancellationToken);
 
@@ -167,9 +164,10 @@ internal sealed class CharacterRepository(
 
         foreach (var player in players)
         {
-            player.PlayerStageId = maxStagePerPlayer
-                .FirstOrDefault(p => p.PlayerId == player.PlayerId)
-                ?.MaxStage;
+            player.ActiveStages = maxStagePerPlayer
+                .Where(p => p.PlayerId == player.PlayerId)
+                .SelectMany(x => x.Stages)
+                .ToList();
             player.HasPromotionRequest = characterPromotionRequests.Contains(player.Id);
         }
 

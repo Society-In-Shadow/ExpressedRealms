@@ -300,13 +300,12 @@ namespace ExpressedRealms.Characters.UseCases.Reports.GetCRB
             if (checkin is null)
                 return;
 
-            var currentStage = await checkinRepository.GetCurrentStage(checkin.Id);
-            if (currentStage is not null && currentStage.Id == CheckinStageEnum.GoApproval)
-            {
-                await sendMessageUseCase.ExecuteAsync(
-                    new() { CharacterId = characterId, StageId = CheckinStageEnum.CrbPrinted }
-                );
+            var approveCrbPrinted = await sendMessageUseCase.ExecuteAsync(
+                new() { CharacterId = characterId, StageId = CheckinStageEnum.CrbPrinted }
+            );
 
+            if (approveCrbPrinted.IsSuccess)
+            {
                 var proficiencies = await profRepository.GetBasicProficiencies(characterId);
 
                 var character = await characterRepository.GetCharacterInfoForPickablePowers(

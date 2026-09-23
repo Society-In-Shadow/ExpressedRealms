@@ -83,15 +83,13 @@ internal sealed class ConfirmedUserInfoUseCase(
             .Select(x => CheckinStageEnum.FromValue(x.CheckinStageId))
             .ToList();
 
-        var earliestIncomplete =
-            ApproveStageAndSendMessageUseCase.InitialCheckinSequence.FirstOrDefault(x =>
-                !completedStages.Contains(x)
-            );
+        var earliestIncomplete = CheckinWorkflows.InitialCheckinSequence.FirstOrDefault(x =>
+            !completedStages.Contains(x)
+        );
 
-        var latestCompleted =
-            ApproveStageAndSendMessageUseCase.InitialCheckinSequence.LastOrDefault(x =>
-                completedStages.Contains(x)
-            );
+        var latestCompleted = CheckinWorkflows.InitialCheckinSequence.LastOrDefault(x =>
+            completedStages.Contains(x)
+        );
 
         return (earliestIncomplete ?? latestCompleted)!;
     }
@@ -105,7 +103,7 @@ internal sealed class ConfirmedUserInfoUseCase(
         if (checkin is null)
         {
             checkinId = await checkinRepository.CreateCheckinAsync(
-                new Checkin() { PlayerId = playerId, EventId = eventId!.Value }
+                new Checkin() { PlayerId = playerId, EventId = eventId.Value }
             );
         }
 
