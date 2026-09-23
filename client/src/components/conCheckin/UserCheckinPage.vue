@@ -10,7 +10,7 @@ import Step from 'primevue/step'
 import StepPanel from 'primevue/steppanel'
 import Card from 'primevue/card'
 import Checkbox from 'primevue/checkbox'
-import type { BasicInfo } from '@/components/conCheckin/types.ts'
+import { type BasicInfo, CheckinStage } from '@/components/conCheckin/types.ts'
 
 const eventCheckinInfo = EventCheckinStore()
 const router = useRouter()
@@ -21,7 +21,7 @@ let qrcode = useQRCode(text, {
   margin: 5,
 })
 
-const currentStage = ref<BasicInfo | null>(null)
+const currentStage = ref<BasicInfo>(null)
 const stepperValue = ref(null)
 
 onBeforeMount(async () => {
@@ -38,25 +38,34 @@ async function refreshData() {
   await eventCheckinInfo.getCheckinInfo()
   text.value = eventCheckinInfo.lookupId
   currentStage.value = eventCheckinInfo.checkinStage
-  const startingSteps = [8, 9, 10]
-  if (currentStage.value) {
-    if (currentStage.value.id == 1)
-      stepperValue.value = '2'
-    else if (currentStage.value.id == 3) {
-      setInterval(updateCountdown, 1000)
-      stepperValue.value = (currentStage.value.id).toString()
-    }
-    else if (currentStage.value.id == 11) {
-      stepperValue.value = '3'
-    }
-    else if (startingSteps.includes(currentStage.value.id)) {
-      stepperValue.value = '1'
-    }
-    else
-      stepperValue.value = (currentStage.value.id).toString()
+
+  // Age Check, EVent Quetions Heck, Character Storage
+  if (eventCheckinInfo.checkinStage.id == CheckinStage.AwaitingCheckin)
+    stepperValue.value = '1' // Initial Checkin
+  // Transition point here, Waiting for future GO Approval Step to
+  else if (eventCheckinInfo.checkinStage.id == CheckinStage.AssignedXpCheck) {
+    stepperValue.value = '2' // GO Approval
   }
-  else {
-    stepperValue.value = '1'
+  // Waiting for future Completed Crb Printed
+  else if (eventCheckinInfo.checkinStage.id == CheckinStage.GoApproval) {
+    setInterval(updateCountdown, 1000)
+    stepperValue.value = '3' // CRB Is Cooking
+  }
+  // Waiting for past Assembled step
+  else if (eventCheckinInfo.checkinStage.id == CheckinStage.CrbPickedUp) {
+    stepperValue.value = '4' // CRB Ready
+  }
+  // Waiting for past picked up step
+  else if (eventCheckinInfo.checkinStage.id == CheckinStage.Day2Checkin) {
+    stepperValue.value = '5' // CRB Picked Up
+  }
+  // waiting for past chekcin step
+  else if (eventCheckinInfo.checkinStage.id == CheckinStage.Day3Checkin) {
+    stepperValue.value = '6'
+  }
+  // waiting for past chekcin step
+  else if (eventCheckinInfo.checkinStage.id == CheckinStage.FinalStage) {
+    stepperValue.value = '7'
   }
 }
 
