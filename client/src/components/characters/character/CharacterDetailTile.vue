@@ -74,7 +74,7 @@ const canEditCharacterSheet = computed(() => (characterInfo.isOwner && !characte
         </div>
         <div class="mt-3 text-right">
           <Button v-if="canDownloadCrb" label="Download CRB" class="mr-3" @click="downloadCharacterBooklet()" />
-          <Button v-if="canEditCharacterSheet" label="Edit" @click="redirectToEdit" />
+          <Button v-if="canEditCharacterSheet" label="Setup Wizard" @click="redirectToEdit" />
         </div>
       </div>
     </template>
