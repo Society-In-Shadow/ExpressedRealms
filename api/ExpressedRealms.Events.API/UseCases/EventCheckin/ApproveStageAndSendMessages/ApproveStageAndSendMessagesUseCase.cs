@@ -19,30 +19,6 @@ internal sealed class ApproveStageAndSendMessageUseCase(
     CancellationToken cancellationToken
 ) : IApproveStageAndSendMessageUseCase
 {
-    public static readonly List<CheckinStageEnum> PreCheckinSequence =
-    [
-        CheckinStageEnum.PlayerEarlyCheckin,
-        CheckinStageEnum.GoApproval,
-        CheckinStageEnum.CrbPrinted,
-        CheckinStageEnum.CrbAssembled,
-        CheckinStageEnum.CrbPickedUp,
-    ];
-
-    public static readonly List<CheckinStageEnum> InitialCheckinSequence =
-    [
-        CheckinStageEnum.AgeCheckApproval,
-        CheckinStageEnum.EventQuestionsCheck,
-        CheckinStageEnum.CharacterStorageQuestion,
-        CheckinStageEnum.AssignedXpCheck,
-        CheckinStageEnum.GoApproval,
-        CheckinStageEnum.CrbPrinted,
-        CheckinStageEnum.CrbAssembled,
-        CheckinStageEnum.CrbPickedUp,
-        CheckinStageEnum.Day2Checkin,
-        CheckinStageEnum.Day3Checkin,
-        CheckinStageEnum.FinalStage,
-    ];
-
     public async Task<Result> ExecuteAsync(ApproveStageAndSendMessageModel model)
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
@@ -96,7 +72,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
             return Result.Fail("Stage has been completed already");
 
         var inPreCheckinPeriod = await checkinRepository.GetExclusivePreCheckinEventId();
-        if (inPreCheckinPeriod.HasValue && !PreCheckinSequence.Contains(requestedStage))
+        if (inPreCheckinPeriod.HasValue && !CheckinWorkflows.PreCheckinSequence.Contains(requestedStage))
         {
             return Result.Fail(
                 "Precheckin Period doesn't allow this type of stage to be completed."
@@ -222,9 +198,9 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         if (completedStages.Count == 0)
             return new SequenceData(completedStages, false);
 
-        var requestedStageIndex = InitialCheckinSequence.IndexOf(currentTargetStage);
+        var requestedStageIndex = CheckinWorkflows.InitialCheckinSequence.IndexOf(currentTargetStage);
 
-        var previousStage = InitialCheckinSequence
+        var previousStage = CheckinWorkflows.InitialCheckinSequence
             .Where((x, y) => y == requestedStageIndex - 1)
             .FirstOrDefault();
 

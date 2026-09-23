@@ -58,7 +58,7 @@ onMounted(() => {
       },
     })
   }
-  if (props.character?.playerStageId == CheckinStage.CrbPrinted) {
+  if (props.character?.activeStages.includes(CheckinStage.CrbAssembled)) {
     items.value.push({
       label: 'CRB Ready For Pickup',
       command: async ($event) => {
@@ -70,7 +70,7 @@ onMounted(() => {
 })
 
 async function redirectToCharacterSheet() {
-  if (props.character?.playerStageId == CheckinStage.PlayerEarlyCheckin)
+  if (props.character?.activeStages.includes(CheckinStage.GoApproval))
     await router.push({ name: 'characterSheet', params: { id: props.character.id }, query: { src: 'approve_character_early' } })
   else
     await router.push({ name: 'characterSheet', params: { id: props.character.id } })

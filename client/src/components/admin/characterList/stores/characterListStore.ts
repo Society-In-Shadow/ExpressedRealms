@@ -46,33 +46,33 @@ export const adminCharacterListStore
         this.filteredCharacters = this.filteredCharacters.sort((a, b) => a.name.localeCompare(b.name))
       },
       getAwaitingCheckin() {
-        const awaitingStageIds = [8, 9]
-        return this.filteredCharacters.filter(x => x.playerStageId === null || awaitingStageIds.includes(x.playerStageId))
+        const awaitingStageIds = [CheckinStage.AwaitingCheckin]
+        return this.filteredCharacters.filter(x => x.activeStages.some(stage => awaitingStageIds.includes(stage)))
       },
       getAwaitingGoApproval() {
-        return this.filteredCharacters.filter(x => x.playerStageId === 1)
+        const awaitingStageIds = [CheckinStage.AssignedXpCheck, CheckinStage.GoApproval]
+        return this.filteredCharacters.filter(x => x.activeStages.some(stage => awaitingStageIds.includes(stage)))
       },
       getAwaitingCrbPrinting() {
-        const awaitingStageIds = [2, 3]
-        return this.filteredCharacters.filter(x => awaitingStageIds.includes(x.playerStageId))
+        return this.filteredCharacters.filter(x => x.activeStages.includes(CheckinStage.CrbPrinted))
       },
       getPrintedCrbs() {
-        return this.filteredCharacters.filter(x => x.playerStageId === 11)
+        return this.filteredCharacters.filter(x => x.activeStages.includes(CheckinStage.CrbAssembled))
       },
       getAwaitingPickup() {
-        return this.filteredCharacters.filter(x => x.playerStageId === 4)
+        return this.filteredCharacters.filter(x => x.activeStages.includes(CheckinStage.CrbPickedUp))
       },
       getAwaitingDay2() {
-        return this.filteredCharacters.filter(x => x.playerStageId === 5)
+        return this.filteredCharacters.filter(x => x.activeStages.includes(CheckinStage.Day2Checkin))
       },
       getAwaitingDay3() {
-        return this.filteredCharacters.filter(x => x.playerStageId === 6)
+        return this.filteredCharacters.filter(x => x.activeStages.includes(CheckinStage.Day3Checkin))
       },
       getCompletedCharacters() {
-        return this.filteredCharacters.filter(x => x.playerStageId === 7)
+        return this.filteredCharacters.filter(x => x.activeStages.includes(CheckinStage.FinalStage))
       },
       getAwaitingGoPreApproval() {
-        return this.filteredCharacters.filter(x => x.playerStageId === CheckinStage.PlayerEarlyCheckin)
+        return this.filteredCharacters.filter(x => x.activeStages.includes(CheckinStage.PlayerEarlyCheckin))
       },
       getFactionPromotions() {
         return this.filteredCharacters.filter(x => x.hasPromotionRequest)
