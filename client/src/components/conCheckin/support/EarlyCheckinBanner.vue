@@ -89,14 +89,3 @@ async function redirectToCharacterSheet() {
     </div>
   </div>
 </template>
-
-<style>
- .custom-message{
-   background: color-mix(in srgb,var(--p-blue-500),transparent 84%);
-   color: var(--p-blue-500);
-   border-radius:  var(--p-content-border-radius);
-   outline-width:  var(--p-content-border-width);
-   outline-style: solid;
-   -webkit-tap-highlight-color: transparent;
- }
-</style>
