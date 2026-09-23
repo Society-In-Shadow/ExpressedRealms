@@ -362,10 +362,10 @@ public static class ProficiencyDtos
             },
         };
 
-        const int Adepts = 3;
-        const int Sidhe = 7;
-        const int Sorcerers = 8;
-        const int Shammas = 4;
+        const int Adepts = 1;
+        const int Sidhe = 4;
+        const int Sorcerers = 5;
+        const int Shammas = 3;
 
         var expressionSpecificProficiency = expressionId switch
         {
