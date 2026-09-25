@@ -54,7 +54,7 @@ public static partial class Permissions
             Name = nameof(RunSpecialScripts),
             Description = "This allows one to run one off scripts that need to be run via code",
         };
-        
+
         public static readonly Permission RerunDailyUpdates = new(ResourceInfo)
         {
             Id = new Guid("01a0d8ba-dbd5-706c-84d0-67beeee3db9a"),

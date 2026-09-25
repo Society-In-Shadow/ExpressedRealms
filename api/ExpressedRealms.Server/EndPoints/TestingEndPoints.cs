@@ -80,13 +80,16 @@ internal static class TestingEndPoints
         endpoints
             .MapPost("/updateLookup", () => Results.Ok())
             .RequirePermission(Permissions.DevDebug.RunSpecialScripts);
-        
+
         endpoints
-            .MapPost("/rerunDailyMessage", async (IEventReminderHandlerUseCase eventReminderHandler) =>
-            {
-                await eventReminderHandler.ExecuteAsync();
-                return Results.Ok();
-            })
+            .MapPost(
+                "/rerunDailyMessage",
+                async (IEventReminderHandlerUseCase eventReminderHandler) =>
+                {
+                    await eventReminderHandler.ExecuteAsync();
+                    return Results.Ok();
+                }
+            )
             .RequirePermission(Permissions.DevDebug.RerunDailyUpdates);
     }
 }
