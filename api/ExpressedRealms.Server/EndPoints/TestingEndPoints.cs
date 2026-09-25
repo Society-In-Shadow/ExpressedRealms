@@ -2,6 +2,7 @@ using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Authentication.PermissionCollection.Configuration;
 using ExpressedRealms.Email.TestEmail;
 using ExpressedRealms.Events.API.Discord;
+using ExpressedRealms.Events.API.UseCases.Events.TriggerEventReminder;
 using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.FeatureFlags.FeatureClient;
 using StackExchange.Redis;
@@ -79,5 +80,16 @@ internal static class TestingEndPoints
         endpoints
             .MapPost("/updateLookup", () => Results.Ok())
             .RequirePermission(Permissions.DevDebug.RunSpecialScripts);
+
+        endpoints
+            .MapPost(
+                "/rerunDailyMessage",
+                async (IEventReminderHandlerUseCase eventReminderHandler) =>
+                {
+                    await eventReminderHandler.ExecuteAsync();
+                    return Results.Ok();
+                }
+            )
+            .RequirePermission(Permissions.DevDebug.RerunDailyUpdates);
     }
 }

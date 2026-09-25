@@ -128,6 +128,7 @@ export const UserPermissions = {
     SendDiscordMessage: 'devdebug.senddiscordmessage',
     TestRedis: 'devdebug.testredis',
     RunSpecialScripts: 'devdebug.runspecialscripts',
+    RerunDailyUpdates: 'devdebug.rerundailyupdates',
   } as const,
 } as const
 
