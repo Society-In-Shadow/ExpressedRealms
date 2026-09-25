@@ -1,3 +1,4 @@
+using ExpressedRealms.DB.Models.Checkins.CheckinSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.Events.API.Repositories.EventCheckin;
 using ExpressedRealms.Events.API.Repositories.Events;
@@ -34,20 +35,7 @@ internal sealed class GetEarlyCheckinInformationForPlayerUseCase(
         var primaryCharacter = await checkinRepository.GetPrimaryCharacterInformation(playerId);
         var checkin = await checkinRepository.GetCheckinAsync(targetEvent.Value, playerId);
 
-        CheckinStageEnum? currentStage = null;
-        if (checkin is not null)
-        {
-            var approvedStages = await checkinRepository.GetActiveApprovedStages(checkin.Id);
-            var activeList = approvedStages
-                .Select(x => CheckinStageEnum.FromValue(x.CheckinStageId))
-                .ToList();
-            var currentStageIndex = CheckinWorkflows.PreCheckinSequence.FindLastIndex(
-                activeList.Contains
-            );
-            currentStage = CheckinWorkflows.PreCheckinSequence[
-                Math.Min(currentStageIndex + 1, CheckinWorkflows.PreCheckinSequence.Count - 1)
-            ];
-        }
+        var currentStage = await GetCurrentStage(checkin);
 
         return Result.Ok(
             new GetEarlyCheckinInformationForPlayerReturnModel()
@@ -70,5 +58,27 @@ internal sealed class GetEarlyCheckinInformationForPlayerUseCase(
                     : new KeyValuePair<int, string>(currentStage.Value, currentStage.Name),
             }
         );
+    }
+
+    private async Task<CheckinStageEnum?> GetCurrentStage(Checkin? checkin)
+    {
+        if (checkin is null)
+            return null;
+
+        var approvedStages = await checkinRepository.GetActiveApprovedStages(checkin.Id);
+
+        if (approvedStages.Count == 0)
+            return null;
+        
+        var activeList = approvedStages
+            .Select(x => CheckinStageEnum.FromValue(x.CheckinStageId))
+            .ToList();
+        var currentStageIndex = CheckinWorkflows.PreCheckinSequence.FindLastIndex(
+            activeList.Contains
+        );
+        
+        return CheckinWorkflows.PreCheckinSequence[
+            Math.Min(currentStageIndex + 1, CheckinWorkflows.PreCheckinSequence.Count - 1)
+        ];
     }
 }
