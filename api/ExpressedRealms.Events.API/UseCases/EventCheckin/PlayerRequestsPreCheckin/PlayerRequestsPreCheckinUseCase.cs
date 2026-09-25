@@ -27,7 +27,7 @@ internal sealed class PlayerRequestsPreCheckinUseCase(
 
         if (primaryCharacter is null)
             return Result.Fail("They do not have a primary character selected");
-        
+
         await checkinRepository.CompleteStage(
             new CheckinStageMapping()
             {
@@ -47,8 +47,9 @@ internal sealed class PlayerRequestsPreCheckinUseCase(
                 CheckinId = checkinId,
             }
         );
-        
-        var seekingCrbMessage = $"Character \"{primaryCharacter.CharacterName}\" has Requested Pre GO Approval";
+
+        var seekingCrbMessage =
+            $"Character \"{primaryCharacter.CharacterName}\" has Requested Pre GO Approval";
         await discordService.SendMessageToChannelAsync(
             DiscordChannel.PreCheckinLoadingBay,
             seekingCrbMessage

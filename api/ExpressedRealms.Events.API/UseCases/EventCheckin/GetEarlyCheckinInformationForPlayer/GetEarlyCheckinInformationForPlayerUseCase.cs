@@ -69,14 +69,14 @@ internal sealed class GetEarlyCheckinInformationForPlayerUseCase(
 
         if (approvedStages.Count == 0)
             return null;
-        
+
         var activeList = approvedStages
             .Select(x => CheckinStageEnum.FromValue(x.CheckinStageId))
             .ToList();
         var currentStageIndex = CheckinWorkflows.PreCheckinSequence.FindLastIndex(
             activeList.Contains
         );
-        
+
         return CheckinWorkflows.PreCheckinSequence[
             Math.Min(currentStageIndex + 1, CheckinWorkflows.PreCheckinSequence.Count - 1)
         ];
