@@ -43,6 +43,13 @@ const RunSpecialScripts = async () => {
     })
 }
 
+const RerunDailyMessage = async () => {
+  await axios.post(`/dev/rerunDailyMessage`)
+    .then(async (response) => {
+      toaster.success(`Successfully Re-Ran Daily Message!`)
+    })
+}
+
 </script>
 
 <template>
@@ -55,5 +62,6 @@ const RunSpecialScripts = async () => {
     <Button v-if="permissionCheck.DevDebug.SendDiscordMessage" label="Test Sending Discord Message" @click="sendDiscordMessage" />
     <Button v-if="permissionCheck.DevDebug.TestRedis" label="Test Redis" @click="testRedis" />
     <Button v-if="permissionCheck.DevDebug.RunSpecialScripts" label="Run Special Scripts" @click="RunSpecialScripts" />
+    <Button v-if="permissionCheck.DevDebug.RerunDailyUpdates" label="Re-run Daily Message" @click="RerunDailyMessage" />
   </div>
 </template>
