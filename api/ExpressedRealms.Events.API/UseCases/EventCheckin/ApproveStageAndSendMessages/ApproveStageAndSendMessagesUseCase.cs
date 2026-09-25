@@ -111,22 +111,17 @@ internal sealed class ApproveStageAndSendMessageUseCase(
             // Once GO Approves, it immediately goes into CRB Creation
             await CompleteStage(requestedStage, checkin.Id);
 
-            if (earlyCheckinBypass)
-            {
-                var seekingCrbMessage = $"A GO has Approved a Character for Print Out";
-                await discordService.SendMessageToChannelAsync(
-                    DiscordChannel.PreCheckinLoadingBay,
-                    seekingCrbMessage
-                );
-            }
-            else
-            {
-                var seekingCrbMessage = $"A CRB was approved and put into the print queue";
-                await discordService.SendMessageToChannelAsync(
-                    DiscordChannel.PlayersSeekingCrbs,
-                    seekingCrbMessage
-                );
-            }
+            var characterInformation = await checkinRepository.GetPrimaryCharacterInformation(
+                playerId
+            );
+            var seekingCrbMessage =
+                $"A GO has Approved Character \"{characterInformation!.CharacterName}\" for Print Out";
+            await discordService.SendMessageToChannelAsync(
+                earlyCheckinBypass
+                    ? DiscordChannel.PreCheckinLoadingBay
+                    : DiscordChannel.PlayersSeekingCrbs,
+                seekingCrbMessage
+            );
 
             return Result.Ok();
         }
