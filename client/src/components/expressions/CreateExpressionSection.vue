@@ -91,10 +91,11 @@ const [content] = defineField('content')
 const [sectionType] = defineField('sectionType')
 
 const onSubmit = handleSubmit((values) => {
+  let sectionTypeId = props.addExpressionHeader ? 2 : values.sectionType.Id
   axios.post(`/expressionSubSections/${expressionInfo.currentExpressionId}`, {
     name: values.name,
     content: values.content,
-    sectionTypeId: values.sectionType.id,
+    sectionTypeId: sectionTypeId,
     parentId: props.parentId,
   }).then(() => {
     emit('addedSection')

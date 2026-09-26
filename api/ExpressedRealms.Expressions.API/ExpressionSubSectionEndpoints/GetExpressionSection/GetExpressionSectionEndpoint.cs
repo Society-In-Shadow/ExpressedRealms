@@ -7,7 +7,7 @@ namespace ExpressedRealms.Expressions.API.ExpressionSubSectionEndpoints.GetExpre
 
 internal static class GetExpressionSectionEndpoint
 {
-    internal static async Task<Results<NotFound, Ok<ExpressionSectionDto>>> ExecuteAsync(
+    internal static async Task<Results<NotFound, Ok<ExpressionSectionDto?>>> ExecuteAsync(
         int id,
         IExpressionTextSectionRepository repository
     )
@@ -15,7 +15,7 @@ internal static class GetExpressionSectionEndpoint
         var section = await repository.GetExpressionSection(id);
 
         if (section is null)
-            return TypedResults.NotFound();
+            return TypedResults.Ok((ExpressionSectionDto?)null);
 
         return TypedResults.Ok(
             new ExpressionSectionDto()

@@ -150,7 +150,7 @@ const canCreate = computed(() => {
               <div v-if="permissionCheck.Expression.DownloadBooklet" class="d-flex flex-row justify-content-end align-items-center">
                 <Button label="Download Booklet" @click="downloadExpressionBooklet()" />
               </div>
-              <CreateExpressionSection v-if="expressionHeader.id === 0" :add-expression-header="true" @added-section="fetchData(route.params.name)" />
+              <CreateExpressionSection v-if="!expressionHeader" :add-expression-header="true" @added-section="fetchData(route.params.name)" />
               <EditExpressionSection
                 v-else :section-info="expressionHeader" :current-level="1" :show-skeleton="headerIsLoading" :is-read-only="showPreview"
                 :is-header-section="true"
