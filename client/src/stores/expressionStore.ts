@@ -3,13 +3,14 @@ import axios from 'axios'
 import { cmsStore } from '@/stores/cmsStore.ts'
 import router from '@/router'
 import type { ExpressionSubTypes } from '@/components/expressions/expressionSubTypes'
+import type { ExpressionSectionDto } from '@/components/expressions/types.ts'
 
 const cmsInfo = cmsStore()
 export const expressionStore
   = defineStore('expression', {
     state: () => {
       return {
-        sections: [] as any[],
+        sections: [] as ExpressionSectionDto[],
         currentExpressionId: 0 as number,
         currentExpressionName: '' as string,
         isDoneLoading: false as boolean,

@@ -115,10 +115,12 @@ function toggleCreate() {
 }
 
 const onSubmit = handleSubmit((values) => {
+  let sectionTypeId = props.isHeaderSection ? 2 : values.sectionType.Id
+
   axios.put(`/expressionSubSections/${expressionInfo.currentExpressionId}/${props.sectionInfo.id}`, {
     name: values.name,
     content: values.content,
-    sectionTypeId: values.sectionType.id,
+    sectionTypeId: sectionTypeId,
   }).then(() => {
     props.sectionInfo.name = values.name
     props.sectionInfo.content = values.content

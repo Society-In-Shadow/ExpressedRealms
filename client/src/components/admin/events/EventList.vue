@@ -47,9 +47,12 @@ const sortedEvents = computed<Event[]>(() => {
 })
 const today = DateTime.now().startOf('day')
 const currentAndUnpublishedEvents = computed(() => {
-  return sortedEvents.value.filter((x) => {
+  const filteredEvents = sortedEvents.value.filter((x) => {
     const endOfDay = x.endDate.startOf('day')
     return endOfDay >= today || !x.isPublished
+  })
+  return filteredEvents.sort((a, b) => {
+    return a.startDate - b.startDate
   })
 })
 
