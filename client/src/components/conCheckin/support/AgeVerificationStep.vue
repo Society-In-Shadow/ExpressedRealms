@@ -56,17 +56,17 @@ const verifiedMessage = computed(() => {
 </script>
 
 <template>
-  <h2>{{ eventCheckinInfo.goCheckinInfo.userName }}</h2>
   <div v-if="ageInfo == null">
     Loading...
   </div>
   <div v-else-if="!ageInfo.hasBeenVerified">
-    <h2 v-if="ageInfo && ageInfo.ageGroupId == null">
+    <h2>{{ ageInfo.playerName }}</h2>
+    <h3 v-if="ageInfo && ageInfo.ageGroupId == null">
       Looks like this is your first time playing!
-    </h2>
-    <h2 v-if="signedWaiver && !ageInfo.ageGroupId == null">
+    </h3>
+    <h3 v-if="signedWaiver && !ageInfo.ageGroupId == null">
       They need to reverify their age, they are in the teen bracket
-    </h2>
+    </h3>
     <div class="d-flex self-align-center gap-2 mb-3">
       <Checkbox id="13AgeQuestion" v-model="is13OrOlder" binary />
       <label for="13AgeQuestion">Are you 13 years or older?</label>
