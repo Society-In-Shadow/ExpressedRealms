@@ -147,7 +147,7 @@ const approveStage = async (stageId: number) => {
       </StepPanel>
     </StepItem>
     <StepItem value="2">
-      <Step>Verify User Info</Step>
+      <Step>Age Verification</Step>
       <StepPanel v-if="eventCheckinInfo.activeStepperStep == '2'">
         <AgeVerificationStep />
       </StepPanel>
