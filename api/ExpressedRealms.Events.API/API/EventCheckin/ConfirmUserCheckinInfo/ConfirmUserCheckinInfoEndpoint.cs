@@ -9,22 +9,28 @@ namespace ExpressedRealms.Events.API.API.EventCheckin.ConfirmUserCheckinInfo;
 
 public static class ConfirmUserCheckinInfoEndpoint
 {
-    public static async Task<
-        Results<Ok<GetGoCheckinInfoResponse>, ValidationProblem, NotFound>
-    > ExecuteAsync(string lookupId, [FromServices] IConfirmedUserInfoUseCase useCase)
+    public static async Task<Results<Ok<GetGoCheckinInfoResponse>, ValidationProblem, NotFound>> 
+        ExecuteAsync(string lookupId, [FromServices] IConfirmedUserInfoUseCase useCase)
     {
         var results = await useCase.ExecuteAsync(new() { LookupId = lookupId });
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;
         if (results.HasNotFound(out var notFound))
-            return notFound;
+        {
+            return TypedResults.Ok(new GetGoCheckinInfoResponse()
+            {
+                WasFound = false,
+            });
+        }
+            
 
         results.ThrowIfErrorNotHandled();
 
         return TypedResults.Ok(
             new GetGoCheckinInfoResponse()
             {
+                WasFound = true,
                 PlayerNumber = results.Value.PlayerNumber,
                 PrimaryCharacterInfo = results.Value.PrimaryCharacterInfo is null
                     ? null

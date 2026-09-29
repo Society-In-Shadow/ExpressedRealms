@@ -62,11 +62,9 @@ function waitForElement(selector, timeout = 300) {
 }
 async function onDetect(detectedCodes) {
   eventCheckinInfo.lookupId = detectedCodes
-  await eventCheckinInfo.getGoCheckinInfo(detectedCodes)
+  await eventCheckinInfo.verifiedUserInfo()
 
   const activeEl = await waitForElement('.active-panel')
-
-  console.log(activeEl)
 
   activeEl?.scrollIntoView({
     behavior: 'smooth',

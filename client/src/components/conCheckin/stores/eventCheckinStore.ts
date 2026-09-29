@@ -9,7 +9,6 @@ import {
   CheckinStage,
   type GetCheckinQuestionsResponse,
   type GetStonePullInfoResponse,
-  type GoCheckinInfo,
   type PrimaryCharacterInfo,
   type Question,
 } from '@/components/conCheckin/types.ts'
@@ -27,7 +26,6 @@ export const EventCheckinStore
         lookupId: '',
         eventName: '',
         checkinStage: {} as BasicInfo,
-        goCheckinInfo: {} as GoCheckinInfo,
         playerNumber: 0,
         assignedXp: {} as AssignedXpType | null | undefined,
         primaryCharacter: {} as PrimaryCharacterInfo | null,
@@ -42,7 +40,6 @@ export const EventCheckinStore
         this.isReset = true
         this.lookupId = ''
         this.checkinStage = null
-        this.goCheckinInfo = {} as GoCheckinInfo
         this.playerNumber = 0
         this.assignedXp = null
         this.primaryCharacter = null
@@ -60,22 +57,14 @@ export const EventCheckinStore
         this.checkinStage = response.data.checkinStage
         this.sendPickupCrbEmail = response.data.sendPickupCrbEmail
       },
-      async getGoCheckinInfo(lookupId: string): Promise<boolean> {
-        const response = await axios.get<GoCheckinInfo>(`/events/checkin/lookup/${encodeURIComponent(lookupId)}`)
+      async verifiedUserInfo() {
+        this.foundInfo = false
+        const response = await axios.get<ApproveCheckinInfo>(`/events/checkin/lookup/${this.lookupId}/approve`)
 
         if (!response.data.wasFound) {
           this.hasInvalidLookupId = true
           return false
         }
-
-        this.hasInvalidLookupId = false
-        this.goCheckinInfo = response.data
-        this.activeStepperStep = '2'
-        return true
-      },
-      async verifiedUserInfo() {
-        this.foundInfo = false
-        const response = await axios.get<ApproveCheckinInfo>(`/events/checkin/lookup/${this.lookupId}/approve`)
 
         this.foundInfo = true
         this.playerNumber = response.data.playerNumber
@@ -89,7 +78,7 @@ export const EventCheckinStore
         switch (checkinStage as CheckinStage) {
           default:
             // They need to verify their age
-            this.activeStepperStep = '2'
+            this.activeStepperStep = '1'
             break
           case CheckinStage.AgeCheckApproval:
             // Age approved, They need to answer event questions next
