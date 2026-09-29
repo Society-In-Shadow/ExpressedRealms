@@ -14,6 +14,7 @@ import {
 } from '@/components/conCheckin/types.ts'
 import toaster from '@/services/Toasters'
 import router from '@/router'
+import { can } from '@/stores/userPermissionStore.ts'
 
 export const EventCheckinStore
   = defineStore(`eventCheckin`, {
@@ -98,7 +99,7 @@ export const EventCheckinStore
           case CheckinStage.PlayerNeedsReapproval:
             // Stone Pulled, They need to get GO Approval next
             // Redirect them to the character sheet
-            if (this.primaryCharacter) {
+            if (this.primaryCharacter && can.Event.GoApproval) {
               await router.push({ name: 'characterSheet', params: { id: this.primaryCharacter.characterId }, query: { src: 'approve_character_checkin' } })
               return
             }
@@ -166,7 +167,7 @@ export const EventCheckinStore
         await axios.post(`/events/checkin/lookup/${this.lookupId}/assignXp`, { amount: amount, AssignedXpTypeId: typeId })
 
         toaster.success('Assigned XP successfully!')
-        await this.handleStageRedirect(CheckinStage.ShqApproval)
+        await this.verifiedUserInfo()
       },
       async approveStage(stageId: number) {
         await axios.post(`/events/checkin/lookup/${this.lookupId}/approveStage`, { stageId: stageId })
