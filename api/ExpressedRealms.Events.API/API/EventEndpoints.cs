@@ -10,7 +10,6 @@ using ExpressedRealms.Events.API.API.EventCheckin.GetBasicCheckDetails;
 using ExpressedRealms.Events.API.API.EventCheckin.GetBreakOfDawnInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetCheckinQuestions;
 using ExpressedRealms.Events.API.API.EventCheckin.GetEarlyCheckinInfo;
-using ExpressedRealms.Events.API.API.EventCheckin.GetGoCheckinInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetStonePullInfo;
 using ExpressedRealms.Events.API.API.EventCheckin.GetUserCheckinDetails;
 using ExpressedRealms.Events.API.API.EventCheckin.PlayerRequestsPreCheckin;
@@ -124,10 +123,6 @@ internal static class EventEndpoints
             "checkin/updateCrbEmail",
             UpdateCrbEmailNotificationEndpoint.ExecuteAsync
         );
-
-        endpointGroup
-            .MapGet("checkin/lookup/{lookupId}", GetGoCheckinInfoEndpoint.ExecuteAsync)
-            .RequirePermission(Permissions.Event.Checkin);
 
         endpointGroup
             .MapGet(

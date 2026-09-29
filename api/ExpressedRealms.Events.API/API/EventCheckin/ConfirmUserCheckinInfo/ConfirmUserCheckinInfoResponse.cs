@@ -8,4 +8,5 @@ public class GetGoCheckinInfoResponse
     public PrimaryCharacterInfo? PrimaryCharacterInfo { get; set; }
     public BasicInfo? CurrentStage { get; set; }
     public int CurrentEventDay { get; set; }
+    public bool WasFound { get; set; }
 }

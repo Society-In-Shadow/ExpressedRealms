@@ -17,14 +17,17 @@ public static class ConfirmUserCheckinInfoEndpoint
 
         if (results.HasValidationError(out var validationProblem))
             return validationProblem;
-        if (results.HasNotFound(out var notFound))
-            return notFound;
+        if (results.HasNotFound(out _))
+        {
+            return TypedResults.Ok(new GetGoCheckinInfoResponse() { WasFound = false });
+        }
 
         results.ThrowIfErrorNotHandled();
 
         return TypedResults.Ok(
             new GetGoCheckinInfoResponse()
             {
+                WasFound = true,
                 PlayerNumber = results.Value.PlayerNumber,
                 PrimaryCharacterInfo = results.Value.PrimaryCharacterInfo is null
                     ? null

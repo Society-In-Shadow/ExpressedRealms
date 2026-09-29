@@ -28,12 +28,8 @@ export interface CheckinInfo {
   sendPickupCrbEmail: boolean
 }
 
-export interface GoCheckinInfo {
-  wasFound: boolean
-  userName: string | null
-}
-
 export interface ApproveCheckinInfo {
+  wasFound: boolean
   playerNumber: number
   questions: Array<Question>
   primaryCharacterInfo: PrimaryCharacterInfo | null
@@ -83,6 +79,7 @@ export interface ActiveEvent {
 }
 
 export interface AgeInfo {
+  playerName: string
   ageGroupId: AgeGroupId | null
   hasBeenVerified: boolean
 }

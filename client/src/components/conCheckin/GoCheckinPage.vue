@@ -62,11 +62,9 @@ function waitForElement(selector, timeout = 300) {
 }
 async function onDetect(detectedCodes) {
   eventCheckinInfo.lookupId = detectedCodes
-  await eventCheckinInfo.getGoCheckinInfo(detectedCodes)
+  await eventCheckinInfo.verifiedUserInfo()
 
   const activeEl = await waitForElement('.active-panel')
-
-  console.log(activeEl)
 
   activeEl?.scrollIntoView({
     behavior: 'smooth',
@@ -149,13 +147,13 @@ const approveStage = async (stageId: number) => {
       </StepPanel>
     </StepItem>
     <StepItem value="2">
-      <Step>Verify User Info</Step>
+      <Step>Age Verification</Step>
       <StepPanel v-if="eventCheckinInfo.activeStepperStep == '2'">
         <AgeVerificationStep />
       </StepPanel>
     </StepItem>
     <StepItem value="3">
-      <Step>HR Questions</Step>
+      <Step>Event Questions</Step>
       <StepPanel v-if="eventCheckinInfo.activeStepperStep == '3'">
         <AnswerQuestions />
       </StepPanel>
@@ -175,7 +173,13 @@ const approveStage = async (stageId: number) => {
     <StepItem value="6" :disabled="stepperStep !== '6'">
       <Step>GO Approval</Step>
       <StepPanel>
-        <h3>Link to their CRB</h3>
+        <div v-if="!can.Event.GoApproval">
+          <h3>Insufficient Permissions</h3>
+          <p>You do not have the ability to approve this character sheet.</p>
+          <p>Redirect the player to find a Floor GO.</p>
+          <p>Reset the scanner by clicking the button below.</p>
+          <Button class="mr-3" label="Reset Scanner" @click="eventCheckinInfo.resetGoPage()" />
+        </div>
         <p v-if="!eventCheckinInfo.primaryCharacter">
           They do not have a primary character setup yet, you will need to walk them through how to do that.  You will need to recheck them in after they have one
         </p>

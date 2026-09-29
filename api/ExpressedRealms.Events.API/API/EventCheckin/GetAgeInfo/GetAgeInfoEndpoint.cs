@@ -26,6 +26,7 @@ public static class GetAgeInfoEndpoint
         return TypedResults.Ok(
             new GetAgeInfoResponse()
             {
+                PlayerName = results.Value.PlayerName,
                 AgeGroupId = results.Value.AgeGroupId,
                 HasBeenVerified = results.Value.HasBeenVerified,
             }

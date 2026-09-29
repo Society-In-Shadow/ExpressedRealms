@@ -28,6 +28,7 @@ internal sealed class GetAgeInfoUseCase(
         return Result.Ok(
             new GetAgeInfoReturnModel()
             {
+                PlayerName = player.Name,
                 AgeGroupId = player.AgeGroupId,
                 HasBeenVerified =
                     player.LastAgeGroupCheck.HasValue
