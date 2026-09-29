@@ -497,18 +497,30 @@ internal sealed class CharacterRepository(
             ExpressionPublishStatusEnum.Legacy.Value,
             ExpressionPublishStatusEnum.PlayTesting.Value,
         ];
-        var character = await context
-            .Characters.Where(x => x.Id == id && x.Player.UserId == userContext.CurrentUserId())
-            .Select(x => new { x.IsPrimaryCharacter, x.Expression.PublishStatusId })
-            .FirstOrDefaultAsync();
+        var userCharacters = await context
+            .Characters.Where(x => x.Player.UserId == userContext.CurrentUserId())
+            .Select(x => new
+            {
+                x.Id,
+                x.Expression.PublishStatusId,
+                x.IsPrimaryCharacter,
+            })
+            .ToListAsync(cancellationToken);
 
-        if (character is null)
-            return false;
+        var currentCharacter = userCharacters.First(x => x.Id == id);
 
-        // Always allow a player to unselect a primary character
-        if (character.IsPrimaryCharacter)
+        // Always allow primary characters to be deselected
+        if (currentCharacter.IsPrimaryCharacter)
             return true;
 
-        return !invalidPublishTypes.Contains(character.PublishStatusId);
+        var currentCharacterHasInvalidExpressionType = invalidPublishTypes.Contains(
+            currentCharacter.PublishStatusId
+        );
+        if (currentCharacterHasInvalidExpressionType)
+            return false;
+
+        // This character can only become a primary if there are no other primary characters
+        var hasOtherPrimaryCharacters = userCharacters.Any(x => x.IsPrimaryCharacter && x.Id != id);
+        return !hasOtherPrimaryCharacters;
     }
 }
