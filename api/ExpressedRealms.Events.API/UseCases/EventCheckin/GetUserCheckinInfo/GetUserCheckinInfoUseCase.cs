@@ -21,8 +21,8 @@ internal sealed class GetUserCheckinInfoUseCase(IEventCheckinRepository checkinR
         BasicInfo? currentStage = null;
         if (playerInfo.CheckinId is not null)
         {
-            var stages = await checkinRepository.GetActiveApprovedStages(
-                playerInfo.CheckinId.Value
+            var stages = CheckinWorkflows.FilterActiveApprovedStages(
+                await checkinRepository.GetApprovedStages(playerInfo.CheckinId.Value)
             );
             var activeStep = GetActiveStatus(stages);
             currentStage = new BasicInfo() { Id = activeStep.Value, Name = activeStep.Name };

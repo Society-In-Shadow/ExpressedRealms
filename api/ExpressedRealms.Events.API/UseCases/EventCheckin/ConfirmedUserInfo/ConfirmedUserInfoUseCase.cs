@@ -78,7 +78,9 @@ internal sealed class ConfirmedUserInfoUseCase(
     // This needs to happen during character management grab
     private async Task<CheckinStageEnum> GetEarliestIncompleteStage(int checkinId)
     {
-        var activeList = await checkinRepository.GetActiveApprovedStages(checkinId);
+        var activeList = CheckinWorkflows.FilterActiveApprovedStages(
+            await checkinRepository.GetApprovedStages(checkinId)
+        );
         var completedStages = activeList
             .Select(x => CheckinStageEnum.FromValue(x.CheckinStageId))
             .ToList();

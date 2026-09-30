@@ -185,7 +185,9 @@ internal sealed class ApproveStageAndSendMessageUseCase(
     )
     {
         // Filters stages, makes sure that stages between initial checkin and anything before reapproval gets removed
-        var activeList = await checkinRepository.GetActiveApprovedStages(checkinId);
+        var activeList = CheckinWorkflows.FilterActiveApprovedStages(
+            await checkinRepository.GetApprovedStages(checkinId)
+        );
 
         var completedStages = activeList
             .Select(x => CheckinStageEnum.FromValue(x.CheckinStageId))
