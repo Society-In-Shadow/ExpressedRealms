@@ -138,7 +138,7 @@ internal sealed class CharacterRepository(
             .Select(g => new
             {
                 PlayerId = g.Key,
-                Stages = g.OrderBy(x => x.CreatedAt).Select(x => x.CheckinStageId).ToList(),
+                Stages = g.OrderBy(x => x.CreatedAt).ToList(),
             })
             .ToListAsync(cancellationToken);
 

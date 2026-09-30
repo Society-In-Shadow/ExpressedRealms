@@ -68,7 +68,9 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         var sequenceData = await GetSequenceData(checkin.Id, requestedStage);
 
         var hasBeenCompleted = sequenceData.CompletedStages.Contains(requestedStage);
-        if (hasBeenCompleted)
+        var isReapprovingCharacter = requestedStage == CheckinStageEnum.PlayerNeedsReapproval;
+        var hasReApprovedBefore = sequenceData.CompletedStages.Any(x => x == CheckinStageEnum.PlayerNeedsReapproval);
+        if (hasBeenCompleted && !(isReapprovingCharacter && hasReApprovedBefore))
             return Result.Fail("Stage has been completed already");
 
         var inPreCheckinPeriod = await checkinRepository.GetExclusivePreCheckinEventId();
@@ -94,6 +96,19 @@ internal sealed class ApproveStageAndSendMessageUseCase(
             }
 
             return Result.Fail("The user does not have Early Checkin Privileges");
+        }
+
+        if (requestedStage == CheckinStageEnum.PlayerNeedsReapproval)
+        {
+            var completedShqSteps = 
+                CheckinWorkflows.SHQCheckinSequence.Any() &&
+                CheckinWorkflows.SHQCheckinSequence.All(x => sequenceData.CompletedStages.Contains(x));
+
+            if (!completedShqSteps)
+                return Result.Fail("All SHQ related checkin steps need to be finished before reapproving");
+            
+            await CompleteStage(CheckinStageEnum.PlayerNeedsReapproval, checkin.Id);
+            return Result.Ok();
         }
 
         var earlyCheckinBypass = sequenceData.CompletedStages.Contains(

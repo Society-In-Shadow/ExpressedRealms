@@ -1,3 +1,5 @@
+using ExpressedRealms.DB.Models.Checkins.CheckinStageMappingSetup;
+
 namespace ExpressedRealms.Characters.Repository.DTOs;
 
 public sealed record PrimaryCharacterListDto
@@ -9,5 +11,5 @@ public sealed record PrimaryCharacterListDto
     public int PlayerNumber { get; set; }
     public Guid PlayerId { get; set; }
     public bool HasPromotionRequest { get; set; }
-    public List<int> ActiveStages { get; set; } = [];
+    public List<CheckinStageMapping> ActiveStages { get; set; } = [];
 }
