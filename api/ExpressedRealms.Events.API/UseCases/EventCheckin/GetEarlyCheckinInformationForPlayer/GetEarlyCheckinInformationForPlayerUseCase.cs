@@ -65,7 +65,9 @@ internal sealed class GetEarlyCheckinInformationForPlayerUseCase(
         if (checkin is null)
             return null;
 
-        var approvedStages = await checkinRepository.GetActiveApprovedStages(checkin.Id);
+        var approvedStages = CheckinWorkflows.FilterActiveApprovedStages(
+            await checkinRepository.GetApprovedStages(checkin.Id)
+        );
 
         if (approvedStages.Count == 0)
             return null;

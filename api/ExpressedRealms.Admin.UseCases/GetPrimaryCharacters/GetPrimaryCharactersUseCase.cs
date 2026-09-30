@@ -1,4 +1,5 @@
 using ExpressedRealms.Characters.Repository;
+using ExpressedRealms.DB.Models.Checkins.CheckinStageMappingSetup;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageSetup;
 using ExpressedRealms.Events.API.UseCases.EventCheckin.ApproveStageAndSendMessages;
 using FluentResults;
@@ -28,13 +29,17 @@ internal sealed class GetPrimaryCharactersUseCase(ICharacterRepository character
         );
     }
 
-    private static List<int> GetActiveStatus(List<int> completedStages)
+    private static List<int> GetActiveStatus(List<CheckinStageMapping> completedStages)
     {
         var playerList = new List<int>();
 
+        var filteredStages = CheckinWorkflows.FilterActiveApprovedStages(completedStages)
+            .Select(x => x.CheckinStageId)
+            .ToList();
+        
         // This will always be the next step needed to be completed
         var earliestIncomplete = CheckinWorkflows.InitialCheckinSequence.FirstOrDefault(x =>
-            !completedStages.Contains(x)
+            !filteredStages.Contains(x)
         );
 
         // Ignore Age Check Approval - list default behavior is to show as awaiting checkin
@@ -51,7 +56,7 @@ internal sealed class GetPrimaryCharactersUseCase(ICharacterRepository character
         }
 
         var latestCompleted = CheckinWorkflows.InitialCheckinSequence.LastOrDefault(x =>
-            completedStages.Contains(x)
+            filteredStages.Contains(x)
         );
 
         if (latestCompleted is not null)
