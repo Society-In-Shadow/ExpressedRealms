@@ -101,7 +101,7 @@ internal sealed class ApproveStageAndSendMessageUseCase(
         if (requestedStage == CheckinStageEnum.PlayerNeedsReapproval)
         {
             var completedShqSteps = 
-                CheckinWorkflows.SHQCheckinSequence.Any() &&
+                CheckinWorkflows.SHQCheckinSequence.Count == 0 &&
                 CheckinWorkflows.SHQCheckinSequence.All(x => sequenceData.CompletedStages.Contains(x));
 
             if (!completedShqSteps)

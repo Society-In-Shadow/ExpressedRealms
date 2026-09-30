@@ -332,7 +332,12 @@ internal sealed class CharacterRepository(
             .ToListAsync(cancellationToken);
 
         // Should be comparing the latest archived version to the last approved version from the last active event
+        // during an active event, otherwise there is nothing to diff
         var eventId = await eventCheckinRepository.GetInclusivePreCheckinEventId();
+        
+        if (eventId is null)
+            return null;
+        
         var mostRecentDate = await eventCheckinRepository.GetDateForFirstScheduledEvent(eventId.Value);
         var cutoffDate = mostRecentDate.AddDays(-14).ToDateTime(TimeOnly.MinValue);
         var previousCharacters = availableCharacters.Where(x => x.CreateDate < cutoffDate).ToList();
