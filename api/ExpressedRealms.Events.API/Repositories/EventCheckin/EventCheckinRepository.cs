@@ -511,6 +511,15 @@ LIMIT 1
             .FirstAsync(cancellationToken);
     }
 
+    public Task<DateOnly> GetDateForFirstScheduledEvent(int eventId)
+    {
+        return context.EventScheduleItems
+            .Where(x => x.EventId == eventId)
+            .OrderBy(x => x.Date)
+            .Select(x => x.Date)
+            .FirstAsync();
+    }
+
     public async Task<int> CreatePrimaryCharacterArchiveAsync(Guid targetPlayerId)
     {
         var characterInfo = await context

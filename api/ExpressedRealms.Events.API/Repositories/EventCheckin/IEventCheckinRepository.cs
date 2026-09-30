@@ -59,4 +59,5 @@ public interface IEventCheckinRepository : IGenericRepository
     Task<int?> GetInclusivePreCheckinEventId();
     Task<Guid?> GetPlayerIdOrDefault(string lookupId);
     Task<int> GetExpressionTypeId(int expressionId);
+    Task<DateOnly> GetDateForFirstScheduledEvent(int eventId);
 }
