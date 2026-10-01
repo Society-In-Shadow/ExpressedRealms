@@ -112,7 +112,7 @@ const modifierGroupStore
           statModifierId: values.modifierType.id,
           targetExpressionId: values.targetExpression?.id ?? null,
           targetProgressionPathId: values.targetProgressionPath?.id ?? null,
-          targetProgressionLevelId: values.targetProgressionLevel.id ?? null,
+          targetProgressionLevelId: values.targetProgressionLevel?.id ?? null,
           notes: values.notes,
         } as CreateStatModifier)
           .then(async (response) => {
