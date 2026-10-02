@@ -69,7 +69,9 @@ internal sealed class ApproveStageAndSendMessageUseCase(
 
         var hasBeenCompleted = sequenceData.CompletedStages.Contains(requestedStage);
         var isReapprovingCharacter = requestedStage == CheckinStageEnum.PlayerNeedsReapproval;
-        var hasReApprovedBefore = sequenceData.CompletedStages.Any(x => x == CheckinStageEnum.PlayerNeedsReapproval);
+        var hasReApprovedBefore = sequenceData.CompletedStages.Any(x =>
+            x == CheckinStageEnum.PlayerNeedsReapproval
+        );
         if (hasBeenCompleted && !(isReapprovingCharacter && hasReApprovedBefore))
             return Result.Fail("Stage has been completed already");
 
@@ -100,13 +102,17 @@ internal sealed class ApproveStageAndSendMessageUseCase(
 
         if (requestedStage == CheckinStageEnum.PlayerNeedsReapproval)
         {
-            var completedShqSteps = 
-                CheckinWorkflows.SHQCheckinSequence.Count == 0 &&
-                CheckinWorkflows.SHQCheckinSequence.All(x => sequenceData.CompletedStages.Contains(x));
+            var completedShqSteps =
+                CheckinWorkflows.SHQCheckinSequence.Count == 0
+                && CheckinWorkflows.SHQCheckinSequence.All(x =>
+                    sequenceData.CompletedStages.Contains(x)
+                );
 
             if (!completedShqSteps)
-                return Result.Fail("All SHQ related checkin steps need to be finished before reapproving");
-            
+                return Result.Fail(
+                    "All SHQ related checkin steps need to be finished before reapproving"
+                );
+
             await CompleteStage(CheckinStageEnum.PlayerNeedsReapproval, checkin.Id);
             return Result.Ok();
         }

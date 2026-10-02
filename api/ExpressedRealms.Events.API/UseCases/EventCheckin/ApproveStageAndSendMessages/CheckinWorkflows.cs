@@ -19,9 +19,9 @@ public static class CheckinWorkflows
         CheckinStageEnum.AgeCheckApproval,
         CheckinStageEnum.EventQuestionsCheck,
         CheckinStageEnum.CharacterStorageQuestion,
-        CheckinStageEnum.AssignedXpCheck
+        CheckinStageEnum.AssignedXpCheck,
     ];
-    
+
     public static readonly List<CheckinStageEnum> InitialCheckinSequence =
     [
         CheckinStageEnum.AgeCheckApproval,
@@ -36,8 +36,10 @@ public static class CheckinWorkflows
         CheckinStageEnum.Day3Checkin,
         CheckinStageEnum.FinalStage,
     ];
-    
-    public static List<CheckinStageMapping> FilterActiveApprovedStages(List<CheckinStageMapping> mappings)
+
+    public static List<CheckinStageMapping> FilterActiveApprovedStages(
+        List<CheckinStageMapping> mappings
+    )
     {
         var activeList = new List<CheckinStageMapping>();
         var latestReapprovedStage = mappings
@@ -48,7 +50,9 @@ public static class CheckinWorkflows
         if (latestReapprovedStage is not null)
         {
             activeList.AddRange(
-                mappings.Where(x => SHQCheckinSequence.Contains(CheckinStageEnum.FromValue(x.CheckinStageId)))
+                mappings.Where(x =>
+                    SHQCheckinSequence.Contains(CheckinStageEnum.FromValue(x.CheckinStageId))
+                )
             );
             activeList.AddRange(
                 mappings
