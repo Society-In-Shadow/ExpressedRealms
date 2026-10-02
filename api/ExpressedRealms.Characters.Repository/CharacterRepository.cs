@@ -523,6 +523,9 @@ internal sealed class CharacterRepository(
             })
             .ToListAsync(cancellationToken);
 
+        if (userCharacters.Count == 0)
+            return true;
+        
         var currentCharacter = userCharacters.First(x => x.Id == id);
 
         // Always allow primary characters to be deselected
