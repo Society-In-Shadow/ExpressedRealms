@@ -135,11 +135,7 @@ internal sealed class CharacterRepository(
         var maxStagePerPlayer = await context
             .CheckinStageMappings.Where(x => x.Checkin.EventId == activeEventId)
             .GroupBy(x => x.Checkin.PlayerId)
-            .Select(g => new
-            {
-                PlayerId = g.Key,
-                Stages = g.OrderBy(x => x.CreatedAt).ToList(),
-            })
+            .Select(g => new { PlayerId = g.Key, Stages = g.OrderBy(x => x.CreatedAt).ToList() })
             .ToListAsync(cancellationToken);
 
         var characterPromotionRequests = await context
@@ -315,37 +311,34 @@ internal sealed class CharacterRepository(
             .Characters.Where(x => x.Id == characterId)
             .Select(x => new { x.IsArchived, x.SourceCharacterId })
             .FirstAsync(cancellationToken);
-        
+
         if (!character.IsArchived)
             return null;
 
-        
         var availableCharacters = await context
             .Characters.IgnoreQueryFilters(["ArchivedCharacters"])
             .Where(x => x.SourceCharacterId == character.SourceCharacterId && x.IsArchived)
             .OrderByDescending(x => x.CreateDate)
-            .Select(x =>  new
-            {
-               x.Id,
-                x.CreateDate
-            })
+            .Select(x => new { x.Id, x.CreateDate })
             .ToListAsync(cancellationToken);
 
         // Should be comparing the latest archived version to the last approved version from the last active event
         // during an active event, otherwise there is nothing to diff
         var eventId = await eventCheckinRepository.GetInclusivePreCheckinEventId();
-        
+
         if (eventId is null)
             return null;
-        
-        var mostRecentDate = await eventCheckinRepository.GetDateForFirstScheduledEvent(eventId.Value);
+
+        var mostRecentDate = await eventCheckinRepository.GetDateForFirstScheduledEvent(
+            eventId.Value
+        );
         var cutoffDate = mostRecentDate.AddDays(-14).ToDateTime(TimeOnly.MinValue);
         var previousCharacters = availableCharacters.Where(x => x.CreateDate < cutoffDate).ToList();
-        
+
         // If the character has only been approved at this event, reprint out all the cards
         if (availableCharacters.Count <= 2 || previousCharacters.Count == 0)
             return null;
-        
+
         return new CharacterDiffIdsDto()
         {
             NewestCharacterId = availableCharacters[0].Id,
@@ -525,7 +518,7 @@ internal sealed class CharacterRepository(
 
         if (userCharacters.Count == 0)
             return true;
-        
+
         var currentCharacter = userCharacters.First(x => x.Id == id);
 
         // Always allow primary characters to be deselected

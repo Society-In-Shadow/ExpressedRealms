@@ -33,10 +33,11 @@ internal sealed class GetPrimaryCharactersUseCase(ICharacterRepository character
     {
         var playerList = new List<int>();
 
-        var filteredStages = CheckinWorkflows.FilterActiveApprovedStages(completedStages)
+        var filteredStages = CheckinWorkflows
+            .FilterActiveApprovedStages(completedStages)
             .Select(x => x.CheckinStageId)
             .ToList();
-        
+
         // This will always be the next step needed to be completed
         var earliestIncomplete = CheckinWorkflows.InitialCheckinSequence.FirstOrDefault(x =>
             !filteredStages.Contains(x)
