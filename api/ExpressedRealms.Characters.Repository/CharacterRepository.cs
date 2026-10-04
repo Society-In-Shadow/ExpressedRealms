@@ -336,7 +336,7 @@ internal sealed class CharacterRepository(
         var previousCharacters = availableCharacters.Where(x => x.CreateDate < cutoffDate).ToList();
 
         // If the character has only been approved at this event, reprint out all the cards
-        if (availableCharacters.Count <= 2 || previousCharacters.Count == 0)
+        if (availableCharacters.Count < 2 || previousCharacters.Count == 0)
             return null;
 
         return new CharacterDiffIdsDto()
