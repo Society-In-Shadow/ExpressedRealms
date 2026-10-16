@@ -159,7 +159,7 @@ jobs:
         uses: actions/setup-node@v6
         if: ${{ needs.changes.outputs.frontend == 'true' }}
         with:
-          node-version: "20.x"
+          node-version: "24.x"
       - name: "Install Deps"
         if: ${{ needs.changes.outputs.frontend == 'true' }}
         working-directory: ./client
@@ -167,7 +167,7 @@ jobs:
       - name: "Test"
         if: ${{ needs.changes.outputs.frontend == 'true' }}
         working-directory: ./client
-        run: npm exec vitest -- --coverage.enabled true
+        run: npm exec vitest -- --coverage.enabled true --ignore-scripts
       - name: "Upload Coverage"
         uses: actions/upload-artifact@v6
         if: ${{ needs.changes.outputs.frontend == 'true' }}
