@@ -5,15 +5,6 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FakeItEasy" Version="9.0.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="4.0.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="xunit.v3" Version="4.0.2" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\ExpressedRealms.Powers.UseCases\ExpressedRealms.Powers.UseCases.csproj" />
     <ProjectReference Include="..\ExpressedRealms.Shared.UseCases.Tests.Unit\ExpressedRealms.Shared.UseCases.Tests.Unit.csproj" />
   </ItemGroup>

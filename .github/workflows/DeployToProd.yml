@@ -295,7 +295,7 @@ jobs:
 
       - name: Run Unit Tests
         if: ${{ needs.changes.outputs.backend == 'true' }}
-        run: dotnet test --no-restore ./api --logger trx
+        run: dotnet test --solution ./api/ExpressedRealms.sln --no-restore --report-trx
 
   sonarcloud-scan:
     name: Run SonarCloud Scan
