@@ -10,8 +10,8 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Bogus" Version="35.6.5" />
-    <PackageReference Include="System.CommandLine" Version="2.0.9" />
-    <PackageReference Include="Scriban" Version="7.2.4" />
+    <PackageReference Include="System.CommandLine" Version="2.0.13" />
+    <PackageReference Include="Scriban" Version="7.5.1" />
   </ItemGroup>
   <ItemGroup>
     <!-- IMPORTANT: ensure templates get copied -->

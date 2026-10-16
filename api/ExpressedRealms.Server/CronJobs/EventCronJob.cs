@@ -7,7 +7,10 @@ public class EventCronJob(IEventReminderHandlerUseCase eventReminderHandler) : I
 {
     public static readonly JobKey Key = new JobKey("job-name", "group-name");
 
-    public async Task Execute(IJobExecutionContext context)
+    public async ValueTask Execute(
+        IJobExecutionContext context,
+        CancellationToken cancellationToken = new CancellationToken()
+    )
     {
         await eventReminderHandler.ExecuteAsync();
     }

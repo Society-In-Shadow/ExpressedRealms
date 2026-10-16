@@ -5,8 +5,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="QRCoder" Version="1.7.0" />
-    <PackageReference Include="QuestPDF.HTML" Version="1.4.5" />
+    <PackageReference Include="QRCoder" Version="1.8.1" />
+    <PackageReference Include="QuestPDF" Version="2026.9.1" />
+    <PackageReference Include="QuestPDF.HTML" Version="1.5.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ExpressedRealms.Powers.Reporting\ExpressedRealms.Powers.Reporting.csproj" />
