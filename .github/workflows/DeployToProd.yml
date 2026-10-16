@@ -348,15 +348,9 @@ jobs:
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"Society-In-Shadow_ExpressedRealms" /o:"society-in-shadows" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
-          Push-Location ./api
-          try {
-            dotnet restore ./ExpressedRealms.sln
-            dotnet build ./ExpressedRealms.sln --no-restore
-            dotnet-coverage collect "dotnet test --solution ./ExpressedRealms.sln --no-restore" -f xml -o "../coverage.xml"
-          }
-            finally {
-            Pop-Location
-          }
+          dotnet restore ./api/ExpressedRealms.sln
+          dotnet build ./api/ExpressedRealms.sln --no-restore
+          dotnet-coverage collect "dotnet test --solution ./api/ExpressedRealms.sln --no-restore" -f xml -o "coverage.xml"
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
 
   push_api_to_azure_container_registry:
