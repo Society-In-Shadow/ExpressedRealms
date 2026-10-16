@@ -10,16 +10,13 @@
     <ProjectReference Include="..\ExpressedRealms.Shared.UseCases\ExpressedRealms.Shared.UseCases.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FluentResults" Version="3.16.0" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.1">
+    <PackageReference Include="FluentResults" Version="4.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.13">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Slugify.Core" Version="5.1.1" />
-    <PackageReference
-      Include="SharpGrip.FluentValidation.AutoValidation.Endpoints"
-      Version="1.5.0"
-    />
+    <PackageReference Include="SharpGrip.FluentValidation.AutoValidation.Endpoints" Version="2.0.0" />
   </ItemGroup>
 </Project>

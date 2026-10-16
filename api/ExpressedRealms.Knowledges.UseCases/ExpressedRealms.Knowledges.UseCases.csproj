@@ -5,13 +5,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FluentResults" Version="3.16.0" />
-    <PackageReference Include="FluentValidation" Version="11.11.0" />
-    <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
-    <PackageReference
-      Include="Microsoft.Extensions.DependencyInjection.Abstractions"
-      Version="10.0.1"
-    />
+    <PackageReference Include="FluentResults" Version="4.0.0" />
+    <PackageReference Include="FluentValidation" Version="12.2.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2026.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.13" />
   </ItemGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="$(AssemblyName).Tests.Unit" />

@@ -6,8 +6,8 @@
     <RootNamespace>ExpressedRealms.Expressions.Repository</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="FluentResults" Version="3.16.0" />
-    <PackageReference Include="FluentValidation" Version="11.11.0" />
+    <PackageReference Include="FluentResults" Version="4.0.0" />
+    <PackageReference Include="FluentValidation" Version="12.2.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ExpressedRealms.DB\ExpressedRealms.DB.csproj" />
