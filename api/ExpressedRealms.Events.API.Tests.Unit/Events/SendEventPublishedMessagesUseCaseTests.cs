@@ -298,7 +298,7 @@ public class SendEventPublishedMessagesUseCaseTests
         A.CallTo(() =>
                 _discordService.SendMessageToChannelAsync(
                     DiscordChannel.PublicAnnouncements,
-                    A<string>.That.Contains("Friday\n\n**10:00 AM** - 10:30 AM - **Test Event 1**"),
+                    A<string>.That.Contains($"Friday{Environment.NewLine}{Environment.NewLine}**10:00 AM** - 10:30 AM - **Test Event 1**"),
                     A<Embed[]>._
                 )
             )
@@ -321,7 +321,7 @@ public class SendEventPublishedMessagesUseCaseTests
                 _discordService.SendMessageToChannelAsync(
                     DiscordChannel.PublicAnnouncements,
                     A<string>.That.Contains(
-                        "Saturday\n\n**11:00 AM** - 11:30 AM - **Test Event 2**"
+                        $"Saturday{Environment.NewLine}{Environment.NewLine}**11:00 AM** - 11:30 AM - **Test Event 2**"
                     ),
                     A<Embed[]>._
                 )
@@ -344,7 +344,7 @@ public class SendEventPublishedMessagesUseCaseTests
         A.CallTo(() =>
                 _discordService.SendMessageToChannelAsync(
                     DiscordChannel.PublicAnnouncements,
-                    A<string>.That.Contains("Sunday\n\n**12:00 PM** - 12:30 PM - **Test Event 3**"),
+                    A<string>.That.Contains($"Sunday{Environment.NewLine}{Environment.NewLine}**12:00 PM** - 12:30 PM - **Test Event 3**"),
                     A<Embed[]>._
                 )
             )
