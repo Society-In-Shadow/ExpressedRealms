@@ -54,7 +54,7 @@ services:
   
   ui:
     container_name: societyinshadows.org
-    image: node:23.11.0
+    image: node:24.22.0
     working_dir: /app
     ports:
       - '3000:3000'
