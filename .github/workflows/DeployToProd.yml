@@ -350,7 +350,7 @@ jobs:
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"Society-In-Shadow_ExpressedRealms" /o:"society-in-shadows" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
           Push-Location ./api
           try {
-            dotnet build ./ExpressedRealms.sln --no-restore
+            dotnet build ./ExpressedRealms.sln
             
             dotnet-coverage collect "dotnet test --solution ./ExpressedRealms.sln --no-restore" -f xml -o "../coverage.xml"
           }
