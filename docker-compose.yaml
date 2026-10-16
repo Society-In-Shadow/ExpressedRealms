@@ -11,11 +11,11 @@ services:
   
   postgres:
     container_name: expressed-realms-db
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     ports:
       - "127.0.0.1:5432:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql
     environment:
       - POSTGRES_DB=expressedRealms
       - POSTGRES_USER=dev_user
@@ -72,25 +72,6 @@ services:
     command: sh -c "npx vite --host 0.0.0.0"
     networks:
       - expressed-realms-network
-
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: expressed-realms-db-admin
-    ports:
-      - "127.0.0.1:8888:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: dev_admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: VeryFancyPassword1!
-      # https://github.com/docker/compose/issues/8578#issuecomment-945228061
-      GUNICORN_ACCESS_LOGFILE: '/dev/null'
-    volumes:
-      - pgAdmin_data:/var/lib/pgadmin
-    restart: always
-    networks:
-      - expressed-realms-network
-    depends_on:
-      postgres:
-        condition: service_started
 
   mailpit:
     image: axllent/mailpit
