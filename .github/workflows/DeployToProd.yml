@@ -167,7 +167,7 @@ jobs:
       - name: "Test"
         if: ${{ needs.changes.outputs.frontend == 'true' }}
         working-directory: ./client
-        run: npm exec vitest -- --coverage.enabled true --ignore-scripts
+        run: npm exec vitest -- --coverage.enabled true
       - name: "Upload Coverage"
         uses: actions/upload-artifact@v6
         if: ${{ needs.changes.outputs.frontend == 'true' }}
