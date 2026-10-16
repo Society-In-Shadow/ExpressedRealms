@@ -283,26 +283,22 @@ jobs:
         if: ${{ needs.changes.outputs.backend == 'true' }}
         with:
           dotnet-version: 10.0.x
-          
-      - name: Verify test runner configuration
-        if: ${{ needs.changes.outputs.backend == 'true' }}
-        run: |
-          pwd
-          cat global.json
-          dotnet --version
 
       # Step 3: Restore and build .NET project
       - name: Restore dependencies
         if: ${{ needs.changes.outputs.backend == 'true' }}
-        run: dotnet restore ./api
+        working-directory: ./api
+        run: dotnet restore
 
       - name: Build
         if: ${{ needs.changes.outputs.backend == 'true' }}
-        run: dotnet build --no-restore ./api
+        working-directory: ./api
+        run: dotnet build --no-restore .
 
       - name: Run Unit Tests
         if: ${{ needs.changes.outputs.backend == 'true' }}
-        run: dotnet test --solution ./api/ExpressedRealms.sln --no-restore --report-trx
+        working-directory: ./api
+        run: dotnet test --solution ./ExpressedRealms.sln --no-restore --report-trx
 
   sonarcloud-scan:
     name: Run SonarCloud Scan
