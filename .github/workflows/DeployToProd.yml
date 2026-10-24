@@ -159,7 +159,7 @@ jobs:
         uses: actions/setup-node@v6
         if: ${{ needs.changes.outputs.frontend == 'true' }}
         with:
-          node-version: "20.x"
+          node-version: "24.x"
       - name: "Install Deps"
         if: ${{ needs.changes.outputs.frontend == 'true' }}
         working-directory: ./client
@@ -287,15 +287,18 @@ jobs:
       # Step 3: Restore and build .NET project
       - name: Restore dependencies
         if: ${{ needs.changes.outputs.backend == 'true' }}
-        run: dotnet restore ./api
+        working-directory: ./api
+        run: dotnet restore
 
       - name: Build
         if: ${{ needs.changes.outputs.backend == 'true' }}
-        run: dotnet build --no-restore ./api
+        working-directory: ./api
+        run: dotnet build --no-restore .
 
       - name: Run Unit Tests
         if: ${{ needs.changes.outputs.backend == 'true' }}
-        run: dotnet test --no-restore ./api --logger trx
+        working-directory: ./api
+        run: dotnet test --solution ./ExpressedRealms.sln --no-restore --report-trx
 
   sonarcloud-scan:
     name: Run SonarCloud Scan
@@ -345,8 +348,9 @@ jobs:
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"Society-In-Shadow_ExpressedRealms" /o:"society-in-shadows" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
-          dotnet build ./api/ExpressedRealms.sln
-          dotnet-coverage collect "dotnet test ./api --no-restore" -f xml -o "coverage.xml"
+          dotnet restore ./api/ExpressedRealms.sln
+          dotnet build ./api/ExpressedRealms.sln --no-restore
+          dotnet-coverage collect "dotnet test ./api/ExpressedRealms.sln --no-restore" -f xml -o "coverage.xml"
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
 
   push_api_to_azure_container_registry:

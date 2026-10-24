@@ -163,7 +163,7 @@ public static class ResultOverrides
         return true;
     }
 
-    private static IDictionary<string, string[]> GetValidationFailure(List<IError> errors)
+    private static IDictionary<string, string[]> GetValidationFailure(IReadOnlyList<IError> errors)
     {
         if (errors.Count == 0)
             return new Dictionary<string, string[]>();
