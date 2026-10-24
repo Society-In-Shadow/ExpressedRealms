@@ -24,6 +24,15 @@ internal class ExpressionSectionsConfiguration : IEntityTypeConfiguration<Expres
 
         builder.Property(e => e.Content).IsRequired();
 
+        builder.Property(e => e.ProcessedPlainText);
+
+        builder.HasGeneratedTsVectorColumn(
+                p => p.SearchVector,
+                "english",
+                p => new { p.Name, p.ProcessedPlainText })
+            .HasIndex(x => x.SearchVector)
+            .HasMethod("GIN");
+
         builder
             .HasOne(e => e.CloneSource)
             .WithMany(e => e.Clones)

@@ -1,10 +1,13 @@
 using ExpressedRealms.Authentication.PermissionCollection;
 using ExpressedRealms.Authentication.PermissionCollection.Configuration;
+using ExpressedRealms.DB;
 using ExpressedRealms.Email.TestEmail;
 using ExpressedRealms.Events.API.Discord;
 using ExpressedRealms.Events.API.UseCases.Events.TriggerEventReminder;
 using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.FeatureFlags.FeatureClient;
+using ExpressedRealms.UseCases.Shared;
+using Microsoft.EntityFrameworkCore;
 using StackExchange.Redis;
 
 namespace ExpressedRealms.Server.EndPoints;
@@ -91,5 +94,26 @@ internal static class TestingEndPoints
                 }
             )
             .RequirePermission(Permissions.DevDebug.RerunDailyUpdates);
+        
+        endpoints
+            .MapPost(
+                "/runPlanTextMigration",
+                async (ExpressedRealmsDbContext dbContext) =>
+                {
+                    var rows = await dbContext.ExpressionSections
+                        .ToListAsync();
+
+                    foreach (var row in rows)
+                    {
+                        row.ProcessedPlainText = row.Content.ToPlainText();
+                    }
+
+                    await dbContext.SaveChangesAsync();
+                }
+            )
+            .RequirePermission(Permissions.DevDebug.RerunDailyUpdates);
+        
+        
+
     }
 }

@@ -1,6 +1,7 @@
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
+using NpgsqlTypes;
 
 namespace ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 
@@ -14,11 +15,14 @@ public class ExpressionSection : ISoftDelete
     public int OrderIndex { get; set; }
     public string Name { get; set; } = null!;
     public string Content { get; set; } = null!;
+    public string? ProcessedPlainText { get; set; }
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
 
     public int? CloneSourceId { get; set; }
     public Guid? CloneBatchId { get; set; }
+    
+    public NpgsqlTsVector? SearchVector { get; set; }
 
     public virtual Expression Expression { get; set; } = null!;
     public virtual ExpressionSection? Parent { get; set; }
