@@ -2284,6 +2284,10 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("parent_id");
 
+                    b.Property<string>("ProcessedPlainText")
+                        .HasColumnType("text")
+                        .HasColumnName("processed_plain_text");
+
                     b.Property<int>("SectionTypeId")
                         .HasColumnType("integer")
                         .HasColumnName("section_type_id");

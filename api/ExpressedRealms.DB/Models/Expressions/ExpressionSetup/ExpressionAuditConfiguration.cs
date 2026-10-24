@@ -16,6 +16,7 @@ internal static class ExpressionAuditConfiguration
                 case "expression_type_id":
                 case "cms_type_id":
                 case "expression_sub_type_id":
+                case "processed_plain_text":
                     continue;
 
                 case "name":

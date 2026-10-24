@@ -1,7 +1,6 @@
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
-using NpgsqlTypes;
 
 namespace ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 
@@ -22,7 +21,7 @@ public class ExpressionSection : ISoftDelete
     public int? CloneSourceId { get; set; }
     public Guid? CloneBatchId { get; set; }
     
-    public NpgsqlTsVector? SearchVector { get; set; }
+    //public NpgsqlTsVector? SearchVector { get; set; }
 
     public virtual Expression Expression { get; set; } = null!;
     public virtual ExpressionSection? Parent { get; set; }
