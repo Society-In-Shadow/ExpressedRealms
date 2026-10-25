@@ -24,12 +24,6 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "Allows one to see the contact us page on the marketing materials"
     );
 
-    public static readonly ReleaseFlags ShowPreCheckinFunctionality = new(
-        "Show Pre-Checkin Functionality",
-        "show-pre-checkin",
-        "Enables pre-checkin actions, both user and admin side"
-    );
-
     public override string ToString()
     {
         return Name;

@@ -1,5 +1,4 @@
 using ExpressedRealms.Events.API.UseCases.EventCheckin.GetEarlyCheckinInformationForPlayer;
-using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.FeatureFlags.FeatureClient;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
@@ -15,11 +14,6 @@ public static class GetEarlyCheckinInfoEndpoint
         [FromServices] IFeatureToggleClient toggleClient
     )
     {
-        if (!await toggleClient.HasFeatureFlag(ReleaseFlags.ShowPreCheckinFunctionality))
-        {
-            return TypedResults.Ok(new GetEarlyCheckinInfoResponse() { ShowBanner = false });
-        }
-
         var results = await useCase.ExecuteAsync();
 
         results.ThrowIfErrorNotHandled();

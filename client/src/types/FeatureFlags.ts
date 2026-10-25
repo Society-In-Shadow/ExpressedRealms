@@ -3,7 +3,6 @@
  */
 export const FeatureFlags = {
   ShowMarketingContactUsPage: 'show-marketing-contact-us',
-  ShowPreCheckinFunctionality: 'show-pre-checkin',
   TestReleaseFlag: 'test-feature-flag',
 } as const
 
