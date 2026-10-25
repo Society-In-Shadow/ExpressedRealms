@@ -3,7 +3,6 @@
 import { computed, ref } from 'vue'
 
 import Button from 'primevue/button'
-import { hasFlag } from '@/stores/featureFlags/featureFlagStore.ts'
 import { useQuery } from '@pinia/colada'
 import { earlyCheckinQuery } from '@/components/conCheckin/services/earlyCheckinService.ts'
 import { DateTime } from 'luxon'
@@ -19,7 +18,7 @@ const { data, isPending } = useQuery(earlyCheckinQuery)
 
 const popups = confirmationPopups()
 
-const showBanner = computed(() => hasFlag.ShowPreCheckinFunctionality && !isPending.value && (data?.value?.showBanner ?? false))
+const showBanner = computed(() => !isPending.value && (data?.value?.showBanner ?? false))
 
 const now = DateTime.now()
 const formatted = computed(() => {

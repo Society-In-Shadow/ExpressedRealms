@@ -9,7 +9,6 @@ import { experienceStore } from '@/components/characters/character/stores/experi
 import Tag from 'primevue/tag'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 import { downloadFile } from '@/utilities/downloadUtility.ts'
-import { hasFlag } from '@/stores/featureFlags/featureFlagStore.ts'
 
 const userPermissionInfo = userPermissionStore()
 const permissionCheck = userPermissionInfo.permissionCheck
@@ -68,7 +67,7 @@ const canEditCharacterSheet = computed(() => (characterInfo.isOwner && !characte
           <div v-if="!experienceInfo.isLoading && characterInfo.isInCharacterCreation">
             <em>In Character Creation - {{ characterInfo.expression }}</em>
           </div>
-          <div v-if="characterInfo.factionName && hasFlag.ShowFactions">
+          <div v-if="characterInfo.factionName">
             <em>{{ characterInfo.factionName }} ({{ characterInfo.factionRank }})</em>
           </div>
         </div>

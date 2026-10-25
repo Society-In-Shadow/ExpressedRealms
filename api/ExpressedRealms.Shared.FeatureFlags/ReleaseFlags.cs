@@ -24,24 +24,6 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "Allows one to see the contact us page on the marketing materials"
     );
 
-    public static readonly ReleaseFlags ShowArchetypeSelection = new(
-        "Show Archetypes on Character Creation",
-        "show-archetype-selection",
-        "Will show the archetype selection on character creation"
-    );
-
-    public static readonly ReleaseFlags ShowFactions = new(
-        "Shows Faction Functionality",
-        "show-factions",
-        "Shows faction info in the expressions, and allows one to join a faction in the character editor"
-    );
-
-    public static readonly ReleaseFlags ShowPreCheckinFunctionality = new(
-        "Show Pre-Checkin Functionality",
-        "show-pre-checkin",
-        "Enables pre-checkin actions, both user and admin side"
-    );
-
     public override string ToString()
     {
         return Name;

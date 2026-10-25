@@ -16,7 +16,6 @@ import { breakpointsBootstrapV5, useBreakpoints } from '@vueuse/core'
 import ArchetypeInfo from '@/components/characters/wizard/basicInfo/supporting/ArchetypeInfo.vue'
 import { characterListQuery } from '@/components/navbar/stores/navMenuStore.ts'
 import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
-import { hasFlag } from '@/stores/featureFlags/featureFlagStore.ts'
 
 const { refetch } = useQueryWithLoading(characterListQuery)
 
@@ -108,11 +107,10 @@ async function copyCharacter(characterId: number) {
             <h2>Make Custom</h2>
             <p>You can create your own from scratch.  This provides you with full flexibilty to build as you wish.</p>
             <Button data-cy="add-character-button" label="Create Custom Character" class="w-100 mb-2" type="submit" />
-            <div v-if="hasFlag.ShowArchetypeSelection">
-              <h2>Choose Archetype</h2>
-              <p>Or select an archetype and tweak or use that build directly.  This will limit some of the choices you have.</p>
-              <ArchetypeInfo :expression-id="expression.id" @selected-archetype="copyCharacter" />
-            </div>
+
+            <h2>Choose Archetype</h2>
+            <p>Or select an archetype and tweak or use that build directly.  This will limit some of the choices you have.</p>
+            <ArchetypeInfo :expression-id="expression.id" @selected-archetype="copyCharacter" />
 
             <Button label="Back" class="w-100 mt-2" severity="secondary" @click="router.push({name: 'characters'})" />
           </div>

@@ -9,7 +9,6 @@ import { breakpointsBootstrapV5, useBreakpoints } from '@vueuse/core'
 import { wizardContentStore } from '@/components/characters/wizard/stores/wizardContentStore.ts'
 import { characterStore } from '@/components/characters/character/stores/characterStore.ts'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
-import { hasFlag } from '@/stores/featureFlags/featureFlagStore.ts'
 
 const BasicInfoStep = defineAsyncComponent(() =>
   import('@/components/characters/wizard/basicInfo/EditCharacterDetails.vue'),
@@ -62,7 +61,7 @@ const sections = computed(() => [
   { name: 'Basic Info', component: isAdd.value ? AddCharacterStep : BasicInfoStep },
   { name: 'Stats', isDisabled: isAdd.value, component: StatStep },
   { name: 'Skills', isDisabled: isAdd.value, component: SkillStep },
-  { name: 'Faction', isDisabled: isAdd.value, component: FactionSelectList, visible: () => hasFlag.ShowFactions },
+  { name: 'Faction', isDisabled: isAdd.value, component: FactionSelectList },
   { name: 'Powers', isDisabled: isAdd.value, component: PowerStep },
   { name: 'Knowledges', isDisabled: isAdd.value, component: KnowledgeStep },
   { name: 'Contacts', isDisabled: isAdd.value, visible: () => !characterInfo.isInCharacterCreation && !isAdd.value, component: ContactStep },
