@@ -4,7 +4,6 @@
 export const FeatureFlags = {
   ShowMarketingContactUsPage: 'show-marketing-contact-us',
   ShowPreCheckinFunctionality: 'show-pre-checkin',
-  ShowFactions: 'show-factions',
   TestReleaseFlag: 'test-feature-flag',
 } as const
 

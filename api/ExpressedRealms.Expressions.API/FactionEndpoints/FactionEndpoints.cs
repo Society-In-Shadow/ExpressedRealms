@@ -6,8 +6,6 @@ using ExpressedRealms.Expressions.API.FactionEndpoints.EditFaction;
 using ExpressedRealms.Expressions.API.FactionEndpoints.GetFaction;
 using ExpressedRealms.Expressions.API.FactionEndpoints.GetFactionParticipants;
 using ExpressedRealms.Expressions.API.FactionEndpoints.GetFactions;
-using ExpressedRealms.FeatureFlags;
-using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 
@@ -19,8 +17,7 @@ internal static class FactionEndpoints
     {
         var endpointGroup = app.MapGroup("factions")
             .WithTags("Factions")
-            .RequireAuthorization()
-            .RequireFeatureToggle(ReleaseFlags.ShowFactions);
+            .RequireAuthorization();
 
         endpointGroup.MapGet("expressions/{expressionId}", GetFactionsEndpoint.ExecuteAsync);
 

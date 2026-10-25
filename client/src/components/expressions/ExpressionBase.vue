@@ -23,7 +23,6 @@ import PowersToC from '@/components/expressions/PowersToC.vue'
 import ProgressionTab from '@/components/expressions/progressionPaths/ProgressionTab.vue'
 import ExpressionLogo from '@/components/common/ExpressionLogo.vue'
 import { can, userPermissionStore } from '@/stores/userPermissionStore.ts'
-import { hasFlag } from '@/stores/featureFlags/featureFlagStore.ts'
 import FactionTab from '@/components/expressions/factions/FactionTab.vue'
 
 const userPermissionInfo = userPermissionStore()
@@ -166,7 +165,7 @@ const canCreate = computed(() => {
             <Tab value="0">
               Background
             </Tab>
-            <Tab v-if="hasFlag.ShowFactions" value="3">
+            <Tab value="3">
               Factions
             </Tab>
             <Tab value="1">
@@ -192,7 +191,7 @@ const canCreate = computed(() => {
             <TabPanel v-if="can.ProgressionPath.View" value="2">
               <ProgressionTab v-if="expressionInfo.isDoneLoading" :expression-id="expressionInfo.currentExpressionId" />
             </TabPanel>
-            <TabPanel v-if="hasFlag.ShowFactions" value="3">
+            <TabPanel value="3">
               <FactionTab v-if="expressionInfo.isDoneLoading" :expression-id="expressionInfo.currentExpressionId" />
             </TabPanel>
           </TabPanels>
