@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using NpgsqlTypes;
 
 #nullable disable
 
@@ -2288,6 +2289,13 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("text")
                         .HasColumnName("processed_plain_text");
 
+                    b.Property<NpgsqlTsVector>("SearchVector")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("tsvector")
+                        .HasColumnName("search_vector")
+                        .HasAnnotation("Npgsql:TsVectorConfig", "english")
+                        .HasAnnotation("Npgsql:TsVectorProperties", new[] { "Name", "ProcessedPlainText" });
+
                     b.Property<int>("SectionTypeId")
                         .HasColumnType("integer")
                         .HasColumnName("section_type_id");
@@ -2303,6 +2311,11 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.HasIndex("ParentId")
                         .HasDatabaseName("ix_expression_sections_parent_id");
+
+                    b.HasIndex("SearchVector")
+                        .HasDatabaseName("ix_expression_sections_search_vector");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("SearchVector"), "GIN");
 
                     b.HasIndex("SectionTypeId")
                         .HasDatabaseName("ix_expression_sections_section_type_id");

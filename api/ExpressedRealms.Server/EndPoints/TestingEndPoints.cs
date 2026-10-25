@@ -112,7 +112,29 @@ internal static class TestingEndPoints
                 }
             );
         
-        
+        app.MapGet("/search", async (
+            string q,
+            ExpressedRealmsDbContext db,
+            CancellationToken cancellationToken) =>
+        {
+            var results = await db.ExpressionSections
+                .Where(x => x.SearchVector.Matches(
+                    EF.Functions.WebSearchToTsQuery("english", q)))
+                .OrderByDescending(x =>
+                    x.SearchVector.Rank(
+                        EF.Functions.WebSearchToTsQuery("english", q)))
+                .Select(x => new
+                {
+                    EntryId = x.Id,
+                    Section = x.Expression.CmsType.Name,
+                    ExpressionName = x.Expression.Name,
+                    SectionName = x.Name,
+                    SectionContent = x.Content
+                })
+                .Take(6)
+                .ToListAsync(cancellationToken);
+            return Results.Ok(results);
+        });
 
     }
 }
