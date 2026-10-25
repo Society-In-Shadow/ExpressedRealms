@@ -26,11 +26,15 @@ internal class ExpressionSectionsConfiguration : IEntityTypeConfiguration<Expres
 
         builder.Property(e => e.ProcessedPlainText);
 
-        builder.HasGeneratedTsVectorColumn(
-                p => p.SearchVector,
-                "english",
-                p => new { p.Name, p.ProcessedPlainText })
-            .HasIndex(x => x.SearchVector)
+        builder.Property(p => p.SearchVector)
+            .HasComputedColumnSql(
+                """
+                setweight(to_tsvector('english', coalesce("name", '')), 'A') ||
+                setweight(to_tsvector('english', coalesce("processed_plain_text", '')), 'B')
+                """,
+                stored: true);
+
+        builder.HasIndex(p => p.SearchVector)
             .HasMethod("GIN");
 
         builder

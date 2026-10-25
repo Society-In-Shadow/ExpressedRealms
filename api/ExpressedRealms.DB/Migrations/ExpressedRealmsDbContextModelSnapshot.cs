@@ -2293,8 +2293,7 @@ namespace ExpressedRealms.DB.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("tsvector")
                         .HasColumnName("search_vector")
-                        .HasAnnotation("Npgsql:TsVectorConfig", "english")
-                        .HasAnnotation("Npgsql:TsVectorProperties", new[] { "Name", "ProcessedPlainText" });
+                        .HasComputedColumnSql("setweight(to_tsvector('english', coalesce(\"name\", '')), 'A') ||\nsetweight(to_tsvector('english', coalesce(\"processed_plain_text\", '')), 'B')", true);
 
                     b.Property<int>("SectionTypeId")
                         .HasColumnType("integer")

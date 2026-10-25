@@ -120,7 +120,8 @@ internal static class TestingEndPoints
             var results = await db.ExpressionSections
                 .Where(x => x.SearchVector.Matches(
                     EF.Functions.WebSearchToTsQuery("english", q)))
-                .OrderByDescending(x =>
+                .OrderByDescending(x => x.Name.ToLower() == q.ToLower())
+                .ThenByDescending(x =>
                     x.SearchVector.Rank(
                         EF.Functions.WebSearchToTsQuery("english", q)))
                 .Select(x => new
