@@ -17,7 +17,7 @@ namespace ExpressedRealms.DB.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.1")
+                .HasAnnotation("ProductVersion", "10.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -933,10 +933,6 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("extra_mortis");
 
-                    b.Property<int?>("FactionId")
-                        .HasColumnType("integer")
-                        .HasColumnName("faction_id");
-
                     b.Property<bool>("IsArchived")
                         .HasColumnType("boolean")
                         .HasColumnName("is_archived");
@@ -1028,9 +1024,6 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.HasIndex("ExpressionId")
                         .HasDatabaseName("ix_characters_expression_id");
-
-                    b.HasIndex("FactionId")
-                        .HasDatabaseName("ix_characters_faction_id");
 
                     b.HasIndex("PlayerId")
                         .HasDatabaseName("ix_characters_player_id");
@@ -1554,6 +1547,12 @@ namespace ExpressedRealms.DB.Migrations
                             Id = 10,
                             Description = "Player has been assigned XP",
                             Name = "Assign XP Check"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Description = "The player has not checked in yet for this event",
+                            Name = "Awaitin Checkin"
                         },
                         new
                         {
@@ -5344,12 +5343,6 @@ namespace ExpressedRealms.DB.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_characters_expressions_expression_id");
 
-                    b.HasOne("ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup.ExpressionSection", "FactionInfo")
-                        .WithMany("CharactersList")
-                        .HasForeignKey("FactionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("fk_characters_expression_sections_faction_id");
-
                     b.HasOne("ExpressedRealms.DB.UserProfile.PlayerDBModels.PlayerSetup.Player", "Player")
                         .WithMany("Characters")
                         .HasForeignKey("PlayerId")
@@ -5382,8 +5375,6 @@ namespace ExpressedRealms.DB.Migrations
                         .HasConstraintName("fk_characters_stat_modifier_groups_stat_modifier_group_id");
 
                     b.Navigation("Expression");
-
-                    b.Navigation("FactionInfo");
 
                     b.Navigation("Player");
 
@@ -6944,8 +6935,6 @@ namespace ExpressedRealms.DB.Migrations
 
             modelBuilder.Entity("ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup.ExpressionSection", b =>
                 {
-                    b.Navigation("CharactersList");
-
                     b.Navigation("Children");
 
                     b.Navigation("Clones");

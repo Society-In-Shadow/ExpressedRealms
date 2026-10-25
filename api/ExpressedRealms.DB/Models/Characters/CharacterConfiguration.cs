@@ -14,8 +14,6 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
         builder.Property(x => x.PlayerId).IsRequired();
         builder.Property(x => x.ExpressionId).IsRequired();
 
-        builder.Property(x => x.FactionId);
-
         builder.Property(x => x.StatExperiencePoints).IsRequired().HasDefaultValue(72);
 
         builder.Property(x => x.WealthLevel).HasDefaultValue(1);
@@ -81,11 +79,5 @@ public class CharacterConfiguration : IEntityTypeConfiguration<Character>
             .HasForeignKey(x => x.ExpressionId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-
-        builder
-            .HasOne(x => x.FactionInfo)
-            .WithMany(x => x.CharactersList)
-            .HasForeignKey(x => x.FactionId)
-            .OnDelete(DeleteBehavior.Restrict);
     }
 }

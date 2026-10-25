@@ -40,21 +40,6 @@ describe('<AddCharacter />', () => {
             }
         }).as('addOptions');
 
-        cy.intercept('GET', '/navMenu/featureFlags', {
-            statusCode: 200,
-            body: {featureFlags: ['show-faction-dropdown']}
-        }).as('featureFlags');
-
-        cy.intercept('GET', '/characters/factionOptions/1', {
-            statusCode: 200,
-            body: factionValues
-        }).as('factionOptions');
-
-        cy.intercept('GET', '/characters/factionOptions/2', {
-            statusCode: 200,
-            body: factionValues2
-        }).as('factionOptions2');
-
         cy.mount(addUserProfile);
     });
 
@@ -84,27 +69,6 @@ describe('<AddCharacter />', () => {
         cy.get("#expression_0").click();
         cy.dataCy(expressionHelp).should('not.be.visible');
         cy.dataCy("expression-short-description").contains(expressionValues[0].shortDescription);
-    })
-
-    it('Faction Field Populates Data', () => {
-        // Faction needs to be disabled until after an expression has been selected
-        cy.dataCy(faction).should('not.exist');
-        cy.dataCy(expression).click();
-        cy.get("#expression_0").click();
-        cy.get("@factionOptions");
-        // Select after selecting, it should now be visable and testable
-        cy.dataCy(faction).should('exist');
-        cy.dataCy(addCharacterButton).click();
-        cy.dataCy(faction).click();
-        cy.get("#faction_list li").each(($ele, i) => {
-            expect($ele).to.have.text(factionValues[i].name)
-        });
-        cy.get("#faction_0").click();
-        cy.dataCy(factionHelp).should('not.be.visible');
-        // If you change expression, it should clear out the old stuff
-        cy.dataCy(expression).click();
-        cy.get("#expression_1").click();
-        cy.get("@factionOptions2")
     })
 
     it('Passes Data Through Data To API', () => {

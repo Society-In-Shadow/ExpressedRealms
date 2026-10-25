@@ -12,30 +12,11 @@ const expressionValues = [
   { id: 2, name: 'Boo', shortDescription: 'Goo' },
 ]
 
-const factionValues = [
-  { id: 4, name: 'Too', description: 'Far' },
-  { id: 5, name: 'Loo', description: 'Yoo' },
-]
-
-const factionValues2 = [
-  { id: 6, name: 'Hoo', description: 'Gar' },
-  { id: 7, name: 'Moo', description: 'Boo' },
-]
-
 describe('<AddCharacterTile />', () => {
   beforeEach(() => {
     vi.spyOn(axios, 'get').mockImplementation((url: string) => {
       if (url === '/characters/options') {
         return Promise.resolve({ data: { expressions: expressionValues } }) // Mock data for specific URL
-      }
-      if (url === '/characters/factionOptions/1') {
-        return Promise.resolve({ data: factionValues })
-      }
-      if (url === '/characters/factionOptions/2') {
-        return Promise.resolve({ data: factionValues2 })
-      }
-      if (url === '/navMenu/featureFlags') {
-        return Promise.resolve({ data: { featureFlags: ['show-faction-dropdown'] } })
       }
       // Default behavior for other URLs
       return Promise.resolve({ data: [] })
