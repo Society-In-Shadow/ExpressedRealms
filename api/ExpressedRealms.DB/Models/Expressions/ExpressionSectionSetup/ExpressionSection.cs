@@ -1,6 +1,5 @@
 using Audit.EntityFramework;
 using ExpressedRealms.DB.Interceptors;
-using ExpressedRealms.DB.Models.Characters;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 
 namespace ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
@@ -26,7 +25,6 @@ public class ExpressionSection : ISoftDelete
     public virtual ExpressionSection? CloneSource { get; set; }
     public virtual ExpressionSectionType SectionType { get; set; } = null;
     public virtual List<ExpressionSection>? Children { get; set; }
-    public virtual List<Character> CharactersList { get; set; }
     public virtual List<ExpressionSectionAuditTrail> SectionAudits { get; set; } = null!;
     public virtual ICollection<ExpressionSection> Clones { get; set; } =
         new HashSet<ExpressionSection>();

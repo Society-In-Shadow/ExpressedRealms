@@ -4,7 +4,6 @@ using ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings;
 using ExpressedRealms.DB.Models.Characters.AssignedXP.AssignedXpMappingModels;
 using ExpressedRealms.DB.Models.Characters.XpTables;
 using ExpressedRealms.DB.Models.Contacts;
-using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.Models.Expressions.ProgressionPathSetup.ProgressionPaths;
 using ExpressedRealms.DB.Models.Factions.CharacterFactionMappingModels;
@@ -25,8 +24,6 @@ public class Character : ISoftDelete
     public string? Background { get; set; }
     public Guid PlayerId { get; set; }
     public int ExpressionId { get; set; }
-
-    public int? FactionId { get; set; }
 
     public int StatExperiencePoints { get; set; }
 
@@ -60,7 +57,6 @@ public class Character : ISoftDelete
 
     public virtual Player Player { get; set; } = null!;
     public virtual Expression Expression { get; set; } = null!;
-    public virtual ExpressionSection? FactionInfo { get; set; } = null!;
     public virtual Character? SourceCharacter { get; set; }
     public virtual List<CharacterSkillsMapping> CharacterSkillsMappings { get; set; } = null!;
     public virtual List<CharacterKnowledgeMapping> CharacterKnowledgeMappings { get; set; } = null!;

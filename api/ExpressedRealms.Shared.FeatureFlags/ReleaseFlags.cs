@@ -24,12 +24,6 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "Allows one to see the contact us page on the marketing materials"
     );
 
-    public static readonly ReleaseFlags ShowFactionDropdown = new(
-        "Show Faction Dropdown on Add / Edit Character",
-        "show-faction-dropdown",
-        "Allows one to see the faction dropdown on the add / edit character page"
-    );
-
     public static readonly ReleaseFlags ShowArchetypeSelection = new(
         "Show Archetypes on Character Creation",
         "show-archetype-selection",

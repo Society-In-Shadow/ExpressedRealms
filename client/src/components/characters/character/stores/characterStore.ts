@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import { hasFlag } from '@/stores/featureFlags/featureFlagStore.ts'
 
 export const characterStore
   = defineStore('character', {
@@ -19,8 +18,6 @@ export const characterStore
         secondaryProgressionId: 0 as number,
         isArchetypeCharacter: false as boolean,
         isOwner: false as boolean,
-        factions: [] as any[],
-        faction: {} as any,
         characterId: 0 as number,
         canModifyPrimaryCharacter: false as boolean,
         factionRank: '' as string,
@@ -51,16 +48,6 @@ export const characterStore
             this.factionName = response.data.factionName
             this.isPlaytestExpression = response.data.isPlaytestExpression
             this.isLegacyExpression = response.data.isLegacyExpression
-
-            if (hasFlag.ShowFactionDropdown) {
-              await axios.get(`/characters/${characterId}/factionOptions`)
-                .then((factionResponse) => {
-                  this.factions = factionResponse.data
-
-                  this.faction = factionResponse.data.find(x => x.id == response.data.factionId)
-                  this.isLoading = false
-                })
-            }
           })
       },
       async getEditOptions(id: number) {
