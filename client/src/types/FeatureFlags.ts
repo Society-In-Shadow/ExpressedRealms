@@ -2,7 +2,6 @@
  * Auto-Generated, Do Not Edit
  */
 export const FeatureFlags = {
-  ShowArchetypeSelection: 'show-archetype-selection',
   ShowMarketingContactUsPage: 'show-marketing-contact-us',
   ShowPreCheckinFunctionality: 'show-pre-checkin',
   ShowFactions: 'show-factions',

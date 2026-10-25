@@ -25,7 +25,6 @@ using ExpressedRealms.Characters.Repository.Skills;
 using ExpressedRealms.Characters.Repository.Skills.DTOs;
 using ExpressedRealms.DB;
 using ExpressedRealms.DB.Models.Expressions.ExpressionPublishStatusSetup;
-using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.Repositories.Shared.ExternalDependencies;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Authorization;
@@ -104,12 +103,10 @@ internal static class CharacterEndPoints
 
         endpointGroup
             .MapPost("{characterId}/copy", CopyCharacterEndpoint.ExecuteAsync)
-            .RequireFeatureToggle(ReleaseFlags.ShowArchetypeSelection)
             .RequireAuthorization();
 
         endpointGroup
             .MapGet("/archetypes/{id}", GetArchetypesForExpressionEndpoint.ExecuteAsync)
-            .RequireFeatureToggle(ReleaseFlags.ShowArchetypeSelection)
             .RequireAuthorization();
 
         endpointGroup
