@@ -8,6 +8,7 @@ import { logOff } from '@/services/Authentication'
 import { useRouter } from 'vue-router'
 import { userInfoQuery } from '@/auth/authStore.ts'
 import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
+import NavSearch from '@/components/navbar/search/NavSearch.vue'
 
 const Router = useRouter()
 const { data } = useQueryWithLoading(userInfoQuery)
@@ -46,9 +47,23 @@ const gravatar = computed(() => {
   return `https://www.gravatar.com/avatar/${hash}`
 })
 
+const showFullSearch = ref(false)
+
 </script>
 
 <template>
+  <div>
+    <div v-if="!showFullSearch" class="flex align-items-center p-3 cursor-pointer mb-2 gap-2 no-underline text-900" @click="showFullSearch = !showFullSearch">
+      <Avatar class="pi pi-search" shape="circle" size="large" />
+      <div class="hideIfSmall">
+        Search
+      </div>
+    </div>
+    <div v-else>
+      <NavSearch />
+    </div>
+  </div>
+
   <a class="flex align-items-center p-3 cursor-pointer mb-2 gap-2 no-underline text-900" href="https://discord.gg/NSv3GxSAj7" target="_blank">
     <Avatar class="pi pi-discord" shape="circle" size="large" />
     <div class="hideIfSmall">Discord</div>
