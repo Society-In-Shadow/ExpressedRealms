@@ -16,6 +16,8 @@ internal static class ExpressionSectionAuditConfiguration
                 case "expression_id":
                 case "clone_source_id":
                 case "clone_batch_id":
+                case "processed_plain_text":
+                case "search_vector":
                     continue;
 
                 case "section_type_id":
