@@ -121,18 +121,20 @@ internal static class TestingEndPoints
                 .Where(x => x.SearchVector.Matches(
                     EF.Functions.WebSearchToTsQuery("english", q)))
                 .OrderByDescending(x => x.Name.ToLower() == q.ToLower())
-                .ThenByDescending(x =>
-                    x.SearchVector.Rank(
-                        EF.Functions.WebSearchToTsQuery("english", q)))
+                .ThenByDescending(x => x.SearchVector.Rank(
+                    EF.Functions.WebSearchToTsQuery("english", q)))
                 .Select(x => new
                 {
                     EntryId = x.Id,
                     Section = x.Expression.CmsType.Name,
-                    ExpressionName = x.Expression.Name,
+                    NavName = x.Expression.Name,
                     SectionName = x.Name,
-                    SectionContent = x.Content
+                    SectionContent = EF.Functions.WebSearchToTsQuery("english", q)
+                        .GetResultHeadline(
+                            "english",
+                            x.ProcessedPlainText,
+                            "MaxWords=20, MinWords=10, MaxFragments=1, StartSel=<mark>, StopSel=</mark>")
                 })
-                .Take(6)
                 .ToListAsync(cancellationToken);
             return Results.Ok(results);
         });
