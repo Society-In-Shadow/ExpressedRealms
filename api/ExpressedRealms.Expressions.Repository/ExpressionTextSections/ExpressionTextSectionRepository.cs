@@ -5,6 +5,7 @@ using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.Expressions.Repository.ExpressionTextSections.DTOs;
 using ExpressedRealms.Expressions.Repository.ExpressionTextSections.Helpers;
 using ExpressedRealms.Repositories.Shared.CommonFailureTypes;
+using ExpressedRealms.UseCases.Shared;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 
@@ -130,6 +131,7 @@ internal sealed class ExpressionTextSectionRepository(
             ExpressionId = dto.ExpressionId,
             SectionTypeId = dto.SectionTypeId,
             ParentId = dto.ParentId,
+            ProcessedPlainText = dto.Content.ToPlainText(),
             OrderIndex = nextPlaceOnList + 1,
         };
 
@@ -163,6 +165,7 @@ internal sealed class ExpressionTextSectionRepository(
         section.Content = dto.Content;
         section.ExpressionId = dto.ExpressionId;
         section.SectionTypeId = dto.SectionTypeId;
+        section.ProcessedPlainText = dto.Content.ToPlainText();
 
         context.ExpressionSections.Update(section);
 
