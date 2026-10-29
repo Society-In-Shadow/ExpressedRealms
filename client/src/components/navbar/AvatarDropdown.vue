@@ -47,45 +47,29 @@ const gravatar = computed(() => {
   return `https://www.gravatar.com/avatar/${hash}`
 })
 
-const showFullSearch = ref(false)
-
 </script>
 
 <template>
-  <div>
-    <div v-if="!showFullSearch" class="flex align-items-center p-3 cursor-pointer mb-2 gap-2 no-underline text-900" @click="showFullSearch = !showFullSearch">
-      <Avatar class="pi pi-search" shape="circle" size="large" />
-      <div class="hideIfSmall">
-        Search
-      </div>
-    </div>
-    <div v-else>
+  <div class="d-flex flex-row gap-2">
+    <div class="flex align-items-center cursor-pointer">
       <NavSearch />
     </div>
+
+    <a href="https://discord.gg/NSv3GxSAj7" target="_blank" class="flex align-items-center cursor-pointer  no-underline">
+      <Avatar class="pi pi-discord avatar-size" shape="circle" />
+    </a>
+    <a
+      v-if="data!.userInfo !== null" class="flex align-items-center cursor-pointer" aria-haspopup="true" aria-controls="overlay_tmenu"
+      @click="toggle"
+    >
+      <Avatar :image="gravatar" shape="circle" class="avatar-size" style="max-width: 2em; max-height: 2em;" />
+      <TieredMenu id="overlay_tmenu" ref="menu" :model="items" popup />
+    </a>
+    <RouterLink v-else to="/login" class="flex align-items-center cursor-pointer">
+      <Avatar class="pi pi-sign-in" shape="circle" />
+      <div class="hideIfSmall">
+        Login
+      </div>
+    </RouterLink>
   </div>
-
-  <a class="flex align-items-center p-3 cursor-pointer mb-2 gap-2 no-underline text-900" href="https://discord.gg/NSv3GxSAj7" target="_blank">
-    <Avatar class="pi pi-discord" shape="circle" size="large" />
-    <div class="hideIfSmall">Discord</div>
-  </a>
-  <a v-if="data!.userInfo !== null" class="flex align-items-center p-3 cursor-pointer mb-2 gap-2" aria-haspopup="true" aria-controls="overlay_tmenu" @click="toggle">
-    <Avatar :image="gravatar" shape="circle" size="large" />
-    <div class="hideIfSmall">{{ data!.userInfo.name }}</div>
-    <i class="pi pi-caret-down text-lg" />
-    <TieredMenu id="overlay_tmenu" ref="menu" :model="items" popup />
-  </a>
-  <RouterLink v-else class="flex align-items-center p-3 cursor-pointer mb-2 gap-2 no-underline text-900" to="/login">
-    <Avatar class="pi pi-sign-in" shape="circle" size="large" />
-    <div class="hideIfSmall">
-      Login
-    </div>
-  </RouterLink>
 </template>
-
-<style scoped>
-  @media(max-width: 576px){
-    .hideIfSmall{
-      display: none;
-    }
-  }
-</style>

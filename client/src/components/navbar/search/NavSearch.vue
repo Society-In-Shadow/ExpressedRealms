@@ -2,9 +2,13 @@
 import { AutoComplete } from 'primevue'
 import type { SearchResult } from '@/components/navbar/types.ts'
 import axios from 'axios'
-import { ref } from 'vue'
+import { nextTick, ref } from 'vue'
+import Avatar from 'primevue/avatar'
+import Drawer from 'primevue/drawer'
+import { breakpointsBootstrapV5, useBreakpoints } from '@vueuse/core'
 
 const suggestions = ref<SearchResult[]>([])
+const hasData = ref(false)
 
 const search = async (event: { query: string }) => {
   const response = await axios.get<SearchResult[]>('search', {
@@ -12,36 +16,78 @@ const search = async (event: { query: string }) => {
       q: event.query,
     },
   })
-
+  hasData.value = event.query.length > 0
   suggestions.value = response.data.slice(0, 6)
 }
+
+const searchInput = ref()
+
+const showFullSearch = ref(false)
+const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5)
+const isMobile = activeBreakpoint.smaller('md')
+
+const togglePanel = async () => {
+  showFullSearch.value = !showFullSearch.value
+  await nextTick()
+  searchInput.value?.$el.querySelector('input')?.focus()
+}
+
 </script>
 
 <template>
-  <AutoComplete
-    :suggestions="suggestions"
-    option-label="name"
-    placeholder="Search..."
-    :min-length="2"
-    :delay="250"
-    scroll-height="20em"
-    @complete="search"
-  >
-    <template #option="{ option }">
-      <div class="flex flex-column gap-1">
-        <span class="font-medium">{{ option.section }} > {{ option.navName }} > {{ option.sectionName }}</span>
-        <small class="text-color-secondary">
-          <div v-html="option.sectionContent" />
-        </small>
+  <div v-if="!showFullSearch" class="flex align-items-center cursor-pointer" @click="togglePanel">
+    <Avatar class="pi pi-search avatar-size" shape="circle" />
+  </div>
+  <div v-else>
+    <Drawer
+      v-model:visible="showFullSearch" header="Global Search" :dismissable="false"
+      :block-scroll="isMobile" :position="isMobile ? 'full' : 'right'" class="search-drawer"
+    >
+      <AutoComplete
+        ref="searchInput"
+        placeholder="Search..."
+        :min-length="2"
+        :delay="250"
+        scroll-height="20em"
+        class="w-100 pb-3"
+        input-class="w-100"
+        loading-icon="si-search"
+        @complete="search"
+      />
+      <div class="d-flex flex-column align-items-center pt-2">
+        <div v-if="suggestions.length == 0 && !hasData">
+          <p>Search above to get started!</p>
+        </div>
+        <div v-else-if="suggestions.length == 0 && hasData">
+          <p>No Search Results</p>
+        </div>
       </div>
-    </template>
-  </AutoComplete>
+
+      <div v-for="suggestion in suggestions" :key="suggestion.entryId">
+        <div class="flex flex-column gap-1 pb-3">
+          <h3 class="m-0 p-0">
+            {{ suggestion.sectionName }}
+          </h3>
+          <h5 class="m-0 p-0 pb-1 pt-1 text-secondary">
+            {{ suggestion.section }} > {{ suggestion.navName }}
+          </h5>
+          <small class="text-color-secondary">
+            <div v-html="suggestion.sectionContent" />
+          </small>
+        </div>
+      </div>
+    </Drawer>
+  </div>
 </template>
 
 <style>
-  mark {
-    font-weight: bold;
-    background: inherit;
-    color: var(--p-text-muted-color)
-  }
+mark {
+  font-weight: bold;
+  background: inherit;
+  color: var(--p-text-muted-color)
+}
+.search-drawer {
+  width: 30rem !important;
+  max-width: 100vw;
+}
 </style>
