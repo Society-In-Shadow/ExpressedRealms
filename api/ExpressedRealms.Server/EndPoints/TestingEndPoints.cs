@@ -8,6 +8,7 @@ using ExpressedRealms.FeatureFlags;
 using ExpressedRealms.FeatureFlags.FeatureClient;
 using ExpressedRealms.UseCases.Shared;
 using Microsoft.EntityFrameworkCore;
+using Slugify;
 using StackExchange.Redis;
 
 namespace ExpressedRealms.Server.EndPoints;
@@ -117,6 +118,8 @@ internal static class TestingEndPoints
             ExpressedRealmsDbContext db,
             CancellationToken cancellationToken) =>
         {
+            var helper = new SlugHelper();
+            
             var results = await db.ExpressionSections
                 .Where(x => x.SearchVector.Matches(
                     EF.Functions.WebSearchToTsQuery("english", q)))
@@ -128,12 +131,13 @@ internal static class TestingEndPoints
                     EntryId = x.Id,
                     Section = x.Expression.CmsType.Name,
                     NavName = x.Expression.Name,
+                    Slug = helper.GenerateSlug(x.Expression.Name),
                     SectionName = x.Name,
                     SectionContent = EF.Functions.WebSearchToTsQuery("english", q)
                         .GetResultHeadline(
                             "english",
                             x.ProcessedPlainText,
-                            "MaxWords=20, MinWords=10, MaxFragments=1, StartSel=<mark>, StopSel=</mark>")
+                            "MaxWords=20, MinWords=10, MaxFragments=2, StartSel=<mark>, StopSel=</mark>")
                 })
                 .ToListAsync(cancellationToken);
             return Results.Ok(results);

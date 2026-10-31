@@ -2168,13 +2168,13 @@ namespace ExpressedRealms.DB.Migrations
                         {
                             Id = 13,
                             Description = "Sections that should show up in the rule book.",
-                            Name = "Rule Book Section"
+                            Name = "Rule Book"
                         },
                         new
                         {
                             Id = 14,
                             Description = "Sections that should show up in the world background.",
-                            Name = "World Background Section"
+                            Name = "World Background"
                         });
                 });
 

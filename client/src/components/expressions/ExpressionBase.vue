@@ -24,6 +24,7 @@ import ProgressionTab from '@/components/expressions/progressionPaths/Progressio
 import ExpressionLogo from '@/components/common/ExpressionLogo.vue'
 import { can, userPermissionStore } from '@/stores/userPermissionStore.ts'
 import FactionTab from '@/components/expressions/factions/FactionTab.vue'
+import { scrollToSection } from '@/components/expressions/expressionUtilities.ts'
 
 const userPermissionInfo = userPermissionStore()
 const permissionCheck = userPermissionInfo.permissionCheck
@@ -73,6 +74,8 @@ async function fetchData() {
       if (location.hash) {
         await nextTick()
         window.location.replace(location.hash)
+
+        scrollToSection(location.hash)
       }
     })
 

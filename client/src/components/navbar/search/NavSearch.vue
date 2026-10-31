@@ -6,9 +6,12 @@ import { nextTick, ref } from 'vue'
 import Avatar from 'primevue/avatar'
 import Drawer from 'primevue/drawer'
 import { breakpointsBootstrapV5, useBreakpoints } from '@vueuse/core'
+import { useRouter } from 'vue-router'
+import { makeIdSafe } from '@/utilities/stringUtilities.ts'
 
 const suggestions = ref<SearchResult[]>([])
 const hasData = ref(false)
+const router = useRouter()
 
 const search = async (event: { query: string }) => {
   const response = await axios.get<SearchResult[]>('search', {
@@ -30,6 +33,18 @@ const togglePanel = async () => {
   showFullSearch.value = !showFullSearch.value
   await nextTick()
   searchInput.value?.$el.querySelector('input')?.focus()
+}
+
+const redirect = async (suggestion: SearchResult) => {
+  let section = ''
+  if (suggestion.section == 'Rule Book')
+    section = 'rulebook'
+  else if (suggestion.section == 'World Background')
+    section = 'worldbackground'
+  else if (suggestion.section == 'Expression')
+    section = 'expressions'
+  await router.push({ name: section, params: { slug: suggestion.slug }, hash: '#' + makeIdSafe(suggestion.sectionName) })
+  showFullSearch.value = false
 }
 
 </script>
@@ -63,7 +78,7 @@ const togglePanel = async () => {
         </div>
       </div>
 
-      <div v-for="suggestion in suggestions" :key="suggestion.entryId">
+      <div v-for="suggestion in suggestions" :key="suggestion.entryId" @click="redirect(suggestion)">
         <div class="flex flex-column gap-1 pb-3">
           <h3 class="m-0 p-0">
             {{ suggestion.sectionName }}

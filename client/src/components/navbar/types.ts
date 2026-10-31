@@ -16,6 +16,7 @@ export interface SearchResult {
   entryId: number
   sectionTypeId: number
   section: string
+  slug: string
   NavName: string
   sectionName: string
   sectionContent: string
