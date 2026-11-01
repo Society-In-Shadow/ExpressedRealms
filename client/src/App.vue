@@ -2,6 +2,7 @@
 import { PiniaColadaDevtools } from '@pinia/colada-devtools'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { breakpointsBootstrapV5, useBreakpoints } from '@vueuse/core'
 
 const route = useRoute()
 
@@ -15,9 +16,12 @@ const routeKey = computed(() => {
   return 'noReset'
 })
 
+const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5)
+const isMobile = activeBreakpoint.smaller('md')
+
 </script>
 <template>
   <router-view :key="routeKey" />
 
-  <PiniaColadaDevtools />
+  <PiniaColadaDevtools v-if="!isMobile" />
 </template>
