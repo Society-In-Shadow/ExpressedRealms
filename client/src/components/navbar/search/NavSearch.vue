@@ -79,7 +79,7 @@ const redirect = async (suggestion: SearchResult) => {
       </div>
 
       <div v-for="suggestion in suggestions" :key="suggestion.entryId" @click="redirect(suggestion)">
-        <div class="flex flex-column gap-1 pb-3">
+        <div class="flex flex-column gap-1 pb-3" style="cursor: pointer">
           <h3 class="m-0 p-0">
             {{ suggestion.sectionName }}
           </h3>
