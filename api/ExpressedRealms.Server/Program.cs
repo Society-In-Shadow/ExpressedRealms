@@ -20,6 +20,7 @@ using ExpressedRealms.Expressions.Repository;
 using ExpressedRealms.Expressions.UseCases.Configuration;
 using ExpressedRealms.FeatureFlags.Configuration;
 using ExpressedRealms.FeatureFlags.FeatureManager;
+using ExpressedRealms.Global.API.Configuration;
 using ExpressedRealms.Knowledges.API.Configuration;
 using ExpressedRealms.Knowledges.UseCases.Configuration;
 using ExpressedRealms.Powers.API.Configuration;
@@ -163,6 +164,7 @@ try
     builder.Services.AddEventUseCaseInjections();
     builder.Services.AddSharedInjections();
     builder.Services.AddFeatureFlagInjections();
+    builder.Services.ConfigureGlobalServices();
 
     Log.Information("Building the App");
     var app = builder.Build();
@@ -258,6 +260,7 @@ try
     app.UseAntiforgery();
 
     Log.Information("Adding endpoints");
+    app.ConfigureGlobalEndPoints();
     app.AddAuthEndPoints();
     app.AddTestingEndPoints();
     app.AddPlayerEndPoints();
