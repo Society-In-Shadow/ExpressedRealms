@@ -10,7 +10,9 @@ internal sealed class GlobalSearchUseCase(
     CancellationToken cancellationToken
 ) : IGlobalSearchUseCase
 {
-    public async Task<Result<List<GlobalSearchUseCaseReturnModel>>> ExecuteAsync(GlobalSearchUseCaseModel useCaseModel)
+    public async Task<Result<List<GlobalSearchUseCaseReturnModel>>> ExecuteAsync(
+        GlobalSearchUseCaseModel useCaseModel
+    )
     {
         var result = await ValidationHelper.ValidateAndHandleErrorsAsync(
             validator,
@@ -21,18 +23,24 @@ internal sealed class GlobalSearchUseCase(
         if (result.IsFailed)
             return Result.Fail(result.Errors);
 
-        var expressionSectionResults = await searchRepository.GetExpressionSections(useCaseModel.Search);
-        
+        var expressionSectionResults = await searchRepository.GetExpressionSections(
+            useCaseModel.Search
+        );
+
         var helper = new SlugHelper();
 
-        return Result.Ok(expressionSectionResults.Select(x => new GlobalSearchUseCaseReturnModel()
-        {
-            EntryId = x.EntryId,
-            NavName = x.NavName,
-            Section = x.Section,
-            SectionContent = x.SectionContent,
-            SectionName = x.SectionName,
-            Slug = helper.GenerateSlug(x.NavName),
-        }).ToList());
+        return Result.Ok(
+            expressionSectionResults
+                .Select(x => new GlobalSearchUseCaseReturnModel()
+                {
+                    EntryId = x.EntryId,
+                    NavName = x.NavName,
+                    Section = x.Section,
+                    SectionContent = x.SectionContent,
+                    SectionName = x.SectionName,
+                    Slug = helper.GenerateSlug(x.NavName),
+                })
+                .ToList()
+        );
     }
 }

@@ -23,7 +23,7 @@ public sealed class ReleaseFlags : SmartEnum<ReleaseFlags, string>
         "show-marketing-contact-us",
         "Allows one to see the contact us page on the marketing materials"
     );
-    
+
     public static readonly ReleaseFlags ShowGlobalSearch = new(
         "Show Global Search",
         "show-global-search",

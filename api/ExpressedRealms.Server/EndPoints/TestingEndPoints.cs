@@ -94,14 +94,13 @@ internal static class TestingEndPoints
                 }
             )
             .RequirePermission(Permissions.DevDebug.RerunDailyUpdates);
-        
+
         endpoints
             .MapPost(
                 "/runPlanTextMigration",
                 async (ExpressedRealmsDbContext dbContext) =>
                 {
-                    var rows = await dbContext.ExpressionSections
-                        .ToListAsync();
+                    var rows = await dbContext.ExpressionSections.ToListAsync();
 
                     foreach (var row in rows)
                     {
@@ -110,6 +109,7 @@ internal static class TestingEndPoints
 
                     await dbContext.SaveChangesAsync();
                 }
-            ).RequirePermission(Permissions.DevDebug.RunPlainTextMigrations);
+            )
+            .RequirePermission(Permissions.DevDebug.RunPlainTextMigrations);
     }
 }
