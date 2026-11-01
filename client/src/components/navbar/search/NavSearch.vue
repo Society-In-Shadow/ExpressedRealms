@@ -20,7 +20,7 @@ const search = async (event: { query: string }) => {
     },
   })
   hasData.value = event.query.length > 0
-  suggestions.value = response.data.items.slice(0, 6)
+  suggestions.value = response.data.items
 }
 
 const searchInput = ref()
@@ -28,6 +28,7 @@ const searchInput = ref()
 const showFullSearch = ref(false)
 const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5)
 const isMobile = activeBreakpoint.smaller('md')
+const searchText = ref('')
 
 const togglePanel = async () => {
   showFullSearch.value = !showFullSearch.value
@@ -60,13 +61,15 @@ const redirect = async (suggestion: SearchResult) => {
     >
       <AutoComplete
         ref="searchInput"
+        v-model="searchText"
         placeholder="Search..."
         :min-length="2"
-        :delay="250"
+        :delay="600"
         scroll-height="20em"
         class="w-100 pb-3"
         input-class="w-100"
         loading-icon="si-search"
+        @clear="suggestions = []"
         @complete="search"
       />
       <div class="d-flex flex-column align-items-center pt-2">
