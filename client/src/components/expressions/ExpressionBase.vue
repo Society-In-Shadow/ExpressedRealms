@@ -9,7 +9,7 @@ import ExpressionSection from '@/components/expressions/ExpressionSection.vue'
 import axios from 'axios'
 import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 import { expressionStore } from '@/stores/expressionStore'
-import { computed, nextTick, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import Card from 'primevue/card'
 import ScrollTop from 'primevue/scrolltop'
 import CreateExpressionSection from '@/components/expressions/CreateExpressionSection.vue'
@@ -106,6 +106,17 @@ onBeforeRouteUpdate(async (to, from) => {
     await fetchData()
   }
 })
+
+watch(
+  () => route.hash,
+  async (newPath, oldPath) => {
+    if (newPath !== oldPath) {
+      await nextTick()
+      window.location.replace(location.hash)
+      scrollToSection(location.hash)
+    }
+  },
+)
 
 async function downloadExpressionBooklet() {
   const res = await axios.get(`/expression/${expressionInfo.currentExpressionId}/booklet`, {

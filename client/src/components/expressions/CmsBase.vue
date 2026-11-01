@@ -90,6 +90,17 @@ watch(
   },
 )
 
+watch(
+  () => route.hash,
+  async (newPath, oldPath) => {
+    if (newPath !== oldPath) {
+      await nextTick()
+      window.location.replace(location.hash)
+      scrollToSection(location.hash)
+    }
+  },
+)
+
 async function downloadExpressionBooklet() {
   const res = await axios.get(`/expression/${expressionInfo.currentExpressionId}/report`, {
     responseType: 'blob',
