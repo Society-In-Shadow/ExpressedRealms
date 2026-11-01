@@ -9,5 +9,6 @@
     <PackageReference Include="FluentResults" Version="4.0.0" />
     <PackageReference Include="FluentValidation" Version="12.2.0" />
     <PackageReference Include="JetBrains.Annotations" Version="2026.2.0" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.13.1" />
   </ItemGroup>
 </Project>

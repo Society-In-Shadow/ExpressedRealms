@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using NpgsqlTypes;
 
 #nullable disable
 
@@ -2167,13 +2168,13 @@ namespace ExpressedRealms.DB.Migrations
                         {
                             Id = 13,
                             Description = "Sections that should show up in the rule book.",
-                            Name = "Rule Book Section"
+                            Name = "Rule Book"
                         },
                         new
                         {
                             Id = 14,
                             Description = "Sections that should show up in the world background.",
-                            Name = "World Background Section"
+                            Name = "World Background"
                         });
                 });
 
@@ -2284,6 +2285,17 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("parent_id");
 
+                    b.Property<string>("ProcessedPlainText")
+                        .HasColumnType("text")
+                        .HasColumnName("processed_plain_text");
+
+                    b.Property<NpgsqlTsVector>("SearchVector")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("tsvector")
+                        .HasColumnName("search_vector")
+                        .HasComputedColumnSql("setweight(to_tsvector('english', coalesce(\"name\", '')), 'A') ||\nsetweight(to_tsvector('english', coalesce(\"processed_plain_text\", '')), 'B')", true);
+
                     b.Property<int>("SectionTypeId")
                         .HasColumnType("integer")
                         .HasColumnName("section_type_id");
@@ -2299,6 +2311,11 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.HasIndex("ParentId")
                         .HasDatabaseName("ix_expression_sections_parent_id");
+
+                    b.HasIndex("SearchVector")
+                        .HasDatabaseName("ix_expression_sections_search_vector");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("SearchVector"), "GIN");
 
                     b.HasIndex("SectionTypeId")
                         .HasDatabaseName("ix_expression_sections_section_type_id");

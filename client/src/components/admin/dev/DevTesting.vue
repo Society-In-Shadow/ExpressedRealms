@@ -49,6 +49,12 @@ const RerunDailyMessage = async () => {
       toaster.success(`Successfully Re-Ran Daily Message!`)
     })
 }
+const UpdatePlainTextForGlobalSearch = async () => {
+  await axios.post(`/dev/runPlanTextMigration`)
+    .then(async (response) => {
+      toaster.success(`Successfully Refreshed Global Search Data!`)
+    })
+}
 
 </script>
 
@@ -62,6 +68,6 @@ const RerunDailyMessage = async () => {
     <Button v-if="permissionCheck.DevDebug.SendDiscordMessage" label="Test Sending Discord Message" @click="sendDiscordMessage" />
     <Button v-if="permissionCheck.DevDebug.TestRedis" label="Test Redis" @click="testRedis" />
     <Button v-if="permissionCheck.DevDebug.RunSpecialScripts" label="Run Special Scripts" @click="RunSpecialScripts" />
-    <Button v-if="permissionCheck.DevDebug.RerunDailyUpdates" label="Re-run Daily Message" @click="RerunDailyMessage" />
+    <Button v-if="permissionCheck.DevDebug.RunPlainTextMigrations" label="Force Refresh Global Search Data" @click="UpdatePlainTextForGlobalSearch" />
   </div>
 </template>

@@ -26,6 +26,7 @@ import { Tooltip } from 'primevue'
 import { PiniaColadaDelay } from '@pinia/colada-plugin-delay'
 import './styles/tableLayout.css'
 import './styles/overrides.css'
+import './styles/navbar.css'
 import { userPermissionStore } from '@/stores/userPermissionStore.ts'
 
 axiosConfig.setupErrorHandlingInterceptors()

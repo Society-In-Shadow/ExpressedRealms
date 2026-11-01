@@ -14,6 +14,7 @@ import ExpressionToC from '@/components/expressions/ExpressionToC.vue'
 import axios from 'axios'
 import BlessingToC from '@/components/expressions/BlessingToC.vue'
 import { can, userPermissionStore } from '@/stores/userPermissionStore.ts'
+import { scrollToSection } from '@/components/expressions/expressionUtilities.ts'
 
 const userPermissionInfo = userPermissionStore()
 const permissionCheck = userPermissionInfo.permissionCheck
@@ -58,6 +59,7 @@ async function fetchData() {
       if (location.hash) {
         await nextTick()
         window.location.replace(location.hash)
+        scrollToSection(location.hash)
       }
     })
 }
@@ -84,6 +86,17 @@ watch(
   async (newPath, oldPath) => {
     if (newPath !== oldPath) {
       await fetchData()
+    }
+  },
+)
+
+watch(
+  () => route.hash,
+  async (newPath, oldPath) => {
+    if (newPath !== oldPath) {
+      await nextTick()
+      window.location.replace(location.hash)
+      scrollToSection(location.hash)
     }
   },
 )

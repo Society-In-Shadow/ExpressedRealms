@@ -129,6 +129,7 @@ export const UserPermissions = {
     TestRedis: 'devdebug.testredis',
     RunSpecialScripts: 'devdebug.runspecialscripts',
     RerunDailyUpdates: 'devdebug.rerundailyupdates',
+    RunPlainTextMigrations: 'devdebug.runplaintextmigrations',
   } as const,
 } as const
 

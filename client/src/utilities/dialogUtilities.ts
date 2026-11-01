@@ -19,7 +19,7 @@ export const useAppDialog = () => {
         props: {
           header: options.header,
           style: {
-            width: '500px',
+            width: '1000px',
           },
           breakpoints: {
             '960px': '75vw',

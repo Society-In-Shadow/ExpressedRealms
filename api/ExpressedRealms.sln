@@ -109,6 +109,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Scaffolder"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Shared.FeatureFlags.UiSync", "ExpressedRealms.Shared.FeatureFlags.UiSync\ExpressedRealms.Shared.FeatureFlags.UiSync.csproj", "{98406E6C-7E5D-4D27-8660-45C623511A1A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressedRealms.Global.API", "ExpressedRealms.Global.API\ExpressedRealms.Global.API.csproj", "{0F3B38C9-58F7-4BA6-B100-4287048A2536}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -299,6 +301,10 @@ Global
 		{98406E6C-7E5D-4D27-8660-45C623511A1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98406E6C-7E5D-4D27-8660-45C623511A1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98406E6C-7E5D-4D27-8660-45C623511A1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F3B38C9-58F7-4BA6-B100-4287048A2536}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F3B38C9-58F7-4BA6-B100-4287048A2536}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F3B38C9-58F7-4BA6-B100-4287048A2536}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F3B38C9-58F7-4BA6-B100-4287048A2536}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

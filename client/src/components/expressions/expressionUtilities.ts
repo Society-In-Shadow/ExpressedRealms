@@ -14,6 +14,16 @@ export function scrollToSection(sectionId: string) {
       behavior: 'smooth', // Smoothly scroll to the section
       block: 'start', // Align with the top of the viewport
     })
+    target.animate(
+      [
+        { backgroundColor: 'var(--p-primary-100)' },
+        { backgroundColor: 'transparent' },
+      ],
+      {
+        duration: 1500,
+        easing: 'ease-out',
+      },
+    )
   }
 }
 

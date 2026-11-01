@@ -12,4 +12,18 @@ export enum CharacterState {
   Regular = 0,
 }
 
+export interface SearchResult {
+  entryId: number
+  sectionTypeId: number
+  section: string
+  slug: string
+  navName: string
+  sectionName: string
+  sectionContent: string
+}
+
+export interface SearchResponse {
+  items: SearchResult[]
+}
+
 export type CharacterList = Character[]
