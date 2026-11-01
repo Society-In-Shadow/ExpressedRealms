@@ -9,6 +9,7 @@ import { useRouter } from 'vue-router'
 import { userInfoQuery } from '@/auth/authStore.ts'
 import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 import NavSearch from '@/components/navbar/search/NavSearch.vue'
+import { hasFlag } from '@/stores/featureFlags/featureFlagStore.ts'
 
 const Router = useRouter()
 const { data } = useQueryWithLoading(userInfoQuery)
@@ -51,7 +52,7 @@ const gravatar = computed(() => {
 
 <template>
   <div class="d-flex flex-row gap-2">
-    <div class="flex align-items-center cursor-pointer">
+    <div v-if="hasFlag.ShowGlobalSearch" class="flex align-items-center cursor-pointer">
       <NavSearch />
     </div>
 

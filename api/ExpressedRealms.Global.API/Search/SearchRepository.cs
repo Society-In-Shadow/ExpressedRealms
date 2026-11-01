@@ -1,4 +1,5 @@
 using ExpressedRealms.DB;
+using ExpressedRealms.DB.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpressedRealms.Global.API.Search;
@@ -10,24 +11,30 @@ internal sealed class SearchRepository(
 {
     public async Task<List<SearchInformationDto>> GetExpressionSections(string search)
     {
+        const string language = "english";
         return await context.ExpressionSections
             .Where(x => x.SearchVector.Matches(
-                EF.Functions.WebSearchToTsQuery("english", search)))
+                EF.Functions.WebSearchToTsQuery(language, search)))
             .OrderByDescending(x => x.Name.ToLower() == search.ToLower())
             .ThenByDescending(x => x.SearchVector.Rank(
-                EF.Functions.WebSearchToTsQuery("english", search)))
+                EF.Functions.WebSearchToTsQuery(language, search)))
             .Select(x => new SearchInformationDto()
             {
                 EntryId = x.Id,
                 Section = x.Expression.CmsType.Name,
                 NavName = x.Expression.Name,
                 SectionName = x.Name,
-                SectionContent = EF.Functions.WebSearchToTsQuery("english", search)
+                SectionContent = EF.Functions.WebSearchToTsQuery(language, search)
                     .GetResultHeadline(
-                        "english",
+                        language,
                         x.ProcessedPlainText,
                         "MaxWords=20, MinWords=10, MaxFragments=2, StartSel=<mark>, StopSel=</mark>")
             })
             .ToListAsync(cancellationToken);
+    }
+
+    public async Task EditAsync<TEntity>(TEntity entity) where TEntity : class
+    {
+        await context.CommonSaveChanges(entity, cancellationToken);
     }
 }

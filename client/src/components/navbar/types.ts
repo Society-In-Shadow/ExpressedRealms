@@ -17,9 +17,13 @@ export interface SearchResult {
   sectionTypeId: number
   section: string
   slug: string
-  NavName: string
+  navName: string
   sectionName: string
   sectionContent: string
+}
+
+export interface SearchResponse {
+  items: SearchResult[]
 }
 
 export type CharacterList = Character[]

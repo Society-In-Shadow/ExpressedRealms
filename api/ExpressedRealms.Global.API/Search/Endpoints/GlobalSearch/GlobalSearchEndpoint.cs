@@ -9,14 +9,14 @@ namespace ExpressedRealms.Global.API.Search.Endpoints.GlobalSearch;
 public static class GlobalSearchEndpoint
 {
     public static async Task<Results<Ok<GlobalSearchResponse>, ValidationProblem, NotFound>> ExecuteAsync(
-        string search,
+        [FromQuery]string query,
         [FromServices] IGlobalSearchUseCase useCase
     )
     {
         var results = await useCase.ExecuteAsync(
             new()
             {
-                Search = search,
+                Search = query,
             }
         );
 

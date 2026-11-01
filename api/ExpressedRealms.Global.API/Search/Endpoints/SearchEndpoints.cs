@@ -10,10 +10,10 @@ internal static class SearchEndpoints
 {
     internal static void AddSearchEndpoints(this WebApplication app)
     {
-        var endpointGroup = app.MapGroup("search")
-            .WithTags("Events");
+        var endpointGroup = app.MapGroup("")
+            .WithTags("Search");
 
-        endpointGroup.MapGet("{search}", () => GlobalSearchEndpoint.ExecuteAsync)
+        endpointGroup.MapGet("search", GlobalSearchEndpoint.ExecuteAsync)
             .RequireFeatureToggle(ReleaseFlags.ShowGlobalSearch);
 
     }

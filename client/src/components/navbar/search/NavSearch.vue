@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { AutoComplete } from 'primevue'
-import type { SearchResult } from '@/components/navbar/types.ts'
+import type { SearchResponse, SearchResult } from '@/components/navbar/types.ts'
 import axios from 'axios'
 import { nextTick, ref } from 'vue'
 import Avatar from 'primevue/avatar'
@@ -14,13 +14,13 @@ const hasData = ref(false)
 const router = useRouter()
 
 const search = async (event: { query: string }) => {
-  const response = await axios.get<SearchResult[]>('search', {
+  const response = await axios.get<SearchResponse>('search', {
     params: {
-      q: event.query,
+      query: event.query,
     },
   })
   hasData.value = event.query.length > 0
-  suggestions.value = response.data.slice(0, 6)
+  suggestions.value = response.data.items.slice(0, 6)
 }
 
 const searchInput = ref()
