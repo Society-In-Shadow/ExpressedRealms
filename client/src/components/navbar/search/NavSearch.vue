@@ -36,7 +36,7 @@ const togglePanel = async () => {
   searchInput.value?.$el.querySelector('input')?.focus()
 }
 
-const redirect = async (suggestion: SearchResult) => {
+const redirect = (suggestion: SearchResult) => {
   let section = ''
   if (suggestion.section == 'Rule Book')
     section = 'rulebook'
@@ -44,7 +44,14 @@ const redirect = async (suggestion: SearchResult) => {
     section = 'worldbackground'
   else if (suggestion.section == 'Expression')
     section = 'expressions'
-  await router.push({ name: section, params: { slug: suggestion.slug }, hash: '#' + makeIdSafe(suggestion.sectionName) })
+  return router.resolve({
+    name: section,
+    params: { slug: suggestion.slug },
+    hash: '#' + makeIdSafe(suggestion.sectionName),
+  })
+}
+
+const hideSideBar = () => {
   showFullSearch.value = false
 }
 
@@ -82,17 +89,19 @@ const redirect = async (suggestion: SearchResult) => {
       </div>
 
       <div v-for="suggestion in suggestions" :key="suggestion.entryId" @click="redirect(suggestion)">
-        <div class="flex flex-column gap-1 pb-3" style="cursor: pointer">
-          <h3 class="m-0 p-0">
-            {{ suggestion.sectionName }}
-          </h3>
-          <h5 class="m-0 p-0 pb-1 pt-1 text-secondary">
-            {{ suggestion.section }} > {{ suggestion.navName }}
-          </h5>
-          <small class="text-color-secondary">
-            <div v-html="suggestion.sectionContent" />
-          </small>
-        </div>
+        <RouterLink :to="redirect(suggestion)" class="no-underline text-color" @click.left="hideSideBar">
+          <div class="flex flex-column gap-1 pb-3">
+            <h3 class="m-0 p-0">
+              {{ suggestion.sectionName }}
+            </h3>
+            <h5 class="m-0 p-0 pb-1 pt-1 text-secondary">
+              {{ suggestion.section }} > {{ suggestion.navName }}
+            </h5>
+            <small class="text-color-secondary">
+              <div v-html="suggestion.sectionContent" />
+            </small>
+          </div>
+        </RouterLink>
       </div>
     </Drawer>
   </div>
