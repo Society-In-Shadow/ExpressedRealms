@@ -30,7 +30,7 @@ internal sealed class SearchRepository(
                     .Functions.WebSearchToTsQuery(language, search)
                     .GetResultHeadline(
                         language,
-                        x.ProcessedPlainText,
+                        x.ProcessedPlainText ?? "",
                         "MaxWords=20, MinWords=10, MaxFragments=2, StartSel=<mark>, StopSel=</mark>"
                     ),
             })

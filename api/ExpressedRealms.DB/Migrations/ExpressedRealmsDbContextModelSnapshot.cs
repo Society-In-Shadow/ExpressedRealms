@@ -2290,6 +2290,7 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnName("processed_plain_text");
 
                     b.Property<NpgsqlTsVector>("SearchVector")
+                        .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("tsvector")
                         .HasColumnName("search_vector")

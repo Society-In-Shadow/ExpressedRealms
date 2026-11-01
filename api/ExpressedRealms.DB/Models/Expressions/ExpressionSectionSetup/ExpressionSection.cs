@@ -22,7 +22,7 @@ public class ExpressionSection : ISoftDelete
     public int? CloneSourceId { get; set; }
     public Guid? CloneBatchId { get; set; }
 
-    public NpgsqlTsVector? SearchVector { get; set; }
+    public NpgsqlTsVector SearchVector { get; set; } = null!;
 
     public virtual Expression Expression { get; set; } = null!;
     public virtual ExpressionSection? Parent { get; set; }

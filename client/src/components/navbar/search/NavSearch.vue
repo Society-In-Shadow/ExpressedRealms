@@ -58,8 +58,8 @@ const hideSideBar = () => {
 </script>
 
 <template>
-  <div v-if="!showFullSearch" class="flex align-items-center cursor-pointer" @click="togglePanel">
-    <Avatar class="pi pi-search avatar-size" shape="circle" />
+  <div v-if="!showFullSearch" class="flex align-items-center cursor-pointer">
+    <Avatar class="pi pi-search avatar-size" shape="circle" @click="togglePanel" />
   </div>
   <div v-else>
     <Drawer
@@ -88,7 +88,7 @@ const hideSideBar = () => {
         </div>
       </div>
 
-      <div v-for="suggestion in suggestions" :key="suggestion.entryId" @click="redirect(suggestion)">
+      <div v-for="suggestion in suggestions" :key="suggestion.entryId">
         <RouterLink :to="redirect(suggestion)" class="no-underline text-color" @click.left="hideSideBar">
           <div class="flex flex-column gap-1 pb-3">
             <h3 class="m-0 p-0">
