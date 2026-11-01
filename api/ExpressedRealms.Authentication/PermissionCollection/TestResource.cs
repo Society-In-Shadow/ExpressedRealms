@@ -61,5 +61,12 @@ public static partial class Permissions
             Name = nameof(RerunDailyUpdates),
             Description = "Allows one to manually trigger reminder notifications.",
         };
+
+        public static readonly Permission RunPlainTextMigrations = new(ResourceInfo)
+        {
+            Id = new Guid("01a19608-fc7c-734b-85d2-94329eba253f"),
+            Name = nameof(RunPlainTextMigrations),
+            Description = "Global reset of all plain text fields for global search.",
+        };
     }
 }

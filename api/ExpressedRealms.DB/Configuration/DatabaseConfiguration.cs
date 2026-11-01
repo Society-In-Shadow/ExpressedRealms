@@ -28,7 +28,6 @@ public static class DatabaseConfiguration
                             postgresOptions =>
                             {
                                 postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
-                                //postgresOptions.UseVector();
                             }
                         )
                         .ReplaceService<IHistoryRepository, CamelCaseHistoryContext>()
@@ -51,7 +50,6 @@ public static class DatabaseConfiguration
                         postgresOptions =>
                         {
                             postgresOptions.MigrationsHistoryTable("_EfMigrations", "efcore");
-                            //postgresOptions.UseVector();
                         }
                     )
                     .ReplaceService<IHistoryRepository, CamelCaseHistoryContext>()

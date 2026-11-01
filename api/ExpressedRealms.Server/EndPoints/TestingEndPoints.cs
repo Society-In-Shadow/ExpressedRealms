@@ -110,6 +110,6 @@ internal static class TestingEndPoints
 
                     await dbContext.SaveChangesAsync();
                 }
-            );
+            ).RequirePermission(Permissions.DevDebug.RunPlainTextMigrations);
     }
 }
