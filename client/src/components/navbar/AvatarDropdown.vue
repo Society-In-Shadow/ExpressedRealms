@@ -56,7 +56,7 @@ const gravatar = computed(() => {
       <NavSearch />
     </div>
 
-    <a href="https://discord.gg/NSv3GxSAj7" target="_blank" class="flex align-items-center cursor-pointer  no-underline">
+    <a href="https://discord.gg/NSv3GxSAj7" target="_blank" class="flex align-items-center cursor-pointer no-underline">
       <Avatar class="pi pi-discord avatar-size" shape="circle" />
     </a>
     <a
@@ -66,11 +66,8 @@ const gravatar = computed(() => {
       <Avatar :image="gravatar" shape="circle" class="avatar-size" style="max-width: 2em; max-height: 2em;" />
       <TieredMenu id="overlay_tmenu" ref="menu" :model="items" popup />
     </a>
-    <RouterLink v-else to="/login" class="flex align-items-center cursor-pointer">
-      <Avatar class="pi pi-sign-in" shape="circle" />
-      <div class="hideIfSmall">
-        Login
-      </div>
+    <RouterLink v-else to="/login" class="flex align-items-center cursor-pointer no-underline">
+      <Avatar class="pi pi-sign-in avatar-size" shape="circle" />
     </RouterLink>
   </div>
 </template>
