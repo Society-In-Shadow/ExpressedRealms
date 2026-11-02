@@ -8,7 +8,6 @@ public interface IExpressionTextSectionRepository
 {
     Task<Result<int>> CreateExpressionTextSectionAsync(CreateExpressionTextSectionDto dto);
     Task<Result<int>> EditExpressionTextSectionAsync(EditExpressionTextSectionDto dto);
-    Task<Result> DeleteExpressionTextSectionAsync(int expressionId, int id);
     Task<Result<GetExpressionTextSectionDto>> GetExpressionTextSection(int sectionId);
     Task<List<ExpressionSectionDto>> GetExpressionTextSections(int expressionId);
     Task<Result<ExpressionTextSectionOptions>> GetExpressionTextSectionOptions(
@@ -22,4 +21,6 @@ public interface IExpressionTextSectionRepository
     Task<bool> IsExpression(int expressionID);
     Task<List<ExpressionSectionDto>> GetExpressionTextSectionForReport(int expressionId);
     Task<ExpressionSection?> FindFactionForExpression(int expressionId, int factionId);
+    Task<List<CommonDeleteHierarchyDto>> GetAllSectionsForExpression(int expressionId);
+    Task<Result> DeleteSections(List<int> ids, DateTimeOffset deletionDate);
 }
