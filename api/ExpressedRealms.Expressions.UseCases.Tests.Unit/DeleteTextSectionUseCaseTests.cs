@@ -2,11 +2,14 @@ using ExpressedRealms.DB.Models.Expressions;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.Expressions.Repository.Expressions;
+using ExpressedRealms.Expressions.Repository.Expressions.DTOs;
 using ExpressedRealms.Expressions.Repository.ExpressionTextSections;
+using ExpressedRealms.Expressions.Repository.ExpressionTextSections.DTOs;
 using ExpressedRealms.Expressions.UseCases.ExpressionTextSections.DeleteTextSection;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
 using ExpressedRealms.UseCases.Shared.CommonFailureTypes;
 using FakeItEasy;
+using FluentResults;
 using Xunit;
 
 namespace ExpressedRealms.Expressions.UseCases.Tests.Unit;
@@ -29,6 +32,11 @@ public class DeleteTextSectionUseCaseTests
             .Returns(new Expression() { Id = _model.ExpressionId });
 
         A.CallTo(() =>
+                _expressionRepository.CheckUserPermissionsForExpressionDelete(_model.ExpressionId)
+            )
+            .Returns(Result.Ok(new GetExpressionDto() { Id = _model.ExpressionId }));
+
+        A.CallTo(() =>
                 _textRepository.GetExpressionSectionForDeletion(_model.ExpressionId, _model.Id)
             )
             .Returns(
@@ -39,9 +47,26 @@ public class DeleteTextSectionUseCaseTests
                 }
             );
 
+        A.CallTo(() => _textRepository.GetAllSectionsForExpression(_model.ExpressionId))
+            .Returns(
+                new List<CommonDeleteHierarchyDto>()
+                {
+                    new(_model.Id, null, false),
+                    new(2, _model.Id, false),
+                    new(1, _model.Id, false),
+                    new(4, null, false),
+                }
+            );
+
         var validator = new DeleteTextSectionModelValidator(_textRepository, _expressionRepository);
 
-        _useCase = new DeleteTextSectionUseCase(_textRepository, validator, CancellationToken.None);
+        _useCase = new DeleteTextSectionUseCase(
+            _textRepository,
+            _expressionRepository,
+            validator,
+            TimeProvider.System,
+            CancellationToken.None
+        );
     }
 
     [Fact]
@@ -150,7 +175,7 @@ public class DeleteTextSectionUseCaseTests
         Assert.False(result.IsSuccess);
         Assert.Equal(
             "You cannot delete the systems knowledge section.",
-            result.Errors.First().Message
+            result.Errors[0].Message
         );
     }
 
@@ -173,7 +198,7 @@ public class DeleteTextSectionUseCaseTests
         Assert.False(result.IsSuccess);
         Assert.Equal(
             "You cannot delete the systems blessings section.",
-            result.Errors.First().Message
+            result.Errors[0].Message
         );
     }
 
@@ -181,9 +206,11 @@ public class DeleteTextSectionUseCaseTests
     public async Task UseCase_WillDelete_TheExpression()
     {
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() =>
-                _textRepository.DeleteExpressionTextSectionAsync(_model.ExpressionId, _model.Id)
-            )
+        A.CallTo(() => _textRepository.DeleteSections(
+                A<List<int>>.That.Matches(x => 
+                    x.Order().SequenceEqual(new[] { 1, 2, _model.Id }.Order())),
+                A<DateTimeOffset>.Ignored
+            ))
             .MustHaveHappenedOnceExactly();
     }
 }
