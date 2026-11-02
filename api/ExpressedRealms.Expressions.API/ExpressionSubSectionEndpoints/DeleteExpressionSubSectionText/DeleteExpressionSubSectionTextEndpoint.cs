@@ -1,4 +1,4 @@
-using ExpressedRealms.Expressions.Repository.ExpressionTextSections;
+using ExpressedRealms.Expressions.UseCases.ExpressionTextSections.DeleteTextSection;
 using ExpressedRealms.Server.Shared;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -10,10 +10,12 @@ internal static class DeleteExpressionSubSectionTextEndpoint
     internal static async Task<Results<NotFound, StatusCodeHttpResult, NoContent>> ExecuteAsync(
         int expressionId,
         int sectionId,
-        IExpressionTextSectionRepository repository
+        IDeleteTextSectionUseCase repository
     )
     {
-        var results = await repository.DeleteExpressionTextSectionAsync(expressionId, sectionId);
+        var results = await repository.ExecuteAsync(
+            new DeleteTextSectionModel() { Id = sectionId, ExpressionId = expressionId }
+        );
 
         if (results.HasNotFound(out var notFound))
             return notFound;

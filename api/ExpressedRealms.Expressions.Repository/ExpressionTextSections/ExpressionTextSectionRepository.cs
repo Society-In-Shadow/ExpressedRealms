@@ -1,5 +1,4 @@
 using ExpressedRealms.DB;
-using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSectionSetup;
 using ExpressedRealms.Expressions.Repository.Expressions;
 using ExpressedRealms.Expressions.Repository.ExpressionTextSections.DTOs;
@@ -174,22 +173,31 @@ internal sealed class ExpressionTextSectionRepository(
         return Result.Ok(section.Id);
     }
 
-    public async Task<Result> DeleteExpressionTextSectionAsync(int expressionId, int id)
+    public async Task<Result> DeleteSections(List<int> ids, DateTimeOffset deletionDate)
     {
-        var authResult = await expressionRepository.CheckUserPermissionsForExpressionDelete(
-            expressionId
-        );
-        if (authResult.IsFailed)
-            return authResult.ToResult();
-
-        var section = await context
+        var sections = await context
             .ExpressionSections.IgnoreQueryFilters()
-            .FirstAsync(x => x.ExpressionId == expressionId && x.Id == id);
+            .Where(x => ids.Contains(x.Id))
+            .ToListAsync(cancellationToken);
 
-        section.SoftDelete();
+        foreach (var section in sections)
+        {
+            section.DeletedAt = deletionDate;
+            section.IsDeleted = true;
+        }
+
         await context.SaveChangesAsync(cancellationToken);
 
         return Result.Ok();
+    }
+
+    public async Task<List<CommonDeleteHierarchyDto>> GetAllSectionsForExpression(int expressionId)
+    {
+        return await context
+            .ExpressionSections.IgnoreQueryFilters()
+            .Where(x => x.ExpressionId == expressionId)
+            .Select(x => new CommonDeleteHierarchyDto(x.Id, x.ParentId, x.IsDeleted))
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<List<ExpressionSectionDto>> GetExpressionTextSections(int expressionId)
