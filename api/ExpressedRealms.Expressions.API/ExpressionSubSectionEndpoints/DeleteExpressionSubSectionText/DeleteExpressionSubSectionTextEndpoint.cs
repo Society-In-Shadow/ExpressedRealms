@@ -13,11 +13,9 @@ internal static class DeleteExpressionSubSectionTextEndpoint
         IDeleteTextSectionUseCase repository
     )
     {
-        var results = await repository.ExecuteAsync(new DeleteTextSectionModel()
-        {
-            Id = sectionId,
-            ExpressionId = expressionId
-        });
+        var results = await repository.ExecuteAsync(
+            new DeleteTextSectionModel() { Id = sectionId, ExpressionId = expressionId }
+        );
 
         if (results.HasNotFound(out var notFound))
             return notFound;

@@ -173,10 +173,7 @@ public class DeleteTextSectionUseCaseTests
         var result = await _useCase.ExecuteAsync(_model);
 
         Assert.False(result.IsSuccess);
-        Assert.Equal(
-            "You cannot delete the systems knowledge section.",
-            result.Errors[0].Message
-        );
+        Assert.Equal("You cannot delete the systems knowledge section.", result.Errors[0].Message);
     }
 
     [Fact]
@@ -196,21 +193,21 @@ public class DeleteTextSectionUseCaseTests
         var result = await _useCase.ExecuteAsync(_model);
 
         Assert.False(result.IsSuccess);
-        Assert.Equal(
-            "You cannot delete the systems blessings section.",
-            result.Errors[0].Message
-        );
+        Assert.Equal("You cannot delete the systems blessings section.", result.Errors[0].Message);
     }
 
     [Fact]
     public async Task UseCase_WillDelete_TheExpression()
     {
         await _useCase.ExecuteAsync(_model);
-        A.CallTo(() => _textRepository.DeleteSections(
-                A<List<int>>.That.Matches(x => 
-                    x.Order().SequenceEqual(new[] { 1, 2, _model.Id }.Order())),
-                A<DateTimeOffset>.Ignored
-            ))
+        A.CallTo(() =>
+                _textRepository.DeleteSections(
+                    A<List<int>>.That.Matches(x =>
+                        x.Order().SequenceEqual(new[] { 1, 2, _model.Id }.Order())
+                    ),
+                    A<DateTimeOffset>.Ignored
+                )
+            )
             .MustHaveHappenedOnceExactly();
     }
 }

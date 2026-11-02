@@ -193,7 +193,8 @@ internal sealed class ExpressionTextSectionRepository(
 
     public async Task<List<CommonDeleteHierarchyDto>> GetAllSectionsForExpression(int expressionId)
     {
-        return await context.ExpressionSections.IgnoreQueryFilters()
+        return await context
+            .ExpressionSections.IgnoreQueryFilters()
             .Where(x => x.ExpressionId == expressionId)
             .Select(x => new CommonDeleteHierarchyDto(x.Id, x.ParentId, x.IsDeleted))
             .ToListAsync(cancellationToken);

@@ -32,7 +32,7 @@ internal sealed class DeleteTextSectionUseCase(
         );
         if (authResult.IsFailed)
             return authResult.ToResult();
-        
+
         var expressionSection = await repository.GetExpressionSectionForDeletion(
             model.ExpressionId,
             model.Id
@@ -58,7 +58,8 @@ internal sealed class DeleteTextSectionUseCase(
 
     private static List<int> GetDescendantsToDelete(
         int targetParent,
-        List<CommonDeleteHierarchyDto> items)
+        List<CommonDeleteHierarchyDto> items
+    )
     {
         var deletedDescendent = items.First(x => x.Id == targetParent);
         var lookupTable = items.Where(x => x.ParentId.HasValue).ToLookup(x => x.ParentId!.Value);
@@ -70,7 +71,8 @@ internal sealed class DeleteTextSectionUseCase(
 
     private static List<int> GetDescendantsToDelete(
         CommonDeleteHierarchyDto parent,
-        ILookup<int, CommonDeleteHierarchyDto> childrenByParentId)
+        ILookup<int, CommonDeleteHierarchyDto> childrenByParentId
+    )
     {
         var idsToDelete = new List<int>();
 
