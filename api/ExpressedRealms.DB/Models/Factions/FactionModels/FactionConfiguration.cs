@@ -13,6 +13,20 @@ public class FactionConfiguration : IEntityTypeConfiguration<Faction>
         builder.Property(e => e.Name).HasMaxLength(250).IsRequired();
         builder.Property(e => e.Background).IsRequired().HasMaxLength(10_000);
 
+        builder.Property(e => e.ProcessedPlainText);
+
+        builder
+            .Property(p => p.SearchVector)
+            .HasComputedColumnSql(
+                """
+                setweight(to_tsvector('english', coalesce("name", '')), 'A') ||
+                setweight(to_tsvector('english', coalesce("processed_plain_text", '')), 'B')
+                """,
+                stored: true
+            );
+
+        builder.HasIndex(p => p.SearchVector).HasMethod("GIN");
+
         builder
             .HasOne(x => x.CloneSource)
             .WithMany(x => x.Clones)

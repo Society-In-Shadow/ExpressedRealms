@@ -3040,6 +3040,17 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("character varying(250)")
                         .HasColumnName("name");
 
+                    b.Property<string>("ProcessedPlainText")
+                        .HasColumnType("text")
+                        .HasColumnName("processed_plain_text");
+
+                    b.Property<NpgsqlTsVector>("SearchVector")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("tsvector")
+                        .HasColumnName("search_vector")
+                        .HasComputedColumnSql("setweight(to_tsvector('english', coalesce(\"name\", '')), 'A') ||\nsetweight(to_tsvector('english', coalesce(\"processed_plain_text\", '')), 'B')", true);
+
                     b.HasKey("Id")
                         .HasName("pk_factions");
 
@@ -3048,6 +3059,11 @@ namespace ExpressedRealms.DB.Migrations
 
                     b.HasIndex("ExpressionId")
                         .HasDatabaseName("ix_factions_expression_id");
+
+                    b.HasIndex("SearchVector")
+                        .HasDatabaseName("ix_factions_search_vector");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("SearchVector"), "GIN");
 
                     b.ToTable("factions", (string)null);
                 });

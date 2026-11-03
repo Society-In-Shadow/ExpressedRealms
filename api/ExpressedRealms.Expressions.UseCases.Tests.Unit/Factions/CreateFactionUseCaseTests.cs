@@ -4,6 +4,7 @@ using ExpressedRealms.Expressions.Repository.Factions;
 using ExpressedRealms.Expressions.UseCases.FactionLevelUseCases.CreateFactionLevel;
 using ExpressedRealms.Expressions.UseCases.FactionUseCases.CreateFaction;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
+using ExpressedRealms.UseCases.Shared;
 using FakeItEasy;
 using Xunit;
 
@@ -165,6 +166,22 @@ public class CreateFactionUseCaseTests
                         k.FactionId == NewFactionId
                         && k.Specialization == _model.Specialization
                         && k.KnowledgeId == _model.KnowledgeId
+                    )
+                )
+            )
+            .MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task UseCase_WillAdd_ProcessedPlainTextField()
+    {
+        _model.Background = "<h1>Hello World</h1>";
+
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() =>
+                _factionRepository.CreateFactionAsync(
+                    A<Faction>.That.Matches(k =>
+                        k.ProcessedPlainText == _model.Background.ToPlainText()
                     )
                 )
             )

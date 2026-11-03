@@ -47,6 +47,7 @@ internal sealed class CreateFactionUseCase(
             {
                 Name = model.Name,
                 Background = model.Background,
+                ProcessedPlainText = model.Background.ToPlainText(),
                 ExpressionId = model.ExpressionId,
             }
         );

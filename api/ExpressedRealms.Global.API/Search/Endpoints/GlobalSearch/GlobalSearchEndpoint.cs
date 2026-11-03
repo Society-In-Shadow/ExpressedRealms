@@ -30,6 +30,7 @@ public static class GlobalSearchEndpoint
                         EntryId = x.EntryId,
                         NavName = x.NavName,
                         Section = x.Section,
+                        SectionSubSection = x.SectionSubSection,
                         SectionContent = x.SectionContent,
                         SectionName = x.SectionName,
                         Slug = x.Slug,

@@ -9,13 +9,16 @@ internal sealed class SearchRepository(
     CancellationToken cancellationToken
 ) : ISearchRepository
 {
-    public async Task<List<SearchInformationDto>> GetExpressionSections(string search, List<int> allowedExpressionIds)
+    public async Task<List<SearchInformationDto>> GetExpressionSections(
+        string search,
+        List<int> allowedExpressionIds
+    )
     {
         const string language = "english";
         return await context
             .ExpressionSections.Where(x =>
-                x.SearchVector.Matches(EF.Functions.WebSearchToTsQuery(language, search)) && 
-                allowedExpressionIds.Contains(x.ExpressionId)
+                x.SearchVector.Matches(EF.Functions.WebSearchToTsQuery(language, search))
+                && allowedExpressionIds.Contains(x.ExpressionId)
             )
             .OrderByDescending(x => x.Name.ToLower() == search.ToLower())
             .ThenByDescending(x =>
@@ -34,6 +37,41 @@ internal sealed class SearchRepository(
                         x.ProcessedPlainText ?? "",
                         "MaxWords=20, MinWords=10, MaxFragments=2, StartSel=<mark>, StopSel=</mark>"
                     ),
+                Rank = x.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(language, search)),
+            })
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<List<SearchInformationDto>> GetFactionSections(
+        string search,
+        List<int> allowedExpressionIds
+    )
+    {
+        const string language = "english";
+        return await context
+            .Factions.Where(x =>
+                x.SearchVector.Matches(EF.Functions.WebSearchToTsQuery(language, search))
+                && allowedExpressionIds.Contains(x.ExpressionId)
+            )
+            .OrderByDescending(x => x.Name.ToLower() == search.ToLower())
+            .ThenByDescending(x =>
+                x.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(language, search))
+            )
+            .Select(x => new SearchInformationDto()
+            {
+                EntryId = x.Id,
+                Section = x.Expression.CmsType.Name,
+                NavName = x.Expression.Name,
+                SectionName = x.Name,
+                SectionSubSection = "Faction",
+                SectionContent = EF
+                    .Functions.WebSearchToTsQuery(language, search)
+                    .GetResultHeadline(
+                        language,
+                        x.ProcessedPlainText ?? "",
+                        "MaxWords=20, MinWords=10, MaxFragments=2, StartSel=<mark>, StopSel=</mark>"
+                    ),
+                Rank = x.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(language, search)),
             })
             .ToListAsync(cancellationToken);
     }
