@@ -3,6 +3,7 @@ using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.Models.Factions.FactionLevelModels;
 using ExpressedRealms.DB.Models.Factions.FactionModels.Audit;
+using NpgsqlTypes;
 
 namespace ExpressedRealms.DB.Models.Factions.FactionModels;
 
@@ -14,6 +15,9 @@ public class Faction : ISoftDelete
     public string Name { get; set; } = null!;
     public string Background { get; set; } = null!;
 
+    public string? ProcessedPlainText { get; set; }
+    public NpgsqlTsVector SearchVector { get; set; } = null!;
+    
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
     public int? CloneSourceId { get; set; }
