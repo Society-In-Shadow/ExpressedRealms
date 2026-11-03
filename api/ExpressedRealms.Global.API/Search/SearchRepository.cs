@@ -9,12 +9,13 @@ internal sealed class SearchRepository(
     CancellationToken cancellationToken
 ) : ISearchRepository
 {
-    public async Task<List<SearchInformationDto>> GetExpressionSections(string search)
+    public async Task<List<SearchInformationDto>> GetExpressionSections(string search, List<int> allowedExpressionIds)
     {
         const string language = "english";
         return await context
             .ExpressionSections.Where(x =>
-                x.SearchVector.Matches(EF.Functions.WebSearchToTsQuery(language, search))
+                x.SearchVector.Matches(EF.Functions.WebSearchToTsQuery(language, search)) && 
+                allowedExpressionIds.Contains(x.ExpressionId)
             )
             .OrderByDescending(x => x.Name.ToLower() == search.ToLower())
             .ThenByDescending(x =>

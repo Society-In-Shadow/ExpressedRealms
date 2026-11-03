@@ -27,6 +27,27 @@ internal sealed class ExpressionRepository(
 {
     public async Task<Result<List<ExpressionNavigationMenuItem>>> GetNavigationMenuItems()
     {
+        var expression = GetAllowedExpressionsQuery();
+
+        return await expression
+            .Select(x => new ExpressionNavigationMenuItem()
+            {
+                ExpressionTypeId = x.CmsTypeId,
+                Name = x.Name,
+                Id = x.Id,
+                ShortDescription = x.ShortDescription,
+                NavMenuImage = x.NavMenuImage,
+                PublishStatusName = x.PublishStatus.Name,
+                PublishStatusId = (PublishTypes)x.PublishStatusId,
+                OrderIndex = x.OrderIndex,
+                ExpressionSubTypeId = x.ExpressionSubTypeId,
+            })
+            .OrderBy(x => x.OrderIndex)
+            .ToListAsync(cancellationToken);
+    }
+
+    public IQueryable<Expression> GetAllowedExpressionsQuery()
+    {
         var allowedStatuses = new List<int>
         {
             ExpressionPublishStatusEnum.Published,
@@ -46,22 +67,7 @@ internal sealed class ExpressionRepository(
         var expression = context
             .Expressions.AsNoTracking()
             .Where(e => allowedStatuses.Contains(e.PublishStatusId));
-
-        return await expression
-            .Select(x => new ExpressionNavigationMenuItem()
-            {
-                ExpressionTypeId = x.CmsTypeId,
-                Name = x.Name,
-                Id = x.Id,
-                ShortDescription = x.ShortDescription,
-                NavMenuImage = x.NavMenuImage,
-                PublishStatusName = x.PublishStatus.Name,
-                PublishStatusId = (PublishTypes)x.PublishStatusId,
-                OrderIndex = x.OrderIndex,
-                ExpressionSubTypeId = x.ExpressionSubTypeId,
-            })
-            .OrderBy(x => x.OrderIndex)
-            .ToListAsync(cancellationToken);
+        return expression;
     }
 
     public async Task<Result<GetExpressionDto>> GetExpression(int expressionId)
