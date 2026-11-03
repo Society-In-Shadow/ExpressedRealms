@@ -3,6 +3,7 @@ using ExpressedRealms.Expressions.Repository.Factions;
 using ExpressedRealms.Expressions.UseCases.FactionUseCases.CreateFaction;
 using ExpressedRealms.Expressions.UseCases.FactionUseCases.EditFaction;
 using ExpressedRealms.Shared.UseCases.Tests.Unit;
+using ExpressedRealms.UseCases.Shared;
 using FakeItEasy;
 using Xunit;
 
@@ -141,6 +142,22 @@ public class EditFactionUseCaseTests
                 _factionRepository.EditFactionAsync(
                     A<Faction>.That.Matches(k =>
                         k.Name == faction.Name && k.Background == faction.Background
+                    )
+                )
+            )
+            .MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task UseCase_WillUpdate_ProcessedPlainTextField()
+    {
+        _model.Background = "<h1>Hello World</h1>";
+
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() =>
+                _factionRepository.EditFactionAsync(
+                    A<Faction>.That.Matches(k =>
+                        k.ProcessedPlainText == _model.Background.ToPlainText()
                     )
                 )
             )
