@@ -40,6 +40,7 @@ internal sealed class EditFactionUseCase(
 
         faction.Name = model.Name;
         faction.Background = model.Background;
+        faction.ProcessedPlainText = model.Background.ToPlainText();
 
         await factionRepository.EditFactionAsync(faction);
 
