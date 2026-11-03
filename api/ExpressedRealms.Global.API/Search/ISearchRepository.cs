@@ -5,4 +5,5 @@ namespace ExpressedRealms.Global.API.Search;
 internal interface ISearchRepository : IGenericRepository
 {
     Task<List<SearchInformationDto>> GetExpressionSections(string search, List<int> allowedExpressionIds);
+    Task<List<SearchInformationDto>> GetFactionSections(string search, List<int> allowedExpressionIds);
 }

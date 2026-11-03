@@ -18,6 +18,7 @@ export interface SearchResult {
   section: string
   slug: string
   navName: string
+  sectionSubSection: string | null
   sectionName: string
   sectionContent: string
 }

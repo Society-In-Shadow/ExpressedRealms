@@ -95,7 +95,7 @@ const hideSideBar = () => {
               {{ suggestion.sectionName }}
             </h3>
             <h5 class="m-0 p-0 pb-1 pt-1 text-secondary">
-              {{ suggestion.section }} > {{ suggestion.navName }}
+              {{ suggestion.section }} > {{ suggestion.navName }} <span v-if="suggestion.sectionSubSection"> > {{ suggestion.sectionSubSection }}</span>
             </h5>
             <small class="text-color-secondary">
               <div v-html="suggestion.sectionContent" />

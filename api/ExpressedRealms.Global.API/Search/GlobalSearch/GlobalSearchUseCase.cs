@@ -30,20 +30,28 @@ internal sealed class GlobalSearchUseCase(
 
         var availableExpressions = await visibleExpressions.Select(x => x.Id).ToListAsync();
 
+        var searchResults = new List<SearchInformationDto>();
         var expressionSectionResults = await searchRepository.GetExpressionSections(
             useCaseModel.Search,
             availableExpressions
         );
 
+        var factions = await searchRepository.GetFactionSections(useCaseModel.Search, availableExpressions);
+        
+        searchResults.AddRange(expressionSectionResults);
+        searchResults.AddRange(factions);
+        
         var helper = new SlugHelper();
 
         return Result.Ok(
-            expressionSectionResults
+            searchResults
+                .OrderByDescending(x => x.Rank)
                 .Select(x => new GlobalSearchUseCaseReturnModel()
                 {
                     EntryId = x.EntryId,
                     NavName = x.NavName,
                     Section = x.Section,
+                    SectionSubSection = x.SectionSubSection,
                     SectionContent = x.SectionContent,
                     SectionName = x.SectionName,
                     Slug = helper.GenerateSlug(x.NavName),

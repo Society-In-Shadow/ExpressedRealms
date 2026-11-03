@@ -8,4 +8,5 @@ public record GlobalSearchUseCaseReturnModel()
     public string Slug { get; init; } = null!;
     public string SectionName { get; init; } = null!;
     public string SectionContent { get; init; } = null!;
+    public string? SectionSubSection { get; set; }
 };
