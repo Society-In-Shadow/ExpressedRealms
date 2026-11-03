@@ -23,4 +23,5 @@ public interface IExpressionRepository
     Task<bool> ExpressionIsExpressionType(int expressionId);
     Task<bool> HasDuplicateName(string name, int expressionId = 0);
     Task<List<ExpressionInfoForModifiersProjection>> GetAllEnabledExpressionAndSubpaths();
+    IQueryable<Expression> GetAllowedExpressionsQuery();
 }
