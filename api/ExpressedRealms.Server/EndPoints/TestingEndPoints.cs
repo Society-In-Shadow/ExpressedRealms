@@ -106,7 +106,7 @@ internal static class TestingEndPoints
                     {
                         row.ProcessedPlainText = row.Content.ToPlainText();
                     }
-                    
+
                     var factions = await dbContext.Factions.ToListAsync();
 
                     foreach (var row in factions)

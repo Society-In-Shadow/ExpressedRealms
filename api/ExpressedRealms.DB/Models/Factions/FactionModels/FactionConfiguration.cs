@@ -12,8 +12,7 @@ public class FactionConfiguration : IEntityTypeConfiguration<Faction>
         builder.Property(e => e.ExpressionId).IsRequired();
         builder.Property(e => e.Name).HasMaxLength(250).IsRequired();
         builder.Property(e => e.Background).IsRequired().HasMaxLength(10_000);
-        
-        
+
         builder.Property(e => e.ProcessedPlainText);
 
         builder

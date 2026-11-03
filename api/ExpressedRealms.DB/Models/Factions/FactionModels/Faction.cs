@@ -17,7 +17,7 @@ public class Faction : ISoftDelete
 
     public string? ProcessedPlainText { get; set; }
     public NpgsqlTsVector SearchVector { get; set; } = null!;
-    
+
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
     public int? CloneSourceId { get; set; }

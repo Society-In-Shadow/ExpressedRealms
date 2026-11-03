@@ -36,11 +36,14 @@ internal sealed class GlobalSearchUseCase(
             availableExpressions
         );
 
-        var factions = await searchRepository.GetFactionSections(useCaseModel.Search, availableExpressions);
-        
+        var factions = await searchRepository.GetFactionSections(
+            useCaseModel.Search,
+            availableExpressions
+        );
+
         searchResults.AddRange(expressionSectionResults);
         searchResults.AddRange(factions);
-        
+
         var helper = new SlugHelper();
 
         return Result.Ok(
