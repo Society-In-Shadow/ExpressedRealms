@@ -20,6 +20,18 @@ public class PowerConfiguration : IEntityTypeConfiguration<Power>
         builder.Property(e => e.CloneSourceId);
         builder.Property(e => e.CloneBatchId);
 
+        builder.Property(e => e.ProcessedPlainText);
+
+        builder
+            .Property(p => p.SearchVector)
+            .HasComputedColumnSql(
+                """
+                setweight(to_tsvector('english', coalesce("name", '')), 'A') ||
+                setweight(to_tsvector('english', coalesce("processed_plain_text", '')), 'B')
+                """,
+                stored: true
+            );
+
         builder
             .HasOne(e => e.CloneSource)
             .WithMany(e => e.CloneTargets)

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { computed, ref } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
 import { can } from '@/stores/userPermissionStore.ts'
@@ -9,6 +9,7 @@ import FactionItem from '@/components/expressions/factions/FactionItem.vue'
 import { factionListQuery } from '@/components/expressions/factions/stores/factionStore.ts'
 import { factionDialogs } from '@/components/expressions/factions/services/dialogs.ts'
 import { useQuery } from '@pinia/colada'
+import { scrollToSection } from '@/components/expressions/expressionUtilities.ts'
 
 const dialogs = factionDialogs()
 
@@ -31,6 +32,12 @@ const toggleAdd = () => {
 const enableAdd = computed(() => {
   return can.Faction.Create
 })
+
+watch(() => data.value, async () => {
+  if (!location.hash) return
+  await nextTick()
+  scrollToSection(location.hash)
+}, { flush: 'post' })
 
 </script>
 

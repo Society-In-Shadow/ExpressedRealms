@@ -57,7 +57,6 @@ watch(
   async (newPath, oldPath) => {
     if (newPath !== oldPath) {
       await nextTick()
-      window.location.replace(location.hash)
       scrollToSection(location.hash)
     }
   },

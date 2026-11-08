@@ -49,6 +49,15 @@ const redirect = (suggestion: SearchResult) => {
     if (suggestion.sectionSubSection == 'Faction') {
       subSection = 'factions'
     }
+    if (suggestion.sectionSubSection == 'Faction Power') {
+      subSection = 'factions'
+    }
+    if (suggestion.sectionSubSection == 'Power Path Power') {
+      subSection = 'powers'
+    }
+    if (suggestion.sectionSubSection == 'Power Path') {
+      subSection = 'powers'
+    }
   }
 
   return router.resolve({

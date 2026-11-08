@@ -41,7 +41,6 @@ async function fetchData() {
       isLoading.value = false
       if (location.hash) {
         await nextTick()
-        window.location.replace(location.hash)
         scrollToSection(location.hash)
       }
     })
@@ -74,7 +73,6 @@ watch(
   async (newPath, oldPath) => {
     if (newPath !== oldPath) {
       await nextTick()
-      window.location.replace(location.hash)
       scrollToSection(location.hash)
     }
   },

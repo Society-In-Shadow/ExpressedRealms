@@ -78,12 +78,13 @@ watch(
 )
 
 watch(currentTab,
-  async () => {
+  async (tab) => {
     await router.push({
       query: {
         ...route.query,
-        section: currentTab.value,
+        section: tab,
       },
+      hash: '',
     })
   })
 

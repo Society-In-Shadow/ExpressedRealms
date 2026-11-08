@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import { powerPathStore } from '@/components/expressions/powerPaths/stores/powerPathStore'
-import { onBeforeMount, ref, watch } from 'vue'
+import { nextTick, onBeforeMount, ref, watch } from 'vue'
 import Button from 'primevue/button'
 import ListPowers from '@/components/expressions/powers/ListPowers.vue'
 import AddPowerPath from '@/components/expressions/powerPaths/AddPowerPath.vue'
@@ -13,6 +13,7 @@ import { expressionStore } from '@/stores/expressionStore.ts'
 import { useRoute } from 'vue-router'
 import SplitButton from 'primevue/splitbutton'
 import { can } from '@/stores/userPermissionStore.ts'
+import { scrollToSection } from '@/components/expressions/expressionUtilities.ts'
 
 let powerPaths = powerPathStore()
 
@@ -32,6 +33,9 @@ onBeforeMount(async () => {
 
 watch(() => props.expressionId, async () => {
   await powerPaths.getPowerPaths(props.expressionId)
+  if (!location.hash) return
+  await nextTick()
+  scrollToSection(location.hash)
 }, { immediate: true })
 
 const showAddPower = ref(false)

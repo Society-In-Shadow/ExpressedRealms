@@ -7,6 +7,7 @@ using ExpressedRealms.DB.Models.Powers.PowerPathPowerMappingSetup;
 using ExpressedRealms.DB.Models.Powers.PowerPrerequisitePowerSetup;
 using ExpressedRealms.DB.Models.Powers.PowerPrerequisiteSetup;
 using ExpressedRealms.DB.Models.Powers.PowerSetup.Audit;
+using NpgsqlTypes;
 
 namespace ExpressedRealms.DB.Models.Powers;
 
@@ -43,6 +44,9 @@ public class Power : ISoftDelete
 
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
+
+    public string? ProcessedPlainText { get; set; }
+    public NpgsqlTsVector SearchVector { get; set; } = null!;
 
     public virtual Power? CloneSource { get; set; }
     public virtual List<PowerCategoryMapping> CategoryMappings { get; set; } = null!;
