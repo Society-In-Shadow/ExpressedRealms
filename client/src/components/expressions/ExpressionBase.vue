@@ -5,9 +5,9 @@ import TabList from 'primevue/tablist'
 import Tab from 'primevue/tab'
 import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
-import { onBeforeRouteUpdate, useRoute } from 'vue-router'
+import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
 import { expressionStore } from '@/stores/expressionStore'
-import { nextTick, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import Card from 'primevue/card'
 import ScrollTop from 'primevue/scrolltop'
 import '@he-tree/vue/style/default.css'
@@ -29,11 +29,12 @@ import { breakpointsBootstrapV5, useBreakpoints } from '@vueuse/core'
 
 const expressionInfo = expressionStore()
 const route = useRoute()
+const router = useRouter()
 
 const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5)
 const isMobile = activeBreakpoint.smaller('md')
 
-const currentTab = ref('0')
+const currentTab = ref('background')
 
 onMounted(async () => {
   await expressionInfo.getExpressionId(route)
@@ -50,11 +51,40 @@ watch(
   async (newPath, oldPath) => {
     if (newPath !== oldPath) {
       await nextTick()
-      window.location.replace(location.hash)
       scrollToSection(location.hash)
     }
   },
 )
+
+const routeSection = computed(() => {
+  const section = route.query.section
+
+  return typeof section === 'string' ? section : null
+})
+
+const isValidRouteSection = computed(() =>
+  ['background', 'factions', 'powers', 'progressions'].some(section => section === routeSection.value),
+)
+
+watch(
+  () => route.query.section,
+  (section) => {
+    if (isValidRouteSection.value) {
+      currentTab.value = section as string
+    }
+  },
+  { immediate: true },
+)
+
+watch(currentTab,
+  async () => {
+    await router.push({
+      query: {
+        ...route.query,
+        section: currentTab.value,
+      },
+    })
+  })
 
 </script>
 
@@ -75,7 +105,7 @@ watch(
       </template>
       <template #content>
         <article id="expression-toc">
-          <ExpressionToC v-if="currentTab == '0'" />
+          <ExpressionToC v-if="currentTab == 'background'" />
           <PowersToC v-else :show-skeleton="false" />
         </article>
       </template>
@@ -85,30 +115,30 @@ watch(
         <ExpressionHeader :expression-id="expressionInfo.currentExpressionId" />
         <Tabs v-model:value="currentTab">
           <TabList>
-            <Tab value="0">
+            <Tab value="background">
               Background
             </Tab>
-            <Tab value="3">
+            <Tab value="factions">
               Factions
             </Tab>
-            <Tab value="1">
+            <Tab value="powers">
               Powers
             </Tab>
-            <Tab v-if="can.ProgressionPath.View" value="2">
+            <Tab v-if="can.ProgressionPath.View" value="progressions">
               Progressions
             </Tab>
           </TabList>
           <TabPanels>
-            <TabPanel value="0">
+            <TabPanel v-if="currentTab == 'background'" value="background">
               <ExpressionSectionTab :expression-id="expressionInfo.currentExpressionId" />
             </TabPanel>
-            <TabPanel value="1">
+            <TabPanel v-if="currentTab == 'powers'" value="powers">
               <PowerTab v-if="expressionInfo.isDoneLoading" :expression-id="expressionInfo.currentExpressionId" />
             </TabPanel>
-            <TabPanel v-if="can.ProgressionPath.View" value="2">
+            <TabPanel v-if="currentTab == 'progressions' && can.ProgressionPath.View" value="progressions">
               <ProgressionTab v-if="expressionInfo.isDoneLoading" :expression-id="expressionInfo.currentExpressionId" />
             </TabPanel>
-            <TabPanel value="3">
+            <TabPanel v-if="currentTab == 'factions'" value="factions">
               <FactionTab v-if="expressionInfo.isDoneLoading" :expression-id="expressionInfo.currentExpressionId" />
             </TabPanel>
           </TabPanels>
