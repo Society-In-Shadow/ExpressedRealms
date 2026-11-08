@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import { powerPathStore } from '@/components/expressions/powerPaths/stores/powerPathStore'
-import { onBeforeMount, ref } from 'vue'
+import { onBeforeMount, ref, watch } from 'vue'
 import Button from 'primevue/button'
 import ListPowers from '@/components/expressions/powers/ListPowers.vue'
 import AddPowerPath from '@/components/expressions/powerPaths/AddPowerPath.vue'
@@ -29,6 +29,10 @@ const props = defineProps({
 onBeforeMount(async () => {
   await powerPaths.getPowerPaths(props.expressionId)
 })
+
+watch(() => props.expressionId, async () => {
+  await powerPaths.getPowerPaths(props.expressionId)
+}, { immediate: true })
 
 const showAddPower = ref(false)
 
