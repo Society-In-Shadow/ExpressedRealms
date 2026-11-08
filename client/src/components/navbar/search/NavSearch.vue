@@ -38,16 +38,25 @@ const togglePanel = async () => {
 
 const redirect = (suggestion: SearchResult) => {
   let section = ''
+  let subSection = ''
   if (suggestion.section == 'Rule Book')
     section = 'rulebook'
   else if (suggestion.section == 'World Background')
     section = 'worldbackground'
-  else if (suggestion.section == 'Expression')
+  else if (suggestion.section == 'Expression') {
     section = 'expressions'
+    subSection = 'background'
+    if (suggestion.sectionSubSection == 'Faction') {
+      subSection = 'factions'
+    }
+  }
+
   return router.resolve({
     name: section,
     params: { slug: suggestion.slug },
+
     hash: '#' + makeIdSafe(suggestion.sectionName),
+    query: { section: subSection },
   })
 }
 
