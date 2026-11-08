@@ -42,7 +42,7 @@ function saveChanges() {
 const showTocEdit = ref(false)
 function toggleEdit() {
   if (!showTocEdit.value)
-    originalModel = JSON.parse(JSON.stringify(toRaw(expressionInfo.sections)))
+    originalModel = structuredClone(toRaw(expressionInfo.sections))
 
   if (showTocEdit.value)
     expressionInfo.sections = originalModel

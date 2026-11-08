@@ -24,7 +24,7 @@ const { data, isLoading, error } = useQuery(
 )
 const showAdd = ref(false)
 
-const toggleAdd = async () => {
+const toggleAdd = () => {
   dialogs.showCreateFaction()
 }
 

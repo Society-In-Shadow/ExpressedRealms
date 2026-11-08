@@ -64,7 +64,7 @@ const routeSection = computed(() => {
 })
 
 const isValidRouteSection = computed(() =>
-  ['background', 'factions', 'powers', 'progressions'].some(section => section === routeSection.value),
+  ['background', 'factions', 'powers', 'progressions'].includes(routeSection.value ?? ''),
 )
 
 watch(

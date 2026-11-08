@@ -36,7 +36,7 @@ const { refetch } = useQueryWithLoading(factionListQuery(expressionData.currentE
 
 const items = ref<Command[]>([])
 
-onMounted(async () => {
+onMounted(() => {
   PopulateFactionActions()
 })
 

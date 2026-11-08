@@ -23,7 +23,7 @@ const { data, isLoading, error } = useQueryWithLoading(factionListQuery(props.ex
 
 const showAdd = ref(false)
 
-const toggleAdd = async () => {
+const toggleAdd = () => {
   dialogs.showCreateFaction()
 }
 

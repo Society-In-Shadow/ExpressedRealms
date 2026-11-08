@@ -34,7 +34,7 @@ function saveChanges() {
 const showPowerPathReorder = ref(false)
 function toggleEdit() {
   if (!showPowerPathReorder.value)
-    originalModel = JSON.parse(JSON.stringify(toRaw(powerPaths.powerPaths)))
+    originalModel = structuredClone(toRaw(powerPaths.powerPaths))
 
   if (showPowerPathReorder.value)
     powerPaths.powerPaths = originalModel

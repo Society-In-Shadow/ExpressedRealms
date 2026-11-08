@@ -34,7 +34,7 @@ const showPreview = ref(false)
 async function fetchData() {
   headerIsLoading.value = true
   await axios.get(`/expressionSubSections/${expressionInfo.currentExpressionId}/expression`)
-    .then(async (json) => {
+    .then((json) => {
       expressionHeader.value = json.data
       headerIsLoading.value = false
     })
