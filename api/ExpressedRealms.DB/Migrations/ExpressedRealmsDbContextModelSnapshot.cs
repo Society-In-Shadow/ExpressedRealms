@@ -4099,6 +4099,17 @@ namespace ExpressedRealms.DB.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("order_index");
 
+                    b.Property<string>("ProcessedPlainText")
+                        .HasColumnType("text")
+                        .HasColumnName("processed_plain_text");
+
+                    b.Property<NpgsqlTsVector>("SearchVector")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("tsvector")
+                        .HasColumnName("search_vector")
+                        .HasComputedColumnSql("setweight(to_tsvector('english', coalesce(\"name\", '')), 'A') ||\nsetweight(to_tsvector('english', coalesce(\"processed_plain_text\", '')), 'B')", true);
+
                     b.HasKey("Id")
                         .HasName("pk_power_paths");
 

@@ -55,6 +55,9 @@ const redirect = (suggestion: SearchResult) => {
     if (suggestion.sectionSubSection == 'Power Path Power') {
       subSection = 'powers'
     }
+    if (suggestion.sectionSubSection == 'Power Path') {
+      subSection = 'powers'
+    }
   }
 
   return router.resolve({

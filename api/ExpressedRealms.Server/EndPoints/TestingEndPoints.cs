@@ -120,6 +120,12 @@ internal static class TestingEndPoints
                         power.ProcessedPlainText = $"{power.Description.ToPlainText()} {power.GameMechanicEffect.ToPlainText()} {power.Limitation.ToPlainText()}";
                     }
                     
+                    var powerPaths = await dbContext.PowerPaths.ToListAsync();
+                    foreach (var powerPath in powerPaths)
+                    {
+                        powerPath.ProcessedPlainText = powerPath.Description.ToPlainText();
+                    }
+                    
                     await dbContext.SaveChangesAsync();
                 }
             )

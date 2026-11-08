@@ -16,6 +16,8 @@ internal static class PowerPathAuditTrailExtensions
                 case "expression_id": // You cannot change the Expression Id after creation
                 case "clone_source_id":
                 case "clone_batch_id":
+                case "processed_plain_text":
+                case "search_vector":
                     continue;
 
                 case "name":

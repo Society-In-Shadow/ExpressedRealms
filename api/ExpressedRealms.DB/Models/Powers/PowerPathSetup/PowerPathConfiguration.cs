@@ -18,6 +18,18 @@ public class PowerPathConfiguration : IEntityTypeConfiguration<PowerPath>
         builder.Property(e => e.DeletedAt);
 
         builder.HasQueryFilter(x => !x.IsDeleted);
+        
+        builder.Property(e => e.ProcessedPlainText);
+
+        builder
+            .Property(p => p.SearchVector)
+            .HasComputedColumnSql(
+                """
+                setweight(to_tsvector('english', coalesce("name", '')), 'A') ||
+                setweight(to_tsvector('english', coalesce("processed_plain_text", '')), 'B')
+                """,
+                stored: true
+            );
 
         builder
             .HasOne(e => e.CloneSource)

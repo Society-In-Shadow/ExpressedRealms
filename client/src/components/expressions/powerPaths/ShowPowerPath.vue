@@ -36,7 +36,7 @@ const popups = powerPathConfirmationPopups(props.path.id, props.path.name)
 <template>
   <div v-if="!showEdit" :id="makeIdSafe(props.path.name)">
     <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
-      <h1 class="p-0 m-0">
+      <h1 :id="makeIdSafe(props.path.name)" class="p-0 m-0">
         {{ props.path.name }}
       </h1>
       <div v-if="(can.Powers.Delete || can.Powers.Edit) && !props.isReadOnly" class="d-inline-flex align-items-start">

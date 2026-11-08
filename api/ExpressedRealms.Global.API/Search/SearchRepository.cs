@@ -145,6 +145,39 @@ internal sealed class SearchRepository(
             })
             .ToListAsync(cancellationToken);
     }
+    
+    public async Task<List<SearchInformationDto>> GetPowerPathSections(
+        string search,
+        List<int> allowedExpressionIds
+    )
+    {
+        return await context
+            .PowerPaths.Where(x =>
+                x.SearchVector.Matches(EF.Functions.WebSearchToTsQuery(Language, search))
+                                && allowedExpressionIds.Contains(x.ExpressionId)
+            )
+            .OrderByDescending(x => x.Name.ToLower() == search.ToLower())
+            .ThenByDescending(x =>
+                x.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(Language, search))
+            )
+            .Select(x => new SearchInformationDto()
+            {
+                EntryId = x.Id,
+                Section = x.Expression.CmsType.Name,
+                NavName = x.Expression.Name,
+                SectionName = x.Name,
+                SectionSubSection = "Power Path",
+                SectionContent = EF
+                    .Functions.WebSearchToTsQuery(Language, search)
+                    .GetResultHeadline(
+                        Language,
+                        x.ProcessedPlainText ?? "",
+                        SearchConfiguration
+                    ),
+                Rank = x.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(Language, search)),
+            })
+            .ToListAsync(cancellationToken);
+    }
 
     public async Task EditAsync<TEntity>(TEntity entity)
         where TEntity : class

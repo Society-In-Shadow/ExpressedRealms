@@ -2,6 +2,7 @@ using Audit.EntityFramework;
 using ExpressedRealms.DB.Interceptors;
 using ExpressedRealms.DB.Models.Expressions.ExpressionSetup;
 using ExpressedRealms.DB.Models.Powers.PowerPathPowerMappingSetup;
+using NpgsqlTypes;
 
 namespace ExpressedRealms.DB.Models.Powers.PowerPathSetup;
 
@@ -22,6 +23,9 @@ public class PowerPath : ISoftDelete
 
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
+    
+    public string? ProcessedPlainText { get; set; }
+    public NpgsqlTsVector SearchVector { get; set; } = null!;
 
     public virtual PowerPath? CloneSource { get; set; }
     public virtual List<PowerPathAuditTrail> PowerPathAudits { get; set; } = null!;
