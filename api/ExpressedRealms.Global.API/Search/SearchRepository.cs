@@ -13,12 +13,12 @@ internal sealed class SearchRepository(
 
     private const string SearchConfiguration =
         "MaxWords=20, MinWords=10, MaxFragments=2, StartSel=<mark>, StopSel=</mark>";
+
     public async Task<List<SearchInformationDto>> GetExpressionSections(
         string search,
         List<int> allowedExpressionIds
     )
     {
-
         return await context
             .ExpressionSections.Where(x =>
                 x.SearchVector.Matches(EF.Functions.WebSearchToTsQuery(Language, search))
@@ -36,11 +36,7 @@ internal sealed class SearchRepository(
                 SectionName = x.Name,
                 SectionContent = EF
                     .Functions.WebSearchToTsQuery(Language, search)
-                    .GetResultHeadline(
-                        Language,
-                        x.ProcessedPlainText ?? "",
-                        SearchConfiguration
-                    ),
+                    .GetResultHeadline(Language, x.ProcessedPlainText ?? "", SearchConfiguration),
                 Rank = x.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(Language, search)),
             })
             .ToListAsync(cancellationToken);
@@ -69,16 +65,12 @@ internal sealed class SearchRepository(
                 SectionSubSection = "Faction",
                 SectionContent = EF
                     .Functions.WebSearchToTsQuery(Language, search)
-                    .GetResultHeadline(
-                        Language,
-                        x.ProcessedPlainText ?? "",
-                        SearchConfiguration
-                    ),
+                    .GetResultHeadline(Language, x.ProcessedPlainText ?? "", SearchConfiguration),
                 Rank = x.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(Language, search)),
             })
             .ToListAsync(cancellationToken);
     }
-    
+
     public async Task<List<SearchInformationDto>> GetFactionPowerSections(
         string search,
         List<int> allowedExpressionIds
@@ -86,7 +78,8 @@ internal sealed class SearchRepository(
     {
         return await context
             .FactionLevels.Where(x =>
-                x.Power != null && x.Power.SearchVector.Matches(EF.Functions.WebSearchToTsQuery(Language, search))
+                x.Power != null
+                && x.Power.SearchVector.Matches(EF.Functions.WebSearchToTsQuery(Language, search))
                 && allowedExpressionIds.Contains(x.Faction.ExpressionId)
             )
             .OrderByDescending(x => x.Power.Name.ToLower() == search.ToLower())
@@ -106,13 +99,12 @@ internal sealed class SearchRepository(
                         Language,
                         x.Power.ProcessedPlainText ?? "",
                         SearchConfiguration
-                        
                     ),
                 Rank = x.Power.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(Language, search)),
             })
             .ToListAsync(cancellationToken);
     }
-    
+
     public async Task<List<SearchInformationDto>> GetPowerPathPowerSections(
         string search,
         List<int> allowedExpressionIds
@@ -120,8 +112,9 @@ internal sealed class SearchRepository(
     {
         return await context
             .PowerPathPowerMappings.Where(x =>
-                x.Power != null && x.Power.SearchVector.Matches(EF.Functions.WebSearchToTsQuery(Language, search))
-                                && allowedExpressionIds.Contains(x.PowerPath.ExpressionId)
+                x.Power != null
+                && x.Power.SearchVector.Matches(EF.Functions.WebSearchToTsQuery(Language, search))
+                && allowedExpressionIds.Contains(x.PowerPath.ExpressionId)
             )
             .OrderByDescending(x => x.Power.Name.ToLower() == search.ToLower())
             .ThenByDescending(x =>
@@ -145,7 +138,7 @@ internal sealed class SearchRepository(
             })
             .ToListAsync(cancellationToken);
     }
-    
+
     public async Task<List<SearchInformationDto>> GetPowerPathSections(
         string search,
         List<int> allowedExpressionIds
@@ -154,7 +147,7 @@ internal sealed class SearchRepository(
         return await context
             .PowerPaths.Where(x =>
                 x.SearchVector.Matches(EF.Functions.WebSearchToTsQuery(Language, search))
-                                && allowedExpressionIds.Contains(x.ExpressionId)
+                && allowedExpressionIds.Contains(x.ExpressionId)
             )
             .OrderByDescending(x => x.Name.ToLower() == search.ToLower())
             .ThenByDescending(x =>
@@ -169,11 +162,7 @@ internal sealed class SearchRepository(
                 SectionSubSection = "Power Path",
                 SectionContent = EF
                     .Functions.WebSearchToTsQuery(Language, search)
-                    .GetResultHeadline(
-                        Language,
-                        x.ProcessedPlainText ?? "",
-                        SearchConfiguration
-                    ),
+                    .GetResultHeadline(Language, x.ProcessedPlainText ?? "", SearchConfiguration),
                 Rank = x.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(Language, search)),
             })
             .ToListAsync(cancellationToken);

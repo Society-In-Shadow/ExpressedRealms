@@ -18,7 +18,7 @@ public class PowerPathConfiguration : IEntityTypeConfiguration<PowerPath>
         builder.Property(e => e.DeletedAt);
 
         builder.HasQueryFilter(x => !x.IsDeleted);
-        
+
         builder.Property(e => e.ProcessedPlainText);
 
         builder

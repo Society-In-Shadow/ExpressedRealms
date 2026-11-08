@@ -44,7 +44,7 @@ public class Power : ISoftDelete
 
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
-    
+
     public string? ProcessedPlainText { get; set; }
     public NpgsqlTsVector SearchVector { get; set; } = null!;
 

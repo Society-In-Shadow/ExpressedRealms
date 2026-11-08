@@ -45,12 +45,12 @@ internal sealed class GlobalSearchUseCase(
             useCaseModel.Search,
             availableExpressions
         );
-        
+
         var powerPathPowerSections = await searchRepository.GetPowerPathPowerSections(
             useCaseModel.Search,
             availableExpressions
         );
-        
+
         var powerPathSections = await searchRepository.GetPowerPathSections(
             useCaseModel.Search,
             availableExpressions
@@ -61,7 +61,7 @@ internal sealed class GlobalSearchUseCase(
         searchResults.AddRange(factionPowers);
         searchResults.AddRange(powerPathPowerSections);
         searchResults.AddRange(powerPathSections);
-        
+
         var helper = new SlugHelper();
 
         return Result.Ok(

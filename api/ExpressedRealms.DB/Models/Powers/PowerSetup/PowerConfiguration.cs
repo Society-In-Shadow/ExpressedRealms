@@ -31,7 +31,7 @@ public class PowerConfiguration : IEntityTypeConfiguration<Power>
                 """,
                 stored: true
             );
-        
+
         builder
             .HasOne(e => e.CloneSource)
             .WithMany(e => e.CloneTargets)
