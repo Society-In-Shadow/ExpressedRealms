@@ -41,8 +41,14 @@ internal sealed class GlobalSearchUseCase(
             availableExpressions
         );
 
+        var factionPowers = await searchRepository.GetFactionPowerSections(
+            useCaseModel.Search,
+            availableExpressions
+        );
+
         searchResults.AddRange(expressionSectionResults);
         searchResults.AddRange(factions);
+        searchResults.AddRange(factionPowers);
 
         var helper = new SlugHelper();
 
