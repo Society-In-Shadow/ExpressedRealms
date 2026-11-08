@@ -19,6 +19,8 @@ import FactionTab from '@/components/expressions/factions/FactionTab.vue'
 import { scrollToSection } from '@/components/expressions/expressionUtilities.ts'
 import ExpressionSectionTab from '@/components/expressions/expressionSection/ExpressionSectionTab.vue'
 import ExpressionHeader from '@/components/expressions/expressionSection/ExpressionHeader.vue'
+import ExpressionToC from '@/components/expressions/expressionSection/ExpressionToC.vue'
+import PowersToC from '@/components/expressions/PowersToC.vue'
 
 const expressionInfo = expressionStore()
 const route = useRoute()
@@ -56,8 +58,8 @@ watch(
       </template>
       <template #content>
         <article id="expression-toc">
-          <!--          <ExpressionToC v-if="currentTab == '0'" v-model="sections" :can-edit="showEdit" :show-skeleton="isLoading" @toggle-preview="togglePreview" />-->
-          <!--          <PowersToC v-else :show-skeleton="isLoading" />-->
+          <ExpressionToC v-if="currentTab == '0'" />
+          <PowersToC v-else :show-skeleton="false" />
         </article>
       </template>
     </Card>

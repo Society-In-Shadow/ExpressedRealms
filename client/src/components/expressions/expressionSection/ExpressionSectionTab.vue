@@ -20,29 +20,6 @@ const props = defineProps({
 const expressionInfo = expressionStore()
 const route = useRoute()
 
-let sections = ref([
-  {
-    id: 1,
-    subSections: [
-      { id: 2, subSections: [] },
-      { id: 3, subSections: [] },
-      { id: 4, subSections: [] },
-    ],
-  },
-  {
-    id: 5,
-    subSections: [],
-  },
-  {
-    id: 6,
-    subSections: [{ id: 7 }],
-  },
-  {
-    id: 8,
-    subSections: [{ id: 9 }],
-  },
-])
-
 const isLoading = ref(true)
 const showCreate = ref(false)
 const showPreview = ref(false)
@@ -51,7 +28,6 @@ async function fetchData() {
   isLoading.value = true
   await expressionInfo.getExpressionSections()
     .then(async () => {
-      sections.value = expressionInfo.sections
       isLoading.value = false
       if (location.hash) {
         await nextTick()
@@ -100,7 +76,7 @@ const canCreate = computed(() => {
 
 <template>
   <article id="expression-body">
-    <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :is-read-only="showPreview" @refresh-list="fetchData(route.params.name)" />
+    <ExpressionSection :sections="expressionInfo.sections" :current-level="1" :show-skeleton="isLoading" :is-read-only="showPreview" @refresh-list="fetchData(route.params.name)" />
     <Button v-if="canCreate && !showPreview" label="Add Section" class="m-2" @click="toggleCreate" />
     <div v-if="showCreate">
       <CreateExpressionSection @cancel-event="toggleCreate" @added-section="fetchData(route.params.name)" />
