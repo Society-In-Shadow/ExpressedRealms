@@ -26,6 +26,7 @@ import AccordionContent from 'primevue/accordioncontent'
 import AccordionPanel from 'primevue/accordionpanel'
 import Accordion from 'primevue/accordion'
 import { breakpointsBootstrapV5, useBreakpoints } from '@vueuse/core'
+import FactionToC from '@/components/expressions/factions/FactionToC.vue'
 
 const expressionInfo = expressionStore()
 const route = useRoute()
@@ -94,7 +95,8 @@ watch(currentTab,
       <AccordionPanel value="0">
         <AccordionHeader>Table Of Contents</AccordionHeader>
         <AccordionContent>
-          <ExpressionToC v-if="currentTab == '0'" />
+          <ExpressionToC v-if="currentTab == 'background'" />
+          <FactionToC v-else-if="currentTab == 'factions'" />
           <PowersToC v-else :show-skeleton="false" />
         </AccordionContent>
       </AccordionPanel>
@@ -106,6 +108,7 @@ watch(currentTab,
       <template #content>
         <article id="expression-toc">
           <ExpressionToC v-if="currentTab == 'background'" />
+          <FactionToC v-else-if="currentTab == 'factions'" />
           <PowersToC v-else :show-skeleton="false" />
         </article>
       </template>
@@ -128,18 +131,18 @@ watch(currentTab,
               Progressions
             </Tab>
           </TabList>
-          <TabPanels>
+          <TabPanels v-if="expressionInfo.currentExpressionId != 0">
             <TabPanel v-if="currentTab == 'background'" value="background">
               <ExpressionSectionTab :expression-id="expressionInfo.currentExpressionId" />
             </TabPanel>
             <TabPanel v-if="currentTab == 'powers'" value="powers">
-              <PowerTab v-if="expressionInfo.isDoneLoading" :expression-id="expressionInfo.currentExpressionId" />
+              <PowerTab :expression-id="expressionInfo.currentExpressionId" />
             </TabPanel>
             <TabPanel v-if="currentTab == 'progressions' && can.ProgressionPath.View" value="progressions">
-              <ProgressionTab v-if="expressionInfo.isDoneLoading" :expression-id="expressionInfo.currentExpressionId" />
+              <ProgressionTab :expression-id="expressionInfo.currentExpressionId" />
             </TabPanel>
             <TabPanel v-if="currentTab == 'factions'" value="factions">
-              <FactionTab v-if="expressionInfo.isDoneLoading" :expression-id="expressionInfo.currentExpressionId" />
+              <FactionTab :expression-id="expressionInfo.currentExpressionId" />
             </TabPanel>
           </TabPanels>
         </Tabs>
