@@ -5,105 +5,33 @@ import TabList from 'primevue/tablist'
 import Tab from 'primevue/tab'
 import TabPanels from 'primevue/tabpanels'
 import TabPanel from 'primevue/tabpanel'
-import ExpressionSection from '@/components/expressions/ExpressionSection.vue'
-import axios from 'axios'
 import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 import { expressionStore } from '@/stores/expressionStore'
-import { computed, nextTick, onMounted, ref, watch } from 'vue'
+import { nextTick, onMounted, ref, watch } from 'vue'
 import Card from 'primevue/card'
 import ScrollTop from 'primevue/scrolltop'
-import CreateExpressionSection from '@/components/expressions/CreateExpressionSection.vue'
-import Button from 'primevue/button'
 import '@he-tree/vue/style/default.css'
 import '@he-tree/vue/style/material-design.css'
-import ExpressionToC from '@/components/expressions/ExpressionToC.vue'
-import EditExpressionSection from '@/components/expressions/EditExpressionSection.vue'
 import PowerTab from '@/components/expressions/powers/PowerTab.vue'
-import PowersToC from '@/components/expressions/PowersToC.vue'
 import ProgressionTab from '@/components/expressions/progressionPaths/ProgressionTab.vue'
-import ExpressionLogo from '@/components/common/ExpressionLogo.vue'
-import { can, userPermissionStore } from '@/stores/userPermissionStore.ts'
+import { can } from '@/stores/userPermissionStore.ts'
 import FactionTab from '@/components/expressions/factions/FactionTab.vue'
 import { scrollToSection } from '@/components/expressions/expressionUtilities.ts'
-
-const userPermissionInfo = userPermissionStore()
-const permissionCheck = userPermissionInfo.permissionCheck
+import ExpressionSectionTab from '@/components/expressions/expressionSection/ExpressionSectionTab.vue'
+import ExpressionHeader from '@/components/expressions/expressionSection/ExpressionHeader.vue'
 
 const expressionInfo = expressionStore()
 const route = useRoute()
 
-let sections = ref([
-  {
-    id: 1,
-    subSections: [
-      { id: 2, subSections: [] },
-      { id: 3, subSections: [] },
-      { id: 4, subSections: [] },
-    ],
-  },
-  {
-    id: 5,
-    subSections: [],
-  },
-  {
-    id: 6,
-    subSections: [{ id: 7 }],
-  },
-  {
-    id: 8,
-    subSections: [{ id: 9 }],
-  },
-])
-
-const expressionHeader = ref({})
-
-const isLoading = ref(true)
-const headerIsLoading = ref(true)
-const showEdit = can.Powers.Edit
-const showCreate = ref(false)
-const showPreview = ref(false)
 const currentTab = ref('0')
-
-async function fetchData() {
-  isLoading.value = true
-  headerIsLoading.value = true
-  await expressionInfo.getExpressionSections()
-    .then(async () => {
-      sections.value = expressionInfo.sections
-      isLoading.value = false
-      if (location.hash) {
-        await nextTick()
-        window.location.replace(location.hash)
-
-        scrollToSection(location.hash)
-      }
-    })
-
-  headerIsLoading.value = true
-  await axios.get(`/expressionSubSections/${expressionInfo.currentExpressionId}/expression`)
-    .then(async (json) => {
-      expressionHeader.value = json.data
-      headerIsLoading.value = false
-    })
-}
-
-function toggleCreate() {
-  showCreate.value = !showCreate.value
-}
-
-function togglePreview() {
-  showPreview.value = !showPreview.value
-}
 
 onMounted(async () => {
   await expressionInfo.getExpressionId(route)
-  await fetchData()
 })
 
 onBeforeRouteUpdate(async (to, from) => {
   if (to.params.slug !== from.params.slug) {
     await expressionInfo.getExpressionId(to)
-    await fetchData()
   }
 })
 
@@ -118,28 +46,6 @@ watch(
   },
 )
 
-async function downloadExpressionBooklet() {
-  const res = await axios.get(`/expression/${expressionInfo.currentExpressionId}/booklet`, {
-    responseType: 'blob',
-  })
-  const expression = route.params.slug
-  const url = URL.createObjectURL(res.data)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = `${expression}-booklet.pdf`
-  document.body.appendChild(a)
-  a.click()
-  a.remove()
-  URL.revokeObjectURL(url)
-}
-
-const canCreate = computed(() => {
-  if (expressionInfo.expressionTypeId == 1 && can.Expression.Create)
-    return true
-
-  return (expressionInfo.expressionTypeId == 13 || expressionInfo.expressionTypeId == 14) && can.ContentManagementSystem.Create
-})
-
 </script>
 
 <template>
@@ -150,30 +56,14 @@ const canCreate = computed(() => {
       </template>
       <template #content>
         <article id="expression-toc">
-          <ExpressionToC v-if="currentTab == '0'" v-model="sections" :can-edit="showEdit" :show-skeleton="isLoading" @toggle-preview="togglePreview" />
-          <PowersToC v-else :show-skeleton="isLoading" />
+          <!--          <ExpressionToC v-if="currentTab == '0'" v-model="sections" :can-edit="showEdit" :show-skeleton="isLoading" @toggle-preview="togglePreview" />-->
+          <!--          <PowersToC v-else :show-skeleton="isLoading" />-->
         </article>
       </template>
     </Card>
     <Card class="custom-card flex-grow-1">
       <template #content>
-        <div class="pb-4">
-          <div class="d-flex flex-column flex-md-row">
-            <div class="col-12 order-1 order-md-0 col-md-8">
-              <div v-if="permissionCheck.Expression.DownloadBooklet" class="d-flex flex-row justify-content-end align-items-center">
-                <Button label="Download Booklet" @click="downloadExpressionBooklet()" />
-              </div>
-              <CreateExpressionSection v-if="!expressionHeader" :add-expression-header="true" @added-section="fetchData(route.params.name)" />
-              <EditExpressionSection
-                v-else :section-info="expressionHeader" :current-level="1" :show-skeleton="headerIsLoading" :is-read-only="showPreview"
-                :is-header-section="true"
-              />
-            </div>
-            <div class="col-12 align-self-center text-center order-0 order-md-1 col-md-4">
-              <ExpressionLogo :expression-sub-type-id="expressionInfo.expressionSubTypeId" :is-loading="headerIsLoading" />
-            </div>
-          </div>
-        </div>
+        <ExpressionHeader :expression-id="expressionInfo.currentExpressionId" />
         <Tabs v-model:value="currentTab">
           <TabList>
             <Tab value="0">
@@ -191,13 +81,7 @@ const canCreate = computed(() => {
           </TabList>
           <TabPanels>
             <TabPanel value="0">
-              <article id="expression-body">
-                <ExpressionSection :sections="sections" :current-level="1" :show-skeleton="isLoading" :is-read-only="showPreview" @refresh-list="fetchData(route.params.name)" />
-                <Button v-if="canCreate && !showPreview" label="Add Section" class="m-2" @click="toggleCreate" />
-                <div v-if="showCreate">
-                  <CreateExpressionSection @cancel-event="toggleCreate" @added-section="fetchData(route.params.name)" />
-                </div>
-              </article>
+              <ExpressionSectionTab :expression-id="expressionInfo.currentExpressionId" />
             </TabPanel>
             <TabPanel value="1">
               <PowerTab v-if="expressionInfo.isDoneLoading" :expression-id="expressionInfo.currentExpressionId" />
