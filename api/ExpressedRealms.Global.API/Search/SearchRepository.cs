@@ -9,20 +9,24 @@ internal sealed class SearchRepository(
     CancellationToken cancellationToken
 ) : ISearchRepository
 {
+    private const string Language = "english";
+
+    private const string SearchConfiguration =
+        "MaxWords=20, MinWords=10, MaxFragments=2, StartSel=<mark>, StopSel=</mark>";
     public async Task<List<SearchInformationDto>> GetExpressionSections(
         string search,
         List<int> allowedExpressionIds
     )
     {
-        const string language = "english";
+
         return await context
             .ExpressionSections.Where(x =>
-                x.SearchVector.Matches(EF.Functions.WebSearchToTsQuery(language, search))
+                x.SearchVector.Matches(EF.Functions.WebSearchToTsQuery(Language, search))
                 && allowedExpressionIds.Contains(x.ExpressionId)
             )
             .OrderByDescending(x => x.Name.ToLower() == search.ToLower())
             .ThenByDescending(x =>
-                x.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(language, search))
+                x.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(Language, search))
             )
             .Select(x => new SearchInformationDto()
             {
@@ -31,13 +35,13 @@ internal sealed class SearchRepository(
                 NavName = x.Expression.Name,
                 SectionName = x.Name,
                 SectionContent = EF
-                    .Functions.WebSearchToTsQuery(language, search)
+                    .Functions.WebSearchToTsQuery(Language, search)
                     .GetResultHeadline(
-                        language,
+                        Language,
                         x.ProcessedPlainText ?? "",
-                        "MaxWords=20, MinWords=10, MaxFragments=2, StartSel=<mark>, StopSel=</mark>"
+                        SearchConfiguration
                     ),
-                Rank = x.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(language, search)),
+                Rank = x.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(Language, search)),
             })
             .ToListAsync(cancellationToken);
     }
@@ -47,15 +51,14 @@ internal sealed class SearchRepository(
         List<int> allowedExpressionIds
     )
     {
-        const string language = "english";
         return await context
             .Factions.Where(x =>
-                x.SearchVector.Matches(EF.Functions.WebSearchToTsQuery(language, search))
+                x.SearchVector.Matches(EF.Functions.WebSearchToTsQuery(Language, search))
                 && allowedExpressionIds.Contains(x.ExpressionId)
             )
             .OrderByDescending(x => x.Name.ToLower() == search.ToLower())
             .ThenByDescending(x =>
-                x.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(language, search))
+                x.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(Language, search))
             )
             .Select(x => new SearchInformationDto()
             {
@@ -65,13 +68,13 @@ internal sealed class SearchRepository(
                 SectionName = x.Name,
                 SectionSubSection = "Faction",
                 SectionContent = EF
-                    .Functions.WebSearchToTsQuery(language, search)
+                    .Functions.WebSearchToTsQuery(Language, search)
                     .GetResultHeadline(
-                        language,
+                        Language,
                         x.ProcessedPlainText ?? "",
-                        "MaxWords=20, MinWords=10, MaxFragments=2, StartSel=<mark>, StopSel=</mark>"
+                        SearchConfiguration
                     ),
-                Rank = x.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(language, search)),
+                Rank = x.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(Language, search)),
             })
             .ToListAsync(cancellationToken);
     }
@@ -81,15 +84,14 @@ internal sealed class SearchRepository(
         List<int> allowedExpressionIds
     )
     {
-        const string language = "english";
         return await context
             .FactionLevels.Where(x =>
-                x.Power != null && x.Power.SearchVector.Matches(EF.Functions.WebSearchToTsQuery(language, search))
+                x.Power != null && x.Power.SearchVector.Matches(EF.Functions.WebSearchToTsQuery(Language, search))
                 && allowedExpressionIds.Contains(x.Faction.ExpressionId)
             )
             .OrderByDescending(x => x.Power.Name.ToLower() == search.ToLower())
             .ThenByDescending(x =>
-                x.Power.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(language, search))
+                x.Power.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(Language, search))
             )
             .Select(x => new SearchInformationDto()
             {
@@ -99,13 +101,47 @@ internal sealed class SearchRepository(
                 SectionName = x.Power!.Name,
                 SectionSubSection = "Faction Power",
                 SectionContent = EF
-                    .Functions.WebSearchToTsQuery(language, search)
+                    .Functions.WebSearchToTsQuery(Language, search)
                     .GetResultHeadline(
-                        language,
+                        Language,
                         x.Power.ProcessedPlainText ?? "",
-                        "MaxWords=20, MinWords=10, MaxFragments=2, StartSel=<mark>, StopSel=</mark>"
+                        SearchConfiguration
+                        
                     ),
-                Rank = x.Power.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(language, search)),
+                Rank = x.Power.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(Language, search)),
+            })
+            .ToListAsync(cancellationToken);
+    }
+    
+    public async Task<List<SearchInformationDto>> GetPowerPathPowerSections(
+        string search,
+        List<int> allowedExpressionIds
+    )
+    {
+        return await context
+            .PowerPathPowerMappings.Where(x =>
+                x.Power != null && x.Power.SearchVector.Matches(EF.Functions.WebSearchToTsQuery(Language, search))
+                                && allowedExpressionIds.Contains(x.PowerPath.ExpressionId)
+            )
+            .OrderByDescending(x => x.Power.Name.ToLower() == search.ToLower())
+            .ThenByDescending(x =>
+                x.Power.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(Language, search))
+            )
+            .Select(x => new SearchInformationDto()
+            {
+                EntryId = x.Id,
+                Section = x.PowerPath.Expression.CmsType.Name,
+                NavName = x.PowerPath.Expression.Name,
+                SectionName = x.Power.Name,
+                SectionSubSection = "Power Path Power",
+                SectionContent = EF
+                    .Functions.WebSearchToTsQuery(Language, search)
+                    .GetResultHeadline(
+                        Language,
+                        x.Power.ProcessedPlainText ?? "",
+                        SearchConfiguration
+                    ),
+                Rank = x.Power.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(Language, search)),
             })
             .ToListAsync(cancellationToken);
     }

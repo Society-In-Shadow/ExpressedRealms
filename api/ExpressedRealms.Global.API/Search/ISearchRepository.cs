@@ -17,4 +17,9 @@ internal interface ISearchRepository : IGenericRepository
         string search,
         List<int> allowedExpressionIds
     );
+
+    Task<List<SearchInformationDto>> GetPowerPathPowerSections(
+        string search,
+        List<int> allowedExpressionIds
+    );
 }
