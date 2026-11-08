@@ -15,6 +15,11 @@ import axios from 'axios'
 import BlessingToC from '@/components/expressions/BlessingToC.vue'
 import { can, userPermissionStore } from '@/stores/userPermissionStore.ts'
 import { scrollToSection } from '@/components/expressions/expressionUtilities.ts'
+import AccordionPanel from 'primevue/accordionpanel'
+import AccordionHeader from 'primevue/accordionheader'
+import AccordionContent from 'primevue/accordioncontent'
+import Accordion from 'primevue/accordion'
+import { breakpointsBootstrapV5, useBreakpoints } from '@vueuse/core'
 
 const userPermissionInfo = userPermissionStore()
 const permissionCheck = userPermissionInfo.permissionCheck
@@ -25,6 +30,8 @@ const isLoading = ref(true)
 const showCreate = ref(false)
 const showPreview = ref(false)
 
+const activeBreakpoint = useBreakpoints(breakpointsBootstrapV5)
+const isMobile = activeBreakpoint.smaller('md')
 async function fetchData() {
   isLoading.value = true
   await expressionInfo.getExpressionId(route)
@@ -99,7 +106,16 @@ const canCreate = computed(() => {
 
 <template>
   <div id="expression" class="d-flex flex-column flex-md-row gap-2 ">
-    <Card class="custom-toc flex-grow-0 sticky-md-top d-print-none zIndexFix">
+    <Accordion v-if="isMobile" :value="[]" class="custom-toc flex-grow-0 sticky-md-top d-print-none zIndexFix">
+      <AccordionPanel value="0">
+        <AccordionHeader>Table Of Contents</AccordionHeader>
+        <AccordionContent>
+          <ExpressionToC />
+          <BlessingToC v-if="hasBlessingSection" :show-skeleton="isLoading" />
+        </AccordionContent>
+      </AccordionPanel>
+    </Accordion>
+    <Card v-else class="custom-toc flex-grow-0 sticky-md-top d-print-none zIndexFix">
       <template #title>
         Table Of Contents
       </template>
