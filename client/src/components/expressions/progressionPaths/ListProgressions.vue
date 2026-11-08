@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { onBeforeMount, ref } from 'vue'
+import { onBeforeMount, ref, watch } from 'vue'
 import Button from 'primevue/button'
 import Divider from 'primevue/divider'
 import { progressionPathStore } from '@/components/expressions/progressionPaths/stores/progressionPathsStore.ts'
@@ -19,6 +19,10 @@ const props = defineProps({
 })
 
 onBeforeMount(async () => {
+  await progressionPaths.getProgressionPaths(props.expressionId)
+})
+
+watch(() => props.expressionId, async () => {
   await progressionPaths.getProgressionPaths(props.expressionId)
 })
 

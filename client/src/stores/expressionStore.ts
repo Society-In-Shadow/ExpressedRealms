@@ -10,7 +10,28 @@ export const expressionStore
   = defineStore('expression', {
     state: () => {
       return {
-        sections: [] as ExpressionSectionDto[],
+        sections: [
+          {
+            id: 1,
+            subSections: [
+              { id: 2, subSections: [] },
+              { id: 3, subSections: [] },
+              { id: 4, subSections: [] },
+            ],
+          },
+          {
+            id: 5,
+            subSections: [],
+          },
+          {
+            id: 6,
+            subSections: [{ id: 7 }],
+          },
+          {
+            id: 8,
+            subSections: [{ id: 9 }],
+          },
+        ] as ExpressionSectionDto[],
         currentExpressionId: 0 as number,
         currentExpressionName: '' as string,
         isDoneLoading: false as boolean,

@@ -14,6 +14,7 @@ import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 import { factionListQuery } from '@/components/expressions/factions/stores/factionStore.ts'
 import { expressionStore } from '@/stores/expressionStore.ts'
 import PowerCard from '@/components/expressions/powers/PowerCard.vue'
+import { makeIdSafe } from '@/utilities/stringUtilities.ts'
 
 const userPermissionInfo = userPermissionStore()
 const permissionCheck = userPermissionInfo.permissionCheck
@@ -35,7 +36,7 @@ const { refetch } = useQueryWithLoading(factionListQuery(expressionData.currentE
 
 const items = ref<Command[]>([])
 
-onMounted(async () => {
+onMounted(() => {
   PopulateFactionActions()
 })
 
@@ -82,7 +83,7 @@ function article(value: string): 'A' | 'An' {
   <Card>
     <template #content>
       <div class="d-flex flex-column flex-md-row align-self-center justify-content-between">
-        <h1 class="p-0 m-0 flex-fill">
+        <h1 :id="makeIdSafe(props.item?.name)" class="p-0 m-0 flex-fill">
           {{ props.item?.name }}
         </h1>
         <div class="p-0 m-0 d-inline-flex align-items-start">

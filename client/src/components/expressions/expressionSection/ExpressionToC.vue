@@ -3,16 +3,15 @@
 import { makeIdSafe } from '@/utilities/stringUtilities'
 import Skeleton from 'primevue/skeleton'
 import { BaseTree, Draggable } from '@he-tree/vue'
-import { ref, toRaw } from 'vue'
+import { computed, ref, toRaw } from 'vue'
 import Button from 'primevue/button'
 import axios from 'axios'
 import toaster from '@/services/Toasters'
 import { expressionStore } from '@/stores/expressionStore'
 import { getIdsWithDynamicSortForArray, scrollToSection } from '@/components/expressions/expressionUtilities'
+import { can } from '@/stores/userPermissionStore.ts'
 
 const expressionInfo = expressionStore()
-
-const model = defineModel({ required: true, default: {}, type: Array })
 
 const emit = defineEmits<{
   togglePreview: []
@@ -20,20 +19,19 @@ const emit = defineEmits<{
 
 let originalModel
 
-const props = defineProps({
-  canEdit: {
-    type: Boolean,
-  },
-  showSkeleton: {
-    type: Boolean,
-    required: true,
-  },
+const showSkeleton = computed(() => { return !expressionInfo.isDoneLoading })
+
+const canEdit = computed(() => {
+  if (expressionInfo.expressionTypeId == 1 && can.Expression.Edit)
+    return true
+
+  return (expressionInfo.expressionTypeId == 13 || expressionInfo.expressionTypeId == 14) && can.ContentManagementSystem.Edit
 })
 
 function saveChanges() {
   axios.put(`/expression/${expressionInfo.currentExpressionId}/updateHierarchy`, {
     expressionId: expressionInfo.currentExpressionId,
-    items: getIdsWithDynamicSortForArray(model.value, null),
+    items: getIdsWithDynamicSortForArray(expressionInfo.sections, null),
   }).then(() => {
     emit('togglePreview')
     showTocEdit.value = !showTocEdit.value
@@ -44,10 +42,10 @@ function saveChanges() {
 const showTocEdit = ref(false)
 function toggleEdit() {
   if (!showTocEdit.value)
-    originalModel = JSON.parse(JSON.stringify(toRaw(model.value)))
+    originalModel = structuredClone(toRaw(expressionInfo.sections))
 
   if (showTocEdit.value)
-    model.value = originalModel
+    expressionInfo.sections = originalModel
 
   emit('togglePreview')
   showTocEdit.value = !showTocEdit.value
@@ -57,8 +55,8 @@ function toggleEdit() {
 
 <template>
   <Draggable
-    v-if="props.canEdit && showTocEdit"
-    v-model="model"
+    v-if="canEdit && showTocEdit"
+    v-model="expressionInfo.sections"
     class="mtl-tree"
     children-key="subSections"
     update-behavior="new"
@@ -72,15 +70,15 @@ function toggleEdit() {
   </Draggable>
   <BaseTree
     v-else
-    v-model="model"
+    v-model="expressionInfo.sections"
     children-key="subSections"
   >
     <template #default="{ node }">
-      <Skeleton v-if="props.showSkeleton" id="toc-skeleton" class="mb-2" height="1.5em" />
+      <Skeleton v-if="showSkeleton" id="toc-skeleton" class="mb-2" height="1.5em" />
       <a v-else class="p-1 tocItem" :href="'#' + makeIdSafe(node.name)" @click.prevent="scrollToSection(node.name)">{{ node.name }}</a>
     </template>
   </BaseTree>
-  <div v-if="props.canEdit">
+  <div v-if="canEdit">
     <Button v-if="showTocEdit" label="Save" class="mt-2 w-100" @click="saveChanges" />
     <Button :label="showTocEdit ? 'Cancel' : 'Edit Order'" class="mt-2 w-100" @click="toggleEdit" />
   </div>

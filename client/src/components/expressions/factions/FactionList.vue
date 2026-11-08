@@ -5,10 +5,10 @@ import Button from 'primevue/button'
 import Card from 'primevue/card'
 import { can } from '@/stores/userPermissionStore.ts'
 import Skeleton from 'primevue/skeleton'
-import { useQueryWithLoading } from '@/utilities/queryOverride.ts'
 import FactionItem from '@/components/expressions/factions/FactionItem.vue'
 import { factionListQuery } from '@/components/expressions/factions/stores/factionStore.ts'
 import { factionDialogs } from '@/components/expressions/factions/services/dialogs.ts'
+import { useQuery } from '@pinia/colada'
 
 const dialogs = factionDialogs()
 
@@ -19,11 +19,12 @@ const props = defineProps({
   },
 })
 
-const { data, isLoading, error } = useQueryWithLoading(factionListQuery(props.expressionId))
-
+const { data, isLoading, error } = useQuery(
+  () => factionListQuery(props.expressionId),
+)
 const showAdd = ref(false)
 
-const toggleAdd = async () => {
+const toggleAdd = () => {
   dialogs.showCreateFaction()
 }
 
@@ -43,7 +44,7 @@ const enableAdd = computed(() => {
       />
     </div>
   </div>
-  <div v-if="isLoading">
+  <div v-if="isLoading && !data">
     <Skeleton v-for="height in 3" :key="height" class="mb-3 mt-3" height="100px" />
   </div>
   <div v-else-if="error">
@@ -72,7 +73,7 @@ const enableAdd = computed(() => {
     </Card>
   </div>
   <div v-else>
-    <div v-for="item in data!.factions" :key="item.id">
+    <div v-for="item in data?.factions ?? []" :key="item.id">
       <FactionItem :item="item" />
     </div>
   </div>
