@@ -171,6 +171,8 @@ internal sealed class PowerRepository(
         power.Limitation = editPowerModel.Limitation;
         power.OtherFields = editPowerModel.Other;
         power.Cost = editPowerModel.Cost;
+        power.ProcessedPlainText =
+            $"{editPowerModel.Description.ToPlainText()} {editPowerModel.GameMechanicEffect.ToPlainText()} {editPowerModel.Limitation.ToPlainText()}";
 
         await context.SaveChangesAsync(cancellationToken);
 
