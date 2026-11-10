@@ -3,6 +3,7 @@ using ExpressedRealms.DB.Models.Contacts;
 using ExpressedRealms.DB.Models.Factions.FactionLevelModels;
 using ExpressedRealms.DB.Models.Knowledges.CharacterKnowledgeMappings;
 using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels.Audit;
+using NpgsqlTypes;
 
 namespace ExpressedRealms.DB.Models.Knowledges.KnowledgeModels;
 
@@ -15,6 +16,9 @@ public class Knowledge : ISoftDelete
 
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
+
+    public string? ProcessedPlainText { get; set; }
+    public NpgsqlTsVector SearchVector { get; set; } = null!;
 
     public virtual KnowledgeType KnowledgeType { get; set; } = null!;
     public virtual List<KnowledgeAuditTrail> KnowledgeAuditTrails { get; set; } = null!;

@@ -1,4 +1,3 @@
-using ExpressedRealms.DB.Models.Knowledges.KnowledgeModels;
 using ExpressedRealms.Knowledges.Repository.Knowledges;
 using ExpressedRealms.UseCases.Shared;
 using FluentResults;
@@ -27,6 +26,7 @@ internal sealed class EditKnowledgeUseCase(
         knowledge.Name = model.Name;
         knowledge.Description = model.Description;
         knowledge.KnowledgeTypeId = model.KnowledgeTypeId;
+        knowledge.ProcessedPlainText = model.Description.ToPlainText();
 
         await knowledgeRepository.EditKnowledgeAsync(knowledge);
 

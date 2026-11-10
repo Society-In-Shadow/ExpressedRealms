@@ -13,6 +13,10 @@ internal static class KnowledgesAuditTrailExtensions
         {
             switch (changedRecord.ColumnName)
             {
+                case "processed_plain_text":
+                case "search_vector":
+                    continue;
+
                 case "name":
                     changedRecord.FriendlyName = "Name";
                     break;

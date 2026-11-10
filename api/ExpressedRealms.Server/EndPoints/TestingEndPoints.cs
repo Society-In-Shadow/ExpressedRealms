@@ -138,6 +138,13 @@ internal static class TestingEndPoints
                             + string.Join("", blessing.BlessingLevels.Select(x => x.Description)).ToPlainText();
                     }
 
+                    var knowledges = await dbContext.Knowledges.ToListAsync();
+
+                    foreach (var knowledge in knowledges)
+                    {
+                        knowledge.ProcessedPlainText = knowledge.Description.ToPlainText();
+                    }
+
                     await dbContext.SaveChangesAsync();
                 }
             )

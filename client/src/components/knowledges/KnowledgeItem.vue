@@ -6,6 +6,7 @@ import Button from 'primevue/button'
 import { knowledgeConfirmationPopup } from '@/components/knowledges/services/knowledgeConfirmationPopupService'
 import EditKnowledge from '@/components/knowledges/EditKnowledge.vue'
 import { can } from '@/stores/userPermissionStore.ts'
+import { makeIdSafe } from '@/utilities/stringUtilities.ts'
 
 const props = defineProps({
   knowledge: {
@@ -31,7 +32,7 @@ function toggleEdit() {
   <div v-if="showEdit" class="mb-2">
     <EditKnowledge :knowledge-id="props.knowledge.id" @canceled="toggleEdit" />
   </div>
-  <div v-else class="d-flex flex-column flex-md-row align-self-center justify-content-between">
+  <div v-else :id="makeIdSafe(props.knowledge?.name)" class="d-flex flex-column flex-md-row align-self-center justify-content-between">
     <div>
       <h1 class="p-0 m-0">
         {{ props.knowledge.name }}
