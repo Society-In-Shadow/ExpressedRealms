@@ -126,6 +126,17 @@ internal static class TestingEndPoints
                     {
                         powerPath.ProcessedPlainText = powerPath.Description.ToPlainText();
                     }
+                    
+                    var blessings = await dbContext.Blessings
+                        .Include(x => x.BlessingLevels)
+                        .ToListAsync();
+
+                    foreach (var blessing in blessings)
+                    {
+                        blessing.ProcessedPlainText = blessing.Description.ToPlainText() +
+                                                      string.Join("",
+                                                          blessing.BlessingLevels.Select(x => x.Description));
+                    }
 
                     await dbContext.SaveChangesAsync();
                 }

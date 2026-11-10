@@ -167,6 +167,32 @@ internal sealed class SearchRepository(
             })
             .ToListAsync(cancellationToken);
     }
+    
+    public async Task<List<SearchInformationDto>> GetBlessingSections(
+        string search
+    )
+    {
+        return await context
+            .Blessings.Where(x =>
+                x.SearchVector.Matches(EF.Functions.WebSearchToTsQuery(Language, search))
+            )
+            .OrderByDescending(x => x.Name.ToLower() == search.ToLower())
+            .ThenByDescending(x =>
+                x.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(Language, search))
+            )
+            .Select(x => new SearchInformationDto()
+            {
+                EntryId = x.Id,
+                Section = "Rule Book",
+                NavName = "Advantages and Disadvantages",
+                SectionName = x.Name,
+                SectionContent = EF
+                    .Functions.WebSearchToTsQuery(Language, search)
+                    .GetResultHeadline(Language, x.ProcessedPlainText ?? "", SearchConfiguration),
+                Rank = x.SearchVector.Rank(EF.Functions.WebSearchToTsQuery(Language, search)),
+            })
+            .ToListAsync(cancellationToken);
+    }
 
     public async Task EditAsync<TEntity>(TEntity entity)
         where TEntity : class
