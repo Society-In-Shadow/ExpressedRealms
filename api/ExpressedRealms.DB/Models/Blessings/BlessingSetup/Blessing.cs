@@ -18,7 +18,7 @@ public class Blessing : ISoftDelete
     public required string SubCategory { get; set; }
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
-    
+
     public string? ProcessedPlainText { get; set; }
     public NpgsqlTsVector SearchVector { get; set; } = null!;
 

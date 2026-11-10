@@ -28,7 +28,5 @@ internal interface ISearchRepository : IGenericRepository
         List<int> allowedExpressionIds
     );
 
-    Task<List<SearchInformationDto>> GetBlessingSections(
-        string search
-    );
+    Task<List<SearchInformationDto>> GetBlessingSections(string search);
 }

@@ -167,10 +167,8 @@ internal sealed class SearchRepository(
             })
             .ToListAsync(cancellationToken);
     }
-    
-    public async Task<List<SearchInformationDto>> GetBlessingSections(
-        string search
-    )
+
+    public async Task<List<SearchInformationDto>> GetBlessingSections(string search)
     {
         return await context
             .Blessings.Where(x =>

@@ -55,7 +55,7 @@ internal sealed class GlobalSearchUseCase(
             useCaseModel.Search,
             availableExpressions
         );
-        
+
         var blessings = await searchRepository.GetBlessingSections(useCaseModel.Search);
 
         searchResults.AddRange(expressionSectionResults);

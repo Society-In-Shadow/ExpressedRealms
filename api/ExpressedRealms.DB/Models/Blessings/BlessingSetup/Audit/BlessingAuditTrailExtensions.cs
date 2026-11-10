@@ -16,7 +16,7 @@ internal static class BlessingAuditTrailExtensions
                 case "processed_plain_text":
                 case "search_vector":
                     continue;
-                
+
                 case "name":
                     changedRecord.FriendlyName = "Name";
                     break;
