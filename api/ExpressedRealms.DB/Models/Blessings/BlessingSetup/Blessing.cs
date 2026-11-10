@@ -4,6 +4,7 @@ using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup;
 using ExpressedRealms.DB.Models.Blessings.BlessingLevelSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.BlessingSetup.Audit;
 using ExpressedRealms.DB.Models.Blessings.CharacterBlessingMappings;
+using NpgsqlTypes;
 
 namespace ExpressedRealms.DB.Models.Blessings.BlessingSetup;
 
@@ -17,6 +18,9 @@ public class Blessing : ISoftDelete
     public required string SubCategory { get; set; }
     public bool IsDeleted { get; set; }
     public DateTimeOffset? DeletedAt { get; set; }
+
+    public string? ProcessedPlainText { get; set; }
+    public NpgsqlTsVector SearchVector { get; set; } = null!;
 
     public virtual List<BlessingAuditTrail> BlessingAuditTrails { get; set; } = null!;
     public virtual List<BlessingLevel> BlessingLevels { get; set; } = null!;

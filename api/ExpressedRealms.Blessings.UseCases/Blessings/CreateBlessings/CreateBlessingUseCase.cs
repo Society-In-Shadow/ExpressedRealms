@@ -27,6 +27,7 @@ internal sealed class CreateBlessingUseCase(
             {
                 Name = model.Name,
                 Description = model.Description,
+                ProcessedPlainText = model.Description.ToPlainText(),
                 SubCategory = model.SubCategory,
                 Type = model.Type,
             }
