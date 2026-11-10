@@ -60,6 +60,13 @@ internal sealed class BlessingRepository(
     {
         return await context.Blessings.FirstAsync(x => x.Id == id, cancellationToken);
     }
+    
+    public async Task<List<string>> GetBlessingLevelsForSearchUpdate(int blessingId)
+    {
+        return await context.BlessingLevels.Where(x => x.BlessingId == blessingId)
+            .Select(x => x.Description)
+            .ToListAsync();
+    }
 
     public async Task<BlessingLevel> GetBlessingLevelForEditing(int blessingId, int id)
     {

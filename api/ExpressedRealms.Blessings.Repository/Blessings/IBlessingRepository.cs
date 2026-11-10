@@ -18,4 +18,5 @@ public interface IBlessingRepository
     Task<bool> IsExistingBlessingLevel(int blessingId, int id);
     Task<bool> BlessingLevelExists(int id);
     Task<BlessingLevel> GetBlessingLevel(int blessingLevelId);
+    Task<List<string>> GetBlessingLevelsForSearchUpdate(int blessingId);
 }

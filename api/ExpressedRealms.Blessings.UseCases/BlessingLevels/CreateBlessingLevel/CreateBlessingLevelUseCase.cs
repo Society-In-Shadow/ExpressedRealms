@@ -32,6 +32,14 @@ internal sealed class CreateBlessingLevelUseCase(
                 Description = model.Description,
             }
         );
+        
+
+        var blessing = await blessingRepository.GetBlessingForEditing(model.BlessingId);
+        var levelDescriptions = await blessingRepository.GetBlessingLevelsForSearchUpdate(model.BlessingId);
+        blessing.ProcessedPlainText = blessing.Description.ToPlainText() +
+                                      string.Join("", levelDescriptions).ToPlainText();
+        
+        await blessingRepository.EditBlessingAsync(blessing);
 
         return Result.Ok(returnedId);
     }

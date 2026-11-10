@@ -26,12 +26,23 @@ internal sealed class EditBlessingLevelUseCase(
             model.LevelId
         );
 
+        var updatedDescription = level.Description != model.Description;
         level.XpCost = model.XpCost;
         level.XpGain = model.XpGain;
         level.Level = model.Level;
         level.Description = model.Description;
-
+        
         await blessingRepository.EditBlessingLevelAsync(level);
+        
+        if (updatedDescription)
+        {
+            var blessing = await blessingRepository.GetBlessingForEditing(model.BlessingId);
+            var levelDescriptions = await blessingRepository.GetBlessingLevelsForSearchUpdate(model.BlessingId);
+            blessing.ProcessedPlainText = blessing.Description.ToPlainText() +
+                                          string.Join("", levelDescriptions).ToPlainText();
+            
+            await blessingRepository.EditBlessingAsync(blessing);
+        }
 
         return Result.Ok();
     }

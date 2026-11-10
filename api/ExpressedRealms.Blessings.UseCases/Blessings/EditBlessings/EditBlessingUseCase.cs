@@ -23,6 +23,13 @@ internal sealed class EditBlessingUseCase(
 
         var blessing = await blessingRepository.GetBlessingForEditing(model.Id);
 
+        if (blessing.Description != model.Description)
+        {
+            var levelDescriptions = await blessingRepository.GetBlessingLevelsForSearchUpdate(model.Id);
+            blessing.ProcessedPlainText = blessing.Description.ToPlainText() +
+                                          string.Join("", levelDescriptions).ToPlainText();
+        }
+        
         blessing.Name = model.Name;
         blessing.Description = model.Description;
         blessing.SubCategory = model.SubCategory;
