@@ -139,6 +139,7 @@ internal sealed class PowerPathRepository(
             Description = createPowerPathModel.Description,
             ExpressionId = createPowerPathModel.ExpressionId,
             OrderIndex = nextPlaceOnList + 1,
+            ProcessedPlainText = createPowerPathModel.Description.ToPlainText()
         };
 
         context.PowerPaths.Add(newPowerPath);
@@ -165,7 +166,8 @@ internal sealed class PowerPathRepository(
 
         power.Name = editPowerPathModel.Name;
         power.Description = editPowerPathModel.Description;
-
+        power.ProcessedPlainText = editPowerPathModel.Description.ToPlainText();
+        
         await context.SaveChangesAsync(cancellationToken);
 
         return Result.Ok();

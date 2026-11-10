@@ -42,6 +42,7 @@ internal sealed class CreatePowerUseCase(
             CategoryMappings = model
                 .Category.Select(x => new PowerCategoryMapping() { CategoryId = x })
                 .ToList(),
+            ProcessedPlainText = $"{model.Description.ToPlainText()} {model.GameMechanicEffect.ToPlainText()} {model.Limitation.ToPlainText()}"
         };
 
         var powerId = await powerRepository.CreatePower(newPower);
