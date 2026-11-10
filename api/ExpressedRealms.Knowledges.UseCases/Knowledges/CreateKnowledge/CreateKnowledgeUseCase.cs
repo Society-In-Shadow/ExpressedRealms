@@ -28,6 +28,7 @@ internal sealed class CreateKnowledgeUseCase(
                 Name = model.Name,
                 Description = model.Description,
                 KnowledgeTypeId = model.KnowledgeTypeId,
+                ProcessedPlainText = model.Description.ToPlainText(),
             }
         );
 

@@ -29,4 +29,5 @@ internal interface ISearchRepository : IGenericRepository
     );
 
     Task<List<SearchInformationDto>> GetBlessingSections(string search);
+    Task<List<SearchInformationDto>> GetKnowledgeSections(string search);
 }

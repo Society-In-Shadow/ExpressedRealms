@@ -58,12 +58,15 @@ internal sealed class GlobalSearchUseCase(
 
         var blessings = await searchRepository.GetBlessingSections(useCaseModel.Search);
 
+        var knowledges = await searchRepository.GetKnowledgeSections(useCaseModel.Search);
+
         searchResults.AddRange(expressionSectionResults);
         searchResults.AddRange(factions);
         searchResults.AddRange(factionPowers);
         searchResults.AddRange(powerPathPowerSections);
         searchResults.AddRange(powerPathSections);
         searchResults.AddRange(blessings);
+        searchResults.AddRange(knowledges);
 
         var helper = new SlugHelper();
 
