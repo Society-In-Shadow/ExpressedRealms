@@ -52,7 +52,7 @@ const gravatar = computed(() => {
 
 <template>
   <div class="d-flex flex-row gap-2">
-    <div v-if="hasFlag.ShowGlobalSearch" class="flex align-items-center cursor-pointer">
+    <div v-if="hasFlag.ShowGlobalSearch && data!.userInfo !== null" class="flex align-items-center cursor-pointer">
       <NavSearch />
     </div>
 
