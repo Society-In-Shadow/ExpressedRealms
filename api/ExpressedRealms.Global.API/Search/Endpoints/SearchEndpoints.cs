@@ -10,7 +10,8 @@ internal static class SearchEndpoints
 {
     internal static void AddSearchEndpoints(this WebApplication app)
     {
-        var endpointGroup = app.MapGroup("").WithTags("Search");
+        var endpointGroup = app.MapGroup("").WithTags("Search")
+            .RequireAuthorization();
 
         endpointGroup
             .MapGet("search", GlobalSearchEndpoint.ExecuteAsync)
