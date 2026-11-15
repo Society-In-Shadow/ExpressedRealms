@@ -17,9 +17,7 @@ DISABLE:
   - TEKTON
 DISABLE_LINTERS:
   - JSON_PRETTIER
-  - REPOSITORY_KICS
   - SPELL_PROSELINT
-  - SPELL_MISSPELL
   - SPELL_VALE
 #  - TYPESCRIPT_ES # These I cannot get to work, cannot find the client files at all (Default scanner needs to be looking in a different directory other then root)
   - TYPESCRIPT_STANDARD
@@ -31,7 +29,6 @@ DISABLE_LINTERS:
   - REPOSITORY_DEVSKIM # There's a git ownership issue with this one : fatal: detected dubious ownership in repository at '/github/workspace/.git'
   - REPOSITORY_TRIVY # Getting fatal download errors, and too many requests errors, so ignoring for now
   - REPOSITORY_KINGFISHER # This is a new one on the block, it doesn't seem to play nicely with azure config keys and doesn't seem to consistently check keys
-  - SQL_TSQLLINT # This will throw errors with postgres scripts
 DISABLE_ERRORS_LINTERS:
   - PYTHON_BANDIT
   - PYTHON_PYRIGHT
@@ -42,7 +39,6 @@ PRINT_ALL_FILES: false
 JSON_JSONLINT_FILTER_REGEX_EXCLUDE: '(\.vscode/)'
 BASH_FILTER_REGEX_EXCLUDE: "(lib)"
 MARKDOWN_FILTER_REGEX_EXCLUDE: '(license\.md|docs/licenses)'
-MARKDOWN_MARKDOWN_LINK_CHECK_DISABLE_ERRORS: true
 SPELL_VALE_FILE_EXTENSIONS:
   - .md
 SPELL_FILTER_REGEX_EXCLUDE: (valestyles|\.github|docs/licenses)
