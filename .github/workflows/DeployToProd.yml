@@ -306,30 +306,30 @@ jobs:
     needs: changes
     if: ${{ needs.changes.outputs.run_sonarcloud_scan == 'true' }}
     steps:
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: 17
-          distribution: "zulu" # Alternative distribution options are available.
+          distribution: temurin
+          java-version: 21
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
-      - name: Cache SonarQube Cloud packages
+      - name: Cache SonarQube packages
         uses: actions/cache@v4
         with:
-          path: ~\sonar\cache
+          path: ~\.sonar\cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
-      - name: Cache SonarQube Cloud scanner
+      - name: Cache SonarQube scanner
         id: cache-sonar-scanner
         uses: actions/cache@v4
         with:
           path: .\.sonar\scanner
           key: ${{ runner.os }}-sonar-scanner
           restore-keys: ${{ runner.os }}-sonar-scanner
-      - name: Install SonarQube Cloud scanner
-        if: ${{ steps.cache-sonar-scanner.outputs.cache-hit != 'true' }}
-        shell: powershell
+      - name: Install SonarQube scanner
+        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        shell: pwsh
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
@@ -342,16 +342,32 @@ jobs:
       - name: Install DotCover
         run: dotnet tool install --global dotnet-coverage
 
+      - name: Restore
+        run: dotnet restore ./api/ExpressedRealms.sln
+    
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        shell: powershell
+        shell: pwsh
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"Society-In-Shadow_ExpressedRealms" /o:"society-in-shadows" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
-          dotnet restore ./api/ExpressedRealms.sln
-          dotnet build ./api/ExpressedRealms.sln --no-restore
-          dotnet-coverage collect "dotnet test ./api/ExpressedRealms.sln --no-restore" -f xml -o "coverage.xml"
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
+          $ErrorActionPreference = "Stop"
+          $PSNativeCommandUseErrorActionPreference = $true
+          
+          dotnet sonarscanner begin `
+            /k:"Society-In-Shadow_ExpressedRealms" `
+            /o:"society-in-shadows" `
+            /d:sonar.token="$env:SONAR_TOKEN" `
+            /d:sonar.host.url="https://sonarcloud.io" `
+            /d:sonar.cs.vscoveragexml.reportsPaths="coverage.xml"
+          
+          dotnet build ./api/ExpressedRealms.sln --no-restore --no-incremental
+          
+          dotnet-coverage collect `
+            "dotnet test ./api/ExpressedRealms.sln --no-build --no-restore" `
+            -f xml `
+            -o "coverage.xml"
+          
+          dotnet sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
 
   push_api_to_azure_container_registry:
     name: Push API to Azure Container Registry
