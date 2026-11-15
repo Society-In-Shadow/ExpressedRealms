@@ -367,10 +367,12 @@ jobs:
             /d:sonar.cs.vscoveragexml.reportsPaths="**/TestResults/**/*.xml"
           
           dotnet build ./api/ExpressedRealms.sln --no-restore --no-incremental
-          
-          dotnet test ./ExpressedRealms.sln `
+  
+    
+          dotnet test --solution ./api/ExpressedRealms.sln `
           --no-build `
           --no-restore `
+          --results-directory-layout per-module `
           --coverage `
           --coverage-output-format xml
           
