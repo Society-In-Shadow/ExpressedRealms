@@ -298,7 +298,7 @@ jobs:
       - name: Run Unit Tests
         if: ${{ needs.changes.outputs.backend == 'true' }}
         working-directory: ./api
-        run: dotnet test --solution ./ExpressedRealms.sln --no-restore --report-trx
+        run: dotnet test --solution ./ExpressedRealms.slnx --no-restore --report-trx
 
   sonarcloud-scan:
     name: Run SonarCloud Scan
@@ -306,52 +306,64 @@ jobs:
     needs: changes
     if: ${{ needs.changes.outputs.run_sonarcloud_scan == 'true' }}
     steps:
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: 17
-          distribution: "zulu" # Alternative distribution options are available.
+          distribution: temurin
+          java-version: 21
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
-      - name: Cache SonarQube Cloud packages
+      - name: Cache SonarQube packages
         uses: actions/cache@v4
         with:
-          path: ~\sonar\cache
+          path: ~\.sonar\cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
-      - name: Cache SonarQube Cloud scanner
+      - name: Cache SonarQube scanner
         id: cache-sonar-scanner
         uses: actions/cache@v4
         with:
           path: .\.sonar\scanner
           key: ${{ runner.os }}-sonar-scanner
           restore-keys: ${{ runner.os }}-sonar-scanner
-      - name: Install SonarQube Cloud scanner
-        if: ${{ steps.cache-sonar-scanner.outputs.cache-hit != 'true' }}
-        shell: powershell
+      - name: Install SonarQube scanner
+        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
+        shell: pwsh
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+      - name: Setup .NET and Nuget Cache
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 10.0.x
+          cache: true
+          check-latest: false
+          skip-lts-prepass: true
+          cache-dependency-path: api/**/packages.lock.json
 
-      - name: Install DotCover
-        run: dotnet tool install --global dotnet-coverage
+      - name: Install .NET tools
+        shell: pwsh
+        run: |
+          dotnet tool install --global dotnet-sonarscanner
+          dotnet tool install --global dotnet-coverage
+          "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
 
+      - name: Restore Nuget Packages From Cache
+        run: dotnet restore ./api/ExpressedRealms.slnx --locked-mode
+    
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          DOTNET_COVERAGE_TELEMETRY_OPTOUT: 1
+        working-directory: ./api
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"Society-In-Shadow_ExpressedRealms" /o:"society-in-shadows" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
-          dotnet restore ./api/ExpressedRealms.sln
-          dotnet build ./api/ExpressedRealms.sln --no-restore
-          dotnet-coverage collect "dotnet test ./api/ExpressedRealms.sln --no-restore" -f xml -o "coverage.xml"
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
+          dotnet sonarscanner begin /k:"Society-In-Shadow_ExpressedRealms" /o:"society-in-shadows" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+          dotnet build ./ExpressedRealms.slnx --no-restore --no-incremental
+          dotnet-coverage collect "dotnet test ./ExpressedRealms.slnx --no-build --no-restore" -f xml -o "coverage.xml"
+          dotnet sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
 
   push_api_to_azure_container_registry:
     name: Push API to Azure Container Registry
