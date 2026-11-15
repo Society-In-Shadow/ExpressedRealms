@@ -346,6 +346,7 @@ jobs:
       - name: Install .NET tools
         shell: pwsh
         run: |
+          dotnet tool install --global dotnet-sonarscanner
           dotnet tool install --global dotnet-coverage
           "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
 
