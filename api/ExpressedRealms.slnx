@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Solution>
+  <Folder Name="Blessings">
+    <Project Path="ExpressedRealms.Blessings.Repository/ExpressedRealms.Blessings.Repository.csproj" />
+    <Project Path="ExpressedRealms.Blessings.UseCases/ExpressedRealms.Blessings.UseCases.csproj" />
+    <Project Path="ExpressedRealms.Blessings.UseCases.Tests.Unit/ExpressedRealms.Blessings.UseCases.Tests.Unit.csproj" />
+    <Project Path="ExpressedRealms.Blessings.API/ExpressedRealms.Blessings.API.csproj" />
+  </Folder>
+  <Folder Name="Expressions">
+    <Project Path="ExpressedRealms.Expressions.Repository/ExpressedRealms.Expressions.Repository.csproj" />
+    <Project Path="ExpressedRealms.Expressions.API/ExpressedRealms.Expressions.API.csproj" />
+    <Project Path="ExpressedRealms.Expressions.UseCases/ExpressedRealms.Expressions.UseCases.csproj" />
+    <Project Path="ExpressedRealms.Expressions.UseCases.Tests.Unit/ExpressedRealms.Expressions.UseCases.Tests.Unit.csproj" />
+    <Project Path="ExpressedRealms.Expressions.Reports/ExpressedRealms.Expressions.Reports.csproj" />
+  </Folder>
+  <Folder Name="Knowledges">
+    <Project Path="ExpressedRealms.Knowledges.UseCases/ExpressedRealms.Knowledges.UseCases.csproj" />
+    <Project Path="ExpressedRealms.Knowledges.UseCases.Tests.Unit/ExpressedRealms.Knowledges.UseCases.Tests.Unit.csproj" />
+    <Project Path="ExpressedRealms.Knowledges.Repository/ExpressedRealms.Knowledges.Repository.csproj" />
+    <Project Path="ExpressedRealms.Knowledges.API/ExpressedRealms.Knowledges.API.csproj" />
+  </Folder>
+  <Folder Name="Powers">
+    <Project Path="ExpressedRealms.Powers.Repository/ExpressedRealms.Powers.Repository.csproj" />
+    <Project Path="ExpressedRealms.Powers.API/ExpressedRealms.Powers.API.csproj" />
+    <Project Path="ExpressedRealms.Powers.Repository.Tests.Unit/ExpressedRealms.Powers.Repository.Tests.Unit.csproj" />
+    <Project Path="ExpressedRealms.Powers.Reporting/ExpressedRealms.Powers.Reporting.csproj" />
+    <Project Path="ExpressedRealms.Powers.UseCases/ExpressedRealms.Powers.UseCases.csproj" />
+    <Project Path="ExpressedRealms.Powers.UseCases.Tests.Unit/ExpressedRealms.Powers.UseCases.Tests.Unit.csproj" />
+  </Folder>
+  <Folder Name="Characters">
+    <Project Path="ExpressedRealms.Characters.Repository/ExpressedRealms.Characters.Repository.csproj" />
+    <Project Path="ExpressedRealms.Characters.API/ExpressedRealms.Characters.API.csproj" />
+    <Project Path="ExpressedRealms.Characters.UseCases/ExpressedRealms.Characters.UseCases.csproj" />
+    <Project Path="ExpressedRealms.Characters.UseCases.Tests.Unit/ExpressedRealms.Characters.UseCases.Tests.Unit.csproj" />
+    <Project Path="ExpressedRealms.Characters.Reports/ExpressedRealms.Characters.Reports.csproj" />
+  </Folder>
+  <Folder Name="Admin">
+    <Project Path="ExpressedRealms.Admin.Repository/ExpressedRealms.Admin.Repository.csproj" />
+    <Project Path="ExpressedRealms.Admin.UseCases/ExpressedRealms.Admin.UseCases.csproj" />
+    <Project Path="ExpressedRealms.Admin.API/ExpressedRealms.Admin.API.csproj" />
+    <Project Path="ExpressedRealms.Admin.UseCases.Tests.Unit/ExpressedRealms.Admin.UseCases.Tests.Unit.csproj" />
+  </Folder>
+  <Folder Name="Shared">
+    <Project Path="ExpressedRealms.Repositories.Shared/ExpressedRealms.Repositories.Shared.csproj" />
+    <Project Path="ExpressedRealms.Shared.FeatureFlags/ExpressedRealms.Shared.FeatureFlags.csproj" />
+    <Project Path="ExpressedRealms.Server.Shared/ExpressedRealms.Server.Shared.csproj" />
+    <Project Path="ExpressedRealms.Shared/ExpressedRealms.Shared.csproj" />
+    <Project Path="ExpressedRealms.Shared.UseCases/ExpressedRealms.Shared.UseCases.csproj" />
+    <Project Path="ExpressedRealms.Shared.UseCases.Tests.Unit/ExpressedRealms.Shared.UseCases.Tests.Unit.csproj" />
+    <Project Path="ExpressedRealms.Shared.Reports/ExpressedRealms.Shared.Reports.csproj" />
+    <Project Path="ExpressedRealms.PermissionSync/ExpressedRealms.PermissionSync.csproj" />
+    <Project Path="ExpressedRealms.Shared.FeatureFlags.UiSync/ExpressedRealms.Shared.FeatureFlags.UiSync.csproj" />
+  </Folder>
+  <Project Path="ExpressedRealms.Server/ExpressedRealms.Server.csproj" />
+  <Project Path="ExpressedRealms.DB/ExpressedRealms.DB.csproj" />
+  <Project Path="ExpressedRealms.Email/ExpressedRealms.Email.csproj" />
+  <Project Path="ExpressedRealms.Authentication/ExpressedRealms.Authentication.csproj" />
+  <Project Path="ExpressedRealms.MigrationProject/ExpressedRealms.MigrationProject.csproj" />
+  <Project Path="ExpressedRealms.Reporting.Testing/ExpressedRealms.Reporting.Testing.csproj" />
+  <Project Path="ExpressedRealms.Events.API/ExpressedRealms.Events.API.csproj" />
+  <Project Path="ExpressedRealms.Events.API.Tests.Unit/ExpressedRealms.Events.API.Tests.Unit.csproj" />
+  <Project Path="ExpressedRealms.Scaffolder/ExpressedRealms.Scaffolder.csproj" />
+  <Project Path="ExpressedRealms.Global.API/ExpressedRealms.Global.API.csproj" />
+</Solution>
