@@ -11,5 +11,6 @@
     <PackageReference Include="JetBrains.Annotations" />
     <PackageReference Include="NetArchTest.Rules" />
     <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" />
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
   </ItemGroup>
 </Project>
