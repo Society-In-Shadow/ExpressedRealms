@@ -355,11 +355,13 @@ jobs:
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          DOTNET_COVERAGE_TELEMETRY_OPTOUT: 1
+        working-directory: ./api
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"Society-In-Shadow_ExpressedRealms" /o:"society-in-shadows" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
-          dotnet build ./api/ExpressedRealms.sln --no-restore --no-incremental
-          dotnet-coverage collect "dotnet test ./api/ExpressedRealms.sln --no-build --no-restore" -f xml -o "coverage.xml"
+          dotnet build ./ExpressedRealms.sln --no-restore --no-incremental
+          dotnet-coverage collect "dotnet test ./ExpressedRealms.sln --no-build --no-restore" -f xml -o "coverage.xml"
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
 
   push_api_to_azure_container_registry:
