@@ -71,3 +71,10 @@ FILTER_REGEX_INCLUDE: (client/.*|api/.*|docs/.*|.*\.cs|.*\.md)
 # TYPESCRIPT_STANDARD_ARGUMENTS:
 #  - "--project"
 #  - "./expressedrealms.client/tsconfig.json"
+ADDITIONAL_EXCLUDED_DIRECTORIES:
+  - node_modules
+  - bin
+  - obj
+  - dist
+  - coverage
+  - .vite
