@@ -172,4 +172,32 @@ public class EditKnowledgeUseCaseTests
             )
             .MustHaveHappenedOnceExactly();
     }
+    
+    [Fact]
+    public async Task UseCase_WillUpdateSearchResults()
+    {
+        _model.Description = "<h1>hi</h1>";
+        var knowledge = new Knowledge()
+        {
+            Id = _model.Id,
+            Name = _model.Name,
+            Description = _model.Description,
+            ProcessedPlainText = "hi",
+            KnowledgeTypeId = _model.KnowledgeTypeId,
+        };
+
+        await _useCase.ExecuteAsync(_model);
+        A.CallTo(() =>
+                _repository.EditKnowledgeAsync(
+                    A<Knowledge>.That.Matches(k =>
+                        k.Id == knowledge.Id
+                        && k.Name == knowledge.Name
+                        && k.Description == knowledge.Description
+                        && k.ProcessedPlainText == knowledge.ProcessedPlainText
+                        && k.KnowledgeTypeId == knowledge.KnowledgeTypeId
+                    )
+                )
+            )
+            .MustHaveHappenedOnceExactly();
+    }
 }
