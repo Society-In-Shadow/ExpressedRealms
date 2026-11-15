@@ -334,22 +334,22 @@ jobs:
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
 
-      - name: Setup .NET
+      - name: Setup .NET and Nuget Cache
         uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 10.0.x
           cache: true
+          check-latest: false
           skip-lts-prepass: true
           cache-dependency-path: api/**/packages.lock.json
 
       - name: Install .NET tools
         shell: pwsh
         run: |
-          dotnet tool install --global dotnet-sonarscanner
           dotnet tool install --global dotnet-coverage
           "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
 
-      - name: Restore
+      - name: Restore Nuget Packages From Cache
         run: dotnet restore ./api/ExpressedRealms.sln --locked-mode
     
       - name: Build and analyze
