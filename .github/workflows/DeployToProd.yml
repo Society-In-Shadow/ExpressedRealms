@@ -354,23 +354,12 @@ jobs:
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        shell: pwsh
+        shell: powershell
         run: |
-          $ErrorActionPreference = "Stop"
-          $PSNativeCommandUseErrorActionPreference = $true
-          
-          dotnet sonarscanner begin `
-            /k:"Society-In-Shadow_ExpressedRealms" `
-            /o:"society-in-shadows" `
-            /d:sonar.token="$env:SONAR_TOKEN" `
-            /d:sonar.host.url="https://sonarcloud.io" `
-            /d:sonar.cs.vscoveragexml.reportsPaths="**/TestResults/**/*.xml"
-          
-          dotnet build ./api/ExpressedRealms.sln --no-restore --no-incremental
-          
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"Society-In-Shadow_ExpressedRealms" /o:"society-in-shadows" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+          dotnet build ./api/ExpressedRealms.sln --no-restore
           dotnet-coverage collect "dotnet test ./api/ExpressedRealms.sln --no-restore" -f xml -o "coverage.xml"
-          
-          dotnet sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
+          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
 
   push_api_to_azure_container_registry:
     name: Push API to Azure Container Registry
