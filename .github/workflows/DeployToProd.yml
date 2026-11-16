@@ -81,8 +81,6 @@ jobs:
     continue-on-error: true
     needs: changes
     if: ${{ needs.changes.outputs.run_megalinter == 'true' }}
-    env:
-      GRYPE_DB_CACHE_DIR: /github/workspace/.megalinter-cache/grype
     permissions:
       issues: write
       pull-requests: write
@@ -95,13 +93,16 @@ jobs:
         with:
           fetch-depth: 0 # If you use VALIDATE_ALL_CODEBASE = true, you can remove this line to improve performances
 
-      - name: Cache Grype vulnerability database
-        uses: actions/cache@v6
+      # Cache the grype vulnerability database between runs: downloading it is
+      # what makes REPOSITORY_GRYPE take ~2 minutes on a cold run. grype still
+      # refreshes the DB itself when the cached copy is older than its max age.
+      - name: Cache grype vulnerability DB
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: .megalinter-cache/grype
-          key: grype-db-v0.121.0-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
+          key: grype-db-${{ github.run_id }}
           restore-keys: |
-            grype-db-v0.121.0-${{ runner.os }}-
+            grype-db-
 
       # Mega-Linter
       - name: Mega-Linter
@@ -113,6 +114,7 @@ jobs:
           # All available variables are described in documentation
           # https://megalinter.github.io/configuration/
           VALIDATE_ALL_CODEBASE: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }} # Validates all source when push on main, else just the git diff with main. Override with true if you always want to lint all sources
+          GRYPE_DB_CACHE_DIR: /github/workspace/.megalinter-cache/grype
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # ADD YOUR CUSTOM ENV VARIABLES HERE OR DEFINE THEM IN A FILE .mega-linter.yml AT THE ROOT OF YOUR REPOSITORY
           # DISABLE: COPYPASTE,SPELL # Uncomment to disable copy-paste and spell checks
