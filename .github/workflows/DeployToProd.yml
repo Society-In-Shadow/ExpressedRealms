@@ -119,16 +119,17 @@ jobs:
           # ADD YOUR CUSTOM ENV VARIABLES HERE OR DEFINE THEM IN A FILE .mega-linter.yml AT THE ROOT OF YOUR REPOSITORY
           # DISABLE: COPYPASTE,SPELL # Uncomment to disable copy-paste and spell checks
 
+      - name: Fix Grype cache permissions
+        if: always()
+        run: |
+          sudo chmod -R a+rX .megalinter-cache || true
+          ls -lahR .megalinter-cache || true
+
       - name: Inspect Grype cache
         if: always()
         run: |
           echo "Grype cache contents:"
           find .megalinter-cache/grype -type f -ls || true
-
-      - name: Fix Grype cache permissions
-        if: always()
-        run: |
-          sudo chmod -R a+rX .megalinter-cache/grype || true
 
       # Upload MegaLinter artifacts
       - name: Archive production artifacts
