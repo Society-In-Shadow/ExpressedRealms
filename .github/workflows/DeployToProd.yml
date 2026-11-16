@@ -10,6 +10,7 @@ env:
   RUN_PUSH_API_TO_ACR: "true"
   RUN_DEPLOY_API_TO_PROD: "true"
   RUN_DEPLOY_UI_TO_PROD: "true"
+  GRYPE_DB_CACHE_DIR: /github/workspace/.megalinter-cache/grype
 
 on: # yamllint disable-line truthy
   push:
@@ -92,6 +93,14 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0 # If you use VALIDATE_ALL_CODEBASE = true, you can remove this line to improve performances
+
+      - name: Cache Grype vulnerability database
+        uses: actions/cache@v6
+        with:
+          path: .megalinter-cache/grype
+          key: grype-db-v0.121.0-${{ runner.os }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            grype-db-v0.121.0-${{ runner.os }}-
 
       # Mega-Linter
       - name: Mega-Linter
