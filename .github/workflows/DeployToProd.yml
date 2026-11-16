@@ -3,13 +3,13 @@ name: Primary Workflow
 
 env:
   RUN_MEGALINTER: "true"
-  RUN_VITESTS: "false"
-  RUN_CYPRESS: "false"
-  RUN_BACKEND_UNIT_TESTS: "false"
-  RUN_SONARCLOUD_SCAN: "false"
-  RUN_PUSH_API_TO_ACR: "false"
-  RUN_DEPLOY_API_TO_PROD: "false"
-  RUN_DEPLOY_UI_TO_PROD: "false"
+  RUN_VITESTS: "true"
+  RUN_CYPRESS: "true"
+  RUN_BACKEND_UNIT_TESTS: "true"
+  RUN_SONARCLOUD_SCAN: "true"
+  RUN_PUSH_API_TO_ACR: "true"
+  RUN_DEPLOY_API_TO_PROD: "true"
+  RUN_DEPLOY_UI_TO_PROD: "true"
 
 on: # yamllint disable-line truthy
   push:
@@ -103,16 +103,16 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: .megalinter-cache/grype
-          key: grype-db2-${{ github.run_id }}
+          key: grype-db-${{ github.run_id }}
           restore-keys: |
-            grype-db2-
+            grype-db-
 
       # Mega-Linter
       - name: Mega-Linter
         id: ml
         # You can override Mega-Linter flavor used to have faster performances
         # More info at https://megalinter.github.io/flavors/
-        uses: oxsecurity/megalinter/flavors/dotnetweb@v10.2.0
+        uses: oxsecurity/megalinter/flavors/dotnetweb@f2fe8c1cba37091848df3e524066c8c23ef353ed
         env:
           # All available variables are described in documentation
           # https://megalinter.github.io/configuration/
@@ -121,6 +121,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # ADD YOUR CUSTOM ENV VARIABLES HERE OR DEFINE THEM IN A FILE .mega-linter.yml AT THE ROOT OF YOUR REPOSITORY
           # DISABLE: COPYPASTE,SPELL # Uncomment to disable copy-paste and spell checks
+
+      - name: Fix Grype cache permissions
+        if: always()
+        run: |
+          sudo chmod -R a+rX .megalinter-cache || true
+          ls -lahR .megalinter-cache || true
 
       # Upload MegaLinter artifacts
       - name: Archive production artifacts
