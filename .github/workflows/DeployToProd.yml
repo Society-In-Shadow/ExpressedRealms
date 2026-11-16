@@ -107,16 +107,22 @@ jobs:
           restore-keys: |
             grype-db-
 
-      - name: Verify Grype cache
+      - name: Locate Grype cache
         run: |
-          echo "Grype cache location:"
-          echo "$GRYPE_DB_CACHE_DIR"
+          echo "Current directory:"
+          pwd
           
-          echo "Grype database:"
-          ls -lh .megalinter-cache/grype/6/
+          echo "Workspace:"
+          echo "$GITHUB_WORKSPACE"
           
-          echo "Cache disk usage:"
-          du -sh .megalinter-cache/grype
+          echo "Grype-related environment:"
+          env | grep -i grype || true
+          
+          echo "Searching workspace:"
+          find "$GITHUB_WORKSPACE" -name vulnerability.db -ls 2>/dev/null || true
+          
+          echo "Searching MegaLinter cache:"
+          find . -path '*grype*' -type f -ls 2>/dev/null | head -50
 
       # Mega-Linter
       - name: Mega-Linter
