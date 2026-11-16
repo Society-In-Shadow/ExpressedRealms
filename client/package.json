@@ -51,25 +51,30 @@
     "vue-router": "^5.0.7",
     "yup": "^1.7.1"
   },
+  "overrides": {
+    "minimatch": "^11.0.1",
+    "js-beautify": {
+      "glob": "14.0.2"
+    }
+  },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@pinia/colada-devtools": "^1.0.0",
     "@rushstack/eslint-patch": "^1.16.1",
     "@stylistic/eslint-plugin": "^5.10.0",
     "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/vue": "^8.1.0",
     "@tsconfig/node18": "^18.2.6",
     "@types/jest": "^30.0.0",
     "@types/node": "^26.0.1",
     "@vitejs/plugin-vue": "^6.0.7",
     "@vitest/coverage-v8": "^5.0.5",
-    "@vue/test-utils": "^2.4.10",
+    "@vue/test-utils": "^2.6.0",
     "@vue/tsconfig": "^0.9.1",
     "cross-fetch": "^4.1.0",
     "cypress": "^15.16.0",
     "eslint": "^10.6.0",
     "eslint-plugin-cypress": "^6.4.1",
-    "eslint-plugin-sonarjs": "^4.1.0",
+    "eslint-plugin-sonarjs": "^4.2.2",
     "eslint-plugin-vue": "^10.9.1",
     "globals": "^17.6.0",
     "jiti": "^2.7.0",

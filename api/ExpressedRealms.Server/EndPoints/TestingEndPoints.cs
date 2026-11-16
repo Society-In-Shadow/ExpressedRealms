@@ -135,7 +135,8 @@ internal static class TestingEndPoints
                     {
                         blessing.ProcessedPlainText =
                             blessing.Description.ToPlainText()
-                            + string.Join("", blessing.BlessingLevels.Select(x => x.Description)).ToPlainText();
+                            + string.Join("", blessing.BlessingLevels.Select(x => x.Description))
+                                .ToPlainText();
                     }
 
                     var knowledges = await dbContext.Knowledges.ToListAsync();

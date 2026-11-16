@@ -81,11 +81,14 @@ jobs:
     continue-on-error: true
     needs: changes
     if: ${{ needs.changes.outputs.run_megalinter == 'true' }}
+    env:
+      GRYPE_DB_CACHE_DIR: /github/workspace/.megalinter-cache/grype
     permissions:
       issues: write
       pull-requests: write
       statuses: write
       security-events: write
+      contents: read
     steps:
       # Git Checkout
       - name: Checkout Code
@@ -93,19 +96,37 @@ jobs:
         with:
           fetch-depth: 0 # If you use VALIDATE_ALL_CODEBASE = true, you can remove this line to improve performances
 
+      # Cache the grype vulnerability database between runs: downloading it is
+      # what makes REPOSITORY_GRYPE take ~2 minutes on a cold run. grype still
+      # refreshes the DB itself when the cached copy is older than its max age.
+      - name: Cache grype vulnerability DB
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: .megalinter-cache/grype
+          key: grype-db-${{ github.run_id }}
+          restore-keys: |
+            grype-db-
+
       # Mega-Linter
       - name: Mega-Linter
         id: ml
         # You can override Mega-Linter flavor used to have faster performances
         # More info at https://megalinter.github.io/flavors/
-        uses: oxsecurity/megalinter@0e3ce9b9c8c10effb9b269509cc47ca17cae31c7
+        uses: oxsecurity/megalinter/flavors/dotnetweb@f2fe8c1cba37091848df3e524066c8c23ef353ed
         env:
           # All available variables are described in documentation
           # https://megalinter.github.io/configuration/
           VALIDATE_ALL_CODEBASE: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }} # Validates all source when push on main, else just the git diff with main. Override with true if you always want to lint all sources
+
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # ADD YOUR CUSTOM ENV VARIABLES HERE OR DEFINE THEM IN A FILE .mega-linter.yml AT THE ROOT OF YOUR REPOSITORY
           # DISABLE: COPYPASTE,SPELL # Uncomment to disable copy-paste and spell checks
+
+      - name: Fix Grype cache permissions
+        if: always()
+        run: |
+          sudo chmod -R a+rX .megalinter-cache || true
+          ls -lahR .megalinter-cache || true
 
       # Upload MegaLinter artifacts
       - name: Archive production artifacts
