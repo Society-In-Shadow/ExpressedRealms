@@ -10,7 +10,6 @@ env:
   RUN_PUSH_API_TO_ACR: "true"
   RUN_DEPLOY_API_TO_PROD: "true"
   RUN_DEPLOY_UI_TO_PROD: "true"
-  GRYPE_DB_CACHE_DIR: /github/workspace/.megalinter-cache/grype
 
 on: # yamllint disable-line truthy
   push:
@@ -82,6 +81,8 @@ jobs:
     continue-on-error: true
     needs: changes
     if: ${{ needs.changes.outputs.run_megalinter == 'true' }}
+    env:
+      GRYPE_DB_CACHE_DIR: ${{ github.workspace }}/.megalinter-cache/grype
     permissions:
       issues: write
       pull-requests: write
