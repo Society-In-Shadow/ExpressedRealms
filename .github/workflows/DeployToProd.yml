@@ -125,6 +125,11 @@ jobs:
           echo "Grype cache contents:"
           find .megalinter-cache/grype -type f -ls || true
 
+      - name: Fix Grype cache permissions
+        if: always()
+        run: |
+          sudo chmod -R a+rX .megalinter-cache/grype || true
+
       # Upload MegaLinter artifacts
       - name: Archive production artifacts
         if: ${{ (success() || failure()) }}
