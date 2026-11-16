@@ -132,7 +132,7 @@ public class CreateKnowledgeUseCaseTests
         var result = await _useCase.ExecuteAsync(_model);
         Assert.Equal(5, result.Value);
     }
-    
+
     [Fact]
     public async Task UseCase_WillUpdateSearchResults()
     {

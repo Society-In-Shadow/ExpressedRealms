@@ -172,7 +172,7 @@ public class EditKnowledgeUseCaseTests
             )
             .MustHaveHappenedOnceExactly();
     }
-    
+
     [Fact]
     public async Task UseCase_WillUpdateSearchResults()
     {
