@@ -81,11 +81,14 @@ jobs:
     continue-on-error: true
     needs: changes
     if: ${{ needs.changes.outputs.run_megalinter == 'true' }}
+    env:
+      GRYPE_DB_CACHE_DIR: /github/workspace/.megalinter-cache/grype
     permissions:
       issues: write
       pull-requests: write
       statuses: write
       security-events: write
+      contents: read
     steps:
       # Git Checkout
       - name: Checkout Code
@@ -125,7 +128,7 @@ jobs:
           # All available variables are described in documentation
           # https://megalinter.github.io/configuration/
           VALIDATE_ALL_CODEBASE: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }} # Validates all source when push on main, else just the git diff with main. Override with true if you always want to lint all sources
-          GRYPE_DB_CACHE_DIR: /github/workspace/.megalinter-cache/grype
+
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # ADD YOUR CUSTOM ENV VARIABLES HERE OR DEFINE THEM IN A FILE .mega-linter.yml AT THE ROOT OF YOUR REPOSITORY
           # DISABLE: COPYPASTE,SPELL # Uncomment to disable copy-paste and spell checks
