@@ -104,6 +104,17 @@ jobs:
           restore-keys: |
             grype-db-
 
+      - name: Verify Grype cache
+        run: |
+          echo "Grype cache location:"
+          echo "$GRYPE_DB_CACHE_DIR"
+          
+          echo "Grype database:"
+          ls -lh .megalinter-cache/grype/6/
+          
+          echo "Cache disk usage:"
+          du -sh .megalinter-cache/grype
+
       # Mega-Linter
       - name: Mega-Linter
         id: ml
