@@ -11,7 +11,15 @@ public class CreatureConfiguration : IEntityTypeConfiguration<Creature>
         builder.Property(e => e.Id).IsRequired();
         builder.Property(e => e.Name).HasMaxLength(250).IsRequired();
         builder.Property(e => e.Description).IsRequired().HasMaxLength(5000);
+        builder.Property(e => e.CreaturePublishTypeId).IsRequired();
 
+        builder
+            .HasOne(x => x.CreaturePublishType)
+            .WithMany(x => x.Creatures)
+            .HasForeignKey(x => x.CreaturePublishTypeId)
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired();
+        
         builder.HasQueryFilter(x => !x.IsDeleted);
         builder.Property(e => e.IsDeleted);
         builder.Property(e => e.DeletedAt);
