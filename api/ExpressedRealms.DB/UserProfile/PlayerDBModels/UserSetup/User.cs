@@ -14,6 +14,7 @@ using ExpressedRealms.DB.Models.Checkins.CheckinQuestionResponseSetup.Audit;
 using ExpressedRealms.DB.Models.Checkins.CheckinSetup.Audit;
 using ExpressedRealms.DB.Models.Checkins.CheckinStageMappingSetup;
 using ExpressedRealms.DB.Models.Contacts.Audit;
+using ExpressedRealms.DB.Models.Creatures.CreatureSetup.Audit;
 using ExpressedRealms.DB.Models.Events.EventScheduleItemsSetup.Audit;
 using ExpressedRealms.DB.Models.Events.EventSetup.Audit;
 using ExpressedRealms.DB.Models.Events.Questions.EventQuestionSetup.Audit;
@@ -89,4 +90,6 @@ public class User : IdentityUser
         new HashSet<StatGroupMappingAuditTrail>();
     public ICollection<CharacterStorageInfoAuditTrail> CharacterStorageInfoAuditTrails { get; set; } =
         new HashSet<CharacterStorageInfoAuditTrail>();
+    public ICollection<CreatureAuditTrail> CreatureAuditTrails { get; set; } =
+        new HashSet<CreatureAuditTrail>();
 }

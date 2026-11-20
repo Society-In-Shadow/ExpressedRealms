@@ -1,0 +1,84 @@
+using Audit.EntityFramework.ConfigurationApi;
+using ExpressedRealms.DB.Exceptions;
+using ExpressedRealms.DB.Interceptors;
+
+namespace ExpressedRealms.DB.Models.Creatures.CreatureSetup.Audit;
+
+internal static class CreatureAuditTrailExtensions
+{
+    public static List<ChangedRecord> ProcessChangedRecords(List<ChangedRecord> changedRecords)
+    {
+        List<ChangedRecord> changedRecordsToReturn = new();
+        foreach (var changedRecord in changedRecords)
+        {
+            switch (changedRecord.ColumnName)
+            {
+                case "event_id":
+                    continue;
+
+                case "name":
+                    changedRecord.FriendlyName = "Name";
+                    break;
+
+                case "start_date":
+                    changedRecord.FriendlyName = "Start Date";
+                    break;
+
+                case "end_date":
+                    changedRecord.FriendlyName = "End Date";
+                    break;
+
+                case "location":
+                    changedRecord.FriendlyName = "Location";
+                    break;
+
+                case "website_name":
+                    changedRecord.FriendlyName = "Website Name";
+                    break;
+
+                case "website_url":
+                    changedRecord.FriendlyName = "Website URL";
+                    break;
+
+                case "additional_notes":
+                    changedRecord.FriendlyName = "Website Name";
+                    break;
+
+                case "con_experience":
+                    changedRecord.FriendlyName = "Con Experience";
+                    break;
+
+                case "is_published":
+                    changedRecord.FriendlyName = "Published";
+                    changedRecord.Message = "Event was Published";
+                    break;
+
+                case "time_zone_id":
+                    changedRecord.FriendlyName = "Time Zone";
+                    break;
+
+                case "collect_attendee_information":
+                    changedRecord.FriendlyName = "Collect Attendee Information";
+                    break;
+
+                default:
+                    throw new MissingAuditColumnException(changedRecord.ColumnName);
+            }
+
+            changedRecordsToReturn.Add(changedRecord);
+        }
+
+        return changedRecordsToReturn;
+    }
+
+    public static IAuditEntityMapping AddCreatureAuditTrailMapping(this IAuditEntityMapping mapping)
+    {
+        return mapping.Map<Creature, CreatureAuditTrail>(
+            (Event, audit) =>
+            {
+                audit.CreatureId = Event.Id;
+                return true;
+            }
+        );
+    }
+}
