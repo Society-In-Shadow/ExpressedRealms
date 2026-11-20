@@ -2,10 +2,10 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS restore
 WORKDIR /src
 
 # https://stackoverflow.com/a/51373386
-COPY ExpressedRealms.sln ./
+COPY ExpressedRealms.slnx ./
 COPY */*.csproj ./
 RUN for file in $(ls *.csproj); do mkdir -p ${file%.*}/ && mv "$file" ${file%.*}/; done
-RUN dotnet restore ExpressedRealms.sln
+RUN dotnet restore ExpressedRealms.slnx
 
 # Stage 2: Build + publish
 FROM restore AS build
